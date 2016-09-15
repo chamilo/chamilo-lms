@@ -348,19 +348,6 @@ class TestDropboxFunctions extends UnitTestCase {
 	*/
 
 	/**
-	* Function that finds a given config setting
-	*/
-
-	function testdropbox_cnf() {
-		$variable = 'test';
-		$res= dropbox_cnf($variable);
-		if(!is_null($res)){
-		$this->assertTrue(is_string($res));
-		}
-        //var_dump($res);
-	}
-
-	/**
 	* This is a callback function to decrypt the files in the zip file to their normal filename (as stored in the database)
 	* @param $p_event a variable of PCLZip
 	* @param $p_header a variable of PCLZip

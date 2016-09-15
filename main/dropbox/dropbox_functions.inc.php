@@ -495,13 +495,15 @@ function display_add_form($dropbox_unid, $viewReceivedCategory, $viewSentCategor
     );
 
     $form->addElement('header', get_lang('UploadNewFile'));
-    $form->addElement('hidden', 'MAX_FILE_SIZE', dropbox_cnf('maxFilesize'));
+    $maxFileSize = api_get_setting('dropbox_max_filesize');
+    $form->addElement('hidden', 'MAX_FILE_SIZE', $maxFileSize);
     $form->addElement('hidden', 'dropbox_unid', $dropbox_unid);
     $form->addElement('hidden', 'sec_token', $token);
     $form->addElement('hidden', 'origin', $origin);
     $form->addElement('file', 'file', get_lang('UploadFile'), array('onChange' => 'javascript: checkfile(this.value);'));
 
-    if (dropbox_cnf('allowOverwrite')) {
+    $allowOverwrite = api_get_setting('dropbox_allow_overwrite');
+    if ($allowOverwrite == 'true') {
         $form->addElement('checkbox', 'cb_overwrite', null, get_lang('OverwriteFile'), array('id' => 'cb_overwrite'));
     }
 
@@ -575,12 +577,13 @@ function display_add_form($dropbox_unid, $viewReceivedCategory, $viewSentCategor
     */
 
     $current_user_id = '';
+    $allowStudentToStudent = api_get_setting('dropbox_allow_student_to_student');
     $options = array();
     $userGroup = new UserGroup();
     foreach ($complete_user_list_for_dropbox as $current_user) {
         if (($dropbox_person -> isCourseTutor
                 || $dropbox_person -> isCourseAdmin
-                || dropbox_cnf('allowStudentToStudent')
+                || $allowStudentToStudent == 'true'
                 || $current_user['status'] != 5                         // Always allow teachers.
                 || $current_user['is_tutor'] == 1                       // Always allow tutors.
                 ) && $current_user['user_id'] != $_user['user_id']) {   // Don't include yourself.
@@ -607,10 +610,11 @@ function display_add_form($dropbox_unid, $viewReceivedCategory, $viewSentCategor
     /*
     * Show groups
     */
+    $allowGroups = api_get_setting('dropbox_allow_group');
     if (($dropbox_person->isCourseTutor || $dropbox_person->isCourseAdmin)
-        && dropbox_cnf('allowGroup') || dropbox_cnf('allowStudentToStudent')
+        && $allowGroups == 'true' || $allowStudentToStudent == 'true'
     ) {
-        $complete_group_list_for_dropbox = GroupManager::get_group_list(null, dropbox_cnf('courseId'));
+        $complete_group_list_for_dropbox = GroupManager::get_group_list(null, $course_info['code']);
 
         if (count($complete_group_list_for_dropbox) > 0) {
             foreach ($complete_group_list_for_dropbox as $current_group) {
@@ -621,7 +625,8 @@ function display_add_form($dropbox_unid, $viewReceivedCategory, $viewSentCategor
         }
     }
 
-    if (dropbox_cnf('allowJustUpload')) {
+    $allowUpload = api_get_setting('dropbox_allow_just_upload');
+    if ($allowUpload == 'true') {
         $options['user_'.$_user['user_id']] = get_lang('JustUploadInSelect');
     }
 
@@ -692,7 +697,8 @@ function isCourseMember($user_id)
 */
 function removeUnusedFiles()
 {
-    $course_id = api_get_course_int_id();
+    $_course = api_get_course_info();
+    $course_id = $_course['real_id'];
 
     // select all files that aren't referenced anymore
     $sql = "SELECT DISTINCT f.id, f.filename
@@ -712,7 +718,7 @@ function removeUnusedFiles()
                 WHERE c_id = $course_id AND id ='" . $res['id'] . "'";
         Database::query($sql);
         //delete file from server
-        @unlink( dropbox_cnf('sysPath') . '/' . $res['filename']);
+        @unlink( api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/dropbox/' . $res['filename']);
     }
 }
 
@@ -770,7 +776,8 @@ function removeMoreIfMailing($file_id)
 
     if ($res = Database::fetch_array($result)) {
         $mailingPseudoId = $res['dest_user_id'];
-        if ($mailingPseudoId > dropbox_cnf('mailingIdBase')) {
+        $mailId = get_mail_id_base();
+        if ($mailingPseudoId > $mailId) {
             $sql = "DELETE FROM " . Database::get_course_table(TABLE_DROPBOX_PERSON) . "
                     WHERE c_id = $course_id AND user_id='" . $mailingPseudoId . "'";
             Database::query($sql);
@@ -781,17 +788,6 @@ function removeMoreIfMailing($file_id)
             Database::query($sql);
         }
     }
-}
-
-/**
-* Function that finds a given config setting
-*
-* @author René Haentjens, Ghent University
-*/
-function dropbox_cnf($variable)
-{
-    $dropbox_cnf = getDropboxConf();
-    return $dropbox_cnf[$variable];
 }
 
 /**
@@ -868,7 +864,8 @@ function store_add_dropbox($file = [])
     $dropbox_filetmpname = $file['tmp_name'];
 
     // check if the filesize does not exceed the allowed size.
-    if ($dropbox_filesize <= 0 || $dropbox_filesize > $dropbox_cnf['maxFilesize']) {
+    $maxFileSize = api_get_setting('dropbox_max_filesize');
+    if ($dropbox_filesize <= 0 || $dropbox_filesize > $maxFileSize) {
         Display::addFlash(Display::return_message(get_lang('DropboxFileTooBig'), 'warning'));
 
         return false;
@@ -911,10 +908,10 @@ function store_add_dropbox($file = [])
             api_is_course_admin(),
             api_is_course_tutor()
         );
-
+        $mailId = get_mail_id_base();
         foreach ($dropbox_person->sentWork as $w) {
             if ($w->title == $dropbox_filename) {
-                if (($w->recipients[0]['id'] > dropbox_cnf('mailingIdBase')) xor $thisIsAMailing) {
+                if (($w->recipients[0]['id'] > $mailId) xor $thisIsAMailing) {
                     Display::addFlash(Display::return_message(get_lang('MailingNonMailingError'), 'warning'));
                     return false;
                 }
@@ -947,7 +944,7 @@ function store_add_dropbox($file = [])
         }
     }
 
-    @move_uploaded_file($dropbox_filetmpname, dropbox_cnf('sysPath') . '/' . $dropbox_filename);
+    @move_uploaded_file($dropbox_filetmpname, api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/dropbox/' . $dropbox_filename);
 
     $b_send_mail = api_get_course_setting('email_alert_on_new_doc_dropbox');
 
@@ -1343,4 +1340,16 @@ function get_last_tool_access($tool, $courseId = null, $user_id = null)
     $result = Database::query($sql);
     $row = Database::fetch_array($result);
     return $row['access_date'];
+}
+/**
+ * Previously $dropbox_cnf['mailingIdBase'], returns a mailing ID to generate a mail ID
+ * @return int
+ */
+function get_mail_id_base()
+{
+    // false = no mailing functionality
+    //$dropbox_cnf['mailingIdBase'] = 10000000;  // bigger than any user_id,
+    // allowing enough space for pseudo_ids as uploader_id, dest_user_id, user_id:
+    // mailing pseudo_id = dropbox_cnf('mailingIdBase') + mailing id
+    return 10000000;
 }

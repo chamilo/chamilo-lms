@@ -310,8 +310,9 @@ class Dropbox_SentWork extends Dropbox_Work
         $session_id = api_get_session_id();
         $user  = api_get_user_id();
         $now = api_get_utc_datetime();
+        $mailId = get_mail_id_base();
 
-		// Insert data in dropbox_post and dropbox_person table for each recipient
+        // Insert data in dropbox_post and dropbox_person table for each recipient
 		foreach ($this->recipients as $rec) {
             $file_id = (int)$this->id;
             $user_id = (int)$rec['id'];
@@ -335,10 +336,10 @@ class Dropbox_SentWork extends Dropbox_Work
             }
 
 			// Update item_property table for each recipient
-			if (($ownerid = $this->uploader_id) > $dropbox_cnf['mailingIdBase']) {
+			if (($ownerid = $this->uploader_id) > $mailId) {
 			    $ownerid = getUserOwningThisMailing($ownerid);
 			}
-			if (($recipid = $rec["id"]) > $dropbox_cnf['mailingIdBase']) {
+			if (($recipid = $rec["id"]) > $mailId) {
 			    $recipid = $ownerid;  // mailing file recipient = mailing id, not a person
 			}
             api_item_property_update(
@@ -630,8 +631,8 @@ class Dropbox_Person
         );
 
 		// Update item_property table
-
-		if (($ownerid = $this->receivedWork[$wi]->uploader_id) > $dropbox_cnf['mailingIdBase']) {
+        $mailId = get_mail_id_base();
+		if (($ownerid = $this->receivedWork[$wi]->uploader_id) > $mailId) {
 		    $ownerid = getUserOwningThisMailing($ownerid);
 		}
 
@@ -656,11 +657,12 @@ class Dropbox_Person
     {
         $dropbox_cnf = getDropboxConf();
     	$new_received_work = array();
-		foreach ($this->receivedWork as $work) {
+        $mailId = get_mail_id_base();
+        foreach ($this->receivedWork as $work) {
 			switch ($type) {
 				case 'uploader_id':
 					if ($work->uploader_id == $value ||
-						($work->uploader_id > $dropbox_cnf['mailingIdBase'] &&
+						($work->uploader_id > $mailId &&
                         getUserOwningThisMailing($work->uploader_id) == $value)
                     ) {
 						$new_received_work[] = $work;

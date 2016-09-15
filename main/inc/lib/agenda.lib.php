@@ -1387,7 +1387,6 @@ class Agenda
 
         if (!empty($courses)) {
             foreach ($courses as $course) {
-                //if (api_is_coach($sessionId, $course['real_id'])) {
                 $this->getCourseEvents(
                     $start,
                     $end,
@@ -1397,7 +1396,6 @@ class Agenda
                     0,
                     $color
                 );
-                //}
             }
         }
 

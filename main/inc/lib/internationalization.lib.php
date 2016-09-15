@@ -353,6 +353,7 @@ function _api_get_timezone()
     $to_timezone = date_default_timezone_get();
     // Second, see if a timezone has been chosen for the platform
     $timezone_value = api_get_setting('timezone_value', 'timezones');
+
     if ($timezone_value != null) {
         $to_timezone = $timezone_value;
     }

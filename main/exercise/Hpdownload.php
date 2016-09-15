@@ -81,22 +81,6 @@ if ($content_type == 'text/html') {
 	$fp = fopen($full_file_name, "r");
 	$file_content = fread ($fp, filesize ($full_file_name));
 	fclose($fp);
-	//$file_content = api_replace_parameter($dir, $file_content, "src");
-	//$file_content = api_replace_parameter($dir, $file_content, "href");
-
-	/*
-	//parse line per line
-	$file_content_array = file($full_file_name);
-
-	foreach($file_content_array as $line)
-	{
-		$line = api_replace_parameter($dir, $line, "src");
-		$line = api_replace_parameter($dir, $line, "href");
-		$file_content .= $line;
-	}
-	*/
-
-
     $exercisePath = api_get_self();
   	$exfile = explode('/',$exercisePath);
   	$exfile = $exfile[sizeof($exfile)-1];

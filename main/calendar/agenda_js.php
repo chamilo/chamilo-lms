@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
-
 /**
  * @package chamilo.calendar
  */

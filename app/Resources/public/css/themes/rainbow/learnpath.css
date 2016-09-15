@@ -10,6 +10,9 @@
 .scorm_item_level_0{
  padding: 0 2.5em 0 0; 
 }
+.scorm_item_level_2{
+ padding: 0 2.5em 0 3em;   
+}
 .expand .fa{
     background-color: #96BD0D;
 }

@@ -5133,12 +5133,14 @@ function get_forums_of_group($groupId)
     if (!empty($forum_list)) {
         foreach ($forum_list as $key => $value) {
             $last_post_info_of_forum = get_last_post_information($key, api_is_allowed_to_edit());
-            $forum_list[$key]['last_post_id'] = $last_post_info_of_forum['last_post_id'];
-            $forum_list[$key]['last_poster_id'] = $last_post_info_of_forum['last_poster_id'];
-            $forum_list[$key]['last_post_date'] = $last_post_info_of_forum['last_post_date'];
-            $forum_list[$key]['last_poster_name'] = $last_post_info_of_forum['last_poster_name'];
-            $forum_list[$key]['last_poster_lastname'] = $last_post_info_of_forum['last_poster_lastname'];
-            $forum_list[$key]['last_poster_firstname'] = $last_post_info_of_forum['last_poster_firstname'];
+            if ($last_post_info_of_forum) {
+                $forum_list[$key]['last_post_id'] = $last_post_info_of_forum['last_post_id'];
+                $forum_list[$key]['last_poster_id'] = $last_post_info_of_forum['last_poster_id'];
+                $forum_list[$key]['last_post_date'] = $last_post_info_of_forum['last_post_date'];
+                $forum_list[$key]['last_poster_name'] = $last_post_info_of_forum['last_poster_name'];
+                $forum_list[$key]['last_poster_lastname'] = $last_post_info_of_forum['last_poster_lastname'];
+                $forum_list[$key]['last_poster_firstname'] = $last_post_info_of_forum['last_poster_firstname'];
+            }
         }
     }
 

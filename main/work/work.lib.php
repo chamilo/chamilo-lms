@@ -1816,7 +1816,7 @@ function get_work_user_list(
             $extra_conditions = " work.post_group_id = '".intval($group_id)."' ";
             // set to select only messages posted by the user's group
         } else {
-            $extra_conditions = " work.post_group_id = '0' ";
+            $extra_conditions = " (work.post_group_id = '0' OR work.post_group_id is NULL) ";
         }
 
         if ($is_allowed_to_edit || $isDrhOfCourse) {
@@ -1885,7 +1885,6 @@ function get_work_user_list(
         }
 
         $url = api_get_path(WEB_CODE_PATH).'work/';
-
         $unoconv = api_get_configuration_value('unoconv.binaries');
 
         while ($work = Database::fetch_array($result, 'ASSOC')) {
@@ -1894,7 +1893,6 @@ function get_work_user_list(
             // Get the author ID for that document from the item_property table
             $is_author  = false;
             $can_read   = false;
-
             $owner_id = $work['user_id'];
 
             /* Because a bug found when saving items using the api_item_property_update()
@@ -1962,10 +1960,6 @@ function get_work_user_list(
             ) {
                 // Firstname, lastname, username
                 $work['fullname'] = Display::div($work['fullname'], array('class' => 'work-name'));
-
-                //$work['firstname'] = Display::div($work['firstname'], array('class' => $class));
-                //$work['lastname'] = Display::div($work['lastname'], array('class' => $class));
-
                 $work['title_clean'] = $work['title'];
 
                 if (strlen($work['title']) > 30) {

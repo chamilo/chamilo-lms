@@ -201,7 +201,7 @@ $extra_params = array();
 $extra_params['autowidth'] = 'true';
 $extra_params['height'] = 'auto';
 $extra_params['sortname'] = 'firstname';
-$url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_work_user_list_others&work_id='.$workId.'&type='.$type;
+$url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_work_user_list_others&work_id='.$workId.'&type='.$type.'&'.api_get_cidreq();
 ?>
 <script>
     $(function() {

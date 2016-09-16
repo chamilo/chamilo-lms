@@ -1367,39 +1367,35 @@ class ImportCsv
     {
         $content = file($file);
         $sessions = array();
+        $tag_names = array();
 
-        if (!api_strstr($content[0], ';')) {
-            $error_message = get_lang('NotCSV');
-        } else {
-            $tag_names = array();
-
-            foreach ($content as $key => $enreg) {
-                $enreg = explode(';', trim($enreg));
-                if ($key) {
-                    foreach ($tag_names as $tag_key => $tag_name) {
-                        if (isset($enreg[$tag_key])) {
-                            $sessions[$key - 1][$tag_name] = $enreg[$tag_key];
-                        }
+        foreach ($content as $key => $enreg) {
+            $enreg = explode(';', trim($enreg));
+            if ($key) {
+                foreach ($tag_names as $tag_key => $tag_name) {
+                    if (isset($enreg[$tag_key])) {
+                        $sessions[$key - 1][$tag_name] = $enreg[$tag_key];
                     }
-                } else {
-                    foreach ($enreg as $tag_name) {
-                        $tag_names[] = api_preg_replace(
-                            '/[^a-zA-Z0-9_\-]/',
-                            '',
-                            $tag_name
-                        );
-                    }
-                    if (!in_array('SessionName', $tag_names) || !in_array(
-                            'DateStart',
-                            $tag_names
-                        ) || !in_array('DateEnd', $tag_names)
-                    ) {
-                        $error_message = get_lang('NoNeededData');
-                        break;
-                    }
+                }
+            } else {
+                foreach ($enreg as $tag_name) {
+                    $tag_names[] = api_preg_replace(
+                        '/[^a-zA-Z0-9_\-]/',
+                        '',
+                        $tag_name
+                    );
+                }
+                if (!in_array('SessionName', $tag_names) || !in_array(
+                        'DateStart',
+                        $tag_names
+                    ) || !in_array('DateEnd', $tag_names)
+                ) {
+                    $error_message = get_lang('NoNeededData');
+                    break;
                 }
             }
         }
+
 
         if (!empty($sessions)) {
             // Looping the sessions.
@@ -1938,7 +1934,7 @@ class ImportCsv
      */
     private function fixCSVFile($file)
     {
-        $f = fopen($file, 'r+');
+        /*$f = fopen($file, 'r+');
         $cursor = -1;
 
         fseek($f, $cursor, SEEK_END);
@@ -1951,7 +1947,7 @@ class ImportCsv
         if ($char === "\"") {
             fseek($f, -1, SEEK_CUR);
             fwrite($f, '";');
-        }
+        }*/
     }
 }
 

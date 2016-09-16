@@ -935,7 +935,6 @@ class Agenda
 
                 // Session coach can see all events inside a session.
                 if (api_is_coach()) {
-
                     // Own course
                     $this->getCourseEvents(
                         $start,
@@ -1045,14 +1044,6 @@ class Agenda
                                 );
                             }
                         }
-
-                        $this->getSessionEvents(
-                            $start,
-                            $end,
-                            $my_session_id,
-                            $user_id,
-                            $this->eventOtherSessionColor
-                        );
                     }
                 }
 

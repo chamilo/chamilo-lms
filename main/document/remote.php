@@ -58,7 +58,7 @@ if ($action == 'list') {
     if ($debug>0) { error_log("sending file list",0); }
 
     // get files list
-    $files = DocumentManager::get_all_document_data($_course, $cwd, 0, NULL, false);
+    $files = DocumentManager::get_all_document_data($_course, $cwd, 0, null, false);
 
     // adding download link to files
     foreach ($files as $k => $f) {

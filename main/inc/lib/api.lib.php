@@ -3528,7 +3528,7 @@ function api_item_property_delete(
  * (3) "visible"
  * (4) "invisible"
  * @param int $user_id id of the editing/adding user
- * @param int $to_group_id id of the intended group (0 = for everybody), only relevant for $type (1)
+ * @param int $to_group_id group.iid
  * @param int $to_user_id id of the intended user (always has priority over $to_group_id !), only relevant for $type (1)
  * @param string $start_visible 0000-00-00 00:00:00 format
  * @param string $end_visible 0000-00-00 00:00:00 format
@@ -6810,16 +6810,32 @@ function api_is_global_chat_enabled()
  *
  * @param int $item_id
  * @param int $tool_id
- * @param int $group_id
+ * @param int $group_id iid
  * @param array $courseInfo
  */
-function api_set_default_visibility($item_id, $tool_id, $group_id = 0, $courseInfo = array(), $sessionId = 0, $userId = 0)
-{
+function api_set_default_visibility(
+    $item_id,
+    $tool_id,
+    $group_id = 0,
+    $courseInfo = array(),
+    $sessionId = 0,
+    $userId = 0
+) {
     $courseInfo = empty($courseInfo) ? api_get_course_info() : $courseInfo;
     $courseId = $courseInfo['real_id'];
     $courseCode = $courseInfo['code'];
     $sessionId = empty($sessionId) ? api_get_session_id() : $sessionId;
     $userId = empty($userId) ? api_get_user_id() : $userId;
+
+    if (empty($group_id)) {
+        $group_id = api_get_group_id();
+    }
+
+    $groupInfo = GroupManager::get_group_properties($group_id);
+    $groupIid = 0;
+    if ($groupInfo) {
+        $groupIid = $groupInfo['iid'];
+    }
 
     $original_tool_id = $tool_id;
 
@@ -6854,10 +6870,6 @@ function api_set_default_visibility($item_id, $tool_id, $group_id = 0, $courseIn
             $visibility = 'visible';
         }
 
-        if (empty($group_id)) {
-            $group_id = api_get_group_id();
-        }
-
         // Read the portal and course default visibility
         if ($tool_id == 'documents') {
             $visibility = DocumentManager::getDocumentDefaultVisibility($courseCode);
@@ -6869,7 +6881,7 @@ function api_set_default_visibility($item_id, $tool_id, $group_id = 0, $courseIn
             $item_id,
             $visibility,
             $userId,
-            $group_id,
+            $groupIid,
             null,
             null,
             null,

@@ -283,12 +283,18 @@ class Rest extends WebService
 
             $path = $directory['path'];
         }
-
         require_once api_get_path(LIBRARY_PATH) . 'fileDisplay.lib.php';
 
         $courseInfo = api_get_course_info_by_id($this->course->getId());
-
-        $documents = DocumentManager::get_all_document_data($courseInfo, $path, 0, null, false, false, $sessionId);
+        $documents = DocumentManager::get_all_document_data(
+            $courseInfo,
+            $path,
+            0,
+            null,
+            false,
+            false,
+            $sessionId
+        );
         $results = [];
 
         if (is_array($documents)) {

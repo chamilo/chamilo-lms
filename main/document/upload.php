@@ -103,12 +103,13 @@ function setFocus(){
 }
 </script>';
 
-
+$groupIid = 0;
 // This needs cleaning!
 if (!empty($groupId)) {
     // If the group id is set, check if the user has the right to be here
     // Get group info
     $group_properties = GroupManager::get_group_properties($groupId);
+    $groupIid = $group_properties['iid'];
 
     // Only courseadmin or group members allowed
     if ($is_allowed_to_edit || GroupManager::is_user_in_group(api_get_user_id(), $group_properties['iid'])) {
@@ -217,7 +218,11 @@ if ($is_certificate_mode) {
 // Link to create a folder
 echo $toolbar = Display::toolbarAction('toolbar-upload', array($actions), 1);
 // Form to select directory
-$folders = DocumentManager::get_all_document_folders($_course, $groupId, $is_allowed_to_edit);
+$folders = DocumentManager::get_all_document_folders(
+    $_course,
+    $groupIid,
+    $is_allowed_to_edit
+);
 if (!$is_certificate_mode) {
     echo DocumentManager::build_directory_selector(
         $folders,

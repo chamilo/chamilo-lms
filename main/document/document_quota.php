@@ -76,7 +76,7 @@ if (!empty($group_list)) {
         $session[] = array(addslashes(get_lang('Group').': '.$group_data['name']).' ('.format_file_size($quota_bytes).')', $quota_percentage);
     }
 }
-//Showing weight of documents uploaded by user
+// Showing weight of documents uploaded by user
 $document_list = DocumentManager::get_all_document_data($_course);
 if (is_array($document_list)) {
     foreach ($document_list as $document_data) {

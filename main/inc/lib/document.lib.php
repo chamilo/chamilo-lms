@@ -531,7 +531,7 @@ class DocumentManager
      *
      * @param array $_course
      * @param string $path
-     * @param int $to_group_id
+     * @param int $to_group_id iid
      * @param int $to_user_id
      * @param boolean $can_see_invisible
      * @param boolean $search
@@ -741,7 +741,7 @@ class DocumentManager
      * can show all folders (except for the deleted ones) or only visible ones
      *
      * @param array $_course
-     * @param int $to_group_id iid
+     * @param int $groupIid iid
      * @param boolean $can_see_invisible
      * @param boolean $getInvisibleList
      *
@@ -749,13 +749,13 @@ class DocumentManager
      */
     public static function get_all_document_folders(
         $_course,
-        $to_group_id = 0,
+        $groupIid = 0,
         $can_see_invisible = false,
         $getInvisibleList = false
     ) {
         $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
-        $to_group_id = intval($to_group_id);
+        $groupIid = intval($groupIid);
         $document_folders = array();
 
         $students = CourseManager::get_user_list_from_course_code(
@@ -770,8 +770,8 @@ class DocumentManager
             }
         }
 
-        $groupCondition = " last.to_group_id = $to_group_id";
-        if (empty($to_group_id)) {
+        $groupCondition = " last.to_group_id = $groupIid";
+        if (empty($groupIid)) {
             $groupCondition = " (last.to_group_id = 0 OR last.to_group_id IS NULL)";
         }
 
@@ -785,7 +785,7 @@ class DocumentManager
             $session_id = api_get_session_id();
             $condition_session = api_get_session_condition($session_id, true, false, 'docs.session_id');
 
-            if ($to_group_id <> 0) {
+            if ($groupIid <> 0) {
                 $sql = "SELECT DISTINCT docs.id, path
                        FROM $TABLE_ITEMPROPERTY  AS last
                        INNER JOIN $TABLE_DOCUMENT  AS docs
@@ -890,9 +890,9 @@ class DocumentManager
             $condition_session = api_get_session_condition($session_id, true, false, 'docs.session_id');
             //get invisible folders
             $sql = "SELECT DISTINCT docs.id, path
-                    FROM $TABLE_ITEMPROPERTY AS last, $TABLE_DOCUMENT AS docs
-                    WHERE
-                        docs.id = last.ref AND
+                    FROM $TABLE_ITEMPROPERTY AS last INNER JOIN $TABLE_DOCUMENT AS docs
+                    ON (docs.id = last.ref AND last.c_id = docs.c_id)
+                    WHERE                        
                         docs.filetype = 'folder' AND
                         last.tool = '" . TOOL_DOCUMENT . "' AND
                         $groupCondition AND
@@ -2037,7 +2037,6 @@ class DocumentManager
             $id = self::get_document_id_of_directory_certificate();
 
             if (empty($id)) {
-
                 create_unexisting_directory(
                     $courseInfo,
                     api_get_user_id(),
@@ -2054,7 +2053,6 @@ class DocumentManager
                 $id = self::get_document_id_of_directory_certificate();
 
                 if (empty($id)) {
-
                     $id = add_document(
                         $courseInfo,
                         $dir_name,
@@ -3861,7 +3859,7 @@ class DocumentManager
      * @param string $course_code
      * @param int $session_id
      * @param int $user_id
-     * @param int $groupId
+     * @param int $groupId iid
      * @return bool
      */
     public static function check_visibility_tree(
@@ -4912,7 +4910,7 @@ class DocumentManager
      * @param string $folder Example: /folder/folder2
      * @param array $courseInfo
      * @param int $sessionId
-     * @param int $groupId
+     * @param int $groupId group.id
      *
      * @return bool
      */

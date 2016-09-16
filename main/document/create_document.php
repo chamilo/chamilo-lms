@@ -98,10 +98,15 @@ if (!empty($sessionId) && empty($document_data)) {
         $sessionId
     );
 }
+$groupIid = 0;
+
+if (!empty($groupId)) {
+    $group_properties = GroupManager::get_group_properties($groupId);
+    $groupIid = $group_properties['iid'];
+}
 
 if (empty($document_data)) {
     if (api_is_in_group()) {
-        $group_properties = GroupManager::get_group_properties($groupId);
         $document_id = DocumentManager::get_document_id($_course, $group_properties['directory']);
         $document_data = DocumentManager::get_document_data_by_id($document_id, api_get_course_id());
         $dir = $document_data['path'];
@@ -191,7 +196,6 @@ if (!is_dir($filepath)) {
 }
 
 $to_group_id = 0;
-
 if (!$is_certificate_mode) {
 	if (api_is_in_group()) {
         $interbreadcrumb[] = array(
@@ -199,7 +203,7 @@ if (!$is_certificate_mode) {
             "name" => get_lang('GroupSpace'),
         );
 		$noPHP_SELF = true;
-		$to_group_id = api_get_group_id();
+		$to_group_id = $group_properties['iid'];
 		$path = explode('/', $dir);
 		if ('/'.$path[1] != $group_properties['directory']) {
 			api_not_allowed(true);
@@ -300,7 +304,11 @@ $current_session_id = api_get_session_id();
 $form->addHtmlEditor('content', get_lang('Content'), true, true, $editorConfig, true);
 
 // Comment-field
-$folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is_allowed_to_edit);
+$folders = DocumentManager::get_all_document_folders(
+    $_course,
+    $groupIid,
+    $is_allowed_to_edit
+);
 
 // If we are not in the certificates creation, display a folder chooser for the
 // new document created
@@ -308,13 +316,20 @@ $folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is
 if (!$is_certificate_mode &&
 	!DocumentManager::is_my_shared_folder($userId, $dir, $current_session_id)
 ) {
-	$folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is_allowed_to_edit);
+    $folders = DocumentManager::get_all_document_folders(
+        $_course,
+        $groupIid,
+        $is_allowed_to_edit
+    );
 
-	//$parent_select = $form->addElement('select', 'curdirpath', array(null, get_lang('DestinationDirectory')));
-        $parent_select = $form->addSelect('curdirpath', get_lang('DestinationDirectory'),null, array('cols-size' => [2, 10, 0]) );
-	// Following two conditions copied from document.inc.php::build_directory_selector()
+    $parent_select = $form->addSelect(
+        'curdirpath',
+        get_lang('DestinationDirectory'),
+        null,
+        array('cols-size' => [2, 10, 0])
+    );
+
 	$folder_titles = array();
-
     if (is_array($folders)) {
         $escaped_folders = array();
         foreach ($folders as $key => & $val) {

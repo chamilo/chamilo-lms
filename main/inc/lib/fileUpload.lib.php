@@ -165,7 +165,7 @@ function process_uploaded_file($uploaded_file, $show_output = true)
  * @param string $documentDir Example: /var/www/chamilo/courses/ABC/document
  * @param string $uploadPath Example: /folder1/folder2/
  * @param int $userId
- * @param int $groupId, 0 for everybody
+ * @param int $groupId group.id
  * @param int $toUserId, NULL for everybody
  * @param int $unzip 1/0
  * @param string $whatIfFileExists overwrite, rename or warn if exists (default)
@@ -210,6 +210,12 @@ function handle_uploaded_document(
         $sessionId = api_get_session_id();
     } else {
         $sessionId = intval($sessionId);
+    }
+
+    $groupIid = 0;
+    if (!empty($groupId)) {
+        $groupInfo = GroupManager::get_group_properties($groupId);
+        $groupIid = $groupInfo['iid'];
     }
 
     // Just in case process_uploaded_file is not called
@@ -302,13 +308,6 @@ function handle_uploaded_document(
                 Using the session_id and group_id if values are not empty
             */
 
-            /*$fileExists = DocumentManager::documentExists(
-                $uploadPath.$cleanName,
-                $courseInfo,
-                $sessionId,
-                $groupId
-            );*/
-
             $fileSystemName = DocumentManager::fixDocumentName(
                 $cleanName,
                 'file',
@@ -390,7 +389,7 @@ function handle_uploaded_document(
                                     $documentId,
                                     'DocumentUpdated',
                                     $userId,
-                                    $groupId,
+                                    $groupIid,
                                     $toUserId,
                                     null,
                                     null,
@@ -429,7 +428,7 @@ function handle_uploaded_document(
                                         $documentId,
                                         'DocumentAdded',
                                         $userId,
-                                        $groupId,
+                                        $groupIid,
                                         $toUserId,
                                         null,
                                         null,
@@ -479,7 +478,7 @@ function handle_uploaded_document(
                                     $documentId,
                                     'DocumentAdded',
                                     $userId,
-                                    $groupId,
+                                    $groupIid,
                                     $toUserId,
                                     null,
                                     null,
@@ -489,6 +488,7 @@ function handle_uploaded_document(
                                 // Redo visibility
                                 api_set_default_visibility($documentId, TOOL_DOCUMENT, null, $courseInfo);
                             }
+
                             // If the file is in a folder, we need to update all parent folders
                             item_property_update_on_folder($courseInfo, $uploadPath, $userId);
                             // Display success message to user
@@ -1031,7 +1031,7 @@ function unzip_uploaded_file($uploaded_file, $upload_path, $base_work_dir, $max_
  * @param int    $maxFilledSpace  - amount of bytes to not exceed in the base
  *                                working directory
  * @param int $sessionId
- * @param int $groupId
+ * @param int $groupId group.id
  * @param boolean $output Optional. If no output not wanted on success, set to false.
  *
  * @return boolean true if it succeeds false otherwise
@@ -1208,7 +1208,7 @@ function filter_extension(&$filename)
  * @param string $comment
  * @param int $readonly
  * @param bool $save_visibility
- * @param int $group_id
+ * @param int $group_id group.id
  * @param int $session_id Session ID, if any
  * @param int $userId creator id
  *
@@ -1250,7 +1250,14 @@ function add_document(
         Database::query($sql);
 
         if ($save_visibility) {
-            api_set_default_visibility($documentId, TOOL_DOCUMENT, $group_id, $_course, $session_id, $userId);
+            api_set_default_visibility(
+                $documentId,
+                TOOL_DOCUMENT,
+                $group_id,
+                $_course,
+                $session_id,
+                $userId
+            );
         }
 
         return $documentId;
@@ -1464,7 +1471,7 @@ function search_img_from_html($html_file) {
  * @param   array   $_course current course information
  * @param   int     $user_id current user id
  * @param   int     $session_id
- * @param   int     $to_group_id
+ * @param   int     $to_group_id group.id
  * @param   int     $to_user_id
  * @param   string  $base_work_dir /var/www/chamilo/courses/ABC/document
  * @param   string  $desired_dir_name complete path of the desired name
@@ -1554,6 +1561,12 @@ function create_unexisting_directory(
                         )
             ";
 
+            $groupIid = 0;
+            if (!empty($to_group_id)) {
+                $groupInfo = GroupManager::get_group_properties($to_group_id);
+                $groupIid = $groupInfo['iid'];
+            }
+
             $rs = Database::query($sql);
             if (Database::num_rows($rs) == 0) {
                 $document_id = add_document(
@@ -1584,7 +1597,7 @@ function create_unexisting_directory(
                             $document_id,
                             $visibilities[$visibility],
                             $user_id,
-                            $to_group_id,
+                            $groupIid,
                             $to_user_id,
                             null,
                             null,
@@ -1597,7 +1610,7 @@ function create_unexisting_directory(
                             $document_id,
                             'FolderCreated',
                             $user_id,
-                            $to_group_id,
+                            $groupIid,
                             $to_user_id,
                             null,
                             null,
@@ -1644,7 +1657,7 @@ function create_unexisting_directory(
  * @param string $base_work_dir
  * @param string $missing_files_dir
  * @param int $user_id
- * @param int $max_filled_space
+ * @param int $to_group_id group.id
  */
 function move_uploaded_file_collection_into_directory(
     $_course,
@@ -1815,7 +1828,7 @@ function build_missing_files_form($missing_files, $upload_path, $file_name)
  * @param string $base_work_dir
  * @param string $folderPath
  * @param int $sessionId
- * @param int $groupId
+ * @param int $groupId group.id
  * @param bool $output
  * @param array $parent
  * @param string $uploadPath

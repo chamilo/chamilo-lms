@@ -1454,6 +1454,7 @@ class ImportCsv
 
                         if (is_numeric($result)) {
                             $sessionId = $result;
+                            $this->logger->addInfo("Session #$sessionId created: ".$session['SessionName']);
                             SessionManager::update_session_extra_field_value(
                                 $sessionId,
                                 $this->extraFieldIdNameList['session'],
@@ -1501,6 +1502,7 @@ class ImportCsv
                         );
 
                         if (is_numeric($result)) {
+                            $this->logger->addInfo("Session #$sessionId updated: ".$session['SessionName']);
                             $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
                             $params = array(
                                 'description' => $session['SessionDescription']
@@ -1531,6 +1533,8 @@ class ImportCsv
                         true
                     );
 
+                    $this->logger->addInfo("Session #$sessionId: Courses added'".implode(', ', $courseList)."'");
+
                     if (!empty($sessionId)) {
                         $courses = explode('|', $session['Courses']);
                         foreach ($courses as $course) {
@@ -1540,7 +1544,6 @@ class ImportCsv
                                 // Coaches
                                 $courseCoaches = isset($courseArray[1]) ? $courseArray[1] : null;
                                 $courseCoaches = explode(',', $courseCoaches);
-
                                 if (!empty($courseCoaches)) {
                                     $coachList = array();
                                     foreach ($courseCoaches as $courseCoach) {
@@ -1550,6 +1553,8 @@ class ImportCsv
                                             $coachList[] = $courseCoachId;
                                         }
                                     }
+
+                                    $this->logger->addInfo("Session #$sessionId: coaches updated: '".implode(', ', $coachList)."'");
                                     SessionManager::updateCoaches(
                                         $sessionId,
                                         $courseCode,
@@ -1570,6 +1575,7 @@ class ImportCsv
                                         }
                                     }
 
+                                    $this->logger->addInfo("Session #$sessionId: Students added '".implode(', ', $userList)."'");
                                     SessionManager::subscribe_users_to_session_course(
                                         $userList,
                                         $sessionId,

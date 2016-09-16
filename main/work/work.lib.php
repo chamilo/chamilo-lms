@@ -271,6 +271,12 @@ function getWorkList($id, $my_folder_data, $add_in_where_query = null)
     $session_id = api_get_session_id();
     $condition_session = api_get_session_condition($session_id);
     $group_id = api_get_group_id();
+
+    $groupInfo = GroupManager::get_group_properties($group_id);
+    $groupIid = 0;
+    if ($groupInfo) {
+        $groupIid = $groupInfo['iid'];
+    }
     $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
     $linkInfo = GradebookUtils::isResourceInCourseGradebook(
@@ -305,17 +311,17 @@ function getWorkList($id, $my_folder_data, $add_in_where_query = null)
                     $condition_session AND
                     $active_condition AND
                     (parent_id = 0)
-                    $contains_file_query AND
-                    post_group_id = '".$group_id."'
+                    $contains_file_query AND 
+                    post_group_id = $groupIid
                 ORDER BY sent_date DESC";
     } else {
         if (!empty($group_id)) {
             // set to select only messages posted by the user's group
-            $group_query = " WHERE c_id = $course_id AND post_group_id = '".$group_id."' ";
-            $subdirs_query = "AND parent_id = 0";
+            $group_query = " WHERE c_id = $course_id AND post_group_id = '".$groupIid."' ";
+            $subdirs_query = " AND parent_id = 0";
         } else {
-            $group_query = " WHERE c_id = $course_id AND  post_group_id = '0' ";
-            $subdirs_query = "AND parent_id = 0";
+            $group_query = " WHERE c_id = $course_id AND (post_group_id = '0' OR post_group_id is NULL) ";
+            $subdirs_query = " AND parent_id = 0";
         }
         //@todo how we can active or not an assignment?
         $active_condition = ' AND active IN (1, 0)';
@@ -370,7 +376,7 @@ function getWorkPerUser($userId)
 
 /**
  * @param int $workId
- * @param int $groupId
+ * @param int $groupId iid
  * @param int $course_id
  * @param int $sessionId
  * @return mixed
@@ -388,12 +394,12 @@ function getUniqueStudentAttemptsTotal($workId, $groupId, $course_id, $sessionId
     $sql = "SELECT count(DISTINCT u.user_id)
             FROM $work_table w
             INNER JOIN $user_table u
-                ON w.user_id = u.user_id
+            ON w.user_id = u.user_id
             WHERE
                 w.c_id = $course_id
                 $sessionCondition AND
-                w.parent_id = ".$workId." AND
-                w.post_group_id = ".$groupId." AND
+                w.parent_id = $workId AND
+                w.post_group_id = $groupId AND
                 w.active IN (0, 1)
             ";
 
@@ -437,6 +443,12 @@ function getUniqueStudentAttempts(
     $sessionId = intval($sessionId);
     $groupId = intval($groupId);
 
+    $groupInfo = GroupManager::get_group_properties($groupId);
+    $groupIid = 0;
+    if ($groupInfo) {
+        $groupIid = $groupInfo['iid'];
+    }
+
     $studentCondition = null;
 
     if (!empty($onlyUserList)) {
@@ -454,13 +466,13 @@ function getUniqueStudentAttempts(
                 SELECT count(*), w.parent_id
                 FROM $work_table w
                 INNER JOIN $user_table u
-                    ON w.user_id = u.user_id
+                ON w.user_id = u.user_id
                 WHERE
                     w.filetype = 'file' AND
                     w.c_id = $course_id
                     $sessionCondition AND
                     $workCondition
-                    w.post_group_id = ".$groupId." AND
+                    w.post_group_id = $groupIid AND
                     w.active IN (0, 1) $studentCondition
                 ";
     if (!empty($userId)) {
@@ -1174,9 +1186,9 @@ function get_work_id($path)
  */
 function get_count_work($work_id, $onlyMeUserId = null, $notMeUserId = null)
 {
-    $work_table      = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-    $iprop_table     = Database::get_course_table(TABLE_ITEM_PROPERTY);
-    $user_table      = Database::get_main_table(TABLE_MAIN_USER);
+    $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+    $iprop_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
+    $user_table = Database::get_main_table(TABLE_MAIN_USER);
 
     $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
     $session_id = api_get_session_id();
@@ -1187,11 +1199,17 @@ function get_count_work($work_id, $onlyMeUserId = null, $notMeUserId = null)
     $course_id = $course_info['real_id'];
     $work_id = intval($work_id);
 
+    $groupInfo = GroupManager::get_group_properties($group_id);
+    $groupIid = 0;
+    if ($groupInfo) {
+        $groupIid = $groupInfo['iid'];
+    }
+
     if (!empty($group_id)) {
         // set to select only messages posted by the user's group
-        $extra_conditions = " work.post_group_id = '".intval($group_id)."' ";
+        $extra_conditions = " work.post_group_id = '".intval($groupIid)."' ";
     } else {
-        $extra_conditions = " work.post_group_id = '0' ";
+        $extra_conditions = " (work.post_group_id = '0' or work.post_group_id IS NULL) ";
     }
 
     if ($is_allowed_to_edit) {
@@ -1227,7 +1245,8 @@ function get_count_work($work_id, $onlyMeUserId = null, $notMeUserId = null)
                 prop.visibility <> 2 AND
                 work.c_id = $course_id
             )
-            INNER JOIN $user_table u ON (work.user_id = u.user_id)
+            INNER JOIN $user_table u 
+            ON (work.user_id = u.user_id)
             WHERE $extra_conditions $where_condition $condition_session";
 
     $result = Database::query($sql);
@@ -1264,6 +1283,13 @@ function getWorkListStudent(
     $session_id = api_get_session_id();
     $condition_session = api_get_session_condition($session_id);
     $group_id = api_get_group_id();
+
+    $groupInfo = GroupManager::get_group_properties($group_id);
+    $groupIid = 0;
+    if ($groupInfo) {
+        $groupIid = $groupInfo['iid'];
+    }
+
     $userId = api_get_user_id();
 
     $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
@@ -1285,7 +1311,7 @@ function getWorkListStudent(
     // Get list from database
 
     if (!empty($group_id)) {
-        $group_query = " WHERE w.c_id = $course_id AND post_group_id = '".$group_id."' ";
+        $group_query = " WHERE w.c_id = $course_id AND post_group_id = '".$groupIid."' ";
         $subdirs_query = "AND parent_id = 0";
     } else {
         $group_query = " WHERE w.c_id = $course_id AND (post_group_id = '0' or post_group_id is NULL)  ";
@@ -1476,7 +1502,7 @@ function getWorkListTeacher(
 
             $countUniqueAttempts = getUniqueStudentAttemptsTotal(
                 $workId,
-                $group_id,
+                $groupIid,
                 $course_id,
                 $session_id
             );
@@ -1796,6 +1822,13 @@ function get_work_user_list(
 
     $session_id = api_get_session_id();
     $group_id = api_get_group_id();
+
+    $groupInfo = GroupManager::get_group_properties($group_id);
+    $groupIid = 0;
+    if ($groupInfo) {
+        $groupIid = $groupInfo['iid'];
+    }
+
     $course_info = api_get_course_info();
     $course_id = $course_info['real_id'];
 
@@ -1820,7 +1853,7 @@ function get_work_user_list(
 
     if (!empty($work_data)) {
         if (!empty($group_id)) {
-            $extra_conditions = " work.post_group_id = '".intval($group_id)."' ";
+            $extra_conditions = " work.post_group_id = '".intval($groupIid)."' ";
             // set to select only messages posted by the user's group
         } else {
             $extra_conditions = " (work.post_group_id = '0' OR work.post_group_id is NULL) ";
@@ -1865,8 +1898,9 @@ function get_work_user_list(
         }
 
         $user_condition = "INNER JOIN $user_table u  ON (work.user_id = u.user_id) ";
-        $work_condition = "$iprop_table prop INNER JOIN $work_table work
-                           ON (prop.ref = work.id AND prop.c_id = $course_id AND work.c_id = $course_id ) ";
+        $work_condition = "$iprop_table prop 
+                            INNER JOIN $work_table work
+                           ON (prop.ref = work.id AND prop.c_id = $course_id AND work.c_id = $course_id) ";
 
         $work_assignment = get_work_assignment_by_id($work_id);
 
@@ -4312,13 +4346,20 @@ function generateMoveForm($item_id, $path, $courseInfo, $groupId, $sessionId)
     $session_id = intval($sessionId);
     $groupId = intval($groupId);
     $sessionCondition = empty($sessionId) ? " AND (session_id = 0 OR session_id IS NULL) " : " AND session_id='".$session_id."'";
+
+    $groupInfo = GroupManager::get_group_properties($group_id);
+    $groupIid = 0;
+    if ($groupInfo) {
+        $groupIid = $groupInfo['iid'];
+    }
+
     $sql = "SELECT id, url, title
             FROM $work_table
             WHERE
                 c_id = $courseId AND
                 active IN (0, 1) AND
                 url LIKE '/%' AND
-                post_group_id = $groupId
+                post_group_id = $groupIid
                 $sessionCondition";
     $res = Database::query($sql);
     while ($folder = Database::fetch_array($res)) {

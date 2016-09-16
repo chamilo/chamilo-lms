@@ -1021,7 +1021,9 @@ class GroupManager
                 FROM $group_user_table g
                 INNER JOIN $user_table u
                 ON (u.user_id = g.user_id)
-                WHERE c_id = $courseId AND g.group_id = $group_id";
+                WHERE 
+                    c_id = $courseId AND 
+                    g.group_id = $group_id";
 
         if (!empty($column) && !empty($direction)) {
             $column = Database::escape_string($column, null, false);
@@ -1638,11 +1640,11 @@ class GroupManager
      */
     public static function unsubscribe_all_users($groupId)
     {
-        $courseId = api_get_course_int_id();
+        $course_id = api_get_course_int_id();
         //api_is_element_in_the_session(TOOL_GROUP, $group_ids[$i])
 
         $groupId = (int) $groupId;
-        if (empty($courseId) || empty($groupId)) {
+        if (empty($course_id) || empty($groupId)) {
             return false;
         }
 
@@ -1650,7 +1652,7 @@ class GroupManager
         $sql = "DELETE FROM $table_group_user
                 WHERE 
                     group_id = $groupId AND 
-                    c_id = $courseId";
+                    c_id = $course_id";
         $result = Database::query($sql);
 
         return $result;

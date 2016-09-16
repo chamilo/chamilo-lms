@@ -1533,7 +1533,7 @@ class ImportCsv
                         true
                     );
 
-                    $this->logger->addInfo("Session #$sessionId: Courses added'".implode(', ', $courseList)."'");
+                    $this->logger->addInfo("Session #$sessionId: Courses added: '".implode(', ', $courseList)."'");
 
                     if (!empty($sessionId)) {
                         $courses = explode('|', $session['Courses']);
@@ -1554,7 +1554,7 @@ class ImportCsv
                                         }
                                     }
 
-                                    $this->logger->addInfo("Session #$sessionId: coaches updated: '".implode(', ', $coachList)."'");
+                                    $this->logger->addInfo("Session #$sessionId: course '$courseCode' coaches added: '".implode(', ', $coachList)."'");
                                     SessionManager::updateCoaches(
                                         $sessionId,
                                         $courseCode,
@@ -1575,7 +1575,7 @@ class ImportCsv
                                         }
                                     }
 
-                                    $this->logger->addInfo("Session #$sessionId: Students added '".implode(', ', $userList)."'");
+                                    $this->logger->addInfo("Session #$sessionId: course '$courseCode': Students added '".implode(', ', $userList)."'");
                                     SessionManager::subscribe_users_to_session_course(
                                         $userList,
                                         $sessionId,

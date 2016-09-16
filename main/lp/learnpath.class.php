@@ -4215,6 +4215,7 @@ class learnpath
 
         $tbl_tool = Database :: get_course_table(TABLE_TOOL_LIST);
         $link = 'lp/lp_controller.php?action=view&lp_id='.$lp_id.'&id_session='.$session_id;
+
         $sql = "SELECT * FROM $tbl_tool
                 WHERE
                     c_id = ".$course_id." AND

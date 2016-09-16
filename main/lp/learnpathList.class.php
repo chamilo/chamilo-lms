@@ -68,9 +68,9 @@ class LearnpathList
             $session_id = api_get_session_id();
         }
 
-        $condition_session = api_get_session_condition($session_id, true, true, 'Lp.sessionId');
+        $condition_session = api_get_session_condition($session_id, true, true, 'lp.sessionId');
 
-        $order = "ORDER BY Lp.displayOrder ASC, Lp.name ASC";
+        $order = "ORDER BY lp.displayOrder ASC, lp.name ASC";
         if (isset($order_by)) {
             $order = Database::parse_conditions(array('order' => $order_by));
         }
@@ -80,10 +80,10 @@ class LearnpathList
 
         if ($check_publication_dates) {
             $time_conditions = " AND (
-                (Lp.publicatedOn IS NOT NULL AND Lp.publicatedOn < '$now' AND Lp.expiredOn IS NOT NULL AND Lp.expiredOn > '$now') OR
-                (Lp.publicatedOn IS NOT NULL AND Lp.publicatedOn < '$now' AND Lp.expiredOn IS NULL) OR
-                (Lp.publicatedOn IS NULL AND Lp.expiredOn IS NOT NULL AND Lp.expiredOn > '$now') OR
-                (Lp.publicatedOn IS NULL AND Lp.expiredOn IS NULL ))
+                (lp.publicatedOn IS NOT NULL AND lp.publicatedOn < '$now' AND lp.expiredOn IS NOT NULL AND lp.expiredOn > '$now') OR
+                (lp.publicatedOn IS NOT NULL AND lp.publicatedOn < '$now' AND lp.expiredOn IS NULL) OR
+                (lp.publicatedOn IS NULL AND lp.expiredOn IS NOT NULL AND lp.expiredOn > '$now') OR
+                (lp.publicatedOn IS NULL AND lp.expiredOn IS NULL ))
             ";
         }
 
@@ -91,20 +91,20 @@ class LearnpathList
         if ($ignoreCategoryFilter == false) {
             if (!empty($categoryId)) {
                 $categoryId = intval($categoryId);
-                $categoryFilter = " AND Lp.categoryId = $categoryId";
+                $categoryFilter = " AND lp.categoryId = $categoryId";
             } else {
-                $categoryFilter = " AND (Lp.categoryId = 0 OR Lp.categoryId IS NULL) ";
+                $categoryFilter = " AND (lp.categoryId = 0 OR lp.categoryId IS NULL) ";
             }
         }
 
-        $dql = "SELECT Lp FROM ChamiloCourseBundle:CLp as Lp
+        $dql = "SELECT lp FROM ChamiloCourseBundle:CLp as lp
                 WHERE
-                    Lp.cId = $course_id
+                    lp.cId = $course_id
                     $time_conditions
                     $condition_session
                     $categoryFilter
-                $order
-                    ";
+                    $order
+                ";
 
         $learningPaths = Database::getManager()
             ->createQuery($dql)
@@ -141,7 +141,7 @@ class LearnpathList
             $vis = api_get_item_visibility(
                 api_get_course_info($course_code),
                 'learnpath',
-                $row->getIid(),
+                $row->getId(),
                 $session_id
             );
 

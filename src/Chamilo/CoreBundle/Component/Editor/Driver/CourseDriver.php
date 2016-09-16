@@ -33,7 +33,6 @@ class CourseDriver extends Driver implements DriverInterface
             $this->coursePath = $baseDir;
 
             // Creates shared folder
-
             if (!file_exists($baseDir . '/shared_folder')) {
                 $title = get_lang('UserFolders');
                 $folderName = '/shared_folder';
@@ -102,11 +101,15 @@ class CourseDriver extends Driver implements DriverInterface
                 )
             );
 
-            $folders = \DocumentManager::get_all_document_folders($this->connector->course, null, false, true);
-            if (!empty($folders)) {
-                foreach ($folders as $folder) {
-                    //$folder = str_replace('-', "", $folder);
-                    //\/
+            $foldersToHide = \DocumentManager::get_all_document_folders(
+                $this->connector->course,
+                null,
+                false,
+                true
+            );
+
+            if (!empty($foldersToHide)) {
+                foreach ($foldersToHide as $folder) {
                     $config['attributes'][] = [
                         'pattern' => '!'.$folder.'!',
                         'read' => false,
@@ -117,9 +120,7 @@ class CourseDriver extends Driver implements DriverInterface
                 }
             }
 
-            // Blocking all groups
-
-            // hide all groups folders
+            // Hide all groups folders
             $config['attributes'][] = [
                 'pattern' => '!_groupdocs_!',
                 'read' => false,
@@ -128,13 +129,16 @@ class CourseDriver extends Driver implements DriverInterface
                 'locked' => false
             ];
 
-
             // Allow only the groups I have access
             $allGroups = \GroupManager::getAllGroupPerUserSubscription($userId);
             if (!empty($allGroups)) {
                 foreach ($allGroups as $groupInfo) {
                     $groupId = $groupInfo['iid'];
-                    if (\GroupManager::user_has_access($userId, $groupId, \GroupManager::GROUP_TOOL_DOCUMENTS)) {
+                    if (\GroupManager::user_has_access(
+                        $userId,
+                        $groupId,
+                        \GroupManager::GROUP_TOOL_DOCUMENTS
+                    )) {
                         $config['attributes'][] = [
                             'pattern' => '!'.$groupInfo['secret_directory'].'!',
                             'read' => true,
@@ -215,7 +219,6 @@ class CourseDriver extends Driver implements DriverInterface
         $this->setConnectorFromPlugin();
 
         if ($this->allowToEdit()) {
-
             // upload file by elfinder.
             $result = parent::upload($fp, $dst, $name, $tmpname);
             $name = $result['name'];
@@ -262,7 +265,6 @@ class CourseDriver extends Driver implements DriverInterface
         $this->setConnectorFromPlugin();
 
         if ($this->allowToEdit()) {
-
             $path = $this->decode($hash);
             $stat = $this->stat($path);
             $stat['realpath'] = $path;
@@ -292,12 +294,10 @@ class CourseDriver extends Driver implements DriverInterface
         //if ($this->connector->security->isGranted('ROLE_ADMIN')) {
 
         if (api_is_anonymous()) {
-
             return false;
         }
 
         if (isset($this->connector->course) && !empty($this->connector->course)) {
-
             return true;
         }
 

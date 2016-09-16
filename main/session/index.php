@@ -146,7 +146,7 @@ if (!empty($course_list)) {
             api_get_user_id(),
             $course_data['code'],
             $session_id,
-            'Lp.publicatedOn ASC',
+            'lp.publicatedOn ASC',
             true
         );
         $lp_list = $list->get_flat_list();

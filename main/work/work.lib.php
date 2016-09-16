@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use Chamilo\CourseBundle\Entity\CStudentPublication;
 
 /**
  *  @package chamilo.work
@@ -1411,6 +1412,12 @@ function getWorkListTeacher(
     $condition_session = api_get_session_condition($session_id);
     $group_id = api_get_group_id();
     $is_allowed_to_edit = api_is_allowed_to_edit() || api_is_coach();
+    $groupInfo = GroupManager::get_group_properties($group_id);
+
+    $groupIid = 0;
+    if ($groupInfo) {
+        $groupIid = $groupInfo['iid'];
+    }
 
     if (!in_array($direction, array('asc', 'desc'))) {
         $direction = 'desc';
@@ -1441,7 +1448,7 @@ function getWorkListTeacher(
                     $condition_session AND
                     $active_condition AND
                     (parent_id = 0) AND
-                    post_group_id = '".$group_id."'
+                    post_group_id = '".$groupIid."'
                     $where_condition
                 ORDER BY $column $direction
                 LIMIT $start, $limit";
@@ -3726,7 +3733,7 @@ function addDir($formValues, $user_id, $courseInfo, $groupId, $session_id)
     $dirName = '/'.$created_dir;
     $today = new DateTime(api_get_utc_datetime(), new DateTimeZone('UTC'));
 
-    $workTable = new \Chamilo\CourseBundle\Entity\CStudentPublication();
+    $workTable = new CStudentPublication();
     $workTable
         ->setCId($course_id)
         ->setUrl($dirName)

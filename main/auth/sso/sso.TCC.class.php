@@ -291,7 +291,7 @@ class ssoTCC
      */
     public function generateProfileEditingURL($userId = 0, $asAdmin = false)
     {
-        $userId = intval($userId);
+/*        $userId = intval($userId);
 
         if (empty($userId)) {
             $userId = api_get_user_id();
@@ -318,6 +318,8 @@ class ssoTCC
         $url = "{$this->protocol}{$this->domain}/user/{$drupalUserId}/edit";
 
         return $url;
+*/
+        return api_get_path(WEB_CODE_PATH) . 'auth/profile.php';
     }
 
 }

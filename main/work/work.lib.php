@@ -1287,7 +1287,7 @@ function getWorkListStudent(
         $group_query = " WHERE w.c_id = $course_id AND post_group_id = '".$group_id."' ";
         $subdirs_query = "AND parent_id = 0";
     } else {
-        $group_query = " WHERE w.c_id = $course_id AND post_group_id = '0' ";
+        $group_query = " WHERE w.c_id = $course_id AND (post_group_id = '0' or post_group_id is NULL)  ";
         $subdirs_query = "AND parent_id = 0";
     }
 
@@ -1324,7 +1324,6 @@ function getWorkListStudent(
     }
 
     $works = array();
-
     $url = api_get_path(WEB_CODE_PATH).'work/work_list.php?'.api_get_cidreq();
     if ($isDrhOfCourse) {
         $url = api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq();

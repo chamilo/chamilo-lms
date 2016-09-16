@@ -775,14 +775,15 @@ class DocumentManager
             $groupCondition = " (last.to_group_id = 0 OR last.to_group_id IS NULL)";
         }
 
+        $show_users_condition = '';
+        if (api_get_setting('show_users_folders') === 'false') {
+            $show_users_condition = " AND docs.path NOT LIKE '%shared_folder%'";
+        }
+
         if ($can_see_invisible) {
             // condition for the session
             $session_id = api_get_session_id();
             $condition_session = api_get_session_condition($session_id, true, false, 'docs.session_id');
-            $show_users_condition = '';
-            if (api_get_setting('show_users_folders') === 'false') {
-                $show_users_condition = " AND docs.path NOT LIKE '%shared_folder%'";
-            }
 
             if ($to_group_id <> 0) {
                 $sql = "SELECT DISTINCT docs.id, path
@@ -795,11 +796,11 @@ class DocumentManager
                             docs.c_id = {$_course['real_id']}
                        )
                        WHERE
-                            docs.filetype 		= 'folder' AND
+                            docs.filetype = 'folder' AND
                             $groupCondition AND
                             docs.path NOT LIKE '%shared_folder%' AND
                             docs.path NOT LIKE '%_DELETED_%' AND
-                            last.visibility <> 2
+                            last.visibility <> 2                            
                             $condition_session ";
             } else {
                 $sql = "SELECT DISTINCT docs.id, path
@@ -816,7 +817,9 @@ class DocumentManager
                             docs.path NOT LIKE '%_DELETED_%' AND
                             $groupCondition AND
                             last.visibility <> 2
-                            $show_users_condition $condition_session ";
+                            $show_users_condition 
+                            $condition_session 
+                        ";
             }
             $result = Database::query($sql);
 
@@ -858,16 +861,19 @@ class DocumentManager
             //get visible folders
             $sql = "SELECT DISTINCT docs.id, path
                     FROM
-                        $TABLE_ITEMPROPERTY AS last, $TABLE_DOCUMENT AS docs
+                        $TABLE_ITEMPROPERTY AS last INNER JOIN 
+                        $TABLE_DOCUMENT AS docs
+                        ON (docs.id = last.ref AND last.c_id = docs.c_id)
                     WHERE
-                        docs.id = last.ref AND
                         $fileType
                         last.tool = '" . TOOL_DOCUMENT . "' AND
                         $groupCondition AND
                         $visibilityCondition
+                        $show_users_condition
                         $condition_session AND
                         last.c_id = {$_course['real_id']}  AND
                         docs.c_id = {$_course['real_id']} ";
+
             $result = Database::query($sql);
 
             $visibleFolders = array();
@@ -916,7 +922,6 @@ class DocumentManager
                     $invisibleFolders[$folders_in_invisible_folder['id']] = $folders_in_invisible_folder['path'];
                 }
             }
-
 
             //if both results are arrays -> //calculate the difference between the 2 arrays -> only visible folders are left :)
             if (is_array($visibleFolders) && is_array($invisibleFolders)) {
@@ -5066,7 +5071,6 @@ class DocumentManager
         return $uniqueName;
     }
 
-
     /**
      * Builds the form that enables the user to
      * select a directory to browse/upload in
@@ -5098,7 +5102,10 @@ class DocumentManager
             $folder_sql = implode("','", $escaped_folders);
 
             $sql = "SELECT * FROM $doc_table
-                WHERE filetype = 'folder' AND c_id = $course_id AND path IN ('" . $folder_sql . "')";
+                    WHERE 
+                        filetype = 'folder' AND 
+                        c_id = $course_id AND 
+                        path IN ('" . $folder_sql . "')";
             $res = Database::query($sql);
             $folder_titles = array();
             while ($obj = Database::fetch_object($res)) {

@@ -1638,14 +1638,19 @@ class GroupManager
      */
     public static function unsubscribe_all_users($groupId)
     {
-        $course_id = api_get_course_int_id();
+        $courseId = api_get_course_int_id();
         //api_is_element_in_the_session(TOOL_GROUP, $group_ids[$i])
+
+        $groupId = (int) $groupId;
+        if (empty($courseId) || empty($groupId)) {
+            return false;
+        }
 
         $table_group_user = Database :: get_course_table(TABLE_GROUP_USER);
         $sql = "DELETE FROM $table_group_user
                 WHERE 
                     group_id = $groupId AND 
-                    c_id = $course_id";
+                    c_id = $courseId";
         $result = Database::query($sql);
 
         return $result;
@@ -1660,13 +1665,17 @@ class GroupManager
      */
     public static function unsubscribe_all_tutors($groupId)
     {
-        $course_id = api_get_course_int_id();
+        $courseId = api_get_course_int_id();
         $groupId = (int) $groupId;
+
+        if (empty($courseId) || empty($groupId)) {
+            return false;
+        }
 
         if (!empty($groupId) > 0) {
             $table_group_tutor = Database :: get_course_table(TABLE_GROUP_TUTOR);
             $sql = "DELETE FROM $table_group_tutor
-                    WHERE group_id = $groupId AND c_id = $course_id";
+                    WHERE group_id = $groupId AND c_id = $courseId";
             $result = Database::query($sql);
             return $result;
         }

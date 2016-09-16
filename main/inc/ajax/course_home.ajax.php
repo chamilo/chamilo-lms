@@ -272,7 +272,12 @@ switch ($action) {
                 }
             }
 
-            $list = new LearnpathList(api_get_user_id(),$item['code'], $session_id, 'Lp.publicatedOn DESC');
+            $list = new LearnpathList(
+                api_get_user_id(),
+                $item['code'],
+                $session_id,
+                'lp.publicatedOn DESC'
+            );
             $flat_list = $list->get_flat_list();
             $lps[$item['code']] = $flat_list;
             $item['title'] = Display::url(

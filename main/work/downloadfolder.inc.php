@@ -60,6 +60,12 @@ if (array_key_exists('filename', $work_data)) {
     $filenameCondition = ", filename";
 }
 
+$groupIid = 0;
+if ($groupId) {
+    $groupInfo = GroupManager::get_group_properties($groupId);
+    $groupIid = $groupInfo['iid'];
+}
+
 if (api_is_allowed_to_edit() || api_is_coach()) {
     //Search for all files that are not deleted => visibility != 2
    $sql = "SELECT DISTINCT
@@ -85,7 +91,7 @@ if (api_is_allowed_to_edit() || api_is_coach()) {
                 work.filetype = 'file' AND
                 props.visibility <> '2' AND
                 work.active IN (0, 1) AND
-                work.post_group_id = $groupId
+                work.post_group_id = $groupIid
                 $sessionCondition
             ";
 
@@ -124,7 +130,7 @@ if (api_is_allowed_to_edit() || api_is_coach()) {
                 work.parent_id = $work_id AND
                 work.filetype = 'file' AND
                 props.visibility = '1' AND
-                work.post_group_id = $groupId
+                work.post_group_id = $groupIid
                 $userCondition
             ";
 }

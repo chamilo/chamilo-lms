@@ -3049,7 +3049,7 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
                                               SET post_group_id = $newGroupId 
                                               WHERE 
                                                 c_id = $courseId AND 
-                                                group_id = $groupId AND 
+                                                post_group_id = $groupId AND 
                                                 iid = $workIid
                                               ";
                                 $connection->executeQuery($sqlUpdate);

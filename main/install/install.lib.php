@@ -3058,6 +3058,37 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
                     }
                 }
 
+                // Fix work documents that don't have c_item_property value
+                $sql = "SELECT * FROM c_student_publication where parent_id is not null";
+                $statement = $connection->executeQuery($sql);
+                $result = $statement->fetchAll();
+                while ($result as $row) {
+                    $groupId  = $row['post_group_id'];
+                    $courseId = $row['c_id'];
+                    $sessionId = $row['session_id'];
+                    $workId = $row['id'];
+                    $itemInfo = api_get_item_property_info(
+                      $courseId,
+                       'work',
+                      $workId,
+                      $sessionId
+                    );
+                    $courseInfo = api_get_course_info_by_id($courseId);
+                    if (empty($item_info)) {
+                        api_item_property_update(
+                            $courseInfo,
+                            'work',
+                            $workId,
+                            'visible',
+                            1,
+                            $groupId,
+                            null,
+                            null,
+                            null,
+                            $sessionId
+                        );
+                    }
+                }
                 $connection->executeQuery("UPDATE settings_current SET selected_value = '1.11.0' WHERE variable = 'chamilo_database_version'");
 
                 error_log('Migrations files were executed.');

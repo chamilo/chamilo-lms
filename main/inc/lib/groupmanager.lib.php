@@ -966,7 +966,7 @@ class GroupManager
         $id2 = intval($id2);
         $course_id = api_get_course_int_id();
 
-        $sql = "SELECT id,display_order FROM $table_group_cat
+        $sql = "SELECT id, display_order FROM $table_group_cat
                 WHERE id IN ($id1,$id2) AND c_id = $course_id ";
         $res = Database::query($sql);
         $cat1 = Database::fetch_object($res);
@@ -1021,7 +1021,7 @@ class GroupManager
         $sql = "$select
                 FROM $group_user_table gu
                 INNER JOIN $groupTable g
-                ON (gu.group_id = g.id and g.c_id = gu.c_id)
+                ON (gu.group_id = g.iid and g.c_id = gu.c_id)
                 INNER JOIN $user_table u
                 ON (u.id = gu.user_id)
                 WHERE 
@@ -1072,7 +1072,7 @@ class GroupManager
         $sql = "SELECT user_id 
                 FROM $group_user_table gu
                 INNER JOIN $groupTable g
-                ON (gu.group_id = g.id and g.c_id = gu.c_id)
+                ON (gu.group_id = g.iid and g.c_id = gu.c_id)
                 WHERE gu.c_id = $course_id AND g.id = $group_id";
         $res = Database::query($sql);
         $users = array();
@@ -1134,7 +1134,7 @@ class GroupManager
         $sql = "SELECT user_id 
                 FROM $group_user_table gu
                 INNER JOIN $groupTable g
-                ON (gu.group_id = g.id and g.c_id = gu.c_id)
+                ON (gu.group_id = g.iid and g.c_id = gu.c_id)
                 WHERE gu.c_id = $course_id AND g.id = $group_id";
         $res = Database::query($sql);
         $users = array();

@@ -1119,13 +1119,18 @@ function to_javascript_work()
 
             var checked = $("#expiry_date").attr("checked");
             if (checked) {
-                $("#option2").show();
-                $("#option3").show();
-                $("#end_date").attr("checked", true);
+                $("#option2").show();                
             } else {
-                $("#option2").hide();
-                $("#option3").hide();
-                $("#end_date").attr("checked", false);
+                $("#option2").hide();                
+            }
+            
+            var checkedEndDate = $("#end_date").attr("checked");            
+            if (checkedEndDate) {                
+                $("#option3").show();
+                $("#ends_on").attr("checked", true);
+            } else {
+                $("#option3").hide();                
+                $("#ends_on").attr("checked", false);
             }
 
             $("#expiry_date").click(function() {
@@ -3812,7 +3817,12 @@ function addDir($formValues, $user_id, $courseInfo, $groupId, $session_id)
         $groupIid
     );
 
-    updatePublicationAssignment($workTable->getIid(), $formValues, $courseInfo, $groupIid);
+    updatePublicationAssignment(
+        $workTable->getIid(),
+        $formValues,
+        $courseInfo,
+        $groupIid
+    );
 
     if (api_get_course_setting('email_alert_students_on_new_homework') == 1) {
         send_email_on_homework_creation(
@@ -3893,7 +3903,6 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
 
     // Insert into agenda
     $agendaId = 0;
-
     if (isset($params['add_to_calendar']) && $params['add_to_calendar'] == 1) {
         // Setting today date
         $date = $end_date = $time;
@@ -3937,8 +3946,8 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
     }
 
     $qualification = isset($params['qualification']) && !empty($params['qualification']) ? 1 : 0;
-    $expiryDate = isset($params['enableExpiryDate']) && $params['enableExpiryDate'] == 1 ? api_get_utc_datetime($params['expires_on']) : '';
-    $endDate = isset($params['enableEndDate']) && $params['enableEndDate'] == 1 ? api_get_utc_datetime($params['ends_on']) : '';
+    $expiryDate = isset($params['enableExpiryDate']) && (int) $params['enableExpiryDate'] == 1 ? api_get_utc_datetime($params['expires_on']) : '';
+    $endDate = isset($params['enableEndDate']) && (int) $params['enableEndDate'] == 1 ? api_get_utc_datetime($params['ends_on']) : '';
 
     $data = get_work_assignment_by_id($workId, $course_id);
 
@@ -3962,12 +3971,10 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
                 add_to_calendar = $agendaId,
                 enable_qualification = '$qualification',
                 publication_id = '$workId'";
-
         Database::query($sql);
-
         $my_last_id = Database::insert_id();
-        if ($my_last_id) {
 
+        if ($my_last_id) {
             $sql = "UPDATE $table SET
                         id = iid
                     WHERE iid = $my_last_id";
@@ -4141,6 +4148,7 @@ function deleteWorkItem($item_id, $courseInfo)
  */
 function getFormWork($form, $defaults = array())
 {
+    $sessionId = api_get_session_id();
     if (!empty($defaults)) {
         if (isset($defaults['submit'])) {
             unset($defaults['submit']);
@@ -4162,7 +4170,7 @@ function getFormWork($form, $defaults = array())
     // QualificationOfAssignment
     $form->addElement('text', 'qualification', get_lang('QualificationNumeric'));
 
-    if ((api_get_session_id() != 0 && Gradebook::is_active()) || api_get_session_id() == 0) {
+    if (($sessionId != 0 && Gradebook::is_active()) || $sessionId == 0) {
         $form->addElement(
             'checkbox',
             'make_calification',
@@ -4198,15 +4206,9 @@ function getFormWork($form, $defaults = array())
     }
 
     $currentDate = substr(api_get_local_time(), 0, 10);
-
     if (!isset($defaults['expires_on'])) {
         $date = substr($currentDate, 0, 10);
         $defaults['expires_on'] = $date.' 23:59';
-    }
-
-    if (!isset($defaults['ends_on'])) {
-        $date = substr($currentDate, 0, 10);
-        $defaults['ends_on'] = $date.' 23:59';
     }
 
     $form->addElement('date_time_picker', 'expires_on', get_lang('ExpiresAt'));
@@ -4214,6 +4216,10 @@ function getFormWork($form, $defaults = array())
 
     $form->addElement('checkbox', 'enableEndDate', null, get_lang('EnableEndDate'), 'id="end_date"');
 
+    if (!isset($defaults['ends_on'])) {
+        $date = substr($currentDate, 0, 10);
+        $defaults['ends_on'] = $date.' 23:59';
+    }
     if (isset($defaults['enableEndDate']) && $defaults['enableEndDate']) {
         $form->addElement('html', '<div id="option3" style="display: block;">');
     } else {

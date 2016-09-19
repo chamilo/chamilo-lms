@@ -1500,19 +1500,19 @@ function getWorkListTeacher(
             $work['type'] = Display::return_icon('work.png');
             $work['expires_on'] = empty($work['expires_on']) ? null : api_get_local_time($work['expires_on']);
 
+            $countUniqueAttempts = getUniqueStudentAttemptsTotal(
+                $workId,
+                $group_id,
+                $course_id,
+                $session_id
+            );
+
             $totalUsers = getStudentSubscribedToWork(
                 $workId,
                 $course_id,
                 $group_id,
                 $session_id,
                 true
-            );
-
-            $countUniqueAttempts = getUniqueStudentAttemptsTotal(
-                $workId,
-                $group_id,
-                $course_id,
-                $session_id
             );
 
             $work['amount'] = Display::label(

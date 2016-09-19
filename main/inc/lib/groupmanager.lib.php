@@ -1003,6 +1003,7 @@ class GroupManager
         $direction = null
     ) {
         $group_user_table = Database :: get_course_table(TABLE_GROUP_USER);
+        $groupTable = Database :: get_course_table(TABLE_GROUP);
         $user_table = Database :: get_main_table(TABLE_MAIN_USER);
 
         $group_id = intval($group_id);
@@ -1013,17 +1014,19 @@ class GroupManager
             $courseId = intval($courseId);
         }
 
-        $select = " SELECT g.user_id, firstname, lastname ";
+        $select = " SELECT u.id, firstname, lastname ";
         if ($getCount) {
-            $select = " SELECT count(u.user_id) count";
+            $select = " SELECT count(u.id) count";
         }
         $sql = "$select
-                FROM $group_user_table g
+                FROM $group_user_table gu
+                INNER JOIN $groupTable g
+                ON (gu.group_id = g.id and g.c_id = gu.c_id)
                 INNER JOIN $user_table u
-                ON (u.user_id = g.user_id)
+                ON (u.id = gu.user_id)
                 WHERE 
-                    c_id = $courseId AND 
-                    g.group_id = $group_id";
+                    gu.c_id = $courseId AND 
+                    g.id = $group_id";
 
         if (!empty($column) && !empty($direction)) {
             $column = Database::escape_string($column, null, false);
@@ -1036,6 +1039,7 @@ class GroupManager
             $limit = intval($limit);
             $sql .= " LIMIT $start, $limit";
         }
+
         $res = Database::query($sql);
         $users = array();
         while ($obj = Database::fetch_object($res)) {
@@ -1061,10 +1065,15 @@ class GroupManager
     {
         $group_user_table = Database :: get_course_table(TABLE_GROUP_USER);
         $tutor_user_table = Database :: get_course_table(TABLE_GROUP_TUTOR);
+        $groupTable = Database :: get_course_table(TABLE_GROUP);
+
         $course_id = api_get_course_int_id();
         $group_id = intval($group_id);
-        $sql = "SELECT user_id FROM $group_user_table
-                WHERE c_id = $course_id AND group_id = $group_id";
+        $sql = "SELECT user_id 
+                FROM $group_user_table gu
+                INNER JOIN $groupTable g
+                ON (gu.group_id = g.id and g.c_id = gu.c_id)
+                WHERE gu.c_id = $course_id AND g.id = $group_id";
         $res = Database::query($sql);
         $users = array();
 
@@ -1072,8 +1081,11 @@ class GroupManager
             $users[] = api_get_user_info($obj->user_id);
         }
 
-        $sql = "SELECT user_id FROM $tutor_user_table
-                WHERE c_id = $course_id AND group_id = $group_id";
+        $sql = "SELECT user_id 
+                FROM $tutor_user_table gu
+                INNER JOIN $groupTable g
+                ON (gu.group_id = g.id and g.c_id = gu.c_id)
+                WHERE gu.c_id = $course_id AND g.id = $group_id";
         $res = Database::query($sql);
         while ($obj = Database::fetch_object($res)) {
             $users[] = api_get_user_info($obj->user_id);
@@ -1089,12 +1101,16 @@ class GroupManager
      */
     public static function getTutors($group_id)
     {
+        $groupTable = Database :: get_course_table(TABLE_GROUP);
         $tutor_user_table = Database :: get_course_table(TABLE_GROUP_TUTOR);
         $course_id = api_get_course_int_id();
         $group_id = intval($group_id);
 
-        $sql = "SELECT user_id FROM $tutor_user_table
-                WHERE c_id = $course_id AND group_id = $group_id";
+        $sql = "SELECT user_id 
+                FROM $tutor_user_table gu
+                INNER JOIN $groupTable g
+                ON (gu.group_id = g.id and g.c_id = gu.c_id)
+                WHERE gu.c_id = $course_id AND g.id = $group_id";
         $res = Database::query($sql);
 
         $users = array();
@@ -1115,8 +1131,11 @@ class GroupManager
         $group_user_table = Database :: get_course_table(TABLE_GROUP_USER);
         $course_id = api_get_course_int_id();
         $group_id = intval($group_id);
-        $sql = "SELECT user_id FROM $group_user_table
-                WHERE c_id = $course_id AND group_id = $group_id";
+        $sql = "SELECT user_id 
+                FROM $group_user_table gu
+                INNER JOIN $groupTable g
+                ON (gu.group_id = g.id and g.c_id = gu.c_id)
+                WHERE gu.c_id = $course_id AND g.id = $group_id";
         $res = Database::query($sql);
         $users = array();
 

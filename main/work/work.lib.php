@@ -398,7 +398,6 @@ function getUniqueStudentAttemptsTotal($workId, $groupId, $course_id, $sessionId
         $groupIid = $groupInfo['iid'];
     }
 
-
     $sql = "SELECT count(DISTINCT u.user_id)
             FROM $work_table w
             INNER JOIN $user_table u
@@ -1212,7 +1211,7 @@ function get_count_work($work_id, $onlyMeUserId = null, $notMeUserId = null)
 
     $groupIid = 0;
     if ($group_id) {
-        $groupInfo = GroupManager::get_group_properties($groupId);
+        $groupInfo = GroupManager::get_group_properties($group_id);
         $groupIid = $groupInfo['iid'];
     }
 
@@ -1906,10 +1905,6 @@ function get_work_user_list(
         }
 
         $user_condition = "INNER JOIN $user_table u  ON (work.user_id = u.user_id) ";
-        $work_condition = "$iprop_table prop 
-                            INNER JOIN $work_table work
-                           ON (prop.ref = work.id AND prop.c_id = $course_id AND work.c_id = $course_id) ";
-
         $work_assignment = get_work_assignment_by_id($work_id);
 
         if (!empty($studentId)) {
@@ -1917,8 +1912,12 @@ function get_work_user_list(
         }
 
         $sql = " $select
-                FROM $work_condition  $user_condition
-                WHERE $extra_conditions $where_condition $condition_session
+                FROM $work_table work  $user_condition
+                WHERE
+                    work.c_id = $course_id AND
+                    $extra_conditions 
+                    $where_condition 
+                    $condition_session
                     AND u.status != " . INVITEE . "
                 ORDER BY $column $direction";
 

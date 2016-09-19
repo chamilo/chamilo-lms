@@ -989,7 +989,6 @@ function insert_all_directory_in_course_table($base_work_dir)
         $groupIid = $groupInfo['iid'];
     }
 
-
     for($i = 0; $i < count($only_dir); $i++) {
         $url = $only_dir[$i];
 
@@ -1483,7 +1482,7 @@ function getWorkListTeacher(
                     w.c_id = $course_id
                     $condition_session AND
                     $active_condition AND
-                    (parent_id = 0) AND
+                    parent_id = 0 AND
                     post_group_id = $groupIid
                     $where_condition
                 ORDER BY $column $direction
@@ -3638,7 +3637,6 @@ function processWorkForm(
     }
 
     $workData = [];
-
     if ($saveWork) {
         $filename = isset($result['filename']) ? $result['filename'] : null;
         if (empty($title)) {

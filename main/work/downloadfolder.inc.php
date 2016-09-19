@@ -120,11 +120,11 @@ if (api_is_allowed_to_edit() || api_is_coach()) {
                 $filenameCondition
             FROM $tbl_student_publication AS work
             INNER JOIN $prop_table AS props
-                ON (props.c_id = $course_id AND
-                    work.c_id = $course_id AND
-                    work.id = props.ref)
+            ON (props.c_id = $course_id AND
+                work.c_id = $course_id AND
+                work.id = props.ref)
             WHERE
-                props.tool='work' AND
+                props.tool = 'work' AND
                 work.accepted = 1 AND
                 work.active = 1 AND
                 work.parent_id = $work_id AND

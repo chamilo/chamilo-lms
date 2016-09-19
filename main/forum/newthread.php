@@ -167,9 +167,9 @@ echo '</div>';
 // Set forum attachment data into $_SESSION
 getAttachedFiles($current_forum['forum_id'], 0, 0);
 
-
-
-$form->display();
+if ($form) {
+    $form->display();
+}
 
 if (isset($origin) && $origin == 'learnpath') {
     Display::display_reduced_footer();

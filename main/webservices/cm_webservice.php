@@ -148,8 +148,6 @@ class WSCM
 		$login = $username;
 		$password = $pass;
 
-        //lookup the user in the main database
-        $user_table = Database::get_main_table(TABLE_MAIN_USER);
         $userRepo = UserManager::getRepository();
         /** @var User $uData */
         $uData = $userRepo->findOneBy([
@@ -158,14 +156,14 @@ class WSCM
 
         if ($uData) {
             if ($uData->getAuthSource() == PLATFORM_AUTH_SOURCE) {
-                $password = trim(stripslashes($password));
+                $passwordEncoded = UserManager::encryptPassword($password, $uData);
                 // Check the user's password
-                if ($password == $uData->getPassword() AND (trim($login) == $uData->getUsername())) {
+                if ($passwordEncoded == $uData->getPassword() && (trim($login) == $uData->getUsername())) {
                     // Check if the account is active (not locked)
                     if ($uData->getActive()) {
                         // Check if the expiration date has not been reached
                         $now = new DateTime();
-                        if ($uData->getExpirationDate() > $now OR !$uData->getExpirationDate()) {
+                        if ($uData->getExpirationDate() > $now || !$uData->getExpirationDate()) {
                             return "valid";
                         } else {
                             return get_lang('AccountExpired');
@@ -192,23 +190,26 @@ class WSCM
 	 * @param string User id value
 	 * @return mixed System user id if the user was found, WSError otherwise
 	 */
-	protected function getUserId($user_id_field_name, $user_id_value)
+    protected function getUserId($user_id_field_name, $user_id_value)
     {
-		if($user_id_field_name == "chamilo_user_id") {
-			if(UserManager::is_user_id_valid(intval($user_id_value))) {
-				return intval($user_id_value);
-			} else {
-				return new WSCMError(100, "User not found");
-			}
-		} else {
-			$user_id = UserManager::get_user_id_from_original_id($user_id_value, $user_id_field_name);
-			if($user_id == 0) {
-				return new WSCMError(100, "User not found");
-			} else {
-				return $user_id;
-			}
-		}
-	}
+        if ($user_id_field_name == "chamilo_user_id") {
+            if (UserManager::is_user_id_valid(intval($user_id_value))) {
+                return intval($user_id_value);
+            } else {
+                return new WSCMError(100, "User not found");
+            }
+        } else {
+            $user_id = UserManager::get_user_id_from_original_id(
+                $user_id_value,
+                $user_id_field_name
+            );
+            if ($user_id == 0) {
+                return new WSCMError(100, "User not found");
+            } else {
+                return $user_id;
+            }
+        }
+    }
 
 	/**
 	 * Gets the real course id based on the course id field name and value.

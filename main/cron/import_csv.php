@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-if (PHP_SAPI !='cli') {
+if (PHP_SAPI != 'cli') {
     die('Run this script through the command line or comment this line in the code');
 }
 
@@ -27,7 +27,7 @@ class ImportCsv
         'session' => 'external_session_id',
         'course' => 'external_course_id',
         'user' => 'external_user_id',
-        'calendar_event' => 'external_calendar_event_id'
+        'calendar_event' => 'external_calendar_event_id',
     );
     public $defaultAdminId = 1;
     public $defaultSessionVisibility = 1;
@@ -193,7 +193,12 @@ class ImportCsv
                         echo 'File: '.$file.PHP_EOL;
                         $this->logger->addInfo("Reading file: $file");
                         if ($method == 'importSessions') {
-                            $this->$method($file, true, $teacherBackup, $groupBackup);
+                            $this->$method(
+                                $file,
+                                true,
+                                $teacherBackup,
+                                $groupBackup
+                            );
                         } else {
                             $this->$method($file, true);
                         }
@@ -226,7 +231,12 @@ class ImportCsv
                         $file = $fileInfo['file'];
                         echo 'Static file: '.$file.PHP_EOL;
                         $this->logger->addInfo("Reading static file: $file");
-                        $this->$method($file, true, $teacherBackup, $groupBackup);
+                        $this->$method(
+                            $file,
+                            true,
+                            $teacherBackup,
+                            $groupBackup
+                        );
                     }
                 }
             }
@@ -263,11 +273,13 @@ class ImportCsv
 
         // Create calendar_event extra field extra_external_session_id
         $extraField = new ExtraField('calendar_event');
-        $extraField->save(array(
-            'field_type' => ExtraField::FIELD_TYPE_TEXT,
-            'variable' => $this->extraFieldIdNameList['calendar_event'],
-            'display_text' => 'External calendar event id'
-        ));
+        $extraField->save(
+            array(
+                'field_type' => ExtraField::FIELD_TYPE_TEXT,
+                'variable' => $this->extraFieldIdNameList['calendar_event'],
+                'display_text' => 'External calendar event id',
+            )
+        );
     }
 
     /**
@@ -286,7 +298,9 @@ class ImportCsv
         if ($result) {
             $this->logger->addInfo("Moving file to the treated folder: $file");
         } else {
-            $this->logger->addError("Error - Cant move file to the treated folder: $file");
+            $this->logger->addError(
+                "Error - Cant move file to the treated folder: $file"
+            );
         }
     }
 
@@ -394,11 +408,11 @@ class ImportCsv
                 $row = $this->cleanUserRow($row);
 
                 $user_id = UserManager::get_user_id_from_original_id(
-                    $row['extra_' . $this->extraFieldIdNameList['user']],
+                    $row['extra_'.$this->extraFieldIdNameList['user']],
                     $this->extraFieldIdNameList['user']
                 );
                 $userInfo = array();
-                $userInfoByOfficialCode  = null;
+                $userInfoByOfficialCode = null;
 
                 if (!empty($user_id)) {
                     $userInfo = api_get_user_info($user_id);
@@ -431,7 +445,11 @@ class ImportCsv
                         foreach ($row as $key => $value) {
                             if (substr($key, 0, 6) == 'extra_') {
                                 //an extra field
-                                UserManager::update_extra_field_value($userId, substr($key, 6), $value);
+                                UserManager::update_extra_field_value(
+                                    $userId,
+                                    substr($key, 6),
+                                    $value
+                                );
                             }
                         }
                         $this->logger->addInfo("Teachers - User created: ".$row['username']);
@@ -585,7 +603,11 @@ class ImportCsv
                         foreach ($row as $key => $value) {
                             if (substr($key, 0, 6) === 'extra_') {
                                 //an extra field
-                                UserManager::update_extra_field_value($result, substr($key, 6), $value);
+                                UserManager::update_extra_field_value(
+                                    $result,
+                                    substr($key, 6),
+                                    $value
+                                );
                             }
                         }
                         $this->logger->addInfo("Students - User created: ".$row['username']);
@@ -734,7 +756,7 @@ class ImportCsv
 
     /**
      * @param string $file
-     * @param bool   $moveFile
+     * @param bool $moveFile
      *
      * @return int
      */
@@ -744,7 +766,7 @@ class ImportCsv
         $data = Import::csvToArray($file);
 
         if (!empty($data)) {
-            $this->logger->addInfo(count($data) . " records found.");
+            $this->logger->addInfo(count($data)." records found.");
             $eventsToCreate = array();
             $errorFound = false;
             foreach ($data as $row) {
@@ -758,7 +780,7 @@ class ImportCsv
                     );
                 }
 
-                $courseCode  = null;
+                $courseCode = null;
                 if (isset($row['coursecode'])) {
                     $courseCode = $row['coursecode'];
                 }
@@ -812,7 +834,7 @@ class ImportCsv
                 }
 
                 $date = $row['date'];
-                $startTime  = $row['time_start'];
+                $startTime = $row['time_start'];
                 $endTime = $row['time_end'];
                 $title = $row['title'];
                 $comment = $row['comment'];
@@ -847,7 +869,7 @@ class ImportCsv
                         'session_id' => $sessionId,
                         'comment' => $comment,
                         'color' => $color,
-                        $this->extraFieldIdNameList['calendar_event'] => $row['external_calendar_itemID']
+                        $this->extraFieldIdNameList['calendar_event'] => $row['external_calendar_itemID'],
                     );
                 }
             }
@@ -871,7 +893,9 @@ class ImportCsv
             $externalEventId = null;
 
             $extraField = new ExtraField('calendar_event');
-            $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable($extraFieldName);
+            $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable(
+                $extraFieldName
+            );
 
             if (empty($extraFieldInfo)) {
                 $this->logger->addInfo(
@@ -1025,8 +1049,12 @@ class ImportCsv
      * @param array $teacherBackup
      * @param array $groupBackup
      */
-    private function importCourses($file, $moveFile = true, &$teacherBackup = array(), &$groupBackup = array())
-    {
+    private function importCourses(
+        $file,
+        $moveFile = true,
+        &$teacherBackup = array(),
+        &$groupBackup = array()
+    ) {
         $this->fixCSVFile($file);
         $data = Import::csvToArray($file);
 
@@ -1037,7 +1065,7 @@ class ImportCsv
                 $row = $this->cleanCourseRow($row);
 
                 $courseId = CourseManager::get_course_id_from_original_id(
-                    $row['extra_' . $this->extraFieldIdNameList['course']],
+                    $row['extra_'.$this->extraFieldIdNameList['course']],
                     $this->extraFieldIdNameList['course']
                 );
 
@@ -1053,7 +1081,10 @@ class ImportCsv
                     $params['course_language'] = $row['language'];
                     $params['teachers'] = $row['teachers'];
 
-                    $courseInfo = CourseManager::create_course($params, $this->defaultAdminId);
+                    $courseInfo = CourseManager::create_course(
+                        $params,
+                        $this->defaultAdminId
+                    );
 
                     if (!empty($courseInfo)) {
                         CourseManager::update_course_extra_field_value(
@@ -1154,7 +1185,7 @@ class ImportCsv
     {
         $data = Import::csv_reader($file);
         if (!empty($data)) {
-            $this->logger->addInfo(count($data) . " records found.");
+            $this->logger->addInfo(count($data)." records found.");
             $userIdList = [];
             foreach ($data as $row) {
                 $chamiloUserName = $row['UserName'];
@@ -1225,7 +1256,7 @@ class ImportCsv
                 }
 
                 $this->logger->addError(
-                    "User '$chamiloUserName' was added as '$status' to Session: #$chamiloSessionId - Course: " . $courseInfo['code']
+                    "User '$chamiloUserName' was added as '$status' to Session: #$chamiloSessionId - Course: ".$courseInfo['code']
                 );
 
             }
@@ -1240,7 +1271,7 @@ class ImportCsv
         $data = Import::csv_reader($file);
 
         if (!empty($data)) {
-            $this->logger->addInfo(count($data) . " records found.");
+            $this->logger->addInfo(count($data)." records found.");
             foreach ($data as $row) {
                 $chamiloUserName = $row['UserName'];
                 $chamiloCourseCode = $row['CourseCode'];
@@ -1299,7 +1330,7 @@ class ImportCsv
         $data = Import::csv_reader($file);
 
         if (!empty($data)) {
-            $this->logger->addInfo(count($data) . " records found.");
+            $this->logger->addInfo(count($data)." records found.");
             foreach ($data as $row) {
                 $chamiloUserName = $row['UserName'];
                 $chamiloCourseCode = $row['CourseCode'];
@@ -1515,83 +1546,103 @@ class ImportCsv
                         }
                     }
 
-                    // Courses
-                    $courses = explode('|', $session['Courses']);
-                    $courseList = array();
-                    foreach ($courses as $course) {
-                        $courseArray = bracketsToArray($course);
-                        $courseCode = $courseArray[0];
-                        if (CourseManager::course_exists($courseCode)) {
-                            $courseInfo = api_get_course_info($courseCode);
-                            $courseList[] = $courseInfo['real_id'];
-                        }
-                    }
-
-                    SessionManager::add_courses_to_session(
-                        $sessionId,
-                        $courseList,
-                        true
-                    );
-
-                    $this->logger->addInfo("Session #$sessionId: Courses added: '".implode(', ', $courseList)."'");
-
                     if (!empty($sessionId)) {
+                        // Courses
                         $courses = explode('|', $session['Courses']);
+                        $courseList = [];
+                        $courseListWithCoach = [];
                         foreach ($courses as $course) {
                             $courseArray = bracketsToArray($course);
                             $courseCode = $courseArray[0];
                             if (CourseManager::course_exists($courseCode)) {
-                                // Coaches
+                                $courseInfo = api_get_course_info($courseCode);
+                                $courseList[] = $courseInfo['real_id'];
+                                // Extracting course coaches
                                 $courseCoaches = isset($courseArray[1]) ? $courseArray[1] : null;
                                 $courseCoaches = explode(',', $courseCoaches);
-                                if (!empty($courseCoaches)) {
-                                    $coachList = array();
-                                    foreach ($courseCoaches as $courseCoach) {
-                                        $courseCoachId = UserManager::get_user_id_from_username($courseCoach);
-                                        if ($courseCoachId !== false) {
-                                            // Just insert new coaches
-                                            $coachList[] = $courseCoachId;
-                                        }
-                                    }
 
-                                    $this->logger->addInfo("Session #$sessionId: course '$courseCode' coaches added: '".implode(', ', $coachList)."'");
-                                    SessionManager::updateCoaches(
-                                        $sessionId,
-                                        $courseCode,
-                                        $coachList,
-                                        true
-                                    );
-                                }
-
-                                // Students
+                                // Extracting students
                                 $courseUsers = isset($courseArray[2]) ? $courseArray[2] : null;
                                 $courseUsers = explode(',', $courseUsers);
-                                if (!empty($courseUsers)) {
-                                    $userList = array();
-                                    foreach ($courseUsers as $username) {
-                                        $userInfo = api_get_user_info_from_username(trim($username));
-                                        if (!empty($userInfo)) {
-                                            $userList[] = $userInfo['user_id'];
-                                        }
-                                    }
 
-                                    $this->logger->addInfo("Session #$sessionId: course '$courseCode': Students added '".implode(', ', $userList)."'");
-                                    SessionManager::subscribe_users_to_session_course(
-                                        $userList,
-                                        $sessionId,
-                                        $courseCode,
-                                        SESSION_VISIBLE_READ_ONLY,
-                                        true
+                                $courseListWithCoach[] = [
+                                    'course_info' => $courseInfo,
+                                    'coaches' => $courseCoaches,
+                                    'course_users' => $courseUsers
+                                ];
+                            }
+                        }
+
+                        SessionManager::add_courses_to_session(
+                            $sessionId,
+                            $courseList,
+                            true
+                        );
+
+                        $this->logger->addInfo("Session #$sessionId: Courses added: '".implode(', ', $courseList)."'");
+
+                        if (empty($courseListWithCoach)) {
+                            $this->logger->addInfo("No users/coaches to update");
+                            continue;
+                        }
+
+                        foreach ($courseListWithCoach as $courseData) {
+                            $courseInfo = $courseData['course_info'];
+                            $courseId = $courseInfo['real_id'];
+                            $courseCoaches = $courseData['coaches'];
+                            $courseUsers = $courseData['course_users'];
+
+                            // Coaches
+                            if (!empty($courseCoaches)) {
+                                $coachList = array();
+                                foreach ($courseCoaches as $courseCoach) {
+                                    $courseCoachId = UserManager::get_user_id_from_username(
+                                        $courseCoach
                                     );
-                                } else {
-                                    $this->logger->addInfo("No users to register.");
+                                    if ($courseCoachId !== false) {
+                                        // Just insert new coaches
+                                        $coachList[] = $courseCoachId;
+                                    }
                                 }
+
+                                $this->logger->addInfo("Session #$sessionId: course '$courseCode' coaches added: '".implode(', ', $coachList)."'");
+
+                                SessionManager::updateCoaches(
+                                    $sessionId,
+                                    $courseId,
+                                    $coachList,
+                                    true
+                                );
                             } else {
-                                $this->logger->addInfo("Course does not exists $courseCode");
+                                $this->logger->addInfo("No coaches added");
+                            }
+
+                            // Students
+                            if (!empty($courseUsers)) {
+                                $userList = array();
+                                foreach ($courseUsers as $username) {
+                                    $userInfo = api_get_user_info_from_username(trim($username));
+                                    if (!empty($userInfo)) {
+                                        $userList[] = $userInfo['user_id'];
+                                    }
+                                }
+
+                                $this->logger->addInfo("Session #$sessionId: course '$courseCode': Students added '".implode(', ', $userList)."'");
+                                SessionManager::subscribe_users_to_session_course(
+                                    $userList,
+                                    $sessionId,
+                                    $courseCode,
+                                    SESSION_VISIBLE_READ_ONLY,
+                                    true
+                                );
+                            } else {
+                                $this->logger->addInfo("No users to register.");
                             }
                         }
                     } else {
-                        $this->logger->addInfo('SessionID not found in system.');
+                        $this->logger->addInfo(
+                            'SessionID not found in system.'
+                        );
                     }
                 } else {
                     $this->logger->addInfo('SessionID does not exists');
@@ -1604,13 +1655,17 @@ class ImportCsv
 
     /**
      * @param string $file
-     * @param bool   $moveFile
+     * @param bool $moveFile
      * @param array $teacherBackup
      * @param array $groupBackup
      */
-    private function importSessions($file, $moveFile = true, &$teacherBackup = array(), &$groupBackup = array())
-    {
-        $avoid =  null;
+    private function importSessions(
+        $file,
+        $moveFile = true,
+        &$teacherBackup = array(),
+        &$groupBackup = array()
+    ) {
+        $avoid = null;
         if (isset($this->conditions['importSessions']) &&
             isset($this->conditions['importSessions']['update'])
         ) {
@@ -1727,19 +1782,31 @@ class ImportCsv
                 $courseInfo = api_get_course_info($chamiloCourseCode);
 
                 if (empty($courseInfo)) {
-                    $this->logger->addError('Course does not exists: '.$chamiloCourseCode);
+                    $this->logger->addError(
+                        'Course does not exists: '.$chamiloCourseCode
+                    );
                     continue;
                 }
 
-                $userId = UserManager::get_user_id_from_username($chamiloUserName);
+                $userId = UserManager::get_user_id_from_username(
+                    $chamiloUserName
+                );
 
                 if (empty($userId)) {
-                    $this->logger->addError('User does not exists: '.$chamiloUserName);
+                    $this->logger->addError(
+                        'User does not exists: '.$chamiloUserName
+                    );
                     continue;
                 }
 
-                CourseManager::subscribe_user($userId, $courseInfo['code'], $status);
-                $this->logger->addInfo("User $userId added to course $chamiloCourseCode as $status");
+                CourseManager::subscribe_user(
+                    $userId,
+                    $courseInfo['code'],
+                    $status
+                );
+                $this->logger->addInfo(
+                    "User $userId added to course $chamiloCourseCode as $status"
+                );
             }
         }
     }
@@ -1747,8 +1814,12 @@ class ImportCsv
     /**
      * @param string $file
      */
-    private function importUnsubscribeStatic($file, $moveFile = false, &$teacherBackup = array(), &$groupBackup = array())
-    {
+    private function importUnsubscribeStatic(
+        $file,
+        $moveFile = false,
+        &$teacherBackup = array(),
+        &$groupBackup = array()
+    ) {
         $data = Import::csv_reader($file);
 
         if (!empty($data)) {
@@ -1788,7 +1859,9 @@ class ImportCsv
                 $userCourseData = Database::fetch_array($result, 'ASSOC');
                 $teacherBackup[$userId][$courseInfo['code']] = $userCourseData;
 
-                $sql = "SELECT * FROM ".Database::get_course_table(TABLE_GROUP_USER)."
+                $sql = "SELECT * FROM ".Database::get_course_table(
+                        TABLE_GROUP_USER
+                    )."
                         WHERE
                             user_id = ".$userId." AND
                             c_id = '".$courseInfo['real_id']."'
@@ -1981,7 +2054,10 @@ if (!empty($emails)) {
     }
 }*/
 
-$stream = new StreamHandler(api_get_path(SYS_ARCHIVE_PATH).'import_csv.log', $minLevel);
+$stream = new StreamHandler(
+    api_get_path(SYS_ARCHIVE_PATH).'import_csv.log',
+    $minLevel
+);
 $logger->pushHandler(new BufferHandler($stream, 0, $minLevel));
 $logger->pushHandler(new RotatingFileHandler('import_csv', 5, $minLevel));
 
@@ -2020,7 +2096,7 @@ $timeStart = microtime(true);
 $import->run();
 
 $timeEnd = microtime(true);
-$executionTime = round(($timeEnd - $timeStart)/60, 2);
+$executionTime = round(($timeEnd - $timeStart) / 60, 2);
 $logger->addInfo("Total execution Time $executionTime Min");
 
 if (isset($_configuration['import_csv_fix_permissions']) &&

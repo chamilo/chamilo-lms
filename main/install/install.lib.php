@@ -3062,7 +3062,7 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
                 $sql = "SELECT * FROM c_student_publication where parent_id is not null";
                 $statement = $connection->executeQuery($sql);
                 $result = $statement->fetchAll();
-                while ($result as $row) {
+                foreach ($result as $row) {
                     $groupId  = $row['post_group_id'];
                     $courseId = $row['c_id'];
                     $sessionId = $row['session_id'];

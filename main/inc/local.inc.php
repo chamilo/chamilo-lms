@@ -558,7 +558,10 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                     }
                 }
             } //end if is_array($extAuthSource)
-            if ($loginFailed) { //If we are here username given is wrong
+
+            $checkUserInfo = Session::read('_user');
+            if ($loginFailed && empty($checkUserInfo)) {
+                //If we are here username given is wrong
                 Session::write('loginFailed', '1');
                 header(
                     'Location: '.api_get_path(WEB_PATH)

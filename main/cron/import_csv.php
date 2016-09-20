@@ -1588,6 +1588,7 @@ class ImportCsv
 
                         foreach ($courseListWithCoach as $courseData) {
                             $courseInfo = $courseData['course_info'];
+                            $courseCode = $courseInfo['code'];
                             $courseId = $courseInfo['real_id'];
                             $courseCoaches = $courseData['coaches'];
                             $courseUsers = $courseData['course_users'];

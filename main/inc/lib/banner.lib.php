@@ -505,7 +505,7 @@ function menuArray()
                 if ($GLOBALS['this_section'] == SECTION_CAMPUS) {
                     if (!empty($_GET['include'])) {
                         $name = str_replace(' ', '-', strtolower($navigation_info['title'])) . '_' . $lang . $ext;
-                        if ($_GET['include'] == $name) {
+                        if (strtolower($_GET['include']) == $name) {
                             $activeSection = $section;
                         }
                     }

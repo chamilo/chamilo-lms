@@ -671,6 +671,7 @@ class Wiki
                     'linksto' => $_clean['linksto'],
                     'user_ip' => $_SERVER['REMOTE_ADDR'],
                     'session_id' => $session_id,
+                    'addlock_disc' => 1
                 ];
                 $id = Database::insert($tbl_wiki, $params);
                 if ($id > 0) {
@@ -3368,7 +3369,6 @@ class Wiki
         $id = $row['id'];
         $firstuserid = $row['user_id'];
 
-
         if (isset($_POST['Submit']) && self::double_post($_POST['wpost_id'])) {
             $dtime = api_get_utc_datetime();
             $message_author = api_get_user_id();
@@ -3393,7 +3393,6 @@ class Wiki
             exit;
         }
 
-
         //mode assignment: previous to show  page type
         $icon_assignment = null;
         if ($row['assignment'] == 1) {
@@ -3405,18 +3404,18 @@ class Wiki
         $countWPost = null;
         $avg_WPost_score = null;
 
+
         // Show title and form to discuss if page exist
         if ($id != '') {
             // Show discussion to students if isn't hidden.
             // Show page to all teachers if is hidden.
             // Mode assignments: If is hidden, show pages to student only if student is the author
-            if ($row['visibility_disc']==1 ||
-                api_is_allowed_to_edit(false,true) ||
+            if ($row['visibility_disc'] == 1 ||
+                api_is_allowed_to_edit(false, true) ||
                 api_is_platform_admin() ||
-                ($row['assignment']==2 && $row['visibility_disc']==0 && (api_get_user_id()==$row['user_id']))
+                ($row['assignment'] == 2 && $row['visibility_disc']==0 && (api_get_user_id()==$row['user_id']))
             ) {
                 echo '<div id="wikititle">';
-
                 // discussion action: protecting (locking) the discussion
                 $addlock_disc = null;
                 $lock_unlock_disc = null;
@@ -3436,7 +3435,7 @@ class Wiki
                 // discussion action: visibility.  Show discussion to students if isn't hidden. Show page to all teachers if is hidden.
                 $visibility_disc = null;
                 $hide_show_disc = null;
-                if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
+                if (api_is_allowed_to_edit(false, true) || api_is_platform_admin()) {
                     if (self::check_visibility_discuss()==1) {
                         /// TODO: 	Fix Mode assignments: If is hidden, show discussion to student only if student is the author
                         $visibility_disc = Display::return_icon('visible.png', get_lang('ShowDiscussExtra'),'',ICON_SIZE_SMALL);
@@ -3453,7 +3452,7 @@ class Wiki
                 //discussion action: check add rating lock. Show/Hide list to rating for all student
                 $lock_unlock_rating_disc = null;
                 $ratinglock_disc = null;
-                if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
+                if (api_is_allowed_to_edit(false, true) || api_is_platform_admin()) {
                     if (self::check_ratinglock_discuss() == 1) {
                         $ratinglock_disc = Display::return_icon('star.png', get_lang('UnlockRatingDiscussExtra'),'',ICON_SIZE_SMALL);
                         $lock_unlock_rating_disc = 'unlockrating';
@@ -3464,7 +3463,7 @@ class Wiki
                 }
 
                 echo '<span style="float:right">';
-                echo '<a href="index.php?action=discuss&amp;actionpage='.$lock_unlock_rating_disc.'&amp;title='.api_htmlentities(urlencode($page)).'">'.$ratinglock_disc.'</a>';
+                echo '<a href="index.php?action=discuss&actionpage='.$lock_unlock_rating_disc.'&title='.api_htmlentities(urlencode($page)).'">'.$ratinglock_disc.'</a>';
                 echo '</span>';
 
                 //discussion action: email notification
@@ -3486,7 +3485,6 @@ class Wiki
                 }
 
                 echo '</div>';
-
                 if ($row['addlock_disc']==1 || api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
                     //show comments but students can't add theirs
                     ?>

@@ -1815,22 +1815,23 @@ function get_last_post_information($forum_id, $show_invisibles = false, $course_
 /**
  * Retrieve all the threads of a given forum
  *
- * @param int   forum id
- * @param string course db name
+ * @param int $forum_id
+ * @param int|null $courseId Optional If is null then it is considered the current course
+ * @param int|null $sessionId Optional. If is null then it is considered the current session
  * @return an array containing all the information about the threads
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version february 2006, dokeos 1.8
  */
-function get_threads($forum_id)
+function get_threads($forum_id, $courseId = null, $sessionId = null)
 {
     $groupId = api_get_group_id();
-    $sessionId = api_get_session_id();
+    $sessionId = $sessionId !== NULL ? intval($sessionId) : api_get_session_id();
     $table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
     $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
     $table_users = Database :: get_main_table(TABLE_MAIN_USER);
 
-    $courseId = api_get_course_int_id();
+    $courseId = $courseId !== NULL ? intval($courseId) : api_get_course_int_id();
     $groupInfo = GroupManager::get_group_properties($groupId);
     $groupCondition = '';
     if (!empty($groupInfo)) {
@@ -2084,19 +2085,20 @@ function get_post_information($post_id)
 /**
  * This function retrieves all the information of a thread
  *
+ * @param int $forumId
  * @param $thread_id integer that indicates the forum
- *
+ * @param int|null $sessionId Optional. If is null then it is considered the current session
  * @return array returns
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version february 2006, dokeos 1.8
  */
-function get_thread_information($forumId, $thread_id)
+function get_thread_information($forumId, $thread_id, $sessionId = null)
 {
     $table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
     $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
     $thread_id = intval($thread_id);
-    $sessionId = api_get_session_id();
+    $sessionId = $sessionId !== null ? intval($sessionId) : api_get_session_id();
     $sessionCondition = api_get_session_condition($sessionId, true, false, 'threads.session_id');
     $forumCondition = '';
     if (!empty($forumId)) {

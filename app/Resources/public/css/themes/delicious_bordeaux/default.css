@@ -143,7 +143,7 @@ background: #800020;
 .panel-default{
     border-color: #F3F3F4;
 }
-footer{
+footer.bgfooter{
 background: #890226; /* Old browsers */
 background: -moz-linear-gradient(top, #890226 0%, #6d0019 100%); /* FF3.6+ */
 background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#890226), color-stop(100%,#6d0019)); /* Chrome,Safari4+ */
@@ -155,9 +155,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#890226', end
 color: #9DD0F1;
 border-top: 4px solid #720033;
 }
-footer a{
+footer.bgfooter a{
   color: #ffffff;
 }
-footer a:hover{
+footer.bgfooter a:hover{
   color: #CCC;
 }

@@ -121,7 +121,7 @@ border-radius: 0;
 .nav li a:hover{
     background: transparent;
 }
-footer{
+footer.bgfooter{
   background: #1c1c1c; /* Old browsers */
   background: -moz-linear-gradient(top, #1c1c1c 0%, #272727 99%); /* FF3.6+ */
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#1c1c1c), color-stop(99%,#272727)); /* Chrome,Safari4+ */
@@ -132,10 +132,10 @@ footer{
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1c1c1c', endColorstr='#272727',GradientType=0 ); /* IE6-9 */
   color: #d4707f;
 }
-footer a{
+footer.bgfooter a{
   color: #ffffff;
 }
-footer a:hover{
+footer.bgfooter a:hover{
   color: #CCC;
 }
 #carousel-announcement .left, #carousel-announcement .right{

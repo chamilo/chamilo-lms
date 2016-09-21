@@ -667,4 +667,11 @@ echo Display::tabs(
     $tabs
 );
 
+// Deleting the objects
+Session::erase('_gid');
+Session::erase('oLP');
+Session::erase('lpobject');
+
+api_remove_in_gradebook();
+
 Display::display_footer();

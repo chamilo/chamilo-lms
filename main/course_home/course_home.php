@@ -309,7 +309,6 @@ $tpl->display_one_col_template();
 Session::erase('_gid');
 Session::erase('oLP');
 Session::erase('lpobject');
-Session::erase('studentview');
 
 api_remove_in_gradebook();
 DocumentManager::removeGeneratedAudioTempFile();

@@ -541,7 +541,6 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
         $navigation_item['url'] = $web_course_path . $_course['path'].'/index.php'.(!empty($session_id) ? '?id_session='.$session_id : '');
         $_course['name'] = api_htmlentities($_course['name']);
         $course_title = cut($_course['name'], MAX_LENGTH_BREADCRUMB);
-
         switch (api_get_setting('breadcrumbs_course_homepage')) {
             case 'get_lang':
                 $navigation_item['title'] = Display::img(api_get_path(WEB_IMG_PATH).'home.png', get_lang('CourseHomepageLink')).' '.get_lang('CourseHomepageLink');
@@ -658,10 +657,11 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
     /* Part 4 . Show the teacher view/student view button at the right of the breadcrumb */
     $view_as_student_link = null;
     if ($user_id && isset($course_id)) {
-        if ((api_is_course_admin() || api_is_platform_admin()) && api_get_setting('student_view_enabled') == 'true') {
+        if ((api_is_course_admin() || api_is_platform_admin() || api_is_coach(null, null, false)) && api_get_setting('student_view_enabled') == 'true') {
             $view_as_student_link = api_display_tool_view_option();
         }
     }
+
     if (!empty($final_navigation)) {
         $lis = '';
         $i = 0;

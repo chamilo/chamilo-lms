@@ -337,7 +337,7 @@ if (isset($_SESSION['oLP'])) {
 }
 
 if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true') {
-    if ($_REQUEST['action'] != 'list' AND $_REQUEST['action'] != 'view') {
+    if (isset($_REQUEST['action']) && !in_array($_REQUEST['action'], ['list', 'view'])) {
         if (!empty($_REQUEST['lp_id'])) {
             $_REQUEST['action'] = 'view';
         } else {

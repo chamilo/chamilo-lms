@@ -1153,6 +1153,7 @@ class DocumentManager
         if (empty($base_work_dir)) {
             return false;
         }
+
         if (empty($documentId)) {
             $documentId = self::get_document_id($_course, $path, $sessionId);
             $docInfo = self::get_document_data_by_id(
@@ -1180,11 +1181,13 @@ class DocumentManager
         if (empty($path) || empty($docInfo) || empty($documentId)) {
             return false;
         }
+
         $itemInfo = api_get_item_property_info(
             $_course['real_id'],
             TOOL_DOCUMENT,
             $documentId,
-            $sessionId
+            $sessionId,
+            $groupId
         );
 
         if (empty($itemInfo)) {
@@ -1241,14 +1244,15 @@ class DocumentManager
                         null,
                         $base_work_dir,
                         $sessionId,
-                        $row['id']
+                        $row['id'],
+                        $groupId
                     );
                 }
             }
         }
 
         if ($document_exists_in_disk) {
-            if (api_get_setting('permanently_remove_deleted_files') == 'true') {
+            if (api_get_setting('permanently_remove_deleted_files') === 'true') {
                 // Delete documents, do it like this so metadata gets deleted too
                 my_delete($base_work_dir.$path);
                 // Hard delete.

@@ -11,70 +11,70 @@ $libpath = api_get_path(LIBRARY_PATH);
  */
 class WSCMError
 {
-	/**
-	 * Error handler. This needs to be a class that implements the interface WSErrorHandler
-	 *
-	 * @var WSErrorHandler
-	 */
-	protected static $_handler;
+    /**
+     * Error handler. This needs to be a class that implements the interface WSErrorHandler
+     *
+     * @var WSErrorHandler
+     */
+    protected static $_handler;
 
-	/**
-	 * Error code
-	 *
-	 * @var int
-	 */
-	public $code;
+    /**
+     * Error code
+     *
+     * @var int
+     */
+    public $code;
 
-	/**
-	 * Error message
-	 *
-	 * @var string
-	 */
-	public $message;
+    /**
+     * Error message
+     *
+     * @var string
+     */
+    public $message;
 
-	/**
-	 * Constructor
-	 *
-	 * @param int Error code
-	 * @param string Error message
-	 */
-	public function __construct($code, $message)
+    /**
+     * Constructor
+     *
+     * @param int Error code
+     * @param string Error message
+     */
+    public function __construct($code, $message)
     {
-		$this->code = $code;
-		$this->message = $message;
-	}
+        $this->code = $code;
+        $this->message = $message;
+    }
 
-	/**
-	 * Sets the error handler
-	 *
-	 * @param WSErrorHandler Error handler
-	 */
-	public static function setErrorHandler($handler)
+    /**
+     * Sets the error handler
+     *
+     * @param WSErrorHandler Error handler
+     */
+    public static function setErrorHandler($handler)
     {
-		if($handler instanceof WSErrorHandler) {
-			self::$_handler = $handler;
-		}
-	}
+        if($handler instanceof WSErrorHandler) {
+            self::$_handler = $handler;
+        }
+    }
 
-	/**
-	 * Returns the error handler
-	 *
-	 * @return WSErrorHandler Error handler
-	 */
-	public static function getErrorHandler()
+    /**
+     * Returns the error handler
+     *
+     * @return WSErrorHandler Error handler
+     */
+    public static function getErrorHandler()
     {
-		return self::$_handler;
-	}
+        return self::$_handler;
+    }
 
-	/**
-	 * Transforms the error into an array
-	 *
-	 * @return array Associative array with code and message
-	 */
-	public function toArray()
+    /**
+     * Transforms the error into an array
+     *
+     * @return array Associative array with code and message
+     */
+    public function toArray()
     {
-		return array('code' => $this->code, 'message' => $this->message);
-	}
+        return array('code' => $this->code, 'message' => $this->message);
+    }
 }
 
 /**
@@ -142,7 +142,6 @@ class WSCM
 	 *
 	 * return "valid" if username e password are correct! Else, return a message error
 	 */
-
 	public function verifyUserPass($username, $pass)
     {
 		$login = $username;
@@ -222,20 +221,23 @@ class WSCM
 	 */
 	protected function getCourseId($course_id_field_name, $course_id_value)
     {
-		if($course_id_field_name == "chamilo_course_id") {
-			if(CourseManager::get_course_code_from_course_id(intval($course_id_value)) != null) {
-				return intval($course_id_value);
-			} else {
-				return new WSCMError(200, "Course not found");
-			}
-		} else {
-			$courseId = CourseManager::get_course_code_from_original_id($course_id_value, $course_id_field_name);
-			if (empty($courseId)) {
-				return new WSCMError(200, "Course not found");
-			} else {
-				return $courseId;
-			}
-		}
+        if ($course_id_field_name == "chamilo_course_id") {
+            if (CourseManager::get_course_code_from_course_id($course_id_value) != null) {
+                return intval($course_id_value);
+            } else {
+                return new WSCMError(200, "Course not found");
+            }
+        } else {
+            $courseId = CourseManager::get_course_code_from_original_id(
+                $course_id_value,
+                $course_id_field_name
+            );
+            if (empty($courseId)) {
+                return new WSCMError(200, "Course not found");
+            } else {
+                return $courseId;
+            }
+        }
 	}
 
 	/**
@@ -305,10 +307,9 @@ class WSCM
 	 * @param <type> $string
 	 * @return <type> $string
 	 */
-	public function nl2br_revert($string) {
+	public function nl2br_revert($string)
+    {
 		return preg_replace('`<br(?: /)?>([\\n\\r])`', '$1', $string);
 	}
-
-
 }
 

@@ -1413,9 +1413,7 @@ class DocumentManager
         }
 
         $session_id = empty($session_id) ? api_get_session_id() : intval($session_id);
-
         $www = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/document';
-
         $TABLE_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT);
         $id = intval($id);
 

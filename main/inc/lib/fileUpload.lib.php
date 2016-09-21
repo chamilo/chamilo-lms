@@ -269,7 +269,6 @@ function handle_uploaded_document(
 
             return false;
         } else {
-
             // If the upload path differs from / (= root) it will need a slash at the end
             if ($uploadPath != '/') {
                 $uploadPath = $uploadPath.'/';
@@ -295,10 +294,8 @@ function handle_uploaded_document(
             if ($onlyUploadFile) {
                 $errorResult = moveUploadedFile($uploadedFile, $whereToSave.$cleanName);
                 if ($errorResult) {
-
                     return $whereToSave.$cleanName;
                 } else {
-
                     return $errorResult;
                 }
             }
@@ -307,7 +304,6 @@ function handle_uploaded_document(
                 Based in the clean name we generate a new filesystem name
                 Using the session_id and group_id if values are not empty
             */
-
             $fileSystemName = DocumentManager::fixDocumentName(
                 $cleanName,
                 'file',

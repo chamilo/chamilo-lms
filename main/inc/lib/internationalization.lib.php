@@ -661,12 +661,12 @@ function api_format_date($time, $format = null, $language = null)
  * You can use it like this:
  * Display::tip(date_to_str_ago($dateInUtc), api_get_local_time($dateInUtc));
  *
- * @param  string $date The string has to be the result of a date function in this format -> date('Y-m-d H:i:s', time());
- * @return string $timeZone
+ * @param string $date The string has to be the result of a date function in this format -> date('Y-m-d H:i:s', time());
+ * @param string $timeZone
+ * @return string
  *
  * @author Julio Montoya
  */
-
 function date_to_str_ago($date, $timeZone = 'UTC')
 {
     if ($date === '0000-00-00 00:00:00') {
@@ -674,7 +674,6 @@ function date_to_str_ago($date, $timeZone = 'UTC')
     }
 
     $getOldTimezone = _api_get_timezone();
-
     $timeAgo = new TimeAgo($timeZone, api_get_language_isocode());
     $value = $timeAgo->inWords($date);
 

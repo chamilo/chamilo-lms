@@ -148,15 +148,15 @@ background: #111111;
 .panel-default{
     border-color: #F3F3F4;
 }
-footer{
+footer.bgfooter{
 background: #111111;
 color: #FBD232;
 border-top: 5px solid #FBD232;
 }
-footer a{
+footer.bgfooter a{
   color: #ffffff;
 }
-footer a:hover{
+footer.bgfooter a:hover{
   color: #CCC;
 }
 .menu-column .panel-heading{

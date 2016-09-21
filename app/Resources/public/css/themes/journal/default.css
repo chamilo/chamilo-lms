@@ -181,14 +181,14 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6fc4af', end
 .panel-default{
     border-color: #F3F3F4;
 }
-footer{
+footer.bgfooter{
 background: #34495E;
 color: #50B387;
 border-top: 4px solid #50B387;
 }
-footer a{
+footer.bgfooter a{
   color: #ffffff;
 }
-footer a:hover{
+footer.bgfooter a:hover{
   color: #CCC;
 }

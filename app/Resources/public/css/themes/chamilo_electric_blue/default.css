@@ -112,13 +112,13 @@ border-radius: 0px;
 .nav li a:hover{
     background: transparent;
 }
-footer{
+footer.bgfooter{
   background: #004455;
   color: #37abc8;
 }
-footer a{
+footer.bgfooter a{
   color: #ffffff;
 }
-footer a:hover{
+footer.bgfooter a:hover{
   color: #CCC;
 }

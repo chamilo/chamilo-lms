@@ -157,14 +157,14 @@ background: #FF650D;
 .panel-default{
     border-color: #F3F3F4;
 }
-footer{
+footer.bgfooter{
 background: #000000;
 color: #FF6700;
 border-top: 4px solid #FF6700;
 }
-footer a{
+footer.bgfooter a{
   color: #ffffff;
 }
-footer a:hover{
+footer.bgfooter a:hover{
   color: #CCC;
 }

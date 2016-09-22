@@ -291,7 +291,7 @@ class ssoTCC
      */
     public function generateProfileEditingURL($userId = 0, $asAdmin = false)
     {
-/*        $userId = intval($userId);
+        $userId = intval($userId);
 
         if (empty($userId)) {
             $userId = api_get_user_id();
@@ -310,7 +310,7 @@ class ssoTCC
         }
         // If the user doesn't match a Drupal user, give the normal profile
         // link
-        if ($drupalUserIdData === false) {
+/*        if ($drupalUserIdData === false) {
             return api_get_path(WEB_CODE_PATH) . 'auth/profile.php';
         }
         // In all other cases, generate a link to the Drupal profile edition

@@ -1049,7 +1049,10 @@ switch ($action) {
                 );
 
                 $result[] = array(
-                    'name' => $session['name'],
+                    'name' => Display::url(
+                        $session['name'],
+                        api_get_path(WEB_CODE_PATH) . 'mySpace/course.php?session_id=' . $session['id']
+                    ),
                     'date' => $session_date_string,
                     'course_per_session' => $count_courses_in_session,
                     'student_per_session' => $count_users_in_session,
@@ -1059,7 +1062,6 @@ switch ($action) {
         }
         break;
     case 'get_sessions':
-
         $session_columns = SessionManager::getGridColumns($list_type);
         $columns = $session_columns['simple_column_name'];
 

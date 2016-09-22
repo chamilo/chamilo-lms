@@ -148,12 +148,17 @@ try {
 if (!empty($_configuration['multiple_access_urls'])) {
     $_configuration['access_url'] = 1;
     $access_urls = api_get_access_urls();
-
     $root_rel = api_get_self();
     $root_rel = substr($root_rel, 1);
     $pos = strpos($root_rel, '/');
     $root_rel = substr($root_rel, 0, $pos);
-    $protocol = ((!empty($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) != 'OFF') ? 'https' : 'http').'://';
+    $protocol = 'http://';
+    if (!empty($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) != 'OFF') {
+        $protocol = 'https://';
+    } elseif (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') {
+        $protocol = 'https://';
+    }
+
     //urls with subdomains (HTTP_HOST is preferred - see #6764)
     $request_url_root = '';
     if (empty($_SERVER['HTTP_HOST'])) {

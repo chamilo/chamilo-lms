@@ -686,13 +686,18 @@ function api_get_path($path = '', $configuration = [])
         }
     }
 
-    // To avoid that the api_get_access_url() function fails since global.inc.php also calls the main_api.lib.php
-    if (isset($configuration['access_url']) && $configuration['access_url'] != 1) {
-        //we look into the DB the function api_get_access_url
-        $url_info = api_get_access_url($configuration['access_url']);
-        $root_web = $url_info['active'] == 1 ? $url_info['url'] : $configuration['root_web'];
+    if (isset($configuration['multiple_access_urls']) && $configuration['multiple_access_urls']) {
+        // To avoid that the api_get_access_url() function fails since global.inc.php also calls the main_api.lib.php
+        if (isset($configuration['access_url']) && !empty($configuration['access_url'])) {
+            // We look into the DB the function api_get_access_url
+            $url_info = api_get_access_url($configuration['access_url']);
+            // Avoid default value
+            $defaulValues = ['http://localhost/', 'https://localhost/'];
+            if (!empty($url_info['url']) && !in_array($url_info['url'], $defaulValues)) {
+                $root_web = $url_info['active'] == 1 ? $url_info['url'] : $configuration['root_web'];
+            }
+        }
     }
-
 
     if (empty($paths)) {
         $paths = [];

@@ -38,7 +38,7 @@
             {% endif %}
         </tr>
 
-        {% if pdf_session_info.access_start_date != '' and pdf_session_info.access_end_date not empty %}
+        {% if pdf_session_info.access_start_date != '' and pdf_session_info.access_end_date is not empty %}
         <tr>
             <td>
                 <strong>{{ "PeriodToDisplay" | get_lang }}:</strong> {{ "FromDateXToDateY"| get_lang | format(pdf_session_info.access_start_date, pdf_session_info.access_end_date ) }}

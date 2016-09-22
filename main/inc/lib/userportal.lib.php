@@ -1173,7 +1173,6 @@ class IndexManager
 
         // Declared listSession variable
         $listSession = [];
-
         if (is_array($session_categories)) {
             foreach ($session_categories as $session_category) {
                 $session_category_id = $session_category['session_category']['id'];
@@ -1271,12 +1270,11 @@ class IndexManager
 
                             $params['category_id'] = $session_box['category_id'];
                             $params['title'] = $session_box['title'];
-                            //$params['subtitle'] = $extra_info;
                             $params['id_coach'] = $coachId;
                             $params['coach_url'] = api_get_path(WEB_AJAX_PATH) . 'user_manager.ajax.php?a=get_user_popup&user_id=' . $coachId;
                             $params['coach_name'] = !empty($session_box['coach']) ? $session_box['coach'] : null;
-                            $params['coach_avatar'] =UserManager::getUserPicture($coachId, USER_IMAGE_SIZE_SMALL);
-                            $params['date'] =  $session_box['dates'];
+                            $params['coach_avatar'] = UserManager::getUserPicture($coachId, USER_IMAGE_SIZE_SMALL);
+                            $params['date'] = $session_box['dates'];
                             $params['image'] = isset($imageField['value']) ? $imageField['value'] : null;
                             $params['duration'] = isset($session_box['duration']) ? ' ' . $session_box['duration'] : null;
                             $params['edit_actions'] = $actions;
@@ -1373,10 +1371,9 @@ class IndexManager
                             $sessionParams = [];
                             // Category
                             if ($count > 0) {
-                                $session_box = Display:: get_session_title_box($session_id);
+                                $session_box = Display::get_session_title_box($session_id);
                                 $sessionParams[0]['id'] = $session_id;
                                 $sessionParams[0]['date'] = $session_box['dates'];
-                                //$sessionParams['show_link_to_session'] = !api_is_drh() && $sessionTitleLink;
                                 $sessionParams[0]['course_list_session_style'] = $coursesListSessionStyle;
                                 $sessionParams[0]['title'] = $session_box['title'];
                                 $sessionParams[0]['subtitle'] = (!empty($session_box['coach']) ? $session_box['coach'] . ' | ': '') . $session_box['dates'];

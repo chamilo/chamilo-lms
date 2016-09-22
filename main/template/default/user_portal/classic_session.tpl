@@ -82,7 +82,8 @@
                                     {{ row.coach_name }}
                                 </span>
                             {% endif %}
-                            <span><i class="fa fa-calendar" aria-hidden="true"></i>
+                            <span>
+                                <i class="fa fa-calendar" aria-hidden="true"></i>
                                 {{ row.date }}
                             </span>
                         </div>

@@ -6759,29 +6759,31 @@ class SessionManager
      * Converts "start date" and "end date" to "From start date to end date" string
      * @param string $startDate
      * @param string $endDate
+     * @param bool $showTime
+     * @param bool $dateHuman
      *
      * @return string
      */
     private static function convertSessionDateToString($startDate, $endDate, $showTime, $dateHuman)
     {
-        $startDateToLocal = '';
-        $endDateToLocal = '';
-        // This will clean the variables if 0000-00-00 00:00:00 the variable will be empty
-        if (isset($startDateToLocal)) {
-            $startDateToLocal = api_get_local_time($startDate, null, null, true, $showTime, $dateHuman);
-        }
-        if (isset($endDateToLocal)) {
-            $endDateToLocal = api_get_local_time($endDate, null, null, true, $showTime, $dateHuman);
-        }
+        // api_get_local_time returns empty if date is invalid like 0000-00-00 00:00:00
+        $startDateToLocal = api_get_local_time($startDate, null, null, true, $showTime, $dateHuman);
+        $endDateToLocal = api_get_local_time($endDate, null, null, true, $showTime, $dateHuman);
+
         $result = '';
         if (!empty($startDateToLocal) && !empty($endDateToLocal)) {
-            $result =  sprintf(get_lang('FromDateXToDateY'), $startDateToLocal, $endDateToLocal);
+            //$result = sprintf(get_lang('FromDateXToDateY'), $startDateToLocal, $endDateToLocal);
+            $result = sprintf(
+                get_lang('FromDateXToDateY'),
+                api_format_date($startDateToLocal, DATE_TIME_FORMAT_LONG_24H),
+                api_format_date($endDateToLocal, DATE_TIME_FORMAT_LONG_24H)
+            );
         } else {
             if (!empty($startDateToLocal)) {
-                $result = get_lang('From').' '.$startDateToLocal;
+                $result = get_lang('From').' '.api_format_date($startDateToLocal, DATE_TIME_FORMAT_LONG_24H);
             }
             if (!empty($endDateToLocal)) {
-                $result = get_lang('Until').' '.$endDateToLocal;
+                $result = get_lang('Until').' '.api_format_date($endDateToLocal, DATE_TIME_FORMAT_LONG_24H);
             }
         }
         if (empty($result)) {
@@ -6794,32 +6796,32 @@ class SessionManager
      * @params array $sessionInfo An array with all the session dates
      * @return string
      */
-    public static function parseSessionDates($sessionInfo)
+    public static function parseSessionDates($sessionInfo, $showTime = false)
     {
         $displayDates = self::convertSessionDateToString(
             $sessionInfo['display_start_date'],
             $sessionInfo['display_end_date'],
-            false,
+            $showTime,
             true
         );
         $accessDates = self::convertSessionDateToString(
             $sessionInfo['access_start_date'],
             $sessionInfo['access_end_date'],
-            false,
+            $showTime,
             true
         );
 
         $coachDates = self::convertSessionDateToString(
             $sessionInfo['coach_access_start_date'],
             $sessionInfo['coach_access_end_date'],
-            false,
+            $showTime,
             true
         );
 
         $result = [
             'access' => $accessDates,
             'display' => $displayDates,
-            'coach' => $coachDates,
+            'coach' => $coachDates
         ];
 
         return $result;

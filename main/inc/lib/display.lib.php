@@ -1531,12 +1531,11 @@ class Display
         if (!$nosession) {
             global $now, $date_start, $date_end;
         }
-
         $output = array();
+        $active = false;
         if (!$nosession) {
-            $main_user_table        = Database :: get_main_table(TABLE_MAIN_USER);
-            $tbl_session            = Database :: get_main_table(TABLE_MAIN_SESSION);
-            $active = false;
+            $main_user_table = Database :: get_main_table(TABLE_MAIN_USER);
+            $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
             // Request for the name of the general coach
             $sql ='SELECT tu.lastname, tu.firstname, ts.*
                     FROM '.$tbl_session.' ts
@@ -1554,31 +1553,21 @@ class Display
             $session['coach'] = '';
             $session['dates'] =  '';
 
-            if (
-                (
-                    $session_info['access_end_date'] == '0000-00-00 00:00:00' &&
-                    $session_info['access_start_date'] == '0000-00-00 00:00:00'
-                ) ||
-                (
-                    $session_info['access_end_date'] == '0000-00-00' &&
-                    $session_info['access_start_date'] == '0000-00-00'
-                ) ||
-                (
-                    empty($session_info['access_end_date']) && empty($session_info['access_start_date'])
-                )
+            if (($session_info['access_end_date'] == '0000-00-00 00:00:00' && $session_info['access_start_date'] == '0000-00-00 00:00:00') ||
+                ($session_info['access_end_date'] == '0000-00-00 00:00:00' && $session_info['access_start_date'] == '0000-00-00 00:00:00') ||
+                (empty($session_info['access_end_date']) && empty($session_info['access_start_date']))
             ) {
                 if (api_get_setting('show_session_coach') === 'true') {
                     $session['coach'] = get_lang('GeneralCoach').': '.api_get_person_name($session_info['firstname'], $session_info['lastname']);
                 }
+
                 if (isset($session_info['duration']) && !empty($session_info['duration'])) {
                     $userDurationData = SessionManager::getUserSession(
                         api_get_user_id(),
                         $session_id
                     );
-                    $userDuration = 0;
-                    if (isset($userDurationData['duration'])) {
-                        $userDuration = intval($userDurationData['duration']);
-                    }
+
+                    $userDuration = isset($userDurationData['duration']) ? (int) $userDurationData['duration'] : 0;
                     $totalDuration = $session_info['duration'] + $userDuration;
 
                     $daysLeft = SessionManager::getDayLeftInSession(
@@ -1590,16 +1579,16 @@ class Display
                 }
                 $active = true;
             } else {
-                $start = $stop = false;
+                /*$start = $stop = false;
                 $start_buffer = $stop_buffer = '';
-                if ($session_info['access_start_date'] == '0000-00-00 00:00:00' || empty($session_info['access_start_date'])) {
+                if ($session_info['access_start_date'] === '0000-00-00 00:00:00' || empty($session_info['access_start_date'])) {
                     $session_info['access_start_date'] = '';
                 } else {
                     $start = true;
                     $start_buffer = $session_info['access_start_date'];
                     $session_info['access_start_date'] = $session_info['access_start_date'];
                 }
-                if ($session_info['access_end_date'] == '0000-00-00 00:00:00' || empty($session_info['access_end_date'])) {
+                if ($session_info['access_end_date'] === '0000-00-00 00:00:00' || empty($session_info['access_end_date'])) {
                     $session_info['access_end_date'] = '';
                 } else {
                     $stop = true;
@@ -1608,13 +1597,12 @@ class Display
                 }
                 if ($start && $stop) {
                     $session['dates'] = sprintf(
-                            get_lang('FromDateXToDateY'),
-                            api_format_date($start_buffer),
-                            api_format_date($stop_buffer)
-                        );
+                        get_lang('FromDateXToDateY'),
+                        api_format_date($start_buffer),
+                        api_format_date($stop_buffer)
+                    );
                 } else {
                     $start_buffer = $stop_buffer = null;
-
                     if (!empty($session_info['access_start_date'])) {
                         $start_buffer = sprintf(
                             get_lang('FromDateX'),
@@ -1627,17 +1615,21 @@ class Display
                             get_lang('UntilDateX'),
                             api_format_date(api_get_local_time($session_info['access_end_date']))
                         );
-                    }
-                    $session['dates'] = $start_buffer . ' ' . $stop_buffer;
-                }
+                    }*/
 
-                if ( api_get_setting('show_session_coach') === 'true' ) {
+                $dates = SessionManager::parseSessionDates($session_info, true);
+
+                //$session['dates'] = $start_buffer . ' ' . $stop_buffer.'- julio '.$dates['access'];
+                $session['dates'] = $dates['access'];
+
+
+                if (api_get_setting('show_session_coach') === 'true' ) {
                     $session['coach'] = api_get_person_name(
                         $session_info['firstname'],
                         $session_info['lastname']
                     );
                 }
-                $active = ($date_start <= $now && $date_end >= $now);
+                $active = $date_start <= $now && $date_end >= $now;
             }
             $session['active'] = $active;
             $session['session_category_id'] = $session_info['session_category_id'];

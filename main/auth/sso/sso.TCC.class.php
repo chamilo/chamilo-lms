@@ -271,7 +271,7 @@ class ssoTCC
     {
         $key = substr(api_get_security_key(), 0, 16);
         $ivsize = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_ECB);
-        $iv = mcrypt_create_iv($ivsize);
+        $iv = mcrypt_create_iv($ivsize, MCRYPT_RAND);
         $valuedecode = base64_decode($value);
 
         return mcrypt_decrypt(

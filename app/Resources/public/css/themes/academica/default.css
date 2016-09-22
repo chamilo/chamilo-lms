@@ -125,7 +125,7 @@ header{
 .panel-default .panel-heading{
     background-color: #ddecef;
 }
-footer{
+footer.bgfooter{
   background: #004455; /* Old browsers */
   background: -moz-linear-gradient(top, #004455 0%, #272727 100%); /* FF3.6+ */
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#004455), color-stop(100%,#272727)); /* Chrome,Safari4+ */
@@ -137,9 +137,9 @@ footer{
   color: #9DD0F1;
   border-top: 2px solid #364753;
 }
-footer a{
+footer.bgfooter a{
   color: #ffffff;
 }
-footer a:hover{
+footer.bgfooter a:hover{
   color: #CCC;
 }

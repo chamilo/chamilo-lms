@@ -160,15 +160,15 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#8fc400', end
 .panel-default .panel-heading{
     background-color: #F9F9F9;
 }
-footer{
+footer.bgfooter{
   background: #232323;
   color: #837E76;
   border-top: 2px solid #79B72C;
 }
-footer a{
+footer.bgfooter a{
   color: #63AC0C;
 }
-footer a:hover{
+footer.bgfooter a:hover{
   color: #63AC0C;
 }
 .menu-column .panel-default .panel-heading{

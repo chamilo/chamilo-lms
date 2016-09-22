@@ -153,15 +153,15 @@ background: #020202;
     background-color: #0099c0;
   }
 }
-footer{
+footer.bgfooter{
   background: #000000;
   color: #FF0000;
   border-top: 4px solid #FF0000;
 }
-footer a{
+footer.bgfooter a{
   color: #ffffff;
 }
-footer a:hover{
+footer.bgfooter a:hover{
   color: #CCC;
 }
 .nav li a:hover{

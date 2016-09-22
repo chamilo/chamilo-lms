@@ -559,20 +559,13 @@ class Rest extends WebService
     {
         require_once api_get_path(SYS_CODE_PATH) . 'forum/forumfunction.inc.php';
 
-        $forumInfo = get_forums($forumId);
+        $forumInfo = get_forums($forumId, $this->course->getCode());
 
         if (!isset($forumInfo['iid'])) {
             throw new Exception(get_lang('NoForum'));
         }
 
-        /** @var Course $course */
-        $course = Database::getManager()->find('ChamiloCoreBundle:Course', $forumInfo['c_id']);
-
-        if (!$course) {
-            throw new Exception(get_lang('NoCourse'));
-        }
-
-        $webCoursePath = api_get_path(WEB_COURSE_PATH) . $course->getDirectory() . '/upload/forum/images/';
+        $webCoursePath = api_get_path(WEB_COURSE_PATH) . $this->course->getDirectory() . '/upload/forum/images/';
         $forum = [
             'id' => $forumInfo['iid'],
             'title' => $forumInfo['forum_title'],
@@ -581,7 +574,7 @@ class Rest extends WebService
             'threads' => []
         ];
 
-        $threads = get_threads($forumInfo['iid']);
+        $threads = get_threads($forumInfo['iid'], $this->course->getId());
 
         foreach ($threads as $thread) {
             $forum['threads'][] = [
@@ -598,6 +591,7 @@ class Rest extends WebService
     }
 
     /**
+     * @param int $forumId
      * @param int $threadId
      * @return array
      */
@@ -615,7 +609,7 @@ class Rest extends WebService
             'posts' => []
         ];
 
-        $forumInfo = get_forums($threadInfo['forum_id']);
+        $forumInfo = get_forums($threadInfo['forum_id'], $this->course->getCode());
 
         $postsInfo = getPosts($forumInfo, $threadInfo['iid'], 'ASC');
 

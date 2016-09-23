@@ -420,12 +420,7 @@ switch ($action) {
                 $announcement_to_modify = '';
             }
 
-            $form->addElement(
-                'checkbox',
-                'email_ann',
-                null,
-                get_lang('EmailOption')
-            );
+            $form->addCheckBox('email_ann', '', get_lang('EmailOption'));
         } else {
             if (!isset($announcement_to_modify)) {
                 $announcement_to_modify = '';
@@ -433,12 +428,7 @@ switch ($action) {
 
             $element = CourseManager::addGroupMultiSelect($form, $group_properties['iid'], array());
             $form->setRequired($element);
-            $form->addElement(
-                'checkbox',
-                'email_ann',
-                null,
-                get_lang('EmailOption')
-            );
+            $form->addCheckBox('email_ann', '', get_lang('EmailOption'));
         }
 
         $announcementInfo = AnnouncementManager::get_by_id($course_id, $id);
@@ -458,6 +448,8 @@ switch ($action) {
                 $defaults['users'] = $to;
             }
         }
+
+        $defaults['email_ann'] = true;
 
         $form->addElement('text', 'title', get_lang('EmailTitle'));
         $form->addElement('hidden', 'id');

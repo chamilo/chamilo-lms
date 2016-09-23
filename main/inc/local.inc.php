@@ -611,13 +611,13 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
             if ($redirectToMasterConditions) {
                 // Redirect to master server
                 $osso->ask_master();
-            } elseif (isset($_GET['sso_cookie'])) {
+            } elseif (isset($_REQUEST['sso_cookie'])) {
 
                 // Here we are going to check the origin of
                 // what the call says should be used for
                 // authentication, and ensure  we know it
                 $matches_domain = false;
-                if (isset($_GET['sso_referer'])) {
+                if (isset($_REQUEST['sso_referer'])) {
                     $protocol = api_get_setting('sso_authentication_protocol');
 
                     // sso_authentication_domain can list
@@ -633,7 +633,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                             //  then skip other possibilities
                             // Do NOT compare the whole referer, as this might cause confusing errors with friendly urls,
                             // like in Drupal /?q=user& vs /user?
-                            $referrer = substr($_GET['sso_referer'], 0, strrpos($_GET['sso_referer'], '/'));
+                            $referrer = substr($_REQUEST['sso_referer'], 0, strrpos($_REQUEST['sso_referer'], '/'));
                             if ($protocol.trim($mu) === $referrer) {
                                 $matches_domain = true;
                                 break;

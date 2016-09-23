@@ -7865,8 +7865,7 @@ function api_mail_html(
     $senderName = !empty($senderName) ? $senderName : $defaultName;
     $senderEmail = !empty($senderEmail) ? $senderEmail : $defaultEmail;
 
-    // Errors to sender
-    $mail->AddCustomHeader('Errors-To: '.$senderEmail);
+
     $mail->AddCustomHeader('envelope-from: '.$defaultEmail);
 
     // Reply to first
@@ -7875,9 +7874,14 @@ function api_mail_html(
             $extra_headers['reply_to']['mail'],
             $extra_headers['reply_to']['name']
         );
+            // Errors to sender
+        $mail->AddCustomHeader('Errors-To: '.$extra_headers['reply_to']['mail']);
         $mail->Sender = $extra_headers['reply_to']['mail'];
         unset($extra_headers['reply_to']);
+    } else {
+        $mail->AddCustomHeader('Errors-To: '.$defaultEmail);
     }
+
     //If the SMTP configuration only accept one sender
     if ($platform_email['SMTP_UNIQUE_SENDER']) {
         $senderName = $platform_email['SMTP_FROM_NAME'];

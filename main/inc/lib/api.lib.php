@@ -7865,9 +7865,6 @@ function api_mail_html(
     $senderName = !empty($senderName) ? $senderName : $defaultName;
     $senderEmail = !empty($senderEmail) ? $senderEmail : $defaultEmail;
 
-
-    $mail->AddCustomHeader('envelope-from: '.$defaultEmail);
-
     // Reply to first
     if (isset($extra_headers['reply_to'])) {
         $mail->AddReplyTo(
@@ -7887,7 +7884,7 @@ function api_mail_html(
         $senderName = $platform_email['SMTP_FROM_NAME'];
         $senderEmail = $platform_email['SMTP_FROM_EMAIL'];
     }
-    $mail->SetFrom($senderEmail, $senderName);
+    $mail->SetFrom($defaultEmail, $defaultName);
 
     $mail->Subject = $subject;
     $mail->AltBody = strip_tags(

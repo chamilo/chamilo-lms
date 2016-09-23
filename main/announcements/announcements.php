@@ -28,6 +28,19 @@ $current_course_tool = TOOL_ANNOUNCEMENT;
 $this_section = SECTION_COURSES;
 $nameTools = get_lang('ToolAnnouncement');
 
+$allowToEdit = (
+    api_is_allowed_to_edit(false, true) ||
+    (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())
+);
+
+$sessionId = api_get_session_id();
+$drhHasAccessToSessionContent = api_get_configuration_value('drh_can_access_all_session_content');
+
+if (!empty($sessionId) && $drhHasAccessToSessionContent) {
+    $allowToEdit = $allowToEdit || api_is_drh();
+}
+
+
 /* ACCESS RIGHTS */
 api_protect_course_script(true);
 
@@ -246,10 +259,7 @@ switch ($action) {
 
         if (empty($count)) {
             $html = '';
-            if ((api_is_allowed_to_edit(false, true) ||
-                    (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) &&
-                (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath')
-            ) {
+            if ($allowToEdit && (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath')) {
                 $html .= '<div id="no-data-view">';
                 $html .= '<h3>'.get_lang('Announcements').'</h3>';
                 $html .= Display::return_icon('valves.png', '', array(), 64);
@@ -601,9 +611,7 @@ if (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath') {
 // Actions
 $show_actions = false;
 $actionsLeft = '';
-if ((api_is_allowed_to_edit(false, true) ||
-    (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) &&
-    (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath')
+if ($allowToEdit && (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath')
 ) {
     if (in_array($action, array('add', 'modify', 'view'))) {
         $actionsLeft .= "<a href='".api_get_self()."?".api_get_cidreq()."'>".
@@ -620,7 +628,7 @@ if ((api_is_allowed_to_edit(false, true) ||
     }
 }
 
-if (api_is_allowed_to_edit() && $announcement_number > 1) {
+if ($allowToEdit) {
     if (api_get_group_id() == 0) {
         if (!isset($_GET['action'])) {
             $actionsLeft .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete_all\" onclick=\"javascript:if(!confirm('".get_lang("ConfirmYourChoice")."')) return false;\">".

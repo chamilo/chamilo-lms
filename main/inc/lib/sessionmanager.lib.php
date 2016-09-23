@@ -4105,19 +4105,20 @@ class SessionManager
 
     /**
      * @param int $user_id
-     * @param bool $ignore_visibility_for_admins
+     * @param bool $ignoreVisibilityForAdmins
      * @param bool $ignoreTimeLimit
      *
      * @return array
      */
-    public static function get_sessions_by_user($user_id, $ignore_visibility_for_admins = false, $ignoreTimeLimit = false)
+    public static function get_sessions_by_user($user_id, $ignoreVisibilityForAdmins = false, $ignoreTimeLimit = false)
     {
         $sessionCategories = UserManager::get_sessions_by_category(
             $user_id,
             false,
-            $ignore_visibility_for_admins,
+            $ignoreVisibilityForAdmins,
             $ignoreTimeLimit
         );
+
         $sessionArray = array();
         if (!empty($sessionCategories)) {
             foreach ($sessionCategories as $category) {

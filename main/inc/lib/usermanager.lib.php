@@ -2499,147 +2499,135 @@ class UserManager
         // Get the list of sessions per user
         $now = new DateTime('now', new DateTimeZone('UTC'));
 
-        $dql = "
-            SELECT DISTINCT
-                S.id,
-                S.name,
-                S.accessStartDate AS access_start_date,
-                S.accessEndDate AS access_end_date,
-                SC.id AS session_category_id,
-                SC.name AS session_category_name,
-                SC.dateStart AS session_category_date_start,
-                SC.dateEnd AS session_category_date_end,
-                S.coachAccessStartDate AS coach_access_start_date,
-                S.coachAccessEndDate AS coach_access_end_date
-            FROM ChamiloCoreBundle:Session AS S
-            LEFT JOIN ChamiloCoreBundle:SessionCategory AS SC WITH S.category = SC
-            LEFT JOIN ChamiloCoreBundle:SessionRelCourseRelUser AS SCU WITH SCU.session = S
-            WHERE SCU.user = :user OR S.generalCoach = :user
-            ORDER BY SC.name, S.name";
+        $dql = "SELECT DISTINCT
+                    s.id,
+                    s.name,
+                    s.accessStartDate AS access_start_date,
+                    s.accessEndDate AS access_end_date,
+                    sc.id AS session_category_id,
+                    sc.name AS session_category_name,
+                    sc.dateStart AS session_category_date_start,
+                    sc.dateEnd AS session_category_date_end,
+                    s.coachAccessStartDate AS coach_access_start_date,
+                    s.coachAccessEndDate AS coach_access_end_date
+                FROM ChamiloCoreBundle:Session AS s
+                LEFT JOIN ChamiloCoreBundle:SessionCategory AS sc WITH s.category = sc
+                LEFT JOIN ChamiloCoreBundle:SessionRelCourseRelUser AS scu WITH scu.session = s
+                WHERE scu.user = :user OR s.generalCoach = :user
+                ORDER BY sc.name, s.name";
 
-        $sessionData = Database::getManager()
+        $dql = Database::getManager()
             ->createQuery($dql)
             ->setParameters(['user' => $user_id])
-            ->getResult();
-        $categories = [];
-        foreach ($sessionData as $row) {
-                // User portal filters:
+        ;
 
-                if ($ignoreTimeLimit === false) {
-                    if ($is_time_over) {
-                        // History
-                        if (empty($row['access_end_date'])) {
+        $sessionData = $dql->getResult();
+        $categories = [];
+
+        foreach ($sessionData as $row) {
+            // User portal filters:
+            if ($ignoreTimeLimit === false) {
+                if ($is_time_over) {
+                    // History
+                    if (empty($row['access_end_date'])) {
+                        continue;
+                    }
+
+                    if (!empty($row['access_end_date'])) {
+                        if ($row['access_end_date'] > $now) {
                             continue;
                         }
 
-                        if (!empty($row['access_end_date'])) {
-                            if ($row['access_end_date'] > $now) {
+                    }
+                } else {
+                    // Current user portal
+                    if (api_is_allowed_to_create_course()) {
+                        // Teachers can access the session depending in the access_coach date
+                    } else {
+                        if (isset($row['access_end_date']) &&
+                            !empty($row['access_end_date'])
+                        ) {
+                            if ($row['access_end_date'] <= $now) {
                                 continue;
                             }
-
-                        }
-                    } else {
-                        // Current user portal
-                        if (api_is_allowed_to_create_course()) {
-                            // Teachers can access the session depending in the access_coach date
-                        } else {
-                            if (isset($row['access_end_date']) &&
-                                !empty($row['access_end_date'])
-                            ) {
-                                if ($row['access_end_date'] <= $now) {
-                                    continue;
-                                }
-                            }
                         }
                     }
                 }
+            }
 
-                $categories[$row['session_category_id']]['session_category'] = array(
-                    'id' => $row['session_category_id'],
-                    'name' => $row['session_category_name'],
-                    'date_start' => $row['session_category_date_start']
-                        ? $row['session_category_date_start']->format('Y-m-d H:i:s')
-                        : null,
-                    'date_end' => $row['session_category_date_end']
-                        ? $row['session_category_date_end']->format('Y-m-d H:i:s')
-                        : null
+            $categories[$row['session_category_id']]['session_category'] = array(
+                'id' => $row['session_category_id'],
+                'name' => $row['session_category_name'],
+                'date_start' => $row['session_category_date_start'] ? $row['session_category_date_start']->format('Y-m-d H:i:s') : null,
+                'date_end' => $row['session_category_date_end'] ? $row['session_category_date_end']->format('Y-m-d H:i:s') : null
+            );
+
+            $session_id = $row['id'];
+            $courseList = UserManager::get_courses_list_by_session(
+                $user_id,
+                $session_id
+            );
+
+            $visibility = api_get_session_visibility(
+                $session_id,
+                null,
+                $ignore_visibility_for_admins
+            );
+
+            if ($visibility != SESSION_VISIBLE) {
+                // Course Coach session visibility.
+                $blockedCourseCount = 0;
+                $closedVisibilityList = array(
+                    COURSE_VISIBILITY_CLOSED,
+                    COURSE_VISIBILITY_HIDDEN
                 );
 
-                $session_id = $row['id'];
-                $courseList = UserManager::get_courses_list_by_session(
-                    $user_id,
-                    $row['id']
-                );
-
-                $visibility = api_get_session_visibility(
-                    $session_id,
-                    null,
-                    $ignore_visibility_for_admins
-                );
-
-                if ($visibility != SESSION_VISIBLE) {
-
-                    // Course Coach session visibility.
-                    $blockedCourseCount = 0;
-                    $closedVisibilityList = array(
-                        COURSE_VISIBILITY_CLOSED,
-                        COURSE_VISIBILITY_HIDDEN
+                foreach ($courseList as $course) {
+                    // Checking session visibility
+                    $sessionCourseVisibility = api_get_session_visibility(
+                        $session_id,
+                        $course['real_id'],
+                        $ignore_visibility_for_admins
                     );
 
-                    foreach ($courseList as $course) {
-                        // Checking session visibility
-                        $sessionCourseVisibility = api_get_session_visibility(
-                            $session_id,
-                            $course['real_id'],
-                            $ignore_visibility_for_admins
-                        );
-
-                        $courseIsVisible = !in_array(
-                            $course['visibility'],
-                            $closedVisibilityList
-                        );
-                        if ($courseIsVisible === false || $sessionCourseVisibility == SESSION_INVISIBLE) {
-                            $blockedCourseCount++;
-                        }
-                    }
-
-                    // If all courses are blocked then no show in the list.
-                    if ($blockedCourseCount === count($courseList)) {
-                        $visibility = SESSION_INVISIBLE;
-                    } else {
-                        $visibility = SESSION_VISIBLE;
+                    $courseIsVisible = !in_array(
+                        $course['visibility'],
+                        $closedVisibilityList
+                    );
+                    if ($courseIsVisible === false || $sessionCourseVisibility == SESSION_INVISIBLE) {
+                        $blockedCourseCount++;
                     }
                 }
 
-                switch ($visibility) {
-                    case SESSION_VISIBLE_READ_ONLY:
-                    case SESSION_VISIBLE:
-                    case SESSION_AVAILABLE:
-                        break;
-                    case SESSION_INVISIBLE:
-                        if ($ignore_visibility_for_admins == false) {
-                            continue 2;
-                        }
+                // If all courses are blocked then no show in the list.
+                if ($blockedCourseCount === count($courseList)) {
+                    $visibility = SESSION_INVISIBLE;
+                } else {
+                    $visibility = SESSION_VISIBLE;
                 }
-
-                $categories[$row['session_category_id']]['sessions'][$row['id']] = array(
-                    'session_name' => $row['name'],
-                    'session_id' => $row['id'],
-                    'access_start_date' => $row['access_start_date']
-                        ? $row['access_start_date']->format('Y-m-d H:i:s')
-                        : null,
-                    'access_end_date' => $row['access_end_date']
-                        ? $row['access_end_date']->format('Y-m-d H:i:s')
-                        : null,
-                    'coach_access_start_date' => $row['coach_access_start_date']
-                        ? $row['coach_access_start_date']->format('Y-m-d H:i:s')
-                        : null,
-                    'coach_access_end_date' => $row['coach_access_end_date']
-                        ? $row['coach_access_end_date']->format('Y-m-d H:i:s')
-                        : null,
-                    'courses' => $courseList
-                );
             }
+
+            switch ($visibility) {
+                case SESSION_VISIBLE_READ_ONLY:
+                case SESSION_VISIBLE:
+                case SESSION_AVAILABLE:
+                    break;
+                case SESSION_INVISIBLE:
+                    if ($ignore_visibility_for_admins == false) {
+                        continue 2;
+                    }
+            }
+
+            $categories[$row['session_category_id']]['sessions'][$row['id']] = array(
+                'session_name' => $row['name'],
+                'session_id' => $row['id'],
+                'access_start_date' => $row['access_start_date'] ? $row['access_start_date']->format('Y-m-d H:i:s') : null,
+                'access_end_date' => $row['access_end_date'] ? $row['access_end_date']->format('Y-m-d H:i:s') : null,
+                'coach_access_start_date' => $row['coach_access_start_date'] ? $row['coach_access_start_date']->format('Y-m-d H:i:s') : null,
+                'coach_access_end_date' => $row['coach_access_end_date'] ? $row['coach_access_end_date']->format('Y-m-d H:i:s') : null,
+                'courses' => $courseList
+            );
+        }
 
         return $categories;
     }

@@ -7885,7 +7885,8 @@ function api_mail_html(
         $senderEmail = $platform_email['SMTP_FROM_EMAIL'];
     }
     $mail->SetFrom($defaultEmail, $defaultName);
-
+    $mail->From = $defaultEmail;
+    $mail->Sender = $defaultEmail;
     $mail->Subject = $subject;
     $mail->AltBody = strip_tags(
         str_replace('<br />', "\n", api_html_entity_decode($message))
@@ -7996,7 +7997,6 @@ function api_mail_html(
             $mail->AddCustomHeader($extra_headers);
         }
     }
-
 
     // WordWrap the html body (phpMailer only fixes AltBody) FS#2988
     $mail->Body = $mail->WrapText($mail->Body, $mail->WordWrap);

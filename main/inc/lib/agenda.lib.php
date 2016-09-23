@@ -149,8 +149,6 @@ class Agenda
         $end = api_get_utc_datetime($end);
         $allDay = isset($allDay) && $allDay == 'true' ? 1 : 0;
         $id = null;
-        $content = Security::remove_XSS($content);
-        $eventComment = nl2br($eventComment);
 
         switch ($this->type) {
             case 'personal':
@@ -587,8 +585,6 @@ class Agenda
         $start = api_get_utc_datetime($start);
         $end = api_get_utc_datetime($end);
         $allDay = isset($allDay) && $allDay == 'true' ? 1 : 0;
-        $content = nl2br($content);
-        $comment = nl2br($comment);
 
         switch ($this->type) {
             case 'personal':
@@ -625,7 +621,6 @@ class Agenda
                 }
 
                 if ($this->getIsAllowedToEdit()) {
-
                     $attributes = array(
                         'title' => $title,
                         'content' => $content,
@@ -658,7 +653,6 @@ class Agenda
                         $groupToAdd = array_diff($sendTo['groups'], $eventInfo['send_to']['groups']);
 
                         if ($sendTo['everyone']) {
-
                             // Delete all from group
                             if (isset($eventInfo['send_to']['groups']) &&
                                 !empty($eventInfo['send_to']['groups'])
@@ -705,7 +699,6 @@ class Agenda
                                 $this->sessionId
                             );
                         } else {
-
                             // Delete "everyone".
                             api_item_property_delete(
                                 $this->course,
@@ -2015,10 +2008,6 @@ class Agenda
             $url = api_get_self().'?'.api_get_cidreq().'&action='.$action.'&id='.$id.'&type='.$this->type;
         } else {
             $url = api_get_self().'?action='.$action.'&id='.$id.'&type='.$this->type;
-        }
-
-        if (isset($params['content'])) {
-            $params['content'] = nl2br($params['content']);
         }
 
         $form = new FormValidator(

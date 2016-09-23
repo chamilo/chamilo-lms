@@ -113,7 +113,7 @@ class AnnouncementEmail
         $result['groups'] = array();
         $result['users'] = array();
 
-        $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
+        $table = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $tool = TOOL_ANNOUNCEMENT;
 
         $id = $this->announcement('id');
@@ -121,7 +121,7 @@ class AnnouncementEmail
         $sessionCondition = api_get_session_condition($this->session_id);
 
         $sql = "SELECT to_group_id, to_user_id
-                FROM $tbl_item_property
+                FROM $table
                 WHERE
                     c_id = $course_id AND
                     tool = '$tool' AND
@@ -131,16 +131,19 @@ class AnnouncementEmail
         $rs = Database::query($sql);
 
         while ($row = Database::fetch_array($rs, 'ASSOC')) {
+            // if to_user_id <> 0 then it is sent to a specific user
+            $user_id = $row['to_user_id'];
+            if (!empty($user_id)) {
+                $result['users'][] = (int) $user_id;
+                // If user is set then skip the group
+                continue;
+            }
+
             // if to_group_id is null then it is sent to a specific user
             // if to_group_id = 0 then it is sent to everybody
             $group_id = $row['to_group_id'];
             if (!empty($group_id)) {
                 $result['groups'][] = (int) $group_id;
-            }
-            // if to_user_id <> 0 then it is sent to a specific user
-            $user_id = $row['to_user_id'];
-            if (!empty($user_id)) {
-                $result['users'][] = (int) $user_id;
             }
         }
         return $result;
@@ -275,7 +278,8 @@ class AnnouncementEmail
         $tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
         $id = $this->announcement('id');
         $course_id = $this->course('id');
-        $sql = "SELECT * FROM $tbl_announcement_attachment WHERE c_id = $course_id AND announcement_id = $id ";
+        $sql = "SELECT * FROM $tbl_announcement_attachment 
+                WHERE c_id = $course_id AND announcement_id = $id ";
         $rs = Database::query($sql);
         $course_path = $this->course('directory');
         while ($row = Database::fetch_array($rs)) {

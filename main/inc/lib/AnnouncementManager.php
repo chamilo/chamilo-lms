@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CAnnouncement;
+use Chamilo\CourseBundle\Entity\CItemProperty;
+
 /**
  * Include file with functions for the announcements module.
  * @author jmontoya
@@ -262,10 +265,14 @@ class AnnouncementManager
         global $charset;
 
         $html = '';
-        $result = self::getAnnouncementInfoById($announcement_id, api_get_course_int_id(), api_get_user_id());
-        /** @var \Chamilo\CourseBundle\Entity\CAnnouncement $announcement */
+        $result = self::getAnnouncementInfoById(
+            $announcement_id,
+            api_get_course_int_id(),
+            api_get_user_id()
+        );
+        /** @var CAnnouncement $announcement */
         $announcement = $result['announcement'];
-        /** @var \Chamilo\CourseBundle\Entity\CItemProperty $itemProperty */
+        /** @var CItemProperty $itemProperty */
         $itemProperty = $result['item_property'];
 
         if (empty($announcement) || empty($itemProperty)) {
@@ -522,7 +529,7 @@ class AnnouncementManager
             'title' => $emailTitle,
             'end_date' => $now,
             'display_order' => $order,
-            'session_id' => api_get_session_id(),
+            'session_id' => api_get_session_id()
         ];
 
         $last_id = Database::insert($tbl_announcement, $params);
@@ -571,7 +578,7 @@ class AnnouncementManager
                                 $_course,
                                 TOOL_ANNOUNCEMENT,
                                 $last_id,
-                                "AnnouncementAdded",
+                                'AnnouncementAdded',
                                 api_get_user_id(),
                                 $group,
                                 $user
@@ -1173,7 +1180,6 @@ class AnnouncementManager
         // starting the form if there is more than one user/group
         $output = array();
         if ($total_numbers > 1) {
-            //$output.="<option>".get_lang("SentTo")."</option>";
             // outputting the name of the groups
             if (is_array($sent_to_array['groups'])) {
                 foreach ($sent_to_array['groups'] as $group_id) {
@@ -1231,7 +1237,7 @@ class AnnouncementManager
         $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
         $tool = Database::escape_string($tool);
-        $id = intval($id);
+        $id = (int) $id;
 
         $sent_to_group = array();
         $sent_to = array();
@@ -1243,14 +1249,16 @@ class AnnouncementManager
         $result = Database::query($sql);
 
         while ($row = Database::fetch_array($result)) {
+            // if to_user_id <> 0 then it is sent to a specific user
+            if ($row['to_user_id'] <> 0) {
+                $sent_to_user[] = $row['to_user_id'];
+                continue;
+            }
+
             // if to_group_id is null then it is sent to a specific user
             // if to_group_id = 0 then it is sent to everybody
             if ($row['to_group_id'] != 0) {
                 $sent_to_group[] = $row['to_group_id'];
-            }
-            // if to_user_id <> 0 then it is sent to a specific user
-            if ($row['to_user_id'] <> 0) {
-                $sent_to_user[] = $row['to_user_id'];
             }
         }
 

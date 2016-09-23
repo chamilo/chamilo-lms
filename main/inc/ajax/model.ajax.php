@@ -1017,12 +1017,12 @@ switch ($action) {
         if (!empty($sessions)) {
             foreach ($sessions as $session) {
                 if (api_drh_can_access_all_session_content()) {
-                    $count_courses_in_session = count(SessionManager::get_course_list_by_session_id($session['id']));
+                    $count_courses_in_session = SessionManager::get_course_list_by_session_id($session['id'], '', null, true);
                 } else {
                     $count_courses_in_session = count(Tracking::get_courses_followed_by_coach($user_id, $session['id']));
                 }
 
-                $count_users_in_session = count(SessionManager::get_users_by_session($session['id'], 0));
+                $count_users_in_session = SessionManager::get_users_by_session($session['id'], 0, true);
                 $session_date = array();
                 if (!empty($session['access_start_date'])) {
                     $session_date[] = get_lang('From').' '.api_format_date($session['access_start_date'], DATE_FORMAT_SHORT);

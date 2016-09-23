@@ -7861,12 +7861,13 @@ function api_mail_html(
     $defaultEmail = $notification->getDefaultPlatformSenderEmail();
     $defaultName = $notification->getDefaultPlatformSenderName();
 
-    // Error to admin.
-    $mail->AddCustomHeader('Errors-To: '.$defaultEmail);
-
     // If the parameter is set don't use the admin.
     $senderName = !empty($senderName) ? $senderName : $defaultName;
     $senderEmail = !empty($senderEmail) ? $senderEmail : $defaultEmail;
+
+    // Errors to sender
+    $mail->AddCustomHeader('Errors-To: '.$senderEmail);
+    $mail->AddCustomHeader('envelope-from: '.$defaultEmail);
 
     // Reply to first
     if (isset($extra_headers['reply_to'])) {
@@ -7994,6 +7995,7 @@ function api_mail_html(
             $mail->AddCustomHeader($extra_headers);
         }
     }
+
 
     // WordWrap the html body (phpMailer only fixes AltBody) FS#2988
     $mail->Body = $mail->WrapText($mail->Body, $mail->WordWrap);

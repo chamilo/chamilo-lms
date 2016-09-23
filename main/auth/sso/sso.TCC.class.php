@@ -96,7 +96,7 @@ class ssoTCC
         $loginFailed = false;
 
         //change the way we recover the cookie depending on how it is formed
-        $sso = $this->decode_cookie($_GET['sso_cookie']);
+        $sso = $this->decode_cookie($_REQUEST['sso_cookie']);
 
         $value = explode(';;', $sso);
         $ssoSecret = substr($value[1], 0, 5);

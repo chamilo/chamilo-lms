@@ -1953,7 +1953,7 @@ HOTSPOT;
                             if (($locked == false || api_is_platform_admin()) && !api_is_student_boss()) {
                                 $ip = TrackingUserLog::get_ip_from_user_event(
                                     $results[$i]['exe_user_id'],
-                                    date('Y-m-d h:i:s'),
+                                    api_get_utc_datetime(),
                                     false
                                 );
                                 $actions .= '<a href="http://www.whatsmyip.org/ip-geo-location/?ip=' . $ip . '" target="_blank">

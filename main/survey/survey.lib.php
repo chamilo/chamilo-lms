@@ -1793,12 +1793,17 @@ class SurveyUtil
      * @param integer Option id
      * @param string  Option value
      * @param array	  Survey data settings
+     * @return bool False if insufficient data, true otherwise
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version January 2007
      */
     public static function store_answer($user, $survey_id, $question_id, $option_id, $option_value, $survey_data)
     {
+        // If the question_id is empty, don't store an answer
+        if (empty($question_id)) {
+            return false;
+        }
         // Table definition
         $table_survey_answer = Database :: get_course_table(TABLE_SURVEY_ANSWER);
 
@@ -1827,6 +1832,7 @@ class SurveyUtil
 
         $sql = "UPDATE $table_survey_answer SET answer_id = $insertId WHERE iid = $insertId";
         Database::query($sql);
+        return true;
     }
 
     /**

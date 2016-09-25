@@ -203,10 +203,15 @@ if (count($_POST) > 0) {
         // Looping through all the post values
         foreach ($_POST as $key => & $value) {
             // If the post value key contains the string 'question' then it is an answer on a question
-            if (strpos($key, 'question') !== false) {
+            if (strpos($key, 'question') !== false && ($key != '_qf__question')) {
                 // Finding the question id by removing 'question'
                 $survey_question_id = str_replace('question', '', $key);
-
+                // If not question ID was defined, we're on the start
+                // screen or something else that doesn't require
+                // saving an answer
+                if (empty($survey_question_id)) {
+                    continue;
+                }
                 /* If the post value is an array then we have a multiple response question or a scoring question type
                 remark: when it is a multiple response then the value of the array is the option_id
                 when it is a scoring question then the key of the array is the option_id and the value is the value
@@ -302,6 +307,12 @@ if (count($_POST) > 0) {
             if (strpos($key, 'question') !== false) {
                 // Finding the question id by removing 'question'
                 $survey_question_id = str_replace('question', '', $key);
+                // If not question ID was defined, we're on the start
+                // screen or something else that doesn't require
+                // saving an answer
+                if (empty($survey_question_id)) {
+                    continue;
+                }
                 // We select the correct answer and the puntuacion
                 $sql = "SELECT value FROM $table_survey_question_option
                         WHERE c_id = $course_id AND question_option_id='".intval($value)."'";

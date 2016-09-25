@@ -7868,4 +7868,5 @@ $TicketMsgWelcome = "Welcome to YOUR tickets section. Here, you'll be able to tr
 $TicketNoHistory = "No history";
 $RecalculateResults = "Recalculate results";
 $XParenthesisDeleted = "%s (deleted)";
+$AvailableAlsoInMainPortal = "Available also on main portal";
 ?>

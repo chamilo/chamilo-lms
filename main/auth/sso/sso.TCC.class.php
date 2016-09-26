@@ -96,9 +96,10 @@ class ssoTCC
         $loginFailed = false;
 
         //change the way we recover the cookie depending on how it is formed
-        $sso = $this->decode_cookie($_GET['sso_cookie']);
+        $sso = $this->decode_cookie($_REQUEST['sso_cookie']);
 
         $value = explode(';;', $sso);
+        $ssoSecret = substr($value[1], 0, 5);
         $value = $value[0];
 
         $userExtraFieldValue = new ExtraFieldValue('user');
@@ -108,7 +109,7 @@ class ssoTCC
         );
 
         if ($userData) {
-            $userId = $userData['value'];
+            $userId = $userData['item_id'];
         } else {
             return false;
         }
@@ -131,9 +132,9 @@ class ssoTCC
             $uData = Database::fetch_array($result);
             //Check the user's password
             if ($uData['auth_source'] == PLATFORM_AUTH_SOURCE) {
-                if ($sso['secret'] === sha1($uData['username'].$sso_challenge.api_get_security_key())&&
-                    ($sso['username'] == $uData['username'])
-                ) {
+                $secret = substr(api_get_security_key(), 0, 5);
+                // Check if secret sent in sso is correct
+                if ((string) $ssoSecret == (string) $secret)  {
                     //Check if the account is active (not locked)
                     if ($uData['active']=='1') {
                         // check if the expiration date has not been reached
@@ -236,7 +237,7 @@ class ssoTCC
                         exit;
                     }
                 } else {
-                    //SHA1 of password is wrong
+                    //Secret sent through SSO is incorrect
                     $loginFailed = true;
                     Session::erase('_uid');
                     header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=wrong_password');
@@ -271,7 +272,7 @@ class ssoTCC
     {
         $key = substr(api_get_security_key(), 0, 16);
         $ivsize = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_ECB);
-        $iv = mcrypt_create_iv($ivsize);
+        $iv = mcrypt_create_iv($ivsize, MCRYPT_RAND);
         $valuedecode = base64_decode($value);
 
         return mcrypt_decrypt(
@@ -310,7 +311,7 @@ class ssoTCC
         }
         // If the user doesn't match a Drupal user, give the normal profile
         // link
-        if ($drupalUserIdData === false) {
+/*        if ($drupalUserIdData === false) {
             return api_get_path(WEB_CODE_PATH) . 'auth/profile.php';
         }
         // In all other cases, generate a link to the Drupal profile edition
@@ -318,6 +319,8 @@ class ssoTCC
         $url = "{$this->protocol}{$this->domain}/user/{$drupalUserId}/edit";
 
         return $url;
+*/
+        return api_get_path(WEB_CODE_PATH) . 'auth/profile.php';
     }
 
 }

@@ -33,6 +33,34 @@ a:focus {
     margin-bottom: 30px;
     margin-top: 10px;
 }
+.home-information{
+    margin-top: 20px;
+    padding-top: 20px;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+}
+.home-information .title{
+    position: static;
+    font-size: 16px;
+    margin-top: 20px;
+    margin-bottom: 12px;
+    font-weight: bold;
+    color: #07578A;
+}
+.home-information .item-icon{
+    text-align: center;
+}
+.home-information .item-icon .circle .fa{
+    color: #FFF;
+}
+.home-information .item-icon .circle{
+    width: 75px;
+    height: 75px;
+    line-height: 90px;
+    border-radius: 50%;
+    background: #162A83;
+    display: inline-block;
+}
 .title{
     position: static;
     font-size: 25px;
@@ -186,7 +214,7 @@ a:focus {
     color: #96BD0D;
 }
 .statistics .number{
-    color: #E2007A;
+    color: #96BD0D;
     font-weight: 700;
 }
 .statistics .text{
@@ -387,7 +415,7 @@ a:focus {
 }
 /* End Jquery UI */
 footer{
-  background-color:#009EE0;
+  background-color:#162A83;
 }
 footer{
   color: #ffffff;

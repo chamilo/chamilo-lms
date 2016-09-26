@@ -38,12 +38,10 @@
 {% if show_header == true %}
 
 <div id="page-wrap"><!-- page section -->
-    {% block help_notifications %}
-    <ul id="navigation" class="notification-panel">
+    <div id="navigation" class="notification-panel">
         {{ help_content }}
-        {{ bug_notification_link }}
-    </ul>
-    {% endblock %}
+        {{ bug_notification }}
+    </div>
     {% block topbar %}
         {% include template ~ "/layout/topbar.tpl" %}
         {% if show_toolbar == 1 %}

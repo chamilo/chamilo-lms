@@ -34,3 +34,5 @@ msgstr "Inscription"
 msgid "My certificates"
 msgstr "Mes certificats"
 
+msgid "Latest blocks"
+msgstr "Derniers blocks"

@@ -250,7 +250,6 @@ class Certificate extends Model
                         }
                     }
                 }
-            }
         } else {
             // General certificate
 

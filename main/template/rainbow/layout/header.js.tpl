@@ -194,12 +194,12 @@ $(document).ready(function(){
         return false;
     });
 
-    // old jquery.menu.js
+   // old jquery.menu.js
     $('#navigation a').stop().animate({
         'marginLeft':'50px'
     },1000);
 
-    $('#navigation > li').hover(
+    $('#navigation div').hover(
         function () {
             $('a',$(this)).stop().animate({
                 'marginLeft':'1px'

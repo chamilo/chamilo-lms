@@ -62,7 +62,14 @@ class QuestionAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('translations', 'a2lix_translations', array())
+            ->add('translations', 'a2lix_translations',  array(
+                'fields' => array(
+                    'headline' => [],
+                    'body' => array(
+                        'attr' => array('class' => 'ckeditor')
+                    )
+                )
+            ))
             ->add(
                 'category',
                 null,

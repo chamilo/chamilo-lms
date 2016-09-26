@@ -12,7 +12,6 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="menuone">
             <ul class="nav navbar-nav">
-
                 {% if _u.logged == 1 %}
                     {% for items in menu %}
                         {% if items.key != 'profile' and items.key != 'dashboard' and items.key != 'admin' and items.key != 'agenda' %}
@@ -53,12 +52,13 @@
                             </div>
                         </li>
                         <li role="separator" class="divider"></li>
-
                         <li class="user-body">
+                            {% if _us.is_admin == 1 %}
                             <a href="{{ _p.web }}main/admin">
                                 <em class="fa fa-cog" aria-hidden="true"></em>
                                 {{ "NomPageAdmin"|get_lang }}
                             </a>
+                            {% endif %}
                             <a href="{{ _p.web }}main/calendar/agenda_js.php?type=personal">
                                 <em class="fa fa-calendar" aria-hidden="true"></em>
                                 {{ "AllowPersonalAgendaTitle"|get_lang }}
@@ -75,8 +75,6 @@
                         </li>
                     </ul>
                 </li>
-
-
                {% endif %}
             </ul>
             {% endif %}

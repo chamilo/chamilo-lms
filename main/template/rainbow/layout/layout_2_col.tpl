@@ -28,9 +28,9 @@
     <div class="row">
         <div class="col-md-12">
             {% if home_page_block %}
-            <section id="homepage-home">
-                {{ home_page_block }}
-            </section>
+                <section id="homepage-home">
+                    {{ home_page_block }}
+                </section>
             {% endif %}
             <div class="home-information">
                 <div class="row">

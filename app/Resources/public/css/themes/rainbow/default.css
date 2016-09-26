@@ -17,7 +17,7 @@ body {
   background: url('images/bg.png') center center repeat-x;
 }
 a {
-  color: #07578A;
+  color: #162A83;
   text-decoration: none;
 }
 a:hover,
@@ -34,10 +34,8 @@ a:focus {
     margin-top: 0;
 }
 .home-information{
-    margin-top: 20px;
-    padding-top: 20px;
-    margin-bottom: 20px;
-    padding-bottom: 20px;
+    margin: 0;
+    padding: 0;
 }
 .home-information .title{
     position: static;
@@ -45,7 +43,7 @@ a:focus {
     margin-top: 20px;
     margin-bottom: 12px;
     font-weight: bold;
-    color: #07578A;
+    color: #162A83;
 }
 .home-information .item-icon{
     text-align: center;
@@ -131,6 +129,16 @@ a:focus {
 .navbar-right{
  margin-right: 0;   
 }
+.partners{
+    padding-bottom: 10px;
+    padding-top: 10px;
+    text-align: center;
+}
+.partners a{
+    display: inline-block;
+    padding-left: 10px;
+    padding-right: 10px;
+}
 /* Menu Option */
 .item-menu{
     text-align: center;
@@ -181,7 +189,7 @@ a:focus {
     margin-top: 10px;
 }
 .section-notice .items .title a{
-    color: #07578A;
+    color: #162A83;
     font-size: 20px;
     font-weight: 700;
 }
@@ -237,9 +245,8 @@ a:focus {
     margin: 0;
 }
 .welcome-home-top-temp{
-    padding-top: 15px;
-    padding-bottom: 15px;
-    margin-bottom: 15px;
+   padding: 0;
+   margin: 0;
 }
 .welcome-home-top-temp h1{
     color: #E53140;
@@ -248,7 +255,7 @@ a:focus {
     font-size: 20px;
 }
 #carousel-announcement .carousel-indicators .active{
-    background: #009EE0;
+    background: #162A83;
 }
 .carousel-indicators li{
     border: none;
@@ -262,7 +269,7 @@ a:focus {
 }
 .carousel-control:focus, .carousel-control:hover{
     opacity: 1;
-    color: #009EE0;
+    color: #162A83;
 }
 .navbar{
   border-radius: 0;
@@ -395,8 +402,12 @@ a:focus {
   background:#3C4147 !important;
   color: #fff;
 }
+.grid-courses .items .title{
+    font-size: 12px;
+    font-weight: bold;
+}
 .badge-warning{
-  background-color: #FD6600;
+  background-color: #6D237D;
 }
 .breadcrumb{
   padding: 8px 15px;

@@ -4,9 +4,9 @@
         {{ plugin_pre_footer }}
     </div>
 {% endif %}
-
 <footer class="sticky-footer"> <!-- start of #footer section -->
     <div class="container">
+        
         <div class="row">
             <div id="footer_left" class="col-md-4">
                 {% if session_teachers is not null %}

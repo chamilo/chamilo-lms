@@ -171,39 +171,35 @@ class GradebookTable extends SortableTable
         switch ($this->column) {
             // Type
             case (0 + $col_adjust):
-                $sorting = GradebookDataGenerator :: GDG_SORT_TYPE;
+                $sorting = GradebookDataGenerator::GDG_SORT_TYPE;
                 break;
             case (1 + $col_adjust):
-                $sorting = GradebookDataGenerator :: GDG_SORT_NAME;
+                $sorting = GradebookDataGenerator::GDG_SORT_NAME;
                 break;
             case (2 + $col_adjust):
-                $sorting = GradebookDataGenerator :: GDG_SORT_DESCRIPTION;
+                $sorting = GradebookDataGenerator::GDG_SORT_DESCRIPTION;
                 break;
             case (3 + $col_adjust):
-                $sorting = GradebookDataGenerator :: GDG_SORT_WEIGHT;
+                $sorting = GradebookDataGenerator::GDG_SORT_WEIGHT;
                 break;
             case (4 + $col_adjust):
-                $sorting = GradebookDataGenerator :: GDG_SORT_DATE;
+                $sorting = GradebookDataGenerator::GDG_SORT_DATE;
                 break;
             case (5 + $col_adjust):
-                $sorting = GradebookDataGenerator :: GDG_SORT_ID;
+                $sorting = GradebookDataGenerator::GDG_SORT_ID;
                 break;
         }
 
         if ($this->direction == 'DESC') {
-            $sorting |= GradebookDataGenerator :: GDG_SORT_DESC;
+            $sorting |= GradebookDataGenerator::GDG_SORT_DESC;
         } else {
-            $sorting |= GradebookDataGenerator :: GDG_SORT_ASC;
+            $sorting |= GradebookDataGenerator::GDG_SORT_ASC;
         }
 
         // Status of user in course.
         $user_id = $this->userId;
         $course_code = api_get_course_id();
         $session_id = api_get_session_id();
-        $status_user = api_get_status_of_user_in_course(
-            api_get_user_id(),
-            api_get_course_int_id()
-        );
 
         if (empty($session_id)) {
             $statusToFilter = STUDENT;
@@ -244,6 +240,7 @@ class GradebookTable extends SortableTable
             $session_id,
             'ORDER BY id'
         );
+
         $total_categories_weight = 0;
         $scoredisplay = ScoreDisplay :: instance();
 
@@ -718,7 +715,7 @@ class GradebookTable extends SortableTable
                 );
 
                 if (!empty($content_html)) {
-                    $new_content = explode('</head>',$content_html['content']);
+                    $new_content = explode('</head>', $content_html['content']);
                 }
 
                 if (empty($new_content[0])) {
@@ -950,13 +947,13 @@ class GradebookTable extends SortableTable
                 $prms_uri='?selectcat=' . $item->get_id() . '&amp;view='.$view;
 
                 if (isset($_GET['isStudentView'])) {
-                    if ( isset($is_student) || ( isset($_SESSION['studentview']) && $_SESSION['studentview']=='studentview') ) {
+                    if ( isset($is_student) || (isset($_SESSION['studentview']) && $_SESSION['studentview']=='studentview') ) {
                         $prms_uri=$prms_uri.'&amp;isStudentView='.Security::remove_XSS($_GET['isStudentView']);
                     }
                 }
 
                 $cat = new Category();
-                $show_message=$cat->show_message_resource_delete($item->get_course_code());
+                $show_message = $cat->show_message_resource_delete($item->get_course_code());
                 return '&nbsp;<a href="'.Security::remove_XSS($_SESSION['gradebook_dest']).$prms_uri.'">'
                 . $item->get_name()
                 . '</a>'

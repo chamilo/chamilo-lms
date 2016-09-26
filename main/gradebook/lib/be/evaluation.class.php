@@ -230,47 +230,45 @@ class Evaluation implements GradebookItem
 			$paramcount ++;
 		}
 
-		if (isset ($user_id)) {
+		if (isset($user_id)) {
 			if ($paramcount != 0) $sql .= ' AND';
 			else $sql .= ' WHERE';
 			$sql .= ' user_id = '.intval($user_id);
 			$paramcount ++;
 		}
 
-		if (isset ($course_code) && $course_code <> '-1') {
+		if (isset($course_code) && $course_code <> '-1') {
 			if ($paramcount != 0) $sql .= ' AND';
 			else $sql .= ' WHERE';
 			$sql .= " course_code = '".Database::escape_string($course_code)."'";
 			$paramcount ++;
 		}
 
-		if (isset ($category_id)) {
+		if (isset($category_id)) {
 			if ($paramcount != 0) $sql .= ' AND';
 			else $sql .= ' WHERE';
 			$sql .= ' category_id = '.intval($category_id);
 			$paramcount ++;
 		}
 
-		if (isset ($visible)) {
+		if (isset($visible)) {
 			if ($paramcount != 0) $sql .= ' AND';
 			else $sql .= ' WHERE';
 			$sql .= ' visible = '.intval($visible);
 			$paramcount ++;
 		}
 
-		if (isset ($locked)) {
+		if (isset($locked)) {
 			if ($paramcount != 0) $sql .= ' AND';
 			else $sql .= ' WHERE';
 			$sql .= ' locked = '.intval($locked);
 		}
 
 		$result = Database::query($sql);
-		$alleval = Evaluation::create_evaluation_objects_from_sql_result($result);
+		$allEval = Evaluation::create_evaluation_objects_from_sql_result($result);
 
-		return $alleval;
+		return $allEval;
 	}
-
-
 
 	/**
 	 * @param array $result
@@ -306,7 +304,7 @@ class Evaluation implements GradebookItem
 	/**
 	 * Insert this evaluation into the database
 	 */
-	public function add()
+    public function add()
 	{
 		if (isset($this->name) &&
 			isset($this->user_id) &&

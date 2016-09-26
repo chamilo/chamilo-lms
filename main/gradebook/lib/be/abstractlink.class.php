@@ -56,7 +56,7 @@ abstract class AbstractLink implements GradebookItem
      */
     public function get_ref_id()
     {
-        return $this->ref_id;
+        return (int) $this->ref_id;
     }
 
     /**
@@ -239,32 +239,32 @@ abstract class AbstractLink implements GradebookItem
         $tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
         $sql = 'SELECT * FROM '.$tbl_grade_links;
         $paramcount = 0;
-        if (isset ($id)) {
+        if (isset($id)) {
             $sql.= ' WHERE id = '.intval($id);
             $paramcount ++;
         }
-        if (isset ($type)) {
+        if (isset($type)) {
             if ($paramcount != 0) $sql .= ' AND';
             else $sql .= ' WHERE';
             $sql .= ' type = '.intval($type);
             $paramcount ++;
         }
-        if (isset ($ref_id)) {
+        if (isset($ref_id)) {
             if ($paramcount != 0) $sql .= ' AND';
             else $sql .= ' WHERE';
             $sql .= ' ref_id = '.intval($ref_id);
             $paramcount ++;
         }
-        if (isset ($user_id)) {
+        if (isset($user_id)) {
             if ($paramcount != 0) {
                 $sql .= ' AND';
-            }else {
+            } else {
                 $sql .= ' WHERE';
             }
             $sql .= ' user_id = '.intval($user_id);
             $paramcount ++;
         }
-        if (isset ($course_code)) {
+        if (isset($course_code)) {
             if ($paramcount != 0) {
                 $sql .= ' AND';
             } else {
@@ -273,16 +273,16 @@ abstract class AbstractLink implements GradebookItem
             $sql .= " course_code = '".Database::escape_string($course_code)."'";
             $paramcount ++;
         }
-        if (isset ($category_id)) {
+        if (isset($category_id)) {
             if ($paramcount != 0) {
                 $sql .= ' AND';
-            }else {
+            } else {
                 $sql .= ' WHERE';
             }
             $sql .= ' category_id = '.intval($category_id);
             $paramcount ++;
         }
-        if (isset ($visible)) {
+        if (isset($visible)) {
             if ($paramcount != 0) {
                 $sql .= ' AND';
             } else {
@@ -290,6 +290,7 @@ abstract class AbstractLink implements GradebookItem
             }
             $sql .= ' visible = '.intval($visible);
         }
+
         $result = Database::query($sql);
         $links = AbstractLink::create_objects_from_sql_result($result);
 

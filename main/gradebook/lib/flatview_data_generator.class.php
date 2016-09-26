@@ -638,7 +638,11 @@ class FlatViewDataGenerator
             // Fixing total when using one or multiple gradebooks.
             if (empty($parentCategoryIdFilter)) {
                 if ($this->category->get_parent_id() == 0) {
-                    $item_value = $score[0] / $divide * $item->get_weight();
+                    if (isset($score[0])) {
+                        $item_value = $score[0] / $divide * $item->get_weight();
+                    } else {
+                        $item_value = 0;
+                    }
                 } else {
                     $item_value = $item_value * $item->get_weight();
                 }

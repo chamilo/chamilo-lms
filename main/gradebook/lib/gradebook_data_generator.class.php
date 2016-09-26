@@ -31,9 +31,9 @@ class GradebookDataGenerator
      */
     public function __construct($cats = array(), $evals = array(), $links = array())
     {
-        $allcats = (isset($cats) ? $cats : array());
-        $allevals = (isset($evals) ? $evals : array());
-        $alllinks = (isset($links) ? $links : array());
+        $allcats = isset($cats) ? $cats : array();
+        $allevals = isset($evals) ? $evals : array();
+        $alllinks = isset($links) ? $links : array();
 
         // if we are in the root category and if there are sub categories
         // display only links depending of the root category and not link that belongs
@@ -42,12 +42,12 @@ class GradebookDataGenerator
         if (count($allcats) > 0) {
             // get sub categories id
             $tabCategories = array();
-            for ($i=0; $i < count($allcats); $i++) {
+            for ($i = 0; $i < count($allcats); $i++) {
                 $tabCategories[] = $allcats[$i]->get_id();
             }
             // dont display links that belongs to a sub category
             $tabLinkToDisplay = array();
-            for ($i=0; $i < count($alllinks); $i++) {
+            for ($i = 0; $i < count($alllinks); $i++) {
                 if (!in_array($alllinks[$i]->get_category_id(), $tabCategories)) {
                     $tabLinkToDisplay[] = $alllinks[$i];
                 }
@@ -90,54 +90,27 @@ class GradebookDataGenerator
         //$status = CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());
         // do some checks on count, redefine if invalid value
         if (!isset($count)) {
-            $count = count ($this->items) - $start;
+            $count = count($this->items) - $start;
         }
         if ($count < 0) {
             $count = 0;
         }
 
         $allitems = $this->items;
-        /*
-        // sort array
-        if ($sorting & self :: GDG_SORT_TYPE) {
-            usort($allitems, array('GradebookDataGenerator', 'sort_by_type'));
-        } elseif ($sorting & self :: GDG_SORT_ID) {
-            usort($allitems, array('GradebookDataGenerator', 'sort_by_id'));
-        } elseif ($sorting & self :: GDG_SORT_NAME) {
-            usort($allitems, array('GradebookDataGenerator', 'sort_by_name'));
-        } elseif ($sorting & self :: GDG_SORT_DESCRIPTION) {
-            usort($allitems, array('GradebookDataGenerator', 'sort_by_description'));
-        } elseif ($sorting & self :: GDG_SORT_WEIGHT) {
-            usort($allitems, array('GradebookDataGenerator', 'sort_by_weight'));
-        } elseif ($sorting & self :: GDG_SORT_DATE) {
-            //usort($allitems, array('GradebookDataGenerator', 'sort_by_date'));
-        }
-        if ($sorting & self :: GDG_SORT_DESC) {
-            $allitems = array_reverse($allitems);
-        }*/
-
         usort($allitems, array('GradebookDataGenerator', 'sort_by_name'));
 
         $userId = $this->userId;
 
         // Get selected items
-        $visibleitems = array_slice($allitems, $start, $count);
-        $course_code = api_get_course_id();
-        $sessionId = api_get_session_id();
-        $status_user = api_get_status_of_user_in_course(
-            api_get_user_id(),
-            api_get_course_int_id()
-        );
-
+        $visibleItems = array_slice($allitems, $start, $count);
         $userCount = count($studentList);
 
         // Generate the data to display
         $data = array();
-
-        /** @var GradebookItem $item */
         $totalWeight = 0;
 
-        foreach ($visibleitems as $item) {
+        /** @var GradebookItem $item */
+        foreach ($visibleItems as $item) {
             $row = array();
             $row[] = $item;
             $row[] = $item->get_name();

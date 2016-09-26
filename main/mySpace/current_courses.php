@@ -220,14 +220,18 @@ if (isset($_GET['export'])) {
 	$column = 0; //skip the first column (row titles)
 
 	foreach ($headers as $header) {
-		$worksheet->SetCellValueByColumnAndRow($line, $column, $header);
+		$worksheet->setCellValueByColumnAndRow($column, $line, $header);
 		$column++;
 	}
 	$line++;
 	foreach ($array as $row) {
 		$column = 0;
 		foreach ($row as $item) {
-			$worksheet->SetCellValueByColumnAndRow($line, $column, html_entity_decode(strip_tags($item)));
+            $worksheet->setCellValueByColumnAndRow(
+                $column,
+                $line,
+                html_entity_decode(strip_tags($item))
+            );
 			$column++;
 		}
 		$line++;

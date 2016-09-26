@@ -2559,7 +2559,7 @@ class SurveyUtil
         $sql = "SELECT q.question_id, q.type, q.survey_question, count(o.question_option_id) as number_of_options
 				FROM $table_survey_question q LEFT JOIN $table_survey_question_option o
 				ON q.question_id = o.question_id
-				WHERE q.survey_id = '".Database::escape_string($_GET['survey_id'])."' AND
+				WHERE q.survey_id = '".$surveyId."' AND
 				q.c_id = $course_id AND
 				o.c_id = $course_id
 				GROUP BY q.question_id
@@ -2614,7 +2614,7 @@ class SurveyUtil
 				LEFT JOIN $table_survey_question_option sqo
 				ON sq.question_id = sqo.question_id
 				WHERE
-				    sq.survey_id = '".intval($_GET['survey_id'])."' AND
+				    sq.survey_id = '".$surveyId."' AND
                     sq.c_id = $course_id AND
                     sqo.c_id = $course_id
 				ORDER BY sq.sort ASC, sqo.sort ASC";
@@ -2641,7 +2641,7 @@ class SurveyUtil
                     $display_percentage_header = 0;
                 } else if ($row['type'] == 'percentage') {
                     $possible_answers[$row['question_id']][$row['question_option_id']] = $row['question_option_id'];
-                } else if ($row['type'] <> 'comment' AND $row['type'] <> 'pagebreak' AND $row['type'] <> 'percentage') {
+                } else if ($row['type'] <> 'comment' && $row['type'] <> 'pagebreak' && $row['type'] <> 'percentage') {
                     echo '<th>';
                     echo $row['option_text'];
                     echo '</th>';
@@ -2661,7 +2661,7 @@ class SurveyUtil
         $sql = "SELECT * FROM $table_survey_answer
                 WHERE
                     c_id = $course_id AND
-                    survey_id='".intval($_GET['survey_id'])."'
+                    survey_id='".$surveyId."'
                 ORDER BY user ASC";
         $result = Database::query($sql);
         $i = 1;
@@ -3030,6 +3030,14 @@ class SurveyUtil
      */
     public static function export_complete_report_xls($survey_data, $filename, $user_id = 0)
     {
+        $course_id = api_get_course_int_id();
+        $surveyId = isset($_GET['survey_id']) ? (int) $_GET['survey_id'] : 0;
+
+        if (empty($course_id) || empty($surveyId)) {
+
+            return false;
+        }
+
         $spreadsheet = new PHPExcel();
         $spreadsheet->setActiveSheetIndex(0);
         $worksheet = $spreadsheet->getActiveSheet();
@@ -3037,23 +3045,20 @@ class SurveyUtil
         $column = 1; // Skip the first column (row titles)
 
         // Show extra fields blank space (enough for extra fields on next line)
-        //if (!empty($_REQUEST['fields_filter'])) {
         // Show user fields section with a big th colspan that spans over all fields
         $extra_user_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', false, true);
         $num = count($extra_user_fields);
         for ($i = 0; $i < $num; $i++) {
-            $worksheet->SetCellValueByColumnAndRow($line, $column, '');
+            $worksheet->setCellValueByColumnAndRow($column, $line, '');
             $column++;
         }
+
         $display_extra_user_fields = true;
-        //}
 
         // Database table definitions
         $table_survey_question = Database :: get_course_table(TABLE_SURVEY_QUESTION);
         $table_survey_question_option = Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
         $table_survey_answer = Database :: get_course_table(TABLE_SURVEY_ANSWER);
-
-        $course_id = api_get_course_int_id();
 
         // First line (questions)
         $sql = "SELECT
@@ -3065,7 +3070,7 @@ class SurveyUtil
 				LEFT JOIN $table_survey_question_option options
                 ON questions.question_id = options.question_id AND options.c_id = $course_id
 				WHERE
-				    questions.survey_id = '".intval($_GET['survey_id'])."' AND
+				    questions.survey_id = '".$surveyId."' AND
 				    questions.c_id = $course_id
 				GROUP BY questions.question_id
 				ORDER BY questions.sort ASC";
@@ -3074,15 +3079,16 @@ class SurveyUtil
             // We show the questions if
             // 1. there is no question filter and the export button has not been clicked
             // 2. there is a quesiton filter but the question is selected for display
-            if (!(isset($_POST['submit_question_filter'])) || (isset($_POST['submit_question_filter']) && is_array($_POST['questions_filter']) &&
+            if (!(isset($_POST['submit_question_filter'])) ||
+                (isset($_POST['submit_question_filter']) && is_array($_POST['questions_filter']) &&
                 in_array($row['question_id'], $_POST['questions_filter']))
             ) {
                 // We do not show comment and pagebreak question types
                 if ($row['type'] != 'comment' && $row['type'] != 'pagebreak') {
                     if ($row['number_of_options'] == 0 && $row['type'] == 'open') {
-                        $worksheet->SetCellValueByColumnAndRow(
-                            $line,
+                        $worksheet->setCellValueByColumnAndRow(
                             $column,
+                            $line,
                             api_html_entity_decode(
                                 strip_tags($row['survey_question']),
                                 ENT_QUOTES
@@ -3091,9 +3097,9 @@ class SurveyUtil
                         $column ++;
                     } else {
                         for ($ii = 0; $ii < $row['number_of_options']; $ii ++) {
-                            $worksheet->SetCellValueByColumnAndRow(
-                                $line,
+                            $worksheet->setCellValueByColumnAndRow(
                                 $column,
+                                $line,
                                 api_html_entity_decode(
                                     strip_tags($row['survey_question']),
                                     ENT_QUOTES
@@ -3105,6 +3111,8 @@ class SurveyUtil
                 }
             }
         }
+
+
         $line++;
         $column = 1;
 
@@ -3112,9 +3120,9 @@ class SurveyUtil
         if ($display_extra_user_fields) {
             // Show the fields names for user fields
             foreach ($extra_user_fields as & $field) {
-                $worksheet->SetCellValueByColumnAndRow(
-                    $line,
+                $worksheet->setCellValueByColumnAndRow(
                     $column,
+                    $line,
                     api_html_entity_decode(strip_tags($field[3]), ENT_QUOTES)
                 );
                 $column++;
@@ -3134,9 +3142,11 @@ class SurveyUtil
                     survey_question_option.sort as option_sort
 				FROM $table_survey_question survey_question
 				LEFT JOIN $table_survey_question_option survey_question_option
-				ON survey_question.question_id = survey_question_option.question_id AND survey_question_option.c_id = $course_id
+				ON 
+				    survey_question.question_id = survey_question_option.question_id AND 
+				    survey_question_option.c_id = $course_id
 				WHERE 
-				    survey_question.survey_id = '".intval($_GET['survey_id'])."' AND
+				    survey_question.survey_id = $surveyId AND
 				    survey_question.c_id = $course_id
 				ORDER BY survey_question.sort ASC, survey_question_option.sort ASC";
         $result = Database::query($sql);
@@ -3147,13 +3157,14 @@ class SurveyUtil
             // 1. there is no question filter and the export button has not been clicked
             // 2. there is a quesiton filter but the question is selected for display
             if (!isset($_POST['submit_question_filter']) ||
-                (isset($_POST['questions_filter']) && is_array($_POST['questions_filter']) && in_array($row['question_id'], $_POST['questions_filter']))
+                (isset($_POST['questions_filter']) && is_array($_POST['questions_filter']) &&
+                in_array($row['question_id'], $_POST['questions_filter']))
             ) {
                 // We do not show comment and pagebreak question types
                 if ($row['type'] != 'comment' && $row['type'] != 'pagebreak') {
-                    $worksheet->SetCellValueByColumnAndRow(
-                        $line,
+                    $worksheet->setCellValueByColumnAndRow(
                         $column,
+                        $line,
                         api_html_entity_decode(
                             strip_tags($row['option_text']),
                             ENT_QUOTES
@@ -3172,11 +3183,11 @@ class SurveyUtil
         $old_user = '';
         $answers_of_user = array();
         $sql = "SELECT * FROM $table_survey_answer
-                WHERE c_id = $course_id AND survey_id='".intval($_GET['survey_id'])."' ";
+                WHERE c_id = $course_id AND survey_id = $surveyId";
         if ($user_id != 0) {
-            $sql .= "AND user='".intval($user_id)."' ";
+            $sql .= " AND user='".intval($user_id)."' ";
         }
-        $sql .=	"ORDER BY user ASC";
+        $sql .=	" ORDER BY user ASC";
 
         $open_question_iterator = 1;
         $result = Database::query($sql);
@@ -3190,7 +3201,7 @@ class SurveyUtil
                     true
                 );
                 foreach ($return as $elem) {
-                    $worksheet->SetCellValueByColumnAndRow($line, $column, $elem);
+                    $worksheet->setCellValueByColumnAndRow($column, $line, $elem);
                     $column++;
                 }
                 $answers_of_user = array();
@@ -3216,7 +3227,7 @@ class SurveyUtil
 
         // this is to display the last user
         foreach ($return as $elem) {
-            $worksheet->SetCellValueByColumnAndRow($line, $column, $elem);
+            $worksheet->setCellValueByColumnAndRow($column, $line, $elem);
             $column++;
         }
 

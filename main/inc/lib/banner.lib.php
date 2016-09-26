@@ -453,7 +453,7 @@ function menuArray()
             }
         } else {
             if (api_get_user_id() && !api_is_anonymous()) {
-                $list = split("\n", $openMenuTabsLoggedIn);
+                $list = explode("\n", $openMenuTabsLoggedIn);
                 foreach ($list as $link) {
                     $matches = array();
                     $match = preg_match('$href="([^"]*)" target="([^"]*)">([^<]*)</a>$', $link, $matches);
@@ -467,7 +467,7 @@ function menuArray()
                     }
                 }
             } else {
-                $list = split("\n", $open);
+                $list = explode("\n", $open);
                 foreach ($list as $link) {
                     $matches = array();
                     $match = preg_match('$href="([^"]*)" target="([^"]*)">([^<]*)</a>$', $link, $matches);
@@ -488,7 +488,6 @@ function menuArray()
         //$pre_lis = '';
         $activeSection = '';
         foreach ($mainNavigation['navigation'] as $section => $navigation_info) {
-
             $key = (!empty($navigation_info['key'])?'tab-'.$navigation_info['key']:'');
 
             if (isset($GLOBALS['this_section'])) {

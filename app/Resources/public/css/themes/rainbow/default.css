@@ -30,8 +30,8 @@ a:focus {
 }
 .logo-ofaj{
     padding: 5px;
-    margin-bottom: 30px;
-    margin-top: 10px;
+    margin-bottom: 0;
+    margin-top: 0;
 }
 .home-information{
     margin-top: 20px;
@@ -128,9 +128,11 @@ a:focus {
 .back_to_top_wrap:hover{
     color: #FFFFFF;
 }
+.navbar-right{
+ margin-right: 0;   
+}
 /* Menu Option */
 .item-menu{
-    width: 180px;
     text-align: center;
 }
 .item-menu a{
@@ -140,7 +142,7 @@ a:focus {
 .navbar-collapse{
     padding: 0;
 }
-.menu-1{
+/* .menu-1{
     background: #41A62A;
 }
 .menu-2{
@@ -157,7 +159,7 @@ a:focus {
 }
 .menu-6{
     background: #8E91FD;
-}
+} */
 /* end Menu Option */
 .statistics{
     padding-top: 20px;
@@ -266,19 +268,17 @@ a:focus {
   border-radius: 0;
 }
 .navbar {
-  background: #FFFFFF;
+  background: #96BD0D;
   border: none;
 }
 .nav li a{
-   padding: 10px 15px;
+   padding: 10px 20px;
 }
 .navbar-nav li a{
   font-weight: bold;
-  line-height: 22px;
+  line-height: 25px;
   padding-top: 12.5px;
   padding-bottom: 12.5px;
-  padding-left: 20px;
-  padding-right: 20px;
 }
 .navbar-collapse{
   overflow: hidden !important;
@@ -291,7 +291,7 @@ a:focus {
 .navbar-default .navbar-nav > .active > a:hover,
 .navbar-default .navbar-nav > .active > a:focus{
   color: #fff;
-  background:#07578A;
+  background:#6B1D82;
 }
 .navbar-default .navbar-nav > li > a{
   color: #333333;
@@ -328,11 +328,14 @@ a:focus {
 .navbar-default .navbar-nav > .open > a,
 .navbar-default .navbar-nav > .open > a:hover,
 .navbar-default .navbar-nav > .open > a:focus{
-    background-color: #FFF;
+    background-color: #6B1D82;
+    padding-bottom: 7px;
+    padding-top: 7px;
+    color: #FFF;
 }
 .navbar-default .navbar-nav > li > a:focus,
 .navbar-default .navbar-nav > li > a:hover{
-    color: #666666;
+    color: #FFF;
 }
 .nav > li > a:hover, .nav > li > a:focus{
    background-color: transparent;

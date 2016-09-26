@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CGroupRelUser;
+
 /**
  * This library contains some functions for group-management.
  * @author Bart Mollet
@@ -1128,19 +1130,26 @@ class GroupManager
      */
     public static function getStudents($group_id)
     {
-        $group_user_table = Database :: get_course_table(TABLE_GROUP_USER);
-        $course_id = api_get_course_int_id();
-        $group_id = intval($group_id);
-        $sql = "SELECT user_id 
-                FROM $group_user_table gu
-                INNER JOIN $groupTable g
-                ON (gu.group_id = g.iid and g.c_id = gu.c_id)
-                WHERE gu.c_id = $course_id AND g.id = $group_id";
-        $res = Database::query($sql);
-        $users = array();
+        $em = Database::getManager();
+        $subscriptions = $em
+            ->createQuery('
+                SELECT gu
+                FROM ChamiloCourseBundle:CGroupRelUser gu
+                INNER JOIN ChamiloCourseBundle:CGroupInfo g
+                WITH gu.groupId = g.iid AND g.cId = gu.cId
+                WHERE gu.cId = :course AND g.id = :group
+            ')
+            ->setParameters([
+                'course' => api_get_course_int_id(),
+                'group' => intval($group_id)
+            ])
+            ->getResult();
 
-        while ($obj = Database::fetch_object($res)) {
-            $users[] = api_get_user_info($obj->user_id);
+        $users = [];
+
+        /** @var CGroupRelUser $subscription */
+        foreach ($subscriptions as $subscription) {
+            $users[] = api_get_user_info($subscription->getUserId());
         }
 
         return $users;

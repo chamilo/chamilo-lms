@@ -3330,14 +3330,14 @@ class SessionManager
 
         $session_id = intval($session_id);
 
-        $sqlSelect = "SELECT *";
+        $sqlSelect = "*, c.id, c.id as real_id";
 
         if ($getCount) {
-            $sqlSelect = "SELECT COUNT(1)";
+            $sqlSelect = "COUNT(1) as count";
         }
 
         // select the courses
-        $sql = "SELECT *, c.id, c.id as real_id
+        $sql = "SELECT $sqlSelect
                 FROM $tbl_course c
                 INNER JOIN $tbl_session_rel_course src
                 ON c.id = src.c_id
@@ -3365,9 +3365,9 @@ class SessionManager
         $courses = array();
         if ($num_rows > 0) {
             if ($getCount) {
-                $count = Database::fetch_array($result);
+                $count = Database::fetch_assoc($result);
 
-                return intval($count[0]);
+                return intval($count['count']);
             }
 
             while ($row = Database::fetch_array($result,'ASSOC'))	{
@@ -3565,10 +3565,11 @@ class SessionManager
     /**
      * Get users by session
      * @param  int $id session id
-     * @param	int	$status filter by status coach = 2
-     * @return  array a list with an user list
+     * @param    int $status filter by status coach = 2
+     * @param bool $getCount Optional. Allow get the number of rows from the result
+     * @return array|int A list with an user list. If $getCount is true then return a the count of registers
      */
-    public static function get_users_by_session($id, $status = null)
+    public static function get_users_by_session($id, $status = null, $getCount = false)
     {
         if (empty($id)) {
             return array();
@@ -3578,13 +3579,13 @@ class SessionManager
         $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $table_access_url_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
-        $sql = "SELECT
-                    u.user_id,
-                    lastname,
-                    firstname,
-                    username,
-                    relation_type,
-                    access_url_id
+        $selectedField = 'u.user_id,lastname, firstname, username, relation_type, access_url_id';
+
+        if ($getCount) {
+            $selectedField = 'count(1) AS count';
+        }
+
+        $sql = "SELECT $selectedField
                 FROM $tbl_user u
                 INNER JOIN $tbl_session_rel_user
                 ON u.user_id = $tbl_session_rel_user.user_id AND
@@ -3605,6 +3606,12 @@ class SessionManager
         $sql .= api_sort_by_first_name() ? ' firstname, lastname' : '  lastname, firstname';
 
         $result = Database::query($sql);
+
+        if ($getCount) {
+            $count = Database::fetch_assoc($result);
+
+            return $count['count'];
+        }
 
         $return = array();
         while ($row = Database::fetch_array($result, 'ASSOC')) {

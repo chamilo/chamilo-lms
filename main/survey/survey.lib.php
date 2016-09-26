@@ -2886,7 +2886,7 @@ class SurveyUtil
             // We show the options if
             // 1. there is no question filter and the export button has not been clicked
             // 2. there is a quesiton filter but the question is selected for display
-            if (!($_POST['submit_question_filter']) || (
+            if (!(isset($_POST['submit_question_filter'])) || (
                 is_array($_POST['questions_filter']) &&
                 in_array($row['question_id'], $_POST['questions_filter']))
             ) {
@@ -2993,10 +2993,16 @@ class SurveyUtil
             foreach ($possible_options as $question_id => $possible_option) {
                 if (is_array($possible_option) && count($possible_option) > 0) {
                     foreach ($possible_option as $option_id => & $value) {
-                        $my_answer_of_user = ($answers_of_user[$question_id] == null) ? array() : $answers_of_user[$question_id];
+                        $my_answer_of_user = !isset($answers_of_user[$question_id]) || isset($answers_of_user[$question_id]) && $answers_of_user[$question_id] == null ? array() : $answers_of_user[$question_id];
                         $key = array_keys($my_answer_of_user);
-                        if (substr($key[0], 0, 4) == 'open') {
-                            $return .= '"'.str_replace('"', '""', api_html_entity_decode(strip_tags($answers_of_user[$question_id][$key[0]]['option_id']), ENT_QUOTES)).'"';
+                        if (isset($key[0]) && substr($key[0], 0, 4) == 'open') {
+                            $return .= '"'.
+                                str_replace(
+                                    '"',
+                                    '""',
+                                    api_html_entity_decode(strip_tags($answers_of_user[$question_id][$key[0]]['option_id']), ENT_QUOTES)
+                                ).
+                                '"';
                         } elseif (!empty($answers_of_user[$question_id][$option_id])) {
                             //$return .= 'v';
                             if ($answers_of_user[$question_id][$option_id]['value'] != 0) {
@@ -4551,8 +4557,8 @@ class SurveyUtil
         $table_survey_answer = Database :: get_course_table(TABLE_SURVEY_ANSWER);
         $table_survey = Database:: get_course_table(TABLE_SURVEY);
 
-        $sql = 'SELECT question_id
-                FROM '.$table_survey_question."
+        $sql = "SELECT question_id
+                FROM $table_survey_question
                 WHERE c_id = $course_id";
         $result = Database::query($sql);
 
@@ -4588,51 +4594,40 @@ class SurveyUtil
         echo '	<th>'.get_lang('Anonymous').'</th>';
         echo '</tr>';
 
+        $now = api_get_utc_datetime();
+
         $sql = "SELECT *
-                FROM $table_survey survey,
+                FROM $table_survey survey INNER JOIN
                 $table_survey_invitation survey_invitation
-				WHERE
-                    survey_invitation.user = $user_id AND
+                ON (
                     survey.code = survey_invitation.survey_code AND
-                    survey.avail_from <= '".date('Y-m-d H:i:s')."' AND
-                    survey.avail_till >= '".date('Y-m-d H:i:s')."' AND
+                    survey.c_id = survey_invitation.c_id
+                )
+				WHERE
+                    survey_invitation.user = $user_id AND                    
+                    survey.avail_from <= '".$now."' AND
+                    survey.avail_till >= '".$now."' AND
                     survey.c_id = $course_id AND
                     survey.session_id = $sessionId AND
                     survey_invitation.c_id = $course_id
 				";
         $result = Database::query($sql);
-        $counter = 0;
-        while ($row = Database::fetch_array($result, 'ASSOC')) {
 
-            // Get the user into survey answer table (user or anonymus)
-            $sql = "SELECT user FROM $table_survey_answer
-					WHERE c_id = $course_id AND survey_id = (
-					    SELECT survey_id from $table_survey
-					    WHERE code ='".Database::escape_string($row['code'])." AND c_id = $course_id'
-                    )
-            ";
-            $result_answer = Database::query($sql);
-            $row_answer = Database::fetch_array($result_answer,'ASSOC');
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
             echo '<tr>';
             if ($row['answered'] == 0) {
                 echo '<td>';
-                echo Display::return_icon('statistics.png', get_lang('CreateNewSurvey'),array('style'=>'inline-block'),ICON_SIZE_TINY);
+                echo Display::return_icon('statistics.png', get_lang('CreateNewSurvey'), array(),ICON_SIZE_TINY);
                 echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/fillsurvey.php?course='.$_course['sysCode'].'&invitationcode='.$row['invitation_code'].'&cidReq='.$_course['sysCode'].'">'.$row['title'].'</a></td>';
             } else {
                 echo '<td>';
-                echo Display::return_icon('statistics_na.png', get_lang('CreateNewSurvey'),array('style'=>'inline-block'),ICON_SIZE_TINY);
+                echo Display::return_icon('statistics_na.png', get_lang('CreateNewSurvey'), array(),ICON_SIZE_TINY);
                 echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=questionreport&cidReq='.$_course['sysCode'].'&id_session='.$row['session_id'].'&gidReq=0&origin=&survey_id='.$row['survey_id'].'">'.$row['title'].'</a></td>';
             }
             echo '<td class="center">';
             echo ($row['anonymous'] == 1) ? get_lang('Yes') : get_lang('No');
             echo '</td>';
             echo '</tr>';
-            if ($row['anonymous'] == 1) {
-                $current_user_id = $_SESSION['surveyuser'];
-            } else {
-                $current_user_id = api_get_user_id();
-            }
-            $link_available = self::show_link_available(api_get_user_id(),$row['code'],$current_user_id);
         }
         echo '</table>';
     }

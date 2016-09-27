@@ -220,7 +220,15 @@ if ($user_already_registered_show_terms === false) {
 
     // USERNAME
     if (api_get_setting('login_is_email') != 'true') {
-        $form->addElement('text', 'username', get_lang('UserName'), array('id' => 'username', 'size' => USERNAME_MAX_LENGTH));
+        $form->addText(
+            'username',
+            get_lang('UserName'),
+            array(
+                'id' => 'username',
+                'size' => USERNAME_MAX_LENGTH,
+                'autocomplete' => 'off'
+            )
+        );
         $form->applyFilter('username', 'trim');
         $form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
         $form->addRule('username', sprintf(get_lang('UsernameMaxXCharacters'), (string)USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
@@ -237,7 +245,7 @@ if ($user_already_registered_show_terms === false) {
     );
 
     $checkPass = api_get_setting('allow_strength_pass_checker');
-    if ($checkPass == 'true') {
+    if ($checkPass === 'true') {
         $form->addElement('label', null, '<div id="password_progress"></div>');
     }
 

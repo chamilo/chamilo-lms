@@ -25,7 +25,7 @@
                 {% endif %}
 
                 {% if _u.logged == 0 %}
-                    <li class="item-menu menu-1"><a href="{{ _p.web }}">{{ "CampusHomepage"|get_lang }}</a></li>
+                    <li class="item-menu active"><a href="{{ _p.web }}">{{ "CampusHomepage"|get_lang }}</a></li>
                     <li class="item-menu menu-2"><a href="{{ _p.web }}web/app_dev.php/faq?_locale={{ document_language }}">{{ "FAQ"|get_lang }}</a></li>
                     <li class="item-menu menu-3"><a href="{{ _p.web }}main/auth/inscription.php">{{ "Subscription"|get_lang }}</a></li>
                     <li class="item-menu menu-4"><a href="#">{{ "Demo"|get_lang }}</a></li>

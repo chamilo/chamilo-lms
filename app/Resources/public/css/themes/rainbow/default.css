@@ -150,25 +150,24 @@ a:focus {
 .navbar-collapse{
     padding: 0;
 }
-/* .menu-1{
-    background: #41A62A;
+.navbar-default .navbar-nav > li > a:focus, .navbar-default .navbar-nav > li > a:hover{
+    background-color: #8A3BA2;
 }
-.menu-2{
-    background: #97BF0D;
+#formLogin .input-group .input-group-addon .fa{
+    color: #162A83;
 }
-.menu-3{
-    background: #F9B200;
+.grid-courses  .items .image .user-actions .btn .fa{
+    color: #162A83;
 }
-.menu-4{
-    background: #E53140;
+.hot-courses .grid-courses .items .toolbar{
+    display: none;
 }
-.menu-5{
-    background: #E2007A;
+.hot-courses .grid-courses .items{
+    min-height: 230px;
 }
-.menu-6{
-    background: #8E91FD;
-} */
-/* end Menu Option */
+#latest_pages .section-title{
+    margin-bottom: 35px;
+}
 .statistics{
     padding-top: 20px;
     padding-bottom: 20px;
@@ -190,12 +189,11 @@ a:focus {
 }
 .section-notice .items .title a{
     color: #162A83;
-    font-size: 20px;
+    font-size: 14px;
     font-weight: 700;
 }
 .section-notice .items .title a:hover{
     color: #666666;
-    font-size: 20px;
     font-weight: 700;
 }
 .section-notice .items .image .sonata-media-block-media-container img,
@@ -207,6 +205,9 @@ a:focus {
     color: #888;
     padding-top: 5px;
     padding-bottom: 10px;
+}
+.section-global #breadcrumb-bar{
+    display: none;
 }
 .grid-courses .session .session-name{
     color: #E53140;

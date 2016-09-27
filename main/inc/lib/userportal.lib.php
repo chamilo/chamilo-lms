@@ -1193,10 +1193,10 @@ class IndexManager
                         }
 
                         // Courses inside the current session.
-                        $date_session_start = $session['access_start_date'];
-                        $date_session_end = $session['access_end_date'];
-                        $coachAccessStartDate = $session['coach_access_start_date'];
-                        $coachAccessEndDate = $session['coach_access_end_date'];
+                        $date_session_start = api_get_local_time($session['access_start_date']);
+                        $date_session_end = api_get_local_time($session['access_end_date']);
+                        $coachAccessStartDate = api_get_local_time($session['coach_access_start_date']);
+                        $coachAccessEndDate = api_get_local_time($session['coach_access_end_date']);
 
                         $session_now = time();
                         $count_courses_session = 0;

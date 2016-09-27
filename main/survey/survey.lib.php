@@ -3014,20 +3014,18 @@ class SurveyUtil
         $spreadsheet = new PHPExcel();
         $spreadsheet->setActiveSheetIndex(0);
         $worksheet = $spreadsheet->getActiveSheet();
-        $line = 0;
+        $line = 1;
         $column = 1; // Skip the first column (row titles)
 
         // Show extra fields blank space (enough for extra fields on next line)
-        //if (!empty($_REQUEST['fields_filter'])) {
         // Show user fields section with a big th colspan that spans over all fields
         $extra_user_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', false, true);
         $num = count($extra_user_fields);
         for ($i = 0; $i < $num; $i++) {
-            $worksheet->SetCellValueByColumnAndRow($line, $column, '');
+            $worksheet->setCellValueByColumnAndRow($column, $line, '');
             $column++;
         }
         $display_extra_user_fields = true;
-        //}
 
         // Database table definitions
         $table_survey_question = Database :: get_course_table(TABLE_SURVEY_QUESTION);
@@ -3055,15 +3053,15 @@ class SurveyUtil
             // We show the questions if
             // 1. there is no question filter and the export button has not been clicked
             // 2. there is a quesiton filter but the question is selected for display
-            if (!($_POST['submit_question_filter']) || (is_array($_POST['questions_filter']) &&
+            if (!(isset($_POST['submit_question_filter'])) || (is_array($_POST['questions_filter']) &&
                 in_array($row['question_id'], $_POST['questions_filter']))
             ) {
                 // We do not show comment and pagebreak question types
                 if ($row['type'] != 'comment' && $row['type'] != 'pagebreak') {
                     if ($row['number_of_options'] == 0 && $row['type'] == 'open') {
-                        $worksheet->SetCellValueByColumnAndRow(
-                            $line,
+                        $worksheet->setCellValueByColumnAndRow(
                             $column,
+                            $line,
                             api_html_entity_decode(
                                 strip_tags($row['survey_question']),
                                 ENT_QUOTES
@@ -3072,9 +3070,9 @@ class SurveyUtil
                         $column ++;
                     } else {
                         for ($ii = 0; $ii < $row['number_of_options']; $ii ++) {
-                            $worksheet->SetCellValueByColumnAndRow(
-                                $line,
+                            $worksheet->setCellValueByColumnAndRow(
                                 $column,
+                                $line,
                                 api_html_entity_decode(
                                     strip_tags($row['survey_question']),
                                     ENT_QUOTES
@@ -3093,9 +3091,9 @@ class SurveyUtil
         if ($display_extra_user_fields) {
             // Show the fields names for user fields
             foreach ($extra_user_fields as & $field) {
-                $worksheet->SetCellValueByColumnAndRow(
-                    $line,
+                $worksheet->setCellValueByColumnAndRow(
                     $column,
+                    $line,
                     api_html_entity_decode(strip_tags($field[3]), ENT_QUOTES)
                 );
                 $column++;
@@ -3119,14 +3117,14 @@ class SurveyUtil
             // We show the options if
             // 1. there is no question filter and the export button has not been clicked
             // 2. there is a quesiton filter but the question is selected for display
-            if (!($_POST['submit_question_filter']) ||
+            if (!(isset($_POST['submit_question_filter'])) ||
                 (is_array($_POST['questions_filter']) && in_array($row['question_id'], $_POST['questions_filter']))
             ) {
                 // We do not show comment and pagebreak question types
                 if ($row['type'] != 'comment' && $row['type'] != 'pagebreak') {
-                    $worksheet->SetCellValueByColumnAndRow(
-                        $line,
+                    $worksheet->setCellValueByColumnAndRow(
                         $column,
+                        $line,
                         api_html_entity_decode(
                             strip_tags($row['option_text']),
                             ENT_QUOTES
@@ -3163,7 +3161,7 @@ class SurveyUtil
                     true
                 );
                 foreach ($return as $elem) {
-                    $worksheet->SetCellValueByColumnAndRow($line, $column, $elem);
+                    $worksheet->setCellValueByColumnAndRow($column, $line, $elem);
                     $column++;
                 }
                 $answers_of_user = array();
@@ -3189,7 +3187,7 @@ class SurveyUtil
 
         // this is to display the last user
         foreach ($return as $elem) {
-            $worksheet->SetCellValueByColumnAndRow($line, $column, $elem);
+            $worksheet->setCellValueByColumnAndRow($column, $line, $elem);
             $column++;
         }
 
@@ -3249,9 +3247,9 @@ class SurveyUtil
             foreach ($possible_options as $question_id => & $possible_option) {
                 if (is_array($possible_option) && count($possible_option) > 0) {
                     foreach ($possible_option as $option_id => & $value) {
-                        $my_answers_of_user = ($answers_of_user[$question_id]==null) ? array() : $answers_of_user[$question_id];
+                        $my_answers_of_user = isset($answers_of_user[$question_id]) ? $answers_of_user[$question_id] : [];
                         $key = array_keys($my_answers_of_user);
-                        if (substr($key[0], 0, 4) == 'open') {
+                        if (isset($key[0]) && substr($key[0], 0, 4) == 'open') {
                             $return[] = api_html_entity_decode(strip_tags($answers_of_user[$question_id][$key[0]]['option_id']), ENT_QUOTES);
                         } elseif (!empty($answers_of_user[$question_id][$option_id])) {
                             //$return .= 'v';

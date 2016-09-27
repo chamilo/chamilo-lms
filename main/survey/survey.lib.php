@@ -2805,7 +2805,6 @@ class SurveyUtil
         $return = ';';
 
         // Show extra fields blank space (enough for extra fields on next line)
-
         $extra_user_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', false, true);
 
         $num = count($extra_user_fields);
@@ -3041,7 +3040,7 @@ class SurveyUtil
         $spreadsheet = new PHPExcel();
         $spreadsheet->setActiveSheetIndex(0);
         $worksheet = $spreadsheet->getActiveSheet();
-        $line = 0;
+        $line = 1;
         $column = 1; // Skip the first column (row titles)
 
         // Show extra fields blank space (enough for extra fields on next line)
@@ -3070,7 +3069,7 @@ class SurveyUtil
 				LEFT JOIN $table_survey_question_option options
                 ON questions.question_id = options.question_id AND options.c_id = $course_id
 				WHERE
-				    questions.survey_id = '".$surveyId."' AND
+				    questions.survey_id = $surveyId AND
 				    questions.c_id = $course_id
 				GROUP BY questions.question_id
 				ORDER BY questions.sort ASC";
@@ -3094,7 +3093,7 @@ class SurveyUtil
                                 ENT_QUOTES
                             )
                         );
-                        $column ++;
+                        $column++;
                     } else {
                         for ($ii = 0; $ii < $row['number_of_options']; $ii ++) {
                             $worksheet->setCellValueByColumnAndRow(
@@ -3105,13 +3104,12 @@ class SurveyUtil
                                     ENT_QUOTES
                                 )
                             );
-                            $column ++;
+                            $column++;
                         }
                     }
                 }
             }
         }
-
 
         $line++;
         $column = 1;
@@ -3217,6 +3215,7 @@ class SurveyUtil
             }
             $old_user = $row['user'];
         }
+
         $return = SurveyUtil::export_complete_report_row_xls(
             $survey_data,
             $possible_answers,

@@ -27,7 +27,7 @@
                 {% endif %}
                 {% if administrator_name is not null %}
                     <div id="admin_name">
-                        {{ administrator_name }}
+                        <a href="{{ "URLOFAJ" | get_lang }}">{{ "OFAJ" | get_lang }}</a>
                     </div>
                 {% endif %}
                 <div id="software_name">

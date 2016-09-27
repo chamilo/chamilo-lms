@@ -68,7 +68,6 @@ class NavBuilder extends ContainerAware
         )->setAttribute('class', 'item-menu menu-1 homepage');
 
         if ($checker->isGranted('IS_AUTHENTICATED_FULLY')) {
-
             $menu->addChild(
                 $translator->trans('My courses'),
                 array('route' => 'userportal')
@@ -247,7 +246,6 @@ class NavBuilder extends ContainerAware
 
         // <nav class="navbar navbar-default">
         if ($checker->isGranted('IS_AUTHENTICATED_FULLY')) {
-
             $token = $this->container->get('security.token_storage');
             /** @var User $user */
             $user = $token->getToken()->getUser();
@@ -256,7 +254,7 @@ class NavBuilder extends ContainerAware
             $uri = $user->getPictureUri();
 
             if (empty($uri)) {
-                $uri = $this->container->get('templating.helper.assets')->getUrl('main/img/icons/32/unknown.png');
+                $uri = $this->container->get('templating.helper.assets')->getUrl('../../main/img/icons/32/unknown.png');
                 $uri = str_replace('web/', '/', $uri);
                 $image = '<img src="'.$uri.'" class="img-circle"/>';
             } else {
@@ -274,7 +272,6 @@ class NavBuilder extends ContainerAware
             )->setAttribute('dropdown', true);
 
             if ($checker->isGranted('ROLE_ADMIN')) {
-
                 $dropdown->addChild(
                     $translator->trans('Administration'),
                     array(

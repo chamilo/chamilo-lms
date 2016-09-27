@@ -53,7 +53,7 @@
                         </li>
                         <li role="separator" class="divider"></li>
                         <li class="user-body">
-                            {% if _us.is_admin == 1 %}
+                            {% if _u.is_admin == 1 %}
                             <a href="{{ _p.web }}main/admin">
                                 <em class="fa fa-cog" aria-hidden="true"></em>
                                 {{ "NomPageAdmin"|get_lang }}

@@ -1888,14 +1888,22 @@ function api_add_url_param($url, $param, $filter_xss = true) {
  * @return string the generated password
  */
 function api_generate_password($length = 8) {
-    $characters = 'abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    $characters = 'abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ123456789';
+    $numbers = '123456789';
     if ($length < 2) {
         $length = 2;
     }
+
     $password = '';
     for ($i = 0; $i < $length; $i ++) {
         $password .= $characters[rand() % strlen($characters)];
     }
+
+    // At least 2 digits
+    for ($i = 0; $i < 2; $i ++) {
+        $password .= $numbers[rand() % strlen($numbers)];
+    }
+
     return $password;
 }
 

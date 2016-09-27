@@ -15,6 +15,7 @@ require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 $cidReq = api_get_cidreq();
 $survey_id = intval($_GET['survey_id']);
+$userId = isset($_GET['user_id']) ? $_GET['user_id'] : 0;
 $survey_data = SurveyManager::get_survey($survey_id);
 
 // Export
@@ -24,7 +25,6 @@ $survey_data = SurveyManager::get_survey($survey_id);
 if (isset($_POST['export_report']) && $_POST['export_report']) {
     switch ($_POST['export_format']) {
         case 'xls':
-            $userId = isset($_GET['user_id']) ? $_GET['user_id'] : 0;
             $filename = 'survey_results_'.$survey_id.'.xls';
             $data = SurveyUtil::export_complete_report_xls(
                 $survey_data,
@@ -35,7 +35,6 @@ if (isset($_POST['export_report']) && $_POST['export_report']) {
             break;
         case 'csv':
         default:
-            $userId = isset($_GET['user_id']) ? $_GET['user_id'] : 0;
             $data = SurveyUtil::export_complete_report(
                 $survey_data,
                 $userId

@@ -6,57 +6,34 @@
 {% endif %}
 <footer class="sticky-footer"> <!-- start of #footer section -->
     <div class="container">
-        
         <div class="row">
-            <div id="footer_left" class="col-md-4">
-                {% if session_teachers is not null %}
-                    <div id="session_teachers">
-                        {{ session_teachers }}
-                    </div>
-                {% endif %}
-
+            <div id="footer_left" class="col-md-8">
+               <div class="sub-footer">
+                        <div class="row">
+                                <div class="col-md-12">
+                                    <div class="partners">
+                                        <a href="#"><img src="{{ _p.web_css_theme }}images/rbs_logo_rgb.png"/></a>
+                                        <a href="#"><img src="{{ _p.web_css_theme }}images/logo_cavilam.png"/></a>
+                                    </div>
+                                </div>
+                        </div>
+                </div>
+            </div>
+            <div id="footer_right" class="col-md-4">
                 {% if teachers is not null %}
                     <div id="teachers">
                         {{ teachers }}
                     </div>
                 {% endif %}
-
-                {#  Plugins for footer section #}
-                {% if plugin_footer_left is not null %}
-                    <div id="plugin_footer_left">
-                        {{ plugin_footer_left }}
-                    </div>
-                {% endif %}
-                &nbsp;
-            </div>
-
-            <div id="footer_center" class="col-md-4">
-                {#   Plugins for footer section  #}
-                {% if plugin_footer_center is not null %}
-                    <div id="plugin_footer_center">
-                        {{ plugin_footer_center }}
-                    </div>
-                {% endif %}
-                &nbsp;
-            </div>
-
-            <div id="footer_right" class="col-md-4">
                 {% if administrator_name is not null %}
                     <div id="admin_name">
                         {{ administrator_name }}
                     </div>
                 {% endif %}
-
                 <div id="software_name">
 	                <a href="{{_p.web}}" target="_blank">{{ "PoweredByX" |get_lang | format(_s.software_name) }}</a>
                     &copy; {{ "now"|date("Y") }}
                 </div>
-                {#   Plugins for footer section  #}
-                {% if plugin_footer_right is not null %}
-                    <div id="plugin_footer_right">
-                        {{ plugin_footer_right }}
-                    </div>
-                {% endif %}
                 &nbsp;
             </div><!-- end of #footer_right -->
         </div><!-- end of #row -->

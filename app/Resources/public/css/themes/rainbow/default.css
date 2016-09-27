@@ -132,12 +132,15 @@ a:focus {
 .partners{
     padding-bottom: 10px;
     padding-top: 10px;
-    text-align: center;
+    text-align: left;
 }
 .partners a{
     display: inline-block;
     padding-left: 10px;
     padding-right: 10px;
+}
+footer #footer_right{
+    text-align: right;
 }
 /* Menu Option */
 .item-menu{
@@ -430,16 +433,16 @@ a:focus {
 }
 /* End Jquery UI */
 footer{
-  background-color:#162A83;
+  background-color:#ECECEC;
 }
 footer{
-  color: #ffffff;
+  color: #333333;
 }
 footer a{
-  color: #ffffff;
+  color: #666666;
 }
 footer a:hover{
-    color: #FFD42A;
+    color: #96BD0D;
 }
 .navbar-default .navbar-brand {
   color:white;

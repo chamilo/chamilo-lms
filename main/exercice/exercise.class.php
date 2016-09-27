@@ -189,10 +189,10 @@ class Exercise
                 $this->edit_exercise_in_lp = true;
             }
 
-            if ($object->end_time != '0000-00-00 00:00:00') {
+            if ($object->end_time != '0000-00-00 00:00:00' && !empty($object->end_time)) {
                 $this->end_time 	= $object->end_time;
             }
-            if ($object->start_time != '0000-00-00 00:00:00') {
+            if ($object->start_time != '0000-00-00 00:00:00' && !empty($object->start_time)) {
                 $this->start_time 	= $object->start_time;
             }
 
@@ -1603,13 +1603,13 @@ class Exercise
         // Exercise already exists
         if ($id) {
             // we prepare date in the database using the api_get_utc_datetime() function
-            if (!empty($this->start_time) && $this->start_time != '0000-00-00 00:00:00') {
+            if (!empty($this->start_time) && $this->start_time != '0000-00-00 00:00:00' && !empty($this->start_time)) {
                 $start_time = $this->start_time;
             } else {
                 $start_time = '0000-00-00 00:00:00';
             }
 
-            if (!empty($this->end_time) && $this->end_time != '0000-00-00 00:00:00') {
+            if (!empty($this->end_time) && $this->end_time != '0000-00-00 00:00:00' && !empty($this->end_time)) {
                 $end_time = $this->end_time;
             } else {
                 $end_time = '0000-00-00 00:00:00';
@@ -2207,7 +2207,7 @@ class Exercise
 
             $var = Exercise::selectTimeLimit();
 
-            if (($this->start_time != '0000-00-00 00:00:00'))
+            if (($this->start_time != '0000-00-00 00:00:00') && !empty($this->start_time))
                 $form->addElement('html','<div id="start_date_div" style="display:block;">');
             else
                 $form->addElement('html','<div id="start_date_div" style="display:none;">');
@@ -2218,7 +2218,7 @@ class Exercise
 
             $form->addElement('checkbox', 'activate_end_date_check', null , get_lang('EnableEndTime'), array('onclick' => 'activate_end_date()'));
 
-            if (($this->end_time != '0000-00-00 00:00:00'))
+            if (($this->end_time != '0000-00-00 00:00:00' && !empty($this->end_time)))
                 $form->addElement('html','<div id="end_date_div" style="display:block;">');
             else
                 $form->addElement('html','<div id="end_date_div" style="display:none;">');
@@ -2359,15 +2359,15 @@ class Exercise
                 $defaults['pass_percentage'] = $this->selectPassPercentage();
                 $defaults['question_selection_type'] = $this->getQuestionSelectionType();
 
-                if (($this->start_time != '0000-00-00 00:00:00')) {
+                if (($this->start_time != '0000-00-00 00:00:00' && !empty($this->start_time))) {
                     $defaults['activate_start_date_check'] = 1;
                 }
-                if ($this->end_time != '0000-00-00 00:00:00') {
+                if ($this->end_time != '0000-00-00 00:00:00' && !empty($this->end_time)) {
                     $defaults['activate_end_date_check'] = 1;
                 }
 
-                $defaults['start_time'] = ($this->start_time!='0000-00-00 00:00:00') ? api_get_local_time($this->start_time) : date('Y-m-d 12:00:00');
-                $defaults['end_time'] = ($this->end_time!='0000-00-00 00:00:00') ? api_get_local_time($this->end_time) : date('Y-m-d 12:00:00', time()+84600);
+                $defaults['start_time'] = ($this->start_time!='0000-00-00 00:00:00' && !empty($this->start_time)) ? api_get_local_time($this->start_time) : date('Y-m-d 12:00:00');
+                $defaults['end_time'] = ($this->end_time!='0000-00-00 00:00:00' && !empty($this->end_time)) ? api_get_local_time($this->end_time) : date('Y-m-d 12:00:00', time()+84600);
 
                 // Get expired time
                 if ($this->expired_time != '0') {

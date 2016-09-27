@@ -723,20 +723,21 @@ if ($is_visible_return['value'] == false) {
     exit;
 }
 
-$limit_time_exists = (($objExercise->start_time != '0000-00-00 00:00:00') || ($objExercise->end_time != '0000-00-00 00:00:00')) ? true : false;
+$limit_time_exists = ((!empty($objExercise->start_time) && $objExercise->start_time != '0000-00-00 00:00:00') ||
+    (!empty($objExercise->end_time) && $objExercise->end_time != '0000-00-00 00:00:00')) ? true : false;
 
 if ($limit_time_exists) {
     $exercise_start_time = api_strtotime($objExercise->start_time, 'UTC');
     $exercise_end_time = api_strtotime($objExercise->end_time, 'UTC');
     $time_now = time();
 
-    if ($objExercise->start_time != '0000-00-00 00:00:00') {
+    if (!empty($objExercise->start_time) && $objExercise->start_time != '0000-00-00 00:00:00') {
         $permission_to_start = (($time_now - $exercise_start_time) > 0) ? true : false;
     } else {
         $permission_to_start = true;
     }
     if ($_SERVER['REQUEST_METHOD'] != 'POST') {
-        if ($objExercise->end_time != '0000-00-00 00:00:00') {
+        if ($objExercise->end_time != '0000-00-00 00:00:00' && !empty($objExercise->end_time)) {
             $exercise_timeover = (($time_now - $exercise_end_time) > 0) ? true : false;
         } else {
             $exercise_timeover = false;

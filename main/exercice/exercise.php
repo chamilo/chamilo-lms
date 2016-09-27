@@ -550,7 +550,9 @@ if (!empty($exercise_list)) {
             $session_img = api_get_session_image($row['session_id'], $userInfo['status']);
 
             $time_limits = false;
-            if ($row['start_time'] != '0000-00-00 00:00:00' || $row['end_time'] != '0000-00-00 00:00:00') {
+            if ((!empty($row['start_time']) && $row['start_time'] != '0000-00-00 00:00:00') ||
+                ($row['end_time'] != '0000-00-00 00:00:00' && !empty($row['end_time']))
+            ) {
                 $time_limits = true;
             }
 
@@ -558,11 +560,11 @@ if (!empty($exercise_list)) {
             if ($time_limits) {
                 // check if start time
                 $start_time = false;
-                if ($row['start_time'] != '0000-00-00 00:00:00') {
+                if (!empty($row['start_time']) && $row['start_time'] != '0000-00-00 00:00:00') {
                     $start_time = api_strtotime($row['start_time'], 'UTC');
                 }
                 $end_time = false;
-                if ($row['end_time'] != '0000-00-00 00:00:00') {
+                if (!empty($row['end_time']) && $row['end_time'] != '0000-00-00 00:00:00') {
                     $end_time = api_strtotime($row['end_time'], 'UTC');
                 }
                 $now = time();
@@ -893,7 +895,9 @@ if (!empty($exercise_list)) {
                     } else {
                         //Quiz not ready due to time limits 	700 	$attempt_text = get_lang('NotAttempted');
                         //@todo use the is_visible function
-                        if ($row['start_time'] != '0000-00-00 00:00:00' && $row['end_time'] != '0000-00-00 00:00:00') {
+                        if (!empty($row['start_time']) && !empty($row['end_time']) &&
+                            $row['start_time'] != '0000-00-00 00:00:00' && $row['end_time'] != '0000-00-00 00:00:00'
+                        ) {
                             $today = time();
                             $start_time = api_strtotime($row['start_time'], 'UTC');
                             $end_time = api_strtotime($row['end_time'], 'UTC');

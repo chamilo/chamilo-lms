@@ -255,7 +255,7 @@ class NavBuilder extends ContainerAware
 
             if (empty($uri)) {
                 $uri = $this->container->get('templating.helper.assets')->getUrl('../../main/img/icons/32/unknown.png');
-                $uri = str_replace('web/', '/', $uri);
+                $uri = str_replace('web/', '', $uri);
                 $image = '<img src="'.$uri.'" class="img-circle"/>';
             } else {
                 $uri = 'app/upload/'.$user->getPictureLegacy();

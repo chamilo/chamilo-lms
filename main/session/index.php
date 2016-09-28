@@ -147,10 +147,12 @@ if (!empty($course_list)) {
             $course_data['code'],
             $session_id,
             'lp.publicatedOn ASC',
+            true,
+            null,
             true
         );
-        $lp_list = $list->get_flat_list();
 
+        $lp_list = $list->get_flat_list();
         $lp_count = 0;
 
         if (!empty($lp_list)) {
@@ -172,8 +174,8 @@ if (!empty($course_list)) {
                 1
             )
         );
-        $max_mutation_date = '';
 
+        $max_mutation_date = '';
         $last_date = Tracking::get_last_connection_date_on_the_course(
             api_get_user_id(),
             $course_info,
@@ -210,11 +212,11 @@ if (!empty($course_list)) {
         }
 
         $new_course_list[] = array(
-            'title'=> $course_data['title'].$icons,
+            'title' => $course_data['title'].$icons,
             //  'recent_lps' => $icons,
             //'max_mutation_date' => substr(api_get_local_time($max_mutation_date),0,10),
             'exercise_count' => $exercise_count,
-            'lp_count'       => $lp_count
+            'lp_count' => $lp_count
         );
     }
 }
@@ -229,7 +231,6 @@ if (api_is_coach_of_course_in_session($session_id) == false) {
 
 $entityManager = Database::getManager();
 $session = $entityManager->find('ChamiloCoreBundle:Session', $session_id);
-
 $sessionTitleLink = api_get_configuration_value('courses_list_session_title_link');
 
 if ($sessionTitleLink == 2 && $session->getNbrCourses() === 1) {
@@ -255,7 +256,13 @@ foreach ($session_list as $item) {
 // Session list form
 if (count($session_select) > 1) {
     $form = new FormValidator('exercise_admin', 'get', api_get_self().'?session_id='.$session_id);
-    $form->addElement('select', 'session_id', get_lang('SessionList'), $session_select, 'onchange="javascript:change_session()"');
+    $form->addElement(
+        'select',
+        'session_id',
+        get_lang('SessionList'),
+        $session_select,
+        'onchange="javascript:change_session()"'
+    );
     $defaults['session_id'] = $session_id;
     $form->setDefaults($defaults);
     $form->display();
@@ -292,7 +299,10 @@ foreach ($final_array as $session_data) {
 
                     $best_score = '';
                     if (!empty($best_score_data)) {
-                        $best_score = ExerciseLib::show_score($best_score_data['exe_result'], $best_score_data['exe_weighting']);
+                        $best_score = ExerciseLib::show_score(
+                            $best_score_data['exe_result'],
+                            $best_score_data['exe_weighting']
+                        );
                     }
 
                     // Exercise results
@@ -307,7 +317,10 @@ foreach ($final_array as $session_data) {
                         }
                         if (!empty($result_list)) {
                             foreach ($result_list as $exercise_result) {
-                                $platform_score = ExerciseLib::show_score($exercise_result['exe_result'], $exercise_result['exe_weighting']);
+                                $platform_score = ExerciseLib::show_score(
+                                    $exercise_result['exe_result'],
+                                    $exercise_result['exe_weighting']
+                                );
                                 $my_score = 0;
                                 if(!empty($exercise_result['exe_weighting']) && intval($exercise_result['exe_weighting']) != 0) {
                                     $my_score = $exercise_result['exe_result']/$exercise_result['exe_weighting'];
@@ -324,18 +337,23 @@ foreach ($final_array as $session_data) {
                                 $exercise_info->exercise = Display::url(
                                     $exercise_info->exercise,
                                     api_get_path(WEB_CODE_PATH) . "exercise/result.php?cidReq=$my_course_code&id={$exercise_result['exe_id']}&id_session=$session_id&show_headers=1",
-                                    array('target'=>SESSION_LINK_TARGET,'class'=>'exercise-result-link')
+                                    array('target' => SESSION_LINK_TARGET, 'class'=>'exercise-result-link')
                                 );
 
-                                $my_real_array[]= array(
-                                    'status'      => Display::return_icon('quiz.gif', get_lang('Attempted'),'', ICON_SIZE_SMALL),
-                                    'date'        => $start_date,
-                                    'course'      => $course_data['name'],
-                                    'exercise'    => $exercise_info->exercise,
-                                    'attempt'     => $counter,
-                                    'result'      => $platform_score,
+                                $my_real_array[] = array(
+                                    'status' => Display::return_icon(
+                                        'quiz.gif',
+                                        get_lang('Attempted'),
+                                        '',
+                                        ICON_SIZE_SMALL
+                                    ),
+                                    'date' => $start_date,
+                                    'course' => $course_data['name'],
+                                    'exercise' => $exercise_info->exercise,
+                                    'attempt' => $counter,
+                                    'result' => $platform_score,
                                     'best_result' => $best_score,
-                                    'position'    => $position
+                                    'position' => $position,
                                 );
                                 $counter++;
                             }
@@ -350,18 +368,22 @@ foreach ($final_array as $session_data) {
                             $exercise_info->exercise = Display::url(
                                 $exercise_info->exercise,
                                 api_get_path(WEB_CODE_PATH) . "exercise/overview.php?cidReq=$my_course_code&exerciseId={$exercise_info->id}&id_session=$session_id",
-                                array('target'=>SESSION_LINK_TARGET)
+                                array('target' => SESSION_LINK_TARGET)
                             );
 
-                            $new_exercises[]= array(
-                                'status'      => Display::return_icon('star.png', get_lang('New'), array('width'=>ICON_SIZE_SMALL)),
-                                'date'        => $start_date,
-                                'course'      => $course_data['name'],
-                                'exercise'    => $exercise_info->exercise,
-                                'attempt'     => '-',
-                                'result'      => '-',
+                            $new_exercises[] = array(
+                                'status' => Display::return_icon(
+                                    'star.png',
+                                    get_lang('New'),
+                                    array('width' => ICON_SIZE_SMALL)
+                                ),
+                                'date' => $start_date,
+                                'course' => $course_data['name'],
+                                'exercise' => $exercise_info->exercise,
+                                'attempt' => '-',
+                                'result' => '-',
                                 'best_result' => '-',
-                                'position'    => '-'
+                                'position' => '-'
                             );
                         }
                     }

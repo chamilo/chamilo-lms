@@ -88,6 +88,8 @@ if (!empty($course_list)) {
             $course_data['code'],
             $session_id,
             'publicated_on ASC',
+            true,
+            null,
             true
         );
         $lp_list = $list->get_flat_list();

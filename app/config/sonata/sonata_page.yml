@@ -16,7 +16,7 @@ sonata_page:
         block: Chamilo\PageBundle\Entity\Block
         snapshot: Chamilo\PageBundle\Entity\Snapshot
 
-    multisite: host_with_path_by_locale # host
+    multisite: host_by_locale # host
     use_streamed_response: false # set the value to false in debug mode or if the reverse proxy does not handle streamed response
 
     ignore_uri_patterns:

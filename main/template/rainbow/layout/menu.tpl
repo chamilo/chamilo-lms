@@ -16,7 +16,9 @@
                     {% for items in menu %}
                         {% if items.key != 'profile' and items.key != 'dashboard' and items.key != 'admin' and items.key != 'agenda' %}
                         {% set counter = counter + 1 %}
-                            <li class="item-menu menu-{{ counter }} {{ items.key }} {{ items.current }}"><a href="{{ items.url }}">{{ items.title }}</a></li>
+                            <li class="item-menu menu-{{ counter }} {{ items.key }} {{ items.current }}">
+                                <a href="{{ items.url }}">{{ items.title }}</a>
+                            </li>
                         {% endif %}
                     {% endfor %}
                 {% endif %}
@@ -25,9 +27,13 @@
                 {% endif %}
 
                 {% if _u.logged == 0 %}
-                    <li class="item-menu active"><a href="{{ _p.web }}">{{ "CampusHomepage"|get_lang }}</a></li>
-                    <li class="item-menu menu-2"><a href="{{ _p.web }}web/app_dev.php/faq?_locale={{ document_language }}">{{ "FAQ"|get_lang }}</a></li>
-                    <li class="item-menu menu-3"><a href="{{ _p.web }}main/auth/inscription.php">{{ "Subscription"|get_lang }}</a></li>
+                    <li class="item-menu {% if _p.basename == 'index.php' %} active {% endif %}">
+                        <a href="{{ _p.web }}">{{ "CampusHomepage"|get_lang }}</a>
+                    </li>
+                    <li class="item-menu menu-2">
+                        <a href="{{ _p.web }}web/app_dev.php/faq?_locale={{ document_language }}">{{ "FAQ"|get_lang }}</a>
+                    </li>
+                    <li class="item-menu menu-3 {% if _p.basename == 'inscription.php' %} active {% endif %}"><a href="{{ _p.web }}main/auth/inscription.php">{{ "Subscription"|get_lang }}</a></li>
                     <li class="item-menu menu-4"><a href="#">{{ "Demo"|get_lang }}</a></li>
                     <li class="item-menu menu-5"><a href="{{ _p.web }}web/app_dev.php/contact?_locale={{ document_language }}">{{ "Contact"|get_lang }}</a></li>
                 {% endif %}

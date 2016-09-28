@@ -2181,12 +2181,6 @@ form .formw .freeze {
     font-weight: normal;
     font-size: 90%;
 }
-.invisible {
-    color: #999;
-}
-.invisible h2 {
-    color: #999;
-}
 .requirements td {
     padding:5px;
 }
@@ -3242,9 +3236,6 @@ a.forum_group_link {
 }
 .link .list-group-item-heading a{
     text-decoration: none;
-}
-.link .list-group-item-heading .invisible{
-    color: #666666;
 }
 .link .list-group-item-text{
     font-size: 12px;

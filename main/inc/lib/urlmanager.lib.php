@@ -315,7 +315,7 @@ class UrlManager
             $where ="WHERE $table_url_rel_usergroup.access_url_id = ".intval($access_url_id);
         }
 
-        $sql = "SELECT id, name, access_url_id
+        $sql = "SELECT u.id, u.name, access_url_id
 				FROM $table_user_group u
 				INNER JOIN $table_url_rel_usergroup
 				ON $table_url_rel_usergroup.usergroup_id = u.id

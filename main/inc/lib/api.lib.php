@@ -7956,15 +7956,15 @@ function api_mail_html(
             }
             $o++;
         }
-    } elseif (is_array($_FILES)) {
-        $data_file = $_FILES;
-        $o = 0;
-        foreach ($data_file as $file_attach) {
-            if (!empty($file_attach['tmp_name']) && !empty($file_attach['name'])) {
-                $mail->AddAttachment($file_attach['tmp_name'], $file_attach['name']);
-            }
-            $o++;
-        }
+//    } elseif (is_array($_FILES)) {
+//        $data_file = $_FILES;
+//        $o = 0;
+//        foreach ($data_file as $file_attach) {
+//            if (!empty($file_attach['tmp_name']) && !empty($file_attach['name'])) {
+//                $mail->AddAttachment($file_attach['tmp_name'], $file_attach['name']);
+//            }
+//            $o++;
+//        }
     }
 
     // Only valid addresses are accepted.

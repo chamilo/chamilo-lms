@@ -117,6 +117,9 @@ class NavBuilder extends ContainerAware
         }
 
         $categories = $this->container->get('faq.entity.category_repository')->retrieveActive();
+        $pathInfo = $this->container->get('router')->getContext()->getPathInfo();
+        $pathInfo = str_replace('/', '', $pathInfo);
+        $active = $pathInfo === 'faq' ? 'active' : '';
         if ($categories) {
             $faq = $menu->addChild(
                 'FAQ',
@@ -124,7 +127,7 @@ class NavBuilder extends ContainerAware
                     'route' => 'faq_index',
                     'routeParameters' => ['_locale' => $locale]
                 ]
-            )->setAttribute('class', 'item-menu menu-5');
+            )->setAttribute('class', 'item-menu menu-5 '.$active);
 
             /** @var Category $category */
             /*foreach ($categories as $category) {
@@ -162,13 +165,14 @@ class NavBuilder extends ContainerAware
                 )
             )->setAttribute('class', 'item-menu menu-4');
 
+            $active = $pathInfo === 'contact' ? 'active' : '';
             $menu->addChild(
                 $translator->trans('Contact'),
                 array(
                     'route' => 'contact',
                     'routeParameters' => ['_locale' => $locale]
                 )
-            )->setAttribute('class', 'item-menu menu-5');
+            )->setAttribute('class', 'item-menu menu-5 '.$active);
         }
 
         return $menu;
@@ -244,7 +248,6 @@ class NavBuilder extends ContainerAware
         $translator = $this->container->get('translator');
         $menu = $factory->createItem('root');
 
-        // <nav class="navbar navbar-default">
         if ($checker->isGranted('IS_AUTHENTICATED_FULLY')) {
             $token = $this->container->get('security.token_storage');
             /** @var User $user */

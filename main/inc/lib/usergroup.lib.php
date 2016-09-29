@@ -45,7 +45,7 @@ class UserGroup extends Model
         $this->table_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $this->table_user = Database::get_main_table(TABLE_MAIN_USER);
 
-        $this->useMultipleUrl = api_get_configuration_value('enable_multiple_url_support_for_classes');
+        $this->useMultipleUrl = api_get_configuration_value('multiple_access_urls');
     }
 
     /**

@@ -5045,7 +5045,7 @@ function api_set_setting($var, $value, $subvar = null, $cat = null, $access_url 
         // Found item for this access_url.
         $row = Database::fetch_array($res);
         $sql = "UPDATE $t_settings SET selected_value = '$value'
-                WHERE id = ".$row['id'] ;
+                WHERE id = ".$row['id'];
         Database::query($sql);
     } else {
         // Item not found for this access_url, we have to check if it exist with access_url = 1
@@ -5071,8 +5071,9 @@ function api_set_setting($var, $value, $subvar = null, $cat = null, $access_url 
                         "".(!empty($row['comment']) ? "'".$row['comment']."'" : "NULL").",".(!empty($row['scope']) ? "'".$row['scope']."'" : "NULL")."," .
                         "".(!empty($row['subkeytext'])?"'".$row['subkeytext']."'":"NULL").",$access_url)";
                 Database::query($insert);
-            } else { // Such a setting does not exist.
-                error_log(__FILE__.':'.__LINE__.': Attempting to update setting '.$var.' ('.$subvar.') which does not exist at all', 0);
+            } else {
+                // Such a setting does not exist.
+                //error_log(__FILE__.':'.__LINE__.': Attempting to update setting '.$var.' ('.$subvar.') which does not exist at all', 0);
             }
         } else {
             // Other access url.
@@ -5084,7 +5085,8 @@ function api_set_setting($var, $value, $subvar = null, $cat = null, $access_url 
             }
             $res = Database::query($select);
 
-            if (Database::num_rows($res) > 0) { // We have a setting for access_url 1, but none for the current one, so create one.
+            if (Database::num_rows($res) > 0) {
+                // We have a setting for access_url 1, but none for the current one, so create one.
                 $row = Database::fetch_array($res);
                 if ($row['access_url_changeable'] == 1) {
                     $insert = "INSERT INTO $t_settings (variable,subkey, type,category, selected_value,title, comment,scope, subkeytext,access_url, access_url_changeable) VALUES
@@ -5098,7 +5100,7 @@ function api_set_setting($var, $value, $subvar = null, $cat = null, $access_url 
                     Database::query($insert);
                 }
             } else { // Such a setting does not exist.
-                error_log(__FILE__.':'.__LINE__.': Attempting to update setting '.$var.' ('.$subvar.') which does not exist at all. The access_url is: '.$access_url.' ',0);
+                //error_log(__FILE__.':'.__LINE__.': Attempting to update setting '.$var.' ('.$subvar.') which does not exist at all. The access_url is: '.$access_url.' ',0);
             }
         }
     }
@@ -7956,15 +7958,15 @@ function api_mail_html(
             }
             $o++;
         }
-    } elseif (is_array($_FILES)) {
-        $data_file = $_FILES;
-        $o = 0;
-        foreach ($data_file as $file_attach) {
-            if (!empty($file_attach['tmp_name']) && !empty($file_attach['name'])) {
-                $mail->AddAttachment($file_attach['tmp_name'], $file_attach['name']);
-            }
-            $o++;
-        }
+//    } elseif (is_array($_FILES)) {
+//        $data_file = $_FILES;
+//        $o = 0;
+//        foreach ($data_file as $file_attach) {
+//            if (!empty($file_attach['tmp_name']) && !empty($file_attach['name'])) {
+//                $mail->AddAttachment($file_attach['tmp_name'], $file_attach['name']);
+//            }
+//            $o++;
+//        }
     }
 
     // Only valid addresses are accepted.

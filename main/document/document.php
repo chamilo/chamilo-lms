@@ -1303,7 +1303,7 @@ if ($is_allowed_to_edit ||
                 $courseInfo,
                 api_get_user_id(),
                 $sessionId,
-                $groupIid,
+                $groupId,
                 $to_user_id,
                 $base_work_dir,
                 $dir_name,

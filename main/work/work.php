@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
-
 /**
  *	@package chamilo.work
  **/
@@ -333,9 +331,9 @@ switch ($action) {
                 get_lang('Description').':'.Security::remove_XSS($my_folder_data['description'], STUDENT).
                 '</div>';
         }
-        if (api_is_allowed_to_edit() || api_is_coach()) {
-            // Work list
 
+        // Work list
+        if (api_is_allowed_to_edit() || api_is_coach()) {
             $content .= '<div class="row">';
             $content .= '<div class="col-md-12">';
             $content .= '<div class="table-responsive">';

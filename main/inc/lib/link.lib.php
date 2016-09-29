@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CLink;
+
 /**
  * Function library for the links tool.
  *
@@ -870,7 +872,7 @@ class Link extends Model
                     $condition_session AND
                     link.c_id = " . $course_id . " AND
                     itemproperties.c_id = " . $course_id . "
-                ORDER BY link.display_order DESC";
+                ORDER BY link.display_order ASC";
         $result = Database:: query($sql);
         $numberoflinks = Database:: num_rows($result);
         if ($numberoflinks > 0) {
@@ -883,14 +885,13 @@ class Link extends Model
                     $_user['status']
                 );
 
-                //$css_class = $i % 2 == 0 ? $css_class = 'row_odd' : $css_class = 'row_even';
                 $toolbar = '';
                 $link_validator = '';
                 if (api_is_allowed_to_edit(null, true)) {
                     $toolbar .= Display::toolbarButton(
                         '',
                         '#',
-                        'retweet',
+                        'check-circle-o',
                         'default btn-sm',
                         array(
                             'onclick' => "check_url('" . $myrow['id'] . "', '" . addslashes($myrow['url']) . "');",
@@ -904,9 +905,6 @@ class Link extends Model
                         'class' => 'check-link'
                         )
                     );
-                }
-
-                if (api_is_allowed_to_edit(null, true)) {
 
                     if ($session_id == $myrow['session_id']) {
                         $url = api_get_self() . '?' . api_get_cidreq() .
@@ -923,21 +921,6 @@ class Link extends Model
                                 'title' => $title
                             )
                         );
-
-                        // DISPLAY MOVE UP COMMAND only if it is not the top link.
-                        /* commented at least since 2014-10-11
-                        if ($i != 1) {
-                            echo '<a href="' . api_get_self() . '?' . api_get_cidreq() .  '&sec_token='.$token.'&urlview=' . $urlview . '&up=', $myrow[0], '" title="' . get_lang('Up') . '">' . Display :: return_icon('up.png', get_lang('Up'), array (), ICON_SIZE_SMALL) . '', "</a>\n";
-                        } else {
-                            echo Display :: return_icon('up_na.png', get_lang('Up'), array (), ICON_SIZE_SMALL) . '</a>';
-                        }
-
-                        // DISPLAY MOVE DOWN COMMAND only if it is not the bottom link.
-                        if ($i < $numberoflinks) {
-                            echo '<a href="' . api_get_self() . '?' . api_get_cidreq() .  '&sec_token='.$token.'&urlview=' . $urlview . '&down=' . $myrow[0] . '" title="' . get_lang('Down') . '">' . Display :: return_icon('down.png', get_lang('Down'), array (), ICON_SIZE_SMALL) . '', "</a>\n";
-                        } else {
-                            echo Display :: return_icon('down_na.png', get_lang('Down'), array (), ICON_SIZE_SMALL) . '', "</a>\n";
-                        }*/
 
                         if ($myrow['visibility'] == '1') {
                             $url .= 'link.php?' . api_get_cidreq() .
@@ -969,6 +952,30 @@ class Link extends Model
                                 )
                             );
                         }
+
+                        $moveLinkParams = [
+                            'id' => $myrow['id'],
+                            'scope' => 'category',
+                            'category_id' => $myrow['category_id'],
+                            'action' => 'move_link_up'
+                        ];
+                        $toolbar .= Display::toolbarButton(
+                            get_lang('MoveUp'),
+                            'link.php?' . api_get_cidreq() . '&' . http_build_query($moveLinkParams),
+                            'level-up',
+                            'default',
+                            ['class' => 'btn-sm ' . ($i === 1 ? 'disabled' : '')],
+                            false
+                        );
+                        $moveLinkParams['action'] = 'move_link_down';
+                        $toolbar .= Display::toolbarButton(
+                            get_lang('MoveDown'),
+                            'link.php?' . api_get_cidreq() . '&' . http_build_query($moveLinkParams),
+                            'level-down',
+                            'default',
+                            ['class' => 'btn-sm ' . ($i === $numberoflinks ? 'disabled' : '')],
+                            false
+                        );
 
                         $url .= api_get_self() . '?' . api_get_cidreq() .'&sec_token=' . $token .'&action=deletelink&id=' . $myrow['id'] .'&category_id=' . $myrow['category_id'];
                         $event = "javascript: if(!confirm('" . get_lang('LinkDelconfirm') . "'))return false;";
@@ -1037,7 +1044,7 @@ class Link extends Model
                             array(
                                 'href' => $url,
                                 'target' => '_blank',
-                                'class' => 'invisible'
+                                'class' => 'text-muted'
                             )
                         );
                         $content .= $link_validator;
@@ -1131,7 +1138,6 @@ class Link extends Model
      */
     public static function movecatlink($action, $catlinkid, $courseId = null, $sessionId = null)
     {
-        $tbl_link = Database:: get_course_table(TABLE_LINK);
         $tbl_categories = Database:: get_course_table(TABLE_LINK_CATEGORY);
 
         if (is_null($courseId)) {
@@ -1142,50 +1148,26 @@ class Link extends Model
             $sessionId = api_get_session_id();
         }
         $sessionId = intval($sessionId);
+        $thiscatlinkId = intval($catlinkid);
 
         if ($action == 'down') {
-            $thiscatlinkId = intval($catlinkid);
             $sortDirection = 'DESC';
         }
 
         if ($action == 'up') {
-            $thiscatlinkId = intval($catlinkid);
             $sortDirection = 'ASC';
         }
 
-        // We check if it is a category we are moving or a link.
-        // If it is a category, a querystring catmove = true is present in the url.
-        $catmove = 'true';
-        if ($catmove == 'true') {
-            $movetable = $tbl_categories;
-            $catid = $catlinkid;
-        } else {
-            $movetable = $tbl_link;
-            // Getting the category of the link.
-            if (!empty ($thiscatlinkId)) {
-                $sql = "SELECT category_id FROM " . $movetable . "
-                        WHERE c_id = $courseId AND id='$thiscatlinkId'";
-                $result = Database:: query($sql);
-                $catid = Database:: fetch_array($result);
-            }
-        }
-
-        // This code is copied and modified from announcements.php.
+        $movetable = $tbl_categories;
 
         if (!empty($sortDirection)) {
             if (!in_array(trim(strtoupper($sortDirection)), array('ASC', 'DESC'))) {
                 $sortDirection = 'ASC';
             }
 
-            if ($catmove == 'true') {
-                $sql = "SELECT id, display_order FROM $movetable
-                        WHERE c_id = $courseId
-                        ORDER BY display_order $sortDirection";
-            } else {
-                $sql = "SELECT id, display_order FROM  $movetable
-                        WHERE c_id = $courseId AND category_id='" . $catid[0] . "'
-                        ORDER BY display_order $sortDirection";
-            }
+            $sql = "SELECT id, display_order FROM $movetable
+                    WHERE c_id = $courseId
+                    ORDER BY display_order $sortDirection";
             $linkresult = Database:: query($sql);
             $thislinkOrder = 1;
             while ($sortrow = Database:: fetch_array($linkresult)) {
@@ -1783,5 +1765,77 @@ class Link extends Model
         $category = Database::fetch_array($result, 'ASSOC');
 
         return $category;
+    }
+
+    /**
+     * Move a the display_order from a link in its category
+     * @param int $id The link ID
+     * @param string $direction The direction to sort the links
+     * @return bool
+     */
+    private static function moveLinkDisplayOrder($id, $direction)
+    {
+        $em = Database::getManager();
+        /** @var CLink $link */
+        $link = $em->find('ChamiloCourseBundle:CLink', $id);
+
+        if (!$link) {
+            return false;
+        }
+
+        $compareLinks = $em
+            ->getRepository('ChamiloCourseBundle:CLink')
+            ->findBy(
+                ['cId' => $link->getCId(), 'categoryId' => $link->getCategoryId()],
+                ['displayOrder' => $direction]
+            );
+        /** @var CLink $prevLink */
+        $prevLink = null;
+
+        /** @var CLink $compareLink */
+        foreach ($compareLinks as $compareLink) {
+            if ($compareLink->getId() !== $link->getId()) {
+                $prevLink = $compareLink;
+
+                continue;
+            }
+
+            if (!$prevLink) {
+                return false;
+            }
+
+            $newPrevLinkDisplayOrder = $link->getDisplayOrder();
+            $newLinkDisplayOrder = $prevLink->getDisplayOrder();
+
+            $link->setDisplayOrder($newLinkDisplayOrder);
+            $prevLink->setDisplayOrder($newPrevLinkDisplayOrder);
+
+            $em->merge($prevLink);
+            $em->merge($link);
+            break;
+        }
+
+        $em->flush();
+        return true;
+    }
+
+    /**
+     * Move to up a the display_order from a link in its category
+     * @param int $id
+     * @return bool
+     */
+    public static function moveLinkUp($id)
+    {
+        return self::moveLinkDisplayOrder($id, 'ASC');
+    }
+
+    /**
+     * Move to down a the display_order from a link in its category
+     * @param int $id
+     * @return bool
+     */
+    public static function moveLinkDown($id)
+    {
+        return self::moveLinkDisplayOrder($id, 'DESC');
     }
 }

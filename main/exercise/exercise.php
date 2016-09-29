@@ -563,6 +563,8 @@ if (isset($list_ordered) && !empty($list_ordered)) {
     $exercise_list = $new_question_list;
 }
 
+$tableRows = [];
+
 /*  Listing exercises  */
 if (!empty($exercise_list)) {
     if ($origin != 'learnpath') {
@@ -895,13 +897,13 @@ if (!empty($exercise_list)) {
                 // Don't remove this marker: note-query-exe-results
                 $sql = "SELECT * FROM $TBL_TRACK_EXERCISES
                         WHERE
-                            exe_exo_id      = ".$row['id']." AND
-                            exe_user_id     = ".$userId." AND
-                            c_id    = ".api_get_course_int_id()." AND
-                            status          <> 'incomplete' AND
-                            orig_lp_id      = 0 AND
+                            exe_exo_id = ".$row['id']." AND
+                            exe_user_id = $userId AND
+                            c_id = ".api_get_course_int_id()." AND
+                            status <> 'incomplete' AND
+                            orig_lp_id = 0 AND
                             orig_lp_item_id = 0 AND
-                            session_id      =  '".api_get_session_id()."'
+                            session_id =  '".api_get_session_id()."'
                         ORDER BY exe_id DESC";
 
                 $qryres = Database::query($sql);
@@ -967,7 +969,10 @@ if (!empty($exercise_list)) {
                         if ($num > 0) {
                             $row_track = Database :: fetch_array($qryres);
                             $attempt_text = get_lang('LatestAttempt').' : ';
-                            $attempt_text .= ExerciseLib::show_score($row_track['exe_result'], $row_track['exe_weighting']);
+                            $attempt_text .= ExerciseLib::show_score(
+                                $row_track['exe_result'],
+                                $row_track['exe_weighting']
+                            );
                         } else {
                             $attempt_text = get_lang('NotAttempted');
                         }
@@ -1012,8 +1017,7 @@ if (!empty($exercise_list)) {
                     'id' => 'exercise_list_' . $my_exercise_id,
                 )
             );
-
-        } // end foreach()
+        }
     }
 }
 

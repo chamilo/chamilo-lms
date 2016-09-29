@@ -510,11 +510,11 @@ function showStudentWorkGrid()
     );
 
     $columnModel = array(
-        array('name'=>'type', 'index'=>'type', 'width'=>'30',   'align'=>'center', 'sortable' => 'false'),
+        array('name'=>'type', 'index'=>'type', 'width'=>'30', 'align'=>'center', 'sortable' => 'false'),
         array('name'=>'title', 'index'=>'title', 'width'=>'250',   'align'=>'left'),
         array('name'=>'expires_on', 'index'=>'expires_on', 'width'=>'80',  'align'=>'center', 'sortable'=>'false'),
-        array('name'=>'feedback', 'index'=>'feedback', 'width'=>'80',  'align'=>'center'),
-        array('name'=>'last_upload', 'index'=>'feedback', 'width'=>'125',  'align'=>'center'),
+        array('name'=>'feedback', 'index'=>'feedback', 'width'=>'80',  'align'=>'center', 'sortable'=>'false'),
+        array('name'=>'last_upload', 'index'=>'feedback', 'width'=>'125',  'align'=>'center', 'sortable'=>'false')
     );
 
     if ($courseInfo['show_score'] == 0) {
@@ -554,7 +554,7 @@ function showTeacherWorkGrid()
         array('name'=>'title', 'index'=>'title',  'width'=>'300',   'align'=>'left', 'wrap_cell' => "true"),
         array('name'=>'sent_date', 'index'=>'sent_date', 'width'=>'125',  'align'=>'center'),
         array('name'=>'expires_on', 'index'=>'expires_on', 'width'=>'125',  'align'=>'center'),
-        array('name'=>'amount', 'index'=>'end_on', 'width'=>'110',  'align'=>'center'),
+        array('name'=>'amount', 'index'=>'amount', 'width'=>'110',  'align'=>'center', 'sortable' => 'false'),
         array('name'=>'actions', 'index'=>'actions', 'width'=>'110', 'align'=>'left', 'sortable'=>'false')
     );
 
@@ -1413,7 +1413,6 @@ function getWorkListStudent(
             $work['last_upload'] = (!empty($lastWork['qualification'])) ? Display::label($lastWork['qualification'], 'warning').' - ' : '';
             $work['last_upload'] .= api_get_local_time($lastWork['sent_date']);
         }
-
 
         $work['title'] = Display::url($work['title'], $url.'&id='.$work['id']);
         $work['others'] = Display::url(

@@ -43,7 +43,6 @@ class Export
     public static function arrayToCsv($data, $filename = 'export')
     {
         if (empty($data)) {
-
             return false;
         }
 
@@ -53,6 +52,7 @@ class Export
         $writer->setStream(fopen($filePath, 'w'));
 
         foreach ($data as $item) {
+            $item = array_map('trim', $item);
             $writer->writeItem($item);
         }
         $writer->finish();

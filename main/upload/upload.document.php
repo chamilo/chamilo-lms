@@ -56,7 +56,7 @@ if (isset($_FILES['user_upload'])) {
             $base_work_dir,
             $_POST['curdirpath'],
             api_get_user_id(),
-            $to_group_id,
+            api_get_group_id(),
             $to_user_id,
             $_POST['unzip'],
             $_POST['if_exists']
@@ -138,7 +138,7 @@ if (isset($_POST['create_dir']) && $_POST['dirname']!='') {
         $_course,
         api_get_user_id(),
         api_get_session_id(),
-        $to_group_id,
+        api_get_group_id(),
         $to_user_id,
         $base_work_dir,
         $dir_name,

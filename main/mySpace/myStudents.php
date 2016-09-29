@@ -733,7 +733,7 @@ if (!empty($student_id)) {
                         }
 
                         $scoretotal_display = '0/0 (0%)';
-                        if (!empty($scoretotal)) {
+                        if (!empty($scoretotal) && !empty($scoretotal[1])) {
                             $scoretotal_display =
                                 round($scoretotal[0], 1 ).'/'.
                                 round($scoretotal[1], 1).

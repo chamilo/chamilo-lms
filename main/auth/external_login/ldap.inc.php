@@ -182,7 +182,7 @@ function extldap_get_chamilo_user($ldap_user, $cor = null)
                 if (isset($ldap_user[$ldap_field][0])) {
                     $chamilo_user[$chamilo_field] = extldap_purify_string($ldap_user[$ldap_field][0]);
                 } else {
-                    error_log('EXTLDAP WARNING : '.$ldap_field.'[0] field is not set in ldap array');
+                    //error_log('EXTLDAP WARNING : '.$ldap_field.'[0] field is not set in ldap array');
                 }
                 break;
         }
@@ -196,14 +196,6 @@ function extldap_get_chamilo_user($ldap_user, $cor = null)
  * array returned by the ldap for the user
  * */
 
-/**
- * example function for email
- * */
-/*
-  function extldap_get_email($ldap_user){
-  return $ldap_user['cn'].$ldap['sn'].'@gmail.com';
-  }
- */
 function extldap_get_status($ldap_user)
 {
     return STUDENT;
@@ -243,7 +235,6 @@ function extldap_get_user_search_string($username)
 function extldap_import_all_users()
 {
     global $extldap_config;
-    //echo "Connecting...\n";
     $ds = extldap_connect();
     if (!$ds) {
         return false;

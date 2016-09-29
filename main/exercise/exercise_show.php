@@ -208,7 +208,7 @@ if (!empty($track_exercise_info)) {
         if ($result_disabled == RESULT_DISABLE_NO_SCORE_AND_EXPECTED_ANSWERS) {
             $show_results = false;
             if ($origin != 'learnpath') {
-                echo '<table width="100%" border="0" cellspacing="0" cellpadding="0">
+                /*echo '<table width="100%" border="0" cellspacing="0" cellpadding="0">
                       <tr>
                         <td colspan="2">';
                 Display::display_warning_message(
@@ -217,7 +217,7 @@ if (!empty($track_exercise_info)) {
                 );
                 echo '</td>
                 </tr>
-                </table>';
+                </table>';*/
             }
         } elseif ($result_disabled == RESULT_DISABLE_SHOW_SCORE_ONLY) {
             $show_results = false;
@@ -260,6 +260,10 @@ if (!empty($track_exercise_info)) {
 
 if ($origin == 'learnpath' && !isset($_GET['fb_type'])) {
     $show_results = false;
+}
+
+if ($is_allowedToEdit && in_array($action, ['qualify', 'edit'])) {
+    $show_results = true;
 }
 
 if ($show_results || $show_only_total_score || $showTotalScoreAndUserChoices) {

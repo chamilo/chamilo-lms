@@ -720,8 +720,12 @@ class UserGroup extends Model
      * @param bool $delete_users_not_present_in_list
      * @param array $relationType
      */
-    public function subscribe_users_to_usergroup($usergroup_id, $list, $delete_users_not_present_in_list = true, $relationType = '')
-    {
+    public function subscribe_users_to_usergroup(
+        $usergroup_id,
+        $list,
+        $delete_users_not_present_in_list = true,
+        $relationType = ''
+    ) {
         $current_list = self::get_users_by_usergroup($usergroup_id);
         $course_list = self::get_courses_by_usergroup($usergroup_id);
         $session_list = self::get_sessions_by_usergroup($usergroup_id);
@@ -785,7 +789,11 @@ class UserGroup extends Model
                         CourseManager::subscribe_user($user_id, $course_info['code']);
                     }
                 }
-                $params = array('user_id' => $user_id, 'usergroup_id' => $usergroup_id, 'relation_type' => $relationType);
+                $params = array(
+                    'user_id' => $user_id,
+                    'usergroup_id' => $usergroup_id,
+                    'relation_type' => $relationType,
+                );
                 Database::insert($this->usergroup_rel_user_table, $params);
             }
         }

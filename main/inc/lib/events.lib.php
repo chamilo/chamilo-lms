@@ -623,7 +623,6 @@ class Event
                         api_get_user_id(),
                         $exe_id,
                         $question_id,
-                        $answer_id,
                         $answer_id
                     )
                 )

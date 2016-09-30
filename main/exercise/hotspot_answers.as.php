@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CQuizAnswer;
+use Chamilo\CoreBundle\Entity\TrackEHotspot;
+
 /**
  * This file generates the ActionScript variables code used by the
  * HotSpot .swf
@@ -76,9 +79,10 @@ if ($objExercise->results_disabled != RESULT_DISABLE_SHOW_SCORE_ONLY) {
         ->getQuery()
         ->getResult();
 
+    /** @var CQuizAnswer $hotspotAnswer */
     foreach ($result as $hotspotAnswer) {
         $hotSpot = [];
-        $hotSpot['id'] = $hotspotAnswer->getId();
+        $hotSpot['id'] = $hotspotAnswer->getIid();
         $hotSpot['answer'] = $hotspotAnswer->getAnswer();
 
         switch ($hotspotAnswer->getHotspotType()) {
@@ -118,6 +122,7 @@ $rs = $em
         ['hotspotId' => 'ASC']
     );
 
+/** @var TrackEHotspot $row */
 foreach ($rs as $row) {
     $data['answers'][] = $row->getHotspotCoordinate();
 }

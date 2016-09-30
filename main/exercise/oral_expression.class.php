@@ -28,8 +28,8 @@ class OralExpression extends Question
     public function __construct()
     {
         parent::__construct();
-        $this -> type = ORAL_EXPRESSION;
-        $this -> isContent = $this-> getIsContent();
+        $this->type = ORAL_EXPRESSION;
+        $this->isContent = $this->getIsContent();
     }
 
     /**
@@ -38,7 +38,6 @@ class OralExpression extends Question
      */
     function createAnswersForm($form)
     {
-
         $form -> addElement('text','weighting', get_lang('Weighting'), array('class' => 'span1'));
         global $text, $class;
         // setting the save button here and not in the question class.php
@@ -58,7 +57,7 @@ class OralExpression extends Question
      */
     function processAnswersCreation($form)
     {
-        $this->weighting = $form ->getSubmitValue('weighting');
+        $this->weighting = $form->getSubmitValue('weighting');
         $this->save();
     }
 
@@ -96,18 +95,17 @@ class OralExpression extends Question
     {
         $this->sessionId = intval($sessionId);
         $this->userId = intval($userId);
-
         $this->exerciseId = 0;
-
+        $this->exeId = intval($exeId);
         if (!empty($exerciseId)) {
             $this->exerciseId = intval($exerciseId);
         }
-
-        $this->exeId = intval($exeId);
-
         $this->storePath = $this->generateDirectory();
+        error_log('storepath:'.$this->storePath);
         $this->fileName = $this->generateFileName();
+        error_log('fileName:'.$this->fileName);
         $this->filePath = $this->storePath . $this->fileName;
+        error_log('filePath:'.$this->filePath);
     }
 
     /**
@@ -138,15 +136,15 @@ class OralExpression extends Question
             mkdir($this->storePath . $this->sessionId . '/' . $this->exerciseId . '/' . $this->id . '/' . $this->userId);
         }
 
-        $this->storePath .= implode(
-                '/',
-                array(
-                    $this->sessionId,
-                    $this->exerciseId,
-                    $this->id,
-                    $this->userId
-                )
-            ) . '/';
+        $params = [
+            $this->sessionId,
+            $this->exerciseId,
+            $this->id,
+            $this->userId,
+        ];
+
+        $this->storePath .= implode('/', $params).'/';
+
         return $this->storePath;
     }
 
@@ -158,14 +156,14 @@ class OralExpression extends Question
     {
         return implode(
             '-',
-            array(
+            [
                 $this->course['real_id'],
                 $this->sessionId,
                 $this->userId,
                 $this->exerciseId,
                 $this->id,
                 $this->exeId
-            )
+            ]
         );
     }
 
@@ -175,10 +173,17 @@ class OralExpression extends Question
      */
     private function generateRelativeDirectory()
     {
-        return '/exercises/' . implode(
-            '/',
-            [$this->sessionId, $this->exerciseId, $this->id, $this->userId]
-        ) . '/';
+        $params = [
+            $this->sessionId,
+            $this->exerciseId,
+            $this->id,
+            $this->userId,
+        ];
+
+        $path = implode('/', $params);
+        $directory = '/exercises/'.$path.'/';
+
+        return $directory;
     }
 
     /**
@@ -188,7 +193,6 @@ class OralExpression extends Question
     public function returnRecorder()
     {
         $directory = '/..' . $this->generateRelativeDirectory();
-
         $recordAudioView = new Template('', false, false,false, false, false, false);
         $recordAudioView->assign('directory', $directory);
         $recordAudioView->assign('user_id', $this->userId);
@@ -237,11 +241,12 @@ class OralExpression extends Question
         }
 
         foreach ($this->available_extensions as $extension) {
-            if (!is_file($this->storePath . $fileName . ".$extension.$extension")) {
+            $file = "{$this->storePath}$fileName.$extension";
+            if (!is_file($file)) {
                 continue;
             }
 
-            return "{$this->storePath}$fileName.$extension.$extension";
+            return $file;
         }
 
         return '';

@@ -3244,11 +3244,7 @@ class Exercise
 
         $organs_at_risk_hit = 0;
         $questionScore = 0;
-
-        if ($debug) error_log('Start answer loop ');
-
         $answer_correct_array = array();
-
         $orderedHotspots = [];
 
         if ($answerType == HOT_SPOT) {
@@ -3262,6 +3258,8 @@ class Exercise
                     ['hotspotId' => 'ASC']
                 );
         }
+
+        if ($debug) error_log('Start answer loop ');
 
         for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
             $answer = $objAnswerTmp->selectAnswer($answerId);
@@ -3861,18 +3859,22 @@ class Exercise
                     break;
                 case ORAL_EXPRESSION:
                     if ($from_database) {
-                        $query  = "SELECT answer, marks FROM ".$TBL_TRACK_ATTEMPT."
-                                   WHERE exe_id = '".$exeId."' AND question_id= '".$questionId."'";
-                        $resq   = Database::query($query);
+                        $query = "SELECT answer, marks 
+                                  FROM $TBL_TRACK_ATTEMPT
+                                  WHERE 
+                                        exe_id = $exeId AND 
+                                        question_id = $questionId
+                                 ";
+                        $resq = Database::query($query);
                         $row = Database::fetch_assoc($resq);
                         $choice = $row['answer'];
                         $choice = str_replace('\r\n', '', $choice);
                         $choice = stripslashes($choice);
                         $questionScore = $row['marks'];
-                        if ($questionScore==-1) {
-                            $totalScore+=0;
+                        if ($questionScore == -1) {
+                            $totalScore += 0;
                         } else {
-                            $totalScore+=$questionScore;
+                            $totalScore += $questionScore;
                         }
                         $arrques = $questionName;
                         $arrans  = $choice;
@@ -4215,12 +4217,13 @@ class Exercise
                             );
                         } elseif ($answerType == ORAL_EXPRESSION) {
                             // to store the details of open questions in an array to be used in mail
+                            /** @var OralExpression $objQuestionTmp */
                             ExerciseShowFunctions::display_oral_expression_answer(
                                 $feedback_type,
                                 $choice,
                                 0,
                                 0,
-                                $nano,
+                                $objQuestionTmp->getFileUrl(true),
                                 $results_disabled
                             );
                         } elseif ($answerType == HOT_SPOT) {
@@ -6986,7 +6989,13 @@ class Exercise
                     $s .= $objQuestionTmp->returnRecorder();
                 }
 
-                $form->addElement('html_editor', "choice[".$questionId."]", null, array('id' => "choice[".$questionId."]"), array('ToolbarSet' => 'TestFreeAnswer'));
+                $form->addElement(
+                    'html_editor',
+                    "choice[".$questionId."]",
+                    null,
+                    array('id' => "choice[".$questionId."]"),
+                    array('ToolbarSet' => 'TestFreeAnswer')
+                );
                 //$form->setDefaults(array("choice[".$questionId."]" => $content));
                 $s .= $form->return_form();
             }

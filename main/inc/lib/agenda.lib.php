@@ -51,7 +51,6 @@ class Agenda
         $this->event_session_color = '#00496D'; // kind of green
         $this->eventOtherSessionColor = '#999';
         $this->event_personal_color = 'steel blue'; //steel blue
-
     }
 
     /**
@@ -195,6 +194,11 @@ class Agenda
                     Database::query($sql);
 
                     $groupId = api_get_group_id();
+                    $groupIid = 0;
+                    if ($groupId) {
+                        $groupInfo = GroupManager::get_group_properties($groupId);
+                        $groupIid = $groupInfo['iid'];
+                    }
 
                     if (!empty($usersToSend)) {
                         $sendTo = $this->parseSendToArray($usersToSend);
@@ -204,9 +208,9 @@ class Agenda
                                 $this->course,
                                 TOOL_CALENDAR_EVENT,
                                 $id,
-                                "AgendaAdded",
+                                'AgendaAdded',
                                 $senderId,
-                                $groupId,
+                                $groupIid,
                                 '',
                                 $start,
                                 $end,
@@ -216,9 +220,9 @@ class Agenda
                                 $this->course,
                                 TOOL_CALENDAR_EVENT,
                                 $id,
-                                "visible",
+                                'visible',
                                 $senderId,
-                                $groupId,
+                                $groupIid,
                                 '',
                                 $start,
                                 $end,
@@ -228,13 +232,19 @@ class Agenda
                             // Storing the selected groups
                             if (!empty($sendTo['groups'])) {
                                 foreach ($sendTo['groups'] as $group) {
+                                    $groupIidItem = 0;
+                                    if ($group) {
+                                        $groupInfo = GroupManager::get_group_properties($group);
+                                        $groupIidItem = $groupInfo['iid'];
+                                    }
+
                                     api_item_property_update(
                                         $this->course,
                                         TOOL_CALENDAR_EVENT,
                                         $id,
-                                        "AgendaAdded",
+                                        'AgendaAdded',
                                         $senderId,
-                                        $group,
+                                        $groupIidItem,
                                         0,
                                         $start,
                                         $end,
@@ -245,9 +255,9 @@ class Agenda
                                         $this->course,
                                         TOOL_CALENDAR_EVENT,
                                         $id,
-                                        "visible",
+                                        'visible',
                                         $senderId,
-                                        $group,
+                                        $groupIidItem,
                                         0,
                                         $start,
                                         $end,
@@ -263,9 +273,9 @@ class Agenda
                                         $this->course,
                                         TOOL_CALENDAR_EVENT,
                                         $id,
-                                        "AgendaAdded",
+                                        'AgendaAdded',
                                         $senderId,
-                                        $groupId,
+                                        $groupIid,
                                         $userId,
                                         $start,
                                         $end,
@@ -276,9 +286,9 @@ class Agenda
                                         $this->course,
                                         TOOL_CALENDAR_EVENT,
                                         $id,
-                                        "visible",
+                                        'visible',
                                         $senderId,
-                                        $groupId,
+                                        $groupIid,
                                         $userId,
                                         $start,
                                         $end,

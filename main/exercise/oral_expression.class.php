@@ -138,7 +138,7 @@ class OralExpression extends Question
             mkdir($this->storePath . $this->sessionId . '/' . $this->exerciseId . '/' . $this->id . '/' . $this->userId);
         }
 
-        return $this->storePath .= implode(
+        $this->storePath .= implode(
                 '/',
                 array(
                     $this->sessionId,
@@ -147,6 +147,7 @@ class OralExpression extends Question
                     $this->userId
                 )
             ) . '/';
+        return $this->storePath;
     }
 
     /**
@@ -222,7 +223,13 @@ class OralExpression extends Question
                     ]);
 
                 if (!$result) {
-                    return null;
+                    return '';
+                }
+
+                $fileName = $result->getFilename();
+
+                if (empty($fileName)) {
+                    return '';
                 }
 
                 return $this->storePath . $result->getFilename();
@@ -237,16 +244,18 @@ class OralExpression extends Question
             return "{$this->storePath}$fileName.$extension.$extension";
         }
 
-        return null;
+        return '';
     }
 
     /**
      * Get the URL for the audio file. Return null if the file doesn't exists
+     * @param bool $loadFromDatabase
+     *
      * @return string
      */
-    public function getFileUrl()
+    public function getFileUrl($loadFromDatabase = false)
     {
-        $filePath = $this->getAbsoluteFilePath();
+        $filePath = $this->getAbsoluteFilePath($loadFromDatabase);
 
         if (empty($filePath)) {
             return null;

@@ -498,7 +498,6 @@ class Event
             );
 
             // Check if attempt exists.
-
             $sql = "SELECT exe_id FROM $TBL_TRACK_ATTEMPT
                     WHERE
                         c_id = $course_id AND

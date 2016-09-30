@@ -454,12 +454,6 @@ class TestMainApi extends UnitTestCase {
 		//var_dump($res);
 	}
 
-	function testString2Boolean(){
-		global $string;
-		$res=api_string_2_boolean($string);
-		$this->assertFalse($res);
-	}
-
 	function testApiNumberOfPlugins(){
 		global $_plugins;
 		$location=2;

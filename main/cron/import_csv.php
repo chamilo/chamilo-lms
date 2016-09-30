@@ -872,6 +872,7 @@ class ImportCsv
                         $this->extraFieldIdNameList['calendar_event'] => $row['external_calendar_itemID'],
                     );
                 }
+                $errorFound = false;
             }
 
             if (empty($eventsToCreate)) {
@@ -2006,6 +2007,11 @@ class ImportCsv
             Database::query($sql);
             echo $sql.PHP_EOL;
         }
+
+        $table = Database::get_course_table(TABLE_ITEM_PROPERTY);
+        $sql = "DELETE FROM $table WHERE tool = 'calendar_event'";
+        Database::query($sql);
+        echo $sql.PHP_EOL;
     }
 
     /**

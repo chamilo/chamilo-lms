@@ -532,7 +532,9 @@ if ($formSent && isset($_POST)) {
                     $choice = $exerciseResult[$questionId];
                     if (isset($exe_id)) {
                     	// Manage the question and answer attempts
-                        if ($debug) { error_log('8.3. manage_answer exe_id: '.$exe_id.' - $questionId: '.$questionId.' Choice'.print_r($choice,1)); }
+                        if ($debug) {
+                            error_log('8.3. manage_answer exe_id: '.$exe_id.' - $questionId: '.$questionId.' Choice'.print_r($choice,1));
+                        }
                         $objExercise->manage_answer(
                             $exe_id,
                             $questionId,

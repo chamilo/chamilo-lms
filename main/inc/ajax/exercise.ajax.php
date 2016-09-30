@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use \ChamiloSession as Session;
+use ChamiloSession as Session;
 
 /**
  * Responses to AJAX calls
@@ -326,7 +326,7 @@ switch ($action) {
                 exit;
             }
 
-            $_SESSION['exe_id'] = $exe_id;
+            Session::write('exe_id', $exe_id);
 
             // Getting the total weight if the request is simple
             $total_weight = 0;

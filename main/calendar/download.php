@@ -82,7 +82,10 @@ if (Database::num_rows($result)) {
         $full_file_name,
         api_get_path(SYS_COURSE_PATH).$course_info['path'].'/upload/calendar/'
     )) {
-        DocumentManager::file_send_for_download($full_file_name, true, $title);
+        $result = DocumentManager::file_send_for_download($full_file_name, true, $title);
+        if ($result === false) {
+            api_not_allowed(true);
+        }
     }
 }
 

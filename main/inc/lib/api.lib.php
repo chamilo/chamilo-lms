@@ -2635,7 +2635,7 @@ function api_is_coach($session_id = 0, $courseId = null, $check_student_view = t
     if (!empty($session_id)) {
         $sql = "SELECT DISTINCT id, name, access_start_date, access_end_date
                 FROM $session_table
-                WHERE session.id_coach =  '".$userId."' AND id = '$session_id'
+                WHERE session.id_coach = $userId AND id = $session_id
                 ORDER BY access_start_date, access_end_date, name";
         $result = Database::query($sql);
         if (!empty($sessionIsCoach)) {
@@ -3015,7 +3015,6 @@ function api_is_coach_of_course_in_session($sessionId)
     return false;
 }
 
-
 /**
 * Checks if a student can edit contents in a session depending
 * on the session visibility
@@ -3054,7 +3053,6 @@ function api_is_allowed_to_session_edit($tutor = false, $coach = false)
                 case SESSION_AVAILABLE:         //5
                     return true;
             }
-
         }
     }
 }
@@ -3348,7 +3346,7 @@ function api_not_allowed($print_headers = false, $message = null)
             $msg .= "<div style='display:none;'>";
         }
         $msg .= '<div class="well">';
-        $msg .= $form->return_form();
+        $msg .= $form->returnForm();
         $msg .='</div>';
         if ($casEnabled) {
             $msg .= "</div>";
@@ -3936,6 +3934,7 @@ function api_get_item_property_id($course_code, $tool, $ref, $sessionId = 0)
     // Definition of tables.
     $tableItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
     $course_id = $course_info['real_id'];
+    $sessionId = (int) $sessionId;
     $sessionCondition = " AND session_id = $sessionId ";
     if (empty($sessionId)) {
         $sessionCondition = " AND (session_id = 0 OR session_id IS NULL) ";
@@ -4072,7 +4071,6 @@ function api_get_item_property_info($course_id, $tool, $ref, $session_id = 0, $g
  * (in some cases, like the indexing language picker, it can alter the presentation)
  * @return string
  */
-
 function api_get_languages_combo($name = 'language')
 {
     $ret = '';
@@ -4431,23 +4429,6 @@ function api_max_sort_value($user_course_category, $user_id)
         return $row_max['max_sort'];
     }
     return 0;
-}
-
-/**
- * This function converts the string "true" or "false" to a boolean true or false.
- * This function is in the first place written for the Chamilo Config Settings (also named AWACS)
- * @param string "true" or "false"
- * @return boolean true or false
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- */
-function api_string_2_boolean($string) {
-    if ($string == 'true') {
-        return true;
-    }
-    if ($string == 'false') {
-        return false;
-    }
-    return false;
 }
 
 /**
@@ -4895,9 +4876,9 @@ function parse_info_file($filename) {
  * Gets Chamilo version from the configuration files
  * @return string   A string of type "1.8.4", or an empty string if the version could not be found
  */
-function api_get_version() {
-    global $_configuration;
-    return (string)$_configuration['system_version'];
+function api_get_version()
+{
+    return (string) api_get_configuration_value('system_version');
 }
 
 /**
@@ -8078,7 +8059,7 @@ function api_is_date_in_date_range($startDate, $endDate, $currentDate = null)
     $endDate = strtotime(api_get_local_time($endDate));
     $currentDate = strtotime(api_get_local_time($currentDate));
 
-    if (($currentDate >= $startDate) && ($currentDate <= $endDate)) {
+    if ($currentDate >= $startDate && $currentDate <= $endDate) {
         return true;
     }
 
@@ -8175,4 +8156,3 @@ function api_remove_uploaded_file($type, $file)
         unlink($path);
     }
 }
-

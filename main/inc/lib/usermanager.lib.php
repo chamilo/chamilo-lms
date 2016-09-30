@@ -2613,7 +2613,7 @@ class UserManager
                 case SESSION_AVAILABLE:
                     break;
                 case SESSION_INVISIBLE:
-                    if ($ignore_visibility_for_admins == false) {
+                    if ($ignore_visibility_for_admins === false) {
                         continue 2;
                     }
             }
@@ -2635,6 +2635,7 @@ class UserManager
     /**
      * Gives a list of [session_id-course_code] => [status] for the current user.
      * @param integer $user_id
+     * @param int $sessionLimit
      * @return array  list of statuses (session_id-course_code => status)
      */
     public static function get_personal_session_course_list($user_id, $sessionLimit = null)
@@ -2775,7 +2776,7 @@ class UserManager
 
                 // This query is horribly slow when more than a few thousand
                 // users and just a few sessions to which they are subscribed
-                $personal_course_list_sql = "SELECT DISTINCT
+                $sql = "SELECT DISTINCT
                         course.code code,
                         course.title i,
                         ".(api_is_western_name_order() ? "CONCAT(user.firstname,' ',user.lastname)" : "CONCAT(user.lastname,' ',user.firstname)")." t,
@@ -2799,8 +2800,7 @@ class UserManager
                             OR session.id_coach = $user_id
                         )
                     ORDER BY i";
-                $course_list_sql_result = Database::query($personal_course_list_sql);
-
+                $course_list_sql_result = Database::query($sql);
                 while ($result_row = Database::fetch_array($course_list_sql_result, 'ASSOC')) {
                     $result_row['course_info'] = api_get_course_info($result_row['code']);
                     $key = $result_row['session_id'].' - '.$result_row['code'];
@@ -2818,7 +2818,7 @@ class UserManager
 
             /* This query is very similar to the above query,
                but it will check the session_rel_course_user table if there are courses registered to our user or not */
-            $personal_course_list_sql = "SELECT DISTINCT
+            $sql = "SELECT DISTINCT
                 course.code code,
                 course.title i, CONCAT(user.lastname,' ',user.firstname) t,
                 email,
@@ -2839,8 +2839,7 @@ class UserManager
             WHERE session_course_user.user_id = $user_id
             ORDER BY i";
 
-            $course_list_sql_result = Database::query($personal_course_list_sql);
-
+            $course_list_sql_result = Database::query($sql);
             while ($result_row = Database::fetch_array($course_list_sql_result, 'ASSOC')) {
                 $result_row['course_info'] = api_get_course_info($result_row['code']);
                 $key = $result_row['session_id'].' - '.$result_row['code'];
@@ -2881,9 +2880,6 @@ class UserManager
             }
         }
 
-        $personal_course_list = array();
-        $courses = array();
-
         /* This query is very similar to the query below, but it will check the
         session_rel_course_user table if there are courses registered
         to our user or not */
@@ -2904,8 +2900,10 @@ class UserManager
                     $where_access_url
                 ORDER BY sc.position ASC";
 
-        $result = Database::query($sql);
+        $personal_course_list = array();
+        $courses = array();
 
+        $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
             while ($result_row = Database::fetch_array($result, 'ASSOC')) {
                 $result_row['status'] = 5;
@@ -2932,7 +2930,7 @@ class UserManager
                     WHERE
                       s.id = $session_id AND
                       (
-                        (scu.user_id=$user_id AND scu.status=2) OR
+                        (scu.user_id = $user_id AND scu.status=2) OR
                         s.id_coach = $user_id
                       )
                     $where_access_url
@@ -2963,8 +2961,8 @@ class UserManager
             }
         } else {
             //check if user is general coach for this session
-            $s = api_get_session_info($session_id);
-            if ($s['id_coach'] == $user_id) {
+            $sessionInfo = api_get_session_info($session_id);
+            if ($sessionInfo['id_coach'] == $user_id) {
                 $course_list = SessionManager::get_course_list_by_session_id($session_id);
 
                 if (!empty($course_list)) {
@@ -3036,15 +3034,18 @@ class UserManager
                     $return = "<h4>$course</h4>";
                     $return .= '<ul class="thumbnails">';
                 }
+                $extensionList = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'tif'];
                 foreach ($file_list as $file) {
                     if ($resourcetype == "all") {
                         $return .= '<li><a href="'.$web_path.urlencode($file).'" target="_blank">'.htmlentities($file).'</a></li>';
                     } elseif ($resourcetype == "images") {
                         //get extension
                         $ext = explode('.', $file);
-                        if ($ext[1] == 'jpg' || $ext[1] == 'jpeg' || $ext[1] == 'png' || $ext[1] == 'gif' || $ext[1] == 'bmp' || $ext[1] == 'tif') {
-                            $return .= '<li class="span2"><a class="thumbnail" href="'.$web_path.urlencode($file).'" target="_blank">
-                                            <img src="'.$web_path.urlencode($file).'" ></a>
+                        if (isset($ext[1]) && in_array($ext[1], $extensionList)) {
+                            $return .= '<li class="span2">
+                                            <a class="thumbnail" href="'.$web_path.urlencode($file).'" target="_blank">
+                                                <img src="'.$web_path.urlencode($file).'" >
+                                            </a>
                                         </li>';
                         }
                     }

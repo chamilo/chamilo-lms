@@ -182,7 +182,7 @@ function extldap_get_chamilo_user($ldap_user, $cor = null)
                 if (isset($ldap_user[$ldap_field][0])) {
                     $chamilo_user[$chamilo_field] = extldap_purify_string($ldap_user[$ldap_field][0]);
                 } else {
-                    error_log('EXTLDAP WARNING : '.$ldap_field.'[0] field is not set in ldap array');
+                    //error_log('EXTLDAP WARNING : '.$ldap_field.'[0] field is not set in ldap array');
                 }
                 break;
         }

@@ -101,6 +101,9 @@ if (Security::check_abs_path($sys_course_path.$doc_url, $sys_course_path.'/')) {
     // Launch event
     Event::event_download($doc_url);
     $download = (!empty($_GET['dl']) ? true : false);
-    DocumentManager::file_send_for_download($full_file_name, $download);
+    $result = DocumentManager::file_send_for_download($full_file_name, $download);
+    if ($result === false) {
+        api_not_allowed(true);
+    }
 }
 exit;

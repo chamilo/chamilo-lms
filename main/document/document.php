@@ -315,7 +315,10 @@ switch ($action) {
         }
         $full_file_name = $base_work_dir.$document_data['path'];
         if (Security::check_abs_path($full_file_name, $base_work_dir.'/')) {
-            DocumentManager::file_send_for_download($full_file_name, true);
+            $result = DocumentManager::file_send_for_download($full_file_name, true);
+            if ($result === false) {
+                api_not_allowed(true);
+            }
         }
         exit;
         break;

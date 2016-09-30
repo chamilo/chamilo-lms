@@ -58,12 +58,19 @@ $sql = 'SELECT filename FROM '.$tbl_blogs_attachment.'
 $result = Database::query($sql);
 if (Database::num_rows($result) > 0) {
     $row = Database::fetch_array($result);
-    if (Security::check_abs_path($full_file_name, api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/blog/')) {
-        DocumentManager::file_send_for_download(
+    if (Security::check_abs_path(
+        $full_file_name,
+        api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/blog/')
+    ) {
+        $result = DocumentManager::file_send_for_download(
             $full_file_name,
             true,
             $row['filename']
         );
+
+        if ($result === false) {
+            api_not_allowed(true);
+        }
     }
 }
 exit;

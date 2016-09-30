@@ -1088,13 +1088,12 @@ class IndexManager
      */
     public function returnCoursesAndSessions($user_id)
     {
-        global $_configuration;
-
         $gamificationModeIsActive = api_get_setting('gamification_mode');
         $listCourse = '';
         $specialCourseList = '';
         $load_history = isset($_GET['history']) && intval($_GET['history']) == 1 ? true : false;
         $viewGridCourses = api_get_configuration_value('view_grid_courses');
+        $showSimpleSessionInfo = api_get_configuration_value('show_simple_session_info');
 
         $coursesWithoutCategoryTemplate = '/user_portal/classic_courses_without_category.tpl';
         $coursesWithCategoryTemplate = '/user_portal/classic_courses_with_category.tpl';
@@ -1102,12 +1101,10 @@ class IndexManager
         if ($load_history) {
             // Load sessions in category in *history*
             $session_categories = UserManager::get_sessions_by_category($user_id, true);
-
         } else {
             // Load sessions in category
             $session_categories = UserManager::get_sessions_by_category($user_id, false);
         }
-
         $html = '';
         // Showing history title
         if ($load_history) {
@@ -1286,12 +1283,8 @@ class IndexManager
                             $params['num_users'] = $session_box['num_users'];
                             $params['num_courses'] = $session_box['num_courses'];
                             $params['courses'] = $html_courses_session;
-                            //$params['extra_fields'] = $session_box['extra_fields'];
 
-                            if (
-                                isset($_configuration['show_simple_session_info']) &&
-                                $_configuration['show_simple_session_info']
-                            ) {
+                            if ($showSimpleSessionInfo) {
                                 $params['show_simple_session_info'] = true;
                             }
 
@@ -1381,10 +1374,7 @@ class IndexManager
                                 $sessionParams[0]['courses'] = $html_courses_session;
                                 $sessionParams[0]['show_simple_session_info'] = false;
 
-                                if (
-                                    isset($_configuration['show_simple_session_info']) &&
-                                    $_configuration['show_simple_session_info']
-                                ) {
+                                if ($showSimpleSessionInfo) {
                                     $sessionParams[0]['show_simple_session_info'] = true;
                                 }
 

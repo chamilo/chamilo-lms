@@ -10699,8 +10699,11 @@ EOD;
                     continue;
                 }
 
-                $exerciseResult = $exerciseResultInfo['exe_result'] * 100 / $exerciseResultInfo['exe_weighting'];
-
+                if (!empty($exerciseResultInfo['exe_weighting'])) {
+                    $exerciseResult = $exerciseResultInfo['exe_result'] * 100 / $exerciseResultInfo['exe_weighting'];
+                } else {
+                    $exerciseResult = 0;
+                }
                 $totalResult += $exerciseResult;
             }
 

@@ -2776,7 +2776,7 @@ class UserManager
 
                 // This query is horribly slow when more than a few thousand
                 // users and just a few sessions to which they are subscribed
-                $personal_course_list_sql = "SELECT DISTINCT
+                $sql = "SELECT DISTINCT
                         course.code code,
                         course.title i,
                         ".(api_is_western_name_order() ? "CONCAT(user.firstname,' ',user.lastname)" : "CONCAT(user.lastname,' ',user.firstname)")." t,
@@ -2800,8 +2800,7 @@ class UserManager
                             OR session.id_coach = $user_id
                         )
                     ORDER BY i";
-                $course_list_sql_result = Database::query($personal_course_list_sql);
-
+                $course_list_sql_result = Database::query($sql);
                 while ($result_row = Database::fetch_array($course_list_sql_result, 'ASSOC')) {
                     $result_row['course_info'] = api_get_course_info($result_row['code']);
                     $key = $result_row['session_id'].' - '.$result_row['code'];
@@ -2819,7 +2818,7 @@ class UserManager
 
             /* This query is very similar to the above query,
                but it will check the session_rel_course_user table if there are courses registered to our user or not */
-            $personal_course_list_sql = "SELECT DISTINCT
+            $sql = "SELECT DISTINCT
                 course.code code,
                 course.title i, CONCAT(user.lastname,' ',user.firstname) t,
                 email,
@@ -2840,8 +2839,7 @@ class UserManager
             WHERE session_course_user.user_id = $user_id
             ORDER BY i";
 
-            $course_list_sql_result = Database::query($personal_course_list_sql);
-
+            $course_list_sql_result = Database::query($sql);
             while ($result_row = Database::fetch_array($course_list_sql_result, 'ASSOC')) {
                 $result_row['course_info'] = api_get_course_info($result_row['code']);
                 $key = $result_row['session_id'].' - '.$result_row['code'];
@@ -3036,15 +3034,18 @@ class UserManager
                     $return = "<h4>$course</h4>";
                     $return .= '<ul class="thumbnails">';
                 }
+                $extensionList = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'tif'];
                 foreach ($file_list as $file) {
                     if ($resourcetype == "all") {
                         $return .= '<li><a href="'.$web_path.urlencode($file).'" target="_blank">'.htmlentities($file).'</a></li>';
                     } elseif ($resourcetype == "images") {
                         //get extension
                         $ext = explode('.', $file);
-                        if ($ext[1] == 'jpg' || $ext[1] == 'jpeg' || $ext[1] == 'png' || $ext[1] == 'gif' || $ext[1] == 'bmp' || $ext[1] == 'tif') {
-                            $return .= '<li class="span2"><a class="thumbnail" href="'.$web_path.urlencode($file).'" target="_blank">
-                                            <img src="'.$web_path.urlencode($file).'" ></a>
+                        if (isset($ext[1]) && in_array($ext[1], $extensionList)) {
+                            $return .= '<li class="span2">
+                                            <a class="thumbnail" href="'.$web_path.urlencode($file).'" target="_blank">
+                                                <img src="'.$web_path.urlencode($file).'" >
+                                            </a>
                                         </li>';
                         }
                     }

@@ -185,6 +185,16 @@ switch ($action) {
         header('Location: '.$linkListUrl);
         exit;
         break;
+    case 'move_link_up':
+        Link::moveLinkUp($id);
+        header('Location: ' . $linkListUrl);
+        exit;
+        break;
+    case 'move_link_down':
+        Link::moveLinkDown($id);
+        header('Location: ' . $linkListUrl);
+        exit;
+        break;
     case 'list':
     default:
         ob_start();

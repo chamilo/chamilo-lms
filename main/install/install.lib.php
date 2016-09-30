@@ -1103,7 +1103,7 @@ function display_requirements(
         </button>
         <input type="hidden" name="is_executable" id="is_executable" value="-" />
             <button type="submit" class="btn btn-default" <?php echo !$error ?: 'disabled="disabled"' ?> name="step2_update_8" value="Upgrade from Chamilo 1.9.x">
-                <em class="fa fa-forward" aria-hidden="true"></em> <?php echo get_lang('UpgradeFromLMS19x') ?>
+                <em class="fa fa-forward" aria-hidden="true"></em> <?php echo get_lang('UpgradeVersion') ?>
             </button>
             </p>
         <?php

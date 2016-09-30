@@ -444,13 +444,13 @@ foreach ($questionList as $questionId) {
                 echo "
                         <tr>
                             <td colspan=\"2\">
-                                <div id=\"hotspot-solution\"></div>
+                                <div id=\"hotspot-solution-$questionId-$id\"></div>
                                 <script>
                                     $(document).on('ready', function () {
                                         new HotspotQuestion({
                                             questionId: $questionId,
                                             exerciseId: $id,
-                                            selector: '#hotspot-solution',
+                                            selector: '#hotspot-solution-$questionId-$id',
                                             for: 'solution',
                                             relPath: '$relPath'
                                         });

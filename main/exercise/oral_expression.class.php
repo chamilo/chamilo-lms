@@ -101,11 +101,8 @@ class OralExpression extends Question
             $this->exerciseId = intval($exerciseId);
         }
         $this->storePath = $this->generateDirectory();
-        error_log('storepath:'.$this->storePath);
         $this->fileName = $this->generateFileName();
-        error_log('fileName:'.$this->fileName);
         $this->filePath = $this->storePath . $this->fileName;
-        error_log('filePath:'.$this->filePath);
     }
 
     /**

@@ -46,7 +46,9 @@ if (isset($_GET['delete']) && $_GET['delete'] === 'yes') {
         get_lang('Yes').'</a></p>';
 	$interbreadcrumb[] = array('url' => 'maintenance.php', 'name' => get_lang('Maintenance'));
 }
-Display :: display_header($tool_name, 'Settings');
-echo Display::page_header($tool_name);
-Display::display_warning_message($message, false);
-Display :: display_footer();
+
+$tpl = new Template($tool_name);
+
+$tpl->assign('content', Display::return_message($message, 'warning', false));
+$tpl->display_one_col_template();
+

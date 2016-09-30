@@ -100,7 +100,10 @@ if (!$allowed_to_download) {
         exit;
     }
     $file = $work->title;
-    DocumentManager::file_send_for_download($path, true, $file);
+    $result = DocumentManager::file_send_for_download($path, true, $file);
+    if ($result === false) {
+        api_not_allowed(true);
+    }
     exit;
 }
 //@todo clean this file the code below is useless there are 2 exits in previous conditions ... maybe a bad copy/paste/merge?

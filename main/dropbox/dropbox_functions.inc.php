@@ -1189,7 +1189,10 @@ function zip_download($fileList)
     }
     Session::erase('dropbox_files_to_download');
     $name = 'dropbox-'.api_get_utc_datetime().'.zip';
-    DocumentManager::file_send_for_download($temp_zip_file, true, $name);
+    $result = DocumentManager::file_send_for_download($temp_zip_file, true, $name);
+    if ($result === false) {
+        api_not_allowed(true);
+    }
     @unlink($temp_zip_file);
     exit;
 }

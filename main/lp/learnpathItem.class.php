@@ -4157,6 +4157,16 @@ class learnpathItem
                                         )
                                     ";
                         $iva_res = Database::query($iva_sql);
+
+                        $interaction[0] = isset($interaction[0]) ? $interaction[0] : '';
+                        $interaction[1] = isset($interaction[1]) ? $interaction[1] : '';
+                        $interaction[2] = isset($interaction[2]) ? $interaction[2] : '';
+                        $interaction[3] = isset($interaction[3]) ? $interaction[3] : '';
+                        $interaction[4] = isset($interaction[4]) ? $interaction[4] : '';
+                        $interaction[5] = isset($interaction[5]) ? $interaction[5] : '';
+                        $interaction[6] = isset($interaction[6]) ? $interaction[6] : '';
+                        $interaction[7] = isset($interaction[7]) ? $interaction[7] : '';
+
                         // id(0), type(1), time(2), weighting(3), correct_responses(4), student_response(5), result(6), latency(7)
                         if (Database::num_rows($iva_res) > 0) {
                             // Update (or don't).
@@ -4169,7 +4179,7 @@ class learnpathItem
                                 'weighting' => $interaction[3],
                                 'completion_time' => $interaction[2],
                                 'correct_responses' => $correct_resp,
-                                'student_response' => isset($interaction[5]) ? $interaction[5] : '',
+                                'student_response' => $interaction[5],
                                 'result' => $interaction[6],
                                 'latency' => $interaction[7]
                             );
@@ -4194,7 +4204,7 @@ class learnpathItem
                                 'weighting' => $interaction[3],
                                 'completion_time' => $interaction[2],
                                 'correct_responses' => $correct_resp,
-                                'student_response' => isset($interaction[5]) ? $interaction[5] : '',
+                                'student_response' => $interaction[5],
                                 'result' => $interaction[6],
                                 'latency' => $interaction[7]
                             );

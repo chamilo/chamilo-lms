@@ -1412,8 +1412,14 @@ class UserManager
         $condition = 'AND'
     ) {
         $user_table = Database :: get_main_table(TABLE_MAIN_USER);
+        $tblAccessUrlRelUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $return_array = array();
-        $sql_query = "SELECT * FROM $user_table";
+        $sql_query = "SELECT * FROM $user_table ";
+
+        if (api_is_multiple_url_enabled()) {
+            $sql_query .= " INNER JOIN $tblAccessUrlRelUser auru ON auru.user_id = user.id ";
+        }
+
         if (count($conditions) > 0) {
             $sql_query .= ' WHERE ';
             $temp_conditions = array();
@@ -1428,6 +1434,14 @@ class UserManager
             }
             if (!empty($temp_conditions)) {
                 $sql_query .= implode(' '.$condition.' ', $temp_conditions);
+            }
+
+            if (api_is_multiple_url_enabled()) {
+                $sql_query .= ' AND auru.access_url_id = ' . api_get_current_access_url_id();
+            }
+        } else {
+            if (api_is_multiple_url_enabled()) {
+                $sql_query .= ' WHERE auru.access_url_id = ' . api_get_current_access_url_id();
             }
         }
         if (count($order_by) > 0) {

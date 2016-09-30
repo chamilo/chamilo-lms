@@ -231,7 +231,7 @@ function get_number_of_users()
 
 	if (isset($_REQUEST['type']) && $_REQUEST['type'] === 'teacher') {
 		if (api_get_session_id() != 0) {
-			$sql = "SELECT COUNT(u.user_id)
+			$sql = "SELECT COUNT(u.id)
 					FROM $user_table u
 					LEFT JOIN $tbl_session_rel_course_user cu
 					ON
@@ -243,68 +243,68 @@ function get_number_of_users()
 						u.status = 1 AND
 						(u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
 
-			if (api_is_multiple_url_enabled()) {
-				$url_access_id = api_get_current_access_url_id();
-				if ($url_access_id !=-1) {
-					$tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-					$sql = "SELECT COUNT(u.user_id)
-							FROM $user_table u
-							LEFT JOIN $tbl_session_rel_course_user cu
-							ON
-							    u.user_id = cu.user_id and cu.c_id = '".api_get_course_int_id()."' AND
-							    session_id ='".$sessionId."'
-							INNER JOIN  $tbl_url_rel_user as url_rel_user
-							ON (url_rel_user.user_id = u.user_id)
-							WHERE
-								cu.user_id IS NULL AND
-								access_url_id= $url_access_id AND
-								u.status = 1 AND
-								(u.official_code <> 'ADMIN' OR u.official_code IS NULL)
-							";
-				}
-			}
-		} else {
-			$sql = "SELECT COUNT(u.user_id)
-					FROM $user_table u
-					LEFT JOIN $course_user_table cu
-					ON u.user_id = cu.user_id and c_id='".api_get_course_int_id()."'
-				    WHERE cu.user_id IS NULL AND u.status<>".DRH." ";
-
-			if (api_is_multiple_url_enabled()) {
-				$url_access_id = api_get_current_access_url_id();
-				if ($url_access_id !=-1) {
-					$tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-
-					$sql = "SELECT COUNT(u.user_id)
-						FROM $user_table u
-						LEFT JOIN $course_user_table cu
-						ON u.user_id = cu.user_id AND c_id='".api_get_course_int_id()."'
-						INNER JOIN  $tbl_url_rel_user as url_rel_user
-						ON (url_rel_user.user_id = u.user_id)
-						WHERE cu.user_id IS NULL AND u.status<>".DRH." AND access_url_id= $url_access_id ";
-				}
-			}
-		}
-	} else {
-		// students
-		if ($sessionId != 0) {
-			$sql = "SELECT COUNT(u.user_id)
-					FROM $user_table u
-					LEFT JOIN $tbl_session_rel_course_user cu
-					ON
-						u.user_id = cu.user_id AND
-						c_id='".api_get_course_int_id()."' AND
-						session_id ='".$sessionId."'
-					WHERE
-						cu.user_id IS NULL AND
-						u.status<>".DRH." AND
-						(u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
+            if (api_is_multiple_url_enabled()) {
+                $url_access_id = api_get_current_access_url_id();
+                if ($url_access_id !=-1) {
+                    $tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+                    $sql = "SELECT COUNT(u.id)
+                            FROM $user_table u
+                            LEFT JOIN $tbl_session_rel_course_user cu
+                            ON
+                                u.user_id = cu.user_id AND cu.c_id = '".api_get_course_int_id()."' AND
+                                session_id ='".$sessionId."'
+                            INNER JOIN  $tbl_url_rel_user as url_rel_user
+                            ON (url_rel_user.user_id = u.user_id)
+                            WHERE
+                                cu.user_id IS NULL AND
+                                access_url_id= $url_access_id AND
+                                u.status = 1 AND
+                                (u.official_code <> 'ADMIN' OR u.official_code IS NULL)
+                            ";
+                }
+            }
+        } else {
+            $sql = "SELECT COUNT(u.id)
+                    FROM $user_table u
+                    LEFT JOIN $course_user_table cu
+                    ON u.user_id = cu.user_id and c_id='".api_get_course_int_id()."'
+                    WHERE cu.user_id IS NULL AND u.status<>".DRH." ";
 
             if (api_is_multiple_url_enabled()) {
                 $url_access_id = api_get_current_access_url_id();
                 if ($url_access_id !=-1) {
                     $tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-                    $sql = "SELECT COUNT(u.user_id)
+
+                    $sql = "SELECT COUNT(u.id)
+                        FROM $user_table u
+                        LEFT JOIN $course_user_table cu
+                        ON u.user_id = cu.user_id AND c_id='".api_get_course_int_id()."'
+                        INNER JOIN  $tbl_url_rel_user as url_rel_user
+                        ON (url_rel_user.user_id = u.user_id)
+                        WHERE cu.user_id IS NULL AND u.status<>".DRH." AND access_url_id= $url_access_id ";
+                }
+            }
+        }
+    } else {
+        // students
+        if ($sessionId != 0) {
+            $sql = "SELECT COUNT(u.id)
+                    FROM $user_table u
+                    LEFT JOIN $tbl_session_rel_course_user cu
+                    ON
+                        u.user_id = cu.user_id AND
+                        c_id='".api_get_course_int_id()."' AND
+                        session_id ='".$sessionId."'
+                    WHERE
+                        cu.user_id IS NULL AND
+                        u.status<>".DRH." AND
+                        (u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
+
+            if (api_is_multiple_url_enabled()) {
+                $url_access_id = api_get_current_access_url_id();
+                if ($url_access_id !=-1) {
+                    $tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+                    $sql = "SELECT COUNT(u.id)
                             FROM $user_table u
                             LEFT JOIN $tbl_session_rel_course_user cu
                             ON
@@ -312,7 +312,7 @@ function get_number_of_users()
                                 c_id='".api_get_course_int_id()."' AND
                                 session_id ='".$sessionId."'
                             INNER JOIN $tbl_url_rel_user as url_rel_user
-                            ON (url_rel_user.user_id = u.user_id)
+                            ON (url_rel_user.user_id = u.id)
                             WHERE
                                 cu.user_id IS NULL AND
                                 u.status<>".DRH." AND
@@ -321,7 +321,7 @@ function get_number_of_users()
                 }
             }
         } else {
-            $sql = "SELECT COUNT(u.user_id)
+            $sql = "SELECT COUNT(u.id)
                     FROM $user_table u
                     LEFT JOIN $course_user_table cu
                     ON u.user_id = cu.user_id AND c_id='".api_get_course_int_id()."'";
@@ -350,16 +350,17 @@ function get_number_of_users()
 
                 if ($url_access_id !=-1) {
                     $tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-                    $sql = "SELECT COUNT(u.user_id)
+                    $sql = "SELECT COUNT(u.id)
                             FROM $user_table u
-                            LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and c_id='".api_get_course_int_id()."'
+                            LEFT JOIN $course_user_table cu 
+                            ON u.user_id = cu.user_id AND c_id='".api_get_course_int_id()."'
                             INNER JOIN $tbl_url_rel_user as url_rel_user
-                            ON (url_rel_user.user_id = u.user_id)
+                            ON (url_rel_user.user_id = u.id)
                             WHERE cu.user_id IS NULL AND access_url_id= $url_access_id AND u.status <> ".DRH." ";
                 }
             }
-		}
-	}
+        }
+    }
 
     // when there is a keyword then we are searching and we have to change the SQL statement
     if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
@@ -425,7 +426,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 	$is_western_name_order = api_is_western_name_order();
 
     if (api_get_setting('show_email_addresses') === 'true') {
-        $select_fields = "u.user_id              AS col0,
+        $select_fields = "u.id              AS col0,
                 u.official_code        AS col1,
                 ".($is_western_name_order
                 ? "u.firstname         AS col2,
@@ -474,12 +475,11 @@ function get_user_data($from, $number_of_items, $column, $direction)
 						(u.official_code <> 'ADMIN' OR u.official_code IS NULL) AND
 						field_values.field_id = '".intval($field_identification[0])."' AND
 						field_values.value = '".Database::escape_string($field_identification[1])."'";
-			} else {
-				$sql .=	"WHERE cu.user_id IS NULL AND u.status=1 AND (u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
-			}
+            } else {
+                $sql .=	"WHERE cu.user_id IS NULL AND u.status=1 AND (u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
+            }
 
-            $sql .=	" AND access_url_id= $url_access_id";
-
+            $sql .=	" AND access_url_id = $url_access_id";
 		} else {
 		     // adding a teacher NOT through a session
 			$sql = "SELECT $select_fields
@@ -664,7 +664,9 @@ function get_user_data($from, $number_of_items, $column, $direction)
 
 	// Sorting and pagination (used by the sortable table)
 	$sql .= " ORDER BY col$column $direction ";
-	$sql .= " LIMIT $from,$number_of_items";
+    $from = (int) $from;
+    $number_of_items = (int) $number_of_items;
+	$sql .= " LIMIT $from, $number_of_items";
 
 	$res = Database::query($sql);
 	$users = array ();
@@ -695,6 +697,8 @@ function reg_filter($user_id)
     } else {
         $type = STUDENT;
     }
+    $user_id = (int) $user_id;
+
 	$result = '<a class="btn btn-small btn-primary" href="'.api_get_self().'?register=yes&type='.$type.'&user_id='.$user_id.'">'.
         get_lang("reg").'</a>';
 
@@ -710,7 +714,6 @@ function reg_filter($user_id)
  * @param string $url_params
  * @return string Some HTML-code with the lock/unlock button
  */
-
 function active_filter($active, $url_params, $row)
 {
 	$_user = api_get_user_info();
@@ -723,7 +726,7 @@ function active_filter($active, $url_params, $row)
         $action = 'AccountInactive';
         $image = 'error';
 	}
-    $result = null;
+    $result = '';
     if ($row['0'] <> $_user['user_id']) {
 	// you cannot lock yourself out otherwise you could disable all the accounts
 	// including your own => everybody is locked out and nobody can change it anymore.
@@ -754,6 +757,7 @@ function search_additional_profile_fields($keyword)
     $tableExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
 	$table_user = Database::get_main_table(TABLE_MAIN_USER);
 
+    $keyword = Database::escape_string($keyword);
 	// getting the field option text that match this keyword (for radio buttons and checkboxes)
 	$sql = "SELECT * FROM $table_user_field_options
 	        WHERE display_text LIKE '%".$keyword."%'";

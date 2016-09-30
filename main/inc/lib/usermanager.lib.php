@@ -2613,7 +2613,7 @@ class UserManager
                 case SESSION_AVAILABLE:
                     break;
                 case SESSION_INVISIBLE:
-                    if ($ignore_visibility_for_admins == false) {
+                    if ($ignore_visibility_for_admins === false) {
                         continue 2;
                     }
             }
@@ -2635,6 +2635,7 @@ class UserManager
     /**
      * Gives a list of [session_id-course_code] => [status] for the current user.
      * @param integer $user_id
+     * @param int $sessionLimit
      * @return array  list of statuses (session_id-course_code => status)
      */
     public static function get_personal_session_course_list($user_id, $sessionLimit = null)
@@ -2881,9 +2882,6 @@ class UserManager
             }
         }
 
-        $personal_course_list = array();
-        $courses = array();
-
         /* This query is very similar to the query below, but it will check the
         session_rel_course_user table if there are courses registered
         to our user or not */
@@ -2904,8 +2902,10 @@ class UserManager
                     $where_access_url
                 ORDER BY sc.position ASC";
 
-        $result = Database::query($sql);
+        $personal_course_list = array();
+        $courses = array();
 
+        $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
             while ($result_row = Database::fetch_array($result, 'ASSOC')) {
                 $result_row['status'] = 5;
@@ -2932,7 +2932,7 @@ class UserManager
                     WHERE
                       s.id = $session_id AND
                       (
-                        (scu.user_id=$user_id AND scu.status=2) OR
+                        (scu.user_id = $user_id AND scu.status=2) OR
                         s.id_coach = $user_id
                       )
                     $where_access_url
@@ -2963,8 +2963,8 @@ class UserManager
             }
         } else {
             //check if user is general coach for this session
-            $s = api_get_session_info($session_id);
-            if ($s['id_coach'] == $user_id) {
+            $sessionInfo = api_get_session_info($session_id);
+            if ($sessionInfo['id_coach'] == $user_id) {
                 $course_list = SessionManager::get_course_list_by_session_id($session_id);
 
                 if (!empty($course_list)) {

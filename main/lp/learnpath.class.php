@@ -11161,9 +11161,9 @@ EOD;
         $lpItemId = [];
 
         $typeListNotToVerify = self::getChapterTypes();
-        foreach ($this->items as $item) {
-            if (!in_array($item->get_type(), $typeListNotToVerify)) {
-                $lpItemId[] = $item->get_id();
+        foreach ($this->get_toc() as $item) {
+            if (!in_array($item['type'], $typeListNotToVerify)) {
+                $lpItemId[] = $item['id'];
             }
         }
 

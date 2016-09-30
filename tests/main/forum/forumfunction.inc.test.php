@@ -102,19 +102,6 @@ class TestForumFunction extends UnitTestCase {
 	 }
 
 	 /**
-	* This function returns a piece of html code that make the links grey (=invisible for the student)
-	* @param boolean 0/1: 0 = invisible, 1 = visible
-	* @return string language variable
-	*/
-
-	public function testclass_visible_invisible() {
-		 $current_visibility_status = 0;
-		 $res = class_visible_invisible($current_visibility_status);
-		 $this->assertTrue(is_string($res));
-		 //var_dump($res);
-	 }
-
-	 /**
 	* This function counts the number of forums inside a given category
 	* @param $cat_id the id of the forum category
 	* @todo an additional parameter that takes the visibility into account. For instance $countinvisible=0 would return the number

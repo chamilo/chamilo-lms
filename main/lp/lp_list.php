@@ -272,7 +272,7 @@ foreach ($categories as $item) {
                 $my_title = Display::tag(
                     'font',
                     $name,
-                    array('class' => 'invisible')
+                    array('class' => 'text-muted')
                 );
                 $icon_learnpath = Display::return_icon(
                     'learnpath_na.png',

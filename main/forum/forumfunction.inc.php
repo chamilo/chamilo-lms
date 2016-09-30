@@ -1225,9 +1225,9 @@ function change_lock_status($content, $id, $action)
  */
 function move_up_down($content, $direction, $id)
 {
-    $table_categories = Database :: get_course_table(TABLE_FORUM_CATEGORY);
-    $table_forums = Database :: get_course_table(TABLE_FORUM);
-    $table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
+    $table_categories = Database:: get_course_table(TABLE_FORUM_CATEGORY);
+    $table_forums = Database:: get_course_table(TABLE_FORUM);
+    $table_item_property = Database:: get_course_table(TABLE_ITEM_PROPERTY);
     $course_id = api_get_course_int_id();
     $id = intval($id);
 
@@ -1244,7 +1244,7 @@ function move_up_down($content, $direction, $id)
         $sort_column = 'forum_order';
         // We also need the forum_category of this forum.
         $sql = "SELECT forum_category FROM $table_forums
-                WHERE c_id = $course_id AND forum_id = ".intval($id);
+                WHERE c_id = $course_id AND forum_id = " . intval($id);
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
         $forum_category = $row['forum_category'];
@@ -1301,42 +1301,16 @@ function move_up_down($content, $direction, $id)
     // We do an extra check if we do not have illegal values. If your remove this if statment you will
     // be able to mess with the sorting by refreshing the page over and over again.
     if ($this_sort != '' && $next_sort != '' && $next_id != '' && $this_id != '') {
-        $sql = "UPDATE $table SET $sort_column='".Database::escape_string($this_sort)."'
-                WHERE c_id = $course_id AND $id_column='".Database::escape_string($next_id)."'";
+        $sql = "UPDATE $table SET $sort_column='" . Database::escape_string($this_sort) . "'
+                WHERE c_id = $course_id AND $id_column='" . Database::escape_string($next_id) . "'";
         Database::query($sql);
 
-        $sql = "UPDATE $table SET $sort_column='".Database::escape_string($next_sort)."'
-                WHERE c_id = $course_id AND $id_column='".Database::escape_string($this_id)."'";
+        $sql = "UPDATE $table SET $sort_column='" . Database::escape_string($next_sort) . "'
+                WHERE c_id = $course_id AND $id_column='" . Database::escape_string($this_id) . "'";
         Database::query($sql);
     }
 
-    return get_lang(ucfirst($content).'Moved');
-}
-
-/**
- * This function returns a piece of html code that make the links grey (=invisible for the student)
- *
- * @param int 0 = invisible, 1 = visible
- * @return string language variable
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @version february 2006, dokeos 1.8
- */
-function class_visible_invisible($current_visibility_status)
-{
-    $current_visibility_status = intval($current_visibility_status);
-    if ($current_visibility_status == 0) {
-        return 'class="invisible"';
-    }
-}
-
-function return_visible_invisible($current_visibility_status)
-{
-    $current_visibility_status = intval($current_visibility_status);
-    if ($current_visibility_status == 0) {
-        $status='invisible';
-        return $status;
-    }
+    return get_lang(ucfirst($content) . 'Moved');
 }
 
 /**

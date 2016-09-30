@@ -96,13 +96,13 @@ function doneResizing(){
         $("#courseCollapse").addClass("in");
         $("#skillsCollapse").addClass("in");
         $("#sn-sidebar-collapse").addClass("in");
-        $("#user_image_block").removeClass("invisible");
+        $("#user_image_block").removeClass("text-muted");
     } else {
         $("#profileCollapse").removeClass("in");
         $("#courseCollapse").removeClass("in");
         $("#skillsCollapse").removeClass("in");
         $("#sn-avatar-one").removeClass("in");
-        $("#user_image_block").addClass("invisible");
+        $("#user_image_block").addClass("text-muted");
     }
 };
 // Removes the yellow input in Chrome

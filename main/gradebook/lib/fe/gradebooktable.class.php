@@ -262,7 +262,7 @@ class GradebookTable extends SortableTable
             $item = $mainCategory = $data[0];
 
             //if the item is invisible, wrap it in a span with class invisible
-            $invisibility_span_open  = api_is_allowed_to_edit() && $item->is_visible() == '0' ? '<span class="invisible">' : '';
+            $invisibility_span_open  = api_is_allowed_to_edit() && $item->is_visible() == '0' ? '<span class="text-muted">' : '';
             $invisibility_span_close = api_is_allowed_to_edit() && $item->is_visible() == '0' ? '</span>' : '';
 
             // Id
@@ -435,7 +435,7 @@ class GradebookTable extends SortableTable
                         $item = $data[0];
 
                         //if the item is invisible, wrap it in a span with class invisible
-                        $invisibility_span_open = api_is_allowed_to_edit() && $item->is_visible() == '0' ? '<span class="invisible">' : '';
+                        $invisibility_span_open = api_is_allowed_to_edit() && $item->is_visible() == '0' ? '<span class="text-muted">' : '';
                         $invisibility_span_close = api_is_allowed_to_edit() && $item->is_visible() == '0' ? '</span>' : '';
 
                         if (isset($item)) {

@@ -262,7 +262,7 @@ if (is_array($forumCategories)) {
             $forumCategory['cat_title'],
             array(
                 'href' => $urlCategory,
-                'class' => return_visible_invisible($forumCategory['visibility'])
+                'class' => empty($forumCategory['visibility']) ? 'text-muted' : null
             )
         );
 
@@ -489,7 +489,7 @@ if (is_array($forumCategories)) {
                                 'href' => 'viewforum.php?' . api_get_cidreq()
                                     . '&gidReq=' . intval($groupid)
                                     . '&forum=' . intval($forum['forum_id']),
-                                'class' => return_visible_invisible(strval(intval($forum['visibility'])))
+                                'class' => empty($forum['visibility']) ? 'text-muted' : null
                             ]
                         );
 

@@ -39,7 +39,7 @@ switch ($action) {
             }
 
             $requested_image = ($tool_visibility == 0 ) ? $tool_image : $na_image;
-            $requested_class = ($tool_visibility == 0 ) ? 'visible' : 'invisible';
+            $requested_class = ($tool_visibility == 0 ) ? '' : 'text-muted';
             $requested_message = ($tool_visibility == 0 ) ? 'is_active' : 'is_inactive';
             $requested_view = ($tool_visibility == 0 ) ? 'visible.png' : 'invisible.png';
             $requested_visible = ($tool_visibility == 0 ) ? 1 : 0;

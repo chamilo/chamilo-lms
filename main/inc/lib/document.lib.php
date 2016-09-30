@@ -3678,7 +3678,7 @@ class DocumentManager
 
         $visibilityClass = null;
         if ($visibility == 0) {
-            $visibilityClass = ' invisible ';
+            $visibilityClass = ' text-muted ';
         }
         $return = null;
 
@@ -5376,7 +5376,7 @@ class DocumentManager
                     $url = 'show_content.php?' . api_get_cidreq() . '&id=' . $document_data['id'];
                     $class = 'ajax';
                     if ($visibility == false) {
-                        $class = "ajax invisible";
+                        $class = "ajax text-muted";
                     }
                     return Display::url(
                         $title,

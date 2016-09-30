@@ -1959,7 +1959,7 @@ function get_work_user_list(
             }
 
             if ($work['accepted'] == '0') {
-                $class = 'invisible';
+                $class = 'text-muted';
             } else {
                 $class = '';
             }

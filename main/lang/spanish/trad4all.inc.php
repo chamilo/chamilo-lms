@@ -7887,4 +7887,9 @@ $TicketMsgWelcome = "Bienvenido a la sección de TUS tickets. Aquí serás capaz
 $TicketNoHistory = "Sin historial";
 $RecalculateResults = "Recalcular resultados";
 $XParenthesisDeleted = "%s (eliminado)";
+$AvailableAlsoInMainPortal = "Disponible también en el portal principal";
+$EditCourseCategoryToURL = "Editar categorías de cursos de una URL";
+$VisibleToSelf = "Visible para si mismo";
+$VisibleToOthers = "Visible por otros";
+$UpgradeVersion = "Actualizar la versión de Chamilo LMS";
 ?>

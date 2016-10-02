@@ -7869,4 +7869,8 @@ $TicketNoHistory = "No history";
 $RecalculateResults = "Recalculate results";
 $XParenthesisDeleted = "%s (deleted)";
 $AvailableAlsoInMainPortal = "Available also on main portal";
+$EditCourseCategoryToURL = "Edit course categories for one URL";
+$VisibleToSelf = "Visible to self";
+$VisibleToOthers = "Visible to others";
+$UpgradeVersion = "Upgrade Chamilo LMS version";
 ?>

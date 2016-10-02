@@ -7815,4 +7815,9 @@ $TicketMsgWelcome = "Bienvenu(e) dans votre section de tickets personnels. Suive
 $TicketNoHistory = "Aucun historique";
 $RecalculateResults = "Recalculer les résultats";
 $XParenthesisDeleted = "%s (supprimé)";
+$AvailableAlsoInMainPortal = "Disponible également sur le portail principal";
+$EditCourseCategoryToURL = "Éditer catégories de cours pour une URL";
+$VisibleToSelf = "Visible par soi-même";
+$VisibleToOthers = "Visible par d'autres";
+$UpgradeVersion = "Mettre à jour depuis une version antérieure";
 ?>

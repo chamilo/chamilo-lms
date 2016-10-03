@@ -523,7 +523,6 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 );
             }
         } else {
-
             $extraFieldValue = new ExtraFieldValue('user');
             $uData = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
                 'organisationemail',
@@ -576,6 +575,10 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
 
             if (isset($extAuthSource) && is_array($extAuthSource)) {
                 foreach ($extAuthSource as $thisAuthSource) {
+                    if (!empty($thisAuthSource['login']) && file_exists($thisAuthSource['login'])) {
+                        include_once($thisAuthSource['login']);
+                        break;
+                    }
                     if (isset($thisAuthSource['newUser']) && file_exists($thisAuthSource['newUser'])) {
                         include_once($thisAuthSource['newUser']);
                     } else {

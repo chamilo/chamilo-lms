@@ -630,13 +630,11 @@ if ($modifyAnswers) {
                         for ($i = 1; $i <= $nbrAnswers; $i++) {
                             // is an delineation
                             if ($answerType == HOT_SPOT_DELINEATION) {
-                                $select_lp_id = array();
                                 $option_lp = '';
 
                                 // setting the LP
                                 $isSelected = false;
                                 foreach ($flat_list as $id => $details) {
-                                    $select_lp_id[$id] = $details['lp_name'];
                                     $selected = '';
                                     if ($id == $lp[$i]) {
                                         $isSelected = true;
@@ -932,12 +930,10 @@ if ($modifyAnswers) {
 
                         $list = new LearnpathList(api_get_user_id());
                         $flat_list = $list->get_flat_list();
-                        $select_lp_id = array();
                         $option_lp = '';
                         $isSelected = false;
                         foreach ($flat_list as $id => $details) {
                             $selected = '';
-                            $select_lp_id[$id] = $details['lp_name'];
                             if (isset($lp_noerror) && $id == $lp_noerror) {
                                 $selected = 'selected="selected"';
                                 $isSelected = true;
@@ -962,7 +958,6 @@ if ($modifyAnswers) {
                             $selected = '';
                             $question = Question::read($questionid);
                             $val = 'Q' . $key . ' :' . substrwords($question->selectTitle(), ICON_SIZE_SMALL);
-                            $select_lp_id[$id] = $details['lp_name'];
                             if ($questionid == $selectQuestionNoError) {
                                 $selected = 'selected="selected"';
                             }

@@ -629,6 +629,65 @@ if (@$_POST['step2']) {
     }
     ?>
 
+    <div id="pnl-check-crs-tables" class="alert alert-warning hide">
+        <p><?php echo get_lang('CRSTablesIntro') ?></p>
+        <p>
+            <button type="button" class="btn btn-warning btn-xs" id="btn-remove-crs-table" data-removing-text="<?php echo get_lang('Removing') ?>" autocomplete="off">
+                    <span class="fa-stack" aria-hidden="true">
+                        <span class="fa fa-circle-thin fa-stack-2x"></span>
+                        <span class="fa fa-trash-o fa-stack-1x"></span>
+                    </span>
+                <?php echo get_lang('CheckForCRSTables') ?>
+            </button>
+        </p>
+    </div>
+    <script>
+        $(document).on('ready', function () {
+            $.post('<?php echo api_get_path(WEB_CODE_PATH); ?>install/ajax.php', {
+                a: 'check_crs_tables',
+                db_host: '<?php echo $dbHostForm; ?>',
+                db_username: '<?php echo $dbUsernameForm; ?>',
+                db_pass: '<?php echo $dbPassForm; ?>',
+                db_name: '<?php echo $dbNameForm ?>',
+                db_port: '<?php echo $dbPortForm; ?>'
+            }, function (response) {
+                if (!parseInt(response)) {
+                    return;
+                }
+
+                $('#pnl-check-crs-tables').removeClass('hide');
+
+                $('#btn-remove-crs-table').on('click', function (e) {
+                    e.preventDefault();
+
+                    var sure = confirm('<?php echo get_lang('AreYouSureToDelete') ?>');
+
+                    if (!sure) {
+                        return;
+                    }
+
+                    var $btnNext = $('button.btn-success:submit'),
+                        $btnRemove = $(this).button('removing');
+
+                    $btnNext.prop('disabled', true);
+
+                    $.post('<?php echo api_get_path(WEB_CODE_PATH) ?>install/ajax.php', {
+                        a: 'remove_crs_tables',
+                        db_host: '<?php echo $dbHostForm; ?>',
+                        db_username: '<?php echo $dbUsernameForm; ?>',
+                        db_pass: '<?php echo $dbPassForm; ?>',
+                        db_name: '<?php echo $dbNameForm ?>',
+                        db_port: '<?php echo $dbPortForm; ?>'
+                    }, function () {
+                        $btnRemove.remove();
+
+                        $btnNext.prop('disabled', false);
+                    });
+                });
+            });
+        });
+    </script>
+
     <table width="100%">
         <tr>
             <td>

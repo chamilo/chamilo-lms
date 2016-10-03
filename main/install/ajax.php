@@ -33,6 +33,12 @@ $dbHost = isset($_POST['db_host']) ? $_POST['db_host'] : 'localhost';
 $dbUsername = isset($_POST['db_username']) ? $_POST['db_username'] : 'root';
 $dbPass = isset($_POST['db_pass']) ? $_POST['db_pass'] : '';
 $dbName = isset($_POST['db_name']) ? $_POST['db_name'] : 'chamilo';
+$installType = isset($_POST['install_type']) ? $_POST['install_type'] : 'new';
+
+if ($installType === 'new') {
+    $dbName = null;
+}
+
 $dbPort = isset($_POST['db_port']) ? $_POST['db_port'] : 3306;
 
 $manager = connectToDatabase($dbHost, $dbUsername, $dbPass, $dbName, $dbPort);
@@ -42,6 +48,12 @@ $db_c_prefix = api_get_configuration_value('table_prefix') ? api_get_configurati
 
 switch ($action) {
     case 'check_crs_tables':
+        if (empty($dbName)) {
+            echo 0;
+
+            break;
+        }
+
         $countOfTables = $manager
             ->getConnection()
             ->executeQuery("SHOW TABLES LIKE '$db_c_prefix$db_prefix%'")

@@ -649,7 +649,8 @@ if (@$_POST['step2']) {
                 db_username: '<?php echo $dbUsernameForm; ?>',
                 db_pass: '<?php echo $dbPassForm; ?>',
                 db_name: '<?php echo $dbNameForm ?>',
-                db_port: '<?php echo $dbPortForm; ?>'
+                db_port: '<?php echo $dbPortForm; ?>',
+                install_type: '<?php echo $installType ?>'
             }, function (response) {
                 if (!parseInt(response)) {
                     return;

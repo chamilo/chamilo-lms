@@ -52,14 +52,17 @@ class LocaleListener implements EventSubscriberInterface
      */
     public function onKernelRequest(GetResponseEvent $event)
     {
+        /** @var Request $request */
         $request = $event->getRequest();
         if (!$request->hasPreviousSession()) {
             return;
         }
 
         // try to see if the locale has been set as a _locale routing parameter
-        if ($locale = $request->attributes->get('_locale')) {
+        if ($locale = $request->get('_locale')) {
+            $request->headers->set('Accept-Language', $locale);
             $request->getSession()->set('_locale', $locale);
+            $request->setLocale($locale);
         } else {
             $locale = $this->defaultLocale;
 

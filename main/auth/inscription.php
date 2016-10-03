@@ -85,7 +85,7 @@ $(document).ready(function() {
                     
                     $("input[name=\'extra_terms_nationalite\']").val(monU.Nationalite);
                     $("input[name=\'extra_terms_paysresidence\']").val(monU.PaysResidence);
-                    $("input[name=\'address\']").val(monU.Adresse);
+                    $("input[name=\'extra_terms_adresse\']").val(monU.Adresse);
                     $("input[name=\'extra_terms_codepostal\']").val(monU.CP);
                     $("input[name=\'extra_terms_ville\']").val(monU.Ville);													
                 } else {

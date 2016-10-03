@@ -24,9 +24,8 @@ class PageController extends Controller
      */
     public function getLatestPages($number, Request $request)
     {
-        $site = $this->container->get('sonata.page.site.selector')->retrieve();
-
         $locale = $request->get('_locale');
+        $site = $this->container->get('sonata.page.site.selector.host_by_locale')->retrieve();
         $translator = $this->get('translator');
 
         $criteria = [
@@ -47,6 +46,7 @@ class PageController extends Controller
             if ($page->getUrl() === '/') {
                 continue;
             }
+
             $criteria = ['pageId' => $page];
             /** @var Snapshot $snapshot */
             // Check if page has a valid snapshot

@@ -828,6 +828,9 @@ if ($form->validate()) {
         $cityData = $extraField->get_values_by_handler_and_field_variable(api_get_user_id(), 'terms_ville');
         $city = $cityData['value'];
 
+        $AddressData = $extraField->get_values_by_handler_and_field_variable(api_get_user_id(), 'terms_adresse');
+        $Adresse = $AddressData['value'];
+
         switch ($user_data['language']) {
             case 'french':
             case 'french2':
@@ -850,7 +853,7 @@ if ($form->validate()) {
             'DateNaissance' => $birthDate,
             'Langue' => $language,
             'Nationalite' => $citizenship,
-            'Adresse' => $user_data['address'],
+            'Adresse' => $Adresse,
             'CP' => $cp,
             'PaysResidence' => $country,
             'Ville' => $city,

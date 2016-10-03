@@ -152,7 +152,11 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
-
+    chamilo_core.listener.locale_fix:
+        class: Chamilo\CoreBundle\EventListener\LocaleListener
+        arguments: ["%kernel.default_locale%", "@service_container"]
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 48 }
 
 #
 #    # Settings listener

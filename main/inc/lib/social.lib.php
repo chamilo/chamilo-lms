@@ -1008,7 +1008,7 @@ class SocialManager extends UserManager
         $links = '<ul class="nav nav-pills nav-stacked">';
         $links .= '
             <li class="home-icon">            
-                <form action="'.$url.'" method="post">                            
+                <form target="_blank" action="'.$url.'" method="post">                            
                     <input type="hidden" id="HashKey" name="HashKey" value="'.$hashKey.'"/>            
                     <input type="submit" value="'.get_lang('TCCConnect').'" class="btn btn-primary"/>            
                 </form>                

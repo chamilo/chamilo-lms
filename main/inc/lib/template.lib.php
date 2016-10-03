@@ -502,7 +502,9 @@ class Template
             'web_query_vars' => api_htmlentities($_SERVER['QUERY_STRING']),
             'web_self_query_vars' => api_htmlentities($_SERVER['REQUEST_URI']),
             'web_cid_query' => api_get_cidreq(),
+            'basename' => basename(api_get_self())
         );
+
         $this->assign('_p', $_p);
 
         //Here we can add system parameters that can be use in any template

@@ -209,7 +209,8 @@ function WSUpdateTCCUserIdAndGetUser($params)
                 'terms_ville',
                 'terms_paysresidence',
                 'terms_nationalite',
-                'terms_codepostal'
+                'terms_codepostal',
+                'terms_adresse'
             ];
 
             $extraFieldResults = [];
@@ -235,6 +236,7 @@ function WSUpdateTCCUserIdAndGetUser($params)
                     $language = 'fr-FR';
                     break;
                 case 'german':
+                case 'german2':
                     $language = 'de-DE';
                     break;
             }
@@ -247,7 +249,7 @@ function WSUpdateTCCUserIdAndGetUser($params)
                 'Langue' => $language,
                 'Nationalite' => $extraFieldResults['terms_nationalite'],
                 'Pays' => $extraFieldResults['terms_paysresidence'],
-                'Adresse' => $user->getAddress() ,
+                'Adresse' => $extraFieldResults['terms_adresse'],
                 'CodePostal' => $extraFieldResults['terms_codepostal'],
                 'Ville' => $extraFieldResults['terms_ville'],
                 'Email' => $user->getEmail(),
@@ -309,7 +311,7 @@ function WSEditUserTCC($params)
                     $params['Langue'] = 'french2';
                     break;
                 case 'de-DE':
-                    $params['Langue'] = 'german';
+                    $params['Langue'] = 'german2';
                     break;
             }
 
@@ -317,7 +319,6 @@ function WSEditUserTCC($params)
                 ->setFirstname($params['Prenom'])
                 ->setLastname($params['Nom'])
                 ->setLanguage($params['Langue'])
-                ->setAddress($params['Adresse'])
                 ->setEmail($params['Email'])
             ;
 
@@ -334,7 +335,8 @@ function WSEditUserTCC($params)
                 'terms_ville' => 'Ville',
                 'terms_paysresidence' => 'Pays',
                 'terms_nationalite' => 'Nationalite',
-                'terms_codepostal' => 'CodePostal'
+                'terms_codepostal' => 'CodePostal',
+                'terms_adresse' => 'Adresse'
             ];
 
             foreach ($fields as $extraFieldName => $externalName) {

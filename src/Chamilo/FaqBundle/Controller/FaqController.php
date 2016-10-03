@@ -29,9 +29,9 @@ class FaqController extends Controller
      */
     public function indexAction($categorySlug, $questionSlug, Request $request)
     {
-        $locale = $request->get('_locale');
+        /*$locale = $request->get('_locale');
         $translator = $this->get('translator');
-        $translator->setLocale($locale);
+        $translator->setLocale($locale);*/
 
         if (!$categorySlug || !$questionSlug) {
             $redirect = $this->generateRedirectToDefaultSelection($categorySlug, $questionSlug);
@@ -58,10 +58,10 @@ class FaqController extends Controller
         return $this->render(
             '@ChamiloFaq/Faq/index.html.twig',
             array(
-                'categories'       => $categories,
-                'questions'        => $questions,
+                'categories' => $categories,
+                'questions' => $questions,
                 'selectedCategory' => $selectedCategory,
-                'selectedQuestion' => $selectedQuestion
+                'selectedQuestion' => $selectedQuestion,
             )
         );
     }

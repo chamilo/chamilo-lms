@@ -523,6 +523,36 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 );
             }
         } else {
+
+            $extraFieldValue = new ExtraFieldValue('user');
+            $uData = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
+                'organisationemail',
+                $login
+            );
+            if (!empty($uData)) {
+                $uData = api_get_user_info($uData['item_id']);
+
+                if (!empty($extAuthSource[$uData['auth_source']]['login'])
+                    && file_exists($extAuthSource[$uData['auth_source']]['login'])
+                ) {
+                    /*
+                     * Process external authentication
+                     * on the basis of the given login name
+                     */
+                    $loginFailed = true;  // Default initialisation. It could
+                    // change after the external authentication
+                    $key = $uData['auth_source']; //'ldap','shibboleth'...
+
+                    /* >>>>>>>> External authentication modules <<<<<<<<< */
+                    // see configuration.php to define these
+                    include_once($extAuthSource[$key]['login']);
+                }
+            } else {
+                // change after the external authentication
+                // login failed, Database::num_rows($result) <= 0
+                $loginFailed = true;  // Default initialisation. It could
+            }
+
             // login failed, Database::num_rows($result) <= 0
             $loginFailed = true;  // Default initialisation. It could
             // change after the external authentication

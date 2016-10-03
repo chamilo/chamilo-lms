@@ -136,17 +136,17 @@ $form->display();
 
 echo get_lang('CSVMustLookLike');
 echo '<blockquote><pre>
-    username;
-    jdoe;
-    jmontoya;
+    username
+    jdoe
+    jmontoya
 </pre>
 </blockquote>';
 
 echo get_lang('Or');
 echo '<blockquote><pre>
-    id;
-    23;
-    1337;
+    id
+    23
+    1337
 </pre>
 </blockquote>';
 

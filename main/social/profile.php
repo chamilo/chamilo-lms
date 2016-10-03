@@ -325,7 +325,7 @@ if ($show_full_profile) {
 
     $extra_information = '';
     if (is_array($extra_user_data) && count($extra_user_data) > 0) {
-        $extra_information_value = '<ul class="list-group">';
+        $extra_information_value = '';
         $extraField = new ExtraField('user');
         foreach ($extra_user_data as $key => $data) {
             if (empty($data)) {
@@ -414,10 +414,12 @@ if ($show_full_profile) {
                 }
             }
         }
-        $extra_information_value .= '</ul>';
 
         // if there are information to show
         if (!empty($extra_information_value)) {
+
+            $extra_information_value = '<ul class="list-group">' . $extra_information_value . '</ul>';
+
             $extra_information .= Display::panelCollapse(
                 get_lang('ExtraInformation'),
                 $extra_information_value,

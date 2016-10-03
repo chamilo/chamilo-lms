@@ -3267,6 +3267,7 @@ class Exercise
             $answerCorrect = $objAnswerTmp->isCorrect($answerId);
             $answerWeighting = (float)$objAnswerTmp->selectWeighting($answerId);
             $answerAutoId = $objAnswerTmp->selectAutoId($answerId);
+            $answerIid = isset($objAnswerTmp->iid[$answerId]) ? $objAnswerTmp->iid[$answerId] : '';
 
             $answer_correct_array[$answerId] = (bool)$answerCorrect;
 
@@ -4013,12 +4014,13 @@ class Exercise
                 case HOT_SPOT:
                     if ($from_database) {
                         $TBL_TRACK_HOTSPOT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
+                        // Check auto id
                         $sql = "SELECT hotspot_correct
                                 FROM $TBL_TRACK_HOTSPOT
                                 WHERE
                                     hotspot_exe_id = $exeId AND
                                     hotspot_question_id= $questionId AND
-                                    hotspot_answer_id = ".intval($answerAutoId)."";
+                                    hotspot_answer_id = ".intval($answerAutoId);
                         $result = Database::query($sql);
                         if (Database::num_rows($result)) {
                             $studentChoice = Database::result(
@@ -4032,7 +4034,7 @@ class Exercise
                                 $totalScore += $answerWeighting;
                             }
                         } else {
-                            // If answerid is different:
+                            // If answer.id is different:
                             $sql = "SELECT hotspot_correct
                                 FROM $TBL_TRACK_HOTSPOT
                                 WHERE
@@ -4040,15 +4042,40 @@ class Exercise
                                     hotspot_question_id= $questionId AND
                                     hotspot_answer_id = ".intval($answerId);
                             $result = Database::query($sql);
-                            $studentChoice = Database::result(
-                                $result,
-                                0,
-                                "hotspot_correct"
-                            );
 
-                            if ($studentChoice) {
-                                $questionScore += $answerWeighting;
-                                $totalScore += $answerWeighting;
+                            if (Database::num_rows($result)) {
+                                $studentChoice = Database::result(
+                                    $result,
+                                    0,
+                                    "hotspot_correct"
+                                );
+
+                                if ($studentChoice) {
+                                    $questionScore += $answerWeighting;
+                                    $totalScore += $answerWeighting;
+                                }
+                            } else {
+                                // check answer.iid
+                                if (!empty($answerIid)) {
+                                    $sql = "SELECT hotspot_correct
+                                            FROM $TBL_TRACK_HOTSPOT
+                                            WHERE
+                                                hotspot_exe_id = $exeId AND
+                                                hotspot_question_id= $questionId AND
+                                                hotspot_answer_id = ".intval($answerIid);
+                                    $result = Database::query($sql);
+
+                                    $studentChoice = Database::result(
+                                        $result,
+                                        0,
+                                        "hotspot_correct"
+                                    );
+
+                                    if ($studentChoice) {
+                                        $questionScore += $answerWeighting;
+                                        $totalScore += $answerWeighting;
+                                    }
+                                }
                             }
                         }
                     } else {

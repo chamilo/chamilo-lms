@@ -7873,4 +7873,8 @@ $EditCourseCategoryToURL = "Edit course categories for one URL";
 $VisibleToSelf = "Visible to self";
 $VisibleToOthers = "Visible to others";
 $UpgradeVersion = "Upgrade Chamilo LMS version";
+$CRSTablesIntro = "The install script has detected tables coming from previous versions that could cause problems during the upgrade process.
+Please click on the button below to delete them. We heavily recommend you do a full backup of them before confirming this last install step.";
+$Removing = "Removing";
+$CheckForCRSTables = "Check for tables from previous versions";
 ?>

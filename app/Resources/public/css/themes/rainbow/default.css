@@ -382,6 +382,19 @@ footer #footer_right{
     background-color: #000080;
     border-color: #000080;
 }
+.page-inscription .btn-default{
+    background-color: #162A83;
+    border-color: #162A83;
+    color: #FFF;
+}
+.page-inscription .dropdown-toggle.btn-default{
+    background-color: #FFF;
+    border-color: #CCC;
+    color: #33;
+}
+#extra_terms_datedenaissance_alt{
+    background: #FFF;
+}
 .navbar-inverse li a{
   line-height: 30px;
   background: none !important;

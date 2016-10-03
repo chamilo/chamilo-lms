@@ -5,10 +5,11 @@
 %}
 
 {% block content %}
-
-{{ inscription_header }}
-{{ inscription_content }}
-{{ form }}
-{{ text_after_registration }}
+<div class="page-inscription">
+    {{ inscription_header }}
+    {{ inscription_content }}
+    {{ form }}
+    {{ text_after_registration }}
+</div>
 
 {% endblock %}

@@ -70,6 +70,16 @@ a:focus {
 .title a:hover{
     color: #666;
 }
+.page-faq .title, .page-contact .title{
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+.page-inscription .page-header{
+    border: none;
+    font-size: 25px;
+    font-weight: bold;
+    color: #07578A;
+}
 .title-green{
     position: static;
     font-size: 25px;
@@ -93,6 +103,12 @@ a:focus {
     padding: 0;
     margin: 0;
 }
+.list-items-faq a{
+    color: #666;
+}
+.list-items-faq a:hover{
+    color: #07578A;
+}
 .list-faq .list-title{
     font-size: 16px;
     font-weight: bold;
@@ -107,10 +123,15 @@ a:focus {
     padding-left: 30px;
     padding-right: 30px;
 }
+.block-faq .panel-default {
+    border: none;
+    box-shadow: none;
+}
 .block-faq .panel-default .panel-heading{
     font-weight: bold;
     font-size: 16px;
-    background: #F2F2F2;
+    background: transparent;
+    border: none;
 }
 .back_to_top{
     font-size: 16px;
@@ -359,6 +380,14 @@ footer #footer_right{
     background-color: #000080;
     border-color: #000080;
 }
+.btn-default{
+    background-color: #162A83;
+    border-color: #162A83;
+}
+.btn-default:hover{
+    background-color: #000080;
+    border-color: #000080;
+}
 .navbar-inverse li a{
   line-height: 30px;
   background: none !important;
@@ -478,6 +507,11 @@ legend{
 }
 .legend .panel-body{
     font-size: 13px;
+}
+.items .sonata-media-block-media-container{
+    float: left;
+    padding-right: 10px;
+    padding-top: 5px;
 }
 @media (max-width: 480px) {
     .item-menu{

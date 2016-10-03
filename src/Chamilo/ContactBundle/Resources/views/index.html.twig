@@ -3,11 +3,11 @@
 {% block chamilo_content %}
 
 <section id="main_content">
-    <div class="page-header">
-        <h2>{{ 'Contact' | trans  }}</h2>
-    </div>
+    <div class="page-contact">
+    <h2 class="title">{{ 'Contact' | trans  }}</h2>
     {{ form_start(form) }}
     {{ form_widget(form, {'attr': {'class': ''}}) }}
     {{ form_end(form) }}
+    </div>
 </section>
 {% endblock %}

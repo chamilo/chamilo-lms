@@ -5297,6 +5297,7 @@ div#chat-remote-video video {
   font-size: 12px;
   padding-top: 10px;
   line-height: 15px;
+  min-height: 80px;
 }
 #whoisonline .items-user .toolbar .btn, #whoisonline .items-user .items-user-status{
   margin-bottom: 5px;

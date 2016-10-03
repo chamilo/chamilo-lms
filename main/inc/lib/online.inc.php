@@ -205,9 +205,17 @@ function user_is_online($user_id)
     return false;
 
 }
+
 /**
  * Gives a list of people online now (and in the last $valid minutes)
- * @return  array       For each line, a list of user IDs and login dates, or FALSE on error or empty results
+ *
+ * @param $from
+ * @param $number_of_items
+ * @param null $column
+ * @param null $direction
+ * @param null $time_limit
+ * @param bool $friends
+ * @return  array|bool For each line, a list of user IDs and login dates, or FALSE on error or empty results
  */
 function who_is_online($from, $number_of_items, $column = null, $direction = null, $time_limit = null, $friends = false)
 {

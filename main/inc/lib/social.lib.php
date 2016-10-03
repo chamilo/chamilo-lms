@@ -1013,20 +1013,15 @@ class SocialManager extends UserManager
     public static function display_user_list($user_list, $wrap = true)
     {
         $html = null;
+
         if (isset($_GET['id']) or count($user_list) < 1) {
             return false;
         }
-        $column_size = '12';
-        $add_row = false;
-        if (api_is_anonymous()) {
-            $add_row = true;
-        }
+
         $course_url = '';
         if (isset($_GET['cidReq']) && strlen($_GET['cidReq']) > 0) {
             $course_url = '&amp;cidReq='.Security::remove_XSS($_GET['cidReq']);
         }
-
-        $html .= '<div class="row">';
 
         foreach ($user_list as $uid) {
             $user_info = api_get_user_info($uid, $checkIfUserOnline = true);
@@ -1034,7 +1029,7 @@ class SocialManager extends UserManager
             $firstname =  $user_info['firstname'];
             $completeName = $firstname.', '.$lastname;
 
-            $user_rol = $user_info['status'] == 1 ? Display::return_icon('teacher.png',get_lang('Teacher'),null,ICON_SIZE_TINY) : Display::return_icon('user.png',get_lang('Student'),null,ICON_SIZE_TINY);
+            $user_rol = $user_info['status'] == 1 ? Display::return_icon('teacher.png', get_lang('Teacher'), null, ICON_SIZE_TINY) : Display::return_icon('user.png', get_lang('Student'), null, ICON_SIZE_TINY);
             $status_icon_chat = null;
             if ($user_info['user_is_online_in_chat'] == 1) {
                 $status_icon_chat = Display::return_icon('online.png', get_lang('Online'));
@@ -1073,18 +1068,6 @@ class SocialManager extends UserManager
                         </div>
                       </div>';
 
-        }
-        $counter = $_SESSION['who_is_online_counter'];
-
-        if ($wrap) {
-            $html .= '</div>';
-        }
-        if (count($user_list) >= 9) {
-            $html .= '<div class="col-md-'.$column_size.'">
-                        <a class="btn btn-large btn-default" id="link_load_more_items" data_link="'.$counter.'" >'.get_lang('More').'</a></div>';
-        }
-        if ($wrap && $add_row) {
-            $html .= '</div>';
         }
 
         return $html;

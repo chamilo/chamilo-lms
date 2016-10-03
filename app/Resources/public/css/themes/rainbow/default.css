@@ -380,14 +380,6 @@ footer #footer_right{
     background-color: #000080;
     border-color: #000080;
 }
-.btn-default{
-    background-color: #162A83;
-    border-color: #162A83;
-}
-.btn-default:hover{
-    background-color: #000080;
-    border-color: #000080;
-}
 .navbar-inverse li a{
   line-height: 30px;
   background: none !important;

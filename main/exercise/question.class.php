@@ -1793,7 +1793,7 @@ abstract class Question
         $label = "<div class=\"rib rib-$class\"><h3>$score_label</h3></div> <h4>{$score['result']}</h4>";
 
         if ($hideLabel === true) {
-            $label = "<h4>{$score['result']}<h4/>;";
+            $label = "<h4>{$score['result']}<h4/>";
         }
 
         $header .= Display::div(

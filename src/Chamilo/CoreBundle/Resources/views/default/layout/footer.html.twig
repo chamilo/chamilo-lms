@@ -3,38 +3,22 @@
     <!-- start of #footer section -->
     <div class="container">
         <div class="row">
-            <div id="footer_left" class="col-md-4">
-                {% if session_teachers is not null %}
-                    <div id="session_teachers">
-                        {{ session_teachers }}
-                    </div>
-                {% endif %}
-
-                {% if teachers is not null %}
-                    <div id="teachers">
-                        {{ teachers }}
-                    </div>
-                {% endif %}
-
-                {#  Plugins for footer section #}
-                {% if plugin_footer_left is not null %}
-                    <div id="plugin_footer_left">
-                        {{ plugin_footer_left }}
-                    </div>
-                {% endif %}
-                 &nbsp;
+            <div id="footer_left" class="col-md-8">
+               <div class="sub-footer">
+                        <div class="row">
+                                <div class="col-md-12">
+                                    <div class="partners">
+                                        <a href="#">
+                                            <img src="{{ asset('css/themes/'~ theme ~'/images/rbs_logo_rgb.png') }}"/>
+                                        </a>
+                                        <a href="#">
+                                            <img src="{{ asset('css/themes/'~ theme ~'/images/logo_cavilam.png') }}"/>
+                                        </a>
+                                    </div>
+                                </div>
+                        </div>
+                </div>
             </div>
-
-            <div id="footer_center" class="col-md-4">
-                {#   Plugins for footer section  #}
-                {% if plugin_footer_center is not null %}
-                    <div id="plugin_footer_center">
-                        {{ plugin_footer_center }}
-                    </div>
-                {% endif %}
-                 &nbsp;
-            </div>
-
             <div id="footer_right" class="col-md-4">
 
                 <div id="admin_name">

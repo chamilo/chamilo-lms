@@ -4016,24 +4016,47 @@ class Exercise
                         $sql = "SELECT hotspot_correct
                                 FROM $TBL_TRACK_HOTSPOT
                                 WHERE
-                                    hotspot_exe_id = '".$exeId."' AND
-                                    hotspot_question_id= '".$questionId."' AND
+                                    hotspot_exe_id = $exeId AND
+                                    hotspot_question_id= $questionId AND
                                     hotspot_answer_id = ".intval($answerAutoId)."";
                         $result = Database::query($sql);
-                        $studentChoice = Database::result($result, 0, "hotspot_correct");
+                        if (Database::num_rows($result)) {
+                            $studentChoice = Database::result(
+                                $result,
+                                0,
+                                "hotspot_correct"
+                            );
 
-                        if ($studentChoice) {
-                            $questionScore  += $answerWeighting;
-                            $totalScore     += $answerWeighting;
+                            if ($studentChoice) {
+                                $questionScore += $answerWeighting;
+                                $totalScore += $answerWeighting;
+                            }
+                        } else {
+                            // If answerid is different:
+                            $sql = "SELECT hotspot_correct
+                                FROM $TBL_TRACK_HOTSPOT
+                                WHERE
+                                    hotspot_exe_id = $exeId AND
+                                    hotspot_question_id= $questionId AND
+                                    hotspot_answer_id = ".intval($answerId);
+                            $result = Database::query($sql);
+                            $studentChoice = Database::result(
+                                $result,
+                                0,
+                                "hotspot_correct"
+                            );
+
+                            if ($studentChoice) {
+                                $questionScore += $answerWeighting;
+                                $totalScore += $answerWeighting;
+                            }
                         }
                     } else {
                         if (!isset($choice[$answerAutoId])) {
                             $choice[$answerAutoId] = 0;
                         } else {
                             $studentChoice = $choice[$answerAutoId];
-
                             $choiceIsValid = false;
-
                             if (!empty($studentChoice)) {
                                 $hotspotType = $objAnswerTmp->selectHotspotType($answerId);
                                 $hotspotCoordinates = $objAnswerTmp->selectHotspotCoordinates($answerId);
@@ -4069,7 +4092,7 @@ class Exercise
                     break;
                 // @todo never added to chamilo
                 //for hotspot with fixed order
-                case HOT_SPOT_ORDER :
+                case HOT_SPOT_ORDER:
                     $studentChoice = $choice['order'][$answerId];
                     if ($studentChoice == $answerId) {
                         $questionScore  += $answerWeighting;
@@ -4080,7 +4103,7 @@ class Exercise
                     }
                     break;
                 // for hotspot with delineation
-                case HOT_SPOT_DELINEATION :
+                case HOT_SPOT_DELINEATION:
                     if ($from_database) {
                         // getting the user answer
                         $TBL_TRACK_HOTSPOT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
@@ -4228,6 +4251,7 @@ class Exercise
                             );
                         } elseif ($answerType == HOT_SPOT) {
                             foreach ($orderedHotspots as $correctAnswerId => $hotspot) {
+
                                 if ($hotspot->getHotspotAnswerId() == $answerAutoId) {
                                     break;
                                 }
@@ -4235,7 +4259,7 @@ class Exercise
 
                             ExerciseShowFunctions::display_hotspot_answer(
                                 $feedback_type,
-                                ++$correctAnswerId,
+                                $answerId,
                                 $answer,
                                 $studentChoice,
                                 $answerComment,
@@ -4980,16 +5004,14 @@ class Exercise
                 // We made an extra table for the answers
 
                 if ($show_result) {
-                    $relPath = api_get_path(REL_PATH);
+                    $relPath = api_get_path(WEB_CODE_PATH);
                     //	if ($origin != 'learnpath') {
                     echo '</table></td></tr>';
                     echo "
                         <tr>
                             <td colspan=\"2\">
                                 <p><em>" . get_lang('HotSpot') . "</em></p>
-
                                 <div id=\"hotspot-solution-$questionId\"></div>
-
                                 <script>
                                     $(document).on('ready', function () {
                                         new HotspotQuestion({
@@ -5000,7 +5022,6 @@ class Exercise
                                             relPath: '$relPath'
                                         });
                                     });
-
                                 </script>
                             </td>
                         </tr>

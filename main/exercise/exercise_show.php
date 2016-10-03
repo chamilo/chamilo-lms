@@ -439,7 +439,7 @@ foreach ($questionList as $questionId) {
             $totalScore += $question_result['score'];
 
             if ($show_results) {
-                $relPath = api_get_path(REL_PATH);
+                $relPath = api_get_path(WEB_CODE_PATH);
                 echo '</table></td></tr>';
                 echo "
                         <tr>

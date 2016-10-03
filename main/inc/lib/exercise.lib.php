@@ -1136,9 +1136,8 @@ HTML;
             }
             $questionName = $objQuestionTmp->selectTitle();
             $questionDescription = $objQuestionTmp->selectDescription();
-
             if ($freeze) {
-                $relPath = api_get_path(REL_PATH);
+                $relPath = api_get_path(WEB_CODE_PATH);
                 echo "
                     <script>
                         $(document).on('ready', function () {
@@ -1172,28 +1171,24 @@ HTML;
             }
 
             $answerList = '';
-
             if ($answerType != HOT_SPOT_DELINEATION) {
                 $answerList = '
                     <div class="well well-sm">
                         <h5 class="page-header">' . get_lang('HotspotZones') . '</h5>
-                        <ol>
+                        <ul>
                 ';
 
                 if (!empty($answers_hotspot)) {
                     Session::write('hotspot_ordered', array_keys($answers_hotspot));
-
                     $countAnswers = 1;
-
                     foreach ($answers_hotspot as $value) {
                         $answerList .= "<li><p>{$countAnswers} - {$value}</p></li>";
-
                         $countAnswers++;
                     }
                 }
 
                 $answerList .= '
-                        </ol>
+                        </ul>
                     </div>
                 ';
             }
@@ -1212,7 +1207,7 @@ HTML;
 HOTSPOT;
             }
 
-            $relPath = api_get_path(REL_PATH);
+            $relPath = api_get_path(WEB_CODE_PATH);
             $s .= "
                             <div class=\"col-sm-8 col-md-9\">
                                 <div class=\"hotspot-image\"></div>

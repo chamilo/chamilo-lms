@@ -1034,7 +1034,7 @@ if ($modifyAnswers) {
     <?php
     $swf_loaded = $answerType == HOT_SPOT_DELINEATION ? 'hotspot_delineation_admin' : 'hotspot_admin';
     $height = 450;
-    $relPath = api_get_path(REL_PATH);
+    $relPath = api_get_path(WEB_CODE_PATH);
     ?>
                 <div id="hotspot-container" class="center-block">
                 </div>

@@ -508,6 +508,18 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 $loginFailed = true;  // Default initialisation. It could
                 // change after the external authentication
                 $key = $uData['auth_source']; //'ldap','shibboleth'...
+
+                // Check if organisationemail email exist for this user and replace the current login with
+                $extraFieldValue = new ExtraFieldValue('user');
+                $newLogin = $extraFieldValue->get_values_by_handler_and_field_variable(
+                    $uData['user_id'],
+                    'organisationemail'
+                );
+
+                if (!empty($newLogin) && isset($newLogin['value'])) {
+                    $login = $newLogin['value'];
+                }
+
                 /* >>>>>>>> External authentication modules <<<<<<<<< */
                 // see configuration.php to define these
                 include_once($extAuthSource[$key]['login']);
@@ -572,7 +584,6 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
              * responsability of the external login script
              * to provide this $_user['user_id'].
              */
-
             if (isset($extAuthSource) && is_array($extAuthSource)) {
                 foreach ($extAuthSource as $thisAuthSource) {
                     if (!empty($thisAuthSource['login']) && file_exists($thisAuthSource['login'])) {

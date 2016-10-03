@@ -11161,6 +11161,8 @@ EOD;
         $lpItemId = [];
 
         $typeListNotToVerify = self::getChapterTypes();
+	    
+	// Using get_toc() function instead $this->items because returns the correct order of the items  
         foreach ($this->get_toc() as $item) {
             if (!in_array($item['type'], $typeListNotToVerify)) {
                 $lpItemId[] = $item['id'];

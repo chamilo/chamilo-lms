@@ -14,7 +14,12 @@
                 </div>
             </div>
             <div id="whoisonline">
-                {{ whoisonline }}
+                <div id="user-list" class="row">
+                    {{ whoisonline }}
+                </div>
+                <div class="col-md-12">
+                    <a class="btn btn-large btn-default" id="link_load_more_items" data_link="2" >{{ 'More' | get_lang }}</a>
+                </div>
             </div>
         </div>
     </div>
@@ -23,18 +28,17 @@
             $("#link_load_more_items").click(function() {
                 page = $("#link_load_more_items").attr("data_link");
                 $.ajax({
-                    beforeSend: function(objeto) {
-                        $("#display_response_id").html("'.addslashes(get_lang('Loading')).'");
+                    beforeSend: function() {
+                        $("#link_load_more_items").html("{{ 'Loading' | get_lang }} <em class='fa fa-spinner fa-pulse fa-fw'></em>");
                     },
                     type: "GET",
                     url: "main/inc/ajax/online.ajax.php?a=load_online_user",
-                    data: "online_page_nr="+page,
+                    data: "online_page_nr=" + page,
                     success: function(data) {
-                        $("#display_response_id").html("");
                         if (data != "end") {
-                            $("#link_load_more_items").remove();
-                            var last = $("#online_grid_container li:last");
-                            last.after(data);
+                            $("#link_load_more_items").attr("data_link", parseInt(page) + 1);
+                            $("#user-list").append(data);
+                            $("#link_load_more_items").html("{{ 'More' | get_lang }}");
                         } else {
                             $("#link_load_more_items").remove();
                         }

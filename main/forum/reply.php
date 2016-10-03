@@ -193,7 +193,7 @@ if ($origin != 'learnpath') {
 echo '<div class="forum_title">';
 echo '<h1>';
 echo Display::url(
-    repare4display($current_forum['forum_title']),
+    prepare4display($current_forum['forum_title']),
     'viewforum.php?' . api_get_cidreq() . '&' . http_build_query(['forum' => $current_forum['forum_id']]),
     ['class' => empty($current_forum['visibility']) ? 'text-muted' : null]
 );

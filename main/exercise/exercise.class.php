@@ -4026,7 +4026,7 @@ class Exercise
                             $studentChoice = Database::result(
                                 $result,
                                 0,
-                                "hotspot_correct"
+                                'hotspot_correct'
                             );
 
                             if ($studentChoice) {
@@ -4047,7 +4047,7 @@ class Exercise
                                 $studentChoice = Database::result(
                                     $result,
                                     0,
-                                    "hotspot_correct"
+                                    'hotspot_correct'
                                 );
 
                                 if ($studentChoice) {
@@ -4068,7 +4068,7 @@ class Exercise
                                     $studentChoice = Database::result(
                                         $result,
                                         0,
-                                        "hotspot_correct"
+                                        'hotspot_correct'
                                     );
 
                                     if ($studentChoice) {
@@ -4079,10 +4079,14 @@ class Exercise
                             }
                         }
                     } else {
-                        if (!isset($choice[$answerAutoId])) {
+                        if (!isset($choice[$answerAutoId]) && !isset($choice[$answerIid])) {
                             $choice[$answerAutoId] = 0;
+                            $choice[$answerIid] = 0;
                         } else {
                             $studentChoice = $choice[$answerAutoId];
+                            if (empty($studentChoice)) {
+                                $studentChoice = $choice[$answerIid];
+                            }
                             $choiceIsValid = false;
                             if (!empty($studentChoice)) {
                                 $hotspotType = $objAnswerTmp->selectHotspotType($answerId);
@@ -4094,12 +4098,10 @@ class Exercise
                                         $hotspotProperties = Geometry::decodeSquare($hotspotCoordinates);
                                         $choiceIsValid = Geometry::pointIsInSquare($hotspotProperties, $choicePoint);
                                         break;
-
                                     case 'circle':
                                         $hotspotProperties = Geometry::decodeEllipse($hotspotCoordinates);
                                         $choiceIsValid = Geometry::pointIsInEllipse($hotspotProperties, $choicePoint);
                                         break;
-
                                     case 'poly':
                                         $hotspotProperties = Geometry::decodePolygon($hotspotCoordinates);
                                         $choiceIsValid = Geometry::pointIsInPolygon($hotspotProperties, $choicePoint);
@@ -4108,11 +4110,11 @@ class Exercise
                             }
 
                             $choice[$answerAutoId] = 0;
-
                             if ($choiceIsValid) {
-                                $questionScore  += $answerWeighting;
-                                $totalScore     += $answerWeighting;
+                                $questionScore += $answerWeighting;
+                                $totalScore += $answerWeighting;
                                 $choice[$answerAutoId] = 1;
+                                $choice[$answerIid] = 1;
                             }
                         }
                     }
@@ -4278,7 +4280,6 @@ class Exercise
                             );
                         } elseif ($answerType == HOT_SPOT) {
                             foreach ($orderedHotspots as $correctAnswerId => $hotspot) {
-
                                 if ($hotspot->getHotspotAnswerId() == $answerAutoId) {
                                     break;
                                 }
@@ -4997,11 +4998,12 @@ class Exercise
                         // we always insert the answer_id 1 = delineation
                         Event::saveQuestionAttempt($questionScore, 1, $quesId, $exeId, 0);
                         //in delineation mode, get the answer from $hotspot_delineation_result[1]
+                        $hotspotValue = (int) $hotspot_delineation_result[1] === 1 ? 1 : 0;
                         Event::saveExerciseAttemptHotspot(
                             $exeId,
                             $quesId,
                             1,
-                            $hotspot_delineation_result[1],
+                            $hotspotValue,
                             $exerciseResultCoordinates[$quesId]
                         );
                     } else {
@@ -5011,14 +5013,27 @@ class Exercise
                             Event::saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0);
                             if (is_array($exerciseResultCoordinates[$quesId])) {
                                 foreach($exerciseResultCoordinates[$quesId] as $idx => $val) {
-                                    Event::saveExerciseAttemptHotspot($exeId,$quesId,$idx,0,$val);
+                                    Event::saveExerciseAttemptHotspot(
+                                        $exeId,
+                                        $quesId,
+                                        $idx,
+                                        0,
+                                        $val
+                                    );
                                 }
                             }
                         } else {
                             Event::saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0);
                             if (is_array($exerciseResultCoordinates[$quesId])) {
                                 foreach($exerciseResultCoordinates[$quesId] as $idx => $val) {
-                                    Event::saveExerciseAttemptHotspot($exeId,$quesId,$idx,$choice[$idx],$val);
+                                    $hotspotValue = (int) $choice[$idx] === 1 ? 1 : 0;
+                                    Event::saveExerciseAttemptHotspot(
+                                        $exeId,
+                                        $quesId,
+                                        $idx,
+                                        $hotspotValue,
+                                        $val
+                                    );
                                 }
                             }
                         }
@@ -5148,7 +5163,6 @@ class Exercise
                 //            } elseif ($answerType == HOT_SPOT || $answerType == HOT_SPOT_DELINEATION) {
             } elseif ($answerType == HOT_SPOT) {
                 $answer = [];
-
                 if (isset($exerciseResultCoordinates[$questionId]) && !empty($exerciseResultCoordinates[$questionId])) {
                     Database::delete(
                         Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT),
@@ -5163,8 +5177,16 @@ class Exercise
 
                     foreach ($exerciseResultCoordinates[$questionId] as $idx => $val) {
                         $answer[] = $val;
-
-                        Event::saveExerciseAttemptHotspot($exeId, $quesId, $idx, $choice[$idx], $val, false, $this->id);
+                        $hotspotValue = (int) $choice[$idx] === 1 ? 1 : 0;
+                        Event::saveExerciseAttemptHotspot(
+                            $exeId,
+                            $quesId,
+                            $idx,
+                            $hotspotValue,
+                            $val,
+                            false,
+                            $this->id
+                        );
                     }
                 }
 

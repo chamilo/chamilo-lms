@@ -608,6 +608,7 @@ class Event
                 $correct = 0;
             }
         }
+
         $tbl_track_e_hotspot = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
         if ($updateResults) {
             $params = array(

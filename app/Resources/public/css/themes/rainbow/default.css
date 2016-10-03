@@ -76,6 +76,8 @@ a:focus {
 }
 .page-inscription .page-header{
     border: none;
+}
+.page-inscription .page-header h2{
     font-size: 25px;
     font-weight: bold;
     color: #07578A;

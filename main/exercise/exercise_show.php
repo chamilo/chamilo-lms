@@ -196,7 +196,7 @@ if ($origin != 'learnpath') {
 <?php
 $show_results = true;
 $show_only_total_score = false;
-$showTotalScoreAndUserChoices = true;
+$showTotalScoreAndUserChoicesInLastAttempt = true;
 
 // Avoiding the "Score 0/0" message  when the exe_id is not set
 if (!empty($track_exercise_info)) {
@@ -204,21 +204,8 @@ if (!empty($track_exercise_info)) {
     $result_disabled = $track_exercise_info['results_disabled'];
 
     if (true) {
-        //if (!(api_is_platform_admin() || api_is_course_admin() || api_is_course_coach()) ) {
         if ($result_disabled == RESULT_DISABLE_NO_SCORE_AND_EXPECTED_ANSWERS) {
             $show_results = false;
-            if ($origin != 'learnpath') {
-                /*echo '<table width="100%" border="0" cellspacing="0" cellpadding="0">
-                      <tr>
-                        <td colspan="2">';
-                Display::display_warning_message(
-                    get_lang('ThankYouForPassingTheTest') . '<br /><br /><a href="exercise.php">' . (get_lang('BackToExercisesList')) . '</a>',
-                    false
-                );
-                echo '</td>
-                </tr>
-                </table>';*/
-            }
         } elseif ($result_disabled == RESULT_DISABLE_SHOW_SCORE_ONLY) {
             $show_results = false;
             $show_only_total_score = true;
@@ -245,11 +232,13 @@ if (!empty($track_exercise_info)) {
             if ($numberAttempts >= $track_exercise_info['max_attempt']) {
                 $show_results = true;
                 $show_only_total_score = true;
-                $showTotalScoreAndUserChoices = false;
+                // Attempt reach max so show score/feedback now
+                $showTotalScoreAndUserChoicesInLastAttempt = true;
             } else {
                 $show_results = true;
                 $show_only_total_score = true;
-                $showTotalScoreAndUserChoices = true;
+                // Last attempt not reach don't show score/feedback
+                $showTotalScoreAndUserChoicesInLastAttempt = false;
             }
         }
     }
@@ -266,7 +255,7 @@ if ($is_allowedToEdit && in_array($action, ['qualify', 'edit'])) {
     $show_results = true;
 }
 
-if ($show_results || $show_only_total_score || $showTotalScoreAndUserChoices) {
+if ($show_results || $show_only_total_score || $showTotalScoreAndUserChoicesInLastAttempt) {
     $user_info = api_get_user_info($student_id);
     //Shows exercise header
     echo $objExercise->show_exercise_result_header(
@@ -411,13 +400,13 @@ foreach ($questionList as $questionId) {
                 $show_results,
                 $objExercise->selectPropagateNeg(),
                 [],
-                $showTotalScoreAndUserChoices
+                $showTotalScoreAndUserChoicesInLastAttempt
             );
             $questionScore = $question_result['score'];
             $totalScore += $question_result['score'];
             break;
         case HOT_SPOT:
-            if ($show_results || $showTotalScoreAndUserChoices) {
+            if ($show_results || $showTotalScoreAndUserChoicesInLastAttempt) {
                 echo '<table width="500" border="0"><tr>
                     <td valign="top" align="center" style="padding-left:0px;" >
                         <table border="1" bordercolor="#A4A4A4" style="border-collapse: collapse;" width="552">';
@@ -433,7 +422,7 @@ foreach ($questionList as $questionId) {
                 $show_results,
                 $objExercise->selectPropagateNeg(),
                 [],
-                $showTotalScoreAndUserChoices
+                $showTotalScoreAndUserChoicesInLastAttempt
             );
             $questionScore = $question_result['score'];
             $totalScore += $question_result['score'];
@@ -476,7 +465,7 @@ foreach ($questionList as $questionId) {
                 $objExercise->selectPropagateNeg(),
                 'database',
                 [],
-                $showTotalScoreAndUserChoices
+                $showTotalScoreAndUserChoicesInLastAttempt
             );
 
             $questionScore = $question_result['score'];
@@ -821,7 +810,7 @@ $total_score_text = null;
 
 //Total score
 if ($origin != 'learnpath' || ($origin == 'learnpath' && isset($_GET['fb_type']))) {
-    if ($show_results || $show_only_total_score || $showTotalScoreAndUserChoices) {
+    if ($show_results || $show_only_total_score || $showTotalScoreAndUserChoicesInLastAttempt) {
         $total_score_text .= '<div class="question_row">';
         $my_total_score_temp = $totalScore;
         if ($objExercise->selectPropagateNeg() == 0 && $my_total_score_temp < 0) {
@@ -837,7 +826,7 @@ if ($origin != 'learnpath' || ($origin == 'learnpath' && isset($_GET['fb_type'])
     }
 }
 
-if (!empty($category_list) && ($show_results || $show_only_total_score || $showTotalScoreAndUserChoices)) {
+if (!empty($category_list) && ($show_results || $show_only_total_score || $showTotalScoreAndUserChoicesInLastAttempt)) {
     // Adding total
     $category_list['total'] = array(
         'score' => $my_total_score_temp,

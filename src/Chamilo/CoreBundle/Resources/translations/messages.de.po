@@ -39,3 +39,6 @@ msgstr "Meine Zertifikate"
 
 msgid "Latest blocks"
 msgstr "Neueste Blöcke"
+
+msgid "Go up"
+msgstr "Nach oben"

@@ -505,6 +505,13 @@ switch ($action) {
         echo 'ok';
         break;
     case 'show_question':
+        $isAllowedToEdit = api_is_allowed_to_edit(null, true, false, false);
+
+        if (!$isAllowedToEdit) {
+            api_not_allowed(true);
+            exit;
+        }
+
         $questionId = isset($_GET['question']) ? intval($_GET['question']) : 0;
         $exerciseId = isset($_REQUEST['exercise']) ? intval($_REQUEST['exercise']) : 0;
 

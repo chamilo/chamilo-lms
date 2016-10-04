@@ -3959,7 +3959,6 @@ class Exercise
                                             $user_answer = Display::span($real_list[$i_answer_id]);
                                         }
 
-
                                         // Try with $i_answer_id_auto
                                         if (empty($user_answer)) {
                                             if (isset($real_list[$i_answer_id_auto])) {

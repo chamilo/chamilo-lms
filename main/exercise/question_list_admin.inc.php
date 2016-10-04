@@ -105,7 +105,37 @@ $ajax_url = api_get_path(WEB_AJAX_PATH)."exercise.ajax.php?".api_get_cidreq()."&
                 heightStyle: "content",
                 active: false, // all items closed by default
                 collapsible: true,
-                header: ".header_operations"
+                header: ".header_operations",
+                beforeActivate: function (e, ui) {
+                    var data = ui.newHeader.data();
+
+                    if (typeof data === 'undefined') {
+                        return;
+                    }
+
+                    var exerciseId = data.exercise || 0,
+                        questionId = data.question || 0;
+
+                    if (!questionId || !exerciseId) {
+                        return;
+                    }
+
+                    var $pnlQuestion = $('#pnl-question-' + questionId);
+
+                    if ($pnlQuestion.html().trim().length) {
+                        return;
+                    }
+
+                    $pnlQuestion.html('<span class="fa fa-spinner fa-spin fa-3x fa-fw" aria-hidden="true"></span>');
+
+                    $.get('<?php echo api_get_path(WEB_AJAX_PATH) ?>exercise.ajax.php', {
+                        a: 'show_question',
+                        exercise: exerciseId,
+                        question: questionId
+                    }, function (response) {
+                        $pnlQuestion.html(response)
+                    });
+                }
             })
             .sortable({
                 cursor: "move", // works?
@@ -154,8 +184,6 @@ if (!$inATest) {
     echo "</tr>";
     echo "</table>";
     echo "</div>";
-    echo "<div style='clear:both'>&nbsp;</div>";
-
     echo '<div id="question_list">';
     if ($nbrQuestions) {
         //Always getting list from DB
@@ -259,7 +287,7 @@ if (!$inATest) {
                 $questionScore = Display::tag('div', $objQuestionTmp->selectWeighting(), array('style'=>$styleScore));
 
                 echo '<div id="question_id_list_'.$id.'" >';
-                echo '<div class="header_operations">';
+                echo '<div class="header_operations" data-exercise="' . $objExercise->selectId() . '" data-question="' . $id . '">';
                 echo $questionName;
                 echo $questionType;
                 echo $questionCategory;
@@ -267,22 +295,11 @@ if (!$inATest) {
                 echo $questionScore;
                 echo $actions;
                 echo '</div>';
-                echo '<div class="question-list-description-block">';
-                echo '<p class="lead">' . get_lang($question_class) . '</p>';
-                //echo get_lang('Level').': '.$objQuestionTmp->selectLevel();
-                ExerciseLib::showQuestion(
-                    $id,
-                    false,
+                echo Display::tag(
+                    'div',
                     null,
-                    null,
-                    false,
-                    true,
-                    false,
-                    true,
-                    $objExercise->feedback_type,
-                    true
+                    ['class' => 'question-list-description-block', 'id' => "pnl-question-$id"]
                 );
-                echo '</div>';
                 echo '</div>';
                 unset($objQuestionTmp);
             }

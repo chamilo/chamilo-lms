@@ -150,7 +150,7 @@ a:focus {
     color: #FFFFFF;
 }
 .navbar-right{
- margin-right: 0;   
+ margin-right: 0;
 }
 .partners{
     padding-bottom: 10px;
@@ -525,6 +525,11 @@ legend{
         width: 100%;
         text-align: center;
     }
+}
+
+.required:before {
+    content: "* ";
+    color: #f00;
 }
 
 /* .red_underline {

@@ -3897,14 +3897,14 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
     $workTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $workId = intval($workId);
-    $time = api_get_utc_datetime();
+    $now = api_get_utc_datetime();
     $course_id = $courseInfo['real_id'];
 
     // Insert into agenda
     $agendaId = 0;
     if (isset($params['add_to_calendar']) && $params['add_to_calendar'] == 1) {
         // Setting today date
-        $date = $end_date = $time;
+        $date = $end_date = $now;
 
         if (isset($params['enableExpiryDate'])) {
             $end_date = $params['expires_on'];

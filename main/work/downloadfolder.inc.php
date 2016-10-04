@@ -68,7 +68,7 @@ if ($groupId) {
 
 if (api_is_allowed_to_edit() || api_is_coach()) {
     //Search for all files that are not deleted => visibility != 2
-   $sql = "SELECT DISTINCT
+    $sql = "SELECT DISTINCT
                 url,
                 title,
                 description,

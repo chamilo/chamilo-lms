@@ -3527,7 +3527,7 @@ HOTSPOT;
             $show_only_score = false;
         }
 
-        $show_total_score_and_user_choices = false;
+        $showTotalScoreAndUserChoicesInLastAttempt = true;
 
         if ($objExercise->results_disabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
             $show_only_score = true;
@@ -3555,9 +3555,9 @@ HOTSPOT;
                 if ($numberAttempts >= $objExercise->attempts) {
                     $show_results = true;
                     $show_only_score = false;
-                    $show_total_score_and_user_choices = false;
+                    $showTotalScoreAndUserChoicesInLastAttempt = true;
                 } else {
-                    $show_total_score_and_user_choices = true;
+                    $showTotalScoreAndUserChoicesInLastAttempt = false;
                 }
             }
         }
@@ -3609,7 +3609,7 @@ HOTSPOT;
                     $show_results,
                     $objExercise->selectPropagateNeg(),
                     [],
-                    $show_total_score_and_user_choices
+                    $showTotalScoreAndUserChoicesInLastAttempt
                 );
 
                 if (empty($result)) {

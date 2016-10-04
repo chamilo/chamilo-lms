@@ -3972,6 +3972,14 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
         $agenda->set_course($courseInfo);
         $agenda->type = 'course';
 
+        if (!empty($agendaId)) {
+            // add_to_calendar is set but it doesnt exists then invalidate
+            $eventInfo = $agenda->get_event($agendaId);
+            if (empty($eventInfo)) {
+                $agendaId = 0;
+            }
+        }
+
         if (empty($agendaId)) {
             $agendaId = $agenda->addEvent(
                 $date,
@@ -4012,7 +4020,6 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
     }
 
     if (empty($data)) {
-
         $sql = "INSERT INTO $table SET
                 c_id = $course_id ,
                 $expiryDateCondition
@@ -4041,7 +4048,7 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
         $sql = "UPDATE $table SET
                     $expiryDateCondition
                     $endOnCondition
-                    add_to_calendar  = $agendaId,
+                    add_to_calendar = $agendaId,
                     enable_qualification = '".$qualification."'
                 WHERE
                     publication_id = $workId AND

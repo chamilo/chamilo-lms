@@ -862,7 +862,7 @@ class Display
         if (in_array($tag, array('img','input','br'))) {
             $return_value = '<'.$tag.' '.$attribute_list.' />';
         } else {
-            $return_value = '<'.$tag.' '.$attribute_list.' > '.$content.'</'.$tag.'>';
+            $return_value = '<'.$tag.' '.$attribute_list.' >'.$content.'</'.$tag.'>';
         }
         return $return_value;
     }

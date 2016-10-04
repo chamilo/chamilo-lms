@@ -1138,7 +1138,7 @@ HTML;
                 $relPath = api_get_path(REL_PATH);
                 echo "
                     <script>
-                        $(document).on('ready', function () {
+//                        $(document).on('ready', function () {
                             new " . ($answerType == HOT_SPOT ? "HotspotQuestion" : "DelineationQuestion") . "({
                                 questionId: $questionId,
                                 exerciseId: $exerciseId,
@@ -1146,7 +1146,7 @@ HTML;
                                 for: 'preview',
                                 relPath: '$relPath'
                             });
-                        });
+//                        });
                     </script>
                     <div id=\"hotspot-preview-$questionId\"></div>
                 ";

@@ -3923,6 +3923,14 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
         $agenda->set_course($courseInfo);
         $agenda->type = 'course';
 
+        if (!empty($agendaId)) {
+            // add_to_calendar is set but it doesnt exists then invalidate
+            $eventInfo = $agenda->get_event($agendaId);
+            if (empty($eventInfo)) {
+                $agendaId = 0;
+            }
+        }
+
         if (empty($agendaId)) {
             $agendaId = $agenda->addEvent(
                 $date,

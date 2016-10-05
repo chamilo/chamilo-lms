@@ -707,9 +707,9 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
 }
 
 if ($blockButton) {
-    $form->addButtonCreate(get_lang('RegisterUser'), 'submit', false, ['disabled' => 'disabled']);
+    $form->addButton('submit', get_lang('RegisterUser'), 'check', 'primary', null, null, ['disabled' => 'disabled'], false);
 } else {
-    $form->addButtonCreate(get_lang('RegisterUser'));
+    $form->addButton('submit', get_lang('RegisterUser'));
 }
 
 $course_code_redirect = Session::read('course_redirect');

@@ -7,43 +7,6 @@ class TestAnnouncements extends UnitTestCase {
         $this->UnitTestCase('Displays one specific announcement test');
     }
 
-    public function Testconstruct_not_selected_select_form(){
-        $courseSysCode= '123';
-        $course_code = $courseSysCode;
-        ob_start();
-        $to_already_selected="";
-        $_SESSION['_cid'] = 'CURSO1';
-        $user_list = array( 0=>array(
-                          0 => '1','user_id' => '1',
-                          1 =>'Doe','lastname' =>'Doe',
-                          2 =>'John','firstname' =>'John',
-                          3 => 'admin','username' =>'admin'
-                      ));
-
-        $res = construct_not_selected_select_form($group_list=null, $user_list,$to_already_selected);
-        ob_end_clean();
-        $this->assertTrue(is_null($res));
-        //var_dump($res);
-    }
-
-    public function Testconstruct_selected_select_form(){
-        $to_already_selected="";
-        ob_start();
-        $res = construct_selected_select_form($group_list=null, $user_list=null,$to_already_selected);
-        ob_end_clean();
-        $this->assertTrue(is_null($res));
-        //var_dump($res);
-    }
-
-    public function Testshow_to_form_group(){
-        ob_start();
-        $group_id=1;
-        $group_users=GroupManager::get_subscribed_users($group_id);
-        $res = show_to_form_group($group_id);
-        ob_end_clean();
-        $this->assertTrue(is_null($res));
-        //var_dump($res);
-    }
 
     public function Testget_course_users(){
         $_SESSION['id_session'] = 'CURSO1';

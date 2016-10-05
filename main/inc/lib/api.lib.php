@@ -248,6 +248,10 @@ define('LOG_EXERCISE_AND_USER_ID', 'exercise_and_user_id');
 define('LOG_LP_ID', 'lp_id');
 define('LOG_EXERCISE_ATTEMPT_QUESTION_ID', 'exercise_a_q_id');
 
+define('LOG_WORK_DIR_DELETE', 'work_dir_delete');
+define('LOG_WORK_FILE_DELETE', 'work_file_delete');
+define('LOG_WORK_DATA', 'work_data_array');
+
 define('LOG_MY_FOLDER_PATH', 'path');
 define('LOG_MY_FOLDER_NEW_PATH', 'new_path');
 

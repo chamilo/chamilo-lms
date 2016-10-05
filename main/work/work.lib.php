@@ -802,6 +802,20 @@ function deleteDirWork($id)
                     WHERE c_id = $course_id AND publication_id = $id";
             Database::query($sql);
 
+            Event::addEvent(
+                LOG_WORK_DIR_DELETE,
+                LOG_WORK_DATA,
+                [
+                    'id' => $work_data['id'],
+                    'url' => $work_data['url'],
+                    'title' => $work_data['title']
+                ],
+                null,
+                api_get_user_id(),
+                api_get_course_int_id(),
+                api_get_session_id()
+            );
+
             $link_info = GradebookUtils::isResourceInCourseGradebook(
                 api_get_course_id(),
                 3,
@@ -4123,6 +4137,21 @@ function deleteWorkItem($item_id, $courseInfo)
                 'DocumentDeleted',
                 api_get_user_id()
             );
+
+            Event::addEvent(
+                LOG_WORK_FILE_DELETE,
+                LOG_WORK_DATA,
+                [
+                    'id' => $work_data['id'],
+                    'url' => $work_data['url'],
+                    'title' => $work_data['title']
+                ],
+                null,
+                api_get_user_id(),
+                api_get_course_int_id(),
+                api_get_session_id()
+            );
+
             $work = $row['url'];
 
             if ($row['contains_file'] == 1) {

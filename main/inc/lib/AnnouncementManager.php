@@ -1327,9 +1327,7 @@ class AnnouncementManager
             } else {
                 $new_file_name = uniqid('');
                 $new_path = $updir . '/' . $new_file_name;
-		
-		// This file is copy here but its cleaned in api_mail_html in api.lib.php
-                copy($file['tmp_name'], $new_path);
+                @move_uploaded_file($file['tmp_name'], $new_path);
 
                 $params = [
                     'c_id' => $course_id,

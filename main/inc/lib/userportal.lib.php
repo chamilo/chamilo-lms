@@ -958,7 +958,7 @@ class IndexManager
             );
         }
 
-         $diagnosis = '';
+        $diagnosis = '';
 
         if (api_is_drh() || api_is_student_boss()) {
             $diagnosis = Display::url(get_lang('DiagnosisManagement'), api_get_path(WEB_PATH).'load_search.php').'<br />';
@@ -973,10 +973,10 @@ class IndexManager
             $html .= self::show_right_block(
                 get_lang('Diagnostic'),
                 $diagnosis,
-                'profile_block',
+                'diagnosis_block',
                 null,
-                'profile',
-                'profileCollapse'
+                'diagnosis',
+                'diagnosisCollapse'
             );
         }
 

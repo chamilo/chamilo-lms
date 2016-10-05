@@ -25,20 +25,6 @@ $items = $em->getRepository('ChamiloCoreBundle:ExtraFieldSavedSearch')->findBy($
 
 $extraFieldSession = new ExtraField('session');
 $extraFieldValueSession = new ExtraFieldValue('session');
-//$extra = $extraField->addElements($form, '', [], true, true);
-
-/*$extra = $extraField->addElements($form, '', [], true, true, array('heures_disponibilite_par_semaine'));
-$elements = $form->getElements();
-$variables = ['theme', 'domaine', 'competenceniveau', 'filiere'];
-foreach ($elements as $element) {
-    $element->setAttribute('extra_label_class', 'red_underline');
-}
-
-$htmlHeadXtra[] ='<script>
-$(document).ready(function(){
-	'.$extra['jquery_ready_content'].'
-});
-</script>';*/
 
 $filter = false;
 $extraFieldValue = new ExtraFieldValue('user');
@@ -55,9 +41,25 @@ if ($hide === false) {
 
 $url = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?a=order&user_id='.$userId;
 
+// Theme fix
+$lang = api_get_interface_language();
+$theme = 'theme_fr';
+switch ($lang) {
+    case 'french2':
+    case 'french':
+        $theme = 'theme_fr';
+        break;
+    case 'german2':
+    case 'german':
+        $theme = 'theme_de';
+        break;
+}
+
+
 $htmlHeadXtra[] ='<script>
 $(document).ready(function() {
-
+    
+    var themeDefault = "extra_'.$theme.'";
     var extraFiliere = $("input[name=\'extra_filiere[extra_filiere]\']").parent().parent().parent().parent();
     
     '.$defaultValueStatus.'
@@ -86,6 +88,23 @@ $(document).ready(function() {
         })
     );
     
+    $("#extra_theme_fr").parent().append(
+        $("<a>", {
+            "class": "btn ajax btn-default",
+            "href": "'.$url.'&field_variable=extra_theme_fr",
+            "text": "'.get_lang('Order').'"             
+        })
+    );
+    
+    $("#extra_theme_de").parent().append(
+        $("<a>", {
+            "class": "btn ajax btn-default",
+            "href": "'.$url.'&field_variable=extra_theme_de",
+            "text": "'.get_lang('Order').'"             
+        })
+    );
+    
+    
     $("#extra_domaine").on("change", function() {
         var domainList = [];
         $( "#extra_domaine option:selected" ).each(function() {       
@@ -96,10 +115,10 @@ $(document).ready(function() {
         $.ajax({
             contentType: "application/x-www-form-urlencoded",
             type: "GET",
-            url: "'.api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?a=search_options_from_tags&type=session&from=extra_domaine&search=extra_theme&options="+domainListToString,
+            url: "'.api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?a=search_options_from_tags&type=session&from=extra_domaine&search="+themeDefault+"&options="+domainListToString,
             success: function(data) {            
-                $("#extra_theme").find("option").remove().end();                    
-                $("#extra_theme").empty();
+                $("#"+themeDefault).find("option").remove().end();                    
+                $("#"+themeDefault).empty();
                 var selectToString = "";
                 jQuery.each(JSON.parse(data), function(i, item) {
                    selectToString += "<optgroup label=\'"+item.text+"\'>";                   
@@ -112,8 +131,8 @@ $(document).ready(function() {
                     selectToString += "</optgroup>";
                 });        
                 
-                $("#extra_theme").html(selectToString);                 
-                $("#extra_theme").selectpicker("refresh");
+                $("#"+themeDefault).html(selectToString);                 
+                $("#"+themeDefault).selectpicker("refresh");
             }           
             
          });        
@@ -376,11 +395,11 @@ $userForm->addHeader(Display::url(get_lang('ThemesObjectifs'), '#', ['id'=> 'the
 
 $fieldsToShow = [
     'domaine',
-    'theme'
+    $theme
 ];
 
 $specialUrlList = [
-    'theme' => api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?a=search_tags_from_diagnosis'
+    $theme => api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?a=search_tags_from_diagnosis'
 ];
 
 $extra = $extraFieldSession->addElements(
@@ -504,7 +523,7 @@ if ($userForm->validate()) {
         'extra_domaine',
         'extra_temps-de-travail',
         //'extra_competenceniveau',
-        'extra_theme',
+        'extra_'.$theme,
         'extra_ecouter',
         'extra_lire',
         'extra_participer_a_une_conversation',
@@ -585,13 +604,31 @@ if ($userForm->validate()) {
         }
         $em->flush();
     }
-    Display::addFlash(Display::return_message(get_lang('Saved')));
-    header('Location:'.api_get_self());
+
+    $superiorUserList = [1];
+    if ($superiorUserList) {
+        $url = api_get_path(WEB_PATH).'load_search.php?user_id='.$userInfo['user_id'];
+        $subject = sprintf(get_lang('DiagnosisFromUserX'), $userInfo['complete_name']);
+        $message = sprintf(get_lang('DiagnosisFromUserXWithLinkX'), $userInfo['complete_name'], $url);
+        foreach ($superiorUserList as $userId) {
+            MessageManager::send_message_simple(
+                $userId,
+                $subject,
+                $message
+            );
+        }
+    }
+    Display::addFlash(Display::return_message(get_lang('SessionSearchSavedExplanation')));
+    Display::addFlash(Display::url(get_lang('ReturnToDiagnosis'), api_get_self(), ['class' => 'btn btn-primary']));
+    header('Location:'.api_get_self().'?result=1');
     exit;
 }
 
+$result = isset($_GET['result']) ? true : false;
 $tpl = new Template(get_lang('Diagnosis'));
-$tpl->assign('form', $userFormToString);
+if ($result === false) {
+    $tpl->assign('form', $userFormToString);
+}
 $content = $tpl->fetch('default/user_portal/search_extra_field.tpl');
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

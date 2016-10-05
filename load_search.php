@@ -20,6 +20,11 @@ $userId = api_get_user_id();
 $userInfo = api_get_user_info();
 
 $userToLoad = isset($_GET['user_id']) ? $_GET['user_id'] : '';
+
+$userToLoadInfo = [];
+if ($userToLoad) {
+    $userToLoadInfo = api_get_user_info($userToLoad);
+}
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 
 switch ($action) {
@@ -97,17 +102,50 @@ if (!empty($items)) {
 $extraField = new ExtraField('session');
 $extraFieldValue = new ExtraFieldValue('session');
 
+$theme = 'theme_fr';
+if ($userToLoadInfo) {
+    $lang = $userToLoadInfo['language'];
+    switch ($lang) {
+        case 'french2':
+        case 'french':
+            $theme = 'theme_fr';
+            break;
+        case 'german2':
+        case 'german':
+            $theme = 'theme_de';
+            break;
+    }
+}
+
+
+// Session fields
+$showOnlyThisFields = [
+    'access_start_date',
+    'access_end_date',
+    //'heures_disponibilite_par_semaine', this is only for user
+    'domaine',
+    'filiere',
+    $theme,
+    'ecouter',
+    'lire',
+    'participer_a_une_conversation',
+    's_exprimer_oralement_en_continu',
+    'ecrire'
+];
+//$showOnlyThisFields = [];
+
 $extra = $extraField->addElements(
     $form,
     '',
     [],
+    false, //filter
     true,
-    true,
-    [],
-    [],
+    $showOnlyThisFields,
+    $showOnlyThisFields,
     $defaults,
     [],
-    true
+    false,
+    true // force
 );
 
 $form->addButtonSearch(get_lang('Search'), 'save');
@@ -282,6 +320,7 @@ $numHours = '0';
 $field = 'heures_disponibilite_par_semaine';
 $extraField = new ExtraFieldValue('user');
 $data = $extraField->get_values_by_handler_and_field_variable($userToLoad, $field);
+
 $availableHoursPerWeek = 0;
 
 function dateDiffInWeeks($date1, $date2)
@@ -298,19 +337,26 @@ function dateDiffInWeeks($date1, $date2)
 if ($data) {
     $availableHoursPerWeek = $data['value'];
     $numberWeeks = 0;
-
     if ($form->validate()) {
         $formData = $form->getSubmitValues();
+
         if (isset($formData['extra_access_start_date']) && isset($formData['extra_access_end_date'])) {
             $startDate = $formData['extra_access_start_date'];
             $endDate = $formData['extra_access_end_date'];
 
             $numberWeeks = dateDiffInWeeks($startDate, $endDate);
         }
+    } else {
+        if ($defaults) {
+            if (isset($defaults['extra_access_start_date']) && isset($defaults['extra_access_end_date'])) {
+                $startDate = $defaults['extra_access_start_date'];
+                $endDate = $defaults['extra_access_end_date'];
+                $numberWeeks = dateDiffInWeeks($startDate, $endDate);
+            }
+        }
     }
 
     $total = $numberWeeks * $availableHoursPerWeek;
-
     $sessions = SessionManager::getSessionsFollowedByUser($userToLoad);
 
     if ($sessions) {

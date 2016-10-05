@@ -235,6 +235,7 @@ class ExtraField extends Model
                 $conditions
                 ORDER BY field_order ASC
         ";
+
         $result = Database::query($sql);
         $extraFields = Database::store_result($result, 'ASSOC');
 
@@ -826,6 +827,7 @@ class ExtraField extends Model
             }
 
             foreach ($extra as $field_details) {
+
                 if (!empty($showOnlyThisFields)) {
                     if (!in_array($field_details['variable'], $showOnlyThisFields)) {
                         continue;

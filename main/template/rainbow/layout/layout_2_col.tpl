@@ -64,7 +64,7 @@
                     <div class="col-md-3">
                         <div class="item-icon">
                             <span class="circle">
-                                <i class="fa fa-graduation-cap fa-3x" aria-hidden="true"></i>
+                                <i class="fa fa-paper-plane fa-3x" aria-hidden="true"></i>
                             </span>
                         </div>
                         <h4 class="title">Praxes: informations sur le programme</h4>
@@ -77,7 +77,7 @@
                     <div class="col-md-3">
                         <div class="item-icon">
                             <span class="circle">
-                                <i class="fa fa-university fa-3x" aria-hidden="true"></i>
+                                <i class="fa fa-file-text fa-3x" aria-hidden="true"></i>
                             </span>
                         </div>
                         <h4 class="title">Conditions de participation</h4>

@@ -275,6 +275,9 @@ footer #footer_right{
    padding: 0;
    margin: 0;
 }
+#content-section, #page-wrap{
+    margin-bottom: 250px;
+}
 .welcome-home-top-temp h1{
     color: #E53140;
 }

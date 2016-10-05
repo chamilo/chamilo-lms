@@ -1383,7 +1383,7 @@ class AnnouncementManager
                 Display :: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
             } else {
                 $new_file_name = uniqid('');
-                $new_path = $updir . '/' . $new_file_name;  
+                $new_path = $updir . '/' . $new_file_name;
                 @move_uploaded_file($file['tmp_name'], $new_path);
                 $safe_file_comment = Database::escape_string($file_comment);
                 $safe_file_name = Database::escape_string($file_name);

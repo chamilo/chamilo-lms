@@ -34,8 +34,8 @@ class BBBPlugin extends Plugin
     protected function __construct()
     {
         parent::__construct(
-            '2.4',
-            'Julio Montoya, Yannick Warnier',
+            '2.5',
+            'Julio Montoya, Yannick Warnier, Angel Fernando Quiroz Campos',
             [
                 'tool_enable' => 'boolean',
                 'host' => 'text',
@@ -44,6 +44,8 @@ class BBBPlugin extends Plugin
                 'enable_conference_in_course_groups' => 'boolean',
             ]
         );
+
+        $this->isAdminPlugin = true;
     }
 
     /**

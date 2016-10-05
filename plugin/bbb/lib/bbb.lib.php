@@ -445,29 +445,26 @@ class bbb
      * Gets all the course meetings saved in the plugin_bbb_meeting table
      * @return array Array of current open meeting rooms
      */
-    public function getMeetings()
+    public function getMeetings($courseId = 0, $sessionId = 0, $groupId = 0)
     {
+        $em = Database::getManager();
         $pass = $this->getUserMeetingPassword();
-        $courseId = api_get_course_int_id();
-        $sessionId = api_get_session_id();
+        $conditions = [];
 
-        $conditions =  array(
-            'where' => array(
-                'c_id = ? AND session_id = ? ' => array(
-                    $courseId,
-                    $sessionId,
-                ),
-            ),
-        );
-
-        if ($this->hasGroupSupport()) {
-            $groupId = api_get_group_id();
+        if ($courseId || $sessionId || $groupId) {
             $conditions =  array(
                 'where' => array(
-                    'c_id = ? AND session_id = ? AND group_id = ? ' =>
-                        array($courseId, $sessionId, $groupId)
-                )
+                    'c_id = ? AND session_id = ? ' => array($courseId, $sessionId),
+                ),
             );
+
+            if ($this->hasGroupSupport()) {
+                $conditions =  array(
+                    'where' => array(
+                        'c_id = ? AND session_id = ? AND group_id = ? ' => array($courseId, $sessionId, $groupId)
+                    )
+                );
+            }
         }
 
         $meetingList = Database::select(
@@ -690,6 +687,10 @@ class bbb
                 $item['go_url'] = $this->protocol.$this->api->getJoinMeetingURL($joinParams);
             }
             $item = array_merge($item, $meetingDB, $meetingBBB);
+
+            $item['course'] = $em->find('ChamiloCoreBundle:Course', $item['c_id']);
+            $item['session'] = $em->find('ChamiloCoreBundle:Session', $item['session_id']);
+
             $newMeetingList[] = $item;
         }
 

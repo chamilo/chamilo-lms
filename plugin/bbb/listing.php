@@ -107,7 +107,11 @@ if ($conferenceManager) {
 }
     
 
-$meetings = $bbb->getMeetings();
+$meetings = $bbb->getMeetings(
+    api_get_course_int_id(),
+    api_get_session_id(),
+    api_get_group_id()
+);
 if (!empty($meetings)) {
     $meetings = array_reverse($meetings);
 }

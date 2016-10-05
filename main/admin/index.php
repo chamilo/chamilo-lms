@@ -396,12 +396,26 @@ if (api_is_platform_admin()) {
     if (isset($_plugins['menu_administrator']) && count($_plugins['menu_administrator']) > 0) {
         $menuAdministratorItems = [];
 
+        $plugin_obj = new AppPlugin();
+        $items = array();
         foreach ($_plugins['menu_administrator'] as $pluginName) {
-            if (!file_exists(api_get_path(SYS_PLUGIN_PATH) . $pluginName . '/start.php')) {
+            $itemUrl = '';
+            $plugin_info = $plugin_obj->getPluginInfo($pluginName);
+
+            if ($plugin_info['is_admin_plugin']) {
+                $itemUrl = '/admin.php';
+            } elseif ($plugin_info['is_admin_plugin']) {
+                $itemUrl = '/start.php';
+            }
+
+            if (!file_exists(api_get_path(SYS_PLUGIN_PATH) . $pluginName . $itemUrl)) {
                 continue;
             }
 
-            $menuAdministratorItems[] = $pluginName;
+            $items[] = array(
+                'url' => api_get_path(WEB_PLUGIN_PATH) . $pluginName . $itemUrl,
+                'label' => $plugin_info['title']
+            );
         }
 
         if ($menuAdministratorItems) {

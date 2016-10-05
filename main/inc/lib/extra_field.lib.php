@@ -445,7 +445,8 @@ class ExtraField extends Model
         $orderFields = [],
         $extraData = [],
         $specialUrlList = [],
-        $orderDependingDefaults = false
+        $orderDependingDefaults = false,
+        $forceShowFields = false
     ) {
         if (empty($form)) {
             return false;
@@ -473,7 +474,7 @@ class ExtraField extends Model
         $extra = $this->set_extra_fields_in_form(
             $form,
             $extraData,
-            false,
+            $forceShowFields,
             $extraFields,
             $itemId,
             $exclude,

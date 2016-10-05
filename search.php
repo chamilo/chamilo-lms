@@ -40,7 +40,7 @@ $(document).ready(function(){
 });
 </script>';*/
 
-
+$filter = false;
 $extraFieldValue = new ExtraFieldValue('user');
 $wantStage = $extraFieldValue->get_values_by_handler_and_field_variable(api_get_user_id(), 'filiere_want_stage');
 $hide = true;
@@ -268,10 +268,14 @@ $extra = $extraField->addElements(
     $userForm,
     api_get_user_id(),
     [],
-    true,
+    $filter,
     true,
     $fieldsToShow,
-    $fieldsToShow
+    $fieldsToShow,
+    [],
+    [],
+    false,
+    true //$forceShowFields = false
 );
 
 $jqueryExtra .= $extra['jquery_ready_content'];
@@ -284,10 +288,14 @@ $extra = $extraFieldSession->addElements(
     $userForm,
     api_get_user_id(),
     [],
-    true,
+    $filter,
     true,
     $fieldsToShow,
-    $fieldsToShow
+    $fieldsToShow,
+    [],
+    [],
+    false,
+    true //$forceShowFields = false
 );
 
 
@@ -300,9 +308,14 @@ $extra = $extraFieldSession->addElements(
     $userForm,
     '',
     [],
+    $filter,
     true,
-    true,
-    array('access_start_date', 'access_end_date')
+    array('access_start_date', 'access_end_date'),
+    [],
+    [],
+    [],
+    false,
+    true //$forceShowFields = false
 );
 $jqueryExtra .= $extra['jquery_ready_content'];
 
@@ -320,10 +333,14 @@ $extra = $extraField->addElements(
     $userForm,
     api_get_user_id(),
     [],
-    true,
+    $filter,
     true,
     $fieldsToShow,
-    $fieldsToShow
+    $fieldsToShow,
+    [],
+    [],
+    false,
+    true //$forceShowFields = false
 );
 
 $jqueryExtra .= $extra['jquery_ready_content'];
@@ -342,10 +359,14 @@ $extra = $extraField->addElements(
     $userForm,
     api_get_user_id(),
     [],
-    true,
+    $filter,
     true,
     $fieldsToShow,
-    $fieldsToShow
+    $fieldsToShow,
+    [],
+    [],
+    false,
+    true //$forceShowFields = false
 );
 
 $jqueryExtra .= $extra['jquery_ready_content'];
@@ -366,13 +387,14 @@ $extra = $extraFieldSession->addElements(
     $userForm,
     api_get_user_id(),
     [],
-    true,
+    $filter,
     true,
     $fieldsToShow,
     $fieldsToShow,
     $defaults,
     $specialUrlList,
-    true
+    true,
+    true // $forceShowFields
 );
 
 $jqueryExtra .= $extra['jquery_ready_content'];
@@ -393,11 +415,15 @@ $extra = $extraFieldSession->addElements(
     $userForm,
     api_get_user_id(),
     [],
-    true,
+    $filter,
     true,
     $fieldsToShow,
     $fieldsToShow,
-    $defaults
+    $defaults,
+    [],
+    false, //$orderDependingDefaults = false,
+    true //$forceShowFields = false
+
 );
 
 $jqueryExtra .= $extra['jquery_ready_content'];
@@ -413,10 +439,14 @@ $extra = $extraField->addElements(
     $userForm,
     api_get_user_id(),
     [],
-    true,
+    $filter,
     false,
     $fieldsToShow,
-    $fieldsToShow
+    $fieldsToShow,
+    [],
+    [],
+    false,
+    true //$forceShowFields = false
 );
 
 $jqueryExtra .= $extra['jquery_ready_content'];
@@ -433,10 +463,14 @@ $extra = $extraField->addElements(
     $userForm,
     api_get_user_id(),
     [],
-    true,
+    $filter,
     true,
     $fieldsToShow,
-    $fieldsToShow
+    $fieldsToShow,
+    [],
+    [],
+    false,
+    true //$forceShowFields = false
 );
 
 $jqueryExtra .= $extra['jquery_ready_content'];

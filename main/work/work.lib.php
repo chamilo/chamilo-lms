@@ -2876,9 +2876,11 @@ function getWorkComments($work)
     }
 
     $sql = "SELECT
-            c.id, c.user_id, u.firstname, u.lastname, u.username, u.picture_uri
+                c.id, 
+                c.user_id
             FROM $commentTable c
-            INNER JOIN $userTable u ON (u.user_id = c.user_id)
+            INNER JOIN $userTable u 
+            ON (u.id = c.user_id)
             WHERE c_id = $courseId AND work_id = $workId
             ORDER BY sent_at
             ";
@@ -2886,9 +2888,10 @@ function getWorkComments($work)
     $comments = Database::store_result($result, 'ASSOC');
     if (!empty($comments)) {
         foreach ($comments as &$comment) {
-            $comment['picture'] = UserManager::getUserPicture($comment['user_id']);
+            $userInfo = api_get_user_info($comment['user_id']);
+            $comment['picture'] = $userInfo['avatar'];
+            $comment['complete_name'] = $userInfo['complete_name_with_username'];
             $commentInfo = getWorkComment($comment['id']);
-
             if (!empty($commentInfo)) {
                 $comment = array_merge($comment, $commentInfo);
             }

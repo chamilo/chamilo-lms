@@ -285,7 +285,8 @@ if ($is_allowedToEdit) {
                         //clean student results
                         if ($exercise_action_locked == false) {
                             $quantity_results_deleted = $objExerciseTmp->clean_results(true);
-                            Display :: display_confirmation_message(sprintf(get_lang('XResultsCleaned'), $quantity_results_deleted));
+                            $title = $objExerciseTmp->selectTitle();
+                            Display :: display_confirmation_message($title.': '.sprintf(get_lang('XResultsCleaned'), $quantity_results_deleted));
                         }
                         break;
                     case 'copy_exercise': //copy an exercise

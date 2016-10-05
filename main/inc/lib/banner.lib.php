@@ -148,6 +148,7 @@ function getCustomTabs()
 }
 
 /**
+ *
  * @param string $theme
  */
 function return_logo($theme)

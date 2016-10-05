@@ -48,7 +48,6 @@ class Agenda
         $this->event_session_color = '#00496D'; // kind of green
         $this->eventOtherSessionColor = '#999';
         $this->event_personal_color = 'steel blue'; //steel blue
-
     }
 
     /**
@@ -508,24 +507,24 @@ class Agenda
     }
 
     /**
-     * @param int $item_id
+     * @param int $itemId
      * @param array $sentTo
      * @return int
      */
-    public function storeAgendaEventAsAnnouncement($item_id, $sentTo = array())
+    public function storeAgendaEventAsAnnouncement($itemId, $sentTo = array())
     {
         $table_agenda = Database::get_course_table(TABLE_AGENDA);
         $course_id = api_get_course_int_id();
 
         // Check params
-        if (empty($item_id) or $item_id != strval(intval($item_id))) {
+        if (empty($itemId) || $itemId != strval(intval($itemId))) {
             return -1;
         }
 
         // Get the agenda item.
-        $item_id = intval($item_id);
+        $itemId = intval($itemId);
         $sql = "SELECT * FROM $table_agenda
-                WHERE c_id = $course_id AND id = ".$item_id;
+                WHERE c_id = $course_id AND id = ".$itemId;
         $res = Database::query($sql);
 
         if (Database::num_rows($res) > 0) {
@@ -622,7 +621,6 @@ class Agenda
                 }
 
                 if ($this->getIsAllowedToEdit()) {
-
                     $attributes = array(
                         'title' => $title,
                         'content' => $content,
@@ -650,12 +648,10 @@ class Agenda
 
                         $usersToDelete = array_diff($eventInfo['send_to']['users'], $sendTo['users']);
                         $usersToAdd = array_diff($sendTo['users'], $eventInfo['send_to']['users']);
-
                         $groupsToDelete = array_diff($eventInfo['send_to']['groups'], $sendTo['groups']);
                         $groupToAdd = array_diff($sendTo['groups'], $eventInfo['send_to']['groups']);
 
                         if ($sendTo['everyone']) {
-
                             // Delete all from group
                             if (isset($eventInfo['send_to']['groups']) &&
                                 !empty($eventInfo['send_to']['groups'])
@@ -702,7 +698,6 @@ class Agenda
                                 $this->sessionId
                             );
                         } else {
-
                             // Delete "everyone".
                             api_item_property_delete(
                                 $this->course,
@@ -1810,53 +1805,6 @@ class Agenda
     }
 
     /**
-     * this function shows the form with the user that were not selected
-     * @author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     * @return string code
-     */
-    public static function construct_not_selected_select_form($group_list = null, $user_list = null, $to_already_selected = array())
-    {
-        $html = '<select id="users_to_send_id" data-placeholder="'.get_lang('Select').'" name="users_to_send[]" multiple="multiple">';
-        if ($to_already_selected == 'everyone') {
-            $html .= '<option value="everyone" checked="checked">'.get_lang('Everyone').'</option>';
-        } else {
-            $html .= '<option value="everyone">'.get_lang('Everyone').'</option>';
-        }
-
-        if (is_array($group_list)) {
-            $html .= '<optgroup label="'.get_lang('Groups').'">';
-            foreach ($group_list as $this_group) {
-                if (!is_array($to_already_selected) || !in_array("GROUP:".$this_group['id'], $to_already_selected)) {
-                    // $to_already_selected is the array containing the groups (and users) that are already selected
-                    $count_users = isset($this_group['count_users']) ? $this_group['count_users'] : $this_group['userNb'];
-                    $count_users = " &ndash; $count_users ".get_lang('Users');
-
-                    $html .= '<option value="GROUP:'.$this_group['id'].'"> '.$this_group['name'].$count_users.'</option>';
-                }
-            }
-            $html .= '</optgroup>';
-        }
-
-        // adding the individual users to the select form
-        if (is_array($group_list)) {
-            $html .= '<optgroup label="'.get_lang('Users').'">';
-        }
-        foreach ($user_list as $this_user) {
-            // $to_already_selected is the array containing the users (and groups) that are already selected
-            if (!is_array($to_already_selected) || !in_array("USER:".$this_user['user_id'], $to_already_selected)) {
-                $username = api_htmlentities(sprintf(get_lang('LoginX'), $this_user['username']), ENT_QUOTES);
-                // @todo : add title attribute $username in the jqdialog window. wait for a chosen version to inherit title attribute
-                $html .= '<option title="'.$username.'" value="USER:'.$this_user['user_id'].'">'.api_get_person_name($this_user['firstname'], $this_user['lastname']).' ('.$this_user['username'].') </option>';
-            }
-        }
-        if (is_array($group_list)) {
-            $html .= '</optgroup>';
-            $html .= "</select>";
-        }
-        return $html;
-    }
-
-    /**
      * @param FormValidator $form
      * @param array $groupList
      * @param array $userList
@@ -1867,10 +1815,10 @@ class Agenda
      */
     public function setSendToSelect(
         $form,
-        $groupList = null,
-        $userList = null,
-        $sendTo = array(),
-        $attributes = array(),
+        $groupList = [],
+        $userList = [],
+        $sendTo = [],
+        $attributes = [],
         $addOnlyItemsInSendTo = false,
         $required = false
     ) {
@@ -1898,7 +1846,7 @@ class Agenda
             $form->setRequired($select);
         }
 
-        $selectedEveryoneOptions = array();
+        $selectedEveryoneOptions = [];
         if (isset($sendTo['everyone']) && $sendTo['everyone']) {
             $selectedEveryoneOptions = array('selected');
             $sendToUsers = array();
@@ -2159,7 +2107,6 @@ class Agenda
                         );
                     }
                 }
-
             }
             // }
 
@@ -2235,7 +2182,6 @@ class Agenda
         );
 
         return true;
-
     }
 
     /**
@@ -2337,7 +2283,7 @@ class Agenda
      * Add an attachment file into agenda
      * @param int $eventId
      * @param array $fileUserUpload ($_FILES['user_upload'])
-     * @param string comment about file
+     * @param string $comment about file
      * @param array $courseInfo
      * @return string
      */
@@ -2542,7 +2488,7 @@ class Agenda
         $sql = "SELECT count(DISTINCT(id)) as count
                 FROM ".$this->tbl_course_agenda."
                 WHERE
-                    c_id = ".$courseId." AND
+                    c_id = $courseId AND
                     parent_event_id = ".$eventId;
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
@@ -2591,9 +2537,7 @@ class Agenda
             );
 
             if ($this->type == 'course') {
-
                 if (!isset($_GET['action'])) {
-
                     $form = new FormValidator(
                         'form-search',
                         'post',
@@ -2620,10 +2564,9 @@ class Agenda
             api_is_session_admin() ||
             api_is_coach()
         ) {
-            if ($this->type == 'personal') {
+            if ($this->type === 'personal') {
                 $form = null;
                 if (!isset($_GET['action'])) {
-
                     $form = new FormValidator(
                         'form-search',
                         'get',
@@ -2740,7 +2683,6 @@ class Agenda
                 /** @var Sabre\VObject\Property\ICalendar\Recur $repeat */
                 $repeat = $event->RRULE;
                 if ($id && !empty($repeat)) {
-
                     $repeat = $repeat->getParts();
                     $freq = $trans[$repeat['FREQ']];
 
@@ -2812,15 +2754,16 @@ class Agenda
         $groupId = null;
         $userId = null;
 
-        if ($filter == 'everyone') {
+        if ($filter === 'everyone') {
             $everyone = true;
         } else {
-            if (substr($filter, 0, 1) == 'G') {
+            if (substr($filter, 0, 1) === 'G') {
                 $groupId = str_replace('GROUP:', '', $filter);
             } else {
                 $userId = str_replace('USER:', '', $filter);
             }
         }
+
         if (empty($userId) && empty($groupId)) {
             $everyone = true;
         }

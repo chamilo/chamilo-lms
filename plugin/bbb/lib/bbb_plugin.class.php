@@ -35,7 +35,7 @@ class BBBPlugin extends Plugin
     {
         parent::__construct(
             '2.5',
-            'Julio Montoya, Yannick Warnier',
+            'Julio Montoya, Yannick Warnier, Angel Fernando Quiroz Campos',
             [
                 'tool_enable' => 'boolean',
                 'host' => 'text',
@@ -46,6 +46,8 @@ class BBBPlugin extends Plugin
                 'enable_global_conference_link' => 'boolean'
             ]
         );
+
+        $this->isAdminPlugin = true;
     }
 
     /**

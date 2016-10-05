@@ -738,6 +738,14 @@ class SystemAnnouncementManager
             MessageManager::send_message_simple($row['user_id'], $title, $content);
             $message_sent = true;
 		}
+	    
+	    	// Minor validation to clean up the attachment files in the announcement
+		if (!empty($_FILES)) {
+		    $attachments = $_FILES;
+		    foreach ($attachments as $attachment) {
+			unlink($attachment['tmp_name']);
+		    }
+		}
 
 		return $message_sent; //true if at least one e-mail was sent
 	}

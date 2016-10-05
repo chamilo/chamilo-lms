@@ -958,6 +958,28 @@ class IndexManager
             );
         }
 
+         $diagnosis = '';
+
+        if (api_is_drh() || api_is_student_boss()) {
+            $diagnosis = Display::url(get_lang('DiagnosisManagement'), api_get_path(WEB_PATH).'load_search.php').'<br />';
+            $diagnosis .= Display::url(get_lang('Diagnostic'), api_get_path(WEB_PATH).'search.php');
+        } else {
+            if (api_is_student()) {
+                $diagnosis = Display::url(get_lang('Diagnostic'), api_get_path(WEB_PATH).'search.php');
+            }
+        }
+
+        if (!empty($diagnosis)) {
+            $html .= self::show_right_block(
+                get_lang('Diagnostic'),
+                $diagnosis,
+                'profile_block',
+                null,
+                'profile',
+                'profileCollapse'
+            );
+        }
+
         return $html;
     }
 
@@ -1044,9 +1066,11 @@ class IndexManager
         }
 
         //Sort courses
-        $url = api_get_path(WEB_CODE_PATH).'auth/courses.php?action=sortmycourses';
+        //Not needed in the case of Ofaj.
+        /*$url = api_get_path(WEB_CODE_PATH).'auth/courses.php?action=sortmycourses';
         $img_order= Display::return_icon('order-course.png',get_lang('SortMyCourses'),null,ICON_SIZE_SMALL);
         $my_account_content .= '<li class="order-course">'.Display::url($img_order.get_lang('SortMyCourses'), $url, array('class' => 'sort course')).'</li>';
+        */
 
         // Session history
         if (isset($_GET['history']) && intval($_GET['history']) == 1) {

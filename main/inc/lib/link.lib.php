@@ -1768,7 +1768,7 @@ class Link extends Model
     }
 
     /**
-     * Move a the display_order from a link in its category
+     * Move a link inside its category (display_order field)
      * @param int $id The link ID
      * @param string $direction The direction to sort the links
      * @return bool
@@ -1820,7 +1820,7 @@ class Link extends Model
     }
 
     /**
-     * Move to up a the display_order from a link in its category
+     * Move a link up in its category
      * @param int $id
      * @return bool
      */
@@ -1830,7 +1830,7 @@ class Link extends Model
     }
 
     /**
-     * Move to down a the display_order from a link in its category
+     * Move a link down in its category
      * @param int $id
      * @return bool
      */

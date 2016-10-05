@@ -8021,6 +8021,10 @@ function api_mail_html(
 
     // Clear all the addresses.
     $mail->ClearAddresses();
+    
+    // Clear all attachments
+    $mail->ClearAttachments();
+    
     return 1;
 }
 

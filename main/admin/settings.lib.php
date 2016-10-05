@@ -79,10 +79,20 @@ function handle_regions()
             echo '</td><td>';
             $selected_plugins = $plugin_obj->get_areas_by_plugin($plugin);
 
-            if (isset($plugin_info['is_course_plugin']) && $plugin_info['is_course_plugin']) {
-                $region_list = array('course_tool_plugin' => 'course_tool_plugin');
-            } else {
+            $region_list = [];
+
+            $isAdminPlugin = isset($plugin_info['is_admin_plugin']) && $plugin_info['is_admin_plugin'];
+            $isCoursePlugin = isset($plugin_info['is_course_plugin']) && $plugin_info['is_course_plugin'];
+
+            if (!$isAdminPlugin && !$isCoursePlugin) {
                 $region_list = $plugin_region_list;
+            } else {
+                if ($isAdminPlugin) {
+                    $region_list['menu_administrator'] = 'menu_administrator';
+                }
+                if ($isCoursePlugin) {
+                    $region_list['course_tool_plugin'] = 'course_tool_plugin';
+                }
             }
             echo Display::select('plugin_' . $plugin . '[]', $region_list, $selected_plugins,
                 array('multiple' => 'multiple', 'style' => 'width:500px'), true, get_lang('None'));

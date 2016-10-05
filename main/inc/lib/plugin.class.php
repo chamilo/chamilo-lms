@@ -24,6 +24,7 @@ class Plugin
     // Translation strings.
     private $strings = null;
     public $isCoursePlugin = false;
+    public $isAdminPlugin = false;
     public $isMailPlugin = false;
 
     /**
@@ -76,6 +77,7 @@ class Plugin
         $result['author'] = $this->get_author();
         $result['plugin_class'] = get_class($this);
         $result['is_course_plugin'] = $this->isCoursePlugin;
+        $result['is_admin_plugin'] = $this->isAdminPlugin;
         $result['is_mail_plugin'] = $this->isMailPlugin;
 
         if ($form = $this->get_settings_form()) {

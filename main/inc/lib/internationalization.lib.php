@@ -154,13 +154,14 @@ function get_lang($variable, $reserved = null, $language = null) {
     return $ret;
 }
 
+
 /**
  * Gets the current interface language.
  * @param bool $purified (optional)	When it is true, a purified (refined)
  * language value will be returned, for example 'french' instead of 'french_unicode'.
  * @return string					The current language of the interface.
  */
-function api_get_interface_language($purified = false, $check_sub_language = false)
+function api_get_interface_language($purified = false, $check_sub_language = false, $setParentLanguageName = true)
 {
     global $language_interface;
 
@@ -174,6 +175,7 @@ function api_get_interface_language($purified = false, $check_sub_language = fal
         if (!isset($parent_language_name)) {
             // 2. The current language is a sub language so we grab the father's
             // setting according to the internalization_database/name_order_convetions.php file
+
             $language_id = api_get_language_id($language_interface);
             $language_info = api_get_language_info($language_id);
 
@@ -183,7 +185,9 @@ function api_get_interface_language($purified = false, $check_sub_language = fal
             ) {
                 if (!empty($language_info['parent_id'])) {
                     $language_info = api_get_language_info($language_info['parent_id']);
-                    $parent_language_name = $language_info['english_name'];
+                    if ($setParentLanguageName) {
+                        $parent_language_name = $language_info['english_name'];
+                    }
 
                     if (!empty($parent_language_name)) {
                         return $parent_language_name;
@@ -204,7 +208,6 @@ function api_get_interface_language($purified = false, $check_sub_language = fal
 
     return $interface_language;
 }
-
 /**
  * Returns a purified language id, without possible suffixes that will disturb language identification in certain cases.
  * @param string $language	The input language identificator, for example 'french_unicode'.
@@ -236,6 +239,7 @@ function api_get_language_isocode($language = null, $default_code = 'en')
     if (empty($language)) {
         $language = api_get_interface_language(false, true);
     }
+
     if (!isset($iso_code[$language])) {
         if (!class_exists('Database')) {
             // This might happen, in case of calling this function early during the global initialization.
@@ -781,7 +785,7 @@ function api_get_person_name(
     //We check if the language is supported, otherwise we check the interface language of the parent language of sublanguage
 
     if (empty($language)) {
-        $language = api_get_interface_language(false, true);
+        $language = api_get_interface_language(false, true, false);
     }
 
     if (!isset($valid[$format][$language])) {

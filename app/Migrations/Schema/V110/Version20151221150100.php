@@ -42,9 +42,9 @@ class Version20151221150100 extends AbstractMigrationChamilo
         $this->addSql("
             UPDATE c_quiz_answer a
             INNER JOIN c_quiz_answer b
-            ON a.question_id = b.question_id
+            ON (a.question_id = b.question_id AND b.c_id = a.c_id)
             INNER JOIN c_quiz_question q
-            ON b.question_id = q.id
+            ON (b.question_id = q.id AND b.c_id = q.c_id)
             SET a.correct = b.id_auto
             WHERE
                 a.correct = b.id AND

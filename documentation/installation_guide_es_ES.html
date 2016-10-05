@@ -771,7 +771,7 @@ Apache2: La configuración para nuestro sitio de ejemplo my.chamilo10.net sería
 	RewriteCond %{QUERY_STRING} ^id=(.*)$
 	RewriteRule ^([^/.]+)/?$ user.php?$1 [L]
 	RewriteRule ^certificates/$ certificates/index.php?id=%1 [L]
-	RewriteRule ^courses/([^/]+)/$ app/course_home/course_home.php?cDir=$1 [QSA,L]
+	RewriteRule ^courses/([^/]+)/$ main/course_home/course_home.php?cDir=$1 [QSA,L]
 	RewriteRule ^courses/([^/]+)/index.php$ main/course_home/course_home.php?cDir=$1 [QSA,L]
 	RewriteRule ^courses/([^/]+)/document/(.*)$ main/document/download.php?doc_url=/$2&cDir=$1 [QSA,L]
 	RewriteRule ^courses/([^/]+)/work/(.*)$ main/work/download.php?file=work/$2&cDir=$1 [QSA,L]

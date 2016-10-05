@@ -17,7 +17,9 @@ $plugin = BBBPlugin::create();
 $tool_name = $plugin->get_lang('Videoconference');
 $tpl = new Template($tool_name);
 
-$bbb = new bbb('', '');
+$isGlobal = isset($_GET['global']) ? true : false;
+
+$bbb = new bbb('', '', $isGlobal);
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
 $meetings = $bbb->getMeetings();

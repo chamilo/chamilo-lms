@@ -802,6 +802,20 @@ function deleteDirWork($id)
                     WHERE c_id = $course_id AND publication_id = $id";
             Database::query($sql);
 
+            Event::addEvent(
+                LOG_WORK_DIR_DELETE,
+                LOG_WORK_DATA,
+                [
+                    'id' => $work_data['id'],
+                    'url' => $work_data['url'],
+                    'title' => $work_data['title']
+                ],
+                null,
+                api_get_user_id(),
+                api_get_course_int_id(),
+                api_get_session_id()
+            );
+
             $link_info = GradebookUtils::isResourceInCourseGradebook(
                 api_get_course_id(),
                 3,
@@ -2862,9 +2876,11 @@ function getWorkComments($work)
     }
 
     $sql = "SELECT
-            c.id, c.user_id, u.firstname, u.lastname, u.username, u.picture_uri
+                c.id, 
+                c.user_id
             FROM $commentTable c
-            INNER JOIN $userTable u ON (u.user_id = c.user_id)
+            INNER JOIN $userTable u 
+            ON (u.id = c.user_id)
             WHERE c_id = $courseId AND work_id = $workId
             ORDER BY sent_at
             ";
@@ -2872,9 +2888,10 @@ function getWorkComments($work)
     $comments = Database::store_result($result, 'ASSOC');
     if (!empty($comments)) {
         foreach ($comments as &$comment) {
-            $comment['picture'] = UserManager::getUserPicture($comment['user_id']);
+            $userInfo = api_get_user_info($comment['user_id']);
+            $comment['picture'] = $userInfo['avatar'];
+            $comment['complete_name'] = $userInfo['complete_name_with_username'];
             $commentInfo = getWorkComment($comment['id']);
-
             if (!empty($commentInfo)) {
                 $comment = array_merge($comment, $commentInfo);
             }
@@ -3066,7 +3083,7 @@ function getLastWorkStudentFromParentByUser(
     $sessionCondition = api_get_session_condition($sessionId);
 
     $sql = "SELECT *
-            FROM  $work
+            FROM $work
             WHERE
                 user_id = $userId
                 $sessionCondition AND
@@ -3214,9 +3231,9 @@ function addWorkComment($courseInfo, $userId, $parentWork, $work, $data)
     $content = sprintf(get_lang('ThereIsANewWorkFeedbackInWorkXHere'), $work['title'], $url);
 
     if (!empty($userIdListToSend)) {
-        foreach ($userIdListToSend as $userId) {
+        foreach ($userIdListToSend as $userIdToSend) {
             MessageManager::send_message_simple(
-                $userId,
+                $userIdToSend,
                 $subject,
                 $content
             );
@@ -3280,7 +3297,6 @@ function getWorkDateValidationStatus($homework)
     $has_ended = false;
 
     if (!empty($homework)) {
-
         if (!empty($homework['expires_on']) || !empty($homework['ends_on'])) {
             $time_now = time();
 
@@ -4123,6 +4139,21 @@ function deleteWorkItem($item_id, $courseInfo)
                 'DocumentDeleted',
                 api_get_user_id()
             );
+
+            Event::addEvent(
+                LOG_WORK_FILE_DELETE,
+                LOG_WORK_DATA,
+                [
+                    'id' => $work_data['id'],
+                    'url' => $work_data['url'],
+                    'title' => $work_data['title']
+                ],
+                null,
+                api_get_user_id(),
+                api_get_course_int_id(),
+                api_get_session_id()
+            );
+
             $work = $row['url'];
 
             if ($row['contains_file'] == 1) {
@@ -4169,9 +4200,9 @@ function getFormWork($form, $defaults = array())
     $form->addButtonAdvancedSettings('advanced_params', get_lang('AdvancedParameters'));
 
     if (!empty($defaults) && (isset($defaults['enableEndDate']) || isset($defaults['enableExpiryDate']))) {
-        $form->addElement('html', '<div id="advanced_params_options" style="display:block">');
+        $form->addHtml('<div id="advanced_params_options" style="display:block">');
     } else {
-        $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
+        $form->addHtml('<div id="advanced_params_options" style="display:none">');
     }
 
     // QualificationOfAssignment
@@ -4194,22 +4225,22 @@ function getFormWork($form, $defaults = array())
     }
 
     if (!empty($defaults) && isset($defaults['category_id'])) {
-        $form->addElement('html', '<div id=\'option1\' style="display:block">');
+        $form->addHtml('<div id=\'option1\' style="display:block">');
     } else {
-        $form->addElement('html', '<div id=\'option1\' style="display:none">');
+        $form->addHtml('<div id=\'option1\' style="display:none">');
     }
 
     // Loading Gradebook select
     GradebookUtils::load_gradebook_select_in_tool($form);
 
     $form->addElement('text', 'weight', get_lang('WeightInTheGradebook'));
-    $form->addElement('html', '</div>');
+    $form->addHtml('</div>');
 
     $form->addElement('checkbox', 'enableExpiryDate', null, get_lang('EnableExpiryDate'), 'id="expiry_date"');
     if (isset($defaults['enableExpiryDate']) && $defaults['enableExpiryDate']) {
-        $form->addElement('html', '<div id="option2" style="display: block;">');
+        $form->addHtml('<div id="option2" style="display: block;">');
     } else {
-        $form->addElement('html', '<div id="option2" style="display: none;">');
+        $form->addHtml('<div id="option2" style="display: none;">');
     }
 
     $currentDate = substr(api_get_local_time(), 0, 10);
@@ -4219,8 +4250,7 @@ function getFormWork($form, $defaults = array())
     }
 
     $form->addElement('date_time_picker', 'expires_on', get_lang('ExpiresAt'));
-    $form->addElement('html', '</div>');
-
+    $form->addHtml('</div>');
     $form->addElement('checkbox', 'enableEndDate', null, get_lang('EnableEndDate'), 'id="end_date"');
 
     if (!isset($defaults['ends_on'])) {
@@ -4228,18 +4258,18 @@ function getFormWork($form, $defaults = array())
         $defaults['ends_on'] = $date.' 23:59';
     }
     if (isset($defaults['enableEndDate']) && $defaults['enableEndDate']) {
-        $form->addElement('html', '<div id="option3" style="display: block;">');
+        $form->addHtml('<div id="option3" style="display: block;">');
     } else {
-        $form->addElement('html', '<div id="option3" style="display: none;">');
+        $form->addHtml('<div id="option3" style="display: none;">');
     }
 
     $form->addElement('date_time_picker', 'ends_on', get_lang('EndsAt'));
-    $form->addElement('html', '</div>');
+    $form->addHtml('</div>');
 
     $form->addElement('checkbox', 'add_to_calendar', null, get_lang('AddToCalendar'));
     $form->addElement('select', 'allow_text_assignment', get_lang('DocumentType'), getUploadDocumentType());
 
-    $form->addElement('html', '</div>');
+    $form->addHtml('</div>');
 
     if (isset($defaults['enableExpiryDate']) && isset($defaults['enableEndDate'])) {
         $form->addRule(array('expires_on', 'ends_on'), get_lang('DateExpiredNotBeLessDeadLine'), 'comparedate');
@@ -4275,7 +4305,12 @@ function updateSettings($courseInfo, $showScore, $studentDeleteOwnPublication)
     $main_course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
     $table_course_setting = Database :: get_course_table(TOOL_COURSE_SETTING);
 
-    $query = "UPDATE ".$main_course_table." SET show_score = '".$showScore."'
+    if (empty($courseId)) {
+        return false;
+    }
+
+    $query = "UPDATE $main_course_table 
+              SET show_score = '$showScore'
               WHERE id = $courseId";
     Database::query($query);
 
@@ -4289,8 +4324,10 @@ function updateSettings($courseInfo, $showScore, $studentDeleteOwnPublication)
     // changing the tool setting: is a student allowed to delete his/her own document
 
     // counting the number of occurrences of this setting (if 0 => add, if 1 => update)
-    $query = "SELECT * FROM " . $table_course_setting . "
-              WHERE c_id = $courseId AND variable = 'student_delete_own_publication'";
+    $query = "SELECT * FROM $table_course_setting
+              WHERE 
+                c_id = $courseId AND 
+                variable = 'student_delete_own_publication'";
 
     $result = Database::query($query);
     $number_of_setting = Database::num_rows($result);

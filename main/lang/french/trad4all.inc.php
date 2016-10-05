@@ -6130,7 +6130,10 @@ $SSOServerUnAuthURIComment = "L'adresse de la page qui se charge de la déconnex
 $SSOServerProtocolTitle = "Protocole du serveur Single Sign On";
 $SSOServerProtocolComment = "Le protocole à préfixer au domaine du serveur Single Sign On (nous recommandons l'usage de https:// si votre serveur le permet, car tout protocole non sécurisé engendre des risques au niveau du mécanisme d'authentification).";
 $EnabledWirisTitle = "Editeur mathématique WIRIS";
-$EnabledWirisComment = "Activer l'éditeur mathématique WIRIS";
+$EnabledWirisComment = "Activer l'éditeur mathématique WIRIS.
+En installant ce plugin, vous obtenez l'éditeur WIRIS et WIRIS CAS.
+Cette activation n'est totalement réalisé que si le <a href=\"http://www.wiris.com/es/plugins3/ckeditor/download\">plugin PHP pour CKeditor WIRIS</a> a été préalablement téléchargé et décompressé dans le répertoire de Chamilo main/inc/lib/javascript/ckeditor/plugins/ 
+Cela est nécessaire car Wiris est un logiciel propriétaire et ses services sont de nature <a href=\"http://www.wiris.com/store/who-pays\">commerciale</a>. Pour faire des ajustements pour le plug-in, éditer le fichier configuration.ini ou remplacer son contenu par le fichier de chamilo configuration.ini.default";
 $FileSavedAs = "Le fichier a été enregistré sous";
 $FileExportAs = "Le fichier a été exporté sous";
 $AllowSpellCheckTitle = "Correcteur orthographique";

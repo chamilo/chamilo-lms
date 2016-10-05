@@ -40,7 +40,6 @@ if (!empty($sessionId) && $drhHasAccessToSessionContent) {
     $allowToEdit = $allowToEdit || api_is_drh();
 }
 
-
 /* ACCESS RIGHTS */
 api_protect_course_script(true);
 
@@ -214,17 +213,15 @@ switch ($action) {
                 'width' => '150',
                 'align' => 'left',
                 //'formatter' => 'action_formatter',
-                'sortable' => 'false',
-            ),
+                'sortable' => 'false'
+            )
         );
 
         // Autowidth
         $extra_params['autowidth'] = 'true';
         // height auto
         $extra_params['height'] = 'auto';
-
         $editOptions = '';
-
         if (api_is_allowed_to_edit()) {
             $extra_params['multiselect'] = true;
             $editOptions = '

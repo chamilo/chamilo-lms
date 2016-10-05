@@ -701,6 +701,11 @@ class Event
                 $event_value = serialize($event_value);
             }
         }
+        // If event is an array then the $event_value_type should finish with
+        // the suffix _array for example LOG_WORK_DATA = work_data_array
+        if (is_array($event_value)) {
+            $event_value = serialize($event_value);
+        }
 
         $event_value = Database::escape_string($event_value);
         $sessionId = empty($sessionId) ? api_get_session_id() : intval($sessionId);

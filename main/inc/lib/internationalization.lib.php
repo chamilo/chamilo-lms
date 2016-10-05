@@ -158,10 +158,14 @@ function get_lang($variable, $reserved = null, $language = null) {
  * Gets the current interface language.
  * @param bool $purified (optional)	When it is true, a purified (refined)
  * language value will be returned, for example 'french' instead of 'french_unicode'.
+ * @param bool $setParentLanguageName
  * @return string					The current language of the interface.
  */
-function api_get_interface_language($purified = false, $check_sub_language = false)
-{
+function api_get_interface_language(
+    $purified = false,
+    $check_sub_language = false,
+    $setParentLanguageName = true
+) {
     global $language_interface;
 
     if (empty($language_interface)) {
@@ -183,7 +187,9 @@ function api_get_interface_language($purified = false, $check_sub_language = fal
             ) {
                 if (!empty($language_info['parent_id'])) {
                     $language_info = api_get_language_info($language_info['parent_id']);
-                    $parent_language_name = $language_info['english_name'];
+                    if ($setParentLanguageName) {
+                        $parent_language_name = $language_info['english_name'];
+                    }
 
                     if (!empty($parent_language_name)) {
                         return $parent_language_name;
@@ -781,7 +787,9 @@ function api_get_person_name(
     //We check if the language is supported, otherwise we check the interface language of the parent language of sublanguage
 
     if (empty($language)) {
-        $language = api_get_interface_language(false, true);
+        // Do not set $setParentLanguageName because this function is called before
+        // the main language is loaded in global.inc.php
+        $language = api_get_interface_language(false, true, false);
     }
 
     if (!isset($valid[$format][$language])) {

@@ -238,9 +238,8 @@ class AnnouncementEmail
         );
 
         $user_email = $this->sender('mail');
-        //$course_param = api_get_cidreq();
         // Build the link by hand because api_get_cidreq() doesn't accept course params
-        $course_param = 'cidReq='.api_get_course_id().'&amp;id_session='.$session_id.'&amp;gidReq='.api_get_group_id();
+        $course_param = 'cidReq='.api_get_course_id().'&id_session='.$session_id.'&gidReq='.api_get_group_id();
         $course_name = $this->course('title');
 
         $result = "<div>$content</div>";
@@ -250,9 +249,10 @@ class AnnouncementEmail
         if (!empty($attachment)) {
             $result .= '<br />';
             $result .= Display::url(
-                    $attachment['filename'],
-                    api_get_path(WEB_CODE_PATH).'announcements/download.php?file='.basename($attachment['path']).'&'.$course_param
-                ).'<br />';
+                $attachment['filename'],
+                api_get_path(WEB_CODE_PATH).'announcements/download.php?file='.basename($attachment['path']).'&'.$course_param
+            );
+            $result .= '<br />';
         }
 
         $result .= '<hr />';

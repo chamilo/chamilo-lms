@@ -605,19 +605,22 @@ if ($userForm->validate()) {
         $em->flush();
     }
 
-    $superiorUserList = [1];
+    $superiorUserList = UserManager::getStudentBossList($userInfo['user_id']);
+
     if ($superiorUserList) {
         $url = api_get_path(WEB_PATH).'load_search.php?user_id='.$userInfo['user_id'];
         $subject = sprintf(get_lang('DiagnosisFromUserX'), $userInfo['complete_name']);
         $message = sprintf(get_lang('DiagnosisFromUserXWithLinkX'), $userInfo['complete_name'], $url);
-        foreach ($superiorUserList as $userId) {
+        foreach ($superiorUserList as $bossData) {
+            $bossId = $bossData['boss_id'];
             MessageManager::send_message_simple(
-                $userId,
+                $bossId,
                 $subject,
                 $message
             );
         }
     }
+
     Display::addFlash(Display::return_message(get_lang('SessionSearchSavedExplanation')));
     Display::addFlash(Display::url(get_lang('ReturnToDiagnosis'), api_get_self(), ['class' => 'btn btn-primary']));
     header('Location:'.api_get_self().'?result=1');

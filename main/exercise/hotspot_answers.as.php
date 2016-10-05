@@ -57,7 +57,17 @@ $data['image_height'] = $pictureHeight;
 $data['courseCode'] = $_course['path'];
 $data['hotspots'] = [];
 
-if ($objExercise->results_disabled != RESULT_DISABLE_SHOW_SCORE_ONLY) {
+error_log("\$objExercise->results_disabled: {$objExercise->results_disabled}");
+
+$showScoreOptions = [
+    RESULT_DISABLE_SHOW_SCORE_ONLY,
+    RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES,
+    RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT
+];
+
+$showExpectedChoice = !in_array($objExercise->results_disabled, $showScoreOptions);
+
+if ($showExpectedChoice) {
     $qb = $em->createQueryBuilder();
     $qb
         ->select('a')

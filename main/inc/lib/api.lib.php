@@ -7234,25 +7234,32 @@ function api_get_password_checker_js($usernameInputId, $passwordInputId)
         return null;
     }
 
-    $verdicts = array(
-        get_lang('PasswordWeak'),
-        get_lang('PasswordNormal'),
-        get_lang('PasswordMedium'),
-        get_lang('PasswordStrong'),
-        get_lang('PasswordVeryStrong')
-    );
+    $translations = [
+        'wordLength' => get_lang('PasswordIsTooShort'),
+        'wordNotEmail' => get_lang('YourPasswordCannotBeTheSameAsYourEmail'),
+        'wordSimilarToUsername' => get_lang('YourPasswordCannotContainYourUsername'),
+        'wordTwoCharacterClasses' => get_lang('WordTwoCharacterClasses'),
+        'wordRepetitions' => get_lang('TooManyRepetitions'),
+        'wordSequences' => get_lang('YourPasswordContainsSequences'),
+        'errorList' => get_lang('Errors'),
+        'veryWeak' => get_lang('PasswordVeryWeak'),
+        'weak' => get_lang('PasswordWeak'),
+        'normal' => get_lang('PasswordNormal'),
+        'medium' => get_lang('PasswordMedium'),
+        'strong' => get_lang('PasswordStrong'),
+        'veryStrong' => get_lang('PasswordVeryStrong')
+    ];
 
     $js = api_get_asset('pwstrength-bootstrap/dist/pwstrength-bootstrap.min.js');
-    $js .=  "<script>
-    var verdicts = ['".implode("','", $verdicts)."'];
+    $js .=  "<script>    
     var errorMessages = {
         password_to_short : \"" . get_lang('PasswordIsTooShort')."\",
         same_as_username : \"".get_lang('YourPasswordCannotBeTheSameAsYourUsername')."\"
     };
 
     $(document).ready(function() {
-        var options = {
-            verdicts: verdicts,
+        var lang = ".json_encode($translations).";     
+        var options = {        
             onLoad : function () {
                 //$('#messages').text('Start typing password');
             },
@@ -7266,6 +7273,12 @@ function api_get_password_checker_js($usernameInputId, $passwordInputId)
                 errors: '#password-errors'
             },
             usernameField: '$usernameInputId'
+        };
+        options.i18n = {
+            t: function (key) {
+                var result = lang[key];
+                return result === key ? '' : result; // This assumes you return the                
+            }
         };
         $('".$passwordInputId."').pwstrength(options);
     });
@@ -8025,10 +8038,10 @@ function api_mail_html(
 
     // Clear all the addresses.
     $mail->ClearAddresses();
-    
+
     // Clear all attachments
     $mail->ClearAttachments();
-    
+
     return 1;
 }
 

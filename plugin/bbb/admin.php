@@ -15,12 +15,42 @@ $plugin = BBBPlugin::create();
 $tool_name = $plugin->get_lang('Videoconference');
 $tpl = new Template($tool_name);
 
-$isGlobal = isset($_GET['global']) ? true : false;
-
-$bbb = new bbb('', '', $isGlobal);
+$bbb = new bbb('', '');
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
 $meetings = $bbb->getMeetings();
+
+if ($action) {
+    switch ($action) {
+        case 'export':
+            $dataToExport = [
+                [$tool_name, get_lang('RecordList')],
+                [],
+                [
+                    get_lang('CreatedAt'),
+                    get_lang('Status'),
+                    get_lang('Records'),
+                    get_lang('Course'),
+                    get_lang('Session'),
+                    get_lang('Participants'),
+                ]
+            ];
+
+            foreach ($meetings as $meeting) {
+                $dataToExport[] = [
+                    $meeting['created_at'],
+                    $meeting['status'] == 1 ? get_lang('MeetingOpened') : get_lang('MeetingClosed'),
+                    $meeting['record'] == 1 ? get_lang('Yes') : get_lang('No'),
+                    $meeting['course'] ? $meeting['course']->getTitle() : '-',
+                    $meeting['session'] ? $meeting['session']->getName() : '-',
+                    isset($meeting['participants']) ? implode(PHP_EOL, $meeting['participants']) : null
+                ];
+            }
+
+            Export::arrayToXls($dataToExport);
+            break;
+    }
+}
 
 if (!empty($meetings)) {
     $meetings = array_reverse($meetings);
@@ -35,7 +65,20 @@ if (!$bbb->isServerRunning()) {
 $tpl->assign('meetings', $meetings);
 
 $content = $tpl->fetch('bbb/admin.tpl');
+$actions = [];
+
+if ($meetings) {
+    $actions[] = Display::toolbarButton(
+        get_lang('ExportInExcel'),
+        api_get_self() . '?action=export',
+        'file-excel-o',
+        'success',
+        [],
+        false
+    );
+}
 
 $tpl->assign('header', get_lang('RecordList'));
+$tpl->assign('actions', implode('', $actions));
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

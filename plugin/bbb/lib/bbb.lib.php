@@ -1204,8 +1204,9 @@ class bbb
     public function unPublishUrl($meeting)
     {
         if (!isset($meeting['id'])) {
-            return '';
+            return null;
         }
+
         return api_get_path(WEB_PLUGIN_PATH).'bbb/listing.php?'.$this->getUrlParams().'&action=unpublish&id='.$meeting['id'];
     }
 

@@ -35,11 +35,7 @@
                 <td>{{ meeting.session ? meeting.session.name : '-' }}</td>
                 <td>{{ meeting.participants ? meeting.participants|join('<br>') : '-' }}</td>
                 <td>
-                    {% if meeting.status == 1 %}
-                        <a class="btn btn-default" href="{{ meeting.end_url }} "> {{ 'CloseMeeting'|get_lang }}</a>
-                    {% else %}
-                        {{ meeting.action_links }}
-                    {% endif %}
+                    {{ meeting.participants|join('<br>') }}
                 </td>
             </tr>
         {% endfor %}

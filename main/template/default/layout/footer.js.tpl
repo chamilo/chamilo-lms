@@ -9,9 +9,9 @@
         // Chosen select
         $(".chzn-select").chosen({
             disable_search_threshold: 10,
-            no_results_text: '{{ 'SearchNoResultsFound' | get_lang }}',
-            placeholder_text_multiple: '{{ 'SelectSomeOptions' | get_lang }}',
-            placeholder_text_single: '{{ 'SelectAnOption' | get_lang }}',
+            no_results_text: '{{ 'SearchNoResultsFound' | get_lang | escape('js')}}',
+            placeholder_text_multiple: '{{ 'SelectSomeOptions' | get_lang | escape('js')}}',
+            placeholder_text_single: '{{ 'SelectAnOption' | get_lang | escape('js')}}',
             width: "100%"
         });
 

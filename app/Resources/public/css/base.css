@@ -1540,13 +1540,26 @@ div.admin_section h4 {
     border-radius: 5px;
     border: 1px dashed #B0B0B0
 }
-
 #question_list .header_operations {
     height:45px;
     margin-bottom:5px;
     clear: both;
+    background: #F5F5F5;
+    font-size: 12px;
 }
-
+#question_list .header_operations:hover{
+    background: #FFEEAA;
+    border-color: #FFDE57;
+}
+#question_list .header_operations .edition{
+    padding-top: 0;
+}
+#question_list .header_operations .edition img{
+    margin-right: 5px;
+}
+#question_list .header_operations img{
+    vertical-align: inherit;
+}
 .document_preview_container {
     border-radius: 5px;
     box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05);
@@ -5760,7 +5773,6 @@ ul#toolnavbox-two li a.btn{
     font-size: 120%;
     margin-bottom: 0;
 }
-.
 #upload_form .fa-plus-square-o, #upload_form .fa-minus-square-o {
     cursor:pointer;
 }

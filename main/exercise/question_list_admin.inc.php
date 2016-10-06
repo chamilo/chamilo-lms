@@ -177,10 +177,10 @@ if (!$inATest) {
     echo "<table class='table table-condensed'>";
     echo "<tr>";
     echo "<th style=\"width: 50%;\">" .get_lang('Questions'). "</th>";
-    echo "<th style=\"width: 6%;\">" .get_lang('Type'). "</th>";
-    echo "<th style=\"width: 22%; text-align:center;\">" .get_lang('Category'). "</th>";
-    echo "<th style=\"width: 6%;\">" .get_lang('Difficulty'). "</th>";
-    echo "<th style=\"width: 16%; float:left;\">" .get_lang('Score'). "</th>";
+    echo "<th style=\"width: 10%;\">" .get_lang('Type'). "</th>";
+    echo "<th style=\"width: 20%;\">" .get_lang('Category'). "</th>";
+    echo "<th style=\"width: 10%;\">" .get_lang('Difficulty'). "</th>";
+    echo "<th style=\"width: 10%;\">" .get_lang('Score'). "</th>";
     echo "</tr>";
     echo "</table>";
     echo "</div>";
@@ -241,21 +241,22 @@ if (!$inATest) {
                     $delete_link = '<a id="delete_'.$id.'" class="opener"  href="'.api_get_self().'?'.api_get_cidreq().'&exerciseId='.$exerciseId.'&deleteQuestion='.$id.'" >'.Display::return_icon('delete.png',get_lang('RemoveFromTest'), array(), ICON_SIZE_SMALL).'</a>';
                 }
 
-                $edit_link = Display::tag('div', $edit_link,   array('style'=>'float:left; padding:0px; margin:0px'));
-                $clone_link = Display::tag('div', $clone_link,  array('style'=>'float:left; padding:0px; margin:0px'));
-                $delete_link = Display::tag('div', $delete_link, array('style'=>'float:left; padding:0px; margin:0px'));
+                $edit_link = Display::tag('li', $edit_link,   array('class'=>'tools'));
+                $clone_link = Display::tag('li', $clone_link,  array('class'=>'tools'));
+                $delete_link = Display::tag('li', $delete_link, array('class'=>'tools'));
                 $actions = Display::tag(
-                    'div',
+                    'ul',
                     $edit_link.$clone_link.$delete_link,
-                    array('class'=>'edition','style'=>'width:100px; right:10px; margin-top: 8px; position: absolute; top: 10%;')
+                    array('class'=>'edition')
                 );
 
                 $title = Security::remove_XSS($objQuestionTmp->selectTitle());
-                $move = Display::return_icon(
+                /* $move = Display::return_icon(
                     'all_directions.png',
                     get_lang('Move'),
-                    array('class'=>'moved', 'style'=>'margin-bottom:-0.5em;')
-                );
+                    array('class'=>'moved', 'style'=>'margin-bottom:-0.3em;')
+                ); */
+                $move = Display::returnFontAwesomeIcon("arrows moved", 'lg');
 
                 // Question name
                 $questionName = Display::tag(

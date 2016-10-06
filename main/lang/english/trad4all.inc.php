@@ -7864,4 +7864,23 @@ $MoodleFileImportedSuccessfully = "The Moodle course file has been imported succ
 $ExtensionInstalledButNotEnabled = "Extension installed but not enabled";
 $MailingTestSent = "E-mail sent. This procedure works in all aspects similarly to the normal e-mail sending of Chamilo, but allows for more flexibility in terms of destination e-mail and message body.";
 $EMailTester = "E-mail tester";
+$TicketMsgWelcome = "Welcome to YOUR tickets section. Here, you'll be able to track the state of all the tickets you created in the main tickets section.";
+$TicketNoHistory = "No history";
+$RecalculateResults = "Recalculate results";
+$XParenthesisDeleted = "%s (deleted)";
+$AvailableAlsoInMainPortal = "Available also on main portal";
+$EditCourseCategoryToURL = "Edit course categories for one URL";
+$VisibleToSelf = "Visible to self";
+$VisibleToOthers = "Visible to others";
+$UpgradeVersion = "Upgrade Chamilo LMS version";
+$CRSTablesIntro = "The install script has detected tables coming from previous versions that could cause problems during the upgrade process.
+Please click on the button below to delete them. We heavily recommend you do a full backup of them before confirming this last install step.";
+$Removing = "Removing";
+$CheckForCRSTables = "Check for tables from previous versions";
+$YourPasswordCannotBeTheSameAsYourEmail = "Your password cannot be the same as your email";
+$YourPasswordCannotContainYourUsername = "Your password cannot contain your username";
+$WordTwoCharacterClasses = "Use different character classes";
+$TooManyRepetitions = "Too many repetitions";
+$YourPasswordContainsSequences = "Your password contains sequences";
+$PasswordVeryWeak = "Very weak";
 ?>

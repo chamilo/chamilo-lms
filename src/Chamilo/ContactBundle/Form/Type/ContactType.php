@@ -34,9 +34,15 @@ class ContactType extends AbstractType
             ->add('firstname')
             ->add('lastname')
             ->add('email')
-            ->add('subject')
+            ->add('subject', 'text')
             ->add('message', 'textarea')
-            ->add('send', SubmitType::class, ['attr' => ['class' => 'btn btn-primary']])
+            ->add(
+                'send',
+                SubmitType::class,
+                [
+                    'attr' => ['class' => 'btn btn-primary'],
+                ]
+            )
         ;
     }
 

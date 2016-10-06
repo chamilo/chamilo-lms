@@ -42,3 +42,12 @@ msgstr "Neueste Blöcke"
 
 msgid "Go up"
 msgstr "Nach oben"
+
+msgid "PoweredByX"
+msgstr "Powered by %s"
+
+msgid "URLOFAJ"
+msgstr "https://www.dfjw.org/"
+
+msgid "OFAJ"
+msgstr "Deutsch-Französisches Jugendwerk"

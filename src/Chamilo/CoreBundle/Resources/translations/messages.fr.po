@@ -39,3 +39,15 @@ msgstr "Derniers blocks"
 
 msgid "Go up"
 msgstr "Vers le haut"
+
+msgid "Go up"
+msgstr "Vers le haut"
+
+msgid "PoweredByX"
+msgstr "Créé avec %s"
+
+msgid "URLOFAJ"
+msgstr "https://www.ofaj.org/"
+
+msgid "OFAJ"
+msgstr "Office franco-allemand pour la Jeunesse"

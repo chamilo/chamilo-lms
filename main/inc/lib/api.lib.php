@@ -7192,21 +7192,47 @@ function api_get_password_checker_js($usernameInputId, $passwordInputId)
     $js = api_get_asset('pwstrength-bootstrap/dist/pwstrength-bootstrap.min.js');
 
     $js .=  "<script>
-    var errorMessages = {
-        password_to_short : \" " . get_lang('PasswordIsTooShort')."\",
-        same_as_username : \" ".get_lang('YourPasswordCannotBeTheSameAsYourUsername')."\"
-    };
-
     $(document).ready(function() {
         var lang = ".json_encode($translations).";            
         var options = {
+            common : {
+                minChar: 5,
+            },
+            ui: {
+                showErrors: false,
+            },
+            rules : {
+                scores: {
+                  wordNotEmail: -100,
+                  wordLength: -50,
+                  wordSimilarToUsername: -100,
+                  wordSequences: -50,
+                  wordTwoCharacterClasses: 2,
+                  wordRepetitions: -25,
+                  wordLowercase: 1,
+                  wordUppercase: 3,
+                  wordOneNumber: 3,
+                  wordThreeNumbers: 5,
+                  wordOneSpecialChar: 3,
+                  wordTwoSpecialChar: 5,
+                  wordUpperLowerCombo: 2,
+                  wordLetterNumberCombo: 2,
+                  wordLetterNumberCharCombo: 2
+                },
+                activated: {
+                    wordNotEmail: true,
+                    wordRepetitions: true,
+                    wordUpperLowerCombo: true,
+                    wordLetterNumberCombo: true,
+                    wordSequences: true,
+                }
+            },
             onLoad : function () {
                 //$('#messages').text('Start typing password');
             },
             onKeyUp: function (evt) {
                 $(evt.target).pwstrength('outputErrorList');
             },
-            errorMessages : errorMessages,
             viewports: {
                 progress: '#password_progress',
                 verdict: '#password-verdict',

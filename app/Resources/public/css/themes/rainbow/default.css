@@ -75,6 +75,12 @@ a:focus {
     margin-top: 15px;
     margin-bottom: 10px;
 }
+.ui-widget-content{
+    color: #666;
+}
+.ui-widget-header{
+    color: #666;
+}
 .page-inscription .page-header{
     border: none;
 }

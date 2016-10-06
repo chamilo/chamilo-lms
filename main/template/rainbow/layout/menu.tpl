@@ -34,7 +34,7 @@
                         <a href="{{ _p.web }}web/app_dev.php/faq?_locale={{ document_language }}">{{ "FAQ"|get_lang }}</a>
                     </li>
                     <li class="item-menu menu-3 {% if _p.basename == 'inscription.php' %} active {% endif %}"><a href="{{ _p.web }}main/auth/inscription.php">{{ "Subscription"|get_lang }}</a></li>
-                    <li class="item-menu menu-4"><a href="#">{{ "Demo"|get_lang }}</a></li>
+                    <li class="item-menu menu-4"><a href="{{ "DemoMenuLink"|get_lang }}">{{ "Demo"|get_lang }}</a></li>
                     <li class="item-menu menu-5"><a href="{{ _p.web }}web/app_dev.php/contact?_locale={{ document_language }}">{{ "Contact"|get_lang }}</a></li>
                 {% endif %}
             </ul>

@@ -15,6 +15,7 @@ body {
   font-family: Verdana, Helvetica, Arial, sans-serif !important;
   line-height: 1.72222;
   background: url('images/bg.png') center center repeat-x;
+  color: #666;
 }
 a {
   color: #162A83;
@@ -99,6 +100,7 @@ a:focus {
     margin-top: 25px;
     padding-top: 20px;
     padding-bottom: 20px;
+    margin-bottom: 20px;
 }
 .list-items-faq{
     list-style: none;
@@ -126,14 +128,12 @@ a:focus {
     padding-right: 30px;
 }
 .block-faq .panel-default {
-    border: none;
     box-shadow: none;
 }
 .block-faq .panel-default .panel-heading{
     font-weight: bold;
     font-size: 16px;
     background: transparent;
-    border: none;
 }
 .back_to_top{
     font-size: 16px;
@@ -301,6 +301,9 @@ footer #footer_right{
     opacity: 1;
     color: #162A83;
 }
+.form-horizontal .progress{
+    margin-top: 10px;
+}
 .navbar{
   border-radius: 0;
 }
@@ -459,10 +462,10 @@ footer #footer_right{
   background-color: #ECF0F1;
 }
 .panel-default{
-  border-color: #ECF0F1;
+  border-color: #ddd;
 }
 .panel-default .panel-heading{
-  color: #2c3e50;
+  color: #666;
   background-color:#ECF0F1;
   border-color: #ECF0F1;
 }

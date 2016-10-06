@@ -2327,6 +2327,7 @@ class Display
         $buttonClass = "btn btn-$type";
         $icon = self::tag('i', null, ['class' => "fa fa-$icon fa-fw", 'aria-hidden' => 'true']);
         $attributes['class'] = isset($attributes['class']) ? "$buttonClass {$attributes['class']}" : $buttonClass;
+        $attributes['title'] = isset($attributes['title']) ? $attributes['title'] : $text;
 
         if (!$includeText) {
             $text = '<span class="sr-only">' . $text . '</span>';

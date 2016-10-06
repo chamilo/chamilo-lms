@@ -310,6 +310,25 @@ class bbb
     }
 
     /**
+     * Save a participant in a meeting room
+     * @param int $meetingId
+     * @param int $participantId
+     * @return false|int The last inserted ID. Otherwise return false
+     */
+    public function saveParticipant($meetingId, $participantId)
+    {
+        return Database::insert(
+            'plugin_bbb_room',
+            [
+                'meeting_id' => $meetingId,
+                'participant_id' => $participantId,
+                'in_at' => api_get_utc_datetime(),
+                'out_at' => api_get_utc_datetime()
+            ]
+        );
+    }
+
+    /**
      * Tells whether the given meeting exists and is running
      * (using course code as name)
      * @param string $meetingName Meeting name (usually the course code)
@@ -1234,5 +1253,50 @@ class bbb
         }
 
         return api_get_path(WEB_PLUGIN_PATH).'bbb/listing.php?'.$this->getUrlParams().'&action=copy_record_to_link_tool&id='.$meeting['id'];
+    }
+
+    /**
+     * Get the meeting info from DB by its name
+     * @param string $name
+     * @return array
+     */
+    public function findMeetingByName($name)
+    {
+        $meetingData = Database::select(
+            '*',
+            'plugin_bbb_meeting',
+            array('where' => array('meeting_name = ? AND status = 1 ' => $name)),
+            'first'
+        );
+
+        return $meetingData;
+    }
+
+    /**
+     * @param int $meetingId
+     * @return array
+     */
+    public function findMeetingParticipants($meetingId)
+    {
+        $em = Database::getManager();
+        $meetingData = Database::select(
+            '*',
+            'plugin_bbb_room',
+            array('where' => array('meeting_id = ?' => intval($meetingId)))
+        );
+
+        $return = [];
+
+        foreach ($meetingData as $participantInfo) {
+            $return[] = [
+                'id' => $participantInfo['id'],
+                'meeting_id' => $participantInfo['meeting_id'],
+                'participant' => $em->find('ChamiloUserBundle:User', $participantInfo['participant_id']),
+                'in_at' => $participantInfo['in_at'],
+                'out_at' => $participantInfo['out_at']
+            ];
+        }
+
+        return $return;
     }
 }

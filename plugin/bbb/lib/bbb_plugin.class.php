@@ -105,6 +105,18 @@ class BBBPlugin extends Plugin
                 )";
         Database::query($sql);
 
+        Database::query(
+            "CREATE TABLE plugin_bbb_room (
+                id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                meeting_id int(10) unsigned NOT NULL,
+                participant_id int(11) NOT NULL,
+                in_at datetime NOT NULL,
+                out_at datetime NOT NULL,
+                FOREIGN KEY (meeting_id) REFERENCES plugin_bbb_meeting (id),
+                FOREIGN KEY (participant_id) REFERENCES user (id)
+            );"
+        );
+
         // Installing course settings
         $this->install_course_fields_in_all_courses();
     }
@@ -145,6 +157,8 @@ class BBBPlugin extends Plugin
         $t = Database::get_main_table('plugin_bbb_meeting');
         $sql = "DROP TABLE IF EXISTS $t";
         Database::query($sql);
+
+        Database::query('DROP TABLE IF EXISTS plugin_bbb_room');
 
         // Deleting course settings
         $this->uninstall_course_fields_in_all_courses($this->course_settings);

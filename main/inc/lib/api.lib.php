@@ -7199,7 +7199,7 @@ function api_get_password_checker_js($usernameInputId, $passwordInputId)
                 minChar: 5,
             },
             ui: {
-                showErrors: false,
+                showErrors: true,
             },
             rules : {
                 scores: {

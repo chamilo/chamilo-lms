@@ -30,10 +30,10 @@
                         {{ meeting.show_links }}
                     {% endif %}
                 </td>
-                <td>{{ meeting.course ? meeting.course.title : '-' }}</td>
-                <td>{{ meeting.session ? meeting.session.name : '-' }}</td>
+                <td>{{ meeting.course ?: '-' }}</td>
+                <td>{{ meeting.session ?: '-' }}</td>
                 <td>
-                    {{ meeting.participants|join('<br>') }}
+                    {{ meeting.participants ? meeting.participants|join('<br>') : '-' }}
                 </td>
             </tr>
         {% endfor %}

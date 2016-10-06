@@ -4,6 +4,8 @@
  * @package chamilo.plugin.bigbluebutton
  */
 
+use Chamilo\UserBundle\Entity\User;
+
 $course_plugin = 'bbb'; //needed in order to load the plugin lang variables
 $cidReset = true;
 
@@ -19,6 +21,15 @@ $bbb = new bbb('', '');
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
 $meetings = $bbb->getMeetings();
+
+foreach ($meetings as &$meeting) {
+    $participants = $bbb->findMeetingParticipants($meeting['id']);
+
+    /** @var User $participant */
+    foreach ($participants as $participant) {
+        $meeting['participants'][] = $participant['participant']->getCompleteName();
+    }
+}
 
 if ($action) {
     switch ($action) {

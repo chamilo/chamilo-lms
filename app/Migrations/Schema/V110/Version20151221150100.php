@@ -29,9 +29,9 @@ class Version20151221150100 extends AbstractMigrationChamilo
         $this->addSql("
             UPDATE track_e_attempt a
             INNER JOIN c_quiz_answer qa
-            ON a.question_id = qa.question_id
+            ON (a.question_id = qa.question_id AND a.c_id = qa.c_id)
             INNER JOIN c_quiz_question q
-            ON qa.question_id = q.id
+            ON (qa.question_id = q.id AND qa.c_id = q.c_id)
             SET a.answer = qa.id_auto
             WHERE
                 a.answer = qa.id AND

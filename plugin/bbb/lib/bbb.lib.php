@@ -1255,9 +1255,13 @@ class bbb
                 Display::return_icon('delete.png', get_lang('Delete')),
                 $this->deleteRecordUrl($meetingInfo)
             );
+            $links[] = $linkVisibility;
+        } else {
+            $links[] = Display::url(
+                Display::return_icon('course_home.png', get_lang('GoToCourse')),
+                $this->getListingUrl()
+            );
         }
-
-        $links[] = $linkVisibility;
 
         return $links;
     }

@@ -1541,24 +1541,75 @@ div.admin_section h4 {
     border: 1px dashed #B0B0B0
 }
 #question_list .header_operations {
-    height:45px;
+    height:30px;
     margin-bottom:5px;
     clear: both;
     background: #F5F5F5;
     font-size: 12px;
+    padding: 2px;
 }
 #question_list .header_operations:hover{
     background: #FFEEAA;
     border-color: #FFDE57;
 }
-#question_list .header_operations .edition{
-    padding-top: 0;
+#question_list .header_operations .table{
+    margin: 0;
 }
-#question_list .header_operations .edition img{
-    margin-right: 5px;
+#question_list .header_operations.ui-state-focus{
+    background: #D9EDF7;
+    border-color: #bce8f1;
 }
-#question_list .header_operations img{
-    vertical-align: inherit;
+#question_list .header_operations .table tbody tr td{
+    padding: 0;
+    border: none;
+    vertical-align: middle;
+}
+#question_list .header_operations .table .question{
+    width: 40%;
+    padding-left: 5px;
+}
+#question_list .header_operations .table .type{
+    width: 10%;
+}
+#question_list .header_operations .table .category{
+    width: 20%;
+}
+#question_list .header_operations .table .level{
+    width: 10%;
+    text-align: center;
+}
+#question_list .header_operations .table .score{
+    width: 10%;
+    text-align: center;
+}
+#question_list .header_operations .table .btn-actions{
+    width: 10%;
+}
+#question_list .edition{
+    padding-top: 3px;
+    text-align: center;
+}
+#question_list .edition .items{
+    padding:2px;
+    margin:0 3px 0 0;
+    border: 1px solid #CCC;
+    border-radius: 5px;
+    background: #FFF;
+}
+#question_list .edition .items img{
+    width: 16px;
+}
+#question_list .question-list-description-block .question_options .radio{
+    min-height: 0;
+    margin-left: 30px;
+    margin-top: 0;
+}
+#question_list .question-list-description-block .question_options .radio p{
+    padding: 5px 0 0 0;
+    margin: 0;
+}
+#question_list .question-list-description-block .lead{
+    font-size: 18px;
 }
 .document_preview_container {
     border-radius: 5px;

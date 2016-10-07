@@ -31,6 +31,7 @@ class bbb
     private $courseCode;
     private $sessionId;
     private $groupId;
+    private $plugin;
 
     /**
      * Constructor (generates a connection to the API and the Chamilo settings
@@ -47,6 +48,7 @@ class bbb
 
         // Initialize video server settings from global settings
         $plugin = BBBPlugin::create();
+        $this->plugin = $plugin;
 
         $bbbPlugin = $plugin->get('tool_enable');
 
@@ -580,7 +582,7 @@ class bbb
                 }
 
                 $recordLink = Display::url(
-                    get_lang('ViewRecord'),
+                    $this->plugin->get_lang('ViewRecord'),
                     $record['playbackFormatUrl'],
                     ['target' => '_blank']
                 );

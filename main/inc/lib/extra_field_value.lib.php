@@ -74,11 +74,11 @@ class ExtraFieldValue extends Model
      * In order to save this function needs a item_id (user id, course id, etc)
      * This function is used with $extraField->addElements()
      * @param array $params array for the insertion into the *_field_values table
-     *
+     * @param bool $showQuery
      * @return mixed false on empty params, void otherwise
      * @assert (array()) === false
      */
-    public function saveFieldValues($params)
+    public function saveFieldValues($params, $showQuery = false)
     {
         foreach ($params as $key => $value) {
             $found = strpos($key, '__persist__');
@@ -103,7 +103,6 @@ class ExtraFieldValue extends Model
         $extraFields = $extraField->get_all(null, 'option_order');
 
         // Parse params.
-        //foreach ($params as $key => $value) {
         foreach ($extraFields as $fieldDetails) {
             if ($fieldDetails['visible'] != 1) {
                 continue;
@@ -308,7 +307,7 @@ class ExtraFieldValue extends Model
                         'comment' => $comment
                     );
 
-                    self::save($newParams);
+                    self::save($newParams, $showQuery);
             }
         }
     }

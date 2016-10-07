@@ -2131,7 +2131,7 @@ class GroupManager
      */
     public static function process_groups($group_list, $category_id = null)
     {
-        global $origin, $charset;
+        global $charset;
         $category_id = intval($category_id);
 
         $totalRegistered = 0;
@@ -2139,7 +2139,6 @@ class GroupManager
         $user_info = api_get_user_info();
         $session_id = api_get_session_id();
         $user_id = $user_info['user_id'];
-        $orig = isset($origin) ? $origin : null;
         $hideGroup = api_get_setting('hide_course_group_if_no_tools_available');
 
         foreach ($group_list as $this_group) {
@@ -2165,7 +2164,7 @@ class GroupManager
                     $groupNameClass = 'muted';
                 }
 
-                $group_name = '<a class="'.$groupNameClass.'" href="group_space.php?cidReq='.api_get_course_id().'&origin='.$orig.'&gidReq='.$this_group['id'].'">'.
+                $group_name = '<a class="'.$groupNameClass.'" href="group_space.php?'.api_get_cidreq(true, false).'&gidReq='.$this_group['id'].'">'.
                     Security::remove_XSS($this_group['name']).'</a> ';
                 if (!empty($user_id) && !empty($this_group['id_tutor']) && $user_id == $this_group['id_tutor']) {
                     $group_name .= Display::label(get_lang('OneMyGroups'), 'success');

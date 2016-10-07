@@ -515,12 +515,13 @@ function lp_upload_quiz_action_handling() {
                         break;
                     case FREE_ANSWER:
                         $questionObj = Question::read($question_id, $courseId);
-                        $globalScore = $score_list[$i][3];
-                        $questionObj->updateWeighting($globalScore);
-                        $questionObj->save();
+                        if ($questionObj) {
+                            $globalScore = $score_list[$i][3];
+                            $questionObj->updateWeighting($globalScore);
+                            $questionObj->save();
+                        }
                         break;
                     case FILL_IN_BLANKS:
-
                         $scoreList = array();
                         $size = array();
 
@@ -549,8 +550,10 @@ function lp_upload_quiz_action_handling() {
                         $objAnswer->save();
 
                         $questionObj = Question::read($question_id, $courseId);
-                        $questionObj->updateWeighting($globalScore);
-                        $questionObj->save();
+                        if ($questionObj) {
+                            $questionObj->updateWeighting($globalScore);
+                            $questionObj->save();
+                        }
                         break;
                     case MATCHING:
                         $globalScore = $score_list[$i][3];
@@ -582,8 +585,10 @@ function lp_upload_quiz_action_handling() {
                         $objAnswer->save();
 
                         $questionObj = Question::read($question_id, $courseId);
-                        $questionObj->updateWeighting($globalScore);
-                        $questionObj->save();
+                        if ($questionObj) {
+                            $questionObj->updateWeighting($globalScore);
+                            $questionObj->save();
+                        }
 
                         break;
                 }

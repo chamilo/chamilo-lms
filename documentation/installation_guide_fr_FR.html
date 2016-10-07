@@ -755,9 +755,13 @@ Ce sont uniquement les redirections à placer dans un bloc server{}, comme les a
 
   location @rewrite{
     rewrite ^/courses/([^/]+)/scorm/(.*)$ /main/document/download_scorm.php?doc_url=/$2&cDir=$1 last;
+    # Alternatively, you can choose to give direct access to all SCORM files, which is much faster but less secure
+    # rewrite "^/courses/([^/]+)/scorm/(.*)$" /app/courses/$1/scorm/$2 break;
+    rewrite "^/courses/([^/]+)/document/certificates/(.*)$" /app/courses/$1/document/certificates/$2 last;
     rewrite ^/courses/([^/]+)/document/(.*)$ /main/document/download.php?doc_url=/$2&cDir=$1 last;
     rewrite ^/courses/([^/]+)/work/(.*)$ /main/work/download.php?file=work/$2&cDir=$1 last;
     rewrite ^/courses/([^/]+)/upload/(.*)$ /app/courses/$1/upload/$2 last;
+    rewrite ^/main/upload/users/(.*)/(.*)/my_files/(.*)$ /app/upload/users/$1/$2/my_files/$3 last;
     try_files $uri /index.php;
     break;
   }

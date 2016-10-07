@@ -26,7 +26,8 @@ foreach ($meetings as &$meeting) {
 
     /** @var User $participant */
     foreach ($participants as $participant) {
-        $meeting['participants'][] = $participant['participant']->getCompleteName();
+        $meeting['participants'][] = $participant['participant']->getCompleteName()
+            . ' (' . $participant['participant']->getUsername() . ')';
     }
 }
 

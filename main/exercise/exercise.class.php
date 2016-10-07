@@ -3979,7 +3979,7 @@ class Exercise
                             }
 
                             if ($show_result) {
-                                if ($showTotalScoreAndUserChoicesInLastAttempt == false) {
+                                if ($showTotalScoreAndUserChoicesInLastAttempt === false) {
                                     $user_answer = '';
                                 }
                                 echo '<tr>';
@@ -3987,7 +3987,9 @@ class Exercise
                                 echo '<td>' . $user_answer;
 
                                 if (in_array($answerType, [MATCHING, MATCHING_DRAGGABLE])) {
-                                    if (isset($real_list[$i_answer_correct_answer]) && $showTotalScoreAndUserChoicesInLastAttempt == true) {
+                                    if (isset($real_list[$i_answer_correct_answer]) &&
+                                        $showTotalScoreAndUserChoicesInLastAttempt === true
+                                    ) {
                                         echo Display::span(
                                             $real_list[$i_answer_correct_answer],
                                             ['style' => 'color: #008000; font-weight: bold;']

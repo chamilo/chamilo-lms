@@ -1626,7 +1626,10 @@ div.admin_section h4 {
     top: 0;
     right: 0;
 }
-
+.view-options{
+    padding-top: 6px;
+    padding-right: 10px;
+}
 #course_settings h3 img {
     margin-left: 25px;
 }

@@ -639,41 +639,42 @@ class bbb
                     // the table's primary key), skip this conference
                     continue;
                 }
-                $recordingParams = array(
-                    'meetingId' => $mId, //-- OPTIONAL - comma separate if multiple ids
-                );
-
-                //To see the recording list in your BBB server do: bbb-record --list
-                $records = $this->api->getRecordingsWithXmlResponseArray($recordingParams);
-
-                if ($isAdminReport) {
-                    $courseInfo = api_get_course_info_by_id($meetingDB['c_id']);
-                    $this->forceCIdReq($courseInfo['code'], $meetingDB['session_id'], $meetingDB['group_id']);
-                }
 
                 $record = [];
                 $recordLink = get_lang('NoRecording');
 
-                if (!empty($records)) {
-                    if (!isset($records['messageKey']) || $records['messageKey'] != 'noRecordings') {
-                        //if you get several recordings here and you used a
-                        // previous version of Chamilo, you might want to
-                        // only keep the last result for each chamilo conf
-                        $record = end($records);
-                        if (!is_array($record) || !isset($record['recordId'])) {
-                            continue;
-                        }
+                if (empty($meetingDB['video_url'])) {
+                    $recordingParams = ['meetingId' => $mId];
+                    $records = $this->api->getRecordingsWithXmlResponseArray($recordingParams);
 
-                        $recordLink = Display::url(
-                            get_lang('ViewRecord')." [~".$record['playbackFormatLength']."']",
-                            $record['playbackFormatUrl'],
-                            array('target' => '_blank')
-                        );
+                    if (!empty($records)) {
+                        if (!isset($records['messageKey']) || $records['messageKey'] != 'noRecordings') {
+                            $record = end($records);
 
-                        if (!$this->isConferenceManager()) {
-                            $record = [];
+                            if (!is_array($record) || !isset($record['recordId'])) {
+                                continue;
+                            }
+
+                            $this->updateMeetingVideoUrl($meetingDB['id'], $record['playbackFormatUrl']);
+
+                            if (!$this->isConferenceManager()) {
+                                $record = [];
+                            }
                         }
                     }
+                } else {
+                    $record['playbackFormatUrl'] = $meetingDB['video_url'];
+                }
+
+                $recordLink = Display::url(
+                    get_lang('ViewRecord'),
+                    $record['playbackFormatUrl'],
+                    ['target' => '_blank']
+                );
+
+                if ($isAdminReport) {
+                    $courseInfo = api_get_course_info_by_id($meetingDB['c_id']);
+                    $this->forceCIdReq($courseInfo['code'], $meetingDB['session_id'], $meetingDB['group_id']);
                 }
 
                 $actionLinks = $this->getActionLinks($meetingDB, $record, $isGlobal, $isAdminReport);
@@ -1212,6 +1213,13 @@ class bbb
         return $return;
     }
 
+    /**
+     * @param array $meetingInfo
+     * @param array $recordInfo
+     * @param bool $isGlobal
+     * @param bool $isAdminReport
+     * @return array
+     */
     private function getActionLinks($meetingInfo, $recordInfo, $isGlobal = false, $isAdminReport = false)
     {
         $isVisible = $meetingInfo['visibility'] != 0;
@@ -1264,5 +1272,19 @@ class bbb
         }
 
         return $links;
+    }
+
+    /**
+     * @param int $meetingId
+     * @param string $videoUrl
+     * @return bool|int
+     */
+    public function updateMeetingVideoUrl($meetingId, $videoUrl)
+    {
+        return Database::update(
+            'plugin_bbb_meeting',
+            ['video_url' => $videoUrl],
+            ['id = ?' => intval($meetingId)]
+        );
     }
 }

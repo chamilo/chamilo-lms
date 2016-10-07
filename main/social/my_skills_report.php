@@ -148,7 +148,18 @@ if ($isStudent) {
             $skill = $objSkill->get($selectedSkill);
             $reportTitle = sprintf(get_lang('StudentsWhoAchievedTheSkillX'), $skill['name']);
             $students = UserManager::getUsersFollowedByUser(
-                $userId, STUDENT, false, false, false, null, null, null, null, null, null, DRH
+                $userId,
+                STUDENT,
+                false,
+                false,
+                false,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                DRH
             );
 
             $coursesFilter = array();
@@ -192,8 +203,7 @@ if ($isStudent) {
 }
 
 $tpl->assign('rows', $tableRows);
-
-$contentTemplate = $tpl->fetch("default/" . $tplPath);
-
+$templateName = $tpl->get_template($tplPath);
+$contentTemplate = $tpl->fetch($templateName);
 $tpl->assign('content', $contentTemplate);
 $tpl->display_one_col_template();

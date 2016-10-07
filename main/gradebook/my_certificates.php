@@ -29,9 +29,10 @@ $template = new Template(get_lang('MyCertificates'));
 
 $template->assign('course_list', $courseList);
 $template->assign('session_list', $sessionList);
-$content = $template->fetch('default/gradebook/my_certificates.tpl');
+$templateName = $template->get_template('gradebook/my_certificates.tpl');
+$content = $template->fetch($templateName);
 
-if (api_get_setting('allow_public_certificates') == 'true') {
+if (api_get_setting('allow_public_certificates') === 'true') {
     $template->assign(
         'actions',
         Display::toolbarButton(

@@ -541,7 +541,8 @@ $template->assign(
 $template->assign('lp_id', $_SESSION['oLP']->lp_id);
 $template->assign('lp_current_item_id', $_SESSION['oLP']->get_current_item_id());
 
-$content = $template->fetch('default/learnpath/view.tpl');
+$view = $template->get_template('learnpath/view.tpl');
+$content = $template->fetch($view);
 
 $template->assign('content', $content);
 $template->display_no_layout_template();

@@ -246,11 +246,7 @@ if ($agenda->type === 'course') {
 }
 
 $tpl->assign('form_add', $form->returnForm());
-
-// Loading Agenda template.
-$content = $tpl->fetch('default/agenda/month.tpl');
-
+$templateName = $tpl->get_template('agenda/month.tpl');
+$content = $tpl->fetch($templateName);
 $tpl->assign('content', $content);
-
-// Loading main Chamilo 1 col template
 $tpl->display_one_col_template();

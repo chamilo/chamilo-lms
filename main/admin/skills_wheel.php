@@ -70,7 +70,7 @@ $saveProfileForm->addHidden('profile_id', null);
 $saveProfileForm->addText('name', get_lang('Name'), true, ['id' => 'name_profile']);
 $saveProfileForm->addTextarea('description', get_lang('Description'), ['id' => 'description_profile', 'rows' => 6]);
 $tpl->assign('saveProfileForm', $saveProfileForm->returnForm());
-
-$content = $tpl->fetch('default/skill/skill_wheel.tpl');
+$templateName = $tpl->get_template('skill/skill_wheel.tpl');
+$content = $tpl->fetch($templateName);
 $tpl->assign('content', $content);
 $tpl->display_no_layout_template();

@@ -216,15 +216,16 @@ class Notification extends Model
      * NOTIFICATION_TYPE_MESSAGE,
      * NOTIFICATION_TYPE_INVITATION,
      * NOTIFICATION_TYPE_GROUP
-     * @param array	    $user_list recipients: user list of ids
+     * @param array	    $userList recipients: user list of ids
      * @param string	$title
      * @param string	$content
-     * @param array	    $sender_info
-     * result of api_get_user_info() or GroupPortalManager:get_group_data()
+     * @param array	    $senderInfo result of api_get_user_info() or GroupPortalManager:get_group_data()
+     * @param array	    $attachments
+     *
      */
     public function save_notification(
         $type,
-        $user_list,
+        $userList,
         $title,
         $content,
         $senderInfo = array(),
@@ -259,8 +260,8 @@ class Notification extends Model
 
         $settingInfo = UserManager::get_extra_field_information_by_name($settingToCheck);
 
-        if (!empty($user_list)) {
-            foreach ($user_list as $user_id) {
+        if (!empty($userList)) {
+            foreach ($userList as $user_id) {
                 if ($avoid_my_self) {
                     if ($user_id == api_get_user_id()) {
                         continue;
@@ -273,8 +274,15 @@ class Notification extends Model
 
                 if (!empty($settingInfo)) {
                     $extra_data = UserManager::get_extra_user_data($user_id);
-                    if (isset($extra_data[$settingToCheck]) && !empty($extra_data[$settingToCheck])) {
+
+                    if (isset($extra_data[$settingToCheck])) {
                         $userSetting = $extra_data[$settingToCheck];
+                    }
+
+                    // Means that user extra was not set
+                    // Then send email now.
+                    if ($userSetting === '') {
+                        $userSetting = NOTIFY_MESSAGE_AT_ONCE;
                     }
                 }
 
@@ -329,7 +337,7 @@ class Notification extends Model
                 $this->save($params);
             }
 
-            self::sendPushNotification($user_list, $title, $content);
+            self::sendPushNotification($userList, $title, $content);
         }
     }
 

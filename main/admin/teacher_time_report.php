@@ -368,25 +368,22 @@ $form->setDefaults([
 ]);
 
 $tpl = new Template($toolName);
-$tpl->assign('reportTitle', $reportTitle);
-$tpl->assign('reportSubTitle', $reportSubTitle);
-
-$tpl->assign('selectedCourse', $selectedCourse);
-$tpl->assign('selectedSession', $selectedSession);
-$tpl->assign('selectedTeacher', $selectedTeacher);
-$tpl->assign('selectedFrom', $selectedFrom);
-$tpl->assign('selectedUntil', $selectedUntil);
-
-$tpl->assign('withFilter', $withFilter);
-
+$tpl->assign('report_title', $reportTitle);
+$tpl->assign('report_sub_title', $reportSubTitle);
+$tpl->assign('selected_course', $selectedCourse);
+$tpl->assign('selected_session', $selectedSession);
+$tpl->assign('selected_teacher', $selectedTeacher);
+$tpl->assign('selected_from', $selectedFrom);
+$tpl->assign('selected_until', $selectedUntil);
+$tpl->assign('with_filter', $withFilter);
 $tpl->assign('courses', $courseList);
 $tpl->assign('sessions', $sessionsList);
-$tpl->assign('courseCoaches', $teacherList);
-
+//$tpl->assign('courseCoaches', $teacherList);
 $tpl->assign('form', $form->returnForm());
-
 $tpl->assign('rows', $timeReport->data);
 
-$contentTemplate = $tpl->fetch('default/admin/teacher_time_report.tpl');
+$templateName = $tpl->get_template('admin/teacher_time_report.tpl');
+
+$contentTemplate = $tpl->fetch($templateName);
 $tpl->assign('content', $contentTemplate);
 $tpl->display_one_col_template();

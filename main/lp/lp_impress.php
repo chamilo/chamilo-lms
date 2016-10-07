@@ -95,6 +95,7 @@ foreach ($list as $toc) {
 $tool_name = get_lang('ViewModeImpress');
 $tpl = new Template($tool_name, false, false, true);
 $tpl->assign('html', $html);
-$content = $tpl->fetch('default/learnpath/impress.tpl');
+$templateName = $tpl->get_template('learnpath/impress.tpl');
+$content = $tpl->fetch($templateName);
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

@@ -7,6 +7,7 @@
             <th>{{ 'Course'|get_lang }}</th>
             <th>{{ 'Session'|get_lang }}</th>
             <th>{{ 'Participants'|get_lang }}</th>
+            <th>{{ 'Actions'|get_lang }}</th>
         </tr>
     </thead>
         <tbody>
@@ -34,6 +35,9 @@
                 <td>{{ meeting.session ?: '-' }}</td>
                 <td>
                     {{ meeting.participants ? meeting.participants|join('<br>') : '-' }}
+                </td>
+                <td>
+                    {{ meeting.action_links }}
                 </td>
             </tr>
         {% endfor %}

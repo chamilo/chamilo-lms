@@ -1245,7 +1245,7 @@ class bbb
         }
 
         $links[] = Display::url(
-            Display::return_icon('down.png', get_lang('DownloadFile')),
+            Display::return_icon('save.png', get_lang('DownloadFile')),
             $recordInfo['playbackFormatUrl'] . '/capture.m4v',
             ['target' => '_blank']
         );

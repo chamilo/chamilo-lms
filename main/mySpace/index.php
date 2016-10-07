@@ -429,7 +429,6 @@ if ($export_csv) {
          </div>';
 }
 
-
 // Send the csv file if asked
 if ($export_csv) {
 	ob_end_clean();

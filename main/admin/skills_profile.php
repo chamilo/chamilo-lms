@@ -143,9 +143,10 @@ foreach ($total_skills_to_search as $skill_info) {
 
 $tpl->assign('skill_list', $skill_list);
 $tpl->assign('search_skill_list', $skills);
-$form_to_html = $form->return_form();
+$form_to_html = $form->returnForm();
 $tpl->assign('form', $form_to_html);
 $tpl->assign('url', $url);
-$content = $tpl->fetch('default/skill/profile.tpl');
+$templateName = $tpl->get_template('skill/profile.tpl');
+$content = $tpl->fetch($templateName);
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

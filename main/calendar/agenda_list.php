@@ -79,10 +79,7 @@ if (api_is_allowed_to_edit()) {
     }
 }
 
-// Loading Agenda template
-$content = $tpl->fetch('default/agenda/event_list.tpl');
-
+$templateName = $tpl->get_template('agenda/event_list.tpl');
+$content = $tpl->fetch($templateName);
 $tpl->assign('content', $content);
-
-// Loading main Chamilo 1 col template
 $tpl->display_one_col_template();

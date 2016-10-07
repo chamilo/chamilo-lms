@@ -116,7 +116,7 @@ switch ($action) {
 }
 
 $tpl->assign('list', $list);
-
-$contentTemplate = $tpl->fetch('default/admin/skill_profile.tpl');
+$templateName = $tpl->get_template('admin/skill_profile.tpl');
+$contentTemplate = $tpl->fetch($templateName);
 $tpl->assign('content', $contentTemplate);
 $tpl->display_one_col_template();

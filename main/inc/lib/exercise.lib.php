@@ -84,7 +84,7 @@ class ExerciseLib
                 return '';
             }
 
-            echo '<div class="question_options row">';
+            echo '<div class="question_options">';
 
             // construction of the Answer object (also gets all answers details)
             $objAnswerTmp = new Answer($questionId);

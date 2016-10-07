@@ -1097,9 +1097,17 @@ class bbb
         $links = [];
 
         if (empty($recordInfo)) {
-            $links[] = $linkVisibility;
+            if (!$isAdminReport) {
+                $links[] = $linkVisibility;
 
-            return $links;
+                return $links;
+            } else {
+                $links[] = Display::url(
+                    Display::return_icon('course_home.png', get_lang('GoToCourse')),
+                    $this->getListingUrl()
+                );
+                return $links;
+            }
         }
 
         if (!$isGlobal) {

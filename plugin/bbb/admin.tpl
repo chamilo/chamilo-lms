@@ -36,6 +36,9 @@
                 <td>
                     {{ meeting.participants ? meeting.participants|join('<br>') : '-' }}
                 </td>
+                <td>
+                    {{ meeting.action_links }}
+                </td>
             </tr>
         {% endfor %}
     </tbody>

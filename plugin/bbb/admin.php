@@ -22,7 +22,7 @@ $isGlobal = isset($_GET['global']) ? true : false;
 $bbb = new bbb('', '', $isGlobal);
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
-$meetings = $bbb->getMeetings();
+$meetings = $bbb->getMeetings(0, 0, 0, true);
 
 foreach ($meetings as &$meeting) {
     $participants = $bbb->findMeetingParticipants($meeting['id']);
@@ -85,9 +85,7 @@ if ($meetings) {
         get_lang('ExportInExcel'),
         api_get_self() . '?action=export',
         'file-excel-o',
-        'success',
-        [],
-        false
+        'success'
     );
 }
 

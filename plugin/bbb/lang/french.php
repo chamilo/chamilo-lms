@@ -39,3 +39,5 @@ $strings['ThereAreNotRecordingsForTheMeetings'] = 'Aucun enregistrement disponib
 $strings['NoRecording'] = "Pas d'enregistrement";
 $strings['ClickToContinue'] = 'Cliquez pour continuer';
 $strings['UrlMeetingToShare'] = 'URL à partager';
+
+$strings['AdminView'] = 'View for administrators';

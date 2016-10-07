@@ -186,5 +186,19 @@ $tpl->assign('form', $formToString);
 
 $listing_tpl = 'bbb/listing.tpl';
 $content = $tpl->fetch($listing_tpl);
+
+if (api_is_platform_admin()) {
+    $actionLinks = [
+        Display::toolbarButton(
+            $plugin->get_lang('AdminView'),
+            api_get_path(WEB_PLUGIN_PATH) . 'bbb/admin.php',
+            'list',
+            'primary'
+        )
+    ];
+
+    $tpl->assign('actions', implode(PHP_EOL, $actionLinks));
+}
+
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

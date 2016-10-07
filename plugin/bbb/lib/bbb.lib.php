@@ -1252,11 +1252,23 @@ class bbb
             );
         }
 
-        $links[] = Display::url(
-            Display::return_icon('save.png', get_lang('DownloadFile')),
-            $recordInfo['playbackFormatUrl'] . '/capture.m4v',
-            ['target' => '_blank']
-        );
+        if ($meetingInfo['has_video_m4v']) {
+            $links[] = Display::url(
+                Display::return_icon('save.png', get_lang('DownloadFile')),
+                $recordInfo['playbackFormatUrl'] . '/capture.m4v',
+                ['target' => '_blank']
+            );
+        } else {
+            $links[] = Display::url(
+                Display::return_icon('save.png', get_lang('DownloadFile')),
+                '#',
+                [
+                    'id' => "btn-check-meeting-video-{$meetingInfo['id']}",
+                    'class' => 'check-meeting-video',
+                    'data-id' => $meetingInfo['id']
+                ]
+            );
+        }
 
         if (!$isAdminReport) {
             $links[] = Display::url(
@@ -1286,5 +1298,38 @@ class bbb
             ['video_url' => $videoUrl],
             ['id = ?' => intval($meetingId)]
         );
+    }
+
+    /**
+     * Check if the meeting has a capture.m4v video file. If exists then the has_video_m4v field is updated
+     * @param int $meetingId
+     * @return bool
+     */
+    public function checkDirectMeetingVideoUrl($meetingId)
+    {
+        $meetingInfo = Database::select(
+            '*',
+            'plugin_bbb_meeting',
+            [
+                'where' => ['id = ?' => intval($meetingId)]
+            ],
+            'first'
+        );
+
+        if (!isset($meetingInfo['video_url'])) {
+            return false;
+        }
+
+        $hasCapture = SocialManager::verifyUrl($meetingInfo['video_url'] . '/capture.m4v');
+
+        if ($hasCapture) {
+            return Database::update(
+                'plugin_bbb_meeting',
+                ['has_video_m4v' => true],
+                ['id = ?' => intval($meetingId)]
+            );
+        }
+
+        return $hasCapture;
     }
 }

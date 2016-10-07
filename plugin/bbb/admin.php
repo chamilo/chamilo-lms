@@ -15,7 +15,6 @@ api_protect_admin_script();
 
 $plugin = BBBPlugin::create();
 $tool_name = $plugin->get_lang('Videoconference');
-$tpl = new Template($tool_name);
 
 $isGlobal = isset($_GET['global']) ? true : false;
 
@@ -74,6 +73,13 @@ if (!$bbb->isServerRunning()) {
         Display::return_message(get_lang('ServerIsNotRunning'), 'error')
     );
 }
+
+$htmlHeadXtra[] = api_get_js_simple(
+    api_get_path(WEB_PLUGIN_PATH) . 'bbb/resources/utils.js'
+);
+$htmlHeadXtra[] = "<script>var _p = {web_plugin: '" . api_get_path(WEB_PLUGIN_PATH). "'}</script>";
+
+$tpl = new Template($tool_name);
 
 $tpl->assign('meetings', $meetings);
 

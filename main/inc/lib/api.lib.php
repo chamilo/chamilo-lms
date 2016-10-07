@@ -7241,7 +7241,7 @@ function api_get_password_checker_js($usernameInputId, $passwordInputId)
         'wordTwoCharacterClasses' => get_lang('WordTwoCharacterClasses'),
         'wordRepetitions' => get_lang('TooManyRepetitions'),
         'wordSequences' => get_lang('YourPasswordContainsSequences'),
-        'errorList' => get_lang('Errors'),
+        'errorList' => get_lang('ErrorsFound'),
         'veryWeak' => get_lang('PasswordVeryWeak'),
         'weak' => get_lang('PasswordWeak'),
         'normal' => get_lang('PasswordNormal'),

@@ -36,6 +36,7 @@ class bbb
     private $courseCode;
     private $sessionId;
     private $groupId;
+    private $plugin;
 
     /**
      * Constructor (generates a connection to the API and the Chamilo settings
@@ -667,7 +668,7 @@ class bbb
                 }
 
                 $recordLink = Display::url(
-                    get_lang('ViewRecord'),
+                    $this->plugin->get_lang('ViewRecord'),
                     $record['playbackFormatUrl'],
                     ['target' => '_blank']
                 );

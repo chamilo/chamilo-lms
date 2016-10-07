@@ -10,6 +10,13 @@ require_once __DIR__.'/config.php';
 $plugin = BBBPlugin::create();
 $tool_name = $plugin->get_lang('Videoconference');
 
+$htmlHeadXtra[] = api_get_js_simple(
+    api_get_path(WEB_PLUGIN_PATH) . 'bbb/resources/utils.js'
+);
+$htmlHeadXtra[] = "<script>var _p = {web_plugin: '" . api_get_path(WEB_PLUGIN_PATH). "'}</script>";
+
+$tpl = new Template($tool_name);
+
 $isGlobal = isset($_GET['global']) ? true : false;
 $isGlobalPerUser = isset($_GET['user_id']) ? (int) $_GET['user_id']: false;
 

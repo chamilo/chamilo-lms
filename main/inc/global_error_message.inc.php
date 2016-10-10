@@ -313,7 +313,7 @@ EOM;
         </body>
 </html>
 EOM;
-     }
+    }
     foreach ($global_error_message as $key => $value) {
         $global_error_message_page = str_replace('{'.strtoupper($key).'}', $value, $global_error_message_page);
     }

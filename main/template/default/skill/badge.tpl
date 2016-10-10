@@ -30,14 +30,10 @@
                 <h3 class="sub-title">{{ 'OpenBadgesActionCall' | get_lang }}</h3>
                 <div class="block-content">
                     <div class="block-title">{{ 'IssuerDetails' | get_lang }}</div>
-
                     <p>{{ 'Name' | get_lang }} : {{ _s.institution }}</p>
                     <p>{{ 'URL' | get_lang }} : {{ _p.web }}</p>
-
                     <div class="block-title">{{ 'BackpackDetails' | get_lang }}</div>
-
                     <p>{{ 'URL' | get_lang }} : {{ backpack }}</p>
-
                     <p>{{ 'TheBadgesWillBeSentToThatBackpack' | get_lang }}</p>
 
                 </div>

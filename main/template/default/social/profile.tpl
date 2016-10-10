@@ -91,7 +91,6 @@
             </div>
          </div>
         {% endif %}
-
         {{ invitations }}
         {{ social_rss_block }}
         {{ social_right_information }}

@@ -85,7 +85,6 @@
                                         {% endif %}
                                     </h4>
                                     <div class="notifications">{{ item.notifications }}</div>
-
                                 </div>
                             </div>
                         </div>

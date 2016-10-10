@@ -2,7 +2,6 @@
     <div class="row">
         <div class="col-xs-12">
             <p><em class="fa fa-clock-o"></em> <em>{{ session_date.display }}</em></p>
-
             {% if show_tutor %}
                 <p>
                     <em class="fa fa-user"></em> {{ 'SessionGeneralCoach'|get_lang }}: <em>{{ session.generalCoach.getCompleteName() }}</em>

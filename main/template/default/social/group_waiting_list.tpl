@@ -29,9 +29,7 @@
                     </div>
                 </div>
             </div>
-
             {% endfor %}
-
         </div>
         <div id="display_response_id" class="col-md-5"></div>
         {{ social_auto_extend_link }}

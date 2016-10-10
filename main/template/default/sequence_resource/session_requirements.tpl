@@ -2,7 +2,6 @@
 
 {% for item in sequences %}
     <h4>{{ item.name }}</h4>
-
     <div id="parents">
         {% for session in item.requirements %}
             <div class="parent">

@@ -350,7 +350,7 @@ if ($show_full_profile) {
             );
 
             if (in_array($extraFieldInfo['variable'], ['skype', 'linkedin_url'])) {
-                break;
+                continue;
             }
 
             // if is not visible skip

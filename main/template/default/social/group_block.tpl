@@ -1,1 +1,1 @@
-    {{ social_avatar_block }}
+{{ social_avatar_block }}

@@ -6,8 +6,8 @@
             <div class="sm-groups">
             {{ social_avatar_block }}
             {{ social_menu_block }}
-            
-            <!-- Block chat list -->    
+
+            <!-- Block chat list -->
             <div class="chat-friends">
                 <div class="panel-group" id="blocklistFriends" role="tablist" aria-multiselectable="true">
                     <div class="panel panel-default">
@@ -27,7 +27,6 @@
                 </div>
             </div>
             </div>
-            
         </div>
         <div class="col-md-9">
             {{ group_message }}

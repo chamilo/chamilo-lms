@@ -15,7 +15,6 @@
                                 <a href="{{ _p.web_main ~ 'social/my_skills_report.php' }}"> {{'SkillsReport'|get_lang }}</a>
                             </li>
                         {% endif %}
-
                         <li>
                             <a href="{{ _p.web_main ~ 'social/skills_wheel.php' }}"> {{ 'SkillsWheel'|get_lang }}</a>
                         </li>
@@ -30,11 +29,11 @@
             jQuery(document).ready(function(){
             jQuery('.scrollbar-inner').scrollbar();
         });
-                        </script>                
+                        </script>
         <div id="skillList" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
             <div class="panel-body">
                 {% if skills %}
-               
+
                 <div class="scrollbar-inner badges-sidebar">
                     <ul class="list-unstyled list-badges">
                         {% for skill in skills %}
@@ -49,7 +48,6 @@
                         {% endfor %}
                     </ul>
                 </div>
-                    
                 {% else %}
                     <p>{{ 'WithoutAchievedSkills'|get_lang }}</p>
                     <p>

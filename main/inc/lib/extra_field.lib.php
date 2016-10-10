@@ -15,7 +15,8 @@ class ExtraField extends Model
         'display_text',
         'default_value',
         'field_order',
-        'visible',
+        'visible_to_self',
+        'visible_to_others',
         'changeable',
         'filter',
         'extra_field_type',
@@ -193,8 +194,11 @@ class ExtraField extends Model
             case 'changeable':
                 $sidx = 'e.changeable';
                 break;
-            case 'visible':
-                $sidx = 'e.visible';
+            case 'visible_to_self':
+                $sidx = 'e.visibleToSelf';
+                break;
+            case 'visible_to_others':
+                $sidx = 'e.visibleToOthers';
                 break;
             case 'filter':
                 $sidx = 'e.filter';
@@ -842,7 +846,7 @@ class ExtraField extends Model
                 }
 
                 if (!$admin_permissions) {
-                    if ($field_details['visible'] == 0) {
+                    if ($field_details['visible_to_self'] == 0) {
                         continue;
                     }
 
@@ -862,7 +866,7 @@ class ExtraField extends Model
                         $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
                         $form->applyFilter('extra_'.$field_details['variable'], 'trim');
                         if (!$admin_permissions) {
-                            if ($field_details['visible'] == 0) {
+                            if ($field_details['visible_to_self'] == 0) {
                                 $form->freeze(
                                     'extra_'.$field_details['variable']
                                 );
@@ -880,7 +884,7 @@ class ExtraField extends Model
                         $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
                         $form->applyFilter('extra_'.$field_details['variable'], 'trim');
                         if (!$admin_permissions) {
-                            if ($field_details['visible'] == 0) {
+                            if ($field_details['visible_to_self'] == 0) {
                                 $form->freeze(
                                     'extra_'.$field_details['variable']
                                 );
@@ -907,7 +911,7 @@ class ExtraField extends Model
                             $field_details['display_text']
                         );
                         if (!$admin_permissions) {
-                            if ($field_details['visible'] == 0) {
+                            if ($field_details['visible_to_self'] == 0) {
                                 $form->freeze(
                                     'extra_'.$field_details['variable']
                                 );
@@ -953,7 +957,7 @@ class ExtraField extends Model
                             $field_details['display_text']
                         );
                         if (!$admin_permissions) {
-                            if ($field_details['visible'] == 0) {
+                            if ($field_details['visible_to_self'] == 0) {
                                 $form->freeze(
                                     'extra_'.$field_details['variable']
                                 );
@@ -1123,7 +1127,7 @@ class ExtraField extends Model
                         */
 
                         if (!$admin_permissions) {
-                            if ($field_details['visible'] == 0) {
+                            if ($field_details['visible_to_self'] == 0) {
                                 $form->freeze('extra_' . $field_details['variable']);
                             }
                         }
@@ -1141,7 +1145,7 @@ class ExtraField extends Model
                             array('multiple' => 'multiple', 'id' => 'extra_'.$field_details['variable'])
                         );
                         if (!$admin_permissions) {
-                            if ($field_details['visible'] == 0) {
+                            if ($field_details['visible_to_self'] == 0) {
                                 $form->freeze('extra_'.$field_details['variable']);
                             }
                         }
@@ -1149,7 +1153,7 @@ class ExtraField extends Model
                     case ExtraField::FIELD_TYPE_DATE:
                         $form->addDatePicker('extra_'.$field_details['variable'], $field_details['display_text']);
                         if (!$admin_permissions) {
-                            if ($field_details['visible'] == 0) {
+                            if ($field_details['visible_to_self'] == 0) {
                                 $form->freeze('extra_'.$field_details['variable']);
                             }
                         }
@@ -1167,7 +1171,7 @@ class ExtraField extends Model
                             $form->setDefaults($defaults);
                         }
                         if (!$admin_permissions) {
-                            if ($field_details['visible'] == 0) {
+                            if ($field_details['visible_to_self'] == 0) {
                                 $form->freeze('extra_'.$field_details['variable']);
                             }
                         }
@@ -1249,7 +1253,7 @@ class ExtraField extends Model
                         );
 
                         if (!$admin_permissions) {
-                            if ($field_details['visible'] == 0) {
+                            if ($field_details['visible_to_self'] == 0) {
                                 $form->freeze('extra_'.$field_details['variable']);
                             }
                         }
@@ -1375,7 +1379,7 @@ EOF;
                             api_get_timezones(),
                             ''
                         );
-                        if ($field_details['visible'] == 0) {
+                        if ($field_details['visible_to_self'] == 0) {
                             $form->freeze(
                                 'extra_'.$field_details['variable']
                             );
@@ -1409,7 +1413,7 @@ EOF;
                         );
                         $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
                         $form->applyFilter('extra_'.$field_details['variable'], 'trim');
-                        if ($field_details['visible'] == 0) {
+                        if ($field_details['visible_to_self'] == 0) {
                             $form->freeze('extra_'.$field_details['variable']);
                         }
                         break;
@@ -1428,7 +1432,7 @@ EOF;
                             get_lang('MobilePhoneNumberWrong'),
                             'mobile_phone_number'
                         );
-                        if ($field_details['visible'] == 0) {
+                        if ($field_details['visible_to_self'] == 0) {
                             $form->freeze('extra_'.$field_details['variable']);
                         }
                         break;
@@ -1445,7 +1449,7 @@ EOF;
                         $form->applyFilter('extra_'.$field_details['variable'], 'intval');
 
                         if (!$admin_permissions) {
-                            if ($field_details['visible'] == 0) {
+                            if ($field_details['visible_to_self'] == 0) {
                                 $form->freeze(
                                     'extra_'.$field_details['variable']
                                 );
@@ -1492,7 +1496,7 @@ EOF;
                         );
 
                         if (!$admin_permissions) {
-                            if ($field_details['visible'] == 0) {
+                            if ($field_details['visible_to_self'] == 0) {
                                 $form->freeze(
                                     'extra_'.$field_details['variable']
                                 );
@@ -1512,7 +1516,7 @@ EOF;
                         $form->applyFilter('extra_'.$field_details['variable'], 'floatval');
 
                         if (!$admin_permissions) {
-                            if ($field_details['visible'] == 0) {
+                            if ($field_details['visible_to_self'] == 0) {
                                 $form->freeze(
                                     'extra_'.$field_details['variable']
                                 );
@@ -1551,7 +1555,7 @@ EOF;
                         $form->applyFilter('extra_'.$field_details['variable'], 'trim');
 
                         if (!$admin_permissions) {
-                            if ($field_details['visible'] == 0) {
+                            if ($field_details['visible_to_self'] == 0) {
                                 $form->freeze(
                                     'extra_'.$field_details['variable']
                                 );
@@ -1574,7 +1578,7 @@ EOF;
                         $form->applyFilter('extra_' . $field_details['variable'], 'stripslashes');
 
                         if (!$admin_permissions) {
-                            if ($field_details['visible'] == 0) {
+                            if ($field_details['visible_to_self'] == 0) {
                                 $form->freeze(
                                     'extra_' . $field_details['variable']
                                 );
@@ -1591,7 +1595,7 @@ EOF;
                             'stripslashes'
                         );
                         if (!$admin_permissions) {
-                            if ($field_details['visible'] == 0) {
+                            if ($field_details['visible_to_self'] == 0) {
                                 $form->freeze(
                                     'extra_' . $field_details['variable']
                                 );
@@ -1606,7 +1610,7 @@ EOF;
                         $form->applyFilter('extra_' . $field_details['variable'], 'stripslashes');
 
                         if (!$admin_permissions) {
-                            if ($field_details['visible'] == 0) {
+                            if ($field_details['visible_to_self'] == 0) {
                                 $form->freeze(
                                     'extra_' . $field_details['variable']
                                 );
@@ -1623,7 +1627,7 @@ EOF;
                             'stripslashes'
                         );
                         if (!$admin_permissions) {
-                            if ($field_details['visible'] == 0) {
+                            if ($field_details['visible_to_self'] == 0) {
                                 $form->freeze(
                                     'extra_' . $field_details['variable']
                                 );
@@ -1643,7 +1647,7 @@ EOF;
                         $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
                         $form->applyFilter('extra_'.$field_details['variable'], 'trim');
                         if (!$admin_permissions) {
-                            if ($field_details['visible'] == 0) {
+                            if ($field_details['visible_to_self'] == 0) {
                                 $form->freeze(
                                     'extra_'.$field_details['variable']
                                 );
@@ -1831,7 +1835,8 @@ EOF;
             get_lang('FieldLabel'),
             get_lang('Type'),
             get_lang('FieldChangeability'),
-            get_lang('Visibility'),
+            get_lang('VisibleToSelf'),
+            get_lang('VisibleToOthers'),
             get_lang('Filter'),
             get_lang('FieldOrder'),
             get_lang('Actions')
@@ -1872,8 +1877,15 @@ EOF;
                 'sortable' => 'true',
             ),
             array(
-                'name' => 'visible',
-                'index' => 'visible',
+                'name' => 'visible_to_self',
+                'index' => 'visible_to_self',
+                'width' => '40',
+                'align' => 'left',
+                'sortable' => 'true',
+            ),
+             array(
+                'name' => 'visible_to_others',
+                'index' => 'visible_to_others',
                 'width' => '40',
                 'align' => 'left',
                 'sortable' => 'true',
@@ -1995,10 +2007,15 @@ EOF;
             array('id' => 'default_value')
         );
 
-        $group   = array();
-        $group[] = $form->createElement('radio', 'visible', null, get_lang('Yes'), 1);
-        $group[] = $form->createElement('radio', 'visible', null, get_lang('No'), 0);
-        $form->addGroup($group, '', get_lang('Visible'), null, false);
+        $group = array();
+        $group[] = $form->createElement('radio', 'visible_to_self', null, get_lang('Yes'), 1);
+        $group[] = $form->createElement('radio', 'visible_to_self', null, get_lang('No'), 0);
+        $form->addGroup($group, '', get_lang('VisibleToSelf'), null, false);
+
+        $group = array();
+        $group[] = $form->createElement('radio', 'visible_to_others', null, get_lang('Yes'), 1);
+        $group[] = $form->createElement('radio', 'visible_to_others', null, get_lang('No'), 0);
+        $form->addGroup($group, '', get_lang('VisibleToOthers'), null, false);
 
         $group   = array();
         $group[] = $form->createElement('radio', 'changeable', null, get_lang('Yes'), 1);
@@ -2027,7 +2044,8 @@ EOF;
             $defaults['field_options'] = $option->get_field_options_by_field_to_string($id);
             $form->addButtonUpdate(get_lang('Modify'));
         } else {
-            $defaults['visible'] = 0;
+            $defaults['visible_to_self'] = 0;
+            $defaults['visible_to_others'] = 0;
             $defaults['changeable'] = 0;
             $defaults['filter'] = 0;
             $form->addButtonCreate(get_lang('Add'));
@@ -2091,7 +2109,7 @@ JAVASCRIPT;
     {
         $fields = $this->get_all(
             array(
-                'visible = ? AND filter = ?' => array(1, 1)
+                'visible_to_self = ? AND filter = ?' => array(1, 1)
             ),
             'display_text'
         );
@@ -2468,7 +2486,7 @@ JAVASCRIPT;
         $fields = $this->get_all();
 
         foreach ($fields as $field) {
-            if ($field['visible'] != '1') {
+            if ($field['visible_to_self'] != '1') {
                 continue;
             }
 

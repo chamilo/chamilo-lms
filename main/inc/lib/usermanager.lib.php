@@ -2000,7 +2000,7 @@ class UserManager
         $extraFieldType = EntityExtraField::USER_FIELD_TYPE;
         $sqlf = "SELECT * FROM $t_uf WHERE extra_field_type = $extraFieldType ";
         if (!$all_visibility) {
-            $sqlf .= " AND visible = 1 ";
+            $sqlf .= " AND visible_to_self = 1 ";
         }
         if (!is_null($field_filter)) {
             $field_filter = intval($field_filter);
@@ -2020,7 +2020,7 @@ class UserManager
                     3 => empty($rowf['display_text']) ? '' : $rowf['display_text'],
                     4 => $rowf['default_value'],
                     5 => $rowf['field_order'],
-                    6 => $rowf['visible'],
+                    6 => $rowf['visible_to_self'],
                     7 => $rowf['changeable'],
                     8 => $rowf['filter'],
                     9 => array(),
@@ -2220,7 +2220,7 @@ class UserManager
                 $field_filter = intval($field_filter);
                 $filter_cond .= " AND filter = $field_filter ";
             }
-            $sql .= " AND f.visible = 1 $filter_cond ";
+            $sql .= " AND f.visible_to_self = 1 $filter_cond ";
         } else {
             if (isset($field_filter)) {
                 $field_filter = intval($field_filter);
@@ -2307,7 +2307,7 @@ class UserManager
                 WHERE f.variable = '$field_variable' ";
 
         if (!$all_visibility) {
-            $sql .= " AND f.visible = 1 ";
+            $sql .= " AND f.visible_to_self = 1 ";
         }
 
         $sql .= " AND extra_field_type = ".EntityExtraField::USER_FIELD_TYPE;

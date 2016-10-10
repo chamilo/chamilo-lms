@@ -19,7 +19,26 @@ $tool_name = $plugin->get_lang('Videoconference');
 $bbb = new bbb('', '');
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
-$meetings = $bbb->getMeetings(0, 0, 0, true);
+$form = new FormValidator(get_lang('Search'));
+$form->addDatePicker('search_meeting', get_lang('Date'));
+$form->addButtonSearch(get_lang('Search'));
+
+$actions = [];
+
+if ($form->validate()) {
+    $date = $form->getSubmitValue('search_meeting');
+    $meetings = $bbb->getMeetings(0, 0, 0, true, $date);
+
+    $actions[] = Display::toolbarButton(
+        $plugin->get_lang('ReturnToFullList'),
+        api_get_self(),
+        'list',
+        'primary'
+    );
+
+} else {
+    $meetings = $bbb->getMeetings(0, 0, 0, true);
+}
 
 foreach ($meetings as &$meeting) {
     $participants = $bbb->findMeetingParticipants($meeting['id']);
@@ -35,12 +54,12 @@ if ($action) {
     switch ($action) {
         case 'export':
             $dataToExport = [
-                [$tool_name, get_lang('RecordList')],
+                [$tool_name, $plugin->get_lang('RecordList')],
                 [],
                 [
                     get_lang('CreatedAt'),
                     get_lang('Status'),
-                    get_lang('Records'),
+                    $plugin->get_lang('Records'),
                     get_lang('Course'),
                     get_lang('Session'),
                     get_lang('Participants'),
@@ -50,7 +69,7 @@ if ($action) {
             foreach ($meetings as $meeting) {
                 $dataToExport[] = [
                     $meeting['created_at'],
-                    $meeting['status'] == 1 ? get_lang('MeetingOpened') : get_lang('MeetingClosed'),
+                    $meeting['status'] == 1 ? $plugin->get_lang('MeetingOpened') : $plugin->get_lang('MeetingClosed'),
                     $meeting['record'] == 1 ? get_lang('Yes') : get_lang('No'),
                     $meeting['course'] ? $meeting['course']->getTitle() : '-',
                     $meeting['session'] ? $meeting['session']->getName() : '-',
@@ -81,9 +100,9 @@ $htmlHeadXtra[] = "<script>var _p = {web_plugin: '" . api_get_path(WEB_PLUGIN_PA
 $tpl = new Template($tool_name);
 
 $tpl->assign('meetings', $meetings);
+$tpl->assign('search_form', $form->returnForm());
 
 $content = $tpl->fetch('bbb/admin.tpl');
-$actions = [];
 
 if ($meetings) {
     $actions[] = Display::toolbarButton(
@@ -94,7 +113,7 @@ if ($meetings) {
     );
 }
 
-$tpl->assign('header', get_lang('RecordList'));
+$tpl->assign('header', $plugin->get_lang('RecordList'));
 $tpl->assign('actions', implode('', $actions));
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

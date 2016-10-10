@@ -51,3 +51,5 @@ $strings['NoRecording'] = 'No hay grabación';
 $strings['ClickToContinue'] = 'Hacer click para continuar';
 
 $strings['AdminView'] = 'Vista para administradores';
+
+$strings['ReturnToFullList'] = 'Regresar a la lista completa';

@@ -195,7 +195,7 @@ footer #footer_right{
     display: none;
 }
 .hot-courses .grid-courses .items{
-    min-height: 230px;
+    min-height: 220px;
 }
 #latest_pages .section-title{
     margin-bottom: 35px;
@@ -457,6 +457,7 @@ footer #footer_right{
 .grid-courses .items .title{
     font-size: 12px;
     font-weight: bold;
+    min-height: 35px;
 }
 .badge-warning{
   background-color: #6D237D;

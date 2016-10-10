@@ -198,6 +198,10 @@ class IndexManager
                 $show_create_link = true;
             }
 
+            if (api_is_student_boss() || api_is_session_admin()) {
+                $show_create_link = false;
+            }
+
             if ($show_menu && ($show_create_link || $show_course_link )) {
                 $show_menu = true;
             } else {

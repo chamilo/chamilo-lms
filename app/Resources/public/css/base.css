@@ -1288,21 +1288,18 @@ a.unread {
  float:left;
  width:100%;
 }
-
 .lp_resource_element, .lp_resource_element_no_link {
-    background-image:-moz-linear-gradient(top,#fefefe,#eee);
-    background-image:-webkit-gradient(linear,left top,left bottom,color-stop(0,#fdfdfd),color-stop(1,#eee));
-    border: 1px solid #CCCCCC;
+    border: 1px solid #DDDDDD;
     color: #444444;
     cursor: pointer;
-    font-weight: bold;
     text-decoration: none;
-    text-shadow: 0 1px 1px #F6F6F6;
     margin:5px;
-    padding:5px;
-    list-style: none outside none;
+    padding:5px 10px;
+    list-style: none;
     border-radius: 5px;
-    width:80% !important;
+}
+.lp_resource_element:hover{
+    background-color: #E6E6E6;
 }
 .lp_resource_element_new a {
   font-size: 14px;
@@ -1508,15 +1505,15 @@ div.admin_section h4 {
 }
 
 #lp_item_list ul, #lp_item_list li{
-    /* float:left;*/
     width:100%;
 }
-
 #lp_item_list .item_data {
-    padding:5px 0px 5px 0px;
+    padding:0;
     /* float:left;*/
 }
-
+#lp_item_list .item_data span{
+    margin-left: 5px;
+}
 .item_data .button_actions {
     display: none;
     margin: 5px 0px;
@@ -5688,9 +5685,6 @@ a.sessionView {
     margin-top: 20px;
 }
 #resource_tab li a {
-    padding: 5px 10px;
-}
-#resource_tab li.lp_resource_element a{
     padding: 5px;
 }
 /* Gravatar */

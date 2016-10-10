@@ -1231,7 +1231,10 @@ a.unread {
 #course_tools .content a {
   font-size: 12px;
 }
-
+.course-tool .make_visible_and_invisible img{
+    margin-top: -3px;
+    margin-right: 5px;
+}
 .big_icon img {
   padding:5px;
   -moz-border-radius:10px;

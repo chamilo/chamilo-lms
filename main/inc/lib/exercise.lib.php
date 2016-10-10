@@ -322,7 +322,7 @@ class ExerciseLib
                         }
 
                         $answer = Security::remove_XSS($answer, STUDENT);
-          
+
                         $s .= Display::input(
                             'hidden',
                             'choice2[' . $questionId . ']',
@@ -1144,6 +1144,7 @@ HTML;
 
             if ($freeze) {
                 $relPath = api_get_path(REL_PATH);
+                $relPath = api_get_path(REL_PATH).'chamilo_ofaj/';
                 echo "
                     <script>
                         $(document).on('ready', function () {
@@ -1218,6 +1219,7 @@ HOTSPOT;
             }
 
             $relPath = api_get_path(REL_PATH);
+            $relPath = api_get_path(REL_PATH).'chamilo_ofaj/';
             $s .= "
                             <div class=\"col-sm-8 col-md-9\">
                                 <div class=\"hotspot-image\"></div>

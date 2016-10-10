@@ -270,7 +270,9 @@ class Matching extends Question
         $header .= '<table class="'.$this->question_table_class .'">';
         $header .= '<tr>
                 <th>'.get_lang('ElementList').'</th>
-                <th>'.get_lang('CorrespondsTo').'</th>
+                <th>'.get_lang('YourChoice').'</th>
+                <th>'.get_lang('ExpectedChoice').'</th>
+                <th>'.get_lang('Status').'</th>
               </tr>';
 
         return $header;

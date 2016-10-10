@@ -436,6 +436,7 @@ foreach ($questionList as $questionId) {
 
             if ($show_results) {
                 $relPath = api_get_path(REL_PATH);
+                $relPath = api_get_path(REL_PATH).'chamilo_ofaj/';
                 echo '</table></td></tr>';
                 echo "
                         <tr>

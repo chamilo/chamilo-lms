@@ -79,10 +79,17 @@ class ExerciseShowFunctions
         $id,
         $questionId,
         $results_disabled,
-        $showTotalScoreAndUserChoices
+        $showTotalScoreAndUserChoices,
+        $expectedChoice = '',
+        $choice = '',
+        $status = ''
     ) {
         if (empty($id)) {
-            echo '<tr><td>'. Security::remove_XSS($answer).'</td></tr>';
+            echo '<tr><td>'. Security::remove_XSS($answer).'</td>';
+            echo '<td>'. Security::remove_XSS($choice).'</td>';
+            echo '<td>'. Security::remove_XSS($expectedChoice).'</td>';
+            echo '<td>'. Security::remove_XSS($status).'</td>';
+            echo '</tr>';
         } else {
         ?>
             <tr>
@@ -91,12 +98,27 @@ class ExerciseShowFunctions
                     echo Security::remove_XSS($answer);
                     ?>
                 </td>
+                 <td>
+                    <?php
+                    echo Security::remove_XSS($choice);
+                    ?>
+                </td>
+                <td>
+                    <?php
+                    echo Security::remove_XSS($expectedChoice);
+                    ?>
+                </td>
+                  <td>
+                    <?php
+                    echo Security::remove_XSS($status);
+                    ?>
+                </td>
 
             <?php
             if (!api_is_allowed_to_edit(null,true) && $feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
                 <td>
                     <?php
-                    $comm = Event::get_comments($id,$questionId);
+                    $comm = Event::get_comments($id, $questionId);
                     ?>
                 </td>
             <?php } ?>
@@ -246,7 +268,7 @@ class ExerciseShowFunctions
 			<td class="text-left" width="10%">
 				<?php
                 if (!$hide_expected_answer) {
-    				$my_choice = $studentChoice ? get_lang('Correct') : get_lang('Fault');
+    				$my_choice = $studentChoice ? Display::label(get_lang('Correct'), 'success') : Display::label(get_lang('Incorrect'), 'danger');
     				echo $my_choice;
                 }
 				?>
@@ -292,7 +314,6 @@ class ExerciseShowFunctions
         $resultsDisabled,
         $showTotalScoreAndUserChoices
     ) {
-
         $hide_expected_answer = false;
         if ($feedback_type == 0 && ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ONLY)) {
             $hide_expected_answer = true;
@@ -326,9 +347,24 @@ class ExerciseShowFunctions
                 echo "-";
             } ?>
 		</td>
-		<td width="40%">
+
+		<td width="30%">
 			<?php
 			echo $answer;
+			?>
+		</td>
+
+        <?php
+        $status = Display::label(get_lang('Incorrect'), 'danger');
+        if ($studentChoice) {
+            if ($answerCorrect) {
+                $status = Display::label(get_lang('Correct'), 'success');
+            }
+        }
+     ?>
+        <td width="20%">
+			<?php
+			echo $status;
 			?>
 		</td>
 
@@ -431,10 +467,21 @@ class ExerciseShowFunctions
         } else {
             echo '-';
         }
+
+        $status = Display::label(get_lang('Incorrect'), 'danger');
+        if (isset($new_options[$studentChoice])) {
+            if ($studentChoice == $answerCorrect) {
+                $status = Display::label(get_lang('Correct'), 'success');
+            }
+        }
         ?>
         </td>
-        <td width="40%">
+        <td width="30%">
 			<?php echo $answer; ?>
+        </td>
+
+        <td width="20%">
+			<?php echo $status; ?>
         </td>
 
         <?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
@@ -533,12 +580,29 @@ class ExerciseShowFunctions
         }
         ?>
         </td>
-        <td width="40%">
+
+        <td width="30%">
             <?php
             //my answer
             echo $answer;
             ?>
         </td>
+
+         <?php
+        $status = Display::label(get_lang('Incorrect'), 'danger');
+        if ($studentChoice) {
+            if ($studentChoice == $answerCorrect) {
+                $status = Display::label(get_lang('Correct'), 'success');
+            }
+        }
+        ?>
+
+        <td width="20%">
+			<?php
+			echo $status;
+			?>
+		</td>
+
 
         <?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
         <td width="20%">

@@ -3792,6 +3792,10 @@ class Exercise
                     }
                     $answer = '';
                     $realCorrectTags = $correctTags;
+                    $calculatedStatus = Display::label(get_lang('Incorrect'), 'danger');
+                    $expectedAnswer = '';
+                    $calculatedChoice = '';
+
                     for ($i = 0; $i < count($realCorrectTags); $i++) {
                         if ($i == 0) {
                             $answer .= $realText[0];
@@ -3805,10 +3809,12 @@ class Exercise
                             $totalScore += $answerWeighting[$i];
                             // adds the word in green at the end of the string
                             $answer .= $correctTags[$i];
+                            $calculatedChoice = $correctTags[$i];
                         } elseif (!empty($userTags[$i])) {
                             // else if the word entered by the student IS NOT the same as the one defined by the professor
                             // adds the word in red at the end of the string, and strikes it
                             $answer .= '<font color="red"><s>' . $userTags[$i] . '</s></font>';
+                            $calculatedChoice = $userTags[$i];
                         } else {
                             // adds a tabulation if no word has been typed by the student
                             $answer .= ''; // remove &nbsp; that causes issue
@@ -3819,10 +3825,10 @@ class Exercise
                             $this->results_disabled != EXERCISE_FEEDBACK_TYPE_EXAM
                         ) {
                             $answer .= ' / <font color="green"><b>' . $realCorrectTags[$i] . '</b></font>';
+                            $calculatedStatus = Display::label(get_lang('Correct'), 'success');
+                            $expectedAnswer = $realCorrectTags[$i];
                         }
-
                         $answer .= ']';
-
                         if (isset($realText[$i +1])) {
                             $answer .= $realText[$i +1];
                         }
@@ -3912,10 +3918,16 @@ class Exercise
                                     correct <> 0
                                 ORDER BY id_auto';
                         $res_answers = Database::query($sql);
+                        $options = [];
+                        while ($a_answers = Database::fetch_array($res_answers)) {
+                            $options[] = $a_answers;
+                        }
 
                         $questionScore = 0;
+                        $counterAnswer = 1;
 
-                        while ($a_answers = Database::fetch_array($res_answers)) {
+                        //while ($a_answers = Database::fetch_array($res_answers)) {
+                        foreach ($options as $a_answers) {
                             $i_answer_id = $a_answers['id']; //3
                             $s_answer_label = $a_answers['answer'];  // your daddy - your mother
                             $i_answer_correct_answer = $a_answers['correct']; //1 - 2
@@ -3937,55 +3949,74 @@ class Exercise
                             }
 
                             $i_answerWeighting = $a_answers['ponderation'];
-
                             $user_answer = '';
+                            $status = Display::label(get_lang('Incorrect'), 'danger');
+
                             if (!empty($s_user_answer)) {
                                 if ($answerType == DRAGGABLE) {
                                     if ($s_user_answer == $i_answer_correct_answer) {
                                         $questionScore += $i_answerWeighting;
                                         $totalScore += $i_answerWeighting;
-                                        $user_answer = Display::label(get_lang('Correct'), 'success');
+                                        $user_answer = $answerMatching[$i_answer_id_auto];
+                                        $status = Display::label(get_lang('Correct'), 'success');
                                     } else {
-                                        $user_answer = Display::label(get_lang('Incorrect'), 'danger');
+                                        $data = $options[$real_list[$s_user_answer]-1];
+                                        $user_answer = $data['answer'];
                                     }
                                 } else {
                                     if ($s_user_answer == $i_answer_correct_answer) {
                                         $questionScore += $i_answerWeighting;
                                         $totalScore += $i_answerWeighting;
+                                        $status = Display::label(get_lang('Correct'), 'success');
 
-                                        if (isset($real_list[$i_answer_id])) {
-                                            $user_answer = Display::span($real_list[$i_answer_id]);
+                                        if (isset($real_list[$i_answer_correct_answer])) {
+                                            $user_answer = Display::span($real_list[$i_answer_correct_answer]);
                                         }
                                     } else {
                                         $user_answer = Display::span(
-                                            $real_list[$s_user_answer],
-                                            ['style' => 'color: #FF0000; text-decoration: line-through;']
+                                            $real_list[$s_user_answer]
                                         );
                                     }
                                 }
                             } elseif ($answerType == DRAGGABLE) {
-                                $user_answer = Display::label(get_lang('Incorrect'), 'danger');
+                                $user_answer = '';
                             }
 
                             if ($show_result) {
                                 if ($showTotalScoreAndUserChoices == true) {
                                     $user_answer = '';
                                 }
-                                echo '<tr>';
-                                echo '<td>' . $s_answer_label . '</td>';
-                                echo '<td>' . $user_answer;
+                                switch ($answerType) {
+                                    case MATCHING:
+                                    case MATCHING_DRAGGABLE:
+                                        echo '<tr>';
+                                        echo '<td>' . $counterAnswer . '</td>';
+                                        echo '<td>' . $user_answer.'</td>';
+                                        echo '<td>';
+                                        if (in_array($answerType, [MATCHING, MATCHING_DRAGGABLE])) {
+                                            if (isset($real_list[$i_answer_correct_answer]) &&
+                                                $showTotalScoreAndUserChoices == false
+                                            ) {
+                                                echo Display::span(
+                                                    $real_list[$i_answer_correct_answer]
+                                                );
+                                            }
+                                        }
 
-                                if (in_array($answerType, [MATCHING, MATCHING_DRAGGABLE])) {
-                                    if (isset($real_list[$i_answer_correct_answer]) && $showTotalScoreAndUserChoices == false) {
-                                        echo Display::span(
-                                            $real_list[$i_answer_correct_answer],
-                                            ['style' => 'color: #008000; font-weight: bold;']
-                                        );
-                                    }
+                                        //echo '<td>' . $s_answer_label . '</td>';
+                                        echo '<td>' . $status . '</td>';
+                                        echo '</tr>';
+                                        break;
+                                    case DRAGGABLE:
+                                        echo '<tr>';
+                                        echo '<td>' . $user_answer.'</td>';
+                                        echo '<td>' . $s_answer_label . '</td>';
+                                        echo '<td>' . $status . '</td>';
+                                        echo '</tr>';
+                                        break;
                                 }
-                                echo '</td>';
-                                echo '</tr>';
                             }
+                            $counterAnswer++;
                         }
                         break(2); // break the switch and the "for" condition
                     } else {
@@ -4202,7 +4233,10 @@ class Exercise
                                 0,
                                 0,
                                 $results_disabled,
-                                $showTotalScoreAndUserChoices
+                                $showTotalScoreAndUserChoices,
+                                $expectedAnswer,
+                                $calculatedChoice,
+                                $calculatedStatus
                             );
                         } elseif ($answerType == FREE_ANSWER) {
                             ExerciseShowFunctions::display_free_answer(
@@ -4978,6 +5012,7 @@ class Exercise
 
                 if ($show_result) {
                     $relPath = api_get_path(REL_PATH);
+                    $relPath = api_get_path(REL_PATH).'chamilo_ofaj/';
                     //	if ($origin != 'learnpath') {
                     echo '</table></td></tr>';
                     echo "

@@ -216,10 +216,12 @@ class Draggable extends Question
     {
         $header = parent::return_header($feedback_type, $counter, $score);
         $header .= '<table class="' . $this->question_table_class . '">
-            <tr>
-                <th>' . get_lang('ElementList') . '</th>
-                <th>' . get_lang('Status') . '</th>
-            </tr>';
+                    <tr>
+                        <th>' . get_lang('YourChoice') . '</th>
+                        <th>' . get_lang('ExpectedChoice') . '</th>
+                        <th>' . get_lang('Status') . '</th>
+                    </tr>
+        ';
 
         return $header;
     }

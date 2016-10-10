@@ -123,10 +123,10 @@ class SessionManagerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers SessionManager::suscribe_users_to_session
-     * @todo   Implement testSuscribe_users_to_session().
+     * @covers SessionManager::subscribe_users_to_session
+     * @todo   Implement testSubscribe_users_to_session().
      */
-    public function testSuscribe_users_to_session()
+    public function testSubscribe_users_to_session()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(

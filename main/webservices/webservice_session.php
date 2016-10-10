@@ -302,7 +302,7 @@ class WSSession extends WS
 				return $user_id;
 			} else {
 				if($state  == 1) {
-					SessionManager::suscribe_users_to_session($session_id, array($user_id));
+					SessionManager::subscribe_users_to_session($session_id, array($user_id));
 				} else {
 					$result = SessionManager::unsubscribe_user_from_session($session_id, $user_id);
 					if (!$result) {

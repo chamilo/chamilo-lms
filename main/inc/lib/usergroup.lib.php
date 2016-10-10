@@ -637,7 +637,7 @@ class UserGroup extends Model
                 Database::insert($this->usergroup_rel_session_table, $params);
 
                 if (!empty($user_list)) {
-                    SessionManager::suscribe_users_to_session($session_id, $user_list, null, false);
+                    SessionManager::subscribe_users_to_session($session_id, $user_list, null, false);
                 }
             }
         }
@@ -774,7 +774,7 @@ class UserGroup extends Model
             // Adding sessions
             if (!empty($session_list)) {
                 foreach ($session_list as $session_id) {
-                    SessionManager::suscribe_users_to_session($session_id, $new_items, null, false);
+                    SessionManager::subscribe_users_to_session($session_id, $new_items, null, false);
                 }
             }
 

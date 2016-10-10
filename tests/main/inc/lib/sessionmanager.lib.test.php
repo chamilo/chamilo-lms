@@ -121,10 +121,10 @@ class TestSessionManager extends UnitTestCase {
 		//var_dump($res);
 	}
 
-	function testsuscribe_users_to_session() {
+	function testsubscribe_users_to_session() {
 		$id_session='';
 		$user_list='';
-		$res=SessionManager::suscribe_users_to_session($id_session,$user_list,$empty_users=true);
+		$res=SessionManager::subscribe_users_to_session($id_session,$user_list,$empty_users=true);
 		if(!is_null($res)) $this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}

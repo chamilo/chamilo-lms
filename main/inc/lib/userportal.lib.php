@@ -966,6 +966,10 @@ class IndexManager
             }
         }
 
+        if (api_is_student_boss() || api_is_session_admin()) {
+            $show_course_link = false;
+        }
+
         // My account section
         $my_account_content = '<ul class="nav nav-pills nav-stacked">';
 

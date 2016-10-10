@@ -153,8 +153,8 @@ if (is_int($global_error_code) && $global_error_code > 0) {
     $installChamiloImage = "data:image/png;base64,".base64_encode(file_get_contents("$root_sys/main/img/mr_chamilo_install.png"));
     $global_error_message['mr_chamilo'] = $installChamiloImage;
 
-     if ($global_error_code == 2) {
-    $global_error_message_page =
+    if ($global_error_code == 2) {
+        $global_error_message_page =
 <<<EOM
 <!DOCTYPE html>
 <html>
@@ -250,11 +250,11 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 		</body>
 </html>
 EOM;
-    }else{
+    } else {
         $global_error_message_page = 
 <<<EOM
-            <!DOCTYPE html>
-<html>
+    <!DOCTYPE html>
+        <html>
         <head>
             <title>{TITLE}</title>
             <meta charset="{ENCODING}" />

@@ -839,7 +839,7 @@ class SystemAnnouncementManager
         $now = api_get_utc_datetime();
 
         $whereConditions = [
-            "(lang = ? OR lang IS NULL) " => $selectedUserLanguage,
+            "(lang = ? OR lang IS NULL OR lang = '') " => $selectedUserLanguage,
             "AND (? >= date_start AND ? <= date_end) " => [$now, $now],
             "AND id = ? " => intval($announcementId)
         ];

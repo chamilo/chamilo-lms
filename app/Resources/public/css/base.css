@@ -5759,6 +5759,7 @@ ul#toolnavbox li a {
     font-size: 12px;
     width: 200px;
     height: 35px;
+    margin-left:-160px;
 }
 ul#toolnavbox .tool-img{
     margin-left: 5px;

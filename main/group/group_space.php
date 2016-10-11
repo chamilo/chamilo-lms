@@ -363,8 +363,8 @@ if (api_get_setting('show_email_addresses') == 'true') {
     }
 }
 //the order of these calls is important
-$table->set_column_filter(1, 'user_name_filter');
-$table->set_column_filter(2, 'user_name_filter');
+//$table->set_column_filter(1, 'user_name_filter');
+//$table->set_column_filter(2, 'user_name_filter');
 $table->set_column_filter(0, 'user_icon_filter');
 $table->display();
 

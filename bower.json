@@ -28,7 +28,8 @@
     "jquery.scrollbar": "0.2.*",
     "jquery-file-upload": "*",
     "pwstrength-bootstrap": "*",
-    "readmore-js": "2.1.0"
+    "readmore-js": "2.1.0",
+    "qtip2": "*"
   },
   "resolutions": {
     "jquery": "2.1.4"

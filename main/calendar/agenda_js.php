@@ -21,11 +21,12 @@ $current_course_tool = TOOL_CALENDAR_EVENT;
 $this_section = SECTION_MYAGENDA;
 
 $htmlHeadXtra[] = api_get_jquery_libraries_js(array('jquery-ui', 'jquery-ui-i18n'));
-$htmlHeadXtra[] = api_get_js('qtip2/jquery.qtip.min.js');
+
+$htmlHeadXtra[] = api_get_asset('qtip2/jquery.qtip.min.js');
 $htmlHeadXtra[] = api_get_asset('fullcalendar/dist/fullcalendar.min.js');
 $htmlHeadXtra[] = api_get_asset('fullcalendar/dist/gcal.js');
-$htmlHeadXtra[] = api_get_css(api_get_path(WEB_PATH).'web/assets/fullcalendar/dist/fullcalendar.min.css');
-$htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/qtip2/jquery.qtip.min.css');
+$htmlHeadXtra[] = api_get_css_asset('fullcalendar/dist/fullcalendar.min.css');
+$htmlHeadXtra[] = api_get_css_asset('qtip2/jquery.qtip.min.css');
 
 if (api_is_platform_admin() && ($type == 'admin' || $type == 'platform')) {
     $type = 'admin';
@@ -110,7 +111,6 @@ switch ($type) {
         }
         break;
 }
-
 
 //Setting translations
 $day_short = api_get_week_days_short();
@@ -208,7 +208,7 @@ $form = new FormValidator(
     array('id' => 'add_event_form')
 );
 
-$form->addElement('html', '<span id="calendar_course_info"></span><div id="visible_to_input">');
+$form->addHtml('<span id="calendar_course_info"></span><div id="visible_to_input">');
 
 $sendTo = $agenda->parseAgendaFilter($userId);
 $addOnlyItemsInSendTo = true;
@@ -218,11 +218,11 @@ if ($sendTo['everyone']) {
 }
 
 $agenda->showToForm($form, $sendTo, array(), $addOnlyItemsInSendTo);
-$form->addElement('html', '</div>');
+$form->addHtml('</div>');
 
-$form->addElement('html', '<div id="visible_to_read_only" style="display: none">');
+$form->addHtml('<div id="visible_to_read_only" style="display: none">');
 $form->addElement('label', get_lang('To'), '<div id="visible_to_read_only_users"></div>');
-$form->addElement('html', '</div>');
+$form->addHtml('</div>');
 
 $form->addElement('label', get_lang('Agenda'), '<div id ="color_calendar"></div>');
 $form->addElement('label', get_lang('Date'), '<span id="start_date"></span><span id="end_date"></span>');
@@ -239,18 +239,14 @@ $form->addHtmlEditor(
 );
 
 if ($agenda->type === 'course') {
-    $form->addElement('html', '<div id="add_as_announcement_div" style="display: none">');
+    $form->addHtml('<div id="add_as_announcement_div" style="display: none">');
     $form->addElement('checkbox', 'add_as_annonuncement', null, get_lang('AddAsAnnouncement'));
-    $form->addElement('html', '</div>');
+    $form->addHtml('</div>');
     $form->addElement('textarea', 'comment', get_lang('Comment'), array('id' => 'comment'));
 }
 
 $tpl->assign('form_add', $form->returnForm());
-
-// Loading Agenda template.
-$content = $tpl->fetch('default/agenda/month.tpl');
-
+$templateName = $tpl->get_template('agenda/month.tpl');
+$content = $tpl->fetch($templateName);
 $tpl->assign('content', $content);
-
-// Loading main Chamilo 1 col template
 $tpl->display_one_col_template();

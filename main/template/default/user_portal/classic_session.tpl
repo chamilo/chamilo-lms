@@ -45,6 +45,14 @@
                             {{ row.description }}
                         {% endif %}
                         <div class="info-session">
+                            {# Classic #}
+                            <span>
+                                <a href="{{ _p.web_main ~ 'session/index.php?session_id=' ~ row.id }}">
+                                <img id="session_img_{{ row.id }}" src="{{ "window_list.png"|icon(32) }}" width="32" height="32"
+                                     alt="{{ row.title }}" title="{{ row.title }}"/>
+                                {{ row.title }}
+                                </a>
+                            </span>
                             {% if row.coach_name  != '' %}
                                 <span>
                                     <i class="fa fa-user" aria-hidden="true"></i>

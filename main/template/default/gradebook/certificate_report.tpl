@@ -1,48 +1,44 @@
 <script>
-    $(document).on('ready', function () {
-        $('select#session').on('change', function () {
-            var sessionId = parseInt(this.value, 10),
-                    $selectCourse = $('select#course');
+$(document).on('ready', function () {
+    $('select#session').on('change', function () {
+        var sessionId = parseInt(this.value, 10),
+                $selectCourse = $('select#course');
 
-            $selectCourse.empty();
+        $selectCourse.empty();
 
-            $.get('{{ _p.web_main }}inc/ajax/course.ajax.php', {
-                a: 'display_sessions_courses',
-                session: sessionId
-            }, function (courseList) {
-                $('<option>', {
-                    value: 0,
-                    text: "{{ 'Select' | get_lang }}"
-                }).appendTo($selectCourse);
+        $.get('{{ _p.web_main }}inc/ajax/course.ajax.php', {
+            a: 'display_sessions_courses',
+            session: sessionId
+        }, function (courseList) {
+            $('<option>', {
+                value: 0,
+                text: "{{ 'Select' | get_lang }}"
+            }).appendTo($selectCourse);
 
-                if (courseList.length > 0) {
-                    $.each(courseList, function (index, course) {
-                        $('<option>', {
-                            value: course.id,
-                            text: course.name
-                        }).appendTo($selectCourse);
-                    });
-                }
-            }, 'json');
-        });
+            if (courseList.length > 0) {
+                $.each(courseList, function (index, course) {
+                    $('<option>', {
+                        value: course.id,
+                        text: course.name
+                    }).appendTo($selectCourse);
+                });
+            }
+        }, 'json');
     });
+});
 </script>
 
-{{ searchBySessionCourseDateForm }}
+{{ search_by_session_form }}
 
 <hr>
 
-{{ searchByStudentForm }}
+{{ search_form }}
 
-{% if errorMessage is defined %}
-    <div class="alert alert-error">{{ errorMessage }}</div>
-{% endif %}
-
-{% if not certificateStudents is empty %}
+{% if not certificate_students is empty %}
     <h2 class="page-header">{{ "GradebookListOfStudentsCertificates" | get_lang }}</h2>
-    {% if not exportAllLink is null %}
+    {% if not export_all_link is null %}
         <div class="actions">
-            <a href="{{ exportAllLink }}" class="btn btn-info">
+            <a href="{{ export_all_link }}" class="btn btn-info">
                 <em class="fa fa-check"></em> {{ 'ExportAllCertificatesToPDF' | get_lang }}
             </a>
         </div>
@@ -68,23 +64,25 @@
             </tr>
         </tfoot>
         <tbody>
-            {% for student in certificateStudents %}
-                <tr>
-                    <td>{{ student.fullName }}</td>
-                    <td>{{ student.sessionName }}</td>
-                    <td>{{ student.courseName }}</td>
-                    <td>
-                        {% for certificate in student.certificates %}
-                            <p>{{ certificate.createdAt }}</p>
-                        {% endfor %}
-                    </td>
-                    <td>
-                        {% for certificate in student.certificates %}
-                            <a href="{{ _p.web }}certificates/index.php?id={{ certificate.id }}" class="btn btn-default"><em class="fa fa-floppy-o"></em> {{ 'Certificate' | get_lang }}</a>
-                        {% endfor %}
-                    </td>
-                </tr>
-            {% endfor %}
+        {% for student in certificate_students %}
+            <tr>
+                <td>{{ student.fullName }}</td>
+                <td>{{ student.sessionName }}</td>
+                <td>{{ student.courseName }}</td>
+                <td>
+                    {% for certificate in student.certificates %}
+                        <p>{{ certificate.createdAt }}</p>
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for certificate in student.certificates %}
+                        <a href="{{ _p.web }}certificates/index.php?id={{ certificate.id }}" class="btn btn-default">
+                            <em class="fa fa-floppy-o"></em> {{ 'Certificate' | get_lang }}
+                        </a>
+                    {% endfor %}
+                </td>
+            </tr>
+        {% endfor %}
         </tbody>
     </table>
 {% else %}

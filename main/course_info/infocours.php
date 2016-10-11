@@ -46,8 +46,8 @@ if (!$is_allowedToEdit) {
     api_not_allowed(true);
 }
 
-$htmlHeadXtra[] = '<link  href="'. api_get_path(WEB_PATH) .'web/assets/cropper/dist/cropper.min.css" rel="stylesheet">';
-$htmlHeadXtra[] = '<script src="'. api_get_path(WEB_PATH) .'web/assets/cropper/dist/cropper.min.js"></script>';
+$htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
+$htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
 $show_delete_watermark_text_message = false;
 if (api_get_setting('pdf_export_watermark_by_course') == 'true') {
     if (isset($_GET['delete_watermark'])) {

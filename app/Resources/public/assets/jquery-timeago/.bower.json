@@ -17,7 +17,7 @@
     "tag": "v1.4.3",
     "commit": "5293dacee881e78b25bd4f699161fca81dff5205"
   },
-  "_source": "git://github.com/rmm5t/jquery-timeago.git",
+  "_source": "https://github.com/rmm5t/jquery-timeago.git",
   "_target": "1.4.*",
   "_originalSource": "jquery-timeago"
 }

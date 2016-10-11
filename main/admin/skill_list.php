@@ -176,8 +176,8 @@ switch ($action) {
         $tpl->assign('skills', $skillList);
         $tpl->assign('current_tag_id', $extraFieldSearchTagId);
         $tpl->assign('tags', $tags);
-
-        $content = $tpl->fetch('default/skill/list.tpl');
+        $templateName = $tpl->get_template('skill/list.tpl');
+        $content = $tpl->fetch($templateName);
 
         $tpl->assign('actions', $toolbar);
         $tpl->assign('content', $content);

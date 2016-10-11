@@ -223,7 +223,7 @@ class UserManager
         $expirationDate = null,
         $active = 1,
         $hr_dept_id = 0,
-        $extra = null,
+        $extra = [],
         $encrypt_method = '',
         $send_mail = false,
         $isAdmin = false,
@@ -383,11 +383,24 @@ class UserManager
             }
 
             if (api_get_multiple_access_url()) {
-                UrlManager::add_user_to_url($return, api_get_current_access_url_id());
+                UrlManager::add_user_to_url($userId, api_get_current_access_url_id());
             } else {
                 //we are adding by default the access_url_user table with access_url_id = 1
-                UrlManager::add_user_to_url($return, 1);
+                UrlManager::add_user_to_url($userId, 1);
             }
+
+            if (is_array($extra) && count($extra) > 0) {
+                foreach ($extra as $fname => $fvalue) {
+                    self::update_extra_field_value($userId, $fname, $fvalue);
+                }
+            } else {
+                // Create notify settings by default
+                self::update_extra_field_value($userId, 'mail_notify_invitation', '1');
+                self::update_extra_field_value($userId, 'mail_notify_message', '1');
+                self::update_extra_field_value($userId, 'mail_notify_group_message', '1');
+            }
+
+            self::update_extra_field_value($userId, 'already_logged_in', 'false');
 
             if (!empty($email) && $send_mail) {
                 $recipient_name = api_get_person_name(
@@ -483,27 +496,19 @@ class UserManager
                 }
                 /* ENDS MANAGE EVENT WITH MAIL */
             }
-            Event::addEvent(LOG_USER_CREATE, LOG_USER_ID, $return);
+
+            if (!empty($hook)) {
+                $hook->setEventData(array(
+                    'return' => $userId,
+                    'originalPassword' => $original_password
+                ));
+                $hook->notifyCreateUser(HOOK_EVENT_TYPE_POST);
+            }
+            Event::addEvent(LOG_USER_CREATE, LOG_USER_ID, $userId);
         } else {
             Display::addFlash(Display::return_message(get_lang('ErrorContactPlatformAdmin')));
 
             return false;
-        }
-
-        if (is_array($extra) && count($extra) > 0) {
-            $res = true;
-            foreach ($extra as $fname => $fvalue) {
-                $res = $res && self::update_extra_field_value($return, $fname, $fvalue);
-            }
-        }
-        self::update_extra_field_value($return, 'already_logged_in', 'false');
-
-        if (!empty($hook)) {
-            $hook->setEventData(array(
-                'return' => $return,
-                'originalPassword' => $original_password
-            ));
-            $hook->notifyCreateUser(HOOK_EVENT_TYPE_POST);
         }
 
         return $return;
@@ -1995,7 +2000,7 @@ class UserManager
         $extraFieldType = EntityExtraField::USER_FIELD_TYPE;
         $sqlf = "SELECT * FROM $t_uf WHERE extra_field_type = $extraFieldType ";
         if (!$all_visibility) {
-            $sqlf .= " AND visible = 1 ";
+            $sqlf .= " AND visible_to_self = 1 ";
         }
         if (!is_null($field_filter)) {
             $field_filter = intval($field_filter);
@@ -2015,7 +2020,7 @@ class UserManager
                     3 => empty($rowf['display_text']) ? '' : $rowf['display_text'],
                     4 => $rowf['default_value'],
                     5 => $rowf['field_order'],
-                    6 => $rowf['visible'],
+                    6 => $rowf['visible_to_self'],
                     7 => $rowf['changeable'],
                     8 => $rowf['filter'],
                     9 => array(),
@@ -2215,7 +2220,7 @@ class UserManager
                 $field_filter = intval($field_filter);
                 $filter_cond .= " AND filter = $field_filter ";
             }
-            $sql .= " AND f.visible = 1 $filter_cond ";
+            $sql .= " AND f.visible_to_self = 1 $filter_cond ";
         } else {
             if (isset($field_filter)) {
                 $field_filter = intval($field_filter);
@@ -2302,7 +2307,7 @@ class UserManager
                 WHERE f.variable = '$field_variable' ";
 
         if (!$all_visibility) {
-            $sql .= " AND f.visible = 1 ";
+            $sql .= " AND f.visible_to_self = 1 ";
         }
 
         $sql .= " AND extra_field_type = ".EntityExtraField::USER_FIELD_TYPE;
@@ -5335,7 +5340,10 @@ EOF;
     public static function getUserProfileLink($userInfo)
     {
         if (isset($userInfo) && isset($userInfo['user_id'])) {
-            return Display::url($userInfo['complete_name'], $userInfo['profile_url']);
+            return Display::url(
+                $userInfo['complete_name_with_username'],
+                $userInfo['profile_url']
+            );
         } else {
             return get_lang('Anonymous');
         }

@@ -198,7 +198,16 @@ if (!empty($_FILES)) {
         $index,
         true
     );
-    header('Location: '.api_get_self().'?'.api_get_cidreq().'#tabs-2');
+
+    $redirectUrl = api_get_self() . '?' . api_get_cidreq();
+
+    if ($document_data) {
+        $redirectUrl .= '&' . http_build_query([
+            'id' => $document_data['iid']
+        ]);
+    }
+
+    header("Location: $redirectUrl");
     exit;
 }
 

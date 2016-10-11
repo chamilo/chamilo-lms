@@ -84,7 +84,7 @@ class ExerciseLib
                 return '';
             }
 
-            echo '<div class="question_options row">';
+            echo '<div class="question_options">';
 
             // construction of the Answer object (also gets all answers details)
             $objAnswerTmp = new Answer($questionId);
@@ -1140,7 +1140,7 @@ HTML;
                 $relPath = api_get_path(WEB_CODE_PATH);
                 echo "
                     <script>
-                        $(document).on('ready', function () {
+//                        $(document).on('ready', function () {
                             new " . ($answerType == HOT_SPOT ? "HotspotQuestion" : "DelineationQuestion") . "({
                                 questionId: $questionId,
                                 exerciseId: $exerciseId,
@@ -1148,7 +1148,7 @@ HTML;
                                 for: 'preview',
                                 relPath: '$relPath'
                             });
-                        });
+//                        });
                     </script>
                     <div id=\"hotspot-preview-$questionId\"></div>
                 ";
@@ -3527,7 +3527,7 @@ HOTSPOT;
             $show_only_score = false;
         }
 
-        $show_total_score_and_user_choices = false;
+        $showTotalScoreAndUserChoicesInLastAttempt = true;
 
         if ($objExercise->results_disabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
             $show_only_score = true;
@@ -3555,9 +3555,9 @@ HOTSPOT;
                 if ($numberAttempts >= $objExercise->attempts) {
                     $show_results = true;
                     $show_only_score = false;
-                    $show_total_score_and_user_choices = false;
+                    $showTotalScoreAndUserChoicesInLastAttempt = true;
                 } else {
-                    $show_total_score_and_user_choices = true;
+                    $showTotalScoreAndUserChoicesInLastAttempt = false;
                 }
             }
         }
@@ -3609,7 +3609,7 @@ HOTSPOT;
                     $show_results,
                     $objExercise->selectPropagateNeg(),
                     [],
-                    $show_total_score_and_user_choices
+                    $showTotalScoreAndUserChoicesInLastAttempt
                 );
 
                 if (empty($result)) {

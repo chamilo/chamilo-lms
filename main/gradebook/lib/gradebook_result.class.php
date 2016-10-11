@@ -79,7 +79,7 @@ class GradeBookResult
      */
     public function exportCompleteReportXLS($data)
     {
-        $filename = 'gradebook-results-'.api_get_local_time().'.xls';
+        $filename = 'gradebook-results-'.api_get_local_time().'.xlsx';
 
         $spreadsheet = new PHPExcel();
         $spreadsheet->setActiveSheetIndex(0);

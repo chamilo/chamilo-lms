@@ -8,10 +8,8 @@
 </head>
 <body dir="{{text_direction}}" class="{{section_name}}">
 <section id="content-scorm">
-    
-        {% block body %}
-            {{ content }}
-        {% endblock %}
-    
+{% block body %}
+    {{ content }}
+{% endblock %}
 </body>
 </html>

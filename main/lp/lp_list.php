@@ -816,9 +816,8 @@ $template->assign('message', $message);
 $template->assign('introduction_section', $introductionSection);
 $template->assign('data', $data);
 $template->assign('lp_is_shown', $lpIsShown);
-
-$content = $template->fetch('default/learnpath/list.tpl');
-
+$templateName = $template->get_template('learnpath/list.tpl');
+$content = $template->fetch($templateName);
 $template->assign('content', $content);
 $template->display_one_col_template();
 

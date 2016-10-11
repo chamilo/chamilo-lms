@@ -77,6 +77,10 @@ if (isset($_GET['action']) && $is_allowed_in_course) {
                 Display::addFlash(Display::return_message(get_lang('GroupNowMember')));
                 header("Location: $currentUrl");
                 exit;
+            } else {
+                Display::addFlash(Display::return_message(get_lang('Error')));
+                header("Location: $currentUrl");
+                exit;
             }
             break;
         case 'self_unreg':

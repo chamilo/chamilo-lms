@@ -1386,13 +1386,18 @@ class GroupManager
         $table_group = Database :: get_course_table(TABLE_GROUP);
         $group_id = intval($group_id);
         if (isset($group_id)) {
-            $sql = "SELECT  self_registration_allowed
+            $sql = "SELECT status, self_registration_allowed
                     FROM $table_group
                     WHERE c_id = $course_id AND iid = $group_id";
-            $db_result = Database::query($sql);
-            $db_object = Database::fetch_object($db_result);
+            $result = Database::query($sql);
+            $group = Database::fetch_object($result);
 
-            return $db_object->self_registration_allowed == 1 && self :: can_user_subscribe($user_id, $group_id);
+            if ($group->status == 0 || $group->self_registration_allowed != 1) {
+
+                return false;
+            }
+
+            return self::can_user_subscribe($user_id, $group_id);
         } else {
             return false;
         }
@@ -1413,13 +1418,18 @@ class GroupManager
         $group_id = intval($group_id);
         $course_id = api_get_course_int_id();
 
-        $sql = "SELECT self_unregistration_allowed
+        $sql = "SELECT status, self_unregistration_allowed
                 FROM $table_group
                 WHERE c_id = $course_id AND iid = $group_id";
-        $db_result = Database::query($sql);
-        $db_object = Database::fetch_object($db_result);
+        $result = Database::query($sql);
+        $group = Database::fetch_object($result);
 
-        return $db_object->self_unregistration_allowed == 1 && self :: is_subscribed($user_id, $group_id);
+        if ($group->status == 0 || $group->self_unregistration_allowed != 1) {
+
+            return false;
+        }
+
+        return self::is_subscribed($user_id, $group_id);
     }
 
     /**
@@ -2131,7 +2141,7 @@ class GroupManager
      */
     public static function process_groups($group_list, $category_id = null)
     {
-        global $origin, $charset;
+        global $charset;
         $category_id = intval($category_id);
 
         $totalRegistered = 0;
@@ -2139,7 +2149,6 @@ class GroupManager
         $user_info = api_get_user_info();
         $session_id = api_get_session_id();
         $user_id = $user_info['user_id'];
-        $orig = isset($origin) ? $origin : null;
         $hideGroup = api_get_setting('hide_course_group_if_no_tools_available');
 
         foreach ($group_list as $this_group) {
@@ -2165,7 +2174,7 @@ class GroupManager
                     $groupNameClass = 'muted';
                 }
 
-                $group_name = '<a class="'.$groupNameClass.'" href="group_space.php?cidReq='.api_get_course_id().'&origin='.$orig.'&gidReq='.$this_group['id'].'">'.
+                $group_name = '<a class="'.$groupNameClass.'" href="group_space.php?'.api_get_cidreq(true, false).'&gidReq='.$this_group['id'].'">'.
                     Security::remove_XSS($this_group['name']).'</a> ';
                 if (!empty($user_id) && !empty($this_group['id_tutor']) && $user_id == $this_group['id_tutor']) {
                     $group_name .= Display::label(get_lang('OneMyGroups'), 'success');

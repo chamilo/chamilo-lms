@@ -11,7 +11,6 @@
 </div>
 
 <p>{{ 'YouCanAssignATutorInThisLinkX'|get_lang | format(link)}} </p>
-
 <p>{{ 'SignatureFormula'|get_lang }}</p>
 <p>{{ _admin.name }}, {{ _admin.surname }}<br>
     {{ 'Manager'|get_lang }} {{ _s.site_name }}<br>

@@ -177,4 +177,4 @@ In short, we ask you to send us Pull Requests based on a branch that you create
 with this purpose into your repository forked from the original Chamilo repository.
 
 # Documentation
-For more information on Chamilo, visit https://stable.chamilo.org/documentation
+For more information on Chamilo, visit https://1.11.chamilo.org/documentation/index.html

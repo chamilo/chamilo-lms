@@ -57,7 +57,7 @@
     "tag": "v1.0.0",
     "commit": "c0805bc83c9270a0be4afdfbd02d517de7a4c970"
   },
-  "_source": "git://github.com/fengyuanchen/cropper.git",
+  "_source": "https://github.com/fengyuanchen/cropper.git",
   "_target": "1.0.*",
   "_originalSource": "cropper"
 }

@@ -9,9 +9,9 @@
         // Chosen select
         $(".chzn-select").chosen({
             disable_search_threshold: 10,
-            no_results_text: '{{ 'SearchNoResultsFound' | get_lang }}',
-            placeholder_text_multiple: '{{ 'SelectSomeOptions' | get_lang }}',
-            placeholder_text_single: '{{ 'SelectAnOption' | get_lang }}',
+            no_results_text: '{{ 'SearchNoResultsFound' | get_lang | escape('js') }}',
+            placeholder_text_multiple: '{{ 'SelectSomeOptions' | get_lang | escape('js') }}',
+            placeholder_text_single: '{{ 'SelectAnOption' | get_lang | escape('js') }}',
             width: "100%"
         });
 
@@ -92,8 +92,8 @@
             placement: 'right'
         };
         $('.boot-tooltip').tooltip(tip_options);
-        var more = '{{ 'SeeMore' | get_lang }}';
-        var close = '{{ 'Close' | get_lang }}';
+        var more = '{{ 'SeeMore' | get_lang | escape('js') }}';
+        var close = '{{ 'Close' | get_lang | escape('js') }}';
         $('.list-teachers').readmore({
             speed: 75,
             moreLink: '<a href="#">' + more + '</a>',

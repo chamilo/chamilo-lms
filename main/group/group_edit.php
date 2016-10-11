@@ -104,7 +104,7 @@ function check_group_members($value)
         return true;
     }
     if (isset($value['max_member']) && isset($value['group_members']) && $value['max_member'] < count($value['group_members'])) {
-        return array ('group_members' => get_lang('GroupTooMuchMembers'));
+        return array('group_members' => get_lang('GroupTooMuchMembers'));
     }
     return true;
 }
@@ -157,7 +157,7 @@ $group_tutors_element = $form->addElement(
 );
 
 // Group members
-$group_member_list = GroupManager :: get_subscribed_users($current_group['iid']);
+$group_member_list = GroupManager::get_subscribed_users($current_group['iid']);
 
 $selected_users = array ();
 foreach ($group_member_list as $index => $user) {
@@ -172,7 +172,14 @@ foreach ($complete_user_list as $index => $user) {
      }
 }
 
-$group_members_element = $form->addElement('advmultiselect', 'group_members', get_lang('GroupMembers'), $possible_users, 'style="width: 280px;"');
+$group_members_element = $form->addElement(
+    'advmultiselect',
+    'group_members',
+    get_lang('GroupMembers'),
+    $possible_users,
+    'style="width: 280px;"'
+);
+
 $form->addFormRule('check_group_members');
 
 // Members per group
@@ -306,7 +313,7 @@ if ($form->validate()) {
     } else {
         $max_member = $values['max_member'];
     }
-    $self_registration_allowed   = isset($values['self_registration_allowed']) ? 1 : 0;
+    $self_registration_allowed = isset($values['self_registration_allowed']) ? 1 : 0;
     $self_unregistration_allowed = isset($values['self_unregistration_allowed']) ? 1 : 0;
 
     GroupManager::set_group_properties(
@@ -369,9 +376,9 @@ if (!empty($_GET['keyword']) && !empty($_GET['submit'])) {
     echo '<br/>'.get_lang('SearchResultsFor').' <span style="font-style: italic ;"> '.$keyword_name.' </span><br>';
 }
 
-Display :: display_header($nameTools, 'Group');
+Display::display_header($nameTools, 'Group');
 
 $form->setDefaults($defaults);
 $form->display();
 
-Display :: display_footer();
+Display::display_footer();

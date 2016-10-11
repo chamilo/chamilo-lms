@@ -35,7 +35,7 @@ $tpl->assign('url', $url);
 $tpl->assign('html', $html);
 $tpl->assign('skill_visualizer', $skill_visualizer);
 $tpl->assign('js', $skill_visualizer->return_js());
-
-$content = $tpl->fetch('default/skill/skill_tree.tpl');
+$templateName = $tpl->get_template('skill/skill_tree.tpl');
+$content = $tpl->fetch($templateName);
 $tpl->assign('content', $content);
 $tpl->display_no_layout_template();

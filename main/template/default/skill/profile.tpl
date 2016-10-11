@@ -1,28 +1,30 @@
 {% if search_skill_list is not null %}
     <div class="skills-skills">
         <h3>{{"Skills"|get_lang}}</h3>
-        <ul class="holder">             
-            {% for search_skill_id in search_skill_list %}        
+        <ul class="holder">
+            {% for search_skill_id in search_skill_list %}
                 <li class="bit-box">
                     {{ skill_list[search_skill_id].name}}
                     <a class="closebutton" href="?a=remove_skill&id={{search_skill_id}}"></a>
-                </li>        
+                </li>
             {% endfor %}
         </ul>
-        <a id="add_profile" class="btn btn-default" href="#"><em class="fa fa-floppy-o"></em> {{"SaveThisSearch"|get_lang}}</a>
+        <a id="add_profile" class="btn btn-default" href="#">
+            <em class="fa fa-floppy-o"></em> {{"SaveThisSearch"|get_lang}}
+        </a>
     </div>
 {% endif %}
 
-{% if profiles is not null %}    
+{% if profiles is not null %}
     <div class="skills-profiles">
         <h3>{{"SkillProfiles"|get_lang}}</h3>
         <ul class="holder">
-            {%for profile in profiles %}        
+            {%for profile in profiles %}
                 <li class="bit-box">
                     <a href="?a=load_profile&id={{profile.id}}">{{profile.name}}</a>
-                </li>        
+                </li>
             {% endfor %}
-        </ul>    
+        </ul>
     </div>
 {% endif %}
 
@@ -37,7 +39,7 @@
                         {% if (total_search_skills - count) == 1 %}
                             {{ "MissingOneStepToMatch"|get_lang }}
                         {% else %}
-                            {{ "MissingXStepsToMatch"|get_lang | format(total_search_skills - count)}}                        
+                            {{ "MissingXStepsToMatch"|get_lang | format(total_search_skills - count)}}
                         {% endif %}
                     {% endif %}
                 </h4>
@@ -51,14 +53,16 @@
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <div class="avatar-user">
-                                <img  class="img-circle" width="100" src="{{ user.user.avatar }}" class="center-block">
+                                <img class="img-circle" width="100" src="{{ user.user.avatar }}" class="center-block">
                             </div>
-                            <p class="text-center"><em class="fa fa-user"></em> 
+                            <p class="text-center"><em class="fa fa-user"></em>
                                 <a href="{{ _p.web_main }}social/profile.php?u={{ user['user'].user_id }}" target="_blank">
                                     {{ user['user'].complete_name_with_username }}
                                 </a>
                             </p>
-                            <p class="text-center"><em class="fa fa-graduation-cap"></em> {{ "AchievedSkills"|get_lang }} {{ user.total_found_skills }} / {{ total_search_skills }}</p>
+                            <p class="text-center">
+                                <em class="fa fa-graduation-cap"></em> {{ "AchievedSkills"|get_lang }} {{ user.total_found_skills }} / {{ total_search_skills }}
+                            </p>
                         </div>
                         <ul class="list-group">
                             {% for skill_data in user.skills %}
@@ -78,7 +82,7 @@
                             {% endfor %}
                         </ul>
                     </div>
-                    </div>    
+                    </div>
                 </div>
             {% endfor %}
         </div>
@@ -89,21 +93,21 @@
     {% endif %}
 {% endif %}
 </div>
-<div id="dialog-form" style="display:none;">    
-    <form id="save_profile_form" class="form-horizontal" name="form">       
+<div id="dialog-form" style="display:none;">
+    <form id="save_profile_form" class="form-horizontal" name="form">
         <fieldset>
-            <div class="control-group">            
-                <label class="control-label" for="name">{{"Name"|get_lang}}</label>            
+            <div class="control-group">
+                <label class="control-label" for="name">{{"Name"|get_lang}}</label>
                 <div class="controls">
-                    <input type="text" name="name" id="name" size="40" />             
+                    <input type="text" name="name" id="name" size="40" />
                 </div>
-            </div>        
-            <div class="control-group">            
-                <label class="control-label" for="name">{{"Description"|get_lang}}</label>            
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="name">{{"Description"|get_lang}}</label>
                 <div class="controls">
                     <textarea name="description" id="description" class="span2"  rows="7"></textarea>
                 </div>
-            </div>  
+            </div>
         </fieldset>
-    </form>    
+    </form>
 </div>

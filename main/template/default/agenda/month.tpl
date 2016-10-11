@@ -235,13 +235,13 @@ $(document).ready(function() {
                     comment = event.comment;
                 }
 
-				/*element.qtip({
+				element.qtip({
                     hide: {
                         delay: 2000
                     },
 		            content: event.description + ' ' + comment,
 		            position: { at:'top left' , my:'bottom left'}
-		        });*/
+		        });
 			}
 	    },
 		eventClick: function(calEvent, jsEvent, view) {

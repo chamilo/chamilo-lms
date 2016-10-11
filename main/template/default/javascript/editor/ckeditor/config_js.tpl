@@ -109,6 +109,5 @@ CKEDITOR.editorConfig = function (config) {
     // Allows to use "class" attribute inside divs and spans.
     config.allowedContent = true;
     config.contentsCss = '{{ cssEditor }}';
-
     config.customConfig = '{{ _p.web_main ~ 'inc/lib/javascript/ckeditor/config_js.php'}}';
 };

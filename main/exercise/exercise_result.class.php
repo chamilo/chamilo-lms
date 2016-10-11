@@ -408,9 +408,9 @@ class ExerciseResult
     ) {
         global $charset;
         $this->getExercisesReporting($document_path, $user_id, $export_filter, $exercise_id, $hotpotato_name);
-        $filename = 'exercise_results_'.api_get_local_time().'.xls';
+        $filename = 'exercise_results_'.api_get_local_time().'.xlsx';
         if (!empty($user_id)) {
-            $filename = 'exercise_results_user_'.$user_id.'_'.api_get_local_time().'.xls';
+            $filename = 'exercise_results_user_'.$user_id.'_'.api_get_local_time().'.xlsx';
         }
 
         $spreadsheet = new PHPExcel();

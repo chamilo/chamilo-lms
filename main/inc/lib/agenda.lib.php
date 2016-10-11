@@ -146,7 +146,7 @@ class Agenda
     ) {
         $start = api_get_utc_datetime($start);
         $end = api_get_utc_datetime($end);
-        $allDay = isset($allDay) && $allDay == 'true' ? 1 : 0;
+        $allDay = isset($allDay) && $allDay === 'true' ? 1 : 0;
         $id = null;
 
         switch ($this->type) {
@@ -1116,8 +1116,8 @@ class Agenda
                     return $this->events;
                     break;
             }
-
         }
+
         return '';
     }
 
@@ -1855,54 +1855,6 @@ class Agenda
     }
 
     /**
-     * this function shows the form with the user that were not selected
-     * @author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     * @return string code
-     */
-    public static function construct_not_selected_select_form($group_list = null, $user_list = null, $to_already_selected = array())
-    {
-        $html = '<select id="users_to_send_id" data-placeholder="'.get_lang('Select').'" name="users_to_send[]" multiple="multiple">';
-        if ($to_already_selected == 'everyone') {
-            $html .= '<option value="everyone" checked="checked">'.get_lang('Everyone').'</option>';
-        } else {
-            $html .= '<option value="everyone">'.get_lang('Everyone').'</option>';
-        }
-
-        if (is_array($group_list)) {
-            $html .= '<optgroup label="'.get_lang('Groups').'">';
-            foreach ($group_list as $this_group) {
-                if (!is_array($to_already_selected) || !in_array("GROUP:".$this_group['id'], $to_already_selected)) {
-                    // $to_already_selected is the array containing the groups (and users) that are already selected
-                    $count_users = isset($this_group['count_users']) ? $this_group['count_users'] : $this_group['userNb'];
-                    $count_users = " &ndash; $count_users ".get_lang('Users');
-
-                    $html .= '<option value="GROUP:'.$this_group['id'].'"> '.$this_group['name'].$count_users.'</option>';
-                }
-            }
-            $html .= '</optgroup>';
-        }
-
-        // adding the individual users to the select form
-        if (is_array($group_list)) {
-            $html .= '<optgroup label="'.get_lang('Users').'">';
-        }
-        foreach ($user_list as $this_user) {
-            // $to_already_selected is the array containing the users (and groups) that are already selected
-            if (!is_array($to_already_selected) || !in_array("USER:".$this_user['user_id'], $to_already_selected)) {
-                $username = api_htmlentities(sprintf(get_lang('LoginX'), $this_user['username']), ENT_QUOTES);
-                // @todo : add title attribute $username in the jqdialog window. wait for a chosen version to inherit title attribute
-                $html .= '<option title="'.$username.'" value="USER:'.$this_user['user_id'].'">'.api_get_person_name($this_user['firstname'], $this_user['lastname']).' ('.$this_user['username'].') </option>';
-            }
-        }
-        if (is_array($group_list)) {
-            $html .= '</optgroup>';
-            $html .= "</select>";
-        }
-
-        return $html;
-    }
-
-    /**
      * @param FormValidator $form
      * @param array $groupList
      * @param array $userList
@@ -1913,10 +1865,10 @@ class Agenda
      */
     public function setSendToSelect(
         $form,
-        $groupList = null,
-        $userList = null,
-        $sendTo = array(),
-        $attributes = array(),
+        $groupList = [],
+        $userList = [],
+        $sendTo = [],
+        $attributes = [],
         $addOnlyItemsInSendTo = false,
         $required = false
     ) {
@@ -2051,7 +2003,7 @@ class Agenda
      * @param array $params
      * @return FormValidator
      */
-    public function getForm($params = array())
+    public function getForm($params = [])
     {
         $action = isset($params['action']) ? Security::remove_XSS($params['action']) : null;
         $id = isset($params['id']) ? intval($params['id']) : null;
@@ -2351,7 +2303,6 @@ class Agenda
         return $list;
     }
 
-
     /**
      * Show a list with all the attachments according to the post's id
      * @param int $attachmentId
@@ -2386,7 +2337,7 @@ class Agenda
      * Add an attachment file into agenda
      * @param int $eventId
      * @param array $fileUserUpload ($_FILES['user_upload'])
-     * @param string comment about file
+     * @param string $comment about file
      * @param array $courseInfo
      * @return string
      */
@@ -2797,7 +2748,6 @@ class Agenda
                 /** @var Sabre\VObject\Property\ICalendar\Recur $repeat */
                 $repeat = $event->RRULE;
                 if ($id && !empty($repeat)) {
-
                     $repeat = $repeat->getParts();
                     $freq = $trans[$repeat['FREQ']];
 
@@ -3466,10 +3416,9 @@ class Agenda
         return $items;
     }
 
-
     /**
      * This function retrieves one personal agenda item returns it.
-     * @param	int	The agenda item ID
+     * @param	int	$id The agenda item ID
      * @return 	array	The results of the database query, or null if not found
      */
     public static function get_personal_agenda_item($id)
@@ -3487,7 +3436,6 @@ class Agenda
         }
         return $item;
     }
-
 
     /**
      * This function calculates the startdate of the week (monday)

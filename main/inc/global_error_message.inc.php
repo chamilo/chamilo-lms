@@ -153,7 +153,8 @@ if (is_int($global_error_code) && $global_error_code > 0) {
     $installChamiloImage = "data:image/png;base64,".base64_encode(file_get_contents("$root_sys/main/img/mr_chamilo_install.png"));
     $global_error_message['mr_chamilo'] = $installChamiloImage;
 
-    $global_error_message_page =
+    if ($global_error_code == 2) {
+        $global_error_message_page =
 <<<EOM
 <!DOCTYPE html>
 <html>
@@ -249,6 +250,70 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 		</body>
 </html>
 EOM;
+    } else {
+        $global_error_message_page = 
+<<<EOM
+    <!DOCTYPE html>
+        <html>
+        <head>
+            <title>{TITLE}</title>
+            <meta charset="{ENCODING}" />
+            <style>
+            $css_def
+            </style>  
+        </head>
+        <body>
+        <div id="page-error">
+            <div class="page-wrap">
+                <header>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="logo">
+                                    <img src="{CHAMILO_LOGO}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+                <section id="menu-bar">
+                <nav class="navbar navbar-default">
+                    <div class="container">        
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#menuone" aria-expanded="false">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                    </div>  
+                    <div class="collapse navbar-collapse" id="menuone">
+                        <ul class="nav navbar-nav">
+                            <li id="current" class="active tab-homepage"><a href="#" target="_self">Homepage</a></li>
+                        </ul>
+                    </div>
+                    </div>
+                </nav>
+                </section>
+                
+                <section id="content-error">
+                    <div class="container">
+                        <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="alert alert-danger" role="alert">
+                                {DESCRIPTION}
+                                {CODE}
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+        </body>
+</html>
+EOM;
+    }
     foreach ($global_error_message as $key => $value) {
         $global_error_message_page = str_replace('{'.strtoupper($key).'}', $value, $global_error_message_page);
     }

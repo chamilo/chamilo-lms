@@ -350,10 +350,16 @@ if ($show_full_profile) {
             );
 
             if (in_array($extraFieldInfo['variable'], ['skype', 'linkedin_url'])) {
-                break;
+                continue;
             }
 
-            if ($extraFieldInfo['visible'] != 1) {
+            // if is not visible skip
+            if ($extraFieldInfo['visible_to_self'] != 1) {
+                continue;
+            }
+
+            // if is not visible to others skip also
+            if ($extraFieldInfo['visible_to_others'] != 1) {
                 continue;
             }
 
@@ -523,8 +529,8 @@ if ($show_full_profile) {
     }
 
     // Block Social Course
-
     $my_courses = null;
+
     // COURSES LIST
     if (is_array($list)) {
         // Courses without sessions
@@ -538,7 +544,6 @@ if ($show_full_profile) {
             }
         }
         $social_course_block .=  $my_courses;
-        //$social_course_block = Display::panel($my_courses, get_lang('MyCourses'));
     }
 
     // Block Social Sessions
@@ -555,7 +560,7 @@ if ($show_full_profile) {
     }
 
     // Productions
-    $production_list =  UserManager::build_production_list($user_id);
+    $production_list = UserManager::build_production_list($user_id);
 
     // Images uploaded by course
     $file_list = '';
@@ -684,13 +689,12 @@ $tpl->assign('social_course_block', $social_course_block);
 $tpl->assign('social_group_info_block', $social_group_info_block);
 $tpl->assign('social_rss_block', $social_rss_block);
 $tpl->assign('social_skill_block', SocialManager::getSkillBlock($my_user_id));
-$tpl->assign('sessionList', $social_session_block);
+$tpl->assign('session_list', $social_session_block);
 $tpl->assign('invitations', $listInvitations);
 $tpl->assign('social_right_information', $socialRightInformation);
 $tpl->assign('social_auto_extend_link', $socialAutoExtendLink);
 
 $formModalTpl =  new Template();
-//$formModalTpl->assign('messageForm', MessageManager::generate_message_form('send_message'));
 $formModalTpl->assign('invitation_form', MessageManager::generate_invitation_form('send_invitation'));
 $formModals = $formModalTpl->fetch('default/social/form_modals.tpl');
 

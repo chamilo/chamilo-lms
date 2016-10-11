@@ -306,7 +306,6 @@ if (!empty($work_id)) {
         if (api_resource_is_locked_by_gradebook($work_id, LINK_STUDENTPUBLICATION)) {
             echo Display::display_warning_message(get_lang('ResourceLockedByGradebook'));
         } else {
-
             $comments = getWorkComments($work_item);
 
             $template = $tpl->get_template('work/comments.tpl');

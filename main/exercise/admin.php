@@ -54,15 +54,16 @@ $this_section = SECTION_COURSES;
 // Access control
 api_protect_course_script(true);
 
-$is_allowedToEdit = api_is_allowed_to_edit(null,true);
+$is_allowedToEdit = api_is_allowed_to_edit(null, true, false, false);
 $sessionId = api_get_session_id();
 
+$studentViewActive = api_is_student_view_active();
 if (!$is_allowedToEdit) {
     api_not_allowed(true);
 }
 
 /*  stripslashes POST data  */
-if($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     foreach($_POST as $key=>$val) {
         if(is_string($val)) {
             $_POST[$key]=stripslashes($val);
@@ -78,15 +79,15 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
 if (empty($exerciseId)) {
     $exerciseId = isset($_GET['exerciseId']) ? intval($_GET['exerciseId']):'0';
 }
-if (empty($newQuestion)) {
-    $newQuestion = isset($_GET['newQuestion']) ? $_GET['newQuestion'] : 0;
-}
+
+$newQuestion = isset($_GET['newQuestion']) ? $_GET['newQuestion'] : 0;
+
 if (empty($modifyAnswers)) {
     $modifyAnswers = isset($_GET['modifyAnswers']) ? $_GET['modifyAnswers'] : 0;
 }
-if (empty($editQuestion)) {
-    $editQuestion = isset($_GET['editQuestion']) ? $_GET['editQuestion'] : 0;
-}
+
+$editQuestion = isset($_GET['editQuestion']) ? $_GET['editQuestion'] : 0;
+
 if (empty($modifyQuestion)) {
     $modifyQuestion = isset($_GET['modifyQuestion']) ? $_GET['modifyQuestion'] : 0;
 }
@@ -188,8 +189,6 @@ if (!is_object($objExercise)) {
 // Exercise can be edited in their course.
 if ($objExercise->sessionId != $sessionId) {
     api_not_allowed(true);
-    /*header('Location: '.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq());
-    exit;*/
 }
 
 // doesn't select the exercise ID if we come from the question pool
@@ -205,7 +204,6 @@ $nbrQuestions = $objExercise->selectNbrQuestions();
 // Question object creation.
 if ($editQuestion || $newQuestion || $modifyQuestion || $modifyAnswers) {
     if ($editQuestion || $newQuestion) {
-
         // reads question data
         if ($editQuestion) {
             // question not found
@@ -246,7 +244,7 @@ if ($cancelQuestion) {
         exit();
     } else {
         // goes back to the question viewing
-        $editQuestion=$modifyQuestion;
+        $editQuestion = $modifyQuestion;
         unset($newQuestion,$modifyQuestion);
     }
 }
@@ -274,7 +272,7 @@ if (!empty($clone_question) && !empty($objExercise->id)) {
 // if cancelling answer creation/modification
 if ($cancelAnswers) {
     // goes back to the question viewing
-    $editQuestion=$modifyAnswers;
+    $editQuestion = $modifyAnswers;
     unset($modifyAnswers);
 }
 $nameTools = null;
@@ -342,8 +340,8 @@ $htmlHeadXtra[] = api_get_js('jqueryui-touch-punch/jquery.ui.touch-punch.min.js'
 $htmlHeadXtra[] = api_get_js('jquery.jsPlumb.all.js');
 
 $template = new Template();
-
-$htmlHeadXtra[] = $template->fetch('default/exercise/submit.js.tpl');
+$templateName = $template->get_template('exercise/submit.js.tpl');
+$htmlHeadXtra[] = $template->fetch($templateName);
 $htmlHeadXtra[] = api_get_js('d3/jquery.xcolor.js');
 
 $htmlHeadXtra[] = '<link rel="stylesheet" href="' . api_get_path(WEB_LIBRARY_JS_PATH) . 'hotspot/css/hotspot.css">';
@@ -421,11 +419,33 @@ if ($newQuestion || $editQuestion) {
     $type = isset($_REQUEST['answerType']) ? Security::remove_XSS($_REQUEST['answerType']) : null;
     echo '<input type="hidden" name="Type" value="'.$type.'" />';
 
-    if ($newQuestion == 'yes') {
+    if ($newQuestion === 'yes') {
         $objExercise->edit_exercise_in_lp = true;
+        require 'question_admin.inc.php';
     }
 
-    require 'question_admin.inc.php';
+    if ($editQuestion) {
+        // Question preview if teacher clicked the "switch to student"
+        if ($studentViewActive && $is_allowedToEdit) {
+            echo '<div class="main-question">';
+            echo Display::div($objQuestion->selectTitle(), array('class' => 'question_title'));
+            ExerciseLib::showQuestion(
+                $editQuestion,
+                false,
+                null,
+                null,
+                false,
+                true,
+                false,
+                true,
+                $objExercise->feedback_type,
+                true
+            );
+            echo '</div>';
+        } else {
+            require 'question_admin.inc.php';
+        }
+    }
 }
 
 if (isset($_GET['hotspotadmin'])) {

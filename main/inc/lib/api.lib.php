@@ -248,6 +248,10 @@ define('LOG_EXERCISE_AND_USER_ID', 'exercise_and_user_id');
 define('LOG_LP_ID', 'lp_id');
 define('LOG_EXERCISE_ATTEMPT_QUESTION_ID', 'exercise_a_q_id');
 
+define('LOG_WORK_DIR_DELETE', 'work_dir_delete');
+define('LOG_WORK_FILE_DELETE', 'work_file_delete');
+define('LOG_WORK_DATA', 'work_data_array');
+
 define('LOG_MY_FOLDER_PATH', 'path');
 define('LOG_MY_FOLDER_NEW_PATH', 'new_path');
 
@@ -6363,9 +6367,20 @@ function api_get_js($file) {
 
 /**
  * Returns the <script> HTML tag
+ * @return string
  */
-function api_get_asset($file) {
+function api_get_asset($file)
+{
     return '<script type="text/javascript" src="'.api_get_path(WEB_PATH).'web/assets/'.$file.'"></script>'."\n";
+}
+
+/**
+ * Returns the <script> HTML tag
+ * @return string
+ */
+function api_get_css_asset($file, $media = 'screen')
+{
+    return '<link href="'.api_get_path(WEB_PATH).'web/assets/'.$file.'" rel="stylesheet" media="'.$media.'" type="text/css" />'."\n";
 }
 
 /**
@@ -7230,25 +7245,32 @@ function api_get_password_checker_js($usernameInputId, $passwordInputId)
         return null;
     }
 
-    $verdicts = array(
-        get_lang('PasswordWeak'),
-        get_lang('PasswordNormal'),
-        get_lang('PasswordMedium'),
-        get_lang('PasswordStrong'),
-        get_lang('PasswordVeryStrong')
-    );
+    $translations = [
+        'wordLength' => get_lang('PasswordIsTooShort'),
+        'wordNotEmail' => get_lang('YourPasswordCannotBeTheSameAsYourEmail'),
+        'wordSimilarToUsername' => get_lang('YourPasswordCannotContainYourUsername'),
+        'wordTwoCharacterClasses' => get_lang('WordTwoCharacterClasses'),
+        'wordRepetitions' => get_lang('TooManyRepetitions'),
+        'wordSequences' => get_lang('YourPasswordContainsSequences'),
+        'errorList' => get_lang('ErrorsFound'),
+        'veryWeak' => get_lang('PasswordVeryWeak'),
+        'weak' => get_lang('PasswordWeak'),
+        'normal' => get_lang('PasswordNormal'),
+        'medium' => get_lang('PasswordMedium'),
+        'strong' => get_lang('PasswordStrong'),
+        'veryStrong' => get_lang('PasswordVeryStrong')
+    ];
 
     $js = api_get_asset('pwstrength-bootstrap/dist/pwstrength-bootstrap.min.js');
-    $js .=  "<script>
-    var verdicts = ['".implode("','", $verdicts)."'];
+    $js .=  "<script>    
     var errorMessages = {
         password_to_short : \"" . get_lang('PasswordIsTooShort')."\",
         same_as_username : \"".get_lang('YourPasswordCannotBeTheSameAsYourUsername')."\"
     };
 
     $(document).ready(function() {
-        var options = {
-            verdicts: verdicts,
+        var lang = ".json_encode($translations).";     
+        var options = {        
             onLoad : function () {
                 //$('#messages').text('Start typing password');
             },
@@ -7262,6 +7284,12 @@ function api_get_password_checker_js($usernameInputId, $passwordInputId)
                 errors: '#password-errors'
             },
             usernameField: '$usernameInputId'
+        };
+        options.i18n = {
+            t: function (key) {
+                var result = lang[key];
+                return result === key ? '' : result; // This assumes you return the                
+            }
         };
         $('".$passwordInputId."').pwstrength(options);
     });
@@ -8021,6 +8049,10 @@ function api_mail_html(
 
     // Clear all the addresses.
     $mail->ClearAddresses();
+
+    // Clear all attachments
+    $mail->ClearAttachments();
+
     return 1;
 }
 

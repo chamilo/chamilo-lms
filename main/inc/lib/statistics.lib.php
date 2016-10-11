@@ -249,7 +249,7 @@ class Statistics
                     WHERE
                         track_default.default_user_id = user.user_id AND
                         url.user_id = user.user_id AND
-                        access_url_id='".$current_url_id."'";
+                        access_url_id= $current_url_id ";
         } else {
             $sql = "SELECT
                    default_event_type  as col0,
@@ -282,7 +282,6 @@ class Statistics
         $res = Database::query($sql);
         $activities = array ();
         while ($row = Database::fetch_row($res)) {
-
             if (strpos($row[1], '_object') === false && strpos($row[1], '_array') === false) {
                 $row[2] = $row[2];
             } else {

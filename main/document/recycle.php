@@ -58,8 +58,8 @@ $template = new Template(get_lang('DeletedDocuments'));
 $template->assign('files', $files);
 $template->assign('actions', $actions);
 $template->assign('web_cid_query', api_get_cidreq());
-
-$content = $template->fetch('default/document/recycle.tpl');
+$templateName = $template->get_template('document/recycle.tpl');
+$content = $template->fetch($templateName);
 $template->assign('content', $content);
 $template->display_one_col_template();
 

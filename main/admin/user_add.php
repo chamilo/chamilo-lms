@@ -42,8 +42,8 @@ if ($checkPass == 'true') {
     });
     </script>';
 }
-$htmlHeadXtra[] = '<link  href="'. api_get_path(WEB_PATH) .'web/assets/cropper/dist/cropper.min.css" rel="stylesheet">';
-$htmlHeadXtra[] = '<script src="'. api_get_path(WEB_PATH) .'web/assets/cropper/dist/cropper.min.js"></script>';
+$htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
+$htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
 $htmlHeadXtra[] = '
 <script>
 $("#status_select").ready(function() {
@@ -126,7 +126,7 @@ $form->addElement('text', 'official_code', get_lang('OfficialCode'), array('size
 $form->applyFilter('official_code', 'html_filter');
 $form->applyFilter('official_code', 'trim');
 // Email
-$form->addElement('text', 'email', get_lang('Email'), array('size' => '40'));
+$form->addElement('text', 'email', get_lang('Email'), array('size' => '40', 'autocomplete' => 'off'));
 $form->addRule('email', get_lang('EmailWrong'), 'email');
 if (api_get_setting('registration', 'email') == 'true') {
     $form->addRule('email', get_lang('EmailWrong'), 'required');
@@ -138,7 +138,7 @@ if (api_get_setting('login_is_email') == 'true') {
 }
 
 // Phone
-$form->addElement('text', 'phone', get_lang('PhoneNumber'));
+$form->addElement('text', 'phone', get_lang('PhoneNumber'), ['autocomplete' => 'off']);
 // Picture
 $form->addFile(
     'picture',

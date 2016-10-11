@@ -76,8 +76,8 @@ $template->assign('user_list', $userList);
 $template->assign('user_info', $userInfo);
 $template->assign('course_list', $courseList);
 $template->assign('session_list', $sessionList);
-
-$content = $template->fetch('default/gradebook/search.tpl');
+$templateName = $template->get_template('gradebook/search.tpl');
+$content = $template->fetch($templateName);
 
 $template->assign('header', get_lang('SearchCertificates'));
 $template->assign('content', $content);

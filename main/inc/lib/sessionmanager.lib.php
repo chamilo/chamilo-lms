@@ -3745,7 +3745,7 @@ class SessionManager
      * @param int $promotion_id
      * @param array $list
      */
-    public static function suscribe_sessions_to_promotion($promotion_id, $list)
+    public static function subscribe_sessions_to_promotion($promotion_id, $list)
     {
         $t = Database::get_main_table(TABLE_MAIN_SESSION);
         $params = array();
@@ -3775,7 +3775,7 @@ class SessionManager
 
     /**
      * Copies a session with the same data to a new session.
-     * The new copy is not assigned to the same promotion. @see suscribe_sessions_to_promotions() for that
+     * The new copy is not assigned to the same promotion. @see subscribe_sessions_to_promotions() for that
      * @param   int     Session ID
      * @param   bool    Whether to copy the relationship with courses
      * @param   bool    Whether to copy the relationship with users

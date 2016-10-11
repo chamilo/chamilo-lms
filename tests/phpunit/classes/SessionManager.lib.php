@@ -435,10 +435,10 @@ class SessionManagerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers SessionManager::suscribe_sessions_to_promotion
-     * @todo   Implement testSuscribe_sessions_to_promotion().
+     * @covers SessionManager::subscribe_sessions_to_promotion
+     * @todo   Implement testSubscribe_sessions_to_promotion().
      */
-    public function testSuscribe_sessions_to_promotion()
+    public function testSubscribe_sessions_to_promotion()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(

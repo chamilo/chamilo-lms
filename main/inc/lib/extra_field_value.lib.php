@@ -104,7 +104,7 @@ class ExtraFieldValue extends Model
 
         // Parse params.
         foreach ($extraFields as $fieldDetails) {
-            if ($fieldDetails['visible'] != 1) {
+            if ($fieldDetails['visible_to_self'] != 1) {
                 continue;
             }
 
@@ -651,7 +651,7 @@ class ExtraFieldValue extends Model
                 ";
         if ($filterByVisibility) {
             $visibility = intval($visibility);
-            $sql .= " AND visible = $visibility ";
+            $sql .= " AND visible_to_self = $visibility ";
         }
         $sql .= " ORDER BY id";
 
@@ -966,7 +966,7 @@ class ExtraFieldValue extends Model
 
         if ($onlyVisibleFields) {
             $queryBuilder->andWhere(
-                $queryBuilder->expr()->eq('f.visible', true)
+                $queryBuilder->expr()->eq('f.visibleToSelf', true)
             );
         }
 

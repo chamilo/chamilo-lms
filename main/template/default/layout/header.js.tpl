@@ -1,97 +1,78 @@
 <script>
-    {% if constant('CHAMILO_LOAD_WYSIWYG') %}
-        // External plugins not part of the default Ckeditor package.
-        var plugins = [
-            'asciimath',
-            'asciisvg',
-            'audio',
-            'ckeditor_wiris',
-            'dialogui',
-            'glossary',
-            'leaflet',
-            'mapping',
-            'maximize',
-            'mathjax',
-            'oembed',
-            'toolbar',
-            'toolbarswitch',
-            'video',
-            'wikilink',
-            'wordcount',
-            'youtube'
-        ];
+{% if constant('CHAMILO_LOAD_WYSIWYG') %}
+    // External plugins not part of the default Ckeditor package.
+    var plugins = [
+        'asciimath',
+        'asciisvg',
+        'audio',
+        'ckeditor_wiris',
+        'dialogui',
+        'glossary',
+        'leaflet',
+        'mapping',
+        'maximize',
+        'mathjax',
+        'oembed',
+        'toolbar',
+        'toolbarswitch',
+        'video',
+        'wikilink',
+        'wordcount',
+        'youtube'
+    ];
 
-        plugins.forEach(function(plugin) {
-            CKEDITOR.plugins.addExternal(plugin, '{{ _p.web_main ~ 'inc/lib/javascript/ckeditor/plugins/' }}' + plugin + '/');
-        });
+    plugins.forEach(function(plugin) {
+        CKEDITOR.plugins.addExternal(plugin, '{{ _p.web_main ~ 'inc/lib/javascript/ckeditor/plugins/' }}' + plugin + '/');
+    });
 
-        /**
-         * Function use to load templates in a div
-         **/
-        var showTemplates = function (ckeditorName) {
-            var editorName = 'content';
-            if (ckeditorName && ckeditorName.length > 0) {
-                editorName = ckeditorName;
-            }
-            CKEDITOR.editorConfig(CKEDITOR.config);
-            CKEDITOR.loadTemplates(CKEDITOR.config.templates_files, function (a){
-                var templatesConfig = CKEDITOR.getTemplates("default");
-
-                var $templatesUL = $("<ul>");
-                if (templatesConfig) {
-                    $.each(templatesConfig.templates, function () {
+    /**
+     * Function use to load templates in a div
+     **/
+    var showTemplates = function (ckeditorName) {
+        var editorName = 'content';
+        if (ckeditorName && ckeditorName.length > 0) {
+            editorName = ckeditorName;
+        }
+        CKEDITOR.editorConfig(CKEDITOR.config);
+        CKEDITOR.loadTemplates(CKEDITOR.config.templates_files, function (a) {
+            var templatesConfig = CKEDITOR.getTemplates("default");
+            var $templatesUL = $("<ul>");
+            if (templatesConfig) {
+                $.each(templatesConfig.templates, function () {
                     var template = this;
                     var $templateLi = $("<li>");
-
                     var templateHTML = "<img src=\"" + templatesConfig.imagesPath + template.image + "\" ><div>";
                     templateHTML += "<b>" + template.title + "</b>";
 
                     if (template.description) {
-                    templateHTML += "<div class=description>" + template.description + "</div>";
+                        templateHTML += "<div class=description>" + template.description + "</div>";
                     }
-
                     templateHTML += "</div>";
 
                     $("<a>", {
-                    href: "#",
-                    html: templateHTML,
-                    click: function (e) {
-                    e.preventDefault();
-                    if (CKEDITOR.instances[editorName]) {
-                    CKEDITOR.instances[editorName].setData(template.html, function () {
-                    this.checkDirty();
-                    });
-                    }
-                    }
+                        href: "#",
+                        html: templateHTML,
+                        click: function (e) {
+                            e.preventDefault();
+                            if (CKEDITOR.instances[editorName]) {
+                                CKEDITOR.instances[editorName].setData(template.html, function () {
+                                    this.checkDirty();
+                                });
+                            }
+                        }
                     }).appendTo($templateLi);
                     $templatesUL.append($templateLi);
-                    });
-                }
-                $templatesUL.appendTo("#frmModel");
-            });
-        };
-    {% endif %}
+                });
+            }
+            $templatesUL.appendTo("#frmModel");
+        });
+    };
+{% endif %}
 
 
-
-
-$(document).ready(function(){
-    $("#open-view-list").click(function(){
-        $("#student-list-work").fadeIn(300);
-    });
-    $("#closed-view-list").click(function(){
-        $("#student-list-work").fadeOut(300);
-    });
-    check_brand();
-    var id;
-    $(window).resize(function() {
-        clearTimeout(id);
-        id = setTimeout(doneResizing, 200);
-    });
-
-function doneResizing(){
-  var widhtWindow = $(window).width();
-  if ((widhtWindow>=1024) && (widhtWindow>=768)) {
+function doneResizing() {
+    var widhtWindow = $(window).width();
+    if ((widhtWindow>=1024) && (widhtWindow>=768)) {
         $("#profileCollapse").addClass("in");
         $("#courseCollapse").addClass("in");
         $("#skillsCollapse").addClass("in");
@@ -105,7 +86,22 @@ function doneResizing(){
         $("#user_image_block").addClass("text-muted");
     }
 };
-// Removes the yellow input in Chrome
+
+$(document).ready(function() {
+    $("#open-view-list").click(function(){
+        $("#student-list-work").fadeIn(300);
+    });
+    $("#closed-view-list").click(function(){
+        $("#student-list-work").fadeOut(300);
+    });
+    check_brand();
+    var id;
+    $(window).resize(function() {
+        clearTimeout(id);
+        id = setTimeout(doneResizing, 200);
+    });
+
+    // Removes the yellow input in Chrome
     if (navigator.userAgent.toLowerCase().indexOf("chrome") >= 0) {
         $(window).load(function(){
             $('input:-webkit-autofill').each(function(){
@@ -242,9 +238,7 @@ $(window).resize(function() {
 });
 
 $(document).scroll(function() {
-
     var valor = $('body').outerHeight() - 700;
-
     if ($(this).scrollTop() > 100) {
         $('.bottom_actions').addClass('bottom_actions_fixed');
     } else {
@@ -303,9 +297,7 @@ $(document).scroll(function() {
             }
         }
     }
-
 });
-
 
 function get_url_params(q, attribute) {
     var vars;

@@ -3198,26 +3198,20 @@ class learnpath
                 'browsed' => 'scorm_completed',
             ];
 
-            $scorm_color_background = 'row_odd';
-            $style_item = '';
-
-            if ($color_counter % 2 == 0) {
-                $scorm_color_background = 'row_even';
-            }
+            $rowColor = ' ';
 
             $dirTypes = self::getChapterTypes();
 
             if (in_array($item['type'], $dirTypes)) {
-                $scorm_color_background ='scorm_item_section ';
-                $style_item = '';
+                $rowColor ='scorm_item_section ';
             }
             if ($item['id'] == $this->current) {
-                $scorm_color_background = 'scorm_item_normal '.$scorm_color_background.' scorm_highlight';
+                $rowColor = 'scorm_item_normal '.$rowColor.' scorm_highlight';
             } elseif (!in_array($item['type'], $dirTypes)) {
-                $scorm_color_background = 'scorm_item_normal '.$scorm_color_background.' ';
+                $rowColor = 'scorm_item_normal '.$rowColor.' ';
             }
 
-            $html .= '<div id="toc_' . $item['id'] . '" class="' . $scorm_color_background . ' '.$class_name[$item['status']].' ">';
+            $html .= '<div id="toc_' . $item['id'] . '" class="' . $rowColor . ' ' . $class_name[$item['status']] . '">';
 
             // Learning path title
             $title = $item['title'];
@@ -3235,9 +3229,9 @@ class learnpath
             }
             if (in_array($item['type'], $dirTypes)) {
                 // Chapters
-                $html .= '<div class="'.$style_item.' scorm_section_level_'.$item['level'].'" title="'.$description.'" >';
+                $html .= '<div class="section level_'.$item['level'].'" title="'.$description.'" >';
             } else {
-                $html .= '<div class="'.$style_item.' scorm_item_level_'.$item['level'].' scorm_type_'.learnpath::format_scorm_type_item($item['type']).'" title="'.$description.'" >';
+                $html .= '<div class="item level_'.$item['level'].' scorm_type_'.learnpath::format_scorm_type_item($item['type']).'" title="'.$description.'" >';
                 $html .= '<a name="atoc_'.$item['id'].'"></a>';
             }
 
@@ -3251,7 +3245,7 @@ class learnpath
             }
             $html .= "</div>";
 
-            if ($scorm_color_background != '') {
+            if ($rowColor != '') {
                 $html .= '</div>';
             }
 

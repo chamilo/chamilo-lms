@@ -18,7 +18,6 @@ See https://support.chamilo.org/issues/6976
   position: relative;
   width: 100%;
 }
-
 #author_name {
   float: left;
   text-align:center;
@@ -26,11 +25,6 @@ See https://support.chamilo.org/issues/6976
   font-size: 11px;
   color: #888;
   margin-top: 2px;
-}
-
-#learning_path_toc {
-  font-size:9pt;
-  margin:0;
 }
 #learning_path_left_zone #scorm-gamification{
 }
@@ -81,13 +75,6 @@ See https://support.chamilo.org/issues/6976
     text-decoration: none;
     font-weight: bold;
 }
-.inner_lp_toc .scorm_item_section {
-    background:#E8ECEF;
-    color:#666;
-    padding: 5px 0px 5px 0px;
-    font-size: 12px;
-    font-weight: bold;
-}
 .inner_lp_toc .scorm_item {
     font-size: 16px;
     margin-left: 10px;
@@ -102,40 +89,50 @@ See https://support.chamilo.org/issues/6976
 }
 /* learning path's classes for section and item for 5 levels of depth */
 .scorm_section_level_0 {
-    padding : 0 0 0 0;
+    margin: 0 0 0 0;
 }
 .scorm_section_level_1 {
-    padding : 0 0.5em 0 2em;
+    margin: 0 0.5em 0 20px;
 }
 .scorm_section_level_2 {
-    padding : 0 0.5em 0 4em;
+    margin: 0 0.5em 0 40px;
 }
 .scorm_section_level_3 {
-    padding : 0 0.5em 0 6em;
+    margin: 0 0.5em 0 60px;
 }
 .scorm_section_level_4 {
-    padding : 0 0.5em 0 8em;
+    margin: 0 0.5em 0 70px;
 }
 .scorm_section_level_5 {
-    padding : 0 0.5em 0 10em;
+    margin: 0 0.5em 0 10em;
 }
-.scorm_item_level_0 {
-    padding : 0 0 0 0;
+.scorm_item_normal{
+    line-height: 25px;
+    border-bottom: 1px solid #DDD;
 }
-.scorm_item_level_1 {
-    padding : 0 0.5em 0 1.5em;
+.level_0 {
+    margin: 0;
+    padding-left: 20px;
 }
-.scorm_item_level_2 {
-    padding : 0 0.5em 0 3em;
+.level_1 {
+    margin: 0 0.5em 0 20px;
+    padding-left: 20px;
 }
-.scorm_item_level_3 {
-    padding : 0 0.5em 0 4.5em;
+.level_2 {
+    margin: 0 0.5em 0 40px;
+    padding-left: 20px;
 }
-.scorm_item_level_4 {
-    padding : 0 0.5em 0 6em;
+.level_3 {
+    margin: 0 0.5em 0 60px;
+    padding-left: 20px;
 }
-.scorm_item_level_5 {
-    padding : 0 0.5em 0 7.5em;
+.level_4 {
+    margin: 0 0.5em 0 70px;
+    padding-left: 20px;
+}
+.level_5 {
+    margin: 0 0.5em 0 90px;
+    padding-left: 20px;
 }
 #learning_path_breadcrumb_zone .breadcrumb{
   background-color: #2b3d53;
@@ -191,10 +188,6 @@ See https://support.chamilo.org/issues/6976
   margin-top: .5em;
   font-size: 12px;
 }
-#lp_navigation_elem .buttons {
-
-}
-
 #learning_path_left_zone .scorm_title{
   font-size: 20px;
   color: #666;
@@ -202,80 +195,59 @@ See https://support.chamilo.org/issues/6976
   margin-top: .5em;
 }
 /* for section */
-.scorm_item_section.scorm_completed{
-  color: #ffffff;
-  padding-right: 1.5em;
-  background-color: #AAB3B8;
-}
 .scorm_item_section{
-  background: #2b3d53; /* Old browsers */
-  background: -moz-linear-gradient(top, #2b3d53 0%, #2c3d4d 100%); /* FF3.6+ */
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#2b3d53), color-stop(100%,#2c3d4d)); /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(top, #2b3d53 0%,#2c3d4d 100%); /* Chrome10+,Safari5.1+ */
-  background: -o-linear-gradient(top, #2b3d53 0%,#2c3d4d 100%); /* Opera 11.10+ */
-  background: -ms-linear-gradient(top, #2b3d53 0%,#2c3d4d 100%); /* IE10+ */
-  background: linear-gradient(to bottom, #2b3d53 0%,#2c3d4d 100%); /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2b3d53', endColorstr='#2c3d4d',GradientType=0 ); /* IE6-9 */
-  padding-top: 10px;
-  padding-bottom: 10px;
-  font-size: 14px;
-  color: #ffffff;
-  /* border-top-left-radius:5px;
-  border-top-right-radius: 5px;*/
+    border-bottom: 1px solid #DDD;
+    font-size: 12px;
+    font-weight: bold;
 }
-.scorm_item_section .scorm_section_level_0{
-  padding-left: .5em;
-  padding-right: .5em;
+.scorm_item_section .section{
+    background:url("../../main/img/scorm/folder-item-closed.png") no-repeat left center;
 }
-.scorm_item_section .scorm_section_level_1{
-  padding-left: 1.5em;
-  padding-right: .5em;
-}
-.scorm_item_section .scorm_section_level_2{
-  padding-left: 2.5em;
-  padding-right: .5em;
-}
-.scorm_item_section .scorm_section_level_3{
-  padding-left: 3.5em;
-  padding-right: .5em;
-}
-
-.scorm_item_normal .scorm_item_level_0{
-  padding-left: 1.5em;
-}
-.scorm_item_normal{
-  padding:5px;
-  margin-left: 10px;
+.scorm_item_section.scorm_completed .section{
+  background:url("../../main/img/scorm/folder-item-open.png") no-repeat left center;
+  padding-right: 1.5em;
 }
 .scorm_item_normal a.items-list{
   color: #666666;
+  font-size: 12px;
 }
 .scorm_item_normal a:hover{
    text-decoration: none;
 }
-.scorm_item_normal.scorm_completed {
+.scorm_item_normal.scorm_completed{
+   background-color: #F5F5F5;
+}
+.scorm_item_section.scorm_completed{
+   background-color: #F5F5F5;
+   color: #000;
+}
+.scorm_completed .item {
   background:url("../../main/img/scorm/scorm_completed.png") no-repeat left center;
 }
-.scorm_item_normal.scorm_failed{
+.scorm_completed .item a{
+  color: #000;
+}
+.scorm_failed .item{
   background:url("../../main/img/scorm/scorm_failed.png") no-repeat left center;
 }
-.scorm_item_normal.scorm_not_attempted{
+.scorm_not_attempted .item{
   background:url("../../main/img/scorm/scorm_not_attempted.png") no-repeat left center;	
 }
-.scorm_item_normal.scorm_highlight{
+.scorm_highlight .item{
   background:url("../../main/img/scorm/scorm_highlight.png") no-repeat left center !important;
   color: #009AB8;
 }
-.scorm_item_normal.scorm_highlight.scorm_completed{
+.scorm_highlight.scorm_completed .item{
   background:url("../../main/img/scorm/scorm_current.png") no-repeat left center !important;
-  color: #009AB8;
 }
-.scorm_item_normal.scorm_highlight.scorm_failed{
+.scorm_highlight.scorm_failed .item{
     background:url("../../main/img/scorm/scorm_failed.png") no-repeat left center !important;
-    color: #009AB8;
 }
-.scorm_item_normal.scorm_highlight a{
-  color: #009AB8 !important;
+.scorm_highlight a{
+  color: #FFFFFF !important;
+}
+.scorm_item_normal.scorm_highlight{
+    background-color: #00AAD4;
 }
 
 /* END SCORM CSS BASE*/
@@ -309,29 +281,25 @@ See https://support.chamilo.org/issues/6976
     padding-bottom: 10px;
 }
 .scorm-title{
-    color: #666;
-    font-size: 16px;
-    font-weight: 700;
+    color: #333;
+    font-size: 18px;
+    font-weight: bold;
     line-height: 1.5em;
-    margin: 0 0 10px;
+    margin: 0 0 15px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #DDD;
 }
-
 #learning_path_right_zone .lp-view-tabs li a {
     padding: 5px 10px;
 }
-
-
-
-/* Extra small devices (mobiles, 767px and down) */
 #learning_path_main {
     height: 100%;
     margin: 0;
     overflow: hidden;
 }
-
 #learning_path_left_zone,
 #learning_path_right_zone {
     bottom: 0;
@@ -345,7 +313,6 @@ See https://support.chamilo.org/issues/6976
     transition-property: left width;
     transition-duration: 0.5s;
 }
-
 #learning_path_left_zone .lp-view-zone-container,
 #learning_path_right_zone .lp-view-zone-container {
     bottom: 0;
@@ -355,7 +322,6 @@ See https://support.chamilo.org/issues/6976
     right: 0;
     top: 0;
 }
-
 #learning_path_toc {
     bottom: 5px;
     left: 5px;
@@ -366,12 +332,10 @@ See https://support.chamilo.org/issues/6976
     transition-property: top;
     transition-duration: 0.1s;
 }
-
 #learning_path_right_zone {
     left: 100%;
     width: 100%;
 }
-
 #learning_path_right_zone .lp-view-tabs .tab-content {
     bottom: 5px;
     left: 5px;
@@ -388,11 +352,9 @@ See https://support.chamilo.org/issues/6976
     height: 100%;
     width: 100%;
 }
-
 #learning_path_main.lp-view-collapsed #learning_path_left_zone {
     left: -100%;
 }
-
 #learning_path_main.lp-view-collapsed #learning_path_right_zone {
     left: 0;
     width: 100%;
@@ -449,13 +411,13 @@ See https://support.chamilo.org/issues/6976
     color: #ffffff;
 }
 #learning_path_toc {
-        bottom: 10px;
-        left: 10px;
-        right: 5px;
-        margin-top:20px;
-        border: 1px solid #ddd;
-        padding: 10px;
-        border-radius: 5px;
+    bottom: 10px;
+    left: 10px;
+    right: 5px;
+    margin-top:20px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 5px;
 }
 /* Small devices (tablets, 768px and up) */
 @media (min-width: 768px) {

@@ -1475,7 +1475,8 @@ switch ($action) {
             'variable',
             'field_type',
             'changeable',
-            'visible',
+            'visible_to_self',
+            'visible_to_others',
             'filter',
             'field_order',
         );
@@ -1494,7 +1495,8 @@ switch ($action) {
                 $item['display_text'] = ExtraField::translateDisplayName($item['variable'], $item['displayText']);
                 $item['field_type'] = $obj->get_field_type_by_id($item['fieldType']);
                 $item['changeable'] = $item['changeable'] ? $checkIcon : $timesIcon;
-                $item['visible'] = $item['visible'] ? $checkIcon : $timesIcon;
+                $item['visible_to_self'] = $item['visibleToSelf'] ? $checkIcon : $timesIcon;
+                $item['visible_to_others'] = $item['visibleToOthers'] ? $checkIcon : $timesIcon;
                 $item['filter'] = $item['filter'] ? $checkIcon : $timesIcon;
                 $new_result[] = $item;
             }

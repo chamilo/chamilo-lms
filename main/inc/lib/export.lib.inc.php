@@ -41,7 +41,7 @@ class Export
     public static function arrayToCsv($data, $filename = 'export')
     {
         if (empty($data)) {
-            
+
             return false;
         }
 
@@ -89,7 +89,7 @@ class Export
      */
     public static function export_table_xls_html($data, $filename = 'export', $encoding = 'utf-8')
     {
-        $file = api_get_path(SYS_ARCHIVE_PATH).uniqid('').'.xls';
+        $file = api_get_path(SYS_ARCHIVE_PATH).uniqid('').'.xlsx';
         $handle = fopen($file, 'a+');
         $systemEncoding = api_get_system_encoding();
         fwrite($handle, '<!DOCTYPE html><html><meta http-equiv="Content-Type" content="text/html" charset="utf-8" /><body><table>');

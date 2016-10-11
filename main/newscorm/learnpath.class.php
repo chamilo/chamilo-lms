@@ -8813,7 +8813,7 @@ class learnpath
                     link_category.category_title as category_title
                 FROM $tbl_link as link
                 LEFT JOIN $linkCategoryTable as link_category
-                ON link.category_id = link_category.id
+                ON (link.category_id = link_category.id AND link.c_id = link_category.c_id) 
                 WHERE link.c_id = ".$course_id." $condition_session
                 ORDER BY link_category.category_title ASC, link.title ASC";
         $links = Database::query($sql);

@@ -171,7 +171,6 @@ header{
 #carousel-announcement .carousel-control.right, #carousel-announcement .carousel-control.left{
     background-image: none;
 }
-
 #carousel-announcement .left{
   left: 0px;
 }
@@ -181,18 +180,24 @@ header{
 #carousel-announcement .carousel-indicators li{
   width: 20px;
   height: 20px;
-  background-color: #fff;
+  background-color: #ddd;
   margin: 0px 15px 0px 0px;
   position: relative;
 }
 #carousel-announcement .carousel-indicators .active{
-  background: #C52D2F;
+  background: #2C5B8E;
 }
-
+.carousel-control{
+ width: 5%;   
+}
+.carousel-content .block-text{
+    padding-left: 7%;
+    padding-right: 7%;
+    min-height: 300px;
+}
 .panelSliders {
   margin: 20px 0;
 }
-
 .panelSliders .ui-slider-handle {
   border-color: #000;
 }
@@ -201,7 +206,6 @@ header{
   margin: 25px auto;
   text-align: center;
 }
-
 #notice_block p, #notice-block p{
     color: #666;
     font-size: 12px;
@@ -1170,18 +1174,15 @@ a.unread {
     -moz-transform: scale(0.6);
     -o-transform: scale(0.6);
 }
-
 .clip_horizontal {
     position:absolute;
     clip:rect(0px 218px 155px 0px);
     top:-25px;
     left:-48px;
-
     -webkit-transform: scale(0.6);
     -moz-transform: scale(0.6);
     -o-transform: scale(0.6);
 }
-
 .social-plugin-item {
     float:left;
     width:50%;

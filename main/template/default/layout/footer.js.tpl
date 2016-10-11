@@ -60,7 +60,7 @@
         });
 
         // Adv multi-select search input.
-        $('.select_class_filter').on('focus', function () {
+        $('.select_class_filter').each( function () {
             var inputId = $(this).attr('id');
             inputId = inputId.replace('-filter', '');
             $("#" + inputId).filterByText($("#" + inputId + "-filter"));

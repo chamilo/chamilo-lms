@@ -720,6 +720,16 @@ class UserManager
                 WHERE lastedit_user_id = '".$user_id."'";
         Database::query($sql);
 
+        $em = Database::getManager();
+        $criteria = ['user' => $user_id];
+        $searchList = $em->getRepository('ChamiloCoreBundle:ExtraFieldSavedSearch')->findBy($criteria);
+        if ($searchList) {
+            foreach ($searchList as $search) {
+                $em->remove($search);
+            }
+            $em->flush();
+        }
+
         // Delete user from database
         $sql = "DELETE FROM $table_user WHERE id = '".$user_id."'";
         Database::query($sql);

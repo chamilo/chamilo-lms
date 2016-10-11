@@ -1,9 +1,10 @@
+{{ search_form }}
 <table class="table table-hover table-striped">
     <thead>
         <tr>
             <th>{{ 'CreatedAt'|get_lang }}</th>
             <th>{{ 'Status'|get_lang }}</th>
-            <th>{{ 'Records'|get_lang }}</th>
+            <th>{{ 'Records'|get_plugin_lang('BBBPlugin') }}</th>
             <th>{{ 'Course'|get_lang }}</th>
             <th>{{ 'Session'|get_lang }}</th>
             <th>{{ 'Participants'|get_lang }}</th>
@@ -20,9 +21,9 @@
                 {% endif %}
                 <td>
                     {% if meeting.status == 1 %}
-                        <span class="label label-success">{{ 'MeetingOpened'|get_lang }}</span>
+                        <span class="label label-success">{{ 'MeetingOpened'|get_plugin_lang('BBBPlugin') }}</span>
                     {% else %}
-                        <span class="label label-info">{{ 'MeetingClosed'|get_lang }}</span>
+                        <span class="label label-info">{{ 'MeetingClosed'|get_plugin_lang('BBBPlugin') }}</span>
                     {% endif %}
                 </td>
                 <td>

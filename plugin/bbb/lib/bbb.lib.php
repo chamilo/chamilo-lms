@@ -486,7 +486,7 @@ class bbb
      * Gets all the course meetings saved in the plugin_bbb_meeting table
      * @return array Array of current open meeting rooms
      */
-    public function getMeetings($courseId = 0, $sessionId = 0, $groupId = 0, $isAdminReport = false)
+    public function getMeetings($courseId = 0, $sessionId = 0, $groupId = 0, $isAdminReport = false, $date = '')
     {
         $em = Database::getManager();
         $pass = $this->getUserMeetingPassword();
@@ -506,6 +506,20 @@ class bbb
                     )
                 );
             }
+        }
+
+        if (!empty($date)) {
+
+            $date = date_create($date);
+            $dateStart = date_format($date, 'Y-m-d H:i:s');
+            $date = $date->add(new DateInterval('P1D'));
+            $dateEnd = date_format($date, 'Y-m-d H:i:s');
+
+            $conditions =  array(
+                'where' => array(
+                    'created_at BETWEEN ? AND ? ' => array($dateStart, $dateEnd),
+                ),
+            );
         }
 
         $meetingList = Database::select(

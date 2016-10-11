@@ -17,7 +17,7 @@
     "tag": "v1.5.5",
     "commit": "8498e17dc6c4b5aa21f3a2bbe8c20f3a461c3211"
   },
-  "_source": "git://github.com/trentrichardson/jQuery-Timepicker-Addon.git",
+  "_source": "https://github.com/trentrichardson/jQuery-Timepicker-Addon.git",
   "_target": "1.5.*",
   "_originalSource": "jqueryui-timepicker-addon"
 }

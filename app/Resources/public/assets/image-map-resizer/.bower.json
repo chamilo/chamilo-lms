@@ -40,7 +40,7 @@
     "tag": "v0.5.4",
     "commit": "eef318b0892b5ecec2c95a9c2f7f06c420978cbe"
   },
-  "_source": "git://github.com/davidjbradshaw/image-map-resizer.git",
+  "_source": "https://github.com/davidjbradshaw/image-map-resizer.git",
   "_target": "0.5.*",
   "_originalSource": "image-map-resizer"
 }

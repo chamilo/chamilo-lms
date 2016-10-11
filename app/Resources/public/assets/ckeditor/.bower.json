@@ -21,7 +21,7 @@
   "_resolution": {
     "type": "version",
     "tag": "4.5.9",
-    "commit": "ba2580967f7409784921b4320e297522175e45bb"
+    "commit": "5de42515a5ca7015de75627ad8067f786d7fc425"
   },
   "_source": "https://github.com/AngelFQC/ckeditor-releases.git",
   "_target": "*",

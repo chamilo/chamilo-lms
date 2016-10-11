@@ -209,7 +209,7 @@ $(document).on( 'shown.bs.tab', 'a[data-toggle="tab"]', function (e) {
 /* DISPLAY SECTION */
 
 echo $learnPath->build_action_menu();
-echo '<div class="row" style="overflow:hidden">';
+echo '<div class="row">';
 echo '<div id="lp_sidebar" class="col-md-4">';
 echo $learnPath->return_new_tree(null, true);
 

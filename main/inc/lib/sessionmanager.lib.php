@@ -1621,7 +1621,7 @@ class SessionManager
      * @param bool $empty_users
      * @return bool
      */
-    public static function suscribe_users_to_session(
+    public static function subscribe_users_to_session(
         $id_session,
         $user_list,
         $session_visibility = SESSION_VISIBLE_READ_ONLY,
@@ -3924,7 +3924,7 @@ class SessionManager
             }
             $users = null;
             //Subscribing in read only mode
-            self::suscribe_users_to_session($sid, $short_users, SESSION_VISIBLE_READ_ONLY, true);
+            self::subscribe_users_to_session($sid, $short_users, SESSION_VISIBLE_READ_ONLY, true);
             $short_users = null;
         }
         return $sid;
@@ -5354,7 +5354,7 @@ class SessionManager
                                 continue;
                             }
                             $messages[] = Display::return_message(get_lang('StudentList') . '<br />' . $userToString, 'info', false);
-                            SessionManager::suscribe_users_to_session(
+                            SessionManager::subscribe_users_to_session(
                                 $sessionDestinationId,
                                 $newUserList,
                                 SESSION_VISIBLE_READ_ONLY,

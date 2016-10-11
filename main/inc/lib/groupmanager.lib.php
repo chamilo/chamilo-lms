@@ -1386,13 +1386,18 @@ class GroupManager
         $table_group = Database :: get_course_table(TABLE_GROUP);
         $group_id = intval($group_id);
         if (isset($group_id)) {
-            $sql = "SELECT  self_registration_allowed
+            $sql = "SELECT status, self_registration_allowed
                     FROM $table_group
                     WHERE c_id = $course_id AND iid = $group_id";
-            $db_result = Database::query($sql);
-            $db_object = Database::fetch_object($db_result);
+            $result = Database::query($sql);
+            $group = Database::fetch_object($result);
 
-            return $db_object->self_registration_allowed == 1 && self :: can_user_subscribe($user_id, $group_id);
+            if ($group->status == 0 || $group->self_registration_allowed != 1) {
+
+                return false;
+            }
+
+            return self::can_user_subscribe($user_id, $group_id);
         } else {
             return false;
         }
@@ -1416,10 +1421,15 @@ class GroupManager
         $sql = "SELECT self_unregistration_allowed
                 FROM $table_group
                 WHERE c_id = $course_id AND iid = $group_id";
-        $db_result = Database::query($sql);
-        $db_object = Database::fetch_object($db_result);
+        $result = Database::query($sql);
+        $group = Database::fetch_object($result);
 
-        return $db_object->self_unregistration_allowed == 1 && self :: is_subscribed($user_id, $group_id);
+        if ($group->status == 0 || $group->self_unregistration_allowed != 1) {
+
+            return false;
+        }
+
+        return self::is_subscribed($user_id, $group_id);
     }
 
     /**

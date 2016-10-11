@@ -576,7 +576,7 @@ if (!empty($exerciseList)) {
             $my_exercise_id = $row['id'];
 
             $exercise = new Exercise();
-            $exercise->read($my_exercise_id);
+            $exercise->read($my_exercise_id, false);
 
             if (empty($exercise->id)) {
                 continue;

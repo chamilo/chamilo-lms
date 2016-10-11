@@ -3984,8 +3984,8 @@ class Exercise
                             }
 
                             if ($show_result) {
-                                if ($showTotalScoreAndUserChoices == true) {
-                                    $user_answer = '';
+                                if ($showTotalScoreAndUserChoicesInLastAttempt == false) {
+                                    $s_answer_label = '';
                                 }
                                 switch ($answerType) {
                                     case MATCHING:
@@ -3996,7 +3996,7 @@ class Exercise
                                         echo '<td>';
                                         if (in_array($answerType, [MATCHING, MATCHING_DRAGGABLE])) {
                                             if (isset($real_list[$i_answer_correct_answer]) &&
-                                                $showTotalScoreAndUserChoices == false
+                                                $showTotalScoreAndUserChoicesInLastAttempt == true
                                             ) {
                                                 echo Display::span(
                                                     $real_list[$i_answer_correct_answer]

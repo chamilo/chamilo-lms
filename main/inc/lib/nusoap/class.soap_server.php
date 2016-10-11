@@ -211,11 +211,13 @@ class nusoap_server extends nusoap_base
 			$this->debug("In nusoap_server, WSDL is specified");
 			if (is_object($wsdl) && (get_class($wsdl) == 'wsdl')) {
 				$this->wsdl = $wsdl;
+                $this->wsdl->soap_defencoding = $this->soap_defencoding;
 				$this->externalWSDLURL = $this->wsdl->wsdl;
 				$this->debug('Use existing wsdl instance from ' . $this->externalWSDLURL);
 			} else {
 				$this->debug('Create wsdl from ' . $wsdl);
 				$this->wsdl = new wsdl($wsdl);
+                $this->wsdl->soap_defencoding = $this->soap_defencoding;
 				$this->externalWSDLURL = $wsdl;
 			}
 			$this->appendDebug($this->wsdl->getDebug());
@@ -282,7 +284,7 @@ class nusoap_server extends nusoap_base
               }
 			} elseif ($this->wsdl) {
 				$this->debug("In service, serialize WSDL");
-				header("Content-Type: text/xml; charset=ISO-8859-1\r\n");
+                header("Content-Type: text/xml; charset=".$this->soap_defencoding."\r\n");
 				print $this->wsdl->serialize($this->debug_flag);
 				if ($this->debug_flag) {
 					$this->debug('wsdl:');
@@ -291,7 +293,7 @@ class nusoap_server extends nusoap_base
 				}
 			} else {
 				$this->debug("In service, there is no WSDL");
-				header("Content-Type: text/html; charset=ISO-8859-1\r\n");
+                header("Content-Type: text/html; charset=".$this->soap_defencoding."\r\n");
 				print "This service does not provide WSDL";
 			}
 		} elseif ($this->wsdl) {
@@ -1090,7 +1092,8 @@ class nusoap_server extends nusoap_base
             $schemaTargetNamespace = $namespace;
         }
 
-		$this->wsdl = new wsdl;
+        $this->wsdl = new wsdl();
+        $this->wsdl->soap_defencoding = $this->soap_defencoding;
 		$this->wsdl->serviceName = $serviceName;
         $this->wsdl->endpoint = $endpoint;
 		$this->wsdl->namespaces['tns'] = $namespace;

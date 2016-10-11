@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * With this tool you can easily adjust non critical configuration settings.
  * Non critical means that changing them will not result in a broken campus.
@@ -236,6 +238,9 @@ if (!empty($_GET['category']) &&
 
         foreach ($settings as $item) {
             $key = $item['variable'];
+            if ($key === 'prevent_multiple_simultaneous_login') {
+                Session::write('first_user_login', 1);
+            }
             if (in_array($key, $settings_to_avoid)) {
                 continue;
             }

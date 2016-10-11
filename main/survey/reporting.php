@@ -25,7 +25,7 @@ $survey_data = SurveyManager::get_survey($survey_id);
 if (isset($_POST['export_report']) && $_POST['export_report']) {
     switch ($_POST['export_format']) {
         case 'xls':
-            $filename = 'survey_results_'.$survey_id.'.xls';
+            $filename = 'survey_results_'.$survey_id.'.xlsx';
             $data = SurveyUtil::export_complete_report_xls(
                 $survey_data,
                 $filename,

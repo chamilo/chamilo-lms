@@ -5340,7 +5340,10 @@ EOF;
     public static function getUserProfileLink($userInfo)
     {
         if (isset($userInfo) && isset($userInfo['user_id'])) {
-            return Display::url($userInfo['complete_name'], $userInfo['profile_url']);
+            return Display::url(
+                $userInfo['complete_name_with_username'],
+                $userInfo['profile_url']
+            );
         } else {
             return get_lang('Anonymous');
         }

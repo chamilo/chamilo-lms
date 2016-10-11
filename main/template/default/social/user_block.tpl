@@ -57,21 +57,21 @@
                                 </li>
                             {% endif %}
                         {% endif %}
-                    {% if chat_enabled == 1 %}
-                        {% if user.user_is_online_in_chat != 0 %}
-                            {% if user_relation == user_relation_type_friend %}
-                                <li class="item">
-                                    <a onclick="javascript:chatWith('{{ user.id }}', '{{ user.complete_name }}', '{{ user.user_is_online }}','{{ user.avatar_small }}')" href="javascript:void(0);">
-                                        <img src="{{ "online.png" | icon }}" alt="{{ "Online" | get_lang }}">
-                                        {{ "Chat" | get_lang }} ({{ "Online" | get_lang }})
-                                    </a>
-                                </li>
-                            {# else #}
-                                {# <img src="{{ "offline.png" | icon }}" alt="{{ "Online" | get_lang }}"> #}
-                                {# {{ "Chat" | get_lang }} ({{ "Offline" | get_lang }}) #}
+                        {% if chat_enabled == 1 %}
+                            {% if user.user_is_online_in_chat != 0 %}
+                                {% if user_relation == user_relation_type_friend %}
+                                    <li class="item">
+                                        <a onclick="javascript:chatWith('{{ user.id }}', '{{ user.complete_name }}', '{{ user.user_is_online }}','{{ user.avatar_small }}')" href="javascript:void(0);">
+                                            <img src="{{ "online.png" | icon }}" alt="{{ "Online" | get_lang }}">
+                                            {{ "Chat" | get_lang }} ({{ "Online" | get_lang }})
+                                        </a>
+                                    </li>
+                                {# else #}
+                                    {# <img src="{{ "offline.png" | icon }}" alt="{{ "Online" | get_lang }}"> #}
+                                    {# {{ "Chat" | get_lang }} ({{ "Offline" | get_lang }}) #}
+                                {% endif %}
                             {% endif %}
                         {% endif %}
-                    {% endif %}
 
                     {% if not profile_edition_link is empty %}
                     <li class="item">
@@ -80,7 +80,6 @@
                         </a>
                     </li>
                     {% endif %}
-
                     </ul>
                 </div>
             </div>

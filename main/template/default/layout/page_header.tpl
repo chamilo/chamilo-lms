@@ -2,9 +2,9 @@
     {{ help_content }}
     {{ bug_notification }}
 </div>
-    {% block topbar %}
-        {% include template ~ "/layout/topbar.tpl" %}
-    {% endblock %}
+{% block topbar %}
+    {% include template ~ "/layout/topbar.tpl" %}
+{% endblock %}
 <div class="extra-header">{{ header_extra_content }}</div>
 <header id="header-section">
 <section>

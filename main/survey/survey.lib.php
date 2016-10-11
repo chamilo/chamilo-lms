@@ -2502,6 +2502,7 @@ class SurveyUtil
         $table_survey_answer = Database :: get_course_table(TABLE_SURVEY_ANSWER);
 
         $surveyId = isset($_GET['survey_id']) ? intval($_GET['survey_id']) : 0;
+        $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
 
         // Actions bar
         echo '<div class="actions">';
@@ -2514,16 +2515,16 @@ class SurveyUtil
         echo '</div>';
 
         // The form
-        echo '<form id="form1a" name="form1a" method="post" action="'.api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&survey_id='.$surveyId.'&'.api_get_cidreq().'">';
+        echo '<form id="form1a" name="form1a" method="post" action="'.api_get_self().'?action='.$action.'&survey_id='.$surveyId.'&'.api_get_cidreq().'">';
         echo '<input type="hidden" name="export_report" value="export_report">';
         echo '<input type="hidden" name="export_format" value="csv">';
         echo '</form>';
-        echo '<form id="form1b" name="form1b" method="post" action="'.api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&survey_id='.$surveyId.'&'.api_get_cidreq().'">';
+        echo '<form id="form1b" name="form1b" method="post" action="'.api_get_self().'?action='.$action.'&survey_id='.$surveyId.'&'.api_get_cidreq().'">';
         echo '<input type="hidden" name="export_report" value="export_report">';
         echo '<input type="hidden" name="export_format" value="xls">';
         echo '</form>';
 
-        echo '<form id="form2" name="form2" method="post" action="'.api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&survey_id='.$surveyId.'&'.api_get_cidreq().'">';
+        echo '<form id="form2" name="form2" method="post" action="'.api_get_self().'?action='.$action.'&survey_id='.$surveyId.'&'.api_get_cidreq().'">';
 
         // The table
         echo '<br /><table class="data_table" border="1">';
@@ -2557,14 +2558,17 @@ class SurveyUtil
 
         $course_id = api_get_course_int_id();
         $sql = "SELECT q.question_id, q.type, q.survey_question, count(o.question_option_id) as number_of_options
-				FROM $table_survey_question q LEFT JOIN $table_survey_question_option o
+				FROM $table_survey_question q 
+				LEFT JOIN $table_survey_question_option o
 				ON q.question_id = o.question_id
-				WHERE q.survey_id = '".$surveyId."' AND
-				q.c_id = $course_id AND
-				o.c_id = $course_id
+				WHERE 
+				    q.survey_id = '".$surveyId."' AND
+				    q.c_id = $course_id AND
+				    o.c_id = $course_id
 				GROUP BY q.question_id
 				ORDER BY q.sort ASC";
         $result = Database::query($sql);
+        $questions = [];
         while ($row = Database::fetch_array($result)) {
             // We show the questions if
             // 1. there is no question filter and the export button has not been clicked
@@ -2620,7 +2624,9 @@ class SurveyUtil
 				ORDER BY sq.sort ASC, sqo.sort ASC";
         $result = Database::query($sql);
 
-        $display_percentage_header = 1;	// in order to display only once the cell option (and not 100 times)
+        $display_percentage_header = 1;
+        $possible_answers = [];
+        // in order to display only once the cell option (and not 100 times)
         while ($row = Database::fetch_array($result)) {
             // We show the options if
             // 1. there is no question filter and the export button has not been clicked

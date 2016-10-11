@@ -6,7 +6,7 @@
 <html lang="{{ document_language }}" class="no-js"> <!--<![endif]-->
 <head>
 {% block head %}
-    {% include template ~ "/layout/head.tpl" %}
+{% include template ~ "/layout/head.tpl" %}
 {% endblock %}
 </head>
 <body dir="{{ text_direction }}" class="{{ section_name }} {{ login_class }}">
@@ -46,7 +46,7 @@
             {% block breadcrumb %}
                 {{ breadcrumb }}
             {% endblock %}
-            
+
             {% block body %}
                 {{ content }}
             {% endblock %}

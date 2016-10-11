@@ -8,7 +8,7 @@
     "tag": "v1.15.4",
     "commit": "6f84fbcd42bd6ab1af8134ef0c495e8a6c3175f7"
   },
-  "_source": "git://github.com/HenrikJoreteg/SimpleWebRTC.git",
+  "_source": "https://github.com/HenrikJoreteg/SimpleWebRTC.git",
   "_target": "1.15.*",
   "_originalSource": "simpleWebRTC"
 }

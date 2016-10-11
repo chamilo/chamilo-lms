@@ -1,5 +1,3 @@
-{# "UpdatedBy"|get_lang|format(comment.username) #}
-
 <hr>
 <h3>
     {{ 'Comments' | get_lang }}

@@ -528,13 +528,20 @@ class Wiki
                 WHERE c_id = $course_id AND $groupFilter $conditionSession
                 ORDER BY id DESC";
 
-        $sql = "DELETE FROM $tbl_wiki_conf
-                WHERE c_id = $course_id AND page_id IN ($sql)";
-        Database::query($sql);
+        $result = Database::query($sql);
+        $pageList = Database::store_result($result);
+        if ($pageList) {
+            foreach ($pageList as $pageData) {
+                $pageId = $pageData['page_id'];
+                $sql = "DELETE FROM $tbl_wiki_conf
+                        WHERE c_id = $course_id AND page_id = $pageId";
+                Database::query($sql);
 
-        $sql = "DELETE FROM $tbl_wiki_discuss
-                WHERE c_id = $course_id AND publication_id IN ($sql)";
-        Database::query($sql);
+                $sql = "DELETE FROM $tbl_wiki_discuss
+                        WHERE c_id = $course_id AND publication_id = $pageId";
+                Database::query($sql);
+            }
+        }
 
         $sql = "DELETE FROM $tbl_wiki_mailcue
                 WHERE c_id = $course_id AND $groupFilter $conditionSession ";

@@ -1,6 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Doctrine\ORM\EntityManager;
+use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Entity\ExtraFieldOptions;
+use Chamilo\CoreBundle\Entity\ExtraFieldValues;
+
 /**
  * Chamilo LMS
  * This file contains functions used by the install and upgrade scripts.
@@ -9,11 +14,6 @@
  * - a function get_old_version_settings to retrieve the config file settings
  *   of older versions before upgrading.
  */
-
-use Doctrine\ORM\EntityManager;
-use Chamilo\CoreBundle\Entity\ExtraField;
-use Chamilo\CoreBundle\Entity\ExtraFieldOptions;
-use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 
 /*      CONSTANTS */
 define('SYSTEM_CONFIG_FILENAME', 'configuration.dist.php');
@@ -1103,7 +1103,7 @@ function display_requirements(
         </button>
         <input type="hidden" name="is_executable" id="is_executable" value="-" />
             <button type="submit" class="btn btn-default" <?php echo !$error ?: 'disabled="disabled"' ?> name="step2_update_8" value="Upgrade from Chamilo 1.9.x">
-                <em class="fa fa-forward" aria-hidden="true"></em> <?php echo get_lang('UpgradeFromLMS19x') ?>
+                <em class="fa fa-forward" aria-hidden="true"></em> <?php echo get_lang('UpgradeVersion') ?>
             </button>
             </p>
         <?php
@@ -3022,6 +3022,73 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
             );
 
             if ($result) {
+
+                $connection->executeQuery("ALTER TABLE course_category MODIFY COLUMN auth_course_child VARCHAR(40) DEFAULT 'TRUE'");
+
+                // Fix post_group_id
+                $sql = "SELECT * FROM c_student_publication where (post_group_id <> 0 or post_group_id is not null)";
+                $statement = $connection->executeQuery($sql);
+                $result = $statement->fetchAll();
+                foreach ($result as $row) {
+                    $groupId = $row['post_group_id'];
+                    $courseId = $row['c_id'];
+                    $sessionId = $row['session_id'];
+                    $workIid = $row['iid'];
+                    $sql = "SELECT iid from c_group_info where c_id = $courseId and iid = $groupId";
+                    $statement = $connection->executeQuery($sql);
+                    $count = $statement->rowCount();
+                    if ($count == 0) {
+                        $sql = "SELECT iid from c_group_info where c_id = $courseId and id = $groupId";
+                        $statement = $connection->executeQuery($sql);
+                        $count = $statement->rowCount();
+                        if ($count > 0) {
+                            $rowGroup = $statement->fetch();
+                            $newGroupId = $rowGroup['iid'];
+                            if ($newGroupId) {
+                                $sqlUpdate = "UPDATE c_student_publication 
+                                              SET post_group_id = $newGroupId 
+                                              WHERE 
+                                                c_id = $courseId AND 
+                                                post_group_id = $groupId AND 
+                                                iid = $workIid
+                                              ";
+                                $connection->executeQuery($sqlUpdate);
+                            }
+                        }
+                    }
+                }
+
+                // Fix work documents that don't have c_item_property value
+                $sql = "SELECT * FROM c_student_publication where parent_id is not null";
+                $statement = $connection->executeQuery($sql);
+                $result = $statement->fetchAll();
+                foreach ($result as $row) {
+                    $groupId  = $row['post_group_id'];
+                    $courseId = $row['c_id'];
+                    $sessionId = $row['session_id'];
+                    $workId = $row['id'];
+                    $itemInfo = api_get_item_property_info(
+                      $courseId,
+                       'work',
+                      $workId,
+                      $sessionId
+                    );
+                    $courseInfo = api_get_course_info_by_id($courseId);
+                    if (empty($item_info)) {
+                        api_item_property_update(
+                            $courseInfo,
+                            'work',
+                            $workId,
+                            'visible',
+                            1,
+                            $groupId,
+                            null,
+                            null,
+                            null,
+                            $sessionId
+                        );
+                    }
+                }
                 $connection->executeQuery("UPDATE settings_current SET selected_value = '1.11.0' WHERE variable = 'chamilo_database_version'");
 
                 error_log('Migrations files were executed.');

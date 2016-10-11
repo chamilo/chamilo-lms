@@ -436,48 +436,53 @@ class Database
     }
 
     /**
-     * @param string $table_name use Database::get_main_table
+     * @param string $tableName use Database::get_main_table
      * @param array $attributes Values to updates
      * Example: $params['name'] = 'Julio'; $params['lastname'] = 'Montoya';
-     * @param array $where_conditions where conditions i.e array('id = ?' =>'4')
-     * @param bool $show_query
+     * @param array $whereConditions where conditions i.e array('id = ?' =>'4')
+     * @param bool $showQuery
      *
      * @return bool|int
      */
     public static function update(
-        $table_name,
+        $tableName,
         $attributes,
-        $where_conditions = array(),
-        $show_query = false
+        $whereConditions = array(),
+        $showQuery = false
     ) {
-        if (!empty($table_name) && !empty($attributes)) {
-            $update_sql = '';
-            //Cleaning attributes
+        if (!empty($tableName) && !empty($attributes)) {
+            $updateSql = '';
             $count = 1;
 
+            if ($showQuery) {
+                var_dump($attributes);
+            }
+
             foreach ($attributes as $key => $value) {
-                $update_sql .= "$key = :$key ";
+                $updateSql .= "$key = :$key ";
                 if ($count < count($attributes)) {
-                    $update_sql.=', ';
+                    $updateSql.= ', ';
                 }
                 $count++;
             }
 
-            if (!empty($update_sql)) {
+            if (!empty($updateSql)) {
                 //Parsing and cleaning the where conditions
-                $where_return = self::parse_where_conditions($where_conditions);
+                $whereReturn = self::parse_where_conditions($whereConditions);
 
-                $sql = "UPDATE $table_name SET $update_sql $where_return ";
+                $sql = "UPDATE $tableName SET $updateSql $whereReturn ";
 
                 $statement = self::getManager()->getConnection()->prepare($sql);
+
                 $result = $statement->execute($attributes);
 
-                if ($show_query) {
+                if ($showQuery) {
                     var_dump($sql);
+                    var_dump($attributes);
+                    var_dump($whereConditions);
                 }
 
                 if ($result) {
-
                     return $statement->rowCount();
                 }
             }
@@ -515,11 +520,11 @@ class Database
             }
         }
 
-        $sql    = "SELECT $clean_columns FROM $table_name $conditions";
+        $sql = "SELECT $clean_columns FROM $table_name $conditions";
         $result = self::query($sql);
         $array = array();
 
-        if ($type_result == 'all') {
+        if ($type_result === 'all') {
             while ($row = self::fetch_array($result, $option)) {
                 if (isset($row['id'])) {
                     $array[$row['id']] = $row;
@@ -553,11 +558,10 @@ class Database
             $type_condition = strtolower($type_condition);
             switch ($type_condition) {
                 case 'where':
-
                     foreach ($condition_data as $condition => $value_array) {
                         if (is_array($value_array)) {
                             $clean_values = array();
-                            foreach($value_array as $item) {
+                            foreach ($value_array as $item) {
                                 $item = Database::escape_string($item);
                                 $clean_values[]= $item;
                             }
@@ -567,17 +571,17 @@ class Database
                         }
 
                         if (!empty($condition) && $clean_values != '') {
-                            $condition = str_replace('%',"'@percentage@'", $condition); //replace "%"
-                            $condition = str_replace("'?'","%s", $condition);
-                            $condition = str_replace("?","%s", $condition);
+                            $condition = str_replace('%', "'@percentage@'", $condition); //replace "%"
+                            $condition = str_replace("'?'", "%s", $condition);
+                            $condition = str_replace("?", "%s", $condition);
 
-                            $condition = str_replace("@%s@","@-@", $condition);
-                            $condition = str_replace("%s","'%s'", $condition);
-                            $condition = str_replace("@-@","@%s@", $condition);
+                            $condition = str_replace("@%s@", "@-@", $condition);
+                            $condition = str_replace("%s", "'%s'", $condition);
+                            $condition = str_replace("@-@", "@%s@", $condition);
 
                             // Treat conditions as string
                             $condition = vsprintf($condition, $clean_values);
-                            $condition = str_replace('@percentage@','%', $condition); //replace "%"
+                            $condition = str_replace('@percentage@', '%', $condition); //replace "%"
                             $where_return .= $condition;
                         }
                     }
@@ -595,7 +599,7 @@ class Database
                         $new_order_array = explode(',', $order_array);
                         $temp_value = array();
 
-                        foreach($new_order_array as $element) {
+                        foreach ($new_order_array as $element) {
                             $element = explode(' ', $element);
                             $element = array_filter($element);
                             $element = array_values($element);
@@ -614,8 +618,6 @@ class Database
                         }
                         if (!empty($temp_value)) {
                             $return_value .= ' ORDER BY '.implode(', ', $temp_value);
-                        } else {
-                            //$return_value .= '';
                         }
                     }
                     break;
@@ -624,7 +626,7 @@ class Database
                     if (!empty($limit_array)) {
                         if (count($limit_array) > 1) {
                             $return_value .= ' LIMIT '.intval($limit_array[0]).' , '.intval($limit_array[1]);
-                        }  else {
+                        } else {
                             $return_value .= ' LIMIT '.intval($limit_array[0]);
                         }
                     }

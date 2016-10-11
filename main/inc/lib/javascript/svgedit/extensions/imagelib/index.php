@@ -6,18 +6,23 @@
 //Chamilo load libraries
 require_once '../../../../../../inc/global.inc.php';
 
-//Add security from Chamilo
+// Add security from Chamilo
 api_protect_course_script();
 api_block_anonymous_users();
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
-
 $curdirpath='/images/gallery'; //path of library directory
-
 $course_info = api_get_course_info();
 
-//get all files and folders
-$docs_and_folders = DocumentManager::get_all_document_data($course_info, $curdirpath, 0, null, $is_allowed_to_edit, false);
+// Get all files and folders
+$docs_and_folders = DocumentManager::get_all_document_data(
+    $course_info,
+    $curdirpath,
+    0,
+    null,
+    $is_allowed_to_edit,
+    false
+);
 
 //get all filenames
 $array_to_search = is_array($docs_and_folders) ? $docs_and_folders : array();

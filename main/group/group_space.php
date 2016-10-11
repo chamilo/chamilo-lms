@@ -52,7 +52,7 @@ Display::display_introduction_section(TOOL_GROUP);
 if (!empty($_GET['selfReg']) &&
     GroupManager :: is_self_registration_allowed($user_id, $current_group['iid'])
 ) {
-    GroupManager :: subscribe_users($user_id, $current_group['id']);
+    GroupManager :: subscribe_users($user_id, $current_group['iid']);
     Display :: display_normal_message(get_lang('GroupNowMember'));
 }
 
@@ -62,7 +62,7 @@ if (!empty($_GET['selfReg']) &&
 if (!empty($_GET['selfUnReg']) &&
     GroupManager :: is_self_unregistration_allowed($user_id, $current_group['iid'])
 ) {
-    GroupManager :: unsubscribe_users($user_id, $current_group['iid']);
+    GroupManager::unsubscribe_users($user_id, $current_group['iid']);
     Display::display_normal_message(get_lang('StudentDeletesHimself'));
 }
 

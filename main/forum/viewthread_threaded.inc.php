@@ -26,7 +26,7 @@ $_user = api_get_user_info();
 $sortDirection = isset($_GET['posts_order']) && $_GET['posts_order'] === 'desc' ? 'DESC' : 'ASC';
 $rows = getPosts($current_forum, $_GET['thread'], $sortDirection, true);
 $sessionId = api_get_session_id();
-$currentThread = get_thread_information($_GET['thread']);
+$currentThread = get_thread_information($current_forum['forum_id'], $_GET['thread']);
 $post_id = isset($_GET['post']) ? (int) $_GET['post'] : 0;
 $userId = api_get_user_id();
 
@@ -89,21 +89,24 @@ foreach ($rows as $post) {
             $counter == 1 AND !isset($_GET['post'])
         )
     ) {
-        $thread_structure .= '<strong>' .prepare4display($post['post_title']) . '</strong></div>';
+        $thread_structure .= '<strong>' .prepare4display($post['post_title']) . '</strong>';
         $prev_next_array[] = $post['post_id'];
     } else {
-        if ($post['visible'] == '0') {
-            $class = ' class="invisible"';
-        } else {
-            $class = '';
-        }
         $count_loop = ($count == 0) ? '&id=1' : '';
-        $thread_structure .= "<a href=\"viewthread.php?" . api_get_cidreq() .
-            "&forum=" . $forumId . "&thread=" . $threadId .
-            "&post=" . $post['post_id'] . "$count_loop\"" .
-            "$class>" . prepare4display($post['post_title']) . "</a></div>";
+        $thread_structure .= Display::url(
+            prepare4display($post['post_title']),
+            'viewthread.php?' . api_get_cidreq() . "$count_loop&" . http_build_query([
+                'forum' => $forumId,
+                'thread' => $threadId,
+                'post' => $post['post_id']
+            ]),
+            ['class' => empty($post['visible']) ? 'text-muted' : null]
+        );
+
         $prev_next_array[] = $post['post_id'];
     }
+
+    $thread_structure .= '</div>';
     $count++;
 }
 
@@ -169,10 +172,10 @@ if (((int) $current_id) > 0) {
     echo '<a href="' . $prev_href . '" ' . $class_prev . ' title=' .
         $prev_message . '>' . $prev_img . ' ' . $prev_message . '</a>';
 } else {
-    echo '<b><span class="invisible">' .
-        $first_img . ' ' . $first_message . '</b></span>';
-    echo '<b><span class="invisible">' .
-        $prev_img . ' ' . $prev_message . '</b></span>';
+    echo '<strong class="text-muted">' .
+        $first_img . ' ' . $first_message . '</strong>';
+    echo '<strong class="text-muted">' .
+        $prev_img . ' ' . $prev_message . '</strong>';
 }
 
 // Current counter
@@ -183,8 +186,8 @@ if (($current_id + 1) < $max) {
     echo '<a href="' . $next_href . '" ' . $class_next . ' title=' . $next_message . '>' . $next_message . ' ' . $next_img . '</a>';
     echo '<a href="' . $last_href . '" ' . $class . ' title=' . $last_message . '>' . $last_message . ' ' . $last_img . '</a>';
 } else {
-    echo '<b><span class="invisible">' . $next_message . ' ' . $next_img . '</b></span>';
-    echo '<b><span class="invisible">' . $last_message . ' ' . $last_img . '</b></span>';
+    echo '<strong class="text-muted">' . $next_message . ' ' . $next_img . '</strong>';
+    echo '<strong class="text-muted">' . $last_message . ' ' . $last_img . '</strong>';
 }
 echo '</center>';
 

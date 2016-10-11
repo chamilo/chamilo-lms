@@ -579,21 +579,21 @@ function modify_filter($user_id, $url_params, $row)
     if (api_is_platform_admin() || (api_is_session_admin() && $current_user_status_label == $statusname[STUDENT])) {
         if (!$user_is_anonymous) {
             if (api_global_admin_can_edit_admin($user_id)) {
-                $result .= '<a href="user_list.php?action=login_as&user_id='.$user_id.'&sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('login_as.png', get_lang('LoginAs')).'</a>&nbsp;&nbsp;';
+                $result .= '<a href="user_list.php?action=login_as&user_id='.$user_id.'&sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('login_as.png', get_lang('LoginAs')).'</a>&nbsp;';
             } else {
-                $result .= Display::return_icon('login_as_na.png', get_lang('LoginAs')).'&nbsp;&nbsp;';
+                $result .= Display::return_icon('login_as_na.png', get_lang('LoginAs')).'&nbsp;';
             }
         } else {
-            $result .= Display::return_icon('login_as_na.png', get_lang('LoginAs')).'&nbsp;&nbsp;';
+            $result .= Display::return_icon('login_as_na.png', get_lang('LoginAs')).'&nbsp;';
         }
     } else {
-        $result .= Display::return_icon('login_as_na.png', get_lang('LoginAs')).'&nbsp;&nbsp;';
+        $result .= Display::return_icon('login_as_na.png', get_lang('LoginAs')).'&nbsp;';
     }
 
     if ($current_user_status_label != $statusname[STUDENT]) {
-        $result .= Display::return_icon('statistics_na.gif', get_lang('Reporting')).'&nbsp;&nbsp;';
+        $result .= Display::return_icon('statistics_na.gif', get_lang('Reporting')).'&nbsp;';
     } else {
-        $result .= '<a href="../mySpace/myStudents.php?student='.$user_id.'">'.Display::return_icon('statistics.gif', get_lang('Reporting')).'</a>&nbsp;&nbsp;';
+        $result .= '<a href="../mySpace/myStudents.php?student='.$user_id.'">'.Display::return_icon('statistics.gif', get_lang('Reporting')).'</a>&nbsp;';
     }
 
     if (api_is_platform_admin(true)) {

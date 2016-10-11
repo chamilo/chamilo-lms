@@ -154,15 +154,18 @@ function get_lang($variable, $reserved = null, $language = null) {
     return $ret;
 }
 
-
 /**
  * Gets the current interface language.
  * @param bool $purified (optional)	When it is true, a purified (refined)
  * language value will be returned, for example 'french' instead of 'french_unicode'.
+ * @param bool $setParentLanguageName
  * @return string					The current language of the interface.
  */
-function api_get_interface_language($purified = false, $check_sub_language = false, $setParentLanguageName = true)
-{
+function api_get_interface_language(
+    $purified = false,
+    $check_sub_language = false,
+    $setParentLanguageName = true
+) {
     global $language_interface;
 
     if (empty($language_interface)) {
@@ -208,6 +211,7 @@ function api_get_interface_language($purified = false, $check_sub_language = fal
 
     return $interface_language;
 }
+
 /**
  * Returns a purified language id, without possible suffixes that will disturb language identification in certain cases.
  * @param string $language	The input language identificator, for example 'french_unicode'.
@@ -357,6 +361,7 @@ function _api_get_timezone()
     $to_timezone = date_default_timezone_get();
     // Second, see if a timezone has been chosen for the platform
     $timezone_value = api_get_setting('timezone_value', 'timezones');
+
     if ($timezone_value != null) {
         $to_timezone = $timezone_value;
     }
@@ -785,6 +790,8 @@ function api_get_person_name(
     //We check if the language is supported, otherwise we check the interface language of the parent language of sublanguage
 
     if (empty($language)) {
+        // Do not set $setParentLanguageName because this function is called before
+        // the main language is loaded in global.inc.php
         $language = api_get_interface_language(false, true, false);
     }
 

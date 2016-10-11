@@ -22,7 +22,7 @@
                                             {{ teacher.firstname }} {{ teacher.lastname }}
                                         </a>
                                      </h5>
-                                </div>       
+                                </div>
                             {% endif %}
                         {% endfor %}
                         </div>
@@ -31,7 +31,7 @@
                 </div>
                 <div class="description">
                     <h4 class="title">
-                            <a title="{{ item.title}}" href="{{ item.course_public_url }}">{{ item.title}}</a>
+                        <a title="{{ item.title}}" href="{{ item.course_public_url }}">{{ item.title}}</a>
                     </h4>
                     <div class="ranking">
                         {{ item.rating_html }}

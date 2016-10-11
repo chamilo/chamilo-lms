@@ -70,6 +70,8 @@ class Version111 extends AbstractMigrationChamilo
 
         // Needed to update 0000-00-00 00:00:00 values
         $this->addSql('SET sql_mode = ""');
+        // In case this one didn't work, also try this
+        $this->addSql('SET SESSION sql_mode = ""');
 
         $this->addSql('ALTER TABLE c_lp CHANGE publicated_on publicated_on DATETIME');
         $this->addSql('ALTER TABLE c_lp CHANGE expired_on expired_on DATETIME');
@@ -268,7 +270,6 @@ class Version111 extends AbstractMigrationChamilo
         $this->addSql("INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('show_link_ticket_notification', NULL, 'radio', 'Platform', 'false', 'ShowLinkTicketNotificationTitle', 'ShowLinkTicketNotificationComment', NULL, NULL, 0)");
         $this->addSql("INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, access_url) VALUES ('sso_authentication_subclass', NULL, 'textfield', 'Security', '', 'SSOSubclassTitle', 'SSOSubclassComment', 1)");
 
-
         $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('ticket_allow_student_add', 'true', 'Yes'), ('ticket_allow_student_add', 'false', 'No')");
         $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('ticket_allow_category_edition', 'true', 'Yes'), ('ticket_allow_category_edition', 'false', 'No')");
         $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('ticket_send_warning_to_all_admins', 'true', 'Yes'), ('ticket_send_warning_to_all_admins', 'false', 'No')");
@@ -298,6 +299,7 @@ class Version111 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE extra_field_options CHANGE display_text display_text VARCHAR(255) DEFAULT NULL');
         $this->addSql('ALTER TABLE extra_field CHANGE variable variable VARCHAR(255) NOT NULL');
         $this->addSql('ALTER TABLE c_course_setting MODIFY COLUMN value TEXT');
+        $this->addSql("ALTER TABLE session MODIFY COLUMN name VARCHAR(150) NOT NULL DEFAULT ''");
 
         if (!$schema->hasTable('version')) {
             $this->addSql('CREATE TABLE version (id int unsigned NOT NULL AUTO_INCREMENT, version varchar(255), PRIMARY KEY(id), UNIQUE(version));');
@@ -311,6 +313,8 @@ class Version111 extends AbstractMigrationChamilo
         $this->addSql('DELETE FROM settings_current WHERE variable = "course_create_active_tools" AND subkey = "online_conference"');
         $this->addSql('DELETE FROM settings_options WHERE variable = "visio_use_rtmpt"');
         $this->addSql('DELETE FROM course_module WHERE name = "conference"');
+        $this->addSql('ALTER TABLE c_student_publication_assignment CHANGE add_to_calendar add_to_calendar INT NOT NULL;');
+        $this->addSql('ALTER TABLE extra_field ADD visible_to_others TINYINT(1) DEFAULT NULL, CHANGE visible visible_to_self TINYINT(1) DEFAULT NULL');
     }
 
     /**

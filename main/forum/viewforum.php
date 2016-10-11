@@ -22,9 +22,6 @@
  *  @package chamilo.forum
  */
 
-use ChamiloSession as Session;
-
-// Including the global initialization file.
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_FORUM;
 
@@ -321,7 +318,7 @@ if (
                     );
                     $table_list .= '<td>
                         <a href="' . $forumUrl . 'forumqualify.php?' . api_get_cidreq()
-                        . '&forum=' . Security::remove_XSS($my_forum) . '&thread='
+                        . '&forum=' . intval($my_forum) . '&thread='
                         . intval($_GET['id']) . '&user=' . $row_student_list['id']
                         . '&user_id=' . $row_student_list['id'] . '&idtextqualify='
                         . $current_qualify_thread.'">'

@@ -129,15 +129,15 @@ background: #F7490C;
 .panel-default .panel-heading{
     background-color: #F9F9F9;
 }
-footer{
+footer.bgfooter{
   background: #782306;
   color: #F7490C;
   border-top: 4px solid #F7490C;
 }
-footer a{
+footer.bgfooter a{
   color: #ffffff;
 }
-footer a:hover{
+footer.bgfooter a:hover{
   color: #CCC;
 }
 .badge{

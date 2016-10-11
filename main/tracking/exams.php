@@ -408,63 +408,63 @@ function export_complete_report_xls($filename, $array)
     $column = 0; //skip the first column (row titles)
 
     if ($global) {
-        $worksheet->SetCellValueByColumnAndRow($line, $column, get_lang('Courses'));
+        $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('Courses'));
         $column++;
-        $worksheet->SetCellValueByColumnAndRow($line, $column, get_lang('Exercises'));
+        $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('Exercises'));
         $column++;
-        $worksheet->SetCellValueByColumnAndRow($line, $column, get_lang('ExamTaken'));
+        $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('ExamTaken'));
         $column++;
-        $worksheet->SetCellValueByColumnAndRow($line, $column, get_lang('ExamNotTaken'));
+        $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('ExamNotTaken'));
         $column++;
-        $worksheet->SetCellValueByColumnAndRow($line, $column, sprintf(get_lang('ExamPassX'), $filter_score) . '%');
+        $worksheet->setCellValueByColumnAndRow($column, $line, sprintf(get_lang('ExamPassX'), $filter_score) . '%');
         $column++;
-        $worksheet->SetCellValueByColumnAndRow($line, $column, get_lang('ExamFail'));
+        $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('ExamFail'));
         $column++;
-        $worksheet->SetCellValueByColumnAndRow($line, $column, get_lang('TotalStudents'));
+        $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('TotalStudents'));
         $column++;
 
         $line++;
         foreach ($array as $row) {
             $column = 0;
             foreach ($row as $item) {
-                $worksheet->SetCellValueByColumnAndRow($line, $column, html_entity_decode(strip_tags($item)));
+                $worksheet->setCellValueByColumnAndRow($column, $line, html_entity_decode(strip_tags($item)));
                 $column++;
             }
             $line++;
         }
         $line++;
     } else {
-        $worksheet->SetCellValueByColumnAndRow($line,$column,get_lang('Exercises'));
+        $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('Exercises'));
         $column++;
-        $worksheet->SetCellValueByColumnAndRow($line,$column,get_lang('User'));
+        $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('User'));
         $column++;
-        $worksheet->SetCellValueByColumnAndRow($line,$column,get_lang('Percentage'));
+        $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('Percentage'));
         $column++;
-        $worksheet->SetCellValueByColumnAndRow($line,$column,get_lang('Status'));
+        $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('Status'));
         $column++;
-        $worksheet->SetCellValueByColumnAndRow($line,$column,get_lang('Attempts'));
+        $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('Attempts'));
         $column++;
         $line++;
         foreach ($array as $row) {
             $column = 0;
-            $worksheet->SetCellValueByColumnAndRow(
+            $worksheet->setCellValueByColumnAndRow(
                 $line,
                 $column,
                 html_entity_decode(strip_tags($row['exercise']))
             );
             $column++;
-            foreach ($row['users'] as $key=>$user) {
+            foreach ($row['users'] as $key => $user) {
                 $column = 1;
-                $worksheet->SetCellValueByColumnAndRow(
-                    $line,
+                $worksheet->setCellValueByColumnAndRow(
                     $column,
+                    $line,
                     html_entity_decode(strip_tags($user))
                 );
                 $column++;
                 foreach ($row['results'][$key] as $result_item) {
-                    $worksheet->SetCellValueByColumnAndRow(
-                        $line,
+                    $worksheet->setCellValueByColumnAndRow(
                         $column,
+                        $line,
                         html_entity_decode(strip_tags($result_item))
                     );
                     $column++;

@@ -80,9 +80,16 @@ class ExtraField extends BaseAttribute
     /**
      * @var boolean
      *
-     * @ORM\Column(name="visible", type="boolean", nullable=true, unique=false)
+     * @ORM\Column(name="visible_to_self", type="boolean", nullable=true, unique=false)
      */
-    protected $visible;
+    protected $visibleToSelf;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="visible_to_others", type="boolean", nullable=true, unique=false)
+     */
+    protected $visibleToOthers;
 
     /**
      * @var boolean
@@ -246,27 +253,7 @@ class ExtraField extends BaseAttribute
         return $this;
     }
 
-    /**
-     * @return boolean
-     */
-    public function isVisible()
-    {
-        return $this->visible;
-    }
-
-    /**
-     * @param boolean $visible
-     *
-     * @return $this
-     */
-    public function setVisible($visible)
-    {
-        $this->visible = $visible;
-
-        return $this;
-    }
-
-    /**
+     /**
      * @return boolean
      */
     public function isChangeable()
@@ -302,6 +289,44 @@ class ExtraField extends BaseAttribute
     public function setFilter($filter)
     {
         $this->filter = $filter;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isVisibleToSelf()
+    {
+        return $this->visibleToSelf;
+    }
+
+    /**
+     * @param boolean $visibleToSelf
+     * @return ExtraField
+     */
+    public function setVisibleToSelf($visibleToSelf)
+    {
+        $this->visibleToSelf = $visibleToSelf;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isVisibleToOthers()
+    {
+        return $this->visibleToOthers;
+    }
+
+    /**
+     * @param boolean $visibleToOthers
+     * @return ExtraField
+     */
+    public function setVisibleToOthers($visibleToOthers)
+    {
+        $this->visibleToOthers = $visibleToOthers;
 
         return $this;
     }

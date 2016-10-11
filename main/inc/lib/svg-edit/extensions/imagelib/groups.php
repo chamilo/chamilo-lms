@@ -16,7 +16,11 @@ $course_info = api_get_course_info();
 $groupId = api_get_group_id();
 
 $group_properties = GroupManager::get_group_properties($groupId);
-$groupdirpath = $group_properties['directory'];
+$groupIid = 0;
+if ($group_properties) {
+    $groupdirpath = $group_properties['directory'];
+    $groupIid = $group_properties['iid'];
+}
 $group_disk_path = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/document'.$groupdirpath.'/';
 $group_web_path = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/document'.$groupdirpath.'/';
 
@@ -24,13 +28,13 @@ $group_web_path = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/document'
 $docs_and_folders = DocumentManager::get_all_document_data(
     $course_info,
     $groupdirpath,
-    api_get_group_id(),
+    $groupIid,
     null,
     $is_allowed_to_edit,
     false
 );
 
-//get all group filenames
+// get all group filenames
 $array_to_search = is_array($docs_and_folders) ? $docs_and_folders : array();
 
 if (count($array_to_search) > 0) {

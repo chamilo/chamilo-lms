@@ -114,7 +114,7 @@ if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
             $actionsLeft .= $item;
         }
     }
-    
+
     if (count($a_courses) > 0) {
         $actionsRight .= Display::url(
             Display::return_icon('printer.png', get_lang('Print'), array(), 32),
@@ -242,6 +242,8 @@ function get_courses($from, $limit, $column, $direction)
             $assignmentsInCourse = 0;
             $avgTimeSpentInCourse = 0;
             $avgProgressInCourse = 0;
+            $countStudents = 0;
+            $avgScoreInCourse = 0;
 
             if (count($userIdList) > 0) {
                 $countStudents = count($userIdList);

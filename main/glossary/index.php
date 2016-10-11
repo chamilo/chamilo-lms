@@ -198,10 +198,8 @@ switch ($action) {
         );
         $form->addElement('header', '', get_lang('ImportGlossary'));
         $form->addElement('file', 'file', get_lang('ImportCSVFileLocation'));
-
         $form->addElement('checkbox', 'replace', null, get_lang('DeleteAllGlossaryTerms'));
         $form->addElement('checkbox', 'update', null, get_lang('UpdateExistingGlossaryTerms'));
-
         $form->addButtonImport(get_lang('Import'), 'SubmitImport');
         $content = $form->returnForm();
 
@@ -316,13 +314,19 @@ switch ($action) {
 
             if (count($badList) > 0) {
                 Display::addFlash(
-                    Display::return_message(get_lang("GlossaryTermAlreadyExists").': ' . implode(', ', $badList), 'error')
+                    Display::return_message(
+                        get_lang("GlossaryTermAlreadyExists").': ' . implode(', ', $badList),
+                        'error'
+                    )
                 );
             }
 
             if (count($doubles) > 0) {
                 Display::addFlash(
-                    Display::return_message(get_lang("TermsDuplicatedInFile").': '.implode(', ', $doubles), 'warning')
+                    Display::return_message(
+                        get_lang("TermsDuplicatedInFile").': '.implode(', ', $doubles),
+                        'warning'
+                    )
                 );
             }
 
@@ -343,9 +347,9 @@ switch ($action) {
 
         usort($data, "sorter");
         $list = array();
-        $list[] = array('term','definition');
+        $list[] = array('term', 'definition');
         foreach ($data as $line) {
-            $list[] = array ($line[0], $line[1]);
+            $list[] = array($line[0], $line[1]);
         }
         $filename = 'glossary_course_'.api_get_course_id();
         Export::arrayToCsv($list, $filename);

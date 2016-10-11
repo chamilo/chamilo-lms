@@ -62,14 +62,17 @@ $doc_url = Database::escape_string($doc_url);
 $sql = "SELECT filename FROM $tbl_announcement_attachment
   	  	WHERE c_id = $course_id AND path LIKE BINARY '$doc_url'";
 
-$result= Database::query($sql);
+$result = Database::query($sql);
 if (Database::num_rows($result) > 0) {
     $row= Database::fetch_array($result);
     $title = str_replace(' ','_', $row['filename']);
     if (Security::check_abs_path($full_file_name,
         api_get_path(SYS_COURSE_PATH) . api_get_course_path() . '/upload/announcements/')
     ) {
-        DocumentManager::file_send_for_download($full_file_name, true, $title);
+        $result = DocumentManager::file_send_for_download($full_file_name, true, $title);
+        if ($result === false) {
+            api_not_allowed(true);
+        }
     }
 }
 exit;

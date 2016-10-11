@@ -63,7 +63,7 @@ if ($conferenceManager) {
             }
             break;
         case 'delete_record':
-            $bbb->deleteRecord($_GET['id']);
+            $result = $bbb->deleteRecord($_GET['id']);
             if ($result) {
                 $message = Display::return_message(get_lang('Deleted'), 'success');
             } else {

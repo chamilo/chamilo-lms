@@ -58,7 +58,7 @@ class CStudentPublicationAssignment
     /**
      * @var boolean
      *
-     * @ORM\Column(name="add_to_calendar", type="boolean", nullable=false)
+     * @ORM\Column(name="add_to_calendar", type="integer", nullable=false)
      */
     private $addToCalendar;
 

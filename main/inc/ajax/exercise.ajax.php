@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use \ChamiloSession as Session;
+use ChamiloSession as Session;
 
 /**
  * Responses to AJAX calls
@@ -326,7 +326,7 @@ switch ($action) {
                 exit;
             }
 
-            $_SESSION['exe_id'] = $exe_id;
+            Session::write('exe_id', $exe_id);
 
             // Getting the total weight if the request is simple
             $total_weight = 0;
@@ -503,6 +503,42 @@ switch ($action) {
             exit;
         }
         echo 'ok';
+        break;
+    case 'show_question':
+        $isAllowedToEdit = api_is_allowed_to_edit(null, true, false, false);
+
+        if (!$isAllowedToEdit) {
+            api_not_allowed(true);
+            exit;
+        }
+
+        $questionId = isset($_GET['question']) ? intval($_GET['question']) : 0;
+        $exerciseId = isset($_REQUEST['exercise']) ? intval($_REQUEST['exercise']) : 0;
+
+        if (!$questionId || !$exerciseId) {
+            break;
+        }
+
+        $objExercise = new Exercise();
+        $objExercise->read($exerciseId);
+
+        $objQuestion = Question::read($questionId);
+        $objQuestion->get_question_type_name();
+
+        echo '<p class="lead">' . $objQuestion->get_question_type_name() . '</p>';
+        //echo get_lang('Level').': '.$objQuestionTmp->selectLevel();
+        ExerciseLib::showQuestion(
+            $questionId,
+            false,
+            null,
+            null,
+            false,
+            true,
+            false,
+            true,
+            $objExercise->feedback_type,
+            true
+        );
         break;
     default:
         echo '';

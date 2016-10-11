@@ -101,7 +101,7 @@ function getWhereClause($col, $oper, $val)
 }
 
 // If there is no search request sent by jqgrid, $where should be empty
-$whereCondition = null;
+$whereCondition = '';
 $operation = isset($_REQUEST['oper'])  ? $_REQUEST['oper']  : false;
 $exportFormat = isset($_REQUEST['export_format'])  ? $_REQUEST['export_format']  : 'csv';
 $searchField = isset($_REQUEST['searchField'])  ? $_REQUEST['searchField']  : false;
@@ -429,8 +429,12 @@ switch ($action) {
         $exercise_id = $_REQUEST['exerciseId'];
 
         if (isset($_GET['filter_by_user']) && !empty($_GET['filter_by_user'])) {
-            $filter_user = intval($_GET['filter_by_user']);
-            $whereCondition .= " AND te.exe_user_id  = '$filter_user'";
+            $filter_user = (int) $_GET['filter_by_user'];
+            if (empty($whereCondition)) {
+                $whereCondition .= " te.exe_user_id  = '$filter_user'";
+            } else {
+                $whereCondition .= " AND te.exe_user_id  = '$filter_user'";
+            }
         }
 
         if (!empty($whereCondition)) {
@@ -1054,12 +1058,12 @@ switch ($action) {
         if (!empty($sessions)) {
             foreach ($sessions as $session) {
                 if (api_drh_can_access_all_session_content()) {
-                    $count_courses_in_session = count(SessionManager::get_course_list_by_session_id($session['id']));
+                    $count_courses_in_session = SessionManager::get_course_list_by_session_id($session['id'], '', null, true);
                 } else {
                     $count_courses_in_session = count(Tracking::get_courses_followed_by_coach($user_id, $session['id']));
                 }
 
-                $count_users_in_session = count(SessionManager::get_users_by_session($session['id'], 0));
+                $count_users_in_session = SessionManager::get_users_by_session($session['id'], 0, true);
                 $session_date = array();
                 if (!empty($session['access_start_date']) && $session['access_start_date'] != '0000-00-00') {
                     $session_date[] = get_lang('From').' '.api_format_date($session['access_start_date'], DATE_FORMAT_SHORT);
@@ -1086,7 +1090,10 @@ switch ($action) {
                 );
 
                 $result[] = array(
-                    'name' => $session['name'],
+                    'name' => Display::url(
+                        $session['name'],
+                        api_get_path(WEB_CODE_PATH) . 'mySpace/course.php?session_id=' . $session['id']
+                    ),
                     'date' => $session_date_string,
                     'course_per_session' => $count_courses_in_session,
                     'student_per_session' => $count_users_in_session,
@@ -1512,7 +1519,8 @@ switch ($action) {
             'variable',
             'field_type',
             'changeable',
-            'visible',
+            'visible_to_self',
+            'visible_to_others',
             'filter',
             'field_order',
         );
@@ -1531,7 +1539,8 @@ switch ($action) {
                 $item['display_text'] = ExtraField::translateDisplayName($item['variable'], $item['displayText']);
                 $item['field_type'] = $obj->get_field_type_by_id($item['fieldType']);
                 $item['changeable'] = $item['changeable'] ? $checkIcon : $timesIcon;
-                $item['visible'] = $item['visible'] ? $checkIcon : $timesIcon;
+                $item['visible_to_self'] = $item['visibleToSelf'] ? $checkIcon : $timesIcon;
+                $item['visible_to_others'] = $item['visibleToOthers'] ? $checkIcon : $timesIcon;
                 $item['filter'] = $item['filter'] ? $checkIcon : $timesIcon;
                 $new_result[] = $item;
             }

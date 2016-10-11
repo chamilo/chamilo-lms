@@ -1359,11 +1359,13 @@ class CourseManager
             $sql .= ' FROM ' . Database::get_main_table(TABLE_MAIN_USER) . ' as user ';
             $sql .= " LEFT JOIN ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER) . " as session_course_user
                       ON
-                        user.user_id = session_course_user.user_id AND
+                        user.id = session_course_user.user_id AND
                         $sessionCondition
-                        INNER JOIN $course_table course ON session_course_user.c_id = course.id AND
+                        INNER JOIN $course_table course 
+                        ON session_course_user.c_id = course.id AND
                         $courseCondition
-                        INNER JOIN $sessionTable session ON session_course_user.session_id = session.id
+                        INNER JOIN $sessionTable session 
+                        ON session_course_user.session_id = session.id
                    ";
             $where[] = ' session_course_user.c_id IS NOT NULL ';
 
@@ -1382,14 +1384,14 @@ class CourseManager
                                 course.title,
                                 course.code,
                                 course_rel_user.status as status_rel,
-                                user.user_id,
+                                user.id as user_id,
                                 user.email,
                                 course_rel_user.is_tutor,
                                 user.*  ';
                 } else {
                     $sql = 'SELECT DISTINCT
                                 course_rel_user.status as status_rel,
-                                user.user_id,
+                                user.id as user_id,
                                 user.email,
                                 course_rel_user.is_tutor,
                                 user.*  ';
@@ -1398,12 +1400,13 @@ class CourseManager
 
             $sql .= ' FROM ' . Database::get_main_table(TABLE_MAIN_USER) . ' as user '
                   . ' LEFT JOIN ' . Database::get_main_table(TABLE_MAIN_COURSE_USER) . ' as course_rel_user
-                        ON user.user_id = course_rel_user.user_id AND
+                      ON 
+                        user.id = course_rel_user.user_id AND
                         course_rel_user.relation_type <> ' . COURSE_RELATION_TYPE_RRHH . '  '
                   . " INNER JOIN $course_table course ON course_rel_user.c_id = course.id ";
 
             if (!empty($course_code)) {
-                $sql .= ' AND course_rel_user.c_id="' . $courseId . '"';
+                $sql .= ' AND course_rel_user.c_id = "' . $courseId . '"';
             }
             $where[] = ' course_rel_user.c_id IS NOT NULL ';
 
@@ -1416,7 +1419,7 @@ class CourseManager
         $multiple_access_url = api_get_multiple_access_url();
         if ($multiple_access_url) {
             $sql .= ' LEFT JOIN ' . Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER) . ' au
-                      ON (au.user_id = user.user_id) ';
+                      ON (au.user_id = user.id) ';
         }
 
         $extraFieldWasAdded = false;
@@ -1427,7 +1430,7 @@ class CourseManager
                     $fieldValuesTable = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
                     $sql .= ' LEFT JOIN '.$fieldValuesTable.' as ufv
                             ON (
-                                user.user_id = ufv.item_id AND
+                                user.id = ufv.item_id AND
                                 (field_id = '.$extraFieldInfo['id'].' OR field_id IS NULL)
                             )';
                     $extraFieldWasAdded = true;
@@ -1457,7 +1460,7 @@ class CourseManager
         if (!empty($userIdList)) {
             $userIdList = array_map('intval', $userIdList);
             $userIdList = implode('","', $userIdList);
-            $sql .= ' AND user.user_id IN ("' . $userIdList . '")';
+            $sql .= ' AND user.id IN ("' . $userIdList . '")';
         }
 
         if (isset($filterByActive)) {
@@ -4141,7 +4144,10 @@ class CourseManager
                 $session = api_get_session_info($course_info['id_session']);
                 $session_category_id = CourseManager::get_session_category_id_by_session_id($course_info['id_session']);
                 $session['category'] = $sessioncoach['name'];
-                if ($session['access_start_date'] == '0000-00-00') {
+                if (
+                    $session['access_start_date'] == '0000-00-00 00:00:00' || empty($session['access_start_date']) ||
+                    $session['access_start_date'] == '0000-00-00'
+                ) {
                     //$session['dates'] = get_lang('WithoutTimeLimits');
                     $session['dates'] = '';
                     if (api_get_setting('show_session_coach') === 'true') {
@@ -5058,7 +5064,7 @@ class CourseManager
     }
 
     /**
-     * @param int $courseId
+     * @param array $courseInfo
      * @param array $teachers
      * @param bool $deleteTeachersNotInList
      * @param bool $editTeacherInSessions
@@ -5066,7 +5072,7 @@ class CourseManager
      * @return false|null
      */
     public static function updateTeachers(
-        $courseId,
+        $courseInfo,
         $teachers,
         $deleteTeachersNotInList = true,
         $editTeacherInSessions = false,
@@ -5080,12 +5086,12 @@ class CourseManager
         if (!is_array($teachers)) {
             $teachers = array($teachers);
         }
-        $courseId = intval($courseId);
-        $courseInfo = api_get_course_info_by_id($courseId);
 
-        if (empty($courseInfo)) {
+        if (empty($courseInfo) || !isset($courseInfo['real_id'])) {
             return false;
         }
+
+        $courseId = $courseInfo['real_id'];
         $course_code = $courseInfo['code'];
 
         $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);

@@ -21,27 +21,27 @@
 </div>
 
 <script>
-    $(document).on('ready', function() {
-        var $sendInvitationModal = $('#send-invitation-modal');
-        var sendToUser = 0;
+$(document).on('ready', function() {
+    var $sendInvitationModal = $('#send-invitation-modal');
+    var sendToUser = 0;
 
-        $('.btn-to-send-invitation').on('click', function(e) {
-            e.preventDefault();
-            sendToUser = $(this).data('send-to');
-            $sendInvitationModal.modal('show');
-        });
+    $('.btn-to-send-invitation').on('click', function(e) {
+        e.preventDefault();
+        sendToUser = $(this).data('send-to');
+        $sendInvitationModal.modal('show');
+    });
 
-        $('#btn-send-invitation').on('click', function(e) {
-            e.preventDefault();
+    $('#btn-send-invitation').on('click', function(e) {
+        e.preventDefault();
 
-            var $frmSendInvitation = $sendInvitationModal.find('.modal-body form'),
-                url = '{{ _p.web_ajax }}message.ajax.php?a=send_invitation&user_id=' + sendToUser;
+        var $frmSendInvitation = $sendInvitationModal.find('.modal-body form'),
+            url = '{{ _p.web_ajax }}message.ajax.php?a=send_invitation&user_id=' + sendToUser;
 
-            $.get(url, $frmSendInvitation.serialize(), function() {
-                $frmSendInvitation[0].reset();
+        $.get(url, $frmSendInvitation.serialize(), function() {
+            $frmSendInvitation[0].reset();
 
-                window.location.reload();
-            });
+            window.location.reload();
         });
     });
+});
 </script>

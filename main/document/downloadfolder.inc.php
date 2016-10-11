@@ -314,6 +314,9 @@ $name = ($path == '/') ? 'documents.zip' : $documentInfo['title'].'.zip';
 
 if (Security::check_abs_path($tempZipFile, api_get_path(SYS_ARCHIVE_PATH))) {
     $result = DocumentManager::file_send_for_download($tempZipFile, true, $name);
+    if ($result === false) {
+        api_not_allowed(true);
+    }
     @unlink($tempZipFile);
     exit;
 } else {

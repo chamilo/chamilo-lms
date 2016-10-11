@@ -98,5 +98,3 @@ $s->register(
         '',
         'Recusa o contive de amizade feito pelo usuario userfriend_id.'
 );
-
-?>

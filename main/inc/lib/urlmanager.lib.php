@@ -316,7 +316,7 @@ class UrlManager
             $where ="WHERE $table_url_rel_usergroup.access_url_id = ".intval($access_url_id);
         }
 
-        $sql = "SELECT id, name, access_url_id
+        $sql = "SELECT u.id, u.name, access_url_id
 				FROM $table_user_group u
 				INNER JOIN $table_url_rel_usergroup
 				ON $table_url_rel_usergroup.usergroup_id = u.id
@@ -691,8 +691,8 @@ class UrlManager
     /**
      * Add a user into a url
      * @author Julio Montoya
-     * @param  $user_id
-     * @param  $url_id
+     * @param  int $user_id
+     * @param  int $url_id
      *
      * @return boolean true if success
      * */

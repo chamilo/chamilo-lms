@@ -88,7 +88,7 @@ define('_MPDF_TTFONTDATAPATH', __DIR__.'/../../app/cache/mpdf/');
 require_once __DIR__.'/../../vendor/autoload.php';
 
 // Do not over-use this variable. It is only for this script's local use.
-$libraryPath = api_get_path(LIBRARY_PATH);
+$libraryPath = __DIR__.'/lib/';
 
 // @todo convert this libs in classes
 require_once $libraryPath.'database.constants.inc.php';
@@ -133,6 +133,7 @@ $dbParams = array(
     // Only relevant for pdo_mysql, pdo_pgsql, and pdo_oci/oci8,
     'port' => isset($_configuration['db_port']) ? $_configuration['db_port'] : ''
 );
+
 try {
     $database = new \Database();
     $database->connect($dbParams);
@@ -147,12 +148,17 @@ try {
 if (!empty($_configuration['multiple_access_urls'])) {
     $_configuration['access_url'] = 1;
     $access_urls = api_get_access_urls();
-
     $root_rel = api_get_self();
     $root_rel = substr($root_rel, 1);
     $pos = strpos($root_rel, '/');
     $root_rel = substr($root_rel, 0, $pos);
-    $protocol = ((!empty($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) != 'OFF') ? 'https' : 'http').'://';
+    $protocol = 'http://';
+    if (!empty($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) != 'OFF') {
+        $protocol = 'https://';
+    } elseif (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') {
+        $protocol = 'https://';
+    }
+
     //urls with subdomains (HTTP_HOST is preferred - see #6764)
     $request_url_root = '';
     if (empty($_SERVER['HTTP_HOST'])) {

@@ -52,7 +52,7 @@ if (isset($_GET['origin'])) {
 // We are getting all the information about the current forum and forum category.
 // Note pcool: I tried to use only one sql statement (and function) for this,
 // but the problem is that the visibility of the forum AND forum cateogory are stored in the item_property table.
-$current_thread = get_thread_information($_GET['thread']);
+$current_thread = get_thread_information($_GET['forum'], $_GET['thread']);
 $current_forum = get_forum_information($_GET['forum']);
 $current_forum_category = get_forumcategory_information($current_forum['forum_category']);
 $current_post = get_post_information($_GET['post']);
@@ -201,7 +201,16 @@ if ($origin != 'learnpath') {
 
 /*New display forum div*/
 echo '<div class="forum_title">';
-echo '<h1><a href="viewforum.php?&origin='.$origin.'&forum='.$current_forum['forum_id'].'" '.class_visible_invisible($current_forum['visibility']).'>'.prepare4display($current_forum['forum_title']).'</a></h1>';
+echo '<h1>';
+echo Display::url(
+    prepare4display($current_forum['forum_title']),
+    'viewforum.php?' . api_get_cidreq() . '&' . http_build_query([
+        'origin' => $origin,
+        'forum' => $current_forum['forum_id']
+    ]),
+    ['class' => empty($current_forum['visibility']) ? 'text-muted' : null]
+);
+echo '</h1>';
 echo '<p class="forum_description">'.prepare4display($current_forum['forum_comment']).'</p>';
 echo '</div>';
 /* End new display forum */

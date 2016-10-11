@@ -166,7 +166,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fe9700', end
 .panel-default .panel-heading{
     background-color: #F9F9F9;
 }
-footer{
+footer.bgfooter{
 background: #04638a; /* Old browsers */
 background: -moz-linear-gradient(top, #04638a 0%, #041759 100%); /* FF3.6+ */
 background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#04638a), color-stop(100%,#041759)); /* Chrome,Safari4+ */
@@ -178,9 +178,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#04638a', end
   color: #9DD0F1;
   border-top: 4px solid #CCC;
 }
-footer a{
+footer.bgfooter a{
   color: #ffffff;
 }
-footer a:hover{
+footer.bgfooter a:hover{
   color: #CCC;
 }

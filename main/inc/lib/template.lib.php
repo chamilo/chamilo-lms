@@ -83,10 +83,12 @@ class Template
             api_get_path(SYS_PLUGIN_PATH) // plugin folder
         );
 
-        $cache_folder = api_get_path(SYS_ARCHIVE_PATH).'twig';
+        $urlId = api_get_current_access_url_id();
+
+        $cache_folder = api_get_path(SYS_ARCHIVE_PATH).'twig/'.$urlId.'/';
 
         if (!is_dir($cache_folder)) {
-            mkdir($cache_folder, api_get_permissions_for_new_directories());
+            mkdir($cache_folder, api_get_permissions_for_new_directories(), true);
         }
 
         $loader = new Twig_Loader_Filesystem($template_paths);

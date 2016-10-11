@@ -45,6 +45,14 @@
                             {{ row.description }}
                         {% endif %}
                         <div class="info-session">
+                            {# Classic #}
+                            <span>
+                                <a href="{{ _p.web_main ~ 'session/index.php?session_id=' ~ row.id }}">
+                                <img id="session_img_{{ row.id }}" src="{{ "window_list.png"|icon(32) }}" width="32" height="32"
+                                     alt="{{ row.title }}" title="{{ row.title }}"/>
+                                {{ row.title }}
+                                </a>
+                            </span>
                             {% if row.coach_name  != '' %}
                                 <span>
                                     <i class="fa fa-user" aria-hidden="true"></i>
@@ -82,7 +90,8 @@
                                     {{ row.coach_name }}
                                 </span>
                             {% endif %}
-                            <span><i class="fa fa-calendar" aria-hidden="true"></i>
+                            <span>
+                                <i class="fa fa-calendar" aria-hidden="true"></i>
                                 {{ row.date }}
                             </span>
                         </div>
@@ -102,7 +111,7 @@
                                     <div class="col-md-10">
                                         <h4>{{ item.title }}</h4>
                                         <div class="list-teachers">
-                                            {% if item.teachers|length > 0 %}
+                                            {% if item.coaches|length > 0 %}
                                                 <img src="{{ 'teacher.png'|icon(16) }}" width="16" height="16">&nbsp;
                                                 {% for coach in item.coaches %}
                                                     {{ loop.index > 1 ? ' | ' }}

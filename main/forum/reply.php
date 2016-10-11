@@ -46,7 +46,7 @@ $threadId = isset($_GET['thread']) ? (int)$_GET['thread'] : 0;
 // We are getting all the information about the current forum and forum category.
 // Note pcool: I tried to use only one sql statement (and function) for this,
 // but the problem is that the visibility of the forum AND forum cateogory are stored in the item_property table.
-$current_thread	= get_thread_information($threadId); // Note: This has to be validated that it is an existing thread.
+$current_thread	= get_thread_information($forumId, $threadId); // Note: This has to be validated that it is an existing thread.
 $current_forum	= get_forum_information($current_thread['forum_id']); // Note: This has to be validated that it is an existing forum.
 $current_forum_category = get_forumcategory_information(Security::remove_XSS($current_forum['forum_category']));
 
@@ -191,9 +191,13 @@ if ($origin != 'learnpath') {
 }
 /*New display forum div*/
 echo '<div class="forum_title">';
-echo '<h1><a href="viewforum.php?'.api_get_cidreq().'&forum='.$current_forum['forum_id'].'" '.
-    class_visible_invisible($current_forum['visibility']).'>'.
-    prepare4display($current_forum['forum_title']).'</a></h1>';
+echo '<h1>';
+echo Display::url(
+    prepare4display($current_forum['forum_title']),
+    'viewforum.php?' . api_get_cidreq() . '&' . http_build_query(['forum' => $current_forum['forum_id']]),
+    ['class' => empty($current_forum['visibility']) ? 'text-muted' : null]
+);
+echo '</h1>';
 echo '<p class="forum_description">'.prepare4display($current_forum['forum_comment']).'</p>';
 echo '</div>';
 

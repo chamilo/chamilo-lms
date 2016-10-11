@@ -24,7 +24,7 @@ $strings['Skip'] = 'Passer';
 $strings['Next'] = 'Suivant';
 $strings['Prev'] = 'Précédent';
 $strings['Done'] = 'Terminé';
-$strings['StartButtonText'] = 'Démarrer le tour guidé';
+$strings['StartButtonText'] = 'Tour guidé';
 
 /* String for the steps */
 // if body class = section-mycampus

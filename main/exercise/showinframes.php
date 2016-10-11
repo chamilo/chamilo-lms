@@ -75,13 +75,17 @@ if ($title =='') {
 $nameTools = $title;
 $noPHP_SELF = true;
 
-$htmlHeadXtra[] = '
-<script>
-    $(document).ready( function(){
-        var height = $(this).innerHeight() - 20;
-        $("#hotpotatoe").css("height", height)
-    });
-</script>';
+$htmlHeadXtra[] = /** @lang HTML */<<<HTML
+    <script>
+        $(document).on('ready', function () {
+            var iframe = document.getElementById('hotpotatoe');
+
+            iframe.onload = function () {
+                this.height = $(this.contentDocument.body).outerHeight(true)
+            };
+        });
+    </script>
+HTML;
 
 $interbreadcrumb[]= array ("url"=>"./exercise.php", "name"=> get_lang('Exercises'));
 if ($origin == 'learnpath') {
@@ -90,6 +94,6 @@ if ($origin == 'learnpath') {
     Display::display_header($nameTools, "Exercise");
 }
 $url = $document_web_path.$doc_url.$user_id.'.t.html?time='.intval($time);
-echo '<iframe id="hotpotatoe" width="100%" frameborder="0" src="'.$url.'"></iframe>';
+echo '<iframe id="hotpotatoe" name="hotpotatoe" width="100%" height="100%" frameborder="0" src="'.$url.'"></iframe>';
 echo '</body></html>';
 exit;

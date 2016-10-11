@@ -132,15 +132,15 @@ background: #F7490C;
 .menu-column .panel-default .panel-heading a:hover{
     color: #111;
 }
-footer{
+footer.bgfooter{
   background: #465251;
   color: #111;
   border:none;
 }
-footer a{
+footer.bgfooter a{
   color: #ffffff;
 }
-footer a:hover{
+footer.bgfooter a:hover{
   color: #CCC;
 }
 .badge{

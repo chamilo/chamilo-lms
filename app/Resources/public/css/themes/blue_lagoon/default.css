@@ -104,14 +104,14 @@ header{
 .nav li a:hover{
     background: transparent;
 }
-footer{
+footer.bgfooter{
   background: #2E75A3;
   color: #9DD0F1;
   border-top: 2px solid #0099C0;
 }
-footer a{
+footer.bgfooter a{
   color: #ffffff;
 }
-footer a:hover{
+footer.bgfooter a:hover{
   color: #CCC;
 }

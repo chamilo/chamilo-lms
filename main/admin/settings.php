@@ -84,22 +84,28 @@ $form_search_html = $form_search->returnForm();
 $url_id = api_get_current_access_url_id();
 
 $settings = null;
-
-function get_settings($category = null)
+/**
+ * @param string $category
+ * @return array
+ */
+function get_settings($category = '')
 {
     $url_id = api_get_current_access_url_id();
     $settings_by_access_list = array();
 
     if ($url_id == 1) {
         $settings = api_get_settings($category, 'group', $url_id);
-
     } else {
         $url_info = api_get_access_url($url_id);
         if ($url_info['active'] == 1) {
+            $categoryToSearch = $category;
+            if ($category == 'search_setting') {
+                $categoryToSearch = '';
+            }
             // The default settings of Chamilo
-            $settings = api_get_settings($category, 'group', 1, 0);
+            $settings = api_get_settings($categoryToSearch, 'group', 1, 0);
             // The settings that are changeable from a particular site.
-            $settings_by_access = api_get_settings($category, 'group', $url_id, 1);
+            $settings_by_access = api_get_settings($categoryToSearch, 'group', $url_id, 1);
 
             foreach ($settings_by_access as $row) {
                 if (empty($row['variable'])) {
@@ -122,7 +128,7 @@ function get_settings($category = null)
         }
     }
 
-    if (isset($category) && $category== 'search_setting') {
+    if (isset($category) && $category == 'search_setting') {
         if (!empty($_REQUEST['search_field'])) {
             $settings = searchSetting($_REQUEST['search_field']);
         }

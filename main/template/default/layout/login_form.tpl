@@ -3,7 +3,7 @@
     <div id="login_block" class="panel panel-default">
         <div class="panel-body">
         {{ login_language_form }}
-        
+
         {% if plugin_login_top is not null %}
             <div id="plugin_login_top">
                 {{ plugin_login_top }}
@@ -11,7 +11,6 @@
         {% endif %}
 
         {{ login_failed }}
-
         {{ login_form }}
 
         {% if "allow_lostpassword" | get_setting == 'true' or "allow_registration" | get_setting == 'true' %}

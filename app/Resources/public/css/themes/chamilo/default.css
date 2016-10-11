@@ -139,13 +139,13 @@ a:focus {
   padding-left: 0.2em;
 }
 /* End Jquery UI */
-footer{
+.bgfooter{
   background-color:#1A2226;
 }
-footer{
+.bgfooter{
   color: #ffffff;
 }
-footer a{
+.bgfooter a{
   color: #ffffff;
 }
 .page-header{

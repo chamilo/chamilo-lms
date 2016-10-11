@@ -28,6 +28,18 @@ $current_course_tool = TOOL_ANNOUNCEMENT;
 $this_section = SECTION_COURSES;
 $nameTools = get_lang('ToolAnnouncement');
 
+$allowToEdit = (
+    api_is_allowed_to_edit(false, true) ||
+    (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())
+);
+
+$sessionId = api_get_session_id();
+$drhHasAccessToSessionContent = api_get_configuration_value('drh_can_access_all_session_content');
+
+if (!empty($sessionId) && $drhHasAccessToSessionContent) {
+    $allowToEdit = $allowToEdit || api_is_drh();
+}
+
 /* ACCESS RIGHTS */
 api_protect_course_script(true);
 
@@ -52,6 +64,10 @@ $course_id = api_get_course_int_id();
 $_course = api_get_course_info_by_id($course_id);
 $group_id = api_get_group_id();
 $sessionId = api_get_session_id();
+
+if (!empty($group_id)) {
+    $group_properties = GroupManager:: get_group_properties($group_id);
+}
 
 api_protect_course_group(GroupManager::GROUP_TOOL_ANNOUNCEMENT);
 
@@ -197,17 +213,15 @@ switch ($action) {
                 'width' => '150',
                 'align' => 'left',
                 //'formatter' => 'action_formatter',
-                'sortable' => 'false',
-            ),
+                'sortable' => 'false'
+            )
         );
 
         // Autowidth
         $extra_params['autowidth'] = 'true';
         // height auto
         $extra_params['height'] = 'auto';
-
         $editOptions = '';
-
         if (api_is_allowed_to_edit()) {
             $extra_params['multiselect'] = true;
             $editOptions = '
@@ -242,10 +256,7 @@ switch ($action) {
 
         if (empty($count)) {
             $html = '';
-            if ((api_is_allowed_to_edit(false, true) ||
-                    (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) &&
-                (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath')
-            ) {
+            if ($allowToEdit && (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath')) {
                 $html .= '<div id="no-data-view">';
                 $html .= '<h3>'.get_lang('Announcements').'</h3>';
                 $html .= Display::return_icon('valves.png', '', array(), 64);
@@ -406,12 +417,7 @@ switch ($action) {
                 $announcement_to_modify = '';
             }
 
-            $form->addElement(
-                'checkbox',
-                'email_ann',
-                null,
-                get_lang('EmailOption')
-            );
+            $form->addCheckBox('email_ann', '', get_lang('EmailOption'));
         } else {
             if (!isset($announcement_to_modify)) {
                 $announcement_to_modify = '';
@@ -419,12 +425,7 @@ switch ($action) {
 
             $element = CourseManager::addGroupMultiSelect($form, $group_properties['iid'], array());
             $form->setRequired($element);
-            $form->addElement(
-                'checkbox',
-                'email_ann',
-                null,
-                get_lang('EmailOption')
-            );
+            $form->addCheckBox('email_ann', '', get_lang('EmailOption'));
         }
 
         $announcementInfo = AnnouncementManager::get_by_id($course_id, $id);
@@ -444,6 +445,8 @@ switch ($action) {
                 $defaults['users'] = $to;
             }
         }
+
+        $defaults['email_ann'] = true;
 
         $form->addElement('text', 'title', get_lang('EmailTitle'));
         $form->addElement('hidden', 'id');
@@ -573,16 +576,14 @@ switch ($action) {
 if (!empty($_GET['remind_inactive'])) {
     $to[] = 'USER:'.intval($_GET['remind_inactive']);
 }
-
 if (!empty($group_id)) {
-    $group_properties = GroupManager:: get_group_properties($group_id);
     $interbreadcrumb[] = array(
         "url" => api_get_path(WEB_CODE_PATH)."group/group.php?".api_get_cidreq(),
         "name" => get_lang('Groups'),
     );
     $interbreadcrumb[] = array(
         "url" => api_get_path(WEB_CODE_PATH)."group/group_space.php?".api_get_cidreq(),
-        "name" => get_lang('GroupSpace').' '.$group_properties['name'],
+        "name" => get_lang('GroupSpace').' '.$group_properties['name']
     );
 }
 
@@ -599,9 +600,7 @@ if (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath') {
 // Actions
 $show_actions = false;
 $actionsLeft = '';
-if ((api_is_allowed_to_edit(false, true) ||
-    (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) &&
-    (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath')
+if ($allowToEdit && (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath')
 ) {
     if (in_array($action, array('add', 'modify', 'view'))) {
         $actionsLeft .= "<a href='".api_get_self()."?".api_get_cidreq()."'>".
@@ -618,7 +617,7 @@ if ((api_is_allowed_to_edit(false, true) ||
     }
 }
 
-if (api_is_allowed_to_edit() && $announcement_number > 1) {
+if ($allowToEdit) {
     if (api_get_group_id() == 0) {
         if (!isset($_GET['action'])) {
             $actionsLeft .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete_all\" onclick=\"javascript:if(!confirm('".get_lang("ConfirmYourChoice")."')) return false;\">".

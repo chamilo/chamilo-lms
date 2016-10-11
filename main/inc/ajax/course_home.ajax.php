@@ -39,7 +39,7 @@ switch ($action) {
             }
 
             $requested_image = ($tool_visibility == 0 ) ? $tool_image : $na_image;
-            $requested_class = ($tool_visibility == 0 ) ? 'visible' : 'invisible';
+            $requested_class = ($tool_visibility == 0 ) ? '' : 'text-muted';
             $requested_message = ($tool_visibility == 0 ) ? 'is_active' : 'is_inactive';
             $requested_view = ($tool_visibility == 0 ) ? 'visible.png' : 'invisible.png';
             $requested_visible = ($tool_visibility == 0 ) ? 1 : 0;
@@ -178,13 +178,13 @@ switch ($action) {
                 }
 
                 // Checking LP publicated and expired_on dates
-                if (!empty($lp_item['publicated_on']) && $lp_item['publicated_on'] != '0000-00-00 00:00:00') {
+                if (!empty($lp_item['publicated_on'])) {
                     if ($now < api_strtotime($lp_item['publicated_on'], 'UTC')) {
                         continue;
                     }
                 }
 
-                if (!empty($lp_item['expired_on']) && $lp_item['expired_on'] != '0000-00-00 00:00:00') {
+                if (!empty($lp_item['expired_on'])) {
                     if ($now > api_strtotime($lp_item['expired_on'], 'UTC')) {
                         continue;
                     }
@@ -272,7 +272,12 @@ switch ($action) {
                 }
             }
 
-            $list = new LearnpathList(api_get_user_id(),$item['code'], $session_id, 'publicated_on DESC');
+            $list = new LearnpathList(
+                api_get_user_id(),
+                $item['code'],
+                $session_id,
+                'lp.publicatedOn DESC'
+            );
             $flat_list = $list->get_flat_list();
             $lps[$item['code']] = $flat_list;
             $item['title'] = Display::url(
@@ -292,7 +297,7 @@ switch ($action) {
                     false
                 );
 
-                if ($lp_item['modified_on'] == '0000-00-00 00:00:00' || empty($lp_item['modified_on'])) {
+                if (empty($lp_item['modified_on'])) {
                     $lp_date = api_get_local_time($lp_item['created_on']);
                     $image = 'new.gif';
                     $label = get_lang('LearnpathAdded');
@@ -313,7 +318,7 @@ switch ($action) {
                 }
 
                 // Checking LP publicated and expired_on dates
-                if (!empty($lp_item['publicated_on']) && $lp_item['publicated_on'] != '0000-00-00 00:00:00') {
+                if (!empty($lp_item['publicated_on'])) {
                     $week_data = date('Y', api_strtotime($lp_item['publicated_on'], 'UTC')).' - '.get_week_from_day($lp_item['publicated_on']);
                     if ($now < api_strtotime($lp_item['publicated_on'], 'UTC')) {
                         continue;
@@ -322,7 +327,7 @@ switch ($action) {
                     $week_data = '';
                 }
 
-                if (!empty($lp_item['expired_on']) && $lp_item['expired_on'] != '0000-00-00 00:00:00') {
+                if (!empty($lp_item['expired_on'])) {
                     if ($now > api_strtotime($lp_item['expired_on'], 'UTC')) {
                         continue;
                     }
@@ -426,7 +431,7 @@ switch ($action) {
                     $session_id,
                     false
                 );
-                if ($lp_item['modified_on'] == '0000-00-00 00:00:00' || empty($lp_item['modified_on'])) {
+                if (empty($lp_item['modified_on'])) {
                     $lp_date = api_get_local_time($lp_item['created_on']);
                     $image = 'new.gif';
                     $label = get_lang('LearnpathAdded');
@@ -446,12 +451,12 @@ switch ($action) {
                 }
 
                  //Checking LP publicated and expired_on dates
-                if (!empty($lp_item['publicated_on']) && $lp_item['publicated_on'] != '0000-00-00 00:00:00') {
+                if (!empty($lp_item['publicated_on'])) {
                     if ($now < api_strtotime($lp_item['publicated_on'], 'UTC')) {
                         continue;
                     }
                 }
-                if (!empty($lp_item['expired_on']) && $lp_item['expired_on'] != '0000-00-00 00:00:00') {
+                if (!empty($lp_item['expired_on'])) {
                     if ($now > api_strtotime($lp_item['expired_on'], 'UTC')) {
                         continue;
                     }

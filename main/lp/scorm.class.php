@@ -662,7 +662,7 @@ class scorm extends learnpath
             - parse & change relative html links
             - make sure the filenames are secure (filter funny characters or php extensions)
         */
-        if (is_dir($course_sys_dir.$new_dir) OR
+        if (is_dir($course_sys_dir.$new_dir) ||
             @mkdir($course_sys_dir.$new_dir, api_get_permissions_for_new_directories())
         ) {
 

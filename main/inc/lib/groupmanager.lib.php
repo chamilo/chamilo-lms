@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CGroupRelUser;
+
 /**
  * This library contains some functions for group-management.
  * @author Bart Mollet
@@ -966,7 +968,7 @@ class GroupManager
         $id2 = intval($id2);
         $course_id = api_get_course_int_id();
 
-        $sql = "SELECT id,display_order FROM $table_group_cat
+        $sql = "SELECT id, display_order FROM $table_group_cat
                 WHERE id IN ($id1,$id2) AND c_id = $course_id ";
         $res = Database::query($sql);
         $cat1 = Database::fetch_object($res);
@@ -1003,6 +1005,7 @@ class GroupManager
         $direction = null
     ) {
         $group_user_table = Database :: get_course_table(TABLE_GROUP_USER);
+        $groupTable = Database :: get_course_table(TABLE_GROUP);
         $user_table = Database :: get_main_table(TABLE_MAIN_USER);
 
         $group_id = intval($group_id);
@@ -1013,15 +1016,19 @@ class GroupManager
             $courseId = intval($courseId);
         }
 
-        $select = " SELECT g.user_id, firstname, lastname ";
+        $select = " SELECT u.id, firstname, lastname ";
         if ($getCount) {
-            $select = " SELECT count(u.user_id) count";
+            $select = " SELECT count(u.id) count";
         }
         $sql = "$select
-                FROM $group_user_table g
+                FROM $group_user_table gu
+                INNER JOIN $groupTable g
+                ON (gu.group_id = g.iid and g.c_id = gu.c_id)
                 INNER JOIN $user_table u
-                ON (u.user_id = g.user_id)
-                WHERE c_id = $courseId AND g.group_id = $group_id";
+                ON (u.id = gu.user_id)
+                WHERE 
+                    gu.c_id = $courseId AND 
+                    g.id = $group_id";
 
         if (!empty($column) && !empty($direction)) {
             $column = Database::escape_string($column, null, false);
@@ -1034,6 +1041,7 @@ class GroupManager
             $limit = intval($limit);
             $sql .= " LIMIT $start, $limit";
         }
+
         $res = Database::query($sql);
         $users = array();
         while ($obj = Database::fetch_object($res)) {
@@ -1059,10 +1067,15 @@ class GroupManager
     {
         $group_user_table = Database :: get_course_table(TABLE_GROUP_USER);
         $tutor_user_table = Database :: get_course_table(TABLE_GROUP_TUTOR);
+        $groupTable = Database :: get_course_table(TABLE_GROUP);
+
         $course_id = api_get_course_int_id();
         $group_id = intval($group_id);
-        $sql = "SELECT user_id FROM $group_user_table
-                WHERE c_id = $course_id AND group_id = $group_id";
+        $sql = "SELECT user_id 
+                FROM $group_user_table gu
+                INNER JOIN $groupTable g
+                ON (gu.group_id = g.iid and g.c_id = gu.c_id)
+                WHERE gu.c_id = $course_id AND g.id = $group_id";
         $res = Database::query($sql);
         $users = array();
 
@@ -1070,8 +1083,11 @@ class GroupManager
             $users[] = api_get_user_info($obj->user_id);
         }
 
-        $sql = "SELECT user_id FROM $tutor_user_table
-                WHERE c_id = $course_id AND group_id = $group_id";
+        $sql = "SELECT user_id 
+                FROM $tutor_user_table gu
+                INNER JOIN $groupTable g
+                ON (gu.group_id = g.id and g.c_id = gu.c_id)
+                WHERE gu.c_id = $course_id AND g.id = $group_id";
         $res = Database::query($sql);
         while ($obj = Database::fetch_object($res)) {
             $users[] = api_get_user_info($obj->user_id);
@@ -1087,12 +1103,16 @@ class GroupManager
      */
     public static function getTutors($group_id)
     {
+        $groupTable = Database :: get_course_table(TABLE_GROUP);
         $tutor_user_table = Database :: get_course_table(TABLE_GROUP_TUTOR);
         $course_id = api_get_course_int_id();
         $group_id = intval($group_id);
 
-        $sql = "SELECT user_id FROM $tutor_user_table
-                WHERE c_id = $course_id AND group_id = $group_id";
+        $sql = "SELECT user_id 
+                FROM $tutor_user_table gu
+                INNER JOIN $groupTable g
+                ON (gu.group_id = g.id and g.c_id = gu.c_id)
+                WHERE gu.c_id = $course_id AND g.id = $group_id";
         $res = Database::query($sql);
 
         $users = array();
@@ -1110,16 +1130,26 @@ class GroupManager
      */
     public static function getStudents($group_id)
     {
-        $group_user_table = Database :: get_course_table(TABLE_GROUP_USER);
-        $course_id = api_get_course_int_id();
-        $group_id = intval($group_id);
-        $sql = "SELECT user_id FROM $group_user_table
-                WHERE c_id = $course_id AND group_id = $group_id";
-        $res = Database::query($sql);
-        $users = array();
+        $em = Database::getManager();
+        $subscriptions = $em
+            ->createQuery('
+                SELECT gu
+                FROM ChamiloCourseBundle:CGroupRelUser gu
+                INNER JOIN ChamiloCourseBundle:CGroupInfo g
+                WITH gu.groupId = g.iid AND g.cId = gu.cId
+                WHERE gu.cId = :course AND g.id = :group
+            ')
+            ->setParameters([
+                'course' => api_get_course_int_id(),
+                'group' => intval($group_id)
+            ])
+            ->getResult();
 
-        while ($obj = Database::fetch_object($res)) {
-            $users[] = api_get_user_info($obj->user_id);
+        $users = [];
+
+        /** @var CGroupRelUser $subscription */
+        foreach ($subscriptions as $subscription) {
+            $users[] = api_get_user_info($subscription->getUserId());
         }
 
         return $users;
@@ -1641,6 +1671,11 @@ class GroupManager
         $course_id = api_get_course_int_id();
         //api_is_element_in_the_session(TOOL_GROUP, $group_ids[$i])
 
+        $groupId = (int) $groupId;
+        if (empty($course_id) || empty($groupId)) {
+            return false;
+        }
+
         $table_group_user = Database :: get_course_table(TABLE_GROUP_USER);
         $sql = "DELETE FROM $table_group_user
                 WHERE 
@@ -1660,13 +1695,17 @@ class GroupManager
      */
     public static function unsubscribe_all_tutors($groupId)
     {
-        $course_id = api_get_course_int_id();
+        $courseId = api_get_course_int_id();
         $groupId = (int) $groupId;
+
+        if (empty($courseId) || empty($groupId)) {
+            return false;
+        }
 
         if (!empty($groupId) > 0) {
             $table_group_tutor = Database :: get_course_table(TABLE_GROUP_TUTOR);
             $sql = "DELETE FROM $table_group_tutor
-                    WHERE group_id = $groupId AND c_id = $course_id";
+                    WHERE group_id = $groupId AND c_id = $courseId";
             $result = Database::query($sql);
             return $result;
         }
@@ -2092,7 +2131,7 @@ class GroupManager
      */
     public static function process_groups($group_list, $category_id = null)
     {
-        global $origin, $charset;
+        global $charset;
         $category_id = intval($category_id);
 
         $totalRegistered = 0;
@@ -2100,7 +2139,6 @@ class GroupManager
         $user_info = api_get_user_info();
         $session_id = api_get_session_id();
         $user_id = $user_info['user_id'];
-        $orig = isset($origin) ? $origin : null;
         $hideGroup = api_get_setting('hide_course_group_if_no_tools_available');
 
         foreach ($group_list as $this_group) {
@@ -2126,7 +2164,7 @@ class GroupManager
                     $groupNameClass = 'muted';
                 }
 
-                $group_name = '<a class="'.$groupNameClass.'" href="group_space.php?cidReq='.api_get_course_id().'&origin='.$orig.'&gidReq='.$this_group['id'].'">'.
+                $group_name = '<a class="'.$groupNameClass.'" href="group_space.php?'.api_get_cidreq(true, false).'&gidReq='.$this_group['id'].'">'.
                     Security::remove_XSS($this_group['name']).'</a> ';
                 if (!empty($user_id) && !empty($this_group['id_tutor']) && $user_id == $this_group['id_tutor']) {
                     $group_name .= Display::label(get_lang('OneMyGroups'), 'success');

@@ -19,6 +19,7 @@ $postAction = isset($_POST['action']) ? $_POST['action'] : null;
 $view = isset($_GET['view']) ? Security::remove_XSS($_GET['view']) : null;
 $viewReceivedCategory = isset($_GET['view_received_category']) ? Security::remove_XSS($_GET['view_received_category']) : null;
 $viewSentCategory = isset($_GET['view_sent_category']) ? Security::remove_XSS($_GET['view_sent_category']) : null;
+$showSentReceivedTabs = true;
 
 // Do the tracking
 Event::event_access_tool(TOOL_DROPBOX);
@@ -203,7 +204,7 @@ if ($action != 'add') {
 	}
 
 	// ACTIONS
-	if ($view == 'received' || !$dropbox_cnf['sent_received_tabs']) {
+	if ($view == 'received' || !$showSentReceivedTabs) {
 		//echo '<h3>'.get_lang('ReceivedFiles').'</h3>';
 
 		// This is for the categories
@@ -240,7 +241,7 @@ if ($action != 'add') {
 		}
 	}
 
-	if (!$view || $view == 'sent' || !$dropbox_cnf['sent_received_tabs']) {
+	if (!$view || $view == 'sent' || !$showSentReceivedTabs) {
 		// This is for the categories
 		if (isset($viewSentCategory) AND $viewSentCategory != '') {
 			$view_dropbox_category_sent = $viewSentCategory;
@@ -279,7 +280,7 @@ if ($action != 'add') {
 		}
 	}
 	/*	THE MENU TABS */
-	if ($dropbox_cnf['sent_received_tabs']) {
+	if ($showSentReceivedTabs) {
 ?>
 <ul class="nav nav-tabs">
     <li <?php if (!$view || $view == 'sent') { echo 'class="active"'; } ?> >
@@ -295,7 +296,7 @@ if ($action != 'add') {
 <?php
 	}
     /*	RECEIVED FILES */
-	if ($view == 'received' || !$dropbox_cnf['sent_received_tabs']) {
+	if ($view == 'received' || !$showSentReceivedTabs) {
 		// This is for the categories
 		if (isset($viewReceivedCategory) AND $viewReceivedCategory != '') {
 			$view_dropbox_category_received = $viewReceivedCategory;
@@ -489,7 +490,7 @@ if ($action != 'add') {
 
 	/*	SENT FILES */
 
-	if (!$view || $view == 'sent' || !$dropbox_cnf['sent_received_tabs']) {
+	if (!$view || $view == 'sent' || !$showSentReceivedTabs) {
 		// This is for the categories
 		if (isset($viewSentCategory) AND $viewSentCategory != '') {
 			$view_dropbox_category_sent = $viewSentCategory;

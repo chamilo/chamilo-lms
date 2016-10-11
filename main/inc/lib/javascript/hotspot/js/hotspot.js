@@ -53,7 +53,6 @@ window.HotspotQuestion = (function () {
                 this.set('height', y - startY);
             }
         };
-
         SquareModel.decode = function (hotspotInfo) {
             var coords = hotspotInfo.coord.split('|'),
                 position = coords[0].split(';'),
@@ -64,7 +63,7 @@ window.HotspotQuestion = (function () {
                     height: parseInt(coords[2])
                 });
 
-            hotspot.id = hotspotInfo.id;
+            hotspot.id = hotspotInfo.iid;
             hotspot.name = hotspotInfo.answer;
 
             return hotspot;
@@ -124,7 +123,7 @@ window.HotspotQuestion = (function () {
                     radiusY: parseInt(coords[2])
                 });
 
-            hotspot.id = hotspotInfo.id;
+            hotspot.id = hotspotInfo.iid;
             hotspot.name = hotspotInfo.answer;
 
             return hotspot;
@@ -170,7 +169,7 @@ window.HotspotQuestion = (function () {
             var hotspot = new PolygonModel({
                 points: points
             });
-            hotspot.id = hotspotInfo.id;
+            hotspot.id = hotspotInfo.iid;
             hotspot.name = hotspotInfo.answer;
 
             return hotspot;
@@ -269,7 +268,6 @@ window.HotspotQuestion = (function () {
                 self.render();
             });
         };
-
         HotspotSVG.prototype.render = function () {
             var newEl = null;
 
@@ -323,7 +321,6 @@ window.HotspotQuestion = (function () {
                 self.render();
             });
         };
-
         AnswerSVG.prototype.render = function () {
             this.circleEl.setAttribute('cx', this.model.get('x'));
             this.circleEl.setAttribute('cy', this.model.get('y'));
@@ -1139,13 +1136,13 @@ window.HotspotQuestion = (function () {
 
         switch (config.for) {
             case 'admin':
-                xhrQuestion = $.getJSON(config.relPath+'main/exercise/hotspot_actionscript_admin.as.php', {
+                xhrQuestion = $.getJSON(config.relPath+'exercise/hotspot_actionscript_admin.as.php', {
                     modifyAnswers: parseInt(config.questionId)
                 });
                 break;
 
             case 'user':
-                xhrQuestion = $.getJSON(config.relPath+'main/exercise/hotspot_actionscript.as.php', {
+                xhrQuestion = $.getJSON(config.relPath+'exercise/hotspot_actionscript.as.php', {
                     modifyAnswers: parseInt(config.questionId),
                     exe_id: parseInt(config.exerciseId)
                 });
@@ -1154,7 +1151,7 @@ window.HotspotQuestion = (function () {
             case 'solution':
                 //no break
             case 'preview':
-                xhrQuestion = $.getJSON(config.relPath+'main/exercise/hotspot_answers.as.php', {
+                xhrQuestion = $.getJSON(config.relPath+'exercise/hotspot_answers.as.php', {
                     modifyAnswers: parseInt(config.questionId),
                     exe_id: parseInt(config.exerciseId)
                 });
@@ -1763,21 +1760,19 @@ window.DelineationQuestion = (function () {
 
         switch (config.for) {
             case 'admin':
-                xhrQuestion = $.getJSON(config.relPath+'main/exercise/hotspot_actionscript_admin.as.php', {
+                xhrQuestion = $.getJSON(config.relPath+'exercise/hotspot_actionscript_admin.as.php', {
                     modifyAnswers: parseInt(config.questionId)
                 });
                 break;
-
             case 'user':
-                xhrQuestion = $.getJSON(config.relPath+'main/exercise/hotspot_actionscript.as.php', {
+                xhrQuestion = $.getJSON(config.relPath+'exercise/hotspot_actionscript.as.php', {
                     modifyAnswers: parseInt(config.questionId)
                 });
                 break;
-
             case 'solution':
                 //no break
             case 'preview':
-                xhrQuestion = $.getJSON(config.relPath+'main/exercise/hotspot_answers.as.php', {
+                xhrQuestion = $.getJSON(config.relPath+'exercise/hotspot_answers.as.php', {
                     modifyAnswers: parseInt(config.questionId),
                     exe_id: parseInt(config.exerciseId)
                 });

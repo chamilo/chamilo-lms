@@ -235,7 +235,6 @@ class MessageManager
 
         $now = api_get_utc_datetime();
         if (!empty($receiver_user_id) || !empty($group_id)) {
-
             // message for user friend
             //@todo it's possible to edit a message? yes, only for groups
             if ($edit_message_id) {
@@ -246,7 +245,6 @@ class MessageManager
                 Database::query($query);
                 $inbox_last_id = $edit_message_id;
             } else {
-
                 $params = [
                     'user_sender_id' => $user_sender_id,
                     'user_receiver_id' => $receiver_user_id,

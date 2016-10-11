@@ -89,7 +89,7 @@ class ExerciseLib
                 return '';
             }
 
-            echo '<div class="question_options row">';
+            echo '<div class="question_options">';
 
             // construction of the Answer object (also gets all answers details)
             $objAnswerTmp = new Answer($questionId);
@@ -1143,8 +1143,7 @@ HTML;
             $questionDescription = $objQuestionTmp->selectDescription();
 
             if ($freeze) {
-                $relPath = api_get_path(REL_PATH);
-                $relPath = api_get_path(REL_PATH).'chamilo_ofaj/';
+                $relPath = api_get_path(WEB_CODE_PATH);
                 echo "
                     <script>
                         $(document).on('ready', function () {
@@ -1183,23 +1182,20 @@ HTML;
                 $answerList = '
                     <div class="well well-sm">
                         <h5 class="page-header">' . get_lang('HotspotZones') . '</h5>
-                        <ol>
+                        <ul>
                 ';
 
                 if (!empty($answers_hotspot)) {
                     Session::write('hotspot_ordered', array_keys($answers_hotspot));
-
                     $countAnswers = 1;
-
                     foreach ($answers_hotspot as $value) {
                         $answerList .= "<li><p>{$countAnswers} - {$value}</p></li>";
-
                         $countAnswers++;
                     }
                 }
 
                 $answerList .= '
-                        </ol>
+                        </ul>
                     </div>
                 ';
             }
@@ -1218,8 +1214,7 @@ HTML;
 HOTSPOT;
             }
 
-            $relPath = api_get_path(REL_PATH);
-            $relPath = api_get_path(REL_PATH).'chamilo_ofaj/';
+            $relPath = api_get_path(WEB_CODE_PATH);
             $s .= "
                             <div class=\"col-sm-8 col-md-9\">
                                 <div class=\"hotspot-image\"></div>
@@ -1553,8 +1548,7 @@ HOTSPOT;
         $exercise_id,
         $extra_where_conditions = null,
         $get_count = false
-    )
-    {
+    ) {
         //@todo replace all this globals
         global $documentPath, $filter;
 
@@ -1740,7 +1734,8 @@ HOTSPOT;
                 WHERE
                     te.status != 'incomplete' AND
                     te.c_id = " . $course_id . " $session_id_and AND
-                    ce.active <>-1 AND ce.c_id = " . $course_id . "
+                    ce.active <>-1 AND 
+                    ce.c_id = " . $course_id . "
                     $exercise_where
                     $extra_where_conditions
                 ";
@@ -1770,9 +1765,7 @@ HOTSPOT;
                     AND tth.c_id = " . $course_id . "
                     $hotpotatoe_where
                     $sqlWhereOption
-                    AND user.status NOT IN(" . api_get_users_status_ignored_in_reports(
-                    'string'
-                ) . ")
+                    AND user.status NOT IN(" . api_get_users_status_ignored_in_reports('string') . ")
                 ORDER BY
                     tth.c_id ASC,
                     tth.exe_date DESC";
@@ -1963,7 +1956,7 @@ HOTSPOT;
                             if (($locked == false || api_is_platform_admin()) && !api_is_student_boss()) {
                                 $ip = TrackingUserLog::get_ip_from_user_event(
                                     $results[$i]['exe_user_id'],
-                                    date('Y-m-d h:i:s'),
+                                    api_get_utc_datetime(),
                                     false
                                 );
                                 $actions .= '<a href="http://www.whatsmyip.org/ip-geo-location/?ip=' . $ip . '" target="_blank">
@@ -3542,7 +3535,7 @@ HOTSPOT;
             $show_only_score = false;
         }
 
-        $show_total_score_and_user_choices = false;
+        $showTotalScoreAndUserChoicesInLastAttempt = true;
 
         if ($objExercise->results_disabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
             $show_only_score = true;
@@ -3570,9 +3563,9 @@ HOTSPOT;
                 if ($numberAttempts >= $objExercise->attempts) {
                     $show_results = true;
                     $show_only_score = false;
-                    $show_total_score_and_user_choices = false;
+                    $showTotalScoreAndUserChoicesInLastAttempt = true;
                 } else {
-                    $show_total_score_and_user_choices = true;
+                    $showTotalScoreAndUserChoicesInLastAttempt = false;
                 }
             }
         }
@@ -3624,7 +3617,7 @@ HOTSPOT;
                     $show_results,
                     $objExercise->selectPropagateNeg(),
                     [],
-                    $show_total_score_and_user_choices
+                    $showTotalScoreAndUserChoicesInLastAttempt
                 );
 
                 if (empty($result)) {

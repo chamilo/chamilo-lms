@@ -13,9 +13,8 @@ use \Doctrine\ORM\Query\Expr\Join;
  */
 class ExtraFieldValuesRepository extends EntityRepository
 {
-
     /**
-     * Get the extra field values for visible extra fields 
+     * Get the extra field values for visible extra fields
      * @param int $extraFieldType The type of extra field
      * @param int $itemId The item ID
      * @return \Doctrine\ORM\QueryBuilder
@@ -35,11 +34,10 @@ class ExtraFieldValuesRepository extends EntityRepository
                 $queryBuilder->expr()->andX(
                     $queryBuilder->expr()->eq('f.extraFieldType', intval($extraFieldType)),
                     $queryBuilder->expr()->eq('fv.itemId', intval($itemId)),
-                    $queryBuilder->expr()->eq('f.visible', true)
+                    $queryBuilder->expr()->eq('f.visibleToSelf', true)
                 )
-            );
-
+            )
+        ;
         return $queryBuilder->getQuery()->getResult();
     }
-
 }

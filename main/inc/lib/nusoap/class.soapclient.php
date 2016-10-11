@@ -1,8 +1,5 @@
 <?php
 
-
-
-
 /**
 *
 * [nu]soapclient higher level class for easy usage.
@@ -23,8 +20,8 @@
 * @version  $Id: class.soapclient.php,v 1.69 2010/04/26 20:15:08 snichol Exp $
 * @access   public
 */
-class nusoap_client extends nusoap_base  {
-
+class nusoap_client extends nusoap_base
+{
 	var $username = '';				// Username for HTTP authentication
 	var $password = '';				// Password for HTTP authentication
 	var $authtype = '';				// Type of HTTP authentication

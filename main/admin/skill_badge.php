@@ -38,7 +38,9 @@ $toolbar = Display::toolbarButton(
 
 $tpl = new Template(get_lang('Badges'));
 $tpl->assign('backpack', $backpack);
-$contentTemplate = $tpl->fetch('default/skill/badge.tpl');
+
+$templateName = $tpl->get_template('skill/badge.tpl');
+$contentTemplate = $tpl->fetch($templateName);
 
 $tpl->assign('actions', $toolbar);
 $tpl->assign('content', $contentTemplate);

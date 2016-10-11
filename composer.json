@@ -150,7 +150,7 @@
         "knplabs/doctrine-behaviors": "~1.1",
         "lunetics/locale-bundle": "^2.4",
         "theodo-evolution/session-bundle": "1.0.*",
-        "jimmiw/php-time-ago": "^0.4.11",
+        "jimmiw/php-time-ago": "^0.4.14",
         "phpoffice/phpword": "^0.12.1",
         "facebook/php-sdk-v4" : "~5.0",
         "kigkonsult/icalcreator" : "0.1.0",

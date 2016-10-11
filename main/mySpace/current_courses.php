@@ -9,7 +9,7 @@ $cidReset = true;
 require_once '../inc/global.inc.php';
 $this_section = SECTION_TRACKING;
 
-$filename = 'reporting.xls';
+$filename = 'reporting.xlsx';
 
 if (!api_is_allowed_to_create_course()) {
 	api_not_allowed(true);
@@ -220,14 +220,18 @@ if (isset($_GET['export'])) {
 	$column = 0; //skip the first column (row titles)
 
 	foreach ($headers as $header) {
-		$worksheet->SetCellValueByColumnAndRow($line, $column, $header);
+		$worksheet->setCellValueByColumnAndRow($column, $line, $header);
 		$column++;
 	}
 	$line++;
 	foreach ($array as $row) {
 		$column = 0;
 		foreach ($row as $item) {
-			$worksheet->SetCellValueByColumnAndRow($line, $column, html_entity_decode(strip_tags($item)));
+            $worksheet->setCellValueByColumnAndRow(
+                $column,
+                $line,
+                html_entity_decode(strip_tags($item))
+            );
 			$column++;
 		}
 		$line++;

@@ -1008,4 +1008,21 @@ class CLp
         return $this;
     }
 
+    /**
+     * Get iid
+     * @return int
+     */
+    public function getIid()
+    {
+        return $this->iid;
+    }
+
+    /**
+     * Get subscribeUsers
+     * @return int
+     */
+    public function getSubscribeUsers()
+    {
+        return $this->subscribeUsers;
+    }
 }

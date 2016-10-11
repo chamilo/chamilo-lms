@@ -1,44 +1,44 @@
 <script>
-    (function () {
-        var designer = null;
-        $(document).on('ready', function () {
-            $('.help-badges').tooltip();
-            $('.help-badges-img').tooltip();
+(function () {
+    var designer = null;
+    $(document).on('ready', function () {
+        $('.help-badges').tooltip();
+        $('.help-badges-img').tooltip();
+    });
+
+    $(document).on('ready', function () {
+        $('#btn-open-designer').on('click', function (e) {
+            e.preventDefault();
+
+            var designerUrl = 'https://www.openbadges.me/designer.html?origin={{ _p.web }}';
+            designerUrl = designerUrl + '&email={{ platformAdminEmail }}';
+            designerUrl = designerUrl + '&close=true';
+            designerUrl = designerUrl + '&hidePublish=true';
+
+            var windowOptions = 'width=1200,height=680,location=0,menubar=0,status=0,toolbar=0';
+            designer = window.open(designerUrl, '', windowOptions);
         });
 
-        $(document).on('ready', function () {
-            $('#btn-open-designer').on('click', function (e) {
-                e.preventDefault();
+        $('#image').on('change', function () {
+            var self = this;
 
-                var designerUrl = 'https://www.openbadges.me/designer.html?origin={{ _p.web }}';
-                designerUrl = designerUrl + '&email={{ platformAdminEmail }}';
-                designerUrl = designerUrl + '&close=true';
-                designerUrl = designerUrl + '&hidePublish=true';
+            if (self.files.length > 0) {
+                var image = self.files[0];
 
-                var windowOptions = 'width=1200,height=680,location=0,menubar=0,status=0,toolbar=0';
-                designer = window.open(designerUrl, '', windowOptions);
-            });
-
-            $('#image').on('change', function () {
-                var self = this;
-
-                if (self.files.length > 0) {
-                    var image = self.files[0];
-
-                    if (!image.type.match(/image.*/)) {
-                        return;
-                    }
-
-                    var fileReader = new FileReader();
-                    fileReader.onload = function (e) {
-                        $('#badge-preview').attr('src', e.target.result);
-                        $('#badge-container').removeClass('hide');
-                    };
-                    fileReader.readAsDataURL(image);
+                if (!image.type.match(/image.*/)) {
+                    return;
                 }
-            });
+
+                var fileReader = new FileReader();
+                fileReader.onload = function (e) {
+                    $('#badge-preview').attr('src', e.target.result);
+                    $('#badge-container').removeClass('hide');
+                };
+                fileReader.readAsDataURL(image);
+            }
         });
-    })();
+    });
+})();
 </script>
 <div class="col-md-12">
 

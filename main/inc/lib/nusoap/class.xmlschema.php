@@ -1,8 +1,5 @@
 <?php
 
-
-
-
 /**
 * parses an XML Schema, allows access to it's data, other utility methods.
 * imperfect, no validation... yet, but quite functional.
@@ -12,8 +9,8 @@
 * @version  $Id: class.xmlschema.php,v 1.53 2010/04/26 20:15:08 snichol Exp $
 * @access   public
 */
-class nusoap_xmlschema extends nusoap_base  {
-
+class nusoap_xmlschema extends nusoap_base
+{
 	// files
 	var $schema = '';
 	var $xml = '';
@@ -51,7 +48,7 @@ class nusoap_xmlschema extends nusoap_base  {
 	* @param	string $namespaces namespaces defined in enclosing XML
 	* @access   public
 	*/
-	function nusoap_xmlschema($schema='',$xml='',$namespaces=array()){
+	function __construct($schema='',$xml='',$namespaces=array()){
 		parent::__construct();
 		$this->debug('nusoap_xmlschema class instantiated, inside constructor');
 		// files

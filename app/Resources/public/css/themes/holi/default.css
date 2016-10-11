@@ -217,7 +217,7 @@ a:focus {
  border-color: #ECF0F1;
 }
 /* End Jquery UI */
-footer{
+footer.bgfooter{
   background-color:#6B77B8;
   border-bottom: 1px solid #6B77B8;
   -webkit-filter: none;
@@ -225,10 +225,10 @@ footer{
   -webkit-box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
   box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
 }
-footer{
+footer.bgfooter{
   color: #ffffff;
 }
-footer a{
+footer.bgfooter a{
   color: #ffffff;
 }
 

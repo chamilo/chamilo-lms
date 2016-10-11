@@ -218,7 +218,7 @@ $_SESSION['social_user_id'] = intval($user_id);
 
 // Setting some course info
 $my_user_id = isset($_GET['u']) ? intval($_GET['u']) : api_get_user_id();
-$personal_course_list = UserManager::get_personal_session_course_list($my_user_id);
+$personal_course_list = UserManager::get_personal_session_course_list($my_user_id, 50);
 
 $course_list_code = array();
 $i = 1;
@@ -320,13 +320,12 @@ $social_right_content = '';
 $listInvitations = '';
 
 if ($show_full_profile) {
-
     $t_ufo = Database :: get_main_table(TABLE_EXTRA_FIELD_OPTIONS);
     $extra_user_data = UserManager::get_extra_user_data($user_id, false, true);
 
     $extra_information = '';
     if (is_array($extra_user_data) && count($extra_user_data) > 0) {
-        $extra_information_value = '<ul class="list-group">';
+        $extra_information_value = '';
         $extraField = new ExtraField('user');
         foreach ($extra_user_data as $key => $data) {
             if (empty($data)) {
@@ -351,10 +350,16 @@ if ($show_full_profile) {
             );
 
             if (in_array($extraFieldInfo['variable'], ['skype', 'linkedin_url'])) {
-                break;
+                continue;
             }
 
-            if ($extraFieldInfo['visible'] != 1) {
+            // if is not visible skip
+            if ($extraFieldInfo['visible_to_self'] != 1) {
+                continue;
+            }
+
+            // if is not visible to others skip also
+            if ($extraFieldInfo['visible_to_others'] != 1) {
                 continue;
             }
 
@@ -415,10 +420,12 @@ if ($show_full_profile) {
                 }
             }
         }
-        $extra_information_value .= '</ul>';
 
         // if there are information to show
         if (!empty($extra_information_value)) {
+
+            $extra_information_value = '<ul class="list-group">' . $extra_information_value . '</ul>';
+
             $extra_information .= Display::panelCollapse(
                 get_lang('ExtraInformation'),
                 $extra_information_value,
@@ -522,8 +529,8 @@ if ($show_full_profile) {
     }
 
     // Block Social Course
-
     $my_courses = null;
+
     // COURSES LIST
     if (is_array($list)) {
         // Courses without sessions
@@ -537,7 +544,6 @@ if ($show_full_profile) {
             }
         }
         $social_course_block .=  $my_courses;
-        //$social_course_block = Display::panel($my_courses, get_lang('MyCourses'));
     }
 
     // Block Social Sessions
@@ -554,7 +560,7 @@ if ($show_full_profile) {
     }
 
     // Productions
-    $production_list =  UserManager::build_production_list($user_id);
+    $production_list = UserManager::build_production_list($user_id);
 
     // Images uploaded by course
     $file_list = '';
@@ -683,13 +689,12 @@ $tpl->assign('social_course_block', $social_course_block);
 $tpl->assign('social_group_info_block', $social_group_info_block);
 $tpl->assign('social_rss_block', $social_rss_block);
 $tpl->assign('social_skill_block', SocialManager::getSkillBlock($my_user_id));
-$tpl->assign('sessionList', $social_session_block);
+$tpl->assign('session_list', $social_session_block);
 $tpl->assign('invitations', $listInvitations);
 $tpl->assign('social_right_information', $socialRightInformation);
 $tpl->assign('social_auto_extend_link', $socialAutoExtendLink);
 
 $formModalTpl =  new Template();
-//$formModalTpl->assign('messageForm', MessageManager::generate_message_form('send_message'));
 $formModalTpl->assign('invitation_form', MessageManager::generate_invitation_form('send_invitation'));
 $formModals = $formModalTpl->fetch('default/social/form_modals.tpl');
 

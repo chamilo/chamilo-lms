@@ -76,8 +76,6 @@ class CNotebookRepository extends EntityRepository
 
         $qb->orderBy($orderField, $orderDirection);
 
-        error_log($qb->getQuery()->getSQL());
-
         return $qb->getQuery()->getResult();
     }
 }

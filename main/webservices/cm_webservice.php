@@ -1,5 +1,7 @@
 <?php
 
+use Chamilo\UserBundle\Entity\User;
+
 require_once(dirname(__FILE__).'/../inc/global.inc.php');
 
 $libpath = api_get_path(LIBRARY_PATH);
@@ -9,70 +11,70 @@ $libpath = api_get_path(LIBRARY_PATH);
  */
 class WSCMError
 {
-	/**
-	 * Error handler. This needs to be a class that implements the interface WSErrorHandler
-	 *
-	 * @var WSErrorHandler
-	 */
-	protected static $_handler;
+    /**
+     * Error handler. This needs to be a class that implements the interface WSErrorHandler
+     *
+     * @var WSErrorHandler
+     */
+    protected static $_handler;
 
-	/**
-	 * Error code
-	 *
-	 * @var int
-	 */
-	public $code;
+    /**
+     * Error code
+     *
+     * @var int
+     */
+    public $code;
 
-	/**
-	 * Error message
-	 *
-	 * @var string
-	 */
-	public $message;
+    /**
+     * Error message
+     *
+     * @var string
+     */
+    public $message;
 
-	/**
-	 * Constructor
-	 *
-	 * @param int Error code
-	 * @param string Error message
-	 */
-	public function __construct($code, $message)
+    /**
+     * Constructor
+     *
+     * @param int Error code
+     * @param string Error message
+     */
+    public function __construct($code, $message)
     {
-		$this->code = $code;
-		$this->message = $message;
-	}
+        $this->code = $code;
+        $this->message = $message;
+    }
 
-	/**
-	 * Sets the error handler
-	 *
-	 * @param WSErrorHandler Error handler
-	 */
-	public static function setErrorHandler($handler)
+    /**
+     * Sets the error handler
+     *
+     * @param WSErrorHandler Error handler
+     */
+    public static function setErrorHandler($handler)
     {
-		if($handler instanceof WSErrorHandler) {
-			self::$_handler = $handler;
-		}
-	}
+        if($handler instanceof WSErrorHandler) {
+            self::$_handler = $handler;
+        }
+    }
 
-	/**
-	 * Returns the error handler
-	 *
-	 * @return WSErrorHandler Error handler
-	 */
-	public static function getErrorHandler()
+    /**
+     * Returns the error handler
+     *
+     * @return WSErrorHandler Error handler
+     */
+    public static function getErrorHandler()
     {
-		return self::$_handler;
-	}
+        return self::$_handler;
+    }
 
-	/**
-	 * Transforms the error into an array
-	 *
-	 * @return array Associative array with code and message
-	 */
-	public function toArray()
+    /**
+     * Transforms the error into an array
+     *
+     * @return array Associative array with code and message
+     */
+    public function toArray()
     {
-		return array('code' => $this->code, 'message' => $this->message);
-	}
+        return array('code' => $this->code, 'message' => $this->message);
+    }
 }
 
 /**
@@ -140,33 +142,27 @@ class WSCM
 	 *
 	 * return "valid" if username e password are correct! Else, return a message error
 	 */
-
 	public function verifyUserPass($username, $pass)
     {
 		$login = $username;
 		$password = $pass;
 
-        //lookup the user in the main database
-        $user_table = Database::get_main_table(TABLE_MAIN_USER);
-        $sql = "SELECT user_id, username, password, auth_source, active, expiration_date
-                FROM $user_table
-                WHERE username = '".trim(addslashes($login))."'";
-        $result = Database::query($sql);
+        $userRepo = UserManager::getRepository();
+        /** @var User $uData */
+        $uData = $userRepo->findOneBy([
+            'username' => trim(addslashes($login))
+        ]);
 
-        if (Database::num_rows($result) > 0) {
-            $uData = Database::fetch_array($result);
-
-            if ($uData['auth_source'] == PLATFORM_AUTH_SOURCE) {
-                $password = trim(stripslashes($password));
+        if ($uData) {
+            if ($uData->getAuthSource() == PLATFORM_AUTH_SOURCE) {
+                $passwordEncoded = UserManager::encryptPassword($password, $uData);
                 // Check the user's password
-                if ($password == $uData['password'] AND (trim($login) == $uData['username'])) {
+                if ($passwordEncoded == $uData->getPassword() && (trim($login) == $uData->getUsername())) {
                     // Check if the account is active (not locked)
-                    if ($uData['active'] == '1') {
+                    if ($uData->getActive()) {
                         // Check if the expiration date has not been reached
-                        if ($uData['expiration_date'] > date(
-                                'Y-m-d H:i:s'
-                            ) OR $uData['expiration_date'] == '0000-00-00 00:00:00'
-                        ) {
+                        $now = new DateTime();
+                        if ($uData->getExpirationDate() > $now || !$uData->getExpirationDate()) {
                             return "valid";
                         } else {
                             return get_lang('AccountExpired');
@@ -193,23 +189,26 @@ class WSCM
 	 * @param string User id value
 	 * @return mixed System user id if the user was found, WSError otherwise
 	 */
-	protected function getUserId($user_id_field_name, $user_id_value)
+    protected function getUserId($user_id_field_name, $user_id_value)
     {
-		if($user_id_field_name == "chamilo_user_id") {
-			if(UserManager::is_user_id_valid(intval($user_id_value))) {
-				return intval($user_id_value);
-			} else {
-				return new WSCMError(100, "User not found");
-			}
-		} else {
-			$user_id = UserManager::get_user_id_from_original_id($user_id_value, $user_id_field_name);
-			if($user_id == 0) {
-				return new WSCMError(100, "User not found");
-			} else {
-				return $user_id;
-			}
-		}
-	}
+        if ($user_id_field_name == "chamilo_user_id") {
+            if (UserManager::is_user_id_valid(intval($user_id_value))) {
+                return intval($user_id_value);
+            } else {
+                return new WSCMError(100, "User not found");
+            }
+        } else {
+            $user_id = UserManager::get_user_id_from_original_id(
+                $user_id_value,
+                $user_id_field_name
+            );
+            if ($user_id == 0) {
+                return new WSCMError(100, "User not found");
+            } else {
+                return $user_id;
+            }
+        }
+    }
 
 	/**
 	 * Gets the real course id based on the course id field name and value.
@@ -222,20 +221,23 @@ class WSCM
 	 */
 	protected function getCourseId($course_id_field_name, $course_id_value)
     {
-		if($course_id_field_name == "chamilo_course_id") {
-			if(CourseManager::get_course_code_from_course_id(intval($course_id_value)) != null) {
-				return intval($course_id_value);
-			} else {
-				return new WSCMError(200, "Course not found");
-			}
-		} else {
-			$courseId = CourseManager::get_course_code_from_original_id($course_id_value, $course_id_field_name);
-			if (empty($courseId)) {
-				return new WSCMError(200, "Course not found");
-			} else {
-				return $courseId;
-			}
-		}
+        if ($course_id_field_name == "chamilo_course_id") {
+            if (CourseManager::get_course_code_from_course_id($course_id_value) != null) {
+                return intval($course_id_value);
+            } else {
+                return new WSCMError(200, "Course not found");
+            }
+        } else {
+            $courseId = CourseManager::get_course_code_from_original_id(
+                $course_id_value,
+                $course_id_field_name
+            );
+            if (empty($courseId)) {
+                return new WSCMError(200, "Course not found");
+            } else {
+                return $courseId;
+            }
+        }
 	}
 
 	/**
@@ -305,10 +307,9 @@ class WSCM
 	 * @param <type> $string
 	 * @return <type> $string
 	 */
-	public function nl2br_revert($string) {
+	public function nl2br_revert($string)
+    {
 		return preg_replace('`<br(?: /)?>([\\n\\r])`', '$1', $string);
 	}
-
-
 }
 

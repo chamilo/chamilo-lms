@@ -358,7 +358,6 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
 
                     // Check if the account is active (not locked)
                     if ($uData['active'] == '1') {
-
                         // Check if the expiration date has not been reached
                         if ($uData['expiration_date'] > date('Y-m-d H:i:s')
                             || empty($uData['expiration_date'])
@@ -366,7 +365,6 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                             global $_configuration;
 
                             if (api_is_multiple_url_enabled()) {
-
                                 // Check if user is an admin
                                 $my_user_is_admin = UserManager::is_admin($uData['user_id']);
 
@@ -379,7 +377,6 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                 $current_access_url_id = api_get_current_access_url_id();
 
                                 if ($my_user_is_admin === false) {
-
                                     // the user have the permissions to enter at this site
                                     if (is_array($my_url_list) &&
                                         in_array($current_access_url_id, $my_url_list)
@@ -438,7 +435,6 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                     }
                                 }
                             } else {
-
                                 ConditionalLogin::check_conditions($uData);
                                 $_user['user_id'] = $uData['user_id'];
                                 $_user['status'] = $uData['status'];
@@ -475,7 +471,6 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                     Session::write('loginFailed', '1');
 
                     if ($allowCaptcha) {
-
                         if (isset($_SESSION['loginFailedCount'])) {
                             $_SESSION['loginFailedCount']++;
                         } else {
@@ -513,6 +508,18 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 $loginFailed = true;  // Default initialisation. It could
                 // change after the external authentication
                 $key = $uData['auth_source']; //'ldap','shibboleth'...
+
+                // Check if organisationemail email exist for this user and replace the current login with
+                $extraFieldValue = new ExtraFieldValue('user');
+                $newLogin = $extraFieldValue->get_values_by_handler_and_field_variable(
+                    $uData['user_id'],
+                    'organisationemail'
+                );
+
+                if (!empty($newLogin) && isset($newLogin['value'])) {
+                    $login = $newLogin['value'];
+                }
+
                 /* >>>>>>>> External authentication modules <<<<<<<<< */
                 // see configuration.php to define these
                 include_once($extAuthSource[$key]['login']);
@@ -528,6 +535,35 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 );
             }
         } else {
+            $extraFieldValue = new ExtraFieldValue('user');
+            $uData = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
+                'organisationemail',
+                $login
+            );
+            if (!empty($uData)) {
+                $uData = api_get_user_info($uData['item_id']);
+
+                if (!empty($extAuthSource[$uData['auth_source']]['login'])
+                    && file_exists($extAuthSource[$uData['auth_source']]['login'])
+                ) {
+                    /*
+                     * Process external authentication
+                     * on the basis of the given login name
+                     */
+                    $loginFailed = true;  // Default initialisation. It could
+                    // change after the external authentication
+                    $key = $uData['auth_source']; //'ldap','shibboleth'...
+
+                    /* >>>>>>>> External authentication modules <<<<<<<<< */
+                    // see configuration.php to define these
+                    include_once($extAuthSource[$key]['login']);
+                }
+            } else {
+                // change after the external authentication
+                // login failed, Database::num_rows($result) <= 0
+                $loginFailed = true;  // Default initialisation. It could
+            }
+
             // login failed, Database::num_rows($result) <= 0
             $loginFailed = true;  // Default initialisation. It could
             // change after the external authentication
@@ -548,9 +584,12 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
              * responsability of the external login script
              * to provide this $_user['user_id'].
              */
-
             if (isset($extAuthSource) && is_array($extAuthSource)) {
                 foreach ($extAuthSource as $thisAuthSource) {
+                    if (!empty($thisAuthSource['login']) && file_exists($thisAuthSource['login'])) {
+                        include_once($thisAuthSource['login']);
+                        break;
+                    }
                     if (isset($thisAuthSource['newUser']) && file_exists($thisAuthSource['newUser'])) {
                         include_once($thisAuthSource['newUser']);
                     } else {
@@ -563,7 +602,10 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                     }
                 }
             } //end if is_array($extAuthSource)
-            if ($loginFailed) { //If we are here username given is wrong
+
+            $checkUserInfo = Session::read('_user');
+            if ($loginFailed && empty($checkUserInfo)) {
+                //If we are here username given is wrong
                 Session::write('loginFailed', '1');
                 header(
                     'Location: '.api_get_path(WEB_PATH)

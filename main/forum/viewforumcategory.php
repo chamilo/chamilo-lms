@@ -236,7 +236,7 @@ if ($action_forums != 'add') {
             $forumTitle,
             array(
                 'href'=>$linkForumCategory,
-                'class'=>return_visible_invisible(strval(intval($forum_category['visibility'])))
+                'class' => empty($forum_category['visibility']) ? 'text-muted' : null
             )
         ).$session_displayed.$session_img,
         null
@@ -388,7 +388,7 @@ if ($action_forums != 'add') {
                         'href' => 'viewforum.php?' . api_get_cidreq()
                             . "&gidReq={$forum['forum_of_group']}&forum={$forum['forum_id']}&search="
                             . Security::remove_XSS(urlencode(isset($_GET['search']) ? $_GET['search'] : '')),
-                        'class' => return_visible_invisible($forum['visibility'])
+                        'class' => empty($forum['visibility']) ? 'text-muted' : null
                     )
                 );
                 $html .= Display::tag(

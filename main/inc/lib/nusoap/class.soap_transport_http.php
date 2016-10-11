@@ -1,8 +1,5 @@
 <?php
 
-
-
-
 /**
 * transport class for sending/receiving data via HTTP and HTTPS
 * NOTE: PHP must be compiled with the CURL extension for HTTPS support
@@ -12,8 +9,8 @@
 * @version  $Id: class.soap_transport_http.php,v 1.68 2010/04/26 20:15:08 snichol Exp $
 * @access public
 */
-class soap_transport_http extends nusoap_base {
-
+class soap_transport_http extends nusoap_base
+{
 	var $url = '';
 	var $uri = '';
 	var $digest_uri = '';
@@ -57,7 +54,7 @@ class soap_transport_http extends nusoap_base {
 	* @param boolean $use_curl Whether to try to force cURL use
 	* @access public
 	*/
-	function soap_transport_http($url, $curl_options = NULL, $use_curl = false){
+	function __construct($url, $curl_options = NULL, $use_curl = false){
 		parent::__construct();
 		$this->debug("ctor url=$url use_curl=$use_curl curl_options:");
 		$this->appendDebug($this->varDump($curl_options));

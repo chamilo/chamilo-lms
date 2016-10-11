@@ -50,8 +50,8 @@ $toolbar = Display::toolbarButton(
 $tpl = new Template(get_lang('Skills'));
 $tpl->assign('errorMessage', $errorMessage);
 $tpl->assign('skills', $skills);
-
-$contentTemplate = $tpl->fetch('default/skill/badge_list.tpl');
+$templateName = $tpl->get_template('skill/badge_list.tpl');
+$contentTemplate = $tpl->fetch($templateName);
 
 $tpl->assign('actions', $toolbar);
 $tpl->assign('content', $contentTemplate);

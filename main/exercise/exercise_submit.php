@@ -156,7 +156,8 @@ if ($objExercise->review_answers) {
 }
 
 $template->assign('shuffle_answers', $objExercise->random_answers);
-$htmlHeadXtra[] = $template->fetch($template->get_template('/exercise/submit.js.tpl'));
+$templateName = $template->get_template('exercise/submit.js.tpl');
+$htmlHeadXtra[] = $template->fetch($templateName);
 
 $current_timestamp = time();
 $my_remind_list = array();
@@ -532,7 +533,9 @@ if ($formSent && isset($_POST)) {
                     $choice = $exerciseResult[$questionId];
                     if (isset($exe_id)) {
                     	// Manage the question and answer attempts
-                        if ($debug) { error_log('8.3. manage_answer exe_id: '.$exe_id.' - $questionId: '.$questionId.' Choice'.print_r($choice,1)); }
+                        if ($debug) {
+                            error_log('8.3. manage_answer exe_id: '.$exe_id.' - $questionId: '.$questionId.' Choice'.print_r($choice,1));
+                        }
                         $objExercise->manage_answer(
                             $exe_id,
                             $questionId,

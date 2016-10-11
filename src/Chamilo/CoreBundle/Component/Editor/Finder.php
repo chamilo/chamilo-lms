@@ -36,6 +36,7 @@ class Finder extends \elFinder
 
         // setlocale and global locale regists to elFinder::locale
         self::$locale = !empty($opts['locale']) ? $opts['locale'] : 'en_US.UTF-8';
+
         if (false === @setlocale(LC_ALL, self::$locale)) {
             self::$locale = setlocale(LC_ALL, '');
         }

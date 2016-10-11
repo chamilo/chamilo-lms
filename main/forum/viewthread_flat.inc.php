@@ -116,7 +116,6 @@ if (isset($current_thread['thread_id'])) {
             $html .= '<div class="panel panel-default forum-post">';
             $html .= '<div class="panel-body">';
             $html .= '<div class="row">';
-
             $html .= '<div class="col-md-2">';
 
             if ($origin != 'learnpath') {
@@ -246,7 +245,7 @@ if (isset($current_thread['thread_id'])) {
             ) {
                 $my_forum_id = $clean_forum_id;
                 if (isset($_GET['gradebook'])) {
-                    $info_thread = get_thread_information($clean_thread_id);
+                    $info_thread = get_thread_information($clean_forum_id, $clean_thread_id);
                     $my_forum_id = $info_thread['forum_id'];
                 }
 

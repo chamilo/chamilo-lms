@@ -15,7 +15,7 @@ if (!isset($_FILES['audio_blob'], $_REQUEST['audio_dir'])) {
     api_not_allowed();
 }
 
-$file = $_FILES["audio_blob"];
+$file = $_FILES['audio_blob'];
 $audioDir = Security::remove_XSS($_REQUEST['audio_dir']);
 $userId = api_get_user_id();
 

@@ -315,7 +315,10 @@ switch ($action) {
         }
         $full_file_name = $base_work_dir.$document_data['path'];
         if (Security::check_abs_path($full_file_name, $base_work_dir.'/')) {
-            DocumentManager::file_send_for_download($full_file_name, true);
+            $result = DocumentManager::file_send_for_download($full_file_name, true);
+            if ($result === false) {
+                api_not_allowed(true);
+            }
         }
         exit;
         break;
@@ -1303,7 +1306,7 @@ if ($is_allowed_to_edit ||
                 $courseInfo,
                 api_get_user_id(),
                 $sessionId,
-                $groupIid,
+                $groupId,
                 $to_user_id,
                 $base_work_dir,
                 $dir_name,

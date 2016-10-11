@@ -88,7 +88,7 @@ switch ($action) {
 }
 
 $tpl->assign('list', $list);
-
-$contentTemplate = $tpl->fetch('default/admin/skill.tpl');
+$view = $tpl->get_template('admin/skill.tpl');
+$contentTemplate = $tpl->fetch($view);
 $tpl->assign('content', $contentTemplate);
 $tpl->display_one_col_template();

@@ -59,7 +59,7 @@ foreach ($course_list as $course) {
         $session_id
     );
     if ($status !== false || api_is_platform_admin() || $userIsGeneralCoach) {
-        $user_course_list[] = $course['code'];
+        $user_course_list[] = $course['real_id'];
     }
 }
 
@@ -126,12 +126,13 @@ $new_course_list = array();
 
 if (!empty($course_list)) {
     foreach ($course_list as $course_data) {
-        if (!api_is_platform_admin()) {
-            if (in_array(
-                    $course_data['code'],
-                    $user_course_list
-                ) || api_is_anonymous()
-            ) {
+        if (api_is_platform_admin()) {
+            $course_data['title'] = Display::url(
+                $course_data['title'],
+                api_get_course_url($course_data['code'], $session_id)
+            );
+        } else {
+            if (in_array($course_data['real_id'], $user_course_list) || api_is_anonymous()) {
                 $course_data['title'] = Display::url(
                     $course_data['title'],
                     api_get_course_url($course_data['code'], $session_id)
@@ -145,11 +146,13 @@ if (!empty($course_list)) {
             api_get_user_id(),
             $course_data['code'],
             $session_id,
-            'publicated_on ASC',
+            'lp.publicatedOn ASC',
+            true,
+            null,
             true
         );
-        $lp_list = $list->get_flat_list();
 
+        $lp_list = $list->get_flat_list();
         $lp_count = 0;
 
         if (!empty($lp_list)) {
@@ -171,8 +174,8 @@ if (!empty($course_list)) {
                 1
             )
         );
-        $max_mutation_date = '';
 
+        $max_mutation_date = '';
         $last_date = Tracking::get_last_connection_date_on_the_course(
             api_get_user_id(),
             $course_info,
@@ -182,7 +185,7 @@ if (!empty($course_list)) {
 
         $icons = '';
         foreach ($lp_list as $item) {
-            if ($item['modified_on'] == '0000-00-00 00:00:00' || empty($item['modified_on'])) {
+            if (empty($item['modified_on'])) {
                 $lp_date_original = $item['created_on'];
                 $image = 'new.gif';
                 $label = get_lang('LearnpathAdded');
@@ -209,30 +212,25 @@ if (!empty($course_list)) {
         }
 
         $new_course_list[] = array(
-            'title'=> $course_data['title'].$icons,
+            'title' => $course_data['title'].$icons,
             //  'recent_lps' => $icons,
             //'max_mutation_date' => substr(api_get_local_time($max_mutation_date),0,10),
             'exercise_count' => $exercise_count,
-            'lp_count'       => $lp_count
+            'lp_count' => $lp_count
         );
     }
 }
 
-// If the requested session does not exist in my list we stop the script
-/*if (!api_is_platform_admin()) {
-    if (!api_is_anonymous() && !in_array($session_id, $my_session_list)) {
+//If session is not active we stop de script
+if (api_is_coach_of_course_in_session($session_id) == false) {
+    //If session is not active we stop de script
+    if (!api_is_allowed_to_session_edit()) {
         api_not_allowed(true);
     }
-}*/
-
-//If session is not active we stop de script
-if (!api_is_allowed_to_session_edit()) {
-	api_not_allowed();
 }
 
 $entityManager = Database::getManager();
 $session = $entityManager->find('ChamiloCoreBundle:Session', $session_id);
-
 $sessionTitleLink = api_get_configuration_value('courses_list_session_title_link');
 
 if ($sessionTitleLink == 2 && $session->getNbrCourses() === 1) {
@@ -258,7 +256,13 @@ foreach ($session_list as $item) {
 // Session list form
 if (count($session_select) > 1) {
     $form = new FormValidator('exercise_admin', 'get', api_get_self().'?session_id='.$session_id);
-    $form->addElement('select', 'session_id', get_lang('SessionList'), $session_select, 'onchange="javascript:change_session()"');
+    $form->addElement(
+        'select',
+        'session_id',
+        get_lang('SessionList'),
+        $session_select,
+        'onchange="javascript:change_session()"'
+    );
     $defaults['session_id'] = $session_id;
     $form->setDefaults($defaults);
     $form->display();
@@ -295,7 +299,10 @@ foreach ($final_array as $session_data) {
 
                     $best_score = '';
                     if (!empty($best_score_data)) {
-                        $best_score = ExerciseLib::show_score($best_score_data['exe_result'], $best_score_data['exe_weighting']);
+                        $best_score = ExerciseLib::show_score(
+                            $best_score_data['exe_result'],
+                            $best_score_data['exe_weighting']
+                        );
                     }
 
                     // Exercise results
@@ -310,7 +317,10 @@ foreach ($final_array as $session_data) {
                         }
                         if (!empty($result_list)) {
                             foreach ($result_list as $exercise_result) {
-                                $platform_score = ExerciseLib::show_score($exercise_result['exe_result'], $exercise_result['exe_weighting']);
+                                $platform_score = ExerciseLib::show_score(
+                                    $exercise_result['exe_result'],
+                                    $exercise_result['exe_weighting']
+                                );
                                 $my_score = 0;
                                 if(!empty($exercise_result['exe_weighting']) && intval($exercise_result['exe_weighting']) != 0) {
                                     $my_score = $exercise_result['exe_result']/$exercise_result['exe_weighting'];
@@ -327,18 +337,23 @@ foreach ($final_array as $session_data) {
                                 $exercise_info->exercise = Display::url(
                                     $exercise_info->exercise,
                                     api_get_path(WEB_CODE_PATH) . "exercise/result.php?cidReq=$my_course_code&id={$exercise_result['exe_id']}&id_session=$session_id&show_headers=1",
-                                    array('target'=>SESSION_LINK_TARGET,'class'=>'exercise-result-link')
+                                    array('target' => SESSION_LINK_TARGET, 'class'=>'exercise-result-link')
                                 );
 
-                                $my_real_array[]= array(
-                                    'status'      => Display::return_icon('quiz.gif', get_lang('Attempted'),'', ICON_SIZE_SMALL),
-                                    'date'        => $start_date,
-                                    'course'      => $course_data['name'],
-                                    'exercise'    => $exercise_info->exercise,
-                                    'attempt'     => $counter,
-                                    'result'      => $platform_score,
+                                $my_real_array[] = array(
+                                    'status' => Display::return_icon(
+                                        'quiz.gif',
+                                        get_lang('Attempted'),
+                                        '',
+                                        ICON_SIZE_SMALL
+                                    ),
+                                    'date' => $start_date,
+                                    'course' => $course_data['name'],
+                                    'exercise' => $exercise_info->exercise,
+                                    'attempt' => $counter,
+                                    'result' => $platform_score,
                                     'best_result' => $best_score,
-                                    'position'    => $position
+                                    'position' => $position,
                                 );
                                 $counter++;
                             }
@@ -353,18 +368,22 @@ foreach ($final_array as $session_data) {
                             $exercise_info->exercise = Display::url(
                                 $exercise_info->exercise,
                                 api_get_path(WEB_CODE_PATH) . "exercise/overview.php?cidReq=$my_course_code&exerciseId={$exercise_info->id}&id_session=$session_id",
-                                array('target'=>SESSION_LINK_TARGET)
+                                array('target' => SESSION_LINK_TARGET)
                             );
 
-                            $new_exercises[]= array(
-                                'status'      => Display::return_icon('star.png', get_lang('New'), array('width'=>ICON_SIZE_SMALL)),
-                                'date'        => $start_date,
-                                'course'      => $course_data['name'],
-                                'exercise'    => $exercise_info->exercise,
-                                'attempt'     => '-',
-                                'result'      => '-',
+                            $new_exercises[] = array(
+                                'status' => Display::return_icon(
+                                    'star.png',
+                                    get_lang('New'),
+                                    array('width' => ICON_SIZE_SMALL)
+                                ),
+                                'date' => $start_date,
+                                'course' => $course_data['name'],
+                                'exercise' => $exercise_info->exercise,
+                                'attempt' => '-',
+                                'result' => '-',
                                 'best_result' => '-',
-                                'position'    => '-'
+                                'position' => '-'
                             );
                         }
                     }
@@ -382,11 +401,11 @@ if (!empty($new_exercises)) {
 
 $start = $end = $start_only = $end_only ='';
 
-if (!empty($session_info['access_start_date']) && $session_info['access_start_date'] != '0000-00-00') {
+if (!empty($session_info['access_start_date'])) {
     $start = api_convert_and_format_date($session_info['access_start_date'], DATE_FORMAT_SHORT);
     $start_only = get_lang('From').' '.$session_info['access_start_date'];
 }
-if (!empty($session_info['access_start_date']) && $session_info['access_end_date'] != '0000-00-00') {
+if (!empty($session_info['access_start_date'])) {
     $end = api_convert_and_format_date($session_info['access_end_date'], DATE_FORMAT_SHORT);
     $end_only = get_lang('Until').' '.$session_info['access_end_date'];
 }
@@ -669,5 +688,12 @@ echo Display::tabs(
     $headers,
     $tabs
 );
+
+// Deleting the objects
+Session::erase('_gid');
+Session::erase('oLP');
+Session::erase('lpobject');
+
+api_remove_in_gradebook();
 
 Display::display_footer();

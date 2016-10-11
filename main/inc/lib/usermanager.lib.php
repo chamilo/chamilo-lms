@@ -63,14 +63,18 @@ class UserManager
      */
     public static function getManager()
     {
-        $encoderFactory = self::getEncoderFactory();
-        $userManager = new Chamilo\UserBundle\Entity\Manager\UserManager(
-            $encoderFactory,
-            new \FOS\UserBundle\Util\Canonicalizer(),
-            new \FOS\UserBundle\Util\Canonicalizer(),
-            Database::getManager(),
-            'Chamilo\\UserBundle\\Entity\\User'
-        );
+        static $userManager;
+
+        if (!isset($userManager)) {
+            $encoderFactory = self::getEncoderFactory();
+            $userManager = new Chamilo\UserBundle\Entity\Manager\UserManager(
+                $encoderFactory,
+                new \FOS\UserBundle\Util\Canonicalizer(),
+                new \FOS\UserBundle\Util\Canonicalizer(),
+                Database::getManager(),
+                'Chamilo\\UserBundle\\Entity\\User'
+            );
+        }
 
         return $userManager;
     }
@@ -186,7 +190,7 @@ class UserManager
      * @param  string $language User language    (optional)
      * @param  string $phone Phone number    (optional)
      * @param  string $picture_uri Picture URI        (optional)
-     * @param  string $auth_source Authentication source    (optional, defaults to 'platform', dependind on constant)
+     * @param  string $authSource Authentication source    (optional, defaults to 'platform', dependind on constant)
      * @param  string $expirationDate Account expiration date (optional, defaults to null)
      * @param  int    $active Whether the account is enabled or disabled by default
      * @param  int    $hr_dept_id The department of HR in which the user is registered (optional, defaults to 0)
@@ -215,11 +219,11 @@ class UserManager
         $language = '',
         $phone = '',
         $picture_uri = '',
-        $auth_source = PLATFORM_AUTH_SOURCE,
+        $authSource = PLATFORM_AUTH_SOURCE,
         $expirationDate = null,
         $active = 1,
         $hr_dept_id = 0,
-        $extra = null,
+        $extra = [],
         $encrypt_method = '',
         $send_mail = false,
         $isAdmin = false,
@@ -232,10 +236,20 @@ class UserManager
         if (!empty($hook)) {
             $hook->notifyCreateUser(HOOK_EVENT_TYPE_PRE);
         }
+
+        // First check wether the login already exists
+        if (!self::is_username_available($loginName)) {
+            Display::addFlash(
+                Display::return_message(get_lang('LoginAlreadyTaken'))
+            );
+
+            return false;
+        }
+
         global $_configuration;
         $original_password = $password;
-        $access_url_id = 1;
 
+        $access_url_id = 1;
         if (api_get_multiple_access_url()) {
             $access_url_id = api_get_current_access_url_id();
         }
@@ -269,17 +283,29 @@ class UserManager
         }
 
         if (empty($password)) {
-            Display::addFlash(
-                Display::return_message(get_lang('ThisFieldIsRequired').': '.get_lang('Password'), 'warning')
-            );
+            if ($authSource === PLATFORM_AUTH_SOURCE) {
+                Display::addFlash(
+                    Display::return_message(
+                        get_lang('ThisFieldIsRequired').': '.get_lang(
+                            'Password'
+                        ),
+                        'warning'
+                    )
+                );
 
-            return false;
+                return false;
+            }
+
+            // We use the authSource as password.
+            // The real validation will be by processed by the auth
+            // source not Chamilo
+            $password = $authSource;
         }
 
         // database table definition
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
 
-        //Checking the user language
+        // Checking the user language
         $languages = api_get_languages();
         $language = strtolower($language);
 
@@ -293,15 +319,6 @@ class UserManager
             $creator_id = $currentUserId;
         } else {
             $creator_id = 0;
-        }
-
-        // First check wether the login already exists
-        if (!self::is_username_available($loginName)) {
-            Display::addFlash(
-                Display::return_message(get_lang('LoginAlreadyTaken'))
-            );
-
-            return false;
         }
 
         $currentDate = api_get_utc_datetime();
@@ -329,8 +346,6 @@ class UserManager
         /** @var User $user */
         $user = $userManager->createUser();
 
-        /** @var User $user */
-        //$user = new User();
         $user
             ->setLastname($lastName)
             ->setFirstname($firstName)
@@ -341,7 +356,7 @@ class UserManager
             ->setOfficialCode($official_code)
             ->setPictureUri($picture_uri)
             ->setCreatorId($creator_id)
-            ->setAuthSource($auth_source)
+            ->setAuthSource($authSource)
             ->setPhone($phone)
             ->setAddress($address)
             ->setLanguage($language)
@@ -368,11 +383,24 @@ class UserManager
             }
 
             if (api_get_multiple_access_url()) {
-                UrlManager::add_user_to_url($return, api_get_current_access_url_id());
+                UrlManager::add_user_to_url($userId, api_get_current_access_url_id());
             } else {
                 //we are adding by default the access_url_user table with access_url_id = 1
-                UrlManager::add_user_to_url($return, 1);
+                UrlManager::add_user_to_url($userId, 1);
             }
+
+            if (is_array($extra) && count($extra) > 0) {
+                foreach ($extra as $fname => $fvalue) {
+                    self::update_extra_field_value($userId, $fname, $fvalue);
+                }
+            } else {
+                // Create notify settings by default
+                self::update_extra_field_value($userId, 'mail_notify_invitation', '1');
+                self::update_extra_field_value($userId, 'mail_notify_message', '1');
+                self::update_extra_field_value($userId, 'mail_notify_group_message', '1');
+            }
+
+            self::update_extra_field_value($userId, 'already_logged_in', 'false');
 
             if (!empty($email) && $send_mail) {
                 $recipient_name = api_get_person_name(
@@ -487,27 +515,19 @@ class UserManager
                 }
                 /* ENDS MANAGE EVENT WITH MAIL */
             }
-            Event::addEvent(LOG_USER_CREATE, LOG_USER_ID, $return);
+
+            if (!empty($hook)) {
+                $hook->setEventData(array(
+                    'return' => $userId,
+                    'originalPassword' => $original_password
+                ));
+                $hook->notifyCreateUser(HOOK_EVENT_TYPE_POST);
+            }
+            Event::addEvent(LOG_USER_CREATE, LOG_USER_ID, $userId);
         } else {
             Display::addFlash(Display::return_message(get_lang('ErrorContactPlatformAdmin')));
 
             return false;
-        }
-
-        if (is_array($extra) && count($extra) > 0) {
-            $res = true;
-            foreach ($extra as $fname => $fvalue) {
-                $res = $res && self::update_extra_field_value($return, $fname, $fvalue);
-            }
-        }
-        self::update_extra_field_value($return, 'already_logged_in', 'false');
-
-        if (!empty($hook)) {
-            $hook->setEventData(array(
-                'return' => $return,
-                'originalPassword' => $original_password
-            ));
-            $hook->notifyCreateUser(HOOK_EVENT_TYPE_POST);
         }
 
         return $return;
@@ -889,17 +909,27 @@ class UserManager
         if (!empty($hook)) {
             $hook->notifyUpdateUser(HOOK_EVENT_TYPE_PRE);
         }
-        global $_configuration;
         $original_password = $password;
+
+        if ($user_id != strval(intval($user_id))) {
+            return false;
+        }
 
         if (empty($user_id)) {
             return false;
         }
-        $user_info = api_get_user_info($user_id, false, true);
+
+        $userManager = self::getManager();
+        /** @var Chamilo\UserBundle\Entity\User $user */
+        $user = self::getRepository()->find($user_id);
+
+        if (empty($user)) {
+            return false;
+        }
 
         if ($reset_password == 0) {
             $password = null;
-            $auth_source = $user_info['auth_source'];
+            $auth_source = $user->getAuthSource();
         } elseif ($reset_password == 1) {
             $original_password = $password = api_generate_password();
             $auth_source = PLATFORM_AUTH_SOURCE;
@@ -911,31 +941,16 @@ class UserManager
             $auth_source = $auth_source;
         }
 
-        if ($user_id != strval(intval($user_id))) {
-            return false;
-        }
-
-        if ($user_id === false) {
-            return false;
-        }
-
-        //Checking the user language
+        // Checking the user language
         $languages = api_get_languages();
         if (!in_array($language, $languages['folder'])) {
             $language = api_get_setting('platformLanguage');
         }
 
         $change_active = 0;
-        if ($user_info['active'] != $active) {
+        $isUserActive = $user->getActive();
+        if ($isUserActive != $active) {
             $change_active = 1;
-        }
-
-        $userManager = self::getManager();
-        /** @var Chamilo\UserBundle\Entity\User $user */
-        $user = self::getRepository()->find($user_id);
-
-        if (empty($user)) {
-            return false;
         }
 
         $originalUsername = $user->getUsername();
@@ -1026,7 +1041,7 @@ class UserManager
                     get_lang('YouAreReg')." ".api_get_setting('siteName')." ".get_lang('WithTheFollowingSettings')."\n\n".
                     get_lang('Username')." : ".$username.(($reset_password > 0) ? "\n".
                     get_lang('Pass')." : ".stripslashes($original_password) : "")."\n\n".
-                    get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is')." : ".$_configuration['root_web']."\n\n".
+                    get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is')." : ".api_get_path(WEB_PATH)."\n\n".
                     get_lang('Problem')."\n\n".
                     get_lang('SignatureFormula').",\n\n".
                     api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".
@@ -1149,7 +1164,7 @@ class UserManager
 
     /**
      * Check if a username is available
-     * @param string the wanted username
+     * @param string $username the wanted username
      * @return boolean true if the wanted username is available
      * @assert ('') === false
      * @assert ('xyzxyzxyz') === true
@@ -1421,8 +1436,14 @@ class UserManager
         $condition = 'AND'
     ) {
         $user_table = Database :: get_main_table(TABLE_MAIN_USER);
+        $tblAccessUrlRelUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $return_array = array();
-        $sql_query = "SELECT * FROM $user_table";
+        $sql_query = "SELECT * FROM $user_table ";
+
+        if (api_is_multiple_url_enabled()) {
+            $sql_query .= " INNER JOIN $tblAccessUrlRelUser auru ON auru.user_id = user.id ";
+        }
+
         if (count($conditions) > 0) {
             $sql_query .= ' WHERE ';
             $temp_conditions = array();
@@ -1437,6 +1458,14 @@ class UserManager
             }
             if (!empty($temp_conditions)) {
                 $sql_query .= implode(' '.$condition.' ', $temp_conditions);
+            }
+
+            if (api_is_multiple_url_enabled()) {
+                $sql_query .= ' AND auru.access_url_id = ' . api_get_current_access_url_id();
+            }
+        } else {
+            if (api_is_multiple_url_enabled()) {
+                $sql_query .= ' WHERE auru.access_url_id = ' . api_get_current_access_url_id();
             }
         }
         if (count($order_by) > 0) {
@@ -1990,7 +2019,7 @@ class UserManager
         $extraFieldType = EntityExtraField::USER_FIELD_TYPE;
         $sqlf = "SELECT * FROM $t_uf WHERE extra_field_type = $extraFieldType ";
         if (!$all_visibility) {
-            $sqlf .= " AND visible = 1 ";
+            $sqlf .= " AND visible_to_self = 1 ";
         }
         if (!is_null($field_filter)) {
             $field_filter = intval($field_filter);
@@ -2010,7 +2039,7 @@ class UserManager
                     3 => empty($rowf['display_text']) ? '' : $rowf['display_text'],
                     4 => $rowf['default_value'],
                     5 => $rowf['field_order'],
-                    6 => $rowf['visible'],
+                    6 => $rowf['visible_to_self'],
                     7 => $rowf['changeable'],
                     8 => $rowf['filter'],
                     9 => array(),
@@ -2210,7 +2239,7 @@ class UserManager
                 $field_filter = intval($field_filter);
                 $filter_cond .= " AND filter = $field_filter ";
             }
-            $sql .= " AND f.visible = 1 $filter_cond ";
+            $sql .= " AND f.visible_to_self = 1 $filter_cond ";
         } else {
             if (isset($field_filter)) {
                 $field_filter = intval($field_filter);
@@ -2297,7 +2326,7 @@ class UserManager
                 WHERE f.variable = '$field_variable' ";
 
         if (!$all_visibility) {
-            $sql .= " AND f.visible = 1 ";
+            $sql .= " AND f.visible_to_self = 1 ";
         }
 
         $sql .= " AND extra_field_type = ".EntityExtraField::USER_FIELD_TYPE;
@@ -2501,158 +2530,141 @@ class UserManager
         $ignore_visibility_for_admins = false,
         $ignoreTimeLimit = false
     ) {
-        // Database Table Definitions
-        $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
-        $tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $tbl_session_category = Database :: get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-
         if ($user_id != strval(intval($user_id))) {
             return array();
         }
 
         // Get the list of sessions per user
-        $now = api_get_utc_datetime();
+        $now = new DateTime('now', new DateTimeZone('UTC'));
 
-        $sql = "SELECT DISTINCT
-                    session.id,
-                    session.name,
-                    session.access_start_date,
-                    session.access_end_date,
-                    session_category_id,
-                    session_category.name as session_category_name,
-                    session_category.date_start session_category_date_start,
-                    session_category.date_end session_category_date_end,
-                    coach_access_start_date,
-                    coach_access_end_date
-              FROM $tbl_session as session
-                  LEFT JOIN $tbl_session_category session_category
-                  ON (session_category_id = session_category.id)
-                  LEFT JOIN $tbl_session_course_user as session_rel_course_user
-                  ON (session_rel_course_user.session_id = session.id)
-              WHERE (
-                    session_rel_course_user.user_id = $user_id OR
-                    session.id_coach = $user_id
-              )
-              ORDER BY session_category_name, name";
+        $dql = "SELECT DISTINCT
+                    s.id,
+                    s.name,
+                    s.accessStartDate AS access_start_date,
+                    s.accessEndDate AS access_end_date,
+                    sc.id AS session_category_id,
+                    sc.name AS session_category_name,
+                    sc.dateStart AS session_category_date_start,
+                    sc.dateEnd AS session_category_date_end,
+                    s.coachAccessStartDate AS coach_access_start_date,
+                    s.coachAccessEndDate AS coach_access_end_date
+                FROM ChamiloCoreBundle:Session AS s
+                LEFT JOIN ChamiloCoreBundle:SessionCategory AS sc WITH s.category = sc
+                LEFT JOIN ChamiloCoreBundle:SessionRelCourseRelUser AS scu WITH scu.session = s
+                WHERE scu.user = :user OR s.generalCoach = :user
+                ORDER BY sc.name, s.name";
 
-        $result = Database::query($sql);
-        $categories = array();
-        if (Database::num_rows($result) > 0) {
-            while ($row = Database::fetch_array($result, 'ASSOC')) {
-                // User portal filters:
+        $dql = Database::getManager()
+            ->createQuery($dql)
+            ->setParameters(['user' => $user_id])
+        ;
 
-                if ($ignoreTimeLimit === false) {
-                    if ($is_time_over) {
-                        // History
-                        if (empty($row['access_end_date']) || $row['access_end_date'] == '0000-00-00 00:00:00') {
+        $sessionData = $dql->getResult();
+        $categories = [];
+
+        foreach ($sessionData as $row) {
+            // User portal filters:
+            if ($ignoreTimeLimit === false) {
+                if ($is_time_over) {
+                    // History
+                    if (empty($row['access_end_date'])) {
+                        continue;
+                    }
+
+                    if (!empty($row['access_end_date'])) {
+                        if ($row['access_end_date'] > $now) {
                             continue;
                         }
 
-                        if (isset($row['access_end_date'])) {
-                            if ($row['access_end_date'] > $now) {
+                    }
+                } else {
+                    // Current user portal
+                    if (api_is_allowed_to_create_course()) {
+                        // Teachers can access the session depending in the access_coach date
+                    } else {
+                        if (isset($row['access_end_date']) &&
+                            !empty($row['access_end_date'])
+                        ) {
+                            if ($row['access_end_date'] <= $now) {
                                 continue;
                             }
-
-                        }
-                    } else {
-                        // Current user portal
-                        if (api_is_allowed_to_create_course()) {
-                            // Teachers can access the session depending in the access_coach date
-                        } else {
-                            if (isset($row['access_end_date']) &&
-                                ($row['access_end_date'] != '0000-00-00 00:00:00') &&
-                                !empty($row['access_end_date'])
-                            ) {
-                                if ($row['access_end_date'] <= $now) {
-                                    continue;
-                                }
-                            }
                         }
                     }
                 }
+            }
 
-                $categories[$row['session_category_id']]['session_category'] = array(
-                    'id' => $row['session_category_id'],
-                    'name' => $row['session_category_name'],
-                    'date_start' => $row['session_category_date_start'],
-                    'date_end' => $row['session_category_date_end']
+            $categories[$row['session_category_id']]['session_category'] = array(
+                'id' => $row['session_category_id'],
+                'name' => $row['session_category_name'],
+                'date_start' => $row['session_category_date_start'] ? $row['session_category_date_start']->format('Y-m-d H:i:s') : null,
+                'date_end' => $row['session_category_date_end'] ? $row['session_category_date_end']->format('Y-m-d H:i:s') : null
+            );
+
+            $session_id = $row['id'];
+            $courseList = UserManager::get_courses_list_by_session(
+                $user_id,
+                $session_id
+            );
+
+            $visibility = api_get_session_visibility(
+                $session_id,
+                null,
+                $ignore_visibility_for_admins
+            );
+
+            if ($visibility != SESSION_VISIBLE) {
+                // Course Coach session visibility.
+                $blockedCourseCount = 0;
+                $closedVisibilityList = array(
+                    COURSE_VISIBILITY_CLOSED,
+                    COURSE_VISIBILITY_HIDDEN
                 );
 
-                $session_id = $row['id'];
-                $courseList = UserManager::get_courses_list_by_session(
-                    $user_id,
-                    $row['id']
-                );
-
-                // Session visibility.
-                /*$visibility = api_get_session_visibility(
-                    $session_id,
-                    null,
-                    $ignore_visibility_for_admins
-                );*/
-
-
-                $visibility = api_get_session_visibility(
-                    $session_id,
-                    null,
-                    $ignore_visibility_for_admins
-                );
-
-                if ($visibility != SESSION_VISIBLE) {
-
-                    // Course Coach session visibility.
-                    $blockedCourseCount = 0;
-                    $closedVisibilityList = array(
-                        COURSE_VISIBILITY_CLOSED,
-                        COURSE_VISIBILITY_HIDDEN
+                foreach ($courseList as $course) {
+                    // Checking session visibility
+                    $sessionCourseVisibility = api_get_session_visibility(
+                        $session_id,
+                        $course['real_id'],
+                        $ignore_visibility_for_admins
                     );
 
-                    foreach ($courseList as $course) {
-                        // Checking session visibility
-                        $sessionCourseVisibility = api_get_session_visibility(
-                            $session_id,
-                            $course['real_id'],
-                            $ignore_visibility_for_admins
-                        );
-
-                        $courseIsVisible = !in_array(
-                            $course['visibility'],
-                            $closedVisibilityList
-                        );
-                        if ($courseIsVisible === false || $sessionCourseVisibility == SESSION_INVISIBLE) {
-                            $blockedCourseCount++;
-                        }
-                    }
-
-                    // If all courses are blocked then no show in the list.
-                    if ($blockedCourseCount === count($courseList)) {
-                        $visibility = SESSION_INVISIBLE;
-                    } else {
-                        $visibility = SESSION_VISIBLE;
+                    $courseIsVisible = !in_array(
+                        $course['visibility'],
+                        $closedVisibilityList
+                    );
+                    if ($courseIsVisible === false || $sessionCourseVisibility == SESSION_INVISIBLE) {
+                        $blockedCourseCount++;
                     }
                 }
 
-                switch ($visibility) {
-                    case SESSION_VISIBLE_READ_ONLY:
-                    case SESSION_VISIBLE:
-                    case SESSION_AVAILABLE:
-                        break;
-                    case SESSION_INVISIBLE:
-                        if ($ignore_visibility_for_admins == false) {
-                            continue 2;
-                        }
+                // If all courses are blocked then no show in the list.
+                if ($blockedCourseCount === count($courseList)) {
+                    $visibility = SESSION_INVISIBLE;
+                } else {
+                    $visibility = SESSION_VISIBLE;
                 }
-
-                $categories[$row['session_category_id']]['sessions'][$row['id']] = array(
-                    'session_name' => $row['name'],
-                    'session_id' => $row['id'],
-                    'access_start_date' => $row['access_start_date'],
-                    'access_end_date' => $row['access_end_date'],
-                    'coach_access_start_date' => $row['coach_access_start_date'],
-                    'coach_access_end_date' => $row['coach_access_end_date'],
-                    'courses' => $courseList
-                );
             }
+
+            switch ($visibility) {
+                case SESSION_VISIBLE_READ_ONLY:
+                case SESSION_VISIBLE:
+                case SESSION_AVAILABLE:
+                    break;
+                case SESSION_INVISIBLE:
+                    if ($ignore_visibility_for_admins === false) {
+                        continue 2;
+                    }
+            }
+
+            $categories[$row['session_category_id']]['sessions'][$row['id']] = array(
+                'session_name' => $row['name'],
+                'session_id' => $row['id'],
+                'access_start_date' => $row['access_start_date'] ? $row['access_start_date']->format('Y-m-d H:i:s') : null,
+                'access_end_date' => $row['access_end_date'] ? $row['access_end_date']->format('Y-m-d H:i:s') : null,
+                'coach_access_start_date' => $row['coach_access_start_date'] ? $row['coach_access_start_date']->format('Y-m-d H:i:s') : null,
+                'coach_access_end_date' => $row['coach_access_end_date'] ? $row['coach_access_end_date']->format('Y-m-d H:i:s') : null,
+                'courses' => $courseList
+            );
         }
 
         return $categories;
@@ -2661,9 +2673,10 @@ class UserManager
     /**
      * Gives a list of [session_id-course_code] => [status] for the current user.
      * @param integer $user_id
+     * @param int $sessionLimit
      * @return array  list of statuses (session_id-course_code => status)
      */
-    public static function get_personal_session_course_list($user_id)
+    public static function get_personal_session_course_list($user_id, $sessionLimit = null)
     {
         // Database Table Definitions
         $tbl_course = Database :: get_main_table(TABLE_MAIN_COURSE);
@@ -2697,10 +2710,10 @@ class UserManager
                     course_rel_user.status course_rel_status,
                     course_rel_user.sort sort,
                     course_rel_user.user_course_cat user_course_cat
-                 FROM ".$tbl_course_user." course_rel_user
-                 LEFT JOIN ".$tbl_course." course
+                 FROM $tbl_course_user course_rel_user
+                 LEFT JOIN $tbl_course course
                  ON course.id = course_rel_user.c_id
-                 LEFT JOIN ".$tbl_user_course_category." user_course_category
+                 LEFT JOIN $tbl_user_course_category user_course_category
                  ON course_rel_user.user_course_cat = user_course_category.id
                  $join_access_url
                  WHERE
@@ -2746,15 +2759,24 @@ class UserManager
         // Get the list of sessions where the user is subscribed
         // This is divided into two different queries
         $sessions = array();
+
+        $sessionLimitRestriction = '';
+        if (!empty($sessionLimit)) {
+            $sessionLimit = (int) $sessionLimit;
+            $sessionLimitRestriction = "LIMIT $sessionLimit";
+        }
+
         $sql = "SELECT DISTINCT s.id, name, access_start_date, access_end_date
-                FROM $tbl_session_user, $tbl_session s
+                FROM $tbl_session_user su INNER JOIN $tbl_session s
+                ON (s.id = su.session_id)
                 WHERE (
-                    session_id = s.id AND
-                    user_id = $user_id AND
-                    relation_type <> ".SESSION_RELATION_TYPE_RRHH."
+                    su.user_id = $user_id AND
+                    su.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
                 )
                 $coachCourseConditions
-                ORDER BY access_start_date, access_end_date, name";
+                ORDER BY access_start_date, access_end_date, name
+                $sessionLimitRestriction
+        ";
 
         $result = Database::query($sql);
         if (Database::num_rows($result)>0) {
@@ -2792,8 +2814,7 @@ class UserManager
 
                 // This query is horribly slow when more than a few thousand
                 // users and just a few sessions to which they are subscribed
-                $id_session = $enreg['id'];
-                $personal_course_list_sql = "SELECT DISTINCT
+                $sql = "SELECT DISTINCT
                         course.code code,
                         course.title i,
                         ".(api_is_western_name_order() ? "CONCAT(user.firstname,' ',user.lastname)" : "CONCAT(user.lastname,' ',user.firstname)")." t,
@@ -2812,13 +2833,12 @@ class UserManager
                         LEFT JOIN $tbl_user as user
                             ON user.id = session_course_user.user_id OR session.id_coach = user.id
                     WHERE
-                        session_course_user.session_id = $id_session AND (
+                        session_course_user.session_id = $session_id AND (
                             (session_course_user.user_id = $user_id AND session_course_user.status = 2)
                             OR session.id_coach = $user_id
                         )
                     ORDER BY i";
-                $course_list_sql_result = Database::query($personal_course_list_sql);
-
+                $course_list_sql_result = Database::query($sql);
                 while ($result_row = Database::fetch_array($course_list_sql_result, 'ASSOC')) {
                     $result_row['course_info'] = api_get_course_info($result_row['code']);
                     $key = $result_row['session_id'].' - '.$result_row['code'];
@@ -2836,7 +2856,7 @@ class UserManager
 
             /* This query is very similar to the above query,
                but it will check the session_rel_course_user table if there are courses registered to our user or not */
-            $personal_course_list_sql = "SELECT DISTINCT
+            $sql = "SELECT DISTINCT
                 course.code code,
                 course.title i, CONCAT(user.lastname,' ',user.firstname) t,
                 email,
@@ -2849,15 +2869,15 @@ class UserManager
                 session.name as session_name,
                 IF((session_course_user.user_id = 3 AND session_course_user.status=2),'2', '5')
             FROM $tbl_session_course_user as session_course_user
-                INNER JOIN $tbl_course AS course
-                ON course.id = session_course_user.c_id AND session_course_user.session_id = $session_id
-                INNER JOIN $tbl_session as session ON session_course_user.session_id = session.id
-                LEFT JOIN $tbl_user as user ON user.id = session_course_user.user_id
+            INNER JOIN $tbl_course AS course
+            ON course.id = session_course_user.c_id AND session_course_user.session_id = $session_id
+            INNER JOIN $tbl_session as session 
+            ON session_course_user.session_id = session.id
+            LEFT JOIN $tbl_user as user ON user.id = session_course_user.user_id
             WHERE session_course_user.user_id = $user_id
             ORDER BY i";
 
-            $course_list_sql_result = Database::query($personal_course_list_sql);
-
+            $course_list_sql_result = Database::query($sql);
             while ($result_row = Database::fetch_array($course_list_sql_result, 'ASSOC')) {
                 $result_row['course_info'] = api_get_course_info($result_row['code']);
                 $key = $result_row['session_id'].' - '.$result_row['code'];
@@ -2898,9 +2918,6 @@ class UserManager
             }
         }
 
-        $personal_course_list = array();
-        $courses = array();
-
         /* This query is very similar to the query below, but it will check the
         session_rel_course_user table if there are courses registered
         to our user or not */
@@ -2921,8 +2938,10 @@ class UserManager
                     $where_access_url
                 ORDER BY sc.position ASC";
 
-        $result = Database::query($sql);
+        $personal_course_list = array();
+        $courses = array();
 
+        $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
             while ($result_row = Database::fetch_array($result, 'ASSOC')) {
                 $result_row['status'] = 5;
@@ -2949,7 +2968,7 @@ class UserManager
                     WHERE
                       s.id = $session_id AND
                       (
-                        (scu.user_id=$user_id AND scu.status=2) OR
+                        (scu.user_id = $user_id AND scu.status=2) OR
                         s.id_coach = $user_id
                       )
                     $where_access_url
@@ -2980,8 +2999,8 @@ class UserManager
             }
         } else {
             //check if user is general coach for this session
-            $s = api_get_session_info($session_id);
-            if ($s['id_coach'] == $user_id) {
+            $sessionInfo = api_get_session_info($session_id);
+            if ($sessionInfo['id_coach'] == $user_id) {
                 $course_list = SessionManager::get_course_list_by_session_id($session_id);
 
                 if (!empty($course_list)) {
@@ -3053,15 +3072,18 @@ class UserManager
                     $return = "<h4>$course</h4>";
                     $return .= '<ul class="thumbnails">';
                 }
+                $extensionList = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'tif'];
                 foreach ($file_list as $file) {
                     if ($resourcetype == "all") {
                         $return .= '<li><a href="'.$web_path.urlencode($file).'" target="_blank">'.htmlentities($file).'</a></li>';
                     } elseif ($resourcetype == "images") {
                         //get extension
                         $ext = explode('.', $file);
-                        if ($ext[1] == 'jpg' || $ext[1] == 'jpeg' || $ext[1] == 'png' || $ext[1] == 'gif' || $ext[1] == 'bmp' || $ext[1] == 'tif') {
-                            $return .= '<li class="span2"><a class="thumbnail" href="'.$web_path.urlencode($file).'" target="_blank">
-                                            <img src="'.$web_path.urlencode($file).'" ></a>
+                        if (isset($ext[1]) && in_array($ext[1], $extensionList)) {
+                            $return .= '<li class="span2">
+                                            <a class="thumbnail" href="'.$web_path.urlencode($file).'" target="_blank">
+                                                <img src="'.$web_path.urlencode($file).'" >
+                                            </a>
                                         </li>';
                         }
                     }
@@ -4219,12 +4241,14 @@ class UserManager
                         FROM $tbl_user u
                         INNER JOIN $tbl_session_rel_user sru ON (sru.user_id = u.id)
                         WHERE
-                            sru.session_id IN (
-                                SELECT DISTINCT(s.id) FROM $tbl_session s INNER JOIN
-                                $tbl_session_rel_access_url
-                                WHERE access_url_id = ".api_get_current_access_url_id()."
-                                $sessionConditionsCoach
-                                UNION (
+                            (
+                                sru.session_id IN (
+                                    SELECT DISTINCT(s.id) FROM $tbl_session s INNER JOIN
+                                    $tbl_session_rel_access_url session_rel_access_rel_user
+                                    ON session_rel_access_rel_user.session_id = s.id
+                                    WHERE access_url_id = ".api_get_current_access_url_id()."
+                                    $sessionConditionsCoach                                  
+                                ) OR sru.session_id IN (
                                     SELECT DISTINCT(s.id) FROM $tbl_session s
                                     INNER JOIN $tbl_session_rel_access_url url
                                     ON (url.session_id = s.id)
@@ -4233,7 +4257,7 @@ class UserManager
                                     WHERE access_url_id = ".api_get_current_access_url_id()."
                                     $sessionConditionsTeacher
                                 )
-                            )
+                            )                            
                             $userConditions
                     )
                     UNION ALL(
@@ -4281,16 +4305,18 @@ class UserManager
         }
 
         $orderBy = null;
-        if (api_is_western_name_order()) {
-            $orderBy .= " ORDER BY firstname, lastname ";
-        } else {
-            $orderBy .= " ORDER BY lastname, firstname ";
-        }
+        if ($getOnlyUserId == false) {
+            if (api_is_western_name_order()) {
+                $orderBy .= " ORDER BY firstname, lastname ";
+            } else {
+                $orderBy .= " ORDER BY lastname, firstname ";
+            }
 
-        if (!empty($column) && !empty($direction)) {
-            // Fixing order due the UNIONs
-            $column = str_replace('u.', '', $column);
-            $orderBy = " ORDER BY $column $direction ";
+            if (!empty($column) && !empty($direction)) {
+                // Fixing order due the UNIONs
+                $column = str_replace('u.', '', $column);
+                $orderBy = " ORDER BY $column $direction ";
+            }
         }
 
         $sql .= $orderBy;

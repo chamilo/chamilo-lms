@@ -498,7 +498,6 @@ class Event
             );
 
             // Check if attempt exists.
-
             $sql = "SELECT exe_id FROM $TBL_TRACK_ATTEMPT
                     WHERE
                         c_id = $course_id AND
@@ -609,6 +608,7 @@ class Event
                 $correct = 0;
             }
         }
+
         $tbl_track_e_hotspot = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
         if ($updateResults) {
             $params = array(
@@ -623,7 +623,6 @@ class Event
                         api_get_user_id(),
                         $exe_id,
                         $question_id,
-                        $answer_id,
                         $answer_id
                     )
                 )
@@ -701,6 +700,11 @@ class Event
                 unset($event_value['picture_uri']);
                 $event_value = serialize($event_value);
             }
+        }
+        // If event is an array then the $event_value_type should finish with
+        // the suffix _array for example LOG_WORK_DATA = work_data_array
+        if (is_array($event_value)) {
+            $event_value = serialize($event_value);
         }
 
         $event_value = Database::escape_string($event_value);

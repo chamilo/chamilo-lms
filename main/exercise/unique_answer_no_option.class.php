@@ -209,8 +209,9 @@ class UniqueAnswerNoOption extends Question
         $i = 666;
         $form->addHtml('<tr>');
 
+        $defaults["counter[$i]"] = '-';
         $defaults['answer[' . $i . ']'] = get_lang('DontKnow');
-        $defaults['weighting[' . $i . ']'] = 0;
+        $defaults['weighting[' . $i . ']'] = '0';
         $defaults['scenario'] = $temp_scenario;
         $renderer = & $form->defaultRenderer();
 
@@ -235,12 +236,13 @@ class UniqueAnswerNoOption extends Question
             'weighting[' . $i . ']'
         );
 
-        $answer_number = $form->addElement('text', 'counter[' . $i . ']', null, 'value="-"');
-        $answer_number->freeze();
+        $form
+            ->addElement('text', 'counter[' . $i . ']', null)
+            ->freeze();
 
         $form->addElement('hidden', 'position[' . $i . ']', '666');
 
-        $form->addElement('radio', 'correct', null, null, $i, 'class="checkbox" style="margin-left: 0em;"');
+        $form->addElement('radio', 'correct', null, null, $i, ['class' => 'checkbox', 'disabled' => true]);
         $form->addElement('html_editor', 'answer[' . $i . ']', null, array(), $editor_config);
 
         $form->addRule('answer[' . $i . ']', get_lang('ThisFieldIsRequired'), 'required');
@@ -248,7 +250,9 @@ class UniqueAnswerNoOption extends Question
 
         //$form->addElement('select', 'destination'.$i, get_lang('SelectQuestion').' : ',$select_question,'multiple');
 
-        $form->addText("weighting[$i]", null, false, ['style' => 'width: 60px;', 'value' => 0, 'readonly' => 'readonly']);
+        $form
+            ->addElement('text', "weighting[$i]", null)
+            ->freeze();
 
         $form->addHTml('</tr>');
         $form->addHtml('</tbody></table>');

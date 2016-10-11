@@ -169,16 +169,16 @@ background: #F38A1E;
 .panel-default{
     border-color: #F3F3F4;
 }
-footer{
+footer.bgfooter{
 background: #2C9BB6;
 color: #FFF;
 border-top: 10px solid #EFEFEF;
 }
-footer a{
+footer.bgfooter a{
   color: #FFFF00;
   font-weight: bold;
 }
-footer a:hover{
+footer.bgfooter a:hover{
   color: #CCC;
 }
 .menu-column .panel-body{

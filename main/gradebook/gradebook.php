@@ -71,9 +71,9 @@ if (isset ($_GET['createallcategories'])) {
 //move a category
 
 if (isset($_GET['movecat'])) {
-    $move_cat = Security::remove_XSS($_GET['movecat']);
+    $move_cat = (int) $_GET['movecat'];
     GradebookUtils::block_students();
-    $cats= Category :: load($move_cat);
+    $cats = Category :: load($move_cat);
     if (!isset ($_GET['targetcat'])) {
         $move_form= new CatForm(CatForm :: TYPE_MOVE,
             $cats[0],
@@ -267,7 +267,7 @@ if ($course_to_crsind && !isset($_GET['confirm'])) {
                  method="post"
                  action="'.api_get_self() .'?confirm='
         .(isset($_GET['movecat']) ? '&movecat=' . Security::remove_XSS($_GET['movecat'])
-            : '&moveeval=' . Security::remove_XSS($_GET['moveeval']) ).'&selectcat=' . $selectcat.'&targetcat=' . Security::remove_XSS($_GET['targetcat']).'">
+            : '&moveeval=' . intval($_GET['moveeval']) ).'&selectcat=' . $selectcat.'&targetcat=' . Security::remove_XSS($_GET['targetcat']).'">
 			   <input type="submit" value="'.'  '.get_lang('Ok').'  '.'">
 			   </form>';
 

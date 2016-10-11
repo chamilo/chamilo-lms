@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CToolIntro;
+
 /**
  * The INTRODUCTION MICRO MODULE is used to insert and edit
  * an introduction section on a Chamilo module or on the course homepage.
@@ -27,8 +29,6 @@
  *
  * @package chamilo.include
  */
-
-use Chamilo\CourseBundle\Entity\CToolIntro;
 
 $TBL_INTRODUCTION = Database::get_course_table(TABLE_TOOL_INTRO);
 $intro_editAllowed = $is_allowed_to_edit;
@@ -70,12 +70,7 @@ if ($intro_editAllowed) {
     if ($intro_cmdUpdate) {
         if ($form->validate()) {
             $form_values = $form->exportValues();
-            $intro_content = Security::remove_XSS(
-                stripslashes(
-                    api_html_entity_decode($form_values['intro_content'])
-                ),
-                COURSEMANAGERLOWSECURITY
-            );
+            $intro_content = $form_values['intro_content'];
 
             $criteria = [
                 'cId' => $course_id,
@@ -90,8 +85,7 @@ if ($intro_editAllowed) {
                     ->findOneBy($criteria);
 
                 if ($toolIntro) {
-                    $toolIntro
-                        ->setIntroText($intro_content);
+                    $toolIntro->setIntroText($intro_content);
                 } else {
                     $toolIntro = new CToolIntro();
                     $toolIntro
@@ -103,10 +97,12 @@ if ($intro_editAllowed) {
                 Database::getManager()->persist($toolIntro);
                 Database::getManager()->flush();
 
-                $introduction_section .= Display::return_message(
-                    get_lang('IntroductionTextUpdated'),
-                    'confirmation',
-                    false
+                Display::addFlash(
+                    Display::return_message(
+                        get_lang('IntroductionTextUpdated'),
+                        'confirmation',
+                        false
+                    )
                 );
             } else {
                 // got to the delete command
@@ -125,7 +121,9 @@ if ($intro_editAllowed) {
                     id='".Database::escape_string($moduleId)."' AND
                     session_id='".intval($session_id)."'";
         Database::query($sql);
-        $introduction_section .= Display::return_message(get_lang('IntroductionTextDeleted'), 'confirmation');
+        Display::addFlash(
+            Display::return_message(get_lang('IntroductionTextDeleted'), 'confirmation')
+        );
     }
 }
 
@@ -134,7 +132,7 @@ if ($intro_editAllowed) {
 /* Retrieves the module introduction text, if exist */
 /* @todo use a lib to query the $TBL_INTRODUCTION table */
 // Getting course intro
-$intro_content = null;
+$intro_content = '';
 $sql = "SELECT intro_text FROM $TBL_INTRODUCTION
         WHERE
             c_id = $course_id AND
@@ -155,7 +153,7 @@ if (!empty($session_id)) {
                 id = '".Database::escape_string($moduleId)."' AND
                 session_id = '".intval($session_id)."'";
     $intro_dbQuery = Database::query($sql);
-    $introSessionContent = null;
+    $introSessionContent = '';
     if (Database::num_rows($intro_dbQuery) > 0) {
         $intro_dbResult = Database::fetch_array($intro_dbQuery);
         $introSessionContent = $intro_dbResult['intro_text'];
@@ -165,6 +163,8 @@ if (!empty($session_id)) {
         $intro_content = $introSessionContent;
     }
 }
+
+$intro_content = Security::remove_XSS($intro_content);
 
 /* Determines the correct display */
 

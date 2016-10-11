@@ -15,7 +15,6 @@ if (isset($_GET['cidReq']) && strlen($_GET['cidReq']) > 0) {
     api_protect_course_script(true);
 }
 
-$_SESSION['who_is_online_counter'] = 2;
 $this_section = SECTION_SOCIAL;
 // table definitions
 
@@ -29,19 +28,11 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) ||
 ) {
 
     if (isset($_GET['cidReq']) && strlen($_GET['cidReq']) > 0) {
-        $user_list = who_is_online_in_this_course(0, 9, api_get_user_id(), api_get_setting('time_limit_whosonline'), $_GET['cidReq']);
+        $user_list = who_is_online_in_this_course(0, MAX_ONLINE_USERS, api_get_user_id(), api_get_setting('time_limit_whosonline'), $_GET['cidReq']);
     } else {
-        $user_list = who_is_online(0, 9);
+        $user_list = who_is_online(0, MAX_ONLINE_USERS);
     }
-    /* if (!isset($_GET['id'])) {
-        if (api_get_setting('allow_social_tool') == 'true') {
-            if (!api_is_anonymous()) {
-                //this include the social menu div
-                $social_left_content = SocialManager::show_social_menu('whoisonline');
-            }
-        }
-    }
-*/
+
     if ($user_list) {
         if (!isset($_GET['id'])) {
             if (api_get_setting('allow_social_tool') == 'true') {

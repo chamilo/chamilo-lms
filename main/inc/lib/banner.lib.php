@@ -1,12 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+
 /**
  * Code
  * @todo use globals or parameters or add this file in the template
  * @package chamilo.include
  */
-
-use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 
 /**
  * Determines the possible tabs (=sections) that are available.
@@ -453,7 +454,7 @@ function menuArray()
             }
         } else {
             if (api_get_user_id() && !api_is_anonymous()) {
-                $list = split("\n", $openMenuTabsLoggedIn);
+                $list = explode("\n", $openMenuTabsLoggedIn);
                 foreach ($list as $link) {
                     $matches = array();
                     $match = preg_match('$href="([^"]*)" target="([^"]*)">([^<]*)</a>$', $link, $matches);
@@ -466,10 +467,8 @@ function menuArray()
                         );
                     }
                 }
-
             } else {
-
-                $list = split("\n", $open);
+                $list = explode("\n", $open);
                 foreach ($list as $link) {
                     $matches = array();
                     $match = preg_match('$href="([^"]*)" target="([^"]*)">([^<]*)</a>$', $link, $matches);
@@ -490,7 +489,6 @@ function menuArray()
         //$pre_lis = '';
         $activeSection = '';
         foreach ($mainNavigation['navigation'] as $section => $navigation_info) {
-
             $key = (!empty($navigation_info['key'])?'tab-'.$navigation_info['key']:'');
 
             if (isset($GLOBALS['this_section'])) {
@@ -506,7 +504,7 @@ function menuArray()
                 if ($GLOBALS['this_section'] == SECTION_CAMPUS) {
                     if (!empty($_GET['include'])) {
                         $name = str_replace(' ', '-', strtolower($navigation_info['title'])) . '_' . $lang . $ext;
-                        if ($_GET['include'] == $name) {
+                        if (strtolower($_GET['include']) == $name) {
                             $activeSection = $section;
                         }
                     }
@@ -675,13 +673,13 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
         }
     }
 
-
     $html = '';
 
     /* Part 4 . Show the teacher view/student view button at the right of the breadcrumb */
     $view_as_student_link = null;
     if ($user_id && isset($course_id)) {
-        if ((api_is_course_admin() || api_is_platform_admin()) && api_get_setting('student_view_enabled') == 'true' && api_get_course_info()) {
+        if ((api_is_course_admin() || api_is_platform_admin() || api_is_coach(null, null, false)) &&
+            api_get_setting('student_view_enabled') === 'true' && api_get_course_info()) {
             $view_as_student_link = api_display_tool_view_option();
         }
     }
@@ -744,7 +742,9 @@ function getOnlineUsersCount($cacheEnabled = false)
     if ($cacheEnabled) {
         $apc = apcu_cache_info(true);
         $apc_end = $apc['start_time'] + $apc['ttl'];
-        if (apcu_exists('my_campus_whoisonline_count_simple') AND (time() < $apc_end) AND apcu_fetch('my_campus_whoisonline_count_simple') > 0 ) {
+        if (apcu_exists('my_campus_whoisonline_count_simple') && (time() < $apc_end) &&
+            apcu_fetch('my_campus_whoisonline_count_simple') > 0
+        ) {
             $number = apcu_fetch('my_campus_whoisonline_count_simple');
         } else {
             $number = who_is_online_count(api_get_setting('time_limit_whosonline'));

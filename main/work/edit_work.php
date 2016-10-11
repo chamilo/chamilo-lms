@@ -61,31 +61,22 @@ if (Gradebook::is_active()) {
 } else {
     $defaults['category_id'] = '';
 }
-
 if (!empty($homework['expires_on'])) {
     $homework['expires_on'] = api_get_local_time($homework['expires_on']);
-    $there_is_a_expire_date = true;
     $defaults['enableExpiryDate'] = true;
+    $defaults['expires_on'] = $homework['expires_on'];
 } else {
     $homework['expires_on'] = null;
-    $there_is_a_expire_date = false;
 }
 
 if (!empty($homework['ends_on'])) {
     $homework['ends_on'] = api_get_local_time($homework['ends_on']);
-    $there_is_a_end_date = true;
+    $defaults['ends_on'] = $homework['ends_on'];
     $defaults['enableEndDate'] = true;
 } else {
     $homework['ends_on'] = null;
-    $there_is_a_end_date = false;
-}
-
-if ($there_is_a_end_date) {
-    $defaults['ends_on'] = $homework['ends_on'];
-}
-
-if ($there_is_a_expire_date) {
-    $defaults['expires_on'] = $homework['expires_on'];
+    $defaults['enableEndDate'] = false;
+    $defaults['ends_on'] = null;
 }
 
 $defaults['add_to_calendar'] = isset($homework['add_to_calendar']) ? $homework['add_to_calendar'] : null;
@@ -95,6 +86,8 @@ $form->addButtonUpdate(get_lang('ModifyDirectory'));
 
 if ($form->validate()) {
     $params = $form->getSubmitValues();
+    $params['enableEndDate'] = isset($params['enableEndDate']) ? true : false;
+    $params['enableExpiryDate'] = isset($params['enableExpiryDate']) ? true : false;
     $workId = $params['work_id'];
     $editCheck = false;
     $workData = get_work_data_by_id($workId);
@@ -106,7 +99,6 @@ if ($form->validate()) {
     }
 
     if ($editCheck) {
-
         updateWork($workData['iid'], $params, $courseInfo, $sessionId);
         updatePublicationAssignment($workId, $params, $courseInfo, $groupId);
         updateDirName($workData, $params['new_dir']);

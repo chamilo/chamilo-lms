@@ -1352,6 +1352,9 @@ function WSCreateUserPasswordCrypted($params)
         return 0;
     }
 
+    $queryExpirationDate = '';
+    if (!empty($params['expiration_date'])) $queryExpirationDate = "expiration_date     = '".Database::escape_string($expiration_date)."', ";
+
     $sql = "INSERT INTO $table_user SET
             lastname            = '".Database::escape_string(trim($lastName))."',
             firstname           = '".Database::escape_string(trim($firstName))."',
@@ -1367,7 +1370,7 @@ function WSCreateUserPasswordCrypted($params)
             phone               = '".Database::escape_string($phone)."',
             language            = '".Database::escape_string($language)."',
             registration_date   = '".api_get_utc_datetime()."',
-            expiration_date     = '".Database::escape_string($expiration_date)."',
+            ".$queryExpirationDate."
             hr_dept_id          = '".Database::escape_string($hr_dept_id)."',
             active              = '".Database::escape_string($active)."'";
     if ($debug) error_log($sql);

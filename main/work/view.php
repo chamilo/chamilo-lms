@@ -144,7 +144,7 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
         $tpl->assign('is_allowed_to_edit', api_is_allowed_to_edit());
 
         $template = $tpl->get_template('work/view.tpl');
-        $content  = $tpl->fetch($template);
+        $content = $tpl->fetch($template);
         $tpl->assign('content', $content);
         $tpl->display_one_col_template();
     } else {

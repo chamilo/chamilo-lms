@@ -12,4 +12,5 @@ $editor = new CkEditor();
 $templates = $editor->simpleFormatTemplates();
 
 $template->assign('templates', $templates);
+header('Content-type: application/x-javascript');
 $template->display('default/javascript/editor/ckeditor/templates.tpl');

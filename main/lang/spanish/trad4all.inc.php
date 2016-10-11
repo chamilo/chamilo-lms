@@ -7883,4 +7883,17 @@ $MoodleFileImportedSuccessfully = "El archivo de curso de Moodle ha sido importa
 $ExtensionInstalledButNotEnabled = "Extensión instalada pero no activada";
 $MailingTestSent = "El correo de prueba ha sido enviado. Se comporta en todos aspectos como los demás correos de Chamilo, pero permite hacer pruebas con correos y cuerpos distintos.";
 $EMailTester = "Probador de correo electrónico";
+$TicketMsgWelcome = "Bienvenido a la sección de TUS tickets. Aquí serás capaz de revisar el estado de todos los tickets que has creado en la sección principal de tickets.";
+$TicketNoHistory = "Sin historial";
+$RecalculateResults = "Recalcular resultados";
+$XParenthesisDeleted = "%s (eliminado)";
+$AvailableAlsoInMainPortal = "Disponible también en el portal principal";
+$EditCourseCategoryToURL = "Editar categorías de cursos de una URL";
+$VisibleToSelf = "Visible para si mismo";
+$VisibleToOthers = "Visible por otros";
+$UpgradeVersion = "Actualizar la versión de Chamilo LMS";
+$CRSTablesIntro = "El script de instalación ha detectado tablas procedentes de versiones anteriores que podrían causar problemas durante el proceso de actualización.
+Por favor, haga clic en el botón de abajo para eliminarlas. Recomendamos seriamente hacer una copia de seguridad completa de estas antes de confirmar este último paso de instalación.";
+$Removing = "Removiendo";
+$CheckForCRSTables = "Comprobar si hay tablas de veriones anteriores";
 ?>

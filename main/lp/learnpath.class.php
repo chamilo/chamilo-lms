@@ -3197,26 +3197,20 @@ class learnpath
                 'browsed' => 'scorm_completed',
             ];
 
-            $scorm_color_background = 'row_odd';
-            $style_item = '';
-
-            if ($color_counter % 2 == 0) {
-                $scorm_color_background = 'row_even';
-            }
+            $rowColor = ' ';
 
             $dirTypes = self::getChapterTypes();
 
             if (in_array($item['type'], $dirTypes)) {
-                $scorm_color_background ='scorm_item_section ';
-                $style_item = '';
+                $rowColor ='scorm_item_section ';
             }
             if ($item['id'] == $this->current) {
-                $scorm_color_background = 'scorm_item_normal '.$scorm_color_background.' scorm_highlight';
+                $rowColor = 'scorm_item_normal '.$rowColor.' scorm_highlight';
             } elseif (!in_array($item['type'], $dirTypes)) {
-                $scorm_color_background = 'scorm_item_normal '.$scorm_color_background.' ';
+                $rowColor = 'scorm_item_normal '.$rowColor.' ';
             }
 
-            $html .= '<div id="toc_' . $item['id'] . '" class="' . $scorm_color_background . ' '.$class_name[$item['status']].' ">';
+            $html .= '<div id="toc_' . $item['id'] . '" class="' . $rowColor . ' ' . $class_name[$item['status']] . '">';
 
             // Learning path title
             $title = $item['title'];
@@ -3234,9 +3228,9 @@ class learnpath
             }
             if (in_array($item['type'], $dirTypes)) {
                 // Chapters
-                $html .= '<div class="'.$style_item.' scorm_section_level_'.$item['level'].'" title="'.$description.'" >';
+                $html .= '<div class="section level_'.$item['level'].'" title="'.$description.'" >';
             } else {
-                $html .= '<div class="'.$style_item.' scorm_item_level_'.$item['level'].' scorm_type_'.learnpath::format_scorm_type_item($item['type']).'" title="'.$description.'" >';
+                $html .= '<div class="item level_'.$item['level'].' scorm_type_'.learnpath::format_scorm_type_item($item['type']).'" title="'.$description.'" >';
                 $html .= '<a name="atoc_'.$item['id'].'"></a>';
             }
 
@@ -3250,7 +3244,7 @@ class learnpath
             }
             $html .= "</div>";
 
-            if ($scorm_color_background != '') {
+            if ($rowColor != '') {
                 $html .= '</div>';
             }
 
@@ -4214,6 +4208,7 @@ class learnpath
 
         $tbl_tool = Database :: get_course_table(TABLE_TOOL_LIST);
         $link = 'lp/lp_controller.php?action=view&lp_id='.$lp_id.'&id_session='.$session_id;
+
         $sql = "SELECT * FROM $tbl_tool
                 WHERE
                     c_id = ".$course_id." AND
@@ -8954,7 +8949,7 @@ class learnpath
                     link_category.category_title as category_title
                 FROM $tbl_link as link
                 LEFT JOIN $linkCategoryTable as link_category
-                ON link.category_id = link_category.id
+                ON (link.category_id = link_category.id AND link.c_id = link_category.c_id)
                 WHERE link.c_id = ".$course_id." $condition_session
                 ORDER BY link_category.category_title ASC, link.title ASC";
         $links = Database::query($sql);
@@ -10698,8 +10693,11 @@ EOD;
                     continue;
                 }
 
-                $exerciseResult = $exerciseResultInfo['exe_result'] * 100 / $exerciseResultInfo['exe_weighting'];
-
+                if (!empty($exerciseResultInfo['exe_weighting'])) {
+                    $exerciseResult = $exerciseResultInfo['exe_result'] * 100 / $exerciseResultInfo['exe_weighting'];
+                } else {
+                    $exerciseResult = 0;
+                }
                 $totalResult += $exerciseResult;
             }
 
@@ -11157,9 +11155,11 @@ EOD;
         $lpItemId = [];
 
         $typeListNotToVerify = self::getChapterTypes();
-        foreach ($this->items as $item) {
-            if (!in_array($item->get_type(), $typeListNotToVerify)) {
-                $lpItemId[] = $item->get_id();
+
+	// Using get_toc() function instead $this->items because returns the correct order of the items
+        foreach ($this->get_toc() as $item) {
+            if (!in_array($item['type'], $typeListNotToVerify)) {
+                $lpItemId[] = $item['id'];
             }
         }
 
@@ -11293,8 +11293,7 @@ EOD;
                 $result = Database::query("SELECT * FROM ".$TBL_DOCUMENT." WHERE c_id = $course_id AND id=$id");
                 $myrow = Database::fetch_array($result);
                 $path = $myrow['path'];
-                $link .= $main_dir_path . 'exercise/showinframes.php?file='.$path.'' .
-                        '&origin='.$origin.'&cid='.$course_code.'&uid='.api_get_user_id().'' .
+                $link .= $main_dir_path . 'exercise/showinframes.php?file='.$path.'&origin='.$origin.'&cid='.$course_code.'&uid='.api_get_user_id().'' .
                         '&learnpath_id='.$learningPathId.'&learnpath_item_id='.$id_in_path.'&lp_view_id='.$lpViewId;
                 break;
             case TOOL_FORUM:

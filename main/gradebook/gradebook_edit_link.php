@@ -11,9 +11,9 @@ api_block_anonymous_users();
 GradebookUtils::block_students();
 $tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 //selected name of database
-$course_id              = GradebookUtils::get_course_id_by_link_id($_GET['editlink']);
-$tbl_forum_thread 		= Database :: get_course_table(TABLE_FORUM_THREAD);
-$tbl_attendance 		= Database :: get_course_table(TABLE_ATTENDANCE);
+$course_id = GradebookUtils::get_course_id_by_link_id($_GET['editlink']);
+$tbl_forum_thread = Database:: get_course_table(TABLE_FORUM_THREAD);
+$tbl_attendance = Database:: get_course_table(TABLE_ATTENDANCE);
 $em = Database::getManager();
 
 $linkarray = LinkFactory :: load($_GET['editlink']);
@@ -25,8 +25,9 @@ if ($link->is_locked() && !api_is_platform_admin()) {
 
 $linkcat  = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : 0;
 $linkedit = isset($_GET['editlink']) ? Security::remove_XSS($_GET['editlink']):'';
-
+$course_code = api_get_course_id();
 $session_id = api_get_session_id();
+
 if ($session_id == 0) {
     $cats = Category:: load(
         null,
@@ -96,7 +97,7 @@ if ($form->validate()) {
         ->execute([
             'final_weight' => $final_weight,
             'course' => $course_id,
-            'link' => intval($_GET['editlink'] ),
+            'link' => intval($_GET['editlink']),
             'type' => LINK_STUDENTPUBLICATION
         ]);
 

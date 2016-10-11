@@ -193,10 +193,11 @@ if ($form->validate()) {
         $sendSubscriptionNotification
     );
 
-    if ($return == strval(intval($return))) {
-		header('Location: resume_session.php?id_session=' . $return);
-		exit();
-	}
+    if ($return) {
+        Display::addFlash(Display::return_message(get_lang('Updated')));
+        header('Location: resume_session.php?id_session=' . $return);
+        exit();
+    }
 }
 
 // display the header

@@ -60,9 +60,15 @@ if (array_key_exists('filename', $work_data)) {
     $filenameCondition = ", filename";
 }
 
+$groupIid = 0;
+if ($groupId) {
+    $groupInfo = GroupManager::get_group_properties($groupId);
+    $groupIid = $groupInfo['iid'];
+}
+
 if (api_is_allowed_to_edit() || api_is_coach()) {
     //Search for all files that are not deleted => visibility != 2
-   $sql = "SELECT DISTINCT
+    $sql = "SELECT DISTINCT
                 url,
                 title,
                 description,
@@ -85,7 +91,7 @@ if (api_is_allowed_to_edit() || api_is_coach()) {
                 work.filetype = 'file' AND
                 props.visibility <> '2' AND
                 work.active IN (0, 1) AND
-                work.post_group_id = $groupId
+                work.post_group_id = $groupIid
                 $sessionCondition
             ";
 
@@ -114,17 +120,17 @@ if (api_is_allowed_to_edit() || api_is_coach()) {
                 $filenameCondition
             FROM $tbl_student_publication AS work
             INNER JOIN $prop_table AS props
-                ON (props.c_id = $course_id AND
-                    work.c_id = $course_id AND
-                    work.id = props.ref)
+            ON (props.c_id = $course_id AND
+                work.c_id = $course_id AND
+                work.id = props.ref)
             WHERE
-                props.tool='work' AND
+                props.tool = 'work' AND
                 work.accepted = 1 AND
                 work.active = 1 AND
                 work.parent_id = $work_id AND
                 work.filetype = 'file' AND
                 props.visibility = '1' AND
-                work.post_group_id = $groupId
+                work.post_group_id = $groupIid
                 $userCondition
             ";
 }
@@ -182,7 +188,7 @@ if (!empty($files)) {
 
     //start download of created file
     $name = $fileName .'.zip';
-    
+
     if (Security::check_abs_path($temp_zip_file, api_get_path(SYS_ARCHIVE_PATH))) {
         DocumentManager::file_send_for_download($temp_zip_file, true, $name);
         @unlink($temp_zip_file);

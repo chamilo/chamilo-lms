@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * These files are a complete rework of the forum. The database structure is
  * based on phpBB but all the code is rewritten. A lot of new functionalities
@@ -22,9 +24,6 @@
  * @package chamilo.forum
  */
 
-use ChamiloSession as Session;
-
-// Including the global initialization file.
 require_once '../inc/global.inc.php';
 $current_course_tool = TOOL_FORUM;
 $htmlHeadXtra[] = '<script>
@@ -75,7 +74,7 @@ $search_forum = isset($_GET['search']) ? Security::remove_XSS($_GET['search']) :
 
 $actions = isset($_GET['action']) ? $_GET['action'] : '';
 
-if ($actions == 'add') {
+if ($actions === 'add') {
     switch ($_GET['content']) {
         case 'forum':
             $interbreadcrumb[] = array(
@@ -115,7 +114,6 @@ Display::display_introduction_section(TOOL_FORUM);
 $form_count = 0;
 
 if (api_is_allowed_to_edit(false, true)) {
-
     //if is called from a learning path lp_id
     $lp_id = isset($_REQUEST['lp_id']) ? intval($_REQUEST['lp_id']) : null;
     handle_forum_and_forumcategories($lp_id);
@@ -154,7 +152,7 @@ $forumCategories = get_forum_categories();
 // display group forum in general forum tool depending to configuration option
 $setting = api_get_setting('display_groups_forum_in_general_tool');
 
-$forum_list = get_forums('', '', $setting == 'true');
+$forum_list = get_forums('', '', $setting === 'true');
 $user_id = api_get_user_id();
 
 /* RETRIEVING ALL GROUPS AND THOSE OF THE USER */
@@ -175,9 +173,7 @@ if (!api_is_anonymous()) {
 }
 
 /* ACTION LINKS */
-
 echo '<div class="actions">';
-
 //if is called from learning path
 if (!empty($_GET['lp_id']) || !empty($_POST['lp_id'])) {
     echo "<a href=\"../lp/lp_controller.php?"
@@ -204,7 +200,7 @@ if (api_is_allowed_to_edit(false, true)) {
         )
         . '</a>';
 
-    if (is_array($forumCategories) and !empty($forumCategories)) {
+    if (is_array($forumCategories) && !empty($forumCategories)) {
         echo '<a href="'.api_get_self().'?'.api_get_cidreq(
             ).'&action=add&content=forum&lp_id='.$lp_id.'"> '.
             Display::return_icon(
@@ -228,8 +224,8 @@ if (!empty($forumsInNoCategory)) {
                 'cat_id' => 0,
                 'session_id' => 0,
                 'visibility' => 1,
-                'cat_comment' => null,
-            ),
+                'cat_comment' => null
+            )
         )
     );
 }
@@ -266,7 +262,7 @@ if (is_array($forumCategories)) {
             $forumCategory['cat_title'],
             array(
                 'href' => $urlCategory,
-                'class' => return_visible_invisible($forumCategory['visibility'])
+                'class' => empty($forumCategory['visibility']) ? 'text-muted' : null
             )
         );
 
@@ -407,7 +403,6 @@ if (is_array($forumCategories)) {
                         $imgForum = '';
                         // Showing the image
                         if (!empty($forum['forum_image'])) {
-
                             $image_path = api_get_path(WEB_COURSE_PATH). api_get_course_path(). '/upload/forum/images/'. $forum['forum_image'];
                             $image_size = api_getimagesize($image_path);
                             $img_attributes = '';
@@ -494,7 +489,7 @@ if (is_array($forumCategories)) {
                                 'href' => 'viewforum.php?' . api_get_cidreq()
                                     . '&gidReq=' . intval($groupid)
                                     . '&forum=' . intval($forum['forum_id']),
-                                'class' => return_visible_invisible(strval(intval($forum['visibility'])))
+                                'class' => empty($forum['visibility']) ? 'text-muted' : null
                             ]
                         );
 
@@ -551,21 +546,23 @@ if (is_array($forumCategories)) {
                         $html .= '<div class="col-md-6">';
 
                         // The last post in the forum.
-                        if ($forum['last_poster_name'] != '') {
+                        if (isset($forum['last_poster_name']) && $forum['last_poster_name'] != '') {
                             $name = $forum['last_poster_name'];
                             $poster_id = 0;
                             $username = "";
                         } else {
-                            $name = api_get_person_name(
-                                $forum['last_poster_firstname'],
-                                $forum['last_poster_lastname']
-                            );
-                            $poster_id = $forum['last_poster_id'];
-                            $userinfo = api_get_user_info($poster_id);
-                            $username = sprintf(
-                                get_lang('LoginX'),
-                                $userinfo['username']
-                            );
+                            if (isset($forum['last_poster_firstname'])) {
+                                $name = api_get_person_name(
+                                    $forum['last_poster_firstname'],
+                                    $forum['last_poster_lastname']
+                                );
+                                $poster_id = $forum['last_poster_id'];
+                                $userinfo = api_get_user_info($poster_id);
+                                $username = sprintf(
+                                    get_lang('LoginX'),
+                                    $userinfo['username']
+                                );
+                            }
                         }
 
                         if (!empty($forum['last_post_id'])) {

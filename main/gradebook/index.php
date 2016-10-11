@@ -164,7 +164,7 @@ if (isset($_GET['createallcategories'])) {
             $cat->set_weight(0);
             $cat->set_visible(0);
             $cat->add();
-            unset ($cat);
+            unset($cat);
         }
     }
     header('Location: '.$_SESSION['gradebook_dest'].'?addallcat=&selectcat=0');
@@ -181,18 +181,17 @@ if (isset($_GET['visiblelog'])) {
 if (isset($_GET['movecat'])) {
     GradebookUtils::block_students();
     $cats= Category :: load($_GET['movecat']);
-    if (!isset ($_GET['targetcat'])) {
+    if (!isset($_GET['targetcat'])) {
         $move_form= new CatForm(
             CatForm :: TYPE_MOVE,
             $cats[0],
             'move_cat_form',
             null,
-            api_get_self() . '?movecat=' . Security::remove_XSS($_GET['movecat'])
-            . '&selectcat=' . $selectCat
+            api_get_self() . '?movecat=' . intval($_GET['movecat']). '&selectcat=' . $selectCat
         );
         if ($move_form->validate()) {
             header('Location: ' . api_get_self() . '?selectcat=' . $selectCat
-                . '&movecat=' . Security::remove_XSS($_GET['movecat'])
+                . '&movecat=' . intval($_GET['movecat'])
                 . '&targetcat=' . $move_form->exportValue('move_cat'));
             exit;
         }
@@ -421,7 +420,7 @@ if (!empty($course_to_crsind) && !isset($_GET['confirm'])) {
         die ('Error: movecat or moveeval not defined');
     }
     $button = '<form name="confirm" method="post" action="'.api_get_self() .'?confirm='
-        .(isset($_GET['movecat']) ? '&movecat=' . Security::remove_XSS($_GET['movecat'])
+        .(isset($_GET['movecat']) ? '&movecat=' . intval($_GET['movecat'])
             : '&moveeval=' . Security::remove_XSS($_GET['moveeval'])).'&selectcat=' . $selectCat.'&targetcat=' . Security::remove_XSS($_GET['targetcat']).'">
 			   <input type="submit" value="'.get_lang('Ok').'">
 			   </form>';
@@ -878,8 +877,8 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null,true))
         /** @var Category $cat */
         foreach ($cats as $cat) {
             $allcat = $cat->get_subcategories($stud_id, $course_code, $session_id);
-            $alleval = $cat->get_evaluations($stud_id);
-            $alllink = $cat->get_links($stud_id, true);
+            $alleval = $cat->get_evaluations($stud_id, false, $course_code, $session_id);
+            $alllink = $cat->get_links($stud_id, true, $course_code, $session_id);
 
             if ($cat->get_parent_id() != 0) {
                 $i++;

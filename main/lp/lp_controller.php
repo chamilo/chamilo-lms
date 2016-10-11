@@ -1,13 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * Controller script. Prepares the common background variables to give to the scripts corresponding to
  * the requested action
  * @package chamilo.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
-use ChamiloSession as Session;
 
 // Flag to allow for anonymous user - needs to be set before global.inc.php.
 $use_anonymous = true;
@@ -327,11 +328,12 @@ if ($debug > 0) error_log('New LP - Passed oLP creation check', 0);
 $is_allowed_to_edit = api_is_allowed_to_edit(false, true, false, false);
 
 if (isset($_SESSION['oLP'])) {
-    $_SESSION['oLP']->update_queue = array(); // Reinitialises array used by javascript to update items in the TOC.
+    $_SESSION['oLP']->update_queue = array();
+    // Reinitialises array used by javascript to update items in the TOC.
 }
 
 if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true') {
-    if ($_REQUEST['action'] != 'list' && $_REQUEST['action'] != 'view') {
+    if (isset($_REQUEST['action']) && !in_array($_REQUEST['action'], ['list', 'view'])) {
         if (!empty($_REQUEST['lp_id'])) {
             $_REQUEST['action'] = 'view';
         } else {
@@ -343,7 +345,6 @@ if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true') {
         if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'view' && !isset($_REQUEST['exeId'])) {
             $_REQUEST['action'] = 'build';
         }
-        //$_SESSION['studentview'] = null;
     }
 }
 

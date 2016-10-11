@@ -165,7 +165,7 @@ function process_uploaded_file($uploaded_file, $show_output = true)
  * @param string $documentDir Example: /var/www/chamilo/courses/ABC/document
  * @param string $uploadPath Example: /folder1/folder2/
  * @param int $userId
- * @param int $groupId, 0 for everybody
+ * @param int $groupId group.id
  * @param int $toUserId, NULL for everybody
  * @param int $unzip 1/0
  * @param string $whatIfFileExists overwrite, rename or warn if exists (default)
@@ -210,6 +210,12 @@ function handle_uploaded_document(
         $sessionId = api_get_session_id();
     } else {
         $sessionId = intval($sessionId);
+    }
+
+    $groupIid = 0;
+    if (!empty($groupId)) {
+        $groupInfo = GroupManager::get_group_properties($groupId);
+        $groupIid = $groupInfo['iid'];
     }
 
     // Just in case process_uploaded_file is not called
@@ -263,7 +269,6 @@ function handle_uploaded_document(
 
             return false;
         } else {
-
             // If the upload path differs from / (= root) it will need a slash at the end
             if ($uploadPath != '/') {
                 $uploadPath = $uploadPath.'/';
@@ -289,10 +294,8 @@ function handle_uploaded_document(
             if ($onlyUploadFile) {
                 $errorResult = moveUploadedFile($uploadedFile, $whereToSave.$cleanName);
                 if ($errorResult) {
-
                     return $whereToSave.$cleanName;
                 } else {
-
                     return $errorResult;
                 }
             }
@@ -301,14 +304,6 @@ function handle_uploaded_document(
                 Based in the clean name we generate a new filesystem name
                 Using the session_id and group_id if values are not empty
             */
-
-            /*$fileExists = DocumentManager::documentExists(
-                $uploadPath.$cleanName,
-                $courseInfo,
-                $sessionId,
-                $groupId
-            );*/
-
             $fileSystemName = DocumentManager::fixDocumentName(
                 $cleanName,
                 'file',
@@ -390,7 +385,7 @@ function handle_uploaded_document(
                                     $documentId,
                                     'DocumentUpdated',
                                     $userId,
-                                    $groupId,
+                                    $groupIid,
                                     $toUserId,
                                     null,
                                     null,
@@ -429,7 +424,7 @@ function handle_uploaded_document(
                                         $documentId,
                                         'DocumentAdded',
                                         $userId,
-                                        $groupId,
+                                        $groupIid,
                                         $toUserId,
                                         null,
                                         null,
@@ -479,7 +474,7 @@ function handle_uploaded_document(
                                     $documentId,
                                     'DocumentAdded',
                                     $userId,
-                                    $groupId,
+                                    $groupIid,
                                     $toUserId,
                                     null,
                                     null,
@@ -489,6 +484,7 @@ function handle_uploaded_document(
                                 // Redo visibility
                                 api_set_default_visibility($documentId, TOOL_DOCUMENT, null, $courseInfo);
                             }
+
                             // If the file is in a folder, we need to update all parent folders
                             item_property_update_on_folder($courseInfo, $uploadPath, $userId);
                             // Display success message to user
@@ -1031,7 +1027,7 @@ function unzip_uploaded_file($uploaded_file, $upload_path, $base_work_dir, $max_
  * @param int    $maxFilledSpace  - amount of bytes to not exceed in the base
  *                                working directory
  * @param int $sessionId
- * @param int $groupId
+ * @param int $groupId group.id
  * @param boolean $output Optional. If no output not wanted on success, set to false.
  *
  * @return boolean true if it succeeds false otherwise
@@ -1208,7 +1204,7 @@ function filter_extension(&$filename)
  * @param string $comment
  * @param int $readonly
  * @param bool $save_visibility
- * @param int $group_id
+ * @param int $group_id group.id
  * @param int $session_id Session ID, if any
  * @param int $userId creator id
  *
@@ -1250,7 +1246,14 @@ function add_document(
         Database::query($sql);
 
         if ($save_visibility) {
-            api_set_default_visibility($documentId, TOOL_DOCUMENT, $group_id, $_course, $session_id, $userId);
+            api_set_default_visibility(
+                $documentId,
+                TOOL_DOCUMENT,
+                $group_id,
+                $_course,
+                $session_id,
+                $userId
+            );
         }
 
         return $documentId;
@@ -1464,7 +1467,7 @@ function search_img_from_html($html_file) {
  * @param   array   $_course current course information
  * @param   int     $user_id current user id
  * @param   int     $session_id
- * @param   int     $to_group_id
+ * @param   int     $to_group_id group.id
  * @param   int     $to_user_id
  * @param   string  $base_work_dir /var/www/chamilo/courses/ABC/document
  * @param   string  $desired_dir_name complete path of the desired name
@@ -1554,6 +1557,12 @@ function create_unexisting_directory(
                         )
             ";
 
+            $groupIid = 0;
+            if (!empty($to_group_id)) {
+                $groupInfo = GroupManager::get_group_properties($to_group_id);
+                $groupIid = $groupInfo['iid'];
+            }
+
             $rs = Database::query($sql);
             if (Database::num_rows($rs) == 0) {
                 $document_id = add_document(
@@ -1584,7 +1593,7 @@ function create_unexisting_directory(
                             $document_id,
                             $visibilities[$visibility],
                             $user_id,
-                            $to_group_id,
+                            $groupIid,
                             $to_user_id,
                             null,
                             null,
@@ -1597,7 +1606,7 @@ function create_unexisting_directory(
                             $document_id,
                             'FolderCreated',
                             $user_id,
-                            $to_group_id,
+                            $groupIid,
                             $to_user_id,
                             null,
                             null,
@@ -1644,7 +1653,7 @@ function create_unexisting_directory(
  * @param string $base_work_dir
  * @param string $missing_files_dir
  * @param int $user_id
- * @param int $max_filled_space
+ * @param int $to_group_id group.id
  */
 function move_uploaded_file_collection_into_directory(
     $_course,
@@ -1750,209 +1759,6 @@ function create_link_file($file_path, $url)
 }
 
 /**
- * Opens html file $full_file_name;
- * Parses the hyperlinks; and
- * Writes the result back in the html file.
- *
- * @author Roan Embrechts
- * @version 0.1
- */
-function api_replace_links_in_html($upload_path, $full_file_name)
-{
-    // Open the file
-    if (file_exists($full_file_name)) {
-        $fp = fopen($full_file_name, 'r');
-        $buffer = fread ($fp, filesize ($full_file_name));
-
-        // Parse the contents
-        $new_html_content = api_replace_links_in_string($upload_path, $buffer);
-
-        // Write the result
-        $fp = fopen($full_file_name, 'w');
-        fwrite($fp, $new_html_content);
-    }
-}
-
-/**
-deprecated: use api_replace_parameter instead
-
-Parse the buffer string provided as parameter
-Replace the a href tags so they are displayed correctly.
-- works for files in root and subdirectories
-- replace relative hyperlinks to use showinframes.php?file= ...
-- add target="_self" to all absolute hyperlinks
-- leave local anchors untouched (e.g. #CHAPTER1)
-- leave links with download.php and showinframes.php untouched
-
-@author Roan Embrechts
-@version 0.6
- */
-function api_replace_links_in_string($upload_path, $buffer) {
-    // Search for hyperlinks
-    $matches = array();
-    if (preg_match_all('/<a[\s]*href[^<]*>/i', $buffer, $matches)) {
-        $tag_list = $matches[0];
-    }
-
-    // Search the filepath of all detected <a href> tags
-    if (sizeof($tag_list) > 0) {
-        $file_path_list = array();
-        $href_list = array();
-
-        foreach ($tag_list as & $this_tag) {
-            /* Match case insensitive, the stuff between the two ~ :
-                a href = <exactly one quote><one or more non-quotes><exactly one ">
-                e.g. a href="www.google.be", A HREF =   "info.html"
-                to match ["] escape the " or else PHP interprets it
-                [\"]{1} --> matches exactly one "
-                +	1 or more (like * is 0 or more)
-                [\s]* matches whitespace
-                $matches contains captured subpatterns
-                the only one here is ([^\"]+) --> matches[1]
-            */
-            if (preg_match("~a href[\s]*=[\s]*[\"]{1}([^\"]+)[\"]{1}~i", $this_tag, $matches)) {
-                $file_path_list[] = $matches[1]; // older
-                $href_list[] = $matches[0]; // to also add target="_self"
-            }
-        }
-    }
-
-    // Replace the original hyperlinks by the correct ones
-    for ($count = 0; $count < sizeof($href_list); $count++) {
-
-        $replace_what[$count] = $href_list[$count];
-
-        $is_absolute_hyperlink = strpos($replace_what[$count], 'http');
-        $is_local_anchor = strpos($replace_what[$count], "#");
-        if (!$is_absolute_hyperlink && !$is_local_anchor) {
-            // This is a relative hyperlink
-            if ((strpos($replace_what[$count], 'showinframes.php') === false) &&
-                (strpos($replace_what[$count], 'download.php') === false)
-            ) {
-                // Fix the link to use showinframes.php
-                $replace_by[$count] = 'a href = "showinframes.php?file='.$upload_path.'/'.$file_path_list[$count].'" target="_self"';
-            } else {
-                // URL has been already fixed, leave it as is
-                $replace_by[$count] = $replace_what[$count];
-            }
-        } elseif ($is_absolute_hyperlink) {
-            $replace_by[$count] = 'a href="'.$file_path_list[$count].'" target ="_self"';
-        } else {
-            // Don't change anything
-            $replace_by[$count] = $replace_what[$count];
-        }
-        //Display::display_normal_message('Link replaced by ' . $replace_by[$count]); // debug
-    }
-
-    $buffer = str_replace($replace_what, $replace_by, $buffer);
-    return $buffer;
-}
-
-/**
-EXPERIMENTAL - function seems to work, needs more testing
-
-@param $upload_path is the path where the document is stored, like "/archive/"
-if it is the root level, the function expects "/"
-otherwise "/path/"
-
-This function parses all tags with $param_name parameters.
-so the tags are displayed correctly.
-
---------------
-Algorithm v1.0
---------------
-given a string and a parameter,
- * OK find all tags in that string with the specified parameter (like href or src)
- * OK for every one of these tags, find the src|href|... part to edit it
- * OK change the src|href|... part to use download.php (or showinframes.php)
- * OK do some special stuff for hyperlinks
-
-Exceptions
- * OK if download.php or showinframes.php is already in the tag, leave it alone
- * OK if mailto is in the tag, leave it alone
- * OK if the src|href param contains http://, it's absolute --> leave it alone
-
-Special for hyperlinks (a href...)
- * OK add target="_self"
- * OK use showinframes.php instead of download.php
-
-@author Roan Embrechts
-@version 1.1
- */
-function api_replace_parameter($upload_path, $buffer, $param_name = 'src')
-{
-    // Search for tags with $param_name as a parameter
-
-    /*
-    // [\s]*	matches whitespace
-    // [\"=a-z] matches ", = and a-z
-    // ([\s]*[a-z]*)*	matches all whitespace and normal alphabet
-    //					characters a-z combinations but seems too slow
-    //	perhaps ([\s]*[a-z]*) a maximum number of times ?
-    // [\s]*[a-z]*[\s]*	matches many tags
-    // the ending "i" means to match case insensitive (a matches a and A)
-    */
-    $matches = array();
-    if (preg_match_all('/<[a-z]+[^<]*'.$param_name.'[^<]*>/i', $buffer, $matches)) {
-        $tag_list = $matches[0];
-    }
-
-    // Search the filepath of parameter $param_name in all detected tags
-
-    if (sizeof($tag_list) > 0) {
-        $file_path_list = array();
-        $href_list = array();
-
-        foreach ($tag_list as & $this_tag) {
-            //Display::display_normal_message(htmlentities($this_tag)); //debug
-            if ( preg_match("~".$param_name."[\s]*=[\s]*[\"]{1}([^\"]+)[\"]{1}~i", $this_tag, $matches)) {
-                $file_path_list[] = $matches[1]; // older
-                $href_list[] = $matches[0]; // to also add target="_self"
-            }
-        }
-    }
-
-    // Replace the original tags by the correct ones
-
-    for ($count = 0; $count < sizeof($href_list); $count++) {
-        $replace_what[$count] = $href_list[$count];
-
-        $is_absolute_hyperlink = strpos($replace_what[$count], 'http');
-        $is_local_anchor = strpos($replace_what[$count], '#');
-        if (!$is_absolute_hyperlink && !$is_local_anchor) {
-            if ((strpos($replace_what[$count], 'showinframes.php') === false)
-                && (strpos($replace_what[$count], 'download.php') === false)
-                && (strpos($replace_what[$count], 'mailto') === false)) {
-
-                // Fix the link to use download.php or showinframes.php
-                if (preg_match("/<a([\s]*[\"\/:'=a-z0-9]*){5}href[^<]*>/i", $tag_list[$count])) {
-                    $replace_by[$count] = " $param_name =\"showinframes.php?file=" . $upload_path.$file_path_list[$count]."\" target=\"_self\" ";
-                } else {
-                    $replace_by[$count] = " $param_name =\"download.php?doc_url=" . $upload_path.$file_path_list[$count]."\" ";
-                }
-            } else {
-                // "mailto" or url already fixed, leave as is
-                //$message .= "Already fixed or contains mailto: ";
-                $replace_by[$count] = $replace_what[$count];
-            }
-        } elseif ($is_absolute_hyperlink) {
-            //$message .= "Absolute hyperlink, don't change, add target=_self: ";
-            $replace_by[$count] = " $param_name=\"" . $file_path_list[$count] . "\" target =\"_self\"";
-        } else {
-            // Don't change anything
-            //$message .= "Local anchor, don't change: ";
-            $replace_by[$count] = $replace_what[$count];
-        }
-        //$message .= "In tag $count, <b>" . htmlentities($tag_list[$count])
-        //	. "</b>, parameter <b>" . $replace_what[$count] . "</b> replaced by <b>" . $replace_by[$count] . "</b><br>"; //debug
-    }
-    //if ($message) api_display_debug_info($message); //debug
-    $buffer = str_replace($replace_what, $replace_by, $buffer);
-
-    return $buffer;
-}
-
-/**
  * Checks the extension of a file, if it's .htm or .html
  * we use search_img_from_html to get all image paths in the file
  *
@@ -2018,7 +1824,7 @@ function build_missing_files_form($missing_files, $upload_path, $file_name)
  * @param string $base_work_dir
  * @param string $folderPath
  * @param int $sessionId
- * @param int $groupId
+ * @param int $groupId group.id
  * @param bool $output
  * @param array $parent
  * @param string $uploadPath

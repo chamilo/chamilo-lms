@@ -2758,7 +2758,7 @@ class learnpathItem
                             'LearnpathPrereqNotCompleted'
                         );
                     }
-                    
+
                     return $returnstatus;
                 }
             }
@@ -3614,7 +3614,7 @@ class learnpathItem
                          WHERE c_id = ' . $course_id . '
                             AND lp_item_id="' . $this->db_id . '"
                             AND lp_view_id="' . $this->view_id . '"
-                            AND view_count="' . $this->attempt_id . '" ;';
+                            AND view_count="' . $this->get_attempt_id() . '"';
         $result = Database::query($get_view_sql);
         $row = Database::fetch_array($result);
 
@@ -3663,7 +3663,7 @@ class learnpathItem
                     WHERE c_id = $course_id
                       AND lp_item_id = {$this->db_id}
                       AND lp_view_id = {$this->view_id}
-                      AND view_count = {$this->attempt_id}";
+                      AND view_count = {$this->get_attempt_id()}";
             if (self::debug > 0) {
                 error_log($sql);
             }
@@ -4132,10 +4132,7 @@ class learnpathItem
                     }
                     foreach ($this->interactions as $index => $interaction) {
                         $correct_resp = '';
-                        if (is_array(
-                                $interaction[4]
-                            ) && !empty($interaction[4][0])
-                        ) {
+                        if (is_array($interaction[4] ) && !empty($interaction[4][0])) {
                             foreach ($interaction[4] as $resp) {
                                 $correct_resp .= $resp . ',';
                             }
@@ -4160,6 +4157,16 @@ class learnpathItem
                                         )
                                     ";
                         $iva_res = Database::query($iva_sql);
+
+                        $interaction[0] = isset($interaction[0]) ? $interaction[0] : '';
+                        $interaction[1] = isset($interaction[1]) ? $interaction[1] : '';
+                        $interaction[2] = isset($interaction[2]) ? $interaction[2] : '';
+                        $interaction[3] = isset($interaction[3]) ? $interaction[3] : '';
+                        $interaction[4] = isset($interaction[4]) ? $interaction[4] : '';
+                        $interaction[5] = isset($interaction[5]) ? $interaction[5] : '';
+                        $interaction[6] = isset($interaction[6]) ? $interaction[6] : '';
+                        $interaction[7] = isset($interaction[7]) ? $interaction[7] : '';
+
                         // id(0), type(1), time(2), weighting(3), correct_responses(4), student_response(5), result(6), latency(7)
                         if (Database::num_rows($iva_res) > 0) {
                             // Update (or don't).
@@ -4186,7 +4193,6 @@ class learnpathItem
                                     )
                                 )
                             );
-
                         } else {
                             // Insert new one.
                             $params = array(

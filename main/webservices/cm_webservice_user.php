@@ -13,36 +13,30 @@ class WSCMUser extends WSCM {
 
     public function find_id_user($username, $password, $name)
     {
-        if($this->verifyUserPass($username, $password) == "valid")
-        {
-
+         if ($this->verifyUserPass($username, $password) == "valid") {
             $listResult = "#";
 
             $listArrayResult = Array();
             $listArray = Array();
 
             $list = $this->get_user_list_like_start(array('firstname'=>$name), array('firstname'));
-            foreach ($list as $userData)
-            {
-                $listArray[] = $userData['user_id'];
-            }
+             foreach ($list as $userData) {
+                 $listArray[] = $userData['user_id'];
+             }
 
             $list = $this->get_user_list_like_start(array('lastname'=>$name), array('firstname'));
-            foreach ($list as $userData)
-            {
-                $listArray[] = $userData['user_id'];
-            }
+             foreach ($list as $userData) {
+                 $listArray[] = $userData['user_id'];
+             }
 
             $list = $this->get_user_list_like_start(array('email'=>$name), array('firstname'));
-            foreach ($list as $userData)
-            {
+            foreach ($list as $userData) {
                 $listArray[] = $userData['user_id'];
             }
 
-            $listArrayResult = array_unique($listArray);
-            foreach($listArrayResult as $result)
-            {
-                $listResult .= $result . "#";
+                $listArrayResult = array_unique($listArray);
+            foreach ($listArrayResult as $result) {
+                $listResult .= $result."#";
             }
 
             return $listResult;
@@ -171,15 +165,4 @@ class WSCMUser extends WSCM {
         }
         return $return_array;
     }
-
-
 }
-
-/*
-echo "aqui: ";
-$aqui = new WSCMUser();
-
-//print_r($aqui->unreadMessage("aluno", "e695f51fe3dd6b7cf2be3188a614f10f"));
-//print_r($aqui->send_invitation("marco", "c4ca4238a0b923820dcc509a6f75849b", "1", "oia ai"));
-print_r($aqui->denied_invitation("admin", "c4ca4238a0b923820dcc509a6f75849b", "3"));
-*/

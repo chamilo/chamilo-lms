@@ -20,8 +20,13 @@ if ($document_id) {
 }
 
 //Check user visibility
-//$is_visible = DocumentManager::is_visible_by_id($document_id, $course_info, api_get_session_id(), api_get_user_id());
-$is_visible = DocumentManager::check_visibility_tree($document_id, api_get_course_id(), api_get_session_id(), api_get_user_id(), api_get_group_id());
+$is_visible = DocumentManager::check_visibility_tree(
+    $document_id,
+    api_get_course_id(),
+    api_get_session_id(),
+    api_get_user_id(),
+    api_get_group_id()
+);
 
 if (!api_is_allowed_to_edit() && !$is_visible) {
     api_not_allowed(true);

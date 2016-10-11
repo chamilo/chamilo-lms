@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
-
 require_once '../inc/global.inc.php';
 require_once 'work.lib.php';
 
@@ -51,7 +49,6 @@ switch ($action) {
 }
 
 if (empty($docId)) {
-
     Display :: display_header(null);
 
     $documents = getAllDocumentToWork($workId, api_get_course_int_id());
@@ -83,7 +80,6 @@ if (empty($docId)) {
     echo $documentTree;
     echo '<hr /><div class="clear"></div>';
 } else {
-
     $documentInfo = DocumentManager::get_document_data_by_id($docId, $courseInfo['code']);
     $url = api_get_path(WEB_CODE_PATH).'work/add_document.php?id='.$workId.'&document_id='.$docId.'&'.api_get_cidreq();
     $form = new FormValidator('add_doc', 'post', $url);

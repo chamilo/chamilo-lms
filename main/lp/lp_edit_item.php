@@ -161,7 +161,7 @@ $(document).ready(function() {
 
 echo $_SESSION['oLP']->build_action_menu();
 
-echo '<div class="row" style="overflow:hidden">';
+echo '<div class="row">';
 echo '<div id="lp_sidebar" class="col-md-4">';
 $path_item = isset($_GET['path_item']) ? $_GET['path_item'] : 0;
 $path_item = Database::escape_string($path_item);

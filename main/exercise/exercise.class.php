@@ -3979,7 +3979,7 @@ class Exercise
 
                             if ($show_result) {
                                 if ($showTotalScoreAndUserChoicesInLastAttempt === false) {
-                                    $user_answer = '';
+                                    $s_answer_label = '';
                                 }
                                 echo '<tr>';
                                 echo '<td>' . $s_answer_label . '</td>';

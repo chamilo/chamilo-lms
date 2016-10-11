@@ -6368,8 +6368,17 @@ function api_get_js($file) {
 /**
  * Returns the <script> HTML tag
  */
-function api_get_asset($file) {
+function api_get_asset($file)
+{
     return '<script type="text/javascript" src="'.api_get_path(WEB_PATH).'web/assets/'.$file.'"></script>'."\n";
+}
+
+/**
+ * Returns the <script> HTML tag
+ */
+function api_get_css_asset($file, $media = 'screen')
+{
+    return '<link href="'.api_get_path(WEB_PATH).'web/assets/'.$file.'" rel="stylesheet" media="'.$media.'" type="text/css" />'."\n";
 }
 
 /**

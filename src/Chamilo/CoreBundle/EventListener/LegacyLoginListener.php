@@ -56,7 +56,12 @@ class LegacyLoginListener implements EventSubscriberInterface
             if (!$isGranted) {
                 if (isset($_SESSION) && isset($_SESSION['_user'])) {
                     if ($_SESSION['_user']['active'] == 1) {
+                        // Not login for anonymous
+                        if ($_SESSION['_user']['status'] == 6) {
+                            return false;
+                        }
                         $username = $_SESSION['_user']['username'];
+
                         $criteria = ['username' => $username];
                         /** @var User $user */
                         $user = $this->container->get('sonata.user.user_manager')->findOneBy($criteria);

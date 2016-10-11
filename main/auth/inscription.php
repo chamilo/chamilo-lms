@@ -642,7 +642,7 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
     if (!api_is_platform_admin()) {
         if (api_get_setting('show_terms_if_profile_completed') === 'true') {
             $userInfo = api_get_user_info(api_get_user_id(), false, false, true);
-            if ($userInfo) {
+            if ($userInfo && $userInfo['status'] != ANONYMOUS) {
                 $termActivated = false;
                 $values = $userInfo['extra'];
                 foreach ($values as $value) {
@@ -673,7 +673,6 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
     $language = api_get_interface_language();
     $language = api_get_language_id($language);
     $term_preview = LegalManager::get_last_condition($language);
-
 
     if (!$term_preview) {
         //we load from the platform

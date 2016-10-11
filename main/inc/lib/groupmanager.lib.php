@@ -1418,7 +1418,7 @@ class GroupManager
         $group_id = intval($group_id);
         $course_id = api_get_course_int_id();
 
-        $sql = "SELECT self_unregistration_allowed
+        $sql = "SELECT status, self_unregistration_allowed
                 FROM $table_group
                 WHERE c_id = $course_id AND iid = $group_id";
         $result = Database::query($sql);

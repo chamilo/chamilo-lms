@@ -3,7 +3,6 @@
 
 use ChamiloSession as Session;
 
-
 /**
 *	Code library for showing Who is online
 *
@@ -60,11 +59,11 @@ function preventMultipleLogin($userId)
     $userId = intval($userId);
     if (api_get_setting('prevent_multiple_simultaneous_login') === 'true') {
         if (!empty($userId) && !api_is_anonymous()) {
-
             $isFirstLogin = Session::read('first_user_login');
             if (empty($isFirstLogin)) {
                 $sql = "SELECT login_id FROM $table
-                        WHERE login_user_id = " . $userId . " LIMIT 1";
+                        WHERE login_user_id = $userId 
+                        LIMIT 1";
 
                 $result = Database::query($sql);
                 $loginData = array();
@@ -184,13 +183,14 @@ function user_is_online($user_id)
     $access_url_id = api_get_current_access_url_id();
     $time_limit = api_get_setting('time_limit_whosonline');
 
-    $online_time = time() - $time_limit*60;
+    $online_time = time() - $time_limit * 60;
     $limit_date = api_get_utc_datetime($online_time);
     $user_id = intval($user_id);
 
-    $query = " SELECT login_user_id,login_date
+    $query = " SELECT login_user_id, login_date
                FROM $track_online_table track
-               INNER JOIN $table_user u ON (u.id=track.login_user_id)
+               INNER JOIN $table_user u 
+               ON (u.id=track.login_user_id)
                WHERE
                     track.access_url_id =  $access_url_id AND
                     login_date >= '".$limit_date."'  AND

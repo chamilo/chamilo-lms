@@ -16,11 +16,17 @@
               {{ announcement.title }}
           </div>
           <div class="carousel-content">
-              {{ announcement.content }}
+              {% if announcement.readMore %}
+                <div class="block-text">
+                    {{ announcement.content }}
+                    <a href="{{ _p.web }}news_list.php?id={{ announcement.id }}">{{ "More" | get_lang }}</a>
+                </div>
+              {% else %}  
+                <div class="block-image">
+                    {{ announcement.content }}
+                </div>
+              {% endif %}
           </div>
-            {% if announcement.readMore %}
-                <a href="{{ _p.web }}news_list.php?id={{ announcement.id }}">{{ "More" | get_lang }}</a>
-            {% endif %}
         </div>
     {% endfor %}
   </div>

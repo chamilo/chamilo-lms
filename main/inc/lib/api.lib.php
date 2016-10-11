@@ -6367,6 +6367,7 @@ function api_get_js($file) {
 
 /**
  * Returns the <script> HTML tag
+ * @return string
  */
 function api_get_asset($file)
 {
@@ -6375,6 +6376,7 @@ function api_get_asset($file)
 
 /**
  * Returns the <script> HTML tag
+ * @return string
  */
 function api_get_css_asset($file, $media = 'screen')
 {

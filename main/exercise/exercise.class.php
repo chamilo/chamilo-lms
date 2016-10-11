@@ -134,7 +134,8 @@ class Exercise
 
             return false;
         }
-        $sql = "SELECT * FROM $TBL_EXERCISES WHERE c_id = ".$this->course_id." AND id = ".$id;
+        $sql = "SELECT * FROM $TBL_EXERCISES 
+                WHERE c_id = ".$this->course_id." AND id = ".$id;
         $result = Database::query($sql);
 
         // if the exercise has been found
@@ -194,12 +195,10 @@ class Exercise
                 $this->start_time = $object->start_time;
             }
 
-            //control time
+            // Control time
             $this->expired_time = $object->expired_time;
 
-            //Checking if question_order is correctly set
-
-            //$this->questionList     = $this->selectQuestionList(true);
+            // Checking if question_order is correctly set
             if ($parseQuestionList) {
                 $this->setQuestionList();
             }

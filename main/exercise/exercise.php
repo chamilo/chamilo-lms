@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * 	Exercise list: This script shows the list of exercises for administrators and students.
  * 	@package chamilo.exercise
@@ -10,8 +12,6 @@
  * 	@author Julio Montoya <gugli100@gmail.com>, lots of cleanup + several improvements
  * Modified by hubert.borderiou (question category)
  */
-
-use \ChamiloSession as Session;
 
 // including the global library
 require_once '../inc/global.inc.php';
@@ -25,9 +25,6 @@ $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/qtip2/j
 
 // Access control
 api_protect_course_script(true);
-
-// including additional libraries
-
 require_once 'hotpotatoes.lib.php';
 
 /* 	Constants and variables */
@@ -78,7 +75,7 @@ $origin = isset($_REQUEST['origin']) ? Security::remove_XSS($_REQUEST['origin'])
 $choice = isset($_REQUEST['choice']) ? Security::remove_XSS($_REQUEST['choice']) : null;
 
 $hpchoice = isset($_REQUEST['hpchoice']) ? Security::remove_XSS($_REQUEST['hpchoice']) : null;
-$exerciseId = isset($_REQUEST['exerciseId']) ? Security::remove_XSS($_REQUEST['exerciseId']) : null;
+$exerciseId = isset($_REQUEST['exerciseId']) ? (int) $_REQUEST['exerciseId'] : null;
 $file = isset($_REQUEST['file']) ? Database::escape_string($_REQUEST['file']) : null;
 
 $learnpath_id = isset($_REQUEST['learnpath_id']) ? intval($_REQUEST['learnpath_id']) : null;
@@ -389,7 +386,8 @@ $condition_session = api_get_session_condition($session_id, true, true);
 
 // Only for administrators
 if ($is_allowedToEdit) {
-    $total_sql = "SELECT count(iid) as count FROM $TBL_EXERCISES
+    $total_sql = "SELECT count(iid) as count 
+                  FROM $TBL_EXERCISES
                   WHERE c_id = $courseId AND active<>'-1' $condition_session ";
     $sql = "SELECT * FROM $TBL_EXERCISES
             WHERE c_id = $courseId AND active<>'-1' $condition_session
@@ -397,7 +395,8 @@ if ($is_allowedToEdit) {
             LIMIT ".$from.",".$limit;
 } else {
     // Only for students
-    $total_sql = "SELECT count(iid) as count FROM $TBL_EXERCISES
+    $total_sql = "SELECT count(iid) as count 
+                  FROM $TBL_EXERCISES
                   WHERE c_id = $courseId AND active = '1' $condition_session ";
     $sql = "SELECT * FROM $TBL_EXERCISES
             WHERE c_id = $courseId AND
@@ -500,15 +499,14 @@ $i = 1;
 $online_icon = Display::return_icon('online.png', get_lang('Visible'), array('width' => '12px'));
 $offline_icon = Display::return_icon('offline.png', get_lang('Invisible'), array('width' => '12px'));
 
-$exercise_list = array();
-$exercise_obj = new Exercise();
+$exerciseList = array();
 $list_ordered = null;
 
 while ($row = Database :: fetch_array($result, 'ASSOC')) {
-    $exercise_list[$row['iid']] = $row;
+    $exerciseList[$row['iid']] = $row;
 }
 
-if (!empty($exercise_list) &&
+if (!empty($exerciseList) &&
     api_get_setting('exercise_invisible_in_session') === 'true'
 ) {
     if (!empty($sessionId)) {
@@ -523,7 +521,7 @@ if (!empty($exercise_list) &&
 
         if ($changeDefaultVisibility) {
             // Check exercise
-            foreach ($exercise_list as $exercise) {
+            foreach ($exerciseList as $exercise) {
                 if ($exercise['session_id'] == 0) {
                     $visibilityInfo = api_get_item_property_info(
                         $courseInfo,
@@ -557,38 +555,34 @@ if (!empty($exercise_list) &&
 if (isset($list_ordered) && !empty($list_ordered)) {
     $new_question_list = array();
     foreach ($list_ordered as $exercise_id) {
-        if (isset($exercise_list[$exercise_id])) {
-            $new_question_list[] = $exercise_list[$exercise_id];
+        if (isset($exerciseList[$exercise_id])) {
+            $new_question_list[] = $exerciseList[$exercise_id];
         }
     }
-    $exercise_list = $new_question_list;
+    $exerciseList = $new_question_list;
 }
 
 $tableRows = [];
 
 /*  Listing exercises  */
-if (!empty($exercise_list)) {
+if (!empty($exerciseList)) {
     if ($origin != 'learnpath') {
         //avoid sending empty parameters
         $myorigin = (empty($origin) ? '' : '&origin='.$origin);
         $mylpid = (empty($learnpath_id) ? '' : '&learnpath_id='.$learnpath_id);
         $mylpitemid = (empty($learnpath_item_id) ? '' : '&learnpath_item_id='.$learnpath_item_id);
-
-        // $token = Security::get_token(); // has been moved above
-
         $i = 1;
-
-        foreach ($exercise_list as $row) {
+        foreach ($exerciseList as $row) {
             $my_exercise_id = $row['id'];
 
-            $exercise_obj = new Exercise();
-            $exercise_obj->read($my_exercise_id);
+            $exercise = new Exercise();
+            $exercise->read($my_exercise_id);
 
-            if (empty($exercise_obj->id)) {
+            if (empty($exercise->id)) {
                 continue;
             }
 
-            $locked = $exercise_obj->is_gradebook_locked;
+            $locked = $exercise->is_gradebook_locked;
             $i++;
             //validacion when belongs to a session
             $session_img = api_get_session_image($row['session_id'], $userInfo['status']);
@@ -642,7 +636,7 @@ if (!empty($exercise_list)) {
                 }
             }
 
-            $cut_title = $exercise_obj->getCutTitle();
+            $cut_title = $exercise->getCutTitle();
             $alt_title = '';
             if ($cut_title != $row['title']) {
                 $alt_title = ' title = "'.$row['title'].'" ';
@@ -651,7 +645,7 @@ if (!empty($exercise_list)) {
             // Teacher only
             if ($is_allowedToEdit) {
                 $lp_blocked = null;
-                if ($exercise_obj->exercise_was_added_in_lp == true) {
+                if ($exercise->exercise_was_added_in_lp == true) {
                     $lp_blocked = Display::div(
                         get_lang('AddedToLPCannotBeAccessed'),
                         array('class' => 'lp_content_type_label')
@@ -668,7 +662,7 @@ if (!empty($exercise_list)) {
                 if (!empty($sessionId)) {
                     $setting = api_get_configuration_value('show_hidden_exercise_added_to_lp');
                     if ($setting) {
-                        if ($exercise_obj->exercise_was_added_in_lp == false) {
+                        if ($exercise->exercise_was_added_in_lp == false) {
                             if ($visibility == 0) {
                                 continue;
                             }
@@ -771,7 +765,7 @@ if (!empty($exercise_list)) {
 
                     // Visible / invisible
                     // Check if this exercise was added in a LP
-                    if ($exercise_obj->exercise_was_added_in_lp == true) {
+                    if ($exercise->exercise_was_added_in_lp == true) {
                         $actions .= Display::return_icon('invisible.png', get_lang('AddedToLPCannotBeAccessed'), '', ICON_SIZE_SMALL);
                     } else {
                         if ($row['active'] == 0 || $visibility == 0) {
@@ -788,7 +782,7 @@ if (!empty($exercise_list)) {
                     $actions = Display::return_icon('edit_na.png', get_lang('ExerciseEditionNotAvailableInSession'));
 
                     // Check if this exercise was added in a LP
-                    if ($exercise_obj->exercise_was_added_in_lp == true) {
+                    if ($exercise->exercise_was_added_in_lp == true) {
                         $actions .= Display::return_icon('invisible.png', get_lang('AddedToLPCannotBeAccessed'), '', ICON_SIZE_SMALL);
                     } else {
 
@@ -1151,14 +1145,13 @@ if (isset($attribute['path']) && is_array($attribute['path'])) {
 
                     $item .= Display::tag('td', $actions, array('class' => 'td_actions'));
                 }
-
                 $tableRows[] = Display::tag('tr', $item);
             }
         }
     }
 }
 
-if (empty($exercise_list) && $hotpotatoes_exist == false) {
+if (empty($exerciseList) && $hotpotatoes_exist == false) {
     if ($is_allowedToEdit && $origin != 'learnpath') {
         echo '<div id="no-data-view">';
         echo '<h3>'.get_lang('Quiz').'</h3>';

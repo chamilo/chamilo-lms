@@ -200,9 +200,7 @@ if (!empty($groupId)) {
 }
 
 // Actions.
-
 $document_id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : null;
-
 $currentUrl = api_get_self().'?'.api_get_cidreq().'&id='.$document_id;
 
 if (Portfolio::controller()->accept()) {
@@ -875,7 +873,10 @@ if ($is_certificate_mode) {
 // Interbreadcrumb for the current directory root path
 if (empty($document_data['parents'])) {
     if (isset($_GET['createdir'])) {
-        $interbreadcrumb[] = array('url' => $document_data['document_url'], 'name' => $document_data['title']);
+        $interbreadcrumb[] = array(
+            'url' => $document_data['document_url'],
+            'name' => $document_data['title'],
+        );
     } else {
         $interbreadcrumb[] = array('url' => '#', 'name' => $document_data['title']);
     }
@@ -892,7 +893,10 @@ if (empty($document_data['parents'])) {
         if (!isset($_GET['createdir']) && $document_sub_data['id'] == $document_data['id']) {
             $document_sub_data['document_url'] = '#';
         }
-        $interbreadcrumb[] = array('url' => $document_sub_data['document_url'], 'name' => $document_sub_data['title']);
+        $interbreadcrumb[] = array(
+            'url' => $document_sub_data['document_url'],
+            'name' => $document_sub_data['title'],
+        );
         $counter++;
     }
 }
@@ -906,7 +910,6 @@ $js_path = api_get_path(WEB_LIBRARY_PATH).'javascript/';
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.$js_path.'jquery-jplayer/skin/chamilo/jplayer.blue.monday.css" type="text/css">';
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.$js_path.'jquery-jplayer/jplayer/jquery.jplayer.min.js"></script>';
 $mediaplayer_path = api_get_path(WEB_LIBRARY_PATH).'mediaplayer/player.swf';
-
 
 $documentAndFolders = DocumentManager::get_all_document_data(
     $courseInfo,
@@ -980,7 +983,7 @@ if ($groupId != 0) { // Add group name after for group documents
     $add_group_to_title = ' ('.$group_properties['name'].')';
 }
 
-$moveForm = null;
+$moveForm = '';
 
 /* 	MOVE FILE OR DIRECTORY */
 //Only teacher and all users into their group and each user into his/her shared folder
@@ -1512,6 +1515,7 @@ if (isset($_GET['curdirpath']) &&
         );
     }
 }
+
 /* 	GET ALL DOCUMENT DATA FOR CURDIRPATH */
 if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
     $documentAndFolders = DocumentManager::get_all_document_data(
@@ -1558,7 +1562,6 @@ if (!isset($folders) || $folders === false) {
     $folders = array();
 }
 $btngroup = array('class' => 'btn btn-default');
-
 
 /* GO TO PARENT DIRECTORY */
 $actionsLeft = '';
@@ -1676,6 +1679,7 @@ if ($is_allowed_to_edit ||
         );
     }
 }
+
 require 'document_slideshow.inc.php';
 if ($image_present && !isset($_GET['keyword'])) {
     $actionsLeft .= Display::url(
@@ -1764,7 +1768,6 @@ if (isset($documentAndFolders) && is_array($documentAndFolders)) {
 
             // Show the owner of the file only in groups
             $user_link = '';
-
             if (!empty($groupId)) {
                 if (!empty($document_data['insert_user_id'])) {
                     $user_info = api_get_user_info($document_data['insert_user_id']);
@@ -1774,7 +1777,12 @@ if (isset($documentAndFolders) && is_array($documentAndFolders)) {
             }
 
             // Icons (clickable)
-            $row[] = DocumentManager::create_document_link($document_data, true, $count, $is_visible);
+            $row[] = DocumentManager::create_document_link(
+                $document_data,
+                true,
+                $count,
+                $is_visible
+            );
 
             $path_info = pathinfo($document_data['path']);
 
@@ -1811,9 +1819,11 @@ if (isset($documentAndFolders) && is_array($documentAndFolders)) {
             // Admins get an edit column
             if ($is_allowed_to_edit ||
                 $groupMemberWithEditRights ||
-                DocumentManager::is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId)
+                DocumentManager::is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId) ||
+                $document_data['insert_user_id'] == api_get_user_id()
             ) {
                 $is_template = isset($document_data['is_template']) ? $document_data['is_template'] : false;
+
                 // If readonly, check if it the owner of the file or if the user is an admin
                 if ($document_data['insert_user_id'] == api_get_user_id() || api_is_platform_admin()) {
                     $edit_icons = DocumentManager::build_edit_icons(
@@ -1886,7 +1896,6 @@ if (!is_null($documentAndFolders)) {
         }
     }
 }
-
 
 if (api_is_platform_admin()) {
     if (api_get_configuration_value('document_manage_deleted_files')) {
@@ -1997,7 +2006,7 @@ if ($is_allowed_to_edit
 // TODO: Currently only delete action -> take only DELETE permission into account
 
 if (count($documentAndFolders) > 1) {
-    if ($is_allowed_to_edit || $group_member_with_upload_rights) {
+    if ($is_allowed_to_edit || $groupMemberWithEditRights) {
         $form_actions = array();
         $form_action['set_invisible'] = get_lang('SetInvisible');
         $form_action['set_visible'] = get_lang('SetVisible');

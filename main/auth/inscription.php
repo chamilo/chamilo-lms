@@ -554,7 +554,7 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
     if (!api_is_platform_admin()) {
         if (api_get_setting('show_terms_if_profile_completed') === 'true') {
             $userInfo = api_get_user_info();
-            if ($userInfo) {
+            if ($userInfo && $userInfo['status'] != ANONYMOUS) {
                 if ((int)$userInfo['profile_completed'] !== 1) {
                     api_not_allowed(true);
                 }

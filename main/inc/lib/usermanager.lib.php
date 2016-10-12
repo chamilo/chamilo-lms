@@ -5075,12 +5075,19 @@ EOF;
      *
      * @param int $studentId
      * @param array $bossList
+     * @param bool $sendNotification
      * @return int Affected rows
      */
-    public static function subscribeUserToBossList($studentId, $bossList)
+    public static function subscribeUserToBossList($studentId, $bossList, $sendNotification = false)
     {
         if ($bossList) {
             $studentId = (int) $studentId;
+            $studentInfo = api_get_user_info($studentId);
+
+            if (empty($studentInfo)) {
+                return false;
+            }
+
             $userRelUserTable = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
             $sql = "DELETE FROM $userRelUserTable 
                     WHERE user_id = $studentId AND relation_type = ".USER_RELATION_TYPE_BOSS;
@@ -5090,8 +5097,20 @@ EOF;
                 $bossId = (int) $bossId;
                 $sql = "INSERT IGNORE INTO $userRelUserTable (user_id, friend_user_id, relation_type)
                         VALUES ($studentId, $bossId, ".USER_RELATION_TYPE_BOSS.")";
+                $insertId = Database::query($sql);
 
-                Database::query($sql);
+                if ($insertId && $sendNotification) {
+                    $name = $studentInfo['complete_name'];
+                    $url = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$studentId;
+                    $url = Display::url($url, $url);
+                    $subject = sprintf(get_lang('UserXHasBeenAssignedToBoss'), $name);
+                    $message = sprintf(get_lang('UserXHasBeenAssignedToBossWithUrlX'), $name, $url);
+                    MessageManager::send_message_simple(
+                        $bossId,
+                        $subject,
+                        $message
+                    );
+                }
             }
         }
     }

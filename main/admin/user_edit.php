@@ -552,7 +552,11 @@ if ($form->validate()) {
         );
 
         if (isset($user['student_boss'])) {
-            UserManager::subscribeUserToBossList($user_id, $user['student_boss']);
+            UserManager::subscribeUserToBossList(
+                $user_id,
+                $user['student_boss'],
+                true
+            );
         }
 
 		if (api_get_setting('openid_authentication') == 'true' && !empty($user['openid'])) {

@@ -2666,7 +2666,11 @@ function api_get_user_status($user_id = null)
  * @return boolean True if the user has course creation rights,
  * false otherwise.
  */
-function api_is_allowed_to_create_course() {
+function api_is_allowed_to_create_course()
+{
+    if (api_is_platform_admin()) {
+        return true;
+    }
     return Session::read('is_allowedCreateCourse');
 }
 

@@ -122,7 +122,7 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
      * @return    PEAR_Error on error or true
      * @throws    PEAR_Error
      */
-    private function load(&$options, $param1=null, $param2=null, $param3=null, $param4=null)
+    protected function load(&$options, $param1=null, $param2=null, $param3=null, $param4=null)
     {
         switch (true) {
             case is_array($options):

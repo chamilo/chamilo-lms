@@ -178,13 +178,10 @@ if ($bbb->isGlobalConference() === false &&
     }
 }
 
-$urlToShare = $plugin->get_lang('UrlMeetingToShare').'<br />'.$conferenceUrl;
-
 $tpl = new Template($tool_name);
 $tpl->assign('allow_to_edit', $conferenceManager);
 $tpl->assign('meetings', $meetings);
 $tpl->assign('conference_url', $conferenceUrl);
-$tpl->assign('url_to_share', $urlToShare);
 $tpl->assign('users_online', $users_online);
 $tpl->assign('bbb_status', $status);
 $tpl->assign('show_join_button', $showJoinButton);

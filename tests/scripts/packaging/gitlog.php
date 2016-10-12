@@ -21,8 +21,14 @@ $repository = __DIR__.'/../..';
 $number = 500; //the number of commits to check (including minor)
 $formatHTML = true;
 $showDate = false;
-if (!empty($argv[1]) && $argv[1] == '-t') {
-    $showDate = true;
+$endCommit = false;
+if (!empty($argv[1])) {
+    if ($argv[1] == '-t') {
+        $showDate = true;
+    } else {
+        $endCommit = $argv[1];
+        echo "End commit has been defined as ".$endCommit.PHP_EOL;
+    }
 }
 
 $git = new \SebastianBergmann\Git\Git($repository);
@@ -104,6 +110,14 @@ foreach ($logs as $log) {
     } else {
         $commitLink = substr($log['sha1'], 0, 8);
         echo '('.$commitLink.$issueLink.') '.$log['message'].''.PHP_EOL;
+    }
+    // check end commit to stop processing
+    if ($endCommit) {
+        $length = strlen($endCommit);
+        if (substr($log['sha1'], 0, $length) == $endCommit) {
+            echo "Found the end commit ".$endCommit.", exiting...".PHP_EOL;
+            break;
+        }
     }
     $i++;
 }

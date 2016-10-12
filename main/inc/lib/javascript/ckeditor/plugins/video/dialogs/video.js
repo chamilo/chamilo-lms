@@ -157,8 +157,27 @@ CKEDITOR.dialog.add( 'video', function ( editor )
 				var video = videos[i];
 				if ( !video || !video.src )
 					continue;
-				innerHtml += '<cke:source src="' + video.src + '" type="' + video.type + '" />';
-				links += link.replace('%src%', video.src).replace('%type%', video.type);
+				//local copy of video URL
+				var mySrc = video.src;
+				//Chrome is picky about the redirect, so point directly to app/courses/ if currently pointing to courses/
+				//See https://support.chamilo.org/issues/8462
+				var coursesPathIndex = mySrc.indexOf('courses');
+				var newHtmlTag = '<cke:source src="' + mySrc + '" type="' + video.type + '" />';
+				var newLinks = link.replace('%src%', mySrc).replace('%type%', video.type);
+				//is video saved on courses folder ?
+				if (coursesPathIndex >= 0) {
+					//test if real path is not already present (in case of video edition)
+					var myPath = mySrc.indexOf('app');
+					if (myPath=-1) {
+						//add real path (app/) to video.src...
+						var myChromeSrc = mySrc.slice(0, coursesPathIndex) + "app/" + mySrc.slice(myBug);
+						//insert full path link...
+						newHtmlTag = '<cke:source src="' + myChromeSrc + '" type="' + video.type + '" />';
+						newLinks = link.replace('%src%', myChromeSrc).replace('%type%', video.type);
+					}
+				}
+				innerHtml += newHtmlTag;
+				links += newLinks;
 			}
 			videoNode.setHtml( innerHtml + fallbackTemplate.replace( '%links%', links ) );
 

@@ -673,12 +673,12 @@ class TicketManager
                      </form>';
             $content .= $form;
 
-            Database::query(
-                "UPDATE $table_support_tickets 
-                SET status_id = '".self::STATUS_UNCONFIRMED."'
-                WHERE ticket_id = '$ticket_id'"
-            );
+            $sql = "UPDATE $table_support_tickets 
+                    SET status_id = '".self::STATUS_UNCONFIRMED."'
+                    WHERE id = '$ticket_id'";
+            Database::query($sql);
         }
+
         $sql = "SELECT COUNT(*) as total_messages
                FROM $table_support_messages
                WHERE ticket_id = $ticket_id";
@@ -877,7 +877,7 @@ class TicketManager
                 $keyword = Database::escape_string(trim($_GET['keyword']));
                 $sql .= " AND (
                             ticket.code = '$keyword' OR 
-                            ticket.ticket_id = '$keyword'                            
+                            ticket.id = '$keyword'                            
                         )";
             }
         }
@@ -1370,10 +1370,11 @@ class TicketManager
         );
         $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
         $now = api_get_utc_datetime();
-        $sql = "UPDATE " . $table_support_messages . "
-                SET status = 'LEI', 
-                sys_lastedit_user_id ='" . api_get_user_id() . "',
-                sys_lastedit_datetime ='" . $now . "'
+        $sql = "UPDATE $table_support_messages
+                SET 
+                    status = 'LEI', 
+                    sys_lastedit_user_id ='" . api_get_user_id() . "',
+                    sys_lastedit_datetime ='" . $now . "'
                 WHERE ticket_id ='$ticket_id' ";
 
         if (api_is_platform_admin()) {
@@ -1387,7 +1388,7 @@ class TicketManager
             Database::query(
                 "UPDATE $table_support_tickets SET 
                     status_id = '".self::STATUS_PENDING."'
-                 WHERE ticket_id ='$ticket_id' AND status_id = '".self::STATUS_NEW."'"
+                 WHERE id ='$ticket_id' AND status_id = '".self::STATUS_NEW."'"
             );
             return true;
         } else {
@@ -1492,11 +1493,12 @@ class TicketManager
         $user_id = intval($user_id);
 
         $now = api_get_utc_datetime();
-        $sql = "UPDATE " . $table_support_tickets . " SET
-                status_id = '$status_id',
-                sys_lastedit_user_id ='$user_id',
-                sys_lastedit_datetime ='" . $now . "'
-                WHERE ticket_id ='$ticket_id'";
+        $sql = "UPDATE $table_support_tickets
+                SET
+                    status_id = '$status_id',
+                    sys_lastedit_user_id ='$user_id',
+                    sys_lastedit_datetime ='" . $now . "'
+                WHERE id ='$ticket_id'";
         $result = Database::query($sql);
 
         if (Database::affected_rows($result) > 0) {
@@ -1525,13 +1527,14 @@ class TicketManager
         $table_main_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
         $user_info = api_get_user_info();
         $user_id = $user_info['user_id'];
-        $sql = "SELECT COUNT( DISTINCT ticket.id) AS unread
+        $sql = "SELECT COUNT(DISTINCT ticket.id) AS unread
                 FROM $table_support_tickets ticket,
                 $table_support_messages message ,
                 $table_main_user user
-                WHERE ticket.id = message.ticket_id
-                AND message.status = 'NOL'
-                AND user.user_id = message.sys_insert_user_id ";
+                WHERE 
+                    ticket.id = message.ticket_id AND 
+                    message.status = 'NOL' AND 
+                    user.user_id = message.sys_insert_user_id ";
         if (!api_is_platform_admin()) {
             $sql .= " AND ticket.request_user = '$user_id'
                       AND user_id IN (SELECT user_id FROM $table_main_admin)  ";
@@ -1562,7 +1565,7 @@ class TicketManager
                   priority_id = '".self::PRIORITY_HIGH."',
                   sys_lastedit_user_id ='$user_id',
                   sys_lastedit_datetime ='$now'
-                WHERE ticket_id = '$ticket_id'";
+                WHERE id = '$ticket_id'";
         Database::query($sql);
     }
 
@@ -1793,29 +1796,29 @@ class TicketManager
                          OR visual_code LIKE '%$keyword_course%' )) ";
             }
             if ($keyword_unread == 'yes') {
-                $sql .= " AND ticket.ticket_id IN (
-                          SELECT ticket.ticket_id
-                          FROM  $table_support_tickets ticket,
+                $sql .= " AND ticket.id IN (
+                          SELECT ticket.id
+                          FROM $table_support_tickets ticket,
                           $table_support_messages message,
                           $table_main_user user
-                          WHERE ticket.ticket_id = message.ticket_id
+                          WHERE ticket.id = message.ticket_id
                           AND message.status = 'NOL'
                           AND message.sys_insert_user_id = user.user_id
                           AND user.status != 1   AND ticket.status_id != '".self::STATUS_FORWARDED."'
-                          GROUP BY ticket.ticket_id)";
+                          GROUP BY ticket.id)";
             } else {
                 if ($keyword_unread == 'no') {
-                    $sql .= " AND ticket.ticket_id NOT IN (
-                              SELECT ticket.ticket_id
+                    $sql .= " AND ticket.id NOT IN (
+                              SELECT ticket.id
                               FROM  $table_support_tickets ticket,
                               $table_support_messages message,
                               $table_main_user user
-                              WHERE ticket.ticket_id = message.ticket_id
+                              WHERE ticket.id = message.ticket_id
                               AND message.status = 'NOL'
                               AND message.sys_insert_user_id = user.user_id
                               AND user.status != 1
                               AND ticket.status_id != '".self::STATUS_FORWARDED."'
-                             GROUP BY ticket.ticket_id)";
+                             GROUP BY ticket.id)";
                 }
             }
         }

@@ -1171,61 +1171,73 @@ class CourseHome
     {
         $navigation_items = self::get_navigation_items(true);
         $course_id = api_get_course_id();
-
+        
+        $class= null;
+        $idLearn = null;
+        $item = null;
+        $marginLeft = 160;
+        
         $html = '<div id="toolnav">';
-        if (api_get_setting('show_navigation_menu') == 'icons') {
-            $html .= self::show_navigation_tool_shortcuts($orientation = SHORTCUTS_VERTICAL);
-        } else {
-            $html .= '<script>$(function() {
-                $("#toolnavbox a").stop().animate({"margin-left":"-160px"},1000);
+        $html .= '<ul id="toolnavbox">';
+        $count = 0;
+        foreach ($navigation_items as $key => $navigation_item) {
+            //students can't see the course settings option
+            $count++;
+            if (!api_is_allowed_to_edit() && $key == 'course_settings') {
+                continue;
+            }
+            $html .= '<li>';
+            $url_item = parse_url($navigation_item['link']);
+            $url_current = parse_url($_SERVER['REQUEST_URI']);
+
+            if (api_get_setting('show_navigation_menu') == 'text') {
+                $class = 'text';
+                $marginLeft = 170;
+                $item = $navigation_item['name'];
+            } else if (api_get_setting('show_navigation_menu') == 'icons') {
+                $class = 'icons';
+                $marginLeft = 25;
+                $item = Display::return_icon(substr($navigation_item['image'],0,-3)."png", $navigation_item['name'], array('class'=>'tool-img'), ICON_SIZE_SMALL);
+            } else {
+                $class = 'icons-text';
+                $item = $navigation_item['name'] . Display::return_icon(substr($navigation_item['image'],0,-3)."png", $navigation_item['name'], array('class'=>'tool-img'), ICON_SIZE_SMALL);
+            }
+
+            if (stristr($url_item['path'], $url_current['path'])) {
+                if (!isset($_GET['learnpath_id']) || strpos($url_item['query'], 'learnpath_id='.intval($_GET['learnpath_id'])) === 0) {
+                    $idLearn = ' id="here"';
+                }
+            }
+
+            if (strpos($navigation_item['link'], 'chat') !== false &&
+                api_get_course_setting('allow_open_chat_window', $course_id)
+            ) {
+                $html .= '<a ' . $idLearn . ' class="btn btn-default text-left ' . $class . ' " href="javascript: void(0);" onclick="javascript: window.open(\''.$navigation_item['link'].'\',\'window_chat'.api_get_course_id().'\',config=\'height=\'+600+\', width=\'+825+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="'.$navigation_item['target'].'"';
+                $html .= ' title="'.$navigation_item['name'].'">';
+                $html .=  $item;
+                $html .= '</a>';
+            } else {
+                $html .= '<a ' . $idLearn . ' class="btn btn-default text-left ' . $class . '" href="'.$navigation_item['link'].'" target="_top" title="'.$navigation_item['name'].'">';
+                $html .=  $item;
+                $html .= '</a>';
+            }
+
+            $html .= '</li>';
+        }
+        $html .= '</ul>';
+        $html .= '<script>$(function() {
+                $("#toolnavbox a").stop().animate({"margin-left":"-' . $marginLeft . 'px"},1000);
                 $("#toolnavbox > li").hover(
                     function () {
                         $("a",$(this)).stop().animate({"margin-left":"-2px"},200);
                         $("span",$(this)).css("display","block");
                     },
                     function () {
-                        $("a",$(this)).stop().animate({"margin-left":"-160px"},200);
+                        $("a",$(this)).stop().animate({"margin-left":"-' . $marginLeft . 'px"},200);
                         $("span",$(this)).css("display","initial");
                     }
                 );
             });</script>';
-            $html .= '<ul id="toolnavbox">';
-            $count = 0;
-            foreach ($navigation_items as $key => $navigation_item) {
-                //students can't see the course settings option
-                $count++;
-                if (!api_is_allowed_to_edit() && $key == 'course_settings') {
-                    continue;
-                }
-                $html .= '<li>';
-                $url_item = parse_url($navigation_item['link']);
-                $url_current = parse_url($_SERVER['REQUEST_URI']);
-
-                if (strpos($navigation_item['link'], 'chat') !== false &&
-                    api_get_course_setting('allow_open_chat_window', $course_id)
-                ) {
-                    $html .= '<a class="btn btn-default text-left" href="javascript: void(0);" onclick="javascript: window.open(\''.$navigation_item['link'].'\',\'window_chat'.api_get_course_id().'\',config=\'height=\'+600+\', width=\'+825+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="'.$navigation_item['target'].'"';
-                } else {
-                    $html .= '<a class="btn btn-default text-left" href="'.$navigation_item['link'].'" target="_top" ';
-                }
-
-                if (stristr($url_item['path'], $url_current['path'])) {
-                    if (!isset($_GET['learnpath_id']) || strpos($url_item['query'], 'learnpath_id='.intval($_GET['learnpath_id'])) === 0) {
-                        $html .= ' id="here"';
-                    }
-                }
-                $html .= ' title="'.$navigation_item['name'].'">';
-                if (api_get_setting('show_navigation_menu') != 'icons') {
-                    $html .= $navigation_item['name'];
-                }
-                if (api_get_setting('show_navigation_menu') != 'text') {
-                    $html .= Display::return_icon(substr($navigation_item['image'],0,-3)."png", $navigation_item['name'], array('class'=>'tool-img'), ICON_SIZE_SMALL);
-                }
-                $html .= '</a>';
-                $html .= '</li>';
-            }
-            $html .= '</ul>';
-        }
         $html .= '</div>';
 
         return $html;

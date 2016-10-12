@@ -171,6 +171,20 @@
         autoPlay: 'Reproducir automáticamente'
     };
 
+    var fr = {
+        toolbar: 'Audio',
+        dialogTitle: 'Propriétés de l\'audio',
+        fakeObject: 'Audio',
+        properties: 'Editer l\'audio',
+        widthRequired: 'La largeur ne peut être vide',
+        heightRequired: 'La hauteur ne peut être vide',
+        sourceAudio: 'Fichier audio',
+        sourceType: 'Type',
+        linkTemplate: '<a href="%src%">%type%</a> ',
+        fallbackTemplate: 'Votre navigateur ne supporte pas l\'AUDIO.<br>Veuillez télécharger le fichier: %links%',
+        autoPlay: 'Lecture automatique'
+    };
+
     // v3
     if (CKEDITOR.skins) {
         en = {audio: en};

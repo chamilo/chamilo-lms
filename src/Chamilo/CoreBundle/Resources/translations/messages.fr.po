@@ -51,3 +51,6 @@ msgstr "https://www.ofaj.org/"
 
 msgid "OFAJ"
 msgstr "Office franco-allemand pour la Jeunesse"
+
+msgid "DemoMenuLink"
+msgstr "http://test.com"

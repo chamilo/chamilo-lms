@@ -158,10 +158,7 @@ class NavBuilder extends ContainerAware
             $menu->addChild(
                 $translator->trans('Demo'),
                 array(
-                    'route' => 'main',
-                    'routeParameters' => array(
-                        'name' => 'social/home.php',
-                    )
+                    'uri' => $translator->trans('DemoMenuLink')
                 )
             )->setAttribute('class', 'item-menu menu-4');
 

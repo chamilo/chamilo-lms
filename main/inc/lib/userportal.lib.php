@@ -1261,7 +1261,7 @@ class IndexManager
                                 'id' => $session_id
                             );
                             $session_box = Display::get_session_title_box($session_id);
-
+                           
                             $actions = null;
                             if (api_is_platform_admin()) {
                                 $actions = api_get_path(WEB_CODE_PATH) .'session/resume_session.php?id_session='.$session_id;

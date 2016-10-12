@@ -193,12 +193,12 @@ class IndexManager
                 $show_course_link = true;
                 $show_create_link = true;
             } else {
-                if (api_get_setting('allow_students_to_browse_courses') == 'true') {
+                if (api_get_setting('allow_students_to_browse_courses') === 'true') {
                     $show_menu = true;
                     $show_course_link = true;
                 }
 
-                if (api_get_setting('allow_users_to_create_courses')) {
+                if (api_get_setting('allow_users_to_create_courses') === 'true') {
                     $show_create_link = true;
                 }
             }
@@ -1023,7 +1023,7 @@ class IndexManager
         if (api_is_course_admin() || api_is_allowed_to_create_course()) {
             $show_course_link = true;
         } else {
-            if (api_get_setting('allow_students_to_browse_courses') == 'true') {
+            if (api_get_setting('allow_students_to_browse_courses') === 'true') {
                 $show_course_link = true;
             }
         }

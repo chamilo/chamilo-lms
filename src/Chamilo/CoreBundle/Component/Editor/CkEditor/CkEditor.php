@@ -66,7 +66,7 @@ class CkEditor extends Editor
         }
 
         $html = '<textarea id="'.$this->getName().'" name="'.$this->getName().'" class="ckeditor">
-                 '.$style.$this->value.'
+                 '.$style.htmlspecialchars($this->value, ENT_COMPAT).'
                  </textarea>';
         $html .= $this->editorReplace();
 
@@ -83,7 +83,7 @@ class CkEditor extends Editor
         $config = $toolbar->getConfig();
 
         $javascript = $this->toJavascript($config);
-        
+
         $html = "<script>
            CKEDITOR.replace('".$this->getName()."',
                $javascript

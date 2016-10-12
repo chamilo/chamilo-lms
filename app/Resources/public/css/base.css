@@ -5757,9 +5757,17 @@ ul#toolnavbox li a {
     display: block;
     margin-left: -2px;
     font-size: 12px;
-    width: 200px;
     height: 35px;
     margin-left:-160px;
+}
+ul#toolnavbox li a.icons{
+    width: 70px;
+}
+ul#toolnavbox li a.icons-text{
+    width: 200px;
+}
+ul#toolnavbox li a.text{
+    width: 180px;
 }
 ul#toolnavbox .tool-img{
     margin-left: 5px;

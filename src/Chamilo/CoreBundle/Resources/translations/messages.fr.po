@@ -53,4 +53,4 @@ msgid "OFAJ"
 msgstr "Office franco-allemand pour la Jeunesse"
 
 msgid "DemoMenuLink"
-msgstr "http://test.com"
+msgstr "https://ofaj.beeznest.com/courses/DEMO/index.php"

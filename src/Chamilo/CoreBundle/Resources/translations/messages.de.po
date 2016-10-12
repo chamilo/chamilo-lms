@@ -51,3 +51,7 @@ msgstr "https://www.dfjw.org/"
 
 msgid "OFAJ"
 msgstr "Deutsch-Französisches Jugendwerk"
+
+msgid "DemoMenuLink"
+msgstr "https://ofaj.beeznest.com/courses/DEMOVERSION/index.php"
+

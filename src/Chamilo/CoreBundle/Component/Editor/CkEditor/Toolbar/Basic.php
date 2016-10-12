@@ -172,7 +172,7 @@ class Basic extends Toolbar
             'wordLimit' => 'unlimited'
         );*/
 
-        //$config['skins'] = 'moono';
+        $config['skin'] = 'bootstrapck,' . api_get_path(REL_PATH) . 'main/inc/lib/javascript/ckeditor/skins/bootstrapck/';
 
         if (isset($this->config)) {
             $this->config = array_merge($config, $this->config);

@@ -203,7 +203,7 @@ class IndexManager
                 $show_create_link = false;
             }
 
-            if ($show_menu && ($show_create_link || $show_course_link )) {
+            if ($show_menu && ($show_create_link || $show_course_link)) {
                 $show_menu = true;
             } else {
                 $show_menu = false;
@@ -1024,6 +1024,10 @@ class IndexManager
             if (api_get_setting('allow_students_to_browse_courses') == 'true') {
                 $show_course_link = true;
             }
+        }
+
+        if (api_is_student_boss() || api_is_session_admin()) {
+            $show_create_link = false;
         }
 
         // My account section

@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  *	This script is about deleting a course.
  *	It displays a message box ('are you sure you wish to delete this course')
@@ -8,8 +10,6 @@
  *
  *	@package chamilo.course_info
  */
-
-use \ChamiloSession as Session;
 
 require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;

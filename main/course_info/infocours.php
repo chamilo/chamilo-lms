@@ -60,16 +60,16 @@ $tbl_admin = Database:: get_main_table(TABLE_MAIN_ADMIN);
 $tbl_course_user = Database:: get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_course = Database:: get_main_table(TABLE_MAIN_COURSE);
 
-$s_select_course_tutor_name = "SELECT tutor_name FROM $tbl_course WHERE id = $courseId";
-$q_tutor = Database::query($s_select_course_tutor_name);
+$sql = "SELECT tutor_name FROM $tbl_course WHERE id = $courseId";
+$q_tutor = Database::query($sql);
 $s_tutor = Database::result($q_tutor, 0, 'tutor_name');
 
 $target_name = api_sort_by_first_name() ? 'firstname' : 'lastname';
-$s_sql_course_titular = "SELECT DISTINCT username, lastname, firstname
-    FROM $tbl_user as user, $tbl_course_user as course_rel_user
-    WHERE (course_rel_user.status='1') AND user.user_id=course_rel_user.user_id AND c_id ='".$courseId."'
-    ORDER BY ".$target_name." ASC";
-$q_result_titulars = Database::query($s_sql_course_titular);
+$sql = "SELECT DISTINCT username, lastname, firstname
+        FROM $tbl_user as user, $tbl_course_user as course_rel_user
+        WHERE (course_rel_user.status='1') AND user.user_id=course_rel_user.user_id AND c_id ='".$courseId."'
+        ORDER BY ".$target_name." ASC";
+$q_result_titulars = Database::query($sql);
 
 if (Database::num_rows($q_result_titulars) == 0) {
     $sql = "SELECT username, lastname, firstname FROM $tbl_user as user, $tbl_admin as admin
@@ -808,7 +808,6 @@ if ($form->validate() && is_settings_editable()) {
 }
 
 /*	Header */
-
 Display :: display_header($nameTools, MODULE_HELP_NAME);
 if ($show_delete_watermark_text_message) {
     Display :: display_normal_message(get_lang('FileDeleted'));

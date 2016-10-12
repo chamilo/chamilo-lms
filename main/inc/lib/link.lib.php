@@ -234,9 +234,9 @@ class Link extends Model
                     // Add all terms to db.
                     $all_specific_terms = '';
                     foreach ($specific_fields as $specific_field) {
-                        if (isset ($_REQUEST[$specific_field['code']])) {
+                        if (isset($_REQUEST[$specific_field['code']])) {
                             $sterms = trim($_REQUEST[$specific_field['code']]);
-                            if (!empty ($sterms)) {
+                            if (!empty($sterms)) {
                                 $all_specific_terms .= ' ' . $sterms;
                                 $sterms = explode(',', $sterms);
                                 foreach ($sterms as $sterm) {
@@ -295,7 +295,7 @@ class Link extends Model
                     }
 
                     $di = new ChamiloIndexer();
-                    isset ($_POST['language']) ? $lang = Database:: escape_string(
+                    isset($_POST['language']) ? $lang = Database:: escape_string(
                         $_POST['language']
                     ) : $lang = 'english';
                     $di->connectDb(null, null, $lang);
@@ -331,7 +331,6 @@ class Link extends Model
             $description = trim($_POST['description']);
 
             if (empty($category_title)) {
-                $msgErr = get_lang('GiveCategoryName');
                 Display:: display_error_message(get_lang('GiveCategoryName'));
                 $ok = false;
             } else {
@@ -388,7 +387,6 @@ class Link extends Model
         $id = intval($id);
 
         if (empty($id)) {
-
             return false;
         }
 
@@ -450,7 +448,7 @@ class Link extends Model
     public static function delete_link_from_search_engine($course_id, $link_id)
     {
         // Remove from search engine if enabled.
-        if (api_get_setting('search_enabled') == 'true') {
+        if (api_get_setting('search_enabled') === 'true') {
             $tbl_se_ref = Database:: get_main_table(
                 TABLE_MAIN_SEARCH_ENGINE_REF
             );
@@ -459,9 +457,7 @@ class Link extends Model
             $res = Database:: query($sql);
             if (Database:: num_rows($res) > 0) {
                 $row = Database:: fetch_array($res);
-                require_once api_get_path(
-                        LIBRARY_PATH
-                    ) . 'search/ChamiloIndexer.class.php';
+                require_once api_get_path(LIBRARY_PATH) . 'search/ChamiloIndexer.class.php';
                 $di = new ChamiloIndexer();
                 $di->remove_document((int)$row['search_did']);
             }
@@ -588,15 +584,9 @@ class Link extends Model
             $res = Database:: query($sql);
 
             if (Database:: num_rows($res) > 0) {
-                require_once api_get_path(
-                        LIBRARY_PATH
-                    ).'search/ChamiloIndexer.class.php';
-                require_once api_get_path(
-                        LIBRARY_PATH
-                    ).'search/IndexableChunk.class.php';
-                require_once api_get_path(
-                        LIBRARY_PATH
-                    ).'specific_fields_manager.lib.php';
+                require_once api_get_path(LIBRARY_PATH).'search/ChamiloIndexer.class.php';
+                require_once api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php';
+                require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 
                 $se_ref = Database:: fetch_array($res);
                 $specific_fields = get_specific_field_list();
@@ -610,11 +600,11 @@ class Link extends Model
                         TOOL_LINK,
                         $id
                     );
-                    if (isset ($_REQUEST[$specific_field['code']])) {
+                    if (isset($_REQUEST[$specific_field['code']])) {
                         $sterms = trim(
                             $_REQUEST[$specific_field['code']]
                         );
-                        if (!empty ($sterms)) {
+                        if (!empty($sterms)) {
                             $all_specific_terms .= ' ' . $sterms;
                             $sterms = explode(',', $sterms);
                             foreach ($sterms as $sterm) {
@@ -652,7 +642,7 @@ class Link extends Model
                 $ic_slide->addValue('content', $link_description);
 
                 // Add category name if set.
-                if (isset ($categoryId) && $categoryId > 0) {
+                if (isset($categoryId) && $categoryId > 0) {
                     $table_link_category = Database:: get_course_table(
                         TABLE_LINK_CATEGORY
                     );
@@ -864,7 +854,7 @@ class Link extends Model
 
         $sql = "SELECT *, link.id FROM $tbl_link link
                 INNER JOIN $TABLE_ITEM_PROPERTY itemproperties
-                ON (link.id=itemproperties.ref AND link.c_id = itemproperties.c_id )
+                ON (link.id=itemproperties.ref AND link.c_id = itemproperties.c_id)
                 WHERE
                     itemproperties.tool='" . TOOL_LINK . "' AND
                     link.category_id='" . $catid . "' AND
@@ -1260,10 +1250,7 @@ class Link extends Model
             WHERE c_id = $course_id AND " . $urleq . ' AND ' . $cateq
         );
 
-        if (Database:: num_rows($result) >= 1 && ($row = Database:: fetch_array(
-                $result
-            ))
-        ) {
+        if (Database:: num_rows($result) >= 1 && ($row = Database:: fetch_array($result))) {
             $sql = "UPDATE $tbl_link SET 
                         title = '" . Database:: escape_string($title) . "', 
                         description = '" . Database:: escape_string($description) . "'
@@ -1573,7 +1560,6 @@ class Link extends Model
             }
 
             $header .= Security::remove_XSS($myrow['category_title']).'</a>';
-
             $header .= '<div class="pull-right">';
             if (api_is_allowed_to_edit(null, true)) {
                 if ($session_id == $myrow['session_id']) {

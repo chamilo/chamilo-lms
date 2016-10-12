@@ -80,14 +80,14 @@ class ExtraField extends BaseAttribute
     /**
      * @var boolean
      *
-     * @ORM\Column(name="visible_to_self", type="boolean", nullable=true, unique=false)
+     * @ORM\Column(name="visible_to_self", type="boolean", nullable=true, unique=false, options={"default": false})
      */
     protected $visibleToSelf;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="visible_to_others", type="boolean", nullable=true, unique=false)
+     * @ORM\Column(name="visible_to_others", type="boolean", nullable=true, unique=false, options={"default": false})
      */
     protected $visibleToOthers;
 

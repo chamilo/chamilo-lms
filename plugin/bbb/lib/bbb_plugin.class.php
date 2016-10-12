@@ -101,7 +101,7 @@ class BBBPlugin extends Plugin
                 remote_id CHAR(30),
                 visibility TINYINT NOT NULL DEFAULT 1,
                 voice_bridge INT NOT NULL DEFAULT 1,
-                access_url INT NOT NULL DEFAULT 1
+                access_url INT NOT NULL DEFAULT 1,
                 video_url TEXT NULL,
                 has_video_m4v TINYINT NOT NULL DEFAULT 0
                 )";

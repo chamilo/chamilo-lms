@@ -24,7 +24,6 @@
 		icons: 'flash', // %REMOVE_LINE_CORE%
 		hidpi: true, // %REMOVE_LINE_CORE%
 		onLoad: function() {
-			console.log(this.path, this);
 			CKEDITOR.addCss( 'img.cke_flash' +
 				'{' +
 					'background-image: url(' + CKEDITOR.getUrl( this.path + 'images/placeholder.png' ) + ');' +
@@ -38,7 +37,6 @@
 
 		},
 		init: function( editor ) {
-			console.log(editor.config.flash_flvPlayer, this.path + 'swf/player.swf');
 			editor.config.flash_flvPlayer = editor.config.flash_flvPlayer || (this.path + 'swf/player.swf');
 
 			var allowed = 'object[classid,codebase,height,hspace,vspace,width];' +

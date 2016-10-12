@@ -60,10 +60,20 @@ foreach ($logs as $log) {
         if (substr($issue, 0, 1) == '#') {
             // not a BeezNest task
             $num = substr($issue, 1);
-            if ($formatHTML) {
-                $issueLink = ' - <a href="https://support.chamilo.org/issues/' . $num . '">#' . $num . '</a>';
+            if ($num > 4000) {
+                //should be Chamilo support site
+                if ($formatHTML) {
+                    $issueLink = ' - <a href="https://support.chamilo.org/issues/' . $num . '">CT#' . $num . '</a>';
+                } else {
+                    $issueLink = ' - ' . $num;
+                }
             } else {
-                $issueLink = ' - ' . $num;
+                //should be Github
+                if ($formatHTML) {
+                    $issueLink = ' - <a href="https://github.com/chamilo/chamilo-lms/issues/' . $num . '">GH#' . $num . '</a>';
+                } else {
+                    $issueLink = ' - ' . $num;
+                }
             }
         } else {
             $num = substr($issue, 3);

@@ -6364,7 +6364,7 @@ class learnpath
                         $result = Database::query($sql_doc);
                         $path_file = Database::result($result, 0, 0);
                         $path_parts = pathinfo($path_file);
-                        // TODO: Correct the following naive comparisons, also, htm extension is missing.
+                        // TODO: Correct the following naive comparisons.
                         if (in_array($path_parts['extension'], array(
                             'html',
                             'txt',
@@ -6374,11 +6374,18 @@ class learnpath
                             'jpeg',
                             'JPEG',
                             'gif',
-                            'swf'
+                            'swf',
+                            'pdf',
+                            'htm'
                         ))) {
                             $return .= $this->display_document($row['path'], true, true);
                         }
                         break;
+                    case TOOL_HOTPOTATOES:
+
+                        $return .= $this->display_document($row['path'], false, true);
+                        break;
+
                 }
                 $return .= '</div>';
             }

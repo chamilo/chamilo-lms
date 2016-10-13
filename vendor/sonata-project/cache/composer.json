@@ -1,0 +1,42 @@
+{
+    "name": "sonata-project/cache",
+    "description": "Cache library",
+    "keywords": ["cache", "redis", "mongodb", "memcached"],
+    "homepage": "https://github.com/sonata-project/cache",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Thomas Rabaix",
+            "email": "thomas.rabaix@gmail.com",
+            "homepage": "https://sonata-project.org/"
+        }
+    ],
+    "require-dev": {
+        "psr/log": "~1.0",
+        "doctrine/orm": "~2.2",
+        "predis/predis": "~0.8,<1.0",
+        "doctrine/phpcr-odm": "~1.0",
+        "jackalope/jackalope-doctrine-dbal": "~1.0",
+        "symfony/phpunit-bridge": "~2.7|~3.0",
+        "fabpot/php-cs-fixer": "~0.1|~1.0"
+    },
+    "suggest": {
+        "doctrine/orm": "ORM support",
+        "doctrine/phpcr-odm": "PHPCR ODM support",
+        "ext-apc": "Caching with ext/apc",
+        "ext-memcached": "Caching with ext/memcached",
+        "predis/predis": "Install redis php"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.x-dev"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Sonata\\Cache\\Tests\\": "test/",
+            "Sonata\\Cache\\": "lib/"
+        }
+    }
+}

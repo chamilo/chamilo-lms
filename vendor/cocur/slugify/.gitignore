@@ -1,0 +1,11 @@
+*.sublime-project
+*.sublime-workspace
+.idea
+/nbproject/private/
+/build/
+/cache/
+vendor
+report
+composer.lock
+phpunit.xml
+humbuglog.txt

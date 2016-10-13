@@ -1,0 +1,29 @@
+{#
+
+This file is part of the Sonata package.
+
+(c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+
+#}
+
+{% extends sonata_block.templates.block_base %}
+
+{# block classes are prepended with a container class #}
+{% block block_class %} cms-container{% if not block.hasParent() %} cms-container-root{%endif%}{% if settings.class %} {{ settings.class }}{% endif %}{% endblock %}
+
+{# identify a block role used by the page editor #}
+{% block block_role %}container{% endblock %}
+
+{# render container block #}
+{% block block %}
+    {% if decorator %}{{ decorator.pre|raw }}{% endif %}
+    {% for child in block.children %}
+        {% block block_child_render %}
+            {{ sonata_block_render(child) }}
+        {% endblock %}
+    {% endfor %}
+    {% if decorator %}{{ decorator.post|raw }}{% endif %}
+{% endblock %}

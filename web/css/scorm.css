@@ -1,0 +1,495 @@
+/*
+File used to display Learning Path item in student view
+If scorm.css file exists in theme folder, scorm.css file is used instead of this one
+See https://support.chamilo.org/issues/6976
+*/
+/* LP SCORM */
+/* Default LP left column values */
+
+.audio-scorm #container{
+    min-height: 45px;
+    margin-bottom: 5px;
+}
+#author_image {
+  border: 1px solid #CCCCCC;
+  float: left;
+  margin: 0;
+  padding: 8px;
+  position: relative;
+  width: 100%;
+}
+#author_name {
+  float: left;
+  text-align:center;
+  width: 100%;
+  font-size: 11px;
+  color: #888;
+  margin-top: 2px;
+}
+#learning_path_left_zone #scorm-gamification{
+}
+#scorm-gamification .fa-star{
+    font-size: 20px;
+    color: #C2C2C2;
+}
+#scorm-gamification .fa-star.level{
+    color: #D9534F;
+}
+#learning_path_left_zone .navegation-bar .buttons{
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+#learning_path_left_zone .description-autor{
+
+}
+.inner_lp_toc .scorm_item a {
+    font-weight: bold;
+    font-size: 14px;
+    margin-right: 1px;
+    padding-bottom: 2px;
+    text-decoration: none;
+    color: #2F3E46;
+}
+.inner_lp_toc .scorm_item a.chapter_module {
+    font-weight: normal;
+    margin-right: 10px;
+}
+.inner_lp_toc .scorm_item_highlight {
+    border: 1px solid #999;
+    background:#999;
+    font-weight:bold;
+    text-shadow:0 -1px 1px #666;
+    background-image:-webkit-gradient(linear,left top,left bottom,from(#666),to(#999));
+    background-image:-webkit-linear-gradient(top,#666,#999);
+    background-image:-moz-linear-gradient(top,#666,#999);
+    background-image:-ms-linear-gradient(top,#666,#999);
+    background-image:-o-linear-gradient(top,#666,#999);
+    background-image:linear-gradient(top,#666,#999);
+    margin-right: 0px;
+    padding: 10px 0px 10px 0px;
+    text-decoration: none;
+}
+.inner_lp_toc .scorm_item_highlight a {
+    color:#fff;
+    margin-right: 1px;
+    text-decoration: none;
+    font-weight: bold;
+}
+.inner_lp_toc .scorm_item {
+    font-size: 16px;
+    margin-left: 10px;
+    margin-right:10px;
+    text-decoration: none;
+    border-color: rgba(255, 255, 255, 0.3);
+}
+.inner_lp_toc .scorm_item_section .scorm_item:before {
+    content : url('../../main/img/lp_section.png');  /* path from main/lp/lp_controller.php file */
+    vertical-align: text-top;
+    margin-right : 5px;
+}
+/* learning path's classes for section and item for 5 levels of depth */
+.scorm_section_level_0 {
+    margin: 0 0 0 0;
+}
+.scorm_section_level_1 {
+    margin: 0 0.5em 0 20px;
+}
+.scorm_section_level_2 {
+    margin: 0 0.5em 0 40px;
+}
+.scorm_section_level_3 {
+    margin: 0 0.5em 0 60px;
+}
+.scorm_section_level_4 {
+    margin: 0 0.5em 0 70px;
+}
+.scorm_section_level_5 {
+    margin: 0 0.5em 0 10em;
+}
+.scorm_item_normal{
+    line-height: 25px;
+    border-bottom: 1px solid #DDD;
+}
+.level_0 {
+    margin: 0;
+    padding-left: 20px;
+}
+.level_1 {
+    margin: 0 0.5em 0 20px;
+    padding-left: 20px;
+}
+.level_2 {
+    margin: 0 0.5em 0 40px;
+    padding-left: 20px;
+}
+.level_3 {
+    margin: 0 0.5em 0 60px;
+    padding-left: 20px;
+}
+.level_4 {
+    margin: 0 0.5em 0 70px;
+    padding-left: 20px;
+}
+.level_5 {
+    margin: 0 0.5em 0 90px;
+    padding-left: 20px;
+}
+#learning_path_breadcrumb_zone .breadcrumb{
+  background-color: #2b3d53;
+  border-radius: 0;
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
+  color: #ffffff;
+  font-size: 12px;
+}
+#learning_path_breadcrumb_zone .breadcrumb a{
+  color: #ffffff;
+  text-decoration: none;
+}
+#learning_path_breadcrumb_zone .breadcrumb a:hover{
+  color: #dddddd;
+}
+.total{
+  width: 100%;
+}
+.view-options{
+    padding-top: 3px;
+    margin-right: 5px;
+}
+.panel-default .panel-heading .btn{
+  top: -25px;
+}
+.panel-default .panel-heading .dropdown-menu{
+  top: 30%;
+}
+#content-scorm .breadcrumb{
+  padding: 5px;
+}
+.scorm-heading{
+  font-size: 14px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+#control-bottom{
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  left: 0;
+}
+#control-bottom.well{
+  margin-bottom: 0;
+}
+/*SCORM CSS BASE */
+#learning_path_left_zone .home{
+  display: inline-block;
+  width: 94%;
+  margin-bottom: .5em;
+  margin-top: .5em;
+  font-size: 12px;
+}
+#learning_path_left_zone .scorm_title{
+  font-size: 20px;
+  color: #666;
+  margin-bottom: .5em;
+  margin-top: .5em;
+}
+/* for section */
+.scorm_item_section{
+    border-bottom: 1px solid #DDD;
+    font-size: 12px;
+    font-weight: bold;
+}
+.scorm_item_section .section{
+    background:url("../../main/img/scorm/folder-item-closed.png") no-repeat left center;
+}
+.scorm_item_section.scorm_completed .section{
+  background:url("../../main/img/scorm/folder-item-open.png") no-repeat left center;
+  padding-right: 1.5em;
+}
+.scorm_item_normal a.items-list{
+  color: #666666;
+  font-size: 12px;
+}
+.scorm_item_normal a:hover{
+   text-decoration: none;
+}
+.scorm_item_normal.scorm_completed{
+   background-color: #F5F5F5;
+}
+.scorm_item_section.scorm_completed{
+   background-color: #F5F5F5;
+   color: #000;
+}
+.scorm_completed .item {
+  background:url("../../main/img/scorm/scorm_completed.png") no-repeat left center;
+}
+.scorm_completed .item a{
+  color: #000;
+}
+.scorm_failed .item{
+  background:url("../../main/img/scorm/scorm_failed.png") no-repeat left center;
+}
+.scorm_not_attempted .item{
+  background:url("../../main/img/scorm/scorm_not_attempted.png") no-repeat left center;	
+}
+.scorm_highlight .item{
+  background:url("../../main/img/scorm/scorm_highlight.png") no-repeat left center !important;
+  color: #009AB8;
+}
+.scorm_highlight.scorm_completed .item{
+  background:url("../../main/img/scorm/scorm_current.png") no-repeat left center !important;
+}
+.scorm_highlight.scorm_failed .item{
+    background:url("../../main/img/scorm/scorm_failed.png") no-repeat left center !important;
+}
+.scorm_highlight a{
+  color: #FFFFFF !important;
+}
+.scorm_item_normal.scorm_highlight{
+    background-color: #00AAD4;
+}
+
+/* END SCORM CSS BASE*/
+
+
+#scorm-info{
+    padding: 10px;
+    margin-bottom: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+#scorm-info .description-autor p {
+    font-size: 12px;
+    line-height: 20px;
+    color: #666666;
+}
+#scorm-info hr {
+    background-color: #DDD;
+    width: 100%;
+}
+#scorm-info #progress_bar .progress{
+    margin-bottom: 5px;
+}
+.image-avatar .media-left img,
+.image-avatar img{
+    border: 1px solid #DDD;
+    border-radius: 5px;
+}
+.image-avatar{
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+.scorm-title{
+    color: #333;
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 1.5em;
+    margin: 0 0 15px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #DDD;
+}
+#learning_path_right_zone .lp-view-tabs li a {
+    padding: 5px 10px;
+}
+#learning_path_main {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+}
+#learning_path_left_zone,
+#learning_path_right_zone {
+    bottom: 0;
+    box-sizing: content-box;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition-property: left width;
+    transition-duration: 0.5s;
+}
+#learning_path_left_zone .lp-view-zone-container,
+#learning_path_right_zone .lp-view-zone-container {
+    bottom: 0;
+    left: 0;
+    padding: 5px;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+#learning_path_toc {
+    bottom: 5px;
+    left: 5px;
+    overflow: auto;
+    position: absolute;
+    right: 5px;
+    top: 100%;
+    transition-property: top;
+    transition-duration: 0.1s;
+}
+#learning_path_right_zone {
+    left: 100%;
+    width: 100%;
+}
+#learning_path_right_zone .lp-view-tabs .tab-content {
+    bottom: 5px;
+    left: 5px;
+    position: absolute;
+    right: 5px;
+    top: 65px;
+}
+#learning_path_right_zone .tab-pane{
+    height: 100%;
+    position: relative;
+}
+#learning_path_right_zone .tab-pane iframe {
+    border: 0 none;
+    height: 100%;
+    width: 100%;
+}
+#learning_path_main.lp-view-collapsed #learning_path_left_zone {
+    left: -100%;
+}
+#learning_path_main.lp-view-collapsed #learning_path_right_zone {
+    left: 0;
+    width: 100%;
+}
+.nav-tabs li.active a{
+    color: #006A84;
+}
+.nav-tabs li a{
+    color: #666666;
+}
+#lp-view-expand-button{
+    border: none;
+    background: none;
+    padding: 0;
+    margin: 0;
+}
+.movil-toolbar{
+    width: 100%;
+    height: 40px;
+    padding-top: 5px;
+}
+.btn-movil{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.btn-movil li{
+    display: block;
+    float: left;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+.icon-toolbar .fa{
+    width: 35px;
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+    border-radius: 100%;
+    background-color: #34495E;
+    font-size: 20px;
+    color: #FFF;
+}
+.icon-toolbar .fa:hover{
+    background-color: #000;
+}
+.expand .fa{
+    background-color: #00829C;
+}
+.expand .fa:hover{
+    background-color: #006A84;
+    color: #ffffff;
+}
+.expand .fa:active, .expand .fa:focus{
+    color: #ffffff;
+}
+#learning_path_toc {
+    bottom: 10px;
+    left: 10px;
+    right: 5px;
+    margin-top:20px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 5px;
+}
+/* Small devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+    #scorm-info{
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+    #learning_path_left_zone {
+        width: 250px;
+    }
+    #learning_path_right_zone {
+        left: 250px;
+        width: calc(100% - 250px);
+    }
+    #learning_path_main.lp-view-include-breadcrumb #learning_path_left_zone,
+    #learning_path_main.lp-view-include-breadcrumb #learning_path_right_zone {
+        top: 40px;
+    }
+    #learning_path_left_zone .lp-view-zone-container,
+    #learning_path_right_zone .lp-view-zone-container {
+        padding: 10px;
+    }
+    #learning_path_left_zone .lp-view-zone-container {
+        padding-right: 5px;
+    }
+    #learning_path_right_zone .lp-view-zone-container {
+        padding-left: 5px;
+    }
+    
+    #learning_path_right_zone .lp-view-tabs .tab-content {
+        bottom: 10px;
+        right: 10px;
+        top: 75px;
+    }
+    #learning_path_right_zone .tab-pane{
+    }
+    #learning_path_right_zone .tab-pane iframe {
+    }
+}
+
+/* Medium devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+    #learning_path_left_zone {
+        width: 300px;
+    }
+
+    #learning_path_right_zone {
+        left: 300px;
+        width: calc(100% - 300px);
+    }
+}
+
+/* Large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    #learning_path_left_zone {
+        width: 350px;
+    }
+
+    #learning_path_right_zone {
+        left: 350px;
+        width: calc(100% - 350px);
+    }
+}
+/* Landscape phones and down */
+@media (max-width: 480px) {
+    #home-course{
+        display: none !important;
+    }
+    .scorm-title{
+        font-size: 14px;
+    }
+    .movil-toolbar{
+        padding-left: 35%;
+    }
+}

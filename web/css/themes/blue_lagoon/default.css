@@ -1,0 +1,117 @@
+/*!
+ * CSS BLUE LAGOON - v. 2.0
+ * 2015 - Alex Aragón (aragonc@beeznest.com)
+ * OpenClipArt ilustration (https://openclipart.org/detail/220955/pirate-ship-silhouette)
+ * Licensed GPL
+ * Based on Bootstrap
+*/
+
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Open Sans Light'), local('OpenSans-Light'), url(../chamilo/fonts/OpenSans-Light.woff2) format('woff2'), url(../chamilo/fonts/OpenSans-Light.woff) format('woff');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans'), local('OpenSans'), url(../chamilo/fonts/OpenSans.woff2) format('woff2'), url(../chamilo/fonts/OpenSans.woff) format('woff');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 600;
+  src: local('Open Sans Semibold'), local('OpenSans-Semibold'), url(../chamilo/fonts/OpenSans-Semibold.woff2) format('woff2'), url(../chamilo/fonts/OpenSans-Semibold.woff) format('woff');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Open Sans Bold'), local('OpenSans-Bold'), url(../chamilo/fonts/OpenSans-Bold.woff2) format('woff2'), url(../chamilo/fonts/OpenSans-Bold.woff) format('woff');
+}
+html {
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  margin: 0;
+  font-family: 'Open Sans', sans-serif;
+  line-height: 1.72222;
+}
+a{
+  color: #185B8E;
+}
+a:hover{
+  color: #3F9BC7;
+}
+header{
+  background: url("images/bg-blue.png") repeat-x center -50px;
+}
+.navbar-default {
+  background: #2e75a3;
+  border-color: #0099c0;
+}
+.navbar-default .navbar-brand {
+  color: #ffffff;
+}
+.navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus {
+  color: #ededed;
+}
+.navbar-default .navbar-text {
+  color: #ffffff;
+}
+.navbar-default .navbar-nav > li > a {
+  color: #ffffff;
+}
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+  color: #9DD0F1;
+}
+.navbar-default .navbar-nav > li > .dropdown-menu > li > .divider {
+  background-color: #0099c0;
+}
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+  color: #ededed;
+  background-color: #0099c0;
+}
+.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
+  color: #ededed;
+  background-color: #0099c0;
+}
+.navbar-default .navbar-toggle {
+  border-color: #0099c0;
+}
+.navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {
+  background-color: #0099c0;
+}
+.navbar-default .navbar-toggle .icon-bar {
+  background-color: #ffffff;
+}
+.navbar-default .navbar-collapse,
+.navbar-default .navbar-form {
+  border-color: #ffffff;
+}
+.navbar-default .navbar-link {
+  color: #ffffff;
+}
+.navbar-default .navbar-link:hover {
+  color: #ededed;
+}
+.breadcrumb{
+  background: #afdde9;
+  color: #006A84;
+}
+.nav li a:hover{
+    background: transparent;
+}
+footer.bgfooter{
+  background: #2E75A3;
+  color: #9DD0F1;
+  border-top: 2px solid #0099C0;
+}
+footer.bgfooter a{
+  color: #ffffff;
+}
+footer.bgfooter a:hover{
+  color: #CCC;
+}

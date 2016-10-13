@@ -1,0 +1,45 @@
+{
+    "name": "alchemy/mediavorus",
+    "type": "library",
+    "description": "MediaVorus",
+    "keywords": ["metadata"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Romain Neutron",
+            "email": "imprec@gmail.com",
+            "homepage": "http://www.lickmychip.com/"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "alchemy/phpexiftool"     : "~0.1",
+        "doctrine/collections"    : "~1.0",
+        "symfony/http-foundation" : "~2.0",
+        "symfony/console"         : "~2.0",
+        "php-ffmpeg/php-ffmpeg"   : "~0.3",
+        "monolog/monolog"         : "~1.0"
+    },
+    "suggest": {
+        "jms/serializer"          : "To serialize Medias",
+        "symfony/yaml"            : "To serialize Medias in Yaml format"
+    },
+    "require-dev": {
+        "silex/silex"             : "~1.0",
+        "symfony/yaml"            : "~2.0",
+        "jms/serializer"          : "~0.12.0"
+    },
+    "replace": {
+        "mediavorus/mediavorus": "<=0.4.4"
+    },
+    "autoload": {
+        "psr-0": {
+            "MediaVorus": "src"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.4.x-dev"
+        }
+    }
+}

@@ -705,6 +705,9 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
     }
 }
 
+$form->addCheckBox('extra_platformuseconditions', null, get_lang('PlatformUseConditions'));
+$form->addRule('extra_platformuseconditions', get_lang('ThisFieldIsRequired'), 'required');
+
 if ($blockButton) {
     $form->addButton('submit', get_lang('RegisterUser'), 'check', 'primary', null, null, ['disabled' => 'disabled'], false);
 } else {

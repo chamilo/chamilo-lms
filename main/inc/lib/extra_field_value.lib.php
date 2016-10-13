@@ -226,7 +226,7 @@ class ExtraFieldValue extends Model
 
                         //Crop the image to adjust 16:9 ratio
                         $crop = new Image($value['tmp_name']);
-                        $crop->crop($value['crop_parameters']);
+                        $crop->crop($params['extra_' . $field_variable . '_crop_result']);
 
                         $imageExtraField = new Image($value['tmp_name']);
                         $imageExtraField->resize(400);

@@ -58,6 +58,10 @@ foreach ($logs as $log) {
     if (strpos($log['message'], $langMsg) === 0) {
         continue;
     }
+    $langMsg = 'Merge';
+    if (strpos($log['message'], $langMsg) === 0) {
+        continue;
+    }
     // Look for tasks references
     $issueLink = '';
     $matches = array();
@@ -83,11 +87,13 @@ foreach ($logs as $log) {
             }
         } else {
             $num = substr($issue, 3);
-            if ($formatHTML && $num != '7683') {
-                //7683 is an internal task at BeezNest for all general contributions to Chamilo - no use in adding this reference
-                $issueLink = ' - <a href="https://task.beeznest.com/issues/' . $num . '">BT#' . $num . '</a>';
-            } else {
-                $issueLink = ' - ' . $num;
+            if ($num != '7683') {
+                if ($formatHTML) {
+                    //7683 is an internal task at BeezNest for all general contributions to Chamilo - no use in adding this reference
+                    $issueLink = ' - <a href="https://task.beeznest.com/issues/' . $num . '">BT#' . $num . '</a>';
+                } else {
+                    $issueLink = ' - ' . $num;
+                }
             }
         }
         if ($hasRefs = stripos($log['message'], ' see '.$issue)) {

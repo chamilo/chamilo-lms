@@ -1352,7 +1352,7 @@ $AddClasses = "Add classes";
 $ExportUsers = "Export users list";
 $NumberOfParticipants = "Number of members";
 $NumberOfUsers = "Number of users";
-$Participants = "members";
+$Participants = "Members";
 $FirstLetterClass = "First letter (class name)";
 $FirstLetterUser = "First letter (last name)";
 $FirstLetterCourse = "First letter (code)";
@@ -7654,11 +7654,11 @@ $ExportBadges = "Export badges";
 $LanguagesDisableAllExceptDefault = "Disable all languages except the platform default";
 $ThereAreUsersUsingThisLanguagesDisableItManually = "There are users currently using the following language. Please disable manually.";
 $MessagingAllowSendPushNotificationTitle = "Allow Push Notifications to the Chamilo Messaging mobile app";
-$MessagingAllowSendPushNotificationComment = "Send Push Notifications by Google Cloud Messaging";
-$MessagingGDCProjectNumberTitle = "Project number of Google Developer Console";
-$MessagingGDCProjectNumberComment = "You need register a project on <a href=\"https://console.developers.google.com/\">Google Developer Console</a>";
-$MessagingGDCApiKeyTitle = "API Key of Google Developer Console for Google Cloud Messaging";
-$MessagingGDCApiKeyComment = "You need enable the Google Cloud Messaging API and create one credential for Android";
+$MessagingAllowSendPushNotificationComment = "Send Push Notifications by Google's Firebase Console";
+$MessagingGDCProjectNumberTitle = "Sender ID of Firebase Console for Cloud Messaging";
+$MessagingGDCProjectNumberComment = "You need register a project on <a href=\"https://console.firebase.google.com/\">Google Firebase Console</a>";
+$MessagingGDCApiKeyTitle = "Server key of Firebase Console for Cloud Messaging";
+$MessagingGDCApiKeyComment = "Server key (legacy token) from project credentials";
 $Overwrite = "Overwrite";
 $TheLogoMustBeSizeXAndFormatY = "The logo must be of %s px in size and in %s format";
 $ResetToTheOriginalLogo = "Original logo recovered";
@@ -7877,4 +7877,14 @@ $CRSTablesIntro = "The install script has detected tables coming from previous v
 Please click on the button below to delete them. We heavily recommend you do a full backup of them before confirming this last install step.";
 $Removing = "Removing";
 $CheckForCRSTables = "Check for tables from previous versions";
+$YourPasswordCannotBeTheSameAsYourEmail = "Your password cannot be the same as your email";
+$YourPasswordCannotContainYourUsername = "Your password cannot contain your username";
+$WordTwoCharacterClasses = "Use different character classes";
+$TooManyRepetitions = "Too many repetitions";
+$YourPasswordContainsSequences = "Your password contains sequences";
+$PasswordVeryWeak = "Very weak";
+$UserXHasBeenAssignedToBoss = "You have been assigned the learner %s";
+$UserXHasBeenAssignedToBossWithUrlX = "You have been assigned as tutor for the learner %s.
+
+You can access his profile here: %s";
 ?>

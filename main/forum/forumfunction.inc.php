@@ -4672,10 +4672,14 @@ function display_forum_search_results($search_term)
           4. post is visible
          */
         if (!api_is_allowed_to_edit(null, true)) {
-            if (!empty($category) && $category['visibility'] == '1' &&
-                $forumData['visibility'] == '1' && $forumData['visible'] == '1'
-            ) {
-                $display_result = true;
+            if (!empty($category)) {
+                if ($category['visibility'] == '1' && $forumData['visibility'] == '1') {
+                    $display_result = true;
+                }
+            } else {
+                if ($forumData['visible'] == '1') {
+                    $display_result = true;
+                }
             }
         } else {
             $display_result = true;

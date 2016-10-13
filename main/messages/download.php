@@ -73,7 +73,7 @@ if (!empty($row_users['group_id'])) {
 }
 
 if ($not_allowed_to_edit) {
-	api_not_allowed();
+	api_not_allowed(true);
 	exit;
 }
 
@@ -92,7 +92,14 @@ $full_file_name = $path_user_info['dir'].'message_attachments/'.$file_url;
 
 if (Security::check_abs_path($full_file_name, $path_user_info['dir'].'message_attachments/')) {
     // launch event
-	Event::event_download($file_url);
-    DocumentManager::file_send_for_download($full_file_name,TRUE, $title);
+    Event::event_download($file_url);
+    $result = DocumentManager::file_send_for_download(
+        $full_file_name,
+        true,
+        $title
+    );
+    if ($result === false) {
+        api_not_allowed(true);
+    }
 }
 exit;

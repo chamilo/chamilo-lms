@@ -7823,4 +7823,17 @@ $EditCourseCategoryToURL = "Éditer catégories de cours pour une URL";
 $VisibleToSelf = "Visible par soi-même";
 $VisibleToOthers = "Visible par d'autres";
 $UpgradeVersion = "Mettre à jour depuis une version antérieure";
+$CRSTablesIntro = "Le script d'installation a détecté des tables restantes de versions antérieures, qui pourraient poser problème durant le processus de mise à jour. Veuillez cliquer sur le bouton ci-dessous pour les supprtimer. Nous vous recommandons fortement de faire un backup complet de votre site avant de confirmer cette action, juste au cas où des données importantes (non visibles depuis Chamilo) s'y trouveraient encore.";
+$Removing = "Élimination";
+$CheckForCRSTables = "Vérifier les tables de versions précédentes";
+$YourPasswordCannotBeTheSameAsYourEmail = "Votre mot de passe ne peut pas être identique à votre e-mail";
+$YourPasswordCannotContainYourUsername = "Votre mot de passe ne peut pas contenir votre nom d'utilisateur";
+$WordTwoCharacterClasses = "Utilisez différents types de caractère";
+$TooManyRepetitions = "Trop de répétitions";
+$YourPasswordContainsSequences = "Votre mot de passe contient des séquences";
+$PasswordVeryWeak = "Très faible";
+$UserXHasBeenAssignedToBoss = "L'apprenant %s vous a été assigné";
+$UserXHasBeenAssignedToBossWithUrlX = "Vous avez été assigné comme tuteur pour l'apprenant %s.
+
+Vous pouvez accéder à sa fiche ici: %s";
 ?>

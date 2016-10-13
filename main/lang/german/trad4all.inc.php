@@ -144,6 +144,12 @@ $GlobalLinkUseDoubleColumnPrivateToShowPrivately = "Am Ende des Links ::private 
 $DateTimezoneSettingNotSet = "Ihre php.ini-Datei enthält keine Definition zu date.timezone. Dies ist jedoch eine Vorraussetzung für Chamilo. Bitte konfigurieren Sie diese Einstellung, und starten Sie gegebenenfalls Ihren Webserver neu. Ignorieren auf eigene Gefahr!";
 $CourseVisibilityHidden = "Versteckt - nur für Administratoren sichtbar";
 $ApplyAllLanguages = "Änderungen auf alle Sprachen anwenden";
+$PasswordVeryStrong = "Sehr stark";
+$PasswordStrong = "Stark";
+$PasswordMedium = "Mittel";
+$PasswordNormal = "Normal";
+$PasswordWeak = "Schwach";
+$PasswordIsTooShort = "Das Passwort ist zu kurz";
 $BreadcrumbNavigationDisplayTitle = "Brotkrümelnavigation";
 $AllowurlfopenIsSetToOff = "Die Einstellung \"allow_url_fopen\" ist deaktiviert. Dies verhindert die korrekte Funktion des Registrierungsprozesses. Bitte in der php.ini oder in der Apache Virtual Host Konfiguration ändern.";
 $ImpossibleToContactVersionServerPleaseTryAgain = "Version-Server aktuell nicht verfügbar. Bitte später erneut versuchen.";
@@ -6894,4 +6900,14 @@ $DisplayColumn = "Spalte anzeigen";
 $LegalAgreementAccepted = "Nutzungsbedingungen akzeptiert";
 $DateFormatLongNoDayJS = "dd MM yy";
 $Contact = "Kontakt";
+$YourPasswordCannotBeTheSameAsYourEmail = "Ihr Passwort kann nicht die gleiche sein wie Ihre E-Mail";
+$YourPasswordCannotContainYourUsername = "Ihr Passwort kann nicht enthalten Ihren Benutzernamen";
+$WordTwoCharacterClasses = "Verwenden Sie unterschiedliche Charakterklassen";
+$TooManyRepetitions = "Zu viele Wiederholungen";
+$YourPasswordContainsSequences = "Ihr Passwort enthält Sequenzen";
+$PasswordVeryWeak = "Sehr schwach";
+$UserXHasBeenAssignedToBoss = "Der Schüler %s, die Ihnen zugeordnet";
+$UserXHasBeenAssignedToBossWithUrlX = "Sie wurden Vormund für den Lernenden %s ernannt.
+
+Sie können sein Profil zugreifen hier:% s";
 ?>

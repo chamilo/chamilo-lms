@@ -235,7 +235,7 @@ if (isset($_POST['SubmitAddNewLanguage'])) {
                     SubLanguageManager::remove_language_directory($english_name);
                     $msg .= Display::return_message(get_lang('LanguageDirectoryNotWriteableContactAdmin'), 'error');
                 } else {
-                    Display::addFlash(Display::return_message(get_lang('TheNewSubLanguageHasBeenAdded') . $str_info));
+                    Display::addFlash(Display::return_message(get_lang('TheNewSubLanguageHasBeenAdded') . $str_info, null, false));
                     unset($interbreadcrumb);
                     $_GET['sub_language_id'] = $_REQUEST['sub_language_id'] = $sl_id;
                     require 'sub_language.php';

@@ -155,8 +155,7 @@ CKEDITOR.dialog.add( 'video', function ( editor )
 			for(var i=0; i<videos.length; i++)
 			{
 				var video = videos[i];
-				if ( !video || !video.src )
-					continue;
+				if ( !video || !video.src ) { continue; }
 				//local copy of video URL
 				var mySrc = video.src;
 				//Chrome is picky about the redirect, so point directly to app/courses/ if currently pointing to courses/
@@ -168,9 +167,9 @@ CKEDITOR.dialog.add( 'video', function ( editor )
 				if (coursesPathIndex >= 0) {
 					//test if real path is not already present (in case of video edition)
 					var myPath = mySrc.indexOf('app');
-					if (myPath=-1) {
+					if (myPath==-1) {
 						//add real path (app/) to video.src...
-						var myChromeSrc = mySrc.slice(0, coursesPathIndex) + "app/" + mySrc.slice(myBug);
+						var myChromeSrc = mySrc.slice(0, coursesPathIndex) + "app/" + mySrc.slice(coursesPathIndex);
 						//insert full path link...
 						newHtmlTag = '<cke:source src="' + myChromeSrc + '" type="' + video.type + '" />';
 						newLinks = link.replace('%src%', myChromeSrc).replace('%type%', video.type);

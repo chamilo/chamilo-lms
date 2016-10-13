@@ -4628,8 +4628,10 @@ function display_forum_search_results($search_term)
     // Search restriction.
     foreach ($search_terms as $value) {
         $search_restriction[] = "
-        (posts.post_title LIKE '%".Database::escape_string(trim($value))."%'
-        OR posts.post_text LIKE '%".Database::escape_string(trim($value))."%')";
+        (
+            posts.post_title LIKE '%".Database::escape_string(trim($value))."%' OR 
+            posts.post_text LIKE '%".Database::escape_string(trim($value))."%' 
+        )";
     }
 
     $sessionCondition = api_get_session_condition($session_id, true, false, 'item_property.session_id');
@@ -4658,6 +4660,9 @@ function display_forum_search_results($search_term)
     $result = Database::query($sql);
     $search_results = [];
     while ($row = Database::fetch_array($result, 'ASSOC')) {
+        $forumId = $row['forum_id'];
+        $forumData = get_forums($forumId);
+        $category = isset($forum_categories_list[$forumData['forum_category']]) ? $forum_categories_list[$forumData['forum_category']] : null;
         $display_result = false;
         /*
           We only show it when
@@ -4667,8 +4672,8 @@ function display_forum_search_results($search_term)
           4. post is visible
          */
         if (!api_is_allowed_to_edit(null, true)) {
-            if ($forum_categories_list[$forum_list[$row['forum_id']]['forum_category']]['visibility'] == '1' AND
-                $forum_list[$row['forum_id']]['visibility'] == '1' AND $row['visible'] == '1'
+            if (!empty($category) && $category['visibility'] == '1' &&
+                $forumData['visibility'] == '1' && $forumData['visible'] == '1'
             ) {
                 $display_result = true;
             }
@@ -4677,12 +4682,12 @@ function display_forum_search_results($search_term)
         }
 
         if ($display_result) {
-            $search_results_item = '<li><a href="viewforumcategory.php?'.api_get_cidreq().'&forumcategory='.$forum_list[$row['forum_id']]['forum_category'].'&search='.urlencode($search_term).'">'.
-                prepare4display($forum_categories_list[$row['forum_id']['forum_category']]['cat_title']).'</a> &gt; ';
-            $search_results_item .= '<a href="viewforum.php?'.api_get_cidreq().'&forum='.$row['forum_id'].'&search='.urlencode($search_term).'">'.
+            $categoryName = !empty($category) ? $category['cat_title'] : '';
+            $search_results_item = '<li><a href="viewforumcategory.php?'.api_get_cidreq().'&forumcategory='.$forumData['forum_category'].'&search='.urlencode($search_term).'">'.
+                prepare4display($categoryName).'</a> &gt; ';
+            $search_results_item .= '<a href="viewforum.php?'.api_get_cidreq().'&forum='.$forumId.'&search='.urlencode($search_term).'">'.
                 prepare4display($forum_list[$row['forum_id']]['forum_title']).'</a> &gt; ';
-            //$search_results_item .= '<a href="">THREAD</a> &gt; ';
-            $search_results_item .= '<a href="viewthread.php?'.api_get_cidreq().'&forum='.$row['forum_id'].'&gradebook='.$gradebook.'&thread='.$row['thread_id'].'&search='.urlencode($search_term).'">'.
+            $search_results_item .= '<a href="viewthread.php?'.api_get_cidreq().'&forum='.$forumId.'&gradebook='.$gradebook.'&thread='.$row['thread_id'].'&search='.urlencode($search_term).'">'.
                 prepare4display($row['post_title']).'</a>';
             $search_results_item .= '<br />';
             if (api_strlen($row['post_title']) > 200) {
@@ -4749,14 +4754,12 @@ function add_forum_attachment_file($file_comment, $last_id)
     }
 
     $fileCount = count($_FILES['user_upload']['name']);
-
     $filesData = [];
 
     if (!is_array($_FILES['user_upload']['name'])) {
         $filesData[] = $_FILES['user_upload'];
     } else {
         $fileKeys = array_keys($_FILES['user_upload']);
-
         for ($i = 0; $i < $fileCount; $i++) {
             foreach ($fileKeys as $key) {
                 $filesData[$i][$key] = $_FILES['user_upload'][$key][$i];
@@ -4841,7 +4844,6 @@ function edit_forum_attachment_file($file_comment, $post_id, $id_attach)
     $course_id = api_get_course_int_id();
 
     $fileCount = count($_FILES['user_upload']['name']);
-
     $filesData = [];
 
     if (!is_array($_FILES['user_upload']['name'])) {

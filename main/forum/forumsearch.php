@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * These files are a complete rework of the forum. The database structure is
  * based on phpBB but all the code is rewritten. A lot of new functionalities
@@ -21,10 +23,6 @@
  *  @package chamilo.forum
  */
 
-
-use \ChamiloSession as Session;
-
-// Including the global initialiation file.
 require_once '../inc/global.inc.php';
 
 // The section (tabs).

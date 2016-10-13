@@ -4632,19 +4632,22 @@ function display_forum_search_results($search_term)
         OR posts.post_text LIKE '%".Database::escape_string(trim($value))."%')";
     }
 
+    $sessionCondition = api_get_session_condition($session_id, true, false, 'item_property.session_id');
+
     $sql = "SELECT posts.*
-            FROM $table_posts posts, $table_threads threads, $table_item_property item_property
+            FROM $table_posts posts INNER JOIN $table_threads threads
+            ON (posts.thread_id = threads.thread_id AND posts.c_id = threads.c_id)
+            INNER JOIN $table_item_property item_property
+            ON (item_property.ref = threads.thread_id AND item_property.c_id = threads.c_id)
             WHERE
-                posts.c_id = $course_id
-                AND item_property.c_id = $course_id
-                AND posts.thread_id = threads.thread_id
-                AND item_property.ref = threads.thread_id
-                AND item_property.visibility = 1
-                AND item_property.session_id = $session_id
-                AND posts.visible = 1
-                AND item_property.tool = '".TOOL_FORUM_THREAD."'
-                AND ".implode(' AND ', $search_restriction)."
-                GROUP BY posts.post_id";
+                posts.c_id = $course_id AND 
+                item_property.c_id = $course_id AND 
+                item_property.visibility = 1  
+                $sessionCondition AND
+                posts.visible = 1 AND 
+                item_property.tool = '".TOOL_FORUM_THREAD."' AND 
+                ".implode(' AND ', $search_restriction)."
+            GROUP BY posts.post_id";
 
     // Getting all the information of the forum categories.
     $forum_categories_list = get_forum_categories();

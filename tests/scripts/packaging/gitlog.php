@@ -46,21 +46,17 @@ foreach ($logs as $log) {
         continue;
     }
     //Skip language update messages (not important)
-    $langMsg = 'Update language terms';
-    if (strpos($log['message'], $langMsg) === 0) {
-        continue;
-    }
-    $langMsg = 'Update language vars';
-    if (strpos($log['message'], $langMsg) === 0) {
-        continue;
-    }
-    $langMsg = 'Update lang vars';
-    if (strpos($log['message'], $langMsg) === 0) {
-        continue;
-    }
-    $langMsg = 'Merge';
-    if (strpos($log['message'], $langMsg) === 0) {
-        continue;
+    $langMsg = array(
+        'Update language terms',
+        'Update language vars',
+        'Update lang vars',
+        'Merge',
+        'merge'
+    );
+    foreach ($langMsg as $msg) {
+        if (strpos($log['message'], $msg) === 0) {
+            continue 2;
+        }
     }
     // Look for tasks references
     $issueLink = '';

@@ -146,8 +146,8 @@ class Basic extends Toolbar
             $config['toolbar_maxToolbar'] = $this->getMaximizedToolbar();
         }
 
-        $config['customConfig'] = api_get_path(WEB_LIBRARY_PATH).'javascript/ckeditor/config_js.php';
-        $config['flash_flvPlayer'] = api_get_path(REL_PATH) . 'main/inc/lib/javascript/ckeditor/plugins/flash/swf/player.swf';
+        $config['customConfig'] = api_get_path(WEB_LIBRARY_JS_PATH) . 'ckeditor/config_js.php';
+        $config['flash_flvPlayer'] = api_get_path(WEB_LIBRARY_JS_PATH) . 'ckeditor/plugins/flash/swf/player.swf';
 
         /*filebrowserFlashBrowseUrl
         filebrowserFlashUploadUrl
@@ -172,7 +172,7 @@ class Basic extends Toolbar
             'wordLimit' => 'unlimited'
         );*/
 
-        $config['skin'] = 'bootstrapck,' . api_get_path(REL_PATH) . 'main/inc/lib/javascript/ckeditor/skins/bootstrapck/';
+        $config['skin'] = 'bootstrapck,' . api_get_path(WEB_LIBRARY_JS_PATH) . 'ckeditor/skins/bootstrapck/';
 
         if (isset($this->config)) {
             $this->config = array_merge($config, $this->config);

@@ -80,14 +80,14 @@ class ExtraField extends BaseAttribute
     /**
      * @var boolean
      *
-     * @ORM\Column(name="visible_to_self", type="boolean", nullable=true, unique=false, options={"default": false})
+     * @ORM\Column(name="visible_to_self", type="boolean", nullable=true, unique=false)
      */
     protected $visibleToSelf;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="visible_to_others", type="boolean", nullable=true, unique=false, options={"default": false})
+     * @ORM\Column(name="visible_to_others", type="boolean", nullable=true, unique=false)
      */
     protected $visibleToOthers;
 
@@ -117,6 +117,16 @@ class ExtraField extends BaseAttribute
      * @ORM\Column(name="created_at", type="datetime")
      */
     protected $createdAt;
+
+    /**
+     * ExtraField constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->visibleToOthers = 0;
+        $this->visibleToSelf = 0;
+    }
 
     /**
      * Get id

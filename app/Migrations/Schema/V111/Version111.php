@@ -314,7 +314,7 @@ class Version111 extends AbstractMigrationChamilo
         $this->addSql('DELETE FROM settings_options WHERE variable = "visio_use_rtmpt"');
         $this->addSql('DELETE FROM course_module WHERE name = "conference"');
         $this->addSql('ALTER TABLE c_student_publication_assignment CHANGE add_to_calendar add_to_calendar INT NOT NULL;');
-        $this->addSql('ALTER TABLE extra_field ADD visible_to_others TINYINT(1) DEFAULT FALSE, CHANGE visible visible_to_self TINYINT(1) DEFAULT FALSE');
+        $this->addSql('ALTER TABLE extra_field ADD visible_to_others TINYINT(1) DEFAULT 0, CHANGE visible visible_to_self TINYINT(1) DEFAULT 0');
     }
 
     /**

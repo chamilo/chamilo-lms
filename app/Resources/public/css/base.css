@@ -4722,6 +4722,16 @@ div#chat-remote-video video {
 .session .info-session span{
     margin-right: 10px;
 }
+.info-session .date{
+    font-size: 12px;
+}
+.info-session .description{
+    font-size: 12px;
+    line-height: 22px;
+}
+.info-session .teacher-name{
+    font-size: 12px;
+}
 .session .list-teachers{
     font-size: 12px;
 }

@@ -36,12 +36,12 @@ if ($action) {
     switch ($action) {
         case 'export':
             $dataToExport = [
-                [$tool_name, get_lang('RecordList')],
+                [$tool_name, $plugin->get_lang('RecordList')],
                 [],
                 [
                     get_lang('CreatedAt'),
                     get_lang('Status'),
-                    get_lang('Records'),
+                    $plugin->get_lang('Records'),
                     get_lang('Course'),
                     get_lang('Session'),
                     get_lang('Participants'),
@@ -51,7 +51,7 @@ if ($action) {
             foreach ($meetings as $meeting) {
                 $dataToExport[] = [
                     $meeting['created_at'],
-                    $meeting['status'] == 1 ? get_lang('MeetingOpened') : get_lang('MeetingClosed'),
+                    $meeting['status'] == 1 ? $plugin->get_lang('MeetingOpened') : $plugin->get_lang('MeetingClosed'),
                     $meeting['record'] == 1 ? get_lang('Yes') : get_lang('No'),
                     $meeting['course'] ? $meeting['course']->getTitle() : '-',
                     $meeting['session'] ? $meeting['session']->getName() : '-',
@@ -95,7 +95,7 @@ if ($meetings) {
     );
 }
 
-$tpl->assign('header', get_lang('RecordList'));
+$tpl->assign('header', $plugin->get_lang('RecordList'));
 $tpl->assign('actions', implode('', $actions));
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

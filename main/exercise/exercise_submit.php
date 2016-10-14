@@ -489,6 +489,10 @@ if (!empty($questionList)) {
 	$question_count = count($questionList);
 }
 
+if ($current_question > $question_count) {
+    $current_question = 0;
+}
+
 if ($formSent && isset($_POST)) {
     if ($debug) { error_log('9. $formSent was set'); }
 
@@ -528,7 +532,7 @@ if ($formSent && isset($_POST)) {
                 //saving each question
                 if ($objExercise->feedback_type != EXERCISE_FEEDBACK_TYPE_DIRECT) {
                     $nro_question = $current_question; // - 1;
-                 	$questionId   = $key;
+                 	$questionId = $key;
                     // gets the student choice for this question
                     $choice = $exerciseResult[$questionId];
                     if (isset($exe_id)) {

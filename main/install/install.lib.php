@@ -2558,7 +2558,7 @@ function fixIds(EntityManager $em)
                 ->setDisplayText($field['field_display_text'])
                 ->setDefaultValue($field['field_default_value'])
                 ->setFieldOrder($field['field_order'])
-                ->setVisible($field['field_visible'])
+                ->setVisibleToSelf($field['field_visible'])
                 ->setChangeable($field['field_changeable'])
                 ->setFilter($field['field_filter']);
 

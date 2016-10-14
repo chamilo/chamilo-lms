@@ -27,3 +27,6 @@ msgstr "Ihre Nachricht wurde versendet. Vielen Dank !"
 
 msgid "Contact"
 msgstr "Kontakt"
+
+msgid "Required field"
+msgstr "Eingabe erforderlich"

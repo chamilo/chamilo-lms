@@ -276,10 +276,13 @@ class Version110 extends AbstractMigrationChamilo
         }
 
         if ($schema->hasTable('c_attendance_calendar_rel_group')) {
-            $this->addSql("ALTER TABLE c_attendance_calendar_rel_group MODIFY COLUMN id INT NOT NULL");
-            $this->addSql("ALTER TABLE c_attendance_calendar_rel_group DROP PRIMARY KEY");
-            $this->addSql("ALTER TABLE c_attendance_calendar_rel_group MODIFY COLUMN id INT NULL DEFAULT NULL");
-            $this->addSql("ALTER TABLE c_attendance_calendar_rel_group ADD COLUMN iid int NOT NULL PRIMARY KEY AUTO_INCREMENT");
+            $table = $schema->getTable('c_attendance_calendar_rel_group');
+            if ($table->hasColumn('iid') === false) {
+                $this->addSql("ALTER TABLE c_attendance_calendar_rel_group MODIFY COLUMN id INT NOT NULL");
+                $this->addSql("ALTER TABLE c_attendance_calendar_rel_group DROP PRIMARY KEY");
+                $this->addSql("ALTER TABLE c_attendance_calendar_rel_group MODIFY COLUMN id INT NULL DEFAULT NULL");
+                $this->addSql("ALTER TABLE c_attendance_calendar_rel_group ADD COLUMN iid int NOT NULL PRIMARY KEY AUTO_INCREMENT");
+            }
         }
 
         $this->addSql("ALTER TABLE c_attendance_sheet MODIFY COLUMN c_id INT NOT NULL");

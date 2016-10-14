@@ -1461,7 +1461,13 @@ class SessionManager
                     'description'=> $description,
                     'show_description' => intval($showDescription),
                     'visibility' => $visibility,
-                    'send_subscription_notification' => $sendSubscriptionNotification
+                    'send_subscription_notification' => $sendSubscriptionNotification,
+                    'access_start_date' => null,
+                    'access_end_date' => null,
+                    'display_start_date' => null,
+                    'display_end_date' => null,
+                    'coach_access_start_date' => null,
+                    'coach_access_end_date' => null
                 ];
 
                 if (!empty($sessionAdminId)) {

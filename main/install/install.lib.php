@@ -3065,7 +3065,7 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
                       $sessionId
                     );
                     $courseInfo = api_get_course_info_by_id($courseId);
-                    if (empty($item_info)) {
+                    if (empty($itemInfo)) {
                         api_item_property_update(
                             $courseInfo,
                             'work',

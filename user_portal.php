@@ -233,6 +233,18 @@ if (!empty($_GET['history'])) {
     $historyClass = 'courses-history';
 }
 $controller->tpl->assign('course_history_page', $historyClass);
+
+if (api_is_student()) {
+    $extraFieldValue = new ExtraFieldValue('user');
+    $diagnosisComplete = $extraFieldValue->get_values_by_handler_and_field_variable(
+        api_get_user_id(),
+        'diagnosis_completed'
+    );
+
+    if ($diagnosisComplete === false) {
+        Display::addFlash(Display::return_message(get_lang('DoDiagnosisNow')));
+    }
+}
 $controller->tpl->display_two_col_template();
 
 // Deleting the session_id.

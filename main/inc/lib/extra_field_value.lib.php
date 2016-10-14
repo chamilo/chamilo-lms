@@ -737,7 +737,7 @@ class ExtraFieldValue extends Model
                     sf.extra_field_type = $extraFieldType
                 ORDER BY item_id
                 ";
-        
+
         if ($last) {
             // If we want the last element instead of the first
             // This is useful in special cases where there might

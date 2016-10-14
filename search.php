@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraFieldSavedSearch;
+
 $cidReset = true;
 
 require_once 'main/inc/global.inc.php';
@@ -29,6 +30,14 @@ $extraFieldValueSession = new ExtraFieldValue('session');
 $filter = false;
 $extraFieldValue = new ExtraFieldValue('user');
 $wantStage = $extraFieldValue->get_values_by_handler_and_field_variable(api_get_user_id(), 'filiere_want_stage');
+
+$diagnosisComplete = $extraFieldValue->get_values_by_handler_and_field_variable(api_get_user_id(), 'diagnosis_completed');
+if ($diagnosisComplete && isset($diagnosisComplete['value']) && $diagnosisComplete['value'] == 1 && !isset($_GET['result'])) {
+    Display::addFlash(Display::return_message(get_lang('SessionSearchSavedExplanation')));
+    //header('Location:'.api_get_self().'?result=1');
+    //exit;
+}
+
 $hide = true;
 if ($wantStage !== false) {
     $hide = $wantStage['value'] === 'yes';
@@ -72,13 +81,13 @@ $(document).ready(function() {
         }
     });
         
-    $("#extra_domaine").parent().append(
+    /*$("#extra_domaine").parent().append(
         $("<a>", {
             "class": "btn ajax btn-default",
             "href": "'.$url.'&field_variable=extra_domaine",
             "text": "'.get_lang('Order').'"             
         })
-    );    
+    );*/    
     
     $("#extra_theme").parent().append(
         $("<a>", {
@@ -227,53 +236,6 @@ $extraField = new ExtraField('user');
 $userForm = new FormValidator('user_form', 'post', api_get_self());
 $jqueryExtra = '';
 
-$htmlHeadXtra[] ='<script>
-$(document).ready(function() {
-	$("#filiere_panel").hide();	
-    $("#dispo_panel").hide();    
-    $("#dispo_pendant_panel").hide();
-    $("#niveau_panel").hide();
-    $("#methode_panel").hide();
-    $("#themes_panel").hide();    
-    $("#objectifs_panel").hide();
-
-	$("#filiere").on("click", function() {
-	    $("#filiere_panel").toggle();
-	    return false;
-	});
-	
-	$("#dispo").on("click", function() {
-	    $("#dispo_panel").toggle();
-	    return false;
-	});
-	
-	$("#dispo_pendant").on("click", function() {
-	    $("#dispo_pendant_panel").toggle();
-	    return false;
-	});	
-	
-	$("#niveau").on("click", function() {
-	    $("#niveau_panel").toggle();
-	    return false;
-	});
-	
-	$("#methode").on("click", function() {
-	    $("#methode_panel").toggle();
-	    return false;
-	});
-	
-	$("#themes").on("click", function() {
-	    $("#themes_panel").toggle();
-	    return false;
-	});
-	
-	$("#objectifs").on("click", function() {
-	    $("#objectifs_panel").toggle();
-	    return false;
-	});
-});
-</script>';
-
 $panel = Display::panel(get_lang('FiliereExplanation'), '', '', '',  '', 'filiere_panel');
 $userForm->addHeader(Display::url(get_lang('Filiere'), '#', ['id'=> 'filiere']).''.$panel);
 $fieldsToShow = [
@@ -407,7 +369,7 @@ $extra = $extraFieldSession->addElements(
     api_get_user_id(),
     [],
     $filter,
-    true,
+    false, //tag as select
     $fieldsToShow,
     $fieldsToShow,
     $defaults,
@@ -509,6 +471,7 @@ if ($userForm->validate()) {
     // Saving to user extra fields
     $extraFieldValue = new ExtraFieldValue('user');
     $userData = $userForm->getSubmitValues();
+    $userData['extra_diagnosis_completed'] = 1;
     $extraFieldValue->saveFieldValues($userData);
 
     // Saving to extra_field_saved_search
@@ -622,7 +585,6 @@ if ($userForm->validate()) {
     }
 
     Display::addFlash(Display::return_message(get_lang('SessionSearchSavedExplanation')));
-    Display::addFlash(Display::url(get_lang('ReturnToDiagnosis'), api_get_self(), ['class' => 'btn btn-primary']));
     header('Location:'.api_get_self().'?result=1');
     exit;
 }

@@ -1,5 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use ChamiloSession as Session;
+
 /**
 * Exercise administration
 * This script allows to manage an exercise. It is included from
@@ -7,8 +10,6 @@
 * @package chamilo.exercise
 * @author Olivier Brouckaert, Julio Montoya
 */
-
-use \ChamiloSession as Session;
 
 require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;

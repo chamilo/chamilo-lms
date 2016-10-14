@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
 *	Exercise submission
 * 	This script allows to run an exercise. According to the exercise type, questions
@@ -25,8 +27,6 @@
 * 			Adding reminder + ajax support (2011)
 *   Modified by hubert.borderiou (2011-10-21 question category)
 */
-
-use ChamiloSession as Session;
 
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_QUIZ;

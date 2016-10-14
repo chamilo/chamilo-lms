@@ -1536,6 +1536,8 @@ class SessionManager
         $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $tbl_url_session = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
         $tbl_item_properties = Database::get_course_table(TABLE_ITEM_PROPERTY);
+        $tbl_student_publication = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+        $tbl_student_publication_assignment = Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
         $em = Database::getManager();
 
         $userId = api_get_user_id();
@@ -1568,8 +1570,26 @@ class SessionManager
         foreach ($courses as $courseId) {
             $courseInfo = api_get_course_info_by_id($courseId);
             DocumentManager::deleteDocumentsFromSession($courseInfo, $id_checked);
+
+            $works = Database::select(
+                '*',
+                $tbl_student_publication,
+                [
+                    'where' => ['session_id = ? AND c_id = ?' => [$id_checked, $courseId]]
+                ]
+            );
+
+            $currentCourseRepositorySys = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/';
+
+            foreach ($works as $index => $work) {
+                if ($work['filetype'] = 'folder') {
+                    Database::query("DELETE FROM $tbl_student_publication_assignment WHERE publication_id = $index");
+                }
+                my_delete($currentCourseRepositorySys.'/'.$work['url']);
+            }
         }
 
+        Database::query("DELETE FROM $tbl_student_publication WHERE session_id IN($id_checked)");
         Database::query("DELETE FROM $tbl_session_rel_course WHERE session_id IN($id_checked)");
         Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE session_id IN($id_checked)");
         Database::query("DELETE FROM $tbl_session_rel_user WHERE session_id IN($id_checked)");

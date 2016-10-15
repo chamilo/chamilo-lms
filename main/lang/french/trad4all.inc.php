@@ -7836,4 +7836,32 @@ $UserXHasBeenAssignedToBoss = "L'apprenant %s vous a été assigné";
 $UserXHasBeenAssignedToBossWithUrlX = "Vous avez été assigné comme tuteur pour l'apprenant %s.
 
 Vous pouvez accéder à sa fiche ici: %s";
+$ShortName = "Nom court";
+$Portal = "Portail";
+$CourseUserDocument = "Document d'utilisateur du cours";
+$Destination = "Destinataire";
+$UserTestingEMailConf = "Test de configuration des mails";
+$CMS = "CMS/SGC";
+$SendLegalSubject = "Conditions légales";
+$SendLegalDescriptionToUrlX = "Veuillez accepter nos conditions légales ici: %s";
+$ExerciseInvisibleInSession = "Exercice invisible dans les sessions";
+$YouNeedToConfirmYourAgreementCheckYourEmail = "Vous devez confirmer votre accord avec nos conditions légales. Veuillez vérifier votre e-mail.";
+$ErrorImportingFile = "Erreur d'importation de fichier";
+$Hidden = "Caché";
+$Imported = "Importé";
+$ImportAsCSV = "Importer depuis un CSV";
+$EditThread = "Éditer fil de discussion";
+$AddFiles = "Ajouter fichiers";
+$GroupForums = "Forums de groupe";
+$Generate = "Générer";
+$Ticket = "Ticket";
+$InvalidApiKey = "Clef API incorrecte";
+$NoAnnouncement = "Pas d'annonces";
+$NoForum = "Pas de forum";
+$GoToExercise = "Aller à l'exercice";
+$ForumDissociate = "Dissocier le forum";
+$NoLPFound = "Aucun parcours trouvé";
+$ReportTypeLink = "Lien de rapport actif";
+$InviteesCantBeTutors = "Les invités ne peuvent être tuteurs";
+$InvalidAction = "Action incorrecte";
 ?>

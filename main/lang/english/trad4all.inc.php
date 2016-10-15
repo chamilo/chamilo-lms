@@ -7887,4 +7887,32 @@ $UserXHasBeenAssignedToBoss = "You have been assigned the learner %s";
 $UserXHasBeenAssignedToBossWithUrlX = "You have been assigned as tutor for the learner %s.
 
 You can access his profile here: %s";
+$ShortName = "Short name";
+$Portal = "Portal";
+$CourseUserDocument = "Course user document";
+$Destination = "Destination";
+$UserTestingEMailConf = "User testing of e-mail configuration";
+$CMS = "CMS";
+$SendLegalSubject = "Legal conditions";
+$SendLegalDescriptionToUrlX = "Please accept our legal conditions here: %s";
+$ExerciseInvisibleInSession = "Exercise invisible in sessions";
+$YouNeedToConfirmYourAgreementCheckYourEmail = "You need to confirm your agreement to our terms first. Please check your e-mail.";
+$ErrorImportingFile = "Error importing file";
+$Hidden = "Hidden";
+$Imported = "Imported";
+$ImportAsCSV = "Import from a CSV";
+$EditThread = "Edit thread";
+$AddFiles = "Add files";
+$GroupForums = "Group forums";
+$Generate = "Generate";
+$Ticket = "Ticket";
+$InvalidApiKey = "Invalid API key";
+$NoAnnouncement = "No announcement";
+$NoForum = "No forum";
+$GoToExercise = "Go to exercise";
+$ForumDissociate = "Dissociate forum";
+$NoLPFound = "No learning path found";
+$ReportTypeLink = "Active report link";
+$InviteesCantBeTutors = "Invitees cannot be tutors";
+$InvalidAction = "Invalid action";
 ?>

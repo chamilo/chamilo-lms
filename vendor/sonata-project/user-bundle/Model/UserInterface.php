@@ -15,6 +15,10 @@ interface UserInterface extends \FOS\UserBundle\Model\UserInterface
 {
     const GENDER_FEMALE = 'f';
     const GENDER_MALE = 'm';
+
+    /**
+     * NEXT_MAJOR: remove this constant.
+     */
     const GENDER_MAN = 'm'; // @deprecated
     const GENDER_UNKNOWN = 'u';
 

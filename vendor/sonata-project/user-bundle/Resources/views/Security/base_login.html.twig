@@ -25,7 +25,9 @@ file that was distributed with this source code.
 
                     {% block sonata_user_login_error %}
                         {% if error %}
-                            <div class="alert alert-danger alert-error">{{ error|trans({}, 'FOSUserBundle') }}</div>
+                            <div class="alert alert-danger alert-error">
+                                {{ error.messageKey|trans(error.messageData, 'security') }}
+                            </div>
                         {% endif %}
                     {% endblock %}
 

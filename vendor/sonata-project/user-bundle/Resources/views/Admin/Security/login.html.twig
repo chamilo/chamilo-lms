@@ -30,7 +30,9 @@
             {% block sonata_user_login_form %}
                 {% block sonata_user_login_error %}
                     {% if error %}
-                        <div class="alert alert-danger">{{ error|trans({}, 'FOSUserBundle') }}</div>
+                        <div class="alert alert-danger alert-error">
+                            {{ error.messageKey|trans(error.messageData, 'security') }}
+                        </div>
                     {% endif %}
                 {% endblock %}
                 <p class="login-box-msg">{{ 'title_user_authentication'|trans({}, 'SonataUserBundle') }}</p>

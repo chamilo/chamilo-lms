@@ -62,11 +62,7 @@ class RegistrationFOSUser1Controller extends Controller
                     $this->get('session')->remove('sonata_basket_delivery_redirect');
                     $url = $this->generateUrl($route);
                 } else {
-                    $url = $this->get('session')->get('sonata_user_redirect_url');
-                }
-
-                if (null === $route) {
-                    $url = $this->generateUrl('sonata_user_profile_show');
+                    $url = $this->get('session')->get('sonata_user_redirect_url', $this->generateUrl('sonata_user_profile_show'));
                 }
             }
 

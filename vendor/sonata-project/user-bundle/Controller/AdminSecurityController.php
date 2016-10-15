@@ -17,7 +17,9 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
-use Symfony\Component\Security\Core\SecurityContext;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\SecurityContextInterface;
 
 class AdminSecurityController extends Controller
 {
@@ -41,22 +43,29 @@ class AdminSecurityController extends Controller
 
         $session = $request->getSession();
 
+        // Symfony <2.6 BC. To be removed.
+        $authenticationErrorKey = class_exists('Symfony\Component\Security\Core\Security')
+            ? Security::AUTHENTICATION_ERROR : SecurityContextInterface::AUTHENTICATION_ERROR;
+
         // get the error if any (works with forward and redirect -- see below)
-        if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
-            $error = $request->attributes->get(SecurityContext::AUTHENTICATION_ERROR);
-        } elseif (null !== $session && $session->has(SecurityContext::AUTHENTICATION_ERROR)) {
-            $error = $session->get(SecurityContext::AUTHENTICATION_ERROR);
-            $session->remove(SecurityContext::AUTHENTICATION_ERROR);
+        if ($request->attributes->has($authenticationErrorKey)) {
+            $error = $request->attributes->get($authenticationErrorKey);
+        } elseif (null !== $session && $session->has($authenticationErrorKey)) {
+            $error = $session->get($authenticationErrorKey);
+            $session->remove($authenticationErrorKey);
         } else {
-            $error = '';
+            $error = null;
         }
 
-        if ($error) {
-            // TODO: this is a potential security risk (see http://trac.symfony-project.org/ticket/9523)
-            $error = $error->getMessage();
+        if (!$error instanceof AuthenticationException) {
+            $error = null; // The value does not come from the security component.
         }
+
+        $lastUsernameKey = class_exists('Symfony\Component\Security\Core\Security')
+            ? Security::LAST_USERNAME : SecurityContextInterface::LAST_USERNAME;
+
         // last username entered by the user
-        $lastUsername = (null === $session) ? '' : $session->get(SecurityContext::LAST_USERNAME);
+        $lastUsername = (null === $session) ? '' : $session->get($lastUsernameKey);
 
         if ($this->has('security.csrf.token_manager')) { // sf >= 2.4
             $csrfToken = $this->get('security.csrf.token_manager')->getToken('authenticate');
@@ -66,7 +75,11 @@ class AdminSecurityController extends Controller
                 : null;
         }
 
-        if ($this->get('security.context')->isGranted('ROLE_ADMIN')) {
+        // NEXT_MAJOR: remove when dropping Symfony <2.8 support
+        $authorizationCheckerService = class_exists('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface')
+            ? $this->get('security.authorization_checker') : $this->get('security.context');
+
+        if ($authorizationCheckerService->isGranted('ROLE_ADMIN')) {
             $refererUri = $request->server->get('HTTP_REFERER');
 
             return $this->redirect($refererUri && $refererUri != $request->getUri() ? $refererUri : $this->generateUrl('sonata_admin_dashboard'));
@@ -74,7 +87,7 @@ class AdminSecurityController extends Controller
 
         // TODO: Deprecated in 2.3, to be removed in 3.0
         try {
-            $resetRoute = $this->generateUrl('sonata_user_admin_resetting_request');
+            $resetRoute = $this->generateUrl('sonata_user_resetting_request');
         } catch (RouteNotFoundException $e) {
             @trigger_error('Using the route fos_user_resetting_request for admin password resetting is deprecated since version 2.3 and will be removed in 3.0. Use sonata_user_admin_resetting_request instead.', E_USER_DEPRECATED);
             $resetRoute = $this->generateUrl('fos_user_resetting_request');

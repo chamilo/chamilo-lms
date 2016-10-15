@@ -3828,74 +3828,6 @@
         "homepage": "https://symfony.com"
     },
     {
-        "name": "symfony/twig-bundle",
-        "version": "v2.8.12",
-        "version_normalized": "2.8.12.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/symfony/twig-bundle.git",
-            "reference": "713ca0d98d6a4d41e2df4ceba384f5ef9a480c68"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/symfony/twig-bundle/zipball/713ca0d98d6a4d41e2df4ceba384f5ef9a480c68",
-            "reference": "713ca0d98d6a4d41e2df4ceba384f5ef9a480c68",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.9",
-            "symfony/asset": "~2.7|~3.0.0",
-            "symfony/http-foundation": "~2.5|~3.0.0",
-            "symfony/http-kernel": "~2.7",
-            "symfony/twig-bridge": "~2.7|~3.0.0",
-            "twig/twig": "~1.26|~2.0"
-        },
-        "require-dev": {
-            "doctrine/annotations": "~1.0",
-            "symfony/config": "~2.8|~3.0.0",
-            "symfony/dependency-injection": "~2.6,>=2.6.6|~3.0.0",
-            "symfony/expression-language": "~2.4|~3.0.0",
-            "symfony/finder": "~2.0,>=2.0.5",
-            "symfony/framework-bundle": "~2.7|~3.0.0",
-            "symfony/routing": "~2.1|~3.0.0",
-            "symfony/stopwatch": "~2.2|~3.0.0",
-            "symfony/templating": "~2.1|~3.0.0",
-            "symfony/yaml": "~2.3|~3.0.0"
-        },
-        "time": "2016-10-01 14:18:53",
-        "type": "symfony-bundle",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "2.8-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Symfony\\Bundle\\TwigBundle\\": ""
-            },
-            "exclude-from-classmap": [
-                "/Tests/"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Fabien Potencier",
-                "email": "fabien@symfony.com"
-            },
-            {
-                "name": "Symfony Community",
-                "homepage": "https://symfony.com/contributors"
-            }
-        ],
-        "description": "Symfony TwigBundle",
-        "homepage": "https://symfony.com"
-    },
-    {
         "name": "symfony/polyfill-util",
         "version": "v1.2.0",
         "version_normalized": "1.2.0.0",
@@ -4797,616 +4729,6 @@
         ],
         "description": "Symfony Validator Component",
         "homepage": "http://symfony.com"
-    },
-    {
-        "name": "nelmio/api-doc-bundle",
-        "version": "2.13.0",
-        "version_normalized": "2.13.0.0",
-        "target-dir": "Nelmio/ApiDocBundle",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/nelmio/NelmioApiDocBundle.git",
-            "reference": "a3a9bb3b700f3ebaed95390292dad23f8141afa0"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/a3a9bb3b700f3ebaed95390292dad23f8141afa0",
-            "reference": "a3a9bb3b700f3ebaed95390292dad23f8141afa0",
-            "shasum": ""
-        },
-        "require": {
-            "michelf/php-markdown": "~1.4",
-            "php": ">=5.3",
-            "symfony/console": "~2.3|~3.0",
-            "symfony/framework-bundle": "~2.3|~3.0",
-            "symfony/twig-bundle": "~2.3|~3.0"
-        },
-        "conflict": {
-            "jms/serializer": "<0.12",
-            "jms/serializer-bundle": "<0.11",
-            "symfony/symfony": "~2.7.8",
-            "twig/twig": "<1.12"
-        },
-        "require-dev": {
-            "doctrine/doctrine-bundle": "~1.5",
-            "doctrine/orm": "~2.3",
-            "dunglas/api-bundle": "~1.0@dev",
-            "friendsofsymfony/rest-bundle": "~1.0|~2.0",
-            "jms/serializer-bundle": ">=0.11",
-            "sensio/framework-extra-bundle": "~3.0",
-            "symfony/browser-kit": "~2.3|~3.0",
-            "symfony/css-selector": "~2.3|~3.0",
-            "symfony/finder": "~2.3|~3.0",
-            "symfony/form": "~2.3|~3.0",
-            "symfony/phpunit-bridge": "~2.7|~3.0",
-            "symfony/serializer": "~2.7|~3.0",
-            "symfony/validator": "~2.3|~3.0",
-            "symfony/yaml": "~2.3|~3.0"
-        },
-        "suggest": {
-            "dunglas/api-bundle": "For making use of resources definitions of DunglasApiBundle.",
-            "friendsofsymfony/rest-bundle": "For making use of REST information in the doc.",
-            "jms/serializer": "For making use of serializer information in the doc.",
-            "symfony/form": "For using form definitions as input.",
-            "symfony/validator": "For making use of validator information in the doc."
-        },
-        "time": "2016-06-13 09:12:09",
-        "type": "symfony-bundle",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "2.13-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "Nelmio\\ApiDocBundle": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Nelmio",
-                "homepage": "http://nelm.io"
-            },
-            {
-                "name": "Symfony Community",
-                "homepage": "https://github.com/nelmio/NelmioApiDocBundle/contributors"
-            }
-        ],
-        "description": "Generates documentation for your REST API from annotations",
-        "keywords": [
-            "api",
-            "doc",
-            "documentation",
-            "rest"
-        ]
-    },
-    {
-        "name": "phpoption/phpoption",
-        "version": "1.5.0",
-        "version_normalized": "1.5.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/schmittjoh/php-option.git",
-            "reference": "94e644f7d2051a5f0fcf77d81605f152eecff0ed"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/schmittjoh/php-option/zipball/94e644f7d2051a5f0fcf77d81605f152eecff0ed",
-            "reference": "94e644f7d2051a5f0fcf77d81605f152eecff0ed",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.0"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "4.7.*"
-        },
-        "time": "2015-07-25 16:39:46",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "1.3-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "PhpOption\\": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "Apache2"
-        ],
-        "authors": [
-            {
-                "name": "Johannes M. Schmitt",
-                "email": "schmittjoh@gmail.com"
-            }
-        ],
-        "description": "Option Type for PHP",
-        "keywords": [
-            "language",
-            "option",
-            "php",
-            "type"
-        ]
-    },
-    {
-        "name": "phpcollection/phpcollection",
-        "version": "0.5.0",
-        "version_normalized": "0.5.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/schmittjoh/php-collection.git",
-            "reference": "f2bcff45c0da7c27991bbc1f90f47c4b7fb434a6"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/schmittjoh/php-collection/zipball/f2bcff45c0da7c27991bbc1f90f47c4b7fb434a6",
-            "reference": "f2bcff45c0da7c27991bbc1f90f47c4b7fb434a6",
-            "shasum": ""
-        },
-        "require": {
-            "phpoption/phpoption": "1.*"
-        },
-        "time": "2015-05-17 12:39:23",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "0.4-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "PhpCollection": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "Apache2"
-        ],
-        "authors": [
-            {
-                "name": "Johannes M. Schmitt",
-                "email": "schmittjoh@gmail.com"
-            }
-        ],
-        "description": "General-Purpose Collection Library for PHP",
-        "keywords": [
-            "collection",
-            "list",
-            "map",
-            "sequence",
-            "set"
-        ]
-    },
-    {
-        "name": "jms/parser-lib",
-        "version": "1.0.0",
-        "version_normalized": "1.0.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/schmittjoh/parser-lib.git",
-            "reference": "c509473bc1b4866415627af0e1c6cc8ac97fa51d"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/schmittjoh/parser-lib/zipball/c509473bc1b4866415627af0e1c6cc8ac97fa51d",
-            "reference": "c509473bc1b4866415627af0e1c6cc8ac97fa51d",
-            "shasum": ""
-        },
-        "require": {
-            "phpoption/phpoption": ">=0.9,<2.0-dev"
-        },
-        "time": "2012-11-18 18:08:43",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "1.0-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "JMS\\": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "Apache2"
-        ],
-        "description": "A library for easily creating recursive-descent parsers."
-    },
-    {
-        "name": "jms/metadata",
-        "version": "1.5.1",
-        "version_normalized": "1.5.1.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/schmittjoh/metadata.git",
-            "reference": "22b72455559a25777cfd28c4ffda81ff7639f353"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/schmittjoh/metadata/zipball/22b72455559a25777cfd28c4ffda81ff7639f353",
-            "reference": "22b72455559a25777cfd28c4ffda81ff7639f353",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.0"
-        },
-        "require-dev": {
-            "doctrine/cache": "~1.0"
-        },
-        "time": "2014-07-12 07:13:19",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "1.5.x-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "Metadata\\": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "Apache"
-        ],
-        "authors": [
-            {
-                "name": "Johannes Schmitt",
-                "email": "schmittjoh@gmail.com",
-                "homepage": "https://github.com/schmittjoh",
-                "role": "Developer of wrapped JMSSerializerBundle"
-            }
-        ],
-        "description": "Class/method/property metadata management in PHP",
-        "keywords": [
-            "annotations",
-            "metadata",
-            "xml",
-            "yaml"
-        ]
-    },
-    {
-        "name": "jms/serializer",
-        "version": "1.1.0",
-        "version_normalized": "1.1.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/schmittjoh/serializer.git",
-            "reference": "fe13a1f993ea3456e195b7820692f2eb2b6bbb48"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/schmittjoh/serializer/zipball/fe13a1f993ea3456e195b7820692f2eb2b6bbb48",
-            "reference": "fe13a1f993ea3456e195b7820692f2eb2b6bbb48",
-            "shasum": ""
-        },
-        "require": {
-            "doctrine/annotations": "1.*",
-            "doctrine/instantiator": "~1.0.3",
-            "jms/metadata": "~1.1",
-            "jms/parser-lib": "1.*",
-            "php": ">=5.4.0",
-            "phpcollection/phpcollection": "~0.1"
-        },
-        "conflict": {
-            "twig/twig": "<1.12"
-        },
-        "require-dev": {
-            "doctrine/orm": "~2.1",
-            "doctrine/phpcr-odm": "~1.0.1",
-            "jackalope/jackalope-doctrine-dbal": "1.0.*",
-            "phpunit/phpunit": "~4.0",
-            "propel/propel1": "~1.7",
-            "symfony/filesystem": "2.*",
-            "symfony/form": "~2.1",
-            "symfony/translation": "~2.0",
-            "symfony/validator": "~2.0",
-            "symfony/yaml": "2.*",
-            "twig/twig": "~1.12|~2.0"
-        },
-        "suggest": {
-            "symfony/yaml": "Required if you'd like to serialize data to YAML format."
-        },
-        "time": "2015-10-27 09:24:41",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "1.1-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "JMS\\Serializer": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "Apache2"
-        ],
-        "authors": [
-            {
-                "name": "Johannes M. Schmitt",
-                "email": "schmittjoh@gmail.com"
-            }
-        ],
-        "description": "Library for (de-)serializing data of any complexity; supports XML, JSON, and YAML.",
-        "homepage": "http://jmsyst.com/libs/serializer",
-        "keywords": [
-            "deserialization",
-            "jaxb",
-            "json",
-            "serialization",
-            "xml"
-        ]
-    },
-    {
-        "name": "jms/serializer-bundle",
-        "version": "1.1.0",
-        "version_normalized": "1.1.0.0",
-        "target-dir": "JMS/SerializerBundle",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/schmittjoh/JMSSerializerBundle.git",
-            "reference": "3e396c980545350c2efb65a50041d2a9f9d6562e"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/schmittjoh/JMSSerializerBundle/zipball/3e396c980545350c2efb65a50041d2a9f9d6562e",
-            "reference": "3e396c980545350c2efb65a50041d2a9f9d6562e",
-            "shasum": ""
-        },
-        "require": {
-            "jms/serializer": "^1.0.0",
-            "php": ">=5.4.0",
-            "phpoption/phpoption": "^1.1.0",
-            "symfony/framework-bundle": "~2.3|~3.0"
-        },
-        "require-dev": {
-            "doctrine/doctrine-bundle": "*",
-            "doctrine/orm": "*",
-            "symfony/browser-kit": "*",
-            "symfony/class-loader": "*",
-            "symfony/css-selector": "*",
-            "symfony/finder": "*",
-            "symfony/form": "*",
-            "symfony/process": "*",
-            "symfony/stopwatch": "*",
-            "symfony/twig-bundle": "*",
-            "symfony/validator": "*",
-            "symfony/yaml": "*"
-        },
-        "suggest": {
-            "jms/di-extra-bundle": "Required to get lazy loading (de)serialization visitors, ~1.3"
-        },
-        "time": "2015-11-10 12:26:42",
-        "type": "symfony-bundle",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "1.1-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "JMS\\SerializerBundle": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "Apache2"
-        ],
-        "authors": [
-            {
-                "name": "Johannes M. Schmitt",
-                "email": "schmittjoh@gmail.com"
-            }
-        ],
-        "description": "Allows you to easily serialize, and deserialize data of any complexity",
-        "homepage": "http://jmsyst.com/bundles/JMSSerializerBundle",
-        "keywords": [
-            "deserialization",
-            "jaxb",
-            "json",
-            "serialization",
-            "xml"
-        ]
-    },
-    {
-        "name": "willdurand/jsonp-callback-validator",
-        "version": "v1.1.0",
-        "version_normalized": "1.1.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/willdurand/JsonpCallbackValidator.git",
-            "reference": "1a7d388bb521959e612ef50c5c7b1691b097e909"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/willdurand/JsonpCallbackValidator/zipball/1a7d388bb521959e612ef50c5c7b1691b097e909",
-            "reference": "1a7d388bb521959e612ef50c5c7b1691b097e909",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.0"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "~3.7"
-        },
-        "time": "2014-01-20 22:35:06",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "JsonpCallbackValidator": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "William Durand",
-                "email": "william.durand1@gmail.com",
-                "homepage": "http://www.willdurand.fr"
-            }
-        ],
-        "description": "JSONP callback validator."
-    },
-    {
-        "name": "willdurand/negotiation",
-        "version": "1.5.0",
-        "version_normalized": "1.5.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/willdurand/Negotiation.git",
-            "reference": "2a59f2376557303e3fa91465ab691abb82945edf"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/willdurand/Negotiation/zipball/2a59f2376557303e3fa91465ab691abb82945edf",
-            "reference": "2a59f2376557303e3fa91465ab691abb82945edf",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.0"
-        },
-        "time": "2015-10-01 07:42:40",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "1.5-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Negotiation\\": "src/Negotiation"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "William Durand",
-                "email": "william.durand1@gmail.com"
-            }
-        ],
-        "description": "Content Negotiation tools for PHP provided as a standalone library.",
-        "homepage": "http://williamdurand.fr/Negotiation/",
-        "keywords": [
-            "accept",
-            "content",
-            "format",
-            "header",
-            "negotiation"
-        ]
-    },
-    {
-        "name": "friendsofsymfony/rest-bundle",
-        "version": "1.8.0",
-        "version_normalized": "1.8.0.0",
-        "target-dir": "FOS/RestBundle",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/FriendsOfSymfony/FOSRestBundle.git",
-            "reference": "c0f1aaf9e61a89b02eb5f2fbd2871d686706acb1"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/FriendsOfSymfony/FOSRestBundle/zipball/c0f1aaf9e61a89b02eb5f2fbd2871d686706acb1",
-            "reference": "c0f1aaf9e61a89b02eb5f2fbd2871d686706acb1",
-            "shasum": ""
-        },
-        "require": {
-            "doctrine/inflector": "~1.0",
-            "php": "^5.3.9|~7.0",
-            "psr/log": "~1.0",
-            "symfony/finder": "~2.3|~3.0",
-            "symfony/framework-bundle": "~2.3|~3.0",
-            "symfony/http-kernel": "^2.3.24|~3.0",
-            "willdurand/jsonp-callback-validator": "~1.0",
-            "willdurand/negotiation": "~1.2"
-        },
-        "conflict": {
-            "jms/serializer": "<0.13",
-            "jms/serializer-bundle": "<0.11",
-            "sensio/framework-extra-bundle": ">=3.0.13",
-            "symfony/validator": ">=2.5.0,<2.5.5"
-        },
-        "require-dev": {
-            "jms/serializer": "~0.13|~1.0",
-            "jms/serializer-bundle": "~0.11|~1.0",
-            "phpoption/phpoption": "~1.1.0",
-            "sensio/framework-extra-bundle": "~2.0|~3.0,<3.0.13",
-            "sllh/php-cs-fixer-styleci-bridge": "^1.3",
-            "symfony/browser-kit": "~2.3|~3.0",
-            "symfony/dependency-injection": "~2.3|~3.0",
-            "symfony/form": "~2.3|~3.0",
-            "symfony/phpunit-bridge": "~2.7|~3.0",
-            "symfony/security": "~2.3|~3.0",
-            "symfony/serializer": "~2.3|~3.0",
-            "symfony/validator": "~2.3|~3.0",
-            "symfony/yaml": "~2.3|~3.0"
-        },
-        "suggest": {
-            "jms/serializer-bundle": "Add support for advanced serialization capabilities, recommended, requires ~0.12|~1.0",
-            "sensio/framework-extra-bundle": "Add support for route annotations and the view response listener, requires ~2.0|~3.0",
-            "symfony/serializer": "Add support for basic serialization capabilities and xml decoding, requires ~2.3",
-            "symfony/validator": "Add support for validation capabilities in the ParamFetcher, requires ~2.3"
-        },
-        "time": "2016-06-21 08:42:59",
-        "type": "symfony-bundle",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "1.8-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "FOS\\RestBundle": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Lukas Kahwe Smith",
-                "email": "smith@pooteeweet.org"
-            },
-            {
-                "name": "FriendsOfSymfony Community",
-                "homepage": "https://github.com/friendsofsymfony/FOSRestBundle/contributors"
-            },
-            {
-                "name": "Konstantin Kudryashov",
-                "email": "ever.zet@gmail.com"
-            }
-        ],
-        "description": "This Bundle provides various tools to rapidly develop RESTful API's with Symfony",
-        "homepage": "http://friendsofsymfony.github.com",
-        "keywords": [
-            "rest"
-        ]
     },
     {
         "name": "sonata-project/google-authenticator",
@@ -6672,89 +5994,6 @@
             "admin",
             "bootstrap",
             "sonata"
-        ]
-    },
-    {
-        "name": "sonata-project/user-bundle",
-        "version": "3.0.1",
-        "version_normalized": "3.0.1.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/sonata-project/SonataUserBundle.git",
-            "reference": "e9b641b7dad0e0bd086efef908cbdd61c8451bb3"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/sonata-project/SonataUserBundle/zipball/e9b641b7dad0e0bd086efef908cbdd61c8451bb3",
-            "reference": "e9b641b7dad0e0bd086efef908cbdd61c8451bb3",
-            "shasum": ""
-        },
-        "require": {
-            "friendsofsymfony/rest-bundle": "^1.1",
-            "friendsofsymfony/user-bundle": "^1.3",
-            "jms/serializer-bundle": "~0.13 || ^1.0",
-            "nelmio/api-doc-bundle": "^2.4",
-            "php": "^5.3 || ^7.0",
-            "sonata-project/admin-bundle": "^3.1",
-            "sonata-project/core-bundle": "^3.0",
-            "sonata-project/datagrid-bundle": "^2.2",
-            "sonata-project/doctrine-extensions": "^1.0",
-            "sonata-project/easy-extends-bundle": "^2.1",
-            "sonata-project/google-authenticator": "^1.0",
-            "symfony/console": "^2.3",
-            "symfony/form": "^2.3",
-            "symfony/http-foundation": "^2.3",
-            "symfony/security": "^2.3"
-        },
-        "conflict": {
-            "jms/serializer": "<0.13",
-            "sonata-project/doctrine-orm-admin-bundle": "<3.0 || >=4.0",
-            "sonata-project/seo-bundle": "<2.0 || >=3.0"
-        },
-        "require-dev": {
-            "doctrine/orm": "^2.0",
-            "sllh/php-cs-fixer-styleci-bridge": "^2.0",
-            "sonata-project/seo-bundle": "^2.0",
-            "symfony/phpunit-bridge": "^2.8 || ^3.0"
-        },
-        "suggest": {
-            "sonata-project/doctrine-orm-admin-bundle": "^3.0",
-            "sonata-project/seo-bundle": "For SEO breadcrumb block service usage"
-        },
-        "time": "2016-05-20 09:05:03",
-        "type": "symfony-bundle",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "3.x-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Sonata\\UserBundle\\": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Thomas Rabaix",
-                "email": "thomas.rabaix@sonata-project.org",
-                "homepage": "http://sonata-project.org"
-            },
-            {
-                "name": "Sonata Community",
-                "homepage": "https://github.com/sonata-project/SonataUserBundle/contributors"
-            }
-        ],
-        "description": "Symfony SonataUserBundle",
-        "homepage": "http://sonata-project.org/bundles/user",
-        "keywords": [
-            "google authenticator",
-            "sonata",
-            "user"
         ]
     },
     {
@@ -9243,6 +8482,97 @@
             "selenium",
             "testing",
             "webdriver"
+        ]
+    },
+    {
+        "name": "sonata-project/user-bundle",
+        "version": "3.1.0",
+        "version_normalized": "3.1.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/sonata-project/SonataUserBundle.git",
+            "reference": "4c9f2a337cb8d3e34fab65126ff963342c9ad8f8"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/sonata-project/SonataUserBundle/zipball/4c9f2a337cb8d3e34fab65126ff963342c9ad8f8",
+            "reference": "4c9f2a337cb8d3e34fab65126ff963342c9ad8f8",
+            "shasum": ""
+        },
+        "require": {
+            "friendsofsymfony/user-bundle": "^1.3",
+            "php": "^5.3 || ^7.0",
+            "sonata-project/admin-bundle": "^3.1",
+            "sonata-project/core-bundle": "^3.0",
+            "sonata-project/datagrid-bundle": "^2.2",
+            "sonata-project/doctrine-extensions": "^1.0",
+            "sonata-project/easy-extends-bundle": "^2.1",
+            "sonata-project/google-authenticator": "^1.0",
+            "symfony/console": "^2.3",
+            "symfony/form": "^2.3",
+            "symfony/http-foundation": "^2.3",
+            "symfony/security": "^2.3"
+        },
+        "conflict": {
+            "friendsofsymfony/rest-bundle": "<1.1 || >=2.0",
+            "jms/serializer": "<0.13 || >=2.0",
+            "nelmio/api-doc-bundle": "<2.4 || >= 3.0",
+            "sonata-project/doctrine-orm-admin-bundle": "<3.0 || >=4.0",
+            "sonata-project/seo-bundle": "<2.0 || >=3.0"
+        },
+        "require-dev": {
+            "doctrine/orm": "^2.0",
+            "friendsofsymfony/rest-bundle": "^1.1",
+            "jms/serializer-bundle": "^0.13 || ^1.0",
+            "nelmio/api-doc-bundle": "^2.4",
+            "sllh/php-cs-fixer-styleci-bridge": "^2.0",
+            "sonata-project/seo-bundle": "^2.0",
+            "symfony/phpunit-bridge": "^2.8 || ^3.0"
+        },
+        "suggest": {
+            "friendsofsymfony/rest-bundle": "For using the public API methods.",
+            "jms/serializer": "For using the public API methods.",
+            "nelmio/api-doc-bundle": "For using the public API methods.",
+            "sonata-project/doctrine-orm-admin-bundle": "^3.0",
+            "sonata-project/seo-bundle": "For SEO breadcrumb block service usage"
+        },
+        "time": "2016-10-14 09:43:35",
+        "type": "symfony-bundle",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "3.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Sonata\\UserBundle\\": ""
+            },
+            "exclude-from-classmap": [
+                "Tests/"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Thomas Rabaix",
+                "email": "thomas.rabaix@sonata-project.org",
+                "homepage": "http://sonata-project.org"
+            },
+            {
+                "name": "Sonata Community",
+                "homepage": "https://github.com/sonata-project/SonataUserBundle/contributors"
+            }
+        ],
+        "description": "Symfony SonataUserBundle",
+        "homepage": "http://sonata-project.org/bundles/user",
+        "keywords": [
+            "google authenticator",
+            "sonata",
+            "user"
         ]
     }
 ]

@@ -28,6 +28,8 @@ class Version20160930144400 extends AbstractMigrationChamilo
                     h.hotspot_answer_id = qa.id
             )
         ');
+
+        $this->addSql('ALTER TABLE extra_field ADD visible_to_others TINYINT(1) DEFAULT 0, CHANGE visible visible_to_self TINYINT(1) DEFAULT 0');
     }
 
     /**

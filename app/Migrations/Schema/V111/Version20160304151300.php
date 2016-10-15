@@ -26,6 +26,6 @@ class Version20160304151300 extends AbstractMigrationChamilo
      */
     public function down(Schema $schema)
     {
-        
+
     }
 }

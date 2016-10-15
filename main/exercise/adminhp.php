@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
 *	HotPotatoes administration.
 *	@package chamilo.exercise

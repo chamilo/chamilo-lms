@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use \ChamiloSession as Session;
+use ChamiloSession as Session;
 
 /**
 * Exercise preview
@@ -47,8 +47,7 @@ if ($objExercise->expired_time != 0 && !empty($clock_expired_time)) {
 
 if ($time_control) {
     // Get time left for expiring time
-    $time_left = api_strtotime($clock_expired_time,'UTC') - time();
-
+    $time_left = api_strtotime($clock_expired_time, 'UTC') - time();
     $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/stylesheet/jquery.epiclock.css');
     $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/renderers/minute/epiclock.minute.css');
     $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.dateformat.min.js');
@@ -99,18 +98,18 @@ $exercise_stat_info = $objExercise->get_stat_track_exercise_info(
     0
 );
 
-$attempt_list = null;
+/*$attempt_list = null;
 if (isset($exercise_stat_info['exe_id'])) {
     $attempt_list = Event::getAllExerciseEventByExeId($exercise_stat_info['exe_id']);
-}
+}*/
 
 //1. Check if this is a new attempt or a previous
 $label = get_lang('StartTest');
-if ($time_control && !empty($clock_expired_time) || !empty($attempt_list)) {
+if ($time_control && !empty($clock_expired_time) || isset($exercise_stat_info['exe_id'])) {
     $label = get_lang('ContinueTest');
 }
 
-if (!empty($attempt_list)) {
+if (isset($exercise_stat_info['exe_id'])) {
     $message = Display::return_message(get_lang('YouTriedToResolveThisExerciseEarlier'));
 }
 
@@ -177,7 +176,6 @@ if ($objExercise->results_disabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANS
 if (!empty($attempts)) {
     $i = $counter;
     foreach ($attempts as $attempt_result) {
-
         $score = ExerciseLib::show_score(
             $attempt_result['exe_result'],
             $attempt_result['exe_weighting']

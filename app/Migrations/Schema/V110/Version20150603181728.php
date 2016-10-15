@@ -60,8 +60,8 @@ class Version20150603181728 extends AbstractMigrationChamilo
         $this->addSql("DELETE FROM c_item_property WHERE to_user_id IS NOT NULL AND to_user_id <> 0 AND to_user_id NOT IN (SELECT id FROM user)");
 
         // Sometimes the user was deleted but we need to keep the document.
-        // Assuming user.id = 1 (admin)
-        $this->addSql("UPDATE c_item_property SET insert_user_id = 1 WHERE insert_user_id IS NOT NULL AND insert_user_id <> 0 AND insert_user_id NOT IN (SELECT id FROM user)");
+        // Taking first admin
+        $this->addSql("UPDATE c_item_property SET insert_user_id = (SELECT user_id FROM admin LIMIT 1) WHERE insert_user_id IS NOT NULL AND insert_user_id <> 0 AND insert_user_id NOT IN (SELECT id FROM user)");
 
         // Remove inconsistencies about non-existing users
         $this->addSql("DELETE FROM c_item_property WHERE c_id NOT IN (SELECT id FROM course)");

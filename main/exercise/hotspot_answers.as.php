@@ -57,8 +57,6 @@ $data['image_height'] = $pictureHeight;
 $data['courseCode'] = $_course['path'];
 $data['hotspots'] = [];
 
-error_log("\$objExercise->results_disabled: {$objExercise->results_disabled}");
-
 $showScoreOptions = [
     RESULT_DISABLE_SHOW_SCORE_ONLY,
     RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES,
@@ -89,13 +87,13 @@ if ($showExpectedChoice) {
         ->getQuery()
         ->getResult();
 
-    /** @var CQuizAnswer $hotspotAnswer */
-    foreach ($result as $hotspotAnswer) {
+    /** @var CQuizAnswer $hotSpotAnswer */
+    foreach ($result as $hotSpotAnswer) {
         $hotSpot = [];
-        $hotSpot['id'] = $hotspotAnswer->getIid();
-        $hotSpot['answer'] = $hotspotAnswer->getAnswer();
+        $hotSpot['id'] = $hotSpotAnswer->getIid();
+        $hotSpot['answer'] = $hotSpotAnswer->getAnswer();
 
-        switch ($hotspotAnswer->getHotspotType()) {
+        switch ($hotSpotAnswer->getHotspotType()) {
             case 'square':
                 $hotSpot['type'] = 'square';
                 break;
@@ -113,8 +111,7 @@ if ($showExpectedChoice) {
                 break;
         }
 
-        $hotSpot['coord'] = $hotspotAnswer->getHotspotCoordinates();
-
+        $hotSpot['coord'] = $hotSpotAnswer->getHotspotCoordinates();
         $data['hotspots'][] = $hotSpot;
     }
 }

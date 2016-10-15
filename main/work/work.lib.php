@@ -3587,7 +3587,7 @@ function checkExistingWorkFileName($filename, $workId)
     $work_table = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
     $filename = Database::escape_string($filename);
     $sql = "SELECT title FROM $work_table
-                        WHERE parent_id = $workId AND title = '$filename'";
+                        WHERE parent_id = $workId AND title = '$filename' AND active = 1";
     $result = Database::query($sql);
     return Database::fetch_assoc($result);
 }

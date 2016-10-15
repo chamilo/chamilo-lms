@@ -2550,20 +2550,21 @@ function fixIds(EntityManager $em)
                 error_log("Loading field: ".$field['field_variable']);
             }
             $originalId = $field['id'];
-            $extraField = new ExtraField();
-            $extraField
-                ->setExtraFieldType($type)
-                ->setVariable($field['field_variable'])
-                ->setFieldType($field['field_type'])
-                ->setDisplayText($field['field_display_text'])
-                ->setDefaultValue($field['field_default_value'])
-                ->setFieldOrder($field['field_order'])
-                ->setVisible($field['field_visible'])
-                ->setChangeable($field['field_changeable'])
-                ->setFilter($field['field_filter']);
 
-            $em->persist($extraField);
-            $em->flush();
+            $params = [
+                'extra_field_type' => $type,
+                'variable' => $field['field_variable'],
+                'field_type' => $field['field_type'],
+                'display_text' => $field['field_display_text'],
+                'default_value' => $field['field_default_value'],
+                'field_order' => $field['field_order'],
+                'visible' => $field['field_visible'],
+                'changeable' => $field['field_changeable'],
+                'filter' => $field['field_filter']
+            ];
+
+            $connection->insert('extra_field', $params);
+            $newExtraFieldId = $connection->lastInsertId();
 
             $values = array();
             $handlerId = null;
@@ -2603,14 +2604,13 @@ function fixIds(EntityManager $em)
                 $options = $result->fetchAll();
 
                 foreach ($options as $option) {
-                    $extraFieldOption = new ExtraFieldOptions();
-                    $extraFieldOption
-                        ->setDisplayText($option['option_display_text'])
-                        ->setField($extraField)
-                        ->setOptionOrder($option['option_order'])
-                        ->setValue($option['option_value']);
-                    $em->persist($extraFieldOption);
-                    $em->flush();
+                    $params = [
+                        'display_text' => $option['option_display_text'],
+                        'field_id' => $newExtraFieldId,
+                        'option_order' => $option['option_order'],
+                        'option_value' => $option['option_value']
+                    ];
+                    $connection->insert('extra_field_options', $params);
                 }
 
                 $sql = "SELECT * FROM $valueTable WHERE field_id = $originalId ";
@@ -2628,19 +2628,10 @@ function fixIds(EntityManager $em)
                 $k = 0;
                 foreach ($values as $value) {
                     if (isset($value[$handlerId])) {
-                        /*
-                        $extraFieldValue = new ExtraFieldValues();
-                        $extraFieldValue
-                            ->setValue($value['field_value'])
-                            ->setField($extraField)
-                            ->setItemId($value[$handlerId]);
-                        $em->persist($extraFieldValue);
-                        $em->flush();
-                        */
                         // Insert without the use of the entity as it reduces
                         // speed to 2 records per second (much too slow)
                         $params = [
-                            'field_id' => $extraField->getId(),
+                            'field_id' => $newExtraFieldId,
                             'value' => $value['field_value'],
                             'item_id' => $value[$handlerId]
                         ];
@@ -3074,7 +3065,7 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
                       $sessionId
                     );
                     $courseInfo = api_get_course_info_by_id($courseId);
-                    if (empty($item_info)) {
+                    if (empty($itemInfo)) {
                         api_item_property_update(
                             $courseInfo,
                             'work',

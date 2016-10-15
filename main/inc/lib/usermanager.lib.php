@@ -1532,6 +1532,73 @@ class UserManager
     }
 
     /**
+     * *** READ BEFORE REVIEW THIS FUNCTION ***
+     * This function is a exact copy from get_user_picture_path_by_id() and it was create it to avoid
+     * a recursive calls for get_user_picture_path_by_id() in another functions when you update a user picture
+     * in same script, so you can find this function usage in update_user_picture() function.
+     *
+     * @param   integer   $id User ID
+     * @param   string    $type Type of path to return (can be 'system', 'web')
+     * @param   array $userInfo user information to avoid query the DB
+     * returns the /main/img/unknown.jpg image set it at true
+     *
+     * @return    array     Array of 2 elements: 'dir' and 'file' which contain
+     * the dir and file as the name implies if image does not exist it will
+     * return the unknow image if anonymous parameter is true if not it returns an empty array
+     */
+    public static function getUserPicturePathById($id, $type = 'web', $userInfo = [])
+    {
+        switch ($type) {
+            case 'system': // Base: absolute system path.
+                $base = api_get_path(SYS_CODE_PATH);
+                break;
+            case 'web': // Base: absolute web path.
+            default:
+                $base = api_get_path(WEB_CODE_PATH);
+                break;
+        }
+
+        $anonymousPath = array(
+            'dir' => $base.'img/',
+            'file' => 'unknown.jpg',
+            'email' => ''
+        );
+
+        if (empty($id) || empty($type)) {
+            return $anonymousPath;
+        }
+
+        $id = intval($id);
+
+        if (empty($userInfo)) {
+            $user_table = Database:: get_main_table(TABLE_MAIN_USER);
+            $sql = "SELECT email, picture_uri FROM $user_table WHERE id=$id";
+            $res = Database::query($sql);
+
+            if (!Database::num_rows($res)) {
+                return $anonymousPath;
+            }
+            $user = Database::fetch_array($res);
+
+            if (empty($user['picture_uri'])) {
+                return $anonymousPath;
+            }
+        } else {
+            $user = $userInfo;
+        }
+
+        $pictureFilename = trim($user['picture_uri']);
+
+        $dir = self::getUserPathById($id, $type);
+
+        return array(
+            'dir' => $dir,
+            'file' => $pictureFilename,
+            'email' => $user['email']
+        );
+    }
+
+    /**
      * Get user path from user ID (returns an array).
      * The return format is a complete path to a folder ending with "/"
      * In case the first level of subdirectory of users/ does not exist, the
@@ -1704,7 +1771,7 @@ class UserManager
         }
 
         // User-reserved directory where photos have to be placed.
-        $path_info = self::get_user_picture_path_by_id($user_id, 'system');
+        $path_info = self::getUserPicturePathById($user_id, 'system');
 
         $path = $path_info['dir'];
         // If this directory does not exist - we create it.
@@ -1767,6 +1834,11 @@ class UserManager
 
         // Storing the new photos in 4 versions with various sizes.
         $userPath = self::getUserPathById($user_id, 'system');
+
+        // If this path does not exist - we create it.
+        if (!file_exists($userPath)) {
+            mkdir($userPath, api_get_permissions_for_new_directories(), true);
+        }
         $small = new Image($source_file);
         $small->resize(32);
         $small->send_image($userPath.'small_'.$filename);

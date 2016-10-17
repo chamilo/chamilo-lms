@@ -1507,7 +1507,13 @@ class SessionManager
                     'description'=> $description,
                     'show_description' => intval($showDescription),
                     'visibility' => $visibility,
-                    'send_subscription_notification' => $sendSubscriptionNotification
+                    'send_subscription_notification' => $sendSubscriptionNotification,
+                    'access_start_date' => null,
+                    'access_end_date' => null,
+                    'display_start_date' => null,
+                    'display_end_date' => null,
+                    'coach_access_start_date' => null,
+                    'coach_access_end_date' => null
                 ];
 
                 if (!empty($sessionAdminId)) {
@@ -1576,6 +1582,8 @@ class SessionManager
         $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $tbl_url_session = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
         $tbl_item_properties = Database::get_course_table(TABLE_ITEM_PROPERTY);
+        $tbl_student_publication = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+        $tbl_student_publication_assignment = Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
         $em = Database::getManager();
 
         $userId = api_get_user_id();
@@ -1608,8 +1616,26 @@ class SessionManager
         foreach ($courses as $courseId) {
             $courseInfo = api_get_course_info_by_id($courseId);
             DocumentManager::deleteDocumentsFromSession($courseInfo, $id_checked);
+
+            $works = Database::select(
+                '*',
+                $tbl_student_publication,
+                [
+                    'where' => ['session_id = ? AND c_id = ?' => [$id_checked, $courseId]]
+                ]
+            );
+
+            $currentCourseRepositorySys = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/';
+
+            foreach ($works as $index => $work) {
+                if ($work['filetype'] = 'folder') {
+                    Database::query("DELETE FROM $tbl_student_publication_assignment WHERE publication_id = $index");
+                }
+                my_delete($currentCourseRepositorySys.'/'.$work['url']);
+            }
         }
 
+        Database::query("DELETE FROM $tbl_student_publication WHERE session_id IN($id_checked)");
         Database::query("DELETE FROM $tbl_session_rel_course WHERE session_id IN($id_checked)");
         Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE session_id IN($id_checked)");
         Database::query("DELETE FROM $tbl_session_rel_user WHERE session_id IN($id_checked)");
@@ -1667,7 +1693,7 @@ class SessionManager
      * @param bool $empty_users
      * @return bool
      */
-    public static function suscribe_users_to_session(
+    public static function subscribe_users_to_session(
         $id_session,
         $user_list,
         $session_visibility = SESSION_VISIBLE_READ_ONLY,
@@ -3792,7 +3818,7 @@ class SessionManager
      * @param int $promotion_id
      * @param array $list
      */
-    public static function suscribe_sessions_to_promotion($promotion_id, $list)
+    public static function subscribe_sessions_to_promotion($promotion_id, $list)
     {
         $t = Database::get_main_table(TABLE_MAIN_SESSION);
         $params = array();
@@ -3822,7 +3848,7 @@ class SessionManager
 
     /**
      * Copies a session with the same data to a new session.
-     * The new copy is not assigned to the same promotion. @see suscribe_sessions_to_promotions() for that
+     * The new copy is not assigned to the same promotion. @see subscribe_sessions_to_promotions() for that
      * @param   int     Session ID
      * @param   bool    Whether to copy the relationship with courses
      * @param   bool    Whether to copy the relationship with users
@@ -3971,7 +3997,7 @@ class SessionManager
             }
             $users = null;
             //Subscribing in read only mode
-            self::suscribe_users_to_session($sid, $short_users, SESSION_VISIBLE_READ_ONLY, true);
+            self::subscribe_users_to_session($sid, $short_users, SESSION_VISIBLE_READ_ONLY, true);
             $short_users = null;
         }
         return $sid;
@@ -5401,7 +5427,7 @@ class SessionManager
                                 continue;
                             }
                             $messages[] = Display::return_message(get_lang('StudentList') . '<br />' . $userToString, 'info', false);
-                            SessionManager::suscribe_users_to_session(
+                            SessionManager::subscribe_users_to_session(
                                 $sessionDestinationId,
                                 $newUserList,
                                 SESSION_VISIBLE_READ_ONLY,

@@ -90,11 +90,11 @@ switch ($action) {
             array(
                 '#',
                 get_lang('Date'),
-                get_lang('DateLastEdition'),
+                get_lang('LastUpdate'),
                 get_lang('Category'),
                 get_lang('User'),
                 get_lang('Program'),
-                get_lang('Responsible'),
+                get_lang('AssignedTo'),
                 get_lang('Status'),
                 get_lang('Description')
             )

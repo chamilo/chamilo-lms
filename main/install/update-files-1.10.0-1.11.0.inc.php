@@ -41,7 +41,6 @@ if (defined('SYSTEM_INSTALLATION')) {
     if ($debug) {
         error_log('Folders cleaned up');
     }
-    
 } else {
     echo 'You are not allowed here !'. __FILE__;
 }

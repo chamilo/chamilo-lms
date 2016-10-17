@@ -2254,7 +2254,7 @@ class SurveyUtil
                             survey_id='" . intval($_GET['survey_id']) . "' AND
                             question_id = '" . intval($question['question_id']) . "'";
                 $result = Database::query($sql);
-                while ($row = Database::fetch_array($result)) {
+                while ($row = Database::fetch_array($result, 'ASSOC')) {
                     echo $row['option_id'] . '<hr noshade="noshade" size="1" />';
                 }
             } else {
@@ -2266,7 +2266,7 @@ class SurveyUtil
                             AND question_id = '" . intval($question['question_id']) . "'
                         ORDER BY sort ASC";
                 $result = Database::query($sql);
-                while ($row = Database::fetch_array($result)) {
+                while ($row = Database::fetch_array($result, 'ASSOC')) {
                     $options[$row['question_option_id']] = $row;
                 }
                 // Getting the answers
@@ -2279,7 +2279,7 @@ class SurveyUtil
                 $result = Database::query($sql);
                 $number_of_answers = array();
                 $data = array();
-                while ($row = Database::fetch_array($result)) {
+                while ($row = Database::fetch_array($result, 'ASSOC')) {
                     if (!isset($number_of_answers[$row['question_id']])) {
                         $number_of_answers[$row['question_id']] = 0;
                     }
@@ -2376,7 +2376,7 @@ class SurveyUtil
                         $sql_restriction";
             $result = Database::query($sql);
             echo '<ul>';
-            while ($row = Database::fetch_array($result)) {
+            while ($row = Database::fetch_array($result, 'ASSOC')) {
                 $user_info = api_get_user_info($row['user']);
                 echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=userreport&survey_id='.$surveyId.'&user='.$row['user'].'">'.$user_info['complete_name'].'</a></li>';
             }

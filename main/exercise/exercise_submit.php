@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
 *	Exercise submission
 * 	This script allows to run an exercise. According to the exercise type, questions
@@ -25,8 +27,6 @@
 * 			Adding reminder + ajax support (2011)
 *   Modified by hubert.borderiou (2011-10-21 question category)
 */
-
-use ChamiloSession as Session;
 
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_QUIZ;
@@ -489,6 +489,10 @@ if (!empty($questionList)) {
 	$question_count = count($questionList);
 }
 
+if ($current_question > $question_count) {
+    $current_question = 0;
+}
+
 if ($formSent && isset($_POST)) {
     if ($debug) { error_log('9. $formSent was set'); }
 
@@ -528,7 +532,7 @@ if ($formSent && isset($_POST)) {
                 //saving each question
                 if ($objExercise->feedback_type != EXERCISE_FEEDBACK_TYPE_DIRECT) {
                     $nro_question = $current_question; // - 1;
-                 	$questionId   = $key;
+                 	$questionId = $key;
                     // gets the student choice for this question
                     $choice = $exerciseResult[$questionId];
                     if (isset($exe_id)) {

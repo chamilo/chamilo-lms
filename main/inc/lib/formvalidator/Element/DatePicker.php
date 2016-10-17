@@ -44,14 +44,20 @@ class DatePicker extends HTML_QuickForm_text
             $value = api_format_date($value, DATE_TIME_FORMAT_LONG_24H);
         }
 
-        return $this->getElementJS() . '
+        return '
             <div class="input-group">
                 <span class="input-group-addon">
                     <input ' . $this->_getAttrString($this->_attributes) . '>
                 </span>
                 <input class="form-control" type="text" readonly id="' . $id . '_alt" value="' . $value . '">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button">
+                        <span class="fa fa-times text-danger" aria-hidden="true"></span>
+                        <span class="sr-only">' . get_lang('Reset') . '</span>
+                    </button>
+                </span>
             </div>
-        ';
+        ' . $this->getElementJS();
     }
 
     /**
@@ -76,21 +82,34 @@ class DatePicker extends HTML_QuickForm_text
         $js = null;
         $id = $this->getAttribute('id');
 
-        $js .= "<script>
+        $js .= "<script>                    
             $(function() {
-                $('#$id').hide().datepicker({
-                    defaultDate: '" . $this->getValue() . "',
-                    dateFormat: 'yy-mm-dd',
-                    altField: '#{$id}_alt',
-                    altFormat: \"" . get_lang('DateFormatLongNoDayJS') . "\",
-                    showOn: 'both',
-                    buttonImage: '" . Display::return_icon('attendance.png', null, [], ICON_SIZE_TINY, true, true) . "',
-                    buttonImageOnly: true,
-                    buttonText: '" . get_lang('SelectDate') . "',
-                    changeMonth: true,
-                    changeYear: true,
-                    yearRange: 'c-60y:c+5y'
-                });
+                var txtDate = $('#$id'),
+                    inputGroup = txtDate.parents('.input-group');
+                    
+                txtDate
+                    .hide()
+                    .datepicker({
+                        defaultDate: '" . $this->getValue() . "',
+                        dateFormat: 'yy-mm-dd',
+                        altField: '#{$id}_alt',
+                        altFormat: \"" . get_lang('DateFormatLongNoDayJS') . "\",
+                        showOn: 'both',
+                        buttonImage: '" . Display::return_icon('attendance.png', null, [], ICON_SIZE_TINY, true, true) . "',
+                        buttonImageOnly: true,
+                        buttonText: '" . get_lang('SelectDate') . "',
+                        changeMonth: true,
+                        changeYear: true,
+                        yearRange: 'c-60y:c+5y'
+                    });
+
+                inputGroup
+                    .find('button')
+                    .on('click', function (e) {
+                        e.preventDefault();
+
+                        $('#$id, #{$id}_alt').val('');
+                    });
             });
         </script>";
 

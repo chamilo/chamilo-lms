@@ -303,6 +303,12 @@ class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
                     $template = $element->getTemplate(
                         $this->getForm()->getLayout()
                     );
+                    if ($element->isFrozen()) {
+                        $customFrozentemplate = $element->getCustomFrozenTemplate();
+                        if (!empty($customFrozentemplate)) {
+                            $template = $customFrozentemplate;
+                        }
+                    }
                 } else {
                     $template = $this->getForm()->getDefaultElementTemplate();
                 }

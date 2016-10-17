@@ -21,8 +21,14 @@ $repository = __DIR__.'/../..';
 $number = 500; //the number of commits to check (including minor)
 $formatHTML = true;
 $showDate = false;
-if (!empty($argv[1]) && $argv[1] == '-t') {
-    $showDate = true;
+$endCommit = false;
+if (!empty($argv[1])) {
+    if ($argv[1] == '-t') {
+        $showDate = true;
+    } else {
+        $endCommit = $argv[1];
+        echo "End commit has been defined as ".$endCommit.PHP_EOL;
+    }
 }
 
 $git = new \SebastianBergmann\Git\Git($repository);
@@ -40,17 +46,17 @@ foreach ($logs as $log) {
         continue;
     }
     //Skip language update messages (not important)
-    $langMsg = 'Update language terms';
-    if (strpos($log['message'], $langMsg) === 0) {
-        continue;
-    }
-    $langMsg = 'Update language vars';
-    if (strpos($log['message'], $langMsg) === 0) {
-        continue;
-    }
-    $langMsg = 'Update lang vars';
-    if (strpos($log['message'], $langMsg) === 0) {
-        continue;
+    $langMsg = array(
+        'Update language terms',
+        'Update language vars',
+        'Update lang vars',
+        'Merge',
+        'merge'
+    );
+    foreach ($langMsg as $msg) {
+        if (strpos($log['message'], $msg) === 0) {
+            continue 2;
+        }
     }
     // Look for tasks references
     $issueLink = '';
@@ -60,18 +66,30 @@ foreach ($logs as $log) {
         if (substr($issue, 0, 1) == '#') {
             // not a BeezNest task
             $num = substr($issue, 1);
-            if ($formatHTML) {
-                $issueLink = ' - <a href="https://support.chamilo.org/issues/' . $num . '">#' . $num . '</a>';
+            if ($num > 4000) {
+                //should be Chamilo support site
+                if ($formatHTML) {
+                    $issueLink = ' - <a href="https://support.chamilo.org/issues/' . $num . '">CT#' . $num . '</a>';
+                } else {
+                    $issueLink = ' - ' . $num;
+                }
             } else {
-                $issueLink = ' - ' . $num;
+                //should be Github
+                if ($formatHTML) {
+                    $issueLink = ' - <a href="https://github.com/chamilo/chamilo-lms/issues/' . $num . '">GH#' . $num . '</a>';
+                } else {
+                    $issueLink = ' - ' . $num;
+                }
             }
         } else {
             $num = substr($issue, 3);
-            if ($formatHTML && $num != '7683') {
-                //7683 is an internal task at BeezNest for all general contributions to Chamilo - no use in adding this reference
-                $issueLink = ' - <a href="https://task.beeznest.com/issues/' . $num . '">BT#' . $num . '</a>';
-            } else {
-                $issueLink = ' - ' . $num;
+            if ($num != '7683') {
+                if ($formatHTML) {
+                    //7683 is an internal task at BeezNest for all general contributions to Chamilo - no use in adding this reference
+                    $issueLink = ' - <a href="https://task.beeznest.com/issues/' . $num . '">BT#' . $num . '</a>';
+                } else {
+                    $issueLink = ' - ' . $num;
+                }
             }
         }
         if ($hasRefs = stripos($log['message'], ' see '.$issue)) {
@@ -94,6 +112,14 @@ foreach ($logs as $log) {
     } else {
         $commitLink = substr($log['sha1'], 0, 8);
         echo '('.$commitLink.$issueLink.') '.$log['message'].''.PHP_EOL;
+    }
+    // check end commit to stop processing
+    if ($endCommit) {
+        $length = strlen($endCommit);
+        if (substr($log['sha1'], 0, $length) == $endCommit) {
+            echo "Found the end commit ".$endCommit.", exiting...".PHP_EOL;
+            break;
+        }
     }
     $i++;
 }

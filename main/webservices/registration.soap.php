@@ -5213,7 +5213,7 @@ function WSSuscribeUsersToSession($params)
                     continue; // user_id is not active.
                 }
 
-                SessionManager::suscribe_users_to_session($sessionId, array($user_id), SESSION_VISIBLE_READ_ONLY, false);
+                SessionManager::subscribe_users_to_session($sessionId, array($user_id), SESSION_VISIBLE_READ_ONLY, false);
                 $results[] = 1;
 
                 if ($debug) error_log("subscribe user:$user_id to session $sessionId");
@@ -5294,7 +5294,7 @@ function WSSubscribeUserToSessionSimple($params) {
                 error_log($result);
             }
         } else {
-            SessionManager::suscribe_users_to_session(
+            SessionManager::subscribe_users_to_session(
                 $session_id,
                 array($user_id),
                 SESSION_VISIBLE_READ_ONLY,

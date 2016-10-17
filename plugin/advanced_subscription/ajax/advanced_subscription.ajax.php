@@ -312,7 +312,7 @@ if ($verified) {
 
                     // Student Session inscription
                     if ($data['newStatus'] == ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED) {
-                        SessionManager::suscribe_users_to_session(
+                        SessionManager::subscribe_users_to_session(
                             $data['sessionId'],
                             array($data['studentUserId']),
                             null,

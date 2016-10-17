@@ -1314,6 +1314,7 @@ function _api_format_user($user, $add_password = false)
         $firstname = isset($user['firstName']) ? $user['firstName'] : null;
         $lastname = isset($user['lastName']) ? $user['lastName'] : null;
     }
+
     $result['complete_name'] = api_get_person_name($firstname, $lastname);
 
     $result['complete_name_with_username'] = $result['complete_name'];
@@ -1913,7 +1914,6 @@ function api_generate_password($length = 8)
     if ($length < 2) {
         $length = 2;
     }
-
     $password = '';
     for ($i = 0; $i < $length; $i ++) {
         $password .= $characters[rand() % strlen($characters)];
@@ -2463,6 +2463,7 @@ function api_is_allowed_to_create_course()
     if (api_is_platform_admin()) {
         return true;
     }
+
     return Session::read('is_allowedCreateCourse');
 }
 
@@ -5107,7 +5108,7 @@ function api_set_setting($var, $value, $subvar = null, $cat = null, $access_url 
                     Database::query($insert);
                 }
             } else { // Such a setting does not exist.
-                error_log(__FILE__.':'.__LINE__.': Attempting to update setting '.$var.' ('.$subvar.') which does not exist at all. The access_url is: '.$access_url.' ',0);
+                //error_log(__FILE__.':'.__LINE__.': Attempting to update setting '.$var.' ('.$subvar.') which does not exist at all. The access_url is: '.$access_url.' ',0);
             }
         }
     }
@@ -5290,6 +5291,7 @@ function & api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $u
     }
     $result = Database::query($sql);
     $result = Database::store_result($result,'ASSOC');
+
     return $result;
 }
 
@@ -6385,9 +6387,20 @@ function api_get_js($file) {
 
 /**
  * Returns the <script> HTML tag
+ * @return string
  */
-function api_get_asset($file) {
+function api_get_asset($file)
+{
     return '<script type="text/javascript" src="'.api_get_path(WEB_PATH).'web/assets/'.$file.'"></script>'."\n";
+}
+
+/**
+ * Returns the <script> HTML tag
+ * @return string
+ */
+function api_get_css_asset($file, $media = 'screen')
+{
+    return '<link href="'.api_get_path(WEB_PATH).'web/assets/'.$file.'" rel="stylesheet" media="'.$media.'" type="text/css" />'."\n";
 }
 
 /**

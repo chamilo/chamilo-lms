@@ -18,7 +18,8 @@
         'video',
         'wikilink',
         'wordcount',
-        'youtube'
+        'youtube',
+        'flash'
     ];
 
     plugins.forEach(function(plugin) {

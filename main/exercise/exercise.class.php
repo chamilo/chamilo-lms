@@ -134,7 +134,8 @@ class Exercise
 
             return false;
         }
-        $sql = "SELECT * FROM $TBL_EXERCISES WHERE c_id = ".$this->course_id." AND id = ".$id;
+        $sql = "SELECT * FROM $TBL_EXERCISES 
+                WHERE c_id = ".$this->course_id." AND id = ".$id;
         $result = Database::query($sql);
 
         // if the exercise has been found

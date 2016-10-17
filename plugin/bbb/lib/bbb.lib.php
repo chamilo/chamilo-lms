@@ -33,6 +33,9 @@ class bbb
     public $accessUrl = 1;
     public $userId = 0;
     public $plugin;
+    private $courseCode;
+    private $sessionId;
+    private $groupId;
 
     /**
      * Constructor (generates a connection to the API and the Chamilo settings
@@ -44,6 +47,10 @@ class bbb
      */
     public function __construct($host = '', $salt = '', $isGlobalConference = false, $isGlobalPerUser = 0)
     {
+        $this->courseCode = api_get_course_id();
+        $this->sessionId = api_get_session_id();
+        $this->groupId = api_get_group_id();
+
         // Initialize video server settings from global settings
         $this->plugin = BBBPlugin::create();
 
@@ -106,6 +113,19 @@ class bbb
             $this->api = new BigBlueButtonBN();
             $this->pluginEnabled = true;
         }
+    }
+
+    /**
+     * Set forced the course, session or group IDs
+     * @param string $courseCode
+     * @param int $sessionId
+     * @param int $groupId
+     */
+    public function forceCIdReq($courseCode, $sessionId = 0, $groupId = 0)
+    {
+        $this->courseCode = $courseCode;
+        $this->sessionId = intval($sessionId);
+        $this->groupId = intval($groupId);
     }
 
     /**
@@ -307,6 +327,25 @@ class bbb
 
             return $this->logoutUrl;
         }
+    }
+
+    /**
+     * Save a participant in a meeting room
+     * @param int $meetingId
+     * @param int $participantId
+     * @return false|int The last inserted ID. Otherwise return false
+     */
+    public function saveParticipant($meetingId, $participantId)
+    {
+        return Database::insert(
+            'plugin_bbb_room',
+            [
+                'meeting_id' => $meetingId,
+                'participant_id' => $participantId,
+                'in_at' => api_get_utc_datetime(),
+                'out_at' => api_get_utc_datetime()
+            ]
+        );
     }
 
     /**
@@ -532,42 +571,26 @@ class bbb
      * Gets all the course meetings saved in the plugin_bbb_meeting table
      * @return array Array of current open meeting rooms
      */
-    public function getMeetings()
+    public function getMeetings($courseId = 0, $sessionId = 0, $groupId = 0, $isAdminReport = false)
     {
+        $em = Database::getManager();
         $pass = $this->getUserMeetingPassword();
-        $isGlobal = $this->isGlobalConference();
-        $isGlobalPerUser = $this->isGlobalConferencePerUserEnabled();
+        $conditions = [];
 
-        $courseId = api_get_course_int_id();
-        $sessionId = api_get_session_id();
-
-        $conditions =  array(
-            'where' => array(
-                'c_id = ? AND session_id = ? AND access_url = ?' => array(
-                    $courseId,
-                    $sessionId,
-                    $this->accessUrl
+        if ($courseId || $sessionId || $groupId) {
+            $conditions =  array(
+                'where' => array(
+                    'c_id = ? AND session_id = ? ' => array($courseId, $sessionId),
                 ),
-            ),
-        );
-
-        if ($this->hasGroupSupport()) {
-            $groupId = api_get_group_id();
-            $conditions =  array(
-                'where' => array(
-                    'c_id = ? AND session_id = ? AND group_id = ? AND access_url = ?' =>
-                        array($courseId, $sessionId, $groupId, $this->accessUrl)
-                )
             );
-        }
 
-        if ($isGlobalPerUser) {
-            $conditions =  array(
-                'where' => array(
-                    'user_id = ? AND access_url = ?' =>
-                        array($this->userId, $this->accessUrl)
-                )
-            );
+            if ($this->hasGroupSupport()) {
+                $conditions =  array(
+                    'where' => array(
+                        'c_id = ? AND session_id = ? AND group_id = ? ' => array($courseId, $sessionId, $groupId)
+                    )
+                );
+            }
         }
 
         $meetingList = Database::select(
@@ -605,9 +628,6 @@ class bbb
                 $meetingBBB['add_to_calendar_url'] = $this->addToCalendarUrl($meetingDB);
             }
 
-            $recordArray = array();
-            $actionLinksArray = array();
-
             if ($meetingDB['record'] == 1) {
                 // backwards compatibility (when there was no remote ID)
                 $mId = $meetingDB['remote_id'];
@@ -619,155 +639,48 @@ class bbb
                     // the table's primary key), skip this conference
                     continue;
                 }
-                $recordingParams = array(
-                    'meetingId' => $mId, //-- OPTIONAL - comma separate if multiple ids
-                );
 
-                //To see the recording list in your BBB server do: bbb-record --list
-                $records = $this->api->getRecordingsWithXmlResponseArray($recordingParams);
-                if (!empty($records)) {
-                    $count = 1;
-                    if (isset($records['message']) && !empty($records['message'])) {
-                        if ($records['messageKey'] == 'noRecordings') {
-                            $recordArray[] = $this->plugin->get_lang('NoRecording');
-                            if ($meetingDB['visibility'] == 0) {
-                                $actionLinksArray[] = Display::url(
-                                    Display::return_icon(
-                                        'invisible.png',
-                                        $this->plugin->get_lang('MakeVisible'),
-                                        array(),
-                                        ICON_SIZE_MEDIUM
-                                    ),
-                                    $this->publishUrl($meetingDB)
-                                );
-                            } else {
-                                $actionLinksArray[] = Display::url(
-                                    Display::return_icon(
-                                        'visible.png',
-                                        $this->plugin->get_lang('MakeInvisible'),
-                                        array(),
-                                        ICON_SIZE_MEDIUM
-                                    ),
-                                    $this->unPublishUrl($meetingDB)
-                                );
+                $record = [];
+
+                if (empty($meetingDB['video_url'])) {
+                    $recordingParams = ['meetingId' => $mId];
+                    $records = $this->api->getRecordingsWithXmlResponseArray($recordingParams);
+
+                    if (!empty($records)) {
+                        if (!isset($records['messageKey']) || $records['messageKey'] != 'noRecordings') {
+                            $record = end($records);
+
+                            if (!is_array($record) || !isset($record['recordId'])) {
+                                continue;
                             }
-                        }
-                    } else {
-                        foreach ($records as $record) {
-                            //if you get several recordings here and you used a
-                            // previous version of Chamilo, you might want to
-                            // only keep the last result for each chamilo conf
-                            // (see show_links after the end of this loop)
-                            if (is_array($record) && isset($record['recordId'])) {
-                                $url = Display::url(
-                                    $this->plugin->get_lang('ViewRecord')." [~".$record['playbackFormatLength']."']",
-                                    $record['playbackFormatUrl'],
-                                    array('target' => '_blank')
-                                );
-                                $actionLinks = '';
-                                if ($this->isConferenceManager()) {
-                                    if ($isGlobal === false) {
-                                        $actionLinks .= Display::url(
-                                            Display::return_icon(
-                                                'link.gif',
-                                                $this->plugin->get_lang('CopyToLinkTool')
-                                            ),
-                                            $this->copyToRecordToLinkTool($meetingDB)
-                                        );
-                                        $actionLinks .= Display::url(
-                                            Display::return_icon(
-                                                'agenda.png',
-                                                $this->plugin->get_lang('AddToCalendar')
-                                            ),
-                                            $this->addToCalendarUrl($meetingDB, $record)
-                                        );
-                                    }
-                                    $actionLinks .= Display::url(
-                                        Display::return_icon(
-                                            'delete.png',
-                                            $this->plugin->get_lang('Delete')
-                                        ),
-                                        $this->deleteRecordUrl($meetingDB)
-                                    );
 
-                                    if ($meetingDB['visibility'] == 0) {
-                                        $actionLinks .= Display::url(
-                                            Display::return_icon(
-                                                'invisible.png',
-                                                $this->plugin->get_lang('MakeVisible'),
-                                                array(),
-                                                ICON_SIZE_MEDIUM
-                                            ),
-                                            $this->publishUrl($meetingDB)
-                                        );
-                                    } else {
-                                        $actionLinks .= Display::url(
-                                            Display::return_icon(
-                                                'visible.png',
-                                                $this->plugin->get_lang('MakeInvisible'),
-                                                array(),
-                                                ICON_SIZE_MEDIUM
-                                            ),
-                                            $this->unPublishUrl($meetingDB)
-                                        );
-                                    }
-                                }
-                                $count++;
-                                $recordArray[] = $url;
-                                $actionLinksArray[] = $actionLinks;
-                            } else {
-                                /*if (is_array($record) && isset($record['recordID']) && isset($record['playbacks'])) {
+                            $this->updateMeetingVideoUrl($meetingDB['id'], $record['playbackFormatUrl']);
 
-                                    //Fix the bbb timestamp
-                                    //$record['startTime'] = substr($record['startTime'], 0, strlen($record['startTime']) -3);
-                                    //$record['endTime']   = substr($record['endTime'], 0, strlen($record['endTime']) -3);
-                                    //.' - '.api_convert_and_format_date($record['startTime']).' - '.api_convert_and_format_date($record['endTime'])
-                                    foreach($record['playbacks'] as $item) {
-                                        $url = Display::url(get_lang('ViewRecord'), $item['url'], array('target' => '_blank'));
-                                        //$url .= Display::url(get_lang('DeleteRecord'), api_get_self().'?action=delete_record&'.$record['recordID']);
-                                        if ($this->isConferenceManager()) {
-                                            $url .= Display::url(Display::return_icon('link.gif',get_lang('CopyToLinkTool')), api_get_self().'?action=copy_record_to_link_tool&id='.$meetingDB['id'].'&record_id='.$record['recordID']);
-                                            $url .= Display::url(Display::return_icon('agenda.png',get_lang('AddToCalendar')), api_get_self().'?action=add_to_calendar&id='.$meetingDB['id'].'&start='.api_strtotime($meetingDB['created_at']).'&url='.$item['url']);
-                                            $url .= Display::url(Display::return_icon('delete.png',get_lang('Delete')), api_get_self().'?action=delete_record&id='.$record['recordID']);
-                                        }
-                                        //$url .= api_get_self().'?action=publish&id='.$record['recordID'];
-                                        $count++;
-                                        $recordArray[] = $url;
-                                    }
-                                }*/
+                            if (!$this->isConferenceManager()) {
+                                $record = [];
                             }
                         }
                     }
                 } else {
-                    $actionLinks = '';
-                    if ($this->isConferenceManager()) {
-                        if ($meetingDB['visibility'] == 0) {
-                            $actionLinks .= Display::url(
-                                Display::return_icon(
-                                    'invisible.png',
-                                    $this->plugin->get_lang('MakeVisible'),
-                                    array(),
-                                    ICON_SIZE_MEDIUM
-                                ),
-                                $this->publishUrl($meetingDB)
-                            );
-                        } else {
-                            $actionLinks .= Display::url(
-                                Display::return_icon(
-                                    'visible.png',
-                                    $this->plugin->get_lang('MakeInvisible'),
-                                    array(),
-                                    ICON_SIZE_MEDIUM
-                                ),
-                                $this->unPublishUrl($meetingDB)
-                            );
-                        }
-                    }
-                    $actionLinksArray[] = $actionLinks;
-                    $item['action_links'] = implode('<br />', $actionLinksArray);
+                    $record['playbackFormatUrl'] = $meetingDB['video_url'];
                 }
-                $item['show_links']  = implode('<br />', $recordArray);
-                $item['action_links'] = implode('<br />', $actionLinksArray);
+
+                $recordLink = isset($record['playbackFormatUrl'])
+                    ? Display::url(
+                        $this->plugin->get_lang('ViewRecord'),
+                        $record['playbackFormatUrl'],
+                        ['target' => '_blank']
+                    )
+                    : get_lang('NoRecording');
+
+                if ($isAdminReport) {
+                    $courseInfo = api_get_course_info_by_id($meetingDB['c_id']);
+                    $this->forceCIdReq($courseInfo['code'], $meetingDB['session_id'], $meetingDB['group_id']);
+                }
+
+                $actionLinks = $this->getActionLinks($meetingDB, $record, $isGlobal, $isAdminReport);
+                $item['show_links']  = $recordLink;
+                $item['action_links'] = implode(PHP_EOL, $actionLinks);
             }
 
             $item['created_at'] = api_convert_and_format_date($meetingDB['created_at']);
@@ -789,6 +702,10 @@ class bbb
                 $item['go_url'] = $this->protocol.$this->api->getJoinMeetingURL($joinParams);
             }
             $item = array_merge($item, $meetingDB, $meetingBBB);
+
+            $item['course'] = $em->find('ChamiloCoreBundle:Course', $item['c_id']);
+            $item['session'] = $em->find('ChamiloCoreBundle:Session', $item['session_id']);
+
             $newMeetingList[] = $item;
         }
 
@@ -1114,7 +1031,7 @@ class bbb
     {
         $courseInfo = api_get_course_info();
 
-        if (empty($courseInfo)) {
+        if (empty($this->courseCode)) {
 
             if ($this->isGlobalConferencePerUserEnabled()) {
 
@@ -1130,7 +1047,11 @@ class bbb
             return '';
         }
 
-        return api_get_cidreq();
+        return http_build_query([
+            'cidReq' => $this->courseCode,
+            'id_session' => $this->sessionId,
+            'gidReq' => $this->groupId
+        ]);
     }
 
     /**
@@ -1216,8 +1137,9 @@ class bbb
     public function unPublishUrl($meeting)
     {
         if (!isset($meeting['id'])) {
-            return '';
+            return null;
         }
+
         return api_get_path(WEB_PLUGIN_PATH).'bbb/listing.php?'.$this->getUrlParams().'&action=unpublish&id='.$meeting['id'];
     }
 
@@ -1245,5 +1167,170 @@ class bbb
         }
 
         return api_get_path(WEB_PLUGIN_PATH).'bbb/listing.php?'.$this->getUrlParams().'&action=copy_record_to_link_tool&id='.$meeting['id'];
+    }
+
+    /**
+     * Get the meeting info from DB by its name
+     * @param string $name
+     * @return array
+     */
+    public function findMeetingByName($name)
+    {
+        $meetingData = Database::select(
+            '*',
+            'plugin_bbb_meeting',
+            array('where' => array('meeting_name = ? AND status = 1 ' => $name)),
+            'first'
+        );
+
+        return $meetingData;
+    }
+
+    /**
+     * @param int $meetingId
+     * @return array
+     */
+    public function findMeetingParticipants($meetingId)
+    {
+        $em = Database::getManager();
+        $meetingData = Database::select(
+            '*',
+            'plugin_bbb_room',
+            array('where' => array('meeting_id = ?' => intval($meetingId)))
+        );
+
+        $return = [];
+
+        foreach ($meetingData as $participantInfo) {
+            $return[] = [
+                'id' => $participantInfo['id'],
+                'meeting_id' => $participantInfo['meeting_id'],
+                'participant' => $em->find('ChamiloUserBundle:User', $participantInfo['participant_id']),
+                'in_at' => $participantInfo['in_at'],
+                'out_at' => $participantInfo['out_at']
+            ];
+        }
+
+        return $return;
+    }
+
+    /**
+     * @param array $meetingInfo
+     * @param array $recordInfo
+     * @param bool $isGlobal
+     * @param bool $isAdminReport
+     * @return array
+     */
+    private function getActionLinks($meetingInfo, $recordInfo, $isGlobal = false, $isAdminReport = false)
+    {
+        $isVisible = $meetingInfo['visibility'] != 0;
+        $linkVisibility = $isVisible
+            ? Display::url(
+                Display::return_icon('visible.png', get_lang('MakeInvisible')),
+                $this->unPublishUrl($meetingInfo)
+            )
+            : Display::url(
+                Display::return_icon('invisible.png', get_lang('MakeVisible')),
+                $this->publishUrl($meetingInfo)
+            );
+
+        $links = [];
+
+        if (empty($recordInfo)) {
+            $links[] = $linkVisibility;
+
+            return $links;
+        }
+
+        if (!$isGlobal) {
+            $links[] = Display::url(
+                Display::return_icon('link.gif', get_lang('CopyToLinkTool')),
+                $this->copyToRecordToLinkTool($meetingInfo)
+            );
+            $links[] = Display::url(
+                Display::return_icon('agenda.png', get_lang('AddToCalendar')),
+                $this->addToCalendarUrl($meetingInfo, $recordInfo)
+            );
+        }
+
+        if ($meetingInfo['has_video_m4v']) {
+            $links[] = Display::url(
+                Display::return_icon('save.png', get_lang('DownloadFile')),
+                $recordInfo['playbackFormatUrl'] . '/capture.m4v',
+                ['target' => '_blank']
+            );
+        } else {
+            $links[] = Display::url(
+                Display::return_icon('save.png', get_lang('DownloadFile')),
+                '#',
+                [
+                    'id' => "btn-check-meeting-video-{$meetingInfo['id']}",
+                    'class' => 'check-meeting-video',
+                    'data-id' => $meetingInfo['id']
+                ]
+            );
+        }
+
+        if (!$isAdminReport) {
+            $links[] = Display::url(
+                Display::return_icon('delete.png', get_lang('Delete')),
+                $this->deleteRecordUrl($meetingInfo)
+            );
+            $links[] = $linkVisibility;
+        } else {
+            $links[] = Display::url(
+                Display::return_icon('course_home.png', get_lang('GoToCourse')),
+                $this->getListingUrl()
+            );
+        }
+
+        return $links;
+    }
+
+    /**
+     * @param int $meetingId
+     * @param string $videoUrl
+     * @return bool|int
+     */
+    public function updateMeetingVideoUrl($meetingId, $videoUrl)
+    {
+        return Database::update(
+            'plugin_bbb_meeting',
+            ['video_url' => $videoUrl],
+            ['id = ?' => intval($meetingId)]
+        );
+    }
+
+    /**
+     * Check if the meeting has a capture.m4v video file. If exists then the has_video_m4v field is updated
+     * @param int $meetingId
+     * @return bool
+     */
+    public function checkDirectMeetingVideoUrl($meetingId)
+    {
+        $meetingInfo = Database::select(
+            '*',
+            'plugin_bbb_meeting',
+            [
+                'where' => ['id = ?' => intval($meetingId)]
+            ],
+            'first'
+        );
+
+        if (!isset($meetingInfo['video_url'])) {
+            return false;
+        }
+
+        $hasCapture = SocialManager::verifyUrl($meetingInfo['video_url'] . '/capture.m4v');
+
+        if ($hasCapture) {
+            return Database::update(
+                'plugin_bbb_meeting',
+                ['has_video_m4v' => true],
+                ['id = ?' => intval($meetingId)]
+            );
+        }
+
+        return $hasCapture;
     }
 }

@@ -4,15 +4,18 @@
   {% if show_join_button == true %}
     <div class ="span12" style="text-align:center">
         {{ form }}
-        <a href="{{ conference_url }}" target="_blank" class="btn btn-primary btn-large">
-            {{ 'EnterConference'|get_lang }}
-        </a>
-        <span id="users_online" class="label label-warning">
-            {{ 'XUsersOnLine'| get_lang | format(users_online) }}
-        </span>
+        <p>
+            <a href="{{ conference_url }}" target="_blank" class="btn btn-primary btn-large">
+                {{ 'EnterConference'|get_lang }}
+            </a>
+            <span id="users_online" class="label label-warning">
+                {{ 'XUsersOnLine'| get_lang | format(users_online) }}
+            </span>
+        </p>
 
         <div class="well">
-            {{  url_to_share }}
+            <strong>{{ 'UrlMeetingToShare'|get_lang }}</strong>
+            <input type="text" class="form-control text-center" readonly value="{{ conference_url }}">
         </div>
     </div>
   {% endif %}

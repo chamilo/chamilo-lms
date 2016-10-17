@@ -286,7 +286,6 @@ class nusoap_server extends nusoap_base
 				$this->debug("In service, serialize WSDL");
 				header("Content-Type: text/xml; charset=".$this->soap_defencoding."\r\n");
 				print $this->wsdl->serialize($this->debug_flag);
-
 				if ($this->debug_flag) {
 					$this->debug('wsdl:');
 					$this->appendDebug($this->varDump($this->wsdl));
@@ -846,7 +845,7 @@ class nusoap_server extends nusoap_base
 	* @param	array	$headers	The HTTP headers
 	* @param	string	$data		unprocessed request data from client
 	* @return	mixed	value of the message, decoded into a PHP type
-	* @access   privatet
+	* @access   private
 	*/
     function parseRequest($headers, $data) {
 		$this->debug('Entering parseRequest() for data of length ' . strlen($data) . ' headers:');

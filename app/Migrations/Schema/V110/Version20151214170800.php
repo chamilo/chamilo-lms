@@ -31,15 +31,19 @@ class Version20151214170800 extends AbstractMigrationChamilo
             SELECT a.iid, a.c_id, a.question_id, a.hotspot_coordinates, a.hotspot_type, q.picture, c.directory
             FROM c_quiz_answer a
             INNER JOIN c_quiz_question q
-                ON a.question_id = q.id
+            ON (a.question_id = q.id AND a.c_id = q.c_id)
             INNER JOIN course c
-                ON (a.c_id = c.id AND q.c_id = c.id)
+            ON (a.c_id = c.id AND q.c_id = c.id)
             WHERE a.hotspot_type IN ('square', 'circle', 'poly', 'delineation', 'oar')
         ");
 
         foreach ($answers as $answer) {
             // Recover the real image size to recalculate coordinates
             $imagePath = api_get_path(SYS_PATH) . "courses/{$answer['directory']}/document/images/{$answer['picture']}";
+            if (!file_exists($imagePath)) {
+                error_log("Migration: Image does not exists: $imagePath");
+                continue;
+            }
             $imageSize = getimagesize($imagePath);
             $widthRatio = $imageSize[0] / 360;
             $heightRatio = $imageSize[1] / 360;
@@ -50,7 +54,6 @@ class Version20151214170800 extends AbstractMigrationChamilo
             switch ($answer['hotspot_type']) {
                 case 'square':
                     $oldCenter = explode(';', $oldPairedString[0]);
-
                     $oldCenterX = intval($oldCenter[0]);
                     $oldCenterY = intval($oldCenter[1]);
                     $oldWidth = intval($oldPairedString[1]);
@@ -65,10 +68,8 @@ class Version20151214170800 extends AbstractMigrationChamilo
                     $newPairedString[] = $newWidth;
                     $newPairedString[] = $newHeight;
                     break;
-
                 case 'circle':
                     $oldCenter = explode(';', $oldPairedString[0]);
-
                     $oldCenterX = intval($oldCenter[0]);
                     $oldCenterY = intval($oldCenter[1]);
                     $oldRadiusX = intval($oldPairedString[1]) / 2;
@@ -83,14 +84,12 @@ class Version20151214170800 extends AbstractMigrationChamilo
                     $newPairedString[] = $newRadiusX;
                     $newPairedString[] = $newRadiusY;
                     break;
-
                 case 'poly':
                     //no break;
                 case 'delineation':
                     //no break
                 case 'oar':
                     $paired = [];
-
                     foreach ($oldPairedString as $pairString) {
                         $pair = explode(';', $pairString);
                         $x = isset($pair[0]) ? intval($pair[0]) : 0;

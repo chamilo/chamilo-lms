@@ -278,7 +278,7 @@ class TestUserManager extends UnitTestCase {
 	function testSuscribeUsersToSession() {
 	  	$id_session=1;
 	  	$UserList='';
-	  	$res=UserManager::suscribe_users_to_session($id_session,$UserList);
+	  	$res=UserManager::subscribe_users_to_session($id_session,$UserList);
 	 	$this->assertTrue(is_null($res));
 	}
 */

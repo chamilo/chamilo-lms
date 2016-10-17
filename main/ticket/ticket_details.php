@@ -185,18 +185,23 @@ if (!isset($_GET['ticket_id'])) {
     header('Location: '.api_get_path(WEB_CODE_PATH).'ticket/tickets.php');
     exit;
 }
+
 if (isset($_POST['response'])) {
-    if ($user_id == $ticket['ticket']['assigned_last_user']) {
-        $response = $_POST['response'] == '1' ? true : $_POST['response'] == "0" ? false : null;
-        if ($response && $ticket['ticket']['status_id'] == TicketManager::STATUS_UNCONFIRMED) {
-            /*TicketManager::close_ticket($_GET['ticket_id'], $user_id);
-            $ticket['ticket']['status_id'] = TicketManager::STATUS_CLOSE;
-            $ticket['ticket']['status'] = get_lang('Closed');*/
-        } else if (!is_null($response) && $ticket['ticket']['status_id'] == TicketManager::STATUS_UNCONFIRMED) {
-            TicketManager::update_ticket_status(TicketManager::STATUS_PENDING, $_GET['ticket_id'], $user_id);
-            $ticket['ticket']['status_id'] = TicketManager::STATUS_PENDING;
-            $ticket['ticket']['status'] = get_lang('StatusPending');
+    if ($user_id == $ticket['ticket']['assigned_last_user'] || api_is_platform_admin()) {
+        $response = $_POST['response'] === '1' ? true : false;
+        $newStatus = TicketManager::STATUS_PENDING;
+        if ($response) {
+            $newStatus = TicketManager::STATUS_CLOSE;
         }
+        TicketManager::update_ticket_status(
+            TicketManager::getStatusIdFromCode($newStatus),
+            $ticket_id,
+            $user_id
+        );
+        Display::addFlash(Display::return_message(get_lang('Updated')));
+        header("Location:" . api_get_self() . "?ticket_id=" . $ticket_id);
+        exit;
+
     }
 }
 if (isset($_REQUEST['action'])) {
@@ -231,10 +236,7 @@ if (!isset($_POST['compose'])) {
         $ticket['ticket']['status_id'] = TicketManager::STATUS_CLOSE;
         $ticket['ticket']['status'] = get_lang('Closed');
     }
-    /*$ticket['ticket']['request_user'] = intval($ticket['ticket']['request_user']);
-    if ($ticket['ticket']['request_user'] == $user_id || intval($ticket['ticket']['assigned_last_user']) == $user_id) {
-        TicketManager::update_message_status($ticket_id, $ticket['ticket']['request_user']);
-    }*/
+
     Display::display_header();
     $form_close_ticket = '';
         if ($ticket['ticket']['status_id'] != TicketManager::STATUS_FORWARDED &&

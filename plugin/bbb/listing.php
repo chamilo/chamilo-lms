@@ -10,6 +10,13 @@ require_once __DIR__.'/config.php';
 $plugin = BBBPlugin::create();
 $tool_name = $plugin->get_lang('Videoconference');
 
+$htmlHeadXtra[] = api_get_js_simple(
+    api_get_path(WEB_PLUGIN_PATH) . 'bbb/resources/utils.js'
+);
+$htmlHeadXtra[] = "<script>var _p = {web_plugin: '" . api_get_path(WEB_PLUGIN_PATH). "'}</script>";
+
+$tpl = new Template($tool_name);
+
 $isGlobal = isset($_GET['global']) ? true : false;
 $isGlobalPerUser = isset($_GET['user_id']) ? (int) $_GET['user_id']: false;
 
@@ -112,7 +119,11 @@ if ($conferenceManager) {
     }
 }
 
-$meetings = $bbb->getMeetings();
+$meetings = $bbb->getMeetings(
+    api_get_course_int_id(),
+    api_get_session_id(),
+    api_get_group_id()
+);
 if (!empty($meetings)) {
     $meetings = array_reverse($meetings);
 }
@@ -167,13 +178,10 @@ if ($bbb->isGlobalConference() === false &&
     }
 }
 
-$urlToShare = $plugin->get_lang('UrlMeetingToShare').'<br />'.$conferenceUrl;
-
 $tpl = new Template($tool_name);
 $tpl->assign('allow_to_edit', $conferenceManager);
 $tpl->assign('meetings', $meetings);
 $tpl->assign('conference_url', $conferenceUrl);
-$tpl->assign('url_to_share', $urlToShare);
 $tpl->assign('users_online', $users_online);
 $tpl->assign('bbb_status', $status);
 $tpl->assign('show_join_button', $showJoinButton);
@@ -182,5 +190,19 @@ $tpl->assign('form', $formToString);
 
 $listing_tpl = 'bbb/listing.tpl';
 $content = $tpl->fetch($listing_tpl);
+
+if (api_is_platform_admin()) {
+    $actionLinks = [
+        Display::toolbarButton(
+            $plugin->get_lang('AdminView'),
+            api_get_path(WEB_PLUGIN_PATH) . 'bbb/admin.php',
+            'list',
+            'primary'
+        )
+    ];
+
+    $tpl->assign('actions', implode(PHP_EOL, $actionLinks));
+}
+
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

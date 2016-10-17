@@ -1,0 +1,46 @@
+{
+  "name": "imagesloaded",
+  "description": "JavaScript is all like _You images done yet or what?_",
+  "main": "imagesloaded.js",
+  "dependencies": {
+    "ev-emitter": "~1.0.0"
+  },
+  "devDependencies": {
+    "jquery": ">=1.9 <4.0",
+    "qunit": "~1.20.0"
+  },
+  "ignore": [
+    "**/.*",
+    "test",
+    "package.json",
+    "composer.json",
+    "node_modules",
+    "bower_components",
+    "tests",
+    "sandbox/",
+    "contributing.md"
+  ],
+  "homepage": "http://imagesloaded.desandro.com",
+  "authors": [
+    "David DeSandro"
+  ],
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "images"
+  ],
+  "license": "MIT",
+  "version": "4.1.1",
+  "_release": "4.1.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "v4.1.1",
+    "commit": "2646b88563dbc19ef44da453be92d9be3bdd78d6"
+  },
+  "_source": "https://github.com/desandro/imagesloaded.git",
+  "_target": ">=3.0.0",
+  "_originalSource": "imagesloaded"
+}

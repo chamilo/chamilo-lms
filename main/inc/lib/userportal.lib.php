@@ -174,6 +174,9 @@ class IndexManager
         return false;
     }
 
+    /**
+     * @return null|string
+     */
     public function return_teacher_link()
     {
         $html = '';
@@ -190,7 +193,7 @@ class IndexManager
                 $show_course_link = true;
                 $show_create_link = true;
             } else {
-                if (api_get_setting('allow_students_to_browse_courses') == 'true') {
+                if (api_get_setting('allow_students_to_browse_courses') === 'true') {
                     $show_menu = true;
                     $show_course_link = true;
                 }
@@ -200,7 +203,7 @@ class IndexManager
                 }
             }
 
-            if ($show_menu && ($show_create_link || $show_course_link )) {
+            if ($show_menu && ($show_create_link || $show_course_link)) {
                 $show_menu = true;
             } else {
                 $show_menu = false;
@@ -208,7 +211,6 @@ class IndexManager
         }
 
         // My Account section
-
         if ($show_menu) {
             $html .= '<ul class="nav nav-pills nav-stacked">';
             if ($show_create_link) {
@@ -226,7 +228,14 @@ class IndexManager
         }
 
         if (!empty($html)) {
-            $html = self::show_right_block(get_lang('Courses'), $html, 'teacher_block', null, 'teachers', 'teachersCollapse');
+            $html = self::show_right_block(
+                get_lang('Courses'),
+                $html,
+                'teacher_block',
+                null,
+                'teachers',
+                'teachersCollapse'
+            );
         }
 
         return $html;
@@ -443,20 +452,20 @@ class IndexManager
         $setting_show_also_closed_courses = api_get_setting('show_closed_courses') == 'true';
 
         // Database table definitions.
-        $main_course_table      = Database :: get_main_table(TABLE_MAIN_COURSE);
-        $main_category_table    = Database :: get_main_table(TABLE_MAIN_CATEGORY);
+        $main_course_table = Database:: get_main_table(TABLE_MAIN_COURSE);
+        $main_category_table = Database:: get_main_table(TABLE_MAIN_CATEGORY);
 
         // Get list of courses in category $category.
-        $sql_get_course_list = "SELECT * FROM $main_course_table cours
-                                    WHERE category_code = '" . $category . "'
-                                    ORDER BY title, UPPER(visual_code)";
+        $sql = "SELECT * FROM $main_course_table cours
+                WHERE category_code = '" . $category . "'
+                ORDER BY title, UPPER(visual_code)";
 
         // Showing only the courses of the current access_url_id.
         if (api_is_multiple_url_enabled()) {
             $url_access_id = api_get_current_access_url_id();
             if ($url_access_id != -1) {
                 $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-                $sql_get_course_list = "SELECT * FROM $main_course_table as course
+                $sql = "SELECT * FROM $main_course_table as course
                         INNER JOIN $tbl_url_rel_course as url_rel_course
                         ON (url_rel_course.c_id = course.id)
                         WHERE
@@ -467,8 +476,7 @@ class IndexManager
         }
 
         // Removed: AND cours.visibility='".COURSE_VISIBILITY_OPEN_WORLD."'
-        $sql_result_courses = Database::query($sql_get_course_list);
-
+        $sql_result_courses = Database::query($sql);
         while ($course_result = Database::fetch_array($sql_result_courses)) {
             $course_list[] = $course_result;
         }
@@ -1079,7 +1087,6 @@ class IndexManager
         }
 
         // Course catalog
-
         if ($show_course_link) {
             if (!api_is_drh()) {
                 $my_account_content .= '<li class="list-course"><a href="main/auth/courses.php" >'.Display::return_icon('catalog-course.png',get_lang('CourseCatalog'),null,ICON_SIZE_SMALL).get_lang('CourseCatalog').'</a></li>';
@@ -1278,7 +1285,7 @@ class IndexManager
                                 'id' => $session_id
                             );
                             $session_box = Display::get_session_title_box($session_id);
-
+                           
                             $actions = null;
                             if (api_is_platform_admin()) {
                                 $actions = api_get_path(WEB_CODE_PATH) .'session/resume_session.php?id_session='.$session_id;

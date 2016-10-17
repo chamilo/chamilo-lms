@@ -31,8 +31,8 @@ if (!(isset($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user[
 $userGeolocalization = api_get_setting('enable_profile_user_address_geolocalization') == 'true';
 
 $htmlHeadXtra[] = api_get_password_checker_js('#username', '#password1');
-$htmlHeadXtra[] = '<link  href="'. api_get_path(WEB_PATH) .'web/assets/cropper/dist/cropper.min.css" rel="stylesheet">';
-$htmlHeadXtra[] = '<script src="'. api_get_path(WEB_PATH) .'web/assets/cropper/dist/cropper.min.js"></script>';
+$htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
+$htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
 $htmlHeadXtra[] = '<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=true" ></script>';
 $htmlHeadXtra[] = '<script>
 $(document).ready(function() {

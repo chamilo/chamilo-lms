@@ -317,7 +317,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 
     if ($form_sent == 1) {
         // Added a parameter to send emails when registering a user
-        SessionManager::suscribe_users_to_session(
+        SessionManager::subscribe_users_to_session(
             $id_session,
             $UserList,
             null,

@@ -108,7 +108,7 @@ class Promotion extends Model
                         }
 
                         if (!empty($new_session_list)) {
-                            SessionManager::suscribe_sessions_to_promotion(
+                            SessionManager::subscribe_sessions_to_promotion(
                                 $pid,
                                 $new_session_list
                             );

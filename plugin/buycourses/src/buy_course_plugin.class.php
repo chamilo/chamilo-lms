@@ -912,7 +912,7 @@ class BuyCoursesPlugin extends Plugin
                 $saleIsCompleted = CourseManager::subscribe_user($sale['user_id'], $course['code']);
                 break;
             case self::PRODUCT_TYPE_SESSION:
-                SessionManager::suscribe_users_to_session(
+                SessionManager::subscribe_users_to_session(
                     $sale['product_id'],
                     [$sale['user_id']],
                     api_get_session_visibility($sale['product_id']),

@@ -745,23 +745,23 @@ INSERT INTO course_module VALUES
 (27,'attendance','attendance/index.php','attendance.gif',2,1,'basic'),
 (28,'course_progress','course_progress/index.php','course_progress.gif',2,1,'basic');
 
-INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, created_at) VALUES (1, 1, 'legal_accept','Legal',0,0, NOW());
-INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, created_at) VALUES (1, 1, 'already_logged_in','Already logged in',0,0, NOW());
-INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, created_at) VALUES (1, 1, 'update_type','Update script type',0,0, NOW());
-INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, created_at) VALUES (1, 10, 'tags','tags',0,0, NOW());
-INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, created_at) VALUES (1, 1, 'rssfeeds','RSS',0,0, NOW());
-INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, created_at) VALUES (1, 1, 'dashboard', 'Dashboard', 0, 0, NOW());
-INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, created_at) VALUES (1, 11, 'timezone', 'Timezone', 0, 0, NOW());
-INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, default_value, created_at) values (1, 4, 'mail_notify_invitation',   'MailNotifyInvitation',0,1,'1', NOW());
-INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, default_value, created_at) values (1, 4, 'mail_notify_message',      'MailNotifyMessage',0,1,'1', NOW());
-INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, default_value, created_at) values (1, 4, 'mail_notify_group_message','MailNotifyGroupMessage',0,1,'1', NOW());
-INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, created_at) VALUES (1, 1, 'user_chat_status','User chat status',0,0, NOW());
-INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, created_at) VALUES (1, 1, 'google_calendar_url','Google Calendar URL',0,0, NOW());
-INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, default_value, created_at) VALUES (2, 13, 'special_course', 'Special course', 1 , 1, '', NOW());
-INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, created_at) VALUES (2, 10, 'tags', 'Tags', 1, 1, NOW());
-INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, created_at) VALUES (2, 19, 'video_url', 'VideoUrl', 1, 1, NOW());
-INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, created_at) VALUES (3, 16, 'image', 'Image', 1, 1, NOW());
-INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, created_at) VALUES (1, 1, 'captcha_blocked_until_date', 'Account locked until', 0, 0, NOW());
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible_to_self, changeable, created_at) VALUES (1, 1, 'legal_accept','Legal',0,0, NOW());
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible_to_self, changeable, created_at) VALUES (1, 1, 'already_logged_in','Already logged in',0,0, NOW());
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible_to_self, changeable, created_at) VALUES (1, 1, 'update_type','Update script type',0,0, NOW());
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible_to_self, changeable, created_at) VALUES (1, 10, 'tags','tags',0,0, NOW());
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible_to_self, changeable, created_at) VALUES (1, 1, 'rssfeeds','RSS',0,0, NOW());
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible_to_self, changeable, created_at) VALUES (1, 1, 'dashboard', 'Dashboard', 0, 0, NOW());
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible_to_self, changeable, created_at) VALUES (1, 11, 'timezone', 'Timezone', 0, 0, NOW());
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible_to_self, changeable, default_value, created_at) values (1, 4, 'mail_notify_invitation',   'MailNotifyInvitation',0,1,'1', NOW());
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible_to_self, changeable, default_value, created_at) values (1, 4, 'mail_notify_message',      'MailNotifyMessage',0,1,'1', NOW());
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible_to_self, changeable, default_value, created_at) values (1, 4, 'mail_notify_group_message','MailNotifyGroupMessage',0,1,'1', NOW());
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible_to_self, changeable, created_at) VALUES (1, 1, 'user_chat_status','User chat status',0,0, NOW());
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible_to_self, changeable, created_at) VALUES (1, 1, 'google_calendar_url','Google Calendar URL',0,0, NOW());
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible_to_self, changeable, default_value, created_at) VALUES (2, 13, 'special_course', 'Special course', 1 , 1, '', NOW());
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible_to_self, changeable, created_at) VALUES (2, 10, 'tags', 'Tags', 1, 1, NOW());
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible_to_self, changeable, created_at) VALUES (2, 19, 'video_url', 'VideoUrl', 1, 1, NOW());
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible_to_self, changeable, created_at) VALUES (3, 16, 'image', 'Image', 1, 1, NOW());
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible_to_self, changeable, created_at) VALUES (1, 1, 'captcha_blocked_until_date', 'Account locked until', 0, 0, NOW());
 
 INSERT INTO extra_field_options (field_id, option_value, display_text, option_order) VALUES (8, '1', 'AtOnce',1);
 INSERT INTO extra_field_options (field_id, option_value, display_text, option_order) VALUES (8, '8', 'Daily',2);
@@ -1911,7 +1911,7 @@ VALUES
 
 -- Version 1.11.0.4
 
-INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, created_at)
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible_to_self, changeable, created_at)
 VALUES
 (1, 1, 'skype', 'Skype', 1, 1, now()),
 (1, 1, 'linkedin_url', 'LinkedInUrl', 1, 1, now());
@@ -1944,7 +1944,7 @@ INSERT INTO access_url_rel_course_category (access_url_id, course_category_id) V
 
 UPDATE settings_current SET selected_value = '1.11.0.5' WHERE variable = 'chamilo_database_version';
 
-INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, created_at) VALUES (8, 10, 'tags', 'Tags', 1, 1, NOW());
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible_to_self, changeable, created_at) VALUES (8, 10, 'tags', 'Tags', 1, 1, NOW());
 
 UPDATE settings_current SET selected_value = '1.11.0.6' WHERE variable = 'chamilo_database_version';
 

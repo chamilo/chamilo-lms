@@ -275,7 +275,7 @@ CKEDITOR.dialog.add('audio', function(editor)
                                 id: 'autoplay',
                                 type: 'checkbox',
                                 label: lang.autoPlay,
-                                'default': true,
+                                'default': false,
                                 commit: commitValue
                             }
                         ]

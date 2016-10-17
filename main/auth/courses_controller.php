@@ -831,7 +831,7 @@ class CoursesController
                 'is_subscribed' => SessionManager::isUserSubscribedAsStudent($session->getId(), $userId),
                 'icon' => $this->getSessionIcon($session->getName()),
                 'date' => $sessionDates['display'],
-                'price' => $isThisSessionOnSale['html'],
+                'price' => (!empty($isThisSessionOnSale['html'])?$isThisSessionOnSale['html']:''),
                 'subscribe_button' => isset($isThisSessionOnSale['buy_button']) ? $isThisSessionOnSale['buy_button'] : $this->getRegisteredInSessionButton(
                     $session->getId(),
                     $session->getName(),

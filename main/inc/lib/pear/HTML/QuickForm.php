@@ -1582,7 +1582,7 @@ class HTML_QuickForm extends HTML_Common
      * @access   public
      * @throws   HTML_QuickForm_Error
      */
-    public function freeze($elementList=null)
+    public function freeze($elementList = null, $setTemplateFrozen = '')
     {
         if (!isset($elementList)) {
             $this->_freezeAll = true;
@@ -1597,6 +1597,9 @@ class HTML_QuickForm extends HTML_Common
         foreach (array_keys($this->_elements) as $key) {
             $name = $this->_elements[$key]->getName();
             if ($this->_freezeAll || isset($elementList[$name])) {
+                if (!empty($setTemplateFrozen)) {
+                    $this->_elements[$key]->setCustomFrozenTemplate($setTemplateFrozen);
+                }
                 $this->_elements[$key]->freeze();
                 unset($elementList[$name]);
             }

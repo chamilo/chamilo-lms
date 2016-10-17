@@ -108,6 +108,11 @@ class CourseDriver extends Driver implements DriverInterface
                 true
             );
 
+            // Teachers can see all files and folders see #1425
+            if ($this->allowToEdit()) {
+                $foldersToHide = [];
+            }
+
             if (!empty($foldersToHide)) {
                 foreach ($foldersToHide as $folder) {
                     $config['attributes'][] = [

@@ -672,11 +672,6 @@ class TicketManager
                          <button class="btn btn-danger responseno" name="response" id="responseno" value="0">' . get_lang('No') . '</button>
                      </form>';
             $content .= $form;
-
-            $sql = "UPDATE $table_support_tickets 
-                    SET status_id = '".self::STATUS_UNCONFIRMED."'
-                    WHERE id = '$ticket_id'";
-            Database::query($sql);
         }
 
         $sql = "SELECT COUNT(*) as total_messages
@@ -759,7 +754,7 @@ class TicketManager
         $user_id = api_get_user_id();
         $ticket_id = intval($ticket_id);
         $new_file_name = add_ext_on_mime(
-                stripslashes($file_attach['name']), $file_attach['type']
+            stripslashes($file_attach['name']), $file_attach['type']
         );
         $file_name = $file_attach['name'];
         $table_support_message_attachments = Database::get_main_table(TABLE_TICKET_MESSAGE_ATTACHMENTS);
@@ -1014,8 +1009,14 @@ class TicketManager
                     break;
             }
 
-            $row['col1'] = Display::tip(date_to_str_ago($row['col1']), api_get_local_time($row['col1']));
-            $row['col2'] = Display::tip(date_to_str_ago($row['col2']), api_get_local_time($row['col2']));
+            $row['col1'] = Display::tip(
+                date_to_str_ago($row['col1']),
+                api_get_local_time($row['col1'])
+            );
+            $row['col2'] = Display::tip(
+                date_to_str_ago($row['col2']),
+                api_get_local_time($row['col2'])
+            );
             if ($isAdmin) {
                 if ($row['priority_id'] === self::PRIORITY_HIGH && $row['status_id'] != self::STATUS_CLOSE) {
                     $actions .= '<img src="' . $webCodePath . 'img/exclamation.png" border="0" />';
@@ -1888,6 +1889,23 @@ class TicketManager
         }
 
         return $list;
+    }
+
+    /**
+     * @param string $code
+     * @return int
+     */
+    public static function getStatusIdFromCode($code)
+    {
+        $item = Database::getManager()
+            ->getRepository('ChamiloTicketBundle:Status')
+            ->findOneBy(['code' => $code])
+        ;
+        if ($item) {
+            return $item->getId();
+        }
+
+        return 0;
     }
 
      /**

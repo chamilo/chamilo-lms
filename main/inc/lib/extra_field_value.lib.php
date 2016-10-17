@@ -75,11 +75,12 @@ class ExtraFieldValue extends Model
      * In order to save this function needs a item_id (user id, course id, etc)
      * This function is used with $extraField->addElements()
      * @param array $params array for the insertion into the *_field_values table
+     * @param bool $forceSave
      * @param bool $showQuery
      * @return mixed false on empty params, void otherwise
      * @assert (array()) === false
      */
-    public function saveFieldValues($params, $showQuery = false)
+    public function saveFieldValues($params, $forceSave = false, $showQuery = false)
     {
         foreach ($params as $key => $value) {
             $found = strpos($key, '__persist__');
@@ -105,8 +106,10 @@ class ExtraFieldValue extends Model
         $resultsExist = [];
         // Parse params
         foreach ($extraFields as $fieldDetails) {
-            if ($fieldDetails['visible_to_self'] != 1) {
-                continue;
+            if ($forceSave === false) {
+                if ($fieldDetails['visible_to_self'] != 1) {
+                    continue;
+                }
             }
 
             $field_variable = $fieldDetails['variable'];
@@ -117,7 +120,6 @@ class ExtraFieldValue extends Model
             }
 
             $resultsExist[$field_variable] = isset($value) && $value !== '' ? true : false;
-
             $extraFieldInfo = $this->getExtraField()->get_handler_field_info_by_field_variable($field_variable);
 
             if (!$extraFieldInfo) {

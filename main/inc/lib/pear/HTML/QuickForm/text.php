@@ -235,7 +235,7 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
      */
     public function toHtml()
     {
-        if ($this->_flagFrozen) {
+        if ($this->isFrozen()) {
             return $this->getFrozenHtml();
         } else {
             return '<input ' . $this->_getAttrString($this->_attributes) . ' />';

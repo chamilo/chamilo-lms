@@ -1,6 +1,4 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Base class for form elements
  *
@@ -39,8 +37,8 @@ class HTML_QuickForm_element extends HTML_Common
 {
     private $layout;
     private $icon;
-
-    // {{{ properties
+    private $template;
+    private $customFrozenTemplate = '';
 
     /**
      * Label of the field
@@ -87,9 +85,9 @@ class HTML_QuickForm_element extends HTML_Common
      * @param    string     Name of the element
      * @param    mixed      Label(s) for the element
      * @param    mixed      Associative array of tag attributes or HTML attributes name="value" pairs
-     * @since     1.0
-     * @access    public
-     * @return    void
+     * @since    1.0
+     * @access   public
+     * @return   void
      */
     public function __construct($elementName = null, $elementLabel = null, $attributes = null)
     {
@@ -98,8 +96,7 @@ class HTML_QuickForm_element extends HTML_Common
             $this->setName($elementName);
         }
         if (isset($elementLabel)) {
-
-            $labelFor = "";
+            $labelFor = '';
             // Default Inputs generate this
             if (!empty($attributes['id'])) {
                 $labelFor = $attributes['id'];
@@ -159,7 +156,7 @@ class HTML_QuickForm_element extends HTML_Common
      * @access    public
      * @return    float
      */
-    function apiVersion()
+    public function apiVersion()
     {
         return 3.2;
     } // end func apiVersion
@@ -174,7 +171,7 @@ class HTML_QuickForm_element extends HTML_Common
      * @access    public
      * @return    string
      */
-    function getType()
+    public function getType()
     {
         return $this->_type;
     } // end func getType
@@ -190,7 +187,7 @@ class HTML_QuickForm_element extends HTML_Common
      * @access    public
      * @return    void
      */
-    function setName($name)
+    public function setName($name)
     {
         // interface method
     } //end func setName
@@ -205,7 +202,7 @@ class HTML_QuickForm_element extends HTML_Common
      * @access    public
      * @return    string
      */
-    function getName()
+    public function getName()
     {
         // interface method
     } //end func getName
@@ -221,7 +218,7 @@ class HTML_QuickForm_element extends HTML_Common
      * @access    public
      * @return    void
      */
-    function setValue($value)
+    public function setValue($value)
     {
         // interface
     } // end func setValue
@@ -236,7 +233,7 @@ class HTML_QuickForm_element extends HTML_Common
      * @access    public
      * @return    mixed
      */
-    function getValue()
+    public function getValue()
     {
         // interface
         return null;
@@ -251,7 +248,7 @@ class HTML_QuickForm_element extends HTML_Common
      * @access    public
      * @return    void
      */
-    function freeze()
+    public function freeze()
     {
         $this->_flagFrozen = true;
     } //end func freeze
@@ -266,7 +263,7 @@ class HTML_QuickForm_element extends HTML_Common
     * @return void
     * @since  3.2.4
     */
-    function unfreeze()
+    public function unfreeze()
     {
         $this->_flagFrozen = false;
     }
@@ -293,9 +290,6 @@ class HTML_QuickForm_element extends HTML_Common
         return '<span class="freeze">'.$value.'</span>';
         //
     } //end func getFrozenHtml
-
-    // }}}
-    // {{{ _getPersistantData()
 
    /**
     * Used by getFrozenHtml() to pass the element's value if _persistantFreeze is on
@@ -552,4 +546,38 @@ class HTML_QuickForm_element extends HTML_Common
             }
         }
     }
+
+    /**
+     * @param mixed $template
+     * @return HTML_QuickForm_element
+     */
+    public function setTemplate($template)
+    {
+        $this->template = $template;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCustomFrozenTemplate()
+    {
+        return $this->customFrozenTemplate;
+    }
+
+    /**
+     * @param string $customFrozenTemplate
+     * @return HTML_QuickForm_element
+     */
+    public function setCustomFrozenTemplate($customFrozenTemplate)
+    {
+        $this->customFrozenTemplate = $customFrozenTemplate;
+
+        return $this;
+    }
+
+
+
+
 }

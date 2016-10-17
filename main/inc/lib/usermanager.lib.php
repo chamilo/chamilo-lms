@@ -477,6 +477,14 @@ class UserManager
                     // variables for the default template
                     $tplContent->assign('complete_name', stripslashes(api_get_person_name($firstName, $lastName)));
                     $tplContent->assign('user_added', $user);
+
+                    $renderer = FormValidator::getDefaultRenderer();
+
+                    // Form template
+                    $elementTemplate = ' {label}: {element} <br />';
+                    $renderer->setElementTemplate($elementTemplate);
+                    $form->freeze(null, $elementTemplate);
+
                     /** @var FormValidator $form */
                     $form->freeze();
                     $form->removeElement('submit');

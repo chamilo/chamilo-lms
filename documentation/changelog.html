@@ -49,7 +49,7 @@
 
     <a name="1.11.0"></a>
 
-    <h1>Chamilo 1.11.0 - Lecce, 15th of October 2016</h1>
+    <h1>Chamilo 1.11.0 - Lecce, 17th of October 2016</h1>
     <h3>Release notes - summary</h3>
     <p>Chamilo 1.11.0 is a major release of the 1.11.x branch. It is meant as a transition between 1.10 and 2.0 versions.</p>
     <h3>Release name</h3>
@@ -150,9 +150,16 @@
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/0dfdd23a2ca0268034e05eae745027218974768a">0dfdd23a</a> - <a href="https://support.chamilo.org/issues/11192">#11192</a>) Add function to check if the current lp item is first, both, last or none from lp list</li>
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/3c8e000579ab57ac165816e90175dd260d229593">3c8e0005</a>) Add function api_get_css_asset() to get css files from web/assets</li>
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/23513de43692dd98a690cf2835d12112a1e8cdad">23513de4</a> - <a href="https://support.chamilo.org/issues/8378">CT#8378</a>) Improve exercise list performance</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/879d1ffefe193d20604857fbb72091470151ff35">879d1ffe</a> - <a href="https://task.beeznest.com/issues/11194">BT#11194</a>) Add support for new custom frozen form element template</li>
     </ul>
     <h3>Improvements (minor features) and debug (by date - the latest are listed first)</h3>
     <ul>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/ea6a6863895e7388a7cb5cff223cb15ede01fc95">ea6a6863</a>) Remove double "freeze" call in create_user() form</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/3df995697e387723fd0530bc0ed3a1e2aa8d35e4">3df99569</a>) Use CREATE TABLE IF NOT EXISTS in v1.10 migration script on c_lp_category</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/7eedec36d4cb2aa41e939ab4636feaa0f7010e3b">7eedec36</a>) Fix v1.10 migration queries to avoid empty insert_user_id in c_item_property</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/53af300a9d920101d3989661d852ce498d7bfcb0">53af300a</a>) Fix v1.10 migration query to avoid empty session coach ID</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/e840d1e6894fafb3ba3bf255a886002234446117">e840d1e6</a>) Fix use of admin id in upgrader (further fixes to ensure admin user is active)</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/c75fa66bee6dc384fdca6469ca46029412c609bb">c75fa66b</a>) Fix tickets: fatal error, lang vars, format code</li>
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/8f218b9ea6b7018930826955a3832b7ffb43ac7b">8f218b9e</a>) Fix Upload student work if you upload the same filename that previously was deleted</li>
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/dff94509a60de3057d2cdef20bbde2bd0cfa09b4">dff94509</a>) Fix delete session if exist an assignments inside</li>
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/17aca502d1e3c1cb6806f40737fbb4f7edfa19d4">17aca502</a>) Allow update session dates when these are null</li>

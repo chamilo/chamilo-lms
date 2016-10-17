@@ -29,9 +29,15 @@ $extraFieldValueSession = new ExtraFieldValue('session');
 
 $filter = false;
 $extraFieldValue = new ExtraFieldValue('user');
-$wantStage = $extraFieldValue->get_values_by_handler_and_field_variable(api_get_user_id(), 'filiere_want_stage');
+$wantStage = $extraFieldValue->get_values_by_handler_and_field_variable(
+    api_get_user_id(),
+    'filiere_want_stage'
+);
 
-$diagnosisComplete = $extraFieldValue->get_values_by_handler_and_field_variable(api_get_user_id(), 'diagnosis_completed');
+$diagnosisComplete = $extraFieldValue->get_values_by_handler_and_field_variable(
+    api_get_user_id(),
+    'diagnosis_completed'
+);
 if ($diagnosisComplete && isset($diagnosisComplete['value']) && $diagnosisComplete['value'] == 1 && !isset($_GET['result'])) {
     Display::addFlash(Display::return_message(get_lang('SessionSearchSavedExplanation')));
     //header('Location:'.api_get_self().'?result=1');
@@ -64,13 +70,10 @@ switch ($lang) {
         break;
 }
 
-
 $htmlHeadXtra[] ='<script>
-$(document).ready(function() {
-    
+$(document).ready(function() {    
     var themeDefault = "extra_'.$theme.'";
-    var extraFiliere = $("input[name=\'extra_filiere[extra_filiere]\']").parent().parent().parent().parent();
-    
+    var extraFiliere = $("input[name=\'extra_filiere[extra_filiere]\']").parent().parent().parent().parent();    
     '.$defaultValueStatus.'
     
     $("input[name=\'extra_filiere_want_stage[extra_filiere_want_stage]\']").change(function() {
@@ -170,8 +173,6 @@ if (!empty($items)) {
 }
 
 $form->setDefaults($defaults);
-
-//$view = $form->returnForm();
 $filterToSend = '';
 
 if ($form->validate()) {
@@ -231,7 +232,7 @@ if ($form->validate()) {
         }
     }
 }
-
+$forceShowFields = true;
 $extraField = new ExtraField('user');
 $userForm = new FormValidator('user_form', 'post', api_get_self());
 $jqueryExtra = '';
@@ -256,7 +257,7 @@ $extra = $extraField->addElements(
     [],
     [],
     false,
-    true //$forceShowFields = false
+    $forceShowFields //$forceShowFields = false
 );
 
 $jqueryExtra .= $extra['jquery_ready_content'];
@@ -276,7 +277,7 @@ $extra = $extraFieldSession->addElements(
     [],
     [],
     false,
-    true //$forceShowFields = false
+    $forceShowFields //$forceShowFields = false
 );
 
 
@@ -296,7 +297,7 @@ $extra = $extraFieldSession->addElements(
     [],
     [],
     false,
-    true //$forceShowFields = false
+    $forceShowFields //$forceShowFields = false
 );
 $jqueryExtra .= $extra['jquery_ready_content'];
 
@@ -321,7 +322,7 @@ $extra = $extraField->addElements(
     [],
     [],
     false,
-    true //$forceShowFields = false
+    $forceShowFields //$forceShowFields = false
 );
 
 $jqueryExtra .= $extra['jquery_ready_content'];
@@ -347,7 +348,7 @@ $extra = $extraField->addElements(
     [],
     [],
     false,
-    true //$forceShowFields = false
+    $forceShowFields //$forceShowFields = false
 );
 
 $jqueryExtra .= $extra['jquery_ready_content'];
@@ -360,9 +361,9 @@ $fieldsToShow = [
     $theme
 ];
 
-$specialUrlList = [
+/*$specialUrlList = [
     $theme => api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?a=search_tags_from_diagnosis'
-];
+];*/
 
 $extra = $extraFieldSession->addElements(
     $userForm,
@@ -373,9 +374,9 @@ $extra = $extraFieldSession->addElements(
     $fieldsToShow,
     $fieldsToShow,
     $defaults,
-    $specialUrlList,
+    null,
     true,
-    true // $forceShowFields
+    $forceShowFields // $forceShowFields
 );
 
 $jqueryExtra .= $extra['jquery_ready_content'];
@@ -403,8 +404,7 @@ $extra = $extraFieldSession->addElements(
     $defaults,
     [],
     false, //$orderDependingDefaults = false,
-    true //$forceShowFields = false
-
+    $forceShowFields //$forceShowFields = false
 );
 
 $jqueryExtra .= $extra['jquery_ready_content'];
@@ -427,7 +427,7 @@ $extra = $extraField->addElements(
     [],
     [],
     false,
-    true //$forceShowFields = false
+    $forceShowFields //$forceShowFields = false
 );
 
 $jqueryExtra .= $extra['jquery_ready_content'];
@@ -451,7 +451,7 @@ $extra = $extraField->addElements(
     [],
     [],
     false,
-    true //$forceShowFields = false
+    $forceShowFields //$forceShowFields = false
 );
 
 $jqueryExtra .= $extra['jquery_ready_content'];
@@ -472,7 +472,7 @@ if ($userForm->validate()) {
     $extraFieldValue = new ExtraFieldValue('user');
     $userData = $userForm->getSubmitValues();
     $userData['extra_diagnosis_completed'] = 1;
-    $extraFieldValue->saveFieldValues($userData);
+    $extraFieldValue->saveFieldValues($userData, $forceShowFields);
 
     // Saving to extra_field_saved_search
 

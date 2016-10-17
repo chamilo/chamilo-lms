@@ -831,7 +831,6 @@ class ExtraField extends Model
             }
 
             foreach ($extra as $field_details) {
-
                 if (!empty($showOnlyThisFields)) {
                     if (!in_array($field_details['variable'], $showOnlyThisFields)) {
                         continue;

@@ -24,7 +24,7 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE session_rel_course ENGINE=InnoDB");
         $this->addSql("ALTER TABLE session_rel_course_rel_user ENGINE=InnoDB");
         $this->addSql("ALTER TABLE session_rel_user ENGINE=InnoDB");
-        $this->addSql("UPDATE session SET session.id_coach = (SELECT user_id FROM admin LIMIT 1) WHERE id_coach NOT IN (SELECT user_id FROM user)");
+        $this->addSql("UPDATE session SET session.id_coach = (SELECT u.id FROM admin a INNER JOIN user u ON (u.id = a.user_id AND u.active = 1) LIMIT 1) WHERE id_coach NOT IN (SELECT user_id FROM user)");
     }
 
     /**

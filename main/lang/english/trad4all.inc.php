@@ -7915,4 +7915,8 @@ $NoLPFound = "No learning path found";
 $ReportTypeLink = "Active report link";
 $InviteesCantBeTutors = "Invitees cannot be tutors";
 $InvalidAction = "Invalid action";
+$TicketWasThisAnswerSatisfying = "Was this answer satisfactory?";
+$IfYouAreSureTheTicketWillBeClosed = "If you are certain, the ticket will be closed.";
+$Priorities = "Priorities";
+$Tickets = "Tickets";
 ?>

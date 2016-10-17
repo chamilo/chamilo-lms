@@ -483,10 +483,8 @@ class UserManager
                     // Form template
                     $elementTemplate = ' {label}: {element} <br />';
                     $renderer->setElementTemplate($elementTemplate);
-                    $form->freeze(null, $elementTemplate);
-
                     /** @var FormValidator $form */
-                    $form->freeze();
+                    $form->freeze(null, $elementTemplate);
                     $form->removeElement('submit');
                     $formData = $form->returnForm();
                     $url = api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$user->getId();

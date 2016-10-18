@@ -23,12 +23,13 @@ $apcLoader->register(true);
 
 
 require_once __DIR__.'/../app/AppKernel.php';
-$request = Sonata\PageBundle\Request\RequestFactory::createFromGlobals(
-    'host_with_path_by_locale'
-);
 
 $kernel = new AppKernel('prod', false);
-//$kernel->loadClassCache();
+$kernel->loadClassCache();
+
+$request = Sonata\PageBundle\Request\RequestFactory::createFromGlobals(
+    'host_with_path'
+);
 
 $response = $kernel->handle($request);
 $response->send();

@@ -25,7 +25,7 @@ class PageController extends Controller
     public function getLatestPages($number, Request $request)
     {
         $locale = $request->get('_locale');
-        $site = $this->container->get('sonata.page.site.selector.host_by_locale')->retrieve();
+        $site = $this->container->get('sonata.page.site.selector.host_with_path')->retrieve();
         $translator = $this->get('translator');
 
         $criteria = [

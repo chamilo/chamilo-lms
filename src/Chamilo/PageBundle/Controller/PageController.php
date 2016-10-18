@@ -25,8 +25,8 @@ class PageController extends Controller
     public function getLatestPages($number, Request $request)
     {
         $locale = $request->get('_locale');
-        $site = $this->container->get('sonata.page.site.selector.host_with_path')->retrieve();
-        $translator = $this->get('translator');
+        //$site = $this->container->get('sonata.page.site.selector.host_with_path')->retrieve();
+        $site = $this->container->get('sonata.page.manager.site')->findOneBy(['locale' => $locale]);
 
         $criteria = [
             'enabled' => 1,
@@ -52,7 +52,7 @@ class PageController extends Controller
             // Check if page has a valid snapshot
             $snapshot = $this->container->get('sonata.page.manager.snapshot')->findEnableSnapshot($criteria);
             if ($snapshot) {
-                $page->setMetaDescription($translator->trans($page->getMetaDescription(), [], null, $locale));
+                //$page->setMetaDescription($page->getMetaDescription());
                 $pagesToShow[] = $page;
             }
         }
@@ -70,7 +70,7 @@ class PageController extends Controller
     public function getLatestBlocks($number, Request $request)
     {
         $locale = $request->get('_locale');
-        $site = $this->container->get('sonata.page.site.selector.host_with_path')->retrieve();
+        $site = $this->container->get('sonata.page.manager.site')->findOneBy(['locale' => $locale]);
         $translator = $this->get('translator');
 
         $criteria = [

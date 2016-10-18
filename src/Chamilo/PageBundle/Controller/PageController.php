@@ -69,8 +69,8 @@ class PageController extends Controller
      */
     public function getLatestBlocks($number, Request $request)
     {
-        $site = $this->container->get('sonata.page.site.selector')->retrieve();
         $locale = $request->get('_locale');
+        $site = $this->container->get('sonata.page.site.selector.host_with_path')->retrieve();
         $translator = $this->get('translator');
 
         $criteria = [
@@ -83,6 +83,7 @@ class PageController extends Controller
         $order = ['createdAt' => 'desc'];
         // Get latest pages
         $pages = $this->container->get('sonata.page.manager.page')->findBy($criteria, $order, $number);
+
         $pagesToShow = [];
         /** @var Page $page */
         foreach ($pages as $page) {

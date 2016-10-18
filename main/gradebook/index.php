@@ -792,15 +792,13 @@ if (!empty($selectCat)) {
 }
 
 if (!api_is_allowed_to_edit(null, true)) {
-    if ($hideCertificateExport !== 'true') {
-        $actionsLeft .= Display::url(
-            Display::returnFontAwesomeIcon('file-pdf-o').get_lang(
-                'DownloadReportPdf'
-            ),
-            api_get_self()."?".api_get_self()."&action=export_table",
-            ['class' => 'btn btn-default']
-        );
-    }
+    $actionsLeft .= Display::url(
+        Display::returnFontAwesomeIcon('file-pdf-o').get_lang(
+            'DownloadReportPdf'
+        ),
+        api_get_self()."?".api_get_self()."&action=export_table",
+        ['class' => 'btn btn-default']
+    );
 }
 
 echo $toolbar = Display::toolbarAction('gradebook-student-actions', array($actionsLeft));

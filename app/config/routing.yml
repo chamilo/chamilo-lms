@@ -1,4 +1,3 @@
-
 home:
     path: ../../index.php
 
@@ -45,7 +44,7 @@ logout:
     path: /logout
 
 sonata_user_admin_security_logout:
-  path: /logout
+    path: /logout
 
 #chamilo_course:
 #    resource: "@ChamiloCourseBundle/Resources/config/routing.yml"

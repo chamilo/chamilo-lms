@@ -51,7 +51,6 @@ class PageController extends Controller
             // Check if page has a valid snapshot
             $snapshot = $this->container->get('sonata.page.manager.snapshot')->findEnableSnapshot($criteria);
             if ($snapshot) {
-                //$page->setMetaDescription($page->getMetaDescription());
                 $pagesToShow[] = $page;
             }
         }
@@ -70,7 +69,6 @@ class PageController extends Controller
     {
         $locale = $request->get('_locale');
         $site = $this->container->get('sonata.page.manager.site')->findOneBy(['locale' => $locale]);
-        $translator = $this->get('translator');
 
         $criteria = [
             'enabled' => 1,
@@ -95,7 +93,6 @@ class PageController extends Controller
             // Check if page has a valid snapshot
             $snapshot = $this->container->get('sonata.page.manager.snapshot')->findEnableSnapshot($criteria);
             if ($snapshot) {
-                $page->setMetaDescription($translator->trans($page->getMetaDescription(), [], null, $locale));
                 $pagesToShow[] = $page;
             }
         }

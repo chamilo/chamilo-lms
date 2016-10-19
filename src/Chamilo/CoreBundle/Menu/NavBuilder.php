@@ -64,13 +64,23 @@ class NavBuilder extends ContainerAware
 
         $menu->addChild(
             $translator->trans('Homepage'),
-            array('route' => 'home')
+            array(
+                'route' => 'main',
+                'routeParameters' => array(
+                    'name' => '../index.php',
+                ),
+            )
         )->setAttribute('class', 'item-menu menu-1 homepage');
 
         if ($checker->isGranted('IS_AUTHENTICATED_FULLY')) {
             $menu->addChild(
                 $translator->trans('My courses'),
-                array('route' => 'userportal')
+                array(
+                    'route' => 'main',
+                    'routeParameters' => array(
+                        'name' => '../user_portal.php',
+                    ),
+                )
             )->setAttribute('class', 'item-menu menu-2 my-course');
 
             /*$menu->addChild(

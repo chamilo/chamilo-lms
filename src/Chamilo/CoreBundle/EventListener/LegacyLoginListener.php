@@ -97,13 +97,10 @@ class LegacyLoginListener implements EventSubscriberInterface
                                 $locale = $language->getIsocode();
                             }
 
-                            //$locale = isset($languages[$user->getLanguage()]) ? $languages[$user->getLanguage()] : '';
                             if ($user && !empty($locale)) {
                                 error_log('legacyloginlistener');
                                 error_log($locale);
                                 $user->setLocale($locale);
-
-                                //$request->getSession()->set('_locale_user', $locale);
 
                                 // if no explicit locale has been set on this request, use one from the session
                                 $request->getSession()->set('_locale', $locale);
@@ -117,11 +114,10 @@ class LegacyLoginListener implements EventSubscriberInterface
                             //now dispatch the login event
                             $event = new InteractiveLoginEvent($request, $token);
                             $this->container->get("event_dispatcher")->dispatch("security.interactive_login", $event);
-
-
                             $this->container->get("event_dispatcher")->addListener(
                                 KernelEvents::RESPONSE, array($this, 'redirectUser')
                             );
+
 
                         }
                     }

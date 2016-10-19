@@ -139,7 +139,7 @@ function handle_forum_and_forumcategories($lp_id = null)
             $link_info = GradebookUtils::isResourceInCourseGradebook(
                 api_get_course_id(),
                 5,
-                intval($list_threads[$i]['thread_id']),
+                $list_threads[$i]['thread_id'],
                 api_get_session_id()
             );
             if ($link_info !== false) {
@@ -841,7 +841,7 @@ function deleteForumCategoryThread($content, $id)
         $return_message = get_lang('ForumCategoryDeleted');
 
         if (!empty($forum_list)) {
-            $sql = "SELECT forum_id FROM ".$table_forums."
+            $sql = "SELECT forum_id FROM $table_forums
                     WHERE c_id = $course_id AND forum_category='".$id."'";
             $result = Database::query($sql);
             $row = Database::fetch_array($result);
@@ -863,13 +863,19 @@ function deleteForumCategoryThread($content, $id)
         $return_message = get_lang('ForumDeleted');
 
         if (!empty($number_threads)) {
-            $sql = "SELECT thread_id FROM".$table_forum_thread."
-                    WHERE c_id = $course_id AND forum_id='".$id."'";
+            $sql = "SELECT thread_id FROM $table_forum_thread
+                    WHERE c_id = $course_id AND forum_id = $id ";
             $result = Database::query($sql);
             $row = Database::fetch_array($result);
             foreach ($row as $arr_forum) {
                 $forum_id = $arr_forum['thread_id'];
-                api_item_property_update($_course, 'forum_thread', $forum_id, 'delete', api_get_user_id());
+                api_item_property_update(
+                    $_course,
+                    'forum_thread',
+                    $forum_id,
+                    'delete',
+                    api_get_user_id()
+                );
             }
         }
     }
@@ -1616,6 +1622,7 @@ function get_forums(
                     api_is_allowed_to_edit(),
                     $course_id
                 );
+
                 if ($last_post_info_of_forum) {
                     $forum_list[$key]['last_post_id'] = $last_post_info_of_forum['last_post_id'];
                     $forum_list[$key]['last_poster_id'] = $last_post_info_of_forum['last_poster_id'];

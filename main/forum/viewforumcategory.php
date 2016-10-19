@@ -243,28 +243,12 @@ if ($action_forums != 'add') {
     );
 
 
-    if ($descriptionCategory != '' && trim($descriptionCategory)!= '&nbsp;')
-    {
+    if ($descriptionCategory != '' && trim($descriptionCategory)!= '&nbsp;') {
         $html .= '<div class="forum-description">'.$descriptionCategory.'</div>';
     }
-    /* echo '<tr><th class="forum_head" '.(api_is_allowed_to_edit(null, true) ? 'colspan="5"' : 'colspan="6"').'>'; */
-
-
-    // Step 3: The interim headers (for the forum).
-    /*
-    echo '<tr class="forum_header">';
-    echo '<td colspan="2">'.get_lang('Forum').'</td>';
-    echo '<td>'.get_lang('ForumThreads').'</td>';
-    echo '<td>'.get_lang('Posts').'</td>';
-    echo '<td>'.get_lang('LastPosts').'</td>';
-    echo '<td>'.get_lang('Actions').'</td>';
-    echo '</tr>';
-    echo '</thead>';
-    */
 
     $html .= '</div>';
     echo $html;
-
     echo '<div class="forum_display">';
     // The forums in this category.
     $forums_in_category = get_forums_in_category($forum_category['cat_id']);
@@ -431,13 +415,16 @@ if ($action_forums != 'add') {
                 $html .= '<div class="col-md-2">';
                 $html .= $newPost . '</div>';
 
+                $poster_id = 0;
+                $name = '';
                 // the last post in the forum
-                if ($forum['last_poster_name'] != '') {
+                if (isset($forum['last_poster_name']) && $forum['last_poster_name'] != '') {
                     $name = $forum['last_poster_name'];
-                    $poster_id = 0;
                 } else {
-                    $name = api_get_person_name($forum['last_poster_firstname'], $forum['last_poster_lastname']);
-                    $poster_id = $forum['last_poster_id'];
+                    if (isset($forum['last_poster_lastname'])) {
+                        $name = api_get_person_name($forum['last_poster_firstname'], $forum['last_poster_lastname']);
+                        $poster_id = $forum['last_poster_id'];
+                    }
                 }
                 $html .= '<div class="col-md-6">';
                 if (!empty($forum['last_post_id'])) {

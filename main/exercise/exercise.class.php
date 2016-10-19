@@ -5294,7 +5294,16 @@ class Exercise
         $subject = get_lang('ExerciseAttempted');
 
         if (!empty($sessionId)) {
-            $teachers = CourseManager::get_coach_list_from_course_code($courseCode, $sessionId);
+            $addGeneralCoach = true;
+            $setting = api_get_configuration_value('block_quiz_mail_notification_general_coach');
+            if ($setting === true) {
+                $addGeneralCoach = false;
+            }
+            $teachers = CourseManager::get_coach_list_from_course_code(
+                $courseCode,
+                $sessionId,
+                $addGeneralCoach
+            );
         } else {
             $teachers = CourseManager::get_teacher_list_from_course_code($courseCode);
         }

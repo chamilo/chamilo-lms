@@ -57,15 +57,47 @@ $data['image_height'] = $pictureHeight;
 $data['courseCode'] = $_course['path'];
 $data['hotspots'] = [];
 
-$showScoreOptions = [
-    RESULT_DISABLE_SHOW_SCORE_ONLY,
-    RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES,
-    RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT
-];
 
-$showExpectedChoice = !in_array($objExercise->results_disabled, $showScoreOptions);
 
-if ($showExpectedChoice) {
+
+$showTotalScoreAndUserChoicesInLastAttempt = true;
+
+if ($objExercise->selectResultsDisabled() == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
+    $showOnlyScore = true;
+    $showResults = true;
+    if ($objExercise->attempts > 0) {
+        $attempts = Event::getExerciseResultsByUser(
+            api_get_user_id(),
+            $objExercise->id,
+            api_get_course_int_id(),
+            api_get_session_id(),
+            $trackExerciseInfo['orig_lp_id'],
+            $trackExerciseInfo['orig_lp_item_id'],
+            'desc'
+        );
+        $numberAttempts = count($attempts);
+
+        $showTotalScoreAndUserChoicesInLastAttempt = false;
+
+        if ($numberAttempts >= $objExercise->attempts) {
+            $showResults = true;
+            $showOnlyScore = false;
+            $showTotalScoreAndUserChoicesInLastAttempt = true;
+        }
+    }
+}
+
+$hideExpectedAnswer = false;
+
+if ($objExercise->selectFeedbackType() == 0 && $objExercise->selectResultsDisabled() == 2) {
+    $hideExpectedAnswer = true;
+}
+
+if ($objExercise->selectResultsDisabled() == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
+    $hideExpectedAnswer = $showTotalScoreAndUserChoicesInLastAttempt ? false : true;
+}
+
+if (!$hideExpectedAnswer) {
     $qb = $em->createQueryBuilder();
     $qb
         ->select('a')

@@ -380,8 +380,8 @@ The logic behind this verification is that, whatever resources that needs to be
     (usually called download.php but there are more than one depending on the
     type of resource).<br /><br />
 If you want to speed up files accesses and you don't really care about whom can
-    see your files, then an option is to simply remove this redirection to
-    download.php and let Apache treat the file on its own.<br /><br />
+    see your files, then an option is to simply change this redirection to
+    download.php and let Apache treat the file directly.<br /><br />
 Furthermore, using a PHP script for the download (unless you have special rules)
     will usually prevent static content caching, which will multiply downloads
     and use large amount of additional bandwidth.<br /><br />
@@ -397,13 +397,14 @@ RewriteRule ([^/]+)/document/(.*)$ /main/document/download.php?doc_url=/$2&cDir=
 RewriteRule ([^/]+)/work/(.*)$ /main/work/download.php?file=work/$2&cDir=$1 [QSA,L]
 </IfModule>
 </pre><br />
-The idea is to remove the "scorm" line, so you are left with:
+The idea is to allow direct access (without access validation) to resources in the "scorm" directory with:
 <pre>
 <IfModule mod_rewrite.c>
 RewriteEngine On
 RewriteBase /courses/
 RewriteCond %{REQUEST_URI} !^/main/
 RewriteRule ([^/]+)/document/(.*)&(.*)$ $1/document/$2///$3 [N]
+RewriteRule ([^/]+)/scorm/(.*)$ /app/courses/$1/scorm/$2 [QSA,L]
 RewriteRule ([^/]+)/document/(.*)$ /main/document/download.php?doc_url=/$2&cDir=$1 [QSA,L]
 RewriteRule ([^/]+)/work/(.*)$ /main/work/download.php?file=work/$2&cDir=$1 [QSA,L]
 </IfModule>

@@ -361,14 +361,13 @@ class UniqueAnswerImage extends UniqueAnswer
 
     public function return_header($feedback_type = null, $counter = null, $score = null)
     {
-        $header = parent::return_header($feedback_type, $counter, $score);
-        $header .= '<table class="' . $this->question_table_class . '">
+        $header = '<table class="' . $this->question_table_class . '">
 			<tr>
 				<th>' . get_lang("Choice") . '</th>
 				<th>' . get_lang("ExpectedChoice") . '</th>
 				<th>' . get_lang("Answer") . '</th>';
         $header .= '<th>' . get_lang('Status') . '</th>';
-        $header .= '<th>' . get_lang("Comment") . '</th>';
+        $header .= '<th>' . get_lang('Comment') . '</th>';
         $header .= '</tr>';
 
         return $header;

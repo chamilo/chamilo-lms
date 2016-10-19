@@ -4255,7 +4255,7 @@ class Exercise
                                 $results_disabled,
                                 $showTotalScoreAndUserChoicesInLastAttempt
                             );
-                        } elseif ($answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE ) {
+                        } elseif ($answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {
                             ExerciseShowFunctions::display_multiple_answer_combination_true_false(
                                 $feedback_type,
                                 $answerType,

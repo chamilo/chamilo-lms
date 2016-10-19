@@ -405,7 +405,8 @@ class UniqueAnswer extends Question
 				<th>' . get_lang("Choice") . '</th>
 				<th>' . get_lang("ExpectedChoice") . '</th>
 				<th>' . get_lang("Answer") . '</th>';
-        $header .= '<th>' . get_lang("Comment") . '</th>';
+        $header .= '<th>' . get_lang("Status") . '</th>';
+        $header .= '<th>'.get_lang('Comment').'</th>';
         $header .= '</tr>';
 
         return $header;

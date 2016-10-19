@@ -3767,7 +3767,14 @@ HOTSPOT;
             $exercise_content
         );
 
+
         echo $total_score_text;
+
+        // Ofaj change BT#11784
+        if (!empty($objExercise->description)) {
+            echo Display::div($objExercise->description, array('class'=>'exercise_description'));
+        }
+
         echo $exercise_content;
 
         if (!$show_only_score) {

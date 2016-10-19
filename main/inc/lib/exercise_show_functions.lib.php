@@ -233,9 +233,9 @@ class ExerciseShowFunctions
 
         if ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
             if ($showTotalScoreAndUserChoices) {
-                $hide_expected_answer = true;
-            } else {
                 $hide_expected_answer = false;
+            } else {
+                $hide_expected_answer = true;
             }
         }
 
@@ -321,9 +321,9 @@ class ExerciseShowFunctions
 
         if ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
             if ($showTotalScoreAndUserChoices) {
-                $hide_expected_answer = true;
-            } else {
                 $hide_expected_answer = false;
+            } else {
+                $hide_expected_answer = true;
             }
         }
 
@@ -355,10 +355,12 @@ class ExerciseShowFunctions
 		</td>
 
         <?php
-        $status = Display::label(get_lang('Incorrect'), 'danger');
+        $status = '';
         if ($studentChoice) {
             if ($answerCorrect) {
                 $status = Display::label(get_lang('Correct'), 'success');
+            } else {
+                $status = Display::label(get_lang('Incorrect'), 'danger');
             }
         }
      ?>
@@ -432,9 +434,9 @@ class ExerciseShowFunctions
 
         if ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
             if ($showTotalScoreAndUserChoices) {
-                $hide_expected_answer = true;
-            } else {
                 $hide_expected_answer = false;
+            } else {
+                $hide_expected_answer = true;
             }
         }
 
@@ -546,12 +548,11 @@ class ExerciseShowFunctions
 
         if ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
             if ($showTotalScoreAndUserChoices) {
-                $hide_expected_answer = true;
-            } else {
                 $hide_expected_answer = false;
+            } else {
+                $hide_expected_answer = true;
             }
         }
-
         ?>
         <tr>
         <td width="5%">
@@ -589,10 +590,13 @@ class ExerciseShowFunctions
         </td>
 
          <?php
-        $status = Display::label(get_lang('Incorrect'), 'danger');
-        if ($studentChoice) {
+
+        $status = '';
+        if (isset($studentChoice)) {
             if ($studentChoice == $answerCorrect) {
                 $status = Display::label(get_lang('Correct'), 'success');
+            } else {
+                $status = Display::label(get_lang('Incorrect'), 'danger');
             }
         }
         ?>

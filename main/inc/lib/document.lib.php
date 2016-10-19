@@ -1893,7 +1893,7 @@ class DocumentManager
 
         // get extra fields
         $extraField = new ExtraField('user');
-        $extraFields = $extraField->get_all(['filter = ? AND visible = ?' => [1, 1]]);
+        $extraFields = $extraField->get_all(['filter = ? AND visible_to_self = ?' => [1, 1]]);
 
         //Student information
         $user_info = api_get_user_info($user_id);

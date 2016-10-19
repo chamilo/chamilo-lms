@@ -167,6 +167,7 @@ class Exercise
             $this->review_answers = (isset($object->review_answers) && $object->review_answers == 1) ? true : false;
             $this->globalCategoryId = isset($object->global_category_id) ? $object->global_category_id : null;
             $this->questionSelectionType = isset($object->question_selection_type) ? $object->question_selection_type : null;
+            $this->hideQuestionTitle = intval($object->hide_question_title);
 
             $sql = "SELECT lp_id, max_score
                     FROM $table_lp_item
@@ -1602,7 +1603,8 @@ class Exercise
                     'display_category_name' => $display_category_name,
                     'pass_percentage' => $pass_percentage,
                     'results_disabled' => $results_disabled,
-                    'question_selection_type' => $this->getQuestionSelectionType()
+                    'question_selection_type' => $this->getQuestionSelectionType(),
+                    'hide_question_title' => $this->getHideQuestionTitle()
                 ];
             }
 
@@ -1668,7 +1670,8 @@ class Exercise
                 'display_category_name' => $display_category_name,
                 'pass_percentage' => $pass_percentage,
                 'save_correct_answers' => (int) $saveCorrectAnswers,
-                'propagate_neg' => $propagate_neg
+                'propagate_neg' => $propagate_neg,
+                'hide_question_title' => $this->getHideQuestionTitle()
             ];
 
             $this->id = Database::insert($TBL_EXERCISES, $params);
@@ -2327,6 +2330,7 @@ class Exercise
                 $defaults['display_category_name'] = $this->selectDisplayCategoryName();
                 $defaults['pass_percentage'] = $this->selectPassPercentage();
                 $defaults['question_selection_type'] = $this->getQuestionSelectionType();
+                $defaults['hide_question_title'] = $this->getHideQuestionTitle();
 
                 if (!empty($this->start_time)) {
                     $defaults['activate_start_date_check'] = 1;

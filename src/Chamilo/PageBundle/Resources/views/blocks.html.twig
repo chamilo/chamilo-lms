@@ -1,24 +1,17 @@
-<div class="container section-notice">
-    <h2 class="section-title">{{ "Latest blocks"| trans }}</h2>
+<div class="container home-information">
     <div class="row">
         {% for page in pages %}
-            <div class="col-md-4">
-            <div class="items">
-                <div class="description">
-                    <h2 class="title">
-                        <a href="{{ url(page.routeName, {'path' : page.site.relativePath ~ page.url}) }}">{{ page.name }}</a>
-                    </h2>
-                    <div class="date">
-                        <i class="fa fa-calendar" aria-hidden="true"></i>
-                        {{ page.createdAt | format_datetime }}
-                    </div>
-                    {{ sonata_page_render_container('image_preview', page)  }}
-                    <p>
-                        {{ page.metaDescription }}
-                    </p>
-                </div>
+            <div class="col-md-3">
+                {{ sonata_page_render_container('header', page)  }}
+                <h4 class="title">
+                    <a href="{{ url(page.routeName, {'path' : page.site.relativePath ~ page.url}) }}">
+                        {{ page.title }}
+                    </a>
+                </h4>
+                <p>
+                    {{ page.metaDescription }}
+                </p>
             </div>
-        </div>
         {% endfor %}
     </div>
 </div>

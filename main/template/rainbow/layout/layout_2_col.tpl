@@ -38,14 +38,14 @@
                         <div class="item-icon">
                             <span class="circle">
                                 <i class="fa fa-question-circle fa-3x" aria-hidden="true"></i>
-                            </span> 
+                            </span>
                         </div>
                         <h4 class="title">Objectifs de la plate-forme</h4>
                         <p>
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit,
                             sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                             Ut enim ad minim veniam.
-                        </p> 
+                        </p>
                     </div>
                     <div class="col-md-3">
                         <div class="item-icon">
@@ -58,8 +58,8 @@
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit,
                             sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                             Ut enim ad minim veniam.
-                            
-                        </p> 
+
+                        </p>
                     </div>
                     <div class="col-md-3">
                         <div class="item-icon">
@@ -72,7 +72,7 @@
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit,
                             sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                             Ut enim ad minim veniam.
-                        </p> 
+                        </p>
                     </div>
                     <div class="col-md-3">
                         <div class="item-icon">
@@ -85,10 +85,13 @@
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit,
                             sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                             Ut enim ad minim veniam.
-                        </p> 
+                        </p>
                     </div>
                 </div>
             </div>
+
+            <div id="latest_blocks"></div>
+
             <!-- block statistics -->
             <div class="statistics">
                 <div class="row">
@@ -149,7 +152,6 @@
             });
             </script>
             <div id="latest_pages"></div>
-            <div id="latest_blocks"></div>
             <!-- END CSS -->
         </div>
     </div>

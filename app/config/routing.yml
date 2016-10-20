@@ -81,6 +81,7 @@ core_bundle:
 
 page_bundle:
     resource: "@ChamiloPageBundle/Resources/config/routing.yml"
+    prefix:   /{_locale}/
 
 #liip_theme:
 #    resource: "@LiipThemeBundle/Resources/config/routing.xml"

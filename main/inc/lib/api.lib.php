@@ -1936,17 +1936,19 @@ function api_generate_password($length = 8)
  * 2. Only English letters (uppercase or lowercase, it doesn't matter) and digits are allowed.
  * 3. The password should contain at least 3 letters.
  * 4. It should contain at least 2 digits.
- * 5. It should not contain 3 or more consequent (according to ASCII table) characters.
+ *
  */
 function api_check_password($password) {
     $password_length = api_strlen($password);
     if ($password_length < 5) {
         return false;
     }
-    $password = api_strtolower($password);
+    //$password = api_strtolower($password);
     $letters = 0;
     $digits = 0;
-    $consequent_characters = 0;
+    /*
+     * 5. It should not contain 3 or more consequent (according to ASCII table) characters.
+     * $consequent_characters = 0;
     $previous_character_code = 0;
     for ($i = 0; $i < $password_length; $i ++) {
         $current_character_code = api_ord(api_substr($password, $i, 1));
@@ -1966,7 +1968,7 @@ function api_check_password($password) {
             return false;
         }
         $previous_character_code = $current_character_code;
-    }
+    }*/
     return ($letters >= 3 && $digits >= 2);
 }
 
@@ -7284,7 +7286,7 @@ function api_get_password_checker_js($usernameInputId, $passwordInputId)
     $js = api_get_asset('pwstrength-bootstrap/dist/pwstrength-bootstrap.min.js');
 
     $js .=  "<script>
-    $(document).ready(function() {
+    $(document).ready(function() {      
         var lang = ".json_encode($translations).";            
         var options = {
             common : {
@@ -7317,6 +7319,21 @@ function api_get_password_checker_js($usernameInputId, $passwordInputId)
                     wordUpperLowerCombo: true,
                     wordLetterNumberCombo: true,
                     wordSequences: true,
+                    wordNotEmail: true,
+                    wordLength: true,
+                    wordSimilarToUsername: true,
+                    wordSequences: true,
+                    wordTwoCharacterClasses: true,
+                    wordRepetitions: true,
+                    wordLowercase: true,
+                    wordUppercase: true,
+                    wordOneNumber: true,
+                    wordThreeNumbers: true,
+                    wordOneSpecialChar: true,
+                    wordTwoSpecialChar: true,
+                    wordUpperLowerCombo: true,
+                    wordLetterNumberCombo: true,
+                    wordLetterNumberCharCombo: true
                 }
             },
             onLoad : function () {

@@ -38,10 +38,12 @@ $diagnosisComplete = $extraFieldValue->get_values_by_handler_and_field_variable(
     api_get_user_id(),
     'diagnosis_completed'
 );
-if ($diagnosisComplete && isset($diagnosisComplete['value']) && $diagnosisComplete['value'] == 1 && !isset($_GET['result'])) {
-    Display::addFlash(Display::return_message(get_lang('SessionSearchSavedExplanation')));
-    //header('Location:'.api_get_self().'?result=1');
-    //exit;
+
+if ($diagnosisComplete && isset($diagnosisComplete['value']) && $diagnosisComplete['value'] == 1) {
+    if (!isset($_GET['result'])) {
+        header('Location:'.api_get_self().'?result=1');
+        exit;
+    }
 }
 
 $hide = true;
@@ -376,7 +378,8 @@ $extra = $extraFieldSession->addElements(
     $defaults,
     null,
     true,
-    $forceShowFields // $forceShowFields
+    $forceShowFields, // $forceShowFields
+    3
 );
 
 $jqueryExtra .= $extra['jquery_ready_content'];
@@ -472,10 +475,10 @@ if ($userForm->validate()) {
     $extraFieldValue = new ExtraFieldValue('user');
     $userData = $userForm->getSubmitValues();
     $userData['extra_diagnosis_completed'] = 1;
+
     $extraFieldValue->saveFieldValues($userData, $forceShowFields);
 
     // Saving to extra_field_saved_search
-
     /** @var \Chamilo\UserBundle\Entity\User $user */
     $user = $em->getRepository('ChamiloUserBundle:User')->find($userId);
 
@@ -484,6 +487,9 @@ if ($userForm->validate()) {
         'extra_access_end_date',
         'extra_filiere',
         'extra_domaine',
+        'extra_domaine[0]',
+        'extra_domaine[1]',
+        'extra_domaine[3]',
         'extra_temps-de-travail',
         //'extra_competenceniveau',
         'extra_'.$theme,
@@ -584,7 +590,6 @@ if ($userForm->validate()) {
         }
     }
 
-    Display::addFlash(Display::return_message(get_lang('SessionSearchSavedExplanation')));
     header('Location:'.api_get_self().'?result=1');
     exit;
 }
@@ -593,6 +598,8 @@ $result = isset($_GET['result']) ? true : false;
 $tpl = new Template(get_lang('Diagnosis'));
 if ($result === false) {
     $tpl->assign('form', $userFormToString);
+} else {
+    Display::addFlash(Display::return_message(get_lang('SessionSearchSavedExplanation')));
 }
 $content = $tpl->fetch('default/user_portal/search_extra_field.tpl');
 $tpl->assign('content', $content);

@@ -12,11 +12,11 @@ switch ($action) {
         } else {
             $_SESSION['who_is_online_counter'] = 2;
         }
-        $images_to_show = 9;
+        $images_to_show = 12;
 
         $page = intval($_REQUEST['online_page_nr']);
         $max_page = ceil(who_is_online_count()/$images_to_show);
-        $page_rows = ($page-1)*9;
+        $page_rows = ($page-1)*$images_to_show;
 
         if (!empty($max_page) && $page <= $max_page) {
             if (isset($_GET['cidReq']) && strlen($_GET['cidReq']) > 0) {

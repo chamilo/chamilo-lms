@@ -1192,7 +1192,7 @@ if (!empty($error)) {
             false,
             $origin,
             $i,
-            true,
+            $objExercise->getHideQuestionTitle() ? false : true,
             false,
             $user_choice,
             false,

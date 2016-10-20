@@ -22,7 +22,7 @@
     </div>
     <script>
         $(document).ready(function() {
-            $("#link_load_more_items").click(function() {
+            $('#link_load_more_items').on('click', function(e) {
                 page = $("#link_load_more_items").attr("data_link");
                 $.ajax({
                     beforeSend: function(objeto) {
@@ -36,7 +36,7 @@
                         if (data != "end") {
                             $("#link_load_more_items").remove();
                             var last = $("#whoisonline");
-                            last.after(data);
+                            last.append(data);
                         } else {
                             $("#link_load_more_items").remove();
                         }

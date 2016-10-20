@@ -188,7 +188,7 @@ header{
   background: #2C5B8E;
 }
 .carousel-control{
- width: 5%;   
+ width: 5%;
 }
 .carousel-content .block-text{
     padding-left: 7%;
@@ -5359,6 +5359,7 @@ div#chat-remote-video video {
 }
 #whoisonline .items-user-avatar .img-responsive{
     display: inline-block;
+    height: 128px;
 }
 #whoisonline .items-user-name{
   font-size: 12px;

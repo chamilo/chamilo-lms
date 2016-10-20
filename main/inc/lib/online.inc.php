@@ -300,7 +300,8 @@ function who_is_online($from, $number_of_items, $column = null, $direction = nul
     }
 
 	//This query will show all registered users. Only for dev purposes.
-	/*$query = "SELECT DISTINCT u.id as login_user_id, login_date FROM ".$track_online_table ."  e , $table_user u
+	/*$query = "SELECT DISTINCT u.id as login_user_id, login_date
+	        FROM $track_online_table e, $table_user u
             GROUP by u.id
             ORDER BY $column $direction
             LIMIT $from, $number_of_items";*/

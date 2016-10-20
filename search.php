@@ -38,10 +38,12 @@ $diagnosisComplete = $extraFieldValue->get_values_by_handler_and_field_variable(
     api_get_user_id(),
     'diagnosis_completed'
 );
-if ($diagnosisComplete && isset($diagnosisComplete['value']) && $diagnosisComplete['value'] == 1 && !isset($_GET['result'])) {
-    Display::addFlash(Display::return_message(get_lang('SessionSearchSavedExplanation')));
-    header('Location:'.api_get_self().'?result=1');
-    exit;
+
+if ($diagnosisComplete && isset($diagnosisComplete['value']) && $diagnosisComplete['value'] == 1) {
+    if (!isset($_GET['result'])) {
+        header('Location:'.api_get_self().'?result=1');
+        exit;
+    }
 }
 
 $hide = true;
@@ -588,7 +590,6 @@ if ($userForm->validate()) {
         }
     }
 
-    Display::addFlash(Display::return_message(get_lang('SessionSearchSavedExplanation')));
     header('Location:'.api_get_self().'?result=1');
     exit;
 }
@@ -597,6 +598,8 @@ $result = isset($_GET['result']) ? true : false;
 $tpl = new Template(get_lang('Diagnosis'));
 if ($result === false) {
     $tpl->assign('form', $userFormToString);
+} else {
+    Display::addFlash(Display::return_message(get_lang('SessionSearchSavedExplanation')));
 }
 $content = $tpl->fetch('default/user_portal/search_extra_field.tpl');
 $tpl->assign('content', $content);

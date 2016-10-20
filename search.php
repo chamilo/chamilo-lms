@@ -376,7 +376,8 @@ $extra = $extraFieldSession->addElements(
     $defaults,
     null,
     true,
-    $forceShowFields // $forceShowFields
+    $forceShowFields, // $forceShowFields
+    3
 );
 
 $jqueryExtra .= $extra['jquery_ready_content'];
@@ -472,6 +473,7 @@ if ($userForm->validate()) {
     $extraFieldValue = new ExtraFieldValue('user');
     $userData = $userForm->getSubmitValues();
     $userData['extra_diagnosis_completed'] = 1;
+
     $extraFieldValue->saveFieldValues($userData, $forceShowFields);
 
     // Saving to extra_field_saved_search
@@ -484,6 +486,9 @@ if ($userForm->validate()) {
         'extra_access_end_date',
         'extra_filiere',
         'extra_domaine',
+        'extra_domaine[0]',
+        'extra_domaine[1]',
+        'extra_domaine[3]',
         'extra_temps-de-travail',
         //'extra_competenceniveau',
         'extra_'.$theme,

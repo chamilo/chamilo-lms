@@ -451,7 +451,8 @@ class ExtraField extends Model
         $extraData = [],
         $specialUrlList = [],
         $orderDependingDefaults = false,
-        $forceShowFields = false
+        $forceShowFields = false,
+        $separateExtraMultipleSelect = 0
     ) {
         if (empty($form)) {
             return false;
@@ -487,7 +488,8 @@ class ExtraField extends Model
             $showOnlyThisFields,
             $orderFields,
             $specialUrlList,
-            $orderDependingDefaults
+            $orderDependingDefaults,
+            $separateExtraMultipleSelect
         );
 
         return $extra;
@@ -812,7 +814,8 @@ class ExtraField extends Model
         $showOnlyThisFields = [],
         $orderFields = [],
         $specialUrlList = [],
-        $orderDependingDefaults = false
+        $orderDependingDefaults = false,
+        $separateExtraMultipleSelect = 0
     ) {
         $type = $this->type;
         $jquery_ready_content = '';
@@ -1164,13 +1167,26 @@ class ExtraField extends Model
                             }
                         }
 
-                        $form->addElement(
-                            'select',
-                            'extra_'.$field_details['variable'],
-                            $field_details['display_text'],
-                            $options,
-                            array('multiple' => 'multiple', 'id' => 'extra_'.$field_details['variable'])
-                        );
+                        if ($separateExtraMultipleSelect > 0) {
+                            for($i = 0; $i < $separateExtraMultipleSelect; $i++) {
+                                $form->addElement(
+                                    'select',
+                                    'extra_'.$field_details['variable'].'['.$i.']',
+                                    $field_details['display_text'],
+                                    $options,
+                                    array('id' => 'extra_'.$field_details['variable'].'_'.$i)
+                                );
+                            }
+                        } else {
+                            $form->addElement(
+                                'select',
+                                'extra_'.$field_details['variable'],
+                                $field_details['display_text'],
+                                $options,
+                                array('multiple' => 'multiple', 'id' => 'extra_'.$field_details['variable'])
+                            );
+                        }
+
                         if (!$admin_permissions) {
                             if ($field_details['visible_to_self'] == 0) {
                                 $form->freeze('extra_'.$field_details['variable']);

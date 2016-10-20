@@ -22,7 +22,7 @@
     </div>
     <script>
         $(document).ready(function() {
-            $('#link_load_more_items').on('click', function(e) {
+            $('#whoisonline').on('click', 'a#link_load_more_items', function() {
                 page = $("#link_load_more_items").attr("data_link");
                 $.ajax({
                     beforeSend: function(objeto) {

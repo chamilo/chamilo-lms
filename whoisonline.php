@@ -44,9 +44,15 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) ||
 ) {
 
     if (isset($_GET['cidReq']) && strlen($_GET['cidReq']) > 0) {
-        $user_list = who_is_online_in_this_course(0, 9, api_get_user_id(), api_get_setting('time_limit_whosonline'), $_GET['cidReq']);
+        $user_list = who_is_online_in_this_course(
+            0,
+            12,
+            api_get_user_id(),
+            api_get_setting('time_limit_whosonline'),
+            $_GET['cidReq']
+        );
     } else {
-        $user_list = who_is_online(0, 9);
+        $user_list = who_is_online(0, 12);
     }
     /* if (!isset($_GET['id'])) {
         if (api_get_setting('allow_social_tool') == 'true') {
@@ -70,7 +76,6 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) ||
     }
 
     $whoisonline_list .= SocialManager::display_user_list($user_list);
-
 
     if (isset($_GET['id'])) {
         if (api_get_setting('allow_social_tool') == 'true' && api_user_is_login()) {

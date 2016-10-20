@@ -40,8 +40,8 @@ $diagnosisComplete = $extraFieldValue->get_values_by_handler_and_field_variable(
 );
 if ($diagnosisComplete && isset($diagnosisComplete['value']) && $diagnosisComplete['value'] == 1 && !isset($_GET['result'])) {
     Display::addFlash(Display::return_message(get_lang('SessionSearchSavedExplanation')));
-    //header('Location:'.api_get_self().'?result=1');
-    //exit;
+    header('Location:'.api_get_self().'?result=1');
+    exit;
 }
 
 $hide = true;
@@ -477,7 +477,6 @@ if ($userForm->validate()) {
     $extraFieldValue->saveFieldValues($userData, $forceShowFields);
 
     // Saving to extra_field_saved_search
-
     /** @var \Chamilo\UserBundle\Entity\User $user */
     $user = $em->getRepository('ChamiloUserBundle:User')->find($userId);
 

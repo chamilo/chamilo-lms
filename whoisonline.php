@@ -90,11 +90,9 @@ $tpl = new Template(get_lang('UsersOnLineList'));
 if (api_get_setting('allow_social_tool') == 'true' && !api_is_anonymous()) {
     $tpl->assign('whoisonline', $whoisonline_list);
     $tpl->assign('social_search', $social_search);
-    $social_layout = $tpl->get_template('social/whoisonline.tpl');
-    $tpl->display($social_layout);
 } else {
-    $content = $social_right_content;
-    $tpl->assign('header', get_lang('UsersOnLineList'));
-    $tpl->assign('content', $content);
-    $tpl->display_one_col_template();
+    $tpl->assign('whoisonline', $social_right_content);
 }
+
+$social_layout = $tpl->get_template('social/whoisonline.tpl');
+$tpl->display($social_layout);

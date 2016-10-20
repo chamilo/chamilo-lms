@@ -8,6 +8,7 @@ use ChamiloSession as Session;
  *
  * Allows to instantiate an object of type Exercise
  * @package chamilo.exercise
+ * @todo use doctrine object
  * @author Olivier Brouckaert
  * @author Julio Montoya Cleaning exercises
  * Modified by Hubert Borderiou #294
@@ -1600,7 +1601,8 @@ class Exercise
                     'display_category_name' => $display_category_name,
                     'pass_percentage' => $pass_percentage,
                     'results_disabled' => $results_disabled,
-                    'question_selection_type' => $this->getQuestionSelectionType()
+                    'question_selection_type' => $this->getQuestionSelectionType(),
+                    'hide_question_title' => $this->getHideQuestionTitle()
                 ];
             }
 
@@ -1666,7 +1668,8 @@ class Exercise
                 'display_category_name' => $display_category_name,
                 'pass_percentage' => $pass_percentage,
                 'save_correct_answers' => (int) $saveCorrectAnswers,
-                'propagate_neg' => $propagate_neg
+                'propagate_neg' => $propagate_neg,
+                'hide_question_title' => $this->getHideQuestionTitle()
             ];
 
             $this->id = Database::insert($TBL_EXERCISES, $params);
@@ -2325,6 +2328,7 @@ class Exercise
                 $defaults['display_category_name'] = $this->selectDisplayCategoryName();
                 $defaults['pass_percentage'] = $this->selectPassPercentage();
                 $defaults['question_selection_type'] = $this->getQuestionSelectionType();
+                $defaults['hide_question_title'] = $this->getHideQuestionTitle();
 
                 if (!empty($this->start_time)) {
                     $defaults['activate_start_date_check'] = 1;

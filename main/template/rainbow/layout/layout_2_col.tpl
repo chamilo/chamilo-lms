@@ -31,6 +31,7 @@
                 <section id="homepage-home">
                     {{ home_page_block }}
                 </section>
+            {% endif %}
 
             <div id="latest_blocks"></div>
 

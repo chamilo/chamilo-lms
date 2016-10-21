@@ -4005,14 +4005,15 @@ class Exercise
 
                             if ($show_result) {
                                 if ($showTotalScoreAndUserChoicesInLastAttempt == false) {
-                                    $user_answer = '';
+                                    $s_answer_label = '';
                                 }
                                 echo '<tr>';
                                 echo '<td>' . $s_answer_label . '</td>';
                                 echo '<td>' . $user_answer;
-
                                 if (in_array($answerType, [MATCHING, MATCHING_DRAGGABLE])) {
-                                    if (isset($real_list[$i_answer_correct_answer]) && $showTotalScoreAndUserChoicesInLastAttempt == true) {
+                                    if (isset($real_list[$i_answer_correct_answer]) &&
+                                        $showTotalScoreAndUserChoicesInLastAttempt === true
+                                    ) {
                                         echo Display::span(
                                             $real_list[$i_answer_correct_answer],
                                             ['style' => 'color: #008000; font-weight: bold;']

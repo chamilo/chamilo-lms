@@ -824,6 +824,7 @@ class Template
 
         // Get language iso-code for this page - ignore errors
         $this->assign('document_language', api_get_language_isocode());
+        $this->assign('current_language', api_get_interface_language());
 
         $course_title = isset($_course['name']) ? $_course['name'] : null;
 

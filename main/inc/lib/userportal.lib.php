@@ -878,7 +878,7 @@ class IndexManager
     /**
      * @return null|string|void
      */
-    public function return_profile_block($diagnosisComplete)
+    public function return_profile_block($diagnosisComplete = null)
     {
         global $_configuration;
         $user_id = api_get_user_id();

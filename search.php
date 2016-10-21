@@ -605,6 +605,8 @@ if ($userForm->validate()) {
             continue;
         }
 
+
+
         $extraFieldObj = $em->getRepository('ChamiloCoreBundle:ExtraField')->find($extraFieldInfo['id']);
 
         $search = [

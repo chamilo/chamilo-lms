@@ -453,7 +453,8 @@ class ExtraField extends Model
         $orderDependingDefaults = false,
         $forceShowFields = false,
         $separateExtraMultipleSelect = [],
-        $customLabelsExtraMultipleSelect = []
+        $customLabelsExtraMultipleSelect = [],
+        $fieldsToFreeze = []
     ) {
         if (empty($form)) {
             return false;
@@ -491,7 +492,8 @@ class ExtraField extends Model
             $specialUrlList,
             $orderDependingDefaults,
             $separateExtraMultipleSelect,
-            $customLabelsExtraMultipleSelect
+            $customLabelsExtraMultipleSelect,
+            $fieldsToFreeze
         );
 
         return $extra;
@@ -818,7 +820,8 @@ class ExtraField extends Model
         $specialUrlList = [],
         $orderDependingDefaults = false,
         $separateExtraMultipleSelect = [],
-        $customLabelsExtraMultipleSelect = []
+        $customLabelsExtraMultipleSelect = [],
+        $fieldsToFreeze = []
     ) {
         $type = $this->type;
         $jquery_ready_content = '';
@@ -922,6 +925,7 @@ class ExtraField extends Model
                                 );
                             }
                         }
+
                         $form->addGroup(
                             $group,
                             'extra_'.$field_details['variable'],
@@ -1925,6 +1929,12 @@ EOF;
                         ');
                         break;
                 }
+
+                if (in_array($field_details['variable'], $fieldsToFreeze)) {
+                    $form->freeze(
+                        'extra_'.$field_details['variable']
+                    );
+                }
             }
         }
 
@@ -2523,8 +2533,10 @@ JAVASCRIPT;
         if ($oper == 'ew' || $oper == 'en') {
             $val = '%'.$val;
         }
+
         if ($oper == 'cn' || $oper == 'nc' || $oper == 'in' || $oper == 'ni') {
-            if (is_array($val)) {
+            if (is_array($val) || is_object($val)) {
+                $val = (array) $val;
                 $result = '"%'.implode(';', $val).'%"';
                 foreach ($val as $item) {
                     $result .= ' OR '.$col.' LIKE "%'.$item.'%"';
@@ -2562,7 +2574,6 @@ JAVASCRIPT;
         }
 
         $condition_array = array();
-
         foreach ($filters->rules as $rule) {
             if (strpos($rule->field, $stringToSearch) === false) {
                 // normal fields
@@ -2595,7 +2606,7 @@ JAVASCRIPT;
                         }
                     } else {
                         if (isset($rule->data)) {
-                            if ($rule->data == -1) {
+                            if ($rule->data === -1) {
                                 continue;
                             }
                             $condition_array[] = ' ('.$this->get_where_clause($rule->field, $rule->op, $rule->data).') ';

@@ -159,7 +159,6 @@ if ((isset($_REQUEST['filters2']) && $forceSearch) || ($search || $forceSearch) 
                         unset($filters->rules[$key]);
                     }
                 }
-
                 $result = $extraField->getExtraFieldRules($filters, 'extra_');
 
                 $extra_fields = $result['extra_fields'];
@@ -187,8 +186,11 @@ if ((isset($_REQUEST['filters2']) && $forceSearch) || ($search || $forceSearch) 
                     // Remove conditions already added
                     $extraQuestionCondition = str_replace($extraCondition, '', $extraQuestionCondition);
                 }
-
                 $whereCondition .= $extraQuestionCondition;
+
+                if (isset($filters->custom_dates)) {
+                    $whereCondition .= $filters->custom_dates;
+                }
             }
         } elseif (!empty($filters->rules)) {
             $whereCondition .= ' AND ( ';
@@ -482,8 +484,6 @@ switch ($action) {
         break;
     case 'get_sessions':
         $list_type = isset($_REQUEST['list_type']) ? $_REQUEST['list_type'] : 'simple';
-
-
         $loadExtraFields = isset($_REQUEST['load_extra_field']) ? $_REQUEST['load_extra_field'] : '';
         if (!empty($loadExtraFields)) {
             $loadExtraFields = explode(',', $loadExtraFields);
@@ -496,7 +496,6 @@ switch ($action) {
         }
 
         if ($list_type === 'simple') {
-
             $count = SessionManager::get_sessions_admin(
                 array('where' => $whereCondition, 'extra' => $extra_fields),
                 true,
@@ -893,7 +892,7 @@ switch ($action) {
         } else {
             $columns = array(
                 //'type',
-                'fullname',               
+                'fullname',
                 'title',
                 'qualification',
                 'sent_date',

@@ -519,7 +519,6 @@ class SessionManager
 
         $query .= $order;
         $query .= $limit;
-
         $result = Database::query($query);
 
         $categories = self::get_all_session_category();
@@ -7598,9 +7597,6 @@ class SessionManager
         if (!empty($options['order'])) {
             $query .= " ORDER BY ".$options['order'];
         }
-
-        //error_log($query);
-        //echo $query;
 
         $result = Database::query($query);
         $formatted_sessions = array();

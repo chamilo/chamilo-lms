@@ -117,6 +117,114 @@ if ($userToLoadInfo) {
     }
 }
 
+$extraFieldUser = new ExtraField('user');
+
+$userForm = new FormValidator('user_form', 'post', api_get_self());
+$panel = Display::panel(get_lang('FiliereExplanation'), '', '', '',  '', 'filiere_panel');
+$userForm->addHeader(Display::url(get_lang('Filiere'), '#', ['id'=> 'filiere']).''.$panel);
+$fieldsToShow = [
+    'statusocial',
+    'filiere_user',
+    'filiereprecision',
+    'filiere_want_stage',
+];
+$forceShowFields = true;
+$filter = false;
+$extra = $extraFieldUser->addElements(
+    $userForm,
+    $userToLoad,
+    [],
+    $filter,
+    true,
+    $fieldsToShow,
+    $fieldsToShow,
+    [],
+    [],
+    false,
+    $forceShowFields, //$forceShowFields = false
+    [],
+    [],
+    $fieldsToShow
+);
+
+$panel = Display::panel(get_lang('DisponibilitePendantMonStageExplanation'), '', '', '',  '', 'dispo_pendant_panel');
+$userForm->addHeader(Display::url(get_lang('DisponibilitePendantMonStage'), '#', ['id'=> 'dispo_pendant']).''.$panel);
+
+$fieldsToShow = [
+    'datedebutstage',
+    'datefinstage',
+    'poursuiteapprentissagestage',
+    'heures_disponibilite_par_semaine_stage'
+];
+
+$extra = $extraFieldUser->addElements(
+    $userForm,
+    $userToLoad,
+    [],
+    $filter,
+    true,
+    $fieldsToShow,
+    $fieldsToShow,
+    [],
+    [],
+    false,
+    $forceShowFields, //$forceShowFields = false
+    [],
+    [],
+    $fieldsToShow
+);
+
+
+$panel = Display::panel(get_lang('ObjectifsApprentissageExplanation'), '', '', '',  '', 'objectifs_panel');
+$userForm->addHeader(Display::url(get_lang('ObjectifsApprentissage'), '#', ['id'=> 'objectifs']).''.$panel);
+
+$fieldsToShow = [
+    'objectif_apprentissage'
+];
+
+$extra = $extraFieldUser->addElements(
+    $userForm,
+    $userToLoad,
+    [],
+    $filter,
+    false,
+    $fieldsToShow,
+    $fieldsToShow,
+    [],
+    [],
+    false,
+    $forceShowFields,//$forceShowFields = false
+    [],
+    [],
+    $fieldsToShow
+);
+
+
+$panel = Display::panel(get_lang('MethodeTravailExplanation'), '', '', '',  '', 'methode_panel');
+$userForm->addHeader(Display::url(get_lang('MethodeTravail'), '#', ['id'=> 'methode']).''.$panel);
+
+$fieldsToShow = [
+    'methode_de_travaille',
+    'accompagnement'
+];
+
+$extra = $extraFieldUser->addElements(
+    $userForm,
+    $userToLoad,
+    [],
+    $filter,
+    true,
+    $fieldsToShow,
+    $fieldsToShow,
+    [],
+    [],
+    false,
+    $forceShowFields, //$forceShowFields = false
+    [],
+    [],
+    $fieldsToShow
+);
+
 
 // Session fields
 $showOnlyThisFields = [
@@ -132,7 +240,6 @@ $showOnlyThisFields = [
     's_exprimer_oralement_en_continu',
     'ecrire'
 ];
-//$showOnlyThisFields = [];
 
 $extra = $extraField->addElements(
     $form,
@@ -144,11 +251,12 @@ $extra = $extraField->addElements(
     $showOnlyThisFields,
     $defaults,
     [],
-    false,
+    false, //$orderDependingDefaults
     true // force
 );
 
-$form->addButtonSearch(get_lang('Search'), 'save');
+$form->addButtonSearch(get_lang('Search'), 'search');
+$form->addButtonSave(get_lang('Save'), 'save');
 
 $extraFieldsToFilter = $extraField->get_all(array('variable = ?' => 'temps-de-travail'));
 $extraFieldToSearch = array();
@@ -201,39 +309,159 @@ if ($formSearch->validate()) {
 
 if ($form->validate()) {
     $params = $form->getSubmitValues();
+    $save = false;
+    $search = false;
+    if (isset($params['search'])) {
+        unset($params['search']);
+        $search = true;
+    }
+
     if (isset($params['save'])) {
+        $save = true;
         unset($params['save']);
     }
+
     $form->setDefaults($params);
 
-    // Search
     $filters = [];
-    // Parse params.
-    foreach ($params as $key => $value) {
-        if (substr($key, 0, 6) != 'extra_' && substr($key, 0, 7) != '_extra_') {
-            continue;
-        }
-        if (!empty($value)) {
-            $filters[$key] = $value;
-        }
-    }
-    $filterToSend = [];
-    if (!empty($filters)) {
-        $filterToSend = ['groupOp' => 'AND'];
-        if ($filters) {
-            $count = 1;
-            $countExtraField = 1;
-            foreach ($result['column_model'] as $column) {
-                if ($count > 5) {
-                    if (isset($filters[$column['name']])) {
-                        $defaultValues['jqg'.$countExtraField] = $filters[$column['name']];
-                        $filterToSend['rules'][] = ['field' => $column['name'], 'op' => 'cn', 'data' => $filters[$column['name']]];
-                    }
-                    $countExtraField++;
-                }
-                $count++;
+
+    // Search
+    if ($search) {
+        // Parse params.
+        foreach ($params as $key => $value) {
+            if (substr($key, 0, 6) != 'extra_' && substr($key, 0, 7) != '_extra_') {
+                continue;
+            }
+            if (!empty($value)) {
+                $filters[$key] = $value;
             }
         }
+
+        $filterToSend = [];
+        if (!empty($filters)) {
+            $filterToSend = ['groupOp' => 'AND'];
+            if ($filters) {
+                $count = 1;
+                $countExtraField = 1;
+                foreach ($result['column_model'] as $column) {
+                    if ($count > 5) {
+                        if (isset($filters[$column['name']])) {
+                            $defaultValues['jqg'.$countExtraField] = $filters[$column['name']];
+                            $filterToSend['rules'][] = [
+                                'field' => $column['name'],
+                                'op' => 'cn',
+                                'data' => $filters[$column['name']]
+                            ];
+                        }
+                        $countExtraField++;
+                    }
+                    $count++;
+                }
+            }
+        }
+    }
+
+    if ($save) {
+
+        /** @var \Chamilo\UserBundle\Entity\User $user */
+        $user = $em->getRepository('ChamiloUserBundle:User')->find($userToLoad);
+        $extraFieldValueSession = new ExtraFieldValue('session');
+
+        $sessionFields = [
+            'extra_access_start_date',
+            'extra_access_end_date',
+            'extra_filiere',
+            'extra_domaine',
+            'extra_domaine[0]',
+            'extra_domaine[1]',
+            'extra_domaine[3]',
+            'extra_temps-de-travail',
+            //'extra_competenceniveau',
+            'extra_'.$theme,
+            'extra_ecouter',
+            'extra_lire',
+            'extra_participer_a_une_conversation',
+            'extra_s_exprimer_oralement_en_continu',
+            'extra_ecrire'
+        ];
+
+        $userData = $params;
+
+        foreach ($userData as $key => $value) {
+
+
+            $found = strpos($key, '__persist__');
+            if ($found === false) {
+                continue;
+            }
+
+
+        }
+
+        if (isset($userData['extra_filiere_want_stage']) &&
+            isset($userData['extra_filiere_want_stage']['extra_filiere_want_stage'])
+        ) {
+            $wantStage = $userData['extra_filiere_want_stage']['extra_filiere_want_stage'];
+
+            if ($wantStage === 'yes') {
+                if (isset($userData['extra_filiere_user'])) {
+                    $userData['extra_filiere'] = [];
+                    $userData['extra_filiere']['extra_filiere'] = $userData['extra_filiere_user']['extra_filiere_user'];
+                }
+            }
+        }
+
+        // save in ExtraFieldSavedSearch.
+        foreach ($userData as $key => $value) {
+            if (substr($key, 0, 6) != 'extra_' && substr($key, 0, 7) != '_extra_') {
+                continue;
+            }
+
+            if (!in_array($key, $sessionFields)) {
+                continue;
+            }
+
+            $field_variable = substr($key, 6);
+            $extraFieldInfo = $extraFieldValueSession
+                ->getExtraField()
+                ->get_handler_field_info_by_field_variable($field_variable);
+
+            if (!$extraFieldInfo) {
+                continue;
+            }
+
+            $extraFieldObj = $em->getRepository('ChamiloCoreBundle:ExtraField')->find($extraFieldInfo['id']);
+
+            $search = [
+                'field' => $extraFieldObj,
+                'user' => $user
+            ];
+
+            /** @var ExtraFieldSavedSearch $saved */
+            $saved = $em->getRepository('ChamiloCoreBundle:ExtraFieldSavedSearch')->findOneBy($search);
+
+            if ($saved) {
+                $saved
+                    ->setField($extraFieldObj)
+                    ->setUser($user)
+                    ->setValue($value)
+                ;
+                $em->merge($saved);
+            } else {
+                $saved = new ExtraFieldSavedSearch();
+                $saved
+                    ->setField($extraFieldObj)
+                    ->setUser($user)
+                    ->setValue($value)
+                ;
+                $em->persist($saved);
+            }
+            $em->flush();
+        }
+        Display::addFlash(Display::return_message(get_lang('Saved'), 'success'));
+        header('Location: '.api_get_self().'?user_id='.$userToLoad);
+        exit;
+
     }
 }
 
@@ -256,7 +484,25 @@ $(function() {
 });
 </script>';
 
+
+
 if (!empty($filterToSend)) {
+    $userStartDate = $params['extra_access_start_date'];
+    $date = new DateTime($userStartDate);
+    $date->sub(new DateInterval('P3D'));
+    $userStartDateMinus = $date->format('Y-m-d h:i:s');
+
+    $userEndDate = $params['extra_access_end_date'];
+    $date = new DateTime($userEndDate);
+    $date->add(new DateInterval('P2D'));
+    $userEndDatePlus = $date->format('Y-m-d h:i:s');
+
+    $sql = " AND (
+        (s.access_start_date > '$userStartDateMinus' AND s.access_start_date < '$userEndDatePlus') OR
+        (s.access_start_date > '$userStartDateMinus' AND (s.access_start_date = '' OR s.access_start_date IS NULL)) OR 
+        ((s.access_start_date = '' OR s.access_start_date IS NULL) AND (s.access_end_date = '' OR s.access_end_date IS NULL))
+    )";
+    $filterToSend['custom_dates'] = $sql;
     $filterToSend = json_encode($filterToSend);
     $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_search=true&load_extra_field='.$extraFieldListToString.'&_force_search=true&rows=20&page=1&sidx=&sord=asc&filters2='.$filterToSend;
 } else {
@@ -294,7 +540,16 @@ $action_links = 'function action_formatter(cellvalue, options, rowObject) {
 
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
-$griJs = Display::grid_js('sessions', $url, $columns, $column_model, $extra_params, array(), $action_links, true);
+$griJs = Display::grid_js(
+    'sessions',
+    $url,
+    $columns,
+    $column_model,
+    $extra_params,
+    array(),
+    $action_links,
+    true
+);
 $grid = '<div id="session-table" class="table-responsive">';
 $grid .= Display::grid_html('sessions');
 $grid .= '</div>';
@@ -307,7 +562,7 @@ if (empty($items)) {
     $griJs = '';
 }
 $tpl->assign('form', $view);
-$tpl->assign('form_search', $formSearch->returnForm());
+$tpl->assign('form_search', $formSearch->returnForm().$userForm->returnForm());
 
 $table = new HTML_Table(array('class' => 'data_table'));
 $column = 0;
@@ -343,7 +598,6 @@ if ($data) {
         if (isset($formData['extra_access_start_date']) && isset($formData['extra_access_end_date'])) {
             $startDate = $formData['extra_access_start_date'];
             $endDate = $formData['extra_access_end_date'];
-
             $numberWeeks = dateDiffInWeeks($startDate, $endDate);
         }
     } else {

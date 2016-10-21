@@ -665,7 +665,7 @@ class bbb
                     $record['playbackFormatUrl'] = $meetingDB['video_url'];
                 }
 
-                $recordLink = $record['playbackFormatUrl']
+                $recordLink = isset($record['playbackFormatUrl']) && !empty($record['playbackFormatUrl'])
                     ? Display::url(
                         $this->plugin->get_lang('ViewRecord'),
                         $record['playbackFormatUrl'],

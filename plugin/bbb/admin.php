@@ -26,9 +26,11 @@ $meetings = $bbb->getMeetings(0, 0, 0, true);
 foreach ($meetings as &$meeting) {
     $participants = $bbb->findMeetingParticipants($meeting['id']);
 
-    /** @var User $participant */
-    foreach ($participants as $participant) {
-        $meeting['participants'][] = $participant['participant']->getCompleteName();
+    foreach ($participants as $meetingParticipant) {
+        /** @var User $participant */
+        $participant = $meetingParticipant['participant'];
+        $meeting['participants'][] = $participant->getCompleteName()
+            . ' (' . $participant->getEmail() . ')';
     }
 }
 

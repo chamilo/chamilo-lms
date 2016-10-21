@@ -3123,7 +3123,7 @@ class Exercise
      * @param bool      $show_result show results or not
      * @param int       $propagate_neg
      * @param array     $hotspot_delineation_result
-     * @param boolean $showTotalScoreAndUserChoices
+     * @param boolean $showTotalScoreAndUserChoicesInLastAttempt
      * @todo    reduce parameters of this function
      * @return  string  html code
      */
@@ -3138,7 +3138,7 @@ class Exercise
         $show_result = true,
         $propagate_neg = 0,
         $hotspot_delineation_result = array(),
-        $showTotalScoreAndUserChoices = false
+        $showTotalScoreAndUserChoicesInLastAttempt = true
     ) {
         global $debug;
         //needed in order to use in the exercise_attempt() for the time
@@ -4004,7 +4004,7 @@ class Exercise
                             }
 
                             if ($show_result) {
-                                if ($showTotalScoreAndUserChoices == true) {
+                                if ($showTotalScoreAndUserChoicesInLastAttempt == false) {
                                     $user_answer = '';
                                 }
                                 echo '<tr>';
@@ -4012,7 +4012,7 @@ class Exercise
                                 echo '<td>' . $user_answer;
 
                                 if (in_array($answerType, [MATCHING, MATCHING_DRAGGABLE])) {
-                                    if (isset($real_list[$i_answer_correct_answer]) && $showTotalScoreAndUserChoices == false) {
+                                    if (isset($real_list[$i_answer_correct_answer]) && $showTotalScoreAndUserChoicesInLastAttempt == true) {
                                         echo Display::span(
                                             $real_list[$i_answer_correct_answer],
                                             ['style' => 'color: #008000; font-weight: bold;']
@@ -4190,7 +4190,7 @@ class Exercise
                                 0,
                                 0,
                                 $results_disabled,
-                                $showTotalScoreAndUserChoices
+                                $showTotalScoreAndUserChoicesInLastAttempt
                             );
                         } elseif ($answerType == MULTIPLE_ANSWER_TRUE_FALSE) {
                             ExerciseShowFunctions::display_multiple_answer_true_false(
@@ -4204,7 +4204,7 @@ class Exercise
                                 $questionId,
                                 0,
                                 $results_disabled,
-                                $showTotalScoreAndUserChoices
+                                $showTotalScoreAndUserChoicesInLastAttempt
                             );
                         } elseif ($answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {
                             ExerciseShowFunctions::display_multiple_answer_combination_true_false(
@@ -4218,7 +4218,7 @@ class Exercise
                                 0,
                                 0,
                                 $results_disabled,
-                                $showTotalScoreAndUserChoices
+                                $showTotalScoreAndUserChoicesInLastAttempt
                             );
                         } elseif ($answerType == FILL_IN_BLANKS) {
                             ExerciseShowFunctions::display_fill_in_blanks_answer(
@@ -4228,7 +4228,7 @@ class Exercise
                                 0,
                                 $results_disabled,
                                 '',
-                                $showTotalScoreAndUserChoices
+                                $showTotalScoreAndUserChoicesInLastAttempt
                             );
                         } elseif ($answerType == CALCULATED_ANSWER) {
                             ExerciseShowFunctions::display_calculated_answer(
@@ -4237,7 +4237,7 @@ class Exercise
                                 0,
                                 0,
                                 $results_disabled,
-                                $showTotalScoreAndUserChoices
+                                $showTotalScoreAndUserChoicesInLastAttempt
                             );
                         } elseif ($answerType == FREE_ANSWER) {
                             ExerciseShowFunctions::display_free_answer(
@@ -4273,7 +4273,7 @@ class Exercise
                                 $answerComment,
                                 $results_disabled,
                                 $answerId,
-                                $showTotalScoreAndUserChoices
+                                $showTotalScoreAndUserChoicesInLastAttempt
                             );
                         } elseif ($answerType == HOT_SPOT_ORDER) {
                             ExerciseShowFunctions::display_hotspot_order_answer(
@@ -4477,7 +4477,7 @@ class Exercise
                                     $questionId,
                                     $answerId,
                                     $results_disabled,
-                                    $showTotalScoreAndUserChoices
+                                    $showTotalScoreAndUserChoicesInLastAttempt
                                 );
                             } else {
                                 ExerciseShowFunctions::display_unique_or_multiple_answer(
@@ -4491,7 +4491,7 @@ class Exercise
                                     $questionId,
                                     '',
                                     $results_disabled,
-                                    $showTotalScoreAndUserChoices
+                                    $showTotalScoreAndUserChoicesInLastAttempt
                                 );
                             }
                             break;
@@ -4508,7 +4508,7 @@ class Exercise
                                     $questionId,
                                     $answerId,
                                     $results_disabled,
-                                    $showTotalScoreAndUserChoices
+                                    $showTotalScoreAndUserChoicesInLastAttempt
                                 );
                             } else {
                                 ExerciseShowFunctions::display_multiple_answer_combination_true_false(
@@ -4522,7 +4522,7 @@ class Exercise
                                     $questionId,
                                     '',
                                     $results_disabled,
-                                    $showTotalScoreAndUserChoices
+                                    $showTotalScoreAndUserChoicesInLastAttempt
                                 );
                             }
                             break;
@@ -4539,7 +4539,7 @@ class Exercise
                                     $questionId,
                                     $answerId,
                                     $results_disabled,
-                                    $showTotalScoreAndUserChoices
+                                    $showTotalScoreAndUserChoicesInLastAttempt
                                 );
                             } else {
                                 ExerciseShowFunctions::display_multiple_answer_true_false(
@@ -4553,7 +4553,7 @@ class Exercise
                                     $questionId,
                                     '',
                                     $results_disabled,
-                                    $showTotalScoreAndUserChoices
+                                    $showTotalScoreAndUserChoicesInLastAttempt
                                 );
                             }
                             break;
@@ -4565,7 +4565,7 @@ class Exercise
                                 $questionId,
                                 $results_disabled,
                                 $str,
-                                $showTotalScoreAndUserChoices
+                                $showTotalScoreAndUserChoicesInLastAttempt
                             );
                             break;
                         case CALCULATED_ANSWER:
@@ -4576,7 +4576,7 @@ class Exercise
                                 $questionId,
                                 $results_disabled,
                                 '',
-                                $showTotalScoreAndUserChoices
+                                $showTotalScoreAndUserChoicesInLastAttempt
                             );
                             break;
                         case FREE_ANSWER:
@@ -4611,7 +4611,7 @@ class Exercise
                                 $answerComment,
                                 $results_disabled,
                                 $answerId,
-                                $showTotalScoreAndUserChoices
+                                $showTotalScoreAndUserChoicesInLastAttempt
                             );
                             break;
                         case HOT_SPOT_DELINEATION:

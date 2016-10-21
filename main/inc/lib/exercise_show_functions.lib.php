@@ -4,8 +4,8 @@
 * EVENTS LIBRARY
 *
 * This is the events library for Chamilo.
-* Functions of this library are used to record information when some kind
-* of event occur.
+* Functions of this library are used to record informations when some kind
+* of event occur. Each event has his own types of informations then each event
 * use its own function.
 *
 * @package chamilo.library
@@ -213,9 +213,9 @@ class ExerciseShowFunctions
 
         if ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
             if ($showTotalScoreAndUserChoices) {
-                $hide_expected_answer = true;
-            } else {
                 $hide_expected_answer = false;
+            } else {
+                $hide_expected_answer = true;
             }
         }
 
@@ -302,9 +302,9 @@ class ExerciseShowFunctions
 
         if ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
             if ($showTotalScoreAndUserChoices) {
-                $hide_expected_answer = true;
-            } else {
                 $hide_expected_answer = false;
+            } else {
+                $hide_expected_answer = true;
             }
         }
 
@@ -398,9 +398,9 @@ class ExerciseShowFunctions
 
         if ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
             if ($showTotalScoreAndUserChoices) {
-                $hide_expected_answer = true;
-            } else {
                 $hide_expected_answer = false;
+            } else {
+                $hide_expected_answer = true;
             }
         }
 
@@ -501,9 +501,9 @@ class ExerciseShowFunctions
 
         if ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
             if ($showTotalScoreAndUserChoices) {
-                $hide_expected_answer = true;
-            } else {
                 $hide_expected_answer = false;
+            } else {
+                $hide_expected_answer = true;
             }
         }
 

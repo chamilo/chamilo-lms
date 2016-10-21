@@ -3979,8 +3979,18 @@ class Exercise
                                         $questionScore += $i_answerWeighting;
                                         $totalScore += $i_answerWeighting;
 
+                                        // Try with id
                                         if (isset($real_list[$i_answer_id])) {
                                             $user_answer = Display::span($real_list[$i_answer_id]);
+                                        }
+
+                                        // Try with $i_answer_id_auto
+                                        if (empty($user_answer)) {
+                                            if (isset($real_list[$i_answer_id_auto])) {
+                                                $user_answer = Display::span(
+                                                    $real_list[$i_answer_id_auto]
+                                                );
+                                            }
                                         }
                                     } else {
                                         $user_answer = Display::span(

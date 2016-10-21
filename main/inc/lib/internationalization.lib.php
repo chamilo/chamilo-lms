@@ -1080,7 +1080,8 @@ function api_transliterate($string, $unknown = '?', $from_encoding = null)
  * @link http://php.net/manual/en/function.ord.php
  * Note the difference with the original funtion ord(): ord('') returns 0, api_ord('') returns 0xFFFD (unknown character).
  */
-function api_ord($character, $encoding = null) {
+function api_ord($character, $encoding = 'UTF-8')
+{
     return Patchwork\Utf8::ord(api_utf8_encode($character, $encoding));
 }
 
@@ -1181,7 +1182,7 @@ function api_stristr($haystack, $needle, $before_needle = false, $encoding = nul
  * if (strlen($string) != 0)
  * there is no need the original function strlen() to be changed, it works correctly and faster for these cases.
  */
-function api_strlen($string, $encoding = null)
+function api_strlen($string)
 {
     return Utf8::strlen($string);
 }
@@ -1330,10 +1331,10 @@ function api_strtoupper($string, $encoding = null)
  * @link http://php.net/manual/en/function.substr
  * @link http://php.net/manual/en/function.mb-substr
  */
-function api_substr($string, $start, $length = null, $encoding = null)
+function api_substr($string, $start, $length = null)
 {
     if (is_null($length)) {
-        $length = api_strlen($string, $encoding);
+        $length = api_strlen($string);
     }
     return Utf8::substr($string, $start, $length);
 }

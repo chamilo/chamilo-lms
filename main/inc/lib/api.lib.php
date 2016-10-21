@@ -1943,23 +1943,16 @@ function api_check_password($password) {
     if ($password_length < 5) {
         return false;
     }
-    //$password = api_strtolower($password);
+    $password = api_strtolower($password);
     $letters = 0;
     $digits = 0;
     /*
      * 5. It should not contain 3 or more consequent (according to ASCII table) characters.
-     * $consequent_characters = 0;
+     */
+    $consequent_characters = 0;
     $previous_character_code = 0;
     for ($i = 0; $i < $password_length; $i ++) {
         $current_character_code = api_ord(api_substr($password, $i, 1));
-        if ($i && abs($current_character_code - $previous_character_code) <= 1) {
-            $consequent_characters ++;
-            if ($consequent_characters == 3) {
-                return false;
-            }
-        } else {
-            $consequent_characters = 1;
-        }
         if ($current_character_code >= 97 && $current_character_code <= 122) {
             $letters ++;
         } elseif ($current_character_code >= 48 && $current_character_code <= 57) {
@@ -1968,7 +1961,7 @@ function api_check_password($password) {
             return false;
         }
         $previous_character_code = $current_character_code;
-    }*/
+    }
     return ($letters >= 3 && $digits >= 2);
 }
 

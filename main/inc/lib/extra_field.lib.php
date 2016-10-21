@@ -452,7 +452,8 @@ class ExtraField extends Model
         $specialUrlList = [],
         $orderDependingDefaults = false,
         $forceShowFields = false,
-        $separateExtraMultipleSelect = 0
+        $separateExtraMultipleSelect = [],
+        $customLabelsExtraMultipleSelect = []
     ) {
         if (empty($form)) {
             return false;
@@ -489,7 +490,8 @@ class ExtraField extends Model
             $orderFields,
             $specialUrlList,
             $orderDependingDefaults,
-            $separateExtraMultipleSelect
+            $separateExtraMultipleSelect,
+            $customLabelsExtraMultipleSelect
         );
 
         return $extra;
@@ -815,7 +817,8 @@ class ExtraField extends Model
         $orderFields = [],
         $specialUrlList = [],
         $orderDependingDefaults = false,
-        $separateExtraMultipleSelect = 0
+        $separateExtraMultipleSelect = [],
+        $customLabelsExtraMultipleSelect = []
     ) {
         $type = $this->type;
         $jquery_ready_content = '';
@@ -1167,17 +1170,24 @@ class ExtraField extends Model
                             }
                         }
 
-                        if ($separateExtraMultipleSelect > 0) {
-                            for($i = 0; $i < $separateExtraMultipleSelect; $i++) {
+                        // OFAJ
+                        $separateValue = 0;
+                        if (isset($separateExtraMultipleSelect[$field_details['variable']])) {
+                            $separateValue = $separateExtraMultipleSelect[$field_details['variable']];
+                        }
+
+                        if ($separateValue > 0) {
+                            for($i = 0; $i < $separateValue; $i++) {
                                 $form->addElement(
                                     'select',
                                     'extra_'.$field_details['variable'].'['.$i.']',
-                                    $field_details['display_text'],
+                                    $customLabelsExtraMultipleSelect[$field_details['variable']][$i], //$field_details['display_text'],
                                     $options,
                                     array('id' => 'extra_'.$field_details['variable'].'_'.$i)
                                 );
                             }
                         } else {
+                            // default behaviour
                             $form->addElement(
                                 'select',
                                 'extra_'.$field_details['variable'],
@@ -1312,35 +1322,16 @@ class ExtraField extends Model
                         $variable = $field_details['variable'];
                         $field_id = $field_details['id'];
 
-                        $tagsSelect = $form->addSelect(
-                            "extra_{$field_details['variable']}",
-                            $field_details['display_text']
-                        );
 
-                        if ($useTagAsSelect === false) {
-                            $tagsSelect->setAttribute('class', null);
+                        $separateValue = 0;
+                        if (isset($separateExtraMultipleSelect[$field_details['variable']])) {
+                            $separateValue = $separateExtraMultipleSelect[$field_details['variable']];
                         }
 
-                        $tagsSelect->setAttribute('id', "extra_{$field_details['variable']}");
-                        $tagsSelect->setMultiple(true);
-
-                        if ($this->type === 'user') {
-                            // The magic should be here
-                            $user_tags = UserManager::get_user_tags($itemId, $field_details['id']);
-
-                            if (is_array($user_tags) && count($user_tags) > 0) {
-                                foreach ($user_tags as $tag) {
-                                    $tagsSelect->addOption(
-                                        $tag['tag'],
-                                        $tag['tag'],
-                                        ['selected' => 'selected', 'class' => 'selected']
-                                    );
-                                }
-                            }
-                            $url = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php';
-                        } else {
+                        if ($separateValue > 0) {
                             $em = Database::getManager();
-                            $fieldTags = $em->getRepository('ChamiloCoreBundle:ExtraFieldRelTag')
+                            $fieldTags = $em
+                                ->getRepository('ChamiloCoreBundle:ExtraFieldRelTag')
                                 ->findBy(
                                     [
                                         'fieldId' => $field_id,
@@ -1348,20 +1339,8 @@ class ExtraField extends Model
                                     ]
                                 );
 
-                            foreach ($fieldTags as $fieldTag) {
-                                $tag = $em->find('ChamiloCoreBundle:Tag', $fieldTag->getTagId());
 
-                                if (empty($tag)) {
-                                    continue;
-                                }
-                                $tagsSelect->addOption(
-                                    $tag->getTag(),
-                                    $tag->getTag(),
-                                    ['selected' => 'selected', 'class' => 'selected']
-                                );
-                            }
-
-                            if (!empty($extraData) && isset($extraData['extra_'.$field_details['variable']])) {
+                            /*if (!empty($extraData) && isset($extraData['extra_'.$field_details['variable']])) {
                                 $data = $extraData['extra_'.$field_details['variable']];
                                 foreach ($data as $option) {
                                     $tagsSelect->addOption(
@@ -1370,64 +1349,176 @@ class ExtraField extends Model
                                         ['selected' => 'selected', 'class' => 'selected']
                                     );
                                 }
-                            }
-
-                            if ($useTagAsSelect) {
-
-                                $fieldTags = $em
-                                    ->getRepository('ChamiloCoreBundle:ExtraFieldRelTag')
-                                    ->findBy([
-                                        'fieldId' => $field_id
-                                    ]);
-                                $tagsAdded = [];
+                            }*/
+                            // ofaj
+                            for ($i = 0; $i < $separateValue; $i++) {
+                                $tagsSelect = $form->addElement(
+                                    'select',
+                                    'extra_'.$field_details['variable'].'['.$i.']',
+                                    $customLabelsExtraMultipleSelect[$field_details['variable']][$i], //$field_details['display_text'],
+                                    null,
+                                    array('id' => 'extra_'.$field_details['variable'].'_'.$i)
+                                );
                                 foreach ($fieldTags as $fieldTag) {
                                     $tag = $em->find('ChamiloCoreBundle:Tag', $fieldTag->getTagId());
 
                                     if (empty($tag)) {
                                         continue;
                                     }
+                                    $tagsSelect->addOption(
+                                        $tag->getTag(),
+                                        $tag->getTag(),
+                                        ['selected' => 'selected', 'class' => 'selected']
+                                    );
+                                }
+                            }
+                        } else {
+                            $tagsSelect = $form->addSelect(
+                                "extra_{$field_details['variable']}",
+                                $field_details['display_text']
+                            );
 
-                                    $tagText = $tag->getTag();
+                            if ($useTagAsSelect === false) {
+                                $tagsSelect->setAttribute('class', null);
+                            }
 
-                                    if (in_array($tagText, $tagsAdded)) {
+                            $tagsSelect->setAttribute(
+                                'id',
+                                "extra_{$field_details['variable']}"
+                            );
+                            $tagsSelect->setMultiple(true);
+
+
+                            if ($this->type === 'user') {
+                                // The magic should be here
+                                $user_tags = UserManager::get_user_tags(
+                                    $itemId,
+                                    $field_details['id']
+                                );
+
+                                if (is_array($user_tags) && count(
+                                        $user_tags
+                                    ) > 0
+                                ) {
+                                    foreach ($user_tags as $tag) {
+                                        $tagsSelect->addOption(
+                                            $tag['tag'],
+                                            $tag['tag'],
+                                            [
+                                                'selected' => 'selected',
+                                                'class' => 'selected'
+                                            ]
+                                        );
+                                    }
+                                }
+                                $url = api_get_path(
+                                        WEB_AJAX_PATH
+                                    ).'user_manager.ajax.php';
+                            } else {
+                                $em = Database::getManager();
+                                $fieldTags = $em->getRepository(
+                                    'ChamiloCoreBundle:ExtraFieldRelTag'
+                                )
+                                    ->findBy(
+                                        [
+                                            'fieldId' => $field_id,
+                                            'itemId' => $itemId,
+                                        ]
+                                    );
+
+                                foreach ($fieldTags as $fieldTag) {
+                                    $tag = $em->find(
+                                        'ChamiloCoreBundle:Tag',
+                                        $fieldTag->getTagId()
+                                    );
+
+                                    if (empty($tag)) {
                                         continue;
                                     }
                                     $tagsSelect->addOption(
                                         $tag->getTag(),
                                         $tag->getTag(),
-                                        []
+                                        [
+                                            'selected' => 'selected',
+                                            'class' => 'selected'
+                                        ]
                                     );
-
-                                    $tagsAdded[] = $tagText;
                                 }
+
+                                if (!empty($extraData) && isset($extraData['extra_'.$field_details['variable']])) {
+                                    $data = $extraData['extra_'.$field_details['variable']];
+                                    foreach ($data as $option) {
+                                        $tagsSelect->addOption(
+                                            $option,
+                                            $option,
+                                            [
+                                                'selected' => 'selected',
+                                                'class' => 'selected'
+                                            ]
+                                        );
+                                    }
+                                }
+
+                                if ($useTagAsSelect) {
+                                    $fieldTags = $em->getRepository('ChamiloCoreBundle:ExtraFieldRelTag')
+                                        ->findBy(
+                                            [
+                                                'fieldId' => $field_id
+                                            ]
+                                        );
+                                    $tagsAdded = [];
+                                    foreach ($fieldTags as $fieldTag) {
+                                        $tag = $em->find(
+                                            'ChamiloCoreBundle:Tag',
+                                            $fieldTag->getTagId()
+                                        );
+
+                                        if (empty($tag)) {
+                                            continue;
+                                        }
+
+                                        $tagText = $tag->getTag();
+
+                                        if (in_array($tagText, $tagsAdded)) {
+                                            continue;
+                                        }
+                                        $tagsSelect->addOption(
+                                            $tag->getTag(),
+                                            $tag->getTag(),
+                                            []
+                                        );
+
+                                        $tagsAdded[] = $tagText;
+                                    }
+                                }
+
+                                $url = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php';
                             }
 
-                            $url = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php';
-                        }
+                            $url = $url."?a=search_tags&field_id=$field_id&type={$this->type}";
 
-                        $url = $url."?a=search_tags&field_id=$field_id&type={$this->type}";
+                            if (isset($specialUrlList[$field_details['variable']])) {
+                                //$url = $specialUrlList[$field_details['variable']]."&field_id=$field_id&type={$this->type}";
+                            }
 
-                        if (isset($specialUrlList[$field_details['variable']])) {
-                            //$url = $specialUrlList[$field_details['variable']]."&field_id=$field_id&type={$this->type}";
-                        }
+                            if ($useTagAsSelect == false) {
+                                $complete_text = get_lang('StartToType');
 
-                        if ($useTagAsSelect == false) {
-                            $complete_text = get_lang('StartToType');
+                                //if cache is set to true the jquery will be called 1 time
 
-                            //if cache is set to true the jquery will be called 1 time
-
-                            $jquery_ready_content .= <<<EOF
-                        $("#extra_$variable").fcbkcomplete({
-                            json_url: "$url",
-                            cache: false,
-                            filter_case: true,
-                            filter_hide: true,
-                            complete_text:"$complete_text",
-                            firstselected: false,
-                            filter_selected: true,                        
-                            newel: true
-                        });
+                                $jquery_ready_content .= <<<EOF
+                            $("#extra_$variable").fcbkcomplete({
+                                json_url: "$url",
+                                cache: false,
+                                filter_case: true,
+                                filter_hide: true,
+                                complete_text:"$complete_text",
+                                firstselected: false,
+                                filter_selected: true,                        
+                                newel: true
+                            });
 EOF;
+                            }
                         }
                         break;
                     case ExtraField::FIELD_TYPE_TIMEZONE:

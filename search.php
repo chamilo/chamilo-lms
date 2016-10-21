@@ -239,6 +239,53 @@ $extraField = new ExtraField('user');
 $userForm = new FormValidator('user_form', 'post', api_get_self());
 $jqueryExtra = '';
 
+$htmlHeadXtra[] ='<script>		
+$(document).ready(function() {		
+    /*$("#filiere_panel").hide();			
+    $("#dispo_panel").hide();    		
+    $("#dispo_pendant_panel").hide();		
+    $("#niveau_panel").hide();		
+    $("#methode_panel").hide();		
+    $("#themes_panel").hide();    		
+    $("#objectifs_panel").hide();*/	
+            
+    $("#filiere").on("click", function() {		
+        $("#filiere_panel").toggle();		
+        return false;		
+    });		
+    
+    $("#dispo").on("click", function() {		
+        $("#dispo_panel").toggle();		
+        return false;		
+    });		
+    
+    $("#dispo_pendant").on("click", function() {		
+        $("#dispo_pendant_panel").toggle();		
+        return false;		
+    });			
+    
+    $("#niveau").on("click", function() {		
+        $("#niveau_panel").toggle();		
+        return false;		
+    });		
+    
+    $("#methode").on("click", function() {		
+        $("#methode_panel").toggle();		
+        return false;		
+    });		
+    
+    $("#themes").on("click", function() {		
+        $("#themes_panel").toggle();		
+        return false;		
+    });		
+    
+    $("#objectifs").on("click", function() {		
+        $("#objectifs_panel").toggle();		
+        return false;		
+    });		
+ });		
+ </script>';
+
 $panel = Display::panel(get_lang('FiliereExplanation'), '', '', '',  '', 'filiere_panel');
 $userForm->addHeader(Display::url(get_lang('Filiere'), '#', ['id'=> 'filiere']).''.$panel);
 $fieldsToShow = [
@@ -379,7 +426,21 @@ $extra = $extraFieldSession->addElements(
     null,
     true,
     $forceShowFields, // $forceShowFields
-    3
+    [ 'domaine' => 3, $theme => 5], // $separateExtraMultipleSelect
+    [
+        'domaine' => [
+            get_lang('Domaine').' 1',
+            get_lang('Domaine').' 2',
+            get_lang('Domaine').' 3'
+        ],
+        $theme  => [
+            get_lang('Theme').' 1',
+            get_lang('Theme').' 2',
+            get_lang('Theme').' 3',
+            get_lang('Theme').' 4',
+            get_lang('Theme').' 5'
+        ],
+    ]
 );
 
 $jqueryExtra .= $extra['jquery_ready_content'];
@@ -475,7 +536,6 @@ if ($userForm->validate()) {
     $extraFieldValue = new ExtraFieldValue('user');
     $userData = $userForm->getSubmitValues();
     $userData['extra_diagnosis_completed'] = 1;
-
     $extraFieldValue->saveFieldValues($userData, $forceShowFields);
 
     // Saving to extra_field_saved_search

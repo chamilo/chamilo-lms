@@ -3979,11 +3979,16 @@ class Exercise
                                 }
                             } elseif ($answerType == DRAGGABLE) {
                                 $user_answer = Display::label(get_lang('Incorrect'), 'danger');
+                            } else {
+                                $user_answer = Display::span(
+                                    get_lang('Incorrect').' &nbsp;',
+                                    ['style' => 'color: #FF0000; text-decoration: line-through;']
+                                );
                             }
 
                             if ($show_result) {
                                 if ($showTotalScoreAndUserChoicesInLastAttempt === false) {
-                                    $s_answer_label = '';
+                                    $user_answer = '';
                                 }
                                 echo '<tr>';
                                 echo '<td>' . $s_answer_label . '</td>';

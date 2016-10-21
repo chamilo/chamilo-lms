@@ -878,7 +878,7 @@ class IndexManager
     /**
      * @return null|string|void
      */
-    public function return_profile_block()
+    public function return_profile_block($diagnosisComplete)
     {
         global $_configuration;
         $user_id = api_get_user_id();
@@ -969,13 +969,17 @@ class IndexManager
         }
 
         $diagnosis = '';
-
         if (api_is_drh() || api_is_student_boss()) {
             $diagnosis = Display::url(get_lang('DiagnosisManagement'), api_get_path(WEB_PATH).'load_search.php').'<br />';
             $diagnosis .= Display::url(get_lang('Diagnostic'), api_get_path(WEB_PATH).'search.php');
         } else {
             if (api_is_student()) {
-                $diagnosis = Display::url(get_lang('Diagnostic'), api_get_path(WEB_PATH).'search.php');
+                if ($diagnosisComplete === false) {
+                    $diagnosis = Display::url(
+                        get_lang('Diagnostic'),
+                        api_get_path(WEB_PATH).'search.php'
+                    );
+                }
             }
         }
 
@@ -1285,7 +1289,7 @@ class IndexManager
                                 'id' => $session_id
                             );
                             $session_box = Display::get_session_title_box($session_id);
-                           
+
                             $actions = null;
                             if (api_is_platform_admin()) {
                                 $actions = api_get_path(WEB_CODE_PATH) .'session/resume_session.php?id_session='.$session_id;

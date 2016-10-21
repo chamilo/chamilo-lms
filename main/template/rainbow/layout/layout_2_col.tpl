@@ -31,64 +31,6 @@
                 <section id="homepage-home">
                     {{ home_page_block }}
                 </section>
-            {% endif %}
-            <div class="home-information">
-                <div class="row">
-                    <div class="col-md-3">
-                        <div class="item-icon">
-                            <span class="circle">
-                                <i class="fa fa-question-circle fa-3x" aria-hidden="true"></i>
-                            </span>
-                        </div>
-                        <h4 class="title">Objectifs de la plate-forme</h4>
-                        <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                            Ut enim ad minim veniam.
-                        </p>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="item-icon">
-                            <span class="circle">
-                                <i class="fa fa-users fa-3x" aria-hidden="true"></i>
-                            </span>
-                        </div>
-                        <h4 class="title">Public cible</h4>
-                        <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                            Ut enim ad minim veniam.
-
-                        </p>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="item-icon">
-                            <span class="circle">
-                                <i class="fa fa-paper-plane fa-3x" aria-hidden="true"></i>
-                            </span>
-                        </div>
-                        <h4 class="title">Praxes: informations sur le programme</h4>
-                        <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                            Ut enim ad minim veniam.
-                        </p>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="item-icon">
-                            <span class="circle">
-                                <i class="fa fa-file-text fa-3x" aria-hidden="true"></i>
-                            </span>
-                        </div>
-                        <h4 class="title">Conditions de participation</h4>
-                        <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                            Ut enim ad minim veniam.
-                        </p>
-                    </div>
-                </div>
-            </div>
 
             <div id="latest_blocks"></div>
 

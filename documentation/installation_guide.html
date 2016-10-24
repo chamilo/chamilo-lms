@@ -7,8 +7,7 @@
     <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
     <link href="js/prettify.css" type="text/css" rel="stylesheet" />
     <script src="js/prettify.js" type="text/javascript"></script>
-
-    </head>
+</head>
 <body>
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -21,7 +20,6 @@
             </button>
             <a class="navbar-brand" href="#">Chamilo - Documentation</a>
         </div>
-
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
                 <li class="active"><a href="index.html">Home</a></li>
@@ -47,14 +45,11 @@
 <p>French: Vous pouvez aussi lire <a href="installation_guide_fr_FR.html">ce guide d'installation en français</a>.</p>
 <p>Italian: You can also read <a href="installation_guide_it_IT.html">this guide in Italian</a>.</p>
 
-
 <h2><b>Contents</b></h2>
-
 <ol>
-
   <li><a href="#1._Pre-requisites">Pre-requisites</a></li>
   <li><a href="#2._Installation_of_Chamilo_LMS">Installation of Chamilo LMS</a></li>
-  <li><a href="#3._Upgrade_from_a_previous_version_of">Upgrade from a previous version of Chamilo/Dok€os</a></li>
+  <li><a href="#3._Upgrade">Upgrade</a></li>
   <li><a href="#4._Troubleshooting">Troubleshooting</a></li>
   <li><a href="#5._Administration_section">Administration section</a></li>
   <li><a href="#6._LDAP">LDAP&nbsp;</a></li>
@@ -87,41 +82,29 @@ Chamilo is mainly a LMS running (the so called <span style="font-weight: bold;">
 <li><span style="font-weight: bold;">PHP 5.4+ (5.6 recommended for greater efficiency) (support for PHP7 seems OK but not evaluated on high load setups just yet)</span></li>
 </ul>
 <br />
-
-All these pieces of software are free software and freely available. <br />
-
-<br />
-
+All these pieces of software are free software and freely available. <br /><br />
 To run Chamilo <span style="font-weight: bold;">LMS</span> on your server, you need to install WAMP, LAMP or MAMP:
 <ul>
-
   <li>To install <span style="font-weight: bold;">WAMP</span> (AMP on Windows), we recommend the <a href="http://www.apachefriends.org/en/xampp.html">XAMPP</a> .exe installer<a href="http://www.apachefriends.org/en/xampp.html"></a></li>
-
   <li>To install <span style="font-weight: bold;">LAMP</span>
 (AMP on Linux), use the Package manager of your favourite distribution (Synaptic, RPMFinder etc.).
 For instance, on a Ubuntu server,&nbsp;use Shell or Synaptic following the
-    <a href="http://ubuntuguide.org/wiki/Ubuntu:Feisty#Apache_HTTP_Server">Ubuntuguide on Apache</a> and the following sections</li>
-
+    <a href="http://ubuntuguide.org/wiki/Ubuntu:Feisty#Apache_HTTP_Server">Ubuntuguide on Apache</a> and the following sections
+  </li>
   <li>To install <span style="font-weight: bold;">MAMP</span> (AMP on Mac OS X), refer to the <a href="http://www.mamp.info/en/index.php">MAMP</a> dedicated website<a href="http://www.mamp.info/en/index.php"></a></li>
   <li>Make sure you check the <a href="dependencies.html" title="Dependencies">Dependencies page</a> if you need to know the requirements in more precise way.
 </ul>
-
-
 <br />
 
-
 <h3><span style="font-weight: bold;">MySQL or MariaDB database server</span></h3>
-
 You will need a login and password allowing you to manage and create a database. Usually, the default configuration on local computers is
 to allow you to connect as root with an empty password. It is <b>HIGHLY RECOMMENDED</b> to change the password and define a user with access to
 only a specific database. Please refer to the MySQL or MariaDB documentation in order to do this.<br />
 <br />
 <span class="text-muted">Chamilo versions prior to 1.9.0 required to choose between multiple databases and a deprecated single-database mode.
     This has been cleaned up and simplified to one single database.</span><br />
-
 <hr style="width: 100%; height: 2px;" />
 <h2><a name="2._Installation_of_Chamilo_LMS"></a><span style="font-weight: bold;">2. Installation of Chamilo LMS</span></h2>
-
 <p>
 Before you start installing Chamilo LMS, you must understand that, because we provide Chamilo as free software, many services providers
     have been able to develop extensions of Chamilo, which have made it possible to install Chamilo in many ways:<br />
@@ -265,58 +248,49 @@ date.timezone = 'America/New_York'
 
 
 <hr />
-<h2><a name="3._Upgrade_from_a_previous_version_of"></a>3. Upgrade from a
-previous version of Chamilo LMS (1.*) or Dok€os (&lt;2.0)</h2>
+<h2><a name="3._Upgrade"></a>3. Upgrade</h2>
 
 Before upgrading, we <b>heavily</b> recommend you do a full backup of the previous
 Chamilo directories and databases. If you are unsure how to achieve this
 please ask your hosting provider for advice <b>before</b> you continue further.<br /><br />
-<em>Chamilo LMS 1.10 comes with a new database structure in comparison to 1.9,
-as was the case between 1.9 and 1.8.
-Although the upgrade script takes the migration in charge, it might be generating
-a very heavy load on your server during the upgrade, and will change your
-database considerably, preserving the data as well as possible (we have tested
-the procedure many times, but remember this is GNU/GPLv3 and we cannot be held
-responsible for what would happen to your data without professional supervision).
-This is why we *really* recommend you take a full backup of your system before
-you upgrade.</em>
-<br />
-<br />
-Also note that Chamilo LMS 1.10 unites all language files from the
-main/lang/ directory into one single file by language.
-If you have changed language files directly (instead of
-using the recommended way: sub-languages), you should take a backup copy of
-these changed translations before you upgrade. Sublanguages might also require
-som manual work, but the upgrade procedure will not touch sublanguages directly.
-<br /><br />
+
 <div class="text-muted"> NOTE: For very heavy Chamilo databases, some of our official
 providers have developed improved migration procedures that use more memory but
 process the upgrades much faster. If this is the kind of thing you
 need, we highly recommend you contact them (see reference below).</div>
-    <br />
+<br />
 <div class="text-muted"> NOTE: This version of Chamilo can only be used to upgrade
-from earlier versions of Chamilo 1.9.*. For example, you cannot use the normal
+from earlier versions of Chamilo 1.9.*. You cannot use the normal
 upgrade scripts from Chamilo 1.10 to upgrade from Chamilo 1.8.* or even Dok€os 2.0
 (which was born after the split with Chamilo). If you need this, please contact one
 of the Chamilo Association's <a href="https://chamilo.org/providers">official providers</a>)</div>
-
 <p></p>
 
-<h3>3.1 Upgrading from Chamilo 1.10.x (minor upgrade)</h3>
-As this is only a minor version change from previous 1.10.* versions of Chamilo, the only thing you need to do is:
+<h3>3.1 Upgrading from Chamilo 1.11.x (Minor version)</h3>
+As this is only a minor version change from previous 1.11.* versions of Chamilo, the only thing you need to do is:
 <ul>
   <li> check that you haven't left any customised stylesheet or image <span class="text-muted">(if you have, make sure you keep a copy on the side*)</span></li>
-  <li> download the Chamilo 1.10 install package from the <a href="http://www.chamilo.org/download">Chamilo download page</a></li>
-  <li> unzip the new files of Chamilo 1.10 over the files of the older version
+  <li> download the Chamilo 1.11 install package from the <a href="http://www.chamilo.org/download">Chamilo download page</a></li>
+  <li> unzip the new files of Chamilo 1.11 over the files of the older version
+    (or unzip the files in one folder and then copy the files from there to the
+    older version's directory).</li>
+  <li> clean your app/cache/twig directory: delete all the contents *in* this directory (do NOT remove the directory itself, only its contents!).
+       It will all be re-generated.
+      You can also delete the contents of this directory through the "Archive directory cleanup" option in the "System" box of the Administration page.</li>
+  <li> you're done! No other upgrade procedure is required</li>
+</ul>
+<h3>3.2 Upgrading from Chamilo 1.10.x</h3>
+<ul>
+  <li> check that you haven't left any customised stylesheet or image <span class="text-muted">(if you have, make sure you keep a copy on the side*)</span></li>
+  <li> download the Chamilo 1.11 install package from the <a href="http://www.chamilo.org/download">Chamilo download page</a></li>
+  <li> unzip the new files of Chamilo 1.11 over the files of the older version
     (or unzip the files in one folder and then copy the files from there to the
     older version's directory). Note that you should remove the "home" and
     "searchdb" directories from the package before you overwrite the previous
     files.</li>
-  <li> edit the app/config/configuration.php file: at the en of the file, locate the previous version number (e.g. '1.10.4') and change it to this new version (e.g. '1.10.8')</li>
   <li> clean your app/cache/twig directory: delete all the contents *in* this directory (do NOT remove the directory itself, only its contents!). It will all be re-generated. You can also delete the contents of this directory through the "Archive directory cleanup" option in the "System" box of the Administration page.</li>
-  <li> you're done! No other upgrade procedure is required</li>
+  <li>Go to your portal install page (main/install/) and follow the upgrade procedure</li>
 </ul>
-
 Please note that if you (unluckily) upgraded from any of the 1.9 versions to 1.10.0 against our recommendations, we
     provide a patch script that should get most of it in order. The script is available here:<br />
     <a href="https://raw.githubusercontent.com/chamilo/chamilo-lms/1.10.x/tests/scripts/fix_migrations_1.9.x_1.10.0.php">https://raw.githubusercontent.com/chamilo/chamilo-lms/1.10.x/tests/scripts/fix_migrations_1.9.x_1.10.0.php</a> or, if
@@ -325,7 +299,6 @@ Please note that if you (unluckily) upgraded from any of the 1.9 versions to 1.1
     connecting to your Chamilo site as admin). You should also remove the scripts afterwards.<br />
     This script is provided without warranty. Please *always* take a backup before you use it.
 <br />
-
 
 <h3>3.2 Upgrading from Chamilo 1.9.x</h3>
 <ul>
@@ -781,7 +754,7 @@ If you have issues with files taking a long time to download, make sure you reco
     <hr style="width: 100%; height: 2px;" />
     <h2><a name="17._Git_Upgrade"></a>Upgrading from Git</h2>
     <p>If you have sufficient experience with Git and have installed your initial Chamilo portal
-        from the Git version, you might want to upgrade from 1.9.x to 1.10.x using Git directly.<br />
+        from the Git version, you might want to upgrade from 1.9.x to 1.11.x using Git directly.<br />
     Here are a few tips that might help you:<br />
     <ul>
     <li>Get into your Chamilo Git repository</li>

@@ -3486,9 +3486,12 @@ class DocumentManager
                     api_get_user_id()
                 );
 
-                if (!$is_visible) {
-                    continue;
+                if ($showInvisibleFiles == false) {
+                    if (!$is_visible) {
+                        continue;
+                    }
                 }
+
                 $newResources[] = $resource;
             }
         }

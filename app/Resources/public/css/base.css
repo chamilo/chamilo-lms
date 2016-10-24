@@ -190,7 +190,7 @@ header{
   background: #2C5B8E;
 }
 .carousel-control{
- width: 5%;   
+ width: 5%;
 }
 .carousel-content .block-text{
     padding-left: 7%;
@@ -3970,20 +3970,22 @@ ul.holder{
   padding: 0;
 }
 ul.holder li.bit-input input{
-  width: 100%;
-  display: block;
-  height: 38px;
-  padding: 8px 12px;
-  font-size: 14px;
-  line-height: 1.42857;
-  color: #555;
-  background-color: #ffffff;
-  background-image: none;
-  border: 1px solid #cccccc;
-  border-radius: 4px;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset;
+    width: 100%;
+    display: block;
+    height: 38px;
+    padding: 8px 12px;
+    font-size: 14px;
+    line-height: 1.42857;
+    color: #555;
+    background-color: #ffffff;
+    background-image: none;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset;
+    border: 1px solid #cccccc !important;
+    width: 500px !important;
 }
 ul.holder li.bit-box{
   padding-right: 15px;

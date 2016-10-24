@@ -252,7 +252,22 @@ $extra = $extraField->addElements(
     $defaults,
     [],
     false, //$orderDependingDefaults
-    true // force
+    true, // force
+    [ 'domaine' => 3, $theme => 5], // $separateExtraMultipleSelect
+    [
+        'domaine' => [
+            get_lang('Domaine').' 1',
+            get_lang('Domaine').' 2',
+            get_lang('Domaine').' 3'
+        ],
+        $theme  => [
+            get_lang('Theme').' 1',
+            get_lang('Theme').' 2',
+            get_lang('Theme').' 3',
+            get_lang('Theme').' 4',
+            get_lang('Theme').' 5'
+        ],
+    ]
 );
 
 $form->addButtonSearch(get_lang('Search'), 'search');
@@ -272,6 +287,30 @@ $columns = $result['columns'];
 $column_model = $result['column_model'];
 
 $form->setDefaults($defaults);
+
+
+/** @var HTML_QuickForm_select $element */
+$domaine1 = $form->getElementByName('extra_domaine[0]');
+$domaine2 = $form->getElementByName('extra_domaine[1]');
+$domaine3 = $form->getElementByName('extra_domaine[2]');
+$userForm->setDefaults($defaults);
+$domainList = array_merge($domaine1->getValue(), $domaine3->getValue(), $domaine2->getValue());
+$themeList = [];
+$extraField = new ExtraField('session');
+$resultOptions = $extraField->searchOptionsFromTags('extra_domaine', 'extra_'.$theme, $domainList);
+
+if ($resultOptions) {
+    $resultOptions = array_column($resultOptions, 'tag', 'id');
+    $resultOptions = array_filter($resultOptions);
+
+    for ($i = 0; $i < 5; $i++) {
+        /** @var HTML_QuickForm_select $theme */
+        $themeElement = $form->getElementByName('extra_'.$theme.'['.$i.']');
+        foreach ($resultOptions as $key => $value) {
+            $themeElement->addOption($value, $value);
+        }
+    }
+}
 
 $filterToSend = '';
 
@@ -306,6 +345,7 @@ if ($formSearch->validate()) {
         }
     }
 }
+
 $params = [];
 if ($form->validate()) {
     $params = $form->getSubmitValues();

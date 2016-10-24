@@ -467,7 +467,6 @@ class ExtraField extends Model
         if (empty($extraData)) {
             if (!empty($itemId)) {
                 $extraData = self::get_handler_extra_data($itemId);
-
                 if ($form) {
                     $form->setDefaults($extraData);
                 }
@@ -2821,4 +2820,46 @@ JAVASCRIPT;
 
         return $skillList;
     }
+
+    /**
+     * @param string $from
+     * @param string $search
+     *
+     * @return array
+     */
+    public function searchOptionsFromTags($from, $search, $options)
+    {
+        $extraFieldInfo = $this->get_handler_field_info_by_field_variable(str_replace('extra_', '', $from));
+        $extraFieldInfoTag = $this->get_handler_field_info_by_field_variable(str_replace('extra_', '', $search));
+
+        if (empty($extraFieldInfo) || empty($extraFieldInfoTag)) {
+            return [];
+        }
+
+        $id = $extraFieldInfo['id'];
+        $tagId = $extraFieldInfoTag['id'];
+
+        $table = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+        $tagRelExtraTable = Database::get_main_table(TABLE_MAIN_EXTRA_FIELD_REL_TAG);
+        $tagTable = Database::get_main_table(TABLE_MAIN_TAG);
+        $optionsTable = Database::get_main_table(TABLE_EXTRA_FIELD_OPTIONS);
+
+        $sql = "SELECT DISTINCT t.*, v.value, o.display_text
+                FROM $tagRelExtraTable te 
+                INNER JOIN $tagTable t
+                ON (t.id = te.tag_id AND te.field_id = t.field_id AND te.field_id = $tagId) 
+                INNER JOIN $table v
+                ON (te.item_id = v.item_id AND v.field_id = $id)
+                INNER JOIN $optionsTable o
+                ON (o.option_value = v.value)
+                WHERE v.value IN ('".implode("','", $options)."')                           
+                ORDER BY o.option_order, t.tag
+               ";
+
+        $result = Database::query($sql);
+        $result = Database::store_result($result);
+        return $result;
+    }
+
+
 }

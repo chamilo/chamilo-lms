@@ -752,6 +752,22 @@ class HTML_QuickForm extends HTML_Common
     }
 
     /**
+     * @param string $name
+     * @return bool|mixed
+     */
+    public function getElementByName($name)
+    {
+        foreach ($this->_elements as &$element) {
+            $elementName = $element->getName();
+            if ($elementName == $name) {
+                return $element;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Returns the element's raw value
      *
      * This returns the value as submitted by the form (not filtered)

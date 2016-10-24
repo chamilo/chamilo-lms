@@ -161,7 +161,6 @@ $(document).ready(function() {
 });
 </script>';
 
-
 $form->addButtonSave(get_lang('Save'), 'save');
 
 $result = SessionManager::getGridColumns('simple');
@@ -291,8 +290,8 @@ $(document).ready(function() {
         $("#objectifs_panel").toggle();		
         return false;		
     });		
- });		
- </script>';
+});		
+</script>';
 
 $panel = Display::panel(get_lang('FiliereExplanation'), '', '', '',  '', 'filiere_panel');
 $userForm->addHeader(Display::url(get_lang('Filiere'), '#', ['id'=> 'filiere']).''.$panel);
@@ -337,9 +336,7 @@ $extra = $extraFieldSession->addElements(
     $forceShowFields //$forceShowFields = false
 );
 
-
 $jqueryExtra .= $extra['jquery_ready_content'];
-
 $panel = Display::panel(get_lang('DisponibiliteAvantExplanation'), '', '', '',  '', 'dispo_panel');
 $userForm->addHeader(Display::url(get_lang('DisponibiliteAvant'), '#', ['id'=> 'dispo']).''.$panel);
 
@@ -430,7 +427,7 @@ $extra = $extraFieldSession->addElements(
     null,
     true,
     $forceShowFields, // $forceShowFields
-    [ 'domaine' => 3, $theme => 5], // $separateExtraMultipleSelect
+    ['domaine' => 3, $theme => 5], // $separateExtraMultipleSelect
     [
         'domaine' => [
             get_lang('Domaine').' 1',
@@ -534,7 +531,29 @@ $(document).ready(function(){
 
 $userForm->addButtonSave(get_lang('Save'));
 
+/** @var HTML_QuickForm_select $element */
+$domaine1 = $form->getElementByName('extra_domaine[0]');
+$domaine2 = $form->getElementByName('extra_domaine[1]');
+$domaine3 = $form->getElementByName('extra_domaine[2]');
 $userForm->setDefaults($defaults);
+$domainList = array_merge($domaine1->getValue(), $domaine3->getValue(), $domaine2->getValue());
+$themeList = [];
+$extraField = new ExtraField('session');
+$resultOptions = $extraField->searchOptionsFromTags('extra_domaine', 'extra_'.$theme, $domainList);
+
+if ($resultOptions) {
+    $resultOptions = array_column($resultOptions, 'tag', 'id');
+    $resultOptions = array_filter($resultOptions);
+
+    for ($i = 0; $i < 5; $i++) {
+        /** @var HTML_QuickForm_select $theme */
+        $themeElement = $form->getElementByName('extra_'.$theme.'['.$i.']');
+        foreach ($resultOptions as $key => $value) {
+            $themeElement->addOption($value, $value);
+        }
+    }
+}
+
 $userFormToString = $userForm->returnForm();
 
 if ($userForm->validate()) {
@@ -559,6 +578,11 @@ if ($userForm->validate()) {
         'extra_temps-de-travail',
         //'extra_competenceniveau',
         'extra_'.$theme,
+        'extra_'.$theme.'[0]',
+        'extra_'.$theme.'[1]',
+        'extra_'.$theme.'[2]',
+        'extra_'.$theme.'[3]',
+        'extra_'.$theme.'[4]',
         'extra_ecouter',
         'extra_lire',
         'extra_participer_a_une_conversation',
@@ -571,11 +595,6 @@ if ($userForm->validate()) {
 
         if ($found === false) {
             continue;
-        }
-
-        $tempKey = str_replace('__persist__', '', $key);
-        if (!isset($params[$tempKey])) {
-            $params[$tempKey] = array();
         }
     }
 

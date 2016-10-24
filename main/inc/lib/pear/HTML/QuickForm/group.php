@@ -503,6 +503,7 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
     {
         parent::freeze();
         foreach (array_keys($this->_elements) as $key) {
+            $this->_elements[$key]->freezeSeeOnlySelected = $this->freezeSeeOnlySelected;
             $this->_elements[$key]->freeze();
         }
     }

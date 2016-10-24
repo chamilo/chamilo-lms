@@ -454,7 +454,8 @@ class ExtraField extends Model
         $forceShowFields = false,
         $separateExtraMultipleSelect = [],
         $customLabelsExtraMultipleSelect = [],
-        $fieldsToFreeze = []
+        $fieldsToFreeze = [],
+        $addEmptyOptionSelects = false
     ) {
         if (empty($form)) {
             return false;
@@ -493,7 +494,8 @@ class ExtraField extends Model
             $orderDependingDefaults,
             $separateExtraMultipleSelect,
             $customLabelsExtraMultipleSelect,
-            $fieldsToFreeze
+            $fieldsToFreeze,
+            $addEmptyOptionSelects
         );
 
         return $extra;
@@ -821,7 +823,8 @@ class ExtraField extends Model
         $orderDependingDefaults = false,
         $separateExtraMultipleSelect = [],
         $customLabelsExtraMultipleSelect = [],
-        $fieldsToFreeze = []
+        $fieldsToFreeze = [],
+        $addEmptyOptionSelects = false
     ) {
         $type = $this->type;
         $jquery_ready_content = '';
@@ -1163,6 +1166,9 @@ class ExtraField extends Model
                             $defaultOptions = $extraData['extra_'.$field_details['variable']];
                             if (!empty($defaultOptions)) {
                                 $firstList = [];
+                                if ($addEmptyOptionSelects) {
+                                    $firstList[] = '';
+                                }
                                 foreach ($defaultOptions as $key) {
                                     if (isset($options[$key])) {
                                         $firstList[$key] = $options[$key];
@@ -1325,8 +1331,6 @@ class ExtraField extends Model
                     case ExtraField::FIELD_TYPE_TAG:
                         $variable = $field_details['variable'];
                         $field_id = $field_details['id'];
-
-
                         $separateValue = 0;
                         if (isset($separateExtraMultipleSelect[$field_details['variable']])) {
                             $separateValue = $separateExtraMultipleSelect[$field_details['variable']];
@@ -1363,6 +1367,13 @@ class ExtraField extends Model
                                     null,
                                     array('id' => 'extra_'.$field_details['variable'].'_'.$i)
                                 );
+
+                                if ($addEmptyOptionSelects) {
+                                    $tagsSelect->addOption(
+                                        '',
+                                        ''
+                                    );
+                                }
                                 foreach ($fieldTags as $fieldTag) {
                                     $tag = $em->find('ChamiloCoreBundle:Tag', $fieldTag->getTagId());
 
@@ -1371,8 +1382,7 @@ class ExtraField extends Model
                                     }
                                     $tagsSelect->addOption(
                                         $tag->getTag(),
-                                        $tag->getTag(),
-                                        ['selected' => 'selected', 'class' => 'selected']
+                                        $tag->getTag()
                                     );
                                 }
                             }
@@ -1931,6 +1941,8 @@ EOF;
                 }
 
                 if (in_array($field_details['variable'], $fieldsToFreeze)) {
+                    $element = $form->getElement('extra_'.$field_details['variable']);
+                    $element->freezeSeeOnlySelected = true;
                     $form->freeze(
                         'extra_'.$field_details['variable']
                     );

@@ -41,8 +41,8 @@ $diagnosisComplete = $extraFieldValue->get_values_by_handler_and_field_variable(
 
 if ($diagnosisComplete && isset($diagnosisComplete['value']) && $diagnosisComplete['value'] == 1) {
     if (!isset($_GET['result'])) {
-        header('Location:'.api_get_self().'?result=1');
-        exit;
+        //header('Location:'.api_get_self().'?result=1');
+        //exit;
     }
 }
 
@@ -116,39 +116,46 @@ $(document).ready(function() {
             "href": "'.$url.'&field_variable=extra_theme_de",
             "text": "'.get_lang('Order').'"             
         })
-    );
+    );    
     
-    
-    $("#extra_domaine").on("change", function() {
+    $("#extra_domaine_0, #extra_domaine_1, #extra_domaine_2").on("change", function() {
         var domainList = [];
-        $( "#extra_domaine option:selected" ).each(function() {       
+        $("#extra_domaine_0 option:selected").each(function() {       
             domainList.push($(this).val());
         });
-        
+        $("#extra_domaine_1 option:selected").each(function() {       
+            domainList.push($(this).val());
+        });        
+        $("#extra_domaine_2 option:selected").each(function() {       
+            domainList.push($(this).val());
+        });
+                
         var domainListToString = JSON.stringify(domainList);        
         $.ajax({
             contentType: "application/x-www-form-urlencoded",
             type: "GET",
             url: "'.api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?a=search_options_from_tags&type=session&from=extra_domaine&search="+themeDefault+"&options="+domainListToString,
-            success: function(data) {            
-                $("#"+themeDefault).find("option").remove().end();                    
-                $("#"+themeDefault).empty();
+            success: function(data) {
+            
                 var selectToString = "";
                 jQuery.each(JSON.parse(data), function(i, item) {
                    selectToString += "<optgroup label=\'"+item.text+"\'>";                   
-                   jQuery.each(item.children, function(j, data) {
-                        console.log(data);
+                   jQuery.each(item.children, function(j, data) {                        
                         if (data.text != "") {                                    
                             selectToString += "<option value=\'"+data.text+"\'> " +data.text+"</option>"
                         }
                     });                         
                     selectToString += "</optgroup>";
-                });        
-                
-                $("#"+themeDefault).html(selectToString);                 
-                $("#"+themeDefault).selectpicker("refresh");
-            }           
-            
+                });   
+                 
+                for (i = 0; i <= 5; i++) { 
+                    var themeId = "#"+themeDefault+"_"+i;    
+                    $(themeId).find("option").remove().end();                    
+                    $(themeId).empty();
+                    $(themeId).html(selectToString);                 
+                    $(themeId).selectpicker("refresh");
+                }
+            }
          });        
     });
 });
@@ -234,6 +241,7 @@ if ($form->validate()) {
         }
     }
 }
+
 $forceShowFields = true;
 $extraField = new ExtraField('user');
 $userForm = new FormValidator('user_form', 'post', api_get_self());
@@ -410,10 +418,6 @@ $fieldsToShow = [
     $theme
 ];
 
-/*$specialUrlList = [
-    $theme => api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?a=search_tags_from_diagnosis'
-];*/
-
 $extra = $extraFieldSession->addElements(
     $userForm,
     api_get_user_id(),
@@ -440,7 +444,9 @@ $extra = $extraFieldSession->addElements(
             get_lang('Theme').' 4',
             get_lang('Theme').' 5'
         ],
-    ]
+    ],
+    [],
+    true //$addEmptyOptionSelects
 );
 
 $jqueryExtra .= $extra['jquery_ready_content'];
@@ -599,15 +605,17 @@ if ($userForm->validate()) {
         $field_variable = substr($key, 6);
         $extraFieldInfo = $extraFieldValueSession
             ->getExtraField()
-            ->get_handler_field_info_by_field_variable($field_variable);
+            ->get_handler_field_info_by_field_variable($field_variable)
+        ;
 
         if (!$extraFieldInfo) {
             continue;
         }
 
-
-
-        $extraFieldObj = $em->getRepository('ChamiloCoreBundle:ExtraField')->find($extraFieldInfo['id']);
+        $extraFieldObj = $em
+            ->getRepository('ChamiloCoreBundle:ExtraField')
+            ->find($extraFieldInfo['id'])
+        ;
 
         $search = [
             'field' => $extraFieldObj,

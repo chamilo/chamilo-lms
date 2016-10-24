@@ -69,6 +69,7 @@ class HTML_Common
      * @access    private
      */
     var $_comment = '';
+    public $freezeSeeOnlySelected;
 
     /**
      * Class constructor
@@ -79,6 +80,7 @@ class HTML_Common
      */
     public function __construct($attributes = null, $tabOffset = 0)
     {
+        $this->freezeSeeOnlySelected = false;
         $this->setAttributes($attributes);
         $this->setTabOffset($tabOffset);
     } // end constructor

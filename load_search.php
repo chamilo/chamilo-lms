@@ -306,7 +306,7 @@ if ($formSearch->validate()) {
         }
     }
 }
-
+$params = [];
 if ($form->validate()) {
     $params = $form->getSubmitValues();
     $save = false;
@@ -484,15 +484,14 @@ $(function() {
 });
 </script>';
 
-
-
 if (!empty($filterToSend)) {
-    $userStartDate = $params['extra_access_start_date'];
+    $userStartDate = isset($params['extra_access_start_date']) ? $params['extra_access_start_date'] : '';
+    $userEndDate = isset($params['extra_access_end_date']) ? $params['extra_access_end_date'] : '';
+
     $date = new DateTime($userStartDate);
     $date->sub(new DateInterval('P3D'));
     $userStartDateMinus = $date->format('Y-m-d h:i:s');
 
-    $userEndDate = $params['extra_access_end_date'];
     $date = new DateTime($userEndDate);
     $date->add(new DateInterval('P2D'));
     $userEndDatePlus = $date->format('Y-m-d h:i:s');
@@ -502,7 +501,10 @@ if (!empty($filterToSend)) {
         (s.access_start_date > '$userStartDateMinus' AND (s.access_start_date = '' OR s.access_start_date IS NULL)) OR 
         ((s.access_start_date = '' OR s.access_start_date IS NULL) AND (s.access_end_date = '' OR s.access_end_date IS NULL))
     )";
-    $filterToSend['custom_dates'] = $sql;
+
+    if ($userStartDate && !empty($userStartDate)) {
+        $filterToSend['custom_dates'] = $sql;
+    }
     $filterToSend = json_encode($filterToSend);
     $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_search=true&load_extra_field='.$extraFieldListToString.'&_force_search=true&rows=20&page=1&sidx=&sord=asc&filters2='.$filterToSend;
 } else {

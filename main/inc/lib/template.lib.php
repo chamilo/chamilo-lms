@@ -920,17 +920,20 @@ class Template
         $this->assign('message_link', $message_link);
         $this->assign('message_url', $message_url);
 
-        //Certificate Link
+        // Certificate Link
         $certificatesUrl = api_get_path(WEB_CODE_PATH).'gradebook/my_certificates.php';
         $certificateLink = Display::url(get_lang('MyCertificates'), $certificatesUrl);
-        $this->assign('certificate_link', $certificateLink);
+        $allow = api_get_configuration_value('hide_my_certificate_link');
+        if ($allow === false) {
+            $this->assign('certificate_link', $certificateLink);
+        }
 
         $institution = api_get_setting('Institution');
         $portal_name = empty($institution) ? api_get_setting('siteName') : $institution;
 
         $this->assign('portal_name', $portal_name);
 
-        //Menu
+        // Menu
         $menu = return_menu();
         $this->assign('menu', $menu);
 

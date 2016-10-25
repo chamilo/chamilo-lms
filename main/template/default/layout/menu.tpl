@@ -28,7 +28,9 @@
                         <li>
                             {{ profile_link }}
                             {{ message_link }}
-                            {{ certificate_link }}
+                            {% if certificate_link %}
+                                {{ certificate_link }}
+                            {% endif %}
                         </li>
                     </ul>
                 </li>

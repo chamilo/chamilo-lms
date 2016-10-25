@@ -331,20 +331,27 @@ class IndexManager
          * Generate the block for show a panel with links to My Certificates and Certificates Search pages
          * @return string The HTML code for the panel
          */
-        $certificatesItem = null;
-
+        $certificatesItem = '';
         if (!api_is_anonymous()) {
-            $certificatesItem = Display::tag(
-                'li',
-                Display::url(Display::return_icon('graduation.png',get_lang('MyCertificates'),null,ICON_SIZE_SMALL).
-                    get_lang('MyCertificates'),
-                    api_get_path(WEB_CODE_PATH) . "gradebook/my_certificates.php"
-                )
-            );
+            $allow = api_get_configuration_value('hide_my_certificate_link');
+            if ($allow === false) {
+                $certificatesItem = Display::tag(
+                    'li',
+                    Display::url(
+                        Display::return_icon(
+                            'graduation.png',
+                            get_lang('MyCertificates'),
+                            null,
+                            ICON_SIZE_SMALL
+                        ).
+                        get_lang('MyCertificates'),
+                        api_get_path(WEB_CODE_PATH)."gradebook/my_certificates.php"
+                    )
+                );
+            }
         }
 
-        $searchItem = null;
-
+        $searchItem = '';
         if (api_get_setting('allow_public_certificates') == 'true') {
             $searchItem = Display::tag(
                 'li',
@@ -356,8 +363,8 @@ class IndexManager
         }
 
         if (empty($certificatesItem) && empty($searchItem)) {
-            return null;
-        }else{
+            return '';
+        } else {
             $content.= $certificatesItem;
             $content.= $searchItem;
         }

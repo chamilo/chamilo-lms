@@ -68,7 +68,6 @@ class NavBuilder extends ContainerAware
                 break;
         }
 
-
         $menu = $factory->createItem('root');
         $menu->setChildrenAttribute('class', 'nav navbar-nav');
 
@@ -77,8 +76,9 @@ class NavBuilder extends ContainerAware
             array(
                 'route' => 'main',
                 'routeParameters' => array(
-                    'name' => '../index.php?language='.$chamiloLocale,
-                ),
+                    'name' => '../index.php',
+                    'language' => $chamiloLocale
+                )
             )
         )->setAttribute('class', 'item-menu menu-1 homepage');
 
@@ -88,7 +88,8 @@ class NavBuilder extends ContainerAware
                 array(
                     'route' => 'main',
                     'routeParameters' => array(
-                        'name' => '../user_portal.php?language='.$chamiloLocale,
+                        'name' => '../user_portal.php',
+                        'language' => $chamiloLocale
                     ),
                 )
             )->setAttribute('class', 'item-menu menu-2 my-course');
@@ -108,7 +109,8 @@ class NavBuilder extends ContainerAware
                 array(
                     'route' => 'main',
                     'routeParameters' => array(
-                        'name' => 'mySpace/index.php?language='.$chamiloLocale,
+                        'name' => 'mySpace/index.php',
+                        'language' => $chamiloLocale
                     ),
                 )
             )->setAttribute('class', 'item-menu menu-3 my-space');
@@ -118,7 +120,8 @@ class NavBuilder extends ContainerAware
                 array(
                     'route' => 'main',
                     'routeParameters' => array(
-                        'name' => 'social/home.php?language='.$chamiloLocale,
+                        'name' => 'social/home.php',
+                        'language' => $chamiloLocale
                     ),
                 )
             )->setAttribute('class', 'item-menu menu-4 social-network ');
@@ -170,7 +173,8 @@ class NavBuilder extends ContainerAware
                 array(
                     'route' => 'main',
                     'routeParameters' => array(
-                        'name' => 'auth/inscription.php?language='.$chamiloLocale,
+                        'name' => 'auth/inscription.php',
+                        'language' => $chamiloLocale
                     )
                 )
             )->setAttribute('class', 'item-menu menu-3');

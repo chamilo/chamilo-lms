@@ -1904,9 +1904,7 @@ function getPosts($threadId, $orderDirection = 'ASC', $recursive = false, $postI
     $depth++;
     /** @var \Chamilo\CourseBundle\Entity\CForumPost $post */
     foreach ($posts as $post) {
-        $user = $em->find('ChamiloUserBundle:User', $post->getPosterId());
-
-        $list[$post->getPostId()] = [
+        $postInfo = [
             'c_id' => $post->getCId(),
             'post_id' => $post->getPostId(),
             'post_title' => $post->getPostTitle(),
@@ -1919,13 +1917,23 @@ function getPosts($threadId, $orderDirection = 'ASC', $recursive = false, $postI
             'post_notification' => $post->getPostNotification(),
             'post_parent_id' => $post->getPostParentId(),
             'visible' => $post->getVisible(),
-            'indent_cnt' => $depth,
-            'user_id' => $user->getUserId(),
-            'username' => $user->getUsername(),
-            'username_canonical' => $user->getUsernameCanonical(),
-            'lastname' => $user->getLastname(),
-            'firstname' => $user->getFirstname(),
+            'indent_cnt' => $depth
         ];
+
+        $posterId = $post->getPosterId();
+        if (!empty($posterId)) {
+            $user = $em->find('ChamiloUserBundle:User', $posterId);
+
+            if ($user) {
+                $postInfo['user_id'] = $user->getUserId();
+                $postInfo['username'] = $user->getUsername();
+                $postInfo['username_canonical'] = $user->getUsernameCanonical();
+                $postInfo['lastname'] = $user->getLastname();
+                $postInfo['firstname'] = $user->getFirstname();
+            }
+        }
+
+        $list[$post->getPostId()] = $postInfo;
 
         if (!$recursive) {
             continue;

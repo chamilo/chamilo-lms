@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
@@ -80,8 +81,8 @@ class Legal
         $this->id = $id;
 
         return $this;
-    }   
-    
+    }
+
 
     /**
      * Set date

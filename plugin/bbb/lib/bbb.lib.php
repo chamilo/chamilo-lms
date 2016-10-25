@@ -570,7 +570,6 @@ class bbb
                 }
 
                 $record = [];
-                $recordLink = get_lang('NoRecording');
 
                 if (empty($meetingDB['video_url'])) {
                     $recordingParams = ['meetingId' => $mId];
@@ -595,11 +594,13 @@ class bbb
                     $record['playbackFormatUrl'] = $meetingDB['video_url'];
                 }
 
-                $recordLink = Display::url(
-                    $this->plugin->get_lang('ViewRecord'),
-                    $record['playbackFormatUrl'],
-                    ['target' => '_blank']
-                );
+                $recordLink = isset($record['playbackFormatUrl']) && !empty($record['playbackFormatUrl'])
+                    ? Display::url(
+                        $this->plugin->get_lang('ViewRecord'),
+                        $record['playbackFormatUrl'],
+                        ['target' => '_blank']
+                    )
+                    : get_lang('NoRecording');
 
                 if ($isAdminReport) {
                     $courseInfo = api_get_course_info_by_id($meetingDB['c_id']);

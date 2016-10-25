@@ -37,7 +37,7 @@ $sessionId = api_get_session_id();
 
 if (!api_is_platform_admin()) {
     if (
-        !api_is_allowed_to_edit(null, true) &&
+        !api_is_allowed_to_edit(null, true, false, false) &&
         !learnpath::is_lp_visible_for_student($lp_id, api_get_user_id())
     ) {
         api_not_allowed(true);

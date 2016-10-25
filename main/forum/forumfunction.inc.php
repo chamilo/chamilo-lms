@@ -1470,9 +1470,9 @@ function get_forums(
 ) {
     $course_info = api_get_course_info($course_code);
 
-    $table_forums = Database :: get_course_table(TABLE_FORUM);
-    $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
-    $table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
+    $table_forums = Database::get_course_table(TABLE_FORUM);
+    $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
+    $table_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
     // Condition for the session
     $session_id = intval($sessionId) ?: api_get_session_id();
@@ -1527,7 +1527,6 @@ function get_forums(
                     threads.c_id = $course_id AND
                     item_properties.c_id = $course_id
                 GROUP BY threads.forum_id";
-
 
         // Course Admin
         if (api_is_allowed_to_edit()) {

@@ -1446,13 +1446,8 @@ function get_forums(
     $table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
 
     // Condition for the session
-    if (empty($sessionId)) {
-        $session_id = api_get_session_id();
-    } else {
-        $session_id = $sessionId;
-    }
-
-    $sessionIdLink = ($session_id === 0) ? '' : 'AND threads.session_id = item_properties.session_id';
+    $session_id = intval($sessionId) ?: api_get_session_id();
+    $sessionIdLink = $session_id === 0 ? '' : ' AND threads.session_id = item_properties.session_id';
 
     $condition_session = api_get_session_condition(
         $session_id,

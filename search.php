@@ -41,8 +41,8 @@ $diagnosisComplete = $extraFieldValue->get_values_by_handler_and_field_variable(
 
 if ($diagnosisComplete && isset($diagnosisComplete['value']) && $diagnosisComplete['value'] == 1) {
     if (!isset($_GET['result'])) {
-        //header('Location:'.api_get_self().'?result=1');
-        //exit;
+        header('Location:'.api_get_self().'?result=1');
+        exit;
     }
 }
 

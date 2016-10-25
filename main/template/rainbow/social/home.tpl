@@ -4,7 +4,6 @@
     <div class="row">
         <div class="col-md-3">
             {{ social_avatar_block }}
-
             <div class="social-network-menu">
             {{ social_menu_block }}
             </div>
@@ -19,7 +18,7 @@
             {{ social_auto_extend_link }}
         </div>
         <div class="col-md-3">
-        <!-- Block chat list -->    
+            <!-- Block chat list -->
             <div class="chat-friends">
                 <div class="panel-group" id="blocklistFriends" role="tablist" aria-multiselectable="true">
                     <div class="panel panel-default">
@@ -38,34 +37,33 @@
                     </div>
                 </div>
             </div>
-       
-         <!-- Block session list -->
-        {% if sessionList != null %}
-        <div class="panel-group" id="session-block" role="tablist" aria-multiselectable="true">
-            <div class="panel panel-default">
-                <div class="panel-heading" role="tab" id="headingOne">
-                    <h4 class="panel-title">
-                        <a role="button" data-toggle="collapse" data-parent="#session-block" href="#sessionList" aria-expanded="true" aria-controls="sessionList">
-                           {{ "MySessions" | get_lang }}
-                        </a>
-                    </h4>
-                </div>
-                <div id="sessionList" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-                    <div class="panel-body">
-                        <ul class="list-group">
-                            {% for session in sessionList %}
-                            <li id="session_{{ session.id }}" class="list-group-item" style="min-height:65px;">
-                                <img class="img-session" src="{{ session.image }}"/>
-                                <span class="title">{{ session.name }}</span>
-                            </li>
-                            {% endfor %}
-                        </ul>
+
+            <!-- Block session list -->
+            {% if sessionList != null %}
+            <div class="panel-group" id="session-block" role="tablist" aria-multiselectable="true">
+                <div class="panel panel-default">
+                    <div class="panel-heading" role="tab" id="headingOne">
+                        <h4 class="panel-title">
+                            <a role="button" data-toggle="collapse" data-parent="#session-block" href="#sessionList" aria-expanded="true" aria-controls="sessionList">
+                               {{ "MySessions" | get_lang }}
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="sessionList" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                        <div class="panel-body">
+                            <ul class="list-group">
+                                {% for session in sessionList %}
+                                <li id="session_{{ session.id }}" class="list-group-item" style="min-height:65px;">
+                                    <img class="img-session" src="{{ session.image }}"/>
+                                    <span class="title">{{ session.name }}</span>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
                     </div>
                 </div>
-            </div>
-         </div>
-         {% endif %}
-         
+             </div>
+             {% endif %}
         </div>
     </div>
 {% endblock %}

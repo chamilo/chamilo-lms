@@ -38,9 +38,12 @@
                             <a title="{{ "Inbox"|get_lang }}" href="{{ message_url }}">
                                 <em class="fa fa-envelope" aria-hidden="true"></em> {{ "Inbox"|get_lang }}
                             </a>
+                            {% if certificate_url %}
                             <a title="{{ "MyCertificates"|get_lang }}" href="{{ certificate_url }}">
                                 <em class="fa fa-graduation-cap" aria-hidden="true"></em> {{ "MyCertificates"|get_lang }}
                             </a>
+                            {% endif %}
+
                             <a id="logout_button" title="{{ "Logout"|get_lang }}" href="{{ logout_link }}" >
                                 <em class="fa fa-sign-out"></em> {{ "Logout"|get_lang }}
                             </a>

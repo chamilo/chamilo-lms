@@ -300,7 +300,26 @@ Please note that if you (unluckily) upgraded from any of the 1.9 versions to 1.1
     This script is provided without warranty. Please *always* take a backup before you use it.
 <br />
 
-<h3>3.2 Upgrading from Chamilo 1.9.x</h3>
+<h3>3.3 Upgrading from Chamilo 1.9.x</h3>
+
+<p>Chamilo LMS 1.11.x comes with a new database structure in comparison to 1.9,
+as was the case between 1.9 and 1.8.
+Although the upgrade script takes the migration in charge, it might be generating
+a very heavy load on your server during the upgrade, and will change your
+database considerably, preserving the data as well as possible (we have tested
+the procedure many times, but remember this is GNU/GPLv3 and we cannot be held
+responsible for what would happen to your data without professional supervision).
+This is why we *really* recommend you take a full backup of your system before
+you upgrade.</p>
+
+Also note that Chamilo LMS 1.10 unites all language files from the
+main/lang/ directory into one single file by language.
+If you have changed language files directly (instead of
+using the recommended way: sub-languages), you should take a backup copy of
+these changed translations before you upgrade. Sublanguages might also require
+some manual work, but the upgrade procedure will not touch sublanguages directly.
+<br /><br />
+
 <ul>
   <li> make sure you don't have tables from previous versions of Chamilo still hanging around. These can cause the upgrade to fail. In particular, tables from versions 1.8.* could have multiple tables for each course, resulting in many tables with the same prefix. Only tables without prefix or with a "c_" prefix exist in 1.9 and superior versions. Make sure none of these tables persist. Take a backup of your database (just in case) and delete these prefixed tables (drop table ...).</li>
   <li> check that you haven't left any customised stylesheet or image <span class="text-muted">(if you have, make sure you keep a copy on the side*)</span></li>
@@ -335,12 +354,12 @@ to the old ones which will be deprecated shortly (not maintained).</span>
 Do not delete the previous Chamilo installation directory before installing
 the new one. The upgrade process should take care of all unrequired folders.</p>
 
-    <h3>3.2 Upgrading from Chamilo 1.8.x</h3>
-    To upgrade from version of Chamilo prior to 1.9.0, you will need to first upgrade them to 1.9.10.x, then upgrade again (separately) to 1.10.x.
-    You can find the 1.9.10.x packages here: <a href="https://github.com/chamilo/chamilo-lms/releases">https://github.com/chamilo/chamilo-lms/releases</a>
+<h3>3.4 Upgrading from Chamilo 1.8.x</h3>
+To upgrade from version of Chamilo prior to 1.9.0, you will need to first upgrade them to 1.9.10.x, then upgrade again (separately) to 1.10.x.
+You can find the 1.9.10.x packages here: <a href="https://github.com/chamilo/chamilo-lms/releases">https://github.com/chamilo/chamilo-lms/releases</a>
 
-    <p></p>
-<h3>3.5 In both last cases</h3>
+<p></p>
+<h3>3.5 Directories permissions when upgrading from 1.9.x</h3>
 
 The following directories need to be readable, writeable and executable for the web server:
 <ul>

@@ -47,6 +47,65 @@
 <p><i>Note: most #wxyz references are issue numbers you can find in <a href="http://support.chamilo.org/projects/chamilo-18/issues" target="_blank">our public bug tracking system</a>. Some references marked BT#xyz are developments made externally for BeezNest customers and integrated into Chamilo. The details of these tasks cannot be seen for confidentiality reasons, but the code change is public and can be reviewed by anyone.</i></p>
 <p>&nbsp;</p>
 
+    <a name="1.11.2"></a>
+
+    <h1>Chamilo 1.11.2 - , 28th of October 2016</h1>
+    <h3>Release notes - summary</h3>
+    <p>Chamilo 1.11.2 is a minor, bugfix release of the 1.11.x branch, with a few bugfixes on top of 1.11.0.</p>
+    <h3>Release name</h3>
+    <p><a href=""></a> .</p>
+    <h3>Security fixes</h3>
+    <ul>
+        <li>Several security fixes were applied to this version. Please update as soon as possible. You can find details of the vulnerability on <a href="https://support.chamilo.org/projects/chamilo-18/wiki/Security_issues">Chamilo's security page</a></li>
+    </ul>
+    <h3>Possibly breaking changes</h3>
+    <p>None in this version.</p>
+    <h3>Notable new Features</h3>
+    <h4>For end-users, teachers and Chamilo admins</h4>
+    <p>None in this version.</p>
+    <h4>For developers and sysadmins</h4>
+    <ul>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/641c865ad7b6c0623fe2f0c92e946fcbbd2e93de">641c865a</a>) Add configuration block_quiz_mail_notification_general_coach</li>
+    </ul>
+    <h3>Improvements (minor features) and debug</h3>
+    <ul>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/7055a50530d1b5049d03def4248555f6b8b1d191">7055a505</a> - <a href="https://task.beeznest.com/issues/11636">BT#11636</a>) Show participants emails on videoconference admin view</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/a3feab412d34e0254cb60c3f8a02e059479e76f8">a3feab41</a> - <a href="https://task.beeznest.com/issues/11636">BT#11636</a>) Fix show links for videoconference</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/e6887301cbedc0bc1353d95450c7e303c5d74240">e6887301</a>) Restoring missing "database" and "language" notes in installation guide</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/bc319badbff4b425595d815c2b6066f1ec2fb501">bc319bad</a> - <a href="https://task.beeznest.com/issues/11860">BT#11860</a>) Fix teacher can't access LP</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/8f40f7d803dbc595abdebd0c4f76fe7185257bbd">8f40f7d8</a> - <a href="https://task.beeznest.com/issues/11879">BT#11879</a>) Lp build: Load forums as in the forum tool</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/a12383d866b718499f73e79a996a532afc0d6b5c">a12383d8</a>) Add user object in tpl $tplContent->assign('new_user', $user);</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/fe6864713a079c8415261635cf03bce23a75ceb2">fe686471</a> - <a href="https://task.beeznest.com/issues/11890">BT#11890</a>) Add new config hide_my_certificate_link</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/f6a1adb81323fa82a174d1455b886c1577b813e7">f6a1adb8</a>) Add missing fos_group* tables on upgrade from 1.10</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/938c4ed30a5a950348cd0dbf1147c9c91cabf427">938c4ed3</a>) Add missing database changes on upgrade from 1.10 on message.votes column and ticket tables</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/57cfd396830f117506035316bba44567a78babcd">57cfd396</a>) Update upgrade section in installation guide.</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/660c2efb0e9819b4efc98f269f1d8fe2c8fca7a9">660c2efb</a> - <a href="https://task.beeznest.com/issues/11770">BT#11770</a>) If $showInvisibleFiles = false then hide documents</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/3c604d8b7ae700ecc3ecfa190948d312f965213b">3c604d8b</a>) Exercise draggable question type fix from 1.10</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/07db02b7498fa36bb745696fedcdf04881b2c63c">07db02b7</a> - <a href="https://task.beeznest.com/issues/11869">BT#11869</a>) Fix whoisonline page</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/f3f1b6e1dc46450c099b751a8857ff618829c8e1">f3f1b6e1</a>) Fix hide_question_title DB errors</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/0f4c7f8603d9d5f7e7095812913bf85b01bb0d49">0f4c7f86</a> - <a href="https://task.beeznest.com/issues/11859">BT#11859</a>) Fix "Show expected choice in last attempt" option in exercises</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/9795d9f3fa73d22eefc52b9143ef76be401db8fb">9795d9f3</a>) Fix RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT conditions</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/269d392f2c26d124faf8c7c1919dfc97632b0f66">269d392f</a>) Fix visible_to_self query in document.lib.php</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/0ab33541864b5e0e8ac93b2ad2ba5298f258e9fc">0ab33541</a>) Block access to tests and .git via browser in .htaccess</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/e82597613a26dc88f143b36825b3863275c156f2">e8259761</a>) Partially undo change. Report to pdf is available.</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/9e7d2c6c5ee9fba00d4c1f437921a2a2ed64023c">9e7d2c6c</a>) Hide pdf link depending of setting hide_certificate_export_link</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/a0665ba22eab4dde9daf7bf6f68c0dc003fce45c">a0665ba2</a>) Fix migration errors with extra_field table type</li>
+    </ul>
+    <h3>Stylesheets and theming</h3>
+    <p>None in this version.</p>
+    <h3>Web services</h3>
+    <p>None in this version.</p>
+    <h3>Removals</h3>
+    <p>None in this version.</p>
+    <h3>Known issues</h3>
+    <ul>
+        <li>IMS/QTI import/export has minor issues</li>
+        <li>In Internet Explorer 9, learning paths might not show other pages than the first to be opened. We lacked computers with IE9 at the time of release of 1.10.8. Guaranteeing IE9 support will likely require additional services. See <a href="https://support.chamilo.org/issues/8075">the corresponding bug report</a></li>
+        <li>The Xapian search module is broken. We'll fix that soon, but not a lot of people use it</li>
+        <li>Encoding issues when importing accentuated characters from MS-Office-generated .xlsx files (for example when importing exercises). This isn't really a Chamilo issue, but since some users might have issues with that, we've decided to report it to avoid any surprise.</li>
+    </ul>
+
+
     <a name="1.11.0"></a>
 
     <h1>Chamilo 1.11.0 - Lecce, 17th of October 2016</h1>

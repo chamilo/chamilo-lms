@@ -1481,6 +1481,7 @@ function get_forums(
                     $includeGroupsForumSelect
                 ORDER BY forum.forum_order ASC";
 
+
         // Select the number of threads of the forums (only the threads that are visible).
         $sql2 = "SELECT count(*) AS number_of_threads, threads.forum_id
                 FROM $table_threads threads

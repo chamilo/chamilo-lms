@@ -8906,7 +8906,36 @@ class learnpath
         require_once '../forum/forumfunction.inc.php';
         require_once '../forum/forumconfig.inc.php';
 
-        $a_forums = get_forums();
+        $forumCategories = get_forum_categories();
+        $forumsInNoCategory = get_forums_in_category(0);
+        if (!empty($forumsInNoCategory)) {
+            $forumCategories = array_merge(
+                $forumCategories,
+                array(
+                    array(
+                        'cat_id' => 0,
+                        'session_id' => 0,
+                        'visibility' => 1,
+                        'cat_comment' => null,
+                    ),
+                )
+            );
+        }
+
+        $forumList = get_forums();
+        $a_forums = [];
+        foreach ($forumCategories as $forumCategory) {
+            // The forums in this category.
+            $forumsInCategory = get_forums_in_category($forumCategory['cat_id']);
+            if (!empty($forumsInCategory)) {
+                foreach ($forumList as $forum) {
+                    if (isset($forum['forum_category']) && $forum['forum_category'] == $forumCategory['cat_id']) {
+                        $a_forums[] = $forum;
+                    }
+                }
+            }
+        }
+
         $return = '<ul class="lp_resource">';
 
         //First add link

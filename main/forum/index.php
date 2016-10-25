@@ -348,19 +348,6 @@ if (is_array($forumCategories)) {
 
         echo '<div class="forum_display">';
         if (!empty($forumsInCategory)) {
-
-            // Step 4: The interim headers (for the forum).
-            /* echo '<tr class="forum_header">';
-            echo '<td></td>';
-            echo '<td>'.get_lang('Forum').'</td>';
-            echo '<td>'.get_lang('Topics').'</td>';
-            echo '<td>'.get_lang('Posts').'</td>';
-            echo '<td>'.get_lang('LastPosts').'</td>';
-            echo '<td>'.get_lang('Actions').'</td>';
-            echo '</tr>'; */
-
-            // Step 5: We display all the forums in this category.
-
             foreach ($forum_list as $forum) {
                 // Here we clean the whatnew_post_info array a little bit because to display the icon we
                 // test if $whatsnew_post_info[$forum['forum_id']] is empty or not.

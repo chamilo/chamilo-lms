@@ -436,6 +436,7 @@ class UserManager
                 $tplContent->assign('login_name', $loginName);
                 $tplContent->assign('original_password', stripslashes($original_password));
                 $tplContent->assign('mailWebPath', $url);
+                $tplContent->assign('new_user', $user);
 
                 $layoutContent = $tplContent->get_template('mail/content_registration_platform.tpl');
                 $emailBody = $tplContent->fetch($layoutContent);

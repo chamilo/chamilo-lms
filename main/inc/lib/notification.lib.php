@@ -282,7 +282,7 @@ class Notification extends Model
                     // Means that user extra was not set
                     // Then send email now.
                     if ($userSetting === '') {
-                        $userSetting = NOTIFY_MESSAGE_AT_ONCE;
+                        $userSetting = self::NOTIFY_MESSAGE_AT_ONCE;
                     }
                 }
 

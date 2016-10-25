@@ -294,7 +294,7 @@ $(document).ready(function() {
 </script>';
 
 $panel = Display::panel(get_lang('FiliereExplanation'), '', '', '',  '', 'filiere_panel');
-$userForm->addHeader(Display::url(get_lang('Filiere'), '#', ['id'=> 'filiere']).''.$panel);
+$userForm->addHtml(Display::url(get_lang('Filiere'), '#', ['id'=> 'filiere']).''.$panel);
 $fieldsToShow = [
     'statusocial',
     'filiere_user',
@@ -338,7 +338,7 @@ $extra = $extraFieldSession->addElements(
 
 $jqueryExtra .= $extra['jquery_ready_content'];
 $panel = Display::panel(get_lang('DisponibiliteAvantExplanation'), '', '', '',  '', 'dispo_panel');
-$userForm->addHeader(Display::url(get_lang('DisponibiliteAvant'), '#', ['id'=> 'dispo']).''.$panel);
+$userForm->addHtml(Display::url(get_lang('DisponibiliteAvant'), '#', ['id'=> 'dispo']).''.$panel);
 
 $extra = $extraFieldSession->addElements(
     $userForm,
@@ -382,7 +382,7 @@ $extra = $extraField->addElements(
 $jqueryExtra .= $extra['jquery_ready_content'];
 
 $panel = Display::panel(get_lang('DisponibilitePendantMonStageExplanation'), '', '', '',  '', 'dispo_pendant_panel');
-$userForm->addHeader(Display::url(get_lang('DisponibilitePendantMonStage'), '#', ['id'=> 'dispo_pendant']).''.$panel);
+$userForm->addHtml(Display::url(get_lang('DisponibilitePendantMonStage'), '#', ['id'=> 'dispo_pendant']).''.$panel);
 
 $fieldsToShow = [
     'datedebutstage',
@@ -408,7 +408,7 @@ $extra = $extraField->addElements(
 $jqueryExtra .= $extra['jquery_ready_content'];
 
 $panel = Display::panel(get_lang('ThemesObjectifsExplanation'), '', '', '',  '', 'themes_panel');
-$userForm->addHeader(Display::url(get_lang('ThemesObjectifs'), '#', ['id'=> 'themes']).''.$panel);
+$userForm->addHtml(Display::url(get_lang('ThemesObjectifs'), '#', ['id'=> 'themes']).''.$panel);
 
 $fieldsToShow = [
     'domaine',
@@ -449,7 +449,7 @@ $extra = $extraFieldSession->addElements(
 $jqueryExtra .= $extra['jquery_ready_content'];
 
 $panel = Display::panel(get_lang('NiveauLangueExplanation'), '', '', '',  '', 'niveau_panel');
-$userForm->addHeader(Display::url(get_lang('NiveauLangue'), '#', ['id'=> 'niveau']).''.$panel);
+$userForm->addHtml(Display::url(get_lang('NiveauLangue'), '#', ['id'=> 'niveau']).''.$panel);
 
 $fieldsToShow = [
     //'competenceniveau'
@@ -477,7 +477,7 @@ $extra = $extraFieldSession->addElements(
 $jqueryExtra .= $extra['jquery_ready_content'];
 
 $panel = Display::panel(get_lang('ObjectifsApprentissageExplanation'), '', '', '',  '', 'objectifs_panel');
-$userForm->addHeader(Display::url(get_lang('ObjectifsApprentissage'), '#', ['id'=> 'objectifs']).''.$panel);
+$userForm->addHtml(Display::url(get_lang('ObjectifsApprentissage'), '#', ['id'=> 'objectifs']).''.$panel);
 
 $fieldsToShow = [
     'objectif_apprentissage'
@@ -500,7 +500,7 @@ $extra = $extraField->addElements(
 $jqueryExtra .= $extra['jquery_ready_content'];
 
 $panel = Display::panel(get_lang('MethodeTravailExplanation'), '', '', '',  '', 'methode_panel');
-$userForm->addHeader(Display::url(get_lang('MethodeTravail'), '#', ['id'=> 'methode']).''.$panel);
+$userForm->addHtml(Display::url(get_lang('MethodeTravail'), '#', ['id'=> 'methode']).''.$panel);
 
 $fieldsToShow = [
     'methode_de_travaille',

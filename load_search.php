@@ -10,6 +10,53 @@ require_once 'main/inc/global.inc.php';
 $htmlHeadXtra[] = '<link  href="'. api_get_path(WEB_PATH) .'web/assets/cropper/dist/cropper.min.css" rel="stylesheet">';
 $htmlHeadXtra[] = '<script src="'. api_get_path(WEB_PATH) .'web/assets/cropper/dist/cropper.min.js"></script>';
 
+$htmlHeadXtra[] ='<script>		
+$(document).ready(function() {		
+    /*$("#filiere_panel").hide();			
+    $("#dispo_panel").hide();    		
+    $("#dispo_pendant_panel").hide();		
+    $("#niveau_panel").hide();		
+    $("#methode_panel").hide();		
+    $("#themes_panel").hide();    		
+    $("#objectifs_panel").hide();*/	
+            
+    $("#filiere").on("click", function() {		
+        $("#filiere_panel").toggle();		
+        return false;		
+    });		
+    
+    $("#dispo").on("click", function() {		
+        $("#dispo_panel").toggle();		
+        return false;		
+    });		
+    
+    $("#dispo_pendant").on("click", function() {		
+        $("#dispo_pendant_panel").toggle();		
+        return false;		
+    });			
+    
+    $("#niveau").on("click", function() {		
+        $("#niveau_panel").toggle();		
+        return false;		
+    });		
+    
+    $("#methode").on("click", function() {		
+        $("#methode_panel").toggle();		
+        return false;		
+    });		
+    
+    $("#themes").on("click", function() {		
+        $("#themes_panel").toggle();		
+        return false;		
+    });		
+    
+    $("#objectifs").on("click", function() {		
+        $("#objectifs_panel").toggle();		
+        return false;		
+    });		
+});		
+</script>';
+
 api_block_anonymous_users();
 $allowToSee = api_is_drh() || api_is_student_boss() || api_is_platform_admin();
 
@@ -121,7 +168,7 @@ $extraFieldUser = new ExtraField('user');
 
 $userForm = new FormValidator('user_form', 'post', api_get_self());
 $panel = Display::panel(get_lang('FiliereExplanation'), '', '', '',  '', 'filiere_panel');
-$userForm->addHeader(Display::url(get_lang('Filiere'), '#', ['id'=> 'filiere']).''.$panel);
+$userForm->addHtml(Display::url(get_lang('Filiere'), '#', ['id'=> 'filiere']).''.$panel);
 $fieldsToShow = [
     'statusocial',
     'filiere_user',
@@ -148,7 +195,7 @@ $extra = $extraFieldUser->addElements(
 );
 
 $panel = Display::panel(get_lang('DisponibilitePendantMonStageExplanation'), '', '', '',  '', 'dispo_pendant_panel');
-$userForm->addHeader(Display::url(get_lang('DisponibilitePendantMonStage'), '#', ['id'=> 'dispo_pendant']).''.$panel);
+$userForm->addHtml(Display::url(get_lang('DisponibilitePendantMonStage'), '#', ['id'=> 'dispo_pendant']).''.$panel);
 
 $fieldsToShow = [
     'datedebutstage',
@@ -176,7 +223,7 @@ $extra = $extraFieldUser->addElements(
 
 
 $panel = Display::panel(get_lang('ObjectifsApprentissageExplanation'), '', '', '',  '', 'objectifs_panel');
-$userForm->addHeader(Display::url(get_lang('ObjectifsApprentissage'), '#', ['id'=> 'objectifs']).''.$panel);
+$userForm->addHtml(Display::url(get_lang('ObjectifsApprentissage'), '#', ['id'=> 'objectifs']).''.$panel);
 
 $fieldsToShow = [
     'objectif_apprentissage'
@@ -201,7 +248,7 @@ $extra = $extraFieldUser->addElements(
 
 
 $panel = Display::panel(get_lang('MethodeTravailExplanation'), '', '', '',  '', 'methode_panel');
-$userForm->addHeader(Display::url(get_lang('MethodeTravail'), '#', ['id'=> 'methode']).''.$panel);
+$userForm->addHtml(Display::url(get_lang('MethodeTravail'), '#', ['id'=> 'methode']).''.$panel);
 
 $fieldsToShow = [
     'methode_de_travaille',

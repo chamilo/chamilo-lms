@@ -670,6 +670,8 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
         }
     }
 
+    /*
+     * Ofaj
     $language = api_get_interface_language();
     $language = api_get_language_id($language);
     $term_preview = LegalManager::get_last_condition($language);
@@ -702,7 +704,7 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
     } else {
         $preview = LegalManager::show_last_condition($term_preview);
         $form->addElement('label', null, $preview);
-    }
+    }*/
 }
 
 $form->addCheckBox('extra_platformuseconditions', null, get_lang('PlatformUseConditions'));

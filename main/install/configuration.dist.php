@@ -251,3 +251,5 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 //$_configuration['announcements_hide_send_to_hrm_users'] = true;
 // Hide certificate link in index/userportal pages
 //$_configuration['hide_my_certificate_link'] = false;
+// Send only quiz answer notifications to course coaches and not general coach
+//$_configuration['block_quiz_mail_notification_general_coach'] = false;

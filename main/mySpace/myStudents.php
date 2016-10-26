@@ -761,8 +761,13 @@ if (!empty($student_id)) {
                             $scoretotal_display
                         );
 
+                        $extraParam = '';
+                        if (api_is_student_boss()) {
+                            $extraParam = '&log_as_user='.$student_id;
+                        }
+
                         echo '<tr>
-                        <td ><a href="' .$courseInfoItem['course_public_url'] .'?id_session=' . $sId . '">'.
+                        <td ><a href="' .$courseInfoItem['course_public_url'] .'?id_session=' . $sId . $extraParam.'">'.
                             $courseInfoItem['title'].'</a></td>
                         <td >'.$time_spent_on_course .'</td>
                         <td >'.$progress.'</td>

@@ -1101,6 +1101,7 @@ $is_courseCoach = false; //course coach
 $is_courseAdmin = false;
 $is_courseTutor = false;
 $is_courseMember = false;
+$bossHasAccess = false;
 
 if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
     if (isset($_cid) && $_cid) {
@@ -1207,6 +1208,24 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
             $is_courseAdmin = (bool)($cuData['status'] == 1);
             $is_courseTutor = (bool)($cuData['is_tutor'] == 1);
             $is_courseMember = true;
+        }
+
+        // Ofaj - student boss can access course if he follows the user
+        if (isset($_user) && isset($_user['status']) && $_user['status'] == STUDENT_BOSS) {
+            if (isset($_REQUEST['log_as_user'])) {
+                $isBoss = UserManager::userIsBossOfStudent($_user['user_id'], $_REQUEST['log_as_user']);
+
+                $isUserFollowedInCourse = CourseManager::is_user_subscribed_in_course(
+                    $_REQUEST['log_as_user'],
+                    $_course['code'],
+                    0
+                );
+
+                if ($isBoss && $isUserFollowedInCourse) {
+                    $is_courseMember = true;
+                    $bossHasAccess = true;
+                }
+            }
         }
 
         // We are in a session course? Check session permissions
@@ -1345,7 +1364,6 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
     $is_allowed_in_course = false;
 
     if (isset($_course) && isset($_course['visibility'])) {
-
         switch ($_course['visibility']) {
             case COURSE_VISIBILITY_OPEN_WORLD: //3
                 $is_allowed_in_course = true;
@@ -1357,7 +1375,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                     $courseCode,
                     $session_id
                 );
-                if (isset($user_id) && ($is_platformAdmin || $isUserSubscribedInCourse === true) && !api_is_anonymous($user_id)) {
+                if (isset($user_id) && ($is_platformAdmin || $isUserSubscribedInCourse === true || $bossHasAccess) && !api_is_anonymous($user_id)) {
                     $is_allowed_in_course = true;
                 }
                 break;

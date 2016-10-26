@@ -129,8 +129,7 @@ class GradeModel extends Model
             $form->addElement('hidden', 'components['.$i.'][id]', null);
 
             $template_percentage =
-            '<div id=' . $i . ' style="display: '.(($i<=$nr_items)?'inline':'none').';" class="form-group">
-                <p>
+            '<div id=' . $i . ' style="display: '.(($i<=$nr_items)?'inline':'none').';" class="form-group">                
                 <label for="" class="col-sm-2 control-label">
                     {label}
                 </label>
@@ -150,7 +149,7 @@ class GradeModel extends Model
             <a href="javascript:minItem(' . ($counter) . ')">
                 '.Display::return_icon('delete.png', get_lang('Delete'), ['id' => 'min-' . ($counter), 'style' => 'display: '.(($counter>=$nr_items) ? 'inline':'none') ]).'
             </a>
-            </div></p></div>';
+            </div></div>';
             $renderer->setElementTemplate($template_title, 'components['.$i.'][title]');
             $renderer->setElementTemplate($template_percentage, 'components['.$i.'][percentage]');
             $renderer->setElementTemplate($template_acronym, 'components['.$i.'][acronym]');
@@ -161,7 +160,6 @@ class GradeModel extends Model
                 $form->addRule('components['.$i.'][title]', get_lang('ThisFieldIsRequired'), 'required');
             }
             $form->addRule('components['.$i.'][percentage]', get_lang('OnlyNumbers'), 'numeric');
-
             $form->addRule(array('components['.$i.'][percentage]', 'maxvalue'), get_lang('Over100'), 'compare', '<=');
             $form->addRule(array('components['.$i.'][percentage]', 'minvalue'), get_lang('UnderMin'), 'compare', '>=');
 

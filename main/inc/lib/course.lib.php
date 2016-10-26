@@ -6228,7 +6228,7 @@ class CourseManager
         $sql = "SELECT count(e.iid) count 
                 FROM $table c INNER JOIN $tableExercise e
                 ON (c.id = e.c_id)
-                WHERE visibility IN (".implode(',', $visibility).")";
+                WHERE e.active <> -1 AND visibility IN (".implode(',', $visibility).")";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
 

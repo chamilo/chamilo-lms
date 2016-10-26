@@ -13,7 +13,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 
 if (api_get_setting('gradebook_enable_grade_model') != 'true') {
-    api_not_allowed();
+    api_not_allowed(true);
 }
 
 //Add the JS needed to use the jqgrid
@@ -38,8 +38,8 @@ if ($action === 'add') {
 }
 
 $htmlHeadXtra[]= '<script>
-
 function plusItem(item) {
+    console.log(item);
     if (item != 1) {
 		document.getElementById(item).style.display = "inline";
     	document.getElementById("plus-"+item).style.display = "none";
@@ -69,7 +69,6 @@ function minItem(item) {
 }
 </script>';
 
-// The header.
 Display::display_header();
 
 //jqgrid will use this URL to do the selects
@@ -113,10 +112,10 @@ $extra_params['height'] = 'auto';
 
 //With this function we can add actions to the jgrid (edit, delete, etc)
 $action_links = 'function action_formatter(cellvalue, options, rowObject) {
-                         return \'<a href="?action=edit&id=\'+options.rowId+\'">'.Display::return_icon('edit.png',get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>'.
-                         '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="?sec_token='.$token.'&action=delete&id=\'+options.rowId+\'">'.Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>'.
-                         '\';
-                 }';
+     return \'<a href="?action=edit&id=\'+options.rowId+\'">'.Display::return_icon('edit.png',get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>'.
+     '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="?sec_token='.$token.'&action=delete&id=\'+options.rowId+\'">'.Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>'.
+     '\';
+}';
 ?>
 <script>
 $(function() {

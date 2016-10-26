@@ -83,8 +83,7 @@ class GradeModel extends Model
         $form->addElement('header', $header);
         $id = isset($_GET['id']) ? intval($_GET['id']) : '';
         $form->addElement('hidden', 'id', $id);
-
-        $form->addElement('text', 'name', get_lang('Name'), array('size' => '70'));
+        $form->addText('name', get_lang('Name'));
         $form->addHtmlEditor(
             'description',
             get_lang('Description'),
@@ -97,14 +96,13 @@ class GradeModel extends Model
             )
         );
 
-        $form->addElement('label', get_lang('Components'));
+        $form->addLabel(get_lang('Components'), '');
 
         // Get components
         $nr_items = 2;
         $max = 10;
 
         // Setting the defaults
-
         $defaults = $this->get($id);
         if ($defaults) {
             $components = $this->get_components($defaults['id']);
@@ -112,7 +110,7 @@ class GradeModel extends Model
 
         if ($action == 'edit') {
             if (!empty($components)) {
-                $nr_items = count($components) -1;
+                $nr_items = count($components);
             }
         }
 
@@ -122,6 +120,7 @@ class GradeModel extends Model
 
         $component_array = array();
 
+
         for ($i = 0; $i <= $max; $i++) {
             $counter = $i;
             $form->addElement('text', 'components['.$i.'][percentage]', null);
@@ -130,10 +129,12 @@ class GradeModel extends Model
             $form->addElement('hidden', 'components['.$i.'][id]', null);
 
             $template_percentage =
-            '<div id=' . $i . ' style="display: '.(($i<=$nr_items)?'inline':'none').';" class="control-group">
+            '<div id=' . $i . ' style="display: '.(($i<=$nr_items)?'inline':'none').';" class="form-group">
                 <p>
-                <label class="control-label">{label}</label>
-                <div class="controls">
+                <label for="" class="col-sm-2 control-label">
+                    {label}
+                </label>
+                <div class="col-sm-8">
                     <!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->
                     {element} <!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --> % = ';
 

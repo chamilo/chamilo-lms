@@ -549,11 +549,17 @@ legend{
     padding-right: 10px;
     padding-top: 5px;
 }
+#carousel-announcement .carousel-indicators li{
+    border: 1px solid #162A83;
+}
 @media (max-width: 480px) {
     .item-menu{
         width: 100%;
         text-align: center;
     }
+    #carousel-announcement{
+        min-height: auto;
+    }    
 }
 
 .required:before {

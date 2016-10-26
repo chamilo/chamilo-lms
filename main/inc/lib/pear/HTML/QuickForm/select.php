@@ -78,8 +78,13 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
             if (!empty($attributes['class'])) {
                 $oldClass = $attributes['class'];
             }
+
             $attributes['class'] = $oldClass . ' selectpicker show-tick form-control';
             $attributes['data-live-search'] = 'true';
+            // Ofaj
+            if (isset($attributes['disable_select_effect']) && $attributes['disable_select_effect']) {
+                $attributes['class'] = 'form-control';
+            }
 
             if (isset($attributes['placeholder'])) {
                 $addBlank =  $attributes['placeholder'];

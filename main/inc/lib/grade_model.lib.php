@@ -79,11 +79,10 @@ class GradeModel extends Model
             $header = get_lang('Modify');
         }
 
-        $form->addElement('header', $header);
+        $form->addHeader($header);
         $id = isset($_GET['id']) ? intval($_GET['id']) : '';
         $form->addElement('hidden', 'id', $id);
-
-        $form->addElement('text', 'name', get_lang('Name'), array('size' => '70'));
+        $form->addText('name', get_lang('Name'));
         $form->addHtmlEditor(
             'description',
             get_lang('Description'),
@@ -103,14 +102,14 @@ class GradeModel extends Model
         $max = 10;
 
         // Setting the defaults
-
         $defaults = $this->get($id);
-
-        $components = $this->get_components($defaults['id']);
+        if ($defaults) {
+            $components = $this->get_components($defaults['id']);
+        }
 
         if ($action == 'edit') {
             if (!empty($components)) {
-                $nr_items = count($components) -1;
+                $nr_items = count($components);
             }
         }
 
@@ -123,15 +122,16 @@ class GradeModel extends Model
         for ($i = 0; $i <= $max; $i++) {
             $counter = $i;
             $form->addElement('text', 'components['.$i.'][percentage]', null);
-            $form->addElement('text', 'components['.$i.'][acronym]',    null);
-            $form->addElement('text', 'components['.$i.'][title]',      null);
-            $form->addElement('hidden', 'components['.$i.'][id]',       null);
+            $form->addElement('text', 'components['.$i.'][acronym]', null);
+            $form->addElement('text', 'components['.$i.'][title]', null);
+            $form->addElement('hidden', 'components['.$i.'][id]', null);
 
-             $template_percentage =
-            '<div id=' . $i . ' style="display: '.(($i<=$nr_items)?'inline':'none').';" class="control-group">
-                <p>
-                <label class="control-label">{label}</label>
-                <div class="controls">
+            $template_percentage =
+            '<div id=' . $i . ' style="display: '.(($i<=$nr_items)?'inline':'none').';" class="form-group">                
+                <label for="" class="col-sm-2 control-label">
+                    {label}
+                </label>
+                <div class="col-sm-8">
                     <!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->
                     {element} <!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --> % = ';
 
@@ -142,12 +142,12 @@ class GradeModel extends Model
             $template_title =
             '&nbsp{element} <!-- BEGIN error --> <span class="form_error">{error}</span><!-- END error -->
              <a href="javascript:plusItem(' . ($counter+1) . ')">
-                <img style="display: '.(($counter>=$nr_items)?'inline':'none').';" id="plus-' . ($counter+1) . '" src="'.Display::return_icon('add.png').'" alt="'.get_lang('Add').'" title="'.get_lang('Add').'">
+                '.Display::return_icon('add.png', get_lang('Add'), ['id' => 'plus-' . ($counter+1), 'style' => 'display: '.(($counter>=$nr_items) ? 'inline':'none') ]).'
             </a>
             <a href="javascript:minItem(' . ($counter) . ')">
-                <img style="display: '.(($counter>=$nr_items)?'inline':'none').';" id="min-' . $counter . '" src="'.Display::return_icon('delete.png').'" alt="'.get_lang('Delete').'" title="'.get_lang('Delete').'">
+                '.Display::return_icon('delete.png', get_lang('Delete'), ['id' => 'min-' . ($counter), 'style' => 'display: '.(($counter>=$nr_items) ? 'inline':'none') ]).'
             </a>
-            </div></p></div>';
+            </div></div>';
 
             $renderer->setElementTemplate($template_title, 'components['.$i.'][title]');
             $renderer->setElementTemplate($template_percentage, 'components['.$i.'][percentage]');
@@ -155,8 +155,8 @@ class GradeModel extends Model
 
             if ($i == 0) {
                 $form->addRule('components['.$i.'][percentage]', get_lang('ThisFieldIsRequired'), 'required');
-                $form->addRule('components['.$i.'][title]', get_lang('ThisFieldIsRequired'), 'required');
                 $form->addRule('components['.$i.'][acronym]', get_lang('ThisFieldIsRequired'), 'required');
+                $form->addRule('components['.$i.'][title]', get_lang('ThisFieldIsRequired'), 'required');
             }
             $form->addRule('components['.$i.'][percentage]', get_lang('OnlyNumbers'), 'numeric');
 
@@ -195,6 +195,10 @@ class GradeModel extends Model
 		return $form;
     }
 
+    /**
+     * @param $id
+     * @return array|null
+     */
     public function get_components($id)
     {
         $obj = new GradeModelComponents();
@@ -204,6 +208,11 @@ class GradeModel extends Model
         return null;
     }
 
+    /**
+     * @param array $params
+     * @param bool $show_query
+     * @return bool
+     */
     public function save($params, $show_query = false)
     {
 	    $id = parent::save($params, $show_query);
@@ -239,15 +248,22 @@ class GradeModel extends Model
                 }
             }
         }
-        //$params['components']
     }
 
+    /**
+     * @param int $id
+     */
     public function delete($id)
     {
 	    parent::delete($id);
-	    //event_system(LOG_CAREER_DELETE, LOG_CAREER_ID, $id, api_get_utc_datetime(), api_get_user_id());
     }
 
+    /**
+     * @param $form
+     * @param string $name
+     * @param null $default_value
+     * @return bool
+     */
     public function fill_grade_model_select_in_form(&$form, $name = 'gradebook_model_id', $default_value = null)
     {
         if (api_get_setting('gradebook_enable_grade_model') == 'false') {
@@ -290,14 +306,24 @@ class GradeModelComponents extends Model
     public $table;
     public $columns = array('id', 'title', 'percentage', 'acronym', 'grade_model_id');
 
+    /**
+     * GradeModelComponents constructor.
+     */
 	public function __construct()
     {
+        parent::__construct();
         $this->table =  Database::get_main_table(TABLE_GRADE_MODEL_COMPONENTS);
 	}
 
+    /**
+     * @param array $params
+     * @param bool $show_query
+     * @return bool
+     */
     public function save($params, $show_query = false)
     {
 	    $id = parent::save($params, $show_query);
+
         return $id;
     }
 }

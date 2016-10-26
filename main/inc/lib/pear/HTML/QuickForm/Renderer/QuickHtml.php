@@ -36,9 +36,8 @@
  * @version     Release: 3.2.11
  * @since       3.1.1
  */
-class HTML_QuickForm_Renderer_QuickHtml extends HTML_QuickForm_Renderer_Default {
-    // {{{ properties
-
+class HTML_QuickForm_Renderer_QuickHtml extends HTML_QuickForm_Renderer_Default
+{
     /**
      * The array of rendered elements
      * @var array
@@ -60,9 +59,6 @@ class HTML_QuickForm_Renderer_QuickHtml extends HTML_QuickForm_Renderer_Default 
         // The default templates aren't used for this renderer
         $this->clearAllTemplates();
     } // end constructor
-
-    // }}}
-    // {{{ toHtml()
 
     /**
      * returns the HTML generated for the form
@@ -86,9 +82,6 @@ class HTML_QuickForm_Renderer_QuickHtml extends HTML_QuickForm_Renderer_Default 
         $this->_html = str_replace('</form>', $data . "\n</form>", $this->_html);
         return $this->_html;
     } // end func toHtml
-
-    // }}}
-    // {{{ elementToHtml()
 
     /**
      * Gets the html for an element and marks it as rendered.
@@ -132,9 +125,6 @@ class HTML_QuickForm_Renderer_QuickHtml extends HTML_QuickForm_Renderer_Default 
         }
     } // end func elementToHtml
 
-    // }}}
-    // {{{ renderElement()
-
     /**
      * Gets the html for an element and adds it to the array by calling
      * parent::renderElement()
@@ -160,9 +150,6 @@ class HTML_QuickForm_Renderer_QuickHtml extends HTML_QuickForm_Renderer_Default 
         }
         $this->_html = '';
     } // end func renderElement
-
-    // }}}
-    // {{{ renderHidden()
 
     /**
      * Gets the html for a hidden element and adds it to the array.

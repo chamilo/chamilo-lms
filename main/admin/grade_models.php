@@ -10,10 +10,10 @@ require_once '../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
 
-api_protect_admin_script();
+api_protect_admin_script(true);
 
 if (api_get_setting('gradebook_enable_grade_model') != 'true') {
-    api_not_allowed();
+    api_not_allowed(true);
 }
 
 //Add the JS needed to use the jqgrid
@@ -38,9 +38,8 @@ if ($action == 'add') {
 }
 
 $htmlHeadXtra[]= '<script>
-
 function plusItem(item) {
-        if (item != 1) {
+    if (item != 1) {
 		document.getElementById(item).style.display = "inline";
     	document.getElementById("plus-"+item).style.display = "none";
    	 	document.getElementById("min-"+(item-1)).style.display = "none";
@@ -48,8 +47,8 @@ function plusItem(item) {
    	 	document.getElementById("plus-"+(item+1)).style.display = "inline";
 	 	//document.getElementById("txta-"+(item)).value = "100";
 	 	//document.getElementById("txta-"+(item-1)).value = "";
-        }
-  }
+    }
+}
 
 function minItem(item) {
     if (item != 1) {
@@ -70,17 +69,39 @@ function minItem(item) {
 Display::display_header($tool_name);
 
 //jqgrid will use this URL to do the selects
-$url            = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_grade_models';
+$url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_grade_models';
 
 //The order is important you need to check the the $column variable in the model.ajax.php file
-$columns        = array(get_lang('Name'), get_lang('Description'), get_lang('Actions'));
+$columns = array(
+    get_lang('Name'),
+    get_lang('Description'),
+    get_lang('Actions'),
+);
 
 //Column config
-$column_model   = array(
-                        array('name'=>'name',           'index'=>'name',        'width'=>'80',   'align'=>'left'),
-                        array('name'=>'description',    'index'=>'description', 'width'=>'500',  'align'=>'left','sortable'=>'false'),
-                        array('name'=>'actions',        'index'=>'actions',     'width'=>'100',  'align'=>'left','formatter'=>'action_formatter','sortable'=>'false')
-                       );
+$column_model = array(
+    array(
+        'name' => 'name',
+        'index' => 'name',
+        'width' => '80',
+        'align' => 'left',
+    ),
+    array(
+        'name' => 'description',
+        'index' => 'description',
+        'width' => '500',
+        'align' => 'left',
+        'sortable' => 'false',
+    ),
+    array(
+        'name' => 'actions',
+        'index' => 'actions',
+        'width' => '100',
+        'align' => 'left',
+        'formatter' => 'action_formatter',
+        'sortable' => 'false',
+    ),
+);
 //Autowidth
 $extra_params['autowidth'] = 'true';
 //height auto
@@ -88,16 +109,25 @@ $extra_params['height'] = 'auto';
 
 //With this function we can add actions to the jgrid (edit, delete, etc)
 $action_links = 'function action_formatter(cellvalue, options, rowObject) {
-                         return \'<a href="?action=edit&id=\'+options.rowId+\'">'.Display::return_icon('edit.png',get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>'.
-                         '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="?sec_token='.$token.'&action=delete&id=\'+options.rowId+\'">'.Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>'.
-                         '\';
-                 }';
+     return \'<a href="?action=edit&id=\'+options.rowId+\'">'.Display::return_icon('edit.png',get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>'.
+     '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="?sec_token='.$token.'&action=delete&id=\'+options.rowId+\'">'.Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>'.
+     '\';
+}';
 ?>
 <script>
 $(function() {
 <?php
     // grid definition see the $obj->display() function
-    echo Display::grid_js('grade_model',  $url, $columns, $column_model, $extra_params, array(), $action_links,true);
+    echo Display::grid_js(
+        'grade_model',
+        $url,
+        $columns,
+        $column_model,
+        $extra_params,
+        array(),
+        $action_links,
+        true
+    );
 ?>
 });
 </script>
@@ -168,4 +198,5 @@ switch ($action) {
         $obj->display();
         break;
 }
+echo '<script> $(document).ready(function(){ $("input").removeClass("form-control"); }); </script>';
 Display :: display_footer();

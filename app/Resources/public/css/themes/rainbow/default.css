@@ -60,6 +60,14 @@ a:focus {
     background: #162A83;
     display: inline-block;
 }
+#sessionList .list-group .title{
+    font-size: 12px;
+    font-weight: normal;
+    display: inline !important;
+}
+#session-block .list-group .list-group-item{
+    float: left;
+}
 .title{
     position: static;
     font-size: 25px;

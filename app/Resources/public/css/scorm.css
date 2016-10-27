@@ -224,7 +224,7 @@ body{
    color: #000;
 }
 .scorm_completed .item {
-  background:url("../../main/img/scorm/scorm_completed.png") no-repeat left center;
+  background:url("../../main/img/scorm/scorm_completed.png") no-repeat 5px center;
 }
 .scorm_completed .item a{
   color: #000;
@@ -240,7 +240,7 @@ body{
   color: #009AB8;
 }
 .scorm_highlight.scorm_completed .item{
-  background:url("../../main/img/scorm/scorm_current.png") no-repeat left center !important;
+  background:url("../../main/img/scorm/scorm_current.png") no-repeat 5px center !important;
 }
 .scorm_highlight.scorm_failed .item{
     background:url("../../main/img/scorm/scorm_failed.png") no-repeat left center !important;

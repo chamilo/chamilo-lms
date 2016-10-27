@@ -265,9 +265,11 @@ class Certificate extends Model
         $path_certificate
     ) {
         $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
+        $now = api_get_utc_datetime();
         if (!UserManager::is_user_certified($cat_id, $user_id)) {
             $sql = 'UPDATE '.$table_certificate.' SET 
-                        path_certificate="'.Database::escape_string($path_certificate).'"
+                        path_certificate="'.Database::escape_string($path_certificate).'",
+                        created_at = "'.$now.'"
                     WHERE cat_id="'.intval($cat_id).'" AND user_id="'.intval($user_id).'" ';
             Database::query($sql);
         }

@@ -5242,13 +5242,14 @@ div#chat-remote-video video {
   width: 60%;
 }
 .items-course{
-  padding: 10px;
-  border: 1px solid #e6e6e6;
-  border-radius: 5px;
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-  min-height: 330px;
-  margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #e6e6e6;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    min-height: 330px;
+    margin-bottom: 10px;
+    height: 330px;
 }
 .items-course .items-course-info .title{
   font-size: 14px;

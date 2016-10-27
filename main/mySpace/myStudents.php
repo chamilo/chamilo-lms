@@ -1082,6 +1082,12 @@ if (!empty($student_id)) {
 
         $result_exercices = Database::query($sql);
         $i = 0;
+
+        $extraParam = '';
+        if (api_is_student_boss()) {
+            $extraParam = '&log_as_user='.$student_id;
+        }
+
         if (Database :: num_rows($result_exercices) > 0) {
             while ($exercices = Database :: fetch_array($result_exercices)) {
                 $exercise_id = intval($exercices['id']);
@@ -1161,7 +1167,7 @@ if (!empty($student_id)) {
                 if (Database :: num_rows($result_last_attempt) > 0) {
                     $id_last_attempt = Database :: result($result_last_attempt, 0, 0);
                     if ($count_attempts > 0)
-                        echo '<a href="../exercise/exercise_show.php?id=' . $id_last_attempt . '&cidReq='.$course_code.'&session_id='.$sessionId.'&student='.$student_id.'&origin='.(empty($origin)?'tracking':$origin).'">
+                        echo '<a href="../exercise/exercise_show.php?'.$extraParam.'&id=' . $id_last_attempt . '&cidReq='.$course_code.'&session_id='.$sessionId.'&student='.$student_id.'&origin='.(empty($origin)?'tracking':$origin).'">
                         '.Display::return_icon('quiz.gif').'
                      </a>';
                 }

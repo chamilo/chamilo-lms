@@ -1191,7 +1191,6 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
     }
 
     if (isset($user_id) && $user_id && isset($_real_cid) && $_real_cid) {
-
         //Check if user is subscribed in a course
         $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $sql = "SELECT * FROM $course_user_table
@@ -1214,11 +1213,10 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
         if (isset($_user) && isset($_user['status']) && $_user['status'] == STUDENT_BOSS) {
             if (isset($_REQUEST['log_as_user'])) {
                 $isBoss = UserManager::userIsBossOfStudent($_user['user_id'], $_REQUEST['log_as_user']);
-
                 $isUserFollowedInCourse = CourseManager::is_user_subscribed_in_course(
                     $_REQUEST['log_as_user'],
                     $_course['code'],
-                    0
+                    false
                 );
 
                 if ($isBoss && $isUserFollowedInCourse) {
@@ -1255,19 +1253,22 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
 
                 // Am I a session admin?
                 if (isset($row) && isset($row[0]) && $row[0]['session_admin_id'] == $user_id) {
-                    $is_courseMember     = false;
-                    $is_courseTutor      = false;
-                    $is_courseAdmin      = false;
-                    $is_courseCoach      = false;
-                    $is_sessionAdmin     = true;
+                    $is_courseMember = false;
+                    $is_courseTutor = false;
+                    $is_courseAdmin = false;
+                    $is_courseCoach = false;
+                    $is_sessionAdmin = true;
                 } else {
                     // Am I a session coach for this session?
-                    $sql = "SELECT session.id, session.id_coach FROM $tbl_session session
+                    $sql = "SELECT session.id, session.id_coach 
+                            FROM $tbl_session session
                             INNER JOIN $tbl_session_course sc
                             ON sc.session_id = session.id
-                            WHERE session.id = $session_id
-                            AND session.id_coach = $user_id
-                            AND sc.c_id = '$_real_cid'";
+                            WHERE 
+                                session.id = $session_id AND 
+                                session.id_coach = $user_id AND 
+                                sc.c_id = '$_real_cid'
+                            ";
                     $result = Database::query($sql);
 
                     if (Database::num_rows($result)) {
@@ -1328,6 +1329,25 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                             $is_courseAdmin = false;
                             $is_sessionAdmin = false;
                             $is_courseCoach = false;
+                        }
+
+                        // Boss validation
+                        if (isset($_REQUEST['log_as_user'])) {
+                            $isBoss = UserManager::userIsBossOfStudent($user_id, $_REQUEST['log_as_user']);
+                            $isUserFollowedInCourse = CourseManager::is_user_subscribed_in_course(
+                                $_REQUEST['log_as_user'],
+                                $_course['code'],
+                                true,
+                                $session_id
+                            );
+
+                            if ($isBoss && $isUserFollowedInCourse) {
+                                $is_courseMember = true;
+                                $is_courseTutor = false;
+                                $is_courseAdmin = false;
+                                $is_courseCoach = false;
+                                $is_sessionAdmin = false;
+                            }
                         }
                     }
                 }

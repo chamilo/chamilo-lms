@@ -1347,6 +1347,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                                 $is_courseAdmin = false;
                                 $is_courseCoach = false;
                                 $is_sessionAdmin = false;
+                                $bossHasAccess = true;
                             }
                         }
                     }

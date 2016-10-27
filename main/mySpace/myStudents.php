@@ -676,7 +676,7 @@ if (!empty($student_id)) {
 
             // Courses
             echo '<h3>'.$title.'</h3>';
-            echo '<div class="table-respondive">';
+            echo '<div class="table-responsive">';
             echo '<table class="table table-striped table-hover courses-tracking">';
             echo '<thead>';
             echo '<tr>

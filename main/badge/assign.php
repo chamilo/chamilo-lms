@@ -115,6 +115,8 @@ $form->addRule('skill', get_lang('ThisFieldIsRequired'), 'required');
 $form->addSelect('acquired_level', get_lang('AcquiredLevel'), $acquiredLevel);
 $form->addRule('acquired_level', get_lang('ThisFieldIsRequired'), 'required');
 $form->addTextarea('argumentation', get_lang('Argumentation'), ['rows' => 6]);
+$form->addRule('argumentation', get_lang('ThisFieldIsRequired'), 'required');
+$form->addRule('argumentation', sprintf(get_lang('ThisTextShouldBeAtLeastXCharsLong'), 10), 'mintext', 10);
 $form->applyFilter('argumentation', 'trim');
 $form->addButtonSave(get_lang('Save'));
 $form->setDefaults($formDefaultValues);

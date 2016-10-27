@@ -7802,4 +7802,8 @@ $NoLPFound = "No caminho de aprendizagem encontrados";
 $ReportTypeLink = "Link de relatório ativo";
 $InviteesCantBeTutors = "Os convidados não podem ser tutores";
 $InvalidAction = "Ação inválida";
+$TicketWasThisAnswerSatisfying = "Essa resposta foi satisfatória?";
+$IfYouAreSureTheTicketWillBeClosed = "Se você estiver certo, o bilhete será fechada.";
+$Priorities = "Prioridades";
+$Tickets = "Tickets";
 ?>

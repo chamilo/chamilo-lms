@@ -3298,7 +3298,7 @@ $StartTimeWindow = "Start";
 $EndTimeWindow = "End";
 $AccessNotAllowed = "The access to this page is not allowed";
 $InThisCourse = "in this course";
-$ThisFieldIsRequired = "required field";
+$ThisFieldIsRequired = "Required field";
 $AllowedHTMLTags = "Allowed HTML tags";
 $FormHasErrorsPleaseComplete = "The form contains incorrect or incomplete data. Please check your input.";
 $StartDateShouldBeBeforeEndDate = "The first date should be before the end date";
@@ -7919,4 +7919,5 @@ $TicketWasThisAnswerSatisfying = "Was this answer satisfactory?";
 $IfYouAreSureTheTicketWillBeClosed = "If you are certain, the ticket will be closed.";
 $Priorities = "Priorities";
 $Tickets = "Tickets";
+$ThisTextShouldBeAtLeastXCharsLong = "This text should be at least %s characters long";
 ?>

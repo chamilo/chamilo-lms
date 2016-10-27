@@ -7932,4 +7932,9 @@ $NoLPFound = "No hay lecciones";
 $ReportTypeLink = "Enlace de reporte activo";
 $InviteesCantBeTutors = "Los invitados no pueden ser tutores";
 $InvalidAction = "Acción incorrecta";
+$TicketWasThisAnswerSatisfying = "¿Fue satisfactoria la respuesta?";
+$IfYouAreSureTheTicketWillBeClosed = "Si está seguro, el ticket será cerrado.";
+$Priorities = "Prioridades";
+$Tickets = "Tickets";
+$ThisTextShouldBeAtLeastXCharsLong = "Este texto debe contener por lo mínimo 10 caracteres";
 ?>

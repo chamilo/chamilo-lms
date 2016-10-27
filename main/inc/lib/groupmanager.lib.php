@@ -471,6 +471,7 @@ class GroupManager
 
         if ($db_object) {
             $result['id'] = $db_object->id;
+            $result['iid'] = $db_object->iid;
             $result['name'] = $db_object->name;
             $result['status'] = $db_object->status;
             $result['description'] = $db_object->description;

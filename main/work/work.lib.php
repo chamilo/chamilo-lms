@@ -3687,7 +3687,9 @@ function processWorkForm(
     $groupIid = 0;
     if (!empty($groupId)) {
         $groupInfo = GroupManager::get_group_properties($groupId);
-        $groupIid = $groupInfo['iid'];
+        if ($groupInfo) {
+            $groupIid = $groupInfo['iid'];
+        }
     }
 
     $title = $values['title'];

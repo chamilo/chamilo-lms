@@ -2276,7 +2276,6 @@ function fixIds(EntityManager $em)
         $result = $connection->fetchAll($sql);
 
         foreach ($result as $item) {
-            //$courseId = $item['c_id'];
             $sessionId = intval($item['session_id']);
             $groupId = intval($item['to_group_id']);
             $iid = $item['iid'];

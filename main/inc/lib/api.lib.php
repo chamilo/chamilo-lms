@@ -2564,7 +2564,7 @@ function api_get_user_platform_status($user_id = null) {
                     case 5:
                         $course_status['status'] = 'student';
                         //check if tutor
-                        $tutor_course_status = CourseManager::get_tutor_in_course_status($user_id, $course_code);
+                        $tutor_course_status = CourseManager::get_tutor_in_course_status($user_id, $course_id);
                         if ($tutor_course_status) {
                             $course_status['status'] = 'tutor';
                         }
@@ -6979,7 +6979,7 @@ function api_detect_user_roles($user_id, $courseId, $session_id = 0)
             if (CourseManager::is_course_teacher($user_id, $course_code)) {
                 $user_roles[] = COURSEMANAGER;
             }
-            if (CourseManager::get_tutor_in_course_status($user_id, $course_code)) {
+            if (CourseManager::get_tutor_in_course_status($user_id, $courseInfo['real_id'])) {
                 $user_roles[] = COURSE_TUTOR;
             }
 
@@ -8249,3 +8249,7 @@ function api_remove_uploaded_file($type, $file)
     }
 }
 
+function api_student_boss_access_to_course_and_session()
+{
+    return true;
+}

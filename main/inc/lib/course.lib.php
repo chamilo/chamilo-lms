@@ -339,18 +339,18 @@ class CourseManager
 
     /**
      * @param int $user_id
-     * @param string $course_code
+     * @param int $courseId
      *
      * @return mixed
      */
-    public static function get_tutor_in_course_status($user_id, $course_code)
+    public static function get_tutor_in_course_status($user_id, $courseId)
     {
         $result = Database::fetch_array(
             Database::query("
                 SELECT is_tutor
                 FROM " . Database::get_main_table(TABLE_MAIN_COURSE_USER) . "
                 WHERE
-                    course_code = '" . Database::escape_string($course_code) . "' AND
+                    c_id = '" . Database::escape_string($courseId) . "' AND
                     user_id = " . intval($user_id)
             )
         );

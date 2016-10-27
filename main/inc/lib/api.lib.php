@@ -6740,7 +6740,7 @@ function api_detect_user_roles($user_id, $courseId, $session_id = 0)
             if (CourseManager::is_course_teacher($user_id, $course_code)) {
                 $user_roles[] = COURSEMANAGER;
             }
-            if (CourseManager::get_tutor_in_course_status($user_id, $course_code)) {
+            if (CourseManager::get_tutor_in_course_status($user_id, $courseInfo['real_id'])) {
                 $user_roles[] = COURSE_TUTOR;
             }
 

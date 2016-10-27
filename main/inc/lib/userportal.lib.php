@@ -380,6 +380,22 @@ class IndexManager
 
         $searchItem = null;
 
+        $myCertificate = GradebookUtils::get_certificate_by_user_id(
+           0,
+            $this->user_id
+        );
+
+        if ($myCertificate) {
+            $content .= Display::tag(
+                'li',
+                Display::url(
+                    Display::return_icon('skill-badges.png', get_lang('MyGeneralCertificate'), null, ICON_SIZE_SMALL).get_lang('MyGeneralCertificate'),
+                    api_get_path(WEB_CODE_PATH).'social/my_skills_report.php?a=generate_custom_skill'
+                )
+            );
+        }
+
+
         if (api_get_setting('allow_public_certificates') == 'true') {
             $searchItem = Display::tag(
                 'li',

@@ -85,6 +85,10 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
             if (isset($attributes['disable_select_effect']) && $attributes['disable_select_effect']) {
                 $attributes['class'] = 'form-control';
             }
+            // Ofaj
+            if (isset($attributes['select_chosen']) && $attributes['select_chosen']) {
+                $attributes['class'] = 'chzn-select';
+            }
 
             if (isset($attributes['placeholder'])) {
                 $addBlank =  $attributes['placeholder'];

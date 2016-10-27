@@ -1198,7 +1198,7 @@ class ExtraField extends Model
                         } else {
                             // Ofaj
                             $attributes = array('multiple' => 'multiple', 'id' => 'extra_'.$field_details['variable']);
-                            $noSelectEffectList = [
+                            $chosenSelect = [
                                 'ecouter',
                                 'lire',
                                 'participer_a_une_conversation',
@@ -1206,8 +1206,8 @@ class ExtraField extends Model
                                 'ecrire'
                             ];
 
-                            if (in_array($field_details['variable'], $noSelectEffectList)) {
-                                $attributes['disable_select_effect'] = true;
+                            if (in_array($field_details['variable'], $chosenSelect)) {
+                                $attributes['select_chosen'] = true;
                             }
 
                             // default behaviour

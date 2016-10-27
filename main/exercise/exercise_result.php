@@ -36,7 +36,6 @@ if (empty($origin)) {
 
 /** @var Exercise $objExercise */
 if (empty($objExercise)) {
-
     $objExercise = Session::read('objExercise');
 }
 if (empty($remind_list)) {

@@ -3409,7 +3409,6 @@ class learnpath
                         $item_id,
                         $this->get_view_id()
                     );
-
                     if ($this->debug > 0) {
                         error_log('rl_get_resource_link_for_learnpath - file: ' . $file, 0);
                     }
@@ -11295,12 +11294,28 @@ EOD;
         }
         $row_item = Database::fetch_array($res_item, 'ASSOC');
 
+        $item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+        // Get the lp_item_view with the highest view_count.
+        $sql = "SELECT * FROM $item_view_table
+                WHERE
+                    c_id = $course_id AND
+                    lp_item_id = " . $row_item['id'] . " AND
+                    lp_view_id = " . $lpViewId . "
+                ORDER BY view_count DESC";
+        $learnpathItemViewResult = Database::query($sql);
+        $learnpathItemViewData = Database::fetch_array($learnpathItemViewResult, 'ASSOC');
+        $learnpathItemViewId = 0;
+        if (isset($learnpathItemViewData)) {
+            $learnpathItemViewId = $learnpathItemViewData['id'];
+        }
+
         $type = strtolower($row_item['item_type']);
         $id = (strcmp($row_item['path'], '') == 0) ? '0' : $row_item['path'];
         $origin = 'learnpath';
         $main_dir_path = api_get_path(WEB_CODE_PATH);
         $main_course_path = api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/';
         $link = '';
+
         switch ($type) {
             case 'dir':
                 $link .= $main_dir_path . 'lp/blank.php';
@@ -11322,11 +11337,11 @@ EOD;
                     $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
                     $sql = "SELECT * FROM $TBL_EXERCICES WHERE c_id = $course_id AND id=$id";
                     $result= Database::query($sql);
-                    $myrow=Database::fetch_array($result);
+                    $myrow = Database::fetch_array($result);
                     if ($row_item['title'] != '') {
                         $myrow['title'] = $row_item['title'];
                     }
-                    $link .= $main_dir_path . 'exercise/overview.php?cidReq='.$course_code.'&session_id='.$session_id.'&lp_init=1&origin='.$origin.'&learnpath_id='.$learningPathId.'&learnpath_item_id='.$id_in_path.'&exerciseId='.$id;
+                    $link .= $main_dir_path . 'exercise/overview.php?cidReq='.$course_code.'&session_id='.$session_id.'&lp_init=1&origin='.$origin.'&learnpath_item_view_id='.$learnpathItemViewId.'&learnpath_id='.$learningPathId.'&learnpath_item_id='.$id_in_path.'&exerciseId='.$id;
                 }
                 break;
             case 'hotpotatoes': //lowercase because of strtolower above

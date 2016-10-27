@@ -1196,13 +1196,27 @@ class ExtraField extends Model
                                 );
                             }
                         } else {
+                            // Ofaj
+                            $attributes = array('multiple' => 'multiple', 'id' => 'extra_'.$field_details['variable']);
+                            $chosenSelect = [
+                                'ecouter',
+                                'lire',
+                                'participer_a_une_conversation',
+                                's_exprimer_oralement_en_continu',
+                                'ecrire'
+                            ];
+
+                            if (in_array($field_details['variable'], $chosenSelect)) {
+                                $attributes['select_chosen'] = true;
+                            }
+
                             // default behaviour
                             $form->addElement(
                                 'select',
                                 'extra_'.$field_details['variable'],
                                 $field_details['display_text'],
                                 $options,
-                                array('multiple' => 'multiple', 'id' => 'extra_'.$field_details['variable'])
+                                $attributes
                             );
                         }
 

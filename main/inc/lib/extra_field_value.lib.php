@@ -77,10 +77,11 @@ class ExtraFieldValue extends Model
      * @param array $params array for the insertion into the *_field_values table
      * @param bool $forceSave
      * @param bool $showQuery
+     * @param array $saveOnlyThisFields
      * @return mixed false on empty params, void otherwise
      * @assert (array()) === false
      */
-    public function saveFieldValues($params, $forceSave = false, $showQuery = false)
+    public function saveFieldValues($params, $forceSave = false, $showQuery = false, $saveOnlyThisFields = [])
     {
         foreach ($params as $key => $value) {
             $found = strpos($key, '__persist__');
@@ -113,6 +114,13 @@ class ExtraFieldValue extends Model
             }
 
             $field_variable = $fieldDetails['variable'];
+
+            if (!empty($saveOnlyThisFields)) {
+                if (!in_array($field_variable, $saveOnlyThisFields)) {
+                    continue;
+                }
+            }
+
             if (isset($params['extra_'.$field_variable])) {
                 $value = $params['extra_'.$field_variable];
             } else {

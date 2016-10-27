@@ -5557,4 +5557,17 @@ SQL;
             return Display::tabsOnlyLink($headers, $optionSelected);
         }
     }
+
+    /**
+     * @return int
+     */
+    public static function getCountActiveUsers()
+    {
+        $table = Database::get_main_table(TABLE_MAIN_USER);
+        $sql = "SELECT count(id) count FROM $table WHERE active = 1";
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result);
+
+        return $row['count'];
+    }
 }

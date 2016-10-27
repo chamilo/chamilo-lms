@@ -42,7 +42,7 @@
                         <ul class="items">
                             <li><i class="fa fa-user fa-4x icon-color" aria-hidden="true"></i></li>
                             <li>
-                                <h2 class="number">450+</h2>
+                                <h2 class="number">{{ total_users }}</h2>
                                 <p class="text">{{ "RegisteredUsers"|get_lang }}</p>
                             </li>
                         </ul>
@@ -51,7 +51,7 @@
                         <ul class="items">
                             <li><i class="fa fa-book fa-4x icon-color" aria-hidden="true"></i></li>
                             <li>
-                                <h2 class="number">30</h2>
+                                <h2 class="number">{{ total_courses }}</h2>
                                 <p class="text">{{ "OpenCourses"|get_lang }}</p>
                             </li>
                         </ul>
@@ -60,7 +60,7 @@
                         <ul class="items">
                             <li><i class="fa fa-signal fa-4x icon-color" aria-hidden="true"></i></li>
                             <li>
-                                <h2 class="number">300+</h2>
+                                <h2 class="number">{{ total_exercises }}</h2>
                                 <p class="text">{{ "Certificates"|get_lang }}</p>
                             </li>
                         </ul>

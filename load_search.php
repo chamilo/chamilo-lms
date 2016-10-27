@@ -276,8 +276,44 @@ $extra = $extraFieldUser->addElements(
 // Session fields
 $showOnlyThisFields = [
     'access_start_date',
-    'access_end_date',
-    //'heures_disponibilite_par_semaine', this is only for user
+    'access_end_date'
+];
+
+$extra = $extraField->addElements(
+    $form,
+    '',
+    [],
+    false, //filter
+    true,
+    $showOnlyThisFields,
+    $showOnlyThisFields,
+    $defaults,
+    [],
+    false, //$orderDependingDefaults
+    true, // force
+    [], // $separateExtraMultipleSelect
+    []
+);
+
+$fieldsToShow = [
+    'heures_disponibilite_par_semaine',
+];
+
+$extra = $extraFieldUser->addElements(
+    $form,
+    $userToLoad,
+    [],
+    $filter,
+    true,
+    $fieldsToShow,
+    $fieldsToShow,
+    [],
+    [],
+    false,
+    $forceShowFields //$forceShowFields = false
+);
+
+$showOnlyThisFields = [
     'domaine',
     'filiere',
     $theme,
@@ -334,7 +370,6 @@ $columns = $result['columns'];
 $column_model = $result['column_model'];
 
 $form->setDefaults($defaults);
-
 
 /** @var HTML_QuickForm_select $element */
 $domaine1 = $form->getElementByName('extra_domaine[0]');
@@ -453,7 +488,17 @@ if ($form->validate()) {
     }
 
     if ($save) {
+        $userData = $params;
 
+        // Update extra_heures_disponibilite_par_semaine
+        $extraFieldValue = new ExtraFieldValue('user');
+        $userDataToSave = [
+            'item_id' => $userToLoad,
+            'extra_heures_disponibilite_par_semaine' => isset($userData['extra_heures_disponibilite_par_semaine']) ? $userData['extra_heures_disponibilite_par_semaine'] : ''
+        ];
+        $extraFieldValue->saveFieldValues($userDataToSave, true, false, ['heures_disponibilite_par_semaine']);
+
+        // Save session search
         /** @var \Chamilo\UserBundle\Entity\User $user */
         $user = $em->getRepository('ChamiloUserBundle:User')->find($userToLoad);
         $extraFieldValueSession = new ExtraFieldValue('session');
@@ -476,17 +521,11 @@ if ($form->validate()) {
             'extra_ecrire'
         ];
 
-        $userData = $params;
-
         foreach ($userData as $key => $value) {
-
-
             $found = strpos($key, '__persist__');
             if ($found === false) {
                 continue;
             }
-
-
         }
 
         if (isset($userData['extra_filiere_want_stage']) &&

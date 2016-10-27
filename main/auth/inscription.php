@@ -670,38 +670,57 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
         }
     }
 
-    $language = api_get_interface_language();
-    $language = api_get_language_id($language);
-    $term_preview = LegalManager::get_last_condition($language);
-
-    if (!$term_preview) {
-        //we load from the platform
-        $language = api_get_setting('platformLanguage');
+    // Ofaj
+    if (!api_is_anonymous()) {
+        $language = api_get_interface_language();
         $language = api_get_language_id($language);
         $term_preview = LegalManager::get_last_condition($language);
 
-        //if is false we load from english
         if (!$term_preview) {
-            $language = api_get_language_id('english'); //this must work
+            //we load from the platform
+            $language = api_get_setting('platformLanguage');
+            $language = api_get_language_id($language);
             $term_preview = LegalManager::get_last_condition($language);
+
+            //if is false we load from english
+            if (!$term_preview) {
+                $language = api_get_language_id('english'); //this must work
+                $term_preview = LegalManager::get_last_condition($language);
+            }
         }
-    }
 
-    // Version and language
-    $form->addElement('hidden', 'legal_accept_type', $term_preview['version'].':'.$term_preview['language_id']);
-    $form->addElement('hidden', 'legal_info', $term_preview['id'].':'.$term_preview['language_id']);
-
-    if ($term_preview['type'] == 1) {
+        // Version and language
         $form->addElement(
-            'checkbox',
-            'legal_accept',
-            null,
-            get_lang('IHaveReadAndAgree').'&nbsp;<a href="inscription.php?legal" target="_blank">'.get_lang('TermsAndConditions').'</a>'
+            'hidden',
+            'legal_accept_type',
+            $term_preview['version'].':'.$term_preview['language_id']
         );
-        $form->addRule('legal_accept', get_lang('ThisFieldIsRequired'), 'required');
-    } else {
-        $preview = LegalManager::show_last_condition($term_preview);
-        $form->addElement('label', null, $preview);
+        $form->addElement(
+            'hidden',
+            'legal_info',
+            $term_preview['id'].':'.$term_preview['language_id']
+        );
+
+        if ($term_preview['type'] == 1) {
+            $form->addElement(
+                'checkbox',
+                'legal_accept',
+                null,
+                get_lang(
+                    'IHaveReadAndAgree'
+                ).'&nbsp;<a href="inscription.php?legal" target="_blank">'.get_lang(
+                    'TermsAndConditions'
+                ).'</a>'
+            );
+            $form->addRule(
+                'legal_accept',
+                get_lang('ThisFieldIsRequired'),
+                'required'
+            );
+        } else {
+            $preview = LegalManager::show_last_condition($term_preview);
+            $form->addElement('label', null, $preview);
+        }
     }
 }
 

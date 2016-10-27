@@ -18,7 +18,7 @@ if (!api_is_allowed_to_create_course() &&
     // Check if the user is tutor of the course
     $user_course_status = CourseManager::get_tutor_in_course_status(
         api_get_user_id(),
-        api_get_course_id()
+        api_get_course_int_id()
     );
     if ($user_course_status != 1) {
         api_not_allowed(true);
@@ -41,10 +41,6 @@ $student_id = intval($_GET['student']);
 
 // time spent on the course
 $courseInfo = api_get_course_info($course_code);
-
-if (empty($sessionId)) {
-    $sessionId = api_get_session_id();
-}
 
 if ($export) {
     ob_start();
@@ -761,8 +757,13 @@ if (!empty($student_id)) {
                             $scoretotal_display
                         );
 
+                        $extraParam = '';
+                        if (api_is_student_boss()) {
+                            $extraParam = '&log_as_user='.$student_id;
+                        }
+
                         echo '<tr>
-                        <td ><a href="' .$courseInfoItem['course_public_url'] .'?id_session=' . $sId . '">'.
+                        <td ><a href="' .$courseInfoItem['course_public_url'] .'?id_session=' . $sId . $extraParam.'">'.
                             $courseInfoItem['title'].'</a></td>
                         <td >'.$time_spent_on_course .'</td>
                         <td >'.$progress.'</td>
@@ -1077,6 +1078,12 @@ if (!empty($student_id)) {
 
         $result_exercices = Database::query($sql);
         $i = 0;
+
+        $extraParam = '';
+        if (api_is_student_boss()) {
+            $extraParam = '&log_as_user='.$student_id;
+        }
+
         if (Database :: num_rows($result_exercices) > 0) {
             while ($exercices = Database :: fetch_array($result_exercices)) {
                 $exercise_id = intval($exercices['id']);
@@ -1156,14 +1163,14 @@ if (!empty($student_id)) {
                 if (Database :: num_rows($result_last_attempt) > 0) {
                     $id_last_attempt = Database :: result($result_last_attempt, 0, 0);
                     if ($count_attempts > 0)
-                        echo '<a href="../exercise/exercise_show.php?id=' . $id_last_attempt . '&cidReq='.$course_code.'&session_id='.$sessionId.'&student='.$student_id.'&origin='.(empty($origin)?'tracking':$origin).'">
+                        echo '<a href="../exercise/exercise_show.php?id=' . $id_last_attempt . $extraParam.'&cidReq='.$course_code.'&session_id='.$sessionId.'&student='.$student_id.'&origin='.(empty($origin)?'tracking':$origin).'">
                         '.Display::return_icon('quiz.gif').'
                      </a>';
                 }
                 echo '</td>';
 
                 echo '<td>';
-                $all_attempt_url = "../exercise/exercise_report.php?exerciseId=$exercise_id&cidReq=$course_code&filter_by_user=$student_id&id_session=$sessionId";
+                $all_attempt_url = "../exercise/exercise_report.php?exerciseId=".$exercise_id.$extraParam."&cidReq=$course_code&filter_by_user=$student_id&id_session=$sessionId";
                 echo Display::url(Display::return_icon('test_results.png', get_lang('AllAttempts'), array(), ICON_SIZE_SMALL), $all_attempt_url );
 
                 echo '</td></tr>';

@@ -343,14 +343,14 @@ class CourseManager
      *
      * @return mixed
      */
-    public static function get_tutor_in_course_status($user_id, $course_code)
+    public static function get_tutor_in_course_status($user_id, $courseId)
     {
         $result = Database::fetch_array(
             Database::query("
                 SELECT is_tutor
                 FROM " . Database::get_main_table(TABLE_MAIN_COURSE_USER) . "
                 WHERE
-                    course_code = '" . Database::escape_string($course_code) . "' AND
+                    c_id = '" . Database::escape_string($courseId) . "' AND
                     user_id = " . intval($user_id)
             )
         );
@@ -2481,7 +2481,7 @@ class CourseManager
     public static function course_exists($course_code)
     {
         $sql = 'SELECT 1 FROM ' . Database::get_main_table(TABLE_MAIN_COURSE) . '
-                    WHERE code="' . Database::escape_string($course_code) . '"';        
+                WHERE code="' . Database::escape_string($course_code) . '"';
 
         return Database::num_rows(Database::query($sql));
     }
@@ -6189,5 +6189,49 @@ class CourseManager
 
         $courseFieldValue = new ExtraFieldValue('course');
         $courseFieldValue->saveFieldValues($params);
+    }
+
+    /**
+     * @return int
+     */
+    public static function getCountOpenCourses()
+    {
+        $visibility = [
+            COURSE_VISIBILITY_REGISTERED,
+            COURSE_VISIBILITY_OPEN_PLATFORM,
+            COURSE_VISIBILITY_OPEN_WORLD
+        ];
+
+        $table = Database::get_main_table(TABLE_MAIN_COURSE);
+        $sql = "SELECT count(id) count 
+                FROM $table 
+                WHERE visibility IN (".implode(',', $visibility).")";
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result);
+
+        return $row['count'];
+    }
+
+    /**
+     * @return int
+     */
+    public static function getCountExercisesFromOpenCourse()
+    {
+        $visibility = [
+            COURSE_VISIBILITY_REGISTERED,
+            COURSE_VISIBILITY_OPEN_PLATFORM,
+            COURSE_VISIBILITY_OPEN_WORLD
+        ];
+
+        $table = Database::get_main_table(TABLE_MAIN_COURSE);
+        $tableExercise = Database::get_course_table(TABLE_QUIZ_TEST);
+        $sql = "SELECT count(e.iid) count 
+                FROM $table c INNER JOIN $tableExercise e
+                ON (c.id = e.c_id)
+                WHERE e.active <> -1 AND visibility IN (".implode(',', $visibility).")";
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result);
+
+        return $row['count'];
     }
 }

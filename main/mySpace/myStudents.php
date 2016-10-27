@@ -42,10 +42,6 @@ $student_id = intval($_GET['student']);
 // time spent on the course
 $courseInfo = api_get_course_info($course_code);
 
-if (empty($sessionId)) {
-    $sessionId = api_get_session_id();
-}
-
 if ($export) {
     ob_start();
 }

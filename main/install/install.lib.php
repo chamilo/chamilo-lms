@@ -2404,11 +2404,6 @@ function fixIds(EntityManager $em)
                 continue;
             }
 
-            /*$group['description'] = Database::escape_string($group['description']);
-            $group['name'] = Database::escape_string($group['name']);
-            $sql = "INSERT INTO usergroup (name, group_type, description, picture, url, visibility, updated_at, created_at)
-                    VALUES ('{$group['name']}', '1', '{$group['description']}', '{$group['picture_uri']}', '{$group['url']}', '{$group['visibility']}', '{$group['updated_on']}', '{$group['created_on']}')";
-            */
             $params = [
                 'name' => $group['name'],
                 'description' => $group['description'],
@@ -2957,9 +2952,9 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
             );
 
             if ($result) {
-                error_log('Migrations files were executed.');
-
+                error_log('Migrations files were executed ('.date('Y-m-d H:i:s').')');
                 fixIds($manager);
+                error_log('fixIds finished ('.date('Y-m-d H:i:s').')');
 
                 $connection->executeQuery("UPDATE settings_current SET selected_value = '1.10.0' WHERE variable = 'chamilo_database_version'");
 

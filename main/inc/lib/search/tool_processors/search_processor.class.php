@@ -17,8 +17,8 @@
  * See lp_list_search for an example of calling the process.
  * @package chamilo.include.search
  */
-abstract class search_processor {
-
+abstract class search_processor
+{
     /**
      * Search engine api results
      */

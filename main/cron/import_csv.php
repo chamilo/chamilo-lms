@@ -1027,10 +1027,10 @@ class ImportCsv
                     );
 
                     if (!empty($eventId)) {
-                        $extraFieldValue->is_course_model = true;
+                        //$extraFieldValue->is_course_model = true;
                         $extraFieldValue->save(
                             array(
-                                'field_value' => $externalEventId,
+                                'value' => $externalEventId,
                                 'field_id' => $extraFieldInfo['id'],
                                 'item_id' => $eventId
                             )

@@ -27,15 +27,19 @@ $csv_content = array();
 $course_info = api_get_course_info($courseCode);
 
 if (empty($course_info) || empty($lp_id)) {
-    api_not_allowed();
+    api_not_allowed(true);
 }
 $userInfo = api_get_user_info($user_id);
 $name = $userInfo['complete_name'];
 
+$isBoss = UserManager::userIsBossOfStudent(api_get_user_id(), $user_id);
+
 if (!api_is_platform_admin(true) &&
     !CourseManager :: is_course_teacher(api_get_user_id(), $courseCode) &&
-    !Tracking :: is_allowed_to_coach_student(api_get_user_id(), $user_id) && !api_is_drh() && !api_is_course_tutor()) {
-	api_not_allowed();
+    !$isBoss &&
+    !Tracking :: is_allowed_to_coach_student(api_get_user_id(), $user_id) && !api_is_drh() && !api_is_course_tutor()
+) {
+	api_not_allowed(true);
 }
 
 if ($origin == 'user_course') {

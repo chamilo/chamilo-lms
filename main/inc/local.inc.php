@@ -1340,19 +1340,12 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
     $is_allowed_in_course = false;
 
     if (isset($_course) && isset($_course['visibility'])) {
-
         switch ($_course['visibility']) {
             case COURSE_VISIBILITY_OPEN_WORLD: //3
                 $is_allowed_in_course = true;
                 break;
             case COURSE_VISIBILITY_OPEN_PLATFORM: //2
-                $courseCode = $_course['code'];
-                $isUserSubscribedInCourse = CourseManager::is_user_subscribed_in_course(
-                    $user_id,
-                    $courseCode,
-                    $session_id
-                );
-                if (isset($user_id) && ($is_platformAdmin || $isUserSubscribedInCourse === true) && !api_is_anonymous($user_id)) {
+                if (isset($user_id) && !api_is_anonymous($user_id)) {
                     $is_allowed_in_course = true;
                 }
                 break;
@@ -1370,6 +1363,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                 if ($is_platformAdmin) {
                     $is_allowed_in_course = true;
                 }
+                break;
         }
     }
 

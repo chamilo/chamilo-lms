@@ -841,6 +841,9 @@ class Agenda
                             $counter++;
                         }
                     }
+                    return true;
+                } else {
+                    return false;
                 }
                 break;
             case 'admin':

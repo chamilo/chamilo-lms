@@ -923,22 +923,13 @@ class ImportCsv
                         continue;
                     }
 
-                    $items = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
+                    $item = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
                         $extraFieldName,
                         $externalEventId,
                         false,
                         false,
-                        true
+                        false
                     );
-
-                    $item = null;
-                    if (!empty($items)) {
-                        foreach ($items as $tempItem) {
-                            if ($tempItem['item_id'] == $externalEventId) {
-                                $item = $tempItem;
-                            }
-                        }
-                    }
 
                     if (!empty($item)) {
                         $this->logger->addInfo(
@@ -982,10 +973,10 @@ class ImportCsv
                 }
 
                 $content = '';
-                if ($update && isset($item['calendar_event_id'])) {
+                if ($update && isset($item['item_id'])) {
                     //the event already exists, just update
-                    $eventId = $agenda->editEvent(
-                        $item['calendar_event_id'],
+                    $eventResult = $agenda->editEvent(
+                        $item['item_id'],
                         $event['start'],
                         $event['end'],
                         false,
@@ -999,9 +990,9 @@ class ImportCsv
                         $color
                     );
 
-                    if ($eventId !== false) {
+                    if ($eventResult !== false) {
                         $this->logger->addInfo(
-                            "Event updated: #$eventId"
+                            "Event updated: #".$item['item_id']
                         );
                     } else {
                         $this->logger->addInfo(

@@ -8,7 +8,7 @@
 require_once '../inc/global.inc.php';
 
 // Protection
-api_protect_course_script();
+api_protect_course_script(true);
 
 $noPHP_SELF = true;
 $header_file = isset($_GET['file']) ? Security::remove_XSS($_GET['file']) : null;
@@ -27,11 +27,20 @@ if (empty($course_info)) {
 if (!$document_id) {
     $document_id = DocumentManager::get_document_id($course_info, $header_file);
 }
-$document_data = DocumentManager::get_document_data_by_id($document_id, $course_code, true, $session_id);
-if ($session_id != 0 and !$document_data) {
-    $document_data = DocumentManager::get_document_data_by_id($document_id, $course_code, true, 0);
+$document_data = DocumentManager::get_document_data_by_id(
+    $document_id,
+    $course_code,
+    true,
+    $session_id
+);
+if ($session_id != 0 && !$document_data) {
+    $document_data = DocumentManager::get_document_data_by_id(
+        $document_id,
+        $course_code,
+        true,
+        0
+    );
 }
-
 if (empty($document_data)) {
     api_not_allowed(true);
 }
@@ -64,8 +73,7 @@ if ($is_allowed_in_course == false) {
     api_not_allowed(true);
 }
 
-//Check user visibility
-//$is_visible = DocumentManager::is_visible_by_id($document_id, $course_info, api_get_session_id(), api_get_user_id());
+// Check user visibility
 $is_visible = DocumentManager::check_visibility_tree(
     $document_id,
     api_get_course_id(),

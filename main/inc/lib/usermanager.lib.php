@@ -2810,7 +2810,9 @@ class UserManager
                 $course_list = SessionManager::get_course_list_by_session_id($session_id);
                 if (!empty($course_list)) {
                     foreach ($course_list as $course) {
-                        $personal_course_list[] = $course;
+                        if (!in_array($course['id'], $courses)) {
+                            $personal_course_list[] = $course;
+                        }
                     }
                 }
             }

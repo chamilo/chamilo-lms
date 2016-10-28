@@ -369,8 +369,8 @@ class IndexManager
         if (!api_is_anonymous()) {
             $allow = api_get_configuration_value('hide_my_certificate_link');
             if ($allow === false) {
-            $certificatesItem = Display::tag(
-                'li',
+                $certificatesItem = Display::tag(
+                    'li',
                     Display::url(
                         Display::return_icon(
                             'graduation.png',
@@ -378,10 +378,11 @@ class IndexManager
                             null,
                             ICON_SIZE_SMALL
                         ).
-                    get_lang('MyCertificates'),
-                    api_get_path(WEB_CODE_PATH) . "gradebook/my_certificates.php"
-                )
-            );
+                        get_lang('MyCertificates'),
+                        api_get_path(WEB_CODE_PATH)."gradebook/my_certificates.php"
+                    )
+                );
+            }
         }
 
         $searchItem = null;

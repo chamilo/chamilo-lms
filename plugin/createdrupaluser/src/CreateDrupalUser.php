@@ -108,7 +108,7 @@ class CreateDrupalUser extends Plugin implements HookPluginInterface
                     'display_text' => get_plugin_lang('DrupalUserId', 'CreateDrupalUser'),
                     'default_value' => null,
                     'field_order' => null,
-                    'visible' => false,
+                    'visible_to_self' => false,
                     'changeable' => false,
                     'filter' => null
                 ]

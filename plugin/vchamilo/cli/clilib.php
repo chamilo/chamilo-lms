@@ -20,35 +20,36 @@ function vchamilo_parse_csv_nodelist($nodelistlocation = '', $plugin = null){
     $csv_delimiter2 = ";";
 
     // make arrays of valid fields for error checking
-    $required = array('root_web' => 1,
-            'sitename' => 1,
-            'institution' => 1,
-            'main_database' => 1,
-            'statistics_database' => 1,
-            'user_personal_database' => 1,
-            'db_user' => 1,
-            'db_password' => 1,
-            'course_folder' => 1,
-            );
+    $required = array(
+        'root_web' => 1,
+        'sitename' => 1,
+        'institution' => 1,
+        'main_database' => 1,
+        'statistics_database' => 1,
+        'user_personal_database' => 1,
+        'db_user' => 1,
+        'db_password' => 1,
+        'course_folder' => 1,
+    );
 
     $optional = array(
-            'db_host' => 1,
-            'template' => 1,
-            'table_prefix' => 1,
-            'single_database' => 1,
-            'tracking_enabled' => 1,
-            'visible' => 1,
-            );
+        'db_host' => 1,
+        'template' => 1,
+        'table_prefix' => 1,
+        'single_database' => 1,
+        'tracking_enabled' => 1,
+        'visible' => 1,
+    );
 
     $optionalDefaults = array(
-            'db_host' => $_configuration['db_host'],
-            'db_prefix' => 'chm_',
-            'table_prefix' => '',
-            'tracking_enabled' => 0,
-            'single_database' => 1,
-            'template' => '',
-            'visible' => 1,
-            );
+        'db_host' => $_configuration['db_host'],
+        'db_prefix' => 'chm_',
+        'table_prefix' => '',
+        'tracking_enabled' => 0,
+        'single_database' => 1,
+        'template' => '',
+        'visible' => 1
+    );
 
     $patterns = array();
 

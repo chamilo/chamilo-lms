@@ -16,7 +16,7 @@ $teachingHours->save(array(
     'field_type' => ExtraField::FIELD_TYPE_INTEGER,
     'variable' => 'teaching_hours',
     'display_text' => get_lang('TeachingHours'),
-    'visible' => 1,
+    'visible_to_self' => 1,
     'changeable' => 1
 ));
 
@@ -25,7 +25,7 @@ $cost->save(array(
     'field_type' => ExtraField::FIELD_TYPE_FLOAT,
     'variable' => 'cost',
     'display_text' => get_lang('Cost'),
-    'visible' => 1,
+    'visible_to_self' => 1,
     'changeable' => 1
 ));
 
@@ -34,7 +34,7 @@ $vacancies->save(array(
     'field_type' => ExtraField::FIELD_TYPE_INTEGER,
     'variable' => 'vacancies',
     'display_text' => get_lang('Vacancies'),
-    'visible' => 1,
+    'visible_to_self' => 1,
     'changeable' => 1
 ));
 
@@ -43,7 +43,7 @@ $recommendedNumberOfParticipants->save(array(
     'field_type' => ExtraField::FIELD_TYPE_INTEGER,
     'variable' => 'recommended_number_of_participants',
     'display_text' => get_lang('RecommendedNumberOfParticipants'),
-    'visible' => 1,
+    'visible_to_self' => 1,
     'changeable' => 1
 ));
 
@@ -52,7 +52,7 @@ $place->save(array(
     'field_type' => ExtraField::FIELD_TYPE_TEXT,
     'variable' => 'place',
     'display_text' => get_lang('Place'),
-    'visible' => 1,
+    'visible_to_self' => 1,
     'changeable' => 1
 ));
 
@@ -61,7 +61,7 @@ $schedule->save(array(
     'field_type' => ExtraField::FIELD_TYPE_TEXT,
     'variable' => 'schedule',
     'display_text' => get_lang('Schedule'),
-    'visible' => 1,
+    'visible_to_self' => 1,
     'changeable' => 1
 ));
 
@@ -70,7 +70,7 @@ $allowVisitors->save(array(
     'field_type' => ExtraField::FIELD_TYPE_CHECKBOX,
     'variable' => 'allow_visitors',
     'display_text' => get_lang('AllowVisitors'),
-    'visible' => 1,
+    'visible_to_self' => 1,
     'changeable' => 1
 ));
 
@@ -85,7 +85,7 @@ $mode->save(array(
     'field_type' => ExtraField::FIELD_TYPE_SELECT,
     'variable' => 'mode',
     'display_text' => get_lang('Mode'),
-    'visible' => 1,
+    'visible_to_self' => 1,
     'changeable' => 1,
     'field_options' => implode('; ', $modeOptions)
 ));
@@ -95,7 +95,7 @@ $isInductionSession->save(array(
     'field_type' => ExtraField::FIELD_TYPE_CHECKBOX,
     'variable' => 'is_induction_session',
     'display_text' => get_lang('IsInductionSession'),
-    'visible' => 1,
+    'visible_to_self' => 1,
     'changeable' => 1
 ));
 
@@ -104,7 +104,7 @@ $isOpenSession->save(array(
     'field_type' => ExtraField::FIELD_TYPE_CHECKBOX,
     'variable' => 'is_open_session',
     'display_text' => get_lang('IsOpenSession'),
-    'visible' => 1,
+    'visible_to_self' => 1,
     'changeable' => 1
 ));
 
@@ -113,7 +113,7 @@ $duration->save(array(
     'field_type' => ExtraField::FIELD_TYPE_TEXT,
     'variable' => 'human_text_duration',
     'display_text' => get_lang('DurationInWords'),
-    'visible' => 1,
+    'visible_to_self' => 1,
     'changeable' => 1
 ));
 
@@ -128,7 +128,7 @@ $showStatus->save(array(
     'field_type' => ExtraField::FIELD_TYPE_SELECT,
     'variable' => 'show_status',
     'display_text' => get_lang('ShowStatus'),
-    'visible' => 1,
+    'visible_to_self' => 1,
     'changeable' => 1,
     'field_options' => implode('; ', $showStatusOptions)
 ));
@@ -138,7 +138,7 @@ $publicationStartDate->save(array(
     'field_type' => ExtraField::FIELD_TYPE_DATE,
     'variable' => 'publication_start_date',
     'display_text' => get_lang('PublicationStartDate'),
-    'visible' => 1,
+    'visible_to_self' => 1,
     'changeable' => 1
 ));
 
@@ -147,7 +147,7 @@ $publicationEndDate->save(array(
     'field_type' => ExtraField::FIELD_TYPE_DATE,
     'variable' => 'publication_end_date',
     'display_text' => get_lang('PublicationEndDate'),
-    'visible' => 1,
+    'visible_to_self' => 1,
     'changeable' => 1
 ));
 
@@ -156,7 +156,7 @@ $banner->save(array(
     'field_type' => ExtraField::FIELD_TYPE_FILE_IMAGE,
     'variable' => 'banner',
     'display_text' => get_lang('SessionBanner'),
-    'visible' => 1,
+    'visible_to_self' => 1,
     'changeable' => 1
 ));
 
@@ -165,7 +165,7 @@ $brochure->save(array(
     'field_type' => ExtraField::FIELD_TYPE_FILE,
     'variable' => 'brochure',
     'display_text' => get_lang('Brochure'),
-    'visible' => 1,
+    'visible_to_self' => 1,
     'changeable' => 1
 ));
 
@@ -179,7 +179,7 @@ $target->save(array(
     'field_type' => ExtraField::FIELD_TYPE_SELECT,
     'variable' => 'target',
     'display_text' => get_lang('TargetAudience'),
-    'visible' => 1,
+    'visible_to_self' => 1,
     'changeable' => 1,
     'field_options' => implode('; ', $targetOptions)
 ));
@@ -189,7 +189,7 @@ $shortDescription->save(array(
     'field_type' => ExtraField::FIELD_TYPE_TEXT,
     'variable' => 'short_description',
     'display_text' => get_lang('ShortDescription'),
-    'visible' => 1,
+    'visible_to_self' => 1,
     'changeable' => 1
 ));
 
@@ -198,6 +198,6 @@ $id->save(array(
     'field_type' => ExtraField::FIELD_TYPE_TEXT,
     'variable' => 'code',
     'display_text' => get_lang('Code'),
-    'visible' => 1,
+    'visible_to_self' => 1,
     'changeable' => 1
 ));

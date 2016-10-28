@@ -82,7 +82,7 @@ class TicketManager
             $direction = 'ASC';
         }
         $column = intval($column);
-        $from 	= intval($from);
+        $from = intval($from);
         $numberItems = intval($numberItems);
 
         //$sql .= " ORDER BY col$column $direction ";
@@ -181,7 +181,7 @@ class TicketManager
             if (self::userIsAssignedToCategory($userId, $categoryId) == false) {
                 $params = [
                     'category_id' => $categoryId,
-                    'user_id' => $userId,
+                    'user_id' => $userId
                 ];
                 Database::insert($table, $params);
             }
@@ -328,7 +328,6 @@ class TicketManager
         if (!empty($assigned_user)) {
             $assignedUserInfo = api_get_user_info($assigned_user);
             if (empty($assignedUserInfo)) {
-
                 return false;
             }
         }
@@ -545,7 +544,6 @@ class TicketManager
 
             return true;
         } else {
-
             return false;
         }
     }
@@ -562,7 +560,6 @@ class TicketManager
         $user_id = intval($user_id);
 
         if (empty($ticket_id)) {
-
             return false;
         }
 
@@ -691,7 +688,7 @@ class TicketManager
             'sys_insert_datetime' => $now,
             'sys_lastedit_user_id' => $user_id,
             'sys_lastedit_datetime' => $now,
-            'status' => $status,
+            'status' => $status
         ];
         Database::insert($table_support_messages, $params);
 
@@ -1271,7 +1268,7 @@ class TicketManager
                     status.name as status, 
                     priority.name priority
                 FROM $table_support_tickets ticket,
-                    $table_support_category cat ,
+                    $table_support_category cat,
                     $table_support_priority priority,
                     $table_support_status status
 		        WHERE
@@ -1605,7 +1602,7 @@ class TicketManager
         $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
         $now = api_get_utc_datetime();
         $userId = api_get_user_id();
-        $sql = "UPDATE $table_support_tickets  *
+        $sql = "UPDATE $table_support_tickets
                 SET
                     status_id = '".self::STATUS_CLOSE."',
                     sys_lastedit_user_id ='$userId',
@@ -1690,11 +1687,15 @@ class TicketManager
             $user_id = api_get_user_id();
         }
 
-        $sql = "SELECT ticket.code, ticket.sys_insert_datetime ,
-                ticket.sys_lastedit_datetime , cat.name as category ,
-                CONCAT(user.lastname,' ', user.firstname) AS fullname ,
-                status.name as status , ticket.total_messages as messages ,
-                ticket.assigned_last_user as responsable
+        $sql = "SELECT 
+                    ticket.code, 
+                    ticket.sys_insert_datetime,
+                    ticket.sys_lastedit_datetime, 
+                    cat.name as category,
+                    CONCAT(user.lastname,' ', user.firstname) AS fullname,
+                    status.name as status, 
+                    ticket.total_messages as messages,
+                    ticket.assigned_last_user as responsable
                 FROM $table_support_tickets ticket,
                 $table_support_category cat ,
                 $table_support_priority priority,
@@ -2163,8 +2164,6 @@ class TicketManager
 
         return $form;
     }
-
-    //
 
     /**
      * @return array

@@ -3408,7 +3408,6 @@ class learnpath
                         $item_id,
                         $this->get_view_id()
                     );
-
                     if ($this->debug > 0) {
                         error_log('rl_get_resource_link_for_learnpath - file: ' . $file, 0);
                     }
@@ -6533,7 +6532,16 @@ class learnpath
         $dir = $_SESSION['oLP']->display_item_form('dir', get_lang('EnterDataNewChapter'), 'add_item');
         echo Display::tabs(
             $headers,
-            array($documents, $exercises, $links, $works, $forums, $dir, $finish), 'resource_tab'
+            array(
+                $documents,
+                $exercises,
+                $links,
+                $works,
+                $forums,
+                $dir,
+                $finish,
+            ),
+            'resource_tab'
         );
 
         return true;
@@ -9087,11 +9095,39 @@ class learnpath
         require_once '../forum/forumfunction.inc.php';
         require_once '../forum/forumconfig.inc.php';
 
-        $a_forums = get_forums();
+        $forumCategories = get_forum_categories();
+        $forumsInNoCategory = get_forums_in_category(0);
+        if (!empty($forumsInNoCategory)) {
+            $forumCategories = array_merge(
+                $forumCategories,
+                array(
+                    array(
+                        'cat_id' => 0,
+                        'session_id' => 0,
+                        'visibility' => 1,
+                        'cat_comment' => null,
+                    ),
+                )
+            );
+        }
+
+        $forumList = get_forums();
+        $a_forums = [];
+        foreach ($forumCategories as $forumCategory) {
+            // The forums in this category.
+            $forumsInCategory = get_forums_in_category($forumCategory['cat_id']);
+            if (!empty($forumsInCategory)) {
+                foreach ($forumList as $forum) {
+                    if (isset($forum['forum_category']) && $forum['forum_category'] == $forumCategory['cat_id']) {
+                        $a_forums[] = $forum;
+                    }
+                }
+            }
+        }
 
         $return = '<ul class="lp_resource">';
 
-        //First add link
+        // First add link
         $return .= '<li class="lp_resource_element">';
         $return .= Display::return_icon('new_forum.png');
         $return .= Display::url(
@@ -9106,26 +9142,24 @@ class learnpath
         $return .= '</li>';
 
         $return .= '<script>
-            function toggle_forum(forum_id){
-                if(document.getElementById("forum_"+forum_id+"_content").style.display == "none"){
+            function toggle_forum(forum_id) {
+                if (document.getElementById("forum_"+forum_id+"_content").style.display == "none") {
                     document.getElementById("forum_"+forum_id+"_content").style.display = "block";
-                            document.getElementById("forum_"+forum_id+"_opener").src = "' . Display::returnIconPath('remove.gif').'";
+                    document.getElementById("forum_"+forum_id+"_opener").src = "' . Display::returnIconPath('remove.gif').'";
                 } else {
                     document.getElementById("forum_"+forum_id+"_content").style.display = "none";
-                            document.getElementById("forum_"+forum_id+"_opener").src = "' . Display::returnIconPath('add.gif').'";
+                    document.getElementById("forum_"+forum_id+"_opener").src = "' . Display::returnIconPath('add.gif').'";
                 }
             }
         </script>';
 
         foreach ($a_forums as $forum) {
             if (!empty($forum['forum_id'])) {
-
                 $link = Display::url(
                     Display::return_icon('preview_view.png', get_lang('Preview')),
                     api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq().'&forum='.$forum['forum_id'],
                     ['target' => '_blank']
                 );
-
 
                 $return .= '<li class="lp_resource_element" data_id="'.$forum['forum_id'].'" data_type="'.TOOL_FORUM.'" title="'.$forum['forum_title'].'" >';
                 $return .= '<a class="moved" href="#">';
@@ -9144,7 +9178,6 @@ class learnpath
                 $a_threads = get_threads($forum['forum_id']);
                 if (is_array($a_threads)) {
                     foreach ($a_threads as $thread) {
-
                         $link = Display::url(
                             Display::return_icon('preview_view.png', get_lang('Preview')),
                             api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.api_get_cidreq().'&forum='.$forum['forum_id'].'&thread='.$thread['thread_id'],
@@ -11261,12 +11294,28 @@ EOD;
         }
         $row_item = Database::fetch_array($res_item, 'ASSOC');
 
+        $item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+        // Get the lp_item_view with the highest view_count.
+        $sql = "SELECT * FROM $item_view_table
+                WHERE
+                    c_id = $course_id AND
+                    lp_item_id = " . $row_item['id'] . " AND
+                    lp_view_id = " . $lpViewId . "
+                ORDER BY view_count DESC";
+        $learnpathItemViewResult = Database::query($sql);
+        $learnpathItemViewData = Database::fetch_array($learnpathItemViewResult, 'ASSOC');
+        $learnpathItemViewId = 0;
+        if (isset($learnpathItemViewData)) {
+            $learnpathItemViewId = $learnpathItemViewData['id'];
+        }
+
         $type = strtolower($row_item['item_type']);
         $id = (strcmp($row_item['path'], '') == 0) ? '0' : $row_item['path'];
         $origin = 'learnpath';
         $main_dir_path = api_get_path(WEB_CODE_PATH);
         $main_course_path = api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/';
         $link = '';
+
         switch ($type) {
             case 'dir':
                 $link .= $main_dir_path . 'lp/blank.php';
@@ -11288,11 +11337,11 @@ EOD;
                     $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
                     $sql = "SELECT * FROM $TBL_EXERCICES WHERE c_id = $course_id AND id=$id";
                     $result= Database::query($sql);
-                    $myrow=Database::fetch_array($result);
+                    $myrow = Database::fetch_array($result);
                     if ($row_item['title'] != '') {
                         $myrow['title'] = $row_item['title'];
                     }
-                    $link .= $main_dir_path . 'exercise/overview.php?cidReq='.$course_code.'&session_id='.$session_id.'&lp_init=1&origin='.$origin.'&learnpath_id='.$learningPathId.'&learnpath_item_id='.$id_in_path.'&exerciseId='.$id;
+                    $link .= $main_dir_path . 'exercise/overview.php?cidReq='.$course_code.'&session_id='.$session_id.'&lp_init=1&origin='.$origin.'&learnpath_item_view_id='.$learnpathItemViewId.'&learnpath_id='.$learningPathId.'&learnpath_item_id='.$id_in_path.'&exerciseId='.$id;
                 }
                 break;
             case 'hotpotatoes': //lowercase because of strtolower above

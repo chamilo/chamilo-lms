@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * This file was originally the copy of document.php, but many modifications happened since then ;
  * the direct file view is not needed anymore, if the user uploads a scorm zip file, a directory
@@ -12,7 +14,6 @@
  * @author Isthvan Mandak, several new features
  * @author Roan Embrechts, code improvements and refactoring
  */
-use \ChamiloSession as Session;
 
 $use_anonymous = true;
 
@@ -34,10 +35,9 @@ $lp_id = !empty($_GET['lp_id']) ? intval($_GET['lp_id']) : 0;
 $sessionId = api_get_session_id();
 
 // Check if the learning path is visible for student - (LP requisites)
-
 if (!api_is_platform_admin()) {
     if (
-        !api_is_allowed_to_edit(null, true) &&
+        !api_is_allowed_to_edit(null, true, false, false) &&
         !learnpath::is_lp_visible_for_student($lp_id, api_get_user_id())
     ) {
         api_not_allowed(true);

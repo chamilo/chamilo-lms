@@ -339,7 +339,7 @@ class CourseManager
 
     /**
      * @param int $user_id
-     * @param string $course_code
+     * @param int $courseId
      *
      * @return mixed
      */
@@ -1728,9 +1728,10 @@ class CourseManager
      * Get a list of coaches of a course and a session
      * @param   string  Course code
      * @param   int     Session ID
+     * @param   bool $addGeneralCoach
      * @return  array   List of users
      */
-    public static function get_coach_list_from_course_code($course_code, $session_id)
+    public static function get_coach_list_from_course_code($course_code, $session_id, $addGeneralCoach = true)
     {
         if (empty($course_code) || empty($session_id)) {
             return array();
@@ -1755,16 +1756,18 @@ class CourseManager
             $users[$user['user_id']] = $user_info;
         }
 
-        $table = Database::get_main_table(TABLE_MAIN_SESSION);
-        // We get the session coach.
-        $sql = 'SELECT id_coach FROM ' . $table . ' WHERE id=' . $session_id;
-        $rs = Database::query($sql);
-        $session_id_coach = Database::result($rs, 0, 'id_coach');
-        $user_info = api_get_user_info($session_id_coach);
-        $user_info['status'] = $user['status'];
-        //$user_info['tutor_id'] = $user['tutor_id'];
-        $user_info['email'] = $user['email'];
-        $users[$session_id_coach] = $user_info;
+        if ($addGeneralCoach) {
+            $table = Database::get_main_table(TABLE_MAIN_SESSION);
+            // We get the session coach.
+            $sql = 'SELECT id_coach FROM '.$table.' WHERE id='.$session_id;
+            $rs = Database::query($sql);
+            $session_id_coach = Database::result($rs, 0, 'id_coach');
+            $user_info = api_get_user_info($session_id_coach);
+            $user_info['status'] = $user['status'];
+            //$user_info['tutor_id'] = $user['tutor_id'];
+            $user_info['email'] = $user['email'];
+            $users[$session_id_coach] = $user_info;
+        }
 
         return $users;
     }
@@ -2327,6 +2330,11 @@ class CourseManager
             $sql = "DELETE FROM $table_stats_links WHERE c_id = $courseId";
             Database::query($sql);
             $sql = "DELETE FROM $table_stats_uploads WHERE c_id = $courseId";
+            Database::query($sql);
+
+            // Update ticket
+            $ticket = Database::get_main_table(TABLE_TICKET_TICKET);
+            $sql = "UPDATE $ticket SET course_id = NULL WHERE course_id = $courseId";
             Database::query($sql);
 
             // Delete the course from the database

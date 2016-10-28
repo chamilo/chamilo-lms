@@ -45,7 +45,9 @@ switch ($action) {
         }
         if (isset($_GET['denied_friend_id'])) {
             SocialManager::invitation_denied($_GET['denied_friend_id'], $current_user_id);
-            Display::display_confirmation_message(api_xml_http_response_encode(get_lang('InvitationDenied')));
+            Display::addFlash(
+                Display::return_message(get_lang('InvitationDenied'), 'success')
+            );
 
             header('Location: ' . api_get_path(WEB_CODE_PATH) . 'social/invitations.php');
         }

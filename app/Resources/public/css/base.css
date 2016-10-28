@@ -5306,6 +5306,7 @@ div#chat-remote-video video {
 }
 #whoisonline .items-user-avatar .img-responsive{
     display: inline-block;
+    height: 128px;
 }
 #whoisonline .items-user-name{
   font-size: 12px;

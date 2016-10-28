@@ -32,16 +32,16 @@ class CStudentPublicationRelUser
     /**
      * @var integer
      *
-     * @ORM\Column(name="c_id", type="integer")
+     * @ORM\Column(name="id", type="integer", nullable=true)
      */
-    private $cId;
+    private $id;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="integer", nullable=true)
+     * @ORM\Column(name="c_id", type="integer")
      */
-    private $id;
+    private $cId;
 
     /**
      * @var integer

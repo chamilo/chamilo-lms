@@ -45,7 +45,7 @@ class DashboardManager
         foreach ($possibleplugins as $testplugin) {
             $plugin_info_file = $dashboard_pluginpath.$testplugin."/$testplugin.info";
             if (file_exists($plugin_info_file) && is_readable($plugin_info_file)) {
-                $plugin_info = parse_info_file($plugin_info_file);
+                $plugin_info = api_parse_info_file($plugin_info_file);
 
                 // change index to lower case
                 $plugin_info = array_change_key_case($plugin_info);
@@ -216,7 +216,7 @@ class DashboardManager
                         $plugin_info_file = $dashboard_pluginpath . $testplugin . "/$testplugin.info";
                         $plugin_info = array();
                         if (file_exists($plugin_info_file)) {
-                            $plugin_info = parse_info_file($plugin_info_file);
+                            $plugin_info = api_parse_info_file($plugin_info_file);
                         }
 
                         // change keys to lower case

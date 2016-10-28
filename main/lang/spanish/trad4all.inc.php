@@ -7675,7 +7675,7 @@ $ThereAreUsersUsingThisLanguagesDisableItManually = "Hay usuarios que usan actua
 $MessagingAllowSendPushNotificationTitle = "Permitir enviar notificaciones Push a la aplicación móvil de Chamilo Messaging";
 $MessagingAllowSendPushNotificationComment = "Enviar notificaciones Push a través de Firebase Console de Google";
 $MessagingGDCProjectNumberTitle = "ID del remitente de Firebase Console para Mensajería en la Nube";
-$MessagingGDCProjectNumberComment = "Necesita registrar un proyecto en <a href=\"https://console.developers.google.com/\">Google Developer Console</a>";
+$MessagingGDCProjectNumberComment = "Necesita registrar un proyecto en <a href=\"https://console.firebase.google.com/\">Google Firebase Console</a>";
 $MessagingGDCApiKeyTitle = "Server key de Firebase Console para Mensajería en la Nube";
 $MessagingGDCApiKeyComment = "Server key (legacy token) de las credenciales del proyecto en Firebase Console";
 $Overwrite = "Sobreescribir";
@@ -7932,4 +7932,9 @@ $NoLPFound = "No hay lecciones";
 $ReportTypeLink = "Enlace de reporte activo";
 $InviteesCantBeTutors = "Los invitados no pueden ser tutores";
 $InvalidAction = "Acción incorrecta";
+$TicketWasThisAnswerSatisfying = "¿Fue satisfactoria la respuesta?";
+$IfYouAreSureTheTicketWillBeClosed = "Si está seguro, el ticket será cerrado.";
+$Priorities = "Prioridades";
+$Tickets = "Tickets";
+$ThisTextShouldBeAtLeastXCharsLong = "Este texto debe contener por lo mínimo 10 caracteres";
 ?>

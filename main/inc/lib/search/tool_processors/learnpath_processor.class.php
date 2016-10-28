@@ -1,12 +1,9 @@
 <?php
-
 /* For licensing terms, see /license.txt */
+
 /**
  *
  * @package chamilo.include.search
- */
-/**
- * Code
  */
 include_once dirname(__FILE__) . '/../../../global.inc.php';
 require_once dirname(__FILE__) . '/search_processor.class.php';
@@ -16,11 +13,12 @@ require_once dirname(__FILE__) . '/../IndexableChunk.class.php';
  * Process learning paths before pass it to search listing scripts
  * @package chamilo.include.search
  */
-class learnpath_processor extends search_processor {
-
+class learnpath_processor extends search_processor
+{
     public $learnpaths = array();
 
-    function learnpath_processor($rows) {
+    public function __construct($rows)
+    {
         $this->rows = $rows;
         // group by learning path
         foreach ($rows as $row_id => $row_val) {
@@ -40,16 +38,24 @@ class learnpath_processor extends search_processor {
         }
     }
 
-    public function process() {
+    /**
+     * @return array
+     */
+    public function process()
+    {
         $results = array();
         foreach ($this->learnpaths as $courseid => $learnpaths) {
-            $search_show_unlinked_results = (api_get_setting('search_show_unlinked_results') == 'true');
-            $course_visible_for_user = api_is_course_visible_for_user(NULL, $courseid);
+            $search_show_unlinked_results = api_get_setting('search_show_unlinked_results') == 'true';
+            $course_visible_for_user = api_is_course_visible_for_user(null, $courseid);
             // can view course?
             if ($course_visible_for_user || $search_show_unlinked_results) {
                 foreach ($learnpaths as $lp_id => $lp) {
                     // is visible?
-                    $visibility = api_get_item_visibility(api_get_course_info($courseid), TOOL_LEARNPATH, $lp_id);
+                    $visibility = api_get_item_visibility(
+                        api_get_course_info($courseid),
+                        TOOL_LEARNPATH,
+                        $lp_id
+                    );
                     if ($visibility) {
                         list($thumbnail, $image, $name, $author) = $this->get_information($courseid, $lp_id, $lp['has_document_id']);
                         $url = api_get_path(WEB_CODE_PATH) . 'lp/lp_controller.php?cidReq=%s&action=view&lp_id=%s';
@@ -88,7 +94,8 @@ class learnpath_processor extends search_processor {
     /**
      * Get learning path information
      */
-    private function get_information($course_id, $lp_id, $has_document_id = TRUE) {
+    private function get_information($course_id, $lp_id, $has_document_id = true)
+    {
         $course_information = api_get_course_info($course_id);
         $course_id = $course_information['real_id'];
         $course_path = $course_information['path'];

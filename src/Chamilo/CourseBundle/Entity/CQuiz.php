@@ -203,6 +203,21 @@ class CQuiz
     private $questionSelectionType;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="hide_question_title", type="boolean", nullable=true)
+     */
+    private $hideQuestionTitle;
+
+    /**
+     * CQuiz constructor.
+     */
+    public function __construct()
+    {
+        $this->hideQuestionTitle = false;
+    }
+
+    /**
      * Set title
      *
      * @param string $title
@@ -749,4 +764,46 @@ class CQuiz
     {
         return $this->cId;
     }
+
+    /**
+     * @return int
+     */
+    public function getQuestionSelectionType()
+    {
+        return $this->questionSelectionType;
+    }
+
+    /**
+     * @param int $questionSelectionType
+     * @return CQuiz
+     */
+    public function setQuestionSelectionType($questionSelectionType)
+    {
+        $this->questionSelectionType = $questionSelectionType;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isHideQuestionTitle()
+    {
+        return $this->hideQuestionTitle;
+    }
+
+    /**
+     * @param boolean $hideQuestionTitle
+     * @return CQuiz
+     */
+    public function setHideQuestionTitle($hideQuestionTitle)
+    {
+        $this->hideQuestionTitle = $hideQuestionTitle;
+
+        return $this;
+    }
+
+
+
+
 }

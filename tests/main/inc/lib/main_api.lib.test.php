@@ -392,18 +392,6 @@ class TestMainApi extends UnitTestCase {
 		$this->assertEqual($res,'');
 		ob_end_clean();
 	}
-/*
-	function testConvertMysqlDate(){
-	 	$last_post_datetime = array();
-	 	$res=convert_mysql_date($last_post_datetime);
-	 	$this->assertTrue($res);
-	}
-*/
-	function testApiGetDatetime(){
-	 	$res=api_get_datetime($time=null);
-	 	$this->assertTrue($res);
-	 	$this->assertFalse(isset($time));
-	}
 
 	function testApiGetItemVisibility(){
 	 	global $_course;
@@ -552,22 +540,8 @@ class TestMainApi extends UnitTestCase {
 		$this->assertTrue(is_array($res));
 	}
 
-	function testApiAddAccessUrl(){
-		$u = Database::escape_string($u);
-		$d = Database::escape_string($d);
-		$res = api_add_access_url($u,$d='',$a=1);
-		$this->assertTrue(is_numeric($res));
-		//var_dump($res);
-	}
-
 	function testApiGetSettings(){
 		$res = api_get_settings($cat=null,$ordering='list',$access_url=1,$url_changeable=0);
-		$this->assertTrue(is_array($res));
-		//var_dump($res);
-	}
-
-	function testApiGetSettingsCategories(){
-		$res = api_get_settings_categories($exceptions=array(),$access_url=1);
 		$this->assertTrue(is_array($res));
 		//var_dump($res);
 	}
@@ -579,14 +553,6 @@ class TestMainApi extends UnitTestCase {
 		//var_dump($res);
 	}
 
-/*
-	function testApiDeleteCategorySettings(){
-		$c= false;
-		$res = api_delete_category_settings($c,$a=1);
-		$this->assertTrue(is_bool($res));
-		//var_dump($res);
-	}
-*/
 	function testApiAddSetting(){
 		$sk=null;
 		$type='textfield';
@@ -654,14 +620,6 @@ class TestMainApi extends UnitTestCase {
 					'user_id'=>'1');
 		$res=api_get_status_of_user_in_course($id['user_id'], $id['c_id']);
 		$this->assertTrue(is_null($res));
-		//var_dump($res);
-	}
-
-	function testApiIsInCourse(){
-		$_SESSION['_course']['sysCode']=0;
-		$res=api_is_in_course($course_code=null);
-		$this->assertTrue(is_bool($res));
-		$this->assertTrue(isset($_SESSION['_course']['sysCode']));
 		//var_dump($res);
 	}
 

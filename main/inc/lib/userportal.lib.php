@@ -1554,7 +1554,8 @@ class IndexManager
      */
     public function return_hot_courses()
     {
-        return CourseManager::return_hot_courses(30, 6);
+        // ofaj 4 courses
+        return CourseManager::return_hot_courses(30, 4);
     }
 
     /**

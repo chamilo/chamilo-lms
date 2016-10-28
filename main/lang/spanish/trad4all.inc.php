@@ -7937,4 +7937,7 @@ $IfYouAreSureTheTicketWillBeClosed = "Si está seguro, el ticket será cerrado."
 $Priorities = "Prioridades";
 $Tickets = "Tickets";
 $ThisTextShouldBeAtLeastXCharsLong = "Este texto debe contener por lo mínimo 10 caracteres";
+$TicketXAssignedToUserX = "Ticket <b>#%s</b> asignado al usuario <b>%s</b>";
+$ThisItemIsRelatedToOtherTickets = "Este item está relacionado con otros tickets.";
+$WarningCategoryXDoesntHaveUsers = "Atención: La categoría %s no tiene responsables";
 ?>

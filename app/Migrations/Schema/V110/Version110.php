@@ -46,7 +46,7 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("CREATE TABLE IF NOT EXISTS hook_call( id int UNSIGNED NOT NULL AUTO_INCREMENT, hook_event_id int UNSIGNED NOT NULL, hook_observer_id int UNSIGNED NOT NULL, type tinyint NOT NULL, hook_order int UNSIGNED NOT NULL, enabled tinyint NOT NULL, PRIMARY KEY PK_hook_management_hook_call(id))");
         $this->addSql("CREATE TABLE IF NOT EXISTS c_student_publication_rel_document (iid INT NOT NULL PRIMARY KEY, id INT NULL, work_id INT NOT NULL, document_id INT NOT NULL, c_id INT NOT NULL)");
         $this->addSql("CREATE TABLE IF NOT EXISTS c_student_publication_rel_user (iid INT NOT NULL AUTO_INCREMENT PRIMARY KEY, id INT NULL, work_id INT NOT NULL, user_id INT NOT NULL, c_id INT NOT NULL)");
-        $this->addSql("CREATE TABLE IF NOT EXISTS c_student_publication_comment (iid INT NOT NULL PRIMARY KEY, id INT NULL, work_id INT NOT NULL, c_id INT NOT NULL, comment text, file VARCHAR(255), user_id int NOT NULL, sent_at datetime NOT NULL)");
+        $this->addSql("CREATE TABLE IF NOT EXISTS c_student_publication_comment (iid INT NOT NULL PRIMARY KEY AUTO_INCREMENT, id INT NULL, work_id INT NOT NULL, c_id INT NOT NULL, comment text, file VARCHAR(255), user_id int NOT NULL, sent_at datetime NOT NULL)");
         $this->addSql("CREATE TABLE IF NOT EXISTS c_attendance_calendar_rel_group (iid int NOT NULL auto_increment PRIMARY KEY, id INT, c_id INT NOT NULL, group_id INT NOT NULL, calendar_id INT NOT NULL)");
 
         $this->addSql("ALTER TABLE skill_rel_user MODIFY COLUMN acquired_skill_at datetime default NULL");

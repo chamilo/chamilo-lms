@@ -151,6 +151,10 @@ class BBBPlugin extends Plugin
         $sql = "DELETE FROM $t_tool WHERE name = 'bbb' AND c_id != 0";
         Database::query($sql);
 
+        $t = Database::get_main_table('plugin_bbb_room');
+        $sql = "DROP TABLE IF EXISTS $t";
+        Database::query($sql);
+
         $t = Database::get_main_table('plugin_bbb_meeting');
         $sql = "DROP TABLE IF EXISTS $t";
         Database::query($sql);

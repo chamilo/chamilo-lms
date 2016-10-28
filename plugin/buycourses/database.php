@@ -168,7 +168,7 @@ $saleCommissions->addColumn(
     ['unsigned' => true]
 );
 $saleCommissions->setPrimaryKey(['id']);
-        
+
 $saleTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_SALE);
 $saleTable->addColumn(
     'id',
@@ -231,7 +231,7 @@ $paypalExtraField = Database::select(
     ],
     'first'
 );
-        
+
 if (!$paypalExtraField) {
     Database::insert(
         $extraFieldTable,
@@ -242,10 +242,10 @@ if (!$paypalExtraField) {
             'display_text' => 'Paypal',
             'default_value' => '',
             'field_order' => 0,
-            'visible' => 1,
+            'visible_to_self' => 1,
             'changeable' => 1,
             'filter' => 0,
-            'created_at' => getdate()
+            'created_at' => api_get_utc_datetime()
         ]
     );
 }

@@ -635,19 +635,6 @@ class Display
     }
 
     /**
-     *	Creates a hyperlink to the platform homepage.
-     *	@param string $name, the visible name of the hyperlink, default is sitename
-     *	@return string with html code for hyperlink
-     */
-    public static function get_platform_home_link_html($name = '')
-    {
-        if ($name == '') {
-            $name = api_get_setting('siteName');
-        }
-        return '<a href="'.api_get_path(WEB_PATH).'index.php">'.$name.'</a>';
-    }
-
-    /**
      * Prints an <option>-list with all letters (A-Z).
      * @param char $selected_letter The letter that should be selected
      * @todo This is English language specific implementation.
@@ -709,7 +696,7 @@ class Display
      * Gets the path of an icon
      *
      * @param string $icon
-     * @param string $size
+     * @param int $size
      *
      * @return string
      */
@@ -1126,7 +1113,7 @@ class Display
      */
     public static function grid_html($div_id)
     {
-        $table  = self::tag('table','', array('id' => $div_id));
+        $table = self::tag('table','', array('id' => $div_id));
         $table .= self::tag('div','', array('id' => $div_id.'_pager'));
         return $table;
     }
@@ -1716,11 +1703,6 @@ class Display
         return $html;
     }
 
-    public static function return_default_table_class()
-    {
-        return 'table table-bordered';
-    }
-
     /**
      * @param string $title
      * @param string $second_title
@@ -2126,7 +2108,7 @@ class Display
      * @param int $fixedValue
      * @return string
      */
-    static function parsePaginationItem(
+    public static function parsePaginationItem(
         $itemId,
         $isCurrent,
         $conditions,

@@ -94,11 +94,11 @@ $social_left_content = SocialManager::show_social_menu('waiting_list', $group_id
 foreach($users as $user) {
     switch ($user['relation_type']) {
         case GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER:
-            $user['link']  = '<a href="group_waiting_list.php?id='.$group_id.'&u='.$user['user_id'].'&action=accept">'.
+            $user['link']  = '<a href="group_waiting_list.php?id='.$group_id.'&u='.$user['user_info']['user_id'].'&action=accept">'.
                 Display::return_icon('invitation_friend.png', get_lang('AddNormalUser')).'</a>';
-            $user['link'] .= '<a href="group_waiting_list.php?id='.$group_id.'&u='.$user['user_id'].'&action=set_moderator">'.
+            $user['link'] .= '<a href="group_waiting_list.php?id='.$group_id.'&u='.$user['user_info']['user_id'].'&action=set_moderator">'.
                 Display::return_icon('social_moderator_add.png', get_lang('AddModerator')).'</a>';
-            $user['link'] .= '<a href="group_waiting_list.php?id='.$group_id.'&u='.$user['user_id'].'&action=deny">'.
+            $user['link'] .= '<a href="group_waiting_list.php?id='.$group_id.'&u='.$user['user_info']['user_id'].'&action=deny">'.
                 Display::return_icon('user_delete.png', get_lang('DenyEntry')).'</a>';
             break;
     }

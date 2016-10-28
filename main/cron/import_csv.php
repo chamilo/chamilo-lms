@@ -993,6 +993,7 @@ class ImportCsv
                         $eventComment,
                         $color
                     );
+
                     if ($eventId !== false) {
                         $this->logger->addInfo(
                             "Event updated: #$eventId"
@@ -1026,8 +1027,7 @@ class ImportCsv
                             array(
                                 'field_value' => $externalEventId,
                                 'field_id' => $extraFieldInfo['id'],
-                                'calendar_event_id' => $eventId,
-                                'c_id' => $event['course_id']
+                                'item_id' => $eventId
                             )
                         );
                         $this->logger->addInfo(

@@ -1749,11 +1749,9 @@ class CourseManager
                ' WHERE session_id ="' . $session_id . '" AND c_id="' . $courseId . '" AND status = 2';
         $rs = Database::query($sql);
         while ($user = Database::fetch_array($rs)) {
-            $user_info = api_get_user_info($user['user_id']);
-            if ($user_info) {
-                $user_info['status'] = $user['status'];
-                $user_info['email'] = $user['email'];
-                $users[$user['user_id']] = $user_info;
+            $userInfo = api_get_user_info($user['user_id']);
+            if ($userInfo) {
+                $users[$user['user_id']] = $userInfo;
             }
         }
 
@@ -1763,11 +1761,9 @@ class CourseManager
             $sql = 'SELECT id_coach FROM '.$table.' WHERE id='.$session_id;
             $rs = Database::query($sql);
             $session_id_coach = Database::result($rs, 0, 'id_coach');
-            $user_info = api_get_user_info($session_id_coach);
-            if ($user_info) {
-                $user_info['status'] = $user['status'];
-                $user_info['email'] = $user['email'];
-                $users[$session_id_coach] = $user_info;
+            $userInfo = api_get_user_info($session_id_coach);
+            if ($userInfo) {
+                $users[$session_id_coach] = $userInfo;
             }
         }
 

@@ -466,18 +466,23 @@ class UserGroup extends Model
      * @param   int    $id user group id
      * @return  array   with a list of user ids
      */
-    public function get_users_by_usergroup($id = null, $relation = '')
+    public function get_users_by_usergroup($id = null, $relationList = [])
     {
+        $relationCondition = '';
+        if (!empty($relationList)) {
+            $relationListToString = implode("', '", $relationList);
+            $relationCondition = " AND relation_type IN('$relationListToString')";
+        }
+
         if (empty($id)) {
             $conditions = array();
         } else {
-            $conditions = array('where' => array('usergroup_id = ?' => $id));
+            $conditions = array('where' => array("usergroup_id = ? $relationCondition "=> $id));
         }
         $results = Database::select(
             'user_id',
             $this->usergroup_rel_user_table,
-            $conditions,
-            true
+            $conditions
         );
         $array = array();
         if (!empty($results)) {
@@ -500,9 +505,9 @@ class UserGroup extends Model
         $results = Database::select(
             'user_id',
             $this->usergroup_rel_user_table,
-            $conditions,
-            true
+            $conditions
         );
+
         $array = array();
         if (!empty($results)) {
             foreach ($results as $row) {
@@ -837,7 +842,11 @@ class UserGroup extends Model
         $result = Database::select(
             'u.*',
             $from,
-            array('where' => $where, 'order'=> "name $sord", 'LIMIT'=> "$start , $limit")
+            array(
+                'where' => $where,
+                'order' => "name $sord",
+                'LIMIT' => "$start , $limit"
+            )
         );
 
         $new_result = array();
@@ -845,15 +854,23 @@ class UserGroup extends Model
             foreach ($result as $group) {
                 $group['sessions'] = count($this->get_sessions_by_usergroup($group['id']));
                 $group['courses'] = count($this->get_courses_by_usergroup($group['id']));
-                $group['users'] = count($this->get_users_by_usergroup($group['id']));
+
                 switch ($group['group_type']) {
                     case 0:
                         $group['group_type'] = Display::label(get_lang('Class'), 'info');
+                        $roles = [0];
                         break;
                     case 1:
                         $group['group_type'] = Display::label(get_lang('Social'), 'success');
+                        $roles = [
+                            GROUP_USER_PERMISSION_ADMIN,
+                            GROUP_USER_PERMISSION_READER,
+                            GROUP_USER_PERMISSION_MODERATOR,
+                            GROUP_USER_PERMISSION_HRM
+                        ];
                         break;
                 }
+                $group['users'] = count($this->get_users_by_usergroup($group['id'], $roles));
                 $new_result[] = $group;
             }
             $result = $new_result;

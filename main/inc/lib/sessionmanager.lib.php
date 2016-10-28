@@ -1538,6 +1538,7 @@ class SessionManager
         $tbl_item_properties = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $tbl_student_publication = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
         $tbl_student_publication_assignment = Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
+        $ticket = Database::get_main_table(TABLE_TICKET_TICKET);
         $em = Database::getManager();
 
         $userId = api_get_user_id();
@@ -1596,7 +1597,11 @@ class SessionManager
         Database::query("DELETE FROM $tbl_item_properties WHERE session_id IN ($id_checked)");
         Database::query("DELETE FROM $tbl_url_session WHERE session_id IN($id_checked)");
 
-        Database::query("DELETE FROM $tbl_session WHERE id IN ($id_checked)");
+        $sql = "UPDATE $ticket SET session_id = NULL WHERE session_id IN ($id_checked)";
+        Database::query($sql);
+
+        $sql = "DELETE FROM $tbl_session WHERE id IN ($id_checked)";
+        Database::query($sql);
 
         $extraFieldValue = new ExtraFieldValue('session');
         $extraFieldValue->deleteValuesByItem($id_checked);
@@ -1627,7 +1632,8 @@ class SessionManager
     {
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
         $id_promotion = intval($id_promotion);
-        $sql = "UPDATE $tbl_session SET promotion_id=0
+        $sql = "UPDATE $tbl_session 
+                SET promotion_id = 0
                 WHERE promotion_id = $id_promotion";
         if (Database::query($sql)) {
             return true;

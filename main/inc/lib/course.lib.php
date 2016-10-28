@@ -2332,6 +2332,11 @@ class CourseManager
             $sql = "DELETE FROM $table_stats_uploads WHERE c_id = $courseId";
             Database::query($sql);
 
+            // Update ticket
+            $ticket = Database::get_main_table(TABLE_TICKET_TICKET);
+            $sql = "UPDATE $ticket SET course_id = NULL WHERE course_id = $courseId";
+            Database::query($sql);
+
             // Delete the course from the database
             $sql = "DELETE FROM $table_course WHERE code = '" . $codeFiltered . "'";
             Database::query($sql);

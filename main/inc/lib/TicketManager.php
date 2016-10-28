@@ -4,6 +4,7 @@
 use Chamilo\TicketBundle\Entity\Project;
 use Chamilo\TicketBundle\Entity\Status;
 use Chamilo\TicketBundle\Entity\Priority;
+use Chamilo\TicketBundle\Entity\Ticket;
 
 /**
  * Class TicketManager
@@ -1893,6 +1894,22 @@ class TicketManager
     }
 
     /**
+     * @return array
+     */
+    public static function getTicketsFromCriteria($criteria)
+    {
+        $items = Database::getManager()->getRepository('ChamiloTicketBundle:Ticket')->findBy($criteria);
+
+        $list = [];
+        /** @var Ticket $row */
+        foreach ($items as $row) {
+            $list[$row->getId()] = $row->getCode();
+        }
+
+        return $list;
+    }
+
+    /**
      * @param string $code
      * @return int
      */
@@ -2060,6 +2077,7 @@ class TicketManager
         foreach ($items as $row) {
             $list[] = [
                 'id' => $row->getId(),
+                'code' => $row->getCode(),
                 '0' => $row->getId(),
                 '1' => $row->getName(),
                 '2' => $row->getDescription(),
@@ -2177,6 +2195,7 @@ class TicketManager
         foreach ($items as $row) {
             $list[] = [
                 'id' => $row->getId(),
+                'code' => $row->getCode(),
                 '0' => $row->getId(),
                 '1' => $row->getName(),
                 '2' => $row->getDescription(),
@@ -2308,5 +2327,31 @@ class TicketManager
         ];
 
         echo Display::actions($items);
+    }
+
+    /**
+     * @return array
+     */
+    public static function getDefaultStatusList() {
+        return [
+            self::STATUS_NEW,
+            self::STATUS_PENDING,
+            self::STATUS_UNCONFIRMED,
+            self::STATUS_CLOSE,
+            self::STATUS_FORWARDED
+        ];
+    }
+
+        /**
+     * @return array
+     */
+    public static function getDefaultPriorityList() {
+        return [
+            self::PRIORITY_NORMAL,
+            self::PRIORITY_HIGH,
+            self::PRIORITY_LOW,
+            self::STATUS_CLOSE,
+            self::STATUS_FORWARDED
+        ];
     }
 }

@@ -932,9 +932,11 @@ class ImportCsv
                     );
 
                     $item = null;
-                    foreach ($items as $tempItem) {
-                        if ($tempItem['item_id'] == $event['course_id']) {
-                            $item = $tempItem;
+                    if (!empty($items)) {
+                        foreach ($items as $tempItem) {
+                            if ($tempItem['item_id'] == $externalEventId) {
+                                $item = $tempItem;
+                            }
                         }
                     }
 
@@ -944,6 +946,10 @@ class ImportCsv
                         );
                         $update = true;
                         //continue;
+                    } else {
+                        $this->logger->addInfo(
+                            "Event #$externalEventId was not added. Preparing to be created ..."
+                        );
                     }
                 }
 
@@ -976,7 +982,6 @@ class ImportCsv
                 }
 
                 $content = '';
-
                 if ($update && isset($item['calendar_event_id'])) {
                     //the event already exists, just update
                     $eventId = $agenda->editEvent(

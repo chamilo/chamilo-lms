@@ -331,7 +331,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                             if (CourseManager::course_exists($course_code)) {
                                 // If the course exists we continue.
                                 $course_info = CourseManager::get_course_information($course_code);
-                                $courseId = $course_info['c_id'];
+                                $courseId = $course_info['real_id'];
 
                                 $session_course_relation = SessionManager::relation_session_course_exist($session_id, $courseId);
                                 if (!$session_course_relation) {

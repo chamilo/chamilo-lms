@@ -798,7 +798,7 @@ class ImportCsv
                 if (!empty($sessionId) && !empty($courseInfo)) {
                     $courseIncluded = SessionManager::relation_session_course_exist(
                         $sessionId,
-                        $courseInfo['code']
+                        $courseInfo['real_id']
                     );
 
                     if ($courseIncluded == false) {

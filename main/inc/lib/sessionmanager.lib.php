@@ -2468,7 +2468,7 @@ class SessionManager
         $sql = "SELECT c_id FROM $tbl_session_course
                 WHERE
                   session_id = " . intval($session_id) . " AND
-                  c_id = " . intval($courseId) . "";
+                  c_id = " . intval($courseId);
         $result = Database::query($sql);
         $num = Database::num_rows($result);
         if ($num > 0) {

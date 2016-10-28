@@ -1017,7 +1017,7 @@ if (!empty($student_id)) {
                         }
                         $link = Display::url(
                             Display::return_icon('2rightarrow.png', get_lang('Details')),
-                            'lp_tracking.php?cidReq='.$course_code.'&course='.$course_code.$from.'&origin='.$origin.'&lp_id='.$learnpath->getId().'&student_id='.$user_info['user_id'].'&id_session='.$sessionId
+                            'lp_tracking.php?cidReq='.$course_code.'&course='.$course_code.$from.$extraParam.'&origin='.$origin.'&lp_id='.$learnpath->getId().'&student_id='.$user_info['user_id'].'&id_session='.$sessionId
                         );
                         echo Display::tag('td', $link);
                     }

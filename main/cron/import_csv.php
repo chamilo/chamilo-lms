@@ -979,15 +979,16 @@ class ImportCsv
 
                 if ($update && isset($item['calendar_event_id'])) {
                     //the event already exists, just update
-                    $eventId = $agenda->edit_event(
+                    $eventId = $agenda->editEvent(
                         $item['calendar_event_id'],
                         $event['start'],
                         $event['end'],
                         false,
                         $event['title'],
                         $content,
-                        array('everyone'), // send to
+                        array('everyone'), // $usersToSend
                         array(), //$attachmentArray = array(),
+                        [], //$attachmentCommentList
                         null, //$attachmentComment = null,
                         $eventComment,
                         $color
@@ -1003,20 +1004,22 @@ class ImportCsv
                     }
                 } else {
                     // New event. Create it.
-                    $eventId = $agenda->add_event(
+                    $eventId = $agenda->addEvent(
                         $event['start'],
                         $event['end'],
                         false,
                         $event['title'],
                         $content,
-                        array('everyone'), // send to
+                        array('everyone'), // $usersToSend
                         false, //$addAsAnnouncement = false
                         null, //  $parentEventId
                         array(), //$attachmentArray = array(),
+                        [], //$attachmentCommentList
                         null, //$attachmentComment = null,
                         $eventComment,
                         $color
                     );
+
                     if (!empty($eventId)) {
                         $extraFieldValue->is_course_model = true;
                         $extraFieldValue->save(

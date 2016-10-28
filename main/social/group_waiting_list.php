@@ -34,9 +34,9 @@ if (empty($group_id)) {
     }
 }
 
-$interbreadcrumb[]= array ('url' =>'groups.php','name' => get_lang('Groups'));
+$interbreadcrumb[]= array ('url' => 'groups.php','name' => get_lang('Groups'));
 $interbreadcrumb[] = array('url' => 'group_view.php?id='.$group_id, 'name' => $group_info['name']);
-$interbreadcrumb[]= array ('url' =>'#','name' => get_lang('WaitingList'));
+$interbreadcrumb[]= array ('url' => '#','name' => get_lang('WaitingList'));
 
 // Group information
 $admins = $usergroup->get_users_by_group(
@@ -90,14 +90,15 @@ $new_member_list = array();
 $social_left_content = SocialManager::show_social_menu('waiting_list', $group_id);
 
 // Display form
-foreach($users as $user) {
+foreach ($users as $user) {
+    $userId = $user['user_info']['user_id'];
     switch ($user['relation_type']) {
         case GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER:
-            $user['link']  = '<a href="group_waiting_list.php?id='.$group_id.'&u='.$user['user_id'].'&action=accept">'.
+            $user['link']  = '<a href="group_waiting_list.php?id='.$group_id.'&u='.$userId.'&action=accept">'.
                 Display::return_icon('invitation_friend.png', get_lang('AddNormalUser')).'</a>';
-            $user['link'] .= '<a href="group_waiting_list.php?id='.$group_id.'&u='.$user['user_id'].'&action=set_moderator">'.
+            $user['link'] .= '<a href="group_waiting_list.php?id='.$group_id.'&u='.$userId.'&action=set_moderator">'.
                 Display::return_icon('social_moderator_add.png', get_lang('AddModerator')).'</a>';
-            $user['link'] .= '<a href="group_waiting_list.php?id='.$group_id.'&u='.$user['user_id'].'&action=deny">'.
+            $user['link'] .= '<a href="group_waiting_list.php?id='.$group_id.'&u='.$userId.'&action=deny">'.
                 Display::return_icon('user_delete.png', get_lang('DenyEntry')).'</a>';
             break;
     }

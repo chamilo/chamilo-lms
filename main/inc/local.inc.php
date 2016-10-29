@@ -1345,8 +1345,25 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                 $is_allowed_in_course = true;
                 break;
             case COURSE_VISIBILITY_OPEN_PLATFORM: //2
-                if (isset($user_id) && !api_is_anonymous($user_id)) {
-                    $is_allowed_in_course = true;
+                $userAccess = api_get_configuration_value('block_registered_users_access_to_open_course_contents');
+                // If this setting is not set or equals false, allow registered users to access content from any open
+                // course
+                if ($userAccess == false) {
+                    if (isset($user_id) && !api_is_anonymous($user_id)) {
+                        $is_allowed_in_course = true;
+                    }
+                } else {
+                    // If the setting == true, then only allow users to access the content of an open course if they are
+                    // directly subscribed to the course (so first check the registration to the course)
+                    $courseCode = $_course['code'];
+                    $isUserSubscribedInCourse = CourseManager::is_user_subscribed_in_course(
+                        $user_id,
+                        $courseCode,
+                        $session_id
+                    );
+                    if (isset($user_id) && ($is_platformAdmin || $isUserSubscribedInCourse === true) && !api_is_anonymous($user_id)) {
+                        $is_allowed_in_course = true;
+                    }
                 }
                 break;
             case COURSE_VISIBILITY_REGISTERED: //1

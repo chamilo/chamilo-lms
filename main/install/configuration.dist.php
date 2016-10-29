@@ -253,3 +253,5 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 //$_configuration['hide_my_certificate_link'] = false;
 // Send only quiz answer notifications to course coaches and not general coach
 //$_configuration['block_quiz_mail_notification_general_coach'] = false;
+// Security: block direct access from logged in users to contents in OPEN (but not public) courses. Set to true to block
+//$_configuration['block_registered_users_access_to_open_course_contents'] = false;

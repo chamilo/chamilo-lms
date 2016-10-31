@@ -824,9 +824,7 @@ if (isset($uidReset) && $uidReset) {
     $is_platformAdmin = false;
     $is_allowedCreateCourse = false;
     if (isset($_user['user_id']) && $_user['user_id'] && !api_is_anonymous()) {
-    //if (isset($_user['user_id']) && $_user['user_id']) {
         // a uid is given (log in succeeded)
-
         $_SESSION['loginFailed'] = false;
         unset($_SESSION['loginFailedCount']);
         unset($_SESSION['loginToBlock']);
@@ -878,7 +876,6 @@ if (isset($uidReset) && $uidReset) {
     $is_allowedCreateCourse = isset($_SESSION['is_allowedCreateCourse']) ? $_SESSION['is_allowedCreateCourse'] : false;
 }
 
-
 if (!isset($_SESSION['login_as'])) {
     $save_course_access = true;
     $_course = Session::read('_course');
@@ -891,7 +888,6 @@ if (!isset($_SESSION['login_as'])) {
 
         if ($save_course_access) {
             $course_tracking_table = Database:: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-
             /*
             * When $_configuration['session_lifetime'] is too big 100 hours (in order to let users take exercises with no problems)
             * the function Tracking::get_time_spent_on_the_course() returns big values (200h) due the condition:
@@ -908,7 +904,6 @@ if (!isset($_SESSION['login_as'])) {
             $session_lifetime = 3600; // 1 hour
             $time = api_get_utc_datetime();
             if (isset($_user['user_id']) && !empty($_user['user_id'])) {
-
                 //We select the last record for the current course in the course tracking table
                 //But only if the login date is < than now + max_life_time
                 $sql = "SELECT course_access_id
@@ -947,7 +942,6 @@ if (isset($cidReset) && $cidReset) {
         $_course = api_get_course_info($cidReq);
 
         if (!empty($_course)) {
-
             //@TODO real_cid should be cid, for working with numeric course id
             $_real_cid = $_course['real_id'];
             $_cid = $_course['code'];
@@ -1027,7 +1021,6 @@ if (isset($cidReset) && $cidReset) {
         }
     }
 } else {
-
     // Continue with the previous values
     if (empty($_SESSION['_course']) && !empty($_SESSION['_cid'])) {
         //Just in case $_course is empty we try to load if the c_id still exists
@@ -1080,7 +1073,6 @@ if (isset($cidReset) && $cidReset) {
 }
 
 /*  COURSE / USER REL. INIT */
-
 $session_id = api_get_session_id();
 $user_id = isset($_user['user_id']) ? $_user['user_id'] : null;
 
@@ -1185,7 +1177,6 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
     }
 
     if (isset($user_id) && $user_id && isset($_real_cid) && $_real_cid) {
-
         //Check if user is subscribed in a course
         $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $sql = "SELECT * FROM $course_user_table
@@ -1247,10 +1238,10 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                     $result = Database::query($sql);
 
                     if (Database::num_rows($result)) {
-                        $is_courseMember     = true;
-                        $is_courseTutor      = false;
-                        $is_courseCoach      = true;
-                        $is_sessionAdmin     = false;
+                        $is_courseMember = true;
+                        $is_courseTutor = false;
+                        $is_courseCoach = true;
+                        $is_sessionAdmin = false;
                     } else {
                         // Am I a course coach or a student?
                         $sql = "SELECT cu.user_id, cu.status
@@ -1313,10 +1304,10 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                     $sessionInfo = SessionManager::getSessionFollowedByDrh($user_id, $session_id);
                     if (!empty($sessionInfo) && !empty($sessionInfo['course_list'])) {
                         if (isset($sessionInfo['course_list'][$_course['real_id']])) {
-                            $is_courseMember     = true;
-                            $is_courseTutor      = false;
-                            $is_courseCoach      = false;
-                            $is_sessionAdmin     = false;
+                            $is_courseMember = true;
+                            $is_courseTutor = false;
+                            $is_courseCoach = false;
+                            $is_sessionAdmin = false;
                         }
                     }
                 }
@@ -1409,7 +1400,6 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
     } // check the session visibility
 
     if ($is_allowed_in_course == true) {
-
         //if I'm in a session
         if ($session_id != 0) {
             if (!$is_platformAdmin) {
@@ -1421,7 +1411,6 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                         $is_allowed_in_course = false;
                         break;
                 }
-                //checking date
             }
         }
     }
@@ -1447,7 +1436,6 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
     Session::write('is_sessionAdmin', $is_sessionAdmin);
 } else {
     // Continue with the previous values
-
     $is_courseAdmin = isset($_SESSION['is_courseAdmin']) ? $_SESSION['is_courseAdmin'] : false;
     $is_courseTutor = isset($_SESSION['is_courseTutor']) ? $_SESSION['is_courseTutor'] : false;
     $is_courseCoach = isset($_SESSION['is_courseCoach']) ? $_SESSION['is_courseCoach'] : false;
@@ -1511,3 +1499,4 @@ if ((isset($cas_login) && $cas_login && exist_firstpage_parameter()) ||
 }
 
 Redirect::session_request_uri($logging_in, $user_id);
+

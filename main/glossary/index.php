@@ -125,19 +125,13 @@ switch ($action) {
 
             // Date treatment for timezones
             if (!empty($glossary_data['insert_date'])) {
-                $glossary_data['insert_date'] = Display::tip(
-                    date_to_str_ago($glossary_data['insert_date']),
-                    api_get_local_time($glossary_data['insert_date'])
-                );
+                $glossary_data['insert_date'] = Display::dateToStringAgoAndLongDate($glossary_data['insert_date']);
             } else {
                 $glossary_data['insert_date'] = '';
             }
 
             if (!empty($glossary_data['update_date'])) {
-                $glossary_data['update_date'] = Display::tip(
-                    date_to_str_ago($glossary_data['update_date']),
-                    api_get_local_time($glossary_data['update_date'])
-                );
+                $glossary_data['update_date'] = Display::dateToStringAgoAndLongDate($glossary_data['update_date']);
             } else {
                  $glossary_data['update_date'] = '';
             }

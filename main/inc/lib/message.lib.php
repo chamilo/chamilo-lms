@@ -1012,7 +1012,7 @@ class MessageManager
                 $message_content .= '</div>';
 
                 $message_content .= '<div class="col-md-2 col-md-offset-5">';
-                $message_content .= Display::tip(date_to_str_ago($row['send_date']), api_get_local_time($row['send_date']));
+                $message_content .= Display::dateToStringAgoAndLongDate($row['send_date']);
                 $message_content .= '</div>';
 
             } else {
@@ -1025,7 +1025,7 @@ class MessageManager
                 $message_content .= '</div>';
 
                 $message_content .= '<div class="col-md-2 col-md-offset-5">';
-                $message_content .= Display::tip(date_to_str_ago($row['send_date']), api_get_local_time($row['send_date']));
+                $message_content .= Display::dateToStringAgoAndLongDate($row['send_date']);
                 $message_content .= '</div>';
             }
             $message_content .= '</div>';

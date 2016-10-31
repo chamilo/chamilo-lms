@@ -2484,4 +2484,21 @@ HTML;
         }
         return $html;
     }
+
+    /**
+     * @param string $dateTime in UTC
+     *
+     * @return string
+     */
+    public static function dateToStringAgoAndLongDate($dateTime)
+    {
+        if (empty($dateTime) || $dateTime === '0000-00-00 00:00:00') {
+            return '';
+        }
+
+        return self::tip(
+            date_to_str_ago($dateTime),
+            api_get_local_time($dateTime)
+        );
+    }
 }

@@ -85,7 +85,7 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
 
     /**
      * @var string
-     * @ORM\Column(name="email_canonical", type="string", length=100, nullable=false, unique=true)
+     * @ORM\Column(name="email_canonical", type="string", length=100, nullable=false, unique=false)
      */
     protected $emailCanonical;
 

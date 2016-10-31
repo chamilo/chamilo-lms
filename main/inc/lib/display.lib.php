@@ -2486,6 +2486,7 @@ HTML;
     }
 
     /**
+     * Returns the string "1 day ago" with a link showing the exact date time.
      * @param string $dateTime in UTC
      *
      * @return string

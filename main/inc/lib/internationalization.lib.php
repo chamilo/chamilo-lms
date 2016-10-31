@@ -660,14 +660,12 @@ function api_format_date($time, $format = null, $language = null)
 }
 
 /**
- * Returns the difference between the current date (date(now)) with the parameter $date in a string format like "2 days, 1 hour"
- * Example: $date = '2008-03-07 15:44:08';
- * 			date_to_str($date) it will return 3 days, 20 hours
- * The given date should be in the timezone chosen by the user or administrator. Use api_get_local_time() to get it...
+ * Returns the difference between the current date (date(now)) with the parameter
+ * $date in a string format like "2 days ago, 1 hour ago".
  * You can use it like this:
- * Display::tip(date_to_str_ago($dateInUtc), api_get_local_time($dateInUtc));
+ * Display::dateToStringAgoAndLongDate($dateInUtc);
  *
- * @param string $date The string has to be the result of a date function in this format -> date('Y-m-d H:i:s', time());
+ * @param string $date Result of a date function in this format -> date('Y-m-d H:i:s', time());
  * @param string $timeZone
  * @return string
  *

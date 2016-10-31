@@ -39,11 +39,11 @@ $action = isset($_GET['action']) ? $_GET['action'] : '';
 // Tool name
 if ($action === 'addnote') {
 	$tool = 'NoteAddNew';
-	$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('ToolNotebook'));
+	$interbreadcrumb[] = array('url' => 'index.php?'.api_get_cidreq(), 'name' => get_lang('ToolNotebook'));
 }
 if ($action === 'editnote') {
 	$tool = 'ModifyNote';
-	$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('ToolNotebook'));
+	$interbreadcrumb[] = array('url' => 'index.php?'.api_get_cidreq(), 'name' => get_lang('ToolNotebook'));
 }
 
 // Displaying the header
@@ -54,29 +54,31 @@ Display::display_introduction_section(TOOL_NOTEBOOK);
 
 // Action handling: Adding a note
 if ($action === 'addnote') {
-	if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
-		api_not_allowed();
-	}
+    if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
+        api_not_allowed();
+    }
 
-	if (!empty($_GET['isStudentView'])) {
-		NotebookManager::display_notes();
-		exit;
-	}
+    if (!empty($_GET['isStudentView'])) {
+        NotebookManager::display_notes();
+        exit;
+    }
 
 	$_SESSION['notebook_view'] = 'creation_date';
 
     $form = new FormValidator(
         'note',
         'post',
-        api_get_self().'?action='.Security::remove_XSS($_GET['action'])
+        api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&'.api_get_cidreq()
     );
     // Setting the form elements
     $form->addElement('header', '', get_lang('NoteAddNew'));
     $form->addElement('text', 'note_title', get_lang('NoteTitle'), array('id' => 'note_title'));
-
-    $form->addElement('html_editor', 'note_comment', get_lang('NoteComment'), null, api_is_allowed_to_edit()
-        ? array('ToolbarSet' => 'Notebook', 'Width' => '100%', 'Height' => '300')
-        : array('ToolbarSet' => 'NotebookStudent', 'Width' => '100%', 'Height' => '300', 'UserStatus' => 'student')
+    $form->addElement(
+        'html_editor',
+        'note_comment',
+        get_lang('NoteComment'),
+        null,
+        api_is_allowed_to_edit() ? array('ToolbarSet' => 'Notebook', 'Width' => '100%', 'Height' => '300') : array('ToolbarSet' => 'NotebookStudent', 'Width' => '100%', 'Height' => '300', 'UserStatus' => 'student')
     );
     $form->addButtonCreate(get_lang('AddNote'), 'SubmitNote');
 
@@ -116,7 +118,7 @@ if ($action === 'addnote') {
     $form = new FormValidator(
         'note',
         'post',
-        api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&notebook_id='.intval($_GET['notebook_id'])
+        api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&notebook_id='.intval($_GET['notebook_id']).'&'.api_get_cidreq()
     );
     // Setting the form elements
     $form->addElement('header', '', get_lang('ModifyNote'));
@@ -160,15 +162,14 @@ if ($action === 'addnote') {
     }
 } elseif ($action === 'deletenote' && is_numeric($_GET['notebook_id'])) {
     // Action handling: deleting a note
-
-    $res = NotebookManager::delete_note(Security::remove_XSS($_GET['notebook_id']));
+    $res = NotebookManager::delete_note($_GET['notebook_id']);
     if ($res) {
         Display::display_confirmation_message(get_lang('NoteDeleted'));
     }
 
     NotebookManager::display_notes();
 } elseif (
-    $action === 'changeview' && in_array($_GET['view'], array('creation_date', 'update_date', 'title')) ) {
+    $action === 'changeview' && in_array($_GET['view'], array('creation_date', 'update_date', 'title'))) {
 
     // Action handling: changing the view (sorting order)
     switch ($_GET['view']) {

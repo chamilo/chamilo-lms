@@ -104,7 +104,7 @@ class BBBPlugin extends Plugin
         Database::query($sql);
 
         Database::query(
-            "CREATE TABLE plugin_bbb_room (
+            "CREATE TABLE IF NOT EXISTS plugin_bbb_room (
                 id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 meeting_id int(10) unsigned NOT NULL,
                 participant_id int(11) NOT NULL,

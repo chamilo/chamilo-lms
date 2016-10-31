@@ -756,7 +756,7 @@ class Statistics
         $access_url_rel_course_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $current_url_id = api_get_current_access_url_id();
 
-        $columns[0] = 'c_id';
+        $columns[0] = 't.c_id';
         $columns[1] = 'access_date';
         $sql_order[SORT_ASC] = 'ASC';
         $sql_order[SORT_DESC] = 'DESC';
@@ -789,14 +789,14 @@ class Statistics
                    WHERE
                         t.c_id = a.c_id AND
                         access_url_id='".$current_url_id."'
-                   GROUP BY c_id
-                   HAVING c_id <> ''
-                   AND DATEDIFF( '".date('Y-m-d h:i:s')."' , access_date ) <= ". $date_diff;
+                   GROUP BY t.c_id
+                   HAVING t.c_id <> ''
+                   AND DATEDIFF( '".api_get_utc_datetime()."' , access_date ) <= ". $date_diff;
         } else {
             $sql = "SELECT * FROM $table
                    GROUP BY c_id
                    HAVING c_id <> ''
-                   AND DATEDIFF( '".date('Y-m-d h:i:s')."' , access_date ) <= ". $date_diff;
+                   AND DATEDIFF( '".api_get_utc_datetime()."' , access_date ) <= ". $date_diff;
         }
         $sql .= ' ORDER BY '.$columns[$column].' '.$sql_order[$direction];
         $from = ($page_nr -1) * $per_page;

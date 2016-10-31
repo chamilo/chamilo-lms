@@ -790,23 +790,17 @@ class bbb
      */
     public function getUserMeetingPassword()
     {
-        if ($this->isConferenceManager()) {
+        if ($this->isGlobalConferencePerUserEnabled()) {
 
-            return $this->getModMeetingPassword();
-        } else {
-
-            if ($this->isGlobalConferencePerUserEnabled()) {
-
-                return 'url_'.$this->userId.'_'.api_get_current_access_url_id();
-            }
-
-            if ($this->isGlobalConference()) {
-
-                return 'url_'.api_get_current_access_url_id();
-            }
-
-            return api_get_course_id();
+            return 'url_'.$this->userId.'_'.api_get_current_access_url_id();
         }
+
+        if ($this->isGlobalConference()) {
+
+            return 'url_'.api_get_current_access_url_id();
+        }
+
+        return api_get_course_id();
     }
 
     /**

@@ -4009,7 +4009,7 @@ class UserManager
                     relation_type <> '.USER_RELATION_TYPE_RRHH.' ';
         $result = Database::query($sql);
         $row = Database :: fetch_array($result, 'ASSOC');
-        $current_date = date('Y-m-d H:i:s');
+        $current_date = api_get_utc_datetime();
 
         if ($row['count'] == 0) {
             $sql = 'INSERT INTO '.$tbl_my_friend.'(friend_user_id,user_id,relation_type,last_edit)

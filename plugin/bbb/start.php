@@ -21,9 +21,7 @@ $bbb = new bbb('', '', $isGlobal, $isGlobalPerUser);
 
 if ($bbb->pluginEnabled) {
     if ($bbb->isServerRunning()) {
-
         if (isset($_GET['launch']) && $_GET['launch'] == 1) {
-
             if (file_exists(__DIR__ . '/config.vm.php')) {
                 $config = require __DIR__ . '/config.vm.php';
                 $vmIsEnabled = true;
@@ -49,8 +47,6 @@ if ($bbb->pluginEnabled) {
 
             $meetingParams = array();
             $meetingParams['meeting_name'] = $bbb->getCurrentVideoConferenceName();
-
-
 
             if ($bbb->meetingExists($meetingParams['meeting_name'])) {
                 $url = $bbb->joinMeeting($meetingParams['meeting_name']) ?: $bbb->createMeeting($meetingParams);

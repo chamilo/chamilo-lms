@@ -247,7 +247,7 @@ class bbb
             }
         }
 
-        $params['attendee_pw'] = isset($params['moderator_pw']) ? $params['moderator_pw'] : $this->getUserMeetingPassword();
+        $params['attendee_pw'] = isset($params['attendee_pw']) ? $params['attendee_pw'] : $this->getUserMeetingPassword();
         $attendeePassword = $params['attendee_pw'];
         $params['moderator_pw'] = isset($params['moderator_pw']) ? $params['moderator_pw'] : $this->getModMeetingPassword();
         $moderatorPassword = $params['moderator_pw'];
@@ -574,7 +574,14 @@ class bbb
     public function getMeetings($courseId = 0, $sessionId = 0, $groupId = 0, $isAdminReport = false)
     {
         $em = Database::getManager();
-        $pass = $this->getUserMeetingPassword();
+
+        $manager = $this->isConferenceManager();
+        if ($manager) {
+            $pass = $this->getUserMeetingPassword();
+        } else {
+            $pass = $this->getModMeetingPassword();
+        }
+
         $conditions = [];
 
         if ($courseId || $sessionId || $groupId) {
@@ -758,7 +765,12 @@ class bbb
             return false;
         }
         $meetingData = Database::select('*', $this->table, array('where' => array('id = ?' => array($id))), 'first');
-        $pass = $this->getUserMeetingPassword();
+        $manager = $this->isConferenceManager();
+        if ($manager) {
+            $pass = $this->getUserMeetingPassword();
+        } else {
+            $pass = $this->getModMeetingPassword();
+        }
 
         $endParams = array(
             'meetingId' => $meetingData['remote_id'],   // REQUIRED - We have to know which meeting to end.
@@ -778,23 +790,17 @@ class bbb
      */
     public function getUserMeetingPassword()
     {
-        if ($this->isConferenceManager()) {
+        if ($this->isGlobalConferencePerUserEnabled()) {
 
-            return $this->getModMeetingPassword();
-        } else {
-
-            if ($this->isGlobalConferencePerUserEnabled()) {
-
-                return 'url_'.$this->userId.'_'.api_get_current_access_url_id();
-            }
-
-            if ($this->isGlobalConference()) {
-
-                return 'url_'.api_get_current_access_url_id();
-            }
-
-            return api_get_course_id();
+            return 'url_'.$this->userId.'_'.api_get_current_access_url_id();
         }
+
+        if ($this->isGlobalConference()) {
+
+            return 'url_'.api_get_current_access_url_id();
+        }
+
+        return api_get_course_id();
     }
 
     /**

@@ -38,6 +38,7 @@ $strings['plugin_tool_bbb'] = 'Vidéo';
 $strings['ThereAreNotRecordingsForTheMeetings'] = 'Aucun enregistrement disponible';
 $strings['NoRecording'] = "Pas d'enregistrement";
 $strings['ClickToContinue'] = 'Cliquez pour continuer';
+$strings['NoGroup'] = 'Sans groupe';
 $strings['UrlMeetingToShare'] = 'URL à partager';
 
 $strings['AdminView'] = 'View for administrators';

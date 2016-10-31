@@ -608,7 +608,7 @@ if ($form->validate()) {
         $values['username'] = api_substr($values['username'], 0, USERNAME_MAX_LENGTH);
     }
 
-    if (api_get_setting('allow_registration_as_teacher') == 'false') {
+    if (api_get_setting('allow_registration_as_teacher') === 'false') {
         $values['status'] = STUDENT;
     }
 
@@ -621,7 +621,7 @@ if ($form->validate()) {
     }
 
     if ($user_already_registered_show_terms &&
-        api_get_setting('allow_terms_conditions') == 'true'
+        api_get_setting('allow_terms_conditions') === 'true'
     ) {
         $user_id = $_SESSION['term_and_condition']['user_id'];
         $is_admin = UserManager::is_admin($user_id);
@@ -761,7 +761,6 @@ if ($form->validate()) {
 
             /* If the account has to be approved then we set the account to inactive,
             sent a mail to the platform admin and exit the page.*/
-
             if (api_get_setting('allow_registration') === 'approval') {
                 $TABLE_USER = Database::get_main_table(TABLE_MAIN_USER);
                 // 1. set account inactive
@@ -833,14 +832,21 @@ if ($form->validate()) {
                     $bossList = array_column($bossList, 'boss_id');
                     $currentUserInfo = api_get_user_info($user_id);
                     foreach ($bossList as $bossId) {
-                        $subjectEmail = sprintf(get_lang('UserXSignedTheAgreement'), $currentUserInfo['complete_name']);
+                        $subjectEmail = sprintf(
+                            get_lang('UserXSignedTheAgreement'),
+                            $currentUserInfo['complete_name']
+                        );
                         $contentEmail = sprintf(
                             get_lang('UserXSignedTheAgreementTheY'),
                             $currentUserInfo['complete_name'],
                             api_get_local_time($time)
                         );
 
-                        MessageManager::send_message_simple($bossId, $subjectEmail, $contentEmail);
+                        MessageManager::send_message_simple(
+                            $bossId,
+                            $subjectEmail,
+                            $contentEmail
+                        );
                     }
                 }
             }
@@ -855,10 +861,11 @@ if ($form->validate()) {
     $_user['mail'] = $values['email'];
     $_user['language'] = $values['language'];
     $_user['user_id'] = $user_id;
-    $is_allowedCreateCourse = isset($values['status']) && $values['status'] == 1;
-    $usersCanCreateCourse = api_get_setting('allow_users_to_create_courses') === 'true';
-
     Session::write('_user', $_user);
+
+    $is_allowedCreateCourse = isset($values['status']) && $values['status'] == 1;
+    $usersCanCreateCourse = api_is_allowed_to_create_course();
+
     Session::write('is_allowedCreateCourse', $is_allowedCreateCourse);
 
     // Stats

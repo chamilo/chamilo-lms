@@ -2249,9 +2249,14 @@ class Display
             $objSSO = null;
 
             if (!empty($subSSOClass)) {
-                require_once api_get_path(SYS_CODE_PATH)."auth/sso/sso.$subSSOClass.class.php";
-                $subSSOClass = 'sso'.$subSSOClass;
-                $objSSO = new $subSSOClass();
+                $file = api_get_path(SYS_CODE_PATH)."auth/sso/sso.$subSSOClass.class.php";
+                if (file_exists($file)) {
+                    require_once $file;
+                    $subSSOClass = 'sso'.$subSSOClass;
+                    $objSSO = new $subSSOClass();
+                } else {
+                    throw new Exception("$subSSOClass file not set");
+                }
             } else {
                 $objSSO = new sso();
             }
@@ -2290,7 +2295,7 @@ class Display
     {
         $title = !empty($title) ? '<div class="panel-heading"><h3 class="panel-title">'.$title.'</h3>'.$extra.'</div>' : '';
         $footer = !empty($footer) ? '<div class="panel-footer ">'.$footer.'</div>' : '';
-        $styles = ['primary','success','info','warning','danger'];
+        $styles = ['primary', 'success', 'info', 'warning', 'danger'];
         $style = !in_array($style, $styles) ? 'default' : $style;
 
         return '

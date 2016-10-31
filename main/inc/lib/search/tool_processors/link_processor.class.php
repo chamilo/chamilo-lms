@@ -1,12 +1,9 @@
 <?php
-
 /* For licensing terms, see /license.txt */
+
 /**
  *
  * @package chamilo.include.search
- */
-/**
- * Code
  */
 include_once dirname(__FILE__) . '/../../../global.inc.php';
 require_once dirname(__FILE__) . '/search_processor.class.php';
@@ -15,11 +12,12 @@ require_once dirname(__FILE__) . '/search_processor.class.php';
  * Process links before pass it to search listing scripts
  * @package chamilo.include.search
  */
-class link_processor extends search_processor {
-
+class link_processor extends search_processor
+{
     public $links = array();
 
-    function link_processor($rows) {
+    public function __construct($rows)
+    {
         $this->rows = $rows;
 
         // group all links together
@@ -37,9 +35,9 @@ class link_processor extends search_processor {
         }
     }
 
-    public function process() {
+    public function process()
+    {
         $results = array();
-
         foreach ($this->links as $courseCode => $one_course_links) {
             $course_info = api_get_course_info($courseCode);
             $search_show_unlinked_results = (api_get_setting('search_show_unlinked_results') == 'true');
@@ -95,7 +93,8 @@ class link_processor extends search_processor {
     /**
      * Get document information
      */
-    private function get_information($course_id, $link_id) {
+    private function get_information($course_id, $link_id)
+    {
         $course_information = api_get_course_info($course_id);
         $course_id = $course_information['real_id'];
         $course_id_alpha = $course_information['id'];
@@ -126,5 +125,4 @@ class link_processor extends search_processor {
             return array();
         }
     }
-
 }

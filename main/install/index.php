@@ -134,7 +134,7 @@ $update_from_version_8 = array(
     '1.10.2',
     '1.10.4',
     '1.10.6',
-    '1.10.8',
+    '1.10.8'
 );
 
 $my_old_version = '';
@@ -159,23 +159,15 @@ if (is_dir($oldSymfonyFolder)) {
 // A protection measure for already installed systems.
 if (isAlreadyInstalledSystem()) {
     // The system has already been installed, so block re-installation.
-    /*$global_error_code = 6;
+    $global_error_code = 6;
     require '../inc/global_error_message.inc.php';
-    die();*/
+    exit;
 }
 
 /* STEP 1 : INITIALIZES FORM VARIABLES IF IT IS THE FIRST VISIT */
 
 // Is valid request
 $is_valid_request = isset($_REQUEST['is_executable']) ? $_REQUEST['is_executable'] : null;
-/*foreach ($_POST as $request_index => $request_value) {
-    if (substr($request_index, 0, 4) == 'step') {
-        if ($request_index != $is_valid_request) {
-            unset($_POST[$request_index]);
-        }
-    }
-}*/
-
 $badUpdatePath = false;
 $emptyUpdatePath = true;
 $proposedUpdatePath = '';

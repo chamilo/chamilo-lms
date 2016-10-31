@@ -360,22 +360,29 @@ class IndexManager
      */
     public function return_skills_links()
     {
-        $content = '';
-        $content .= '<ul class="nav nav-pills nav-stacked">';
+        $content = '<ul class="nav nav-pills nav-stacked">';
         /**
          * Generate the block for show a panel with links to My Certificates and Certificates Search pages
          * @return string The HTML code for the panel
          */
-        $certificatesItem = null;
-
+        $certificatesItem = '';
         if (!api_is_anonymous()) {
-            $certificatesItem = Display::tag(
-                'li',
-                Display::url(Display::return_icon('graduation.png',get_lang('MyCertificates'),null,ICON_SIZE_SMALL).
-                    get_lang('MyCertificates'),
-                    api_get_path(WEB_CODE_PATH) . "gradebook/my_certificates.php"
-                )
-            );
+            $allow = api_get_configuration_value('hide_my_certificate_link');
+            if ($allow === false) {
+                $certificatesItem = Display::tag(
+                    'li',
+                    Display::url(
+                        Display::return_icon(
+                            'graduation.png',
+                            get_lang('MyCertificates'),
+                            null,
+                            ICON_SIZE_SMALL
+                        ).
+                        get_lang('MyCertificates'),
+                        api_get_path(WEB_CODE_PATH)."gradebook/my_certificates.php"
+                    )
+                );
+            }
         }
 
         $searchItem = null;
@@ -407,15 +414,20 @@ class IndexManager
         }
 
         if (empty($certificatesItem) && empty($searchItem)) {
-            return null;
+            return '';
         }else{
             $content.= $certificatesItem;
             $content.= $searchItem;
         }
 
         if (api_get_setting('allow_skills_tool') == 'true') {
-
-            $content .= Display::tag('li', Display::url(Display::return_icon('skill-badges.png',get_lang('MySkills'),null,ICON_SIZE_SMALL).get_lang('MySkills'), api_get_path(WEB_CODE_PATH).'social/my_skills_report.php'));
+            $content .= Display::tag(
+                'li',
+                Display::url(
+                    Display::return_icon('skill-badges.png',get_lang('MySkills'),null,ICON_SIZE_SMALL).get_lang('MySkills'),
+                    api_get_path(WEB_CODE_PATH).'social/my_skills_report.php'
+                )
+            );
             $allowSkillsManagement = api_get_setting('allow_hr_skills_management') == 'true';
             if (($allowSkillsManagement && api_is_drh()) || api_is_platform_admin()) {
                 $content .= Display::tag('li',
@@ -424,6 +436,7 @@ class IndexManager
                         api_get_path(WEB_CODE_PATH) . 'admin/skills_wheel.php'));
             }
         }
+
         $content .= '</ul>';
         $html = self::show_right_block(
             get_lang("Skills"),
@@ -1541,6 +1554,7 @@ class IndexManager
      */
     public function return_hot_courses()
     {
+        // ofaj 4 courses
         return CourseManager::return_hot_courses(30, 4);
     }
 

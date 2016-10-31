@@ -68,6 +68,14 @@ a:focus {
 #session-block .list-group .list-group-item{
     float: left;
 }
+#courseList .list-group .title{
+    font-size: 12px;
+    font-weight: normal;
+    display: inline !important;
+}
+#course-block .list-group .list-group-item{
+    float: left;
+}
 .title{
     position: static;
     font-size: 25px;

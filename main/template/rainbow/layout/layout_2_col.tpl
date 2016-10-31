@@ -61,7 +61,7 @@
                             <li><i class="fa fa-signal fa-4x icon-color" aria-hidden="true"></i></li>
                             <li>
                                 <h2 class="number">{{ total_exercises }}</h2>
-                                <p class="text">{{ "Certificates"|get_lang }}</p>
+                                <p class="text">{{ "Exercises"|get_lang }}</p>
                             </li>
                         </ul>
                     </div>

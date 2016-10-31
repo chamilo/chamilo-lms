@@ -436,6 +436,7 @@ class UserManager
                 $tplContent->assign('login_name', $loginName);
                 $tplContent->assign('original_password', stripslashes($original_password));
                 $tplContent->assign('mailWebPath', $url);
+                $tplContent->assign('new_user', $user);
 
                 // ofaj
                 $urlSearch = api_get_path(WEB_PATH).'search.php';

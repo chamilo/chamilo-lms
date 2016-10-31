@@ -756,6 +756,7 @@ $no_qualification = false;
 // Show certificate link.
 $certificate = array();
 $actionsLeft = '';
+$hideCertificateExport = api_get_setting('hide_certificate_export_link');
 
 if (!empty($selectCat)) {
     $cat = new Category();
@@ -769,7 +770,8 @@ if (!empty($selectCat)) {
                 $selectCat,
                 $stud_id
             );
-            if (isset($certificate['pdf_url'])) {
+
+            if (isset($certificate['pdf_url']) && $hideCertificateExport !== 'true') {
                 $actionsLeft .= Display::url(Display::returnFontAwesomeIcon('file-pdf-o') .
                     get_lang('DownloadCertificatePdf'),
                     $certificate['pdf_url'],
@@ -777,7 +779,13 @@ if (!empty($selectCat)) {
                 );
             }
 
-            $currentScore = Category::getCurrentScore($stud_id, $selectCat, $course_code, $session_id, true);
+            $currentScore = Category::getCurrentScore(
+                $stud_id,
+                $selectCat,
+                $course_code,
+                $session_id,
+                true
+            );
             Category::registerCurrentScore($currentScore, $stud_id, $selectCat);
         }
     }
@@ -785,7 +793,9 @@ if (!empty($selectCat)) {
 
 if (!api_is_allowed_to_edit(null, true)) {
     $actionsLeft .= Display::url(
-        Display::returnFontAwesomeIcon('file-pdf-o') . get_lang('DownloadReportPdf'),
+        Display::returnFontAwesomeIcon('file-pdf-o').get_lang(
+            'DownloadReportPdf'
+        ),
         api_get_self()."?".api_get_self()."&action=export_table",
         ['class' => 'btn btn-default']
     );

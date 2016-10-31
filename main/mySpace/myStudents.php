@@ -315,6 +315,12 @@ if (isset($message)) {
 }
 
 $token = Security::get_token();
+
+$extraParam = '';
+if (api_is_student_boss()) {
+    $extraParam = '&log_as_user='.$student_id;
+}
+
 if (!empty($student_id)) {
     // Actions bar
     echo '<div class="actions">';
@@ -678,7 +684,7 @@ if (!empty($student_id)) {
 
             // Courses
             echo '<h3>'.$title.'</h3>';
-            echo '<div class="table-respondive">';
+            echo '<div class="table-responsive">';
             echo '<table class="table table-striped table-hover courses-tracking">';
             echo '<thead>';
             echo '<tr>
@@ -709,7 +715,7 @@ if (!empty($student_id)) {
                         if (!empty($results_faults_avg['total'])) {
                             if (api_is_drh()) {
                                 $attendances_faults_avg =
-                                    '<a title="'.get_lang('GoAttendance').'" href="'.api_get_path(WEB_CODE_PATH).'attendance/index.php?cidReq='.$courseCodeItem.'&id_session='.$sId.'&student_id='.$student_id.'">'.
+                                    '<a title="'.get_lang('GoAttendance').'" href="'.api_get_path(WEB_CODE_PATH).'attendance/index.php?cidReq='.$courseCodeItem.$extraParam.'&id_session='.$sId.'&student_id='.$student_id.'">'.
                                     $results_faults_avg['faults'].'/'.$results_faults_avg['total'].' ('.$results_faults_avg['porcent'].'%)</a>';
                             } else {
                                 $attendances_faults_avg =
@@ -757,11 +763,6 @@ if (!empty($student_id)) {
                             $scoretotal_display
                         );
 
-                        $extraParam = '';
-                        if (api_is_student_boss()) {
-                            $extraParam = '&log_as_user='.$student_id;
-                        }
-
                         echo '<tr>
                         <td ><a href="' .$courseInfoItem['course_public_url'] .'?id_session=' . $sId . $extraParam.'">'.
                             $courseInfoItem['title'].'</a></td>
@@ -772,10 +773,10 @@ if (!empty($student_id)) {
                         <td >'.$scoretotal_display.'</td>';
 
                         if (isset($_GET['id_coach']) && intval($_GET['id_coach']) != 0) {
-                            echo '<td width="10"><a href="'.api_get_self().'?student='.$user_info['user_id'].'&details=true&course='.$courseInfoItem['code'].'&id_coach='.Security::remove_XSS($_GET['id_coach']).'&origin='.$origin.'&id_session='.$sId.'#infosStudent">
+                            echo '<td width="10"><a href="'.api_get_self().'?student='.$user_info['user_id'].$extraParam.'&details=true&course='.$courseInfoItem['code'].'&id_coach='.Security::remove_XSS($_GET['id_coach']).'&origin='.$origin.'&id_session='.$sId.'#infosStudent">
                             '.Display::return_icon('2rightarrow.png', get_lang('Details')).'</a></td>';
                         } else {
-                            echo '<td width="10"><a href="'.api_get_self().'?student='.$user_info['user_id'].'&details=true&course='.$courseInfoItem['code'].'&origin='.$origin.'&id_session='.$sId.'#infosStudent">
+                            echo '<td width="10"><a href="'.api_get_self().'?student='.$user_info['user_id'].$extraParam.'&details=true&course='.$courseInfoItem['code'].'&origin='.$origin.'&id_session='.$sId.'#infosStudent">
                             '.Display::return_icon('2rightarrow.png', get_lang('Details')).'</a></td>';
                         }
                         echo '</tr>';
@@ -1016,7 +1017,7 @@ if (!empty($student_id)) {
                         }
                         $link = Display::url(
                             Display::return_icon('2rightarrow.png', get_lang('Details')),
-                            'lp_tracking.php?cidReq='.$course_code.'&course='.$course_code.$from.'&origin='.$origin.'&lp_id='.$learnpath->getId().'&student_id='.$user_info['user_id'].'&id_session='.$sessionId
+                            'lp_tracking.php?cidReq='.$course_code.'&course='.$course_code.$from.$extraParam.'&origin='.$origin.'&lp_id='.$learnpath->getId().'&student_id='.$user_info['user_id'].'&id_session='.$sessionId
                         );
                         echo Display::tag('td', $link);
                     }
@@ -1078,11 +1079,6 @@ if (!empty($student_id)) {
 
         $result_exercices = Database::query($sql);
         $i = 0;
-
-        $extraParam = '';
-        if (api_is_student_boss()) {
-            $extraParam = '&log_as_user='.$student_id;
-        }
 
         if (Database :: num_rows($result_exercices) > 0) {
             while ($exercices = Database :: fetch_array($result_exercices)) {

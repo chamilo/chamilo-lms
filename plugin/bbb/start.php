@@ -21,9 +21,7 @@ $bbb = new bbb('', '', $isGlobal, $isGlobalPerUser);
 
 if ($bbb->pluginEnabled) {
     if ($bbb->isServerRunning()) {
-
         if (isset($_GET['launch']) && $_GET['launch'] == 1) {
-
             if (file_exists(__DIR__ . '/config.vm.php')) {
                 $config = require __DIR__ . '/config.vm.php';
                 $vmIsEnabled = true;

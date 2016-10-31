@@ -151,7 +151,8 @@ class HTML_QuickForm_RuleRegistry
             'maxfilesize', 'HTML_QuickForm_Rule_MaxFileSize',
             'mimetype', 'HTML_QuickForm_Rule_MimeType',
             'filename', 'HTML_QuickForm_Rule_FileName',
-            'validquestiontype' => 'HTML_QuickForm_Rule_QuestionType'
+            'validquestiontype' => 'HTML_QuickForm_Rule_QuestionType',
+            'mintext' => 'Html_Quickform_Rule_MinText'
         );
 
         $class = $rules[$ruleName];
@@ -192,7 +193,6 @@ class HTML_QuickForm_RuleRegistry
 
             return ($result == 0) ? false : $result;
         } else {
-
             return $rule->validate($values, $options);
         }
     } // end func validate

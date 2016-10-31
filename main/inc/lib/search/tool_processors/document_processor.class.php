@@ -1,12 +1,9 @@
 <?php
-
 /* For licensing terms, see /license.txt */
+
 /**
  *
  * @package chamilo.include.search
- */
-/**
- * Code
  */
 include_once dirname(__FILE__) . '/../../../global.inc.php';
 require_once dirname(__FILE__) . '/search_processor.class.php';
@@ -15,13 +12,15 @@ require_once dirname(__FILE__) . '/search_processor.class.php';
  * Process documents before pass it to search listing scripts
  * @package chamilo.include.search
  */
-class document_processor extends search_processor {
-
-    function document_processor($rows) {
+class document_processor extends search_processor
+{
+    public function __construct($rows)
+    {
         $this->rows = $rows;
     }
 
-    public function process() {
+    public function process()
+    {
         $results = array();
         foreach ($this->rows as $row_val) {
             $search_show_unlinked_results = (api_get_setting('search_show_unlinked_results') == 'true');
@@ -67,7 +66,8 @@ class document_processor extends search_processor {
     /**
      * Get document information
      */
-    private function get_information($course_id, $doc_id) {
+    private function get_information($course_id, $doc_id)
+    {
         $course_information = api_get_course_info($course_id);
         $course_id = $course_information['real_id'];
         $course_path = $course_information['path'];

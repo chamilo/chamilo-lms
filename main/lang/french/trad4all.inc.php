@@ -7861,6 +7861,11 @@ $NoLPFound = "Aucun parcours trouvé";
 $ReportTypeLink = "Lien de rapport actif";
 $InviteesCantBeTutors = "Les invités ne peuvent être tuteurs";
 $InvalidAction = "Action incorrecte";
+$TicketWasThisAnswerSatisfying = "Selon vous, cette réponse est-elle satisfaisante?";
+$IfYouAreSureTheTicketWillBeClosed = "Si vous confirmez, le ticket sera clôturé.";
+$Priorities = "Priorités";
+$Tickets = "Tickets";
+$ThisTextShouldBeAtLeastXCharsLong = "Ce texte doit contenir au moins %s caractères";
 
 
 $TCCConnection = 'Connexion à TCC';

@@ -108,7 +108,7 @@ class BBBPlugin extends Plugin
         Database::query($sql);
 
         Database::query(
-            "CREATE TABLE plugin_bbb_room (
+            "CREATE TABLE IF NOT EXISTS plugin_bbb_room (
                 id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 meeting_id int(10) unsigned NOT NULL,
                 participant_id int(11) NOT NULL,
@@ -149,18 +149,18 @@ class BBBPlugin extends Plugin
             Database::query($sql);
         }
 
-        $sql = "DELETE FROM $t_options WHERE variable  = 'bbb_plugin'";
+        $sql = "DELETE FROM $t_options WHERE variable = 'bbb_plugin'";
         Database::query($sql);
 
         // hack to get rid of Database::query warning (please add c_id...)
         $sql = "DELETE FROM $t_tool WHERE name = 'bbb' AND c_id != 0";
         Database::query($sql);
 
+        Database::query('DROP TABLE IF EXISTS plugin_bbb_room');
+
         $t = Database::get_main_table('plugin_bbb_meeting');
         $sql = "DROP TABLE IF EXISTS $t";
         Database::query($sql);
-
-        Database::query('DROP TABLE IF EXISTS plugin_bbb_room');
 
         // Deleting course settings
         $this->uninstall_course_fields_in_all_courses($this->course_settings);

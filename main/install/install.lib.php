@@ -3007,6 +3007,7 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
             );
 
             if ($result) {
+                error_log('Migrations files were executed ('.date('Y-m-d H:i:s').')');
 
                 $connection->executeQuery("ALTER TABLE course_category MODIFY COLUMN auth_course_child VARCHAR(40) DEFAULT 'TRUE'");
 
@@ -3044,7 +3045,7 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
                 }
 
                 // Fix work documents that don't have c_item_property value
-                $sql = "SELECT * FROM c_student_publication where parent_id is not null";
+                $sql = "SELECT * FROM c_student_publication WHERE parent_id IS NOT NULL";
                 $statement = $connection->executeQuery($sql);
                 $result = $statement->fetchAll();
                 foreach ($result as $row) {
@@ -3076,7 +3077,6 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
                 }
                 $connection->executeQuery("UPDATE settings_current SET selected_value = '1.11.0' WHERE variable = 'chamilo_database_version'");
 
-                error_log('Migrations files were executed.');
                 if ($processFiles) {
                     include __DIR__.'/update-files-1.10.0-1.11.0.inc.php';
                 }

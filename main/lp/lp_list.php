@@ -231,13 +231,13 @@ foreach ($categories as $item) {
                 if (!empty($details['publicated_on'])) {
                     $start_time = api_convert_and_format_date(
                         $details['publicated_on'],
-                        DATE_TIME_FORMAT_LONG
+                        DATE_TIME_FORMAT_LONG_24H
                     );
                 }
                 if (!empty($details['expired_on'])) {
                     $end_time = api_convert_and_format_date(
                         $details['expired_on'],
-                        DATE_TIME_FORMAT_LONG
+                        DATE_TIME_FORMAT_LONG_24H
                     );
                 }
             }

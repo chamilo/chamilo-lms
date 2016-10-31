@@ -747,17 +747,24 @@ if (!empty($action)) {
 			case 'delete_user':
 				if (api_is_platform_admin()) {
                     $user_to_delete = $_GET['user_id'];
+                    $userToDeleteInfo = api_get_user_info($user_to_delete);
                     $current_user_id = api_get_user_id();
 
-					if ($deleteUserAvailable && api_global_admin_can_edit_admin($_GET['user_id'])) {
+					if ($userToDeleteInfo && $deleteUserAvailable && api_global_admin_can_edit_admin($_GET['user_id'])) {
 						if ($user_to_delete != $current_user_id && UserManager :: delete_user($_GET['user_id'])) {
-							$message = Display :: return_message(get_lang('UserDeleted'), 'confirmation');
+							$message = Display :: return_message(
+							    get_lang('UserDeleted').': '.$userToDeleteInfo['complete_name_with_username'],
+                                'confirmation'
+                            );
 						} else {
 							$message = Display :: return_message(get_lang('CannotDeleteUserBecauseOwnsCourse'), 'error');
 						}
 					} else {
-						$message = Display :: return_message(get_lang('CannotDeleteUser'),'error');
+						$message = Display :: return_message(get_lang('CannotDeleteUser'), 'error');
 					}
+					Display::addFlash($message);
+					header('Location: '.api_get_self());
+                    exit;
 				}
 				break;
             case 'delete':
@@ -792,7 +799,8 @@ $form->addButtonSearch(get_lang('Search'));
 
 $searchAdvanced = '
 <a id="advanced_params" href="javascript://" class = "btn btn-default advanced_options" onclick="display_advanced_search_form();">
-    <span id="img_plus_and_minus">&nbsp;'. Display::returnFontAwesomeIcon('arrow-right') . ' '.get_lang('AdvancedSearch').'
+    <span id="img_plus_and_minus">&nbsp;
+    '. Display::returnFontAwesomeIcon('arrow-right') . ' '.get_lang('AdvancedSearch').'
     </span>
 </a>';
 $actionsLeft = '';

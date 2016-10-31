@@ -249,11 +249,15 @@ table.lp_overview tr:hover {
 table.lp_overview img {
 	margin-left:3px;
 }
+.scorm_item_normal a.items-list{
+    line-height: 18px;
+}
 .scorm_type_document .items-list{
 	display: block;
     background: url('images/text.png') no-repeat right center;
     padding-bottom: 5px;
     padding-top: 5px;
+    padding-right: 25px;
 }
 .scorm_type_quiz .items-list{
 	display: block;
@@ -272,22 +276,22 @@ table.lp_overview img {
 	padding-left: 25px;
 }
 .level_1 {
-    margin: 0 1.5em 0 20px;
+    margin: 0 0.5em 0 20px;
     padding-left: 25px;
 }
 .level_2 {
-    margin: 0 1.5em 0 40px;
+    margin: 0 0.5em 0 40px;
     padding-left: 25px;
 }
 .level_3 {
-    margin: 0 1.5em 0 60px;
+    margin: 0 0.5em 0 60px;
     padding-left: 25px;
 }
 .level_4 {
-    margin: 0 1.5em 0 70px;
+    margin: 0 0.5em 0 70px;
     padding-left: 25px;
 }
 .level_5 {
-    margin: 0 1.5em 0 90px;
+    margin: 0 0.5em 0 90px;
     padding-left: 25px;
 }

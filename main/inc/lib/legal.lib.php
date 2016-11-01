@@ -44,7 +44,7 @@ class LegalManager
             Database::insert($legal_table, $params);
 
             return true;
-        } elseif($last['type'] != $type && $language == $last['language_id']) {
+        } elseif ($last['type'] != $type && $language == $last['language_id']) {
             // Update
             $id = $last['id'];
             $params = [
@@ -56,7 +56,6 @@ class LegalManager
 
             return true;
         } else {
-
             return false;
         }
     }
@@ -88,10 +87,8 @@ class LegalManager
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
         if (Database::num_rows($result) > 0) {
-
             return $row['version'];
         } else {
-
             return 0;
         }
     }
@@ -201,7 +198,8 @@ class LegalManager
             default:
                 break;
         }
-		return 	$preview;
+
+		return $preview;
 	}
 
 	/**
@@ -226,11 +224,8 @@ class LegalManager
 
 		$result = Database::query($sql);
 		$legals = array();
-		$versions = array();
 		while ($legal = Database::fetch_array($result)) {
 			// max 2000 chars
-			//echo strlen($legal[1]); echo '<br>';
-			$versions[] = $legal[0];
 			$languages[] = $legal[1];
             if (strlen($legal[2]) > 2000) {
                 $legal[2] = substr($legal[2], 0, 2000).' ... ';
@@ -242,6 +237,7 @@ class LegalManager
             }
 			$legals[] = $legal;
 		}
+
 		return $legals;
 	}
 

@@ -1076,7 +1076,7 @@ function api_transliterate($string, $unknown = '?', $from_encoding = null)
  * Note the difference with the original funtion ord(): ord('') returns 0, api_ord('') returns 0xFFFD (unknown character).
  */
 function api_ord($character, $encoding = null) {
-    return Patchwork\Utf8::ord(api_utf8_encode($character, $encoding));
+    return Utf8::ord(api_utf8_encode($character, $encoding));
 }
 
 /**
@@ -1889,7 +1889,8 @@ function _api_convert_encoding(&$string, $to_encoding, $from_encoding)
  * @param string $encoding		The given encoding identificator, for example 'WINDOWS-1252'.
  * @return string				Returns the name of the corresponding conversion table, for the same example - 'CP1252'.
  */
-function _api_get_character_map_name($encoding) {
+function _api_get_character_map_name($encoding)
+{
     static $character_map_selector;
     if (!isset($character_map_selector)) {
         $file = dirname(__FILE__).'/internationalization_database/conversion/character_map_selector.php';
@@ -1951,7 +1952,8 @@ function _api_mb_supports($encoding) {
  * @param string $encoding	The specified encoding.
  * @return bool				Returns TRUE when the specified encoding is supported, FALSE othewise.
  */
-function _api_iconv_supports($encoding) {
+function _api_iconv_supports($encoding)
+{
     static $supported = array();
     if (!isset($supported[$encoding])) {
         if (ICONV_INSTALLED) {
@@ -1974,7 +1976,8 @@ function _api_iconv_supports($encoding) {
 
 // This function checks whether the function _api_convert_encoding() (the php-
 // implementation) is able to convert from/to a given encoding.
-function _api_convert_encoding_supports($encoding) {
+function _api_convert_encoding_supports($encoding)
+{
     static $supports = array();
     if (!isset($supports[$encoding])) {
         $supports[$encoding] = _api_get_character_map_name(api_refine_encoding_id($encoding)) != '';

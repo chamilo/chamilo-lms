@@ -202,14 +202,7 @@ class Login
             Database::getManager()->flush();
 
             $url = api_get_path(WEB_CODE_PATH).'auth/reset.php?token='.$uniqueId;
-
-            //$mailTemplate = new Template(null, false, false, false, false, false);
-            //$mailLayout = $mailTemplate->get_template('mail/reset_password.tpl');
-            //$mailTemplate->assign('complete_user_name', $user->getCompleteName());
-            //$mailTemplate->assign('link', $url);
             $mailSubject = get_lang('ResetPasswordInstructions');
-            //$mailBody = $mailTemplate->fetch($mailLayout);
-
             $mailBody = sprintf(
                 get_lang('ResetPasswordCommentWithUrl'),
                 $url
@@ -377,9 +370,7 @@ class Login
      */
     static function init_course($course_id, $reset)
     {
-        global $_configuration;
         global $is_platformAdmin;
-        global $is_allowedCreateCourse;
         global $_user;
 
         global $_cid;
@@ -533,7 +524,6 @@ class Login
                         $time = api_get_utc_datetime();
 
                         if (isset($_user['user_id']) && !empty($_user['user_id'])) {
-
                             //We select the last record for the current course in the course tracking table
                             //But only if the login date is < than now + max_life_time
                             $sql = "SELECT course_access_id FROM $course_tracking_table
@@ -575,7 +565,6 @@ class Login
         $is_sessionAdmin = false;
 
         if ($reset) {
-
             if (isset($user_id) && $user_id && isset($_cid) && $_cid) {
 
                 //Check if user is subscribed in a course
@@ -766,15 +755,14 @@ class Login
             Session::write('is_courseTutor', $is_courseTutor);
             Session::write('is_courseCoach', $is_courseCoach);
             Session::write('is_allowed_in_course', $is_allowed_in_course);
-
             Session::write('is_sessionAdmin', $is_sessionAdmin);
         } else {
             // continue with the previous values
-            $is_courseAdmin = $_SESSION['is_courseAdmin'];
-            $is_courseTutor = $_SESSION['is_courseTutor'];
-            $is_courseCoach = $_SESSION['is_courseCoach'];
-            $is_courseMember = $_SESSION['is_courseMember'];
-            $is_allowed_in_course = $_SESSION['is_allowed_in_course'];
+            $is_courseAdmin = Session::read('is_courseAdmin');
+            $is_courseTutor = Session::read('is_courseTutor');
+            $is_courseCoach = Session::read('is_courseCoach');
+            $is_courseMember = Session::read('is_courseMember');
+            $is_allowed_in_course = Session::read('is_allowed_in_course');
         }
     }
 

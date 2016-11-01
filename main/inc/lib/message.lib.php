@@ -1334,7 +1334,13 @@ class MessageManager
         $main_content .= '</div>';
         //$main_content = Security::remove_XSS($main_content, STUDENT, true);
 
-        $html .= Display::div(Display::div($title . $main_content, array('class' => 'message-topic')), array('class' => 'sm-groups-message'));
+        $html .= Display::div(
+            Display::div(
+                $title.$main_content,
+                array('class' => 'message-topic')
+            ),
+            array('class' => 'sm-groups-message')
+        );
 
         $topic_id = $main_message['id'];
 
@@ -1422,6 +1428,7 @@ class MessageManager
                 );
             }
         }
+
         return $html;
     }
 
@@ -1550,7 +1557,6 @@ class MessageManager
     /**
      * @param $id
      * @param array $params
-     * @param string $display
      * @return string
      */
     public static function generate_invitation_form($id, $params = array())
@@ -1561,7 +1567,10 @@ class MessageManager
     }
 
     //@todo this functions should be in the message class
-
+    /**
+     * @param string $keyword
+     * @return string
+     */
     public static function inbox_display($keyword = '')
     {
         $success = get_lang('SelectedMessagesDeleted');
@@ -1655,7 +1664,7 @@ class MessageManager
         $html = null;
         if (isset($_REQUEST['action'])) {
             switch ($_REQUEST['action']) {
-                case 'delete' :
+                case 'delete':
                     $number_of_selected_messages = count($_POST['id']);
                     if ($number_of_selected_messages != 0) {
                         foreach ($_POST['id'] as $index => $message_id) {
@@ -1664,7 +1673,7 @@ class MessageManager
                     }
                     $html .= Display::return_message(api_xml_http_response_encode($success), 'normal', false);
                     break;
-                case 'deleteone' :
+                case 'deleteone':
                     MessageManager::delete_message_by_user_receiver(api_get_user_id(), $_GET['id']);
                     $html .= Display::return_message(api_xml_http_response_encode($success), 'normal', false);
                     $html .= '<br/>';

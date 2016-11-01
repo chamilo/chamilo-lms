@@ -55,7 +55,7 @@ if (Security::check_token('post') && (
         $cb = new CourseBuilder();
         $course = $cb->build();
     }
-    $recycle_type = "";
+    $recycle_type = '';
     if (isset($_POST['recycle_option']) && $_POST['recycle_option'] == 'full_backup') {
         $recycle_type = 'full_backup';
     } else if (isset($_POST['action']) && $_POST['action'] == 'course_select_form') {
@@ -96,7 +96,6 @@ if (Security::check_token('post') && (
         $token = Security::get_token();
         $form->addElement('hidden', 'sec_token');
         $form->setConstants(array('sec_token' => $token));
-
         $form->display();
     }
 }

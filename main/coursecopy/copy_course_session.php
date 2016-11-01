@@ -88,8 +88,6 @@ function display_form()
     $html  = '';
     $sessions = SessionManager::get_sessions_list(array(), array('name', 'ASC'));
 
-    // Actions
-
     // Link back to the documents overview
     $actionsLeft = '<a href="../admin/index.php">'.
         Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'), '', ICON_SIZE_MEDIUM).
@@ -165,7 +163,6 @@ function search_courses($id_session, $type)
 
             // Build select for destination sessions where is not included current session from select origin
             if (!empty($id_session)) {
-
                 $sessions = SessionManager::get_sessions_list(array(), array('name', 'ASC'));
 
                 $select_destination .= '<select name="sessions_list_destination" class="form-control" onchange = "javascript: xajax_search_courses(this.value,\'destination\');">';
@@ -231,7 +228,7 @@ $xajax->processRequests();
 /* HTML head extra */
 
 $htmlHeadXtra[] = $xajax->getJavascript( api_get_path(WEB_LIBRARY_PATH).'xajax/');
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 function checkSelected(id_select,id_radio,id_title,id_destination) {
    var num=0;
    obj_origin = document.getElementById(id_select);
@@ -282,10 +279,10 @@ if (Security::check_token('post') && (
     Security::clear_token();
     $destination_course = $origin_course = $destination_session = $origin_session = '';
     if (isset ($_POST['action']) && $_POST['action'] == 'course_select_form') {
-        $destination_course	 	= $_POST['destination_course'];
-        $origin_course 			= $_POST['origin_course'];
-        $destination_session 	= $_POST['destination_session'];
-        $origin_session 		= $_POST['origin_session'];
+        $destination_course = $_POST['destination_course'];
+        $origin_course = $_POST['origin_course'];
+        $destination_session = $_POST['destination_session'];
+        $origin_session = $_POST['origin_session'];
 
         $course = CourseSelectForm::get_posted_course(
             'copy_course',
@@ -299,23 +296,22 @@ if (Security::check_token('post') && (
         Display::display_confirmation_message(get_lang('CopyFinished'));
         display_form();
     } else {
-
-        $arr_course_origin 		= array();
+        $arr_course_origin = array();
         $arr_course_destination = array();
-        $destination_session 	= '';
-        $origin_session 		= '';
+        $destination_session = '';
+        $origin_session = '';
 
         if (isset($_POST['SessionCoursesListOrigin'])) {
-            $arr_course_origin 		= $_POST['SessionCoursesListOrigin'];
+            $arr_course_origin = $_POST['SessionCoursesListOrigin'];
         }
         if (isset($_POST['SessionCoursesListDestination'])) {
             $arr_course_destination = $_POST['SessionCoursesListDestination'];
         }
         if (isset($_POST['sessions_list_destination'])) {
-            $destination_session 	= $_POST['sessions_list_destination'];
+            $destination_session = $_POST['sessions_list_destination'];
         }
         if (isset($_POST['sessions_list_origin'])) {
-            $origin_session 		= $_POST['sessions_list_origin'];
+            $origin_session = $_POST['sessions_list_origin'];
         }
 
         if ((is_array($arr_course_origin) && count($arr_course_origin) > 0) && !empty($destination_session)) {
@@ -323,7 +319,6 @@ if (Security::check_token('post') && (
             if (count($arr_course_origin) > 1 || count($arr_course_destination) > 1) {
                 Display::display_error_message(get_lang('YouMustSelectACourseFromOriginalSession'));
             } else {
-                //foreach ($arr_course_origin as $course_origin) {
                 //first element of the array
                 $course_code = $arr_course_origin[0];
                 $course_destinatination = $arr_course_destination[0];
@@ -355,22 +350,22 @@ if (Security::check_token('post') && (
         Display::display_normal_message(get_lang('ToExportDocumentsWithGlossaryYouHaveToSelectGlossary'));
     }
 
-    $arr_course_origin 		= array();
+    $arr_course_origin = array();
     $arr_course_destination = array();
-    $destination_session 	= '';
-    $origin_session 		= '';
+    $destination_session = '';
+    $origin_session = '';
 
     if (isset($_POST['SessionCoursesListOrigin'])) {
-        $arr_course_origin 		= $_POST['SessionCoursesListOrigin'];
+        $arr_course_origin = $_POST['SessionCoursesListOrigin'];
     }
     if (isset($_POST['SessionCoursesListDestination'])) {
         $arr_course_destination = $_POST['SessionCoursesListDestination'];
     }
     if (isset($_POST['sessions_list_destination'])) {
-        $destination_session 	= $_POST['sessions_list_destination'];
+        $destination_session = $_POST['sessions_list_destination'];
     }
     if (isset($_POST['sessions_list_origin'])) {
-        $origin_session 		= $_POST['sessions_list_origin'];
+        $origin_session = $_POST['sessions_list_origin'];
     }
 
     if ((is_array($arr_course_origin) && count($arr_course_origin) > 0) && !empty($destination_session)) {
@@ -378,14 +373,12 @@ if (Security::check_token('post') && (
         $course_origin = api_get_course_info($arr_course_origin[0]);
         $cb = new CourseBuilder('', $course_origin);
         $course = $cb->build($origin_session, $arr_course_origin[0], $with_base_content);
-        //$hiddenFields['same_file_name_option'] = $_POST['same_file_name_option'];
-        $hiddenFields['destination_course'] 	= $arr_course_destination[0];
-        $hiddenFields['origin_course'] 		= $arr_course_origin[0];
-        $hiddenFields['destination_session'] 	= $destination_session;
-        $hiddenFields['origin_session'] 		= $origin_session;
+        $hiddenFields['destination_course'] = $arr_course_destination[0];
+        $hiddenFields['origin_course'] = $arr_course_origin[0];
+        $hiddenFields['destination_session'] = $destination_session;
+        $hiddenFields['origin_session'] = $origin_session;
         // Add token to Course select form
         $hiddenFields['sec_token'] = Security::get_token();
-
         CourseSelectForm :: display_form($course, $hiddenFields, true);
         echo '<div style="float:right"><a href="javascript:window.history.go(-1);">'.
             Display::return_icon(

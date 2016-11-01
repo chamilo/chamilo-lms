@@ -56,7 +56,7 @@ if (isset($dashboard_view) && $dashboard_view == 'blocks') {
         if (count($columns) > 0) {
             $columns_name = array_keys($columns);
             // blocks for column 1
-            if (in_array('column_1',$columns_name)) {
+            if (in_array('column_1', $columns_name)) {
                 echo '<div id="column1" class="col-md-6">';
                     foreach ($columns['column_1'] as $content) {
                         echo $content;
@@ -68,7 +68,7 @@ if (isset($dashboard_view) && $dashboard_view == 'blocks') {
                 echo '</div>';
             }
             // blocks for column 2
-            if (in_array('column_2',$columns_name)) {
+            if (in_array('column_2', $columns_name)) {
                 // blocks for column 1
                 echo '<div id="column2" class="col-md-6">';
                     foreach ($columns['column_2'] as $content) {

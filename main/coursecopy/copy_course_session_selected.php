@@ -55,7 +55,7 @@ $interbreadcrumb[] = array(
 
 // Database Table Definitions
 $tbl_session_rel_course_rel_user = Database::get_main_table(
-        TABLE_MAIN_SESSION_COURSE_USER
+    TABLE_MAIN_SESSION_COURSE_USER
 );
 $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);

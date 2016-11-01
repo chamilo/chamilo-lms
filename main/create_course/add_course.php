@@ -116,7 +116,6 @@ $form->addRule(
 // The teacher
 $titular = & $form->addElement('hidden', 'tutor_name', '');
 if ($course_validation_feature) {
-
     // Description of the requested course.
     $form->addElement(
         'textarea',
@@ -279,7 +278,6 @@ if ($form->validate()) {
 
     if ($course_code_ok) {
         if (!$course_validation_feature) {
-
             $params = array();
             $params['title'] = $title;
             $params['exemplary_content'] = $exemplary_content;
@@ -320,7 +318,6 @@ if ($form->validate()) {
                     header('Location: ' . $url);
                     exit;
                 } else {
-
                     $url = api_get_path(WEB_COURSE_PATH) . $course_info['directory'] . '/';
                     header('Location: ' . $url);
                     exit;

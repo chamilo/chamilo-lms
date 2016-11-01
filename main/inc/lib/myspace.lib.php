@@ -2517,8 +2517,8 @@ class MySpace
         if ($form->validate()) {
             $table = new SortableTable(
                 'tracking_access_overview',
-                ['MySpace','getNumberOfRrackingAccessOverview'],
-                ['MySpace','getUserDataAccessTrackingOverview'],
+                ['MySpace', 'getNumberOfTrackAccessOverview'],
+                ['MySpace', 'getUserDataAccessTrackingOverview'],
                 0
             );
             $table->additional_parameters = $form->exportValues();
@@ -2546,11 +2546,11 @@ class MySpace
         );
     }
 
-    public static function getNumberOfRrackingAccessOverview()
+    public static function getNumberOfTrackAccessOverview()
     {
-        $track_e_course_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 
-        return Database::count_rows($track_e_course_access);
+        return Database::count_rows($table);
     }
 
     public static function getUserDataAccessTrackingOverview($from, $numberItems, $column, $orderDirection)
@@ -2700,10 +2700,10 @@ function get_stats($user_id, $courseId, $start_date = null, $end_date = null)
 
     $course_info = api_get_course_info_by_id($courseId);
     if (!empty($course_info)) {
-        $strg_sd    = "";
-        $strg_ed    = "";
+        $strg_sd = '';
+        $strg_ed = '';
         if ($start_date != null && $end_date != null){
-            $end_date = add_day_to( $end_date );
+            $end_date = add_day_to($end_date);
             $strg_sd = "AND login_course_date BETWEEN '$start_date' AND '$end_date'";
             $strg_ed = "AND logout_course_date BETWEEN '$start_date' AND '$end_date'";
         }

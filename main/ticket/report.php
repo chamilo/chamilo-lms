@@ -79,7 +79,7 @@ $tools['group'] = array('id' => 'group', 'name' => get_lang('Group'));
 $tools['learnpath'] = array('id' => 'learnpath', 'name' => get_lang('Learnpath'));
 $tools['link'] = array('id' => 'link', 'name' => get_lang('Link'));
 $tools['quiz'] = array('id' => 'quiz', 'name' => get_lang('Quiz'));
-$tools['student_publication'] = array('id' => 'student_publication', 'name' => get_lang('StudentPublication'));
+$tools['student_publication'] = array('id' => 'student_publication', 'name' => get_lang('ToolStudentPublication'));
 $tools['user'] = array('id' => 'user', 'name' => get_lang('User'));
 $tools['forum'] = array('id' => 'forum', 'name' => get_lang('Forum'));
 

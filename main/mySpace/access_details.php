@@ -126,7 +126,7 @@ $result_to_print = convert_to_string($sql_result);
 
 echo Display::page_header(get_lang('DetailsStudentInCourse'));
 echo Display::page_subheader(
-    get_lang('User').': '.$userInfo['complete_name'].' - '.get_lang('Course').': '.$course_code
+    get_lang('User').': '.$userInfo['complete_name'].' - '.get_lang('Course').': '.$courseInfo['title'] . ' (' . $course_code . ')'
 );
 
 $form->setDefaults(array('from' => $from, 'to' => $to));

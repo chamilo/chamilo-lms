@@ -6,6 +6,7 @@ use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 use Gedmo\Sortable\Entity\Repository\SortableRepository;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Class learnpath
@@ -237,7 +238,6 @@ class learnpath
 
             $sql = "UPDATE $lp_table SET id = iid WHERE iid = ".$this->lp_view_id;
             Database::query($sql);
-
         }
 
         // Initialise items.
@@ -484,7 +484,7 @@ class learnpath
      * @param int $parent
      * @param int $previous
      * @param string $type
-     * @param int  resource ID (ref)
+     * @param int $id resource ID (ref)
      * @param string $title
      * @param string $description
      * @param int $prerequisites
@@ -770,9 +770,7 @@ class learnpath
 
         // Session id.
         $session_id = api_get_session_id();
-
         $userId = empty($userId) ? api_get_user_id() : $userId;
-
         $check_name = "SELECT * FROM $tbl_lp
                        WHERE c_id = $course_id AND name = '$name'";
 
@@ -1090,7 +1088,8 @@ class learnpath
                 $sql = "SELECT id FROM $lp
                         WHERE c_id = ".$course_id." AND path = '$path' AND id != " . $this->lp_id;
                 $res = Database::query($sql);
-                if (Database :: num_rows($res) > 0) { // Another learning path uses this directory, so don't delete it.
+                if (Database :: num_rows($res) > 0) {
+                    // Another learning path uses this directory, so don't delete it.
                     if ($this->debug > 2) {
                         error_log('New LP - In learnpath::delete(), found other LP using path ' . $path . ', keeping directory', 0);
                     }
@@ -9640,8 +9639,6 @@ class learnpath
                                     }
                                 }
                             }*/
-
-
                             $possible_parent = $this->get_scorm_xml_node($children, 'ITEM_'.$item->parent);
                             if ($possible_parent) {
                                 if ($possible_parent->getAttribute('identifier') == 'ITEM_'.$item->parent) {
@@ -9857,7 +9854,6 @@ class learnpath
         // TODO: Add a readme file here, with a short description and a link to the Reload player
         // then add the file to the zip, then destroy the file (this is done automatically).
         // http://www.reload.ac.uk/scormplayer.html - once done, don't forget to close FS#138
-
         foreach ($zip_files as $file_path) {
             if (empty($file_path)) {
                 continue;
@@ -9988,7 +9984,7 @@ EOD;
         // Add the extra files that go along with a SCORM package.
         $main_code_path = api_get_path(SYS_CODE_PATH) . 'lp/packaging/';
 
-        $fs = new \Symfony\Component\Filesystem\Filesystem;
+        $fs = new Filesystem();
         $fs->mirror($main_code_path, $archive_path.$temp_dir_short);
 
         // Finalize the imsmanifest structure, add to the zip, then return the zip.
@@ -10118,12 +10114,9 @@ EOD;
      */
     public function upload_image($image_array)
     {
-        $image_moved = false;
         if (!empty ($image_array['name'])) {
             $upload_ok = process_uploaded_file($image_array);
             $has_attachment = true;
-        } else {
-            $image_moved = true;
         }
 
         if ($upload_ok) {
@@ -10135,8 +10128,7 @@ EOD;
                 $new_file_name = add_ext_on_mime(stripslashes($image_array['name']), $image_array['type']);
 
                 if (!filter_extension($new_file_name)) {
-                    //Display :: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
-                    $image_moved = false;
+
                 } else {
                     $file_extension = explode('.', $image_array['name']);
                     $file_extension = strtolower($file_extension[sizeof($file_extension) - 1]);
@@ -10151,7 +10143,6 @@ EOD;
 
                     // Storing the image filename.
                     if ($result) {
-                        $image_moved = true;
                         $this->set_preview_image($new_file_name);
 
                         //Resize to 64px to use on course homepage
@@ -10203,9 +10194,9 @@ EOD;
         $table_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 
         // Get the max order of the items
-        $sql_max_order = "SELECT max(display_order) AS display_order FROM $table_lp_item
-    	                  WHERE c_id = $course_id AND lp_id = '" . $this->lp_id . "'";
-        $rs_max_order = Database::query($sql_max_order);
+        $sql = "SELECT max(display_order) AS display_order FROM $table_lp_item
+                WHERE c_id = $course_id AND lp_id = '" . $this->lp_id . "'";
+        $rs_max_order = Database::query($sql);
         $row_max_order = Database::fetch_object($rs_max_order);
         $max_order = $row_max_order->display_order;
         // Get the previous item ID
@@ -10223,9 +10214,7 @@ EOD;
      */
     public function copy()
     {
-        $main_path = api_get_path(SYS_CODE_PATH);
-
-        //Course builder
+        // Course builder
         $cb = new CourseBuilder();
 
         //Setting tools that will be copied
@@ -10460,7 +10449,9 @@ EOD;
     public static function getCategoryByCourse($courseId)
     {
         $em = Database::getManager();
-        $items = $em->getRepository('ChamiloCourseBundle:CLpCategory')->findBy(array('cId' => $courseId));
+        $items = $em->getRepository('ChamiloCourseBundle:CLpCategory')->findBy(
+            array('cId' => $courseId)
+        );
 
         return $items;
     }
@@ -10475,7 +10466,6 @@ EOD;
         $em = Database::getManager();
         $item = $em->find('ChamiloCourseBundle:CLpCategory', $id);
         if ($item) {
-
             $courseId = $item->getCId();
             $query = $em->createQuery('SELECT u FROM ChamiloCourseBundle:CLp u WHERE u.cId = :id AND u.categoryId = :catId');
             $query->setParameter('id', $courseId);
@@ -10501,7 +10491,7 @@ EOD;
      *
      * @return mixed
      */
-    static function getCategoryFromCourseIntoSelect($courseId, $addSelectOption = false)
+    public static function getCategoryFromCourseIntoSelect($courseId, $addSelectOption = false)
     {
         $items = self::getCategoryByCourse($courseId);
         $cats = array();
@@ -10737,7 +10727,6 @@ EOD;
     public function getFinalEvaluationItem()
     {
         $exercises = [];
-
         foreach ($this->items as $item) {
             if ($item->type != 'quiz') {
                 continue;
@@ -11123,10 +11112,9 @@ EOD;
         }
 
         $lpItemId = [];
-
         $typeListNotToVerify = self::getChapterTypes();
 
-	// Using get_toc() function instead $this->items because returns the correct order of the items
+	    // Using get_toc() function instead $this->items because returns the correct order of the items
         foreach ($this->get_toc() as $item) {
             if (!in_array($item['type'], $typeListNotToVerify)) {
                 $lpItemId[] = $item['id'];
@@ -11183,7 +11171,6 @@ EOD;
 
         return true;
     }
-
 
     /**
      * Returns an HTML-formatted link to a resource, to incorporate directly into
@@ -11299,14 +11286,6 @@ EOD;
                 $tbl_post = Database::get_course_table(TABLE_FORUM_POST);
                 $result = Database::query("SELECT * FROM $tbl_post WHERE c_id = $course_id AND post_id=$id");
                 $myrow = Database::fetch_array($result);
-                $title = $myrow['post_title'];
-                //$desc = $row_item['description'];
-                $posternom = $myrow['poster_name'];
-                $posttime = $myrow['post_date'];
-                $posttext = $myrow['post_text'];
-                $posttitle = $title;
-                $posttext = str_replace('"', "'", $posttext);
-
                 $link .= $main_dir_path.'forum/viewthread.php?post='.$id.'' .
                         '&thread='.$myrow['thread_id'].'&forum='.$myrow['forum_id'].'' .
                         '&lp=true';
@@ -11468,11 +11447,9 @@ EOD;
                 $pathname = explode('/', $myrow['path']); // Making a correct name for the link.
                 $last = count($pathname) - 1; // Making a correct name for the link.
                 $filename = $pathname[$last]; // Making a correct name for the link.
-                $image = choose_image($filename);
                 $ext = explode('.', $filename);
                 $ext = strtolower($ext[sizeof($ext) - 1]);
                 $myrow['path'] = rawurlencode($myrow['path']);
-                $in_frames = in_array($ext, array('htm', 'html', 'gif', 'jpg', 'jpeg', 'png'));
                 $output = $filename;
                 break;
         }

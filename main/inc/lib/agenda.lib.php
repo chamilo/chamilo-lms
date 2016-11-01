@@ -1851,7 +1851,7 @@ class Agenda
     private function formatEventDate($utcTime)
     {
         $utcTimeZone = new DateTimeZone('UTC');
-        $platformTimeZone = new DateTimeZone(_api_get_timezone());
+        $platformTimeZone = new DateTimeZone(api_get_timezone());
 
         $eventDate = new DateTime($utcTime, $utcTimeZone);
         $eventDate->setTimezone($platformTimeZone);
@@ -2718,7 +2718,7 @@ class Agenda
         );
         $sentTo = array('everyone' => true);
         $calendar = Sabre\VObject\Reader::read($data);
-        $currentTimeZone = _api_get_timezone();
+        $currentTimeZone = api_get_timezone();
         if (!empty($calendar->VEVENT)) {
             foreach ($calendar->VEVENT as $event) {
                 $start = $event->DTSTART->getDateTime();

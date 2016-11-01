@@ -514,7 +514,7 @@ class Template
             'site_name' => api_get_setting('siteName'),
             'institution' => api_get_setting('Institution'),
             'date' => api_format_date('now', DATE_FORMAT_LONG),
-            'timezone' => _api_get_timezone(),
+            'timezone' => api_get_timezone(),
             'gamification_mode' => api_get_setting('gamification_mode')
         );
         $this->assign('_s', $_s);

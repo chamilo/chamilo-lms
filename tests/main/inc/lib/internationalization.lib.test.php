@@ -971,7 +971,7 @@ class TestInternationalization extends UnitTestCase {
 
 	public function test_api_get_utc_datetime_with_string() {
 		$timestamp = time();
-		$timezone = _api_get_timezone();
+		$timezone = api_get_timezone();
 		$system_timezone = date_default_timezone_get();
 		date_default_timezone_set($timezone);
 		$datetime = date('Y-m-d H:i:s', $timestamp);

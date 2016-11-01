@@ -1284,15 +1284,15 @@ class TicketManager
                 $row['course'] = null;
                 $row['start_date_from_db'] = $row['start_date'];
                 $row['start_date'] = api_convert_and_format_date(
-                        api_get_local_time($row['start_date']), DATE_TIME_FORMAT_LONG, _api_get_timezone()
+                        api_get_local_time($row['start_date']), DATE_TIME_FORMAT_LONG, api_get_timezone()
                 );
                 $row['end_date_from_db'] = $row['end_date'];
                 $row['end_date'] = api_convert_and_format_date(
-                        api_get_local_time($row['end_date']), DATE_TIME_FORMAT_LONG, _api_get_timezone()
+                        api_get_local_time($row['end_date']), DATE_TIME_FORMAT_LONG, api_get_timezone()
                 );
                 $row['sys_lastedit_datetime_from_db'] = $row['sys_lastedit_datetime'];
                 $row['sys_lastedit_datetime'] = api_convert_and_format_date(
-                        api_get_local_time($row['sys_lastedit_datetime']), DATE_TIME_FORMAT_LONG, _api_get_timezone()
+                        api_get_local_time($row['sys_lastedit_datetime']), DATE_TIME_FORMAT_LONG, api_get_timezone()
                 );
                 $row['course_url'] = null;
                 if ($row['course_id'] != 0) {

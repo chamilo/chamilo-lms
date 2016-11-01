@@ -38,7 +38,7 @@ switch ($action) {
         } else {
             $updatedAt = new DateTime(
                 api_get_utc_datetime(),
-                new DateTimeZone(_api_get_timezone())
+                new DateTimeZone(api_get_timezone())
             );
 
             $skill->setStatus(1);
@@ -71,7 +71,7 @@ switch ($action) {
         } else {
             $updatedAt = new DateTime(
                 api_get_utc_datetime(),
-                new DateTimeZone(_api_get_timezone())
+                new DateTimeZone(api_get_timezone())
             );
 
             $skill->setStatus(0);

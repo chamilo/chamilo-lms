@@ -353,7 +353,7 @@ function api_get_timezones()
  *
  * @return string The timezone chosen
  */
-function _api_get_timezone()
+function api_get_timezone()
 {
     // First, get the default timezone of the server
     $to_timezone = date_default_timezone_get();
@@ -394,7 +394,7 @@ function _api_get_timezone()
  */
 function api_get_utc_datetime($time = null, $return_null_if_invalid_date = false, $returnObj = false)
 {
-    $from_timezone = _api_get_timezone();
+    $from_timezone = api_get_timezone();
     $to_timezone = 'UTC';
     if (is_null($time) || empty($time) || $time === '0000-00-00 00:00:00') {
         if ($return_null_if_invalid_date) {
@@ -451,7 +451,7 @@ function api_get_local_time(
     }
     // Determining the timezone to be converted to
     if (is_null($to_timezone)) {
-        $to_timezone = _api_get_timezone();
+        $to_timezone = api_get_timezone();
     }
 
     // If time is a timestamp, convert it to a string
@@ -525,7 +525,7 @@ function api_strtotime($time, $timezone = null)
 function api_format_date($time, $format = null, $language = null)
 {
     $system_timezone = date_default_timezone_get();
-    date_default_timezone_set(_api_get_timezone());
+    date_default_timezone_set(api_get_timezone());
 
     if (is_string($time)) {
         $time = strtotime($time);
@@ -677,7 +677,7 @@ function date_to_str_ago($date, $timeZone = 'UTC')
         return '';
     }
 
-    $getOldTimezone = _api_get_timezone();
+    $getOldTimezone = api_get_timezone();
     $timeAgo = new TimeAgo($timeZone, api_get_language_isocode());
     $value = $timeAgo->inWords($date);
 

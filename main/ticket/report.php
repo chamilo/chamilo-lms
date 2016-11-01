@@ -298,7 +298,7 @@ if (isset($_POST['report'])) {
     $result = Database::query($sql);
     $table_result = new SortableTable();
     $table_result->set_header(0, get_lang('User'), false);
-    $table_result->set_header(1, get_lang('Fullname'), false);
+    $table_result->set_header(1, get_lang('FullUserName'), false);
     $table_result->set_header(2, get_lang('Date'), false);
     $table_result->set_header(3, get_lang('Course'), false);
     $table_result->set_header(4, get_lang('Tool'), false);

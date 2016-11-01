@@ -67,19 +67,19 @@ div.ticket-form {
 </style>';
 $types = TicketManager::get_all_tickets_categories();
 $tools = array();
-$tools['todas'] = array('id' => '', 'name' => get_lang('Todas'));
+$tools['todas'] = array('id' => '', 'name' => get_lang('All'));
 $tools['announcement'] = array('id' => 'announcement', 'name' => get_lang('Announcement'));
 // $tools[]= array('id'=>'assignment','name'=>get_lang('Assignment'));
-$tools['calendar_event'] = array('id' => 'calendar_event', 'name' => get_lang('Calendar_event'));
+$tools['calendar_event'] = array('id' => 'calendar_event', 'name' => get_lang('CalendarEvent'));
 $tools['chat'] = array('id' => 'chat', 'name' => get_lang('Chat'));
-$tools['course_description'] = array('id' => 'course_description', 'name' => get_lang('Course_description'));
+$tools['course_description'] = array('id' => 'course_description', 'name' => get_lang('CourseDescription'));
 $tools['document'] = array('id' => 'document', 'name' => get_lang('Document'));
 $tools['dropbox'] = array('id' => 'dropbox', 'name' => get_lang('Dropbox'));
 $tools['group'] = array('id' => 'group', 'name' => get_lang('Group'));
 $tools['learnpath'] = array('id' => 'learnpath', 'name' => get_lang('Learnpath'));
 $tools['link'] = array('id' => 'link', 'name' => get_lang('Link'));
 $tools['quiz'] = array('id' => 'quiz', 'name' => get_lang('Quiz'));
-$tools['student_publication'] = array('id' => 'student_publication', 'name' => get_lang('Student_publication'));
+$tools['student_publication'] = array('id' => 'student_publication', 'name' => get_lang('StudentPublication'));
 $tools['user'] = array('id' => 'user', 'name' => get_lang('User'));
 $tools['forum'] = array('id' => 'forum', 'name' => get_lang('Forum'));
 

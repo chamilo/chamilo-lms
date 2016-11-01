@@ -1640,7 +1640,7 @@ class learnpath
         }
 
         if (empty ($id) || $id != strval(intval($id))) {
-            return array ();
+            return array();
         }
 
         $lp_item = Database :: get_course_table(TABLE_LP_ITEM);
@@ -2796,68 +2796,6 @@ class learnpath
     }
 
     /**
-     * Returns a usable array of stats related to the current learnpath and user
-     * @return array	Well-formatted array containing status for the current learnpath
-     */
-    public function get_stats()
-    {
-        if ($this->debug > 0) {
-            error_log('New LP - In learnpath::get_stats()', 0);
-        }
-    }
-
-    /**
-     * Static method. Can be re-implemented by children. Gives an array of statistics for
-     * the given course (for all learnpaths and all users)
-     * @param	string	Course code
-     * @return array	Well-formatted array containing status for the course's learnpaths
-     */
-    public function get_stats_course($course)
-    {
-        //if ($this->debug > 0) { error_log('New LP - In learnpath::get_stats_course()', 0); }
-        // TODO
-    }
-
-    /**
-     * Static method. Can be re-implemented by children. Gives an array of statistics for
-     * the given course and learnpath (for all users)
-     * @param	string	Course code
-     * @param	integer	Learnpath ID
-     * @return array	Well-formatted array containing status for the specified learnpath
-     */
-    public function get_stats_lp($course, $lp)
-    {
-        //if ($this->debug > 0) { error_log('New LP - In learnpath::get_stats_lp()', 0); }
-        // TODO
-    }
-
-    /**
-     * Static method. Can be re-implemented by children. Gives an array of statistics for
-     * the given course, learnpath and user.
-     * @param	string	Course code
-     * @param	integer	Learnpath ID
-     * @param	integer	User ID
-     * @return array	Well-formatted array containing status for the specified learnpath and user
-     */
-    public function get_stats_lp_user($course, $lp, $user)
-    {
-        //if ($this->debug > 0) { error_log('New LP - In learnpath::get_stats_lp_user()', 0); }
-        // TODO
-    }
-
-    /**
-     * Static method. Can be re-implemented by children. Gives an array of statistics for
-     * the given course and learnpath (for all users)
-     * @param	string	Course code
-     * @param	integer	User ID
-     * @return array	Well-formatted array containing status for the user's learnpaths
-     */
-    public function get_stats_user($course, $user) {
-        //if ($this->debug > 0) { error_log('New LP - In learnpath::get_stats_user()', 0); }
-        // TODO
-    }
-
-    /**
      * Gets the status list for all LP's items
      * @return	array	Array of [index] => [item ID => current status]
      */
@@ -3186,7 +3124,6 @@ class learnpath
         $i = 0;
 
         foreach ($toc_list as $item) {
-
             // Style Status
             $class_name = [
                 'not attempted' => 'scorm_not_attempted',
@@ -3199,7 +3136,6 @@ class learnpath
             ];
 
             $rowColor = ' ';
-
             $dirTypes = self::getChapterTypes();
 
             if (in_array($item['type'], $dirTypes)) {
@@ -5369,7 +5305,7 @@ class learnpath
             }
             $sql = "UPDATE $lp_table SET debug = $force
                     WHERE c_id = ".$course_id." AND id = " . $this->get_id();
-            $res = Database::query($sql);
+            Database::query($sql);
             $this->scorm_debug = $force;
             return $force;
         } else {
@@ -6662,7 +6598,7 @@ class learnpath
         }
 
         if (isset ($_GET['edit']) && $_GET['edit'] == 'true') {
-            $legend .= Display :: return_warning_message(get_lang('Warning') . ' ! ' . get_lang('WarningEditingDocument'));
+            $legend .= Display :: return_message(get_lang('Warning') . ' ! ' . get_lang('WarningEditingDocument'));
         }
 
         $form->addHeader($legend);
@@ -6893,7 +6829,7 @@ class learnpath
             $legend .= get_lang('EditCurrentExecice');
         }
         if (isset ($_GET['edit']) && $_GET['edit'] == 'true') {
-            $legend .= Display:: return_warning_message(
+            $legend .= Display:: return_message(
                 get_lang('Warning').' ! '.get_lang('WarningEditingDocument')
             );
         }
@@ -7730,7 +7666,7 @@ class learnpath
         $return .= '</legend>';
 
         if (isset ($_GET['edit']) && $_GET['edit'] == 'true') {
-            $return .= Display :: return_warning_message('<strong>' . get_lang('Warning') . ' !</strong><br />' . get_lang('WarningEditingDocument'), false);
+            $return .= Display :: return_message('<strong>' . get_lang('Warning') . ' !</strong><br />' . get_lang('WarningEditingDocument'), false);
         }
         $form = new FormValidator('form', 'POST', api_get_self() . '?' .$_SERVER['QUERY_STRING'], '', array('enctype'=> "multipart/form-data"));
         $defaults['title'] = Security :: remove_XSS($item_title);
@@ -8215,7 +8151,7 @@ class learnpath
         $result = Database::query($sql);
         $arrLP = array();
         while ($row = Database :: fetch_array($result)) {
-            $arrLP[] = array (
+            $arrLP[] = array(
                 'id' => $row['id'],
                 'item_type' => $row['item_type'],
                 'title' => $row['title'],
@@ -8387,32 +8323,26 @@ class learnpath
         $_course = api_get_course_info();
         $course_id = api_get_course_int_id();
         $course_code = api_get_course_id();
-
         $return = '<div class="actions">';
-
         switch ($item_type) {
             case 'dir':
                 // Commented the message cause should not show it.
                 //$lang = get_lang('TitleManipulateChapter');
                 break;
-
             case TOOL_LP_FINAL_ITEM:
             case TOOL_DOCUMENT:
                 // Commented the message cause should not show it.
                 //$lang = get_lang('TitleManipulateDocument');
                 break;
-
             case TOOL_LINK:
             case 'link' :
                 // Commented the message cause should not show it.
                 //$lang = get_lang('TitleManipulateLink');
                 break;
-
             case TOOL_QUIZ:
                 // Commented the message cause should not show it.
                 //$lang = get_lang('TitleManipulateQuiz');
                 break;
-
             case TOOL_STUDENTPUBLICATION:
                 // Commented the message cause should not show it.
                 //$lang = get_lang('TitleManipulateStudentPublication');
@@ -9046,7 +8976,7 @@ class learnpath
      */
     public function get_student_publications()
     {
-        $return = '<ul class="lp_resource" >';
+        $return = '<ul class="lp_resource">';
         $return .= '<li class="lp_resource_element">';
         $return .= Display::return_icon('works_new.gif');
         $return .= ' <a href="' . api_get_self() . '?' . api_get_cidreq() . '&action=add_item&type=' . TOOL_STUDENTPUBLICATION . '&lp_id=' . $this->lp_id . '">' .

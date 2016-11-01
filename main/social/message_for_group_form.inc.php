@@ -10,7 +10,7 @@ $cidReset = true;
 require_once '../inc/global.inc.php';
 
 api_block_anonymous_users();
-if (api_get_setting('allow_social_tool') !='true') {
+if (api_get_setting('allow_social_tool') != 'true') {
     api_not_allowed();
 }
 
@@ -64,7 +64,13 @@ $anchor_topic  = isset($_GET['anchor_topic']) ? Security::remove_XSS($_GET['anch
 
 $url = api_get_path(WEB_CODE_PATH).'social/group_topics.php?id='.$group_id.'&anchor_topic='.$anchor_topic.'&topics_page_nr='.$page_topic.$param_item_page;
 
-$form = new FormValidator('form', 'post', $url, null, array('enctype' => 'multipart/form-data'));
+$form = new FormValidator(
+    'form',
+    'post',
+    $url,
+    null,
+    array('enctype' => 'multipart/form-data')
+);
 $form->addElement('hidden', 'action', $allowed_action);
 $form->addElement('hidden', 'group_id', $group_id);
 $form->addElement('hidden', 'parent_id', $message_id);

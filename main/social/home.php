@@ -62,12 +62,13 @@ if (api_get_setting('profile', 'picture') == 'true') {
                 api_get_user_id(),
                 $_FILES['picture']['name'],
                 $_FILES['picture']['tmp_name']
-            )
-            ) {
+            )) {
                 $table_user = Database :: get_main_table(TABLE_MAIN_USER);
 
                 $sql = "UPDATE $table_user
-                    SET picture_uri = '$new_picture' WHERE user_id =  " . api_get_user_id();
+                        SET 
+                            picture_uri = '$new_picture' 
+                        WHERE user_id =  " . api_get_user_id();
 
                 $result = Database::query($sql);
             }
@@ -122,7 +123,7 @@ if (!empty($results)) {
                 $group_url
             ),
             $result['name'],
-            $group_info.$group_actions,
+            $group_info.$group_actions
         );
     }
 }
@@ -147,7 +148,7 @@ foreach ($results as $result) {
         $result['count'] = $result['count'] . ' ' . get_lang('Members');
     }
     $result['name'] = '<div class="group-name">'.Display::url(
-            api_ucwords(cut($result['name'], 40, true)),$group_url)
+            api_ucwords(cut($result['name'], 40, true)), $group_url)
         .'</div><div class="count-username">'.Display::returnFontAwesomeIcon('user').$result['count'].'</div>';
 
     $picture = $userGroup->get_picture_group(
@@ -170,7 +171,7 @@ $social_group_block = null;
 if ($list > 0) {
     $social_group_block .= '<div class="list-group-newest">';
     $social_group_block .= '<div class="group-title">' . get_lang('Newest') . '</div>';
-    for($i = 0;$i < $list; $i++){
+    for ($i = 0;$i < $list; $i++) {
         $social_group_block.='<div class="row">';
         $social_group_block.='<div class="col-md-3">' . $groups_newest[$i][0] . '</div>';
         $social_group_block.='<div class="col-md-9">' . $groups_newest[$i][1];
@@ -184,7 +185,7 @@ if ($list > 0) {
     $social_group_block .= '<div class="list-group-newest">';
     $social_group_block .= '<div class="group-title">' . get_lang('Popular') . '</div>';
 
-    for($i = 0;$i < $list; $i++){
+    for ($i = 0;$i < $list; $i++) {
         $social_group_block.='<div class="row">';
         $social_group_block.='<div class="col-md-3">' . $groups_pop[$i][0] . '</div>';
         $social_group_block.='<div class="col-md-9">' . $groups_pop[$i][1];
@@ -199,7 +200,7 @@ $friend_html = SocialManager::listMyFriendsBlock(
     '',
     $show_full_profile
 );
-//Block Social Sessions
+// Block Social Sessions
 $social_session_block = null;
 $user_info = api_get_user_info($user_id);
 $sessionList = SessionManager::getSessionsFollowedByUser($user_id, $user_info['status']);

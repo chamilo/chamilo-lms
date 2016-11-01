@@ -810,13 +810,12 @@ class ExtraField extends Model
         $type = $this->type;
         $jquery_ready_content = null;
         if (!empty($extra)) {
-
             $newOrder = [];
             if (!empty($orderFields)) {
                 foreach ($orderFields as $order) {
                     foreach ($extra as $field_details) {
                         if ($order == $field_details['variable']) {
-                           $newOrder[] = $field_details;
+                            $newOrder[] = $field_details;
                         }
                     }
                 }

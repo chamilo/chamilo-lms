@@ -377,7 +377,7 @@ class ExerciseLink extends AbstractLink
     public function get_type_name()
     {
         if ($this->is_hp == 1) {
-            return get_lang('HotPotatoes');
+            return 'HotPotatoes';
         } else {
             return get_lang('Quiz');
         }

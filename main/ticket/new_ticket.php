@@ -489,7 +489,7 @@ function save_ticket()
         exit;
     } else {
         Display::display_header(get_lang('ComposeMessage'));
-        Display::display_error_message(get_lang('ErrorRegisterMessage'));
+        Display::display_error_message(get_lang('ThereWasAnErrorRegisteringTheTicket'));
     }
 }
 

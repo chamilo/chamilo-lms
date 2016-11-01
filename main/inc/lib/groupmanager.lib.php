@@ -2437,7 +2437,7 @@ class GroupManager
                     $result['updated']['group'][] = $data;
                 }
 
-                $students = isset($data['students']) ? explode(',', $data['students']) : null;
+                $students = isset($data['students']) ? explode(',', $data['students']) : [];
                 if (!empty($students)) {
                     $studentUserIdList = array();
                     foreach ($students as $student) {
@@ -2447,7 +2447,7 @@ class GroupManager
                     self::subscribe_users($studentUserIdList, $groupId);
                 }
 
-                $tutors = isset($data['tutors']) ? explode(',', $data['tutors']) : null;
+                $tutors = isset($data['tutors']) ? explode(',', $data['tutors']) : [];
                 if (!empty($tutors)) {
                     $tutorIdList = array();
                     foreach ($tutors as $tutor) {
@@ -2613,7 +2613,7 @@ class GroupManager
     /**
      * @param string $default
      */
-    static function getSettingBar($default)
+    public static function getSettingBar($default)
     {
         $activeSettings = null;
         $activeTutor = null;

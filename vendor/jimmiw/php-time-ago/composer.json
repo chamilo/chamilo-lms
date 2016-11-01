@@ -1,0 +1,20 @@
+{
+    "name": "jimmiw/php-time-ago",
+    "description": "Simple module, that displays the date in a \"time ago\" format",
+    "keywords": ["time ago", "distance of time", "time ago in words"],
+    "homepage": "https://github.com/jimmiw/php-time-ago",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jimmi Westerberg",
+            "homepage": "http://www.westsworld.dk",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=4"
+    },
+    "autoload": {
+        "files": ["timeago.inc.php"]
+    }
+}

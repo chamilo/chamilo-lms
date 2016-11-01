@@ -1,0 +1,24 @@
+{
+    "name": "kigkonsult/icalcreator",
+    "type": "library",
+    "description": "iCalcreator is a PHP implementation of rfc2445/rfc5545, management of iCal formatted files",
+    "keywords": [ "rfc2445", "rfc5545", "calendar", "management", "file", "format" ],
+    "time" : "2015-05-03",
+    "license": "LGPL-2.1",
+    "homepage": "http://kigkonsult.se",
+    "support": {
+       "issues": "http://kigkonsult.se/contact/index.php"
+    },
+    "authors": [
+        {
+            "name": "Kjell-Inge Gustafsson",
+            "email": "ical@kigkonsult.se"
+        }
+    ],
+    "autoload": {
+        "files": ["iCalcreator.php"]
+    },
+    "require": {
+        "php": ">=5.3"
+    }
+}

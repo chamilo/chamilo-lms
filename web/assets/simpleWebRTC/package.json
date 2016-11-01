@@ -1,0 +1,28 @@
+{
+  "name": "simplewebrtc",
+  "version": "1.15.4",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:henrikjoreteg/SimpleWebRTC.git"
+  },
+  "main": "./simplewebrtc.js",
+  "description": "World's easiest webrtc",
+  "dependencies": {
+    "webrtcsupport": "^1.0.0",
+    "wildemitter": "1.x",
+    "socket.io-client": "0.9.16",
+    "attachmediastream": "1.0.1",
+    "webrtc": "1.14.x",
+    "mockconsole": "0.0.1"
+  },
+  "devDependencies": {
+    "express": "3.x.x",
+    "browserify": "2.22.0",
+    "precommit-hook": "0.3.x",
+    "request": "",
+    "uglify-js": "2.3.6"
+  },
+  "scripts": {
+    "updateLatest": "./scripts/updateLatest.sh"
+  }
+}

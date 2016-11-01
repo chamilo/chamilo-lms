@@ -1,0 +1,17 @@
+{
+  "name": "jquery.scrollbar",
+  "version": "0.2.10",
+  "main": [
+    "./jquery.scrollbar.js",
+    "./jquery.scrollbar.css"
+  ],
+  "dependencies": {
+    "jquery": ">=1.7"
+  },
+  "ignore": [
+    ".*",
+    "*.json",
+    "*.md",
+    "*.txt"
+  ]
+}

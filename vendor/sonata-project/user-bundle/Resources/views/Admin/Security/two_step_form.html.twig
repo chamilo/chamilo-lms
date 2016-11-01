@@ -1,0 +1,46 @@
+{#
+
+This file is part of the Sonata package.
+
+(c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+
+#}
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="{{ asset('bundles/sonataadmin/bootstrap/css/bootstrap.min.css') }}" type="text/css" media="all" >
+        <link rel="stylesheet" href="/bundles/sonataadmin/css/layout.css" type="text/css" media="all">
+        <link rel="stylesheet" href="/bundles/sonataadmin/css/colors.css" type="text/css" media="all">
+    </head>
+
+    <body class="sonata-bc">
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="connection">
+
+                    <form method="POST">
+                        {% if state == 'error' %}
+                            <div class="alert alert-error">{{ 'label_two_step_code_error'|trans({}, 'SonataUserBundle') }}</div>
+                        {% endif %}
+
+                        <div class="control-group">
+                            <label for="code">{{ 'label_two_step_code'|trans({}, 'SonataUserBundle') }}</label>
+
+                            <div class="controls">
+                                <input type="text" id="username" name="_code" class="big sonata-medium" autocomplete='off'/>
+                                <span class="help-block sonata-ba-field-help">{{ 'message_two_step_code_help'|trans({}, 'SonataUserBundle') }}</span>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <input type="submit" class="btn primary" id="_submit" name="_submit" value="{{ 'security.login.submit'|trans({}, 'FOSUserBundle') }}" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

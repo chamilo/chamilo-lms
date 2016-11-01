@@ -316,7 +316,7 @@ function returnThumbnail($course)
 
     $html .= '<div class="image">';
     $html .= '<img class="img-responsive" src="'.$course_medium_image.'" alt="'.api_htmlentities($title).'"/>';
-    $categoryTitle = $course['category'];
+    $categoryTitle = isset($course['category']) ? $course['category'] : '';
     if (!empty($categoryTitle)) {
         $listCategory = CourseManager::getCategoriesList();
         $categoryTitle = $listCategory[$categoryTitle];

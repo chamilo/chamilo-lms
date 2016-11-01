@@ -156,11 +156,11 @@ function getCustomTabs()
 {
     $tableSettingsCurrent = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
     $sql = "SELECT * FROM $tableSettingsCurrent
-        WHERE variable = 'show_tabs' AND
-        subkey like 'custom_tab_%'";
+            WHERE 
+                variable = 'show_tabs' AND
+                subkey like 'custom_tab_%'";
     $result = Database::query($sql);
     $customTabs = array();
-
     while ($row = Database::fetch_assoc($result)) {
         $customTabs[] = $row;
     }
@@ -206,9 +206,7 @@ function returnNotificationMenu()
         (api_get_setting('showonline', 'users') == 'true' && $user_id) ||
         (api_get_setting('showonline', 'course') == 'true' && $user_id && $course_id)
     ) {
-
         $number = getOnlineUsersCount($cacheEnabled);
-
         $number_online_in_course = getOnlineUsersInCourseCount($user_id, $_course, $cacheEnabled);
 
         // Display the who's online of the platform
@@ -226,10 +224,9 @@ function returnNotificationMenu()
             (is_array($_course) &&
                api_get_setting('showonline', 'course') == 'true' && isset($_course['sysCode'])
             )
-           )
-        {
-                $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonline.php?cidReq='.$_course['sysCode'].'" target="_self">'.
-                        Display::return_icon('course.png', get_lang('UsersOnline').' '.get_lang('InThisCourse'), array(), ICON_SIZE_TINY).' '.$number_online_in_course.' </a></li>';
+        ) {
+            $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonline.php?cidReq='.$_course['sysCode'].'" target="_self">'.
+                    Display::return_icon('course.png', get_lang('UsersOnline').' '.get_lang('InThisCourse'), array(), ICON_SIZE_TINY).' '.$number_online_in_course.' </a></li>';
         }
 
         if (isset($user_id) && api_get_session_id() != 0) {
@@ -290,7 +287,7 @@ function return_navigation_array()
         if (api_get_setting('gradebook_enable') == 'true') {
             if (api_get_setting('show_tabs', 'my_gradebook') == 'true') {
                 $navigation['mygradebook'] = $possible_tabs['mygradebook'];
-            } else{
+            } else {
                 $menu_navigation['mygradebook'] = $possible_tabs['mygradebook'];
             }
         }
@@ -315,7 +312,7 @@ function return_navigation_array()
             if (api_get_setting('allow_social_tool') == 'true') {
                 $navigation['social'] = isset($possible_tabs['social']) ? $possible_tabs['social'] : null;
             }
-        } else{
+        } else {
             $menu_navigation['social'] = isset($possible_tabs['social']) ? $possible_tabs['social'] : null;
         }
 
@@ -324,7 +321,7 @@ function return_navigation_array()
             if (api_is_platform_admin() || api_is_drh() || api_is_session_admin()) {
                 $navigation['dashboard'] = isset($possible_tabs['dashboard']) ? $possible_tabs['dashboard'] : null;
             }
-        } else{
+        } else {
             $menu_navigation['dashboard'] = isset($possible_tabs['dashboard']) ? $possible_tabs['dashboard'] : null;
         }
 
@@ -394,14 +391,12 @@ function menuArray()
         $lang = $_SESSION['_user']['language'];
     }
 
-
     // Preparing home folder for multiple urls
     if (api_get_multiple_access_url()) {
         $access_url_id = api_get_current_access_url_id();
         if ($access_url_id != -1) {
             // If not a dead URL
             $urlInfo = api_get_access_url($access_url_id);
-
             $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $urlInfo['url']));
             $cleanUrl = api_replace_dangerous_char($url);
             $cleanUrl = str_replace('/', '-', $cleanUrl);
@@ -428,7 +423,7 @@ function menuArray()
     }
     // Sanitize page content
     $pageContent = api_to_system_encoding($pageContent, api_detect_encoding(strip_tags($pageContent)));
-    $open = str_replace('{rel_path}',api_get_path(REL_PATH), $pageContent);
+    $open = str_replace('{rel_path}', api_get_path(REL_PATH), $pageContent);
     $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
     // Get the extra page content, containing the links to add to the tabs
     //  that are only for users already logged in
@@ -446,7 +441,7 @@ function menuArray()
         $openMenuTabsLoggedIn = str_replace('{rel_path}',api_get_path(REL_PATH), $pageContent);
         $openMenuTabsLoggedIn = api_to_system_encoding($openMenuTabsLoggedIn, api_detect_encoding(strip_tags($openMenuTabsLoggedIn)));
     }
-    if (!empty($open) OR !empty($openMenuTabsLoggedIn)) {
+    if (!empty($open) || !empty($openMenuTabsLoggedIn)) {
         if (strpos($open.$openMenuTabsLoggedIn, 'show_menu') === false) {
             if (api_is_anonymous()) {
                 $mainNavigation['navigation'][SECTION_CAMPUS]  = null;
@@ -604,22 +599,22 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
             // titles for shared folders
             if ($breadcrumb_step['name'] == 'shared_folder') {
                 $navigation_item['title'] = get_lang('UserFolders');
-            } elseif(strstr($breadcrumb_step['name'], 'shared_folder_session_')) {
+            } elseif (strstr($breadcrumb_step['name'], 'shared_folder_session_')) {
                 $navigation_item['title'] = get_lang('UserFolders');
-            } elseif(strstr($breadcrumb_step['name'], 'sf_user_')) {
+            } elseif (strstr($breadcrumb_step['name'], 'sf_user_')) {
                 $userinfo = api_get_user_info(substr($breadcrumb_step['name'], 8));
                 $navigation_item['title'] = $userinfo['complete_name'];
-            } elseif($breadcrumb_step['name'] == 'chat_files') {
+            } elseif ($breadcrumb_step['name'] == 'chat_files') {
                 $navigation_item['title'] = get_lang('ChatFiles');
-            } elseif($breadcrumb_step['name'] == 'images') {
+            } elseif ($breadcrumb_step['name'] == 'images') {
                 $navigation_item['title'] = get_lang('Images');
-            } elseif($breadcrumb_step['name'] == 'video') {
+            } elseif ($breadcrumb_step['name'] == 'video') {
                 $navigation_item['title'] = get_lang('Video');
-            } elseif($breadcrumb_step['name'] == 'audio') {
+            } elseif ($breadcrumb_step['name'] == 'audio') {
                 $navigation_item['title'] = get_lang('Audio');
-            } elseif($breadcrumb_step['name'] == 'flash') {
+            } elseif ($breadcrumb_step['name'] == 'flash') {
                 $navigation_item['title'] = get_lang('Flash');
-            } elseif($breadcrumb_step['name'] == 'gallery') {
+            } elseif ($breadcrumb_step['name'] == 'gallery') {
                 $navigation_item['title'] = get_lang('Gallery');
             }
             // Fixes breadcrumb title now we applied the Security::remove_XSS and
@@ -648,7 +643,6 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
             }
         }
     }
-
 
     // part 3: The tool itself. If we are on the course homepage we do not want
     // to display the title of the course because this
@@ -682,6 +676,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
             $view_as_student_link = api_display_tool_view_option();
         }
     }
+
     if (!empty($final_navigation)) {
         $lis = '';
         $i = 0;
@@ -698,7 +693,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
                     if ($final_navigation_count-1 > $i) {
                         $bread .= '';
                     }
-                    $lis.= Display::tag('li', $bread,array('class'=>'active'));
+                    $lis.= Display::tag('li', $bread, array('class'=>'active'));
                     $i++;
                 }
             }
@@ -715,7 +710,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
         }
 
         if (!empty($navigation_right)) {
-            foreach($navigation_right as $item){
+            foreach($navigation_right as $item) {
                 $extra_class = isset($item['class']) ? $item['class'] : null;
                 $lis.= Display::tag('li', $item['title'], array('class' => $extra_class.' pull-right'));
             }
@@ -781,7 +776,11 @@ function getOnlineUsersInCourseCount($userId, $_course, $cacheEnabled = false)
                     api_get_setting('time_limit_whosonline'),
                     $_course['id']
                 );
-                apcu_store('my_campus_whoisonline_count_simple_'.$_course['id'],$numberOnlineInCourse,15);
+                apcu_store(
+                    'my_campus_whoisonline_count_simple_'.$_course['id'],
+                    $numberOnlineInCourse,
+                    15
+                );
             }
         } else {
             $numberOnlineInCourse = who_is_online_in_this_course_count(

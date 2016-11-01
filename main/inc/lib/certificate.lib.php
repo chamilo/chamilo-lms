@@ -58,7 +58,6 @@ class Certificate extends Model
         }
 
         if ($this->user_id) {
-
             // Need to be called before any operation
             $this->check_certificate_path();
 
@@ -136,11 +135,9 @@ class Certificate extends Model
                     @unlink($this->qr_file);
                 }
                 if ($delete_db || $force_delete) {
-
                     return parent::delete($this->certificate_data['id']);
                 }
             } else {
-
                 return parent::delete($this->certificate_data['id']);
             }
         }
@@ -325,7 +322,7 @@ class Certificate extends Model
 
         if (!empty($content)) {
             foreach ($content as $key => $value) {
-                $my_header = str_replace(array('((', '))') , '', $headers[$key]);
+                $my_header = str_replace(array('((', '))'), '', $headers[$key]);
                 $final_content[$my_header] = $value;
             }
         }

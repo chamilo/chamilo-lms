@@ -77,16 +77,19 @@ class Blog
 
         // Get blog members
         $sql = "SELECT user.user_id, user.firstname, user.lastname
-                FROM " . $tbl_blogs_rel_user . " blogs_rel_user
-                INNER JOIN " . $tbl_users . " user
-                ON blogs_rel_user.user_id = user.user_id
+                FROM  $tbl_blogs_rel_user blogs_rel_user
+                INNER JOIN $tbl_users user
+                ON (blogs_rel_user.user_id = user.user_id)
                 WHERE
                     blogs_rel_user.c_id = $course_id AND
                     blogs_rel_user.blog_id = '" . (int)$blog_id."'";
         $result = Database::query($sql);
         $blog_members = array ();
         while ($user = Database::fetch_array($result)) {
-            $blog_members[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']);
+            $blog_members[$user['user_id']] = api_get_person_name(
+                $user['firstname'],
+                $user['lastname']
+            );
         }
 
         return $blog_members;
@@ -131,7 +134,6 @@ class Blog
             $this_blog_id = Database::insert($tbl_blogs, $params);
 
             if ($this_blog_id > 0) {
-
                 $sql = "UPDATE $tbl_blogs SET blog_id = iid WHERE iid = $this_blog_id";
                 Database::query($sql);
 
@@ -146,7 +148,6 @@ class Blog
             }
 
             // Make first post. :)
-
             $params = [
                 'post_id' => 0,
                 'c_id' => $course_id,
@@ -213,7 +214,8 @@ class Blog
         // Update course homepage link
         $sql = "UPDATE $tbl_tool SET
                 name = '".Database::escape_string($title)."'
-                WHERE c_id = $course_id AND link = 'blog/blog.php?blog_id=".(int)$blog_id."' LIMIT 1";
+                WHERE c_id = $course_id AND link = 'blog/blog.php?blog_id=".(int)$blog_id."' 
+                LIMIT 1";
         Database::query($sql);
     }
 
@@ -400,7 +402,7 @@ class Blog
         Database::query($sql);
 
         // Delete posts and attachments
-        delete_all_blog_attachment($blog_id,$post_id);
+        delete_all_blog_attachment($blog_id, $post_id);
     }
 
     /**
@@ -525,7 +527,7 @@ class Blog
 
         // Delete them recursively
         while ($comment = Database::fetch_array($result)) {
-            Blog::delete_comment($blog_id,$post_id,$comment['comment_id']);
+            Blog::delete_comment($blog_id, $post_id, $comment['comment_id']);
         }
 
         // Finally, delete the selected comment to

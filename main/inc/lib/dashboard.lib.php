@@ -52,7 +52,7 @@ class DashboardManager
 
                 echo '<tr>';
                 self::display_dashboard_plugin_checkboxes($testplugin);
-                for ($i = 0 ; $i < count($table_cols); $i++) {
+                for ($i = 0; $i < count($table_cols); $i++) {
                     if (isset($plugin_info[strtolower($table_cols[$i])])) {
                         echo '<td>';
                         echo $plugin_info[$table_cols[$i]];
@@ -66,9 +66,11 @@ class DashboardManager
                 if ($testplugin != 'css') {
                     echo Display::tag(
                         'tr',
-                        Display::tag('td',
+                        Display::tag(
+                            'td',
                             get_lang('CheckFilePermissions') . ' ' . Security::remove_XSS($plugin_info_file),
-                            array('colspan' => '3'))
+                            array('colspan' => '3')
+                        )
                     );
                 }
             }
@@ -480,7 +482,7 @@ class DashboardManager
         $extra_user_data = explode(';', $extra_user_data[$field_variable]);
         $data = array();
         foreach ($extra_user_data as $extra) {
-            $split_extra = explode(':',$extra);
+            $split_extra = explode(':', $extra);
             if (!empty($split_extra)) {
                 $block_id = $split_extra[0];
                 $column = isset($split_extra[1]) ? $split_extra[1] : null;

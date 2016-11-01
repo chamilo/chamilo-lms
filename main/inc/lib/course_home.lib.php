@@ -299,7 +299,6 @@ class CourseHome
         if (isset($all_tools_list)) {
             $lnk = array();
             foreach ($all_tools_list as & $tool) {
-
                 if ($tool['image'] == 'scormbuilder.gif') {
                     // check if the published learnpath is visible for student
                     $published_lp_id = self::get_published_lp_id_from_link($tool['link']);
@@ -1171,12 +1170,12 @@ class CourseHome
     {
         $navigation_items = self::get_navigation_items(true);
         $course_id = api_get_course_id();
-        
+
         $class= null;
         $idLearn = null;
         $item = null;
         $marginLeft = 160;
-        
+
         $html = '<div id="toolnav">';
         $html .= '<ul id="toolnavbox">';
         $count = 0;

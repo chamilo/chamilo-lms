@@ -98,7 +98,7 @@ class CourseRequestManager
         $code = $keys['currentCourseId'];
         $db_name = isset($keys['currentCourseDbName']) ? $keys['currentCourseDbName'] : null;
         $directory = $keys['currentCourseRepository'];
-
+        // @todo user entity
         $sql = sprintf(
             'INSERT INTO %s (
                 code, user_id, directory, db_name,
@@ -157,7 +157,6 @@ class CourseRequestManager
         $email_body .= get_lang('FillWithExemplaryContent', null, $email_language).': '.($exemplary_content ? get_lang('Yes', null, $email_language) : get_lang('No', null, $email_language))."\n";
 
         // Sending an e-mail to the platform administrator.
-
         $email_body_admin = $email_body;
         $email_body_admin .= "\n".get_lang('CourseRequestPageForApproval', null, $email_language).' '.api_get_path(WEB_CODE_PATH).'admin/course_request_edit.php?id='.$last_insert_id."\n";
         $email_body_admin .= "\n".get_lang('CourseRequestLegalNote', null, $email_language)."\n";
@@ -324,6 +323,7 @@ class CourseRequestManager
             }
         }
 
+        // @todo use entity
         $sql = sprintf('UPDATE %s SET
                 code = "%s", user_id = "%s", directory = "%s", db_name = "%s",
                 course_language = "%s", title = "%s", description = "%s", category_code = "%s",
@@ -472,7 +472,6 @@ class CourseRequestManager
 
         $course_info = CourseManager::create_course($params);
         if (!empty($course_info)) {
-
             // Mark the request as accepted.
             $sql = "UPDATE ".Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST)."
                     SET status = ".COURSE_REQUEST_ACCEPTED."

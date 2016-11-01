@@ -114,7 +114,7 @@ class CourseCategory
 
         $code = CourseManager::generate_course_code($code);
         $sql = "SELECT 1 FROM $tbl_category
-            WHERE code = '".Database::escape_string($code)."'";
+                WHERE code = '".Database::escape_string($code)."'";
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             return false;
@@ -177,9 +177,7 @@ class CourseCategory
     {
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
-
         $node = Database::escape_string($node);
-
         $result = Database::query("SELECT parent_id, tree_pos FROM $tbl_category WHERE code='$node'");
 
         if ($row = Database::fetch_array($result)) {
@@ -221,8 +219,11 @@ class CourseCategory
 
         $code = CourseManager::generate_course_code($code);
         // Updating category
-        $sql = "UPDATE $tbl_category SET name='$name', code='$code', auth_course_child = '$canHaveCourses'
-            WHERE code = '$old_code'";
+        $sql = "UPDATE $tbl_category SET 
+                    name='$name', 
+                    code='$code', 
+                    auth_course_child = '$canHaveCourses'
+                WHERE code = '$old_code'";
         Database::query($sql);
 
         // Updating children
@@ -259,22 +260,22 @@ class CourseCategory
         }
 
         $sql = "SELECT code,tree_pos
-            FROM $tbl_category
-            WHERE
-                tree_pos < $tree_pos
-                $parentIdCondition
-            ORDER BY tree_pos DESC
-            LIMIT 0,1";
+                FROM $tbl_category
+                WHERE
+                    tree_pos < $tree_pos
+                    $parentIdCondition
+                ORDER BY tree_pos DESC
+                LIMIT 0,1";
 
         $result = Database::query($sql);
         if (!$row = Database::fetch_array($result)) {
             $sql = "SELECT code, tree_pos
-                FROM $tbl_category
-                WHERE
-                    tree_pos > $tree_pos
-                    $parentIdCondition
-                ORDER BY tree_pos DESC
-                LIMIT 0,1";
+                    FROM $tbl_category
+                    WHERE
+                        tree_pos > $tree_pos
+                        $parentIdCondition
+                    ORDER BY tree_pos DESC
+                    LIMIT 0,1";
             $result2 = Database::query($sql);
             if (!$row = Database::fetch_array($result2)) {
                 return false;
@@ -282,13 +283,13 @@ class CourseCategory
         }
 
         $sql = "UPDATE $tbl_category
-            SET tree_pos ='".$row['tree_pos']."'
-            WHERE code='$code'";
+                SET tree_pos ='".$row['tree_pos']."'
+                WHERE code='$code'";
         Database::query($sql);
 
         $sql = "UPDATE $tbl_category
-            SET tree_pos = '$tree_pos'
-            WHERE code= '".$row['code']."'";
+                SET tree_pos = '$tree_pos'
+                WHERE code= '".$row['code']."'";
         Database::query($sql);
 
         return true;
@@ -308,12 +309,15 @@ class CourseCategory
         if (empty($categoryId)) {
             return 0;
         }
-        $sql = "SELECT id, code FROM $tbl_category WHERE parent_id = $categoryId";
+        $sql = "SELECT id, code FROM $tbl_category 
+                WHERE parent_id = $categoryId";
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
             $count += self::courseCategoryChildrenCount($row['id']);
         }
-        $sql = "UPDATE $tbl_category SET children_count = $count WHERE id = $categoryId";
+        $sql = "UPDATE $tbl_category SET 
+                    children_count = $count 
+                WHERE id = $categoryId";
         Database::query($sql);
 
         return $count + 1;
@@ -328,7 +332,8 @@ class CourseCategory
     {
         $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $categoryCode = Database::escape_string($categoryCode);
-        $sql = "SELECT code, id FROM $tbl_category WHERE parent_id = '$categoryCode'";
+        $sql = "SELECT code, id FROM $tbl_category 
+                WHERE parent_id = '$categoryCode'";
         $result = Database::query($sql);
         $children = array();
         while ($row = Database::fetch_array($result, 'ASSOC')) {
@@ -422,7 +427,6 @@ class CourseCategory
             $moveIcon = Display::return_icon('up.png', get_lang('UpInSameLevel'), null, ICON_SIZE_SMALL);
 
             foreach ($categories as $category) {
-
                 $editUrl = $mainUrl.'&id='.$category['code'].'&action=edit';
                 $moveUrl = $mainUrl.'&id='.$category['code'].'&action=moveUp&tree_pos='.$category['tree_pos'];
                 $deleteUrl = $mainUrl.'&id='.$category['code'].'&action=delete';
@@ -468,8 +472,8 @@ class CourseCategory
     {
         $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $sql = "SELECT name FROM $tbl_category
-            WHERE parent_id IS NULL
-            ORDER BY tree_pos";
+                WHERE parent_id IS NULL
+                ORDER BY tree_pos";
 
         return Database::store_result(Database::query($sql));
     }
@@ -481,7 +485,10 @@ class CourseCategory
      */
     public static function addToUrl($id)
     {
-        UrlManager::addCourseCategoryListToUrl(array($id), array(api_get_current_access_url_id()));
+        UrlManager::addCourseCategoryListToUrl(
+            array($id),
+            array(api_get_current_access_url_id())
+        );
     }
 
     /**
@@ -619,7 +626,6 @@ class CourseCategory
                     $visibilityCondition
                 ";
         // Showing only the courses of the current portal access_url_id.
-
         if (api_is_multiple_url_enabled()) {
             $url_access_id = api_get_current_access_url_id();
             if ($url_access_id != -1) {
@@ -667,7 +673,6 @@ class CourseCategory
             list($num_records) = Database::fetch_row($result);
 
             if (api_is_multiple_url_enabled()) {
-
                 $url_access_id = api_get_current_access_url_id();
                 $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 
@@ -684,12 +689,16 @@ class CourseCategory
                         WHERE
                             access_url_id = $url_access_id AND
                             RAND()*$num_records< $random_value
-                            $without_special_courses $visibilityCondition
+                            $without_special_courses 
+                            $visibilityCondition
                         ORDER BY RAND()
                         LIMIT 0, $random_value";
             } else {
                 $sql = "SELECT id FROM $tbl_course course
-                        WHERE RAND()*$num_records< $random_value $without_special_courses $visibilityCondition
+                        WHERE 
+                            RAND()*$num_records< $random_value 
+                            $without_special_courses 
+                            $visibilityCondition
                         ORDER BY RAND()
                         LIMIT 0, $random_value";
             }
@@ -729,7 +738,7 @@ class CourseCategory
                         ORDER BY title $limitFilter ";
             }
 
-            //showing only the courses of the current Chamilo access_url_id
+            // Showing only the courses of the current Chamilo access_url_id
             if (api_is_multiple_url_enabled()) {
                 $url_access_id = api_get_current_access_url_id();
                 $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
@@ -838,7 +847,6 @@ class CourseCategory
         $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
 
         if (empty($list)) {
-
             $sql = "SELECT * FROM $table
                     WHERE (parent_id IS NULL) ";
             $result = Database::query($sql);
@@ -1054,8 +1062,12 @@ class CourseCategory
      * @param string $content
      * @return string
      */
-    public static function getPageNumberItem($pageNumber, $pageLength, $liAttributes = array(), $content = '')
-    {
+    public static function getPageNumberItem(
+        $pageNumber,
+        $pageLength,
+        $liAttributes = array(),
+        $content = ''
+    ) {
         // Get page URL
         $url = self::getCourseCategoryUrl(
             $pageNumber,

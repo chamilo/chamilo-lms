@@ -1,20 +1,18 @@
 {{javascript}}
 
-<script type="text/javascript">
-
+<script>
 {% if is_allowed_to_edit %}
     var sec_token = '{{sec_token}}';
 {% endif %}
 
-    
- function delete_entry(name, btn){   
+function delete_entry(name, btn){
     if(!confirm("{{'ConfirmYourChoice'|get_lang}}")){
         return false;
-    } 
+    }
 
     var item = $('#'+name);
-    var id = item.attr('data-id'); 
-    var c_id = item.attr('data-c_id'); 
+    var id = item.attr('data-id');
+    var c_id = item.attr('data-c_id');
 
     var f = function(data){
         if(data.success){
@@ -25,13 +23,13 @@
     };
     CourseDescription.del(c_id, id, f);
     $(btn).addClass("loading");
- }
+}
 
- function delete_all(){
+function delete_all(){
     if(!confirm("{{'ConfirmYourChoice'|get_lang}}")){
         return false;
-    } 
-    
+    }
+
     var f = function(data){
         if(data.success){
             var item = $('.course_descriptions');
@@ -40,9 +38,7 @@
         message.update(data);
     };
     CourseDescription.delete_by_course({{c_id}}, {{session_id}}, f);
-    
- }
- 
+}
 </script>
 
 {% for message in messages %}
@@ -50,12 +46,12 @@
 {% endfor %}
 
 {% if is_allowed_to_edit %}
-    <div class="btn-toolbar actions-bar" >
+    <div class="btn-toolbar actions-bar">
         <div class="btn-group edit new">
-            {% for type in types %}        
+            {% for type in types %}
                 <a href="{{root}}&amp;action=add&amp;description_type={{type.id}}" class="btn btn-default">
                     <img title="{{type.title}}" alt="{{type.title}}" src="{{type.icon|icon(32)}} " width="32" height="32">
-                </a>    
+                </a>
             {% endfor %}
         </div>
         <div class="btn-group edit">
@@ -78,26 +74,26 @@
         <div class="title sectiontitle">
             {% if is_allowed_to_edit %}
                 <div class="pull-right element-actions">
-                {% if session_id == description.session_id %}                    
-                    <a href="{{root}}&amp;action=delete&amp;id={{description.id}}" 
+                {% if session_id == description.session_id %}
+                    <a href="{{root}}&amp;action=delete&amp;id={{description.id}}"
                        onclick="delete_entry('description_{{description.id}}', this); return false;"
                        title="{{'Delete'|get_lang}}">
                         <em class="size-22 icon-delete"></em>
                     </a>
 
-                    <a href="{{root}}&amp;action=edit&amp;id={{description.id}}" 
+                    <a href="{{root}}&amp;action=edit&amp;id={{description.id}}"
                        title="{{'Edit'|get_lang}}">
                         <em class="size-22 icon-edit"></em>
                     </a>
                 {% else %}
-                    <img title="{{'EditionNotAvailableFromSession'|get_lang}}" 
-                         alt="{{'EditionNotAvailableFromSession'|get_lang}}" 
+                    <img title="{{'EditionNotAvailableFromSession'|get_lang}}"
+                         alt="{{'EditionNotAvailableFromSession'|get_lang}}"
                          src="{{'edit_na.png'|icon(22)}}"  width="22" height="22"
                          style="vertical-align:middle;">
                 {% endif %}
                 </div>
             {% endif %}
-            
+
             <img title="{{description.type.title}}" alt="{{description.type.title}}" src="{{description.type.icon|icon(32)}}" class="icon">
             {{description.title}}
         </div>

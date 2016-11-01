@@ -1287,7 +1287,6 @@ class SessionManager
 
         //foreach
         foreach ($data as $key => $info) {
-
             $sql = "SELECT
                     name
                     FROM $sessionTable
@@ -1324,6 +1323,7 @@ class SessionManager
             #add ip to final array
             $return[$key]['ip'] = $ip['user_ip'];
         }
+
         return $return;
     }
 
@@ -1357,6 +1357,7 @@ class SessionManager
             }
             return false;
         }
+
         return $session_name;
     }
 
@@ -1624,17 +1625,17 @@ class SessionManager
     }
 
     /**
-     * @param int $id_promotion
+     * @param int $id promotion id
      *
      * @return bool
      */
-    public static function clear_session_ref_promotion($id_promotion)
+    public static function clear_session_ref_promotion($id)
     {
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-        $id_promotion = intval($id_promotion);
+        $id = intval($id);
         $sql = "UPDATE $tbl_session 
                 SET promotion_id = 0
-                WHERE promotion_id = $id_promotion";
+                WHERE promotion_id = $id";
         if (Database::query($sql)) {
             return true;
         } else {
@@ -1681,8 +1682,10 @@ class SessionManager
         if (empty($session_visibility)) {
             $session_visibility = $session->getVisibility();
             //default status loaded if empty
-            if (empty($session_visibility))
-                $session_visibility = SESSION_VISIBLE_READ_ONLY; // by default readonly 1
+            // by default readonly 1
+            if (empty($session_visibility)) {
+                $session_visibility = SESSION_VISIBLE_READ_ONLY;
+            }
         } else {
             if (!in_array($session_visibility, array(SESSION_VISIBLE_READ_ONLY, SESSION_VISIBLE, SESSION_INVISIBLE))) {
                 $session_visibility = SESSION_VISIBLE_READ_ONLY;
@@ -1705,8 +1708,7 @@ class SessionManager
             $course_list[] = $row['c_id'];
         }
 
-        if (
-            $session->getSendSubscriptionNotification() &&
+        if ($session->getSendSubscriptionNotification() &&
             is_array($user_list)
         ) {
             // Sending emails only
@@ -2116,12 +2118,12 @@ class SessionManager
         $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
-        $delete_sql = "DELETE FROM $tbl_session_rel_user
-		               WHERE
-                            session_id = $session_id AND
-		                    user_id = $user_id AND
-		                    relation_type <> " . SESSION_RELATION_TYPE_RRHH . "";
-        $result = Database::query($delete_sql);
+        $sql = "DELETE FROM $tbl_session_rel_user
+                WHERE
+                    session_id = $session_id AND
+                    user_id = $user_id AND
+                    relation_type <> " . SESSION_RELATION_TYPE_RRHH . "";
+        $result = Database::query($sql);
         $return = Database::affected_rows($result);
 
         // Update number of users
@@ -2153,7 +2155,8 @@ class SessionManager
 
                 if (Database::affected_rows($result)) {
                     // Update number of users in this relation
-                    $sql = "UPDATE $tbl_session_rel_course SET nbr_users = nbr_users - 1
+                    $sql = "UPDATE $tbl_session_rel_course SET 
+                            nbr_users = nbr_users - 1
                             WHERE session_id = $session_id AND c_id = $courseId";
                     Database::query($sql);
                 }
@@ -2210,7 +2213,6 @@ class SessionManager
 
         // Remove existing courses from the session.
         if ($removeExistingCoursesWithUsers === true && !empty($existingCourses)) {
-
             foreach ($existingCourses as $existingCourse) {
                 if (!in_array($existingCourse['c_id'], $courseList)) {
 
@@ -2282,7 +2284,6 @@ class SessionManager
                             $oldCategoryId= $cat->get_id();
                             $newId = $cat->add();
                             $newCategoryIdList[$oldCategoryId] = $newId;
-
                             $parentId = $cat->get_parent_id();
 
                             if (!empty($parentId)) {
@@ -2366,8 +2367,8 @@ class SessionManager
     /**
      * Unsubscribe course from a session
      *
-     * @param int Session id
-     * @param int Course id
+     * @param int $session_id
+     * @param int $course_id
      * @return bool True in case of success, false otherwise
      */
     public static function unsubscribe_course_from_session($session_id, $course_id)

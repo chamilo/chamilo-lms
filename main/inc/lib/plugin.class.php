@@ -397,7 +397,6 @@ class Plugin
         $courseId = (int) $courseId;
 
         if (empty($courseId)) {
-
             return false;
         }
 

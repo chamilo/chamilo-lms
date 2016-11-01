@@ -1035,18 +1035,13 @@ class bbb
      */
     public function getUrlParams()
     {
-        $courseInfo = api_get_course_info();
-
         if (empty($this->courseCode)) {
 
             if ($this->isGlobalConferencePerUserEnabled()) {
-
                 return 'global=1&user_id='.$this->userId;
             }
 
-
             if ($this->isGlobalConference()) {
-
                 return 'global=1';
             }
 

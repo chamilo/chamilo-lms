@@ -24,8 +24,8 @@ $this_section = SECTION_TRACKING;
 /* MAIN */
 $user_id = intval($_REQUEST['student']);
 $session_id = intval($_GET['id_session']);
-$type = Security::remove_XSS($_REQUEST['type']);
-$course_code = Security::remove_XSS($_REQUEST['course']);
+$type = isset($_REQUEST['type']) ? Security::remove_XSS($_REQUEST['type']) : '';
+$course_code = isset($_REQUEST['course']) ? Security::remove_XSS($_REQUEST['course']) : '';
 $courseInfo = api_get_course_info($course_code);
 $courseId = $courseInfo['real_id'];
 $connections = MySpace::get_connections_to_course($user_id, $courseId, $session_id);

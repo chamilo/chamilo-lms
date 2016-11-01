@@ -70,7 +70,7 @@ $tools = array();
 $tools['todas'] = array('id' => '', 'name' => get_lang('All'));
 $tools['announcement'] = array('id' => 'announcement', 'name' => get_lang('Announcement'));
 // $tools[]= array('id'=>'assignment','name'=>get_lang('Assignment'));
-$tools['calendar_event'] = array('id' => 'calendar_event', 'name' => get_lang('CalendarEvent'));
+$tools['calendar_event'] = array('id' => 'calendar_event', 'name' => get_lang('ToolCalendarEvent'));
 $tools['chat'] = array('id' => 'chat', 'name' => get_lang('Chat'));
 $tools['course_description'] = array('id' => 'course_description', 'name' => get_lang('CourseDescription'));
 $tools['document'] = array('id' => 'document', 'name' => get_lang('Document'));

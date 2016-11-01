@@ -1110,18 +1110,20 @@ class Agenda
                 break;
         }
 
-        if (!empty($this->events)) {
-            switch ($format) {
-                case 'json':
-                    return json_encode($this->events);
-                    break;
-                case 'array':
-                    return $this->events;
-                    break;
-            }
+        switch ($format) {
+            case 'json':
+                if (empty($this->events)) {
+                    return '';
+                }
+                return json_encode($this->events);
+                break;
+            case 'array':
+                if (empty($this->events)) {
+                    return [];
+                }
+                return $this->events;
+                break;
         }
-
-        return '';
     }
 
     /**

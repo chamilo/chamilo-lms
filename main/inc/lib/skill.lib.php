@@ -1281,16 +1281,17 @@ class Skill extends Model
     }
 
     /**
-     * @param string $course_code
+     * @param string $courseCode
      * @return int
      */
-    public function get_count_skills_by_course($course_code)
+    public function get_count_skills_by_course($courseCode)
     {
+        $courseCode = Database::escape_string($courseCode);
         $sql = "SELECT count(skill_id) as count
                 FROM {$this->table_gradebook} g
                 INNER JOIN {$this->table_skill_rel_gradebook} sg
                 ON g.id = sg.gradebook_id
-                WHERE course_code = '$course_code'";
+                WHERE course_code = '$courseCode'";
 
         $result = Database::query($sql);
         if (Database::num_rows($result)) {

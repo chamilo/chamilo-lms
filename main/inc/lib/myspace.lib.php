@@ -2892,7 +2892,7 @@ function grapher($sql_result, $start_date, $end_date, $type = "")
             $myPicture->drawText(
                 $mainWidth / 2,
                 30,
-                get_lang('ExercisesInTimeProgressChart'),
+                get_lang('TimeSpentInTheCourse'),
                 array(
                     "FontSize" => 12,
                     "Align" => TEXT_ALIGN_BOTTOMMIDDLE

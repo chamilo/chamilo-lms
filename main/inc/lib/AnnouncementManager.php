@@ -319,20 +319,24 @@ class AnnouncementManager
             api_get_session_id()
         );
 
+        $lastEdit = $itemProperty->getLasteditDate();
+
         $html .= "<tr><td>$content</td></tr>";
-        $html .= "<tr><td class=\"announcements_datum\">" . get_lang('LastUpdateDate') . " : " . api_convert_and_format_date(
-            $itemProperty->getInsertDate(), DATE_TIME_FORMAT_LONG
-        ) . "</td></tr>";
+        $html .= "<tr><td class=\"announcements_datum\">" . get_lang('LastUpdateDate') . " : " .
+            Display::dateToStringAgoAndLongDate(
+                !empty($lastEdit) ? $lastEdit->format('Y-m-d h:i:s') : ''
+            ) . "</td></tr>";
 
         if ($itemProperty->getGroup() !== null) {
             $sent_to_icon = Display::return_icon('group.gif', get_lang('AnnounceSentToUserSelection'));
         }
+
         if (api_is_allowed_to_edit(false, true)) {
             $sent_to = self::sent_to('announcement', $announcement_id);
             $sent_to_form = self::sent_to_form($sent_to);
             $html .= Display::tag(
                 'td',
-                get_lang('SentTo') . ' : ' . $sent_to_form,
+                get_lang('SentTo').': ' . $sent_to_form,
                 array('class' => 'announcements_datum')
             );
         }
@@ -447,7 +451,7 @@ class AnnouncementManager
                     $_course,
                     TOOL_ANNOUNCEMENT,
                     $last_id,
-                    "AnnouncementAdded",
+                    'AnnouncementAdded',
                     api_get_user_id(),
                     '0'
                 );
@@ -1105,8 +1109,8 @@ class AnnouncementManager
             } else {
                 $new_file_name = uniqid('');
                 $new_path = $updir . '/' . $new_file_name;
-		
-                // This file is copy here but its cleaned in api_mail_html in api.lib.php    
+
+                // This file is copy here but its cleaned in api_mail_html in api.lib.php
                 copy($file['tmp_name'], $new_path);
 
                 $params = [

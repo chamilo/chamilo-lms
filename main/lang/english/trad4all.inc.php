@@ -7923,5 +7923,29 @@ $ThisTextShouldBeAtLeastXCharsLong = "This text should be at least %s characters
 $TicketXAssignedToUserX = "Ticket <b>#%s</b> assigned to user <b>%s</b>";
 $ThisItemIsRelatedToOtherTickets = "This item is related to other tickets.";
 $WarningCategoryXDoesntHaveUsers = "Warning: No one has been assigned to category %s";
+$TicketXCreatedWithNoCategory = "Ticket %s was created without a category";
+$TicketInformation = "Ticket info";
+$CategoryWithNoUserNotificationSentToAdmins = "A notification was sent to the administrators to report this category has no user assigned";
+$VirtualSupport = "Virtual support";
+$IncidentResentToVirtualSupport = "The incident has been sent to the virtual support team again";
+$YourQuestionWasSentToTheResponableAreaX = "Your question has been sent to %s, the area in charge";
+$YourAnswerToTheQuestionWillBeSentToX = "Your answer to this question will be sent to %s";
+$MessageResent = "Message resent";
+$TicketAssignedToXCheckZAtLinkY = "Ticket assigned to %s. Follow-up at <a href='%s'>#%s</a>.";
+$TicketXAssigned = "Ticket %s assigned";
+$Historial = "History";
+$TicketNum = "Ticket number";
+$TicketClosed = "Ticket closed";
+$Unassign = "Unassign";
+$PleaseSelectTasks = "Please select tasks";
+$PleaseSelect = "Please select";
+$PleaseSelectThread = "Please select thread";
+$TotalTickets = "Total tickets";
+$ThereWasAnErrorRegisteringTheTicket = "There was an error registering your ticket";
+$AreYouSureYouWantToUnassignTheTicket = "Are you sure you want to unassign this ticket?";
+$AreYouSureYouWantToCloseTheTicket = "Are you sure you want to close this ticket?";
+$Unassigned = "Unassigned";
+$SelectWeeksSpan = "Select the timespan in weeks";
 $CourseXAdded = 'Course %s added.';
+
 ?>

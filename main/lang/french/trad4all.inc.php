@@ -7872,4 +7872,27 @@ $ThisTextShouldBeAtLeastXCharsLong = "Ce texte doit contenir au moins %s caract�
 $TicketXAssignedToUserX = "Ticket <b>#%s</b> assigné à l'utilisateur <b>%s</b>";
 $ThisItemIsRelatedToOtherTickets = "Cet élément est lié à d'autres tickets.";
 $WarningCategoryXDoesntHaveUsers = "Attention: Personne n'est assigné à la catégorie %s";
+$TicketXCreatedWithNoCategory = "Le ticket %s a été créé sans catégorie";
+$TicketInformation = "Info ticket";
+$CategoryWithNoUserNotificationSentToAdmins = "Une alerte a été envoyée aux administrateurs pour les informer que cette catégorie n'a pas de responsable assigné.";
+$VirtualSupport = "Support virtuel";
+$IncidentResentToVirtualSupport = "L'incident a été envoyé à nouveau à l'équipe de support virtuel";
+$YourQuestionWasSentToTheResponableAreaX = "Votre question a été envoyée à %s, l'unité en charge";
+$YourAnswerToTheQuestionWillBeSentToX = "Votre réponse à cette question sera envoyée à %s";
+$MessageResent = "Message réenvoyé";
+$TicketAssignedToXCheckZAtLinkY = "Ticket assigné à %s. Faites-en le suivi ici <a href='%s'>#%s</a>.";
+$TicketXAssigned = "Ticket %s assigné";
+$Historial = "Historique";
+$TicketNum = "Numéro de ticket";
+$TicketClosed = "Ticket fermé";
+$Unassign = "Désassigner";
+$PleaseSelectTasks = "Sélectionnez les tâches";
+$PleaseSelect = "Sélectionnez";
+$PleaseSelectThread = "Sélectionnez un fil de discussion";
+$TotalTickets = "Total de tickets";
+$ThereWasAnErrorRegisteringTheTicket = "Une erreur est survenue lors de l'enregistrement de votre ticket";
+$AreYouSureYouWantToUnassignTheTicket = "Êtes-vous sûr de vouloir désassigner ce ticket?";
+$AreYouSureYouWantToCloseTheTicket = "Êtes-vous sûr de vouloir fermer ce ticket?";
+$Unassigned = "Désassigné";
+$SelectWeeksSpan = "Sélectionnez la durée en semaines";
 ?>

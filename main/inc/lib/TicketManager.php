@@ -615,12 +615,12 @@ class TicketManager
                     $sender = api_get_user_info($insert_id);
                     $href = api_get_path(WEB_CODE_PATH).'/ticket/ticket_details.php?ticket_id='.$ticket_id;
                     $message = sprintf(
-                        get_lang('TicketAssignedMsg'),
+                        get_lang('TicketAssignedToXCheckZAtLinkY'),
                         $info['complete_name'],
                         $href,
                         $ticket_id
                     );
-                    $mailTitle = sprintf(get_lang('TicketAssignX'), $ticket_id);
+                    $mailTitle = sprintf(get_lang('TicketXAssigned'), $ticket_id);
                     api_mail_html(
                         $info['complete_name'],
                         $info['mail'],

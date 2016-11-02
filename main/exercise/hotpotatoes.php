@@ -100,7 +100,7 @@ $form->addElement('hidden', 'fld', $fld);
 $form->addElement('hidden', 'imgcount', $imgcount);
 $form->addElement('hidden', 'finish', $finish);
 $form->addElement('html', GenerateHiddenList($imgparams));
-$form->addElement('label', '', Display::return_icon('hotpotatoes.jpg', get_lang('HotPotatoes')));
+$form->addElement('label', '', Display::return_icon('hotpotatoes.jpg', 'HotPotatoes'));
 $label = get_lang('DownloadImg').' : ';
 if ($finish == 0) {
     $label = get_lang('DownloadFile').' : ';

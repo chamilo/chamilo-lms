@@ -192,7 +192,7 @@ del clic derecho en ellos).
   <li><strong>Proteger su directorio de configuración: </strong> asegurarse que nadie pueda sobreescribirlo. Usted puede encontrar el directorio de configuración en (carpeta de chamilo)/main/inc/conf. Hacerlo de solo lectura (windows/xwindows: clic derecho en el archivo para editar las propiedades. linux/bsd/macosx: usar el comando chmod 0555). El archivo de configuración es creado por el servidor web (Apache + PHP, normalmente), por lo tanto usted necesita ser administrador para cambiar sus permisos.</li>
   <li><strong>Configurar su instalación de Chamilo: </strong>
 en la sección de administración de Chamilo, usted puede usar las Opciones de Configuración de Chamilo para ajustar el comportamiento de su instalación.</li>
-  <li>Consulte nuestra nueva <a href="security_guide.html">guia de seguridad</a> para más información.</li>
+  <li>Consulte nuestra nueva <a href="security.html">guia de seguridad</a> para más información.</li>
 </ul>
 </p>
 
@@ -281,25 +281,25 @@ tomar una copia de backup de estos cambios antes de actualizar.</p>
 NOTA: Esta versión de Chamilo sólo se puede utilizar para actualizar desde versiones inferiores de Chamilo 1.9.*. Por ejemplo, no puede utilizar los scripts de actualización normales de Chamilo 1.9 para actualizar desde Dok€oS 2.0. Si usted necesita esto, por favor póngase en contacto con uno de los proveedores oficiales de la Asociación Chamilo)
 </div>
 
-<h3>3.1 Actualizar desde Chamilo 1.10.x (actualización menor)</h3>
+<h3>3.1 Actualizar desde Chamilo 1.11.x (actualización menor)</h3>
 <p>
-Dado que se trata sólo de un cambio de versión menor  previa de Chamilo 1.10.*, lo único que tiene que hacer es:
+Dado que se trata sólo de un cambio de versión menor previa de Chamilo 1.11.*, lo único que tiene que hacer es:
 <ul>
 <li>Revisar que no ha dejado alguna hoja de estilo personalizada o imagen (si es que tiene, asegúrese de guardar una copia de respaldo)</li>
 <li>Descargar el paquete de instalación de Chamilo 1.9 desde la página de descarga de Chamilo</li>
 <li>Descomprimir los nuevos archivos de Chamilo 1.9 sobre los archivos de la versión anterior (o descomprimirlos en una nueva carpeta y después copiarlos sobre los archivos de la versión anterior)</li>
-<li>Editar el archivo main/inc/conf/configuration.php: hacia el final del archivo, localizar el número de la versión (p.e. ‘1.9.4’) y cambiarlo por la nueva versión (p.e.‘1.9.8’)</li>
+<li>Editar el archivo app/config/configuration.php: hacia el final del archivo, localizar el número de la versión (p.e. ‘1.9.4’) y cambiarlo por la nueva versión (p.e.‘1.9.8’)</li>
 <li>Ya está! Ningún otro procedimiento de actualización es requerido.</li>
 </ul>
 </p>
 
-<h3>3.2 Actualizar desde Chamilo 1.9.x</h3>
+<h3>3.2 Actualizar desde Chamilo 1.9.x p 1.10.x</h3>
 <ul>
   <li>Asegúrese que ninguna tabla de una versión anterior (a la 1.9) exista en su base de datos. Estas tablas pueden causar errores durante el proceso de actualización hacia versiones superiores. En particular, las tablas de versiones 1.8.* y anteriores podían repetirse una vez por curso, resultando en una gran cantidad de tablas que compartían el mismo prefijo. Solo las tablas sin prefijo o con un prefijo "c_" son legítimas en Chamilo 1.9 y siguientes. Asegúrese de que ninguna de estas antiguas tablas persista. Tóme una copia de seguridad de la base de datos (por si a caso) y luego borre estas tablas con prefijo (drop table ...).</li>
   <li>Compruebe que no ha dejado ninguna hoja de estilo o imagen personalizada (si la tuviera, asegúrese de realizar una copia de respaldo*)</li>
   <li>Descargue el paquete de instalación de Chamilo 1.9 desde la página de descarga de Chamilo</li>
   <li>Descomprima los nuevos ficheros de Chamilo 1.9 sobre los ficheros de la antigua versión ( o descomprima en una carpeta y luego copie los archivos en el directorio de la versión antigua)</li>
-  <li>Asegúrese *por completo* que el archivo .htaccess de la versión 1.10 ha sido copiado en la raíz también</li>
+  <li>Asegúrese *por completo* que el archivo .htaccess de la versión 1.11 ha sido copiado en la raíz también</li>
   <li>Asegúrese que "AllowOverride All" está presente en su configuración de Apache, ya que interpretar el archivo .htaccess es muy importante para que Chamilo funcione (ojo que la directiva Order-Allow ha sido remplazada por "Require all granted" en Apache 2.4)</li>
   <li>Escriba en su navegador web la URL de su portal + main/install/</li>
   <li>Elija su idioma y haga click sobre Actualizar desde 1.9.x</li>
@@ -320,7 +320,7 @@ Dado que se trata sólo de un cambio de versión menor  previa de Chamilo 1.10.*
 <br />
 
 <h3>3.3 Actualizar desde Chamilo o Dok€os 1.8.x</h3>
-Para actualizar desde una versión previa a la 1.9.0, deberá a partir de ahora primero actualizar a la versión 1.9.10.x, para luego actualizar de ahí a la 1.10.x.
+Para actualizar desde una versión previa a la 1.9.0, deberá a partir de ahora primero actualizar a la versión 1.9.10.x, para luego actualizar de ahí a la 1.11.x.
 Podrá encontrar una versión descargable de 1.9.10.x aquí: <a href="https://github.com/chamilo/chamilo-lms/releases">https://github.com/chamilo/chamilo-lms/releases</a>
 
 <h3>3.4 En ambos últimos casos</h3>
@@ -395,7 +395,7 @@ Distribuciones nuevas también permiten descargar rpms para los paquetes adicion
 
 <p><span>Nota:</span>El mecanismo de LDAP ha cambiado en 1,9. Como resultado, parte de la información siguiente puede no ser correcta. Por favor, compruebe los ajustes de configuración dentro de Chamilo para conocer los detalles.</p>
 <p>
-En (la carpeta de Chamilo)/main/inc/conf/configuration.php, aproximadamente en la line 90, se puede ver<br />
+En (la carpeta de Chamilo)/app/config/configuration.php, aproximadamente en la line 90, se puede ver<br />
 //for new login module<br />
 //uncomment these to activate ldap<br />
 //$extAuthSource['ldap']['login'] = "./main/auth/ldap/login.php";<br />

@@ -2798,10 +2798,10 @@ function grapher($sql_result, $start_date, $end_date, $type = "")
     $last_days      = 5;
     $last_months    = 3;
     for ($i = $last_days; $i >= 0; $i--) {
-        $main_day[date ('d-m-Y', mktime () - $i * 3600 * 24)] = 0;
+        $main_day[date ('d-m-Y', time () - $i * 3600 * 24)] = 0;
     }
     for ($i = $last_months; $i >= 0; $i--) {
-        $main_month_year[date ('m-Y', mktime () - $i * 30 * 3600 * 24)] = 0;
+        $main_month_year[date ('m-Y', time () - $i * 30 * 3600 * 24)] = 0;
     }
 
     $i = 0;
@@ -2892,7 +2892,7 @@ function grapher($sql_result, $start_date, $end_date, $type = "")
             $myPicture->drawText(
                 $mainWidth / 2,
                 30,
-                get_lang('ExercisesInTimeProgressChart'),
+                get_lang('TimeSpentInTheCourse'),
                 array(
                     "FontSize" => 12,
                     "Align" => TEXT_ALIGN_BOTTOMMIDDLE

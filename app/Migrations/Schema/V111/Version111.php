@@ -6,6 +6,7 @@ namespace Application\Migrations\Schema\V111;
 use Application\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
+
 /**
  * Class Version111
  * Migrate file to updated to Chamilo 1.11
@@ -20,6 +21,11 @@ class Version111 extends AbstractMigrationChamilo
      */
     public function up(Schema $schema)
     {
+        // Needed to update 0000-00-00 00:00:00 values
+        $this->addSql('SET sql_mode = ""');
+        // In case this one didn't work, also try this
+        $this->addSql('SET SESSION sql_mode = ""');
+
         $this->addSql("ALTER TABLE extra_field ENGINE=InnoDB");
         $this->addSql('CREATE TABLE extra_field_saved_search (id INT AUTO_INCREMENT NOT NULL, field_id INT DEFAULT NULL, user_id INT DEFAULT NULL, value LONGTEXT DEFAULT NULL COLLATE utf8_unicode_ci, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_16ABE32A443707B0 (field_id), INDEX IDX_16ABE32AA76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $this->addSql('ALTER TABLE extra_field_saved_search ADD CONSTRAINT FK_16ABE32A443707B0 FOREIGN KEY (field_id) REFERENCES extra_field (id)');
@@ -68,11 +74,6 @@ class Version111 extends AbstractMigrationChamilo
         $this->addSql("INSERT INTO access_url_rel_course_category (access_url_id, course_category_id) VALUES (1, 3) ");
 
         $this->addSql('ALTER TABLE notification CHANGE content content TEXT');
-
-        // Needed to update 0000-00-00 00:00:00 values
-        $this->addSql('SET sql_mode = ""');
-        // In case this one didn't work, also try this
-        $this->addSql('SET SESSION sql_mode = ""');
 
         $this->addSql('ALTER TABLE c_lp CHANGE publicated_on publicated_on DATETIME');
         $this->addSql('ALTER TABLE c_lp CHANGE expired_on expired_on DATETIME');

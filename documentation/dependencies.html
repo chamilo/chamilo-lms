@@ -64,16 +64,17 @@ We recommend using HTML5-compatible technology.
   <li>We recommend a Pentium-I as a minimum processor capability for PCs</li>
   <li>Works on Windows XP (SP3 recommended) and later versions, Linux (any version with a graphical interface), Mac OS (any version), FreeBSD, Android, iOS and pretty much any other operating system with a graphical interface you might think about</li>
   <li>Any modern browser (IE8 and inferior *excluded*).</li>
-  <li>Optional: Flash plugin (only required for a few features like the hotspot image question type and the audio recorder)</li>
-  <li>Optional: Java applet capability (only required in case you don't use the Flash version of the audio recorder)</li>
+  <li>Optional: Flash plugin (only required for a few features like the videoconference plugins)</li>
+  <li>Optional: Java applet capability (only required for some plugins)</li>
 </ul>
 
 <h2>Dependencies - server-side</h2>
 <ul>
   <li>Apache 2+</li>
-  <li> PHP 5.4 or higher with MySQL bindings (mysqlnd is recommended) and php-gd extension to allow Chamilo to resize pictures. Not tested with PHP 7.0 yet</li>
+  <li> PHP 5.4 or higher with MySQL bindings (mysqlnd is recommended) and php-gd extension to allow Chamilo to resize pictures. Now also supports PHP 7.0</li>
   <li>MySQL 5.1+ or any version of MariaDB database server</li>
   <li>php5-intl package (for international behaviour support)</li>
+  <li>php5-mbstring package (for international behaviour support)</li>
   <li>php5-imagick</li>
   <li>php5-curl (only required for a feature in the links tool and an optional installer check)</li>
   <li>php5-mcrypt (only required for a feature in the survey tool)</li>

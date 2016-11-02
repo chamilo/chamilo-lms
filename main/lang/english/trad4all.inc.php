@@ -7923,4 +7923,5 @@ $ThisTextShouldBeAtLeastXCharsLong = "This text should be at least %s characters
 $TicketXAssignedToUserX = "Ticket <b>#%s</b> assigned to user <b>%s</b>";
 $ThisItemIsRelatedToOtherTickets = "This item is related to other tickets.";
 $WarningCategoryXDoesntHaveUsers = "Warning: No one has been assigned to category %s";
+$CourseXAdded = 'Course %s added.';
 ?>

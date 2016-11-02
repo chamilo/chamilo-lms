@@ -212,8 +212,10 @@ if ($form->validate()) {
     if ($courseInfo && isset($courseInfo['course_public_url'])) {
         Display::addFlash(
             Display::return_message(
-                get_lang('Added').'&nbsp;'.
-                Display::url($courseInfo['course_public_url'], $courseInfo['course_public_url']),
+                sprintf(
+                    get_lang('CourseXAdded'),
+                    Display::url($courseInfo['title'], $courseInfo['course_public_url'])
+                ),
                 'confirmation',
                 false
             )

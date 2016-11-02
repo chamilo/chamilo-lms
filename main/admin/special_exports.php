@@ -16,9 +16,7 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseSelectForm;
 $cidReset = true;
 require_once  '../inc/global.inc.php';
 
-// setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
-// setting breadcrumbs
 $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 // Access restrictions
 api_protect_admin_script(true);
@@ -26,10 +24,9 @@ $nameTools = get_lang('SpecialExports');
 $export = '';
 
 // include additional libraries
-
 if (function_exists('ini_set')) {
-	api_set_memory_limit('256M');
-	ini_set('max_execution_time',0);
+    api_set_memory_limit('256M');
+    ini_set('max_execution_time', 0);
 }
 
 // Displaying the header
@@ -42,8 +39,6 @@ if (count($_POST) == 0) {
     Display::display_normal_message(get_lang('SpecialExportsIntroduction'));
 }
 $error =0;
-/* MAIN CODE */
-
 $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 $tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 
@@ -51,46 +46,46 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
     (isset ($_POST['backup_option']) && $_POST['backup_option'] == 'full_backup')
 ) {
 	$export = false;
-	if (isset ($_POST['action']) && $_POST['action'] == 'course_select_form') {
-		$FileZip = create_zip();
-		$to_group_id = 0;
-		$sql_session = "SELECT id, name FROM $tbl_session ";
-		$query_session = Database::query($sql_session);
-		$ListSession = array();
-		while ($rows_session = Database::fetch_assoc($query_session)) {
-			$ListSession[$rows_session['id']] = $rows_session['name'];
-		}
+    if (isset ($_POST['action']) && $_POST['action'] == 'course_select_form') {
+        $FileZip = create_zip();
+        $to_group_id = 0;
+        $sql_session = "SELECT id, name FROM $tbl_session ";
+        $query_session = Database::query($sql_session);
+        $ListSession = array();
+        while ($rows_session = Database::fetch_assoc($query_session)) {
+            $ListSession[$rows_session['id']] = $rows_session['name'];
+        }
 
         $groupCondition = " props.to_group_id = $to_group_id";
         if (empty($to_group_id)) {
             $groupCondition = " (props.to_group_id = 0 OR props.to_group_id IS NULL)";
         }
 
-		$zip_folder=new PclZip($FileZip['TEMP_FILE_ZIP']);
-		if(!isset($_POST['resource']) || count($_POST['resource']) == 0 ) {
-			Display::display_error_message(get_lang('ErrorMsgSpecialExport'));
-		} else {
-			$Resource = $_POST['resource'];
+        $zip_folder=new PclZip($FileZip['TEMP_FILE_ZIP']);
+        if (!isset($_POST['resource']) || count($_POST['resource']) == 0) {
+            Display::display_error_message(get_lang('ErrorMsgSpecialExport'));
+        } else {
+            $Resource = $_POST['resource'];
 
-			foreach ($Resource as $Code_course => $Sessions) {
-				$_course 		= api_get_course_info($Code_course);
-				$tbl_document 	= Database::get_course_table(TABLE_DOCUMENT);
-				$tbl_property 	= Database::get_course_table(TABLE_ITEM_PROPERTY);
-				$course_id 		= $_course['real_id'];
+            foreach ($Resource as $Code_course => $Sessions) {
+                $_course = api_get_course_info($Code_course);
+                $tbl_document = Database::get_course_table(TABLE_DOCUMENT);
+                $tbl_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
+                $course_id = $_course['real_id'];
 
-				//Add item to the zip file course
-				$sql = "SELECT path FROM $tbl_document AS docs, $tbl_property AS props
+                //Add item to the zip file course
+                $sql = "SELECT path FROM $tbl_document AS docs, $tbl_property AS props
                         WHERE props.tool='".TOOL_DOCUMENT."'
-						AND docs.id=props.ref
-						AND docs.path LIKE '".$querypath."/%'
-						AND docs.filetype='file'
-						AND (docs.session_id = '0' OR docs.session_id IS NULL)
-						AND props.visibility<>'2'
-						AND $groupCondition
-						AND docs.c_id = $course_id
-						AND props.c_id = $course_id";
-				$query = Database::query($sql );
-				while ($rows_course_file = Database::fetch_assoc($query)) {
+                        AND docs.id=props.ref
+                        AND docs.path LIKE '".$querypath."/%'
+                        AND docs.filetype='file'
+                        AND (docs.session_id = '0' OR docs.session_id IS NULL)
+                        AND props.visibility<>'2'
+                        AND $groupCondition
+                        AND docs.c_id = $course_id
+                        AND props.c_id = $course_id";
+                $query = Database::query($sql);
+                while ($rows_course_file = Database::fetch_assoc($query)) {
                     $zip_folder->add(
                         $FileZip['PATH_COURSE'].$_course['directory']."/document".$rows_course_file['path'],
                         PCLZIP_OPT_ADD_PATH,
@@ -98,23 +93,23 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
                         PCLZIP_OPT_REMOVE_PATH,
                         $FileZip['PATH_COURSE'].$_course['directory']."/document".$FileZip['PATH_REMOVE']
                     );
-				}
+                }
 
-				foreach ($Sessions as $IdSession => $value){
-					$session_id = Security::remove_XSS($IdSession);
-					//Add tem to the zip file session course
-					$sql_session_doc = "SELECT path FROM $tbl_document AS docs, $tbl_property AS props
-						WHERE props.tool='".TOOL_DOCUMENT."'
-							AND docs.id=props.ref
-							AND docs.path LIKE '".$querypath."/%'
-							AND docs.filetype='file'
-							AND docs.session_id = '$session_id'
-							AND props.visibility<>'2'
-							AND $groupCondition
-							AND docs.c_id = $course_id
-							AND props.c_id = $course_id";
-					$query_session_doc = Database::query($sql_session_doc);
-					while ($rows_course_session_file = Database::fetch_assoc($query_session_doc)) {
+                foreach ($Sessions as $IdSession => $value) {
+                    $session_id = (int) $IdSession;
+                    //Add tem to the zip file session course
+                    $sql_session_doc = "SELECT path FROM $tbl_document AS docs, $tbl_property AS props
+                        WHERE props.tool='".TOOL_DOCUMENT."'
+                            AND docs.id=props.ref
+                            AND docs.path LIKE '".$querypath."/%'
+                            AND docs.filetype='file'
+                            AND docs.session_id = '$session_id'
+                            AND props.visibility<>'2'
+                            AND $groupCondition
+                            AND docs.c_id = $course_id
+                            AND props.c_id = $course_id";
+                    $query_session_doc = Database::query($sql_session_doc);
+                    while ($rows_course_session_file = Database::fetch_assoc($query_session_doc)) {
                         $zip_folder->add(
                             $FileZip['PATH_COURSE'].$_course['directory'].'/document'.$rows_course_session_file['path'],
                             PCLZIP_OPT_ADD_PATH,
@@ -122,50 +117,42 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
                             PCLZIP_OPT_REMOVE_PATH,
                             $FileZip['PATH_COURSE'].$_course['directory'].'/document'.$FileZip['PATH_REMOVE']
                         );
-					}
-				}
-			}
-			$name = rename_zip($FileZip);
-			$export = true;
-		}
-	} else {
-		$name = fullexportspecial();
-	}
-?>
-<!-- Manual download <script language="JavaScript">
- // setTimeout(\'download_backup()\',2000);
- function download_backup()
- {
-	window.location="../course_info/download.php?archive=<?php echo $name; ?>&session=true";
- }
-</script> //-->
-<?php
+                    }
+                }
+            }
+            $name = rename_zip($FileZip);
+            $export = true;
+        }
+    } else {
+        $name = fullexportspecial();
+    }
 }
 
 if ($export && $name) {
-	Display::display_confirmation_message(get_lang('BackupCreated'));
-	echo '<br /><a class="btn btn-default" href="'.api_get_path(WEB_CODE_PATH).'course_info/download.php?archive='.urlencode($name).'&session=true">'.get_lang('Download').'</a>';
+    Display::display_confirmation_message(get_lang('BackupCreated'));
+    echo '<br /><a class="btn btn-default" href="'.api_get_path(WEB_CODE_PATH).'course_info/download.php?archive='.urlencode($name).'&session=true">'.get_lang('Download').'</a>';
 } else {
-	// Display forms especial export
-	if (isset ($_POST['backup_option']) && $_POST['backup_option'] == 'select_items') {
-		$cb = new CourseBuilder();
-		$course = $cb->build_session_course();
-		if($course === false){
-			Display::display_error_message(get_lang('ErrorMsgSpecialExport'));
-			form_special_export();
-		} else {
-			Display::display_normal_message(get_lang('ToExportSpecialSelect'));
-			CourseSelectForm :: display_form_session_export($course);
-		}
-	} else {
-		form_special_export();
-	}
+    // Display forms especial export
+    if (isset($_POST['backup_option']) && $_POST['backup_option'] == 'select_items') {
+        $cb = new CourseBuilder();
+        $course = $cb->build_session_course();
+        if ($course === false) {
+            Display::display_error_message(get_lang('ErrorMsgSpecialExport'));
+            form_special_export();
+        } else {
+            Display::display_normal_message(get_lang('ToExportSpecialSelect'));
+            CourseSelectForm :: display_form_session_export($course);
+        }
+    } else {
+        form_special_export();
+    }
 }
 
 /* FOOTER */
 Display::display_footer();
 
-function form_special_export() {
+function form_special_export()
+{
     $form = new FormValidator('special_exports','post');
     $renderer = $form->defaultRenderer();
     $renderer->setCustomElementTemplate('<div>{element}</div> ');
@@ -179,41 +166,57 @@ function form_special_export() {
     $form->display();
 }
 
-function create_zip(){
+function create_zip()
+{
     $path = '';
-    if(empty($path)) { $path='/'; }
-    $remove_dir = ($path!='/') ? substr($path,0,strlen($path) - strlen(basename($path))) : '/';
+    if (empty($path)) {
+        $path = '/';
+    }
+    $remove_dir = ($path != '/') ? substr($path, 0, strlen($path) - strlen(basename($path))) : '/';
     $sys_archive_path = api_get_path(SYS_ARCHIVE_PATH);
     $sys_course_path = api_get_path(SYS_COURSE_PATH);
     $temp_zip_dir = $sys_archive_path."temp";
-    if(!is_dir($temp_zip_dir)) {
+    if (!is_dir($temp_zip_dir)) {
         mkdir($temp_zip_dir, api_get_permissions_for_new_directories());
     } else {
-        $handle=opendir($temp_zip_dir);
-        while (false!==($file = readdir($handle))) {
+        $handle = opendir($temp_zip_dir);
+        while (false !== ($file = readdir($handle))) {
             if ($file != "." && $file != "..") {
-                $Diff = (time() - filemtime("$temp_zip_dir/$file"))/60/60;  //the "age" of the file in hours
-                if ($Diff > 4) unlink("$temp_zip_dir/$file");   //delete files older than 4 hours
+                $Diff = (time() - filemtime("$temp_zip_dir/$file")) / 60 / 60;  //the "age" of the file in hours
+                if ($Diff > 4) {
+                    unlink("$temp_zip_dir/$file");
+                }   //delete files older than 4 hours
             }
         }
         closedir($handle);
     }
     $temp_zip_file = $temp_zip_dir."/".md5(time()).".zip";  //create zipfile of given directory
-    return array('PATH' => $path,
-                 'PATH_TEMP_ARCHIVE' => $temp_zip_dir,
-                 'PATH_COURSE' => $sys_course_path,
-                 'TEMP_FILE_ZIP' => $temp_zip_file,
-                 'PATH_REMOVE' => $remove_dir);
+    return array(
+        'PATH' => $path,
+        'PATH_TEMP_ARCHIVE' => $temp_zip_dir,
+        'PATH_COURSE' => $sys_course_path,
+        'TEMP_FILE_ZIP' => $temp_zip_file,
+        'PATH_REMOVE' => $remove_dir
+    );
 }
 
-function rename_zip($FileZip) {
-    Event::event_download(($FileZip['PATH'] == '/')?'full_export_'.date('Ymd').'.zip (folder)': basename($FileZip['PATH']).'.zip (folder)');
-    $name = ($FileZip['PATH']=='/')? 'full_export_'.date('Ymd').'.zip':basename($FileZip['PATH']).'.zip';
-    if(file_exists($FileZip['PATH_TEMP_ARCHIVE'].'/'.$name)){ unlink($FileZip['PATH_TEMP_ARCHIVE'].'/'.$name); }
-    if(file_exists($FileZip['TEMP_FILE_ZIP'])) {
-        rename($FileZip['TEMP_FILE_ZIP'], $FileZip['PATH_TEMP_ARCHIVE'].'/'.$name);
+function rename_zip($FileZip)
+{
+    Event::event_download(($FileZip['PATH'] == '/') ? 'full_export_'.date('Ymd').'.zip (folder)' : basename($FileZip['PATH']).'.zip (folder)');
+    $name = ($FileZip['PATH'] == '/') ? 'full_export_'.date('Ymd').'.zip' : basename($FileZip['PATH']).'.zip';
+    if (file_exists($FileZip['PATH_TEMP_ARCHIVE'].'/'.$name)) {
+        unlink($FileZip['PATH_TEMP_ARCHIVE'].'/'.$name);
+    }
+    if (file_exists($FileZip['TEMP_FILE_ZIP'])) {
+        rename(
+            $FileZip['TEMP_FILE_ZIP'],
+            $FileZip['PATH_TEMP_ARCHIVE'].'/'.$name
+        );
+
         return $name;
-    } else { return false; }
+    } else {
+        return false;
+    }
 
 }
 
@@ -233,8 +236,7 @@ function fullexportspecial()
         $groupCondition = " (props.to_group_id = 0 OR props.to_group_id IS NULL)";
     }
 
-
-    if (count($list_course) >0 ) {
+    if (count($list_course) > 0) {
         foreach($list_course as $_course) {
             if($FileZip['PATH'] == '/') {
                 $querypath=''; // to prevent ...path LIKE '//%'... in query
@@ -294,11 +296,13 @@ function fullexportspecial()
         }
 
         $name = rename_zip($FileZip);
-        if ($name === false){
+        if ($name === false) {
             $export = false;
+
             return false;
         } else {
             $export = true;
+
             return $name;
         }
     } else {

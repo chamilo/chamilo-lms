@@ -1,0 +1,4 @@
+name: Chamilo Migrations
+migrations_namespace: Application\Migrations\Schema\V110
+table_name: version
+migrations_directory: app/Migrations/Schema/V110

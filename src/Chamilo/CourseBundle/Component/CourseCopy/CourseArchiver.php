@@ -3,6 +3,8 @@
 
 namespace Chamilo\CourseBundle\Component\CourseCopy;
 
+use Symfony\Component\Filesystem\Filesystem;
+
 /**
  * Some functions to write a course-object to a zip-file and to read a course-
  * object from such a zip-file.
@@ -14,11 +16,33 @@ namespace Chamilo\CourseBundle\Component\CourseCopy;
 class CourseArchiver
 {
     /**
+     * @return string
+     */
+    public static function getBackupDir()
+    {
+        return api_get_path(SYS_ARCHIVE_PATH).'course_backups/';
+    }
+
+    /**
+     * @return string
+     */
+    public static function createBackupDir()
+    {
+        $perms = api_get_permissions_for_new_directories();
+        $dir = self::getBackupDir();
+        $fs = new Filesystem();
+        $fs->mkdir($dir, $perms);
+
+        return $dir;
+    }
+
+    /**
      * Delete old temp-dirs
      */
-    public static function clean_backup_dir()
+    public static function cleanBackupDir()
     {
-        $dir = api_get_path(SYS_ARCHIVE_PATH);
+        $dir = self::getBackupDir();
+
         if ($handle = @ opendir($dir)) {
             while (($file = readdir($handle)) !== false) {
                 if ($file != "." && $file != ".." &&
@@ -36,22 +60,25 @@ class CourseArchiver
      * Write a course and all its resources to a zip-file.
      * @return string A pointer to the zip-file
      */
-    public static function write_course($course)
+    public static function createBackup($course)
     {
-        $perm_dirs = api_get_permissions_for_new_directories();
+        CourseArchiver::cleanBackupDir();
+        CourseArchiver::createBackupDir();
 
-        CourseArchiver::clean_backup_dir();
+        $perm_dirs = api_get_permissions_for_new_directories();
+        $backupDirectory = self::getBackupDir();
 
         // Create a temp directory
-        $tmp_dir_name = 'CourseArchiver_' . api_get_unique_id();
-        $backup_dir = api_get_path(SYS_ARCHIVE_PATH) . $tmp_dir_name . '/';
+        $backup_dir = $backupDirectory . 'CourseArchiver_' . api_get_unique_id() . '/';
 
         // All course-information will be stored in course_info.dat
         $course_info_file = $backup_dir . 'course_info.dat';
-        $zip_dir = api_get_path(SYS_ARCHIVE_PATH);
+
         $user = api_get_user_info();
         $date = new \DateTime(api_get_local_time());
-        $zip_file = $user['user_id'] . '_' . $course->code . '_' . $date->format('Ymd-His') . '.zip';
+        $zipFileName = $user['user_id'] . '_' . $course->code . '_' . $date->format('Ymd-His') . '.zip';
+        $zipFilePath = $backupDirectory. $zipFileName;
+
         $php_errormsg = '';
         $res = @mkdir($backup_dir, $perm_dirs);
         if ($res === false) {
@@ -129,22 +156,22 @@ class CourseArchiver
         }
 
         // Zip the course-contents
-        $zip = new \PclZip($zip_dir . $zip_file);
-        $zip->create($zip_dir . $tmp_dir_name, PCLZIP_OPT_REMOVE_PATH, $zip_dir . $tmp_dir_name . '/');
-        //$zip->deleteByIndex(0);
+        $zip = new \PclZip($zipFilePath);
+        $zip->create($backup_dir, PCLZIP_OPT_REMOVE_PATH, $backup_dir);
+
         // Remove the temp-dir.
         rmdirr($backup_dir);
-        return '' . $zip_file;
+        return $zipFileName;
     }
 
     /**
      * @param int $user_id
      * @return array
      */
-    public static function get_available_backups($user_id = null)
+    public static function getAvailableBackups($user_id = null)
     {
         $backup_files = array();
-        $dirname = api_get_path(SYS_ARCHIVE_PATH) . '';
+        $dirname = self::getBackupDir();
         if ($dir = opendir($dirname)) {
             while (($file = readdir($dir)) !== false) {
                 $file_parts = explode('_', $file);
@@ -174,12 +201,12 @@ class CourseArchiver
      * @param array $file
      * @return bool|string
      */
-    public static function import_uploaded_file($file)
+    public static function importUploadedFile($file)
     {
         $new_filename = uniqid('') . '.zip';
-        $new_dir = api_get_path(SYS_ARCHIVE_PATH);
+        $new_dir = self::getBackupDir();
         if (is_dir($new_dir) && is_writable($new_dir)) {
-            move_uploaded_file($file, api_get_path(SYS_ARCHIVE_PATH).$new_filename);
+            move_uploaded_file($file, $new_dir.$new_filename);
 
             return $new_filename;
         }
@@ -195,21 +222,27 @@ class CourseArchiver
      * @return course The course
      * @todo Check if the archive is a correct Chamilo-export
      */
-    public static function read_course($filename, $delete = false)
+    public static function readCourse($filename, $delete = false)
     {
-        CourseArchiver::clean_backup_dir();
+        CourseArchiver::cleanBackupDir();
         // Create a temp directory
-        $tmp_dir_name = 'CourseArchiver_' . uniqid('');
-        $unzip_dir = api_get_path(SYS_ARCHIVE_PATH) . '' . $tmp_dir_name;
+        $tmp_dir_name = 'CourseArchiver_'.uniqid('');
+        $unzip_dir = self::getBackupDir().$tmp_dir_name;
+        $filePath = self::getBackupDir().$filename;
+
         @mkdir($unzip_dir, api_get_permissions_for_new_directories(), true);
-        @copy(api_get_path(SYS_ARCHIVE_PATH) . '' . $filename, $unzip_dir . '/backup.zip');
+        @copy(
+            $filePath,
+            $unzip_dir . '/backup.zip'
+        );
+
         // unzip the archive
         $zip = new \PclZip($unzip_dir . '/backup.zip');
         @chdir($unzip_dir);
         $zip->extract(PCLZIP_OPT_TEMP_FILE_ON);
         // remove the archive-file
         if ($delete) {
-            @unlink(api_get_path(SYS_ARCHIVE_PATH) . '' . $filename);
+            @unlink($filePath);
         }
 
         // read the course
@@ -222,7 +255,6 @@ class CourseArchiver
         @fclose($fp);
 
         class_alias('Chamilo\CourseBundle\Component\CourseCopy\Course', 'Course');
-
         class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\Announcement', 'Announcement');
         class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\Attendance', 'Attendance');
         class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\CalendarEvent', 'CalendarEvent');

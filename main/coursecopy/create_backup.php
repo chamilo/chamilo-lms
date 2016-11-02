@@ -68,7 +68,7 @@ if (Security::check_token('post') && (
         $course = $cb->build();
     }
 
-    $zip_file = CourseArchiver::write_course($course);
+    $zip_file = CourseArchiver::createBackup($course);
     Display::display_confirmation_message(get_lang('BackupCreated'));
     echo '<br /><a class="btn btn-primary btn-large" href="' . api_get_path(WEB_CODE_PATH) . 'course_info/download.php?archive=' . $zip_file . '&' . api_get_cidreq() . '">
     ' . get_lang('Download') . '</a>';

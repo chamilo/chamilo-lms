@@ -74,7 +74,7 @@ if (Security::check_token('post') && (
             $delete_file = false;
         } else {
             if ($_FILES['backup']['error'] == 0) {
-                $filename = CourseArchiver::import_uploaded_file(
+                $filename = CourseArchiver::importUploadedFile(
                     $_FILES['backup']['tmp_name']
                 );
                 if ($filename === false) {
@@ -89,7 +89,7 @@ if (Security::check_token('post') && (
 
         if (!$error) {
             // Full backup
-            $course = CourseArchiver::read_course($filename, $delete_file);
+            $course = CourseArchiver::readCourse($filename, $delete_file);
         }
     }
 
@@ -116,7 +116,7 @@ if (Security::check_token('post') && (
             }
         }
     }
-    CourseArchiver::clean_backup_dir();
+    CourseArchiver::cleanBackupDir();
 
 } elseif (Security::check_token('post') && (
         isset($_POST['import_option']) &&
@@ -130,10 +130,10 @@ if (Security::check_token('post') && (
         $filename = $_POST['backup_server'];
         $delete_file = false;
     } else {
-        $filename = CourseArchiver::import_uploaded_file($_FILES['backup']['tmp_name']);
+        $filename = CourseArchiver::importUploadedFile($_FILES['backup']['tmp_name']);
         $delete_file = true;
     }
-    $course = CourseArchiver::read_course($filename, $delete_file);
+    $course = CourseArchiver::readCourse($filename, $delete_file);
 
     if ($course->has_resources() && ($filename !== false)) {
         $hiddenFields['same_file_name_option'] = $_POST['same_file_name_option'];
@@ -149,7 +149,7 @@ if (Security::check_token('post') && (
     }
 } else {
     $user = api_get_user_info();
-    $backups = CourseArchiver::get_available_backups(
+    $backups = CourseArchiver::getAvailableBackups(
         $is_platformAdmin ? null : $user['user_id']
     );
     $backups_available = count($backups) > 0;

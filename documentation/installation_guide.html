@@ -5,8 +5,6 @@
     <link rel="stylesheet" href="../web/assets/bootstrap/dist/css/bootstrap.css" type="text/css" media="screen,projection" />
     <link rel="stylesheet" href="default.css" type="text/css" media="screen,projection" />
     <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
-    <link href="js/prettify.css" type="text/css" rel="stylesheet" />
-    <script src="js/prettify.js" type="text/javascript"></script>
 </head>
 <body>
 <nav class="navbar navbar-default navbar-fixed-top">
@@ -261,7 +259,7 @@ need, we highly recommend you contact them (see reference below).</div>
 <br />
 <div class="text-muted"> NOTE: This version of Chamilo can only be used to upgrade
 from earlier versions of Chamilo 1.9.*. You cannot use the normal
-upgrade scripts from Chamilo 1.10 to upgrade from Chamilo 1.8.* or even Dok€os 2.0
+upgrade scripts from Chamilo 1.11 to upgrade from Chamilo 1.8.* or even Dok€os 2.0
 (which was born after the split with Chamilo). If you need this, please contact one
 of the Chamilo Association's <a href="https://chamilo.org/providers">official providers</a>)</div>
 <p></p>
@@ -323,9 +321,9 @@ some manual work, but the upgrade procedure will not touch sublanguages directly
 <ul>
   <li> make sure you don't have tables from previous versions of Chamilo still hanging around. These can cause the upgrade to fail. In particular, tables from versions 1.8.* could have multiple tables for each course, resulting in many tables with the same prefix. Only tables without prefix or with a "c_" prefix exist in 1.9 and superior versions. Make sure none of these tables persist. Take a backup of your database (just in case) and delete these prefixed tables (drop table ...).</li>
   <li> check that you haven't left any customised stylesheet or image <span class="text-muted">(if you have, make sure you keep a copy on the side*)</span></li>
-  <li> download the Chamilo 1.10 install package from the <a href="http://www.chamilo.org/download">Chamilo download page</a></li>
-  <li> unzip the new files of Chamilo 1.10 over the files of the older version (or unzip the files in one folder and then copy the files from there to the older version's directory)</li>
-  <li> make *absolutely sure* that the .htaccess file of version 1.10 is copied as well</li>
+  <li> download the Chamilo 1.11 install package from the <a href="http://www.chamilo.org/download">Chamilo download page</a></li>
+  <li> unzip the new files of Chamilo 1.11 over the files of the older version (or unzip the files in one folder and then copy the files from there to the older version's directory)</li>
+  <li> make *absolutely sure* that the .htaccess file of version 1.11 is copied as well</li>
   <li> make sure "AllowOverride All" is present in your Apache configuration, as interpreting the .htaccess files is very important for Chamilo to work (note that the Order-Allow directive has been replaced by "Require all granted" in Apache 2.4)</li>
   <li> point your browser on your portal URL + main/install/</li>
   <li> click&nbsp;<span style="font-style: italic;">Install</span>, then choose <span style="font-style: italic;">Upgrade from 1.9.*</span></li>
@@ -355,7 +353,7 @@ Do not delete the previous Chamilo installation directory before installing
 the new one. The upgrade process should take care of all unrequired folders.</p>
 
 <h3>3.4 Upgrading from Chamilo 1.8.x</h3>
-To upgrade from version of Chamilo prior to 1.9.0, you will need to first upgrade them to 1.9.10.x, then upgrade again (separately) to 1.10.x.
+To upgrade from version of Chamilo prior to 1.9.0, you will need to first upgrade them to 1.9.10.x, then upgrade again (separately) to 1.11.x.
 You can find the 1.9.10.x packages here: <a href="https://github.com/chamilo/chamilo-lms/releases">https://github.com/chamilo/chamilo-lms/releases</a>
 
 <p></p>
@@ -632,7 +630,7 @@ If you have issues with files taking a long time to download, make sure you reco
 <hr style="width: 100%; height: 2px;" />
     <h2><a name="16._Rewrite"></a>Rewrite</h2>
     <p>
-    Chamilo LMS 1.10 is the first version to require the web server to allow redirections of requests.<br />
+    Chamilo LMS 1.10 is the first version to require the web server to allow redirections of requests (and so 1.11 does as well).<br />
     For Apache, this is done through enabling the Rewrite module and either allowing overrides (through .htaccess) or adding a specific configuration section to the VirtualHost defined for Apache.<br />
     For Nginx, this is done through specific redirection rules in the corresponding virtual host (server clause).<br /><br />
     To make sure this isn't too complex for anyone, we recommend a configuration below to help you out in both cases.

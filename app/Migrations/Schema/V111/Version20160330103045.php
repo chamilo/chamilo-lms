@@ -133,9 +133,16 @@ class Version20160330103045 extends AbstractMigrationChamilo
             $this->addSql('DROP INDEX UNIQ_8D93D649F85E0677 ON user');
         }
 
-        $this->addSql(
-            'ALTER TABLE user ADD email_canonical VARCHAR(255) NOT NULL, ADD credentials_expired TINYINT(1), ADD credentials_expire_at DATETIME DEFAULT NULL, ADD locked TINYINT(1),ADD enabled TINYINT(1) NOT NULL, ADD expired TINYINT(1) NOT NULL, ADD expires_at DATETIME DEFAULT NULL, CHANGE username username VARCHAR(255) NOT NULL, CHANGE username_canonical username_canonical VARCHAR(255) NOT NULL, CHANGE email email VARCHAR(255) NOT NULL'
-        );
+        $this->addSql('ALTER TABLE user ADD email_canonical VARCHAR(255) NOT NULL');
+        $this->addSql('ALTER TABLE user ADD credentials_expired TINYINT(1)');
+        $this->addSql('ALTER TABLE user ADD credentials_expire_at DATETIME DEFAULT NULL');
+        $this->addSql('ALTER TABLE user ADD locked TINYINT(1) NOT NULL');
+        $this->addSql('ALTER TABLE user ADD enabled TINYINT(1) NOT NULL');
+        $this->addSql('ALTER TABLE user ADD expired TINYINT(1) NOT NULL');
+        $this->addSql('ALTER TABLE user ADD expires_at DATETIME DEFAULT NULL');
+        $this->addSql('ALTER TABLE user CHANGE username username VARCHAR(100) NOT NULL');
+        $this->addSql('ALTER TABLE user CHANGE username_canonical username_canonical VARCHAR(100) NOT NULL');
+        $this->addSql('ALTER TABLE user CHANGE email email VARCHAR(100) NOT NULL');
 
         $sql = "UPDATE user SET email_canonical = email";
         $this->addSql($sql);

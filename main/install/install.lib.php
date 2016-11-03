@@ -2274,7 +2274,6 @@ function fixIds(EntityManager $em)
 
         $sql = "SELECT * FROM c_item_property WHERE c_id = $courseId";
         $result = $connection->fetchAll($sql);
-
         foreach ($result as $item) {
             $sessionId = intval($item['session_id']);
             $groupId = intval($item['to_group_id']);
@@ -2330,13 +2329,13 @@ function fixIds(EntityManager $em)
                 error_log($sql);
                 $connection->executeQuery($sql);
             }
-
-            if ($debug) {
-                // Print a status in the log once in a while
-                error_log("Process item #$counter/$totalCourse");
-            }
-            $counter++;
         }
+
+        if ($debug) {
+            // Print a status in the log once in a while
+            error_log("Course process #$counter/$totalCourse");
+        }
+        $counter++;
     }
 
     if ($debug) {

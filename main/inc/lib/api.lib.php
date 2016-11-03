@@ -663,6 +663,7 @@ function api_get_path($path = '', $configuration = [])
     if (!empty($configuration) && array_key_exists('root_web', $configuration)) {
         $root_web = $configuration['root_web'];
     } else {
+        $root_web = '';
         // Try guess it from server.
         if (defined('SYSTEM_INSTALLATION') && SYSTEM_INSTALLATION) {
             if (($pos = strpos(($requested_page_rel = api_get_self()), 'main/install')) !== false) {

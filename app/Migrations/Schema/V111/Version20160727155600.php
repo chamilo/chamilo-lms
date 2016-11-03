@@ -14,7 +14,6 @@ use Chamilo\CoreBundle\Entity\BranchSync;
  */
 class Version20160727155600 extends AbstractMigrationChamilo
 {
-
     /**
      * @param Schema $schema
      */
@@ -25,14 +24,8 @@ class Version20160727155600 extends AbstractMigrationChamilo
         $count = $result['count'];
 
         if (!$count) {
-            $em = $this->getEntityManager();
-            $branchSync = new BranchSync();
-            $branchSync
-                ->setBranchName('localhost')
-                ->setAccessUrlId(1);
-
-            $em->persist($branchSync);
-            $em->flush();
+            $unique = sha1(uniqid());
+            $this->addSql("INSERT INTO branch_sync (branch_name, unique_id, access_url_id) VALUES ('localhost', '$unique', '1')'");
         }
     }
 

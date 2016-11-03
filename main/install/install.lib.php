@@ -2107,6 +2107,8 @@ function fixIds(EntityManager $em)
 {
     $debug = true;
     $connection = $em->getConnection();
+    $database = new Database();
+    $database->setManager($em);
 
     if ($debug) {
         error_log('fixIds');

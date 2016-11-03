@@ -39,7 +39,7 @@ class Version20151214170800 extends AbstractMigrationChamilo
 
         foreach ($answers as $answer) {
             // Recover the real image size to recalculate coordinates
-            $imagePath = api_get_path(SYS_PATH) . "courses/{$answer['directory']}/document/images/{$answer['picture']}";
+            $imagePath = __DIR__ . "/../../../../courses/{$answer['directory']}/document/images/{$answer['picture']}";
             if (!file_exists($imagePath)) {
                 error_log("Migration: Image does not exists: $imagePath");
                 continue;

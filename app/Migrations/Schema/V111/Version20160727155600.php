@@ -20,13 +20,12 @@ class Version20160727155600 extends AbstractMigrationChamilo
      */
     public function up(Schema $schema)
     {
-        $em = $this->getEntityManager();
+        $sql = "SELECT COUNT(id) as count FROM branch_sync";
+        $result = $this->connection->executeQuery($sql)->fetch();
+        $count = $result['count'];
 
-        $cont = $em
-            ->createQuery('SELECT COUNT(bs.id) FROM ChamiloCoreBundle:BranchSync AS bs')
-            ->getSingleScalarResult();
-
-        if (!$cont) {
+        if (!$count) {
+            $em = $this->getEntityManager();
             $branchSync = new BranchSync();
             $branchSync
                 ->setBranchName('localhost')

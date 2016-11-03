@@ -25,7 +25,8 @@ class Version20160727155600 extends AbstractMigrationChamilo
 
         if (!$count) {
             $unique = sha1(uniqid());
-            $this->addSql("INSERT INTO branch_sync (branch_name, unique_id, access_url_id) VALUES ('localhost', '$unique', '1')'");
+            $sql = "INSERT INTO branch_sync (branch_name, unique_id, access_url_id) VALUES ('localhost', '$unique', '1')";
+            $this->addSql($sql);
         }
     }
 

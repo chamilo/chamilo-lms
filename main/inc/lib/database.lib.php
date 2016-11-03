@@ -189,12 +189,10 @@ class Database
         $connection->executeQuery('SET sql_mode = "";');
 
         if ($returnConnection) {
-
             return $connection;
         }
 
         if ($returnManager) {
-
             return $entityManager;
         }
 

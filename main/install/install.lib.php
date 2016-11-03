@@ -2106,10 +2106,6 @@ function migrate($chamiloVersion, EntityManager $manager)
 function fixIds(EntityManager $em)
 {
     $debug = true;
-    $connection = $em->getConnection();
-    $database = new Database();
-    $database->setManager($em);
-
     if ($debug) {
         error_log('fixIds');
     }
@@ -2349,16 +2345,19 @@ function fixIds(EntityManager $em)
     $result = $connection->fetchAll($sql);
     foreach ($result as $item) {
         $courseCode = $item['course_code'];
-        $courseInfo = api_get_course_info($courseCode);
 
+        $sql = "SELECT * FROM course WHERE code = '$courseCode'";
+        $courseInfo = $connection->fetchAssoc($sql);
         if (empty($courseInfo)) {
             continue;
         }
-        $courseId = $courseInfo['real_id'];
+
+        $courseId = $courseInfo['id'];
+
         $ref = $item['ref_id'];
         $iid = $item['id'];
-        $sql = '';
 
+        $sql = '';
         switch ($item['type']) {
             case LINK_LEARNPATH:
                 $sql = "SELECT * FROM c_link WHERE c_id = $courseId AND id = $ref ";
@@ -2415,7 +2414,6 @@ function fixIds(EntityManager $em)
                 'created_at' => $group['created_on']
             ];
             $connection->insert('usergroup', $params);
-            //$connection->executeQuery($sql);
             $id = $connection->lastInsertId('id');
             $oldGroups[$group['id']] = $id;
         }
@@ -2449,7 +2447,6 @@ function fixIds(EntityManager $em)
             foreach ($dataList as $data) {
                 if (isset($oldGroups[$data['group_id']])) {
                     $data['group_id'] = $oldGroups[$data['group_id']];
-
                     $userId = $data['user_id'];
 
                     $sql = "SELECT id FROM user WHERE user_id = $userId";
@@ -2921,6 +2918,9 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
 
     $connection = $manager->getConnection();
 
+    $database = new Database();
+    $database->setManager($manager);
+
     switch ($fromVersion) {
         case '1.9.0':
         case '1.9.2':
@@ -2933,6 +2933,10 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
         case '1.9.10':
         case '1.9.10.2':
         case '1.9.10.4':
+
+            $database = new Database();
+            $database->setManager($manager);
+
             // Fix type "enum" before running the migration with Doctrine
             $connection->executeQuery("ALTER TABLE course_category MODIFY COLUMN auth_course_child VARCHAR(40) DEFAULT 'TRUE'");
             $connection->executeQuery("ALTER TABLE course_category MODIFY COLUMN auth_cat_child VARCHAR(40) DEFAULT 'TRUE'");
@@ -3000,6 +3004,8 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
         case '1.10.6':
             // no break
         case '1.10.8':
+            $database = new Database();
+            $database->setManager($manager);
             // Migrate using the migration files located in:
             // src/Chamilo/CoreBundle/Migrations/Schema/V111
             $result = migrate(
@@ -3055,10 +3061,10 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
                     $sessionId = $row['session_id'];
                     $workId = $row['id'];
                     $itemInfo = api_get_item_property_info(
-                      $courseId,
-                       'work',
-                      $workId,
-                      $sessionId
+                        $courseId,
+                        'work',
+                        $workId,
+                        $sessionId
                     );
                     $courseInfo = api_get_course_info_by_id($courseId);
                     if (empty($itemInfo)) {
@@ -3076,7 +3082,8 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
                         );
                     }
                 }
-                $connection->executeQuery("UPDATE settings_current SET selected_value = '1.11.0' WHERE variable = 'chamilo_database_version'");
+                $sql = "UPDATE settings_current SET selected_value = '1.11.0' WHERE variable = 'chamilo_database_version'";
+                $connection->executeQuery($sql);
 
                 if ($processFiles) {
                     include __DIR__.'/update-files-1.10.0-1.11.0.inc.php';

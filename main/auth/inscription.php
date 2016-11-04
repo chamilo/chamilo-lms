@@ -1009,12 +1009,11 @@ if ($form->validate()) {
     // last user login date is now
     $user_last_login_datetime = 0; // used as a unix timestamp it will correspond to : 1 1 1970
     Session::write('user_last_login_datetime', $user_last_login_datetime);
-    $recipient_name = api_get_person_name($values['firstname'], $values['lastname']);
     $text_after_registration =
         '<p>'.
         get_lang('Dear', null, $_user['language']).' '.
-        stripslashes(Security::remove_XSS($recipient_name)).',<br /><br />'.
-        get_lang('PersonalSettings',null,$_user['language']).".</p>";
+        stripslashes(Security::remove_XSS($values['firstname'])).',<br /><br />'.
+        get_lang('PersonalSettings',null,$_user['language'])."</p>";
 
     $form_data = array(
         'button' => Display::button('next', get_lang('Next', null, $_user['language']), array('class' => 'btn btn-primary btn-large')),
@@ -1038,9 +1037,9 @@ if ($form->validate()) {
         }
     } else {
         if (!empty($values['email'])) {
-            $text_after_registration.= '<p>'.get_lang('MailHasBeenSent', null, $_user['language']).'.</p>';
+            $text_after_registration.= '<p>'.get_lang('MailHasBeenSent', null, $_user['language']).'</p>';
             $diagnosticPath = '<a href="'.api_get_path(WEB_PATH).'search.php">'.get_lang('Diagnostic').'</a>';
-            $text_after_registration.= '<p>'.sprintf(get_lang('WelcomePleaseGoToDiagnosticAtX', null, $_user['language']), $diagnosticPath).'.</p>';
+            $text_after_registration.= '<p>'.sprintf(get_lang('WelcomePleaseGoToDiagnosticAtX', null, $_user['language']), $diagnosticPath).'</p>';
         }
 
         if ($is_allowedCreateCourse) {

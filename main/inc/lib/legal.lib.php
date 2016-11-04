@@ -287,9 +287,11 @@ class LegalManager
      */
 	public static function sendLegal($userId)
     {
+        $userInfo = api_get_user_info($userId);
         $subject = get_lang('SendTermsSubject');
         $content = sprintf(
             get_lang('SendTermsDescriptionToUrlX'),
+            $userInfo['firstName'],
             api_get_path(WEB_PATH)
         );
         MessageManager::send_message_simple($userId, $subject, $content);

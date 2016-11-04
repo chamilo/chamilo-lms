@@ -418,7 +418,7 @@ footer #footer_right{
 .page-inscription .dropdown-toggle.btn-default{
     background-color: #FFF;
     border-color: #CCC;
-    color: #33;
+    color: #333;
 }
 #extra_terms_datedenaissance_alt{
     background: #FFF;
@@ -575,7 +575,7 @@ legend{
     }
     #carousel-announcement{
         min-height: auto;
-    }    
+    }
 }
 
 .required:before {

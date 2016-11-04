@@ -108,7 +108,6 @@ class Version20160330103045 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE timeline__action_component ADD CONSTRAINT FK_6ACD1B16E2ABAFFF FOREIGN KEY (component_id) REFERENCES timeline__component (id) ON DELETE CASCADE;");
         //$this->addSql("CREATE UNIQUE INDEX UNIQ_8D93D649A0D96FBF ON user (email_canonical);");
         */
-        $this->addSql('DROP TABLE extra_field_saved_search');
         $table = $schema->getTable('track_stored_values_stack');
         $hasIndex = $table->hasIndex('user_sco_course_sv_stack');
         if ($hasIndex) {
@@ -173,40 +172,5 @@ class Version20160330103045 extends AbstractMigrationChamilo
      */
     public function down(Schema $schema)
     {
-        $this->addSql('ALTER TABLE page__page DROP FOREIGN KEY FK_2FAE39EDF6BD1646');
-        $this->addSql('ALTER TABLE page__snapshot DROP FOREIGN KEY FK_3963EF9AF6BD1646');
-        $this->addSql('ALTER TABLE page__page DROP FOREIGN KEY FK_2FAE39ED727ACA70');
-        $this->addSql('ALTER TABLE page__page DROP FOREIGN KEY FK_2FAE39ED158E0B66');
-        $this->addSql('ALTER TABLE page__snapshot DROP FOREIGN KEY FK_3963EF9AC4663E4');
-        $this->addSql('ALTER TABLE page__bloc DROP FOREIGN KEY FK_FCDC1A97C4663E4');
-        $this->addSql('ALTER TABLE page__bloc DROP FOREIGN KEY FK_FCDC1A97727ACA70');
-        $this->addSql('ALTER TABLE classification__category DROP FOREIGN KEY FK_43629B36727ACA70');
-        $this->addSql('ALTER TABLE media__media DROP FOREIGN KEY FK_5C6DD74E12469DE2');
-        $this->addSql('ALTER TABLE classification__category DROP FOREIGN KEY FK_43629B36E25D857E');
-        $this->addSql('ALTER TABLE classification__tag DROP FOREIGN KEY FK_CA57A1C7E25D857E');
-        $this->addSql('ALTER TABLE classification__collection DROP FOREIGN KEY FK_A406B56AE25D857E');
-        $this->addSql('ALTER TABLE media__gallery_media DROP FOREIGN KEY FK_80D4C5414E7AF8F');
-        $this->addSql('ALTER TABLE classification__category DROP FOREIGN KEY FK_43629B36EA9FDD75');
-        $this->addSql('ALTER TABLE classification__collection DROP FOREIGN KEY FK_A406B56AEA9FDD75');
-        $this->addSql('ALTER TABLE media__gallery_media DROP FOREIGN KEY FK_80D4C541EA9FDD75');
-        $this->addSql('CREATE TABLE extra_field_saved_search (id INT AUTO_INCREMENT NOT NULL, field_id INT DEFAULT NULL, user_id INT DEFAULT NULL, value LONGTEXT DEFAULT NULL COLLATE utf8_unicode_ci, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_16ABE32A443707B0 (field_id), INDEX IDX_16ABE32AA76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
-        $this->addSql('ALTER TABLE extra_field_saved_search ADD CONSTRAINT FK_16ABE32A443707B0 FOREIGN KEY (field_id) REFERENCES extra_field (id)');
-        $this->addSql('ALTER TABLE extra_field_saved_search ADD CONSTRAINT FK_16ABE32AA76ED395 FOREIGN KEY (user_id) REFERENCES user (id)');
-        /*$this->addSql('DROP TABLE page__site');
-        $this->addSql('DROP TABLE page__page');
-        $this->addSql('DROP TABLE page__snapshot');
-        $this->addSql('DROP TABLE page__bloc');
-        $this->addSql('DROP TABLE classification__category');
-        $this->addSql('DROP TABLE classification__context');
-        $this->addSql('DROP TABLE classification__tag');
-        $this->addSql('DROP TABLE classification__collection');
-        $this->addSql('DROP TABLE media__gallery');
-        $this->addSql('DROP TABLE media__media');
-        $this->addSql('DROP TABLE media__gallery_media');*/
-        $this->addSql('ALTER TABLE session_rel_user DROP duration');
-        $this->addSql('CREATE INDEX user_sco_course_sv ON track_stored_values (user_id, sco_id, course_id, sv_key)');
-        $this->addSql(
-            'CREATE INDEX user_sco_course_sv_stack ON track_stored_values_stack (user_id, sco_id, course_id, sv_key, stack_order)'
-        );
     }
 }

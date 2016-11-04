@@ -6,7 +6,7 @@
             <div class="items">
                 <div class="description">
                     <h2 class="title">
-                        <a href="{{ url(page.routeName, {'path' : page.site.relativePath ~ page.url }) }}">{{ page.name }}</a>
+                        <a href="{{ url(page.routeName, {'path' : page.site.relativePath ~ page.url, '_locale' : app.request.getLocale() }) }}">{{ page.name }}</a>
                     </h2>
                     <div class="date">
                         <i class="fa fa-calendar" aria-hidden="true"></i>

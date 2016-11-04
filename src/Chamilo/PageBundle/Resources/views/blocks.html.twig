@@ -4,7 +4,7 @@
             <div class="col-md-3">
                 {{ sonata_page_render_container('header', page)  }}
                 <h4 class="title">
-                    <a href="{{ url(page.routeName, {'path' : page.site.relativePath ~ page.url}) }}">
+                    <a href="{{ url(page.routeName, {'path' : page.site.relativePath ~ page.url, '_locale' : app.request.getLocale() }) }}">
                         {{ page.title }}
                     </a>
                 </h4>

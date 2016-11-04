@@ -427,7 +427,7 @@ if (is_platform_authentication() &&
     is_profile_editable() &&
     api_get_setting('profile', 'password') == 'true'
 ) {
-    $form->addElement('password', 'password0', array(get_lang('Pass'), get_lang('Enter2passToChange')), array('size' => 40));
+    $form->addElement('password', 'password0', array(get_lang('CurrentPassword'), get_lang('Enter2passToChange')), array('size' => 40));
     $form->addElement('password', 'password1', get_lang('NewPass'), array('id'=> 'password1', 'size' => 40));
 
     $checkPass = api_get_setting('allow_strength_pass_checker');

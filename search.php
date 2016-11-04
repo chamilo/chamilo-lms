@@ -677,8 +677,9 @@ if ($userForm->validate()) {
 
     if ($superiorUserList) {
         $url = api_get_path(WEB_PATH).'load_search.php?user_id='.$userInfo['user_id'];
+        $urlContact = api_get_path(WEB_CODE_PATH) . 'messages/inbox.php?f=social';
         $subject = sprintf(get_lang('DiagnosisFromUserX'), $userInfo['complete_name']);
-        $message = sprintf(get_lang('DiagnosisFromUserXWithLinkX'), $userInfo['complete_name'], $url);
+        $message = sprintf(get_lang('DiagnosisFromUserXLangXWithLinkXContactAtX'), $userInfo['complete_name'], $userInfo['language'], $url, $urlContact);
         foreach ($superiorUserList as $bossData) {
             $bossId = $bossData['boss_id'];
             MessageManager::send_message_simple(

@@ -973,8 +973,9 @@ if ($form->validate()) {
                 if ($bossList) {
                     $bossList = array_column($bossList, 'boss_id');
                     $currentUserInfo = api_get_user_info($user_id);
+                    $followUpPath = api_get_path(WEB_CODE_PATH) . 'admin/user_information.php?user_id='.$currentUserInfo['id'];
                     foreach ($bossList as $bossId) {
-                        $subjectEmail = sprintf(get_lang('UserXSignedTheAgreement'), $currentUserInfo['complete_name']);
+                        $subjectEmail = sprintf(get_lang('UserXSignedTheAgreementCheckAtPageX'), $currentUserInfo['complete_name'], $followUpPath);
                         $contentEmail = sprintf(
                             get_lang('UserXSignedTheAgreementTheY'),
                             $currentUserInfo['complete_name'],

@@ -154,15 +154,13 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE course_rel_user ADD COLUMN c_id int default NULL");
         $this->addSql("ALTER TABLE course_field_values ADD COLUMN c_id int default NULL");
 
-        $this->addSql("ALTER TABLE session_rel_course_rel_user ADD COLUMN c_id int default NULL");
+        $this->addSql("ALTER TABLE session_rel_course_rel_user ADD COLUMN c_id int NOT NULL");
         $this->addSql("ALTER TABLE session_rel_course_rel_user CHANGE id_session session_id int");
         $this->addSql("ALTER TABLE session_rel_course_rel_user CHANGE id_user user_id int");
-
         $this->addSql("ALTER TABLE access_url_rel_course ADD COLUMN c_id int");
-
         $this->addSql("ALTER TABLE session_rel_course ADD COLUMN position int NOT NULL default 0");
         $this->addSql("ALTER TABLE session_rel_course ADD COLUMN category varchar(255) default ''");
-        $this->addSql("ALTER TABLE session_rel_course ADD COLUMN c_id int unsigned");
+        $this->addSql("ALTER TABLE session_rel_course ADD COLUMN c_id int unsigned NOT NULL");
         $this->addSql("ALTER TABLE session_rel_course CHANGE id_session session_id int");
         $this->addSql('DELETE FROM session_rel_course WHERE session_id NOT IN (SELECT id FROM session)');
 

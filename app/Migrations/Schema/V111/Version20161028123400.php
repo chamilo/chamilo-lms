@@ -25,6 +25,17 @@ class Version20161028123400 extends AbstractMigrationChamilo
         if (!$iidColumn->getAutoincrement()) {
             $iidColumn->setAutoincrement(true);
         }
+
+        // Deleting users that don't exist anymore
+        $sql = 'DELETE FROM access_url_rel_user WHERE user_id NOT IN (SELECT user_id from user)';
+        $this->addSql($sql);
+
+        $table = $schema->getTable('personal_agenda');
+        if ($table->hasIndex('id')) {
+            $this->addSql('ALTER TABLE personal_agenda modify id int not null');
+            $this->addSql('ALTER TABLE personal_agenda DROP index id');
+            $this->addSql('ALTER TABLE personal_agenda CHANGE id id INT AUTO_INCREMENT NOT NULL PRIMARY KEY;');
+        }
     }
 
     /**

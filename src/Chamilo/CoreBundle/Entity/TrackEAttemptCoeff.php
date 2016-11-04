@@ -16,6 +16,15 @@ class TrackEAttemptCoeff
     /**
      * @var integer
      *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    private $id;
+
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="attempt_id", type="integer", nullable=false)
      */
     private $attemptId;
@@ -26,17 +35,6 @@ class TrackEAttemptCoeff
      * @ORM\Column(name="marks_coeff", type="float", precision=6, scale=2, nullable=true)
      */
     private $marksCoeff;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-
 
     /**
      * Set attemptId

@@ -16,6 +16,15 @@ class TrackEHotspot
     /**
      * @var integer
      *
+     * @ORM\Column(name="hotspot_id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    private $hotspotId;
+
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="hotspot_user_id", type="integer", nullable=false)
      */
     private $hotspotUserId;
@@ -68,17 +77,6 @@ class TrackEHotspot
      * @ORM\Column(name="hotspot_coordinate", type="text", nullable=false)
      */
     private $hotspotCoordinate;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="hotspot_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $hotspotId;
-
-
 
     /**
      * Set hotspotUserId

@@ -16,6 +16,15 @@ class TrackEItemProperty
     /**
      * @var integer
      *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    private $id;
+
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="course_id", type="integer", nullable=false)
      */
     private $courseId;
@@ -68,17 +77,6 @@ class TrackEItemProperty
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
     private $sessionId;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-
 
     /**
      * Set courseId

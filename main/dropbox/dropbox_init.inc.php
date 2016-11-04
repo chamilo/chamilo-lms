@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * @desc The dropbox is a personal (peer to peer) file exchange module that allows
  * you to send documents to a certain (group of) users.
@@ -111,9 +113,6 @@ Version 1.4 (Yannick Warnier)
  * @package chamilo.dropbox
  */
 
-use ChamiloSession as Session;
-
-// including the basic Chamilo initialisation file
 require_once __DIR__.'/../inc/global.inc.php';
 $is_allowed_in_course = api_is_allowed_in_course();
 $is_courseTutor = api_is_course_tutor();
@@ -154,8 +153,6 @@ if (empty($session_id)) {
         $session_id
     );
 }
-
-/*	Object Initialisation */
 
 // we need this here because the javascript to re-upload the file needs an array
 // off all the documents that have already been sent.
@@ -210,8 +207,7 @@ if ($allowOverwrite == 'true') {
     //sentArray keeps list of all files still available in the sent files list
     //of the user.
     //This is used to show or hide the overwrite file-radio button of the upload form
-	$javascript .= "
-		var sentArray = new Array(";
+    $javascript .= " var sentArray = new Array(";
     if (isset($dropbox_person)) {
         for ($i = 0; $i < count($dropbox_person->sentWork); $i++) {
             if ($i > 0) {
@@ -292,14 +288,12 @@ $(function () {
 </script>";
 $checked_files = false;
 if (!$view || $view == 'received') {
-	$part = 'received';
+    $part = 'received';
 } elseif ($view = 'sent') {
-	$part = 'sent';
-
-
+    $part = 'sent';
 } else {
-	header('location: index.php?view='.$view.'&error=Error');
-	exit;
+    header('location: index.php?view='.$view.'&error=Error');
+    exit;
 }
 
 if (($postAction == 'download_received' || $postAction == 'download_sent') and !$_POST['store_feedback']) {
@@ -323,11 +317,10 @@ if ((!$is_allowed_in_course || !$is_course_member) && !api_is_allowed_to_edit(nu
     } else {
         api_not_allowed();
     }
-	exit();
+    exit();
 }
 
 /*	BREADCRUMBS */
-
 if ($view == 'received') {
     $interbreadcrumb[] = array(
         'url' => api_get_path(WEB_CODE_PATH).'dropbox/index.php?'.api_get_cidreq(),
@@ -347,31 +340,31 @@ if ($view == 'received') {
 if ($view == 'sent' || empty($view)) {
     $interbreadcrumb[] = array(
         'url' => api_get_path(WEB_CODE_PATH).'dropbox/index.php?'.api_get_cidreq(),
-		'name' => get_lang('Dropbox')
+        'name' => get_lang('Dropbox')
     );
-	$nameTools = get_lang('SentFiles');
+    $nameTools = get_lang('SentFiles');
 
-	if ($action == 'addsentcategory') {
-		$interbreadcrumb[] = array(
-			'url' => api_get_path(WEB_CODE_PATH).'dropbox/index.php?view=sent&'.api_get_cidreq(),
-			'name' => get_lang('SentFiles'),
-		);
-		$nameTools = get_lang('AddNewCategory');
-	}
-	if ($action == 'add') {
-		$interbreadcrumb[] = array(
-			'url' => api_get_path(WEB_CODE_PATH).'dropbox/index.php?view=sent&'.api_get_cidreq(),
-			'name' => get_lang('SentFiles'),
-		);
-		$nameTools = get_lang('UploadNewFile');
-	}
+    if ($action == 'addsentcategory') {
+        $interbreadcrumb[] = array(
+            'url' => api_get_path(WEB_CODE_PATH).'dropbox/index.php?view=sent&'.api_get_cidreq(),
+            'name' => get_lang('SentFiles'),
+        );
+        $nameTools = get_lang('AddNewCategory');
+    }
+    if ($action == 'add') {
+        $interbreadcrumb[] = array(
+            'url' => api_get_path(WEB_CODE_PATH).'dropbox/index.php?view=sent&'.api_get_cidreq(),
+            'name' => get_lang('SentFiles'),
+        );
+        $nameTools = get_lang('UploadNewFile');
+    }
 }
 
 /*	HEADER & TITLE */
 
 if (isset($origin) && $origin == 'learnpath') {
     $htmlHeadXtra[] = $javascript;
-	Display::display_reduced_header($nameTools, 'Dropbox');
+    Display::display_reduced_header($nameTools, 'Dropbox');
 } else {
     Display::display_header($nameTools, 'Dropbox');
 }

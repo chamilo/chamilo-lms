@@ -100,9 +100,6 @@ $(function() {
 </script>
 <?php
 
-// Tool introduction
-Display::display_introduction_section(get_lang('Classes'));
-
 $usergroup = new UserGroup();
 $usergroup->showGroupTypeSetting = true;
 // Action handling: Adding a note

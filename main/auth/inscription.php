@@ -879,12 +879,17 @@ if ($form->validate()) {
         '<p>'.
         get_lang('Dear', null, $_user['language']).' '.
         stripslashes(Security::remove_XSS($recipient_name)).',<br /><br />'.
-        get_lang('PersonalSettings',null,$_user['language']).".</p>";
+        get_lang('PersonalSettings').".</p>";
 
     $form_data = array(
-        'button' => Display::button('next', get_lang('Next', null, $_user['language']), array('class' => 'btn btn-primary btn-large')),
-        'message' => null,
-        'action' => api_get_path(WEB_PATH).'user_portal.php'
+        'button' => Display::button(
+            'next',
+            get_lang('Next', null, $_user['language']),
+            array('class' => 'btn btn-primary btn-large')
+        ),
+        'message' => '',
+        'action' => api_get_path(WEB_PATH).'user_portal.php',
+        'go_button' => ''
     );
 
     if (api_get_setting('allow_terms_conditions') === 'true' && $user_already_registered_show_terms) {

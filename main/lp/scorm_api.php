@@ -134,7 +134,7 @@ olms.scorm_variables = new Array(
 );
 
 // manage variables to save or not
-olms.variable_to_send=new Array();
+olms.variable_to_send = new Array();
 
 // temporary list of variables (gets set to true when set through LMSSetValue)
 olms.updatable_vars_list = new Array();
@@ -1450,7 +1450,7 @@ function switch_item(current_item, next_item){
          be triggered by the SCO when it unloads) will use bad values. However,
          we need to load the new asset's context once the SCO has unloaded
      (4) sco switching to sco
-         We don't neet to switch nor commit, LMSFinish() on unload and
+         We don't need to switch nor commit, LMSFinish() on unload and
          LMSInitialize on load will do the job
      In any case, we need to change the current document frame.
      These cases, although clear here, are however very difficult to implement
@@ -1496,6 +1496,7 @@ function switch_item(current_item, next_item){
         } else {
             logit_lms('Case 4 - current == sco and next == sco');
         }
+        // Setting userNavigatesAway = 1
         xajax_save_item_scorm(
             olms.lms_lp_id,
             olms.lms_user_id,
@@ -1768,28 +1769,27 @@ var loadForumThread = function(lpId, lpItemId) {
  * @uses lp_ajax_save_item.php through an AJAX call
  */
 function xajax_save_item(
-        lms_lp_id,
-        lms_user_id,
-        lms_view_id,
-        lms_item_id,
-        score,
-        max,
-        min,
-        lesson_status,
-        session_time,
-        suspend_data,
-        lesson_location,
-        interactions,
-        lms_item_core_exit,
-        item_type,
-        session_id,
-        course_id,
-        finishSignalReceived,
-        userNavigatesAway,
-        statusSignalReceived
+    lms_lp_id,
+    lms_user_id,
+    lms_view_id,
+    lms_item_id,
+    score,
+    max,
+    min,
+    lesson_status,
+    session_time,
+    suspend_data,
+    lesson_location,
+    interactions,
+    lms_item_core_exit,
+    item_type,
+    session_id,
+    course_id,
+    finishSignalReceived,
+    userNavigatesAway,
+    statusSignalReceived
 ) {
     var params = '';
-
     if (typeof(finishSignalReceived) == 'undefined') {
         finishSignalReceived = 0;
     }
@@ -1815,7 +1815,7 @@ function xajax_save_item(
 
     // console.info(session_time);
     if (olms.lms_lp_type == 1 || item_type == 'document' || item_type == 'asset') {
-        logit_lms('xajax_save_item with params:' + params,3);
+        logit_lms('xajax_save_item with params:' + params, 3);
         $.ajax({
             type:"POST",
             data: params,
@@ -1849,12 +1849,10 @@ function xajax_save_item_scorm(
     finishSignalReceived,
     userNavigatesAway,
     statusSignalReceived
-    )
-{
+) {
     if (typeof(finishSignalReceived) == 'undefined') {
         finishSignalReceived = 0;
     }
-
     if (typeof(userNavigatesAway) == 'undefined') {
         userNavigatesAway = 0;
     }

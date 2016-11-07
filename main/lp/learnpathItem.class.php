@@ -3644,15 +3644,20 @@ class learnpathItem
             // Step 2.2 : if not cumulative mode total_time = total_time - last_update + total_sec
             $total_time = $total_time - $this->last_scorm_session_time + $total_sec;
             $this->last_scorm_session_time = $total_sec;
+
+            if ($total_time < 0) {
+                $total_time = $total_sec;
+            }
         }
 
-        //Step 3 update db only if status != completed, passed, browsed or seriousgamemode not activated
+        // Step 3 update db only if status != completed, passed, browsed or seriousgamemode not activated
+        // @todo complete
         $case_completed = array(
             'completed',
             'passed',
             'browsed',
             'failed'
-        ); //TODO COMPLETE
+        );
 
         if ($this->seriousgame_mode != 1 ||
             !in_array($row['status'], $case_completed)

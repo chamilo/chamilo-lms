@@ -323,7 +323,7 @@ if ($intro_dispCommand) {
             $textIntro .= "</a>";
             $toolbar .= $textIntro . $editIconButton;
         } else {
-            $toolbar .= '<a class="btn btn-default" href="' . api_get_self() . '?intro_cmdAdd=1">"' . get_lang('AddIntro') . '</a>';
+            $toolbar .= '<a class="btn btn-default" href="' . api_get_self() . '?intro_cmdAdd=1">' . get_lang('AddIntro') . '</a>';
             $toolbar .= $editIconButton;
         }
         $toolbar .= '</div>';

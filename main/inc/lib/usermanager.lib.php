@@ -483,10 +483,10 @@ class UserManager
                     $tplContent = new Template(null, false, false, false, false, false);
                     // variables for the default template
                     $tplContent->assign('complete_name', stripslashes(api_get_person_name($firstName, $lastName)));
-                    $lang = $user->getLanguage();
+                    /*$lang = $user->getLanguage();
                     if ($lang === 'french2') {
                         $user->setLanguage('french');
-                    }
+                    }*/
 
                     $langData = api_get_language_info(api_get_language_id($user->getLanguage()));
                     $user->setLanguage($langData['original_name']);

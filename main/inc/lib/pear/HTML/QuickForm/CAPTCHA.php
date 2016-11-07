@@ -83,9 +83,9 @@ class HTML_QuickForm_CAPTCHA extends HTML_QuickForm_input
      * @access protected
      */
     var $_options = array(
-            'sessionVar' => '_HTML_QuickForm_CAPTCHA',
-            'phrase'     => null,
-            );
+        'sessionVar' => '_HTML_QuickForm_CAPTCHA',
+        'phrase' => null,
+    );
 
     /**
      * CAPTCHA driver
@@ -112,9 +112,12 @@ class HTML_QuickForm_CAPTCHA extends HTML_QuickForm_input
      *
      * @access public
      */
-    public function __construct($elementName = null, $elementLabel = null,
-                                    $options = null, $attributes = null)
-    {
+    public function __construct(
+        $elementName = null,
+        $elementLabel = null,
+        $options = null,
+        $attributes = null
+    ) {
         parent::__construct($elementName, $elementLabel, $attributes);
         $this->setType('CAPTCHA_'.$this->_CAPTCHA_driver);
 

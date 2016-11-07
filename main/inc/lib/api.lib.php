@@ -7493,6 +7493,12 @@ function api_format_time($time, $originFormat = 'php')
     $mins = ($time % 3600) / 60;
     $secs = ($time % 60);
 
+    if ($time < 0) {
+        $hours = 0;
+        $mins = 0;
+        $secs = 0;
+    }
+
     if ($originFormat == 'js') {
         $formattedTime = trim(sprintf("%02d : %02d : %02d", $hours, $mins, $secs));
     } else {

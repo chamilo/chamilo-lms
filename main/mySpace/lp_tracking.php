@@ -74,6 +74,13 @@ $table_title = ($session_name? Display::return_icon('session.png', get_lang('Ses
     Display::return_icon('course.png', get_lang('Course'), array(), ICON_SIZE_SMALL).' '.$course_info['name'].' '.
     Display::return_icon('user.png', get_lang('User'), array(), ICON_SIZE_SMALL).' '.$name;
 echo Display::page_header($table_title);
-echo Display::page_subheader('<h3>'.Display::return_icon('learnpath.png', get_lang('ToolLearnpath'), array(), ICON_SIZE_SMALL).' '.$lp_title.'</h3>');
+echo Display::page_subheader(
+    '<h3>'.Display::return_icon(
+        'learnpath.png',
+        get_lang('ToolLearnpath'),
+        array(),
+        ICON_SIZE_SMALL
+    ).' '.$lp_title.'</h3>'
+);
 echo $output;
 Display :: display_footer();

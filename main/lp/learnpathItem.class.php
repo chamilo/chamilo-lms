@@ -1037,7 +1037,7 @@ class learnpathItem
         $type = $this->get_type();
 
         switch ($type) {
-            case TOOL_DOCUMENT :
+            case TOOL_DOCUMENT:
             case TOOL_QUIZ:
             case 'sco':
                 // Get the document and, if HTML, open it.
@@ -3380,9 +3380,7 @@ class learnpathItem
         global $charset;
         $course_id = api_get_course_int_id();
         $lp_item = Database::get_course_table(TABLE_LP_ITEM);
-        require_once api_get_path(
-                LIBRARY_PATH
-            ) . 'search/ChamiloIndexer.class.php';
+        require_once api_get_path(LIBRARY_PATH) . 'search/ChamiloIndexer.class.php';
         $a_terms = preg_split('/,/', $terms);
         $i_terms = preg_split('/,/', $this->get_terms());
         foreach ($i_terms as $term) {

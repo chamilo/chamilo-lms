@@ -24,14 +24,14 @@ $doc_url = str_replace(' ', '+', $doc_url);
 
 $doc_url = str_replace(array('../', '\\..', '\\0', '..\\'), array('', '', '', ''), $doc_url); //echo $doc_url;
 
-if (strpos($doc_url,'../') OR strpos($doc_url,'/..')) {
+if (strpos($doc_url,'../') || strpos($doc_url,'/..')) {
     $doc_url = '';
 }
 $sys_course_path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/scorm';
 $user_id = api_get_user_id();
 
 if ($_SESSION['oLP']) {
-    $lp_id      = $_SESSION['oLP']->get_id();
+    $lp_id = $_SESSION['oLP']->get_id();
     $lp_item_id = $_SESSION['oLP']->current;
     $lp_item_info = new learnpathItem($lp_item_id);
     if (!empty($lp_item_info)) {

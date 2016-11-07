@@ -318,7 +318,7 @@ if ($intro_dispCommand) {
         // Displays "Add intro" commands
         $toolbar = '<div class="btn-group pull-right" role="group">';
         if (!empty($courseId)) {
-            $textIntro  = '<a class="btn btn-default" title="' . get_lang('AddIntro') . '" href="'.api_get_self().'?' . api_get_cidreq().'&intro_cmdAdd=1">';
+            $textIntro  = '<a class="btn btn-default" title="' . addslashes(get_lang('AddIntro')) . '" href="'.api_get_self().'?' . api_get_cidreq().'&intro_cmdAdd=1">';
             $textIntro .= '<em class="fa fa-file-text"></em> ';
             $textIntro .= "</a>";
             $toolbar .= $textIntro . $editIconButton;

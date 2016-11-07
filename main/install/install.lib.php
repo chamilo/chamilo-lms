@@ -2105,6 +2105,9 @@ function migrate($chamiloVersion, EntityManager $manager)
  */
 function fixIds(EntityManager $em)
 {
+    $connection = $em->getConnection();
+    $database = new Database();
+    $database->setManager($em);
     $debug = true;
     if ($debug) {
         error_log('fixIds');

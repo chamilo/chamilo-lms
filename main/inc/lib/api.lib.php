@@ -3426,15 +3426,17 @@ function api_item_property_delete(
     if (empty($userId)) {
         $userCondition = " AND (to_user_id is NULL OR to_user_id = 0) ";
     }
+    $sessionCondition = api_get_session_condition($sessionId, true, false, 'session_id');
     $sql = "DELETE FROM $table
             WHERE
                 c_id = $courseId AND
                 tool  = '$tool' AND
-                ref = $itemId AND
-                session_id = $sessionId
+                ref = $itemId
+                $sessionCondition
                 $userCondition
                 $groupCondition
             ";
+
     Database::query($sql);
 }
 

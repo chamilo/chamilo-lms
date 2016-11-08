@@ -100,6 +100,19 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
                 header('Location: '.$url);
                 exit;
                 break;
+            case 'delete_correction':
+                if (isset($work['url_correction']) && !empty($work['url_correction'])) {
+                    if (api_is_allowed_to_edit()) {
+                        deleteCorrection($courseInfo, $work);
+                        Display::addFlash(
+                            Display::return_message(get_lang('Deleted'))
+                        );
+                    }
+                }
+
+                header('Location: '.$url);
+                exit;
+                break;
         }
 
         $comments = getWorkComments($work);
@@ -123,7 +136,7 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
                     $work['download_url']
                 );
 
-                if (isset($work['url_correction'])) {
+                if (!empty($work['url_correction'])) {
                     $actions .= Display::url(
                         Display::return_icon(
                             'check-circle.png',
@@ -133,6 +146,17 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
                         ),
                         $work['download_url'].'&correction=1'
                     );
+                    if (api_is_allowed_to_edit()) {
+                        $actions .= Display::url(
+                            Display::return_icon(
+                                'delete.png',
+                                get_lang('Delete').': '.get_lang('Correction'),
+                                null,
+                                ICON_SIZE_MEDIUM
+                            ),
+                            api_get_self().'?action=delete_correction&id='.$id.'&'.api_get_cidreq()
+                        );
+                    }
                 }
             }
         }

@@ -5129,3 +5129,22 @@ function protectWork($courseInfo, $workId)
         }
     }
 }
+
+function deleteCorrection($courseInfo, $work)
+{
+    if (isset($work['url_correction']) && !empty($work['url_correction']) && isset($work['iid'])) {
+        $id = $work['iid'];
+        $table = Database:: get_course_table(TABLE_STUDENT_PUBLICATION);
+        $sql = "UPDATE $table SET
+                    url_correction = '',
+                    title_correction = ''
+                WHERE iid = $id";
+        Database::query($sql);
+        $coursePath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/';
+        if (file_exists($coursePath.$work['url_correction'])) {
+            if (Security::check_abs_path($coursePath.$work['url_correction'], $coursePath)) {
+                unlink($coursePath.$work['url_correction']);
+            }
+        }
+    }
+}

@@ -2071,7 +2071,7 @@ class Agenda
             $form->addElement('hidden', 'selected_form[0]', "GROUP:'.$groupId.'");
             $form->addElement('hidden', 'to', 'true');
         } else {
-            $sendTo = isset($params['send_to']) ? $params['send_to'] : null;
+            $sendTo = isset($params['send_to']) ? $params['send_to'] : ['everyone' => true];
             if ($this->type == 'course') {
                 $this->showToForm($form, $sendTo, array(), false, true);
             }
@@ -2139,9 +2139,13 @@ class Agenda
                     </span>'
             );
 
-            $form->addLabel('',
-                '<span id="link-more-attach"><a href="javascript://" onclick="return add_image_form()">'.get_lang('AddOneMoreFile').'</a></span>&nbsp;('.sprintf(get_lang('MaximunFileSizeX'),format_file_size(api_get_setting('message_max_upload_filesize'))).')');
-
+            $form->addLabel(
+                '',
+                '<span id="link-more-attach">
+                    <a href="javascript://" onclick="return add_image_form()">'.
+                        get_lang('AddOneMoreFile').'</a>
+                 </span>&nbsp;('.sprintf(get_lang('MaximunFileSizeX'),format_file_size(api_get_setting('message_max_upload_filesize'))).')'
+            );
 
             if (isset($params['attachment']) && !empty($params['attachment'])) {
                 $attachmentList = $params['attachment'];
@@ -2214,6 +2218,7 @@ class Agenda
             null,
             $order
         );
+
         $groupList = CourseManager::get_group_list_of_course(
             api_get_course_id(),
             $this->sessionId

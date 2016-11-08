@@ -226,8 +226,20 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null)
     if (isset($_GET['prefill'])) {
         switch ($_GET['prefill']) {
             case 'ofaj':
+                $sendToUser = isset($_GET['send_to_user']) ? $_GET['send_to_user'] : 0;
+                $sendToUserFullName = '';
+                if ($sendToUser) {
+                    $sendToUserInfo = api_get_user_info($sendToUser);
+                    $sendToUserFullName = $sendToUserInfo['complete_name'];
+                }
+                $currentUserInfo = api_get_user_info();
                 $default['title'] = get_lang('OfajEndLPSubject');
-                $default['content'] = get_lang('OfajEndLpDescription');
+                $default['content'] = sprintf(
+                    get_lang('OfajEndLpDescription'),
+                    $sendToUserFullName,
+                    $currentUserInfo['complete_name'],
+                    $currentUserInfo['complete_name']
+                );
                 break;
         }
     }

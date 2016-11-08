@@ -228,7 +228,15 @@ if (api_is_student()) {
     );
 
     if ($diagnosisComplete === false) {
-        Display::addFlash(Display::return_message(get_lang('DoDiagnosisNow')));
+        $url = api_get_path(WEB_PATH).'search.php';
+        $link = Display::url($url, $url);
+        Display::addFlash(
+            Display::return_message(
+                sprintf(get_lang('DoDiagnosisNow'), $link),
+                'normal',
+                false
+            )
+        );
     }
 }
 

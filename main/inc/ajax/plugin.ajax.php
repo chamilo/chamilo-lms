@@ -8,6 +8,8 @@ use \Michelf\MarkdownExtra;
 
 require_once '../global.inc.php';
 
+api_block_anonymous_users();
+
 $action = $_REQUEST['a'];
 
 switch ($action) {
@@ -15,7 +17,7 @@ switch ($action) {
         $plugin = isset($_GET['plugin']) ? $_GET['plugin'] : '';
         $appPlugin = new AppPlugin();
         $pluginInfo = $appPlugin->getPluginInfo($plugin);
-        
+
         $html = '';
         if (!empty($pluginInfo)) {
             $file = api_get_path(SYS_PLUGIN_PATH).$plugin.'/README.md';

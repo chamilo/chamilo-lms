@@ -3,8 +3,7 @@
 
 api_protect_admin_script();
 
-$table = 'vchamilo';
-$tablename = Database::get_main_table($table);
-$sql = " DROP TABLE IF EXISTS $tablename ";
+$table = Database::get_main_table('vchamilo');
+$sql = " DROP TABLE IF EXISTS $table";
 
 Database::query($sql);

@@ -28,7 +28,6 @@ class Virtual
 
         $virtualChamilo = [];
         if ($_configuration['root_web'] == $virtualChamiloWebRoot) {
-
             return;
         }
 
@@ -445,7 +444,6 @@ class Virtual
 
             // executing all commands
             foreach ($cmds as $cmd) {
-
                 // Final command.
                 $cmd = $pgm.' '.$cmd;
                 // Prints log messages in the page and in 'cmd.log'.
@@ -475,7 +473,6 @@ class Virtual
     {
         $file = api_get_path(SYS_PATH).'/plugin/vchamilo/templates/'.$version.'/manifest.php';
         if (file_exists($file)) {
-
             include $file;
 
             $manifest = new stdClass();
@@ -541,7 +538,6 @@ class Virtual
                 if (is_dir($dir->getPathname())) {
                     // A template is considered when a dump.sql exists.
                     if (file_exists($dir->getPathname().'/dump.sql')) {
-
                         $templateName = $dir->getRelativePathname();
                         if ($templateName == $template) {
                             $templateName .= ' (default)';
@@ -559,7 +555,6 @@ class Virtual
     * this function set will map standard moodle API calls to chamilo
     * internal primitives. This avoids too many changes to do in imported
     * code
-    *
     */
     public static function getConfig($module, $key, $isplugin = true)
     {

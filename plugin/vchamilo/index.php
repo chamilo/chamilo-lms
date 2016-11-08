@@ -14,14 +14,14 @@ $plugin = VChamiloPlugin::create();
 $_template['show_message'] = true;
 $_template['title'] = $plugin->get_lang('hostlist');
 
-$tablename = Database::get_main_table('vchamilo');
-$sql = "SELECT sitename, root_web FROM $tablename WHERE visible = 1";
+$table = Database::get_main_table('vchamilo');
+$sql = "SELECT sitename, root_web FROM $table WHERE visible = 1";
 
-if ($virtualChamilo == '%'){
+if ($virtualChamilo == '%') {
     $result = Database::query($sql);
     $_template['hosts'] = array();
-    if ($result){
-        while($vchamilo = Database::fetch_assoc($result)){
+    if ($result) {
+        while ($vchamilo = Database::fetch_assoc($result)) {
             $_template['hosts'][] = $vchamilo;
         }
     }

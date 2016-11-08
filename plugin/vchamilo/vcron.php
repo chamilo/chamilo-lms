@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is a cron microclock script.
  * It will be used as replacement of setting individual
@@ -29,7 +28,7 @@ define('LOWEST_POSSIBLE_GAP', 1);
 
 global $VCRON;
 
-$VCRON = new StdClass;
+$VCRON = new stdClass();
 $VCRON->ACTIVATION = 'cli';                         // choose how individual cron are launched, 'cli' or 'web'
 $VCRON->STRATEGY = ROUND_ROBIN ;                    // choose vcron rotation mode
 $VCRON->PERIOD = 15 * MINSECS ;                     // used if LOWEST_POSSIBLE_GAP to setup the max gap
@@ -71,7 +70,7 @@ function fire_vhost_cron($vhost) {
     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
 
     // Check for proxy.
-    if (!empty($http_proxy_host) and !is_proxybypass($uri)) {
+    if (!empty($http_proxy_host) && !is_proxybypass($uri)) {
 
         curl_setopt($ch, CURLOPT_HTTPPROXYTUNNEL, false);
 

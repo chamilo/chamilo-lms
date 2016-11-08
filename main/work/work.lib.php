@@ -2093,8 +2093,7 @@ function get_work_user_list(
                         </form>
                     ';
 
-                    $correction .= "
-                        <script>
+                    $correction .= "<script>
                         $(document).ready(function() {
                             $('#file_upload_".$item_id."').fileupload({
                                 uploadTable: $('.files'),

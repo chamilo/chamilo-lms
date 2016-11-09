@@ -4,6 +4,7 @@
 use ChamiloSession as Session;
 use Doctrine\Common\Collections\Criteria;
 use Chamilo\CourseBundle\Entity\CForumPost;
+use Chamilo\CourseBundle\Entity\CForumThread;
 
 /**
  * These files are a complete rework of the forum. The database structure is
@@ -544,6 +545,7 @@ function store_forumcategory($values, $courseInfo = array(), $showMessage = true
             'cat_title' => $clean_cat_title,
             'cat_comment' => isset($values['forum_category_comment']) ? $values['forum_category_comment'] : '',
         ];
+
         Database::update(
             $table_categories,
             $params,
@@ -633,7 +635,7 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
         $new_max = null;
     } else {
         $sql = "SELECT MAX(forum_order) as sort_max
-                FROM ".$table_forums."
+                FROM $table_forums
                 WHERE
                     c_id = $course_id AND
                     forum_category='".Database::escape_string($values['forum_category'])."'";
@@ -644,6 +646,7 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
 
     // Forum images
     $image_moved = false;
+    $has_attachment = false;
     if (!empty($_FILES['picture']['name'])) {
         $upload_ok = process_uploaded_file($_FILES['picture']);
         $has_attachment = true;
@@ -784,7 +787,6 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
         }
         $return_message = get_lang('ForumAdded');
         if ($returnId) {
-
             return $last_id;
         }
     }
@@ -951,7 +953,7 @@ function delete_post($post_id)
         // Decreasing the number of replies for this thread and also changing the last post information.
         $sql = "UPDATE $table_threads
                 SET
-                    thread_replies=thread_replies-1,
+                    thread_replies = thread_replies - 1,
                     thread_last_post = ".intval($last_post_of_thread['post_id']).",
                     thread_date='".Database::escape_string($last_post_of_thread['post_date'])."'
                 WHERE c_id = $course_id AND thread_id = ".intval($_GET['thread']);
@@ -1071,6 +1073,7 @@ function return_lock_unlock_icon($content, $id, $current_lock_status, $additiona
         $html .= 'action=lock&content=' . $content . '&id=' . $id . '">' .
             Display::return_icon('unlock.png', get_lang('Lock'), array(), ICON_SIZE_SMALL) . '</a>';
     }
+
     return $html;
 }
 
@@ -1795,7 +1798,7 @@ function get_last_post_information($forum_id, $show_invisibles = false, $course_
  * @param int $forum_id
  * @param int|null $courseId Optional If is null then it is considered the current course
  * @param int|null $sessionId Optional. If is null then it is considered the current session
- * @return an array containing all the information about the threads
+ * @return array containing all the information about the threads
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version february 2006, dokeos 1.8
@@ -1803,12 +1806,12 @@ function get_last_post_information($forum_id, $show_invisibles = false, $course_
 function get_threads($forum_id, $courseId = null, $sessionId = null)
 {
     $groupId = api_get_group_id();
-    $sessionId = $sessionId !== NULL ? intval($sessionId) : api_get_session_id();
+    $sessionId = $sessionId !== null ? intval($sessionId) : api_get_session_id();
     $table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
     $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
     $table_users = Database :: get_main_table(TABLE_MAIN_USER);
 
-    $courseId = $courseId !== NULL ? intval($courseId) : api_get_course_int_id();
+    $courseId = $courseId !== null ? intval($courseId) : api_get_course_int_id();
     $groupInfo = GroupManager::get_group_properties($groupId);
     $groupCondition = '';
     if (!empty($groupInfo)) {
@@ -1822,8 +1825,6 @@ function get_threads($forum_id, $courseId = null, $sessionId = null)
     // because we also have thread.* in it. This is because thread has a field locked and post also has the same field
     // since we are merging these we would have the post.locked value but in fact we want the thread.locked value
     // This is why it is added to the end of the field selection
-
-
     $sql = "SELECT DISTINCT
                 item_properties.*,
                 users.firstname,
@@ -2510,7 +2511,7 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
 
     // We first store an entry in the forum_thread table because the thread_id is used in the forum_post table.
 
-    $lastThread = new \Chamilo\CourseBundle\Entity\CForumThread();
+    $lastThread = new CForumThread();
     $lastThread
         ->setCId($course_id)
         ->setThreadTitle($clean_post_title)
@@ -2852,8 +2853,6 @@ function showUpdateThreadForm($currentForum, $forumSetting, $formValues = '')
         $token = Security::get_token();
         $form->addElement('hidden', 'sec_token');
         $form->setConstants(array('sec_token' => $token));
-
-
         $form->display();
     }
 }
@@ -2956,10 +2955,8 @@ function show_add_post_form($current_forum, $forum_setting, $action, $id = '', $
         }
 
         $form->addElement('html', '<div id="options_field" style="display:none">');
-
         $form->addElement('text', 'numeric_calification', get_lang('QualificationNumeric'));
         $form->applyFilter('numeric_calification', 'html_filter');
-
         $form->addElement('text', 'calification_notebook_title', get_lang('TitleColumnGradebook'));
         $form->applyFilter('calification_notebook_title', 'html_filter');
 
@@ -3077,9 +3074,9 @@ function show_add_post_form($current_forum, $forum_setting, $action, $id = '', $
             ) {
                 Display::addFlash(
                     Display::return_message(
-                    get_lang('YouMustAssignWeightOfQualification').'&nbsp;<a href="javascript:window.history.go(-1);">'.get_lang('Back').'</a>',
-                    'error',
-                    false
+                        get_lang('YouMustAssignWeightOfQualification').'&nbsp;<a href="javascript:window.history.go(-1);">'.get_lang('Back').'</a>',
+                        'error',
+                        false
                     )
                 );
 
@@ -3162,7 +3159,6 @@ function saveThreadScore(
         $res_string = Database::query($sql);
         $row_string = Database::fetch_array($res_string);
         if ($thread_qualify <= $row_string[0]) {
-
             if ($threadInfo['thread_peer_qualify'] == 0) {
                 $sql = "SELECT COUNT(*) FROM $table_threads_qualify
                         WHERE
@@ -3812,7 +3808,13 @@ function store_edit_post($forumInfo, $values)
     // Update attached files
     if (!empty($_POST['file_ids']) && is_array($_POST['file_ids'])) {
         foreach ($_POST['file_ids'] as $key => $id) {
-            editAttachedFile(array('comment' => $_POST['file_comments'][$key], 'post_id' => $values['post_id']), $id);
+            editAttachedFile(
+                array(
+                    'comment' => $_POST['file_comments'][$key],
+                    'post_id' => $values['post_id'],
+                ),
+                $id
+            );
         }
     }
 
@@ -3903,7 +3905,9 @@ function increase_thread_view($thread_id)
     $course_id = api_get_course_int_id();
 
     $sql = "UPDATE $table_threads SET thread_views=thread_views+1
-            WHERE c_id = $course_id AND  thread_id='".Database::escape_string($thread_id)."'"; // This needs to be cleaned first.
+            WHERE 
+                c_id = $course_id AND  
+                thread_id = '".intval($thread_id)."'";
     Database::query($sql);
 }
 
@@ -3919,10 +3923,13 @@ function updateThreadInfo($thread_id, $last_post_id, $post_date)
 {
     $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
     $course_id = api_get_course_int_id();
-    $sql = "UPDATE $table_threads SET thread_replies=thread_replies+1,
-            thread_last_post='".Database::escape_string($last_post_id)."',
-            thread_date='".Database::escape_string($post_date)."'
-            WHERE c_id = $course_id AND  thread_id='".Database::escape_string($thread_id)."'"; // this needs to be cleaned first
+    $sql = "UPDATE $table_threads SET 
+            thread_replies = thread_replies+1,
+            thread_last_post = '".Database::escape_string($last_post_id)."',
+            thread_date = '".Database::escape_string($post_date)."'
+            WHERE 
+                c_id = $course_id AND  
+                thread_id='".Database::escape_string($thread_id)."'"; // this needs to be cleaned first
     Database::query($sql);
 }
 
@@ -3956,7 +3963,8 @@ function get_whats_new()
     $table_posts = Database :: get_course_table(TABLE_FORUM_POST);
     $tracking_last_tool_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
 
-    // Note: This has to be replaced by the tool constant later. But temporarily bb_forum is used since this is the only thing that is in the tracking currently.
+    // Note: This has to be replaced by the tool constant later.
+    // But temporarily bb_forum is used since this is the only thing that is in the tracking currently.
     //$tool = TOOL_FORUM;
     $tool = TOOL_FORUM; //
     // to do: Remove this. For testing purposes only.
@@ -4046,7 +4054,10 @@ function get_unaproved_messages($forum_id)
 
     $return_array = array();
     $sql = "SELECT DISTINCT thread_id FROM $table_posts
-            WHERE c_id = $course_id AND forum_id='".Database::escape_string($forum_id)."' AND visible='0'";
+            WHERE 
+                c_id = $course_id AND 
+                forum_id='".Database::escape_string($forum_id)."' AND 
+                visible='0' ";
     $result = Database::query($sql);
     while ($row = Database::fetch_array($result)) {
         $return_array[] = $row['thread_id'];
@@ -4412,7 +4423,6 @@ function store_move_post($values)
         Database::query($sql);
     } else {
         // Moving to the chosen thread.
-
         $sql = "SELECT thread_id FROM ".$table_posts."
                 WHERE c_id = $course_id AND post_id = '".$values['post_id']."' ";
         $result = Database::query($sql);
@@ -4578,7 +4588,6 @@ function prepare4display($input)
  */
 function forum_search()
 {
-    // Initialize the object.
     $form = new FormValidator('forumsearch', 'post', 'forumsearch.php?'.api_get_cidreq());
 
     // Setting the form elements.
@@ -4911,7 +4920,7 @@ function edit_forum_attachment_file($file_comment, $post_id, $id_attach)
  * Show a list with all the attachments according to the post's id
  * @param int $post_id
  * @return array with the post info
- * @author Julio Montoya Dokeos
+ * @author Julio Montoya
  * @version avril 2008, dokeos 1.8.5
  */
 function get_attachment($post_id)
@@ -4931,6 +4940,11 @@ function get_attachment($post_id)
     return $row;
 }
 
+/**
+ * @param int $postId
+ *
+ * @return array
+ */
 function getAllAttachment($postId)
 {
     $forumAttachmentTable = Database :: get_course_table(TABLE_FORUM_ATTACHMENT);
@@ -4955,11 +4969,11 @@ function getAllAttachment($postId)
 
 /**
  * Delete the all the attachments from the DB and the file according to the post's id or attach id(optional)
- * @param post id
+ * @param int $post_id
  * @param int $id_attach
  * @param bool $display to show or not result message
  * @return integer
- * @author Julio Montoya Dokeos
+ * @author Julio Montoya
  * @version october 2014, chamilo 1.9.8
  */
 function delete_attachment($post_id, $id_attach = 0, $display = true)
@@ -5088,7 +5102,6 @@ function get_forums_of_group($groupId)
     }
 
     // Handling all the forum information.
-
     $result = Database::query($sql);
     $forum_list = array();
     while ($row = Database::fetch_array($result, 'ASSOC')) {
@@ -5413,7 +5426,7 @@ function count_number_of_user_in_course($course_id)
  *
  * @return  array the information of statistical
  * @author Jhon Hinojosa <jhon.hinojosa@dokeos.com>,
- * @version octubre 2008, dokeos 1.8
+ * @version oct 2008, dokeos 1.8
  */
 function get_statistical_information($thread_id, $user_id, $course_id)
 {
@@ -5433,7 +5446,7 @@ function get_statistical_information($thread_id, $user_id, $course_id)
  *
  * @return  int the number of post inside a thread
  * @author Jhon Hinojosa <jhon.hinojosa@dokeos.com>,
- * @version octubre 2008, dokeos 1.8
+ * @version oct 2008, dokeos 1.8
  */
 function get_thread_user_post($course_code, $thread_id, $user_id)
 {

@@ -111,6 +111,20 @@ switch ($action) {
             }
         }
         break;
+    case 'delete_correction':
+        $result = get_work_user_list(null, null, null, null, $workId);
+        if ($result) {
+            foreach ($result as $item) {
+                $workToDelete = get_work_data_by_id($item['id']);
+                deleteCorrection($courseInfo, $workToDelete);
+            }
+            Display::addFlash(
+                Display::return_message(get_lang('Deleted'), 'confirmation')
+            );
+        }
+        header('Location: '.api_get_self().'?'.api_get_cidreq().'&id='.$workId);
+        exit;
+        break;
     case 'make_visible':
         /*	Visible */
         if ($is_allowed_to_edit) {
@@ -157,7 +171,6 @@ $actionsLeft = '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_
     Display::return_icon('back.png', get_lang('BackToWorksList'), '', ICON_SIZE_MEDIUM).'</a>';
 
 if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !$isDrhOfCourse) {
-
     $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'work/add_document.php?'.api_get_cidreq().'&id='.$workId.'">';
     $actionsLeft .= Display::return_icon('new_document.png', get_lang('AddDocument'), '', ICON_SIZE_MEDIUM).'</a>';
 
@@ -181,6 +194,9 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !$isDrhOfC
 
     $url = api_get_path(WEB_CODE_PATH).'work/upload_corrections.php?'.api_get_cidreq().'&id='.$workId;
     $actionsLeft .= Display::toolbarButton(get_lang('UploadCorrections'), $url, 'upload', 'success');
+
+    $url = api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$workId.'&action=delete_correction';
+    $actionsLeft .= Display::toolbarButton(get_lang('DeleteCorrections'), $url, 'upload', 'danger');
 }
 
 echo Display::toolbarAction('toolbar-worklist', array($actionsLeft), 1);

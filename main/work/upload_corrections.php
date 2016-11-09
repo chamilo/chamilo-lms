@@ -9,7 +9,6 @@ $current_course_tool  = TOOL_STUDENTPUBLICATION;
 
 api_protect_course_script(true);
 
-// Including necessary files
 require_once 'work.lib.php';
 
 $this_section = SECTION_COURSES;
@@ -64,12 +63,10 @@ $form->addButtonUpload(get_lang('Upload'));
 
 $succeed = false;
 if ($form->validate()) {
-
     $values = $form->getSubmitValues();
     $upload = process_uploaded_file($_FILES['file'], false);
 
     if ($upload) {
-
         $zip = new PclZip($_FILES['file']['tmp_name']);
         // Check the zip content (real size and file extension)
         $zipFileList = (array)$zip->listContent();
@@ -152,7 +149,6 @@ if ($form->validate()) {
                     }
 
                     if (!empty($correctionFilePath)) {
-
                         $result = copy(
                             $file->getRealPath(),
                             $correctionFilePath

@@ -385,7 +385,7 @@ function show_add_forum_form($inputvalues = array(), $lp_id)
     if ($form->validate()) {
         $check = Security::check_token('post');
         if ($check) {
-            $values = $form->exportValues();
+            $values = $form->getSubmitValues();
             $return_message = store_forum($values);
             Display :: display_confirmation_message($return_message);
         }
@@ -590,7 +590,6 @@ function store_forumcategory($values, $courseInfo = array(), $showMessage = true
  */
 function store_forum($values, $courseInfo = array(), $returnId = false)
 {
-    $now = api_get_utc_datetime();
     $courseInfo = empty($courseInfo) ? api_get_course_info() : $courseInfo;
     $course_id = $courseInfo['real_id'];
     $session_id = api_get_session_id();
@@ -658,23 +657,11 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
             }
         }
     }
-
+    $sql_image = '';
     if (isset($values['forum_id'])) {
-        $sql_image = isset($sql_image) ? $sql_image : '';
-        $new_file_name = isset($new_file_name) ? $new_file_name : '';
-        if ($image_moved) {
-            if (empty($_FILES['picture']['name'])) {
-                $sql_image = "";
-            } else {
-                $sql_image = $new_file_name;
-                delete_forum_image($values['forum_id']);
-            }
-        }
-
         // Storing after edition.
         $params = [
             'forum_title'=> $values['forum_title'],
-            'forum_image'=> $sql_image,
             'forum_comment'=> isset($values['forum_comment']) ? $values['forum_comment'] : null,
             'forum_category'=> isset($values['forum_category']) ? $values['forum_category'] : null,
             'allow_anonymous'=> isset($values['allow_anonymous_group']['allow_anonymous']) ? $values['allow_anonymous_group']['allow_anonymous'] : null,
@@ -689,6 +676,17 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
             'session_id'=> $session_id,
             'lp_id' => isset($values['lp_id']) ? intval($values['lp_id']) : 0
         ];
+
+        if (isset($upload_ok)) {
+            if ($has_attachment) {
+                $params['forum_image'] = $new_file_name;
+            }
+        }
+
+        if (isset($values['remove_picture']) && $values['remove_picture'] == 1) {
+            $params['forum_image'] = '';
+            delete_forum_image($values['forum_id']);
+        }
 
         Database::update(
             $table_forums,

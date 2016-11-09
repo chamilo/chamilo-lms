@@ -618,6 +618,7 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
 
     // Forum images
     $image_moved = false;
+    $has_attachment = false;
     if (!empty($_FILES['picture']['name'])) {
         $upload_ok = process_uploaded_file($_FILES['picture']);
         $has_attachment = true;
@@ -657,7 +658,7 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
             }
         }
     }
-    $sql_image = '';
+
     if (isset($values['forum_id'])) {
         // Storing after edition.
         $params = [

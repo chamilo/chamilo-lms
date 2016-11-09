@@ -65,7 +65,7 @@ class Blog
      *
      * @param Integer $blog_id
      *
-     * @return Array Returns an array with [userid]=>[username]
+     * @return array Returns an array with [userid]=>[username]
      */
     public static function get_blog_users($blog_id)
     {
@@ -2604,7 +2604,7 @@ class Blog
  * @param the comment's id
  * @param integer $blog_id
  * @return array with the post info according the parameters
- * @author Julio Montoya Dokeos
+ * @author Julio Montoya
  * @version avril 2008, dokeos 1.8.5
  */
 function get_blog_attachment($blog_id, $post_id=null,$comment_id=null)
@@ -2641,18 +2641,17 @@ function get_blog_attachment($blog_id, $post_id=null,$comment_id=null)
 
 /**
  * Delete the all the attachments according the parameters.
- * @param the blog's id
- * @param the post's id
- * @param the comment's id
- * @param integer $blog_id
- * @param integer $post_id
- * @param integer $comment_id
- * @author Julio Montoya Dokeos
+ * @param int $blog_id
+ * @param int $post_id post's id
+ * @param int $comment_id the comment's id
+ * @author Julio Montoya
  * @version avril 2008, dokeos 1.8.5
  */
-
-function delete_all_blog_attachment($blog_id,$post_id=null,$comment_id=null)
-{
+function delete_all_blog_attachment(
+    $blog_id,
+    $post_id = null,
+    $comment_id = null
+) {
 	$_course = api_get_course_info();
 	$blog_table_attachment = Database::get_course_table(TABLE_BLOGS_ATTACHMENT);
 	$blog_id = intval($blog_id);
@@ -2697,15 +2696,16 @@ function delete_all_blog_attachment($blog_id,$post_id=null,$comment_id=null)
 
 /**
  * Gets all the post from a given user id
- * @param string db course name
- * @param int user id
+ * @param string $course_code
+ * @param int $user_id
  */
 function get_blog_post_from_user($course_code, $user_id)
 {
-	$tbl_blogs 		= Database::get_course_table(TABLE_BLOGS);
-	$tbl_blog_post 	= Database::get_course_table(TABLE_BLOGS_POSTS);
-	$course_info 	= api_get_course_info($course_code);
-	$course_id 		= $course_info['real_id'];
+    $tbl_blogs = Database::get_course_table(TABLE_BLOGS);
+    $tbl_blog_post = Database::get_course_table(TABLE_BLOGS_POSTS);
+    $course_info = api_get_course_info($course_code);
+    $course_id = $course_info['real_id'];
+    $user_id = intval($user_id);
 
 	$sql = "SELECT DISTINCT blog.blog_id, post_id, title, full_text, post.date_creation
 			FROM $tbl_blogs blog
@@ -2760,7 +2760,6 @@ function get_blog_comment_from_user($course_code, $user_id)
 			$return_data.=  '<div class="clear"></div><br />';
 			$return_data.=  '<div class="actions" style="margin-left:5px;margin-right:5px;">'.$row['title'].'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="float:right;margin-top:-18px"><a href="../blog/blog.php?blog_id='.$row['blog_id'].'&gidReq=&cidReq='.Security::remove_XSS($course_code).' " >'.get_lang('SeeBlog').'</a></div></div>';
 			$return_data.=  '<br / >';
-			//$return_data.=  '<strong>'.$row['title'].'</strong>'; echo '<br>';*/
 			$return_data.=  $row['comment'];
 			$return_data.=  '<br />';
 		}

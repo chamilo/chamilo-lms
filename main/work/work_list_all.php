@@ -109,6 +109,20 @@ switch ($action) {
             }
         }
         break;
+    case 'delete_correction':
+        $result = get_work_user_list(null, null, null, null, $workId);
+        if ($result) {
+            foreach ($result as $item) {
+                $workToDelete = get_work_data_by_id($item['id']);
+                deleteCorrection($courseInfo, $workToDelete);
+            }
+            Display::addFlash(
+                Display::return_message(get_lang('Deleted'), 'confirmation')
+            );
+        }
+        header('Location: '.api_get_self().'?'.api_get_cidreq().'&id='.$workId);
+        exit;
+        break;
     case 'make_visible':
         /*	Visible */
         if ($is_allowed_to_edit) {
@@ -180,6 +194,8 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !$isDrhOfC
     $url = api_get_path(WEB_CODE_PATH).'work/upload_corrections.php?'.api_get_cidreq().'&id='.$workId;
     $actionsLeft .= '<a class="btn-toolbar" href="'.$url.'">'.
         Display::return_icon('upload_package.png', get_lang('UploadCorrectionsPackage'), '', ICON_SIZE_MEDIUM) . ' ' . get_lang('UploadCorrectionsPackage') . '</a>';
+    $url = api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$workId.'&action=delete_correction';
+    $actionsLeft .= Display::toolbarButton(get_lang('DeleteCorrections'), $url, 'upload', 'danger');
 }
 
 echo Display::toolbarAction('toolbar-worklist', array($actionsLeft), 1);

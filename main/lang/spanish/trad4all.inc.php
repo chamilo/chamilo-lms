@@ -7963,4 +7963,7 @@ $AreYouSureYouWantToUnassignTheTicket = "Está seguro que quiere desasignar este
 $AreYouSureYouWantToCloseTheTicket = "Está seguro que quiere cerrar este ticket?";
 $Unassigned = "Desasignado";
 $SelectWeeksSpan = "Seleccione la duración en semanas";
+$CourseXAdded = "Curso %s añadido";
+$CurrentPassword = "Contraseña actual";
+$DeleteCorrections = "Eliminar correciones";
 ?>

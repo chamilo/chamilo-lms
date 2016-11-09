@@ -2056,7 +2056,7 @@ function get_work_user_list(
                         $feedback .= ' ';
                     }
                     $feedback .= '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.
-                            $count . ' ' . Display::returnFontAwesomeIcon('comments-o') . '</a> ';
+                    $count . ' ' . Display::returnFontAwesomeIcon('comments-o') . '</a> ';
                 }
 
                 $work['qualification'] = $qualification_string.$feedback;

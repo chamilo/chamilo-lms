@@ -132,7 +132,7 @@ if ($form->validate()) {
         foreach ($finder as $file) {
             $fileName = $file->getBasename();
             $fileName = substr($fileName, 20, strlen($fileName));
-            $pos = strpos($fileName, '-') + 1;
+            $pos = strpos($fileName, '_') + 1;
             $fileName = substr($fileName, $pos, strlen($fileName));
 
             if (isset($finalResult[$fileName])) {

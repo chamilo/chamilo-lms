@@ -195,7 +195,7 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !$isDrhOfC
     $actionsLeft .= '<a class="btn-toolbar" href="'.$url.'">'.
         Display::return_icon('upload_package.png', get_lang('UploadCorrectionsPackage'), '', ICON_SIZE_MEDIUM) . ' ' . get_lang('UploadCorrectionsPackage') . '</a>';
     $url = api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$workId.'&action=delete_correction';
-    $actionsLeft .= Display::toolbarButton(get_lang('DeleteCorrections'), $url, 'upload', 'danger');
+    $actionsLeft .= Display::toolbarButton(get_lang('DeleteCorrections'), $url, 'remove', 'danger');
 }
 
 echo Display::toolbarAction('toolbar-worklist', array($actionsLeft), 1);

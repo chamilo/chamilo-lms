@@ -125,18 +125,19 @@ if ($form->validate()) {
 
         $finder = new Finder();
         $finder->files()->in($destinationDir);
-
         $table = Database:: get_course_table(TABLE_STUDENT_PUBLICATION);
 
         /** @var SplFileInfo $file */
         foreach ($finder as $file) {
             $fileName = $file->getBasename();
             $fileName = substr($fileName, 20, strlen($fileName));
-            $pos = strpos($fileName, '-') + 1;
+            $pos = strpos($fileName, '_') + 1;
             $fileName = substr($fileName, $pos, strlen($fileName));
+
             if (isset($finalResult[$fileName])) {
                 $workStudentId = $finalResult[$fileName];
                 $workStudent = get_work_data_by_id($workStudentId);
+
                 if ($workStudent) {
                     if (!empty($workStudent['url_correction'])) {
                         $correctionFilePath = $coursePath.$workStudent['url_correction'];

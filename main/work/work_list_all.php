@@ -291,6 +291,7 @@ if (!empty($work_data['enable_qualification']) &&
             'align' => 'left',
             'search' => 'false',
             'sortable' => 'false',
+            'title' => 'false'
         ),
         array(
             'name' => 'actions',

@@ -4812,7 +4812,7 @@ class learnpath
         $params = [
             'expired_on' => $this->expired_on,
         ];
-        Database::update($lp_table, $params, ['c_id = ? AND id = ?' => [$course_id, $lp_id]], true);
+        Database::update($lp_table, $params, ['c_id = ? AND id = ?' => [$course_id, $lp_id]]);
 
         return true;
     }

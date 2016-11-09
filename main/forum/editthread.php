@@ -8,8 +8,6 @@
  * @package chamilo.forum
  */
 
-use ChamiloSession as Session;
-
 require_once '../inc/global.inc.php';
 
 // The section (tabs).

@@ -1,6 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+use Doctrine\Common\Collections\Criteria;
+use Chamilo\CourseBundle\Entity\CForumPost;
+
 /**
  * These files are a complete rework of the forum. The database structure is
  * based on phpBB but all the code is rewritten. A lot of new functionalities
@@ -21,10 +25,6 @@
  * @todo displaying icons => display library
  * @todo complete the missing phpdoc the correct order should be
  */
-
-use ChamiloSession as Session;
-use Doctrine\Common\Collections\Criteria;
-use Chamilo\CourseBundle\Entity\CForumPost;
 
 define('FORUM_NEW_POST', 0);
 
@@ -179,10 +179,8 @@ function handle_forum_and_forumcategories($lp_id = null)
  */
 function show_add_forumcategory_form($inputvalues = array(), $lp_id)
 {
-    // Initialize the object.
     $form = new FormValidator('forumcategory', 'post', 'index.php?' . api_get_cidreq());
     // hidden field if from learning path
-
     $form->addElement('hidden', 'lp_id', $lp_id);
     // Setting the form elements.
     $form->addElement('header', get_lang('AddForumCategory'));
@@ -411,7 +409,7 @@ function show_add_forum_form($inputvalues = array(), $lp_id)
     if ($form->validate()) {
         $check = Security::check_token('post');
         if ($check) {
-            $values = $form->exportValues();
+            $values = $form->getSubmitValues();
             $return_message = store_forum($values);
             Display :: display_confirmation_message($return_message);
         }
@@ -439,13 +437,16 @@ function delete_forum_image($forum_id)
     $forum_id = intval($forum_id);
 
     $sql = "SELECT forum_image FROM $table_forums
-            WHERE forum_id = '".$forum_id."' AND c_id = $course_id";
+            WHERE forum_id = $forum_id AND c_id = $course_id";
     $result = Database::query($sql);
     $row = Database::fetch_array($result);
     if ($row['forum_image'] != '') {
-        $del_file = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/forum/images/'.$row['forum_image'];
+        $file = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/forum/images/'.$row['forum_image'];
+        if (file_exists($file)) {
+            unlink($file);
+        }
 
-        return @unlink($del_file);
+        return true;
     } else {
         return false;
     }
@@ -524,7 +525,6 @@ function store_forumcategory($values, $courseInfo = array(), $showMessage = true
 {
     $courseInfo = empty($courseInfo) ? api_get_course_info() : $courseInfo;
     $course_id = $courseInfo['real_id'];
-
     $table_categories = Database::get_course_table(TABLE_FORUM_CATEGORY);
 
     // Find the max cat_order. The new forum category is added at the end => max cat_order + &
@@ -564,7 +564,6 @@ function store_forumcategory($values, $courseInfo = array(), $showMessage = true
         );
         $return_message = get_lang('ForumCategoryEdited');
     } else {
-
         $params = [
             'c_id' => $course_id,
             'cat_title' => $clean_cat_title,
@@ -577,7 +576,6 @@ function store_forumcategory($values, $courseInfo = array(), $showMessage = true
         $last_id = Database::insert($table_categories, $params);
 
         if ($last_id > 0) {
-
             $sql = "UPDATE $table_categories SET cat_id = $last_id WHERE iid = $last_id";
             Database::query($sql);
 
@@ -618,7 +616,6 @@ function store_forumcategory($values, $courseInfo = array(), $showMessage = true
  */
 function store_forum($values, $courseInfo = array(), $returnId = false)
 {
-    $now = api_get_utc_datetime();
     $courseInfo = empty($courseInfo) ? api_get_course_info() : $courseInfo;
     $course_id = $courseInfo['real_id'];
     $session_id = api_get_session_id();
@@ -688,20 +685,9 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
     }
 
     if (isset($values['forum_id'])) {
-        $sql_image = isset($sql_image) ? $sql_image : '';
-        $new_file_name = isset($new_file_name) ? $new_file_name : '';
-        if ($image_moved) {
-            if (empty($_FILES['picture']['name'])) {
-                $sql_image = "";
-            } else {
-                $sql_image = $new_file_name;
-                delete_forum_image($values['forum_id']);
-            }
-        }
         // Storing after edition.
         $params = [
             'forum_title'=> $values['forum_title'],
-            'forum_image'=> $sql_image,
             'forum_comment'=> isset($values['forum_comment']) ? $values['forum_comment'] : null,
             'forum_category'=> isset($values['forum_category']) ? $values['forum_category'] : null,
             'allow_anonymous'=> isset($values['allow_anonymous_group']['allow_anonymous']) ? $values['allow_anonymous_group']['allow_anonymous'] : null,
@@ -719,6 +705,17 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
             'session_id'=> $session_id,
             'lp_id' => isset($values['lp_id']) ? intval($values['lp_id']) : 0
         ];
+
+        if (isset($upload_ok)) {
+            if ($has_attachment) {
+                $params['forum_image'] = $new_file_name;
+            }
+        }
+
+        if (isset($values['remove_picture']) && $values['remove_picture'] == 1) {
+            $params['forum_image'] = '';
+            delete_forum_image($values['forum_id']);
+        }
 
         Database::update(
             $table_forums,

@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * This file is responsible for  passing requested documents to the browser.
  * Html files are parsed to fix a few problems with URLs,

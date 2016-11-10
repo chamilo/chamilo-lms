@@ -27,11 +27,9 @@ switch ($action) {
             }
         }
         break;
-
     case 'version':
         echo version_check();
         break;
-
     case 'get_extra_content':
         $blockName = isset($_POST['block']) ? Security::remove_XSS($_POST['block']) : null;
 
@@ -49,7 +47,6 @@ switch ($action) {
             $urlInfo = api_get_access_url($accessUrlId);
             $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $urlInfo['url']));
             $cleanUrl = str_replace('/', '-', $url);
-
             $newUrlDir = api_get_path(SYS_APP_PATH) . "home/$cleanUrl/admin/";
         } else {
             $newUrlDir = api_get_path(SYS_APP_PATH) . "home/admin/";
@@ -174,10 +171,12 @@ function check_system_version()
                 $version_info = $version;
             }
 
-            if ($system_version != $version_info) {
-                $output = '<br /><span style="color:red">' . get_lang('YourVersionNotUpToDate') . '. '.get_lang('LatestVersionIs').' <b>Chamilo '.$version_info.'</b>. '.get_lang('YourVersionIs').' <b>Chamilo '.$system_version. '</b>. '.str_replace('http://www.chamilo.org', '<a href="http://www.chamilo.org">http://www.chamilo.org</a>', get_lang('PleaseVisitOurWebsite')).'</span>';
+            if (version_compare($system_version, $version_info, '<=')) {
+                $output = '<span style="color:red">' . get_lang('YourVersionNotUpToDate') .'<br />
+                           '.get_lang('LatestVersionIs').' <b>Chamilo '.$version_info.'</b>.  <br />
+                           '.get_lang('YourVersionIs').' <b>Chamilo '.$system_version. '</b>.  <br />'.str_replace('http://www.chamilo.org', '<a href="http://www.chamilo.org">http://www.chamilo.org</a>', get_lang('PleaseVisitOurWebsite')).'</span>';
             } else {
-                $output = '<br /><span style="color:green">'.get_lang('VersionUpToDate').': Chamilo '.$version_info.'</span>';
+                $output = '<span style="color:green">'.get_lang('VersionUpToDate').': Chamilo '.$version_info.'</span>';
             }
         } else {
             $output = '<span style="color:red">' . get_lang('ImpossibleToContactVersionServerPleaseTryAgain') . '</span>';

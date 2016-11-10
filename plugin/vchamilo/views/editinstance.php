@@ -20,8 +20,8 @@ $registeronly = isset($_REQUEST['registeronly']) ? $_REQUEST['registeronly'] : 0
 $plugin = VChamiloPlugin::create();
 $thisurl = api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php';
 
-$coursePath = Virtual::getConfig('vchamilo', 'course_real_root');
-$homePath = Virtual::getConfig('vchamilo', 'home_real_root');
+/*$coursePath = Virtual::getConfig('vchamilo', 'course_real_root');
+$homePath = Virtual::getConfig('vchamilo', 'home_real_root');*/
 
 if ($id) {
     $mode = 'update';

@@ -704,7 +704,6 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
             'moderated'=> $values['moderated']['moderated'],
             'start_time' => !empty($values['start_time']) ? api_get_utc_datetime($values['start_time']) : null,
             'end_time' => !empty($values['end_time']) ? api_get_utc_datetime($values['end_time']) : null,
-            'forum_order'=> isset($new_max) ? $new_max : null,
             'session_id'=> $session_id,
             'lp_id' => isset($values['lp_id']) ? intval($values['lp_id']) : 0
         ];

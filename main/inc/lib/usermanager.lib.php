@@ -1677,6 +1677,7 @@ class UserManager
                 $userInfo = api_get_user_info($user_id);
             }
         }
+
         $imageWebPath = self::get_user_picture_path_by_id($user_id, 'web', $userInfo);
         $pictureWebFile = $imageWebPath['file'];
         $pictureWebDir = $imageWebPath['dir'];
@@ -1781,6 +1782,7 @@ class UserManager
         $path_info = self::getUserPicturePathById($user_id, 'system');
 
         $path = $path_info['dir'];
+
         // If this directory does not exist - we create it.
         if (!file_exists($path)) {
             mkdir($path, api_get_permissions_for_new_directories(), true);

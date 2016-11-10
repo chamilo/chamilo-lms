@@ -48,6 +48,7 @@ $form_settings = array(
     'course_real_root' => Virtual::getConfig('vchamilo', 'course_real_root', true),
     'archive_real_root' => Virtual::getConfig('vchamilo', 'archive_real_root', true),
     'home_real_root' => Virtual::getConfig('vchamilo', 'home_real_root', true),
+    'upload_real_root' => Virtual::getConfig('vchamilo', 'upload_real_root', true),
 );
 
 $form->setDefaults($form_settings);
@@ -77,6 +78,12 @@ $form->addElement(
     'text',
     'home_real_root',
     [$plugin->get_lang('homerealroot'), 'Example: '.api_get_path(SYS_PATH).'var/home/']
+);
+
+$form->addElement(
+    'text',
+    'upload_real_root',
+    [$plugin->get_lang('UploadRealRoot'), 'Example: '.api_get_path(SYS_PATH).'var/upload/']
 );
 
 $form->addElement('header', $plugin->get_lang('mysqlcmds'));

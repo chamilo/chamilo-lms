@@ -108,4 +108,7 @@ $strings['DatabaseDescription'] = 'A new database will be created with that name
 $strings['RootWebExists'] = 'An instance with the same root web exists.';
 $strings['ImportInstance'] = 'Import instance';
 $strings['ConfigurationPath'] = 'Chamilo configuration path';
+$strings['UploadRealRoot'] = 'Upload files';
+$strings['DatabaseAccessShouldBeDifferentThanMasterChamilo'] = 'Database server should be different than the Chamilo master';
+
 

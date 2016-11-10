@@ -30,7 +30,10 @@ if (api_is_allowed_to_edit()) {
     // the learning path, we do not include the banner so we have to explicitly
     // include the stylesheet, which is normally done in the header
     if (empty($_GET['origin']) || $_GET['origin'] != 'learnpath') {
-        $interbreadcrumb[]= array ('url' => 'blog_admin.php?','name' => $nameTools);
+        $interbreadcrumb[] = array(
+            'url' => 'blog_admin.php?'.api_get_cidreq(),
+            'name' => $nameTools,
+        );
         $my_url='';
         if (isset($_GET['action']) && $_GET['action']=='add') {
             $current_section = get_lang('AddBlog');

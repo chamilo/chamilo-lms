@@ -100,10 +100,19 @@ class AttendanceController
                 if ($check) {
                     $attendance->set_name($_POST['title']);
                     $attendance->set_description($_POST['description']);
-                    $attendance->set_attendance_qualify_title($_POST['attendance_qualify_title']);
-                    $attendance->set_attendance_weight($_POST['attendance_weight']);
+                    if (isset($_POST['attendance_qualify_title'])) {
+                        $attendance->set_attendance_qualify_title(
+                            $_POST['attendance_qualify_title']
+                        );
+                    }
 
-                    $attendance->category_id = $_POST['category_id'];
+                    if (isset($_POST['attendance_weight'])) {
+                        $attendance->set_attendance_weight(
+                            $_POST['attendance_weight']
+                        );
+                    }
+
+                    $attendance->category_id = isset($_POST['category_id']) ? $_POST['category_id'] : '';
                     $link_to_gradebook = false;
                     if (isset($_POST['attendance_qualify_gradebook']) &&
                         $_POST['attendance_qualify_gradebook'] == 1

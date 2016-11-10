@@ -679,6 +679,7 @@ class Virtual
         if ($return === 'head') {
             $htmlHeadXtra[] = $str;
         }
+
         if ($return) {
             return $str;
         }
@@ -744,18 +745,20 @@ class Virtual
 
         global $virtualChamilo;
         if (!isset($virtualChamilo)) {
-            api_not_allowed(true, 'You have to edit the configuration.php. Please check the readme file.');
+            api_not_allowed(
+                true,
+                'You have to edit the configuration.php. Please check the readme file.'
+            );
         }
 
         $coursePath = self::getConfig('vchamilo', 'course_real_root');
         $homePath = self::getConfig('vchamilo', 'home_real_root');
         $archivePath = self::getConfig('vchamilo', 'archive_real_root');
         $uploadPath = self::getConfig('vchamilo', 'upload_real_root');
-
         $cmdSql = self::getConfig('vchamilo', 'cmd_mysql');
         $cmdMySql = self::getConfig('vchamilo', 'cmd_mysqldump');
 
-        if (empty($coursePath) || empty($homePath) || empty($uploadPath) || empty($archivePath) || empty($cmdSql)|| empty($cmdMySql)) {
+        if (empty($coursePath) || empty($homePath) || empty($uploadPath) || empty($archivePath) || empty($cmdSql) || empty($cmdMySql)) {
             api_not_allowed(true, 'You have to complete all plugin settings.');
         }
 
@@ -819,7 +822,6 @@ class Virtual
             );
 
             if ($getManager) {
-
                 return $manager;
             }
 
@@ -927,8 +929,10 @@ class Virtual
 
         $sitename = Database::escape_string($data->sitename);
         $institution = Database::escape_string($data->institution);
+
         $sqls[] = "UPDATE {$settingstable} SET selected_value = '{$sitename}' 
                    WHERE variable = 'siteName' AND category = 'Platform' ";
+
         $sqls[] = "UPDATE {$settingstable} SET selected_value = '{$institution}' 
                    WHERE variable = 'institution' AND category = 'Platform' ";
 
@@ -992,7 +996,6 @@ class Virtual
         $data->lastcron = 0;
         $data->lastcrongap = 0;
         $data->croncount = 0;
-        $template = '';
 
         $mainDatabase = api_get_configuration_value('main_database');
 
@@ -1001,7 +1004,7 @@ class Virtual
                 Display::return_message('You cannot use the same database as the chamilo master', 'error')
             );
 
-            return ;
+            return false;
         }
 
         self::ctrace('Registering: '.$data->root_web);
@@ -1021,19 +1024,20 @@ class Virtual
             $statement = $connection->query('SELECT * FROM settings_current');
             $settings = $statement->fetchAll();
             $settings = array_column($settings, 'selected_value', 'variable');
-
             $institution = $settings['Institution'];
             $siteName = $settings['siteName'];
-
             $newDatabase->sitename = $siteName;
             $newDatabase->institution = $institution;
-
             $slug = $newDatabase->slug = $data->slug = Virtual::getSlugFromUrl($data->root_web);
             $id = Database::insert($table, (array) $newDatabase);
         }
 
         if (!$id) {
             throw new Exception('Was not registered');
+        }
+
+        if (empty($slug)) {
+            throw new Exception('Slug is empty');
         }
 
         self::createDirsFromSlug($slug);
@@ -1139,7 +1143,6 @@ class Virtual
             }
         }
 
-
         $absAlternateHome = Virtual::getConfig('vchamilo', 'home_real_root');
         $absAlternateArchive = Virtual::getConfig('vchamilo', 'archive_real_root');
         $absAlternateUpload = Virtual::getConfig('vchamilo', 'upload_real_root');
@@ -1204,7 +1207,6 @@ class Virtual
         $currentVersion = implode('.', [$versionParts[0], $versionParts[1], '0']);
 
         if (version_compare($version, $currentVersion, '<')) {
-
             return $version;
         }
 

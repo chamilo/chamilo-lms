@@ -30,7 +30,7 @@ Insert the hook at the end of the file.
 
 ```
 include_once $_configuration['root_sys'].'plugin/vchamilo/lib/Virtual.php';
-vchamilo_hook_configuration($_configuration);
+Virtual::hookConfiguration($_configuration);
 ```
 
 What you need for a virtual node is:

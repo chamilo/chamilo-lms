@@ -39,7 +39,6 @@ if ($action === 'add') {
 
 $htmlHeadXtra[]= '<script>
 function plusItem(item) {
-    console.log(item);
     if (item != 1) {
 		document.getElementById(item).style.display = "inline";
     	document.getElementById("plus-"+item).style.display = "none";

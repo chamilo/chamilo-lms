@@ -491,7 +491,6 @@ if ($form->validate()) {
                 $_FILES['picture']['name'],
                 $_FILES['picture']['tmp_name'],
                 $user['picture_crop_result']
-
             );
 		}
 

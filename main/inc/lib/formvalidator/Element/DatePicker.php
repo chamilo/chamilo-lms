@@ -41,7 +41,7 @@ class DatePicker extends HTML_QuickForm_text
         $label = $this->getLabel();
 
         if (!empty($value)) {
-            $value = api_format_date($value, DATE_TIME_FORMAT_LONG_24H);
+            $value = api_format_date($value, DATE_FORMAT_LONG_NO_DAY);
         }
 
         return '

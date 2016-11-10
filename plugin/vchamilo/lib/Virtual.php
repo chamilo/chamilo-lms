@@ -42,9 +42,7 @@ class Virtual
 
         if ($result->rowCount()) {
             $data = $result->fetch();
-
             $excludes = array('id', 'name');
-
             $query = "SELECT * FROM settings_current WHERE subkey = 'vchamilo'";
             $virtualSettings = $connection->executeQuery($query);
             $virtualSettings = $virtualSettings->fetchAll();
@@ -52,9 +50,13 @@ class Virtual
             $homePath = '';
             $coursePath = '';
             $archivePath = '';
+            $uploadPath = '';
 
             foreach ($virtualSettings as $setting) {
                 switch ($setting['variable']) {
+                    case 'vchamilo_upload_real_root':
+                        $uploadPath = $setting['selected_value'];
+                        break;
                     case 'vchamilo_home_real_root':
                         $homePath = $setting['selected_value'];
                         break;
@@ -67,7 +69,7 @@ class Virtual
                 }
             }
 
-            if (empty($homePath) || empty($coursePath) || empty($archivePath)) {
+            if (empty($homePath) || empty($coursePath) || empty($archivePath) || empty($uploadPath)) {
                 echo 'Configure correctly the vchamilo plugin';
                 exit;
             }
@@ -84,6 +86,7 @@ class Virtual
                 $data['SYS_ARCHIVE_PATH'] = $archivePath.'/'.$data['slug'];
                 $data['SYS_HOME_PATH'] = $homePath.'/'.$data['slug'];
                 $data['SYS_COURSE_PATH'] = $coursePath.'/'.$data['slug'];
+                $data['SYS_UPLOAD_PATH'] = $uploadPath.'/'.$data['slug'];
 
                 $virtualChamilo = $data;
             } else {
@@ -588,11 +591,13 @@ class Virtual
         $coursePath = self::getConfig('vchamilo', 'course_real_root').$separator.$vchamilo->slug;
         $homePath = self::getConfig('vchamilo', 'home_real_root').$separator.$vchamilo->slug;
         $archivePath = self::getConfig('vchamilo', 'archive_real_root').$separator.$vchamilo->slug;
+        $uploadPath = self::getConfig('vchamilo', 'upload_real_root').$separator.$vchamilo->slug;
 
         // get the protocol free hostname
         Display::addFlash(
             Display::return_message("Copying {$templateDir}/data/courses => $coursePath")
         );
+
         copyDirTo(
             self::chopLastSlash($templateDir.'/data/courses'),
             self::chopLastSlash($coursePath),
@@ -616,6 +621,17 @@ class Virtual
         copyDirTo(
             self::chopLastSlash($templateDir.'/data/home'),
             self::chopLastSlash($homePath),
+            false
+        );
+
+        // Upload
+        Display::addFlash(
+            Display::return_message("Copying {$templateDir}/data/upload => $uploadPath")
+        );
+
+        copyDirTo(
+            self::chopLastSlash($templateDir.'/data/upload'),
+            self::chopLastSlash($uploadPath),
             false
         );
     }
@@ -669,6 +685,12 @@ class Virtual
         echo $str;
     }
 
+    /**
+     * @param $file
+     * @param $component
+     * @param bool $return
+     * @return string
+     */
     public static function requireCss($file, $component, $return = false)
     {
         global $_configuration, $htmlHeadXtra;
@@ -728,10 +750,12 @@ class Virtual
         $coursePath = self::getConfig('vchamilo', 'course_real_root');
         $homePath = self::getConfig('vchamilo', 'home_real_root');
         $archivePath = self::getConfig('vchamilo', 'archive_real_root');
+        $uploadPath = self::getConfig('vchamilo', 'upload_real_root');
+
         $cmdSql = self::getConfig('vchamilo', 'cmd_mysql');
         $cmdMySql = self::getConfig('vchamilo', 'cmd_mysqldump');
 
-        if (empty($coursePath) || empty($homePath) || empty($archivePath) || empty($cmdSql)|| empty($cmdMySql)) {
+        if (empty($coursePath) || empty($homePath) || empty($uploadPath) || empty($archivePath) || empty($cmdSql)|| empty($cmdMySql)) {
             api_not_allowed(true, 'You have to complete all plugin settings.');
         }
 
@@ -742,13 +766,21 @@ class Virtual
             $coursePath,
             $homePath,
             $archivePath,
+            $uploadPath,
             $templatePath
         ];
 
         foreach ($paths as $path) {
-            if (!is_writable($path)) {
+            $path = trim($path);
+            if (is_dir($path)) {
+                if (!is_writable($path)) {
+                    Display::addFlash(
+                        Display::return_message("Directory must have writable permissions: '$path'", 'warning')
+                    );
+                };
+            } else {
                 Display::addFlash(
-                    Display::return_message('Directory must have writable permissions: '.$path, 'warning')
+                    Display::return_message("Directory doesn't exist: '$path'", 'warning')
                 );
             }
         }
@@ -857,6 +889,12 @@ class Virtual
             $slug = $virtualInfo['slug'];
         } else {
             $slug = $data->slug = Virtual::getSlugFromUrl($data->root_web);
+            if (empty($slug)) {
+                Display::addFlash(
+                    Display::return_message('Cannot create slug from url: '.$data->root_web, 'error')
+                );
+                return ;
+            }
             Database::insert($tablename, (array) $data);
         }
 
@@ -867,7 +905,6 @@ class Virtual
         }
 
         // or we continue with physical creation
-
         self::createDirsFromSlug($slug);
 
         if (!$template) {
@@ -930,9 +967,11 @@ class Virtual
 
         $fromCoursePath = $data->course_path;
         $fromHomePath = $data->home_path;
+        $fromUploadPath = $data->upload_path;
 
         unset($data->course_path);
         unset($data->home_path);
+        unset($data->upload_path);
 
         $newDatabase = clone $data;
         $newDatabase->main_database = $newDatabase->import_to_main_database;
@@ -978,9 +1017,7 @@ class Virtual
             );
             return false;
         } else {
-
             $connection = Virtual::getConnectionFromInstance($data);
-
             $statement = $connection->query('SELECT * FROM settings_current');
             $settings = $statement->fetchAll();
             $settings = array_column($settings, 'selected_value', 'variable');
@@ -1032,20 +1069,29 @@ class Virtual
 
         $coursePath = self::getConfig('vchamilo', 'course_real_root').'/'.$slug;
         $homePath = self::getConfig('vchamilo', 'home_real_root').'/'.$slug;
+        $uploadPath = self::getConfig('vchamilo', 'upload_real_root').'/'.$slug;
 
+        // Course
         self::ctrace("Copy from '$fromCoursePath' to backup '$coursePath' ");
-
         copyDirTo(
             self::chopLastSlash($fromCoursePath),
             self::chopLastSlash($coursePath),
             false
         );
 
+        // Home
         self::ctrace("Copy from '$fromHomePath' to backup '$homePath' ");
-
         copyDirTo(
             self::chopLastSlash($fromHomePath),
             self::chopLastSlash($homePath),
+            false
+        );
+
+        // Upload
+        self::ctrace("Copy from '$fromUploadPath' to backup '$uploadPath' ");
+        copyDirTo(
+            self::chopLastSlash($fromUploadPath),
+            self::chopLastSlash($uploadPath),
             false
         );
 
@@ -1062,7 +1108,6 @@ class Virtual
         $settings = $statement->fetchAll();
         $settings = array_column($settings, 'selected_value', 'variable');
         $settings['data_base'];
-
     }
 
     /**
@@ -1094,54 +1139,32 @@ class Virtual
             }
         }
 
+
         $absAlternateHome = Virtual::getConfig('vchamilo', 'home_real_root');
+        $absAlternateArchive = Virtual::getConfig('vchamilo', 'archive_real_root');
+        $absAlternateUpload = Virtual::getConfig('vchamilo', 'upload_real_root');
+
         // absalternatehome is a vchamilo config setting that tells where the
         // real physical storage for home pages are.
         $homeDir = $absAlternateHome.'/'.$slug;
-
-        self::ctrace("Making home dir as $homeDir");
-
-        if (!is_dir($homeDir)) {
-            if (!mkdir($homeDir, 0777, true)) {
-                self::ctrace("Error creating home dir $homeDir \n");
-            }
-        }
-
-        // if real homedir IS NOT under chamilo install, link to it
-        // Seems not be necessary as we can globally link the whole Home container
-        /*
-        $standardlocation = $_configuration['root_sys'].'home/'.$home_folder; // where it should be
-        if ($homeDir != $standardlocation){
-            self::ctrace("Linking virtual home dir ");
-            if (!symlink($homeDir, $standardlocation)){
-                self::ctrace("could not link $standardlocation => $homeDir ");
-            }
-        }
-        */
-
-        // create archive
-        $absAlternateArchive = Virtual::getConfig('vchamilo', 'archive_real_root');
         $archiveDir = $absAlternateArchive.'/'.$slug;
+        $uploadDir = $absAlternateUpload.'/'.$slug;
 
-        self::ctrace("Making archive dir as $archiveDir ");
+        $dirs = [
+            $homeDir,
+            $archiveDir,
+            $uploadDir
+        ];
 
-        if (!is_dir($archiveDir)) {
-            if (!mkdir($archiveDir, 0777, true)) {
-                self::ctrace("Error creating archive dir $archiveDir\n");
+        foreach ($dirs as $dir) {
+            self::ctrace("Making dir as $dir");
+
+            if (!is_dir($dir)) {
+                if (!mkdir($dir, 0777, true)) {
+                    self::ctrace("Error creating dir $dir \n");
+                }
             }
         }
-
-        // if real archivedir IS NOT under chamilo install, link to it
-        // Seems not be necessary as we can globally link the whole Home container
-        /*
-        $standardlocation = $_configuration['root_sys'].'archive/'.$archive_folder; // where it should be
-        if ($archiveDir != $standardlocation){
-            self::ctrace("Linking virtual archive dir ");
-            if (!symlink($archiveDir, $standardlocation)){
-                self::ctrace("could not link $standardlocation => $archiveDir ");
-            }
-        }
-        */
     }
 
     /**

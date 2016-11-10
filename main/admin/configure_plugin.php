@@ -30,7 +30,6 @@ if (isset($pluginInfo['settings_form'])) {
     /** @var FormValidator $form */
     $form = $pluginInfo['settings_form'];
     if (isset($form)) {
-
         // We override the form attributes
         $attributes = array('action' => $currentUrl, 'method' => 'POST');
         $form->updateAttributes($attributes);
@@ -65,6 +64,7 @@ if (isset($form)) {
         );
 
         foreach ($values as $key => $value) {
+            $value = trim($value);
             api_add_setting(
                 $value,
                 Database::escape_string($pluginName . '_' . $key),

@@ -59,12 +59,13 @@ switch ($action) {
                 array('where' => array("root_web = '{$n->root_web}' " => array()))
             );
         }
+
         if ($todelete) {
             foreach ($todelete as $fooid => $instance) {
                 $slug = $instance['slug'];
 
                 if (empty($slug)) {
-                    continue;
+                   continue;
                 }
 
                 // Remove all files and eventual symlinks
@@ -88,6 +89,14 @@ switch ($action) {
 
                     Display::addFlash(Display::return_message("Deleting $archivedir"));
                     removeDir($archivedir);
+                }
+
+                // Delete upload
+                if ($dir = Virtual::getConfig('vchamilo', 'upload_real_root')) {
+                    $dir = $dir.'/'.$slug;
+
+                    Display::addFlash(Display::return_message("Deleting $dir"));
+                    removeDir($dir);
                 }
 
                 $sql = "DELETE FROM {$table} WHERE id = ".$instance['id'];
@@ -174,6 +183,7 @@ switch ($action) {
                 $coursePath = api_get_path(SYS_COURSE_PATH);
                 $homePath = api_get_path(SYS_HOME_PATH);
                 $archivePath = api_get_path(SYS_ARCHIVE_PATH);
+                $uploadPath = api_get_path(SYS_UPLOAD_PATH);
             } else {
                 // Get Vchamilo known record.
                 $vchamilo = Database::select('*', 'vchamilo', array('where' => array('root_web = ?' => array($wwwroot))), 'first');
@@ -181,10 +191,12 @@ switch ($action) {
                 $coursePath = Virtual::getConfig('vchamilo', 'course_real_root');
                 $homePath = Virtual::getConfig('vchamilo', 'home_real_root');
                 $archivePath = Virtual::getConfig('vchamilo', 'archive_real_root');
+                $uploadPath = Virtual::getConfig('vchamilo', 'upload_real_root');
 
                 $coursePath = $coursePath.'/'.$vchamilo->slug;
                 $homePath = $homePath.'/'.$vchamilo->slug;
                 $archivePath = $archivePath.'/'.$vchamilo->slug;
+                $uploadPath = $uploadPath.'/'.$vchamilo->slug;
             }
 
             $content = '';
@@ -232,6 +244,9 @@ switch ($action) {
             Display::addFlash(Display::return_message("Copying from '$coursePath' to '$absolute_datadir/courses' "));
             copyDirTo($coursePath, $absolute_datadir.'/courses/', false);
 
+            Display::addFlash(Display::return_message("Copying from '$uploadPath' to '$absolute_datadir/upload' "));
+            copyDirTo($uploadPath, $absolute_datadir.'/upload/', false);
+
             // Store original hostname and some config info for further database or filestore replacements.
             $FILE = fopen($backupDir.$separator.'manifest.php', 'w');
             fwrite($FILE, '<'.'?php ');
@@ -242,7 +257,8 @@ switch ($action) {
             // Every step was SUCCESS.
             if (empty($fullautomation)) {
                 Display::addFlash(
-                    Display::return_message($plugin->get_lang('successfinishedcapture'),
+                    Display::return_message(
+                        $plugin->get_lang('successfinishedcapture'),
                         'success'
                     )
                 );
@@ -317,6 +333,7 @@ switch ($action) {
                 $coursePath = Virtual::getConfig('vchamilo', 'course_real_root');
                 $homePath = Virtual::getConfig('vchamilo', 'home_real_root');
                 $archivePath = Virtual::getConfig('vchamilo', 'archive_real_root');
+                //$uploadPath = Virtual::getConfig('vchamilo', 'upload_real_root');
 
                 // Get instance archive
                 $archivepath = api_get_path(SYS_ARCHIVE_PATH, (array)$instance);

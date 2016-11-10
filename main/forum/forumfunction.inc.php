@@ -673,7 +673,6 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
             'default_view'=> isset($values['default_view_type_group']['default_view_type']) ? $values['default_view_type_group']['default_view_type'] : null,
             'forum_of_group'=> isset($values['group_forum']) ? $values['group_forum'] : null,
             'forum_group_public_private'=> isset($values['public_private_group_forum_group']['public_private_group_forum']) ? $values['public_private_group_forum_group']['public_private_group_forum'] : null,
-            'forum_order'=> isset($new_max) ? $new_max : null,
             'session_id'=> $session_id,
             'lp_id' => isset($values['lp_id']) ? intval($values['lp_id']) : 0
         ];

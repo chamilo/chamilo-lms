@@ -1919,16 +1919,18 @@ class SurveyUtil
      */
     function delete_user_report($survey_id, $user_id)
     {
-        $table_survey_answer 		= Database :: get_course_table(TABLE_SURVEY_ANSWER);
-        $table_survey_invitation 	= Database :: get_course_table(TABLE_SURVEY_INVITATION);
-        $table_survey 				= Database :: get_course_table(TABLE_SURVEY);
+        $table_survey_answer = Database:: get_course_table(TABLE_SURVEY_ANSWER);
+        $table_survey_invitation = Database:: get_course_table(TABLE_SURVEY_INVITATION);
+        $table_survey = Database:: get_course_table(TABLE_SURVEY);
 
         $course_id = api_get_course_int_id();
+        $survey_id = (int) $survey_id;
 
         if (!empty($survey_id) && !empty($user_id)) {
+            $user_id = Database::escape_string($user_id);
             // delete data from survey_answer by user_id and survey_id
             $sql = "DELETE FROM $table_survey_answer
-			        WHERE c_id = $course_id AND survey_id = '".(int)$survey_id."' AND user = '".(int)$user_id."'";
+			        WHERE c_id = $course_id AND survey_id = '".$survey_id."' AND user = '".$user_id."'";
             Database::query($sql);
             // update field answered from survey_invitation by user_id and survey_id
             $sql = "UPDATE $table_survey_invitation SET answered = '0'
@@ -1940,7 +1942,7 @@ class SurveyUtil
                                 c_id = $course_id AND
                                 survey_id = '".(int)$survey_id."'
                         ) AND
-			            user = '".(int)$user_id."'";
+			            user = '".$user_id."'";
             $result = Database::query($sql);
         }
 
@@ -2165,8 +2167,6 @@ class SurveyUtil
             $limitStatement = null;
             if (!$singlePage) {
                 echo '<div id="question_report_questionnumbers" class="pagination">';
-                /* echo '<ul><li class="disabled"><a href="#">'.get_lang('Question').'</a></li>'; */
-
                 if ($currentQuestion != 0) {
                     echo '<li><a href="' . api_get_path(WEB_CODE_PATH) . 'survey/reporting.php?action=' . $action . '&' . api_get_cidreq() . '&survey_id=' . $surveyId . '&question=' . ($offset - 1) . '">' . get_lang('PreviousQuestion') . '</a></li>';
                 }
@@ -2177,9 +2177,6 @@ class SurveyUtil
                     } else {
                         echo '<li class="disabled"s><a href="#">' . $i . '</a></li>';
                     }
-                    /*if ($i < $survey_data['number_of_questions']) {
-                        echo ' | ';
-                    }*/
                 }
                 if ($currentQuestion < ($survey_data['number_of_questions'] - 1)) {
                     echo '<li><a href="' . api_get_path(WEB_CODE_PATH) . 'survey/reporting.php?action=' . $action . '&' . api_get_cidreq() . '&survey_id=' . $surveyId . '&question=' . ($offset + 1) . '">' . get_lang('NextQuestion') . '</li></a>';
@@ -2198,25 +2195,10 @@ class SurveyUtil
                     ORDER BY sort ASC
                     $limitStatement";
             $result = Database::query($sql);
-            //$question = Database::fetch_array($result);
 
             while ($row = Database::fetch_array($result)) {
                 $questions[$row['question_id']] = $row;
             }
-
-            // Navigate through the questions (next and previous)
-            /*if ($currentQuestion != 0 ) {
-                echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action='.Security::remove_XSS($_GET['action']).'&'.api_get_cidreq().'&survey_id='.Security::remove_XSS($_GET['survey_id']).'&question='.Security::remove_XSS($offset-1).'">'.
-                    Display::return_icon('action_prev.png', get_lang('PreviousQuestion'), array('align' => 'middle')).' '.get_lang('PreviousQuestion').'</a>  ';
-            } else {
-                echo Display::return_icon('action_prev.png', get_lang('PreviousQuestion'), array('align' => 'middle')).' '.get_lang('PreviousQuestion').' ';
-            }
-            echo ' | ';
-            if ($currentQuestion < ($survey_data['number_of_questions'] - 1)) {
-                echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action='.Security::remove_XSS($_GET['action']).'&'.api_get_cidreq().'&survey_id='.Security::remove_XSS($_GET['survey_id']).'&question='.Security::remove_XSS($offset+1).'">'.get_lang('NextQuestion').' '.Display::return_icon('action_next.png', get_lang('NextQuestion'), array('align' => 'middle')).'</a>';
-            } else {
-                echo get_lang('NextQuestion').' '.Display::return_icon('action_next.png', get_lang('NextQuestion'), array('align' => 'middle'));
-            }*/
         }
 
         foreach ($questions as $question) {
@@ -2252,6 +2234,7 @@ class SurveyUtil
                 while ($row = Database::fetch_array($result)) {
                     $options[$row['question_option_id']] = $row;
                 }
+
                 // Getting the answers
                 $sql = "SELECT *, count(answer_id) as total FROM $table_survey_answer
                         WHERE

@@ -48,7 +48,6 @@
         "ext-xml": "*",
         "ext-json": "*",
         "ext-mbstring": "*",
-
         "twig/twig": "1.*",
         "twig/extensions": "~1.0",
         "doctrine/orm": "~2.4",
@@ -104,7 +103,8 @@
         "facebook/php-sdk-v4" : "~5.0",
         "kigkonsult/icalcreator" : "0.1.0",
         "essence/essence": "2.6.1",
-        "pclzip/pclzip": "2.8.2"
+        "pclzip/pclzip": "2.8.2",
+        "chamilo/chash": "dev-master"
     },
     "require-dev": {
         "behat/behat": "@stable",

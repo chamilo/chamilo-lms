@@ -19,8 +19,8 @@ How to setup
 You need :
 
 1. Install the vchamilo package into the <chamiloroot>/plugin directory
-2. Install the plugin in chamilo administration
-3. Insert the virtualisation hook into the chamilo master configuration file:
+2. Install the plugin in Chamilo administration
+3. Insert the virtualization hook into the Chamilo master configuration file:
 
 ```
 <chamiloroot>/app/config/configuration.php

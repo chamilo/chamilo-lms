@@ -2097,17 +2097,21 @@ function get_work_user_list(
                             '.addslashes(get_lang('ClickOrDropOneFileHere')).'
                             '.Display::return_icon('upload_file.png', get_lang('Correction'), [], ICON_SIZE_TINY).'
                         </div>
-
                         <input id="file_'.$item_id.'" type="file" name="file" class="" multiple>
                         </form>
                     ';
 
                     $correction .= "<script>
                     $(document).ready(function() {
+                        $('.work_correction_file_upload').each(function () {
+                            $(this).fileupload({
+                                dropZone: $(this)
+                            });
+                        });
                         $('#file_upload_".$item_id."').fileupload({
                             add: function (e, data) {
                                 $('#progress_$item_id').html();
-                                $('#file_$item_id').remove();
+                                //$('#file_$item_id').remove();
                                 data.context = $('#progress_$item_id').html('$loadingText <br /> <em class=\"fa fa-spinner fa-pulse fa-fw\"></em>');
                                 data.submit();
                             },

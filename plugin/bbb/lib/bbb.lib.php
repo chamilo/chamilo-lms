@@ -97,6 +97,15 @@ class bbb
 
         if ($bbbPluginEnabled === 'true') {
             $userInfo = api_get_user_info();
+            if ($userInfo === false && !empty($isGlobalPerUser)) {
+                // If we are following a link to a global "per user" conference
+                // then generate a random guest name to join the conference
+                // because there is no part of the process where we give a name
+                $this->userCompleteName = 'Guest' . rand(1000,9999);
+            } else {
+                $this->userCompleteName = $userInfo['complete_name'];
+            }
+
             $this->userCompleteName = $userInfo['complete_name'];
             $this->salt = $bbb_salt;
             $info = parse_url($bbb_host);

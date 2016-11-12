@@ -106,7 +106,6 @@ class bbb
                 $this->userCompleteName = $userInfo['complete_name'];
             }
 
-            $this->userCompleteName = $userInfo['complete_name'];
             $this->salt = $bbb_salt;
             $info = parse_url($bbb_host);
             $this->url = $bbb_host.'/bigbluebutton/';

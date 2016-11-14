@@ -1069,7 +1069,6 @@ class Virtual
         }
 
         self::createDirsFromSlug($slug);
-        self::ctrace("Create database");
         $databaseCreated = Virtual::createDatabase($newDatabase);
         if (!$databaseCreated) {
             Display::addFlash(
@@ -1077,6 +1076,10 @@ class Virtual
             );
             return false;
         }
+
+        $coursePath = self::getConfig('vchamilo', 'course_real_root').'/'.$slug;
+        $homePath = self::getConfig('vchamilo', 'home_real_root').'/'.$slug;
+        $uploadPath = self::getConfig('vchamilo', 'upload_real_root').'/'.$slug;
 
         $dumpFile = api_get_path(SYS_ARCHIVE_PATH).uniqid($data->main_database.'_dump_', true).'.sql';
         self::ctrace('Create backup from "'.$data->main_database.'" here: '.$dumpFile.' ');
@@ -1134,10 +1137,6 @@ class Virtual
         if (file_exists($dumpFile)) {
             unlink($dumpFile);
         }
-
-        $coursePath = self::getConfig('vchamilo', 'course_real_root').'/'.$slug;
-        $homePath = self::getConfig('vchamilo', 'home_real_root').'/'.$slug;
-        $uploadPath = self::getConfig('vchamilo', 'upload_real_root').'/'.$slug;
 
         // Course
         self::ctrace("Copy from '$fromCoursePath' to backup '$coursePath' ");

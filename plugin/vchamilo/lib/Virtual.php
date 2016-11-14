@@ -6,6 +6,7 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\StreamOutput;
 use Symfony\Component\Console\Application;
+use Doctrine\ORM\EntityManager;
 
 /**
  * Class Virtual
@@ -607,9 +608,7 @@ class Virtual
         // Make template directory (files and SQL).
         $separator = DIRECTORY_SEPARATOR;
         $templateDir = $_configuration['root_sys'].'plugin'.$separator.'vchamilo'.$separator.'templates'.$separator.$template;
-
         $vchamilo->virtual = true;
-
         $coursePath = self::getConfig('vchamilo', 'course_real_root').$separator.$vchamilo->slug;
         $homePath = self::getConfig('vchamilo', 'home_real_root').$separator.$vchamilo->slug;
         $archivePath = self::getConfig('vchamilo', 'archive_real_root').$separator.$vchamilo->slug;
@@ -1041,7 +1040,7 @@ class Virtual
             );
             return false;
         } else {
-            /** @var \Doctrine\ORM\EntityManager $em */
+            /** @var EntityManager $em */
             $em = Virtual::getConnectionFromInstance($data, true);
             if ($em) {
                 $connection = $em->getConnection();
@@ -1118,7 +1117,7 @@ class Virtual
         $outputStream = new \Symfony\Component\Console\Output\BufferedOutput($tmpFile);
 
         $arguments = array(
-            'from-version' => '1.10.0',
+            'from-version' => '1.10.0', // @todo change value
             'to-version' => '1.11.x',
             'host' => $newDatabase->db_host,
             'username' => $newDatabase->db_user,
@@ -1130,9 +1129,11 @@ class Virtual
         $input = new ArrayInput($arguments);
         $command->run($input, $outputStream);
 
-        Display::addFlash(Display::return_message($outputStream->fetch());
+        Display::addFlash(Display::return_message($outputStream->fetch()));
 
-        @unlink($dumpFile);
+        if (file_exists($dumpFile)) {
+            unlink($dumpFile);
+        }
 
         $coursePath = self::getConfig('vchamilo', 'course_real_root').'/'.$slug;
         $homePath = self::getConfig('vchamilo', 'home_real_root').'/'.$slug;

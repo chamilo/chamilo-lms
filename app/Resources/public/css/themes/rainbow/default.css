@@ -568,6 +568,19 @@ legend{
 #carousel-announcement .carousel-indicators li{
     border: 1px solid #162A83;
 }
+.ofaj-search .text-info{
+    color: #888;
+}
+.ofaj-search .col-sm-8{
+    width: 50.666%;
+}
+.ofaj-search .col-sm-2{
+    width: 17.667%;
+}
+.ofaj-search .col-sm-2.control-label{
+    width: 31.667%;
+    font-weight: normal;
+}
 @media (max-width: 480px) {
     .item-menu{
         width: 100%;

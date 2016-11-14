@@ -1,7 +1,8 @@
-{{ form_search }}
+<div class="ofaj-search">
+    {{ form_search }}
 
-{{ form }}
-
+    {{ form }}
+</div>
 <script>
     $(function() {
         {{ grid_js }}

@@ -77,7 +77,7 @@ foreach ($instances as $instance) {
 
     if (!$instance->visible) {
         $cmd .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="'.$thisurl.'?what=fulldeleteinstances&vids[]='.$instance->id.'" title="'.$plugin->get_lang('destroyinstances').'">
-        &nbsp;'.Display::returnFontAwesomeIcon('remove').' </a>';
+        &nbsp;'.Display::returnFontAwesomeIcon('remove', 2).' </a>';
     } else {
         $cmd .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="'.$thisurl.'?what=deleteinstances&vids[]='.$instance->id.'" title="'.$plugin->get_lang('deleteinstances').'">
          &nbsp;'.Display::returnFontAwesomeIcon('remove', 2).' </a>';

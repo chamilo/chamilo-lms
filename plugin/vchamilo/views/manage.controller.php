@@ -203,7 +203,7 @@ switch ($action) {
             if ($vchamilostep == 1) {
                 // Auto dump the databases in a master template folder.
                 // this will create three files : dump.sql
-                $result = Virtual::dumpDatabase($vchamilo, $absolute_sqldir);
+                $result = Virtual::backupDatabase($vchamilo, $absolute_sqldir);
 
                 if (empty($fullautomation)) {
                     if (!$result) {

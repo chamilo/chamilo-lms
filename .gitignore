@@ -42,6 +42,7 @@ plugin/bbb/config.vm.php
 
 # Cron temp files
 main/cron/incoming/*
+plugin/vchamilo/templates/*
 
 # Stuff updated through composer - Remove just before release
 composer.lock

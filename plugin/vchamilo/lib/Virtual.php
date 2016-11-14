@@ -3,6 +3,9 @@
 
 use Cocur\Slugify\Slugify;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\StreamOutput;
+use Symfony\Component\Console\Application;
 
 /**
  * Class Virtual
@@ -268,13 +271,31 @@ class Virtual
         $databaseToDelete = $params->main_database;
         unset($params->main_database);
         $connection = self::getConnectionFromInstance($params);
-        $databases = $connection->getSchemaManager()->listDatabases();
+        if ($connection) {
+            $databases = $connection->getSchemaManager()->listDatabases();
 
-        if (in_array($databaseToDelete, $databases)) {
-            $connection->getSchemaManager()->dropDatabase($databaseToDelete);
-            Display::addFlash(Display::return_message('Database deleted: '.$databaseToDelete));
+            if (in_array($databaseToDelete, $databases)) {
+                $connection->getSchemaManager()->dropDatabase(
+                    $databaseToDelete
+                );
+                Display::addFlash(
+                    Display::return_message(
+                        'Database deleted: '.$databaseToDelete
+                    )
+                );
+            } else {
+                Display::addFlash(
+                    Display::return_message(
+                        'Database does not exist: '.$databaseToDelete
+                    )
+                );
+            }
         } else {
-            Display::addFlash(Display::return_message('Database does not exist: '.$databaseToDelete));
+            Display::addFlash(
+                Display::return_message(
+                    "Cannot connect DB: $databaseToDelete"
+                )
+            );
         }
 
         return false;
@@ -291,21 +312,28 @@ class Virtual
         unset($params->main_database);
 
         $connection = Virtual::getConnectionFromInstance($params);
-        $databaseList = $connection->getSchemaManager()->listDatabases();
+        if ($connection) {
+            $databaseList = $connection->getSchemaManager()->listDatabases();
 
-        if (!in_array($databaseName, $databaseList)) {
-            $connection->getSchemaManager()->createDatabase($databaseName);
-            Display::addFlash(Display::return_message("Creating DB ".$databaseName));
-        } else {
-            Display::addFlash(Display::return_message("DB already exists: ".$databaseName));
+            if (!in_array($databaseName, $databaseList)) {
+                $connection->getSchemaManager()->createDatabase($databaseName);
+                Display::addFlash(
+                    Display::return_message("Creating DB ".$databaseName)
+                );
+            } else {
+                Display::addFlash(
+                    Display::return_message("DB already exists: ".$databaseName)
+                );
+            }
+
+            return true;
         }
-
-        return true;
+        return false;
     }
 
     /**
     * get a proper SQLdump command
-    * @param object $vmoodledata the complete new host information
+    * @param object $vchamilodata the complete new host information
     * @return string the shell command
     */
     public static function getDatabaseDumpCmd($vchamilodata)
@@ -327,17 +355,21 @@ class Virtual
         // Retrieves the host configuration (more secure).
         $vchamilodata = empty($vchamilodata) ? Virtual::makeThis() : $vchamilodata;
         if (strstr($vchamilodata->db_host, ':') !== false) {
-            list($vchamilodata->db_host, $vchamilodata->db_port) = explode(':', $vchamilodata->db_host);
+            list($vchamilodata->db_host, $vchamilodata->db_port) = explode(
+                ':',
+                $vchamilodata->db_host
+            );
         }
 
         // Password.
+        $databasePassword = '';
         if (!empty($vchamilodata->db_password)) {
-            $vchamilodata->db_password = '-p'.escapeshellarg($vchamilodata->db_password).' ';
+            $databasePassword = '-p'.escapeshellarg($vchamilodata->db_password).' ';
         }
 
         // Making the command line (see 'vconfig.php' file for defining the right paths).
         $sqlcmd = $pgm.' -h'.$vchamilodata->db_host.(isset($vchamilodata->db_port) ? ' -P'.$vchamilodata->db_port.' ' : ' ' );
-        $sqlcmd .= '-u'.$vchamilodata->db_user.' '.$vchamilodata->db_password;
+        $sqlcmd .= '-u'.$vchamilodata->db_user.' '.$databasePassword;
         $sqlcmd .= '%DATABASE% < ';
 
         return $sqlcmd;
@@ -384,12 +416,12 @@ class Virtual
     }
 
     /**
-     * Dumps a SQL database for having a snapshot.
+     * Backups a database for having a snapshot.
      * @param        $vchamilo    object        The Vchamilo object.
      * @param        $outputfilerad    string        The output SQL file radical.
      * @return        bool    If TRUE, dumping database was a success, otherwise FALSE.
      */
-    public static function dumpDatabase($vchamilo, $outputfilerad)
+    public static function backupDatabase($vchamilo, $outputfilerad)
     {
         // Separating host and port, if sticked.
         if (strstr($vchamilo->db_host, ':') !== false) {
@@ -449,19 +481,9 @@ class Virtual
             foreach ($cmds as $cmd) {
                 // Final command.
                 $cmd = $pgm.' '.$cmd;
-                // Prints log messages in the page and in 'cmd.log'.
-                /*if ($LOG = fopen(dirname($outputfilerad).'/cmd.log', 'a')){
-                    fwrite($LOG, $cmd."\n");
-                }*/
 
                 // Executes the SQL command.
                 exec($cmd, $execoutput, $returnvalue);
-
-                /*if ($LOG){
-                    foreach($execoutput as $execline) fwrite($LOG, $execline."\n");
-                    fwrite($LOG, $returnvalue."\n");
-                    fclose($LOG);
-                }*/
             }
         }
 
@@ -651,6 +673,7 @@ class Virtual
      */
     public static function ctrace($str)
     {
+        error_log($str);
         Display::addFlash(Display::return_message($str, 'normal', false));
     }
 
@@ -826,10 +849,8 @@ class Virtual
             }
 
             return $manager->getConnection();
-
         } catch (Exception $e) {
             echo $e->getMessage();
-            exit;
         }
     }
 
@@ -1020,16 +1041,24 @@ class Virtual
             );
             return false;
         } else {
-            $connection = Virtual::getConnectionFromInstance($data);
-            $statement = $connection->query('SELECT * FROM settings_current');
-            $settings = $statement->fetchAll();
-            $settings = array_column($settings, 'selected_value', 'variable');
-            $institution = $settings['Institution'];
-            $siteName = $settings['siteName'];
-            $newDatabase->sitename = $siteName;
-            $newDatabase->institution = $institution;
-            $slug = $newDatabase->slug = $data->slug = Virtual::getSlugFromUrl($data->root_web);
-            $id = Database::insert($table, (array) $newDatabase);
+            /** @var \Doctrine\ORM\EntityManager $em */
+            $em = Virtual::getConnectionFromInstance($data, true);
+            if ($em) {
+                $connection = $em->getConnection();
+                $statement = $connection->query('SELECT * FROM settings_current');
+                $settings = $statement->fetchAll();
+                $settings = array_column(
+                    $settings,
+                    'selected_value',
+                    'variable'
+                );
+                $institution = $settings['Institution'];
+                $siteName = $settings['siteName'];
+                $newDatabase->sitename = $siteName;
+                $newDatabase->institution = $institution;
+                $slug = $newDatabase->slug = $data->slug = Virtual::getSlugFromUrl($data->root_web);
+                $id = Database::insert($table, (array)$newDatabase);
+            }
         }
 
         if (!$id) {
@@ -1042,13 +1071,17 @@ class Virtual
 
         self::createDirsFromSlug($slug);
         self::ctrace("Create database");
-        Virtual::createDatabase($newDatabase);
+        $databaseCreated = Virtual::createDatabase($newDatabase);
+        if (!$databaseCreated) {
+            Display::addFlash(
+                Display::return_message('Error while creating a DB', 'error')
+            );
+            return false;
+        }
 
         $dumpFile = api_get_path(SYS_ARCHIVE_PATH).uniqid($data->main_database.'_dump_', true).'.sql';
-
         self::ctrace('Create backup from "'.$data->main_database.'" here: '.$dumpFile.' ');
-
-        Virtual::dumpDatabase($data, $dumpFile);
+        Virtual::backupDatabase($data, $dumpFile);
 
         $sqlcmd = Virtual::getDatabaseDumpCmd($newDatabase);
         $sqlcmd = str_replace('%DATABASE%', $newDatabase->main_database, $sqlcmd);
@@ -1058,16 +1091,46 @@ class Virtual
         if (!defined('CLI_SCRIPT')) {
             putenv('LANG=en_US.utf-8');
         }
+
         // ensure utf8 is correctly handled by php exec()
         // @see http://stackoverflow.com/questions/10028925/call-a-program-via-shell-exec-with-utf-8-text-input
-
-        exec($import, $output, $return);
+        $result = exec($import, $output, $return);
 
         self::ctrace('Restore backup here "'.$newDatabase->main_database.'" : <br />'.$import.' ');
+        self::ctrace($result);
 
-        if (!empty($output)) {
-            Display::addFlash(Display::return_message(implode("\n", $output)."\n"));
+        $command = new \Chash\Command\Installation\UpgradeDatabaseCommand();
+        // Creates the helper set
+        $helperSet = \Doctrine\ORM\Tools\Console\ConsoleRunner::createHelperSet($em);
+
+        $helpers = array(
+            'configuration' => new Chash\Helpers\ConfigurationHelper(),
+            'dialog' => new \Symfony\Component\Console\Helper\QuestionHelper(),
+        );
+
+        foreach ($helpers as $name => $helper) {
+            $helperSet->set($helper, $name);
         }
+
+        $command->setHelperSet($helperSet);
+
+        $tmpFile = tmpfile();
+        $outputStream = new \Symfony\Component\Console\Output\BufferedOutput($tmpFile);
+
+        $arguments = array(
+            'from-version' => '1.10.0',
+            'to-version' => '1.11.x',
+            'host' => $newDatabase->db_host,
+            'username' => $newDatabase->db_user,
+            'password' => $newDatabase->db_password,
+            'db_name' => $newDatabase->main_database,
+            'root_sys' => api_get_configuration_value('root_sys')
+        );
+
+        $input = new ArrayInput($arguments);
+        $command->run($input, $outputStream);
+
+        Display::addFlash(Display::return_message($outputStream->fetch());
 
         @unlink($dumpFile);
 

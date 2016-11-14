@@ -21,7 +21,7 @@ $plugin_info['title'] = 'Chamilo Virtualization';
 //the comments that go with the plugin
 $plugin_info['comment'] = "Holds chamilo virtualisation tools";
 //the plugin version
-$plugin_info['version'] = '1.0';
+$plugin_info['version'] = '1.2';
 //the plugin author
 $plugin_info['author'] = 'Valery Fremaux, Julio Montoya';
 

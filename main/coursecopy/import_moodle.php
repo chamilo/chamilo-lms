@@ -51,16 +51,14 @@ if ($form->validate()) {
     }
 }
 
-$templateName = get_lang('ImportFromMoodle');
-
-$template = new Template($templateName);
+$template = new Template(get_lang('ImportFromMoodle'));
 $infoMsg = Display::return_message(get_lang('ImportFromMoodleInstructions'), 'normal', false);
 $template->assign('info_msg', $infoMsg);
 $template->assign('form', $form->returnForm());
 $templateName = $template->get_template('coursecopy/import_moodle.tpl');
 $content = $template->fetch($templateName);
 
-$template->assign('header', $templateName);
+$template->assign('header', get_lang('ImportFromMoodle'));
 $template->assign('content', $content);
 
 $template->display_one_col_template();

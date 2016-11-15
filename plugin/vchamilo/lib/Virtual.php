@@ -1132,7 +1132,7 @@ class Virtual
         $input = new ArrayInput($arguments);
         $command->run($input, $outputStream);
 
-        Display::addFlash(Display::return_message($outputStream->fetch()));
+        error_log($outputStream->fetch());
 
         if (file_exists($dumpFile)) {
             unlink($dumpFile);

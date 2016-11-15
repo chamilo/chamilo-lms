@@ -145,6 +145,8 @@ if ($form->validate()) {
         $vchamilo->upload_path = $values['upload_path'];
 
         Virtual::importInstance($vchamilo);
+
+        Virtual::redirect(api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php');
     }
 }
 

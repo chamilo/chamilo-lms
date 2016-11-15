@@ -25,7 +25,7 @@ require_once 'database.constants.inc.php';
  *	@package chamilo.library
  */
 class MySQLIDatabase {
-    
+
     /* Variable use only in the installation process to log errors. See the Database::query function */
     static $log_queries = false;
 
@@ -424,7 +424,7 @@ class MySQLIDatabase {
             ? new mysqli('p:'.$parameters['server'], $parameters['username'], $parameters['password'])
             : new mysqli($parameters['server'], $parameters['username'], $parameters['password']);
         if ($database_connection->connect_errno) {
-            error_log($database_connection->connect_errno());
+
             return false;
         } else {
             return true;
@@ -438,7 +438,7 @@ class MySQLIDatabase {
      */
     public static function errno($connection = null)
     {
-        return self::use_default_connection($connection) ? mysqli::mysqli_errno() : mysqli::mysqli_errno($connection);
+        return self::use_default_connection($connection) ? mysqli_connect_error() : mysqli_connect_error($connection);
     }
 
     /**
@@ -448,7 +448,7 @@ class MySQLIDatabase {
      */
     public static function error($connection = null)
     {
-        return self::use_default_connection($connection) ? mysqli::mysqli_error() : mysqli::mysqli_error($connection);
+        return self::use_default_connection($connection) ? mysqli_connect_error() : mysqli_connect_error($connection);
     }
 
     /**
@@ -595,7 +595,7 @@ class MySQLIDatabase {
      */
     public function get_host_info($connection = null)
     {
-        return self::use_default_connection($connection) ? mysqli::mysqli_get_host_info() : mysqli::mysqli_get_host_info($connection);
+        return self::use_default_connection($connection) ? mysqli_get_host_info() : mysqli_get_host_info($connection);
     }
 
     /**
@@ -605,7 +605,7 @@ class MySQLIDatabase {
      */
     public function get_proto_info($connection = null)
     {
-        return self::use_default_connection($connection) ? mysqli::mysqli_get_proto_info() : mysqli::mysqli_get_proto_info($connection);
+        return self::use_default_connection($connection) ? mysqli_get_proto_info() : mysqli_get_proto_info($connection);
     }
 
     /**
@@ -615,7 +615,7 @@ class MySQLIDatabase {
      */
     public function get_server_info($connection = null)
     {
-        return self::use_default_connection($connection) ? mysqli::mysqli_get_server_info() : mysqli::mysqli_get_server_info($connection);
+        return self::use_default_connection($connection) ? mysqli_get_server_info() : mysqli_get_server_info($connection);
     }
 
     /**
@@ -713,7 +713,7 @@ class MySQLIDatabase {
     public static function query($query, $connection = null, $file = null, $line = null)
     {
         global $database_connection;
-        
+
         $result = @$database_connection->query($query);
         if ($database_connection->errno) {
             $backtrace = debug_backtrace(); // Retrieving information about the caller statement.
@@ -760,19 +760,19 @@ class MySQLIDatabase {
                 $info .= '</pre>';
                 echo $info;
             }
-            
+
             if (isset(self::$log_queries) && self::$log_queries) {
                 error_log("----------------  SQL error ---------------- ");
                 error_log($query);
-                
+
                 error_log('error #'.self::errno($connection));
                 error_log('error: '.self::error($connection));
-                
+
                 $info = 'FILE: ' .(empty($file) ? ' unknown ' : $file);
                 error_log($info);
                 $info = 'LINE: '.(empty($line) ? ' unknown ' : $line);
                 error_log($info);
-                
+
                 if (empty($type)) {
                     if (!empty($function)) {
                         $info = 'FUNCTION: ' . $function;
@@ -788,7 +788,7 @@ class MySQLIDatabase {
                 }
                 error_log("---------------- end ----------------");
             }
-            
+
         }
         return $result;
     }
@@ -1209,20 +1209,20 @@ class MySQLIDatabase {
                             $value_array = Database::escape_string($value_array);
                             $clean_values = $value_array;
                         }
-                        if (!empty($condition) && $clean_values != '') {                                                                                      
+                        if (!empty($condition) && $clean_values != '') {
                             $condition = str_replace('%',"'@percentage@'", $condition); //replace "%"
                             $condition = str_replace("'?'","%s", $condition);
                             $condition = str_replace("?","%s", $condition);
-                            
+
                             $condition = str_replace("@%s@","@-@", $condition);
                             $condition = str_replace("%s","'%s'", $condition);
                             $condition = str_replace("@-@","@%s@", $condition);
-                            
-                            //Treat conditons as string                            
-                            $condition = vsprintf($condition, $clean_values);                                                        
-                            $condition = str_replace('@percentage@','%', $condition); //replace "%"                            
+
+                            //Treat conditons as string
+                            $condition = vsprintf($condition, $clean_values);
+                            $condition = str_replace('@percentage@','%', $condition); //replace "%"
                             $where_return .= $condition;
-                        }                 
+                        }
                     }
                     if (!empty($where_return)) {
                         $return_value = " WHERE $where_return" ;
@@ -1230,11 +1230,11 @@ class MySQLIDatabase {
                 break;
                 case 'order':
                     $order_array = $condition_data;
-                    
+
                     if (!empty($order_array)) {
                         // 'order' => 'id desc, name desc'
                         $order_array = self::escape_string($order_array);
-                        $new_order_array = explode(',', $order_array);                            
+                        $new_order_array = explode(',', $order_array);
                         $temp_value = array();
 
                         foreach($new_order_array as $element) {
@@ -1247,19 +1247,19 @@ class MySQLIDatabase {
                                 $order = 'DESC';
                                 if (in_array($element[1], array('desc', 'asc'))) {
                                     $order = $element[1];
-                                }                            
-                                $temp_value[]= $element[0].' '.$order.' ';                                       
+                                }
+                                $temp_value[]= $element[0].' '.$order.' ';
                             } else {
                                 //by default DESC
-                                $temp_value[]= $element[0].' DESC ';                                       
+                                $temp_value[]= $element[0].' DESC ';
                             }
                         }
                         if (!empty($temp_value)) {
-                            $return_value .= ' ORDER BY '.implode(', ', $temp_value);                                
+                            $return_value .= ' ORDER BY '.implode(', ', $temp_value);
                         } else {
                             //$return_value .= '';
-                        }                        
-                    }                                        
+                        }
+                    }
                     break;
 
                 case 'limit':
@@ -1291,7 +1291,7 @@ class MySQLIDatabase {
     {
         $result = false;
         $where_return = self::parse_where_conditions($where_conditions);
-        $sql    = "DELETE FROM $table_name $where_return ";        
+        $sql    = "DELETE FROM $table_name $where_return ";
         $result = self::query($sql);
         $affected_rows = self::affected_rows();
         //@todo should return affected_rows for

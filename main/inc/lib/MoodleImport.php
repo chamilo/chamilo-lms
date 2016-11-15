@@ -32,7 +32,12 @@ class MoodleImport
             }
 
             if (!$mainFileKey) {
-                Display::addFlash(Display::return_message(get_lang('FailedToImportThisIsNotAMoodleFile'), 'error'));
+                Display::addFlash(
+                    Display::return_message(
+                        get_lang('FailedToImportThisIsNotAMoodleFile'),
+                        'error'
+                    )
+                );
             }
 
             $folder = api_get_unique_id();
@@ -45,7 +50,7 @@ class MoodleImport
 
             mkdir($destinationDir, api_get_permissions_for_new_directories(), true);
 
-            $newFolderData = create_unexisting_directory(
+            create_unexisting_directory(
                 $courseInfo,
                 api_get_user_id(),
                 $sessionId,
@@ -90,7 +95,7 @@ class MoodleImport
                                 // Create a Forum category based on Moodle forum type.
                                 $catForumValues['forum_category_title'] = $moduleValues['type'];
                                 $catForumValues['forum_category_comment'] = '';
-                                $catId = store_forumcategory($catForumValues, [], false);
+                                $catId = store_forumcategory($catForumValues, $courseInfo, false);
                                 $forumValues = [];
                                 $forumValues['forum_title'] = $moduleValues['name'];
                                 $forumValues['forum_image'] = '';
@@ -98,10 +103,9 @@ class MoodleImport
                                 $forumValues['forum_category'] = $catId;
                                 $forumValues['moderated'] = 0;
 
-                                store_forum($forumValues);
+                                store_forum($forumValues, $courseInfo);
                                 break;
                             case 'quiz':
-
                                 // Read the current quiz module xml.
                                 // The quiz case is the very complicate process of all the import.
                                 // Please if you want to review the script, try to see the readingXML functions.
@@ -117,7 +121,7 @@ class MoodleImport
                                 // var_dump($moduleValues); // <-- uncomment this to see the final array
 
                                 // Lets do this ...
-                                $exercise = new Exercise();
+                                $exercise = new Exercise($courseInfo['real_id']);
                                 $exercise->updateTitle(Exercise::format_title_variable($moduleValues['name']));
                                 $exercise->updateDescription($moduleValues['intro']);
                                 $exercise->updateAttempts($moduleValues['attempts_number']);
@@ -177,7 +181,7 @@ class MoodleImport
                                         $questionList = $moduleValues['question_instances'][$index]['plugin_qtype_'.$qType.'_question'];
                                         $currentQuestion = $moduleValues['question_instances'][$index];
 
-                                        $result = $this->processAnswers($questionList, $qType, $questionInstance, $currentQuestion);
+                                        $this->processAnswers($questionList, $qType, $questionInstance, $currentQuestion);
                                     }
                                 }
 
@@ -337,6 +341,7 @@ class MoodleImport
             }
 
             $currentItem['contextid'] = $contextId;
+
             return $currentItem;
         }
 
@@ -464,7 +469,7 @@ class MoodleImport
     }
 
     /**
-     * Search the current quiestion resource in main Questions XML
+     * Search the current question resource in main Questions XML
      *
      * @param resource $questionsXml XML file
      * @param int $questionId
@@ -617,13 +622,9 @@ class MoodleImport
                 break;
             case 'multianswer':
                 $objAnswer = new Answer($questionInstance->id);
-
                 $coursePath = api_get_course_path();
-
                 $placeholder = str_replace('@@PLUGINFILE@@', '/courses/' . $coursePath . '/document/moodle', $currentQuestion['questiontext']);
-
                 $optionsValues = [];
-
                 foreach ($questionList as $slot => $subQuestion) {
                     $qtype = $subQuestion['qtype'];
                     $optionsValues[] = $this->processFillBlanks($objAnswer, $qtype, $subQuestion['plugin_qtype_'.$qtype.'_question'], $placeholder, $slot + 1);
@@ -794,13 +795,11 @@ class MoodleImport
      */
     public function processFillBlanks($objAnswer, $questionType, $answerValues, &$placeholder, $position)
     {
-
         $coursePath = api_get_course_path();
 
         switch ($questionType) {
             case 'multichoice':
                 $optionsValues = [];
-
                 $correctAnswer = '';
                 $othersAnswer = '';
                 foreach ($answerValues as $answer) {
@@ -818,13 +817,10 @@ class MoodleImport
                 $placeholder = str_replace("{#$position}", $currentAnswers, $placeholder);
 
                 return $optionsValues;
-
                 break;
             case 'shortanswer':
                 $optionsValues = [];
-
                 $correctAnswer = '';
-
                 foreach ($answerValues as $answer) {
                     $correct = intval($answer['fraction']);
                     if ($correct) {
@@ -838,7 +834,6 @@ class MoodleImport
                 $placeholder = str_replace("{#$position}", $currentAnswers, $placeholder);
 
                 return $optionsValues;
-
                 break;
             case 'match':
                 $answers = [];
@@ -893,7 +888,6 @@ class MoodleImport
         if ($moduleRes) {
             $activities = $moduleDoc->getElementsByTagName('file');
             foreach ($activities as $activity) {
-
                 $currentItem = [];
                 $thisIsAnInvalidItem = false;
 
@@ -953,5 +947,4 @@ class MoodleImport
             }
         }
     }
-
 }

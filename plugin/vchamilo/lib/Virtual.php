@@ -16,7 +16,7 @@ class Virtual
     /**
      * @param array $_configuration
      */
-    public static function hookConfiguration(&$_configuration)
+    public static function hookConfiguration(& $_configuration)
     {
         global $virtualChamilo;
 
@@ -55,6 +55,7 @@ class Virtual
             $coursePath = '';
             $archivePath = '';
             $uploadPath = '';
+            $passwordEncryption = '';
 
             foreach ($virtualSettings as $setting) {
                 switch ($setting['variable']) {
@@ -69,6 +70,9 @@ class Virtual
                         break;
                     case 'vchamilo_archive_real_root':
                         $archivePath = $setting['selected_value'];
+                        break;
+                    case 'vchamilo_password_encryption':
+                        $passwordEncryption = $setting['selected_value'];
                         break;
                 }
             }
@@ -91,6 +95,10 @@ class Virtual
                 $data['SYS_HOME_PATH'] = $homePath.'/'.$data['slug'];
                 $data['SYS_COURSE_PATH'] = $coursePath.'/'.$data['slug'];
                 $data['SYS_UPLOAD_PATH'] = $uploadPath.'/'.$data['slug'];
+
+                if (!empty($passwordEncryption)) {
+                    $_configuration['password_encryption'] = $passwordEncryption;
+                }
 
                 $virtualChamilo = $data;
             } else {
@@ -1275,5 +1283,22 @@ class Virtual
 
         return false;
     }
+
+    /**
+     * @return array
+     */
+    public static function getEncryptList()
+    {
+        $encryptList = [
+            'bcrypt',
+            'sha1',
+            'md5',
+            'none'
+        ];
+
+        return array_combine($encryptList, $encryptList);
+    }
+
+
 }
 

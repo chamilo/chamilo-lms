@@ -6,6 +6,20 @@ Authors : Valery Fremaux (valery.fremaux@gmail.com), Julio Montoya
 Virtual chamilo is a feature that allows running several chamilo instances sharing the same
 code base.
 
+Changelog
+=========
+
+Version 1.4
+
+Database upgrade needed: 
+
+ALTER TABLE vchamilo ADD COLUMN password_encryption VARCHAR(255);
+
+Version 1.3
+
+Add vchamilo import
+
+
 Version features
 ===================
 This is a yet prototypal version that is not full featured in back-office tools.

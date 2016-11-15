@@ -16,7 +16,7 @@ class VChamiloPlugin extends Plugin
      */
     public function __construct()
     {
-        parent::__construct('1.3', 'Valery Fremaux, Julio Montoya');
+        parent::__construct('1.4', 'Valery Fremaux, Julio Montoya');
     }
 
     /**

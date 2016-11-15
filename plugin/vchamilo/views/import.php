@@ -45,6 +45,14 @@ $form->addText(
     true
 );
 
+$encryptList = Virtual::getEncryptList();
+
+$form->addSelect(
+    'password_encryption',
+    get_lang('EncryptMethodUserPass'),
+    $encryptList
+);
+
 $form->addText(
     'course_path',
     [
@@ -143,6 +151,7 @@ if ($form->validate()) {
         $vchamilo->course_path = $values['course_path'];
         $vchamilo->home_path = $values['home_path'];
         $vchamilo->upload_path = $values['upload_path'];
+        $vchamilo->password_encryption = $values['password_encryption'];
 
         Virtual::importInstance($vchamilo);
 

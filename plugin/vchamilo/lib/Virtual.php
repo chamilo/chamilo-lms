@@ -975,8 +975,9 @@ class Virtual
 
     /**
      * @param stdClass $data
+     * @param string $fromVersion
      */
-    public static function importInstance($data)
+    public static function importInstance($data, $fromVersion)
     {
         if (isset($data->what)) {
             unset($data->what);
@@ -1069,6 +1070,7 @@ class Virtual
         }
 
         if (!$id) {
+            var_dump($data);
             throw new Exception('Was not registered');
         }
 
@@ -1128,7 +1130,7 @@ class Virtual
         $outputStream = new \Symfony\Component\Console\Output\BufferedOutput($tmpFile);
 
         $arguments = array(
-            'from-version' => '1.10.0', // @todo change value
+            'from-version' => $fromVersion, // @todo change value
             'to-version' => '1.11.x',
             'host' => $newDatabase->db_host,
             'username' => $newDatabase->db_user,

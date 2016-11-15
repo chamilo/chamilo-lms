@@ -53,6 +53,21 @@ $form->addSelect(
     $encryptList
 );
 
+$encryptList = Virtual::getEncryptList();
+
+$versionList = [
+    '1.11.x',
+    '1.10.x',
+    //'1.9.x'
+];
+
+$form->addSelect(
+    'version',
+    get_lang('FromVersion'),
+    array_combine($versionList, $versionList)
+);
+
+
 $form->addText(
     'course_path',
     [
@@ -153,7 +168,7 @@ if ($form->validate()) {
         $vchamilo->upload_path = $values['upload_path'];
         $vchamilo->password_encryption = $values['password_encryption'];
 
-        Virtual::importInstance($vchamilo);
+        Virtual::importInstance($vchamilo, $values['version']);
 
         Virtual::redirect(api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php');
     }

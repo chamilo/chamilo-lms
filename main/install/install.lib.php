@@ -2776,7 +2776,7 @@ function finishInstallation(
     updateDirAndFilesPermissions();
 
     // Set the latest version
-    $path = api_get_path(SYS_PATH).'app/Migrations/Schema/V111/';
+    $path = $sysPath.'app/Migrations/Schema/V111/';
     $finder = new \Symfony\Component\Finder\Finder();
     $files = $finder->files()->in($path);
     foreach ($files as $version) {

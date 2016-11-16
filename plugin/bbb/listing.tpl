@@ -46,6 +46,8 @@
                     {% if meeting.record == 1 %}
                         {# Record list #}
                         {{ meeting.show_links }}
+                    {% else %}
+                        {{ 'NoRecording'|get_lang }}
                     {% endif %}
                 </td>
 

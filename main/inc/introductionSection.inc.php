@@ -96,7 +96,6 @@ if ($intro_editAllowed) {
                 }
                 Database::getManager()->persist($toolIntro);
                 Database::getManager()->flush();
-
                 Display::addFlash(
                     Display::return_message(
                         get_lang('IntroductionTextUpdated'),
@@ -164,10 +163,9 @@ if (!empty($session_id)) {
     }
 }
 
-$intro_content = Security::remove_XSS($intro_content);
+$intro_content = Security::remove_XSS($intro_content, COURSEMANAGER);
 
 /* Determines the correct display */
-
 if ($intro_cmdEdit || $intro_cmdAdd) {
     $intro_dispDefault = false;
     $intro_dispForm = true;
@@ -190,7 +188,7 @@ if ($intro_dispForm) {
     $default['intro_content'] = $intro_content;
     $form->setDefaults($default);
     $introduction_section .= '<div id="courseintro" style="width: 98%">';
-    $introduction_section .= $form->return_form();
+    $introduction_section .= $form->returnForm();
     $introduction_section .= '</div>';
 }
 
@@ -209,7 +207,7 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
         $thematic_advance_info = $thematic->get_thematic_advance_list($last_done_advance);
         $subTitle1 = get_lang('CurrentTopic');
         $class1 = ' current';
-    } else if($displayMode == '2') {
+    } else if ($displayMode == '2') {
         // Show only the two next course progress steps
         // $information_title = get_lang('InfoAboutNextAdvanceNotDone');
         $last_done_advance = $thematic->get_next_thematic_advance_not_done();
@@ -217,7 +215,7 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
         $thematic_advance_info = $thematic->get_thematic_advance_list($last_done_advance);
         $thematic_advance_info2 = $thematic->get_thematic_advance_list($next_advance_not_done);
         $subTitle1 = $subTitle2 = get_lang('NextTopic');
-    } else if($displayMode == '3') {
+    } else if ($displayMode == '3') {
         // Show the current and next course progress steps
         // $information_title = get_lang('InfoAboutLastDoneAdvanceAndNextAdvanceNotDone');
         $last_done_advance =  $thematic->get_last_done_thematic_advance();
@@ -232,8 +230,7 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
     if (!empty($thematic_advance_info)) {
         $thematic_advance = get_lang('CourseThematicAdvance');
         $thematicScore = $thematic->get_total_average_of_thematic_advances() . '%';
-        $thematicUrl = api_get_path(WEB_CODE_PATH) .
-            'course_progress/index.php?action=thematic_details&'.api_get_cidreq();
+        $thematicUrl = api_get_path(WEB_CODE_PATH).'course_progress/index.php?action=thematic_details&'.api_get_cidreq();
         $thematic_info = $thematic->get_thematic_list(
             $thematic_advance_info['thematic_id']
         );
@@ -283,8 +280,6 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
                     </div>
                 </div>';
         }
-
-
         $thematicPanel = '<div class="row">';
         $thematicPanel .= '<div class="col-md-2">' . $infoUser . '</div>';
         $thematicPanel .= '<div class="col-md-10"><div class="row">' . $thematicItemOne . $thematicItemTwo . '</div></div>';

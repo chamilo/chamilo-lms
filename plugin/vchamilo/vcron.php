@@ -1,4 +1,5 @@
 <?php
+exit;
 /**
  * This file is a cron microclock script.
  * It will be used as replacement of setting individual

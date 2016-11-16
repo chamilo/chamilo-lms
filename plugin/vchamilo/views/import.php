@@ -58,7 +58,7 @@ $encryptList = Virtual::getEncryptList();
 $versionList = [
     '1.11.x',
     '1.10.x',
-    //'1.9.x'
+    '1.9.x'
 ];
 
 $form->addSelect(

@@ -6298,7 +6298,7 @@ $server->register(
  * Web service to get a session list filtered by name, description or short description extra field
  * @param array $params Contains the following parameters
  *   string $params['term'] Search term
- *   string $params['extra_fields'] Extrafields to include in request result
+ *   string $params['extrafields'] Extrafields to include in request result
  *   string $params['secret_key'] Secret key to check
  * @return array The list
  */

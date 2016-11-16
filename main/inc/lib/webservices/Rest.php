@@ -508,7 +508,7 @@ class Rest extends WebService
                 'title' => $forumInfo['forum_title'],
                 'description' => $forumInfo['forum_comment'],
                 'image' => $forumInfo['forum_image'] ? ($webCoursePath . $forumInfo['forum_image']) : '',
-                'numberOfThreads' => intval($forumInfo['number_of_threads']),
+                'numberOfThreads' => isset($forumInfo['number_of_threads']) ? intval($forumInfo['number_of_threads']) : 0,
                 'lastPost' => null
             ];
 

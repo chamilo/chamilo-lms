@@ -2083,14 +2083,13 @@ function get_work_user_list(
                         <form
                             id="file_upload_'.$item_id.'"
                             class="work_correction_file_upload file_upload_small fileinput-button"
-                            action="'.api_get_path(WEB_AJAX_PATH).'work.ajax.php?'.api_get_cidreq().'&a=upload_correction_file&item_id='.$item_id.'" method="POST" enctype="multipart/form-data"
+                            action="'.api_get_path(WEB_AJAX_PATH).'work.ajax.php?'.api_get_cidreq().'&a=upload_correction_file&item_id='.$item_id.'" method="POST" enctype="multipart/form-data"                            
                         >
                         <div id="progress_'.$item_id.'" class="text-center button-load">
                             '.addslashes(get_lang('ClickOrDropOneFileHere')).'
                             '.Display::return_icon('upload_file.png', get_lang('Correction'), [], ICON_SIZE_TINY).'
                         </div>
-                        <input type="file" name="file" multiple>
-                        <button type="submit"></button>
+                        <input id="file_'.$item_id.'" type="file" name="file" multiple>                        
                         </form>
                     ';
 
@@ -2101,10 +2100,16 @@ function get_work_user_list(
 
                     $correction .= "<script>
                         $(document).ready(function() {
+                            $('.work_correction_file_upload').each(function () {
+                                $(this).fileupload({
+                                    dropZone: $(this)
+                                });
+                            });
                             $('#file_upload_".$item_id."').fileupload({
                                 add: function (e, data) {
                                     $('#progress_$item_id').html();
-                                    $('#file_$item_id').remove();
+                                    //$('#file_$item_id').remove();
+                                    console.log('#file_upload_".$item_id."');
                                     data.context = $('#progress_$item_id').html('$loadingText <br /> <em class=\"fa fa-spinner fa-pulse fa-fw\"></em>');
                                     data.submit();
                                 },

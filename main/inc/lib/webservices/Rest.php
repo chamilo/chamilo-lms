@@ -415,10 +415,12 @@ class Rest extends WebService
         $agenda->setType('course');
         $result = $agenda->parseAgendaFilter(null);
 
-        $start = new DateTime('now');
-        $start->modify('first day of month');
-        $end = new DateTime('now');
-        $end->modify('first day of month');
+        $start = new DateTime(api_get_utc_datetime(), new DateTimeZone('UTC'));
+        $start->modify('first day of this month');
+        $start->setTime(0, 0, 0);
+        $end = new DateTime(api_get_utc_datetime(), new DateTimeZone('UTC'));
+        $end->modify('last day of this month');
+        $end->setTime(23, 59, 59);
 
         $groupId = current($result['groups']);
         $userId = current($result['users']);

@@ -487,8 +487,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                     }
 
                     header(
-                        'Location: '.api_get_path(WEB_PATH)
-                        .'index.php?loginFailed=1&error=user_password_incorrect'
+                        'Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=user_password_incorrect'
                     );
                     exit;
                 }

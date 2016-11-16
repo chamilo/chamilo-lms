@@ -86,7 +86,6 @@ $searchFormToString = '';
 switch ($action) {
     case 'move':
         /* Move announcement up/down */
-
         if (!empty($_GET['down'])) {
             $thisAnnouncementId = intval($_GET['down']);
             $sortDirection = "DESC";
@@ -105,15 +104,15 @@ switch ($action) {
             $announcementInfo = AnnouncementManager::get_by_id($course_id, $thisAnnouncementId);
 
             $sql = "SELECT DISTINCT announcement.id, announcement.display_order
-                FROM $tbl_announcement announcement,
-				$tbl_item_property itemproperty
-				WHERE
-				    announcement.c_id =  $course_id AND
-				    itemproperty.c_id =  $course_id AND
-					itemproperty.ref = announcement.id AND
-                    itemproperty.tool = '".TOOL_ANNOUNCEMENT."'  AND
-                    itemproperty.visibility <> 2
-                ORDER BY display_order $sortDirection";
+                    FROM $tbl_announcement announcement,
+                    $tbl_item_property itemproperty
+                    WHERE
+                        announcement.c_id =  $course_id AND
+                        itemproperty.c_id =  $course_id AND
+                        itemproperty.ref = announcement.id AND
+                        itemproperty.tool = '".TOOL_ANNOUNCEMENT."'  AND
+                        itemproperty.visibility <> 2
+                    ORDER BY display_order $sortDirection";
             $result = Database::query($sql);
             $thisAnnouncementOrderFound = false;
             $thisAnnouncementOrder = null;
@@ -549,6 +548,7 @@ switch ($action) {
                             $sendToUsersInSession
                         );
                     }
+
                     Display::addFlash(
                         Display::return_message(
                             get_lang('AnnouncementAdded'),
@@ -565,7 +565,6 @@ switch ($action) {
                     }
                     header('Location: '.$homeUrl);
                     exit;
-
                 } // end condition token
             }
         }

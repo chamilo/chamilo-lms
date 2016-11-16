@@ -1,12 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use ChamiloSession as Session;
+
 /**
  *	Functions and main code for the download folder feature
  *
  *	@package chamilo.document
  */
-
-use ChamiloSession as Session;
 
 set_time_limit(0);
 

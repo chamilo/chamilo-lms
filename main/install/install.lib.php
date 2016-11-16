@@ -2776,9 +2776,14 @@ function finishInstallation(
     updateDirAndFilesPermissions();
 
     // Set the latest version
-    $path = api_get_path(SYS_PATH).'app/Migrations/Schema/V111/';
+    $path = $sysPath.'app/Migrations/Schema/V111/';
     $finder = new \Symfony\Component\Finder\Finder();
     $files = $finder->files()->in($path);
+
+    // Needed for chash
+    $sql = 'CREATE TABLE IF NOT EXISTS version (id int unsigned NOT NULL AUTO_INCREMENT, version varchar(255), PRIMARY KEY(id), UNIQUE(version));';
+    Database::query($sql);
+
     foreach ($files as $version) {
         $version = str_replace(['Version',  '.php' ], '', $version->getFilename());
         $sql = "INSERT INTO version (version) VALUES ('$version')";

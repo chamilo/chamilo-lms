@@ -36,8 +36,9 @@ $sql = "CREATE TABLE IF NOT EXISTS $tablename (
   `lastcron` int(11),
   `croncount` int(11),
   `template` varchar(255),
+  `password_encryption` varchar(255),  
   PRIMARY KEY (`id`)
-) DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 ";
 Database::query($sql);
 

@@ -3381,13 +3381,15 @@ class Tracking
             }
 
             $sql = "SELECT count(ip.tool) AS count
-                    FROM $tbl_item_property ip INNER JOIN $tbl_document pub
-                            ON ip.ref = pub.id
-                    WHERE 	ip.c_id  = $course_id AND
-                            pub.c_id  = $course_id AND
-                            pub.filetype ='file' AND
-                            ip.tool = 'document'
-                            $condition_user $condition_session ";
+                    FROM $tbl_item_property ip 
+                    INNER JOIN $tbl_document pub
+                    ON (ip.ref = pub.id AND ip.c_id = pub.c_id)
+                    WHERE 	
+                        ip.c_id  = $course_id AND
+                        pub.c_id  = $course_id AND
+                        pub.filetype ='file' AND
+                        ip.tool = 'document'
+                        $condition_user $condition_session ";
             $rs = Database::query($sql);
             $row = Database::fetch_array($rs, 'ASSOC');
             return $row['count'];
@@ -3438,7 +3440,8 @@ class Tracking
 
         $sql = "SELECT count(ip.tool) as count
                 FROM $tbl_item_property ip
-                INNER JOIN $tbl_student_publication pub ON ip.ref = pub.id
+                INNER JOIN $tbl_student_publication pub 
+                ON (ip.ref = pub.id AND ip.c_id = pub.c_id)
                 WHERE
                     ip.tool='work' AND
                     $conditionToString";
@@ -3465,7 +3468,7 @@ class Tracking
         $courseCondition = null;
         $conditions = array();
         if (!empty($courseInfo)) {
-            $course_id	    = $courseInfo['real_id'];
+            $course_id = $courseInfo['real_id'];
             $conditions[]= " post.c_id  = $course_id AND forum.c_id = $course_id ";
         }
 
@@ -3489,7 +3492,7 @@ class Tracking
         $conditionsToString = implode('AND ', $conditions);
         $sql = "SELECT count(poster_id) as count
                 FROM $tbl_forum_post post INNER JOIN $tbl_forum forum
-                ON forum.forum_id = post.forum_id
+                ON (forum.forum_id = post.forum_id AND forum.c_id = post.c_id)
                 WHERE $conditionsToString";
 
         $rs = Database::query($sql);
@@ -3651,7 +3654,7 @@ class Tracking
         $sql = "SELECT count(*)
                 FROM $tbl_forums f
                 INNER JOIN $item i
-                    ON f.c_id = i.c_id AND f.iid = i.ref AND tool = '".TOOL_FORUM."'
+                ON f.c_id = i.c_id AND f.iid = i.ref AND tool = '".TOOL_FORUM."'
                 WHERE
                     f.c_id = $course_id AND
                     $groupCondition
@@ -3741,9 +3744,9 @@ class Tracking
 
     /**
      * Get count student's visited links
-     * @param    int        Student id
-     * @param    int    $courseId
-     * @param    int        Session id (optional)
+     * @param    int $student_id Student id
+     * @param    int $courseId
+     * @param    int $session_id Session id (optional)
      * @return    int        count of visited links
      */
     public static function count_student_visited_links($student_id, $courseId, $session_id = 0)
@@ -3887,7 +3890,6 @@ class Tracking
                             session_course_user.c_id = ' . $courseId . ' AND
                             stats_login.login_course_date IS NULL
                         GROUP BY session_course_user.user_id';
-
             }
         }
 

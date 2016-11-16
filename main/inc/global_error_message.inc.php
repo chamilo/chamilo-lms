@@ -49,7 +49,6 @@ $TechnicalIssuesTitle = 'Technical issues';
 $TechnicalIssuesDescription = 'This portal is currently experiencing technical issues. Please report this to the portal administrator. Thank you for your help.';
 
 if (is_int($global_error_code) && $global_error_code > 0) {
-
     if (class_exists('Template') && function_exists('api_get_configuration_value')) {
         $theme = Template::getThemeFallback().'/';
     } else {
@@ -58,7 +57,7 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 
     $root_rel = '';
     $installation_guide_url = $root_rel.'documentation/installation_guide.html';
-    
+
     $css_path = 'app/Resources/public/css/';
     $css_web_assets = 'web/assets/';
     $css_web_path = 'web/css/';
@@ -251,7 +250,7 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 </html>
 EOM;
     } else {
-        $global_error_message_page = 
+        $global_error_message_page =
 <<<EOM
     <!DOCTYPE html>
         <html>

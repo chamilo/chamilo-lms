@@ -307,6 +307,10 @@ class AnnouncementEmail
         // Send email one by one to avoid antispam
         $users = $this->sent_to();
 
+        $batchSize = 20;
+        $counter = 1;
+        $em = Database::getManager();
+
         foreach ($users as $user) {
             $message = $this->message($user['user_id']);
             MessageManager::send_message_simple(
@@ -317,6 +321,12 @@ class AnnouncementEmail
                 $sendToDrhUsers,
                 true
             );
+
+            if (($counter % $batchSize) === 0) {
+                $em->flush();
+                $em->clear();
+            }
+            $counter++;
         }
 
         if ($sendToUsersInSession) {

@@ -352,9 +352,7 @@ class InstanceForm extends ChamiloForm
         $form->addHeader($plugin->get_lang('hostdefinition'));
         $form->addText('sitename', [$plugin->get_lang('sitename'), $plugin->get_lang('SiteNameExample')]);
         $form->applyFilter('sitename', 'trim');
-
         $form->addText('institution', [$plugin->get_lang('institution'), $plugin->get_lang('InstitutionExample')]);
-
         $form->applyFilter('institution', 'trim');
 
         // Host's name.
@@ -366,6 +364,14 @@ class InstanceForm extends ChamiloForm
         $form->applyFilter('root_web', 'trim');
 
         if ($this->_mode == 'update') {
+            $encryptList = Virtual::getEncryptList();
+            $encryptMethod = $form->addElement(
+                'select',
+                'password_encryption',
+                get_lang('EncryptMethodUserPass'),
+                $encryptList
+            );
+            $encryptMethod->freeze();
             $elementWeb->freeze();
         }
 

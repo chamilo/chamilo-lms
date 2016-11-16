@@ -16,7 +16,7 @@ class Virtual
     /**
      * @param array $_configuration
      */
-    public static function hookConfiguration(&$_configuration)
+    public static function hookConfiguration(& $_configuration)
     {
         global $virtualChamilo;
 
@@ -55,6 +55,7 @@ class Virtual
             $coursePath = '';
             $archivePath = '';
             $uploadPath = '';
+            $passwordEncryption = '';
 
             foreach ($virtualSettings as $setting) {
                 switch ($setting['variable']) {
@@ -69,6 +70,9 @@ class Virtual
                         break;
                     case 'vchamilo_archive_real_root':
                         $archivePath = $setting['selected_value'];
+                        break;
+                    case 'vchamilo_password_encryption':
+                        $passwordEncryption = $setting['selected_value'];
                         break;
                 }
             }
@@ -91,6 +95,10 @@ class Virtual
                 $data['SYS_HOME_PATH'] = $homePath.'/'.$data['slug'];
                 $data['SYS_COURSE_PATH'] = $coursePath.'/'.$data['slug'];
                 $data['SYS_UPLOAD_PATH'] = $uploadPath.'/'.$data['slug'];
+
+                if (!empty($passwordEncryption)) {
+                    $_configuration['password_encryption'] = $passwordEncryption;
+                }
 
                 $virtualChamilo = $data;
             } else {
@@ -967,8 +975,9 @@ class Virtual
 
     /**
      * @param stdClass $data
+     * @param string $fromVersion
      */
-    public static function importInstance($data)
+    public static function importInstance($data, $fromVersion)
     {
         if (isset($data->what)) {
             unset($data->what);
@@ -1061,6 +1070,7 @@ class Virtual
         }
 
         if (!$id) {
+            var_dump($data);
             throw new Exception('Was not registered');
         }
 
@@ -1069,7 +1079,6 @@ class Virtual
         }
 
         self::createDirsFromSlug($slug);
-        self::ctrace("Create database");
         $databaseCreated = Virtual::createDatabase($newDatabase);
         if (!$databaseCreated) {
             Display::addFlash(
@@ -1077,6 +1086,10 @@ class Virtual
             );
             return false;
         }
+
+        $coursePath = self::getConfig('vchamilo', 'course_real_root').'/'.$slug;
+        $homePath = self::getConfig('vchamilo', 'home_real_root').'/'.$slug;
+        $uploadPath = self::getConfig('vchamilo', 'upload_real_root').'/'.$slug;
 
         $dumpFile = api_get_path(SYS_ARCHIVE_PATH).uniqid($data->main_database.'_dump_', true).'.sql';
         self::ctrace('Create backup from "'.$data->main_database.'" here: '.$dumpFile.' ');
@@ -1117,7 +1130,7 @@ class Virtual
         $outputStream = new \Symfony\Component\Console\Output\BufferedOutput($tmpFile);
 
         $arguments = array(
-            'from-version' => '1.10.0', // @todo change value
+            'from-version' => $fromVersion, // @todo change value
             'to-version' => '1.11.x',
             'host' => $newDatabase->db_host,
             'username' => $newDatabase->db_user,
@@ -1129,15 +1142,11 @@ class Virtual
         $input = new ArrayInput($arguments);
         $command->run($input, $outputStream);
 
-        Display::addFlash(Display::return_message($outputStream->fetch()));
+        error_log($outputStream->fetch());
 
         if (file_exists($dumpFile)) {
             unlink($dumpFile);
         }
-
-        $coursePath = self::getConfig('vchamilo', 'course_real_root').'/'.$slug;
-        $homePath = self::getConfig('vchamilo', 'home_real_root').'/'.$slug;
-        $uploadPath = self::getConfig('vchamilo', 'upload_real_root').'/'.$slug;
 
         // Course
         self::ctrace("Copy from '$fromCoursePath' to backup '$coursePath' ");
@@ -1276,5 +1285,22 @@ class Virtual
 
         return false;
     }
+
+    /**
+     * @return array
+     */
+    public static function getEncryptList()
+    {
+        $encryptList = [
+            'bcrypt',
+            'sha1',
+            'md5',
+            'none'
+        ];
+
+        return array_combine($encryptList, $encryptList);
+    }
+
+
 }
 

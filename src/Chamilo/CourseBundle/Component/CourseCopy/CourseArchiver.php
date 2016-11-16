@@ -42,17 +42,18 @@ class CourseArchiver
     public static function cleanBackupDir()
     {
         $dir = self::getBackupDir();
-
-        if ($handle = @ opendir($dir)) {
-            while (($file = readdir($handle)) !== false) {
-                if ($file != "." && $file != ".." &&
-                    strpos($file, 'CourseArchiver_') === 0 &&
-                    is_dir($dir . '/' . $file)
-                ) {
-                    rmdirr($dir . '/' . $file);
+        if (is_dir($dir)) {
+            if ($handle = @ opendir($dir)) {
+                while (($file = readdir($handle)) !== false) {
+                    if ($file != "." && $file != ".." &&
+                        strpos($file, 'CourseArchiver_') === 0 &&
+                        is_dir($dir.'/'.$file)
+                    ) {
+                        rmdirr($dir.'/'.$file);
+                    }
                 }
+                closedir($handle);
             }
-            closedir($handle);
         }
     }
 

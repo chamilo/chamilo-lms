@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use Chamilo\CourseBundle\Entity\CItemProperty;
 
 /**
  * This is a code library for Chamilo.
@@ -3717,7 +3718,7 @@ function api_item_property_update(
         $startVisibleDate = !empty($start_visible) ? new DateTime($start_visible, new DateTimeZone('UTC')) : null;
         $endVisibleDate = !empty($endVisibleDate) ? new DateTime($endVisibleDate, new DateTimeZone('UTC')) : null;
 
-        $cItemProperty = new \Chamilo\CourseBundle\Entity\CItemProperty($objCourse);
+        $cItemProperty = new CItemProperty($objCourse);
         $cItemProperty
             ->setTool($tool)
             ->setRef($item_id)

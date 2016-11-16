@@ -464,8 +464,11 @@ class AnnouncementManager
             } else {
                 $send_to = CourseManager::separateUsersGroups($sentTo);
 
+                $batchSize = 20;
+                $em = Database::getManager();
                 // Storing the selected groups
                 if (is_array($send_to['groups']) && !empty($send_to['groups'])) {
+                    $counter = 1;
                     foreach ($send_to['groups'] as $group) {
                         api_item_property_update(
                             $_course,
@@ -475,11 +478,18 @@ class AnnouncementManager
                             api_get_user_id(),
                             $group
                         );
+
+                        if (($counter % $batchSize) === 0) {
+                             $em->flush();
+                             $em->clear();
+                        }
+                        $counter++;
                     }
                 }
 
                 // Storing the selected users
                 if (is_array($send_to['users'])) {
+                    $counter = 1;
                     foreach ($send_to['users'] as $user) {
                         api_item_property_update(
                             $_course,
@@ -490,6 +500,12 @@ class AnnouncementManager
                             '',
                             $user
                         );
+
+                        if (($counter % $batchSize) === 0) {
+                             $em->flush();
+                             $em->clear();
+                        }
+                        $counter++;
                     }
                 }
             }

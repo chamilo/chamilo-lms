@@ -42,6 +42,7 @@ function wsConvertPpt($pptData)
     $cmd = pptConverterGetCommandBaseParams();
     $cmd .= ' -w ' . $w . ' -h ' . $h . ' -d oogie "' . $tempPath . $fullFileName.'"  "' . $tempPathNewFiles . $fileName . '.html"';
 
+    $perms = api_get_permissions_for_new_files();
     chmod($tempPathNewFiles . $fileName, $perms);
 
     $files = array();

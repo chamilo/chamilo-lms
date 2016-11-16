@@ -221,7 +221,11 @@ abstract class OpenofficeDocument extends learnpath
             'service_ppt2lp_size' => $size,
         );
 
-        $result = $client->__call('wsConvertPpt', array('pptData' => $params));
+        try {
+            $result = $client->__call('wsConvertPpt', array('pptData' => $params));
+        } catch (Exception $e) {
+            error_log($e->getMessage());
+        }
 
         return $result;
     }

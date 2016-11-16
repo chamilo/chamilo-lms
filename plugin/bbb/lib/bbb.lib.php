@@ -722,11 +722,35 @@ class bbb
 
                 $actionLinks = $this->getActionLinks($meetingDB, $record, $isGlobal, $isAdminReport);
                 $item['show_links']  = $recordLink;
-            } else {
-                $actionLinks = $this->getActionLinks($meetingDB, []);
-            }
+                $item['action_links'] = implode(PHP_EOL, $actionLinks);
+            }else{
+            	$isVisible = $meetingDB['visibility'] != 0;
+            	$linkVisibility = $isVisible
+                    ? Display::url(
+                        Display::return_icon('visible.png', get_lang('MakeInvisible')),
+                        $this->unPublishUrl($meetingDB)
+                    )
+                    : Display::url(
+                        Display::return_icon('invisible.png', get_lang('MakeVisible')),
+                        $this->publishUrl($meetingDB)
+                    );
+                $links = [];
 
-            $item['action_links'] = implode(PHP_EOL, $actionLinks);
+                if (!$isAdminReport) {
+                    $links[] = Display::url(
+                        Display::return_icon('delete.png', get_lang('Delete')),
+                        $this->deleteRecordUrl($meetingDB)
+                    );
+                    $links[] = $linkVisibility;
+                } else {
+                    $links[] = Display::url(
+                        Display::return_icon('course_home.png', get_lang('GoToCourse')),
+                        $this->getListingUrl()
+                    );
+                }
+                $item['show_links'] = get_lang('NoRecording');
+                $item['action_links'] = implode(PHP_EOL, $links);
+            }
 
             $item['created_at'] = api_convert_and_format_date($meetingDB['created_at']);
             // created_at
@@ -1291,9 +1315,22 @@ class bbb
         $links = [];
 
         if (empty($recordInfo)) {
-            $links[] = $linkVisibility;
+            if (!$isAdminReport) {
+                $links[] = Display::url(
+                    Display::return_icon('delete.png', get_lang('Delete')),
+                    $this->deleteRecordUrl($meetingInfo)
+                );
+                $links[] = $linkVisibility;
 
-            return $links;
+                return $links;
+            } else {
+                $links[] = Display::url(
+                    Display::return_icon('course_home.png', get_lang('GoToCourse')),
+                    $this->getListingUrl()
+                );
+
+                return $links;
+            }
         }
 
         if (!$isGlobal) {

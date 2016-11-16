@@ -27,7 +27,7 @@ $response = $client->call(
     'import_users',
     array(
         'filepath' => api_get_path(SYS_UPLOAD_PATH)."users_import.csv",
-        'security_key' => $_configuration['security_key'],
+        'security_key' => api_get_configuration_value('security_key'),
     )
 );
 echo $response;

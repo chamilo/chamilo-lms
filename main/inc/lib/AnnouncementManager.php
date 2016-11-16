@@ -153,11 +153,17 @@ class AnnouncementManager
     /**
      * Deletes an announcement
      * @param array $_course the course array
-     * @param int 	$id the announcement id
+     * @param int $id the announcement id
      */
     public static function delete_announcement($_course, $id)
     {
-        api_item_property_update($_course, TOOL_ANNOUNCEMENT, $id, 'delete', api_get_user_id());
+        api_item_property_update(
+            $_course,
+            TOOL_ANNOUNCEMENT,
+            $id,
+            'delete',
+            api_get_user_id()
+        );
     }
 
     /**
@@ -387,13 +393,13 @@ class AnnouncementManager
 
     /**
      * Store an announcement in the database (including its attached file if any)
-     * @param string    Announcement title (pure text)
-     * @param string    Content of the announcement (can be HTML)
-     * @param int       Display order in the list of announcements
-     * @param array     Array of users and groups to send the announcement to
-     * @param array	    uploaded file $_FILES
-     * @param string    Comment describing the attachment
-     * @param bool  $sendToUsersInSession
+     * @param string $emailTitle   Announcement title (pure text)
+     * @param string $newContent   Content of the announcement (can be HTML)
+     * @param array  $sentTo      Array of users and groups to send the announcement to
+     * @param array   $file     uploaded file $_FILES
+     * @param string  $file_comment  Comment describing the attachment
+     * @param string $end_date
+     * @param bool $sendToUsersInSession
      * @return int      false on failure, ID of the announcement on success
      */
     public static function add_announcement(
@@ -1206,8 +1212,11 @@ class AnnouncementManager
      * @param bool $sendToUsersInSession
      * @param bool $sendToDrhUsers
      */
-    public static function send_email($id, $sendToUsersInSession = false, $sendToDrhUsers = false)
-    {
+    public static function send_email(
+        $id,
+        $sendToUsersInSession = false,
+        $sendToDrhUsers = false
+    ) {
         $email = AnnouncementEmail::create(null, $id);
         $email->send($sendToUsersInSession, $sendToDrhUsers);
     }
@@ -1278,7 +1287,7 @@ class AnnouncementManager
 
             //if (!empty($user_id)) {
             if (0) {
-                if (is_array($group_memberships) && count($group_memberships) > 0 ) {
+                if (is_array($group_memberships) && count($group_memberships) > 0) {
                     $sql = "SELECT $select
                             FROM $tbl_announcement announcement, $tbl_item_property ip
                             WHERE
@@ -1325,7 +1334,6 @@ class AnnouncementManager
                         ORDER BY display_order DESC";
                 //GROUP BY ip.ref
             } else {
-
                 // A.3 you are a course admin without any group or user filter
                 // A.3.a you are a course admin without user or group filter but WITH studentview
                 // => see all the messages of all the users and groups without editing possibilities
@@ -1402,7 +1410,6 @@ class AnnouncementManager
                             AND ip.visibility='1'
                         ORDER BY display_order DESC";
             } else {
-
                 if ($user_id) {
                     if ($allowUserEditSetting && !api_is_anonymous()) {
                         $cond_user_id = " AND (
@@ -1426,7 +1433,6 @@ class AnnouncementManager
     						AND ip.visibility='1'
     						AND announcement.session_id IN(0, ".$session_id.")
 						ORDER BY display_order DESC";
-
                 } else {
                     if (($allowUserEditSetting && !api_is_anonymous())) {
                         $cond_user_id = " AND (
@@ -1691,7 +1697,7 @@ class AnnouncementManager
                         }
 
                         // the user is not identiefied => show only the general announcements
-                        $sql="SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id
+                        $sql = "SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id
                                 FROM $tbl_announcement announcement, $tbl_item_property ip
                                 WHERE
                                     announcement.c_id = $course_id AND

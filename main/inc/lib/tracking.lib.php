@@ -3464,18 +3464,11 @@ class Tracking
             return 0;
         }
 
-        $courseInfo = api_get_course_info($courseCode);
-        $courseCondition = null;
-        $conditions = array();
-        if (!empty($courseInfo)) {
-            $course_id = $courseInfo['real_id'];
-            $conditions[]= " post.c_id  = $course_id AND forum.c_id = $course_id ";
-        }
-
         // Table definition.
         $tbl_forum_post = Database :: get_course_table(TABLE_FORUM_POST);
         $tbl_forum = Database :: get_course_table(TABLE_FORUM);
 
+        $conditions = array();
         if (is_array($student_id)) {
             $studentList = array_map('intval', $student_id);
             $conditions[]= " post.poster_id IN ('".implode("','", $studentList)."') ";
@@ -3484,15 +3477,41 @@ class Tracking
             $conditions[]= " post.poster_id = '$student_id' ";
         }
 
-        if (isset($session_id)) {
-            $session_id = intval($session_id);
-            $conditions[]= " forum.session_id = $session_id";
+        $conditionsToString = implode('AND ', $conditions);
+
+        if (empty($courseCode)) {
+            $sql = "SELECT count(poster_id) as count
+                    FROM $tbl_forum_post post INNER JOIN $tbl_forum forum
+                    ON forum.forum_id = post.forum_id
+                    WHERE $conditionsToString";
+
+            $rs = Database::query($sql);
+            $row = Database::fetch_array($rs, 'ASSOC');
+            return $row['count'];
+        }
+
+        require_once api_get_path(SYS_CODE_PATH).'forum/forumconfig.inc.php';
+        require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
+
+        $courseInfo = api_get_course_info($courseCode);
+
+        $forums = [];
+        if (!empty($courseInfo)) {
+            $forums = get_forums('', $courseCode, true, $session_id);
+            $course_id = $courseInfo['real_id'];
+            $conditions[]= " post.c_id  = $course_id ";
+        }
+
+        if (!empty($forums)) {
+            $idList = array_column($forums, 'forum_id');
+            $idListToString = implode("', '", $idList);
+            $conditions[]= " post.forum_id  IN ('$idListToString')";
         }
 
         $conditionsToString = implode('AND ', $conditions);
+
         $sql = "SELECT count(poster_id) as count
-                FROM $tbl_forum_post post INNER JOIN $tbl_forum forum
-                ON (forum.forum_id = post.forum_id AND forum.c_id = post.c_id)
+                FROM $tbl_forum_post post
                 WHERE $conditionsToString";
 
         $rs = Database::query($sql);

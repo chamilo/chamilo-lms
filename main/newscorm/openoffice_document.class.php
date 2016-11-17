@@ -188,6 +188,7 @@ abstract class OpenofficeDocument extends learnpath
             'trace' => 1,
             'exception' => 1,
             'cache_wsdl' => WSDL_CACHE_NONE,
+            'keep_alive' => false,
         );
         $client = new SoapClient(null, $options);
         $result = '';

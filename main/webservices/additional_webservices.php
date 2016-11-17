@@ -33,7 +33,10 @@ function wsConvertPpt($pptData)
     $tempPathNewFiles = $tempArchivePath . 'wsConvert/' . $fileName . '-n/';
 
     $oldumask = umask(0);
-    $perms = api_get_permissions_for_new_directories();
+    //$perms = api_get_permissions_for_new_directories();
+    // Set permissions the most permissively possible: these files will
+    // be deleted below and we need a parallel process to be able to write them
+    $perms = 0777;
     pptConverterDirectoriesCreate($tempPath, $tempPathNewFiles, $fileName, $perms);
 
     $file = base64_decode($fileData);
@@ -42,7 +45,7 @@ function wsConvertPpt($pptData)
     $cmd = pptConverterGetCommandBaseParams();
     $cmd .= ' -w ' . $w . ' -h ' . $h . ' -d oogie "' . $tempPath . $fullFileName.'"  "' . $tempPathNewFiles . $fileName . '.html"';
 
-    $perms = api_get_permissions_for_new_files();
+    //$perms = api_get_permissions_for_new_files();
     chmod($tempPathNewFiles . $fileName, $perms);
 
     $files = array();

@@ -17,6 +17,15 @@ $libpath = api_get_path(LIBRARY_PATH);
  */
 function wsConvertPpt($pptData)
 {
+    global $_configuration;
+    $ip = trim($_SERVER['REMOTE_ADDR']);
+    // If an IP filter array is defined in configuration.php,
+    // check if this IP is allowed
+    if (!empty($_configuration['ppt2lp_ip_filter'])) {
+        if (!in_array($ip, $_configuration['ppt2lp_ip_filter'])) {
+            return false;
+        }
+    }
     $fileData = $pptData['file_data'];
     $dataInfo = pathinfo($pptData['file_name']);
     $fileName =  basename($pptData['file_name'], '.' . $dataInfo['extension']);

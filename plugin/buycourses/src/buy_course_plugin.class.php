@@ -76,6 +76,7 @@ class BuyCoursesPlugin extends Plugin
             ",
             array(
                 'show_main_menu_tab' => 'boolean',
+                'public_main_menu_tab' => 'boolean',
                 'include_sessions' => 'boolean',
                 'include_services' => 'boolean',
                 'paypal_enable' => 'boolean',

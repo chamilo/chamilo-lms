@@ -415,10 +415,12 @@ class Rest extends WebService
         $agenda->setType('course');
         $result = $agenda->parseAgendaFilter(null);
 
-        $start = new DateTime('now');
-        $start->modify('first day of month');
-        $end = new DateTime('now');
-        $end->modify('first day of month');
+        $start = new DateTime(api_get_utc_datetime(), new DateTimeZone('UTC'));
+        $start->modify('first day of this month');
+        $start->setTime(0, 0, 0);
+        $end = new DateTime(api_get_utc_datetime(), new DateTimeZone('UTC'));
+        $end->modify('last day of this month');
+        $end->setTime(23, 59, 59);
 
         $groupId = current($result['groups']);
         $userId = current($result['users']);
@@ -506,7 +508,7 @@ class Rest extends WebService
                 'title' => $forumInfo['forum_title'],
                 'description' => $forumInfo['forum_comment'],
                 'image' => $forumInfo['forum_image'] ? ($webCoursePath . $forumInfo['forum_image']) : '',
-                'numberOfThreads' => intval($forumInfo['number_of_threads']),
+                'numberOfThreads' => isset($forumInfo['number_of_threads']) ? intval($forumInfo['number_of_threads']) : 0,
                 'lastPost' => null
             ];
 

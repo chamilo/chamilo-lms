@@ -253,7 +253,14 @@ class MessageManager
         $total_filesize = 0;
         if (is_array($file_attachments)) {
             foreach ($file_attachments as $file_attach) {
-                $total_filesize += $file_attach['size'];
+                $fileSize = isset($file_attach['size']) ? $file_attach['size'] : 0;
+                if (is_array($fileSize)) {
+                    foreach ($fileSize as $size) {
+                        $total_filesize += $size;
+                    }
+                } else {
+                    $total_filesize += $fileSize;
+                }
             }
         }
 

@@ -25,7 +25,7 @@ $lpid = 1; // set to your learnpath ID
 $lpiid = 1; // set to your learnpath item ID
 
 // Build the server's SOAP script address
-$server = api_get_path(WEB_CODE_PATH).'webservices/soap.php?wsdl';
+$server = api_get_path(WEB_CODE_PATH).'webservices/registration.soap.php?wsdl';
 
 /**
  * Call the webservice
@@ -35,10 +35,14 @@ $server = api_get_path(WEB_CODE_PATH).'webservices/soap.php?wsdl';
 $client = new SoapClient($server, array('cache_wsdl' => WSDL_CACHE_NONE));
 
 // Call the function we want with the right params...
-$response = $client->{'WSReport.test'}();
+try {
+    $response = $client->{'WSSearchSession'}(array('term' => 'a', 'extrafields' => array(), 'secret_key' => $signature));
+} catch (Exception $e) {
+    error_log(print_r($e->getMessage(), 1));
+}
 //$response = $client->{'WSReport.GetLearnpathStatusSingleItem'}($signature, 'chamilo_user_id', $uid, 'chamilo_course_id', $cid, $lpid, $lpiid);
 //$response = $client->{'WSReport.GetLearnpathProgress'}($signature, 'chamilo_user_id', $uid, 'chamilo_course_id', $cid, $lpid);
 //$response = $client->{'WSReport.GetLearnpathHighestLessonLocation'}($signature, 'chamilo_user_id', $uid, 'chamilo_course_id', $cid, $lpid);
 // Print the output, or do whatever you like with it (it's the status for this item):
-echo '<pre>'.$response.'</pre>';
+echo '<pre>'.print_r($response, 1).'</pre>';
 // This should print "complete", "incomplete" or any other active status.

@@ -188,6 +188,7 @@ abstract class OpenofficeDocument extends learnpath
             'trace' => 1,
             'exception' => 1,
             'cache_wsdl' => WSDL_CACHE_NONE,
+            'keep_alive' => false,
         );
         $client = new SoapClient(null, $options);
         $result = '';
@@ -203,7 +204,11 @@ abstract class OpenofficeDocument extends learnpath
             'service_ppt2lp_size' => $service_ppt2lp_size,
         );
 
-        $result = $client->__call('wsConvertPpt', array('pptData' => $params));
+        try {
+            $result = $client->__call('wsConvertPpt', array('pptData' => $params));
+        } catch (Exception $e) {
+            error_log($e->getMessage());
+        }
 
         return $result;
     }

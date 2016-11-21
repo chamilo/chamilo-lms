@@ -7,7 +7,7 @@
 <footer class="sticky-footer"> <!-- start of #footer section -->
     <div class="container">
         <div class="row">
-            <div id="footer_left" class="col-md-8">
+            <div id="footer_left" class="col-md-4">
                <div class="sub-footer">
                         <div class="row">
                                 <div class="col-md-12">
@@ -18,6 +18,13 @@
                                 </div>
                         </div>
                 </div>
+            </div>
+            <div id="footer_center" class="col-md-4">
+                {% if plugin_footer_center is not null %}
+                <div id="plugin_footer_center">
+                    {{ plugin_footer_center }}
+                </div>
+                {% endif %}
             </div>
             <div id="footer_right" class="col-md-4">
                 {% if teachers is not null %}

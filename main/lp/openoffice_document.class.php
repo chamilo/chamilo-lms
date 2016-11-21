@@ -194,19 +194,32 @@ abstract class OpenofficeDocument extends learnpath
     {
         // host
         $ppt2lp_host = api_get_setting('service_ppt2lp', 'host');
-
+        // SOAP URI (just the host)
+        $matches = array();
+        $uri = '';
+        $result = preg_match('/^([a-zA-Z0-9]*):\/\/([^\/]*)\//', $ppt2lp_host, $matches);
+        if ($result) {
+            $uri = $matches[1] . '://' . $matches[2] . '/';
+        } else {
+            $uri = $ppt2lp_host;
+        }
         // secret key
         $secret_key = sha1(api_get_setting('service_ppt2lp', 'ftp_password'));
 
         // client
         $options = array(
             'location' => $ppt2lp_host,
-            'uri' => $ppt2lp_host,
+            'uri' => $uri,
             'trace' => 1,
-            'exception' => 1,
+            'exceptions' => true,
             'cache_wsdl' => WSDL_CACHE_NONE,
             'keep_alive' => false,
+            'features' => SOAP_SINGLE_ELEMENT_ARRAYS,
+            'compression' => SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_GZIP | 9,
         );
+        if (substr($ppt2lp_host, 0, 5) === 'https') {
+            $options['ssl_method'] =  SOAP_SSL_METHOD_TLS;
+        }
         $client = new SoapClient(null, $options);
         $result = '';
 
@@ -223,11 +236,14 @@ abstract class OpenofficeDocument extends learnpath
         );
 
         try {
+            //error_log('['.time().'] Calling wsConvertPpt webservice on ' . $ppt2lp_host);
             $result = $client->__call('wsConvertPpt', array('pptData' => $params));
         } catch (Exception $e) {
-            error_log($e->getMessage());
+            error_log('['.time().'] Chamilo SOAP call error: ' . $e->getMessage());
         }
-
+        // Make sure we destroy the SOAP client as it may generate SSL connection
+        // binding issue (if using SSL)
+        unset($client);
         return $result;
     }
 

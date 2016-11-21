@@ -219,6 +219,10 @@ abstract class OpenofficeDocument extends learnpath
         );
         if (substr($ppt2lp_host, 0, 5) === 'https') {
             $options['ssl_method'] =  SOAP_SSL_METHOD_TLS;
+            // If using SSL, please note that *not* supporting the SSLv2
+            // (broken in terms of security), the server tends to generate
+            // the following issue:
+            // SoapClient::__doRequest(): SSL: Connection reset by peer
         }
         $client = new SoapClient(null, $options);
         $result = '';

@@ -55,7 +55,7 @@
 
         "doctrine/migrations": "~1.0@dev",
         "symfony/doctrine-bridge": "~2.8",
-        "symfony/validator": "2.6.4",
+        "symfony/validator": "~2.8",
         "symfony/filesystem": "~2.8",
         "symfony/security": "~2.8",
         "doctrine/data-fixtures": "~1.0@dev",

@@ -744,6 +744,7 @@ class DocumentManager
      * @param int $groupIid iid
      * @param boolean $can_see_invisible
      * @param boolean $getInvisibleList
+     * @param string $path current path
      *
      * @return array with paths
      */
@@ -751,7 +752,8 @@ class DocumentManager
         $_course,
         $groupIid = 0,
         $can_see_invisible = false,
-        $getInvisibleList = false
+        $getInvisibleList = false,
+        $path = ''
     ) {
         $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
@@ -763,8 +765,8 @@ class DocumentManager
             api_get_session_id()
         );
 
+        $conditionList = array();
         if (!empty($students)) {
-            $conditionList = array();
             foreach ($students as $studentId => $studentInfo) {
                 $conditionList[] = '/shared_folder/sf_user_' . $studentInfo['user_id'];
             }
@@ -783,7 +785,11 @@ class DocumentManager
         if ($can_see_invisible) {
             // condition for the session
             $session_id = api_get_session_id();
-            $condition_session = api_get_session_condition($session_id, true, false, 'docs.session_id');
+            //$condition_session = api_get_session_condition($session_id, true, false, 'docs.session_id');
+
+            $session_id = $session_id ?: api_get_session_id();
+            $condition_session = " AND (last.session_id = '$session_id' OR (last.session_id = '0' OR last.session_id IS NULL) )";
+            $condition_session .= self::getSessionFolderFilters($path, $session_id);
 
             if ($groupIid <> 0) {
                 $sql = "SELECT DISTINCT docs.id, path

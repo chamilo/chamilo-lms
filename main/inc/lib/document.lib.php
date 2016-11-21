@@ -765,8 +765,8 @@ class DocumentManager
             api_get_session_id()
         );
 
+        $conditionList = array();
         if (!empty($students)) {
-            $conditionList = array();
             foreach ($students as $studentId => $studentInfo) {
                 $conditionList[] = '/shared_folder/sf_user_' . $studentInfo['user_id'];
             }

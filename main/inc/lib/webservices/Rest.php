@@ -224,6 +224,11 @@ class Rest extends WebService
     public function getCourseInfo()
     {
         $teachers = CourseManager::get_teacher_list_from_course_code_to_string($this->course->getCode());
+        $tools = CourseHome::get_tools_category(
+            'TOOL_STUDENT_VIEW',
+            $this->course->getId(),
+            $this->session ? $this->session->getId() : 0
+        );
 
         return [
             'id' => $this->course->getId(),
@@ -231,7 +236,13 @@ class Rest extends WebService
             'code' => $this->course->getCode(),
             'directory' => $this->course->getDirectory(),
             'urlPicture' => $this->course->getPicturePath(true),
-            'teachers' => $teachers
+            'teachers' => $teachers,
+            'tools' => array_map(
+                function ($tool) {
+                    return ['type' => $tool['name']];
+                },
+                $tools
+            )
         ];
     }
 

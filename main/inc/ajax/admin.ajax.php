@@ -171,7 +171,7 @@ function check_system_version()
                 $version_info = $version;
             }
 
-            if (version_compare($system_version, $version_info, '<=')) {
+            if (version_compare($system_version, $version_info, '<')) {
                 $output = '<span style="color:red">' . get_lang('YourVersionNotUpToDate') .'<br />
                            '.get_lang('LatestVersionIs').' <b>Chamilo '.$version_info.'</b>.  <br />
                            '.get_lang('YourVersionIs').' <b>Chamilo '.$system_version. '</b>.  <br />'.str_replace('http://www.chamilo.org', '<a href="http://www.chamilo.org">http://www.chamilo.org</a>', get_lang('PleaseVisitOurWebsite')).'</span>';

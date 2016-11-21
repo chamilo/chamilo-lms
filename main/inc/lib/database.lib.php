@@ -157,9 +157,24 @@ class Database
         $sysPath = !empty($sysPath) ? $sysPath : api_get_path(SYS_PATH);
 
         // Registering Constraints
-        AnnotationRegistry::registerAutoloadNamespace(
-            'Symfony\Component\Validator\Constraint',
-            $sysPath."vendor/symfony/validator"
+        /*AnnotationRegistry::registerAutoloadNamespace(
+            'Symfony\Component',
+            $sysPath."vendor/"
+        );*/
+
+        AnnotationRegistry::registerLoader(
+            function ($class) use ($sysPath) {
+                $file = str_replace("\\", DIRECTORY_SEPARATOR, $class).".php";
+                $file = str_replace('Symfony/Component/Validator', '', $file);
+                $file = $sysPath.'vendor/symfony/validator'.$file;
+
+                if (file_exists($file)) {
+                    // file exists makes sure that the loader fails silently
+                    require_once $file;
+
+                    return true;
+                }
+            }
         );
 
         AnnotationRegistry::registerFile(

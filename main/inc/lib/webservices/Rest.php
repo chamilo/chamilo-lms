@@ -883,21 +883,24 @@ class Rest extends WebService
 
                 foreach ($sessions['courses'] as $course) {
                     $courseInfo = api_get_course_info_by_id($course['real_id']);
+                    $teachers = SessionManager::getCoachesByCourseSessionToString(
+                        $sessions['session_id'],
+                        $course['real_id']
+                    );
 
                     $sessionCourses[] = [
-                        'visibility' => $course['visibility'],
-                        'status' => $course['status'],
                         'id' => $courseInfo['real_id'],
                         'title' => $courseInfo['title'],
                         'code' => $courseInfo['code'],
                         'directory' => $courseInfo['directory'],
-                        'pictureUrl' => $courseInfo['course_image_large']
+                        'pictureUrl' => $courseInfo['course_image_large'],
+                        'teachers' => $teachers
                     ];
                 }
 
                 $categorySessions[] = [
-                    'session_name' => $sessions['session_name'],
-                    'session_id' => $sessions['session_id'],
+                    'name' => $sessions['session_name'],
+                    'id' => $sessions['session_id'],
                     'accessStartDate' => api_format_date($sessions['access_start_date'], DATE_TIME_FORMAT_SHORT),
                     'accessEndDate' => api_format_date($sessions['access_end_date'], DATE_TIME_FORMAT_SHORT),
                     'courses' => $sessionCourses

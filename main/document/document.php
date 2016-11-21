@@ -1019,7 +1019,9 @@ if ($is_allowed_to_edit ||
             $folders = DocumentManager::get_all_document_folders(
                 $courseInfo,
                 $groupIid,
-                $is_allowed_to_edit || $group_member_with_upload_rights
+                $is_allowed_to_edit || $group_member_with_upload_rights,
+                false,
+                $curdirpath
             );
 
             // filter if is my shared folder. TODO: move this code to build_move_to_selector function
@@ -1547,14 +1549,18 @@ if ($groupId != 0) {
         $folders = DocumentManager::get_all_document_folders(
             $courseInfo,
             $groupIid,
-            $is_allowed_to_edit || $group_member_with_upload_rights
+            $is_allowed_to_edit || $group_member_with_upload_rights,
+            false,
+            $curdirpath
         );
     }
 } else {
     $folders = DocumentManager::get_all_document_folders(
         $courseInfo,
-        $groupIid,
-        $is_allowed_to_edit || $group_member_with_upload_rights
+        0,
+        $is_allowed_to_edit || $group_member_with_upload_rights,
+        false,
+        $curdirpath
     );
 }
 

@@ -647,7 +647,7 @@ if (isset($document_data) && $document_data['path'] == '/certificates') {
 
 if (!$parent_id) {
     $testParentId = 0;
-    // Guess parent id depe
+    // Get parent id from current path
     if (!empty($document_data['path'])) {
         $testParentId = DocumentManager::get_document_id(
             api_get_course_info(),

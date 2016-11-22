@@ -441,19 +441,21 @@ class CourseHome
     /**
      * Gets the tools of a certain category. Returns an array expected
      * by show_tools_category()
-     * @param string $course_tool_category	contains the category of tools to
+     * @param string $course_tool_category contains the category of tools to
      * display: "toolauthoring", "toolinteraction", "tooladmin", "tooladminplatform", "toolplugin"
+     * @param int $courseId Optional
+     * @param int $sessionId Optional
      * @return array
      */
-    public static function get_tools_category($course_tool_category)
+    public static function get_tools_category($course_tool_category, $courseId = 0, $sessionId = 0)
     {
         $course_tool_table = Database::get_course_table(TABLE_TOOL_LIST);
         $is_platform_admin = api_is_platform_admin();
         $all_tools_list = array();
 
         // Condition for the session
-        $session_id = api_get_session_id();
-        $course_id = api_get_course_int_id();
+        $session_id = $sessionId ?: api_get_session_id();
+        $course_id = $courseId ?: api_get_course_int_id();
         $condition_session = api_get_session_condition($session_id, true, true, 't.session_id');
 
         switch ($course_tool_category) {

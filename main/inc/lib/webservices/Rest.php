@@ -224,6 +224,11 @@ class Rest extends WebService
     public function getCourseInfo()
     {
         $teachers = CourseManager::get_teacher_list_from_course_code_to_string($this->course->getCode());
+        $tools = CourseHome::get_tools_category(
+            'TOOL_STUDENT_VIEW',
+            $this->course->getId(),
+            $this->session ? $this->session->getId() : 0
+        );
 
         return [
             'id' => $this->course->getId(),
@@ -231,7 +236,13 @@ class Rest extends WebService
             'code' => $this->course->getCode(),
             'directory' => $this->course->getDirectory(),
             'urlPicture' => $this->course->getPicturePath(true),
-            'teachers' => $teachers
+            'teachers' => $teachers,
+            'tools' => array_map(
+                function ($tool) {
+                    return ['type' => $tool['name']];
+                },
+                $tools
+            )
         ];
     }
 
@@ -872,21 +883,24 @@ class Rest extends WebService
 
                 foreach ($sessions['courses'] as $course) {
                     $courseInfo = api_get_course_info_by_id($course['real_id']);
+                    $teachers = SessionManager::getCoachesByCourseSessionToString(
+                        $sessions['session_id'],
+                        $course['real_id']
+                    );
 
                     $sessionCourses[] = [
-                        'visibility' => $course['visibility'],
-                        'status' => $course['status'],
                         'id' => $courseInfo['real_id'],
                         'title' => $courseInfo['title'],
                         'code' => $courseInfo['code'],
                         'directory' => $courseInfo['directory'],
-                        'pictureUrl' => $courseInfo['course_image_large']
+                        'pictureUrl' => $courseInfo['course_image_large'],
+                        'teachers' => $teachers
                     ];
                 }
 
                 $categorySessions[] = [
-                    'session_name' => $sessions['session_name'],
-                    'session_id' => $sessions['session_id'],
+                    'name' => $sessions['session_name'],
+                    'id' => $sessions['session_id'],
                     'accessStartDate' => api_format_date($sessions['access_start_date'], DATE_TIME_FORMAT_SHORT),
                     'accessEndDate' => api_format_date($sessions['access_end_date'], DATE_TIME_FORMAT_SHORT),
                     'courses' => $sessionCourses

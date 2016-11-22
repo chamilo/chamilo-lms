@@ -77,7 +77,12 @@ $action = isset($_GET['action']) ? $_GET['action'] : '';
 switch ($action) {
     case 'subscribe_user':
         $sessionId = isset($_GET['session_id']) ? $_GET['session_id'] : '';
-        SessionManager::suscribe_users_to_session($sessionId, [$userToLoad], SESSION_VISIBLE_READ_ONLY, false);
+        SessionManager::subscribe_users_to_session(
+            $sessionId,
+            [$userToLoad],
+            SESSION_VISIBLE_READ_ONLY,
+            false
+        );
         Display::addFlash(Display::return_message(get_lang('UserAdded')));
         header("Location: ".api_get_self().'?user_id='.$userToLoad);
         exit;

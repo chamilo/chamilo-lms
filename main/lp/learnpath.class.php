@@ -5922,7 +5922,7 @@ class learnpath
             $folderData = create_unexisting_directory(
                 $course,
                 $creatorId,
-                api_get_session_id(),
+                0,
                 0,
                 0,
                 $filepath,
@@ -7661,6 +7661,7 @@ class learnpath
 
         if ($action != 'move') {
             $data = $this->generate_lp_folder($_course);
+
             $folders = DocumentManager::get_all_document_folders(
                 $_course,
                 0,

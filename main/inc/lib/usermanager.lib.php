@@ -708,6 +708,11 @@ class UserManager
                 WHERE lastedit_user_id = '".$user_id."'";
         Database::query($sql);
 
+        // Skills
+        $table = Database::get_main_table(TABLE_MAIN_SKILL_REL_USER);
+        $sql = "DELETE FROM $table WHERE user_id = $user_id";
+        Database::query($sql);
+
         // Delete user from database
         $sql = "DELETE FROM $table_user WHERE id = '".$user_id."'";
         Database::query($sql);

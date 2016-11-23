@@ -33,15 +33,25 @@ class DatePicker extends HTML_QuickForm_text
     public function toHtml()
     {
         if ($this->_flagFrozen) {
-            return $this->getFrozenHtml();
-        }
+            $value = $this->getValue();
+            if (!empty($value) && $value != '0000-00-00') {
+                $value = api_format_date($value, DATE_FORMAT_LONG_NO_DAY);
+                $this->updateAttributes(
+                    array(
+                        'value' => $value
+                    )
+                );
+            }
 
+            $frozen = $this->getFrozenHtml();
+            return $frozen;
+        }
         $id = $this->getAttribute('id');
         $value = $this->getValue();
         $label = $this->getLabel();
 
         if (!empty($value)) {
-            $value = api_format_date($value, DATE_TIME_FORMAT_LONG_24H);
+            $value = api_format_date($value, DATE_FORMAT_LONG_NO_DAY);
         }
 
         return '

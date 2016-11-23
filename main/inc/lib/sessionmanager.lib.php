@@ -519,6 +519,7 @@ class SessionManager
 
         $query .= $order;
         $query .= $limit;
+
         $result = Database::query($query);
 
         $categories = self::get_all_session_category();

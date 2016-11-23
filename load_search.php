@@ -407,32 +407,34 @@ $filterToSend = '';
 
 if ($formSearch->validate()) {
     $formSearchParams = $formSearch->getSubmitValues();
-    $filters = [];
-    foreach ($defaults as $key => $value) {
-        if (substr($key, 0, 6) != 'extra_' && substr($key, 0, 7) != '_extra_') {
-            continue;
-        }
-        if (!empty($value)) {
-            $filters[$key] = $value;
-        }
-    }
+}
 
-    $filterToSend = [];
-    if (!empty($filters)) {
-        $filterToSend = ['groupOp' => 'AND'];
-        if ($filters) {
-            $count = 1;
-            $countExtraField = 1;
-            foreach ($result['column_model'] as $column) {
-                if ($count > 5) {
-                    if (isset($filters[$column['name']])) {
-                        $defaultValues['jqg'.$countExtraField] = $filters[$column['name']];
-                        $filterToSend['rules'][] = ['field' => $column['name'], 'op' => 'cn', 'data' => $filters[$column['name']]];
-                    }
-                    $countExtraField++;
+// Search filter
+$filters = [];
+foreach ($defaults as $key => $value) {
+    if (substr($key, 0, 6) != 'extra_' && substr($key, 0, 7) != '_extra_') {
+        continue;
+    }
+    if (!empty($value)) {
+        $filters[$key] = $value;
+    }
+}
+
+$filterToSend = [];
+if (!empty($filters)) {
+    $filterToSend = ['groupOp' => 'AND'];
+    if ($filters) {
+        $count = 1;
+        $countExtraField = 1;
+        foreach ($result['column_model'] as $column) {
+            if ($count > 5) {
+                if (isset($filters[$column['name']])) {
+                    $defaultValues['jqg'.$countExtraField] = $filters[$column['name']];
+                    $filterToSend['rules'][] = ['field' => $column['name'], 'op' => 'cn', 'data' => $filters[$column['name']]];
                 }
-                $count++;
+                $countExtraField++;
             }
+            $count++;
         }
     }
 }

@@ -665,15 +665,16 @@ $sessionByUserList = SessionManager::get_sessions_by_user($userToLoad, true, tru
 $sessionUserList = array();
 if (!empty($sessionByUserList)) {
     foreach ($sessionByUserList as $sessionByUser) {
-        $sessionUserList[] = $sessionByUser['session_id'];
+        $sessionUserList[] = (string) $sessionByUser['session_id'];
     }
 }
 $action_links = 'function action_formatter(cellvalue, options, rowObject) {
-    var sessionList = '.json_encode($sessionUserList).';
-    if ($.inArray(options.rowId, sessionList) == -1) {
-        return \'<a href="'.api_get_self().'?action=subscribe_user&user_id='.$userToLoad.'&session_id=\'+options.rowId+\'">'.Display::return_icon('add.png', addslashes(get_lang('Subscribe')),'',ICON_SIZE_SMALL).'</a>'.'\';
+    var sessionList = '.json_encode($sessionUserList).';    
+    var id = options.rowId.toString();    
+    if (sessionList.indexOf(id) == -1) {
+        return \'<a href="'.api_get_self().'?action=subscribe_user&user_id='.$userToLoad.'&session_id=\'+id+\'">'.Display::return_icon('add.png', addslashes(get_lang('Subscribe')),'',ICON_SIZE_SMALL).'</a>'.'\';
     } else {
-        return \'<a href="'.api_get_self().'?action=unsubscribe_user&user_id='.$userToLoad.'&session_id=\'+options.rowId+\'">'.Display::return_icon('delete.png', addslashes(get_lang('Delete')),'',ICON_SIZE_SMALL).'</a>'.'\';
+        return \'<a href="'.api_get_self().'?action=unsubscribe_user&user_id='.$userToLoad.'&session_id=\'+id+\'">'.Display::return_icon('delete.png', addslashes(get_lang('Delete')),'',ICON_SIZE_SMALL).'</a>'.'\';
     }
 }';
 

@@ -156,7 +156,7 @@ function parse_csv_courses_data($file)
 
 $cidReset = true;
 
-require '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();

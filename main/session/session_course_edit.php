@@ -8,7 +8,7 @@
 
 $cidReset = true;
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 $id_session = intval($_GET['id_session']);
 SessionManager::protectSession($id_session);

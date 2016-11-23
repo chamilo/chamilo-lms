@@ -6,7 +6,7 @@
  * @author Julio Montoya <gugli100@gmail.com>
  */
 $cidReset = true;
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
 
@@ -110,7 +110,7 @@ if ($total_invitations == 0 && count($_GET) <= 0) {
 
 if ($number_loop != 0) {
     $invitationHtml = '';
-    
+
     foreach ($list_get_invitation as $invitation) {
         $sender_user_id = $invitation['user_sender_id'];
         $user_info = api_get_user_info($sender_user_id);
@@ -125,7 +125,7 @@ if ($number_loop != 0) {
         $invitationHtml .= '<a href="profile.php?u='.$sender_user_id.'"><img class="img-responsive img-rounded" src="'.$userPicture.'"/></a>';
         $invitationHtml .= '</div>';
         $invitationHtml .= '<div class="col-md-10">';
-        
+
         $invitationHtml .= '<div class="pull-right">';
         $invitationHtml .= '<div class="btn-group btn-group-sm" role="group">';
         $invitationHtml .= Display::toolbarButton(
@@ -151,14 +151,14 @@ if ($number_loop != 0) {
         );
         $invitationHtml .= '</div>';
         $invitationHtml .= '</div>';
-        
+
         $invitationHtml .= '<h5 class="title-profile"><a href="profile.php?u='.$sender_user_id.'">
                             '.$user_info['complete_name'].'</a>:
                             </h5>';
         $invitationHtml .= '<div class="content-invitation">'.$content.'</div>';
         $invitationHtml .= '<div class="date-invitation">'.get_lang('DateSend').' : '.$date.'</div>';
-        
-        
+
+
         $invitationHtml .= '</div>';
         $invitationHtml .= '</div></div>';
     }

@@ -4,7 +4,7 @@
 // including necessary libraries
 $cidReset = true;
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 // user permissions
 api_block_anonymous_users();

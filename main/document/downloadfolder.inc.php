@@ -11,7 +11,7 @@ use ChamiloSession as Session;
 
 set_time_limit(0);
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script();
 

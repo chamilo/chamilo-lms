@@ -12,7 +12,7 @@ use ChamiloSession as Session;
  * @author Juan Carlos Raña Trabado
  * @since 30/january/2011
 */
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 $_SESSION['whereami'] = 'document/editpaint';
 $this_section = SECTION_COURSES;

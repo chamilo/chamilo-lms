@@ -5,7 +5,7 @@
  */
 
 // including the basic Chamilo initialisation file
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 // the dropbox file that contains additional functions
 require_once 'dropbox_functions.inc.php';

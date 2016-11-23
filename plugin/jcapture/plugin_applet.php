@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once '../../main/inc/global.inc.php';
+require_once __DIR__.'/../../main/inc/global.inc.php';
 
 $plugin = new AppPlugin();
 $pluginList = $plugin->get_installed_plugins();

@@ -6,7 +6,7 @@ define('CHAMILO_INTERNAL', true);
 
 global $plugin;
 
-require_once '../../../main/inc/global.inc.php';
+require_once __DIR__.'/../../../main/inc/global.inc.php';
 require_once api_get_path(SYS_PLUGIN_PATH).'vchamilo/views/editinstance_form.php';
 
 api_protect_admin_script();

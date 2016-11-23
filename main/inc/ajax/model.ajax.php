@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 //@todo this could be integrated in the inc/lib/model.lib.php + try to clean this file
-require_once '../global.inc.php';
+require_once __DIR__.'/../global.inc.php';
 
 $libpath = api_get_path(LIBRARY_PATH);
 

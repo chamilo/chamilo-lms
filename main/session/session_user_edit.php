@@ -4,7 +4,7 @@
 $cidReset = true;
 
 // including the global Chamilo file
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 $sessionId = isset($_GET['session_id']) ? $_GET['session_id'] : null;
 $userId = isset($_GET['user_id']) ? $_GET['user_id'] : null;

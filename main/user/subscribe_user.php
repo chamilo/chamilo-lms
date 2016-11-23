@@ -10,7 +10,7 @@ use Chamilo\CoreBundle\Entity\ExtraField;
 * @package chamilo.user
 */
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool  = TOOL_USER;
 
 // the section (for the tabs)

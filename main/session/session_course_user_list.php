@@ -6,7 +6,7 @@
 */
 $cidReset = true;
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 $tbl_user                           = Database::get_main_table(TABLE_MAIN_USER);
 $tbl_course                         = Database::get_main_table(TABLE_MAIN_COURSE);

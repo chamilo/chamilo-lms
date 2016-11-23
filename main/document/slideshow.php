@@ -6,7 +6,7 @@
  * @author Juan Carlos Raña Trabado herodoto@telefonica.net	January 2008
  * @package chamilo.document
  */
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 api_protect_course_script();
 
 $noPHP_SELF = true;

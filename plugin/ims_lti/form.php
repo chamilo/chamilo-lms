@@ -4,7 +4,7 @@
 use Chamilo\UserBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Course;
 
-require '../../main/inc/global.inc.php';
+require_once __DIR__.'/../../main/inc/global.inc.php';
 require './OAuthSimple.php';
 
 api_protect_course_script();

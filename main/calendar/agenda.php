@@ -7,7 +7,7 @@
 
 // use anonymous mode when accessing this course tool
 $use_anonymous = true;
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_CALENDAR_EVENT;
 $course_info = api_get_course_info();
 

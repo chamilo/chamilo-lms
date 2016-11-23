@@ -27,7 +27,7 @@ use ChamiloSession as Session;
  * not for validation at the moment)
  */
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 $groupRights = Session::read('group_member_with_upload_rights');
 

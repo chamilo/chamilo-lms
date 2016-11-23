@@ -9,7 +9,7 @@
 
 $cidReset = true;
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 $user_id = api_get_user_id();
 $show_full_profile = true;

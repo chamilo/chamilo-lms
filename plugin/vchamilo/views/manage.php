@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 $cidReset = true;
-require_once '../../../main/inc/global.inc.php';
+require_once __DIR__.'/../../../main/inc/global.inc.php';
 
 // Security
 api_protect_admin_script();

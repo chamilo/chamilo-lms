@@ -20,7 +20,7 @@
  *	On this page the options of the slideshow can be set: maintain the original file
  *	or resize the file to a given width.
  */
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 api_protect_course_script();
 
 $path = Security::remove_XSS($_GET['curdirpath']);
@@ -136,7 +136,7 @@ Display::toolbarAction('toolbar-slideshow', $content)
                 <button type="submit" class="btn btn-default" name="Submit" value="Save" ><?php echo get_lang('Save'); ?></button>
             </div>
         </div>
-</form>           
+</form>
     </div>
 </div>
 <?php

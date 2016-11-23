@@ -1,7 +1,7 @@
 <?php
 /* See license terms in /license.txt */
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
 
@@ -146,14 +146,14 @@ if (!empty($question_list)) {
 
                         $answer_item = api_substr($answer_item, 1);
                         $answer_item = api_substr($answer_item, 0, api_strlen($answer_item) -1);
-                        
+
                         $data[$id]['answer'] 	= $answer_item;
 
                         $data[$id]['correct'] 	= '-';
 
                         $count = ExerciseLib::getNumberStudentsFillBlanksAnwserCount($question_id, $exercise_id);
                         $count = $count[$counter];
-                        
+
                         $percentange = 0;
                         if (!empty($count_students)) {
                             $percentange = $count/$count_students*100;

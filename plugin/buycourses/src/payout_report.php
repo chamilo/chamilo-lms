@@ -8,7 +8,7 @@
 //Initialization
 $cidReset = true;
 
-require_once '../../../main/inc/global.inc.php';
+require_once __DIR__.'/../../../main/inc/global.inc.php';
 
 $htmlHeadXtra[] = '<link rel="stylesheet" href="../resources/css/style.css" type="text/css">';
 $htmlHeadXtra[] = '<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>';
@@ -44,17 +44,17 @@ $form->setDefaults([
 switch ($selectedStatus) {
     case '2':
         $payouts = $plugin->getPayouts($selectedStatus);
-        
+
         break;
     case '1':
         $payouts = $plugin->getPayouts($selectedStatus);
-        
+
         break;
     case '0':
         //no break
     default:
         $payouts = $plugin->getPayouts();
-        
+
         break;
 }
 

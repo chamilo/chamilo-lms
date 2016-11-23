@@ -11,7 +11,7 @@
 
 $cidReset = true;
 
-require_once '../../../main/inc/global.inc.php';
+require_once __DIR__.'/../../../main/inc/global.inc.php';
 
 $htmlHeadXtra[] = '<link rel="stylesheet" href="../resources/css/style.css" type="text/css">';
 

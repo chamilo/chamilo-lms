@@ -5,7 +5,7 @@
  * This file takes care of all blog navigation and displaying.
  * @package chamilo.blogs
  */
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 $blog_id = intval($_GET['blog_id']);
 

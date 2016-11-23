@@ -12,7 +12,7 @@ use ChamiloSession as Session;
  * @author Julio Montoya <gugli100@gmail.com> Updating form with formvalidator
  */
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 if (empty($_user['user_id'])) {
     api_not_allowed(true);

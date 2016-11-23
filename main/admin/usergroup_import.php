@@ -74,7 +74,7 @@ function save_data($classes)
 // Resetting the course id.
 $cidReset = true;
 
-include '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 // Setting the section (for the tabs).
 $this_section = SECTION_PLATFORM_ADMIN;

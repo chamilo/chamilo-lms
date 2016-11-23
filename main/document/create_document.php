@@ -9,7 +9,7 @@ use ChamiloSession as Session;
  *	@package chamilo.document
  */
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 $_SESSION['whereami'] = 'document/create';
 $this_section = SECTION_COURSES;

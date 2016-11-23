@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 // The section for the tabs
 $this_section = SECTION_COURSES;
@@ -161,7 +161,7 @@ function getCustomWebIconPath()
 {
     // Check if directory exists or create it if it doesn't
     $dir = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/course_home_icons/';
-    
+
     return $dir;
 }
 $tpl = new Template($toolName);

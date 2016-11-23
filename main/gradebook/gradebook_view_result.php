@@ -5,7 +5,7 @@
  * Script
  * @package chamilo.gradebook
  */
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/fe/exportgradebook.php';
 
 api_block_anonymous_users();

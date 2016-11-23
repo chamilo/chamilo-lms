@@ -9,7 +9,7 @@
 //Disabling code when course code is null (gradebook as a tab) see issue #2705
 exit;
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_MYGRADEBOOK;
 api_block_anonymous_users();
 GradebookUtils::block_students();

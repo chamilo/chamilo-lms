@@ -8,7 +8,7 @@
 // Resetting the course id.
 $cidReset = true;
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
 require_once $libpath.'specific_fields_manager.lib.php';
 

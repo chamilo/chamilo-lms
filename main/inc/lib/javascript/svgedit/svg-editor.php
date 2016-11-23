@@ -6,6 +6,7 @@
  */
 
 require_once '../../../../inc/global.inc.php';//hack for Chamilo
+
 api_protect_course_script();
 api_block_anonymous_users();
 if (!isset($_SESSION['draw_dir'])) {

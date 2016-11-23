@@ -27,7 +27,7 @@ if (!isset($_REQUEST['view'])) {
 } else {
     $view = $_REQUEST['view'];
 }
-include('../inc/global.inc.php');
+require_once __DIR__.'/../inc/global.inc.php';
 
 $interbreadcrumb[] = array("url" => "../user/user.php", "name" => get_lang('Users'));
 

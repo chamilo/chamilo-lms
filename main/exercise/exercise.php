@@ -14,7 +14,7 @@ use ChamiloSession as Session;
  */
 
 // including the global library
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_QUIZ;
 
 // Setting the tabs

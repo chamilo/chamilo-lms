@@ -14,7 +14,7 @@ use ChamiloSession as Session;
  *
  */
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 $debug = false;
 if (empty($origin)) {
     $origin = isset($_REQUEST['origin']) ? $_REQUEST['origin'] : null;

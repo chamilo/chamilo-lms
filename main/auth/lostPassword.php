@@ -15,7 +15,7 @@
 *	@package chamilo.auth
 */
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 // Custom pages
 // Had to move the form handling in here, because otherwise there would

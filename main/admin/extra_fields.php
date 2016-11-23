@@ -7,7 +7,7 @@
 
 $cidReset = true;
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 $extraFieldType = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
 

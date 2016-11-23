@@ -8,7 +8,7 @@
 * 	@version $Id: question.php 21734 2009-07-02 17:12:41Z cvargas1 $
 */
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 $htmlHeadXtra[] = '<script>
 $(document).ready( function() {

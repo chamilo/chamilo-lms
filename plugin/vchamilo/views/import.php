@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 $cidReset = true;
-require_once '../../../main/inc/global.inc.php';
+require_once __DIR__.'/../../../main/inc/global.inc.php';
 
 $interbreadcrumb[] = array('url' => 'manage.php', 'name' => get_lang('VChamilo'));
 

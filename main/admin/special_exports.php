@@ -14,7 +14,7 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseSelectForm;
 
 // including the global file
 $cidReset = true;
-require_once  '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
 $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));

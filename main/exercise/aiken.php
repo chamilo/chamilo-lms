@@ -8,7 +8,7 @@
 * @author César Perales <cesar.perales@gmail.com> Updated function names and import files for Aiken format support
 */
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 $lib_path = api_get_path(LIBRARY_PATH);
 $main_path = api_get_path(SYS_CODE_PATH);
 

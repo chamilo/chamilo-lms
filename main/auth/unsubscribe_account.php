@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 if (api_get_setting('platform_unsubscribe_allowed') != 'true') {
     api_not_allowed();

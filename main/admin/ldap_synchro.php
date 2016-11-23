@@ -10,7 +10,7 @@ exit(); //not yet functional, needs to be revised
 
 $cidReset=true;
 
-require('../inc/global.inc.php');
+require_once __DIR__.'/../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
 require_once('../auth/ldap/authldap.php');
 $annee_base=date('Y');

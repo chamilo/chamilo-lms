@@ -4,7 +4,7 @@
  * @package chamilo.calendar
  */
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 $interbreadcrumb[] = array(
     'url' => api_get_path(WEB_CODE_PATH) . "calendar/agenda_js.php",

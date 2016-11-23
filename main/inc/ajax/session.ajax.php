@@ -4,7 +4,7 @@
 /**
  * Responses to AJAX calls
  */
-require_once '../global.inc.php';
+require_once __DIR__.'/../global.inc.php';
 
 $action = $_REQUEST['a'];
 

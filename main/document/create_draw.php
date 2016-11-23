@@ -12,7 +12,7 @@ use ChamiloSession as Session;
  * @since 25/september/2010
 */
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 $_SESSION['whereami'] = 'document/createdraw';
 $this_section = SECTION_COURSES;

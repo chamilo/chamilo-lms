@@ -4,7 +4,7 @@
 /**
  * Responses to AJAX calls for the document upload
  */
-require_once '../global.inc.php';
+require_once __DIR__.'/../global.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'dropbox/dropbox_functions.inc.php';
 
 $action = $_REQUEST['a'];

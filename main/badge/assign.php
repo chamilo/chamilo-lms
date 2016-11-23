@@ -11,7 +11,7 @@ use Chamilo\CoreBundle\Entity\SkillRelUser;
  * @package chamilo.badge
  */
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 if (!api_is_platform_admin(false, true) && !api_is_student_boss()) {
     api_not_allowed(true);

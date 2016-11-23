@@ -15,7 +15,7 @@ $userId = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : null;
 if ($type == 'personal' || $type == 'admin') {
     $cidReset = true; // fixes #5162
 }
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 $current_course_tool = TOOL_CALENDAR_EVENT;
 $this_section = SECTION_MYAGENDA;

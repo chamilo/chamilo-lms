@@ -6,7 +6,7 @@
  * @package chamilo.admin
  */
 $cidReset = true;
-require '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 // temporary configuration of in which folder to upload the file in each course.

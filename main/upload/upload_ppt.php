@@ -9,7 +9,7 @@ use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 $htmlHeadXtra[] = '<script language="javascript" src="../inc/lib/javascript/upload.js" type="text/javascript"></script>';
 $htmlHeadXtra[] = '<script type="text/javascript">

@@ -9,7 +9,7 @@
  */
 $cidReset = true;
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_admin_script(true);
 api_protect_limit_for_session_admin();
@@ -111,7 +111,7 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
               <?php
                 echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_category_add.php">'.Display::return_icon('new_folder.png', get_lang('AddSessionCategory'), '', ICON_SIZE_MEDIUM).'</a>
                       <a href="'.api_get_path(WEB_CODE_PATH).'session/session_list.php">'.Display::return_icon('session.png', get_lang('ListSession'), '', ICON_SIZE_MEDIUM).'</a>';
-            ?>  
+            ?>
             </div>
             <div class="col-md-6">
                 <div class="pull-right">
@@ -122,7 +122,7 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
                     <!-- <a href="session_list.php?search=advanced"><?php echo get_lang('AdvancedSearch'); ?></a> -->
                     </div>
                 </form>
-                </div>    
+                </div>
             </div>
         </div>
     <form method="post" action="<?php echo api_get_self(); ?>?action=delete&sort=<?php echo $sort; ?>" onsubmit="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;">
@@ -154,7 +154,7 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
             }
             ?>
         </div>
-        
+
         <table class="data_table" width="100%">
             <tr>
                 <th>&nbsp;</th>

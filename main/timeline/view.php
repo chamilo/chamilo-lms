@@ -4,7 +4,7 @@
 	@author Julio Montoya <gugli100@gmail.com> BeezNest 2011
 *	@package chamilo.timeline
 */
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 $interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('Timeline'));
 $interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('Listing'));

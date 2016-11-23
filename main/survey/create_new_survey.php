@@ -13,7 +13,7 @@
  *  api get_languages and and api_get_available_languages (or a parameter)
  */
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
 

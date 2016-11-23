@@ -7,7 +7,7 @@
  */
 $cidReset = true;
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 $ajax_url = api_get_path(WEB_AJAX_PATH).'message.ajax.php';
 api_block_anonymous_users();
 

@@ -9,7 +9,7 @@
 
 use ChamiloSession as Session;
 // Including the global initialization file
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
 $current_course_tool  = TOOL_SURVEY;
@@ -30,7 +30,7 @@ if ($isDrhOfCourse) {
 }
 if (!api_is_allowed_to_edit(false, true) ||
     (api_is_course_coach() && $extend_rights_for_coachs == 'false')
-) {    
+) {
     api_not_allowed(true);
 	exit;
 }

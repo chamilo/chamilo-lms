@@ -7,7 +7,7 @@
  * @package chamilo.glossary
  */
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 /**
  * Search a term and return description from a glossary.
@@ -49,7 +49,7 @@ if (isset($_POST['glossary_id']) &&
     $glossaryInfo = GlossaryManager::get_glossary_term_by_glossary_name(
         $my_glossary_name
     );
-    
+
     $glossary_description = str_replace(
         $path_image_search,
         $path_image,

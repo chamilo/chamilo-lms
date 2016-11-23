@@ -8,7 +8,7 @@ $action = $_GET['a'];
 
 switch ($action) {
     case 'set_visibility':
-        require_once '../global.inc.php';
+        require_once __DIR__.'/../global.inc.php';
         $course_id = api_get_course_int_id();
         if (api_is_allowed_to_edit(null, true)) {
             $tool_table = Database::get_course_table(TABLE_TOOL_LIST);
@@ -63,8 +63,8 @@ switch ($action) {
             echo json_encode($response_data);
         }
         break;
-    case 'show_course_information' :
-        require_once '../global.inc.php';
+    case 'show_course_information':
+        require_once __DIR__.'/../global.inc.php';
 
         // Get the name of the database course.
         $tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
@@ -102,7 +102,7 @@ switch ($action) {
          * wrapper to process the AJAX petitions from the jqgrid
          */
 
-        require_once '../global.inc.php';
+        require_once __DIR__.'/../global.inc.php';
         $now = time();
         $page  = intval($_REQUEST['page']);     //page
         $limit = intval($_REQUEST['rows']);     // quantity of rows
@@ -231,7 +231,7 @@ switch ($action) {
         echo json_encode($response);
         break;
     case 'session_courses_lp_by_week':
-        require_once '../global.inc.php';
+        require_once __DIR__.'/../global.inc.php';
         $now = time();
 
         $page  = intval($_REQUEST['page']);     //page
@@ -377,7 +377,7 @@ switch ($action) {
         echo json_encode($response);
         break;
     case 'session_courses_lp_by_course':
-        require_once '../global.inc.php';
+        require_once __DIR__.'/../global.inc.php';
         $now = time();
         $page  = intval($_REQUEST['page']);     //page
         $limit = intval($_REQUEST['rows']);     // quantity of rows

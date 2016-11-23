@@ -3,7 +3,7 @@
 /**
  * @package chamilo.webservices
  */
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 require_once(dirname(__FILE__).'/webservice.php');
 $libpath = api_get_path(LIBRARY_PATH);
 

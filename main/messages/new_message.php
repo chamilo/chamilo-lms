@@ -13,7 +13,7 @@
 * - send to specific user (when pressing send message in the who is online list)
 */
 $cidReset = true;
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
 

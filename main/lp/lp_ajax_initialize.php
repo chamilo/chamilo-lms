@@ -12,7 +12,7 @@
 // Flag to allow for anonymous user - needs to be set before global.inc.php
 
 $use_anonymous = true;
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 /**
  * Get one item's details
@@ -169,7 +169,7 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item)
     $mylp->prerequisites_match(); // Check the prerequisites are all complete.
     if ($debug > 1) { error_log('Prereq_match() returned '.htmlentities($mylp->error), 0); }
     if ($debug > 1) { error_log("return = $return "); }
-    
+
     return $return;
 }
 echo initialize_item($_POST['lid'], $_POST['uid'], $_POST['vid'], $_POST['iid']);

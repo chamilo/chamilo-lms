@@ -3,7 +3,7 @@
 
 exit;
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 api_protect_admin_script();
 
 $file = '';

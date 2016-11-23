@@ -9,7 +9,7 @@
  *
  *	@package chamilo.work
  */
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 require_once 'work.lib.php';
 
 // Course protection

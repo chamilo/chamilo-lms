@@ -13,7 +13,7 @@
 
 // Prevents FF 3.6 + Adobe Reader 9 bug see BT#794 when calling a pdf file in a LP
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script();
 

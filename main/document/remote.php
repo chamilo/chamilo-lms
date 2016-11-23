@@ -14,7 +14,7 @@
  */
 /* FIX for IE cache when using https */
 session_cache_limiter('none');
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 api_block_anonymous_users();
 /*==== Variables initialisation ====*/
 $action = $_REQUEST['action']; //safe as only used in if()'s

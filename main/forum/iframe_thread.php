@@ -20,7 +20,7 @@
  *
  * @package chamilo.forum
  */
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 // A notice for unauthorized people.
 api_protect_course_script(true);

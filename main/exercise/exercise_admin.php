@@ -11,7 +11,7 @@ use ChamiloSession as Session;
 * @author Olivier Brouckaert, Julio Montoya
 */
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
 if (!api_is_allowed_to_edit(null, true)) {

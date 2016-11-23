@@ -10,7 +10,7 @@ use ChamiloSession as Session;
 */
 
 $cidReset = true;
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 $current_access_url_id = api_get_current_access_url_id();
 

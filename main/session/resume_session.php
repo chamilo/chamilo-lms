@@ -10,7 +10,7 @@ use Chamilo\CoreBundle\Entity\Repository\SequenceRepository;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 
 $cidReset = true;
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 // setting breadcrumbs
 $interbreadcrumb[] = array('url' => 'session_list.php', 'name' => get_lang('Sessions'));

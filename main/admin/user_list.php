@@ -520,7 +520,7 @@ function user_filter($name, $params, $row)
  */
 function modify_filter($user_id, $url_params, $row)
 {
-    $_admins_list = Session::read('admin_list');
+    $_admins_list = Session::read('admin_list', []);
     $is_admin = in_array($user_id, $_admins_list);
     $statusname = api_get_status_langvars();
     $user_is_anonymous = false;

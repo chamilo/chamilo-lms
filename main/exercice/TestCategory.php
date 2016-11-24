@@ -521,7 +521,7 @@ class TestCategory
         $sql = "SELECT DISTINCT qrc.question_id, qrc.category_id
                 FROM $TBL_QUESTION_REL_CATEGORY qrc
                 INNER JOIN $TBL_EXERCICE_QUESTION eq
-                ON (eq.question_id = qrc.question_id)
+                ON (eq.question_id = qrc.question_id AND eq.c_id = qrc.c_id)
                 INNER JOIN $categoryTable c
                 ON (c.id = qrc.category_id)
                 INNER JOIN $tableQuestion q

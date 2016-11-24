@@ -605,11 +605,11 @@ $defaultTab = 1;
             $('.nav.nav-tabs a:last').on('shown', function (e) {
                 var panel = $('#tab_4');
 
-                console.log(panel.html(), $.trim(panel.html()).length);
-
                 if ($.trim(panel.html()).length) {
                     return;
                 }
+
+                panel.html('<div style="text-align: center;"><?php echo Display::return_icon('loading1.gif', get_lang('Loading')) ?></div>');
 
                 $.ajax('<?php echo api_get_path(WEB_AJAX_PATH) ?>session.ajax.php', {
                     data: {

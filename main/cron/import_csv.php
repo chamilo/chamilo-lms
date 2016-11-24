@@ -985,7 +985,6 @@ class ImportCsv
                         array('everyone'), // $usersToSend
                         array(), //$attachmentArray = array(),
                         [], //$attachmentCommentList
-                        null, //$attachmentComment = null,
                         $eventComment,
                         $color
                     );
@@ -1012,7 +1011,6 @@ class ImportCsv
                         null, //  $parentEventId
                         array(), //$attachmentArray = array(),
                         [], //$attachmentCommentList
-                        null, //$attachmentComment = null,
                         $eventComment,
                         $color
                     );

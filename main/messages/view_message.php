@@ -70,7 +70,7 @@ if (!empty($message)) {
 }
 $tpl = new Template(get_lang('View'));
 // Block Social Avatar
-SocialManager::setSocialUserBlock($tpl, $user_id, $show_menu);
+SocialManager::setSocialUserBlock($tpl, api_get_user_id(), $show_menu);
 
 if (api_get_setting('allow_social_tool') === 'true') {
     $tpl->assign('social_menu_block', $social_menu_block);

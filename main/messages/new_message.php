@@ -382,7 +382,7 @@ if (api_get_setting('allow_social_tool') === 'true') {
 
 $tpl = new Template(get_lang('ComposeMessage'));
 // Block Social Avatar
-SocialManager::setSocialUserBlock($tpl, $user_id, 'messages');
+SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'messages');
 
 if (api_get_setting('allow_social_tool') === 'true') {
     $tpl->assign('social_menu_block', $social_menu_block);

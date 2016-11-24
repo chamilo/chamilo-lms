@@ -519,11 +519,6 @@ $(function() {
         $( big_image ).dialog("open");
         return false;
     });
-
-    /* Binds a tab id in the url */
-    $("#tabs").bind('tabsselect', function(event, ui) {
-		window.location.href=ui.tab;
-    });
 <?php
      // Displays js code to use a jqgrid
      echo Display::grid_js('courses',       '',             $columns_courses, $column_model_courses, $extra_params_courses, $new_course_list);
@@ -533,7 +528,6 @@ $(function() {
      echo Display::grid_js('exercises',      '',            $column_exercise, $column_exercise_model, $extra_params_exercise, $my_real_array);
 ?>
     // Generate tabs with jquery-ui
-    $('#tabs').tabs();
     $('#sub_tab').tabs();
 });
 </script>
@@ -607,10 +601,22 @@ if (!empty($tabToHide)) {
     }
 }
 
-// Main headers data
-echo Display::tabs(
-    $headers,
-    $tabs
-);
+$defaultTab = 1;
+?>
+    <ul class="nav nav-tabs">
+        <?php foreach ($headers as $i => $tabHeader) { ?>
+            <li class="<?php echo $defaultTab === $i ? 'active' : '' ?>">
+                <a href="#tab_<?php echo $i ?>" data-toggle="tab"><?php echo $tabHeader ?></a>
+            </li>
+        <?php } ?>
+    </ul>
+    <div class="tab-content">
+        <?php foreach ($tabs as $i => $tabContent) { ?>
+            <div class="tab-pane <?php echo $defaultTab === $i ? 'active' : '' ?>" id="tab_<?php echo $i ?>">
+                <?php echo $tabContent ?>
+            </div>
+        <?php } ?>
+    </div>
+<?php
 
 Display::display_footer();

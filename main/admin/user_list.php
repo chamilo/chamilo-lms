@@ -298,7 +298,7 @@ function prepare_user_sql_query($is_count)
         $sql .= " ) ";
     }
 
-    $variables = Session::read('variables_to_show');
+    $variables = Session::read('variables_to_show', []);
 
     $extraField = new ExtraField('user');
 

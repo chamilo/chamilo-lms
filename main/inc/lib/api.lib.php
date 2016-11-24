@@ -7624,7 +7624,7 @@ function api_mail_html(
     }
 
     //If the SMTP configuration only accept one sender
-    if ($platform_email['SMTP_UNIQUE_SENDER']) {
+    if (isset($platform_email['SMTP_UNIQUE_SENDER']) && $platform_email['SMTP_UNIQUE_SENDER']) {
         $senderName = $platform_email['SMTP_FROM_NAME'];
         $senderEmail = $platform_email['SMTP_FROM_EMAIL'];
     }

@@ -233,7 +233,7 @@ if (count($pending_invitations) > 0) {
 }
 
 $tpl = new Template(null);
-SocialManager::setSocialUserBlock($tpl, $user_id, 'invitations');
+SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'invitations');
 $tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_invitations_block',$socialInvitationsBlock);
 $tpl->assign('content', $content);

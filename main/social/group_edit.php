@@ -59,7 +59,7 @@ $social_right_content = $form->returnForm();
 
 $tpl = new Template(get_lang('Edit'));
 
-SocialManager::setSocialUserBlock($tpl, $user_id, 'groups', $group_id);
+SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'groups', $group_id);
 
 $tpl->setHelp('Groups');
 $tpl->assign('social_menu_block', $social_left_content);

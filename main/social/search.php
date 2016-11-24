@@ -235,7 +235,7 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) 
 
 $tpl = new Template($tool_name);
 // Block Social Avatar
-SocialManager::setSocialUserBlock($tpl, $user_id, 'search');
+SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'search');
 $tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_search', $block_search);
 $tpl->assign('search_form', $searchForm);

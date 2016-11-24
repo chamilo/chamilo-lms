@@ -103,7 +103,7 @@ if (isset($_GET['cidReq'])) {
         ) . '</a>';
 }
 $tpl = new Template();
-SocialManager::setSocialUserBlock($tpl, $user_id, 'myfiles');
+SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'myfiles');
 $editor = new \Chamilo\CoreBundle\Component\Editor\Editor();
 $editor = $tpl->fetch('default/'.$editor->getEditorStandAloneTemplate());
 

@@ -47,7 +47,7 @@ $social_menu_block = SocialManager::show_social_menu('group_add');
 $social_right_content = $form->returnForm();
 
 $tpl = new Template(null);
-SocialManager::setSocialUserBlock($tpl, $user_id, null, null);
+SocialManager::setSocialUserBlock($tpl, api_get_user_id(), null, null);
 $tpl->setHelp('Groups');
 $tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_right_content', $social_right_content);

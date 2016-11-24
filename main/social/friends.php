@@ -156,7 +156,7 @@ if (count($friends) == 0) {
 $social_right_content .= '</div>';
 
 $tpl = new Template(get_lang('Social'));
-SocialManager::setSocialUserBlock($tpl, $user_id, 'friends');
+SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'friends');
 
 $tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_right_content', $social_right_content);

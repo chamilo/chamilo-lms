@@ -350,7 +350,7 @@ if ($form->validate()) {
         CourseManager::updateTeachers($courseInfo, $teachers, true, false);
 
         // Updating session coaches
-        $sessionCoaches = $course['session_coaches'];
+        $sessionCoaches = isset($course['session_coaches']) ? $course['session_coaches'] : [];
         if (!empty($sessionCoaches)) {
             foreach ($sessionCoaches as $sessionId => $coachesToSubscribe) {
                 if (!empty($coachesToSubscribe)) {

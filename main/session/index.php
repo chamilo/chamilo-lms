@@ -535,24 +535,6 @@ $(function() {
 <?php
 
 $courseCode = isset($_GET['course']) ? $_GET['course'] : null;
-$reportingTab = Tracking::show_user_progress(
-    api_get_user_id(),
-    $session_id,
-    '#tabs-4',
-    false,
-    false
-);
-
-if (!empty($reportingTab))  {
-    $reportingTab .= '<br />'.Tracking::show_course_detail(
-            api_get_user_id(),
-            $courseCode,
-            $session_id
-        );
-}
-if (empty($reportingTab)) {
-    $reportingTab = Display::return_message(get_lang('NoDataAvailable'), 'warning');
-}
 
 // Main headers
 $headers = array(
@@ -589,7 +571,7 @@ $tabs = array(
     $coursesTab,
     Display::grid_html('list_course'),
     Display::grid_html('exercises'),
-    $reportingTab
+    null
 );
 
 $tabToHide = api_get_configuration_value('session_hide_tab_list');
@@ -617,6 +599,31 @@ $defaultTab = 1;
             </div>
         <?php } ?>
     </div>
+
+    <script>
+        $(document).on('ready', function () {
+            $('.nav.nav-tabs a:last').on('shown', function (e) {
+                var panel = $('#tab_4');
+
+                console.log(panel.html(), $.trim(panel.html()).length);
+
+                if ($.trim(panel.html()).length) {
+                    return;
+                }
+
+                $.ajax('<?php echo api_get_path(WEB_AJAX_PATH) ?>session.ajax.php', {
+                    data: {
+                        course: '<?php echo $courseCode ?>',
+                        session_id: '<?php echo api_get_session_id() ?>',
+                        a: 'my_session_statistics'
+                    },
+                    success: function (response) {
+                        panel.html(response);
+                    }
+                });
+            });
+        });
+    </script>
 <?php
 
 Display::display_footer();

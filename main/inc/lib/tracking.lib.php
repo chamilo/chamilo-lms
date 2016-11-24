@@ -3948,7 +3948,7 @@ class Tracking
      * @param string $extra_params
      * @param bool $show_courses
      * @param bool $showAllSessions
-     *
+     * @param bool $isSessionIndex Optional. If not comming from session index page then use api_get_self when show a link
      * @return string
      */
     public static function show_user_progress(
@@ -3956,7 +3956,8 @@ class Tracking
         $session_id = 0,
         $extra_params = '',
         $show_courses = true,
-        $showAllSessions = true
+        $showAllSessions = true,
+        $isSessionIndex = true
     ) {
         $tbl_course = Database :: get_main_table(TABLE_MAIN_COURSE);
         $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
@@ -4483,7 +4484,8 @@ class Tracking
                         $details = '<a href="#">';
                         $details .=Display::return_icon('2rightarrow_na.gif', get_lang('Details'));
                     } else {
-                        $details = '<a href="'.api_get_self().'?course='.$course_code.'&session_id='.$session_id_from_get.$extra_params.'">';
+                        $url = !$isSessionIndex ? api_get_self() : api_get_path(WEB_CODE_PATH) . 'session/index.php';
+                        $details = '<a href="' . $url . '?course='.$course_code.'&session_id='.$session_id_from_get.$extra_params.'">';
                         $details .= Display::return_icon('2rightarrow.gif', get_lang('Details'));
                     }
                     $details .= '</a>';

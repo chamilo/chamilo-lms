@@ -520,7 +520,7 @@ function user_filter($name, $params, $row)
  */
 function modify_filter($user_id, $url_params, $row)
 {
-	global $charset, $_admins_list;
+    $_admins_list = Session::read('admin_list');
     $is_admin = in_array($user_id, $_admins_list);
     $statusname = api_get_status_langvars();
     $user_is_anonymous = false;
@@ -655,7 +655,7 @@ function modify_filter($user_id, $url_params, $row)
                 api_global_admin_can_edit_admin($user_id)
             ) {
                 // you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
-                $result .= ' <a href="user_list.php?action=delete_user&user_id='.$user_id.'&'.$url_params.'&sec_token='.$_SESSION['sec_token'].'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
+                $result .= ' <a href="user_list.php?action=delete_user&user_id='.$user_id.'&'.$url_params.'&sec_token='.$_SESSION['sec_token'].'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice")))."'".')) return false;">'.Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
             } else {
                 $result .= Display::return_icon('delete_na.png', get_lang('Delete'), array(), ICON_SIZE_SMALL);
             }
@@ -830,7 +830,7 @@ if (isset($_GET['keyword'])) {
 $parameters['sec_token'] = Security::get_token();
 
 $_admins_list = array_keys(UserManager::get_all_administrators());
-
+Session::write('admin_list', $_admins_list);
 // Display Advanced search form.
 $form = new FormValidator('advanced_search', 'get', '', '', array(), FormValidator::LAYOUT_HORIZONTAL);
 

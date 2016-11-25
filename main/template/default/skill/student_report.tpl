@@ -20,7 +20,11 @@
                 <tr>
                     <td>{{ row.skillName }}</td>
                     <td>{{ row.achievedAt }}</td>
-                    <td><img src="{{ row.courseImage }}" alt="{{ row.courseName }}" width="32"> {{ row.courseName }}</td>
+                    {% if row.courseName %}
+                        <td><img src="{{ row.courseImage }}" alt="{{ row.courseName }}" width="32"> {{ row.courseName }}</td>
+                    {% else %}
+                        <td> - </td>
+                    {% endif %}
                 </tr>
             {% endfor %}
         </tbody>

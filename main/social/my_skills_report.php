@@ -37,7 +37,7 @@ if ($isStudent) {
             FROM $skillTable s
             INNER JOIN $skillRelUserTable sru
             ON s.id = sru.skill_id
-            INNER JOIN $courseTable c
+            LEFT JOIN $courseTable c
             ON sru.course_id = c.id
             WHERE sru.user_id = $userId";
 
@@ -82,7 +82,7 @@ if ($isStudent) {
                 FROM $skillTable s
                 INNER JOIN $skillRelUserTable sru
                 ON s.id = sru.skill_id
-                INNER JOIN $courseTable c
+                LEFT JOIN $courseTable c
                 ON sru.course_id = c.id
                 WHERE sru.user_id = $selectedStudent
                 ";

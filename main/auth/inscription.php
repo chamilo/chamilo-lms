@@ -1038,7 +1038,7 @@ if ($form->validate()) {
     } else {
         if (!empty($values['email'])) {
             $text_after_registration.= '<p>'.get_lang('MailHasBeenSent', null, $_user['language']).'</p>';
-            $diagnosticPath = '<a href="'.api_get_path(WEB_PATH).'search.php">'.get_lang('Diagnostic').'</a>';
+            $diagnosticPath = '<a href="'.api_get_path(WEB_PATH).'search.php">'.api_get_path(WEB_PATH).'search.php</a>';
             $text_after_registration.= '<p>'.sprintf(get_lang('WelcomePleaseGoToDiagnosticAtX', null, $_user['language']), $diagnosticPath).'</p>';
         }
 

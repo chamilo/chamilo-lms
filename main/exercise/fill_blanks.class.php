@@ -1051,9 +1051,9 @@ class FillBlanks extends Question
 
         if ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
             if ($showTotalScoreAndUserChoices) {
-                $resultsDisabled = true;
-            } else {
                 $resultsDisabled = false;
+            } else {
+                $resultsDisabled = true;
             }
         }
 

@@ -78,11 +78,17 @@ class ExtraFieldValue extends Model
      * @param bool $forceSave
      * @param bool $showQuery
      * @param array $saveOnlyThisFields
+     * @param array $avoidFields do not insert/modify this field
      * @return mixed false on empty params, void otherwise
      * @assert (array()) === false
      */
-    public function saveFieldValues($params, $forceSave = false, $showQuery = false, $saveOnlyThisFields = [])
-    {
+    public function saveFieldValues(
+        $params,
+        $forceSave = false,
+        $showQuery = false,
+        $saveOnlyThisFields = [],
+        $avoidFields = []
+    ) {
         foreach ($params as $key => $value) {
             $found = strpos($key, '__persist__');
 
@@ -114,6 +120,12 @@ class ExtraFieldValue extends Model
             }
 
             $field_variable = $fieldDetails['variable'];
+
+            if (!empty($avoidFields)) {
+                if (in_array($field_variable, $avoidFields)) {
+                    continue;
+                }
+            }
 
             if (!empty($saveOnlyThisFields)) {
                 if (!in_array($field_variable, $saveOnlyThisFields)) {

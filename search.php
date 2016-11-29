@@ -607,7 +607,13 @@ if ($userForm->validate()) {
     $extraFieldValue = new ExtraFieldValue('user');
     $userData = $userForm->getSubmitValues();
     $userData['extra_diagnosis_completed'] = 1;
-    $extraFieldValue->saveFieldValues($userData, $forceShowFields);
+    $extraFieldValue->saveFieldValues(
+        $userData,
+        $forceShowFields,
+        false,
+        [],
+        ['legal_accept']
+    );
 
     // Saving to extra_field_saved_search
     /** @var \Chamilo\UserBundle\Entity\User $user */

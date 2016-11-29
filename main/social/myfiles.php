@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * @author Juan Carlos Trabado herodoto@telefonica.net
  * @package chamilo.social
@@ -9,10 +10,6 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
-
-if (api_get_setting('allow_social_tool') != 'true') {
-    api_not_allowed(true);
-}
 
 if (api_get_setting('allow_my_files') === 'false') {
     api_not_allowed(true);
@@ -107,10 +104,15 @@ SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'myfiles');
 $editor = new \Chamilo\CoreBundle\Component\Editor\Editor();
 $editor = $tpl->fetch('default/'.$editor->getEditorStandAloneTemplate());
 
-$tpl->assign('social_right_content', $editor);
-$tpl->assign('social_menu_block', $social_menu_block);
-$tpl->assign('actions', $actions);
 $tpl->assign('show_media_element', 0);
 
-$social_layout = $tpl->get_template('social/myfiles.tpl');
-$tpl->display($social_layout);
+if (api_get_setting('allow_social_tool') == 'true') {
+    $tpl->assign('social_menu_block', $social_menu_block);
+    $tpl->assign('social_right_content', $editor);
+    $social_layout = $tpl->get_template('social/myfiles.tpl');
+    $tpl->display($social_layout);
+} else {
+    $tpl->assign('actions', $actions);
+    $tpl->assign('content', $editor);
+    $tpl->display_one_col_template();
+}

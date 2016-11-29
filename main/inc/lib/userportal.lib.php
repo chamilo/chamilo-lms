@@ -925,8 +925,10 @@ class IndexManager
             if (api_get_setting('allow_social_tool') == 'true') {
                 $link = '?f=social';
             }
-            $profile_content .= '<li class="inbox-message-social"><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php'.$link.'">'.Display::return_icon('inbox.png',get_lang('Inbox'),null,ICON_SIZE_SMALL).get_lang('Inbox').$cant_msg.' </a></li>';
-            $profile_content .= '<li class="new-message-social"><a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php'.$link.'">'.Display::return_icon('new-message.png',get_lang('Compose'),null,ICON_SIZE_SMALL).get_lang('Compose').' </a></li>';
+            $profile_content .= '<li class="inbox-message-social"><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php'.$link.'">'.
+                Display::return_icon('inbox.png',get_lang('Inbox'),null,ICON_SIZE_SMALL).get_lang('Inbox').$cant_msg.' </a></li>';
+            $profile_content .= '<li class="new-message-social"><a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php'.$link.'">'.
+                Display::return_icon('new-message.png',get_lang('Compose'),null,ICON_SIZE_SMALL).get_lang('Compose').' </a></li>';
 
             if (api_get_setting('allow_social_tool') == 'true') {
                 $total_invitations = Display::badge($total_invitations);
@@ -934,7 +936,8 @@ class IndexManager
             }
 
             if (isset($_configuration['allow_my_files_link_in_homepage']) && $_configuration['allow_my_files_link_in_homepage']) {
-                $myFiles = '<li class="myfiles-social"><a href="'.api_get_path(WEB_PATH).'main/social/myfiles.php">'.get_lang('MyFiles').'</a></li>';
+                $myFiles = '<li class="myfiles-social"><a href="'.api_get_path(WEB_PATH).'main/social/myfiles.php">'.
+                    Display::return_icon('sn-files.png',get_lang('Files'),null,ICON_SIZE_SMALL).get_lang('MyFiles').'</a></li>';
 
                 if (api_get_setting('allow_my_files') === 'false') {
                     $myFiles = '';

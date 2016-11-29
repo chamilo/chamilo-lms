@@ -1176,6 +1176,12 @@ class ExtraField extends Model
                                 if (!empty($firstList)) {
                                     $options = array_merge($firstList, $options);
                                 }
+                            } else {
+                                $firstList = [];
+                                if ($addEmptyOptionSelects) {
+                                    $firstList[] = '&nbsp;';
+                                    $options = array_merge($firstList, $options);
+                                }
                             }
                         }
 

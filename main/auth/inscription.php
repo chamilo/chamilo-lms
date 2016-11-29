@@ -997,6 +997,9 @@ if ($form->validate()) {
     $_user['mail'] = $values['email'];
     $_user['language'] = $values['language'];
     $_user['user_id'] = $user_id;
+
+    $userInfo = api_get_user_info($user_id);
+    $_user['status'] = $userInfo['status'];
     $is_allowedCreateCourse = isset($values['status']) && $values['status'] == 1;
     $usersCanCreateCourse = api_get_setting('allow_users_to_create_courses') === 'true';
 

@@ -111,13 +111,12 @@ if (isset($_GET['f']) && $_GET['f'] == 'social') {
 }
 
 $social_parameter = '';
-
+$actions = '';
 if ((isset($_GET['f']) && $_GET['f'] === 'social') ||
     api_get_setting('allow_social_tool') === 'true'
 ) {
     $social_parameter = '?f=social';
 } else {
-    $actions = null;
     //Comes from normal profile
     if (api_get_setting('allow_social_tool') === 'true' && api_get_setting('allow_message_tool') === 'true') {
         $actions .= '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.
@@ -134,9 +133,10 @@ if ((isset($_GET['f']) && $_GET['f'] === 'social') ||
     }
 }
 
-//LEFT CONTENT
+// LEFT CONTENT
+$social_menu_block = '';
 if (api_get_setting('allow_social_tool') === 'true') {
-    //Block Social Menu
+    // Block Social Menu
     $social_menu_block = SocialManager::show_social_menu('messages');
 }
 
@@ -176,6 +176,7 @@ $tpl = new Template(null);
 // Block Social Avatar
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'messages');
 if (api_get_setting('allow_social_tool') == 'true') {
+    $tpl->assign('actions', $actions);
     $tpl->assign('social_menu_block', $social_menu_block);
     $tpl->assign('social_right_content', $social_right_content);
     $social_layout = $tpl->get_template('social/inbox.tpl');

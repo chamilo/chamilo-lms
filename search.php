@@ -301,6 +301,18 @@ $(document).ready(function() {
     });		
 });		
 </script>';
+
+
+$userForm->addHtml('<div class="panel-group" id="search_extrafield" role="tablist" aria-multiselectable="true">');
+$userForm->addHtml('<div class="panel panel-default">');
+$userForm->addHtml('<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseZero" aria-expanded="true" aria-controls="collapseZero">' .
+    get_lang('Diagnostic') . '</a></div>');
+$userForm->addHtml('<div id="collapseZero" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingZero">');
+$userForm->addHtml('<div class="panel-body"><p class="text-info">');
+$userForm->addHtml(get_lang('DiagnosticIntroduction'));
+$userForm->addHtml('</div></div></div></div>');
+
+
 $userForm->addHtml('<div class="panel-group" id="search_extrafield" role="tablist" aria-multiselectable="true">');
 $userForm->addHtml('<div class="panel panel-default">');
 $userForm->addHtml('<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">' . get_lang('Filiere') . '</a></div>');
@@ -743,6 +755,7 @@ if ($result === false) {
 } else {
     Display::addFlash(Display::return_message(get_lang('SessionSearchSavedExplanation')));
 }
+
 $content = $tpl->fetch($tpl->get_template('user_portal/search_extra_field.tpl'));
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

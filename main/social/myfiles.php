@@ -15,9 +15,6 @@ if (api_get_setting('allow_my_files') === 'false') {
     api_not_allowed(true);
 }
 
-$this_section = SECTION_SOCIAL;
-$_SESSION['this_section'] = $this_section;
-
 $htmlHeadXtra[] = '
 <script>
 
@@ -95,9 +92,16 @@ if (isset($_GET['cidReq'])) {
 }
 
 if (api_get_setting('allow_social_tool') == 'true') {
+    $_SESSION['this_section'] = SECTION_SOCIAL;
     $interbreadcrumb[] = array(
         'url' => 'profile.php',
         'name' => get_lang('SocialNetwork')
+    );
+} else {
+    $_SESSION['this_section'] = SECTION_COURSES;
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_PATH).'user_portal.php',
+        'name' => get_lang('MyCourses')
     );
 }
 
@@ -116,7 +120,11 @@ if (api_get_setting('allow_social_tool') == 'true') {
     $social_layout = $tpl->get_template('social/myfiles.tpl');
     $tpl->display($social_layout);
 } else {
+    $controller = new IndexManager(get_lang('MyCourses'));
     $tpl->assign('actions', $actions);
     $tpl->assign('content', $editor);
-    $tpl->display_one_col_template();
+    $tpl->assign('profile_block', $controller->return_profile_block());
+    $tpl->assign('user_image_block', $controller->return_user_image_block());
+    $tpl->assign('course_block', $controller->return_course_block());
+    $tpl->display_two_col_template();
 }

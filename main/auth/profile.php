@@ -852,7 +852,7 @@ $show_delete_account_button = api_get_setting('platform_unsubscribe_allowed') ==
 $tpl = new Template(get_lang('ModifyProfile'));
 $tpl->assign('actions', $actions);
 
-SocialManager::setSocialUserBlock($tpl, $user_id, 'messages');
+SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'messages');
 
 if (api_get_setting('allow_social_tool') === 'true') {
     SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'home');

@@ -7949,4 +7949,6 @@ $SelectWeeksSpan = "Select the timespan in weeks";
 $CourseXAdded = "Course %s added";
 $CurrentPassword = "Current password";
 $DeleteCorrections = "Delete corrections";
+$AllowMyFilesTitle = "Allow My Files page";
+$AllowMyFilesComment = "Allow users upload files in a personal space in the platform.";
 ?>

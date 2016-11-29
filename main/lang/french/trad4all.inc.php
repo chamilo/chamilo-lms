@@ -241,7 +241,7 @@ $CorrectScore = "Score réponse correcte";
 $UseCustomScoreForAllQuestions = "Utiliser le score sur mesure pour toutes les questions";
 $YouShouldAddItemsBeforeAttachAudio = "
 Vous devez ajouter des étapes à votre parcours avant de pouvoir leur affecter des fichiers audio";
-$InactiveDays = "Joours inactifs";
+$InactiveDays = "Jours inactifs";
 $FollowedHumanResources = "DRH suivis";
 $TheTextYouEnteredDoesNotMatchThePicture = "Le texte introduit ne correspond pas à l'image.";
 $RemoveOldRelationships = "Supprimer les relations antérieures";
@@ -7897,4 +7897,7 @@ $Unassigned = "Désassigné";
 $SelectWeeksSpan = "Sélectionnez la durée en semaines";
 $CourseXAdded = "Course %s added.";
 $CurrentPassword = "Mot de passe actuel";
+$DeleteCorrections = "Supprimer les corrections";
+$AllowMyFilesTitle = "Activer la page \"Mes fichiers\"";
+$AllowMyFilesComment = "Permettre aux utilisateurs de télécharger des fichiers dans un espace personnel de la plate-forme.";
 ?>

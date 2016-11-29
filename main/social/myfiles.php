@@ -18,12 +18,6 @@ if (api_get_setting('allow_my_files') === 'false') {
 $this_section = SECTION_SOCIAL;
 $_SESSION['this_section'] = $this_section;
 
-$interbreadcrumb[] = array(
-    'url' => 'profile.php',
-    'name' => get_lang('SocialNetwork')
-);
-$interbreadcrumb[] = array('url' => '#', 'name' => get_lang('MyFiles'));
-
 $htmlHeadXtra[] = '
 <script>
 
@@ -99,6 +93,16 @@ if (isset($_GET['cidReq'])) {
             ) . ')'
         ) . '</a>';
 }
+
+if (api_get_setting('allow_social_tool') == 'true') {
+    $interbreadcrumb[] = array(
+        'url' => 'profile.php',
+        'name' => get_lang('SocialNetwork')
+    );
+}
+
+$interbreadcrumb[] = array('url' => '#', 'name' => get_lang('MyFiles'));
+
 $tpl = new Template();
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'myfiles');
 $editor = new \Chamilo\CoreBundle\Component\Editor\Editor();

@@ -455,7 +455,8 @@ class ExtraField extends Model
         $separateExtraMultipleSelect = [],
         $customLabelsExtraMultipleSelect = [],
         $fieldsToFreeze = [],
-        $addEmptyOptionSelects = false
+        $addEmptyOptionSelects = false,
+        $introductionTextList = []
     ) {
         if (empty($form)) {
             return false;
@@ -494,7 +495,8 @@ class ExtraField extends Model
             $separateExtraMultipleSelect,
             $customLabelsExtraMultipleSelect,
             $fieldsToFreeze,
-            $addEmptyOptionSelects
+            $addEmptyOptionSelects,
+            $introductionTextList
         );
 
         return $extra;
@@ -823,7 +825,8 @@ class ExtraField extends Model
         $separateExtraMultipleSelect = [],
         $customLabelsExtraMultipleSelect = [],
         $fieldsToFreeze = [],
-        $addEmptyOptionSelects = false
+        $addEmptyOptionSelects = false,
+        $introductionTextList = []
     ) {
         $type = $this->type;
         $jquery_ready_content = '';
@@ -875,6 +878,12 @@ class ExtraField extends Model
                     if (in_array($field_details['variable'], $exclude)) {
                         continue;
                     }
+                }
+
+                if (!empty($introductionTextList) &&
+                    in_array($field_details['variable'], array_keys($introductionTextList))
+                ) {
+                    $form->addHtml($introductionTextList[$field_details['variable']]);
                 }
 
                 switch ($field_details['field_type']) {

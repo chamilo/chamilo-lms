@@ -420,6 +420,7 @@ $userForm->addHtml('<div class="panel-body"><p class="text-info">' . get_lang('D
 $fieldsToShow = [
     'datedebutstage',
     'datefinstage',
+    'je_ne_connais_pas_encore_mes_dates_de_stage',
     'poursuiteapprentissagestage',
     'heures_disponibilite_par_semaine_stage'
 ];
@@ -446,6 +447,11 @@ $userForm->addHtml('<div class="panel panel-default">');
 $userForm->addHtml('<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour">' . get_lang('ThemesObjectifs') . '</a></div>');
 $userForm->addHtml('<div id="collapseFour" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingFour">');
 $userForm->addHtml('<div class="panel-body"><p class="text-info">' . get_lang('ThemesObjectifsExplanation') . '</p>');
+
+$introductionTextList = [
+    'domaine' => get_lang('DomaineIntroduction'),
+    $theme => get_lang('ThemeFieldIntroduction'),
+];
 
 $fieldsToShow = [
     'domaine',
@@ -480,7 +486,8 @@ $extra = $extraFieldSession->addElements(
         ],
     ],
     [],
-    true //$addEmptyOptionSelects
+    true, //$addEmptyOptionSelects
+    $introductionTextList
 );
 
 $jqueryExtra .= $extra['jquery_ready_content'];

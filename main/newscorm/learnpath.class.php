@@ -2789,7 +2789,7 @@ class learnpath
                 }
             }
             $subchildren = $item_temp->childNodes;
-            if ($subchildren->length > 0) {
+            if ($subchildren && $subchildren->length > 0) {
                 $val = $this->get_scorm_xml_node($subchildren, $id);
                 if (is_object($val)) {
 
@@ -8813,7 +8813,7 @@ class learnpath
                     link_category.category_title as category_title
                 FROM $tbl_link as link
                 LEFT JOIN $linkCategoryTable as link_category
-                ON (link.category_id = link_category.id AND link.c_id = link_category.c_id) 
+                ON (link.category_id = link_category.id AND link.c_id = link_category.c_id)
                 WHERE link.c_id = ".$course_id." $condition_session
                 ORDER BY link_category.category_title ASC, link.title ASC";
         $links = Database::query($sql);
@@ -9112,7 +9112,7 @@ class learnpath
         // Removes the learning_path/scorm_folder path when exporting see #4841
         $path_to_remove = null;
         $result = $this->generate_lp_folder($_course);
-
+        $path_to_replace = '';
         if (isset($result['dir']) && strpos($result['dir'], 'learning_path')) {
             $path_to_remove = 'document'.$result['dir'];
             $path_to_replace = $folder_name.'/';
@@ -9164,7 +9164,7 @@ class learnpath
                 // Attach this item to the organization element or hits parent if there is one.
                 if (!empty($item->parent) && $item->parent != 0) {
                     $children = $organization->childNodes;
-                    $possible_parent = &$this->get_scorm_xml_node($children, 'ITEM_'.$item->parent);
+                    $possible_parent = $this->get_scorm_xml_node($children, 'ITEM_'.$item->parent);
                     if (is_object($possible_parent)) {
                         $possible_parent->appendChild($my_item);
                     } else {
@@ -9294,10 +9294,32 @@ class learnpath
                                     $orig_file_path = dirname($cur_path.$my_file_path).'/';
                                     $orig_file_path = str_replace('\\', '/', $orig_file_path);
                                     $relative_path = '';
+                                    // Image/src file is inside a course
+                                    $fixDirRelative = '';
+                                    // image file is inside a course
                                     if (strstr($file_path, $cur_path) !== false) {
-                                        //$relative_path = substr($file_path, strlen($orig_file_path));
+                                        // html file that wraps the image is inside a course
+                                        if (strstr($orig_file_path, $cur_path) !== false) {
+                                            // Get count of directories from document until the last slash
+                                            // if $orig_file_path =
+                                            // /var/www/html/chamilo/app/courses/CLEAN123/document/learning_path/Le_parcours/
+                                            // $distance should be 2 (learning_path and Le_parcours)
+
+                                            $origFilePathFixed = str_replace($path_to_remove, $path_to_replace, $orig_file_path);
+                                            $distance = array_filter(explode('/', str_replace($cur_path.'document/', '', $origFilePathFixed)));
+
+                                            if ($distance) {
+                                                foreach ($distance as $relative) {
+                                                    $fixDirRelative .=  '../';
+                                                }
+                                            }
+                                        }
                                         $relative_path = str_replace($cur_path, '', $file_path);
                                         $file_path = substr($file_path, strlen($cur_path));
+
+                                        if (!empty($fixDirRelative)) {
+                                            $relative_path = $fixDirRelative.$relative_path;
+                                        }
                                     } else {
                                         // This case is still a problem as it's difficult to calculate a relative path easily
                                         // might still generate wrong links.

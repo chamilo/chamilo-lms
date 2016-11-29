@@ -247,7 +247,15 @@ $userForm = new FormValidator('user_form', 'post', api_get_self());
 $jqueryExtra = '';
 
 $htmlHeadXtra[] ='<script>		
-$(document).ready(function() {		
+$(document).ready(function() {	
+	$("#collapseOne").collapse("hide");
+	$("#collapseTwo").collapse("hide");
+	$("#collapseThree").collapse("hide");
+	$("#collapseFour").collapse("hide");
+	$("#collapseFive").collapse("hide");
+	$("#collapseSix").collapse("hide");
+	$("#collapseSeven").collapse("hide");
+	
     /*$("#filiere_panel").hide();			
     $("#dispo_panel").hide();    		
     $("#dispo_pendant_panel").hide();		

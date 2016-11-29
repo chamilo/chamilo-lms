@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * @package chamilo.calendar
  */
@@ -31,6 +32,13 @@ if (!empty($currentCourseId) && $currentCourseId != -1) {
     // Agenda is inside a course tool
     $url = api_get_self() . '?' . api_get_cidreq();
     $this_section = SECTION_COURSES;
+
+    // Order by start date
+    usort($events, function($a, $b) {
+        $t1 = strtotime($a['start']);
+        $t2 = strtotime($b['start']);
+        return $t1 > $t2;
+    });
 } else {
     // Agenda is out of the course tool (e.g personal agenda)
 
@@ -63,11 +71,7 @@ if (api_is_allowed_to_edit()) {
         $courseInfo = api_get_course_info();
         if (empty($courseInfo)) {
             // This happens when list agenda is not inside a course
-            if (
-                ($type == 'course' || $type == 'session') &&
-                isset($_GET['cid']) &&
-                intval($_GET['cid']) !== 0
-            ) {
+            if (($type == 'course' || $type == 'session') && isset($_GET['cid']) && intval($_GET['cid']) !== 0) {
                 // For course and session event types
                 // Just needs course ID
                 $courseInfo = array('real_id' => intval($_GET['cid']));

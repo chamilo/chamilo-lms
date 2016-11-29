@@ -124,7 +124,7 @@ if ($userToLoad) {
 
 $formSearch->addButtonSearch(get_lang('Search'), 'save');
 
-$form = new FormValidator('search', 'post', api_get_self().'?user_id='.$userToLoad);
+$form = new FormValidator('search', 'post', api_get_self().'?user_id='.$userToLoad.'#session-table');
 $form->addHeader(get_lang('Diagnosis'));
 $form->addHidden('user_id', $userToLoad);
 

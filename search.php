@@ -130,7 +130,8 @@ $(document).ready(function() {
             domainList.push($(this).val());
         });
                 
-        var domainListToString = JSON.stringify(domainList);        
+        var domainListToString = JSON.stringify(domainList);  
+             
         $.ajax({
             contentType: "application/x-www-form-urlencoded",
             type: "GET",
@@ -573,9 +574,9 @@ $domaine2 = $userForm->getElementByName('extra_domaine[1]');
 $domaine3 = $userForm->getElementByName('extra_domaine[2]');
 
 $domainList = array_merge(
-    $domaine1->getValue(),
-    $domaine3->getValue(),
-    $domaine2->getValue()
+    is_array($domaine1) ? $domaine1->getValue() : [],
+    is_array($domaine3) ? $domaine3->getValue() : [],
+    is_array($domaine2) ? $domaine2->getValue() : []
 );
 
 $themeList = [];

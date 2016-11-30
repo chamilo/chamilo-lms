@@ -306,7 +306,7 @@ $(document).ready(function() {
 $userForm->addHtml('<div class="panel-group" id="search_extrafield" role="tablist" aria-multiselectable="true">');
 $userForm->addHtml('<div class="panel panel-default">');
 $userForm->addHtml('<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseZero" aria-expanded="true" aria-controls="collapseZero">' .
-    get_lang('Diagnostic') . '</a></div>');
+    get_lang('DiagnosticForm') . '</a></div>');
 $userForm->addHtml('<div id="collapseZero" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingZero">');
 $userForm->addHtml('<div class="panel-body"><p class="text-info">');
 $userForm->addHtml(get_lang('DiagnosticIntroduction'));

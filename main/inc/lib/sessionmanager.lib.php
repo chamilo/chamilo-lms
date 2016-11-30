@@ -422,8 +422,13 @@ class SessionManager
      * @return mixed Integer for number of rows, or array of results
      * @assert (array(),true) !== false
      */
-    public static function get_sessions_admin($options = array(), $get_count = false, $accessStartDate = '', $accessEndDate = '', $extraFieldsToLoad = array())
-    {
+    public static function get_sessions_admin(
+        $options = array(),
+        $get_count = false,
+        $accessStartDate = '',
+        $accessEndDate = '',
+        $extraFieldsToLoad = array()
+    ) {
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
         $sessionCategoryTable = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
 
@@ -472,6 +477,11 @@ class SessionManager
                     s.id
                 "
             ;
+            // ofaj fix
+            if (!empty($extraFieldsToLoad)) {
+                $select = "SELECT DISTINCT s.* ";
+            }
+
             if (isset($options['order'])) {
                 $isMakingOrder = strpos($options['order'], 'category_name') === 0;
             }
@@ -496,13 +506,15 @@ class SessionManager
         if (!empty($accessStartDate) && !empty($accessEndDate)) {
             $accessStartDate = api_get_utc_datetime($accessStartDate);
             $accessEndDate = api_get_utc_datetime($accessEndDate);
-            $query .= " AND (
 
-                (access_start_date > '$accessStartDate' AND access_end_date < '$accessEndDate') OR
-                (access_start_date > '$accessStartDate' AND access_end_date IS NULL) OR
-                (access_start_date IS NULL AND access_end_date < '$accessEndDate') OR
-                (access_start_date IS NULL AND access_end_date IS NULL)            
-            )";
+            if (empty($extraFieldsToLoad)) {
+                $query .= " AND (    
+                    (access_start_date > '$accessStartDate' AND access_end_date < '$accessEndDate') OR
+                    (access_start_date > '$accessStartDate' AND access_end_date IS NULL) OR
+                    (access_start_date IS NULL AND access_end_date < '$accessEndDate') OR
+                    (access_start_date IS NULL AND access_end_date IS NULL)            
+                )";
+            }
         }
 
         if (api_is_multiple_url_enabled()) {
@@ -519,7 +531,7 @@ class SessionManager
 
         $query .= $order;
         $query .= $limit;
-
+        //var_dump($query);echo $query;
         $result = Database::query($query);
 
         $categories = self::get_all_session_category();
@@ -534,6 +546,7 @@ class SessionManager
 
         if (Database::num_rows($result)) {
             $sessions = Database::store_result($result, 'ASSOC');
+
             if ($get_count) {
                 return $sessions[0]['total_rows'];
             }
@@ -552,7 +565,6 @@ class SessionManager
                     $url
                 );
 
-
                 if (!empty($extraFieldsToLoad)) {
                     foreach ($extraFieldsToLoad as $field) {
                         $extraFieldValue = new ExtraFieldValue('session');
@@ -561,7 +573,6 @@ class SessionManager
                         $fieldDataToString = '';
                         if (!empty($fieldData)) {
                             foreach ($fieldData as $data) {
-
                                 $fieldDataArray[] = $data['value'];
                             }
                             $fieldDataToString = implode(', ', $fieldDataArray);
@@ -622,6 +633,7 @@ class SessionManager
                 $formatted_sessions[$session_id]['category_name'] = $categoryName;
             }
         }
+
         return $formatted_sessions;
     }
 

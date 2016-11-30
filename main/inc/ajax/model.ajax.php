@@ -485,9 +485,9 @@ switch ($action) {
     case 'get_sessions':
         $list_type = isset($_REQUEST['list_type']) ? $_REQUEST['list_type'] : 'simple';
         $loadExtraFields = isset($_REQUEST['load_extra_field']) ? $_REQUEST['load_extra_field'] : '';
+        $extraFieldsToLoad = array();
         if (!empty($loadExtraFields)) {
             $loadExtraFields = explode(',', $loadExtraFields);
-            $extraFieldsToLoad = array();
             foreach ($loadExtraFields as $fieldId) {
                 $extraField = new ExtraField('session');
                 $fieldData = $extraField->get($fieldId);

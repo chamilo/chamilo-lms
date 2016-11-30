@@ -23,7 +23,7 @@ class ExtraField extends Model
          /* Enable this when field_loggeable is introduced as a table field (2.0)
         'field_loggeable',
          */
-        'created_at'
+        'created_at',
     );
 
     public $ops = array(
@@ -153,7 +153,7 @@ class ExtraField extends Model
             'lp',
             'calendar_event',
             'lp_item',
-            'skill'
+            'skill',
         );
     }
 
@@ -1026,7 +1026,7 @@ class ExtraField extends Model
                                         array(
                                             'fieldId' => $field_details['id'],
                                             'relatedFieldOptionId' => $defaultValueId,
-                                            'roleId' => $userInfo['status']
+                                            'roleId' => $userInfo['status'],
                                         )
                                     );
                                 foreach ($fieldWorkFlow as $item) {
@@ -1218,7 +1218,7 @@ class ExtraField extends Model
                                 'lire',
                                 'participer_a_une_conversation',
                                 's_exprimer_oralement_en_continu',
-                                'ecrire'
+                                'ecrire',
                             ];
 
                             if (in_array($field_details['variable'], $chosenSelect)) {
@@ -1447,7 +1447,7 @@ class ExtraField extends Model
                                             $tag['tag'],
                                             [
                                                 'selected' => 'selected',
-                                                'class' => 'selected'
+                                                'class' => 'selected',
                                             ]
                                         );
                                     }
@@ -1481,7 +1481,7 @@ class ExtraField extends Model
                                         $tag->getTag(),
                                         [
                                             'selected' => 'selected',
-                                            'class' => 'selected'
+                                            'class' => 'selected',
                                         ]
                                     );
                                 }
@@ -1494,7 +1494,7 @@ class ExtraField extends Model
                                             $option,
                                             [
                                                 'selected' => 'selected',
-                                                'class' => 'selected'
+                                                'class' => 'selected',
                                             ]
                                         );
                                     }
@@ -1504,7 +1504,7 @@ class ExtraField extends Model
                                     $fieldTags = $em->getRepository('ChamiloCoreBundle:ExtraFieldRelTag')
                                         ->findBy(
                                             [
-                                                'fieldId' => $field_id
+                                                'fieldId' => $field_id,
                                             ]
                                         );
                                     $tagsAdded = [];
@@ -1599,7 +1599,7 @@ EOF;
                             $field_details['display_text'],
                             array(
                                 'size'  => 60,
-                                'style' => 'background-image: url(\''.$icon_path.'\'); background-repeat: no-repeat; background-position: 0.4em '.$top.'em; padding-left: '.$leftpad.'em; '
+                                'style' => 'background-image: url(\''.$icon_path.'\'); background-repeat: no-repeat; background-position: 0.4em '.$top.'em; padding-left: '.$leftpad.'em; ',
                             )
                         );
                         $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
@@ -1651,7 +1651,7 @@ EOF;
                         $fieldVariable = "extra_{$field_details['variable']}";
 
                         $fieldTexts = [
-                            $field_details['display_text']
+                            $field_details['display_text'],
                         ];
 
                         if (is_array($extraData) && array_key_exists($fieldVariable, $extraData)) {
@@ -1717,7 +1717,7 @@ EOF;
                     case ExtraField::FIELD_TYPE_FILE:
                         $fieldVariable = "extra_{$field_details['variable']}";
                         $fieldTexts = array(
-                            $field_details['display_text']
+                            $field_details['display_text'],
                         );
 
                         if (is_array($extraData) &&
@@ -1729,7 +1729,7 @@ EOF;
                                     api_get_path(WEB_UPLOAD_PATH) . $extraData[$fieldVariable],
                                     array(
                                         'title' => $field_details['display_text'],
-                                        'target' => '_blank'
+                                        'target' => '_blank',
                                     )
                                 );
                             }
@@ -2038,7 +2038,7 @@ EOF;
             get_lang('VisibleToOthers'),
             get_lang('Filter'),
             get_lang('FieldOrder'),
-            get_lang('Actions')
+            get_lang('Actions'),
         );
     }
 
@@ -2141,7 +2141,7 @@ EOF;
 
         if ($action == 'edit') {
             $translateUrl = api_get_path(WEB_CODE_PATH) . 'extrafield/translate.php?' . http_build_query([
-                'extra_field' => $id
+                'extra_field' => $id,
             ]);
             $translateButton = Display::toolbarButton(get_lang('TranslateThisTerm'), $translateUrl, 'language', 'link');
 
@@ -2308,7 +2308,7 @@ JAVASCRIPT;
     {
         $fields = $this->get_all(
             array(
-                'visible_to_self = ? AND filter = ?' => array(1, 1)
+                'visible_to_self = ? AND filter = ?' => array(1, 1),
             ),
             'display_text'
         );
@@ -2395,7 +2395,7 @@ JAVASCRIPT;
                     'hidden'        => 'true',
                     'search'        => 'true',
                     'stype'         => $type,
-                    'searchoptions' => $search_options
+                    'searchoptions' => $search_options,
                 );
                 $columns[]      = $field['display_text'];
                 $rules[]        = array('field' => 'extra_'.$field['variable'], 'op' => 'cn');
@@ -2429,7 +2429,7 @@ JAVASCRIPT;
                             array(
                                 ExtraField::FIELD_TYPE_SELECT,
                                 ExtraField::FIELD_TYPE_SELECT,
-                                ExtraField::FIELD_TYPE_DOUBLE_SELECT
+                                ExtraField::FIELD_TYPE_DOUBLE_SELECT,
                             )
                         )
                     ) {
@@ -2484,7 +2484,7 @@ JAVASCRIPT;
                             array(
                                 ExtraField::FIELD_TYPE_SELECT,
                                 ExtraField::FIELD_TYPE_SELECT,
-                                ExtraField::FIELD_TYPE_DOUBLE_SELECT
+                                ExtraField::FIELD_TYPE_DOUBLE_SELECT,
                             )
                         )
                     ) {
@@ -2652,7 +2652,7 @@ JAVASCRIPT;
                             $extra_fields[] = array(
                                 'field' => $rule->field,
                                 'id' => $field_option['id'],
-                                'data' => $rule->data
+                                'data' => $rule->data,
                             );
                         }
                     }
@@ -2662,7 +2662,7 @@ JAVASCRIPT;
                     $field_option = $this->get_handler_field_info_by_field_variable($original_field);
                     $extra_fields[] = array(
                         'field' => $rule->field,
-                        'id' => $field_option['id']
+                        'id' => $field_option['id'],
                     );
                 }
             }
@@ -2670,7 +2670,7 @@ JAVASCRIPT;
 
         return array(
             'extra_fields' => $extra_fields,
-            'condition_array' => $condition_array
+            'condition_array' => $condition_array,
         );
     }
 
@@ -2685,6 +2685,8 @@ JAVASCRIPT;
 
         $fields = $this->get_all();
 
+        $em = Database::getManager();
+
         foreach ($fields as $field) {
             if ($field['visible_to_self'] != '1') {
                 continue;
@@ -2692,6 +2694,31 @@ JAVASCRIPT;
 
             $fieldValue = new ExtraFieldValue($this->type);
             $valueData = $fieldValue->get_values_by_handler_and_field_id($itemId, $field['id'], true);
+
+            if ($field['field_type'] == ExtraField::FIELD_TYPE_TAG) {
+                $tags = $em
+                    ->getRepository('ChamiloCoreBundle:ExtraFieldRelTag')
+                    ->findBy(
+                        [
+                            'fieldId' => $field['id'],
+                            'itemId' => $itemId,
+                        ]
+                    );
+                if ($tags) {
+                    /** @var \Chamilo\CoreBundle\Entity\ExtraFieldRelTag $tag */
+                    $data = [];
+                    foreach ($tags as $extraFieldTag) {
+                        /** @var \Chamilo\CoreBundle\Entity\Tag $tag */
+                        $tag = $em->find('ChamiloCoreBundle:Tag', $extraFieldTag->getTagId());
+                        /*$data[] = [
+                            'id' => $extraFieldTag->getTagId(),
+                            'value' => $tag->getTag()
+                        ];*/
+                        $data[] = $tag->getTag();
+                    }
+                    $valueData = implode(',', $data);
+                }
+            }
 
             if (!$valueData) {
                 continue;
@@ -2710,6 +2737,11 @@ JAVASCRIPT;
                 case ExtraField::FIELD_TYPE_DATE:
                     if ($valueData !== false && !empty($valueData['value'])) {
                         $displayedValue = api_format_date($valueData['value'], DATE_FORMAT_LONG_NO_DAY);
+                    }
+                    break;
+                case ExtraField::FIELD_TYPE_TAG:
+                    if (!empty($valueData)) {
+                        $displayedValue = $valueData;
                     }
                     break;
                 case ExtraField::FIELD_TYPE_FILE_IMAGE:
@@ -2747,7 +2779,7 @@ JAVASCRIPT;
                         api_get_path(WEB_UPLOAD_PATH) . $valueData['value'],
                         array(
                             'title' => $field['display_text'],
-                            'target' => '_blank'
+                            'target' => '_blank',
                         )
                     );
                     break;
@@ -2758,7 +2790,7 @@ JAVASCRIPT;
 
             $valuesData[] = array(
                 'text' => $field['display_text'],
-                'value' => $displayedValue
+                'value' => $displayedValue,
             );
         }
 

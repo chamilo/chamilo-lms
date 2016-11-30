@@ -654,10 +654,24 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
                     }
                 }
 
-                if ($termActivated === false) {
+                $extraFieldValue = new ExtraFieldValue('user');
+                $value = $extraFieldValue->get_values_by_handler_and_field_variable(api_get_user_id(), 'legal_accept');
+                $legalAccept = false;
+                if (isset($value['value'])) {
+                    list($legalId, $legalLanguageId, $legalTime) = explode(
+                        ':',
+                        $value['value']
+                    );
+                    if ($legalId) {
+                        $legalAccept = true;
+                    }
+                }
+
+                if ($termActivated === false && $legalAccept == false) {
                     $blockButton = true;
                     Display::addFlash(Display::return_message(get_lang('TermActivatedIsNeededDescription'), 'warning'));
                 }
+
                 if ($blockButton === false) {
                     if ((int)$userInfo['profile_completed'] !== 1) {
                         $blockButton = true;

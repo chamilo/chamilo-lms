@@ -622,8 +622,12 @@ $(function() {
 </script>';
 
 if (!empty($filterToSend)) {
-    $userStartDate = isset($params['extra_access_start_date']) ? $params['extra_access_start_date'] : '';
-    $userEndDate = isset($params['extra_access_end_date']) ? $params['extra_access_end_date'] : '';
+    // Get start and end date from ExtraFieldSavedSearch
+    $defaultExtraStartDate = isset($defaults['extra_access_start_date']) ? $defaults['extra_access_start_date'] : '';
+    $defaultExtraEndDate = isset($defaults['extra_access_end_date']) ? $defaults['extra_access_end_date'] : '';
+
+    $userStartDate = isset($params['extra_access_start_date']) ? $params['extra_access_start_date'] : $defaultExtraStartDate;
+    $userEndDate = isset($params['extra_access_end_date']) ? $params['extra_access_end_date'] : $defaultExtraEndDate;
 
     $date = new DateTime($userStartDate);
     $date->sub(new DateInterval('P3D'));

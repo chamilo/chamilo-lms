@@ -643,18 +643,14 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
         if (api_get_setting('show_terms_if_profile_completed') === 'true') {
             $userInfo = api_get_user_info(api_get_user_id(), false, false, true);
             if ($userInfo && $userInfo['status'] != ANONYMOUS) {
+                $extraFieldValue = new ExtraFieldValue('user');
                 $termActivated = false;
-                $values = $userInfo['extra'];
-                foreach ($values as $value) {
-                    /** @var \Chamilo\CoreBundle\Entity\ExtraFieldValues $value */
-                    $value = $value['value'];
-                    if ($value->getField()->getVariable() === 'termactivated') {
-                        $termValue = $value->getValue();
-                        $termActivated = !empty($termValue) && $termValue == 1;
-                    }
+                $value = $extraFieldValue->get_values_by_handler_and_field_variable(api_get_user_id(), 'termactivated');
+                if (isset($value['value'])) {
+                    $termActivated = !empty($value['value']) && $value['value'] == 1;
                 }
 
-                $extraFieldValue = new ExtraFieldValue('user');
+                /*$extraFieldValue = new ExtraFieldValue('user');
                 $value = $extraFieldValue->get_values_by_handler_and_field_variable(api_get_user_id(), 'legal_accept');
                 $legalAccept = false;
                 if (isset($value['value'])) {
@@ -665,9 +661,9 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
                     if ($legalId) {
                         $legalAccept = true;
                     }
-                }
+                }*/
 
-                if ($termActivated === false && $legalAccept == false) {
+                if ($termActivated === false) {
                     $blockButton = true;
                     Display::addFlash(Display::return_message(get_lang('TermActivatedIsNeededDescription'), 'warning'));
                 }

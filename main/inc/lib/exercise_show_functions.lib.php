@@ -38,9 +38,9 @@ class ExerciseShowFunctions
 	    $showTotalScoreAndUserChoices
     ) {
         $answerHTML = FillBlanks::getHtmlDisplayForAnswer($answer, $resultsDisabled, $showTotalScoreAndUserChoices);
-        if (strpos($originalStudentAnswer, 'font color') !== false) {
+        /*if (strpos($originalStudentAnswer, 'font color') !== false) {
             $answerHTML = $originalStudentAnswer;
-        }
+        }*/
 
         if (empty($id)) {
             echo '<tr><td>';

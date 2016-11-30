@@ -3115,6 +3115,7 @@ class Exercise
         $hotspot_delineation_result = array(),
         $showTotalScoreAndUserChoicesInLastAttempt = true
     ) {
+
         global $debug;
         //needed in order to use in the exercise_attempt() for the time
         global $learnpath_id, $learnpath_item_id;
@@ -3479,6 +3480,7 @@ class Exercise
                     break;
                 case FILL_IN_BLANKS:
                     $str = '';
+
                     if ($from_database) {
                         $sql = "SELECT answer
                                     FROM $TBL_TRACK_ATTEMPT
@@ -3489,7 +3491,8 @@ class Exercise
                         $str = Database::result($result, 0, 'answer');
                     }
 
-                    if ($saved_results == false && strpos($str, 'font color') !== false) {
+                    if (false) {
+
                         // the question is encoded like this
                         // [A] B [C] D [E] F::10,10,10@1
                         // number 1 before the "@" means that is a switchable fill in blank question

@@ -49,13 +49,9 @@ $(document).ready(function() {
             dataType: "json",
             type: "POST",
             contentType: "application/json; charset=utf-8",
-            success: function (data, status) {
-                //console.log(data);			
-            
+            success: function (data, status) {            
                 if (data.d.Exist) {
-                    var monU = data.d.User;
-                    console.log(monU);
-                        
+                    var monU = data.d.User;                    
                     $("input[name=\'extra_tcc_user_id\']").val(monU.UserID);
                     $("input[name=\'extra_tcc_hash_key\']").val(monU.HashKey);                                                                             
                     var $radios = $("input:radio[name=\'extra_terms_genre[extra_terms_genre]\']");
@@ -734,8 +730,18 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
     }
 }
 
-$form->addCheckBox('extra_platformuseconditions', null, get_lang('PlatformUseConditions'));
-$form->addRule('extra_platformuseconditions', get_lang('ThisFieldIsRequired'), 'required');
+if ($user_already_registered_show_terms === false) {
+    $form->addCheckBox(
+        'extra_platformuseconditions',
+        null,
+        get_lang('PlatformUseConditions')
+    );
+    $form->addRule(
+        'extra_platformuseconditions',
+        get_lang('ThisFieldIsRequired'),
+        'required'
+    );
+}
 
 if ($blockButton) {
     $form->addButton('submit', get_lang('RegisterUser'), 'check', 'primary', null, null, ['disabled' => 'disabled'], false);

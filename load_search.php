@@ -620,7 +620,6 @@ $(function() {
     '.$jsTag.'
 });
 </script>';
-
 if (!empty($filterToSend)) {
     // Get start and end date from ExtraFieldSavedSearch
     $defaultExtraStartDate = isset($defaults['extra_access_start_date']) ? $defaults['extra_access_start_date'] : '';
@@ -642,6 +641,64 @@ if (!empty($filterToSend)) {
         (s.access_start_date > '$userStartDateMinus' AND (s.access_start_date = '' OR s.access_start_date IS NULL)) OR 
         ((s.access_start_date = '' OR s.access_start_date IS NULL) AND (s.access_end_date = '' OR s.access_end_date IS NULL))
     )";
+
+    $extraFieldOptions = new ExtraFieldOption('session');
+    $extraFieldSession = new ExtraField('session');
+
+    foreach ($filterToSend['rules'] as &$filterItem) {
+        switch ($filterItem['field']) {
+            case 'extra_ecouter':
+            case 'extra_lire':
+            case 'extra_participer_a_une_conversation':
+            case 'extra_s_exprimer_oralement_en_continu':
+            case 'extra_ecrire':
+                $selectedValue = '';
+
+                $filterItem['field'] = str_replace('extra_', '', $filterItem['field']);
+                $extraFieldSessionData = $extraFieldSession->get_handler_field_info_by_field_variable($filterItem['field']);
+
+                // see https://task.beeznest.com/issues/10849#change-81902
+                if (is_array($filterItem['data'])) {
+                    $myOrder = [];
+                    foreach ($filterItem['data'] as $option) {
+                        foreach ($extraFieldSessionData['options'] as $optionValue) {
+                            if ($option == $optionValue['option_value']) {
+                                $myOrder[$optionValue['option_order']] = $optionValue['option_value'];
+                            }
+                        }
+                    }
+
+                    if (!empty($myOrder)) {
+                        // Taking last from list
+                        $selectedValue = end($myOrder);
+                    }
+                } else {
+                    $selectedValue = $filterItem['data'];
+                }
+
+                $newOptions = array_column($extraFieldSessionData['options'], 'option_value',  'option_order');
+                $searchOptions = [];
+                for ($i = 1; $i < count($newOptions); $i++) {
+                    if ($selectedValue == $newOptions[$i]) {
+                        if (isset($newOptions[$i-1])) {
+                            $searchOptions[] = $newOptions[$i-1];
+                        }
+                        if (isset($newOptions[$i])) {
+                            $searchOptions[] = $newOptions[$i];
+                        }
+                        if (isset($newOptions[$i+1])) {
+                            $searchOptions[] = $newOptions[$i+1];
+                        }
+                        break;
+                    }
+                }
+
+                $filterItem['data'] = $searchOptions;
+
+                break;
+        }
+        //var_dump($filterToSend['rules']);
+    }
 
     if ($userStartDate && !empty($userStartDate)) {
         $filterToSend['custom_dates'] = $sql;

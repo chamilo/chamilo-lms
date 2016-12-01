@@ -3997,7 +3997,8 @@ class Exercise
                                     case MATCHING:
                                     case MATCHING_DRAGGABLE:
                                         echo '<tr>';
-                                        echo '<td>' . $counterAnswer . '</td>';
+                                        //echo '<td>' . $counterAnswer . '</td>';
+                                        echo '<td>' . $s_answer_label . '</td>';
                                         echo '<td>' . $user_answer.'</td>';
                                         echo '<td>';
                                         if (in_array($answerType, [MATCHING, MATCHING_DRAGGABLE])) {

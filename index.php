@@ -114,9 +114,8 @@ if (!api_is_anonymous()) {
     }
 }
 
-$hot_courses = null;
-$announcements_block = null;
-
+$hot_courses = '';
+$announcements_block = '';
 
 // Display the Site Use Cookie Warning Validation
 $useCookieValidation = api_get_setting('cookie_warning');

@@ -98,7 +98,7 @@ class IndexManager
      */
     public function return_announcements($show_slide = true)
     {
-        //// Display System announcements
+        // Display System announcements
         $hideAnnouncements = api_get_setting('hide_global_announcements_when_not_connected');
         $currentUserId = api_get_user_id();
         if ($hideAnnouncements == 'true' && empty($currentUserId)) {
@@ -214,12 +214,14 @@ class IndexManager
         if ($show_menu) {
             $html .= '<ul class="nav nav-pills nav-stacked">';
             if ($show_create_link) {
-                $html .= '<li class="add-course"><a href="' . api_get_path(WEB_CODE_PATH) . 'create_course/add_course.php">'.Display::return_icon('new-course.png',  get_lang('CourseCreate')).(api_get_setting('course_validation') == 'true' ? get_lang('CreateCourseRequest') : get_lang('CourseCreate')).'</a></li>';
+                $html .= '<li class="add-course"><a href="' . api_get_path(WEB_CODE_PATH) . 'create_course/add_course.php">'.
+                    Display::return_icon('new-course.png',  get_lang('CourseCreate')).(api_get_setting('course_validation') == 'true' ? get_lang('CreateCourseRequest') : get_lang('CourseCreate')).'</a></li>';
             }
 
             if ($show_course_link) {
                 if (!api_is_drh() && !api_is_session_admin()) {
-                    $html .=  '<li class="list-course"><a href="'. api_get_path(WEB_CODE_PATH) . 'auth/courses.php">'. Display::return_icon('catalog-course.png', get_lang('CourseCatalog')) .get_lang('CourseCatalog').'</a></li>';
+                    $html .=  '<li class="list-course"><a href="'. api_get_path(WEB_CODE_PATH) . 'auth/courses.php">'.
+                        Display::return_icon('catalog-course.png', get_lang('CourseCatalog')) .get_lang('CourseCatalog').'</a></li>';
                 } else {
                     $html .= '<li><a href="' . api_get_path(WEB_CODE_PATH) . 'dashboard/index.php">'.get_lang('Dashboard').'</a></li>';
                 }
@@ -250,7 +252,6 @@ class IndexManager
         $userId = api_get_user_id();
         // Including the page for the news
         $html = '';
-
         if (!empty($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/', $_GET['include'])) {
             $open = @(string)file_get_contents($this->home.$_GET['include']);
             $html = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
@@ -299,6 +300,9 @@ class IndexManager
 		return $html;
 	}
 
+    /**
+     * @return string
+     */
     public function return_notice()
     {
         $user_selected_language = api_get_interface_language();
@@ -312,7 +316,6 @@ class IndexManager
 
         if (!empty($home_notice)) {
             $home_notice = api_to_system_encoding($home_notice, api_detect_encoding(strip_tags($home_notice)));
-            //$home_notice = Display::div($home_notice, array('class'  => 'homepage_notice'));
             $html = self::show_right_block(
                 get_lang('Notice'),
                 $home_notice,
@@ -322,9 +325,13 @@ class IndexManager
                 'noticesCollapse'
             );
         }
+
         return $html;
     }
 
+    /**
+     * @return string
+     */
     public function return_help()
     {
         $user_selected_language = api_get_interface_language();
@@ -332,12 +339,11 @@ class IndexManager
 
         // Help section.
         /* Hide right menu "general" and other parts on anonymous right menu. */
-
         if (!isset($user_selected_language)) {
             $user_selected_language = $platformLanguage;
         }
 
-        $html = null;
+        $html = '';
         $home_menu = @(string)file_get_contents($this->home.'home_menu_'.$user_selected_language.'.html');
         if (!empty($home_menu)) {
             $home_menu_content = '<ul class="nav nav-pills nav-stacked">';
@@ -515,13 +521,12 @@ class IndexManager
                     FROM $main_category_table t1
                     LEFT JOIN $main_category_table t2 ON t1.code=t2.parent_id
                     LEFT JOIN $main_course_table t3 ON (t3.category_code = t1.code $platform_visible_courses)
-                    WHERE t1.parent_id ". (empty ($category) ? "IS NULL" : "='$category'")."
+                    WHERE t1.parent_id ". (empty($category) ? "IS NULL" : "='$category'")."
                     GROUP BY t1.name,t1.code,t1.parent_id,t1.children_count 
                     ORDER BY t1.tree_pos, t1.name";
 
         // Showing only the category of courses of the current access_url_id
         if (api_is_multiple_url_enabled()) {
-
             $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
             $courseCategoryCondition = " INNER JOIN $table a ON (t1.id = a.course_category_id)";
 
@@ -715,26 +720,26 @@ class IndexManager
         // Secondly we select the courses that are in a category (user_course_cat <> 0)
         // and sort these according to the sort of the category
         $user_id = intval($user_id);
-        $sql_select_courses = "SELECT
-            course.code k,
-            course.visual_code vc,
-            course.subscribe subscr,
-            course.unsubscribe unsubscr,
-            course.title i,
-            course.tutor_name t,
-            course.directory dir,
-            course_rel_user.status status,
-            course_rel_user.sort sort,
-            course_rel_user.user_course_cat user_course_cat
-            FROM
-                $table_course course,
-                $table_course_user course_rel_user
-            WHERE
-                course.id = course_rel_user.c_id AND
-                course_rel_user.user_id = '".$user_id."' AND
-                course_rel_user.relation_type <> ".COURSE_RELATION_TYPE_RRHH."
-            ORDER BY course_rel_user.sort ASC";
-        $result = Database::query($sql_select_courses);
+        $sql = "SELECT
+                course.code k,
+                course.visual_code vc,
+                course.subscribe subscr,
+                course.unsubscribe unsubscr,
+                course.title i,
+                course.tutor_name t,
+                course.directory dir,
+                course_rel_user.status status,
+                course_rel_user.sort sort,
+                course_rel_user.user_course_cat user_course_cat
+                FROM
+                    $table_course course,
+                    $table_course_user course_rel_user
+                WHERE
+                    course.id = course_rel_user.c_id AND
+                    course_rel_user.user_id = '".$user_id."' AND
+                    course_rel_user.relation_type <> ".COURSE_RELATION_TYPE_RRHH."
+                ORDER BY course_rel_user.sort ASC";
+        $result = Database::query($sql);
         $courses = array();
         while ($row = Database::fetch_array($result)) {
             // We only need the database name of the course.
@@ -762,7 +767,7 @@ class IndexManager
      * @param array $params
      * @param string $idAccordion
      * @param string $idCollapse
-     * @return null|string
+     * @return string
      */
     public function show_right_block(
         $title,
@@ -772,16 +777,16 @@ class IndexManager
         $idAccordion = '',
         $idCollapse = ''
     ) {
+        $html = '';
         if (!empty($idAccordion)) {
-            $html = null;
-            $html .= '<div class="panel-group" id="'.$idAccordion.'" role="tablist" aria-multiselectable="true">' . PHP_EOL;
-            $html .= '<div class="panel panel-default" id="'.$id.'">' . PHP_EOL;
-            $html .= '<div class="panel-heading" role="tab"><h4 class="panel-title">' . PHP_EOL;
-            $html .= '<a role="button" data-toggle="collapse" data-parent="#'.$idAccordion.'" href="#'.$idCollapse.'" aria-expanded="true" aria-controls="'.$idCollapse.'">'.$title.'</a>' . PHP_EOL;
-            $html .= '</h4></div>' . PHP_EOL;
-            $html .= '<div id="'.$idCollapse.'" class="panel-collapse collapse in" role="tabpanel">' . PHP_EOL;
-            $html .= '<div class="panel-body">'.$content.'</div>' . PHP_EOL;
-            $html .= '</div></div></div>' . PHP_EOL;
+            $html .= '<div class="panel-group" id="'.$idAccordion.'" role="tablist" aria-multiselectable="true">';
+            $html .= '<div class="panel panel-default" id="'.$id.'">';
+            $html .= '<div class="panel-heading" role="tab"><h4 class="panel-title">';
+            $html .= '<a role="button" data-toggle="collapse" data-parent="#'.$idAccordion.'" href="#'.$idCollapse.'" aria-expanded="true" aria-controls="'.$idCollapse.'">'.$title.'</a>';
+            $html .= '</h4></div>';
+            $html .= '<div id="'.$idCollapse.'" class="panel-collapse collapse in" role="tabpanel">';
+            $html .= '<div class="panel-body">'.$content.'</div>';
+            $html .= '</div></div></div>';
 
         } else {
             if (!empty($id)) {
@@ -790,11 +795,12 @@ class IndexManager
             $params['class'] = 'panel panel-default';
             $html = null;
             if (!empty($title)) {
-                $html .= '<div class="panel-heading">'.$title.'</div>' . PHP_EOL;
+                $html .= '<div class="panel-heading">'.$title.'</div>';
             }
-            $html.= '<div class="panel-body">'.$content.'</div>' . PHP_EOL;
+            $html.= '<div class="panel-body">'.$content.'</div>';
             $html = Display::div($html, $params);
         }
+
         return $html;
     }
 
@@ -859,11 +865,11 @@ class IndexManager
     }
 
     /**
-     * @return null|string
+     * @return string
      */
     public function return_user_image_block()
     {
-        $html = null;
+        $html = '';
         if (!api_is_anonymous()) {
             $userPicture = UserManager::getUserPicture(api_get_user_id(), USER_IMAGE_SIZE_ORIGINAL);
             $content = null;

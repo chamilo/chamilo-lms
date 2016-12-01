@@ -653,9 +653,8 @@ if (!empty($filterToSend)) {
             case 'extra_s_exprimer_oralement_en_continu':
             case 'extra_ecrire':
                 $selectedValue = '';
-
-                $filterItem['field'] = str_replace('extra_', '', $filterItem['field']);
-                $extraFieldSessionData = $extraFieldSession->get_handler_field_info_by_field_variable($filterItem['field']);
+                $fieldExtra = str_replace('extra_', '', $filterItem['field']);
+                $extraFieldSessionData = $extraFieldSession->get_handler_field_info_by_field_variable($fieldExtra);
 
                 // see https://task.beeznest.com/issues/10849#change-81902
                 if (is_array($filterItem['data'])) {
@@ -697,8 +696,8 @@ if (!empty($filterToSend)) {
 
                 break;
         }
-        //var_dump($filterToSend['rules']);
     }
+    //var_dump($filterToSend['rules']);
 
     if ($userStartDate && !empty($userStartDate)) {
         $filterToSend['custom_dates'] = $sql;

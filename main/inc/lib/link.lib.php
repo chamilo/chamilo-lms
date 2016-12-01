@@ -476,7 +476,12 @@ class Link extends Model
     {
         $tbl_link = Database:: get_course_table(TABLE_LINK);
         $course_id = api_get_course_int_id();
-        $sql = "SELECT * FROM " . $tbl_link . "
+
+        if (empty($id) || empty($course_id)) {
+            return [];
+        }
+
+        $sql = "SELECT * FROM $tbl_link
                 WHERE c_id = $course_id AND id='" . intval($id) . "' ";
         $result = Database::query($sql);
         $data = array();
@@ -495,6 +500,7 @@ class Link extends Model
         $tbl_link = Database:: get_course_table(TABLE_LINK);
         $_course = api_get_course_info();
         $course_id = $_course['real_id'];
+        $id = intval($id);
 
         $values['url'] = trim($values['url']);
         $values['title'] = trim($values['title']);
@@ -523,8 +529,12 @@ class Link extends Model
             return false;
         }
 
+        if (empty($id) || empty($course_id)) {
+            return false;
+        }
+
         // Finding the old category_id.
-        $sql = "SELECT * FROM " . $tbl_link . "
+        $sql = "SELECT * FROM $tbl_link
                 WHERE c_id = $course_id AND id='" . $id . "'";
         $result = Database:: query($sql);
         $row = Database:: fetch_array($result);
@@ -1744,7 +1754,12 @@ class Link extends Model
         $table = Database::get_course_table(TABLE_LINK_CATEGORY);
         $id = intval($id);
         $courseId = api_get_course_int_id();
-        $sql = "SELECT * FROM $table WHERE id = $id AND c_id = $courseId";
+
+        if (empty($id) || empty($courseId)) {
+            return [];
+        }
+        $sql = "SELECT * FROM $table 
+                WHERE id = $id AND c_id = $courseId";
         $result = Database::query($sql);
         $category = Database::fetch_array($result, 'ASSOC');
 

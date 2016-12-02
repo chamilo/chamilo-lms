@@ -854,7 +854,7 @@ $tableLabel = $type === STUDENT ? 'student' : 'teacher';
 $table = new SortableTable($tableLabel.'_list', 'get_number_of_users', 'get_user_data', $default_column);
 $parameters['keyword'] = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
 $parameters['sec_token'] = Security::get_token();
-$parameters['cidReq'] = api_get_cidreq();
+$parameters['cidReq'] = $course_code;
 $parameters['id_session'] = api_get_session_id();
 $parameters['type'] = $type;
 

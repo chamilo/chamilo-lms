@@ -3991,7 +3991,7 @@ class Exercise
 
                             if ($show_result) {
                                 if ($showTotalScoreAndUserChoicesInLastAttempt == false) {
-                                    $s_answer_label = '';
+                                    //$s_answer_label = $counterAnswer;
                                 }
                                 switch ($answerType) {
                                     case MATCHING:

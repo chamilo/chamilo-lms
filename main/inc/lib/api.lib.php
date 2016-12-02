@@ -1934,6 +1934,7 @@ function api_generate_password($length = 8)
  */
 function api_check_password($password) {
     $password_length = api_strlen($password);
+
     if ($password_length < 5) {
         return false;
     }
@@ -1951,8 +1952,6 @@ function api_check_password($password) {
             $letters ++;
         } elseif ($current_character_code >= 48 && $current_character_code <= 57) {
             $digits ++;
-        } else {
-            return false;
         }
         $previous_character_code = $current_character_code;
     }

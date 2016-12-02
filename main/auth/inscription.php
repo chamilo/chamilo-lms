@@ -329,7 +329,7 @@ if ($user_already_registered_show_terms === false) {
     $form->addRule('pass2', get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule(array('pass1', 'pass2'), get_lang('PassTwo'), 'compare');
 
-    if (TRUE) {
+    if (true) {
         $form->addRule(
             'pass1',
             get_lang('PassTooEasy') . ': ' . api_generate_password(),

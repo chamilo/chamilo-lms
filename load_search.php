@@ -628,16 +628,19 @@ if (!empty($filterToSend)) {
     $userStartDate = isset($params['extra_access_start_date']) ? $params['extra_access_start_date'] : $defaultExtraStartDate;
     $userEndDate = isset($params['extra_access_end_date']) ? $params['extra_access_end_date'] : $defaultExtraEndDate;
 
+    // Minus 3 days
     $date = new DateTime($userStartDate);
     $date->sub(new DateInterval('P3D'));
     $userStartDateMinus = $date->format('Y-m-d h:i:s');
 
+    // Plus 2 days
     $date = new DateTime($userEndDate);
     $date->add(new DateInterval('P2D'));
     $userEndDatePlus = $date->format('Y-m-d h:i:s');
 
+    // Special OFAJ date logic
     $sql = " AND (
-        (s.access_start_date > '$userStartDateMinus' AND s.access_start_date < '$userEndDatePlus') OR
+        (s.access_start_date > '$userStartDateMinus' AND s.access_end_date < '$userEndDatePlus') OR
         (s.access_start_date > '$userStartDateMinus' AND (s.access_start_date = '' OR s.access_start_date IS NULL)) OR 
         ((s.access_start_date = '' OR s.access_start_date IS NULL) AND (s.access_end_date = '' OR s.access_end_date IS NULL))
     )";
@@ -645,6 +648,8 @@ if (!empty($filterToSend)) {
     $extraFieldOptions = new ExtraFieldOption('session');
     $extraFieldSession = new ExtraField('session');
 
+    // Special filters
+    // see https://task.beeznest.com/issues/10849#change-81902
     foreach ($filterToSend['rules'] as &$filterItem) {
         switch ($filterItem['field']) {
             case 'extra_ecouter':
@@ -656,7 +661,6 @@ if (!empty($filterToSend)) {
                 $fieldExtra = str_replace('extra_', '', $filterItem['field']);
                 $extraFieldSessionData = $extraFieldSession->get_handler_field_info_by_field_variable($fieldExtra);
 
-                // see https://task.beeznest.com/issues/10849#change-81902
                 if (is_array($filterItem['data'])) {
                     $myOrder = [];
                     foreach ($filterItem['data'] as $option) {
@@ -693,11 +697,42 @@ if (!empty($filterToSend)) {
                 }
 
                 $filterItem['data'] = $searchOptions;
+                break;
+            case 'extra_domaine':
+                // Special condition see:
+                // https://task.beeznest.com/issues/10849#note-218
+                // Remove filiere
+                $list =  [
+                    'vie-quotidienne',
+                    //'competente-dans-mon-domaine-de-specialite',
+                    'arrivee-sur-mon-poste-de-travail'
+                ];
 
+                $deleteFiliere = false;
+                if (is_array($filterItem['data'])) {
+                    $myOrder = [];
+                    foreach ($filterItem['data'] as $option) {
+                        if (in_array($option, $list)) {
+                            $deleteFiliere = true;
+                            break;
+                        }
+                    }
+                } else {
+                    if (in_array($filterItem['data'], $list)) {
+                        $deleteFiliere = true;
+                    }
+                }
                 break;
         }
+
+        if ($deleteFiliere) {
+            foreach ($filterToSend['rules'] as &$filterItem) {
+                if ($filterItem['field'] == 'extra_filiere') {
+                    $filterItem = [];
+                }
+            }
+        }
     }
-    //var_dump($filterToSend['rules']);
 
     if ($userStartDate && !empty($userStartDate)) {
         $filterToSend['custom_dates'] = $sql;

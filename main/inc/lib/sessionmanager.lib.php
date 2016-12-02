@@ -457,19 +457,20 @@ class SessionManager
         $isMakingOrder = false;
 
         if ($get_count == true) {
-            $select = " SELECT count(*) as total_rows";
+            $select = " SELECT count(DISTINCT s.id) as total_rows";
         } else {
             $select =
-                "SELECT DISTINCT ".
-                " s.name, ".
-                " s.display_start_date, ".
-                " s.display_end_date, ".
-                " access_start_date, ".
-                " access_end_date, ".
-                " s.visibility, ".
-                " s.session_category_id, ".
-                " $inject_extra_fields ".
-                " s.id ";
+                "SELECT DISTINCT 
+                 s.name,
+                 s.display_start_date, 
+                 s.display_end_date, 
+                 access_start_date, 
+                 access_end_date, 
+                 s.visibility, 
+                 s.session_category_id, 
+                 $inject_extra_fields 
+                 s.id 
+             ";
 
             $isMakingOrder = strpos($options['order'], 'category_name') === 0;
         }

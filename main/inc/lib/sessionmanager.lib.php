@@ -462,7 +462,7 @@ class SessionManager
         $isMakingOrder = false;
 
         if ($get_count == true) {
-            $select = " SELECT count(*) as total_rows";
+            $select = " SELECT count(DISTINCT s.id) as total_rows";
         } else {
             $select ="
                 SELECT DISTINCT

@@ -2578,6 +2578,7 @@ JAVASCRIPT;
                 $val = (array) $val;
                 $result = '"%'.implode(';', $val).'%"';
                 foreach ($val as $item) {
+                    $item = trim($item);
                     $result .= ' OR '.$col.' LIKE "%'.$item.'%"';
                 }
                 $val = $result;

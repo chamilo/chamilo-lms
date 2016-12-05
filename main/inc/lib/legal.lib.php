@@ -289,10 +289,12 @@ class LegalManager
     {
         $userInfo = api_get_user_info($userId);
         $subject = get_lang('SendTermsSubject');
+        $webPath = api_get_path(WEB_PATH);
+        $link = '<a href="'.$webPath.'courses/FORUMDAIDE/index.php">'.$webPath.'courses/FORUMDAIDE/index.php</a>';
         $content = sprintf(
             get_lang('SendTermsDescriptionToUrlX'),
             $userInfo['firstName'],
-            api_get_path(WEB_PATH)
+            $link
         );
         MessageManager::send_message_simple($userId, $subject, $content);
         Display::addFlash(Display::return_message(get_lang('Sent')));

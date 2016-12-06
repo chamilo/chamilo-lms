@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- *	This file is responsible for  passing requested documents to the browser.
+ *  This file is responsible for passing requested documents to the browser.
  *  Many functions updated and moved to lib/document.lib.php
  *	@package chamilo.document
  */
@@ -13,6 +13,8 @@ $this_section = SECTION_COURSES;
 
 // Protection
 api_protect_course_script();
+
+$_course = api_get_course_info();
 
 if (!isset($_course)) {
     api_not_allowed(true);
@@ -26,8 +28,8 @@ $doc_url = str_replace(' ', '+', $doc_url);
 
 $doc_url = str_replace(array('../', '\\..', '\\0', '..\\'), array('', '', '', ''), $doc_url); //echo $doc_url;
 
-if (strpos($doc_url, '../') OR strpos($doc_url, '/..')) {
-   $doc_url = '';
+if (strpos($doc_url, '../') || strpos($doc_url, '/..')) {
+    $doc_url = '';
 }
 
 // Dealing with image included into survey: when users receive a link towards a

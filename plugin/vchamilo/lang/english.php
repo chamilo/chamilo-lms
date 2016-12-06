@@ -103,12 +103,13 @@ $strings['syncthis'] = 'Sync this setting';
 
 $strings['SiteNameExample'] = 'Example: Chamilo';
 $strings['InstitutionExample'] = 'Example: Chamilo Association';
-$strings['RootWebExample'] = 'Example: http://www.chamilo.org/';
+$strings['RootWebExample'] = 'Example: http://www.chamilo.org/ (with final slash)';
 $strings['DatabaseDescription'] = 'A new database will be created with that name.';
 $strings['RootWebExists'] = 'An instance with the same root web exists.';
 $strings['ImportInstance'] = 'Import instance';
 $strings['ConfigurationPath'] = 'Chamilo configuration path';
 $strings['UploadRealRoot'] = 'Upload files';
 $strings['DatabaseAccessShouldBeDifferentThanMasterChamilo'] = 'Database server should be different than the Chamilo master';
+$strings['UrlAppendExample'] = 'Example: /chamilo_v1 (with first slash)';
 
 

@@ -24,7 +24,8 @@ class Virtual
             return;
         }
 
-        // provides an effective value for the virtual root_web    based on domain analysis
+
+        // provides an effective value for the virtual root_web based on domain analysis
         self::getHostName($_configuration);
 
         // We are on physical chamilo. Let original config play
@@ -40,8 +41,7 @@ class Virtual
         /** @var \Doctrine\DBAL\Connection $connection */
         $connection = Virtual::bootConnection($_configuration);
 
-        $table = 'vchamilo';
-        $query = "SELECT * FROM $table WHERE root_web = '$virtualChamiloWebRoot'";
+        $query = "SELECT * FROM vchamilo WHERE root_web = '$virtualChamiloWebRoot'";
         $result = $connection->executeQuery($query);
 
         if ($result->rowCount()) {
@@ -86,15 +86,19 @@ class Virtual
             if ($data && $data['visible'] === '1') {
                 foreach ($data as $key => $value) {
                     if (!in_array($key, $excludes)) {
+                        // Avoid empty password_encryption
+                        if ($key == 'password_encryption' && empty($value)) {
+                            continue;
+                        }
                         $_configuration[$key] = $value;
                     }
                     $_configuration['virtual'] = $data['root_web'].'/';
                 }
 
-                $data['SYS_ARCHIVE_PATH'] = $archivePath.'/'.$data['slug'];
-                $data['SYS_HOME_PATH'] = $homePath.'/'.$data['slug'];
-                $data['SYS_COURSE_PATH'] = $coursePath.'/'.$data['slug'];
-                $data['SYS_UPLOAD_PATH'] = $uploadPath.'/'.$data['slug'];
+                $data['SYS_ARCHIVE_PATH'] = self::addTrailingSlash($archivePath).$data['slug'];
+                $data['SYS_HOME_PATH'] = self::addTrailingSlash($homePath).$data['slug'];
+                $data['SYS_COURSE_PATH'] = self::addTrailingSlash($coursePath).$data['slug'];
+                $data['SYS_UPLOAD_PATH'] = self::addTrailingSlash($uploadPath).$data['slug'];
 
                 if (!empty($passwordEncryption)) {
                     $_configuration['password_encryption'] = $passwordEncryption;
@@ -139,7 +143,24 @@ class Virtual
             return;
         }
 
-        $_configuration['vchamilo_web_root'] = "{$protocol}://".@$_SERVER['HTTP_HOST'];
+        $contentPrefix = '/';
+        if (isset($_SERVER['CONTEXT_PREFIX']) && !empty($_SERVER['CONTEXT_PREFIX'])) {
+            $contentPrefix = $_SERVER['CONTEXT_PREFIX'];
+        } else {
+            // Getting url_append from URL
+            if (isset($_SERVER['REQUEST_URI'])) {
+                $requestUri = $_SERVER['REQUEST_URI'];
+                if (strpos($requestUri, '/courses/') !== false) {
+                    $result = substr($requestUri, 0, strpos($requestUri, '/courses/'));
+                    if (!empty($result) && $result != '/') {
+                        $contentPrefix = $result;
+                    }
+                }
+            }
+        }
+
+        $_configuration['vchamilo_web_root'] = "{$protocol}://".@$_SERVER['HTTP_HOST'].$contentPrefix;
+
         $_configuration['vchamilo_name'] = @$_SERVER['HTTP_HOST'];
         if (empty($_configuration['vchamilo_name'])) { // try again with another source if has failed
             $_configuration['vchamilo_name'] = "{$protocol}://".$_SERVER['SERVER_NAME'];
@@ -148,6 +169,15 @@ class Virtual
             }
             $_configuration['vchamilo_name'] = $_SERVER['SERVER_NAME'];
         }
+    }
+
+    /**
+     * @param string $path
+     * @return string
+     */
+    public static function addTrailingSlash($path)
+    {
+        return substr($path, -1) == '/' ? $path : $path.'/';
     }
 
     /**
@@ -659,7 +689,7 @@ class Virtual
         );
 
         copyDirTo(
-            self::chopLastSlash($templateDir.'/data/upload'),
+            self::chopLastSlash($templateDir.'/data/upload/'),
             self::chopLastSlash($uploadPath),
             false
         );
@@ -756,7 +786,8 @@ class Virtual
         $slugify = new Slugify();
         $urlInfo = parse_url($url);
         if (isset($urlInfo['host'])) {
-            return $slugify->slugify($urlInfo['host']);
+            $path = $urlInfo['path'] != '/' ? '_'.$urlInfo['path'] : '';
+            return $slugify->slugify($urlInfo['host'].$path);
         }
 
         return false;
@@ -906,6 +937,8 @@ class Virtual
 
             return ;
         }
+
+        $data->root_web = api_add_trailing_slash($data->root_web);
 
         self::ctrace('Registering: '.$data->root_web);
         $tablename = Database::get_main_table('vchamilo');

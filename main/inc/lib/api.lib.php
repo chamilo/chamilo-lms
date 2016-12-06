@@ -819,10 +819,12 @@ function api_get_path($path = '', $configuration = [])
 
         global $virtualChamilo;
         if (!empty($virtualChamilo)) {
-            $paths[$root_web][SYS_ARCHIVE_PATH] = $virtualChamilo[SYS_ARCHIVE_PATH].'/';
-            $paths[$root_web][SYS_HOME_PATH] = $virtualChamilo[SYS_HOME_PATH].'/';
-            $paths[$root_web][SYS_COURSE_PATH] = $virtualChamilo[SYS_COURSE_PATH].'/';
-            $paths[$root_web][SYS_UPLOAD_PATH] = $virtualChamilo[SYS_UPLOAD_PATH].'/';
+            $paths[$root_web][SYS_ARCHIVE_PATH] = api_add_trailing_slash($virtualChamilo[SYS_ARCHIVE_PATH]);
+            $paths[$root_web][SYS_HOME_PATH] = api_add_trailing_slash($virtualChamilo[SYS_HOME_PATH]);
+            $paths[$root_web][SYS_COURSE_PATH] = api_add_trailing_slash($virtualChamilo[SYS_COURSE_PATH]);
+            $paths[$root_web][SYS_UPLOAD_PATH] = api_add_trailing_slash($virtualChamilo[SYS_UPLOAD_PATH]);
+            //$paths[$root_web][REL_PATH] = $virtualChamilo[REL_PATH];
+            //$paths[$root_web][REL_COURSE_PATH] = $virtualChamilo[REL_COURSE_PATH];
         }
 
         $isInitialized[$root_web] = true;

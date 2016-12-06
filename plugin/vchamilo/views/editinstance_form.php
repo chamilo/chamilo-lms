@@ -272,7 +272,7 @@ abstract class ChamiloForm
         $status = $this->_upload_manager->preprocess_files();
 
         // now check that we really want each file
-        foreach ($_FILES as $elname=>$file) {
+        foreach ($_FILES as $elname => $file) {
             if ($mform->elementExists($elname) and $mform->getElementType($elname)=='file') {
                 $required = $mform->isElementRequired($elname);
                 if (!empty($this->_upload_manager->files[$elname]['uploadlog']) &&
@@ -294,9 +294,7 @@ abstract class ChamiloForm
 
         // return errors if found
         if ($status && 0 == count($errors)) {
-
             return true;
-
         } else {
             $files = array();
 
@@ -363,6 +361,12 @@ class InstanceForm extends ChamiloForm
         );
         $form->applyFilter('root_web', 'trim');
 
+        $form->addElement(
+            'text',
+            'url_append',
+            ['url_append', $plugin->get_lang('UrlAppendExample')]
+        );
+
         if ($this->_mode == 'update') {
             $encryptList = Virtual::getEncryptList();
             $encryptMethod = $form->addElement(
@@ -427,6 +431,31 @@ class InstanceForm extends ChamiloForm
             );
         } else {
             if ($this->instance) {
+                $form->addLabel(
+                    'slug',
+                    $this->instance['slug']
+                );
+
+                $form->addLabel(
+                    'archive_real_root',
+                    Virtual::getConfig('vchamilo', 'archive_real_root').$this->instance['slug']
+                );
+
+                $form->addLabel(
+                    'course_real_root',
+                    Virtual::getConfig('vchamilo', 'course_real_root').$this->instance['slug']
+                );
+
+                $form->addLabel(
+                    'home_real_root',
+                    Virtual::getConfig('vchamilo', 'home_real_root').$this->instance['slug']
+                );
+
+                $form->addLabel(
+                    'upload_real_root',
+                    Virtual::getConfig('vchamilo', 'upload_real_root').$this->instance['slug']
+                );
+
                 $form->addLabel(
                     $this->_plugin->get_lang('template'),
                     $this->instance['template']

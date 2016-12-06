@@ -1169,4 +1169,26 @@ class FillBlanks extends Question
     {
         return self::getHtmlAnswer($answer, $correct, false, $resultsDisabled);
     }
+
+    /**
+     * Check if a answer is correct by its text
+     * @param string $answerText
+     * @return bool
+     */
+    public static function isCorrect($answerText)
+    {
+        $answerInfo = FillBlanks::getAnswerInfo($answerText, true);
+        $correctAnswerList = $answerInfo['tabwords'];
+        $studentAnswer = $answerInfo['studentanswer'];
+
+        $isCorrect = true;
+
+        foreach ($correctAnswerList as $i => $correctAnswer) {
+            $isGoodStudentAnswer = FillBlanks::isGoodStudentAnswer($studentAnswer[$i], $correctAnswer);
+
+            $isCorrect = $isCorrect && $isGoodStudentAnswer;
+        }
+
+        return $isCorrect;
+    }
 }

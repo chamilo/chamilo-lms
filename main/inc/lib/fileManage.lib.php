@@ -177,7 +177,7 @@ function my_rename($file_path, $new_file_name) {
  * @return bool true if the move succeed, false otherwise.
  * @see move() uses check_name_exist() and copyDirTo() functions
  */
-function move($source, $target, $forceMove = true, $moveContent = false) 
+function move($source, $target, $forceMove = true, $moveContent = false)
 {
     $target = realpath($target); // remove trailing slash
     $source = realpath($source);
@@ -189,7 +189,7 @@ function move($source, $target, $forceMove = true, $moveContent = false)
         }
         $isWindowsOS = api_is_windows_os();
         $canExec = function_exists('exec');
-      
+
         /* File case */
         if (is_file($source)) {
             if ($forceMove && !$isWindowsOS && $canExec) {
@@ -223,7 +223,7 @@ function move($source, $target, $forceMove = true, $moveContent = false)
                     }
                 }
             } else {
-                return copyDirTo($source, $target);        
+                return copyDirTo($source, $target);
             }
             return true;
         }
@@ -236,22 +236,22 @@ function move($source, $target, $forceMove = true, $moveContent = false)
  * Moves a directory and its content to an other area
  *
  * @author Hugues Peeters <peeters@ipm.ucl.ac.be>
- * @param string $orig_dir_path the path of the directory to move
+ * @param string $source the path of the directory to move
  * @param string $destination the path of the new area
  * @return bool false on error
  */
-function copyDirTo($orig_dir_path, $destination, $move = true) {
+function copyDirTo($source, $destination, $move = true)
+{
     $fs = new Filesystem();
-    if (is_dir($orig_dir_path)) {
-        $destinationDir = $destination . "/" . basename($orig_dir_path);
-        $fs->mkdir($destinationDir);
-        if (! is_dir($destinationDir)){
-            error_log("Chamilo copyDirTo cannot mkdir $destinationDir\n");
+    if (is_dir($source)) {
+        $fs->mkdir($destination);
+        if (!is_dir($destination)) {
+            error_log("Chamilo copyDirTo cannot mkdir $destination\n");
             return false; // could not create destination dir
         }
-        $fs->mirror($orig_dir_path, $destinationDir);
+        $fs->mirror($source, $destination);
         if ($move) {
-            $fs->remove($orig_dir_path);
+            $fs->remove($source);
         }
     }
     return true;

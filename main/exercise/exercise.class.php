@@ -8456,7 +8456,14 @@ class Exercise
         foreach ($attempts as $attempt) {
             foreach ($attempt['question_list'] as $answer) {
                 $objAnswer = new Answer($answer['question_id']);
-                $isCorrect = $objAnswer->isCorrectByAutoId($answer['answer']);
+
+                switch ($objAnswer->getQuestionType()) {
+                    case FILL_IN_BLANKS:
+                        $isCorrect = FillBlanks::isCorrect($answer['answer']);
+                        break;
+                    default:
+                        $isCorrect = $objAnswer->isCorrectByAutoId($answer['answer']);
+                }
 
                 if ($isCorrect) {
                     $corrects[$answer['question_id']][] = $answer;

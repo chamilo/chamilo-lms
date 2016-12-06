@@ -3660,11 +3660,11 @@ class Exercise
 
                                 // This value is the user input, not escaped while correct answer is escaped by fckeditor
                                 // Works with cyrillic alphabet and when using ">" chars see #7718 #7610 #7618
-                                if (!$from_database) {
+                                /*if (!$from_database) {
                                     $studentAnswer = htmlentities(
                                         api_utf8_encode($studentAnswer)
                                     );
-                                }
+                                }*/
 
                                 $correctAnswer = $listCorrectAnswers['tabwords'][$i];
                                 $isAnswerCorrect = 0;

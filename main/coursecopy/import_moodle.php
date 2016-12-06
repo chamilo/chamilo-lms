@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
-
 /**
  * Import a backup from moodle system.
  *
@@ -10,7 +8,7 @@ use ChamiloSession as Session;
  * @package chamilo.backup
  */
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 $current_course_tool = TOOL_COURSE_MAINTENANCE;
 api_protect_course_script(true);
@@ -42,27 +40,32 @@ $form->addButtonImport(get_lang('Import'));
 if ($form->validate()) {
     $file = $_FILES['moodle_file'];
     $moodleImport = new MoodleImport();
-    $responseImport = $moodleImport->readMoodleFile($file);
+    $responseImport = $moodleImport->import($file);
 
     Display::cleanFlashMessages();
 
     if ($responseImport) {
-        Display::addFlash(Display::return_message(get_lang('MoodleFileImportedSuccessfully'), 'success'));
+        Display::addFlash(
+            Display::return_message(
+                get_lang('MoodleFileImportedSuccessfully'),
+                'success'
+            )
+        );
     } else {
-        Display::addFlash(Display::return_message(get_lang('ErrorImportingFile'), 'error'));
+        Display::addFlash(
+            Display::return_message(get_lang('ErrorImportingFile'), 'error')
+        );
     }
 }
 
-$templateName = get_lang('ImportFromMoodle');
-
-$template = new Template($templateName);
+$template = new Template(get_lang('ImportFromMoodle'));
 $infoMsg = Display::return_message(get_lang('ImportFromMoodleInstructions'), 'normal', false);
 $template->assign('info_msg', $infoMsg);
 $template->assign('form', $form->returnForm());
 $templateName = $template->get_template('coursecopy/import_moodle.tpl');
 $content = $template->fetch($templateName);
 
-$template->assign('header', $templateName);
+$template->assign('header', get_lang('ImportFromMoodle'));
 $template->assign('content', $content);
 
 $template->display_one_col_template();

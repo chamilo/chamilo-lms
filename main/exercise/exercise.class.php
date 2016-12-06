@@ -3629,6 +3629,7 @@ class Exercise
                         $listCorrectAnswers = FillBlanks::getAnswerInfo(
                             $answer
                         );
+
                         $switchableAnswerSet = $listCorrectAnswers["switchable"];
                         $answerWeighting = $listCorrectAnswers["tabweighting"];
                         // user choices is an array $choice
@@ -3657,19 +3658,15 @@ class Exercise
 
                                 // This value is the user input, not escaped while correct answer is escaped by fckeditor
                                 // Works with cyrillic alphabet and when using ">" chars see #7718 #7610 #7618
-                                if (!$from_database) {
+                                /*if (!$from_database) {
                                     $studentAnswer = htmlentities(
                                         api_utf8_encode($studentAnswer)
                                     );
-                                }
+                                }*/
 
                                 $correctAnswer = $listCorrectAnswers['tabwords'][$i];
                                 $isAnswerCorrect = 0;
-                                if (FillBlanks::isGoodStudentAnswer(
-                                    $studentAnswer,
-                                    $correctAnswer
-                                )
-                                ) {
+                                if (FillBlanks::isGoodStudentAnswer($studentAnswer, $correctAnswer)) {
                                     // gives the related weighting to the student
                                     $questionScore += $answerWeighting[$i];
                                     // increments total score

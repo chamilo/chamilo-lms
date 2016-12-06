@@ -194,7 +194,7 @@ if (!empty($_configuration['multiple_access_urls'])) {
 
 $charset = 'UTF-8';
 
-// Enables the portablity layer and configures PHP for UTF-8
+// Enables the portability layer and configures PHP for UTF-8
 \Patchwork\Utf8\Bootup::initAll();
 
 // Start session after the internationalization library has been initialized.

@@ -5,7 +5,7 @@
  * @author José Loguercio Silva <jose.loguercio@beeznest.com>
  * @package chamilo.plugin.google_maps
  */
-class GoogleMaps extends Plugin
+class GoogleMapsPlugin extends Plugin
 {
     /**
      * Class constructor
@@ -13,7 +13,6 @@ class GoogleMaps extends Plugin
     protected function __construct()
     {
         $parameters = array(
-            'enable_api' => 'boolean',
             'api_key' => 'text'
         );
 
@@ -21,9 +20,19 @@ class GoogleMaps extends Plugin
     }
 
     /**
+     * Get the plugin Name
+     *
+     * @return string
+     */
+    public function get_name()
+    {
+        return "google_maps";
+    }
+
+    /**
      * Instance the plugin
      * @staticvar null $result
-     * @return GoogleMaps
+     * @return GoogleMapsPlugin
      */
     static function create()
     {
@@ -38,7 +47,7 @@ class GoogleMaps extends Plugin
      */
     public function install()
     {
-        $this->installDatabase();
+        return true;
     }
 
     /**
@@ -47,33 +56,6 @@ class GoogleMaps extends Plugin
      */
     public function uninstall()
     {
-        $this->unistallDatabase();
-    }
-
-    /**
-     * Create the database tables for the plugin
-     * @return void
-     */
-    private function installDatabase()
-    {
-        $pluginGoogleMapsLogTable = Database::get_main_table(TABLE_GOOGLE_MAPS);
-
-        $sql = "CREATE TABLE IF NOT EXISTS $pluginGoogleMapsLogTable ("
-                . "api_key varchar(255)";
-
-        Database::query($sql);
-    }
-
-    /**
-     * Drop the database tables for the plugin
-     * @return void
-     */
-    private function unistallDatabase()
-    {
-        $pluginGoogleMapsLogTable = Database::get_main_table(TABLE_TOUR_LOG);
-
-        $sql = "DROP TABLE IF EXISTS $pluginGoogleMapsLogTable";
-
-        Database::query($sql);
+        return true;
     }
 }

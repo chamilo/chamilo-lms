@@ -1,10 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Show the JavaScript template in the web pages
- * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
- * @package chamilo.plugin.tour
+ * Show google maps
+ * @author José Loguercio Silva <jose.loguercio@beeznest.com>
+ * @package chamilo.plugin.google_maps
  */
 require_once __DIR__.'/config.php';
 
-$plugin_info = GoogleMaps::create()->get_info();
+$plugin_info = GoogleMapsPlugin::create()->get_info();

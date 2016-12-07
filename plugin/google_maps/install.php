@@ -2,9 +2,9 @@
 /* For licensing terms, see /license.txt */
 /**
  * Initialization install
- * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
- * @package chamilo.plugin.tour
+ * @author José Loguercio Silva <jose.loguercio@beeznest.com>
+ * @package chamilo.plugin.google_maps
  */
 require_once __DIR__ . '/config.php';
 
-Tour::create()->install();
+GoogleMapsPlugin::create()->install();

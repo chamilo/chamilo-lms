@@ -2658,7 +2658,7 @@ class Exercise
     public function clean_results($cleanLpTests = false, $cleanResultBeforeDate = null)
     {
         $table_track_e_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $table_track_e_attempt   = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+        $table_track_e_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
         $sql_where = '  AND
                         orig_lp_id = 0 AND

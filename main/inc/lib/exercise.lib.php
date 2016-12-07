@@ -2865,14 +2865,9 @@ HOTSPOT;
         $exercise_id,
         $course_code,
         $session_id
-    )
-    {
-        $track_exercises = Database::get_main_table(
-            TABLE_STATISTIC_TRACK_E_EXERCISES
-        );
-        $track_attempt = Database::get_main_table(
-            TABLE_STATISTIC_TRACK_E_ATTEMPT
-        );
+    ) {
+        $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
         $question_id = intval($question_id);
         $exercise_id = intval($exercise_id);
@@ -2966,14 +2961,9 @@ HOTSPOT;
         $course_code,
         $session_id,
         $questionType = ''
-    )
-    {
-        $track_exercises = Database::get_main_table(
-            TABLE_STATISTIC_TRACK_E_EXERCISES
-        );
-        $track_attempt = Database::get_main_table(
-            TABLE_STATISTIC_TRACK_E_ATTEMPT
-        );
+    ) {
+        $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
         $courseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
         $courseUserSession = Database::get_main_table(
@@ -3140,14 +3130,9 @@ HOTSPOT;
         $question_type = null,
         $correct_answer = null,
         $current_answer = null
-    )
-    {
-        $track_exercises = Database::get_main_table(
-            TABLE_STATISTIC_TRACK_E_EXERCISES
-        );
-        $track_attempt = Database::get_main_table(
-            TABLE_STATISTIC_TRACK_E_ATTEMPT
-        );
+    ) {
+        $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
         $courseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $courseUserSession = Database::get_main_table(
@@ -3380,27 +3365,23 @@ HOTSPOT;
         $exercise_id,
         $course_code,
         $session_id
-    )
-    {
-        $track_exercises = Database::get_main_table(
-            TABLE_STATISTIC_TRACK_E_EXERCISES
-        );
-        $track_attempt = Database::get_main_table(
-            TABLE_STATISTIC_TRACK_E_ATTEMPT
-        );
+    ) {
+        $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
         $exercise_id = intval($exercise_id);
         $course_code = Database::escape_string($course_code);
         $session_id = intval($session_id);
 
         $sql = "SELECT DISTINCT exe_user_id
-    		FROM $track_exercises e
-    		INNER JOIN $track_attempt a ON (a.exe_id = e.exe_id)
-    		WHERE
-    		    exe_exo_id 	 = $exercise_id AND
-    			course_code  = '$course_code' AND
-    			e.session_id = $session_id AND
-    			status = ''";
+                FROM $track_exercises e
+                INNER JOIN $track_attempt a 
+                ON (a.exe_id = e.exe_id)
+                WHERE
+                    exe_exo_id 	 = $exercise_id AND
+                    course_code  = '$course_code' AND
+                    e.session_id = $session_id AND
+                    status = ''";
         $result = Database::query($sql);
         $return = 0;
         if ($result) {

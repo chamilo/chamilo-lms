@@ -29,9 +29,9 @@ $interbreadcrumb[]= array ('url' => 'exercise_report.php?'.api_get_cidreq(),'nam
 $interbreadcrumb[]= array ('url' => 'exercise_report.php?filter=2&'.api_get_cidreq(),'name' => get_lang('StudentScore'));
 $interbreadcrumb[]= array ('url' => 'exercise_history.php?exe_id='.intval($_GET['exe_id']).'&'.api_get_cidreq(), 'name' => get_lang('Details'));
 
-$TBL_USER          	    = Database::get_main_table(TABLE_MAIN_USER);
-$TBL_EXERCISES			= Database::get_course_table(TABLE_QUIZ_TEST);
-$TBL_EXERCISES_QUESTION	= Database::get_course_table(TABLE_QUIZ_QUESTION);
+$TBL_USER = Database::get_main_table(TABLE_MAIN_USER);
+$TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);
+$TBL_EXERCISES_QUESTION = Database::get_course_table(TABLE_QUIZ_QUESTION);
 $TBL_TRACK_ATTEMPT_RECORDING= Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
 Display::display_header($nameTools,get_lang('Exercise'));
 
@@ -59,8 +59,14 @@ echo '</div>';
     </tr>
 <?php
 
-$sql = "SELECT *, quiz_question.question, firstname, lastname FROM $TBL_TRACK_ATTEMPT_RECORDING t, $TBL_USER,$TBL_EXERCISES_QUESTION quiz_question
-      WHERE quiz_question.id = question_id AND user_id = author AND exe_id = '".(int)$_GET['exe_id']."' ORDER BY position";
+$sql = "SELECT *, quiz_question.question, firstname, lastname 
+        FROM $TBL_TRACK_ATTEMPT_RECORDING t, $TBL_USER,
+        $TBL_EXERCISES_QUESTION quiz_question
+        WHERE 
+            quiz_question.id = question_id AND 
+            user_id = author AND 
+            exe_id = '".(int)$_GET['exe_id']."' 
+        ORDER BY position";
 $query = Database::query($sql);
 while($row = Database::fetch_array($query)){
     echo '<tr';

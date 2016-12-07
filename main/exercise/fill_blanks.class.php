@@ -759,74 +759,76 @@ class FillBlanks extends Question
         $endDate,
         $useLastAnswerredAttempt = true
     ) {
-       $tblTrackEAttempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-       $tblTrackEExercise = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-       $courseId = api_get_course_int_id();
+        $tblTrackEAttempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+        $tblTrackEExercise = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $courseId = api_get_course_int_id();
         // request to have all the answers of student for this question
-       // student may have doing it several time
-       // student may have not answered the bracket id, in this case, is result of the answer is empty
+        // student may have doing it several time
+        // student may have not answered the bracket id, in this case, is result of the answer is empty
+        // we got the less recent attempt first
+        $sql = 'SELECT * FROM '.$tblTrackEAttempt.' tea
+               LEFT JOIN '.$tblTrackEExercise.' tee
+               ON tee.exe_id = tea.exe_id
+               AND tea.c_id = '.$courseId.'
+               AND exe_exo_id = '.$testId.'
+    
+               WHERE 
+                tee.c_id = '.$courseId.' AND 
+                question_id = '.$questionId.' AND 
+                tea.user_id IN ('.implode(',', $studentsIdList).')  AND 
+                tea.tms >= "'.$startDate.'" AND 
+                tea.tms <= "'.$endDate.'"
+               ORDER BY user_id, tea.exe_id;
+        ';
 
-       // we got the less recent attempt first
-       $sql = '
-           SELECT * FROM '.$tblTrackEAttempt.' tea
-           LEFT JOIN '.$tblTrackEExercise.' tee
-           ON tee.exe_id = tea.exe_id
-           AND tea.c_id = '.$courseId.'
-           AND exe_exo_id = '.$testId.'
+        $res = Database::query($sql);
+        $tabUserResult = array();
+        $bracketNumber = 0;
+        // foreach attempts for all students starting with his older attempt
+        while ($data = Database::fetch_array($res)) {
+            $tabAnswer = FillBlanks::getAnswerInfo($data['answer'], true);
 
-           WHERE tee.c_id = '.$courseId.'
-           AND question_id = '.$questionId.'
-           AND tea.user_id IN ('.implode(',', $studentsIdList).')
-           AND tea.tms >= "'.$startDate.'"
-           AND tea.tms <= "'.$endDate.'"
-           ORDER BY user_id, tea.exe_id;
-       ';
+            // for each bracket to find in this question
+            foreach ($tabAnswer['studentanswer'] as $bracketNumber => $studentAnswer) {
+                if ($tabAnswer['studentanswer'][$bracketNumber] != '') {
+                    // student has answered this bracket, cool
+                    switch (FillBlanks::getFillTheBlankAnswerType($tabAnswer['tabwords'][$bracketNumber])) {
+                        case self::FILL_THE_BLANK_MENU:
+                            // get the indice of the choosen answer in the menu
+                            // we know that the right answer is the first entry of the menu, ie 0
+                            // (remember, menu entries are shuffled when taking the test)
+                            $tabUserResult[$data['user_id']][$bracketNumber] = FillBlanks::getFillTheBlankMenuAnswerNum(
+                                $tabAnswer['tabwords'][$bracketNumber],
+                                $tabAnswer['studentanswer'][$bracketNumber]
+                            );
+                            break;
+                        default:
+                            if (FillBlanks::isGoodStudentAnswer(
+                                $tabAnswer['studentanswer'][$bracketNumber],
+                                $tabAnswer['tabwords'][$bracketNumber]
+                            )
+                            ) {
+                                $tabUserResult[$data['user_id']][$bracketNumber] = 0;   //  right answer
+                            } else {
+                                $tabUserResult[$data['user_id']][$bracketNumber] = -1;  // wrong answer
+                            }
+                    }
+                } else {
+                    // student didn't answer this bracket
+                    if ($useLastAnswerredAttempt) {
+                        // if we take into account the last answered attempt
+                        if (!isset($tabUserResult[$data['user_id']][$bracketNumber])) {
+                            $tabUserResult[$data['user_id']][$bracketNumber] = -2;      // not answered
+                        }
+                    } else {
+                        // we take the last attempt, even if the student answer the question before
+                        $tabUserResult[$data['user_id']][$bracketNumber] = -2;      // not answered
+                    }
+                }
+            }
+        }
 
-       $res = Database::query($sql);
-       $tabUserResult = array();
-       $bracketNumber = 0;
-       // foreach attempts for all students starting with his older attempt
-       while ($data = Database::fetch_array($res)) {
-           $tabAnswer = FillBlanks::getAnswerInfo($data['answer'], true);
-
-           // for each bracket to find in this question
-           foreach ($tabAnswer['studentanswer'] as $bracketNumber => $studentAnswer) {
-
-               if ($tabAnswer['studentanswer'][$bracketNumber] != '') {
-                   // student has answered this bracket, cool
-                   switch (FillBlanks::getFillTheBlankAnswerType($tabAnswer['tabwords'][$bracketNumber])) {
-                       case self::FILL_THE_BLANK_MENU :
-                           // get the indice of the choosen answer in the menu
-                           // we know that the right answer is the first entry of the menu, ie 0
-                           // (remember, menu entries are shuffled when taking the test)
-                           $tabUserResult[$data['user_id']][$bracketNumber] = FillBlanks::getFillTheBlankMenuAnswerNum(
-                               $tabAnswer['tabwords'][$bracketNumber],
-                               $tabAnswer['studentanswer'][$bracketNumber]
-                           );
-                           break;
-                       default :
-                           if (FillBlanks::isGoodStudentAnswer($tabAnswer['studentanswer'][$bracketNumber], $tabAnswer['tabwords'][$bracketNumber])) {
-                               $tabUserResult[$data['user_id']][$bracketNumber] = 0;   //  right answer
-                           } else {
-                               $tabUserResult[$data['user_id']][$bracketNumber] = -1;  // wrong answer
-                           }
-                   }
-               } else {
-                   // student didn't answer this bracket
-                   if ($useLastAnswerredAttempt) {
-                       // if we take into account the last answered attempt
-                       if (!isset($tabUserResult[$data['user_id']][$bracketNumber])) {
-                           $tabUserResult[$data['user_id']][$bracketNumber] = -2;      // not answered
-                       }
-                   } else {
-                       // we take the last attempt, even if the student answer the question before
-                       $tabUserResult[$data['user_id']][$bracketNumber] = -2;      // not answered
-                   }
-               }
-           }
-       }
-
-       return $tabUserResult;
+        return $tabUserResult;
     }
 
     /**
@@ -838,16 +840,17 @@ class FillBlanks extends Question
     {
         $outRes = 0;
         // for each student in group
-        foreach($resultList as $userId => $tabValue) {
-            $trouve = false;
-            // for each bracket, if student has at leat one answer ( choice > -2) then he pass the question
-            foreach($tabValue as $i => $choice) {
-                if ($choice > -2 && !$trouve) {
+        foreach ($resultList as $userId => $tabValue) {
+            $found = false;
+            // for each bracket, if student has at least one answer ( choice > -2) then he pass the question
+            foreach ($tabValue as $i => $choice) {
+                if ($choice > -2 && !$found) {
                     $outRes++;
-                    $trouve = true;
+                    $found = true;
                 }
             }
         }
+
         return $outRes;
     }
 
@@ -1044,8 +1047,11 @@ class FillBlanks extends Question
      *
      * @return string
      */
-    public static function getHtmlDisplayForAnswer($answer, $resultsDisabled = false, $showTotalScoreAndUserChoices = false)
-    {
+    public static function getHtmlDisplayForAnswer(
+        $answer,
+        $resultsDisabled = false,
+        $showTotalScoreAndUserChoices = false
+    ) {
         $result = '';
         $listStudentAnswerInfo = self::getAnswerInfo($answer, true);
 
@@ -1074,7 +1080,6 @@ class FillBlanks extends Question
                 );
             }
         }
-
 
         // rebuild the sentence with student answer inserted
         for ($i=0; $i < count($listStudentAnswerInfo['commonwords']); $i++) {

@@ -5654,7 +5654,7 @@ class Tracking
         $tquiz_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $tquiz_rel_question = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $ttrack_exercises  = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $ttrack_attempt    = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+        $ttrack_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
         $sessions = array();
         $courses = array();
@@ -5756,9 +5756,12 @@ class Tracking
                 q.title as quiz_title,
                 qq.description as description
                 FROM $ttrack_exercises te
-                INNER JOIN $ttrack_attempt ta ON ta.exe_id = te.exe_id
-                INNER JOIN $tquiz q ON q.id = te.exe_exo_id
-                INNER JOIN $tquiz_rel_question rq ON rq.exercice_id = q.id AND rq.c_id = q.c_id
+                INNER JOIN $ttrack_attempt ta 
+                ON ta.exe_id = te.exe_id
+                INNER JOIN $tquiz q 
+                ON q.id = te.exe_exo_id
+                INNER JOIN $tquiz_rel_question rq 
+                ON rq.exercice_id = q.id AND rq.c_id = q.c_id
                 INNER JOIN $tquiz_question qq
                 ON
                     qq.id = rq.question_id AND

@@ -33,9 +33,7 @@ $is_allowedToEdit = $is_courseAdmin || $is_platformAdmin;
 
 $course_code = api_get_course_id();
 $courseId = api_get_course_int_id();
-$course_access_settings = CourseManager::get_access_settings($course_code);
 
-//LOGIC FUNCTIONS
 function is_settings_editable()
 {
     return isset($GLOBALS['course_info_is_editable']) && $GLOBALS['course_info_is_editable'];
@@ -677,8 +675,8 @@ $values['course_language'] = $_course['language'];
 $values['department_name'] = $_course['extLink']['name'];
 $values['department_url'] = $_course['extLink']['url'];
 $values['visibility'] = $_course['visibility'];
-$values['subscribe'] = $course_access_settings['subscribe'];
-$values['unsubscribe'] = $course_access_settings['unsubscribe'];
+$values['subscribe'] = $_course['subscribe'];
+$values['unsubscribe'] = $_course['unsubscribe'];
 $values['course_registration_password'] = $all_course_information['registration_code'];
 $values['legal'] = $all_course_information['legal'];
 $values['activate_legal'] = $all_course_information['activate_legal'];

@@ -487,12 +487,9 @@ class SocialManager extends UserManager
         // Table definitions
         $main_user_table = Database :: get_main_table(TABLE_MAIN_USER);
         $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
-
-        $course_code = $my_course['code'];
         $course_directory = $my_course['course_info']['directory'];
         $course_title = $my_course['course_info']['title'];
-        $course_access_settings = CourseManager :: get_access_settings($course_code);
-        $course_visibility = $course_access_settings['visibility'];
+        $course_visibility = $my_course['course_info']['visibility'];
 
         $user_in_course_status = CourseManager::getUserInCourseStatus(
             api_get_user_id(),

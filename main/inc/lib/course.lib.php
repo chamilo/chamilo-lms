@@ -241,28 +241,6 @@ class CourseManager
     }
 
     /**
-     * Returns the access settings of the course:
-     * which visibility;
-     * whether subscribing is allowed;
-     * whether unsubscribing is allowed.
-     *
-     * @param string $course_code , the course code
-     * @todo for more consistency: use course_info call from database API
-     * @return array with int fields "visibility", "subscribe", "unsubscribe"
-     * @assert ('') === false
-     */
-    public static function get_access_settings($course_code)
-    {
-        return Database::fetch_array(
-            Database::query(
-                "SELECT visibility, subscribe, unsubscribe
-                FROM " . Database::get_main_table(TABLE_MAIN_COURSE) . "
-                WHERE code = '" . Database::escape_string($course_code) . "'"
-            )
-        );
-    }
-
-    /**
      * Returns the status of a user in a course, which is COURSEMANAGER or STUDENT.
      * @param   int $user_id
      * @param   int $courseId
@@ -3988,12 +3966,14 @@ class CourseManager
         $entityManager = Database::getManager();
         $user_id = api_get_user_id();
         $course_info = api_get_course_info_by_id($course['real_id']);
-        $status_course = CourseManager::getUserInCourseStatus($user_id, $course_info['real_id']);
-        $course_info['status'] = empty($session_id) ? $status_course : STUDENT;
+
+        $user_in_course_status = CourseManager::getUserInCourseStatus(
+            $user_id,
+            $course_info['real_id']
+        );
+
+        $course_info['status'] = empty($session_id) ? $user_in_course_status : STUDENT;
         $course_info['id_session'] = $session_id;
-        $objUser = $entityManager->find('ChamiloUserBundle:User', $user_id);
-        $objCourse = $entityManager->find('ChamiloCoreBundle:Course', $course['real_id']);
-        $objSession = $entityManager->find('ChamiloCoreBundle:Session', $session_id);
         $now = date('Y-m-d h:i:s');
 
         // Table definitions
@@ -4001,17 +3981,11 @@ class CourseManager
         $tbl_session = Database:: get_main_table(TABLE_MAIN_SESSION);
         $tbl_session_category = Database:: get_main_table(TABLE_MAIN_SESSION_CATEGORY);
 
-        $course_access_settings = CourseManager::get_access_settings($course_info['code']);
-        $course_visibility = $course_access_settings['visibility'];
+        $course_visibility = $course_info['visibility'];
 
         if ($course_visibility == COURSE_VISIBILITY_HIDDEN) {
             return '';
         }
-
-        $user_in_course_status = CourseManager::getUserInCourseStatus(
-            api_get_user_id(),
-            $course_info['real_id']
-        );
 
         $is_coach = api_is_coach($course_info['id_session'], $course_info['real_id']);
 
@@ -4191,6 +4165,10 @@ class CourseManager
             );
 
             if (api_get_setting('allow_skills_tool') === 'true') {
+                $objUser = $entityManager->find('ChamiloUserBundle:User', $user_id);
+                $objCourse = $entityManager->find('ChamiloCoreBundle:Course', $course['real_id']);
+                $objSession = $entityManager->find('ChamiloCoreBundle:Session', $session_id);
+
                 $skill = $entityManager
                     ->getRepository('ChamiloCoreBundle:Skill')
                     ->getLastByUser($objUser, $objCourse, $objSession);

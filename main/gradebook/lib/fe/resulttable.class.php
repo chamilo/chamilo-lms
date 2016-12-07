@@ -137,9 +137,8 @@ class ResultTable extends SortableTable
         return $sortable_data;
     }
 
-    private function build_edit_column ($item)
+    private function build_edit_column($item)
     {
-        $status = CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());
         $locked_status = $this->evaluation->get_locked();
         if (api_is_allowed_to_edit(null, true) && $locked_status == 0) {
             //api_is_course_admin()

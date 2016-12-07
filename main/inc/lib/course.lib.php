@@ -265,17 +265,17 @@ class CourseManager
     /**
      * Returns the status of a user in a course, which is COURSEMANAGER or STUDENT.
      * @param   int $user_id
-     * @param   string $course_code
+     * @param   int $courseId
      *
      * @return int|bool the status of the user in that course (or false if the user is not in that course)
      */
-    public static function get_user_in_course_status($user_id, $course_code)
+    public static function getUserInCourseStatus($user_id, $courseId)
     {
-        $courseInfo = api_get_course_info($course_code);
-        $courseId = $courseInfo['real_id'];
+        $courseId = (int) $courseId;
         if (empty($courseId)) {
             return false;
         }
+
         $result = Database::fetch_array(
             Database::query(
                 "SELECT status FROM " . Database::get_main_table(TABLE_MAIN_COURSE_USER) . "
@@ -2695,7 +2695,6 @@ class CourseManager
             $sql = "SELECT DISTINCT(course.code), course.id as real_id
                     FROM $tbl_course course";
         } else {
-
             $with_special_courses = $without_special_courses = '';
             if (!empty($special_course_list)) {
                 $sc_string = '"' . implode('","', $special_course_list) . '"';
@@ -3989,7 +3988,7 @@ class CourseManager
         $entityManager = Database::getManager();
         $user_id = api_get_user_id();
         $course_info = api_get_course_info_by_id($course['real_id']);
-        $status_course = CourseManager::get_user_in_course_status($user_id, $course_info['code']);
+        $status_course = CourseManager::getUserInCourseStatus($user_id, $course_info['real_id']);
         $course_info['status'] = empty($session_id) ? $status_course : STUDENT;
         $course_info['id_session'] = $session_id;
         $objUser = $entityManager->find('ChamiloUserBundle:User', $user_id);
@@ -4009,9 +4008,9 @@ class CourseManager
             return '';
         }
 
-        $user_in_course_status = CourseManager::get_user_in_course_status(
+        $user_in_course_status = CourseManager::getUserInCourseStatus(
             api_get_user_id(),
-            $course_info['code']
+            $course_info['real_id']
         );
 
         $is_coach = api_is_coach($course_info['id_session'], $course_info['real_id']);

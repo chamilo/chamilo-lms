@@ -1122,6 +1122,7 @@ class IndexManager
             // Load sessions in category
             $session_categories = UserManager::get_sessions_by_category($user_id, false);
         }
+
         $html = '';
         // Showing history title
         if ($load_history) {
@@ -1366,7 +1367,7 @@ class IndexManager
 
                                 if ($session_now >= $allowed_time && $allowedEndTime) {
                                     if (api_get_setting('hide_courses_in_sessions') === 'false') {
-                                        $c = CourseManager:: get_logged_user_course_html(
+                                        $c = CourseManager::get_logged_user_course_html(
                                             $course,
                                             $session_id,
                                             'session_course_item'

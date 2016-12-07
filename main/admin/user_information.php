@@ -129,7 +129,13 @@ if (isset($_GET['action'])) {
         case 'unsubscribe':
             $courseCode = empty($_GET['course_code']) ? '' : intval($_GET['course_code']);
             $sessionId = empty($_GET['id_session']) ? 0 : intval($_GET['id_session']);
-            if (CourseManager::get_user_in_course_status($userId, $courseCode) == STUDENT) {
+            $courseInfo = api_get_course_info($courseCode);
+
+            if (empty($courseInfo)) {
+                break;
+            }
+
+            if (CourseManager::getUserInCourseStatus($userId, $courseInfo['real_id']) == STUDENT) {
                 CourseManager::unsubscribe_user($userId, $courseCode, $sessionId);
                 Display::addFlash(Display::return_message(get_lang('UserUnsubscribed')));
             } else {

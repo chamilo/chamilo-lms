@@ -87,7 +87,6 @@ class GradebookDataGenerator
         $ignore_score_color = false,
         $studentList = array()
     ) {
-        //$status = CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());
         // do some checks on count, redefine if invalid value
         if (!isset($count)) {
             $count = count($this->items) - $start;

@@ -2489,7 +2489,8 @@ class UserManager
         return $extraField->getFieldInfoByFieldId($fieldId);
     }
 
-    /** Get extra user data by value
+    /**
+     * Get extra user data by value
      * @param string $variable the internal variable name of the field
      * @param string $value the internal value of the field
      * @param bool $all_visibility
@@ -2547,12 +2548,12 @@ class UserManager
 
     /**
      * Get extra user data by field variable
-     * @param string    field variable
+     * @param string    $variable field variable
      * @return array    data
      */
-    public static function get_extra_user_data_by_field_variable($field_variable)
+    public static function get_extra_user_data_by_field_variable($variable)
     {
-        $extra_information_by_variable = self::get_extra_field_information_by_name($field_variable);
+        $extra_information_by_variable = self::get_extra_field_information_by_name($variable);
         $field_id = intval($extra_information_by_variable['id']);
 
         $extraField = new ExtraFieldValue('user');
@@ -2571,14 +2572,14 @@ class UserManager
     /**
      * Get extra user data tags by field variable
      *
-     * @param string    field variable
-     * @return array    data
+     * @param string $variable field variable
+     * @return array
      */
-    public static function get_extra_user_data_for_tags($field_variable)
+    public static function get_extra_user_data_for_tags($variable)
     {
-        $extra_information_by_variable = self::get_extra_field_tags_information_by_name($field_variable);
+        $data = self::get_extra_field_tags_information_by_name($variable);
 
-        return $extra_information_by_variable;
+        return $data;
     }
 
     /**

@@ -2865,8 +2865,8 @@ class Agenda
             $TABLEAGENDA = Database :: get_course_table(TABLE_AGENDA);
             $TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
 
-            $group_memberships = GroupManager :: get_group_ids($array_course_info["real_id"], $user_id);
-            $course_user_status = CourseManager::get_user_in_course_status($user_id, $array_course_info["code"]);
+            $group_memberships = GroupManager::get_group_ids($array_course_info['real_id'], $user_id);
+            $course_user_status = CourseManager::getUserInCourseStatus($user_id, $array_course_info['real_id']);
             // if the user is administrator of that course we show all the agenda items
             if ($course_user_status == '1') {
                 //echo "course admin";

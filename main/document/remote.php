@@ -24,13 +24,13 @@ $cidReq = str_replace($seek, $destroy, $_REQUEST["cidReq"]);
 $cidReq = Security::remove_XSS($cidReq);
 $user_id = api_get_user_id();
 $coursePath = api_get_path(SYS_COURSE_PATH).$cidReq.'/document';
-$_course = CourseManager::get_course_information($cidReq);
-if ($_course == null) {
+$_course = api_get_course_info($cidReq);
+if (empty($_course)) {
     die ("problem when fetching course information");
 }
 // stupid variable initialisation for old version of DocumentManager functions.
 $_course['path'] = $_course['directory'];
-$is_manager = (CourseManager::get_user_in_course_status($user_id, $cidReq) == COURSEMANAGER);
+$is_manager = (CourseManager::getUserInCourseStatus($user_id, $_course['real_id']) == COURSEMANAGER);
 if ($debug > 0) {
     error_log($coursePath, 0);
 }

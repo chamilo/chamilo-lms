@@ -492,10 +492,12 @@ class SocialManager extends UserManager
         $course_directory = $my_course['course_info']['directory'];
         $course_title = $my_course['course_info']['title'];
         $course_access_settings = CourseManager :: get_access_settings($course_code);
-
         $course_visibility = $course_access_settings['visibility'];
 
-        $user_in_course_status = CourseManager :: get_user_in_course_status(api_get_user_id(), $course_code);
+        $user_in_course_status = CourseManager::getUserInCourseStatus(
+            api_get_user_id(),
+            $my_course['real_id']
+        );
 
         //$valor = api_get_settings_params();
         $course_path = api_get_path(SYS_COURSE_PATH).$course_directory;   // course path
@@ -526,7 +528,7 @@ class SocialManager extends UserManager
         if ($course_visibility != COURSE_VISIBILITY_HIDDEN &&
             ($course_visibility != COURSE_VISIBILITY_CLOSED || $user_in_course_status == COURSEMANAGER)
         ) {
-           $result .= '<span class="title">' . $course_title . '<span>';
+            $result .= '<span class="title">' . $course_title . '<span>';
         } else {
             $result .= $course_title." ".get_lang('CourseClosed');
         }
@@ -536,7 +538,6 @@ class SocialManager extends UserManager
 
         $session = '';
         if (!empty($my_course['session_name']) && !empty($my_course['id_session'])) {
-
             // Request for the name of the general coach
             $sql = 'SELECT lastname, firstname
                     FROM '.$tbl_session.' ts
@@ -561,6 +562,7 @@ class SocialManager extends UserManager
                 }
             }
         }
+
         $my_course['id_session'] = isset($my_course['id_session']) ? $my_course['id_session'] : 0;
         $output = array(
             $my_course['user_course_cat'],

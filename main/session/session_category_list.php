@@ -4,9 +4,7 @@
  * List sessions categories
  * @package chamilo.admin
  */
-/**
- * Code
- */
+
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -42,7 +40,6 @@ if ($action == 'delete_on_session' || $action == 'delete_off_session') {
     exit();
 }
 
-//$interbreadcrumb[] = array("url" => "index.php", "name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
 
 if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
@@ -91,7 +88,6 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
 	 			LIMIT $from,".($limit + 1);
 
     $query_rows = "SELECT count(*) as total_rows FROM $tbl_session_category sc $where ";
-
     $order = ($order == 'ASC') ? 'DESC' : 'ASC';
     $result_rows = Database::query($query_rows);
     $recorset = Database::fetch_array($result_rows);
@@ -173,8 +169,12 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
                     break;
                 }
                 $sql = 'SELECT COUNT(session_category_id)
-                FROM '.$tbl_session.' s INNER JOIN '.$table_access_url_rel_session.'  us ON (s.id = us.session_id)
-                WHERE s.session_category_id = '.intval($enreg['id']).' AND us.access_url_id = '.api_get_current_access_url_id();
+                        FROM '.$tbl_session.' s 
+                        INNER JOIN '.$table_access_url_rel_session.'  us 
+                        ON (s.id = us.session_id)
+                        WHERE 
+                            s.session_category_id = '.intval($enreg['id']).' AND 
+                            us.access_url_id = '.api_get_current_access_url_id();
 
                 $rs = Database::query($sql);
                 list($nb_courses) = Database::fetch_array($rs);
@@ -184,7 +184,15 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
                     <td><?php echo api_htmlentities($enreg['name'], ENT_QUOTES, $charset); ?></td>
                     <td><?php echo "<a href=\"session_list.php?id_category=".$enreg['id']."\">".$nb_courses." Session(s) </a>"; ?></td>
                     <td><?php echo api_format_date($enreg['date_start'], DATE_FORMAT_SHORT); ?></td>
-                    <td><?php echo api_format_date($enreg['date_end'], DATE_FORMAT_SHORT); ?></td>
+                    <td>
+                        <?php
+                        if (!empty($enreg['date_end']) && $enreg['date_end'] != '0000-00-00') {
+                            echo api_format_date($enreg['date_end'], DATE_FORMAT_SHORT);
+                        } else {
+                            echo '-';
+                        }
+                        ?>
+                    </td>
                     <td>
                         <a href="session_category_edit.php?&id=<?php echo $enreg['id']; ?>">
                             <?php Display::display_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL); ?>

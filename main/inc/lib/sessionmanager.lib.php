@@ -2546,7 +2546,7 @@ class SessionManager
             $msg = get_lang('InvalidStartDate');
             return $msg;
         } elseif (!$month_end && !$day_end && !$year_end) {
-            $date_end = "null";
+            $date_end = '';
         } elseif (!$month_end || !$day_end || !$year_end || !checkdate($month_end, $day_end, $year_end)) {
             $msg = get_lang('InvalidEndDate');
             return $msg;
@@ -2559,21 +2559,26 @@ class SessionManager
         $params = [
             'name' => $name,
             'date_start' => $date_start,
-            'date_end' => $date_end,
             'access_url_id' => $access_url_id
         ];
-        $id_session = Database::insert($tbl_session_category, $params);
+
+        if (!empty($date_end)) {
+            $params['date_end'] = $date_end;
+        }
+
+        $id = Database::insert($tbl_session_category, $params);
 
         // Add event to system log
         $user_id = api_get_user_id();
         Event::addEvent(
             LOG_SESSION_CATEGORY_CREATE,
             LOG_SESSION_CATEGORY_ID,
-            $id_session,
+            $id,
             api_get_utc_datetime(),
             $user_id
         );
-        return $id_session;
+
+        return $id;
     }
 
     /**
@@ -6994,9 +6999,14 @@ class SessionManager
         $form->addButtonAdvancedSettings('advanced_params');
         $form->addElement('html','<div id="advanced_params_options" style="display:none">');
 
-        $form->addSelect('session_category', get_lang('SessionCategory'), $categoriesOptions, array(
-            'id' => 'session_category'
-        ));
+        $form->addSelect(
+            'session_category',
+            get_lang('SessionCategory'),
+            $categoriesOptions,
+            array(
+                'id' => 'session_category',
+            )
+        );
 
         $form->addHtmlEditor(
             'description',

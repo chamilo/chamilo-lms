@@ -1411,12 +1411,19 @@ class IndexManager
                             'id' => $session_category['session_category']['id'],
                             'title' => $session_category['session_category']['name'],
                             'show_actions' => api_is_platform_admin(),
-                            'subtitle' => null,
+                            'subtitle' => '',
                             'sessions' => $html_sessions
                         );
 
                         $session_category_start_date = $session_category['session_category']['date_start'];
                         $session_category_end_date = $session_category['session_category']['date_end'];
+                        if ($session_category_start_date == '0000-00-00') {
+                            $session_category_start_date = '';
+                        }
+
+                        if ($session_category_end_date == '0000-00-00') {
+                            $session_category_end_date = '';
+                        }
 
                         if (
                             !empty($session_category_start_date) &&
@@ -1424,8 +1431,8 @@ class IndexManager
                         ) {
                             $categoryParams['subtitle'] = sprintf(
                                 get_lang('FromDateXToDateY'),
-                                $session_category['session_category']['date_start'],
-                                $session_category['session_category']['date_end']
+                                $session_category_start_date,
+                                $session_category_end_date
                             );
                         } else {
                             if (

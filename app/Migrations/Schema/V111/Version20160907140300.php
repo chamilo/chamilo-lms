@@ -14,7 +14,9 @@ use Doctrine\DBAL\Types\Type;
  */
 class Version20160907140300 extends AbstractMigrationChamilo
 {
-
+    /**
+     * @param Schema $schema
+     */
     public function up(Schema $schema)
     {
         $data = [

@@ -1178,10 +1178,12 @@ class SessionManager
      */
     public static function get_number_of_tracking_access_overview()
     {
-        // database table definition
-        $track_e_course_access = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $table = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $sql = "SELECT COUNT(course_access_id) count FROM $table";
+        $result = Database::query($sql);
+        $row = Database::fetch_assoc($result);
 
-        return Database::count_rows($track_e_course_access);
+        return $row['count'];
     }
 
     /**

@@ -883,10 +883,12 @@ class MySpace
      */
     public static function get_total_number_courses()
     {
-        // database table definition
-        $main_course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
+        $table = Database :: get_main_table(TABLE_MAIN_COURSE);
+        $sql = "SELECT COUNT(id) count FROM $table";
+        $result = Database::query($sql);
+        $row = Database::fetch_assoc($result);
 
-        return Database::count_rows($main_course_table);
+        return $row['count'];
     }
 
     /**
@@ -1218,9 +1220,12 @@ class MySpace
      */
     public static function get_total_number_sessions()
     {
-        // database table definition
-        $main_session_table = Database :: get_main_table(TABLE_MAIN_SESSION);
-        return Database::count_rows($main_session_table);
+        $table = Database :: get_main_table(TABLE_MAIN_SESSION);
+        $sql = "SELECT COUNT(id) count FROM $table";
+        $result = Database::query($sql);
+        $row = Database::fetch_assoc($result);
+
+        return $row['count'];
     }
 
     /**
@@ -1869,9 +1874,12 @@ class MySpace
      */
     public static function get_number_of_users_tracking_overview()
     {
-        // database table definition
-        $main_user_table = Database :: get_main_table(TABLE_MAIN_USER);
-        return Database::count_rows($main_user_table);
+        $table = Database :: get_main_table(TABLE_MAIN_USER);
+        $sql = "SELECT COUNT(id) count FROM $table";
+        $result = Database::query($sql);
+        $row = Database::fetch_assoc($result);
+
+        return $row['count'];
     }
 
     /**
@@ -2546,13 +2554,26 @@ class MySpace
         );
     }
 
+    /**
+     * @return int
+     */
     public static function getNumberOfTrackAccessOverview()
     {
-        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $table = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $sql = "SELECT COUNT(course_access_id) count FROM $table";
+        $result = Database::query($sql);
+        $row = Database::fetch_assoc($result);
 
-        return Database::count_rows($table);
+        return $row['count'];
     }
 
+    /**
+     * @param $from
+     * @param $numberItems
+     * @param $column
+     * @param $orderDirection
+     * @return array
+     */
     public static function getUserDataAccessTrackingOverview($from, $numberItems, $column, $orderDirection)
     {
         $user = Database::get_main_table(TABLE_MAIN_USER);

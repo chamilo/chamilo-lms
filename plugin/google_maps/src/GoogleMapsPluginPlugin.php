@@ -13,6 +13,7 @@ class GoogleMapsPlugin extends Plugin
     protected function __construct()
     {
         $parameters = array(
+            'enable_api' => 'boolean',
             'api_key' => 'text'
         );
 

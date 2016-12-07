@@ -323,7 +323,8 @@ function returnThumbnail($course)
         $html .= '<span class="category">'. $categoryTitle.'</span>';
         $html .= '<div class="cribbon"></div>';
     }
-    $teachers = CourseManager::getTeachersFromCourseByCode($course['code']);
+    $courseInfo = api_get_course_info($course['code']);
+    $teachers = CourseManager::getTeachersFromCourse($courseInfo['real_id']);
     $html .= '<div class="black-shadow">';
     $html .= '<div class="author-card">';
     $count = 0;

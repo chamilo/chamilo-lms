@@ -1886,13 +1886,12 @@ class CourseManager
      * Return user info array of all teacher-users registered in a course
      * This only returns the users that are registered in this actual course, not linked courses.
      *
-     * @param string $course_code
+     * @param int $courseId
      * @return array with user id
      */
-    public static function getTeachersFromCourseByCode($course_code)
+    public static function getTeachersFromCourse($courseId)
     {
-        $courseInfo = api_get_course_info($course_code);
-        $courseId = $courseInfo['real_id'];
+        $courseId = (int) $courseId;
         if (empty($courseId)) {
             return false;
         }
@@ -1985,10 +1984,9 @@ class CourseManager
      * @param int $session_id
      * @param int $courseId
      *
-     * @return array    - array containing user_id, lastname, firstname, username
-     *
+     * @return array containing user_id, lastname, firstname, username
      */
-    public static function get_coachs_from_course($session_id = 0, $courseId = '')
+    public static function get_coachs_from_course($session_id = 0, $courseId = 0)
     {
         if (!empty($session_id)) {
             $session_id = intval($session_id);
@@ -2006,7 +2004,11 @@ class CourseManager
         $tbl_session_course_user = Database:: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $coaches = array();
 
-        $sql = "SELECT DISTINCT u.user_id,u.lastname,u.firstname,u.username
+        $sql = "SELECT DISTINCT 
+                    u.user_id,
+                    u.lastname,
+                    u.firstname,
+                    u.username
                 FROM $tbl_user u, $tbl_session_course_user scu
                 WHERE
                     u.user_id = scu.user_id AND
@@ -2018,13 +2020,10 @@ class CourseManager
         if (Database::num_rows($rs) > 0) {
             while ($row = Database::fetch_array($rs)) {
                 $completeName = api_get_person_name($row['firstname'], $row['lastname']);
-
                 $coaches[] = $row + ['full_name' => $completeName];
             }
-
             return $coaches;
         } else {
-
             return false;
         }
     }
@@ -3494,7 +3493,7 @@ class CourseManager
                                . Display::returnFontAwesomeIcon('folder-open') . '</a>';
                             $params['document'] .= Display::div('', ['id' => 'document_result_' . $course_info['real_id'] . '_0', 'class' => 'document_preview_container']);
                         }
-                    }else{
+                    } else {
                         if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED && $load_dirs) {
                             $params['document'] = '<a id="document_preview_' . $course_info['real_id'] . '_0" class="document_preview btn btn-default btn-sm" href="javascript:void(0);">'
                                . Display::returnFontAwesomeIcon('folder-open') . '</a>';
@@ -3514,7 +3513,7 @@ class CourseManager
                     $params['title'] = $course_info['title'];
                     $params['link'] = $course_info['course_public_url'].'?id_session=0&autoreg=1';
                     if (api_get_setting('display_teacher_in_courselist') === 'true') {
-                        $params['teachers'] = CourseManager::getTeachersFromCourseByCode($course['code']);
+                        $params['teachers'] = CourseManager::getTeachersFromCourse($course_info['real_id']);
                     }
 
                     if ($showCustomIcon === 'true') {
@@ -3696,7 +3695,7 @@ class CourseManager
             $courseUrl = api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/index.php?id_session=0';
 
             if (api_get_setting('display_teacher_in_courselist') === 'true') {
-                $teachers = CourseManager::getTeachersFromCourseByCode($course['code']);
+                $teachers = CourseManager::getTeachersFromCourse($course_info['real_id']);
             }
 
             $params['status'] = $course['status'];
@@ -3826,7 +3825,7 @@ class CourseManager
             $teachers = '';
 
             if (api_get_setting('display_teacher_in_courselist') === 'true') {
-                $teachers = CourseManager::getTeachersFromCourseByCode($course['code']);
+                $teachers = CourseManager::getTeachersFromCourse($course_info['real_id']);
             }
             $params['status'] = $course['status'];
 
@@ -3964,23 +3963,9 @@ class CourseManager
         $load_dirs = false
     ) {
         $entityManager = Database::getManager();
+        $now = date('Y-m-d h:i:s');
         $user_id = api_get_user_id();
         $course_info = api_get_course_info_by_id($course['real_id']);
-
-        $user_in_course_status = CourseManager::getUserInCourseStatus(
-            $user_id,
-            $course_info['real_id']
-        );
-
-        $course_info['status'] = empty($session_id) ? $user_in_course_status : STUDENT;
-        $course_info['id_session'] = $session_id;
-        $now = date('Y-m-d h:i:s');
-
-        // Table definitions
-        $main_user_table = Database:: get_main_table(TABLE_MAIN_USER);
-        $tbl_session = Database:: get_main_table(TABLE_MAIN_SESSION);
-        $tbl_session_category = Database:: get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-
         $course_visibility = $course_info['visibility'];
 
         if ($course_visibility == COURSE_VISIBILITY_HIDDEN) {
@@ -3989,10 +3974,22 @@ class CourseManager
 
         $is_coach = api_is_coach($course_info['id_session'], $course_info['real_id']);
 
+        $user_in_course_status = CourseManager::getUserInCourseStatus(
+            $user_id,
+            $course_info['real_id']
+        );
+
+        $course_info['status'] = empty($session_id) ? $user_in_course_status : STUDENT;
+        $course_info['id_session'] = $session_id;
+
+        // Table definitions
+        $main_user_table = Database:: get_main_table(TABLE_MAIN_USER);
+        $tbl_session = Database:: get_main_table(TABLE_MAIN_SESSION);
+        $tbl_session_category = Database:: get_main_table(TABLE_MAIN_SESSION_CATEGORY);
+
         // Display course entry.
         // Show a hyperlink to the course, unless the course is closed and user is not course admin.
         $session_url = '';
-
         $params = array();
         $params['icon'] = Display::return_icon(
             'blackboard_blue.png',
@@ -4080,8 +4077,8 @@ class CourseManager
         }
 
         if (api_get_setting('display_teacher_in_courselist') === 'true') {
-            $teacher_list = CourseManager::getTeachersFromCourseByCode(
-                $course_info['code']
+            $teacher_list = CourseManager::getTeachersFromCourse(
+                $course_info['real_id']
             );
 
             $course_coachs = self::get_coachs_from_course(
@@ -4147,7 +4144,6 @@ class CourseManager
                     }
                     $date_start = $session['access_start_date'];
                     $date_end = $session['access_end_date'];
-
                     $active = !$date_end ? ($date_start <= $now) : ($date_start <= $now && $date_end >= $now);
                 }
             }
@@ -4183,6 +4179,7 @@ class CourseManager
         } else {
             $output = array($course_info['user_course_cat'], $html);
         }
+
         return $output;
     }
 
@@ -4823,7 +4820,7 @@ class CourseManager
                 );
             //}
             /* get_lang('Description') */
-            $my_course['teachers'] = CourseManager::getTeachersFromCourseByCode($course_info['code']);
+            $my_course['teachers'] = CourseManager::getTeachersFromCourse($course_info['real_id']);
             $point_info = self::get_course_ranking($course_info['real_id'], 0);
             $my_course['rating_html'] = Display::return_rating_system('star_' . $course_info['real_id'],
                 $ajax_url . '&course_id=' . $course_info['real_id'], $point_info);

@@ -1408,12 +1408,11 @@ class Display
 
         $res = Database::query($sql);
         // Get the group_id's with user membership.
-        $group_ids = GroupManager :: get_group_ids($course_info['real_id'], $user_id);
+        $group_ids = GroupManager::get_group_ids($course_info['real_id'], $user_id);
         $group_ids[] = 0; //add group 'everyone'
         $notifications = array();
         // Filter all last edits of all tools of the course
         while ($res && ($item_property = Database::fetch_array($res, 'ASSOC'))) {
-
             // First thing to check is if the user never entered the tool
             // or if his last visit was earlier than the last modification.
             if ((!isset($lastTrackInCourseDate[$item_property['tool']])

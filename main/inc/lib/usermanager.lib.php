@@ -2661,11 +2661,14 @@ class UserManager
                 }
             }
 
+            $categoryStart = $row['session_category_date_start'] ? $row['session_category_date_start']->format('Y-m-d') : '';
+            $categoryEnd = $row['session_category_date_end'] ? $row['session_category_date_end']->format('Y-m-d') : '';
+
             $categories[$row['session_category_id']]['session_category'] = array(
                 'id' => $row['session_category_id'],
                 'name' => $row['session_category_name'],
-                'date_start' => $row['session_category_date_start'] ? $row['session_category_date_start']->format('Y-m-d H:i:s') : null,
-                'date_end' => $row['session_category_date_end'] ? $row['session_category_date_end']->format('Y-m-d H:i:s') : null
+                'date_start' => $categoryStart,
+                'date_end' => $categoryEnd
             );
 
             $session_id = $row['id'];

@@ -367,7 +367,7 @@ switch ($action) {
         break;
     case 'copytomyfiles':
         // Copy a file to general my files user's
-        if (api_get_setting('allow_social_tool') == 'true' &&
+        if (api_get_setting('allow_my_files') == 'true' &&
             api_get_setting('users_copy_files') == 'true'
             && api_get_user_id() != 0
             && !api_is_anonymous()

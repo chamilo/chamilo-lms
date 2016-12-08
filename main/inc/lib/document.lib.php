@@ -609,11 +609,12 @@ class DocumentManager
                 INNER JOIN $TABLE_DOCUMENT AS docs
                 ON (
                     docs.id = last.ref AND
-                    last.tool = '".TOOL_DOCUMENT."' AND
-                    docs.c_id = {$_course['real_id']} AND
-                    last.c_id = {$_course['real_id']}
+                    docs.c_id = last.c_id
                 )
-                WHERE
+                WHERE                                
+                    last.tool = '".TOOL_DOCUMENT."' AND 
+                    docs.c_id = {$_course['real_id']} AND
+                    last.c_id = {$_course['real_id']} AND
                     docs.path LIKE '" . Database::escape_string($path . $added_slash.'%'). "' AND
                     docs.path NOT LIKE '" . Database::escape_string($path . $added_slash.'%/%')."' AND
                     docs.path NOT LIKE '%_DELETED_%' AND

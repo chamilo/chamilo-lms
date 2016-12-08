@@ -69,7 +69,7 @@ class MessageManager
             $keywordCondition = " AND (title like '%$keyword%' OR content LIKE '%$keyword%') ";
         }
 
-        $sql = "SELECT COUNT(*) as number_messages
+        $sql = "SELECT COUNT(id) as number_messages
                 FROM $table_message
                 WHERE $condition_msg_status AND
                     user_receiver_id=" . api_get_user_id() . "

@@ -2956,8 +2956,8 @@ class CourseManager
     /**
      * Gets the value of a course extra field. Returns null if it was not found
      *
-     * @param string Name of the extra field
-     * @param string Course code
+     * @param string $variable Name of the extra field
+     * @param string $code Course code
      *
      * @return string Value
      */
@@ -3023,7 +3023,8 @@ class CourseManager
     public static function get_course_category($code)
     {
         $table_categories = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $sql = "SELECT * FROM $table_categories WHERE code = '$code';";
+        $code = Database::escape_string($code);
+        $sql = "SELECT * FROM $table_categories WHERE code = '$code'";
         return Database::fetch_array(Database::query($sql));
     }
 
@@ -3052,7 +3053,7 @@ class CourseManager
      * @return int $course_id    The number of rows in the given table.
      * @deprecated
      */
-    public static function count_rows_course_table($table, $session_id = '', $course_id = null)
+    public static function count_rows_course_table($table, $session_id = '', $course_id = 0)
     {
         $condition_session = '';
         if ($session_id !== '') {
@@ -3269,6 +3270,7 @@ class CourseManager
                 $courses[$row['code']] = $row;
             }
         }
+
         return $courses;
     }
 
@@ -3397,6 +3399,7 @@ class CourseManager
         $html .= '<div class="pull-right course-box-actions">' . $params['right_actions'] . '</div>';
         $html .= '</div>';
         $html .= '</div>';
+
         return $html;
     }
 
@@ -3432,8 +3435,8 @@ class CourseManager
      *
      * Special courses are courses that stick on top of the list and are "auto-registerable"
      * in the sense that any user clicking them is registered as a student
-     * @param int       User id
-     * @param bool      Whether to show the document quick-loader or not
+     * @param int       $user_id User id
+     * @param bool      $load_dirs Whether to show the document quick-loader or not
      * @return string
      */
     public static function returnSpecialCourses($user_id, $load_dirs = false)
@@ -3441,9 +3444,7 @@ class CourseManager
         $user_id = intval($user_id);
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-
         $special_course_list = self::get_special_course_list();
-
         $with_special_courses = '';
         if (!empty($special_course_list)) {
             $with_special_courses = ' course.code IN ("' . implode('","', $special_course_list) . '")';
@@ -3462,8 +3463,9 @@ class CourseManager
                         course_rel_user.user_id
                     FROM $tbl_course course
                     LEFT JOIN $tbl_course_user course_rel_user
-                    ON course.id = course_rel_user.c_id AND course_rel_user.user_id = '$user_id'
-                    WHERE $with_special_courses group by course.code";
+                    ON (course.id = course_rel_user.c_id) 
+                    WHERE course_rel_user.user_id = '$user_id' $with_special_courses 
+                    GROUP BY course.code";
 
             $rs_special_course = Database::query($sql);
             $number_of_courses = Database::num_rows($rs_special_course);
@@ -3566,7 +3568,7 @@ class CourseManager
 
         while ($row = Database::fetch_array($result)) {
             // We simply display the title of the category.
-            $courseInCategory = self:: returnCoursesCategories(
+            $courseInCategory = self::returnCoursesCategories(
                 $row['id'],
                 $load_dirs
             );
@@ -3612,22 +3614,21 @@ class CourseManager
             $without_special_courses = ' AND course.code NOT IN ("' . implode('","', $special_course_list) . '")';
         }
 
-        //AND course_rel_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
         $sql = "SELECT
-                course.id,
-                course.title,
-                course.code,
-                course.subscribe subscr,
-                course.unsubscribe unsubscr,
-                course_rel_user.status status,
-                course_rel_user.sort sort,
-                course_rel_user.user_course_cat user_course_cat
-                FROM $TABLECOURS course,
-                     $TABLECOURSUSER course_rel_user,
-                     $TABLE_ACCESS_URL_REL_COURSE url
+                    course.id,
+                    course.title,
+                    course.code,
+                    course.subscribe subscr,
+                    course.unsubscribe unsubscr,
+                    course_rel_user.status status,
+                    course_rel_user.sort sort,
+                    course_rel_user.user_course_cat user_course_cat
+                FROM $TABLECOURS course 
+                INNER JOIN $TABLECOURSUSER course_rel_user
+                ON (course.id = course_rel_user.c_id)
+                INNER JOIN $TABLE_ACCESS_URL_REL_COURSE url
+                ON (url.c_id = course.id)
                 WHERE
-                    course.id = course_rel_user.c_id AND
-                    url.c_id = course.id AND
                     course_rel_user.user_id = '" . $user_id . "' AND
                     course_rel_user.user_course_cat = '" . $user_category_id . "'
                     $without_special_courses ";
@@ -3999,7 +4000,9 @@ class CourseManager
 
         // Display the "what's new" icons
         $notifications = '';
-        if ($course_visibility != COURSE_VISIBILITY_CLOSED && $course_visibility != COURSE_VISIBILITY_HIDDEN) {
+        if ($course_visibility != COURSE_VISIBILITY_CLOSED &&
+            $course_visibility != COURSE_VISIBILITY_HIDDEN
+        ) {
             $notifications .= Display:: show_notification($course_info);
         }
 

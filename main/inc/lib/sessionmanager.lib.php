@@ -3141,6 +3141,7 @@ class SessionManager
      * @param bool $getOnlySessionId
      * @param bool $getSql
      * @param string $orderCondition
+     * @param string $keyword
      * @param string $description
      *
      * @return array sessions
@@ -3383,7 +3384,7 @@ class SessionManager
         $sql = "SELECT $sqlSelect
                 FROM $tbl_course c
                 INNER JOIN $tbl_session_rel_course src
-                ON c.id = src.c_id
+                ON (c.id = src.c_id)
 		        WHERE src.session_id = '$session_id' ";
 
         if (!empty($course_name)) {

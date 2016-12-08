@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * The google maps class allows to use
  * @author José Loguercio Silva <jose.loguercio@beeznest.com>
@@ -14,7 +15,8 @@ class GoogleMapsPlugin extends Plugin
     {
         $parameters = array(
             'enable_api' => 'boolean',
-            'api_key' => 'text'
+            'api_key' => 'text',
+            'extra_field_name' => 'text'
         );
 
         parent::__construct('1.0', 'José Loguercio Silva', $parameters);

@@ -1661,7 +1661,8 @@ class CourseManager
         $courseInfo = api_get_course_info($course_code);
         $courseId = $courseInfo['real_id'];
 
-        $sql = 'SELECT DISTINCT count(*) as count  FROM ' . Database::get_main_table(TABLE_MAIN_USER) . ' as user ';
+        $sql = 'SELECT DISTINCT count(user.id) as count  
+                FROM ' . Database::get_main_table(TABLE_MAIN_USER) . ' as user ';
         $where = array();
         if (!empty($session_id)) {
             $sql .= ' LEFT JOIN ' . Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER) . ' as session_course_user
@@ -1704,8 +1705,8 @@ class CourseManager
 
     /**
      * Get a list of coaches of a course and a session
-     * @param   string  Course code
-     * @param   int     Session ID
+     * @param   string  $course_code
+     * @param   int     $session_id
      * @param   bool $addGeneralCoach
      * @return  array   List of users
      */
@@ -1808,7 +1809,6 @@ class CourseManager
 
         // students subscribed to the course through a session
         if ($with_session) {
-
             $joinSession = "";
             //Session creation date
             if (!empty($date_from) && !empty($date_to)) {
@@ -1880,7 +1880,6 @@ class CourseManager
 
         return $teachers;
     }
-
 
     /**
      * Return user info array of all teacher-users registered in a course
@@ -1964,7 +1963,7 @@ class CourseManager
             }
 
             if (!empty($list)) {
-                if ($orderList === true){
+                if ($orderList === true) {
                     $html .= '<ul class="user-teacher">';
                     foreach ($list as $teacher){
                         $html .= Display::tag('li', Display::return_icon('teacher.png', $teacher, null, ICON_SIZE_TINY) . ' ' . $teacher);
@@ -2063,14 +2062,14 @@ class CourseManager
                 $course_coachs[] = $coach_name;
             }
         }
-        $coaches_to_string = null;
 
+        $coaches_to_string = '';
         if (!empty($course_coachs)) {
-            if ($orderList === true){
+            if ($orderList === true) {
                 $html .= '<ul class="user-coachs">';
-                    foreach ($course_coachs as $coachs){
-                        $html .= Display::tag('li', Display::return_icon('teacher.png', $coachs, null, ICON_SIZE_TINY) . ' ' . $coachs);
-                    }
+                foreach ($course_coachs as $coachs) {
+                    $html .= Display::tag('li', Display::return_icon('teacher.png', $coachs, null, ICON_SIZE_TINY) . ' ' . $coachs);
+                }
                 $html .= '</ul>';
             } else {
                 $coaches_to_string = array_to_string($course_coachs, $separator);
@@ -2093,7 +2092,6 @@ class CourseManager
     public static function get_real_and_linked_user_list($course_code, $with_sessions = true, $session_id = 0)
     {
         $complete_user_list = array();
-
         //get users from real course
         $user_list = self::get_user_list_from_course_code($course_code, $session_id);
         foreach ($user_list as $this_user) {
@@ -4251,7 +4249,7 @@ class CourseManager
             $wanted_code = CourseManager::generate_course_code($wanted_code);
             $table = Database::get_main_table(TABLE_MAIN_COURSE);
             $wanted_code = Database::escape_string($wanted_code);
-            $sql = "SELECT count(*) as count
+            $sql = "SELECT count(id) as count
                     FROM $table
                     WHERE code LIKE '$wanted_code%'";
             $result = Database::query($sql);

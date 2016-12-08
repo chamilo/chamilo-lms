@@ -5384,7 +5384,8 @@ function count_number_of_post_for_user_thread($thread_id, $user_id)
 {
     $table_posts = Database::get_course_table(TABLE_FORUM_POST);
     $course_id = api_get_course_int_id();
-    $sql = "SELECT count(*) as count FROM $table_posts
+    $sql = "SELECT count(iid) as count 
+            FROM $table_posts
             WHERE c_id = $course_id AND
                   thread_id=".intval($thread_id)." AND
                   poster_id = ".intval($user_id)." AND visible = 1 ";

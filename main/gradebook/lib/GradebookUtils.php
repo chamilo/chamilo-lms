@@ -573,19 +573,21 @@ class GradebookUtils
 
     /**
      * register user info about certificate
-     * @param int The category id
-     * @param int The user id
-     * @param float The score obtained for certified
-     * @param Datetime The date when you obtained the certificate
-     * @param integer $cat_id
-     * @param integer $user_id
-     * @param string $date_certificate
+     * @param int $cat_id The category id
+     * @param int $user_id The user id
+     * @param float $score_certificate The score obtained for certified
+     * @param string $date_certificate The date when you obtained the certificate
+     *
      * @return void
      */
-    public static function register_user_info_about_certificate($cat_id, $user_id, $score_certificate, $date_certificate)
-    {
+    public static function registerUserInfoAboutCertificate(
+        $cat_id,
+        $user_id,
+        $score_certificate,
+        $date_certificate
+    ) {
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
-        $sql = 'SELECT COUNT(*) as count
+        $sql = 'SELECT COUNT(id) as count
                 FROM ' . $table . ' gc
                 WHERE gc.cat_id="' . intval($cat_id) . '" AND user_id="' . intval($user_id) . '" ';
         $rs_exist = Database::query($sql);

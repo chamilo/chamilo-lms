@@ -2712,9 +2712,9 @@ class Tracking
      * This function does not take the results of a Test out of a LP
      *
      * @param   int|array   Array of user ids or an user id
-     * @param   string      Course code
-     * @param   array       List of LP ids
-     * @param   int         Session id (optional), if param $session_id is null(default)
+     * @param   string      $course_code Course code
+     * @param   array       $lp_ids List of LP ids
+     * @param   int         $session_id Session id (optional), if param $session_id is 0(default)
      * it'll return results including sessions, 0 = session is not filtered
      * @param   bool        Returns an array of the type [sum_score, num_score] if set to true
      * @param   bool        get only the latest attempts or ALL attempts
@@ -2722,9 +2722,9 @@ class Tracking
      */
     public static function getAverageStudentScore(
         $student_id,
-        $course_code = null,
+        $course_code = '',
         $lp_ids = array(),
-        $session_id = null
+        $session_id = 0
     ) {
         if (empty($student_id)) {
             return 0;
@@ -2764,9 +2764,9 @@ class Tracking
         }
 
         $conditionsToString = implode('AND ', $conditions);
-        $sql = "SELECT  SUM(lp_iv.score) sum_score,
-                        SUM(lp_i.max_score) sum_max_score,
-                        count(*) as count
+        $sql = "SELECT  
+                    SUM(lp_iv.score) sum_score,
+                    SUM(lp_i.max_score) sum_max_score
                 FROM $lp_table as lp
                 INNER JOIN $lp_item_table as lp_i
                 ON lp.id = lp_id AND lp.c_id = lp_i.c_id
@@ -2776,7 +2776,7 @@ class Tracking
                 ON lp_i.id = lp_iv.lp_item_id AND lp_view.c_id = lp_iv.c_id AND lp_iv.lp_view_id = lp_view.id
                 WHERE (lp_i.item_type='sco' OR lp_i.item_type='".TOOL_QUIZ."') AND
                 $conditionsToString
-                ";
+        ";
         $result = Database::query($sql);
         $row = Database::fetch_array($result, 'ASSOC');
 
@@ -2784,7 +2784,7 @@ class Tracking
             return 0;
         }
 
-        return ($row['sum_score'] / $row['sum_max_score'])*100;
+        return ($row['sum_score'] / $row['sum_max_score']) * 100;
 
     }
 
@@ -4017,7 +4017,7 @@ class Tracking
      * BUT NO ROW MATCH THE CONDITION, IT SHOULD BE FINE TO USE IT WHEN YOU USE USER DEFINED DATES AND NO CHAMILO DATES
      * @param   int     User Id
      * @param   int     Course Id
-     * @param   int     Session Id (optional), if param $session_id is null(default) it'll return results including sessions, 0 = session is not filtered
+     * @param   int     Session Id (optional), if param $session_id is 0 (default) it'll return results including sessions, 0 = session is not filtered
      * @param   string  Date from
      * @param   string  Date to
      * @return  array   Data
@@ -4146,7 +4146,7 @@ class Tracking
      * @param    int        Limit (optional, default = 0, 0 = without limit)
      * @return    array     documents downloaded
      */
-    public static function get_documents_most_downloaded_by_course($course_code, $session_id = null, $limit = 0)
+    public static function get_documents_most_downloaded_by_course($course_code, $session_id = 0, $limit = 0)
     {
         //protect data
         $courseId = api_get_course_int_id($course_code);
@@ -4154,11 +4154,14 @@ class Tracking
 
         $TABLETRACK_DOWNLOADS   = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
         $condition_session = '';
-        if (isset($session_id)) {
-            $session_id = intval($session_id);
+        $session_id = intval($session_id);
+        if (!empty($session_id)) {
             $condition_session = ' AND down_session_id = '. $session_id;
         }
-        $sql = "SELECT down_doc_path, COUNT(DISTINCT down_user_id), COUNT(down_doc_path) as count_down
+        $sql = "SELECT 
+                    down_doc_path, 
+                    COUNT(DISTINCT down_user_id), 
+                    COUNT(down_doc_path) as count_down
                 FROM $TABLETRACK_DOWNLOADS
                 WHERE c_id = $courseId
                     $condition_session

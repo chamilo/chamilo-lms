@@ -5036,57 +5036,66 @@ function get_forums_of_group($groupId)
     // Student
     // Select all the forum information of all forums (that are visible to students).
 
-    $sql = "SELECT * FROM $table_forums forum, $table_item_property item_properties
+    $sql = "SELECT * FROM $table_forums forum 
+            INNER JOIN $table_item_property item_properties
+            ON (forum.forum_id = item_properties.ref AND item_properties.c_id = forum.c_id)
             WHERE
                 forum.forum_of_group = $groupId AND
                 forum.c_id = $course_id AND
-                item_properties.c_id = $course_id AND
-                forum.forum_id = item_properties.ref AND
+                item_properties.c_id = $course_id AND                
                 item_properties.visibility = 1 AND
                 item_properties.tool = '".TOOL_FORUM."'
             ORDER BY forum.forum_order ASC";
+
     // Select the number of threads of the forums (only the threads that are visible).
-    $sql2 = "SELECT count(thread_id) AS number_of_threads, threads.forum_id
-            FROM $table_threads threads, $table_item_property item_properties
-            WHERE
-                threads.thread_id = item_properties.ref AND
+    $sql2 = "SELECT 
+                count(thread_id) AS number_of_threads, 
+                threads.forum_id
+            FROM $table_threads threads 
+            INNER JOIN $table_item_property item_properties
+            ON (threads.thread_id = item_properties.ref AND item_properties.c_id = threads.c_id)
+            WHERE                
                 threads.c_id = $course_id AND
                 item_properties.c_id = $course_id AND
                 item_properties.visibility = 1 AND
                 item_properties.tool='".TOOL_FORUM_THREAD."'
             GROUP BY threads.forum_id";
+
     // Select the number of posts of the forum (post that are visible and that are in a thread that is visible).
     $sql3 = "SELECT count(post_id) AS number_of_posts, posts.forum_id
-            FROM $table_posts posts, $table_threads threads, $table_item_property item_properties
-            WHERE posts.visible=1 AND
+            FROM $table_posts posts 
+            INNER JOIN $table_threads threads 
+            ON (posts.thread_id = threads.thread_id AND posts.c_id = threads.c_id)
+            INNER JOIN $table_item_property item_properties
+            ON (threads.thread_id = item_properties.ref AND item_properties.c_id = threads.c_id)
+            WHERE 
+                posts.visible=1 AND
                 posts.c_id = $course_id AND
                 item_properties.c_id = $course_id AND
-                threads.c_id = $course_id
-                AND posts.thread_id=threads.thread_id
-                AND threads.thread_id=item_properties.ref
-                AND item_properties.visibility = 1
-                AND item_properties.tool='".TOOL_FORUM_THREAD."'
+                threads.c_id = $course_id AND 
+                item_properties.visibility = 1 AND 
+                item_properties.tool='".TOOL_FORUM_THREAD."'
             GROUP BY threads.forum_id";
 
     // Course Admin
     if (api_is_allowed_to_edit()) {
         // Select all the forum information of all forums (that are not deleted).
         $sql = "SELECT *
-                FROM $table_forums forum, $table_item_property item_properties
+                FROM $table_forums forum INNER JOIN $table_item_property item_properties
+                ON (forum.forum_id = item_properties.ref AND item_properties.c_id = forum.c_id)
                 WHERE
                     forum.forum_of_group = $groupId AND
                     forum.c_id = $course_id AND
-                    item_properties.c_id = $course_id AND
-                    forum.forum_id = item_properties.ref AND
+                    item_properties.c_id = $course_id AND                    
                     item_properties.visibility <> 2 AND
                     item_properties.tool = '".TOOL_FORUM."'
                 ORDER BY forum_order ASC";
 
         // Select the number of threads of the forums (only the threads that are not deleted).
         $sql2 = "SELECT count(thread_id) AS number_of_threads, threads.forum_id
-                 FROM $table_threads threads, $table_item_property item_properties
+                 FROM $table_threads threads INNER JOIN $table_item_property item_properties
+                 ON (threads.thread_id=item_properties.ref AND item_properties.c_id = threads.c_id)
                  WHERE
-                    threads.thread_id=item_properties.ref AND
                     threads.c_id = $course_id AND
                     item_properties.c_id = $course_id AND
                     item_properties.visibility <> 2 AND
@@ -5097,7 +5106,6 @@ function get_forums_of_group($groupId)
                 FROM $table_posts
                 WHERE c_id = $course_id 
                 GROUP BY forum_id";
-
     }
 
     // Handling all the forum information.

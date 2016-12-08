@@ -2220,7 +2220,7 @@ class learnpath
         // Getting all the information about the item.
         $sql = "SELECT * FROM $tbl_lp_item as lp
                 INNER JOIN $tbl_lp_item_view as lp_view
-                ON lp.id = lp_view.lp_item_id
+                ON (lp.id = lp_view.lp_item_id AND lp.c_id = lp_view.c_id)
                 WHERE
                     lp.id = '".$_SESSION['oLP']->current."' AND
                     lp.c_id = $course_id AND

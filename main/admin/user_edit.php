@@ -68,11 +68,16 @@ function confirmation(name) {
 }
 </script>';
 
-$userGeolocalization = api_get_setting('enable_profile_user_address_geolocalization') == 'true';
+$gMapsPlugin = GoogleMapsPlugin::create();
+$geolocalization = $gMapsPlugin->get('enable_api') === 'true';
+
+if ($geolocalization) {
+	$gmapsApiKey = $gMapsPlugin->get('api_key');
+	$htmlHeadXtra[] = '<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=true&key='. $gmapsApiKey . '" ></script>';
+}
 
 $htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
 $htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
-$htmlHeadXtra[] = '<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=true" ></script>';
 
 $libpath = api_get_path(LIBRARY_PATH);
 $noPHP_SELF = true;
@@ -100,106 +105,6 @@ $user_data['old_password'] = $user_data['password'];
 
 $user_data['registration_date'] = api_get_local_time($user_data['registration_date']);
 unset($user_data['password']);
-
-if ($userGeolocalization) {
-	$htmlHeadXtra[] = '<script>
-    $(document).ready(function() {
-
-        var address = "' . $user_data['address'] . '";
-        initializeGeo(address, false);
-
-        $("#geolocalization").on("click", function() {
-            var address = $("#address").val();
-            initializeGeo(address, false);
-            return false;
-        });
-
-        $("#myLocation").on("click", function() {
-            myLocation();
-            return false;
-        });
-
-        $("#address").keypress(function (event) {
-            if (event.which == 13) {
-                $("#geolocalization").click();
-                return false;
-            }
-        });
-    });
-
-    function myLocation() {
-        if (navigator.geolocation) {
-            var geoPosition = function(position) {
-                var lat = position.coords.latitude;
-                var lng = position.coords.longitude;
-                var latLng = new google.maps.LatLng(lat, lng);
-                initializeGeo(false, latLng)
-            };
-
-            var geoError = function(error) {
-                alert("Geocode ' . get_lang('Error') . ': " + error);
-            };
-
-            var geoOptions = {
-                enableHighAccuracy: true
-            };
-
-            navigator.geolocation.getCurrentPosition(geoPosition, geoError, geoOptions);
-        }
-    }
-
-    function initializeGeo(address, latLng) {
-        var geocoder = new google.maps.Geocoder();
-        var latlng = new google.maps.LatLng(-34.397, 150.644);
-        var myOptions = {
-            zoom: 15,
-            center: latlng,
-            mapTypeControl: true,
-            mapTypeControlOptions: {
-                style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
-            },
-            navigationControl: true,
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
-
-        map = new google.maps.Map(document.getElementById("map"), myOptions);
-
-        var parameter = address ? { "address": address } : latLng ? { "latLng": latLng } : false;
-
-        if (geocoder && parameter) {
-            geocoder.geocode(parameter, function(results, status) {
-                if (status == google.maps.GeocoderStatus.OK) {
-                    if (status != google.maps.GeocoderStatus.ZERO_RESULTS) {
-                        map.setCenter(results[0].geometry.location);
-                        if (!address) {
-                            $("#address").val(results[0].formatted_address);
-                        }
-                        var infowindow = new google.maps.InfoWindow({
-                            content: "<b>" + $("#address").val() + "</b>",
-                            size: new google.maps.Size(150, 50)
-                        });
-
-                        var marker = new google.maps.Marker({
-                            position: results[0].geometry.location,
-                            map: map,
-                            title: $("#address").val()
-                        });
-                        google.maps.event.addListener(marker, "click", function() {
-                            infowindow.open(map, marker);
-                        });
-                    } else {
-                        alert("' . get_lang("NotFound") . '");
-                    }
-
-                } else {
-                    alert("Geocode ' . get_lang('Error') . ': " + status);
-                }
-            });
-        }
-    }
-
-    </script>';
-}
 
 // Create the form
 $form = new FormValidator(
@@ -259,32 +164,6 @@ if (api_get_setting('openid_authentication') == 'true') {
 
 // Phone
 $form->addElement('text', 'phone', get_lang('PhoneNumber'));
-
-if ($userGeolocalization) {
-	// Geolocation
-	$form->addElement('text', 'address', get_lang('AddressField'), ['id' => 'address']);
-	$form->addHtml('
-        <div class="form-group">
-            <label for="geolocalization" class="col-sm-2 control-label"></label>
-            <div class="col-sm-8">
-                <button class="null btn btn-default " id="geolocalization" name="geolocalization" type="submit"><em class="fa fa-map-marker"></em> '.get_lang('Geolocalization').'</button>
-                <button class="null btn btn-default " id="myLocation" name="myLocation" type="submit"><em class="fa fa-crosshairs"></em> '.get_lang('MyLocation').'</button>
-            </div>
-        </div>
-    ');
-
-	$form->addHtml('
-        <div class="form-group">
-            <label for="map" class="col-sm-2 control-label">
-                '.get_lang('Map').'
-            </label>
-            <div class="col-sm-8">
-                <div name="map" id="map" style="width:100%; height:300px;">
-                </div>
-            </div>
-        </div>
-    ');
-}
 
 // Picture
 $form->addFile(

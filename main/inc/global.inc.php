@@ -285,6 +285,10 @@ if (api_get_setting('server_type') == 'test') {
     ini_set('display_errors', '1');
     ini_set('log_errors', '1');
     error_reporting(-1);
+
+    if (function_exists('opcache_reset')) {
+        opcache_reset();
+    }
 } else {
     error_reporting(E_COMPILE_ERROR | E_ERROR | E_CORE_ERROR);
 }

@@ -98,8 +98,9 @@ class MessageManager
             $direction = 'DESC';
         } else {
             $column = intval($column);
-            if (!in_array($direction, array('ASC', 'DESC')))
+            if (!in_array($direction, array('ASC', 'DESC'))) {
                 $direction = 'ASC';
+            }
         }
 
         $keyword = Session::read('message_search_keyword');
@@ -111,7 +112,12 @@ class MessageManager
 
         $table_message = Database::get_main_table(TABLE_MESSAGE);
 
-        $sql = "SELECT id as col0, user_sender_id as col1, title as col2, send_date as col3, msg_status as col4
+        $sql = "SELECT 
+                    id as col0, 
+                    user_sender_id as col1, 
+                    title as col2, 
+                    send_date as col3, 
+                    msg_status as col4
                 FROM $table_message
                 WHERE
                   user_receiver_id=" . api_get_user_id() . " AND
@@ -472,7 +478,7 @@ class MessageManager
     /**
      * @param int $user_receiver_id
      * @param int $id
-     * @return bool|resource
+     * @return bool
      */
     public static function delete_message_by_user_receiver($user_receiver_id, $id)
     {
@@ -492,9 +498,9 @@ class MessageManager
             // delete message
             $query = "UPDATE $table_message SET msg_status=3
                       WHERE user_receiver_id=" . $user_receiver_id . " AND id=" . $id;
-            $result = Database::query($query);
+            Database::query($query);
 
-            return $result;
+            return true;
         } else {
             return false;
         }
@@ -503,9 +509,9 @@ class MessageManager
     /**
      * Set status deleted
      * @author Isaac FLores Paz <isaac.flores@dokeos.com>
-     * @param  integer
-     * @param  integer
-     * @return array
+     * @param  int
+     * @param  int
+     * @return bool
      */
     public static function delete_message_by_user_sender($user_sender_id, $id)
     {
@@ -525,11 +531,12 @@ class MessageManager
             // delete attachment file
             self::delete_message_attachment_file($id, $user_sender_id);
             // delete message
-            $sql = "UPDATE $table_message SET msg_status=3
+            $sql = "UPDATE $table_message 
+                    SET msg_status=3
                     WHERE user_sender_id='$user_sender_id' AND id='$id'";
-            $result = Database::query($sql);
+            Database::query($sql);
 
-            return $result;
+            return true;
         }
 
         return false;
@@ -868,7 +875,12 @@ class MessageManager
         }
 
         $sql = "SELECT
-                    id as col0, user_sender_id as col1, title as col2, send_date as col3, user_receiver_id as col4, msg_status as col5
+                    id as col0, 
+                    user_sender_id as col1, 
+                    title as col2, 
+                    send_date as col3, 
+                    user_receiver_id as col4, 
+                    msg_status as col5
                 FROM $table_message
                 WHERE
                     user_sender_id=" . api_get_user_id() . " AND
@@ -932,7 +944,8 @@ class MessageManager
             $keywordCondition = " AND (title like '%$keyword%' OR content LIKE '%$keyword%') ";
         }
 
-        $sql = "SELECT COUNT(*) as number_messages FROM $table_message
+        $sql = "SELECT COUNT(id) as number_messages 
+                FROM $table_message
                 WHERE
                   msg_status=" . MESSAGE_STATUS_OUTBOX . " AND
                   user_sender_id=" . api_get_user_id() . "
@@ -1112,7 +1125,6 @@ class MessageManager
         $query_vars = array('id' => $group_id, 'topics_page_nr' => 0);
 
         if (is_array($rows) && count($rows) > 0) {
-
             // prepare array for topics with its items
             $topics = array();
             $x = 0;
@@ -1340,7 +1352,6 @@ class MessageManager
         $main_content .= '<div class="message">'. $main_message['content'] . $attachment . '</div></div>';
         $main_content .= '</div>';
         $main_content .= '</div>';
-        //$main_content = Security::remove_XSS($main_content, STUDENT, true);
 
         $html .= Display::div(
             Display::div(
@@ -1539,7 +1550,9 @@ class MessageManager
         $tbl_message = Database::get_main_table(TABLE_MESSAGE);
         $message_id = intval($message_id);
         $sql = "SELECT * FROM $tbl_message
-                WHERE id = '$message_id' AND msg_status <> '" . MESSAGE_STATUS_DELETED . "' ";
+                WHERE 
+                    id = '$message_id' AND 
+                    msg_status <> '" . MESSAGE_STATUS_DELETED . "' ";
         $res = Database::query($sql);
         $item = array();
         if (Database::num_rows($res) > 0) {
@@ -1571,7 +1584,7 @@ class MessageManager
     {
         $form = new FormValidator('send_invitation');
         $form->addTextarea('content', get_lang('AddPersonalMessage'), ['id' => 'content_invitation_id', 'rows' => 5]);
-        return $form->return_form();
+        return $form->returnForm();
     }
 
     //@todo this functions should be in the message class
@@ -1755,7 +1768,7 @@ class MessageManager
      * Get the data of the last received messages for a user
      * @param int $userId The user id
      * @param int $lastId The id of the last received message
-     * @return int The count of new messages
+     * @return array
      */
     public static function getMessagesFromLastReceivedMessage($userId, $lastId = 0)
     {
@@ -1769,8 +1782,6 @@ class MessageManager
         $messagesTable = Database::get_main_table(TABLE_MESSAGE);
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
 
-        $messages = array();
-
         $sql = "SELECT m.*, u.user_id, u.lastname, u.firstname
                 FROM $messagesTable as m
                 INNER JOIN $userTable as u
@@ -1783,6 +1794,7 @@ class MessageManager
 
         $result = Database::query($sql);
 
+        $messages = [];
         if ($result !== false) {
             while ($row = Database::fetch_assoc($result)) {
                 $messages[] = $row;

@@ -1335,9 +1335,10 @@ function getWorkListStudent(
         $groupInfo = GroupManager::get_group_properties($group_id);
         $groupIid = $groupInfo['iid'];
     }
+    $groupIid = (int) $groupIid;
 
     // Get list from database
-    if (!empty($group_id)) {
+    if (!empty($groupIid)) {
         $group_query = " WHERE w.c_id = $course_id AND post_group_id = $groupIid";
         $subdirs_query = "AND parent_id = 0";
     } else {
@@ -1468,6 +1469,7 @@ function getWorkListTeacher(
         $groupInfo = GroupManager::get_group_properties($group_id);
         $groupIid = $groupInfo['iid'];
     }
+    $groupIid = (int) $groupIid;
 
     $is_allowed_to_edit = api_is_allowed_to_edit() || api_is_coach();
     if (!in_array($direction, array('asc', 'desc'))) {

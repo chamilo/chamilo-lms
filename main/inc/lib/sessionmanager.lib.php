@@ -947,17 +947,19 @@ class SessionManager
                     FROM $workTable w
                     LEFT JOIN $workTableAssignment a
                     ON (a.publication_id = w.id AND a.c_id = w.c_id)
-                    WHERE w.c_id = %s
-                    AND parent_id = 0
-                    AND active IN (1, 0)";
+                    WHERE 
+                        w.c_id = %s AND 
+                        parent_id = 0 AND 
+                        active IN (1, 0)";
         } else {
             $sql = "SELECT count(w.id) as count
                     FROM $workTable w
                     LEFT JOIN $workTableAssignment a
                     ON (a.publication_id = w.id AND a.c_id = w.c_id)
-                    WHERE w.c_id = %s
-                    AND parent_id = 0
-                    AND active IN (1, 0)";
+                    WHERE 
+                        w.c_id = %s AND 
+                        parent_id = 0 AND 
+                        active IN (1, 0)";
 
             if (empty($sessionId)) {
                 $sql .= ' AND w.session_id = NULL ';

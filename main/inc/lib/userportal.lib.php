@@ -912,7 +912,7 @@ class IndexManager
         //  @todo Add a platform setting to add the user image.
         if (api_get_setting('allow_message_tool') == 'true') {
             // New messages.
-            $number_of_new_messages = MessageManager::get_new_messages();
+            $number_of_new_messages = MessageManager::getCountNewMessages();
             // New contact invitations.
             $number_of_new_messages_of_friend = SocialManager::get_message_number_invitation_by_user_id(api_get_user_id());
 

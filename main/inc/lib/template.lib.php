@@ -473,7 +473,7 @@ class Template
                 $user_info['is_admin'] = 1;
             }
 
-            $user_info['messages_count'] = MessageManager::get_new_messages();
+            $user_info['messages_count'] = MessageManager::getCountNewMessages();
             $this->user_is_logged_in = true;
         }
         // Setting the $_u array that could be use in any template

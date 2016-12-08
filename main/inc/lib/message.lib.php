@@ -15,23 +15,24 @@ use Chamilo\UserBundle\Entity\User;
 class MessageManager
 {
     /**
-     * Get the new messages for the current user from the database.
+     * Get count new messages for the current user from the database.
      * @return int
      */
-    public static function get_new_messages()
+    public static function getCountNewMessages()
     {
         $table = Database::get_main_table(TABLE_MESSAGE);
         if (!api_get_user_id()) {
             return false;
         }
-        $sql = "SELECT * FROM $table
+        $sql = "SELECT COUNT(id) as count 
+                FROM $table
                 WHERE
                     user_receiver_id=" . api_get_user_id() . " AND
                     msg_status=" . MESSAGE_STATUS_UNREAD;
         $result = Database::query($sql);
-        $i = Database::num_rows($result);
+        $row = Database::fetch_assoc($result);
 
-        return $i;
+        return $row['count'];
     }
 
     /**

@@ -1123,19 +1123,10 @@ class IndexManager
             $session_categories = UserManager::get_sessions_by_category($user_id, false);
         }
 
-        $html = '';
-        // Showing history title
-        if ($load_history) {
-            $html .= Display::page_subheader(get_lang('HistoryTrainingSession'));
-            if (empty($session_categories)) {
-                $html .= get_lang('YouDoNotHaveAnySessionInItsHistory');
-            }
-        }
-
         $sessionCount = 0;
         $courseCount = 0;
 
-        $template = new Template(null, false, false, false, false, false, false);
+        //$template = new Template(null, false, false, false, false, false, false);
 
         // If we're not in the history view...
         if (!isset($_GET['history'])) {
@@ -1157,21 +1148,21 @@ class IndexManager
             }
 
             if ($specialCourses) {
-                $template->assign('courses', $specialCourses);
+                $this->tpl->assign('courses', $specialCourses);
 
-                $specialCourseList = $template->fetch(
+                $specialCourseList = $this->tpl->fetch(
                     $this->tpl->get_template($coursesWithoutCategoryTemplate)
                 );
             }
 
             if ($courses['in_category'] || $courses['not_category']) {
-                $template->assign('courses', $courses['not_category']);
-                $template->assign('categories', $courses['in_category']);
+                $this->tpl->assign('courses', $courses['not_category']);
+                $this->tpl->assign('categories', $courses['in_category']);
 
-                $listCourse = $template->fetch(
+                $listCourse = $this->tpl->fetch(
                     $this->tpl->get_template($coursesWithCategoryTemplate)
                 );
-                $listCourse .= $template->fetch(
+                $listCourse .= $this->tpl->fetch(
                     $this->tpl->get_template($coursesWithoutCategoryTemplate)
                 );
             }
@@ -1191,7 +1182,6 @@ class IndexManager
         if (is_array($session_categories)) {
             foreach ($session_categories as $session_category) {
                 $session_category_id = $session_category['session_category']['id'];
-
                 // Sessions and courses that are not in a session category
                 if (
                     empty($session_category_id) &&
@@ -1312,7 +1302,6 @@ class IndexManager
                                 $params['points'] = GamificationUtils::getSessionPoints($params['id'], $this->user_id);
                             }
                             $listSession[] = $params;
-
                             $sessionCount++;
                         }
                     }
@@ -1519,7 +1508,7 @@ class IndexManager
     }
 
     /**
-     * UserPortal view for session, return the HTLK of the course list
+     * UserPortal view for session, return the HTML of the course list
      * @param $user_id
      * @return string
      */
@@ -1527,7 +1516,6 @@ class IndexManager
     {
         $sessionCount = 0;
         $courseCount = 0;
-
         $load_history = (isset($_GET['history']) && intval($_GET['history']) == 1) ? true : false;
 
         if ($load_history) {
@@ -1536,16 +1524,6 @@ class IndexManager
         } else {
             //Load sessions in category
             $session_categories = UserManager::get_sessions_by_category($user_id, false);
-        }
-
-        $html = '';
-
-        //Showing history title
-        if ($load_history) {
-            $html .= Display::page_subheader(get_lang('HistoryTrainingSession'));
-            if (empty($session_categories)) {
-                $html .= get_lang('YouDoNotHaveAnySessionInItsHistory');
-            }
         }
 
         $html = '';
@@ -1562,10 +1540,8 @@ class IndexManager
             $specialCourses = $specialCoursesResult;
 
             if ($specialCourses) {
-                $specialCoursesTemplate = new Template(null, false, false, false, false, false, false);
-                $specialCoursesTemplate->assign('courses', $specialCourses);
-
-                $html = $specialCoursesTemplate->fetch(
+                $this->tpl->assign('courses', $specialCourses);
+                $html = $this->tpl->fetch(
                     $this->tpl->get_template('/user_portal/classic_courses_without_category.tpl')
                 );
             }

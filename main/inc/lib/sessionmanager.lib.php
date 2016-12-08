@@ -3268,7 +3268,6 @@ class SessionManager
         }
 
         $whereConditions .= $keywordCondition;
-
         $subQuery = $sessionQuery.$courseSessionQuery;
 
         $sql = " $select FROM $tbl_session s

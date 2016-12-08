@@ -3038,7 +3038,7 @@ class UserManager
                     WHERE
                       s.id = $session_id AND
                       (
-                        (scu.user_id = $user_id AND scu.status=2) OR
+                        (scu.user_id = $user_id AND scu.status = 2) OR
                         s.id_coach = $user_id
                       )
                     $where_access_url

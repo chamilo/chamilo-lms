@@ -1911,6 +1911,7 @@ class CourseManager
         $rs = Database::query($sql);
         $listTeachers = array();
         $teachers = array();
+        $url = api_get_path(WEB_AJAX_PATH) . 'user_manager.ajax.php?a=get_user_popup';
         while ($teacher = Database::fetch_array($rs)) {
             $userPicture = UserManager::getUserPicture($teacher['user_id'], USER_IMAGE_SIZE_SMALL);
             $teachers['id'] = $teacher['user_id'];
@@ -1920,7 +1921,7 @@ class CourseManager
             $teachers['username'] = $teacher['username'];
             $teachers['status'] = $teacher['status'];
             $teachers['avatar'] = $userPicture;
-            $teachers['url'] = api_get_path(WEB_AJAX_PATH) . 'user_manager.ajax.php?a=get_user_popup&user_id=' . $teacher['user_id'];
+            $teachers['url'] = $url.'&user_id='. $teacher['user_id'];
             $listTeachers[]=$teachers;
         }
         return $listTeachers;
@@ -2001,7 +2002,6 @@ class CourseManager
 
         $tbl_user = Database:: get_main_table(TABLE_MAIN_USER);
         $tbl_session_course_user = Database:: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $coaches = array();
 
         $sql = "SELECT DISTINCT 
                     u.user_id,
@@ -2017,15 +2017,15 @@ class CourseManager
                     scu.status = 2";
         $rs = Database::query($sql);
 
+        $coaches = array();
         if (Database::num_rows($rs) > 0) {
             while ($row = Database::fetch_array($rs)) {
                 $completeName = api_get_person_name($row['firstname'], $row['lastname']);
                 $coaches[] = $row + ['full_name' => $completeName];
             }
-            return $coaches;
-        } else {
-            return false;
         }
+
+        return $coaches;
     }
 
     /**
@@ -2037,17 +2037,16 @@ class CourseManager
      */
     public static function get_coachs_from_course_to_string(
         $session_id = 0,
-        $courseId = null,
+        $courseId = 0,
         $separator = self::USER_SEPARATOR,
         $add_link_to_profile = false,
         $orderList = false
     ) {
-        $coachs_course = self::get_coachs_from_course($session_id, $courseId);
+        $coachList = self::get_coachs_from_course($session_id, $courseId);
         $course_coachs = array();
-        $html = '';
-        if (is_array($coachs_course)) {
-            foreach ($coachs_course as $coach_course) {
-                $coach_name = api_get_person_name($coach_course['firstname'], $coach_course['lastname']);
+        if (!empty($coachList)) {
+            foreach ($coachList as $coach_course) {
+                $coach_name = $coach_course['full_name'];
                 if ($add_link_to_profile) {
                     $url = api_get_path(WEB_AJAX_PATH) . 'user_manager.ajax.php?a=get_user_popup&user_id=' . $coach_course['user_id'];
                     $coach_name = Display::url(
@@ -2063,7 +2062,7 @@ class CourseManager
             }
         }
 
-        $coaches_to_string = '';
+        $html = '';
         if (!empty($course_coachs)) {
             if ($orderList === true) {
                 $html .= '<ul class="user-coachs">';
@@ -2072,9 +2071,8 @@ class CourseManager
                 }
                 $html .= '</ul>';
             } else {
-                $coaches_to_string = array_to_string($course_coachs, $separator);
+                $html = array_to_string($course_coachs, $separator);
             }
-
         }
 
         return $html;
@@ -3447,7 +3445,7 @@ class CourseManager
         $special_course_list = self::get_special_course_list();
         $with_special_courses = '';
         if (!empty($special_course_list)) {
-            $with_special_courses = ' course.code IN ("' . implode('","', $special_course_list) . '")';
+            $with_special_courses = ' AND course.code IN ("' . implode('","', $special_course_list) . '")';
         }
 
         $courseList = [];
@@ -3530,9 +3528,7 @@ class CourseManager
                     }
 
                     $params['is_special_course'] = true;
-
                     $courseList[] = $params;
-
                 }
             }
         }
@@ -3965,7 +3961,6 @@ class CourseManager
         $session_accessible = true,
         $load_dirs = false
     ) {
-        $entityManager = Database::getManager();
         $now = date('Y-m-d h:i:s');
         $user_id = api_get_user_id();
         $course_info = api_get_course_info_by_id($course['real_id']);
@@ -3983,7 +3978,7 @@ class CourseManager
         $course_info['status'] = empty($session_id) ? $userInCourseStatus : STUDENT;
         $course_info['id_session'] = $session_id;
 
-        $is_coach = api_is_coach($course_info['id_session'], $course_info['real_id']);
+        $is_coach = api_is_coach($session_id, $course_info['real_id']);
 
         // Display course entry.
         // Show a hyperlink to the course, unless the course is closed and user is not course admin.
@@ -4003,7 +3998,7 @@ class CourseManager
         if ($course_visibility != COURSE_VISIBILITY_CLOSED &&
             $course_visibility != COURSE_VISIBILITY_HIDDEN
         ) {
-            $notifications .= Display:: show_notification($course_info);
+            $notifications .= Display::show_notification($course_info);
         }
 
         if ($session_accessible) {
@@ -4148,6 +4143,7 @@ class CourseManager
             );
 
             if (api_get_setting('allow_skills_tool') === 'true') {
+                $entityManager = Database::getManager();
                 $objUser = $entityManager->find('ChamiloUserBundle:User', $user_id);
                 $objCourse = $entityManager->find('ChamiloCoreBundle:Course', $course['real_id']);
                 $objSession = $entityManager->find('ChamiloCoreBundle:Session', $session_id);

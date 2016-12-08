@@ -1105,7 +1105,7 @@ class IndexManager
      */
     public function returnCoursesAndSessions($user_id)
     {
-        $gamificationModeIsActive = api_get_setting('gamification_mode');
+        $gameModeIsActive = api_get_setting('gamification_mode');
         $listCourse = '';
         $specialCourseList = '';
         $load_history = isset($_GET['history']) && intval($_GET['history']) == 1 ? true : false;
@@ -1125,8 +1125,6 @@ class IndexManager
 
         $sessionCount = 0;
         $courseCount = 0;
-
-        //$template = new Template(null, false, false, false, false, false, false);
 
         // If we're not in the history view...
         if (!isset($_GET['history'])) {
@@ -1296,7 +1294,7 @@ class IndexManager
                                 $params['show_simple_session_info'] = true;
                             }
 
-                            if ($gamificationModeIsActive) {
+                            if ($gameModeIsActive) {
                                 $params['stars'] = GamificationUtils::getSessionStars($params['id'], $this->user_id);
                                 $params['progress'] = GamificationUtils::getSessionProgress($params['id'], $this->user_id);
                                 $params['points'] = GamificationUtils::getSessionPoints($params['id'], $this->user_id);
@@ -1459,7 +1457,7 @@ class IndexManager
             $this->tpl->assign('all_courses', $allCoursesInSessions);
             $this->tpl->assign('session', $listSession);
             $this->tpl->assign('show_tutor', (api_get_setting('show_session_coach')==='true' ? true : false));
-            $this->tpl->assign('gamification_mode', $gamificationModeIsActive);
+            $this->tpl->assign('gamification_mode', $gameModeIsActive);
 
             if (api_get_configuration_value('view_grid_courses')) {
                 $sessions_with_no_category = $this->tpl->fetch(

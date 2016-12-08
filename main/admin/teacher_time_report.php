@@ -119,7 +119,7 @@ if (!empty($selectedCourse)) {
     foreach ($sessionsByCourse as $session) {
         $coaches = CourseManager::get_coachs_from_course($session['id'], $course['real_id']);
 
-        if ($coaches) {
+        if (!empty($coaches)) {
             foreach ($coaches as $coach) {
                 $totalTime = UserManager::getTimeSpentInCourses(
                     $coach['user_id'],
@@ -173,7 +173,7 @@ if (!empty($selectedSession)) {
 
         $coaches = CourseManager::get_coachs_from_course($selectedSession, $course['id']);
 
-        if ($coaches) {
+        if (!empty($coaches)) {
             foreach ($coaches as $coach) {
                 $totalTime = UserManager::getTimeSpentInCourses(
                     $coach['user_id'],

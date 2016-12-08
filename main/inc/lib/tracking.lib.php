@@ -3481,8 +3481,9 @@ class Tracking
 
         if (empty($courseCode)) {
             $sql = "SELECT count(poster_id) as count
-                    FROM $tbl_forum_post post INNER JOIN $tbl_forum forum
-                    ON forum.forum_id = post.forum_id
+                    FROM $tbl_forum_post post 
+                    INNER JOIN $tbl_forum forum
+                    ON (forum.forum_id = post.forum_id AND forum.c_id = post.c_id)
                     WHERE $conditionsToString";
 
             $rs = Database::query($sql);

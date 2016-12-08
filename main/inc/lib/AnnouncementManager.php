@@ -1608,14 +1608,18 @@ class AnnouncementManager
                 } else {
                     $group_condition = " AND (ip.to_group_id='".api_get_group_id()."' OR ip.to_group_id = 0 OR ip.to_group_id IS NULL)";
                 }
-                $sql = "SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id
-				FROM $tbl_announcement announcement, $tbl_item_property ip
+                $sql = "SELECT 
+                            announcement.*, 
+                            ip.visibility, 
+                            ip.to_group_id, 
+                            ip.insert_user_id
+				FROM $tbl_announcement announcement INNER JOIN $tbl_item_property ip
+				ON (announcement.c_id = ip.c_id AND announcement.id = ip.ref)
 				WHERE
-				    announcement.c_id   = $course_id AND
-                    ip.c_id             = $course_id AND
-                    announcement.id     = ip.ref AND
-                    ip.tool             = 'announcement' AND
-                    ip.visibility       <> '2'
+				    announcement.c_id = $course_id AND
+                    ip.c_id = $course_id AND                    
+                    ip.tool = 'announcement' AND
+                    ip.visibility <> '2'
                     $group_condition
                     $condition_session
 				GROUP BY ip.ref
@@ -1665,18 +1669,19 @@ class AnnouncementManager
                 // his group announcements AND the general announcements
                 if (is_array($group_memberships) && count($group_memberships)>0) {
                     $sql = "SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id
-                    FROM $tbl_announcement announcement, $tbl_item_property ip
-                    WHERE
-                        announcement.c_id = $course_id AND
-                        ip.c_id = $course_id AND
-                        announcement.id = ip.ref AND
-                        ip.tool='announcement'
-                        AND ip.visibility='1'
-                        $cond_user_id
-                        $condition_session
-                    GROUP BY ip.ref
-                    ORDER BY display_order DESC
-                    LIMIT 0, $maximum";
+                            FROM $tbl_announcement announcement 
+                            INNER JOIN $tbl_item_property ip
+                            ON (announcement.id = ip.ref AND announcement.c_id = ip.c_id)
+                            WHERE
+                                announcement.c_id = $course_id AND
+                                ip.c_id = $course_id AND                                
+                                ip.tool='announcement' AND 
+                                ip.visibility='1'
+                                $cond_user_id
+                                $condition_session
+                            GROUP BY ip.ref
+                            ORDER BY display_order DESC
+                            LIMIT 0, $maximum";
                 } else {
                     // the user is not member of any group
                     // this is an identified user => show the general announcements AND his personal announcements
@@ -1690,13 +1695,14 @@ class AnnouncementManager
                             $cond_user_id = " AND ( ip.to_user_id='".$userId."' OR ip.to_group_id='0' OR ip.to_group_id IS NULL) ";
                         }
                         $sql = "SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id
-                            FROM $tbl_announcement announcement, $tbl_item_property ip
+                            FROM $tbl_announcement announcement 
+                            INNER JOIN $tbl_item_property ip
+                            ON (announcement.c_id = ip.c_id AND announcement.id = ip.ref)
                             WHERE
                                 announcement.c_id = $course_id AND
-                                ip.c_id = $course_id AND
-                                announcement.id = ip.ref
-                                AND ip.tool='announcement'
-                                AND ip.visibility='1'
+                                ip.c_id = $course_id AND 
+                                ip.tool='announcement' AND 
+                                ip.visibility='1'
                                 $cond_user_id
                                 $condition_session
                             GROUP BY ip.ref
@@ -1713,15 +1719,20 @@ class AnnouncementManager
                         }
 
                         // the user is not identiefied => show only the general announcements
-                        $sql = "SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id
-                                FROM $tbl_announcement announcement, $tbl_item_property ip
+                        $sql = "SELECT 
+                                    announcement.*, 
+                                    ip.visibility, 
+                                    ip.to_group_id, 
+                                    ip.insert_user_id
+                                FROM $tbl_announcement announcement 
+                                INNER JOIN $tbl_item_property ip
+                                ON (announcement.id = ip.ref AND announcement.c_id = ip.c_id)
                                 WHERE
                                     announcement.c_id = $course_id AND
-                                    ip.c_id = $course_id AND
-                                    announcement.id = ip.ref
-                                    AND ip.tool='announcement'
-                                    AND ip.visibility='1'
-                                    AND ip.to_group_id='0'
+                                    ip.c_id = $course_id AND 
+                                    ip.tool='announcement' AND 
+                                    ip.visibility='1' AND 
+                                    ip.to_group_id='0'
                                     $condition_session
                                 GROUP BY ip.ref
                                 ORDER BY display_order DESC

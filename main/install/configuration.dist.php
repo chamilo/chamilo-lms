@@ -257,3 +257,6 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 //$_configuration['block_registered_users_access_to_open_course_contents'] = false;
 // Allows syncing the database with the current entity schema
 //$_configuration['sync_db_with_schema'] = false;
+// Load course notifications in user_portal.php using ajax
+//$_configuration['user_portal_load_notification_by_ajax'] = false;
+

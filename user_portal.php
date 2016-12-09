@@ -39,6 +39,28 @@ $load_dirs = api_get_setting('show_documents_preview');
 $displayMyCourseViewBySessionLink = api_get_setting('my_courses_view_by_session') === 'true';
 $nameTools = get_lang('MyCourses');
 
+// Load notification by ajax
+$htmlHeadXtra[] =  '<script>
+$(function() {
+    $(".course_notification").each(function(index) {
+        var div = $(this);
+        var id = $(this).attr("id");       
+        var idList = id.split("_");
+        var courseId = idList[1];
+        var sessionId = idList[2];
+        var status = idList[3];
+        $.ajax({			
+			type: "GET",
+			url: "'.api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=get_notification&course_id="+courseId+"&session_id="+sessionId+"&status="+status,			
+			success: function(data) {			    
+			    div.append(data);			    
+			}
+        });
+    });
+});
+
+</script>';
+
 /*
     Header
     Include the HTTP, HTML headers plus the top banner.

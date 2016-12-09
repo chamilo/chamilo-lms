@@ -1336,10 +1336,11 @@ class Display
      * if the user never entered the course before, he will not see notification
      * icons. This function takes session ID into account (if any) and only shows
      * the corresponding notifications.
-     * @param array     Course information array, containing at least elements 'db' and 'k'
+     * @param array $course_info Course information array, containing at least elements 'db' and 'k'
+     * @param bool $loadAjax
      * @return string   The HTML link to be shown next to the course
      */
-    public static function show_notification($course_info)
+    public static function show_notification($course_info, $loadAjax = true)
     {
         if (empty($course_info)) {
             return '';
@@ -1351,8 +1352,20 @@ class Display
         $course_code = Database::escape_string($course_info['code']);
 
         $user_id = api_get_user_id();
-        $course_id = intval($course_info['real_id']);
-        $sessionId = intval($course_info['id_session']);
+        $course_id = (int) $course_info['real_id'];
+        $sessionId = (int) $course_info['id_session'];
+        $status = (int) $course_info['status'];
+
+        $loadNotificationsByAjax = api_get_configuration_value('user_portal_load_notification_by_ajax');
+
+        if ($loadNotificationsByAjax) {
+            if ($loadAjax) {
+                $id = 'notification_'.$course_id.'_'.$sessionId.'_'.$status;
+                Session::write($id, true);
+
+                return '<span id ="'.$id.'" class="course_notification"></span>';
+            }
+        }
 
         // Get the user's last access dates to all tools of this course
         $sql = "SELECT *
@@ -1429,7 +1442,7 @@ class Display
                 )
                 // Take only what's visible or "invisible but where the user is a teacher" or where the visibility is unset.
                 && ($item_property['visibility'] == '1'
-                    || ($course_info['status'] == '1' && $item_property['visibility'] == '0')
+                    || ($status == '1' && $item_property['visibility'] == '0')
                     || !isset($item_property['visibility']))
             ) {
                 // Also drop announcements and events that are not for the user or his group.

@@ -20,7 +20,6 @@ class MessageManager
      */
     public static function getCountNewMessages()
     {
-        $table = Database::get_main_table(TABLE_MESSAGE);
         $userId = api_get_user_id();
         if (empty($userId)) {
             return false;
@@ -28,17 +27,40 @@ class MessageManager
 
         static $count;
         if (!isset($count)) {
-            $sql = "SELECT COUNT(id) as count 
-                    FROM $table
-                    WHERE
-                        user_receiver_id=".api_get_user_id()." AND
-                        msg_status = ".MESSAGE_STATUS_UNREAD;
-            $result = Database::query($sql);
-            $row = Database::fetch_assoc($result);
-            $count = $row['count'];
+            $cacheEnabled = function_exists('apcu_exists');
+            if ($cacheEnabled) {
+                $var = 'social_messages_unread_u_'.$userId;
+                if (apcu_exists($var)) {
+                    $count = apcu_fetch($var);
+                } else {
+                    $count = self::getCountNewMessagesFromDB($userId);
+                    apcu_store($var, $count, 60);
+                }
+            } else {
+                $count = self::getCountNewMessagesFromDB($userId);
+            }
         }
 
         return $count;
+    }
+    /**
+     * Execute the SQL necessary to know the number of messages in the database
+     * @param   int $userId The user for which we need the unread messages count
+     * @return  int The number of unread messages in the database for the given user
+     */
+    private static function getCountNewMessagesFromDB($userId) {
+        if (empty($userId)) {
+            return 0;
+        }
+        $table = Database::get_main_table(TABLE_MESSAGE);
+        $sql = "SELECT COUNT(id) as count 
+                        FROM $table
+                        WHERE
+                            user_receiver_id=" . api_get_user_id() . " AND
+                            msg_status = " . MESSAGE_STATUS_UNREAD;
+        $result = Database::query($sql);
+        $row = Database::fetch_assoc($result);
+        return $row['count'];
     }
 
     /**

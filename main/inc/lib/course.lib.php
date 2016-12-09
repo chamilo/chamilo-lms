@@ -242,12 +242,12 @@ class CourseManager
 
     /**
      * Returns the status of a user in a course, which is COURSEMANAGER or STUDENT.
-     * @param   int $user_id
+     * @param   int $userId
      * @param   int $courseId
      *
      * @return int|bool the status of the user in that course (or false if the user is not in that course)
      */
-    public static function getUserInCourseStatus($user_id, $courseId)
+    public static function getUserInCourseStatus($userId, $courseId)
     {
         $courseId = (int) $courseId;
         if (empty($courseId)) {
@@ -259,7 +259,7 @@ class CourseManager
                 "SELECT status FROM " . Database::get_main_table(TABLE_MAIN_COURSE_USER) . "
                 WHERE
                     c_id  = $courseId AND
-                    user_id = " . intval($user_id)
+                    user_id = " . intval($userId)
             )
         );
 

@@ -48,7 +48,8 @@ class MessageManager
      * @param   int $userId The user for which we need the unread messages count
      * @return  int The number of unread messages in the database for the given user
      */
-    private static function getCountNewMessagesFromDB($userId) {
+    private static function getCountNewMessagesFromDB($userId)
+    {
         if (empty($userId)) {
             return 0;
         }
@@ -60,6 +61,7 @@ class MessageManager
                             msg_status = " . MESSAGE_STATUS_UNREAD;
         $result = Database::query($sql);
         $row = Database::fetch_assoc($result);
+
         return $row['count'];
     }
 

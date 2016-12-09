@@ -2074,7 +2074,10 @@ class CourseManager
             if ($orderList === true) {
                 $html .= '<ul class="user-coachs">';
                 foreach ($course_coachs as $coachs) {
-                    $html .= Display::tag('li', Display::return_icon('teacher.png', $coachs, null, ICON_SIZE_TINY) . ' ' . $coachs);
+                    $html .= Display::tag(
+                        'li',
+                        Display::return_icon('teacher.png', $coachs, null, ICON_SIZE_TINY) . ' ' . $coachs
+                    );
                 }
                 $html .= '</ul>';
             } else {
@@ -2096,14 +2099,13 @@ class CourseManager
      */
     public static function get_real_and_linked_user_list($course_code, $with_sessions = true, $session_id = 0)
     {
-        $complete_user_list = array();
-        //get users from real course
-        $user_list = self::get_user_list_from_course_code($course_code, $session_id);
-        foreach ($user_list as $this_user) {
-            $complete_user_list[] = $this_user;
+        $list = array();
+        $userList = self::get_user_list_from_course_code($course_code, $session_id);
+        foreach ($userList as $user) {
+            $list[] = $user;
         }
 
-        return $complete_user_list;
+        return $list;
     }
 
     /**
@@ -2344,7 +2346,7 @@ class CourseManager
 
     /**
      * Creates a file called mysql_dump.sql in the course folder
-     * @param $course_code The code of the course
+     * @param string $course_code The code of the course
      * @todo Implementation for single database
      */
     public static function create_database_dump($course_code)
@@ -2604,19 +2606,20 @@ class CourseManager
      * Get the course codes that have been restricted in the catalogue, and if byUserId is set
      * then the courses that the user is allowed or not to see in catalogue
      *
-     * @param boolean allowed Either if the courses have some users that are or are not allowed to see in catalogue
-     * @param boolean byUserId if the courses are or are not allowed to see to the user
+     * @param boolean $allowed Either if the courses have some users that are or are not allowed to see in catalogue
+     * @param boolean $byUserId if the courses are or are not allowed to see to the user
      * @return array Course codes allowed or not to see in catalogue by some user or the user
      */
     public static function getCatalogueCourseList($allowed = true, $byUserId = -1)
     {
         $courseTable = Database:: get_main_table(TABLE_MAIN_COURSE);
         $tblCourseRelUserCatalogue = Database:: get_main_table(TABLE_MAIN_COURSE_CATALOGUE_USER);
-        $visibility = ($allowed?1:0);
+        $visibility = $allowed ? 1 : 0;
 
         // Restriction by user id
         $currentUserRestriction = "";
         if ($byUserId > 0) {
+            $byUserId = (int) $byUserId;
             $currentUserRestriction = " AND tcruc.user_id = $byUserId ";
         }
 
@@ -2740,7 +2743,8 @@ class CourseManager
 
     /**
      * Get course ID from a given course directory name
-     * @param   string  Course directory (without any slash)
+     * @param   string  $path Course directory (without any slash)
+     *
      * @return  string  Course code, or false if not found
      */
     public static function get_course_id_from_path($path)
@@ -2778,10 +2782,10 @@ class CourseManager
 
     /**
      * Get emails of tutors to course
-     * @param string Visual code
-     * @param integer $courseId
+     * @param int $courseId
      * @return array List of emails of tutors to course
-     * @author @author Carlos Vargas <carlos.vargas@dokeos.com>, Dokeos Latino
+     *
+     * @author Carlos Vargas <carlos.vargas@dokeos.com>, Dokeos Latino
      * */
     public static function get_emails_of_tutors_to_course($courseId)
     {
@@ -2873,9 +2877,10 @@ class CourseManager
      * Updates course attribute. Note that you need to check that your
      * attribute is valid before you use this function
      *
-     * @param int Course id
-     * @param string Attribute name
-     * @param string Attribute value
+     * @param int $id Course id
+     * @param string $name Attribute name
+     * @param string $value Attribute value
+     *
      * @return Doctrine\DBAL\Driver\Statement|null True if attribute was successfully updated,
      * false if course was not found or attribute name is invalid
      */
@@ -2945,11 +2950,15 @@ class CourseManager
      */
     public static function get_session_category_id_by_session_id($session_id)
     {
+        if (empty($session_id)) {
+            return [];
+        }
+
         $sql = 'SELECT sc.id session_category
                 FROM ' . Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY) . ' sc
                 INNER JOIN ' . Database::get_main_table(TABLE_MAIN_SESSION) . ' s
                 ON sc.id = s.session_category_id 
-                WHERE s.id="' . Database::escape_string($session_id) . '"';
+                WHERE s.id="' . intval($session_id) . '"';
 
         return Database::result(
             Database::query($sql),
@@ -3056,6 +3065,7 @@ class CourseManager
      * @param  string $table   The table of which the rows should be counted
      * @param  int $session_id       optionally count rows by session id
      * @return int $course_id    The number of rows in the given table.
+     *
      * @deprecated
      */
     public static function count_rows_course_table($table, $session_id = '', $course_id = 0)
@@ -3522,7 +3532,7 @@ class CourseManager
                     $params['title'] = $course_info['title'];
                     $params['link'] = $course_info['course_public_url'].'?id_session=0&autoreg=1';
                     if (api_get_setting('display_teacher_in_courselist') === 'true') {
-                        $params['teachers'] = CourseManager::getTeachersFromCourse($course_info['real_id']);
+                        $params['teachers'] = CourseManager::getTeachersFromCourse($course_info['real_id'], false);
                     }
 
                     if ($showCustomIcon === 'true') {
@@ -3540,8 +3550,8 @@ class CourseManager
             }
         }
 
-    return $courseList;
-}
+        return $courseList;
+    }
 
     /**
      * Display courses (without special courses) as several HTML divs
@@ -3820,10 +3830,9 @@ class CourseManager
 
             $course_title_url = api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/index.php?id_session=0';
 
-            $teachers = '';
-
+            $teachers = [];
             if (api_get_setting('display_teacher_in_courselist') === 'true') {
-                $teachers = CourseManager::getTeachersFromCourse($course_info['real_id']);
+                $teachers = CourseManager::getTeachersFromCourse($course_info['real_id'], false);
             }
             $params['status'] = $row['status'];
 
@@ -3864,7 +3873,8 @@ class CourseManager
 
         $output = array();
         $table_category = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
-        $sql = "SELECT * FROM $table_category WHERE user_id = '".intval($realUserId)."'";
+        $sql = "SELECT * FROM $table_category 
+                WHERE user_id = '".intval($realUserId)."'";
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
             $output[$row['id']] = $row['title'];
@@ -3909,7 +3919,7 @@ class CourseManager
      *
      * @param string $value Original course code
      * @param string $variable Original field name
-     * @return int Course id
+     * @return array
      */
     public static function getCourseInfoFromOriginalId($value, $variable)
     {
@@ -3924,7 +3934,7 @@ class CourseManager
             return $courseInfo;
         }
 
-        return 0;
+        return [];
     }
 
     /**
@@ -4071,7 +4081,8 @@ class CourseManager
 
         if (api_get_setting('display_teacher_in_courselist') === 'true') {
             $teacher_list = CourseManager::getTeachersFromCourse(
-                $course_info['real_id']
+                $course_info['real_id'],
+                false
             );
 
             $course_coachs = self::get_coachs_from_course(
@@ -4702,11 +4713,8 @@ class CourseManager
     public static function process_hot_course_item($courses, $my_course_code_list = array())
     {
         $hotCourses = [];
-
         $ajax_url = api_get_path(WEB_AJAX_PATH) . 'course.ajax.php?a=add_course_vote';
-
         $stok = Security::get_existing_token();
-
         $user_id = api_get_user_id();
 
         foreach ($courses as $courseId) {
@@ -4723,8 +4731,8 @@ class CourseManager
                 $my_course_code_list
             );
 
-            $user_registerd_in_course = CourseManager::is_user_subscribed_in_course($user_id, $course_info['code']);
-            $user_registerd_in_course_as_teacher = CourseManager::is_course_teacher($user_id, $course_info['code']);
+            $user_registerd_in_course = CourseManager::is_user_subscribed_in_course($user_id, $courseCode);
+            $user_registerd_in_course_as_teacher = CourseManager::is_course_teacher($user_id, $courseCode);
             $user_registerd_in_course_as_student = ($user_registerd_in_course && !$user_registerd_in_course_as_teacher);
 
             // if user registered as student
@@ -4801,13 +4809,14 @@ class CourseManager
                 );
             //}
             /* get_lang('Description') */
-            $my_course['teachers'] = CourseManager::getTeachersFromCourse($course_info['real_id']);
+            $my_course['teachers'] = CourseManager::getTeachersFromCourse($course_info['real_id'], false);
             $point_info = self::get_course_ranking($course_info['real_id'], 0);
             $my_course['rating_html'] = Display::return_rating_system('star_' . $course_info['real_id'],
                 $ajax_url . '&course_id=' . $course_info['real_id'], $point_info);
 
             $hotCourses[] = $my_course;
         }
+
         return $hotCourses;
     }
 
@@ -4827,6 +4836,7 @@ class CourseManager
             'all',
             true
         );
+
         return $result;
     }
 

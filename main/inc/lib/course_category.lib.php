@@ -595,7 +595,7 @@ class CourseCategory
         $specialCourseList = CourseManager::get_special_course_list();
         $without_special_courses = '';
         if (!empty($specialCourseList)) {
-            $without_special_courses = ' AND course.code NOT IN ("'.implode('","', $specialCourseList).'")';
+            $without_special_courses = ' AND course.id NOT IN ("'.implode('","', $specialCourseList).'")';
         }
 
         $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition('course');
@@ -661,7 +661,7 @@ class CourseCategory
         $specialCourseList = CourseManager::get_special_course_list();
         $without_special_courses = '';
         if (!empty($specialCourseList)) {
-            $without_special_courses = ' AND course.code NOT IN ("'.implode('","', $specialCourseList).'")';
+            $without_special_courses = ' AND course.id NOT IN ("'.implode('","', $specialCourseList).'")';
         }
         $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition("course");
 

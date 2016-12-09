@@ -742,7 +742,6 @@ function getOnlineUsersCount($cacheEnabled = false)
             $number = apcu_fetch('my_campus_whoisonline_count_simple');
         } else {
             $number = who_is_online_count(api_get_setting('time_limit_whosonline'));
-            apcu_clear_cache();
             apcu_store('my_campus_whoisonline_count_simple', $number, 15);
         }
     } else {

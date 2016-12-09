@@ -734,11 +734,7 @@ function getOnlineUsersCount($cacheEnabled = false)
 {
     $number = 0;
     if ($cacheEnabled) {
-        $apc = apcu_cache_info(true);
-        $apc_end = $apc['start_time'] + $apc['ttl'];
-        if (apcu_exists('my_campus_whoisonline_count_simple') && (time() < $apc_end) &&
-            apcu_fetch('my_campus_whoisonline_count_simple') > 0
-        ) {
+        if (apcu_exists('my_campus_whoisonline_count_simple')) {
             $number = apcu_fetch('my_campus_whoisonline_count_simple');
         } else {
             $number = who_is_online_count(api_get_setting('time_limit_whosonline'));
@@ -763,11 +759,7 @@ function getOnlineUsersInCourseCount($userId, $_course, $cacheEnabled = false)
     if (!empty($_course['id'])) {
         if ($cacheEnabled) {
             $apc = apcu_cache_info(true);
-            $apc_end = $apc['start_time']+$apc['ttl'];
-            if (apcu_exists('my_campus_whoisonline_count_simple_'.$_course['id']) &&
-                (time() < $apc_end) &&
-                apcu_fetch('my_campus_whoisonline_count_simple_'.$_course['id']) > 0
-            ) {
+            if (apcu_exists('my_campus_whoisonline_count_simple_'.$_course['id'])) {
                 $numberOnlineInCourse = apcu_fetch('my_campus_whoisonline_count_simple_'.$_course['id']);
             } else {
                 $numberOnlineInCourse = who_is_online_in_this_course_count(

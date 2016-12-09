@@ -59,6 +59,7 @@ class Basic extends Toolbar
         'widget',
         'wikilink',
         'wordcount',
+        'inserthtml',
         'xml',
     );
 
@@ -173,6 +174,7 @@ class Basic extends Toolbar
         );*/
 
         $config['skin'] = 'bootstrapck,' . api_get_path(WEB_LIBRARY_JS_PATH) . 'ckeditor/skins/bootstrapck/';
+        //$config['skin'] = 'moono';
 
         if (isset($this->config)) {
             $this->config = array_merge($config, $this->config);

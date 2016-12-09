@@ -136,6 +136,34 @@
                 et une installation obsolète sur une seule base. Ca a été clarifié et simplifié par l'usage d'une seule base de données.
             </span><br />
 
+            <h3><span style="font-weight: bold;">Redirections d'Apache</span></h3>
+            <p>
+                Depuis sa version 1.10, Chamilo exige que le serveur web puisse gérer les redirections. Il s'agit d'un pré-requis très commun de nos jours pour les applications web (autant CMS que LMS, ERP, etc) qui permet, entre autres, l'utilisation intelligente et user-friendly des URLs.<br />
+                Si vous utilisez un autre serveur web qu'Apache, dirigez-vous à la section "Configuration de la réécriture" en fin de ce document.<br />
+                Si vous utilisez Apache, la configuration des redirections se fait en deux étapes simples:
+            <ul>
+                <li>Activer le module "rewrite" d'Apache (en ligne de commande, faites simplement un "<i>sudo a2enmod rewrite</i>")</li>
+                <li>Configurer le VirtualHost d'Apache pour qu'il inclue le bloc suivant, ce qui permettra l'interprétation des fichiers .htaccess</li>
+            </ul>
+            Pour Apache <=2.2:
+            <pre>
+    &lt;Directory /&gt;
+        AllowOverride All
+        Order allow,deny
+        allow from all
+    &lt;/Directory&gt;
+    </pre>
+            et pour Apache >=2.4:
+            <pre>
+    &lt;Directory /&gt;
+        AllowOverride All
+        Require all granted
+    &lt;/Directory&gt;
+    </pre>
+            <br />
+            Une fois configurée cette partie (qui est peut-être déjà mise en place par votre fournisseur d'hébergement), il suffit de redémarrer le serveur web pour activer la modification.
+            </p>
+
             <hr style="width: 100%; height: 2px;" />
             <h2><a name="2._Installation_of_Chamilo_LMS"></a><span style="font-weight: bold;">2. Installation de Chamilo LMS</span></h2>
 
@@ -715,7 +743,7 @@ ou, si vous travaillez avec Apache 2.4, la syntaxe est légèrement différente 
 </p>
 <h3>Apache RewriteRules</h3>
 <pre>
-          &lt;LocationMatch "/.git*"&gt;
+  &lt;LocationMatch "/.git*"&gt;
 	order deny,allow
 	deny from all
   &lt;/LocationMatch&gt;
@@ -732,15 +760,20 @@ ou, si vous travaillez avec Apache 2.4, la syntaxe est légèrement différente 
 	RewriteRule ^certificates/$ certificates/index.php?id=%1 [L]
 	RewriteRule ^courses/([^/]+)/$ main/course_home/course_home.php?cDir=$1 [QSA,L]
 	RewriteRule ^courses/([^/]+)/index.php$ main/course_home/course_home.php?cDir=$1 [QSA,L]
+	RewriteRule ^courses/([^/]+)/document/certificates/(.*)$ app/courses/$1/document/certificates/$2 [QSA,L]
 	RewriteRule ^courses/([^/]+)/document/(.*)$ main/document/download.php?doc_url=/$2&cDir=$1 [QSA,L]
+	RewriteRule ^courses/([^/]+)/scorm/(.*)$ main/document/download_scorm.php?doc_url=/$2&cDir=$1 [QSA,L]
 	RewriteRule ^courses/([^/]+)/work/(.*)$ main/work/download.php?file=work/$2&cDir=$1 [QSA,L]
-	RewriteRule ^courses/([^/]+)/upload/(.*)$ main/courses/$1/upload/$2 [QSA,L]
-	RewriteRule ^courses/([^/]+)/course-pic85x85.png$ main/courses/$1/course-pic85x85.png [QSA,L]
+	RewriteRule ^courses/([^/]+)/upload/(.*)$ app/courses/$1/upload/$2 [QSA,L]
+	RewriteRule ^courses/([^/]+)/course-pic85x85.png$ app/courses/$1/course-pic85x85.png [QSA,L]
 	RewriteRule ^courses/([^/]+)/course-pic.png$ app/courses/$1/course-pic.png [QSA,L]
+	RewriteRule ^main/upload/users/(.*)/(.*)/my_files/(.*)$ app/upload/users/$1/$2/my_files/$3 [QSA,L]
 	RewriteRule ^session/(\d{1,})/about/?$ main/session/about.php?session_id=$1 [L]
-    RewriteRule "^badge/(\d{1,})/user/(\d{1,})$" main/badge/issued.php?skill=$1&user=$2 [L]
+    RewriteRule ^badge/(\d{1,})/user/(\d{1,}) main/badge/issued.php?skill=$1&user=$2 [L]
+	RewriteRule ^main/admin/$ main/admin/index.php [QSA,L]
     RewriteRule ^main/exercice/(.+)$ main/exercise/$1 [QSA,L]
     RewriteRule ^main/newscorm/(.*)$ main/lp/$1 [QSA,L]
+	RewriteRule ^courses/(.*)$ app/courses/$1 [QSA,L]
   &lt;/Directory&gt;
 </pre>
 <h3>Nginx</h3>
@@ -767,7 +800,8 @@ Ce sont uniquement les redirections à placer dans un bloc server{}, comme les a
   location / {
     rewrite ^/courses/([^/]+)/$ /main/course_home/course_home.php?cDir=$1 last;
     rewrite ^/courses/([^/]+)/index.php$ /main/course_home/course_home.php?cDir=$1 last;
-    rewrite ^/badge/(\d+)/user/(\d+)$ /main/badge/issued.php?skill=$1&user=$2 last;
+    rewrite ^/skill/(\d+)/user/(\d+)$ /main/badge/issued_all.php?skill=$1&user=$2 last;
+    rewrite ^/badge/(\d+)/user/(\d+)$ /main/badge/issued_all.php?skill=$1&user=$2 last;
     try_files $uri @rewrite;
   }
 
@@ -783,6 +817,7 @@ Ce sont uniquement les redirections à placer dans un bloc server{}, comme les a
     rewrite ^/courses/([^/]+)/$ /main/course_home/course_home.php?cDir=$1 last;
     rewrite ^/courses/([^/]+)/index.php$ /main/course_home/course_home.php?cDir=$1 last;
     rewrite ^/session/([^/]+)/about/?$ /main/session/about.php?session_id=$1 last;
+    rewrite ^/badge/([^/]+) /main/badge/issued.php?issue=$1 last;
     rewrite ^/main/exercice/(.+)$ /main/exercise/$1 last;
     rewrite ^/main/newscorm/(.+)$ /main/lp/$1 last;
 

@@ -112,6 +112,33 @@ Nota:Esto se ha simplificado en gran medida desde la versión 1.9, ya que antes 
     múltiples bases de datos y un modo obsoleto de una sola base de datos.
 </p>
 
+<h3><span style="font-weight: bold;">Redirecciones de Apache</span></h3>
+<p>
+    Desde su versión 1.10, Chamilo requiere del servidor web que pueda gestionar redirecciones. Es algo muy comunes entre todos los sistemas web (ya sean CMS, LMS, ERP, etc) que permite, entre otras cosas, el uso inteligente y amigable de las URLs.<br />
+    Si no usa Apache, debería consultar la sección "Configuraciones opcionales para Apache y Nginx" al fin de este documento.<br />
+    Si usa Apache, configurar las redirecciones consta de dos pasos:
+    <ul>
+        <li>Activar el módulo "rewrite" de Apache (en línea de comando con "<i>sudo a2enmod rewrite</i>")</li>
+        <li>Configurar el VirtualHost de Apache para que incluya el bloque siguiente, autorizando la interpretación de los archivos .htaccess</li>
+    </ul>
+    Para Apache <=2.2:
+    <pre>
+    &lt;Directory /&gt;
+        AllowOverride All
+        Order allow,deny
+        allow from all
+    &lt;/Directory&gt;
+    </pre>
+    y para Apache >=2.4:
+    <pre>
+    &lt;Directory /&gt;
+        AllowOverride All
+        Require all granted
+    &lt;/Directory&gt;
+    </pre>
+    <br />
+    Una vez configurada esta parte (que quizás ya esté configurada por su proveedor), basta con reiniciar el servidor web para activar el cambio.
+</p>
 
 <hr style="width: 100%; height: 2px;" />
 <h2><a name="2._Installation_of_Chamilo_LMS"></a><span style="font-weight: bold;">2. Instalación de Chamilo LMS</span></h2>
@@ -700,7 +727,8 @@ por ejemplo. El efecto debería ser inmediato.
   location / {
     rewrite ^/courses/([^/]+)/$ /main/course_home/course_home.php?cDir=$1 last;
     rewrite ^/courses/([^/]+)/index.php$ /main/course_home/course_home.php?cDir=$1 last;
-    rewrite ^/badge/(\d+)/user/(\d+)$ /main/badge/issued.php?skill=$1&user=$2 last;
+    rewrite ^/skill/(\d+)/user/(\d+)$ /main/badge/issued_all.php?skill=$1&user=$2 last;
+    rewrite ^/badge/(\d+)/user/(\d+)$ /main/badge/issued_all.php?skill=$1&user=$2 last;
     try_files $uri @rewrite;
   }
 
@@ -716,6 +744,7 @@ por ejemplo. El efecto debería ser inmediato.
     rewrite ^/courses/([^/]+)/$ /main/course_home/course_home.php?cDir=$1 last;
     rewrite ^/courses/([^/]+)/index.php$ /main/course_home/course_home.php?cDir=$1 last;
     rewrite ^/session/([^/]+)/about/?$ /main/session/about.php?session_id=$1 last;
+    rewrite ^/badge/([^/]+) /main/badge/issued.php?issue=$1 last;
     rewrite ^/main/exercice/(.+)$ /main/exercise/$1 last;
     rewrite ^/main/newscorm/(.+)$ /main/lp/$1 last;
 
@@ -748,15 +777,15 @@ por ejemplo. El efecto debería ser inmediato.
   }
 </pre>
 
-Apache2: La configuración para nuestro sitio de ejemplo my.chamilo10.net sería la siguiente:
+Apache2: La configuración para nuestro sitio de ejemplo my.chamilo.net sería la siguiente:
 
 <pre>
 &lt;VirtualHost *:80&gt;
   ServerAdmin root@localhost
-  DocumentRoot /var/www/my.chamilo10.net/www
-  ServerName my.chamilo10.net
-  ErrorLog  /var/log/apache2/my.chamilo10.net-error.log
-  CustomLog /var/log/apache2/my.chamilo10.net-access.log combined
+  DocumentRoot /var/www/my.chamilo.net/www
+  ServerName my.chamilo.net
+  ErrorLog  /var/log/apache2/my.chamilo.net-error.log
+  CustomLog /var/log/apache2/my.chamilo.net-access.log combined
 
   ErrorDocument 401 /public/error-401.html
   DirectoryIndex index.php index.html
@@ -772,22 +801,27 @@ Apache2: La configuración para nuestro sitio de ejemplo my.chamilo10.net sería
 	Options -Indexes
   &lt;/Directory&gt;
 
-  &lt;Directory "/var/www/my.chamilo10.net/www"&gt;
+  &lt;Directory "/var/www/chamilo"&gt;
 	RewriteEngine On
 	RewriteCond %{QUERY_STRING} ^id=(.*)$
 	RewriteRule ^([^/.]+)/?$ user.php?$1 [L]
 	RewriteRule ^certificates/$ certificates/index.php?id=%1 [L]
 	RewriteRule ^courses/([^/]+)/$ main/course_home/course_home.php?cDir=$1 [QSA,L]
 	RewriteRule ^courses/([^/]+)/index.php$ main/course_home/course_home.php?cDir=$1 [QSA,L]
+	RewriteRule ^courses/([^/]+)/document/certificates/(.*)$ app/courses/$1/document/certificates/$2 [QSA,L]
 	RewriteRule ^courses/([^/]+)/document/(.*)$ main/document/download.php?doc_url=/$2&cDir=$1 [QSA,L]
+	RewriteRule ^courses/([^/]+)/scorm/(.*)$ main/document/download_scorm.php?doc_url=/$2&cDir=$1 [QSA,L]
 	RewriteRule ^courses/([^/]+)/work/(.*)$ main/work/download.php?file=work/$2&cDir=$1 [QSA,L]
-	RewriteRule ^courses/([^/]+)/upload/(.*)$ main/courses/$1/upload/$2 [QSA,L]
-	RewriteRule ^courses/([^/]+)/course-pic85x85.png$ main/courses/$1/course-pic85x85.png [QSA,L]
+	RewriteRule ^courses/([^/]+)/upload/(.*)$ app/courses/$1/upload/$2 [QSA,L]
+	RewriteRule ^courses/([^/]+)/course-pic85x85.png$ app/courses/$1/course-pic85x85.png [QSA,L]
 	RewriteRule ^courses/([^/]+)/course-pic.png$ app/courses/$1/course-pic.png [QSA,L]
+	RewriteRule ^main/upload/users/(.*)/(.*)/my_files/(.*)$ app/upload/users/$1/$2/my_files/$3 [QSA,L]
 	RewriteRule ^session/(\d{1,})/about/?$ main/session/about.php?session_id=$1 [L]
     RewriteRule ^badge/(\d{1,})/user/(\d{1,}) main/badge/issued.php?skill=$1&user=$2 [L]
+	RewriteRule ^main/admin/$ main/admin/index.php [QSA,L]
     RewriteRule ^main/exercice/(.+)$ main/exercise/$1 [QSA,L]
     RewriteRule ^main/newscorm/(.*)$ main/lp/$1 [QSA,L]
+	RewriteRule ^courses/(.*)$ app/courses/$1 [QSA,L]
   &lt;/Directory&gt;
 
   php_value display_errors Off
@@ -798,7 +832,7 @@ Apache2: La configuración para nuestro sitio de ejemplo my.chamilo10.net sería
   # E_ALL:  php_admin_value error_reporting 6143
   # E_ALL & ^E_NOTICE:
   php_admin_value error_reporting 6135
-  #php_admin_value session.save_path /var/www/my.chamilo10.net/sessions/
+  #php_admin_value session.save_path /var/www/my.chamilo.net/sessions/
   php_admin_value short_open_tag Off
   php_value session.cookie_httponly 1
 

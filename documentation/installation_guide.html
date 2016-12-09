@@ -102,6 +102,35 @@ only a specific database. Please refer to the MySQL or MariaDB documentation in 
 <br />
 <span class="text-muted">Chamilo versions prior to 1.9.0 required to choose between multiple databases and a deprecated single-database mode.
     This has been cleaned up and simplified to one single database.</span><br />
+
+<h3><span style="font-weight: bold;">Apache's redirects</span></h3>
+    <p>
+        Since version 1.10, Chamilo requires the web server to be able to deal with redirects. This is now very common within web platforms (be them CMS, LMS, ERP, etc) and allows them, between other things, to use URLs in an efficient and user-friendly manner.<br />
+        If you don't use Apache as a web server, go to section "Rewrite configurations" at the end of this document.<br />
+        If you do use Apache, configuring redirects is done in two small steps:
+    <ul>
+        <li>Enable the "rewrite" module in Apache (on the command line, run "<i>sudo a2enmod rewrite</i>")</li>
+        <li>Configure the Apache's VirtualHost for your Chamilo to include the following block, which will allow .htaccess files within Chamilo to be interpreted</li>
+    </ul>
+    For Apache <=2.2:
+    <pre>
+    &lt;Directory /&gt;
+        AllowOverride All
+        Order allow,deny
+        allow from all
+    &lt;/Directory&gt;
+    </pre>
+    and for Apache >=2.4:
+    <pre>
+    &lt;Directory /&gt;
+        AllowOverride All
+        Require all granted
+    &lt;/Directory&gt;
+    </pre>
+    <br />
+    Once configured (and maybe this has already been done by your hosting provider), you can simply restart the web server to enable the change.
+    </p>
+
 <hr style="width: 100%; height: 2px;" />
 <h2><a name="2._Installation_of_Chamilo_LMS"></a><span style="font-weight: bold;">2. Installation of Chamilo LMS</span></h2>
 <p>
@@ -605,8 +634,10 @@ This can easily be modified by editing the app/config/configuration.php file, fi
 Feel free to change this to<br />
 <pre>// Custom name_order_conventions
 $_configuration['name_order_conventions'] = array(
- 'french' => array('format' => 'first_name last_name', 'sort_by' => 'last_name')
-);</pre><br />
+  'french' => array('format' => 'first_name last_name', 'sort_by' => 'last_name')
+);
+</pre>
+<br />
 for example. The effect should be immediate.
 </p>
 Please note that, although Chamilo allows you to define its position, the "title" field does not exist at this time, so no need to worry about it.
@@ -653,19 +684,23 @@ If you have issues with files taking a long time to download, make sure you reco
     <p>
         To enable .htaccess on Apache, you just need to check 1 thing: In a &lt;Directory&gt; block of the root folder of Chamilo, ensure the following lines are present:
         <pre>
+    &lt;Directory /&gt;
         AllowOverride All
 		Order allow,deny
 		allow from all
-        </pre>
+    &lt;/Directory&gt;
+    </pre>
     or, if you are working with Apache 2.4, that syntax changed a little and looks more like this:
     <pre>
+    &lt;Directory /&gt;
         AllowOverride All
         Require all granted
+    &lt;/Directory&gt;
     </pre>
     </p>
     <h3>Apache RewriteRules</h3>
     <pre>
-          &lt;LocationMatch "/.git*"&gt;
+  &lt;LocationMatch "/.git*"&gt;
 	order deny,allow
 	deny from all
   &lt;/LocationMatch&gt;
@@ -682,15 +717,20 @@ If you have issues with files taking a long time to download, make sure you reco
 	RewriteRule ^certificates/$ certificates/index.php?id=%1 [L]
 	RewriteRule ^courses/([^/]+)/$ main/course_home/course_home.php?cDir=$1 [QSA,L]
 	RewriteRule ^courses/([^/]+)/index.php$ main/course_home/course_home.php?cDir=$1 [QSA,L]
+	RewriteRule ^courses/([^/]+)/document/certificates/(.*)$ app/courses/$1/document/certificates/$2 [QSA,L]
 	RewriteRule ^courses/([^/]+)/document/(.*)$ main/document/download.php?doc_url=/$2&cDir=$1 [QSA,L]
+	RewriteRule ^courses/([^/]+)/scorm/(.*)$ main/document/download_scorm.php?doc_url=/$2&cDir=$1 [QSA,L]
 	RewriteRule ^courses/([^/]+)/work/(.*)$ main/work/download.php?file=work/$2&cDir=$1 [QSA,L]
-	RewriteRule ^courses/([^/]+)/upload/(.*)$ main/courses/$1/upload/$2 [QSA,L]
-	RewriteRule ^courses/([^/]+)/course-pic85x85.png$ main/courses/$1/course-pic85x85.png [QSA,L]
+	RewriteRule ^courses/([^/]+)/upload/(.*)$ app/courses/$1/upload/$2 [QSA,L]
+	RewriteRule ^courses/([^/]+)/course-pic85x85.png$ app/courses/$1/course-pic85x85.png [QSA,L]
 	RewriteRule ^courses/([^/]+)/course-pic.png$ app/courses/$1/course-pic.png [QSA,L]
+	RewriteRule ^main/upload/users/(.*)/(.*)/my_files/(.*)$ app/upload/users/$1/$2/my_files/$3 [QSA,L]
 	RewriteRule ^session/(\d{1,})/about/?$ main/session/about.php?session_id=$1 [L]
     RewriteRule ^badge/(\d{1,})/user/(\d{1,}) main/badge/issued.php?skill=$1&user=$2 [L]
+	RewriteRule ^main/admin/$ main/admin/index.php [QSA,L]
     RewriteRule ^main/exercice/(.+)$ main/exercise/$1 [QSA,L]
     RewriteRule ^main/newscorm/(.*)$ main/lp/$1 [QSA,L]
+	RewriteRule ^courses/(.*)$ app/courses/$1 [QSA,L]
   &lt;/Directory&gt;
     </pre>
     <h3>Nginx</h3>

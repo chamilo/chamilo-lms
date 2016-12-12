@@ -29,8 +29,10 @@ $em = Database::getManager();
 $extraField = $em->getRepository('ChamiloCoreBundle:ExtraField');
 $extraField = $extraField->findOneBy(['variable' => $extraFieldName]);
 
-$extraFieldValues = $em->getRepository('ChamiloCoreBundle:ExtraFieldValues');
-$extraFieldValues = $extraFieldValues->findBy(['field' => $extraField->getId()]);
+if ($extraField) {
+    $extraFieldValues = $em->getRepository('ChamiloCoreBundle:ExtraFieldValues');
+    $extraFieldValues = $extraFieldValues->findBy(['field' => $extraField->getId()]);
+}
 
 $templateName = get_lang('UsersCoordinatesMap');
 

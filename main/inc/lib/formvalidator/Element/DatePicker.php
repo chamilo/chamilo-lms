@@ -49,7 +49,7 @@ class DatePicker extends HTML_QuickForm_text
                 <span class="input-group-addon">
                     <input ' . $this->_getAttrString($this->_attributes) . '>
                 </span>
-                <input class="form-control" type="text" readonly id="' . $id . '_alt" value="' . $value . '">
+                <input class="form-control" type="text" disabled id="' . $id . '_alt" value="' . $value . '">
                 <span class="input-group-btn">
                     <button class="btn btn-default" type="button">
                         <span class="fa fa-times text-danger" aria-hidden="true"></span>

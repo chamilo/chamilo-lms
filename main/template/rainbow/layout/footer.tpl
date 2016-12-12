@@ -1,10 +1,14 @@
 {#  Plugins for pref footer section #}
-{% if plugin_pre_footer is not null %}
-    <div id="plugin_pre_footer">
-        {{ plugin_pre_footer }}
-    </div>
-{% endif %}
+
 <footer class="sticky-footer"> <!-- start of #footer section -->
+    <div class="pre-footer">
+        {% if plugin_pre_footer is not null %}
+            <div id="plugin_pre_footer" class="text-center">
+                {{ plugin_pre_footer }}
+            </div>
+        {% endif %}
+    </div>
+    <div class="sub-footer">
     <div class="container">
         <div class="row">
             <div id="footer_left" class="col-md-4">
@@ -48,6 +52,7 @@
             {{ footer_extra_content }}
         </div>
     </div><!-- end of #container -->
+    </div>
 </footer>
 
 <div class="modal fade" id="expand-image-modal" tabindex="-1" role="dialog" aria-labelledby="expand-image-modal-title" aria-hidden="true">

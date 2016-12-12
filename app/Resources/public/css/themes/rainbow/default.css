@@ -513,7 +513,12 @@ footer #footer_right{
   padding-left: 0.2em;
 }
 /* End Jquery UI */
-footer{
+.footer .pre-footer{
+    padding-bottom: 5px;
+    padding-top: 5px;
+    margin-bottom: 10px;
+}
+footer .sub-footer{
   background-color:#ECECEC;
 }
 footer{

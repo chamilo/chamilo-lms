@@ -1364,7 +1364,7 @@ class Event
                     WHERE exe_id = {$row['exe_id']}";
             $res_question = Database::query($sql);
             while ($row_q = Database::fetch_array($res_question, 'ASSOC')) {
-                $list[$row['exe_id']]['question_list'][$row_q['question_id']] = $row_q;
+                $list[$row['exe_id']]['question_list'][$row_q['question_id']][] = $row_q;
             }
         }
         return $list;

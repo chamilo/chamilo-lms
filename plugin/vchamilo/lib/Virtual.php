@@ -852,7 +852,7 @@ class Virtual
 
     /**
      * @param object $instance
-     * @return \Doctrine\DBAL\Connection
+     * @return bool|\Doctrine\DBAL\Connection
      */
     public static function getConnectionFromInstance($instance, $getManager = false)
     {
@@ -888,8 +888,10 @@ class Virtual
 
             return $manager->getConnection();
         } catch (Exception $e) {
-            echo $e->getMessage();
+            error_log($e->getMessage());
         }
+
+        return false;
     }
 
     /**
@@ -935,6 +937,17 @@ class Virtual
                 Display::return_message('You cannot use the same database as the chamilo master', 'error')
             );
 
+            return ;
+        }
+
+        $connection = Virtual::getConnectionFromInstance($data);
+        if (!$connection) {
+            Display::addFlash(
+                Display::return_message(
+                    'Cannot connect to database with params: '.print_r($data, 1),
+                    'error'
+                )
+            );
             return ;
         }
 
@@ -1209,18 +1222,6 @@ class Virtual
     }
 
     /**
-     * @param stdClass $params
-     */
-    public static function upgradeInstance($params)
-    {
-        $connection = Virtual::getConnectionFromInstance($params);
-        $statement = $connection->query('SELECT * FROM settings_current');
-        $settings = $statement->fetchAll();
-        $settings = array_column($settings, 'selected_value', 'variable');
-        $settings['data_base'];
-    }
-
-    /**
      * @param string $slug
      *
      * @return string
@@ -1301,19 +1302,25 @@ class Virtual
     public static function canBeUpgraded($instance)
     {
         $connection = Virtual::getConnectionFromInstance($instance);
-        $statement = $connection->query('SELECT * FROM settings_current WHERE variable = "chamilo_database_version"');
-        $settings = $statement->fetchAll();
-        $settings = array_column($settings, 'selected_value', 'variable');
-        $version = $settings['chamilo_database_version'];
-        $versionParts = explode('.', $version);
-        $version = implode('.', [$versionParts[0], $versionParts[1], '0']);
+        if ($connection) {
+            $sql = 'SELECT * FROM settings_current WHERE variable = "chamilo_database_version"';
+            $statement = $connection->query($sql);
+            $settings = $statement->fetchAll();
+            $settings = array_column($settings, 'selected_value', 'variable');
+            $version = $settings['chamilo_database_version'];
+            $versionParts = explode('.', $version);
+            $version = implode('.', [$versionParts[0], $versionParts[1], '0']);
 
-        $currentVersion = api_get_setting('chamilo_database_version');
-        $versionParts = explode('.', $currentVersion);
-        $currentVersion = implode('.', [$versionParts[0], $versionParts[1], '0']);
+            $currentVersion = api_get_setting('chamilo_database_version');
+            $versionParts = explode('.', $currentVersion);
+            $currentVersion = implode(
+                '.',
+                [$versionParts[0], $versionParts[1], '0']
+            );
 
-        if (version_compare($version, $currentVersion, '<')) {
-            return $version;
+            if (version_compare($version, $currentVersion, '<')) {
+                return $version;
+            }
         }
 
         return false;

@@ -45,15 +45,19 @@ if ($form->validate() && $canBeUpgraded) {
     require_once api_get_path(SYS_CODE_PATH).'install/install.lib.php';
 
     $manager = Virtual::getConnectionFromInstance($instance, true);
-    ob_start();
-    $result = migrateSwitch($canBeUpgraded, $manager, false);
-    $data = ob_get_clean();
-    if ($result) {
-        Display::addFlash(Display::return_message(get_lang('Upgraded')));
+    if ($manager) {
+        ob_start();
+        $result = migrateSwitch($canBeUpgraded, $manager, false);
+        $data = ob_get_clean();
+        if ($result) {
+            Display::addFlash(Display::return_message(get_lang('Upgraded')));
+        } else {
+            Display::addFlash(Display::return_message(get_lang('Error')));
+        }
+        $content = $data;
     } else {
         Display::addFlash(Display::return_message(get_lang('Error')));
     }
-    $content = $data;
 }
 
 $tpl = new Template(get_lang('Upgrade'), true, true, false, true, false);

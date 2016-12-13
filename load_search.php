@@ -638,10 +638,14 @@ if (!empty($filterToSend)) {
     $date->add(new DateInterval('P2D'));
     $userEndDatePlus = $date->format('Y-m-d h:i:s');
 
+    // Ofaj fix
+    $userStartDateMinus = str_replace('12:00:00', '00:00:00', $userStartDateMinus);
+    $userEndDatePlus = str_replace('12:00:00', '23:59:59', $userEndDatePlus);
+
     // Special OFAJ date logic
     $sql = " AND (
         (s.access_start_date > '$userStartDateMinus' AND s.access_end_date < '$userEndDatePlus') OR
-        (s.access_start_date > '$userStartDateMinus' AND (s.access_start_date = '' OR s.access_start_date IS NULL)) OR 
+        (s.access_start_date >= '$userStartDateMinus' AND (s.access_end_date = '' OR s.access_end_date IS NULL)) OR 
         ((s.access_start_date = '' OR s.access_start_date IS NULL) AND (s.access_end_date = '' OR s.access_end_date IS NULL))
     )";
 
@@ -679,7 +683,12 @@ if (!empty($filterToSend)) {
                     $selectedValue = $filterItem['data'];
                 }
 
-                $newOptions = array_column($extraFieldSessionData['options'], 'option_value',  'option_order');
+                $newOptions = array_column(
+                    $extraFieldSessionData['options'],
+                    'option_value',
+                    'option_order'
+                );
+
                 $searchOptions = [];
                 for ($i = 1; $i < count($newOptions); $i++) {
                     if ($selectedValue == $newOptions[$i]) {

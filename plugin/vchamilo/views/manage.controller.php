@@ -64,39 +64,37 @@ switch ($action) {
             foreach ($todelete as $fooid => $instance) {
                 $slug = $instance['slug'];
 
-                if (empty($slug)) {
-                   continue;
-                }
+                if (!empty($slug)) {
+                    // Remove all files and eventual symlinks
+                    $absalternatecourse = Virtual::getConfig('vchamilo', 'course_real_root');
+                    $coursedir = $absalternatecourse.$slug;
 
-                // Remove all files and eventual symlinks
-                $absalternatecourse = Virtual::getConfig('vchamilo', 'course_real_root');
-                $coursedir = $absalternatecourse.$slug;
+                    Display::addFlash(Display::return_message("Deleting $coursedir"));
 
-                Display::addFlash(Display::return_message("Deleting $coursedir"));
+                    removeDir($coursedir);
 
-                removeDir($coursedir);
+                    if ($absalternatehome = Virtual::getConfig('vchamilo', 'home_real_root')) {
+                        $homedir = $absalternatehome.'/'.$slug;
 
-                if ($absalternatehome = Virtual::getConfig('vchamilo', 'home_real_root')) {
-                    $homedir = $absalternatehome.'/'.$slug;
+                        Display::addFlash(Display::return_message("Deleting $homedir"));
+                        removeDir($homedir);
+                    }
 
-                    Display::addFlash(Display::return_message("Deleting $homedir"));
-                    removeDir($homedir);
-                }
+                    // delete archive
+                    if ($absalternatearchive = Virtual::getConfig('vchamilo', 'archive_real_root')) {
+                        $archivedir = $absalternatearchive.'/'.$slug;
 
-                // delete archive
-                if ($absalternatearchive = Virtual::getConfig('vchamilo', 'archive_real_root')) {
-                    $archivedir = $absalternatearchive.'/'.$slug;
+                        Display::addFlash(Display::return_message("Deleting $archivedir"));
+                        removeDir($archivedir);
+                    }
 
-                    Display::addFlash(Display::return_message("Deleting $archivedir"));
-                    removeDir($archivedir);
-                }
+                    // Delete upload
+                    if ($dir = Virtual::getConfig('vchamilo', 'upload_real_root')) {
+                        $dir = $dir.'/'.$slug;
 
-                // Delete upload
-                if ($dir = Virtual::getConfig('vchamilo', 'upload_real_root')) {
-                    $dir = $dir.'/'.$slug;
-
-                    Display::addFlash(Display::return_message("Deleting $dir"));
-                    removeDir($dir);
+                        Display::addFlash(Display::return_message("Deleting $dir"));
+                        removeDir($dir);
+                    }
                 }
 
                 $sql = "DELETE FROM {$table} WHERE id = ".$instance['id'];

@@ -6,3 +6,4 @@ $strings['extra_field_name_help'] = "Ingrese aquí el nombre del campo extra de 
 $strings['enable_api'] = "Enable API";
 $strings['api_key'] = "Api Key";
 $strings['extra_field_name'] = "Extra field name";
+$strings['UsersCoordinatesMap'] = "Users Coordinates Map";

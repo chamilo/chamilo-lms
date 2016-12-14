@@ -34,7 +34,7 @@ if ($extraField) {
     $extraFieldValues = $extraFieldValues->findBy(['field' => $extraField->getId()]);
 }
 
-$templateName = get_lang('UsersCoordinatesMap');
+$templateName = $plugin->get_lang('UsersCoordinatesMap');
 
 $tpl = new Template($templateName);
 

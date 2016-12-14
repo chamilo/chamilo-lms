@@ -75,6 +75,7 @@ class SequenceRepository extends EntityRepository
      *
      * @param int $resourceId
      * @param int $type
+     * @return boolean
      */
     public function deleteResource($resourceId, $type)
     {
@@ -82,7 +83,7 @@ class SequenceRepository extends EntityRepository
 
         if ($sequence && $sequence->hasGraph()) {
             $em = $this->getEntityManager();
-            $graph = $sequence->getUnSerializeGraph();
+            $graph = $sequence->getSequence()->getUnSerializeGraph();
 
             $mainVertex = $graph->getVertex($resourceId);
             $vertices = $graph->getVertices();
@@ -92,10 +93,10 @@ class SequenceRepository extends EntityRepository
                 $subResourceId = $vertex->getId();
                 $subSequence = $this->findRequirementForResource($subResourceId, $type);
                 if ($sequence && $subSequence->hasGraph()) {
-                    $graph = $subSequence->getUnSerializeGraph();
+                    $graph = $subSequence->getSequence()->getUnSerializeGraph();
                     $subMainVertex = $graph->getVertex($resourceId);
                     $subMainVertex->destroy();
-                    $subSequence->setGraphAndSerialize($graph);
+                    $subSequence->getSequence()->setGraphAndSerialize($graph);
                     $em->persist($subSequence);
                 }
             }

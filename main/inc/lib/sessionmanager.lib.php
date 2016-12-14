@@ -1549,6 +1549,18 @@ class SessionManager
 
         $userId = api_get_user_id();
 
+        /** @var \Chamilo\CoreBundle\Entity\Repository\SequenceRepository $repo */
+        $repo = Database::getManager()->getRepository('ChamiloCoreBundle:SequenceResource');
+        $sequenceResourse = $repo->findRequirementForResource(
+            $id_checked,
+            \Chamilo\CoreBundle\Entity\SequenceResource::SESSION_TYPE
+        );
+
+        if ($sequenceResourse) {
+            Display::addFlash(Display::return_message(get_lang('ThereIsASequenceResourceLinkedToThisSessionYouNeedToDeleteItFirst'), 'error'));
+            return false;
+        }
+
         if (is_array($id_checked)) {
             foreach ($id_checked as $sessionId) {
                 self::delete($sessionId);
@@ -1612,8 +1624,6 @@ class SessionManager
         $extraFieldValue = new ExtraFieldValue('session');
         $extraFieldValue->deleteValuesByItem($id_checked);
 
-        /** @var \Chamilo\CoreBundle\Entity\Repository\SequenceRepository $repo */
-        $repo = Database::getManager()->getRepository('ChamiloCoreBundle:SequenceResource');
         $repo->deleteResource(
             $id_checked,
             \Chamilo\CoreBundle\Entity\SequenceResource::SESSION_TYPE
@@ -1627,6 +1637,8 @@ class SessionManager
             api_get_utc_datetime(),
             $userId
         );
+
+        return true;
     }
 
     /**

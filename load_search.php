@@ -639,12 +639,12 @@ if (!empty($filterToSend)) {
     $userEndDatePlus = $date->format('Y-m-d h:i:s');
 
     // Ofaj fix
-    $userStartDateMinus = str_replace('12:00:00', '00:00:00', $userStartDateMinus);
-    $userEndDatePlus = str_replace('12:00:00', '23:59:59', $userEndDatePlus);
+    $userStartDateMinus = api_get_utc_datetime(substr($userStartDateMinus, 0, 11).'00:00:00');
+    $userEndDatePlus = api_get_utc_datetime(substr($userEndDatePlus, 0, 11). '23:59:59');
 
     // Special OFAJ date logic
     $sql = " AND (
-        (s.access_start_date > '$userStartDateMinus' AND s.access_end_date < '$userEndDatePlus') OR
+        (s.access_start_date >= '$userStartDateMinus' AND s.access_end_date < '$userEndDatePlus') OR
         (s.access_start_date >= '$userStartDateMinus' AND (s.access_end_date = '' OR s.access_end_date IS NULL)) OR 
         ((s.access_start_date = '' OR s.access_start_date IS NULL) AND (s.access_end_date = '' OR s.access_end_date IS NULL))
     )";

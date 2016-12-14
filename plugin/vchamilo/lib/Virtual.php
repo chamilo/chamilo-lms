@@ -940,7 +940,10 @@ class Virtual
             return ;
         }
 
+        $databaseName = $data->main_database;
+        $data->main_database = '';
         $connection = Virtual::getConnectionFromInstance($data);
+        $data->main_database = $databaseName;
         if (!$connection) {
             Display::addFlash(
                 Display::return_message(
@@ -952,6 +955,9 @@ class Virtual
         }
 
         $data->root_web = api_add_trailing_slash($data->root_web);
+        if (substr($data->root_web, 4) != 'http') {
+            $data->root_web = api_get_protocol().'://'.$data->root_web;
+        }
 
         self::ctrace('Registering: '.$data->root_web);
         $tablename = Database::get_main_table('vchamilo');

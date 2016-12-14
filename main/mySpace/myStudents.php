@@ -582,18 +582,6 @@ if (!empty($student_id)) {
             <?php
             }
 
-            $icon = ' '.Display::url(
-                get_lang('Generate'),
-                api_get_self().'?action=generate_certificate&student='.$student_id.'&course='.$course_code,
-                ['class' => 'btn btn-primary btn-xs']
-            );
-
-            echo '<tr>
-                <td align="right">';
-            echo get_lang('Certificate').' </td>  <td align="left">'.$icon;
-            echo '</td></tr>';
-
-
             if (api_get_setting('allow_terms_conditions') === 'true') {
                 $isBoss = UserManager::userIsBossOfStudent(api_get_user_id(), $student_id);
 
@@ -622,6 +610,18 @@ if (!empty($student_id)) {
                     echo '</td></tr>';
                 }
             }
+
+            $icon = ' '.Display::url(
+                get_lang('Generate'),
+                api_get_self().'?action=generate_certificate&student='.$student_id.'&course='.$course_code,
+                ['class' => 'btn btn-primary btn-xs']
+            );
+
+            echo '<tr>
+                <td align="right">';
+            echo get_lang('Certificate').' </td>  <td align="left">'.$icon;
+            echo '</td></tr>';
+
             ?>
             </tbody>
         </table>

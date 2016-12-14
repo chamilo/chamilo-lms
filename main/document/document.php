@@ -1736,7 +1736,7 @@ if (!$is_certificate_mode) {
 $table_footer = '';
 $total_size = 0;
 $sortable_data = array();
-
+$row = array();
 if (isset($documentAndFolders) && is_array($documentAndFolders)) {
     if ($groupId == 0 ||
         GroupManager::user_has_access(

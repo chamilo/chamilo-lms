@@ -199,6 +199,7 @@ function prepare_user_sql_query($is_count)
         'keyword_officialcode',
         'keyword_status',
         'keyword_active',
+        'keyword_inactive',
         'check_easy_passwords'
     );
 
@@ -258,16 +259,19 @@ function prepare_user_sql_query($is_count)
                     u.lastname LIKE '". Database::escape_string("%".$keywordListValues['keyword_lastname']."%")."' AND
                     u.username LIKE '". Database::escape_string("%".$keywordListValues['keyword_username']."%")."' AND
                     u.email LIKE '". Database::escape_string("%".$keywordListValues['keyword_email']."%")."' AND
-                    u.official_code LIKE '". Database::escape_string("%".$keywordListValues['keyword_officialcode']."%")."' AND
-                    u.status LIKE '".Database::escape_string($keywordListValues['keyword_status'])."'
-                    $keyword_admin
-                    $keyword_extra_value
-                ";
+                    u.status LIKE '".Database::escape_string($keywordListValues['keyword_status'])."' ";
+        if (!empty($keywordListValues['keyword_officialcode'])) {
+            $sql .= " AND u.official_code LIKE '" . Database::escape_string("%" . $keywordListValues['keyword_officialcode'] . "%") . "' ";
+        }
+        $sql .= "
+            $keyword_admin
+            $keyword_extra_value
+        ";
 
-        if (isset($keyword_active) && !isset($keyword_inactive)) {
-            $sql .= " AND u.active='1'";
-        } elseif (isset($keyword_inactive) && !isset($keyword_active)) {
-            $sql .= " AND u.active='0'";
+        if (isset($keywordListValues['keyword_active']) && !isset($keywordListValues['keyword_inactive'])) {
+            $sql .= " AND u.active = 1";
+        } elseif (isset($keywordListValues['keyword_inactive']) && !isset($keywordListValues['keyword_active'])) {
+            $sql .= " AND u.active = 0";
         }
         $sql .= " ) ";
     }

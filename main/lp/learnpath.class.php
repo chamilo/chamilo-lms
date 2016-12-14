@@ -7,6 +7,7 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 use Gedmo\Sortable\Entity\Repository\SortableRepository;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
 
 /**
  * Class learnpath
@@ -9888,12 +9889,25 @@ class learnpath
             }
 
             if (file_exists($filePath) && $copyAll) {
-                $containerOrigin = dirname($filePath);
-                $containerDestination = dirname($dest_file);
+                $extension = $this->get_extension($filePath);
+                if (in_array($extension, ['html', 'html'])) {
+                    $containerOrigin = dirname($filePath);
+                    $containerDestination = dirname($dest_file);
 
-                if (is_dir($containerOrigin) && is_dir($containerDestination)) {
-                    $fs = new Filesystem();
-                    $fs->mirror($containerOrigin, $containerDestination);
+                    $finder = new Finder();
+                    $finder->files()->in($containerOrigin)
+                        ->exclude('share_folder')
+                        ->exclude('chat_files')
+                        ->exclude('certificates');
+
+                    if (is_dir($containerOrigin) && is_dir($containerDestination)) {
+                        $fs = new Filesystem();
+                        $fs->mirror(
+                            $containerOrigin,
+                            $containerDestination,
+                            $finder
+                        );
+                    }
                 }
             }
         }

@@ -259,4 +259,6 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 //$_configuration['sync_db_with_schema'] = false;
 // Load course notifications in user_portal.php using ajax
 //$_configuration['user_portal_load_notification_by_ajax'] = false;
+// When exporting a LP, all files and folders in the same path of an html will be exported too.
+//$_configuration['add_all_files_in_lp_export'] = false;
 

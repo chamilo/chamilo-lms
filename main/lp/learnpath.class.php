@@ -9170,7 +9170,9 @@ class learnpath
             closedir($handle);
         }
         $zip_files = $zip_files_abs = $zip_files_dist = array();
-        if (is_dir($current_course_path.'/scorm/'.$this->path) && is_file($current_course_path.'/scorm/'.$this->path.'/imsmanifest.xml')) {
+        if (is_dir($current_course_path.'/scorm/'.$this->path) &&
+            is_file($current_course_path.'/scorm/'.$this->path.'/imsmanifest.xml')
+        ) {
             // Remove the possible . at the end of the path.
             $dest_path_to_lp = substr($this->path, -1) == '.' ? substr($this->path, 0, -1) : $this->path;
             $dest_path_to_scorm_folder = str_replace('//','/',$temp_zip_dir.'/scorm/'.$dest_path_to_lp);
@@ -9517,7 +9519,6 @@ class learnpath
                 $resources->appendChild($my_resource);
                 $zip_files[] = $my_file_path;
             } else {
-
                 // If the item is a quiz or a link or whatever non-exportable, we include a step indicating it.
                 switch ($item->type) {
                     case TOOL_LINK:
@@ -9833,21 +9834,26 @@ class learnpath
         $root->appendChild($resources);
         $xmldoc->appendChild($root);
 
+        $copyAll = api_get_configuration_value('add_all_files_in_lp_export');
 
         // TODO: Add a readme file here, with a short description and a link to the Reload player
         // then add the file to the zip, then destroy the file (this is done automatically).
         // http://www.reload.ac.uk/scormplayer.html - once done, don't forget to close FS#138
+
         foreach ($zip_files as $file_path) {
             if (empty($file_path)) {
                 continue;
             }
 
+            $filePath = $sys_course_path.$_course['path'].'/'.$file_path;
             $dest_file = $archive_path.$temp_dir_short.'/'.$file_path;
+
             if (!empty($path_to_remove) && !empty($path_to_replace)) {
                 $dest_file = str_replace($path_to_remove, $path_to_replace, $dest_file);
             }
             $this->create_path($dest_file);
-            @copy($sys_course_path.$_course['path'].'/'.$file_path, $dest_file);
+            @copy($filePath, $dest_file);
+
             // Check if the file needs a link update.
             if (in_array($file_path, array_keys($link_updates))) {
                 $string = file_get_contents($dest_file);
@@ -9879,6 +9885,16 @@ class learnpath
                     }
                 }
                 file_put_contents($dest_file, $string);
+            }
+
+            if (file_exists($filePath) && $copyAll) {
+                $containerOrigin = dirname($filePath);
+                $containerDestination = dirname($dest_file);
+
+                if (is_dir($containerOrigin) && is_dir($containerDestination)) {
+                    $fs = new Filesystem();
+                    $fs->mirror($containerOrigin, $containerDestination);
+                }
             }
         }
 

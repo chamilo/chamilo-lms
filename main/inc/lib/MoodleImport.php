@@ -627,10 +627,11 @@ class MoodleImport
     {
         if ($importedFiles) {
             foreach ($importedFiles as $old => $new) {
-                $text = str_replace($old, $new, $text);
-                $old = str_replace(' ', '%20', $old);
-                $text = str_replace($old, $new, $text);
-                //$text = utf8_encode($text);
+                // Ofaj fix moodle file names
+                // In some questions moodle text contains file with name like:
+                // Bild%20Check-In-Formular%20Ausfu%CC%88llen.jpg"
+                // rawurlencode function transforms '' (whitespace) to %20 and so on
+                $text = str_replace(rawurlencode($old), $new, $text);
             }
         }
 

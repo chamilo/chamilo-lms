@@ -230,13 +230,13 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null)
                 $sendToUserFullName = '';
                 if ($sendToUser) {
                     $sendToUserInfo = api_get_user_info($sendToUser);
-                    $sendToUserFullName = $sendToUserInfo['complete_name'];
+                    $sendToUserFirstname = $sendToUserInfo['firstname'];
                 }
                 $currentUserInfo = api_get_user_info();
                 $default['title'] = get_lang('OfajEndLPSubject');
                 $default['content'] = sprintf(
                     get_lang('OfajEndLpDescription'),
-                    $sendToUserFullName,
+                    $sendToUserFirstname,
                     $currentUserInfo['complete_name'],
                     $currentUserInfo['complete_name']
                 );

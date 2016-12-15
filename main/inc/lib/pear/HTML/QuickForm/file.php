@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
  * HTML class for a file upload field
@@ -36,16 +35,11 @@
  */
 class HTML_QuickForm_file extends HTML_QuickForm_input
 {
-    // {{{ properties
-
    /**
     * Uploaded file data, from $_FILES
     * @var array
     */
     var $_value = null;
-
-    // }}}
-    // {{{ constructor
 
     /**
      * Class constructor
@@ -61,12 +55,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
     {
         parent::__construct($elementName, $elementLabel, $attributes);
         $this->setType('file');
-
-
-    } //end constructor
-
-    // }}}
-    // {{{ setSize()
+    }
 
     /**
      * Sets size of file element
@@ -78,10 +67,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
     function setSize($size)
     {
         $this->updateAttributes(array('size' => $size));
-    } //end func setSize
-
-    // }}}
-    // {{{ getSize()
+    }
 
     /**
      * Returns size of file element
@@ -93,10 +79,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
     function getSize()
     {
         return $this->getAttribute('size');
-    } //end func getSize
-
-    // }}}
-    // {{{ freeze()
+    }
 
     /**
      * Freeze the element so that only its value is returned
@@ -107,10 +90,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
     function freeze()
     {
         return false;
-    } //end func freeze
-
-    // }}}
-    // {{{ setValue()
+    }
 
     /**
      * Sets value for file element.
@@ -128,10 +108,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
     function setValue($value)
     {
         return null;
-    } //end func setValue
-
-    // }}}
-    // {{{ getValue()
+    }
 
     /**
      * Returns information about the uploaded file
@@ -329,6 +306,9 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
         </script>';
     }
 
+    /**
+     * @return string
+     */
     public function toHtml()
     {
         $js = '';
@@ -345,6 +325,5 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
         } else {
             return $js.$this->_getTabs() . '<input' . $this->_getAttrString($this->_attributes) . ' />';
         }
-    } //end func toHtml
-
+    }
 }

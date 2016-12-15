@@ -273,7 +273,7 @@ $result = & api_get_settings('Plugins', 'list', $_configuration['access_url']);
 $_plugins = array();
 foreach ($result as & $row) {
     $key = & $row['variable'];
-    if (is_string($_setting[$key])) {
+    if (isset($_setting[$key]) && is_string($_setting[$key])) {
         $_setting[$key] = array();
     }
     $_setting[$key][] = $row['selected_value'];

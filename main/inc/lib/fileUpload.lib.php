@@ -77,8 +77,11 @@ function process_uploaded_file($uploaded_file, $show_output = true)
             case 1:
                 // The uploaded file exceeds the upload_max_filesize directive in php.ini.
                 if ($show_output) {
-                    Display::display_error_message(
-                        get_lang('UplExceedMaxServerUpload').ini_get('upload_max_filesize')
+                    Display::addFlash(
+                        Display::return_message(
+                            get_lang('UplExceedMaxServerUpload').ini_get('upload_max_filesize'),
+                            'error'
+                        )
                     );
                 }
 
@@ -89,21 +92,36 @@ function process_uploaded_file($uploaded_file, $show_output = true)
                 // (e.g. image upload in html editor).
                 $max_file_size = intval($_POST['MAX_FILE_SIZE']);
                 if ($show_output) {
-                    Display::display_error_message(get_lang('UplExceedMaxPostSize'). format_file_size($max_file_size));
+                    Display::addFlash(
+                        Display::return_message(
+                            get_lang('UplExceedMaxPostSize'). format_file_size($max_file_size),
+                            'error'
+                        )
+                    );
                 }
 
                 return false;
             case 3:
                 // The uploaded file was only partially uploaded.
                 if ($show_output) {
-                    Display::display_error_message(get_lang('UplPartialUpload').' '.get_lang('PleaseTryAgain'));
+                    Display::addFlash(
+                        Display::return_message(
+                            get_lang('UplPartialUpload').' '.get_lang('PleaseTryAgain'),
+                            'error'
+                        )
+                    );
                 }
 
                 return false;
             case 4:
                 // No file was uploaded.
                 if ($show_output) {
-                    Display::display_error_message(get_lang('UplNoFileUploaded').' '. get_lang('UplSelectFileFirst'));
+                    Display::addFlash(
+                        Display::return_message(
+                            get_lang('UplNoFileUploaded').' '. get_lang('UplSelectFileFirst'),
+                            'error'
+                        )
+                    );
                 }
 
                 return false;
@@ -113,7 +131,7 @@ function process_uploaded_file($uploaded_file, $show_output = true)
     if (!file_exists($uploaded_file['tmp_name'])) {
         // No file was uploaded.
         if ($show_output) {
-            Display::display_error_message(get_lang('UplUploadFailed'));
+            Display::addFlash(Display::return_message(get_lang('UplUploadFailed'), 'error'));
         }
         return false;
     }
@@ -123,7 +141,12 @@ function process_uploaded_file($uploaded_file, $show_output = true)
         if (empty($filesize)) {
             // No file was uploaded.
             if ($show_output) {
-                Display::display_error_message(get_lang('UplUploadFailedSizeIsZero'));
+                Display::addFlash(
+                    Display::return_message(
+                        get_lang('UplUploadFailedSizeIsZero'),
+                        'error'
+                    )
+                );
             }
 
             return false;
@@ -131,14 +154,19 @@ function process_uploaded_file($uploaded_file, $show_output = true)
     }
 
     $course_id = api_get_course_id();
-    //Checking course quota if we are in a course
 
+    //Checking course quota if we are in a course
     if (!empty($course_id)) {
         $max_filled_space = DocumentManager::get_course_quota();
         // Check if there is enough space to save the file
         if (!DocumentManager::enough_space($uploaded_file['size'], $max_filled_space)) {
             if ($show_output) {
-                Display::display_error_message(get_lang('UplNotEnoughSpace'));
+                Display::addFlash(
+                    Display::return_message(
+                        get_lang('UplNotEnoughSpace'),
+                        'error'
+                    )
+                );
             }
 
             return false;
@@ -201,7 +229,6 @@ function handle_uploaded_document(
     }
 
     $userInfo = api_get_user_info();
-
     $uploadedFile['name'] = stripslashes($uploadedFile['name']);
     // Add extension to files without one (if possible)
     $uploadedFile['name'] = add_ext_on_mime($uploadedFile['name'], $uploadedFile['type']);
@@ -282,7 +309,10 @@ function handle_uploaded_document(
                 if (!mkdir($whereToSave, api_get_permissions_for_new_directories())) {
                     if ($output) {
                         Display::addFlash(
-                            Display::return_message(get_lang('DestDirectoryDoesntExist').' ('.$uploadPath.')', 'error')
+                            Display::return_message(
+                                get_lang('DestDirectoryDoesntExist').' ('.$uploadPath.')',
+                                'error'
+                            )
                         );
                     }
 
@@ -451,7 +481,6 @@ function handle_uploaded_document(
 
                             return $filePath;
                         } else {
-
                             // Put the document data in the database
                             $documentId = add_document(
                                 $courseInfo,
@@ -487,6 +516,7 @@ function handle_uploaded_document(
 
                             // If the file is in a folder, we need to update all parent folders
                             item_property_update_on_folder($courseInfo, $uploadPath, $userId);
+
                             // Display success message to user
                             if ($output) {
                                 Display::addFlash(
@@ -534,12 +564,10 @@ function handle_uploaded_document(
                     );
 
                     $documentTitle = get_document_title($cleanName);
-
                     $fullPath = $whereToSave.$fileSystemName;
                     $filePath = $uploadPath.$fileSystemName;
 
                     if (moveUploadedFile($uploadedFile, $fullPath)) {
-
                         chmod($fullPath, $filePermissions);
                         // Put the document data in the database
                         $documentId = add_document(
@@ -579,30 +607,25 @@ function handle_uploaded_document(
 
                         // Display success message to user
                         if ($output) {
-                            if (isset($_POST['moodle_import'])) {
-                                Display::addFlash(
-                                    Display::display_confirmation_message(
-                                        get_lang('UplUploadSucceeded') . '<br />' . get_lang('UplFileSavedAs') . ' ' . $documentTitle,
-                                        false,
-                                        true
-                                    )
-                                );
-                            } else {
-                                Display::display_confirmation_message(
+                            Display::addFlash(
+                                Display::return_message(
                                     get_lang('UplUploadSucceeded') . '<br />' . get_lang('UplFileSavedAs') . ' ' . $documentTitle,
+                                    'success',
                                     false
-                                );
-                            }
+                                )
+                            );
                         }
 
                         return $filePath;
                     } else {
                         if ($output) {
-                            if (isset($_POST['moodle_import'])) {
-                                Display::addFlash(Display::display_error_message(get_lang('UplUnableToSaveFile'), false, true));
-                            } else {
-                                Display::display_error_message(get_lang('UplUnableToSaveFile'));
-                            }
+                            Display::addFlash(
+                                Display::return_message(
+                                    get_lang('UplUnableToSaveFile'),
+                                    'error',
+                                    false
+                                )
+                            );
                         }
 
                         return false;
@@ -612,11 +635,9 @@ function handle_uploaded_document(
                     // Only save the file if it doesn't exist or warn user if it does exist
                     if (file_exists($fullPath) && $docId) {
                         if ($output) {
-                            if (isset($_POST['moodle_import'])) {
-                                Display::addFlash(Display::display_error_message($cleanName.' '.get_lang('UplAlreadyExists'), false, true));
-                            } else {
-                                Display::display_error_message($cleanName.' '.get_lang('UplAlreadyExists'));
-                            }
+                            Display::addFlash(
+                                Display::return_message($cleanName.' '.get_lang('UplAlreadyExists'), 'error', false)
+                            );
                         }
                     } else {
                         if (moveUploadedFile($uploadedFile, $fullPath)) {
@@ -663,23 +684,13 @@ function handle_uploaded_document(
 
                             // Display success message to user
                             if ($output) {
-                                if (isset($_POST['moodle_import'])) {
-                                    Display::addFlash(
-                                        Display::display_confirmation_message(
-                                            get_lang('UplUploadSucceeded') . '<br /> ' . $documentTitle,
-                                            false,
-                                            true
-                                        )
-                                    );
-                                } else {
-                                    Display::addFlash(
-                                        Display::return_message(
-                                            get_lang('UplUploadSucceeded').'<br /> '.$documentTitle,
-                                            'confirmation',
-                                            false
-                                        )
-                                    );
-                                }
+                                Display::addFlash(
+                                    Display::display_confirmation_message(
+                                        get_lang('UplUploadSucceeded') . '<br /> ' . $documentTitle,
+                                        false,
+                                        true
+                                    )
+                                );
                             }
 
                             return $filePath;

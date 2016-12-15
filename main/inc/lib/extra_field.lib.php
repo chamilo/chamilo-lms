@@ -2605,8 +2605,10 @@ JAVASCRIPT;
         // Getting double select if exists
         $double_select = array();
         foreach ($filters->rules as $rule) {
+            if (empty($rule)) {
+                continue;
+            }
             if (strpos($rule->field, '_second') === false) {
-
             } else {
                 $my_field = str_replace('_second', '', $rule->field);
                 $double_select[$my_field] = $rule->data;
@@ -2615,6 +2617,9 @@ JAVASCRIPT;
 
         $condition_array = array();
         foreach ($filters->rules as $rule) {
+            if (empty($rule)) {
+                continue;
+            }
             if (strpos($rule->field, $stringToSearch) === false) {
                 // normal fields
                 $field = $rule->field;

@@ -73,7 +73,7 @@ switch ($lang) {
 }
 
 $htmlHeadXtra[] ='<script>
-$(document).ready(function() {    
+$(document).ready(function() {  
     var themeDefault = "extra_'.$theme.'";
     var extraFiliere = $("input[name=\'extra_filiere[extra_filiere]\']").parent().parent().parent().parent();    
     '.$defaultValueStatus.'
@@ -248,14 +248,23 @@ $userForm = new FormValidator('user_form', 'post', api_get_self());
 $jqueryExtra = '';
 
 $htmlHeadXtra[] ='<script>		
-$(document).ready(function() {	
-	$("#collapseOne").collapse("hide");
-	$("#collapseTwo").collapse("hide");
-	$("#collapseThree").collapse("hide");
-	$("#collapseFour").collapse("hide");
-	$("#collapseFive").collapse("hide");
-	$("#collapseSix").collapse("hide");
-	$("#collapseSeven").collapse("hide");
+$(document).ready(function() {
+	var blocks = [
+        "#collapseOne",
+        "#collapseTwo",
+        "#collapseThree",
+        "#collapseFour",
+        "#collapseFive",
+        "#collapseSix",
+        "#collapseSeven"         
+    ];
+    
+    $.each(blocks, function( index, value ) {          	
+        if (window.location.hash == value) {            
+            return true;
+        }
+        $(value).collapse("hide");
+    });	   
 	
     /*$("#filiere_panel").hide();			
     $("#dispo_panel").hide();    		
@@ -362,6 +371,7 @@ $extra = $extraFieldSession->addElements(
 
 $jqueryExtra .= $extra['jquery_ready_content'];
 
+$userForm->addButtonSave(get_lang('Save'), 'submit_partial[collapseOne]');
 $userForm->addHtml('</div></div></div>');
 
 $userForm->addHtml('<div class="panel panel-default">');
@@ -408,6 +418,8 @@ $extra = $extraField->addElements(
     $forceShowFields //$forceShowFields = false
 );
 
+$userForm->addButtonSave(get_lang('Save'), 'submit_partial[collapseTwo]');
+
 $jqueryExtra .= $extra['jquery_ready_content'];
 
 $userForm->addHtml('</div></div></div>');
@@ -441,6 +453,7 @@ $extra = $extraField->addElements(
 
 $jqueryExtra .= $extra['jquery_ready_content'];
 
+$userForm->addButtonSave(get_lang('Save'), 'submit_partial[collapseThree]');
 $userForm->addHtml('</div></div></div>');
 
 $userForm->addHtml('<div class="panel panel-default">');
@@ -491,6 +504,8 @@ $extra = $extraFieldSession->addElements(
 );
 
 $jqueryExtra .= $extra['jquery_ready_content'];
+
+$userForm->addButtonSave(get_lang('Save'), 'submit_partial[collapseFour]');
 $userForm->addHtml('</div></div></div>');
 
 $userForm->addHtml('<div class="panel panel-default">');
@@ -522,6 +537,8 @@ $extra = $extraFieldSession->addElements(
 );
 
 $jqueryExtra .= $extra['jquery_ready_content'];
+
+$userForm->addButtonSave(get_lang('Save'), 'submit_partial[collapseFive]');
 $userForm->addHtml('</div></div></div>');
 
 $userForm->addHtml('<div class="panel panel-default">');
@@ -548,6 +565,8 @@ $extra = $extraField->addElements(
 );
 
 $jqueryExtra .= $extra['jquery_ready_content'];
+
+$userForm->addButtonSave(get_lang('Save'), 'submit_partial[collapseSix]');
 $userForm->addHtml('</div></div></div>');
 
 $userForm->addHtml('<div class="panel panel-default">');
@@ -575,6 +594,8 @@ $extra = $extraField->addElements(
 );
 
 $jqueryExtra .= $extra['jquery_ready_content'];
+
+$userForm->addButtonSave(get_lang('Save'), 'submit_partial[collapseSeven]');
 $userForm->addHtml('</div></div></div>');
 $userForm->addHtml('</div>');
 
@@ -584,7 +605,7 @@ $(document).ready(function(){
 });
 </script>';
 
-$userForm->addButtonSave(get_lang('Save'));
+$userForm->addButtonSave(get_lang('Send'));
 $userForm->setDefaults($defaults);
 
 /** @var HTML_QuickForm_select $element */
@@ -625,7 +646,17 @@ if ($userForm->validate()) {
     // Saving to user extra fields
     $extraFieldValue = new ExtraFieldValue('user');
     $userData = $userForm->getSubmitValues();
-    $userData['extra_diagnosis_completed'] = 1;
+    $isPartial = false;
+    $block = '';
+    if (isset($userData['submit_partial'])) {
+        $block = key($userData['submit_partial']);
+        $isPartial = true;
+    }
+
+    if ($isPartial === false) {
+        $userData['extra_diagnosis_completed'] = 1;
+    }
+
     $extraFieldValue->saveFieldValues(
         $userData,
         $forceShowFields,
@@ -663,7 +694,6 @@ if ($userForm->validate()) {
 
     foreach ($userData as $key => $value) {
         $found = strpos($key, '__persist__');
-
         if ($found === false) {
             continue;
         }
@@ -736,7 +766,7 @@ if ($userForm->validate()) {
 
     $superiorUserList = UserManager::getStudentBossList($userInfo['user_id']);
 
-    if ($superiorUserList) {
+    if ($superiorUserList && $isPartial == false) {
         $url = api_get_path(WEB_PATH).'load_search.php?user_id='.$userInfo['user_id'];
         $urlContact = api_get_path(WEB_CODE_PATH) . 'messages/inbox.php?f=social';
         $subject = sprintf(get_lang('DiagnosisFromUserX'), $userInfo['complete_name']);
@@ -751,7 +781,13 @@ if ($userForm->validate()) {
         }
     }
 
-    header('Location:'.api_get_self().'?result=1');
+    if ($isPartial) {
+        header('Location:'.api_get_self().'#'.$block);
+    } else {
+        header('Location:'.api_get_self().'?result=1');
+    }
+
+
     exit;
 }
 

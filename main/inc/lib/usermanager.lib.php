@@ -2635,8 +2635,8 @@ class UserManager
                     s.coachAccessStartDate AS coach_access_start_date,
                     s.coachAccessEndDate AS coach_access_end_date
                 FROM ChamiloCoreBundle:Session AS s
-                LEFT JOIN ChamiloCoreBundle:SessionCategory AS sc WITH s.category = sc
-                LEFT JOIN ChamiloCoreBundle:SessionRelCourseRelUser AS scu WITH scu.session = s
+                INNER JOIN ChamiloCoreBundle:SessionRelCourseRelUser AS scu WITH scu.session = s
+                LEFT JOIN ChamiloCoreBundle:SessionCategory AS sc WITH s.category = sc                
                 WHERE scu.user = :user OR s.generalCoach = :user
                 ORDER BY sc.name, s.name";
 
@@ -2661,7 +2661,6 @@ class UserManager
                         if ($row['access_end_date'] > $now) {
                             continue;
                         }
-
                     }
                 } else {
                     // Current user portal

@@ -381,7 +381,6 @@ class SessionManager
                 $where $where_condition ) as session_table";
 
         if (api_is_multiple_url_enabled()) {
-
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
                 $where.= " AND ar.access_url_id = $access_url_id ";
@@ -518,7 +517,7 @@ class SessionManager
         }
 
         if (api_is_multiple_url_enabled()) {
-            $table_access_url_rel_session= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+            $table_access_url_rel_session = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
                 $where.= " AND ar.access_url_id = $access_url_id ";
@@ -559,6 +558,10 @@ class SessionManager
                 }
                 if (api_is_platform_admin()) {
                     $url = api_get_path(WEB_CODE_PATH)."session/resume_session.php?id_session=".$session['id'];
+                }
+
+                if ($extraFieldsToLoad) {
+                    $url = api_get_path(WEB_CODE_PATH)."session/about.php?session_id=".$session['id'];
                 }
                 $session['name'] = Display::url(
                     $session['name'],

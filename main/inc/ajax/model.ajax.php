@@ -147,6 +147,9 @@ if ((isset($_REQUEST['filters2']) && $forceSearch) || ($search || $forceSearch) 
                 $extraField = new ExtraField($type);
 
                 foreach ($filters->rules as $key => $data) {
+                    if (empty($data)) {
+                        continue;
+                    }
                     if ($data->field == 'extra_access_start_date') {
                         $accessStartDate = $data->data;
                     }

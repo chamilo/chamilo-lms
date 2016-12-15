@@ -3,6 +3,7 @@
 
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Filesystem\Exception\IOException;
 
 /**
  * Chamilo LMS
@@ -194,7 +195,12 @@ if (defined('SYSTEM_INSTALLATION')) {
                 error_log("Renaming: '$origin' to '$destination'");
             }
 
-            $fs->remove($origin);
+            try {
+                $fs->remove($origin);
+            } catch (IOException $e) {
+                // If removing the directory doesn't work, just log an error and continue
+                error_log('Could not move ' . $origin . ' to ' . $destination . '(' . $e->getMessage() . '). Please move it manually.');
+            }
         }
     }
 

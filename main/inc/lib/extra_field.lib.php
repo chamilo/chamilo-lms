@@ -1660,27 +1660,34 @@ EOF;
                         $form->addHtml(
                             '<script>
                                 $(document).ready(function() {
-
-                                    var address = "' . $dataValue . '";
-                                    initializeGeo'.$field_details['variable'].'(address, false);
-
-                                    $("#geolocalization_extra_'.$field_details['variable'].'").on("click", function() {
-                                        var address = $("#extra_'.$field_details['variable'].'").val();
+                                    
+                                    if (typeof google === "object") {
+                                        
+                                        var address = "' . $dataValue . '";
                                         initializeGeo'.$field_details['variable'].'(address, false);
-                                        return false;
-                                    });
-
-                                    $("#myLocation_extra_'.$field_details['variable'].'").on("click", function() {
-                                        myLocation'.$field_details['variable'].'();
-                                        return false;
-                                    });
-
-                                    $("#extra_'.$field_details['variable'].'").keypress(function (event) {
-                                        if (event.which == 13) {
-                                            $("#geolocalization_extra_'.$field_details['variable'].'").click();
+    
+                                        $("#geolocalization_extra_'.$field_details['variable'].'").on("click", function() {
+                                            var address = $("#extra_'.$field_details['variable'].'").val();
+                                            initializeGeo'.$field_details['variable'].'(address, false);
                                             return false;
-                                        }
-                                    });
+                                        });
+    
+                                        $("#myLocation_extra_'.$field_details['variable'].'").on("click", function() {
+                                            myLocation'.$field_details['variable'].'();
+                                            return false;
+                                        });
+    
+                                        $("#extra_'.$field_details['variable'].'").keypress(function (event) {
+                                            if (event.which == 13) {
+                                                $("#geolocalization_extra_'.$field_details['variable'].'").click();
+                                                return false;
+                                            }
+                                        });
+                                        
+                                    } else {
+                                        $("#map_extra_'.$field_details['variable'].'").html("<div class=\"alert alert-info\">' . get_lang('YouNeedToActivateTheGoogleMapsPluginInAdminPlatformToSeeTheMap') . '</div>");
+                                    }
+                                    
                                 });
 
                                 function myLocation'.$field_details['variable'].'() {
@@ -1810,32 +1817,37 @@ EOF;
                         $form->addHtml(
                             '<script>
                                 $(document).ready(function() {
-
-                                    var lat = "' . $lat . '";
-                                    var lng = "' . $lng . '";
-                                    var latLng = new google.maps.LatLng(lat, lng);
-                                    initializeGeo'.$field_details['variable'].'(false, latLng);
-
-                                    $("#geolocalization_extra_'.$field_details['variable'].'").on("click", function() {
-                                        var latLng = $("#extra_'.$field_details['variable'].'").val().split(",");
-                                        var lat = latLng[0];
-                                        var lng = latLng[1];
+                                    if (typeof google === "object") {
+                                        
+                                        var lat = "' . $lat . '";
+                                        var lng = "' . $lng . '";
                                         var latLng = new google.maps.LatLng(lat, lng);
                                         initializeGeo'.$field_details['variable'].'(false, latLng);
-                                        return false;
-                                    });
-
-                                    $("#myLocation_extra_'.$field_details['variable'].'").on("click", function() {
-                                        myLocation'.$field_details['variable'].'();
-                                        return false;
-                                    });
-
-                                    $("#extra_'.$field_details['variable'].'").keypress(function (event) {
-                                        if (event.which == 13) {
-                                            $("#geolocalization_extra_'.$field_details['variable'].'").click();
+    
+                                        $("#geolocalization_extra_'.$field_details['variable'].'").on("click", function() {
+                                            var latLng = $("#extra_'.$field_details['variable'].'").val().split(",");
+                                            var lat = latLng[0];
+                                            var lng = latLng[1];
+                                            var latLng = new google.maps.LatLng(lat, lng);
+                                            initializeGeo'.$field_details['variable'].'(false, latLng);
                                             return false;
-                                        }
-                                    });
+                                        });
+    
+                                        $("#myLocation_extra_'.$field_details['variable'].'").on("click", function() {
+                                            myLocation'.$field_details['variable'].'();
+                                            return false;
+                                        });
+    
+                                        $("#extra_'.$field_details['variable'].'").keypress(function (event) {
+                                            if (event.which == 13) {
+                                                $("#geolocalization_extra_'.$field_details['variable'].'").click();
+                                                return false;
+                                            }
+                                        });
+                                    } else {
+                                        $("#map_extra_'.$field_details['variable'].'").html("<div class=\"alert alert-info\">' . get_lang('YouNeedToActivateTheGoogleMapsPluginInAdminPlatformToSeeTheMap') . '</div>");
+                                    }
+                                    
                                 });
 
                                 function myLocation'.$field_details['variable'].'() {

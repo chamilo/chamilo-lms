@@ -26,6 +26,8 @@ class Plugin
     public $isCoursePlugin = false;
     public $isAdminPlugin = false;
     public $isMailPlugin = false;
+    // Adds icon in the course home
+    public $addCourseTool = true;
 
     /**
      * When creating a new course, these settings are added to the course, in
@@ -458,6 +460,10 @@ class Plugin
 
         // Stop here if we don't want a tool link on the course homepage
         if (!$add_tool_link) {
+            return true;
+        }
+
+        if ($this->addCourseTool == false) {
             return true;
         }
 

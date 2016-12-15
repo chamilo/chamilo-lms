@@ -505,7 +505,7 @@ class CourseHome
                 //Other queries recover id, name, link, image, visibility, admin, address, added_tool, target, category and session_id
                 // but plugins are not present in the tool table, only globally and inside the course_settings table once configured
                 $sql = "SELECT * FROM $course_tool_table t
-                        WHERE category = 'plugin' AND c_id = $course_id $condition_session
+                        WHERE category = 'plugin' AND name <> 'courseblock' AND c_id = $course_id $condition_session
                         ORDER BY id";
                 $result = Database::query($sql);
                 break;

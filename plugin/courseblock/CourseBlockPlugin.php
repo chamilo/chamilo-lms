@@ -7,6 +7,7 @@
 class CourseBlockPlugin extends Plugin
 {
     public $isCoursePlugin = true;
+    public $addCourseTool = false;
 
     // When creating a new course this settings are added to the course
     public $course_settings = array(

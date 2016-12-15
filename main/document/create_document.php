@@ -217,7 +217,7 @@ if (!$is_certificate_mode) {
 	$interbreadcrumb[]= array('url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('Gradebook'));
 }
 
-if (!$is_allowed_in_course) {
+if (!api_is_allowed_in_course()) {
 	api_not_allowed(true);
 }
 

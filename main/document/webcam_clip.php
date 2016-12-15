@@ -82,7 +82,7 @@ if (!empty($groupId)) {
 
 $interbreadcrumb[] = array ("url" => "./document.php?id=".$document_id."&".api_get_cidreq(), "name" => get_lang('Documents'));
 
-if (!$is_allowed_in_course) {
+if (!api_is_allowed_in_course()) {
 	api_not_allowed(true);
 }
 

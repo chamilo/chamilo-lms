@@ -447,7 +447,7 @@ if (api_is_allowed_to_edit(null, true)) {
 }
 
 // $is_allowed_in_course is first defined in local.inc.php
-if (!$is_allowed_in_course) {
+if (!api_is_allowed_in_course()) {
     api_not_allowed(true);
 }
 

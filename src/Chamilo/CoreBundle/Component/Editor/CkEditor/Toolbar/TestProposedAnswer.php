@@ -5,7 +5,7 @@ namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
  * TestProposedAnswer toolbar configuration
- * 
+ *
  * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
 class TestProposedAnswer extends Basic
@@ -47,7 +47,7 @@ class TestProposedAnswer extends Basic
     {
         return [
             ['Bold', 'Subscript', 'Superscript'],
-            ['Image', 'Link', 'Audio', 'Table', 'PasteFromWord'],
+            ['Image', 'Link', 'Audio', 'Table', 'PasteFromWord', 'inserthtml'],
             ['Maximize', 'Source'],
         ];
     }

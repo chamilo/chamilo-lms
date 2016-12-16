@@ -963,7 +963,7 @@ class Tracking
                                                 } else {
                                                     $output .= '<td>
                                                             <a href="../exercise/exercise_show.php?origin=' . $origin . '&id=' . $my_exe_id . '&cidReq=' . $courseCode . '" target="_parent">
-                                                            <img src="' . Display::returnIconPath('quiz.gif').'" alt="' . get_lang('ShowAttempt') . '" title="' . get_lang('ShowAttempt') . '">
+                                                            <img src="' . Display::returnIconPath('quiz.png').'" alt="' . get_lang('ShowAttempt') . '" title="' . get_lang('ShowAttempt') . '">
                                                             </a></td>';
                                                 }
                                             } else {

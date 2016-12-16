@@ -207,7 +207,7 @@ if ($exerciseReporting) {
     echo '<div class="report_section">
                '.Display::page_subheader(
             Display::return_icon(
-                'quiz.gif',
+                'quiz.png',
                 get_lang('AverageResultsToTheExercices')
             ).get_lang('AverageResultsToTheExercices')
         ).'

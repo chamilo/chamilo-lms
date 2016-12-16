@@ -342,7 +342,7 @@ foreach ($final_array as $session_data) {
 
                                 $my_real_array[] = array(
                                     'status' => Display::return_icon(
-                                        'quiz.gif',
+                                        'quiz.png',
                                         get_lang('Attempted'),
                                         '',
                                         ICON_SIZE_SMALL

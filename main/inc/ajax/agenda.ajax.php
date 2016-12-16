@@ -20,7 +20,6 @@ if ($type == 'course') {
 }
 
 $group_id = api_get_group_id();
-
 $is_group_tutor = GroupManager::is_tutor_of_group(api_get_user_id(), $group_id);
 
 $agenda = new Agenda();
@@ -34,6 +33,11 @@ switch ($action) {
         $add_as_announcement = isset($_REQUEST['add_as_annonuncement']) ? $_REQUEST['add_as_annonuncement'] : null;
         $comment = isset($_REQUEST['comment']) ? $_REQUEST['comment'] : null;
         $userToSend = isset($_REQUEST['users_to_send']) ? $_REQUEST['users_to_send'] : array();
+
+        if ($type === 'course') {
+            $agenda->set_course(api_get_course_info());
+        }
+
         echo $agenda->addEvent(
             $_REQUEST['start'],
             $_REQUEST['end'],

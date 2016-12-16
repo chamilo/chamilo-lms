@@ -8064,4 +8064,26 @@ class SessionManager
 
         return $htmlRes;
     }
+
+    /**
+     * @param int $userId
+     * @param int $courseId
+     *
+     * @return array
+     */
+    public static function searchCourseInSessionsFromUser($userId, $courseId)
+    {
+        $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $userId = (int) $userId;
+        $courseId = (int) $courseId;
+        if (empty($userId) || empty($courseId)) {
+            return [];
+        }
+
+        $sql = "SELECT * FROM $table 
+                WHERE c_id = $courseId AND user_id = $userId";
+        $result = Database::query($sql);
+
+        return Database::store_result($result, 'ASSOC');
+    }
 }

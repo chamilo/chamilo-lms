@@ -22,12 +22,6 @@
                                 {{ user.email}}
                                 </a>
                             </li>
-                            <li class="item">
-                                <a href="{{ vcard_user_link }}">
-                                <img src="{{ "vcard.png" | icon(16) }}" alt="{{ "BusinessCard" | get_lang }}" width="16" height="16">
-                                {{ "BusinessCard" | get_lang }}
-                                </a>
-                            </li>
 
                             {% set skype_account = '' %}
                             {% set linkedin_url = '' %}

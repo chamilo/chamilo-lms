@@ -3,6 +3,8 @@
 
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use ChamiloSession as Session;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
 
 /**
  * Class learnpath
@@ -9730,6 +9732,8 @@ class learnpath
         $root->appendChild($resources);
         $xmldoc->appendChild($root);
 
+        $copyAll = api_get_configuration_value('add_all_files_in_lp_export');
+
         // TODO: Add a readme file here, with a short description and a link to the Reload player
         // then add the file to the zip, then destroy the file (this is done automatically).
         // http://www.reload.ac.uk/scormplayer.html - once done, don't forget to close FS#138
@@ -9776,6 +9780,29 @@ class learnpath
                     }
                 }
                 file_put_contents($dest_file, $string);
+            }
+
+            if (file_exists($filePath) && $copyAll) {
+                $extension = $this->get_extension($filePath);
+                if (in_array($extension, ['html', 'html'])) {
+                    $containerOrigin = dirname($filePath);
+                    $containerDestination = dirname($dest_file);
+
+                    $finder = new Finder();
+                    $finder->files()->in($containerOrigin)
+                        ->exclude('share_folder')
+                        ->exclude('chat_files')
+                        ->exclude('certificates');
+
+                    if (is_dir($containerOrigin) && is_dir($containerDestination)) {
+                        $fs = new Filesystem();
+                        $fs->mirror(
+                            $containerOrigin,
+                            $containerDestination,
+                            $finder
+                        );
+                    }
+                }
             }
         }
 

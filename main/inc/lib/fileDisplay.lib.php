@@ -287,13 +287,14 @@ function get_total_folder_size($path, $can_see_invisible = false)
 
     $sql = "SELECT SUM(table1.size) FROM (
                 SELECT props.ref, size
-                FROM $table_itemproperty AS props, $table_document AS docs
+                FROM $table_itemproperty AS props 
+                INNER JOIN $table_document AS docs
+                ON (docs.id = props.ref AND docs.c_id = props.c_id)
                 WHERE
-                    docs.c_id 	= $course_id AND
-                    docs.id 	= props.ref AND
+                    docs.c_id = $course_id AND                    
                     docs.path LIKE '$path/%' AND
-                    props.c_id 	= $course_id AND
-                    props.tool 	= '$tool_document' AND
+                    props.c_id = $course_id AND
+                    props.tool = '$tool_document' AND
                     $visibility_rule
                     $session_condition
                 GROUP BY ref

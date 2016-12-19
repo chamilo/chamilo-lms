@@ -55,7 +55,7 @@ if (isset($_GET['cat_id']) &&
         $files_to_download[] = $row['id'];
     }
     if (!is_array($files_to_download) || empty($files_to_download)) {
-        header('location: index.php?view='.Security::remove_XSS($_GET['sent_received']).'&error=ErrorNoFilesInFolder');
+        header('Location: index.php?'.api_get_cidreq().'&view='.Security::remove_XSS($_GET['sent_received']).'&error=ErrorNoFilesInFolder');
         exit;
     }
     zip_download($files_to_download);

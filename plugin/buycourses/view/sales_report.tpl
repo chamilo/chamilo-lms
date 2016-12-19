@@ -1,3 +1,16 @@
+<link rel="stylesheet" type="text/css" href="../resources/css/style.css"/>
+<ul class="nav nav-tabs buy-courses-sessions-tabs" role="tablist">
+    <li id="buy-courses-sessions-tab" class="active" role="presentation">
+        <a href="sales_report.php" aria-controls="buy-courses_sessions" role="tab">{{ 'CourseSessionBlock'|get_lang }}</a>
+    </li>
+    {% if services_are_included %}
+        <li id="buy-services-tab" class="{{ showing_services ? 'active' : '' }}" role="presentation">
+            <a href="service_sales_report.php" aria-controls="buy-services" role="tab">{{ 'Services'|get_plugin_lang('BuyCoursesPlugin') }}</a>
+        </li>
+    {% endif %}
+</ul>
+</br>
+</br>
 {{ form }}
 
 <div class="table-responsive">

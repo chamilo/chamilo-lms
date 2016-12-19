@@ -346,6 +346,7 @@ if (is_array($forumCategories)) {
         if (!empty($forumsInCategory)) {
             // We display all the forums in this category.
             foreach ($forum_list as $forum) {
+                $html = '';
                 // Here we clean the whatnew_post_info array a little bit because to display the icon we
                 // test if $whatsnew_post_info[$forum['forum_id']] is empty or not.
                 if (isset($forum['forum_id'])) {

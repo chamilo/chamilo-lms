@@ -14,7 +14,7 @@ define('CHAMILO_INTERNAL', true);
 $plugin = VChamiloPlugin::create();
 $thisurl = api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php';
 
-Virtual::requireJs('host_list.js', 'vchamilo');
+Virtual::requireJs('host_list.js', 'vchamilo', 'head');
 
 if ($action) {
     require_once api_get_path(SYS_PLUGIN_PATH).'vchamilo/views/manage.controller.php';

@@ -82,7 +82,7 @@ if (!empty($course_user_list)) {
     }
 }
 
-$content .= Tracking::show_user_progress(api_get_user_id(), $_GET['session_id']);
+$content .= Tracking::show_user_progress(api_get_user_id(), $_GET['session_id'], '', true, true, false);
 $content .= Tracking::show_course_detail(api_get_user_id(), $_GET['course'], $_GET['session_id']);
 
 if (!empty($dates)) {

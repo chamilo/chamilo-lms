@@ -519,11 +519,6 @@ $(function() {
         $( big_image ).dialog("open");
         return false;
     });
-
-    /* Binds a tab id in the url */
-    $("#tabs").bind('tabsselect', function(event, ui) {
-		window.location.href=ui.tab;
-    });
 <?php
      // Displays js code to use a jqgrid
      echo Display::grid_js('courses',       '',             $columns_courses, $column_model_courses, $extra_params_courses, $new_course_list);
@@ -533,7 +528,6 @@ $(function() {
      echo Display::grid_js('exercises',      '',            $column_exercise, $column_exercise_model, $extra_params_exercise, $my_real_array);
 ?>
     // Generate tabs with jquery-ui
-    $('#tabs').tabs();
     $('#sub_tab').tabs();
 });
 </script>
@@ -541,24 +535,6 @@ $(function() {
 <?php
 
 $courseCode = isset($_GET['course']) ? $_GET['course'] : null;
-$reportingTab = Tracking::show_user_progress(
-    api_get_user_id(),
-    $session_id,
-    '#tabs-4',
-    false,
-    false
-);
-
-if (!empty($reportingTab))  {
-    $reportingTab .= '<br />'.Tracking::show_course_detail(
-            api_get_user_id(),
-            $courseCode,
-            $session_id
-        );
-}
-if (empty($reportingTab)) {
-    $reportingTab = Display::return_message(get_lang('NoDataAvailable'), 'warning');
-}
 
 // Main headers
 $headers = array(
@@ -595,7 +571,7 @@ $tabs = array(
     $coursesTab,
     Display::grid_html('list_course'),
     Display::grid_html('exercises'),
-    $reportingTab
+    null
 );
 
 $tabToHide = api_get_configuration_value('session_hide_tab_list');
@@ -607,10 +583,47 @@ if (!empty($tabToHide)) {
     }
 }
 
-// Main headers data
-echo Display::tabs(
-    $headers,
-    $tabs
-);
+$defaultTab = 1;
+?>
+    <ul class="nav nav-tabs">
+        <?php foreach ($headers as $i => $tabHeader) { ?>
+            <li class="<?php echo $defaultTab === $i ? 'active' : '' ?>">
+                <a href="#tab_<?php echo $i ?>" data-toggle="tab"><?php echo $tabHeader ?></a>
+            </li>
+        <?php } ?>
+    </ul>
+    <div class="tab-content">
+        <?php foreach ($tabs as $i => $tabContent) { ?>
+            <div class="tab-pane <?php echo $defaultTab === $i ? 'active' : '' ?>" id="tab_<?php echo $i ?>">
+                <?php echo $tabContent ?>
+            </div>
+        <?php } ?>
+    </div>
+
+    <script>
+        $(document).on('ready', function () {
+            $('.nav.nav-tabs a:last').on('shown', function (e) {
+                var panel = $('#tab_4');
+
+                if ($.trim(panel.html()).length) {
+                    return;
+                }
+
+                panel.html('<div style="text-align: center;"><?php echo Display::return_icon('loading1.gif', get_lang('Loading')) ?></div>');
+
+                $.ajax('<?php echo api_get_path(WEB_AJAX_PATH) ?>session.ajax.php', {
+                    data: {
+                        course: '<?php echo $courseCode ?>',
+                        session_id: '<?php echo api_get_session_id() ?>',
+                        a: 'my_session_statistics'
+                    },
+                    success: function (response) {
+                        panel.html(response);
+                    }
+                });
+            });
+        });
+    </script>
+<?php
 
 Display::display_footer();

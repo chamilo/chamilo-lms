@@ -4,7 +4,8 @@
  * Responses to AJAX calls
  */
 
-$language_file[] = 'admin';
+$language_file = array('learnpath', 'courses', 'index','tracking','exercice', 'admin');
+
 require_once '../global.inc.php';
 
 $action = $_REQUEST['a'];
@@ -106,6 +107,45 @@ switch ($action) {
                 echo json_encode(array(array('T', 'text' => 'TODOS', 'id' => 'T')));
             }
         }
+        break;
+    case 'my_session_statistics':
+        if (empty($_GET['session_id'])) {
+            api_not_allowed();
+        }
+
+        $courseCode = !empty($_GET['course']) ? $_GET['course'] : null;
+        $sessionId = api_get_session_id();
+
+        // Getting all sessions where I'm subscribed
+        $newSessionList = UserManager::get_personal_session_course_list(api_get_user_id());
+
+        $mySessionList = array();
+
+        if (!empty($newSessionList)) {
+            foreach ($newSessionList as $item) {
+                if (!isset($item['id_session'])) {
+                    continue;
+                }
+
+                $mySessionList[] = $item['id_session'];
+            }
+        }
+
+        // If the requested session does not exist in my list we stop the script
+        if (!api_is_platform_admin()) {
+            if (!in_array($sessionId, $mySessionList)) {
+                api_not_allowed(true);
+            }
+        }
+
+        $reportingTab = Tracking::show_user_progress(api_get_user_id(), $sessionId, null, false, false, true);
+
+        if (empty($reportingTab)) {
+            echo Display::return_message(get_lang('NoDataAvailable'), 'warning');
+            exit;
+        }
+
+        echo $reportingTab . '<br>' . Tracking::show_course_detail(api_get_user_id(), $courseCode, $sessionId);
         break;
     default:
         echo '';

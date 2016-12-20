@@ -22,6 +22,9 @@ if ($debug) {
 
 $session_id = isset($_REQUEST['session_id']) ? intval($_REQUEST['session_id']) : api_get_session_id();
 $course_code = isset($_REQUEST['cidReq']) ? $_REQUEST['cidReq'] : api_get_course_id();
+if (!empty($course_code)) {
+    $_SESSION['cidReq'] = $course_code;
+}
 
 switch ($action) {
     case 'get_live_stats':

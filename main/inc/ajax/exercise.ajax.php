@@ -23,7 +23,16 @@ if ($debug) {
 $session_id = isset($_REQUEST['session_id']) ? intval($_REQUEST['session_id']) : api_get_session_id();
 $course_code = isset($_REQUEST['cidReq']) ? $_REQUEST['cidReq'] : api_get_course_id();
 if (!empty($course_code)) {
-    $_SESSION['cidReq'] = $course_code;
+    $courseInfo = api_get_course_info($course_code);
+    if ($courseInfo) {
+        $_SESSION['cidReq'] = $course_code;
+        $_SESSION['_real_cid'] = $courseInfo ['real_id'];
+        $course_id = $courseInfo['real_id'];
+    }
+}
+
+if (!empty($session_id)) {
+    $_SESSION['id_session'] = $session_id;
 }
 
 switch ($action) {

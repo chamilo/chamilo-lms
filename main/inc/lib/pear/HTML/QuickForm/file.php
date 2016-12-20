@@ -300,6 +300,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
                 $image.attr("src", dataUrl);
                 $image.cropper("destroy");
                 $cropButton.addClass("hidden");
+                $("[name='.$id.'_crop_image_base_64]").val($("#'.$id.'_preview_image").attr("src"));
                 return false;
             });
         });

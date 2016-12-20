@@ -17,7 +17,6 @@ $plugin = BuyCoursesPlugin::create();
 $paypalEnable = $plugin->get('paypal_enable');
 $commissionsEnable = $plugin->get('commissions_enable');
 $includeServices = $plugin->get('include_services');
-$servicesOnly = $plugin->get('show_services_only');
 
 $saleStatuses = $plugin->getServiceSaleStatuses();
 $paymentTypes = $plugin->getPaymentTypes();
@@ -41,9 +40,7 @@ foreach ($servicesSales as $sale) {
         'price' => $sale['price'],
         'service_type' => $sale['service']['applies_to'],
         'service_name' => $sale['service']['name'],
-        'complete_user_name' => $sale['buyer']['name'],
-        'recurring_payment' => $sale['recurring_payment'],
-        'payment_type' => $paymentTypes[$sale['payment_type']]
+        'complete_user_name' => $sale['buyer']['name']
     ];
 }
 
@@ -85,7 +82,6 @@ if ($commissionsEnable == 'true') {
 }
 $template->assign('form', $form->returnForm());
 $template->assign('showing_services', true);
-$template->assign('show_services_only', $servicesOnly);
 $template->assign('services_are_included', $includeServices);
 $template->assign('sale_list', $serviceSaleList);
 $template->assign('sale_status_cancelled', BuyCoursesPlugin::SERVICE_STATUS_CANCELLED);

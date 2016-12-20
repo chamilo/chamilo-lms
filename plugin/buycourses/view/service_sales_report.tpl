@@ -1,7 +1,19 @@
 <link rel="stylesheet" type="text/css" href="../resources/css/style.css"/>
 <script type="text/javascript" src="../resources/js/modals.js"></script>
+
+<ul class="nav nav-tabs buy-courses-sessions-tabs" role="tablist">
+    <li id="buy-courses-sessions-tab" class="" role="presentation">
+        <a href="sales_report.php" aria-controls="buy-courses_sessions" role="tab">{{ 'CourseSessionBlock'|get_lang }}</a>
+    </li>
+    <li id="buy-services-tab" class="active" role="presentation">
+        <a href="service_sales_report.php" aria-controls="buy-services" role="tab">{{ 'Services'|get_plugin_lang('BuyCoursesPlugin') }}</a>
+    </li>
+</ul>
+</br>
+</br>
 <div class="row">
     <div class="col-md-3 col-sm-12 col-xs-12">
+        <h4><b>{{ 'Filter' | get_lang }}</b></h4>
         {{ form }}
     </div>
     <div class="col-md-9 col-sm-12 col-xs-12">
@@ -14,7 +26,6 @@
                     <th class="text-center">{{ 'OrderStatus'|get_plugin_lang('BuyCoursesPlugin') }}</th>
                     <th class="text-center">{{ 'OrderDate'|get_plugin_lang('BuyCoursesPlugin') }}</th>
                     <th class="text-right">{{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}</th>
-                    <th class="text-center">{{ 'Renewable'|get_plugin_lang('BuyCoursesPlugin') }}</th>
                     <th class="text-center">{{ 'ServiceSaleInfo'|get_plugin_lang('BuyCoursesPlugin')  }}</th>
                 </tr>
                 </thead>
@@ -34,13 +45,6 @@
                         </td>
                         <td class="text-center">{{ sale.date }}</td>
                         <td class="text-right">{{ sale.currency ~ ' ' ~ sale.price }}</td>
-                        {% if sale.recurring_payment == 0 %}
-                            <td class="text-center">{{ 'No' | get_lang }}</td>
-                        {% else %}
-                            <td class="text-center">
-                                <a id="renewable_info" tag="{{ sale.id }}" name="r_{{ sale.id }}" class="btn btn-warning btn-sm">{{ 'Info' | get_lang }}</a>
-                            </td>
-                        {% endif %}
                         <td class="text-center">
                             <a id="service_sale_info" tag="{{ sale.id }}" name="s_{{ sale.id }}" class="btn btn-info btn-sm">{{ 'Info' | get_lang }}</a>
                         </td>

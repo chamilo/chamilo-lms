@@ -12,6 +12,7 @@ require_once __DIR__.'/../../../main/inc/global.inc.php';
 
 $plugin = BuyCoursesPlugin::create();
 $includeSessions = $plugin->get('include_sessions') === 'true';
+$includeServices = $plugin->get('include_services') === 'true';
 
 $nameFilter = null;
 $minFilter = 0;
@@ -68,6 +69,7 @@ $tpl->assign('search_filter_form', $form->returnForm());
 $tpl->assign('showing_courses', true);
 $tpl->assign('courses', $courseList);
 $tpl->assign('sessions_are_included', $includeSessions);
+$tpl->assign('services_are_included', $includeServices);
 
 $content = $tpl->fetch('buycourses/view/catalog.tpl');
 

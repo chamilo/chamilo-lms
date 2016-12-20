@@ -9,6 +9,11 @@
             <li id="buy-sessions-tab" class="{{ showing_sessions ? 'active' : '' }}" role="presentation">
                 <a href="session_catalog.php" aria-controls="buy-sessions" role="tab">{{ 'Sessions'|get_lang }}</a>
             </li>
+            {% if services_are_included %}
+                <li id="buy-services-tab" class="{{ showing_services ? 'active' : '' }}" role="presentation">
+                    <a href="service_catalog.php" aria-controls="buy-services" role="tab">{{ 'Services'|get_plugin_lang('BuyCoursesPlugin') }}</a>
+                </li>
+            {% endif %}
         </ul>
     {% endif %}
 
@@ -101,6 +106,57 @@
                                             {% endif %}
                                         </div>
                                     </article>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if showing_services %}
+                            {% for service in services %}
+                                <div class="col-md-4 col-sm-6">
+                                    <div class="items-course">
+                                        <div class="items-course-image">
+                                            <a href="{{ _p.web }}service/{{ service.id }}"><img alt="{{ service.name }}" class="img-responsive" src="{{ service.image }}"></a>
+                                        </div>
+                                        <div class="items-course-info">
+                                            <h4 class="title">
+                                                <a title="{{ service.name }}" href="{{ _p.web }}service/{{ service.id }}" >
+                                                    {{ service.name }}
+                                                </a>
+                                            </h4>
+                                            <ul class="list-unstyled">
+                                                <li><em class="fa fa-clock-o"></em> {{ 'Duration'|get_plugin_lang('BuyCoursesPlugin') }} : {{ service.duration_days == 0 ? 'NoLimit' | get_lang  : service.duration_days ~ ' ' ~ 'Days' | get_lang }}</li>
+                                                {% if service.applies_to == 0 %}
+                                                    <li><em class="fa fa-hand-o-right"></em> {{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }} {{ 'None' | get_lang }}</li>
+                                                {% elseif service.applies_to == 1 %}
+                                                    <li><em class="fa fa-hand-o-right"></em> {{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }} {{ 'User' | get_lang }}</li>
+                                                {% elseif service.applies_to == 2 %}
+                                                    <li><em class="fa fa-hand-o-right"></em> {{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }} {{ 'Course' | get_lang }}</li>
+                                                {% elseif service.applies_to == 3 %}
+                                                    <li><em class="fa fa-hand-o-right"></em> {{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }} {{ 'Session' | get_lang }}</li>
+                                                {% elseif service.applies_to == 4 %}
+                                                    <li><em class="fa fa-hand-o-right"></em> {{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }} {{ 'SubscriptionPackage' | get_plugin_lang('BuyCoursesPlugin') }}</li>
+                                                {% endif %}
+                                                <li><em class="fa fa-user"></em> {{ service.owner_name }}</li>
+                                            </ul>
+                                            <p class="text-right">
+                                                <span class="label label-primary">
+                                                    {{ service.currency == 'BRL' ? 'R$' : service.currency }} {{ service.price }}
+                                                </span>
+                                            </p>
+                                            <div class="toolbar">
+                                                <a class="btn btn-info btn-block btn-sm" title="" href="{{ _p.web }}service/{{ service.id }}">
+                                                    <em class="fa fa-info-circle"></em> {{ 'ServiceInformation'|get_plugin_lang('BuyCoursesPlugin') }}
+                                                </a>
+                                                <a class="btn btn-success btn-block btn-sm" title="" href="{{ _p.web_plugin ~ 'buycourses/src/service_process.php?' ~ {'i': service.id, 't': service.applies_to}|url_encode() }}">
+                                                    {% if service.allow_trial %}
+                                                        <em class="fa fa-shopping-cart"></em> {{ 'TryItNowFree'|get_plugin_lang('BuyCoursesPlugin') }}
+                                                    {% else %}
+                                                        <em class="fa fa-shopping-cart"></em> {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
+                                                    {% endif %}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             {% endfor %}
                         {% endif %}

@@ -38,6 +38,9 @@ class BuyCoursesPlugin extends Plugin
     const SERVICE_STATUS_PENDING = 0;
     const SERVICE_STATUS_COMPLETED = 1;
     const SERVICE_STATUS_CANCELLED = -1;
+    const SERVICE_TYPE_USER = 1;
+    const SERVICE_TYPE_COURSE = 2;
+    const SERVICE_TYPE_SESSION = 3;
 
     /**
      *
@@ -1699,7 +1702,7 @@ class BuyCoursesPlugin extends Plugin
         );
 
         if ($return) {
-            $img = str_replace('data:image/png;base64,', '', $service['cropResult']);
+            $img = str_replace('data:image/png;base64,', '', $service['picture_crop_image_base_64']);
             $img = str_replace(' ', '+', $img);
             $data = base64_decode($img);
             $file = api_get_path(SYS_PLUGIN_PATH).'buycourses/uploads/services/images/simg-'.$return.'.png';
@@ -1725,9 +1728,8 @@ class BuyCoursesPlugin extends Plugin
     public function updateService($service, $id)
     {
         $servicesTable = Database::get_main_table(BuyCoursesPlugin::TABLE_SERVICES);
-
-        if (!empty($service['cropResult'])) {
-            $img = str_replace('data:image/png;base64,', '', $service['cropResult']);
+        if (!empty($service['picture_crop_image_base_64'])) {
+            $img = str_replace('data:image/png;base64,', '', $service['picture_crop_image_base_64']);
             $img = str_replace(' ', '+', $img);
             $data = base64_decode($img);
             $file = api_get_path(SYS_PLUGIN_PATH).'buycourses/uploads/services/images/simg-'.$id.'.png';
@@ -1889,6 +1891,7 @@ class BuyCoursesPlugin extends Plugin
             $hot = "count(ss.service_id) as hot, ";
             $conditions = ['ORDER' => 'hot DESC', 'LIMIT' => '6'];
             $groupBy = "GROUP BY ss.service_id";
+            "clean_teacher_files.php";
         }
 
         $innerJoins = "INNER JOIN $servicesTable s ON ss.service_id = s.id $groupBy";
@@ -2000,6 +2003,70 @@ class BuyCoursesPlugin extends Plugin
         $this->updateServiceSaleStatus($serviceSaleId, self::SERVICE_STATUS_COMPLETED);
 
         return true;
+    }
+
+    /**
+     * Lists current service details
+     * @param string $name Optional. The name filter
+     * @param int $min Optional. The minimum price filter
+     * @param int $max Optional. The maximum price filter
+     * @param int $appliesTo Optional.
+     * @return array
+     */
+    public function getCatalogServiceList($name = null, $min = 0, $max = 0, $appliesTo = '')
+    {
+        $servicesTable = Database::get_main_table(BuyCoursesPlugin::TABLE_SERVICES);
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+
+        $whereConditions = [
+            's.id <> ? ' => 0
+        ];
+
+        if (!empty($name)) {
+            $whereConditions['AND s.name LIKE %?%'] = $name;
+        }
+
+        if (!empty($min)) {
+            $whereConditions['AND s.price >= ?'] = $min;
+        }
+
+        if (!empty($max)) {
+            $whereConditions['AND s.price <= ?'] = $max;
+        }
+
+        if (!$appliesTo == '') {
+            $whereConditions['AND s.applies_to = ?'] = $appliesTo;
+        }
+
+        $innerJoins = "INNER JOIN $userTable u ON s.owner_id = u.id";
+        $currency = $this->getSelectedCurrency();
+        $isoCode = $currency['iso_code'];
+        $return = Database::select(
+            "s.*, '$isoCode' as currency, u.firstname, u.lastname",
+            "$servicesTable s $innerJoins",
+            ['WHERE' => $whereConditions]
+        );
+
+        $services = [];
+
+        foreach ($return as $index => $service) {
+            $services[$index]['id'] = $service['id'];
+            $services[$index]['name'] = $service['name'];
+            $services[$index]['description'] = $service['description'];
+            $services[$index]['price'] = $service['price'];
+            $services[$index]['currency'] = $service['currency'];
+            $services[$index]['duration_days'] = $service['duration_days'];
+            $services[$index]['applies_to'] = $service['applies_to'];
+            $services[$index]['owner_id'] = $service['owner_id'];
+            $services[$index]['owner_name'] = api_get_person_name($service['firstname'], $service['lastname']);
+            $services[$index]['visibility'] = $service['visibility'];
+            $services[$index]['image'] = api_get_path(WEB_PLUGIN_PATH).'buycourses/uploads/services/images/'.$service['image'];
+            $services[$index]['video_url'] = $service['video_url'];
+            $services[$index]['service_information'] = $service['service_information'];
+        }
+
+        return $services;
+
     }
 
 }

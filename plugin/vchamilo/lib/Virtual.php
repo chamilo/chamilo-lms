@@ -29,7 +29,7 @@ class Virtual
         self::getHostName($_configuration);
 
         // We are on physical chamilo. Let original config play
-        $virtualChamiloWebRoot = $_configuration['vchamilo_web_root'].'/';
+        $virtualChamiloWebRoot = rtrim($_configuration['vchamilo_web_root'], '/') . '/';
 
         $virtualChamilo = [];
         if ($_configuration['root_web'] == $virtualChamiloWebRoot) {

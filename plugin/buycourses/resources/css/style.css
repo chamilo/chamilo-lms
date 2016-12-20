@@ -1,5 +1,34 @@
 .buy-courses-tabs {
-    margin-bottom: 15px;
+  margin-bottom: 15px;
+}
+
+.buy-courses-page-header {
+  padding-bottom: 9px;
+  margin: 40px 0 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.buy-courses-block-button {
+  display: block;
+  width: 100%;
+  height: 50px;
+  line-height: 35px;
+  font-size: 16px;
+}
+
+.buy-courses-cross-out {
+  text-decoration:line-through;
+}
+
+.buy-courses-title-color {
+  color: #5DC3E1;
+  padding-bottom: 10px;
+}
+
+.buy-courses-description-service {
+  text-align: justify;
+  font-size: 18px;
+  line-height: 1.42857;
 }
 
 @-moz-keyframes wobblebar-loader {

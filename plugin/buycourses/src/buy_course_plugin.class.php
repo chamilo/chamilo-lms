@@ -2010,7 +2010,7 @@ class BuyCoursesPlugin extends Plugin
      * @param string $name Optional. The name filter
      * @param int $min Optional. The minimum price filter
      * @param int $max Optional. The maximum price filter
-     * @param int $appliesTo Optional.
+     * @param mixed $appliesTo Optional.
      * @return array
      */
     public function getCatalogServiceList($name = null, $min = 0, $max = 0, $appliesTo = '')
@@ -2067,6 +2067,23 @@ class BuyCoursesPlugin extends Plugin
 
         return $services;
 
+    }
+
+    /**
+     * Update the service sale status
+     * @param int $serviceSaleId The service sale ID
+     * @param int $newStatus The new status
+     * @return boolean
+     */
+    private function updateServiceSaleStatus($serviceSaleId, $newStatus = self::SERVICE_STATUS_PENDING)
+    {
+        $serviceSaleTable = Database::get_main_table(self::TABLE_SERVICES_SALE);
+
+        return Database::update(
+            $serviceSaleTable,
+            ['status' => intval($newStatus)],
+            ['id = ?' => intval($serviceSaleId)]
+        );
     }
 
 }

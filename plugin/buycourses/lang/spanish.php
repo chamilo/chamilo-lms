@@ -145,3 +145,5 @@ $strings['ServiceAdded'] = "Servicio agregado";
 $strings['ServiceEdited'] = "Servicio editado";
 $strings['ServiceSaleInfo'] = "Información del servicio";
 $strings['ListOfServicesOnSale'] = "Lista de servicios a la venta";
+$strings['AdditionalInfo'] = "Información adicional";
+$strings['PleaseSelectTheCorrectInfoToApplyTheService'] = "Porfavor Seleccione la información correcta para aplicar el servicio";

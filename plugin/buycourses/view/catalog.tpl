@@ -148,11 +148,7 @@
                                                     <em class="fa fa-info-circle"></em> {{ 'ServiceInformation'|get_plugin_lang('BuyCoursesPlugin') }}
                                                 </a>
                                                 <a class="btn btn-success btn-block btn-sm" title="" href="{{ _p.web_plugin ~ 'buycourses/src/service_process.php?' ~ {'i': service.id, 't': service.applies_to}|url_encode() }}">
-                                                    {% if service.allow_trial %}
-                                                        <em class="fa fa-shopping-cart"></em> {{ 'TryItNowFree'|get_plugin_lang('BuyCoursesPlugin') }}
-                                                    {% else %}
-                                                        <em class="fa fa-shopping-cart"></em> {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
-                                                    {% endif %}
+                                                    <em class="fa fa-shopping-cart"></em> {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
                                                 </a>
                                             </div>
                                         </div>

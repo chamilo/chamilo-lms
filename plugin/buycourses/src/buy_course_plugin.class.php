@@ -29,6 +29,7 @@ class BuyCoursesPlugin extends Plugin
     const PRODUCT_TYPE_SESSION = 2;
     const PAYMENT_TYPE_PAYPAL = 1;
     const PAYMENT_TYPE_TRANSFER = 2;
+    const PAYMENT_TYPE_CULQI = 3;
     const PAYOUT_STATUS_CANCELED = 2;
     const PAYOUT_STATUS_PENDING = 0;
     const PAYOUT_STATUS_COMPLETED = 1;
@@ -960,7 +961,8 @@ class BuyCoursesPlugin extends Plugin
     {
         return [
             self::PAYMENT_TYPE_PAYPAL => 'PayPal',
-            self::PAYMENT_TYPE_TRANSFER => $this->get_lang('BankTransfer')
+            self::PAYMENT_TYPE_TRANSFER => $this->get_lang('BankTransfer'),
+            self::PAYMENT_TYPE_CULQI => 'Culqi'
         ];
     }
 
@@ -2084,6 +2086,54 @@ class BuyCoursesPlugin extends Plugin
             ['status' => intval($newStatus)],
             ['id = ?' => intval($serviceSaleId)]
         );
+    }
+
+    /**
+     * Register a Service sale
+     * @param int $serviceId The service ID
+     * @param int $paymentType The payment type
+     * @param int $infoSelect The ID for Service Type
+     * @param int $trial trial mode
+     * @return boolean
+     */
+    public function registerServiceSale($serviceId, $paymentType, $infoSelect, $trial = null)
+    {
+        if (!in_array($paymentType, [self::PAYMENT_TYPE_PAYPAL, self::PAYMENT_TYPE_TRANSFER, self::PAYMENT_TYPE_CULQI])) {
+            return false;
+        }
+
+        $userId = api_get_user_id();
+
+        $service = $this->getServices($serviceId);
+
+        if (empty($service)) {
+            return false;
+        }
+
+        $currency = $this->getSelectedCurrency();
+
+        $values = [
+            'service_id' => $serviceId,
+            'reference' => $this->generateReference(
+                $userId,
+                $service['applies_to'],
+                $infoSelect
+            ),
+            'currency_id' => $currency['id'],
+            'price' => $service['price'],
+            'node_type' => $service['applies_to'],
+            'node_id' => intval($infoSelect),
+            'buyer_id' => $userId,
+            'buy_date' => api_get_utc_datetime(),
+            'date_start' => api_get_utc_datetime(),
+            'date_end' => date_format(date_add(date_create(api_get_utc_datetime()), date_interval_create_from_date_string($service['duration_days'].' days')), 'Y-m-d H:i:s'),
+            'status' => self::SERVICE_STATUS_PENDING,
+            'payment_type' => intval($paymentType)
+        ];
+
+        $returnedServiceSaleId = Database::insert(self::TABLE_SERVICES_SALE, $values);
+
+        return $returnedServiceSaleId;
     }
 
 }

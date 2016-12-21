@@ -62,68 +62,17 @@ if ($form->validate()) {
         header('Location:' . api_get_self() . '?' . $queryString);
         exit;
     }
-
-    $userGroup = $em->getRepository('ChamiloCoreBundle:Usergroup')->findBy(['name' => $formValues['info_select']]);
-
-    if ($userGroup) {
-        Display::addFlash(
-            Display::return_message($plugin->get_lang('StoreNameAlreadyExist'), 'error', false)
-        );
-        header('Location:' . api_get_self() . '?' . $queryString);
-        exit;
-    }
     
     $serviceSaleId = $plugin->registerServiceSale($serviceId, $formValues['payment_type'], $formValues['info_select'], $formValues['enable_trial']);
 
-    if (!empty($formValues['store_code'])) {
-        $data = [
-            'store_code' => Security::remove_XSS($formValues['store_code']),
-            'store_name' => Security::remove_XSS($formValues['info_select']),
-            'parent_id' => 0,
-            'description' => 'Registered by User in buying process',
-            'type' => 1,
-            'discount' => 0
-        ];
-
-        $verification = $plugin->getDiscountByCode($data['store_code']);
-
-        if (!$verification) {
-            $plugin->addDiscountCode($data);
-        }
-    }
-
     if ($serviceSaleId !== false) {
         $_SESSION['bc_service_sale_id'] = $serviceSaleId;
-        
-        if ($verification['discount'] == 100) {
 
-            $serviceSale = $plugin->getServiceSale($serviceSaleId);
-
-            $serviceSaleIsCompleted = $plugin->completeServiceSale($serviceSale['id']);
-            if ($serviceSaleIsCompleted) {
-                Display::addFlash(Display::return_message(sprintf($plugin->get_lang('SubscriptionToServiceXSuccessful'), $serviceSale['service']['name']), 'success'));
-
-                $plugin->SendSubscriptionMail(intval($serviceSale['id']));
-
-                unset($_SESSION['bc_service_sale_id']);
-
-                header('Location: ' . api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/package_panel.php?id='.$serviceSale['id']);
-                exit;
-            }
-        }
-        
-        if ($wizard) {
-            header('Location: ' . api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/service_process_confirm.php?from=register');
-        } else {
-            header('Location: ' . api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/service_process_confirm.php');
-        }
+        header('Location: ' . api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/service_process_confirm.php');
     }
 
     exit;
 }
-
-// Reset discount code
-unset($_SESSION['s_discount']);
 
 $paymentTypesOptions = $plugin->getPaymentTypes(true);
 
@@ -163,47 +112,6 @@ if ($typeUser) {
         }
     }
     $form->addSelect('info_select', get_lang('Session'), $selectOptions);
-} elseif ($typeSubscriptionPackage) {
-    $trial = intval($serviceInfo['allow_trial']);
-
-    if ($trial) {
-        $trialTime = $serviceInfo['trial_period'] == 'Month' ? get_lang($serviceInfo['trial_period']) . '(es)' : get_lang($serviceInfo['trial_period']) . '(s)';
-        $form->addHtml('
-            <div class="form-group ">
-                <label for="qf_373cc5" class="col-sm-6">
-                    ' . sprintf($plugin->get_lang('EnableTrialSubscription'), $serviceInfo['trial_frequency'] . ' ' . $trialTime) . '
-                </label>
-                <div class="col-sm-6">
-                    <input cols-size="" name="enable_trial" value="1" id="qf_373cc5" type="checkbox"></div>
-                <div class="col-sm-0"></div>
-            </div>
-            <div class="form-group ">
-                <div class="col-sm-12">
-                    <p class="help-block">' . sprintf($plugin->get_lang('EnableTrialSubscriptionHelpText'), $serviceInfo['trial_frequency'] . ' ' . $trialTime) . '</p>
-                </div>
-            </div>
-        ');
-    }
-    $form->addText('store_code', $plugin->get_lang('DiscountCodeProcess'), true, ['cols-size' => [6, 6, 0], 'id' => 'store_code']);
-    $form->addText('info_select_trick', $plugin->get_lang('StoreName'), true, ['cols-size' => [6, 6, 0], 'id' => 'info_select_trick']);
-    $form->addHidden('info_select', '');
-    $form->addHtml('
-        <div class="form-group">
-            <div class="col-sm-2 pull-right">
-                <a id="code-checker" class="btn btn-xs btn-warning">' . $plugin->get_lang('Check') . '</a>
-            </div>
-            <div id="code-verificator-text" class="col-sm-4 pull-right">
-            </div>
-        </div>
-        <div id="code-verificator-info">
-
-        </div>
-        <div class="form-group">
-            <div class="col-sm-12">
-                <p class="help-block">' . $plugin->get_lang('DiscountCodeInfoText') . '</p>
-            </div>
-        </div>
-    ');
 }
 
 
@@ -217,11 +125,7 @@ $templateName = $plugin->get_lang('PaymentMethods');
 $interbreadcrumb[] = array("url" => "service_catalog.php", "name" => $plugin->get_lang('ListOfServicesOnSale'));
 
 $tpl = new Template($templateName);
-if (isset($_GET['from'])) {
-    if($_GET['from'] == 'register') {
-        $tpl->assign('wizard', true);
-    }
-}
+
 $tpl->assign('buying_service', true);
 $tpl->assign('service', $serviceInfo);
 $tpl->assign('user', api_get_user_info());

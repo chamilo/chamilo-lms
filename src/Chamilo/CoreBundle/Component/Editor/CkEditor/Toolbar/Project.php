@@ -5,7 +5,7 @@ namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
  * Project toolbar configuration
- * 
+ *
  * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
 class Project extends Basic
@@ -88,7 +88,7 @@ class Project extends Basic
     protected function getMinimizedToolbar()
     {
         return [
-            ['Save', 'NewPage', 'Templates', '-', 'PasteFromWord'],
+            $this->getNewPageBlock(),
             ['Undo', 'Redo'],
             ['Link', 'Image', 'Video', 'Flash', 'Audio', 'Table',  'Asciimath'],
             ['BulletedList', 'NumberedList', 'HorizontalRule'],

@@ -197,7 +197,7 @@ foreach ($rows as $post) {
                     . "&forum=$clean_forum_id&thread=$clean_thread_id&action=list&post={$post['post_id']}"
                     . "&user={$post['user_id']}&user_id={$post['user_id']}"
                     . "&idtextqualify=$current_qualify_thread"
-                    . "\" >" . Display::return_icon('quiz.gif', get_lang('Qualify')) . "</a>";
+                    . "\" >" . Display::return_icon('quiz.png', get_lang('Qualify')) . "</a>";
             }
         }
     }

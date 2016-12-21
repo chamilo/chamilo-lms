@@ -5,7 +5,7 @@ namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
  * WikiTask toolbar configuration
- * 
+ *
  * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
 class WikiTask extends Basic
@@ -88,7 +88,7 @@ class WikiTask extends Basic
     protected function getMinimizedToolbar()
     {
         return [
-            ['NewPage', 'Templates', '-', 'PasteFromWord'],
+            $this->getNewPageBlock(),
             ['Undo', 'Redo'],
             ['Link', 'Image', 'Video', 'Flash', 'Audio', 'Table'],
             ['BulletedList', 'NumberedList', 'HorizontalRule'],

@@ -203,7 +203,7 @@ class Basic extends Toolbar
     protected function getMinimizedToolbar()
     {
         return [
-            ['Save', 'NewPage', 'Templates', '-', 'PasteFromWord'],
+            $this->getNewPageBlock(),
             ['Undo', 'Redo'],
             ['Link', 'Image', 'Video', 'Oembed','Flash', 'Youtube', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
@@ -221,8 +221,8 @@ class Basic extends Toolbar
     protected function getMaximizedToolbar()
     {
         return [
-            ['Save', 'NewPage', 'Templates', '-', 'Preview', 'Print'],
-            ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord'],
+            $this->getNewPageBlock(),
+            ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', 'inserthtml'],
             ['Undo', 'Redo', '-', 'SelectAll', 'Find', '-', 'RemoveFormat'],
             ['Link', 'Unlink', 'Anchor', 'Glossary'],
             [
@@ -252,4 +252,11 @@ class Basic extends Toolbar
         ];
     }
 
+    /**
+     * @return array
+     */
+    public function getNewPageBlock()
+    {
+        return  ['NewPage', 'Templates', '-', 'PasteFromWord', 'inserthtml'];
+    }
 }

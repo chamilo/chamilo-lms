@@ -25,12 +25,10 @@ class AttendanceController
     }
 
     /**
-     * It's used for listing attendace,
+     * It's used for listing attendance,
      * render to attendance_list view
-     * @param boolean   true for listing history (optional)
-     * @param array 	message for showing by action['edit','add','delete'] (optional)
      */
-    public function attendance_list($history = false, $messages = array())
+    public function attendance_list()
     {
         $data = array();
 
@@ -53,20 +51,23 @@ class AttendanceController
         if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
             if (!empty($_POST['title'])) {
                 $check = Security::check_token();
+                $last_id = 0;
                 if ($check) {
                     $attendance->set_name($_POST['title']);
                     $attendance->set_description($_POST['description']);
                     $attendance->set_attendance_qualify_title($_POST['attendance_qualify_title']);
                     $attendance->set_attendance_weight($_POST['attendance_weight']);
                     $link_to_gradebook = false;
-                    if ( isset($_POST['attendance_qualify_gradebook']) && $_POST['attendance_qualify_gradebook'] == 1 ) {
+                    if (isset($_POST['attendance_qualify_gradebook']) &&
+                        $_POST['attendance_qualify_gradebook'] == 1
+                    ) {
                         $link_to_gradebook = true;
                     }
-                    $attendance->category_id = $_POST['category_id'];
+                    $attendance->category_id = isset($_POST['category_id']) ? $_POST['category_id'] : 0;
                     $last_id = $attendance->attendance_add($link_to_gradebook);
                     Security::clear_token();
                 }
-                header('location:index.php?action=calendar_add&attendance_id='.$last_id.'&'.api_get_cidreq());
+                header('Location: index.php?action=calendar_add&attendance_id='.$last_id.'&'.api_get_cidreq());
                 exit;
             } else {
                 $data['error'] = true;
@@ -84,9 +85,9 @@ class AttendanceController
     }
 
     /**
-     * It's used for editing attendace,
+     * It's used for editing attendance,
      * render to attendance_edit or attendance_list view
-     * @param int	attendance id
+     * @param int	$attendance_id
      */
     public function attendance_edit($attendance_id)
     {
@@ -153,7 +154,7 @@ class AttendanceController
     /**
      * It's used for delete attendaces
      * render to attendance_list view
-     * @param int	attendance id
+     * @param int	$attendance_id
      */
     public function attendance_delete($attendance_id)
     {
@@ -178,7 +179,7 @@ class AttendanceController
     /**
      * It's used for make attendance visible
      * render to attendance_list view
-     * @param int	$attendanceId
+     * @param int $attendanceId
      */
     public function attendanceSetVisible($attendanceId)
     {
@@ -196,7 +197,7 @@ class AttendanceController
     /**
      * It's used for make attendance invisible
      * render to attendance_list view
-     * @param int	$attendanceId
+     * @param int $attendanceId
      */
     public function attendanceSetInvisible($attendanceId)
     {
@@ -212,11 +213,12 @@ class AttendanceController
 
     /**
      * Restores an attendance entry and fallback to attendances rendering
-     * @param int	$attendance_id
+     * @param int $attendance_id
      */
     public function attendance_restore($attendance_id)
     {
         $attendance = new Attendance();
+        $affected_rows = false;
         if (!empty($attendance_id)) {
             $affected_rows = $attendance->attendance_restore($attendance_id);
         }

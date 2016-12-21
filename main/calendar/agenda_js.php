@@ -51,6 +51,7 @@ $agenda->type = $type;
 $is_group_tutor = false;
 $session_id = api_get_session_id();
 $group_id = api_get_group_id();
+$courseId = api_get_course_int_id();
 
 if (!empty($group_id)) {
     $group_properties = GroupManager::get_group_properties($group_id);
@@ -193,12 +194,15 @@ if (!empty($userId)) {
     $agenda_ajax_url = api_get_path(WEB_AJAX_PATH).'agenda.ajax.php?type='.$type;
 }
 
+if ($type == 'course' && !empty($courseId)) {
+    $agenda_ajax_url .= '&'.api_get_cidreq();
+}
+
 if (isset($_GET['session_id'])) {
     $agenda_ajax_url .= '&session_id='.intval($_GET['session_id']);
 }
 
 $tpl->assign('web_agenda_ajax_url', $agenda_ajax_url);
-$course_code = api_get_course_id();
 
 $form = new FormValidator(
     'form',

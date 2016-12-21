@@ -292,14 +292,14 @@ if (!$view || $view == 'received') {
 } elseif ($view = 'sent') {
     $part = 'sent';
 } else {
-    header('location: index.php?view='.$view.'&error=Error');
+    header('location: index.php?'.api_get_cidreq().'&view='.$view.'&error=Error');
     exit;
 }
 
 if (($postAction == 'download_received' || $postAction == 'download_sent') and !$_POST['store_feedback']) {
     $checked_file_ids = $_POST['id'];
     if (!is_array($checked_file_ids) || count($checked_file_ids) == 0) {
-        header('location: index.php?view='.$view.'&error=CheckAtLeastOneFile');
+        header('Location: index.php?'.api_get_cidreq().'&view='.$view.'&error=CheckAtLeastOneFile');
     } else {
         handle_multiple_actions();
     }

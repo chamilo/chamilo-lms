@@ -1312,9 +1312,35 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                 }
             }
 
-            //If I'm the admin platform i'm a teacher of the course
+            // If I'm the admin platform i'm a teacher of the course
             if ($is_platformAdmin) {
-                $is_courseAdmin     = true;
+                $is_courseAdmin = true;
+            }
+        } else {
+            // User has not access to the course
+            // This will check if the course was added in one of his sessions
+            // Then it will be redirected to that course-session
+            if ($is_courseMember == false) {
+                // Search session
+                $courseSession = SessionManager::searchCourseInSessionsFromUser(
+                    $user_id,
+                    $_course['real_id']
+                );
+
+                if (!empty($courseSession) && isset($courseSession[0])) {
+                    $courseSessionItem = $courseSession[0];
+                    if (isset($courseSessionItem['session_id'])) {
+                        $customSessionId = $courseSessionItem['session_id'];
+                        $url = $_course['course_public_url'].'?id_session='.$customSessionId;
+
+                        Session::erase('_real_cid');
+                        Session::erase('_cid');
+                        Session::erase('_course');
+
+                        header('Location: '.$url);
+                        exit;
+                    }
+                }
             }
         }
     } else { // keys missing => not anymore in the course - user relation

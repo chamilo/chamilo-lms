@@ -5,7 +5,7 @@ namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
  * TestAnswerFeedback toolbar configuration
- * 
+ *
  * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
 class TestAnswerFeedback extends Basic
@@ -96,7 +96,7 @@ class TestAnswerFeedback extends Basic
     protected function getMinimizedToolbar()
     {
         return [
-            ['NewPage', 'Templates', '-', 'PasteFromWord'],
+            $this->getNewPageBlock(),
             ['Undo', 'Redo'],
             ['Link', 'Image', 'Video', 'Flash', 'Audio', 'Table'],
             ['BulletedList', 'NumberedList', 'HorizontalRule'],

@@ -7237,6 +7237,10 @@ function api_can_login_as($loginAsUserId, $userId = null)
  */
 function api_is_allowed_in_course()
 {
+    if (api_is_platform_admin()) {
+        return true;
+    }
+
     return Session::read('is_allowed_in_course');
 }
 

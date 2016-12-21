@@ -94,7 +94,7 @@ $interbreadcrumb[] = array(
     "name" => get_lang('Documents'),
 );
 
-if (!$is_allowed_in_course) {
+if (!api_is_allowed_in_course()) {
     api_not_allowed(true);
 }
 

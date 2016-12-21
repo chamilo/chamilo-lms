@@ -142,7 +142,7 @@ class GradebookUtils
                 break;
             case 'exercise':
             case LINK_EXERCISE:
-                $icon = 'quiz.gif';
+                $icon = 'quiz.png';
                 break;
             case 'learnpath':
             case LINK_LEARNPATH:

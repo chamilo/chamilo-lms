@@ -27,14 +27,13 @@ class Agenda
      */
     public function __construct($senderId = 0, $courseId = 0, $sessionId = 0)
     {
-        //Table definitions
+        // Table definitions
         $this->tbl_global_agenda = Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
         $this->tbl_personal_agenda = Database::get_main_table(TABLE_PERSONAL_AGENDA);
         $this->tbl_course_agenda = Database::get_course_table(TABLE_AGENDA);
         $this->table_repeat = Database::get_course_table(TABLE_AGENDA_REPEAT);
 
-        //Setting the course object if we are in a course
-        unset($this->course);
+        // Setting the course object if we are in a course
         $courseInfo = api_get_course_info_by_id($courseId);
         if (!empty($courseInfo)) {
             $this->course = $courseInfo;

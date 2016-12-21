@@ -5,7 +5,7 @@ namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
  * Careers toolbar configuration
- * 
+ *
  * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
 class Careers extends Basic
@@ -86,7 +86,7 @@ class Careers extends Basic
     protected function getMinimizedToolbar()
     {
         return [
-            ['Save', 'NewPage', 'Templates', '-', 'PasteText'],
+            $this->getNewPageBlock(),
             ['Undo', 'Redo'],
             ['Link', 'Image', 'Video', 'Flash', 'Youtube', 'Audio', 'Table'],
             ['BulletedList', 'NumberedList', 'HorizontalRule'],

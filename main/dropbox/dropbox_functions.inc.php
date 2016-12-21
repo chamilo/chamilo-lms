@@ -446,7 +446,11 @@ function display_addcategory_form($category_name = '', $id = '', $action)
         $text = get_lang('CreateCategory');
     }
 
-    $form = new FormValidator('add_new_category', 'post', api_get_self().'?view='.Security::remove_XSS($_GET['view']));
+    $form = new FormValidator(
+        'add_new_category',
+        'post',
+        api_get_self().'?'.api_get_cidreq().'&view='.Security::remove_XSS($_GET['view'])
+    );
     $form->addElement('header', $title);
 
     if (isset($id) && $id != '') {

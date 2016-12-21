@@ -123,7 +123,7 @@ class TestQuestionDescription extends Basic
     protected function getMinimizedToolbar()
     {
         return [
-            ['NewPage', 'Templates', '-', 'PasteFromWord'],
+            $this->getNewPageBlock(),
             ['Undo', 'Redo'],
             ['Link', 'Unlink', 'Image', 'Video', 'Flash', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
             ['BulletedList', 'NumberedList', 'HorizontalRule'],

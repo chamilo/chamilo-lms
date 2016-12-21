@@ -94,7 +94,7 @@ class Documents extends Basic
     protected function getMinimizedToolbar()
     {
         return [
-            ['Save', 'NewPage', 'Templates', '-', 'PasteFromWord', 'inserthtml'],
+            $this->getNewPageBlock(),
             ['Undo', 'Redo'],
             [
                 'Link',

@@ -532,7 +532,7 @@ if ($destinationid==-1) {
 		$objQuestionTmp = Question :: read($destinationid);
 		$questionName=$objQuestionTmp->selectTitle();
 		$num_value_array= (array_keys($questionList, $destinationid));
-		$links.= Display :: return_icon('quiz.gif', '', array ('style' => 'padding-left:0px;padding-right:5px;')).'<a onclick="SendEx('.$num_value_array[0].');" href="#">'.get_lang('GoToQuestion').' '.$num_value_array[0].'</a><br /><br />';
+		$links.= Display :: return_icon('quiz.png', '', array ('style' => 'padding-left:0px;padding-right:5px;')).'<a onclick="SendEx('.$num_value_array[0].');" href="#">'.get_lang('GoToQuestion').' '.$num_value_array[0].'</a><br /><br />';
 	}
 }
 

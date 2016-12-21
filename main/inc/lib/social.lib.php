@@ -493,7 +493,7 @@ class SocialManager extends UserManager
 
         $user_in_course_status = CourseManager::getUserInCourseStatus(
             api_get_user_id(),
-            $my_course['real_id']
+            $my_course['course_info']['real_id']
         );
 
         //$valor = api_get_settings_params();

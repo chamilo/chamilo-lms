@@ -53,5 +53,8 @@ RewriteRule ^main/exercice/(.*)$ main/exercise/$1 [QSA,L]
 # Support old URLs using the newscorm folder rather than lp
 RewriteRule ^main/newscorm/(.*)$ main/lp/$1 [QSA,L]
 
+# service Information
+RewriteRule ^service/(\d{1,})$ plugin/buycourses/src/service_information.php?service_id=$1 [L]
+
 # Deny access
 RewriteRule ^(tests|.git) - [F,L,NC]

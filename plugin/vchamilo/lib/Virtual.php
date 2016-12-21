@@ -29,7 +29,7 @@ class Virtual
         self::getHostName($_configuration);
 
         // We are on physical chamilo. Let original config play
-        $virtualChamiloWebRoot = $_configuration['vchamilo_web_root'].'/';
+        $virtualChamiloWebRoot = rtrim($_configuration['vchamilo_web_root'], '/') . '/';
 
         $virtualChamilo = [];
         if ($_configuration['root_web'] == $virtualChamiloWebRoot) {
@@ -99,6 +99,7 @@ class Virtual
                 $data['SYS_HOME_PATH'] = self::addTrailingSlash($homePath).$data['slug'];
                 $data['SYS_COURSE_PATH'] = self::addTrailingSlash($coursePath).$data['slug'];
                 $data['SYS_UPLOAD_PATH'] = self::addTrailingSlash($uploadPath).$data['slug'];
+                $data['WEB_UPLOAD_PATH'] = $_configuration['vchamilo_web_root'] . 'var/upload/' . $data['slug'];
 
                 if (!empty($passwordEncryption)) {
                     $_configuration['password_encryption'] = $passwordEncryption;
@@ -124,7 +125,11 @@ class Virtual
         ) {
             $protocol = 'https';
         } else {
-            $protocol = 'http';
+            if ($_SERVER['HTTPS']) {
+                $protocol = 'https';
+            } else {
+                $protocol = 'http';
+            }
         }
 
         if (defined('CLI_VCHAMILO_OVERRIDE')) {
@@ -955,7 +960,7 @@ class Virtual
         }
 
         $data->root_web = api_add_trailing_slash($data->root_web);
-        if (substr($data->root_web, 4) != 'http') {
+        if (substr($data->root_web, 0, 4) != 'http') {
             $data->root_web = api_get_protocol().'://'.$data->root_web;
         }
 

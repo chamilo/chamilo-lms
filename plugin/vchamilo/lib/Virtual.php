@@ -125,7 +125,7 @@ class Virtual
         ) {
             $protocol = 'https';
         } else {
-            if ($_SERVER['HTTPS']) {
+            if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']) {
                 $protocol = 'https';
             } else {
                 $protocol = 'http';

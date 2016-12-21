@@ -959,7 +959,7 @@ class Virtual
         }
 
         $data->root_web = api_add_trailing_slash($data->root_web);
-        if (substr($data->root_web, 4) != 'http') {
+        if (substr($data->root_web, 0, 4) != 'http') {
             $data->root_web = api_get_protocol().'://'.$data->root_web;
         }
 

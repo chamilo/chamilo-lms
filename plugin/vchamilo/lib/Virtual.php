@@ -124,7 +124,11 @@ class Virtual
         ) {
             $protocol = 'https';
         } else {
-            $protocol = 'http';
+            if ($_SERVER['HTTPS']) {
+                $protocol = 'https';
+            } else {
+                $protocol = 'http';
+            }
         }
 
         if (defined('CLI_VCHAMILO_OVERRIDE')) {

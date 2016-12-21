@@ -322,26 +322,43 @@ class CourseRestorer
                     }
 
                     // File exist in file system.
-                    $documentData = DocumentManager::get_document_id($course_info, $folderToCreate, $my_session_id);
-
-                    if (!empty($documentData)) {
-                        continue;
-                    }
-
-                    /* This means the folder exists in the
-                    filesystem but not in the DB, trying to fix it */
-                    add_document(
+                    $documentData = DocumentManager::get_document_id(
                         $course_info,
                         $folderToCreate,
-                        'folder',
-                        0,
-                        $title,
-                        null,
-                        null,
-                        false,
-                        null,
                         $my_session_id
                     );
+
+                    if (empty($documentData)) {
+
+                        /* This means the folder exists in the
+                        filesystem but not in the DB, trying to fix it */
+                        add_document(
+                            $course_info,
+                            $folderToCreate,
+                            'folder',
+                            0,
+                            $title,
+                            null,
+                            null,
+                            false,
+                            null,
+                            $my_session_id
+                        );
+                    } else {
+                        // if folder exists then just refresh it
+                        api_item_property_update(
+                            $course_info,
+                            TOOL_DOCUMENT,
+                            $documentData,
+                            'FolderUpdated',
+                            $document->item_properties[0]['insert_user_id'],
+                            $document->item_properties[0]['to_group_id'],
+                            $document->item_properties[0]['to_user_id'],
+                            null,
+                            null,
+                            $my_session_id
+                        );
+                    }
                 }
             } elseif ($document->file_type == DOCUMENT) {
                 //Checking if folder exists in the database otherwise we created it

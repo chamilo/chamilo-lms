@@ -635,6 +635,7 @@ class SocialManager extends UserManager
                 )
             );
         } else {
+            $template->assign('show_group', false);
             $template->assign('show_user', true);
             $template->assign(
                 'user_image',

@@ -6822,7 +6822,7 @@ class SessionManager
      */
     public static function getSessionVisibility($sessionInfo)
     {
-        switch($sessionInfo['visibility']) {
+        switch ($sessionInfo['visibility']) {
             case 1:
                 return get_lang('ReadOnly');
             case 2:
@@ -6844,12 +6844,25 @@ class SessionManager
     private static function convertSessionDateToString($startDate, $endDate, $showTime, $dateHuman)
     {
         // api_get_local_time returns empty if date is invalid like 0000-00-00 00:00:00
-        $startDateToLocal = api_get_local_time($startDate, null, null, true, $showTime, $dateHuman);
-        $endDateToLocal = api_get_local_time($endDate, null, null, true, $showTime, $dateHuman);
+        $startDateToLocal = api_get_local_time(
+            $startDate,
+            null,
+            null,
+            true,
+            $showTime,
+            $dateHuman
+        );
+        $endDateToLocal = api_get_local_time(
+            $endDate,
+            null,
+            null,
+            true,
+            $showTime,
+            $dateHuman
+        );
 
         $result = '';
         if (!empty($startDateToLocal) && !empty($endDateToLocal)) {
-            //$result = sprintf(get_lang('FromDateXToDateY'), $startDateToLocal, $endDateToLocal);
             $result = sprintf(
                 get_lang('FromDateXToDateY'),
                 api_format_date($startDateToLocal, DATE_TIME_FORMAT_LONG_24H),
@@ -6866,6 +6879,7 @@ class SessionManager
         if (empty($result)) {
             $result = get_lang('NoTimeLimits');
         }
+
         return $result;
     }
 

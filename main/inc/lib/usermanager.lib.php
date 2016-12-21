@@ -1717,7 +1717,6 @@ class UserManager
         $gravatarEnabled = api_get_setting('gravatar_enabled');
         $anonymousPath = Display::returnIconPath('unknown.png', $pictureAnonymousSize);
         if ($pictureWebFile == 'unknown.jpg' || empty($pictureWebFile)) {
-
             if ($gravatarEnabled === 'true') {
                 $file = self::getGravatar(
                     $imageWebPath['email'],
@@ -2631,23 +2630,34 @@ class UserManager
         $categories = [];
 
         foreach ($sessionData as $row) {
+            $session_id = $row['id'];
+            $coachList = SessionManager::getCoachesBySession($session_id);
+
+            $categoryStart = $row['session_category_date_start'] ? $row['session_category_date_start']->format('Y-m-d') : '';
+            $categoryEnd = $row['session_category_date_end'] ? $row['session_category_date_end']->format('Y-m-d') : '';
+
+            $courseList = UserManager::get_courses_list_by_session(
+                $user_id,
+                $session_id
+            );
+
             // User portal filters:
             if ($ignoreTimeLimit === false) {
                 if ($is_time_over) {
                     // History
                     if (empty($row['access_end_date'])) {
                         continue;
-                    }
-
-                    if (!empty($row['access_end_date'])) {
+                    } else {
                         if ($row['access_end_date'] > $now) {
                             continue;
                         }
-
                     }
                 } else {
                     // Current user portal
-                    if (api_is_allowed_to_create_course()) {
+                    $isGeneralCoach = SessionManager::user_is_general_coach($user_id, $row['id']);
+                    $isCoachOfCourse = in_array($user_id, $coachList);
+
+                    if (api_is_platform_admin() || $isGeneralCoach || $isCoachOfCourse) {
                         // Teachers can access the session depending in the access_coach date
                     } else {
                         if (isset($row['access_end_date']) &&
@@ -2661,20 +2671,11 @@ class UserManager
                 }
             }
 
-            $categoryStart = $row['session_category_date_start'] ? $row['session_category_date_start']->format('Y-m-d') : '';
-            $categoryEnd = $row['session_category_date_end'] ? $row['session_category_date_end']->format('Y-m-d') : '';
-
             $categories[$row['session_category_id']]['session_category'] = array(
                 'id' => $row['session_category_id'],
                 'name' => $row['session_category_name'],
                 'date_start' => $categoryStart,
                 'date_end' => $categoryEnd
-            );
-
-            $session_id = $row['id'];
-            $courseList = UserManager::get_courses_list_by_session(
-                $user_id,
-                $session_id
             );
 
             $visibility = api_get_session_visibility(
@@ -3006,7 +3007,7 @@ class UserManager
                     scu.user_id = $user_id AND
                     scu.session_id = $session_id
                     $where_access_url
-                ORDER BY sc.position ASC";
+                ORDER BY sc.position ASC, c.id";
 
         $personal_course_list = array();
         $courses = array();

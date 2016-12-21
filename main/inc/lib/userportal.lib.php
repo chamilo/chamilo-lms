@@ -1177,6 +1177,8 @@ class IndexManager
 
         // Declared listSession variable
         $listSession = [];
+
+        $session_now = time();
         if (is_array($session_categories)) {
             foreach ($session_categories as $session_category) {
                 $session_category_id = $session_category['session_category']['id'];
@@ -1195,12 +1197,10 @@ class IndexManager
                         }
 
                         // Courses inside the current session.
-                        $date_session_start = api_get_local_time($session['access_start_date']);
-                        $date_session_end = api_get_local_time($session['access_end_date']);
-                        $coachAccessStartDate = api_get_local_time($session['coach_access_start_date']);
-                        $coachAccessEndDate = api_get_local_time($session['coach_access_end_date']);
-
-                        $session_now = time();
+                        $date_session_start = $session['access_start_date'];
+                        $date_session_end = $session['access_end_date'];
+                        $coachAccessStartDate = $session['coach_access_start_date'];
+                        $coachAccessEndDate = $session['coach_access_end_date'];
                         $count_courses_session = 0;
 
                         // Loop course content
@@ -1211,6 +1211,7 @@ class IndexManager
                             $is_coach_course = api_is_coach($session_id, $course['real_id']);
                             $allowed_time = 0;
                             $allowedEndTime = true;
+
                             if (!empty($date_session_start)) {
                                 if ($is_coach_course) {
                                     $allowed_time = api_strtotime($coachAccessStartDate);
@@ -1220,13 +1221,29 @@ class IndexManager
 
                                 if (!isset($_GET['history'])) {
                                     if (!empty($date_session_end)) {
-                                        $endSessionToTms = api_strtotime($date_session_end);
-                                        if ($session_now > $endSessionToTms) {
-                                            $allowedEndTime = false;
+                                        if ($is_coach_course) {
+                                            // if coach end date is empty we use the default end date
+                                            if (empty($coachAccessEndDate)) {
+                                                $endSessionToTms = api_strtotime($date_session_end);
+                                                if ($session_now > $endSessionToTms) {
+                                                    $allowedEndTime = false;
+                                                }
+                                            } else {
+                                                $endSessionToTms = api_strtotime($coachAccessEndDate);
+                                                if ($session_now > $endSessionToTms) {
+                                                    $allowedEndTime = false;
+                                                }
+                                            }
+                                        } else {
+                                            $endSessionToTms = api_strtotime($date_session_end);
+                                            if ($session_now > $endSessionToTms) {
+                                                $allowedEndTime = false;
+                                            }
                                         }
                                     }
                                 }
                             }
+
                             if ($session_now >= $allowed_time && $allowedEndTime) {
                                 // Read only and accessible.
                                 $atLeastOneCourseIsVisible = true;
@@ -1321,35 +1338,44 @@ class IndexManager
                             $coachAccessStartDate = $session['coach_access_start_date'];
                             $coachAccessEndDate = $session['coach_access_end_date'];
 
-                            $session_now = time();
                             $html_courses_session = [];
                             $count = 0;
 
                             foreach ($session['courses'] as $course) {
-                                $is_coach_course = api_is_coach(
-                                    $session_id,
-                                    $course['real_id']
-                                );
-
+                                $is_coach_course = api_is_coach($session_id, $course['real_id']);
                                 $allowed_time = 0;
                                 $allowedEndTime = true;
 
-                                if ($is_coach_course) {
-                                    if (!empty($date_session_start)) {
+                                if (!empty($date_session_start)) {
+                                    if ($is_coach_course) {
                                         $allowed_time = api_strtotime($coachAccessStartDate);
+                                    } else {
+                                        $allowed_time = api_strtotime($date_session_start);
                                     }
+
                                     if (!isset($_GET['history'])) {
                                         if (!empty($date_session_end)) {
-                                            $endSessionToTms = api_strtotime($date_session_end);
-                                            if ($session_now > $endSessionToTms) {
-                                                $allowedEndTime = false;
+                                            if ($is_coach_course) {
+                                                // if coach end date is empty we use the default end date
+                                                if (empty($coachAccessEndDate)) {
+                                                    $endSessionToTms = api_strtotime($date_session_end);
+                                                    if ($session_now > $endSessionToTms) {
+                                                        $allowedEndTime = false;
+                                                    }
+                                                } else {
+                                                    $endSessionToTms = api_strtotime($coachAccessEndDate);
+                                                    if ($session_now > $endSessionToTms) {
+                                                        $allowedEndTime = false;
+                                                    }
+                                                }
+                                            } else {
+                                                $endSessionToTms = api_strtotime($date_session_end);
+                                                if ($session_now > $endSessionToTms) {
+                                                    $allowedEndTime = false;
+                                                }
                                             }
                                         }
                                     }
-                                } else {
-                                    $allowed_time = api_strtotime(
-                                        $date_session_start
-                                    );
                                 }
 
                                 if ($session_now >= $allowed_time && $allowedEndTime) {

@@ -18,7 +18,7 @@ switch ($action) {
         break;
     case 'newinstance':
     case 'instance':
-        $registeronly = $_REQUEST['registeronly'];
+        $registeronly = isset($_REQUEST['registeronly']) ? $_REQUEST['registeronly'] : 0;
         Virtual::redirect(api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/editinstance.php?registeronly='.$registeronly);
         break;
     case 'editinstance':

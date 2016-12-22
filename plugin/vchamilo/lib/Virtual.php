@@ -99,7 +99,6 @@ class Virtual
                 $data['SYS_HOME_PATH'] = self::addTrailingSlash($homePath).$data['slug'];
                 $data['WEB_HOME_PATH'] = $_configuration['vchamilo_web_root'] . 'var/home/' . $data['slug'];
                 $data['SYS_COURSE_PATH'] = self::addTrailingSlash($coursePath).$data['slug'];
-                $data['WEB_HOME_PATH'] = $_configuration['vchamilo_web_root'] . 'var/courses/' . $data['slug'];
                 $data['SYS_UPLOAD_PATH'] = self::addTrailingSlash($uploadPath).$data['slug'];
                 $data['WEB_UPLOAD_PATH'] = $_configuration['vchamilo_web_root'] . 'var/upload/' . $data['slug'];
 

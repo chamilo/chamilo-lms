@@ -495,8 +495,12 @@ if ($form->validate()) {
     }
 
 	if ($fp = @fopen($filepath.$filename.'.'.$extension, 'w')) {
-		//$content = str_replace(api_get_path(WEB_COURSE_PATH), $_configuration['url_append'].'/courses/', $content);
-		$content = str_replace(api_get_path(WEB_COURSE_PATH), $_configuration['url_append'].api_get_path(REL_COURSE_PATH), $content);
+
+		$content = str_replace(
+		    api_get_path(WEB_COURSE_PATH),
+            api_get_configuration_value('url_append').api_get_path(REL_COURSE_PATH),
+            $content
+        );
 
 		fputs($fp, $content);
 		fclose($fp);

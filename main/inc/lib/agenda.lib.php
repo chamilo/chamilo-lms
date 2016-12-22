@@ -2576,22 +2576,22 @@ class Agenda
         $groupInfo = GroupManager::get_group_properties(api_get_group_id());
         $groupIid = isset($groupInfo['iid']) ? $groupInfo['iid'] : 0;
 
-        $actionsLeft = '';
-        $actionsLeft .= "<a href='".api_get_path(WEB_CODE_PATH)."calendar/agenda_js.php?type={$this->type}'>".
-            Display::return_icon('calendar.png', get_lang('Calendar'), '', ICON_SIZE_MEDIUM)."</a>";
-
         $courseCondition = '';
         if (!empty($courseInfo)) {
             $courseCondition = api_get_cidreq();
         }
 
+        $actionsLeft = '';
+        $actionsLeft .= "<a href='".api_get_path(WEB_CODE_PATH)."calendar/agenda_js.php?type={$this->type}&".$courseCondition."'>".
+            Display::return_icon('calendar.png', get_lang('Calendar'), '', ICON_SIZE_MEDIUM)."</a>";
+
         $actionsLeft .= "<a href='".api_get_path(WEB_CODE_PATH)."calendar/agenda_list.php?type={$this->type}&".$courseCondition."'>".
             Display::return_icon('week.png', get_lang('AgendaList'), '', ICON_SIZE_MEDIUM)."</a>";
 
         $form = '';
-
         if (api_is_allowed_to_edit(false, true) ||
-            (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()) && api_is_allowed_to_session_edit(false, true) ||
+            (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()) &&
+            api_is_allowed_to_session_edit(false, true) ||
             (GroupManager::user_has_access(api_get_user_id(), $groupIid, GroupManager::GROUP_TOOL_CALENDAR) &&
             GroupManager::is_tutor_of_group(api_get_user_id(), $groupIid))
         ) {

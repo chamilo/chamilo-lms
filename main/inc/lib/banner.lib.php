@@ -401,7 +401,7 @@ function menuArray()
             $cleanUrl = api_replace_dangerous_char($url);
             $cleanUrl = str_replace('/', '-', $cleanUrl);
             $cleanUrl .= '/';
-            $homepath  = api_get_path(SYS_APP_PATH).'home/'.$cleanUrl; //homep for Home Path
+            $homepath  = api_get_path(SYS_HOME_PATH) . $cleanUrl; //homep for Home Path
 
             //we create the new dir for the new sites
             if (!is_dir($homepath)) {
@@ -409,7 +409,7 @@ function menuArray()
             }
         }
     } else {
-        $homepath = api_get_path(SYS_APP_PATH).'home/';
+        $homepath = api_get_path(SYS_HOME_PATH);
     }
     $ext = '.html';
     $menuTabs = 'home_tabs';

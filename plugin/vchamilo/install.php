@@ -44,6 +44,7 @@ Database::query($sql);
 
 $table = 'vchamilo_config';
 $tablename = Database::get_main_table($table);
+// TODO: rename "name" and "value" fields - these are reserved keywords
 $sql = "CREATE TABLE IF NOT EXISTS $tablename (
     id int(11) NOT NULL AUTO_INCREMENT, 
     component int(11) NOT NULL,

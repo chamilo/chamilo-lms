@@ -663,6 +663,7 @@ class DocumentManager
                     $template_result = Database::query($sql);
                     $row['is_template'] = (Database::num_rows($template_result) > 0) ? 1 : 0;
                 }
+                $row['basename'] = basename($row['path']);
                 // Just filling $document_data.
                 $document_data[$row['id']] = $row;
             }
@@ -1444,6 +1445,7 @@ class DocumentManager
             $row['absolute_path_from_document'] = '/document' . $row['path'];
             $row['absolute_parent_path'] = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/document'.$pathinfo['dirname'] . '/';
             $row['direct_url'] = $www . $path;
+            $row['basename'] = basename($row['path']);
 
             if (dirname($row['path']) == '.') {
                 $row['parent_id'] = '0';
@@ -5302,7 +5304,7 @@ class DocumentManager
                     api_is_platform_admin() ||
                     api_get_setting('students_download_folders') == 'true'
                 ) {
-                    //filter when I am into shared folder, I can show for donwload only my shared folder
+                    //filter: when I am into a shared folder, I can only show "my shared folder" for donwload
                     if (DocumentManager::is_shared_folder($curdirpath, $current_session_id)) {
                         if (preg_match('/shared_folder\/sf_user_' . api_get_user_id() . '$/', urldecode($forcedownload_link)) ||
                             preg_match('/shared_folder_session_' . $current_session_id . '\/sf_user_' . api_get_user_id() . '$/', urldecode($forcedownload_link)) ||
@@ -5320,11 +5322,11 @@ class DocumentManager
                     }
                 }
             } else {
-                $force_download_html = ($size == 0) ? '' : '<a href="' . $forcedownload_link . '" style="float:right"' . $prevent_multiple_click . '>' .
+                $force_download_html = ($size == 0) ? '' : '<a href="' . $forcedownload_link . '" style="float:right"' . $prevent_multiple_click . ' download="' . $document_data['basename'] . '">' .
                     Display::return_icon($forcedownload_icon, get_lang('Download'), array(), ICON_SIZE_SMALL) . '</a>';
             }
 
-            // Copy files to users myfiles
+            // Copy files to user's myfiles
             if (api_get_setting('allow_my_files') === 'true' &&
                 api_get_setting('users_copy_files') === 'true'
             ) {
@@ -5393,13 +5395,13 @@ class DocumentManager
                             'class' => $class,
                             'title' => $tooltip_title_alt,
                             'data-title' => $title,
-                            'style' => 'float: left;'
+                            'style' => 'float:left;'
                         ]
                     )
                     . $force_download_html . $send_to . $copy_to_myfiles
                     . $open_in_new_window_link . $pdf_icon;
                 } else {
-                    // For PDF Download the file.
+                    // For a "PDF Download" of the file.
                     $pdfPreview = null;
                     if ($ext != 'pdf' && !in_array($ext, $webOdflist)) {
                         $url = 'showinframes.php?' . api_get_cidreq() . '&id=' . $document_data['id'];

@@ -542,6 +542,8 @@ class Virtual
     */
     public static function getVmanifest($version)
     {
+        $templatewwwroot = '';
+        // Define the $templatewwwroot content, found in manifest.php for this template
         $file = api_get_path(SYS_PATH).'/plugin/vchamilo/templates/'.$version.'/manifest.php';
         if (file_exists($file)) {
             include $file;

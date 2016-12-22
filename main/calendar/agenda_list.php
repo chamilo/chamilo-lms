@@ -63,22 +63,23 @@ $actions = $agenda->displayActions('list');
 $tpl = new Template(get_lang('Events'));
 $tpl->assign('agenda_events', $events);
 $tpl->assign('url', $url);
+$tpl->assign('show_action', in_array($type, ['course', 'session']));
 $tpl->assign('actions', $actions);
 $tpl->assign('is_allowed_to_edit', api_is_allowed_to_edit());
 
 if (api_is_allowed_to_edit()) {
     if (isset($_GET['action']) && $_GET['action'] == 'change_visibility') {
         $courseInfo = api_get_course_info();
-        if (empty($courseInfo)) {
-            // This happens when list agenda is not inside a course
-            if (($type == 'course' || $type == 'session') && isset($_GET['cid']) && intval($_GET['cid']) !== 0) {
-                // For course and session event types
-                // Just needs course ID
-                $courseInfo = array('real_id' => intval($_GET['cid']));
-                $agenda->changeVisibility($_GET['id'], $_GET['visibility'], $courseInfo);
-            }
+        $courseCondition = '';
+        // This happens when list agenda is not inside a course
+        if (($type == 'course' || $type == 'session' && !empty($courseInfo))) {
+            // For course and session event types
+            // Just needs course ID
+            $agenda->changeVisibility($_GET['id'], $_GET['visibility'], $courseInfo);
+        } else {
+            $courseCondition = '&'.api_get_cidreq();
         }
-        header('Location: '. api_get_self());
+        header('Location: '. api_get_self().'?type='.$agenda->type.$courseCondition);
         exit;
     }
 }

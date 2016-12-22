@@ -456,8 +456,8 @@ function exercise_attempt($score, $answer, $question_id, $exe_id, $position, $ex
     //Validation in case of fraud with actived control time
     if (!exercise_time_control_is_valid($exercise_id, $learnpath_id, $learnpath_item_id)) {
         if ($debug) error_log("exercise_time_control_is_valid is false");
-        $score = 0;
-        $answer = 0;
+        /*$score = 0;
+        $answer = 0;*/
     }
 
     if (!empty($user_id)) {

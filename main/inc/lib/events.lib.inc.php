@@ -540,7 +540,7 @@ function exercise_attempt_hotspot($exe_id, $question_id, $answer_id, $correct, $
     global $safe_lp_id, $safe_lp_item_id;
     //Validation in case of fraud  with actived control time
     if (!exercise_time_control_is_valid($exerciseId, $safe_lp_id, $safe_lp_item_id)) {
-        $correct = 0;
+        //$correct = 0;
     }
 
     $tbl_track_e_hotspot = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);

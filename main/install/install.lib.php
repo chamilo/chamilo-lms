@@ -712,7 +712,7 @@ function display_requirements(
             <div class="alert alert-danger">
                 ' . Display::return_icon('error.png', get_lang('Error'), [], ICON_SIZE_MEDIUM) .
             ' ' .
-            get_lang('InstallMultiURLDetectedNotMainURL') . '
+            sprintf(get_lang('InstallMultiURLDetectedNotMainURL'), api_get_configuration_value('root_web')) . '
             </div>
         ';
     }

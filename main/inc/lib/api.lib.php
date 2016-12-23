@@ -653,57 +653,62 @@ function api_get_path($path = '', $configuration = [])
     // get proper configuration data if exists
     global $_configuration;
 
+    $emptyConfigurationParam = false;
     if (empty($configuration)) {
         $configuration = (array) $_configuration;
+        $emptyConfigurationParam = true;
     }
 
     $course_folder = 'courses/';
+    static $root_web = '';
+    static $root_sys = '';
     $root_sys = $_configuration['root_sys'];
 
-    // Resolve master hostname.
-    if (!empty($configuration) && array_key_exists('root_web', $configuration)) {
-        $root_web = $configuration['root_web'];
-    } else {
-        $root_web = '';
-        // Try guess it from server.
-        if (defined('SYSTEM_INSTALLATION') && SYSTEM_INSTALLATION) {
-            if (($pos = strpos(($requested_page_rel = api_get_self()), 'main/install')) !== false) {
-                $root_rel = substr($requested_page_rel, 0, $pos);
-                // See http://www.mediawiki.org/wiki/Manual:$wgServer
-                $server_protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https' : 'http';
-                $server_name =
-                    isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME']
-                    : (isset($_SERVER['HOSTNAME']) ? $_SERVER['HOSTNAME']
-                    : (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST']
-                    : (isset($_SERVER['SERVER_ADDR']) ? $_SERVER['SERVER_ADDR']
-                    : 'localhost')));
-                if (isset($_SERVER['SERVER_PORT']) && !strpos($server_name, ':')
-                    && (($server_protocol == 'http'
-                    && $_SERVER['SERVER_PORT'] != 80 ) || ($server_protocol == 'https' && $_SERVER['SERVER_PORT'] != 443 ))) {
-                    $server_name .= ":" . $_SERVER['SERVER_PORT'];
+    // If no $root_web has been set so far *and* no custom config has been passed to the function
+    // then re-use the previously-calculated (run-specific) $root_web and skip this complex calculation
+    if (empty($root_web) || $emptyConfigurationParam === false) {
+        // Resolve master hostname.
+        if (!empty($configuration) && array_key_exists('root_web', $configuration)) {
+            $root_web = $configuration['root_web'];
+        } else {
+            $root_web = '';
+            // Try guess it from server.
+            if (defined('SYSTEM_INSTALLATION') && SYSTEM_INSTALLATION) {
+                if (($pos = strpos(($requested_page_rel = api_get_self()), 'main/install')) !== false) {
+                    $root_rel = substr($requested_page_rel, 0, $pos);
+                    // See http://www.mediawiki.org/wiki/Manual:$wgServer
+                    $server_protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https' : 'http';
+                    $server_name =
+                        isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME']
+                            : (isset($_SERVER['HOSTNAME']) ? $_SERVER['HOSTNAME']
+                            : (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST']
+                                : (isset($_SERVER['SERVER_ADDR']) ? $_SERVER['SERVER_ADDR']
+                                    : 'localhost')));
+                    if (isset($_SERVER['SERVER_PORT']) && !strpos($server_name, ':')
+                        && (($server_protocol == 'http'
+                                && $_SERVER['SERVER_PORT'] != 80) || ($server_protocol == 'https' && $_SERVER['SERVER_PORT'] != 443))
+                    ) {
+                        $server_name .= ":" . $_SERVER['SERVER_PORT'];
+                    }
+                    $root_web = $server_protocol . '://' . $server_name . $root_rel;
+                    $root_sys = str_replace('\\', '/', realpath(__DIR__ . '/../../../')) . '/';
                 }
-                $root_web = $server_protocol.'://'.$server_name.$root_rel;
-                $root_sys = str_replace('\\', '/', realpath(__DIR__.'/../../../')).'/';
-            }
-            // Here we give up, so we don't touch anything.
-        }
-    }
-
-    if (isset($configuration['multiple_access_urls']) && $configuration['multiple_access_urls']) {
-        // To avoid that the api_get_access_url() function fails since global.inc.php also calls the main_api.lib.php
-        if (isset($configuration['access_url']) && !empty($configuration['access_url'])) {
-            // We look into the DB the function api_get_access_url
-            $url_info = api_get_access_url($configuration['access_url']);
-            // Avoid default value
-            $defaulValues = ['http://localhost/', 'https://localhost/'];
-            if (!empty($url_info['url']) && !in_array($url_info['url'], $defaulValues)) {
-                $root_web = $url_info['active'] == 1 ? $url_info['url'] : $configuration['root_web'];
+                // Here we give up, so we don't touch anything.
             }
         }
-    }
 
-    if (empty($paths)) {
-        $paths = [];
+        if (isset($configuration['multiple_access_urls']) && $configuration['multiple_access_urls']) {
+            // To avoid that the api_get_access_url() function fails since global.inc.php also calls the main_api.lib.php
+            if (isset($configuration['access_url']) && !empty($configuration['access_url'])) {
+                // We look into the DB the function api_get_access_url
+                $url_info = api_get_access_url($configuration['access_url']);
+                // Avoid default value
+                $defaulValues = ['http://localhost/', 'https://localhost/'];
+                if (!empty($url_info['url']) && !in_array($url_info['url'], $defaulValues)) {
+                    $root_web = $url_info['active'] == 1 ? $url_info['url'] : $configuration['root_web'];
+                }
+            }
+        }
     }
 
     $paths = [];

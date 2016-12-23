@@ -824,7 +824,13 @@ function api_get_path($path = '', $configuration = [])
             $paths[$root_web][WEB_HOME_PATH] = api_add_trailing_slash($virtualChamilo[WEB_HOME_PATH]);
             $paths[$root_web][SYS_COURSE_PATH] = api_add_trailing_slash($virtualChamilo[SYS_COURSE_PATH]);
             $paths[$root_web][SYS_UPLOAD_PATH] = api_add_trailing_slash($virtualChamilo[SYS_UPLOAD_PATH]);
-            $paths[$root_web][WEB_UPLOAD_PATH] = api_add_trailing_slash($virtualChamilo[WEB_UPLOAD_PATH]);
+
+            // WEB_UPLOAD_PATH should be handle by apache htaccess in the vhost
+
+            // RewriteEngine On
+            // RewriteRule /app/upload/(.*)$ http://localhost/other/upload/my-chamilo111-net/$1 [QSA,L]
+
+            //$paths[$root_web][WEB_UPLOAD_PATH] = api_add_trailing_slash($virtualChamilo[WEB_UPLOAD_PATH]);
             //$paths[$root_web][REL_PATH] = $virtualChamilo[REL_PATH];
             //$paths[$root_web][REL_COURSE_PATH] = $virtualChamilo[REL_COURSE_PATH];
         }
@@ -1436,7 +1442,7 @@ function api_get_user_info(
                     false,
                     true
                 );
-                if (intval($user_status['user_chat_status']) == 1) {
+                if (@intval($user_status['user_chat_status']) == 1) {
                     $user_online_in_chat = 1;
                 }
             }

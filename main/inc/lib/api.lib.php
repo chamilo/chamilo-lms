@@ -666,7 +666,7 @@ function api_get_path($path = '', $configuration = [])
 
     // If no $root_web has been set so far *and* no custom config has been passed to the function
     // then re-use the previously-calculated (run-specific) $root_web and skip this complex calculation
-    if (empty($root_web) || $emptyConfigurationParam === false) {
+    if (empty($root_web) || $emptyConfigurationParam === false || empty($configuration)) {
         // Resolve master hostname.
         if (!empty($configuration) && array_key_exists('root_web', $configuration)) {
             $root_web = $configuration['root_web'];

@@ -2138,7 +2138,7 @@ class DocumentManager
     {
         $max = 5;
         $attributes = array();
-        $wanted_attributes = array('src', 'url', '@import', 'href', 'value', 'flashvars');
+        $wanted_attributes = array('src', 'url', '@import', 'href', 'value', 'flashvars', 'poster');
         $explode_attributes = array('flashvars' => 'file');
         $abs_path = '';
 

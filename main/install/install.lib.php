@@ -123,6 +123,22 @@ function checkPhpSettingExists($phpSetting)
 }
 
 /**
+ * Check if the current url is the same root_web when the multiple_access_url is enabled
+ * @return bool
+ */
+function checkAccessUrl()
+{
+    if (api_get_configuration_value('multiple_access_urls') !== true) {
+        return true;
+    }
+
+    $currentWebPath = api_get_path(WEB_PATH);
+    $rootWeb = api_get_configuration_value('root_web');
+
+    return $currentWebPath === $rootWeb;
+}
+
+/**
  * Returns a textual value ('ON' or 'OFF') based on a requester 2-state ini- configuration setting.
  *
  * @param string $val a php ini value
@@ -689,6 +705,18 @@ function display_requirements(
     }
     echo '</div>';
 
+    $properlyAccessUrl =  checkAccessUrl();
+
+    if (!$properlyAccessUrl) {
+        echo '
+            <div class="alert alert-danger">
+                ' . Display::return_icon('error.png', get_lang('Error'), [], ICON_SIZE_MEDIUM) .
+            ' ' .
+            get_lang('InstallMultiURLDetectedNotMainURL') . '
+            </div>
+        ';
+    }
+
     //  SERVER REQUIREMENTS
     echo '<div class="RequirementHeading"><h4>'.get_lang('ServerRequirements').'</h4>';
 
@@ -1090,6 +1118,10 @@ function display_requirements(
                 <?php } ?>
             </ul>
             <?php
+        }
+
+        if (!$properlyAccessUrl) {
+            $error = true;
         }
 
         // And now display the choice buttons (go back or install)

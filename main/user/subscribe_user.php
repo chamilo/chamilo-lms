@@ -699,7 +699,7 @@ function reg_filter($user_id)
     }
     $user_id = (int) $user_id;
 
-	$result = '<a class="btn btn-small btn-primary" href="'.api_get_self().'?register=yes&type='.$type.'&user_id='.$user_id.'">'.
+	$result = '<a class="btn btn-small btn-primary" href="'.api_get_self().'?'.api_get_cidreq().'&register=yes&type='.$type.'&user_id='.$user_id.'">'.
         get_lang("reg").'</a>';
 
 	return $result;

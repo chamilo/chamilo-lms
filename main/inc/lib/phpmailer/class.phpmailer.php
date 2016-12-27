@@ -594,12 +594,35 @@ class PHPMailer {
    * @access protected
    * @return bool
    */
-  protected function SendmailSend($header, $body) {
-    if ($this->Sender != '') {
-      $sendmail = sprintf("%s -oi -f %s -t", escapeshellcmd($this->Sendmail), escapeshellarg($this->Sender));
-    } else {
-      $sendmail = sprintf("%s -oi -t", escapeshellcmd($this->Sendmail));
-    }
+  protected function SendmailSend($header, $body)
+  {
+      if (!(is_file($this->Sendmail) and is_executable($this->Sendmail))) {
+          throw new phpmailerException(
+              $this->lang('execute').$this->Sendmail,
+              self::STOP_CRITICAL
+          );
+      }
+      if (!empty($this->Sender) and $this->validateAddress($this->Sender)) {
+          if ($this->Mailer == 'qmail') {
+              $sendmail = sprintf(
+                  '%s -f%s',
+                  escapeshellcmd($this->Sendmail),
+                  escapeshellarg($this->Sender)
+              );
+          } else {
+              $sendmail = sprintf(
+                  '%s -oi -f%s -t',
+                  escapeshellcmd($this->Sendmail),
+                  escapeshellarg($this->Sender)
+              );
+          }
+      } else {
+          if ($this->Mailer == 'qmail') {
+              $sendmail = sprintf('%s', escapeshellcmd($this->Sendmail));
+          } else {
+              $sendmail = sprintf('%s -oi -t', escapeshellcmd($this->Sendmail));
+          }
+      }
     if ($this->SingleTo === true) {
       foreach ($this->SingleToArray as $key => $val) {
         if(!@$mail = popen($sendmail, 'w')) {
@@ -648,7 +671,7 @@ class PHPMailer {
     $to = implode(', ', $toArr);
 
     $params = sprintf("-oi -f %s", $this->Sender);
-    if ($this->Sender != '' && strlen(ini_get('safe_mode'))< 1) {
+    if (!empty($this->Sender) and !ini_get('safe_mode') and $this->validateAddress($this->Sender)) {
       $old_from = ini_get('sendmail_from');
       ini_set('sendmail_from', $this->Sender);
       if ($this->SingleTo === true && count($toArr) > 1) {
@@ -704,7 +727,12 @@ class PHPMailer {
     if(!$this->SmtpConnect()) {
       throw new phpmailerException($this->Lang('smtp_connect_failed'), self::STOP_CRITICAL);
     }
-    $smtp_from = ($this->Sender == '') ? $this->From : $this->Sender;
+
+    if (!empty($this->Sender) and $this->validateAddress($this->Sender)) {
+        $smtp_from = $this->Sender;
+    } else {
+        $smtp_from = $this->From;
+    }
     if(!$this->smtp->Mail($smtp_from)) {
       throw new phpmailerException($this->Lang('from_failed') . $smtp_from, self::STOP_CRITICAL);
     }
@@ -2332,4 +2360,3 @@ class phpmailerException extends Exception {
     return $errorMsg;
   }
 }
-?>

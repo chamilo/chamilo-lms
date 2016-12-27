@@ -6792,7 +6792,7 @@ class Exercise
         //$this->loadQuestionAJAX = true;
 
         if ($generateJS && $this->loadQuestionAJAX) {
-            $url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?a=get_question&id='.$questionId;
+            $url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?a=get_question&id='.$questionId.'&'.api_get_cidreq();
             $params = array(
                 'questionId' => $questionId,
                 'attemptList'=> $attemptList,

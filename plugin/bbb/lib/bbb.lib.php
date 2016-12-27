@@ -577,9 +577,20 @@ class bbb
 
     /**
      * Gets all the course meetings saved in the plugin_bbb_meeting table
+     * @param int $courseId
+     * @param int $sessionId
+     * @param int $groupId
+     * @param bool $isAdminReport Optional. Set to true then the report is for admins
+     * @param array $dateRange Optional
      * @return array Array of current open meeting rooms
      */
-    public function getMeetings($courseId = 0, $sessionId = 0, $groupId = 0, $isAdminReport = false)
+    public function getMeetings(
+        $courseId = 0,
+        $sessionId = 0,
+        $groupId = 0,
+        $isAdminReport = false,
+        $dateRange = []
+    )
     {
         $em = Database::getManager();
 
@@ -606,6 +617,20 @@ class bbb
                     )
                 );
             }
+        }
+
+        if (!empty($dateRange)) {
+            $dateStart = date_create($dateRange['search_meeting_start']);
+            $dateStart = date_format($dateStart, 'Y-m-d H:i:s');
+            $dateEnd = date_create($dateRange['search_meeting_end']);
+            $dateEnd = $dateEnd->add(new DateInterval('P1D'));
+            $dateEnd = date_format($dateEnd, 'Y-m-d H:i:s');
+
+            $conditions = array(
+                'where' => array(
+                    'created_at BETWEEN ? AND ? ' => array($dateStart, $dateEnd),
+                ),
+            );
         }
 
         $meetingList = Database::select(
@@ -1207,10 +1232,16 @@ class bbb
             'plugin_bbb_room',
             array('where' => array('meeting_id = ?' => intval($meetingId)))
         );
-
+        $participantIds = [];
         $return = [];
 
         foreach ($meetingData as $participantInfo) {
+            if (in_array($participantInfo['participant_id'], $participantIds)) {
+                continue;
+            }
+
+            $participantIds[] = $participantInfo['participant_id'];
+
             $return[] = [
                 'id' => $participantInfo['id'],
                 'meeting_id' => $participantInfo['meeting_id'],

@@ -11348,7 +11348,15 @@ EOD;
                 $link .= $main_dir_path.'user/user.php?origin='.$origin;
                 break;
             case TOOL_STUDENTPUBLICATION:
-                $link .= $main_dir_path.'work/work_list.php?'.api_get_cidreq().'&id='.$row_item['path'].'&origin=learnpath';
+                if (!empty($row_item['path'])) {
+                    $link .= $main_dir_path.'work/work_list.php?'.api_get_cidreq().'&id='.$row_item['path'].'&origin=learnpath';
+                    break;
+                }
+
+                $link .= $main_dir_path . 'work/work.php?' . api_get_cidreq() . '&' . http_build_query([
+                        'id' => $row_item['path'],
+                        'origin' => 'learnpath'
+                    ]);
                 break;
         } //end switch
 

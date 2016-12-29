@@ -175,6 +175,11 @@ switch ($serviceSale['payment_type']) {
 
     case BuyCoursesPlugin::PAYMENT_TYPE_CULQI:
 
+        // We need to include the main online script, acording to the Culqi documentation the JS needs to be loeaded
+        // directly from the main url "https://integ-pago.culqi.com" because a local copy of this JS is not supported
+        $htmlHeadXtra[] = '<script src="https://integ-pago.culqi.com/js/v1"></script>';
+
+
         break;
 }
 

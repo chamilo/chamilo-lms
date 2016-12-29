@@ -18,6 +18,7 @@ $plugin = BuyCoursesPlugin::create();
 $paypalEnable = $plugin->get('paypal_enable');
 $transferEnable = $plugin->get('transfer_enable');
 $commissionsEnable = $plugin->get('commissions_enable');
+$culqiEnable = $plugin->get('culqi_enable');
 
 if (isset($_GET['action'], $_GET['id'])) {
     if ($_GET['action'] == 'delete_taccount') {
@@ -179,14 +180,48 @@ $transferForm->addButtonCreate(get_lang('Add'));
 
 $transferAccounts = $plugin->getTransferAccounts();
 
-//view
+// Culqi main configuration
+
+$culqiForm = new FormValidator('culqi_config');
+
+if ($culqiForm->validate()) {
+    $culqiFormValues = $culqiForm->getSubmitValues();
+
+    $plugin->saveCulqiParameters($culqiFormValues);
+
+    Display::addFlash(
+        Display::return_message(get_lang('Saved'), 'success')
+    );
+
+    header('Location:' . api_get_self());
+    exit;
+}
+
+$culqiForm->addText(
+    'commerce_code',
+    $plugin->get_lang('CommerceCode'),
+    true,
+    ['cols-size' => [3, 8, 1]]
+);
+
+$culqiForm->addText(
+    'api_key',
+    $plugin->get_lang('ApiKey'),
+    true,
+    ['cols-size' => [3, 8, 1]]
+);
+
+$culqiForm->addText(
+    'value_conversion',
+    $plugin->get_lang('ValueConversion'),
+    true,
+    ['cols-size' => [3, 8, 1]]
+);
+
+// breadcrumbs
 $interbreadcrumb[] = [
-    'url' => 'course_catalog.php',
-    'name' => $plugin->get_lang('CourseListOnSale')
-];
-$interbreadcrumb[] = [
-    'url' => 'configuration.php',
-    'name' => $plugin->get_lang('AvailableCoursesConfiguration')
+    'url' => api_get_path(WEB_PLUGIN_PATH) . 'buycourses/index.php',
+    'name' => $plugin->get_lang('plugin_title')
 ];
 
 $templateName = $plugin->get_lang('PaymentsConfiguration');
@@ -196,10 +231,12 @@ $tpl->assign('curency_form', $currencyForm->returnForm());
 $tpl->assign('paypal_form', $paypalForm->returnForm());
 $tpl->assign('commission_form', $commissionForm->returnForm());
 $tpl->assign('transfer_form', $transferForm->returnForm());
+$tpl->assign('culqi_form', $culqiForm->returnForm());
 $tpl->assign('transfer_accounts', $transferAccounts);
 $tpl->assign('paypal_enable', $paypalEnable);
 $tpl->assign('commissions_enable', $commissionsEnable);
 $tpl->assign('transfer_enable', $transferEnable);
+$tpl->assign('culqi_enable', $culqiEnable);
 
 $content = $tpl->fetch('buycourses/view/paymentsetup.tpl');
 

@@ -147,3 +147,5 @@ $strings['ServiceSaleInfo'] = "Información del servicio";
 $strings['ListOfServicesOnSale'] = "Lista de servicios a la venta";
 $strings['AdditionalInfo'] = "Información adicional";
 $strings['PleaseSelectTheCorrectInfoToApplyTheService'] = "Porfavor Seleccione la información correcta para aplicar el servicio";
+$strings['SubscriptionToServiceXSuccessful'] = "La subscripción al servicio %s ha sido satisfactoria";
+$strings['culqi_enable'] = "Habilitar Culqi";

@@ -71,6 +71,7 @@ class BuyCoursesPlugin extends Plugin
                 'include_services' => 'boolean',
                 'paypal_enable' => 'boolean',
                 'transfer_enable' => 'boolean',
+                'culqi_enable' => 'boolean',
                 'commissions_enable' => 'boolean',
                 'unregistered_users_enable' => 'boolean'
             )

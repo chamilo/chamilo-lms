@@ -793,9 +793,9 @@ class Statistics
                    HAVING t.c_id <> ''
                    AND DATEDIFF( '".api_get_utc_datetime()."' , access_date ) <= ". $date_diff;
         } else {
-            $sql = "SELECT * FROM $table
-                   GROUP BY c_id
-                   HAVING c_id <> ''
+            $sql = "SELECT * FROM $table t
+                   GROUP BY t.c_id
+                   HAVING t.c_id <> ''
                    AND DATEDIFF( '".api_get_utc_datetime()."' , access_date ) <= ". $date_diff;
         }
         $sql .= ' ORDER BY '.$columns[$column].' '.$sql_order[$direction];

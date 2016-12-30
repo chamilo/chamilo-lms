@@ -157,7 +157,7 @@ $form->addElement(
 );
 
 $display_date = 'none';
-if (!empty($publicated_on)) {
+if (!empty($publicated_on) && $publicated_on !== '0000-00-00 00:00:00') {
     $display_date = 'block';
     $defaults['activate_start_date_check'] = 1;
 }
@@ -220,7 +220,7 @@ if ($enableLpExtraFields) {
 }
 
 
-$defaults['publicated_on'] = (!empty($publicated_on))? api_get_local_time($publicated_on) : date('Y-m-d 12:00:00');
+$defaults['publicated_on'] = !empty($publicated_on) && $publicated_on !== '0000-00-00 00:00:00' ? api_get_local_time($publicated_on) : null;
 $defaults['expired_on'] = (!empty($expired_on) )? api_get_local_time($expired_on): date('Y-m-d 12:00:00', time()+84600);
 $defaults['subscribe_users'] = $_SESSION['oLP']->getSubscribeUsers();
 $form->setDefaults($defaults);

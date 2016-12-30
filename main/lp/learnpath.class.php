@@ -779,12 +779,13 @@ class learnpath
         if (empty($publicated_on)) {
             //by default the publication date is the same that the creation date
             //The behaviour above was changed due BT#2800
-            global $_custom;
-            if (isset($_custom['lps_hidden_when_no_start_date']) && $_custom['lps_hidden_when_no_start_date']) {
-                $publicated_on = '';
-            } else {
-                $publicated_on = api_get_utc_datetime();
-            }
+//            global $_custom;
+//            if (isset($_custom['lps_hidden_when_no_start_date']) && $_custom['lps_hidden_when_no_start_date']) {
+//                $publicated_on = null;
+//            } else {
+//                $publicated_on = null;
+//            }
+            $publicated_on = null;
         } else {
             $publicated_on = Database::escape_string(api_get_utc_datetime($publicated_on));
         }

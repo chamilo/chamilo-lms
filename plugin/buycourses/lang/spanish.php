@@ -149,3 +149,6 @@ $strings['AdditionalInfo'] = "Información adicional";
 $strings['PleaseSelectTheCorrectInfoToApplyTheService'] = "Porfavor Seleccione la información correcta para aplicar el servicio";
 $strings['SubscriptionToServiceXSuccessful'] = "La subscripción al servicio %s ha sido satisfactoria";
 $strings['culqi_enable'] = "Habilitar Culqi";
+$strings['CulqiConfig'] = "Configuración de CULQI:";
+$strings['InfoCulqiCredentials'] = "Para obtener las credenciales es necesario crearse una cuenta en Culqi e ingresar en modo desarrollo, copiar el código de comercio que se encuentra en su panel de control, luego ingresar al apartado de API Keys y generar la Key correspondiente para copiarla aquí";
+$strings['CommerceCode'] = "Codigo de comercio";

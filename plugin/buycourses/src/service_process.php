@@ -28,6 +28,7 @@ $plugin = BuyCoursesPlugin::create();
 $includeServices = $plugin->get('include_services');
 $paypalEnabled = $plugin->get('paypal_enable') === 'true';
 $transferEnabled = $plugin->get('transfer_enable') === 'true';
+$culqiEnabled = $plugin->get('culqi_enable') === 'true';
 $wizard = true;
 $additionalQueryString = '';
 if ($includeServices !== 'true') {
@@ -74,7 +75,19 @@ if ($form->validate()) {
     exit;
 }
 
-$paymentTypesOptions = $plugin->getPaymentTypes(true);
+$paymentTypesOptions = $plugin->getPaymentTypes();
+
+if (!$paypalEnabled) {
+    unset($paymentTypesOptions[BuyCoursesPlugin::PAYMENT_TYPE_PAYPAL]);
+}
+
+if (!$transferEnabled) {
+    unset($paymentTypesOptions[BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER]);
+}
+
+if (!$culqiEnabled) {
+    unset($paymentTypesOptions[BuyCoursesPlugin::PAYMENT_TYPE_CULQI]);
+}
 
 $form->addHeader('');
 $form->addRadio('payment_type', null, $paymentTypesOptions);

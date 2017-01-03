@@ -9897,9 +9897,11 @@ class learnpath
 
                     $finder = new Finder();
                     $finder->files()->in($containerOrigin)
+                        ->notName('*_DELETED_*')
                         ->exclude('share_folder')
                         ->exclude('chat_files')
-                        ->exclude('certificates');
+                        ->exclude('certificates')
+                    ;
 
                     if (is_dir($containerOrigin) && is_dir($containerDestination)) {
                         $fs = new Filesystem();

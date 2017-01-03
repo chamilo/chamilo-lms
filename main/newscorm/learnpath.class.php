@@ -9743,12 +9743,16 @@ class learnpath
                 continue;
             }
 
+
+            $filePath = $sys_course_path.$_course['path'].'/'.$file_path;
             $dest_file = $archive_path.$temp_dir_short.'/'.$file_path;
+
             if (!empty($path_to_remove) && !empty($path_to_replace)) {
                 $dest_file = str_replace($path_to_remove, $path_to_replace, $dest_file);
             }
             $this->create_path($dest_file);
-            @copy($sys_course_path.$_course['path'].'/'.$file_path, $dest_file);
+            @copy($filePath, $dest_file);
+
             // Check if the file needs a link update.
             if (in_array($file_path, array_keys($link_updates))) {
                 $string = file_get_contents($dest_file);
@@ -9772,8 +9776,8 @@ class learnpath
                     }
                     $string = str_replace($old_new['orig'], $newDestination, $string);
 
-                    //Add files inside the HTMLs
-                    $new_path = str_replace('/courses/', '', $old_new['orig']);
+                    // Add files inside the HTMLs
+                    $new_path = str_replace(api_get_path(REL_COURSE_PATH), '', $old_new['orig']);
                     $destinationFile = $archive_path.$temp_dir_short.'/'.$old_new['dest'];
                     if (file_exists($sys_course_path.$new_path)) {
                         copy($sys_course_path.$new_path, $destinationFile);

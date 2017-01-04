@@ -33,161 +33,220 @@ class FillBlanks extends Question
      */
     public function createAnswersForm($form)
     {
-        $fillBlanksAllowedSeparator = self::getAllowedSeparator();
+        //$fillBlanksAllowedSeparator = self::getAllowedSeparator();
         $defaults = array();
 
         if (!empty($this->id)) {
             $objectAnswer = new Answer($this->id);
             $answer = $objectAnswer->selectAnswer(1);
             $listAnswersInfo = FillBlanks::getAnswerInfo($answer);
-
-            if ($listAnswersInfo["switchable"]) {
+            if ($listAnswersInfo['switchable']) {
                 $defaults['multiple_answer'] = 1;
             } else {
                 $defaults['multiple_answer'] = 0;
             }
             //take the complete string except after the last '::'
-            $defaults['answer'] = $listAnswersInfo["text"];
-            $defaults['select_separator'] = $listAnswersInfo["blankseparatornumber"];
-            $blanksepartornumber = $listAnswersInfo["blankseparatornumber"];
+            $defaults['answer'] = $listAnswersInfo['text'];
+            $defaults['select_separator'] = $listAnswersInfo['blankseparatornumber'];
+            $blankSeparatorNumber = $listAnswersInfo['blankseparatornumber'];
         } else {
             $defaults['answer'] = get_lang('DefaultTextInBlanks');
             $defaults['select_separator'] = 0;
-            $blanksepartornumber = 0;
+            $blankSeparatorNumber = 0;
         }
 
-        $blankSeparatorStart = self::getStartSeparator($blanksepartornumber);
-        $blankSeparatorEnd = self::getEndSeparator($blanksepartornumber);
+        $blankSeparatorStart = self::getStartSeparator($blankSeparatorNumber);
+        $blankSeparatorEnd = self::getEndSeparator($blankSeparatorNumber);
 
-        $setValues = null;
-
-        if (isset($a_weightings) && count($a_weightings) > 0) {
-            foreach ($a_weightings as $i => $weighting) {
-                $setValues .= 'document.getElementById("weighting['.$i.']").value = "'.$weighting.'";';
+        $setWeightAndSize = '';
+        if (isset($listAnswersInfo) && count($listAnswersInfo['tabweighting']) > 0) {
+            foreach ($listAnswersInfo['tabweighting'] as $i => $weighting) {
+                $setWeightAndSize .= 'document.getElementById("weighting['.$i.']").value = "'.$weighting.'";';
+            }
+            foreach ($listAnswersInfo['tabinputsize'] as $i => $sizeOfInput) {
+                //var_dump($listAnswersInfo['tabwords']);
+                $setWeightAndSize .= 'document.getElementById("sizeofinput['.$i.']").value = "'.$sizeOfInput.'";';
+                $setWeightAndSize .= 'document.getElementById("samplesize['.$i.']").style.width = "'.$sizeOfInput.'px";';
             }
         }
-        // javascript
+
         echo '<script>
-
-            var blankSeparatortStart = "'.$blankSeparatorStart.'";
-            var blankSeparatortEnd = "'.$blankSeparatorEnd.'";
-            var blankSeparatortStartRegexp = getBlankSeparatorRegexp(blankSeparatortStart);
-            var blankSeparatortEndRegexp = getBlankSeparatorRegexp(blankSeparatortEnd);
-
+            
+            var firstTime = true;            
+            var originalOrder = new Array();   
+            var blankSeparatorStart = "'.$blankSeparatorStart.'";
+            var blankSeparatorEnd = "'.$blankSeparatorEnd.'";
+            var blankSeparatorStartRegexp = getBlankSeparatorRegexp(blankSeparatorStart);
+            var blankSeparatorEndRegexp = getBlankSeparatorRegexp(blankSeparatorEnd);
+            var blanksRegexp = "/"+blankSeparatorStartRegexp+"[^"+blankSeparatorStartRegexp+"]*"+blankSeparatorEndRegexp+"/g";
+            
             CKEDITOR.on("instanceCreated", function(e) {
-                if (e.editor.name === "answer") {
-                    e.editor.on("change", updateBlanks);
+                if (e.editor.name === "answer") {                  
+                    //e.editor.on("change", updateBlanks);
+                    e.editor.on("change", function(){
+                        updateBlanks();
+                    });
                 }
-            });
-
-            var firstTime = true;
-
+            });                        
+            
             function updateBlanks()
             {
+                
+                var answer;                
                 if (firstTime) {
                     var field = document.getElementById("answer");
-                    var answer = field.value;
+                    answer = field.value;
                 } else {
-                    var answer = CKEDITOR.instances["answer"].getData();
+                    answer = CKEDITOR.instances["answer"].getData();
                 }
-
+                                
                 // disable the save button, if not blanks have been created
                 $("button").attr("disabled", "disabled");
-                $("#defineoneblank").show();
-
-                var blanksRegexp = "/"+blankSeparatortStartRegexp+"[^"+blankSeparatortStartRegexp+"]*"+blankSeparatortEndRegexp+"/g";
-
-                var blanks = answer.match(eval(blanksRegexp));
-                var fields = "<div class=\"form-group \">";
+                $("#defineoneblank").show();                
+                var blanks = answer.match(eval(blanksRegexp));             
+                var fields = "<div class=\"form-group \">";                
                 fields += "<label class=\"col-sm-2 control-label\">'.get_lang('Weighting').'</label>";
                 fields += "<div class=\"col-sm-8\">";
                 fields += "<table>";
                 fields += "<tr><th style=\"padding:0 20px\">'.get_lang("WordTofind").'</th><th style=\"padding:0 20px\">'.get_lang("QuestionWeighting").'</th><th style=\"padding:0 20px\">'.get_lang("BlankInputSize").'</th></tr>";
 
                 if (blanks != null) {
-                    for (var i=0 ; i < blanks.length ; i++){
+                    for (var i=0; i < blanks.length; i++) {
                         // remove forbidden characters that causes bugs
-                        blanks[i] = removeForbiddenChars(blanks[i]);
+                        blanks[i] = removeForbiddenChars(blanks[i]);                        
                         // trim blanks between brackets
-                        blanks[i] = trimBlanksBetweenSeparator(blanks[i], blankSeparatortStart, blankSeparatortEnd);
-
+                        blanks[i] = trimBlanksBetweenSeparator(blanks[i], blankSeparatorStart, blankSeparatorEnd);
+                        
                         // if the word is empty []
-                        if (blanks[i] == blankSeparatortStartRegexp+blankSeparatortEndRegexp) {
+                        if (blanks[i] == blankSeparatorStartRegexp+blankSeparatorEndRegexp) {
                             break;
                         }
+                        
                         // get input size
-                        var lainputsize = 200;
-                        var lainputsizetrue = 200;
-                        if ($("#samplesize\\\["+i+"\\\]").width()) {
-                        // this is a weird patch to avoid to reduce the size of input blank when you are writing in the ckeditor.
-                            lainputsize = $("#samplesize\\\["+i+"\\\]").width();
-                            lainputsizetrue = $("#samplesize\\\["+i+"\\\]").width() + 15;
-                        }
+                        var inputSize = 200;                        
+                        var textValue = blanks[i].substr(1, blanks[i].length - 2);
+                        var btoaValue = textValue.hashCode();
+                                                                      
+                        if (firstTime == false) {
+                            var element = document.getElementById("samplesize["+i+"]");                                
+                            if (element) {
+                                inputSize = document.getElementById("sizeofinput["+i+"]").value;                                
+                            }
+                        }                                                                    
 
                         if (document.getElementById("weighting["+i+"]")) {
                             var value = document.getElementById("weighting["+i+"]").value;
                         } else {
-                            var value = "10";
-                        }
+                            var value = "10";    
+                        }                                            
+                        
                         fields += "<tr>";
                         fields += "<td>"+blanks[i]+"</td>";
                         fields += "<td><input style=\"width:35px\" value=\""+value+"\" type=\"text\" id=\"weighting["+i+"]\" name=\"weighting["+i+"]\" /></td>";
                         fields += "<td>";
-                        fields += "<input type=\"button\" value=\"-\" onclick=\"changeInputSize(-1, "+i+")\">";
-                        fields += "<input type=\"button\" value=\"+\" onclick=\"changeInputSize(1, "+i+")\">";
-                        fields += "<input value=\""+blanks[i].substr(1, blanks[i].length - 2)+"\" style=\"width:"+lainputsizetrue+"px\" disabled=disabled id=\"samplesize["+i+"]\"/>";
-                        fields += "<input type=\"hidden\" id=\"sizeofinput["+i+"]\" name=\"sizeofinput["+i+"]\" value=\""+lainputsize+"\" \"/>";
+                        fields += "<input class=\"btn btn-default\" type=\"button\" value=\"-\" onclick=\"changeInputSize(-1, "+i+")\">&nbsp;";
+                        fields += "<input class=\"btn btn-default\" type=\"button\" value=\"+\" onclick=\"changeInputSize(1, "+i+")\">&nbsp;";
+                        fields += "<input class=\"sample\" id=\"samplesize["+i+"]\" data-btoa=\""+btoaValue+"\"   type=\"text\" value=\""+textValue+"\" style=\"width:"+inputSize+"px\" disabled=disabled />";
+                        fields += "<input id=\"sizeofinput["+i+"]\" type=\"hidden\" value=\""+inputSize+"\" name=\"sizeofinput["+i+"]\"  />";
                         fields += "</td>";
                         fields += "</tr>";
+                        
                         // enable the save button
                         $("button").removeAttr("disabled");
                         $("#defineoneblank").hide();
                     }
-                }
-                document.getElementById("blanks_weighting").innerHTML = fields + "</table></div></div>";
-                if (firstTime) {
-                    firstTime = false;
-                ';
-
-        if (isset($listAnswersInfo) && count($listAnswersInfo["tabweighting"]) > 0) {
-            foreach ($listAnswersInfo["tabweighting"] as $i => $weighting) {
-                echo 'document.getElementById("weighting['.$i.']").value = "'.$weighting.'";';
-            }
-            foreach ($listAnswersInfo["tabinputsize"] as $i => $sizeOfInput) {
-                echo 'document.getElementById("sizeofinput['.$i.']").value = "'.$sizeOfInput.'";';
-                echo '$("#samplesize\\\['.$i.'\\\]").width('.$sizeOfInput.');';
-            }
-        }
-
-        echo '}
-            }
-            window.onload = updateBlanks;
-
-            function getInputSize() {
-                var outTabSize = new Array();
-                $("input").each(function() {
-                    if ($(this).attr("id") && $(this).attr("id").match(/samplesize/)) {
-                        var tabidnum = $(this).attr("id").match(/\d+/);
-                        var idnum = tabidnum[0];
-                        var thewidth = $(this).next().attr("value");
-                        tabInputSize[idnum] = thewidth;
+                }                         
+                
+                document.getElementById("blanks_weighting").innerHTML = fields + "</table></div></div>";                                
+                $(originalOrder).each(function(i, data) {
+                     if (firstTime == false) {
+                        value = data.value;
+                        console.log(value);
+                        var d = $("input.sample[data-btoa=\'"+value+"\']");                        
+                        var id = d.attr("id");   
+                        if (id) {
+                            var sizeInputId = id.replace("samplesize", "sizeofinput");                            
+                            var sizeInputId = sizeInputId.replace("[", "\\\[");
+                            var sizeInputId = sizeInputId.replace("]", "\\\]");                       
+                                                         
+                            $("#"+sizeInputId).val(data.width);                        
+                            d.outerWidth(data.width+"px");
+                        }
                     }
                 });
+                
+                updateOrder(blanks);               
+
+                if (firstTime) {
+                    firstTime = false;
+                    '.$setWeightAndSize.'
+                }
             }
 
-            function changeInputSize(inCoef, inIdNum)
+            window.onload = updateBlanks;
+            
+            String.prototype.hashCode = function() {
+  var hash = 0, i, chr, len;
+  if (this.length === 0) return hash;
+  for (i = 0, len = this.length; i < len; i++) {
+    chr   = this.charCodeAt(i);
+    hash  = ((hash << 5) - hash) + chr;
+    hash |= 0; // Convert to 32bit integer
+  }
+  return hash;
+};
+            
+            function updateOrder(blanks) 
             {
+                originalOrder = new Array();                
+                 if (blanks != null) {
+                    for (var i=0; i < blanks.length; i++) {
+                        // remove forbidden characters that causes bugs
+                        blanks[i] = removeForbiddenChars(blanks[i]);                        
+                        // trim blanks between brackets
+                        blanks[i] = trimBlanksBetweenSeparator(blanks[i], blankSeparatorStart, blankSeparatorEnd);
+                        
+                        // if the word is empty []
+                        if (blanks[i] == blankSeparatorStartRegexp+blankSeparatorEndRegexp) {
+                            break;
+                        }                        
+                        var textValue = blanks[i].substr(1, blanks[i].length - 2);
+                        var btoaValue = textValue.hashCode();
+                        
+                        if (firstTime == false) {
+                            var element = document.getElementById("samplesize["+i+"]");                                
+                            if (element) {
+                                inputSize = document.getElementById("sizeofinput["+i+"]").value;
+                                originalOrder.push({ "width" : inputSize, "value": btoaValue });                                                                               
+                            }
+                        }
+                    }
+                }
+            }
+            
+            function changeInputSize(coef, inIdNum)
+            {
+                if (firstTime) {
+                    var field = document.getElementById("answer");
+                    answer = field.value;
+                } else {
+                    answer = CKEDITOR.instances["answer"].getData();
+                }
+                
+                var blanks = answer.match(eval(blanksRegexp));
                 var currentWidth = $("#samplesize\\\["+inIdNum+"\\\]").width();
-                var newWidth = currentWidth + inCoef * 20;
+                var newWidth = currentWidth + coef * 20;
                 newWidth = Math.max(20, newWidth);
                 newWidth = Math.min(newWidth, 600);
-                $("#samplesize\\\["+inIdNum+"\\\]").width(newWidth);
+                $("#samplesize\\\["+inIdNum+"\\\]").outerWidth(newWidth);
                 $("#sizeofinput\\\["+inIdNum+"\\\]").attr("value", newWidth);
+                
+                updateOrder(blanks); 
             }
 
-            function removeForbiddenChars(inTxt) {
+            function removeForbiddenChars(inTxt)
+            {
                 outTxt = inTxt;
-
                 outTxt = outTxt.replace(/&quot;/g, ""); // remove the   char
                 outTxt = outTxt.replace(/\x22/g, ""); // remove the   char
                 outTxt = outTxt.replace(/"/g, ""); // remove the   char
@@ -199,13 +258,14 @@ class FillBlanks extends Question
             }
 
             function changeBlankSeparator()
-            {
+            {console.log("dd");
                 var separatorNumber = $("#select_separator").val();
                 var tabSeparator = getSeparatorFromNumber(separatorNumber);
-                blankSeparatortStart = tabSeparator[0];
-                blankSeparatortEnd = tabSeparator[1];
-                blankSeparatortStartRegexp = getBlankSeparatorRegexp(blankSeparatortStart);
-                blankSeparatortEndRegexp = getBlankSeparatorRegexp(blankSeparatortEnd);
+                blankSeparatorStart = tabSeparator[0];
+                blankSeparatorEnd = tabSeparator[1];
+                blankSeparatorStartRegexp = getBlankSeparatorRegexp(blankSeparatorStart);
+                blankSeparatorEndRegexp = getBlankSeparatorRegexp(blankSeparatorEnd);
+                blanksRegexp = "/"+blankSeparatorStartRegexp+"[^"+blankSeparatorStartRegexp+"]*"+blankSeparatorEndRegexp+"/g";
                 updateBlanks();
             }
 
@@ -240,8 +300,6 @@ class FillBlanks extends Question
 
             function trimBlanksBetweenSeparator(inTxt, inSeparatorStart, inSeparatorEnd)
             {
-                // blankSeparatortStartRegexp
-                // blankSeparatortEndRegexp
                 var result = inTxt
                 result = result.replace(inSeparatorStart, "");
                 result = result.replace(inSeparatorEnd, "");
@@ -251,35 +309,37 @@ class FillBlanks extends Question
         </script>';
 
         // answer
-        $form->addElement('label', null, '<br /><br />'.get_lang('TypeTextBelow').', '.get_lang('And').' '.get_lang('UseTagForBlank'));
+        $form->addLabel(
+            null,
+            '<br /><br />'.get_lang('TypeTextBelow').', '.get_lang('And').' '.get_lang('UseTagForBlank')
+        );
         $form->addElement(
             'html_editor',
             'answer',
             Display::return_icon('fill_field.png'),
-            ['id' => 'answer', 'onkeyup' => "javascript: updateBlanks(this);"],
+            ['id' => 'answer'],
             array('ToolbarSet' => 'TestQuestionDescription')
         );
-        $form->addRule('answer',get_lang('GiveText'),'required');
+        $form->addRule('answer', get_lang('GiveText'), 'required');
 
         //added multiple answers
-        $form->addElement('checkbox','multiple_answer','', get_lang('FillInBlankSwitchable'));
+        $form->addElement('checkbox', 'multiple_answer', '', get_lang('FillInBlankSwitchable'));
         $form->addElement(
             'select',
             'select_separator',
             get_lang("SelectFillTheBlankSeparator"),
             self::getAllowedSeparatorForSelect(),
-            ' id="select_separator"   style="width:150px" onchange="changeBlankSeparator()" '
+            ' id="select_separator" style="width:150px" onchange="changeBlankSeparator()" '
         );
-        $form->addElement(
-            'label',
+        $form->addLabel(
             null,
             '<input type="button" onclick="updateBlanks()" value="'.get_lang('RefreshBlanks').'" class="btn btn-default" />'
         );
-        $form->addElement('html','<div id="blanks_weighting"></div>');
+        $form->addHtml('<div id="blanks_weighting"></div>');
 
         global $text;
         // setting the save button here and not in the question class.php
-        $form->addElement('html','<div id="defineoneblank" style="color:#D04A66; margin-left:160px">'.get_lang('DefineBlanks').'</div>');
+        $form->addHtml('<div id="defineoneblank" style="color:#D04A66; margin-left:160px">'.get_lang('DefineBlanks').'</div>');
         $form->addButtonSave($text, 'submitQuestion');
 
         if (!empty($this->id)) {
@@ -603,13 +663,13 @@ class FillBlanks extends Question
     public static function getAnswerInfo($userAnswer = "", $isStudentAnswer = false)
     {
         $listAnswerResults = array();
-        $listAnswerResults['text'] = "";
+        $listAnswerResults['text'] = '';
         $listAnswerResults['wordsCount'] = 0;
         $listAnswerResults['tabwordsbracket'] = array();
         $listAnswerResults['tabwords'] = array();
         $listAnswerResults['tabweighting'] = array();
         $listAnswerResults['tabinputsize'] = array();
-        $listAnswerResults['switchable'] = "";
+        $listAnswerResults['switchable'] = '';
         $listAnswerResults['studentanswer'] = array();
         $listAnswerResults['studentscore'] = array();
         $listAnswerResults['blankseparatornumber'] = 0;
@@ -631,7 +691,7 @@ class FillBlanks extends Question
         $listArobaseSplit = explode('@', $listDoubleColon[1]);
 
         if (count($listArobaseSplit) < 2) {
-            $listArobaseSplit[1] = "";
+            $listArobaseSplit[1] = '';
         }
 
         // take the complete string except after the last '::'
@@ -770,8 +830,7 @@ class FillBlanks extends Question
                LEFT JOIN '.$tblTrackEExercise.' tee
                ON tee.exe_id = tea.exe_id
                AND tea.c_id = '.$courseId.'
-               AND exe_exo_id = '.$testId.'
-    
+               AND exe_exo_id = '.$testId.'    
                WHERE 
                 tee.c_id = '.$courseId.' AND 
                 question_id = '.$questionId.' AND 

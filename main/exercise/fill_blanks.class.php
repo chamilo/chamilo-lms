@@ -160,8 +160,7 @@ class FillBlanks extends Question
                 document.getElementById("blanks_weighting").innerHTML = fields + "</table></div></div>";                                
                 $(originalOrder).each(function(i, data) {
                      if (firstTime == false) {
-                        value = data.value;
-                        console.log(value);
+                        value = data.value;                        
                         var d = $("input.sample[data-btoa=\'"+value+"\']");                        
                         var id = d.attr("id");   
                         if (id) {
@@ -258,7 +257,7 @@ class FillBlanks extends Question
             }
 
             function changeBlankSeparator()
-            {console.log("dd");
+            {
                 var separatorNumber = $("#select_separator").val();
                 var tabSeparator = getSeparatorFromNumber(separatorNumber);
                 blankSeparatorStart = tabSeparator[0];

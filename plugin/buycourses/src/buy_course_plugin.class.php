@@ -25,6 +25,7 @@ class BuyCoursesPlugin extends Plugin
     const TABLE_PAYPAL_PAYOUTS = 'plugin_buycourses_paypal_payouts';
     const TABLE_SERVICES = 'plugin_buycourses_services';
     const TABLE_SERVICES_SALE = 'plugin_buycourses_service_sale';
+    const TABLE_CULQI = 'plugin_buycourses_culqi';
     const PRODUCT_TYPE_COURSE = 1;
     const PRODUCT_TYPE_SESSION = 2;
     const PAYMENT_TYPE_PAYPAL = 1;
@@ -86,6 +87,7 @@ class BuyCoursesPlugin extends Plugin
         $tablesToBeCompared = array(
             self::TABLE_PAYPAL,
             self::TABLE_TRANSFER,
+            self::TABLE_CULQI,
             self::TABLE_ITEM_BENEFICIARY,
             self::TABLE_ITEM,
             self::TABLE_SALE,
@@ -115,6 +117,7 @@ class BuyCoursesPlugin extends Plugin
         $tablesToBeDeleted = array(
             self::TABLE_PAYPAL,
             self::TABLE_TRANSFER,
+            self::TABLE_CULQI,
             self::TABLE_ITEM_BENEFICIARY,
             self::TABLE_ITEM,
             self::TABLE_SALE,
@@ -2135,6 +2138,37 @@ class BuyCoursesPlugin extends Plugin
         $returnedServiceSaleId = Database::insert(self::TABLE_SERVICES_SALE, $values);
 
         return $returnedServiceSaleId;
+    }
+
+    /**
+     * Save Culqi configuration params
+     * @param array $params
+     * @return int Rows affected. Otherwise return false
+     */
+    public function saveCulqiParameters($params)
+    {
+        return Database::update(
+            Database::get_main_table(BuyCoursesPlugin::TABLE_CULQI),
+            [
+                'commerce_code' => $params['commerce_code'],
+                'api_key' => $params['api_key']
+            ],
+            ['id = ?' => 1]
+        );
+    }
+
+    /**
+     * Gets the stored Culqi params
+     * @return array
+     */
+    public function getCulqiParams()
+    {
+        return Database::select(
+            '*',
+            Database::get_main_table(BuyCoursesPlugin::TABLE_CULQI),
+            ['id = ?' => 1],
+            'first'
+        );
     }
 
 }

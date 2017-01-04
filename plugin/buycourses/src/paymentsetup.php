@@ -200,23 +200,17 @@ if ($culqiForm->validate()) {
 $culqiForm->addText(
     'commerce_code',
     $plugin->get_lang('CommerceCode'),
-    true,
+    false,
     ['cols-size' => [3, 8, 1]]
 );
-
 $culqiForm->addText(
     'api_key',
-    $plugin->get_lang('ApiKey'),
-    true,
+    $plugin->get_lang('ApiPassword'),
+    false,
     ['cols-size' => [3, 8, 1]]
 );
-
-$culqiForm->addText(
-    'value_conversion',
-    $plugin->get_lang('ValueConversion'),
-    true,
-    ['cols-size' => [3, 8, 1]]
-);
+$culqiForm->addButtonSave(get_lang('Save'));
+$culqiForm->setDefaults($plugin->getCulqiParams());
 
 // breadcrumbs
 $interbreadcrumb[] = [

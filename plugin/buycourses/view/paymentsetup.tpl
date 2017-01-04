@@ -102,10 +102,6 @@
             <div class="row">
                 <div class="col-md-5">
                     <p>{{ 'InfoCulqiCredentials'|get_plugin_lang('BuyCoursesPlugin') }}</p>
-                    <ul>
-                        <li>{{ 'InfoApiStepTwo'|get_plugin_lang('BuyCoursesPlugin') }}</li>
-                        <li>{{ 'InfoApiStepThree'|get_plugin_lang('BuyCoursesPlugin') }}</li>
-                    </ul>
                 </div>
                 <div class="col-md-7">
                     {{ culqi_form }}

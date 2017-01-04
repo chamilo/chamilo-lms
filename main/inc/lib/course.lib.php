@@ -5055,10 +5055,6 @@ class CourseManager
         $deleteSessionTeacherNotInList = false,
         $teacherBackup = array()
     ) {
-        if (empty($teachers)) {
-            return false;
-        }
-
         if (!is_array($teachers)) {
             $teachers = array($teachers);
         }
@@ -5067,6 +5063,7 @@ class CourseManager
             return false;
         }
 
+        $teachers = array_filter($teachers);
         $courseId = $courseInfo['real_id'];
         $course_code = $courseInfo['code'];
 

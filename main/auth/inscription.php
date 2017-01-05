@@ -31,6 +31,14 @@ if ($allowedFieldsConfiguration !== false) {
     $allowedFields = $allowedFieldsConfiguration;
 }
 
+$gMapsPlugin = GoogleMapsPlugin::create();
+$geolocalization = $gMapsPlugin->get('enable_api') === 'true';
+
+if ($geolocalization) {
+    $gmapsApiKey = $gMapsPlugin->get('api_key');
+    $htmlHeadXtra[] = '<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=true&key='. $gmapsApiKey . '" ></script>';
+}
+
 $webserviceUrl = api_get_plugin_setting('logintcc', 'webservice_url');
 $hash = api_get_plugin_setting('logintcc', 'hash');
 
@@ -100,106 +108,6 @@ $(document).ready(function() {
 </script>';
 
 $htmlHeadXtra[] = api_get_password_checker_js('#username', '#pass1');
-
-$userGeolocalization = api_get_setting('enable_profile_user_address_geolocalization') == 'true';
-if ($userGeolocalization) {
-    $htmlHeadXtra[] = '<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=true" ></script>';
-    $htmlHeadXtra[] = '<script>
-    $(document).ready(function() {
-        initializeGeo(false, false);
-
-        $("#geolocalization").on("click", function() {
-            var address = $("#address").val();
-            initializeGeo(address, false);
-            return false;
-        });
-
-        $("#myLocation").on("click", function() {
-            myLocation();
-            return false;
-        });
-        
-        $("#address").keypress(function (event) {
-            if (event.which == 13) {
-                $("#geolocalization").click();
-                return false;
-            }
-        });
-    });
-
-    function myLocation() {
-        if (navigator.geolocation) {
-            var geoPosition = function(position) {
-                var lat = position.coords.latitude;
-                var lng = position.coords.longitude;
-                var latLng = new google.maps.LatLng(lat, lng);
-                initializeGeo(false, latLng)
-            };
-
-            var geoError = function(error) {
-                alert("Geocode '.get_lang('Error').': " + error);
-            };
-
-            var geoOptions = {
-                enableHighAccuracy: true
-            };
-
-            navigator.geolocation.getCurrentPosition(geoPosition, geoError, geoOptions);
-        }
-    }
-
-    function initializeGeo(address, latLng) {
-        var geocoder = new google.maps.Geocoder();
-        var latlng = new google.maps.LatLng(-75.503, 22.921);
-        var myOptions = {
-            zoom: 15,
-            center: latlng,
-            mapTypeControl: true,
-            mapTypeControlOptions: {
-                style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
-            },
-            navigationControl: true,
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
-
-        map = new google.maps.Map(document.getElementById("map"), myOptions);
-
-        var parameter = address ? { "address": address } : latLng ? { "latLng": latLng } : { "address": "Google" };
-
-        if (geocoder && parameter) {
-            geocoder.geocode(parameter, function(results, status) {
-                if (status == google.maps.GeocoderStatus.OK) {
-                    if (status != google.maps.GeocoderStatus.ZERO_RESULTS) {
-                        map.setCenter(results[0].geometry.location);
-                        if (!address) {
-                            $("#address").val(results[0].formatted_address);
-                        }
-                        var infowindow = new google.maps.InfoWindow({
-                            content: "<b>" + $("#address").val() + "</b>",
-                            size: new google.maps.Size(150, 50)
-                        });
-
-                        var marker = new google.maps.Marker({
-                            position: results[0].geometry.location,
-                            map: map,
-                            title: $("#address").val()
-                        });
-                        google.maps.event.addListener(marker, "click", function() {
-                            infowindow.open(map, marker);
-                        });
-                    } else {
-                        alert("'.get_lang("NotFound").'");
-                    }
-
-                } else {
-                    alert("Geocode '.get_lang('Error').': " + status);
-                }
-            });
-        }
-    }
-
-    </script>';
-}
 
 // User is not allowed if Terms and Conditions are disabled and
 // registration is disabled too.

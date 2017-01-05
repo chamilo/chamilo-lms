@@ -3,7 +3,7 @@
  * See license terms in /license.txt
  * @author Eric Marguin <eric.marguin@dokeos.com>
  */
-require_once '../../inc/global.inc.php';
+require_once __DIR__.'/../../inc/global.inc.php';
 
 /**
  * Import users into database from a file located on the server.

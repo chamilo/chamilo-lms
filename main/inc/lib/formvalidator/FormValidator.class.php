@@ -832,6 +832,7 @@ EOT;
                 </div>'
             );
             $this->addHidden($id.'_crop_result', '');
+            $this->addHidden($id.'_crop_image_base_64', '');
         }
     }
 

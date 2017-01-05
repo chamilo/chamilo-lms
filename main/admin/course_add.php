@@ -5,7 +5,7 @@
  *	@package chamilo.admin
  */
 $cidReset = true;
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
@@ -208,7 +208,19 @@ if ($form->validate()) {
         include $file_to_include;
     }
 
-    $course_info = CourseManager::create_course($course);
+    $courseInfo = CourseManager::create_course($course);
+    if ($courseInfo && isset($courseInfo['course_public_url'])) {
+        Display::addFlash(
+            Display::return_message(
+                sprintf(
+                    get_lang('CourseXAdded'),
+                    Display::url($courseInfo['title'], $courseInfo['course_public_url'])
+                ),
+                'confirmation',
+                false
+            )
+        );
+    }
 
     header('Location: course_list.php');
     exit;

@@ -3,7 +3,7 @@
 
 use ChamiloSession as Session;
 
-require_once '../global.inc.php';
+require_once __DIR__.'/../global.inc.php';
 
 // Add security from Chamilo
 api_protect_course_script();

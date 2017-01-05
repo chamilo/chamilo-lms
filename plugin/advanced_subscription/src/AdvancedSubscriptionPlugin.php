@@ -91,7 +91,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                 'display_text' => get_plugin_lang('Area', 'AdvancedSubscriptionPlugin'),
                 'default_value' => null,
                 'field_order' => null,
-                'visible' => 1,
+                'visible_to_self' => 1,
                 'changeable' => 1,
                 'filter' => null
             ));

@@ -316,14 +316,15 @@ function returnThumbnail($course)
 
     $html .= '<div class="image">';
     $html .= '<img class="img-responsive" src="'.$course_medium_image.'" alt="'.api_htmlentities($title).'"/>';
-    $categoryTitle = $course['category'];
+    $categoryTitle = isset($course['category']) ? $course['category'] : '';
     if (!empty($categoryTitle)) {
         $listCategory = CourseManager::getCategoriesList();
         $categoryTitle = $listCategory[$categoryTitle];
         $html .= '<span class="category">'. $categoryTitle.'</span>';
         $html .= '<div class="cribbon"></div>';
     }
-    $teachers = CourseManager::getTeachersFromCourseByCode($course['code']);
+    $courseInfo = api_get_course_info($course['code']);
+    $teachers = CourseManager::getTeachersFromCourse($courseInfo['real_id']);
     $html .= '<div class="black-shadow">';
     $html .= '<div class="author-card">';
     $count = 0;

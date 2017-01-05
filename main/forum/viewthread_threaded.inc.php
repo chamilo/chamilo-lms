@@ -350,7 +350,7 @@ if ($userCanQualify) {
                 $rows[$display_post_id]['user_id'] . "&origin=" . $origin .
                 "&idtextqualify=" . $current_qualify_thread .
                 "\" >" . Display::return_icon(
-                    'quiz.gif',
+                    'quiz.png',
                     get_lang('Qualify')
                 ) . "</a>";
         }

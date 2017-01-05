@@ -676,9 +676,9 @@ class Attendance
                     $current_session_id
                 );
             } else {
-                $user_status_in_course = CourseManager::get_user_in_course_status(
+                $user_status_in_course = CourseManager::getUserInCourseStatus(
                     $uid,
-                    $current_course_id
+                    $currentCourseIntId
                 );
             }
 

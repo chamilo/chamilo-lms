@@ -8,14 +8,12 @@
 
 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 
-global $charset;
+api_protect_course_script();
 
 $show_description_field = false; //for now
 $nameTools = get_lang('Doc');
 $this_section = SECTION_COURSES;
 Event::event_access_tool(TOOL_LEARNPATH);
-
-api_protect_course_script();
 
 if (isset($_SESSION['gradebook'])) {
     $gradebook = $_SESSION['gradebook'];
@@ -159,13 +157,13 @@ $form->addElement(
 );
 
 $display_date = 'none';
-if (!empty($publicated_on)) {
+if (!empty($publicated_on) && $publicated_on !== '0000-00-00 00:00:00') {
     $display_date = 'block';
     $defaults['activate_start_date_check'] = 1;
 }
 
 $form->addElement('html', '<div id="start_date_div" style="display:'.$display_date.';">');
-$form->addDatePicker('publicated_on', get_lang('PublicationDate'));
+$form->addDateTimePicker('publicated_on', get_lang('PublicationDate'));
 $form->addElement('html', '</div>');
 
 //End date
@@ -183,7 +181,7 @@ if (!empty($expired_on)) {
 }
 
 $form->addElement('html', '<div id="end_date_div" style="display:'.$display_date.';">');
-$form->addDatePicker('expired_on', get_lang('ExpirationDate'));
+$form->addDateTimePicker('expired_on', get_lang('ExpirationDate'));
 $form->addElement('html', '</div>');
 
 if (api_is_platform_admin()) {
@@ -222,7 +220,7 @@ if ($enableLpExtraFields) {
 }
 
 
-$defaults['publicated_on'] = (!empty($publicated_on))? api_get_local_time($publicated_on) : date('Y-m-d 12:00:00');
+$defaults['publicated_on'] = !empty($publicated_on) && $publicated_on !== '0000-00-00 00:00:00' ? api_get_local_time($publicated_on) : null;
 $defaults['expired_on'] = (!empty($expired_on) )? api_get_local_time($expired_on): date('Y-m-d 12:00:00', time()+84600);
 $defaults['subscribe_users'] = $_SESSION['oLP']->getSubscribeUsers();
 $form->setDefaults($defaults);

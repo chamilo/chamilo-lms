@@ -7,7 +7,7 @@
 
 // use anonymous mode when accessing this course tool
 $use_anonymous = true;
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_CALENDAR_EVENT;
 $course_info = api_get_course_info();
 
@@ -219,6 +219,7 @@ if (api_is_allowed_to_edit(false, true) ||
                     exit;
                 }
 
+                $usersToSend = isset($values['users_to_send']) ? $values['users_to_send'] : '';
                 // Editing normal event.
                 $agenda->editEvent(
                     $eventId,
@@ -227,7 +228,7 @@ if (api_is_allowed_to_edit(false, true) ||
                     $allDay,
                     $values['title'],
                     $values['content'],
-                    $values['users_to_send'],
+                    $usersToSend,
                     $attachmentList,
                     $attachmentCommentList,
                     $comment,

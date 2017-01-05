@@ -237,19 +237,6 @@ class TestDisplay extends UnitTestCase {
 	}
 
 	/**
-	*	Create a hyperlink to the platform homepage.
-	*	@param string $name, the visible name of the hyperlink, default is sitename
-	*	@return string with html code for hyperlink
-	*/
-	public function testget_platform_home_link_html() {
-		ob_start();
-		$res=Display::get_platform_home_link_html();
-		ob_end_clean();
-		$this->assertTrue(is_string($res));
-		//var_dump($res);
-	}
-
-	/**
 	 * This public function returns the htmlcode for an icon
 	 *
 	 * @param string $image the filename of the file (in the main/img/ folder

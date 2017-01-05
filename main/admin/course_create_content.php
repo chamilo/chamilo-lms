@@ -6,7 +6,7 @@
  * @author Bart Mollet <bart.mollet@hogent.be>
  * @package chamilo.admin
  */
-include ('../inc/global.inc.php');
+require_once __DIR__.'/../inc/global.inc.php';
 $this_section=SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();

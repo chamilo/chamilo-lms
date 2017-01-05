@@ -3,7 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $OpenBadgesBannerText = "Vous pouvez maintenant créer des insignes qui reconnaissent les compétences appris par vos utilisateurs, les récompensent pour leurs efforts et au travers desquels ils pourront démontrer leurs compétences acquises sur leur page de profil. Pour plus d'informations au sujet d'OpenBadges: <a href='http://openbadges.org'>http://openbadges.org</a>.";
-$OpenBadgesIntroduction = "Vous pouvez maintenant élaborer des badges pour récompenser l'acquisition de compétences au travers des îlots sur ce campus virtuel.";
+$OpenBadgesIntroduction = "Vous pouvez maintenant élaborer des badges pour récompenser l'acquisition de compétences au travers des cours sur ce campus virtuel.";
 $DesignANewBadgeComment = "Élaborez un nouveau badge, téléchargez-le et utilisez-le dans le formulaire du badge.";
 $TheBadgesWillBeSentToThatBackpack = "Les badges seront envoyés vers ce sac à dos";
 $BackpackDetails = "Détails du sac à dos";
@@ -7866,7 +7866,39 @@ $IfYouAreSureTheTicketWillBeClosed = "Si vous confirmez, le ticket sera clôtur�
 $Priorities = "Priorités";
 $Tickets = "Tickets";
 $ThisTextShouldBeAtLeastXCharsLong = "Ce texte doit contenir au moins %s caractères";
+$TicketXAssignedToUserX = "Ticket <b>#%s</b> assigné à l'utilisateur <b>%s</b>";
+$ThisItemIsRelatedToOtherTickets = "Cet élément est lié à d'autres tickets.";
+$WarningCategoryXDoesntHaveUsers = "Attention: Personne n'est assigné à la catégorie %s";
+$TicketXCreatedWithNoCategory = "Le ticket %s a été créé sans catégorie";
+$TicketInformation = "Info ticket";
+$CategoryWithNoUserNotificationSentToAdmins = "Une alerte a été envoyée aux administrateurs pour les informer que cette catégorie n'a pas de responsable assigné.";
+$VirtualSupport = "Support virtuel";
+$IncidentResentToVirtualSupport = "L'incident a été envoyé à nouveau à l'équipe de support virtuel";
+$YourQuestionWasSentToTheResponableAreaX = "Votre question a été envoyée à %s, l'unité en charge";
+$YourAnswerToTheQuestionWillBeSentToX = "Votre réponse à cette question sera envoyée à %s";
+$MessageResent = "Message réenvoyé";
+$TicketAssignedToXCheckZAtLinkY = "Ticket assigné à %s. Faites-en le suivi ici <a href='%s'>#%s</a>.";
+$TicketXAssigned = "Ticket %s assigné";
+$Historial = "Historique";
+$TicketNum = "Numéro de ticket";
+$TicketClosed = "Ticket fermé";
+$Unassign = "Désassigner";
+$PleaseSelectTasks = "Sélectionnez les tâches";
+$PleaseSelect = "Sélectionnez";
+$PleaseSelectThread = "Sélectionnez un fil de discussion";
+$TotalTickets = "Total de tickets";
+$ThereWasAnErrorRegisteringTheTicket = "Une erreur est survenue lors de l'enregistrement de votre ticket";
+$AreYouSureYouWantToUnassignTheTicket = "Êtes-vous sûr de vouloir désassigner ce ticket?";
+$AreYouSureYouWantToCloseTheTicket = "Êtes-vous sûr de vouloir fermer ce ticket?";
+$Unassigned = "Désassigné";
+$SelectWeeksSpan = "Sélectionnez la durée en semaines";
+$CourseXAdded = "Course %s added.";
+$CurrentPassword = "Mot de passe actuel";
+$DeleteCorrections = "Supprimer les corrections";
+$AllowMyFilesTitle = "Activer la page \"Mes fichiers\"";
+$AllowMyFilesComment = "Permettre aux utilisateurs de télécharger des fichiers dans un espace personnel de la plate-forme.";
 
+// Ofaj
 
 $TCCConnection = 'Connexion à TCC';
 $TCCConnect = 'Se connecter';

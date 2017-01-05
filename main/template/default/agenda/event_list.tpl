@@ -9,7 +9,7 @@
         <th>
             {{ 'Title' | get_lang }}
         </th>
-        {% if is_allowed_to_edit %}
+        {% if is_allowed_to_edit and show_action %}
             <th>
                 {{ 'Actions' | get_lang }}
             </th>
@@ -41,22 +41,21 @@
                 {{ event.attachment }}
             </td>
 
-            {% if is_allowed_to_edit %}
+            {% if is_allowed_to_edit and show_action %}
                 <td>
                     {% if event.visibility == 1 %}
-                        <a class="btn btn-default" href="{% if url %}{{ url }}{% else %}{{ event.url }}{% endif %}&action=change_visibility&visibility=0&id={{ event.real_id }}">
+                        <a class="btn btn-default" href="{% if url %}{{ url }}{% else %}{{ event.url }}{% endif %}&action=change_visibility&visibility=0&id={{ event.real_id }}&type={{ event.type }}">
                             <img title="{{ 'Invisible' }}" src="{{'visible.png'|icon(32)}} " width="32" height="32">
                         </a>
                     {% else %}
                         {% if event.type == 'course' or event.type == 'session' %}
-                            <a class="btn btn-default" href="{% if url %}{{ url }}{% else %}{{ event.url }}{% endif %}&action=change_visibility&visibility=1&id={{ event.real_id }}">
+                            <a class="btn btn-default" href="{% if url %}{{ url }}{% else %}{{ event.url }}{% endif %}&action=change_visibility&visibility=1&id={{ event.real_id }}&type={{ event.type }}">
                                 <img title="{{ 'Visible' }}" src="{{'invisible.png'|icon(32)}} " width="32" height="32">
                             </a>
                         {% endif %}
                     {% endif %}
                 </td>
             {% endif %}
-
         </tr>
     {% endfor %}
 </table>

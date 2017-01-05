@@ -1,31 +1,19 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * @author Juan Carlos Trabado herodoto@telefonica.net
  * @package chamilo.social
  */
 
 $cidReset = true;
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
-
-if (api_get_setting('allow_social_tool') != 'true') {
-    api_not_allowed(true);
-}
 
 if (api_get_setting('allow_my_files') === 'false') {
     api_not_allowed(true);
 }
-
-$this_section = SECTION_SOCIAL;
-$_SESSION['this_section'] = $this_section;
-
-$interbreadcrumb[] = array(
-    'url' => 'profile.php',
-    'name' => get_lang('SocialNetwork')
-);
-$interbreadcrumb[] = array('url' => '#', 'name' => get_lang('MyFiles'));
 
 $htmlHeadXtra[] = '
 <script>
@@ -102,15 +90,41 @@ if (isset($_GET['cidReq'])) {
             ) . ')'
         ) . '</a>';
 }
+
+if (api_get_setting('allow_social_tool') == 'true') {
+    $_SESSION['this_section'] = SECTION_SOCIAL;
+    $interbreadcrumb[] = array(
+        'url' => 'profile.php',
+        'name' => get_lang('SocialNetwork')
+    );
+} else {
+    $_SESSION['this_section'] = SECTION_COURSES;
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_PATH).'user_portal.php',
+        'name' => get_lang('MyCourses')
+    );
+}
+
+$interbreadcrumb[] = array('url' => '#', 'name' => get_lang('MyFiles'));
+
 $tpl = new Template();
-SocialManager::setSocialUserBlock($tpl, $user_id, 'myfiles');
+SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'myfiles');
 $editor = new \Chamilo\CoreBundle\Component\Editor\Editor();
 $editor = $tpl->fetch('default/'.$editor->getEditorStandAloneTemplate());
 
-$tpl->assign('social_right_content', $editor);
-$tpl->assign('social_menu_block', $social_menu_block);
-$tpl->assign('actions', $actions);
 $tpl->assign('show_media_element', 0);
 
-$social_layout = $tpl->get_template('social/myfiles.tpl');
-$tpl->display($social_layout);
+if (api_get_setting('allow_social_tool') == 'true') {
+    $tpl->assign('social_menu_block', $social_menu_block);
+    $tpl->assign('social_right_content', $editor);
+    $social_layout = $tpl->get_template('social/myfiles.tpl');
+    $tpl->display($social_layout);
+} else {
+    $controller = new IndexManager(get_lang('MyCourses'));
+    $tpl->assign('actions', $actions);
+    $tpl->assign('content', $editor);
+    $tpl->assign('profile_block', $controller->return_profile_block());
+    $tpl->assign('user_image_block', $controller->return_user_image_block());
+    $tpl->assign('course_block', $controller->return_course_block());
+    $tpl->display_two_col_template();
+}

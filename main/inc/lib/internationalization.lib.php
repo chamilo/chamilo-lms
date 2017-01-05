@@ -178,7 +178,6 @@ function api_get_interface_language(
         if (!isset($parent_language_name)) {
             // 2. The current language is a sub language so we grab the father's
             // setting according to the internalization_database/name_order_convetions.php file
-
             $language_id = api_get_language_id($language_interface);
             $language_info = api_get_language_info($language_id);
 
@@ -243,7 +242,6 @@ function api_get_language_isocode($language = null, $default_code = 'en')
     if (empty($language)) {
         $language = api_get_interface_language(false, true);
     }
-
     if (!isset($iso_code[$language])) {
         if (!class_exists('Database')) {
             // This might happen, in case of calling this function early during the global initialization.
@@ -355,7 +353,7 @@ function api_get_timezones()
  *
  * @return string The timezone chosen
  */
-function _api_get_timezone()
+function api_get_timezone()
 {
     // First, get the default timezone of the server
     $to_timezone = date_default_timezone_get();
@@ -396,7 +394,7 @@ function _api_get_timezone()
  */
 function api_get_utc_datetime($time = null, $return_null_if_invalid_date = false, $returnObj = false)
 {
-    $from_timezone = _api_get_timezone();
+    $from_timezone = api_get_timezone();
     $to_timezone = 'UTC';
     if (is_null($time) || empty($time) || $time === '0000-00-00 00:00:00') {
         if ($return_null_if_invalid_date) {
@@ -453,7 +451,7 @@ function api_get_local_time(
     }
     // Determining the timezone to be converted to
     if (is_null($to_timezone)) {
-        $to_timezone = _api_get_timezone();
+        $to_timezone = api_get_timezone();
     }
 
     // If time is a timestamp, convert it to a string
@@ -527,7 +525,7 @@ function api_strtotime($time, $timezone = null)
 function api_format_date($time, $format = null, $language = null)
 {
     $system_timezone = date_default_timezone_get();
-    date_default_timezone_set(_api_get_timezone());
+    date_default_timezone_set(api_get_timezone());
 
     if (is_string($time)) {
         $time = strtotime($time);
@@ -662,27 +660,24 @@ function api_format_date($time, $format = null, $language = null)
 }
 
 /**
- * Returns the difference between the current date (date(now)) with the parameter $date in a string format like "2 days, 1 hour"
- * Example: $date = '2008-03-07 15:44:08';
- * 			date_to_str($date) it will return 3 days, 20 hours
- * The given date should be in the timezone chosen by the user or administrator. Use api_get_local_time() to get it...
+ * Returns the difference between the current date (date(now)) with the parameter
+ * $date in a string format like "2 days ago, 1 hour ago".
  * You can use it like this:
- * Display::tip(date_to_str_ago($dateInUtc), api_get_local_time($dateInUtc));
+ * Display::dateToStringAgoAndLongDate($dateInUtc);
  *
- * @param  string $date The string has to be the result of a date function in this format -> date('Y-m-d H:i:s', time());
- * @return string $timeZone
+ * @param string $date Result of a date function in this format -> date('Y-m-d H:i:s', time());
+ * @param string $timeZone
+ * @return string
  *
  * @author Julio Montoya
  */
-
 function date_to_str_ago($date, $timeZone = 'UTC')
 {
     if ($date === '0000-00-00 00:00:00') {
         return '';
     }
 
-    $getOldTimezone = _api_get_timezone();
-
+    $getOldTimezone = api_get_timezone();
     $timeAgo = new TimeAgo($timeZone, api_get_language_isocode());
     $value = $timeAgo->inWords($date);
 
@@ -1895,7 +1890,8 @@ function _api_convert_encoding(&$string, $to_encoding, $from_encoding)
  * @param string $encoding		The given encoding identificator, for example 'WINDOWS-1252'.
  * @return string				Returns the name of the corresponding conversion table, for the same example - 'CP1252'.
  */
-function _api_get_character_map_name($encoding) {
+function _api_get_character_map_name($encoding)
+{
     static $character_map_selector;
     if (!isset($character_map_selector)) {
         $file = dirname(__FILE__).'/internationalization_database/conversion/character_map_selector.php';
@@ -1957,7 +1953,8 @@ function _api_mb_supports($encoding) {
  * @param string $encoding	The specified encoding.
  * @return bool				Returns TRUE when the specified encoding is supported, FALSE othewise.
  */
-function _api_iconv_supports($encoding) {
+function _api_iconv_supports($encoding)
+{
     static $supported = array();
     if (!isset($supported[$encoding])) {
         if (ICONV_INSTALLED) {
@@ -1980,7 +1977,8 @@ function _api_iconv_supports($encoding) {
 
 // This function checks whether the function _api_convert_encoding() (the php-
 // implementation) is able to convert from/to a given encoding.
-function _api_convert_encoding_supports($encoding) {
+function _api_convert_encoding_supports($encoding)
+{
     static $supports = array();
     if (!isset($supports[$encoding])) {
         $supports[$encoding] = _api_get_character_map_name(api_refine_encoding_id($encoding)) != '';

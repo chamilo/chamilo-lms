@@ -3,7 +3,7 @@
 
 $cidReset = true;
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 $exportCSV = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
 $display = isset($_GET['display']) ? Security::remove_XSS($_GET['display']) : null;

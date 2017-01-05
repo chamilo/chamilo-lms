@@ -12,7 +12,7 @@ use \Chamilo\CoreBundle\Entity\SequenceResource;
 // Delete the globals['_cid'], we don't need it here.
 $cidReset = true; // Flag forcing the 'current course' reset
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 $ctok = Security::get_existing_token();
 

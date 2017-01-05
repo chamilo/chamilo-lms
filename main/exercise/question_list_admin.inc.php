@@ -124,7 +124,7 @@ $ajax_url = api_get_path(WEB_AJAX_PATH)."exercise.ajax.php?".api_get_cidreq()."&
 
                     $pnlQuestion.html('<span class="fa fa-spinner fa-spin fa-3x fa-fw" aria-hidden="true"></span>');
 
-                    $.get('<?php echo api_get_path(WEB_AJAX_PATH) ?>exercise.ajax.php', {
+                    $.get('<?php echo api_get_path(WEB_AJAX_PATH) ?>exercise.ajax.php?<?php echo api_get_cidreq() ?>', {
                         a: 'show_question',
                         exercise: exerciseId,
                         question: questionId
@@ -237,7 +237,7 @@ if (!$inATest) {
                 if ($objExercise->edit_exercise_in_lp == true) {
                     $delete_link = '<a id="delete_'.$id.'" class="opener"  href="'.api_get_self().'?'.api_get_cidreq().'&exerciseId='.$exerciseId.'&deleteQuestion='.$id.'" >'.Display::return_icon('delete.png',get_lang('RemoveFromTest'), array(), ICON_SIZE_SMALL).'</a>';
                 }
-                
+
                 $edit_link = Display::tag('span', $edit_link,   array('class'=>'items'));
                 $clone_link = Display::tag('span', $clone_link,  array('class'=>'items'));
                 $delete_link = Display::tag('span', $delete_link, array('class'=>'items'));

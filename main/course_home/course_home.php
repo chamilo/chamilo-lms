@@ -31,7 +31,6 @@ use ChamiloSession as Session;
 */
 
 $use_anonymous = true;
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 $htmlHeadXtra[] ='<script>
@@ -178,9 +177,9 @@ if (isset($_GET['action']) && $_GET['action'] == 'subscribe') {
         }
     }
 }
-
 /*	Is the user allowed here? */
 api_protect_course_script(true);
+
 
 /*  STATISTICS */
 

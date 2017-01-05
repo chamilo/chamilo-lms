@@ -29,7 +29,7 @@ use ChamiloSession as Session;
  * @package chamilo.document
  */
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 $allowDownloadDocumentsByApiKey = api_get_setting('allow_download_documents_by_api_key') === 'true';
 
@@ -367,7 +367,7 @@ switch ($action) {
         break;
     case 'copytomyfiles':
         // Copy a file to general my files user's
-        if (api_get_setting('allow_social_tool') == 'true' &&
+        if (api_get_setting('allow_my_files') == 'true' &&
             api_get_setting('users_copy_files') == 'true'
             && api_get_user_id() != 0
             && !api_is_anonymous()
@@ -573,6 +573,7 @@ if (isset($document_id) && empty($action)) {
         );
     }
     // If the document is not a folder we show the document.
+
     if ($document_data) {
         $parent_id = $document_data['parent_id'];
         $visibility = DocumentManager::check_visibility_tree(
@@ -1735,7 +1736,7 @@ if (!$is_certificate_mode) {
 $table_footer = '';
 $total_size = 0;
 $sortable_data = array();
-
+$row = array();
 if (isset($documentAndFolders) && is_array($documentAndFolders)) {
     if ($groupId == 0 ||
         GroupManager::user_has_access(

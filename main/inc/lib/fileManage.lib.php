@@ -177,60 +177,84 @@ function my_rename($file_path, $new_file_name) {
  * @return bool true if the move succeed, false otherwise.
  * @see move() uses check_name_exist() and copyDirTo() functions
  */
-function move($source, $target, $forceMove = false, $moveContent = false)
+function move($source, $target, $forceMove = true, $moveContent = false)
 {
-	if (check_name_exist($source)) {
-		$file_name = basename($source);
+    $target = realpath($target); // remove trailing slash
+    $source = realpath($source);
+    if (check_name_exist($source)) {
+        $file_name = basename($source);
+        // move onto self illegal: mv a/b/c a/b/c or mv a/b/c a/b
+        if (strcasecmp($target, dirname($source)) === 0) {
+               return false;
+        }
         $isWindowsOS = api_is_windows_os();
         $canExec = function_exists('exec');
 
-		/* File case */
-		if (is_file($source)) {
-			if ($forceMove && !$isWindowsOS && $canExec) {
-				exec('mv ' . $source . ' ' . $target . '/' . $file_name);
-			} else {
-				copy($source, $target . '/' . $file_name);
-				unlink($source);
-			}
-			return true;
-		} elseif (is_dir($source)) {
-			/* Directory */
-			if ($forceMove && !$isWindowsOS && $canExec) {
-				if ($moveContent) {
-					$base = basename($source);
-					exec('mv '.$source.'/* '.$target.$base.'/');
-					exec('rm -rf '.$source);
-				} else {
-					exec('mv $source $target');
-				}
-			} else {
-				copyDirTo($source, $target);
-			}
-			return true;
-		}
-	} else {
-		return false;
-	}
+        /* File case */
+        if (is_file($source)) {
+            if ($forceMove && !$isWindowsOS && $canExec) {
+                exec('mv ' . $source . ' ' . $target . '/' . $file_name);
+            } else {
+                copy($source, $target . '/' . $file_name);
+                unlink($source);
+            }
+            return true;
+        } elseif (is_dir($source)) {
+            // move dir down will cause loop: mv a/b/ a/b/c/ not legal
+            if (strncasecmp($target, $source, strlen($source)) == 0) {
+                return false;
+            }
+            /* Directory */
+            if ($forceMove && !$isWindowsOS && $canExec) {
+                if ($moveContent) {
+                    $base = basename($source);
+                    $out = []; $retVal = -1;
+                    exec('mv '.$source.'/* '.$target.'/'.$base, $out, $retVal);
+                    if ($retVal !== 0) {
+                        return false; // mv should return 0 on success
+                    }
+                    exec('rm -rf '.$source);
+                } else {
+                    $out = []; $retVal = -1;
+                    exec("mv $source $target", $out, $retVal);
+                    if ($retVal !== 0) {
+                        error_log("Chamilo error fileManage.lib.php: mv $source $target\n");
+                        return false; // mv should return 0 on success
+                    }
+                }
+            } else {
+                return copyDirTo($source, $target);
+            }
+            return true;
+        }
+    } else {
+        return false;
+    }
 }
 
 /**
  * Moves a directory and its content to an other area
  *
  * @author Hugues Peeters <peeters@ipm.ucl.ac.be>
- * @param string $orig_dir_path the path of the directory to move
+ * @param string $source the path of the directory to move
  * @param string $destination the path of the new area
- * @return void
+ * @return bool false on error
  */
-function copyDirTo($orig_dir_path, $destination, $move = true)
+function copyDirTo($source, $destination, $move = true)
 {
     $fs = new Filesystem();
-    if (is_dir($orig_dir_path)) {
-        $fs->mirror($orig_dir_path, $destination);
-
+    if (is_dir($source)) {
+        $fs->mkdir($destination);
+        if (!is_dir($destination)) {
+            error_log("Chamilo copyDirTo cannot mkdir $destination\n");
+            return false; // could not create destination dir
+        }
+        $fs->mirror($source, $destination);
         if ($move) {
-            $fs->remove($orig_dir_path);
+            $fs->remove($source);
         }
     }
+    return true;
 }
 
 /**

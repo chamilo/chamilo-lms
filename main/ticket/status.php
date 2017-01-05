@@ -44,15 +44,22 @@ $interbreadcrumb[] = array(
 
 switch ($action) {
     case 'delete':
-        TicketManager::deleteStatus($id);
-        Display::addFlash(Display::return_message(get_lang('Deleted')));
+        $tickets = TicketManager::getTicketsFromCriteria(['status' => $id]);
+        if (empty($tickets)) {
+            TicketManager::deleteStatus($id);
+            Display::addFlash(Display::return_message(get_lang('Deleted')));
+        } else {
+            Display::addFlash(Display::return_message(get_lang('ThisItemIsRelatedToOtherTickets'), 'warning'));
+        }
+
         header("Location: ".api_get_self());
+        exit;
         break;
     case 'add':
         $toolName = get_lang('Add');
         $interbreadcrumb[] = array(
             'url' => api_get_path(WEB_CODE_PATH).'ticket/status.php',
-            'name' => get_lang('Categories')
+            'name' => get_lang('Status')
         );
         $url = api_get_self().'?action=add';
         $form = TicketManager::getStatusForm($url);
@@ -74,8 +81,8 @@ switch ($action) {
     case 'edit':
         $toolName = get_lang('Edit');
         $interbreadcrumb[] = array(
-            'url' => api_get_path(WEB_CODE_PATH).'ticket/categories.php',
-            'name' => get_lang('Categories')
+            'url' => api_get_path(WEB_CODE_PATH).'ticket/status.php',
+            'name' => get_lang('Status')
         );
         $url = api_get_self().'?action=edit&id='.$id;
         $form = TicketManager::getStatusForm($url);
@@ -83,8 +90,8 @@ switch ($action) {
         $item = TicketManager::getStatus($_GET['id']);
         $form->setDefaults([
             'name' => $item->getName(),
-            'description' => $item->getDescription()]
-        );
+            'description' => $item->getDescription()
+        ]);
         $formToString = $form->returnForm();
         if ($form->validate()) {
             $values =$form->getSubmitValues();
@@ -115,15 +122,20 @@ $isAdmin = api_is_platform_admin();
  */
 function modify_filter($id, $params, $row)
 {
+    $id = $row['id'];
+    $code = $row['code'];
+
     $result = Display::url(
         Display::return_icon('edit.png', get_lang('Edit')),
-        api_get_self()."?action=edit&id={$row['id']}"
+        api_get_self()."?action=edit&id={$id}"
     );
 
-    $result .= Display::url(
-        Display::return_icon('delete.png', get_lang('Delete')),
-        api_get_self()."?action=delete&id={$row['id']}"
-    );
+    if (!in_array($code, TicketManager::getDefaultStatusList())) {
+        $result .= Display::url(
+            Display::return_icon('delete.png', get_lang('Delete')),
+            api_get_self()."?action=delete&id={$id}"
+        );
+    }
 
 	return $result;
 }

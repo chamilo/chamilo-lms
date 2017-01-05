@@ -10,7 +10,7 @@
  * 	@todo The question has to be more clearly indicated (same style as when filling the survey)
  */
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
 $cidReq = api_get_cidreq();

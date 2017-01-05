@@ -1676,16 +1676,6 @@ class CourseChatUtils
             //the caller
             $content[0] = get_lang('CallSent') . '<br />' . $content[0];
         }
-        if (isset($_GET['origin']) && $_GET['origin'] == 'whoisonlinejoin') {
-            //the joiner (we have to delete the chat request to him when he joins the chat)
-            Database::getManager()
-                ->createQuery('
-                    UPDATE ChamiloUserBundle:User u
-                    SET u.chatcallUserId = NULL, u.chatcallDate = NULL, u.chatcallText = NULL
-                    WHERE u.id = :user
-                ')
-                ->execute(['user' => $this->userId]);
-        }
 
         $history = '<div id="content-chat">';
 

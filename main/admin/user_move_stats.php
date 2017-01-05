@@ -7,7 +7,7 @@
  */
 
 $cidReset = true;
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 $this_section=SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
@@ -225,7 +225,7 @@ if (isset($_REQUEST['load_ajax'])) {
                             $sql = "UPDATE $TBL_TRACK_E_LAST_ACCESS SET access_session_id = $new_session_id WHERE access_id = $id";
                             if ($debug) echo $sql;
                             $res = Database::query($sql);
-                            if ($debug) error_log(__FILE__ . ' +' . __LINE__ . ': ' . print_r($res, 1));
+                            if ($debug) var_dump($res);
                             $result_message[$TBL_TRACK_E_LAST_ACCESS]++;
                         }
                     }

@@ -812,51 +812,6 @@ class TestLearnpath extends UnitTestCase {
         //var_dump($res);
     }
 
-    public function testGetStats() {
-        //ob_start();
-        $res = learnpath::get_stats();
-        $this->assertTrue(is_null($res));
-        //ob_end_clean();
-        //var_dump($res);
-    }
-
-    public function testGetStatsCourse() {
-        //ob_start();
-        $course = '';
-        $res = learnpath::get_stats_course($course);
-        $this->assertTrue(is_null($res));
-        //ob_end_clean();
-        //var_dump($res);
-    }
-
-    public function testGetStatsLp() {
-        //ob_start();
-        $lp = 1;
-        $res = learnpath::get_stats_lp(self::course, $lp);
-        $this->assertTrue(is_null($res));
-        //ob_end_clean();
-        //var_dump($res);
-    }
-
-    public function testGetStatsLpUser() {
-        //ob_start();
-        $lp = 1;
-        $user = 1;
-        $res = learnpath::get_stats_lp_user(self::course, $lp, $user);
-        $this->assertTrue(is_null($res));
-        //ob_end_clean();
-        //var_dump($res);
-    }
-
-    public function testGetStatsUser() {
-        //ob_start();
-        $user = 1;
-        $res = learnpath::get_stats_user(self::course, $user);
-        $this->assertTrue(is_null($res));
-        //ob_end_clean();
-        //var_dump($res);
-    }
-
     public function testGetStudentPublications() {
         //ob_start();
         $res = learnpath::get_student_publications();

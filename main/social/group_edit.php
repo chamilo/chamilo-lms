@@ -7,7 +7,7 @@
  */
 
 $cidReset = true;
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
 if (api_get_setting('allow_social_tool') !== 'true') {
@@ -59,7 +59,7 @@ $social_right_content = $form->returnForm();
 
 $tpl = new Template(get_lang('Edit'));
 
-SocialManager::setSocialUserBlock($tpl, $user_id, 'groups', $group_id);
+SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'groups', $group_id);
 
 $tpl->setHelp('Groups');
 $tpl->assign('social_menu_block', $social_left_content);

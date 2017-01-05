@@ -1,6 +1,6 @@
 <?php
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 require_once(dirname(__FILE__).'/cm_webservice.php');
 $libpath = api_get_path(LIBRARY_PATH);
 

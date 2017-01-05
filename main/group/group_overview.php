@@ -13,7 +13,7 @@
  *	@author Bart Mollet, code cleaning, use of Display-library, list of courseAdmin-tools, use of GroupManager
  *	@package chamilo.group
  */
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 $current_course_tool  = TOOL_GROUP;
 
@@ -67,7 +67,7 @@ if (isset($_GET['action'])) {
 $interbreadcrumb[] = array('url' => 'group.php?'.api_get_cidreq(), 'name' => get_lang('Groups'));
 if (!isset ($_GET['origin']) || $_GET['origin'] != 'learnpath') {
     // So we are not in learnpath tool
-    if (!$is_allowed_in_course) {
+    if (!api_is_allowed_in_course()) {
         api_not_allowed(true);
     }
     if (!api_is_allowed_to_edit(false, true)) {

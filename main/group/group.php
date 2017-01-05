@@ -16,7 +16,7 @@ use ChamiloSession as Session;
  *	@author Isaac Flores, code cleaning and improvements
  *	@package chamilo.group
  */
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 $is_allowed_in_course = api_is_allowed_in_course();
 $userId = api_get_user_id();

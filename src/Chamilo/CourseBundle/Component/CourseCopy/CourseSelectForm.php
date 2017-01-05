@@ -220,7 +220,6 @@ class CourseSelectForm
 						}
 
 						echo '<div class="well">';
-
                         echo '<div class="btn-group">';
 						echo "<a class=\"btn btn-default\" href=\"javascript: void(0);\" onclick=\"javascript: setCheckbox('$type',true);\" >".get_lang('All')."</a>";
                         echo "<a class=\"btn btn-default\" href=\"javascript: void(0);\" onclick=\"javascript:setCheckbox('$type',false);\" >".get_lang('None')."</a>";

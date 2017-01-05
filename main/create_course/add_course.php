@@ -15,8 +15,13 @@
 // Flag forcing the "current course" reset.
 $cidReset = true;
 
-// Including the global initialization file.
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
+
+// Check access rights.
+if (!api_is_allowed_to_create_course()) {
+    api_not_allowed(true);
+    exit;
+}
 
 // Section for the tabs.
 $this_section = SECTION_COURSES;
@@ -47,16 +52,6 @@ $interbreadcrumb[] = array(
 $tool_name = $course_validation_feature ? get_lang('CreateCourseRequest') : get_lang('CreateSite');
 
 $tpl = new Template($tool_name);
-
-if (api_get_setting('allow_users_to_create_courses') === 'false' && !api_is_platform_admin()) {
-    api_not_allowed(true);
-}
-
-// Check access rights.
-if (!api_is_allowed_to_create_course()) {
-    api_not_allowed(true);
-    exit;
-}
 
 // Build the form.
 $form = new FormValidator('add_course');
@@ -121,7 +116,6 @@ $form->addRule(
 // The teacher
 $titular = & $form->addElement('hidden', 'tutor_name', '');
 if ($course_validation_feature) {
-
     // Description of the requested course.
     $form->addElement(
         'textarea',
@@ -284,7 +278,6 @@ if ($form->validate()) {
 
     if ($course_code_ok) {
         if (!$course_validation_feature) {
-
             $params = array();
             $params['title'] = $title;
             $params['exemplary_content'] = $exemplary_content;
@@ -325,7 +318,6 @@ if ($form->validate()) {
                     header('Location: ' . $url);
                     exit;
                 } else {
-
                     $url = api_get_path(WEB_COURSE_PATH) . $course_info['directory'] . '/';
                     header('Location: ' . $url);
                     exit;

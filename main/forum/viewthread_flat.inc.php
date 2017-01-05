@@ -258,7 +258,7 @@ if (isset($current_thread['thread_id'])) {
                         . "&thread=" . $clean_thread_id . "&action=list&post=" . $row['post_id']
                         . "&user=" . $row['poster_id'] . "&user_id=" . $row['poster_id']
                         . "&origin=" . $origin . "&idtextqualify=" . $current_qualify_thread . "\" >"
-                        . Display::return_icon('quiz.gif', get_lang('Qualify'))
+                        . Display::return_icon('quiz.png', get_lang('Qualify'))
                         . "</a> ";
                 }
             }

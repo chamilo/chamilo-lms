@@ -5,7 +5,7 @@ use \ChamiloSession as Session;
 
 $cidReset = true;
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
 $course_code = isset($_REQUEST['course_code']) ? $_REQUEST['course_code'] : null;

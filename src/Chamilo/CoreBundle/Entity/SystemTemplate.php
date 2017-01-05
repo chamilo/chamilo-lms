@@ -14,6 +14,15 @@ use Doctrine\ORM\Mapping as ORM;
 class SystemTemplate
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue()
+     */
+    private $id;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=250, nullable=false)
@@ -40,17 +49,6 @@ class SystemTemplate
      * @ORM\Column(name="content", type="text", nullable=false)
      */
     private $content;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-
 
     /**
      * Set title

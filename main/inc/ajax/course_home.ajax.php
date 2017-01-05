@@ -1,5 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use ChamiloSession as Session;
+
 // @todo refactor this script, create a class that manage the jqgrid requests
 /**
  * Responses to AJAX calls
@@ -8,7 +11,7 @@ $action = $_GET['a'];
 
 switch ($action) {
     case 'set_visibility':
-        require_once '../global.inc.php';
+        require_once __DIR__.'/../global.inc.php';
         $course_id = api_get_course_int_id();
         if (api_is_allowed_to_edit(null, true)) {
             $tool_table = Database::get_course_table(TABLE_TOOL_LIST);
@@ -63,8 +66,8 @@ switch ($action) {
             echo json_encode($response_data);
         }
         break;
-    case 'show_course_information' :
-        require_once '../global.inc.php';
+    case 'show_course_information':
+        require_once __DIR__.'/../global.inc.php';
 
         // Get the name of the database course.
         $tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
@@ -102,7 +105,7 @@ switch ($action) {
          * wrapper to process the AJAX petitions from the jqgrid
          */
 
-        require_once '../global.inc.php';
+        require_once __DIR__.'/../global.inc.php';
         $now = time();
         $page  = intval($_REQUEST['page']);     //page
         $limit = intval($_REQUEST['rows']);     // quantity of rows
@@ -231,7 +234,7 @@ switch ($action) {
         echo json_encode($response);
         break;
     case 'session_courses_lp_by_week':
-        require_once '../global.inc.php';
+        require_once __DIR__.'/../global.inc.php';
         $now = time();
 
         $page  = intval($_REQUEST['page']);     //page
@@ -377,7 +380,7 @@ switch ($action) {
         echo json_encode($response);
         break;
     case 'session_courses_lp_by_course':
-        require_once '../global.inc.php';
+        require_once __DIR__.'/../global.inc.php';
         $now = time();
         $page  = intval($_REQUEST['page']);     //page
         $limit = intval($_REQUEST['rows']);     // quantity of rows
@@ -504,7 +507,30 @@ switch ($action) {
 
         echo json_encode($response);
         break;
+    case 'get_notification':
+        $courseId = isset($_REQUEST['course_id']) ? (int) $_REQUEST['course_id'] : 0;
+        $sessionId = isset($_REQUEST['session_id']) ? (int) $_REQUEST['session_id'] : 0;
+        $status = isset($_REQUEST['status']) ? (int) $_REQUEST['status'] : 0;
+        if (empty($courseId)) {
+            break;
+        }
+        require_once __DIR__.'/../global.inc.php';
+
+        $courseInfo = api_get_course_info_by_id($courseId);
+        $courseInfo['id_session'] = $sessionId;
+        $courseInfo['status'] = $status;
+
+        $id = 'notification_'.$courseId.'_'.$sessionId.'_'.$status;
+
+        $notificationId = Session::read($id);
+        if ($notificationId) {
+            echo Display::show_notification($courseInfo, false);
+            Session::erase($notificationId);
+        }
+
+        break;
     default:
         echo '';
+
 }
 exit;

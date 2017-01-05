@@ -9,7 +9,7 @@
 // resetting the course id
 $cidReset = true;
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
 
@@ -184,7 +184,7 @@ if (is_array($members) && count($members)>0) {
         $image = UserManager::getUserPicture($member['id']);
         $member['image'] = '<img class="img-circle" src="'.$image.'"  width="50px" height="50px"  />';
     }
-    
+
     $userList .= Display::return_sortable_grid(
         'invitation_profile',
         array(),
@@ -194,12 +194,12 @@ if (is_array($members) && count($members)>0) {
         false,
         array(true, false, true, false)
     );
-    
+
     $social_right_content .= Display::panel($userList, get_lang('UsersAlreadyInvited'));
 }
 
 $tpl = new Template(null);
-SocialManager::setSocialUserBlock($tpl, $user_id, 'groups', $group_id);
+SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'groups', $group_id);
 $social_menu_block = SocialManager::show_social_menu('member_list', $group_id);
 $tpl->assign('social_menu_block', $social_menu_block);
 $tpl->setHelp('Groups');

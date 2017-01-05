@@ -1203,7 +1203,8 @@ class Event
             $list = array();
             while ($row = Database::fetch_array($res, 'ASSOC')) {
                 $list[$row['exe_id']] = $row;
-                $sql = "SELECT * FROM $table_track_attempt WHERE exe_id = {$row['exe_id']}";
+                $sql = "SELECT * FROM $table_track_attempt 
+                        WHERE exe_id = {$row['exe_id']}";
                 $res_question = Database::query($sql);
                 while ($row_q = Database::fetch_array($res_question, 'ASSOC')) {
                     $list[$row['exe_id']]['question_list'][$row_q['question_id']] = $row_q;
@@ -1243,7 +1244,8 @@ class Event
         $list = array();
         while ($row = Database::fetch_array($res, 'ASSOC')) {
             $list[$row['exe_id']] = $row;
-            $sql = "SELECT * FROM $table_track_attempt WHERE exe_id = {$row['exe_id']}";
+            $sql = "SELECT * FROM $table_track_attempt 
+                    WHERE exe_id = {$row['exe_id']}";
             $res_question = Database::query($sql);
             while ($row_q = Database::fetch_array($res_question, 'ASSOC')) {
                 $list[$row['exe_id']]['question_list'][$row_q['question_id']] = $row_q;
@@ -1279,7 +1281,8 @@ class Event
 
             //Checking if this attempt was revised by a teacher
             $sql_revised = 'SELECT exe_id FROM '.$table_track_attempt_recording.'
-                            WHERE author != "" AND exe_id = '.$exe_id.' LIMIT 1';
+                            WHERE author != "" AND exe_id = '.$exe_id.' 
+                            LIMIT 1';
             $res_revised = Database::query($sql_revised);
             $row['attempt_revised'] = 0;
             if (Database::num_rows($res_revised) > 0) {
@@ -1287,7 +1290,8 @@ class Event
             }
             $list[$exe_id] = $row;
             $sql = "SELECT * FROM $table_track_attempt
-                    WHERE exe_id = $exe_id ORDER BY tms ASC";
+                    WHERE exe_id = $exe_id 
+                    ORDER BY tms ASC";
             $res_question = Database::query($sql);
             while ($row_q = Database::fetch_array($res_question, 'ASSOC')) {
                 $list[$exe_id]['question_list'][$row_q['question_id']] = $row_q;
@@ -1346,7 +1350,7 @@ class Event
         $res = Database::query($sql);
         $list = array();
         while ($row = Database::fetch_array($res, 'ASSOC')) {
-            //Checking if this attempt was revised by a teacher
+            // Checking if this attempt was revised by a teacher
             $sql = 'SELECT exe_id FROM '.$table_track_attempt_recording.'
                     WHERE author != "" AND exe_id = '.$row['exe_id'].'
                     LIMIT 1';
@@ -1432,7 +1436,8 @@ class Event
         $list = array();
         while ($row = Database::fetch_array($res, 'ASSOC')) {
             $list[$row['exe_id']] = $row;
-            $sql = "SELECT * FROM $table_track_attempt WHERE exe_id = {$row['exe_id']}";
+            $sql = "SELECT * FROM $table_track_attempt 
+                    WHERE exe_id = {$row['exe_id']}";
             $res_question = Database::query($sql);
             while ($row_q = Database::fetch_array($res_question, 'ASSOC')) {
                 $list[$row['exe_id']]['question_list'][$row_q['question_id']] = $row_q;
@@ -1597,7 +1602,8 @@ class Event
         $list = array();
         while ($row = Database::fetch_array($res, 'ASSOC')) {
             $list[$row['exe_id']] = $row;
-            $sql = "SELECT * FROM $table_track_attempt WHERE exe_id = {$row['exe_id']}";
+            $sql = "SELECT * FROM $table_track_attempt 
+                    WHERE exe_id = {$row['exe_id']}";
             $res_question = Database::query($sql);
             while ($row_q = Database::fetch_array($res_question, 'ASSOC')) {
                 $list[$row['exe_id']]['question_list'][$row_q['question_id']] = $row_q;
@@ -1737,10 +1743,11 @@ class Event
         }
 
         $sql = "DELETE FROM $table_track_attempt
-                WHERE   hotspot_exe_id = $exe_id AND
-                        hotspot_user_id = $user_id AND
-                        c_id = $courseId AND
-                        hotspot_question_id = $question_id ";
+                WHERE   
+                    hotspot_exe_id = $exe_id AND
+                    hotspot_user_id = $user_id AND
+                    c_id = $courseId AND
+                    hotspot_question_id = $question_id ";
         Database::query($sql);
         Event::addEvent(
             LOG_QUESTION_RESULT_DELETE,

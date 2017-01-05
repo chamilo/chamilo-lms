@@ -8,8 +8,7 @@
  *
  * 	@todo the answered column
  */
-// Including the global initialization file
-require '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 /** @todo this has to be moved to a more appropriate place (after the display_header of the code)*/
 if (!api_is_allowed_to_edit(false, true)) {

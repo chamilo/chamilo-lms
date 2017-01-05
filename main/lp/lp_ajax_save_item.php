@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * This script contains the server part of the AJAX interaction process.
  * The client part is located * in lp_api.php or other api's.
@@ -8,11 +10,9 @@
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 
-use ChamiloSession as Session;
-
 // Flag to allow for anonymous user - needs to be set before global.inc.php.
 $use_anonymous = true;
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 /**
  * Writes an item's new values into the database and returns the operation result

@@ -18,7 +18,7 @@ if (!isset($_GET['cidReq'])) {
 }
 
 // Including the global initialization file
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 // Breadcrumbs
 if (!empty($_user)) {

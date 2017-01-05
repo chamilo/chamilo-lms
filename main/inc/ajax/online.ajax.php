@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
-require_once '../global.inc.php';
+
+require_once __DIR__.'/../global.inc.php';
 
 $action = $_GET['a'];
 

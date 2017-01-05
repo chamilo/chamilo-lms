@@ -8,7 +8,7 @@
  * @todo clean code - structure is unclear and difficult to modify
  */
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 $uInfo = isset($_REQUEST['uInfo']) ? intval($_REQUEST['uInfo']) : 0;
 $view  = isset($_REQUEST['view']) ? Security::remove_XSS($_REQUEST['view']) : '';

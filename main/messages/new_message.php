@@ -13,7 +13,7 @@
 * - send to specific user (when pressing send message in the who is online list)
 */
 $cidReset = true;
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
 
@@ -404,7 +404,7 @@ if (api_get_setting('allow_social_tool') === 'true') {
 
 $tpl = new Template(get_lang('ComposeMessage'));
 // Block Social Avatar
-SocialManager::setSocialUserBlock($tpl, $user_id, 'messages');
+SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'messages');
 
 if (api_get_setting('allow_social_tool') === 'true') {
     $tpl->assign('social_menu_block', $social_menu_block);

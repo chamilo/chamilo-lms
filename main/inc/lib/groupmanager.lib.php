@@ -2080,36 +2080,12 @@ class GroupManager
             $categoryId = $category['id'];
         }
 
-        $group_table = Database::get_course_table(TABLE_GROUP);
-        $group_user_table = Database::get_course_table(TABLE_GROUP_USER);
         $session_id = api_get_session_id();
-        $complete_user_list = CourseManager::get_real_and_linked_user_list($_course['code'], true, $session_id);
-        $course_id = api_get_course_int_id();
-
-        /*
-         * Retrieve all the groups where enrollment is still allowed
-         * (reverse) ordered by the number of place available
-         */
-        $sql = "SELECT g.id gid, count(ug.user_id) count_users, g.max_student
-                FROM $group_table g
-                LEFT JOIN $group_user_table ug
-                ON g.iid = ug.group_id
-                WHERE   
-                    g.c_id = $course_id AND
-                    ug.c_id = $course_id AND
-                    g.iid = $groupId
-                GROUP BY (g.iid)";
-
-        $sql_result = Database::query($sql);
-        $group_available_place = array();
-        while ($group = Database::fetch_array($sql_result, 'ASSOC')) {
-            if (!empty($group['max_student'])) {
-                $places = intval($group['max_student'] - $group['count_users']);
-            } else {
-                $places = self::MEMBER_PER_GROUP_NO_LIMIT;
-            }
-            $group_available_place[$group['gid']] = $places;
-        }
+        $complete_user_list = CourseManager::get_real_and_linked_user_list(
+            $_course['code'],
+            true,
+            $session_id
+        );
 
         /*
          * Retrieve course users (reverse) ordered by the number
@@ -2461,7 +2437,7 @@ class GroupManager
                     $result['updated']['group'][] = $data;
                 }
 
-                $students = isset($data['students']) ? explode(',', $data['students']) : null;
+                $students = isset($data['students']) ? explode(',', $data['students']) : [];
                 if (!empty($students)) {
                     $studentUserIdList = array();
                     foreach ($students as $student) {
@@ -2471,7 +2447,7 @@ class GroupManager
                     self::subscribe_users($studentUserIdList, $groupId);
                 }
 
-                $tutors = isset($data['tutors']) ? explode(',', $data['tutors']) : null;
+                $tutors = isset($data['tutors']) ? explode(',', $data['tutors']) : [];
                 if (!empty($tutors)) {
                     $tutorIdList = array();
                     foreach ($tutors as $tutor) {
@@ -2637,7 +2613,7 @@ class GroupManager
     /**
      * @param string $default
      */
-    static function getSettingBar($default)
+    public static function getSettingBar($default)
     {
         $activeSettings = null;
         $activeTutor = null;

@@ -8,7 +8,7 @@
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 
-include '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 $form_style= '<style>
 .row {

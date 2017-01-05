@@ -709,7 +709,7 @@ class Display
      * Gets the path of an icon
      *
      * @param string $icon
-     * @param string $size
+     * @param int $size
      *
      * @return string
      */
@@ -1126,7 +1126,7 @@ class Display
      */
     public static function grid_html($div_id)
     {
-        $table  = self::tag('table','', array('id' => $div_id));
+        $table = self::tag('table','', array('id' => $div_id));
         $table .= self::tag('div','', array('id' => $div_id.'_pager'));
         return $table;
     }
@@ -1349,10 +1349,11 @@ class Display
      * if the user never entered the course before, he will not see notification
      * icons. This function takes session ID into account (if any) and only shows
      * the corresponding notifications.
-     * @param array     Course information array, containing at least elements 'db' and 'k'
+     * @param array $course_info Course information array, containing at least elements 'db' and 'k'
+     * @param bool $loadAjax
      * @return string   The HTML link to be shown next to the course
      */
-    public static function show_notification($course_info)
+    public static function show_notification($course_info, $loadAjax = true)
     {
         if (empty($course_info)) {
             return '';
@@ -1364,8 +1365,20 @@ class Display
         $course_code = Database::escape_string($course_info['code']);
 
         $user_id = api_get_user_id();
-        $course_id = intval($course_info['real_id']);
-        $sessionId = intval($course_info['id_session']);
+        $course_id = (int) $course_info['real_id'];
+        $sessionId = (int) $course_info['id_session'];
+        $status = (int) $course_info['status'];
+
+        $loadNotificationsByAjax = api_get_configuration_value('user_portal_load_notification_by_ajax');
+
+        if ($loadNotificationsByAjax) {
+            if ($loadAjax) {
+                $id = 'notification_'.$course_id.'_'.$sessionId.'_'.$status;
+                Session::write($id, true);
+
+                return '<span id ="'.$id.'" class="course_notification"></span>';
+            }
+        }
 
         // Get the user's last access dates to all tools of this course
         $sql = "SELECT *
@@ -1421,12 +1434,11 @@ class Display
 
         $res = Database::query($sql);
         // Get the group_id's with user membership.
-        $group_ids = GroupManager :: get_group_ids($course_info['real_id'], $user_id);
+        $group_ids = GroupManager::get_group_ids($course_info['real_id'], $user_id);
         $group_ids[] = 0; //add group 'everyone'
         $notifications = array();
         // Filter all last edits of all tools of the course
         while ($res && ($item_property = Database::fetch_array($res, 'ASSOC'))) {
-
             // First thing to check is if the user never entered the tool
             // or if his last visit was earlier than the last modification.
             if ((!isset($lastTrackInCourseDate[$item_property['tool']])
@@ -1443,7 +1455,7 @@ class Display
                 )
                 // Take only what's visible or "invisible but where the user is a teacher" or where the visibility is unset.
                 && ($item_property['visibility'] == '1'
-                    || ($course_info['status'] == '1' && $item_property['visibility'] == '0')
+                    || ($status == '1' && $item_property['visibility'] == '0')
                     || !isset($item_property['visibility']))
             ) {
                 // Also drop announcements and events that are not for the user or his group.
@@ -2126,7 +2138,7 @@ class Display
      * @param int $fixedValue
      * @return string
      */
-    static function parsePaginationItem(
+    public static function parsePaginationItem(
         $itemId,
         $isCurrent,
         $conditions,
@@ -2267,9 +2279,14 @@ class Display
             $objSSO = null;
 
             if (!empty($subSSOClass)) {
-                require_once api_get_path(SYS_CODE_PATH)."auth/sso/sso.$subSSOClass.class.php";
-                $subSSOClass = 'sso'.$subSSOClass;
-                $objSSO = new $subSSOClass();
+                $file = api_get_path(SYS_CODE_PATH)."auth/sso/sso.$subSSOClass.class.php";
+                if (file_exists($file)) {
+                    require_once $file;
+                    $subSSOClass = 'sso'.$subSSOClass;
+                    $objSSO = new $subSSOClass();
+                } else {
+                    throw new Exception("$subSSOClass file not set");
+                }
             } else {
                 $objSSO = new sso();
             }
@@ -2290,7 +2307,7 @@ class Display
      */
     public static function getVCardUserLink($userId)
     {
-        $vCardUrl = api_get_path(WEB_PATH).'main/social/vcard_export.php?userId='.intval($userId);;
+        $vCardUrl = api_get_path(WEB_PATH).'main/social/vcard_export.php?userId='.intval($userId);
 
         return $vCardUrl;
     }
@@ -2502,6 +2519,25 @@ HTML;
         }
         return $html;
     }
+
+    /**
+     * Returns the string "1 day ago" with a link showing the exact date time.
+     * @param string $dateTime in UTC
+     *
+     * @return string
+     */
+    public static function dateToStringAgoAndLongDate($dateTime)
+    {
+        if (empty($dateTime) || $dateTime === '0000-00-00 00:00:00') {
+            return '';
+        }
+
+        return self::tip(
+            date_to_str_ago($dateTime),
+            api_get_local_time($dateTime)
+        );
+    }
+
     public static function iconAnswer($typeAnswer){
         $valor = null;
         switch ($typeAnswer){

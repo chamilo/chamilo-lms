@@ -5,7 +5,7 @@
  * 	@author Julio Montoya <gugli100@gmail.com>
  */
 $cidReset = true;
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_global_admin_script();
@@ -24,10 +24,10 @@ if ($form->validate()) {
         $url_array = $form->getSubmitValues();
         $url = Security::remove_XSS($url_array['url']);
         $description = Security::remove_XSS($url_array['description']);
-        $active = intval($url_array['active']);
-        $url_id = $url_array['id'];
+        $active = isset($url_array['active']) ? intval($url_array['active']) : 0;
+        $url_id = isset($url_array['id']) ? intval($url_array['id']) : 0;
         $url_to_go = 'access_urls.php';
-        if ($url_id != '') {
+        if (!empty($url_id)) {
             //we can't change the status of the url with id=1
             if ($url_id == 1) {
                 $active = 1;

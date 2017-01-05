@@ -6,7 +6,7 @@
  */
 
 $cidReset = true;
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
 
@@ -39,7 +39,6 @@ if ($action === 'add') {
 
 $htmlHeadXtra[]= '<script>
 function plusItem(item) {
-    console.log(item);
     if (item != 1) {
 		document.getElementById(item).style.display = "inline";
     	document.getElementById("plus-"+item).style.display = "none";

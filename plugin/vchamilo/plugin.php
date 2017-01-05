@@ -1,7 +1,9 @@
 <?php
 /**
- * This script is a configuration file for the vchamilo plugin. You can use it as a master for other platform plugins (course plugins are slightly different).
- * These settings will be used in the administration interface for plugins (Chamilo configuration settings->Plugins)
+ * This script is a configuration file for the vchamilo plugin.
+ * You can use it as a master for other platform plugins (course plugins are slightly different).
+ * These settings will be used in the administration interface for plugins
+ * (Chamilo configuration settings->Plugins)
  * @package chamilo.plugin
  * @author Julio Montoya <gugli100@gmail.com>
  */
@@ -19,7 +21,7 @@ $plugin_info['title'] = 'Chamilo Virtualization';
 //the comments that go with the plugin
 $plugin_info['comment'] = "Holds chamilo virtualisation tools";
 //the plugin version
-$plugin_info['version'] = '1.0';
+$plugin_info['version'] = '1.2';
 //the plugin author
 $plugin_info['author'] = 'Valery Fremaux, Julio Montoya';
 
@@ -46,6 +48,7 @@ $form_settings = array(
     'course_real_root' => Virtual::getConfig('vchamilo', 'course_real_root', true),
     'archive_real_root' => Virtual::getConfig('vchamilo', 'archive_real_root', true),
     'home_real_root' => Virtual::getConfig('vchamilo', 'home_real_root', true),
+    'upload_real_root' => Virtual::getConfig('vchamilo', 'upload_real_root', true),
 );
 
 $form->setDefaults($form_settings);
@@ -75,6 +78,12 @@ $form->addElement(
     'text',
     'home_real_root',
     [$plugin->get_lang('homerealroot'), 'Example: '.api_get_path(SYS_PATH).'var/home/']
+);
+
+$form->addElement(
+    'text',
+    'upload_real_root',
+    [$plugin->get_lang('UploadRealRoot'), 'Example: '.api_get_path(SYS_PATH).'var/upload/']
 );
 
 $form->addElement('header', $plugin->get_lang('mysqlcmds'));

@@ -2712,9 +2712,9 @@ class Tracking
      * This function does not take the results of a Test out of a LP
      *
      * @param   int|array   Array of user ids or an user id
-     * @param   string      Course code
-     * @param   array       List of LP ids
-     * @param   int         Session id (optional), if param $session_id is null(default)
+     * @param   string      $course_code Course code
+     * @param   array       $lp_ids List of LP ids
+     * @param   int         $session_id Session id (optional), if param $session_id is 0(default)
      * it'll return results including sessions, 0 = session is not filtered
      * @param   bool        Returns an array of the type [sum_score, num_score] if set to true
      * @param   bool        get only the latest attempts or ALL attempts
@@ -2722,9 +2722,9 @@ class Tracking
      */
     public static function getAverageStudentScore(
         $student_id,
-        $course_code = null,
+        $course_code = '',
         $lp_ids = array(),
-        $session_id = null
+        $session_id = 0
     ) {
         if (empty($student_id)) {
             return 0;
@@ -2764,9 +2764,9 @@ class Tracking
         }
 
         $conditionsToString = implode('AND ', $conditions);
-        $sql = "SELECT  SUM(lp_iv.score) sum_score,
-                        SUM(lp_i.max_score) sum_max_score,
-                        count(*) as count
+        $sql = "SELECT  
+                    SUM(lp_iv.score) sum_score,
+                    SUM(lp_i.max_score) sum_max_score
                 FROM $lp_table as lp
                 INNER JOIN $lp_item_table as lp_i
                 ON lp.id = lp_id AND lp.c_id = lp_i.c_id
@@ -2784,7 +2784,7 @@ class Tracking
             return 0;
         }
 
-        return ($row['sum_score'] / $row['sum_max_score'])*100;
+        return ($row['sum_score'] / $row['sum_max_score']) * 100;
 
     }
 
@@ -3381,9 +3381,11 @@ class Tracking
             }
 
             $sql = "SELECT count(ip.tool) AS count
-                    FROM $tbl_item_property ip INNER JOIN $tbl_document pub
-                            ON ip.ref = pub.id
-                    WHERE 	ip.c_id  = $course_id AND
+                    FROM $tbl_item_property ip 
+                    INNER JOIN $tbl_document pub
+                    ON (ip.ref = pub.id AND ip.c_id = pub.c_id)
+                    WHERE 	
+                        ip.c_id  = $course_id AND
                             pub.c_id  = $course_id AND
                             pub.filetype ='file' AND
                             ip.tool = 'document'
@@ -3438,7 +3440,8 @@ class Tracking
 
         $sql = "SELECT count(ip.tool) as count
                 FROM $tbl_item_property ip
-                INNER JOIN $tbl_student_publication pub ON ip.ref = pub.id
+                INNER JOIN $tbl_student_publication pub 
+                ON (ip.ref = pub.id AND ip.c_id = pub.c_id)
                 WHERE
                     ip.tool='work' AND
                     $conditionToString";
@@ -3478,8 +3481,9 @@ class Tracking
 
         if (empty($courseCode)) {
             $sql = "SELECT count(poster_id) as count
-                    FROM $tbl_forum_post post INNER JOIN $tbl_forum forum
-                    ON forum.forum_id = post.forum_id
+                    FROM $tbl_forum_post post 
+                    INNER JOIN $tbl_forum forum
+                    ON (forum.forum_id = post.forum_id AND forum.c_id = post.c_id)
                     WHERE $conditionsToString";
 
             $rs = Database::query($sql);
@@ -3760,9 +3764,9 @@ class Tracking
 
     /**
      * Get count student's visited links
-     * @param    int        Student id
-     * @param    int    $courseId
-     * @param    int        Session id (optional)
+     * @param    int $student_id Student id
+     * @param    int $courseId
+     * @param    int $session_id Session id (optional)
      * @return    int        count of visited links
      */
     public static function count_student_visited_links($student_id, $courseId, $session_id = 0)
@@ -3906,7 +3910,6 @@ class Tracking
                             session_course_user.c_id = ' . $courseId . ' AND
                             stats_login.login_course_date IS NULL
                         GROUP BY session_course_user.user_id';
-
             }
         }
 
@@ -4015,7 +4018,7 @@ class Tracking
      * BUT NO ROW MATCH THE CONDITION, IT SHOULD BE FINE TO USE IT WHEN YOU USE USER DEFINED DATES AND NO CHAMILO DATES
      * @param   int     User Id
      * @param   int     Course Id
-     * @param   int     Session Id (optional), if param $session_id is null(default) it'll return results including sessions, 0 = session is not filtered
+     * @param   int     Session Id (optional), if param $session_id is 0 (default) it'll return results including sessions, 0 = session is not filtered
      * @param   string  Date from
      * @param   string  Date to
      * @return  array   Data
@@ -4144,7 +4147,7 @@ class Tracking
      * @param    int        Limit (optional, default = 0, 0 = without limit)
      * @return    array     documents downloaded
      */
-    public static function get_documents_most_downloaded_by_course($course_code, $session_id = null, $limit = 0)
+    public static function get_documents_most_downloaded_by_course($course_code, $session_id = 0, $limit = 0)
     {
         //protect data
         $courseId = api_get_course_int_id($course_code);
@@ -4152,11 +4155,14 @@ class Tracking
 
         $TABLETRACK_DOWNLOADS   = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
         $condition_session = '';
-        if (isset($session_id)) {
             $session_id = intval($session_id);
+        if (!empty($session_id)) {
             $condition_session = ' AND down_session_id = '. $session_id;
         }
-        $sql = "SELECT down_doc_path, COUNT(DISTINCT down_user_id), COUNT(down_doc_path) as count_down
+        $sql = "SELECT 
+                    down_doc_path, 
+                    COUNT(DISTINCT down_user_id), 
+                    COUNT(down_doc_path) as count_down
                 FROM $TABLETRACK_DOWNLOADS
                 WHERE c_id = $courseId
                     $condition_session
@@ -4812,6 +4818,7 @@ class Tracking
 
             //Course details
             $html .= '
+                <thead>
                 <tr>
                 <th>'.get_lang('Exercises').'</th>
                 <th>'.get_lang('Attempts').'</th>
@@ -5651,7 +5658,7 @@ class Tracking
         $tquiz_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $tquiz_rel_question = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $ttrack_exercises  = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $ttrack_attempt    = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+        $ttrack_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
         $sessions = array();
         $courses = array();
@@ -5753,9 +5760,12 @@ class Tracking
                 q.title as quiz_title,
                 qq.description as description
                 FROM $ttrack_exercises te
-                INNER JOIN $ttrack_attempt ta ON ta.exe_id = te.exe_id
-                INNER JOIN $tquiz q ON q.id = te.exe_exo_id
-                INNER JOIN $tquiz_rel_question rq ON rq.exercice_id = q.id AND rq.c_id = q.c_id
+                INNER JOIN $ttrack_attempt ta 
+                ON ta.exe_id = te.exe_id
+                INNER JOIN $tquiz q 
+                ON q.id = te.exe_exo_id
+                INNER JOIN $tquiz_rel_question rq 
+                ON rq.exercice_id = q.id AND rq.c_id = q.c_id
                 INNER JOIN $tquiz_question qq
                 ON
                     qq.id = rq.question_id AND

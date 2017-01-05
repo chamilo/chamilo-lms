@@ -137,6 +137,7 @@ class Template
         $this->twig->addFilter('img', new Twig_Filter_Function('Template::get_image'));
         $this->twig->addFilter('format_date', new Twig_Filter_Function('Template::format_date'));
         $this->twig->addFilter('api_get_local_time', new Twig_Filter_Function('api_get_local_time'));
+        $this->twig->addFilter('user_info', new Twig_Filter_Function('api_get_user_info'));
 
         /*
           $lexer = new Twig_Lexer($this->twig, array(
@@ -473,7 +474,7 @@ class Template
                 $user_info['is_admin'] = 1;
             }
 
-            $user_info['messages_count'] = MessageManager::get_new_messages();
+            $user_info['messages_count'] = MessageManager::getCountNewMessages();
             $this->user_is_logged_in = true;
         }
         // Setting the $_u array that could be use in any template
@@ -516,7 +517,7 @@ class Template
             'site_name' => api_get_setting('siteName'),
             'institution' => api_get_setting('Institution'),
             'date' => api_format_date('now', DATE_FORMAT_LONG),
-            'timezone' => _api_get_timezone(),
+            'timezone' => api_get_timezone(),
             'gamification_mode' => api_get_setting('gamification_mode')
         );
         $this->assign('_s', $_s);

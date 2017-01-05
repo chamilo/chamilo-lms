@@ -37,7 +37,7 @@ class AgendaStudent extends Basic
     {
         return [
             ['Save', 'NewPage', 'Templates', '-', 'Preview', 'Print'],
-            ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord'],
+            ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', 'inserthtml'],
             ['Undo', 'Redo', '-', 'SelectAll', 'Find', '-', 'RemoveFormat'],
             ['Link', 'Unlink', 'Anchor', 'Glossary'],
             [
@@ -52,13 +52,32 @@ class AgendaStudent extends Basic
                 'Smiley',
                 'SpecialChar',
                 'Asciimath',
-                'Asciisvg'
+                'Asciisvg',
             ],
             '/',
             ['Table', '-', 'CreateDiv'],
-            ['BulletedList', 'NumberedList', 'HorizontalRule', '-', 'Outdent', 'Indent', 'Blockquote'],
+            [
+                'BulletedList',
+                'NumberedList',
+                'HorizontalRule',
+                '-',
+                'Outdent',
+                'Indent',
+                'Blockquote',
+            ],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
-            ['Bold', 'Italic', 'Underline', 'Strike', '-', 'Subscript', 'Superscript', '-', 'TextColor', 'BGColor'],
+            [
+                'Bold',
+                'Italic',
+                'Underline',
+                'Strike',
+                '-',
+                'Subscript',
+                'Superscript',
+                '-',
+                'TextColor',
+                'BGColor',
+            ],
             [api_get_setting('allow_spellcheck') == 'true' ? 'Scayt' : ''],
             ['Styles', 'Format', 'Font', 'FontSize'],
             ['PageBreak', 'ShowBlocks'],
@@ -74,7 +93,7 @@ class AgendaStudent extends Basic
     {
         return [
             ['Save', 'Maximize', 'PasteFromWord', '-', 'Undo', 'Redo'],
-            ['Link', 'Unlink', 'Anchor'],
+            ['Link', 'Unlink', 'Anchor', 'inserthtml'],
             ['Image', 'Video', 'Flash', 'Oembed', 'Youtube', 'Audio'],
             ['Table', 'SpecialChar'],
             '/',
@@ -105,7 +124,7 @@ class AgendaStudent extends Basic
     protected function getMinimizedToolbar()
     {
         return [
-            ['Save', 'NewPage', 'Templates', '-', 'PasteFromWord'],
+            ['Save', 'NewPage', 'Templates', '-', 'PasteFromWord', 'inserthtml'],
             ['Undo', 'Redo'],
             ['Link', 'Image', 'Video', 'Flash', 'Youtube', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
             ['BulletedList', 'NumberedList', 'HorizontalRule'],

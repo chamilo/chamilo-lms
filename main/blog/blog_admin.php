@@ -7,7 +7,7 @@
  * @package chamilo.blogs
  */
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool  = TOOL_BLOGS;
 
 $this_section = SECTION_COURSES;
@@ -19,7 +19,7 @@ $blog_table_attachment = Database::get_course_table(TABLE_BLOGS_ATTACHMENT);
 api_protect_course_script(true);
 
 //	 ONLY USERS REGISTERED IN THE COURSE
-if ((!$is_allowed_in_course || !$is_courseMember) && !api_is_allowed_to_edit()) {
+if ((!api_is_allowed_in_course() || !$is_courseMember) && !api_is_allowed_to_edit()) {
     api_not_allowed(true);//print headers/footers
 }
 
@@ -30,7 +30,10 @@ if (api_is_allowed_to_edit()) {
     // the learning path, we do not include the banner so we have to explicitly
     // include the stylesheet, which is normally done in the header
     if (empty($_GET['origin']) || $_GET['origin'] != 'learnpath') {
-        $interbreadcrumb[]= array ('url' => 'blog_admin.php?','name' => $nameTools);
+        $interbreadcrumb[] = array(
+            'url' => 'blog_admin.php?'.api_get_cidreq(),
+            'name' => $nameTools,
+        );
         $my_url='';
         if (isset($_GET['action']) && $_GET['action']=='add') {
             $current_section = get_lang('AddBlog');

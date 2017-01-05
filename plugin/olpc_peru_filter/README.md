@@ -1,4 +1,4 @@
-== English ==
+## English
 
 This plugin will create administration settings to configure the content 
 filtering on OLPC Peru's XS servers (uses Squid).
@@ -30,7 +30,7 @@ on the XS servers in Peru) is to install and configure Squid (yum install
 squid) and add SquidGuard (see URL above), then finally change the permissions
 on the configuration files as in the two last command lines above (with chmod)
 
-== Spanish ==
+## Spanish
 
 Este plugin crea parámetros de administración para configurar el filtrado de 
 contenido en los servidores XS del proyecto Una Laptop Para Cada Niño en 

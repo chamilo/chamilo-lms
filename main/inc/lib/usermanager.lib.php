@@ -724,6 +724,11 @@ class UserManager
                 WHERE lastedit_user_id = '".$user_id."'";
         Database::query($sql);
 
+        // Skills
+        $table = Database::get_main_table(TABLE_MAIN_SKILL_REL_USER);
+        $sql = "DELETE FROM $table WHERE user_id = $user_id";
+        Database::query($sql);
+
         $em = Database::getManager();
         $criteria = ['user' => $user_id];
         $searchList = $em->getRepository('ChamiloCoreBundle:ExtraFieldSavedSearch')->findBy($criteria);
@@ -1703,6 +1708,7 @@ class UserManager
                 $userInfo = api_get_user_info($user_id);
             }
         }
+
         $imageWebPath = self::get_user_picture_path_by_id($user_id, 'web', $userInfo);
         $pictureWebFile = $imageWebPath['file'];
         $pictureWebDir = $imageWebPath['dir'];
@@ -1737,7 +1743,6 @@ class UserManager
         $gravatarEnabled = api_get_setting('gravatar_enabled');
         $anonymousPath = Display::returnIconPath('unknown.png', $pictureAnonymousSize);
         if ($pictureWebFile == 'unknown.jpg' || empty($pictureWebFile)) {
-
             if ($gravatarEnabled === 'true') {
                 $file = self::getGravatar(
                     $imageWebPath['email'],
@@ -1807,6 +1812,7 @@ class UserManager
         $path_info = self::getUserPicturePathById($user_id, 'system');
 
         $path = $path_info['dir'];
+
         // If this directory does not exist - we create it.
         if (!file_exists($path)) {
             mkdir($path, api_get_permissions_for_new_directories(), true);
@@ -2508,7 +2514,8 @@ class UserManager
         return $extraField->getFieldInfoByFieldId($fieldId);
     }
 
-    /** Get extra user data by value
+    /**
+     * Get extra user data by value
      * @param string $variable the internal variable name of the field
      * @param string $value the internal value of the field
      * @param bool $all_visibility
@@ -2566,12 +2573,12 @@ class UserManager
 
     /**
      * Get extra user data by field variable
-     * @param string    field variable
+     * @param string    $variable field variable
      * @return array    data
      */
-    public static function get_extra_user_data_by_field_variable($field_variable)
+    public static function get_extra_user_data_by_field_variable($variable)
     {
-        $extra_information_by_variable = self::get_extra_field_information_by_name($field_variable);
+        $extra_information_by_variable = self::get_extra_field_information_by_name($variable);
         $field_id = intval($extra_information_by_variable['id']);
 
         $extraField = new ExtraFieldValue('user');
@@ -2590,14 +2597,14 @@ class UserManager
     /**
      * Get extra user data tags by field variable
      *
-     * @param string    field variable
-     * @return array    data
+     * @param string $variable field variable
+     * @return array
      */
-    public static function get_extra_user_data_for_tags($field_variable)
+    public static function get_extra_user_data_for_tags($variable)
     {
-        $extra_information_by_variable = self::get_extra_field_tags_information_by_name($field_variable);
+        $data = self::get_extra_field_tags_information_by_name($variable);
 
-        return $extra_information_by_variable;
+        return $data;
     }
 
     /**
@@ -2634,9 +2641,9 @@ class UserManager
                     sc.dateEnd AS session_category_date_end,
                     s.coachAccessStartDate AS coach_access_start_date,
                     s.coachAccessEndDate AS coach_access_end_date
-                FROM ChamiloCoreBundle:Session AS s
+                FROM ChamiloCoreBundle:Session AS s                                
                 INNER JOIN ChamiloCoreBundle:SessionRelCourseRelUser AS scu WITH scu.session = s
-                LEFT JOIN ChamiloCoreBundle:SessionCategory AS sc WITH s.category = sc                
+                LEFT JOIN ChamiloCoreBundle:SessionCategory AS sc WITH s.category = sc
                 WHERE scu.user = :user OR s.generalCoach = :user
                 ORDER BY sc.name, s.name";
 
@@ -2649,22 +2656,34 @@ class UserManager
         $categories = [];
 
         foreach ($sessionData as $row) {
+            $session_id = $row['id'];
+            $coachList = SessionManager::getCoachesBySession($session_id);
+
+            $categoryStart = $row['session_category_date_start'] ? $row['session_category_date_start']->format('Y-m-d') : '';
+            $categoryEnd = $row['session_category_date_end'] ? $row['session_category_date_end']->format('Y-m-d') : '';
+
+            $courseList = UserManager::get_courses_list_by_session(
+                $user_id,
+                $session_id
+            );
+
             // User portal filters:
             if ($ignoreTimeLimit === false) {
                 if ($is_time_over) {
                     // History
                     if (empty($row['access_end_date'])) {
                         continue;
-                    }
-
-                    if (!empty($row['access_end_date'])) {
+                    } else {
                         if ($row['access_end_date'] > $now) {
                             continue;
                         }
                     }
                 } else {
                     // Current user portal
-                    if (api_is_allowed_to_create_course()) {
+                    $isGeneralCoach = SessionManager::user_is_general_coach($user_id, $row['id']);
+                    $isCoachOfCourse = in_array($user_id, $coachList);
+
+                    if (api_is_platform_admin() || $isGeneralCoach || $isCoachOfCourse) {
                         // Teachers can access the session depending in the access_coach date
                     } else {
                         if (isset($row['access_end_date']) &&
@@ -2681,14 +2700,8 @@ class UserManager
             $categories[$row['session_category_id']]['session_category'] = array(
                 'id' => $row['session_category_id'],
                 'name' => $row['session_category_name'],
-                'date_start' => $row['session_category_date_start'] ? $row['session_category_date_start']->format('Y-m-d H:i:s') : null,
-                'date_end' => $row['session_category_date_end'] ? $row['session_category_date_end']->format('Y-m-d H:i:s') : null
-            );
-
-            $session_id = $row['id'];
-            $courseList = UserManager::get_courses_list_by_session(
-                $user_id,
-                $session_id
+                'date_start' => $categoryStart,
+                'date_end' => $categoryEnd
             );
 
             $visibility = api_get_session_visibility(
@@ -3006,7 +3019,6 @@ class UserManager
         /* This query is very similar to the query below, but it will check the
         session_rel_course_user table if there are courses registered
         to our user or not */
-
         $sql = "SELECT DISTINCT
                     c.visibility,
                     c.id as real_id,                    
@@ -3021,7 +3033,7 @@ class UserManager
                     scu.user_id = $user_id AND
                     scu.session_id = $session_id
                     $where_access_url
-                ORDER BY sc.position ASC";
+                ORDER BY sc.position ASC, c.id";
 
         $personal_course_list = array();
         $courses = array();
@@ -3053,7 +3065,7 @@ class UserManager
                     WHERE
                       s.id = $session_id AND
                       (
-                        (scu.user_id = $user_id AND scu.status=2) OR
+                        (scu.user_id = $user_id AND scu.status = 2) OR
                         s.id_coach = $user_id
                       )
                     $where_access_url
@@ -3072,13 +3084,15 @@ class UserManager
         }
 
         if (api_is_drh()) {
-            $session_list = SessionManager::get_sessions_followed_by_drh($user_id);
-            $session_list = array_keys($session_list);
-            if (in_array($session_id, $session_list)) {
-                $course_list = SessionManager::get_course_list_by_session_id($session_id);
-                if (!empty($course_list)) {
-                    foreach ($course_list as $course) {
-                        $personal_course_list[] = $course;
+            $sessionList = SessionManager::get_sessions_followed_by_drh($user_id);
+            $sessionList = array_keys($sessionList);
+            if (in_array($session_id, $sessionList)) {
+                $courseList = SessionManager::get_course_list_by_session_id($session_id);
+                if (!empty($courseList)) {
+                    foreach ($courseList as $course) {
+                        if (!in_array($course['id'], $courses)) {
+                            $personal_course_list[] = $course;
+                        }
                     }
                 }
             }
@@ -3086,10 +3100,9 @@ class UserManager
             //check if user is general coach for this session
             $sessionInfo = api_get_session_info($session_id);
             if ($sessionInfo['id_coach'] == $user_id) {
-                $course_list = SessionManager::get_course_list_by_session_id($session_id);
-
-                if (!empty($course_list)) {
-                    foreach ($course_list as $course) {
+                $courseList = SessionManager::get_course_list_by_session_id($session_id);
+                if (!empty($courseList)) {
+                    foreach ($courseList as $course) {
                         if (!in_array($course['id'], $courses)) {
                             $personal_course_list[] = $course;
                         }
@@ -4033,7 +4046,7 @@ class UserManager
                     relation_type <> '.USER_RELATION_TYPE_RRHH.' ';
         $result = Database::query($sql);
         $row = Database :: fetch_array($result, 'ASSOC');
-        $current_date = date('Y-m-d H:i:s');
+        $current_date = api_get_utc_datetime();
 
         if ($row['count'] == 0) {
             $sql = 'INSERT INTO '.$tbl_my_friend.'(friend_user_id,user_id,relation_type,last_edit)

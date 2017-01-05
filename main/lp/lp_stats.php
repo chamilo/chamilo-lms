@@ -8,7 +8,7 @@
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 // When origin is not set that means that the lp_stats are viewed from the "man running" icon
 if (!isset($origin)) {

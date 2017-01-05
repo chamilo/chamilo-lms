@@ -14,7 +14,7 @@
 *
 */
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
 
@@ -24,8 +24,8 @@ $this_section = SECTION_TRACKING;
 /* MAIN */
 $user_id = intval($_REQUEST['student']);
 $session_id = intval($_GET['id_session']);
-$type = Security::remove_XSS($_REQUEST['type']);
-$course_code = Security::remove_XSS($_REQUEST['course']);
+$type = isset($_REQUEST['type']) ? Security::remove_XSS($_REQUEST['type']) : '';
+$course_code = isset($_REQUEST['course']) ? Security::remove_XSS($_REQUEST['course']) : '';
 $courseInfo = api_get_course_info($course_code);
 $courseId = $courseInfo['real_id'];
 $connections = MySpace::get_connections_to_course($user_id, $courseId, $session_id);
@@ -126,7 +126,7 @@ $result_to_print = convert_to_string($sql_result);
 
 echo Display::page_header(get_lang('DetailsStudentInCourse'));
 echo Display::page_subheader(
-    get_lang('User').': '.$userInfo['complete_name'].' - '.get_lang('Course').': '.$course_code
+    get_lang('User').': '.$userInfo['complete_name'].' - '.get_lang('Course').': '.$courseInfo['title'] . ' (' . $course_code . ')'
 );
 
 $form->setDefaults(array('from' => $from, 'to' => $to));

@@ -798,7 +798,7 @@ class ImportCsv
                 if (!empty($sessionId) && !empty($courseInfo)) {
                     $courseIncluded = SessionManager::relation_session_course_exist(
                         $sessionId,
-                        $courseInfo['code']
+                        $courseInfo['real_id']
                     );
 
                     if ($courseIncluded == false) {
@@ -923,20 +923,13 @@ class ImportCsv
                         continue;
                     }
 
-                    $items = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
+                    $item = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
                         $extraFieldName,
                         $externalEventId,
                         false,
                         false,
-                        true
+                        false
                     );
-
-                    $item = null;
-                    foreach ($items as $tempItem) {
-                        if ($tempItem['item_id'] == $event['course_id']) {
-                            $item = $tempItem;
-                        }
-                    }
 
                     if (!empty($item)) {
                         $this->logger->addInfo(
@@ -944,6 +937,10 @@ class ImportCsv
                         );
                         $update = true;
                         //continue;
+                    } else {
+                        $this->logger->addInfo(
+                            "Event #$externalEventId was not added. Preparing to be created ..."
+                        );
                     }
                 }
 
@@ -976,25 +973,25 @@ class ImportCsv
                 }
 
                 $content = '';
-
-                if ($update && isset($item['calendar_event_id'])) {
+                if ($update && isset($item['item_id'])) {
                     //the event already exists, just update
-                    $eventId = $agenda->edit_event(
-                        $item['calendar_event_id'],
+                    $eventResult = $agenda->editEvent(
+                        $item['item_id'],
                         $event['start'],
                         $event['end'],
                         false,
                         $event['title'],
                         $content,
-                        array('everyone'), // send to
+                        array('everyone'), // $usersToSend
                         array(), //$attachmentArray = array(),
-                        null, //$attachmentComment = null,
+                        [], //$attachmentCommentList
                         $eventComment,
                         $color
                     );
-                    if ($eventId !== false) {
+
+                    if ($eventResult !== false) {
                         $this->logger->addInfo(
-                            "Event updated: #$eventId"
+                            "Event updated: #".$item['item_id']
                         );
                     } else {
                         $this->logger->addInfo(
@@ -1003,28 +1000,28 @@ class ImportCsv
                     }
                 } else {
                     // New event. Create it.
-                    $eventId = $agenda->add_event(
+                    $eventId = $agenda->addEvent(
                         $event['start'],
                         $event['end'],
                         false,
                         $event['title'],
                         $content,
-                        array('everyone'), // send to
+                        array('everyone'), // $usersToSend
                         false, //$addAsAnnouncement = false
                         null, //  $parentEventId
                         array(), //$attachmentArray = array(),
-                        null, //$attachmentComment = null,
+                        [], //$attachmentCommentList
                         $eventComment,
                         $color
                     );
+
                     if (!empty($eventId)) {
-                        $extraFieldValue->is_course_model = true;
+                        //$extraFieldValue->is_course_model = true;
                         $extraFieldValue->save(
                             array(
-                                'field_value' => $externalEventId,
+                                'value' => $externalEventId,
                                 'field_id' => $extraFieldInfo['id'],
-                                'calendar_event_id' => $eventId,
-                                'c_id' => $event['course_id']
+                                'item_id' => $eventId
                             )
                         );
                         $this->logger->addInfo(

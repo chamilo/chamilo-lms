@@ -8,7 +8,7 @@
 
 $cidReset = true;
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 $xajax = new xajax();
 $xajax->registerFunction('search_coachs');
@@ -82,9 +82,9 @@ if (!empty($return)) {
                 </div>
                 <div class="col-md-3"></div>
             </div>
-            
+
             <div style="display: none" id="options">
-            
+
             <div class="form-group">
                 <label class="col-sm-3 control-label"><?php echo get_lang('DateStart') ?></label>
                 <div class="col-sm-6">
@@ -215,17 +215,17 @@ if (!empty($return)) {
                 </select>
                 </div>
                 <div class="col-md-3">
-                    
+
                 </div>
             </div>
-            </div>    
+            </div>
             <div class="form-group">
                 <div class="col-sm-offset-3 col-sm-6">
                     <button class="btn btn-success" type="submit" value="<?php echo get_lang('AddACategory') ?>"><em class="fa fa-plus"></em> <?php echo get_lang('AddACategory') ?></button>
                 </div>
                 <div class="col-md-3"></div>
             </div>
-           
+
         </form>
 </div>
 <script type="text/javascript">

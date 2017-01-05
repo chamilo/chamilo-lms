@@ -7,7 +7,7 @@
  * @author José Loguercio Silva <jose.loguercio@beeznest.com>
  * @package chamilo.badge
  */
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 $issue = isset($_REQUEST['issue']) ? intval($_REQUEST['issue']) : 0;
 

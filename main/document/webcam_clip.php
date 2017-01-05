@@ -12,7 +12,7 @@ use ChamiloSession as Session;
  * @since 7/jun/2012
  * @Updated 04/09/2015 Upgrade to WebCamJS
 */
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 $_SESSION['whereami'] = 'document/webcamclip';
 $this_section = SECTION_COURSES;
@@ -82,7 +82,7 @@ if (!empty($groupId)) {
 
 $interbreadcrumb[] = array ("url" => "./document.php?id=".$document_id."&".api_get_cidreq(), "name" => get_lang('Documents'));
 
-if (!$is_allowed_in_course) {
+if (!api_is_allowed_in_course()) {
 	api_not_allowed(true);
 }
 

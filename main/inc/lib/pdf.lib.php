@@ -226,7 +226,6 @@ class PDF
         self::format_pdf($course_data, $complete_style);
         $counter = 1;
         foreach ($html_file_array as $file) {
-
             //Add a page break per file
             $page_break = '<pagebreak>';
             if ($counter == count($html_file_array)) {
@@ -282,9 +281,9 @@ class PDF
                 $filename = str_replace('_', ' ', $filename);
 
                 if ($extension === 'html') {
-                    $filename = basename($filename,'.html');
+                    $filename = basename($filename, '.html');
                 } elseif($extension === 'htm'){
-                    $filename = basename($filename,'.htm');
+                    $filename = basename($filename, '.htm');
                 }
 
                 $document_html = @file_get_contents($file);

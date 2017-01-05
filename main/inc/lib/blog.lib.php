@@ -65,7 +65,7 @@ class Blog
      *
      * @param Integer $blog_id
      *
-     * @return Array Returns an array with [userid]=>[username]
+     * @return array Returns an array with [userid]=>[username]
      */
     public static function get_blog_users($blog_id)
     {
@@ -77,16 +77,19 @@ class Blog
 
         // Get blog members
         $sql = "SELECT user.user_id, user.firstname, user.lastname
-                FROM " . $tbl_blogs_rel_user . " blogs_rel_user
-                INNER JOIN " . $tbl_users . " user
-                ON blogs_rel_user.user_id = user.user_id
+                FROM  $tbl_blogs_rel_user blogs_rel_user
+                INNER JOIN $tbl_users user
+                ON (blogs_rel_user.user_id = user.user_id)
                 WHERE
                     blogs_rel_user.c_id = $course_id AND
                     blogs_rel_user.blog_id = '" . (int)$blog_id."'";
         $result = Database::query($sql);
         $blog_members = array ();
         while ($user = Database::fetch_array($result)) {
-            $blog_members[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']);
+            $blog_members[$user['user_id']] = api_get_person_name(
+                $user['firstname'],
+                $user['lastname']
+            );
         }
 
         return $blog_members;
@@ -131,7 +134,6 @@ class Blog
             $this_blog_id = Database::insert($tbl_blogs, $params);
 
             if ($this_blog_id > 0) {
-
                 $sql = "UPDATE $tbl_blogs SET blog_id = iid WHERE iid = $this_blog_id";
                 Database::query($sql);
 
@@ -146,7 +148,6 @@ class Blog
             }
 
             // Make first post. :)
-
             $params = [
                 'post_id' => 0,
                 'c_id' => $course_id,
@@ -213,7 +214,8 @@ class Blog
         // Update course homepage link
         $sql = "UPDATE $tbl_tool SET
                 name = '".Database::escape_string($title)."'
-                WHERE c_id = $course_id AND link = 'blog/blog.php?blog_id=".(int)$blog_id."' LIMIT 1";
+                WHERE c_id = $course_id AND link = 'blog/blog.php?blog_id=".(int)$blog_id."' 
+                LIMIT 1";
         Database::query($sql);
     }
 
@@ -400,7 +402,7 @@ class Blog
         Database::query($sql);
 
         // Delete posts and attachments
-        delete_all_blog_attachment($blog_id,$post_id);
+        delete_all_blog_attachment($blog_id, $post_id);
     }
 
     /**
@@ -525,7 +527,7 @@ class Blog
 
         // Delete them recursively
         while ($comment = Database::fetch_array($result)) {
-            Blog::delete_comment($blog_id,$post_id,$comment['comment_id']);
+            Blog::delete_comment($blog_id, $post_id, $comment['comment_id']);
         }
 
         // Finally, delete the selected comment to
@@ -2602,7 +2604,7 @@ class Blog
  * @param the comment's id
  * @param integer $blog_id
  * @return array with the post info according the parameters
- * @author Julio Montoya Dokeos
+ * @author Julio Montoya
  * @version avril 2008, dokeos 1.8.5
  */
 function get_blog_attachment($blog_id, $post_id=null,$comment_id=null)
@@ -2639,18 +2641,17 @@ function get_blog_attachment($blog_id, $post_id=null,$comment_id=null)
 
 /**
  * Delete the all the attachments according the parameters.
- * @param the blog's id
- * @param the post's id
- * @param the comment's id
- * @param integer $blog_id
- * @param integer $post_id
- * @param integer $comment_id
- * @author Julio Montoya Dokeos
+ * @param int $blog_id
+ * @param int $post_id post's id
+ * @param int $comment_id the comment's id
+ * @author Julio Montoya
  * @version avril 2008, dokeos 1.8.5
  */
-
-function delete_all_blog_attachment($blog_id,$post_id=null,$comment_id=null)
-{
+function delete_all_blog_attachment(
+    $blog_id,
+    $post_id = null,
+    $comment_id = null
+) {
 	$_course = api_get_course_info();
 	$blog_table_attachment = Database::get_course_table(TABLE_BLOGS_ATTACHMENT);
 	$blog_id = intval($blog_id);
@@ -2695,15 +2696,16 @@ function delete_all_blog_attachment($blog_id,$post_id=null,$comment_id=null)
 
 /**
  * Gets all the post from a given user id
- * @param string db course name
- * @param int user id
+ * @param string $course_code
+ * @param int $user_id
  */
 function get_blog_post_from_user($course_code, $user_id)
 {
-	$tbl_blogs 		= Database::get_course_table(TABLE_BLOGS);
-	$tbl_blog_post 	= Database::get_course_table(TABLE_BLOGS_POSTS);
-	$course_info 	= api_get_course_info($course_code);
-	$course_id 		= $course_info['real_id'];
+    $tbl_blogs = Database::get_course_table(TABLE_BLOGS);
+    $tbl_blog_post = Database::get_course_table(TABLE_BLOGS_POSTS);
+    $course_info = api_get_course_info($course_code);
+    $course_id = $course_info['real_id'];
+    $user_id = intval($user_id);
 
 	$sql = "SELECT DISTINCT blog.blog_id, post_id, title, full_text, post.date_creation
 			FROM $tbl_blogs blog
@@ -2758,7 +2760,6 @@ function get_blog_comment_from_user($course_code, $user_id)
 			$return_data.=  '<div class="clear"></div><br />';
 			$return_data.=  '<div class="actions" style="margin-left:5px;margin-right:5px;">'.$row['title'].'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="float:right;margin-top:-18px"><a href="../blog/blog.php?blog_id='.$row['blog_id'].'&gidReq=&cidReq='.Security::remove_XSS($course_code).' " >'.get_lang('SeeBlog').'</a></div></div>';
 			$return_data.=  '<br / >';
-			//$return_data.=  '<strong>'.$row['title'].'</strong>'; echo '<br>';*/
 			$return_data.=  $row['comment'];
 			$return_data.=  '<br />';
 		}

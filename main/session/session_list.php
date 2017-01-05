@@ -6,7 +6,7 @@
  */
 $cidReset = true;
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 SessionManager::protectSession(null, false);
@@ -19,8 +19,11 @@ $idChecked = isset($_REQUEST['idChecked']) ? $_REQUEST['idChecked'] : null;
 $list_type = isset($_REQUEST['list_type']) ? $_REQUEST['list_type'] : 'simple';
 
 if ($action == 'delete') {
-    SessionManager::delete($idChecked);
-    Display::addFlash(Display::return_message(get_lang('Deleted')));
+    $response = SessionManager::delete($idChecked);
+
+    if ($response) {
+        Display::addFlash(Display::return_message(get_lang('Deleted')));
+    }
     header('Location: session_list.php');
     exit();
 } elseif ($action == 'copy') {

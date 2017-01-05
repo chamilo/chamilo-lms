@@ -19,5 +19,5 @@ if (!api_is_allowed_to_edit()) {
             SET work_id = '$work_id', forum_id = '$forum_id'
             WHERE  id ='$rs_id'";
     Database::query($sql);
-    Display::display_confirmation_message(get_lang('UpdatedSuccessfully'));
+    Display::display_confirmation_message(get_lang('Updated'));
 }

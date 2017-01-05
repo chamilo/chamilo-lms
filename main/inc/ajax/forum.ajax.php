@@ -7,7 +7,7 @@
  * @author Daniel Barreto Alva <daniel.barreto@beeznest.com>
  */
 
-require_once '../global.inc.php';
+require_once __DIR__.'/../global.inc.php';
 require_once api_get_path(SYS_CODE_PATH) . 'forum/forumfunction.inc.php';
 
 // First, protect this script

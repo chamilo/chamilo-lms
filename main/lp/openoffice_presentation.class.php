@@ -40,12 +40,17 @@ class OpenofficePresentation extends OpenofficeDocument
         if (!is_dir($this->base_work_dir.$this->created_dir)) {
             return false;
         }
+        $dir = $this->created_dir;
+        if (substr($dir, -1, 1) !== '/') {
+            $dir .= '/';
+        }
 
         foreach ($files as $file) {
             /* '||' is used as separator between fields:
                 slide name (with accents) || file name (without accents) || all slide text (to be indexed).
             */
             list($slide_name, $file_name, $slide_body) = explode('||', $file);
+            //error_log('Treating '.$file_name.' from '.__FUNCTION__);
 
             // Filename is utf8 encoded, but when we decode, some chars are not translated (like quote &rsquo;).
             // so we remove these chars by translating it in htmlentities and the reconvert it in want charset.
@@ -61,7 +66,8 @@ class OpenofficePresentation extends OpenofficeDocument
                 $slide_name = 'slide'.str_repeat('0', 2 - strlen($i)).$i;
             }
 
-            if (!is_file($this->base_work_dir.$this->created_dir.$file_name) or filesize($this->base_work_dir.$this->created_dir.$file_name) == 0) {
+            if (!is_file($this->base_work_dir.$dir.$file_name) or filesize($this->base_work_dir.$dir.$file_name) == 0) {
+                //error_log($this->base_work_dir.$dir.$file_name . ' is not a file or is 0');
                 continue;
             }
 
@@ -72,9 +78,9 @@ class OpenofficePresentation extends OpenofficeDocument
             // Add the png to documents.
             $document_id = add_document(
                 $_course,
-                $this->created_dir.urlencode($file_name),
+                $dir.urlencode($file_name),
                 'file',
-                filesize($this->base_work_dir.$this->created_dir.$file_name),
+                filesize($this->base_work_dir.$dir.$file_name),
                 $slide_name
             );
 
@@ -92,7 +98,7 @@ class OpenofficePresentation extends OpenofficeDocument
             );
 
             // Generating the thumbnail.
-            $image = $this->base_work_dir.$this->created_dir . $file_name;
+            $image = $this->base_work_dir.$dir . $file_name;
 
             $pattern = '/(\w+)\.png$/';
             $replacement = '${1}_thumb.png';
@@ -108,14 +114,14 @@ class OpenofficePresentation extends OpenofficeDocument
 
             $my_new_image = new Image($image);
             $my_new_image->resize($thumb_width, $thumb_height);
-            $my_new_image->send_image($this->base_work_dir.$this->created_dir . $thumb_name, -1, 'png');
+            $my_new_image->send_image($this->base_work_dir.$dir . $thumb_name, -1, 'png');
 
             // Adding the thumbnail to documents.
             $document_id_thumb = add_document(
                 $_course,
-                $this->created_dir.urlencode($thumb_name),
+                $dir.urlencode($thumb_name),
                 'file',
-                filesize($this->base_work_dir.$this->created_dir.$thumb_name),
+                filesize($this->base_work_dir.$dir.$thumb_name),
                 $slide_name
             );
 
@@ -123,9 +129,9 @@ class OpenofficePresentation extends OpenofficeDocument
 
             // Create an html file.
             $html_file = $file_name.'.html';
-            $fp = fopen($this->base_work_dir.$this->created_dir.$html_file, 'w+');
+            $fp = fopen($this->base_work_dir.$dir.$html_file, 'w+');
 
-            $slide_src = api_get_path(REL_COURSE_PATH).$_course['path'].'/document/'.$this->created_dir.utf8_encode($file_name);
+            $slide_src = api_get_path(REL_COURSE_PATH).$_course['path'].'/document/'.$dir.utf8_encode($file_name);
             $slide_src = str_replace('\/\/', '/', $slide_src);
             fwrite($fp,
 '<html>
@@ -139,9 +145,9 @@ class OpenofficePresentation extends OpenofficeDocument
             fclose($fp);
             $document_id = add_document(
                 $_course,
-                $this->created_dir.urlencode($html_file),
+                $dir.urlencode($html_file),
                 'file',
-                filesize($this->base_work_dir.$this->created_dir.$html_file),
+                filesize($this->base_work_dir.$dir.$html_file),
                 $slide_name
             );
 

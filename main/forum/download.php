@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * This file is responsible for  passing requested documents to the browser.
  * Html files are parsed to fix a few problems with URLs,
@@ -11,7 +12,7 @@
 
 session_cache_limiter('public');
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
 require_once 'forumconfig.inc.php';

@@ -12,7 +12,7 @@ use \Chamilo\CourseBundle\Entity\Repository\CStudentPublicationRepository;
 
 $cidReset = true;
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 require_once api_get_path(SYS_CODE_PATH) . 'work/work.lib.php';
 
 if (!api_is_platform_admin(true) && !api_is_teacher()) {

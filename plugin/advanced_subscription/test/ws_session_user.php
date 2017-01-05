@@ -66,7 +66,7 @@ $params['secret_key'] = sha1($security_key);
 $wsUrl = api_get_path(WEB_CODE_PATH) . 'webservices/registration.soap.php?wsdl';
 $options = array(
     'location' => $wsUrl,
-    'uri' => $wsUrl,
+    'uri' => $wsUrl
 );
 
 /**
@@ -77,7 +77,6 @@ try {
     $client = new SoapClient(null, $options);
     // Soap call to WS
     $result = $client->__soapCall('HookAdvancedSubscription..WSSessionGetDetailsByUser', array($params));
-    var_dump($result);
     if (is_object($result) && isset($result->action_url)) {
         echo '<br />';
         echo Display::url("message" . $result->message, $result->action_url);

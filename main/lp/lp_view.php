@@ -25,7 +25,7 @@ if ($lp_controller_touched != 1) {
     exit;
 }
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 //To prevent the template class
 $show_learnpath = true;
 

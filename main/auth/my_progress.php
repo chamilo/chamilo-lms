@@ -7,7 +7,7 @@
  */
 
 $cidReset = true;
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_TRACKING;
 
@@ -57,14 +57,14 @@ if (!empty($course_user_list)) {
         $dates .= '<li><a href="#'.$login.'">' . api_convert_and_format_date($login, DATE_FORMAT_SHORT) . '</a></li>';
         $issues .= '<li id ="'.$login.'">';
         $issues .= '<div class="img-course">'.$course_image.'</div>';
-        
+
         $issues .= '<div class="text-course">';
         $issues .= '<p>' . sprintf(
                 get_lang('YouHaveEnteredTheCourseXInY'),
                 '" '. $courseInfo['name'] .' "',
-                api_convert_and_format_date($login, DATE_TIME_FORMAT_LONG) 
+                api_convert_and_format_date($login, DATE_TIME_FORMAT_LONG)
                 ) . '</p>';
-        $issues .= '</div>'; 
+        $issues .= '</div>';
         $issues .= '</li>';
         $count++;
     }
@@ -77,7 +77,7 @@ if (!empty($dates)) {
     if (!empty($content)) {
         $content .= '';
     }
-    
+
     $content .= Display::page_subheader(get_lang('Timeline'));
     $content .= '<div class="row">';
     $content .= '<div class="col-md-12">';
@@ -89,7 +89,7 @@ if (!empty($dates)) {
     $content .= '<a href="#" id="prev"></a>';
     $content .= '<a href="#" id="next"></a>';
     $content .= '</div></div>';
-    
+
 }
 
 $message = null;

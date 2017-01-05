@@ -29,7 +29,7 @@ use ChamiloSession as Session;
 $use_anonymous = true;
 
 // Load common libraries using a compatibility script to bridge between 1.6 and 1.8.
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 // Is this needed? This is probabaly done in the header file.
 $file = $_SESSION['file'];

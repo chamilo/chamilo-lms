@@ -54,7 +54,7 @@ class Documents extends Basic
     {
         return [
             ['Maximize', 'PasteFromWord', '-', 'Undo', 'Redo'],
-            ['Link', 'Unlink', 'Anchor', 'Glossary'],
+            ['Link', 'Unlink', 'Anchor', 'inserthtml', 'Glossary'],
             [
                 'Image',
                 'Video',
@@ -94,7 +94,7 @@ class Documents extends Basic
     protected function getMinimizedToolbar()
     {
         return [
-            ['Save', 'NewPage', 'Templates', '-', 'PasteFromWord'],
+            $this->getNewPageBlock(),
             ['Undo', 'Redo'],
             [
                 'Link',

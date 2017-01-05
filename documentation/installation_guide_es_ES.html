@@ -112,6 +112,33 @@ Nota:Esto se ha simplificado en gran medida desde la versión 1.9, ya que antes 
     múltiples bases de datos y un modo obsoleto de una sola base de datos.
 </p>
 
+<h3><span style="font-weight: bold;">Redirecciones de Apache</span></h3>
+<p>
+    Desde su versión 1.10, Chamilo requiere del servidor web que pueda gestionar redirecciones. Es algo muy comunes entre todos los sistemas web (ya sean CMS, LMS, ERP, etc) que permite, entre otras cosas, el uso inteligente y amigable de las URLs.<br />
+    Si no usa Apache, debería consultar la sección "Configuraciones opcionales para Apache y Nginx" al fin de este documento.<br />
+    Si usa Apache, configurar las redirecciones consta de dos pasos:
+    <ul>
+        <li>Activar el módulo "rewrite" de Apache (en línea de comando con "<i>sudo a2enmod rewrite</i>")</li>
+        <li>Configurar el VirtualHost de Apache para que incluya el bloque siguiente, autorizando la interpretación de los archivos .htaccess</li>
+    </ul>
+    Para Apache <=2.2:
+    <pre>
+    &lt;Directory /&gt;
+        AllowOverride All
+        Order allow,deny
+        allow from all
+    &lt;/Directory&gt;
+    </pre>
+    y para Apache >=2.4:
+    <pre>
+    &lt;Directory /&gt;
+        AllowOverride All
+        Require all granted
+    &lt;/Directory&gt;
+    </pre>
+    <br />
+    Una vez configurada esta parte (que quizás ya esté configurada por su proveedor), basta con reiniciar el servidor web para activar el cambio.
+</p>
 
 <hr style="width: 100%; height: 2px;" />
 <h2><a name="2._Installation_of_Chamilo_LMS"></a><span style="font-weight: bold;">2. Instalación de Chamilo LMS</span></h2>
@@ -192,7 +219,7 @@ del clic derecho en ellos).
   <li><strong>Proteger su directorio de configuración: </strong> asegurarse que nadie pueda sobreescribirlo. Usted puede encontrar el directorio de configuración en (carpeta de chamilo)/main/inc/conf. Hacerlo de solo lectura (windows/xwindows: clic derecho en el archivo para editar las propiedades. linux/bsd/macosx: usar el comando chmod 0555). El archivo de configuración es creado por el servidor web (Apache + PHP, normalmente), por lo tanto usted necesita ser administrador para cambiar sus permisos.</li>
   <li><strong>Configurar su instalación de Chamilo: </strong>
 en la sección de administración de Chamilo, usted puede usar las Opciones de Configuración de Chamilo para ajustar el comportamiento de su instalación.</li>
-  <li>Consulte nuestra nueva <a href="security_guide.html">guia de seguridad</a> para más información.</li>
+  <li>Consulte nuestra nueva <a href="security.html">guia de seguridad</a> para más información.</li>
 </ul>
 </p>
 
@@ -281,25 +308,25 @@ tomar una copia de backup de estos cambios antes de actualizar.</p>
 NOTA: Esta versión de Chamilo sólo se puede utilizar para actualizar desde versiones inferiores de Chamilo 1.9.*. Por ejemplo, no puede utilizar los scripts de actualización normales de Chamilo 1.9 para actualizar desde Dok€oS 2.0. Si usted necesita esto, por favor póngase en contacto con uno de los proveedores oficiales de la Asociación Chamilo)
 </div>
 
-<h3>3.1 Actualizar desde Chamilo 1.10.x (actualización menor)</h3>
+<h3>3.1 Actualizar desde Chamilo 1.11.x (actualización menor)</h3>
 <p>
-Dado que se trata sólo de un cambio de versión menor  previa de Chamilo 1.10.*, lo único que tiene que hacer es:
+Dado que se trata sólo de un cambio de versión menor previa de Chamilo 1.11.*, lo único que tiene que hacer es:
 <ul>
 <li>Revisar que no ha dejado alguna hoja de estilo personalizada o imagen (si es que tiene, asegúrese de guardar una copia de respaldo)</li>
 <li>Descargar el paquete de instalación de Chamilo 1.9 desde la página de descarga de Chamilo</li>
 <li>Descomprimir los nuevos archivos de Chamilo 1.9 sobre los archivos de la versión anterior (o descomprimirlos en una nueva carpeta y después copiarlos sobre los archivos de la versión anterior)</li>
-<li>Editar el archivo main/inc/conf/configuration.php: hacia el final del archivo, localizar el número de la versión (p.e. ‘1.9.4’) y cambiarlo por la nueva versión (p.e.‘1.9.8’)</li>
+<li>Editar el archivo app/config/configuration.php: hacia el final del archivo, localizar el número de la versión (p.e. ‘1.9.4’) y cambiarlo por la nueva versión (p.e.‘1.9.8’)</li>
 <li>Ya está! Ningún otro procedimiento de actualización es requerido.</li>
 </ul>
 </p>
 
-<h3>3.2 Actualizar desde Chamilo 1.9.x</h3>
+<h3>3.2 Actualizar desde Chamilo 1.9.x p 1.10.x</h3>
 <ul>
   <li>Asegúrese que ninguna tabla de una versión anterior (a la 1.9) exista en su base de datos. Estas tablas pueden causar errores durante el proceso de actualización hacia versiones superiores. En particular, las tablas de versiones 1.8.* y anteriores podían repetirse una vez por curso, resultando en una gran cantidad de tablas que compartían el mismo prefijo. Solo las tablas sin prefijo o con un prefijo "c_" son legítimas en Chamilo 1.9 y siguientes. Asegúrese de que ninguna de estas antiguas tablas persista. Tóme una copia de seguridad de la base de datos (por si a caso) y luego borre estas tablas con prefijo (drop table ...).</li>
   <li>Compruebe que no ha dejado ninguna hoja de estilo o imagen personalizada (si la tuviera, asegúrese de realizar una copia de respaldo*)</li>
   <li>Descargue el paquete de instalación de Chamilo 1.9 desde la página de descarga de Chamilo</li>
   <li>Descomprima los nuevos ficheros de Chamilo 1.9 sobre los ficheros de la antigua versión ( o descomprima en una carpeta y luego copie los archivos en el directorio de la versión antigua)</li>
-  <li>Asegúrese *por completo* que el archivo .htaccess de la versión 1.10 ha sido copiado en la raíz también</li>
+  <li>Asegúrese *por completo* que el archivo .htaccess de la versión 1.11 ha sido copiado en la raíz también</li>
   <li>Asegúrese que "AllowOverride All" está presente en su configuración de Apache, ya que interpretar el archivo .htaccess es muy importante para que Chamilo funcione (ojo que la directiva Order-Allow ha sido remplazada por "Require all granted" en Apache 2.4)</li>
   <li>Escriba en su navegador web la URL de su portal + main/install/</li>
   <li>Elija su idioma y haga click sobre Actualizar desde 1.9.x</li>
@@ -320,7 +347,7 @@ Dado que se trata sólo de un cambio de versión menor  previa de Chamilo 1.10.*
 <br />
 
 <h3>3.3 Actualizar desde Chamilo o Dok€os 1.8.x</h3>
-Para actualizar desde una versión previa a la 1.9.0, deberá a partir de ahora primero actualizar a la versión 1.9.10.x, para luego actualizar de ahí a la 1.10.x.
+Para actualizar desde una versión previa a la 1.9.0, deberá a partir de ahora primero actualizar a la versión 1.9.10.x, para luego actualizar de ahí a la 1.11.x.
 Podrá encontrar una versión descargable de 1.9.10.x aquí: <a href="https://github.com/chamilo/chamilo-lms/releases">https://github.com/chamilo/chamilo-lms/releases</a>
 
 <h3>3.4 En ambos últimos casos</h3>
@@ -395,7 +422,7 @@ Distribuciones nuevas también permiten descargar rpms para los paquetes adicion
 
 <p><span>Nota:</span>El mecanismo de LDAP ha cambiado en 1,9. Como resultado, parte de la información siguiente puede no ser correcta. Por favor, compruebe los ajustes de configuración dentro de Chamilo para conocer los detalles.</p>
 <p>
-En (la carpeta de Chamilo)/main/inc/conf/configuration.php, aproximadamente en la line 90, se puede ver<br />
+En (la carpeta de Chamilo)/app/config/configuration.php, aproximadamente en la line 90, se puede ver<br />
 //for new login module<br />
 //uncomment these to activate ldap<br />
 //$extAuthSource['ldap']['login'] = "./main/auth/ldap/login.php";<br />
@@ -700,7 +727,8 @@ por ejemplo. El efecto debería ser inmediato.
   location / {
     rewrite ^/courses/([^/]+)/$ /main/course_home/course_home.php?cDir=$1 last;
     rewrite ^/courses/([^/]+)/index.php$ /main/course_home/course_home.php?cDir=$1 last;
-    rewrite ^/badge/(\d+)/user/(\d+)$ /main/badge/issued.php?skill=$1&user=$2 last;
+    rewrite ^/skill/(\d+)/user/(\d+)$ /main/badge/issued_all.php?skill=$1&user=$2 last;
+    rewrite ^/badge/(\d+)/user/(\d+)$ /main/badge/issued_all.php?skill=$1&user=$2 last;
     try_files $uri @rewrite;
   }
 
@@ -716,6 +744,7 @@ por ejemplo. El efecto debería ser inmediato.
     rewrite ^/courses/([^/]+)/$ /main/course_home/course_home.php?cDir=$1 last;
     rewrite ^/courses/([^/]+)/index.php$ /main/course_home/course_home.php?cDir=$1 last;
     rewrite ^/session/([^/]+)/about/?$ /main/session/about.php?session_id=$1 last;
+    rewrite ^/badge/([^/]+) /main/badge/issued.php?issue=$1 last;
     rewrite ^/main/exercice/(.+)$ /main/exercise/$1 last;
     rewrite ^/main/newscorm/(.+)$ /main/lp/$1 last;
 
@@ -748,15 +777,15 @@ por ejemplo. El efecto debería ser inmediato.
   }
 </pre>
 
-Apache2: La configuración para nuestro sitio de ejemplo my.chamilo10.net sería la siguiente:
+Apache2: La configuración para nuestro sitio de ejemplo my.chamilo.net sería la siguiente:
 
 <pre>
 &lt;VirtualHost *:80&gt;
   ServerAdmin root@localhost
-  DocumentRoot /var/www/my.chamilo10.net/www
-  ServerName my.chamilo10.net
-  ErrorLog  /var/log/apache2/my.chamilo10.net-error.log
-  CustomLog /var/log/apache2/my.chamilo10.net-access.log combined
+  DocumentRoot /var/www/my.chamilo.net/www
+  ServerName my.chamilo.net
+  ErrorLog  /var/log/apache2/my.chamilo.net-error.log
+  CustomLog /var/log/apache2/my.chamilo.net-access.log combined
 
   ErrorDocument 401 /public/error-401.html
   DirectoryIndex index.php index.html
@@ -772,22 +801,27 @@ Apache2: La configuración para nuestro sitio de ejemplo my.chamilo10.net sería
 	Options -Indexes
   &lt;/Directory&gt;
 
-  &lt;Directory "/var/www/my.chamilo10.net/www"&gt;
+  &lt;Directory "/var/www/chamilo"&gt;
 	RewriteEngine On
 	RewriteCond %{QUERY_STRING} ^id=(.*)$
 	RewriteRule ^([^/.]+)/?$ user.php?$1 [L]
 	RewriteRule ^certificates/$ certificates/index.php?id=%1 [L]
 	RewriteRule ^courses/([^/]+)/$ main/course_home/course_home.php?cDir=$1 [QSA,L]
 	RewriteRule ^courses/([^/]+)/index.php$ main/course_home/course_home.php?cDir=$1 [QSA,L]
+	RewriteRule ^courses/([^/]+)/document/certificates/(.*)$ app/courses/$1/document/certificates/$2 [QSA,L]
 	RewriteRule ^courses/([^/]+)/document/(.*)$ main/document/download.php?doc_url=/$2&cDir=$1 [QSA,L]
+	RewriteRule ^courses/([^/]+)/scorm/(.*)$ main/document/download_scorm.php?doc_url=/$2&cDir=$1 [QSA,L]
 	RewriteRule ^courses/([^/]+)/work/(.*)$ main/work/download.php?file=work/$2&cDir=$1 [QSA,L]
-	RewriteRule ^courses/([^/]+)/upload/(.*)$ main/courses/$1/upload/$2 [QSA,L]
-	RewriteRule ^courses/([^/]+)/course-pic85x85.png$ main/courses/$1/course-pic85x85.png [QSA,L]
+	RewriteRule ^courses/([^/]+)/upload/(.*)$ app/courses/$1/upload/$2 [QSA,L]
+	RewriteRule ^courses/([^/]+)/course-pic85x85.png$ app/courses/$1/course-pic85x85.png [QSA,L]
 	RewriteRule ^courses/([^/]+)/course-pic.png$ app/courses/$1/course-pic.png [QSA,L]
+	RewriteRule ^main/upload/users/(.*)/(.*)/my_files/(.*)$ app/upload/users/$1/$2/my_files/$3 [QSA,L]
 	RewriteRule ^session/(\d{1,})/about/?$ main/session/about.php?session_id=$1 [L]
     RewriteRule ^badge/(\d{1,})/user/(\d{1,}) main/badge/issued.php?skill=$1&user=$2 [L]
+	RewriteRule ^main/admin/$ main/admin/index.php [QSA,L]
     RewriteRule ^main/exercice/(.+)$ main/exercise/$1 [QSA,L]
     RewriteRule ^main/newscorm/(.*)$ main/lp/$1 [QSA,L]
+	RewriteRule ^courses/(.*)$ app/courses/$1 [QSA,L]
   &lt;/Directory&gt;
 
   php_value display_errors Off
@@ -798,7 +832,7 @@ Apache2: La configuración para nuestro sitio de ejemplo my.chamilo10.net sería
   # E_ALL:  php_admin_value error_reporting 6143
   # E_ALL & ^E_NOTICE:
   php_admin_value error_reporting 6135
-  #php_admin_value session.save_path /var/www/my.chamilo10.net/sessions/
+  #php_admin_value session.save_path /var/www/my.chamilo.net/sessions/
   php_admin_value short_open_tag Off
   php_value session.cookie_httponly 1
 

@@ -622,7 +622,6 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
          * - Work on a better validation for webservices paths. Current is very poor and exit
          */
         $subsso = api_get_setting('sso_authentication_subclass');
-
         if (!empty($subsso)) {
             require_once api_get_path(SYS_CODE_PATH).'auth/sso/sso.'.$subsso.'.class.php';
             $subsso = 'sso'.$subsso;
@@ -630,7 +629,6 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
         } else {
             $osso = new sso();
         }
-
         if (isset($_SESSION['_user']['user_id'])) {
             if ($logout) {
                 // Make custom redirect after logout
@@ -641,7 +639,6 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
             // Handle cookie from Master Server
 
             $forceSsoRedirect = api_get_setting('sso_force_redirect');
-
             if ($forceSsoRedirect === 'true') {
                 // all users to be redirected unless they are connected (removed req on sso_cookie)
                 $redirectToMasterConditions = !isset($_GET['sso_referer']) && !isset($_GET['loginFailed']);
@@ -653,15 +650,14 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
             if ($redirectToMasterConditions) {
                 // Redirect to master server
                 $osso->ask_master();
-            } elseif (isset($_REQUEST['sso_cookie'])) {
+            } elseif (isset($_GET['sso_cookie'])) {
 
                 // Here we are going to check the origin of
                 // what the call says should be used for
                 // authentication, and ensure  we know it
                 $matches_domain = false;
-                if (isset($_REQUEST['sso_referer'])) {
+                if (isset($_GET['sso_referer'])) {
                     $protocol = api_get_setting('sso_authentication_protocol');
-
                     // sso_authentication_domain can list
                     // several, comma-separated, domains
                     $master_urls = preg_split('/,/', api_get_setting('sso_authentication_domain'));
@@ -675,7 +671,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                             //  then skip other possibilities
                             // Do NOT compare the whole referer, as this might cause confusing errors with friendly urls,
                             // like in Drupal /?q=user& vs /user?
-                            $referrer = substr($_REQUEST['sso_referer'], 0, strrpos($_REQUEST['sso_referer'], '/'));
+                            $referrer = substr($_GET['sso_referer'], 0, strrpos($_GET['sso_referer'], '/'));
                             if ($protocol.trim($mu) === $referrer) {
                                 $matches_domain = true;
                                 break;
@@ -828,9 +824,7 @@ if (isset($uidReset) && $uidReset) {
     $is_platformAdmin = false;
     $is_allowedCreateCourse = false;
     if (isset($_user['user_id']) && $_user['user_id'] && !api_is_anonymous()) {
-    //if (isset($_user['user_id']) && $_user['user_id']) {
         // a uid is given (log in succeeded)
-
         $_SESSION['loginFailed'] = false;
         unset($_SESSION['loginFailedCount']);
         unset($_SESSION['loginToBlock']);
@@ -882,7 +876,6 @@ if (isset($uidReset) && $uidReset) {
     $is_allowedCreateCourse = isset($_SESSION['is_allowedCreateCourse']) ? $_SESSION['is_allowedCreateCourse'] : false;
 }
 
-
 if (!isset($_SESSION['login_as'])) {
     $save_course_access = true;
     $_course = Session::read('_course');
@@ -895,7 +888,6 @@ if (!isset($_SESSION['login_as'])) {
 
         if ($save_course_access) {
             $course_tracking_table = Database:: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-
             /*
             * When $_configuration['session_lifetime'] is too big 100 hours (in order to let users take exercises with no problems)
             * the function Tracking::get_time_spent_on_the_course() returns big values (200h) due the condition:
@@ -912,7 +904,6 @@ if (!isset($_SESSION['login_as'])) {
             $session_lifetime = 3600; // 1 hour
             $time = api_get_utc_datetime();
             if (isset($_user['user_id']) && !empty($_user['user_id'])) {
-
                 //We select the last record for the current course in the course tracking table
                 //But only if the login date is < than now + max_life_time
                 $sql = "SELECT course_access_id
@@ -951,7 +942,6 @@ if (isset($cidReset) && $cidReset) {
         $_course = api_get_course_info($cidReq);
 
         if (!empty($_course)) {
-
             //@TODO real_cid should be cid, for working with numeric course id
             $_real_cid = $_course['real_id'];
             $_cid = $_course['code'];
@@ -1031,7 +1021,6 @@ if (isset($cidReset) && $cidReset) {
         }
     }
 } else {
-
     // Continue with the previous values
     if (empty($_SESSION['_course']) && !empty($_SESSION['_cid'])) {
         //Just in case $_course is empty we try to load if the c_id still exists
@@ -1084,7 +1073,6 @@ if (isset($cidReset) && $cidReset) {
 }
 
 /*  COURSE / USER REL. INIT */
-
 $session_id = api_get_session_id();
 $user_id = isset($_user['user_id']) ? $_user['user_id'] : null;
 
@@ -1101,7 +1089,6 @@ $is_courseCoach = false; //course coach
 $is_courseAdmin = false;
 $is_courseTutor = false;
 $is_courseMember = false;
-$bossHasAccess = false;
 
 if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
     if (isset($_cid) && $_cid) {
@@ -1129,8 +1116,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
 
         // Platform legal terms and conditions
         if (api_get_setting('allow_terms_conditions') === 'true' &&
-            api_get_setting('load_term_conditions_section') === 'course' &&
-            api_is_student()
+            api_get_setting('load_term_conditions_section') === 'course'
         ) {
             $termAndConditionStatus = api_check_term_condition($user_id);
             // @todo not sure why we need the login password and update_term_status
@@ -1184,7 +1170,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                     }
                 }
                 $url = api_get_path(WEB_CODE_PATH).'auth/inscription.php';
-                header('Location: '. $url);
+                header("Location:". $url);
                 exit;
             }
         }
@@ -1207,23 +1193,6 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
             $is_courseAdmin = (bool)($cuData['status'] == 1);
             $is_courseTutor = (bool)($cuData['is_tutor'] == 1);
             $is_courseMember = true;
-        }
-
-        // Ofaj - student boss can access course if he follows the user
-        if (isset($_user) && isset($_user['status']) && $_user['status'] == STUDENT_BOSS) {
-            if (isset($_REQUEST['log_as_user'])) {
-                $isBoss = UserManager::userIsBossOfStudent($_user['user_id'], $_REQUEST['log_as_user']);
-                $isUserFollowedInCourse = CourseManager::is_user_subscribed_in_course(
-                    $_REQUEST['log_as_user'],
-                    $_course['code'],
-                    false
-                );
-
-                if ($isBoss && $isUserFollowedInCourse) {
-                    $is_courseMember = true;
-                    $bossHasAccess = true;
-                }
-            }
         }
 
         // We are in a session course? Check session permissions
@@ -1253,22 +1222,19 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
 
                 // Am I a session admin?
                 if (isset($row) && isset($row[0]) && $row[0]['session_admin_id'] == $user_id) {
-                    $is_courseMember = false;
-                    $is_courseTutor = false;
-                    $is_courseAdmin = false;
-                    $is_courseCoach = false;
-                    $is_sessionAdmin = true;
+                    $is_courseMember     = false;
+                    $is_courseTutor      = false;
+                    $is_courseAdmin      = false;
+                    $is_courseCoach      = false;
+                    $is_sessionAdmin     = true;
                 } else {
                     // Am I a session coach for this session?
-                    $sql = "SELECT session.id, session.id_coach 
-                            FROM $tbl_session session
+                    $sql = "SELECT session.id, session.id_coach FROM $tbl_session session
                             INNER JOIN $tbl_session_course sc
                             ON sc.session_id = session.id
-                            WHERE 
-                                session.id = $session_id AND 
-                                session.id_coach = $user_id AND 
-                                sc.c_id = '$_real_cid'
-                            ";
+                            WHERE session.id = $session_id
+                            AND session.id_coach = $user_id
+                            AND sc.c_id = '$_real_cid'";
                     $result = Database::query($sql);
 
                     if (Database::num_rows($result)) {
@@ -1330,26 +1296,6 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                             $is_sessionAdmin = false;
                             $is_courseCoach = false;
                         }
-
-                        // Boss validation
-                        if (isset($_REQUEST['log_as_user'])) {
-                            $isBoss = UserManager::userIsBossOfStudent($user_id, $_REQUEST['log_as_user']);
-                            $isUserFollowedInCourse = CourseManager::is_user_subscribed_in_course(
-                                $_REQUEST['log_as_user'],
-                                $_course['code'],
-                                true,
-                                $session_id
-                            );
-
-                            if ($isBoss && $isUserFollowedInCourse) {
-                                $is_courseMember = true;
-                                $is_courseTutor = false;
-                                $is_courseAdmin = false;
-                                $is_courseCoach = false;
-                                $is_sessionAdmin = false;
-                                $bossHasAccess = true;
-                            }
-                        }
                     }
                 }
 
@@ -1358,18 +1304,18 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                     $sessionInfo = SessionManager::getSessionFollowedByDrh($user_id, $session_id);
                     if (!empty($sessionInfo) && !empty($sessionInfo['course_list'])) {
                         if (isset($sessionInfo['course_list'][$_course['real_id']])) {
-                            $is_courseMember     = true;
-                            $is_courseTutor      = false;
-                            $is_courseCoach      = false;
-                            $is_sessionAdmin     = false;
+                            $is_courseMember = true;
+                            $is_courseTutor = false;
+                            $is_courseCoach = false;
+                            $is_sessionAdmin = false;
                         }
                     }
                 }
             }
 
-            //If I'm the admin platform i'm a teacher of the course
+            // If I'm the admin platform i'm a teacher of the course
             if ($is_platformAdmin) {
-                $is_courseAdmin     = true;
+                $is_courseAdmin = true;
             }
         } else {
             // User has not access to the course
@@ -1416,14 +1362,25 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                 $is_allowed_in_course = true;
                 break;
             case COURSE_VISIBILITY_OPEN_PLATFORM: //2
+                $userAccess = api_get_configuration_value('block_registered_users_access_to_open_course_contents');
+                // If this setting is not set or equals false, allow registered users to access content from any open
+                // course
+                if ($userAccess == false) {
+                    if (isset($user_id) && !api_is_anonymous($user_id)) {
+                        $is_allowed_in_course = true;
+                    }
+                } else {
+                    // If the setting == true, then only allow users to access the content of an open course if they are
+                    // directly subscribed to the course (so first check the registration to the course)
                 $courseCode = $_course['code'];
                 $isUserSubscribedInCourse = CourseManager::is_user_subscribed_in_course(
                     $user_id,
                     $courseCode,
                     $session_id
                 );
-                if (isset($user_id) && ($is_platformAdmin || $isUserSubscribedInCourse === true || $bossHasAccess) && !api_is_anonymous($user_id)) {
+                if (isset($user_id) && ($is_platformAdmin || $isUserSubscribedInCourse === true) && !api_is_anonymous($user_id)) {
                     $is_allowed_in_course = true;
+                    }
                 }
                 break;
             case COURSE_VISIBILITY_REGISTERED: //1
@@ -1440,6 +1397,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                 if ($is_platformAdmin) {
                     $is_allowed_in_course = true;
                 }
+                break;
         }
     }
 
@@ -1468,7 +1426,6 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
     } // check the session visibility
 
     if ($is_allowed_in_course == true) {
-
         //if I'm in a session
         if ($session_id != 0) {
             if (!$is_platformAdmin) {
@@ -1480,7 +1437,6 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                         $is_allowed_in_course = false;
                         break;
                 }
-                //checking date
             }
         }
     }
@@ -1506,7 +1462,6 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
     Session::write('is_sessionAdmin', $is_sessionAdmin);
 } else {
     // Continue with the previous values
-
     $is_courseAdmin = isset($_SESSION['is_courseAdmin']) ? $_SESSION['is_courseAdmin'] : false;
     $is_courseTutor = isset($_SESSION['is_courseTutor']) ? $_SESSION['is_courseTutor'] : false;
     $is_courseCoach = isset($_SESSION['is_courseCoach']) ? $_SESSION['is_courseCoach'] : false;
@@ -1570,3 +1525,4 @@ if ((isset($cas_login) && $cas_login && exist_firstpage_parameter()) ||
 }
 
 Redirect::session_request_uri($logging_in, $user_id);
+

@@ -43,12 +43,17 @@ $interbreadcrumb[] = array(
     'name' => get_lang('Settings')
 );
 
-
 switch ($action) {
     case 'delete':
-        TicketManager::deletePriority($id);
-        Display::addFlash(Display::return_message(get_lang('Deleted')));
+        $tickets = TicketManager::getTicketsFromCriteria(['priority' => $id]);
+        if (empty($tickets)) {
+            TicketManager::deletePriority($id);
+            Display::addFlash(Display::return_message(get_lang('Deleted')));
+        } else {
+            Display::addFlash(Display::return_message(get_lang('ThisItemIsRelatedToOtherTickets'), 'warning'));
+        }
         header("Location: ".api_get_self());
+        exit;
         break;
     case 'add':
         $toolName = get_lang('Add');
@@ -122,10 +127,14 @@ function modify_filter($id, $params, $row)
         api_get_self()."?action=edit&id={$row['id']}"
     );
 
-    $result .= Display::url(
-        Display::return_icon('delete.png', get_lang('Delete')),
-        api_get_self()."?action=delete&id={$row['id']}"
-    );
+    $code = $row['code'];
+
+    if (!in_array($code, TicketManager::getDefaultPriorityList())) {
+        $result .= Display::url(
+            Display::return_icon('delete.png', get_lang('Delete')),
+            api_get_self()."?action=delete&id={$row['id']}"
+        );
+    }
 
 	return $result;
 }

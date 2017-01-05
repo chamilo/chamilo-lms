@@ -68,7 +68,6 @@ class CourseDescription
         return $results;
     }
 
-
     /**
      * Get all data of course description by session id,
      * first you must set session_id property with the object CourseDescription

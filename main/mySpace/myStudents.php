@@ -9,19 +9,33 @@ require_once '../inc/global.inc.php';
 
 api_block_anonymous_users();
 
+$export = isset($_GET['export']) ? $_GET['export'] : false;
+$sessionId = isset($_GET['id_session']) ? intval($_GET['id_session']) : 0;
+$origin = isset($_GET['origin']) ? Security::remove_XSS($_GET['origin']) : '';
+$course_code = isset($_GET['course']) ? Security :: remove_XSS($_GET['course']) : null;
+$courseInfo = api_get_course_info($course_code);
+$student_id = intval($_GET['student']);
+
 if (!api_is_allowed_to_create_course() &&
     !api_is_session_admin() &&
     !api_is_drh() &&
     !api_is_student_boss() &&
     !api_is_platform_admin()
 ) {
+    if (empty($sessionId)) {
     // Check if the user is tutor of the course
-    $user_course_status = CourseManager::get_tutor_in_course_status(
+        $userCourseStatus = CourseManager::get_tutor_in_course_status(
         api_get_user_id(),
         api_get_course_int_id()
     );
-    if ($user_course_status != 1) {
+    if ($userCourseStatus != 1) {
         api_not_allowed(true);
+        }
+    } else {
+        $coach = api_is_coach($sessionId, $courseInfo['real_id']);
+        if (!$coach) {
+            api_not_allowed(true);
+        }
     }
 }
 
@@ -32,15 +46,6 @@ function show_image(image,width,height) {
 	window_x = window.open(image,\'windowX\',\'width=\'+ width + \', height=\'+ height + \'\');
 }
 </script>';
-
-$export = isset($_GET['export']) ? $_GET['export'] : false;
-$sessionId = isset($_GET['id_session']) ? intval($_GET['id_session']) : 0;
-$origin = isset($_GET['origin']) ? Security::remove_XSS($_GET['origin']) : '';
-$course_code = isset($_GET['course']) ? Security :: remove_XSS($_GET['course']) : null;
-$student_id = intval($_GET['student']);
-
-// time spent on the course
-$courseInfo = api_get_course_info($course_code);
 
 if ($export) {
     ob_start();
@@ -256,7 +261,6 @@ while ($row = Database :: fetch_array($rs)) {
         }
     }
 }
-
 
 // Get the list of sessions where the user is subscribed as student
 $sql = 'SELECT session_id, c_id
@@ -1079,7 +1083,6 @@ if (!empty($student_id)) {
 
         $result_exercices = Database::query($sql);
         $i = 0;
-
         if (Database :: num_rows($result_exercices) > 0) {
             while ($exercices = Database :: fetch_array($result_exercices)) {
                 $exercise_id = intval($exercices['id']);
@@ -1159,8 +1162,8 @@ if (!empty($student_id)) {
                 if (Database :: num_rows($result_last_attempt) > 0) {
                     $id_last_attempt = Database :: result($result_last_attempt, 0, 0);
                     if ($count_attempts > 0)
-                        echo '<a href="../exercise/exercise_show.php?id=' . $id_last_attempt . $extraParam.'&cidReq='.$course_code.'&session_id='.$sessionId.'&student='.$student_id.'&origin='.(empty($origin)?'tracking':$origin).'">
-                        '.Display::return_icon('quiz.gif').'
+                        echo '<a href="../exercise/exercise_show.php?id=' . $id_last_attempt . '&cidReq='.$course_code.'&session_id='.$sessionId.'&student='.$student_id.'&origin='.(empty($origin)?'tracking':$origin).'">
+                        '.Display::return_icon('quiz.png').'
                      </a>';
                 }
                 echo '</td>';

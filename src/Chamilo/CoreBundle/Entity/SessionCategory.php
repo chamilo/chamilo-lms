@@ -16,7 +16,7 @@ class SessionCategory
     /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
      * @ORM\Id
      * @ORM\GeneratedValue
      */
@@ -25,21 +25,21 @@ class SessionCategory
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=100, precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="name", type="string", length=100, nullable=true, unique=false)
      */
     private $name;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date_start", type="date", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="date_start", type="date", nullable=true, unique=false)
      */
     private $dateStart;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date_end", type="date", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="date_end", type="date", nullable=true, unique=false)
      */
     private $dateEnd;
 
@@ -66,7 +66,7 @@ class SessionCategory
      * Set url
      *
      * @param $url
-     * @return AccessUrlRelCourse
+     * @return SessionCategory
      */
     public function setUrl($url)
     {

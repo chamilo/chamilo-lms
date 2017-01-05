@@ -1357,7 +1357,6 @@ class CourseBuilder
             $this->course->path = api_get_path(SYS_COURSE_PATH).$_course['directory'].'/';
             $this->course->backup_path = api_get_path(SYS_COURSE_PATH).$_course['directory'];
             $this->course->encoding = api_get_system_encoding(); //current platform encoding
-            $code_course = $_course['code'];
             $courseId = $_course['real_id'];
             $sql_session = "SELECT s.id, name, c_id
                 FROM $tbl_session_course sc

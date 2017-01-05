@@ -10,8 +10,6 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_admin_script(true);
 
-//$toolName = get_lang('Project');
-
 $libPath = api_get_path(LIBRARY_PATH);
 $webLibPath = api_get_path(WEB_LIBRARY_PATH);
 
@@ -50,9 +48,15 @@ $interbreadcrumb[] = array(
 
 switch ($action) {
     case 'delete':
-        TicketManager::deleteProject($id);
-        Display::addFlash(Display::return_message(get_lang('Deleted')));
+        $tickets = TicketManager::getTicketsFromCriteria(['project' => $id]);
+        if (empty($tickets)) {
+            TicketManager::deleteProject($id);
+            Display::addFlash(Display::return_message(get_lang('Deleted')));
+        } else {
+            Display::addFlash(Display::return_message(get_lang('ThisItemIsRelatedToOtherTickets')));
+        }
         header("Location: ".api_get_self());
+        exit;
         break;
     case 'add':
         $toolName = get_lang('Add');
@@ -86,8 +90,9 @@ switch ($action) {
 
         $form->setDefaults([
             'name' => $item->getName(),
-            'description' => $item->getDescription()]
-        );
+            'description' => $item->getDescription()
+        ]);
+
         $formToString = $form->returnForm();
         if ($form->validate()) {
             $values =$form->getSubmitValues();
@@ -98,7 +103,7 @@ switch ($action) {
                 'sys_lastedit_datetime' => api_get_utc_datetime(),
                 'sys_lastedit_user_id' => api_get_user_id()
             ];
-            $cat = TicketManager::updateProject($_GET['id'], $params);
+            TicketManager::updateProject($_GET['id'], $params);
             Display::addFlash(Display::return_message(get_lang('Updated')));
             header("Location: ".api_get_self());
             exit;

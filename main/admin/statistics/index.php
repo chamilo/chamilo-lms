@@ -7,7 +7,7 @@
  */
 $cidReset = true;
 
-require_once '../../inc/global.inc.php';
+require_once __DIR__.'/../../inc/global.inc.php';
 api_protect_admin_script();
 
 $interbreadcrumb[] = array('url' => '../index.php', 'name' => get_lang('PlatformAdmin'));
@@ -30,7 +30,7 @@ if ($report) {
         });
         </script>';
 }
-        
+
 $tool_name = get_lang('Statistics');
 Display::display_header($tool_name);
 echo Display::page_header($tool_name);

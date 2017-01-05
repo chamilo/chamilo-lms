@@ -13,7 +13,7 @@ use ChamiloSession as Session;
  * TODO:clean all file
  */
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 $_SESSION['whereami'] = 'document/createaudio';
 $this_section = SECTION_COURSES;
 
@@ -98,7 +98,7 @@ $interbreadcrumb[] = array(
     "name" => get_lang('Documents')
 );
 
-if (!$is_allowed_in_course) {
+if (!api_is_allowed_in_course()) {
     api_not_allowed(true);
 }
 

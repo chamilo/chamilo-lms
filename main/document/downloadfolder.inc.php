@@ -1,16 +1,17 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use ChamiloSession as Session;
+
 /**
  *	Functions and main code for the download folder feature
  *
  *	@package chamilo.document
  */
 
-use ChamiloSession as Session;
-
 set_time_limit(0);
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script();
 

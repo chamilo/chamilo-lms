@@ -1,6 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
-require_once '../global.inc.php';
+require_once __DIR__.'/../global.inc.php';
 
 $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;

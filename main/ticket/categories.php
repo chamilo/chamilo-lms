@@ -69,8 +69,13 @@ $interbreadcrumb[] = array(
 
 switch ($action) {
     case 'delete':
-        TicketManager::deleteCategory($id);
-        Display::addFlash(Display::return_message(get_lang('Deleted')));
+        $tickets = TicketManager::getTicketsFromCriteria(['category' => $id]);
+        if (empty($tickets)) {
+            TicketManager::deleteCategory($id);
+            Display::addFlash(Display::return_message(get_lang('Deleted')));
+        } else {
+            Display::addFlash(Display::return_message(get_lang('ThisItemIsRelatedToOtherTickets')));
+        }
         header("Location: ".api_get_self().'?project_id='.$projectId);
         exit;
         break;
@@ -148,9 +153,9 @@ switch ($action) {
 function modify_filter($id, $params, $row)
 {
     $projectId = Session::read('project_id');
-
+    $result = '';
     if (api_get_setting('ticket_allow_category_edition') === 'true') {
-        $result = Display::url(
+        $result .= Display::url(
             Display::return_icon('edit.png', get_lang('Edit')),
             "categories.php?action=edit&id={$row['id']}&project_id=".$projectId
         );

@@ -15,7 +15,7 @@
 // TODO: Is this file deprecated?
 
 $pathopen = isset($_REQUEST['pathopen']) ? $_REQUEST['pathopen'] : null;
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 /* Constants and variables */
 

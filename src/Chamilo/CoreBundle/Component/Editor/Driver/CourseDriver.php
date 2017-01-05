@@ -168,7 +168,7 @@ class CourseDriver extends Driver implements DriverInterface
      */
     public function getCourseDocumentSysPath()
     {
-        $url = null;
+        $url = '';
         if ($this->allow()) {
             $directory = $this->getCourseDirectory();
             $coursePath = $this->connector->paths['sys_course_path'];

@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use Chamilo\CourseBundle\Entity\CItemProperty;
 
 /**
  * This is a code library for Chamilo.
@@ -321,9 +322,6 @@ define('SYS_FONTS_PATH', 'SYS_FONTS_PATH');
 define('SYS_DEFAULT_COURSE_DOCUMENT_PATH', 'SYS_DEFAULT_COURSE_DOCUMENT_PATH');
 define('REL_DEFAULT_COURSE_DOCUMENT_PATH', 'REL_DEFAULT_COURSE_DOCUMENT_PATH');
 define('WEB_DEFAULT_COURSE_DOCUMENT_PATH', 'WEB_DEFAULT_COURSE_DOCUMENT_PATH');
-
-// Forcing PclZip library to use a custom temporary folder.
-define('PCLZIP_TEMPORARY_DIR', api_get_path(SYS_ARCHIVE_PATH));
 
 // Relations type with Course manager
 define('COURSE_RELATION_TYPE_COURSE_MANAGER', 1);
@@ -655,38 +653,48 @@ function api_get_path($path = '', $configuration = [])
     // get proper configuration data if exists
     global $_configuration;
 
+    $emptyConfigurationParam = false;
     if (empty($configuration)) {
-        $configuration = (array) $_configuration;
+        $configuration = (array)$_configuration;
+        $emptyConfigurationParam = true;
     }
 
     $course_folder = 'courses/';
+    static $root_web = '';
+    static $root_sys = '';
     $root_sys = $_configuration['root_sys'];
 
-    // Resolve master hostname.
-    if (!empty($configuration) && array_key_exists('root_web', $configuration)) {
-        $root_web = $configuration['root_web'];
-    } else {
-        // Try guess it from server.
-        if (defined('SYSTEM_INSTALLATION') && SYSTEM_INSTALLATION) {
-            if (($pos = strpos(($requested_page_rel = api_get_self()), 'main/install')) !== false) {
-                $root_rel = substr($requested_page_rel, 0, $pos);
-                // See http://www.mediawiki.org/wiki/Manual:$wgServer
-                $server_protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https' : 'http';
-                $server_name =
-                    isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME']
-                    : (isset($_SERVER['HOSTNAME']) ? $_SERVER['HOSTNAME']
-                    : (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST']
-                    : (isset($_SERVER['SERVER_ADDR']) ? $_SERVER['SERVER_ADDR']
-                    : 'localhost')));
-                if (isset($_SERVER['SERVER_PORT']) && !strpos($server_name, ':')
-                    && (($server_protocol == 'http'
-                    && $_SERVER['SERVER_PORT'] != 80 ) || ($server_protocol == 'https' && $_SERVER['SERVER_PORT'] != 443 ))) {
-                    $server_name .= ":" . $_SERVER['SERVER_PORT'];
+    // If no $root_web has been set so far *and* no custom config has been passed to the function
+    // then re-use the previously-calculated (run-specific) $root_web and skip this complex calculation
+    if (empty($root_web) || $emptyConfigurationParam === false || empty($configuration)) {
+        // Resolve master hostname.
+        if (!empty($configuration) && array_key_exists('root_web', $configuration)) {
+            $root_web = $configuration['root_web'];
+        } else {
+            $root_web = '';
+            // Try guess it from server.
+            if (defined('SYSTEM_INSTALLATION') && SYSTEM_INSTALLATION) {
+                if (($pos = strpos(($requested_page_rel = api_get_self()), 'main/install')) !== false) {
+                    $root_rel = substr($requested_page_rel, 0, $pos);
+                    // See http://www.mediawiki.org/wiki/Manual:$wgServer
+                    $server_protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https' : 'http';
+                    $server_name =
+                        isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME']
+                            : (isset($_SERVER['HOSTNAME']) ? $_SERVER['HOSTNAME']
+                            : (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST']
+                                : (isset($_SERVER['SERVER_ADDR']) ? $_SERVER['SERVER_ADDR']
+                                    : 'localhost')));
+                    if (isset($_SERVER['SERVER_PORT']) && !strpos($server_name, ':')
+                        && (($server_protocol == 'http'
+                                && $_SERVER['SERVER_PORT'] != 80) || ($server_protocol == 'https' && $_SERVER['SERVER_PORT'] != 443))
+                    ) {
+                        $server_name .= ":" . $_SERVER['SERVER_PORT'];
+                    }
+                    $root_web = $server_protocol . '://' . $server_name . $root_rel;
+                    $root_sys = str_replace('\\', '/', realpath(__DIR__ . '/../../../')) . '/';
                 }
-                $root_web = $server_protocol.'://'.$server_name.$root_rel;
-                $root_sys = str_replace('\\', '/', realpath(__DIR__.'/../../../')).'/';
+                // Here we give up, so we don't touch anything.
             }
-            // Here we give up, so we don't touch anything.
         }
     }
 
@@ -701,10 +709,6 @@ function api_get_path($path = '', $configuration = [])
                 $root_web = $url_info['active'] == 1 ? $url_info['url'] : $configuration['root_web'];
             }
         }
-    }
-
-    if (empty($paths)) {
-        $paths = [];
     }
 
     $paths = [];
@@ -833,9 +837,20 @@ function api_get_path($path = '', $configuration = [])
 
         global $virtualChamilo;
         if (!empty($virtualChamilo)) {
-            $paths[$root_web][SYS_ARCHIVE_PATH] = $virtualChamilo[SYS_ARCHIVE_PATH].'/';
-            $paths[$root_web][SYS_HOME_PATH] = $virtualChamilo[SYS_HOME_PATH].'/';
-            $paths[$root_web][SYS_COURSE_PATH] = $virtualChamilo[SYS_COURSE_PATH].'/';
+            $paths[$root_web][SYS_ARCHIVE_PATH] = api_add_trailing_slash($virtualChamilo[SYS_ARCHIVE_PATH]);
+            $paths[$root_web][SYS_HOME_PATH] = api_add_trailing_slash($virtualChamilo[SYS_HOME_PATH]);
+            $paths[$root_web][WEB_HOME_PATH] = api_add_trailing_slash($virtualChamilo[WEB_HOME_PATH]);
+            $paths[$root_web][SYS_COURSE_PATH] = api_add_trailing_slash($virtualChamilo[SYS_COURSE_PATH]);
+            $paths[$root_web][SYS_UPLOAD_PATH] = api_add_trailing_slash($virtualChamilo[SYS_UPLOAD_PATH]);
+
+            // WEB_UPLOAD_PATH should be handle by apache htaccess in the vhost
+
+            // RewriteEngine On
+            // RewriteRule /app/upload/(.*)$ http://localhost/other/upload/my-chamilo111-net/$1 [QSA,L]
+
+            //$paths[$root_web][WEB_UPLOAD_PATH] = api_add_trailing_slash($virtualChamilo[WEB_UPLOAD_PATH]);
+            //$paths[$root_web][REL_PATH] = $virtualChamilo[REL_PATH];
+            //$paths[$root_web][REL_COURSE_PATH] = $virtualChamilo[REL_COURSE_PATH];
         }
 
         $isInitialized[$root_web] = true;
@@ -1446,7 +1461,7 @@ function api_get_user_info(
                     false,
                     true
                 );
-                if (intval($user_status['user_chat_status']) == 1) {
+                if (@intval($user_status['user_chat_status']) == 1) {
                     $user_online_in_chat = 1;
                 }
             }
@@ -2454,6 +2469,15 @@ function api_is_allowed_to_create_course()
         return true;
     }
 
+    // Teachers can only create courses
+    if (api_is_teacher()) {
+        if (api_get_setting('allow_users_to_create_courses') === 'true') {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     return Session::read('is_allowedCreateCourse');
 }
 
@@ -3427,15 +3451,17 @@ function api_item_property_delete(
     if (empty($userId)) {
         $userCondition = " AND (to_user_id is NULL OR to_user_id = 0) ";
     }
+    $sessionCondition = api_get_session_condition($sessionId, true, false, 'session_id');
     $sql = "DELETE FROM $table
             WHERE
                 c_id = $courseId AND
                 tool  = '$tool' AND
-                ref = $itemId AND
-                session_id = $sessionId
+                ref = $itemId
+                $sessionCondition
                 $userCondition
                 $groupCondition
             ";
+
     Database::query($sql);
 }
 
@@ -3715,7 +3741,7 @@ function api_item_property_update(
         $startVisibleDate = !empty($start_visible) ? new DateTime($start_visible, new DateTimeZone('UTC')) : null;
         $endVisibleDate = !empty($endVisibleDate) ? new DateTime($endVisibleDate, new DateTimeZone('UTC')) : null;
 
-        $cItemProperty = new \Chamilo\CourseBundle\Entity\CItemProperty($objCourse);
+        $cItemProperty = new CItemProperty($objCourse);
         $cItemProperty
             ->setTool($tool)
             ->setRef($item_id)
@@ -7274,6 +7300,10 @@ function api_can_login_as($loginAsUserId, $userId = null)
  */
 function api_is_allowed_in_course()
 {
+    if (api_is_platform_admin()) {
+        return true;
+    }
+
     return Session::read('is_allowed_in_course');
 }
 
@@ -7536,6 +7566,12 @@ function api_format_time($time, $originFormat = 'php')
     $mins = ($time % 3600) / 60;
     $secs = ($time % 60);
 
+    if ($time < 0) {
+        $hours = 0;
+        $mins = 0;
+        $secs = 0;
+    }
+
     if ($originFormat == 'js') {
         $formattedTime = trim(sprintf("%02d : %02d : %02d", $hours, $mins, $secs));
     } else {
@@ -7657,7 +7693,7 @@ function api_mail_html(
     }
     //If the SMTP configuration only accept one sender
     //If the SMTP configuration only accept one sender
-    if ($platform_email['SMTP_UNIQUE_SENDER']) {
+    if (isset($platform_email['SMTP_UNIQUE_SENDER']) && $platform_email['SMTP_UNIQUE_SENDER']) {
         $senderName = $platform_email['SMTP_FROM_NAME'];
         $senderEmail = $platform_email['SMTP_FROM_EMAIL'];
     }

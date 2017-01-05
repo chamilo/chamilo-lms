@@ -1,6 +1,7 @@
 <?php
 /* For license terms, see /license.txt */
-require '../../main/inc/global.inc.php';
+
+require_once __DIR__.'/../../main/inc/global.inc.php';
 
 $toolId = isset($_GET['id']) ? intval($_GET['id']) : 0;
 

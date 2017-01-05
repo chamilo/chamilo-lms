@@ -13,7 +13,7 @@ use \ChamiloSession as Session;
 // setting the help
 $help_content = 'exercise_upload';
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 require_once api_get_path(LIBRARY_PATH) . 'pear/excelreader/reader.php';
 

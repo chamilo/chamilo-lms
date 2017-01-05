@@ -1,7 +1,7 @@
 <?php
 /* See license terms in /license.txt */
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 $categoryId = isset($_GET['selectcat']) ? intval($_GET['selectcat']) : false;
 

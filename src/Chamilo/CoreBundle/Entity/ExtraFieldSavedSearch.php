@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Class ExtraField
+ * Class ExtraFieldSavedSearch
  *
  * @ORM\Entity
  * @ORM\Table(name="extra_field_saved_search")

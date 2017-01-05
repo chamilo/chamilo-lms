@@ -11,7 +11,7 @@
  *	@todo course admin functionality to create groups based on who is in which course (or class).
  */
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 $current_course_tool  = TOOL_GROUP;
 
@@ -113,8 +113,6 @@ function check_group_members($value)
     return true;
 }
 
-/*	MAIN CODE */
-
 $htmlHeadXtra[] = '<script>
 $(document).ready( function() {
     $("#max_member").on("focus", function() {
@@ -128,7 +126,6 @@ $form = new FormValidator('group_edit', 'post', api_get_self().'?'.api_get_cidre
 $form->addElement('hidden', 'action');
 $form->addElement('hidden', 'max_student', $current_group['max_student']);
 $complete_user_list = GroupManager::fill_groups_list($current_group['iid']);
-
 $subscribedTutors = GroupManager::getTutors($current_group['iid']);
 if ($subscribedTutors) {
     $subscribedTutors = array_column($subscribedTutors, 'user_id');

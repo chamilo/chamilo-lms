@@ -534,9 +534,9 @@ function showStudentWorkGrid()
     );
 
     $html = '<script>
-    $(function() {
-        '.Display::grid_js('workList', $url, $columns, $columnModel, $params, array(), null, true).'
-    });
+        $(function() {
+            '.Display::grid_js('workList', $url, $columns, $columnModel, $params, array(), null, true).'
+        });
     </script>';
 
     $html .= Display::grid_html('workList');
@@ -907,7 +907,6 @@ function updateDirName($work_data, $newPath)
     $newPath = disable_dangerous_file($newPath);
 
     if ($oldPath == '/'.$newPath) {
-
         return true;
     }
 
@@ -926,10 +925,9 @@ function updateDirName($work_data, $newPath)
  * Return an array with all the folder's ids that are in the given path
  * @param   string Path of the directory
  * @return  array The list of ids of all the directories in the path
- * @author  Julio Montoya Dokeos
+ * @author  Julio Montoya
  * @version April 2008
  */
-
 function get_parent_directories($id)
 {
     $course_id = api_get_course_int_id();
@@ -955,7 +953,7 @@ function get_parent_directories($id)
  * Transform an all directory structure (only directories) in an array
  * @param   string path of the directory
  * @return  array the directory structure into an array
- * @author  Julio Montoya Dokeos
+ * @author  Julio Montoya
  * @version April 2008
  */
 function directory_to_array($directory)
@@ -973,6 +971,7 @@ function directory_to_array($directory)
         }
         closedir($handle);
     }
+
     return $array_items;
 }
 
@@ -1002,7 +1001,7 @@ function insert_all_directory_in_course_table($base_work_dir)
         $groupIid = $groupInfo['iid'];
     }
 
-    for($i = 0; $i < count($only_dir); $i++) {
+    for ($i = 0; $i < count($only_dir); $i++) {
         $url = $only_dir[$i];
 
         $params = [
@@ -1336,9 +1335,10 @@ function getWorkListStudent(
         $groupInfo = GroupManager::get_group_properties($group_id);
         $groupIid = $groupInfo['iid'];
     }
+    $groupIid = (int) $groupIid;
 
     // Get list from database
-    if (!empty($group_id)) {
+    if (!empty($groupIid)) {
         $group_query = " WHERE w.c_id = $course_id AND post_group_id = $groupIid";
         $subdirs_query = "AND parent_id = 0";
     } else {
@@ -1469,6 +1469,7 @@ function getWorkListTeacher(
         $groupInfo = GroupManager::get_group_properties($group_id);
         $groupIid = $groupInfo['iid'];
     }
+    $groupIid = (int) $groupIid;
 
     $is_allowed_to_edit = api_is_allowed_to_edit() || api_is_coach();
     if (!in_array($direction, array('asc', 'desc'))) {
@@ -1761,7 +1762,6 @@ function get_work_user_list_from_documents(
                 $editLink = Display::url($addIcon, $url);
                 $addLinkShowed = true;
             } else {
-
                 $row['title'] = $documentToWork['title'];
                 $row['sent_date'] = $documentToWork['sent_date'];
                 $newWorkId = $documentToWork['id'];
@@ -1781,12 +1781,10 @@ function get_work_user_list_from_documents(
         }
 
         $viewLink = null;
-
         if (!empty($itemId)) {
             $viewLink = Display::url($viewIcon, $urlView.'&id='.$itemId);
         }
 
-        //$row['type'] = build_document_icon_tag('file', $row['url']);
         $row['type'] = null;
 
         if ($qualificationExists) {
@@ -1843,7 +1841,6 @@ function get_work_user_list(
     $getCount = false
 ) {
     $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-    $iprop_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
     $user_table = Database::get_main_table(TABLE_MAIN_USER);
 
     $session_id = api_get_session_id();
@@ -2056,7 +2053,7 @@ function get_work_user_list(
                         $feedback .= ' ';
                     }
                     $feedback .= '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.
-                            $count . ' ' . Display::returnFontAwesomeIcon('comments-o') . '</a> ';
+                    $count . ' ' . Display::returnFontAwesomeIcon('comments-o') . '</a> ';
                 }
 
                 $work['qualification'] = $qualification_string.$feedback;
@@ -2102,17 +2099,21 @@ function get_work_user_list(
                             '.addslashes(get_lang('ClickOrDropOneFileHere')).'
                             '.Display::return_icon('upload_file.png', get_lang('Correction'), [], ICON_SIZE_TINY).'
                         </div>
-
                         <input id="file_'.$item_id.'" type="file" name="file" class="" multiple>
                         </form>
                     ';
 
                     $correction .= "<script>
                     $(document).ready(function() {
+                        $('.work_correction_file_upload').each(function () {
+                            $(this).fileupload({
+                                dropZone: $(this)
+                            });
+                        });
                         $('#file_upload_".$item_id."').fileupload({
                             add: function (e, data) {
                                 $('#progress_$item_id').html();
-                                $('#file_$item_id').remove();
+                                //$('#file_$item_id').remove();
                                 data.context = $('#progress_$item_id').html('$loadingText <br /> <em class=\"fa fa-spinner fa-pulse fa-fw\"></em>');
                                 data.submit();
                             },
@@ -2221,9 +2222,7 @@ function send_reminder_users_without_publication($task_data)
     // The body can be as long as you wish, and any combination of text and variables
     $content = get_lang('ReminderToSubmitPendingTask')."\n".get_lang('CourseName').' : '.$_course['name']."\n";
     $content .= get_lang('WorkName').' : '.$task_title."\n";
-
     $list_users = get_list_users_without_publication($task_id);
-
     $mails_sent_to = array();
     foreach ($list_users as $user) {
         $name_user = api_get_person_name($user[1], $user[0], null, PERSON_NAME_EMAIL_ADDRESS);
@@ -2661,7 +2660,7 @@ function getUserToWork($userId, $workId, $courseId)
  * @param int $workId
  * @param int $courseId
  * @param bool $getCount
- * @return array
+ * @return array|int
  */
 function getAllUserToWork($workId, $courseId, $getCount = false)
 {
@@ -5126,6 +5125,25 @@ function protectWork($courseInfo, $workId)
         );
         if (!$showWork) {
             api_not_allowed(true);
+        }
+    }
+}
+
+function deleteCorrection($courseInfo, $work)
+{
+    if (isset($work['url_correction']) && !empty($work['url_correction']) && isset($work['iid'])) {
+        $id = $work['iid'];
+        $table = Database:: get_course_table(TABLE_STUDENT_PUBLICATION);
+        $sql = "UPDATE $table SET
+                    url_correction = '',
+                    title_correction = ''
+                WHERE iid = $id";
+        Database::query($sql);
+        $coursePath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/';
+        if (file_exists($coursePath.$work['url_correction'])) {
+            if (Security::check_abs_path($coursePath.$work['url_correction'], $coursePath)) {
+                unlink($coursePath.$work['url_correction']);
+            }
         }
     }
 }

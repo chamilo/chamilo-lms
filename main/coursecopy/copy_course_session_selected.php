@@ -13,7 +13,7 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com> Code conventions
  * @package chamilo.backup
  */
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 $current_course_tool = TOOL_COURSE_MAINTENANCE;
 
@@ -55,7 +55,7 @@ $interbreadcrumb[] = array(
 
 // Database Table Definitions
 $tbl_session_rel_course_rel_user = Database::get_main_table(
-        TABLE_MAIN_SESSION_COURSE_USER
+    TABLE_MAIN_SESSION_COURSE_USER
 );
 $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);

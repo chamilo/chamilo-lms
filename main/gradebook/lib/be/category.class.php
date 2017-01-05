@@ -1992,7 +1992,7 @@ class Category implements GradebookItem
         );
 
         if (empty($my_certificate)) {
-            GradebookUtils::register_user_info_about_certificate(
+            GradebookUtils::registerUserInfoAboutCertificate(
                 $category_id,
                 $user_id,
                 $my_score_in_gradebook,

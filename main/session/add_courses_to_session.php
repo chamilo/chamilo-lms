@@ -9,7 +9,7 @@
 // resetting the course id.
 $cidReset = true;
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 $sessionId = isset($_GET['id_session']) ? intval($_GET['id_session']) : null;
 $add = isset($_GET['add']) ? Security::remove_XSS($_GET['add']) : null;

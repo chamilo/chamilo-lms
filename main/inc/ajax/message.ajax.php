@@ -7,7 +7,7 @@
 use Chamilo\UserBundle\Entity\User;
 use Chamilo\UserBundle\Entity\Repository\UserRepository;
 
-require_once '../global.inc.php';
+require_once __DIR__.'/../global.inc.php';
 
 $action = $_GET['a'];
 

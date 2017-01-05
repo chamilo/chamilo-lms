@@ -9,7 +9,7 @@ use ChamiloSession as Session;
  *	@package chamilo.document
  */
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 $_SESSION['whereami'] = 'document/create';
 $this_section = SECTION_COURSES;
@@ -217,7 +217,7 @@ if (!$is_certificate_mode) {
 	$interbreadcrumb[]= array('url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('Gradebook'));
 }
 
-if (!$is_allowed_in_course) {
+if (!api_is_allowed_in_course()) {
 	api_not_allowed(true);
 }
 
@@ -495,28 +495,17 @@ if ($form->validate()) {
     }
 
 	if ($fp = @fopen($filepath.$filename.'.'.$extension, 'w')) {
-		//$content = str_replace(api_get_path(WEB_COURSE_PATH), $_configuration['url_append'].'/courses/', $content);
-		$content = str_replace(api_get_path(WEB_COURSE_PATH), $_configuration['url_append'].api_get_path(REL_COURSE_PATH), $content);
+
+		$content = str_replace(
+		    api_get_path(WEB_COURSE_PATH),
+            api_get_configuration_value('url_append').api_get_path(REL_COURSE_PATH),
+            $content
+        );
 
 		fputs($fp, $content);
 		fclose($fp);
 		chmod($filepath.$filename.'.'.$extension, api_get_permissions_for_new_files());
 
-        /*
-		if (!is_dir($filepath.'css')) {
-			mkdir($filepath.'css', api_get_permissions_for_new_directories());
-			$doc_id = add_document($_course, $dir.'css', 'folder', 0, 'css');
-			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', $userId, null, null, null, null, $current_session_id);
-			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $userId, null, null, null, null, $current_session_id);
-		}
-
-		if (!is_file($filepath.'css/frames.css')) {
-			// Make a copy of the current css for the new document
-			copy(api_get_path(SYS_CODE_PATH).'css/'.api_get_setting('stylesheets').'/frames.css', $filepath.'css/frames.css');
-			$doc_id = add_document($_course, $dir.'css/frames.css', 'file', filesize($filepath.'css/frames.css'), 'frames.css');
-			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $userId, null, null, null, null, $current_session_id);
-			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $userId, null, null, null, null, $current_session_id);
-		}*/
 
 		$file_size = filesize($filepath.$filename.'.'.$extension);
 		$save_file_path = $dir.$filename.'.'.$extension;

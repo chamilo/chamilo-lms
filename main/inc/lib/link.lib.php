@@ -114,8 +114,8 @@ class Link extends Model
      * Update a link in the database
      * @param int $linkId The ID of the link to update
      * @param string $linkUrl The new URL to be saved
-     * @param int   Course ID
-     * @param int   Session ID
+     * @param int   $courseId
+     * @param int   $sessionId
      * @return bool
      */
     public function updateLink(
@@ -155,9 +155,6 @@ class Link extends Model
      */
     public static function addlinkcategory($type)
     {
-        global $catlinkstatus;
-        global $msgErr;
-
         $ok = true;
         $_course = api_get_course_info();
         $course_id = $_course['real_id'];
@@ -216,8 +213,6 @@ class Link extends Model
                     'session_id' => $session_id,
                 ];
                 $link_id = $link->save($params);
-
-                $catlinkstatus = get_lang('LinkAdded');
 
                 if ((api_get_setting('search_enabled') == 'true') &&
                     $link_id && extension_loaded('xapian')
@@ -397,7 +392,6 @@ class Link extends Model
                 // -> Items are no longer physically deleted,
                 // but the visibility is set to 2 (in item_property).
                 // This will make a restore function possible for the platform administrator.
-
                 $sql = "UPDATE $tbl_link SET on_homepage='0'
                         WHERE c_id = $course_id AND id='" . $id . "'";
                 Database:: query($sql);
@@ -482,7 +476,12 @@ class Link extends Model
     {
         $tbl_link = Database:: get_course_table(TABLE_LINK);
         $course_id = api_get_course_int_id();
-        $sql = "SELECT * FROM " . $tbl_link . "
+
+        if (empty($id) || empty($course_id)) {
+            return [];
+        }
+
+        $sql = "SELECT * FROM $tbl_link
                 WHERE c_id = $course_id AND id='" . intval($id) . "' ";
         $result = Database::query($sql);
         $data = array();
@@ -501,6 +500,7 @@ class Link extends Model
         $tbl_link = Database:: get_course_table(TABLE_LINK);
         $_course = api_get_course_info();
         $course_id = $_course['real_id'];
+        $id = intval($id);
 
         $values['url'] = trim($values['url']);
         $values['title'] = trim($values['title']);
@@ -529,8 +529,12 @@ class Link extends Model
             return false;
         }
 
+        if (empty($id) || empty($course_id)) {
+            return false;
+        }
+
         // Finding the old category_id.
-        $sql = "SELECT * FROM " . $tbl_link . "
+        $sql = "SELECT * FROM $tbl_link
                 WHERE c_id = $course_id AND id='" . $id . "'";
         $result = Database:: query($sql);
         $row = Database:: fetch_array($result);
@@ -538,7 +542,7 @@ class Link extends Model
 
         if ($category_id != $values['category_id']) {
             $sql = "SELECT MAX(display_order)
-                    FROM " . $tbl_link . "
+                    FROM $tbl_link 
                     WHERE
                         c_id = $course_id AND
                         category_id='" . intval($values['category_id']) . "'";
@@ -558,7 +562,12 @@ class Link extends Model
             'target' => $values['target'],
             'category_id' => $values['category_id']
         ];
-        Database::update($tbl_link, $params, ['c_id = ? AND id = ?' => [$course_id, $id] ]);
+
+        Database::update(
+            $tbl_link,
+            $params,
+            ['c_id = ? AND id = ?' => [$course_id, $id]]
+        );
 
         // Update search enchine and its values table if enabled.
         if (api_get_setting('search_enabled') == 'true') {
@@ -727,7 +736,11 @@ class Link extends Model
             'category_title' => $values['category_title'],
             'description' => $values['description']
         ];
-        Database::update($tbl_categories, $params, ['c_id = ? AND id = ?' => [$course_id, $id]]);
+        Database::update(
+            $tbl_categories,
+            $params,
+            ['c_id = ? AND id = ?' => [$course_id, $id]]
+        );
         Display::addFlash(Display::return_message(get_lang('CategoryModded')));
 
         return true;
@@ -849,9 +862,7 @@ class Link extends Model
 
         // Condition for the session.
         $condition_session = api_get_session_condition($session_id, true, true, 'link.session_id');
-
         $content = '';
-
         $sql = "SELECT *, link.id FROM $tbl_link link
                 INNER JOIN $TABLE_ITEM_PROPERTY itemproperties
                 ON (link.id=itemproperties.ref AND link.c_id = itemproperties.c_id)
@@ -1334,10 +1345,7 @@ class Link extends Model
 
         // Only one hide_field is assumed to be present, <> is removed from value.
 
-        if (!($url = trim($linkdata['url'])) || !($title = trim(
-                $linkdata['title']
-            ))
-        ) {
+        if (!($url = trim($linkdata['url'])) || !($title = trim($linkdata['title']))) {
             return 0; // 0 = fail
         }
 
@@ -1612,7 +1620,7 @@ class Link extends Model
             $form->addHeader(get_lang('LinkMod'));
         }
 
-        $target_link = "_blank";
+        $target_link = '_blank';
         $title = '';
         $category = '';
         $onhomepage = '';
@@ -1746,7 +1754,12 @@ class Link extends Model
         $table = Database::get_course_table(TABLE_LINK_CATEGORY);
         $id = intval($id);
         $courseId = api_get_course_int_id();
-        $sql = "SELECT * FROM $table WHERE id = $id AND c_id = $courseId";
+
+        if (empty($id) || empty($courseId)) {
+            return [];
+        }
+        $sql = "SELECT * FROM $table 
+                WHERE id = $id AND c_id = $courseId";
         $result = Database::query($sql);
         $category = Database::fetch_array($result, 'ASSOC');
 
@@ -1772,9 +1785,13 @@ class Link extends Model
         $compareLinks = $em
             ->getRepository('ChamiloCourseBundle:CLink')
             ->findBy(
-                ['cId' => $link->getCId(), 'categoryId' => $link->getCategoryId()],
+                [
+                    'cId' => $link->getCId(),
+                    'categoryId' => $link->getCategoryId()
+                ],
                 ['displayOrder' => $direction]
             );
+
         /** @var CLink $prevLink */
         $prevLink = null;
 
@@ -1802,6 +1819,7 @@ class Link extends Model
         }
 
         $em->flush();
+
         return true;
     }
 

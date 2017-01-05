@@ -7,7 +7,7 @@
 * 	@author
 * 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
 */
-include("../inc/global.inc.php");
+require_once __DIR__.'/../inc/global.inc.php';
 $this_section=SECTION_COURSES;
 
 $nameTools=get_lang('ExerciseManagement');

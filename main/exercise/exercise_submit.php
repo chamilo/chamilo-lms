@@ -28,7 +28,7 @@ use ChamiloSession as Session;
 *   Modified by hubert.borderiou (2011-10-21 question category)
 */
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool  = TOOL_QUIZ;
 $this_section = SECTION_COURSES;
 $debug = false;

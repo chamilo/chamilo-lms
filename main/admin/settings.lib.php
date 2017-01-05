@@ -1529,7 +1529,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
             case 'timezone_value':
                 $timezone = $row['selected_value'];
                 if (empty($timezone)) {
-                    $timezone = _api_get_timezone();
+                    $timezone = api_get_timezone();
                 }
                 $form->addLabel('', sprintf(get_lang('LocalTimeUsingPortalTimezoneXIsY'), $timezone, api_get_local_time()));
                 break;

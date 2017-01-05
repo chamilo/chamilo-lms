@@ -76,7 +76,7 @@ echo '</div>';
 
 Display::display_normal_message(get_lang('AddLpIntro'), false);
 
-if ($_POST AND empty($_REQUEST['lp_name'])) {
+if ($_POST && empty($_REQUEST['lp_name'])) {
     Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'), false);
 }
 

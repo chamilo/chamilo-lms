@@ -39,6 +39,30 @@ $load_dirs = api_get_setting('show_documents_preview');
 $displayMyCourseViewBySessionLink = api_get_setting('my_courses_view_by_session') === 'true';
 $nameTools = get_lang('MyCourses');
 
+// Load course notification by ajax
+$loadNotificationsByAjax = api_get_configuration_value('user_portal_load_notification_by_ajax');
+if ($loadNotificationsByAjax) {
+    $htmlHeadXtra[] = '<script>
+    $(function() {
+        $(".course_notification").each(function(index) {
+            var div = $(this);
+            var id = $(this).attr("id");       
+            var idList = id.split("_");
+            var courseId = idList[1];
+            var sessionId = idList[2];
+            var status = idList[3];
+            $.ajax({			
+                type: "GET",
+                url: "'.api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=get_notification&course_id="+courseId+"&session_id="+sessionId+"&status="+status,			
+                success: function(data) {			    
+                    div.append(data);			    
+                }
+            });
+        });
+    });
+    </script>';
+}
+
 /*
     Header
     Include the HTTP, HTML headers plus the top banner.
@@ -103,9 +127,6 @@ if ($displayMyCourseViewBySessionLink) {
 }
 
 $controller = new IndexManager(get_lang('MyCourses'));
-
-// Main courses and session list
-//$courseAndSessions = $controller->returnCoursesAndSessions($userId);
 
 // Main courses and session list
 if (isset($_COOKIE['defaultMyCourseView'.$userId]) &&
@@ -246,9 +267,7 @@ $controller->tpl->assign('course_block', $controller->return_course_block());
 $controller->tpl->assign('navigation_course_links', $controller->return_navigation_links());
 $controller->tpl->assign('search_block', $controller->return_search_block());
 $controller->tpl->assign('classes_block', $controller->return_classes_block());
-//if (api_is_platform_admin() || api_is_drh()) {
 $controller->tpl->assign('skills_block', $controller->return_skills_links());
-//}
 $historyClass = '';
 if (!empty($_GET['history'])) {
     $historyClass = 'courses-history';
@@ -259,4 +278,4 @@ $controller->tpl->display_two_col_template();
 // Deleting the session_id.
 Session::erase('session_id');
 Session::erase('studentview');
-api_remove_in_gradebook('in_gradebook');
+api_remove_in_gradebook();

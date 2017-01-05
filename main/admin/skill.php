@@ -10,7 +10,7 @@ use Chamilo\CoreBundle\Entity\Skill;
  */
 
 $cidReset = true;
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 api_protect_admin_script();
 $em = Database::getManager();
 $profiles = $em->getRepository('ChamiloSkillBundle:Profile')->findAll();

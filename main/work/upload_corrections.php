@@ -4,7 +4,7 @@
 use ChamiloSession as Session;
 use Symfony\Component\Finder\Finder;
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool  = TOOL_STUDENTPUBLICATION;
 
 api_protect_course_script(true);
@@ -64,12 +64,10 @@ $form->addButtonUpload(get_lang('Upload'));
 
 $succeed = false;
 if ($form->validate()) {
-
     $values = $form->getSubmitValues();
     $upload = process_uploaded_file($_FILES['file'], false);
 
     if ($upload) {
-
         $zip = new PclZip($_FILES['file']['tmp_name']);
         // Check the zip content (real size and file extension)
         $zipFileList = (array)$zip->listContent();
@@ -134,7 +132,7 @@ if ($form->validate()) {
         foreach ($finder as $file) {
             $fileName = $file->getBasename();
             $fileName = substr($fileName, 20, strlen($fileName));
-            $pos = strpos($fileName, '-') + 1;
+            $pos = strpos($fileName, '_') + 1;
             $fileName = substr($fileName, $pos, strlen($fileName));
 
             if (isset($finalResult[$fileName])) {
@@ -152,7 +150,6 @@ if ($form->validate()) {
                     }
 
                     if (!empty($correctionFilePath)) {
-
                         $result = copy(
                             $file->getRealPath(),
                             $correctionFilePath

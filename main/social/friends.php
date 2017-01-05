@@ -7,7 +7,7 @@
  */
 
 $cidReset = true;
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
 if (api_get_setting('allow_social_tool') != 'true') {
@@ -156,7 +156,7 @@ if (count($friends) == 0) {
 $social_right_content .= '</div>';
 
 $tpl = new Template(get_lang('Social'));
-SocialManager::setSocialUserBlock($tpl, $user_id, 'friends');
+SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'friends');
 
 $tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_right_content', $social_right_content);

@@ -8,7 +8,7 @@ use \ChamiloSession as Session;
 * 	@author Julio Montoya <gugli100@gmail.com>
 */
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 api_protect_course_script(false);
 
 require_once api_get_path(LIBRARY_PATH).'geometry.lib.php';
@@ -532,7 +532,7 @@ if ($destinationid==-1) {
 		$objQuestionTmp = Question :: read($destinationid);
 		$questionName=$objQuestionTmp->selectTitle();
 		$num_value_array= (array_keys($questionList, $destinationid));
-		$links.= Display :: return_icon('quiz.gif', '', array ('style' => 'padding-left:0px;padding-right:5px;')).'<a onclick="SendEx('.$num_value_array[0].');" href="#">'.get_lang('GoToQuestion').' '.$num_value_array[0].'</a><br /><br />';
+		$links.= Display :: return_icon('quiz.png', '', array ('style' => 'padding-left:0px;padding-right:5px;')).'<a onclick="SendEx('.$num_value_array[0].');" href="#">'.get_lang('GoToQuestion').' '.$num_value_array[0].'</a><br /><br />';
 	}
 }
 

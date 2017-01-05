@@ -8,7 +8,7 @@
 ob_start();
 $cidReset = true;
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_TRACKING;
 
@@ -57,7 +57,7 @@ if (api_get_setting('add_users_by_coach') == 'true') {
 }
 
 Display :: display_header(get_lang('Courses'));
-
+$user_id = 0;
 $a_courses = array();
 if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
     $title = '';

@@ -12,7 +12,7 @@
  *	@package chamilo.user
  */
 $use_anonymous = true;
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool  = TOOL_USER;
 $this_section = SECTION_COURSES;
 
@@ -447,7 +447,7 @@ if (api_is_allowed_to_edit(null, true)) {
 }
 
 // $is_allowed_in_course is first defined in local.inc.php
-if (!$is_allowed_in_course) {
+if (!api_is_allowed_in_course()) {
     api_not_allowed(true);
 }
 

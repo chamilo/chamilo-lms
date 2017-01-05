@@ -6,7 +6,7 @@
  * @package chamilo.gradebook
  */
 //$cidReset = true;
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool  = TOOL_GRADEBOOK;
 
 api_protect_course_script(true);

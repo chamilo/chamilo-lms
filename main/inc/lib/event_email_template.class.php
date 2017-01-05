@@ -45,7 +45,12 @@ class EventEmailTemplate extends Model
 		$content = Display::actions(array(
                 array(
                     'url' => 'event_type.php' ,
-                    'content' => Display::return_icon('new_document.png', get_lang('Add'), array(), ICON_SIZE_MEDIUM)
+                    'content' => Display::return_icon(
+                        'new_document.png',
+                        get_lang('Add'),
+                        array(),
+                        ICON_SIZE_MEDIUM
+                    )
                  )
             )
         );

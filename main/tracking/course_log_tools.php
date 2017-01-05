@@ -5,7 +5,7 @@
  *	@package chamilo.tracking
  */
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_TRACKING;
 
 $course_info = api_get_course_info();
@@ -207,7 +207,7 @@ if ($exerciseReporting) {
     echo '<div class="report_section">
                '.Display::page_subheader(
             Display::return_icon(
-                'quiz.gif',
+                'quiz.png',
                 get_lang('AverageResultsToTheExercices')
             ).get_lang('AverageResultsToTheExercices')
         ).'

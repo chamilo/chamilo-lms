@@ -5,7 +5,7 @@
  * 	Saving the scores.
  * 	@package chamilo.exercise
  */
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 $courseInfo = api_get_course_info();
 $_user = api_get_user_info();
 

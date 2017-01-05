@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 $cidReset = true;
-require_once '../../../main/inc/global.inc.php';
+require_once __DIR__.'/../../../main/inc/global.inc.php';
 
 // Security
 api_protect_admin_script();
@@ -14,7 +14,7 @@ define('CHAMILO_INTERNAL', true);
 $plugin = VChamiloPlugin::create();
 $thisurl = api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php';
 
-Virtual::requireJs('host_list.js', 'vchamilo');
+Virtual::requireJs('host_list.js', 'vchamilo', 'head');
 
 if ($action) {
     require_once api_get_path(SYS_PLUGIN_PATH).'vchamilo/views/manage.controller.php';
@@ -77,7 +77,7 @@ foreach ($instances as $instance) {
 
     if (!$instance->visible) {
         $cmd .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="'.$thisurl.'?what=fulldeleteinstances&vids[]='.$instance->id.'" title="'.$plugin->get_lang('destroyinstances').'">
-        &nbsp;'.Display::returnFontAwesomeIcon('remove').' </a>';
+        &nbsp;'.Display::returnFontAwesomeIcon('remove', 2).' </a>';
     } else {
         $cmd .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="'.$thisurl.'?what=deleteinstances&vids[]='.$instance->id.'" title="'.$plugin->get_lang('deleteinstances').'">
          &nbsp;'.Display::returnFontAwesomeIcon('remove', 2).' </a>';

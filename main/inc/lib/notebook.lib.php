@@ -124,7 +124,7 @@ class NotebookManager
      * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
      * @version januari 2009, dokeos 1.8.6
      */
-    static function update_note($values)
+    public static function update_note($values)
     {
         if (!is_array($values) or empty($values['note_title'])) {
             return false;
@@ -141,7 +141,7 @@ class NotebookManager
             'session_id' => $sessionId,
             'title' => $values['note_title'],
             'description' => $values['note_comment'],
-            'update_date' => api_get_utc_datetime(),
+            'update_date' => api_get_utc_datetime()
         ];
 
         Database::update(
@@ -150,7 +150,7 @@ class NotebookManager
             [
                 'c_id = ? AND notebook_id = ?' => [
                     $course_id,
-                    $values['notebook_id'],
+                    $values['notebook_id']
                 ],
             ]
         );
@@ -167,9 +167,13 @@ class NotebookManager
         return true;
     }
 
-    static function delete_note($notebook_id)
+    /**
+     * @param int $notebook_id
+     * @return bool
+     */
+    public static function delete_note($notebook_id)
     {
-        if (empty($notebook_id) or $notebook_id != strval(intval($notebook_id))) {
+        if (empty($notebook_id) || $notebook_id != strval(intval($notebook_id))) {
             return false;
         }
         // Database table definition
@@ -242,7 +246,7 @@ class NotebookManager
         }
 
         // Database table definition
-        $t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);        
+        $t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);
         if ($_SESSION['notebook_view'] == 'creation_date' || $_SESSION['notebook_view'] == 'update_date') {
             $order_by = " ORDER BY " . $_SESSION['notebook_view'] . " $sort_direction ";
         } else {
@@ -267,12 +271,9 @@ class NotebookManager
         while ($row = Database::fetch_array($result)) {
             // Validation when belongs to a session
             $session_img = api_get_session_image($row['session_id'], $_user['status']);
-            $creation_date = api_get_local_time($row['creation_date'], null, date_default_timezone_get());
-            $update_date = api_get_local_time($row['update_date'], null, date_default_timezone_get());
-
             $updateValue = '';
             if ($row['update_date'] <> $row['creation_date']) {
-                $updateValue = ', ' . get_lang('UpdateDate') . ': ' . date_to_str_ago($row['update_date']) . '&nbsp;&nbsp;<span class="dropbox_date">' . $update_date . '</span>';
+                $updateValue = ', ' . get_lang('UpdateDate') . ': ' . Display::dateToStringAgoAndLongDate($row['update_date']);
             }
 
             $actions = '<a href="' . api_get_self() . '?action=editnote&notebook_id=' . $row['notebook_id'] . '">' .
@@ -283,7 +284,7 @@ class NotebookManager
             echo Display::panel(
                 $row['description'],
                 $row['title'] . $session_img.' <div class="pull-right">'.$actions.'</div>',
-                get_lang('CreationDate') . ': ' . date_to_str_ago($row['creation_date']) . '&nbsp;&nbsp;<span class="dropbox_date">' . $creation_date . $updateValue."</span>"
+                get_lang('CreationDate') . ': ' . Display::dateToStringAgoAndLongDate($row['creation_date']). $updateValue
             );
         }
     }

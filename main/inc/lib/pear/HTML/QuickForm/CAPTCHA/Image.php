@@ -54,9 +54,18 @@
  */
 class HTML_QuickForm_CAPTCHA_Image extends HTML_QuickForm_CAPTCHA
 {
-
-    function HTML_QuickForm_CAPTCHA_Image($elementName = null, $elementLabel = null, $options = null, $attributes = null) {
-        return parent::HTML_QuickForm_CAPTCHA($elementName, $elementLabel, $options, $attributes);
+    public function __construct(
+        $elementName = null,
+        $elementLabel = null,
+        $options = null,
+        $attributes = null
+    ) {
+        return parent::__construct(
+            $elementName,
+            $elementLabel,
+            $options,
+            $attributes
+        );
     }
 
     /**

@@ -38,23 +38,18 @@ class Version20150603181728 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE c_lp ADD subscribe_users INT NOT NULL DEFAULT 0');
         }
 
-        $this->addSql('
-            ALTER TABLE c_item_property
-            MODIFY c_id INT DEFAULT NULL,
-            MODIFY lastedit_user_id INT NOT NULL,
-            MODIFY to_group_id INT NULL,
-            MODIFY insert_user_id INT DEFAULT NULL,
-            MODIFY start_visible DATETIME DEFAULT NULL,
-            MODIFY end_visible DATETIME DEFAULT NULL,
-            MODIFY session_id INT DEFAULT NULL,
-            MODIFY to_user_id INT NULL
-        ');
-
+        $this->addSql('ALTER TABLE c_item_property MODIFY c_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE c_item_property MODIFY lastedit_user_id INT NOT NULL');
+        $this->addSql('ALTER TABLE c_item_property MODIFY to_group_id INT NULL');
+        $this->addSql('ALTER TABLE c_item_property MODIFY insert_user_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE c_item_property MODIFY start_visible DATETIME DEFAULT NULL');
+        $this->addSql('ALTER TABLE c_item_property MODIFY end_visible DATETIME DEFAULT NULL');
+        $this->addSql('ALTER TABLE c_item_property MODIFY session_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE c_item_property MODIFY to_user_id INT NULL');
         $this->addSql("UPDATE c_item_property SET start_visible = NULL WHERE start_visible = '0000-00-00 00:00:00'");
         $this->addSql("UPDATE c_item_property SET end_visible = NULL WHERE end_visible = '0000-00-00 00:00:00'");
 
         // Remove inconsistencies about non-existing courses
-
         $this->addSql("DELETE FROM c_item_property WHERE session_id IS NOT NULL and session_id <> 0 AND session_id NOT IN (SELECT id FROM session)");
         $this->addSql("DELETE FROM c_item_property WHERE to_user_id IS NOT NULL and to_user_id <> 0 AND to_user_id NOT IN (SELECT id FROM user)");
         $this->addSql("DELETE FROM c_item_property WHERE to_user_id IS NOT NULL AND to_user_id <> 0 AND to_user_id NOT IN (SELECT id FROM user)");

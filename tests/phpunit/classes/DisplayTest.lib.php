@@ -279,18 +279,6 @@ class DisplayTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Display::get_platform_home_link_html
-     * @todo   Implement testGet_platform_home_link_html().
-     */
-    public function testGet_platform_home_link_html()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
      * @covers Display::get_alphabet_options
      * @todo   Implement testGet_alphabet_options().
      */
@@ -536,18 +524,6 @@ class DisplayTest extends PHPUnit_Framework_TestCase
      * @todo   Implement testReturn_rating_system().
      */
     public function testReturn_rating_system()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @covers Display::return_default_table_class
-     * @todo   Implement testReturn_default_table_class().
-     */
-    public function testReturn_default_table_class()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(

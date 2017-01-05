@@ -1037,7 +1037,7 @@ class learnpathItem
         $type = $this->get_type();
 
         switch ($type) {
-            case TOOL_DOCUMENT :
+            case TOOL_DOCUMENT:
             case TOOL_QUIZ:
             case 'sco':
                 // Get the document and, if HTML, open it.
@@ -3380,9 +3380,7 @@ class learnpathItem
         global $charset;
         $course_id = api_get_course_int_id();
         $lp_item = Database::get_course_table(TABLE_LP_ITEM);
-        require_once api_get_path(
-                LIBRARY_PATH
-            ) . 'search/ChamiloIndexer.class.php';
+        require_once api_get_path(LIBRARY_PATH) . 'search/ChamiloIndexer.class.php';
         $a_terms = preg_split('/,/', $terms);
         $i_terms = preg_split('/,/', $this->get_terms());
         foreach ($i_terms as $term) {
@@ -3601,8 +3599,6 @@ class learnpathItem
     {
         if (self::debug > 0) {
             error_log('Funcion called: scorm_update_time');
-        }
-        if (self::debug > 0) {
             error_log("total_sec: $total_sec");
         }
 
@@ -3610,12 +3606,13 @@ class learnpathItem
         $item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
         $course_id = api_get_course_int_id();
 
-        $get_view_sql = 'SELECT total_time, status FROM ' . $item_view_table . '
-                         WHERE c_id = ' . $course_id . '
-                            AND lp_item_id="' . $this->db_id . '"
-                            AND lp_view_id="' . $this->view_id . '"
-                            AND view_count="' . $this->get_attempt_id() . '"';
-        $result = Database::query($get_view_sql);
+        $sql = 'SELECT total_time, status FROM ' . $item_view_table . '
+                 WHERE 
+                    c_id = ' . $course_id . ' AND 
+                    lp_item_id="' . $this->db_id . '" AND 
+                    lp_view_id="' . $this->view_id . '" AND 
+                    view_count="' . $this->get_attempt_id() . '"';
+        $result = Database::query($sql);
         $row = Database::fetch_array($result);
 
         if (!isset($row['total_time'])) {
@@ -3630,7 +3627,7 @@ class learnpathItem
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         $lp_id = intval($this->lp_id);
         $sql = "SELECT * FROM $lp_table
-                    WHERE id = $lp_id AND c_id = $course_id";
+                WHERE id = $lp_id AND c_id = $course_id";
         $res = Database::query($sql);
         $accumulateScormTime = 'false';
         if (Database::num_rows($res) > 0) {
@@ -3638,32 +3635,38 @@ class learnpathItem
             $accumulateScormTime = $row['accumulate_scorm_time'];
         }
 
-        //Step 2.1 : if normal mode total_time = total_time + total_sec
+        // Step 2.1 : if normal mode total_time = total_time + total_sec
         if ($accumulateScormTime != 0) {
             $total_time += $total_sec;
-            //$this->last_scorm_session_time = $total_sec;
         } else {
-            //Step 2.2 : if not cumulative mode total_time = total_time - last_update + total_sec
+            // Step 2.2 : if not cumulative mode total_time = total_time - last_update + total_sec
             $total_time = $total_time - $this->last_scorm_session_time + $total_sec;
             $this->last_scorm_session_time = $total_sec;
+
+            if ($total_time < 0) {
+                $total_time = $total_sec;
+            }
         }
-        //Step 3 update db only if status != completed, passed, browsed or seriousgamemode not activated
+
+        // Step 3 update db only if status != completed, passed, browsed or seriousgamemode not activated
+        // @todo complete
         $case_completed = array(
             'completed',
             'passed',
             'browsed',
             'failed'
-        ); //TODO COMPLETE
+        );
 
         if ($this->seriousgame_mode != 1 ||
             !in_array($row['status'], $case_completed)
         ) {
             $sql = "UPDATE $item_view_table
                       SET total_time = '$total_time'
-                    WHERE c_id = $course_id
-                      AND lp_item_id = {$this->db_id}
-                      AND lp_view_id = {$this->view_id}
-                      AND view_count = {$this->get_attempt_id()}";
+                    WHERE 
+                        c_id = $course_id AND 
+                        lp_item_id = {$this->db_id} AND 
+                        lp_view_id = {$this->view_id} AND 
+                        view_count = {$this->get_attempt_id()}";
             if (self::debug > 0) {
                 error_log($sql);
             }
@@ -3679,7 +3682,8 @@ class learnpathItem
         $item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
         $course_id = api_get_course_int_id();
         $sql = 'UPDATE ' . $item_view_table . '
-                SET total_time = 0, start_time=' . time() . '
+                SET total_time = 0, 
+                    start_time=' . time() . '
                 WHERE c_id = ' . $course_id . '
                     AND lp_item_id="' . $this->db_id . '"
                     AND lp_view_id="' . $this->view_id . '"
@@ -3737,21 +3741,11 @@ class learnpathItem
                         $iva_row = Database::fetch_array($iva_res);
                         $iva_id = $iva_row[0];
                         $ivau_sql = "UPDATE $iva_table " .
-                            "SET objective_id = '" . Database::escape_string(
-                                $objective[0]
-                            ) . "'," .
-                            "status = '" . Database::escape_string(
-                                $objective[1]
-                            ) . "'," .
-                            "score_raw = '" . Database::escape_string(
-                                $objective[2]
-                            ) . "'," .
-                            "score_min = '" . Database::escape_string(
-                                $objective[4]
-                            ) . "'," .
-                            "score_max = '" . Database::escape_string(
-                                $objective[3]
-                            ) . "' " .
+                            "SET objective_id = '" . Database::escape_string($objective[0]) . "'," .
+                            "status = '" . Database::escape_string($objective[1]) . "'," .
+                            "score_raw = '" . Database::escape_string($objective[2]) . "'," .
+                            "score_min = '" . Database::escape_string($objective[4]) . "'," .
+                            "score_max = '" . Database::escape_string($objective[3]) . "' " .
                             "WHERE c_id = $course_id AND id = $iva_id";
                         Database::query($ivau_sql);
                     } else {

@@ -4,6 +4,7 @@
 use Chamilo\TicketBundle\Entity\Project;
 use Chamilo\TicketBundle\Entity\Status;
 use Chamilo\TicketBundle\Entity\Priority;
+use Chamilo\TicketBundle\Entity\Ticket;
 
 /**
  * Class TicketManager
@@ -614,12 +615,12 @@ class TicketManager
                     $sender = api_get_user_info($insert_id);
                     $href = api_get_path(WEB_CODE_PATH).'/ticket/ticket_details.php?ticket_id='.$ticket_id;
                     $message = sprintf(
-                        get_lang('TicketAssignedMsg'),
+                        get_lang('TicketAssignedToXCheckZAtLinkY'),
                         $info['complete_name'],
                         $href,
                         $ticket_id
                     );
-                    $mailTitle = sprintf(get_lang('TicketAssignX'), $ticket_id);
+                    $mailTitle = sprintf(get_lang('TicketXAssigned'), $ticket_id);
                     api_mail_html(
                         $info['complete_name'],
                         $info['mail'],
@@ -1283,15 +1284,15 @@ class TicketManager
                 $row['course'] = null;
                 $row['start_date_from_db'] = $row['start_date'];
                 $row['start_date'] = api_convert_and_format_date(
-                        api_get_local_time($row['start_date']), DATE_TIME_FORMAT_LONG, _api_get_timezone()
+                        api_get_local_time($row['start_date']), DATE_TIME_FORMAT_LONG, api_get_timezone()
                 );
                 $row['end_date_from_db'] = $row['end_date'];
                 $row['end_date'] = api_convert_and_format_date(
-                        api_get_local_time($row['end_date']), DATE_TIME_FORMAT_LONG, _api_get_timezone()
+                        api_get_local_time($row['end_date']), DATE_TIME_FORMAT_LONG, api_get_timezone()
                 );
                 $row['sys_lastedit_datetime_from_db'] = $row['sys_lastedit_datetime'];
                 $row['sys_lastedit_datetime'] = api_convert_and_format_date(
-                        api_get_local_time($row['sys_lastedit_datetime']), DATE_TIME_FORMAT_LONG, _api_get_timezone()
+                        api_get_local_time($row['sys_lastedit_datetime']), DATE_TIME_FORMAT_LONG, api_get_timezone()
                 );
                 $row['course_url'] = null;
                 if ($row['course_id'] != 0) {
@@ -1893,6 +1894,22 @@ class TicketManager
     }
 
     /**
+     * @return array
+     */
+    public static function getTicketsFromCriteria($criteria)
+    {
+        $items = Database::getManager()->getRepository('ChamiloTicketBundle:Ticket')->findBy($criteria);
+
+        $list = [];
+        /** @var Ticket $row */
+        foreach ($items as $row) {
+            $list[$row->getId()] = $row->getCode();
+        }
+
+        return $list;
+    }
+
+    /**
      * @param string $code
      * @return int
      */
@@ -2060,6 +2077,7 @@ class TicketManager
         foreach ($items as $row) {
             $list[] = [
                 'id' => $row->getId(),
+                'code' => $row->getCode(),
                 '0' => $row->getId(),
                 '1' => $row->getName(),
                 '2' => $row->getDescription(),
@@ -2177,6 +2195,7 @@ class TicketManager
         foreach ($items as $row) {
             $list[] = [
                 'id' => $row->getId(),
+                'code' => $row->getCode(),
                 '0' => $row->getId(),
                 '1' => $row->getName(),
                 '2' => $row->getDescription(),
@@ -2308,5 +2327,31 @@ class TicketManager
         ];
 
         echo Display::actions($items);
+    }
+
+    /**
+     * @return array
+     */
+    public static function getDefaultStatusList() {
+        return [
+            self::STATUS_NEW,
+            self::STATUS_PENDING,
+            self::STATUS_UNCONFIRMED,
+            self::STATUS_CLOSE,
+            self::STATUS_FORWARDED
+        ];
+    }
+
+        /**
+     * @return array
+     */
+    public static function getDefaultPriorityList() {
+        return [
+            self::PRIORITY_NORMAL,
+            self::PRIORITY_HIGH,
+            self::PRIORITY_LOW,
+            self::STATUS_CLOSE,
+            self::STATUS_FORWARDED
+        ];
     }
 }

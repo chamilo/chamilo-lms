@@ -7,7 +7,7 @@
  */
 
 $cidReset = true;
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
 
@@ -280,7 +280,7 @@ $social_right_content .= Display::tabs($headers, array($newest_content, $popular
 $tpl = new Template(null);
 
 // Block Social Avatar
-SocialManager::setSocialUserBlock($tpl, $user_id, $show_menu);
+SocialManager::setSocialUserBlock($tpl, api_get_user_id(), $show_menu);
 $show_menu = 'browse_groups';
 if (isset($_GET['view']) && $_GET['view'] == 'mygroups') {
     $show_menu = $_GET['view'];

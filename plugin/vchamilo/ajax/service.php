@@ -1,6 +1,6 @@
 <?php
 
-require_once '../../../main/inc/global.inc.php';
+require_once __DIR__.'/../../../main/inc/global.inc.php';
 
 $action = isset($_GET['what']) ? $_GET['what'] : '';
 define('CHAMILO_INTERNAL', true);

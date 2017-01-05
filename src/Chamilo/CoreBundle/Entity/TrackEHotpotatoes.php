@@ -14,6 +14,15 @@ use Doctrine\ORM\Mapping as ORM;
 class TrackEHotpotatoes
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    private $id;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="exe_name", type="string", length=255, nullable=false)
@@ -54,17 +63,6 @@ class TrackEHotpotatoes
      * @ORM\Column(name="exe_weighting", type="smallint", nullable=false)
      */
     private $exeWeighting;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-
 
     /**
      * Set exeName

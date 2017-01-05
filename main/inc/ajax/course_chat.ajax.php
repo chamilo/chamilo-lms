@@ -4,7 +4,7 @@
  * Responses to AJAX calls for course chat
  */
 
-require_once '../global.inc.php';
+require_once __DIR__.'/../global.inc.php';
 
 if (!api_protect_course_script(false)) {
     exit;
@@ -52,7 +52,7 @@ switch ($_REQUEST['action']) {
         break;
     case 'reset':
         $friend = isset($_REQUEST['friend']) ? intval($_REQUEST['friend']) : 0;
-    
+
         $json = [
             'status' => true,
             'data' => $courseChatUtils->readMessages(true, $friend)

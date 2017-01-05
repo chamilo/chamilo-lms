@@ -20,7 +20,7 @@ if (empty($lp_controller_touched) || $lp_controller_touched != 1) {
     exit;
 }
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 $courseDir = api_get_course_path().'/scorm';
 $baseWordDir = $courseDir;
 
@@ -231,13 +231,13 @@ foreach ($categories as $item) {
                 if (!empty($details['publicated_on'])) {
                     $start_time = api_convert_and_format_date(
                         $details['publicated_on'],
-                        DATE_TIME_FORMAT_LONG
+                        DATE_TIME_FORMAT_LONG_24H
                     );
                 }
                 if (!empty($details['expired_on'])) {
                     $end_time = api_convert_and_format_date(
                         $details['expired_on'],
-                        DATE_TIME_FORMAT_LONG
+                        DATE_TIME_FORMAT_LONG_24H
                     );
                 }
             }

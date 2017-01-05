@@ -8,7 +8,8 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * PersonalAgenda
  *
- * @ORM\Table(name="personal_agenda", indexes={@ORM\Index(name="idx_personal_agenda_user", columns={"user"}), @ORM\Index(name="idx_personal_agenda_parent", columns={"parent_event_id"})})
+ * @ORM\Table(name="personal_agenda", indexes={@ORM\Index(name="idx_personal_agenda_user", columns={"user"}),
+ * @ORM\Index(name="idx_personal_agenda_parent", columns={"parent_event_id"})})
  * @ORM\Entity
  */
 class PersonalAgenda

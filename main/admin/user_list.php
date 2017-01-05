@@ -10,7 +10,7 @@ use ChamiloSession as Session;
 */
 
 $cidReset = true;
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 $current_access_url_id = api_get_current_access_url_id();
 
@@ -298,7 +298,7 @@ function prepare_user_sql_query($is_count)
         $sql .= " ) ";
     }
 
-    $variables = Session::read('variables_to_show');
+    $variables = Session::read('variables_to_show', []);
 
     $extraField = new ExtraField('user');
 
@@ -520,7 +520,7 @@ function user_filter($name, $params, $row)
  */
 function modify_filter($user_id, $url_params, $row)
 {
-	global $charset, $_admins_list;
+    $_admins_list = Session::read('admin_list', []);
     $is_admin = in_array($user_id, $_admins_list);
     $statusname = api_get_status_langvars();
     $user_is_anonymous = false;
@@ -655,7 +655,7 @@ function modify_filter($user_id, $url_params, $row)
                 api_global_admin_can_edit_admin($user_id)
             ) {
                 // you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
-                $result .= ' <a href="user_list.php?action=delete_user&user_id='.$user_id.'&'.$url_params.'&sec_token='.$_SESSION['sec_token'].'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
+                $result .= ' <a href="user_list.php?action=delete_user&user_id='.$user_id.'&'.$url_params.'&sec_token='.$_SESSION['sec_token'].'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice")))."'".')) return false;">'.Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
             } else {
                 $result .= Display::return_icon('delete_na.png', get_lang('Delete'), array(), ICON_SIZE_SMALL);
             }
@@ -747,17 +747,24 @@ if (!empty($action)) {
 			case 'delete_user':
 				if (api_is_platform_admin()) {
                     $user_to_delete = $_GET['user_id'];
+                    $userToDeleteInfo = api_get_user_info($user_to_delete);
                     $current_user_id = api_get_user_id();
 
-					if ($deleteUserAvailable && api_global_admin_can_edit_admin($_GET['user_id'])) {
+					if ($userToDeleteInfo && $deleteUserAvailable && api_global_admin_can_edit_admin($_GET['user_id'])) {
 						if ($user_to_delete != $current_user_id && UserManager :: delete_user($_GET['user_id'])) {
-							$message = Display :: return_message(get_lang('UserDeleted'), 'confirmation');
+							$message = Display :: return_message(
+							    get_lang('UserDeleted').': '.$userToDeleteInfo['complete_name_with_username'],
+                                'confirmation'
+                            );
 						} else {
 							$message = Display :: return_message(get_lang('CannotDeleteUserBecauseOwnsCourse'), 'error');
 						}
 					} else {
-						$message = Display :: return_message(get_lang('CannotDeleteUser'),'error');
+						$message = Display :: return_message(get_lang('CannotDeleteUser'), 'error');
 					}
+					Display::addFlash($message);
+					header('Location: '.api_get_self());
+                    exit;
 				}
 				break;
             case 'delete':
@@ -792,7 +799,8 @@ $form->addButtonSearch(get_lang('Search'));
 
 $searchAdvanced = '
 <a id="advanced_params" href="javascript://" class = "btn btn-default advanced_options" onclick="display_advanced_search_form();">
-    <span id="img_plus_and_minus">&nbsp;'. Display::returnFontAwesomeIcon('arrow-right') . ' '.get_lang('AdvancedSearch').'
+    <span id="img_plus_and_minus">&nbsp;
+    '. Display::returnFontAwesomeIcon('arrow-right') . ' '.get_lang('AdvancedSearch').'
     </span>
 </a>';
 $actionsLeft = '';
@@ -822,7 +830,7 @@ if (isset($_GET['keyword'])) {
 $parameters['sec_token'] = Security::get_token();
 
 $_admins_list = array_keys(UserManager::get_all_administrators());
-
+Session::write('admin_list', $_admins_list);
 // Display Advanced search form.
 $form = new FormValidator('advanced_search', 'get', '', '', array(), FormValidator::LAYOUT_HORIZONTAL);
 

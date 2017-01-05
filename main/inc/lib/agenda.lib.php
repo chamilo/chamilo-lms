@@ -27,14 +27,13 @@ class Agenda
      */
     public function __construct($senderId = 0, $courseId = 0, $sessionId = 0)
     {
-        //Table definitions
+        // Table definitions
         $this->tbl_global_agenda = Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
         $this->tbl_personal_agenda = Database::get_main_table(TABLE_PERSONAL_AGENDA);
         $this->tbl_course_agenda = Database::get_course_table(TABLE_AGENDA);
         $this->table_repeat = Database::get_course_table(TABLE_AGENDA_REPEAT);
 
-        //Setting the course object if we are in a course
-        unset($this->course);
+        // Setting the course object if we are in a course
         $courseInfo = api_get_course_info_by_id($courseId);
         if (!empty($courseInfo)) {
             $this->course = $courseInfo;
@@ -841,6 +840,9 @@ class Agenda
                             $counter++;
                         }
                     }
+                    return true;
+                } else {
+                    return false;
                 }
                 break;
             case 'admin':
@@ -1107,18 +1109,20 @@ class Agenda
                 break;
         }
 
-        if (!empty($this->events)) {
-            switch ($format) {
-                case 'json':
-                    return json_encode($this->events);
-                    break;
-                case 'array':
-                    return $this->events;
-                    break;
-            }
+        switch ($format) {
+            case 'json':
+                if (empty($this->events)) {
+                    return '';
+                }
+                return json_encode($this->events);
+                break;
+            case 'array':
+                if (empty($this->events)) {
+                    return [];
+                }
+                return $this->events;
+                break;
         }
-
-        return '';
     }
 
     /**
@@ -1846,7 +1850,7 @@ class Agenda
     private function formatEventDate($utcTime)
     {
         $utcTimeZone = new DateTimeZone('UTC');
-        $platformTimeZone = new DateTimeZone(_api_get_timezone());
+        $platformTimeZone = new DateTimeZone(api_get_timezone());
 
         $eventDate = new DateTime($utcTime, $utcTimeZone);
         $eventDate->setTimezone($platformTimeZone);
@@ -2066,7 +2070,7 @@ class Agenda
             $form->addElement('hidden', 'selected_form[0]', "GROUP:'.$groupId.'");
             $form->addElement('hidden', 'to', 'true');
         } else {
-            $sendTo = isset($params['send_to']) ? $params['send_to'] : null;
+            $sendTo = isset($params['send_to']) ? $params['send_to'] : ['everyone' => true];
             if ($this->type == 'course') {
                 $this->showToForm($form, $sendTo, array(), false, true);
             }
@@ -2134,9 +2138,13 @@ class Agenda
                     </span>'
             );
 
-            $form->addLabel('',
-                '<span id="link-more-attach"><a href="javascript://" onclick="return add_image_form()">'.get_lang('AddOneMoreFile').'</a></span>&nbsp;('.sprintf(get_lang('MaximunFileSizeX'),format_file_size(api_get_setting('message_max_upload_filesize'))).')');
-
+            $form->addLabel(
+                '',
+                '<span id="link-more-attach">
+                    <a href="javascript://" onclick="return add_image_form()">'.
+                        get_lang('AddOneMoreFile').'</a>
+                 </span>&nbsp;('.sprintf(get_lang('MaximunFileSizeX'),format_file_size(api_get_setting('message_max_upload_filesize'))).')'
+            );
 
             if (isset($params['attachment']) && !empty($params['attachment'])) {
                 $attachmentList = $params['attachment'];
@@ -2209,6 +2217,7 @@ class Agenda
             null,
             $order
         );
+
         $groupList = CourseManager::get_group_list_of_course(
             api_get_course_id(),
             $this->sessionId
@@ -2567,22 +2576,22 @@ class Agenda
         $groupInfo = GroupManager::get_group_properties(api_get_group_id());
         $groupIid = isset($groupInfo['iid']) ? $groupInfo['iid'] : 0;
 
-        $actionsLeft = '';
-        $actionsLeft .= "<a href='".api_get_path(WEB_CODE_PATH)."calendar/agenda_js.php?type={$this->type}'>".
-            Display::return_icon('calendar.png', get_lang('Calendar'), '', ICON_SIZE_MEDIUM)."</a>";
-
         $courseCondition = '';
         if (!empty($courseInfo)) {
             $courseCondition = api_get_cidreq();
         }
 
+        $actionsLeft = '';
+        $actionsLeft .= "<a href='".api_get_path(WEB_CODE_PATH)."calendar/agenda_js.php?type={$this->type}&".$courseCondition."'>".
+            Display::return_icon('calendar.png', get_lang('Calendar'), '', ICON_SIZE_MEDIUM)."</a>";
+
         $actionsLeft .= "<a href='".api_get_path(WEB_CODE_PATH)."calendar/agenda_list.php?type={$this->type}&".$courseCondition."'>".
             Display::return_icon('week.png', get_lang('AgendaList'), '', ICON_SIZE_MEDIUM)."</a>";
 
         $form = '';
-
         if (api_is_allowed_to_edit(false, true) ||
-            (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()) && api_is_allowed_to_session_edit(false, true) ||
+            (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()) &&
+            api_is_allowed_to_session_edit(false, true) ||
             (GroupManager::user_has_access(api_get_user_id(), $groupIid, GroupManager::GROUP_TOOL_CALENDAR) &&
             GroupManager::is_tutor_of_group(api_get_user_id(), $groupIid))
         ) {
@@ -2713,7 +2722,7 @@ class Agenda
         );
         $sentTo = array('everyone' => true);
         $calendar = Sabre\VObject\Reader::read($data);
-        $currentTimeZone = _api_get_timezone();
+        $currentTimeZone = api_get_timezone();
         if (!empty($calendar->VEVENT)) {
             foreach ($calendar->VEVENT as $event) {
                 $start = $event->DTSTART->getDateTime();
@@ -2855,8 +2864,8 @@ class Agenda
             $TABLEAGENDA = Database :: get_course_table(TABLE_AGENDA);
             $TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
 
-            $group_memberships = GroupManager :: get_group_ids($array_course_info["real_id"], $user_id);
-            $course_user_status = CourseManager::get_user_in_course_status($user_id, $array_course_info["code"]);
+            $group_memberships = GroupManager::get_group_ids($array_course_info['real_id'], $user_id);
+            $course_user_status = CourseManager::getUserInCourseStatus($user_id, $array_course_info['real_id']);
             // if the user is administrator of that course we show all the agenda items
             if ($course_user_status == '1') {
                 //echo "course admin";

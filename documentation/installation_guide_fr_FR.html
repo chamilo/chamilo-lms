@@ -5,8 +5,6 @@
         <link rel="stylesheet" href="../web/assets/bootstrap/dist/css/bootstrap.css" type="text/css" media="screen,projection" />
         <link rel="stylesheet" href="default.css" type="text/css" media="screen,projection" />
         <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
-        <link href="js/prettify.css" type="text/css" rel="stylesheet" />
-        <script src="js/prettify.js" type="text/javascript"></script>
 
     </head>
     <body>
@@ -137,6 +135,34 @@
                 Les versions de Chamilo antérieures à la 1.9.0 nécessitaient de choisir entre une installation sur plusieurs bases
                 et une installation obsolète sur une seule base. Ca a été clarifié et simplifié par l'usage d'une seule base de données.
             </span><br />
+
+            <h3><span style="font-weight: bold;">Redirections d'Apache</span></h3>
+            <p>
+                Depuis sa version 1.10, Chamilo exige que le serveur web puisse gérer les redirections. Il s'agit d'un pré-requis très commun de nos jours pour les applications web (autant CMS que LMS, ERP, etc) qui permet, entre autres, l'utilisation intelligente et user-friendly des URLs.<br />
+                Si vous utilisez un autre serveur web qu'Apache, dirigez-vous à la section "Configuration de la réécriture" en fin de ce document.<br />
+                Si vous utilisez Apache, la configuration des redirections se fait en deux étapes simples:
+            <ul>
+                <li>Activer le module "rewrite" d'Apache (en ligne de commande, faites simplement un "<i>sudo a2enmod rewrite</i>")</li>
+                <li>Configurer le VirtualHost d'Apache pour qu'il inclue le bloc suivant, ce qui permettra l'interprétation des fichiers .htaccess</li>
+            </ul>
+            Pour Apache <=2.2:
+            <pre>
+    &lt;Directory /&gt;
+        AllowOverride All
+        Order allow,deny
+        allow from all
+    &lt;/Directory&gt;
+    </pre>
+            et pour Apache >=2.4:
+            <pre>
+    &lt;Directory /&gt;
+        AllowOverride All
+        Require all granted
+    &lt;/Directory&gt;
+    </pre>
+            <br />
+            Une fois configurée cette partie (qui est peut-être déjà mise en place par votre fournisseur d'hébergement), il suffit de redémarrer le serveur web pour activer la modification.
+            </p>
 
             <hr style="width: 100%; height: 2px;" />
             <h2><a name="2._Installation_of_Chamilo_LMS"></a><span style="font-weight: bold;">2. Installation de Chamilo LMS</span></h2>
@@ -328,7 +354,7 @@
             sauvegarde de votre installation (répertoires et bases de données).
             Si vous ne savez pas comment faire, consultez votre fournisseur d'hébergement
             ou un administrateur système qualifié avant de continuer l'installation.<br /><br />
-            <em>Chamilo LMS 1.10 est livré avec une nouvelle structure de bases de données
+            <em>Chamilo LMS 1.10 (et donc 1.11) est livré avec une nouvelle structure de bases de données
                 en comparaison avec 1.8. Bien que le script de migration la prenne
                 complètement en charge, il pourrait générer une surcharge sur votre serveur
                 durant la mise à jour, et il changera la base de données de façon assez
@@ -340,7 +366,7 @@
                 votre système avant la mise à jour.</em>
             <br />
             <br />
-            Notez également que Chamilo LMS 1.10 agrège les fichiers du dossier
+            Notez également que Chamilo LMS 1.10 (et donc 1.11) agrège les fichiers du dossier
             main/lang en un fichier unique par langue. Si vous avez modifiez les fichiers de langue directement (plutôt que
             d'utiliser la méthode recommandée des sous-langages), vous devriez faire une copie
             des traductions modifiées avant la mise à jour. Les sous-langages nécessitent également
@@ -354,15 +380,15 @@
                 références ci-dessous).</div>
             <div class="text-muted">
                 NOTE: Cette version de Chamilo peut seulement être utilisée pour mettre à jour des versions antérieures de Chamilo ou de Dok€os.
-                Par exemple vous ne pouvez pas utiliser les scripts de mise à jour normaux de Chamilo 1.10 pour effectuer une mise à jour depuis Dok€os 2.0 (dont la sortie est ultérieure à celle de la création de Chamilo).
+                Par exemple vous ne pouvez pas utiliser les scripts de mise à jour normaux de Chamilo 1.11 pour effectuer une mise à jour depuis Dok€os 2.0 (dont la sortie est ultérieure à celle de la création de Chamilo).
                 Si vous avez besoin de   ce genre de choses, nous vous conseillons de contacter <a href="https://chamilo.org/providers">les fournisseurs officiels de l'Association Chamilo</a>)
             </div>
 
             <p></p>
 
-            <h3>3.1 Mettre à jour depuis Chamilo 1.10.x (upgrade mineure)</h3>
+            <h3>3.1 Mettre à jour depuis Chamilo 1.11.x (upgrade mineure)</h3>
             Comme cette version est une version mineure de Chamilo par rapport à une
-            quelconque version 1.10.*, les seuls pas à suivre sont:
+            quelconque version 1.11.*, les seuls pas à suivre sont:
             <ul>
                 <li> 
                     vérifier que vous n'avez pas créé une version modifiée d'une feuille de
@@ -370,27 +396,27 @@
                         écrasée par la mise à jour. Gardez-en une copie que vous renommerez au
                         moment de la replacer dans le répertoire main/css/)</span>
                 </li>
-                <li> téléchargez le paquet d'installation de Chamilo 1.10 depuis la
+                <li> téléchargez le paquet d'installation de Chamilo 1.11 depuis la
                     <a href="http://www.chamilo.org/download">page de téléchargement de Chamilo</a></li>
-                <li> dézippez les nouveaux fichiers de Chamilo 1.10 par dessus les fichiers de
+                <li> dézippez les nouveaux fichiers de Chamilo 1.11 par dessus les fichiers de
                     l'ancienne version (ou dézippez les fichiers dans un répertoire et copiez-les ensuite
                     là où se trouve votre version actuelle de Chamilo)</li>
-                <li> éditez le fichier main/inc/conf/configuration.php: à la fin du fichier,
-                    localisez le numéro de version antérieur (p.ex. '1.10.4') et remplacez-le
-                    par le numéro de la nouvelle version (p.ex. '1.10.8')</li>
+                <li> éditez le fichier app/config/configuration.php: à la fin du fichier,
+                    localisez le numéro de version antérieur (p.ex. '1.11.0') et remplacez-le
+                    par le numéro de la nouvelle version (p.ex. '1.11.2')</li>
                 <li> Videz votre dossier archive/ : faites une copie temporaire de index.html, supprimez touss les contenus *dans* ce dossier (ne supprimer pas le dossier, juste ses contenus). Vous pouvez également vider ce dossier depuis le lien "Vidange du répertoire archive" du bloc "Système" de l'interface d'administration.</li>
                 <li> fini! Il n'y a pas d'autre procédure requise</li>
             </ul>
 
             <br />
 
-            <h3>3.2 Mettre à jour depuis Chamilo 1.9.x</h3>
+            <h3>3.2 Mettre à jour depuis Chamilo 1.9.x ou 1.10.x</h3>
             <ul>
                 <li> assurez-vous qu'aucune table ne persiste d'une version antérieure de Chamilo. Ces tables peuvent en effet causer une erreur durant la mise à jour. En particulier, les tables des versions 1.8.* et antérieures pouvaient se répéter une fois par cours, résultant en un grand nombre de tables partageant le même préfixe. Seules les tables sans préfixe ou avec un préfixe "c_" sont légitimes dans les versions 1.9 et supérieures. Assurez-vous qu'aucune de ces anciennes tables ne persiste. Prenez une copie de sauvegarde de votre base de données (au cas où) puis supprimez-les (drop table ...).</li>
                 <li> vérifiez que vous n'avez pas laissé de feuille de style personnalisée ou d'image <span class="text-muted">(le cas échant, faites-en une sauvegarde*)</span></li>
-                <li> télécharger le paquet Chamilo 1.10 depuis la <a href="http://www.chamilo.org/download">page de téléchargement de Chamilo</a></li>
-                <li> décompressez les nouveaux fichiers de Chamilo 1.10 sur les fichiers de votre ancienne installation (ou décompressez les dans un nouveau dossier et copier les fichiers extraits sur les anciens fichiers).</li>
-                <li> vérifiez que le fichier .htaccess de la version 1.10 a bien été copié</li>
+                <li> télécharger le paquet Chamilo 1.11 depuis la <a href="http://www.chamilo.org/download">page de téléchargement de Chamilo</a></li>
+                <li> décompressez les nouveaux fichiers de Chamilo 1.11 sur les fichiers de votre ancienne installation (ou décompressez les dans un nouveau dossier et copier les fichiers extraits sur les anciens fichiers).</li>
+                <li> vérifiez que le fichier .htaccess de la version 1.11 a bien été copié</li>
                 <li> vérifiez que "AllowOverride All" est présent dans votre configuration Apache, car l'interprétation du fichier .htaccess est capitale pour le fonctionnement de Chamilo</li>
                 <li> accéder à l'adresse de votre portail URL + main/install </li>
                 <li> Choisissez votre langue et cliquez sur <span style="font-style: italic;">Mettre à jour depuis la version 1.8.x / 1.9.x</span></li>
@@ -422,7 +448,7 @@
 
             <h3>3.3 Mettre à jour depuis Chamilo 1.8.x</h3>
             Pour mettre à jour depuis une version antérieure à la 1.9.0, vous devrez commencer par la mettre à jour vers la version 1.9.10.x,
-            et seulement alors mettre à jours vers la 1.10.x.
+            et seulement alors mettre à jours vers la 1.11.x.
             Vous pouvez trouver une version téléchargeable de 1.9.10.x ici: <a href="https://github.com/chamilo/chamilo-lms/releases">https://github.com/chamilo/chamilo-lms/releases</a>
             <p></p>
             <h3>3.4 Dans les deux derniers cas</h3>
@@ -694,7 +720,7 @@ If you have issues with files taking a long time to download, make sure you reco
 
 <h2><a name="16._Rewrite"></a>Réécriture</h2>
 <p>
-    Chamilo LMS 1.10 est la première version nécessitant que le serveur web autorise les redirections d'url.<br />
+    Chamilo LMS 1.10 est la première version nécessitant que le serveur web autorise les redirections d'url (et donc 1.11 également).<br />
     Pour Apache, il s'agit d'active le module rewrite et d'autoriser l'utilisation des fichiers .htaccess ou d'ajouter une section spécifique dans le Virtual Host.<br />
     Pour Nginx, il s'agit de définir les règles de redirections dans le Virtual Host.<br /><br />
     Pour être certain que c'est à la portée de tous, nous recommandons le fichier de configuration ci-dessous pour vous aider dans les deux cas.
@@ -717,7 +743,7 @@ ou, si vous travaillez avec Apache 2.4, la syntaxe est légèrement différente 
 </p>
 <h3>Apache RewriteRules</h3>
 <pre>
-          &lt;LocationMatch "/.git*"&gt;
+  &lt;LocationMatch "/.git*"&gt;
 	order deny,allow
 	deny from all
   &lt;/LocationMatch&gt;
@@ -734,15 +760,20 @@ ou, si vous travaillez avec Apache 2.4, la syntaxe est légèrement différente 
 	RewriteRule ^certificates/$ certificates/index.php?id=%1 [L]
 	RewriteRule ^courses/([^/]+)/$ main/course_home/course_home.php?cDir=$1 [QSA,L]
 	RewriteRule ^courses/([^/]+)/index.php$ main/course_home/course_home.php?cDir=$1 [QSA,L]
+	RewriteRule ^courses/([^/]+)/document/certificates/(.*)$ app/courses/$1/document/certificates/$2 [QSA,L]
 	RewriteRule ^courses/([^/]+)/document/(.*)$ main/document/download.php?doc_url=/$2&cDir=$1 [QSA,L]
+	RewriteRule ^courses/([^/]+)/scorm/(.*)$ main/document/download_scorm.php?doc_url=/$2&cDir=$1 [QSA,L]
 	RewriteRule ^courses/([^/]+)/work/(.*)$ main/work/download.php?file=work/$2&cDir=$1 [QSA,L]
-	RewriteRule ^courses/([^/]+)/upload/(.*)$ main/courses/$1/upload/$2 [QSA,L]
-	RewriteRule ^courses/([^/]+)/course-pic85x85.png$ main/courses/$1/course-pic85x85.png [QSA,L]
+	RewriteRule ^courses/([^/]+)/upload/(.*)$ app/courses/$1/upload/$2 [QSA,L]
+	RewriteRule ^courses/([^/]+)/course-pic85x85.png$ app/courses/$1/course-pic85x85.png [QSA,L]
 	RewriteRule ^courses/([^/]+)/course-pic.png$ app/courses/$1/course-pic.png [QSA,L]
+	RewriteRule ^main/upload/users/(.*)/(.*)/my_files/(.*)$ app/upload/users/$1/$2/my_files/$3 [QSA,L]
 	RewriteRule ^session/(\d{1,})/about/?$ main/session/about.php?session_id=$1 [L]
-    RewriteRule "^badge/(\d{1,})/user/(\d{1,})$" main/badge/issued.php?skill=$1&user=$2 [L]
+    RewriteRule ^badge/(\d{1,})/user/(\d{1,}) main/badge/issued.php?skill=$1&user=$2 [L]
+	RewriteRule ^main/admin/$ main/admin/index.php [QSA,L]
     RewriteRule ^main/exercice/(.+)$ main/exercise/$1 [QSA,L]
     RewriteRule ^main/newscorm/(.*)$ main/lp/$1 [QSA,L]
+	RewriteRule ^courses/(.*)$ app/courses/$1 [QSA,L]
   &lt;/Directory&gt;
 </pre>
 <h3>Nginx</h3>
@@ -769,7 +800,8 @@ Ce sont uniquement les redirections à placer dans un bloc server{}, comme les a
   location / {
     rewrite ^/courses/([^/]+)/$ /main/course_home/course_home.php?cDir=$1 last;
     rewrite ^/courses/([^/]+)/index.php$ /main/course_home/course_home.php?cDir=$1 last;
-    rewrite ^/badge/(\d+)/user/(\d+)$ /main/badge/issued.php?skill=$1&user=$2 last;
+    rewrite ^/skill/(\d+)/user/(\d+)$ /main/badge/issued_all.php?skill=$1&user=$2 last;
+    rewrite ^/badge/(\d+)/user/(\d+)$ /main/badge/issued_all.php?skill=$1&user=$2 last;
     try_files $uri @rewrite;
   }
 
@@ -785,6 +817,7 @@ Ce sont uniquement les redirections à placer dans un bloc server{}, comme les a
     rewrite ^/courses/([^/]+)/$ /main/course_home/course_home.php?cDir=$1 last;
     rewrite ^/courses/([^/]+)/index.php$ /main/course_home/course_home.php?cDir=$1 last;
     rewrite ^/session/([^/]+)/about/?$ /main/session/about.php?session_id=$1 last;
+    rewrite ^/badge/([^/]+) /main/badge/issued.php?issue=$1 last;
     rewrite ^/main/exercice/(.+)$ /main/exercise/$1 last;
     rewrite ^/main/newscorm/(.+)$ /main/lp/$1 last;
 

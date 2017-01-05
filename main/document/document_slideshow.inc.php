@@ -25,8 +25,6 @@
  *	too much things in one file , I decided to put the code for document.php here and to include this
  *	file into document.php
  */
-$accepted_extensions = array('.jpg', '.jpeg', '.gif', '.png', '.bmp','.svg');
-
 // Resetting the images of the slideshow = destroying the slideshow
 if (isset($_GET['action']) && $_GET['action'] == 'exit_slideshow') {
 	$_SESSION['image_files_only'] = null;
@@ -66,14 +64,14 @@ if ($tablename_column == 0) {
 } else {
 	$tablename_column = intval($tablename_column) - 1;
 }
-$tablename_direction = isset($_GET['tablename_direction']) ? Security::remove_XSS($_GET['tablename_direction']) : 'ASC';
 
 $image_files_only = sort_files($array_to_search);
 $_SESSION['image_files_only'] = $image_files_only;
 
 function sort_files($table)
 {
-    global $tablename_direction, $accepted_extensions;
+    $tablename_direction = isset($_GET['tablename_direction']) ? Security::remove_XSS($_GET['tablename_direction']) : 'ASC';
+    $accepted_extensions = array('.jpg', '.jpeg', '.gif', '.png', '.bmp','.svg');
     $temp = array();
 
     foreach ($table as & $file_array) {

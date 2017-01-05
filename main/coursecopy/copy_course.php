@@ -10,7 +10,7 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
  */
 
 // Setting the global file that gets the general configuration, the databases, the languages, ...
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool  = TOOL_COURSE_MAINTENANCE;
 api_protect_course_script(true);
 
@@ -130,7 +130,6 @@ if (Security::check_token('post') && (
         $token = Security::get_token();
         $form->addElement('hidden', 'sec_token');
         $form->setConstants(array('sec_token' => $token));
-
         $form->display();
     }
 }

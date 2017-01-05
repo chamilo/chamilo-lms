@@ -5,7 +5,7 @@
  * Responses to AJAX calls
  */
 
-require_once '../global.inc.php';
+require_once __DIR__.'/../global.inc.php';
 
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
 $isAllowedToEdit = api_is_allowed_to_edit();

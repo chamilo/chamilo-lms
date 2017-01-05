@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * This script contains the code to edit and send an e-mail to one of
  * the platform's users.
@@ -10,9 +12,7 @@
  * @author Julio Montoya <gugli100@gmail.com> Updating form with formvalidator
  */
 
-use ChamiloSession as Session;
-
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 if (empty($_user['user_id'])) {
     api_not_allowed(true);
@@ -31,12 +31,10 @@ $form->addElement('text', 'email_address', get_lang('EmailDestination'));
 $form->addElement('text', 'email_title', get_lang('EmailTitle'));
 $form->freeze('email_address');
 $form->addElement('textarea', 'email_text', get_lang('EmailText'), array('rows' => '6'));
-
 $form->addRule('email_address', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('email_title', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('email_text', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('email_address', get_lang('EmailWrong'), 'email');
-
 $form->addButtonSend(get_lang('SendMail'));
 
 switch ($action) {

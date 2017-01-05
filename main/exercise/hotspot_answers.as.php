@@ -10,7 +10,7 @@ use Chamilo\CoreBundle\Entity\TrackEHotspot;
  * @package chamilo.exercise
  * @author Toon Keppens, Julio Montoya adding hotspot "medical" support
  */
-include '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 // Set vars
 $questionId = intval($_GET['modifyAnswers']);

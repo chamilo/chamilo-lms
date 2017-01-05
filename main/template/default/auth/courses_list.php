@@ -17,7 +17,8 @@ $courses_without_category = isset($courses_in_category[0]) ? $courses_in_categor
 <!-- Actions: The menu with the different options in cathe course management -->
 <div id="actions" class="actions">
     <?php if ($action != 'createcoursecategory') { ?>
-	<a href="<?php echo api_get_self(); ?>?action=createcoursecategory"><?php echo Display::return_icon('new_folder.png', get_lang('CreateCourseCategory'),'','32'); ?></a>
+	<a href="<?php echo api_get_self(); ?>?action=createcoursecategory">
+        <?php echo Display::return_icon('new_folder.png', get_lang('CreateCourseCategory'),'','32'); ?></a>
     <?php } ?>
 </div>
 
@@ -183,11 +184,9 @@ echo '<table class="data_table">';
 if (!empty($courses_without_category)) {
     $number_of_courses = count($courses_without_category);
     $key = 0;
-
     foreach ($courses_without_category as $course) {
         echo '<tr>';
         ?>
-
         <td>
             <a name="course<?php echo $course['code']; ?>"></a>
             <strong><?php echo $course['title']; ?></strong><br />
@@ -198,7 +197,6 @@ if (!empty($courses_without_category)) {
             ?>
         </td>
         <td valign="top">
-
             <!-- the edit icon OR the edit dropdown list -->
             <?php if (isset($_GET['edit']) && $course['code'] == $_GET['edit']) {
                 $edit_course = Security::remove_XSS($_GET['edit']);

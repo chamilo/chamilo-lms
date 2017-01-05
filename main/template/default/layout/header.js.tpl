@@ -19,7 +19,8 @@
         'wikilink',
         'wordcount',
         'youtube',
-        'flash'
+        'flash',
+        'inserthtml'
     ];
 
     plugins.forEach(function(plugin) {

@@ -62,8 +62,8 @@ class Career extends Model
         $promotion = new Promotion();
         $promotion_list = $promotion->get_all_promotions_by_career_id($career_id);
         if (!empty($promotion_list)) {
-            foreach($promotion_list  as $item) {
-                $params['id']     = $item['id'];
+            foreach ($promotion_list  as $item) {
+                $params['id'] = $item['id'];
                 $params['status'] = $status;
                 $promotion->update($params);
                 $promotion->update_all_sessions_status_by_promotion_id($params['id'], $status);

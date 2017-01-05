@@ -9,11 +9,11 @@ use Chamilo\CoreBundle\Entity\ExtraFieldValues;
  *  @package    chamilo.auth
  */
 
-// quick hack to adapt the registration form result to the selected registration language
+//quick hack to adapt the registration form result to the selected registration language
 if (!empty($_POST['language'])) {
     $_GET['language'] = $_POST['language'];
 }
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 $hideHeaders = isset($_GET['hide_headers']);
 
 $allowedFields = [
@@ -758,7 +758,7 @@ if ($form->validate()) {
         $values['username'] = api_substr($values['username'], 0, USERNAME_MAX_LENGTH);
     }
 
-    if (api_get_setting('allow_registration_as_teacher') == 'false') {
+    if (api_get_setting('allow_registration_as_teacher') === 'false') {
         $values['status'] = STUDENT;
     }
 
@@ -771,7 +771,7 @@ if ($form->validate()) {
     }
 
     if ($user_already_registered_show_terms &&
-        api_get_setting('allow_terms_conditions') == 'true'
+        api_get_setting('allow_terms_conditions') === 'true'
     ) {
         $user_id = $_SESSION['term_and_condition']['user_id'];
         $is_admin = UserManager::is_admin($user_id);
@@ -918,7 +918,6 @@ if ($form->validate()) {
 
             /* If the account has to be approved then we set the account to inactive,
             sent a mail to the platform admin and exit the page.*/
-
             if (api_get_setting('allow_registration') === 'approval') {
                 $TABLE_USER = Database::get_main_table(TABLE_MAIN_USER);
                 // 1. set account inactive
@@ -998,7 +997,11 @@ if ($form->validate()) {
                             api_get_local_time($time)
                         );
 
-                        MessageManager::send_message_simple($bossId, $subjectEmail, $contentEmail);
+                        MessageManager::send_message_simple(
+                            $bossId,
+                            $subjectEmail,
+                            $contentEmail
+                        );
                     }
                 }
             }
@@ -1017,7 +1020,7 @@ if ($form->validate()) {
     $userInfo = api_get_user_info($user_id);
     $_user['status'] = $userInfo['status'];
     $is_allowedCreateCourse = isset($values['status']) && $values['status'] == 1;
-    $usersCanCreateCourse = api_get_setting('allow_users_to_create_courses') === 'true';
+    $usersCanCreateCourse = api_is_allowed_to_create_course();
 
     Session::write('_user', $_user);
     Session::write('is_allowedCreateCourse', $is_allowedCreateCourse);

@@ -10,7 +10,7 @@
  */
 
 $cidReset = true;
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 if (api_get_setting('allow_social_tool') != 'true') {
     $url = api_get_path(WEB_PATH).'whoisonline.php?id='.intval($_GET['u']);
@@ -678,7 +678,13 @@ if ($show_full_profile) {
 
 $tpl = new Template(get_lang('Social'));
 // Block Avatar Social
-SocialManager::setSocialUserBlock($tpl, $user_id, 'shared_profile', 0, $show_full_profile);
+SocialManager::setSocialUserBlock(
+    $tpl,
+    api_get_user_id(),
+    'shared_profile',
+    0,
+    $show_full_profile
+);
 
 $tpl->assign('social_friend_block', $friend_html);
 $tpl->assign('social_menu_block', $social_menu_block);

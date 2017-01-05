@@ -11,7 +11,14 @@ use ChamiloSession as Session;
 class Chat extends Model
 {
     public $table;
-    public $columns = array('id', 'from_user', 'to_user', 'message', 'sent', 'recd');
+    public $columns = array(
+        'id',
+        'from_user',
+        'to_user',
+        'message',
+        'sent',
+        'recd',
+    );
     public $window_list = array();
 
     /**
@@ -93,7 +100,6 @@ class Chat extends Model
         }
 
         $items = array();
-
         foreach ($chat_list as $from_user_id => $rows) {
             $rows = $rows['items'];
             $user_info = api_get_user_info($from_user_id, true);
@@ -191,14 +197,14 @@ class Chat extends Model
         $to_user_id,
         $message,
         $printResult = true,
-        $sanitize =  true
+        $sanitize = true
     ) {
         $user_friend_relation = SocialManager::get_relation_between_contacts(
             $from_user_id,
             $to_user_id
         );
-        if ($user_friend_relation == USER_RELATION_TYPE_FRIEND) {
 
+        if ($user_friend_relation == USER_RELATION_TYPE_FRIEND) {
             $user_info = api_get_user_info($to_user_id, true);
             $this->save_window($to_user_id);
 
@@ -283,7 +289,7 @@ class Chat extends Model
      */
     public static function setDisableChat($status = true)
     {
-        $_SESSION['disable_chat'] = $status;
+        Session::write('disable_chat', $status);
     }
 
     /**
@@ -292,10 +298,10 @@ class Chat extends Model
      */
     public static function disableChat()
     {
-        if (!empty($_SESSION['disable_chat'])){
-            $status = $_SESSION['disable_chat'];
-            if ($status == true){
-                $_SESSION['disable_chat'] = null;
+        $status = Session::read('disable_chat');
+        if (!empty($status)) {
+            if ($status == true) {
+                Session::write('disable_chat', null);
                 return true;
             }
         }
@@ -303,10 +309,14 @@ class Chat extends Model
          return false;
     }
 
+    /**
+     * @return bool
+     */
     public function is_chat_blocked_by_exercises()
     {
-        if (isset($_SESSION['current_exercises'])) {
-            foreach ($_SESSION['current_exercises'] as $attempt_status) {
+        $currentExercises = Session::read('current_exercises');
+        if (!empty($currentExercises)) {
+            foreach ($currentExercises as $attempt_status) {
                 if ($attempt_status == true) {
                     return true;
                 }

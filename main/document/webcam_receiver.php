@@ -5,7 +5,7 @@
 /* Make sure your directory has permission to write files as your web server user! */
 
 //Changes on directory because move the proper script to the new lib upgrade directory
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 ////Add security from Chamilo
 api_protect_course_script();
 api_block_anonymous_users();

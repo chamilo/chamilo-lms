@@ -14,7 +14,7 @@ use ChamiloSession as Session;
  *
  */
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 $debug = false;
 if (empty($origin)) {
     $origin = isset($_REQUEST['origin']) ? $_REQUEST['origin'] : null;
@@ -580,7 +580,8 @@ foreach ($questionList as $questionId) {
                 }
 
                 //showing the score
-                $queryfree = "select marks from " . $TBL_TRACK_ATTEMPT . " WHERE exe_id = " . intval($id) . " and question_id= " . intval($questionId) . "";
+                $queryfree = "SELECT marks from " . $TBL_TRACK_ATTEMPT . " 
+                              WHERE exe_id = " . intval($id) . " AND question_id= " . intval($questionId) . "";
                 $resfree = Database::query($queryfree);
                 $questionScore = Database::result($resfree, 0, "marks");
                 $totalScore += $questionScore;

@@ -21,7 +21,28 @@ $isGlobal = isset($_GET['global']) ? true : false;
 $bbb = new bbb('', '', $isGlobal);
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
-$meetings = $bbb->getMeetings(0, 0, 0, true);
+$currentMonth = date('n');
+$dateStart = isset($_REQUEST['search_meeting_start']) ? $_REQUEST['search_meeting_start'] : date('Y-m-d', mktime(1, 1, 1, $currentMonth, 1, date('Y')));
+$dateEnd = isset($_REQUEST['search_meeting_end']) ? $_REQUEST['search_meeting_end'] : date('Y-m-d', mktime(1, 1, 1, ++$currentMonth, 0, date('Y')));
+
+$dateRange = [
+    'search_meeting_start' => $dateStart,
+    'search_meeting_end' => $dateEnd
+];
+
+$form = new FormValidator(get_lang('Search'));
+$form->addDatePicker('search_meeting_start', get_lang('DateStart'));
+$form->addDatePicker('search_meeting_end', get_lang('DateEnd'));
+$form->addButtonSearch(get_lang('Search'));
+$form->setDefaults($dateRange);
+
+$actions = [];
+
+if ($form->validate()) {
+    $dateRange = $form->getSubmitValues();
+}
+
+$meetings = $bbb->getMeetings(0, 0, 0, true, $dateRange);
 
 foreach ($meetings as &$meeting) {
     $participants = $bbb->findMeetingParticipants($meeting['id']);
@@ -82,8 +103,8 @@ $htmlHeadXtra[] = api_get_js_simple(
 $htmlHeadXtra[] = "<script>var _p = {web_plugin: '" . api_get_path(WEB_PLUGIN_PATH). "'}</script>";
 
 $tpl = new Template($tool_name);
-
 $tpl->assign('meetings', $meetings);
+$tpl->assign('search_form', $form->returnForm());
 
 $content = $tpl->fetch('bbb/admin.tpl');
 $actions = [];
@@ -91,7 +112,11 @@ $actions = [];
 if ($meetings) {
     $actions[] = Display::toolbarButton(
         get_lang('ExportInExcel'),
-        api_get_self() . '?action=export',
+        api_get_self() . '?' . http_build_query([
+            'action' => 'export',
+            'search_meeting_start' => $dateStart,
+            'search_meeting_end' => $dateEnd
+        ]),
         'file-excel-o',
         'success'
     );

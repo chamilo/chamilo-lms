@@ -11,7 +11,7 @@ session_cache_limiter('none');
 
 $language_file = 'hotspot';
 
-include_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 header('Content-Type: text/html; charset=UTF-8');
 

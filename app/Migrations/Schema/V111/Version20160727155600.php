@@ -14,26 +14,19 @@ use Chamilo\CoreBundle\Entity\BranchSync;
  */
 class Version20160727155600 extends AbstractMigrationChamilo
 {
-
     /**
      * @param Schema $schema
      */
     public function up(Schema $schema)
     {
-        $em = $this->getEntityManager();
+        $sql = "SELECT COUNT(id) as count FROM branch_sync";
+        $result = $this->connection->executeQuery($sql)->fetch();
+        $count = $result['count'];
 
-        $cont = $em
-            ->createQuery('SELECT COUNT(bs.id) FROM ChamiloCoreBundle:BranchSync AS bs')
-            ->getSingleScalarResult();
-
-        if (!$cont) {
-            $branchSync = new BranchSync();
-            $branchSync
-                ->setBranchName('localhost')
-                ->setAccessUrlId(1);
-
-            $em->persist($branchSync);
-            $em->flush();
+        if (!$count) {
+            $unique = sha1(uniqid());
+            $sql = "INSERT INTO branch_sync (branch_name, unique_id, access_url_id) VALUES ('localhost', '$unique', '1')";
+            $this->addSql($sql);
         }
     }
 

@@ -5,7 +5,7 @@
  */
 $cidReset = true;
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
@@ -350,7 +350,7 @@ if ($form->validate()) {
         CourseManager::updateTeachers($courseInfo, $teachers, true, false);
 
         // Updating session coaches
-        $sessionCoaches = $course['session_coaches'];
+        $sessionCoaches = isset($course['session_coaches']) ? $course['session_coaches'] : [];
         if (!empty($sessionCoaches)) {
             foreach ($sessionCoaches as $sessionId => $coachesToSubscribe) {
                 if (!empty($coachesToSubscribe)) {

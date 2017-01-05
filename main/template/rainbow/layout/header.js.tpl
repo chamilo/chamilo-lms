@@ -18,7 +18,9 @@ var plugins = [
     'video',
     'wikilink',
     'wordcount',
-    'youtube'
+    'youtube',
+    'flash',
+    'inserthtml'
 ];
 
 plugins.forEach(function(plugin) {

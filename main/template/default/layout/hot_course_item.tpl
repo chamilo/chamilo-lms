@@ -13,9 +13,6 @@
                         {% for teacher in item.teachers %}
                             {% set counter = counter + 1 %}
                             {% if counter <= 3 %}
-                                <a href="{{ teacher.url }}" class="ajax" data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
-                                    <img src="{{ teacher.avatar }}" alt="{{ teacher.firstname }} {{ teacher.lastname }}"/>
-                                </a>
                                 <div class="teachers-details">
                                      <h5>
                                         <a href="{{ teacher.url }}" class="ajax" data-title="{{ teacher.firstname }} {{ teacher.lastname }}">

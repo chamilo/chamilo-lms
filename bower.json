@@ -9,7 +9,7 @@
   ],
   "dependencies": {
     "bootstrap": "3.*",
-    "fontawesome": "4.4.*",
+    "fontawesome": "4.7.*",
     "jquery": "2.2.0",
     "jquery-ui": "1.11.*",
     "bootstrap-daterangepicker": "1.3.*",

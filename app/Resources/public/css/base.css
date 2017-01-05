@@ -6424,3 +6424,8 @@ ul#toolnavbox-two li a.btn{
     width: 21.33333px;
     height: 14.22222px;
 }
+
+input.form-control[type="color"] {
+    padding: 2px;
+}
+

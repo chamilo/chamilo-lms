@@ -359,7 +359,11 @@ class Version111 extends AbstractMigrationChamilo
         $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('show_terms_if_profile_completed', 'true', 'Yes'), ('show_terms_if_profile_completed', 'false', 'No')");
         $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('show_link_ticket_notification', 'true', 'Yes'), ('show_link_ticket_notification', 'false', 'No')");
 
-        $this->addSql("ALTER TABLE c_quiz_question_rel_category ADD INDEX idx_qqrc_qid (question_id)");
+        $table = $schema->getTable('c_quiz_question_rel_category');
+        if (!$table->hasIndex('idx_qqrc_qid')) {
+            $this->addSql("ALTER TABLE c_quiz_question_rel_category ADD INDEX idx_qqrc_qid (question_id)");
+        }
+
         $table = $schema->getTable('c_quiz_answer');
         $hasIndex = $table->hasIndex('idx_cqa_q');
         if (!$hasIndex) {

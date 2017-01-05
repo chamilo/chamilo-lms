@@ -6,7 +6,10 @@
         initMap();
     });
 
-    function addMaker(lat, lng, map, bounds, userInfo) {
+    function addMaker(lat, lng, map, bounds, userInfo, index) {
+        if (index > 5) {
+            return;
+        }
 
         var location = new google.maps.LatLng(lat, lng);
 
@@ -19,11 +22,34 @@
             position: location,
             label: userInfo.complete_name
         });
+
+        switch (index) {
+            case '1':
+                marker.setIcon('//maps.google.com/mapfiles/ms/icons/red-dot.png');
+                break;
+            case '2':
+                marker.setIcon('//maps.google.com/mapfiles/ms/icons/green-dot.png');
+                break;
+            case '3':
+                marker.setIcon('//maps.google.com/mapfiles/ms/icons/blue-dot.png');
+                break;
+            case '4':
+                marker.setIcon('//maps.google.com/mapfiles/ms/icons/yellow-dot.png');
+                break;
+            case '5':
+                marker.setIcon('//maps.google.com/mapfiles/ms/icons/purple-dot.png');
+                break;
+        }
+
         var address = "";
 
         geocoder.geocode({ 'latLng': location }, function (results) {
 
-            address = results[1].formatted_address;
+            if (results) {
+                address = results[1].formatted_address;
+            } else {
+                address = '{{ 'Unknown' | get_lang }}';
+            }
 
             var infoWinContent = "<b>" + userInfo.complete_name + "</b> - " + address;
 
@@ -53,17 +79,23 @@
             mapTypeId: google.maps.MapTypeId.ROADMAP
         });
 
-        {% for field in extra_field_values %}
+        {% for extra in extra_field_values %}
 
-            var latLng = '{{ field.value }}';
-            latLng = latLng.split(',');
+            var index = '{{ loop.index }}';
 
-            var lat = latLng[0];
-            var lng = latLng[1];
+            {% for field in extra %}
 
-            {% set userInfo = field.itemId | user_info %}
+                var latLng = '{{ field.value }}';
+                latLng = latLng.split(',');
 
-            addMaker(lat, lng, map, bounds, {{ userInfo|json_encode }});
+                var lat = latLng[0];
+                var lng = latLng[1];
+
+                {% set userInfo = field.itemId | user_info %}
+
+                addMaker(lat, lng, map, bounds, {{ userInfo|json_encode }}, index);
+
+            {% endfor %}
 
         {% endfor %}
 

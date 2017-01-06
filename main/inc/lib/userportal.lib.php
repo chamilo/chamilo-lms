@@ -1012,7 +1012,9 @@ class IndexManager
             $diagnosis .= Display::url(get_lang('DiagnosticForm'), api_get_path(WEB_PATH).'search.php');
         } else {
             if (api_is_student()) {
-                if ($diagnosisComplete === false) {
+                if ($diagnosisComplete === false ||
+                    is_array($diagnosisComplete) && empty($diagnosisComplete['value'])
+                ) {
                     $diagnosis = Display::url(
                         get_lang('DiagnosticForm'),
                         api_get_path(WEB_PATH).'search.php'

@@ -2634,7 +2634,7 @@ class SurveyUtil
                 WHERE
                     c_id = $course_id AND
                     survey_id='".intval($_GET['survey_id'])."'
-                ORDER BY user ASC";
+                ORDER BY answer_id, user ASC";
         $result = Database::query($sql);
         $i = 1;
         while ($row = Database::fetch_array($result)) {

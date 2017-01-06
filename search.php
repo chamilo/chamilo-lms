@@ -136,12 +136,13 @@ $(document).ready(function() {
             contentType: "application/x-www-form-urlencoded",
             type: "GET",
             url: "'.api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?a=search_options_from_tags&type=session&from=extra_domaine&search="+themeDefault+"&options="+domainListToString,
-            success: function(data) {
-            
+            success: function(data) {            
                 var selectToString = "";
+                selectToString += "<option></option>";
                 jQuery.each(JSON.parse(data), function(i, item) {
-                   selectToString += "<optgroup label=\'"+item.text+"\'>";                   
-                   jQuery.each(item.children, function(j, data) {                        
+                    selectToString += "<optgroup label=\'"+item.text+"\'>";
+                    // Add empty value                    
+                    jQuery.each(item.children, function(j, data) {                        
                         if (data.text != "") {                                    
                             selectToString += "<option value=\'"+data.text+"\'> " +data.text+"</option>"
                         }
@@ -150,10 +151,12 @@ $(document).ready(function() {
                 });   
                  
                 for (i = 0; i <= 5; i++) { 
-                    var themeId = "#"+themeDefault+"_"+i;    
+                    var themeId = "#"+themeDefault+"_"+i;                    
+                    var beforeValue = $(themeId).find(":selected").val()
                     $(themeId).find("option").remove().end();                    
                     $(themeId).empty();
-                    $(themeId).html(selectToString);                 
+                    $(themeId).html(selectToString);   
+                    $(themeId).val(beforeValue);             
                     $(themeId).selectpicker("refresh");
                 }
             }

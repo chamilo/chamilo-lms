@@ -248,7 +248,9 @@ if (api_is_student()) {
         'diagnosis_completed'
     );
 
-    if ($diagnosisComplete === false) {
+    if ($diagnosisComplete === false ||
+        is_array($diagnosisComplete) && empty($diagnosisComplete['value'])
+    ) {
         $url = api_get_path(WEB_PATH).'search.php';
         $link = Display::url($url, $url);
         Display::addFlash(

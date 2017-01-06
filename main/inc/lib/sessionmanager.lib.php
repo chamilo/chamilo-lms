@@ -6921,11 +6921,19 @@ class SessionManager
 
     /**
      * @param FormValidator $form
-     *
+     * @param array $sessionInfo Optional
      * @return array
      */
-    public static function setForm(FormValidator & $form, $sessionId = 0)
+    public static function setForm(FormValidator $form, array $sessionInfo = [])
     {
+        $sessionId = 0;
+        $coachInfo = [];
+
+        if (!empty($sessionInfo)) {
+            $sessionId = intval($sessionInfo['id']);
+            $coachInfo = api_get_user_info($sessionInfo['id_coach']);
+        };
+
         $categoriesList = SessionManager::get_all_session_category();
         $userInfo = api_get_user_info();
 
@@ -6960,7 +6968,6 @@ class SessionManager
                 )
             );
         } else {
-
             $sql = "SELECT COUNT(1) FROM $tbl_user WHERE status = 1";
             $rs = Database::query($sql);
             $countUsers = Database::result($rs, 0, 0);
@@ -7012,7 +7019,7 @@ class SessionManager
                     'select_ajax',
                     'coach_username',
                     get_lang('CoachName'),
-                    null,
+                    $coachInfo ? [$coachInfo['id'] => $coachInfo['complete_name_with_username']] : [],
                     [
                         'url' => api_get_path(WEB_AJAX_PATH) . 'session.ajax.php?a=search_general_coach',
                         'width' => '100%',

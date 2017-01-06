@@ -22,7 +22,6 @@ class DatePicker extends HTML_QuickForm_text
 
         parent::__construct($elementName, $elementLabel, $attributes);
         $this->_appendName = true;
-        $this->_type = 'date_picker';
     }
 
     /**
@@ -46,10 +45,11 @@ class DatePicker extends HTML_QuickForm_text
 
         return '
             <div class="input-group">
-                <span class="input-group-addon">
+                <span class="input-group-addon cursor-pointer">
                     <input ' . $this->_getAttrString($this->_attributes) . '>
                 </span>
-                <input class="form-control" type="text" disabled id="' . $id . '_alt" value="' . $value . '">
+                <p class="form-control disabled" id="' . $id . '_alt_text">' . $value . '</p>
+                <input class="form-control" type="hidden" id="' . $id . '_alt" value="' . $value . '">
                 <span class="input-group-btn">
                     <button class="btn btn-default" type="button">
                         <span class="fa fa-times text-danger" aria-hidden="true"></span>
@@ -85,7 +85,9 @@ class DatePicker extends HTML_QuickForm_text
         $js .= "<script>                    
             $(function() {
                 var txtDate = $('#$id'),
-                    inputGroup = txtDate.parents('.input-group');
+                    inputGroup = txtDate.parents('.input-group'),
+                    txtDateAlt = $('#{$id}_alt'),
+                    txtDateAltText = $('#{$id}_alt_text');
                     
                 txtDate
                     .hide()
@@ -101,7 +103,14 @@ class DatePicker extends HTML_QuickForm_text
                         changeMonth: true,
                         changeYear: true,
                         yearRange: 'c-60y:c+5y'
+                    })
+                    .on('change', function (e) {
+                        txtDateAltText.text(txtDateAlt.val());
                     });
+                    
+                txtDateAltText.on('click', function () {
+                    txtDate.datepicker('show');
+                });
 
                 inputGroup
                     .find('button')
@@ -109,6 +118,7 @@ class DatePicker extends HTML_QuickForm_text
                         e.preventDefault();
 
                         $('#$id, #{$id}_alt').val('');
+                        $('#{$id}_alt_text').html('');
                     });
             });
         </script>";

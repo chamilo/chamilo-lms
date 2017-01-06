@@ -17,7 +17,6 @@ class DateTimePicker extends HTML_QuickForm_text
         $attributes['class'] = 'form-control';
         parent::__construct($elementName, $elementLabel, $attributes);
         $this->_appendName = true;
-        $this->_type = 'date_time_picker';
     }
 
     /**
@@ -39,10 +38,11 @@ class DateTimePicker extends HTML_QuickForm_text
 
         return '
             <div class="input-group">
-                <span class="input-group-addon">
+                <span class="input-group-addon cursor-pointer">
                     <input ' . $this->_getAttrString($this->_attributes) . '>
                 </span>
-                <input class="form-control" type="text" disabled id="' . $id . '_alt" value="' . $value . '">
+                <p class="form-control disabled" id="' . $id . '_alt_text">' . $value . '</p>
+                <input class="form-control" type="hidden" id="' . $id . '_alt" value="' . $value . '">
                 <span class="input-group-btn">
                     <button class="btn btn-default" type="button">
                         <span class="fa fa-times text-danger" aria-hidden="true"></span>
@@ -50,13 +50,13 @@ class DateTimePicker extends HTML_QuickForm_text
                     </button>
                 </span>
             </div>
-        ' .  $this->getElementJS();
+        ' . $this->getElementJS();
     }
 
     /**
      * @param string $value
      */
-    function setValue($value)
+    public function setValue($value)
     {
         $value = substr($value, 0, 16);
         $this->updateAttributes(
@@ -78,7 +78,9 @@ class DateTimePicker extends HTML_QuickForm_text
         $js .= "<script>
             $(function() {
                 var txtDateTime = $('#$id'),
-                    inputGroup = txtDateTime.parents('.input-group');
+                    inputGroup = txtDateTime.parents('.input-group'),
+                    txtDateTimeAlt = $('#{$id}_alt'),
+                    txtDateTimeAltText = $('#{$id}_alt_text');
 
                 txtDateTime
                     .hide()
@@ -97,7 +99,14 @@ class DateTimePicker extends HTML_QuickForm_text
                         buttonText: '" . get_lang('SelectDate') . "',
                         changeMonth: true,
                         changeYear: true
+                    })
+                    .on('change', function (e) {
+                        txtDateTimeAltText.text(txtDateTimeAlt.val());
                     });
+                    
+                txtDateTimeAltText.on('click', function () {
+                    txtDateTime.datepicker('show');
+                });
 
                 inputGroup
                     .find('button')
@@ -105,6 +114,7 @@ class DateTimePicker extends HTML_QuickForm_text
                         e.preventDefault();
 
                         $('#$id, #{$id}_alt').val('');
+                        $('#{$id}_alt_text').html('');
                     });
             });
         </script>";

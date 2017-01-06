@@ -116,7 +116,27 @@ class survey_question
     public function renderForm()
     {
         if (isset($_GET['question_id']) and !empty($_GET['question_id'])) {
-            $this->buttonList[] = $this->getForm()->addButtonUpdate(get_lang('ModifyQuestionSurvey'), 'save', true);
+
+            /**
+             * Check if survey has answers first before update it, this is because if you update it, the question
+             * options will delete and re-insert in database loosing the iid and question_id to verify the correct answers
+             */
+            $surveyId = isset($_GET['survey_id']) ? intval($_GET['survey_id']) : 0;
+            $answersChecker = SurveyUtil::checkIfSurveyHasAnswers($surveyId);
+
+            if (!$answersChecker) {
+                $this->buttonList[] = $this->getForm()->addButtonUpdate(get_lang('ModifyQuestionSurvey'), 'save', true);
+            } else {
+                $this->getForm()->addHtml('
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"></label>
+                        <div class="col-sm-8">
+                            <div class="alert alert-info">' . get_lang('YouCantNotEditThisQuestionBecauseAlreadyExistAnswers') . '</div>
+                        </div>
+                        <div class="col-sm-2"></div>
+                    </div>
+                ');
+            }
         } else {
             $this->buttonList[] = $this->getForm()->addButtonSave(get_lang('CreateQuestionSurvey'), 'save', true);
         }

@@ -38,7 +38,7 @@ $link = SurveyManager::generate_survey_link(
 );
 echo '<div class="row">';
     echo '<div class="col-md-12">';
-    echo Display::url(get_lang('GenerateSurveyAccessLink'), $link, array('class' => 'btn btn-primary btn-large'));
+    echo Display::url(get_lang('GoToSurvey'), $link, array('class' => 'btn btn-primary btn-large'));
     echo '</div>';
     echo '<div class="col-md-12">';
     echo get_lang('GenerateSurveyAccessLinkExplanation');

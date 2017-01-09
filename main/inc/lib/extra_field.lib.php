@@ -1755,7 +1755,7 @@ EOF;
                                                 }
 
                                             } else {
-                                                alert("Geocode ' . get_lang('Error') . ': " + status);
+                                                alert("Geocode ' . get_lang('Error') . ': ' . get_lang("AddressField") . ' ' . get_lang("NotFound") . '");
                                             }
                                         });
                                     }

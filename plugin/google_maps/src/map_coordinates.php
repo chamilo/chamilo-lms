@@ -37,15 +37,28 @@ foreach ($extraFieldName as $field) {
 
 $extraFieldValues = [];
 
-foreach ($extraFieldNames as $fieldName) {
-    $extraFieldRepo = $em->getRepository('ChamiloCoreBundle:ExtraFieldValues');
-    $extraFieldValues[] = $extraFieldRepo->findBy(['field' => $fieldName->getId()]);
+foreach ($extraFieldNames as $index => $fieldName) {
+    if ($fieldName) {
+        $extraFieldRepo = $em->getRepository('ChamiloCoreBundle:ExtraFieldValues');
+        $extraFieldValues[] = $extraFieldRepo->findBy(['field' => $fieldName->getId()]);
+    }
 }
 
 $templateName = $plugin->get_lang('UsersCoordinatesMap');
 
 $tpl = new Template($templateName);
 
+$formattedExtraFieldValues = [];
+
+foreach ($extraFieldValues as $index => $extra) {
+    foreach ($extra as $yandex => $field) {
+        $thisUserExtraField = api_get_user_info($field->getItemId());
+        $formattedExtraFieldValues[$index][$yandex]['address'] = $field->getValue();
+        $formattedExtraFieldValues[$index][$yandex]['user_complete_name'] = $thisUserExtraField['complete_name'];
+    }
+}
+
+$tpl->assign('extra_field_values_formatted', $formattedExtraFieldValues);
 $tpl->assign('extra_field_values', $extraFieldValues);
 
 $content = $tpl->fetch('google_maps/view/map_coordinates.tpl');

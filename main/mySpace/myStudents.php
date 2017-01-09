@@ -16,27 +16,37 @@ $course_code = isset($_GET['course']) ? Security :: remove_XSS($_GET['course']) 
 $courseInfo = api_get_course_info($course_code);
 $student_id = intval($_GET['student']);
 
-if (!api_is_allowed_to_create_course() &&
+$allowedToTrackUser = true;
+
+if (
     !api_is_session_admin() &&
     !api_is_drh() &&
     !api_is_student_boss() &&
     !api_is_platform_admin()
 ) {
     if (empty($sessionId)) {
-        // Check if the user is tutor of the course
-        $userCourseStatus = CourseManager::get_tutor_in_course_status(
-            api_get_user_id(),
-            api_get_course_int_id()
-        );
-        if ($userCourseStatus != 1) {
-            api_not_allowed(true);
+        if (!$is_courseAdmin) {
+            // Check if the user is tutor of the course
+            $userCourseStatus = CourseManager::get_tutor_in_course_status(
+                api_get_user_id(),
+                api_get_course_int_id()
+            );
+
+            if ($userCourseStatus != 1) {
+                $allowedToTrackUser = false;
+            }
         }
     } else {
         $coach = api_is_coach($sessionId, $courseInfo['real_id']);
+
         if (!$coach) {
-            api_not_allowed(true);
+            $allowedToTrackUser = false;
         }
     }
+}
+
+if (!$allowedToTrackUser) {
+    api_not_allowed(true);
 }
 
 $htmlHeadXtra[] = '<script>

@@ -1397,32 +1397,39 @@ class Display
             'tet.session_id'
         );
 
+        $group_ids = GroupManager::get_group_ids($course_info['real_id'], $user_id);
+        $group_ids[] = 0; //add group 'everyone'
+
         // Get the last edits of all tools of this course.
-        $sql = "SELECT
-                    tet.*,
-                    tet.lastedit_date last_date,
-                    tet.tool tool,
-                    tet.ref ref,
+        $sql = "SELECT DISTINCT
+                    tet.to_group_id,
+                    tet.visibility,
+                    tet.to_user_id,
+                    tet.lastedit_type,
+                    tet.lastedit_date,
+                    tet.tool,
+                    tet.ref,
                     tet.lastedit_type type,
-                    tet.to_group_id group_id,
                     ctt.image image,
                     ctt.link link
                 FROM $tool_edit_table tet
                 INNER JOIN $course_tool_table ctt
-                ON tet.c_id = ctt.c_id
+                ON 
+                    tet.c_id = ctt.c_id 
                 WHERE
                     tet.c_id = $course_id AND
-                    tet.lastedit_date > '$oldestTrackDate' ".
+                    tet.lastedit_date > '$oldestTrackDate' AND ".
                     // Special hack for work tool, which is called student_publication in c_tool and work in c_item_property :-/ BT#7104
-                    " AND (ctt.name = tet.tool OR (ctt.name = 'student_publication' AND tet.tool = 'work'))
-                    AND ctt.visibility = '1'
-                    AND tet.lastedit_user_id != $user_id $sessionCondition
+                    " (ctt.name = tet.tool OR (ctt.name = 'student_publication' AND tet.tool = 'work')) AND 
+                    ctt.visibility = '1' AND 
+                    lastedit_type NOT LIKE '%Deleted%' AND 
+                    tet.lastedit_user_id != $user_id $sessionCondition AND 
+                    (tet.to_user_id IN ('$user_id', '0') OR tet.to_user_id IS NULL) AND
+                    (tet.to_group_id IN ('".implode($group_ids)."') OR tet.to_group_id IS NULL)                     
                  ORDER BY tet.lastedit_date";
-
         $res = Database::query($sql);
         // Get the group_id's with user membership.
-        $group_ids = GroupManager::get_group_ids($course_info['real_id'], $user_id);
-        $group_ids[] = 0; //add group 'everyone'
+
         $notifications = array();
         // Filter all last edits of all tools of the course
         while ($res && ($item_property = Database::fetch_array($res, 'ASSOC'))) {

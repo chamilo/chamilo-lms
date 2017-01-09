@@ -36,9 +36,20 @@
                         {{ plugin_header_right }}
                     </div>
                     {% endif %}
+                     <script>
+                       $(document).ready(function() {
+                            $.ajax({
+                                type: "GET",
+                                url: "{{ _p.web_main }}inc/ajax/online.ajax.php?a=get_users_online",
+                                success: function(data) {
+                                    $("#online_notification").html(data);
+                                }
+                            });
+                        });
+                       </script>
                     <div class="section-notifications">
                         <ul id="notifications" class="nav nav-pills pull-right">
-                            {{ notification_menu }}
+                            <span id="online_notification"></span>
                         </ul>
                     </div>
                     {{ accessibility }}

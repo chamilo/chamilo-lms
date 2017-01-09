@@ -922,9 +922,6 @@ class Template
 
         $this->assign('bug_notification', $rightFloatMenu);
 
-        $notification = returnNotificationMenu();
-        $this->assign('notification_menu', $notification);
-
         $resize = '';
         if (api_get_setting('accessibility_font_resize') == 'true') {
             $resize .= '<div class="resize_font">';
@@ -989,36 +986,6 @@ class Template
         //Menu
         $menu = menuArray();
         $this->assign('menu', $menu);
-
-        // Setting notifications
-        $count_unread_message = 0;
-        if (api_get_setting('allow_message_tool') == 'true') {
-            // get count unread message and total invitations
-            $count_unread_message = MessageManager::get_number_of_messages(true);
-        }
-
-        $total_invitations = 0;
-        if (api_get_setting('allow_social_tool') == 'true') {
-            $number_of_new_messages_of_friend = SocialManager::get_message_number_invitation_by_user_id(
-                api_get_user_id()
-            );
-            $usergroup = new UserGroup();
-            $group_pending_invitations = $usergroup->get_groups_by_user(
-                api_get_user_id(),
-                GROUP_USER_PERMISSION_PENDING_INVITATION,
-                false
-            );
-            if (!empty($group_pending_invitations)) {
-                $group_pending_invitations = count($group_pending_invitations);
-            } else {
-                $group_pending_invitations = 0;
-            }
-            $total_invitations = intval($number_of_new_messages_of_friend) + $group_pending_invitations + intval($count_unread_message);
-        }
-        $total_invitations = (!empty($total_invitations) ? Display::badge($total_invitations) : null);
-
-        $this->assign('user_notifications', $total_invitations);
-
 
         // Block Breadcrumb
         $breadcrumb = return_breadcrumb($interbreadcrumb, $language_file, $nameTools);

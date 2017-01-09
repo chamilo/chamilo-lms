@@ -12,14 +12,30 @@
         <div class="collapse navbar-collapse" id="menuone">
             <ul class="nav navbar-nav">
                 {% for item in menu %}
-                    <li class="{{ item.current }}"><a href="{{ item.url }}" target="{{ item.target }}" title="{{ item.title }}">{{ item.title }}</a></li>
+                    <li class="{{ item.current }}">
+                        <a href="{{ item.url }}" target="{{ item.target }}" title="{{ item.title }}">{{ item.title }}
+                        </a>
+                    </li>
                 {% endfor %}
             </ul>
            {% if _u.logged == 1 %}
-           <ul class="nav navbar-nav navbar-right">
-               {% if user_notifications is not null %}
-               <li><a href="{{ message_url }}">{{ user_notifications }}</a></li>
-               {% endif %}
+               <script>
+               $(document).ready(function() {
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ _p.web_main }}inc/ajax/message.ajax.php?a=get_count_message",
+                        success: function(data) {
+                            $("#count_message").html(data);
+                        }
+                    });
+                });
+               </script>
+            <ul class="nav navbar-nav navbar-right">
+               <li>
+                   <a href="{{ message_url }}">
+                       <span id="count_message"></span>
+                   </a>
+               </li>
                {% if _u.status != 6 %}
                 <li class="dropdown avatar-user">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">

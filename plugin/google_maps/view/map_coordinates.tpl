@@ -6,64 +6,8 @@
         initMap();
     });
 
-    function addMaker(lat, lng, map, bounds, userInfo, index) {
-        if (index > 5) {
-            return;
-        }
-
-        var location = new google.maps.LatLng(lat, lng);
-
-        var infoWindow = new google.maps.InfoWindow();
-
-        var geocoder = geocoder = new google.maps.Geocoder();
-
-        var marker = new google.maps.Marker({
-            map: map,
-            position: location,
-            label: userInfo.complete_name
-        });
-
-        switch (index) {
-            case '1':
-                marker.setIcon('//maps.google.com/mapfiles/ms/icons/red-dot.png');
-                break;
-            case '2':
-                marker.setIcon('//maps.google.com/mapfiles/ms/icons/green-dot.png');
-                break;
-            case '3':
-                marker.setIcon('//maps.google.com/mapfiles/ms/icons/blue-dot.png');
-                break;
-            case '4':
-                marker.setIcon('//maps.google.com/mapfiles/ms/icons/yellow-dot.png');
-                break;
-            case '5':
-                marker.setIcon('//maps.google.com/mapfiles/ms/icons/purple-dot.png');
-                break;
-        }
-
-        var address = "";
-
-        geocoder.geocode({ 'latLng': location }, function (results) {
-
-            if (results) {
-                address = results[1].formatted_address;
-            } else {
-                address = '{{ 'Unknown' | get_lang }}';
-            }
-
-            var infoWinContent = "<b>" + userInfo.complete_name + "</b> - " + address;
-
-            marker.addListener('click', function() {
-                infoWindow.setContent(infoWinContent);
-                infoWindow.open(map, marker);
-            });
-        });
-
-        bounds.extend(marker.position);
-        map.fitBounds(bounds);
-    }
-
     function initMap() {
+
         var center = new google.maps.LatLng(-3.480523, 7.866211);
 
         var bounds = new google.maps.LatLngBounds();
@@ -79,25 +23,83 @@
             mapTypeId: google.maps.MapTypeId.ROADMAP
         });
 
-        {% for extra in extra_field_values %}
+        var extraFields = {{ extra_field_values_formatted|json_encode }};
 
-            var index = '{{ loop.index }}';
+        for (var i = 0; i < extraFields.length; i++) {
 
-            {% for field in extra %}
+            var index = i + 1;
 
-                var latLng = '{{ field.value }}';
-                latLng = latLng.split(',');
+            for (var y = 0; y < extraFields[i].length; y++) {
 
-                var lat = latLng[0];
-                var lng = latLng[1];
+                var address = extraFields[i][y]['address'];
+                var userCompleteName = extraFields[i][y]['user_complete_name'];
 
-                {% set userInfo = field.itemId | user_info %}
+                addMaker(address, map, bounds, userCompleteName, index);
+            }
+        }
+    }
 
-                addMaker(lat, lng, map, bounds, {{ userInfo|json_encode }}, index);
+    function addMaker(address, map, bounds, userCompleteName, index) {
 
-            {% endfor %}
+        if (index > 5) {
+            return;
+        }
 
-        {% endfor %}
+        var infoWindow = new google.maps.InfoWindow();
 
+        var geocoder = geocoder = new google.maps.Geocoder();
+
+        var formattedAddress = '';
+
+        geocoder.geocode({ 'address': address }, function (results, status) {
+
+            if (status === google.maps.GeocoderStatus.OK) {
+
+                if (results) {
+                    formattedAddress = results[0].formatted_address;
+                } else {
+                    formattedAddress = '{{ 'Unknown' | get_lang }}';
+                }
+
+                var marker = new google.maps.Marker({
+                    map: map,
+                    position: results[0].geometry.location,
+                    label: userCompleteName
+                });
+
+                switch (index) {
+                    case 1:
+                        marker.setIcon('//maps.google.com/mapfiles/ms/icons/red-dot.png');
+                        break;
+                    case 2:
+                        marker.setIcon('//maps.google.com/mapfiles/ms/icons/green-dot.png');
+                        break;
+                    case 3:
+                        marker.setIcon('//maps.google.com/mapfiles/ms/icons/blue-dot.png');
+                        break;
+                    case 4:
+                        marker.setIcon('//maps.google.com/mapfiles/ms/icons/yellow-dot.png');
+                        break;
+                    case 5:
+                        marker.setIcon('//maps.google.com/mapfiles/ms/icons/purple-dot.png');
+                        break;
+                }
+
+                var infoWinContent = "<b>" + userCompleteName + "</b> - " + formattedAddress;
+
+                marker.addListener('click', function() {
+                    infoWindow.setContent(infoWinContent);
+                    infoWindow.open(map, marker);
+                });
+
+                bounds.extend(marker.position);
+                map.fitBounds(bounds);
+
+            } else if (status === google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
+                setTimeout(function() {
+                    geoCode(address, map, bounds, userCompleteName, index);
+                }, 350);
+            }
+        });
     }
 </script>

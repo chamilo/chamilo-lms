@@ -5241,13 +5241,19 @@ class Exercise
     /**
      * Sends a notification when a user ends an examn
      *
-     * @param integer $exe_id
+     * @param array $question_list_answers
+     * @param string $origin
+     * @param int $exe_id
+     * @param float $score
+     * @param float $weight
+     * @return bool
      */
-    public function send_mail_notification_for_exam($question_list_answers, $origin, $exe_id)
+    public function send_mail_notification_for_exam($question_list_answers, $origin, $exe_id, $score, $weight)
     {
-        if (api_get_course_setting('email_alert_manager_on_new_quiz') != 1 ) {
-            return null;
+        if (api_get_course_setting('email_alert_manager_on_new_quiz') != 1) {
+            return false;
         }
+
         // Email configuration settings
         $courseCode = api_get_course_id();
         $courseInfo = api_get_course_info($courseCode);
@@ -5267,26 +5273,36 @@ class Exercise
             . '&action=qualify';
         $user_info = api_get_user_info(api_get_user_id());
 
+        $scoreLabel = '';
+        if (api_get_configuration_value('send_score_in_exam_notification_mail_to_manager') == true) {
+            $scoreLabel = ExerciseLib::show_score($score, $weight, false, true);
+            $scoreLabel = "<tr>
+                            <td>".get_lang('Score')."</td>
+                            <td>&nbsp;$scoreLabel</td>
+                        </tr>";
+        }
+
         $msg = get_lang('ExerciseAttempted').'<br /><br />'
-                    .get_lang('AttemptDetails').' : <br /><br />'.
-                    '<table>'
-                        .'<tr>'
-                            .'<td><em>'.get_lang('CourseName').'</em></td>'
-                            .'<td>&nbsp;<b>#course#</b></td>'
-                        .'</tr>'
-                        .'<tr>'
-                            .'<td>'.get_lang('TestAttempted').'</td>'
-                            .'<td>&nbsp;#exercise#</td>'
-                        .'</tr>'
-                        .'<tr>'
-                            .'<td>'.get_lang('StudentName').'</td>'
-                            .'<td>&nbsp;#firstName# #lastName#</td>'
-                        .'</tr>'
-                        .'<tr>'
-                            .'<td>'.get_lang('StudentEmail').'</td>'
-                            .'<td>&nbsp;#email#</td>'
-                        .'</tr>'
-                    .'</table>';
+                    .get_lang('AttemptDetails').' : <br /><br />
+                    <table>
+                        <tr>
+                            <td><em>'.get_lang('CourseName').'</em></td>
+                            <td>&nbsp;<b>#course#</b></td>
+                        </tr>
+                        <tr>
+                            <td>'.get_lang('TestAttempted').'</td>
+                            <td>&nbsp;#exercise#</td>
+                        </tr>
+                        <tr>
+                            <td>'.get_lang('StudentName').'</td>
+                            <td>&nbsp;#firstName# #lastName#</td>
+                        </tr>
+                        <tr>
+                            <td>'.get_lang('StudentEmail').'</td>
+                            <td>&nbsp;#email#</td>
+                        </tr>
+                        '.$scoreLabel.'
+                    </table>';
         $open_question_list = null;
 
         $msg = str_replace("#email#", $user_info['email'], $msg);
@@ -5333,7 +5349,7 @@ class Exercise
      *
      * @param integer $exe_id
      */
-    function send_notification_for_open_questions($question_list_answers, $origin, $exe_id)
+    public function send_notification_for_open_questions($question_list_answers, $origin, $exe_id)
     {
         if (api_get_course_setting('email_alert_manager_on_new_quiz') != 1 ) {
             return null;

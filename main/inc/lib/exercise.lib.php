@@ -3771,19 +3771,18 @@ HOTSPOT;
                 );
             }
 
-            // Send notification ..
-            if (!api_is_allowed_to_edit(null, true) && !api_is_excluded_user_type()
+            // Send notification
+            if (!api_is_allowed_to_edit(null, true) &&
+                !api_is_excluded_user_type()
             ) {
-                if (api_get_course_setting(
-                        'email_alert_manager_on_new_quiz'
-                    ) == 1
-                ) {
-                    $objExercise->send_mail_notification_for_exam(
-                        $question_list_answers,
-                        $origin,
-                        $exe_id
-                    );
-                }
+                $objExercise->send_mail_notification_for_exam(
+                    $question_list_answers,
+                    $origin,
+                    $exe_id,
+                    $total_score,
+                    $total_weight
+                );
+
                 $objExercise->send_notification_for_open_questions(
                     $question_list_answers,
                     $origin,
@@ -3810,8 +3809,7 @@ HOTSPOT;
         $score,
         $weight,
         $check_pass_percentage = false
-    )
-    {
+    ) {
         $ribbon = '<div class="title-score">';
         if ($check_pass_percentage) {
             $is_success = self::is_success_exercise_result(

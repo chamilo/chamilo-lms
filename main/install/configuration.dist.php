@@ -261,4 +261,6 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 //$_configuration['user_portal_load_notification_by_ajax'] = false;
 // When exporting a LP, all files and folders in the same path of an html will be exported too.
 //$_configuration['add_all_files_in_lp_export'] = false;
+// Send exercise student score to manager in email notification
+//$_configuration['send_score_in_exam_notification_mail_to_manager'] = false;
 

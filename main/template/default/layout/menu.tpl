@@ -25,13 +25,16 @@
                         type: "GET",
                         url: "{{ _p.web_main }}inc/ajax/message.ajax.php?a=get_count_message",
                         success: function(data) {
-                            $("#count_message").html(data);
+                            if (data != '') {
+                                $("#count_message_li").show();
+                                $("#count_message").html(data);
+                            }
                         }
                     });
                 });
                </script>
             <ul class="nav navbar-nav navbar-right">
-               <li>
+               <li id="count_message_li" style="display: none">
                    <a href="{{ message_url }}">
                        <span id="count_message"></span>
                    </a>

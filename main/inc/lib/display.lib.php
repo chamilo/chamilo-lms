@@ -1394,115 +1394,105 @@ class Display
             $sessionId,
             true,
             false,
-            'tet.session_id'
+            'session_id'
         );
+
+        $hideTools = [TOOL_NOTEBOOK, TOOL_CHAT];
+        // Get current tools in course
+        $sql = "SELECT name, link, image 
+                FROM $course_tool_table 
+                WHERE 
+                    c_id = $course_id AND 
+                    visibility = '1' AND
+                    name NOT IN ('".implode("','", $hideTools)."')
+                ";
+        $result = Database::query($sql);
+        $tools = Database::store_result($result);
 
         $group_ids = GroupManager::get_group_ids($course_info['real_id'], $user_id);
         $group_ids[] = 0; //add group 'everyone'
-
-        // Get the last edits of all tools of this course.
-        $sql = "SELECT DISTINCT
-                    tet.to_group_id,
-                    tet.visibility,
-                    tet.to_user_id,
-                    tet.lastedit_type,
-                    tet.lastedit_date,
-                    tet.tool,
-                    tet.ref,
-                    tet.lastedit_type type,
-                    ctt.image image,
-                    ctt.link link
-                FROM $tool_edit_table tet
-                INNER JOIN $course_tool_table ctt
-                ON 
-                    tet.c_id = ctt.c_id 
-                WHERE
-                    tet.c_id = $course_id AND
-                    tet.lastedit_date > '$oldestTrackDate' AND ".
-                    // Special hack for work tool, which is called student_publication in c_tool and work in c_item_property :-/ BT#7104
-                    " (ctt.name = tet.tool OR (ctt.name = 'student_publication' AND tet.tool = 'work')) AND 
-                    ctt.visibility = '1' AND 
-                    lastedit_type NOT LIKE '%Deleted%' AND 
-                    tet.lastedit_user_id != $user_id $sessionCondition AND 
-                    (tet.to_user_id IN ('$user_id', '0') OR tet.to_user_id IS NULL) AND
-                    (tet.to_group_id IN ('".implode($group_ids)."') OR tet.to_group_id IS NULL)                     
-                 ORDER BY tet.lastedit_date";
-        $res = Database::query($sql);
-        // Get the group_id's with user membership.
-
         $notifications = array();
-        // Filter all last edits of all tools of the course
-        while ($res && ($item_property = Database::fetch_array($res, 'ASSOC'))) {
-            // First thing to check is if the user never entered the tool
-            // or if his last visit was earlier than the last modification.
-            if ((!isset($lastTrackInCourseDate[$item_property['tool']])
-                 || $lastTrackInCourseDate[$item_property['tool']] < $item_property['lastedit_date'])
-                // Drop the tool elements that are part of a group that the
-                // user is not part of.
-                && ((in_array($item_property['to_group_id'], $group_ids)
-                // Drop the dropbox, notebook and chat tools (we don't care)
-                && (
-                        //$item_property['tool'] != TOOL_DROPBOX &&
-                        $item_property['tool'] != TOOL_NOTEBOOK &&
-                        $item_property['tool'] != TOOL_CHAT)
-                   )
-                )
-                // Take only what's visible or "invisible but where the user is a teacher" or where the visibility is unset.
-                && ($item_property['visibility'] == '1'
-                    || ($status == '1' && $item_property['visibility'] == '0')
-                    || !isset($item_property['visibility']))
-            ) {
-                // Also drop announcements and events that are not for the user or his group.
-                if ((
-                        $item_property['tool'] == TOOL_ANNOUNCEMENT ||
-                        $item_property['tool'] == TOOL_CALENDAR_EVENT
-                    ) &&
-                    (
-                        ($item_property['to_user_id'] != $user_id) &&
-                        (!isset($item_property['to_group_id']) || !in_array($item_property['to_group_id'], $group_ids)))
-                ) {
-                   continue;
+        if ($tools) {
+            foreach ($tools as $tool) {
+                $toolName = $tool['name'];
+                // Fix to get student publications
+                if ($toolName == 'student_publication') {
+                    $toolName = 'work';
                 }
+                $sql = "SELECT * FROM $tool_edit_table 
+                        WHERE
+                            c_id = $course_id AND
+                            tool = '$toolName' AND
+                            lastedit_type NOT LIKE '%Deleted%' AND
+                            lastedit_type NOT LIKE '%deleted%' AND
+                            lastedit_type NOT LIKE '%DocumentInvisible%' AND
+                            lastedit_date > '$oldestTrackDate' AND 
+                            lastedit_user_id != $user_id $sessionCondition AND 
+                            visibility != 2 AND
+                            (to_user_id IN ('$user_id', '0') OR to_user_id IS NULL) AND
+                            (to_group_id IN ('".implode("','",$group_ids)."') OR to_group_id IS NULL)       
+                        ORDER BY lastedit_date DESC
+                        LIMIT 1";
 
-                // If it's a survey, make sure the user's invited. Otherwise drop it.
-                if ($item_property['tool'] == TOOL_SURVEY) {
-                    $survey_info = SurveyManager::get_survey($item_property['ref'], 0, $course_code);
-                    if (!empty($survey_info)) {
-                        $invited_users = SurveyUtil::get_invited_users(
-                            $survey_info['code'],
-                            $course_code
-                        );
-                        if (!in_array($user_id, $invited_users['course_users'])) {
-                            continue;
-                        }
-                    }
+                $result = Database::query($sql);
+                $latestChange = Database::fetch_array($result);
+                if ($latestChange) {
+                    $latestChange['link'] = $tool['link'];
+                    $latestChange['image'] = $tool['image'];
+                    $latestChange['tool'] = $tool['name'];
+                    $notifications[$toolName] = $latestChange;
                 }
-
-                // If it's a learning path, ensure it is currently visible to the user
-                if ($item_property['tool'] == TOOL_LEARNPATH) {
-                    if (!learnpath::is_lp_visible_for_student($item_property['ref'], $user_id, $course_code)) {
-                        continue;
-                    }
-                }
-
-                if ($item_property['tool'] == TOOL_DROPBOX) {
-                    $item_property['link'] = 'dropbox/dropbox_download.php?id='.$item_property['ref'];
-                }
-
-                if ($item_property['tool'] == 'work' &&
-                    $item_property['type'] == 'DirectoryCreated'
-                ) {
-                    $item_property['lastedit_type'] = 'WorkAdded';
-                }
-                $notifications[$item_property['tool']] = $item_property;
             }
         }
 
         // Show all tool icons where there is something new.
         $return = '&nbsp;';
-        foreach($notifications as $notification) {
-            $lastDate = date('d/m/Y H:i', convert_sql_date($notification['lastedit_date']));
+        foreach ($notifications as $notification) {
+            $toolName = $notification['tool'];
+            if (!
+                (
+                    $notification['visibility'] == '1'  ||
+                    ($status == '1' && $notification['visibility'] == '0') ||
+                    !isset($notification['visibility'])
+                )
+            ) {
+                continue;
+            }
+
+            if ($toolName == TOOL_SURVEY) {
+                $survey_info = SurveyManager::get_survey($notification['ref'], 0, $course_code);
+                if (!empty($survey_info)) {
+                    $invited_users = SurveyUtil::get_invited_users(
+                        $survey_info['code'],
+                        $course_code
+                    );
+                    if (!in_array($user_id, $invited_users['course_users'])) {
+                        continue;
+                    }
+                }
+            }
+
+            if ($notification['tool'] == TOOL_LEARNPATH) {
+                if (!learnpath::is_lp_visible_for_student($notification['ref'], $user_id, $course_code)) {
+                    continue;
+                }
+            }
+
+            if ($notification['tool'] == TOOL_DROPBOX) {
+                $notification['link'] = 'dropbox/dropbox_download.php?id='.$notification['ref'];
+            }
+
+            if ($notification['tool'] == 'work' &&
+                $notification['lastedit_type'] == 'DirectoryCreated'
+            ) {
+                $notification['lastedit_type'] = 'WorkAdded';
+            }
+
+            $lastDate = api_get_local_time($notification['lastedit_date']);
             $type = $notification['lastedit_type'];
+            if ($type == 'CalendareventVisible') {
+                $type = 'Visible';
+            }
             $label = get_lang('TitleNotification').": ".get_lang($type)." ($lastDate)";
 
             if (strpos($notification['link'], '?') === false) {
@@ -1510,9 +1500,11 @@ class Display
             } else {
                 $notification['link'] = $notification['link'].'&notification=1';
             }
-            $imagen = substr($notification['image'], 0, -4).'.png';
+
+            $image = substr($notification['image'], 0, -4).'.png';
+
             $return .= Display::url(
-                Display::return_icon($imagen, $label),
+                Display::return_icon($image, $label),
                 api_get_path(WEB_CODE_PATH).
                 $notification['link'].'&cidReq='.$course_code.
                 '&ref='.$notification['ref'].

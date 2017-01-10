@@ -1703,7 +1703,7 @@ class learnpathItem
             if ($debug > 2) {
                 error_log('learnpathItem::get_status(): checking db', 0);
             }
-            if (!empty($this->db_item_view_id)) {
+            if (!empty($this->db_item_view_id) && !empty($course_id)) {
                 $table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
                 $sql = "SELECT status FROM $table
                         WHERE

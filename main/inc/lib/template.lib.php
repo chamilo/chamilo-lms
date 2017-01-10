@@ -1052,13 +1052,29 @@ class Template
      */
     private function set_footer_parameters()
     {
-        if (api_get_setting('show_administrator_data') == 'true') {
+        if (api_get_setting('show_administrator_data') === 'true') {
+            $firstName = api_get_setting('administratorName');
+            $lastName = api_get_setting('administratorSurname');
+
+            if (!empty($firstName) && !empty($lastName)) {
+                $name = api_get_person_name($firstName, $lastName);
+            } else {
+                $name = $lastName;
+                if (empty($lastName)) {
+                    $name = $firstName;
+                }
+            }
+
+            $adminName = '';
             // Administrator name
-            $administrator_data = get_lang('Manager').' : '.Display::encrypted_mailto_link(
-                    api_get_setting('emailAdministrator'),
-                    api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))
-                );
-            $this->assign('administrator_name', $administrator_data);
+            if (!empty($name)) {
+                $adminName = get_lang('Manager').' : '.
+                    Display::encrypted_mailto_link(
+                        api_get_setting('emailAdministrator'),
+                        $name
+                    );
+            }
+            $this->assign('administrator_name', $adminName);
         }
 
         // Loading footer extra content

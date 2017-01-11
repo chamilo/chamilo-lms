@@ -8,6 +8,22 @@ require_once __DIR__.'/../global.inc.php';
 
 $action = $_REQUEST['a'];
 switch ($action) {
+    case 'get_document_quota':
+        // Getting the course quota
+        $course_quota = DocumentManager::get_course_quota();
+
+        // Calculating the total space
+        $already_consumed_space_course = DocumentManager::documents_total_space(
+            api_get_course_int_id()
+        );
+
+        // Displaying the quota
+        echo DocumentManager::display_simple_quota(
+            $course_quota,
+            $already_consumed_space_course
+        );
+
+        break;
     case 'upload_file':
         api_protect_course_script(true);
         // User access same as upload.php

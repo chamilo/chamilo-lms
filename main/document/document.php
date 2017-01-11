@@ -1415,9 +1415,7 @@ if ($is_allowed_to_edit ||
     DocumentManager::is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId)
 ) {
     if (isset($_GET['add_as_template']) && !isset($_POST['create_template'])) {
-
         $document_id_for_template = intval($_GET['add_as_template']);
-
         // Create the form that asks for the directory name
         $templateForm .= '
             <form name="set_document_as_new_template" class="form-horizontal" enctype="multipart/form-data" action="' . api_get_self() . '?add_as_template=' . $document_id_for_template . '" method="post">
@@ -1446,7 +1444,6 @@ if ($is_allowed_to_edit ||
             <hr>
         ';
     } elseif (isset($_GET['add_as_template']) && isset($_POST['create_template'])) {
-
         $document_id_for_template = intval($_GET['add_as_template']);
         $title = Security::remove_XSS($_POST['template_title']);
         $user_id = api_get_user_id();
@@ -1737,6 +1734,12 @@ $table_footer = '';
 $total_size = 0;
 $sortable_data = array();
 $row = array();
+
+$userIsSubscribed = CourseManager::is_user_subscribed_in_course(
+    api_get_user_id(),
+    $courseInfo['code']
+);
+
 if (isset($documentAndFolders) && is_array($documentAndFolders)) {
     if ($groupId == 0 ||
         GroupManager::user_has_access(
@@ -1760,7 +1763,8 @@ if (isset($documentAndFolders) && is_array($documentAndFolders)) {
                 $courseInfo,
                 $sessionId,
                 api_get_user_id(),
-                false
+                false,
+                $userIsSubscribed
             );
 
             $invisibility_span_open = ($is_visible == 0) ? '<span class="muted">' : '';
@@ -1799,6 +1803,7 @@ if (isset($documentAndFolders) && is_array($documentAndFolders)) {
             // Icons (clickable)
             $row[] = DocumentManager::create_document_link(
                 $document_data,
+                $courseInfo,
                 true,
                 $count,
                 $is_visible
@@ -1815,9 +1820,16 @@ if (isset($documentAndFolders) && is_array($documentAndFolders)) {
             // Validation when belongs to a session
             $session_img = api_get_session_image($document_data['session_id'], $_user['status']);
 
+            $link = DocumentManager::create_document_link(
+                $document_data,
+                $courseInfo,
+                false,
+                null,
+                $is_visible
+            );
+
             // Document title with link
-            $row[] = DocumentManager::create_document_link($document_data, false, null, $is_visible).
-                $session_img.'<br />'.$invisibility_span_open.
+            $row[] = $link.$session_img.'<br />'.$invisibility_span_open.
                 '<i>'.nl2br(htmlspecialchars($document_data['comment'], ENT_QUOTES, $charset)).'</i>'.
                 $invisibility_span_close.
                 $user_link;
@@ -2060,22 +2072,21 @@ echo $dirForm;
 echo $selector;
 
 $table->display();
+$ajaxURL = api_get_path(WEB_AJAX_PATH).'document.ajax.php?a=get_document_quota&'.api_get_cidreq();
 
 if (count($documentAndFolders) > 1) {
     if ($is_allowed_to_edit || $group_member_with_upload_rights) {
-        // Getting the course quota
-        $course_quota = DocumentManager::get_course_quota();
-
-        // Calculating the total space
-        $already_consumed_space_course = DocumentManager::documents_total_space(
-            api_get_course_int_id()
-        );
-
-        // Displaying the quota
-        DocumentManager::display_simple_quota(
-            $course_quota,
-            $already_consumed_space_course
-        );
+        echo '<script>
+        $(document).ready(function() {
+            $.ajax({
+                url:"'.$ajaxURL.'",
+                success:function(data){
+                    $("#course_quota").html(data);
+                }
+            });             
+        });
+        </script>';
+        echo '<span id="course_quota"></span>';
     }
 }
 if (!empty($table_footer)) {

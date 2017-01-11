@@ -1654,7 +1654,8 @@ class DocumentManager
         $course_info,
         $session_id,
         $user_id,
-        $admins_can_see_everything = true
+        $admins_can_see_everything = true,
+        $userIsSubscribed = null
     ) {
         $user_in_course = false;
 
@@ -1671,12 +1672,18 @@ class DocumentManager
 
         //2. Course and Session visibility are handle in local.inc.php/global.inc.php
         //3. Checking if user exist in course/session
-
         if ($session_id == 0) {
-            if (CourseManager::is_user_subscribed_in_course($user_id, $course_info['code']) || api_is_platform_admin()
-            ) {
+            if (is_null($userIsSubscribed)) {
+                $userIsSubscribed = CourseManager::is_user_subscribed_in_course(
+                    $user_id,
+                    $course_info['code']
+                );
+            }
+
+            if ($userIsSubscribed === true || api_is_platform_admin()) {
                 $user_in_course = true;
             }
+
             // Check if course is open then we can consider that the student is registered to the course
             if (isset($course_info) &&
                 in_array(
@@ -1704,12 +1711,15 @@ class DocumentManager
         }
 
         // 4. Checking document visibility (i'm repeating the code in order to be more clear when reading ) - jm
-
         if ($user_in_course) {
-
             // 4.1 Checking document visibility for a Course
             if ($session_id == 0) {
-                $item_info = api_get_item_property_info($course_info['real_id'], 'document', $doc_id, 0);
+                $item_info = api_get_item_property_info(
+                    $course_info['real_id'],
+                    'document',
+                    $doc_id,
+                    0
+                );
 
                 if (isset($item_info['visibility'])) {
                     // True for admins if document exists
@@ -3163,7 +3173,8 @@ class DocumentManager
         $percentage = round($percentage, 1);
         $message = get_lang('YouAreCurrentlyUsingXOfYourX');
         $message = sprintf($message, $already_consumed_space_m, $percentage . '%', $course_quota_m . ' ');
-        echo Display::div($message, array('id' => 'document_quota'));
+
+        return Display::div($message, array('id' => 'document_quota'));
     }
 
     /**
@@ -5193,6 +5204,7 @@ class DocumentManager
      * Create a html hyperlink depending on if it's a folder or a file
      *
      * @param array $document_data
+     * @param array $course_info
      * @param int $show_as_icon - if it is true, only a clickable icon will be shown
      * @param int $visibility (1/0)
      * @param int $counter
@@ -5201,14 +5213,17 @@ class DocumentManager
      */
     public static function create_document_link(
         $document_data,
+        $course_info,
         $show_as_icon = false,
         $counter = null,
         $visibility
     ) {
         global $dbl_click_id;
-        $course_info = api_get_course_info();
+
+        $current_session_id = api_get_session_id();
         $www = api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/document';
-        $webOdflist = DocumentManager::get_web_odf_extension_list();
+        $webODFList = DocumentManager::get_web_odf_extension_list();
+        $isAllowedToEdit = api_is_allowed_to_edit(null, true);
 
         // Get the title or the basename depending on what we're using
         if ($document_data['title'] != '') {
@@ -5218,7 +5233,7 @@ class DocumentManager
         }
 
         $filetype = $document_data['filetype'];
-        $size = $filetype == 'folder' ? get_total_folder_size($document_data['path'], api_is_allowed_to_edit(null, true)) : $document_data['size'];
+        $size = $filetype == 'folder' ? get_total_folder_size($document_data['path'], $isAllowedToEdit) : $document_data['size'];
         $path = $document_data['path'];
 
         $url_path = urlencode($document_data['path']);
@@ -5250,7 +5265,7 @@ class DocumentManager
             $is_browser_viewable_file = self::is_browser_viewable($ext);
 
             if ($is_browser_viewable_file) {
-                if ($ext == 'pdf' || in_array($ext, $webOdflist)) {
+                if ($ext == 'pdf' || in_array($ext, $webODFList)) {
                     $url = api_get_self() . '?' . api_get_cidreq() . '&amp;action=download&amp;id=' . $document_data['id'];
                 } else {
                     $url = 'showinframes.php?' . api_get_cidreq() . '&id=' . $document_data['id'];
@@ -5291,16 +5306,14 @@ class DocumentManager
             $tooltip_title_alt = get_lang('DefaultCourseImages');
         }
 
-        $current_session_id = api_get_session_id();
         $copy_to_myfiles = $open_in_new_window_link = null;
-
         $curdirpath = isset($_GET['curdirpath']) ? Security::remove_XSS($_GET['curdirpath']) : null;
         $send_to = null;
         $checkExtension = $path;
 
         if (!$show_as_icon) {
             if ($filetype == 'folder') {
-                if (api_is_allowed_to_edit() ||
+                if ($isAllowedToEdit ||
                     api_is_platform_admin() ||
                     api_get_setting('students_download_folders') == 'true'
                 ) {
@@ -5308,13 +5321,13 @@ class DocumentManager
                     if (DocumentManager::is_shared_folder($curdirpath, $current_session_id)) {
                         if (preg_match('/shared_folder\/sf_user_' . api_get_user_id() . '$/', urldecode($forcedownload_link)) ||
                             preg_match('/shared_folder_session_' . $current_session_id . '\/sf_user_' . api_get_user_id() . '$/', urldecode($forcedownload_link)) ||
-                            api_is_allowed_to_edit() || api_is_platform_admin()
+                            $isAllowedToEdit || api_is_platform_admin()
                         ) {
                             $force_download_html = ($size == 0) ? '' : '<a href="' . $forcedownload_link . '" style="float:right"' . $prevent_multiple_click . '>' .
                                 Display::return_icon($forcedownload_icon, get_lang('Download'), array(), ICON_SIZE_SMALL) . '</a>';
                         }
                     } elseif (!preg_match('/shared_folder/', urldecode($forcedownload_link)) ||
-                        api_is_allowed_to_edit() ||
+                        $isAllowedToEdit ||
                         api_is_platform_admin()
                     ) {
                         $force_download_html = ($size == 0) ? '' : '<a href="' . $forcedownload_link . '" style="float:right"' . $prevent_multiple_click . '>' .
@@ -5332,7 +5345,6 @@ class DocumentManager
             ) {
                 $copy_myfiles_link = ($filetype == 'file') ? api_get_self() . '?' . api_get_cidreq() . '&action=copytomyfiles&id=' . $document_data['id'] : api_get_self() . '?' . api_get_cidreq();
                 if ($filetype == 'file') {
-
                     $copy_to_myfiles = '<a href="' . $copy_myfiles_link . '" style="float:right"' . $prevent_multiple_click . '>' .
                         Display::return_icon('briefcase.png', get_lang('CopyToMyFiles'), array(), ICON_SIZE_SMALL) . '&nbsp;&nbsp;</a>';
 
@@ -5348,7 +5360,7 @@ class DocumentManager
 
             $pdf_icon = '';
             $extension = pathinfo($path, PATHINFO_EXTENSION);
-            if (!api_is_allowed_to_edit() &&
+            if (!$isAllowedToEdit &&
                 api_get_setting('students_export2pdf') == 'true' &&
                 $filetype == 'file' &&
                 in_array($extension, array('html', 'htm'))
@@ -5403,7 +5415,7 @@ class DocumentManager
                 } else {
                     // For a "PDF Download" of the file.
                     $pdfPreview = null;
-                    if ($ext != 'pdf' && !in_array($ext, $webOdflist)) {
+                    if ($ext != 'pdf' && !in_array($ext, $webODFList)) {
                         $url = 'showinframes.php?' . api_get_cidreq() . '&id=' . $document_data['id'];
                     } else {
                         $pdfPreview = Display::url(
@@ -5447,16 +5459,16 @@ class DocumentManager
                     ) {
                         $url = 'showinframes.php?' . api_get_cidreq() . '&id=' . $document_data['id'];
                         return '<a href="' . $url . '" title="' . $tooltip_title_alt . '" ' . $visibility_class . ' style="float:left">' .
-                        DocumentManager::build_document_icon_tag($filetype, $path) .
+                        DocumentManager::build_document_icon_tag($filetype, $path, $isAllowedToEdit) .
                         Display::return_icon('shared.png', get_lang('ResourceShared'), array()) . '</a>';
                     } else {
                         return '<a href="' . $url . '" title="' . $tooltip_title_alt . '" ' . $visibility_class . ' style="float:left">' .
-                        DocumentManager::build_document_icon_tag($filetype, $path) .
+                        DocumentManager::build_document_icon_tag($filetype, $path, $isAllowedToEdit) .
                         Display::return_icon('shared.png', get_lang('ResourceShared'), array()) . '</a>';
                     }
                 } else {
                     return '<a href="' . $url . '" title="' . $tooltip_title_alt . '" target="' . $target . '"' . $visibility_class . ' style="float:left">' .
-                    DocumentManager::build_document_icon_tag($filetype, $path) .
+                    DocumentManager::build_document_icon_tag($filetype, $path, $isAllowedToEdit) .
                     Display::return_icon('shared.png', get_lang('ResourceShared'), array()) . '</a>';
                 }
             } else {
@@ -5482,14 +5494,14 @@ class DocumentManager
                     ) {
                         $url = 'showinframes.php?' . api_get_cidreq() . '&id=' . $document_data['id']; //without preview
                         return '<a href="' . $url . '" title="' . $tooltip_title_alt . '" ' . $visibility_class . ' style="float:left">' .
-                        DocumentManager::build_document_icon_tag($filetype, $path) . '</a>';
+                        DocumentManager::build_document_icon_tag($filetype, $path, $isAllowedToEdit) . '</a>';
                     } else {
                         return '<a href="' . $url . '" title="' . $tooltip_title_alt . '" ' . $visibility_class . ' style="float:left">' .
-                        DocumentManager::build_document_icon_tag($filetype, $path) . '</a>';
+                        DocumentManager::build_document_icon_tag($filetype, $path, $isAllowedToEdit) . '</a>';
                     }
                 } else {
                     return '<a href="' . $url . '" title="' . $tooltip_title_alt . '" target="' . $target . '"' . $visibility_class . ' style="float:left">' .
-                    DocumentManager::build_document_icon_tag($filetype, $path) . '</a>';
+                    DocumentManager::build_document_icon_tag($filetype, $path, $isAllowedToEdit) . '</a>';
                 }
             }
         }
@@ -5500,37 +5512,39 @@ class DocumentManager
      *
      * @param string $type (file/folder)
      * @param string $path
+     * @param bool $isAllowedToEdit
      * @return string img html tag
      */
-    public static function build_document_icon_tag($type, $path)
+    public static function build_document_icon_tag($type, $path, $isAllowedToEdit = null)
     {
         $basename = basename($path);
         $current_session_id = api_get_session_id();
-        $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
+        if (is_null($isAllowedToEdit)) {
+            $isAllowedToEdit = api_is_allowed_to_edit(null, true);
+        }
         $user_image = false;
         if ($type == 'file') {
             $icon = choose_image($basename);
-
             $basename = substr(strrchr($basename, '.'), 1);
         } else {
             if ($path == '/shared_folder') {
                 $icon = 'folder_users.png';
-                if ($is_allowed_to_edit) {
+                if ($isAllowedToEdit) {
                     $basename = get_lang('HelpUsersFolder');
                 } else {
                     $basename = get_lang('UserFolders');
                 }
             } elseif (strstr($basename, 'sf_user_')) {
-                $userinfo = api_get_user_info(substr($basename, 8));
-                $icon = $userinfo['avatar_small'];
-
-                $basename = get_lang('UserFolder') . ' ' . $userinfo['complete_name'];
+                $userInfo = api_get_user_info(substr($basename, 8));
+                $icon = $userInfo['avatar_small'];
+                $basename = get_lang('UserFolder') . ' ' . $userInfo['complete_name'];
                 $user_image = true;
             } elseif (strstr($path, 'shared_folder_session_')) {
-                if ($is_allowed_to_edit) {
-                    $basename = '***(' . api_get_session_name($current_session_id) . ')*** ' . get_lang('HelpUsersFolder');
+                $sessionName = api_get_session_name($current_session_id);
+                if ($isAllowedToEdit) {
+                    $basename = '***(' . $sessionName . ')*** ' . get_lang('HelpUsersFolder');
                 } else {
-                    $basename = get_lang('UserFolders') . ' (' . api_get_session_name($current_session_id) . ')';
+                    $basename = get_lang('UserFolders') . ' (' . $sessionName . ')';
                 }
                 $icon = 'folder_users.png';
             } else {
@@ -5538,49 +5552,49 @@ class DocumentManager
 
                 if ($path == '/audio') {
                     $icon = 'folder_audio.gif';
-                    if (api_is_allowed_to_edit()) {
+                    if ($isAllowedToEdit) {
                         $basename = get_lang('HelpDefaultDirDocuments');
                     } else {
                         $basename = get_lang('Audio');
                     }
                 } elseif ($path == '/flash') {
                     $icon = 'folder_flash.gif';
-                    if (api_is_allowed_to_edit()) {
+                    if ($isAllowedToEdit) {
                         $basename = get_lang('HelpDefaultDirDocuments');
                     } else {
                         $basename = get_lang('Flash');
                     }
                 } elseif ($path == '/images') {
                     $icon = 'folder_images.gif';
-                    if (api_is_allowed_to_edit()) {
+                    if ($isAllowedToEdit) {
                         $basename = get_lang('HelpDefaultDirDocuments');
                     } else {
                         $basename = get_lang('Images');
                     }
                 } elseif ($path == '/video') {
                     $icon = 'folder_video.gif';
-                    if (api_is_allowed_to_edit()) {
+                    if ($isAllowedToEdit) {
                         $basename = get_lang('HelpDefaultDirDocuments');
                     } else {
                         $basename = get_lang('Video');
                     }
                 } elseif ($path == '/images/gallery') {
                     $icon = 'folder_gallery.gif';
-                    if (api_is_allowed_to_edit()) {
+                    if ($isAllowedToEdit) {
                         $basename = get_lang('HelpDefaultDirDocuments');
                     } else {
                         $basename = get_lang('Gallery');
                     }
                 } elseif ($path == '/chat_files') {
                     $icon = 'folder_chat.png';
-                    if (api_is_allowed_to_edit()) {
+                    if ($isAllowedToEdit) {
                         $basename = get_lang('HelpFolderChat');
                     } else {
                         $basename = get_lang('ChatFiles');
                     }
                 } elseif ($path == '/learning_path') {
                     $icon = 'folder_learningpath.gif';
-                    if (api_is_allowed_to_edit()) {
+                    if ($isAllowedToEdit) {
                         $basename = get_lang('HelpFolderLearningPaths');
                     } else {
                         $basename = get_lang('LearningPaths');
@@ -5588,9 +5602,11 @@ class DocumentManager
                 }
             }
         }
+
         if ($user_image) {
             return Display::img($icon, $basename, array(), false);
         }
+
         return Display::return_icon($icon, $basename, array(), ICON_SIZE_MEDIUM);
     }
 

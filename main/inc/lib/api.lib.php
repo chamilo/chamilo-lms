@@ -2671,6 +2671,16 @@ function api_is_allowed_to_create_course()
     if (api_is_platform_admin()) {
         return true;
     }
+
+    // Teachers can only create courses
+    if (api_is_teacher()) {
+        if (api_get_setting('allow_users_to_create_courses') === 'true') {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     return Session::read('is_allowedCreateCourse');
 }
 

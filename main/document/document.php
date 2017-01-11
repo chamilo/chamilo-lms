@@ -1747,6 +1747,9 @@ $userIsSubscribed = CourseManager::is_user_subscribed_in_course(
     $courseInfo['code']
 );
 
+
+$getSizeURL = api_get_path(WEB_AJAX_PATH).'document.ajax.php?a=get_dir_size&'.api_get_cidreq();
+
 if (isset($documentAndFolders) && is_array($documentAndFolders)) {
     if ($groupId == 0 || $userAccess) {
         $count = 1;
@@ -1769,8 +1772,7 @@ if (isset($documentAndFolders) && is_array($documentAndFolders)) {
             $invisibility_span_open = ($is_visible == 0) ? '<span class="muted">' : '';
             $invisibility_span_close = ($is_visible == 0) ? '</span>' : '';
 
-            // Size (or total size of a directory)
-            $size = $document_data['filetype'] == 'folder' ? get_total_folder_size($document_data['path'], $isAllowedToEdit) : $document_data['size'];
+            $size = 1;
 
             // Get the title or the basename depending on what we're using
             if ($document_data['title'] != '') {
@@ -1844,12 +1846,15 @@ if (isset($documentAndFolders) && is_array($documentAndFolders)) {
                 $invisibility_span_close.
                 $user_link;
 
-            // Comments => display comment under the document name
-            $display_size = format_file_size($size);
+            if ($document_data['filetype'] == 'folder') {
+                $displaySize = '<span id="document_size_'.$document_data['id'].'" data-path= "'.$document_data['path'].'" class="document_size"></span>';
+            } else {
+                $displaySize = format_file_size($document_data['size']);
+            }
 
             $row[] = '<span style="display:none;">'.$size.'</span>'.
                 $invisibility_span_open.
-                $display_size.
+                $displaySize.
                 $invisibility_span_close;
 
             // Last edit date
@@ -1914,7 +1919,6 @@ if (isset($documentAndFolders) && is_array($documentAndFolders)) {
 
 if (!is_null($documentAndFolders)) {
     // Show download zipped folder icon
-    global $total_size;
     if (!$is_certificate_mode && $total_size != 0
         && (api_get_setting('students_download_folders') == 'true'
         || $isAllowedToEdit
@@ -2092,7 +2096,18 @@ if (count($documentAndFolders) > 1) {
                 success:function(data){
                     $("#course_quota").html(data);
                 }
-            });             
+            });
+            
+            $(".document_size").each(function(i, obj) {
+                var path = obj.getAttribute("data-path");
+                                
+                $.ajax({
+                    url:"'.$getSizeURL.'&path="+path,
+                    success:function(data){
+                        $(obj).html(data);
+                    }
+                });            
+            });    
         });
         </script>';
         echo '<span id="course_quota"></span>';

@@ -8,6 +8,13 @@ require_once __DIR__.'/../global.inc.php';
 
 $action = $_REQUEST['a'];
 switch ($action) {
+    case 'get_dir_size':
+        api_protect_course_script(true);
+        $path = isset($_GET['path']) ? $_GET['path'] : '';
+        $isAllowedToEdit = api_is_allowed_to_edit();
+        $size = get_total_folder_size($path, $isAllowedToEdit);
+        echo format_file_size($size);
+        break;
     case 'get_document_quota':
         // Getting the course quota
         $course_quota = DocumentManager::get_course_quota();

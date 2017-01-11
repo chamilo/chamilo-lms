@@ -97,7 +97,7 @@
 
             } else if (status === google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
                 setTimeout(function() {
-                    geoCode(address, map, bounds, userCompleteName, index);
+                    addMaker(address, map, bounds, userCompleteName, index);
                 }, 350);
             }
         });

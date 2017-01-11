@@ -3240,7 +3240,6 @@ class DocumentManager
     public static function generate_media_preview($i, $type = 'simple')
     {
         $i = intval($i);
-
         $extra_controls = $progress = '';
         if ($type == 'advanced') {
             $extra_controls = ' <li><a href="javascript:;" class="jp-stop" tabindex="1">stop</a></li>
@@ -5209,6 +5208,8 @@ class DocumentManager
      * @param int $show_as_icon - if it is true, only a clickable icon will be shown
      * @param int $visibility (1/0)
      * @param int $counter
+     * @param int $size
+     * @param bool $isAllowedToEdit
      *
      * @return string url
      */
@@ -5217,14 +5218,16 @@ class DocumentManager
         $course_info,
         $show_as_icon = false,
         $counter = null,
-        $visibility
+        $visibility,
+        $size = 0,
+        $isAllowedToEdit = false
     ) {
         global $dbl_click_id;
 
         $current_session_id = api_get_session_id();
+        $courseParams = api_get_cidreq();
         $www = api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/document';
         $webODFList = DocumentManager::get_web_odf_extension_list();
-        $isAllowedToEdit = api_is_allowed_to_edit(null, true);
 
         // Get the title or the basename depending on what we're using
         if ($document_data['title'] != '') {
@@ -5234,9 +5237,7 @@ class DocumentManager
         }
 
         $filetype = $document_data['filetype'];
-        $size = $filetype == 'folder' ? get_total_folder_size($document_data['path'], $isAllowedToEdit) : $document_data['size'];
         $path = $document_data['path'];
-
         $url_path = urlencode($document_data['path']);
 
         // Add class="invisible" on invisible files
@@ -5247,7 +5248,7 @@ class DocumentManager
 
         if (!$show_as_icon) {
             // Build download link (icon)
-            $forcedownload_link = ($filetype == 'folder') ? api_get_self() . '?' . api_get_cidreq() . '&action=downloadfolder&id=' . $document_data['id'] : api_get_self() . '?' . api_get_cidreq() . '&amp;action=download&amp;id=' . $document_data['id'];
+            $forcedownload_link = ($filetype == 'folder') ? api_get_self() . '?' . $courseParams . '&action=downloadfolder&id=' . $document_data['id'] : api_get_self() . '?' . $courseParams . '&amp;action=download&amp;id=' . $document_data['id'];
             // Folder download or file download?
             $forcedownload_icon = ($filetype == 'folder') ? 'save_pack.png' : 'save.png';
             // Prevent multiple clicks on zipped folder download
@@ -5267,17 +5268,17 @@ class DocumentManager
 
             if ($is_browser_viewable_file) {
                 if ($ext == 'pdf' || in_array($ext, $webODFList)) {
-                    $url = api_get_self() . '?' . api_get_cidreq() . '&amp;action=download&amp;id=' . $document_data['id'];
+                    $url = api_get_self() . '?' . $courseParams . '&amp;action=download&amp;id=' . $document_data['id'];
                 } else {
-                    $url = 'showinframes.php?' . api_get_cidreq() . '&id=' . $document_data['id'];
+                    $url = 'showinframes.php?' . $courseParams . '&id=' . $document_data['id'];
                 }
             } else {
                 // url-encode for problematic characters (we may not call them dangerous characters...)
-                $path = str_replace('%2F', '/', $url_path) . '?' . api_get_cidreq();
+                $path = str_replace('%2F', '/', $url_path) . '?' . $courseParams;
                 $url = $www . $path;
             }
         } else {
-            $url = api_get_self() . '?' . api_get_cidreq() . '&id=' . $document_data['id'];
+            $url = api_get_self() . '?' . $courseParams . '&id=' . $document_data['id'];
         }
 
         // The little download icon
@@ -5344,7 +5345,7 @@ class DocumentManager
             if (api_get_setting('allow_my_files') === 'true' &&
                 api_get_setting('users_copy_files') === 'true'
             ) {
-                $copy_myfiles_link = ($filetype == 'file') ? api_get_self() . '?' . api_get_cidreq() . '&action=copytomyfiles&id=' . $document_data['id'] : api_get_self() . '?' . api_get_cidreq();
+                $copy_myfiles_link = ($filetype == 'file') ? api_get_self() . '?' . $courseParams . '&action=copytomyfiles&id=' . $document_data['id'] : api_get_self() . '?' . $courseParams;
                 if ($filetype == 'file') {
                     $copy_to_myfiles = '<a href="' . $copy_myfiles_link . '" style="float:right"' . $prevent_multiple_click . '>' .
                         Display::return_icon('briefcase.png', get_lang('CopyToMyFiles'), array(), ICON_SIZE_SMALL) . '&nbsp;&nbsp;</a>';
@@ -5355,7 +5356,7 @@ class DocumentManager
                 }
 
                 if ($filetype == 'file') {
-                    $send_to = Portfolio::share('document', $document_data['id'], array('style' => 'float:right;'));
+                    //$send_to = Portfolio::share('document', $document_data['id'], array('style' => 'float:right;'));
                 }
             }
 
@@ -5366,12 +5367,12 @@ class DocumentManager
                 $filetype == 'file' &&
                 in_array($extension, array('html', 'htm'))
             ) {
-                $pdf_icon = ' <a style="float:right".' . $prevent_multiple_click . ' href="' . api_get_self() . '?' . api_get_cidreq() . '&action=export_to_pdf&id=' . $document_data['id'] . '">' .
+                $pdf_icon = ' <a style="float:right".' . $prevent_multiple_click . ' href="' . api_get_self() . '?' . $courseParams . '&action=export_to_pdf&id=' . $document_data['id'] . '">' .
                     Display::return_icon('pdf.png', get_lang('Export2PDF'), array(), ICON_SIZE_SMALL) . '</a> ';
             }
 
             if ($is_browser_viewable_file) {
-                $open_in_new_window_link = '<a href="' . $www . str_replace('%2F', '/', $url_path) . '?' . api_get_cidreq() . '" style="float:right"' . $prevent_multiple_click . ' target="_blank">' .
+                $open_in_new_window_link = '<a href="' . $www . str_replace('%2F', '/', $url_path) . '?' . $courseParams . '" style="float:right"' . $prevent_multiple_click . ' target="_blank">' .
                     Display::return_icon('open_in_new_window.png', get_lang('OpenInANewWindow'), array(), ICON_SIZE_SMALL) . '&nbsp;&nbsp;</a>';
             }
 
@@ -5396,7 +5397,7 @@ class DocumentManager
                     preg_match('/svg$/i', urldecode($checkExtension))
                 ) {
                     // Simpler version of showinframesmin.php with no headers
-                    $url = 'show_content.php?' . api_get_cidreq() . '&id=' . $document_data['id'];
+                    $url = 'show_content.php?' . $courseParams . '&id=' . $document_data['id'];
                     $class = 'ajax';
                     if ($visibility == false) {
                         $class = "ajax text-muted";
@@ -5417,11 +5418,11 @@ class DocumentManager
                     // For a "PDF Download" of the file.
                     $pdfPreview = null;
                     if ($ext != 'pdf' && !in_array($ext, $webODFList)) {
-                        $url = 'showinframes.php?' . api_get_cidreq() . '&id=' . $document_data['id'];
+                        $url = 'showinframes.php?' . $courseParams . '&id=' . $document_data['id'];
                     } else {
                         $pdfPreview = Display::url(
                             Display::return_icon('preview.gif', get_lang('Preview')),
-                            api_get_path(WEB_CODE_PATH).'document/showinframes.php?' . api_get_cidreq() . '&id=' . $document_data['id'],
+                            api_get_path(WEB_CODE_PATH).'document/showinframes.php?' . $courseParams . '&id=' . $document_data['id'],
                             array('style' => 'float:right')
                         );
                     }
@@ -5458,7 +5459,7 @@ class DocumentManager
                         preg_match('/bmp$/i', urldecode($checkExtension)) ||
                         preg_match('/svg$/i', urldecode($checkExtension))
                     ) {
-                        $url = 'showinframes.php?' . api_get_cidreq() . '&id=' . $document_data['id'];
+                        $url = 'showinframes.php?' . $courseParams . '&id=' . $document_data['id'];
                         return '<a href="' . $url . '" title="' . $tooltip_title_alt . '" ' . $visibility_class . ' style="float:left">' .
                         DocumentManager::build_document_icon_tag($filetype, $path, $isAllowedToEdit) .
                         Display::return_icon('shared.png', get_lang('ResourceShared'), array()) . '</a>';
@@ -5493,7 +5494,7 @@ class DocumentManager
                         preg_match('/bmp$/i', urldecode($checkExtension)) ||
                         preg_match('/svg$/i', urldecode($checkExtension))
                     ) {
-                        $url = 'showinframes.php?' . api_get_cidreq() . '&id=' . $document_data['id']; //without preview
+                        $url = 'showinframes.php?' . $courseParams . '&id=' . $document_data['id']; //without preview
                         return '<a href="' . $url . '" title="' . $tooltip_title_alt . '" ' . $visibility_class . ' style="float:left">' .
                         DocumentManager::build_document_icon_tag($filetype, $path, $isAllowedToEdit) . '</a>';
                     } else {
@@ -6115,8 +6116,8 @@ class DocumentManager
         if (!($result = in_array($file_extension, $allowed_extensions))) { // Assignment + a logical check.
             return false;
         }
-        //check native support (Explorer, Opera, Firefox, Chrome, Safari)
 
+        //check native support (Explorer, Opera, Firefox, Chrome, Safari)
         if ($file_extension == "pdf") {
             return api_browser_support('pdf');
         } elseif ($file_extension == "mp3") {

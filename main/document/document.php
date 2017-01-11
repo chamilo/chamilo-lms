@@ -1748,17 +1748,9 @@ $userIsSubscribed = CourseManager::is_user_subscribed_in_course(
 );
 
 if (isset($documentAndFolders) && is_array($documentAndFolders)) {
-    if ($groupId == 0 ||
-        GroupManager::user_has_access(
-            $userId,
-            $groupIid,
-            GroupManager::GROUP_TOOL_DOCUMENTS
-        )
-    ) {
+    if ($groupId == 0 || $userAccess) {
         $count = 1;
         $countedPaths = array();
-        $countedPaths = array();
-
         foreach ($documentAndFolders as $key => $document_data) {
             $row = array();
             $row['id'] = $document_data['id'];
@@ -1820,7 +1812,9 @@ if (isset($documentAndFolders) && is_array($documentAndFolders)) {
                 $courseInfo,
                 true,
                 $count,
-                $is_visible
+                $is_visible,
+                $size,
+                $isAllowedToEdit
             );
 
             $path_info = pathinfo($document_data['path']);
@@ -1839,7 +1833,9 @@ if (isset($documentAndFolders) && is_array($documentAndFolders)) {
                 $courseInfo,
                 false,
                 null,
-                $is_visible
+                $is_visible,
+                $size,
+                $isAllowedToEdit
             );
 
             // Document title with link

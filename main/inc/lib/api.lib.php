@@ -6020,6 +6020,12 @@ function api_browser_support($format = '')
     $a_versiontemp = explode('.', $browser->getVersion());
     $current_majorver = $a_versiontemp[0];
 
+    static $result;
+
+    if (isset($result[$format])) {
+        return $result[$format];
+    }
+
     // Native svg support
     if ($format == 'svg') {
         if (($current_browser == 'Internet Explorer' && $current_majorver >= 9) ||
@@ -6028,22 +6034,28 @@ function api_browser_support($format = '')
             ($current_browser == 'Chrome' && $current_majorver >= 1) ||
             ($current_browser == 'Opera' && $current_majorver >= 9)
         ) {
+            $result[$format] = true;
             return true;
         } else {
+            $result[$format] = false;
             return false;
         }
     } elseif ($format == 'pdf') {
         //native pdf support
         if ($current_browser == 'Chrome' && $current_majorver >= 6) {
+            $result[$format] = true;
             return true;
         } else {
+            $result[$format] = false;
             return false;
         }
     } elseif ($format == 'tif' || $format == 'tiff') {
         //native tif support
         if ($current_browser == 'Safari' && $current_majorver >= 5) {
+            $result[$format] = true;
             return true;
         } else {
+            $result[$format] = false;
             return false;
         }
     } elseif ($format == 'ogg' || $format == 'ogx' || $format == 'ogv' || $format == 'oga') {
@@ -6051,43 +6063,55 @@ function api_browser_support($format = '')
         if (($current_browser == 'Firefox' && $current_majorver >= 3) ||
             ($current_browser == 'Chrome' && $current_majorver >= 3) ||
             ($current_browser == 'Opera' && $current_majorver >= 9)) {
+            $result[$format] = true;
             return true;
         } else {
+            $result[$format] = false;
             return false;
         }
     } elseif ($format == 'mpg' || $format == 'mpeg') {
         //native mpg support
         if (($current_browser == 'Safari' && $current_majorver >= 5)) {
+            $result[$format] = true;
             return true;
         } else {
+            $result[$format] = false;
             return false;
         }
     } elseif ($format == 'mp4') {
         //native mp4 support (TODO: Android, iPhone)
         if ($current_browser == 'Android' || $current_browser == 'iPhone') {
+            $result[$format] = true;
             return true;
         } else {
+            $result[$format] = false;
             return false;
         }
     } elseif ($format == 'mov') {
         //native mov support( TODO:check iPhone)
         if ($current_browser == 'Safari' && $current_majorver >= 5 || $current_browser == 'iPhone') {
+            $result[$format] = true;
             return true;
         } else {
+            $result[$format] = false;
             return false;
         }
     } elseif ($format == 'avi') {
         //native avi support
         if ($current_browser == 'Safari' && $current_majorver >= 5) {
+            $result[$format] = true;
             return true;
         } else {
+            $result[$format] = false;
             return false;
         }
     } elseif ($format == 'wmv') {
         //native wmv support
         if ($current_browser == 'Firefox' && $current_majorver >= 4) {
+            $result[$format] = true;
             return true;
         } else {
+            $result[$format] = false;
             return false;
         }
     } elseif ($format == 'webm') {
@@ -6098,8 +6122,10 @@ function api_browser_support($format = '')
             ($current_browser == 'Chrome' && $current_majorver >= 9) ||
             $current_browser == 'Android'
         ) {
+            $result[$format] = true;
             return true;
         } else {
+            $result[$format] = false;
             return false;
         }
     } elseif ($format == 'wav') {
@@ -6112,29 +6138,37 @@ function api_browser_support($format = '')
             $current_browser == 'Android' ||
             $current_browser == 'iPhone'
         ) {
+            $result[$format] = true;
             return true;
         } else {
+            $result[$format] = false;
             return false;
         }
     } elseif ($format == 'mid' || $format == 'kar') {
         //native midi support (TODO:check Android)
         if ($current_browser == 'Opera' && $current_majorver >= 9 || $current_browser == 'Android') {
+            $result[$format] = true;
             return true;
         } else {
+            $result[$format] = false;
             return false;
         }
     } elseif ($format == 'wma') {
         //native wma support
         if ($current_browser == 'Firefox' && $current_majorver >= 4) {
+            $result[$format] = true;
             return true;
         } else {
+            $result[$format] = false;
             return false;
         }
     } elseif ($format == 'au') {
         //native au support
         if ($current_browser == 'Safari' && $current_majorver >= 5) {
+            $result[$format] = true;
             return true;
         } else {
+            $result[$format] = false;
             return false;
         }
     } elseif ($format == 'mp3') {
@@ -6146,14 +6180,17 @@ function api_browser_support($format = '')
             $current_browser == 'iPhone' ||
             $current_browser == 'Firefox'
         ) {
+            $result[$format] = true;
             return true;
         } else {
+            $result[$format] = false;
             return false;
         }
     } elseif ($format == "check_browser") {
         $array_check_browser = array($current_browser, $current_majorver);
         return $array_check_browser;
     } else {
+        $result[$format] = false;
         return false;
     }
 }

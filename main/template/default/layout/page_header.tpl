@@ -42,14 +42,13 @@
                                 type: "GET",
                                 url: "{{ _p.web_main }}inc/ajax/online.ajax.php?a=get_users_online",
                                 success: function(data) {
-                                    $("#online_notification").html(data);
+                                    $("#notifications").append(data);
                                 }
                             });
                         });
                        </script>
                     <div class="section-notifications">
                         <ul id="notifications" class="nav nav-pills pull-right">
-                            <span id="online_notification"></span>
                         </ul>
                     </div>
                     {{ accessibility }}

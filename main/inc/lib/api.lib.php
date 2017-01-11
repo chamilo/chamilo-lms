@@ -1294,10 +1294,11 @@ function api_get_user_courses($userid, $fetch_session = true)
  *
  * @param array Non-standard user array
  * @param bool $add_password
+ * @param bool $loadAvatars turn off to improve performance
  *
  * @return array Standard user array
  */
-function _api_format_user($user, $add_password = false)
+function _api_format_user($user, $add_password = false, $loadAvatars = true)
 {
     $result = array();
 
@@ -1312,7 +1313,6 @@ function _api_format_user($user, $add_password = false)
     }
 
     $result['complete_name'] = api_get_person_name($firstname, $lastname);
-
     $result['complete_name_with_username'] = $result['complete_name'];
 
     if (!empty($user['username'])) {
@@ -1366,15 +1366,32 @@ function _api_format_user($user, $add_password = false)
     $result['user_id'] = $result['id'] = $user_id;
 
     // Getting user avatar.
-    $originalFile = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_ORIGINAL, null, $result);
-    $smallFile = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_SMALL, null, $result);
-    $mediumFile = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_MEDIUM, null, $result);
+    if ($loadAvatars) {
+        $originalFile = UserManager::getUserPicture(
+            $user_id,
+            USER_IMAGE_SIZE_ORIGINAL,
+            null,
+            $result
+        );
+        $smallFile = UserManager::getUserPicture(
+            $user_id,
+            USER_IMAGE_SIZE_SMALL,
+            null,
+            $result
+        );
+        $mediumFile = UserManager::getUserPicture(
+            $user_id,
+            USER_IMAGE_SIZE_MEDIUM,
+            null,
+            $result
+        );
 
-    $result['avatar'] = $originalFile;
-    $avatarString = explode('?', $originalFile);
-    $result['avatar_no_query'] = reset($avatarString);
-    $result['avatar_small'] = $smallFile;
-    $result['avatar_medium'] = $mediumFile;
+        $result['avatar'] = $originalFile;
+        $avatarString = explode('?', $originalFile);
+        $result['avatar_no_query'] = reset($avatarString);
+        $result['avatar_small'] = $smallFile;
+        $result['avatar_medium'] = $mediumFile;
+    }
 
     if (isset($user['user_is_online'])) {
         $result['user_is_online'] = $user['user_is_online'] == true ? 1 : 0;
@@ -1408,6 +1425,7 @@ function _api_format_user($user, $add_password = false)
  * @param bool $showPassword
  * @param bool $loadExtraData
  * @param bool $loadOnlyVisibleExtraData Get the user extra fields that are visible
+ * @param bool $loadAvatars turn off to improve performance and if avatars are not needed.
  * @return array $user_info user_id, lastname, firstname, username, email, etc
  * @author Patrick Cool <patrick.cool@UGent.be>
  * @author Julio Montoya
@@ -1418,12 +1436,13 @@ function api_get_user_info(
     $checkIfUserOnline = false,
     $showPassword = false,
     $loadExtraData = false,
-    $loadOnlyVisibleExtraData = false
+    $loadOnlyVisibleExtraData = false,
+    $loadAvatars = true
 ) {
     if (empty($user_id)) {
         $userFromSession = Session::read('_user');
         if (isset($userFromSession)) {
-            return _api_format_user($userFromSession);
+            return _api_format_user($userFromSession, $showPassword, $loadAvatars);
         }
 
         return false;
@@ -1436,7 +1455,6 @@ function api_get_user_info(
         $result_array = Database::fetch_array($result);
         if ($checkIfUserOnline) {
             $use_status_in_platform = user_is_online($user_id);
-
             $result_array['user_is_online'] = $use_status_in_platform;
             $user_online_in_chat = 0;
 
@@ -1456,13 +1474,12 @@ function api_get_user_info(
 
         if ($loadExtraData) {
             $fieldValue = new ExtraFieldValue('user');
-
             $result_array['extra'] = $fieldValue->getAllValuesForAnItem(
                 $user_id,
                 $loadOnlyVisibleExtraData
             );
         }
-        $user = _api_format_user($result_array, $showPassword);
+        $user = _api_format_user($result_array, $showPassword, $loadAvatars);
 
         return $user;
     }
@@ -2334,6 +2351,7 @@ function api_get_plugin_setting($plugin, $variable)
 {
     $variableName = $plugin.'_'.$variable;
     $result = api_get_setting($variableName);
+
     if (isset($result[$plugin])) {
         return $result[$plugin];
     }

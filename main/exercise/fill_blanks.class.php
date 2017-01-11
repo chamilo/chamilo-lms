@@ -33,9 +33,7 @@ class FillBlanks extends Question
      */
     public function createAnswersForm($form)
     {
-        //$fillBlanksAllowedSeparator = self::getAllowedSeparator();
         $defaults = array();
-
         if (!empty($this->id)) {
             $objectAnswer = new Answer($this->id);
             $answer = $objectAnswer->selectAnswer(1);
@@ -64,7 +62,6 @@ class FillBlanks extends Question
                 $setWeightAndSize .= 'document.getElementById("weighting['.$i.']").value = "'.$weighting.'";';
             }
             foreach ($listAnswersInfo['tabinputsize'] as $i => $sizeOfInput) {
-                //var_dump($listAnswersInfo['tabwords']);
                 $setWeightAndSize .= 'document.getElementById("sizeofinput['.$i.']").value = "'.$sizeOfInput.'";';
                 $setWeightAndSize .= 'document.getElementById("samplesize['.$i.']").style.width = "'.$sizeOfInput.'px";';
             }
@@ -90,8 +87,7 @@ class FillBlanks extends Question
             });                        
             
             function updateBlanks()
-            {
-                
+            {                
                 var answer;                
                 if (firstTime) {
                     var field = document.getElementById("answer");
@@ -185,15 +181,15 @@ class FillBlanks extends Question
             window.onload = updateBlanks;
             
             String.prototype.hashCode = function() {
-  var hash = 0, i, chr, len;
-  if (this.length === 0) return hash;
-  for (i = 0, len = this.length; i < len; i++) {
-    chr   = this.charCodeAt(i);
-    hash  = ((hash << 5) - hash) + chr;
-    hash |= 0; // Convert to 32bit integer
-  }
-  return hash;
-};
+                var hash = 0, i, chr, len;
+                if (this.length === 0) return hash;
+                for (i = 0, len = this.length; i < len; i++) {
+                    chr   = this.charCodeAt(i);
+                    hash  = ((hash << 5) - hash) + chr;
+                    hash |= 0; // Convert to 32bit integer
+                }
+                return hash;
+            };
             
             function updateOrder(blanks) 
             {
@@ -510,7 +506,7 @@ class FillBlanks extends Question
         $displayForStudent,
         $inBlankNumber
     ) {
-        $result = "";
+        $result = '';
         $inTabTeacherSolution = $listAnswersInfo['tabwords'];
         $inTeacherSolution = $inTabTeacherSolution[$inBlankNumber];
         switch (self::getFillTheBlankAnswerType($inTeacherSolution)) {
@@ -563,7 +559,13 @@ class FillBlanks extends Question
     public static function getFillTheBlankMenuAnswers($correctAnswer, $displayForStudent)
     {
         // if $inDisplayForStudent, then shuffle the result array
-        $listChoises = api_preg_split("/\|/", $correctAnswer);
+        /*$items = explode('|', $correctAnswer);
+        if ($displayForStudent) {
+            shuffle($items);
+        }
+
+        return $items;*/
+         $listChoises = api_preg_split("/\|/", $correctAnswer);
         if ($displayForStudent) {
             shuffle($listChoises);
         }
@@ -736,7 +738,7 @@ class FillBlanks extends Question
             array_walk(
                 $listWords[0],
                 function (&$value, $key, $tabBlankChar) {
-                    $trimChars = "";
+                    $trimChars = '';
                     for ($i=0; $i < count($tabBlankChar); $i++) {
                         $trimChars .= $tabBlankChar[$i];
                     }
@@ -826,22 +828,22 @@ class FillBlanks extends Question
         // student may have not answered the bracket id, in this case, is result of the answer is empty
         // we got the less recent attempt first
         $sql = 'SELECT * FROM '.$tblTrackEAttempt.' tea
-               LEFT JOIN '.$tblTrackEExercise.' tee
-               ON tee.exe_id = tea.exe_id
-               AND tea.c_id = '.$courseId.'
-               AND exe_exo_id = '.$testId.'    
+                LEFT JOIN '.$tblTrackEExercise.' tee
+                ON 
+                    tee.exe_id = tea.exe_id AND 
+                    tea.c_id = '.$courseId.' AND 
+                    exe_exo_id = '.$testId.'    
                WHERE 
-                tee.c_id = '.$courseId.' AND 
-                question_id = '.$questionId.' AND 
-                tea.user_id IN ('.implode(',', $studentsIdList).')  AND 
-                tea.tms >= "'.$startDate.'" AND 
-                tea.tms <= "'.$endDate.'"
+                    tee.c_id = '.$courseId.' AND 
+                    question_id = '.$questionId.' AND 
+                    tea.user_id IN ('.implode(',', $studentsIdList).')  AND 
+                    tea.tms >= "'.$startDate.'" AND 
+                    tea.tms <= "'.$endDate.'"
                ORDER BY user_id, tea.exe_id;
         ';
 
         $res = Database::query($sql);
         $tabUserResult = array();
-        $bracketNumber = 0;
         // foreach attempts for all students starting with his older attempt
         while ($data = Database::fetch_array($res)) {
             $tabAnswer = FillBlanks::getAnswerInfo($data['answer'], true);
@@ -891,7 +893,7 @@ class FillBlanks extends Question
 
     /**
      * Return the number of student that give at leat an answer in the fill the blank test
-     * @param $resultList
+     * @param array $resultList
      * @return int
      */
     public static function getNbResultFillBlankAll($resultList)
@@ -1012,7 +1014,6 @@ class FillBlanks extends Question
 
         return $result;
     }
-
 
     /**
      * This function must be the same than the js one getSeparatorFromNumber above

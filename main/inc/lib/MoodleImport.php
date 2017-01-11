@@ -217,9 +217,7 @@ class MoodleImport
                                         );
 
                                         if ($importedFiles) {
-                                            foreach ($importedFiles as $old => $new) {
-                                                $questionText = str_replace($old, $new, $questionText);
-                                            }
+                                            $this->fixPathInText($importedFiles, $questionText);
                                         }
 
                                         $questionInstance->updateDescription($questionText);
@@ -749,10 +747,8 @@ class MoodleImport
                 // sets the total weighting of the question
                 $questionInstance->updateWeighting($questionWeighting);
                 $questionInstance->save();
-                // saves the answers into the data base
-
+                // saves the answers into the database
                 $this->fixPathInText($importedFiles, $placeholder);
-
                 $objAnswer->createAnswer($placeholder, 0, '', 0, 1);
                 $objAnswer->save();
 
@@ -948,7 +944,7 @@ class MoodleImport
                     $optionsValues[$slot]['weight'] = 1;
                     $optionsValues[$slot]['size'] = '200';
 
-                    $currentAnswers = $correctAnswer.$othersAnswers;
+                    $currentAnswers = htmlentities($correctAnswer.$othersAnswers);
                     $currentAnswers = '['.substr($currentAnswers, 0, -1).'] ';
                     $answer['questiontext'] = str_replace(
                         '@@PLUGINFILE@@',

@@ -1457,15 +1457,15 @@ class ImportCsv
                     $date->sub($interval);
                     $coachBefore = $date->format('Y-m-d h:i');
 
-                    $date = new \DateTime($dateStart);
+                    $date = new \DateTime($dateEnd);
                     $interval = new DateInterval('P'.$this->daysCoachAccessAfterBeginning.'D');
                     $date->add($interval);
                     $coachAfter = $date->format('Y-m-d h:i');
 
-                    $dateStart = api_get_utc_datetime($dateStart);
+                    /*$dateStart = api_get_utc_datetime($dateStart);
                     $dateEnd = api_get_utc_datetime($dateEnd);
                     $coachBefore = api_get_utc_datetime($coachBefore);
-                    $coachAfter = api_get_utc_datetime($coachAfter);
+                    $coachAfter = api_get_utc_datetime($coachAfter);*/
 
                     if (empty($sessionId)) {
                         $result = SessionManager::create_session(

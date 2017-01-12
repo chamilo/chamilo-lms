@@ -3037,7 +3037,7 @@ function api_is_allowed($tool, $action, $task_id = 0)
     if (api_is_course_admin()) {
         return true;
     }
-    //if (!$_SESSION['total_permissions'][$_course['code']] and $_course)
+
     if (is_array($_course) and count($_course) > 0) {
         require_once api_get_path(SYS_CODE_PATH).'permissions/permissions_functions.inc.php';
 
@@ -5122,11 +5122,11 @@ function api_get_access_urls($from = 0, $to = 1000000, $order = 'url', $directio
 function api_get_access_url($id, $returnDefault = true)
 {
     static $staticResult;
+    $id = intval($id);
 
     if (isset($staticResult[$id])) {
         $result = $staticResult[$id];
     } else {
-        $id = intval($id);
         // Calling the Database:: library dont work this is handmade.
         $table_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
         $sql = "SELECT url, description, active, created_by, tms
@@ -5313,7 +5313,7 @@ function api_add_setting(
 
 /**
  * Checks wether a user can or can't view the contents of a course.
- *
+ * @deprecated use CourseManager::is_user_subscribed_in_course
  * @param   int $userid     User id or NULL to get it from $_SESSION
  * @param   int $cid        Course id to check whether the user is allowed.
  * @return  bool
@@ -5542,7 +5542,16 @@ function api_is_element_in_the_session($tool, $element_id, $session_id = null) {
  */
 function api_replace_dangerous_char($filename, $treat_spaces_as_hyphens = true)
 {
-    return URLify::filter($filename, 250, '', true, true, false, false, $treat_spaces_as_hyphens);
+    return URLify::filter(
+        $filename,
+        250,
+        '',
+        true,
+        true,
+        false,
+        false,
+        $treat_spaces_as_hyphens
+    );
 }
 
 /**
@@ -5597,11 +5606,11 @@ function api_get_access_url_from_user($user_id) {
             ON (url_rel_user.access_url_id = u.id)
             WHERE user_id = ".intval($user_id);
     $result = Database::query($sql);
-    $url_list = array();
+    $list = array();
     while ($row = Database::fetch_array($result, 'ASSOC')) {
-        $url_list[] = $row['access_url_id'];
+        $list[] = $row['access_url_id'];
     }
-    return $url_list;
+    return $list;
 }
 
 /**

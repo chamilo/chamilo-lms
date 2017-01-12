@@ -11,8 +11,6 @@ var DraggableAnswer = {
         item.fadeOut(function () {
             var $list = $('<ul>').addClass('gallery ui-helper-reset').appendTo(insertHere);
 
-            item.find('a.btn').remove();
-
             var droppedId = item.attr('id'),
                 dropedOnId = insertHere.attr('id'),
                 originSelectId = 'window_' + droppedId + '_select',
@@ -20,9 +18,11 @@ var DraggableAnswer = {
 
             $('#' + originSelectId + ' option')
                 .filter(function (index) {
-                    return index === parseInt(value);
+                    var position = insertHere.prop('id').split('_')[2];
+
+                    return index === parseInt(position);
                 })
-                .attr("selected", true);
+                .prop("selected", true);
 
             item.appendTo($list).fadeIn();
         });
@@ -30,11 +30,6 @@ var DraggableAnswer = {
     recycleItem: function (item) {
         item.fadeOut(function () {
             item
-                .find('a.btn')
-                .remove()
-                .end()
-                .find("img")
-                .end()
                 .appendTo(DraggableAnswer.gallery)
                 .fadeIn();
         });
@@ -42,7 +37,8 @@ var DraggableAnswer = {
         var droppedId = item.attr('id'),
             originSelectId = 'window_' + droppedId + '_select';
 
-        $('#' + originSelectId + ' option:first').attr('selected', 'selected');
+        $('#' + originSelectId + ' option').prop('selected', false);
+        $('#' + originSelectId + ' option:first').prop('selected', true);
     },
     init: function (gallery, trash) {
         this.gallery = gallery;

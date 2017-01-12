@@ -42,6 +42,7 @@ use ChamiloSession as Session;
 
 require_once dirname(__FILE__) . '/ldap.inc.php';
 require_once dirname(__FILE__) . '/functions.inc.php';
+
 $debug = false;
 if ($debug) {
     error_log('Entering login.ldap.php');
@@ -58,7 +59,7 @@ if ($ldap_user !== false) {
         error_log("chamilo_user found user_id: {$uData['user_id']}");
     }
 
-    //Update user info
+    //U pdate user info
     if (isset($extldap_config['update_userinfo']) && $extldap_config['update_userinfo']) {
         external_update_user($chamilo_user);
         if ($debug) {
@@ -75,7 +76,9 @@ if ($ldap_user !== false) {
     $logging_in = true;
     Event::event_login($_user['user_id']);
 } else {
-    error_log('extldap_authenticate error');
+    if ($debug) {
+        error_log('extldap_authenticate error');
+    }
     $loginFailed = true;
     $uidReset = false;
     if (isset($_user) && isset($_user['user_id'])) {

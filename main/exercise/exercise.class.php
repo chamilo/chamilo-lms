@@ -4016,6 +4016,11 @@ class Exercise
                                         echo '</tr>';
                                         break;
                                     case DRAGGABLE:
+                                        if ($showTotalScoreAndUserChoicesInLastAttempt == false) {
+                                            $s_answer_label = '';
+                                            $status = '';
+                                        }
+
                                         echo '<tr>';
                                         echo '<td>' . $user_answer.'</td>';
                                         echo '<td>' . $s_answer_label . '</td>';

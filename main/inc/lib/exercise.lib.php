@@ -848,6 +848,7 @@ class ExerciseLib
                                 ]
                             );
                             $selectedValue = 0;
+                            $selectedKey = 0;
                             $draggableSelectOptions = [];
 
                             foreach ($select_items as $key => $val) {
@@ -861,6 +862,7 @@ class ExerciseLib
                                     isset($user_choice[$matching_correct_answer]) &&
                                     $val['id'] == $user_choice[$matching_correct_answer]['answer']
                                 ) {
+                                    $selectedKey = $key;
                                     $selectedValue = $val['id'];
                                 }
 
@@ -880,16 +882,16 @@ class ExerciseLib
                             );
 
                             if (!empty($answerCorrect) && !empty($selectedValue)) {
-                                $s .= <<<JAVASCRIPT
-                                <script>
-                                    $(function() {
-                                        DraggableAnswer.deleteItem(
-                                            $('#{$questionId}_{$selectedValue}'),
-                                            $('#drop_$windowId')
-                                        );
-                                    });
-                                </script>
-JAVASCRIPT;
+                                $s .= "
+                                    <script>
+                                        $(function() {
+                                            DraggableAnswer.deleteItem(
+                                                $('#{$questionId}_{$lines_count}'),
+                                                $('#drop_{$questionId}_{$selectedKey}')
+                                            );
+                                        });
+                                    </script>
+                                ";
                             }
 
                             if (isset($select_items[$lines_count])) {

@@ -8487,6 +8487,17 @@ class Exercise
                         case FILL_IN_BLANKS:
                             $isCorrect = FillBlanks::isCorrect($answer['answer']);
                             break;
+                        case MATCHING:
+                            //no break
+                        case DRAGGABLE:
+                            //no break
+                        case MATCHING_DRAGGABLE:
+                            $isCorrect = Matching::isCorrect(
+                                $answer['position'],
+                                $answer['answer'],
+                                $answer['question_id']
+                            );
+                            break;
                         default:
                             $isCorrect = $objAnswer->isCorrectByAutoId($answer['answer']);
                     }

@@ -661,7 +661,6 @@ function api_get_path($path = '', $configuration = [])
 
     $course_folder = 'courses/';
     static $root_web = '';
-    static $root_sys = '';
     $root_sys = $_configuration['root_sys'];
 
     // If no $root_web has been set so far *and* no custom config has been passed to the function
@@ -698,15 +697,17 @@ function api_get_path($path = '', $configuration = [])
         }
     }
 
-    if (isset($configuration['multiple_access_urls']) && $configuration['multiple_access_urls']) {
+    if (isset($configuration['multiple_access_urls']) &&
+        $configuration['multiple_access_urls']
+    ) {
         // To avoid that the api_get_access_url() function fails since global.inc.php also calls the main_api.lib.php
         if (isset($configuration['access_url']) && !empty($configuration['access_url'])) {
             // We look into the DB the function api_get_access_url
-            $url_info = api_get_access_url($configuration['access_url']);
+            $urlInfo = api_get_access_url($configuration['access_url']);
             // Avoid default value
-            $defaulValues = ['http://localhost/', 'https://localhost/'];
-            if (!empty($url_info['url']) && !in_array($url_info['url'], $defaulValues)) {
-                $root_web = $url_info['active'] == 1 ? $url_info['url'] : $configuration['root_web'];
+            $defaultValues = ['http://localhost/', 'https://localhost/'];
+            if (!empty($urlInfo['url']) && !in_array($urlInfo['url'], $defaultValues)) {
+                $root_web = $urlInfo['active'] == 1 ? $urlInfo['url'] : $configuration['root_web'];
             }
         }
     }
@@ -5120,13 +5121,21 @@ function api_get_access_urls($from = 0, $to = 1000000, $order = 'url', $directio
  */
 function api_get_access_url($id, $returnDefault = true)
 {
-    $id = intval($id);
-    // Calling the Database:: library dont work this is handmade.
-    $table_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
-    $sql = "SELECT url, description, active, created_by, tms
-            FROM $table_access_url WHERE id = '$id' ";
-    $res = Database::query($sql);
-    $result = @Database::fetch_array($res);
+    static $staticResult;
+
+    if (isset($staticResult[$id])) {
+        $result = $staticResult[$id];
+    } else {
+        $id = intval($id);
+        // Calling the Database:: library dont work this is handmade.
+        $table_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
+        $sql = "SELECT url, description, active, created_by, tms
+                FROM $table_access_url WHERE id = '$id' ";
+        $res = Database::query($sql);
+        $result = @Database::fetch_array($res);
+        $staticResult[$id] = $result;
+    }
+
     // If the result url is 'http://localhost/' (the default) and the root_web
     // (=current url) is different, and the $id is = 1 (which might mean
     // api_get_current_access_url_id() returned 1 by default), then return the

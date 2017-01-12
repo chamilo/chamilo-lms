@@ -708,7 +708,8 @@ class CourseBuilder
         // 2nd union gets the orphan questions from question that were deleted in a exercise.
 
         $sql = " (
-                    SELECT question_id, q.* FROM $table_que q INNER JOIN $table_rel r
+                    SELECT question_id, q.* FROM $table_que q 
+                    INNER JOIN $table_rel r
                     ON (q.c_id = r.c_id AND q.id = r.question_id)
                     INNER JOIN $table_qui ex
                     ON (ex.id = r.exercice_id AND ex.c_id = r.c_id )
@@ -716,8 +717,8 @@ class CourseBuilder
                  )
                  UNION
                  (
-                    SELECT question_id, q.* FROM $table_que q left
-                    OUTER JOIN $table_rel r
+                    SELECT question_id, q.* FROM $table_que q 
+                    left OUTER JOIN $table_rel r
                     ON (q.c_id = r.c_id AND q.id = r.question_id)
                     WHERE q.c_id = $courseId AND r.question_id is null
                  )

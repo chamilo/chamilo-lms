@@ -3636,8 +3636,8 @@ class Exercise
                             $answer
                         );
 
-                        $switchableAnswerSet = $listCorrectAnswers["switchable"];
-                        $answerWeighting = $listCorrectAnswers["tabweighting"];
+                        $switchableAnswerSet = $listCorrectAnswers['switchable'];
+                        $answerWeighting = $listCorrectAnswers['tabweighting'];
                         // user choices is an array $choice
 
                         // get existing user data in n the BDD
@@ -3661,16 +3661,16 @@ class Exercise
                             // not switchable answer, must be in the same place than teacher order
                             for ($i = 0; $i < count($listCorrectAnswers['tabwords']); $i++) {
                                 $studentAnswer = isset($choice[$i]) ? trim($choice[$i]) : '';
+                                $correctAnswer = $listCorrectAnswers['tabwords'][$i];
 
                                 // This value is the user input, not escaped while correct answer is escaped by fckeditor
                                 // Works with cyrillic alphabet and when using ">" chars see #7718 #7610 #7618
-                                /*if (!$from_database) {
+                                if (!$from_database) {
                                     $studentAnswer = htmlentities(
                                         api_utf8_encode($studentAnswer)
                                     );
-                                }*/
+                                }
 
-                                $correctAnswer = $listCorrectAnswers['tabwords'][$i];
                                 $isAnswerCorrect = 0;
                                 if (FillBlanks::isGoodStudentAnswer($studentAnswer, $correctAnswer)) {
                                     // gives the related weighting to the student
@@ -4016,6 +4016,10 @@ class Exercise
                                         echo '</tr>';
                                         break;
                                     case DRAGGABLE:
+                                        if ($showTotalScoreAndUserChoicesInLastAttempt == false) {
+                                            $s_answer_label = '';
+                                        }
+
                                         echo '<tr>';
                                         echo '<td>' . $user_answer.'</td>';
                                         echo '<td>' . $s_answer_label . '</td>';

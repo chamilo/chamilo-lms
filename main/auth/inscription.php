@@ -652,7 +652,7 @@ if ($user_already_registered_show_terms === false) {
 }
 
 if ($blockButton) {
-    $form->addButton('submit', get_lang('RegisterUser'), 'check', 'primary', null, null, ['disabled' => 'disabled'], false);
+    $form->addButton('submit', get_lang('RegisterUserOk'), 'check', 'primary', null, null, ['disabled' => 'disabled'], false);
 } else {
     $form->addButton('submit', get_lang('RegisterUser'));
 }

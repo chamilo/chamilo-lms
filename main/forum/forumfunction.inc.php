@@ -1671,7 +1671,10 @@ function get_last_post_by_thread($course_id, $thread_id, $forum_id, $show_visibl
 
     $table_posts = Database :: get_course_table(TABLE_FORUM_POST);
     $sql = "SELECT * FROM $table_posts
-            WHERE c_id = $course_id AND thread_id = $thread_id AND forum_id = $forum_id";
+            WHERE 
+                c_id = $course_id AND 
+                thread_id = $thread_id AND 
+                forum_id = $forum_id";
 
     if ($show_visible == false) {
         $sql .= " AND visible = 1 ";
@@ -3285,14 +3288,14 @@ function getThreadScoreHistory($user_id, $thread_id, $opt)
     $course_id = api_get_course_int_id();
 
     if ($opt == 'false') {
-        $sql = "SELECT * FROM ".$table_threads_qualify_log."
+        $sql = "SELECT * FROM $table_threads_qualify_log
                 WHERE
                     c_id = $course_id AND
                     thread_id='".Database::escape_string($thread_id)."' AND
                     user_id='".Database::escape_string($user_id)."'
                 ORDER BY qualify_time";
     } else {
-        $sql = "SELECT * FROM ".$table_threads_qualify_log."
+        $sql = "SELECT * FROM $table_threads_qualify_log
                 WHERE
                     c_id = $course_id AND
                     thread_id='".Database::escape_string($thread_id)."' AND
@@ -3956,48 +3959,46 @@ function forum_not_allowed_here()
  */
 function get_whats_new()
 {
-    $_user = api_get_user_info();
-    $_course = api_get_course_info();
+    $userId = api_get_user_id();
+    $course_id = api_get_course_int_id();
+
+    if (empty($course_id) || empty($userId)) {
+        return false;
+    }
 
     $table_posts = Database :: get_course_table(TABLE_FORUM_POST);
     $tracking_last_tool_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
 
-    // Note: This has to be replaced by the tool constant later.
-    // But temporarily bb_forum is used since this is the only thing that is in the tracking currently.
-    //$tool = TOOL_FORUM;
-    $tool = TOOL_FORUM; //
-    // to do: Remove this. For testing purposes only.
-    //Session::erase('last_forum_access');
-    //Session::erase('whatsnew_post_info');
-
-    $course_id = api_get_course_int_id();
+    $tool = TOOL_FORUM;
     $lastForumAccess = Session::read('last_forum_access');
 
     if (!$lastForumAccess) {
-        $sql = "SELECT * FROM ".$tracking_last_tool_access."
+        $sql = "SELECT * FROM $tracking_last_tool_access
                 WHERE
-                    access_user_id='".Database::escape_string($_user['user_id'])."' AND
-                    c_id ='".$course_id."' AND
-                    access_tool='".Database::escape_string($tool)."'";
+                    access_user_id = $userId AND
+                    c_id = $course_id AND
+                    access_tool = '".Database::escape_string($tool)."'";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
-        $_SESSION['last_forum_access'] = $row['access_date'];
+        Session::write('last_forum_access', $row['access_date']);
+        $lastForumAccess = $row['access_date'];
     }
 
     $whatsNew = Session::read('whatsnew_post_info');
 
     if (!$whatsNew) {
         if ($lastForumAccess != '') {
-            $whatsnew_post_info = array();
+            $postInfo = array();
             $sql = "SELECT * FROM $table_posts
                     WHERE
                         c_id = $course_id AND
-                        post_date >'".Database::escape_string($_SESSION['last_forum_access'])."'"; // note: check the performance of this query.
+                        visible = 1 AND                        
+                        post_date > '".Database::escape_string($lastForumAccess)."'";
             $result = Database::query($sql);
             while ($row = Database::fetch_array($result)) {
-                $whatsnew_post_info[$row['forum_id']][$row['thread_id']][$row['post_id']] = $row['post_date'];
+                $postInfo[$row['forum_id']][$row['thread_id']][$row['post_id']] = $row['post_date'];
             }
-            $_SESSION['whatsnew_post_info'] = $whatsnew_post_info;
+            Session::write('whatsnew_post_info', $postInfo);
         }
     }
 }
@@ -5374,11 +5375,19 @@ function count_number_of_post_in_thread($thread_id)
     if (empty($course_id)) {
         return 0;
     }
-    $sql = "SELECT * FROM $table_posts
-            WHERE c_id = $course_id AND thread_id='".intval($thread_id)."' ";
+    $sql = "SELECT count(*) count FROM $table_posts
+            WHERE 
+                c_id = $course_id AND 
+                thread_id='".intval($thread_id)."' ";
     $result = Database::query($sql);
 
-    return count(Database::store_result($result));
+    $count = 0;
+    if (Database::num_rows($result) > 0) {
+        $row = Database::fetch_array($result);
+        $count = $row['count'];
+    }
+
+    return $count;
 }
 
 /**
@@ -5410,7 +5419,7 @@ function count_number_of_post_for_user_thread($thread_id, $user_id)
 /**
  * This function counts the number of user register in course
  * @param   int $course_id Course ID
- *
+ * @deprecated use CourseManager::get_users_count_in_course
  * @return  int the number of user register in course
  * @author Jhon Hinojosa <jhon.hinojosa@dokeos.com>,
  * @version octubre 2008, dokeos 1.8
@@ -5439,7 +5448,8 @@ function count_number_of_user_in_course($course_id)
 function get_statistical_information($thread_id, $user_id, $course_id)
 {
     $result = array();
-    $result['user_course'] = count_number_of_user_in_course($course_id);
+    $courseInfo = api_get_course_info_by_id($course_id);
+    $result['user_course'] = CourseManager::get_users_count_in_course($courseInfo['code']);
     $result['post'] = count_number_of_post_in_thread($thread_id);
     $result['user_post'] = count_number_of_post_for_user_thread($thread_id, $user_id);
 
@@ -5452,7 +5462,7 @@ function get_statistical_information($thread_id, $user_id, $course_id)
  * @param   int $thread_id
  * @param   int $user_id
  *
- * @return  int the number of post inside a thread
+ * @return  array posts inside a thread
  * @author Jhon Hinojosa <jhon.hinojosa@dokeos.com>,
  * @version oct 2008, dokeos 1.8
  */
@@ -5483,8 +5493,8 @@ function get_thread_user_post($course_code, $thread_id, $user_id)
         $row['status'] = '1';
         $post_list[] = $row;
         $sql = "SELECT * FROM $table_posts posts
-                LEFT JOIN  $table_users users
-                    ON posts.poster_id=users.user_id
+                LEFT JOIN $table_users users
+                ON (posts.poster_id=users.user_id)
                 WHERE
                     posts.c_id = $course_id AND
                     posts.thread_id='$thread_id'
@@ -5511,7 +5521,8 @@ function get_name_thread_by_id($thread_id)
 {
     $t_forum_thread = Database::get_course_table(TABLE_FORUM_THREAD);
     $course_id = api_get_course_int_id();
-    $sql = "SELECT thread_title FROM ".$t_forum_thread."
+    $sql = "SELECT thread_title 
+            FROM $t_forum_thread
             WHERE c_id = $course_id AND thread_id = '".intval($thread_id)."' ";
     $result = Database::query($sql);
     $row = Database::fetch_array($result);

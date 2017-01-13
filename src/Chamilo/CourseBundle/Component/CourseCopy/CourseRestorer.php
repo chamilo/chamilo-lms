@@ -1861,7 +1861,7 @@ class CourseRestorer
             $allAnswers = [];
             $onlyAnswers = [];
 
-           if ($question->quiz_type == DRAGGABLE || $question->quiz_type == MATCHING ) {
+           if (in_array($question->quiz_type, [DRAGGABLE, MATCHING, MATCHING_DRAGGABLE])) {
                 $allAnswers = array_column($question->answers, 'answer', 'id');
             }
 
@@ -2043,7 +2043,7 @@ class CourseRestorer
             }
 
             // Fix correct answers
-            if ($question->quiz_type == DRAGGABLE || $question->quiz_type == MATCHING) {
+            if (in_array($question->quiz_type, [DRAGGABLE, MATCHING, MATCHING_DRAGGABLE])) {
                 $onlyAnswersFlip = array_flip($onlyAnswers);
                 foreach ($correctAnswers as $answer_id => $correct_answer) {
                     $params = array();

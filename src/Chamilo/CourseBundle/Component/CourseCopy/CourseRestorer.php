@@ -157,7 +157,6 @@ class CourseRestorer
 
         // Source platform encoding - reading/detection
         // The correspondent data field has been added as of version 1.8.6.1
-
         if (empty($this->course->encoding)) {
             // The archive has been created by a system which is prior to 1.8.6.1 version.
             // In this case we have to detect the encoding.
@@ -266,8 +265,11 @@ class CourseRestorer
      * @param bool $respect_base_content
      * @param string $destination_course_code
      */
-    public function restore_documents($session_id = 0, $respect_base_content = false, $destination_course_code = '')
-    {
+    public function restore_documents(
+        $session_id = 0,
+        $respect_base_content = false,
+        $destination_course_code = ''
+    ) {
         $course_info = api_get_course_info($destination_course_code);
 
         if (!$this->course->has_resources(RESOURCE_DOCUMENT)) {
@@ -329,7 +331,6 @@ class CourseRestorer
                     );
 
                     if (empty($documentData)) {
-
                         /* This means the folder exists in the
                         filesystem but not in the DB, trying to fix it */
                         add_document(
@@ -520,7 +521,6 @@ class CourseRestorer
                                 }
 
                                 // Replace old course code with the new destination code
-
                                 $file_info = pathinfo($path.$document->path);
 
                                 if (isset($file_info['extension']) && in_array($file_info['extension'], array('html', 'htm'))) {
@@ -554,7 +554,6 @@ class CourseRestorer
                                     ]
                                 );
                             }
-
                             break;
                         case FILE_SKIP:
                             $sql = "SELECT id FROM $table
@@ -591,7 +590,6 @@ class CourseRestorer
                                 $orig_base_path   = $course_path.$document_path[0].'/'.$document_path[1];
 
                                 if (is_dir($orig_base_path)) {
-
                                     $new_base_foldername = $orig_base_folder;
                                     $new_base_path = $orig_base_path;
 
@@ -642,7 +640,7 @@ class CourseRestorer
                                         copy($course_path.$document->path, $dest_document_path);
                                     }
 
-                                    //Replace old course code with the new destination code see BT#1985
+                                    // Replace old course code with the new destination code see BT#1985
                                     if (file_exists($dest_document_path)) {
                                         $file_info = pathinfo($dest_document_path);
                                         if (in_array($file_info['extension'], array('html','htm'))) {
@@ -764,10 +762,12 @@ class CourseRestorer
                                     }
                                 }
                             } else {
+                                copy(
+                                    $this->course->backup_path.'/'.$document->path,
+                                    $path.$new_file_name
+                                );
 
-                                copy($this->course->backup_path.'/'.$document->path, $path.$new_file_name);
-
-                                //Replace old course code with the new destination code see BT#1985
+                                // Replace old course code with the new destination code see BT#1985
                                 if (file_exists($path.$new_file_name)) {
                                     $file_info = pathinfo($path.$new_file_name);
                                     if (in_array($file_info['extension'], array('html','htm'))) {
@@ -837,10 +837,12 @@ class CourseRestorer
                         is_dir(dirname($path.$document->path)) &&
                         is_writeable(dirname($path.$document->path))
                     ) {
-                        //echo 'Copying';
-                        copy($this->course->backup_path.'/'.$document->path, $path.$document->path);
+                        copy(
+                            $this->course->backup_path.'/'.$document->path,
+                            $path.$document->path
+                        );
 
-                        //Replace old course code with the new destination code see BT#1985
+                        // Replace old course code with the new destination code see BT#1985
                         if (file_exists($path.$document->path)) {
                             $file_info = pathinfo($path.$document->path);
                             if (isset($file_info['extension']) && in_array($file_info['extension'], array('html','htm'))) {
@@ -1001,7 +1003,9 @@ class CourseRestorer
 
 	/**
 	 * Restore forums
-	 */
+     *
+     * @param int $sessionId
+     */
 	public function restore_forums($sessionId = 0)
     {
 		if ($this->course->has_resources(RESOURCE_FORUM)) {
@@ -1323,6 +1327,7 @@ class CourseRestorer
             $this->course->resources[RESOURCE_LINKCATEGORY][$id]->destination_id = $new_id;
             return $new_id;
         }
+
         return $this->course->resources[RESOURCE_LINKCATEGORY][$id]->destination_id;
     }
 
@@ -1359,11 +1364,6 @@ class CourseRestorer
 
                 $id = Database::insert($tool_intro_table, $params);
                 if ($id) {
-
-                    // id is a varchar not an int
-                    //$sql = "UPDATE $tool_intro_table SET id = iid WHERE iid = $id";
-                    //Database::query($sql);
-
                     if (!isset($this->course->resources[RESOURCE_TOOL_INTRO][$id])) {
                         $this->course->resources[RESOURCE_TOOL_INTRO][$id] = new stdClass();
                     }
@@ -1411,12 +1411,10 @@ class CourseRestorer
                     if (!isset($this->course->resources[RESOURCE_EVENT][$id])) {
                         $this->course->resources[RESOURCE_EVENT][$id] = new stdClass();
                     }
-
                     $this->course->resources[RESOURCE_EVENT][$id]->destination_id = $new_event_id;
                 }
 
 				// Copy event attachment
-
 				$origin_path = $this->course->backup_path.'/upload/calendar/';
 				$destination_path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/upload/calendar/';
 
@@ -1433,7 +1431,10 @@ class CourseRestorer
                         !is_dir($origin_path.$attachment_event->path)
                     ) {
 						$new_filename = uniqid(''); //ass seen in the add_agenda_attachment_file() function in agenda.inc.php
-						$copy_result = copy($origin_path.$attachment_event->path, $destination_path.$new_filename);
+                        $copy_result = copy(
+                            $origin_path.$attachment_event->path,
+                            $destination_path.$new_filename
+                        );
 						//$copy_result = true;
 						if ($copy_result) {
 							$table_attachment = Database :: get_course_table(TABLE_AGENDA_ATTACHMENT);
@@ -1460,7 +1461,10 @@ class CourseRestorer
                         is_readable($origin_path.$event->attachment_path)
                     ) {
 						$new_filename = uniqid(''); //ass seen in the add_agenda_attachment_file() function in agenda.inc.php
-						$copy_result = copy($origin_path.$event->attachment_path, $destination_path.$new_filename);
+                        $copy_result = copy(
+                            $origin_path.$event->attachment_path,
+                            $destination_path.$new_filename
+                        );
 						if ($copy_result) {
 							$table_attachment = Database :: get_course_table(TABLE_AGENDA_ATTACHMENT);
 
@@ -1669,7 +1673,6 @@ class CourseRestorer
 			$resources = $this->course->resources;
 
 			foreach ($resources[RESOURCE_QUIZ] as $id => $quiz) {
-
                 if (isset($quiz->obj)) {
                     //For new imports
                     $quiz = $quiz->obj;
@@ -1854,6 +1857,14 @@ class CourseRestorer
                 }
             }
 
+            $correctAnswers = array();
+            $allAnswers = [];
+            $onlyAnswers = [];
+
+           if ($question->quiz_type == DRAGGABLE || $question->quiz_type == MATCHING ) {
+                $allAnswers = array_column($question->answers, 'answer', 'id');
+            }
+
             if (in_array($question->quiz_type, [MATCHING, MATCHING_DRAGGABLE])) {
                 $temp = array();
                 foreach ($question->answers as $index => $answer) {
@@ -1886,16 +1897,13 @@ class CourseRestorer
 
                         $em->merge($quizAnswer);
                         $em->flush();
+
+                        $correctAnswers[$answerId] = $answer['correct'];
+                        $onlyAnswers[$answerId] = $answer['answer'];
                     }
 				}
 			} else {
-                $correct_answers = array();
-                $allAnswers = [];
-                if ($question->quiz_type == DRAGGABLE) {
-                    $allAnswers = array_column($question->answers, 'answer', 'id');
-                }
 
-                $onlyAnswers = [];
 				foreach ($question->answers as $index => $answer) {
 					// check resources inside html from ckeditor tool and copy correct urls into recipient course
                     $answer['answer'] = DocumentManager::replace_urls_inside_content_html_from_copy_course(
@@ -1935,7 +1943,7 @@ class CourseRestorer
                         Database::query($sql);
                     }
 
-                    $correct_answers[$answerId] = $answer['correct'];
+                    $correctAnswers[$answerId] = $answer['correct'];
                     $onlyAnswers[$answerId] = $answer['answer'];
 				}
 			}
@@ -1998,7 +2006,6 @@ class CourseRestorer
                     }
                 } else {
                     $new_options = array();
-
                     if (isset($question->question_options)) {
                         foreach ($question->question_options as $obj) {
                             $item = array();
@@ -2015,7 +2022,7 @@ class CourseRestorer
                             }
                         }
 
-                        foreach ($correct_answers as $answer_id => $correct_answer) {
+                        foreach ($correctAnswers as $answer_id => $correct_answer) {
                             $params = array();
                             $params['correct'] = $new_options[$correct_answer];
                             Database::update(
@@ -2035,9 +2042,10 @@ class CourseRestorer
                 }
             }
 
-            if ($question->quiz_type == DRAGGABLE) {
+            // Fix correct answers
+            if ($question->quiz_type == DRAGGABLE || $question->quiz_type == MATCHING) {
                 $onlyAnswersFlip = array_flip($onlyAnswers);
-                foreach ($correct_answers as $answer_id => $correct_answer) {
+                foreach ($correctAnswers as $answer_id => $correct_answer) {
                     $params = array();
                     if (isset($allAnswers[$correct_answer]) &&
                         isset($onlyAnswersFlip[$allAnswers[$correct_answer]])
@@ -2058,6 +2066,7 @@ class CourseRestorer
                     }
                 }
             }
+
 			$this->course->resources[RESOURCE_QUIZQUESTION][$id]->destination_id = $new_id;
 		}
 

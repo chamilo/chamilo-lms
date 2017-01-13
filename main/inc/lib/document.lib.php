@@ -799,11 +799,12 @@ class DocumentManager
                        INNER JOIN $TABLE_DOCUMENT  AS docs
                        ON (
                             docs.id = last.ref AND
+                            docs.c_id = last.c_id
+                       )
+                       WHERE                       
                             last.tool = '" . TOOL_DOCUMENT . "' AND
                             last.c_id = {$_course['real_id']} AND
-                            docs.c_id = {$_course['real_id']}
-                       )
-                       WHERE
+                            docs.c_id = {$_course['real_id']} AND
                             docs.filetype = 'folder' AND
                             $groupCondition AND
                             docs.path NOT LIKE '%shared_folder%' AND
@@ -816,11 +817,12 @@ class DocumentManager
                         INNER JOIN $TABLE_DOCUMENT  AS docs
                         ON (
                             docs.id = last.ref AND
-                            last.tool = '" . TOOL_DOCUMENT . "' AND
-                            last.c_id = {$_course['real_id']} AND
-                            docs.c_id = {$_course['real_id']}
+                            docs.c_id = last.c_id                          
                         )
                         WHERE
+                            last.tool = '" . TOOL_DOCUMENT . "' AND
+                            last.c_id = {$_course['real_id']} AND
+                            docs.c_id = {$_course['real_id']} AND
                             docs.filetype = 'folder' AND
                             docs.path NOT LIKE '%_DELETED_%' AND
                             $groupCondition AND
@@ -869,9 +871,9 @@ class DocumentManager
             //get visible folders
             $sql = "SELECT DISTINCT docs.id, path
                     FROM
-                        $TABLE_ITEMPROPERTY AS last INNER JOIN 
-                        $TABLE_DOCUMENT AS docs
-                        ON (docs.id = last.ref AND last.c_id = docs.c_id)
+                    $TABLE_ITEMPROPERTY AS last 
+                    INNER JOIN $TABLE_DOCUMENT AS docs
+                    ON (docs.id = last.ref AND last.c_id = docs.c_id)
                     WHERE
                         $fileType
                         last.tool = '" . TOOL_DOCUMENT . "' AND
@@ -898,7 +900,8 @@ class DocumentManager
             $condition_session = api_get_session_condition($session_id, true, false, 'docs.session_id');
             //get invisible folders
             $sql = "SELECT DISTINCT docs.id, path
-                    FROM $TABLE_ITEMPROPERTY AS last INNER JOIN $TABLE_DOCUMENT AS docs
+                    FROM $TABLE_ITEMPROPERTY AS last 
+                    INNER JOIN $TABLE_DOCUMENT AS docs
                     ON (docs.id = last.ref AND last.c_id = docs.c_id)
                     WHERE                        
                         docs.filetype = 'folder' AND
@@ -915,9 +918,10 @@ class DocumentManager
                 $condition_session = api_get_session_condition($session_id, true, false, 'docs.session_id');
                 //get visible folders in the invisible ones -> they are invisible too
                 $sql = "SELECT DISTINCT docs.id, path
-                        FROM $TABLE_ITEMPROPERTY AS last, $TABLE_DOCUMENT AS docs
-                        WHERE
-                            docs.id = last.ref AND
+                        FROM $TABLE_ITEMPROPERTY AS last 
+                        INNER JOIN $TABLE_DOCUMENT AS docs
+                        ON (docs.id = last.ref AND docs.c_id = last.c_id)
+                        WHERE                            
                             docs.path LIKE '" . Database::escape_string($row['path'].'/%') . "' AND
                             docs.filetype = 'folder' AND
                             last.tool = '" . TOOL_DOCUMENT . "' AND
@@ -991,12 +995,13 @@ class DocumentManager
                     $path = Database::escape_string($file);
                     // Check
                     $sql = "SELECT td.id, readonly, tp.insert_user_id
-                            FROM $TABLE_DOCUMENT td, $TABLE_PROPERTY tp
+                            FROM $TABLE_DOCUMENT td 
+                            INNER JOIN $TABLE_PROPERTY tp
+                            ON (td.c_id = tp.c_id AND tp.ref= td.id)
                             WHERE
                                 td.c_id = $course_id AND
                                 tp.c_id = $course_id AND
-                                td.session_id = $sessionId AND
-                                tp.ref= td.id AND
+                                td.session_id = $sessionId AND                                
                                 (path='" . $path . "' OR path LIKE BINARY '" . $path . "/%' ) ";
                     // Get all id's of documents that are deleted
                     $what_to_check_result = Database::query($sql);
@@ -1025,11 +1030,14 @@ class DocumentManager
 
         if (!empty($document_id)) {
             $sql = "SELECT a.insert_user_id, b.readonly
-                   FROM $TABLE_PROPERTY a, $TABLE_DOCUMENT b
+                   FROM $TABLE_PROPERTY a 
+                   INNER JOIN $TABLE_DOCUMENT b
+                   ON (a.c_id = b.c_id AND a.ref= b.id)
                    WHERE
             			a.c_id = $course_id AND
                         b.c_id = $course_id AND
-            			a.ref = b.id and a.ref = $document_id LIMIT 1";
+            			a.ref = $document_id 
+                    LIMIT 1";
             $result = Database::query($sql);
             $doc_details = Database ::fetch_array($result, 'ASSOC');
 
@@ -1611,8 +1619,10 @@ class DocumentManager
         $sql = "SELECT visibility
                 FROM $docTable d
                 INNER JOIN $propTable ip
-                ON (d.id = ip.ref AND d.c_id  = $course_id AND ip.c_id = $course_id)
+                ON (d.id = ip.ref AND d.c_id = ip.c_id)
         		WHERE
+        		    d.c_id  = $course_id AND 
+        		    ip.c_id = $course_id AND
         		    ip.tool = '" . TOOL_DOCUMENT . "' $condition AND
         			filetype = '$file_type' AND
         			locate(concat(path,'/'), '$doc_path')=1
@@ -2028,7 +2038,7 @@ class DocumentManager
                 $sql_session = '';
             }
 
-            $sql = 'UPDATE ' . $tbl_category . ' SET document_id=null
+            $sql = 'UPDATE ' . $tbl_category . ' SET document_id = null
                     WHERE
                         course_code = "' . Database::escape_string($course_id) . '" AND
                         document_id="' . $default_certificate_id . '" ' . $sql_session;

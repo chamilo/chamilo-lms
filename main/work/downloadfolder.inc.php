@@ -78,15 +78,15 @@ if (api_is_allowed_to_edit() || api_is_coach()) {
                 $filenameCondition
             FROM $tbl_student_publication AS work
             INNER JOIN $prop_table AS props
+            ON (work.id = props.ref AND props.c_id = work.c_id)
             INNER JOIN $tableUser as u
             ON (
-                props.c_id = $course_id AND
-                work.c_id = $course_id AND
-                work.id = props.ref AND
-                props.tool='work' AND
                 work.user_id = u.user_id
             )
- 			WHERE
+            WHERE
+ 			    props.tool = 'work' AND
+ 			    props.c_id = $course_id AND
+                work.c_id = $course_id AND
                 work.parent_id = $work_id AND
                 work.filetype = 'file' AND
                 props.visibility <> '2' AND
@@ -120,10 +120,13 @@ if (api_is_allowed_to_edit() || api_is_coach()) {
                 $filenameCondition
             FROM $tbl_student_publication AS work
             INNER JOIN $prop_table AS props
-            ON (props.c_id = $course_id AND
-                work.c_id = $course_id AND
-                work.id = props.ref)
+            ON (
+                props.c_id = work.c_id AND 
+                work.id = props.ref
+            )
             WHERE
+                props.c_id = $course_id AND
+                work.c_id = $course_id AND                
                 props.tool = 'work' AND
                 work.accepted = 1 AND
                 work.active = 1 AND

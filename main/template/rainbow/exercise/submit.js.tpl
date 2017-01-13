@@ -11,8 +11,6 @@ var DraggableAnswer = {
         item.fadeOut(function () {
             var $list = $('<ul>').addClass('gallery ui-helper-reset').appendTo(insertHere);
 
-            item.find('a.btn').remove();
-
             var droppedId = item.attr('id'),
                 dropedOnId = insertHere.attr('id'),
                 originSelectId = 'window_' + droppedId + '_select',
@@ -20,9 +18,11 @@ var DraggableAnswer = {
 
             $('#' + originSelectId + ' option')
                 .filter(function (index) {
-                    return index === parseInt(value);
+                    var position = insertHere.prop('id').split('_')[2];
+
+                    return index === parseInt(position);
                 })
-                .attr("selected", true);
+                .prop("selected", true);
 
             item.appendTo($list).fadeIn();
         });
@@ -30,11 +30,6 @@ var DraggableAnswer = {
     recycleItem: function (item) {
         item.fadeOut(function () {
             item
-                .find('a.btn')
-                .remove()
-                .end()
-                .find("img")
-                .end()
                 .appendTo(DraggableAnswer.gallery)
                 .fadeIn();
         });
@@ -42,7 +37,8 @@ var DraggableAnswer = {
         var droppedId = item.attr('id'),
             originSelectId = 'window_' + droppedId + '_select';
 
-        $('#' + originSelectId + ' option:first').attr('selected', 'selected');
+        $('#' + originSelectId + ' option').prop('selected', false);
+        $('#' + originSelectId + ' option:first').prop('selected', true);
     },
     init: function (gallery, trash) {
         this.gallery = gallery;
@@ -106,10 +102,10 @@ var MatchingDraggable = {
         };
 
         var destinationEndPoint = {
-            endpoint: ["Dot", {radius: 10}],
+            endpoint: ["Dot", {radius: 15}],
             paintStyle: {fillStyle: MatchingDraggable.colorDestination},
             isSource: false,
-            connectorStyle: {strokeStyle: MatchingDraggable.colorDestination, lineWidth: 4},
+            connectorStyle: {strokeStyle: MatchingDraggable.colorDestination, lineWidth: 8},
             connector: [
                 MatchingDraggable.connectorType,
                 {curviness: MatchingDraggable.curviness}
@@ -147,14 +143,14 @@ var MatchingDraggable = {
             var sourceEndPoint = {
                 endpoint: [
                     "Dot",
-                    {radius: 10}
+                    {radius: 15}
                 ],
                 paintStyle: {
                     fillStyle: destinationColor
                 },
                 isSource: true,
                 connectorStyle: {
-                    strokeStyle: "#CCC",
+                    strokeStyle: "#8a8888",
                     lineWidth: 4
                 },
                 connector: [

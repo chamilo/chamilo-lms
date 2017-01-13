@@ -8,7 +8,11 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * UserRelCourseVote
  *
- * @ORM\Table(name="user_rel_course_vote", indexes={@ORM\Index(name="idx_ucv_cid", columns={"c_id"}), @ORM\Index(name="idx_ucv_uid", columns={"user_id"}), @ORM\Index(name="idx_ucv_cuid", columns={"user_id", "c_id"})})
+ * @ORM\Table(name="user_rel_course_vote", indexes={
+ *     @ORM\Index(name="idx_ucv_cid", columns={"c_id"}),
+ *     @ORM\Index(name="idx_ucv_uid", columns={"user_id"}),
+ *     @ORM\Index(name="idx_ucv_cuid", columns={"user_id", "c_id"})
+ * })
  * @ORM\Entity
  */
 class UserRelCourseVote

@@ -8,7 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * TrackEItemProperty
  *
- * @ORM\Table(name="track_e_item_property", indexes={@ORM\Index(name="course_id", columns={"course_id", "item_property_id", "session_id"})})
+ * @ORM\Table(name="track_e_item_property", indexes={
+ *     @ORM\Index(name="course_id", columns={"course_id", "item_property_id", "session_id"})
+ * })
  * @ORM\Entity
  */
 class TrackEItemProperty

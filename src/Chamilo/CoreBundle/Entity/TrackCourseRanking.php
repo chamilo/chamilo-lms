@@ -8,7 +8,12 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * TrackCourseRanking
  *
- * @ORM\Table(name="track_course_ranking", indexes={@ORM\Index(name="idx_tcc_cid", columns={"c_id"}), @ORM\Index(name="idx_tcc_sid", columns={"session_id"}), @ORM\Index(name="idx_tcc_urlid", columns={"url_id"}), @ORM\Index(name="idx_tcc_creation_date", columns={"creation_date"})})
+ * @ORM\Table(name="track_course_ranking", indexes={
+ *     @ORM\Index(name="idx_tcc_cid", columns={"c_id"}),
+ *     @ORM\Index(name="idx_tcc_sid", columns={"session_id"}),
+ *     @ORM\Index(name="idx_tcc_urlid", columns={"url_id"}),
+ *     @ORM\Index(name="idx_tcc_creation_date", columns={"creation_date"})
+ * })
  * @ORM\Entity
  */
 class TrackCourseRanking

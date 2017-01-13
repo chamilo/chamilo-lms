@@ -50,7 +50,7 @@ if (Security::check_token('post') && (
     Security::clear_token();
 
     if (isset($_POST['action']) && $_POST['action'] == 'course_select_form') {
-        $course = CourseSelectForm :: get_posted_course('copy_course');
+        $course = CourseSelectForm::get_posted_course('copy_course');
     } else {
         $cb = new CourseBuilder();
         $course = $cb->build();
@@ -65,7 +65,7 @@ if (Security::check_token('post') && (
         false
     );
 } elseif (Security::check_token('post') && (
-        isset ($_POST['copy_option']) &&
+        isset($_POST['copy_option']) &&
         $_POST['copy_option'] == 'select_items'
     )
 ) {

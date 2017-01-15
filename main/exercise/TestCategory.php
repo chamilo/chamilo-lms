@@ -954,8 +954,8 @@ class TestCategory
 
             $return .= '</table>';
             $return .= get_lang('ZeroMeansNoQuestionWillBeSelectedMinusOneMeansThatAllQuestionsWillBeSelected');
-            return $return;
         }
+        return $return;
     }
 
     /**

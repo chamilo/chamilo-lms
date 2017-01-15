@@ -1203,7 +1203,7 @@ class Exercise
         $sql = "SELECT e.question_id
                 FROM $TBL_EXERCISE_QUESTION e 
                 INNER JOIN $TBL_QUESTIONS q
-                ON (e.question_id= q.iid AND e.c_id = q.c_id)
+                ON (e.question_id= q.id AND e.c_id = q.c_id)
                 WHERE e.c_id = {$this->course_id} AND e.exercice_id	= '".Database::escape_string($this->id)."'
                 $randomLimit ";
         $result = Database::query($sql);

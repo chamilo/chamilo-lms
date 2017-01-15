@@ -2057,7 +2057,7 @@ class Exercise
                     $option,
                     array(
                         'id' => 'questionSelection',
-                        'onclick' => 'checkQuestionSelection()'
+                        'onchange' => 'checkQuestionSelection()'
                     )
                 );
 
@@ -2102,6 +2102,9 @@ class Exercise
                 // Category selection.
                 $cat = new TestCategory();
                 $cat_form = $cat->returnCategoryForm($this);
+                if (empty($cat_form)) {
+                    $cat_form = '<span class="label label-warning">' . get_lang('NoCategoriesDefined') . '</span>';
+                }
                 $form->addElement('label', null, $cat_form);
                 $form->addElement('html', '</div>');
 

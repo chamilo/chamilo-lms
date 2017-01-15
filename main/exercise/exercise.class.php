@@ -581,7 +581,7 @@ class Exercise
 
             $sql = "SELECT q.iid
                     FROM $TBL_EXERCICE_QUESTION e INNER JOIN $TBL_QUESTIONS  q
-                        ON (e.question_id = q.iid AND e.c_id = ".$this->course_id." )
+                        ON (e.question_id = q.id AND e.c_id = ".$this->course_id." )
 					WHERE e.exercice_id	= '".Database::escape_string($this->id)."'
 					";
 

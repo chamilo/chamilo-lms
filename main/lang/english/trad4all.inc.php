@@ -7951,4 +7951,5 @@ $DeleteCorrections = "Delete corrections";
 $AllowMyFilesTitle = "Enable 'My Files' section";
 $AllowMyFilesComment = "Allow users to upload files to a personal space on the platform.";
 $InstallMultiURLDetectedNotMainURL = "You are currently using the multi-URL feature and are trying to upgrade your portal using a secondary URL. Please connect to the main URL to proceed with the upgrade: %s";
+$OnlyXQuestionsPickedRandomly = "Only %s questions will be picked randomly following the quiz configuration.";
 ?>

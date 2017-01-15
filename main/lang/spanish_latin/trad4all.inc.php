@@ -2192,10 +2192,8 @@ $DropboxContent = "<p>El Baúl de tareas es una herramienta de administración d
 $HHome = "Ayuda página principal";
 $HomeContent = "La mayoría de las rúbricas de iCampus están ya rellenadas con un corto texto o por un enlace dados por defecto, o por un ejemplo. A usted le corresponde el modificarlos.</p><p>As&iacute un corto texto aparece, bien a la vista, en la cabecera de vuestra we";
 $HOnline = "Ayuda para Sistema de Conferencia en línea";
-$OnlineContent = "<br /><span style=\"font-weight: bold;\">Introducción</span><br /> <br /> <div style=\"margin-left: 40px;\">El sistema de Conferencia en línea de chamilo le permite de forma sencilla, enseñar, informar o reunir a más de 500 personas.<br /> </div> <ul> <ul";
 $HClar = "Ayuda: primeros pasos";
 $HDoc = "Ayuda documentos";
-$DocContent = "<p>El módulo de gestión de documentos funciona de manera semejante a la gestión de sus documentos en un ordenador. </p><p>Usted puede introducir documentos de todo tipo (HTML, Word, Powerpoint, Excel, Acrobat, Flash, Quicktime, etc.). Tenga en cuenta, sin";
 $HUser = "Ayuda usuarios";
 $HExercise = "Ayuda: Ejercicios";
 $HPath = "Ayuda: Itinerarios formativos";

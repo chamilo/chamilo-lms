@@ -1082,11 +1082,12 @@ class Exercise
 
     /**
      * returns the array with the question ID list
-     *
+     * @param   bool    $from_db    Whether the results should be fetched in the database or just from memory
+     * @param   bool    $adminView  Whether we should return all questions (admin view) or just a list limited by the max number of random questions
      * @author Olivier Brouckaert
      * @return array - question ID list
      */
-    public function selectQuestionList($from_db = false)
+    public function selectQuestionList($from_db = false, $adminView = false)
     {
         if ($from_db && !empty($this->id)) {
             $nbQuestions = $this->getQuestionCount();
@@ -1101,7 +1102,7 @@ class Exercise
                     if ($this->random == 0 || $nbQuestions < 2) {
                         $questionList = $this->getQuestionOrderedList();
                     } else {
-                        $questionList = $this->selectRandomList();
+                        $questionList = $this->selectRandomList($adminView);
                     }
                     break;
                 default:
@@ -1153,10 +1154,11 @@ class Exercise
      *
      * @author Olivier Brouckaert
      * @author Hubert Borderiou 15 nov 2011
+     * @param    bool    $adminView  Whether we should return all questions (admin view) or just a list limited by the max number of random questions
      * @return array - if the exercise is not set to take questions randomly, returns the question list
      *					 without randomizing, otherwise, returns the list with questions selected randomly
      */
-    public function selectRandomList()
+    public function selectRandomList($adminView = false)
     {
         /*$nbQuestions	= $this->selectNbrQuestions();
         $temp_list		= $this->questionList;
@@ -1193,8 +1195,8 @@ class Exercise
 
         $randomLimit = "LIMIT $random";
         // Random all questions so no limit
-        if ($random == -1) {
-            $randomLimit = null;
+        if ($random == -1 or $adminView === true) {
+            $randomLimit = '';
         }
 
         $sql = "SELECT e.question_id

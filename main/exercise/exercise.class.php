@@ -201,7 +201,7 @@ class Exercise
 
             // Checking if question_order is correctly set
             if ($parseQuestionList) {
-                $this->setQuestionList();
+                $this->setQuestionList(true);
             }
 
             //overload questions list with recorded questions list
@@ -1193,10 +1193,11 @@ class Exercise
 
         $random = isset($this->random) && !empty($this->random) ? $this->random : 0;
 
-        $randomLimit = "LIMIT $random";
+        $randomLimit = "ORDER BY RAND() LIMIT $random";
         // Random all questions so no limit
         if ($random == -1 or $adminView === true) {
-            $randomLimit = '';
+            // If viewing it as admin for edition, don't show it randomly, use title + id
+            $randomLimit = 'ORDER BY e.question_order';
         }
 
         $sql = "SELECT e.question_id
@@ -1204,7 +1205,6 @@ class Exercise
                 INNER JOIN $TBL_QUESTIONS q
                 ON (e.question_id= q.iid AND e.c_id = q.c_id)
                 WHERE e.c_id = {$this->course_id} AND e.exercice_id	= '".Database::escape_string($this->id)."'
-                ORDER BY RAND()
                 $randomLimit ";
         $result = Database::query($sql);
         $questionList = array();
@@ -6067,11 +6067,12 @@ class Exercise
 
     /**
      * Sets the question list when the exercise->read() is executed
+     * @param   bool    $adminView  Whether to view the set the list of *all* questions or just the normal student view
      */
-    public function setQuestionList()
+    public function setQuestionList($adminView = false)
     {
         // Getting question list.
-        $questionList = $this->selectQuestionList(true);
+        $questionList = $this->selectQuestionList(true, $adminView);
 
         $this->setMediaList($questionList);
 

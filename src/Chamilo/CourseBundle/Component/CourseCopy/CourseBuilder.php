@@ -217,7 +217,8 @@ class CourseBuilder
 
             if (!empty($this->course->type) && $this->course->type == 'partial') {
                 $sql = "SELECT d.id, d.path, d.comment, d.title, d.filetype, d.size
-                        FROM $table_doc d INNER JOIN $table_prop p
+                        FROM $table_doc d 
+                        INNER JOIN $table_prop p
                         ON (p.ref = d.id AND d.c_id = p.c_id)
                         WHERE
                             d.c_id = $courseId AND
@@ -230,7 +231,8 @@ class CourseBuilder
                         ORDER BY path";
             } else {
                 $sql = "SELECT d.id, d.path, d.comment, d.title, d.filetype, d.size
-                        FROM $table_doc d INNER JOIN $table_prop p
+                        FROM $table_doc d 
+                        INNER JOIN $table_prop p
                         ON (p.ref = d.id AND d.c_id = p.c_id)
                         WHERE
                             d.c_id = $courseId AND
@@ -256,7 +258,8 @@ class CourseBuilder
         } else {
             if (!empty($this->course->type) && $this->course->type == 'partial') {
                 $sql = "SELECT d.id, d.path, d.comment, d.title, d.filetype, d.size
-                        FROM $table_doc d INNER JOIN $table_prop p
+                        FROM $table_doc d 
+                        INNER JOIN $table_prop p
                         ON (p.ref = d.id AND d.c_id = p.c_id)
                         WHERE
                             d.c_id = $courseId AND
@@ -269,7 +272,8 @@ class CourseBuilder
                         ORDER BY path";
             } else {
                 $sql = "SELECT d.id, d.path, d.comment, d.title, d.filetype, d.size
-                        FROM $table_doc d INNER JOIN $table_prop p
+                        FROM $table_doc d 
+                        INNER JOIN $table_prop p
                         ON (p.ref = d.id AND d.c_id = p.c_id)
                         WHERE
                             d.c_id = $courseId AND
@@ -385,8 +389,9 @@ class CourseBuilder
         $sql = "SELECT * FROM $table WHERE c_id = $courseId
                 $sessionCondition
                 ORDER BY thread_title ";
-        $db_result = Database::query($sql);
-        while ($obj = Database::fetch_object($db_result)) {
+        $result = Database::query($sql);
+
+        while ($obj = Database::fetch_object($result)) {
             $forum_topic = new ForumTopic($obj);
             $this->course->add_resource($forum_topic);
             $this->build_forum_posts($courseId, $obj->thread_id, $obj->forum_id, true);
@@ -455,22 +460,34 @@ class CourseBuilder
                     'l.session_id'
                 );
             }
-            $sql = "SELECT  l.id, l.title, l.url, l.description, l.category_id, l.on_homepage
-                    FROM $table l, $table_prop p
+            $sql = "SELECT  
+                        l.id, 
+                        l.title, 
+                        l.url, 
+                        l.description, 
+                        l.category_id, 
+                        l.on_homepage
+                    FROM $table l INNER JOIN $table_prop p
+                    ON (l.c_id = p.c_id AND p.ref = l.id)
                     WHERE
                         l.c_id = $courseId AND
-                        p.c_id = $courseId AND
-                        p.ref=l.id AND
+                        p.c_id = $courseId AND                        
                         p.tool = '".TOOL_LINK."' AND
                         p.visibility != 2 $session_condition
                     ORDER BY l.display_order";
         } else {
-            $sql = "SELECT l.id, l.title, l.url, l.description, l.category_id, l.on_homepage
-                    FROM $table l, $table_prop p
+            $sql = "SELECT 
+                        l.id, 
+                        l.title, 
+                        l.url, 
+                        l.description, 
+                        l.category_id, 
+                        l.on_homepage
+                    FROM $table l INNER JOIN $table_prop p
+                    ON (l.c_id = p.c_id AND p.ref = l.id)
                     WHERE
                         l.c_id = $courseId AND
-                        p.c_id = $courseId AND
-                        p.ref=l.id AND
+                        p.c_id = $courseId AND                        
                         p.tool = '".TOOL_LINK."' AND
                         p.visibility != 2 AND
                         (l.session_id = 0 OR l.session_id IS NULL)
@@ -544,18 +561,23 @@ class CourseBuilder
     public function build_link_category($id, $courseId = 0)
     {
         $link_cat_table = Database :: get_course_table(TABLE_LINK_CATEGORY);
+        $courseId = intval($courseId);
+        $id = intval($id);
 
+        if (empty($id) || empty($courseId)) {
+            return 0;
+        }
         $sql = "SELECT * FROM $link_cat_table
                 WHERE c_id = $courseId AND id = $id";
-        $db_result = Database::query($sql);
-        while ($obj = Database::fetch_object($db_result)) {
-            $link_category = new LinkCategory(
+        $result = Database::query($sql);
+        while ($obj = Database::fetch_object($result)) {
+            $linkCategory = new LinkCategory(
                 $obj->id,
                 $obj->category_title,
                 $obj->description,
                 $obj->display_order
             );
-            $this->course->add_resource($link_category);
+            $this->course->add_resource($linkCategory);
 
             return $id;
         }
@@ -736,7 +758,6 @@ class CourseBuilder
             $build_orphan_questions = true;
             $orphanQuestionIds = array();
             while ($obj = Database::fetch_object($result)) {
-
                 // Orphan questions
                 if (!empty($obj->question_id)) {
                     $obj->id = $obj->question_id;
@@ -826,6 +847,7 @@ class CourseBuilder
                     exercises.c_id = '.$courseId.' AND
                     (quizz_questions.exercice_id IS NULL OR
                     exercises.active = -1)';
+
         $db_result = Database::query($sql);
         if (Database::num_rows($db_result) > 0) {
             // This is the fictional test for collecting orphan questions.
@@ -1584,7 +1606,14 @@ class CourseBuilder
     ) {
         $courseInfo = api_get_course_info_by_id($courseId);
         $courseCode = $courseInfo['code'];
-        $cats = Category:: load(null, null, $courseCode, null, null, $session_id);
+        $cats = Category:: load(
+            null,
+            null,
+            $courseCode,
+            null,
+            null,
+            $session_id
+        );
 
         $obj = new GradeBookBackup($cats);
         $this->course->add_resource($obj);

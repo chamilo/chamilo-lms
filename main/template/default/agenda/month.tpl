@@ -62,7 +62,7 @@ $(document).ready(function() {
 		header: {
 			left: 'today,prev,next',
 			center: 'title',
-			right: 'month,agendaWeek,agendaDay,listWeek'
+			right: 'month,agendaWeek,agendaDay,listMonth'
 		},
         locale: region_value,
         {% if use_google_calendar == 1 %}

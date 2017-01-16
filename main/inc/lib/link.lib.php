@@ -805,11 +805,11 @@ class Link extends Model
 
         $sql = "SELECT *, linkcat.id
                 FROM $tblLinkCategory linkcat
-                INNER JOIN $tblItemProperty itemproperties
-                ON (linkcat.id = itemproperties.ref AND linkcat.c_id = itemproperties.c_id)
+                INNER JOIN $tblItemProperty ip
+                ON (linkcat.id = ip.ref AND linkcat.c_id = ip.c_id)
                 WHERE
-                    itemproperties.tool = '" . TOOL_LINK_CATEGORY . "' AND
-                    (itemproperties.visibility = '0' OR itemproperties.visibility = '1')
+                    ip.tool = '" . TOOL_LINK_CATEGORY . "' AND
+                    (ip.visibility = '0' OR ip.visibility = '1')
                     $sessionCondition AND
                     linkcat.c_id = " . $courseId . "
                 ORDER BY linkcat.display_order DESC";
@@ -831,11 +831,11 @@ class Link extends Model
 
         $sql = "SELECT DISTINCT linkcat.*, visibility
                 FROM $tblLinkCategory linkcat
-                INNER JOIN $tblItemProperty itemproperties
-                ON (linkcat.id = itemproperties.ref AND linkcat.c_id = itemproperties.c_id)
+                INNER JOIN $tblItemProperty ip
+                ON (linkcat.id = ip.ref AND linkcat.c_id = ip.c_id)
                 WHERE
-                    itemproperties.tool = '" . TOOL_LINK_CATEGORY . "' AND
-                    (itemproperties.visibility = '0' OR itemproperties.visibility = '1')
+                    ip.tool = '" . TOOL_LINK_CATEGORY . "' AND
+                    (ip.visibility = '0' OR ip.visibility = '1')
                     $sessionCondition AND
                     linkcat.c_id = " . $courseId . "
                 ORDER BY linkcat.display_order DESC
@@ -863,17 +863,19 @@ class Link extends Model
         // Condition for the session.
         $condition_session = api_get_session_condition($session_id, true, true, 'link.session_id');
         $content = '';
-        $sql = "SELECT *, link.id FROM $tbl_link link
-                INNER JOIN $TABLE_ITEM_PROPERTY itemproperties
-                ON (link.id=itemproperties.ref AND link.c_id = itemproperties.c_id)
+        $sql = "SELECT *, link.id 
+                FROM $tbl_link link
+                INNER JOIN $TABLE_ITEM_PROPERTY ip
+                ON (link.id=ip.ref AND link.c_id = ip.c_id)
                 WHERE
-                    itemproperties.tool='" . TOOL_LINK . "' AND
+                    ip.tool='" . TOOL_LINK . "' AND
                     link.category_id='" . $catid . "' AND
-                    (itemproperties.visibility='0' OR itemproperties.visibility='1')
+                    (ip.visibility='0' OR ip.visibility='1')
                     $condition_session AND
                     link.c_id = " . $course_id . " AND
-                    itemproperties.c_id = " . $course_id . "
+                    ip.c_id = " . $course_id . "
                 ORDER BY link.display_order ASC";
+
         $result = Database:: query($sql);
         $numberoflinks = Database:: num_rows($result);
         if ($numberoflinks > 0) {
@@ -1498,8 +1500,6 @@ class Link extends Model
     public static function listLinksAndCategories($course_id, $session_id, $categoryId, $show = 'none', $token = null)
     {
         $tbl_link = Database::get_course_table(TABLE_LINK);
-
-        $_user = api_get_user_info();
         $categoryId = intval($categoryId);
 
         /*	Action Links */
@@ -1544,7 +1544,6 @@ class Link extends Model
 
             // Validation when belongs to a session
             $showChildren = $categoryId == $myrow['id'] || $show == 'all';
-            $session_img = api_get_session_image($myrow['session_id'], $_user['status']);
             $myrow['description'] = $myrow['description'];
 
             $strVisibility = '';

@@ -1307,15 +1307,14 @@ class CourseRestorer
         if (is_object($link_cat) && !$link_cat->is_restored()) {
             $sql = "SELECT MAX(display_order) FROM  $link_cat_table
 			        WHERE c_id = ".$this->destination_course_id;
-            $result=Database::query($sql);
-            list($orderMax)=Database::fetch_array($result,'NUM');
-            $display_order=$orderMax+1;
+            $result = Database::query($sql);
+            list($orderMax) = Database::fetch_array($result, 'NUM');
+            $display_order = $orderMax + 1;
 
             $params['c_id'] = $this->destination_course_id;
             $params['category_title'] = self::DBUTF8($link_cat->title);
             $params['description'] = self::DBUTF8($link_cat->description);
             $params['display_order'] = $display_order;
-
             $new_id = Database::insert($link_cat_table, $params);
 
             if ($new_id) {

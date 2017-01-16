@@ -7968,4 +7968,5 @@ $DeleteCorrections = "Eliminar correciones";
 $AllowMyFilesTitle = "Permitir uso de página 'Mis documentos'";
 $AllowMyFilesComment = "Permitir a los usuarios subir archivos en un espacio personal en la plataforma.";
 $InstallMultiURLDetectedNotMainURL = "Usted actualmente está usando la funcionalidad de multi-url y está intentando actualizar su portal usando una URL secundaria. Por favor, conéctese a la URL principal para proceder con la actualización: %s";
+$OnlyXQuestionsPickedRandomly = "Solo %s preguntas serán seleccionadas aleatoriamente según la configuración del ejercicio.";
 ?>

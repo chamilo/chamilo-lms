@@ -201,7 +201,7 @@ class Exercise
 
             // Checking if question_order is correctly set
             if ($parseQuestionList) {
-                $this->setQuestionList();
+                $this->setQuestionList(true);
             }
 
             //overload questions list with recorded questions list
@@ -581,7 +581,7 @@ class Exercise
 
             $sql = "SELECT q.iid
                     FROM $TBL_EXERCICE_QUESTION e INNER JOIN $TBL_QUESTIONS  q
-                        ON (e.question_id = q.iid AND e.c_id = ".$this->course_id." )
+                        ON (e.question_id = q.id AND e.c_id = ".$this->course_id." )
 					WHERE e.exercice_id	= '".Database::escape_string($this->id)."'
 					";
 
@@ -1082,11 +1082,12 @@ class Exercise
 
     /**
      * returns the array with the question ID list
-     *
+     * @param   bool    $from_db    Whether the results should be fetched in the database or just from memory
+     * @param   bool    $adminView  Whether we should return all questions (admin view) or just a list limited by the max number of random questions
      * @author Olivier Brouckaert
      * @return array - question ID list
      */
-    public function selectQuestionList($from_db = false)
+    public function selectQuestionList($from_db = false, $adminView = false)
     {
         if ($from_db && !empty($this->id)) {
             $nbQuestions = $this->getQuestionCount();
@@ -1101,7 +1102,7 @@ class Exercise
                     if ($this->random == 0 || $nbQuestions < 2) {
                         $questionList = $this->getQuestionOrderedList();
                     } else {
-                        $questionList = $this->selectRandomList();
+                        $questionList = $this->selectRandomList($adminView);
                     }
                     break;
                 default:
@@ -1153,10 +1154,11 @@ class Exercise
      *
      * @author Olivier Brouckaert
      * @author Hubert Borderiou 15 nov 2011
+     * @param    bool    $adminView  Whether we should return all questions (admin view) or just a list limited by the max number of random questions
      * @return array - if the exercise is not set to take questions randomly, returns the question list
      *					 without randomizing, otherwise, returns the list with questions selected randomly
      */
-    public function selectRandomList()
+    public function selectRandomList($adminView = false)
     {
         /*$nbQuestions	= $this->selectNbrQuestions();
         $temp_list		= $this->questionList;
@@ -1191,18 +1193,18 @@ class Exercise
 
         $random = isset($this->random) && !empty($this->random) ? $this->random : 0;
 
-        $randomLimit = "LIMIT $random";
+        $randomLimit = "ORDER BY RAND() LIMIT $random";
         // Random all questions so no limit
-        if ($random == -1) {
-            $randomLimit = null;
+        if ($random == -1 or $adminView === true) {
+            // If viewing it as admin for edition, don't show it randomly, use title + id
+            $randomLimit = 'ORDER BY e.question_order';
         }
 
         $sql = "SELECT e.question_id
                 FROM $TBL_EXERCISE_QUESTION e 
                 INNER JOIN $TBL_QUESTIONS q
-                ON (e.question_id= q.iid AND e.c_id = q.c_id)
+                ON (e.question_id= q.id AND e.c_id = q.c_id)
                 WHERE e.c_id = {$this->course_id} AND e.exercice_id	= '".Database::escape_string($this->id)."'
-                ORDER BY RAND()
                 $randomLimit ";
         $result = Database::query($sql);
         $questionList = array();
@@ -2055,7 +2057,7 @@ class Exercise
                     $option,
                     array(
                         'id' => 'questionSelection',
-                        'onclick' => 'checkQuestionSelection()'
+                        'onchange' => 'checkQuestionSelection()'
                     )
                 );
 
@@ -2100,6 +2102,9 @@ class Exercise
                 // Category selection.
                 $cat = new TestCategory();
                 $cat_form = $cat->returnCategoryForm($this);
+                if (empty($cat_form)) {
+                    $cat_form = '<span class="label label-warning">' . get_lang('NoCategoriesDefined') . '</span>';
+                }
                 $form->addElement('label', null, $cat_form);
                 $form->addElement('html', '</div>');
 
@@ -6062,11 +6067,12 @@ class Exercise
 
     /**
      * Sets the question list when the exercise->read() is executed
+     * @param   bool    $adminView  Whether to view the set the list of *all* questions or just the normal student view
      */
-    public function setQuestionList()
+    public function setQuestionList($adminView = false)
     {
         // Getting question list.
-        $questionList = $this->selectQuestionList(true);
+        $questionList = $this->selectQuestionList(true, $adminView);
 
         $this->setMediaList($questionList);
 

@@ -763,7 +763,7 @@ class Template
      */
     public function set_js_files_post()
     {
-        global $disable_js_and_css_files, $htmlHeadXtra;
+        global $disable_js_and_css_files;
         $js_files = array();
         if (api_is_global_chat_enabled()) {
             //Do not include the global chat in LP

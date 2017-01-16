@@ -986,7 +986,9 @@ class ImportCsv
                         array(), //$attachmentArray = array(),
                         [], //$attachmentCommentList
                         $eventComment,
-                        $color
+                        $color,
+                        false,
+                        false
                     );
 
                     if ($eventResult !== false) {

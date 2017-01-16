@@ -578,6 +578,7 @@ class Agenda
      * @param string $comment
      * @param string $color
      * @param bool $addAnnouncement
+     * @param bool $updateContent
      *
      * @return null|false
      */
@@ -593,7 +594,8 @@ class Agenda
         $attachmentCommentList = array(),
         $comment = null,
         $color = '',
-        $addAnnouncement = false
+        $addAnnouncement = false,
+        $updateContent = true
     ) {
         $start = api_get_utc_datetime($start);
         $end = api_get_utc_datetime($end);
@@ -607,12 +609,20 @@ class Agenda
                 }
                 $attributes = array(
                     'title' => $title,
-                    'text' => $content,
                     'date' => $start,
                     'enddate' => $end,
                     'all_day' => $allDay,
-                    'color' => $color
+
                 );
+
+                if ($updateContent) {
+                    $attributes['text'] = $content;
+                }
+
+                if (!empty($color)) {
+                    $attributes['color'] = $color;
+                }
+
                 Database::update(
                     $this->tbl_personal_agenda,
                     $attributes,
@@ -645,13 +655,19 @@ class Agenda
                 if ($this->getIsAllowedToEdit()) {
                     $attributes = array(
                         'title' => $title,
-                        'content' => $content,
                         'start_date' => $start,
                         'end_date' => $end,
                         'all_day' => $allDay,
-                        'comment' => $comment,
-                        'color' => $color
+                        'comment' => $comment
                     );
+
+                    if ($updateContent) {
+                        $attributes['content'] = $content;
+                    }
+
+                    if (!empty($color)) {
+                        $attributes['color'] = $color;
+                    }
 
                     Database::update(
                         $this->tbl_course_agenda,
@@ -850,11 +866,14 @@ class Agenda
                 if (api_is_platform_admin()) {
                     $attributes = array(
                         'title' => $title,
-                        'content' => $content,
                         'start_date' => $start,
                         'end_date' => $end,
                         'all_day' => $allDay
                     );
+
+                    if ($updateContent) {
+                        $attributes['content'] = $content;
+                    }
                     Database::update(
                         $this->tbl_global_agenda,
                         $attributes,
@@ -966,7 +985,9 @@ class Agenda
         $course_id = null,
         $groupId = null,
         $user_id = 0,
-        $format = 'json'
+        $format = 'json',
+        $startLimit = 0,
+        $endLimit = 0
     ) {
         switch ($this->type) {
             case 'admin':
@@ -1009,7 +1030,6 @@ class Agenda
             case 'personal':
             default:
                 $sessionFilterActive = false;
-
                 if (!empty($this->sessionId)) {
                     $sessionFilterActive = true;
                 }
@@ -1024,7 +1044,6 @@ class Agenda
 
                 // Getting course events
                 $my_course_list = array();
-
                 if (!api_is_anonymous()) {
                     $session_list = SessionManager::get_sessions_by_user(
                         api_get_user_id()

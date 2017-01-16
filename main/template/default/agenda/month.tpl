@@ -65,9 +65,8 @@ $(document).ready(function() {
 		header: {
 			left: 'today,prev,next',
 			center: 'title',
-			right: 'month,agendaWeek,agendaDay'
+			right: 'month,agendaWeek,agendaDay,listWeek'
 		},
-        lang: region_value,
         locale: region_value,
         {% if use_google_calendar == 1 %}
             eventSources: [

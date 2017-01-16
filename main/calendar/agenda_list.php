@@ -13,10 +13,8 @@ $interbreadcrumb[] = array(
 );
 
 $currentCourseId = api_get_course_int_id();
-
-$agenda = new Agenda();
 $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
-$agenda->setType($type);
+$agenda = new Agenda($type);
 $events = $agenda->getEvents(
     null,
     null,

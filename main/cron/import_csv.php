@@ -887,7 +887,7 @@ class ImportCsv
                 "Ready to insert events"
             );
 
-            $agenda = new Agenda();
+            $agenda = new Agenda('course');
 
             $extraFieldValue = new ExtraFieldValue('calendar_event');
             $extraFieldName = $this->extraFieldIdNameList['calendar_event'];
@@ -946,7 +946,6 @@ class ImportCsv
 
                 $courseInfo = api_get_course_info_by_id($event['course_id']);
                 $agenda->set_course($courseInfo);
-                $agenda->setType('course');
                 $agenda->setSessionId($event['session_id']);
                 $agenda->setSenderId($event['sender_id']);
                 $agenda->setIsAllowedToEdit(true);

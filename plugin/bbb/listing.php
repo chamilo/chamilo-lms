@@ -36,13 +36,10 @@ if ($conferenceManager) {
     switch ($action) {
         case 'add_to_calendar':
             if ($bbb->isGlobalConference()) {
-
                 return false;
             }
             $courseInfo = api_get_course_info();
-            $agenda = new Agenda();
-            $agenda->type = 'course';
-
+            $agenda = new Agenda('course');
             $id = intval($_GET['id']);
             $title = sprintf($plugin->get_lang('VideoConferenceXCourseX'), $id, $courseInfo['name']);
             $content = Display::url($plugin->get_lang('GoToTheVideoConference'), $_GET['url']);

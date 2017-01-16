@@ -31,8 +31,7 @@ $id = explode('_', $_GET['id']);
 $type = $id[0];
 $id = $id[1];
 
-$agenda = new Agenda();
-$agenda->type = $type; //course,admin or personal
+$agenda = new Agenda($type);
 if (isset($_GET['course_id'])) {
     $course_info = api_get_course_info_by_id($_GET['course_id']);
     if (!empty($course_info)) {

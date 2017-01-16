@@ -404,8 +404,7 @@ class SystemAnnouncementManager
             }
 
             if ($add_to_calendar) {
-                $agenda = new Agenda();
-                $agenda->setType('admin');
+                $agenda = new Agenda('admin');
                 $agenda->addEvent(
                     $date_start,
                     $date_end,
@@ -738,7 +737,7 @@ class SystemAnnouncementManager
             MessageManager::send_message_simple($row['user_id'], $title, $content);
             $message_sent = true;
 		}
-	    
+
 	    	// Minor validation to clean up the attachment files in the announcement
 		if (!empty($_FILES)) {
 		    $attachments = $_FILES;

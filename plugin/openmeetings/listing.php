@@ -24,8 +24,7 @@ if ($teacher) {
     switch ($action) {
         case 'add_to_calendar':
             $course_info = api_get_course_info();
-            $agenda = new Agenda();
-            $agenda->type = 'course';
+            $agenda = new Agenda('course');
 
             $id = intval($_GET['id']);
             $title = sprintf(get_lang('VideoConferenceXCourseX'), $id, $course_info['name']);

@@ -46,8 +46,7 @@ if (isset($_REQUEST['cidReq']) && !empty($_REQUEST['cidReq'])) {
 
 api_protect_course_group(GroupManager::GROUP_TOOL_CALENDAR);
 
-$agenda = new Agenda();
-$agenda->type = $type;
+$agenda = new Agenda($type);
 
 $is_group_tutor = false;
 $session_id = api_get_session_id();
@@ -82,14 +81,10 @@ switch ($type) {
         break;
     case 'course':
         api_protect_course_script(true);
+        $allowToEdit = $agenda->getIsAllowedToEdit();
         $this_section = SECTION_COURSES;
-        if (api_is_allowed_to_edit()) {
+        if ($allowToEdit) {
             $can_add_events = 1;
-        }
-        if (!empty($group_id)) {
-            if ($is_group_tutor) {
-                $can_add_events = 1;
-            }
         }
         break;
     case 'personal':

@@ -21,37 +21,34 @@ function clean_user_select() {
 var region_value = '{{ region_value }}';
 
 $(document).ready(function() {
-	var date = new Date();
-
     // Reset button.
     $("button[type=reset]").click(function() {
         $("#session_id").find('option').removeAttr("selected");
     });
 
 	$("#dialog-form").dialog({
-		autoOpen: false,
-		modal	: false,
-		width	: 580,
-		height	: 480,
-        zIndex: 20000 // added because of qtip2
+		autoOpen : false,
+		modal : false,
+		width : 580,
+		height : 480,
+        zIndex : 20000 // added because of qtip2
    	});
 
     $("#simple-dialog-form").dialog({
-		autoOpen: false,
-		modal	: false,
-		width	: 580,
-		height	: 480,
-        zIndex: 20000 // added because of qtip2
+		autoOpen : false,
+		modal : false,
+		width : 580,
+		height : 480,
+        zIndex : 20000 // added because of qtip2
    	});
 
 	var title = $("#title"),
-	content = $( "#content" ),
-	allFields = $( [] ).add( title ).add( content ), tips = $(".validateTips");
+	content = $("#content"),
+	allFields = $([]).add( title ).add( content ), tips = $(".validateTips");
 
     $("#select_form_id_search").change(function() {
         var temp ="&user_id="+$("#select_form_id_search").val();
         var position =String(window.location).indexOf("&user");
-        var url_length = String(window.location).length;
         var url = String(window.location).substring(0,position)+temp;
         if (position > 0) {
             window.location.replace(url);
@@ -120,8 +117,11 @@ $(document).ready(function() {
 
                 if (diffDays > 1) {
                     $('#start_date').html('');
-                    var clone = end.clone();
-                    var end_date_value = clone.subtract(1, 'days').format('{{ js_format_date }}');
+                    var end_date_value = '';
+                    if (end.hasTime()) {
+                        var clone = end.clone();
+                        end_date_value = clone.subtract(1, 'days').format('{{ js_format_date }}');
+                    }
                     $('#end_date').html(start_date_value + " - " + end_date_value);
                 } else if (diffDays == 0) {
                     var start_date_value = start.format('ll');
@@ -178,7 +178,6 @@ $(document).ready(function() {
                                         }
                                         var temp = "&user_id="+user_id;
                                         var position = String(window.location).indexOf("&user");
-                                        var url_length = String(window.location).length;
                                         var url = String(window.location).substring(0, position)+temp;
                                         /*if (position > 0) {
                                             window.location.replace(url);
@@ -186,19 +185,16 @@ $(document).ready(function() {
                                             url = String(window.location)+temp;
                                             window.location.replace(url);
                                         }*/
-                                    } else {
-                                	   /* calendar.fullCalendar("refetchEvents");
-									    calendar.fullCalendar("rerenderEvents");*/
                                     }
 
                                     $("#title").val('');
                                     $("#content").val('');
                                     $("#comment").val('');
 
-                                    calendar.fullCalendar("refetchEvents");
-                                    calendar.fullCalendar("rerenderEvents");
+                                    calendar.fullCalendar('refetchEvents');
+                                    calendar.fullCalendar('rerenderEvents');
 
-									$("#dialog-form").dialog("close");
+									$("#dialog-form").dialog('close');
 								}
 							});
 						}
@@ -246,8 +242,12 @@ $(document).ready(function() {
             var start = calEvent.start;
             var end = calEvent.end;
             var diffDays = moment(end).diff(start, 'days');
-            var clone = end.clone();
-            var endDateMinusOne = clone.subtract(1, 'days').format('{{ js_format_date }}');
+            var endDateMinusOne = '';
+
+            if (end.hasTime()) {
+                var clone = end.clone();
+                endDateMinusOne = clone.subtract(1, 'days').format('{{ js_format_date }}');
+            }
             var startDateToString = start.format("{{ js_format_date }}");
 
 			// Edit event.
@@ -363,7 +363,6 @@ $(document).ready(function() {
 							});
 						},
                         {% endif %}
-
                         '{{ "Edit"|get_lang }}' : function() {
                             url =  "{{ _p.web_main }}calendar/agenda.php?action=edit&type=fromjs&id=" + calEvent.id+'&course_id='+calEvent.course_id+"";
                             window.location.href = url;

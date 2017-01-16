@@ -21,11 +21,12 @@ class Agenda
 
     /**
      * Constructor
+     * @param string $type
      * @param int $senderId Optional The user sender ID
      * @param int $courseId Opitonal. The course ID
      * @param int $sessionId Optional The session ID
      */
-    public function __construct($senderId = 0, $courseId = 0, $sessionId = 0)
+    public function __construct($type, $senderId = 0, $courseId = 0, $sessionId = 0)
     {
         // Table definitions
         $this->tbl_global_agenda = Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
@@ -33,15 +34,56 @@ class Agenda
         $this->tbl_course_agenda = Database::get_course_table(TABLE_AGENDA);
         $this->table_repeat = Database::get_course_table(TABLE_AGENDA_REPEAT);
 
-        // Setting the course object if we are in a course
-        $courseInfo = api_get_course_info_by_id($courseId);
-        if (!empty($courseInfo)) {
-            $this->course = $courseInfo;
-        }
-        $this->setSessionId($sessionId ?: api_get_session_id());
+        $this->setType($type);
         $this->setSenderId($senderId ?: api_get_user_id());
-        $this->setIsAllowedToEdit(api_is_allowed_to_edit(null, true));
-        $this->events = array();
+        $isAllowToEdit = false;
+
+        switch ($type) {
+            case 'course':
+                $sessionId = $sessionId ?: api_get_session_id();
+                $this->setSessionId($sessionId);
+
+                // Setting the course object if we are in a course
+                $courseInfo = api_get_course_info_by_id($courseId);
+                if (!empty($courseInfo)) {
+                    $this->set_course($courseInfo);
+                }
+
+                // Check if teacher
+                if (empty($sessionId)) {
+                    $isAllowToEdit = api_is_allowed_to_edit(false, true);
+                } else {
+                    $isAllowToEdit = api_is_allowed_to_session_edit(false, true);
+                }
+
+                // Check
+                if (api_get_course_setting('allow_user_edit_agenda') && api_is_allowed_in_course()) {
+                    $isAllowToEdit = true;
+                }
+
+                $groupId = api_get_group_id();
+                if (!empty($groupId)) {
+                    $groupInfo = GroupManager::get_group_properties($groupId);
+                    $isGroupAccess = GroupManager::user_has_access(api_get_user_id(), $groupInfo['iid'], GroupManager::GROUP_TOOL_CALENDAR) &&
+                        GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo['iid']);
+                    if ($isGroupAccess) {
+                        $isAllowToEdit = true;
+                    } else {
+                        $isAllowToEdit = false;
+                    }
+                }
+
+                break;
+            case 'admin':
+                $isAllowToEdit = api_is_platform_admin();
+                break;
+            case 'personal':
+                $isAllowToEdit = !api_is_anonymous();
+                break;
+        }
+
+        $this->setIsAllowedToEdit($isAllowToEdit);
+        $this->events = [];
 
         // Event colors
         $this->event_platform_color = 'red'; //red
@@ -1711,8 +1753,7 @@ class Agenda
                 }
 
                 $event['editable'] = false;
-
-                if (api_is_allowed_to_edit() && $this->type == 'course') {
+                if ($this->getIsAllowedToEdit() && $this->type == 'course') {
                     $event['editable'] = true;
                     if (!empty($session_id)) {
                         if ($coachCanEdit == false) {

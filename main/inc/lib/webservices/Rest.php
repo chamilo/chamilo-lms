@@ -422,8 +422,12 @@ class Rest extends WebService
     {
         $sessionId = $this->session ? $this->session->getId() : 0;
 
-        $agenda = new Agenda($this->user->getId(), $this->course->getId(), $sessionId);
-        $agenda->setType('course');
+        $agenda = new Agenda(
+            'course',
+            $this->user->getId(),
+            $this->course->getId(),
+            $sessionId
+        );
         $result = $agenda->parseAgendaFilter(null);
 
         $start = new DateTime(api_get_utc_datetime(), new DateTimeZone('UTC'));

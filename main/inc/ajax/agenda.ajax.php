@@ -19,24 +19,16 @@ if ($type == 'course') {
     api_protect_course_script(true);
 }
 
-$group_id = api_get_group_id();
-$is_group_tutor = GroupManager::is_tutor_of_group(api_get_user_id(), $group_id);
-
-$agenda = new Agenda();
-$agenda->setType($type);
+$agenda = new Agenda($type);
 
 switch ($action) {
     case 'add_event':
-        if ((!api_is_allowed_to_edit(null, true) && !$is_group_tutor) && $type == 'course') {
+        if (!$agenda->getIsAllowedToEdit()) {
             break;
         }
         $add_as_announcement = isset($_REQUEST['add_as_annonuncement']) ? $_REQUEST['add_as_annonuncement'] : null;
         $comment = isset($_REQUEST['comment']) ? $_REQUEST['comment'] : null;
         $userToSend = isset($_REQUEST['users_to_send']) ? $_REQUEST['users_to_send'] : array();
-
-        if ($type === 'course') {
-            $agenda->set_course(api_get_course_info());
-        }
 
         echo $agenda->addEvent(
             $_REQUEST['start'],
@@ -53,7 +45,7 @@ switch ($action) {
         );
         break;
     case 'edit_event':
-        if (!api_is_allowed_to_edit(null, true) && $type == 'course') {
+        if (!$agenda->getIsAllowedToEdit()) {
             break;
         }
         $id_list = explode('_', $_REQUEST['id']);
@@ -68,7 +60,7 @@ switch ($action) {
         );
         break;
     case 'delete_event':
-        if (!api_is_allowed_to_edit(null, true) && $type == 'course') {
+        if (!$agenda->getIsAllowedToEdit()) {
             break;
         }
         $id_list = explode('_', $_REQUEST['id']);
@@ -77,7 +69,7 @@ switch ($action) {
         $agenda->deleteEvent($id, $deleteAllEventsFromSerie);
         break;
     case 'resize_event':
-        if (!api_is_allowed_to_edit(null, true) && $type == 'course') {
+        if (!$agenda->getIsAllowedToEdit()) {
             break;
         }
         $minute_delta = $_REQUEST['minute_delta'];
@@ -86,7 +78,7 @@ switch ($action) {
         $agenda->resizeEvent($id, $minute_delta);
         break;
     case 'move_event':
-        if (!api_is_allowed_to_edit(null, true) && $type == 'course') {
+        if (!$agenda->getIsAllowedToEdit()) {
             break;
         }
         $minute_delta = $_REQUEST['minute_delta'];
@@ -117,7 +109,6 @@ switch ($action) {
             $groupId,
             $userId
         );
-
         echo $events;
         break;
     case 'get_user_agenda':

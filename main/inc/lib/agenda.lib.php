@@ -1127,34 +1127,30 @@ class Agenda
 
     /**
      * @param int $id
-     * @param int $day_delta
      * @param int $minute_delta
      * @return int
      */
-    public function resizeEvent($id, $day_delta, $minute_delta)
+    public function resizeEvent($id, $minute_delta)
     {
-        // we convert the hour delta into minutes and add the minute delta
-        $delta = ($day_delta * 60 * 24) + $minute_delta;
-        $delta = intval($delta);
-
+        $delta = intval($minute_delta);
         $event = $this->get_event($id);
         if (!empty($event)) {
             switch ($this->type) {
                 case 'personal':
                     $sql = "UPDATE $this->tbl_personal_agenda SET
-                            all_day = 0, enddate = DATE_ADD(enddate, INTERVAL $delta MINUTE)
+                            enddate = DATE_ADD(enddate, INTERVAL $delta MINUTE)
 							WHERE id=".intval($id);
                     Database::query($sql);
                     break;
                 case 'course':
                     $sql = "UPDATE $this->tbl_course_agenda SET
-                            all_day = 0,  end_date = DATE_ADD(end_date, INTERVAL $delta MINUTE)
+                            end_date = DATE_ADD(end_date, INTERVAL $delta MINUTE)
 							WHERE c_id = ".$this->course['real_id']." AND id=".intval($id);
                     Database::query($sql);
                     break;
                 case 'admin':
                     $sql = "UPDATE $this->tbl_global_agenda SET
-                            all_day = 0, end_date = DATE_ADD(end_date, INTERVAL $delta MINUTE)
+                            end_date = DATE_ADD(end_date, INTERVAL $delta MINUTE)
 							WHERE id=".intval($id);
                     Database::query($sql);
                     break;
@@ -1164,23 +1160,21 @@ class Agenda
     }
 
     /**
-     * @param $id
-     * @param $day_delta
-     * @param $minute_delta
+     * @param int $id
+     * @param int $minute_delta minutes
+     * @param int $allDay
      * @return int
      */
-    public function move_event($id, $day_delta, $minute_delta)
+    public function move_event($id, $minute_delta, $allDay)
     {
-        // we convert the hour delta into minutes and add the minute delta
-        $delta = ($day_delta * 60 * 24) + $minute_delta;
-        $delta = intval($delta);
-
         $event = $this->get_event($id);
 
-        $allDay = 0;
-        if ($day_delta == 0 && $minute_delta == 0) {
-            $allDay = 1;
+        if (empty($event)) {
+            return false;
         }
+        // we convert the hour delta into minutes and add the minute delta
+        $delta = intval($minute_delta);
+        $allDay = intval($allDay);
 
         if (!empty($event)) {
             switch ($this->type) {
@@ -1193,7 +1187,8 @@ class Agenda
                     break;
                 case 'course':
                     $sql = "UPDATE $this->tbl_course_agenda SET
-                            all_day = $allDay, start_date = DATE_ADD(start_date,INTERVAL $delta MINUTE),
+                            all_day = $allDay, 
+                            start_date = DATE_ADD(start_date, INTERVAL $delta MINUTE),
                             end_date = DATE_ADD(end_date, INTERVAL $delta MINUTE)
 							WHERE c_id = ".$this->course['real_id']." AND id=".intval($id);
                     Database::query($sql);

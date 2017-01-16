@@ -80,21 +80,20 @@ switch ($action) {
         if (!api_is_allowed_to_edit(null, true) && $type == 'course') {
             break;
         }
-        $day_delta = $_REQUEST['day_delta'];
         $minute_delta = $_REQUEST['minute_delta'];
         $id = explode('_', $_REQUEST['id']);
         $id = $id[1];
-        $agenda->resizeEvent($id, $day_delta, $minute_delta);
+        $agenda->resizeEvent($id, $minute_delta);
         break;
     case 'move_event':
         if (!api_is_allowed_to_edit(null, true) && $type == 'course') {
             break;
         }
-        $day_delta = $_REQUEST['day_delta'];
         $minute_delta = $_REQUEST['minute_delta'];
+        $allDay = $_REQUEST['all_day'];
         $id = explode('_', $_REQUEST['id']);
         $id = $id[1];
-        $agenda->move_event($id, $day_delta, $minute_delta);
+        $agenda->move_event($id, $minute_delta, $allDay);
         break;
     case 'get_events':
         $filter = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : null;

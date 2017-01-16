@@ -24,6 +24,7 @@ $htmlHeadXtra[] = api_get_jquery_libraries_js(array('jquery-ui', 'jquery-ui-i18n
 
 $htmlHeadXtra[] = api_get_asset('qtip2/jquery.qtip.min.js');
 $htmlHeadXtra[] = api_get_asset('fullcalendar/dist/fullcalendar.min.js');
+$htmlHeadXtra[] = api_get_asset('fullcalendar/dist/lang-all.js');
 $htmlHeadXtra[] = api_get_asset('fullcalendar/dist/gcal.js');
 $htmlHeadXtra[] = api_get_css_asset('fullcalendar/dist/fullcalendar.min.css');
 $htmlHeadXtra[] = api_get_css_asset('qtip2/jquery.qtip.min.css');
@@ -114,13 +115,13 @@ switch ($type) {
 }
 
 //Setting translations
-$day_short = api_get_week_days_short();
+/*$day_short = api_get_week_days_short();
 $days = api_get_week_days_long();
 $months = api_get_months_long();
-$months_short = api_get_months_short();
+$months_short = api_get_months_short();*/
 
 //Setting calendar translations
-$tpl->assign('month_names', json_encode($months));
+/*$tpl->assign('month_names', json_encode($months));
 $tpl->assign('month_names_short', json_encode($months_short));
 $tpl->assign('day_names', json_encode($days));
 $tpl->assign('day_names_short', json_encode($day_short));
@@ -132,7 +133,7 @@ $tpl->assign(
         'week' => get_lang('Week'),
         'day' => get_lang('Day')
     ))
-);
+);*/
 
 //see http://docs.jquery.com/UI/Datepicker/$.datepicker.formatDate
 

@@ -1,4 +1,127 @@
 
+v2.9.1 (2016-7-31)
+------------------
+
+- multiple definitions for businessHours (#2686)
+- businessHours for single day doesn't display weekends (#2944)
+- height/contentHeight can accept a function or 'parent' for dynamic value (#3271)
+- fix +more popover clipped by overflow (#3232)
+- fix +more popover positioned incorrectly when scrolled (#3137)
+- Norwegian Nynorsk translation (#3246)
+- fix isAnimating JS error (#3285)
+
+
+v2.9.0 (2016-07-10)
+-------------------
+
+- Setters for (almost) all options (#564).
+  See [docs](http://fullcalendar.io/docs/utilities/dynamic_options/) for more info.
+- Travis CI improvements (#3266)
+
+
+v2.8.0 (2016-06-19)
+-------------------
+
+- getEventSources method (#3103, #2433)
+- getEventSourceById method (#3223)
+- refetchEventSources method (#3103, #1328, #254)
+- removeEventSources method (#3165, #948)
+- prevent flicker when refetchEvents is called (#3123, #2558)
+- fix for removing event sources that share same URL (#3209)
+- jQuery 3 support (#3197, #3124)
+- Travis CI integration (#3218)
+- EditorConfig for promoting consistent code style (#141)
+- use en dash when formatting ranges (#3077)
+- height:auto always shows scrollbars in month view on FF (#3202)
+- new languages:
+	- Basque (#2992)
+	- Galician (#194)
+	- Luxembourgish (#2979)
+
+
+v2.7.3 (2016-06-02)
+-------------------
+
+internal enhancements that plugins can benefit from:
+- EventEmitter not correctly working with stopListeningTo
+- normalizeEvent hook for manipulating event data
+
+
+v2.7.2 (2016-05-20)
+-------------------
+
+- fixed desktops/laptops with touch support not accepting mouse events for
+  dayClick/dragging/resizing (#3154, #3149)
+- fixed dayClick incorrectly triggered on touch scroll (#3152)
+- fixed touch event dragging wrongfully beginning upon scrolling document (#3160)
+- fixed minified JS still contained comments
+- UI change: mouse users must hover over an event to reveal its resizers
+
+
+v2.7.1 (2016-05-01)
+-------------------
+
+- dayClick not firing on touch devices (#3138)
+- icons for prev/next not working in MS Edge (#2852)
+- fix bad languages troubles with firewalls (#3133, #3132)
+- update all dev dependencies (#3145, #3010, #2901, #251)
+- git-ignore npm debug logs (#3011)
+- misc automated test updates (#3139, #3147)
+- Google Calendar htmlLink not always defined (#2844)
+
+
+v2.7.0 (2016-04-23)
+-------------------
+
+touch device support (#994):
+	- smoother scrolling
+	- interactions initiated via "long press":
+		- event drag-n-drop
+		- event resize
+		- time-range selecting
+	- `longPressDelay`
+
+
+v2.6.1 (2016-02-17)
+-------------------
+
+- make `nowIndicator` positioning refresh on window resize
+
+
+v2.6.0 (2016-01-07)
+-------------------
+
+- current time indicator (#414)
+- bundled with most recent version of moment (2.11.0)
+- UMD wrapper around lang files now handles commonjs (#2918)
+- fix bug where external event dragging would not respect eventOverlap
+- fix bug where external event dropping would not render the whole-day highlight
+
+
+v2.5.0 (2015-11-30)
+-------------------
+
+- internal timezone refactor. fixes #2396, #2900, #2945, #2711
+- internal "grid" system refactor. improved API for plugins.
+
+
+v2.4.0 (2015-08-16)
+-------------------
+
+- add new buttons to the header via `customButtons` ([225])
+- control stacking order of events via `eventOrder` ([364])
+- control frequency of slot text via `slotLabelInterval` ([946])
+- `displayEventTime` ([1904])
+- `on` and `off` methods ([1910])
+- renamed `axisFormat` to `slotLabelFormat`
+
+[225]: https://code.google.com/p/fullcalendar/issues/detail?id=225
+[364]: https://code.google.com/p/fullcalendar/issues/detail?id=364
+[946]: https://code.google.com/p/fullcalendar/issues/detail?id=946
+[1904]: https://code.google.com/p/fullcalendar/issues/detail?id=1904
+[1910]: https://code.google.com/p/fullcalendar/issues/detail?id=1910
+
+
 v2.3.2 (2015-06-14)
 -------------------
 

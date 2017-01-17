@@ -1,3 +1,6 @@
+{{ agenda_actions }}
+
+
 <table class="data_table">
     <tr>
         <th>

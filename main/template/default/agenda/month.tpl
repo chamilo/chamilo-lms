@@ -58,12 +58,157 @@ $(document).ready(function() {
         }
     });
 
+    var CustomListViewGrid  = ListViewGrid.extend({
+        fgSegHtml: function(seg) {
+            var view = this.view;
+            var classes = [ 'fc-list-item' ].concat(this.getSegCustomClasses(seg));
+            var bgColor = this.getSegBackgroundColor(seg);
+            var event = seg.event;
+            var url = event.url;
+            var timeHtml;
+
+            if (event.allDay) {
+                timeHtml = view.getAllDayHtml();
+            }
+            else if (view.isMultiDayEvent(event)) { // if the event appears to span more than one day
+                if (seg.isStart || seg.isEnd) { // outer segment that probably lasts part of the day
+                    timeHtml = htmlEscape(this.getEventTimeText(seg));
+                }
+                else { // inner segment that lasts the whole day
+                    timeHtml = view.getAllDayHtml();
+                }
+            }
+            else {
+                // Display the normal time text for the *event's* times
+                timeHtml = htmlEscape(this.getEventTimeText(event));
+            }
+
+            if (url) {
+                classes.push('fc-has-url');
+            }
+
+            return '<tr class="' + classes.join(' ') + '">' +
+                (this.displayEventTime ?
+                    '<td class="fc-list-item-time ' + view.widgetContentClass + '">' +
+                        (timeHtml || '') +
+                    '</td>' :
+                    '') +
+                '<td class="fc-list-item-marker ' + view.widgetContentClass + '">' +
+                    '<span class="fc-event-dot"' +
+                    (bgColor ?
+                        ' style="background-color:' + bgColor + '"' :
+                        '') +
+                    '></span>' +
+                '</td>' +
+                '<td class="fc-list-item-title ' + view.widgetContentClass + '">' +
+                    '<a' + (url ? ' href="' + htmlEscape(url) + '"' : '') + '>' +
+                        htmlEscape(seg.event.title || '') + (seg.event.description || '')
+                    '</a>' +
+                '</td>' +
+            '</tr>';
+        },
+
+        // render the event segments in the view
+        renderSegList: function(allSegs) {
+            var segsByDay = this.groupSegsByDay(allSegs); // sparse array
+            var dayIndex;
+            var daySegs;
+            var i;
+            var tableEl = $('<table class="fc-list-table"><tbody/></table>');
+            var tbodyEl = tableEl.find('tbody');
+            var eventList = new Array;
+            for (dayIndex = segsByDay.length-1; dayIndex > 0; dayIndex--) {
+                daySegs = segsByDay[dayIndex];
+                if (daySegs) { // sparse array, so might be undefined
+
+                    this.sortEventSegs(daySegs);
+
+                    for (i = 0; i < daySegs.length; i++) {
+                        var event = daySegs[i].event;
+                        if (jQuery.inArray(event.id, eventList) !== -1) {
+                            continue;
+                        }
+                        eventList.push(event.id);
+                         // append a day header
+                        tbodyEl.append(this.dayHeaderHtml(
+                            this.view.start.clone().add(dayIndex, 'days'),
+                            event
+                        ));
+
+                        tbodyEl.append(daySegs[i].el); // append event row
+                    }
+                }
+            }
+            console.log(eventList);
+
+            this.el.empty().append(tableEl);
+        },
+        // generates the HTML for the day headers that live amongst the event rows
+        dayHeaderHtml: function(dayDate, event) {
+            var view = this.view;
+            var mainFormat = 'LL';
+            var altFormat = 'dddd';
+
+            return '<tr class="fc-list-heading" data-date="' + dayDate.format('YYYY-MM-DD') + '">' +
+                '<td class="' + view.widgetHeaderClass + '" colspan="3">' +
+                    (mainFormat ?
+                        view.buildGotoAnchorHtml(
+                            dayDate,
+                            { 'class': 'fc-list-heading-main' },
+                            htmlEscape(dayDate.format(mainFormat)) // inner HTML
+                        ) :
+                        '') +
+
+                      (mainFormat ?
+                        view.buildGotoAnchorHtml(
+                            dayDate,
+                            { 'class': 'fc-list-heading-main' },
+                            '&nbsp;-&nbsp; ' + htmlEscape(event.end.format(mainFormat)) // inner HTML
+                        ) :
+                        '') +
+
+                    (altFormat ?
+                        view.buildGotoAnchorHtml(
+                            dayDate,
+                            { 'class': 'fc-list-heading-alt' },
+                            htmlEscape(dayDate.format(altFormat)) // inner HTML
+                        ) :
+                        '') +
+                '</td>' +
+            '</tr>';
+        },
+    });
+
+	var FC = $.fullCalendar; // a reference to FullCalendar's root namespace
+    var View = ListView;      // the class that all views must inherit from
+    var CustomView;          // our subclass
+
+    CustomView = View.extend({ // make a subclass of View
+        initialize: function() {
+            this.grid = new CustomListViewGrid(this);
+            this.scroller = new Scroller({
+                overflowX: 'hidden',
+                overflowY: 'auto'
+            });
+        }
+    });
+
+    FC.views.CustomView = CustomView; // register our class with the view system
+
 	var calendar = $('#calendar').fullCalendar({
 		header: {
 			left: 'today,prev,next',
 			center: 'title',
-			right: 'month,agendaWeek,agendaDay,listMonth'
+			right: 'month,agendaWeek,agendaDay,CustomView'
 		},
+        views: {
+            CustomView: { // name of view
+                duration: { month: 1 },
+                defaults: {
+                    'listDayAltFormat': 'dddd' // day-of-week is nice-to-have
+                }
+            }
+        },
         locale: region_value,
         {% if use_google_calendar == 1 %}
             eventSources: [
@@ -538,6 +683,12 @@ $(document).ready(function() {
 			else $('#loading').hide();
 		}
 	});
+
+
+
+
+
+
 });
 </script>
 {{ actions_div }}

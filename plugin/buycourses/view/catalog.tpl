@@ -28,29 +28,35 @@
                         {% if showing_courses %}
                             {% for course in courses %}
                                 <div class="col-md-4 col-sm-6">
-                                    <article class="thumbnail">
-                                        <img alt="{{ course.title }}" class="img-responsive" src="{{ course.course_img ? course.course_img : 'session_default.png'|icon() }}">
-                                        <div class="caption">
+                                    <article class="items-course">
+                                        <div class="items-course-image">
+                                            <img alt="{{ course.title }}" class="img-responsive" src="{{ course.course_img ? course.course_img : 'session_default.png'|icon() }}">
+                                        </div>
+                                        <div class="items-course-info">
                                             {% set course_description_url = _p.web_ajax ~ 'course_home.ajax.php?' ~ {'code': course.code, 'a': 'show_course_information'}|url_encode() %}
-                                            <h3>
+                                            <h4 class="title">
                                                 <a class="ajax" href="{{ course_description_url }}" data-title="{{ course.title }}">{{ course.title }}</a>
-                                            </h3>
+                                            </h4>
                                             <ul class="list-unstyled">
                                                 {% for teacher in course.teachers %}
                                                     <li><em class="fa fa-user"></em> {{ teacher }}</li>
-                                                    {% endfor %}
+                                                {% endfor %}
                                             </ul>
-                                            <p class="lead text-right">{{ course.currency }} {{ course.price }}</p>
+                                            <p class="text-right">
+                                                <span class="label label-primary">
+                                                    {{ course.currency }} {{ course.price }}
+                                                </span>
+                                            </p>
                                             {% if course.enrolled == "YES" %}
                                                 <div class="alert alert-success">
                                                     <em class="fa fa-check-square-o fa-fw"></em> {{ 'TheUserIsAlreadyRegisteredInTheCourse'|get_plugin_lang('BuyCoursesPlugin') }}
                                                 </div>
                                             {% elseif course.enrolled == "NO" %}
-                                                <div class="text-center">
-                                                    <a class="ajax btn btn-primary" title="" href="{{ course_description_url }}" data-title="{{ course.title }}">
+                                                <div class="toolbar">
+                                                    <a class="ajax btn btn-info btn-block btn-sm" title="" href="{{ course_description_url }}" data-title="{{ course.title }}">
                                                         <em class="fa fa-file-text"></em> {{ 'SeeDescription'|get_plugin_lang('BuyCoursesPlugin') }}
                                                     </a>
-                                                    <a class="btn btn-success" title="" href="{{ _p.web_plugin ~ 'buycourses/src/process.php?' ~ {'i': course.id, 't': 1}|url_encode() }}">
+                                                    <a class="btn btn-success btn-block btn-sm" title="" href="{{ _p.web_plugin ~ 'buycourses/src/process.php?' ~ {'i': course.id, 't': 1}|url_encode() }}">
                                                         <em class="fa fa-shopping-cart"></em> {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
                                                     </a>
                                                 </div>
@@ -66,12 +72,14 @@
                         {% if showing_sessions %}
                             {% for session in sessions %}
                                 <div class="col-md-4 col-sm-6">
-                                    <article class="thumbnail">
-                                        <img alt="{{ session.name }}" class="img-responsive" src="{{ session.image ? session.image : 'session_default.png'|icon() }}">
-                                        <div class="caption">
-                                            <h3>
+                                    <article class="items-course">
+                                        <div class="items-course-image">
+                                            <img alt="{{ session.name }}" class="img-responsive" src="{{ session.image ? session.image : 'session_default.png'|icon() }}">
+                                        </div>
+                                        <div class="items-course-info">
+                                            <h4 class="title">
                                                 <a href="{{ _p.web ~ 'session/' ~ session.id ~ '/about/' }}">{{ session.name }}</a>
-                                            </h3>
+                                            </h4>
                                             {% if 'show_session_coach'|get_setting == 'true' %}
                                                 <p><em class="fa fa-user fa-fw"></em> {{ session.coach }}</p>
                                             {% endif %}
@@ -96,8 +104,8 @@
                                                     <em class="fa fa-check-square-o fa-fw"></em> {{ 'TheUserIsAlreadyRegisteredInTheSession'|get_plugin_lang('BuyCoursesPlugin') }}
                                                 </div>
                                             {% elseif session.enrolled == "NO" %}
-                                                <div class="text-center">
-                                                    <a class="btn btn-success" href="{{ _p.web_plugin ~ 'buycourses/src/process.php?' ~ {'i': session.id, 't': 2}|url_encode() }}">
+                                                <div class="toolbar">
+                                                    <a class="btn btn-success btn-block btn-sm" href="{{ _p.web_plugin ~ 'buycourses/src/process.php?' ~ {'i': session.id, 't': 2}|url_encode() }}">
                                                         <em class="fa fa-shopping-cart"></em> {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
                                                     </a>
                                                 </div>
@@ -115,7 +123,7 @@
                                 <div class="col-md-4 col-sm-6">
                                     <div class="items-course">
                                         <div class="items-course-image">
-                                            <a href="{{ _p.web }}service/{{ service.id }}"><img alt="{{ service.name }}" class="img-responsive" src="{{ service.image }}"></a>
+                                            <a href="{{ _p.web }}service/{{ service.id }}"><img alt="{{ service.name }}" class="img-responsive" src="{{ service.image ? service.image : 'session_default.png'|icon() }}"></a>
                                         </div>
                                         <div class="items-course-info">
                                             <h4 class="title">

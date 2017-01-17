@@ -26,6 +26,7 @@ class BuyCoursesPlugin extends Plugin
     const TABLE_SERVICES = 'plugin_buycourses_services';
     const TABLE_SERVICES_SALE = 'plugin_buycourses_service_sale';
     const TABLE_CULQI = 'plugin_buycourses_culqi';
+    const TABLE_GLOBAL_CONFIG = 'plugin_buycourses_global_config';
     const PRODUCT_TYPE_COURSE = 1;
     const PRODUCT_TYPE_SESSION = 2;
     const PAYMENT_TYPE_PAYPAL = 1;
@@ -43,6 +44,8 @@ class BuyCoursesPlugin extends Plugin
     const SERVICE_TYPE_USER = 1;
     const SERVICE_TYPE_COURSE = 2;
     const SERVICE_TYPE_SESSION = 3;
+    const CULQI_INTEGRATION_TYPE = 'INTEG';
+    const CULQI_PRODUCTION_TYPE = 'PRODUC';
 
     /**
      *
@@ -95,7 +98,8 @@ class BuyCoursesPlugin extends Plugin
             self::TABLE_COMMISSION,
             self::TABLE_PAYPAL_PAYOUTS,
             self::TABLE_SERVICES,
-            self::TABLE_SERVICES_SALE
+            self::TABLE_SERVICES_SALE,
+            self::TABLE_GLOBAL_CONFIG
         );
         $em = Database::getManager();
         $cn = $em->getConnection();
@@ -125,7 +129,8 @@ class BuyCoursesPlugin extends Plugin
             self::TABLE_COMMISSION,
             self::TABLE_PAYPAL_PAYOUTS,
             self::TABLE_SERVICES_SALE,
-            self::TABLE_SERVICES
+            self::TABLE_SERVICES,
+            self::TABLE_GLOBAL_CONFIG
         );
 
         foreach ($tablesToBeDeleted as $tableToBeDeleted) {
@@ -654,6 +659,7 @@ class BuyCoursesPlugin extends Plugin
         $courseInfo = [
             'id' => $course->getId(),
             'title' => $course->getTitle(),
+            'description' => $course->getDescription(),
             'code' => $course->getCode(),
             'visual_code' => $course->getVisualCode(),
             'teachers' => [],
@@ -781,7 +787,7 @@ class BuyCoursesPlugin extends Plugin
      */
     public function registerSale($itemId, $paymentType)
     {
-        if (!in_array($paymentType, [self::PAYMENT_TYPE_PAYPAL, self::PAYMENT_TYPE_TRANSFER])) {
+        if (!in_array($paymentType, [self::PAYMENT_TYPE_PAYPAL, self::PAYMENT_TYPE_TRANSFER, self::PAYMENT_TYPE_CULQI])) {
             return false;
         }
 
@@ -2151,7 +2157,8 @@ class BuyCoursesPlugin extends Plugin
             Database::get_main_table(BuyCoursesPlugin::TABLE_CULQI),
             [
                 'commerce_code' => $params['commerce_code'],
-                'api_key' => $params['api_key']
+                'api_key' => $params['api_key'],
+                'integration' => $params['integration']
             ],
             ['id = ?' => 1]
         );
@@ -2166,6 +2173,36 @@ class BuyCoursesPlugin extends Plugin
         return Database::select(
             '*',
             Database::get_main_table(BuyCoursesPlugin::TABLE_CULQI),
+            ['id = ?' => 1],
+            'first'
+        );
+    }
+
+    /**
+     * Save Global Parameters
+     * @param array $params
+     * @return int Rows affected. Otherwise return false
+     */
+    public function saveGlobalParameters($params)
+    {
+        return Database::update(
+            Database::get_main_table(BuyCoursesPlugin::TABLE_GLOBAL_CONFIG),
+            [
+                'terms_and_conditions' => $params['terms_and_conditions']
+            ],
+            ['id = ?' => 1]
+        );
+    }
+
+    /**
+     * get Global Parameters
+     * @return array
+     */
+    public function getGlobalParameters()
+    {
+        return Database::select(
+            '*',
+            Database::get_main_table(BuyCoursesPlugin::TABLE_GLOBAL_CONFIG),
             ['id = ?' => 1],
             'first'
         );

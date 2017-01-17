@@ -19,11 +19,14 @@ if (empty($saleId)) {
 
 $sale = $plugin->getSale($saleId);
 
+$userInfo = api_get_user_info($sale['user_id']);
+
 if (empty($sale)) {
     api_not_allowed(true);
 }
 
 $currency = $plugin->getCurrency($sale['currency_id']);
+$terms = $plugin->getGlobalParameters();
 
 switch ($sale['payment_type']) {
     case BuyCoursesPlugin::PAYMENT_TYPE_PAYPAL:
@@ -80,7 +83,6 @@ switch ($sale['payment_type']) {
         }
 
         $transferAccounts = $plugin->getTransferAccounts();
-        $userInfo = api_get_user_info($sale['user_id']);
 
         $form = new FormValidator('success', 'POST', api_get_self(), null, null, FormValidator::LAYOUT_INLINE);
 
@@ -133,7 +135,7 @@ switch ($sale['payment_type']) {
             exit;
         }
 
-        $form->addButton('confirm', $plugin->get_lang('ConfirmOrder'), 'check', 'success');
+        $form->addButton('confirm', $plugin->get_lang('ConfirmOrder'), 'check', 'success', 'default', null, ['id' => 'confirm']);
         $form->addButtonCancel($plugin->get_lang('CancelOrder'), 'cancel');
 
         $template = new Template();
@@ -147,16 +149,91 @@ switch ($sale['payment_type']) {
         $template->assign('buying_course', $buyingCourse);
         $template->assign('buying_session', $buyingSession);
 
+        $template->assign('terms', $terms['terms_and_conditions']);
         $template->assign('title', $sale['product_name']);
         $template->assign('price', $sale['price']);
         $template->assign('currency', $sale['currency_id']);
         $template->assign('user', $userInfo);
         $template->assign('transfer_accounts', $transferAccounts);
         $template->assign('form', $form->returnForm());
+        $template->assign('is_bank_transfer', true);
 
         $content = $template->fetch('buycourses/view/process_confirm.tpl');
 
         $template->assign('content', $content);
         $template->display_one_col_template();
+        break;
+
+    case BuyCoursesPlugin::PAYMENT_TYPE_CULQI:
+
+        // We need to include the main online script, acording to the Culqi documentation the JS needs to be loeaded
+        // directly from the main url "https://integ-pago.culqi.com" because a local copy of this JS is not supported
+        $htmlHeadXtra[] = '<script src="//integ-pago.culqi.com/js/v1"></script>';
+
+        $buyingCourse = false;
+        $buyingSession = false;
+
+        switch ($sale['product_type']) {
+            case BuyCoursesPlugin::PRODUCT_TYPE_COURSE:
+                $buyingCourse = true;
+                $course = $plugin->getCourseInfo($sale['product_id']);
+                break;
+            case BuyCoursesPlugin::PRODUCT_TYPE_SESSION:
+                $buyingSession = true;
+                $session = $plugin->getSessionInfo($sale['product_id']);
+                break;
+        }
+
+        $form = new FormValidator('success', 'POST', api_get_self(), null, null, FormValidator::LAYOUT_INLINE);
+
+        if ($form->validate()) {
+
+            $formValues = $form->getSubmitValues();
+
+            if (isset($formValues['cancel'])) {
+                $plugin->cancelSale($sale['id']);
+
+                unset($_SESSION['bc_sale_id']);
+
+                Display::addFlash(
+                    Display::return_message(
+                        $plugin->get_lang('OrderCanceled'),
+                        'warning',
+                        false
+                    )
+                );
+
+                header('Location: ' . api_get_path(WEB_PLUGIN_PATH) . 'buycourses/index.php');
+                exit;
+            }
+        }
+        $form->addButton('confirm', $plugin->get_lang('ConfirmOrder'), 'check', 'success', 'default', null, ['id' => 'confirm']);
+        $form->addButton('cancel', $plugin->get_lang('CancelOrder'), 'times', 'danger', 'default', null, ['id' => 'cancel']);
+
+        $template = new Template();
+
+        if ($buyingCourse) {
+            $template->assign('course', $course);
+        } elseif ($buyingSession) {
+            $template->assign('session', $session);
+        }
+
+        $template->assign('buying_course', $buyingCourse);
+        $template->assign('buying_session', $buyingSession);
+        $template->assign('terms', $terms['terms_and_conditions']);
+        $template->assign('title', $sale['product_name']);
+        $template->assign('price', floatval($sale['price']));
+        $template->assign('currency', $plugin->getSelectedCurrency());
+        $template->assign('user', $userInfo);
+        $template->assign('sale', $sale);
+        $template->assign('form', $form->returnForm());
+        $template->assign('is_culqi_payment', true);
+        $template->assign('culqi_params', $culqiParams = $plugin->getCulqiParams());
+
+        $content = $template->fetch('buycourses/view/process_confirm.tpl');
+
+        $template->assign('content', $content);
+        $template->display_one_col_template();
+
         break;
 }

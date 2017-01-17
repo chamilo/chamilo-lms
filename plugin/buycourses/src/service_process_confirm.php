@@ -179,6 +179,8 @@ switch ($serviceSale['payment_type']) {
         // directly from the main url "https://integ-pago.culqi.com" because a local copy of this JS is not supported
         $htmlHeadXtra[] = '<script src="https://integ-pago.culqi.com/js/v1"></script>';
 
+        $template = new Template();
+
 
         break;
 }

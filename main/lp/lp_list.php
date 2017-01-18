@@ -63,7 +63,7 @@ $introductionSection = Display::return_introduction_section(
 );
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
-
+$courseInfo = api_get_course_info();
 $message = '';
 $actions = '';
 
@@ -161,6 +161,7 @@ foreach ($categories as $item) {
         continue;
     }
 
+    $showBlockedPrerequisite = api_get_configuration_value('show_prerequisite_as_blocked');
     $listData = [];
 
     if (!empty($flat_list)) {
@@ -182,8 +183,18 @@ foreach ($categories as $item) {
                 continue;
             }
 
+            $lpVisibility = learnpath::is_lp_visible_for_student($id, $userId);
+            $isBlocked = learnpath::isBlockedByPrerequisite(
+                $userId,
+                $details['prerequisite'],
+                $courseInfo,
+                api_get_session_id()
+            );
+
             // Check if the learnpath is visible for student.
-            if (!$is_allowed_to_edit && !learnpath::is_lp_visible_for_student($id, $userId)) {
+            if (!$is_allowed_to_edit && $lpVisibility == false &&
+                ($isBlocked && $showBlockedPrerequisite == false)
+            ) {
                 continue;
             }
 
@@ -198,7 +209,7 @@ foreach ($categories as $item) {
                     $time_limits = false;
                 }
 
-                //Checking if expired_on is ON
+                // Checking if expired_on is ON
                 if ($details['expired_on'] != '') {
                     $time_limits = true;
                 }
@@ -255,8 +266,7 @@ foreach ($categories as $item) {
 
             if ($is_allowed_to_edit) {
                 $url_start_lp .= '&isStudentView=true';
-                $studentVisibility = learnpath::is_lp_visible_for_student($id, $userId);
-                $dsp_desc = '<em>'.$details['lp_maker'].'</em>   '.($studentVisibility ? '' : ' - ('.get_lang('LPNotVisibleToStudent').')');
+                $dsp_desc = '<em>'.$details['lp_maker'].'</em>   '.($lpVisibility ? '' : ' - ('.get_lang('LPNotVisibleToStudent').')');
                 $extra = '<div class ="lp_content_type_label">'.$dsp_desc.'</div>';
             }
 
@@ -282,6 +292,22 @@ foreach ($categories as $item) {
                 );
             }
 
+            // Students can see the lp but is inactive
+            if (!$is_allowed_to_edit && $lpVisibility == false && $showBlockedPrerequisite == true) {
+                $my_title = Display::tag(
+                    'font',
+                    $name,
+                    array('class' => 'text-muted')
+                );
+                $icon_learnpath = Display::return_icon(
+                    'learnpath_na.png',
+                    get_lang('LPName'),
+                    '',
+                    ICON_SIZE_SMALL
+                );
+                $url_start_lp = '#';
+            }
+
             $dsp_desc = '';
             $dsp_export = '';
             $dsp_build = '';
@@ -291,7 +317,6 @@ foreach ($categories as $item) {
             $dsp_default_view = '';
             $dsp_debug = '';
             $dsp_order = '';
-
             $progress = 0;
 
             if (!api_is_invitee()) {
@@ -820,9 +845,7 @@ $templateName = $template->get_template('learnpath/list.tpl');
 $content = $template->fetch($templateName);
 $template->assign('content', $content);
 $template->display_one_col_template();
-
-$course_info = api_get_course_info();
-learnpath::generate_learning_path_folder($course_info);
+learnpath::generate_learning_path_folder($courseInfo);
 
 // Deleting the objects
 Session::erase('oLP');

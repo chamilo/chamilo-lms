@@ -2283,6 +2283,32 @@ class learnpath
     }
 
     /**
+     * @param int $lpId
+     * @param array $courseInfo
+     * @return bool
+     *
+     */
+    public static function isBlockedByPrerequisite($student_id, $prerequisite, $courseInfo, $sessionId)
+    {
+        $isBlocked = false;
+
+        if (!empty($prerequisite)) {
+            $progress = self::getProgress(
+                $prerequisite,
+                $student_id,
+                $courseInfo['real_id'],
+                $sessionId
+            );
+            $progress = intval($progress);
+            if ($progress < 100) {
+                $isBlocked = true;
+            }
+        }
+
+        return $isBlocked;
+    }
+
+    /**
      * Checks if the learning path is visible for student after the progress
      * of its prerequisite is completed, considering the time availability and
      * the LP visibility.
@@ -2306,12 +2332,6 @@ class learnpath
             $sessionId = api_get_session_id();
         }
 
-        $tbl_learnpath = Database::get_course_table(TABLE_LP_MAIN);
-        // Get current prerequisite
-        $sql = "SELECT id, prerequisite, subscribe_users, publicated_on, expired_on
-                FROM $tbl_learnpath
-                WHERE c_id = ".$courseInfo['real_id']." AND id = $lp_id";
-
         $itemInfo = api_get_item_property_info(
             $courseInfo['real_id'],
             TOOL_LEARNPATH,
@@ -2324,25 +2344,29 @@ class learnpath
             return false;
         }
 
+        // @todo remove this query and load the row info as a parameter
+        $tbl_learnpath = Database::get_course_table(TABLE_LP_MAIN);
+        // Get current prerequisite
+        $sql = "SELECT id, prerequisite, subscribe_users, publicated_on, expired_on
+                FROM $tbl_learnpath
+                WHERE c_id = ".$courseInfo['real_id']." AND id = $lp_id";
+
         $rs  = Database::query($sql);
         $now = time();
         if (Database::num_rows($rs) > 0) {
             $row = Database::fetch_array($rs, 'ASSOC');
-
             $prerequisite = $row['prerequisite'];
             $is_visible = true;
 
-            if (!empty($prerequisite)) {
-                $progress = self::getProgress(
-                    $prerequisite,
-                    $student_id,
-                    $courseInfo['real_id'],
-                    $sessionId
-                );
-                $progress = intval($progress);
-                if ($progress < 100) {
-                    $is_visible = false;
-                }
+            $isBlocked = self::isBlockedByPrerequisite(
+                $student_id,
+                $prerequisite,
+                $courseInfo,
+                $sessionId
+            );
+
+            if ($isBlocked) {
+                $is_visible = false;
             }
 
             // Also check the time availability of the LP
@@ -2350,7 +2374,6 @@ class learnpath
                 // Adding visibility restrictions
                 if (!empty($row['publicated_on'])) {
                     if ($now < api_strtotime($row['publicated_on'], 'UTC')) {
-                        //api_not_allowed();
                         $is_visible = false;
                     }
                 }
@@ -2361,14 +2384,12 @@ class learnpath
                     $_custom['lps_hidden_when_no_start_date']
                 ) {
                     if (empty($row['publicated_on'])) {
-                        //api_not_allowed();
                         $is_visible = false;
                     }
                 }
 
                 if (!empty($row['expired_on'])) {
                     if ($now > api_strtotime($row['expired_on'], 'UTC')) {
-                        //api_not_allowed();
                         $is_visible = false;
                     }
                 }
@@ -2396,7 +2417,6 @@ class learnpath
                     if (!empty($userGroups)) {
                         foreach ($userGroups as $groupInfo) {
                             $groupId = $groupInfo['iid'];
-
                             $userVisibility = api_get_item_visibility(
                                 $courseInfo,
                                 'learnpath',

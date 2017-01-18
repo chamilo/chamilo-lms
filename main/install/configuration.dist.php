@@ -263,4 +263,8 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 //$_configuration['add_all_files_in_lp_export'] = false;
 // Send exercise student score to manager in email notification
 //$_configuration['send_score_in_exam_notification_mail_to_manager'] = false;
+// Show blocked LPs by prerequisite to students
+//$_configuration['show_prerequisite_as_blocked'] = false;
+
+
 

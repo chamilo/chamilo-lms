@@ -171,7 +171,8 @@ class LearnpathList
                 'expired_on' => $row->getExpiredOn() ? $row->getExpiredOn()->format('Y-m-d H:i:s') : null,
                 //'category_id'       => $row['category_id'],
                 'subscribe_users' => $row->getSubscribeUsers(),
-                'lp_old_id' => $row->getId()
+                'lp_old_id' => $row->getId(),
+                'prerequisite' => $row->getPrerequisite()
             );
             $names[$row->getName()] = $row->getIid();
         }

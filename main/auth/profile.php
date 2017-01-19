@@ -41,7 +41,7 @@ $htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
 $htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
 $htmlHeadXtra[] = '<script>
 $(document).ready(function() {
-    $("id_generate_api_key").on("click", function (e) {
+    $("#id_generate_api_key").on("click", function (e) {
         e.preventDefault();
 
         $.ajax({

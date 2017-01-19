@@ -122,7 +122,7 @@ $(document).ready(function() {
             var tableEl = $('<table class="fc-list-table"><tbody/></table>');
             var tbodyEl = tableEl.find('tbody');
             var eventList = new Array;
-            for (dayIndex = segsByDay.length-1; dayIndex > 0; dayIndex--) {
+            for (dayIndex = 0; dayIndex < segsByDay.length; dayIndex++) {
                 daySegs = segsByDay[dayIndex];
                 if (daySegs) { // sparse array, so might be undefined
 

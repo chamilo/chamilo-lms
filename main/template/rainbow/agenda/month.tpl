@@ -1,3 +1,9 @@
+<style>
+.fc-day-grid-event > .fc-content {
+    white-space: normal;
+}
+
+</style>
 <script>
 function checkLength( o, n, min, max ) {
     if ( o.val().length > max || o.val().length < min ) {
@@ -21,37 +27,34 @@ function clean_user_select() {
 var region_value = '{{ region_value }}';
 
 $(document).ready(function() {
-	var date = new Date();
-
     // Reset button.
     $("button[type=reset]").click(function() {
         $("#session_id").find('option').removeAttr("selected");
     });
 
 	$("#dialog-form").dialog({
-		autoOpen: false,
-		modal	: false,
-		width	: 580,
-		height	: 480,
-        zIndex: 20000 // added because of qtip2
+		autoOpen : false,
+		modal : false,
+		width : 580,
+		height : 480,
+        zIndex : 20000 // added because of qtip2
    	});
 
     $("#simple-dialog-form").dialog({
-		autoOpen: false,
-		modal	: false,
-		width	: 580,
-		height	: 480,
-        zIndex: 20000 // added because of qtip2
+		autoOpen : false,
+		modal : false,
+		width : 580,
+		height : 480,
+        zIndex : 20000 // added because of qtip2
    	});
 
 	var title = $("#title"),
-	content = $( "#content" ),
-	allFields = $( [] ).add( title ).add( content ), tips = $(".validateTips");
+	content = $("#content"),
+	allFields = $([]).add( title ).add( content ), tips = $(".validateTips");
 
     $("#select_form_id_search").change(function() {
         var temp ="&user_id="+$("#select_form_id_search").val();
         var position =String(window.location).indexOf("&user");
-        var url_length = String(window.location).length;
         var url = String(window.location).substring(0,position)+temp;
         if (position > 0) {
             window.location.replace(url);
@@ -61,14 +64,162 @@ $(document).ready(function() {
         }
     });
 
-    $.datepicker.setDefaults( $.datepicker.regional[region_value] );
+    var CustomListViewGrid  = ListViewGrid.extend({
+        fgSegHtml: function(seg) {
+            var view = this.view;
+            var classes = [ 'fc-list-item' ].concat(this.getSegCustomClasses(seg));
+            var bgColor = this.getSegBackgroundColor(seg);
+            var event = seg.event;
+            var url = event.url;
+            var timeHtml;
+
+            if (event.allDay) {
+                timeHtml = view.getAllDayHtml();
+            }
+            else if (view.isMultiDayEvent(event)) { // if the event appears to span more than one day
+                if (seg.isStart || seg.isEnd) { // outer segment that probably lasts part of the day
+                    timeHtml = htmlEscape(this.getEventTimeText(seg));
+                }
+                else { // inner segment that lasts the whole day
+                    timeHtml = view.getAllDayHtml();
+                }
+            }
+            else {
+                // Display the normal time text for the *event's* times
+                timeHtml = htmlEscape(this.getEventTimeText(event));
+            }
+
+            if (url) {
+                classes.push('fc-has-url');
+            }
+
+            return '<tr class="' + classes.join(' ') + '">' +
+                (this.displayEventTime ?
+                    '<td class="fc-list-item-time ' + view.widgetContentClass + '">' +
+                        (timeHtml || '') +
+                    '</td>' :
+                    '') +
+                '<td class="fc-list-item-marker ' + view.widgetContentClass + '">' +
+                    '<span class="fc-event-dot"' +
+                    (bgColor ?
+                        ' style="background-color:' + bgColor + '"' :
+                        '') +
+                    '></span>' +
+                '</td>' +
+                '<td class="fc-list-item-title ' + view.widgetContentClass + '">' +
+                    '<a' + (url ? ' href="' + htmlEscape(url) + '"' : '') + '>' +
+                        htmlEscape(seg.event.title || '') + (seg.event.description || '')
+                    '</a>' +
+                '</td>' +
+            '</tr>';
+        },
+
+        // render the event segments in the view
+        renderSegList: function(allSegs) {
+            var segsByDay = this.groupSegsByDay(allSegs); // sparse array
+            var dayIndex;
+            var daySegs;
+            var i;
+            var tableEl = $('<table class="fc-list-table"><tbody/></table>');
+            var tbodyEl = tableEl.find('tbody');
+            var eventList = new Array;
+            for (dayIndex = segsByDay.length-1; dayIndex > 0; dayIndex--) {
+                daySegs = segsByDay[dayIndex];
+                if (daySegs) { // sparse array, so might be undefined
+
+                    this.sortEventSegs(daySegs);
+
+                    for (i = 0; i < daySegs.length; i++) {
+                        var event = daySegs[i].event;
+                        if (jQuery.inArray(event.id, eventList) !== -1) {
+                            continue;
+                        }
+                        eventList.push(event.id);
+                         // append a day header
+                        tbodyEl.append(this.dayHeaderHtml(
+                            this.view.start.clone().add(dayIndex, 'days'),
+                            event
+                        ));
+
+                        tbodyEl.append(daySegs[i].el); // append event row
+                    }
+                }
+            }
+            console.log(eventList);
+
+            this.el.empty().append(tableEl);
+        },
+        // generates the HTML for the day headers that live amongst the event rows
+        dayHeaderHtml: function(dayDate, event) {
+            var view = this.view;
+            var mainFormat = 'LL';
+            var altFormat = 'dddd';
+            var checkIfSame = event.end.format(mainFormat) == dayDate.format(mainFormat);
+
+            return '<tr class="fc-list-heading" data-date="' + dayDate.format('YYYY-MM-DD') + '">' +
+                '<td class="' + view.widgetHeaderClass + '" colspan="3">' +
+                    (mainFormat ?
+                        view.buildGotoAnchorHtml(
+                            dayDate,
+                            { 'class': 'fc-list-heading-main' },
+                            htmlEscape(dayDate.format(mainFormat)) // inner HTML
+                        ) :
+                        '') +
+
+                      ((checkIfSame == false && mainFormat) ?
+                        view.buildGotoAnchorHtml(
+                            dayDate,
+                            { 'class': 'fc-list-heading-main' },
+                            '&nbsp;-&nbsp; ' + htmlEscape(event.end.format(mainFormat)) // inner HTML
+                        ) :
+                        '') +
+
+                    (altFormat ?
+                        view.buildGotoAnchorHtml(
+                            dayDate,
+                            { 'class': 'fc-list-heading-alt' },
+                            htmlEscape(dayDate.format(altFormat)) // inner HTML
+                        ) :
+                        '') +
+                '</td>' +
+            '</tr>';
+        },
+    });
+
+	var FC = $.fullCalendar; // a reference to FullCalendar's root namespace
+    var View = ListView;      // the class that all views must inherit from
+    var CustomView;          // our subclass
+
+    CustomView = View.extend({ // make a subclass of View
+        initialize: function() {
+            this.grid = new CustomListViewGrid(this);
+            this.scroller = new Scroller({
+                overflowX: 'hidden',
+                overflowY: 'auto'
+            });
+        }
+    });
+
+    FC.views.CustomView = CustomView; // register our class with the view system
 
 	var calendar = $('#calendar').fullCalendar({
 		header: {
-			left: 'today prev,next',
+			left: 'today,prev,next',
 			center: 'title',
-			right: 'month,agendaWeek,agendaDay'
+			right: 'month,agendaWeek,agendaDay,CustomView'
 		},
+        views: {
+            CustomView: { // name of view
+                duration: { month: 1 },
+                defaults: {
+                    'listDayAltFormat': 'dddd' // day-of-week is nice-to-have
+                }
+            },
+            month: {
+                'displayEventEnd' : true
+            }
+        },
+        locale: region_value,
         {% if use_google_calendar == 1 %}
             eventSources: [
                 // if you want to add more just add URL in this array
@@ -78,13 +229,7 @@ $(document).ready(function() {
                 }
             ],
         {% endif %}
-
-        defaultView:    '{{ default_view }}',
-		buttonText: 	{{ button_text }},
-		monthNames: 	{{ month_names }},
-		monthNamesShort:{{ month_names_short }},
-		dayNames: 		{{ day_names }},
-		dayNamesShort: 	{{ day_names_short }},
+        defaultView: '{{ default_view }}',
         firstHour: 8,
         firstDay: 1,
 		selectable	: true,
@@ -99,8 +244,9 @@ $(document).ready(function() {
         },
 		// Add event
 		select: function(start, end, jsEvent, view) {
-            var start_date = start.format("YY-MM-DD");
-            var end_date = end.format("YY-MM-DD");
+            var start_date = start.format("YYYY-MM-DD h:mm");
+            var end_date = end.format("YYYY-MM-DD h:mm");
+            var diffDays = moment(end).diff(start, 'days');
 
             var allDay = true;
             if (end.hasTime()) {
@@ -119,33 +265,40 @@ $(document).ready(function() {
 
 			// Update chz-select
 			//$("#users_to_send").trigger("chosen:updated");
-
 			if ({{ can_add_events }} == 1) {
-				var url = '{{ web_agenda_ajax_url }}&a=add_event&start='+start.format('YYYY-MM-DD 00:00:00')+'&end='+end.format('YYYY-MM-DD 00:00:00')+'&all_day='+allDay+'&view='+view.name;
-                var start_date_value = start.format('{{ js_format_date }}');
-                var end_date_value = end.format('{{ js_format_date }}');
-
+				var url = '{{ web_agenda_ajax_url }}&a=add_event&start='+start.format("YYYY-MM-DD HH:mm:00")+'&end='+end.format("YYYY-MM-DD HH:mm:00")+'&all_day='+allDay+'&view='+view.name;
+			    var start_date_value = start.format('{{ js_format_date }}');
                 $('#start_date').html(start_date_value);
-                
-                if (start_date_value == end_date_value) {
-                    $('#end_date').html(' - ' + end_date_value);
-                } else {
+
+                if (diffDays > 1) {
                     $('#start_date').html('');
-                    $('#end_date').html(start_date_value+" - " + end_date_value);
+                    var end_date_value = '';
+                    if (end) {
+                        var clone = end.clone();
+                        end_date_value = clone.subtract(1, 'days').format('{{ js_format_date }}');
+                    }
+                    $('#end_date').html(start_date_value + " - " + end_date_value);
+                } else if (diffDays == 0) {
+                    var start_date_value = start.format('ll');
+                    var startTime = start.format('LT');
+                    var endTime = end.format('LT');
+                    $('#start_date').html('');
+                    $('#end_date').html(start_date_value + " (" + startTime + " - " + endTime+") ");
+                } else {
+                    $('#end_date').html('');
                 }
 
 				$('#color_calendar').html('{{ type_label }}');
 				$('#color_calendar').removeClass('group_event');
 				$('#color_calendar').addClass('label_tag');
 				$('#color_calendar').addClass('{{ type_event_class }}');
-                                
+
                 //It shows the CKEDITOR while Adding an Event
                 $('#cke_content').show();
                 //It Fixing a minor bug with textarea ckeditor.remplace
                 $('#content').css('display','none');
                 //Reset the CKEditor content that persist in memory
                 CKEDITOR.instances['content'].setData('');
-
 				allFields.removeClass("ui-state-error");
 				$("#dialog-form").dialog("open");
 				$("#dialog-form").dialog({
@@ -153,7 +306,7 @@ $(document).ready(function() {
 						'{{ "Add" | get_lang }}' : function() {
 							var bValid = true;
 							bValid = bValid && checkLength(title, "title", 1, 255);
-                                                        
+
                             //Update the CKEditor Instance to the remplaced textarea, ready to be serializable
                             for ( instance in CKEDITOR.instances ) {
                                 CKEDITOR.instances[instance].updateElement();
@@ -180,7 +333,6 @@ $(document).ready(function() {
                                         }
                                         var temp = "&user_id="+user_id;
                                         var position = String(window.location).indexOf("&user");
-                                        var url_length = String(window.location).length;
                                         var url = String(window.location).substring(0, position)+temp;
                                         /*if (position > 0) {
                                             window.location.replace(url);
@@ -188,19 +340,16 @@ $(document).ready(function() {
                                             url = String(window.location)+temp;
                                             window.location.replace(url);
                                         }*/
-                                    } else {
-                                	   /* calendar.fullCalendar("refetchEvents");
-									    calendar.fullCalendar("rerenderEvents");*/
                                     }
 
                                     $("#title").val('');
                                     $("#content").val('');
                                     $("#comment").val('');
 
-                                    calendar.fullCalendar("refetchEvents");
-                                    calendar.fullCalendar("rerenderEvents");
+                                    calendar.fullCalendar('refetchEvents');
+                                    calendar.fullCalendar('rerenderEvents');
 
-									$("#dialog-form").dialog("close");
+									$("#dialog-form").dialog('close');
 								}
 							});
 						}
@@ -235,34 +384,29 @@ $(document).ready(function() {
                     comment = event.comment;
                 }
 
-				/*element.qtip({
+				element.qtip({
                     hide: {
                         delay: 2000
                     },
 		            content: event.description + ' ' + comment,
 		            position: { at:'top left' , my:'bottom left'}
-		        });*/
+		        });
 			}
 	    },
 		eventClick: function(calEvent, jsEvent, view) {
-            if (!calEvent.end) {
-                calEvent.end = calEvent.start;
-            }
+            var start = calEvent.start;
+            var end = calEvent.end;
+            var diffDays = moment(end).diff(start, 'days');
+            var endDateMinusOne = '';
 
-            var start_date = calEvent.start.format("YY-MM-DD");
-
-            if (calEvent.allDay == 1) {
-                var end_date 	= '';
-            } else {
-                var end_date 	= '';
-                if (calEvent.end && calEvent.end != '') {
-                    var end_date  = calEvent.end.format("YY-MM-DD");
-                }
+            if (end) {
+                var clone = end.clone();
+                endDateMinusOne = clone.subtract(1, 'days').format('{{ js_format_date }}');
             }
+            var startDateToString = start.format("{{ js_format_date }}");
 
 			// Edit event.
 			if (calEvent.editable) {
-
 				$('#visible_to_input').hide();
                 $('#add_as_announcement_div').hide();
 
@@ -271,19 +415,27 @@ $(document).ready(function() {
                     $("#visible_to_read_only_users").html(calEvent.sent_to);
 				{% endif %}
 
-                $('#color_calendar').html('{{type_label}}');
+                $('#color_calendar').html('{{ type_label }}');
                 $('#color_calendar').addClass('label_tag');
                 $('#color_calendar').removeClass('course_event');
                 $('#color_calendar').removeClass('personal_event');
                 $('#color_calendar').removeClass('group_event');
                 $('#color_calendar').addClass(calEvent.type+'_event');
-                
+
                 //It hides the CKEDITOR while clicking an existing Event
                 $('#cke_content').hide();
+                $('#start_date').html(startDateToString);
 
-                $('#start_date').html(calEvent.start.format("YY-MM-DD"));
-                if (calEvent.end) {
-                    $('#end_date').html(' - '+calEvent.end.format("YY-MM-DD"));
+                if (diffDays > 1) {
+                    $('#end_date').html(' - ' + endDateMinusOne);
+                } else if (diffDays == 0) {
+                    var start_date_value = start.format('ll');
+                    var startTime = start.format('LT');
+                    var endTime = end.format('LT');
+                    $('#start_date').html('');
+                    $('#end_date').html(start_date_value + " (" + startTime + " - " + endTime+") ");
+                } else {
+                    $('#end_date').html('');
                 }
 
                 if ($("#title").parent().find('#title_edit').length == 0) {
@@ -320,11 +472,9 @@ $(document).ready(function() {
                 }
 
                 $("#comment_edit").html(calEvent.comment);
-
                 $("#title_edit").show();
                 $("#content_edit").show();
                 $("#comment_edit").show();
-
                 $("#title").hide();
                 $("#content").hide();
                 $("#comment").hide();
@@ -373,14 +523,12 @@ $(document).ready(function() {
 							});
 						},
                         {% endif %}
-
                         '{{ "Edit"|get_lang }}' : function() {
                             url =  "{{ _p.web_main }}calendar/agenda.php?action=edit&type=fromjs&id=" + calEvent.id+'&course_id='+calEvent.course_id+"";
                             window.location.href = url;
                             $("#dialog-form").dialog( "close" );
                         },
 						'{{ "Delete"|get_lang }}': function() {
-
                             if (calEvent.parent_event_id || calEvent.has_children != '') {
                                 var newDiv = $('<div>');
                                 newDiv.dialog({
@@ -468,11 +616,11 @@ $(document).ready(function() {
 				});
 			} else {
 			    // Simple form
-                $('#simple_start_date').html(calEvent.start.format("YY-MM-DD"));
-
-                if (end_date != '') {
-                    $('#simple_start_date').html(calEvent.start.format("YY-MM-DD"));
-                    $('#simple_end_date').html(' ' + calEvent.end.format("YY-MM-DD"));
+                $('#simple_start_date').html(startDateToString);
+                if (diffDays > 1) {
+                    $('#simple_end_date').html(' - ' + endDateMinusOne);
+                } else {
+                    $('#simple_end_date').html('');
                 }
                 if (calEvent.course_name) {
                     $("#calendar_course_info_simple").html(
@@ -519,13 +667,17 @@ $(document).ready(function() {
 		editable: true,
 		events: "{{web_agenda_ajax_url}}&a=get_events",
 		eventDrop: function(event, delta, revert_func) {
+		    var allDay = 0;
+		    if (event.allDay == true) {
+		        allDay = 1;
+            }
 			$.ajax({
 				url: '{{ web_agenda_ajax_url }}',
 				data: {
                     a: 'move_event',
                     id: event.id,
-                    day_delta: delta.days(),
-                    minute_delta: delta.minutes()
+                    all_day: allDay,
+                    minute_delta: delta.asMinutes()
 				}
 			});
 		},
@@ -535,18 +687,23 @@ $(document).ready(function() {
 				data: {
                     a: 'resize_event',
                     id: event.id,
-                    day_delta: delta.days(),
-                    minute_delta: delta.minutes()
+                    minute_delta: delta.asMinutes()
 				}
 			});
         },
-		axisFormat: 'h(:mm)a',
-		timeFormat: 'h:mm',
+		axisFormat: 'H(:mm)', // pm-am format -> h(:mm)a
+		timeFormat: 'H:mm',   // pm-am format -> h:mm
 		loading: function(bool) {
 			if (bool) $('#loading').show();
 			else $('#loading').hide();
 		}
 	});
+
+
+
+
+
+
 });
 </script>
 {{ actions_div }}

@@ -3462,7 +3462,7 @@ class DocumentManager
             $levelCondition = " AND docs.path NOT LIKE'/%/%'";
         }
 
-        $sql = "SELECT last.visibility, docs.*
+        $sql = "SELECT DISTINCT last.visibility, docs.*
                 FROM $tbl_item_prop AS last INNER JOIN $tbl_doc AS docs
                 ON (docs.id = last.ref AND docs.c_id = last.c_id)
                 WHERE

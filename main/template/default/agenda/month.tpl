@@ -1,3 +1,8 @@
+<style>
+.fc-day-grid-event > .fc-content {
+    white-space: normal;
+}
+</style>
 <script>
 function checkLength( o, n, min, max ) {
     if ( o.val().length > max || o.val().length < min ) {
@@ -148,6 +153,7 @@ $(document).ready(function() {
             var view = this.view;
             var mainFormat = 'LL';
             var altFormat = 'dddd';
+            var checkIfSame = event.end.format(mainFormat) == dayDate.format(mainFormat);
 
             return '<tr class="fc-list-heading" data-date="' + dayDate.format('YYYY-MM-DD') + '">' +
                 '<td class="' + view.widgetHeaderClass + '" colspan="3">' +
@@ -159,7 +165,7 @@ $(document).ready(function() {
                         ) :
                         '') +
 
-                      (mainFormat ?
+                      ((checkIfSame == false && mainFormat) ?
                         view.buildGotoAnchorHtml(
                             dayDate,
                             { 'class': 'fc-list-heading-main' },
@@ -207,6 +213,9 @@ $(document).ready(function() {
                 defaults: {
                     'listDayAltFormat': 'dddd' // day-of-week is nice-to-have
                 }
+            },
+            month: {
+                'displayEventEnd' : true
             }
         },
         locale: region_value,
@@ -242,7 +251,6 @@ $(document).ready(function() {
             if (end.hasTime()) {
                 allDay = false;
             }
-            console.log(diffDays);
 
 			$('#visible_to_input').show();
 			$('#add_as_announcement_div').show();
@@ -416,8 +424,15 @@ $(document).ready(function() {
                 //It hides the CKEDITOR while clicking an existing Event
                 $('#cke_content').hide();
                 $('#start_date').html(startDateToString);
+
                 if (diffDays > 1) {
                     $('#end_date').html(' - ' + endDateMinusOne);
+                } else if (diffDays == 0) {
+                    var start_date_value = start.format('ll');
+                    var startTime = start.format('LT');
+                    var endTime = end.format('LT');
+                    $('#start_date').html('');
+                    $('#end_date').html(start_date_value + " (" + startTime + " - " + endTime+") ");
                 } else {
                     $('#end_date').html('');
                 }
@@ -456,11 +471,9 @@ $(document).ready(function() {
                 }
 
                 $("#comment_edit").html(calEvent.comment);
-
                 $("#title_edit").show();
                 $("#content_edit").show();
                 $("#comment_edit").show();
-
                 $("#title").hide();
                 $("#content").hide();
                 $("#comment").hide();

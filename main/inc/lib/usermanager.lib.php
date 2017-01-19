@@ -422,14 +422,17 @@ class UserManager
                 );
                 $email_admin = api_get_setting('emailAdministrator');
 
+                $url = api_get_path(WEB_PATH);
                 if (api_is_multiple_url_enabled()) {
                     $access_url_id = api_get_current_access_url_id();
                     if ($access_url_id != -1) {
-                        $url = api_get_access_url($access_url_id);
+                        $urlInfo = api_get_access_url($access_url_id);
+                        if ($urlInfo) {
+                            $url = $urlInfo['url'];
+                        }
                     }
-                } else {
-                    $url = api_get_path(WEB_PATH);
                 }
+
                 $tplContent = new Template(null, false, false, false, false, false);
                 // variables for the default template
                 $tplContent->assign('complete_name', stripslashes(api_get_person_name($firstName, $lastName)));

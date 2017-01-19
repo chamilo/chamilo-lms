@@ -6,6 +6,9 @@ require_once __DIR__.'/../global.inc.php';
 $action = $_GET['a'];
 
 switch ($action) {
+    case 'get_users_online':
+        echo returnNotificationMenu();
+        break;
     case 'load_online_user':
         $images_to_show = MAX_ONLINE_USERS;
         $page = intval($_REQUEST['online_page_nr']);

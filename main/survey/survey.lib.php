@@ -2671,7 +2671,7 @@ class SurveyUtil
                 WHERE
                     c_id = $course_id AND
                     survey_id='".$surveyId."'
-                ORDER BY user ASC";
+                ORDER BY answer_id, user ASC";
         $result = Database::query($sql);
         $i = 1;
         while ($row = Database::fetch_array($result)) {
@@ -4966,6 +4966,33 @@ class SurveyUtil
                 continue;
             }
 
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if the current survey has answers
+     *
+     * @param $surveyId
+     * @return boolean return true if the survey has answers, false otherwise
+     */
+    public static function checkIfSurveyHasAnswers($surveyId)
+    {
+        $tableSurveyAnswer = Database :: get_course_table(TABLE_SURVEY_ANSWER);
+        $courseId = api_get_course_int_id();
+
+        $sql = "SELECT * FROM $tableSurveyAnswer
+                WHERE
+                    c_id = $courseId AND
+                    survey_id='".$surveyId."'
+                ORDER BY answer_id, user ASC";
+        $result = Database::query($sql);
+
+        $response = Database::affected_rows($result);
+
+        if ($response > 0) {
             return true;
         }
 

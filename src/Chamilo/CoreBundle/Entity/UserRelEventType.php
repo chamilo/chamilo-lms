@@ -8,7 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * UserRelEventType
  *
- * @ORM\Table(name="user_rel_event_type", indexes={@ORM\Index(name="event_name_index", columns={"event_type_name"})})
+ * @ORM\Table(name="user_rel_event_type", indexes={
+ *     @ORM\Index(name="event_name_index", columns={"event_type_name"})
+ * })
  * @ORM\Entity
  */
 class UserRelEventType

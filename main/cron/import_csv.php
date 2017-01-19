@@ -769,6 +769,7 @@ class ImportCsv
             $this->logger->addInfo(count($data)." records found.");
             $eventsToCreate = array();
             $errorFound = false;
+
             foreach ($data as $row) {
                 $sessionId = null;
                 $externalSessionId = null;
@@ -887,7 +888,7 @@ class ImportCsv
                 "Ready to insert events"
             );
 
-            $agenda = new Agenda();
+            $agenda = new Agenda('course');
 
             $extraFieldValue = new ExtraFieldValue('calendar_event');
             $extraFieldName = $this->extraFieldIdNameList['calendar_event'];
@@ -905,6 +906,10 @@ class ImportCsv
 
                 return 0;
             }
+
+            $batchSize = $this->batchSize;
+            $counter = 1;
+            $em = Database::getManager();
 
             foreach ($eventsToCreate as $event) {
                 $update = false;
@@ -946,7 +951,6 @@ class ImportCsv
 
                 $courseInfo = api_get_course_info_by_id($event['course_id']);
                 $agenda->set_course($courseInfo);
-                $agenda->setType('course');
                 $agenda->setSessionId($event['session_id']);
                 $agenda->setSenderId($event['sender_id']);
                 $agenda->setIsAllowedToEdit(true);
@@ -986,7 +990,9 @@ class ImportCsv
                         array(), //$attachmentArray = array(),
                         [], //$attachmentCommentList
                         $eventComment,
-                        $color
+                        $color,
+                        false,
+                        false
                     );
 
                     if ($eventResult !== false) {
@@ -1033,7 +1039,15 @@ class ImportCsv
                         );
                     }
                 }
+
+                if (($counter % $batchSize) === 0) {
+                    $em->flush();
+                    $em->clear(); // Detaches all objects from Doctrine!
+                }
+                $counter++;
             }
+
+            $em->clear(); // Detaches all objects from Doctrine!
         }
 
         if ($moveFile) {
@@ -1457,15 +1471,15 @@ class ImportCsv
                     $date->sub($interval);
                     $coachBefore = $date->format('Y-m-d h:i');
 
-                    $date = new \DateTime($dateStart);
+                    $date = new \DateTime($dateEnd);
                     $interval = new DateInterval('P'.$this->daysCoachAccessAfterBeginning.'D');
                     $date->add($interval);
                     $coachAfter = $date->format('Y-m-d h:i');
 
-                    $dateStart = api_get_utc_datetime($dateStart);
+                    /*$dateStart = api_get_utc_datetime($dateStart);
                     $dateEnd = api_get_utc_datetime($dateEnd);
                     $coachBefore = api_get_utc_datetime($coachBefore);
-                    $coachAfter = api_get_utc_datetime($coachAfter);
+                    $coachAfter = api_get_utc_datetime($coachAfter);*/
 
                     if (empty($sessionId)) {
                         $result = SessionManager::create_session(

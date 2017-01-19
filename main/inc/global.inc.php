@@ -595,4 +595,3 @@ if (empty($default_quota)) {
 define('DEFAULT_DOCUMENT_QUOTA', $default_quota);
 // Forcing PclZip library to use a custom temporary folder.
 define('PCLZIP_TEMPORARY_DIR', api_get_path(SYS_ARCHIVE_PATH));
-

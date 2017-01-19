@@ -212,11 +212,10 @@ function returnNotificationMenu()
         // Display the who's online of the platform
         if ($number &&
             (api_get_setting('showonline', 'world') == 'true' && !$user_id) ||
-                (api_get_setting('showonline', 'users') == 'true' && $user_id)
-           )
-        {
-                $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonline.php" target="_self" title="'.get_lang('UsersOnline').'" >'.
-                            Display::return_icon('user.png', get_lang('UsersOnline'), array(), ICON_SIZE_TINY).' '.$number.'</a></li>';
+            (api_get_setting('showonline', 'users') == 'true' && $user_id)
+        ) {
+            $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonline.php" target="_self" title="'.get_lang('UsersOnline').'" >'.
+                        Display::return_icon('user.png', get_lang('UsersOnline'), array(), ICON_SIZE_TINY).' '.$number.'</a></li>';
         }
 
         // Display the who's online for the course

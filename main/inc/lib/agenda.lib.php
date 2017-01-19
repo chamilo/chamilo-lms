@@ -21,11 +21,12 @@ class Agenda
 
     /**
      * Constructor
+     * @param string $type
      * @param int $senderId Optional The user sender ID
      * @param int $courseId Opitonal. The course ID
      * @param int $sessionId Optional The session ID
      */
-    public function __construct($senderId = 0, $courseId = 0, $sessionId = 0)
+    public function __construct($type, $senderId = 0, $courseId = 0, $sessionId = 0)
     {
         // Table definitions
         $this->tbl_global_agenda = Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
@@ -33,15 +34,56 @@ class Agenda
         $this->tbl_course_agenda = Database::get_course_table(TABLE_AGENDA);
         $this->table_repeat = Database::get_course_table(TABLE_AGENDA_REPEAT);
 
-        // Setting the course object if we are in a course
-        $courseInfo = api_get_course_info_by_id($courseId);
-        if (!empty($courseInfo)) {
-            $this->course = $courseInfo;
-        }
-        $this->setSessionId($sessionId ?: api_get_session_id());
+        $this->setType($type);
         $this->setSenderId($senderId ?: api_get_user_id());
-        $this->setIsAllowedToEdit(api_is_allowed_to_edit(null, true));
-        $this->events = array();
+        $isAllowToEdit = false;
+
+        switch ($type) {
+            case 'course':
+                $sessionId = $sessionId ?: api_get_session_id();
+                $this->setSessionId($sessionId);
+
+                // Setting the course object if we are in a course
+                $courseInfo = api_get_course_info_by_id($courseId);
+                if (!empty($courseInfo)) {
+                    $this->set_course($courseInfo);
+                }
+
+                // Check if teacher
+                if (empty($sessionId)) {
+                    $isAllowToEdit = api_is_allowed_to_edit(false, true);
+                } else {
+                    $isAllowToEdit = api_is_allowed_to_session_edit(false, true);
+                }
+
+                // Check
+                if (api_get_course_setting('allow_user_edit_agenda') && api_is_allowed_in_course()) {
+                    $isAllowToEdit = true;
+                }
+
+                $groupId = api_get_group_id();
+                if (!empty($groupId)) {
+                    $groupInfo = GroupManager::get_group_properties($groupId);
+                    $isGroupAccess = GroupManager::user_has_access(api_get_user_id(), $groupInfo['iid'], GroupManager::GROUP_TOOL_CALENDAR) &&
+                        GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo['iid']);
+                    if ($isGroupAccess) {
+                        $isAllowToEdit = true;
+                    } else {
+                        $isAllowToEdit = false;
+                    }
+                }
+
+                break;
+            case 'admin':
+                $isAllowToEdit = api_is_platform_admin();
+                break;
+            case 'personal':
+                $isAllowToEdit = !api_is_anonymous();
+                break;
+        }
+
+        $this->setIsAllowedToEdit($isAllowToEdit);
+        $this->events = [];
 
         // Event colors
         $this->event_platform_color = 'red'; //red
@@ -578,6 +620,7 @@ class Agenda
      * @param string $comment
      * @param string $color
      * @param bool $addAnnouncement
+     * @param bool $updateContent
      *
      * @return null|false
      */
@@ -593,7 +636,8 @@ class Agenda
         $attachmentCommentList = array(),
         $comment = null,
         $color = '',
-        $addAnnouncement = false
+        $addAnnouncement = false,
+        $updateContent = true
     ) {
         $start = api_get_utc_datetime($start);
         $end = api_get_utc_datetime($end);
@@ -607,12 +651,20 @@ class Agenda
                 }
                 $attributes = array(
                     'title' => $title,
-                    'text' => $content,
                     'date' => $start,
                     'enddate' => $end,
                     'all_day' => $allDay,
-                    'color' => $color
+
                 );
+
+                if ($updateContent) {
+                    $attributes['text'] = $content;
+                }
+
+                if (!empty($color)) {
+                    $attributes['color'] = $color;
+                }
+
                 Database::update(
                     $this->tbl_personal_agenda,
                     $attributes,
@@ -645,13 +697,19 @@ class Agenda
                 if ($this->getIsAllowedToEdit()) {
                     $attributes = array(
                         'title' => $title,
-                        'content' => $content,
                         'start_date' => $start,
                         'end_date' => $end,
                         'all_day' => $allDay,
-                        'comment' => $comment,
-                        'color' => $color
+                        'comment' => $comment
                     );
+
+                    if ($updateContent) {
+                        $attributes['content'] = $content;
+                    }
+
+                    if (!empty($color)) {
+                        $attributes['color'] = $color;
+                    }
 
                     Database::update(
                         $this->tbl_course_agenda,
@@ -850,11 +908,14 @@ class Agenda
                 if (api_is_platform_admin()) {
                     $attributes = array(
                         'title' => $title,
-                        'content' => $content,
                         'start_date' => $start,
                         'end_date' => $end,
                         'all_day' => $allDay
                     );
+
+                    if ($updateContent) {
+                        $attributes['content'] = $content;
+                    }
                     Database::update(
                         $this->tbl_global_agenda,
                         $attributes,
@@ -966,7 +1027,9 @@ class Agenda
         $course_id = null,
         $groupId = null,
         $user_id = 0,
-        $format = 'json'
+        $format = 'json',
+        $startLimit = 0,
+        $endLimit = 0
     ) {
         switch ($this->type) {
             case 'admin':
@@ -1009,7 +1072,6 @@ class Agenda
             case 'personal':
             default:
                 $sessionFilterActive = false;
-
                 if (!empty($this->sessionId)) {
                     $sessionFilterActive = true;
                 }
@@ -1024,7 +1086,6 @@ class Agenda
 
                 // Getting course events
                 $my_course_list = array();
-
                 if (!api_is_anonymous()) {
                     $session_list = SessionManager::get_sessions_by_user(
                         api_get_user_id()
@@ -1127,34 +1188,30 @@ class Agenda
 
     /**
      * @param int $id
-     * @param int $day_delta
      * @param int $minute_delta
      * @return int
      */
-    public function resizeEvent($id, $day_delta, $minute_delta)
+    public function resizeEvent($id, $minute_delta)
     {
-        // we convert the hour delta into minutes and add the minute delta
-        $delta = ($day_delta * 60 * 24) + $minute_delta;
-        $delta = intval($delta);
-
+        $delta = intval($minute_delta);
         $event = $this->get_event($id);
         if (!empty($event)) {
             switch ($this->type) {
                 case 'personal':
                     $sql = "UPDATE $this->tbl_personal_agenda SET
-                            all_day = 0, enddate = DATE_ADD(enddate, INTERVAL $delta MINUTE)
+                            enddate = DATE_ADD(enddate, INTERVAL $delta MINUTE)
 							WHERE id=".intval($id);
                     Database::query($sql);
                     break;
                 case 'course':
                     $sql = "UPDATE $this->tbl_course_agenda SET
-                            all_day = 0,  end_date = DATE_ADD(end_date, INTERVAL $delta MINUTE)
+                            end_date = DATE_ADD(end_date, INTERVAL $delta MINUTE)
 							WHERE c_id = ".$this->course['real_id']." AND id=".intval($id);
                     Database::query($sql);
                     break;
                 case 'admin':
                     $sql = "UPDATE $this->tbl_global_agenda SET
-                            all_day = 0, end_date = DATE_ADD(end_date, INTERVAL $delta MINUTE)
+                            end_date = DATE_ADD(end_date, INTERVAL $delta MINUTE)
 							WHERE id=".intval($id);
                     Database::query($sql);
                     break;
@@ -1164,23 +1221,21 @@ class Agenda
     }
 
     /**
-     * @param $id
-     * @param $day_delta
-     * @param $minute_delta
+     * @param int $id
+     * @param int $minute_delta minutes
+     * @param int $allDay
      * @return int
      */
-    public function move_event($id, $day_delta, $minute_delta)
+    public function move_event($id, $minute_delta, $allDay)
     {
-        // we convert the hour delta into minutes and add the minute delta
-        $delta = ($day_delta * 60 * 24) + $minute_delta;
-        $delta = intval($delta);
-
         $event = $this->get_event($id);
 
-        $allDay = 0;
-        if ($day_delta == 0 && $minute_delta == 0) {
-            $allDay = 1;
+        if (empty($event)) {
+            return false;
         }
+        // we convert the hour delta into minutes and add the minute delta
+        $delta = intval($minute_delta);
+        $allDay = intval($allDay);
 
         if (!empty($event)) {
             switch ($this->type) {
@@ -1193,7 +1248,8 @@ class Agenda
                     break;
                 case 'course':
                     $sql = "UPDATE $this->tbl_course_agenda SET
-                            all_day = $allDay, start_date = DATE_ADD(start_date,INTERVAL $delta MINUTE),
+                            all_day = $allDay, 
+                            start_date = DATE_ADD(start_date, INTERVAL $delta MINUTE),
                             end_date = DATE_ADD(end_date, INTERVAL $delta MINUTE)
 							WHERE c_id = ".$this->course['real_id']." AND id=".intval($id);
                     Database::query($sql);
@@ -1697,8 +1753,7 @@ class Agenda
                 }
 
                 $event['editable'] = false;
-
-                if (api_is_allowed_to_edit() && $this->type == 'course') {
+                if ($this->getIsAllowedToEdit() && $this->type == 'course') {
                     $event['editable'] = true;
                     if (!empty($session_id)) {
                         if ($coachCanEdit == false) {

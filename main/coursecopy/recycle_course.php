@@ -18,7 +18,7 @@ api_protect_course_script(true);
 
 // Check access rights (only teachers are allowed here)
 if (!api_is_allowed_to_edit()) {
-	api_not_allowed(true);
+    api_not_allowed(true);
 }
 
 // Section for the tabs
@@ -63,9 +63,7 @@ if (Security::check_token('post') && (
     }
     $cr = new CourseRecycler($course);
     $cr->recycle($recycle_type);
-
     Display::display_confirmation_message(get_lang('RecycleFinished'));
-
 } elseif (Security::check_token('post') && (
         isset($_POST['recycle_option']) &&
         $_POST['recycle_option'] == 'select_items'

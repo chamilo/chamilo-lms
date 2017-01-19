@@ -237,7 +237,8 @@ if (api_is_allowed_to_edit()) {
 
     // 2nd: Get all folders that are invisible in the given path
     $sql = "SELECT path, docs.session_id, docs.id, props.to_group_id, docs.c_id
-            FROM $doc_table AS docs INNER JOIN $prop_table AS props
+            FROM $doc_table AS docs 
+            INNER JOIN $prop_table AS props
             ON
                 docs.id = props.ref AND
                 docs.c_id = props.c_id

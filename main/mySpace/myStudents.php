@@ -5,38 +5,59 @@
  * Implements the tracking of students in the Reporting pages
  * @package chamilo.reporting
  */
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
 
 $export = isset($_GET['export']) ? $_GET['export'] : false;
 $sessionId = isset($_GET['id_session']) ? intval($_GET['id_session']) : 0;
 $origin = isset($_GET['origin']) ? Security::remove_XSS($_GET['origin']) : '';
-$course_code = isset($_GET['course']) ? Security :: remove_XSS($_GET['course']) : null;
+$course_code = isset($_GET['course']) ? Security :: remove_XSS($_GET['course']) : '';
 $courseInfo = api_get_course_info($course_code);
 $student_id = intval($_GET['student']);
 
-if (!api_is_allowed_to_create_course() &&
+$allowedToTrackUser = true;
+
+if (
     !api_is_session_admin() &&
     !api_is_drh() &&
     !api_is_student_boss() &&
     !api_is_platform_admin()
 ) {
     if (empty($sessionId)) {
-    // Check if the user is tutor of the course
-        $userCourseStatus = CourseManager::get_tutor_in_course_status(
-        api_get_user_id(),
-        api_get_course_int_id()
-    );
-    if ($userCourseStatus != 1) {
-        api_not_allowed(true);
+        $isTeacher = false;
+        // Check if is current teacher if set
+        if (!empty($courseInfo)) {
+            $isTeacher = CourseManager::is_course_teacher(
+                api_get_user_id(),
+                $courseInfo['code']
+            );
+        }
+
+        if (!api_is_course_admin() && $isTeacher == false) {
+            if (!empty($courseInfo)) {
+                // Check if the user is tutor of the course
+                $userCourseStatus = CourseManager::get_tutor_in_course_status(
+                    api_get_user_id(),
+                    $courseInfo['real_id']
+                );
+
+                if ($userCourseStatus != 1) {
+                    $allowedToTrackUser = false;
+                }
+            }
         }
     } else {
         $coach = api_is_coach($sessionId, $courseInfo['real_id']);
+
         if (!$coach) {
-            api_not_allowed(true);
+            $allowedToTrackUser = false;
         }
     }
+}
+
+if (!$allowedToTrackUser) {
+    api_not_allowed(true);
 }
 
 $htmlHeadXtra[] = '<script>

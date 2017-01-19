@@ -7895,8 +7895,10 @@ $SelectWeeksSpan = "Sélectionnez la durée en semaines";
 $CourseXAdded = "Course %s added.";
 $CurrentPassword = "Mot de passe actuel";
 $DeleteCorrections = "Supprimer les corrections";
-$AllowMyFilesTitle = "Activer la page \"Mes fichiers\"";
-$AllowMyFilesComment = "Permettre aux utilisateurs de télécharger des fichiers dans un espace personnel de la plate-forme.";
+$AllowMyFilesTitle = "Activer la page 'Mes fichiers'";
+$AllowMyFilesComment = "Permettre aux utilisateurs de télécharger des fichiers vers un espace personnel sur la plate-forme.";
+$InstallMultiURLDetectedNotMainURL = "Vous utilisez actuellement la fonctionnalité de multi-URL et êtes sur le point de mettre à jour votre portail en utilisant une URL secondaire. Merci de vous connecter à l'URL principale pour continuer le processus de mise à jour: %s";
+$OnlyXQuestionsPickedRandomly = "Seules %s questions seront tirées au hasard selon les règles établies dans la configuration de l'exercice.";
 
 // Ofaj
 

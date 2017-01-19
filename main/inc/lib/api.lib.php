@@ -661,7 +661,6 @@ function api_get_path($path = '', $configuration = [])
 
     $course_folder = 'courses/';
     static $root_web = '';
-    static $root_sys = '';
     $root_sys = $_configuration['root_sys'];
 
     // If no $root_web has been set so far *and* no custom config has been passed to the function
@@ -698,15 +697,17 @@ function api_get_path($path = '', $configuration = [])
         }
     }
 
-    if (isset($configuration['multiple_access_urls']) && $configuration['multiple_access_urls']) {
+    if (isset($configuration['multiple_access_urls']) &&
+        $configuration['multiple_access_urls']
+    ) {
         // To avoid that the api_get_access_url() function fails since global.inc.php also calls the main_api.lib.php
         if (isset($configuration['access_url']) && !empty($configuration['access_url'])) {
             // We look into the DB the function api_get_access_url
-            $url_info = api_get_access_url($configuration['access_url']);
+            $urlInfo = api_get_access_url($configuration['access_url']);
             // Avoid default value
-            $defaulValues = ['http://localhost/', 'https://localhost/'];
-            if (!empty($url_info['url']) && !in_array($url_info['url'], $defaulValues)) {
-                $root_web = $url_info['active'] == 1 ? $url_info['url'] : $configuration['root_web'];
+            $defaultValues = ['http://localhost/', 'https://localhost/'];
+            if (!empty($urlInfo['url']) && !in_array($urlInfo['url'], $defaultValues)) {
+                $root_web = $urlInfo['active'] == 1 ? $urlInfo['url'] : $configuration['root_web'];
             }
         }
     }
@@ -1307,10 +1308,11 @@ function api_get_user_courses($userid, $fetch_session = true)
  *
  * @param array Non-standard user array
  * @param bool $add_password
+ * @param bool $loadAvatars turn off to improve performance
  *
  * @return array Standard user array
  */
-function _api_format_user($user, $add_password = false)
+function _api_format_user($user, $add_password = false, $loadAvatars = true)
 {
     $result = array();
 
@@ -1325,7 +1327,6 @@ function _api_format_user($user, $add_password = false)
     }
 
     $result['complete_name'] = api_get_person_name($firstname, $lastname);
-
     $result['complete_name_with_username'] = $result['complete_name'];
 
     if (!empty($user['username'])) {
@@ -1380,15 +1381,32 @@ function _api_format_user($user, $add_password = false)
     $result['user_id'] = $result['id'] = $user_id;
 
     // Getting user avatar.
-    $originalFile = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_ORIGINAL, null, $result);
-    $smallFile = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_SMALL, null, $result);
-    $mediumFile = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_MEDIUM, null, $result);
+    if ($loadAvatars) {
+        $originalFile = UserManager::getUserPicture(
+            $user_id,
+            USER_IMAGE_SIZE_ORIGINAL,
+            null,
+            $result
+        );
+        $smallFile = UserManager::getUserPicture(
+            $user_id,
+            USER_IMAGE_SIZE_SMALL,
+            null,
+            $result
+        );
+        $mediumFile = UserManager::getUserPicture(
+            $user_id,
+            USER_IMAGE_SIZE_MEDIUM,
+            null,
+            $result
+        );
 
-    $result['avatar'] = $originalFile;
-    $avatarString = explode('?', $originalFile);
-    $result['avatar_no_query'] = reset($avatarString);
-    $result['avatar_small'] = $smallFile;
-    $result['avatar_medium'] = $mediumFile;
+        $result['avatar'] = $originalFile;
+        $avatarString = explode('?', $originalFile);
+        $result['avatar_no_query'] = reset($avatarString);
+        $result['avatar_small'] = $smallFile;
+        $result['avatar_medium'] = $mediumFile;
+    }
 
     if (isset($user['user_is_online'])) {
         $result['user_is_online'] = $user['user_is_online'] == true ? 1 : 0;
@@ -1422,6 +1440,7 @@ function _api_format_user($user, $add_password = false)
  * @param bool $showPassword
  * @param bool $loadExtraData
  * @param bool $loadOnlyVisibleExtraData Get the user extra fields that are visible
+ * @param bool $loadAvatars turn off to improve performance and if avatars are not needed.
  * @return array $user_info user_id, lastname, firstname, username, email, etc
  * @author Patrick Cool <patrick.cool@UGent.be>
  * @author Julio Montoya
@@ -1432,12 +1451,13 @@ function api_get_user_info(
     $checkIfUserOnline = false,
     $showPassword = false,
     $loadExtraData = false,
-    $loadOnlyVisibleExtraData = false
+    $loadOnlyVisibleExtraData = false,
+    $loadAvatars = true
 ) {
     if (empty($user_id)) {
         $userFromSession = Session::read('_user');
         if (isset($userFromSession)) {
-            return _api_format_user($userFromSession);
+            return _api_format_user($userFromSession, $showPassword, $loadAvatars);
         }
 
         return false;
@@ -1450,7 +1470,6 @@ function api_get_user_info(
         $result_array = Database::fetch_array($result);
         if ($checkIfUserOnline) {
             $use_status_in_platform = user_is_online($user_id);
-
             $result_array['user_is_online'] = $use_status_in_platform;
             $user_online_in_chat = 0;
 
@@ -1470,13 +1489,12 @@ function api_get_user_info(
 
         if ($loadExtraData) {
             $fieldValue = new ExtraFieldValue('user');
-
             $result_array['extra'] = $fieldValue->getAllValuesForAnItem(
                 $user_id,
                 $loadOnlyVisibleExtraData
             );
         }
-        $user = _api_format_user($result_array, $showPassword);
+        $user = _api_format_user($result_array, $showPassword, $loadAvatars);
 
         return $user;
     }
@@ -2342,6 +2360,7 @@ function api_get_plugin_setting($plugin, $variable)
 {
     $variableName = $plugin.'_'.$variable;
     $result = api_get_setting($variableName);
+
     if (isset($result[$plugin])) {
         return $result[$plugin];
     }
@@ -3026,7 +3045,7 @@ function api_is_allowed($tool, $action, $task_id = 0)
     if (api_is_course_admin()) {
         return true;
     }
-    //if (!$_SESSION['total_permissions'][$_course['code']] and $_course)
+
     if (is_array($_course) and count($_course) > 0) {
         require_once api_get_path(SYS_CODE_PATH).'permissions/permissions_functions.inc.php';
 
@@ -5110,13 +5129,21 @@ function api_get_access_urls($from = 0, $to = 1000000, $order = 'url', $directio
  */
 function api_get_access_url($id, $returnDefault = true)
 {
+    static $staticResult;
     $id = intval($id);
-    // Calling the Database:: library dont work this is handmade.
-    $table_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
-    $sql = "SELECT url, description, active, created_by, tms
-            FROM $table_access_url WHERE id = '$id' ";
-    $res = Database::query($sql);
-    $result = @Database::fetch_array($res);
+
+    if (isset($staticResult[$id])) {
+        $result = $staticResult[$id];
+    } else {
+        // Calling the Database:: library dont work this is handmade.
+        $table_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
+        $sql = "SELECT url, description, active, created_by, tms
+                FROM $table_access_url WHERE id = '$id' ";
+        $res = Database::query($sql);
+        $result = @Database::fetch_array($res);
+        $staticResult[$id] = $result;
+    }
+
     // If the result url is 'http://localhost/' (the default) and the root_web
     // (=current url) is different, and the $id is = 1 (which might mean
     // api_get_current_access_url_id() returned 1 by default), then return the
@@ -5294,7 +5321,7 @@ function api_add_setting(
 
 /**
  * Checks wether a user can or can't view the contents of a course.
- *
+ * @deprecated use CourseManager::is_user_subscribed_in_course
  * @param   int $userid     User id or NULL to get it from $_SESSION
  * @param   int $cid        Course id to check whether the user is allowed.
  * @return  bool
@@ -5523,7 +5550,16 @@ function api_is_element_in_the_session($tool, $element_id, $session_id = null) {
  */
 function api_replace_dangerous_char($filename, $treat_spaces_as_hyphens = true)
 {
-    return URLify::filter($filename, 250, '', true, true, false, false, $treat_spaces_as_hyphens);
+    return URLify::filter(
+        $filename,
+        250,
+        '',
+        true,
+        true,
+        false,
+        false,
+        $treat_spaces_as_hyphens
+    );
 }
 
 /**
@@ -5578,11 +5614,11 @@ function api_get_access_url_from_user($user_id) {
             ON (url_rel_user.access_url_id = u.id)
             WHERE user_id = ".intval($user_id);
     $result = Database::query($sql);
-    $url_list = array();
+    $list = array();
     while ($row = Database::fetch_array($result, 'ASSOC')) {
-        $url_list[] = $row['access_url_id'];
+        $list[] = $row['access_url_id'];
     }
-    return $url_list;
+    return $list;
 }
 
 /**
@@ -6010,6 +6046,12 @@ function api_browser_support($format = '')
     $a_versiontemp = explode('.', $browser->getVersion());
     $current_majorver = $a_versiontemp[0];
 
+    static $result;
+
+    if (isset($result[$format])) {
+        return $result[$format];
+    }
+
     // Native svg support
     if ($format == 'svg') {
         if (($current_browser == 'Internet Explorer' && $current_majorver >= 9) ||
@@ -6018,22 +6060,28 @@ function api_browser_support($format = '')
             ($current_browser == 'Chrome' && $current_majorver >= 1) ||
             ($current_browser == 'Opera' && $current_majorver >= 9)
         ) {
+            $result[$format] = true;
             return true;
         } else {
+            $result[$format] = false;
             return false;
         }
     } elseif ($format == 'pdf') {
         //native pdf support
         if ($current_browser == 'Chrome' && $current_majorver >= 6) {
+            $result[$format] = true;
             return true;
         } else {
+            $result[$format] = false;
             return false;
         }
     } elseif ($format == 'tif' || $format == 'tiff') {
         //native tif support
         if ($current_browser == 'Safari' && $current_majorver >= 5) {
+            $result[$format] = true;
             return true;
         } else {
+            $result[$format] = false;
             return false;
         }
     } elseif ($format == 'ogg' || $format == 'ogx' || $format == 'ogv' || $format == 'oga') {
@@ -6041,43 +6089,55 @@ function api_browser_support($format = '')
         if (($current_browser == 'Firefox' && $current_majorver >= 3) ||
             ($current_browser == 'Chrome' && $current_majorver >= 3) ||
             ($current_browser == 'Opera' && $current_majorver >= 9)) {
+            $result[$format] = true;
             return true;
         } else {
+            $result[$format] = false;
             return false;
         }
     } elseif ($format == 'mpg' || $format == 'mpeg') {
         //native mpg support
         if (($current_browser == 'Safari' && $current_majorver >= 5)) {
+            $result[$format] = true;
             return true;
         } else {
+            $result[$format] = false;
             return false;
         }
     } elseif ($format == 'mp4') {
         //native mp4 support (TODO: Android, iPhone)
         if ($current_browser == 'Android' || $current_browser == 'iPhone') {
+            $result[$format] = true;
             return true;
         } else {
+            $result[$format] = false;
             return false;
         }
     } elseif ($format == 'mov') {
         //native mov support( TODO:check iPhone)
         if ($current_browser == 'Safari' && $current_majorver >= 5 || $current_browser == 'iPhone') {
+            $result[$format] = true;
             return true;
         } else {
+            $result[$format] = false;
             return false;
         }
     } elseif ($format == 'avi') {
         //native avi support
         if ($current_browser == 'Safari' && $current_majorver >= 5) {
+            $result[$format] = true;
             return true;
         } else {
+            $result[$format] = false;
             return false;
         }
     } elseif ($format == 'wmv') {
         //native wmv support
         if ($current_browser == 'Firefox' && $current_majorver >= 4) {
+            $result[$format] = true;
             return true;
         } else {
+            $result[$format] = false;
             return false;
         }
     } elseif ($format == 'webm') {
@@ -6088,8 +6148,10 @@ function api_browser_support($format = '')
             ($current_browser == 'Chrome' && $current_majorver >= 9) ||
             $current_browser == 'Android'
         ) {
+            $result[$format] = true;
             return true;
         } else {
+            $result[$format] = false;
             return false;
         }
     } elseif ($format == 'wav') {
@@ -6102,29 +6164,37 @@ function api_browser_support($format = '')
             $current_browser == 'Android' ||
             $current_browser == 'iPhone'
         ) {
+            $result[$format] = true;
             return true;
         } else {
+            $result[$format] = false;
             return false;
         }
     } elseif ($format == 'mid' || $format == 'kar') {
         //native midi support (TODO:check Android)
         if ($current_browser == 'Opera' && $current_majorver >= 9 || $current_browser == 'Android') {
+            $result[$format] = true;
             return true;
         } else {
+            $result[$format] = false;
             return false;
         }
     } elseif ($format == 'wma') {
         //native wma support
         if ($current_browser == 'Firefox' && $current_majorver >= 4) {
+            $result[$format] = true;
             return true;
         } else {
+            $result[$format] = false;
             return false;
         }
     } elseif ($format == 'au') {
         //native au support
         if ($current_browser == 'Safari' && $current_majorver >= 5) {
+            $result[$format] = true;
             return true;
         } else {
+            $result[$format] = false;
             return false;
         }
     } elseif ($format == 'mp3') {
@@ -6136,14 +6206,17 @@ function api_browser_support($format = '')
             $current_browser == 'iPhone' ||
             $current_browser == 'Firefox'
         ) {
+            $result[$format] = true;
             return true;
         } else {
+            $result[$format] = false;
             return false;
         }
     } elseif ($format == "check_browser") {
         $array_check_browser = array($current_browser, $current_majorver);
         return $array_check_browser;
     } else {
+        $result[$format] = false;
         return false;
     }
 }

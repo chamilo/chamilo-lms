@@ -912,8 +912,7 @@ class AddCourse
                 }
             }
 
-            $agenda = new Agenda();
-            $agenda->setType('course');
+            $agenda = new Agenda('course');
             $agenda->set_course($courseInfo);
             $agenda->addEvent(
                 $now,

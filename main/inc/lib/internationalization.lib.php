@@ -1707,7 +1707,7 @@ function api_detect_encoding($string, $language = null) {
  * Checks a string for UTF-8 validity.
  *
  */
-function api_is_valid_utf8(&$string)
+function api_is_valid_utf8($string)
 {
     return Utf8::isUtf8($string);
 }

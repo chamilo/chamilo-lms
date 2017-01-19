@@ -330,7 +330,7 @@ class CourseRecycler
     {
         $link_cat_table = Database :: get_course_table(TABLE_LINK_CATEGORY);
         $link_table = Database :: get_course_table(TABLE_LINK);
-        $sql = "SELECT lc.id FROM ".$link_cat_table." lc
+        $sql = "SELECT lc.id FROM $link_cat_table lc
                 LEFT JOIN ".$link_table." l
                 ON
                     lc.id=l.category_id AND

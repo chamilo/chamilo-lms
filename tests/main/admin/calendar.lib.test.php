@@ -12,19 +12,6 @@ class TestCalendar extends UnitTestCase
 		//var_dump($res);
 	}
 
-
-	public function testStoreNewAgendaItem(){
-		global $_user;
-		$res_store = store_new_agenda_item();
-		$this->assertTrue(is_numeric($res_store));
-
-		//delete the new agenda item in the database
-		if (is_numeric($res_store)) {
-			$res_delete = delete_agenda_item($res_store);
-			$this->assertTrue(is_numeric($res_store));
-		}
-	}
-
  	public function testAddWeek(){
  		$timestamp=12;
  		$num=1;

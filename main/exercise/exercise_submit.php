@@ -147,6 +147,10 @@ if (!is_object($objExercise)) {
     exit;
 }
 
+// if the user has submitted the form
+$exercise_title = $objExercise->selectTitle();
+$exercise_sound = $objExercise->selectSound();
+
 // If reminder ends we jump to the exercise_reminder
 if ($objExercise->review_answers) {
     if ($remind_question_id == -1) {
@@ -164,7 +168,7 @@ $my_remind_list = array();
 
 $time_control = false;
 if ($objExercise->expired_time != 0) {
-	$time_control = true;
+    $time_control = true;
 }
 
 // Generating the time control key for the user
@@ -173,14 +177,14 @@ $current_expired_time_key = ExerciseLib::get_time_control_key($objExercise->id, 
 $_SESSION['duration_time'][$current_expired_time_key] = $current_timestamp;
 
 if ($time_control) {
-	// Get the expired time of the current exercise in track_e_exercises
-	$total_seconds = $objExercise->expired_time*60;
+    // Get the expired time of the current exercise in track_e_exercises
+    $total_seconds = $objExercise->expired_time*60;
 }
 
 $show_clock = true;
 $user_id = api_get_user_id();
 if ($objExercise->selectAttempts() > 0) {
-	$attempt_html = '';
+    $attempt_html = '';
     $attempt_count = Event::get_attempt_count(
         $user_id,
         $exerciseId,
@@ -189,11 +193,10 @@ if ($objExercise->selectAttempts() > 0) {
         $learnpath_item_view_id
     );
 
-	if ($attempt_count >= $objExercise->selectAttempts()) {
-		$show_clock = false;
-		if (!api_is_allowed_to_edit(null,true)) {
+    if ($attempt_count >= $objExercise->selectAttempts()) {
+        $show_clock = false;
+        if (!api_is_allowed_to_edit(null, true)) {
             if ($objExercise->results_disabled == 0 && $origin != 'learnpath') {
-
                 // Showing latest attempt according with task BT#1628
                 $exercise_stat_info = Event::getExerciseResultsByUser(
                     $user_id,
@@ -221,42 +224,78 @@ if ($objExercise->selectAttempts() > 0) {
                     );
 
                     if (!empty($last_attempt_info['question_list'])) {
-                        foreach($last_attempt_info['question_list'] as $questions) {
+                        foreach ($last_attempt_info['question_list'] as $questions) {
                             foreach ($questions as $question_data) {
                                 $question_id = $question_data['question_id'];
-                                $marks       = $question_data['marks'];
+                                $marks = $question_data['marks'];
 
                                 $question_info = Question::read($question_id);
-                                $attempt_html .= Display::div($question_info->question, array('class'=>'question_title'));
-                                $attempt_html .= Display::div(get_lang('Score').' '.$marks, array('id'=>'question_question_titlescore'));
+                                $attempt_html .= Display::div(
+                                    $question_info->question,
+                                    array('class' => 'question_title')
+                                );
+                                $attempt_html .= Display::div(
+                                    get_lang('Score').' '.$marks,
+                                    array('id' => 'question_question_titlescore')
+                                );
                             }
                         }
                     }
-					$score =  ExerciseLib::show_score($last_attempt_info['exe_result'], $last_attempt_info['exe_weighting']);
-					$attempt_html .= Display::div(get_lang('YourTotalScore').' '.$score, array('id'=>'question_score'));
-				} else {
-					$attempt_html .= Display::return_message(sprintf(get_lang('ReachedMaxAttempts'), $exercise_title, $objExercise->selectAttempts()), 'warning', false);
-				}
-			} else {
-				$attempt_html .= Display::return_message(sprintf(get_lang('ReachedMaxAttempts'), $exercise_title, $objExercise->selectAttempts()), 'warning', false);
-			}
-		} else {
-			$attempt_html .= Display :: return_message(sprintf(get_lang('ReachedMaxAttempts'), $exercise_title, $objExercise->selectAttempts()), 'warning', false);
-		}
+                    $score = ExerciseLib::show_score(
+                        $last_attempt_info['exe_result'],
+                        $last_attempt_info['exe_weighting']
+                    );
+                    $attempt_html .= Display::div(
+                        get_lang('YourTotalScore').' '.$score,
+                        array('id' => 'question_score')
+                    );
+                } else {
+                    $attempt_html .= Display::return_message(
+                        sprintf(
+                            get_lang('ReachedMaxAttempts'),
+                            $exercise_title,
+                            $objExercise->selectAttempts()
+                        ),
+                        'warning',
+                        false
+                    );
+                }
+            } else {
+                $attempt_html .= Display::return_message(
+                    sprintf(
+                        get_lang('ReachedMaxAttempts'),
+                        $exercise_title,
+                        $objExercise->selectAttempts()
+                    ),
+                    'warning',
+                    false
+                );
+            }
+        } else {
+            $attempt_html .= Display::return_message(
+                sprintf(
+                    get_lang('ReachedMaxAttempts'),
+                    $exercise_title,
+                    $objExercise->selectAttempts()
+                ),
+                'warning',
+                false
+            );
+        }
 
-		if ($origin == 'learnpath') {
-			Display :: display_reduced_header();
-		} else {
-			Display :: display_header(get_lang('Exercises'));
-		}
+        if ($origin == 'learnpath') {
+            Display :: display_reduced_header();
+        } else {
+            Display :: display_header(get_lang('Exercises'));
+        }
 
-		echo $attempt_html;
+        echo $attempt_html;
 
         if ($origin != 'learnpath') {
             Display:: display_footer();
         }
-		exit;
-	}
+        exit;
+    }
 }
 
 if ($debug) {
@@ -462,10 +501,6 @@ $time_left = api_strtotime($clock_expired_time,'UTC') - time();
 if ($time_control) { //Sends the exercise form when the expired time is finished
 	$htmlHeadXtra[] = $objExercise->show_time_control_js($time_left);
 }
-
-// if the user has submitted the form
-$exercise_title = $objExercise->selectTitle();
-$exercise_sound = $objExercise->selectSound();
 
 //in LP's is enabled the "remember question" feature?
 

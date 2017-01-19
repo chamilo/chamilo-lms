@@ -40,7 +40,7 @@ class Course
             if (is_array($resources)) {
                 foreach ($resources as $resource) {
                     Resource::setClassType($resource);
-                    if ($resource->links_to($resource_to_check) ) {
+                    if ($resource->links_to($resource_to_check)) {
                         return true;
                     }
                     if ($type == RESOURCE_LEARNPATH && get_class($resource)=='CourseCopyLearnpath') {
@@ -85,7 +85,7 @@ class Course
      */
     public function show()
     {
-        
+
     }
 
     /**

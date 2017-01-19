@@ -392,7 +392,14 @@ if ($inATest) {
     }
 
     echo '</div>';
-    echo '<div class="alert alert-info">'.sprintf(get_lang('XQuestionsWithTotalScoreY'), $objExercise->selectNbrQuestions(), $maxScoreAllQuestions).'</div>';
+    echo '<div class="alert alert-info">'.
+        sprintf(get_lang('XQuestionsWithTotalScoreY'), $objExercise->selectNbrQuestions(), $maxScoreAllQuestions);
+    if ($objExercise->random > 0) {
+        echo '<br />' .
+            sprintf(get_lang('OnlyXQuestionsPickedRandomly'), $objExercise->random);
+    }
+    echo '</div>';
+
 } else if (isset($_GET['newQuestion'])) {
     // we are in create a new question from question pool not in a test
     echo '<div class="actions">';

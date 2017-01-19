@@ -23,7 +23,8 @@ $this_section = SECTION_MYAGENDA;
 $htmlHeadXtra[] = api_get_jquery_libraries_js(array('jquery-ui', 'jquery-ui-i18n'));
 
 $htmlHeadXtra[] = api_get_asset('qtip2/jquery.qtip.min.js');
-$htmlHeadXtra[] = api_get_asset('fullcalendar/dist/fullcalendar.min.js');
+$htmlHeadXtra[] = api_get_asset('fullcalendar/dist/fullcalendar.js');
+$htmlHeadXtra[] = api_get_asset('fullcalendar/dist/locale-all.js');
 $htmlHeadXtra[] = api_get_asset('fullcalendar/dist/gcal.js');
 $htmlHeadXtra[] = api_get_css_asset('fullcalendar/dist/fullcalendar.min.css');
 $htmlHeadXtra[] = api_get_css_asset('qtip2/jquery.qtip.min.css');
@@ -45,8 +46,7 @@ if (isset($_REQUEST['cidReq']) && !empty($_REQUEST['cidReq'])) {
 
 api_protect_course_group(GroupManager::GROUP_TOOL_CALENDAR);
 
-$agenda = new Agenda();
-$agenda->type = $type;
+$agenda = new Agenda($type);
 
 $is_group_tutor = false;
 $session_id = api_get_session_id();
@@ -81,14 +81,10 @@ switch ($type) {
         break;
     case 'course':
         api_protect_course_script(true);
+        $allowToEdit = $agenda->getIsAllowedToEdit();
         $this_section = SECTION_COURSES;
-        if (api_is_allowed_to_edit()) {
+        if ($allowToEdit) {
             $can_add_events = 1;
-        }
-        if (!empty($group_id)) {
-            if ($is_group_tutor) {
-                $can_add_events = 1;
-            }
         }
         break;
     case 'personal':
@@ -114,13 +110,13 @@ switch ($type) {
 }
 
 //Setting translations
-$day_short = api_get_week_days_short();
+/*$day_short = api_get_week_days_short();
 $days = api_get_week_days_long();
 $months = api_get_months_long();
-$months_short = api_get_months_short();
+$months_short = api_get_months_short();*/
 
 //Setting calendar translations
-$tpl->assign('month_names', json_encode($months));
+/*$tpl->assign('month_names', json_encode($months));
 $tpl->assign('month_names_short', json_encode($months_short));
 $tpl->assign('day_names', json_encode($days));
 $tpl->assign('day_names_short', json_encode($day_short));
@@ -132,7 +128,7 @@ $tpl->assign(
         'week' => get_lang('Week'),
         'day' => get_lang('Day')
     ))
-);
+);*/
 
 //see http://docs.jquery.com/UI/Datepicker/$.datepicker.formatDate
 

@@ -701,7 +701,7 @@ class GradebookUtils
         $new_content_html = str_replace(SYS_CODE_PATH . 'img/', api_get_path(WEB_IMG_PATH), $new_content_html);
 
         $dom = new DOMDocument();
-        $dom->loadHTML($new_content_html);
+        @$dom->loadHTML($new_content_html);
 
         //add print header
         if (!$hide_print_button) {

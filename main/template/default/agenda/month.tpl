@@ -242,6 +242,7 @@ $(document).ready(function() {
             if (end.hasTime()) {
                 allDay = false;
             }
+            console.log(diffDays);
 
 			$('#visible_to_input').show();
 			$('#add_as_announcement_div').show();
@@ -263,7 +264,7 @@ $(document).ready(function() {
                 if (diffDays > 1) {
                     $('#start_date').html('');
                     var end_date_value = '';
-                    if (end.hasTime()) {
+                    if (end) {
                         var clone = end.clone();
                         end_date_value = clone.subtract(1, 'days').format('{{ js_format_date }}');
                     }
@@ -389,7 +390,7 @@ $(document).ready(function() {
             var diffDays = moment(end).diff(start, 'days');
             var endDateMinusOne = '';
 
-            if (end.hasTime()) {
+            if (end) {
                 var clone = end.clone();
                 endDateMinusOne = clone.subtract(1, 'days').format('{{ js_format_date }}');
             }

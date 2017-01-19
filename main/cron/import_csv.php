@@ -769,6 +769,7 @@ class ImportCsv
             $this->logger->addInfo(count($data)." records found.");
             $eventsToCreate = array();
             $errorFound = false;
+
             foreach ($data as $row) {
                 $sessionId = null;
                 $externalSessionId = null;
@@ -906,6 +907,10 @@ class ImportCsv
                 return 0;
             }
 
+            $batchSize = $this->batchSize;
+            $counter = 1;
+            $em = Database::getManager();
+
             foreach ($eventsToCreate as $event) {
                 $update = false;
                 $item = null;
@@ -1034,7 +1039,15 @@ class ImportCsv
                         );
                     }
                 }
+
+                if (($counter % $batchSize) === 0) {
+                    $em->flush();
+                    $em->clear(); // Detaches all objects from Doctrine!
+                }
+                $counter++;
             }
+
+            $em->clear(); // Detaches all objects from Doctrine!
         }
 
         if ($moveFile) {

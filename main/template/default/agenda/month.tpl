@@ -290,10 +290,10 @@ $(document).ready(function() {
                     $('#end_date').html('');
                 }
 
-				$('#color_calendar').html('{{ type_label }}');
+				$('#color_calendar').html('{{ type_label | escape('js')}}');
 				$('#color_calendar').removeClass('group_event');
 				$('#color_calendar').addClass('label_tag');
-				$('#color_calendar').addClass('{{ type_event_class }}');
+				$('#color_calendar').addClass('{{ type_event_class | escape('js') }}');
 
                 //It shows the CKEDITOR while Adding an Event
                 $('#cke_content').show();
@@ -417,7 +417,7 @@ $(document).ready(function() {
                     $("#visible_to_read_only_users").html(calEvent.sent_to);
 				{% endif %}
 
-                $('#color_calendar').html('{{ type_label }}');
+                $('#color_calendar').html('{{ type_label | escape('js') }}');
                 $('#color_calendar').addClass('label_tag');
                 $('#color_calendar').removeClass('course_event');
                 $('#color_calendar').removeClass('personal_event');

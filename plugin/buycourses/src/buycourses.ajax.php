@@ -10,12 +10,15 @@ $cidReset = true;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 
-api_protect_admin_script(true);
+if (api_is_anonymous()) {
+    api_not_allowed(true);
+}
 
 $plugin = BuyCoursesPlugin::create();
 
 $paypalEnable = $plugin->get('paypal_enable');
 $commissionsEnable = $plugin->get('commissions_enable');
+$culqiEnable = $plugin->get('culqi_enable');
 
 $action = isset($_GET['a']) ? $_GET['a'] : null;
 
@@ -226,7 +229,7 @@ switch ($action) {
 
         break;
 
-        case 'cancelPayout':
+    case 'cancelPayout':
         if (api_is_anonymous()) {
             break;
         }
@@ -238,5 +241,202 @@ switch ($action) {
         echo '';
 
         break;
+    case 'culqi_cargo':
+
+        if (!$culqiEnable) {
+            break;
+        }
+
+        $tokenId = $_REQUEST['token_id'];
+        $saleId = $_REQUEST['sale_id'];
+
+        if (!$tokenId || !$saleId) {
+            break;
+        }
+
+        $sale = $plugin->getSale($saleId);
+
+        if (!$sale) {
+            break;
+        }
+
+        require_once("Requests.php");
+        Requests::register_autoloader();
+        require_once("culqi.php");
+
+        $culqiParams = $plugin->getCulqiParams();
+
+        // API Key y autenticación
+        $SECRET_API_KEY = $culqiParams['api_key'];
+        $culqi = new Culqi\Culqi(array('api_key' => $SECRET_API_KEY));
+
+        $environment = $culqiParams['integration'];
+
+        $environment = $environment ? BuyCoursesPlugin::CULQI_INTEGRATION_TYPE : BuyCoursesPlugin::CULQI_PRODUCTION_TYPE;
+
+        $culqi->setEnv($environment);
+
+        $user = api_get_user_info();
+        $currency = $plugin->getSelectedCurrency();
+
+        try {
+            $cargo = $culqi->Cargos->create(array(
+                "moneda" => $currency['iso_code'],
+                "monto" => intval(floatval($sale['price']) * 100),
+                "usuario" => $user['username'],
+                "descripcion" => $sale['product_name'],
+                "pedido" => $sale['reference'],
+                "codigo_pais" => "PE",
+                "direccion" => get_lang('None'),
+                "ciudad" => get_lang('None'),
+                "telefono" => 0,
+                "nombres" => $user['firstname'],
+                "apellidos" => $user['lastname'],
+                "correo_electronico" => $user['email'],
+                "token" => $tokenId
+            ));
+
+            if (is_object($cargo)) {
+
+                $saleIsCompleted = $plugin->completeSale($sale['id']);
+
+                if ($saleIsCompleted) {
+                    Display::addFlash(
+                        Display::return_message(
+                            sprintf($plugin->get_lang('SubscriptionToCourseXSuccessful'), $sale['product_name']),
+                            'success'
+                        )
+                    );
+                }
+            }
+
+            echo json_encode($cargo);
+
+        } catch(Exception $e) {
+
+            $cargo = json_decode($e->getMessage(), true);
+
+            $plugin->cancelSale($sale['id']);
+
+            unset($_SESSION['bc_sale_id']);
+
+            if (is_array($cargo)) {
+                Display::addFlash(
+                    Display::return_message(
+                        sprintf($plugin->get_lang('ErrorOccurred'), $cargo['codigo'], $cargo['mensaje']),
+                        'error',
+                        false
+                    )
+                );
+            } else {
+                Display::addFlash(
+                    Display::return_message(
+                        $plugin->get_lang('ErrorContactPlatformAdmin'),
+                        'error',
+                        false
+                    )
+                );
+            }
+        }
+
+        break;
+
+    case 'culqi_cargo_service':
+
+        if (!$culqiEnable) {
+            break;
+        }
+
+        $tokenId = $_REQUEST['token_id'];
+        $serviceSaleId = $_REQUEST['service_sale_id'];
+
+        if (!$tokenId || !$serviceSaleId) {
+            break;
+        }
+
+        $serviceSale = $plugin->getServiceSale($serviceSaleId);
+
+        if (!$serviceSale) {
+            break;
+        }
+
+        require_once("Requests.php");
+        Requests::register_autoloader();
+        require_once("culqi.php");
+
+        $culqiParams = $plugin->getCulqiParams();
+
+        // API Key y autenticación
+        $SECRET_API_KEY = $culqiParams['api_key'];
+        $culqi = new Culqi\Culqi(array('api_key' => $SECRET_API_KEY));
+
+        $environment = $culqiParams['integration'];
+
+        $environment = $environment ? BuyCoursesPlugin::CULQI_INTEGRATION_TYPE : BuyCoursesPlugin::CULQI_PRODUCTION_TYPE;
+
+        $culqi->setEnv($environment);
+
+        $user = api_get_user_info();
+
+        try {
+            $cargo = $culqi->Cargos->create(array(
+                "moneda" => $serviceSale['currency'],
+                "monto" => intval(floatval($serviceSale['price']) * 100),
+                "usuario" => $user['username'],
+                "descripcion" => $serviceSale['service']['name'],
+                "pedido" => $serviceSale['reference'],
+                "codigo_pais" => "PE",
+                "direccion" => get_lang('None'),
+                "ciudad" => get_lang('None'),
+                "telefono" => 0,
+                "nombres" => $user['firstname'],
+                "apellidos" => $user['lastname'],
+                "correo_electronico" => $user['email'],
+                "token" => $tokenId
+            ));
+
+            if (is_object($cargo)) {
+
+                $saleIsCompleted = $plugin->completeServiceSale($serviceSale['id']);
+
+                if ($saleIsCompleted) {
+                    Display::addFlash(
+                        Display::return_message(
+                            sprintf($plugin->get_lang('SubscriptionToCourseXSuccessful'), $serviceSale['service']['name']),
+                            'success'
+                        )
+                    );
+                }
+            }
+
+            echo json_encode($cargo);
+
+        } catch(Exception $e) {
+
+            $cargo = json_decode($e->getMessage(), true);
+
+            $plugin->cancelServiceSale($serviceSale['id']);
+
+            unset($_SESSION['bc_sale_id']);
+
+            if (is_array($cargo)) {
+                Display::addFlash(
+                    Display::return_message(
+                        sprintf($plugin->get_lang('ErrorOccurred'), $cargo['codigo'], $cargo['mensaje']),
+                        'error',
+                        false
+                    )
+                );
+            } else {
+                Display::addFlash(
+                    Display::return_message(
+                        $plugin->get_lang('ErrorContactPlatformAdmin'),
+                        'error',
+                        false
+                    )
+                );
+            }
+        }
+
+        break;
 }
-exit;

@@ -11,6 +11,11 @@
                 <a href="session_panel.php" aria-controls="buy-sessions" role="tab">{{ 'MySessions'| get_lang }}</a>
             </li>
         {% endif %}
+        {% if services_are_included %}
+            <li id="buy-services-tab" class="" role="presentation">
+                <a href="service_panel.php" aria-controls="buy-services" role="tab">{{ 'MyServices'| get_plugin_lang('BuyCoursesPlugin') }}</a>
+            </li>
+        {% endif %}
         <li id="buy-courses-tab" class="" role="presentation">
             <a href="payout_panel.php" aria-controls="buy-courses" role="tab">{{ 'MyPayouts'| get_plugin_lang('BuyCoursesPlugin') }}</a>
         </li>

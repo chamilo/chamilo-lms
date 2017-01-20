@@ -2,7 +2,18 @@
 
 <link rel="stylesheet" type="text/css" href="../resources/css/style.css"/>
 
-{{ curency_form }}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">{{ 'GlobalConfig'|get_plugin_lang('BuyCoursesPlugin') }}</h3>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-12">
+                {{ global_config_form }}
+            </div>
+        </div>
+    </div>
+</div>
 
 <p class="alert alert-info">
     {{ 'PluginInstruction'|get_plugin_lang('BuyCoursesPlugin') }}

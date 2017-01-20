@@ -122,7 +122,7 @@ $(document).ready(function() {
             var tableEl = $('<table class="fc-list-table"><tbody/></table>');
             var tbodyEl = tableEl.find('tbody');
             var eventList = new Array;
-            for (dayIndex = segsByDay.length-1; dayIndex > 0; dayIndex--) {
+            for (dayIndex = 0; dayIndex < segsByDay.length; dayIndex++) {
                 daySegs = segsByDay[dayIndex];
                 if (daySegs) { // sparse array, so might be undefined
 
@@ -209,6 +209,7 @@ $(document).ready(function() {
 		},
         views: {
             CustomView: { // name of view
+                buttonText: '{{ 'AgendaList' | get_lang }}',
                 duration: { month: 1 },
                 defaults: {
                     'listDayAltFormat': 'dddd' // day-of-week is nice-to-have
@@ -421,10 +422,9 @@ $(document).ready(function() {
                 $('#color_calendar').removeClass('group_event');
                 $('#color_calendar').addClass(calEvent.type+'_event');
 
-                //It hides the CKEDITOR while clicking an existing Event
+                // It hides the CKEDITOR while clicking an existing Event
                 $('#cke_content').hide();
                 $('#start_date').html(startDateToString);
-
                 if (diffDays > 1) {
                     $('#end_date').html(' - ' + endDateMinusOne);
                 } else if (diffDays == 0) {
@@ -569,9 +569,9 @@ $(document).ready(function() {
                                                 calendar.fullCalendar('removeEvents',
                                                     calEvent
                                                 );
-                                                calendar.fullCalendar("refetchEvents");
-                                                calendar.fullCalendar("rerenderEvents");
-                                                $("#dialog-form").dialog( "close" );
+                                                calendar.fullCalendar('refetchEvents');
+                                                calendar.fullCalendar('rerenderEvents');
+                                                $("#dialog-form").dialog('close');
                                                 newDiv.dialog( "destroy" );
                                             }
                                         });
@@ -588,9 +588,9 @@ $(document).ready(function() {
 									calendar.fullCalendar('removeEvents',
 										calEvent
 									);
-									calendar.fullCalendar("refetchEvents");
-									calendar.fullCalendar("rerenderEvents");
-									$("#dialog-form").dialog( "close" );
+									calendar.fullCalendar('refetchEvents');
+									calendar.fullCalendar('rerenderEvents');
+									$("#dialog-form").dialog('close');
 								}
 							});
 						}
@@ -618,9 +618,16 @@ $(document).ready(function() {
                 $('#simple_start_date').html(startDateToString);
                 if (diffDays > 1) {
                     $('#simple_end_date').html(' - ' + endDateMinusOne);
+                } else if (diffDays == 0) {
+                    var start_date_value = start.format('ll');
+                    var startTime = start.format('LT');
+                    var endTime = end.format('LT');
+                    $('#simple_start_date').html('');
+                    $('#simple_end_date').html(start_date_value + " (" + startTime + " - " + endTime+") ");
                 } else {
                     $('#simple_end_date').html('');
                 }
+
                 if (calEvent.course_name) {
                     $("#calendar_course_info_simple").html(
                         '<div class="form-group"><label class="col-sm-3 control-label">{{ 'Course' | get_lang }}</label>' +

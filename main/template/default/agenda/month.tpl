@@ -144,7 +144,6 @@ $(document).ready(function() {
                     }
                 }
             }
-            console.log(eventList);
 
             this.el.empty().append(tableEl);
         },
@@ -153,7 +152,10 @@ $(document).ready(function() {
             var view = this.view;
             var mainFormat = 'LL';
             var altFormat = 'dddd';
-            var checkIfSame = event.end.format(mainFormat) == dayDate.format(mainFormat);
+            var checkIfSame = true;
+            if (event.end) {
+                checkIfSame = event.end.format(mainFormat) == dayDate.format(mainFormat);
+            }
 
             return '<tr class="fc-list-heading" data-date="' + dayDate.format('YYYY-MM-DD') + '">' +
                 '<td class="' + view.widgetHeaderClass + '" colspan="3">' +

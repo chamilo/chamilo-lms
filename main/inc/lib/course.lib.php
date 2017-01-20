@@ -5081,12 +5081,11 @@ class CourseManager
             }
 
             // Recover user categories
-
             $sql = 'SELECT * FROM ' . $course_user_table . '
                     WHERE c_id ="' . $courseId . '" AND status="1" AND relation_type = 0 ' . $cond;
             $result = Database::query($sql);
             if (Database::num_rows($result)) {
-                $teachersToDelete = Database::store_result($sql);
+                $teachersToDelete = Database::store_result($result, 'ASSOC');
                 foreach ($teachersToDelete as $data) {
                     $userId = $data['user_id'];
                     $teacherBackup[$userId][$course_code] = $data;

@@ -74,7 +74,7 @@ generate the missing files.
 
 On a Debian-based system, launch:
 ```
-sudo chown -R www-data:www-data app main/default_course_document/images main/lang  
+sudo chown -R www-data:www-data app main/default_course_document/images main/lang web
 ```
 
 ### Start the installer

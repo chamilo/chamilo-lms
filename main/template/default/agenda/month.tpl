@@ -209,7 +209,7 @@ $(document).ready(function() {
 		},
         views: {
             CustomView: { // name of view
-                buttonText: '{{ 'AgendaList' | get_lang }}',
+                buttonText: '{{ 'AgendaList' | get_lang | escape('js') }}',
                 duration: { month: 1 },
                 defaults: {
                     'listDayAltFormat': 'dddd' // day-of-week is nice-to-have

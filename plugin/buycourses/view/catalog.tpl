@@ -84,7 +84,11 @@
                                                 <p><em class="fa fa-user fa-fw"></em> {{ session.coach }}</p>
                                             {% endif %}
                                             <p><em class="fa fa-calendar fa-fw"></em> {{ session.dates.display }}</p>
-                                            <p class="lead text-right">{{ session.currency }} {{ session.price }}</p>
+                                            <p class="text-right">
+                                                <span class="label label-primary">
+                                                    {{ session.currency }} {{ session.price }}
+                                                </span>
+                                            </p>
                                             <ul class="list-unstyled">
                                                 {% for course in session.courses %}
                                                     <li>

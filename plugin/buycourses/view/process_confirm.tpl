@@ -29,21 +29,28 @@
             <div class="row">
                 <div class="col-sm-12 col-md-12 col-xs-12">
                     <p>
-                        <img alt="{{ session.name }}" class="img-responsive" src="{{ session.image ? session.image : 'session_default.png'|icon() }}">
+                        <img alt="{{ session.name }}" class="img-responsive" style="width: 100%;" src="{{ session.image ? session.image : 'session_default.png'|icon() }}">
                     </p>
-                    <p class="lead text-right">{{ session.currency }} {{ session.price }}</p>
                 </div>
-                <div class="col-sm-6 col-md-7">
-                    <h3 class="page-header">{{ session.name }}</h3>
-                    <p>{{ session.dates.display }}</p>
-                    <dl>
+                <div class="col-sm-12 col-md-12 col-xs-12">
+                    <h3>{{ session.name }}</h3>
+                    <p><em class="fa fa-calendar fa-fw"></em> {{ session.dates.display }}</p>
+                    <ul class="list-unstyled">
                         {% for course in session.courses %}
-                            <dt>{{ course.title }}</dt>
-                            {% for coach in course.coaches %}
-                                <dd><em class="fa fa-user fa-fw"></em> {{ coach }}</dd>
-                            {% endfor %}
+                            <li>
+                                <em class="fa fa-book fa-fw"></em> {{ course.title }}
+                                {% if course.coaches|length %}
+                                    <ul>
+                                        {% for coach in course.coaches %}
+                                            <li><em class="fa fa-user fa-fw"></em>{{ coach }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </li>
                         {% endfor %}
-                    </dl>
+                    </ul>
+                    <p id="n-price" class="lead text-right" style="color: white;"><span class="label label-primary">{{ session.currency == 'BRL' ? 'R$' : session.currency }} {{ session.price }}</span></p>
+                    <p id="s-price" class="lead text-right"></p>
                 </div>
             </div>
         {% elseif buying_service %}
@@ -143,7 +150,7 @@
             Culqi.codigoComercio = '{{ culqi_params.commerce_code }}';
             Culqi.configurar({
                 nombre: '{{ _s.institution }}',
-                orden: '{{ sale.reference }}',
+                orden: '{{ sale.reference ?  sale.reference : buying_service.reference }}',
                 moneda: '{{ currency.iso_code }}',
                 descripcion: '{{ title }}',
                 monto: price
@@ -157,9 +164,20 @@
                     if (Culqi.error) {
                         $("#message-alert").html('<div class="col-md-12 alert alert-danger">{{ 'ErrorOccurred'|get_plugin_lang('BuyCoursesPlugin')|format(Culqi.error.codigo, Culqi.error.mensaje) }}</div>')
                     } else if (Culqi.token) {
+
+                        {% if buying_service %}
+
+                            var url = '{{ _p.web_plugin }}buycourses/src/buycourses.ajax.php?a=culqi_cargo_service&token_id=' + Culqi.token.id + '&service_sale_id=' + {{ buying_service.id }};
+
+                        {% else %}
+
+                            var url = '{{ _p.web_plugin }}buycourses/src/buycourses.ajax.php?a=culqi_cargo&token_id=' + Culqi.token.id + '&sale_id=' + {{ sale.id }};
+
+                        {% endif %}
+
                         $.ajax({
                             type: 'POST',
-                            url: '{{ _p.web_plugin }}buycourses/src/buycourses.ajax.php?a=culqi_cargo&token_id=' + Culqi.token.id + '&sale_id=' + {{ sale.id }},
+                            url: url,
                             beforeSend: function() {
                                 $("#confirm").html('<em class="fa fa-spinner fa-pulse fa-fw" ></em> {{ 'Loading' | get_lang }}');
                                 $("#confirm").prop( "disabled", true );
@@ -170,6 +188,8 @@
                             }
                         })
                     }
+
+                    $(".culqi_checkout").unwatch('style');
                 });
 
                 return false;

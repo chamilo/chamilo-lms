@@ -19,11 +19,14 @@ if (empty($serviceSaleId)) {
 
 $serviceSale = $plugin->getServiceSale($serviceSaleId);
 
+$userInfo = api_get_user_info($serviceSale['buyer']['id']);
+
 if (empty($serviceSale)) {
     api_not_allowed(true);
 }
 
 $currency = $plugin->getCurrency($serviceSale['currency_id']);
+$terms = $plugin->getGlobalParameters();
 
 switch ($serviceSale['payment_type']) {
     case BuyCoursesPlugin::PAYMENT_TYPE_PAYPAL:
@@ -96,7 +99,6 @@ switch ($serviceSale['payment_type']) {
         }
 
         $transferAccounts = $plugin->getTransferAccounts();
-        $userInfo = api_get_user_info($serviceSale['buyer']['id']);
 
         $form = new FormValidator('success', 'POST', api_get_self(), null, null, FormValidator::LAYOUT_INLINE);
 
@@ -158,6 +160,7 @@ switch ($serviceSale['payment_type']) {
 
         $template = new Template();
 
+        $template->assign('terms', $terms['terms_and_conditions']);
         $template->assign('title', $serviceSale['service']['name']);
         $template->assign('price', $serviceSale['price']);
         $template->assign('currency', $serviceSale['currency_id']);
@@ -177,11 +180,51 @@ switch ($serviceSale['payment_type']) {
 
         // We need to include the main online script, acording to the Culqi documentation the JS needs to be loeaded
         // directly from the main url "https://integ-pago.culqi.com" because a local copy of this JS is not supported
-        $htmlHeadXtra[] = '<script src="https://integ-pago.culqi.com/js/v1"></script>';
+        $htmlHeadXtra[] = '<script src="//integ-pago.culqi.com/js/v1"></script>';
+
+        $form = new FormValidator('success', 'POST', api_get_self(), null, null, FormValidator::LAYOUT_INLINE);
+
+        if ($form->validate()) {
+
+            $formValues = $form->getSubmitValues();
+
+            if (isset($formValues['cancel'])) {
+                $plugin->cancelServiceSale($serviceSale['id']);
+
+                unset($_SESSION['bc_service_sale_id']);
+
+                Display::addFlash(
+                    Display::return_message(
+                        $plugin->get_lang('OrderCanceled'),
+                        'warning',
+                        false
+                    )
+                );
+
+                header('Location: ' . api_get_path(WEB_PLUGIN_PATH) . 'buycourses/index.php');
+                exit;
+            }
+        }
+        $form->addButton('confirm', $plugin->get_lang('ConfirmOrder'), 'check', 'success', 'default', null, ['id' => 'confirm']);
+        $form->addButton('cancel', $plugin->get_lang('CancelOrder'), 'times', 'danger', 'default', null, ['id' => 'cancel']);
 
         $template = new Template();
 
+        $template->assign('terms', $terms['terms_and_conditions']);
+        $template->assign('title', $serviceSale['service']['name']);
+        $template->assign('price', floatval($serviceSale['price']));
+        $template->assign('currency', $plugin->getSelectedCurrency());
+        $template->assign('buying_service', $serviceSale);
+        $template->assign('user', $userInfo);
+        $template->assign('service', $serviceSale['service']);
+        $template->assign('form', $form->returnForm());
+        $template->assign('is_culqi_payment', true);
+        $template->assign('culqi_params', $culqiParams = $plugin->getCulqiParams());
 
+        $content = $template->fetch('buycourses/view/process_confirm.tpl');
+
+        $template->assign('content', $content);
+        $template->display_one_col_template();
         break;
 }
 

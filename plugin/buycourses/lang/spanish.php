@@ -157,3 +157,4 @@ $strings['NoTermsAndConditionsProvided'] = "Terminos y condiciones no establecid
 $strings['GlobalConfig'] = "Configuración global:";
 $strings['WriteHereTheTermsAndConditionsOfYourECommerce'] = "Escriba aquí los terminos y condiciones para su tienda virtual";
 $strings['PleaseSelectThePaymentMethodBeforeConfirmYourOrder'] = "Porfavor seleccione el método de pago de su preferencia antes de confirmar su orden";
+$strings['MyServices'] = "Mis servicios";

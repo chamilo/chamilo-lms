@@ -1041,6 +1041,19 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
+     * Get the list of service types
+     * @return array
+     */
+    public function getServiceTypes()
+    {
+        return [
+            self::SERVICE_TYPE_USER => get_lang('User'),
+            self::SERVICE_TYPE_COURSE => get_lang('Course'),
+            self::SERVICE_TYPE_SESSION => get_lang('Session')
+        ];
+    }
+
+    /**
      * Search filtered sessions by name, and range of price
      * @param string $name Optional. The name filter
      * @param int $min Optional. The minimun price filter
@@ -1928,6 +1941,7 @@ class BuyCoursesPlugin extends Plugin
             $servicesSale['service']['name'] = $return['name'];
             $servicesSale['service']['description'] = $return['description'];
             $servicesSale['service']['price'] = $return['service_price'];
+            $servicesSale['service']['currency'] = $return['currency'];
             $servicesSale['service']['duration_days'] = $return['duration_days'];
             $servicesSale['service']['applies_to'] = $return['applies_to'];
             $servicesSale['service']['owner']['id'] = $return['owner_id'];

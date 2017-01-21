@@ -2222,4 +2222,27 @@ class BuyCoursesPlugin extends Plugin
         );
     }
 
+    /**
+     * Get the path
+     * @param string $var path variable
+     * @return string path
+     */
+    public function getPath($var)
+    {
+        $pluginPath = api_get_path(WEB_PLUGIN_PATH) . 'buycourses/';
+        $paths = [
+            'SERVICE_IMAGES' => $pluginPath . 'uploads/services/images/',
+            'SRC' => $pluginPath . 'src/',
+            'VIEW' => $pluginPath . 'view/',
+            'UPLOADS' => $pluginPath . 'uploads/',
+            'LANGUAGES' => $pluginPath . 'lang/',
+            'RESOURCES' => $pluginPath . 'resources/',
+            'RESOURCES_IMG' => $pluginPath . 'resources/img/',
+            'RESOURCES_CSS' => $pluginPath . 'resources/css/',
+            'RESOURCES_JS' => $pluginPath . 'resources/js/',
+        ];
+
+        return $paths[$var];
+    }
+
 }

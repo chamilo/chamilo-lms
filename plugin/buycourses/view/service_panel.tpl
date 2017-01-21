@@ -62,19 +62,14 @@
                 url: '{{ _p.web_plugin }}buycourses/src/buycourses.ajax.php?a='+action,
                 type: 'POST',
                 beforeSend: function() {
-                    if (action == 'renewable_info') {
-                        $('a[name=r_'+id+']').html('<em class="fa fa-spinner fa-pulse"></em> {{ 'Loading' | get_lang }}');
-                    } else if (action == 'service_sale_info') {
+                    if (action == 'service_sale_info') {
                         $('a[name=s_'+id+']').html('<em class="fa fa-spinner fa-pulse"></em> {{ 'Loading' | get_lang }}');
                     }
                 },
                 success: function(response) {
-                    $('a[name=r_'+id+']').html('{{ 'Info' | get_lang }}');
                     $('a[name=s_'+id+']').html('{{ 'Info' | get_lang }}');
                     var title = "";
-                    if (action == "renewable_info") {
-                        title = "{{ 'RecurringPaymentProfilePaypalInformation' | get_plugin_lang('BuyCoursesPlugin') }}";
-                    } else if (action == 'service_sale_info') {
+                    if (action == 'service_sale_info') {
                         title = "{{ 'ServiceSaleInfo' | get_plugin_lang('BuyCoursesPlugin') }}";
                     }
                     bootbox.dialog({

@@ -980,23 +980,25 @@ class ImportCsv
                     continue;
                 }
 
-                $start = $event['start'];
+                // Taking first element of course-session event
+                $alreadyAdded = false;
+                if (isset($eventSentMailList[$courseInfo['real_id']]) && isset($eventSentMailList[$courseInfo['real_id']][$sessionId])) {
+                    $firstDate = $eventSentMailList[$courseInfo['real_id']][$event['session_id']];
+                    $alreadyAdded = true;
+                } else {
+                    $eventSentMailList[$courseInfo['real_id']][$sessionId] = $event['start'];
+                    $firstDate = $event['start'];
+                }
+
                 // Working days (Mon-Fri)see BT#12156#note-16
                 $days = 5;
-                $startDatePlusDays = api_strtotime($start ." +$days weekdays");
+                $startDatePlusDays = api_strtotime("$days weekdays");
 
                 // Send
-                if ($startDatePlusDays > time() &&
-                    api_strtotime($start) < time()
-                ) {
+                if ($startDatePlusDays > api_strtotime($firstDate)) {
                     $sendMail = true;
                 } else {
                     $sendMail = false;
-                }
-
-                $alreadyAdded = false;
-                if (isset($eventSentMailList[$courseInfo['real_id']]) && isset($eventSentMailList[$courseInfo['real_id']][$sessionId])) {
-                    $alreadyAdded = true;
                 }
 
                 // Send announcement to users
@@ -1066,13 +1068,12 @@ class ImportCsv
                         $this->logger->addInfo(
                             "Announcement added: ".(int) ($announcementId)
                         );
-                        /*AnnouncementManager::sendEmail(
+                        AnnouncementManager::sendEmail(
                             $courseInfo,
                             $event['session_id'],
                             $announcementId,
                             false
-                        );*/
-                        $eventSentMailList[$courseInfo['real_id']][$event['session_id']] = true;
+                        );
                     }
                 }
 

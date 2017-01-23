@@ -1053,7 +1053,7 @@ class ImportCsv
                         $event['session_id'],
                         $subject,
                         $emailBody,
-                        ['everybody']
+                        ['everyone']
                     );
 
                     if ($announcementId) {

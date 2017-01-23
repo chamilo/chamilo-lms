@@ -884,10 +884,6 @@ class ImportCsv
                 return 0;
             }
 
-            $this->logger->addInfo(
-                "Ready to insert events"
-            );
-
             $agenda = new Agenda('course');
 
             $extraFieldValue = new ExtraFieldValue('calendar_event');
@@ -906,6 +902,10 @@ class ImportCsv
 
                 return 0;
             }
+
+            $this->logger->addInfo(
+                "Ready to insert events"
+            );
 
             $batchSize = $this->batchSize;
             $counter = 1;
@@ -994,6 +994,10 @@ class ImportCsv
                 if (isset($eventSentMailList[$courseInfo['real_id']]) && isset($eventSentMailList[$courseInfo['real_id']][$sessionId])) {
                     $notificationSent = true;
                 }
+
+                $this->logger->addInfo(
+                    "Send Mail conditions: ".(int) ($notificationSent && $sendMail)
+                );
 
                 // Send announcement to users
                 if ($sendMail == false && $notificationSent) {

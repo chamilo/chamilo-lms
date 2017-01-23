@@ -373,7 +373,7 @@ class ImportCsv
      */
     private function importTeachersStatic($file)
     {
-        $this->importTeachers($file, false);
+        $this->importTeachers($file, true);
     }
 
     /**
@@ -525,7 +525,7 @@ class ImportCsv
      */
     private function importStudentsStatic($file)
     {
-        $this->importStudents($file, false);
+        $this->importStudents($file, true);
     }
 
     /**
@@ -751,7 +751,7 @@ class ImportCsv
      */
     private function importCoursesStatic($file, $moveFile, &$teacherBackup = array(), &$groupBackup = array())
     {
-        $this->importCourses($file, false, $teacherBackup, $groupBackup);
+        $this->importCourses($file, true, $teacherBackup, $groupBackup);
     }
 
     /**
@@ -1299,7 +1299,7 @@ class ImportCsv
      * Parse filename: encora_subsessionsextid-static_31082016.csv
      * @param string $file
      */
-    private function importSubscribeUserToCourseSessionExtStatic($file)
+    private function importSubscribeUserToCourseSessionExtStatic($file, $moveFile = true)
     {
         $data = Import::csv_reader($file);
         if (!empty($data)) {
@@ -1378,12 +1378,17 @@ class ImportCsv
 
             }
         }
+
+        if ($moveFile) {
+            $this->moveFile($file);
+        }
     }
 
     /**
-     * @param string $file
+     * @param $file
+     * @param bool $moveFile
      */
-    private function importUnsubSessionsExtIdStatic($file)
+    private function importUnsubSessionsExtIdStatic($file, $moveFile = true)
     {
         $data = Import::csv_reader($file);
 
@@ -1436,13 +1441,16 @@ class ImportCsv
             }
         }
 
+        if ($moveFile) {
+            $this->moveFile($file);
+        }
     }
 
     /**
      *
      * @param string $file
      */
-    private function importSessionsExtIdStatic($file)
+    private function importSessionsExtIdStatic($file, $moveFile = true)
     {
         $data = Import::csv_reader($file);
 
@@ -1505,13 +1513,18 @@ class ImportCsv
                 );
             }
         }
+
+        if ($moveFile) {
+            $this->moveFile($file);
+        }
     }
 
     /**
      * Updates the session synchronize with the csv file.
+     * @param bool $moveFile
      * @param string $file
      */
-    private function importSessionsStatic($file)
+    private function importSessionsStatic($file, $moveFile = true)
     {
         $content = file($file);
         $sessions = array();
@@ -1533,10 +1546,8 @@ class ImportCsv
                         $tag_name
                     );
                 }
-                if (!in_array('SessionName', $tag_names) || !in_array(
-                        'DateStart',
-                        $tag_names
-                    ) || !in_array('DateEnd', $tag_names)
+                if (!in_array('SessionName', $tag_names) ||
+                    !in_array('DateStart',$tag_names) || !in_array('DateEnd', $tag_names)
                 ) {
                     $error_message = get_lang('NoNeededData');
                     break;
@@ -1769,6 +1780,10 @@ class ImportCsv
         } else {
             $this->logger->addInfo($error_message);
         }
+
+        if ($moveFile) {
+            $this->moveFile($file);
+        }
     }
 
     /**
@@ -1822,8 +1837,9 @@ class ImportCsv
 
     /**
      * @param string $file
+     * @param bool $moveFile
      */
-    private function importSubscribeStatic($file)
+    private function importSubscribeStatic($file, $moveFile = true)
     {
         $data = Import::csv_reader($file);
 
@@ -1879,6 +1895,10 @@ class ImportCsv
                 );
             }
         }
+
+        if ($moveFile) {
+            $this->moveFile($file);
+        }
     }
 
     /**
@@ -1892,7 +1912,6 @@ class ImportCsv
         if (!empty($data)) {
             $this->logger->addInfo(count($data) . " records found.");
             foreach ($data as $row) {
-
                 $chamiloUserName = $row['UserName'];
                 $chamiloCourseCode = $row['CourseCode'];
                 $status = $row['Status'];
@@ -1927,10 +1946,17 @@ class ImportCsv
                 );
             }
         }
+
+        if ($moveFile) {
+            $this->moveFile($file);
+        }
     }
 
     /**
      * @param string $file
+     * @param bool $moveFile
+     * @param array $teacherBackup
+     * @param array $groupBackup
      */
     private function importUnsubscribeStatic(
         $file,
@@ -2009,6 +2035,10 @@ class ImportCsv
                     "User '$chamiloUserName' was removed from session: #$chamiloSessionId, Course: ".$courseInfo['code']
                 );
             }
+        }
+
+        if ($moveFile) {
+            $this->moveFile($file);
         }
     }
 

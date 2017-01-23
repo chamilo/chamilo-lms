@@ -11,7 +11,7 @@
           "description":    "Chamilo Mail Notification",
           "potentialAction": {
             "@type": "ViewAction",
-            "target":   "{{ link }}"
+            "target": "{{ link }}"
           }
         }
     </script>

@@ -2992,15 +2992,16 @@ function api_is_allowed_to_session_edit($tutor = false, $coach = false)
         // If I'm a teacher, I will return true in order to not affect the normal behaviour of Chamilo tools.
         return true;
     } else {
-        if (api_get_session_id() == 0) {
+        $sessionId = api_get_session_id();
+
+        if ($sessionId == 0) {
             // I'm not in a session so i will return true to not affect the normal behaviour of Chamilo tools.
             return true;
         } else {
             // I'm in a session and I'm a student
-            $session_id = api_get_session_id();
 
             // Get the session visibility
-            $session_visibility = api_get_session_visibility($session_id);
+            $session_visibility = api_get_session_visibility($sessionId);
             // if 5 the session is still available
 
             //@todo We could load the session_rel_course_rel_user permission to increase the level of detail.
@@ -7770,7 +7771,10 @@ function api_mail_html(
     if (isset($additionalParameters['link'])) {
         $mailView->assign('link', $additionalParameters['link']);
     }
-
+    $mailView->assign(
+        'mail_header_style',
+        api_get_configuration_value('mail_header_style')
+    );
     $layout = $mailView->get_template('mail/mail.tpl');
     $mail->Body = $mailView->fetch($layout);
 
@@ -7994,5 +7998,56 @@ function api_remove_uploaded_file($type, $file)
     $path = api_get_path(SYS_UPLOAD_PATH).$type.'/'.$file;
     if (file_exists($path)) {
         unlink($path);
+    }
+}
+
+/**
+ * Converts values to float value
+ *
+ * 3.141516 => 3.141516
+ * 3,141516 => 3.141516
+ * @todo WIP
+ *
+ * @param $number
+ * @return false|float|int|mixed
+ */
+function api_parse_float_val($number)
+{
+    if (INTL_INSTALLED) {
+        $iso = api_get_language_isocode();
+        $iso = 'fr';
+        $formatter = new NumberFormatter($iso, NumberFormatter::DECIMAL);
+
+        return $formatter->parse($number);
+    } else {
+        return floatval($number);
+    }
+}
+
+/**
+ * Converts float values
+ * Example if $decimals = 2
+ *
+ * 3.141516 => 3.14
+ * 3,141516 => 3,14
+ *
+ * @todo WIP
+ *
+ * @param string $number number in iso code
+ * @param int $decimals
+ * @return bool|string
+ */
+function api_number_format($number, $decimals = 0)
+{
+    if (INTL_INSTALLED) {
+        $iso = api_get_language_isocode();
+        $iso = 'fr';
+        $formatter = new NumberFormatter($iso, NumberFormatter::DECIMAL);
+        $formatter->setAttribute(NumberFormatter::MAX_FRACTION_DIGITS, $decimals);
+        $formatter->setAttribute(NumberFormatter::GROUPING_SEPARATOR_SYMBOL, '');
+
+        return $formatter->format($number);
+    } else {
+        return number_format($number, $decimals);
     }
 }

@@ -265,6 +265,8 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 //$_configuration['send_score_in_exam_notification_mail_to_manager'] = false;
 // Show blocked LPs by prerequisite to students
 //$_configuration['show_prerequisite_as_blocked'] = false;
+// Mail header extra HTML attributes
+//$_configuration['mail_header_style'] = '';
 
 
 

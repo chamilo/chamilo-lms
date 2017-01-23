@@ -5045,6 +5045,8 @@ class CourseManager
      * @param bool $deleteTeachersNotInList
      * @param bool $editTeacherInSessions
      * @param bool $deleteSessionTeacherNotInList
+     * @param array $teacherBackup
+     *
      * @return false|null
      */
     public static function updateTeachers(

@@ -911,6 +911,7 @@ class ImportCsv
             $counter = 1;
             $em = Database::getManager();
 
+            $eventSentMailList = [];
             foreach ($eventsToCreate as $event) {
                 $update = false;
                 $item = null;
@@ -974,6 +975,86 @@ class ImportCsv
                         "No sender found: #".$event['sender_id']." Skipping ..."
                     );
                     continue;
+                }
+
+                $start = $event['start'];
+                // Tolerance days see BT#12156#note-16
+                $days = 5;
+
+                // Send
+                if (api_strtotime($start) + $days * 24*60*60 > time() &&
+                    api_strtotime($start) < time()
+                ) {
+                    $sendMail = true;
+                } else {
+                    $sendMail = false;
+                }
+
+                $notificationSent = false;
+                if (isset($eventSentMailList[$courseInfo['real_id']]) && isset($eventSentMailList[$courseInfo['real_id']][$sessionId])) {
+                    $notificationSent = true;
+                }
+
+                // Send announcement to users
+                if ($sendMail == false && $notificationSent) {
+                    $start = api_get_local_time(
+                        $event['start_date'],
+                        null,
+                        null,
+                        true
+                    );
+                    $end = api_get_local_time(
+                        $event['end_date'],
+                        null,
+                        null,
+                        true
+                    );
+
+                    if (!empty($end) &&
+                        api_format_date($start, DATE_FORMAT_LONG) ==
+                        api_format_date($end, DATE_FORMAT_LONG)
+                    ) {
+                        $date = api_format_date($start, DATE_FORMAT_LONG).' ('.
+                            api_format_date($start, TIME_NO_SEC_FORMAT).' '.
+                            api_format_date($end, TIME_NO_SEC_FORMAT).')';
+
+                    } else {
+                        $date = api_format_date($start,DATE_TIME_FORMAT_LONG_24H).' - '.
+                                api_format_date($end, DATE_TIME_FORMAT_LONG_24H);
+                    }
+
+                    $sessionName = '';
+                    if (!empty($event['session_id'])) {
+                        $sessionName = ' ('.api_get_session_name($event['session_id']).')';
+                    }
+
+                    $courseTitle = $courseInfo['title'].$sessionName;
+                    $emailBody = sprintf(
+                        get_lang('YouHaveBeenSubscribedToCourseXTheStartDateXAndCommentX'),
+                        $courseTitle,
+                        $date,
+                        $event['comment']
+                    );
+
+                    $subject = get_lang('Reminder');
+
+                    $announcementId = AnnouncementManager::add_announcement(
+                        $courseInfo,
+                        $event['session_id'],
+                        $subject,
+                        $emailBody,
+                        ['everybody']
+                    );
+
+                    if ($announcementId) {
+                        /*AnnouncementManager::sendEmail(
+                            $courseInfo,
+                            $event['session_id'],
+                            $announcementId,
+                            false
+                        );*/
+                        $eventSentMailList[$courseInfo['real_id']][$event['session_id']] = true;
+                    }
                 }
 
                 $content = '';
@@ -1250,7 +1331,6 @@ class ImportCsv
                         break;
                     case 'drh':
                         $removeAllSessionsFromUser = true;
-
                         if (in_array($userId, $userIdList)) {
                             $removeAllSessionsFromUser = false;
                         } else {
@@ -1872,9 +1952,7 @@ class ImportCsv
                 $userCourseData = Database::fetch_array($result, 'ASSOC');
                 $teacherBackup[$userId][$courseInfo['code']] = $userCourseData;
 
-                $sql = "SELECT * FROM ".Database::get_course_table(
-                        TABLE_GROUP_USER
-                    )."
+                $sql = "SELECT * FROM ".Database::get_course_table(TABLE_GROUP_USER)."
                         WHERE
                             user_id = ".$userId." AND
                             c_id = '".$courseInfo['real_id']."'

@@ -505,7 +505,9 @@ switch ($action) {
 
                     /*		MAIL FUNCTION	*/
                     if (isset($_POST['email_ann']) && empty($_POST['onlyThoseMails'])) {
-                        AnnouncementManager::send_email(
+                        AnnouncementManager::sendEmail(
+                            api_get_course_info(),
+                            api_get_session_id(),
                             $id,
                             $sendToUsersInSession,
                             isset($data['send_to_hrm_users'])
@@ -529,6 +531,8 @@ switch ($action) {
 
                     if (empty($group_id)) {
                         $insert_id = AnnouncementManager::add_announcement(
+                            api_get_course_info(),
+                            api_get_session_id(),
                             $data['title'],
                             $data['content'],
                             $data['users'],
@@ -558,7 +562,9 @@ switch ($action) {
 
                     /* MAIL FUNCTION */
                     if (isset($data['email_ann']) && $data['email_ann']) {
-                        AnnouncementManager::send_email(
+                        AnnouncementManager::sendEmail(
+                            api_get_course_info(),
+                            api_get_session_id(),
                             $insert_id,
                             $sendToUsersInSession
                         );

@@ -376,12 +376,18 @@ class AnnouncementManager
     }
 
     /**
+     * @param array $courseInfo
+     *
      * @return int
      */
-    public static function get_last_announcement_order()
+    public static function get_last_announcement_order($courseInfo)
     {
+        if (empty($courseInfo)) {
+            return 0;
+        }
         $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
-        $course_id = api_get_course_int_id();
+
+        $course_id = $courseInfo['real_id'];
         $sql = "SELECT MAX(display_order)
                 FROM $tbl_announcement
                 WHERE c_id = $course_id ";
@@ -398,6 +404,8 @@ class AnnouncementManager
 
     /**
      * Store an announcement in the database (including its attached file if any)
+     * @param array $courseInfo
+     * @param int $sessionId
      * @param string $emailTitle   Announcement title (pure text)
      * @param string $newContent   Content of the announcement (can be HTML)
      * @param array  $sentTo      Array of users and groups to send the announcement to
@@ -408,6 +416,8 @@ class AnnouncementManager
      * @return int      false on failure, ID of the announcement on success
      */
     public static function add_announcement(
+        $courseInfo,
+        $sessionId,
         $emailTitle,
         $newContent,
         $sentTo,
@@ -416,16 +426,20 @@ class AnnouncementManager
         $end_date = null,
         $sendToUsersInSession = false
     ) {
-        $_course = api_get_course_info();
-        $course_id = api_get_course_int_id();
+        if (empty($courseInfo)) {
+            return false;
+        }
 
+        $course_id = $courseInfo['real_id'];
         $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
+
+        $authorId = api_get_user_id();
 
         if (empty($end_date)) {
             $end_date = api_get_utc_datetime();
         }
 
-        $order = self::get_last_announcement_order();
+        $order = self::get_last_announcement_order($courseInfo);
 
         // store in the table announcement
         $params = array(
@@ -434,7 +448,7 @@ class AnnouncementManager
             'title' => $emailTitle,
             'end_date' => $end_date,
             'display_order' => $order,
-            'session_id' => api_get_session_id()
+            'session_id' => (int) $sessionId
         );
 
         $last_id = Database::insert($tbl_announcement, $params);
@@ -454,21 +468,18 @@ class AnnouncementManager
             }
 
             // store in item_property (first the groups, then the users
-            if (empty($sentTo) || !empty($sentTo) &&
-                isset($sentTo[0]) && $sentTo[0] == 'everyone'
-            ) {
+            if (empty($sentTo) || (!empty($sentTo) && isset($sentTo[0]) && $sentTo[0] == 'everyone')) {
                 // The message is sent to EVERYONE, so we set the group to 0
                 api_item_property_update(
-                    $_course,
+                    $courseInfo,
                     TOOL_ANNOUNCEMENT,
                     $last_id,
                     'AnnouncementAdded',
-                    api_get_user_id(),
+                    $authorId,
                     '0'
                 );
             } else {
                 $send_to = CourseManager::separateUsersGroups($sentTo);
-
                 $batchSize = 20;
                 $em = Database::getManager();
                 // Storing the selected groups
@@ -476,11 +487,11 @@ class AnnouncementManager
                     $counter = 1;
                     foreach ($send_to['groups'] as $group) {
                         api_item_property_update(
-                            $_course,
+                            $courseInfo,
                             TOOL_ANNOUNCEMENT,
                             $last_id,
-                            "AnnouncementAdded",
-                            api_get_user_id(),
+                            'AnnouncementAdded',
+                            $authorId,
                             $group
                         );
 
@@ -497,11 +508,11 @@ class AnnouncementManager
                     $counter = 1;
                     foreach ($send_to['users'] as $user) {
                         api_item_property_update(
-                            $_course,
+                            $courseInfo,
                             TOOL_ANNOUNCEMENT,
                             $last_id,
-                            "AnnouncementAdded",
-                            api_get_user_id(),
+                            'AnnouncementAdded',
+                            $authorId,
                             '',
                             $user
                         );
@@ -547,7 +558,7 @@ class AnnouncementManager
 
         // Database definitions
         $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
-        $order = self::get_last_announcement_order();
+        $order = self::get_last_announcement_order($_course);
 
         $now = api_get_utc_datetime();
         $course_id = api_get_course_int_id();
@@ -1243,16 +1254,20 @@ class AnnouncementManager
     }
 
     /**
+     * @param array $courseInfo
+     * @param int $sessionId
      * @param int $id
      * @param bool $sendToUsersInSession
      * @param bool $sendToDrhUsers
      */
-    public static function send_email(
+    public static function sendEmail(
+        $courseInfo,
+        $sessionId,
         $id,
         $sendToUsersInSession = false,
         $sendToDrhUsers = false
     ) {
-        $email = AnnouncementEmail::create(null, $id);
+        $email = AnnouncementEmail::create($courseInfo, $sessionId, $id);
         $email->send($sendToUsersInSession, $sendToDrhUsers);
     }
 

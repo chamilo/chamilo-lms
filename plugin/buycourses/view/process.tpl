@@ -4,43 +4,48 @@
         <legend></legend>
         <div class="row">
             {% if buying_course %}
-                <div class="col-sm-6 col-md-5">
-                    <p>
-                        <img alt="{{ course.title }}" class="img-responsive" src="{{ course.course_img ? course.course_img : 'session_default.png'|icon() }}">
-                    </p>
-                    <p class="lead text-right">{{ course.currency }} {{ course.price }}</p>
+                <div class="col-sm-12 col-md-12 col-xs-12">
+                    <a class="ajax" data-title="{{ course.title }}" href="{{ _p.web_ajax ~ 'course_home.ajax.php?' ~ {'a': 'show_course_information', 'code': course.code}|url_encode() }}">
+                        <img alt="{{ course.title }}" class="img-responsive" style="width: 100%;" src="{{ course.course_img ? course.course_img : 'session_default.png'|icon() }}">
+                    </a>
                 </div>
-                <div class="col-sm-6 col-md-7">
-                    <h3 class="page-header">{{ course.title }}</h3>
-                    <ul class="items-teacher list-unstyled">
+                <div class="col-sm-12 col-md-12 col-xs-12">
+                    <h3>
+                        <a class="ajax" data-title="{{ course.title }}" href="{{ _p.web_ajax ~ 'course_home.ajax.php?' ~ {'a': 'show_course_information', 'code': course.code}|url_encode() }}">{{ course.title }}</a>
+                    </h3>
+                    <ul class="list-unstyled">
                         {% for teacher in course.teachers %}
                             <li><em class="fa fa-user"></em> {{ teacher }}</li>
                         {% endfor %}
                     </ul>
-                    <p>
-                        <a class="ajax btn btn-primary btn-sm" data-title="{{ course.title }}" href="{{ _p.web_ajax ~ 'course_home.ajax.php?' ~ {'a': 'show_course_information', 'code': course.code}|url_encode() }}">
-                            {{'Description'|get_lang }}
-                        </a>
-                    </p>
+                    <p id="n-price" class="lead text-right" style="color: white;"><span class="label label-primary">{{ course.currency == 'BRL' ? 'R$' : course.currency }} {{ course.price }}</span></p>
+                    <p id="s-price" class="lead text-right"></p>
                 </div>
             {% elseif buying_session %}
-                <div class="col-sm-6 col-md-5">
+                <div class="col-sm-12 col-md-12 col-xs-12">
                     <p>
-                        <img alt="{{ session.name }}" class="img-responsive" src="{{ session.image ? session.image : 'session_default.png'|icon() }}">
+                        <img alt="{{ session.name }}" class="img-responsive" style="width: 100%;" src="{{ session.image ? session.image : 'session_default.png'|icon() }}">
                     </p>
-                    <p class="lead text-right">{{ session.currency }} {{ session.price }}</p>
                 </div>
-                <div class="col-sm-6 col-md-7">
-                    <h3 class="page-header">{{ session.name }}</h3>
-                    <p>{{ session.dates.display }}</p>
-                    <dl>
+                <div class="col-sm-12 col-md-12 col-xs-12">
+                    <h3>{{ session.name }}</h3>
+                    <p><em class="fa fa-calendar fa-fw"></em> {{ session.dates.display }}</p>
+                    <ul class="list-unstyled">
                         {% for course in session.courses %}
-                            <dt>{{ course.title }}</dt>
-                            {% for coach in course.coaches %}
-                                <dd><em class="fa fa-user fa-fw"></em> {{ coach }}</dd>
-                            {% endfor %}
+                            <li>
+                                <em class="fa fa-book fa-fw"></em> {{ course.title }}
+                                {% if course.coaches|length %}
+                                    <ul>
+                                        {% for coach in course.coaches %}
+                                            <li><em class="fa fa-user fa-fw"></em>{{ coach }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </li>
                         {% endfor %}
-                    </dl>
+                    </ul>
+                    <p id="n-price" class="lead text-right" style="color: white;"><span class="label label-primary">{{ session.currency == 'BRL' ? 'R$' : session.currency }} {{ session.price }}</span></p>
+                    <p id="s-price" class="lead text-right"></p>
                 </div>
             {% elseif buying_service %}
                 <div class="col-sm-12 col-md-12 col-xs-12">
@@ -69,16 +74,6 @@
                     <p id="n-price" class="lead text-right" style="color: white;"><span class="label label-primary">{{ service.currency == 'BRL' ? 'R$' : service.currency }} {{ service.price }}</span></p>
                     <p id="s-price" class="lead text-right"></p>
                 </div>
-                <script>
-                    $(document).ready(function() {
-
-                        $("label").removeClass('control-label');
-                        $('.form_required').remove();
-                        $("small").remove();
-                        $("label[for=submit]").remove();
-
-                    });
-                </script>
             {% endif %}
         </div>
     </div>
@@ -89,3 +84,13 @@
         {{ form }}
     </div>
 </div>
+<script>
+    $(document).ready(function() {
+
+        $("label").removeClass('control-label');
+        $('.form_required').remove();
+        $("small").remove();
+        $("label[for=submit]").remove();
+
+    });
+</script>

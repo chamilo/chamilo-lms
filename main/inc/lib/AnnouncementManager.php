@@ -413,6 +413,8 @@ class AnnouncementManager
      * @param string  $file_comment  Comment describing the attachment
      * @param string $end_date
      * @param bool $sendToUsersInSession
+     * @param int $authorId
+     * 
      * @return int      false on failure, ID of the announcement on success
      */
     public static function add_announcement(
@@ -424,7 +426,8 @@ class AnnouncementManager
         $file = array(),
         $file_comment = null,
         $end_date = null,
-        $sendToUsersInSession = false
+        $sendToUsersInSession = false,
+        $authorId = 0
     ) {
         if (empty($courseInfo)) {
             return false;
@@ -433,7 +436,7 @@ class AnnouncementManager
         $course_id = $courseInfo['real_id'];
         $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
 
-        $authorId = api_get_user_id();
+        $authorId = empty($authorId) ? api_get_user_id() : $authorId;
 
         if (empty($end_date)) {
             $end_date = api_get_utc_datetime();

@@ -1053,7 +1053,12 @@ class ImportCsv
                         $event['session_id'],
                         $subject,
                         $emailBody,
-                        ['everyone']
+                        ['everyone'],
+                        [],
+                        null,
+                        null,
+                        false,
+                        $this->defaultAdminId
                     );
 
                     if ($announcementId) {

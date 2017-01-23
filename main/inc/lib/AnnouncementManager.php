@@ -476,7 +476,11 @@ class AnnouncementManager
                     $last_id,
                     'AnnouncementAdded',
                     $authorId,
-                    '0'
+                    '0',
+                    null,
+                    null,
+                    null,
+                    $sessionId
                 );
             } else {
                 $send_to = CourseManager::separateUsersGroups($sentTo);

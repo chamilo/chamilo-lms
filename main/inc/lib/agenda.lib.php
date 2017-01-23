@@ -55,7 +55,7 @@ class Agenda
                 $sessionId = $sessionId ?: api_get_session_id();
                 $sessionInfo = api_get_session_info($sessionId);
                 $this->setSessionId($sessionId);
-                $this->setSessioInfo($sessionInfo);
+                $this->setSessionInfo($sessionInfo);
 
                 // Setting the course object if we are in a course
                 $courseInfo = api_get_course_info_by_id($courseId);
@@ -74,10 +74,7 @@ class Agenda
                 }
 
                 // Check
-                if (api_get_course_setting(
-                        'allow_user_edit_agenda'
-                    ) && api_is_allowed_in_course()
-                ) {
+                if (api_get_course_setting('allow_user_edit_agenda') && api_is_allowed_in_course()) {
                     $isAllowToEdit = true;
                 }
 

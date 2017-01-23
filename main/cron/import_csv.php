@@ -884,8 +884,6 @@ class ImportCsv
                 return 0;
             }
 
-            $agenda = new Agenda('course');
-
             $extraFieldValue = new ExtraFieldValue('calendar_event');
             $extraFieldName = $this->extraFieldIdNameList['calendar_event'];
             $externalEventId = null;
@@ -910,7 +908,6 @@ class ImportCsv
             $batchSize = $this->batchSize;
             $counter = 1;
             $em = Database::getManager();
-
             $eventSentMailList = [];
             foreach ($eventsToCreate as $event) {
                 $update = false;
@@ -951,6 +948,12 @@ class ImportCsv
                 }
 
                 $courseInfo = api_get_course_info_by_id($event['course_id']);
+                $agenda = new Agenda(
+                    'course',
+                    $event['sender_id'],
+                    $courseInfo['real_id'],
+                    $event['session_id']
+                );
                 $agenda->set_course($courseInfo);
                 $agenda->setSessionId($event['session_id']);
                 $agenda->setSenderId($event['sender_id']);

@@ -982,17 +982,22 @@ class ImportCsv
 
                 // Taking first element of course-session event
                 $alreadyAdded = false;
-                if (isset($eventSentMailList[$courseInfo['real_id']]) && isset($eventSentMailList[$courseInfo['real_id']][$sessionId])) {
+                if (isset($eventSentMailList[$courseInfo['real_id']]) &&
+                    isset($eventSentMailList[$courseInfo['real_id']][$event['session_id']])
+                ) {
                     $firstDate = $eventSentMailList[$courseInfo['real_id']][$event['session_id']];
                     $alreadyAdded = true;
                 } else {
-                    $eventSentMailList[$courseInfo['real_id']][$sessionId] = $event['start'];
-                    $firstDate = $event['start'];
+                    $firstDate = $eventSentMailList[$courseInfo['real_id']][$event['session_id']] = $event['start'];
                 }
 
                 // Working days (Mon-Fri)see BT#12156#note-16
                 $days = 5;
                 $startDatePlusDays = api_strtotime("$days weekdays");
+
+                $this->logger->addInfo(
+                    "startDatePlusDays: ".$startDatePlusDays.' - First date: '.$firstDate
+                );
 
                 // Send
                 if ($startDatePlusDays > api_strtotime($firstDate)) {

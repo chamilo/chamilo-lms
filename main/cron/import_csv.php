@@ -981,11 +981,12 @@ class ImportCsv
                 }
 
                 $start = $event['start'];
-                // Tolerance days see BT#12156#note-16
+                // Working days (Mon-Fri)see BT#12156#note-16
                 $days = 5;
+                $startDatePlusDays = api_strtotime($start ." +$days weekdays");
 
                 // Send
-                if (api_strtotime($start) + $days * 24*60*60 > time() &&
+                if ($startDatePlusDays > time() &&
                     api_strtotime($start) < time()
                 ) {
                     $sendMail = true;
@@ -1000,10 +1001,6 @@ class ImportCsv
                 if (isset($eventSentMailList[$courseInfo['real_id']]) && isset($eventSentMailList[$courseInfo['real_id']][$sessionId])) {
                     $alreadyAdded = true;
                 }
-
-                $this->logger->addInfo(
-                    "Send Mail already added? : ".(int) ($alreadyAdded)
-                );
 
                 // Send announcement to users
                 if ($sendMail && $alreadyAdded == false) {
@@ -1062,6 +1059,10 @@ class ImportCsv
                     );
 
                     if ($announcementId) {
+                        $this->logger->addInfo(
+                            "<<--SEND MAIL-->>"
+                        );
+
                         $this->logger->addInfo(
                             "Announcement added: ".(int) ($announcementId)
                         );

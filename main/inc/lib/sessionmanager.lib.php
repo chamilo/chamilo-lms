@@ -3073,15 +3073,24 @@ class SessionManager
         if (!empty($sessions_list) && is_array($sessions_list)) {
             foreach ($sessions_list as $session_id) {
                 $session_id = intval($session_id);
-                $sql = "INSERT IGNORE INTO $tbl_session_rel_user (session_id, user_id, relation_type, registered_at)
-                        VALUES (
-                            $session_id,
-                            $userId,
-                            '" . SESSION_RELATION_TYPE_RRHH . "',
-                            '" . api_get_utc_datetime() . "'
-                        )";
-                Database::query($sql);
-                $affected_rows++;
+                $sql = "SELECT session_id
+                        FROM $tbl_session_rel_user
+                        WHERE
+                            session_id = $session_id AND
+                            user_id = $userId AND
+                            relation_type = '" . SESSION_RELATION_TYPE_RRHH . "'";
+                $result = Database::query($sql);
+                if (Database::num_rows($result) == 0) {
+                    $sql = "INSERT IGNORE INTO $tbl_session_rel_user (session_id, user_id, relation_type, registered_at)
+                            VALUES (
+                                $session_id,
+                                $userId,
+                                '".SESSION_RELATION_TYPE_RRHH."',
+                                '".api_get_utc_datetime()."'
+                            )";
+                    Database::query($sql);
+                    $affected_rows++;
+                }
             }
         }
 

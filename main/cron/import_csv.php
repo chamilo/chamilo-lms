@@ -990,9 +990,6 @@ class ImportCsv
                     api_strtotime($start) < time()
                 ) {
                     $sendMail = true;
-                    $this->logger->addInfo(
-                        "Mail to be sent because start date: $start"
-                    );
                 } else {
                     $sendMail = false;
                 }
@@ -1005,21 +1002,20 @@ class ImportCsv
                 // Send announcement to users
                 if ($sendMail && $alreadyAdded == false) {
                     $start = api_get_local_time(
-                        $event['start_date'],
+                        $event['start'],
                         null,
                         null,
                         true
                     );
                     $end = api_get_local_time(
-                        $event['end_date'],
+                        $event['end'],
                         null,
                         null,
                         true
                     );
 
                     if (!empty($end) &&
-                        api_format_date($start, DATE_FORMAT_LONG) ==
-                        api_format_date($end, DATE_FORMAT_LONG)
+                        api_format_date($start, DATE_FORMAT_LONG) == api_format_date($end, DATE_FORMAT_LONG)
                     ) {
                         $date = api_format_date($start, DATE_FORMAT_LONG).' ('.
                             api_format_date($start, TIME_NO_SEC_FORMAT).' '.
@@ -1044,6 +1040,10 @@ class ImportCsv
                     );
 
                     $subject = get_lang('Reminder');
+
+                    $this->logger->addInfo(
+                        "Mail to be sent because start date: ".$event['start']
+                    );
 
                     $announcementId = AnnouncementManager::add_announcement(
                         $courseInfo,

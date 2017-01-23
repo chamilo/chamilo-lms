@@ -989,21 +989,24 @@ class ImportCsv
                     api_strtotime($start) < time()
                 ) {
                     $sendMail = true;
+                    $this->logger->addInfo(
+                        "Mail to be sent because start date: $start"
+                    );
                 } else {
                     $sendMail = false;
                 }
 
-                $notificationSent = false;
+                $alreadyAdded = false;
                 if (isset($eventSentMailList[$courseInfo['real_id']]) && isset($eventSentMailList[$courseInfo['real_id']][$sessionId])) {
-                    $notificationSent = true;
+                    $alreadyAdded = true;
                 }
 
                 $this->logger->addInfo(
-                    "Send Mail conditions: ".(int) ($notificationSent && $sendMail)
+                    "Send Mail already added? : ".(int) ($alreadyAdded)
                 );
 
                 // Send announcement to users
-                if ($sendMail == false && $notificationSent) {
+                if ($sendMail && $alreadyAdded == false) {
                     $start = api_get_local_time(
                         $event['start_date'],
                         null,
@@ -1054,6 +1057,9 @@ class ImportCsv
                     );
 
                     if ($announcementId) {
+                        $this->logger->addInfo(
+                            "Announcement added: ".(int) ($announcementId)
+                        );
                         /*AnnouncementManager::sendEmail(
                             $courseInfo,
                             $event['session_id'],

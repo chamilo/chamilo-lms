@@ -1039,17 +1039,27 @@ class ImportCsv
                     }
 
                     $courseTitle = $courseInfo['title'].$sessionName;
-                    $emailBody = sprintf(
+
+                    $emailBody = get_lang('Dear').' ((user_firstname)) <br />'.
+                        sprintf(
                         get_lang('YouHaveBeenSubscribedToCourseXTheStartDateXAndCommentX'),
                         $courseTitle,
                         $date,
                         $event['comment']
                     );
 
-                    $subject = get_lang('Reminder');
+                    $subject = sprintf(
+                        get_lang('AgendaAvailableInCourseX'),
+                        $courseInfo['title']
+                    );
 
                     $this->logger->addInfo(
                         "Mail to be sent because start date: ".$event['start']
+                    );
+
+                    $coaches = SessionManager::getCoachesByCourseSession(
+                        $courseInfo['real_id'],
+                        $event['session_id']
                     );
 
                     $announcementId = AnnouncementManager::add_announcement(
@@ -1057,7 +1067,10 @@ class ImportCsv
                         $event['session_id'],
                         $subject,
                         $emailBody,
-                        ['everyone'],
+                        [
+                            'everyone',
+                            'users' => $coaches
+                        ],
                         [],
                         null,
                         null,

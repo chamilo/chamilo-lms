@@ -5059,7 +5059,7 @@ class SessionManager
         $coaches = array();
         if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_row($result)) {
-                $coaches[] = $row[0];
+                $coaches[] = $row['user_id'];
             }
         }
 

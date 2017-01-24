@@ -484,6 +484,9 @@ class Event
         $session_id = api_get_session_id();
 
         if (!empty($question_id) && !empty($exe_id) && !empty($user_id)) {
+            if (is_null($answer)) {
+                $answer = '';
+            }
             $attempt = array(
                 'user_id' => $user_id,
                 'question_id' => $question_id,

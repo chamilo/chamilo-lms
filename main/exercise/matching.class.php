@@ -275,4 +275,29 @@ class Matching extends Question
 
         return $header;
     }
+
+    /**
+     * Check if a answer is correct
+     * @param int $position
+     * @param int $answer
+     * @return bool
+     */
+    public static function isCorrect($position, $answer, $questionId)
+    {
+        $em = Database::getManager();
+
+        $count = $em
+            ->createQuery('
+                SELECT COUNT(a) From ChamiloCourseBundle:CQuizAnswer a
+                WHERE a.iid = :position AND a.correct = :answer AND a.questionId = :question
+            ')
+            ->setParameters([
+                'position' => $position,
+                'answer' => $answer,
+                'question' => $questionId
+            ])
+            ->getSingleScalarResult();
+
+        return $count ? true : false;
+    }
 }

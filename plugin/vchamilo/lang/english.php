@@ -112,4 +112,8 @@ $strings['UploadRealRoot'] = 'Upload files';
 $strings['DatabaseAccessShouldBeDifferentThanMasterChamilo'] = 'Database server should be different than the Chamilo master';
 $strings['UrlAppendExample'] = 'Example: /chamilo_v1 (with first slash)';
 
+$strings['FromVersion'] = 'From version';
+$strings['CoursePath'] = 'Path to courses directory';
+$strings['HomePath'] = 'Path to home directory';
+$strings['UploadPath'] = 'Path to upload directory';
 

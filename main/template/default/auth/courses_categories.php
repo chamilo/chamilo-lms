@@ -49,43 +49,6 @@ $code = isset($code) ? $code : null;
                 }
             });
         });
-
-        /*$('.courses-list-btn').toggle(function (e) {
-            e.preventDefault();
-
-            var $el = $(this);
-            var sessionId = getSessionId(this);
-
-            $el.children('img').remove();
-            $el.prepend('<?php echo Display::display_icon('nolines_minus.gif'); ?>');
-
-            $.ajax({
-                url: '<?php echo api_get_path(WEB_AJAX_PATH) . 'course.ajax.php' ?>',
-                type: 'GET',
-                dataType: 'json',
-                data: {
-                    a: 'display_sessions_courses',
-                    session: sessionId
-                },
-                success: function (response){
-                    var $container = $el.prev('.course-list');
-                    var $courseList = $('<ul>');
-                    $.each(response, function (index, course) {
-                        $courseList.append('<li><div><strong>' + course.name + '</strong><br>' + course.coachName + '</div></li>');
-                    });
-
-                    $container.append($courseList).show(250);
-                }
-            });
-        }, function (e) {
-            e.preventDefault();
-            var $el = $(this);
-            var $container = $el.prev('.course-list');
-            $container.hide(250).empty();
-            $el.children('img').remove();
-            $el.prepend('<?php echo Display::display_icon('nolines_plus.gif'); ?>');
-        });*/
-
         var getSessionId = function (el) {
             var parts = el.id.split('_');
             return parseInt(parts[1], 10);
@@ -221,14 +184,20 @@ if ($showCourses && $action != 'display_sessions') {
             // start buycourse validation
             // display the course price and buy button if the buycourses plugin is enabled and this course is configured
             $plugin = BuyCoursesPlugin::create();
-            $isThisCourseInSale = $plugin->buyCoursesForGridCatalogVerificator($course['real_id'], BuyCoursesPlugin::PRODUCT_TYPE_COURSE);
+            $isThisCourseInSale = $plugin->buyCoursesForGridCatalogVerificator(
+                $course['real_id'],
+                BuyCoursesPlugin::PRODUCT_TYPE_COURSE
+            );
 
             if ($isThisCourseInSale) {
                 // set the Price label
                 $separator = $isThisCourseInSale['html'];
                 // set the Buy button instead register.
                 if ($isThisCourseInSale['verificator']) {
-                    $subscribeButton = $plugin->returnBuyCourseButton($course['real_id'], BuyCoursesPlugin::PRODUCT_TYPE_COURSE);
+                    $subscribeButton = $plugin->returnBuyCourseButton(
+                        $course['real_id'],
+                        BuyCoursesPlugin::PRODUCT_TYPE_COURSE
+                    );
                 }
             }
             // end buycourse validation
@@ -400,6 +369,7 @@ function return_goto_button($course)
 /**
  * Display the already registerd text in a course in the course catalog
  * @param $in_status
+ *
  * @return string HTML string
  */
 function return_already_registered_label($in_status)
@@ -426,7 +396,8 @@ function return_already_registered_label($in_status)
  * @param $stok
  * @param $code
  * @param $search_term
- * @return html
+ *
+ * @return string
  */
 function return_register_button($course, $stok, $code, $search_term)
 {
@@ -441,7 +412,8 @@ function return_register_button($course, $stok, $code, $search_term)
  * @param $stok
  * @param $search_term
  * @param $code
- * @return html
+ *
+ * @return string
  */
 function return_unregister_button($course, $stok, $search_term, $code)
 {

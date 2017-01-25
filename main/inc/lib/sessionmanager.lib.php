@@ -488,8 +488,9 @@ class SessionManager
         }
 
         $isFilteringSessionCategory = strpos($where, 'category_name') !== false;
+        $isFilteringSessionCategoryWithName = strpos($where, 'sc.name') !== false;
 
-        if ($isMakingOrder || $isFilteringSessionCategory) {
+        if ($isMakingOrder || $isFilteringSessionCategory || $isFilteringSessionCategoryWithName) {
             $inject_joins .= " LEFT JOIN $sessionCategoryTable sc ON s.session_category_id = sc.id ";
 
             if ($isFilteringSessionCategory) {
@@ -631,7 +632,6 @@ class SessionManager
                         }
                     }
                 }
-
                 $formatted_sessions[$session_id] = $session;
                 $categoryName = isset($orderedCategories[$session['session_category_id']]) ? $orderedCategories[$session['session_category_id']] : '';
                 $formatted_sessions[$session_id]['category_name'] = $categoryName;
@@ -7548,7 +7548,6 @@ class SessionManager
         //for now only sessions
         $extra_field = new ExtraFieldModel('session');
         $double_fields = array();
-
         $extra_field_option = new ExtraFieldOption('session');
 
         if (isset($options['extra'])) {

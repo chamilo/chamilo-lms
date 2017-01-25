@@ -95,15 +95,15 @@ class ChamiloApi
     public static function getPlatformLogo($imageAttributes = [])
     {
         $logoPath = self::getWebPlatformLogoPath();
-        $insitution = api_get_setting('Institution');
-        $insitutionUrl = api_get_setting('InstitutionUrl');
+        $institution = api_get_setting('Institution');
+        $institutionUrl = api_get_setting('InstitutionUrl');
         $siteName = api_get_setting('siteName');
 
         if ($logoPath === null) {
             $headerLogo = \Display::url($siteName, api_get_path(WEB_PATH) . 'index.php');
 
-            if (!empty($insitutionUrl) && !empty($insitution)) {
-                $headerLogo .= ' - ' . \Display::url($insitution, $insitutionUrl);
+            if (!empty($institutionUrl) && !empty($institution)) {
+                $headerLogo .= ' - ' . \Display::url($institution, $institutionUrl);
             }
 
             $courseInfo = api_get_course_info();
@@ -125,7 +125,7 @@ class ChamiloApi
             return \Display::tag('h2', $headerLogo, ['class' => 'text-left']);
         }
 
-        $image = \Display::img($logoPath, $insitution, $imageAttributes);
+        $image = \Display::img($logoPath, $institution, $imageAttributes);
 
         return \Display::url($image, api_get_path(WEB_PATH) . 'index.php');
     }

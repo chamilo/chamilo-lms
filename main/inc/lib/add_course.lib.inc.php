@@ -426,18 +426,12 @@ class AddCourse
         $authorId = empty($authorId) ? api_get_user_id() : (int) $authorId;
 
         $tbl_course_homepage = Database::get_course_table(TABLE_TOOL_LIST);
-        $TABLEGROUPCATEGORIES = Database::get_course_table(
-            TABLE_GROUP_CATEGORY
-        );
+        $TABLEGROUPCATEGORIES = Database::get_course_table(TABLE_GROUP_CATEGORY);
         $TABLEITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $TABLETOOLDOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
         $TABLESETTING = Database::get_course_table(TABLE_COURSE_SETTING);
-        $TABLEGRADEBOOK = Database::get_main_table(
-            TABLE_MAIN_GRADEBOOK_CATEGORY
-        );
-        $TABLEGRADEBOOKLINK = Database::get_main_table(
-            TABLE_MAIN_GRADEBOOK_LINK
-        );
+        $TABLEGRADEBOOK = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+        $TABLEGRADEBOOKLINK = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
         $visible_for_all = 1;
         $visible_for_course_admin = 0;
@@ -955,6 +949,8 @@ class AddCourse
 
             /* Announcement tool */
             AnnouncementManager::add_announcement(
+                $courseInfo,
+                0,
                 get_lang('AnnouncementExampleTitle'),
                 get_lang('AnnouncementEx'),
                 ['everyone' => 'everyone'],

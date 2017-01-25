@@ -10,12 +10,15 @@ $cidReset = true;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 
-api_protect_admin_script(true);
+if (api_is_anonymous()) {
+    api_not_allowed(true);
+}
 
 $plugin = BuyCoursesPlugin::create();
 
 $paypalEnable = $plugin->get('paypal_enable');
 $commissionsEnable = $plugin->get('commissions_enable');
+$culqiEnable = $plugin->get('culqi_enable');
 
 $action = isset($_GET['a']) ? $_GET['a'] : null;
 
@@ -226,7 +229,7 @@ switch ($action) {
 
         break;
 
-        case 'cancelPayout':
+    case 'cancelPayout':
         if (api_is_anonymous()) {
             break;
         }
@@ -238,5 +241,361 @@ switch ($action) {
         echo '';
 
         break;
+    case 'culqi_cargo':
+
+        if (!$culqiEnable) {
+            break;
+        }
+
+        $tokenId = $_REQUEST['token_id'];
+        $saleId = $_REQUEST['sale_id'];
+
+        if (!$tokenId || !$saleId) {
+            break;
+        }
+
+        $sale = $plugin->getSale($saleId);
+
+        if (!$sale) {
+            break;
+        }
+
+        require_once("Requests.php");
+        Requests::register_autoloader();
+        require_once("culqi.php");
+
+        $culqiParams = $plugin->getCulqiParams();
+
+        // API Key y autenticación
+        $SECRET_API_KEY = $culqiParams['api_key'];
+        $culqi = new Culqi\Culqi(array('api_key' => $SECRET_API_KEY));
+
+        $environment = $culqiParams['integration'];
+
+        $environment = $environment ? BuyCoursesPlugin::CULQI_INTEGRATION_TYPE : BuyCoursesPlugin::CULQI_PRODUCTION_TYPE;
+
+        $culqi->setEnv($environment);
+
+        $user = api_get_user_info();
+        $currency = $plugin->getSelectedCurrency();
+
+        try {
+            $cargo = $culqi->Cargos->create(array(
+                "moneda" => $currency['iso_code'],
+                "monto" => intval(floatval($sale['price']) * 100),
+                "usuario" => $user['username'],
+                "descripcion" => $sale['product_name'],
+                "pedido" => $sale['reference'],
+                "codigo_pais" => "PE",
+                "direccion" => get_lang('None'),
+                "ciudad" => get_lang('None'),
+                "telefono" => 0,
+                "nombres" => $user['firstname'],
+                "apellidos" => $user['lastname'],
+                "correo_electronico" => $user['email'],
+                "token" => $tokenId
+            ));
+
+            if (is_object($cargo)) {
+
+                $saleIsCompleted = $plugin->completeSale($sale['id']);
+
+                if ($saleIsCompleted) {
+                    Display::addFlash(
+                        Display::return_message(
+                            sprintf($plugin->get_lang('SubscriptionToCourseXSuccessful'), $sale['product_name']),
+                            'success'
+                        )
+                    );
+                }
+            }
+
+            echo json_encode($cargo);
+
+        } catch(Exception $e) {
+
+            $cargo = json_decode($e->getMessage(), true);
+
+            $plugin->cancelSale($sale['id']);
+
+            unset($_SESSION['bc_sale_id']);
+
+            if (is_array($cargo)) {
+                Display::addFlash(
+                    Display::return_message(
+                        sprintf($plugin->get_lang('ErrorOccurred'), $cargo['codigo'], $cargo['mensaje']),
+                        'error',
+                        false
+                    )
+                );
+            } else {
+                Display::addFlash(
+                    Display::return_message(
+                        $plugin->get_lang('ErrorContactPlatformAdmin'),
+                        'error',
+                        false
+                    )
+                );
+            }
+        }
+
+        break;
+
+    case 'culqi_cargo_service':
+
+        if (!$culqiEnable) {
+            break;
+        }
+
+        $tokenId = $_REQUEST['token_id'];
+        $serviceSaleId = $_REQUEST['service_sale_id'];
+
+        if (!$tokenId || !$serviceSaleId) {
+            break;
+        }
+
+        $serviceSale = $plugin->getServiceSale($serviceSaleId);
+
+        if (!$serviceSale) {
+            break;
+        }
+
+        require_once("Requests.php");
+        Requests::register_autoloader();
+        require_once("culqi.php");
+
+        $culqiParams = $plugin->getCulqiParams();
+
+        // API Key y autenticación
+        $SECRET_API_KEY = $culqiParams['api_key'];
+        $culqi = new Culqi\Culqi(array('api_key' => $SECRET_API_KEY));
+
+        $environment = $culqiParams['integration'];
+
+        $environment = $environment ? BuyCoursesPlugin::CULQI_INTEGRATION_TYPE : BuyCoursesPlugin::CULQI_PRODUCTION_TYPE;
+
+        $culqi->setEnv($environment);
+
+        $user = api_get_user_info();
+
+        try {
+            $cargo = $culqi->Cargos->create(array(
+                "moneda" => $serviceSale['currency'],
+                "monto" => intval(floatval($serviceSale['price']) * 100),
+                "usuario" => $user['username'],
+                "descripcion" => $serviceSale['service']['name'],
+                "pedido" => $serviceSale['reference'],
+                "codigo_pais" => "PE",
+                "direccion" => get_lang('None'),
+                "ciudad" => get_lang('None'),
+                "telefono" => 0,
+                "nombres" => $user['firstname'],
+                "apellidos" => $user['lastname'],
+                "correo_electronico" => $user['email'],
+                "token" => $tokenId
+            ));
+
+            if (is_object($cargo)) {
+
+                $saleIsCompleted = $plugin->completeServiceSale($serviceSale['id']);
+
+                if ($saleIsCompleted) {
+                    Display::addFlash(
+                        Display::return_message(
+                            sprintf($plugin->get_lang('SubscriptionToCourseXSuccessful'), $serviceSale['service']['name']),
+                            'success'
+                        )
+                    );
+                }
+            }
+
+            echo json_encode($cargo);
+
+        } catch(Exception $e) {
+
+            $cargo = json_decode($e->getMessage(), true);
+
+            $plugin->cancelServiceSale($serviceSale['id']);
+
+            unset($_SESSION['bc_sale_id']);
+
+            if (is_array($cargo)) {
+                Display::addFlash(
+                    Display::return_message(
+                        sprintf($plugin->get_lang('ErrorOccurred'), $cargo['codigo'], $cargo['mensaje']),
+                        'error',
+                        false
+                    )
+                );
+            } else {
+                Display::addFlash(
+                    Display::return_message(
+                        $plugin->get_lang('ErrorContactPlatformAdmin'),
+                        'error',
+                        false
+                    )
+                );
+            }
+        }
+
+        break;
+
+    case 'service_sale_info':
+
+        $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
+        $serviceSale = $plugin->getServiceSale($id);
+
+        $isAdmin = api_is_platform_admin();
+
+        if (!$serviceSale) {
+            break;
+        }
+
+        $ajaxCallFile = $plugin->getPath('SRC') . 'buycourses.ajax.php';
+
+        $serviceImg = $plugin->getPath('SERVICE_IMAGES') . $serviceSale['service']['image'];
+        $html = "<img class='img-responsive text-center' src='$serviceImg'>";
+        $html .= "<br />";
+        $html .= "<legend>{$plugin->get_lang('ServiceInformation')}</legend>";
+        $html .= "<ul>";
+        $html .= "<li><b>{$plugin->get_lang('ServiceId')}:</b> {$serviceSale['id']}</li> ";
+        $html .= "<li><b>{$plugin->get_lang('ServiceName')}:</b> {$serviceSale['service']['name']}</li> ";
+        $html .= "<li><b>{$plugin->get_lang('Description')}:</b> {$serviceSale['service']['description']}</li> ";
+        $nodeType = $serviceSale['node_type'];
+        $nodeName = "";
+        $nodeTitle = "";
+        if ($nodeType == BuyCoursesPlugin::SERVICE_TYPE_USER) {
+            $nodeType = get_lang('User');
+        } else if ($nodeType == BuyCoursesPlugin::SERVICE_TYPE_COURSE) {
+            $nodeType = get_lang('Course');
+        } else if ($nodeType == BuyCoursesPlugin::SERVICE_TYPE_SESSION) {
+            $nodeType = get_lang('Session');
+        }
+        $html .= "<li><b>{$plugin->get_lang('AppliesTo')}:</b> $nodeType</li> ";
+        $html .= "<li><b>{$plugin->get_lang('Price')}:</b> {$serviceSale['service']['price']} {$serviceSale['currency']}</li> ";
+        $duration = $serviceSale['service']['duration_days'] . ' ' . $plugin->get_lang('Days');
+        $html .= "</ul>";
+        $html .= "<legend>{$plugin->get_lang('SaleInfo')}</legend>";
+        $html .= "<ul>";
+        $html .= "<li><b>{$plugin->get_lang('BoughtBy')}:</b> {$serviceSale['buyer']['name']}</li> ";
+        $html .= "<li><b>{$plugin->get_lang('PurchaserUser')}:</b> {$serviceSale['buyer']['username']}</li> ";
+        $html .= "<li><b>{$plugin->get_lang('SalePrice')}:</b> {$serviceSale['price']} {$serviceSale['currency']}</li> ";
+        $orderDate = api_format_date($serviceSale['buy_date'], DATE_FORMAT_LONG);
+        $html .= "<li><b>{$plugin->get_lang('OrderDate')}:</b> $orderDate</li> ";
+        $paymentType = $serviceSale['payment_type'];
+        if ($paymentType == BuyCoursesPlugin::PAYMENT_TYPE_PAYPAL) {
+            $paymentType = 'PayPal';
+        } else if ($paymentType == BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER) {
+            $paymentType = $plugin->get_lang('BankTransfer');
+        } else if ($paymentType == BuyCoursesPlugin::PAYMENT_TYPE_CULQI) {
+            $paymentType = 'Culqi';
+        }
+        $html .= "<li><b>{$plugin->get_lang('PaymentMethod')}:</b> $paymentType</li> ";
+        $html .= "<li><b>$nodeType:</b> $nodeName</li> ";
+        $status = $serviceSale['status'];
+        $buttons = "";
+        if ($status == BuyCoursesPlugin::SERVICE_STATUS_COMPLETED) {
+            $status = $plugin->get_lang('Active');
+        } else if ($status == BuyCoursesPlugin::SERVICE_STATUS_PENDING) {
+            $status = $plugin->get_lang('Pending');
+            if ($isAdmin) {
+                $buttons .= "<a id='{$serviceSale['id']}' tag='service_sale_confirm' class='btn btn-success pull-left'>{$plugin->get_lang('ConfirmOrder')}</a>";
+                $buttons .= "<a id='{$serviceSale['id']}' tag='service_sale_cancel' class='btn btn-danger pull-right'>{$plugin->get_lang('CancelOrder')}</a>";
+            }
+        } else if ($status == BuyCoursesPlugin::SERVICE_STATUS_CANCELLED) {
+            $status = $plugin->get_lang('Cancelled');
+        }
+        $html .= "<li><b>{$plugin->get_lang('Status')}:</b> $status</li> ";
+        $html .= "</ul>";
+        $html .= "<br />";
+        $html .= "<div class='row'>";
+        $html .= "<div class='col-md-2'></div>";
+        $html .= "<div class='col-md-8 text-center'>";
+        $html .= "<div class='bc-action-buttons'>";
+        $html .= $buttons;
+        $html .= "</div>";
+        $html .= "</div>";
+        $html .= "<div class='col-md-2'></div>";
+        $html .= "<script>";
+        $html .= "$('.bc-action-buttons a').click(function() {";
+        $html .= "var id = $(this).attr('id');";
+        $html .= "var action = $(this).attr('tag');";
+        $html .= "$.ajax({";
+        $html .= "data: 'id='+id,";
+        $html .= "url: '$ajaxCallFile?a='+action,";
+        $html .= "type: 'POST',";
+        $html .= "beforeSend: function() {";
+        $processingLoaderText = $plugin->get_lang('ProcessingDontCloseThisWindow');
+        $html .= "$('.bootbox-close-button').remove();";
+        $html .= "$('.btn-default').attr('disabled', true);";
+        $html .= "$('.bc-action-buttons').html('<div class=\"wobblebar-loader\"></div><p> $processingLoaderText</p>');";
+        $html .= "},";
+        $html .= "success: function(response) {";
+        $html .= "$('.bc-action-buttons').html(response);";
+        $html .= "},";
+        $html .= "});";
+        $html .= "});";
+        $html .= "</script>";
+
+        echo $html;
+
+        break;
+    case 'service_sale_confirm':
+
+        $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
+
+        $serviceSale = $plugin->getServiceSale($id);
+        $response = $plugin->completeServiceSale($id);
+        $html = "";
+        $html .= "<div class='text-center'>";
+
+        if ($response) {
+            $html .= Display::return_message(
+                sprintf($plugin->get_lang('SubscriptionToServiceXSuccessful'), $serviceSale['service']['name']),
+                'success'
+            );
+        } else {
+            $html .= Display::return_message('Error - ' . $plugin->get_lang('ErrorContactPlatformAdmin'), 'error');
+        }
+
+        $html .= "<a id='finish-button' class='btn btn-primary'>" . $plugin->get_lang('ClickHereToFinish') . "</a>";
+        $html .= "</div>";
+        $html .= "<script>";
+        $html .= "$('#finish-button').click(function() {";
+        $html .= "location.reload();";
+        $html .= "});";
+        $html .= "</script>";
+
+        echo $html;
+
+        break;
+    case 'service_sale_cancel':
+
+        $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
+
+        $serviceSale = $plugin->getServiceSale($id);
+        $response = $plugin->cancelServiceSale($id);
+        $html = "";
+        $html .= "<div class='text-center'>";
+
+        if ($response) {
+            $html .= Display::return_message(
+                $plugin->get_lang('OrderCancelled'),
+                'warning'
+            );
+        } else {
+            $html .= Display::return_message('Error - ' . $plugin->get_lang('ErrorContactPlatformAdmin'), 'error');
+        }
+
+        $html .= "<a id='finish-button' class='btn btn-primary'>" . $plugin->get_lang('ClickHereToFinish') . "</a>";
+        $html .= "</div>";
+        $html .= "<script>";
+        $html .= "$('#finish-button').click(function() {";
+        $html .= "location.reload();";
+        $html .= "});";
+        $html .= "</script>";
+
+        echo $html;
+
+        break;
 }
-exit;

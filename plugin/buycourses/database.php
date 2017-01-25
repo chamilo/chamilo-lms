@@ -280,7 +280,17 @@ $culqiTable->addColumn(
 );
 $culqiTable->addColumn('commerce_code', \Doctrine\DBAL\Types\Type::STRING);
 $culqiTable->addColumn('api_key', \Doctrine\DBAL\Types\Type::STRING);
+$culqiTable->addColumn('integration', \Doctrine\DBAL\Types\Type::INTEGER);
 $culqiTable->setPrimaryKey(['id']);
+
+$globalTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_GLOBAL_CONFIG);
+$globalTable->addColumn(
+    'id',
+    \Doctrine\DBAL\Types\Type::INTEGER,
+    ['autoincrement' => true, 'unsigned' => true]
+);
+$globalTable->addColumn('terms_and_conditions', \Doctrine\DBAL\Types\Type::TEXT);
+$globalTable->setPrimaryKey(['id']);
 
 $queries = $pluginSchema->toSql($platform);
 
@@ -296,6 +306,7 @@ $saleTable = Database::get_main_table(BuyCoursesPlugin::TABLE_SALE);
 $commissionTable = Database::get_main_table(BuyCoursesPlugin::TABLE_COMMISSION);
 $extraFieldTable = Database::get_main_table(TABLE_EXTRA_FIELD);
 $culqiTable = Database::get_main_table(BuyCoursesPlugin::TABLE_CULQI);
+$globalTable = Database::get_main_table(BuyCoursesPlugin::TABLE_GLOBAL_CONFIG);
 
 $paypalExtraField = Database::select(
     "*",
@@ -338,7 +349,15 @@ Database::insert(
     $culqiTable,
     [
         'commerce_code' => '',
-        'api_key' => ''
+        'api_key' => '',
+        'integration' => 1
+    ]
+);
+
+Database::insert(
+    $globalTable,
+    [
+        'terms_and_conditions' => ''
     ]
 );
 

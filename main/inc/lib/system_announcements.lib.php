@@ -107,7 +107,7 @@ class SystemAnnouncementManager
     public static function display_all_announcements($visible, $id = -1, $start = 0,$user_id='')
     {
         $user_selected_language = api_get_interface_language();
-        $start	= intval($start);
+        $start = intval($start);
         $userGroup = new UserGroup();
         $tbl_announcement_group = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS);
         $temp_user_groups = $userGroup->get_groups_by_user(api_get_user_id(),0);
@@ -152,7 +152,7 @@ class SystemAnnouncementManager
             $sql .= " AND access_url_id IN ('1', '$current_access_url_id')";
         }
 
-        if(!isset($_GET['start']) || $_GET['start'] == 0) {
+        if (!isset($_GET['start']) || $_GET['start'] == 0) {
             $sql .= " ORDER BY date_start DESC LIMIT ".$start.",20";
         } else {
             $sql .= " ORDER BY date_start DESC LIMIT ".($start+1).",20";
@@ -254,8 +254,6 @@ class SystemAnnouncementManager
             $current_access_url_id = api_get_current_access_url_id();
         }
         $sql .= " AND access_url_id = '$current_access_url_id' ";
-
-
         $sql .= 'LIMIT '.$start.', 21';
         $announcements = Database::query($sql);
         $i = 0;
@@ -285,25 +283,29 @@ class SystemAnnouncementManager
         $sql .= " WHERE access_url_id = '$current_access_url_id' ";
         $sql .= " ORDER BY date_start ASC";
 
-        $announcements = Database::query($sql);
-        $all_announcements = array();
-        while ($announcement = Database::fetch_object($announcements)) {
-            $all_announcements[] = $announcement;
+        $result = Database::query($sql);
+        $announcements = array();
+        while ($announcement = Database::fetch_object($result)) {
+            $announcements[] = $announcement;
         }
-        return $all_announcements;
+        return $announcements;
     }
 
     /**
      * Adds an announcement to the database
-     * @param string Title of the announcement
-     * @param string Content of the announcement
-     * @param string Start date (YYYY-MM-DD HH:II: SS)
-     * @param string End date (YYYY-MM-DD HH:II: SS)
-     * @param int    Whether the announcement should be visible to teachers (1) or not (0)
-     * @param int    Whether the announcement should be visible to students (1) or not (0)
-     * @param int    Whether the announcement should be visible to anonymous users (1) or not (0)
-     * @param string The language for which the announvement should be shown. Leave null for all langages
-     * @param int    Whether to send an e-mail to all users (1) or not (0)
+     *
+     * @param string $title Title of the announcement
+     * @param string $content Content of the announcement
+     * @param string $date_start Start date (YYYY-MM-DD HH:II: SS)
+     * @param string $date_end End date (YYYY-MM-DD HH:II: SS)
+     * @param int    $visible_teacher Whether the announcement should be visible to teachers (1) or not (0)
+     * @param int    $visible_student Whether the announcement should be visible to students (1) or not (0)
+     * @param int    $visible_guest Whether the announcement should be visible to anonymous users (1) or not (0)
+     * @param string $lang The language for which the announvement should be shown. Leave null for all langages
+     * @param int    $send_mail Whether to send an e-mail to all users (1) or not (0)
+     * @param bool  $add_to_calendar
+     * @param bool  $sendEmailTest
+     *
      * @return mixed  insert_id on success, false on failure
      */
     public static function add_announcement(
@@ -333,7 +335,8 @@ class SystemAnnouncementManager
         $db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 
         if (!checkdate($date_start_to_compare[1], $date_start_to_compare[2], $date_start_to_compare[0])) {
-            Display :: display_normal_message(get_lang('InvalidStartDate'));
+            Display::addFlash(Display::return_message(get_lang('InvalidStartDate'), 'warning'));
+
             return false;
         }
 
@@ -342,12 +345,13 @@ class SystemAnnouncementManager
             $date_end_to_compare[0]) &&
             !checkdate($date_end_to_compare[1], $date_end_to_compare[2], $date_end_to_compare[0])
         ) {
-            Display :: display_normal_message(get_lang('InvalidEndDate'));
+            Display::addFlash(Display::return_message(get_lang('InvalidEndDate'), 'warning'));
+
             return false;
         }
 
         if (strlen(trim($title)) == 0) {
-            Display::display_normal_message(get_lang('InvalidTitle'));
+            Display::addFlash(Display::return_message(get_lang('InvalidTitle'), 'warning'));
 
             return false;
         }
@@ -738,11 +742,11 @@ class SystemAnnouncementManager
             $message_sent = true;
 		}
 
-	    	// Minor validation to clean up the attachment files in the announcement
+        // Minor validation to clean up the attachment files in the announcement
 		if (!empty($_FILES)) {
 		    $attachments = $_FILES;
 		    foreach ($attachments as $attachment) {
-			unlink($attachment['tmp_name']);
+			    unlink($attachment['tmp_name']);
 		    }
 		}
 
@@ -762,7 +766,7 @@ class SystemAnnouncementManager
         $cut_size = 500;
         $now = api_get_utc_datetime();
 
-        $sql = "SELECT * FROM " . $table . "
+        $sql = "SELECT * FROM $table
 				WHERE
 				    (lang = '$user_selected_language' OR lang = '') AND
 				    ('$now' >= date_start AND '$now' <= date_end) ";

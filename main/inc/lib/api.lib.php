@@ -558,8 +558,8 @@ define('TIMELINE_STATUS_ACTIVE', '1');
 define('TIMELINE_STATUS_INACTIVE', '2');
 
 // Event email template class
-define ('EVENT_EMAIL_TEMPLATE_ACTIVE',  1);
-define ('EVENT_EMAIL_TEMPLATE_INACTIVE', 0);
+define('EVENT_EMAIL_TEMPLATE_ACTIVE',  1);
+define('EVENT_EMAIL_TEMPLATE_INACTIVE', 0);
 
 // Course home
 define('SHORTCUTS_HORIZONTAL', 0);
@@ -605,7 +605,7 @@ define('RESOURCE_SESSION_COURSE', 'session_course');
 define('RESOURCE_GRADEBOOK', 'gradebook');
 define('ADD_THEMATIC_PLAN', 6);
 
-// Make sure the CHAMILO_LOAD_WYSIWYG constant is defined
+// Max online users to show per page (whoisonline)
 define('MAX_ONLINE_USERS', 12);
 
 // Make sure the CHAMILO_LOAD_WYSIWYG constant is defined
@@ -1963,11 +1963,10 @@ function api_generate_password($length = 8)
  * 2. Only English letters (uppercase or lowercase, it doesn't matter) and digits are allowed.
  * 3. The password should contain at least 3 letters.
  * 4. It should contain at least 2 digits.
- *
+ * 5. It should not contain 3 or more consequent (according to ASCII table) characters.
  */
 function api_check_password($password) {
     $password_length = api_strlen($password);
-
     if ($password_length < 5) {
         return false;
     }
@@ -2325,7 +2324,7 @@ function api_get_setting($variable, $key = null)
         $filename = api_get_path(SYS_PATH).api_get_home_path().'header_extra_content.txt';
         if (file_exists($filename)) {
             $value = file_get_contents($filename);
-            return $value ;
+            return $value;
         } else {
             return '';
         }
@@ -2334,7 +2333,7 @@ function api_get_setting($variable, $key = null)
         $filename = api_get_path(SYS_PATH).api_get_home_path().'footer_extra_content.txt';
         if (file_exists($filename)) {
             $value = file_get_contents($filename);
-            return $value ;
+            return $value;
         } else {
             return '';
         }
@@ -3000,15 +2999,16 @@ function api_is_allowed_to_session_edit($tutor = false, $coach = false)
         // If I'm a teacher, I will return true in order to not affect the normal behaviour of Chamilo tools.
         return true;
     } else {
-        if (api_get_session_id() == 0) {
+        $sessionId = api_get_session_id();
+
+        if ($sessionId == 0) {
             // I'm not in a session so i will return true to not affect the normal behaviour of Chamilo tools.
             return true;
         } else {
             // I'm in a session and I'm a student
-            $session_id = api_get_session_id();
 
             // Get the session visibility
-            $session_visibility = api_get_session_visibility($session_id);
+            $session_visibility = api_get_session_visibility($sessionId);
             // if 5 the session is still available
 
             //@todo We could load the session_rel_course_rel_user permission to increase the level of detail.
@@ -4981,7 +4981,7 @@ function api_set_setting($var, $value, $subvar = null, $cat = null, $access_url 
         // Found item for this access_url.
         $row = Database::fetch_array($res);
         $sql = "UPDATE $t_settings SET selected_value = '$value'
-                WHERE id = ".$row['id'] ;
+                WHERE id = ".$row['id'];
         Database::query($sql);
     } else {
         // Item not found for this access_url, we have to check if it exist with access_url = 1
@@ -5007,7 +5007,7 @@ function api_set_setting($var, $value, $subvar = null, $cat = null, $access_url 
                         "".(!empty($row['comment']) ? "'".$row['comment']."'" : "NULL").",".(!empty($row['scope']) ? "'".$row['scope']."'" : "NULL")."," .
                         "".(!empty($row['subkeytext'])?"'".$row['subkeytext']."'":"NULL").",$access_url)";
                 Database::query($insert);
-            } else { // Such a setting does not exist.
+            } else {
                 // Such a setting does not exist.
                 //error_log(__FILE__.':'.__LINE__.': Attempting to update setting '.$var.' ('.$subvar.') which does not exist at all', 0);
             }
@@ -5174,7 +5174,7 @@ function api_get_access_url($id, $returnDefault = true)
  * @param int       Access URL's ID. Optional. Uses 1 by default, which is the unique URL
  * @return array    Array of database results for the current settings of the current access URL
  */
-function & api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $url_changeable = 0)
+function &api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $url_changeable = 0)
 {
     $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
     $access_url = (int) $access_url;
@@ -5631,8 +5631,8 @@ function api_get_status_of_user_in_course($user_id, $courseId)
 {
     $tbl_rel_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
     if (!empty($user_id) && !empty($courseId)) {
-        $user_id        = intval($user_id);
-        $courseId    = intval($courseId);
+        $user_id = intval($user_id);
+        $courseId = intval($courseId);
         $sql = 'SELECT status
                 FROM '.$tbl_rel_course_user.'
                 WHERE user_id='.$user_id.' AND c_id = '.$courseId;
@@ -6439,7 +6439,7 @@ function api_get_course_url($course_code = null, $session_id = null)
  * Check if the current portal has the $_configuration['multiple_access_urls'] parameter on
  * @return bool true if multi site is enabled
  *
- * */
+ **/
 function api_get_multiple_access_url() {
     global $_configuration;
     if (isset($_configuration['multiple_access_urls']) && $_configuration['multiple_access_urls']) {
@@ -7332,8 +7332,8 @@ function api_can_login_as($loginAsUserId, $userId = null)
     if ($loginAsUserId != strval(intval($loginAsUserId))) {
         return false;
     }
-    // Check if the user to login is an admin
 
+    // Check if the user to login is an admin
     if (api_is_platform_admin_by_id($loginAsUserId)) {
         // Only super admins can login to admin accounts
         if (!api_global_admin_can_edit_admin($loginAsUserId)) {
@@ -7747,7 +7747,7 @@ function api_mail_html(
     $defaultEmail = $notification->getDefaultPlatformSenderEmail();
     $defaultName = $notification->getDefaultPlatformSenderName();
 
-    // Error to admin.
+    // If the parameter is set don't use the admin.
     $senderName = !empty($senderName) ? $senderName : $defaultName;
     $senderEmail = !empty($senderEmail) ? $senderEmail : $defaultEmail;
 
@@ -7764,7 +7764,7 @@ function api_mail_html(
     } else {
         $mail->AddCustomHeader('Errors-To: '.$defaultEmail);
     }
-    //If the SMTP configuration only accept one sender
+
     //If the SMTP configuration only accept one sender
     if (isset($platform_email['SMTP_UNIQUE_SENDER']) && $platform_email['SMTP_UNIQUE_SENDER']) {
         $senderName = $platform_email['SMTP_FROM_NAME'];
@@ -7820,7 +7820,10 @@ function api_mail_html(
     if (isset($additionalParameters['link'])) {
         $mailView->assign('link', $additionalParameters['link']);
     }
-
+    $mailView->assign(
+        'mail_header_style',
+        api_get_configuration_value('mail_header_style')
+    );
     $layout = $mailView->get_template('mail/mail.tpl');
     $mail->Body = $mailView->fetch($layout);
 
@@ -8044,6 +8047,57 @@ function api_remove_uploaded_file($type, $file)
     $path = api_get_path(SYS_UPLOAD_PATH).$type.'/'.$file;
     if (file_exists($path)) {
         unlink($path);
+    }
+}
+
+/**
+ * Converts values to float value
+ *
+ * 3.141516 => 3.141516
+ * 3,141516 => 3.141516
+ * @todo WIP
+ *
+ * @param $number
+ * @return false|float|int|mixed
+ */
+function api_parse_float_val($number)
+{
+    if (INTL_INSTALLED) {
+        $iso = api_get_language_isocode();
+        $iso = 'fr';
+        $formatter = new NumberFormatter($iso, NumberFormatter::DECIMAL);
+
+        return $formatter->parse($number);
+    } else {
+        return floatval($number);
+    }
+}
+
+/**
+ * Converts float values
+ * Example if $decimals = 2
+ *
+ * 3.141516 => 3.14
+ * 3,141516 => 3,14
+ *
+ * @todo WIP
+ *
+ * @param string $number number in iso code
+ * @param int $decimals
+ * @return bool|string
+ */
+function api_number_format($number, $decimals = 0)
+{
+    if (INTL_INSTALLED) {
+        $iso = api_get_language_isocode();
+        $iso = 'fr';
+        $formatter = new NumberFormatter($iso, NumberFormatter::DECIMAL);
+        $formatter->setAttribute(NumberFormatter::MAX_FRACTION_DIGITS, $decimals);
+        $formatter->setAttribute(NumberFormatter::GROUPING_SEPARATOR_SYMBOL, '');
+
+        return $formatter->format($number);
+    } else {
+        return number_format($number, $decimals);
     }
 }
 

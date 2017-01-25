@@ -5045,6 +5045,8 @@ class CourseManager
      * @param bool $deleteTeachersNotInList
      * @param bool $editTeacherInSessions
      * @param bool $deleteSessionTeacherNotInList
+     * @param array $teacherBackup
+     *
      * @return false|null
      */
     public static function updateTeachers(
@@ -5071,7 +5073,6 @@ class CourseManager
         $alreadyAddedTeachers = CourseManager::get_teacher_list_from_course_code($course_code);
 
         if ($deleteTeachersNotInList) {
-
             // Delete only teacher relations that doesn't match the selected teachers
             $cond = null;
             if (count($teachers) > 0) {
@@ -5081,8 +5082,21 @@ class CourseManager
                 }
             }
 
+            // Recover user categories
+            $sql = 'SELECT * FROM ' . $course_user_table . '
+                    WHERE c_id ="' . $courseId . '" AND status="1" AND relation_type = 0 ' . $cond;
+            $result = Database::query($sql);
+            if (Database::num_rows($result)) {
+                $teachersToDelete = Database::store_result($result, 'ASSOC');
+                foreach ($teachersToDelete as $data) {
+                    $userId = $data['user_id'];
+                    $teacherBackup[$userId][$course_code] = $data;
+                }
+            }
+
             $sql = 'DELETE FROM ' . $course_user_table . '
                     WHERE c_id ="' . $courseId . '" AND status="1" AND relation_type = 0 ' . $cond;
+
             Database::query($sql);
         }
 
@@ -5094,7 +5108,8 @@ class CourseManager
                         WHERE user_id = "' . $userId . '" AND c_id = "' . $courseId . '" ';
                 $result = Database::query($sql);
                 if (Database::num_rows($result)) {
-                    $sql = 'UPDATE ' . $course_user_table . ' SET status = "1"
+                    $sql = 'UPDATE ' . $course_user_table . ' 
+                            SET status = "1"
                             WHERE c_id = "' . $courseId . '" AND user_id = "' . $userId . '"  ';
                 } else {
                     $userCourseCategory = '0';

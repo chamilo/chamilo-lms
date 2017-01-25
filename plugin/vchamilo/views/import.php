@@ -63,7 +63,7 @@ $versionList = [
 
 $form->addSelect(
     'version',
-    get_lang('FromVersion'),
+    $plugin->get_lang('FromVersion'),
     array_combine($versionList, $versionList)
 );
 

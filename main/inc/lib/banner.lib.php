@@ -172,9 +172,8 @@ function getCustomTabs()
  * Return the active logo of the portal, based on a series of settings
  * @param string $theme The name of the theme folder from web/css/themes/
  * @return string HTML string with logo as an HTML element
- * @param string $theme
  */
-function return_logo($theme)
+function return_logo()
 {
     $siteName = api_get_setting('siteName');
 

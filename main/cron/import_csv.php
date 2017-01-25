@@ -1008,18 +1008,8 @@ class ImportCsv
 
                 // Send announcement to users
                 if ($sendMail && $alreadyAdded == false) {
-                    $start = api_get_local_time(
-                        $event['start'],
-                        null,
-                        null,
-                        true
-                    );
-                    $end = api_get_local_time(
-                        $event['end'],
-                        null,
-                        null,
-                        true
-                    );
+                    $start = $event['start'];
+                    $end = $event['end'];
 
                     if (!empty($end) &&
                         api_format_date($start, DATE_FORMAT_LONG) == api_format_date($end, DATE_FORMAT_LONG)
@@ -1027,7 +1017,6 @@ class ImportCsv
                         $date = api_format_date($start, DATE_FORMAT_LONG).' ('.
                             api_format_date($start, TIME_NO_SEC_FORMAT).' '.
                             api_format_date($end, TIME_NO_SEC_FORMAT).')';
-
                     } else {
                         $date = api_format_date($start,DATE_TIME_FORMAT_LONG_24H).' - '.
                                 api_format_date($end, DATE_TIME_FORMAT_LONG_24H);

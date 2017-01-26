@@ -437,7 +437,7 @@ $form->addHtml('</div></div></div>');
 $form->addButtonSave(get_lang('SaveDiagnosticChanges'), 'save');
 $form->addButtonSearch(get_lang('SearchSessions'), 'search');
 
-$extraFieldsToFilter = $extraField->get_all(array('variable = ?' => 'temps-de-travail'));
+$extraFieldsToFilter = $extraField->get_all(array('variable = ?' => 'temps_de_travail'));
 $extraFieldToSearch = array();
 if (!empty($extraFieldsToFilter)) {
     foreach ($extraFieldsToFilter as $filter) {
@@ -594,7 +594,7 @@ if ($form->validate()) {
             'extra_domaine[0]',
             'extra_domaine[1]',
             'extra_domaine[3]',
-            'extra_temps-de-travail',
+            'extra_temps_de_travail',
             //'extra_competenceniveau',
             'extra_'.$theme,
             'extra_ecouter',
@@ -968,7 +968,7 @@ if ($data) {
             $sessionId = $session['id'];
             $data = $sessionFieldValue->get_values_by_handler_and_field_variable(
                 $sessionId,
-                'temps-de-travail'
+                'temps_de_travail'
             );
             if ($data) {
                 $sumHours += $data['value'];

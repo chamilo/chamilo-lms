@@ -680,7 +680,7 @@ if ($userForm->validate()) {
         'extra_domaine[0]',
         'extra_domaine[1]',
         'extra_domaine[3]',
-        'extra_temps-de-travail',
+        'extra_temps_de_travail',
         //'extra_competenceniveau',
         'extra_'.$theme,
         'extra_'.$theme.'[0]',

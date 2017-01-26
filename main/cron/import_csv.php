@@ -1044,28 +1044,22 @@ class ImportCsv
                         $courseInfo['title']
                     );
 
-                    $this->logger->addInfo(
-                        "Mail to be sent because start date: ".$event['start']
-                    );
-
                     $coaches = SessionManager::getCoachesByCourseSession(
                         $courseInfo['real_id'],
                         $event['session_id']
                     );
 
-                    $subjectToSearch = sprintf(
-                        get_lang('AgendaAvailableInCourseX'),
-                        ''
-                    );
-
                     // Search if an announcement exists:
                     $announcementsWithTitleList = AnnouncementManager::getAnnouncementsByTitle(
-                        $subjectToSearch,
+                        $subject,
                         $courseInfo['real_id'],
                         $event['session_id']
                     );
 
                     if (count($announcementsWithTitleList) == 0) {
+                        $this->logger->addInfo(
+                            "Mail to be sent because start date: ".$event['start']
+                        );
                         $announcementId = AnnouncementManager::add_announcement(
                             $courseInfo,
                             $event['session_id'],
@@ -1084,11 +1078,10 @@ class ImportCsv
 
                         if ($announcementId) {
                             $this->logger->addInfo(
-                                "<<--SEND MAIL-->>"
-                            );
-
-                            $this->logger->addInfo(
                                 "Announcement added: ".(int)($announcementId)
+                            );
+                            $this->logger->addInfo(
+                                "<<--SENDING MAIL-->>"
                             );
                             AnnouncementManager::sendEmail(
                                 $courseInfo,

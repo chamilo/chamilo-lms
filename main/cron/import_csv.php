@@ -1057,13 +1057,13 @@ class ImportCsv
                     );
 
                     // Search if an announcement exists:
-                    $announcementsWithTitle = AnnouncementManager::getAnnouncementsByTitle(
+                    $announcementsWithTitleList = AnnouncementManager::getAnnouncementsByTitle(
                         $subjectToSearch,
                         $courseInfo['real_id'],
                         $event['session_id']
                     );
 
-                    if ($announcementsWithTitle == 0) {
+                    if (count($announcementsWithTitleList) == 0) {
                         $announcementId = AnnouncementManager::add_announcement(
                             $courseInfo,
                             $event['session_id'],

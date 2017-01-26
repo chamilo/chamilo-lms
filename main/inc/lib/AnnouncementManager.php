@@ -191,6 +191,38 @@ class AnnouncementManager
     }
 
     /**
+     * @param string $title
+     * @param int $courseId
+     * @param int $sessionId
+     *
+     * @return mixed
+     */
+    public static function getAnnouncementsByTitle($title, $courseId, $sessionId = 0)
+    {
+        $dql = "SELECT a
+                FROM ChamiloCourseBundle:CAnnouncement a 
+                JOIN ChamiloCourseBundle:CItemProperty ip
+                WITH a.id = ip.ref AND a.cId = ip.course
+                WHERE
+                    ip.tool = 'announcement' AND                        
+                    a.cId = :course AND
+                    a.sessionId = :session AND
+                    a.title like :title                    
+                ORDER BY a.displayOrder DESC";
+
+        $qb = Database::getManager()->createQuery($dql);
+        $result = $qb->execute(
+            [
+                'course' => $courseId,
+                'session' => $sessionId,
+                'title' => "%$title%"
+            ]
+        );
+
+        return $result;
+    }
+
+    /**
      * @param int $announcementId
      * @param int $courseId
      * @param int $userId
@@ -406,7 +438,7 @@ class AnnouncementManager
      * Store an announcement in the database (including its attached file if any)
      * @param array $courseInfo
      * @param int $sessionId
-     * @param string $emailTitle   Announcement title (pure text)
+     * @param string $title   Announcement title (pure text)
      * @param string $newContent   Content of the announcement (can be HTML)
      * @param array  $sentTo      Array of users and groups to send the announcement to
      * @param array   $file     uploaded file $_FILES
@@ -414,13 +446,13 @@ class AnnouncementManager
      * @param string $end_date
      * @param bool $sendToUsersInSession
      * @param int $authorId
-     * 
+     *
      * @return int      false on failure, ID of the announcement on success
      */
     public static function add_announcement(
         $courseInfo,
         $sessionId,
-        $emailTitle,
+        $title,
         $newContent,
         $sentTo,
         $file = array(),
@@ -448,7 +480,7 @@ class AnnouncementManager
         $params = array(
             'c_id' => $course_id,
             'content' => $newContent,
-            'title' => $emailTitle,
+            'title' => $title,
             'end_date' => $end_date,
             'display_order' => $order,
             'session_id' => (int) $sessionId
@@ -542,7 +574,7 @@ class AnnouncementManager
     }
 
     /**
-     * @param $emailTitle
+     * @param $title
      * @param $newContent
      * @param $to
      * @param $to_users
@@ -553,7 +585,7 @@ class AnnouncementManager
      * @return bool|int
      */
     public static function add_group_announcement(
-        $emailTitle,
+        $title,
         $newContent,
         $to,
         $to_users,
@@ -574,7 +606,7 @@ class AnnouncementManager
         $params = [
             'c_id' => $course_id,
             'content' => $newContent,
-            'title' => $emailTitle,
+            'title' => $title,
             'end_date' => $now,
             'display_order' => $order,
             'session_id' => api_get_session_id()
@@ -646,16 +678,17 @@ class AnnouncementManager
      * This function stores the announcement item in the announcement table
      * and updates the item_property table
      *
-     * @param int 	id of the announcement
-     * @param string email
-     * @param string content
-     * @param array 	users that will receive the announcement
-     * @param mixed 	attachment
-     * @param string file comment
+     * @param int   $id id of the announcement
+     * @param string $title
+     * @param string $newContent
+     * @param array $to	users that will receive the announcement
+     * @param mixed $file	attachment
+     * @param string $file_comment file comment
+     * @param bool $sendToUsersInSession
      */
     public static function edit_announcement(
         $id,
-        $emailTitle,
+        $title,
         $newContent,
         $to,
         $file = array(),
@@ -670,7 +703,7 @@ class AnnouncementManager
         $id = intval($id);
 
         $params = [
-            'title' => $emailTitle,
+            'title' => $title,
             'content' => $newContent
         ];
 

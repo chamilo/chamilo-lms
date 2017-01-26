@@ -966,7 +966,10 @@ if ($data) {
 
         foreach ($sessions as $session) {
             $sessionId = $session['id'];
-            $data = $sessionFieldValue->get_values_by_handler_and_field_variable($sessionId, 'temps-de-travail');
+            $data = $sessionFieldValue->get_values_by_handler_and_field_variable(
+                $sessionId,
+                'temps-de-travail'
+            );
             if ($data) {
                 $sumHours += $data['value'];
             }
@@ -976,9 +979,9 @@ if ($data) {
 
 $numHours = $total - $sumHours;
 $headers = array(
-    "Total d'heures disponibles" => $total,
-    'Sommes des heures de sessions inscrites' => $sumHours,
-    "Nombre d'heures encore disponible" => $numHours
+    get_lang('TotalAvailableHours') => $total,
+    get_lang('SumHoursSessionsSubscribed') => $sumHours,
+    get_lang('CountHoursAvailable') => $numHours
 );
 foreach ($headers as $header => $value) {
     $table->setCellContents($row, 0, $header);

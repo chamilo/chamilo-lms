@@ -7938,4 +7938,7 @@ $MethodeTravail = "Ma méthode de travail";
 $SearchTCC = "Déjà inscrit dans TCC?";
 
 $URLOFAJ = "https://www.ofaj.org/";
-?>
+
+$TotalAvailableHours = "Total d'heures disponibles";
+$SumHoursSessionsSubscribed = "Sommes des heures de sessions inscrites";
+$CountHoursAvailable = "Nombre d'heures encore disponible";

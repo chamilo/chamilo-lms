@@ -1051,35 +1051,53 @@ class ImportCsv
                         $event['session_id']
                     );
 
-                    $announcementId = AnnouncementManager::add_announcement(
-                        $courseInfo,
-                        $event['session_id'],
-                        $subject,
-                        $emailBody,
-                        [
-                            'everyone',
-                            'users' => $coaches
-                        ],
-                        [],
-                        null,
-                        null,
-                        false,
-                        $this->defaultAdminId
+                    $subjectToSearch = sprintf(
+                        get_lang('AgendaAvailableInCourseX'),
+                        ''
                     );
 
-                    if ($announcementId) {
-                        $this->logger->addInfo(
-                            "<<--SEND MAIL-->>"
-                        );
+                    // Search if an announcement exists:
+                    $announcementsWithTitle = AnnouncementManager::getAnnouncementsByTitle(
+                        $subjectToSearch,
+                        $courseInfo['real_id'],
+                        $event['session_id']
+                    );
 
-                        $this->logger->addInfo(
-                            "Announcement added: ".(int) ($announcementId)
-                        );
-                        AnnouncementManager::sendEmail(
+                    if ($announcementsWithTitle == 0) {
+                        $announcementId = AnnouncementManager::add_announcement(
                             $courseInfo,
                             $event['session_id'],
-                            $announcementId,
-                            false
+                            $subject,
+                            $emailBody,
+                            [
+                                'everyone',
+                                'users' => $coaches
+                            ],
+                            [],
+                            null,
+                            null,
+                            false,
+                            $this->defaultAdminId
+                        );
+
+                        if ($announcementId) {
+                            $this->logger->addInfo(
+                                "<<--SEND MAIL-->>"
+                            );
+
+                            $this->logger->addInfo(
+                                "Announcement added: ".(int)($announcementId)
+                            );
+                            AnnouncementManager::sendEmail(
+                                $courseInfo,
+                                $event['session_id'],
+                                $announcementId,
+                                false
+                            );
+                        }
+                    } else {
+                        $this->logger->addInfo(
+                            "Mail NOT sent an announcement seems to be already saved in this course-session"
                         );
                     }
                 }

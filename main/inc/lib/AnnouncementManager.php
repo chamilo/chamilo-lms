@@ -194,10 +194,11 @@ class AnnouncementManager
      * @param string $title
      * @param int $courseId
      * @param int $sessionId
+     * @param int $visibility 1 or 0
      *
      * @return mixed
      */
-    public static function getAnnouncementsByTitle($title, $courseId, $sessionId = 0)
+    public static function getAnnouncementsByTitle($title, $courseId, $sessionId = 0, $visibility = 1)
     {
         $dql = "SELECT a
                 FROM ChamiloCourseBundle:CAnnouncement a 
@@ -207,7 +208,8 @@ class AnnouncementManager
                     ip.tool = 'announcement' AND                        
                     a.cId = :course AND
                     a.sessionId = :session AND
-                    a.title like :title                    
+                    a.title like :title AND
+                    ip.visibility = :visibility
                 ORDER BY a.displayOrder DESC";
 
         $qb = Database::getManager()->createQuery($dql);
@@ -215,7 +217,8 @@ class AnnouncementManager
             [
                 'course' => $courseId,
                 'session' => $sessionId,
-                'title' => "%$title%"
+                'visibility' => $visibility,
+                'title' => "%$title%",
             ]
         );
 

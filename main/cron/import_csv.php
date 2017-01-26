@@ -1058,7 +1058,8 @@ class ImportCsv
                     $announcementsWithTitleList = AnnouncementManager::getAnnouncementsByTitle(
                         $subject,
                         $courseInfo['real_id'],
-                        $event['session_id']
+                        $event['session_id'],
+                        1
                     );
 
                     if (count($announcementsWithTitleList) == 0) {

@@ -206,6 +206,10 @@ class CourseArchiver
     {
         $new_filename = uniqid('') . '.zip';
         $new_dir = self::getBackupDir();
+        if (!is_dir($new_dir)) {
+            $fs = new Filesystem();
+            $fs->mkdir($new_dir);
+        }
         if (is_dir($new_dir) && is_writable($new_dir)) {
             move_uploaded_file($file, $new_dir.$new_filename);
 

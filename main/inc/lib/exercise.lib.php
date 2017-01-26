@@ -830,7 +830,7 @@ class ExerciseLib
                         }
                         break;
                     case DRAGGABLE:
-                        if ($answerCorrect != 0) {
+                        if ($answerCorrect) {
                             $parsed_answer = $answer;
                             /*$lines_count = '';
                             $data = $objAnswerTmp->getAnswerByAutoId($numAnswer);
@@ -847,24 +847,31 @@ class ExerciseLib
                                     'class' => "window{$questionId}_question_draggable exercise-draggable-answer-option"
                                 ]
                             );
-                            $selectedValue = 0;
+
                             $draggableSelectOptions = [];
+                            $selectedValue = 0;
+                            $selectedIndex = 0;
 
-                            foreach ($select_items as $key => $val) {
-                                if ($debug_mark_answer) {
-                                    if ($val['id'] == $answerCorrect) {
-                                        $selectedValue = $val['id'];
+                            if ($user_choice) {
+                                foreach ($user_choice as $chosen) {
+                                    if ($answerCorrect != $chosen['answer']) {
+                                        continue;
                                     }
+
+                                    $selectedValue = $chosen['answer'];
+                                }
+                            }
+
+                            foreach ($select_items as $key => $select_item) {
+                                $draggableSelectOptions[$select_item['id']] = $select_item['letter'];
+                            }
+
+                            foreach ($draggableSelectOptions as $value => $text) {
+                                if ($value == $selectedValue) {
+                                    break;
                                 }
 
-                                if (
-                                    isset($user_choice[$matching_correct_answer]) &&
-                                    $val['id'] == $user_choice[$matching_correct_answer]['answer']
-                                ) {
-                                    $selectedValue = $val['id'];
-                                }
-
-                                $draggableSelectOptions[$val['id']] = $val['letter'];
+                                $selectedIndex++;
                             }
 
                             $s .= Display::select(
@@ -873,23 +880,22 @@ class ExerciseLib
                                 $selectedValue,
                                 [
                                     'id' => "window_{$windowId}_select",
-                                    'class' => 'select_option',
-                                    'style' => 'display: none;'
+                                    'class' => 'select_option hidden',
                                 ],
                                 false
                             );
 
-                            if (!empty($answerCorrect) && !empty($selectedValue)) {
-                                $s .= <<<JAVASCRIPT
-                                <script>
-                                    $(function() {
-                                        DraggableAnswer.deleteItem(
-                                            $('#{$questionId}_{$selectedValue}'),
-                                            $('#drop_$windowId')
-                                        );
-                                    });
-                                </script>
-JAVASCRIPT;
+                            if ($selectedValue && $selectedIndex) {
+                                $s .= "
+                                    <script>
+                                        $(function() {
+                                            DraggableAnswer.deleteItem(
+                                                $('#{$questionId}_$lines_count'),
+                                                $('#drop_{$questionId}_{$selectedIndex}')
+                                            );
+                                        });
+                                    </script>
+                                ";
                             }
 
                             if (isset($select_items[$lines_count])) {
@@ -900,7 +906,7 @@ JAVASCRIPT;
                                     ) . $select_items[$lines_count]['answer'],
                                     [
                                         'id' => "window_{$windowId}_answer",
-                                        'style' => 'display: none;'
+                                        'class' => 'hidden'
                                     ]
                                 );
                             } else {
@@ -940,35 +946,36 @@ JAVASCRIPT;
                                 </td>
                                 <td width="10%">
 HTML;
+
+                            $draggableSelectOptions = [];
                             $selectedValue = 0;
-                            $selectedPosition = 0;
-                            $questionOptions = [];
+                            $selectedIndex = 0;
 
-                            $iTempt = 0;
-
-                            foreach ($select_items as $key => $val) {
-                                if ($debug_mark_answer) {
-                                    if ($val['id'] == $answerCorrect) {
-                                        $selectedValue = $val['id'];
-                                        $selectedPosition = $iTempt;
+                            if ($user_choice) {
+                                foreach ($user_choice as $chosen) {
+                                    if ($answerCorrect != $chosen['answer']) {
+                                        continue;
                                     }
+
+                                    $selectedValue = $chosen['answer'];
+                                }
+                            }
+
+                            foreach ($select_items as $key => $select_item) {
+                                $draggableSelectOptions[$select_item['id']] = $select_item['letter'];
+                            }
+
+                            foreach ($draggableSelectOptions as $value => $text) {
+                                if ($value == $selectedValue) {
+                                    break;
                                 }
 
-                                if (
-                                    isset($user_choice[$matching_correct_answer]) &&
-                                    $val['id'] == $user_choice[$matching_correct_answer]['answer']
-                                ) {
-                                    $selectedValue = $val['id'];
-                                    $selectedPosition = $iTempt;
-                                }
-
-                                $questionOptions[$val['id']] = $val['letter'];
-                                $iTempt++;
+                                $selectedIndex++;
                             }
 
                             $s .= Display::select(
                                 "choice[$questionId][$numAnswer]",
-                                $questionOptions,
+                                $draggableSelectOptions,
                                 $selectedValue,
                                 [
                                     'id' => "window_{$windowId}_select",
@@ -980,25 +987,25 @@ HTML;
                             if (!empty($answerCorrect) && !empty($selectedValue)) {
                                 // Show connect if is not freeze (question preview)
                                 if (!$freeze) {
-                                    $s .= <<<JAVASCRIPT
-                                <script>
-                                    $(document).on('ready', function () {
-                                        jsPlumb.ready(function() {
-                                            jsPlumb.connect({
-                                                source: 'window_$windowId',
-                                                target: 'window_{$questionId}_{$selectedPosition}_answer',
-                                                endpoint: ['Blank', {radius: 15}],
-                                                anchors: ['RightMiddle', 'LeftMiddle'],
-                                                paintStyle: {strokeStyle: '#8A8888', lineWidth: 8},
-                                                connector: [
-                                                    MatchingDraggable.connectorType,
-                                                    {curvines: MatchingDraggable.curviness}
-                                                ]
+                                    $s .= "
+                                        <script>
+                                            $(document).on('ready', function () {
+                                                jsPlumb.ready(function() {
+                                                    jsPlumb.connect({
+                                                        source: 'window_$windowId',
+                                                        target: 'window_{$questionId}_{$selectedIndex}_answer',
+                                                        endpoint: ['Blank', {radius: 15}],
+                                                        anchors: ['RightMiddle', 'LeftMiddle'],
+                                                        paintStyle: {strokeStyle: '#8A8888', lineWidth: 8},
+                                                        connector: [
+                                                            MatchingDraggable.connectorType,
+                                                            {curvines: MatchingDraggable.curviness}
+                                                        ]
+                                                    });
+                                                });
                                             });
-                                        });
-                                    });
-                                </script>
-JAVASCRIPT;
+                                        </script>
+                                    ";
                                 }
                             }
 

@@ -1419,6 +1419,7 @@ class Display
                 if ($toolName == 'student_publication') {
                     $toolName = 'work';
                 }
+                $toolName = Database::escape_string($toolName);
                 $sql = "SELECT * FROM $tool_edit_table 
                         WHERE
                             c_id = $course_id AND

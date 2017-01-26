@@ -225,7 +225,7 @@ class Rest extends WebService
     {
         $teachers = CourseManager::get_teacher_list_from_course_code_to_string($this->course->getCode());
         $tools = CourseHome::get_tools_category(
-            'TOOL_STUDENT_VIEW',
+            TOOL_STUDENT_VIEW,
             $this->course->getId(),
             $this->session ? $this->session->getId() : 0
         );

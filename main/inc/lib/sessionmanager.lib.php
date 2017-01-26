@@ -461,23 +461,24 @@ class SessionManager
         } else {
             $select =
                 "SELECT DISTINCT 
-                 s.name,
-                 s.display_start_date, 
-                 s.display_end_date, 
-                 access_start_date, 
-                 access_end_date, 
-                 s.visibility, 
-                 s.session_category_id, 
-                 $inject_extra_fields 
-                 s.id 
+                     s.name,
+                     s.display_start_date, 
+                     s.display_end_date, 
+                     access_start_date, 
+                     access_end_date, 
+                     s.visibility, 
+                     s.session_category_id, 
+                     $inject_extra_fields 
+                     s.id 
              ";
 
             $isMakingOrder = strpos($options['order'], 'category_name') === 0;
         }
 
         $isFilteringSessionCategory = strpos($where, 'category_name') !== false;
+        $isFilteringSessionCategoryWithName = strpos($where, 'sc.name') !== false;
 
-        if ($isMakingOrder || $isFilteringSessionCategory) {
+        if ($isMakingOrder || $isFilteringSessionCategory || $isFilteringSessionCategoryWithName) {
             $inject_joins .= " LEFT JOIN $sessionCategoryTable sc ON s.session_category_id = sc.id ";
 
             if ($isFilteringSessionCategory) {
@@ -516,7 +517,6 @@ class SessionManager
         }
 
         $formatted_sessions = array();
-
         if (Database::num_rows($result)) {
             $sessions = Database::store_result($result, 'ASSOC');
             if ($get_count) {
@@ -3073,15 +3073,24 @@ class SessionManager
         if (!empty($sessions_list) && is_array($sessions_list)) {
             foreach ($sessions_list as $session_id) {
                 $session_id = intval($session_id);
-                $sql = "INSERT IGNORE INTO $tbl_session_rel_user (session_id, user_id, relation_type, registered_at)
-                        VALUES (
-                            $session_id,
-                            $userId,
-                            '" . SESSION_RELATION_TYPE_RRHH . "',
-                            '" . api_get_utc_datetime() . "'
-                        )";
-                Database::query($sql);
-                $affected_rows++;
+                $sql = "SELECT session_id
+                        FROM $tbl_session_rel_user
+                        WHERE
+                            session_id = $session_id AND
+                            user_id = $userId AND
+                            relation_type = '" . SESSION_RELATION_TYPE_RRHH . "'";
+                $result = Database::query($sql);
+                if (Database::num_rows($result) == 0) {
+                    $sql = "INSERT IGNORE INTO $tbl_session_rel_user (session_id, user_id, relation_type, registered_at)
+                            VALUES (
+                                $session_id,
+                                $userId,
+                                '".SESSION_RELATION_TYPE_RRHH."',
+                                '".api_get_utc_datetime()."'
+                            )";
+                    Database::query($sql);
+                    $affected_rows++;
+                }
             }
         }
 
@@ -5050,7 +5059,7 @@ class SessionManager
         $coaches = array();
         if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_row($result)) {
-                $coaches[] = $row[0];
+                $coaches[] = $row['user_id'];
             }
         }
 

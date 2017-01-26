@@ -782,15 +782,23 @@ class Link extends Model
      * session
      * @param   int $courseId
      * @param   int $sessionId
+     * @param   bool $withBaseContent
+     *
      * @return array
      */
-    public static function getLinkCategories($courseId, $sessionId)
+    public static function getLinkCategories($courseId, $sessionId, $withBaseContent = true)
     {
         $tblLinkCategory = Database:: get_course_table(TABLE_LINK_CATEGORY);
         $tblItemProperty = Database:: get_course_table(TABLE_ITEM_PROPERTY);
         $courseId = intval($courseId);
+
         // Condition for the session.
-        $sessionCondition = api_get_session_condition($sessionId, true, true, 'linkcat.session_id');
+        $sessionCondition = api_get_session_condition(
+            $sessionId,
+            true,
+            $withBaseContent,
+            'linkcat.session_id'
+        );
 
         // Getting links
         $sql = "SELECT *, linkcat.id
@@ -846,42 +854,71 @@ class Link extends Model
     }
 
     /**
-     * Displays all the links of a given category.
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     * @param $categoryId
+     * @param $courseId
+     * @param $sessionId
+     * @param bool $withBaseContent
+     *
+     * @return array
      */
-    public static function showlinksofcategory($catid)
+    public static function getLinksPerCategory($categoryId, $courseId, $sessionId, $withBaseContent = true)
     {
-        global $token;
-        $_user = api_get_user_info();
-        $course_id = api_get_course_int_id();
-        $session_id = api_get_session_id();
-        $catid = intval($catid);
-
         $tbl_link = Database:: get_course_table(TABLE_LINK);
         $TABLE_ITEM_PROPERTY = Database:: get_course_table(TABLE_ITEM_PROPERTY);
+        $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
+        $categoryId = (int) $categoryId;
 
         // Condition for the session.
-        $condition_session = api_get_session_condition($session_id, true, true, 'link.session_id');
-        $content = '';
+        $condition_session = api_get_session_condition(
+            $sessionId,
+            true,
+            $withBaseContent,
+            'link.session_id'
+        );
+
         $sql = "SELECT *, link.id 
                 FROM $tbl_link link
                 INNER JOIN $TABLE_ITEM_PROPERTY ip
-                ON (link.id=ip.ref AND link.c_id = ip.c_id)
+                ON (link.id = ip.ref AND link.c_id = ip.c_id)
                 WHERE
-                    ip.tool='" . TOOL_LINK . "' AND
-                    link.category_id='" . $catid . "' AND
-                    (ip.visibility='0' OR ip.visibility='1')
+                    ip.tool = '" . TOOL_LINK . "' AND
+                    link.category_id = '" . $categoryId . "' AND
+                    (ip.visibility = '0' OR ip.visibility = '1')
                     $condition_session AND
-                    link.c_id = " . $course_id . " AND
-                    ip.c_id = " . $course_id . "
+                    link.c_id = $courseId AND
+                    ip.c_id = $courseId 
                 ORDER BY link.display_order ASC";
 
         $result = Database:: query($sql);
-        $numberoflinks = Database:: num_rows($result);
-        if ($numberoflinks > 0) {
+
+        return Database::store_result($result);
+    }
+
+    /**
+     * Displays all the links of a given category.
+     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     * @author Julio Montoya
+     *
+     * @param $catid
+     * @param $courseId
+     * @param $session_id
+     * @return string
+     */
+    public static function showLinksPerCategory($catid, $courseId, $session_id)
+    {
+        global $token;
+        $_user = api_get_user_info();
+        $catid = intval($catid);
+
+        $links = self::getLinksPerCategory($catid, $courseId, $session_id);
+        $content = '';
+        $numberoflinks = count($links);
+
+        if (!empty($links)) {
             $content .= '<div class="link list-group">';
             $i = 1;
-            while ($myrow = Database:: fetch_array($result)) {
+            foreach ($links as $myrow) {
                 // Validation when belongs to a session.
                 $session_img = api_get_session_image(
                     $myrow['session_id'],
@@ -962,6 +999,7 @@ class Link extends Model
                             'category_id' => $myrow['category_id'],
                             'action' => 'move_link_up'
                         ];
+
                         $toolbar .= Display::toolbarButton(
                             get_lang('MoveUp'),
                             'link.php?' . api_get_cidreq() . '&' . http_build_query($moveLinkParams),
@@ -970,6 +1008,7 @@ class Link extends Model
                             ['class' => 'btn-sm ' . ($i === 1 ? 'disabled' : '')],
                             false
                         );
+
                         $moveLinkParams['action'] = 'move_link_down';
                         $toolbar .= Display::toolbarButton(
                             get_lang('MoveDown'),
@@ -1530,7 +1569,14 @@ class Link extends Model
         $count = Database::num_rows($result);
 
         if ($count !== 0) {
-            echo Display::panel(Link::showlinksofcategory(0), get_lang('General'));
+            echo Display::panel(
+                Link::showLinksPerCategory(
+                    0,
+                    api_get_course_int_id(),
+                    api_get_session_id()
+                ),
+                get_lang('General')
+            );
         }
 
         $counter = 0;
@@ -1579,7 +1625,11 @@ class Link extends Model
 
             $childrenContent = '';
             if ($showChildren) {
-                $childrenContent = Link::showlinksofcategory($myrow['id']);
+                $childrenContent = Link::showLinksPerCategory(
+                    $myrow['id'],
+                    api_get_course_int_id(),
+                    api_get_session_id()
+                );
             }
 
             echo Display::panel($myrow['description'].$childrenContent, $header);

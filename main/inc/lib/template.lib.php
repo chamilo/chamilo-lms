@@ -126,7 +126,6 @@ class Template
         $this->twig->addFilter('get_path', new Twig_Filter_Function('api_get_path'));
         $this->twig->addFilter('get_setting', new Twig_Filter_Function('api_get_setting'));
         $this->twig->addFilter('var_dump', new Twig_Filter_Function('var_dump'));
-        $this->twig->addFilter('return_logo', new Twig_Filter_Function('return_logo'));
         $this->twig->addFilter('return_message', new Twig_Filter_Function('Display::return_message_and_translate'));
         $this->twig->addFilter('display_page_header', new Twig_Filter_Function('Display::page_header_and_translate'));
         $this->twig->addFilter(
@@ -176,8 +175,6 @@ class Template
 
         $this->assign('template', $this->templateFolder);
         $this->assign('locale', api_get_language_isocode());
-
-        $this->assign('css_styles', $this->theme);
         $this->assign('login_class', null);
 
         $this->setLoginForm();
@@ -185,7 +182,6 @@ class Template
         // Chamilo plugins
         if ($this->show_header) {
             if ($this->load_plugins) {
-
                 $this->plugin = new AppPlugin();
 
                 //1. Showing installed plugins in regions
@@ -649,9 +645,8 @@ class Template
         }
 
         // Logo
-        $logo = return_logo($this->theme);
+        $logo = return_logo();
         $this->assign('logo', $logo);
-
         $this->assign('show_media_element', 1);
     }
 

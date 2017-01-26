@@ -15,34 +15,35 @@ class AnnouncementEmail
 
     /**
      *
-     * @param int|array $course
-     * @param integer $announcement
+     * @param array $courseInfo
+     * @param int $sessionId
+     * @param int $announcementId
      *
      * @return AnnouncementEmail
      */
-    public static function create($course, $announcement)
+    public static function create($courseInfo, $sessionId, $announcementId)
     {
-        return new self($course, $announcement);
+        return new self($courseInfo, $sessionId, $announcementId);
     }
 
     /**
-     * @param int $courseId
-     * @param int $announcement
+     * @param array $courseInfo
+     * @param int $sessionId
+     * @param int $announcementId
      */
-    public function __construct($courseId, $announcement)
+    public function __construct($courseInfo, $sessionId, $announcementId)
     {
-        if (!empty($courseId)) {
-            $course = api_get_course_info_by_id($courseId);
-        } else {
-            $course = api_get_course_info();
+        if (empty($courseInfo)) {
+            $courseInfo = api_get_course_info();
         }
-        $this->course = $course;
-        $this->session_id = api_get_session_id();
 
-        if (is_numeric($announcement)) {
-            $announcement = AnnouncementManager::get_by_id($course['real_id'], $announcement);
+        $this->course = $courseInfo;
+        $this->session_id = !empty($sessionId) ? (int) $sessionId : api_get_session_id();
+
+        if (is_numeric($announcementId)) {
+            $announcementId = AnnouncementManager::get_by_id($courseInfo['real_id'], $announcementId);
         }
-        $this->announcement = $announcement;
+        $this->announcement = $announcementId;
     }
 
     /**
@@ -82,24 +83,27 @@ class AnnouncementEmail
      */
     public function all_users()
     {
-        $course_code = $this->course('code');
+        $courseCode = $this->course('code');
         if (empty($this->session_id)) {
             $group_id = api_get_group_id();
             if (empty($group_id)) {
-                $user_list = CourseManager::get_user_list_from_course_code($course_code);
+                $userList = CourseManager::get_user_list_from_course_code($courseCode);
             } else {
-                $user_list = GroupManager::get_users($group_id);
+                $userList = GroupManager::get_users($group_id);
                 $new_user_list = array();
-                foreach ($user_list as $user) {
+                foreach ($userList as $user) {
                     $new_user_list[] = array('user_id' => $user);
                 }
-                $user_list = $new_user_list;
+                $userList = $new_user_list;
             }
         } else {
-            $user_list = CourseManager::get_user_list_from_course_code($course_code, $this->session_id);
+            $userList = CourseManager::get_user_list_from_course_code(
+                $courseCode,
+                $this->session_id
+            );
         }
 
-        return $user_list;
+        return $userList;
     }
 
     /**
@@ -146,6 +150,7 @@ class AnnouncementEmail
                 $result['groups'][] = (int) $group_id;
             }
         }
+
         return $result;
     }
 
@@ -180,16 +185,15 @@ class AnnouncementEmail
             $users = self::all_users();
         }
 
-        //Clean users just in case
-        $new_list_users = array();
-
+        // Clean users just in case
+        $newListUsers = array();
         if (!empty($users)) {
             foreach ($users as $user) {
-                $new_list_users[$user['user_id']] = array('user_id' => $user['user_id']);
+                $newListUsers[$user['user_id']] = ['user_id' => $user['user_id']];
             }
         }
 
-        return $new_list_users;
+        return $newListUsers;
     }
 
     /**
@@ -229,17 +233,18 @@ class AnnouncementEmail
     {
         $content = $this->announcement('content');
         $session_id = $this->session_id;
+        $courseCode = $this->course('code');
 
         $content = AnnouncementManager::parse_content(
             $receiverUserId,
             $content,
-            $this->course('code'),
+            $courseCode,
             $session_id
         );
 
         $user_email = $this->sender('mail');
         // Build the link by hand because api_get_cidreq() doesn't accept course params
-        $course_param = 'cidReq='.api_get_course_id().'&id_session='.$session_id.'&gidReq='.api_get_group_id();
+        $course_param = 'cidReq='.$courseCode.'&id_session='.$session_id.'&gidReq='.api_get_group_id();
         $course_name = $this->course('title');
 
         $result = "<div>$content</div>";
@@ -275,10 +280,10 @@ class AnnouncementEmail
     public function attachment()
     {
         $result = array();
-        $tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
+        $table = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
         $id = $this->announcement('id');
         $course_id = $this->course('id');
-        $sql = "SELECT * FROM $tbl_announcement_attachment 
+        $sql = "SELECT * FROM $table 
                 WHERE c_id = $course_id AND announcement_id = $id ";
         $rs = Database::query($sql);
         $course_path = $this->course('directory');
@@ -334,7 +339,7 @@ class AnnouncementEmail
             if (!empty($sessionList)) {
                 foreach ($sessionList as $sessionInfo) {
                     $sessionId = $sessionInfo['id'];
-                    $message = $this->message(null, $sessionId);
+                    $message = $this->message(null);
                     $userList = CourseManager::get_user_list_from_course_code(
                         $this->course['code'],
                         $sessionId
@@ -366,9 +371,14 @@ class AnnouncementEmail
         $id = $this->announcement('id');
         $course_id = $this->course('id');
 
-        $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
-        $sql = "UPDATE $tbl_announcement SET email_sent=1
-                WHERE c_id = $course_id AND id=$id AND session_id = {$this->session_id} ";
+        $table = Database::get_course_table(TABLE_ANNOUNCEMENT);
+        $sql = "UPDATE $table SET 
+                email_sent = 1
+                WHERE 
+                    c_id = $course_id AND 
+                    id = $id AND 
+                    session_id = {$this->session_id} 
+                ";
         Database::query($sql);
     }
 }

@@ -191,6 +191,41 @@ class AnnouncementManager
     }
 
     /**
+     * @param string $title
+     * @param int $courseId
+     * @param int $sessionId
+     * @param int $visibility 1 or 0
+     *
+     * @return mixed
+     */
+    public static function getAnnouncementsByTitle($title, $courseId, $sessionId = 0, $visibility = 1)
+    {
+        $dql = "SELECT a
+                FROM ChamiloCourseBundle:CAnnouncement a 
+                JOIN ChamiloCourseBundle:CItemProperty ip
+                WITH a.id = ip.ref AND a.cId = ip.course
+                WHERE
+                    ip.tool = 'announcement' AND                        
+                    a.cId = :course AND
+                    a.sessionId = :session AND
+                    a.title like :title AND
+                    ip.visibility = :visibility
+                ORDER BY a.displayOrder DESC";
+
+        $qb = Database::getManager()->createQuery($dql);
+        $result = $qb->execute(
+            [
+                'course' => $courseId,
+                'session' => $sessionId,
+                'visibility' => $visibility,
+                'title' => "%$title%",
+            ]
+        );
+
+        return $result;
+    }
+
+    /**
      * @param int $announcementId
      * @param int $courseId
      * @param int $userId
@@ -376,12 +411,18 @@ class AnnouncementManager
     }
 
     /**
+     * @param array $courseInfo
+     *
      * @return int
      */
-    public static function get_last_announcement_order()
+    public static function get_last_announcement_order($courseInfo)
     {
+        if (empty($courseInfo)) {
+            return 0;
+        }
         $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
-        $course_id = api_get_course_int_id();
+
+        $course_id = $courseInfo['real_id'];
         $sql = "SELECT MAX(display_order)
                 FROM $tbl_announcement
                 WHERE c_id = $course_id ";
@@ -398,43 +439,54 @@ class AnnouncementManager
 
     /**
      * Store an announcement in the database (including its attached file if any)
-     * @param string $emailTitle   Announcement title (pure text)
+     * @param array $courseInfo
+     * @param int $sessionId
+     * @param string $title   Announcement title (pure text)
      * @param string $newContent   Content of the announcement (can be HTML)
      * @param array  $sentTo      Array of users and groups to send the announcement to
      * @param array   $file     uploaded file $_FILES
      * @param string  $file_comment  Comment describing the attachment
      * @param string $end_date
      * @param bool $sendToUsersInSession
+     * @param int $authorId
+     *
      * @return int      false on failure, ID of the announcement on success
      */
     public static function add_announcement(
-        $emailTitle,
+        $courseInfo,
+        $sessionId,
+        $title,
         $newContent,
         $sentTo,
         $file = array(),
         $file_comment = null,
         $end_date = null,
-        $sendToUsersInSession = false
+        $sendToUsersInSession = false,
+        $authorId = 0
     ) {
-        $_course = api_get_course_info();
-        $course_id = api_get_course_int_id();
+        if (empty($courseInfo)) {
+            return false;
+        }
 
+        $course_id = $courseInfo['real_id'];
         $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
+
+        $authorId = empty($authorId) ? api_get_user_id() : $authorId;
 
         if (empty($end_date)) {
             $end_date = api_get_utc_datetime();
         }
 
-        $order = self::get_last_announcement_order();
+        $order = self::get_last_announcement_order($courseInfo);
 
         // store in the table announcement
         $params = array(
             'c_id' => $course_id,
             'content' => $newContent,
-            'title' => $emailTitle,
+            'title' => $title,
             'end_date' => $end_date,
             'display_order' => $order,
-            'session_id' => api_get_session_id()
+            'session_id' => (int) $sessionId
         );
 
         $last_id = Database::insert($tbl_announcement, $params);
@@ -454,21 +506,22 @@ class AnnouncementManager
             }
 
             // store in item_property (first the groups, then the users
-            if (empty($sentTo) || !empty($sentTo) &&
-                isset($sentTo[0]) && $sentTo[0] == 'everyone'
-            ) {
+            if (empty($sentTo) || (!empty($sentTo) && isset($sentTo[0]) && $sentTo[0] == 'everyone')) {
                 // The message is sent to EVERYONE, so we set the group to 0
                 api_item_property_update(
-                    $_course,
+                    $courseInfo,
                     TOOL_ANNOUNCEMENT,
                     $last_id,
                     'AnnouncementAdded',
-                    api_get_user_id(),
-                    '0'
+                    $authorId,
+                    '0',
+                    null,
+                    null,
+                    null,
+                    $sessionId
                 );
             } else {
                 $send_to = CourseManager::separateUsersGroups($sentTo);
-
                 $batchSize = 20;
                 $em = Database::getManager();
                 // Storing the selected groups
@@ -476,11 +529,11 @@ class AnnouncementManager
                     $counter = 1;
                     foreach ($send_to['groups'] as $group) {
                         api_item_property_update(
-                            $_course,
+                            $courseInfo,
                             TOOL_ANNOUNCEMENT,
                             $last_id,
-                            "AnnouncementAdded",
-                            api_get_user_id(),
+                            'AnnouncementAdded',
+                            $authorId,
                             $group
                         );
 
@@ -497,11 +550,11 @@ class AnnouncementManager
                     $counter = 1;
                     foreach ($send_to['users'] as $user) {
                         api_item_property_update(
-                            $_course,
+                            $courseInfo,
                             TOOL_ANNOUNCEMENT,
                             $last_id,
-                            "AnnouncementAdded",
-                            api_get_user_id(),
+                            'AnnouncementAdded',
+                            $authorId,
                             '',
                             $user
                         );
@@ -524,7 +577,7 @@ class AnnouncementManager
     }
 
     /**
-     * @param $emailTitle
+     * @param $title
      * @param $newContent
      * @param $to
      * @param $to_users
@@ -535,7 +588,7 @@ class AnnouncementManager
      * @return bool|int
      */
     public static function add_group_announcement(
-        $emailTitle,
+        $title,
         $newContent,
         $to,
         $to_users,
@@ -547,7 +600,7 @@ class AnnouncementManager
 
         // Database definitions
         $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
-        $order = self::get_last_announcement_order();
+        $order = self::get_last_announcement_order($_course);
 
         $now = api_get_utc_datetime();
         $course_id = api_get_course_int_id();
@@ -556,7 +609,7 @@ class AnnouncementManager
         $params = [
             'c_id' => $course_id,
             'content' => $newContent,
-            'title' => $emailTitle,
+            'title' => $title,
             'end_date' => $now,
             'display_order' => $order,
             'session_id' => api_get_session_id()
@@ -628,16 +681,17 @@ class AnnouncementManager
      * This function stores the announcement item in the announcement table
      * and updates the item_property table
      *
-     * @param int 	id of the announcement
-     * @param string email
-     * @param string content
-     * @param array 	users that will receive the announcement
-     * @param mixed 	attachment
-     * @param string file comment
+     * @param int   $id id of the announcement
+     * @param string $title
+     * @param string $newContent
+     * @param array $to	users that will receive the announcement
+     * @param mixed $file	attachment
+     * @param string $file_comment file comment
+     * @param bool $sendToUsersInSession
      */
     public static function edit_announcement(
         $id,
-        $emailTitle,
+        $title,
         $newContent,
         $to,
         $file = array(),
@@ -652,7 +706,7 @@ class AnnouncementManager
         $id = intval($id);
 
         $params = [
-            'title' => $emailTitle,
+            'title' => $title,
             'content' => $newContent
         ];
 
@@ -1243,16 +1297,20 @@ class AnnouncementManager
     }
 
     /**
+     * @param array $courseInfo
+     * @param int $sessionId
      * @param int $id
      * @param bool $sendToUsersInSession
      * @param bool $sendToDrhUsers
      */
-    public static function send_email(
+    public static function sendEmail(
+        $courseInfo,
+        $sessionId,
         $id,
         $sendToUsersInSession = false,
         $sendToDrhUsers = false
     ) {
-        $email = AnnouncementEmail::create(null, $id);
+        $email = AnnouncementEmail::create($courseInfo, $sessionId, $id);
         $email->send($sendToUsersInSession, $sendToDrhUsers);
     }
 

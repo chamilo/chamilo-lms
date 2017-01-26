@@ -680,7 +680,7 @@ $tpl = new Template(get_lang('Social'));
 // Block Avatar Social
 SocialManager::setSocialUserBlock(
     $tpl,
-    api_get_user_id(),
+    $friendId,
     'shared_profile',
     0,
     $show_full_profile

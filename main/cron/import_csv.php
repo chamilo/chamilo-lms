@@ -1181,10 +1181,11 @@ class ImportCsv
             }
 
             $em->clear(); // Detaches all objects from Doctrine!
-
+            $this->logger->addInfo('------Summary------');
             foreach ($report as $title => $count) {
                 $this->logger->addInfo("$title: $count");
             }
+            $this->logger->addInfo('------End Summary------');
         }
 
         if ($moveFile) {

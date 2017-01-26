@@ -911,6 +911,11 @@ class ImportCsv
             $counter = 1;
             $em = Database::getManager();
             $eventSentMailList = [];
+            $report = [
+                'mail_sent' => 0,
+                'mail_not_sent_announcement_exists' => 0,
+                'mail_not_sent_because_date' => 0,
+            ];
             foreach ($eventsToCreate as $event) {
                 $update = false;
                 $item = null;
@@ -1083,6 +1088,8 @@ class ImportCsv
                             $this->logger->addInfo(
                                 "<<--SENDING MAIL-->>"
                             );
+
+                            $report['mail_sent']++;
                             AnnouncementManager::sendEmail(
                                 $courseInfo,
                                 $event['session_id'],
@@ -1091,9 +1098,14 @@ class ImportCsv
                             );
                         }
                     } else {
+                        $report['mail_not_sent_announcement_exists']++;
                         $this->logger->addInfo(
                             "Mail NOT sent an announcement seems to be already saved in this course-session"
                         );
+                    }
+                } else {
+                    if ($sendMail == false) {
+                        $report['mail_not_sent_because_date']++;
                     }
                 }
 
@@ -1169,6 +1181,10 @@ class ImportCsv
             }
 
             $em->clear(); // Detaches all objects from Doctrine!
+
+            foreach ($report as $title => $count) {
+                $this->logger->addInfo("$title: $count");
+            }
         }
 
         if ($moveFile) {

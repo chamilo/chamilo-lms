@@ -202,6 +202,7 @@ class ImportCsv
                         } else {
                             $this->$method($file, true);
                         }
+                        $this->logger->addInfo("--Finish reading file--");
                     }
                 }
             }
@@ -237,6 +238,7 @@ class ImportCsv
                             $teacherBackup,
                             $groupBackup
                         );
+                        $this->logger->addInfo("--Finish reading file--");
                     }
                 }
             }

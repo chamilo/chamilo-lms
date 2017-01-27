@@ -1272,6 +1272,21 @@ class CourseHome
                     $html .= ' id="here"';
                 }
                 $html .= ' target="_top" title="'.$navigation_item['name'].'">';
+
+                if (isset($navigation_item['category']) && $navigation_item['category'] == 'plugin') {
+                    /*$plugin_info = $app_plugin->getPluginInfo($navigation_item['name']);
+                    if (isset($plugin_info) && isset($plugin_info['title'])) {
+                        $tool_name = $plugin_info['title'];
+                    }*/
+
+                    if (!file_exists(api_get_path(SYS_CODE_PATH).'img/'.$navigation_item['image']) &&
+                        !file_exists(api_get_path(SYS_CODE_PATH).'img/icons/'.ICON_SIZE_MEDIUM.'/'.$navigation_item['image'])
+                    ) {
+                        $navigation_item['image'] = 'plugins.png';
+                    }
+                    //$tool_link_params['href'] = api_get_path(WEB_PLUGIN_PATH).$navigation_item['link'].'?'.api_get_cidreq();
+                }
+
                 $html .= Display::return_icon(
                     substr($navigation_item['image'], 0, -3).'png',
                     $navigation_item['name'],

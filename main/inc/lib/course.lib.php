@@ -3485,6 +3485,7 @@ class CourseManager
         $rs_special_course = Database::query($sql);
         $number_of_courses = Database::num_rows($rs_special_course);
         $showCustomIcon = api_get_setting('course_images_in_courses_list');
+
         $courseList = [];
         if ($number_of_courses > 0) {
             while ($course = Database::fetch_array($rs_special_course)) {

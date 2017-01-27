@@ -783,7 +783,6 @@ class CourseHome
                 }
 
                 $item['visibility'] = null;
-
                 if (isset($lnk) && is_array($lnk)) {
                     foreach ($lnk as $this_link) {
                         if (empty($tool['adminlink'])) {
@@ -1246,6 +1245,9 @@ class CourseHome
 
     /**
      * Show a toolbar with shortcuts to the course tool
+     * @param int $orientation
+     *
+     * @return string
      */
     public static function show_navigation_tool_shortcuts($orientation = SHORTCUTS_HORIZONTAL)
     {
@@ -1270,15 +1272,18 @@ class CourseHome
                     $html .= ' id="here"';
                 }
                 $html .= ' target="_top" title="'.$navigation_item['name'].'">';
-                $html .= Display::return_icon(substr($navigation_item['image'],0,-3)."png", $navigation_item['name'], null, ICON_SIZE_MEDIUM);
-                //$html .= '<img src="'.api_get_path(WEB_IMG_PATH).$navigation_item['image'].'" alt="'.$navigation_item['name'].'"/>';
+                $html .= Display::return_icon(
+                    substr($navigation_item['image'], 0, -3).'png',
+                    $navigation_item['name'],
+                    null,
+                    ICON_SIZE_MEDIUM
+                );
                 $html .= '</a> ';
                 if ($orientation == SHORTCUTS_VERTICAL) {
                     $html .= '<br />';
                 }
             }
             $html .= '</div>';
-
         }
 
         return $html;

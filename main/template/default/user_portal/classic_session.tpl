@@ -56,13 +56,13 @@
                             <div class="courses">
                                 <div class="row">
                                     <div class="col-md-2">
-                                        {% if item.link %}
-                                            <a href="{{ item.link }}" class="thumbnail">
+                                        <a href="{{ item.link }}" class="thumbnail">
+                                            {% if item.link %}
                                                 <img class="img-responsive" src="{{ item.icon }}">
-                                            </a>
-                                        {% else %}
-                                            {{ 'blackboard.png' | img(48, item.title ) }}
-                                        {% endif %}
+                                            {% else %}
+                                                {{ 'blackboard.png' | img(48, item.title ) }}
+                                            {% endif %}
+                                        </a>
                                     </div>
                                     <div class="col-md-10">
                                         <h4>{{ item.title }}</h4>
@@ -114,7 +114,7 @@
                         {% if row.description != '' %}
                             <div class="description">
                                 {{ row.description }}
-                            </div>                 
+                            </div>
                         {% endif %}
                     </div>
                 </div>

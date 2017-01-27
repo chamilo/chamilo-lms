@@ -48,16 +48,13 @@ class LearnpathList
         $ignoreCategoryFilter = false
     ) {
         $course_info = api_get_course_info($course_code);
-        $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         $tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
 
         $this->course_code = $course_code;
         $this->user_id = $user_id;
-
         $course_id = $course_info['real_id'];
 
         if (empty($course_id)) {
-
             return false;
         }
 
@@ -68,7 +65,12 @@ class LearnpathList
             $session_id = api_get_session_id();
         }
 
-        $condition_session = api_get_session_condition($session_id, true, true, 'lp.sessionId');
+        $condition_session = api_get_session_condition(
+            $session_id,
+            true,
+            true,
+            'lp.sessionId'
+        );
 
         $order = "ORDER BY lp.displayOrder ASC, lp.name ASC";
         if (isset($order_by)) {

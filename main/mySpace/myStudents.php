@@ -117,7 +117,7 @@ if (isset($_GET['details'])) {
                     "url" => api_is_student_boss()?"#":"index.php",
                     "name" => get_lang('MySpace')
                 );
-                if (isset ($_GET['id_coach']) && intval($_GET['id_coach']) != 0) {
+                if (isset($_GET['id_coach']) && intval($_GET['id_coach']) != 0) {
                     $interbreadcrumb[] = array (
                         "url" => "student.php?id_coach=" . Security :: remove_XSS($_GET['id_coach']),
                         "name" => get_lang("CoachStudents")
@@ -159,18 +159,18 @@ if (isset($_GET['details'])) {
         );
         if (isset($_GET['id_coach']) && intval($_GET['id_coach']) != 0) {
             if ($sessionId) {
-                $interbreadcrumb[] = array (
+                $interbreadcrumb[] = array(
                     "url" => "student.php?id_coach=" . Security :: remove_XSS($_GET['id_coach']) . "&id_session=" . $sessionId,
                     "name" => get_lang("CoachStudents")
                 );
             } else {
-                $interbreadcrumb[] = array (
+                $interbreadcrumb[] = array(
                     "url" => "student.php?id_coach=" . Security :: remove_XSS($_GET['id_coach']),
                     "name" => get_lang("CoachStudents")
                 );
             }
         } else {
-            $interbreadcrumb[] = array (
+            $interbreadcrumb[] = array(
                 "url" => "student.php",
                 "name" => get_lang("MyStudents")
             );
@@ -397,7 +397,7 @@ if (!empty($student_id)) {
     // get average of score and average of progress by student
     $avg_student_progress = $avg_student_score = 0;
 
-    if (CourseManager :: is_user_subscribed_in_course($user_info['user_id'], $course_code, true)) {
+    if (CourseManager::is_user_subscribed_in_course($user_info['user_id'], $course_code, true)) {
         $avg_student_progress = Tracking::get_avg_student_progress(
             $user_info['user_id'],
             $course_code,
@@ -745,7 +745,14 @@ if (!empty($student_id)) {
                         }
 
                         // Get evaluations by student
-                        $cats = Category::load(null, null, $courseCodeItem, null, null, $sId);
+                        $cats = Category::load(
+                            null,
+                            null,
+                            $courseCodeItem,
+                            null,
+                            null,
+                            $sId
+                        );
 
                         $scoretotal = array();
                         if (isset($cats) && isset($cats[0])) {
@@ -764,8 +771,18 @@ if (!empty($student_id)) {
                                 ' ('.round(($scoretotal[0] / $scoretotal[1]) * 100, 2).' %)';
                         }
 
-                        $progress = Tracking::get_avg_student_progress($user_info['user_id'], $courseCodeItem, null, $sId);
-                        $score = Tracking :: get_avg_student_score($user_info['user_id'], $courseCodeItem, null, $sId);
+                        $progress = Tracking::get_avg_student_progress(
+                            $user_info['user_id'],
+                            $courseCodeItem,
+                            null,
+                            $sId
+                        );
+                        $score = Tracking:: get_avg_student_score(
+                            $user_info['user_id'],
+                            $courseCodeItem,
+                            null,
+                            $sId
+                        );
                         $progress = empty($progress) ? '0%' : $progress.'%';
                         $score = empty($score) ? '0%' : $score.'%';
 
@@ -822,28 +839,36 @@ if (!empty($student_id)) {
                 get_lang('LastConnexion')
             );
 
-            $query = $em
-                ->createQuery('
-                    SELECT lp FROM ChamiloCourseBundle:CLp lp
-                    WHERE lp.sessionId = :session AND lp.cId = :course
-                    ORDER BY lp.displayOrder ASC
-                ');
-
+            // @todo use LearnpathList class
             if (empty($sessionId)) {
+                $dql = '
+                    SELECT lp FROM ChamiloCourseBundle:CLp lp
+                    WHERE 
+                        (lp.sessionId = 0 OR lp.sessionId IS NULL) AND 
+                        lp.cId = :course
+                    ORDER BY lp.displayOrder ASC
+                ';
+                $query = $em->createQuery($dql);
                 $query->setParameters([
-                    'session' => 0,
                     'course' => $courseInfo['real_id']
                 ]);
             } else {
+                $dql = '
+                    SELECT lp FROM ChamiloCourseBundle:CLp lp
+                    WHERE 
+                        (lp.sessionId = :session OR lp.sessionId = 0 OR lp.sessionId IS NULL) AND 
+                        lp.cId = :course
+                    ORDER BY lp.displayOrder ASC
+                ';
+                $query = $em->createQuery($dql);
                 $query->setParameters([
                     'session' => $sessionId,
                     'course' => $courseInfo['real_id']
                 ]);
             }
 
-            $rs_lp = $query->getResult();
-
-            if (count($rs_lp) > 0) {
+            $lps = $query->getResult();
+            if (count($lps) > 0) {
                 ?>
                 <!-- LPs-->
                 <div class="table-responsive">
@@ -910,7 +935,8 @@ if (!empty($student_id)) {
                 <?php
 
                 $i = 0;
-                foreach ($rs_lp as $learnpath) {
+                /** @var \Chamilo\CourseBundle\Entity\CLp $learnpath */
+                foreach ($lps as $learnpath) {
                     $lp_id = $learnpath->getId();
                     $lp_name = $learnpath->getName();
                     $any_result = false;
@@ -996,7 +1022,6 @@ if (!empty($student_id)) {
                     );
 
                     echo '<tr class="'.$css_class.'">';
-
                     echo Display::tag('td', stripslashes($lp_name));
                     echo Display::tag('td', api_time_to_hms($total_time));
 
@@ -1084,7 +1109,12 @@ if (!empty($student_id)) {
         );
 
         $t_quiz = Database :: get_course_table(TABLE_QUIZ_TEST);
-        $sessionCondition = api_get_session_condition($sessionId, true, true, 'quiz.session_id');
+        $sessionCondition = api_get_session_condition(
+            $sessionId,
+            true,
+            true,
+            'quiz.session_id'
+        );
 
         $sql = "SELECT quiz.title, id FROM " . $t_quiz . " AS quiz
                 WHERE

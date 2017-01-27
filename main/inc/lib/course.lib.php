@@ -507,9 +507,12 @@ class CourseManager
     /**
      * Subscribe a user to a course. No checks are performed here to see if
      * course subscription is allowed.
-     * @param   int     User ID
-     * @param   string  Course code
-     * @param   int     Status (STUDENT, COURSEMANAGER, COURSE_ADMIN, NORMAL_COURSE_MEMBER)
+     * @param   int     $user_id
+     * @param   string  $course_code
+     * @param   int     $status (STUDENT, COURSEMANAGER, COURSE_ADMIN, NORMAL_COURSE_MEMBER)
+     * @param   int $session_id
+     * @param   int $userCourseCategoryId
+     *
      * @return  bool    True on success, false on failure
      * @see add_user_to_course
      * @assert ('', '') === false
@@ -529,10 +532,9 @@ class CourseManager
         $courseInfo = api_get_course_info($course_code);
         $courseId = $courseInfo['real_id'];
         $courseCode = $courseInfo['code'];
+        //$userCourseCategoryId = intval($userCourseCategoryId);
 
-        $userCourseCategoryId = intval($userCourseCategoryId);
-
-        if (empty($user_id) || empty ($course_code)) {
+        if (empty($user_id) || empty($course_code)) {
             return false;
         }
 
@@ -543,23 +545,23 @@ class CourseManager
         }
 
         $status = ($status == STUDENT || $status == COURSEMANAGER) ? $status : STUDENT;
-        //$role_id = ($status == COURSEMANAGER) ? COURSE_ADMIN : NORMAL_COURSE_MEMBER;
 
         // A preliminary check whether the user has bben already registered on the platform.
-        if (Database::num_rows(Database::query(
-                "SELECT status FROM " . Database::get_main_table(TABLE_MAIN_USER) . "
-                WHERE user_id = '$user_id' ")) == 0
-        ) {
+        $sql = "SELECT status FROM " . Database::get_main_table(TABLE_MAIN_USER) . "
+                WHERE user_id = '$user_id' ";
+        if (Database::num_rows(Database::query($sql)) == 0) {
             return false; // The user has not been registered to the platform.
         }
 
         // Check whether the user has not been already subscribed to the course.
-
+        $sql = "SELECT * FROM " . Database::get_main_table(TABLE_MAIN_COURSE_USER) . "                    
+                WHERE 
+                    user_id = '$user_id' AND 
+                    relation_type <> " . COURSE_RELATION_TYPE_RRHH . " AND 
+                    c_id = $courseId
+                ";
         if (empty($session_id)) {
-            if (Database::num_rows(Database::query("
-                    SELECT * FROM " . Database::get_main_table(TABLE_MAIN_COURSE_USER) . "
-                    WHERE user_id = '$user_id' AND relation_type<>" . COURSE_RELATION_TYPE_RRHH . " AND c_id = '$courseId'")) > 0
-            ) {
+            if (Database::num_rows(Database::query($sql)) > 0) {
                 // The user has been already subscribed to the course.
                 return false;
             }
@@ -655,16 +657,21 @@ class CourseManager
      * @author Hugues Peeters
      * @author Roan Embrechts
      *
-     * @param  int $user_id the id of the user
-     * @param  string $courseCode the course code
-     * @param  int $status (optional) The user's status in the course
-     * @param  int The user category in which this subscription will be classified
+     * @param   int $user_id the id of the user
+     * @param   string $courseCode the course code
+     * @param   int $status (optional) The user's status in the course
+     * @param   int $userCourseCategoryId
+     * @param   int The user category in which this subscription will be classified
      *
      * @return false|string true if subscription succeeds, boolean false otherwise.
      * @assert ('', '') === false
      */
-    public static function add_user_to_course($user_id, $courseCode, $status = STUDENT, $userCourseCategoryId = 0)
-    {
+    public static function add_user_to_course(
+        $user_id,
+        $courseCode,
+        $status = STUDENT,
+        $userCourseCategoryId = 0
+    ) {
         $debug = false;
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
         $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -832,7 +839,7 @@ class CourseManager
     /**
      *    Checks wether a parameter exists.
      *    If it doesn't, the function displays an error message.
-     *
+     * @deprecated
      * @return boolean if parameter is set and not empty, false otherwise
      * @todo move function to better place, main_api ?
      */
@@ -847,6 +854,7 @@ class CourseManager
 
     /**
      *    Lets the script die when a parameter check fails.
+     * @deprecated
      * @todo move function to better place, main_api ?
      */
     public static function check_parameter_or_fail($parameter, $error_message)

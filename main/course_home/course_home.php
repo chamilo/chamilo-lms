@@ -135,12 +135,9 @@ Session::erase('_gid');
 $isSpecialCourse = CourseManager::isSpecialCourse($courseId);
 
 if ($isSpecialCourse) {
-    if (isset($_GET['autoreg'])) {
-        $autoRegistration = Security::remove_XSS($_GET['autoreg']);
-        if ($autoRegistration == 1) {
-            if (CourseManager::subscribe_user($user_id, $course_code, STUDENT)) {
-                Session::write('is_allowed_in_course', true);
-            }
+    if (isset($_GET['autoreg']) && $_GET['autoreg'] == 1) {
+        if (CourseManager::subscribe_user($user_id, $course_code, STUDENT)) {
+            Session::write('is_allowed_in_course', true);
         }
     }
 }

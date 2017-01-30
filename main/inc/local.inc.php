@@ -587,7 +587,6 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 foreach ($extAuthSource as $thisAuthSource) {
                     if (!empty($thisAuthSource['login']) && file_exists($thisAuthSource['login'])) {
                         include_once($thisAuthSource['login']);
-                        break;
                     }
                     if (isset($thisAuthSource['newUser']) && file_exists($thisAuthSource['newUser'])) {
                         include_once($thisAuthSource['newUser']);

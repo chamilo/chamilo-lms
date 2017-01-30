@@ -910,7 +910,8 @@ class ImportCsv
             $batchSize = $this->batchSize;
             $counter = 1;
             $em = Database::getManager();
-            $eventSentMailList = [];
+            $eventStartDateList = [];
+            $eventEndDateList = [];
             $report = [
                 'mail_sent' => 0,
                 'mail_not_sent_announcement_exists' => 0,
@@ -962,17 +963,19 @@ class ImportCsv
                 $event['item']  = $item;
                 $event['external_event_id']  = $externalEventId;
 
-                if (isset($eventSentMailList[$courseInfo['real_id']]) &&
-                    isset($eventSentMailList[$courseInfo['real_id']][$event['session_id']])
+                if (isset($eventStartDateList[$courseInfo['real_id']]) &&
+                    isset($eventStartDateList[$courseInfo['real_id']][$event['session_id']])
                 ) {
                     $currentItemDate = api_strtotime($event['start']);
-                    $firstDate = $eventSentMailList[$courseInfo['real_id']][$event['session_id']];
+                    $firstDate = $eventStartDateList[$courseInfo['real_id']][$event['session_id']];
                     if ($currentItemDate < api_strtotime($firstDate)) {
-                        $eventSentMailList[$courseInfo['real_id']][$event['session_id']] = $event['start'];
+                        $eventStartDateList[$courseInfo['real_id']][$event['session_id']] = $event['start'];
+                        $eventEndDateList[$courseInfo['real_id']][$event['session_id']] = $event['end'];
                     }
                 } else {
                     // First time
-                    $eventSentMailList[$courseInfo['real_id']][$event['session_id']] = $event['start'];
+                    $eventStartDateList[$courseInfo['real_id']][$event['session_id']] = $event['start'];
+                    $eventEndDateList[$courseInfo['real_id']][$event['session_id']] = $event['end'];
                 }
                 $eventsToCreateFinal[] = $event;
             }
@@ -1018,7 +1021,8 @@ class ImportCsv
 
                 // Taking first element of course-session event
                 $alreadyAdded = false;
-                $firstDate = $eventSentMailList[$courseInfo['real_id']][$event['session_id']];
+                $firstDate = $eventStartDateList[$courseInfo['real_id']][$event['session_id']];
+                $firstEndDate = $eventEndDateList[$courseInfo['real_id']][$event['session_id']];
 
                 if (isset($eventAlreadySent[$courseInfo['real_id']]) &&
                     isset($eventAlreadySent[$courseInfo['real_id']][$event['session_id']])
@@ -1045,8 +1049,8 @@ class ImportCsv
 
                 // Send announcement to users
                 if ($sendMail && $alreadyAdded == false) {
-                    $start = $event['start'];
-                    $end = $event['end'];
+                    $start = $firstDate;
+                    $end = $firstEndDate;
 
                     if (!empty($end) &&
                         api_format_date($start, DATE_FORMAT_LONG) == api_format_date($end, DATE_FORMAT_LONG)

@@ -48,6 +48,8 @@ $interbreadcrumb[] = array(
 );
 $interbreadcrumb[] = array('url' => '#', 'name'  => get_lang('UploadCorrections'));
 
+$downloadLink = api_get_path(WEB_CODE_PATH).'work/downloadfolder.inc.php?id='.$workId.'&'.api_get_cidreq();
+
 $form = new FormValidator(
     'form',
     'POST',
@@ -55,7 +57,16 @@ $form = new FormValidator(
     '',
     array('enctype' => "multipart/form-data")
 );
+
 $form->addElement('header', get_lang('UploadCorrections'));
+$form->addHtml(Display::return_message(
+    sprintf(
+        get_lang('UploadCorrectionsExplanationWithDownloadLinkX'),
+        $downloadLink
+    ),
+    'normal',
+    false
+));
 $form->addElement('file', 'file', get_lang('UploadADocument'));
 $form->addProgress();
 $form->addRule('file', get_lang('ThisFieldIsRequired'), 'required');

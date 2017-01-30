@@ -570,7 +570,6 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_mathjax', 'false', 'No')");
 
         $this->addSql("INSERT INTO language (original_name, english_name, isocode, dokeos_folder, available) VALUES ('Føroyskt', 'faroese', 'fo', 'faroese', 0), ('Tagalog', 'tagalog', 'tl', 'tagalog',1), ('Tibetan', 'tibetan', 'bo', 'tibetan', 0), ('isiXhosa', 'xhosa', 'xh', 'xhosa', 0)");
-        $this->addSql("DELETE FROM settings_options WHERE variable = 'show_glossary_in_extra_tools'");
 
         $this->addSql("ALTER TABLE c_student_publication MODIFY COLUMN date_of_qualification DATETIME NULL DEFAULT NULL");
         $this->addSql("ALTER TABLE c_student_publication MODIFY COLUMN sent_date DATETIME NULL DEFAULT NULL");
@@ -583,7 +582,6 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("UPDATE c_student_publication_assignment SET ends_on = NULL WHERE ends_on = '0000-00-00 00:00:00'");
 
         $this->addSql("UPDATE settings_current SET type = 'checkbox' WHERE variable = 'registration' AND category = 'User'");
-
         $this->addSql("UPDATE settings_current SET selected_value = 'UTF-8' WHERE variable = 'platform_charset'");
 
         $this->addSql("ALTER TABLE course_rel_user DROP PRIMARY KEY");

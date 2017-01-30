@@ -916,6 +916,8 @@ class ImportCsv
                 'mail_not_sent_announcement_exists' => 0,
                 'mail_not_sent_because_date' => 0,
             ];
+
+            $eventsToCreateFinal = [];
             foreach ($eventsToCreate as $event) {
                 $update = false;
                 $item = null;
@@ -955,6 +957,33 @@ class ImportCsv
                 }
 
                 $courseInfo = api_get_course_info_by_id($event['course_id']);
+                $event['course_info']  = $courseInfo;
+                $event['update']  = $update;
+                $event['item']  = $item;
+                $event['external_event_id']  = $externalEventId;
+
+                if (isset($eventSentMailList[$courseInfo['real_id']]) &&
+                    isset($eventSentMailList[$courseInfo['real_id']][$event['session_id']])
+                ) {
+                    $currentItemDate = api_strtotime($event['start']);
+                    $firstDate = $eventSentMailList[$courseInfo['real_id']][$event['session_id']];
+                    if ($currentItemDate < api_strtotime($firstDate)) {
+                        $eventSentMailList[$courseInfo['real_id']][$event['session_id']] = $event['start'];
+                    }
+                } else {
+                    // First time
+                    $eventSentMailList[$courseInfo['real_id']][$event['session_id']] = $event['start'];
+                }
+                $eventsToCreateFinal[] = $event;
+            }
+
+            $eventAlreadySent = [];
+            foreach ($eventsToCreateFinal as $event) {
+                $courseInfo = $event['course_info'];
+                $item = $event['item'];
+                $update = $event['update'];
+                $externalEventId = $event['external_event_id'];
+
                 $agenda = new Agenda(
                     'course',
                     $event['sender_id'],
@@ -989,13 +1018,14 @@ class ImportCsv
 
                 // Taking first element of course-session event
                 $alreadyAdded = false;
-                if (isset($eventSentMailList[$courseInfo['real_id']]) &&
-                    isset($eventSentMailList[$courseInfo['real_id']][$event['session_id']])
+                $firstDate = $eventSentMailList[$courseInfo['real_id']][$event['session_id']];
+
+                if (isset($eventAlreadySent[$courseInfo['real_id']]) &&
+                    isset($eventAlreadySent[$courseInfo['real_id']][$event['session_id']])
                 ) {
-                    $firstDate = $eventSentMailList[$courseInfo['real_id']][$event['session_id']];
                     $alreadyAdded = true;
                 } else {
-                    $firstDate = $eventSentMailList[$courseInfo['real_id']][$event['session_id']] = $event['start'];
+                    $eventAlreadySent[$courseInfo['real_id']][$event['session_id']] = true;
                 }
 
                 // Working days (Mon-Fri)see BT#12156#note-16

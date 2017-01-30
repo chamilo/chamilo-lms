@@ -376,11 +376,11 @@ $extra = $extraField->addElements(
             get_lang('Domaine').' 3'
         ],
         $theme  => [
-            get_lang('Theme').' 1',
-            get_lang('Theme').' 2',
-            get_lang('Theme').' 3',
-            get_lang('Theme').' 4',
-            get_lang('Theme').' 5'
+            get_lang('ThemeField').' 1',
+            get_lang('ThemeField').' 2',
+            get_lang('ThemeField').' 3',
+            get_lang('ThemeField').' 4',
+            get_lang('ThemeField').' 5'
         ],
     ]
 );

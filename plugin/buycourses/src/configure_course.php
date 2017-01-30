@@ -21,12 +21,10 @@ $plugin = BuyCoursesPlugin::create();
 
 $commissionsEnable = $plugin->get('commissions_enable');
 
-if ($commissionsEnable == "true") {
-    
+if ($commissionsEnable == 'true') {
     $htmlHeadXtra[] = '<script type="text/javascript" src="' . api_get_path(WEB_PLUGIN_PATH) . 'buycourses/resources/js/commissions.js"></script>';
     $defaultCommissions = [];
-    $commissions = "";
-    
+    $commissions = '';
 }
 
 $includeSession = $plugin->get('include_sessions') === 'true';
@@ -58,7 +56,6 @@ if ($editingCourse) {
 
     foreach ($teachers as $courseTeacher) {
         $teacher = $courseTeacher->getUser();
-
         $teachersOptions[] = [
             'text' => $teacher->getCompleteName(),
             'value' => $teacher->getId()
@@ -71,10 +68,10 @@ if ($editingCourse) {
 
     if (!empty($currentBeneficiaries)) {
         $defaultBeneficiaries = array_column($currentBeneficiaries, 'user_id');
-        
+
         if ($commissionsEnable === 'true') {
             $defaultCommissions = array_column($currentBeneficiaries, 'commissions');
-        
+
             foreach ($defaultCommissions as $defaultCommission) {
                 $commissions .= $defaultCommission.',';
             }
@@ -137,10 +134,10 @@ if ($editingCourse) {
 
     if (!empty($currentBeneficiaries)) {
         $defaultBeneficiaries = array_column($currentBeneficiaries, 'user_id');
-        
+
         if ($commissionsEnable == "true") {
             $defaultCommissions = array_column($currentBeneficiaries, 'commissions');
-        
+
             foreach ($defaultCommissions as $defaultCommission) {
                 $commissions .= $defaultCommission.',';
             }
@@ -165,7 +162,6 @@ if ($editingCourse) {
 }
 
 if ($commissionsEnable === 'true') {
-
     $htmlHeadXtra[] = ''
     . '<script>'
         . '$(function(){'
@@ -189,7 +185,6 @@ if ($commissionsEnable === 'true') {
             . '});'
         . '});'
     . '</script>';
-
 }
 
 $form = new FormValidator('beneficiaries');
@@ -223,9 +218,7 @@ if ($editingCourse) {
 }
 
 if ($commissionsEnable === 'true') {
-    
     $platformCommission = $plugin->getPlatformCommission();
-    
     $form->addHtml( ''
             . '<div class="form-group">'
                 . '<label for="sliders" class="col-sm-2 control-label">'
@@ -241,9 +234,8 @@ if ($commissionsEnable === 'true') {
                 . '</div>'
             . '</div>'
     );
-    
+
     $form->addHidden('commissions', '');
-    
 }
 
 $form->addHidden('t', null);
@@ -285,7 +277,7 @@ if ($form->validate()) {
                 $commissions = array_fill(0, count($usersId), 0);
                 $beneficiaries = array_combine($usersId, $commissions);
             }
-            
+
             $plugin->registerItemBeneficiaries($productItem['id'], $beneficiaries);
         }
     } else {
@@ -298,7 +290,7 @@ if ($form->validate()) {
 
 $form->setDefaults($formDefaults);
 
-//View
+// View
 $templateName = $plugin->get_lang('AvailableCourse');
 
 $interbreadcrumb[] = [

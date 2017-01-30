@@ -299,6 +299,6 @@ switch ($action) {
             $attendanceController->getAttendanceBaseInLogin(false, true);
         }
         break;
-    default :
+    default:
         $attendanceController->attendance_list();
 }

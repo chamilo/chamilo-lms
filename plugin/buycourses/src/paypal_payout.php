@@ -1,6 +1,6 @@
 <?php
-
 /* For license terms, see /license.txt */
+
 /**
  * List page for Paypal Payout for the Buy Courses plugin
  * @package chamilo.plugin.buycourses

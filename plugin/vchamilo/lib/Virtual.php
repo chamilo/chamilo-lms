@@ -24,7 +24,6 @@ class Virtual
             return;
         }
 
-
         // provides an effective value for the virtual root_web based on domain analysis
         self::getHostName($_configuration);
 

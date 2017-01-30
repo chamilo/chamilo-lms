@@ -3,9 +3,6 @@
  * User Panel
  * @package chamilo.plugin.buycourses
  */
-/**
- * Initialization
- */
 
 $cidReset = true;
 

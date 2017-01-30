@@ -399,6 +399,14 @@ class Version111 extends AbstractMigrationChamilo
         $this->addSql('DELETE FROM settings_options WHERE variable = "visio_use_rtmpt"');
         $this->addSql('DELETE FROM course_module WHERE name = "conference"');
         $this->addSql('ALTER TABLE c_student_publication_assignment CHANGE add_to_calendar add_to_calendar INT NOT NULL;');
+
+        // Fixes missing options show_glossary_in_extra_tools
+        $this->addSql("DELETE FROM settings_options WHERE variable = 'show_glossary_in_extra_tools'");
+
+        $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_extra_tools', 'none', 'None')");
+        $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_extra_tools', 'exercise', 'Exercise')");
+        $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_extra_tools', 'lp', 'Learning path')");
+        $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_extra_tools', 'exercise_and_lp', 'ExerciseAndLearningPath')");
     }
 
     /**

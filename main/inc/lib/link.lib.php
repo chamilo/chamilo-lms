@@ -930,7 +930,7 @@ class Link extends Model
                 if (api_is_allowed_to_edit(null, true)) {
                     $toolbar .= Display::toolbarButton(
                         '',
-                        '#',
+                        'javascript:void();',
                         'check-circle-o',
                         'default btn-sm',
                         array(

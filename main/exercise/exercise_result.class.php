@@ -9,7 +9,7 @@
 */
 class ExerciseResult
 {
-	private $results = array();
+    private $results = [];
     public $includeAllUsers = false;
     public $onlyBestAttempts = false;
 
@@ -83,9 +83,12 @@ class ExerciseResult
                         te.orig_lp_id as orig_lp_id,
                         tlm.name as lp_name
                 FROM $TBL_EXERCISES  AS ce
-                INNER JOIN $TBL_TRACK_EXERCISES AS te ON (te.exe_exo_id = ce.id)
-                INNER JOIN $TBL_USER  AS user ON (user.user_id = exe_user_id)
-                LEFT JOIN $TBL_TABLE_LP_MAIN AS tlm ON tlm.id = te.orig_lp_id AND tlm.c_id = ce.c_id
+                INNER JOIN $TBL_TRACK_EXERCISES AS te 
+                ON (te.exe_exo_id = ce.id)
+                INNER JOIN $TBL_USER AS user 
+                ON (user.user_id = exe_user_id)
+                LEFT JOIN $TBL_TABLE_LP_MAIN AS tlm 
+                ON (tlm.id = te.orig_lp_id AND tlm.c_id = ce.c_id)
                 WHERE
                     ce.c_id = $course_id AND
                     te.status != 'incomplete' AND
@@ -110,9 +113,12 @@ class ExerciseResult
                     te.orig_lp_id as orig_lp_id,
                     tlm.name as lp_name
                     FROM $TBL_EXERCISES  AS ce
-                    INNER JOIN $TBL_TRACK_EXERCISES AS te ON (te.exe_exo_id = ce.id)
-                    INNER JOIN  $TBL_USER  AS user ON (user.user_id = exe_user_id)
-                    LEFT JOIN $TBL_TABLE_LP_MAIN AS tlm ON tlm.id = te.orig_lp_id AND tlm.c_id = ce.c_id
+                    INNER JOIN $TBL_TRACK_EXERCISES AS te 
+                    ON (te.exe_exo_id = ce.id)
+                    INNER JOIN $TBL_USER AS user 
+                    ON (user.user_id = exe_user_id)
+                    LEFT JOIN $TBL_TABLE_LP_MAIN AS tlm 
+                    ON (tlm.id = te.orig_lp_id AND tlm.c_id = ce.c_id)
                     WHERE
                         ce.c_id = $course_id AND
                         te.status != 'incomplete' AND
@@ -192,16 +198,16 @@ class ExerciseResult
 
                 $return[$i] = array();
                 if (empty($user_id)) {
-                    $return[$i]['official_code']   = $result['official_code'];
+                    $return[$i]['official_code'] = $result['official_code'];
                     if (api_is_western_name_order()) {
-                        $return[$i]['first_name']   = $results[$i]['userpart1'];
-                        $return[$i]['last_name']    = $results[$i]['userpart2'];
+                        $return[$i]['first_name'] = $results[$i]['userpart1'];
+                        $return[$i]['last_name'] = $results[$i]['userpart2'];
                     } else {
-                        $return[$i]['first_name']   = $results[$i]['userpart2'];
-                        $return[$i]['last_name']    = $results[$i]['userpart1'];
+                        $return[$i]['first_name'] = $results[$i]['userpart2'];
+                        $return[$i]['last_name'] = $results[$i]['userpart1'];
                     }
-                    $return[$i]['user_id']      = $results[$i]['excruid'];
-                    $return[$i]['email']        = $results[$i]['exemail'];
+                    $return[$i]['user_id'] = $results[$i]['excruid'];
+                    $return[$i]['email'] = $results[$i]['exemail'];
                 }
                 $return[$i]['title'] = $result['extitle'];
                 $return[$i]['start_date'] = api_get_local_time($result['exstart']);
@@ -235,17 +241,17 @@ class ExerciseResult
                         $isWestern = api_is_western_name_order();
 
                         if (empty($user_id)) {
-                            $return[$i]['official_code']   = $student['official_code'];
+                            $return[$i]['official_code'] = $student['official_code'];
                             if ($isWestern) {
-                                $return[$i]['first_name']   = $student['firstname'];
-                                $return[$i]['last_name']    = $student['lastname'];
+                                $return[$i]['first_name'] = $student['firstname'];
+                                $return[$i]['last_name'] = $student['lastname'];
                             } else {
-                                $return[$i]['first_name']   = $student['lastname'];
-                                $return[$i]['last_name']    = $student['firstname'];
+                                $return[$i]['first_name'] = $student['lastname'];
+                                $return[$i]['last_name'] = $student['firstname'];
                             }
 
-                            $return[$i]['user_id']      = $student['user_id'];
-                            $return[$i]['email']        = $student['email'];
+                            $return[$i]['user_id'] = $student['user_id'];
+                            $return[$i]['email'] = $student['email'];
                         }
                         $return[$i]['title'] = null;
                         $return[$i]['start_date'] = null;
@@ -271,9 +277,14 @@ class ExerciseResult
 
 	/**
 	 * Exports the complete report as a CSV file
-	 * @param	string		Document path inside the document tool
-	 * @param	integer		Optional user ID
-	 * @param	boolean		Whether to include user fields or not
+     *
+     * @param    string $document_path Document path inside the document tool
+     * @param    integer $user_id Optional user ID
+     * @param    boolean $export_user_fields Whether to include user fields or not
+     * @param    int $export_filter
+     * @param    int $exercise_id
+     * @param    string $hotpotato_name
+     *
 	 * @return	boolean		False on error
 	 */
     public function exportCompleteReportCSV(
@@ -286,24 +297,27 @@ class ExerciseResult
     ) {
         global $charset;
         $this->getExercisesReporting($document_path, $user_id, $export_filter, $exercise_id, $hotpotato_name);
-
-        $filename = 'exercise_results_'.date('YmdGis').'.csv';
-        if(!empty($user_id)) {
-            $filename = 'exercise_results_user_'.$user_id.'_'.date('YmdGis').'.csv';
+        $now = api_get_local_time();
+        $filename = 'exercise_results_'.$now.'.csv';
+        if (!empty($user_id)) {
+            $filename = 'exercise_results_user_'.$user_id.'_'.$now.'.csv';
         }
+
+        $filename = api_replace_dangerous_char($filename);
+
         $data = '';
         if (api_is_western_name_order()) {
-            if(!empty($this->results[0]['first_name'])) {
+            if (!empty($this->results[0]['first_name'])) {
                 $data .= get_lang('FirstName').';';
             }
-            if(!empty($this->results[0]['last_name'])) {
+            if (!empty($this->results[0]['last_name'])) {
                 $data .= get_lang('LastName').';';
             }
         } else {
-            if(!empty($this->results[0]['last_name'])) {
+            if (!empty($this->results[0]['last_name'])) {
                 $data .= get_lang('LastName').';';
             }
-            if(!empty($this->results[0]['first_name'])) {
+            if (!empty($this->results[0]['first_name'])) {
                 $data .= get_lang('FirstName').';';
             }
         }
@@ -317,10 +331,18 @@ class ExerciseResult
 
         if ($export_user_fields) {
             //show user fields section with a big th colspan that spans over all fields
-            $extra_user_fields = UserManager::get_extra_fields(0,1000,5,'ASC',false, 1);
-            $num = count($extra_user_fields);
-            foreach($extra_user_fields as $field) {
-                $data .= '"'.str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($field[3]), ENT_QUOTES, $charset)).'";';
+            $extra_user_fields = UserManager::get_extra_fields(
+                0,
+                1000,
+                5,
+                'ASC',
+                false,
+                1
+            );
+            if (!empty($extra_user_fields)) {
+                foreach ($extra_user_fields as $field) {
+                    $data .= '"'.str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($field[3]), ENT_QUOTES, $charset)).'";';
+                }
             }
         }
 
@@ -337,7 +359,6 @@ class ExerciseResult
 
         //results
         foreach ($this->results as $row) {
-
             if (api_is_western_name_order()) {
                 $data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['first_name']), ENT_QUOTES, $charset)).';';
                 $data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['last_name']), ENT_QUOTES, $charset)).';';
@@ -346,30 +367,40 @@ class ExerciseResult
                 $data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['first_name']), ENT_QUOTES, $charset)).';';
             }
 
-            if ($officialCodeInList) {
+            // Official code
+            if ($officialCodeInList === 'true') {
                 $data .= $row['official_code'].';';
             }
 
+            // Email
             $data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['email']), ENT_QUOTES, $charset)).';';
             $data .= str_replace("\r\n",'  ',implode(", ", GroupManager :: get_user_group_name($row['user_id']))).';';
 
             if ($export_user_fields) {
                 //show user fields data, if any, for this user
-                $user_fields_values = UserManager::get_extra_user_data($row['user_id'],false,false, false, true);
-                foreach($user_fields_values as $value) {
-                    $data .= '"'.str_replace('"','""',api_html_entity_decode(strip_tags($value), ENT_QUOTES, $charset)).'";';
+                $user_fields_values = UserManager::get_extra_user_data(
+                    $row['user_id'],
+                    false,
+                    false,
+                    false,
+                    true
+                );
+                if (!empty($user_fields_values)) {
+                    foreach($user_fields_values as $value) {
+                        $data .= '"'.str_replace('"','""',api_html_entity_decode(strip_tags($value), ENT_QUOTES, $charset)).'";';
+                    }
                 }
             }
 
-            $data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['title']), ENT_QUOTES, $charset)).';';
-            $data .= str_replace("\r\n",'  ',$row['start_date']).';';
-            $data .= str_replace("\r\n",'  ',$row['end_date']).';';
-            $data .= str_replace("\r\n",'  ',$row['duration']).';';
-            $data .= str_replace("\r\n",'  ',$row['result']).';';
-            $data .= str_replace("\r\n",'  ',$row['max']).';';
-            $data .= str_replace("\r\n",'  ',$row['status']).';';
-            $data .= str_replace("\r\n",'  ',$row['lp_name']).';';
-            $data .= str_replace("\r\n",'  ',$row['is_user_subscribed']).';';
+            $data .= str_replace("\r\n",'  ', api_html_entity_decode(strip_tags($row['title']), ENT_QUOTES, $charset)).';';
+            $data .= str_replace("\r\n", '  ', $row['start_date']).';';
+            $data .= str_replace("\r\n", '  ', $row['end_date']).';';
+            $data .= str_replace("\r\n", '  ', $row['duration']).';';
+            $data .= str_replace("\r\n", '  ', $row['result']).';';
+            $data .= str_replace("\r\n", '  ', $row['max']).';';
+            $data .= str_replace("\r\n", '  ', $row['status']).';';
+            $data .= str_replace("\r\n", '  ', $row['lp_name']).';';
+            $data .= str_replace("\r\n", '  ', $row['is_user_subscribed']).';';
             $data .= "\n";
         }
 
@@ -502,7 +533,6 @@ class ExerciseResult
 
         foreach ($this->results as $row) {
             $column = 0;
-
             if ($with_column_user) {
                 if (api_is_western_name_order()) {
                     $worksheet->setCellValueByColumnAndRow(

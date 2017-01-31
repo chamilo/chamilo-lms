@@ -91,7 +91,7 @@
                     <div class="panel-body">
                         {% if course_data.objectives %}
                             <div class="objective-course">
-                                <h4 class="title-info"><em class="fa fa-book"></em> {{ "Objectives"|get_lang }}</h4>
+                                <h4 class="title-info"><em class="fa fa-book"></em> {{ course_data.objectives.getTitle }}</h4>
                                 <div class="content-info">
                                     {{ course_data.objectives.getContent }}
                                 </div>
@@ -100,9 +100,54 @@
 
                         {% if course_data.topics %}
                             <div class="topics">
-                                <h4 class="title-info"><em class="fa fa-book"></em> {{ "Topics"|get_lang }}</h4>
+                                <h4 class="title-info"><em class="fa fa-book"></em> {{ course_data.topics.getTitle }}</h4>
                                 <div class="content-info">
                                     {{ course_data.topics.getContent }}
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% if course_data.methodology %}
+                            <div class="topics">
+                                <h4 class="title-info"><em class="fa fa-book"></em> {{ course_data.methodology.getTitle }}</h4>
+                                <div class="content-info">
+                                    {{ course_data.methodology.getContent }}
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% if course_data.material %}
+                            <div class="topics">
+                                <h4 class="title-info"><em class="fa fa-book"></em> {{ course_data.material.getTitle }}</h4>
+                                <div class="content-info">
+                                    {{ course_data.material.getContent }}
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% if course_data.resources %}
+                            <div class="topics">
+                                <h4 class="title-info"><em class="fa fa-book"></em> {{ course_data.resources.getTitle }}</h4>
+                                <div class="content-info">
+                                    {{ course_data.resources.getContent }}
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% if course_data.assesment %}
+                            <div class="topics">
+                                <h4 class="title-info"><em class="fa fa-book"></em> {{ course_data.assesment.getTitle }}</h4>
+                                <div class="content-info">
+                                    {{ course_data.assesment.getContent }}
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% if course_data.custom %}
+                            <div class="topics">
+                                <h4 class="title-info"><em class="fa fa-book"></em> {{ course_data.custom.getTitle }}</h4>
+                                <div class="content-info">
+                                    {{ course_data.custom.getContent }}
                                 </div>
                             </div>
                         {% endif %}

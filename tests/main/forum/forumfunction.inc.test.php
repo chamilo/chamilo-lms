@@ -487,7 +487,7 @@ class TestForumFunction extends UnitTestCase {
 		}
 		//var_dump($res);
 	 }
-	
+
 	 /**
 	* Retrieve all posts of a given thread
 	* @param int $thread_id integer that indicates the forum
@@ -1172,21 +1172,6 @@ class TestForumFunction extends UnitTestCase {
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
-
-
- 	 /**
-	* This public function is called when the user is not allowed in this forum/thread/...
-	* @return bool display message of "not allowed"
-	*/
-
-	public function testforum_not_allowed_here() {
-		 ob_start();
-		 $res = forum_not_allowed_here();
-		 ob_end_clean();
-		 $this->assertTrue(is_bool($res));
-		 //var_dump($res);
-	 }
-
 	  /**
 	 * Delete the all the attachments from the DB and the file according to the post's id or attach id(optional)
 	 * @param post id

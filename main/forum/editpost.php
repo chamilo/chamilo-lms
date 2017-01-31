@@ -125,11 +125,13 @@ $htmlHeadXtra[] = <<<JS
     </script>
 JS;
 
+
 if ($origin == 'learnpath') {
     Display::display_reduced_header();
 } else {
     Display::display_header();
 }
+
 /* Is the user allowed here? */
 
 // The user is not allowed here if
@@ -144,10 +146,7 @@ if (!api_is_allowed_to_edit(null, true) &&
     (($current_forum_category && $current_forum_category['visibility'] == 0) ||
         $current_forum['visibility'] == 0)
 ) {
-    $forum_allow = forum_not_allowed_here();
-    if ($forum_allow === false) {
-        exit;
-    }
+    api_not_allowed();
 }
 
 if (!api_is_allowed_to_edit(null, true) &&
@@ -157,28 +156,20 @@ if (!api_is_allowed_to_edit(null, true) &&
         $current_thread['locked'] <> 0
     )
 ) {
-    $forum_allow = forum_not_allowed_here();
-    if ($forum_allow === false) {
-        exit;
-    }
+    api_not_allowed();
 }
 
 if (!$_user['user_id'] && $current_forum['allow_anonymous'] == 0) {
-    $forum_allow = forum_not_allowed_here();
-    if ($forum_allow === false) {
-        exit;
-    }
+    api_not_allowed();
 }
+
 $group_id = api_get_group_id();
 
 if (!api_is_allowed_to_edit(null, true) &&
     $current_forum['allow_edit'] == 0 &&
     !GroupManager::is_tutor_of_group(api_get_user_id(), $group_properties['iid'])
 ) {
-    $forum_allow = forum_not_allowed_here();
-    if ($forum_allow === false) {
-        exit;
-    }
+    api_not_allowed();
 }
 
 // Action links

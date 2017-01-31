@@ -3939,6 +3939,8 @@ function updateThreadInfo($thread_id, $last_post_id, $post_date)
  * This function is called when the user is not allowed in this forum/thread/...
  * @return bool display message of "not allowed"
  *
+ * @deprecated use api_not_allowed()
+ *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version february 2006, dokeos 1.8
  */

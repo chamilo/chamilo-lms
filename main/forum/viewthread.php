@@ -113,10 +113,7 @@ if (
     !api_is_allowed_to_edit(false, true) &&
     ($current_forum['visibility'] == 0 || $current_thread['visibility'] == 0)
 ) {
-    $forum_allow = forum_not_allowed_here();
-    if ($forum_allow === false) {
-        exit;
-    }
+    api_not_allowed(false);
 }
 
 /* Actions */
@@ -220,7 +217,6 @@ if ($my_message != 'PostDeletedSpecial') {
     echo '</div>&nbsp;';
 
     /* Display Forum Category and the Forum information */
-
     if (!isset($_SESSION['view'])) {
         $viewMode = $current_forum['default_view'];
     } else {

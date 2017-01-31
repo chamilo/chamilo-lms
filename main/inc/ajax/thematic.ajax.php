@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /chamilo_license.txt */
+/* For licensing terms, see /license.txt */
 /**
  * Responses to AJAX calls for thematic
  */
@@ -11,27 +11,27 @@ $action = $_GET['a'];
 $thematic = new Thematic();
 
 switch ($action) {
-	case 'save_thematic_plan':
-		/*$title_list         = $_REQUEST['title'];
-		$description_list   = $_REQUEST['desc'];
-		//$description_list   = $_REQUEST['description'];
-		$description_type   = $_REQUEST['description_type'];
-		if (api_is_allowed_to_edit(null, true)) {
-			for($i=1;$i<count($title_list)+1; $i++) {
-				$thematic->set_thematic_plan_attributes($_REQUEST['thematic_id'], $title_list[$i], $description_list[$i], $description_type[$i]);
-				$affected_rows = $thematic->thematic_plan_save();
-			}
-		}
-		$thematic_plan_data = $thematic->get_thematic_plan_data();
-		$return = $thematic->get_thematic_plan_div($thematic_plan_data);
-		echo $return[$_REQUEST['thematic_id']];*/
-		break;
-	case 'save_thematic_advance':
-		if (!api_is_allowed_to_edit(null, true)) {
-			echo '';
-			exit;
-		}
-		/*
+    case 'save_thematic_plan':
+        /*$title_list         = $_REQUEST['title'];
+        $description_list   = $_REQUEST['desc'];
+        //$description_list   = $_REQUEST['description'];
+        $description_type   = $_REQUEST['description_type'];
+        if (api_is_allowed_to_edit(null, true)) {
+            for($i=1;$i<count($title_list)+1; $i++) {
+                $thematic->set_thematic_plan_attributes($_REQUEST['thematic_id'], $title_list[$i], $description_list[$i], $description_type[$i]);
+                $affected_rows = $thematic->thematic_plan_save();
+            }
+        }
+        $thematic_plan_data = $thematic->get_thematic_plan_data();
+        $return = $thematic->get_thematic_plan_div($thematic_plan_data);
+        echo $return[$_REQUEST['thematic_id']];*/
+        break;
+    case 'save_thematic_advance':
+        if (!api_is_allowed_to_edit(null, true)) {
+            echo '';
+            exit;
+        }
+        /*
         if (($_REQUEST['start_date_type'] == 1 && empty($_REQUEST['start_date_by_attendance'])) || (!empty($_REQUEST['duration_in_hours']) && !is_numeric($_REQUEST['duration_in_hours'])) ) {
             if ($_REQUEST['start_date_type'] == 1 && empty($_REQUEST['start_date_by_attendance'])) {
                 $start_date_error = true;
@@ -79,7 +79,7 @@ switch ($action) {
         $thematic_advance_data = $thematic->get_thematic_advance_list(null, null, true);
         $return = $thematic->get_thematic_advance_div($thematic_advance_data);
         echo $return[$_REQUEST['thematic_id']][$_REQUEST['thematic_advance_id']];*/
-		break;
+        break;
     case 'get_datetime_by_attendance':
         $attendance_id       = intval($_REQUEST['attendance_id']);
         $thematic_advance_id = intval($_REQUEST['thematic_advance_id']);
@@ -98,9 +98,12 @@ switch ($action) {
             }
             $new_thematic_list = array();
 
-            foreach($thematic_list_temp as $item) {
-                if (!empty($item['attendance_id']) ) {
-                    $new_thematic_list[$item['id']] = array('attendance_id' =>$item['attendance_id'], 'start_date'=>$item['start_date']);
+            foreach ($thematic_list_temp as $item) {
+                if (!empty($item['attendance_id'])) {
+                    $new_thematic_list[$item['id']] = array(
+                        'attendance_id' => $item['attendance_id'],
+                        'start_date' => $item['start_date'],
+                    );
                 }
             }
 
@@ -114,8 +117,7 @@ switch ($action) {
                     $insert = true;
                     //checking if was already taken
                     foreach ($new_thematic_list as $key => $thematic_item) {
-                        //if ($calendar['db_date_time'] == $thematic_item['start_date'] && $calendar['attendance_id'] == $thematic_item['attendance_id'] ) {
-                        if ($calendar['db_date_time'] == $thematic_item['start_date'] ) {
+                        if ($calendar['db_date_time'] == $thematic_item['start_date']) {
                             $insert = false;
                             if ($thematic_advance_id == $key) {
                                 $insert = true;
@@ -146,9 +148,10 @@ switch ($action) {
         if (!empty($thematic_advance_id)) {
             $thematic = new Thematic();
             $affected_rows  = $thematic->update_done_thematic_advances($thematic_advance_id);
-            //if ($affected_rows) {
-            $total_average  = $thematic->get_total_average_of_thematic_advances(api_get_course_id(), api_get_session_id());
-            //}
+            $total_average = $thematic->get_total_average_of_thematic_advances(
+                api_get_course_id(),
+                api_get_session_id()
+            );
         }
         echo $total_average;
         break;

@@ -496,7 +496,6 @@ class SocialManager extends UserManager
             $my_course['course_info']['real_id']
         );
 
-        //$valor = api_get_settings_params();
         $course_path = api_get_path(SYS_COURSE_PATH).$course_directory;   // course path
         if (api_get_setting('course_images_in_courses_list') === 'true') {
             if (file_exists($course_path.'/course-pic85x85.png')) {
@@ -510,7 +509,11 @@ class SocialManager extends UserManager
                 );
             }
         } else {
-            $imageCourse = Display::return_icon('course.png', get_lang('Course'), array('class' => 'img-default'));
+            $imageCourse = Display::return_icon(
+                'course.png',
+                get_lang('Course'),
+                array('class' => 'img-default')
+            );
         }
 
         //display course entry

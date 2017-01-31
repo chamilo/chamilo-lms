@@ -1,6 +1,5 @@
 <?php
-
-/* For licensing terms, see /chamilo_license.txt */
+/* For licensing terms, see /license.txt */
 /**
  * Responses to AJAX calls
  * @package chamilo.plugin.buycourses

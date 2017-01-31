@@ -26,6 +26,7 @@ class CourseSelectForm
 	public static function display_form($course, $hidden_fields = null, $avoid_serialize = false)
     {
         global $charset;
+        $resource_titles[RESOURCE_ASSET] = get_lang('Assets');
         $resource_titles[RESOURCE_GRADEBOOK] = get_lang('Gradebook');
         $resource_titles[RESOURCE_EVENT] = get_lang('Events');
         $resource_titles[RESOURCE_ANNOUNCEMENT] = get_lang('Announcements');
@@ -541,12 +542,18 @@ class CourseSelectForm
                                     is_array($documents)
                                 ) {
 									foreach ($documents as $id_to_check => $post_value) {
-										$obj_to_check = $resources[$id_to_check];
-										$shared_path_part = substr($obj_to_check->path,0,strlen($obj->path));
-										if ($id_to_check != $id && $obj->path == $shared_path_part) {
-											$_POST['resource'][RESOURCE_DOCUMENT][$id] = 1;
-											break;
-										}
+									    if (isset($resources[$id_to_check])) {
+                                            $obj_to_check = $resources[$id_to_check];
+                                            $shared_path_part = substr(
+                                                $obj_to_check->path,
+                                                0,
+                                                strlen($obj->path)
+                                            );
+                                            if ($id_to_check != $id && $obj->path == $shared_path_part) {
+                                                $_POST['resource'][RESOURCE_DOCUMENT][$id] = 1;
+                                                break;
+                                            }
+                                        }
 									}
 								}
 							}

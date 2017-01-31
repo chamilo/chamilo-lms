@@ -1,11 +1,9 @@
 <?php
 /* For license terms, see /license.txt */
+
 /**
  * Configuration page for payment methods for the Buy Courses plugin
  * @package chamilo.plugin.buycourses
- */
-/**
- * Initialization
  */
 $cidReset = true;
 

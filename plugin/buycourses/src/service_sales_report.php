@@ -1,6 +1,6 @@
 <?php
-
 /* For license terms, see /license.txt */
+
 /**
  * List of pending payments of the Buy Courses plugin
  * @package chamilo.plugin.buycourses
@@ -62,9 +62,9 @@ if ($paypalEnable == 'true' && $commissionsEnable == 'true') {
         'primary',
         ['title' => $plugin->get_lang('PaypalPayoutCommissions')]
     );
-    
+
     $template->assign('actions', $toolbar);
-    
+
 }
 
 if ($commissionsEnable == 'true') {
@@ -76,9 +76,9 @@ if ($commissionsEnable == 'true') {
         'info',
         ['title' => $plugin->get_lang('PayoutReport')]
     );
-    
+
     $template->assign('actions', $toolbar);
-    
+
 }
 $template->assign('form', $form->returnForm());
 $template->assign('showing_services', true);

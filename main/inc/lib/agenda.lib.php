@@ -1173,11 +1173,15 @@ class Agenda
                     $this->getPlatformEvents($start, $end);
                 }
 
+                $ignoreVisibility = api_get_configuration_value('personal_agenda_show_all_session_events');
+
                 // Getting course events
                 $my_course_list = array();
                 if (!api_is_anonymous()) {
                     $session_list = SessionManager::get_sessions_by_user(
-                        api_get_user_id()
+                        api_get_user_id(),
+                        $ignoreVisibility
+
                     );
                     $my_course_list = CourseManager::get_courses_list_by_user_id(
                         api_get_user_id(),

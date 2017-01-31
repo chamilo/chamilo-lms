@@ -577,6 +577,7 @@ define('UTF8_CONVERT', false); //false by default
 define('DOCUMENT','file');
 define('FOLDER','folder');
 
+define('RESOURCE_ASSET', 'asset');
 define('RESOURCE_DOCUMENT', 'document');
 define('RESOURCE_GLOSSARY', 'glossary');
 define('RESOURCE_EVENT', 'calendar_event');
@@ -613,6 +614,20 @@ define('MAX_ONLINE_USERS', 12);
 if (!defined('CHAMILO_LOAD_WYSIWYG')) {
     define('CHAMILO_LOAD_WYSIWYG', true);
 }
+
+/* Constants for course home */
+define('TOOL_PUBLIC', 'Public');
+define('TOOL_PUBLIC_BUT_HIDDEN', 'PublicButHide');
+define('TOOL_COURSE_ADMIN', 'courseAdmin');
+define('TOOL_PLATFORM_ADMIN', 'platformAdmin');
+define('TOOL_AUTHORING', 'toolauthoring');
+define('TOOL_INTERACTION', 'toolinteraction');
+define('TOOL_COURSE_PLUGIN', 'toolcourseplugin'); //all plugins that can be enabled in courses
+define('TOOL_ADMIN', 'tooladmin');
+define('TOOL_ADMIN_PLATFORM', 'tooladminplatform');
+define('TOOL_DRH', 'tool_drh');
+define('TOOL_STUDENT_VIEW', 'toolstudentview');
+define('TOOL_ADMIN_VISIBLE', 'tooladminvisible');
 
 /**
  * Inclusion of internationalization libraries
@@ -1860,24 +1875,41 @@ function api_format_course_array($course_data)
     $_course['department_name'] = $course_data['department_name'];
     $_course['department_url'] = $course_data['department_url'];
 
+    $courseSys = api_get_path(SYS_COURSE_PATH).$course_data['directory'];
+    $webCourseHome = api_get_path(WEB_COURSE_PATH).$course_data['directory'];
+
     // Course password
     $_course['registration_code'] = !empty($course_data['registration_code']) ? sha1($course_data['registration_code']) : null;
     $_course['disk_quota'] = $course_data['disk_quota'];
-    $_course['course_public_url'] = api_get_path(WEB_COURSE_PATH).$course_data['directory'].'/index.php';
+    $_course['course_public_url'] = $webCourseHome.'/index.php';
 
     if (array_key_exists('add_teachers_to_sessions_courses', $course_data)) {
         $_course['add_teachers_to_sessions_courses'] = $course_data['add_teachers_to_sessions_courses'];
     }
 
-    if (file_exists(api_get_path(SYS_COURSE_PATH).$course_data['directory'].'/course-pic85x85.png')) {
-        $url_image = api_get_path(WEB_COURSE_PATH).$course_data['directory'].'/course-pic85x85.png';
+    // Course image
+    $_course['course_image_source'] = '';
+    if (file_exists($courseSys.'/course-pic85x85.png')) {
+        $url_image = $webCourseHome.'/course-pic85x85.png';
+        $_course['course_image_source'] = $courseSys.'/course-pic85x85.png';
     } else {
-        $url_image = Display::return_icon('course.png', null, null, ICON_SIZE_BIG, null, true, false);
+        $url_image = Display::return_icon(
+            'course.png',
+            null,
+            null,
+            ICON_SIZE_BIG,
+            null,
+            true,
+            false
+        );
     }
     $_course['course_image'] = $url_image;
 
-    if (file_exists(api_get_path(SYS_COURSE_PATH).$course_data['directory'].'/course-pic.png')) {
-        $url_image = api_get_path(WEB_COURSE_PATH).$course_data['directory'].'/course-pic.png';
+    // Course large image
+    $_course['course_image_large_source'] = '';
+    if (file_exists($courseSys.'/course-pic.png')) {
+        $url_image = $webCourseHome.'/course-pic.png';
+        $_course['course_image_large_source'] = $courseSys.'/course-pic.png';
     } else {
         $url_image = Display::returnIconPath('session_default.png');
     }

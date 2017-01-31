@@ -9,7 +9,7 @@
                     {% for item in category.courses %}
                         <div class="row">
                             <div class="col-md-2">
-                                <a class="thumbnail">
+                                <a href="{{ item.link }}" class="thumbnail">
                                     {% if item.thumbnails != '' %}
                                         <img src="{{ item.thumbnails }}" title="{{ item.title }}"
                                              alt="{{ item.title }}"/>

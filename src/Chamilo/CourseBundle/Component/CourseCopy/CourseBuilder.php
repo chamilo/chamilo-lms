@@ -3,6 +3,7 @@
 
 namespace Chamilo\CourseBundle\Component\CourseCopy;
 
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\Asset;
 use Database;
 use TestCategory;
 use Category;
@@ -154,6 +155,24 @@ class CourseBuilder
             );
         }
 
+        // Add asset
+        if (basename($course['course_image_source'] != 'course.png')) {
+            // Add course image courses/XXX/course-pic85x85.png
+            $asset = new Asset(
+                $course['course_image_source'],
+                basename($course['course_image_source']),
+                basename($course['course_image_source'])
+            );
+            $this->course->add_resource($asset);
+
+            $asset = new Asset(
+                $course['course_image_large_source'],
+                basename($course['course_image_large_source']),
+                basename($course['course_image_large_source'])
+            );
+            $this->course->add_resource($asset);
+        }
+
         // Once we've built the resources array a bit more, try to get items
         //  from the item_property table and order them in the "resources" array
         foreach ($this->course->resources as $type => $resources) {
@@ -194,10 +213,9 @@ class CourseBuilder
         $table_doc = Database::get_course_table(TABLE_DOCUMENT);
         $table_prop = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
-        //Remove chat_files and shared_folder files
+        // Remove chat_files and shared_folder files
         $avoid_paths = " path NOT LIKE '/shared_folder%' AND
                          path NOT LIKE '/chat_files%' ";
-        //$avoid_paths = " 1 = 1 ";
 
         if (!empty($courseId) && !empty($session_id)) {
             $session_id = intval($session_id);

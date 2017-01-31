@@ -493,7 +493,6 @@ class GradebookTable extends SortableTable
 
                             if (count($eval_n_links)> 0) {
                                 $value_data = isset($data[4]) ? $data[4] : null;
-
                                 if (!is_null($value_data)) {
                                     //$score = $item->calc_score(api_get_user_id());
                                     //$new_score = $data[3] * $score[0] / $score[1];
@@ -501,7 +500,6 @@ class GradebookTable extends SortableTable
 
                                     // Result
                                     $row[] = $value_data;
-
                                     $best = isset($data['best']) ? $data['best'] : null;
                                     $average = isset($data['average']) ? $data['average'] : null;
                                     $ranking = isset($data['ranking']) ? $data['ranking'] : null;
@@ -806,8 +804,19 @@ class GradebookTable extends SortableTable
             $pChart->Antialias = false;
 
             /* Add a border to the picture */
-            $pChart->drawRectangle(0,0,$xSize-10,$ySize-10,array("R"=>0,"G"=>0,"B"=>0));
-            $pChart->drawText(10,16,get_lang('Results'),array("FontSize"=>11,"Align"=> TEXT_ALIGN_BOTTOMMIDDLE));
+            $pChart->drawRectangle(
+                0,
+                0,
+                $xSize - 10,
+                $ySize - 10,
+                array("R" => 0, "G" => 0, "B" => 0)
+            );
+            $pChart->drawText(
+                10,
+                16,
+                get_lang('Results'),
+                array("FontSize" => 11, "Align" => TEXT_ALIGN_BOTTOMMIDDLE)
+            );
             $pChart->setGraphArea(50, 30, $xSize-50, $ySize-50);
             $pChart->setFontProperties(
                 array(
@@ -945,7 +954,6 @@ class GradebookTable extends SortableTable
             // category
             case 'C':
                 $prms_uri='?selectcat=' . $item->get_id() . '&amp;view='.$view;
-
                 if (isset($_GET['isStudentView'])) {
                     if ( isset($is_student) || (isset($_SESSION['studentview']) && $_SESSION['studentview']=='studentview') ) {
                         $prms_uri=$prms_uri.'&amp;isStudentView='.Security::remove_XSS($_GET['isStudentView']);

@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /chamilo_license.txt */
+/* For licensing terms, see /license.txt */
 /**
  * Responses to AJAX calls for install
  */
@@ -9,7 +9,7 @@
 $action = $_GET['a'];
 
 switch ($action) {
-	case 'send_contact_information':
+    case 'send_contact_information':
         if (!empty($_POST)) {
             // get params from contact form
             $person_name = $_POST['person_name'];
@@ -35,7 +35,6 @@ switch ($action) {
             if ($required_field_error) {
                 echo 'required_field_error';
             } else {
-
                 // save contact information with web service
                 // create a client
                 $client = new SoapClient('https://version.chamilo.org/contact.php?wsdl');
@@ -53,14 +52,15 @@ switch ($action) {
                                         'company_city' => $company_city
                                     );
 
-                $result = $client->__soapCall('ws_add_contact_information', array('contact_params' => $contact_params));
-
+                $result = $client->__soapCall(
+                    'ws_add_contact_information',
+                    array('contact_params' => $contact_params)
+                );
                 echo $result;
             }
-
-            }
+        }
         break;
-	default:
-		echo '';
+    default:
+        echo '';
 }
 exit;

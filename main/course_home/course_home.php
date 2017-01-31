@@ -108,21 +108,6 @@ $(document).ready(function() {
 // The section for the tabs
 $this_section = SECTION_COURSES;
 
-/*	Constants */
-
-define('TOOL_PUBLIC', 'Public');
-define('TOOL_PUBLIC_BUT_HIDDEN', 'PublicButHide');
-define('TOOL_COURSE_ADMIN', 'courseAdmin');
-define('TOOL_PLATFORM_ADMIN', 'platformAdmin');
-define('TOOL_AUTHORING', 'toolauthoring');
-define('TOOL_INTERACTION', 'toolinteraction');
-define('TOOL_COURSE_PLUGIN', 'toolcourseplugin'); //all plugins that can be enabled in courses
-define('TOOL_ADMIN', 'tooladmin');
-define('TOOL_ADMIN_PLATFORM', 'tooladminplatform');
-define('TOOL_DRH', 'tool_drh');
-define('TOOL_STUDENT_VIEW', 'toolstudentview');
-define('TOOL_ADMIN_VISIBLE', 'tooladminvisible');
-
 $user_id = api_get_user_id();
 $course_code = api_get_course_id();
 $courseId = api_get_course_int_id();
@@ -150,12 +135,9 @@ Session::erase('_gid');
 $isSpecialCourse = CourseManager::isSpecialCourse($courseId);
 
 if ($isSpecialCourse) {
-    if (isset($_GET['autoreg'])) {
-        $autoRegistration = Security::remove_XSS($_GET['autoreg']);
-        if ($autoRegistration == 1) {
-            if (CourseManager::subscribe_user($user_id, $course_code, STUDENT)) {
-                Session::write('is_allowed_in_course', true);
-            }
+    if (isset($_GET['autoreg']) && $_GET['autoreg'] == 1) {
+        if (CourseManager::subscribe_user($user_id, $course_code, STUDENT)) {
+            Session::write('is_allowed_in_course', true);
         }
     }
 }

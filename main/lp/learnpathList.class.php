@@ -48,16 +48,13 @@ class LearnpathList
         $ignoreCategoryFilter = false
     ) {
         $course_info = api_get_course_info($course_code);
-        $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         $tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
 
         $this->course_code = $course_code;
         $this->user_id = $user_id;
-
         $course_id = $course_info['real_id'];
 
         if (empty($course_id)) {
-
             return false;
         }
 
@@ -68,7 +65,12 @@ class LearnpathList
             $session_id = api_get_session_id();
         }
 
-        $condition_session = api_get_session_condition($session_id, true, true, 'lp.sessionId');
+        $condition_session = api_get_session_condition(
+            $session_id,
+            true,
+            true,
+            'lp.sessionId'
+        );
 
         $order = "ORDER BY lp.displayOrder ASC, lp.name ASC";
         if (isset($order_by)) {
@@ -110,26 +112,28 @@ class LearnpathList
             ->createQuery($dql)
             ->getResult();
 
-        $names = array();
-
+        $names = [];
         /** @var CLp $row */
         foreach ($learningPaths as $row) {
             // Use domesticate here instead of Database::escape_string because
             // it prevents ' to be slashed and the input (done by learnpath.class.php::toggle_visibility())
             // is done using domesticate()
-            $myname = domesticate($row->getName());
-            $mylink = 'lp/lp_controller.php?action=view&lp_id=' . $row->getIid() . '&id_session='.$session_id;
+            $name = domesticate($row->getName());
+            $link = 'lp/lp_controller.php?action=view&lp_id=' . $row->getIid() . '&id_session='.$session_id;
+            $oldLink = 'newscorm/lp_controller.php?action=view&lp_id=' . $row->getIid() . '&id_session='.$session_id;
 
             $sql2 = "SELECT * FROM $tbl_tool
                      WHERE
                         c_id = $course_id AND (
-                            name='$myname' AND
+                            name='$name' AND
                             image='scormbuilder.gif' AND
-                            link LIKE '$mylink%'
+                            (
+                                link LIKE '$link%' OR
+                                link LIKE '$oldLink%'                                
+                            )
                       )";
 
             $res2 = Database::query($sql2);
-
             if (Database::num_rows($res2) > 0) {
                 $row2 = Database::fetch_array($res2);
                 $pub = $row2['visibility'];

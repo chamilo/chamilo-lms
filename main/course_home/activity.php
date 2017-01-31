@@ -78,7 +78,7 @@ if ($session_id === 0 && api_is_course_admin() && api_is_allowed_to_edit(null, t
     $my_list = CourseHome::get_tools_category(TOOL_INTERACTION);
     $list2 = CourseHome::get_tools_category(TOOL_COURSE_PLUGIN);
 
-    $my_list = array_merge($my_list,$list2);
+    $my_list = array_merge($my_list, $list2);
     $items =  CourseHome::show_tools_category($my_list);
     $content .= return_block(get_lang('Interaction'), $items, 'course-tools-interaction');
 

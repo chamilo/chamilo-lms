@@ -3,6 +3,7 @@
 
 namespace Chamilo\CourseBundle\Component\CourseCopy;
 
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\Asset;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -156,6 +157,17 @@ class CourseArchiver
             copyDirTo($course->path . 'upload/work/', $doc_dir, false);
         }
 
+        if (isset($course->resources[RESOURCE_ASSET]) && is_array($course->resources[RESOURCE_ASSET])) {
+            /** @var Asset $asset */
+            foreach ($course->resources[RESOURCE_ASSET] as $asset) {
+                $doc_dir = $backup_dir . $asset->path;
+                @mkdir(dirname($doc_dir), $perm_dirs, true);
+                if (file_exists($course->path . $asset->path)) {
+                    copy($course->path . $asset->path, $doc_dir);
+                }
+            }
+        }
+
         // Zip the course-contents
         $zip = new \PclZip($zipFilePath);
         $zip->create($backup_dir, PCLZIP_OPT_REMOVE_PATH, $backup_dir);
@@ -187,7 +199,7 @@ class CourseArchiver
                         $backup_files[] = array(
                             'file' => $file,
                             'date' => $date,
-                            'course_code' => $course_code
+                            'course_code' => $course_code,
                         );
                     }
                 }

@@ -44,7 +44,12 @@ class FlatViewTable extends SortableTable
         $addparams = null,
         $mainCourseCategory = null
     ) {
-        parent :: __construct('flatviewlist', null, null, api_is_western_name_order() ? 1 : 0);
+        parent:: __construct(
+            'flatviewlist',
+            null,
+            null,
+            api_is_western_name_order() ? 1 : 0
+        );
 
         $this->selectcat = $selectcat;
 
@@ -103,7 +108,6 @@ class FlatViewTable extends SortableTable
 
         //if (empty($this->datagen->get_total_items_count()) || empty($total_users)) {
         if (empty($user_results) || empty($total_users)) {
-
             echo get_lang('NoResults');
             return '';
         }
@@ -123,7 +127,6 @@ class FlatViewTable extends SortableTable
         }
 
         $i = 0;
-        $show_draw = false;
         $resource_list = array();
         $pre_result2 = array();
 
@@ -149,8 +152,9 @@ class FlatViewTable extends SortableTable
                 }
 
                 foreach ($customdisplays as $display) {
-                    if (!in_array($display['display'], $key_list))
+                    if (!in_array($display['display'], $key_list)) {
                         $resource_list[$key][$display['display']] = 0;
+                    }
                 }
                 $i++;
             }
@@ -161,7 +165,6 @@ class FlatViewTable extends SortableTable
         $new_list = array();
         foreach ($resource_list as $key => $value) {
             $new_value = array();
-
             foreach ($customdisplays as $item) {
                 if ($value[$item['display']] > $max) {
                     $max = $value[$item['display']];
@@ -379,7 +382,6 @@ class FlatViewTable extends SortableTable
         }
 
         // retrieve sorting type
-
         if ($is_western_name_order) {
             $users_sorting = ($this->column == 0 ? FlatViewDataGenerator :: FVDG_SORT_FIRSTNAME : FlatViewDataGenerator :: FVDG_SORT_LASTNAME);
         } else {
@@ -468,13 +470,13 @@ class FlatViewTable extends SortableTable
     }
 
     /**
-     * @param $user_id
+     * @param $userId
      * @param $name
      *
      * @return string
      */
-    private function build_name_link($user_id, $name)
+    private function build_name_link($userId, $name)
     {
-        return '<a href="user_stats.php?userid=' . $user_id . '&selectcat=' . $this->selectcat->get_id() . '&'.api_get_cidreq().'">' . $name . '</a>';
+        return '<a href="user_stats.php?userid=' . $userId . '&selectcat=' . $this->selectcat->get_id() . '&'.api_get_cidreq().'">' . $name . '</a>';
     }
 }

@@ -1,6 +1,6 @@
 <?php
-
 /* For licensing terms, see /license.txt */
+
 /**
  * Service information page
  * Show information about a service (for custom purposes)

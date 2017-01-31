@@ -97,7 +97,7 @@ a:active {text-decoration: none; font-weight : bold;  color : black;}
  */
 function export_pdf_attendance($headers_table, $data_table, $headers_pdf, $footers_pdf, $title_pdf)
 {
-	$mpdf = new mPDF('UTF-8', 'A4-L', '', '', 15, 10, 35, 20, 4, 2, 'L');
+    $mpdf = new mPDF('UTF-8', 'A4-L', '', '', 15, 10, 35, 20, 4, 2, 'L');
 	$mpdf->useOnlyCoreFonts = true;
 	$mpdf->mirrorMargins = 0;
     // Use different Odd/Even headers and footers and mirror margins
@@ -146,7 +146,7 @@ function export_pdf_attendance($headers_table, $data_table, $headers_pdf, $foote
 
     // preparing content pdf
     $css_file = api_get_path(SYS_CSS_PATH).'themes/'.api_get_setting('stylesheets').'/print.css';
-    
+
     if (file_exists($css_file)) {
         $css = @file_get_contents($css_file);
     } else {

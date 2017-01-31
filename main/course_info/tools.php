@@ -43,7 +43,10 @@ switch ($action) {
             api_not_allowed(true);
         }
 
-        $interbreadcrumb[] = array('url' => api_get_self().'?'.api_get_cidreq(), 'name' => get_lang('CustomizeIcons'));
+        $interbreadcrumb[] = array(
+            'url' => api_get_self().'?'.api_get_cidreq(),
+            'name' => get_lang('CustomizeIcons'),
+        );
         $toolName = Security::remove_XSS(stripslashes($tool['name']));
 
         $currentUrl = api_get_self().'?action=edit_icon&id=' . $id.'&'.api_get_cidreq();
@@ -88,9 +91,7 @@ switch ($action) {
             $form->addCheckBox('delete_icon', null, get_lang('DeletePicture'));
         }
         $form->addHtml('</div>');
-
         $form->setDefaults($tool);
-
         $content = $form->returnForm();
 
         if ($form->validate()) {
@@ -123,7 +124,7 @@ switch ($action) {
             $iconsTools .= '<div class="items-tools">';
 
             if (!empty($tool['custom_icon'])) {
-                $image = getCustomWebIconPath().$tool['custom_icon'];
+                $image = CourseHome::getCustomWebIconPath().$tool['custom_icon'];
                 $icon = Display::img($image, $toolIconName);
             } else {
                 $image = (substr($tool['image'], 0, strpos($tool['image'], '.'))).'.png';
@@ -154,20 +155,7 @@ switch ($action) {
         break;
 }
 
-/**
- * @return string
- */
-function getCustomWebIconPath()
-{
-    // Check if directory exists or create it if it doesn't
-    $dir = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/course_home_icons/';
-
-    return $dir;
-}
 $tpl = new Template($toolName);
-
 $tpl->assign('content', $content);
 $template = $tpl->get_template('layout/layout_1_col.tpl');
 $tpl->display($template);
-
-

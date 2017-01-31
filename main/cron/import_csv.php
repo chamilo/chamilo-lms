@@ -202,6 +202,7 @@ class ImportCsv
                         } else {
                             $this->$method($file, true);
                         }
+                        $this->logger->addInfo("--Finish reading file--");
                     }
                 }
             }
@@ -237,6 +238,7 @@ class ImportCsv
                             $teacherBackup,
                             $groupBackup
                         );
+                        $this->logger->addInfo("--Finish reading file--");
                     }
                 }
             }
@@ -908,7 +910,15 @@ class ImportCsv
             $batchSize = $this->batchSize;
             $counter = 1;
             $em = Database::getManager();
-            $eventSentMailList = [];
+            $eventStartDateList = [];
+            $eventEndDateList = [];
+            $report = [
+                'mail_sent' => 0,
+                'mail_not_sent_announcement_exists' => 0,
+                'mail_not_sent_because_date' => 0,
+            ];
+
+            $eventsToCreateFinal = [];
             foreach ($eventsToCreate as $event) {
                 $update = false;
                 $item = null;
@@ -948,6 +958,35 @@ class ImportCsv
                 }
 
                 $courseInfo = api_get_course_info_by_id($event['course_id']);
+                $event['course_info']  = $courseInfo;
+                $event['update']  = $update;
+                $event['item']  = $item;
+                $event['external_event_id']  = $externalEventId;
+
+                if (isset($eventStartDateList[$courseInfo['real_id']]) &&
+                    isset($eventStartDateList[$courseInfo['real_id']][$event['session_id']])
+                ) {
+                    $currentItemDate = api_strtotime($event['start']);
+                    $firstDate = $eventStartDateList[$courseInfo['real_id']][$event['session_id']];
+                    if ($currentItemDate < api_strtotime($firstDate)) {
+                        $eventStartDateList[$courseInfo['real_id']][$event['session_id']] = $event['start'];
+                        $eventEndDateList[$courseInfo['real_id']][$event['session_id']] = $event['end'];
+                    }
+                } else {
+                    // First time
+                    $eventStartDateList[$courseInfo['real_id']][$event['session_id']] = $event['start'];
+                    $eventEndDateList[$courseInfo['real_id']][$event['session_id']] = $event['end'];
+                }
+                $eventsToCreateFinal[] = $event;
+            }
+
+            $eventAlreadySent = [];
+            foreach ($eventsToCreateFinal as $event) {
+                $courseInfo = $event['course_info'];
+                $item = $event['item'];
+                $update = $event['update'];
+                $externalEventId = $event['external_event_id'];
+
                 $agenda = new Agenda(
                     'course',
                     $event['sender_id'],
@@ -982,13 +1021,15 @@ class ImportCsv
 
                 // Taking first element of course-session event
                 $alreadyAdded = false;
-                if (isset($eventSentMailList[$courseInfo['real_id']]) &&
-                    isset($eventSentMailList[$courseInfo['real_id']][$event['session_id']])
+                $firstDate = $eventStartDateList[$courseInfo['real_id']][$event['session_id']];
+                $firstEndDate = $eventEndDateList[$courseInfo['real_id']][$event['session_id']];
+
+                if (isset($eventAlreadySent[$courseInfo['real_id']]) &&
+                    isset($eventAlreadySent[$courseInfo['real_id']][$event['session_id']])
                 ) {
-                    $firstDate = $eventSentMailList[$courseInfo['real_id']][$event['session_id']];
                     $alreadyAdded = true;
                 } else {
-                    $firstDate = $eventSentMailList[$courseInfo['real_id']][$event['session_id']] = $event['start'];
+                    $eventAlreadySent[$courseInfo['real_id']][$event['session_id']] = true;
                 }
 
                 // Working days (Mon-Fri)see BT#12156#note-16
@@ -1008,8 +1049,8 @@ class ImportCsv
 
                 // Send announcement to users
                 if ($sendMail && $alreadyAdded == false) {
-                    $start = $event['start'];
-                    $end = $event['end'];
+                    $start = $firstDate;
+                    $end = $firstEndDate;
 
                     if (!empty($end) &&
                         api_format_date($start, DATE_FORMAT_LONG) == api_format_date($end, DATE_FORMAT_LONG)
@@ -1042,45 +1083,64 @@ class ImportCsv
                         $courseInfo['title']
                     );
 
-                    $this->logger->addInfo(
-                        "Mail to be sent because start date: ".$event['start']
-                    );
-
                     $coaches = SessionManager::getCoachesByCourseSession(
                         $courseInfo['real_id'],
                         $event['session_id']
                     );
 
-                    $announcementId = AnnouncementManager::add_announcement(
-                        $courseInfo,
-                        $event['session_id'],
+                    // Search if an announcement exists:
+                    $announcementsWithTitleList = AnnouncementManager::getAnnouncementsByTitle(
                         $subject,
-                        $emailBody,
-                        [
-                            'everyone',
-                            'users' => $coaches
-                        ],
-                        [],
-                        null,
-                        null,
-                        false,
-                        $this->defaultAdminId
+                        $courseInfo['real_id'],
+                        $event['session_id'],
+                        1
                     );
 
-                    if ($announcementId) {
+                    if (count($announcementsWithTitleList) == 0) {
                         $this->logger->addInfo(
-                            "<<--SEND MAIL-->>"
+                            "Mail to be sent because start date: ".$event['start']
                         );
-
-                        $this->logger->addInfo(
-                            "Announcement added: ".(int) ($announcementId)
-                        );
-                        AnnouncementManager::sendEmail(
+                        $announcementId = AnnouncementManager::add_announcement(
                             $courseInfo,
                             $event['session_id'],
-                            $announcementId,
-                            false
+                            $subject,
+                            $emailBody,
+                            [
+                                'everyone',
+                                'users' => $coaches
+                            ],
+                            [],
+                            null,
+                            null,
+                            false,
+                            $this->defaultAdminId
                         );
+
+                        if ($announcementId) {
+                            $this->logger->addInfo(
+                                "Announcement added: ".(int)($announcementId)
+                            );
+                            $this->logger->addInfo(
+                                "<<--SENDING MAIL-->>"
+                            );
+
+                            $report['mail_sent']++;
+                            AnnouncementManager::sendEmail(
+                                $courseInfo,
+                                $event['session_id'],
+                                $announcementId,
+                                false
+                            );
+                        }
+                    } else {
+                        $report['mail_not_sent_announcement_exists']++;
+                        $this->logger->addInfo(
+                            "Mail NOT sent an announcement seems to be already saved in this course-session"
+                        );
+                    }
+                } else {
+                    if ($sendMail == false) {
+                        $report['mail_not_sent_because_date']++;
                     }
                 }
 
@@ -1156,6 +1216,11 @@ class ImportCsv
             }
 
             $em->clear(); // Detaches all objects from Doctrine!
+            $this->logger->addInfo('------Summary------');
+            foreach ($report as $title => $count) {
+                $this->logger->addInfo("$title: $count");
+            }
+            $this->logger->addInfo('------End Summary------');
         }
 
         if ($moveFile) {

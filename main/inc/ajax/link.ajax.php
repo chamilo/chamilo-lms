@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Responses to AJAX calls
  */
@@ -28,21 +29,32 @@ switch ($action) {
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_TIMEOUT => 4
             );
-            //create a new cURL resource
-
+            // Create a new cURL resource
             $ch = curl_init();
             curl_setopt_array($ch, $defaults);
 
             // grab URL and pass it to the browser
+            ob_start();
             $result = curl_exec($ch);
+            ob_get_clean();
 
             // close cURL resource, and free up system resources
             curl_close($ch);
 
             if ($result) {
-                echo Display::return_icon('check-circle.png', get_lang('Ok'), null, ICON_SIZE_TINY);
+                echo Display::return_icon(
+                    'check-circle.png',
+                    get_lang('Ok'),
+                    null,
+                    ICON_SIZE_TINY
+                );
             } else {
-                echo Display::return_icon('closed-circle.png', get_lang('Wrong'), null, ICON_SIZE_TINY);
+                echo Display::return_icon(
+                    'closed-circle.png',
+                    get_lang('Wrong'),
+                    null,
+                    ICON_SIZE_TINY
+                );
             }
         }
         break;

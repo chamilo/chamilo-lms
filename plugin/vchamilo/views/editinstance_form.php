@@ -438,22 +438,24 @@ class InstanceForm extends ChamiloForm
 
                 $form->addLabel(
                     'archive_real_root',
-                    Virtual::getConfig('vchamilo', 'archive_real_root').$this->instance['slug']
+                    api_add_trailing_slash(Virtual::getConfig('vchamilo', 'archive_real_root')).
+                    $this->instance['slug']
                 );
 
                 $form->addLabel(
                     'course_real_root',
-                    Virtual::getConfig('vchamilo', 'course_real_root').$this->instance['slug']
+                    api_add_trailing_slash(Virtual::getConfig('vchamilo', 'course_real_root')).
+                        $this->instance['slug']
                 );
 
                 $form->addLabel(
                     'home_real_root',
-                    Virtual::getConfig('vchamilo', 'home_real_root').$this->instance['slug']
+                    api_add_trailing_slash(Virtual::getConfig('vchamilo', 'home_real_root')).$this->instance['slug']
                 );
 
                 $form->addLabel(
                     'upload_real_root',
-                    Virtual::getConfig('vchamilo', 'upload_real_root').$this->instance['slug']
+                    api_add_trailing_slash(Virtual::getConfig('vchamilo', 'upload_real_root')).$this->instance['slug']
                 );
 
                 $form->addLabel(

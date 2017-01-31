@@ -166,6 +166,7 @@ class ScriptHandler
             __DIR__.'/../../../../main/inc/lib/cache.class.php',
             __DIR__.'/../../../../main/inc/lib/system/web/request_server.class.php',
             __DIR__.'/../../../../main/inc/lib/page.class.php',
+            __DIR__.'/../../../../main/inc/lib/sortabletable.class.php',
             __DIR__.'/../../../../main/inc/lib/mail.lib.inc.php',
             __DIR__.'/../../../../main/install/i_database.class.php',
             __DIR__.'/../../../../main/install/install.class.php',

@@ -7952,4 +7952,6 @@ $AllowMyFilesTitle = "Enable 'My Files' section";
 $AllowMyFilesComment = "Allow users to upload files to a personal space on the platform.";
 $InstallMultiURLDetectedNotMainURL = "You are currently using the multi-URL feature and are trying to upgrade your portal using a secondary URL. Please connect to the main URL to proceed with the upgrade: %s";
 $OnlyXQuestionsPickedRandomly = "Only %s questions will be picked randomly following the quiz configuration.";
-?>
+$UploadCorrectionsExplanationWithDownloadLinkX = "First you have to download the corrections <a href='%s'> here </a>.
+After that you have to unzip that file and edit the files as you wanted without changing the file names.
+Then create a zip file with those modified files and upload it in this form.";

@@ -136,7 +136,8 @@ class Link extends Model
         }
         $sessionId = intval($sessionId);
         if ($linkUrl != '') {
-            $sql = "UPDATE $tblLink SET url = '$linkUrl'
+            $sql = "UPDATE $tblLink SET 
+                    url = '$linkUrl'
                     WHERE id = $linkId AND c_id = $courseId AND session_id = $sessionId";
             $resLink = Database::query($sql);
 
@@ -930,7 +931,7 @@ class Link extends Model
                 if (api_is_allowed_to_edit(null, true)) {
                     $toolbar .= Display::toolbarButton(
                         '',
-                        'javascript:void();',
+                        'javascript:void(0);',
                         'check-circle-o',
                         'default btn-sm',
                         array(
@@ -947,8 +948,7 @@ class Link extends Model
                     );
 
                     if ($session_id == $myrow['session_id']) {
-                        $url = api_get_self() . '?' . api_get_cidreq() .
-                            '&action=editlink&category=' . (!empty ($category) ? $category : '') .
+                        $url = api_get_self().'?' .api_get_cidreq().'&action=editlink&category=' .(!empty ($category) ? $category : '').
                             '&id=' . $myrow['id'] .
                             '&category_id=' . $myrow['id'];
                         $title = get_lang('Edit');
@@ -1107,7 +1107,8 @@ class Link extends Model
     /**
      * Displays the edit, delete and move icons
      * @param int   Category ID
-     * @return void
+     * @return string
+     *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      */
     public static function showCategoryAdminTools($category, $currentCategory, $countCategories)
@@ -1255,14 +1256,9 @@ class Link extends Model
 
         $result = Database:: query(
             "SELECT id FROM " . $tbl_categories . "
-            WHERE c_id = $course_id AND category_title='" . Database::escape_string(
-                $catname
-            ) . "'"
+            WHERE c_id = $course_id AND category_title='" . Database::escape_string($catname) . "'"
         );
-        if (Database:: num_rows($result) >= 1 && ($row = Database:: fetch_array(
-                $result
-            ))
-        ) {
+        if (Database:: num_rows($result) >= 1 && ($row = Database:: fetch_array($result))) {
             return $row['id']; // Several categories with same name: take the first.
         }
 
@@ -1494,7 +1490,6 @@ class Link extends Model
         // The ID string starts after "v=", which is usually right after
         // "youtube.com/watch?" in the URL
         $pos = strpos($url, "v=");
-
         $id = '';
 
         //If false try other options

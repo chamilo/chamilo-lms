@@ -112,26 +112,28 @@ class LearnpathList
             ->createQuery($dql)
             ->getResult();
 
-        $names = array();
-
+        $names = [];
         /** @var CLp $row */
         foreach ($learningPaths as $row) {
             // Use domesticate here instead of Database::escape_string because
             // it prevents ' to be slashed and the input (done by learnpath.class.php::toggle_visibility())
             // is done using domesticate()
-            $myname = domesticate($row->getName());
-            $mylink = 'lp/lp_controller.php?action=view&lp_id=' . $row->getIid() . '&id_session='.$session_id;
+            $name = domesticate($row->getName());
+            $link = 'lp/lp_controller.php?action=view&lp_id=' . $row->getIid() . '&id_session='.$session_id;
+            $oldLink = 'newscorm/lp_controller.php?action=view&lp_id=' . $row->getIid() . '&id_session='.$session_id;
 
             $sql2 = "SELECT * FROM $tbl_tool
                      WHERE
                         c_id = $course_id AND (
-                            name='$myname' AND
+                            name='$name' AND
                             image='scormbuilder.gif' AND
-                            link LIKE '$mylink%'
+                            (
+                                link LIKE '$link%' OR
+                                link LIKE '$oldLink%'                                
+                            )
                       )";
 
             $res2 = Database::query($sql2);
-
             if (Database::num_rows($res2) > 0) {
                 $row2 = Database::fetch_array($res2);
                 $pub = $row2['visibility'];

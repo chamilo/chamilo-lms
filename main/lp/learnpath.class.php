@@ -4133,72 +4133,76 @@ class learnpath
         $tbl_lp = Database :: get_course_table(TABLE_LP_MAIN);
         $lp_id = intval($lp_id);
         $sql = "SELECT * FROM $tbl_lp
-                WHERE c_id = ".$course_id." AND id = $lp_id";
+                WHERE c_id = $course_id AND id = $lp_id";
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             $row = Database :: fetch_array($result);
             $name = domesticate($row['name']);
             if ($set_visibility == 'i') {
-                $s = $name . " " . get_lang('LearnpathNotPublished');
                 $v = 0;
             }
             if ($set_visibility == 'v') {
-                $s = $name . " " . get_lang('LearnpathPublished');
                 $v = 1;
             }
-        } else {
-            return false;
-        }
 
-        $session_id = api_get_session_id();
-        $session_condition = api_get_session_condition($session_id);
+            $session_id = api_get_session_id();
+            $session_condition = api_get_session_condition($session_id);
 
-        $tbl_tool = Database :: get_course_table(TABLE_TOOL_LIST);
-        $link = 'lp/lp_controller.php?action=view&lp_id='.$lp_id.'&id_session='.$session_id;
+            $tbl_tool = Database :: get_course_table(TABLE_TOOL_LIST);
+            $link = 'lp/lp_controller.php?action=view&lp_id='.$lp_id.'&id_session='.$session_id;
+            $oldLink = 'newscorm/lp_controller.php?action=view&lp_id='.$lp_id.'&id_session='.$session_id;
 
-        $sql = "SELECT * FROM $tbl_tool
-                WHERE
-                    c_id = ".$course_id." AND
-                    link='$link' and
-                    image='scormbuilder.gif' and
-                    link LIKE '$link%'
-                    $session_condition
-                ";
-        $result = Database::query($sql);
-        $num = Database :: num_rows($result);
-        if ($set_visibility == 'i' && $num > 0) {
-            $sql = "DELETE FROM $tbl_tool
-                    WHERE c_id = ".$course_id." AND (link='$link' and image='scormbuilder.gif' $session_condition)";
-            Database::query($sql);
-
-        } elseif ($set_visibility == 'v' && $num == 0) {
-            $sql = "INSERT INTO $tbl_tool (category, c_id, name, link, image, visibility, admin, address, added_tool, session_id) VALUES
-            	    ('authoring', $course_id, '$name', '$link', 'scormbuilder.gif', '$v', '0','pastillegris.gif', 0, $session_id)";
-            Database::query($sql);
-
-            $insertId = Database::insert_id();
-            if ($insertId) {
-                $sql = "UPDATE $tbl_tool SET id = iid WHERE iid = $insertId";
-                Database::query($sql);
-            }
-        } elseif ($set_visibility == 'v' && $num > 0) {
-            $sql = "UPDATE $tbl_tool SET
-                        c_id = $course_id,
-                        name = '$name',
-                        link = '$link',
-                        image = 'scormbuilder.gif',
-                        visibility = '$v',
-                        admin = '0',
-                        address = 'pastillegris.gif',
-                        added_tool = 0,
-                        session_id = $session_id
-            	    WHERE
-            	        c_id = ".$course_id." AND
-            	        (link='$link' and image='scormbuilder.gif' $session_condition)
+            $sql = "SELECT * FROM $tbl_tool
+                    WHERE
+                        c_id = $course_id AND
+                        (link = '$link' OR link = '$oldLink') AND
+                        image = 'scormbuilder.gif' AND
+                        (
+                            link LIKE '$link%' OR
+                            link LIKE '$oldLink%'
+                        )
+                        $session_condition
                     ";
-            Database::query($sql);
+            $result = Database::query($sql);
+            $num = Database :: num_rows($result);
+            if ($set_visibility == 'i' && $num > 0) {
+                $sql = "DELETE FROM $tbl_tool
+                        WHERE 
+                            c_id = $course_id AND 
+                            (link = '$link' OR link = '$oldLink') AND 
+                            image='scormbuilder.gif' 
+                            $session_condition";
+                Database::query($sql);
+            } elseif ($set_visibility == 'v' && $num == 0) {
+                $sql = "INSERT INTO $tbl_tool (category, c_id, name, link, image, visibility, admin, address, added_tool, session_id) VALUES
+                        ('authoring', $course_id, '$name', '$link', 'scormbuilder.gif', '$v', '0','pastillegris.gif', 0, $session_id)";
+                Database::query($sql);
+                $insertId = Database::insert_id();
+                if ($insertId) {
+                    $sql = "UPDATE $tbl_tool SET id = iid WHERE iid = $insertId";
+                    Database::query($sql);
+                }
+            } elseif ($set_visibility == 'v' && $num > 0) {
+                $sql = "UPDATE $tbl_tool SET
+                            c_id = $course_id,
+                            name = '$name',
+                            link = '$link',
+                            image = 'scormbuilder.gif',
+                            visibility = '$v',
+                            admin = '0',
+                            address = 'pastillegris.gif',
+                            added_tool = 0,
+                            session_id = $session_id
+                        WHERE
+                            c_id = ".$course_id." AND
+                            (link='$link' and image='scormbuilder.gif' $session_condition)
+                        ";
+                Database::query($sql);
+            } else {
+                // Parameter and database incompatible, do nothing, exit.
+                return false;
+            }
         } else {
-            // Parameter and database incompatible, do nothing, exit.
             return false;
         }
     }

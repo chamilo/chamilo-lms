@@ -3187,16 +3187,14 @@ function api_not_allowed($print_headers = false, $message = null)
     global $this_section;
 
     if (CustomPages::enabled() && !isset($user_id)) {
-
         if (empty($user_id)) {
             // Why the CustomPages::enabled() need to be to set the request_uri
             $_SESSION['request_uri'] = $_SERVER['REQUEST_URI'];
         }
-
         CustomPages::display(CustomPages::INDEX_UNLOGGED);
     }
 
-    $origin = isset($_GET['origin']) ? $_GET['origin'] : '';
+    $origin = api_get_origin();
 
     $msg = null;
     if (isset($message)) {

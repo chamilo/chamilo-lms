@@ -26,7 +26,7 @@ if ($id) {
     $mode = $registeronly ? 'register' : 'add' ;
 }
 
-$vhost = (array)  Virtual::getInstance($id);
+$vhost = (array) Virtual::getInstance($id);
 
 $form = new InstanceForm($plugin, $mode, $vhost);
 

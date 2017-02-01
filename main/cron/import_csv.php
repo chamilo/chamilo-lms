@@ -830,7 +830,6 @@ class ImportCsv
 
                 if (empty($teacherId)) {
                     $errorFound = true;
-
                     $this->logger->addInfo(
                         "No teacher found in course code : '$courseCode' and session: '$sessionId'"
                     );
@@ -856,11 +855,6 @@ class ImportCsv
                     );
                     $errorFound = true;
                 }
-
-                // If old events do nothing.
-                /*if (api_strtotime($startDate) < time()) {
-                    continue;
-                }*/
 
                 if ($errorFound == false) {
                     $eventsToCreate[] = array(
@@ -919,9 +913,13 @@ class ImportCsv
             ];
 
             $eventsToCreateFinal = [];
+
             foreach ($eventsToCreate as $event) {
                 $update = false;
                 $item = null;
+
+                $info = 'Course: #'.$event['course_id'].' - Session:'.$event['session_id'];
+
                 if (!isset($event[$extraFieldName])) {
                     $this->logger->addInfo(
                         "No external_calendar_itemID found. Skipping ..."
@@ -946,13 +944,12 @@ class ImportCsv
 
                     if (!empty($item)) {
                         $this->logger->addInfo(
-                            "Event #$externalEventId was already added. Updating ..."
+                            "Event #$externalEventId to be updated, was already added here $info."
                         );
                         $update = true;
-                        //continue;
                     } else {
                         $this->logger->addInfo(
-                            "Event #$externalEventId was not added. Preparing to be created ..."
+                            "Event #$externalEventId was not added. To be added here: $info "
                         );
                     }
                 }
@@ -1007,7 +1004,7 @@ class ImportCsv
 
                 if (empty($courseInfo)) {
                     $this->logger->addInfo(
-                        "No course found for added: #".$event['course_id']." Skipping ..."
+                        "No course found #".$event['course_id']." Skipping ..."
                     );
                     continue;
                 }
@@ -1145,6 +1142,9 @@ class ImportCsv
                 }
 
                 $content = '';
+
+                $info = 'Course: #'.$courseInfo['real_id'].' ('.$courseInfo['code'].') - Session:'.$event['session_id'];
+
                 if ($update && isset($item['item_id'])) {
                     //the event already exists, just update
                     $eventResult = $agenda->editEvent(
@@ -1165,7 +1165,7 @@ class ImportCsv
 
                     if ($eventResult !== false) {
                         $this->logger->addInfo(
-                            "Event updated: #".$item['item_id']
+                            "Event #".$item['item_id']." updated here: $info"
                         );
                     } else {
                         $this->logger->addInfo(
@@ -1199,7 +1199,7 @@ class ImportCsv
                             )
                         );
                         $this->logger->addInfo(
-                            "Event added: #$eventId"
+                            "Event added: #$eventId here $info"
                         );
                     } else {
                         $this->logger->addInfo(

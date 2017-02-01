@@ -7974,4 +7974,5 @@ $AllowDownloadDocumentsByApiKeyComment = "Descargar documentos con la llave API"
 $UploadCorrectionsExplanationWithDownloadLinkX = "Primero necesita descargar las correcciones <a href=\"%s\">aquí</a>. Luego descomprima el archivo y edita los documentos sin cambiar sus nombres. Finalmente, crea un archivo zip con estos documentos y vuelva a subir el archivo en esta forma a través de este formulario.";
 $PostsPendingModeration = "Contribuciones a la espera de moderación";
 $OnlyUsersFromCourseSession = "Solo usuarios de un curso en una sesión";
+$ServerXForwardedForInfo = "Si su servidor está detrás de un reverse proxy o un firewall (y únicamente en estos casos), podría usar la cabecera HTTP X_FORWARDED_FOR para mostrar la dirección IP del usuario distante (usted, en este caso).";
 ?>

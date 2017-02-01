@@ -7906,4 +7906,5 @@ $AllowDownloadDocumentsByApiKeyComment = "Permettre le téléchargement de docum
 $UploadCorrectionsExplanationWithDownloadLinkX = "Veuillez d'abord télécharger les corrections <a href=\"%s\">ici</a> puis les décompresser et éditer les fichiers sans changer leurs noms. Ensuite, créez un fichier zip avec les fichiers modifiés et téléchargez-le vers le serveur sous cette forme.";
 $PostsPendingModeration = "Participations en attente de modération";
 $OnlyUsersFromCourseSession = "Seulement les utilisateurs d'un cours dans une session";
+$ServerXForwardedForInfo = "Si le serveur est derrière un proxy ou un firewall (et uniquement dans ces cas), il pourrait utiliser le header HTTP X_FORWARDED_FOR pour montrer l'adresse IP de l'utilisateur distant (la vôtre, dans ce cas précis).";
 ?>

@@ -5135,6 +5135,26 @@ class SessionManager
     }
 
     /**
+     * getAllCoursesFromAllSessions
+     *
+     * @return array
+     */
+    public static function getAllCoursesFromAllSessions()
+    {
+        $sessions = SessionManager::get_sessions_list();
+        $coursesFromSession = array();
+        if (!empty($sessions)) {
+            foreach ($sessions as $session) {
+                $courseList = SessionManager::get_course_list_by_session_id($session['id']);
+                foreach ($courseList as $course) {
+                    $coursesFromSession[$course['code'].':'.$session['id']] = $course['visual_code'] . ' - ' . $course['title'] . ' (' . $session['name'] . ')';
+                }
+            }
+        }
+        return $coursesFromSession;
+    }
+
+    /**
      * @param string $status
      * @param int $userId
      * @param bool $getCount

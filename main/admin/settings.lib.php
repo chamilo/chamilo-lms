@@ -1364,7 +1364,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
                 break;
             case 'textarea':
                 if ($row['variable'] == 'header_extra_content') {
-                    $file = api_get_path(SYS_PATH).api_get_home_path().'header_extra_content.txt';
+                    $file = api_get_home_path().'header_extra_content.txt';
                     $value = '';
                     if (file_exists($file)) {
                         $value = file_get_contents($file);
@@ -1372,7 +1372,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
                     $form->addElement('textarea', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])) , array('rows'=>'10'), $hideme);
                     $default_values[$row['variable']] = $value;
                 } elseif ($row['variable'] == 'footer_extra_content') {
-                    $file = api_get_path(SYS_PATH).api_get_home_path().'footer_extra_content.txt';
+                    $file = api_get_home_path().'footer_extra_content.txt';
                     $value = '';
                     if (file_exists($file)) {
                         $value = file_get_contents($file);

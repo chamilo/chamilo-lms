@@ -217,35 +217,37 @@ class CoursesController
             return false;
         }
 
-        $message = '';
-        $error = '';
-        $content = '';
-        $result = [];
-
         // The course must be open in order to access the auto subscription
         if (in_array(
             $courseInfo['visibility'],
             array(COURSE_VISIBILITY_CLOSED, COURSE_VISIBILITY_REGISTERED, COURSE_VISIBILITY_HIDDEN))
         ) {
-            $error = get_lang('SubscribingNotAllowed');
+            Display::addFlash(
+                Display::return_message(
+                    get_lang('SubscribingNotAllowed'),
+                    'warning'
+                )
+            );
         } else {
+            // Redirect to subscription
+            if (api_is_anonymous()) {
+                header('Location: '.api_get_path(WEB_CODE_PATH).'auth/inscription.php&c='.$course_code);
+                exit;
+            }
             $result = $this->model->subscribe_user($course_code);
             if (!$result) {
-                $error = get_lang('CourseRegistrationCodeIncorrect');
+                Display::addFlash(
+                    Display::return_message(
+                        get_lang('CourseRegistrationCodeIncorrect'),
+                        'warning'
+                    )
+                );
             } else {
-                // Redirect directly to the course after subscription
-                $message = isset($result['message']) ? $result['message'] : '';
-                $content = isset($result['content']) ? $result['content'] : '';
+                Display::addFlash(
+                    Display::return_message($result['message'])
+                );
             }
         }
-
-        if (!empty($search_term)) {
-            $this->search_courses($search_term, $message, $error, $content);
-        } else {
-            $this->courses_categories('subscribe', $category_code, $message, $error, $content);
-        }
-
-        return $result;
     }
 
     /**

@@ -61,7 +61,6 @@ $code = isset($code) ? $code : null;
         <?php } ?>
     });
 </script>
-
 <div class="row">
     <div class="col-md-4">
         <h5><?php echo get_lang('Search'); ?></h5>
@@ -131,7 +130,6 @@ $code = isset($code) ? $code : null;
 <div class="row">
 <?php
 if ($showCourses && $action != 'display_sessions') {
-
     if (!empty($message)) {
         Display::display_confirmation_message($message, false);
     }
@@ -177,7 +175,10 @@ if ($showCourses && $action != 'display_sessions') {
             // display the course bloc
             $html .= '<div class="col-xs-6 col-sm-6 col-md-3"><div class="items items-courses">';
 
-            $course['category_title'] = isset($categoryList[$course['category']]) ? $categoryList[$course['category']] : '';
+            $course['category_title'] = '';
+            if (isset($course['category'])) {
+                $course['category_title'] = isset($categoryList[$course['category']]) ? $categoryList[$course['category']] : '';
+            }
 
             // display thumbnail
             $html .= returnThumbnail($course);

@@ -7958,4 +7958,5 @@ $UploadCorrectionsExplanationWithDownloadLinkX = "First you have to download the
 After that you have to unzip that file and edit the files as you wanted without changing the file names.
 Then create a zip file with those modified files and upload it in this form.";
 $PostsPendingModeration = "Posts pending moderation";
+$OnlyUsersFromCourseSession = "Only users from one course in a session";
 ?>

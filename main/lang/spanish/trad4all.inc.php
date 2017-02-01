@@ -7969,4 +7969,9 @@ $AllowMyFilesTitle = "Permitir uso de página 'Mis documentos'";
 $AllowMyFilesComment = "Permitir a los usuarios subir archivos en un espacio personal en la plataforma.";
 $InstallMultiURLDetectedNotMainURL = "Usted actualmente está usando la funcionalidad de multi-url y está intentando actualizar su portal usando una URL secundaria. Por favor, conéctese a la URL principal para proceder con la actualización: %s";
 $OnlyXQuestionsPickedRandomly = "Solo %s preguntas serán seleccionadas aleatoriamente según la configuración del ejercicio.";
+$AllowDownloadDocumentsByApiKeyTitle = "Permitir descargar documentos del curso a través de la clave de API";
+$AllowDownloadDocumentsByApiKeyComment = "Descargar documentos con la llave API";
+$UploadCorrectionsExplanationWithDownloadLinkX = "Primero necesita descargar las correcciones <a href=\"%s\">aquí</a>. Luego descomprima el archivo y edita los documentos sin cambiar sus nombres. Finalmente, crea un archivo zip con estos documentos y vuelva a subir el archivo en esta forma a través de este formulario.";
+$PostsPendingModeration = "Contribuciones a la espera de moderación";
+$OnlyUsersFromCourseSession = "Solo usuarios de un curso en una sesión";
 ?>

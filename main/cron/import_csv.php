@@ -1086,7 +1086,7 @@ class ImportCsv
 
                     if (count($announcementsWithTitleList) == 0) {
                         $this->logger->addInfo(
-                            "Mail to be sent because start date: ".$event['start']
+                            "Mail to be sent because start date: ".$event['start']." and no announcement found."
                         );
                         $announcementId = AnnouncementManager::add_announcement(
                             $courseInfo,
@@ -1106,7 +1106,7 @@ class ImportCsv
 
                         if ($announcementId) {
                             $this->logger->addInfo(
-                                "Announcement added: ".(int)($announcementId)
+                                "Announcement added: ".(int)($announcementId)." in $info"
                             );
                             $this->logger->addInfo(
                                 "<<--SENDING MAIL-->>"
@@ -1123,7 +1123,7 @@ class ImportCsv
                     } else {
                         $report['mail_not_sent_announcement_exists']++;
                         $this->logger->addInfo(
-                            "Mail NOT sent an announcement seems to be already saved in this course-session"
+                            "Mail NOT sent. An announcement seems to be already saved in $info"
                         );
                     }
                 } else {

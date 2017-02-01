@@ -7947,11 +7947,15 @@ $Unassigned = "Unassigned";
 $SelectWeeksSpan = "Select the timespan in weeks";
 $CourseXAdded = "Course %s added";
 $CurrentPassword = "Current password";
-$DeleteCorrections = "Delete corrections";
+$DeleteCorrections = "Delete all corrections";
 $AllowMyFilesTitle = "Enable 'My Files' section";
 $AllowMyFilesComment = "Allow users to upload files to a personal space on the platform.";
 $InstallMultiURLDetectedNotMainURL = "You are currently using the multi-URL feature and are trying to upgrade your portal using a secondary URL. Please connect to the main URL to proceed with the upgrade: %s";
 $OnlyXQuestionsPickedRandomly = "Only %s questions will be picked randomly following the quiz configuration.";
+$AllowDownloadDocumentsByApiKeyTitle = "Allow download course documents by API Key";
+$AllowDownloadDocumentsByApiKeyComment = "Download documents verifying the REST API key for a user";
 $UploadCorrectionsExplanationWithDownloadLinkX = "First you have to download the corrections <a href='%s'> here </a>.
 After that you have to unzip that file and edit the files as you wanted without changing the file names.
 Then create a zip file with those modified files and upload it in this form.";
+$PostsPendingModeration = "Posts pending moderation";
+?>

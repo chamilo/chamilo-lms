@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CForumPost;
+
 /**
  * These files are a complete rework of the forum. The database structure is
  * based on phpBB but all the code is rewritten. A lot of new functionalities
@@ -268,7 +270,7 @@ if ($action_forums != 'add') {
             // SHOULD WE SHOW THIS PARTICULAR FORUM
             // you are teacher => show forum
 
-            if (api_is_allowed_to_edit(false,true)) {
+            if (api_is_allowed_to_edit(false, true)) {
                 //echo 'teacher';
                 $show_forum = true;
             } else {
@@ -390,6 +392,20 @@ if ($action_forums != 'add') {
                         'class' => 'description'
                     )
                 );
+
+                if ($forum['moderated'] == 1 && api_is_allowed_to_edit(false, true)) {
+                    $waitingCount = getCountPostsWithStatus(
+                        CForumPost::STATUS_WAITING_MODERATION,
+                        $forum
+                    );
+                    if (!empty($waitingCount)) {
+                        $html .= Display::label(
+                            get_lang('PostsPendingModeration'). ': '.$waitingCount,
+                            'warning'
+                        );
+                    }
+                }
+
                 $html .= '</div>';
                 $html .= '</div>';
                 $html .= '<div class="col-md-6">';

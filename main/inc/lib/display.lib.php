@@ -1989,9 +1989,24 @@ class Display
     }
 
     /**
+     * @param array $buttons
+     * @return string
+     */
+    public static function groupButton($buttons)
+    {
+        $html = '<div class="btn-group" role="group">';
+        foreach ($buttons as $button) {
+            $html .= $button;
+        }
+        $html .= '</div>';
+
+        return $html;
+    }
+
+    /**
      * @todo use twig
      */
-    public static function group_button($title, $elements)
+    public static function groupButtonWithDropDown($title, $elements)
     {
         $html = '<div class="btn-group">
                 <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -2337,6 +2352,8 @@ class Display
      * @param string $icon The Awesome Font class for icon
      * @param string $type Optional. The button Bootstrap class. Default 'default' class
      * @param array $attributes The additional attributes
+     * @param bool $includeText
+     *
      * @return string The button HTML
      */
     public static function toolbarButton(
@@ -2504,14 +2521,18 @@ HTML;
 
     /**
      * Returns the string "1 day ago" with a link showing the exact date time.
-     * @param string $dateTime in UTC
+     * @param string $dateTime in UTC or a DateTime in UTC
      *
      * @return string
      */
     public static function dateToStringAgoAndLongDate($dateTime)
     {
-        if (empty($dateTime) || $dateTime === '0000-00-00 00:00:00') {
+       if (empty($dateTime) || $dateTime === '0000-00-00 00:00:00') {
             return '';
+        }
+
+        if ($dateTime instanceof \DateTime) {
+            $dateTime = $dateTime->format('Y-m-d H:i:s');
         }
 
         return self::tip(

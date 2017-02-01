@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CForumPost;
+
 /**
  * These files are a complete rework of the forum. The database structure is
  * based on phpBB but all the code is rewritten. A lot of new functionalities
@@ -460,11 +462,8 @@ if (is_array($threads)) {
                 $newPost = '';
             }
 
-            if ($row['thread_sticky'] == 1) {
-                //$sticky = Display::return_icon('exclamation.gif');
-            }
-
             $name = api_get_person_name($row['firstname'], $row['lastname']);
+
             $linkPostForum = '<a href="viewthread.php?' . api_get_cidreq() . '&forum=' . Security::remove_XSS($my_forum)
                 . "&origin=$origin&thread={$row['thread_id']}&search="
                 . Security::remove_XSS(urlencode($my_search)) . '">'
@@ -514,6 +513,21 @@ if (is_array($threads)) {
             );
             $html .= '<p>'. get_lang('By') .' ' .$authorName.'</p>';
             $html .= '<p>' . api_convert_and_format_date($row['insert_date']) . '</p>';
+
+            if ($current_forum['moderated'] == 1 && api_is_allowed_to_edit(false, true)) {
+                $waitingCount = getCountPostsWithStatus(
+                    CForumPost::STATUS_WAITING_MODERATION,
+                    $current_forum,
+                    $row['thread_id']
+                );
+                if (!empty($waitingCount)) {
+                    $html .= Display::label(
+                        get_lang('PostsPendingModeration'). ': '.$waitingCount,
+                        'warning'
+                    );
+                }
+            }
+
             $html .= '</div>';
             $html .= '</div>';
 

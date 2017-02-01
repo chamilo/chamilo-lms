@@ -59,6 +59,25 @@ $groupId = api_get_group_id();
 $group_properties = GroupManager::get_group_properties($groupId);
 $sessionId = api_get_session_id();
 
+$ajaxURL = api_get_path(WEB_AJAX_PATH).'forum.ajax.php?'.api_get_cidreq().'&a=change_post_status';
+$htmlHeadXtra[] = '<script>
+$(function() {
+    $("span").on("click", ".change_post_status", function() {
+        var updateDiv = $(this).parent();
+        var postId = updateDiv.attr("id");
+                
+        $.ajax({
+            url: "'.$ajaxURL.'&post_id="+postId,
+            type: "GET",
+            success: function(data) {
+                updateDiv.html(data);
+            }                
+        });
+    });  
+});
+    
+</script>';
+
 if ($origin == 'group') {
     $interbreadcrumb[] = array(
         'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),

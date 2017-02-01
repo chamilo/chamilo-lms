@@ -25,6 +25,7 @@ use Chamilo\CourseBundle\Entity\CForumThread;
  * @todo several functions have to be moved to the itemmanager library
  * @todo displaying icons => display library
  * @todo complete the missing phpdoc the correct order should be
+ * @todo convert into a class
  */
 
 define('FORUM_NEW_POST', 0);
@@ -1931,8 +1932,14 @@ function getThreadInfo($threadId, $cId)
  *
  * @return array containing all the information about the posts of a given thread
  */
-function getPosts($forumInfo, $threadId, $orderDirection = 'ASC', $recursive = false, $postId = null, $depth = -1)
-{
+function getPosts(
+    $forumInfo,
+    $threadId,
+    $orderDirection = 'ASC',
+    $recursive = false,
+    $postId = null,
+    $depth = -1
+) {
     $em = Database::getManager();
 
     if (api_is_allowed_to_edit(false, true)) {
@@ -1957,13 +1964,9 @@ function getPosts($forumInfo, $threadId, $orderDirection = 'ASC', $recursive = f
             $filterModerated = false;
         }
     } else {
-        if (GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo['iid']) || api_is_allowed_to_edit()) {
+        if (GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo['iid']) || api_is_allowed_to_edit(false, true)) {
             $filterModerated = false;
         }
-    }
-
-    if ($filterModerated && $forumInfo['moderated'] == 1) {
-        $criteria->andWhere(Criteria::expr()->eq('status', 1));
     }
 
     if ($recursive) {
@@ -1975,8 +1978,20 @@ function getPosts($forumInfo, $threadId, $orderDirection = 'ASC', $recursive = f
         ->addCriteria($criteria)
         ->addOrderBy('p.postId', $orderDirection);
 
-    $posts = $qb->getQuery()->getResult();
 
+    if ($filterModerated && $forumInfo['moderated'] == 1) {
+        if (!api_is_allowed_to_edit(false, true)) {
+            $userId = api_get_user_id();
+            $qb->andWhere(
+                "p.status = 1 OR 
+                    (p.status = ".CForumPost::STATUS_WAITING_MODERATION." AND p.posterId = $userId) OR
+                    (p.status IS NULL AND p.posterId = $userId) 
+                    "
+            );
+        }
+    }
+
+    $posts = $qb->getQuery()->getResult();
     $depth++;
 
     $list = [];
@@ -2018,7 +2033,6 @@ function getPosts($forumInfo, $threadId, $orderDirection = 'ASC', $recursive = f
         if (!$recursive) {
             continue;
         }
-
         $list = array_merge(
             $list,
             getPosts(
@@ -6057,24 +6071,93 @@ function getForumCategoryByTitle($title, $courseId, $sessionId = 0)
     return $resultData;
 }
 
-function getPostStatus($current_forum, $row)
+/**
+ * @param array $current_forum
+ * @param array $row
+ *
+ * @return string
+ */
+function getPostStatus($current_forum, $row, $addWrapper = true)
 {
     $statusIcon = '';
     if ($current_forum['moderated']) {
-        $statusIcon = '<br /><br />';
+        if ($addWrapper) {
+            $statusIcon = '<br /><br /><span id="status_post_'.$row['iid'].'">';
+        }
         $row['status'] = empty($row['status']) ? 2 : $row['status'];
+
+        $addUrl = false;
+        if (api_is_allowed_to_edit(false, true)) {
+            $addUrl = true;
+        }
+
+        $label = '';
+        $icon = '';
+        $buttonType = '';
         switch ($row['status']) {
             case CForumPost::STATUS_VALIDATED:
-                $statusIcon .= Display::label(get_lang('Validated'), 'success');
+                $label = get_lang('Validated');
+                $icon = 'check-circle';
+                $buttonType = 'success';
                 break;
             case CForumPost::STATUS_WAITING_MODERATION:
-                $statusIcon .= Display::label(get_lang('WaitingModeration'), 'warning');
+                $label = get_lang('WaitingModeration');
+                $icon = 'warning';
+                $buttonType = 'warning';
                 break;
             case CForumPost::STATUS_REJECTED:
-                $statusIcon .= Display::label(get_lang('Rejected'), 'danger');
+                $label = get_lang('Rejected');
+                $icon = 'minus-circle';
+                $buttonType = 'danger';
                 break;
+        }
+
+        if ($addUrl) {
+            $statusIcon .= Display::toolbarButton(
+                $label.'&nbsp;',
+                'javascript:void(0)',
+                $icon,
+                $buttonType,
+                ['class' => 'change_post_status']
+            );
+        } else {
+            $statusIcon .= Display::label(
+                Display::returnFontAwesomeIcon($icon).$label,
+                $buttonType
+            );
+        }
+
+        if ($addWrapper) {
+            $statusIcon .= '</span>';
         }
     }
 
     return $statusIcon;
+}
+
+/**
+ * @param array $forumInfo
+ * @param int $threadId
+ * @param int $status
+ * @return mixed
+ */
+function getCountPostsWithStatus($status, $forumInfo, $threadId = null)
+{
+    $em = Database::getManager();
+    $criteria = Criteria::create();
+    $criteria
+        ->where(Criteria::expr()->eq('status', $status))
+        ->andWhere(Criteria::expr()->eq('cId', $forumInfo['c_id']))
+        ->andWhere(Criteria::expr()->eq('visible', 1))
+    ;
+
+    if (!empty($threadId)) {
+        $criteria->andWhere(Criteria::expr()->eq('threadId', $threadId));
+    }
+
+    $qb = $em->getRepository('ChamiloCourseBundle:CForumPost')->createQueryBuilder('p');
+    $qb->select('count(p.iid)')
+        ->addCriteria($criteria);
+
+    return $qb->getQuery()->getSingleScalarResult();
 }

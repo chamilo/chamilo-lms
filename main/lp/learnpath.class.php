@@ -5916,7 +5916,7 @@ class learnpath
                     ])
                 ),
             );
-            $actionsRight = Display::group_button(get_lang('PrerequisitesOptions'), $buttons);
+            $actionsRight = Display::groupButtonWithDropDown(get_lang('PrerequisitesOptions'), $buttons);
         }
 
         $toolbar = Display::toolbarAction('actions-lp-controller', array($actionsLeft, $actionsRight));

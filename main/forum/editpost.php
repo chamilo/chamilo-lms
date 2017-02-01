@@ -134,10 +134,11 @@ JS;
 // 4. if editing of replies is not allowed
 // The only exception is the course manager
 // I have split this is several pieces for clarity.
-//if (!api_is_allowed_to_edit() AND (($current_forum_category['visibility'] == 0 OR $current_forum['visibility'] == 0) OR ($current_forum_category['locked'] <> 0 OR $current_forum['locked'] <> 0 OR $current_thread['locked'] <> 0))) {
 if (!api_is_allowed_to_edit(null, true) &&
-    (($current_forum_category && $current_forum_category['visibility'] == 0) ||
-        $current_forum['visibility'] == 0)
+    (
+        ($current_forum_category && $current_forum_category['visibility'] == 0) ||
+        $current_forum['visibility'] == 0
+    )
 ) {
     api_not_allowed(true);
 }

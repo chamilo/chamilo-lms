@@ -917,9 +917,6 @@ class ImportCsv
             foreach ($eventsToCreate as $event) {
                 $update = false;
                 $item = null;
-
-                $info = 'Course: '.$event['course_id'].' - Session: '.$event['session_id'];
-
                 if (!isset($event[$extraFieldName])) {
                     $this->logger->addInfo(
                         "No external_calendar_itemID found. Skipping ..."
@@ -943,14 +940,7 @@ class ImportCsv
                     );
 
                     if (!empty($item)) {
-                        $this->logger->addInfo(
-                            "Event #$externalEventId to be updated, here $info."
-                        );
                         $update = true;
-                    } else {
-                        $this->logger->addInfo(
-                            "Event #$externalEventId was not added. To be added here: $info "
-                        );
                     }
                 }
 
@@ -983,6 +973,18 @@ class ImportCsv
                 $item = $event['item'];
                 $update = $event['update'];
                 $externalEventId = $event['external_event_id'];
+
+                $info = 'Course: '.$courseInfo['real_id'].' ('.$courseInfo['code'].') - Session: '.$event['session_id'];
+
+                if (!empty($item)) {
+                    $this->logger->addInfo(
+                        "Event #$externalEventId to be updated, here $info."
+                    );
+                } else {
+                    $this->logger->addInfo(
+                        "Event #$externalEventId was not added. To be added here: $info "
+                    );
+                }
 
                 $agenda = new Agenda(
                     'course',
@@ -1142,9 +1144,6 @@ class ImportCsv
                 }
 
                 $content = '';
-
-                $info = 'Course: '.$courseInfo['real_id'].' ('.$courseInfo['code'].') - Session: '.$event['session_id'];
-
                 if ($update && isset($item['item_id'])) {
                     //the event already exists, just update
                     $eventResult = $agenda->editEvent(

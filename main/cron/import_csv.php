@@ -918,7 +918,7 @@ class ImportCsv
                 $update = false;
                 $item = null;
 
-                $info = 'Course: #'.$event['course_id'].' - Session:'.$event['session_id'];
+                $info = 'Course: '.$event['course_id'].' - Session: '.$event['session_id'];
 
                 if (!isset($event[$extraFieldName])) {
                     $this->logger->addInfo(
@@ -944,7 +944,7 @@ class ImportCsv
 
                     if (!empty($item)) {
                         $this->logger->addInfo(
-                            "Event #$externalEventId to be updated, was already added here $info."
+                            "Event #$externalEventId to be updated, here $info."
                         );
                         $update = true;
                     } else {
@@ -1034,7 +1034,7 @@ class ImportCsv
                 $startDatePlusDays = api_strtotime("$days weekdays");
 
                 $this->logger->addInfo(
-                    "startDatePlusDays: ".$startDatePlusDays.' - First date: '.$firstDate
+                    "startDatePlusDays: ".api_get_utc_datetime($startDatePlusDays).' - First date: '.$firstDate
                 );
 
                 // Send
@@ -1143,7 +1143,7 @@ class ImportCsv
 
                 $content = '';
 
-                $info = 'Course: #'.$courseInfo['real_id'].' ('.$courseInfo['code'].') - Session:'.$event['session_id'];
+                $info = 'Course: '.$courseInfo['real_id'].' ('.$courseInfo['code'].') - Session: '.$event['session_id'];
 
                 if ($update && isset($item['item_id'])) {
                     //the event already exists, just update

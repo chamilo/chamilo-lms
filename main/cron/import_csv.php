@@ -1153,7 +1153,7 @@ class ImportCsv
 
                     if ($eventResult !== false) {
                         $this->logger->addInfo(
-                            "Event #".$item['item_id']." External cal Id: (".$externalEventId.") updated here: $info"
+                            "Event updated #".$item['item_id']." External cal Id: (".$externalEventId.") $info"
                         );
                     } else {
                         $this->logger->addInfo(
@@ -1187,11 +1187,11 @@ class ImportCsv
                             )
                         );
                         $this->logger->addInfo(
-                            "Event added: #$eventId External cal id: (".$externalEventId.") here $info"
+                            "Event added: #$eventId External cal id: (".$externalEventId.") $info"
                         );
                     } else {
                         $this->logger->addInfo(
-                            "Error while creating event external id $externalEventId"
+                            "Error while creating event external id: $externalEventId"
                         );
                     }
                 }

@@ -976,16 +976,6 @@ class ImportCsv
 
                 $info = 'Course: '.$courseInfo['real_id'].' ('.$courseInfo['code'].') - Session: '.$event['session_id'];
 
-                if (!empty($item)) {
-                    $this->logger->addInfo(
-                        "Event #$externalEventId to be updated, here $info."
-                    );
-                } else {
-                    $this->logger->addInfo(
-                        "Event #$externalEventId was not added. To be added here: $info "
-                    );
-                }
-
                 $agenda = new Agenda(
                     'course',
                     $event['sender_id'],
@@ -1003,17 +993,16 @@ class ImportCsv
                 // To use the event comment you need
                 // ALTER TABLE c_calendar_event ADD COLUMN comment TEXT;
                 // add in configuration.php allow_agenda_event_comment = true
-
                 if (empty($courseInfo)) {
                     $this->logger->addInfo(
-                        "No course found #".$event['course_id']." Skipping ..."
+                        "No course found for event #$externalEventId Course #".$event['course_id']." Skipping ..."
                     );
                     continue;
                 }
 
                 if (empty($event['sender_id'])) {
                     $this->logger->addInfo(
-                        "No sender found: #".$event['sender_id']." Skipping ..."
+                        "No sender found for event #$externalEventId Send #".$event['sender_id']." Skipping ..."
                     );
                     continue;
                 }
@@ -1164,11 +1153,11 @@ class ImportCsv
 
                     if ($eventResult !== false) {
                         $this->logger->addInfo(
-                            "Event #".$item['item_id']." updated here: $info"
+                            "Event #".$item['item_id']." External cal Id: (".$externalEventId.") updated here: $info"
                         );
                     } else {
                         $this->logger->addInfo(
-                            "Error while updating event."
+                            "Error while updating event with external id: $externalEventId"
                         );
                     }
                 } else {
@@ -1198,11 +1187,11 @@ class ImportCsv
                             )
                         );
                         $this->logger->addInfo(
-                            "Event added: #$eventId here $info"
+                            "Event added: #$eventId External cal id: (".$externalEventId.") here $info"
                         );
                     } else {
                         $this->logger->addInfo(
-                            "Error while creating event."
+                            "Error while creating event external id $externalEventId"
                         );
                     }
                 }

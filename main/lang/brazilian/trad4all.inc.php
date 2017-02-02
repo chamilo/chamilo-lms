@@ -7838,4 +7838,8 @@ $DeleteCorrections = "Excluir correções";
 $AllowMyFilesTitle = "Permitir Minha página Arquivos";
 $AllowMyFilesComment = "Permitir que os usuários fazer upload de arquivos em um espaço pessoal na plataforma.";
 $InstallMultiURLDetectedNotMainURL = "Você está usando o recurso multi-URL e está tentando atualizar seu portal usando um URL secundário. Por favor, conecte-se ao URL principal para continuar com a atualização: %s";
+$OnlyXQuestionsPickedRandomly = "Apenas %s perguntas serão escolhidas aleatoriamente após a configuração do quiz.";
+$AllowDownloadDocumentsByApiKeyTitle = "Permitir download de documentos do curso por chave da API";
+$AllowDownloadDocumentsByApiKeyComment = "Fazer download de documentos que verificam a chave REST API para um usuário";
+$UploadCorrectionsExplanationWithDownloadLinkX = "Primeiro você tem que baixar as correções aqui . Depois que você tem que descompactar esse arquivo e editar os arquivos como você queria sem alterar os nomes dos arquivos. Em seguida, crie um arquivo zip com esses arquivos modificados e faça o upload desse formulário.";
 ?>

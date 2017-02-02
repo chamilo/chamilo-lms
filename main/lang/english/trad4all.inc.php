@@ -7958,4 +7958,6 @@ $UploadCorrectionsExplanationWithDownloadLinkX = "First you have to download the
 After that you have to unzip that file and edit the files as you wanted without changing the file names.
 Then create a zip file with those modified files and upload it in this form.";
 $PostsPendingModeration = "Posts pending moderation";
+$OnlyUsersFromCourseSession = "Only users from one course in a session";
+$ServerXForwardedForInfo = "If the server is behind a proxy or firewall (and only in those cases), it might be using the X_FORWARDED_FOR HTTP header to show the remote user IP (yours, in this case).";
 ?>

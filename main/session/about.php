@@ -175,7 +175,8 @@ $template->assign(
     $courseController->getRegisteredInSessionButton(
         $session->getId(),
         $session->getName(),
-        $hasRequirements
+        $hasRequirements,
+        true
     )
 );
 

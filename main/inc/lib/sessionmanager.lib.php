@@ -6980,7 +6980,7 @@ class SessionManager
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 
         $form->addElement('text', 'name', get_lang('SessionName'), array(
-            'maxlength' => 50,
+            'maxlength' => 150,
         ));
         $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
         $form->addRule('name', get_lang('SessionNameAlreadyExists'), 'callback', 'check_session_name');

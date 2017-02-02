@@ -602,11 +602,14 @@ class UserManager
         $table_work = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
 
         // Unsubscribe the user from all groups in all his courses
-        $sql = "SELECT c.id FROM $table_course c, $table_course_user cu
+        $sql = "SELECT c.id 
+                FROM $table_course c 
+                INNER JOIN $table_course_user cu
+                ON (c.id = cu.c_id)
                 WHERE
                     cu.user_id = '".$user_id."' AND
-                    relation_type<>".COURSE_RELATION_TYPE_RRHH." AND
-                    c.id = cu.c_id";
+                    relation_type<>".COURSE_RELATION_TYPE_RRHH."
+                ";
 
         $res = Database::query($sql);
         while ($course = Database::fetch_object($res)) {
@@ -715,6 +718,14 @@ class UserManager
         $table = Database::get_main_table(TABLE_MAIN_SKILL_REL_USER);
         $sql = "DELETE FROM $table WHERE user_id = $user_id";
         Database::query($sql);
+
+        $connection = Database::getManager()->getConnection();
+        $tableExists = $connection->getSchemaManager()->tablesExist(['plugin_bbb_room']);
+        if ($tableExists) {
+             // Delete user from database
+            $sql = "DELETE FROM plugin_bbb_room WHERE participant_id = $user_id";
+            Database::query($sql);
+        }
 
         // Delete user from database
         $sql = "DELETE FROM $table_user WHERE id = '".$user_id."'";

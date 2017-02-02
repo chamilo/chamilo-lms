@@ -355,7 +355,7 @@ class ImportCsv
                     $teacherUserName = trim($teacherUserName);
                     $userInfo = api_get_user_info_from_username($teacherUserName);
                     if (!empty($userInfo)) {
-                        //$this->logger->addInfo("Username found: $teacherUserName");
+                        $this->logger->addInfo("Username found: $teacherUserName");
                         $row['teachers'][] = $userInfo['user_id'];
                     }
                 }

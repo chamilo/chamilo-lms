@@ -179,6 +179,14 @@ $template->assign(
     )
 );
 
+$redirectToSession = api_get_configuration_value('allow_redirect_to_session_after_inscription_about');
+$redirectToSession = $redirectToSession ? '?s=' . $sessionId : false;
+
+$coursesInThisSession = SessionManager::get_course_list_by_session_id($sessionId);
+$coursesCount = count($coursesInThisSession);
+$redirectToSession = $coursesCount == 1 ? $redirectToSession . '&cr=' . array_values($coursesInThisSession)[0]['directory'] : $redirectToSession;
+
+$template->assign('redirect_to_session', $redirectToSession);
 $template->assign('courses', $courses);
 $essence =  Essence\Essence::instance();
 $template->assign('essence', $essence);

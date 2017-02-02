@@ -269,4 +269,5 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 //$_configuration['mail_header_style'] = '';
 // Show all agenda events in personal agenda from all session no matter the visibility.
 //$_configuration['personal_agenda_show_all_session_events'] = false;
-
+// Allows to redirect to the session after the inscription in session about
+// $_configuration['allow_redirect_to_session_after_inscription_about'] = false;

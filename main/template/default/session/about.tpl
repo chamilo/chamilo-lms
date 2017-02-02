@@ -28,10 +28,11 @@
                                     <dl class="dl-horizontal">
                                         {% if sequence.requirements %}
                                             <dt>{{ sequence.name }}</dt>
-
                                             {% for requirement in sequence.requirements %}
                                                 <dd>
-                                                    <a href="{{ _p.web ~ 'session/' ~ requirement.getId ~ '/about/' }}">{{ requirement.getName }}</a>
+                                                    <a href="{{ _p.web ~ 'session/' ~ requirement.getId ~ '/about/' }}">
+                                                        {{ requirement.getName }}
+                                                    </a>
                                                 </dd>
                                             {% endfor %}
                                         {% endif %}
@@ -166,7 +167,6 @@
                                 <div class="row">
                                     <div class="col-xs-7 col-md-7">
                                         <h4>{{ coach.complete_name }}</h4>
-
                                         {% for extra_field in coach.extra_fields %}
                                             <dl>
                                                 <dt>{{ extra_field.value.getField().getDisplayText() }}</dt>
@@ -204,13 +204,13 @@
                     <div class="panel-heading">{{ "ShareWithYourFriends"|get_lang }}</div>
                     <div class="panel-body">
                         <div class="icons-social text-center">
-                            <a href="https://www.facebook.com/sharer/sharer.php?{{ {'u': pageUrl}|url_encode }}" target="_blank" class="btn bnt-link btn-lg">
+                            <a href="https://www.facebook.com/sharer/sharer.php?{{ {'u': page_url }|url_encode }}" target="_blank" class="btn bnt-link btn-lg">
                                 <em class="fa fa-facebook fa-2x"></em>
                             </a>
-                            <a href="https://twitter.com/home?{{ {'status': session.getName() ~ ' ' ~ pageUrl}|url_encode }}" target="_blank" class="btn bnt-link btn-lg">
+                            <a href="https://twitter.com/home?{{ {'status': session.getName() ~ ' ' ~ page_url }|url_encode }}" target="_blank" class="btn bnt-link btn-lg">
                                 <em class="fa fa-twitter fa-2x"></em>
                             </a>
-                            <a href="https://www.linkedin.com/shareArticle?{{ {'mini': 'true', 'url': pageUrl, 'title': session.getName() }|url_encode }}" target="_blank" class="btn bnt-link btn-lg">
+                            <a href="https://www.linkedin.com/shareArticle?{{ {'mini': 'true', 'url': page_url , 'title': session.getName() }|url_encode }}" target="_blank" class="btn bnt-link btn-lg">
                                 <em class="fa fa-linkedin fa-2x"></em>
                             </a>
                         </div>

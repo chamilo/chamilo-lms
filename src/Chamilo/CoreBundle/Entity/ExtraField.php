@@ -124,8 +124,8 @@ class ExtraField extends BaseAttribute
     public function __construct()
     {
         parent::__construct();
-        $this->visibleToOthers = 0;
-        $this->visibleToSelf = 0;
+        $this->visibleToOthers = false;
+        $this->visibleToSelf = false;
     }
 
     /**

@@ -3044,21 +3044,20 @@ class Exercise
                 }).bind('timer', function () {
                     send_form();
                 });
-
             }
 
             function send_form() {
                 if ($('#exercise_form').length) {
                     $('#exercise_form').submit();
                 } else {
-                    //In reminder
+                    // In exercise_reminder.php
                     final_submit();
                 }
             }
 
             function onExpiredTimeExercise() {
                 $('#wrapper-clock').hide();
-                $('#exercise_form').hide();
+                //$('#exercise_form').hide();
                 $('#expired-message-id').show();
 
                 //Fixes bug #5263
@@ -3067,7 +3066,6 @@ class Exercise
             }
 
 			$(document).ready(function() {
-
 				var current_time = new Date().getTime();
                 var time_left    = parseInt(".$time_left."); // time in seconds when using minutes there are some seconds lost
 				var expired_time = current_time + (time_left*1000);
@@ -6354,7 +6352,7 @@ class Exercise
         return $result;
     }
 
-    function return_time_left_div()
+    public function return_time_left_div()
     {
         $html = '<div id="clock_warning" style="display:none">';
         $html .= Display::return_message(

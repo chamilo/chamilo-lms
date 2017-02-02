@@ -8199,8 +8199,12 @@ class Exercise
             $numberRandomQuestions = $this->random;
             $questionScoreList = array();
             for ($i = 1; $i <= count($questionList); $i++) {
-                $tmpobj_question = Question::read($questionList[$i]);
-                $questionScoreList[] = $tmpobj_question->weighting;
+                if (isset($questionList[$i])) {
+                    $tmpobj_question = Question::read($questionList[$i]);
+                    if (is_object($tmpobj_question)) {
+                        $questionScoreList[] = $tmpobj_question->weighting;
+                    }
+                }
             }
             rsort($questionScoreList);
             // add the first $numberRandomQuestions value of score array to get max_score

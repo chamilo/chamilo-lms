@@ -523,7 +523,11 @@ if (!empty($questionList)) {
 }
 
 if ($current_question > $question_count) {
-    $current_question = 0;
+    // If time control then don't change the current question, otherwise there will be a loop.
+    // @todo
+    if ($time_control == false) {
+        $current_question = 0;
+    }
 }
 
 if ($formSent && isset($_POST)) {

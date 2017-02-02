@@ -742,6 +742,14 @@ class UserManager
             $em->flush();
         }
 
+        $connection = Database::getManager()->getConnection();
+        $tableExists = $connection->getSchemaManager()->tablesExist(['plugin_bbb_room']);
+        if ($tableExists) {
+             // Delete user from database
+            $sql = "DELETE FROM plugin_bbb_room WHERE participant_id = $user_id";
+            Database::query($sql);
+        }
+
         // Delete user from database
         $sql = "DELETE FROM $table_user WHERE id = '".$user_id."'";
         Database::query($sql);

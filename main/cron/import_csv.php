@@ -1302,7 +1302,7 @@ class ImportCsv
                         CourseManager::updateTeachers(
                             $courseInfo,
                             $row['teachers'],
-                            true,
+                            false,
                             false,
                             false,
                             $teacherBackup
@@ -1874,7 +1874,7 @@ class ImportCsv
             false, // updateCourseCoaches
             true, // sessionWithCoursesModifier
             true, //$addOriginalCourseTeachersAsCourseSessionCoaches
-            true, //$removeAllTeachersFromCourse
+            false, //$removeAllTeachersFromCourse
             1, // $showDescription,
             $teacherBackup,
             $groupBackup

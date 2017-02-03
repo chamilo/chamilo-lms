@@ -511,12 +511,14 @@ class CoursesController
      * @param string $sessionName The session name
      * @param boolean $checkRequirements Optional.
      *        Whether the session has requirement. Default is false
+     * @param bool $includeText Optional. Whether show the text in button
      * @return string The button HTML
      */
     public function getRegisteredInSessionButton(
         $sessionId,
         $sessionName,
-        $checkRequirements = false
+        $checkRequirements = false,
+        $includeText = false
     ) {
         if ($checkRequirements) {
             $url = api_get_path(WEB_AJAX_PATH);
@@ -528,7 +530,7 @@ class CoursesController
             ]);
 
             return Display::toolbarButton(
-                null,
+                get_lang('CheckRequirements'),
                 $url,
                 'shield',
                 'default',
@@ -537,7 +539,8 @@ class CoursesController
                     'data-title' => get_lang('CheckRequirements'),
                     'data-size' => 'md',
                     'title' => get_lang('CheckRequirements')
-                ]
+                ],
+                $includeText
             );
         }
 
@@ -557,7 +560,7 @@ class CoursesController
             ]);
 
             $result = Display::toolbarButton(
-                null,
+                get_lang('Subscribe'),
                 $url,
                 'sign-in',
                 'success',
@@ -566,7 +569,8 @@ class CoursesController
                     'data-title' => get_lang('AreYouSureToSubscribe'),
                     'data-size' => 'md',
                     'title' => get_lang('Subscribe')
-                ]
+                ],
+                $includeText
             );
         } else {
             $url .= 'inc/email_editor.php?';
@@ -580,7 +584,8 @@ class CoursesController
                 $url,
                 'sign-in',
                 'success',
-                ['class' => 'btn-sm']
+                ['class' => 'btn-sm'],
+                $includeText
             );
         }
 
@@ -645,10 +650,14 @@ class CoursesController
             '';
         $sessionsBlocks = $this->getFormatedSessionsBlock($sessions);
 
-        // Get session list catalogue URL
-        //$sessionUrl = CourseCategory::getCourseCategoryUrl(1, $limit['length'], null, 0, 'display_sessions');
         // Get session search catalogue URL
-        $courseUrl = CourseCategory::getCourseCategoryUrl(1, $limit['length'], null, 0, 'subscribe');
+        $courseUrl = CourseCategory::getCourseCategoryUrl(
+            1,
+            $limit['length'],
+            null,
+            0,
+            'subscribe'
+        );
 
         $tpl = new Template();
         $tpl->assign('show_courses', CoursesAndSessionsCatalog::showCourses());

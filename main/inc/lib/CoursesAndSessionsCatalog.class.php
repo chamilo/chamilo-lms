@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
+ * @todo change class name
  * Class CoursesAndSessionsCatalog
  */
 class CoursesAndSessionsCatalog

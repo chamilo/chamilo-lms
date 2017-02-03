@@ -645,10 +645,14 @@ class CoursesController
             '';
         $sessionsBlocks = $this->getFormatedSessionsBlock($sessions);
 
-        // Get session list catalogue URL
-        //$sessionUrl = CourseCategory::getCourseCategoryUrl(1, $limit['length'], null, 0, 'display_sessions');
         // Get session search catalogue URL
-        $courseUrl = CourseCategory::getCourseCategoryUrl(1, $limit['length'], null, 0, 'subscribe');
+        $courseUrl = CourseCategory::getCourseCategoryUrl(
+            1,
+            $limit['length'],
+            null,
+            0,
+            'subscribe'
+        );
 
         $tpl = new Template();
         $tpl->assign('show_courses', CoursesAndSessionsCatalog::showCourses());

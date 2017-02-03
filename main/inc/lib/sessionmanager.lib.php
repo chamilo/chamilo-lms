@@ -1962,7 +1962,7 @@ class SessionManager
         is_array($courseInfo) ? $courseId = $courseInfo['real_id'] : $courseId = $courseInfo;
 
         $statusCondition = null;
-        if (isset($status) && !is_null($status))  {
+        if (isset($status) && !is_null($status)) {
             $status = intval($status);
             $statusCondition  = " AND status = $status";
         }
@@ -4744,7 +4744,12 @@ class SessionManager
                                     $coach_id = UserManager::get_user_id_from_username($course_coach);
                                     if ($coach_id !== false) {
                                         // Just insert new coaches
-                                        SessionManager::updateCoaches($session_id, $courseId, array($coach_id), false);
+                                        SessionManager::updateCoaches(
+                                            $session_id,
+                                            $courseId,
+                                            array($coach_id),
+                                            false
+                                        );
 
                                         if ($debug) {
                                             $logger->addInfo("Sessions - Adding course coach: user #$coach_id ($course_coach) to course: '$course_code' and session #$session_id");
@@ -4760,6 +4765,9 @@ class SessionManager
                             $teacherToAdd = null;
                             // Only one coach is added.
                             if ($onlyAddFirstCoachOrTeacher == true) {
+                                if ($debug) {
+                                    $logger->addInfo("onlyAddFirstCoachOrTeacher : true");
+                                }
 
                                 foreach ($course_coaches as $course_coach) {
                                     $coach_id = UserManager::get_user_id_from_username($course_coach);
@@ -4774,7 +4782,6 @@ class SessionManager
                                 if (!empty($teacherList)) {
                                     foreach ($teacherList as $teacher) {
                                         if ($teacherToAdd != $teacher['user_id']) {
-
                                             $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
                                                     WHERE
                                                         user_id = ".$teacher['user_id']." AND
@@ -4811,12 +4818,25 @@ class SessionManager
                                                 $teacher['user_id'],
                                                 $course_code
                                             );
+
+                                            if ($debug) {
+                                                $logger->addInfo("Delete user #".$teacher['user_id']." from base course: $course_code");
+                                            }
                                         }
                                     }
                                 }
 
                                 if (!empty($teacherToAdd)) {
-                                    SessionManager::updateCoaches($session_id, $courseId, array($teacherToAdd), true);
+                                    SessionManager::updateCoaches(
+                                        $session_id,
+                                        $courseId,
+                                        array($teacherToAdd),
+                                        true
+                                    );
+
+                                    if ($debug) {
+                                        $logger->addInfo("Add coach #$teacherToAdd to course $courseId and session $session_id");
+                                    }
 
                                     $userCourseCategory = '';
                                     if (isset($teacherBackupList[$teacherToAdd]) &&
@@ -4833,6 +4853,10 @@ class SessionManager
                                         0,
                                         $userCourseCategory
                                     );
+
+                                    if ($debug) {
+                                        $logger->addInfo("Subscribe user #$teacherToAdd as teacher in course $course_code ");
+                                    }
 
                                     if (isset($groupBackup['user'][$teacherToAdd]) &&
                                         isset($groupBackup['user'][$teacherToAdd][$course_code]) &&
@@ -4865,6 +4889,9 @@ class SessionManager
                             // See BT#6449#note-195
                             // All coaches are added.
                             if ($removeAllTeachersFromCourse) {
+                                if ($debug) {
+                                    $logger->addInfo("removeAllTeachersFromCourse true");
+                                }
                                 $teacherToAdd = null;
                                 foreach ($course_coaches as $course_coach) {
                                     $coach_id = UserManager::get_user_id_from_username(
@@ -4919,6 +4946,10 @@ class SessionManager
                                                     $teacher['user_id'],
                                                     $course_code
                                                 );
+
+                                                if ($debug) {
+                                                    $logger->addInfo("Delete user #".$teacher['user_id']." from base course: $course_code");
+                                                }
                                             }
                                         }
                                     }
@@ -4939,6 +4970,10 @@ class SessionManager
                                             0,
                                             $userCourseCategory
                                         );
+
+                                        if ($debug) {
+                                            $logger->addInfo("Add user as teacher #".$teacherId." in base course: $course_code");
+                                        }
 
                                         if (isset($groupBackup['user'][$teacherId]) &&
                                             isset($groupBackup['user'][$teacherId][$course_code]) &&
@@ -8135,5 +8170,34 @@ class SessionManager
         $result = Database::query($sql);
 
         return Database::store_result($result, 'ASSOC');
+    }
+
+    /**
+     * subsscribe and redirect to session after inscription
+     */
+    public static function redirectToSession()
+    {
+        $sessionId = isset($_SESSION['session_redirect']) ? $_SESSION['session_redirect'] : null;
+        $onlyOneCourseSessionToRedirect = isset($_SESSION['only_one_course_session_redirect']) ? $_SESSION['only_one_course_session_redirect'] : null;
+        $userId = api_get_user_id();
+        $sessionInfo = api_get_session_info($sessionId);
+
+        if (!empty($sessionInfo)) {
+
+            $response = self::isUserSubscribedAsStudent($sessionId, $userId);
+
+            if ($response) {
+
+                $urlToRedirect = api_get_path(WEB_CODE_PATH) . 'session/index.php?session_id=' . $sessionId;
+
+                if (!empty($onlyOneCourseSessionToRedirect)) {
+
+                        $urlToRedirect = api_get_path(WEB_PATH) . 'courses/' . $onlyOneCourseSessionToRedirect . '/index.php?id_session=' . $sessionId;
+                }
+
+                header('Location: ' . $urlToRedirect);
+                exit;
+            }
+        }
     }
 }

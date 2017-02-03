@@ -1262,11 +1262,15 @@ class ExtraField extends Model
                         }
                         break;
                     case ExtraField::FIELD_TYPE_DIVIDER:
-                        $form->addElement(
-                            'static',
-                            $field_details['variable'],
-                            '<br /><strong>'.$field_details['display_text'].'</strong>'
-                        );
+                        $form->addHtml('
+                            <div class="form-group ">
+                                <div class="col-sm-12">
+                                    <div class="panel-separator">
+                                       <h4 id="' . $field_details['variable'] . '" class="form-separator">' . $field_details['display_text'] . '</h4>
+                                    </div>
+                                </div>
+                            </div>    
+                        ');
                         break;
                     case ExtraField::FIELD_TYPE_TAG:
                         $variable = $field_details['variable'];

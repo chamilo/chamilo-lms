@@ -61,6 +61,17 @@ $user_already_registered_show_terms = false;
 if (api_get_setting('allow_terms_conditions') == 'true') {
     $user_already_registered_show_terms = isset($_SESSION['term_and_condition']['user_id']);
 }
+// Direct Link Session Subscription feature #12220
+$sessionRedirect = isset($_REQUEST['s']) && !empty($_REQUEST['s']) ? $_REQUEST['s'] : null;
+$onlyOneCourseSessionRedirect = isset($_REQUEST['cr']) && !empty($_REQUEST['cr']) ? $_REQUEST['cr'] : null;
+
+if (api_get_configuration_value('allow_redirect_to_session_after_inscription_about')) {
+
+    if (!empty($sessionRedirect)) {
+        Session::write('session_redirect', $sessionRedirect);
+        Session::write('only_one_course_session_redirect', $onlyOneCourseSessionRedirect);
+    }
+}
 
 // Direct Link Subscription feature #5299
 $course_code_redirect = isset($_REQUEST['c']) && !empty($_REQUEST['c']) ? $_REQUEST['c'] : null;
@@ -478,6 +489,7 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
 $form->addButtonCreate(get_lang('RegisterUser'));
 
 $course_code_redirect = Session::read('course_redirect');
+$sessionToRedirect = Session::read('session_redirect');
 
 if ($form->validate()) {
     $values = $form->getSubmitValues(1);
@@ -615,6 +627,19 @@ if ($form->validate()) {
                 $sql .= implode(',', $sql_set);
                 $sql .= " WHERE user_id = ".intval($user_id)."";
                 Database::query($sql);
+            }
+
+            // Saving user to Session if it was set
+            if (!empty($sessionToRedirect)) {
+                $sessionInfo = api_get_session_info($sessionToRedirect);
+                if (!empty($sessionInfo)) {
+                    SessionManager::subscribe_users_to_session(
+                        $sessionToRedirect,
+                        [$user_id],
+                        SESSION_VISIBLE_READ_ONLY,
+                        false
+                    );
+                }
             }
 
             // Saving user to course if it was set.
@@ -828,6 +853,7 @@ if ($form->validate()) {
         }
     }
 
+    SessionManager::redirectToSession();
     $form_data = CourseManager::redirectToCourse($form_data);
 
     $form_register = new FormValidator('form_register', 'post', $form_data['action']);
@@ -846,6 +872,8 @@ if ($form->validate()) {
     // Just in case
     Session::erase('course_redirect');
     Session::erase('exercise_redirect');
+    Session::erase('session_redirect');
+    Session::erase('only_one_course_session_redirect');
 
     if (CustomPages::enabled()) {
         CustomPages::display(

@@ -6429,6 +6429,15 @@ input.form-control[type="color"] {
     padding: 2px;
 }
 
+.form-separator {
+    font-weight: bold;
+    border-bottom: 2px solid #CCC;
+    padding-bottom: 12px;
+    color: #666;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
 /* Extra small devices (phones, less than 768px) */
 /* No media query since this is the default in Bootstrap */
 
@@ -6448,4 +6457,3 @@ input.form-control[type="color"] {
 @media (min-width: 1200px) {
 
 }
-

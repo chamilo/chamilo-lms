@@ -8868,7 +8868,7 @@ class learnpath
             $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
             $return .= '</a> ';
             $return .= Display::return_icon('quizz_small.gif', '', array(), ICON_SIZE_TINY);
-            $return .= '<a href="' . api_get_self() . '?'.api_get_cidreq().'&action=add_item&type=' . TOOL_QUIZ . '&file=' . $row_quiz['id'] . '&lp_id=' . $this->lp_id . '">' .
+            $return .= '<a class="moved" href="' . api_get_self() . '?'.api_get_cidreq().'&action=add_item&type=' . TOOL_QUIZ . '&file=' . $row_quiz['id'] . '&lp_id=' . $this->lp_id . '">' .
                 Security :: remove_XSS(cut($row_quiz['title'], 80)).
                 '</a>';
 
@@ -8956,7 +8956,7 @@ class learnpath
                             $moveEverywhereIcon.
                         '</a>
                         '.Display::return_icon('lp_link.png').'
-                        <a href="'.$selfUrl.'?'.$courseIdReq.'&action=add_item&type='.
+                        <a class="moved" href="'.$selfUrl.'?'.$courseIdReq.'&action=add_item&type='.
                         TOOL_LINK.'&file='.$key.'&lp_id='.$this->lp_id.'">'.
                         Security::remove_XSS($title).
                         '</a>

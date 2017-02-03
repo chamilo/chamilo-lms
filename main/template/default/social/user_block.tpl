@@ -4,7 +4,7 @@
             <div class="panel-heading" role="tab" id="heading-sn">
                 <h4 class="panel-title">
                     <a role="button" data-toggle="collapse" data-parent="#sn-avatar" href="#sn-avatar-one" aria-expanded="true" aria-controls="sn-avatar-one">
-                    {{ "Role" | get_lang }}
+                    {{ "Profile" | get_lang }}
                     </a>
                 </h4>
             </div>

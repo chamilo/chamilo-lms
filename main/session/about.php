@@ -86,7 +86,8 @@ foreach ($sessionCourses as $sessionCourse) {
             ]
         );
 
-    $courseDescription = $courseObjectives = $courseTopics = $courseMethodology = $courseMaterial = $courseResources = $courseAssesment = $courseCustom = null;
+    $courseDescription = $courseObjectives = $courseTopics = $courseMethodology = $courseMaterial = $courseResources = $courseAssesment = null;
+    $courseCustom = [];
 
     foreach ($courseDescriptionTools as $descriptionTool) {
         switch ($descriptionTool->getDescriptionType()) {
@@ -112,7 +113,7 @@ foreach ($sessionCourses as $sessionCourse) {
                 $courseAssesment = $descriptionTool;
                 break;
             case CCourseDescription::TYPE_CUSTOM:
-                $courseCustom = $descriptionTool;
+                $courseCustom[] = $descriptionTool;
                 break;
         }
     }
@@ -127,7 +128,7 @@ foreach ($sessionCourses as $sessionCourse) {
         'material' => $courseMaterial,
         'resources' => $courseResources,
         'assesment' => $courseAssesment,
-        'custom' => $courseCustom,
+        'custom' => array_reverse($courseCustom),
         'coaches' => $coachesData,
         'extra_fields' => $courseValues->getAllValuesForAnItem($sessionCourse->getId(), null, true)
     ];

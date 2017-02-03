@@ -145,12 +145,14 @@
                         {% endif %}
 
                         {% if course_data.custom %}
-                            <div class="topics">
-                                <h4 class="title-info"><em class="fa fa-book"></em> {{ course_data.custom.getTitle }}</h4>
-                                <div class="content-info">
-                                    {{ course_data.custom.getContent }}
+                            {% for custom in course_data.custom %}
+                                <div class="topics">
+                                    <h4 class="title-info"><em class="fa fa-book"></em> {{ custom.getTitle }}</h4>
+                                    <div class="content-info">
+                                        {{ custom.getContent }}
+                                    </div>
                                 </div>
-                            </div>
+                            {% endfor %}
                         {% endif %}
                     </div>
                 </div>

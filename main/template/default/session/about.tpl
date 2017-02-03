@@ -228,7 +228,7 @@
                 </div>
             {% elseif not _u.logged %}
                 {% if 'allow_registration'|get_setting == 'true' %}
-                    <a href="{{ _p.web_main ~ 'auth/inscription.php' }}" class="btn btn-info btn-lg">
+                    <a href="{{ _p.web_main ~ 'auth/inscription.php' ~ redirect_to_session }}" class="btn btn-info btn-lg">
                         <em class="fa fa-sign-in fa-fw"></em> {{ 'SignUp'|get_lang }}
                     </a>
                 {% endif %}

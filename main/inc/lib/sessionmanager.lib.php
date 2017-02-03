@@ -8171,4 +8171,33 @@ class SessionManager
 
         return Database::store_result($result, 'ASSOC');
     }
+
+    /**
+     * subsscribe and redirect to session after inscription
+     */
+    public static function redirectToSession()
+    {
+        $sessionId = isset($_SESSION['session_redirect']) ? $_SESSION['session_redirect'] : null;
+        $onlyOneCourseSessionToRedirect = isset($_SESSION['only_one_course_session_redirect']) ? $_SESSION['only_one_course_session_redirect'] : null;
+        $userId = api_get_user_id();
+        $sessionInfo = api_get_session_info($sessionId);
+
+        if (!empty($sessionInfo)) {
+
+            $response = self::isUserSubscribedAsStudent($sessionId, $userId);
+
+            if ($response) {
+
+                $urlToRedirect = api_get_path(WEB_CODE_PATH) . 'session/index.php?session_id=' . $sessionId;
+
+                if (!empty($onlyOneCourseSessionToRedirect)) {
+
+                        $urlToRedirect = api_get_path(WEB_PATH) . 'courses/' . $onlyOneCourseSessionToRedirect . '/index.php?id_session=' . $sessionId;
+                }
+
+                header('Location: ' . $urlToRedirect);
+                exit;
+            }
+        }
+    }
 }

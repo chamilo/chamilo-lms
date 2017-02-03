@@ -1302,7 +1302,7 @@ class ImportCsv
                         CourseManager::updateTeachers(
                             $courseInfo,
                             $row['teachers'],
-                            true,
+                            false,
                             false,
                             false,
                             $teacherBackup

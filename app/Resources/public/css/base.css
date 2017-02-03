@@ -6428,4 +6428,11 @@ ul#toolnavbox-two li a.btn{
 input.form-control[type="color"] {
     padding: 2px;
 }
-
+.form-separator {
+    font-weight: bold;
+    border-bottom: 2px solid #CCC;
+    padding-bottom: 12px;
+    color: #666;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}

@@ -117,8 +117,8 @@ if (count($friends) == 0) {
 
     $social_right_content .= $filterForm->returnForm();
 
-    $friend_html = '<div id="friends" class="row">';
-
+    $friend_html = '<div id="whoisonline">';
+    $friend_html .= '<div class="row">';
     $number_friends = count($friends);
     $j = 0;
 
@@ -126,30 +126,15 @@ if (count($friends) == 0) {
         while ($j < $number_friends) {
             if (isset($friends[$j])) {
                 $friend = $friends[$j];
-                $user_name = api_xml_http_response_encode($friend['firstName'].' '.$friend['lastName']);
-				$userPicture = UserManager::getUserPicture($friend['friend_user_id']);
-
-                $friend_html .= '
-                    <div class="col-md-3">
-                        <div class="thumbnail text-center" id="div_' . $friends[$j]['friend_user_id'] . '">
-                            <img src="' . $userPicture . '" class="img-responsive" id="imgfriend_' . $friend['friend_user_id'] . '" title="'.$user_name.'">
-                            <div class="caption">
-                                <h3>
-                                    <a href="profile.php?u=' . $friend['friend_user_id'] . '">' . $user_name . '</a>
-                                </h3>
-                                <p>
-                                    <button class="btn btn-danger" onclick="delete_friend(this)" id=img_' . $friend['friend_user_id'] . '>
-                                        ' . get_lang('Delete') . '
-                                    </button>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                ';
+                 $toolBar = '<button class="btn btn-danger" onclick="delete_friend(this)" id=img_' . $friend['friend_user_id'] . '>
+                    ' . get_lang('Delete') . '
+                </button>';
+                $friend_html .= Display::getUserCard($friend['user_info'], '', $toolBar);
             }
             $j++;
         }
     }
+    $friend_html .= '</div>';
     $friend_html .= '</div>';
     $social_right_content .= $friend_html;
 }

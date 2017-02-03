@@ -17,7 +17,10 @@ if (api_get_setting('allow_social_tool') != 'true') {
 
 $this_section = SECTION_SOCIAL;
 $tool_name = get_lang('Search');
-$interbreadcrumb[] = array('url' => 'profile.php', 'name' => get_lang('SocialNetwork'));
+$interbreadcrumb[] = array(
+    'url' => api_get_path(WEB_CODE_PATH).'social/profile.php',
+    'name' => get_lang('SocialNetwork'),
+);
 
 $query = isset($_GET['q']) ? Security::remove_XSS($_GET['q']): null;
 $query_search_type = isset($_GET['search_type']) && in_array($_GET['search_type'], array('0','1','2')) ? $_GET['search_type'] : null;
@@ -41,16 +44,21 @@ $groups = array();
 $totalGroups = array();
 $users = array();
 $totalUsers = array();
-
 $usergroup = new UserGroup();
 
 // I'm searching something
-if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) {
-    $itemPerPage = 8;
+if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2)) {
+    $itemPerPage = 6;
 
     if ($_GET['search_type']=='0' || $_GET['search_type']=='1') {
         $page = isset($_GET['users_page_nr']) ? intval($_GET['users_page_nr']) : 1;
-        $totalUsers = UserManager::get_all_user_tags($_GET['q'], 0, 0, $itemPerPage, true);
+        $totalUsers = UserManager::get_all_user_tags(
+            $_GET['q'],
+            0,
+            0,
+            $itemPerPage,
+            true
+        );
 
         $from = intval(($page - 1) * $itemPerPage);
         // Get users from tags
@@ -72,7 +80,6 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) 
 
     $results = '<div id="whoisonline">';
     if (is_array($users) && count($users) > 0) {
-
         $results .= '<div class="row">';
         $buttonClass = 'btn btn-default btn-sm';
         foreach ($users as $user) {
@@ -104,8 +111,6 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) 
                 ]
             );
 
-            $img = '<img src="'.$user_info['avatar'].'" class="img-responsive img-circle" width="100" height="100">';
-
             if ($user_info['user_is_online']) {
                 $status_icon = Display::return_icon('online.png', get_lang('OnLine'), null, ICON_SIZE_TINY);
             } else {
@@ -122,20 +127,11 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) 
             $user_info['complete_name'] = Display::url($user_info['complete_name'], $url);
             $invitations = $user['tag'].$sendInvitation.$sendMessage;
 
-            $results .= '<div class="col-md-3">
-                            <div class="items-user">
-                                <div class="items-user-avatar">
-                                '.$img.'
-                                </div>
-                                <div class="user-info">
-                                   <p>'.$user_info['complete_name'].'</p>
-                                   <div class="items-user-status">' . $status_icon . $user_icon . '</div>
-                                   <div class="toolbar">
-                                    '.$invitations.'
-                                   </div>
-                                </div>
-                            </div>
-                      </div>';
+            $results .= Display::getUserCard(
+                $user_info,
+                $status_icon.$user_icon,
+                $invitations
+            );
         }
         $results .= '</div>';
     }
@@ -181,8 +177,12 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) 
             } else {
                 $count_users_group = $count_users_group;
             }
-            $picture = $usergroup->get_picture_group($group['id'], $group['picture'], GROUP_IMAGE_SIZE_ORIGINAL);
-            //$tags = $usergroup->get_group_tags($group['id']);
+            $picture = $usergroup->get_picture_group(
+                $group['id'],
+                $group['picture'],
+                GROUP_IMAGE_SIZE_ORIGINAL
+            );
+
             $tags = null;
             $group['picture'] = '<img class="img-responsive img-circle" src="'.$picture['file'].'" />';
 

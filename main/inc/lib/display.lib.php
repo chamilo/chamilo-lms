@@ -2540,4 +2540,42 @@ HTML;
             api_get_local_time($dateTime)
         );
     }
+
+    /**
+     * @param $userInfo
+     * @param string $status
+     * @param string $toolbar
+     * @return string
+     */
+    public static function getUserCard($userInfo, $status= '', $toolbar = '')
+    {
+        if (!empty($status)) {
+            $status = '<div class="items-user-status">'.$status.'</div>';
+        }
+
+        if (!empty($toolbar)) {
+            $toolbar = '<div class="btn-group pull-right">'.$toolbar.'</div>';
+        }
+
+        return '<div class="col-md-12">                    
+                    <div class="row">
+                        <div class="col-md-2">                            
+                            <img src="'.$userInfo['avatar'].'" class="img-responsive img-circle">
+                        </div>
+                        <div class="col-md-10">
+                           <p>'.$userInfo['complete_name'].'</p>
+                           <div class="row">
+                           <div class="col-md-2">
+                           '.$status.'
+                           </div>
+                           <div class="col-md-10">                           
+                           '.$toolbar.'
+                           </div>
+                           </div>
+                        </div>
+                    </div>
+                    <hr />
+              </div>';
+    }
+
 }

@@ -518,8 +518,14 @@ class CoursesController
         $sessionId,
         $sessionName,
         $checkRequirements = false,
-        $includeText = false
+        $includeText = false,
+        $btnBing = false
     ) {
+        if($btnBing){
+            $btnBing = 'btn-lg'; 
+        }else{
+            $btnBing = 'btn-sm';
+        }
         if ($checkRequirements) {
             $url = api_get_path(WEB_AJAX_PATH);
             $url .= 'sequence.ajax.php?';
@@ -535,7 +541,7 @@ class CoursesController
                 'shield',
                 'default',
                 [
-                    'class' => 'btn-sm ajax',
+                    'class' => $btnBing . ' ajax',
                     'data-title' => get_lang('CheckRequirements'),
                     'data-size' => 'md',
                     'title' => get_lang('CheckRequirements')
@@ -562,10 +568,10 @@ class CoursesController
             $result = Display::toolbarButton(
                 get_lang('Subscribe'),
                 $url,
-                'sign-in',
-                'success',
+                'pencil',
+                'primary',
                 [
-                    'class' => 'btn-sm ajax',
+                    'class' => $btnBing .' ajax',
                     'data-title' => get_lang('AreYouSureToSubscribe'),
                     'data-size' => 'md',
                     'title' => get_lang('Subscribe')
@@ -580,11 +586,11 @@ class CoursesController
             ]);
 
             $result = Display::toolbarButton(
-                null,
+                get_lang('SubscribeToSessionRequest'),
                 $url,
-                'sign-in',
-                'success',
-                ['class' => 'btn-sm'],
+                'pencil',
+                'primary',
+                ['class' => $btnBing],
                 $includeText
             );
         }

@@ -176,6 +176,7 @@ $template->assign(
         $session->getId(),
         $session->getName(),
         $hasRequirements,
+        true,
         true
     )
 );

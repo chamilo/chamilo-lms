@@ -72,10 +72,10 @@
                         marker.setIcon('//maps.google.com/mapfiles/ms/icons/red-dot.png');
                         break;
                     case 2:
-                        marker.setIcon('//maps.google.com/mapfiles/ms/icons/green-dot.png');
+                        marker.setIcon('//maps.google.com/mapfiles/ms/icons/blue-dot.png');
                         break;
                     case 3:
-                        marker.setIcon('//maps.google.com/mapfiles/ms/icons/blue-dot.png');
+                        marker.setIcon('//maps.google.com/mapfiles/ms/icons/green-dot.png');
                         break;
                     case 4:
                         marker.setIcon('//maps.google.com/mapfiles/ms/icons/yellow-dot.png');

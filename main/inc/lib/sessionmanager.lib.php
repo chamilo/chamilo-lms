@@ -8177,8 +8177,8 @@ class SessionManager
      */
     public static function redirectToSession()
     {
-        $sessionId = isset($_SESSION['session_redirect']) ? $_SESSION['session_redirect'] : null;
-        $onlyOneCourseSessionToRedirect = isset($_SESSION['only_one_course_session_redirect']) ? $_SESSION['only_one_course_session_redirect'] : null;
+        $sessionId = ChamiloSession::read('session_redirect');
+        $onlyOneCourseSessionToRedirect = ChamiloSession::read('only_one_course_session_redirect');
         $userId = api_get_user_id();
         $sessionInfo = api_get_session_info($sessionId);
 

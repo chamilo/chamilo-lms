@@ -370,6 +370,8 @@ foreach ($questionList as $questionId) {
             //no break;
         case UNIQUE_ANSWER_NO_OPTION:
             //no break
+        case UNIQUE_ANSWER_IMAGE:
+            //no break
         case MULTIPLE_ANSWER:
             //no break
         case MULTIPLE_ANSWER_TRUE_FALSE:

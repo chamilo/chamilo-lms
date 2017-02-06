@@ -8674,7 +8674,7 @@ class learnpath
         $row = Database :: fetch_array($result);
         $prerequisiteId = $row['prerequisite'];
         $session_id = api_get_session_id();
-        $session_condition = api_get_session_condition($session_id);
+        $session_condition = api_get_session_condition($session_id, true, true);
         $sql = "SELECT * FROM $tbl_lp
                 WHERE c_id = $course_id $session_condition
                 ORDER BY display_order ";
@@ -8734,7 +8734,7 @@ class learnpath
         $tbl_quiz = Database :: get_course_table(TABLE_QUIZ_TEST);
 
         $session_id = api_get_session_id();
-        $condition_session = api_get_session_condition($session_id);
+        $condition_session = api_get_session_condition($session_id, true, true);
 
         $setting = api_get_configuration_value('show_invisible_exercise_in_lp_list');
 
@@ -8807,7 +8807,12 @@ class learnpath
         $moveEverywhereIcon = Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
 
         $session_id = api_get_session_id();
-        $condition_session = api_get_session_condition($session_id, true, null, "link.session_id");
+        $condition_session = api_get_session_condition(
+            $session_id,
+            true,
+            true,
+            "link.session_id"
+        );
 
         $sql = "SELECT link.id as link_id,
                     link.title as link_title,

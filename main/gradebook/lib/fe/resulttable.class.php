@@ -33,7 +33,7 @@ class ResultTable extends SortableTable
         $this->iscourse = $iscourse;
         $this->forprint = $forprint;
 
-        if (isset ($addparams))  {
+        if (isset($addparams)) {
             $this->set_additional_parameters($addparams);
         }
         $scoredisplay = ScoreDisplay :: instance();
@@ -56,7 +56,7 @@ class ResultTable extends SortableTable
             $this->set_header($column++, get_lang('Display'));
         }
         if (!$this->forprint) {
-            $this->set_header($column++, get_lang('Modify'),false);
+            $this->set_header($column++, get_lang('Modify'), false);
         }
     }
 

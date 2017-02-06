@@ -29,29 +29,34 @@ class ScoreDisplayForm extends FormValidator
 		$this->addElement('hidden', 'minvalue', '0');
 		$counter= 1;
 
-		//setting the default values
+        //setting the default values
 
-		if(is_array($customdisplays)) {
-			foreach ($customdisplays as $customdisplay) {
-				$this->setDefaults(array (
-					'endscore[' . $counter . ']' => $customdisplay['score'],
-					'displaytext[' . $counter . ']' => $customdisplay['display']
-				));
-				$counter++;
-			}
-		}
-		$scorecol = array();
+        if (is_array($customdisplays)) {
+            foreach ($customdisplays as $customdisplay) {
+                $this->setDefaults(array (
+                    'endscore[' . $counter . ']' => $customdisplay['score'],
+                    'displaytext[' . $counter . ']' => $customdisplay['display']
+                ));
+                $counter++;
+            }
+        }
+        $scorecol = array();
 
 		//settings for the colored score
-		$this->addElement('header', get_lang('ScoreEdit'));
+        $this->addElement('header', get_lang('ScoreEdit'));
 
         if ($displayscore->is_coloring_enabled()) {
-            $this->addElement('html', '<b>' . get_lang('ScoreColor') . '</b>');
-            $this->addElement('text', 'scorecolpercent', array(get_lang('Below'), get_lang('WillColorRed'), '%'), array(
-                'size' => 5,
-                'maxlength' => 5,
-				'input-size' => 2
-            ));
+            $this->addElement('html', '<b>'.get_lang('ScoreColor') . '</b>');
+            $this->addElement(
+                'text',
+                'scorecolpercent',
+                array(get_lang('Below'), get_lang('WillColorRed'), '%'),
+                array(
+                    'size' => 5,
+                    'maxlength' => 5,
+                    'input-size' => 2,
+                )
+            );
 
             if (api_get_setting('teachers_can_change_score_settings') != 'true') {
                 $this->freeze('scorecolpercent');
@@ -64,90 +69,95 @@ class ScoreDisplayForm extends FormValidator
 
 		//Settings for the scoring system
 
-		if ($displayscore->is_custom()) {
+        if ($displayscore->is_custom()) {
             $this->addElement('html', '<br /><b>' . get_lang('ScoringSystem') . '</b>');
-			$this->addElement('static', null, null, get_lang('ScoreInfo'));
-			$this->setDefaults(array(
-				'beginscore' => '0'
-			));
-			$this->addElement('text', 'beginscore', array(get_lang('Between'), null, '%'), array(
-				'size' => 5,
-				'maxlength' => 5,
-				'disabled' => 'disabled',
-				'input-size' => 2
-			));
+            $this->addElement('static', null, null, get_lang('ScoreInfo'));
+            $this->setDefaults(array(
+                'beginscore' => '0'
+            ));
+            $this->addElement('text', 'beginscore', array(get_lang('Between'), null, '%'), array(
+                'size' => 5,
+                'maxlength' => 5,
+                'disabled' => 'disabled',
+                'input-size' => 2
+            ));
 
-			for ($counter= 1; $counter <= 20; $counter++) {
-				$renderer =& $this->defaultRenderer();
-				$elementTemplateTwoLabel =
-				'<div id=' . $counter . ' style="display: '.(($counter<=$nr_items)?'inline':'none').';">
-
-				<!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->
-
+            for ($counter= 1; $counter <= 20; $counter++) {
+                $renderer =& $this->defaultRenderer();
+                $elementTemplateTwoLabel =
+                '<div id=' . $counter . ' style="display: '.(($counter<=$nr_items)?'inline':'none').';">
+    
+                <!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->
+    
                 <label class="control-label">{label}</label>
-				<div class="form-group">
-				<label class="col-sm-2 control-label">
+                <div class="form-group">
+                <label class="col-sm-2 control-label">
                 </label>
+    
+                <div class="col-sm-1">
+                <!-- BEGIN error --><span class="form_error">{error}</span><br />
+                <!-- END error -->&nbsp<b>'.get_lang('And').'</b>
+                </div>
+    
+                <div class="col-sm-2">
+                {element}
+                </div>
+    
+                <div class="col-sm-1">
+                =
+                </div>
+    
+    
+                ';
 
-				<div class="col-sm-1">
-				<!-- BEGIN error --><span class="form_error">{error}</span><br />
-				<!-- END error -->&nbsp<b>'.get_lang('And').'</b>
-				</div>
-
-				<div class="col-sm-2">
-				{element}
-				</div>
-
-				<div class="col-sm-1">
-				=
-				</div>
-
-
-				';
-
-				$elementTemplateTwoLabel2 ='
-				<div class="col-sm-2">
-					<!-- BEGIN error --><span class="form_error">{error}</span>
-					<!-- END error -->
-					{element}
-				</div>
-				<div class="col-sm-1">
+                $elementTemplateTwoLabel2 ='
+                <div class="col-sm-2">
+                    <!-- BEGIN error --><span class="form_error">{error}</span>
+                    <!-- END error -->
+                    {element}
+                </div>
+                <div class="col-sm-1">
                     <a href="javascript:plusItem(' . ($counter+1) . ')">
                     <img style="display: '.(($counter>=$nr_items)?'inline':'none').';" id="plus-' . ($counter+1) . '" src="'.Display::returnIconPath('add.png').'" alt="'.get_lang('Add').'" title="'.get_lang('Add').'"></a>
-        			<a href="javascript:minItem(' . ($counter) . ')">
-        			<img style="display: '.(($counter>=$nr_items && $counter!=1)?'inline':'none').';" id="min-' . $counter . '" src="'.Display::returnIconPath('delete.png').'" alt="'.get_lang('Delete').'" title="'.get_lang('Delete').'"></a>
-				</div>
-				</div>
-				</div>';
+                    <a href="javascript:minItem(' . ($counter) . ')">
+                    <img style="display: '.(($counter>=$nr_items && $counter!=1)?'inline':'none').';" id="min-' . $counter . '" src="'.Display::returnIconPath('delete.png').'" alt="'.get_lang('Delete').'" title="'.get_lang('Delete').'"></a>
+                </div>
+                </div>
+                </div>';
 
-				$scorebetw = array();
-				$this->addElement('text', 'endscore[' . $counter . ']', null, array (
-					'size' => 5,
-					'maxlength' => 5,
-					'id' => 'txta-'.$counter,
-					'input-size' => 2
-				));
+                $scorebetw = array();
+                $this->addElement('text', 'endscore[' . $counter . ']', null, array (
+                    'size' => 5,
+                    'maxlength' => 5,
+                    'id' => 'txta-'.$counter,
+                    'input-size' => 2
+                ));
 
-				$this->addElement('text', 'displaytext[' . $counter . ']', null,array (
-					'size' => 40,
-					'maxlength' => 40,
-					'id' => 'txtb-'.$counter
-				));
-				$renderer->setElementTemplate($elementTemplateTwoLabel, 'endscore[' . $counter . ']');
-				$renderer->setElementTemplate($elementTemplateTwoLabel2, 'displaytext[' . $counter . ']');
-				$this->addRule('endscore[' . $counter . ']', get_lang('OnlyNumbers'), 'numeric');
-				$this->addRule(array ('endscore[' . $counter . ']', 'maxvalue'), get_lang('Over100'), 'compare', '<=');
-				$this->addRule(array ('endscore[' . $counter . ']', 'minvalue'), get_lang('UnderMin'), 'compare', '>');
-			}
-		}
+                $this->addElement(
+                    'text',
+                    'displaytext['.$counter.']',
+                    null,
+                    array(
+                        'size' => 40,
+                        'maxlength' => 40,
+                        'id' => 'txtb-'.$counter,
+                    )
+                );
+                $renderer->setElementTemplate($elementTemplateTwoLabel, 'endscore[' . $counter . ']');
+                $renderer->setElementTemplate($elementTemplateTwoLabel2, 'displaytext[' . $counter . ']');
+                $this->addRule('endscore[' . $counter . ']', get_lang('OnlyNumbers'), 'numeric');
+                $this->addRule(array ('endscore[' . $counter . ']', 'maxvalue'), get_lang('Over100'), 'compare', '<=');
+                $this->addRule(array ('endscore[' . $counter . ']', 'minvalue'), get_lang('UnderMin'), 'compare', '>');
+            }
+        }
 
         if ($displayscore->is_custom()) {
-			$this->addButtonSave(get_lang('Ok'));
-		}
-	}
+            $this->addButtonSave(get_lang('Ok'));
+        }
+    }
 
-	public function validate()
+    public function validate()
     {
-		return parent :: validate();
-	}
+        return parent :: validate();
+    }
 }

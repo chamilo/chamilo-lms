@@ -48,7 +48,7 @@ class UserForm extends FormValidator
         }
         $renderer =& $this->defaultRenderer();
         $renderer->setCustomElementTemplate('<span>{element}</span> ');
-        $this->addElement('text','keyword','');
+        $this->addElement('text', 'keyword', '');
         $this->addButtonSearch(get_lang('Search'), 'submit');
     }
 

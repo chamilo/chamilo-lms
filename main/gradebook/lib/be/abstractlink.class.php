@@ -138,22 +138,22 @@ abstract class AbstractLink implements GradebookItem
         return $this->visible;
     }
 
-    public function set_id ($id)
+    public function set_id($id)
     {
         $this->id = $id;
     }
 
-    public function set_type ($type)
+    public function set_type($type)
     {
         $this->type = $type;
     }
 
-    public function set_ref_id ($ref_id)
+    public function set_ref_id($ref_id)
     {
         $this->ref_id = $ref_id;
     }
 
-    public function set_user_id ($user_id)
+    public function set_user_id($user_id)
     {
         $this->user_id = $user_id;
     }
@@ -163,9 +163,11 @@ abstract class AbstractLink implements GradebookItem
      */
     public function set_course_code($course_code)
     {
-        $this->course_code = $course_code;
-        $course_info = api_get_course_info($course_code);
-        $this->course_id = $course_info['real_id'];
+        $courseInfo = api_get_course_info($course_code);
+        if ($courseInfo) {
+            $this->course_code = $course_code;
+            $this->course_id = $courseInfo['real_id'];
+        }
     }
 
     public function getStudentList()

@@ -52,7 +52,6 @@ class EvalForm extends FormValidator
         if (isset($extra1)) {
             $this->extra = $extra1;
         }
-
         switch ($form_type) {
             case self :: TYPE_EDIT:
                 $this->build_editing_form();
@@ -360,22 +359,38 @@ class EvalForm extends FormValidator
             'score' => $this->result_object->get_score(),
             'maximum' => $this->evaluation_object->get_max()
         ));
-        $userinfo = api_get_user_info($this->result_object->get_user_id());
+        $userInfo = api_get_user_info($this->result_object->get_user_id());
         $renderer = & $this->defaultRenderer();
         $renderer->setCustomElementTemplate('<span>{element}</span> ');
-        $this->addElement('label', get_lang('User'), $userinfo['complete_name']);
+        $this->addHeader(get_lang('User').': '.$userInfo['complete_name']);
 
-        $this->addText('score', array(get_lang('Score'), null, '/ ' . $this->evaluation_object->get_max()), false, array(
-            'size' => '4',
-            'class' => 'span1',
-            'maxlength' => '5'
-        ));
+        $this->addText(
+            'score',
+            array(
+                get_lang('Score'),
+                null,
+                '/ '.$this->evaluation_object->get_max(),
+            ),
+            false,
+            array(
+                'size' => '4',
+                'maxlength' => '5',
+            )
+        );
 
         $this->addButtonSave(get_lang('Edit'), 'submit');
         $this->addElement('hidden', 'minvalue', 0);
         $this->addElement('hidden', 'hid_user_id', $this->result_object->get_user_id());
         $this->addElement('hidden', 'maxvalue', $this->evaluation_object->get_max());
-        $this->addRule('score', get_lang('OnlyNumbers'), 'numeric', null, 'client');
+
+        $this->addRule(
+            'score',
+            get_lang('OnlyNumbers'),
+            'numeric',
+            null,
+            'client'
+        );
+
         $this->addRule(
             array(
                 'score',

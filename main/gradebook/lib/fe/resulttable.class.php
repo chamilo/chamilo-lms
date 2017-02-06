@@ -20,7 +20,12 @@ class ResultTable extends SortableTable
      */
     public function __construct($evaluation, $results = array(), $iscourse, $addparams = null,$forprint = false)
     {
-        parent :: __construct('resultlist', null, null, (api_is_western_name_order() xor api_sort_by_first_name()) ? 2 : 1);
+        parent:: __construct(
+            'resultlist',
+            null,
+            null,
+            (api_is_western_name_order() xor api_sort_by_first_name()) ? 2 : 1
+        );
 
         $this->datagen = new ResultsDataGenerator($evaluation, $results, true);
 

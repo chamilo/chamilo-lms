@@ -62,12 +62,11 @@ class DisplayGradebook
         }
 
         $scoredisplay = ScoreDisplay :: instance();
-
         $student_score = '';
-        $average = "";
-        if (($evalobj->has_results())) { // TODO this check needed ?
+        $average = '';
+        if (($evalobj->has_results())) {
+            // TODO this check needed ?
             $score = $evalobj->calc_score();
-
             if ($score != null) {
                 $average = get_lang('Average') . ' :<b> ' . $scoredisplay->display_score($score, SCORE_AVERAGE) . '</b>';
                 $student_score = $evalobj->calc_score(api_get_user_id());
@@ -261,7 +260,6 @@ class DisplayGradebook
         }
 
         if (!$is_course_admin && ($status <> 1 || $sessionStatus == 0) && $selectcat <> 0) {
-
             $catcourse = Category::load($catobj->get_id());
             /** @var Category $category */
             $category = $catcourse[0];
@@ -269,9 +267,7 @@ class DisplayGradebook
             $scoredisplay = ScoreDisplay :: instance();
             $allevals = $category->get_evaluations($userId, true);
             $alllinks = $category->get_links($userId, true);
-
             $allEvalsLinks = array_merge($allevals, $alllinks);
-
             $item_value_total = 0;
             $scoreinfo = null;
 
@@ -387,14 +383,14 @@ class DisplayGradebook
 
                     if ($my_category['generate_certificates'] == 1) {
                         $actionsLeft .= Display::url(
-                                Display::return_icon(
-                                    'certificate_list.png',
-                                    get_lang('GradebookSeeListOfStudentsCertificates'),
-                                    '',
-                                    ICON_SIZE_MEDIUM
-                                ),
-                                "gradebook_display_certificate.php?$my_api_cidreq&cat_id=" . $selectcat
-                            );
+                            Display::return_icon(
+                                'certificate_list.png',
+                                get_lang('GradebookSeeListOfStudentsCertificates'),
+                                '',
+                                ICON_SIZE_MEDIUM
+                            ),
+                            "gradebook_display_certificate.php?$my_api_cidreq&cat_id=" . $selectcat
+                        );
                     }
 
                     $actionsLeft .= Display::url(
@@ -470,8 +466,14 @@ class DisplayGradebook
      * @param bool $show_add_qualification
      * @param bool $show_add_link
      */
-    public function display_reduce_header_gradebook($catobj, $is_course_admin, $is_platform_admin, $simple_search_form, $show_add_qualification = true, $show_add_link = true)
-    {
+    public function display_reduce_header_gradebook(
+        $catobj,
+        $is_course_admin,
+        $is_platform_admin,
+        $simple_search_form,
+        $show_add_qualification = true,
+        $show_add_link = true
+    ) {
         //student
         if (!$is_course_admin) {
             $user = api_get_user_info(api_get_user_id());
@@ -504,26 +506,29 @@ class DisplayGradebook
     }
 
     /**
-     * @param int $userid
+     * @param $userId
+     * @param $categoryId
+     * @return string
      */
-    public static function display_header_user($userid, $categoryId)
+    public static function display_header_user($userId, $categoryId)
     {
-        $user_id = $userid;
-        $user = api_get_user_info($user_id);
+        $user = api_get_user_info($userId);
+        if (empty($user)) {
+            return '';
+        }
 
         $catcourse = Category :: load($categoryId);
         $scoredisplay = ScoreDisplay :: instance();
-        $scorecourse = $catcourse[0]->calc_score($user_id);
 
         // generating the total score for a course
-        $allevals = $catcourse[0]->get_evaluations($user_id, true);
-        $alllinks = $catcourse[0]->get_links($user_id, true);
+        $allevals = $catcourse[0]->get_evaluations($userId, true, api_get_course_id());
+        $alllinks = $catcourse[0]->get_links($userId, true, api_get_course_id());
         $evals_links = array_merge($allevals, $alllinks);
         $item_value = 0;
         $item_total = 0;
         for ($count = 0; $count < count($evals_links); $count++) {
             $item = $evals_links[$count];
-            $score = $item->calc_score($user_id);
+            $score = $item->calc_score($userId);
             $my_score_denom = ($score[1] == 0) ? 1 : $score[1];
             $item_value+=$score[0] / $my_score_denom * $item->get_weight();
             $item_total+=$item->get_weight();
@@ -532,17 +537,11 @@ class DisplayGradebook
         $total_score = array($item_value, $item_total);
         $scorecourse_display = $scoredisplay->display_score($total_score, SCORE_DIV_PERCENT);
 
-        $cattotal = Category :: load(0);
-        $scoretotal = $cattotal[0]->calc_score($user_id);
-        $scoretotal_display = (isset($scoretotal) ? $scoredisplay->display_score($scoretotal, SCORE_PERCENT) : get_lang('NoResultsAvailable'));
-
-        $imageUrl = UserManager::getUserPicture($userid);
-
         $info = '<div class="row"><div class="col-md-3">';
-        $info .= '<div class="thumbnail"><img src="' . $imageUrl . '" /></div>';
+        $info .= '<div class="thumbnail"><img src="' . $user['avatar'] . '" /></div>';
         $info .= '</div>';
         $info .= '<div class="col-md-6">';
-        $info .= get_lang('Name') . ' :  <a target="_blank" href="' . api_get_path(WEB_CODE_PATH) . 'social/profile.php?u=' . $userid . '"> ' .
+        $info .= get_lang('Name') . ' :  <a target="_blank" href="' . api_get_path(WEB_CODE_PATH) . 'social/profile.php?u=' . $userId . '"> ' .
             $user['complete_name'] . '</a><br />';
 
         if (api_get_setting('show_email_addresses') == 'true') {
@@ -552,8 +551,6 @@ class DisplayGradebook
         $info .= get_lang('TotalUser') . ' : <b>' . $scorecourse_display . '</b>';
         $info .= '</div>';
         $info .= '</div>';
-
         echo $info;
     }
-
 }

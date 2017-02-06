@@ -72,7 +72,6 @@ class HTML_QuickForm_Rule_Compare extends HTML_QuickForm_Rule
         }
     }
 
-
     function validate($values, $operator = null)
     {
         $operator = $this->_findOperator($operator);
@@ -95,6 +94,7 @@ class HTML_QuickForm_Rule_Compare extends HTML_QuickForm_Rule
         } else {
             $check = "!(String({jsVar}[0]) {$operator} String({jsVar}[1]))";
         }
+
         return array('', "'' != {jsVar}[0] && {$check}");
     }
 }

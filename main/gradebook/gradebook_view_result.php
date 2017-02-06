@@ -73,7 +73,7 @@ if (isset($_GET['editres'])) {
         $result->set_id($edit_res_xml);
         $result->set_user_id($values['hid_user_id']);
         $result->set_evaluation_id($select_eval);
-        $row_value = isset($values['score']) ? (float) $values['score'] : 0;
+        $row_value = isset($values['score']) ? $values['score'] : 0;
         if (!empty($row_value) || $row_value == 0) {
             $result->set_score(api_number_format($row_value, api_get_setting('gradebook_number_decimals')));
         }
@@ -176,21 +176,43 @@ if (isset($_GET['import'])) {
             }
         } else {
             header('Location: ' . api_get_self() . '?import=&selecteval=' . $select_eval . '&importnofile=');
-            Display::addFlash(Display::return_message(get_lang('ImportNoFile'), 'warning', false));
+            Display::addFlash(
+                Display::return_message(
+                    get_lang('ImportNoFile'),
+                    'warning',
+                    false
+                )
+            );
 
             exit;
         }
         if ($overwritescore != 0) {
             header('Location: ' . api_get_self() . '?selecteval=' . $select_eval. '&importoverwritescore=' . $overwritescore);
-            Display::addFlash(Display::return_message(get_lang('ImportOverWriteScore') . ' ' . $overwritescore));
+            Display::addFlash(
+                Display::return_message(
+                    get_lang('ImportOverWriteScore').' '.$overwritescore
+                )
+            );
             exit;
         }
         if ($nr_results_added == 0) {
-            Display::addFlash(Display::return_message(get_lang('ProblemUploadingFile'), 'warning', false));
+            Display::addFlash(
+                Display::return_message(
+                    get_lang('ProblemUploadingFile'),
+                    'warning',
+                    false
+                )
+            );
             header('Location: ' . api_get_self() . '?selecteval=' . $select_eval. '&nothingadded=');
             exit;
         }
-        Display::addFlash(Display::return_message(get_lang('FileUploadComplete'), 'success', false));
+        Display::addFlash(
+            Display::return_message(
+                get_lang('FileUploadComplete'),
+                'success',
+                false
+            )
+        );
         header('Location: ' . api_get_self() . '?selecteval=' . $select_eval . '&importok=');
         exit;
     }
@@ -356,7 +378,8 @@ if (isset($_GET['export'])) {
 if (isset($_GET['resultdelete'])) {
     $result = Result :: load($_GET['resultdelete']);
     $result[0]->delete();
-    header('Location: gradebook_view_result.php?deleteresult=&selecteval=' . $select_eval);
+    Display::addFlash(Display::return_message(get_lang('ResultDeleted')));
+    header('Location: gradebook_view_result.php?selecteval=' . $select_eval.'&'.api_get_cidreq());
     exit;
 }
 
@@ -458,13 +481,6 @@ if (isset($_GET['adduser'])) {
     Display :: display_confirmation_message(get_lang('UserAdded'), false);
 }
 
-if (isset($_GET['deleteresult'])) {
-    Display :: display_confirmation_message(get_lang('ResultDeleted'), false);
-}
-
-if (isset($_GET['editallresults'])) {
-    Display :: display_confirmation_message(get_lang('AllResultsEdited'), false);
-}
 if (isset($_GET['incorrectdata'])) {
     Display :: display_warning_message(get_lang('IncorrectData'), false);
 }

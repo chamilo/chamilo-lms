@@ -3988,7 +3988,12 @@ class SessionManager
             }
             $users = null;
             //Subscribing in read only mode
-            self::subscribe_users_to_session($sid, $short_users, SESSION_VISIBLE_READ_ONLY, true);
+            self::subscribe_users_to_session(
+                $sid,
+                $short_users,
+                SESSION_VISIBLE_READ_ONLY,
+                true
+            );
             $short_users = null;
         }
         return $sid;
@@ -4855,7 +4860,7 @@ class SessionManager
                                     );
 
                                     if ($debug) {
-                                        $logger->addInfo("Subscribe user #$teacherToAdd as teacher in course $course_code ");
+                                        $logger->addInfo("Subscribe user #$teacherToAdd as teacher in course $course_code with user userCourseCategory $userCourseCategory");
                                     }
 
                                     if (isset($groupBackup['user'][$teacherToAdd]) &&
@@ -4972,7 +4977,7 @@ class SessionManager
                                         );
 
                                         if ($debug) {
-                                            $logger->addInfo("Add user as teacher #".$teacherId." in base course: $course_code");
+                                            $logger->addInfo("Add user as teacher #".$teacherId." in base course: $course_code with userCourseCategory: $userCourseCategory");
                                         }
 
                                         if (isset($groupBackup['user'][$teacherId]) &&

@@ -16,7 +16,7 @@
         }
     </script>
 </head>
-<body style="margin: 0; padding: 0;">
+<body style="margin: 0; padding: 0; {{ mail_body_style }}">
     <table border="0" cellpadding="0" cellspacing="0" width="100%">
         <tr>
             <td>

@@ -7805,10 +7805,8 @@ function api_mail_html(
     if (isset($additionalParameters['link'])) {
         $mailView->assign('link', $additionalParameters['link']);
     }
-    $mailView->assign(
-        'mail_header_style',
-        api_get_configuration_value('mail_header_style')
-    );
+    $mailView->assign('mail_header_style',api_get_configuration_value('mail_header_style'));
+    $mailView->assign('mail_body_style',api_get_configuration_value('mail_body_style'));
     $layout = $mailView->get_template('mail/mail.tpl');
     $mail->Body = $mailView->fetch($layout);
 

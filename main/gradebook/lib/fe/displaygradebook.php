@@ -528,11 +528,10 @@ class DisplayGradebook
             $item_value+=$score[0] / $my_score_denom * $item->get_weight();
             $item_total+=$item->get_weight();
         }
-        $item_value = number_format($item_value, 2, '.', ' ');
+        $item_value = api_number_format($item_value, 2);
         $total_score = array($item_value, $item_total);
         $scorecourse_display = $scoredisplay->display_score($total_score, SCORE_DIV_PERCENT);
 
-        //$scorecourse_display = (isset($scorecourse) ? $scoredisplay->display_score($scorecourse,SCORE_AVERAGE) : get_lang('NoResultsAvailable'));
         $cattotal = Category :: load(0);
         $scoretotal = $cattotal[0]->calc_score($user_id);
         $scoretotal_display = (isset($scoretotal) ? $scoredisplay->display_score($scoretotal, SCORE_PERCENT) : get_lang('NoResultsAvailable'));

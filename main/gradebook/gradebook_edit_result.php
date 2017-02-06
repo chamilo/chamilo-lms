@@ -29,10 +29,10 @@ if ($edit_result_form->validate()) {
     $values = $edit_result_form->exportValues();
     $scores = ($values['score']);
     foreach ($scores as $row) {
-        $resultedit = Result :: load (key($scores));
+        $resultedit = Result:: load(key($scores));
         $row_value = $row;
         if ($row_value != '' ) {
-            $resultedit[0]->set_score(floatval(number_format($row_value, api_get_setting('gradebook_number_decimals'))));
+            $resultedit[0]->set_score(api_number_format($row_value, api_get_setting('gradebook_number_decimals')));
             $resultedit[0]->save();
         }
         next($scores);

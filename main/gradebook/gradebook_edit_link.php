@@ -70,7 +70,7 @@ if ($form->validate()) {
         $row_attendance = Database::fetch_array($rs_attendance);
         $attendance_id  = $row_attendance['ref_id'];
         $sql = 'UPDATE '.$tbl_attendance.' SET
-                    attendance_weight ='.floatval($final_weight).'
+                    attendance_weight ='.api_float_val($final_weight).'
                 WHERE c_id = '.$course_id.' AND id = '.intval($attendance_id);
         Database::query($sql);
     }

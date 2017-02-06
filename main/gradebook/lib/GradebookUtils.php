@@ -1152,7 +1152,7 @@ class GradebookUtils
     public static function updateLinkWeight($linkId, $name, $weight)
     {
         $linkId = intval($linkId);
-        $weight = floatval($weight);
+        $weight = api_float_val($weight);
         $course_id = api_get_course_int_id();
 
         AbstractLink::add_link_log($linkId, $name);

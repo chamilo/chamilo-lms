@@ -1910,6 +1910,10 @@ div.admin_section h4 {
   font-size: 22px;
   margin: 0;
 }
+.question_row_answer img {
+    max-width: 80%;
+    height: auto !important;
+}
 .ribbon {
     float:left;
     width:100%;
@@ -5687,7 +5691,11 @@ a.sessionView {
 .modal-body .sectioncomment{
     color: #666;
 }
-
+.progress{
+    border: 1px solid #c5c5c5;
+    background: #E9E9E9;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 1);
+}
 .wami-container {
     height: 144px;
     position: relative;

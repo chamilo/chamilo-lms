@@ -285,7 +285,6 @@ class GradebookDataGenerator
         $forceSimpleResult = false
     ) {
         $scoredisplay = ScoreDisplay::instance();
-
         $score = $item->calc_score($userId);
 
         if (!empty($score)) {
@@ -328,11 +327,14 @@ class GradebookDataGenerator
                         ];
                     //}
 
-                $display = $scoredisplay->display_score($score, SCORE_DIV_PERCENT_WITH_CUSTOM);
+                $display = $scoredisplay->display_score(
+                    $score,
+                    SCORE_DIV_PERCENT_WITH_CUSTOM
+                );
 
                 $type = $item->get_item_type();
                 if ($type == 'L' && get_class($item) == 'ExerciseLink') {
-                    $display  = ExerciseLib::show_score($score[0], $score[1], false);
+                    $display = ExerciseLib::show_score($score[0], $score[1], false);
                 }
 
                 return array(
@@ -441,7 +443,7 @@ class GradebookDataGenerator
     public function sort_by_weight($item1, $item2)
     {
         if ($item1->get_weight() == $item2->get_weight()) {
-            return $this->sort_by_name($item1,$item2);
+            return $this->sort_by_name($item1, $item2);
         } else {
             return ($item1->get_weight() < $item2->get_weight() ? -1 : 1);
         }

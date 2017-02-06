@@ -9,8 +9,8 @@
  */
 class LinkAddEditForm extends FormValidator
 {
-	const TYPE_ADD = 1;
-	const TYPE_EDIT = 2;
+    const TYPE_ADD = 1;
+    const TYPE_EDIT = 2;
 
     /**
      * Constructor
@@ -52,11 +52,11 @@ class LinkAddEditForm extends FormValidator
             } else {
                 $select = $this->addElement('select', 'select_link', get_lang('ChooseItem'));
                 foreach ($link->get_all_links() as $newlink) {
-                    $select->addoption($newlink[1],$newlink[0]);
+                    $select->addoption($newlink[1], $newlink[0]);
                 }
             }
         } else {
-            $this->addElement('label',get_lang('Name'),  '<span class="freeze">'.$link->get_name().' ['.$link->get_type_name().']</span>');
+            $this->addElement('label', get_lang('Name'),  '<span class="freeze">'.$link->get_name().' ['.$link->get_type_name().']</span>');
             $this->addElement('hidden','name_link',$link->get_name(),array('id'=>'name_link'));
         }
 
@@ -78,7 +78,7 @@ class LinkAddEditForm extends FormValidator
                     if ($my_cat->get_course_code() == api_get_course_id()) {
                         $grade_model_id = $my_cat->get_grade_model_id();
                         if (empty($grade_model_id)) {
-                            if ($my_cat->get_parent_id() == 0 ) {
+                            if ($my_cat->get_parent_id() == 0) {
                                 $default_weight = $my_cat->get_weight();
                                 $select_gradebook->addoption(get_lang('Default'), $my_cat->get_id());
                             } else {
@@ -117,7 +117,7 @@ class LinkAddEditForm extends FormValidator
             'class' => 'span1'
         ));*/
 
-        $this->addRule('weight_mask',get_lang('OnlyNumbers'),'numeric');
+        $this->addRule('weight_mask', get_lang('OnlyNumbers'), 'numeric');
         $this->addRule(array ('weight_mask', 'zero'), get_lang('NegativeValue'), 'compare', '>=');
         if ($form_type == self :: TYPE_EDIT) {
             $parent_cat = Category :: load($link->get_category_id());
@@ -188,5 +188,5 @@ class LinkAddEditForm extends FormValidator
 
         // set default values
         $this->setDefaults($defaults);
-	}
+    }
 }

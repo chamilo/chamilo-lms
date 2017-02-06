@@ -52,7 +52,6 @@ class EvalForm extends FormValidator
         if (isset($extra1)) {
             $this->extra = $extra1;
         }
-
         switch ($form_type) {
             case self :: TYPE_EDIT:
                 $this->build_editing_form();
@@ -85,9 +84,15 @@ class EvalForm extends FormValidator
     protected function build_add_user_to_eval()
     {
         $this->addElement('header', get_lang('ChooseUser'));
-        $select = $this->addElement('select', 'firstLetterUser', get_lang('FirstLetter'), null, array(
-            'onchange' => 'document.add_users_to_evaluation.submit()'
-        ));
+        $select = $this->addElement(
+            'select',
+            'firstLetterUser',
+            get_lang('FirstLetter'),
+            null,
+            array(
+                'onchange' => 'document.add_users_to_evaluation.submit()',
+            )
+        );
         $select->addOption('', '');
         for ($i = 65; $i <= 90; $i ++) {
             $letter = chr($i);
@@ -170,9 +175,7 @@ class EvalForm extends FormValidator
             $results_and_users[] = array('result' => $result, 'user' => $user);
         }
         usort($results_and_users, array('EvalForm', 'sort_by_user'));
-
         $defaults = array();
-
         foreach ($results_and_users as $result_and_user) {
             $user = $result_and_user['user'];
             $result = $result_and_user['result'];
@@ -299,7 +302,6 @@ class EvalForm extends FormValidator
 
         $firstUser = true;
         foreach ($tblusers as $user) {
-
             $element_name = 'score[' . $user[0] . ']';
             $scoreColumnProperties = array('maxlength' => 5);
             if ($firstUser) {
@@ -360,22 +362,38 @@ class EvalForm extends FormValidator
             'score' => $this->result_object->get_score(),
             'maximum' => $this->evaluation_object->get_max()
         ));
-        $userinfo = api_get_user_info($this->result_object->get_user_id());
+        $userInfo = api_get_user_info($this->result_object->get_user_id());
         $renderer = & $this->defaultRenderer();
         $renderer->setCustomElementTemplate('<span>{element}</span> ');
-        $this->addElement('label', get_lang('User'), $userinfo['complete_name']);
+        $this->addHeader(get_lang('User').': '.$userInfo['complete_name']);
 
-        $this->addText('score', array(get_lang('Score'), null, '/ ' . $this->evaluation_object->get_max()), false, array(
-            'size' => '4',
-            'class' => 'span1',
-            'maxlength' => '5'
-        ));
+        $this->addText(
+            'score',
+            array(
+                get_lang('Score'),
+                null,
+                '/ '.$this->evaluation_object->get_max(),
+            ),
+            false,
+            array(
+                'size' => '4',
+                'maxlength' => '5',
+            )
+        );
 
         $this->addButtonSave(get_lang('Edit'), 'submit');
         $this->addElement('hidden', 'minvalue', 0);
         $this->addElement('hidden', 'hid_user_id', $this->result_object->get_user_id());
         $this->addElement('hidden', 'maxvalue', $this->evaluation_object->get_max());
-        $this->addRule('score', get_lang('OnlyNumbers'), 'numeric', null, 'client');
+
+        $this->addRule(
+            'score',
+            get_lang('OnlyNumbers'),
+            'numeric',
+            null,
+            'client'
+        );
+
         $this->addRule(
             array(
                 'score',
@@ -403,9 +421,14 @@ class EvalForm extends FormValidator
      */
     protected function build_add_form()
     {
-        $this->setDefaults(array('hid_user_id' => $this->evaluation_object->get_user_id(),
-            'hid_category_id' => $this->evaluation_object->get_category_id(),
-            'hid_course_code' => $this->evaluation_object->get_course_code(), 'created_at' => api_get_utc_datetime()));
+        $this->setDefaults(
+            array(
+                'hid_user_id' => $this->evaluation_object->get_user_id(),
+                'hid_category_id' => $this->evaluation_object->get_category_id(),
+                'hid_course_code' => $this->evaluation_object->get_course_code(),
+                'created_at' => api_get_utc_datetime(),
+            )
+        );
         $this->build_basic_form(0);
         if ($this->evaluation_object->get_course_code() == null) {
             $this->addElement('checkbox', 'adduser', null, get_lang('AddUserToEval'));
@@ -473,7 +496,15 @@ class EvalForm extends FormValidator
 
         $session_id = api_get_session_id();
         $course_code = api_get_course_id();
-        $all_categories = Category :: load(null, null, $course_code, null, null, $session_id, false);
+        $all_categories = Category:: load(
+            null,
+            null,
+            $course_code,
+            null,
+            null,
+            $session_id,
+            false
+        );
 
         if (count($all_categories) == 1) {
             $this->addElement('hidden', 'hid_category_id', $cat_id);
@@ -531,7 +562,6 @@ class EvalForm extends FormValidator
           'maxlength' => '5',
           'class' => 'span1'
           )); */
-
 
         if ($edit) {
             if (!$this->evaluation_object->has_results()) {
@@ -623,5 +653,4 @@ class EvalForm extends FormValidator
         }
         return $result;
     }
-
 }

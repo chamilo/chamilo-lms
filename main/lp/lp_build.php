@@ -24,9 +24,9 @@ $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
 $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 $tbl_lp_view = Database::get_course_table(TABLE_LP_VIEW);
 
-$isStudentView  = (int) $_REQUEST['isStudentView'];
-$learnpath_id   = (int) $_REQUEST['lp_id'];
-$submit			= $_POST['submit_button'];
+$isStudentView = (int)$_REQUEST['isStudentView'];
+$learnpath_id = (int)$_REQUEST['lp_id'];
+$submit = $_POST['submit_button'];
 
 /* MAIN CODE */
 if ((!$is_allowed_to_edit) || ($isStudentView)) {

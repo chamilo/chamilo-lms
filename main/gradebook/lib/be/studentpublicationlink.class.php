@@ -423,7 +423,7 @@ class StudentPublicationLink extends AbstractLink
         }
         $id = $data['id'];
 
-        $weight = (float) $this->get_weight();
+        $weight = api_float_val($this->get_weight());
         if (!empty($id)) {
             //Cleans works
             $sql = 'UPDATE '.$this->get_studpub_table().' 

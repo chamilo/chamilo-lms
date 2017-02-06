@@ -842,9 +842,13 @@ function api_get_path($path = '', $configuration = [])
         if (!empty($virtualChamilo)) {
             $paths[$root_web][SYS_ARCHIVE_PATH] = api_add_trailing_slash($virtualChamilo[SYS_ARCHIVE_PATH]);
             $paths[$root_web][SYS_HOME_PATH] = api_add_trailing_slash($virtualChamilo[SYS_HOME_PATH]);
-            $paths[$root_web][WEB_HOME_PATH] = api_add_trailing_slash($virtualChamilo[WEB_HOME_PATH]);
             $paths[$root_web][SYS_COURSE_PATH] = api_add_trailing_slash($virtualChamilo[SYS_COURSE_PATH]);
             $paths[$root_web][SYS_UPLOAD_PATH] = api_add_trailing_slash($virtualChamilo[SYS_UPLOAD_PATH]);
+
+            $paths[$root_web][WEB_HOME_PATH] = api_add_trailing_slash($virtualChamilo[WEB_HOME_PATH]);
+            $paths[$root_web][WEB_UPLOAD_PATH] = api_add_trailing_slash($virtualChamilo[WEB_UPLOAD_PATH]);
+            $paths[$root_web][WEB_ARCHIVE_PATH] = api_add_trailing_slash($virtualChamilo[WEB_ARCHIVE_PATH]);
+            //$paths[$root_web][WEB_COURSE_PATH] = api_add_trailing_slash($virtualChamilo[WEB_COURSE_PATH]);
 
             // WEB_UPLOAD_PATH should be handle by apache htaccess in the vhost
 
@@ -7801,10 +7805,8 @@ function api_mail_html(
     if (isset($additionalParameters['link'])) {
         $mailView->assign('link', $additionalParameters['link']);
     }
-    $mailView->assign(
-        'mail_header_style',
-        api_get_configuration_value('mail_header_style')
-    );
+    $mailView->assign('mail_header_style',api_get_configuration_value('mail_header_style'));
+    $mailView->assign('mail_content_style',api_get_configuration_value('mail_content_style'));
     $layout = $mailView->get_template('mail/mail.tpl');
     $mail->Body = $mailView->fetch($layout);
 
@@ -8032,26 +8034,19 @@ function api_remove_uploaded_file($type, $file)
 }
 
 /**
- * Converts values to float value
+ * Converts string value to float value
  *
  * 3.141516 => 3.141516
  * 3,141516 => 3.141516
  * @todo WIP
  *
- * @param $number
- * @return false|float|int|mixed
+ * @param string $number
+ * @return float
  */
-function api_parse_float_val($number)
+function api_float_val($number)
 {
-    if (INTL_INSTALLED) {
-        $iso = api_get_language_isocode();
-        $iso = 'fr';
-        $formatter = new NumberFormatter($iso, NumberFormatter::DECIMAL);
-
-        return $formatter->parse($number);
-    } else {
-        return floatval($number);
-    }
+    $number = (float) str_replace(',', '.', trim($number));
+    return $number;
 }
 
 /**
@@ -8069,15 +8064,7 @@ function api_parse_float_val($number)
  */
 function api_number_format($number, $decimals = 0)
 {
-    if (INTL_INSTALLED) {
-        $iso = api_get_language_isocode();
-        $iso = 'fr';
-        $formatter = new NumberFormatter($iso, NumberFormatter::DECIMAL);
-        $formatter->setAttribute(NumberFormatter::MAX_FRACTION_DIGITS, $decimals);
-        $formatter->setAttribute(NumberFormatter::GROUPING_SEPARATOR_SYMBOL, '');
+    $number = api_float_val($number);
 
-        return $formatter->format($number);
-    } else {
-        return number_format($number, $decimals);
-    }
+    return number_format($number, $decimals);
 }

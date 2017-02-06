@@ -2254,11 +2254,8 @@ class Category implements GradebookItem
 
         $courseEvaluations = $category->get_evaluations($userId, true);
         $courseLinks = $category->get_links($userId, true);
-
         $evaluationsAndLinks = array_merge($courseEvaluations, $courseLinks);
-
         $categoryScore = 0;
-
         for ($i = 0; $i < count($evaluationsAndLinks); $i++) {
             $item = $evaluationsAndLinks[$i];
             $score = $item->calc_score($userId);
@@ -2272,7 +2269,7 @@ class Category implements GradebookItem
             $categoryScore += $itemValue;
         }
 
-        return floatval($categoryScore);
+        return api_float_val($categoryScore);
     }
 
     /**
@@ -2289,7 +2286,7 @@ class Category implements GradebookItem
             [
                 'category_id' => intval($categoryId),
                 'user_id' => intval($userId),
-                'score' => floatval($score),
+                'score' => api_float_val($score),
                 'registered_at' => api_get_utc_datetime()
             ]
         );

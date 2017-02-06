@@ -13,5 +13,5 @@
     title: "Propriétés de l'image",
     uploadTab: "Téléverser",
     urlMissing: "L'URL source de l'image est manquante.",
-    responsive: 'Is responsive'
+    responsive: 'Adaptatif'
 });

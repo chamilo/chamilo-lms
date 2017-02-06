@@ -5687,7 +5687,11 @@ a.sessionView {
 .modal-body .sectioncomment{
     color: #666;
 }
-
+.progress{
+    border: 1px solid #c5c5c5;
+    background: #E9E9E9;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 1);
+}
 .wami-container {
     height: 144px;
     position: relative;

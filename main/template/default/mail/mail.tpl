@@ -16,7 +16,7 @@
         }
     </script>
 </head>
-<body style="margin: 0; padding: 0; {{ mail_body_style }}">
+<body style="margin: 0; padding: 0; ">
     <table border="0" cellpadding="0" cellspacing="0" width="100%">
         <tr>
             <td>
@@ -28,7 +28,9 @@
                     </tr>
                     <tr>
                         <td cellpadding="0" cellspacing="0" style="padding: 40px 10px">
+                            <span {{ mail_content_style }}>
                             {{ content }}
+                            </span>
                         </td>
                     </tr>
                     <tr>

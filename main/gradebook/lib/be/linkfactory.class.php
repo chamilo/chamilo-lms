@@ -112,6 +112,5 @@ class LinkFactory
 
     public function delete()
     {
-
     }
 }

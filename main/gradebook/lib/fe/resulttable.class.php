@@ -20,7 +20,12 @@ class ResultTable extends SortableTable
      */
     public function __construct($evaluation, $results = array(), $iscourse, $addparams = null,$forprint = false)
     {
-        parent :: __construct('resultlist', null, null, (api_is_western_name_order() xor api_sort_by_first_name()) ? 2 : 1);
+        parent:: __construct(
+            'resultlist',
+            null,
+            null,
+            (api_is_western_name_order() xor api_sort_by_first_name()) ? 2 : 1
+        );
 
         $this->datagen = new ResultsDataGenerator($evaluation, $results, true);
 
@@ -28,7 +33,7 @@ class ResultTable extends SortableTable
         $this->iscourse = $iscourse;
         $this->forprint = $forprint;
 
-        if (isset ($addparams))  {
+        if (isset($addparams)) {
             $this->set_additional_parameters($addparams);
         }
         $scoredisplay = ScoreDisplay :: instance();
@@ -51,7 +56,7 @@ class ResultTable extends SortableTable
             $this->set_header($column++, get_lang('Display'));
         }
         if (!$this->forprint) {
-            $this->set_header($column++, get_lang('Modify'),false);
+            $this->set_header($column++, get_lang('Modify'), false);
         }
     }
 

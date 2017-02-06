@@ -79,7 +79,7 @@ class GradebookUtils
         if (!empty($link_id)) {
             $link_id = intval($link_id);
             $sql = 'UPDATE ' . Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK) . '
-                    SET weight = ' . "'" . Database::escape_string((float) $weight) . "'" . '
+                    SET weight = ' . "'" . api_float_val($weight) . "'" . '
                     WHERE course_code = "' . $course_code . '" AND id = ' . $link_id;
             Database::query($sql);
         }
@@ -1152,7 +1152,7 @@ class GradebookUtils
     public static function updateLinkWeight($linkId, $name, $weight)
     {
         $linkId = intval($linkId);
-        $weight = floatval($weight);
+        $weight = api_float_val($weight);
         $course_id = api_get_course_int_id();
 
         AbstractLink::add_link_log($linkId, $name);

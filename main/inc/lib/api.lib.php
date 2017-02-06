@@ -8034,26 +8034,19 @@ function api_remove_uploaded_file($type, $file)
 }
 
 /**
- * Converts values to float value
+ * Converts string value to float value
  *
  * 3.141516 => 3.141516
  * 3,141516 => 3.141516
  * @todo WIP
  *
- * @param $number
- * @return false|float|int|mixed
+ * @param string $number
+ * @return float
  */
-function api_parse_float_val($number)
+function api_float_val($number)
 {
-    if (INTL_INSTALLED) {
-        $iso = api_get_language_isocode();
-        $iso = 'fr';
-        $formatter = new NumberFormatter($iso, NumberFormatter::DECIMAL);
-
-        return $formatter->parse($number);
-    } else {
-        return floatval($number);
-    }
+    $number = (float) str_replace(',', '.', trim($number));
+    return $number;
 }
 
 /**
@@ -8071,15 +8064,7 @@ function api_parse_float_val($number)
  */
 function api_number_format($number, $decimals = 0)
 {
-    if (INTL_INSTALLED) {
-        $iso = api_get_language_isocode();
-        $iso = 'fr';
-        $formatter = new NumberFormatter($iso, NumberFormatter::DECIMAL);
-        $formatter->setAttribute(NumberFormatter::MAX_FRACTION_DIGITS, $decimals);
-        $formatter->setAttribute(NumberFormatter::GROUPING_SEPARATOR_SYMBOL, '');
+    $number = api_float_val($number);
 
-        return $formatter->format($number);
-    } else {
-        return number_format($number, $decimals);
-    }
+    return number_format($number, $decimals);
 }

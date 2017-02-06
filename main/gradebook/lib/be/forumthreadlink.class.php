@@ -357,11 +357,12 @@ class ForumThreadLink extends AbstractLink
 
 	function save_linked_data()
 	{
-		$weight = (float)$this->get_weight();
+		$weight = api_float_val($this->get_weight());
 		$ref_id = $this->get_ref_id();
 
 		if (!empty($ref_id)) {
-			$sql = 'UPDATE '.$this->get_forum_thread_table().' SET thread_weight='.$weight.'
+			$sql = 'UPDATE '.$this->get_forum_thread_table().' SET 
+			        thread_weight='.$weight.'
                     WHERE c_id = '.$this->course_id.' AND thread_id= '.$ref_id;
 			Database::query($sql);
 		}

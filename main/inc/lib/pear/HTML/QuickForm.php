@@ -1774,7 +1774,7 @@ class HTML_QuickForm extends HTML_Common
         }
         if (count($test) > 0) {
             return
-                "\n<script type=\"text/javascript\">\n" .
+                "<script>" .
                 "//<![CDATA[\n" .
                 "function validate_" . $this->_attributes['id'] . "(frm) {\n" .
                 "  var value = '';\n" .

@@ -83,7 +83,6 @@ class FlatViewDataGenerator
     public function get_header_names($items_start = 0, $items_count = null, $show_detail = false)
     {
         $headers = array();
-
         if (isset($this->params['show_official_code']) && $this->params['show_official_code']) {
             $headers[] = get_lang('OfficialCode');
         }
@@ -174,7 +173,6 @@ class FlatViewDataGenerator
                 ).$add_weight;
 
                 if (api_get_setting('gradebook_detailed_admin_view') === 'true') {
-
                     $links = $sub_cat->get_links();
                     $evaluations = $sub_cat->get_evaluations();
 
@@ -526,7 +524,7 @@ class FlatViewDataGenerator
                 if ($convert_using_the_global_weight) {
                     //$item_total = $main_weight;
                 }
-            } else  {
+            } else {
                 // All evaluations
                 $result = $this->parseEvaluations(
                     $user_id,
@@ -669,7 +667,9 @@ class FlatViewDataGenerator
                 (isset($this->params['only_total_category']) && $this->params['only_total_category'] == false)
             ) {
                 if (!$show_all) {
-                    if (in_array($item->get_type(), array(
+                    if (in_array(
+                        $item->get_type(),
+                        array(
                             LINK_EXERCISE,
                             LINK_DROPBOX,
                             LINK_STUDENTPUBLICATION,
@@ -677,7 +677,8 @@ class FlatViewDataGenerator
                             LINK_FORUM_THREAD,
                             LINK_ATTENDANCE,
                             LINK_SURVEY,
-                            LINK_HOTPOTATOES)
+                            LINK_HOTPOTATOES,
+                        )
                     )
                     ) {
                         if (!empty($score[0])) {

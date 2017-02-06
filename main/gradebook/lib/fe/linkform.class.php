@@ -44,7 +44,7 @@ class LinkForm extends FormValidator
             }
         }
 
-        if (isset ($extra)) {
+        if (isset($extra)) {
             $this->extra = $extra;
         }
         if ($form_type == self :: TYPE_CREATE) {

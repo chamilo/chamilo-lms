@@ -96,10 +96,13 @@ class Virtual
 
                 $data['SYS_ARCHIVE_PATH'] = self::addTrailingSlash($archivePath).$data['slug'];
                 $data['SYS_HOME_PATH'] = self::addTrailingSlash($homePath).$data['slug'];
-                $data['WEB_HOME_PATH'] = $_configuration['vchamilo_web_root'] . '/var/home/' . $data['slug'];
                 $data['SYS_COURSE_PATH'] = self::addTrailingSlash($coursePath).$data['slug'];
                 $data['SYS_UPLOAD_PATH'] = self::addTrailingSlash($uploadPath).$data['slug'];
-                //$data['WEB_UPLOAD_PATH'] = $_configuration['vchamilo_web_root'] . '/var/upload/' . $data['slug'];
+
+                $data['WEB_HOME_PATH'] = self::addTrailingSlash($data['home_url']);
+                $data['WEB_UPLOAD_PATH'] = self::addTrailingSlash($data['upload_url']);
+                $data['WEB_ARCHIVE_PATH'] = self::addTrailingSlash($data['archive_url']);
+                //$data['WEB_COURSE_PATH'] = self::addTrailingSlash($data['course_url']);
 
                 if (!empty($passwordEncryption)) {
                     $_configuration['password_encryption'] = $passwordEncryption;
@@ -962,6 +965,12 @@ class Virtual
         }
 
         $data->root_web = api_add_trailing_slash($data->root_web);
+
+        $data->archive_url = api_add_trailing_slash($data->archive_url);
+        $data->home_url = api_add_trailing_slash($data->home_url);
+        $data->upload_url = api_add_trailing_slash($data->upload_url);
+        $data->course_url = api_add_trailing_slash($data->course_url);
+
         if (substr($data->root_web, 0, 4) != 'http') {
             $data->root_web = api_get_protocol().'://'.$data->root_web;
         }

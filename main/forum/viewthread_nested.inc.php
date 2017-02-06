@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CForumPost;
+
 /**
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @author Julio Montoya <gugli100@gmail.com> UI Improvements + lots of bugfixes
@@ -37,6 +39,8 @@ $userId = api_get_user_id();
 $groupInfo = GroupManager::get_group_properties($group_id);
 $postCount = 1;
 
+$allowUserImageForum = api_get_course_setting('allow_user_image_forum');
+
 foreach ($rows as $post) {
     // The style depends on the status of the message: approved or not.
     if ($post['visible'] == '0') {
@@ -55,10 +59,8 @@ foreach ($rows as $post) {
     $html .= '<div class="col-md-offset-' . $indent . '" >';
     $html .= '<div class="panel panel-default forum-post">';
     $html .= '<div class="panel-body">';
-
     $html .= '<div class="row">';
     $html .= '<div class="col-md-2">';
-
 
     $username = sprintf(get_lang('LoginX'), $post['username']);
     if ($post['user_id'] == '0') {
@@ -68,7 +70,7 @@ foreach ($rows as $post) {
     }
 
     if ($origin != 'learnpath') {
-        if (api_get_course_setting('allow_user_image_forum')) {
+        if ($allowUserImageForum) {
             $html .= '<div class="thumbnail">' . display_user_image($post['user_id'], $name, $origin) . '</div>';
         }
 
@@ -78,7 +80,7 @@ foreach ($rows as $post) {
             array('class' => 'title-username')
         );
     } else {
-        if (api_get_course_setting('allow_user_image_forum')) {
+        if ($allowUserImageForum) {
             $html .= '<div class="thumbnail">' . display_user_image($post['user_id'], $name, $origin) . '</div>';
         }
 
@@ -95,13 +97,13 @@ foreach ($rows as $post) {
     if ($origin != 'learnpath') {
         $html .= Display::tag(
             'p',
-            api_convert_and_format_date($post['post_date']),
+            Display::dateToStringAgoAndLongDate($post['post_date']),
             array('class' => 'post-date')
         );
     } else {
         $html .= Display::tag(
             'p',
-            api_convert_and_format_date($post['post_date'], DATE_TIME_FORMAT_SHORT),
+            Display::dateToStringAgoAndLongDate($post['post_date']),
             array('class' => 'text-muted')
         );
     }
@@ -111,25 +113,34 @@ foreach ($rows as $post) {
     $id_attach = !empty($attachment_list) ? $attachment_list['iid'] : '';
 
     $iconEdit = '';
+    $editButton = '';
     // The user who posted it can edit his thread only if the course admin allowed this in the properties of the forum
     // The course admin him/herself can do this off course always
 
-    if (
-    (isset($groupInfo['iid']) &&GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo['iid'])) ||
+    $tutorGroup = GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo['iid']);
+
+    if ((isset($groupInfo['iid']) && $tutorGroup) ||
         ($current_forum['allow_edit'] == 1 && $post['user_id'] == $userId) ||
         (api_is_allowed_to_edit(false, true) && !(api_is_course_coach() && $current_forum['session_id'] != $sessionId))
     ) {
         if ($locked == false) {
-            $iconEdit .= "<a href=\"editpost.php?" . api_get_cidreq()
-                . "&forum=$clean_forum_id&thread=$clean_thread_id&post={$post['post_id']}&id_attach=$id_attach"
-                . "\">"
+            $editUrl = api_get_path(WEB_CODE_PATH).'forum/editpost.php?'.api_get_cidreq();
+            $editUrl .= "&forum=$clean_forum_id&thread=$clean_thread_id&post={$post['post_id']}&id_attach=$id_attach";
+
+            $iconEdit .= "<a href='".$editUrl."'>"
                 . Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL)
                 . "</a>";
+
+            $editButton = Display::toolbarButton(
+                get_lang('Edit'),
+                $editUrl,
+                'pencil',
+                'default'
+            );
         }
     }
 
-    if (
-        (isset($groupInfo['iid']) && GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo['iid'])) ||
+    if ((isset($groupInfo['iid']) && $tutorGroup) ||
         api_is_allowed_to_edit(false, true) &&
         !(api_is_course_coach() && $current_forum['session_id'] != $sessionId)
     ) {
@@ -190,7 +201,9 @@ foreach ($rows as $post) {
     if ($userCanQualify) {
         if ($count > 0) {
             $current_qualify_thread = showQualify(
-                '1', $post['user_id'], $_GET['thread']
+                '1',
+                $post['user_id'],
+                $_GET['thread']
             );
             if ($locked == false) {
                 $iconEdit .= "<a href=\"forumqualify.php?" . api_get_cidreq()
@@ -207,6 +220,10 @@ foreach ($rows as $post) {
     if ($iconEdit != '') {
         $html .= '<div class="tools-icons">' . $iconEdit . ' '.$statusIcon.'</div>';
     }
+
+    $buttonReply = '';
+    $buttonQuote = '';
+    $waitingValidation = '';
 
     if (($current_forum_category && $current_forum_category['locked'] == 0) &&
         $current_forum['locked'] == 0 && $current_thread['locked'] == 0 || api_is_allowed_to_edit(false, true)
@@ -238,9 +255,17 @@ foreach ($rows as $post) {
                     'success',
                     ['id' => "quote-post-{$post['post_id']}"]
                 );
+
+                if ($current_forum['moderated'] && !api_is_allowed_to_edit(false, true)) {
+                    if (empty($post['status']) || $post['status'] == CForumPost::STATUS_WAITING_MODERATION) {
+                        $buttonReply = '';
+                        $buttonQuote = '';
+                    }
+                }
             }
         }
     } else {
+        $closedPost = '';
         if ($current_forum_category && $current_forum_category['locked'] == 1) {
             $closedPost = Display::tag(
                 'div',
@@ -265,9 +290,7 @@ foreach ($rows as $post) {
 
         $html .= $closedPost;
     }
-
     $html .= '</div>';
-
 
     // note: this can be removed here because it will be displayed in the tree
     if (
@@ -282,7 +305,8 @@ foreach ($rows as $post) {
 
     if ($post['post_notification'] == '1' && $post['poster_id'] == $userId) {
         $post_image .= Display::return_icon(
-                'forumnotification.gif', get_lang('YouWillBeNotified')
+            'forumnotification.gif',
+            get_lang('YouWillBeNotified')
         );
     }
 
@@ -293,10 +317,8 @@ foreach ($rows as $post) {
     $html .= Display::tag('div', $titlePost, array('class' => 'post-header'));
 
     // the post body
-
     $html .= Display::tag('div', $post['post_text'], array('class' => 'post-body'));
     $html .= '</div>';
-
     $html .= '</div>';
 
     $html .= '<div class="row">';
@@ -305,11 +327,10 @@ foreach ($rows as $post) {
     $attachment_list = getAllAttachment($post['post_id']);
     if (!empty($attachment_list) && is_array($attachment_list)) {
         foreach ($attachment_list as $attachment) {
-            $realname = $attachment['path'];
             $user_filename = $attachment['filename'];
             $html .= Display::return_icon('attachment.gif', get_lang('Attachment'));
             $html .= '<a href="download.php?file=';
-            $html .= $realname;
+            $html .= $attachment['path'];
             $html .= ' "> ' . $user_filename . ' </a>';
             $html .= '<span class="forum_attach_comment" >' . $attachment['comment'] . '</span>';
             if (($current_forum['allow_edit'] == 1 && $post['user_id'] == $userId) ||
@@ -326,18 +347,18 @@ foreach ($rows as $post) {
 
     $html .= '</div>';
     $html .= '<div class="col-md-6 text-right">';
-    $html .= $buttonReply . ' ' . $buttonQuote;
+    $html .= "$editButton $buttonReply $buttonQuote $waitingValidation";
     $html .= '</div>';
     $html .= '</div>';
+
     // The post has been displayed => it can be removed from the what's new array
     unset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$post['post_id']]);
     unset($_SESSION['whatsnew_post_info'][$current_forum['forum_id']][$current_thread['thread_id']][$post['post_id']]);
 
+    $html .= '</div>';
+    $html .= '</div>';
+    $html .= '</div>';
 
-    $html .= '</div>';
-    $html .= '</div>';
-    $html .= '</div>';
     echo $html;
-
     $count++;
 }

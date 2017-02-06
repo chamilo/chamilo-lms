@@ -638,9 +638,17 @@ class Auth
             if (CourseManager::add_user_to_course($user_id, $course_code, $status_user_in_new_course)) {
                 $send = api_get_course_setting('email_alert_to_teacher_on_new_user_in_course', $course_code);
                 if ($send == 1) {
-                    CourseManager::email_to_tutor($user_id, $all_course_information['real_id'], $send_to_tutor_also = false);
+                    CourseManager::email_to_tutor(
+                        $user_id,
+                        $all_course_information['real_id'],
+                        $send_to_tutor_also = false
+                    );
                 } else if ($send == 2) {
-                    CourseManager::email_to_tutor($user_id, $all_course_information['real_id'], $send_to_tutor_also = true);
+                    CourseManager::email_to_tutor(
+                        $user_id,
+                        $all_course_information['real_id'],
+                        $send_to_tutor_also = true
+                    );
                 }
                 $url = Display::url($all_course_information['title'], api_get_course_url($course_code));
                 $message = sprintf(get_lang('EnrollToCourseXSuccessful'), $url);
@@ -649,7 +657,9 @@ class Auth
             }
             return array('message' => $message);
         } else {
-            if (isset($_POST['course_registration_code']) && $_POST['course_registration_code'] != $all_course_information['registration_code']) {
+            if (isset($_POST['course_registration_code']) &&
+                $_POST['course_registration_code'] != $all_course_information['registration_code']
+            ) {
                 return false;
             }
             $message = get_lang('CourseRequiresPassword') . '<br />';

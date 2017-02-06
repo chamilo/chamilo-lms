@@ -73,14 +73,30 @@ if (is_array($results) && count($results) > 0) {
         }
         $url  = '<a href="group_view.php?id='.$id.'">' . $name . '</a>';
 
-        $count_users_group = count($usergroup->get_users_by_group($id, false, array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_READER, GROUP_USER_PERMISSION_MODERATOR), 0 , 1000));
-        if ($count_users_group == 1 ) {
+        $count_users_group = count(
+            $usergroup->get_users_by_group(
+                $id,
+                false,
+                array(
+                    GROUP_USER_PERMISSION_ADMIN,
+                    GROUP_USER_PERMISSION_READER,
+                    GROUP_USER_PERMISSION_MODERATOR,
+                ),
+                0,
+                1000
+            )
+        );
+        if ($count_users_group == 1) {
             $count_users_group = $count_users_group.' '.get_lang('Member');
         } else {
             $count_users_group = $count_users_group.' '.get_lang('Members');
         }
 
-        $picture = $usergroup->get_picture_group($result['id'], $result['picture'],80);
+        $picture = $usergroup->get_picture_group(
+            $result['id'],
+            $result['picture'],
+            80
+        );
         $result['picture'] = '<img class="social-groups-image" src="'.$picture['file'].'" />';
 
         $members = Display::returnFontAwesomeIcon('user').$count_users_group;
@@ -146,21 +162,18 @@ foreach ($results as $result) {
     //Avoiding my groups
 
     if (!in_array($id,$my_group_list)) {
-        $html .= '<a class="btn" href="group_view.php?id='.$id.'&action=join&u='.api_get_user_id().'">'.get_lang('JoinGroup').'</a> ';
+        $html .= '<a class="btn btn-primary" href="group_view.php?id='.$id.'&action=join&u='.api_get_user_id().'">'.get_lang('JoinGroup').'</a> ';
     }
 
     $html .= '<div class="group-actions" >'.$join_url.'</div>';
     $html .= '</div>';
     $html .= '</div>';
-
-
     $grid_item_2 = $html;
-
-    $grid_newest_groups[]= array($grid_item_2);
+    $grid_newest_groups[] = array($grid_item_2);
 }
 
 // Pop groups
-$results = $usergroup->get_groups_by_popularity(4,false);
+$results = $usergroup->get_groups_by_popularity(4, false);
 $grid_pop_groups = array();
 
 if (is_array($results) && count($results) > 0) {
@@ -168,10 +181,22 @@ if (is_array($results) && count($results) > 0) {
         $result['name'] = Security::remove_XSS($result['name'], STUDENT, true);
         $result['description'] = Security::remove_XSS($result['description'], STUDENT, true);
         $id = $result['id'];
-        $name = cut($result['name'],GROUP_TITLE_LENGTH,true);
+        $name = cut($result['name'], GROUP_TITLE_LENGTH, true);
 
-        $count_users_group = count($usergroup->get_users_by_group($id, false, array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_READER, GROUP_USER_PERMISSION_MODERATOR), 0 , 1000));
-        if ($count_users_group == 1 ) {
+        $count_users_group = count(
+            $usergroup->get_users_by_group(
+                $id,
+                false,
+                array(
+                    GROUP_USER_PERMISSION_ADMIN,
+                    GROUP_USER_PERMISSION_READER,
+                    GROUP_USER_PERMISSION_MODERATOR,
+                ),
+                0,
+                1000
+            )
+        );
+        if ($count_users_group == 1) {
             $count_users_group = $count_users_group.' '.get_lang('Member');
         } else {
             $count_users_group = $count_users_group.' '.get_lang('Members');
@@ -197,9 +222,8 @@ if (is_array($results) && count($results) > 0) {
             $html .= '';
         }
         //Avoiding my groups
-
         if (!in_array($id,$my_group_list)) {
-            $html .= '<a class="btn" href="group_view.php?id='.$id.'&action=join&u='.api_get_user_id().'">'.get_lang('JoinGroup').'</a> ';
+            $html .= '<a class="btn btn-primary" href="group_view.php?id='.$id.'&action=join&u='.api_get_user_id().'">'.get_lang('JoinGroup').'</a> ';
         }
 
         $html .= '<div class="group-actions" >'.$join_url.'</div>';
@@ -213,15 +237,21 @@ if (is_array($results) && count($results) > 0) {
 
 // Display groups (newest, mygroups, pop)
 $query_vars = array();
-
 $newest_content = $popular_content = $my_group_content = null;
-
 if (isset($_GET['view']) && in_array($_GET['view'], $allowed_views)) {
     $view_group = $_GET['view'];
     switch ($view_group) {
         case 'mygroups':
             if (count($grid_my_groups) > 0) {
-                $my_group_content = Display::return_sortable_grid('mygroups', array(), $grid_my_groups, array('hide_navigation'=>true, 'per_page' => 2), $query_vars, false, array(true, true, true,false));
+                $my_group_content = Display::return_sortable_grid(
+                    'mygroups',
+                    array(),
+                    $grid_my_groups,
+                    array('hide_navigation' => true, 'per_page' => 2),
+                    $query_vars,
+                    false,
+                    array(true, true, true, false)
+                );
             }
             if (api_get_setting('allow_students_to_create_groups_in_social') == 'true') {
                 $create_group_item =  '<a class="btn btn-default" href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.

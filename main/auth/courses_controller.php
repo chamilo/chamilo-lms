@@ -217,35 +217,37 @@ class CoursesController
             return false;
         }
 
-        $message = '';
-        $error = '';
-        $content = '';
-        $result = [];
-
         // The course must be open in order to access the auto subscription
         if (in_array(
             $courseInfo['visibility'],
             array(COURSE_VISIBILITY_CLOSED, COURSE_VISIBILITY_REGISTERED, COURSE_VISIBILITY_HIDDEN))
         ) {
-            $error = get_lang('SubscribingNotAllowed');
+            Display::addFlash(
+                Display::return_message(
+                    get_lang('SubscribingNotAllowed'),
+                    'warning'
+                )
+            );
         } else {
+            // Redirect to subscription
+            if (api_is_anonymous()) {
+                header('Location: '.api_get_path(WEB_CODE_PATH).'auth/inscription.php&c='.$course_code);
+                exit;
+            }
             $result = $this->model->subscribe_user($course_code);
             if (!$result) {
-                $error = get_lang('CourseRegistrationCodeIncorrect');
+                Display::addFlash(
+                    Display::return_message(
+                        get_lang('CourseRegistrationCodeIncorrect'),
+                        'warning'
+                    )
+                );
             } else {
-                // Redirect directly to the course after subscription
-                $message = isset($result['message']) ? $result['message'] : '';
-                $content = isset($result['content']) ? $result['content'] : '';
+                Display::addFlash(
+                    Display::return_message($result['message'])
+                );
             }
         }
-
-        if (!empty($search_term)) {
-            $this->search_courses($search_term, $message, $error, $content);
-        } else {
-            $this->courses_categories('subscribe', $category_code, $message, $error, $content);
-        }
-
-        return $result;
     }
 
     /**
@@ -509,13 +511,21 @@ class CoursesController
      * @param string $sessionName The session name
      * @param boolean $checkRequirements Optional.
      *        Whether the session has requirement. Default is false
+     * @param bool $includeText Optional. Whether show the text in button
      * @return string The button HTML
      */
     public function getRegisteredInSessionButton(
         $sessionId,
         $sessionName,
-        $checkRequirements = false
+        $checkRequirements = false,
+        $includeText = false,
+        $btnBing = false
     ) {
+        if($btnBing){
+            $btnBing = 'btn-lg'; 
+        }else{
+            $btnBing = 'btn-sm';
+        }
         if ($checkRequirements) {
             $url = api_get_path(WEB_AJAX_PATH);
             $url .= 'sequence.ajax.php?';
@@ -526,16 +536,17 @@ class CoursesController
             ]);
 
             return Display::toolbarButton(
-                null,
+                get_lang('CheckRequirements'),
                 $url,
                 'shield',
                 'default',
                 [
-                    'class' => 'btn-sm ajax',
+                    'class' => $btnBing . ' ajax',
                     'data-title' => get_lang('CheckRequirements'),
                     'data-size' => 'md',
                     'title' => get_lang('CheckRequirements')
-                ]
+                ],
+                $includeText
             );
         }
 
@@ -555,16 +566,17 @@ class CoursesController
             ]);
 
             $result = Display::toolbarButton(
-                null,
+                get_lang('Subscribe'),
                 $url,
-                'sign-in',
-                'success',
+                'pencil',
+                'primary',
                 [
-                    'class' => 'btn-sm ajax',
+                    'class' => $btnBing .' ajax',
                     'data-title' => get_lang('AreYouSureToSubscribe'),
                     'data-size' => 'md',
                     'title' => get_lang('Subscribe')
-                ]
+                ],
+                $includeText
             );
         } else {
             $url .= 'inc/email_editor.php?';
@@ -574,11 +586,12 @@ class CoursesController
             ]);
 
             $result = Display::toolbarButton(
-                null,
+                get_lang('SubscribeToSessionRequest'),
                 $url,
-                'sign-in',
-                'success',
-                ['class' => 'btn-sm']
+                'pencil',
+                'primary',
+                ['class' => $btnBing],
+                $includeText
             );
         }
 
@@ -643,10 +656,14 @@ class CoursesController
             '';
         $sessionsBlocks = $this->getFormatedSessionsBlock($sessions);
 
-        // Get session list catalogue URL
-        //$sessionUrl = CourseCategory::getCourseCategoryUrl(1, $limit['length'], null, 0, 'display_sessions');
         // Get session search catalogue URL
-        $courseUrl = CourseCategory::getCourseCategoryUrl(1, $limit['length'], null, 0, 'subscribe');
+        $courseUrl = CourseCategory::getCourseCategoryUrl(
+            1,
+            $limit['length'],
+            null,
+            0,
+            'subscribe'
+        );
 
         $tpl = new Template();
         $tpl->assign('show_courses', CoursesAndSessionsCatalog::showCourses());

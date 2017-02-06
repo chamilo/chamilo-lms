@@ -102,9 +102,12 @@ if (!empty($results)) {
 
         $group_url = "group_view.php?id=$id";
 
-        $result['name'] = '<div class="group-name">'.Display::url(
-                          api_ucwords(cut($result['name'], 40, true)), $group_url)
-                          .'</div><div class="count-username">'.
+        $link = Display::url(
+            api_ucwords(cut($result['name'], 40, true)),
+            $group_url
+        );
+
+        $result['name'] = '<div class="group-name">'.$link.'</div><div class="count-username">'.
                             Display::returnFontAwesomeIcon('user').$result['count'].'</div>';
 
         $picture = $userGroup->get_picture_group(
@@ -115,7 +118,7 @@ if (!empty($results)) {
         );
 
         $result['picture'] = '<img class="img-responsive" src="' . $picture['file'] . '" />';
-        $group_actions = '<div class="group-more"><a href="groups.php?#tab_browse-2">' . get_lang('SeeMore') . '</a></div>';
+        $group_actions = '<div class="group-more"><a class="btn btn-default" href="groups.php?#tab_browse-2">' . get_lang('SeeMore') . '</a></div>';
         $group_info= '<div class="description"><p>' . cut($result['description'], 120, true) . "</p></div>";
         $groups_newest[] = array(
             Display::url(
@@ -158,7 +161,7 @@ foreach ($results as $result) {
         GROUP_IMAGE_SIZE_BIG
     );
     $result['picture_uri'] = '<img class="img-responsive" src="' . $picture['file'] . '" />';
-    $group_actions = '<div class="group-more" ><a href="groups.php?#tab_browse-3">' . get_lang('SeeMore') . '</a></div>';
+    $group_actions = '<div class="group-more"><a class="btn btn-default" href="groups.php?#tab_browse-3">' . get_lang('SeeMore') . '</a></div>';
     $group_info= '<div class="description"><p>' . cut($result['description'], 120, true) . "</p></div>";
     $groups_pop[] = array(
         Display::url($result['picture_uri'], $group_url),
@@ -171,7 +174,7 @@ $social_group_block = null;
 if ($list > 0) {
     $social_group_block .= '<div class="list-group-newest">';
     $social_group_block .= '<div class="group-title">' . get_lang('Newest') . '</div>';
-    for ($i = 0;$i < $list; $i++) {
+    for ($i = 0; $i < $list; $i++) {
         $social_group_block.='<div class="row">';
         $social_group_block.='<div class="col-md-3">' . $groups_newest[$i][0] . '</div>';
         $social_group_block.='<div class="col-md-9">' . $groups_newest[$i][1];
@@ -185,7 +188,7 @@ if ($list > 0) {
     $social_group_block .= '<div class="list-group-newest">';
     $social_group_block .= '<div class="group-title">' . get_lang('Popular') . '</div>';
 
-    for ($i = 0;$i < $list; $i++) {
+    for ($i = 0; $i < $list; $i++) {
         $social_group_block.='<div class="row">';
         $social_group_block.='<div class="col-md-3">' . $groups_pop[$i][0] . '</div>';
         $social_group_block.='<div class="col-md-9">' . $groups_pop[$i][1];

@@ -348,14 +348,14 @@ class ImportCsv
 
         $row['teachers'] = array();
         if (isset($row['Teacher']) && !empty($row['Teacher'])) {
-            //$this->logger->addInfo("Teacher list found: ".$row['Teacher']);
+            $this->logger->addInfo("Teacher list found: ".$row['Teacher']);
             $teachers = explode(',', $row['Teacher']);
             if (!empty($teachers)) {
                 foreach ($teachers as $teacherUserName) {
                     $teacherUserName = trim($teacherUserName);
                     $userInfo = api_get_user_info_from_username($teacherUserName);
                     if (!empty($userInfo)) {
-                        //$this->logger->addInfo("Username found: $teacherUserName");
+                        $this->logger->addInfo("Username found: $teacherUserName");
                         $row['teachers'][] = $userInfo['user_id'];
                     }
                 }
@@ -830,7 +830,6 @@ class ImportCsv
 
                 if (empty($teacherId)) {
                     $errorFound = true;
-
                     $this->logger->addInfo(
                         "No teacher found in course code : '$courseCode' and session: '$sessionId'"
                     );
@@ -856,11 +855,6 @@ class ImportCsv
                     );
                     $errorFound = true;
                 }
-
-                // If old events do nothing.
-                /*if (api_strtotime($startDate) < time()) {
-                    continue;
-                }*/
 
                 if ($errorFound == false) {
                     $eventsToCreate[] = array(
@@ -919,6 +913,7 @@ class ImportCsv
             ];
 
             $eventsToCreateFinal = [];
+
             foreach ($eventsToCreate as $event) {
                 $update = false;
                 $item = null;
@@ -945,15 +940,7 @@ class ImportCsv
                     );
 
                     if (!empty($item)) {
-                        $this->logger->addInfo(
-                            "Event #$externalEventId was already added. Updating ..."
-                        );
                         $update = true;
-                        //continue;
-                    } else {
-                        $this->logger->addInfo(
-                            "Event #$externalEventId was not added. Preparing to be created ..."
-                        );
                     }
                 }
 
@@ -987,6 +974,8 @@ class ImportCsv
                 $update = $event['update'];
                 $externalEventId = $event['external_event_id'];
 
+                $info = 'Course: '.$courseInfo['real_id'].' ('.$courseInfo['code'].') - Session: '.$event['session_id'];
+
                 $agenda = new Agenda(
                     'course',
                     $event['sender_id'],
@@ -1004,17 +993,16 @@ class ImportCsv
                 // To use the event comment you need
                 // ALTER TABLE c_calendar_event ADD COLUMN comment TEXT;
                 // add in configuration.php allow_agenda_event_comment = true
-
                 if (empty($courseInfo)) {
                     $this->logger->addInfo(
-                        "No course found for added: #".$event['course_id']." Skipping ..."
+                        "No course found for event #$externalEventId Course #".$event['course_id']." Skipping ..."
                     );
                     continue;
                 }
 
                 if (empty($event['sender_id'])) {
                     $this->logger->addInfo(
-                        "No sender found: #".$event['sender_id']." Skipping ..."
+                        "No sender found for event #$externalEventId Send #".$event['sender_id']." Skipping ..."
                     );
                     continue;
                 }
@@ -1037,7 +1025,7 @@ class ImportCsv
                 $startDatePlusDays = api_strtotime("$days weekdays");
 
                 $this->logger->addInfo(
-                    "startDatePlusDays: ".$startDatePlusDays.' - First date: '.$firstDate
+                    "startDatePlusDays: ".api_get_utc_datetime($startDatePlusDays).' - First date: '.$firstDate
                 );
 
                 // Send
@@ -1098,7 +1086,7 @@ class ImportCsv
 
                     if (count($announcementsWithTitleList) == 0) {
                         $this->logger->addInfo(
-                            "Mail to be sent because start date: ".$event['start']
+                            "Mail to be sent because start date: ".$event['start']." and no announcement found."
                         );
                         $announcementId = AnnouncementManager::add_announcement(
                             $courseInfo,
@@ -1118,7 +1106,7 @@ class ImportCsv
 
                         if ($announcementId) {
                             $this->logger->addInfo(
-                                "Announcement added: ".(int)($announcementId)
+                                "Announcement added: ".(int)($announcementId)." in $info"
                             );
                             $this->logger->addInfo(
                                 "<<--SENDING MAIL-->>"
@@ -1135,7 +1123,7 @@ class ImportCsv
                     } else {
                         $report['mail_not_sent_announcement_exists']++;
                         $this->logger->addInfo(
-                            "Mail NOT sent an announcement seems to be already saved in this course-session"
+                            "Mail NOT sent. An announcement seems to be already saved in $info"
                         );
                     }
                 } else {
@@ -1165,11 +1153,11 @@ class ImportCsv
 
                     if ($eventResult !== false) {
                         $this->logger->addInfo(
-                            "Event updated: #".$item['item_id']
+                            "Event updated #".$item['item_id']." External cal Id: (".$externalEventId.") $info"
                         );
                     } else {
                         $this->logger->addInfo(
-                            "Error while updating event."
+                            "Error while updating event with external id: $externalEventId"
                         );
                     }
                 } else {
@@ -1199,11 +1187,11 @@ class ImportCsv
                             )
                         );
                         $this->logger->addInfo(
-                            "Event added: #$eventId"
+                            "Event added: #$eventId External cal id: (".$externalEventId.") $info"
                         );
                     } else {
                         $this->logger->addInfo(
-                            "Error while creating event."
+                            "Error while creating event external id: $externalEventId"
                         );
                     }
                 }
@@ -1314,7 +1302,7 @@ class ImportCsv
                         CourseManager::updateTeachers(
                             $courseInfo,
                             $row['teachers'],
-                            true,
+                            false,
                             false,
                             false,
                             $teacherBackup
@@ -1886,7 +1874,7 @@ class ImportCsv
             false, // updateCourseCoaches
             true, // sessionWithCoursesModifier
             true, //$addOriginalCourseTeachersAsCourseSessionCoaches
-            true, //$removeAllTeachersFromCourse
+            false, //$removeAllTeachersFromCourse
             1, // $showDescription,
             $teacherBackup,
             $groupBackup

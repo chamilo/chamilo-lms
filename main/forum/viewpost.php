@@ -85,10 +85,7 @@ if ($origin == 'learnpath') {
 if (!api_is_allowed_to_edit(false, true) &&
     ($current_forum['visibility'] == 0 || $current_thread['visibility'] == 0)
 ) {
-    $forum_allow = forum_not_allowed_here();
-    if ($forum_allow === false) {
-        exit;
-    }
+    api_not_allowed(false);
 }
 
 /* Actions */

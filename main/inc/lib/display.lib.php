@@ -2007,9 +2007,24 @@ class Display
     }
 
     /**
+     * @param array $buttons
+     * @return string
+     */
+    public static function groupButton($buttons)
+    {
+        $html = '<div class="btn-group" role="group">';
+        foreach ($buttons as $button) {
+            $html .= $button;
+        }
+        $html .= '</div>';
+
+        return $html;
+    }
+
+    /**
      * @todo use twig
      */
-    public static function group_button($title, $elements)
+    public static function groupButtonWithDropDown($title, $elements)
     {
         $html = '<div class="btn-group">
                 <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -2321,15 +2336,15 @@ class Display
      *
      * @return string
      */
-    public static function panel($content, $title = '', $footer = '', $style = '', $extra = '', $id = '')
+    public static function panel($content, $title = '', $footer = '', $style = '', $extra = '')
     {
         $title = !empty($title) ? '<div class="panel-heading"><h3 class="panel-title">'.$title.'</h3>'.$extra.'</div>' : '';
         $footer = !empty($footer) ? '<div class="panel-footer ">'.$footer.'</div>' : '';
-        $styles = ['primary','success','info','warning','danger'];
+        $styles = ['primary', 'success', 'info', 'warning', 'danger'];
         $style = !in_array($style, $styles) ? 'default' : $style;
 
         return '
-            <div id = '.$id.' class="panel panel-'.$style.'">
+            <div class="panel panel-'.$style.'">
                 '.$title.'
                 '.self::contentPanel($content).'
                 '.$footer.'
@@ -2355,6 +2370,8 @@ class Display
      * @param string $icon The Awesome Font class for icon
      * @param string $type Optional. The button Bootstrap class. Default 'default' class
      * @param array $attributes The additional attributes
+     * @param bool $includeText
+     *
      * @return string The button HTML
      */
     public static function toolbarButton(
@@ -2522,7 +2539,7 @@ HTML;
 
     /**
      * Returns the string "1 day ago" with a link showing the exact date time.
-     * @param string $dateTime in UTC
+     * @param string $dateTime in UTC or a DateTime in UTC
      *
      * @return string
      */
@@ -2532,10 +2549,51 @@ HTML;
             return '';
         }
 
+        if ($dateTime instanceof \DateTime) {
+            $dateTime = $dateTime->format('Y-m-d H:i:s');
+        }
+
         return self::tip(
             date_to_str_ago($dateTime),
             api_get_local_time($dateTime)
         );
+    }
+
+    /**
+     * @param $userInfo
+     * @param string $status
+     * @param string $toolbar
+     * @return string
+     */
+    public static function getUserCard($userInfo, $status= '', $toolbar = '')
+    {
+        if (!empty($status)) {
+            $status = '<div class="items-user-status">'.$status.'</div>';
+        }
+
+        if (!empty($toolbar)) {
+            $toolbar = '<div class="btn-group pull-right">'.$toolbar.'</div>';
+        }
+
+        return '<div class="col-md-12">                    
+                    <div class="row">
+                        <div class="col-md-2">                            
+                            <img src="'.$userInfo['avatar'].'" class="img-responsive img-circle">
+                        </div>
+                        <div class="col-md-10">
+                           <p>'.$userInfo['complete_name'].'</p>
+                           <div class="row">
+                           <div class="col-md-2">
+                           '.$status.'
+                           </div>
+                           <div class="col-md-10">                           
+                           '.$toolbar.'
+                           </div>
+                           </div>
+                        </div>
+                    </div>
+                    <hr />
+              </div>';
     }
 
     public static function iconAnswer($typeAnswer){

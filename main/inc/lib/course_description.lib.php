@@ -178,7 +178,13 @@ class CourseDescription
 		        WHERE c_id = $course_id AND session_id='" . $this->session_id . "'";
         $rs = Database::query($sql);
         $max = Database::fetch_array($rs);
-        $description_type = $max['MAX'] + 1;
+
+        if ($max['MAX'] >= 8) {
+            $description_type = 8;
+        } else {
+            $description_type = $max['MAX'] + 1;
+        }
+
         if ($description_type < ADD_BLOCK) {
             $description_type = ADD_BLOCK;
         }

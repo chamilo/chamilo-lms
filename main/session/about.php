@@ -3,12 +3,16 @@
 
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
-use \Chamilo\CoreBundle\Entity\SequenceResource;
+use Chamilo\CoreBundle\Entity\SequenceResource;
+use Chamilo\UserBundle\Entity\Repository\UserRepository;
+use Chamilo\UserBundle\Entity\User;
 
 /**
  * Session about page
  * Show information about a session and its courses
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
+ * @author Julio Montoya
+ *
  * @package chamilo.session
  */
 
@@ -18,20 +22,21 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $sessionId = isset($_GET['session_id']) ? intval($_GET['session_id']) : 0;
 
-$entityManager = Database::getManager();
+$em = Database::getManager();
 
-$session = $entityManager->find('ChamiloCoreBundle:Session', $sessionId);
+$session = $em->find('ChamiloCoreBundle:Session', $sessionId);
 
 if (!$session) {
     api_not_allowed(true);
 }
 
 $courses = [];
-$sessionCourses = $entityManager->getRepository('ChamiloCoreBundle:Session')->getCoursesOrderedByPosition($session);
-$fieldsRepo = $entityManager->getRepository('ChamiloCoreBundle:ExtraField');
-$fieldTagsRepo = $entityManager->getRepository('ChamiloCoreBundle:ExtraFieldRelTag');
-$userRepo = $entityManager->getRepository('ChamiloUserBundle:User');
-$sequenceResourceRepo = $entityManager->getRepository('ChamiloCoreBundle:SequenceResource');
+$sessionCourses = $em->getRepository('ChamiloCoreBundle:Session')->getCoursesOrderedByPosition($session);
+$fieldsRepo = $em->getRepository('ChamiloCoreBundle:ExtraField');
+$fieldTagsRepo = $em->getRepository('ChamiloCoreBundle:ExtraFieldRelTag');
+/** @var UserRepository $userRepo */
+$userRepo = $em->getRepository('ChamiloUserBundle:User');
+$sequenceResourceRepo = $em->getRepository('ChamiloCoreBundle:SequenceResource');
 
 $tagField = $fieldsRepo->findOneBy([
     'extraFieldType' => ExtraField::COURSE_FIELD_TYPE,
@@ -51,18 +56,25 @@ foreach ($sessionCourses as $sessionCourse) {
 
     $courseCoaches = $userRepo->getCoachesForSessionCourse($session, $sessionCourse);
     $coachesData = [];
-
+    /** @var User $courseCoach */
     foreach ($courseCoaches as $courseCoach) {
         $coachData = [
             'complete_name' => $courseCoach->getCompleteName(),
-            'image' => UserManager::getUserPicture($courseCoach->getId(), USER_IMAGE_SIZE_ORIGINAL),
-            'extra_fields' => $userValues->getAllValuesForAnItem($courseCoach->getId(), true)
+            'image' => UserManager::getUserPicture(
+                $courseCoach->getId(),
+                USER_IMAGE_SIZE_ORIGINAL
+            ),
+            'extra_fields' => $userValues->getAllValuesForAnItem(
+                $courseCoach->getId(),
+                null,
+                true
+            ),
         ];
 
         $coachesData[] = $coachData;
     }
 
-    $courseDescriptionTools = $entityManager->getRepository('ChamiloCourseBundle:CCourseDescription')
+    $courseDescriptionTools = $em->getRepository('ChamiloCourseBundle:CCourseDescription')
         ->findBy(
             [
                 'cId' => $sessionCourse->getId(),
@@ -74,7 +86,8 @@ foreach ($sessionCourses as $sessionCourse) {
             ]
         );
 
-    $courseDescription = $courseObjectives = $courseTopics = null;
+    $courseDescription = $courseObjectives = $courseTopics = $courseMethodology = $courseMaterial = $courseResources = $courseAssesment = null;
+    $courseCustom = [];
 
     foreach ($courseDescriptionTools as $descriptionTool) {
         switch ($descriptionTool->getDescriptionType()) {
@@ -87,6 +100,21 @@ foreach ($sessionCourses as $sessionCourse) {
             case CCourseDescription::TYPE_TOPICS:
                 $courseTopics = $descriptionTool;
                 break;
+            case CCourseDescription::TYPE_METHODOLOGY:
+                $courseMethodology = $descriptionTool;
+                break;
+            case CCourseDescription::TYPE_COURSE_MATERIAL:
+                $courseMaterial = $descriptionTool;
+                break;
+            case CCourseDescription::TYPE_RESOURCES:
+                $courseResources = $descriptionTool;
+                break;
+            case CCourseDescription::TYPE_ASSESMENT:
+                $courseAssesment = $descriptionTool;
+                break;
+            case CCourseDescription::TYPE_CUSTOM:
+                $courseCustom[] = $descriptionTool;
+                break;
         }
     }
 
@@ -96,8 +124,13 @@ foreach ($sessionCourses as $sessionCourse) {
         'tags' => $courseTags,
         'objectives' => $courseObjectives,
         'topics' => $courseTopics,
+        'methodology' => $courseMethodology,
+        'material' => $courseMaterial,
+        'resources' => $courseResources,
+        'assesment' => $courseAssesment,
+        'custom' => array_reverse($courseCustom),
         'coaches' => $coachesData,
-        'extra_fields' => $courseValues->getAllValuesForAnItem($sessionCourse->getId())
+        'extra_fields' => $courseValues->getAllValuesForAnItem($sessionCourse->getId(), null, true)
     ];
 }
 
@@ -116,7 +149,6 @@ $sessionRequirements = $sequenceResourceRepo->getRequirements(
 );
 
 $hasRequirements = false;
-
 foreach ($sessionRequirements as $sequence) {
     if (!empty($sequence['requirements'])) {
         $hasRequirements = true;
@@ -129,7 +161,7 @@ $courseController = new CoursesController();
 /* View */
 $template = new Template($session->getName(), true, true, false, true, false);
 $template->assign('show_tutor', (api_get_setting('show_session_coach')==='true' ? true : false));
-$template->assign('pageUrl', api_get_path(WEB_PATH) . "session/{$session->getId()}/about/");
+$template->assign('page_url', api_get_path(WEB_PATH) . "session/{$session->getId()}/about/");
 $template->assign('session', $session);
 $template->assign('session_date', $sessionDates);
 $template->assign(
@@ -144,17 +176,26 @@ $template->assign(
     $courseController->getRegisteredInSessionButton(
         $session->getId(),
         $session->getName(),
-        $hasRequirements
+        $hasRequirements,
+        true,
+        true
     )
 );
 
+$redirectToSession = api_get_configuration_value('allow_redirect_to_session_after_inscription_about');
+$redirectToSession = $redirectToSession ? '?s=' . $sessionId : false;
+
+$coursesInThisSession = SessionManager::get_course_list_by_session_id($sessionId);
+$coursesCount = count($coursesInThisSession);
+$redirectToSession = $coursesCount == 1 ? $redirectToSession . '&cr=' . array_values($coursesInThisSession)[0]['directory'] : $redirectToSession;
+
+$template->assign('redirect_to_session', $redirectToSession);
 $template->assign('courses', $courses);
-//$essence = new Essence\Essence();
-$essence =  Essence\Essence::instance( );
+$essence =  Essence\Essence::instance();
 $template->assign('essence', $essence);
 $template->assign(
     'session_extra_fields',
-    $sessionValues->getAllValuesForAnItem($session->getId(), true)
+    $sessionValues->getAllValuesForAnItem($session->getId(), null, true)
 );
 $template->assign('has_requirements', $hasRequirements);
 $template->assign('sequences', $sessionRequirements);
@@ -162,9 +203,7 @@ $template->assign('sequences', $sessionRequirements);
 $templateFolder = api_get_configuration_value('default_template');
 
 $layout = $template->get_template('session/about.tpl');
-
 $content = $template->fetch($layout);
-
 $template->assign('header', $session->getName());
 $template->assign('content', $content);
 $template->display_one_col_template();

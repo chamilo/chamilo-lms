@@ -855,9 +855,13 @@ function api_get_path($path = '', $configuration = [])
         if (!empty($virtualChamilo)) {
             $paths[$root_web][SYS_ARCHIVE_PATH] = api_add_trailing_slash($virtualChamilo[SYS_ARCHIVE_PATH]);
             $paths[$root_web][SYS_HOME_PATH] = api_add_trailing_slash($virtualChamilo[SYS_HOME_PATH]);
-            $paths[$root_web][WEB_HOME_PATH] = api_add_trailing_slash($virtualChamilo[WEB_HOME_PATH]);
             $paths[$root_web][SYS_COURSE_PATH] = api_add_trailing_slash($virtualChamilo[SYS_COURSE_PATH]);
             $paths[$root_web][SYS_UPLOAD_PATH] = api_add_trailing_slash($virtualChamilo[SYS_UPLOAD_PATH]);
+
+            $paths[$root_web][WEB_HOME_PATH] = api_add_trailing_slash($virtualChamilo[WEB_HOME_PATH]);
+            $paths[$root_web][WEB_UPLOAD_PATH] = api_add_trailing_slash($virtualChamilo[WEB_UPLOAD_PATH]);
+            $paths[$root_web][WEB_ARCHIVE_PATH] = api_add_trailing_slash($virtualChamilo[WEB_ARCHIVE_PATH]);
+            //$paths[$root_web][WEB_COURSE_PATH] = api_add_trailing_slash($virtualChamilo[WEB_COURSE_PATH]);
 
             // WEB_UPLOAD_PATH should be handle by apache htaccess in the vhost
 
@@ -2353,7 +2357,7 @@ function api_get_setting($variable, $key = null)
 {
     global $_setting;
     if ($variable == 'header_extra_content') {
-        $filename = api_get_path(SYS_PATH).api_get_home_path().'header_extra_content.txt';
+        $filename = api_get_home_path().'header_extra_content.txt';
         if (file_exists($filename)) {
             $value = file_get_contents($filename);
             return $value;
@@ -2362,7 +2366,7 @@ function api_get_setting($variable, $key = null)
         }
     }
     if ($variable == 'footer_extra_content') {
-        $filename = api_get_path(SYS_PATH).api_get_home_path().'footer_extra_content.txt';
+        $filename = api_get_home_path().'footer_extra_content.txt';
         if (file_exists($filename)) {
             $value = file_get_contents($filename);
             return $value;
@@ -3194,16 +3198,14 @@ function api_not_allowed($print_headers = false, $message = null)
     global $this_section;
 
     if (CustomPages::enabled() && !isset($user_id)) {
-
         if (empty($user_id)) {
             // Why the CustomPages::enabled() need to be to set the request_uri
             $_SESSION['request_uri'] = $_SERVER['REQUEST_URI'];
         }
-
         CustomPages::display(CustomPages::INDEX_UNLOGGED);
     }
 
-    $origin = isset($_GET['origin']) ? $_GET['origin'] : '';
+    $origin = api_get_origin();
 
     $msg = null;
     if (isset($message)) {
@@ -7852,10 +7854,8 @@ function api_mail_html(
     if (isset($additionalParameters['link'])) {
         $mailView->assign('link', $additionalParameters['link']);
     }
-    $mailView->assign(
-        'mail_header_style',
-        api_get_configuration_value('mail_header_style')
-    );
+    $mailView->assign('mail_header_style',api_get_configuration_value('mail_header_style'));
+    $mailView->assign('mail_content_style',api_get_configuration_value('mail_content_style'));
     $layout = $mailView->get_template('mail/mail.tpl');
     $mail->Body = $mailView->fetch($layout);
 

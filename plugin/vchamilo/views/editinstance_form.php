@@ -415,6 +415,11 @@ class InstanceForm extends ChamiloForm
             'onclick="opencnxpopup(\''.$_configuration['root_web'].'\'); return false;"'
         );
 
+        $form->addText('archive_url', $this->_plugin->get_lang('ArchiveUrl'));
+        $form->addText('home_url', $this->_plugin->get_lang('HomeUrl'));
+        $form->addText('upload_url', $this->_plugin->get_lang('UploadUrl'));
+        //$form->addText('course_url', $this->_plugin->get_lang('CourseUrl'));
+
         /**
          * Template selection.
          */

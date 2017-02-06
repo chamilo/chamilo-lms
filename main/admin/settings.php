@@ -278,12 +278,12 @@ if (!empty($_GET['category']) &&
                 $old_value = api_get_setting($key);
                 switch ($key) {
                     case 'header_extra_content':
-                        file_put_contents(api_get_path(SYS_PATH).api_get_home_path().'/header_extra_content.txt', $value);
-                        $value = api_get_home_path().'/header_extra_content.txt';
+                        file_put_contents(api_get_home_path().'header_extra_content.txt', $value);
+                        $value = api_get_home_path().'header_extra_content.txt';
                         break;
                     case 'footer_extra_content':
-                        file_put_contents(api_get_path(SYS_PATH).api_get_home_path().'/footer_extra_content.txt', $value);
-                        $value = api_get_home_path().'/footer_extra_content.txt';
+                        file_put_contents(api_get_home_path().'footer_extra_content.txt', $value);
+                        $value = api_get_home_path().'footer_extra_content.txt';
                         break;
                     case 'InstitutionUrl':
                     case 'course_validation_terms_and_conditions_url':

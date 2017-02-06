@@ -59,6 +59,25 @@ $groupId = api_get_group_id();
 $group_properties = GroupManager::get_group_properties($groupId);
 $sessionId = api_get_session_id();
 
+$ajaxURL = api_get_path(WEB_AJAX_PATH).'forum.ajax.php?'.api_get_cidreq().'&a=change_post_status';
+$htmlHeadXtra[] = '<script>
+$(function() {
+    $("span").on("click", ".change_post_status", function() {
+        var updateDiv = $(this).parent();
+        var postId = updateDiv.attr("id");
+                
+        $.ajax({
+            url: "'.$ajaxURL.'&post_id="+postId,
+            type: "GET",
+            success: function(data) {
+                updateDiv.html(data);
+            }                
+        });
+    });  
+});
+    
+</script>';
+
 if ($origin == 'group') {
     $interbreadcrumb[] = array(
         'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
@@ -113,10 +132,7 @@ if (
     !api_is_allowed_to_edit(false, true) &&
     ($current_forum['visibility'] == 0 || $current_thread['visibility'] == 0)
 ) {
-    $forum_allow = forum_not_allowed_here();
-    if ($forum_allow === false) {
-        exit;
-    }
+    api_not_allowed(false);
 }
 
 /* Actions */
@@ -220,7 +236,6 @@ if ($my_message != 'PostDeletedSpecial') {
     echo '</div>&nbsp;';
 
     /* Display Forum Category and the Forum information */
-
     if (!isset($_SESSION['view'])) {
         $viewMode = $current_forum['default_view'];
     } else {

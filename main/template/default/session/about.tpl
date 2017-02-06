@@ -46,9 +46,13 @@
         </div>
     {% endif %}
 
-    {% if is_subscribed %}
+    {% if is_subscribed and user_session_time != -0 %}
         <div class="alert alert-info">
             {{ 'AlreadyRegisteredToSession'|get_lang }}
+        </div>
+    {% elseif is_subscribed and user_session_time < 1 %}
+        <div class="alert alert-warning">
+            {{ 'YourSessionTimeIsExpired'|get_lang }}
         </div>
     {% endif %}
 

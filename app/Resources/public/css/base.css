@@ -1910,6 +1910,10 @@ div.admin_section h4 {
   font-size: 22px;
   margin: 0;
 }
+.question_row_answer img {
+    max-width: 80%;
+    height: auto !important;
+}
 .ribbon {
     float:left;
     width:100%;

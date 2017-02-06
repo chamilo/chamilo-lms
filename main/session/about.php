@@ -181,6 +181,15 @@ $template->assign(
         true
     )
 );
+$template->assign(
+    'user_session_time',
+    SessionManager::getDayLeftInSession(
+        $session->getId(),
+        api_get_user_id(),
+        $session->getDuration()
+    )
+
+);
 
 $redirectToSession = api_get_configuration_value('allow_redirect_to_session_after_inscription_about');
 $redirectToSession = $redirectToSession ? '?s=' . $sessionId : false;

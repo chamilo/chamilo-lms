@@ -532,7 +532,7 @@ class CourseManager
         $courseInfo = api_get_course_info($course_code);
         $courseId = $courseInfo['real_id'];
         $courseCode = $courseInfo['code'];
-        //$userCourseCategoryId = intval($userCourseCategoryId);
+        $userCourseCategoryId = intval($userCourseCategoryId);
 
         if (empty($user_id) || empty($course_code)) {
             return false;
@@ -570,7 +570,12 @@ class CourseManager
         if (!empty($session_id)) {
             SessionManager::subscribe_users_to_session_course(array($user_id), $session_id, $courseCode);
         } else {
-            CourseManager::add_user_to_course($user_id, $courseCode, $status);
+            CourseManager::add_user_to_course(
+                $user_id,
+                $courseCode,
+                $status,
+                $userCourseCategoryId
+            );
 
             // Add event to the system log
             Event::addEvent(
@@ -728,7 +733,7 @@ class CourseManager
             'status' => $status,
             'sort' => $max_sort + 1,
             'relation_type' => 0,
-            'user_course_cat' => $userCourseCategoryId
+            'user_course_cat' => (int) $userCourseCategoryId
         ];
         $insertId = Database::insert($course_user_table, $params);
 

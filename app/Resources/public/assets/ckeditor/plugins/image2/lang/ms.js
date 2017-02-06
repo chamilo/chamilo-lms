@@ -13,5 +13,5 @@
     title: "Ciri-ciri Imej",
     uploadTab: "Muat Naik",
     urlMissing: "Image source URL is missing.",
-    responsive: 'Is responsive'
+    responsive: "Make responsive"
 });

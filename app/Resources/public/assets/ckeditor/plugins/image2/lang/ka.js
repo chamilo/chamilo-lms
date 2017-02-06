@@ -13,5 +13,5 @@
     title: "სურათის პარამეტრები",
     uploadTab: "აქაჩვა",
     urlMissing: "სურათის URL არაა შევსებული.",
-    responsive: 'Is responsive'
+    responsive: "Make responsive"
 });

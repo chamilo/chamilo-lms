@@ -13,5 +13,5 @@
     title: "ચિત્રના ગુણ",
     uploadTab: "અપલોડ",
     urlMissing: "ઈમેજની મૂળ URL છે નહી.",
-    responsive: 'Is responsive'
+    responsive: "Make responsive"
 });

@@ -13,5 +13,5 @@
     title: "Vaizdo savybės",
     uploadTab: "Siųsti",
     urlMissing: "Paveiksliuko nuorodos nėra.",
-    responsive: 'Is responsive'
+    responsive: "Make responsive"
 });

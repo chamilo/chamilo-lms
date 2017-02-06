@@ -13,5 +13,5 @@
     title: "රුපයේ ",
     uploadTab: "උඩුගතකිරීම",
     urlMissing: "රුප මුලාශ්‍ර URL නැත.",
-    responsive: 'Is responsive'
+    responsive: "Make responsive"
 });

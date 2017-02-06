@@ -13,5 +13,5 @@
     title: "Pildi omadused",
     uploadTab: "Lae üles",
     urlMissing: "Pildi lähte-URL on puudu.",
-    responsive: 'Is responsive'
+    responsive: "Make responsive"
 });

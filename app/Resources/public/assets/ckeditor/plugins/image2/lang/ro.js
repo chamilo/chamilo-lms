@@ -13,5 +13,5 @@
     title: "Proprietăţile imaginii",
     uploadTab: "Încarcă",
     urlMissing: "Sursa URL a imaginii lipsește.",
-    responsive: 'Is responsive'
+    responsive: "Make responsive"
 });

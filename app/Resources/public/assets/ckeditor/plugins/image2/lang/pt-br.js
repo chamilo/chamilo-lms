@@ -13,5 +13,5 @@
     title: "Formatar Imagem",
     uploadTab: "Enviar ao Servidor",
     urlMissing: "URL da imagem está faltando.",
-    responsive: 'Is responsive'
+    responsive: "Make responsive"
 });

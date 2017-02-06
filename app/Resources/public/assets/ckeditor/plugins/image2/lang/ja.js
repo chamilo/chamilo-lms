@@ -13,5 +13,5 @@
     title: "画像のプロパティ",
     uploadTab: "アップロード",
     urlMissing: "画像のURLを入力してください。",
-    responsive: 'Is responsive'
+    responsive: "Make responsive"
 });

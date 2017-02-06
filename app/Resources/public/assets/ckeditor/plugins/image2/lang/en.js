@@ -13,5 +13,5 @@
     title: "Image Properties",
     uploadTab: "Upload",
     urlMissing: "Image source URL is missing.",
-    responsive: 'Make responsive'
+    responsive: "Make responsive"
 });

@@ -525,7 +525,7 @@ CKEDITOR.dialog.add( 'image2', function( editor ) {
                     {
                         id: 'isReponsive',
                         type: 'checkbox',
-                        label: lang.reponsive,
+                        label: lang.responsive,
                         requiredContent: features.caption.requiredContent,
                         setup: function( widget ) {
                             this.setValue( widget.data.isResponsive );

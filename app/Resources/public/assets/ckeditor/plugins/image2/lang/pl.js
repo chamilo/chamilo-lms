@@ -13,5 +13,5 @@
     title: "Właściwości obrazka",
     uploadTab: "Wyślij",
     urlMissing: "Podaj adres URL obrazka.",
-    responsive: 'Is responsive'
+    responsive: "Make responsive"
 });

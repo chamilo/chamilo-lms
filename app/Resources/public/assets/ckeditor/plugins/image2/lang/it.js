@@ -13,5 +13,5 @@
     title: "Proprietà immagine",
     uploadTab: "Carica",
     urlMissing: "Manca l'URL dell'immagine.",
-    responsive: 'Is responsive'
+    responsive: "Make responsive"
 });

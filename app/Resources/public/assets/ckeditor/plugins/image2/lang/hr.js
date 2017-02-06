@@ -13,5 +13,5 @@
     title: "Svojstva slika",
     uploadTab: "Pošalji",
     urlMissing: "Nedostaje URL slike.",
-    responsive: 'Is responsive'
+    responsive: "Make responsive"
 });

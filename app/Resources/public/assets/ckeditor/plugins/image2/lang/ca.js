@@ -13,5 +13,5 @@
     title: "Propietats de la imatge",
     uploadTab: "Puja",
     urlMissing: "Falta la URL de la imatge.",
-    responsive: 'Is responsive'
+    responsive: "Make responsive"
 });

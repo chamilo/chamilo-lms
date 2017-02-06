@@ -13,5 +13,5 @@
     title: "Propiedades da imaxe",
     uploadTab: "Cargar",
     urlMissing: "Non se atopa o URL da imaxe.",
-    responsive: 'Is responsive'
+    responsive: "Make responsive"
 });

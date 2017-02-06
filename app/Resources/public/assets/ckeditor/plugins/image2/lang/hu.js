@@ -13,5 +13,5 @@
     title: "Kép tulajdonságai",
     uploadTab: "Feltöltés",
     urlMissing: "Hiányzik a kép URL-je",
-    responsive: 'Is responsive'
+    responsive: "Make responsive"
 });

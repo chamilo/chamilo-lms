@@ -13,5 +13,5 @@
     title: "Ιδιότητες Εικόνας",
     uploadTab: "Αποστολή",
     urlMissing: "Λείπει το πηγαίο URL της εικόνας.",
-    responsive: 'Is responsive'
+    responsive: "Make responsive"
 });

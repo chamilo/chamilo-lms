@@ -13,5 +13,5 @@
     title: "ویژگی​های تصویر",
     uploadTab: "بالاگذاری",
     urlMissing: "آدرس URL اصلی تصویر یافت نشد.",
-    responsive: 'Is responsive'
+    responsive: "Make responsive"
 });

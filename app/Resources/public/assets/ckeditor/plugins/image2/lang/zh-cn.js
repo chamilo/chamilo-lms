@@ -13,5 +13,5 @@
     title: "图像属性",
     uploadTab: "上传",
     urlMissing: "缺少图像源文件地址",
-    responsive: 'Is responsive'
+    responsive: "Make responsive"
 });

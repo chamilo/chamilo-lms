@@ -13,5 +13,5 @@
     title: "Afbeeldingseigenschappen",
     uploadTab: "Uploaden",
     urlMissing: "De URL naar de afbeelding ontbreekt.",
-    responsive: 'Is responsive'
+    responsive: "Responsive doen"
 });

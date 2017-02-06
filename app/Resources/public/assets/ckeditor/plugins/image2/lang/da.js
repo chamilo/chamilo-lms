@@ -13,5 +13,5 @@
     title: "Egenskaber for billede",
     uploadTab: "Upload",
     urlMissing: "Kilde på billed-URL mangler",
-    responsive: 'Is responsive'
+    responsive: "Make responsive"
 });

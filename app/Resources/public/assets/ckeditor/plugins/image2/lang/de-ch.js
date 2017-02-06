@@ -13,5 +13,5 @@
     title: "Bild-Eigenschaften",
     uploadTab: "Hochladen",
     urlMissing: "Bildquellen-URL fehlt.",
-    responsive: 'Is responsive'
+    responsive: "Responsive machen"
 });

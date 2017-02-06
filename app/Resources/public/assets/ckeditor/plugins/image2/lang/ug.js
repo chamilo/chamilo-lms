@@ -13,5 +13,5 @@
     title: "سۈرەت خاسلىقى",
     uploadTab: "يۈكلە",
     urlMissing: "سۈرەتنىڭ ئەسلى ھۆججەت ئادرېسى كەم",
-    responsive: 'Is responsive'
+    responsive: "Make responsive"
 });

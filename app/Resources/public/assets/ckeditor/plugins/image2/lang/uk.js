@@ -13,5 +13,5 @@
     title: "Властивості зображення",
     uploadTab: "Надіслати",
     urlMissing: "Вкажіть URL зображення.",
-    responsive: 'Is responsive'
+    responsive: "Make responsive"
 });

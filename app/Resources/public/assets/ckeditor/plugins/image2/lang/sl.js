@@ -13,5 +13,5 @@
     title: "Lastnosti slike",
     uploadTab: "Naloži",
     urlMissing: "Manjka vir (URL) slike.",
-    responsive: 'Is responsive'
+    responsive: "Make responsive"
 });

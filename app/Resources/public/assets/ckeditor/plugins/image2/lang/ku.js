@@ -13,5 +13,5 @@
     title: "خاسیەتی وێنه",
     uploadTab: "بارکردن",
     urlMissing: "سەرچاوەی بەستەری وێنه بزره",
-    responsive: 'Is responsive'
+    responsive: "Make responsive"
 });

@@ -13,5 +13,5 @@
     title: "Зураг",
     uploadTab: "Илгээж ачаалах",
     urlMissing: "Зургийн эх сурвалжийн хаяг (URL) байхгүй байна.",
-    responsive: 'Is responsive'
+    responsive: "Make responsive"
 });

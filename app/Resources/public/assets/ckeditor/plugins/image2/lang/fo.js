@@ -13,5 +13,5 @@
     title: "Myndaeginleikar",
     uploadTab: "Send til ambætaran",
     urlMissing: "URL til mynd manglar.",
-    responsive: 'Is responsive'
+    responsive: "Make responsive"
 });

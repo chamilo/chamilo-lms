@@ -13,5 +13,5 @@
     title: "Kuvan ominaisuudet",
     uploadTab: "Lisää tiedosto",
     urlMissing: "Kuvan lähdeosoite puuttuu.",
-    responsive: 'Is responsive'
+    responsive: "Make responsive"
 });

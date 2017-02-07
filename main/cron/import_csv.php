@@ -1960,7 +1960,7 @@ class ImportCsv
      * @param $file
      * @param bool $moveFile
      */
-    private function importSubscribeUserToCourse($file, $moveFile = false)
+    private function importSubscribeUserToCourse($file, $moveFile = false, &$teacherBackup = [])
     {
         $data = Import::csv_reader($file);
 
@@ -1991,11 +1991,22 @@ class ImportCsv
                     continue;
                 }
 
+                $userCourseCategory = '';
+                if (isset($teacherBackup[$userId]) &&
+                    isset($teacherBackup[$userId][$courseInfo['code']])
+                ) {
+                    $courseUserData = $teacherBackup[$userId][$courseInfo['code']];
+                    $userCourseCategory = $courseUserData['user_course_cat'];
+                }
+
                 CourseManager::subscribe_user(
                     $userId,
                     $courseInfo['code'],
-                    $status
+                    $status,
+                    0,
+                    $userCourseCategory
                 );
+
                 $this->logger->addInfo(
                     "User $userId added to course $chamiloCourseCode as $status"
                 );

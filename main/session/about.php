@@ -141,7 +141,9 @@ $sessionDates = SessionManager::parseSessionDates([
     'access_end_date' => $session->getAccessEndDate(),
     'coach_access_start_date' => $session->getCoachAccessStartDate(),
     'coach_access_end_date' => $session->getCoachAccessEndDate()
-]);
+],
+    true
+);
 
 $sessionRequirements = $sequenceResourceRepo->getRequirements(
     $session->getId(),

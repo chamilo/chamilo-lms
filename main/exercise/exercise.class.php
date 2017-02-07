@@ -8,7 +8,7 @@ use ChamiloSession as Session;
  *
  * Allows to instantiate an object of type Exercise
  * @package chamilo.exercise
- * @todo use doctrine object
+ * @todo use doctrine object, use getters and setters correctly
  * @author Olivier Brouckaert
  * @author Julio Montoya Cleaning exercises
  * Modified by Hubert Borderiou #294
@@ -615,7 +615,10 @@ class Exercise
                 while ($question = Database::fetch_array($result, 'ASSOC')) {
                     /** @var Question $objQuestionTmp */
                     $objQuestionTmp = Question::read($question['iid']);
-                    $category_labels = TestCategory::return_category_labels($objQuestionTmp->category_list, $category_list);
+                    $category_labels = TestCategory::return_category_labels(
+                        $objQuestionTmp->category_list,
+                        $category_list
+                    );
 
                     if (empty($category_labels)) {
                         $category_labels = "-";
@@ -630,7 +633,10 @@ class Exercise
                         $question_media  = Question::getMediaLabel($objQuestionMedia->question);
                     }
 
-                    $questionType = Display::tag('div', Display::return_icon($typeImg, $typeExpl, array(), ICON_SIZE_MEDIUM).$question_media);
+                    $questionType = Display::tag(
+                        'div',
+                            Display::return_icon($typeImg, $typeExpl, array(), ICON_SIZE_MEDIUM).$question_media
+                    );
 
                     $question = array(
                         'id' => $question['iid'],
@@ -666,8 +672,9 @@ class Exercise
         $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $sql = "SELECT count(q.id) as count
-                FROM $TBL_EXERCICE_QUESTION e INNER JOIN $TBL_QUESTIONS q
-                    ON (e.question_id = q.id)
+                FROM $TBL_EXERCICE_QUESTION e 
+                INNER JOIN $TBL_QUESTIONS q
+                ON (e.question_id = q.id)
                 WHERE e.c_id = {$this->course_id} AND e.exercice_id	= ".Database::escape_string($this->id);
         $result = Database::query($sql);
 

@@ -1,5 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+
 /**
  * @copyright (c) 2001-2006 Universite catholique de Louvain (UCL)
  * @package chamilo.exercise
@@ -7,7 +10,7 @@
  * @author Guillaume Lederer <guillaume@claroline.net>
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
-use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+
 
 /**
  * Unzip the exercise in the temp folder
@@ -87,13 +90,11 @@ function import_exercise($file)
     // if file is not a .zip, then we cancel all
 
     if (!preg_match('/.zip$/i', $file)) {
-
         return 'UplZipCorrupt';
     }
 
     // unzip the uploaded file in a tmp directory
     if (!get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath)) {
-
         return 'UplZipCorrupt';
     }
 
@@ -146,12 +147,10 @@ function import_exercise($file)
     }
 
     if (!$file_found) {
-
         return 'NoXMLFileFoundInTheZip';
     }
 
     if ($result == false) {
-
         return false;
     }
 
@@ -219,7 +218,9 @@ function import_exercise($file)
                 } else {
                     $answer->new_correct[$i] = 0;
                 }
-                $answer->new_weighting[$i] = $question_array['weighting'][$key];
+                if (isset($question_array['weighting'][$key])) {
+                    $answer->new_weighting[$i] = $question_array['weighting'][$key];
+                }
                 if ($answer->new_correct[$i]) {
                     $totalCorrectWeight += $answer->new_weighting[$i];
                 }
@@ -373,7 +374,6 @@ function startElementQti2($parser, $name, $attributes)
     }
 
     if ($record_item_body) {
-
         if ((!in_array($current_element, $non_HTML_tag_to_avoid))) {
             $current_question_item_body .= "<" . $name;
             foreach ($attributes as $attribute_name => $attribute_value) {
@@ -465,14 +465,14 @@ function startElementQti2($parser, $name, $attributes)
         case 'MAPENTRY':
             if ($parent_element == "MAPPING") {
                 $answer_id = $attributes['MAPKEY'];
-                if (!isset ($exercise_info['question'][$current_question_ident]['weighting'])) {
+                if (!isset($exercise_info['question'][$current_question_ident]['weighting'])) {
                     $exercise_info['question'][$current_question_ident]['weighting'] = array();
                 }
                 $exercise_info['question'][$current_question_ident]['weighting'][$answer_id] = $attributes['MAPPEDVALUE'];
             }
             break;
         case 'MAPPING':
-            if (isset ($attributes['DEFAULTVALUE'])) {
+            if (isset($attributes['DEFAULTVALUE'])) {
                 $exercise_info['question'][$current_question_ident]['default_weighting'] = $attributes['DEFAULTVALUE'];
             }
         case 'ITEMBODY':
@@ -627,14 +627,16 @@ function elementDataQti2($parser, $data)
                     $current_question_item_body
                 );
             } else {
-                if (!isset ($exercise_info['question'][$current_question_ident]['wrong_answers'])) {
+                if (!isset($exercise_info['question'][$current_question_ident]['wrong_answers'])) {
                     $exercise_info['question'][$current_question_ident]['wrong_answers'] = array();
                 }
                 $exercise_info['question'][$current_question_ident]['wrong_answers'][] = $data;
             }
             break;
         case 'MATTEXT':
-            if ($grand_parent_element == 'FLOW_MAT' && ($great_grand_parent_element == 'PRESENTATION_MATERIAL' || $great_grand_parent_element == 'SECTION')) {
+            if ($grand_parent_element == 'FLOW_MAT' &&
+                ($great_grand_parent_element == 'PRESENTATION_MATERIAL' || $great_grand_parent_element == 'SECTION')
+            ) {
                 if (!empty(trim($data))) {
                     $exercise_info['description'] = $data;
                 }
@@ -685,9 +687,7 @@ function startElementQti1($parser, $name, $attributes)
         $great_grand_parent_element = "";
     }
 
-
     if ($record_item_body) {
-
         if ((!in_array($current_element, $non_HTML_tag_to_avoid))) {
             $current_question_item_body .= "<" . $name;
             foreach ($attributes as $attribute_name => $attribute_value) {
@@ -697,7 +697,6 @@ function startElementQti1($parser, $name, $attributes)
         } else {
             //in case of FIB question, we replace the IMS-QTI tag b y the correct answer between "[" "]",
             //we first save with claroline tags ,then when the answer will be parsed, the claroline tags will be replaced
-
             if ($current_element == 'INLINECHOICEINTERACTION') {
                 $current_question_item_body .= "**claroline_start**" . $attributes['RESPONSEIDENTIFIER'] . "**claroline_end**";
             }
@@ -741,7 +740,7 @@ function startElementQti1($parser, $name, $attributes)
             $current_answer_id = $attributes['IDENT'];
             $current_question_item_body = '';
             break;
-        case 'RENDER_CHOICE';
+        case 'RENDER_CHOICE':
             break;
         case 'RESPONSE_LABEL':
             if (!empty($attributes['IDENT'])) {
@@ -830,7 +829,7 @@ function endElementQti1($parser, $name, $attributes)
             if ($parent_element == 'MATERIAL') {
                 // For some reason an item in a hierarchy <item><presentation><material><mattext> doesn't seem to
                 // catch the grandfather 'presentation', so we check for 'item' as a patch (great-grand-father)
-                if ($grand_parent_element == 'PRESENTATION' OR $grand_parent_element == 'ITEM') {
+                if ($grand_parent_element == 'PRESENTATION' || $grand_parent_element == 'ITEM') {
                     $exercise_info['question'][$current_question_ident]['title'] = $current_question_item_body;
                     $current_question_item_body = '';
                 } elseif ($grand_parent_element == 'RESPONSE_LABEL') {
@@ -938,7 +937,7 @@ function elementDataQti1($parser, $data)
             // Replace relative links by links to the documents in the course
             // $resourcesLinks is only defined by qtiProcessManifest()
             if (isset($resourcesLinks) && isset($resourcesLinks['manifest']) && isset($resourcesLinks['web'])) {
-                foreach ($resourcesLinks['manifest'] as $key=>$value) {
+                foreach ($resourcesLinks['manifest'] as $key => $value) {
                     $data = preg_replace('|' . $value . '|', $resourcesLinks['web'][$key], $data);
                 }
             }
@@ -1001,7 +1000,8 @@ function isQtiManifest($filePath)
 }
 
 /**
- * Processes an IMS/QTI manifest file: store links to new files to be able to transform them into the questions text
+ * Processes an IMS/QTI manifest file: store links to new files
+ * to be able to transform them into the questions text
  * @param string $filePath The absolute filepath
  * @param array $links List of filepaths changes
  * @return bool
@@ -1039,7 +1039,11 @@ function qtiProcessManifest($filePath)
             $specialHref = Database::escape_string(preg_replace('/_/', '-', strtolower($href)));
             $specialHref = preg_replace('/(-){2,8}/', '-', $specialHref);
 
-            $sql = "SELECT iid FROM " . $tableDocuments . " WHERE c_id = " . $course['real_id'] . " AND session_id = $sessionId AND path = '/" . $specialHref . "'";
+            $sql = "SELECT iid FROM " . $tableDocuments . " 
+                    WHERE
+                        c_id = " . $course['real_id'] . " AND 
+                        session_id = $sessionId AND 
+                        path = '/" . $specialHref . "'";
             $result = Database::query($sql);
             $documentId = 0;
             while ($row = Database::fetch_assoc($result)) {

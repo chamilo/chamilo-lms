@@ -2070,12 +2070,12 @@ class ImportCsv
                         ";
 
                 $result = Database::query($sql);
-                $userCourseData = Database::fetch_array($result, 'ASSOC');
-                $teacherBackup[$userId][$courseInfo['code']] = $userCourseData;
-                if (isset($userCourseData['user_course_cat'])) {
-                     $this->logger->addError(
-                         "Saving user course category: user #$userId course: ".$courseInfo['code']." course cat: ".$userCourseData['user_course_cat']
-                    );
+                $rows = Database::num_rows($result);
+                if ($rows > 0) {
+                    $userCourseData = Database::fetch_array($result, 'ASSOC');
+                    if (!empty($userCourseData) && !empty($userCourseData['user_course_cat'])) {
+                        $teacherBackup[$userId][$courseInfo['code']] = $userCourseData;
+                    }
                 }
 
                 $sql = "SELECT * FROM ".Database::get_course_table(TABLE_GROUP_USER)."

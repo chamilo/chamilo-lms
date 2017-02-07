@@ -4794,9 +4794,12 @@ class SessionManager
                                                     ";
 
                                             $result = Database::query($sql);
-                                            $userCourseData = Database::fetch_array($result, 'ASSOC');
-                                            if (!empty($userCourseData)) {
-                                                $teacherBackupList[$teacher['user_id']][$course_code] = $userCourseData;
+                                            $rows = Database::num_rows($result);
+                                            if ($rows > 0) {
+                                                $userCourseData = Database::fetch_array($result, 'ASSOC');
+                                                if (!empty($userCourseData) && !empty($userCourseData['user_course_cat'])) {
+                                                    $teacherBackupList[$teacher['user_id']][$course_code] = $userCourseData;
+                                                }
                                             }
 
                                             $sql = "SELECT * FROM ".Database::get_course_table(TABLE_GROUP_USER)."
@@ -4923,9 +4926,12 @@ class SessionManager
                                                         ";
 
                                                 $result = Database::query($sql);
-                                                $userCourseData = Database::fetch_array($result, 'ASSOC');
-                                                if (!empty($userCourseData)) {
-                                                    $teacherBackupList[$teacher['user_id']][$course_code] = $userCourseData;
+                                                $rows = Database::num_rows($result);
+                                                if ($rows > 0) {
+                                                    $userCourseData = Database::fetch_array($result, 'ASSOC');
+                                                    if (!empty($userCourseData) && !empty($userCourseData['user_course_cat'])) {
+                                                        $teacherBackupList[$teacher['user_id']][$course_code] = $userCourseData;
+                                                    }
                                                 }
 
                                                 $sql = "SELECT * FROM ".Database::get_course_table(TABLE_GROUP_USER)."

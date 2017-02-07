@@ -5054,6 +5054,7 @@ class CourseManager
      * @param bool $editTeacherInSessions
      * @param bool $deleteSessionTeacherNotInList
      * @param array $teacherBackup
+     * @param Monolog\Logger $logger
      *
      * @return false|null
      */
@@ -5063,7 +5064,8 @@ class CourseManager
         $deleteTeachersNotInList = true,
         $editTeacherInSessions = false,
         $deleteSessionTeacherNotInList = false,
-        $teacherBackup = array()
+        $teacherBackup = array(),
+        $logger = null
     ) {
         if (!is_array($teachers)) {
             $teachers = array($teachers);
@@ -5126,11 +5128,14 @@ class CourseManager
                     ) {
                         $courseUserData = $teacherBackup[$userId][$course_code];
                         $userCourseCategory = $courseUserData['user_course_cat'];
+                        if ($logger) {
+                            $logger->addInfo("Recovering user_course_cat: $userCourseCategory");
+                        }
                     }
 
-                    $sql = "INSERT INTO " . $course_user_table . " SET
-                            c_id = " . $courseId . ",
-                            user_id = " . $userId . ",
+                    $sql = "INSERT INTO $course_user_table SET
+                            c_id = $courseId,
+                            user_id = $userId,
                             status = '1',
                             is_tutor = '0',
                             sort = '0',

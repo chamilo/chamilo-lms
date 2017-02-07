@@ -242,6 +242,8 @@ class ImportCsv
                     }
                 }
             }
+            $this->logger->addInfo("teacher backup");
+            $this->logger->addInfo(print_r($teacherBackup, 1));
         }
     }
 
@@ -1296,7 +1298,8 @@ class ImportCsv
                             false,
                             true,
                             false,
-                            $teacherBackup
+                            $teacherBackup,
+                            $this->logger
                         );
                     } else {
                         CourseManager::updateTeachers(
@@ -1305,7 +1308,8 @@ class ImportCsv
                             false,
                             false,
                             false,
-                            $teacherBackup
+                            $teacherBackup,
+                            $this->logger
                         );
                     }
 

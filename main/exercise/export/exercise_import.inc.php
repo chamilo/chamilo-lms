@@ -184,6 +184,24 @@ function import_exercise($file)
                 $question->updateTitle(formatText(substr(strip_tags($question_array['title']), 0, 50)));
                 $description .= $question_array['title'];
             }
+
+            if (isset($question_array['category'])) {
+                $category = formatText(strip_tags($question_array['category']));
+                $categoryId = TestCategory::get_category_id_for_title(
+                    $category,
+                    api_get_course_int_id()
+                );
+
+                if (!empty($categoryId)) {
+                    $question->category = $categoryId;
+                } else {
+                    $cat = new TestCategory();
+                    $cat->name = $category;
+                    $cat->description = '';
+                    $question->category = $cat->addCategoryInBDD();
+                }
+            }
+
             if (!empty($question_array['description'])) {
                 $description .= $question_array['description'];
             }
@@ -406,6 +424,7 @@ function startElementQti2($parser, $name, $attributes)
             $exercise_info['question'][$current_question_ident]['answer'] = array();
             $exercise_info['question'][$current_question_ident]['correct_answers'] = array();
             $exercise_info['question'][$current_question_ident]['title'] = $attributes['TITLE'];
+            $exercise_info['question'][$current_question_ident]['category'] = $attributes['CATEGORY'];
             $exercise_info['question'][$current_question_ident]['tempdir'] = $questionTempDir;
             break;
         case 'SECTION':

@@ -45,11 +45,22 @@ class ImsAssessmentItem
     */
     function start_item()
     {
+        $categoryTitle = '';
+        if (!empty($this->question->category)) {
+            $category = new TestCategory();
+            $category = $category->getCategory($this->question->category);
+            if ($category) {
+                $categoryTitle = htmlspecialchars(formatExerciseQtiTitle($category->name));
+            }
+        }
+
         $string = '<assessmentItem xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p1 imsqti_v2p1.xsd"
                 identifier="'.$this->questionIdent.'"
-                title="'.htmlspecialchars(formatExerciseQtiTitle($this->question->selectTitle())).'">'."\n";
+                title = "'.htmlspecialchars(formatExerciseQtiTitle($this->question->selectTitle())).'"
+                category = "'.$categoryTitle.'"
+        >'."\n";
 
         return $string;
     }
@@ -161,7 +172,10 @@ class ImsSection
 
     function start_section()
     {
-        $out = '<section ident="EXO_' . $this->exercise->selectId() . '" title="' .cleanAttribute(formatExerciseQtiDescription($this->exercise->selectTitle())) . '">' . "\n";
+        $out = '<section 
+            ident = "EXO_' . $this->exercise->selectId() . '" 
+            title = "' .cleanAttribute(formatExerciseQtiDescription($this->exercise->selectTitle())) . '"            
+        >' . "\n";
         return $out;
     }
 
@@ -438,16 +452,17 @@ function export_question_qti($questionId, $standalone = true)
 {
     $question = new Ims2Question();
     $qst = $question->read($questionId);
-    if (!$qst or $qst->type == FREE_ANSWER) {
+    if (!$qst || $qst->type == FREE_ANSWER) {
         return '';
     }
     $question->id = $qst->id;
     $question->type = $qst->type;
     $question->question = $qst->question;
     $question->description = $qst->description;
-    $question->weighting=$qst->weighting;
-    $question->position=$qst->position;
-    $question->picture=$qst->picture;
+    $question->weighting = $qst->weighting;
+    $question->position = $qst->position;
+    $question->picture = $qst->picture;
+    $question->category = $qst->category;
     $ims = new ImsAssessmentItem($question);
 
     return $ims->export($standalone);

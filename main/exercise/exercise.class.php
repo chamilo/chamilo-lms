@@ -674,8 +674,10 @@ class Exercise
         $sql = "SELECT count(q.id) as count
                 FROM $TBL_EXERCICE_QUESTION e 
                 INNER JOIN $TBL_QUESTIONS q
-                ON (e.question_id = q.id)
-                WHERE e.c_id = {$this->course_id} AND e.exercice_id	= ".Database::escape_string($this->id);
+                ON (e.question_id = q.id AND e.c_id = q.c_id)
+                WHERE 
+                    e.c_id = {$this->course_id} AND 
+                    e.exercice_id	= ".Database::escape_string($this->id);
         $result = Database::query($sql);
 
         $count = 0;
@@ -728,7 +730,7 @@ class Exercise
         $sql = "SELECT DISTINCT e.question_order
                 FROM $TBL_EXERCICE_QUESTION e
                 INNER JOIN $TBL_QUESTIONS q
-                    ON (e.question_id = q.id)
+                ON (e.question_id = q.id AND e.c_id = q.c_id)
                 WHERE
                   e.c_id = {$this->course_id} AND
                   e.exercice_id	= ".Database::escape_string($this->id);
@@ -741,7 +743,7 @@ class Exercise
         $sql = "SELECT DISTINCT e.question_id, e.question_order
                 FROM $TBL_EXERCICE_QUESTION e
                 INNER JOIN $TBL_QUESTIONS q
-                    ON (e.question_id= q.id)
+                ON (e.question_id = q.id AND e.c_id = q.c_id)
                 WHERE
                     e.c_id = {$this->course_id} AND
                     e.exercice_id	= '".Database::escape_string($this->id)."'
@@ -924,7 +926,7 @@ class Exercise
                     true,
                     false
                 );
-            break;
+                break;
             case EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_RANDOM: // 5
                 $categoriesAddedInExercise = $cat->getCategoryExerciseTree(
                     $this,
@@ -1022,10 +1024,8 @@ class Exercise
         // Adding category info in the category list with question list:
 
         if (!empty($questions_by_category)) {
-
             /*$em = Database::getManager();
             $repo = $em->getRepository('ChamiloCoreBundle:CQuizCategory');*/
-
             $newCategoryList = array();
 
             foreach ($questions_by_category as $categoryId => $questionList) {

@@ -172,7 +172,7 @@ if ($form->validate()) {
 		foreach($student_data as $key=>$value) {
 			$key = substr($key, 6);
 			if (is_array($value)) {
-				$user[$key] = $value[$key];
+				$user[$key] = $value['extra_' . $key];
 			} else {
 				$user[$key] = $value;
 			}

@@ -2008,7 +2008,7 @@ class ImportCsv
                 );
 
                 $this->logger->addInfo(
-                    "User $userId added to course $chamiloCourseCode as $status"
+                    "User $userId added to course ".$courseInfo['code']." with status '$status' with course category: '$userCourseCategory'"
                 );
             }
         }
@@ -2068,6 +2068,11 @@ class ImportCsv
                 $result = Database::query($sql);
                 $userCourseData = Database::fetch_array($result, 'ASSOC');
                 $teacherBackup[$userId][$courseInfo['code']] = $userCourseData;
+                if (isset($userCourseData['user_course_cat'])) {
+                     $this->logger->addError(
+                         "Saving user course category: user #$userId course: ".$courseInfo['code']." course cat: ".$userCourseData['user_course_cat']
+                    );
+                }
 
                 $sql = "SELECT * FROM ".Database::get_course_table(TABLE_GROUP_USER)."
                         WHERE

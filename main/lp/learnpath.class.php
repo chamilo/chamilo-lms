@@ -1962,48 +1962,51 @@ class learnpath
      * Gets the navigation bar for the learnpath display screen
      * @return	string	The HTML string to use as a navigation bar
      */
-    public function get_navigation_bar($idBar = null, $display = null) {
+    public function get_navigation_bar($idBar = null, $display = null)
+    {
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::get_navigation_bar()', 0);
         }
-        if(empty($idBar)){
-            $idBar='control-top';
+        if (empty($idBar)) {
+            $idBar = 'control-top';
         }
-        /* if(empty($display)){
-            $display='display:block';
-        } */
+
         $navbar = null;
         $lp_id = $this->lp_id;
         $mycurrentitemid = $this->get_current_item_id();
 
+        $reportingText = get_lang('Reporting');
+        $previousText = get_lang('ScormPrevious');
+        $nextText = get_lang('ScormNext');
+        $fullScreenText = get_lang('ScormExitFullScreen');
+
         if ($this->mode == 'fullscreen') {
             $navbar = '
                   <span id="'.$idBar.'" class="buttons">
-                    <a class="icon-toolbar" href="lp_controller.php?action=stats&'.api_get_cidreq(true).'&lp_id='.$lp_id.'" onclick="window.parent.API.save_asset();return true;" target="content_name" title="stats" id="stats_link">
-                        <span class="fa fa-info"></span><span class="sr-only">' . get_lang('Reporting') . '</span>
+                    <a class="icon-toolbar" href="lp_controller.php?action=stats&'.api_get_cidreq(true).'&lp_id='.$lp_id.'" onclick="window.parent.API.save_asset();return true;" target="content_name" title="'.$reportingText.'" id="stats_link">
+                        <span class="fa fa-info"></span><span class="sr-only">' . $reportingText . '</span>
                     </a>
-                    <a class="icon-toolbar" id="scorm-previous" href="#" onclick="switch_item(' . $mycurrentitemid . ',\'previous\');return false;" title="previous">
-                        <span class="fa fa-chevron-left"></span><span class="sr-only">' . get_lang('ScormPrevious') . '</span>
+                    <a class="icon-toolbar" id="scorm-previous" href="#" onclick="switch_item(' . $mycurrentitemid . ',\'previous\');return false;" title="'.$previousText.'">
+                        <span class="fa fa-chevron-left"></span><span class="sr-only">' . $previousText . '</span>
                     </a>
-                    <a class="icon-toolbar" id="scorm-next" href="#" onclick="switch_item(' . $mycurrentitemid . ',\'next\');return false;" title="next">
-                        <span class="fa fa-chevron-right"></span><span class="sr-only">' . get_lang('ScormNext') . '</span>
+                    <a class="icon-toolbar" id="scorm-next" href="#" onclick="switch_item(' . $mycurrentitemid . ',\'next\');return false;" title="'.$nextText.'">
+                        <span class="fa fa-chevron-right"></span><span class="sr-only">' . $nextText. '</span>
                     </a>
-                    <a class="icon-toolbar" id="view-embedded" href="lp_controller.php?action=mode&mode=embedded" target="_top" title="embedded mode">
-                        <span class="fa fa-columns"></span><span class="sr-only">' . get_lang('ScormExitFullScreen') . '</span>
+                    <a class="icon-toolbar" id="view-embedded" href="lp_controller.php?action=mode&mode=embedded" target="_top" title="'.$fullScreenText.'">
+                        <span class="fa fa-columns"></span><span class="sr-only">' . $fullScreenText . '</span>
                     </a>
                   </span>';
-
         } else {
             $navbar = '
                 <span id="'.$idBar.'" class="buttons text-right">
-                    <a class="icon-toolbar" href="lp_controller.php?action=stats&'.api_get_cidreq(true).'&lp_id='.$lp_id.'" onclick="window.parent.API.save_asset();return true;" target="content_name" title="stats" id="stats_link">
-                        <span class="fa fa-info"></span><span class="sr-only">' . get_lang('Reporting') . '</span>
+                    <a class="icon-toolbar" href="lp_controller.php?action=stats&'.api_get_cidreq(true).'&lp_id='.$lp_id.'" onclick="window.parent.API.save_asset();return true;" target="content_name" title="'.$reportingText.'" id="stats_link">
+                        <span class="fa fa-info"></span><span class="sr-only">' . $reportingText. '</span>
                     </a>
-                    <a class="icon-toolbar" id="scorm-previous" href="#" onclick="switch_item(' . $mycurrentitemid . ',\'previous\');return false;" title="previous">
-                        <span class="fa fa-chevron-left"></span><span class="sr-only">' . get_lang('ScormPrevious') . '</span>
+                    <a class="icon-toolbar" id="scorm-previous" href="#" onclick="switch_item(' . $mycurrentitemid . ',\'previous\');return false;" title="'.$previousText.'">
+                        <span class="fa fa-chevron-left"></span><span class="sr-only">' . $previousText. '</span>
                     </a>
-                    <a class="icon-toolbar" id="scorm-next" href="#" onclick="switch_item(' . $mycurrentitemid . ',\'next\');return false;" title="next">
-                        <span class="fa fa-chevron-right"></span><span class="sr-only">' . get_lang('ScormNext') . '</span>
+                    <a class="icon-toolbar" id="scorm-next" href="#" onclick="switch_item(' . $mycurrentitemid . ',\'next\');return false;" title="'.$nextText.'">
+                        <span class="fa fa-chevron-right"></span><span class="sr-only">' . $nextText . '</span>
                     </a>
                 </span>';
         }

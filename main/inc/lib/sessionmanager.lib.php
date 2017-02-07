@@ -4795,7 +4795,9 @@ class SessionManager
 
                                             $result = Database::query($sql);
                                             $userCourseData = Database::fetch_array($result, 'ASSOC');
-                                            $teacherBackupList[$teacher['user_id']][$course_code] = $userCourseData;
+                                            if (!empty($userCourseData)) {
+                                                $teacherBackupList[$teacher['user_id']][$course_code] = $userCourseData;
+                                            }
 
                                             $sql = "SELECT * FROM ".Database::get_course_table(TABLE_GROUP_USER)."
                                                     WHERE
@@ -4914,7 +4916,6 @@ class SessionManager
                                     if (!empty($teacherList)) {
                                         foreach ($teacherList as $teacher) {
                                             if (!in_array($teacher['user_id'], $teacherToAdd)) {
-
                                                 $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
                                                         WHERE
                                                             user_id = ".$teacher['user_id']." AND
@@ -4923,13 +4924,15 @@ class SessionManager
 
                                                 $result = Database::query($sql);
                                                 $userCourseData = Database::fetch_array($result, 'ASSOC');
-                                                $teacherBackupList[$teacher['user_id']][$course_code] = $userCourseData;
+                                                if (!empty($userCourseData)) {
+                                                    $teacherBackupList[$teacher['user_id']][$course_code] = $userCourseData;
+                                                }
 
                                                 $sql = "SELECT * FROM ".Database::get_course_table(TABLE_GROUP_USER)."
-                                                    WHERE
-                                                        user_id = ".$teacher['user_id']." AND
-                                                        c_id = '".$courseInfo['real_id']."'
-                                                    ";
+                                                        WHERE
+                                                            user_id = ".$teacher['user_id']." AND
+                                                            c_id = '".$courseInfo['real_id']."'
+                                                        ";
 
                                                 $result = Database::query($sql);
                                                 while ($groupData = Database::fetch_array($result, 'ASSOC')) {
@@ -5066,7 +5069,8 @@ class SessionManager
                 }
                 $access_url_id = api_get_current_access_url_id();
                 UrlManager::add_session_to_url($session_id, $access_url_id);
-                $sql = "UPDATE $tbl_session SET nbr_users = '$user_counter', nbr_courses = '$course_counter' WHERE id = '$session_id'";
+                $sql = "UPDATE $tbl_session SET nbr_users = '$user_counter', nbr_courses = '$course_counter' 
+                        WHERE id = '$session_id'";
                 Database::query($sql);
             }
         }

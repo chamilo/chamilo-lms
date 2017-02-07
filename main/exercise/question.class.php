@@ -130,10 +130,8 @@ abstract class Question
 
         // if the question has been found
         if ($object = Database::fetch_object($result)) {
-
             $objQuestion = Question::getInstance($object->type);
             if (!empty($objQuestion)) {
-
                 $objQuestion->id = $id;
                 $objQuestion->question = $object->question;
                 $objQuestion->description = $object->description;
@@ -425,7 +423,6 @@ abstract class Question
             $this->deleteCategory();
         } else {
             // update or add category for a question
-
             $table = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
             $category_id = intval($category);
             $question_id = intval($this->id);
@@ -606,10 +603,11 @@ abstract class Question
             $current_width = $current_image_size['width'];
             $current_height = $current_image_size['height'];
 
-            if ($current_width < $Max && $current_height < $Max)
+            if ($current_width < $Max && $current_height < $Max) {
                 return true;
-            elseif ($current_height == "")
+            } elseif ($current_height == '') {
                 return false;
+            }
 
             // Resize according to height.
             if ($Dimension == "height") {
@@ -810,8 +808,7 @@ abstract class Question
         $category = $this->category;
 
         // question already exists
-        if(!empty($id)) {
-
+        if (!empty($id)) {
             $params = [
                 'question' => $question,
                 'description' => $description,
@@ -1635,7 +1632,7 @@ abstract class Question
                     $icon = Display::return_icon($img, $explanation, null, ICON_SIZE_BIG);
                 }
             }
-            
+
             echo $icon;
             echo '</div>';
             echo '</li>';

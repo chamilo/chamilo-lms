@@ -52,7 +52,7 @@ switch ($action) {
         delete_category_form();
         break;
     case 'export_category':
-        $archiveFile = 'export_exercise_categoroes_'.api_get_course_id().'_'.api_get_local_time();
+        $archiveFile = 'export_exercise_categories_'.api_get_course_id().'_'.api_get_local_time();
         $categories = $category->getCategories($courseId, $sessionId);
         $export = [];
         $export[] = ['title', 'description'];

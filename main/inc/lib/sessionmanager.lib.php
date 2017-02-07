@@ -4677,7 +4677,6 @@ class SessionManager
                     $course_code = $courseArray[0];
 
                     if (CourseManager::course_exists($course_code)) {
-
                         $courseInfo = api_get_course_info($course_code);
                         $courseId = $courseInfo['real_id'];
 
@@ -4790,14 +4789,14 @@ class SessionManager
                                             $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
                                                     WHERE
                                                         user_id = ".$teacher['user_id']." AND
-                                                        course_code = '".$course_code."'
+                                                        c_id = '".$courseId."'
                                                     ";
 
                                             $result = Database::query($sql);
                                             $rows = Database::num_rows($result);
                                             if ($rows > 0) {
                                                 $userCourseData = Database::fetch_array($result, 'ASSOC');
-                                                if (!empty($userCourseData) && !empty($userCourseData['user_course_cat'])) {
+                                                if (!empty($userCourseData)) {
                                                     $teacherBackupList[$teacher['user_id']][$course_code] = $userCourseData;
                                                 }
                                             }
@@ -4922,14 +4921,14 @@ class SessionManager
                                                 $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
                                                         WHERE
                                                             user_id = ".$teacher['user_id']." AND
-                                                            course_code = '".$course_code."'
+                                                            c_id = '".$courseId."'
                                                         ";
 
                                                 $result = Database::query($sql);
                                                 $rows = Database::num_rows($result);
                                                 if ($rows > 0) {
                                                     $userCourseData = Database::fetch_array($result, 'ASSOC');
-                                                    if (!empty($userCourseData) && !empty($userCourseData['user_course_cat'])) {
+                                                    if (!empty($userCourseData)) {
                                                         $teacherBackupList[$teacher['user_id']][$course_code] = $userCourseData;
                                                     }
                                                 }

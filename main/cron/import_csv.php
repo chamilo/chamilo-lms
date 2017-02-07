@@ -2066,14 +2066,13 @@ class ImportCsv
                 $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
                         WHERE
                             user_id = ".$userId." AND
-                            course_code = '".$courseInfo['code']."'
+                            c_id = '".$courseInfo['real_id']."'
                         ";
-
                 $result = Database::query($sql);
                 $rows = Database::num_rows($result);
                 if ($rows > 0) {
                     $userCourseData = Database::fetch_array($result, 'ASSOC');
-                    if (!empty($userCourseData) && !empty($userCourseData['user_course_cat'])) {
+                    if (!empty($userCourseData)) {
                         $teacherBackup[$userId][$courseInfo['code']] = $userCourseData;
                     }
                 }

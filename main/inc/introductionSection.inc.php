@@ -163,7 +163,16 @@ if (!empty($session_id)) {
     }
 }
 
-$intro_content = Security::remove_XSS($intro_content, COURSEMANAGER);
+// Set the user status for the remove_XSS course introduction
+$userStatus = COURSEMANAGER;
+
+// Allows to do a remove_XSS in course introduction with user status COURSEMANAGERLOWSECURITY
+// in order to accept all embed type videos (like vimeo, wistia, etc) - see BT#12244
+if (api_get_configuration_value('allow_course_introduction_low_security')) {
+    $userStatus = COURSEMANAGERLOWSECURITY;
+}
+
+$intro_content = Security::remove_XSS($intro_content, $userStatus);
 
 /* Determines the correct display */
 if ($intro_cmdEdit || $intro_cmdAdd) {

@@ -273,3 +273,5 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 //$_configuration['personal_agenda_show_all_session_events'] = false;
 // Allows to redirect to the session after the inscription in session about
 // $_configuration['allow_redirect_to_session_after_inscription_about'] = false;
+// Allows to do a remove_XSS in course introduction with user status COURSEMANAGERLOWSECURITY in order to accept all embed type videos (like vimeo, wistia, etc)
+// $_configuration['allow_course_introduction_low_security'] = false;

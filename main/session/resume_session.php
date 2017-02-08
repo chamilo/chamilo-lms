@@ -248,9 +248,11 @@ if ($sessionInfo['nbr_courses'] == 0) {
                 Display::return_icon('course_home.gif', get_lang('Course')).'</a>
                 '.$orderButtons.'
                 <a href="session_course_user_list.php?id_session='.$sessionId.'&course_code='.$course->getCode().'">'.
-                Display::return_icon('user.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>
-                <a href="'.api_get_path(WEB_CODE_PATH).'/user/user_import.php?action=import&cidReq='.$course->getCode().'&id_session='.$sessionId.'">'.
+                Display::return_icon('user.png', get_lang('Users'), '', ICON_SIZE_SMALL).'</a>
+                <a href="'.api_get_path(WEB_CODE_PATH).'user/user_import.php?action=import&cidReq='.$course->getCode().'&id_session='.$sessionId.'">'.
                 Display::return_icon('import_csv.png', get_lang('ImportUsersToACourse'), null, ICON_SIZE_SMALL).'</a>
+                <a href="'.api_get_path(WEB_CODE_PATH).'user/user_export.php?file_type=csv&course_session='.$course->getCode().':'.$sessionId.'&addcsvheader=1">'.
+                Display::return_icon('export_csv.png', get_lang('ExportUsersToACourse'), null, ICON_SIZE_SMALL).'</a>
 				<a href="../tracking/courseLog.php?id_session='.$sessionId.'&cidReq='.$course->getCode().$orig_param.'&hide_course_breadcrumb=1">'.
                 Display::return_icon('statistics.gif', get_lang('Tracking')).'</a>&nbsp;
 				<a href="session_course_edit.php?id_session='.$sessionId.'&page=resume_session.php&course_code='.$course->getCode().''.$orig_param.'">'.
@@ -273,6 +275,11 @@ $url .= Display::url(
     Display::return_icon('import_csv.png', get_lang('ImportUsers'), array(), ICON_SIZE_SMALL),
     "session_user_import.php?id_session=$sessionId"
 );
+$url .= Display::url(
+    Display::return_icon('export_csv.png', get_lang('ExportUsers'), array(), ICON_SIZE_SMALL),
+    "/main/user/user_export.php?file_type=csv&session=$sessionId&addcsvheader=1"
+);
+
 
 $userListToShow = Display::page_subheader(get_lang('UserList').$url);
 

@@ -1377,12 +1377,10 @@ switch ($action) {
         }
 
         $selectedItem = null;
-
         foreach ($_SESSION['oLP']->items as $item) {
             if ($item->db_id != $_GET['id']) {
                 continue;
             }
-
             $selectedItem = $item;
         }
 
@@ -1418,14 +1416,13 @@ switch ($action) {
         }
 
         $_SESSION['refresh'] = 1;
-
         if (!isset($_POST['submit']) || empty($post_title)) {
             break;
         }
 
         $_SESSION['oLP']->getFinalItemForm();
 
-        $redirectTo = api_get_self() . '?' . http_build_query([
+        $redirectTo = api_get_self() . '?' . api_get_cidreq().'&'.http_build_query([
             'action' => 'add_item',
             'type' => 'step',
             'lp_id' => intval($_SESSION['oLP']->lp_id)

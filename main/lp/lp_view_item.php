@@ -18,7 +18,6 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_protect_course_script();
 
 if (isset($_GET['lp_item_id'])) {
-
     // Get parameter only came from lp_view.php.
     $lp_item_id  = intval($_GET['lp_item_id']);
     if (isset($_SESSION['lpobject'])) {
@@ -62,18 +61,18 @@ $learnpath_id   = (int) $_REQUEST['lp_id'];
 
 if ((!$is_allowed_to_edit) || $isStudentView) {
     error_log('New LP - User not authorized in lp_view_item.php');
-    header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);
+    header('Location: '.api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?action=view&lp_id='.$learnpath_id.'&'.api_get_cidreq());
     exit;
 }
 // From here on, we are admin because of the previous condition, so don't check anymore.
 
 $course_id = api_get_course_int_id();
-$sql_query = "SELECT * FROM $tbl_lp WHERE c_id = $course_id AND id = $learnpath_id";
-$result=Database::query($sql_query);
+$sql = "SELECT * FROM $tbl_lp 
+        WHERE c_id = $course_id AND id = $learnpath_id";
+$result=Database::query($sql);
 $therow = Database::fetch_array($result);
 
 /* SHOWING THE ADMIN TOOLS	*/
-
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = array (
         'url' => api_get_path(WEB_CODE_PATH).'gradebook/index.php?'.api_get_cidreq(),

@@ -574,8 +574,8 @@ define('FILE_RENAME', 2);
 define('FILE_OVERWRITE', 3);
 define('UTF8_CONVERT', false); //false by default
 
-define('DOCUMENT','file');
-define('FOLDER','folder');
+define('DOCUMENT', 'file');
+define('FOLDER', 'folder');
 
 define('RESOURCE_ASSET', 'asset');
 define('RESOURCE_DOCUMENT', 'document');
@@ -921,12 +921,12 @@ function api_get_cdn_path($web_path)
 {
     global $_configuration;
     $web_root = api_get_path(WEB_PATH);
-    $ext = substr($web_path,strrpos($web_path,'.'));
+    $ext = substr($web_path, strrpos($web_path, '.'));
     if (isset($ext[2])) { // faster version of strlen to check if len>2
         // Check for CDN definitions
         if (!empty($_configuration['cdn_enable']) && !empty($ext)) {
             foreach ($_configuration['cdn'] as $host => $exts) {
-                if (in_array($ext,$exts)) {
+                if (in_array($ext, $exts)) {
                     //Use host as defined in $_configuration['cdn'], without
                     // trailing slash
                     return str_replace($web_root,$host.'/',$web_path);
@@ -7805,8 +7805,8 @@ function api_mail_html(
     if (isset($additionalParameters['link'])) {
         $mailView->assign('link', $additionalParameters['link']);
     }
-    $mailView->assign('mail_header_style',api_get_configuration_value('mail_header_style'));
-    $mailView->assign('mail_content_style',api_get_configuration_value('mail_content_style'));
+    $mailView->assign('mail_header_style', api_get_configuration_value('mail_header_style'));
+    $mailView->assign('mail_content_style', api_get_configuration_value('mail_content_style'));
     $layout = $mailView->get_template('mail/mail.tpl');
     $mail->Body = $mailView->fetch($layout);
 

@@ -360,7 +360,9 @@ if (isset($_POST['title'])) {
 }
 
 $redirectTo = '';
-if ($debug > 0) error_log('New LP - action "'.$action.'" triggered');
+if ($debug > 0) {
+    error_log('New LP - action "'.$action.'" triggered');
+}
 
 switch ($action) {
     case 'add_item':
@@ -369,7 +371,9 @@ switch ($action) {
         }
         if (!$lp_found) {
             //check if the learnpath ID was defined, otherwise send back to list
-            if ($debug > 0) error_log('New LP - No learnpath given for add item', 0);
+            if ($debug > 0) {
+                error_log('New LP - No learnpath given for add item', 0);
+            }
             require 'lp_list.php';
         } else {
             $_SESSION['refresh'] = 1;
@@ -384,7 +388,6 @@ switch ($action) {
                     // Check post_time to ensure ??? (counter-hacking measure?)
                     require 'lp_add_item.php';
                 } else {
-
                     $_SESSION['post_time'] = $_POST['post_time'];
                     $directoryParentId = isset($_POST['directory_parent_id']) ? $_POST['directory_parent_id'] : 0;
                     $courseInfo = api_get_course_info();
@@ -450,7 +453,6 @@ switch ($action) {
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
         }
-
         require 'lp_subscribe_users_to_category.php';
         break;
     case 'add_audio':
@@ -459,7 +461,9 @@ switch ($action) {
         }
         if (!$lp_found) {
             //check if the learnpath ID was defined, otherwise send back to list
-            if ($debug > 0) error_log('New LP - No learnpath given for add audio', 0);
+            if ($debug > 0) {
+                error_log('New LP - No learnpath given for add audio', 0);
+            }
             require 'lp_list.php';
         } else {
             $_SESSION['refresh'] = 1;
@@ -545,17 +549,17 @@ switch ($action) {
                 if (isset($_REQUEST['activate_start_date_check']) &&
                     $_REQUEST['activate_start_date_check'] == 1
                 ) {
-                	$publicated_on = $_REQUEST['publicated_on'];
+                    $publicated_on = $_REQUEST['publicated_on'];
                 } else {
-                	$publicated_on = null;
+                    $publicated_on = null;
                 }
 
                 if (isset($_REQUEST['activate_end_date_check']) &&
                     $_REQUEST['activate_end_date_check'] == 1
                 ) {
-                	$expired_on = $_REQUEST['expired_on'];
+                    $expired_on = $_REQUEST['expired_on'];
                 } else {
-                	$expired_on = null;
+                    $expired_on = null;
                 }
 
                 $new_lp_id = learnpath::add_lp(
@@ -607,7 +611,10 @@ switch ($action) {
             if (!$is_allowed_to_edit) {
                 api_not_allowed(true);
             }
-            if (!$lp_found) { error_log('New LP - No learnpath given for set_autolaunch', 0); require 'lp_list.php'; }
+            if (!$lp_found) {
+                error_log('New LP - No learnpath given for set_autolaunch', 0);
+                require 'lp_list.php';
+            }
             else {
                 $_SESSION['oLP']->set_autolaunch($_GET['lp_id'], $_GET['status']);
                 require 'lp_list.php';
@@ -640,7 +647,6 @@ switch ($action) {
         } else {
             $_SESSION['refresh'] = 1;
             if (isset($_POST['submit_button']) && !empty($post_title)) {
-
                 //Updating the lp.modified_on
                 $_SESSION['oLP']->set_modified_on();
 
@@ -689,8 +695,10 @@ switch ($action) {
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
         }
-        if (!$lp_found) { error_log('New LP - No learnpath given for edit item prereq', 0); require 'lp_list.php'; }
-        else {
+        if (!$lp_found) {
+            error_log('New LP - No learnpath given for edit item prereq', 0);
+            require 'lp_list.php';
+        } else {
             if (isset($_POST['submit_button'])) {
                 //Updating the lp.modified_on
                 $_SESSION['oLP']->set_modified_on();
@@ -1307,7 +1315,6 @@ switch ($action) {
         }
 
         $selectedItem = null;
-
         foreach ($_SESSION['oLP']->items as $item) {
             if ($item->db_id == $_GET['id']) {
                 $selectedItem = $item;
@@ -1391,9 +1398,9 @@ switch ($action) {
             );
 
             if (!empty($forumThread)) {
-                $dissoaciated = $selectedItem->dissociateForumThread($forumThread['iid']);
+                $dissociated = $selectedItem->dissociateForumThread($forumThread['iid']);
 
-                if ($dissoaciated) {
+                if ($dissociated) {
                     Display::addFlash(
                         Display::return_message(get_lang('ForumDissociate'), 'success')
                     );
@@ -1421,7 +1428,6 @@ switch ($action) {
         }
 
         $_SESSION['oLP']->getFinalItemForm();
-
         $redirectTo = api_get_self() . '?' . api_get_cidreq().'&'.http_build_query([
             'action' => 'add_item',
             'type' => 'step',

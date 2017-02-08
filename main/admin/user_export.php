@@ -68,7 +68,7 @@ if ($form->validate()) {
 	$file_type = $export['file_type'];
 	$course_code = Database::escape_string($export['course_code']);
 	$courseInfo = api_get_course_info($course_code);
-	$courseId = $courseInfo['real_id'];
+    $courseId = isset($courseInfo['real_id']) ? $courseInfo['real_id'] : 0;
 
 	$courseSessionValue = explode(':', $export['course_session']);
 	$courseSessionCode = '';

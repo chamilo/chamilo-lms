@@ -31,7 +31,7 @@ RewriteRule ^courses/([^/]+)/document/(.*)$ main/document/download.php?doc_url=/
 RewriteRule ^courses/([^/]+)/work/(.*)$ main/work/download.php?file=work/$2&cDir=$1 [QSA,L]
 
 # Course upload files
-RewriteRule ^courses/([^/]+)/upload/(.*)$ app/courses/$1/upload/$2 [QSA,L]
+RewriteRule ^courses/([^/]+)/upload/([^/]+)/(.*)$ main/document/download_uploaded_files.php?code=$1&type=$2&file=$3 [QSA,L]
 RewriteRule ^courses/([^/]+)/(.*)$ app/courses/$1/$2 [QSA,L]
 
 RewriteRule ^courses/([^/]+)/course-pic85x85.png$ app/courses/$1/course-pic85x85.png [QSA,L]

@@ -264,7 +264,7 @@ class CatForm extends FormValidator
                 'certif_min_score',
                 get_lang('CertificateMinScore'),
                 false,
-                array('class' => 'span1', 'maxlength' => '5')
+                array('maxlength' => '5')
             );
             $this->addRule(
                 'certif_min_score',
@@ -301,7 +301,7 @@ class CatForm extends FormValidator
                 ) == 'true')
         ) {
 
-            //Getting grade models
+            // Getting grade models
             $obj = new GradeModel();
             $obj->fill_grade_model_select_in_form(
                 $this,

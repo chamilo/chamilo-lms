@@ -6651,11 +6651,12 @@ $SupportedScormContentMakers = "Paquets SCORM supportés";
 $DisableEndDate = "Désactiver date de fin";
 $ForumCategories = "Catégories de forums";
 $Copy = "Copie";
-$ArchiveDirCleanup = "Vidange du répertoire archive";
-$ArchiveDirCleanupDescr = "Chamilo garde une copie de la plupart des fichiers temporaires qu'il génère (pour les exports, copies et backups divers) dans son répertoire archive/. Après un certain temps, ces fichiers peuvent s'accumuler et représenter un usage de l'espace disque assez important et sans intérêt particulier. Cliquez sur le bouton ci-dessous pour vider ce répertoire immédiatement. Cette opération devrait en fait être exécutée automatiquement depuis un processus cron, mais si cela représente une difficulté importante dans votre contexte, vous pouvez visiter cette page de temps en temps pour éliminer tous les fichiers temporaires du répertoire.";
+$ArchiveDirCleanup = "Vidange du cache et des fichiers temporaires";
+$ArchiveDirCleanupDescr = "Chamilo garde une copie de la plupart des fichiers temporaires qu'il génère (pour les exports, copies et backups divers) dans son répertoire app/cache/. Après un certain temps, ces fichiers peuvent s'accumuler et représenter un usage de l'espace disque assez important et sans intérêt particulier. Cliquez sur le bouton ci-dessous pour vider ce répertoire immédiatement. Cette opération devrait en fait être exécutée automatiquement depuis un processus cron, mais si cela représente une difficulté importante dans votre contexte, vous pouvez visiter cette page de temps en temps pour éliminer tous les fichiers temporaires du répertoire.
+Cette fonctionnalité nettoie également le cache des thèmes graphiques.";
 $ArchiveDirCleanupProceedButton = "Vidanger";
-$ArchiveDirCleanupSucceeded = "Le répertoire archive/ a été vidangé.";
-$ArchiveDirCleanupFailed = "Le répertoire archive/ n'a pas pu être vidé entièrement. Veuillez le vider manuellement en vous connectant au serveur et en supprimant et liens symboliques du répertoire chamilo/archive, excepté le fichier .htaccess. Sous Linux: # find archive/ \( -type f -or -type l \) -not -name .htaccess -exec echo rm -v \{} \;";
+$ArchiveDirCleanupSucceeded = "Le répertoire app/cache/ a été vidangé.";
+$ArchiveDirCleanupFailed = "Le répertoire app/cache/ n'a pas pu être vidé entièrement. Veuillez le vider manuellement en vous connectant au serveur et en supprimant et liens symboliques du répertoire chamilo/app/cache, excepté le fichier .htaccess. Sous Linux: # find archive/ \( -type f -or -type l \) -not -name .htaccess -exec echo rm -v \{} \;";
 $EnableStartTime = "Activer date de début";
 $EnableEndTime = "Utiliser date de fin";
 $LocalTimeUsingPortalTimezoneXIsY = "L'heure locale selon la zone horaire du portail (%s) est %s";
@@ -7908,4 +7909,5 @@ $PostsPendingModeration = "Participations en attente de modération";
 $OnlyUsersFromCourseSession = "Seulement les utilisateurs d'un cours dans une session";
 $ServerXForwardedForInfo = "Si le serveur est derrière un proxy ou un firewall (et uniquement dans ces cas), il pourrait utiliser le header HTTP X_FORWARDED_FOR pour montrer l'adresse IP de l'utilisateur distant (la vôtre, dans ce cas précis).";
 $GeolocalizationCoordinates = "Géolocalisation par coordonnées";
+$ExportUsersOfACourse = "Exporter les utilisateurs d'un cours";
 ?>

@@ -6659,11 +6659,12 @@ $SupportedScormContentMakers = "Scorm Authoring tools supported";
 $DisableEndDate = "Disable end date";
 $ForumCategories = "Forum Categories";
 $Copy = "Copy";
-$ArchiveDirCleanup = "Archive directory cleanup";
-$ArchiveDirCleanupDescr = "Chamilo keeps a copy of most of the temporary files it generates (for backups, exports, copies, etc) into its archive/ directory. After a while, this can add up to a very large amount of disk space being used for nothing. Click the button below to clean your archive directory up. This operation should be automated by a cron process, but if this is not possible, you can come to this page regularly to remove all temporary files from the directory.";
+$ArchiveDirCleanup = "Cleanup of cache and temporary files";
+$ArchiveDirCleanupDescr = "Chamilo keeps a copy of most of the temporary files it generates (for backups, exports, copies, etc) into its app/cache/ directory. After a while, this can add up to a very large amount of disk space being used for nothing. Click the button below to clean your archive directory up. This operation should be automated by a cron process, but if this is not possible, you can come to this page regularly to remove all temporary files from the directory.
+This feature also cleans up the theme cache files.";
 $ArchiveDirCleanupProceedButton = "Proceed with cleanup";
-$ArchiveDirCleanupSucceeded = "The archive/ directory cleanup has been executed successfully.";
-$ArchiveDirCleanupFailed = "For some reason, the archive/ directory could not be cleaned up. Please clean it up by manually connecting to the server and delete all files and symbolic links under the chamilo/archive/ directory, except the .htaccess file. On Linux: # find archive/ \( -type f -or -type l \) -not -name .htaccess -exec echo rm -v \{} \;";
+$ArchiveDirCleanupSucceeded = "The app/cache/ directory cleanup has been executed successfully.";
+$ArchiveDirCleanupFailed = "For some reason, the app/cache/ directory could not be cleaned up. Please clean it up by manually connecting to the server and delete all files and symbolic links under the chamilo/app/cache/ directory, except the .htaccess file. On Linux: # find app/cache/ \( -type f -or -type l \) -not -name .htaccess -exec echo rm -v \{} \;";
 $EnableStartTime = "Enable start time";
 $EnableEndTime = "Enable end time";
 $LocalTimeUsingPortalTimezoneXIsY = "The local time in the portal timezone (%s) is %s";
@@ -7961,4 +7962,5 @@ $PostsPendingModeration = "Posts pending moderation";
 $OnlyUsersFromCourseSession = "Only users from one course in a session";
 $ServerXForwardedForInfo = "If the server is behind a proxy or firewall (and only in those cases), it might be using the X_FORWARDED_FOR HTTP header to show the remote user IP (yours, in this case).";
 $GeolocalizationCoordinates = "Geolocalization by coordinates";
+$ExportUsersOfACourse = "Export users of a course";
 ?>

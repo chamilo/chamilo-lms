@@ -5630,12 +5630,11 @@ class learnpath
                         $edit_icon .= '</a>';
 
                         if (!in_array($arrLP[$i]['item_type'], ['forum', 'thread'])) {
-                            if (
-                            $this->items[$arrLP[$i]['id']]->getForumThread(
+                            $forumThread = $this->items[$arrLP[$i]['id']]->getForumThread(
                                 $this->course_int_id,
                                 $this->lp_session_id
-                            )
-                            ) {
+                            );
+                            if ($forumThread) {
                                 $forumIconUrl = api_get_self() . '?' . api_get_cidreq() . '&' . http_build_query([
                                     'action' => 'dissociate_forum',
                                     'id' => $arrLP[$i]['id'],
@@ -5672,7 +5671,7 @@ class learnpath
 
                 $url = api_get_self() . '?'.api_get_cidreq().'&view=build&id='.$arrLP[$i]['id'] .'&lp_id='.$this->lp_id;
 
-                if ($arrLP[$i]['item_type'] == 'document') {
+                if (in_array($arrLP[$i]['item_type'], ['document', 'final_item'])) {
                     $urlPreviewLink = api_get_self().'?'.api_get_cidreq().'&action=view_item&mode=preview_document&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id;
                     $previewIcon = Display::url(
                         Display::return_icon('preview_view.png', get_lang('Preview'), array(), ICON_SIZE_TINY),
@@ -5694,11 +5693,18 @@ class learnpath
                         Display::return_icon('accept.png', get_lang('LearnpathPrerequisites'), array(), ICON_SIZE_TINY),
                         $url.'&action=edit_item_prereq', ['class' => 'btn btn-default']
                     );
-                    $move_item_icon = Display::url(
-                        Display::return_icon('move.png', get_lang('Move'), array(), ICON_SIZE_TINY),
-                        $url.'&action=move_item',
-                        ['class' => 'btn btn-default']
-                    );
+                    if ($arrLP[$i]['item_type'] != 'final_item') {
+                        $move_item_icon = Display::url(
+                            Display::return_icon(
+                                'move.png',
+                                get_lang('Move'),
+                                array(),
+                                ICON_SIZE_TINY
+                            ),
+                            $url.'&action=move_item',
+                            ['class' => 'btn btn-default']
+                        );
+                    }
                     $audio_icon = Display::url(
                         Display::return_icon('audio.png', get_lang('UplUpload'), array(), ICON_SIZE_TINY),
                         $url.'&action=add_audio',
@@ -6214,7 +6220,7 @@ class learnpath
     public function edit_document($_course)
     {
         $course_id = api_get_course_int_id();
-        global $_configuration;
+        $urlAppend = api_get_configuration_value('url_append');
         // Please, do not modify this dirname formatting.
         $dir = isset($_GET['dir']) ? $_GET['dir'] : $_POST['dir'];
 
@@ -6247,7 +6253,7 @@ class learnpath
             $file = $filepath . $row['path'];
 
             if ($fp = @ fopen($file, 'w')) {
-                $content = str_replace(api_get_path(WEB_COURSE_PATH), $_configuration['url_append'].api_get_path(REL_COURSE_PATH), $content);
+                $content = str_replace(api_get_path(WEB_COURSE_PATH), $urlAppend.api_get_path(REL_COURSE_PATH), $content);
 
                 // Change the path of mp3 to absolute.
                 // The first regexp deals with :// urls.
@@ -6277,8 +6283,10 @@ class learnpath
         $return = '';
         if (is_numeric($item_id)) {
             $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
-            $sql = "SELECT lp.* FROM " . $tbl_lp_item . " as lp
-                    WHERE c_id = ".$course_id." AND lp.id = " . intval($item_id);
+            $sql = "SELECT lp.* FROM $tbl_lp_item as lp
+                    WHERE 
+                        c_id = $course_id AND 
+                        lp.id = " . intval($item_id);
             $result = Database::query($sql);
             while ($row = Database :: fetch_array($result,'ASSOC')) {
                 $_SESSION['parent_item_id'] = $row['item_type'] == 'dir' ? $item_id : 0;
@@ -6311,6 +6319,7 @@ class learnpath
                         }
                         break;
                     case TOOL_DOCUMENT:
+                    case TOOL_LP_FINAL_ITEM:
                         $tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
                         $sql_doc = "SELECT path FROM " . $tbl_doc . "
                                     WHERE c_id = ".$course_id." AND id = " . intval($row['path']);
@@ -6335,7 +6344,6 @@ class learnpath
                         }
                         break;
                     case TOOL_HOTPOTATOES:
-
                         $return .= $this->display_document($row['path'], false, true);
                         break;
 
@@ -11115,7 +11123,9 @@ EOD;
         $form->addHidden('action', 'add_final_item');
         $form->addHidden('path', Session::read('pathItem'));
         $form->addHidden('previous', $this->get_last());
-        $form->setDefaults(['title' => $title, 'content_lp_certificate' => $content]);
+        $form->setDefaults(
+            ['title' => $title, 'content_lp_certificate' => $content]
+        );
 
         if ($form->validate()) {
             $values = $form->exportValues();
@@ -11134,6 +11144,10 @@ EOD;
                     $documentId,
                     $values['title'],
                     ''
+                );
+
+                Display::addFlash(
+                    Display::return_message(get_lang('Added'))
                 );
             } else {
                 $this->edit_document($this->course_info);

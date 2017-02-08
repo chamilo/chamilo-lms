@@ -7907,4 +7907,5 @@ $UploadCorrectionsExplanationWithDownloadLinkX = "Veuillez d'abord télécharger
 $PostsPendingModeration = "Participations en attente de modération";
 $OnlyUsersFromCourseSession = "Seulement les utilisateurs d'un cours dans une session";
 $ServerXForwardedForInfo = "Si le serveur est derrière un proxy ou un firewall (et uniquement dans ces cas), il pourrait utiliser le header HTTP X_FORWARDED_FOR pour montrer l'adresse IP de l'utilisateur distant (la vôtre, dans ce cas précis).";
+$GeolocalizationCoordinates = "Géolocalisation par coordonnées";
 ?>

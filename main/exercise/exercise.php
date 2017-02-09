@@ -742,7 +742,7 @@ if (!empty($exerciseList)) {
 
                     // Export
                     $actions .= Display::url(
-                        Display::return_icon('cd.gif', get_lang('CopyExercise')),
+                        Display::return_icon('cd.png', get_lang('CopyExercise')),
                         '',
                         array(
                             'onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToCopy'), ENT_QUOTES, $charset))." ".addslashes($row['title'])."?"."')) return false;",

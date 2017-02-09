@@ -614,7 +614,7 @@ foreach ($categories as $item) {
                 if ($details['lp_type'] == 1) {
                     $dsp_disk = Display::url(
                         Display::return_icon(
-                            'cd.gif',
+                            'cd.png',
                             get_lang('Export'),
                             array(),
                             ICON_SIZE_SMALL
@@ -625,7 +625,7 @@ foreach ($categories as $item) {
                 } elseif ($details['lp_type'] == 2) {
                     $dsp_disk = Display::url(
                         Display::return_icon(
-                            'cd.gif',
+                            'cd.png',
                             get_lang('Export'),
                             array(),
                             ICON_SIZE_SMALL
@@ -634,7 +634,7 @@ foreach ($categories as $item) {
                     );
                 } else {
                     $dsp_disk = Display::return_icon(
-                        'cd_gray.gif',
+                        'cd_na.png',
                         get_lang('Export'),
                         array(),
                         ICON_SIZE_SMALL

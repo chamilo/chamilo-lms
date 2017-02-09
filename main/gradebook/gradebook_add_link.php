@@ -85,7 +85,6 @@ if (isset($typeSelected) && $typeSelected != '0') {
 
         $parent_cat = Category::load($addvalues['select_gradebook']);
         $global_weight = $category[0]->get_weight();
-
         $link->set_weight($addvalues['weight_mask']);
 
         if ($link->needs_max()) {

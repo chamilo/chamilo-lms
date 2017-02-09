@@ -31,16 +31,14 @@ class LinkAddEditForm extends FormValidator
         if (isset($link_object)) {
             $link = $link_object;
         } elseif (isset($link_type) && isset($category_object)) {
-            $link = LinkFactory :: create ($link_type);
+            $link = LinkFactory:: create($link_type);
             $link->set_course_code(api_get_course_id());
             $link->set_category_id($category_object[0]->get_id());
         } else {
-            die ('LinkAddEditForm error: define link_type/category_object or link_object');
+            die('LinkAddEditForm error: define link_type/category_object or link_object');
         }
 
         $defaults = array();
-        $this->addElement('hidden', 'zero', 0);
-
         if (!empty($_GET['editlink'])) {
             $this->addElement('header', '', get_lang('EditLink'));
         }
@@ -56,8 +54,18 @@ class LinkAddEditForm extends FormValidator
                 }
             }
         } else {
-            $this->addElement('label', get_lang('Name'),  '<span class="freeze">'.$link->get_name().' ['.$link->get_type_name().']</span>');
-            $this->addElement('hidden','name_link',$link->get_name(),array('id'=>'name_link'));
+            $this->addElement(
+                'label',
+                get_lang('Name'),
+                '<span class="freeze">'.$link->get_name().' ['.$link->get_type_name().']</span>'
+            );
+
+            $this->addElement(
+                'hidden',
+                'name_link',
+                $link->get_name(),
+                array('id' => 'name_link')
+            );
         }
 
         if (count($category_object) == 1) {
@@ -71,7 +79,6 @@ class LinkAddEditForm extends FormValidator
                 array('id' => 'hide_category_id')
             );
             $this->addRule('select_gradebook', get_lang('ThisFieldIsRequired'), 'nonzero');
-
             $default_weight = 0;
             if (!empty($category_object)) {
                 foreach ($category_object as $my_cat) {
@@ -95,33 +102,25 @@ class LinkAddEditForm extends FormValidator
             }
         }
 
-        $this->addText(
+        $this->addFloat(
             'weight_mask',
-            array(get_lang('Weight'), null, ' [0 .. <span id="max_weight">'.$category_object[0]->get_weight().'</span>] '),
+            array(
+                get_lang('Weight'),
+                null,
+                ' [0 .. <span id="max_weight">'.$category_object[0]->get_weight(
+                ).'</span>] ',
+            ),
             true,
             array(
                 'size' => '4',
-                'maxlength' => '5',
-                'class' => 'span1'
+                'maxlength' => '5'
             )
         );
 
         $this->addElement('hidden', 'weight');
 
-        /*
-
-        // ELEMENT: weight
-        $this->addText('weight', array(get_lang('Weight'), null, '/ <span id="max_weight">'.$default_weight.'</span>'), true, array (
-            'size' => '4',
-            'maxlength' => '5',
-            'class' => 'span1'
-        ));*/
-
-        $this->addRule('weight_mask', get_lang('OnlyNumbers'), 'numeric');
-        $this->addRule(array ('weight_mask', 'zero'), get_lang('NegativeValue'), 'compare', '>=');
         if ($form_type == self :: TYPE_EDIT) {
             $parent_cat = Category :: load($link->get_category_id());
-
             if ($parent_cat[0]->get_parent_id() == 0) {
                 $values['weight'] = $link->get_weight();
             } else {
@@ -140,11 +139,20 @@ class LinkAddEditForm extends FormValidator
         // ELEMENT: max
         if ($link->needs_max()) {
             if ($form_type == self :: TYPE_EDIT && $link->has_results()) {
-                $this->addText('max', get_lang('QualificationNumeric'), false, array ('size' => '4','maxlength' => '5', 'disabled' => 'disabled'));
+                $this->addText(
+                    'max',
+                    get_lang('QualificationNumeric'),
+                    false,
+                    array(
+                        'size' => '4',
+                        'maxlength' => '5',
+                        'disabled' => 'disabled',
+                    )
+                );
             } else {
                 $this->addText('max', get_lang('QualificationNumeric'), true, array ('size' => '4','maxlength' => '5'));
                 $this->addRule('max', get_lang('OnlyNumbers'), 'numeric');
-                $this->addRule(array ('max', 'zero'), get_lang('NegativeValue'), 'compare', '>=');
+                $this->addRule('max', get_lang('NegativeValue'), 'compare', '>=');
             }
             if ($form_type == self :: TYPE_EDIT) {
                 $defaults['max'] = $link->get_max();
@@ -153,7 +161,12 @@ class LinkAddEditForm extends FormValidator
 
         // ELEMENT: description
         if ($link->needs_name_and_description()) {
-            $this->addElement('textarea', 'description', get_lang('Description'), array ('rows' => '3','cols' => '34'));
+            $this->addElement(
+                'textarea',
+                'description',
+                get_lang('Description'),
+                array('rows' => '3', 'cols' => '34')
+            );
             if ($form_type == self :: TYPE_EDIT) {
                 $defaults['description'] = $link->get_description();
             }

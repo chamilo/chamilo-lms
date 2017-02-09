@@ -167,4 +167,23 @@ class DateRangePicker extends HTML_QuickForm_text
 
         return true;
     }
+
+    /**
+     * @param mixed $value
+     * @param array $submitValues
+     * @param array $errors
+     */
+    public function getSubmitValue($value, &$submitValues, &$errors)
+    {
+        /** @var DateRangePicker $element */
+        $elementName = $this->getName();
+        $parsedDates = $this->parseDateRange($value);
+        $validateFormat = $this->getAttribute('validate_format');
+
+        if (!$this->validateDates($parsedDates, $validateFormat)) {
+            $errors[$elementName] = get_lang('CheckDates');
+        }
+        $submitValues[$elementName.'_start'] = $parsedDates['start'];
+        $submitValues[$elementName.'_end'] = $parsedDates['end'];
+    }
 }

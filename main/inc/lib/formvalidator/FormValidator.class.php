@@ -1186,6 +1186,85 @@ EOT;
     }
 
     /**
+     * @param $name
+     * @param $label
+     * @param bool $required
+     * @param array $attributes
+     * @param bool $allowNegative
+     * @param null $minValue
+     * @param null $maxValue
+     */
+    public function addFloat(
+        $name,
+        $label,
+        $required = false,
+        $attributes = [],
+        $allowNegative = false,
+        $minValue = null,
+        $maxValue = null
+    ) {
+        $this->addElement(
+            'FloatNumber',
+            $name,
+            $label,
+            $attributes
+        );
+
+        $this->applyFilter($name, 'trim');
+
+        if ($required) {
+            $this->addRule($name, get_lang('ThisFieldIsRequired'), 'required');
+        }
+
+        // Rule allows "," and "."
+        /*$this->addRule(
+            $name,
+            get_lang('OnlyNumbers'),
+            'regex',
+            '/(^-?\d\d*\.\d*$)|(^-?\d\d*$)|(^-?\.\d\d*$)|(^-?\d\d*\,\d*$)|(^-?\,\d\d*$)/'
+        );*/
+
+        if ($allowNegative == false) {
+            $this->addRule(
+                $name,
+                get_lang('NegativeValue'),
+                'compare',
+                '>=',
+                'server',
+                false,
+                false,
+                0
+            );
+        }
+
+        if (!is_null($minValue)) {
+            $this->addRule(
+                $name,
+                get_lang('UnderMin'),
+                'compare',
+                '>=',
+                'server',
+                false,
+                false,
+                $minValue
+            );
+        }
+
+        if (!is_null($maxValue)) {
+            $this->addRule(
+                $name,
+                get_lang('OverMax'),
+                'compare',
+                '<=',
+                'server',
+                false,
+                false,
+                $maxValue
+            );
+        }
+    }
+
+    /**
      * Adds a text field for letters and spaces to the form.
      * A trim-filter is attached to the field.
      * @param string $name The element name

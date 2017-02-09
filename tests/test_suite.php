@@ -170,7 +170,6 @@ class TestsSuite extends TestSuite
         $this->addFile(api_get_path(SYS_TEST_PATH).'main/gradebook/lib/be/evaluation.class.test.php');
         $this->addFile(api_get_path(SYS_TEST_PATH).'main/gradebook/lib/be/exerciselink.class.test.php');
         $this->addFile(api_get_path(SYS_TEST_PATH).'main/gradebook/lib/be/forumthreadlink.class.test.php');
-        $this->addFile(api_get_path(SYS_TEST_PATH).'main/course_info/download.lib.test.php');
 */
         // NEW SCORM
         //$this->addFile(api_get_path(SYS_TEST_PATH).'main/lp/learnpath.class.test.php');

@@ -52,9 +52,11 @@ class CourseSelectForm
 				el = document.getElementById('div_'+item);
                 if (el.style.display == 'none') {
                     el.style.display = '';
+                    if (document.getElementById('img_'+item).length)
 					document.getElementById('img_'+item).className = 'fa fa-minus-square-o fa-lg';
 				} else {
 					el.style.display='none';
+					if (document.getElementById('img_'+item).length)
 					document.getElementById('img_'+item).className ='fa fa-plus-square-o fa-lg';
 				}
 			}
@@ -148,10 +150,8 @@ class CourseSelectForm
 			echo '</h3>';
 		}
         echo '<script src="'.api_get_path(WEB_CODE_PATH).'inc/lib/javascript/upload.js" type="text/javascript"></script>';
-		echo '<script type="text/javascript">var myUpload = new upload(1000);</script>';
-        $icon = Display::returnIconPath('myprogress_bar.gif');
         echo '<div class="tool-backups-options">';
-		echo '<form method="post" id="upload_form" name="course_select_form" onsubmit="javascript: myUpload.start(\'dynamic_div\',\''.$icon.',\''.get_lang('PleaseStandBy', '').'\',\'upload_form\')">';
+		echo '<form method="post" id="upload_form" name="course_select_form">';
 		echo '<input type="hidden" name="action" value="course_select_form"/>';
 
 		if (!empty($hidden_fields['destination_course']) &&
@@ -596,10 +596,12 @@ class CourseSelectForm
 				el = document.getElementById('div_'+item);
                 if (el.style.display == 'none') {
                     el.style.display = '';
+                    if (document.getElementById('img_'+item).length)
 					document.getElementById('img_'+item).className('fa fa-minus-square-o fa-lg');
 				}
 				else{
                     el.style.display = 'none';
+                    if (document.getElementById('img_'+item).length)
 					document.getElementById('img_'+item).className('fa fa-plus-square-o fa-lg');
 				}
 			}
@@ -646,10 +648,9 @@ class CourseSelectForm
 		}
 
 		echo '<script src="'.api_get_path(WEB_CODE_PATH).'inc/lib/javascript/upload.js" type="text/javascript"></script>';
-		echo '<script type="text/javascript">var myUpload = new upload(1000);</script>';
         $icon = Display::returnIconPath('progress_bar.gif');
         echo '<div class="tool-backups-options">';
-		echo '<form method="post" id="upload_form" name="course_select_form" onsubmit="myUpload.start(\'dynamic_div\',\''.$icon.'\',\''.get_lang('PleaseStandBy').'\',\'upload_form\')">';
+		echo '<form method="post" id="upload_form" name="course_select_form">';
 		echo '<input type="hidden" name="action" value="course_select_form"/>';
 		foreach ($list_course as $course) {
 			foreach ($course->resources as $type => $resources) {

@@ -1334,9 +1334,7 @@ class CourseBuilder
     public function build_session_course()
     {
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-        $tbl_session_course = Database::get_main_table(
-            TABLE_MAIN_SESSION_COURSE
-        );
+        $tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $list_course = CourseManager::get_course_list();
         $list = array();
         foreach ($list_course as $_course) {
@@ -1347,12 +1345,12 @@ class CourseBuilder
             $this->course->backup_path = api_get_path(SYS_COURSE_PATH).$_course['directory'];
             $this->course->encoding = api_get_system_encoding(); //current platform encoding
             $courseId = $_course['real_id'];
-            $sql_session = "SELECT s.id, name, c_id
-                FROM $tbl_session_course sc
-                INNER JOIN $tbl_session s
-                ON sc.session_id = s.id
-                WHERE sc.c_id = '$courseId' ";
-            $query_session = Database::query($sql_session);
+            $sql = "SELECT s.id, name, c_id
+                    FROM $tbl_session_course sc
+                    INNER JOIN $tbl_session s
+                    ON sc.session_id = s.id
+                    WHERE sc.c_id = '$courseId' ";
+            $query_session = Database::query($sql);
             while ($rows_session = Database::fetch_assoc($query_session)) {
                 $session = new CourseSession(
                     $rows_session['id'],

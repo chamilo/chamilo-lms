@@ -87,7 +87,7 @@ class MySpace
     public function export_csv($header, $data, $file_name = 'export.csv')
     {
         $archive_path = api_get_path(SYS_ARCHIVE_PATH);
-        $archive_url = api_get_path(WEB_CODE_PATH).'course_info/download.php?archive=';
+        $archive_url = api_get_path(WEB_CODE_PATH).'course_info/download.php?archive_path=&archive=';
 
         if (!$open = fopen($archive_path.$file_name, 'w+')) {
             $message = get_lang('noOpen');

@@ -564,7 +564,6 @@ if (isset($list_ordered) && !empty($list_ordered)) {
 }
 
 $tableRows = [];
-
 /*  Listing exercises  */
 if (!empty($exerciseList)) {
     if ($origin != 'learnpath') {

@@ -111,10 +111,8 @@ $form->addButtonSend(get_lang('SendFile'));
 
 // If finish is set; it's because the user came from this script in the first place (displaying hidden "finish" field).
 if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) {
-
     // Moved this down here as the upload handling functions give output.
     if ($form->validate()) {
-
         // Initialise $finish
         if (!isset($finish)) {
             $finish = 0;

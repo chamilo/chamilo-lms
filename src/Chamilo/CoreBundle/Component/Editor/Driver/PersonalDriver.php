@@ -20,7 +20,6 @@ class PersonalDriver extends Driver implements DriverInterface
         $userId = api_get_user_id();
         $dir = \UserManager::getUserPathById($userId, 'system');
         if (!empty($dir)) {
-
             if (!is_dir($dir)) {
                 mkdir($dir);
             }
@@ -37,11 +36,9 @@ class PersonalDriver extends Driver implements DriverInterface
     public function getConfiguration()
     {
         if ($this->allow()) {
-
             $userId = api_get_user_id();
 
             if (!empty($userId)) {
-
                 // Adding user personal files
                 $dir = \UserManager::getUserPathById($userId, 'system');
                 $dirWeb = \UserManager::getUserPathById($userId, 'web');
@@ -78,12 +75,10 @@ class PersonalDriver extends Driver implements DriverInterface
     /**
      * {@inheritdoc}
      */
-    public function upload($fp, $dst, $name, $tmpname)
+    public function upload($fp, $dst, $name, $tmpname, $hashes = array())
     {
         $this->setConnectorFromPlugin();
-
         if ($this->allow()) {
-
             return parent::upload($fp, $dst, $name, $tmpname);
         }
     }
@@ -96,7 +91,6 @@ class PersonalDriver extends Driver implements DriverInterface
         $this->setConnectorFromPlugin();
 
         if ($this->allow()) {
-
             return parent::rm($hash);
         }
     }
@@ -107,7 +101,6 @@ class PersonalDriver extends Driver implements DriverInterface
     public function allow()
     {
         //if ($this->connector->security->isGranted('IS_AUTHENTICATED_FULLY')) {
-
         return !api_is_anonymous();
     }
 }

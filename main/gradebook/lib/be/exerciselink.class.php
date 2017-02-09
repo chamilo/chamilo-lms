@@ -177,13 +177,15 @@ class ExerciseLink extends AbstractLink
         $tbl_stats = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $session_id = api_get_session_id();
         $course_id = api_get_course_int_id($this->get_course_code());
-        $sql = 'SELECT count(exe_id) AS number FROM '.$tbl_stats."
+        $sql = "SELECT count(exe_id) AS number 
+                FROM $tbl_stats
                 WHERE
                     session_id = $session_id AND
                     c_id = $course_id AND
                     exe_exo_id   = ".(int)$this->get_ref_id();
         $result = Database::query($sql);
         $number=Database::fetch_row($result);
+
         return ($number[0] != 0);
     }
 
@@ -205,38 +207,38 @@ class ExerciseLink extends AbstractLink
         in exercise/exercise.php, look for note-query-exe-results marker*/
         $session_id = $this->get_session_id();
         $courseId = $this->getCourseId();
-	    $exercise = new Exercise($courseId);
+        $exercise = new Exercise($courseId);
         $exercise->read($this->get_ref_id());
+        $stud_id = (int) $stud_id;
 
         if (!$this->is_hp) {
+            if ($exercise->exercise_was_added_in_lp == false) {
+                $sql = "SELECT * FROM $tblStats
+                        WHERE
+                            exe_exo_id = ".intval($this->get_ref_id())." AND
+                            orig_lp_id = 0 AND
+                            orig_lp_item_id = 0 AND
+                            status <> 'incomplete' AND
+                            session_id = $session_id AND
+                            c_id = $courseId
+                        ";
+            } else {
+                $lpId = null;
+                if (!empty($exercise->lpList)) {
+                    // Taking only the first LP
+                    $lpId = current($exercise->lpList);
+                    $lpId = $lpId['lp_id'];
+                }
 
-		if ($exercise->exercise_was_added_in_lp == false) {
-			$sql = "SELECT * FROM $tblStats
-			        WHERE
-			            exe_exo_id = ".intval($this->get_ref_id())." AND
-			            orig_lp_id = 0 AND
-			            orig_lp_item_id = 0 AND
-			            status <> 'incomplete' AND
-			            session_id = $session_id AND
-                                    c_id = $courseId
-                                ";
-		    } else {
-		        $lpId = null;
-		        if (!empty($exercise->lpList)) {
-		            // Taking only the first LP
-		            $lpId = current($exercise->lpList);
-		            $lpId = $lpId['lp_id'];
-		        }
-
-		        $sql = "SELECT * FROM $tblStats
-		                WHERE
-		                    exe_exo_id = ".intval($this->get_ref_id())." AND
-		                    orig_lp_id = $lpId AND
-		                    status <> 'incomplete' AND
-		                    session_id = $session_id AND
-                                    c_id = $courseId
-                                ";
-		    }
+                $sql = "SELECT * 
+                        FROM $tblStats
+                        WHERE
+                            exe_exo_id = ".intval($this->get_ref_id())." AND
+                            orig_lp_id = $lpId AND
+                            status <> 'incomplete' AND
+                            session_id = $session_id AND
+                            c_id = $courseId ";
+            }
 
             if (!empty($stud_id) && $type != 'ranking') {
                 $sql .= " AND exe_user_id = $stud_id ";
@@ -244,13 +246,16 @@ class ExerciseLink extends AbstractLink
             $sql .= ' ORDER BY exe_id DESC';
 
         } else {
-            $sql = "SELECT * FROM $tblHp hp, $tblDoc doc
+            $sql = "SELECT * FROM $tblHp hp 
+                    INNER JOIN $tblDoc doc
+                    ON (hp.exe_name = doc.path AND doc.c_id = hp.c_id)
                     WHERE
-                        hp.c_id = $courseId AND
-                        hp.exe_user_id = $stud_id  AND
-                        hp.exe_name = doc.path AND
-                        doc.c_id = hp.c_id AND
+                        hp.c_id = $courseId AND                        
                         doc.id = ".intval($this->get_ref_id());
+
+            if (!empty($stud_id)) {
+                $sql .= " AND hp.exe_user_id = $stud_id ";
+            }
         }
 
         $scores = Database::query($sql);

@@ -679,7 +679,12 @@ if (!empty($student_id)) {
             $access_start_date = '';
             $access_end_date = '';
             $date_session = '';
-            $title = Display::return_icon('course.png', get_lang('Courses'), array(), ICON_SIZE_SMALL).' '.get_lang('Courses');
+            $title = Display::return_icon(
+                    'course.png',
+                    get_lang('Courses'),
+                    array(),
+                    ICON_SIZE_SMALL
+                ).' '.get_lang('Courses');
 
             $session_info = api_get_session_info($sId);
             if ($session_info) {

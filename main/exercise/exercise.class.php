@@ -7922,7 +7922,6 @@ class Exercise
             }
 
             foreach ($question_list as $questionId) {
-
                 // Creates a temporary Question object
                 $objQuestionTmp = Question::read($questionId);
 
@@ -8003,7 +8002,13 @@ class Exercise
                 }
 
                 $score = array();
-                $score['result'] = get_lang('Score')." : ".ExerciseLib::show_score($my_total_score, $my_total_weight, false, true);
+                $score['result'] = get_lang('Score')." : ".
+                    ExerciseLib::show_score(
+                        $my_total_score,
+                        $my_total_weight,
+                        false,
+                        true
+                    );
                 $score['pass'] = $my_total_score >= $my_total_weight ? true : false;
                 $score['score'] = $my_total_score;
                 $score['weight'] = $my_total_weight;
@@ -8021,7 +8026,6 @@ class Exercise
                 $question_content = '<div class="question_row">';
 
                 if ($show_results) {
-
                     $show_media = false;
                     $counterToShow = $counter;
                     if ($objQuestionTmp->parent_id != 0) {
@@ -8040,16 +8044,25 @@ class Exercise
                     }
 
                     // Shows question title an description.
-                    $question_content .= $objQuestionTmp->return_header(null, $counterToShow, $score, $show_media, $this->getHideQuestionTitle());
+                    $question_content .= $objQuestionTmp->return_header(
+                        null,
+                        $counterToShow,
+                        $score,
+                        $show_media,
+                        $this->getHideQuestionTitle()
+                    );
 
                     // display question category, if any
-                    $question_content .= TestCategory::getCategoryNamesForQuestion($questionId, null, true, $this->categoryMinusOne);
+                    $question_content .= TestCategory::getCategoryNamesForQuestion(
+                        $questionId,
+                        null,
+                        true,
+                        $this->categoryMinusOne
+                    );
                 }
                 $counter++;
-
                 $question_content .= $contents;
                 $question_content .= '</div>';
-
                 $exercise_content .= $question_content;
             } // end foreach() block that loops over all questions
         }
@@ -8087,7 +8100,7 @@ class Exercise
             $learnpath_item_view_id = $exercise_stat_info['orig_lp_item_view_id'];
 
             if (api_is_allowed_to_session_edit()) {
-                update_event_exercise(
+                Event::update_event_exercise(
                     $exercise_stat_info['exe_id'],
                     $this->selectId(),
                     $total_score,

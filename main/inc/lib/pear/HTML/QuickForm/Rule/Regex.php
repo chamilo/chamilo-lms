@@ -84,7 +84,6 @@ class HTML_QuickForm_Rule_Regex extends HTML_QuickForm_Rule
         $this->_data[$name] = $pattern;
     } // end func addData
 
-
     function getValidationScript($options = null)
     {
         $regex = isset($this->_data[$this->name]) ? $this->_data[$this->name] : $options;
@@ -96,6 +95,5 @@ class HTML_QuickForm_Rule_Regex extends HTML_QuickForm_Rule
         }
 
         return array("  var regex = " . $regex . ";\n", "{jsVar} != '' && !regex.test({jsVar})");
-    } // end func getValidationScript
-
+    }
 }

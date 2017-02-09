@@ -72,7 +72,6 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
 
         parent::__construct($elementName, $elementLabel, $attributes);
         $this->_persistantFreeze = true;
-
         $this->setType('text');
     }
 
@@ -123,7 +122,6 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
                 $size = array(2, intval($size), 2);
             }
         }
-
 
         switch ($layout) {
             case FormValidator::LAYOUT_INLINE:

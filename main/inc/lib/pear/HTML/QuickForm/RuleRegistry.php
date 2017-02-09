@@ -43,7 +43,6 @@ class HTML_QuickForm_RuleRegistry
      */
     var $_rules = array();
 
-
     /**
      * Returns a singleton of HTML_QuickForm_RuleRegistry
      *
@@ -84,7 +83,7 @@ class HTML_QuickForm_RuleRegistry
      * @access    public
      * @return    void
      */
-    function registerRule($ruleName, $type, $data1, $data2 = null)
+    public function registerRule($ruleName, $type, $data1, $data2 = null)
     {
         $type = strtolower($type);
         if ($type == 'regex') {
@@ -109,7 +108,7 @@ class HTML_QuickForm_RuleRegistry
      * @access    public
      * @return    HTML_QuickForm_Rule
      */
-    function getRule($ruleName)
+    public function getRule($ruleName)
     {
         if (empty($ruleName)) {
             return false;
@@ -383,5 +382,4 @@ class HTML_QuickForm_RuleRegistry
         }
         return array($value, $tmp_reset);
     }
-} // end class HTML_QuickForm_RuleRegistry
-?>
+}

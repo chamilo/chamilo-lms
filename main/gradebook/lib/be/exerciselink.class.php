@@ -325,18 +325,20 @@ class ExerciseLink extends AbstractLink
      */
     public function get_link()
     {
-        //status student
+        // Status student
         $user_id = api_get_user_id();
+        $session_id = api_get_session_id();
         $course_code = $this->get_course_code();
         $courseInfo = api_get_course_info($course_code);
         $courseId = $courseInfo['real_id'];
-
         $status_user = api_get_status_of_user_in_course($user_id, $courseId);
-        $session_id = api_get_session_id();
 
-        $url = api_get_path(WEB_CODE_PATH).'gradebook/exercise_jump.php?session_id='.$session_id.'&cidReq='.$this->get_course_code().'&gradebook=view&exerciseId='.$this->get_ref_id().'&type='.$this->get_type();
-        if ((!api_is_allowed_to_edit() && $this->calc_score(api_get_user_id()) == null) || $status_user!=1) {
-            $url .= '&amp;doexercise='.$this->get_ref_id();
+        $data = $this->get_exercise_data();
+        $path = $data['path'];
+
+        $url = api_get_path(WEB_CODE_PATH).'gradebook/exercise_jump.php?path='.$path.'&session_id='.$session_id.'&cidReq='.$this->get_course_code().'&gradebook=view&exerciseId='.$this->get_ref_id().'&type='.$this->get_type();
+        if ((!api_is_allowed_to_edit() && $this->calc_score($user_id) == null) || $status_user != 1) {
+            $url .= '&doexercise='.$this->get_ref_id();
         }
 
         return $url;
@@ -379,8 +381,11 @@ class ExerciseLink extends AbstractLink
      */
     public function is_valid_link()
     {
-        $sql = 'SELECT count(id) from '.$this->get_exercise_table().'
-                WHERE c_id = '.$this->course_id.' AND id = '.(int)$this->get_ref_id().' ';
+        $sql = 'SELECT count(id) 
+                FROM '.$this->get_exercise_table().'
+                WHERE 
+                    c_id = '.$this->course_id.' AND 
+                    id = '.(int)$this->get_ref_id().' ';
         $result = Database::query($sql);
         $number = Database::fetch_row($result);
 

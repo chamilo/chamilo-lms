@@ -470,7 +470,7 @@ switch ($action) {
 
                 $_SESSION['duration_time'][$key] = time();
 
-                Event::update_event_exercice(
+                Event::update_event_exercise(
                     $exe_id,
                     $objExercise->selectId(),
                     $total_score,

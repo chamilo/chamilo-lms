@@ -3762,7 +3762,7 @@ HOTSPOT;
             $learnpath_item_view_id = $exercise_stat_info['orig_lp_item_view_id'];
 
             if (api_is_allowed_to_session_edit()) {
-                Event::update_event_exercice(
+                Event::update_event_exercise(
                     $exercise_stat_info['exe_id'],
                     $objExercise->selectId(),
                     $total_score,

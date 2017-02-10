@@ -466,7 +466,7 @@ if ($survey_data['form_fields'] != '' &&
 
     if (isset($list['language']) && $list['language'] == 1) {
         // LANGUAGE
-        $form->addElement('select_language', 'language', get_lang('Language'));
+        $form->addSelectLanguage('language', get_lang('Language'));
         if (api_get_setting('profile', 'language') !== 'true') {
             $form->freeze('language');
         }

@@ -19,7 +19,7 @@ before_install:
   - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - echo "memory_limit = 2G" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - echo "phar.readonly = 0" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - echo "date.timezone = Europe/Paris" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+    echo 'date.timezone = "Europe/Paris"' >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
   # configure apache virtual hosts
   - sudo cp -f tests/travis-apache /etc/apache2/sites-available/default

@@ -39,7 +39,7 @@
             </div>
 
             <!-- Block session list -->
-            {% if sessionList != null %}
+            {% if session_list != null %}
             <div class="panel-group" id="session-block" role="tablist" aria-multiselectable="true">
                 <div class="panel panel-default">
                     <div class="panel-heading" role="tab" id="headingOne">
@@ -52,7 +52,7 @@
                     <div id="sessionList" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
                         <div class="panel-body">
                             <ul class="list-group">
-                                {% for session in sessionList %}
+                                {% for session in session_list %}
                                 <li id="session_{{ session.id }}" class="list-group-item" style="min-height:65px;">
                                     <img class="img-session" src="{{ session.image }}"/>
                                     <span class="title">{{ session.name }}</span>

@@ -84,8 +84,7 @@ if ($course_validation_feature) {
         $form->addRule('target_audience', get_lang('ThisFieldIsRequired'), 'required');
 
         // Course language.
-        $form->addElement('select_language', 'course_language', get_lang('Ln'));
-        $form->applyFilter('select_language', 'html_filter');
+        $form->addSelectLanguage('course_language', get_lang('Ln'));
 
         // Exemplary content checkbox.
         $form->addElement('checkbox', 'exemplary_content', get_lang('FillWithExemplaryContent'));

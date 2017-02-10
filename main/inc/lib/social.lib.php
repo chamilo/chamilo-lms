@@ -1674,7 +1674,6 @@ class SocialManager extends UserManager
         );
 
         $profileEditionLink = null;
-
         if ($currentUserId === $userId) {
             $profileEditionLink = Display::getProfileEditionLink($userId);
         } else {

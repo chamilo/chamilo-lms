@@ -60,7 +60,7 @@ before_script:
   # install Chash, a database, and then install Chamilo
   - git clone https://github.com/chamilo/chash
   - cd chash
-  - composer install
+  #- composer install
   - composer update
   - php -d phar.readonly=0 createPhar.php
   - chmod +x chash.phar

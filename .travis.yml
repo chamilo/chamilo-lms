@@ -78,8 +78,7 @@ before_script:
   - cd /home/travis/build/chamilo/chamilo-lms
   # There's an issue with Chash, starting in version 1.10, whereby PHP CLI on Travis-ci is PHP5.3, whatever the version you ask for.
   # This effectively breaks the installer and renders these tests useless. We are looking for a solution (for example using containers)
-  - sudo chash chash:chamilo_install 1.11.x /home/travis/build/chamilo/chamilo-lms --download-package --no-interaction --sitename="Chamilo" --site_url="http://localhost/" --institution="Chamilo" --institution_url="https://chamilo.org" --encrypt_method="sha1" --firstname="John" --lastname="Doe" --language="english" --driver="pdo_mysql" --host="localhost" --port="3306" --dbname="chamilo" --dbuser="root" --permissions_for_new_directories="0777" --permissions_for_new_files="0666" --linux-user="www-data" --linux-group="www-data" --username="admin" --password="admin" --email="admin@example.com" --phone="555-5555"
-
+  - sudo php -d date.timezone="Europe/Paris" chash.php chash chash:chamilo_install 1.11.x /home/travis/build/chamilo/chamilo-lms --download-package --no-interaction --sitename="Chamilo" --site_url="http://localhost/" --institution="Chamilo" --institution_url="https://chamilo.org" --encrypt_method="sha1" --firstname="John" --lastname="Doe" --language="english" --driver="pdo_mysql" --host="localhost" --port="3306" --dbname="chamilo" --dbuser="root" --permissions_for_new_directories="0777" --permissions_for_new_files="0666" --linux-user="www-data" --linux-group="www-data" --username="admin" --password="admin" --email="admin@example.com" --phone="555-5555"
 script:
   # - phpunit -c tests/phpunit
   # pwd shows /home/travis/build/chamilo/chamilo-lms

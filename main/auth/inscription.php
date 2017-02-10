@@ -205,8 +205,7 @@ if ($user_already_registered_show_terms === false) {
     // Language
     if (in_array('language', $allowedFields)) {
         if (api_get_setting('registration', 'language') == 'true') {
-            $form->addElement(
-                'select_language',
+            $form->addSelectLanguage(
                 'language',
                 get_lang('Language')
             );

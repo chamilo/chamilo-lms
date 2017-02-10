@@ -14,11 +14,12 @@ before_install:
   - sudo apt-get install -qq apache2 libapache2-mod-fastcgi
   # enable php-fpm
   - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
+  - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.0" ]]; then sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/www.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/www.conf ; fi
   - sudo a2enmod rewrite actions fastcgi alias
   - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - echo "memory_limit = 2G" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - echo "phar.readonly = 0" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - echo "date.timezone = Europe/Paris" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - echo 'date.timezone = "Europe/Paris"' >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
   # configure apache virtual hosts
   - sudo cp -f tests/travis-apache /etc/apache2/sites-available/default
@@ -60,7 +61,7 @@ before_script:
   # install Chash, a database, and then install Chamilo
   - git clone https://github.com/chamilo/chash
   - cd chash
-  - composer install
+  #- composer install
   - composer update
   - php -d phar.readonly=0 createPhar.php
   - chmod +x chash.phar
@@ -74,10 +75,13 @@ before_script:
   #- sudo php5 chamilo-cli-installer.php -l admin -p admin -U travis -u 'http://localhost/' -X travis -L english -z 'admin@example.com' -f 'John' -g 'Doe' -b '555-5555' -c 'Test campus' -y 'Chamilo' -x 'https://chamilo.org'
   #- cd ../..
   # install Chamilo with Chash - see reference https://github.com/sonnym/travis-ci-drupal-module-example/blob/master/.travis.yml
-  - cd /home/travis/build/chamilo/chamilo-lms
+  # - cd /home/travis/build/chamilo/chamilo-lms
   # There's an issue with Chash, starting in version 1.10, whereby PHP CLI on Travis-ci is PHP5.3, whatever the version you ask for.
   # This effectively breaks the installer and renders these tests useless. We are looking for a solution (for example using containers)
-  - sudo chash chash:chamilo_install --no-interaction --sitename="Chamilo" --site_url="http://localhost/" --institution="Chamilo" --institution_url="https://chamilo.org" --encrypt_method="sha1" --firstname="John" --lastname="Doe" --language="english" --driver="pdo_mysql" --host="localhost" --port="3306" --dbname="chamilo" --dbuser="root" --permissions_for_new_directories="0777" --permissions_for_new_files="0666" --linux-user="www-data" --linux-group="www-data" --username="admin" --password="admin" --email="admin@example.com" --phone="555-5555" 1.10.x
+  - sudo php -d date.timezone="Europe/Paris" chash.php chash:chamilo_install 1.11.x /home/travis/build/chamilo/chamilo-lms --download-package --no-interaction --only-download-package
+  - cd /home/travis/build/chamilo/chamilo-lms
+  - composer update
+  - sudo php -d date.timezone="Europe/Paris" /home/travis/build/chamilo/chamilo-lms/chash/chash.php chash:chamilo_install 1.11.x /home/travis/build/chamilo/chamilo-lms --no-interaction --sitename="Chamilo" --site_url="http://localhost/" --institution="Chamilo" --institution_url="https://chamilo.org" --encrypt_method="sha1" --firstname="John" --lastname="Doe" --language="english" --driver="pdo_mysql" --host="localhost" --port="3306" --dbname="chamilo" --dbuser="root" --permissions_for_new_directories="0777" --permissions_for_new_files="0666" --linux-user="www-data" --linux-group="www-data" --username="admin" --password="admin" --email="admin@example.com" --phone="555-5555"
 
 script:
   # - phpunit -c tests/phpunit

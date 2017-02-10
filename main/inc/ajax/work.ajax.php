@@ -51,7 +51,7 @@ switch ($action) {
                     $groupId,
                     $userId,
                     $file,
-                    false,
+                    api_get_configuration_value('assignment_prevent_duplicate_upload'),
                     false
                 );
 

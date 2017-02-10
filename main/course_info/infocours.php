@@ -140,7 +140,10 @@ $form->addElement(
     $categories,
     ['style'=>'width:350px', 'id'=>'category_code']
 );
-$form->addElement('select_language', 'course_language', array(get_lang('Ln'), get_lang('TipLang')));
+$form->addSelectLanguage(
+    'course_language',
+    array(get_lang('Ln'), get_lang('TipLang'))
+);
 
 $group = array(
     $form->createElement('radio', 'show_course_in_user_language', null, get_lang('Yes'), 1),

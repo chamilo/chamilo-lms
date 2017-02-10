@@ -127,8 +127,6 @@ class EvalForm extends FormValidator
     protected function build_all_results_edit_form()
     {
         //extra field for check on maxvalue
-        $this->addElement('hidden', 'maxvalue', $this->evaluation_object->get_max());
-        $this->addElement('hidden', 'minvalue', 0);
         $this->addElement('header', get_lang('EditResult'));
 
         $renderer = & $this->defaultRenderer();
@@ -181,35 +179,18 @@ class EvalForm extends FormValidator
             $result = $result_and_user['result'];
 
             $renderer = &$this->defaultRenderer();
-            $this->addText(
+            $this->addFloat(
                 'score['.$result->get_id().']',
                 $this->build_stud_label($user['user_id'], $user['username'], $user['lastname'], $user['firstname']),
                 false,
                 array(
-                    'class' => "span2",
                     'maxlength' => 5
-                )
+                ),
+                false,
+                0,
+                $this->evaluation_object->get_max()
             );
 
-            $this->addRule('score[' . $result->get_id() . ']', get_lang('OnlyNumbers'), 'numeric');
-            $this->addRule(
-                array(
-                    'score['.$result->get_id().']',
-                    'maxvalue',
-                ),
-                get_lang('OverMax'),
-                'compare',
-                '<='
-            );
-            $this->addRule(
-                array(
-                    'score['.$result->get_id().']',
-                    'minvalue',
-                ),
-                get_lang('UnderMin'),
-                'compare',
-                '>='
-            );
             $defaults['score[' . $result->get_id() . ']'] = $result->get_score();
 
             if (api_is_western_name_order()) {
@@ -308,17 +289,17 @@ class EvalForm extends FormValidator
                 $scoreColumnProperties['autofocus'] = '';
                 $firstUser = false;
             }
+
             //user_id, user.username, lastname, firstname
-            $this->addText(
+            $this->addFloat(
                 $element_name,
                 $this->build_stud_label($user[0], $user[1], $user[2], $user[3]),
                 false,
-                $scoreColumnProperties
+                $scoreColumnProperties,
+                false,
+                0,
+                $this->evaluation_object->get_max()
             );
-
-            $this->addRule($element_name, get_lang('OnlyNumbers'), 'numeric');
-            $this->addRule(array($element_name, 'maxvalue'), get_lang('OverMax'), 'compare', '<=');
-            $this->addRule(array($element_name, 'minvalue'), get_lang('UnderMin'), 'compare', '>=');
 
             if (api_is_western_name_order()) {
                 $user_info = '<td align="left" >' . $user[3] . '</td>';
@@ -358,16 +339,18 @@ class EvalForm extends FormValidator
      */
     protected function build_result_edit_form()
     {
-        $this->setDefaults(array(
-            'score' => $this->result_object->get_score(),
-            'maximum' => $this->evaluation_object->get_max()
-        ));
+        $this->setDefaults(
+            array(
+                'score' => $this->result_object->get_score(),
+                'maximum' => $this->evaluation_object->get_max(),
+            )
+        );
         $userInfo = api_get_user_info($this->result_object->get_user_id());
         $renderer = & $this->defaultRenderer();
         $renderer->setCustomElementTemplate('<span>{element}</span> ');
         $this->addHeader(get_lang('User').': '.$userInfo['complete_name']);
 
-        $this->addText(
+        $this->addFloat(
             'score',
             array(
                 get_lang('Score'),
@@ -378,42 +361,14 @@ class EvalForm extends FormValidator
             array(
                 'size' => '4',
                 'maxlength' => '5',
-            )
+            ),
+            false,
+            0,
+            $this->evaluation_object->get_max()
         );
 
         $this->addButtonSave(get_lang('Edit'), 'submit');
-        $this->addElement('hidden', 'minvalue', 0);
         $this->addElement('hidden', 'hid_user_id', $this->result_object->get_user_id());
-        $this->addElement('hidden', 'maxvalue', $this->evaluation_object->get_max());
-
-        $this->addRule(
-            'score',
-            get_lang('OnlyNumbers'),
-            'numeric',
-            null,
-            'client'
-        );
-
-        $this->addRule(
-            array(
-                'score',
-                'maxvalue',
-            ),
-            get_lang('OverMax'),
-            'compare',
-            '<=',
-            'client'
-        );
-        $this->addRule(
-            array(
-                'score',
-                'minvalue',
-            ),
-            get_lang('UnderMin'),
-            'compare',
-            '>=',
-            'client'
-        );
     }
 
     /**
@@ -483,14 +438,18 @@ class EvalForm extends FormValidator
         }
 
         $this->addElement('header', $form_title);
-        $this->addElement('hidden', 'zero', 0);
         $this->addElement('hidden', 'hid_user_id');
         $this->addElement('hidden', 'hid_course_code');
 
-        $this->addText('name', get_lang('EvaluationName'), true, array(
-            'maxlength' => '50',
-            'id' => 'evaluation_title'
-        ));
+        $this->addText(
+            'name',
+            get_lang('EvaluationName'),
+            true,
+            array(
+                'maxlength' => '50',
+                'id' => 'evaluation_title',
+            )
+        );
 
         $cat_id = $this->evaluation_object->get_category_id();
 
@@ -517,7 +476,6 @@ class EvalForm extends FormValidator
                 array('id' => 'hid_category_id')
             );
             $this->addRule('hid_category_id', get_lang('ThisFieldIsRequired'), 'nonzero');
-
             $default_weight = 0;
             if (!empty($all_categories)) {
                 foreach ($all_categories as $my_cat) {
@@ -543,7 +501,7 @@ class EvalForm extends FormValidator
             }
         }
 
-        $this->addText(
+        $this->addFloat(
             'weight_mask',
             array(
                 get_lang('Weight'),
@@ -556,12 +514,6 @@ class EvalForm extends FormValidator
                 'maxlength' => '5'
             )
         );
-
-        /* $this->addText('weight', array(null, null, '/ <span id="max_weight">'.$default_weight.'</span>'), true, array (
-          'size' => '4',
-          'maxlength' => '5',
-          'class' => 'span1'
-          )); */
 
         if ($edit) {
             if (!$this->evaluation_object->has_results()) {
@@ -585,10 +537,14 @@ class EvalForm extends FormValidator
                 );
             }
         } else {
-            $this->addText('max', get_lang('QualificationNumeric'), true, array(
-                'class' => 'span1',
-                'maxlength' => '5'
-            ));
+            $this->addText(
+                'max',
+                get_lang('QualificationNumeric'),
+                true,
+                array(
+                    'maxlength' => '5',
+                )
+            );
             $default_max = api_get_setting('gradebook_default_weight');
             $defaults['max'] = isset($default_max) ? $default_max : 100;
             $this->setDefaults($defaults);
@@ -597,11 +553,8 @@ class EvalForm extends FormValidator
         $this->addElement('textarea', 'description', get_lang('Description'));
         $this->addRule('hid_category_id', get_lang('ThisFieldIsRequired'), 'required');
         $this->addElement('checkbox', 'visible', null, get_lang('Visible'));
-        $this->addRule('weight_mask', get_lang('OnlyNumbers'), 'numeric');
-        $this->addRule(array('weight_mask', 'zero'), get_lang('NegativeValue'), 'compare', '>=');
         $this->addRule('max', get_lang('OnlyNumbers'), 'numeric');
-        $this->addRule(array('max', 'zero'), get_lang('NegativeValue'), 'compare', '>=');
-
+        $this->addRule('max', get_lang('NegativeValue'), 'compare', '>=');
         $setting = api_get_setting('tool_visible_by_default_at_creation');
         $visibility_default = 1;
         if (isset($setting['gradebook']) && $setting['gradebook'] == 'false') {
@@ -620,6 +573,13 @@ class EvalForm extends FormValidator
         parent :: setDefaults($defaults, $filter);
     }
 
+    /**
+     * @param $id
+     * @param $username
+     * @param $lastname
+     * @param $firstname
+     * @return string
+     */
     private function build_stud_label($id, $username, $lastname, $firstname)
     {
         $opendocurl_start = '';
@@ -636,7 +596,7 @@ class EvalForm extends FormValidator
         return $opendocurl_start . api_get_person_name($firstname, $lastname) . ' (' . $username . ')' . $opendocurl_end;
     }
 
-    function sort_by_user($item1, $item2)
+    public function sort_by_user($item1, $item2)
     {
         $user1 = $item1['user'];
         $user2 = $item2['user'];

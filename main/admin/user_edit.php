@@ -269,7 +269,7 @@ if (api_is_platform_admin()) {
 }
 
 //Language
-$form->addElement('select_language', 'language', get_lang('Language'));
+$form->addSelectLanguage('language', get_lang('Language'));
 
 // Send email
 $group = array();

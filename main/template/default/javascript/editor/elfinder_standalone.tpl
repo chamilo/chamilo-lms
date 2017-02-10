@@ -1,4 +1,4 @@
-{% set finderFolder = _p.web ~ 'vendor/barryvdh/elfinder-builds/' %}
+{% set finderFolder = _p.web ~ 'vendor/studio-42/elfinder/' %}
 <!-- elFinder CSS (REQUIRED) -->
 <link rel="stylesheet" type="text/css" media="screen" href="{{ finderFolder }}css/elfinder.full.css">
 <link rel="stylesheet" type="text/css" media="screen" href="{{ finderFolder }}css/theme.css">

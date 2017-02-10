@@ -108,17 +108,24 @@ class LinkForm extends FormValidator
             if (!$link->needs_name_and_description() && count($link->get_all_links()) == '0') {
                 $select->addoption($link->get_type_name(), $linkType, 'disabled');
             } else {
-                if ($link->get_type() == LINK_EXERCISE) {
-                    // Adding exercise
-                    $select->addoption($link->get_type_name(), $linkType);
-                    // Adding hot potatoes
-                    $linkHot = $this->createLink(LINK_HOTPOTATOES, $courseCode);
+                $select->addoption($link->get_type_name(), $linkType);
+            }
+
+            if ($link->get_type() == LINK_EXERCISE) {
+                // Adding hot potatoes
+                $linkHot = $this->createLink(LINK_HOTPOTATOES, $courseCode);
+                $linkHot->setHp(true);
+                if ($linkHot->get_all_links(true)) {
                     $select->addoption(
                         '&nbsp;&nbsp;&nbsp;'.$linkHot->get_type_name(),
                         LINK_HOTPOTATOES
                     );
                 } else {
-                    $select->addoption($link->get_type_name(), $linkType);
+                    $select->addoption(
+                        '&nbsp;&nbsp;&nbsp;'.$linkHot->get_type_name(),
+                        LINK_HOTPOTATOES,
+                        'disabled'
+                    );
                 }
             }
         }

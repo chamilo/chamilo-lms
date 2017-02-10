@@ -164,7 +164,6 @@ if (isset($_GET['action'])) {
     }
 }
 
-
 // Show info about who created this user and when
 $creatorId = $user['creator_id'];
 $creatorInfo = api_get_user_info($creatorId);
@@ -216,7 +215,10 @@ $data = array(
 
 if (api_get_setting('allow_terms_conditions') === 'true') {
     $extraFieldValue = new ExtraFieldValue('user');
-    $value = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'legal_accept');
+    $value = $extraFieldValue->get_values_by_handler_and_field_variable(
+        $userId,
+        'legal_accept'
+    );
     $icon = Display::return_icon('accept_na.png');
     if (isset($value['value'])) {
         list($legalId, $legalLanguageId, $legalTime) = explode(':', $value['value']);

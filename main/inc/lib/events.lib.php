@@ -318,7 +318,7 @@ class Event
      * @author Julio Montoya Armas <gugli100@gmail.com> Reworked 2010
      * @desc Record result of user when an exercise was done
      */
-    public static function update_event_exercice(
+    public static function update_event_exercise(
         $exeid,
         $exo_id,
         $score,

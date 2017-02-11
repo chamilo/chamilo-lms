@@ -246,7 +246,7 @@ function displayActionBar()
             Display::return_icon('back.png', get_lang('GoBackToQuestionList'), '', ICON_SIZE_MEDIUM) . '</a>';
 
     echo '<a href="' . api_get_self() . '?action=addcategory&'.api_get_cidreq().'">' .
-        Display::return_icon('question_category.gif', get_lang('AddACategory')) . '</a>';
+        Display::return_icon('new_folder.png', get_lang('AddACategory'), null, ICON_SIZE_MEDIUM) . '</a>';
 
     echo Display::url(
         Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), [], ICON_SIZE_MEDIUM),

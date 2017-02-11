@@ -731,11 +731,14 @@ function getOnlineUsersCount($cacheEnabled = false)
 {
     $number = 0;
     if ($cacheEnabled) {
-        if (apcu_exists('my_campus_whoisonline_count_simple')) {
-            $number = apcu_fetch('my_campus_whoisonline_count_simple');
+        global $_configuration;
+        $cachePrefix = $_configuration['main_database'].'_'.$_configuration['access_url'].'_';
+        $apcVar = $cachePrefix.'my_campus_whoisonline_count_simple';
+        if (apcu_exists($apcVar)) {
+            $number = apcu_fetch($apcVar);
         } else {
             $number = who_is_online_count(api_get_setting('time_limit_whosonline'));
-            apcu_store('my_campus_whoisonline_count_simple', $number, 15);
+            apcu_store($apcVar, $number, 15);
         }
     } else {
         $number = who_is_online_count(api_get_setting('time_limit_whosonline'));
@@ -755,9 +758,12 @@ function getOnlineUsersInCourseCount($userId, $_course, $cacheEnabled = false)
     $numberOnlineInCourse = 0;
     if (!empty($_course['id'])) {
         if ($cacheEnabled) {
+            global $_configuration;
+            $cachePrefix = $_configuration['main_database'].'_'.$_configuration['access_url'].'_';
+            $apcVar = $cachePrefix.'my_campus_whoisonline_count_simple_'.$_course['id'];
             $apc = apcu_cache_info(true);
-            if (apcu_exists('my_campus_whoisonline_count_simple_'.$_course['id'])) {
-                $numberOnlineInCourse = apcu_fetch('my_campus_whoisonline_count_simple_'.$_course['id']);
+            if (apcu_exists($apcVar)) {
+                $numberOnlineInCourse = apcu_fetch($apcVar);
             } else {
                 $numberOnlineInCourse = who_is_online_in_this_course_count(
                     $userId,
@@ -765,7 +771,7 @@ function getOnlineUsersInCourseCount($userId, $_course, $cacheEnabled = false)
                     $_course['id']
                 );
                 apcu_store(
-                    'my_campus_whoisonline_count_simple_'.$_course['id'],
+                    $apcVar,
                     $numberOnlineInCourse,
                     15
                 );

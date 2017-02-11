@@ -188,13 +188,13 @@ if ($use_extra_fields) {
     }
 }
 
-$target_name = api_sort_by_first_name() ? 'firstname' : 'lastname';
+$target_name = 'lastname';
 $orderBy = $target_name;
 $showOfficialCode = false;
 $orderListByOfficialCode = api_get_setting('order_user_list_by_official_code');
 if ($orderListByOfficialCode === 'true') {
     $showOfficialCode = true;
-    $orderBy = " official_code, firstname, lastname";
+    $orderBy = " official_code, lastname, firstname";
 }
 
 $sql = "SELECT user_id, lastname, firstname, username, official_code
@@ -319,7 +319,7 @@ if (is_array($extra_field_list)) {
     <?php foreach ($db_users as $user) { ?>
           <option value="<?php echo $user['user_id']; ?>" <?php if(in_array($user['user_id'],$users)) echo 'selected="selected"'; ?>>
       <?php
-        $userName = api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')';
+        $userName = $user['lastname'].' '.$user['firstname'].' ('.$user['username'].')';
         if ($showOfficialCode) {
             $officialCode = !empty($user['official_code']) ? $user['official_code'].' - ' : '? - ';
             $userName = $officialCode.$userName;

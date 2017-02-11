@@ -7755,9 +7755,7 @@ function api_mail_html(
         $senderName = $platform_email['SMTP_FROM_NAME'];
         $senderEmail = $platform_email['SMTP_FROM_EMAIL'];
     }
-    $mail->SetFrom($defaultEmail, $defaultName);
-    $mail->From = $defaultEmail;
-    $mail->Sender = $defaultEmail;
+    $mail->SetFrom($senderEmail, $senderName);
     $mail->Subject = $subject;
     $mail->AltBody = strip_tags(
         str_replace('<br />', "\n", api_html_entity_decode($message))

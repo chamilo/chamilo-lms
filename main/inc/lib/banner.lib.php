@@ -199,14 +199,13 @@ function returnNotificationMenu()
     $user_id = api_get_user_id();
 
     $html = '';
-    $cacheEnabled = function_exists('apcu_exists');
 
     if ((api_get_setting('showonline', 'world') == 'true' && !$user_id) ||
         (api_get_setting('showonline', 'users') == 'true' && $user_id) ||
         (api_get_setting('showonline', 'course') == 'true' && $user_id && $course_id)
     ) {
-        $number = getOnlineUsersCount($cacheEnabled);
-        $number_online_in_course = getOnlineUsersInCourseCount($user_id, $_course, $cacheEnabled);
+        $number = getOnlineUsersCount();
+        $number_online_in_course = getOnlineUsersInCourseCount($user_id, $_course);
 
         // Display the who's online of the platform
         if ($number &&
@@ -724,16 +723,14 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
 
 /**
  * Helper function to get the number of users online, using cache if available
- * @param   bool    $cacheEnabled    Whether APCu is available or not
  * @return  int     The number of users currently online
  */
-function getOnlineUsersCount($cacheEnabled = false)
+function getOnlineUsersCount()
 {
+    global $_configuration;
     $number = 0;
-    if ($cacheEnabled) {
-        global $_configuration;
-        $cachePrefix = $_configuration['main_database'].'_'.$_configuration['access_url'].'_';
-        $apcVar = $cachePrefix.'my_campus_whoisonline_count_simple';
+    if (!empty($_configuration['apc'])) {
+        $apcVar = $_configuration['apcPrefix'].'my_campus_whoisonline_count_simple';
         if (apcu_exists($apcVar)) {
             $number = apcu_fetch($apcVar);
         } else {
@@ -750,17 +747,17 @@ function getOnlineUsersCount($cacheEnabled = false)
 /**
  * Helper function to get the number of users online in a course, using cache if available
  * @param   int     $userId         The user ID
- * @param   bool    $cacheEnabled   Whether APCu is available or not
+ * @param   array   $_course        The course details
  * @return  int     The number of users currently online
  */
-function getOnlineUsersInCourseCount($userId, $_course, $cacheEnabled = false)
+function getOnlineUsersInCourseCount($userId, $_course)
 {
+    global $_configuration;
     $numberOnlineInCourse = 0;
     if (!empty($_course['id'])) {
-        if ($cacheEnabled) {
+        if (!empty($_configuration['apc'])) {
             global $_configuration;
-            $cachePrefix = $_configuration['main_database'].'_'.$_configuration['access_url'].'_';
-            $apcVar = $cachePrefix.'my_campus_whoisonline_count_simple_'.$_course['id'];
+            $apcVar = $_configuration['apcPrefix'].'my_campus_whoisonline_count_simple_'.$_course['id'];
             $apc = apcu_cache_info(true);
             if (apcu_exists($apcVar)) {
                 $numberOnlineInCourse = apcu_fetch($apcVar);

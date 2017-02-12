@@ -1688,13 +1688,11 @@ class Tracking
         //This query can be very slow (several seconds on an indexed table
         // with 14M rows). As such, we'll try to use APCU if it is
         // available to store the resulting value for a few seconds
-        $cacheEnabled = function_exists('apcu_exists');
-        if ($cacheEnabled) {
+        global $_configuration;
+        if (!empty($_configuration['apc'])) {
             $apc = apcu_cache_info(true);
             $apc_end = $apc['start_time'] + $apc['ttl'];
-            global $_configuration;
-            $cachePrefix = $_configuration['main_database'].'_'.$_configuration['access_url'].'_';
-            $apc_var = $cachePrefix.'course_access_'.$courseId.'_'.$session_id.'_'.strtotime($roundedStart).'_'.strtotime($roundedStop);
+            $apc_var = $_configuration['apcPrefix'].'course_access_'.$courseId.'_'.$session_id.'_'.strtotime($roundedStart).'_'.strtotime($roundedStop);
             if (apcu_exists($apc_var) && (time() < $apc_end) &&
                 apcu_fetch($apc_var) > 0
             ) {

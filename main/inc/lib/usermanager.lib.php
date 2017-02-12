@@ -755,6 +755,13 @@ class UserManager
             api_get_utc_datetime(),
             $user_id_manager
         );
+        global $_configuration;
+        if (!empty($_configuration['apc'])) {
+            $apcVar = $_configuration['apcPrefix'] . 'userinfo_' . $user_id;
+            if (apcu_exists($apcVar)) {
+                apcu_delete($apcVar);
+            }
+        }
 
         return true;
     }
@@ -1073,6 +1080,14 @@ class UserManager
 
         if (!empty($hook)) {
             $hook->notifyUpdateUser(HOOK_EVENT_TYPE_POST);
+        }
+
+        global $_configuration;
+        if (!empty($_configuration['apc'])) {
+            $apcVar = $_configuration['apcPrefix'] . 'userinfo_' . $user_id;
+            if (apcu_exists($apcVar)) {
+                apcu_delete($apcVar);
+            }
         }
 
         return $user->getId();

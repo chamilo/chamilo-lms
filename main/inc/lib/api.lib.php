@@ -1459,17 +1459,45 @@ function api_get_user_info(
     $loadOnlyVisibleExtraData = false,
     $loadAvatars = true
 ) {
+    global $_configuration;
+    $apcVar = null;
+
     if (empty($user_id)) {
         $userFromSession = Session::read('_user');
         if (isset($userFromSession)) {
-            return _api_format_user($userFromSession, $showPassword, $loadAvatars);
+            if (!empty($_configuration['apc'])) {
+                $apcVar = $_configuration['apcPrefix'] . 'userinfo_' . $userFromSession['user_id'];
+                if (apcu_exists($apcVar)) {
+                    $user = apcu_fetch($apcVar);
+                } else {
+                    $user = _api_format_user($userFromSession, $showPassword, $loadAvatars);
+                    apcu_store($apcVar, $user, 60);
+                }
+            } else {
+                $user = _api_format_user($userFromSession, $showPassword, $loadAvatars);
+            }
+
+            return $user;
         }
 
         return false;
     }
 
-    $sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)."
-            WHERE id='".intval($user_id)."'";
+    // Make sure user_id is safe
+    $user_id = intval($user_id);
+
+    // Re-use user information if not stale and already stored in APCu
+    if (!empty($_configuration['apc'])) {
+        $apcVar = $_configuration['apcPrefix'].'userinfo_'.$user_id;
+        if (apcu_exists($apcVar)) {
+            $user = apcu_fetch($apcVar);
+
+            return $user;
+        }
+    }
+
+    $sql = "SELECT * FROM " . Database:: get_main_table(TABLE_MAIN_USER) . "
+            WHERE id = $user_id";
     $result = Database::query($sql);
     if (Database::num_rows($result) > 0) {
         $result_array = Database::fetch_array($result);
@@ -1500,9 +1528,11 @@ function api_get_user_info(
             );
         }
         $user = _api_format_user($result_array, $showPassword, $loadAvatars);
-
-        return $user;
     }
+    if (!empty($_configuration['apc'])) {
+        apcu_store($apcVar, $user, 60);
+    }
+
     return false;
 }
 

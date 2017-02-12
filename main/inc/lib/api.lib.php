@@ -1461,6 +1461,7 @@ function api_get_user_info(
 ) {
     global $_configuration;
     $apcVar = null;
+    $user = false;
 
     if (empty($user_id)) {
         $userFromSession = Session::read('_user');
@@ -1533,7 +1534,7 @@ function api_get_user_info(
         apcu_store($apcVar, $user, 60);
     }
 
-    return false;
+    return $user;
 }
 
 /**

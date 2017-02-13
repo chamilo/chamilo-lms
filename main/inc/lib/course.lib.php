@@ -3501,6 +3501,8 @@ class CourseManager
                 }
 
                 $params = [];
+                //Param (course_code) needed to get the student process
+                $params['course_code'] = $course['code'];
                 // Get notifications.
                 $course_info['id_session'] = null;
                 $courseUserInfo = CourseManager::getUserCourseInfo($user_id, $courseId);
@@ -3677,6 +3679,9 @@ class CourseManager
             $iconName = basename($course_info['course_image']);
 
             $params = array();
+            //Param (course_code) needed to get the student process
+            $params['course_code'] = $course['code'];
+
             if ($showCustomIcon === 'true' && $iconName != 'course.png') {
                 $params['thumbnails'] = $course_info['course_image'];
                 $params['image'] = $course_info['course_image_large'];
@@ -3820,6 +3825,8 @@ class CourseManager
             }
 
             $params = array();
+            //Param (course_code) needed to get the student process
+            $params['course_code'] = $course['code'];
             $params['edit_actions'] = '';
             $params['document'] = '';
             if (api_is_platform_admin()) {

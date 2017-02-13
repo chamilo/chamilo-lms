@@ -7963,4 +7963,9 @@ $OnlyUsersFromCourseSession = "Only users from one course in a session";
 $ServerXForwardedForInfo = "If the server is behind a proxy or firewall (and only in those cases), it might be using the X_FORWARDED_FOR HTTP header to show the remote user IP (yours, in this case).";
 $GeolocalizationCoordinates = "Geolocalization by coordinates";
 $ExportUsersOfACourse = "Export users of a course";
+$StudentCourseProgress = "Progress: %s &#x00025;";
+$StudentCourseScore = "Rating: %s&#x00025;";
+$StudentCourseCertificate = "Certificate: %s";
+$MyCourseProgressTitle = "Show course progress to student";
+$MyCourseProgressTemplateComment = "By activating this option, the students will see their course progress in the page 'My Courses'.";
 ?>

@@ -55,6 +55,16 @@
                                     </a>
                                 {% endfor %}
                             </div>
+
+                            {% if item.student_info %}
+                            <div class="course-student-info">
+                                <div class="student-info">
+                                    {{ "StudentCourseProgress" | get_lang | format(item.student_info.progress) }}
+                                    {{ "StudentCourseScore" | get_lang | format(item.student_info.score) }}
+                                    {{ "StudentCourseCertificate" | get_lang | format(item.student_info.certificate) }}
+                                </div>
+                            </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

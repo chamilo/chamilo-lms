@@ -3012,7 +3012,8 @@ class UserManager
         to our user or not */
         $sql = "SELECT DISTINCT
                     c.visibility,
-                    c.id as real_id,                    
+                    c.id as real_id,
+                    c.code as course_code,
                     sc.position
                 FROM $tbl_session_course_user as scu
                 INNER JOIN $tbl_session_course sc
@@ -3044,6 +3045,7 @@ class UserManager
             $sql = "SELECT DISTINCT
                         c.visibility, 
                         c.id as real_id,
+                        c.code as course_code,
                         sc.position
                     FROM $tbl_session_course_user as scu
                     INNER JOIN $tbl_session as s

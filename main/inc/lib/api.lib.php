@@ -1322,15 +1322,17 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
 {
     $result = array();
 
+    $firstName = null;
+    $lastName = null;
     if (isset($user['firstname']) && isset($user['lastname'])) { // with only lowercase
-        $result['firstname'] = $user['firstname'];
-        $result['lastname'] = $user['lastname'];
+        $firstName = $result['firstname'] = $user['firstname'];
+        $lastName = $result['lastname'] = $user['lastname'];
     } elseif (isset($user['firstName']) && isset($user['lastName'])) { // with uppercase letters
-        $result['firstname'] = isset($user['firstName']) ? $user['firstName'] : null;
-        $result['lastname'] = isset($user['lastName']) ? $user['lastName'] : null;
+        $firstName = $result['firstname'] = isset($user['firstName']) ? $user['firstName'] : null;
+        $lastName = $result['lastname'] = isset($user['lastName']) ? $user['lastName'] : null;
     }
 
-    $result['complete_name'] = api_get_person_name($result['firstname'], $result['lastname']);
+    $result['complete_name'] = api_get_person_name($firstName, $lastName);
     $result['complete_name_with_username'] = $result['complete_name'];
 
     if (!empty($user['username'])) {
@@ -1338,8 +1340,8 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
     }
 
     // Kept for historical reasons
-    $result['firstName'] = $result['firstname'];
-    $result['lastName'] = $result['lastname'];
+    $result['firstName'] = $firstName;
+    $result['lastName'] = $lastName;
 
     $attributes = array(
         'phone',

@@ -1456,15 +1456,14 @@ function api_get_user_info(
     $loadOnlyVisibleExtraData = false,
     $loadAvatars = true
 ) {
-    global $_configuration;
     $apcVar = null;
     $user = false;
-
+    $cacheAvailable = api_get_configuration_value('apc');
     if (empty($user_id)) {
         $userFromSession = Session::read('_user');
         if (isset($userFromSession)) {
-            if (!empty($_configuration['apc'])) {
-                $apcVar = $_configuration['apcPrefix'] . 'userinfo_' . $userFromSession['user_id'];
+            if (!empty($cacheAvailable)) {
+                $apcVar = api_get_configuration_value('apc_prefix') . 'userinfo_' . $userFromSession['user_id'];
                 if (apcu_exists($apcVar)) {
                     $user = apcu_fetch($apcVar);
                 } else {
@@ -1485,8 +1484,8 @@ function api_get_user_info(
     $user_id = intval($user_id);
 
     // Re-use user information if not stale and already stored in APCu
-    if (!empty($_configuration['apc'])) {
-        $apcVar = $_configuration['apcPrefix'].'userinfo_'.$user_id;
+    if (!empty($cacheAvailable)) {
+        $apcVar = api_get_configuration_value('apc_prefix') . 'userinfo_' . $user_id;
         if (apcu_exists($apcVar)) {
             $user = apcu_fetch($apcVar);
 
@@ -1527,7 +1526,7 @@ function api_get_user_info(
         }
         $user = _api_format_user($result_array, $showPassword, $loadAvatars);
     }
-    if (!empty($_configuration['apc'])) {
+    if (!empty($cacheAvailable)) {
         apcu_store($apcVar, $user, 60);
     }
 

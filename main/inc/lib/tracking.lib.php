@@ -1686,13 +1686,13 @@ class Tracking
                     $month_filter";
 
         //This query can be very slow (several seconds on an indexed table
-        // with 14M rows). As such, we'll try to use APCU if it is
+        // with 14M rows). As such, we'll try to use APCu if it is
         // available to store the resulting value for a few seconds
-        global $_configuration;
-        if (!empty($_configuration['apc'])) {
+        $cacheAvailable = api_get_configuration_value('apc');
+        if (!empty($cacheAvailable)) {
             $apc = apcu_cache_info(true);
             $apc_end = $apc['start_time'] + $apc['ttl'];
-            $apc_var = $_configuration['apcPrefix'].'course_access_'.$courseId.'_'.$session_id.'_'.strtotime($roundedStart).'_'.strtotime($roundedStop);
+            $apc_var = api_get_configuration_value('apc_refix') . 'course_access_' . $courseId . '_' . $session_id . '_' . strtotime($roundedStart) . '_' . strtotime($roundedStop);
             if (apcu_exists($apc_var) && (time() < $apc_end) &&
                 apcu_fetch($apc_var) > 0
             ) {

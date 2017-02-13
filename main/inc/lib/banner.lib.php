@@ -727,10 +727,10 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
  */
 function getOnlineUsersCount()
 {
-    global $_configuration;
     $number = 0;
-    if (!empty($_configuration['apc'])) {
-        $apcVar = $_configuration['apcPrefix'].'my_campus_whoisonline_count_simple';
+    $cacheAvailable = api_get_configuration_value('apc');
+    if (!empty($cacheAvailable)) {
+        $apcVar = api_get_configuration_value('apc_refix') . 'my_campus_whoisonline_count_simple';
         if (apcu_exists($apcVar)) {
             $number = apcu_fetch($apcVar);
         } else {
@@ -752,13 +752,11 @@ function getOnlineUsersCount()
  */
 function getOnlineUsersInCourseCount($userId, $_course)
 {
-    global $_configuration;
+    $cacheAvailable = api_get_configuration_value('apc');
     $numberOnlineInCourse = 0;
     if (!empty($_course['id'])) {
-        if (!empty($_configuration['apc'])) {
-            global $_configuration;
-            $apcVar = $_configuration['apcPrefix'].'my_campus_whoisonline_count_simple_'.$_course['id'];
-            $apc = apcu_cache_info(true);
+        if (!empty($cacheAvailable)) {
+            $apcVar = api_get_configuration_value('apc_refix') . 'my_campus_whoisonline_count_simple_' . $_course['id'];
             if (apcu_exists($apcVar)) {
                 $numberOnlineInCourse = apcu_fetch($apcVar);
             } else {

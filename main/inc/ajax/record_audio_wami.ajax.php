@@ -15,8 +15,8 @@ $_course = api_get_course_info();
 parse_str($_SERVER['QUERY_STRING'], $params);
 
 if (isset($params['waminame']) && isset($params['wamidir']) && isset($params['wamiuserid'])) {
-    $waminame   = $params['waminame'];
-    $wamidir    = $params['wamidir'];
+    $waminame = $params['waminame'];
+    $wamidir = $params['wamidir'];
     $wamiuserid = $params['wamiuserid'];
 } else {
     api_not_allowed();

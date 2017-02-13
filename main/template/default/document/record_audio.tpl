@@ -113,7 +113,6 @@
                     btnStart.prop('disabled', false);
                     btnStop.prop('disabled', true);
                     btnSave.prop('disabled', false);
-
                     tagAudio
                             .removeClass('hidden')
                             .addClass('show')

@@ -86,7 +86,7 @@ before_script:
 script:
   # - phpunit -c tests/phpunit
   # pwd shows /home/travis/build/chamilo/chamilo-lms
-  - cd tests && ../vendor/behat/behat/bin/behat -v
+  - cd tests/behat && ../../vendor/behat/behat/bin/behat -v
 
 # configure notifications (email, IRC, campfire etc)
 notifications:

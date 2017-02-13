@@ -388,9 +388,9 @@ if (isset($_GET['deletelink'])) {
         if ($link[0] != null) {
             // Clean forum qualify
             $sql = 'UPDATE '.$tbl_forum_thread.' SET
-                        thread_qualify_max=0,
-                        thread_weight=0,
-                        thread_title_qualify=""
+                        thread_qualify_max = 0,
+                        thread_weight = 0,
+                        thread_title_qualify = ""
 					WHERE c_id = '.$course_id.' AND thread_id = (
 					    SELECT ref_id FROM '.$tbl_grade_links.'
 					    WHERE id='.$get_delete_link.' AND type = '.LINK_FORUM_THREAD.'

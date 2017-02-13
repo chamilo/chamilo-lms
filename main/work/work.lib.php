@@ -4043,8 +4043,8 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
                     LINK_STUDENTPUBLICATION,
                     $workId,
                     $params['new_dir'],
-                    (float)$params['weight'],
-                    (float)$params['qualification'],
+                    api_float_val($params['weight']),
+                    api_float_val($params['qualification']),
                     $params['description'],
                     1,
                     api_get_session_id()

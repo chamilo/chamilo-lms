@@ -240,7 +240,7 @@ if ($form->validate()) {
             $add_to_update = null;
             if ($is_allowed_to_edit && ($_POST['qualification'] !='' )) {
                 $add_to_update = ', qualificator_id ='."'".api_get_user_id()."', ";
-                $add_to_update .= ' qualification = '."'".Database::escape_string($_POST['qualification'])."',";
+                $add_to_update .= ' qualification = '."'".api_float_val($_POST['qualification'])."',";
                 $add_to_update .= ' date_of_qualification = '."'".api_get_utc_datetime()."'";
 
                 if (isset($_POST['send_email'])) {

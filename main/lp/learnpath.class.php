@@ -4167,6 +4167,7 @@ class learnpath
                         )
                         $session_condition
                     ";
+
             $result = Database::query($sql);
             $num = Database :: num_rows($result);
             if ($set_visibility == 'i' && $num > 0) {
@@ -4199,7 +4200,9 @@ class learnpath
                             session_id = $session_id
                         WHERE
                             c_id = ".$course_id." AND
-                            (link='$link' and image='scormbuilder.gif' $session_condition)
+                            (link = '$link' OR link = '$oldLink') AND 
+                            image='scormbuilder.gif' 
+                            $session_condition
                         ";
                 Database::query($sql);
             } else {

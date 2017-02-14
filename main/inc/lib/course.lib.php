@@ -3326,17 +3326,20 @@ class CourseManager
 
     /**
      * Update course picture
-     * @param   string  Course code
+     * @param   array  $courseInfo
      * @param   string  File name
      * @param   string  The full system name of the image from which course picture will be created.
      * @param   string $cropParameters Optional string that contents "x,y,width,height" of a cropped image format
      * @return  bool    Returns the resulting. In case of internal error or negative validation returns FALSE.
      */
-    public static function update_course_picture($course_code, $filename, $source_file = null, $cropParameters = null)
+    public static function update_course_picture($courseInfo, $filename, $source_file = null, $cropParameters = null)
     {
-        $course_info = api_get_course_info($course_code);
+        if (empty($courseInfo)) {
+            return false;
+        }
+
         // course path
-        $store_path = api_get_path(SYS_COURSE_PATH) . $course_info['path'];
+        $store_path = api_get_path(SYS_COURSE_PATH) . $courseInfo['path'];
         // image name for courses
         $course_image = $store_path . '/course-pic.png';
         $course_medium_image = $store_path . '/course-pic85x85.png';

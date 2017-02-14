@@ -701,7 +701,7 @@ if ($form->validate() && is_settings_editable()) {
     $picture = $_FILES['picture'];
     if (!empty($picture['name'])) {
         $picture_uri = CourseManager::update_course_picture(
-            $course_code,
+            $_course,
             $picture['name'],
             $picture['tmp_name'],
             $updateValues['picture_crop_result']

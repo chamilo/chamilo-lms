@@ -27,15 +27,17 @@ RewriteRule ^courses/([^/]+)/scorm/(.*)$ main/document/download_scorm.php?doc_ur
 RewriteRule ^courses/([^/]+)/document/certificates/(.*)$ app/courses/$1/document/certificates/$2 [QSA,L]
 RewriteRule ^courses/([^/]+)/document/(.*)$ main/document/download.php?doc_url=/$2&cDir=$1 [QSA,L]
 
+# Course upload files
+RewriteRule ^courses/([^/]+)/upload/([^/]+)/(.*)$ main/document/download_uploaded_files.php?code=$1&type=$2&file=$3 [QSA,L]
+
 # Rewrite everything in the work folder
 RewriteRule ^courses/([^/]+)/work/(.*)$ main/work/download.php?file=work/$2&cDir=$1 [QSA,L]
 
-# Course upload files
-RewriteRule ^courses/([^/]+)/upload/([^/]+)/(.*)$ main/document/download_uploaded_files.php?code=$1&type=$2&file=$3 [QSA,L]
-RewriteRule ^courses/([^/]+)/(.*)$ app/courses/$1/$2 [QSA,L]
+RewriteRule ^courses/([^/]+)/course-pic85x85.png$ main/inc/ajax/course.ajax.php?a=get_course_image&code=$1&image=course_image_source [QSA,L]
+RewriteRule ^courses/([^/]+)/course-pic.png$ main/inc/ajax/course.ajax.php?a=get_course_image&code=$1&image=course_image_large_source [QSA,L]
 
-RewriteRule ^courses/([^/]+)/course-pic85x85.png$ app/courses/$1/course-pic85x85.png [QSA,L]
-RewriteRule ^courses/([^/]+)/course-pic.png$ app/courses/$1/course-pic.png [QSA,L]
+# Redirect all courses/ to app/courses/
+RewriteRule ^courses/([^/]+)/(.*)$ app/courses/$1/$2 [QSA,L]
 
 # About session
 RewriteRule ^session/(\d{1,})/about/?$ main/session/about.php?session_id=$1 [L]

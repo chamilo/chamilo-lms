@@ -1814,6 +1814,8 @@ HOTSPOT;
             $lp_list_obj = new LearnpathList(api_get_user_id());
             $lp_list = $lp_list_obj->get_flat_list();
 
+            $oldIds = array_column($lp_list, 'lp_old_id', 'iid');
+
             if (is_array($results)) {
                 $users_array_id = array();
                 $from_gradebook = false;
@@ -1827,7 +1829,6 @@ HOTSPOT;
                     $exercise_id,
                     LINK_EXERCISE
                 );
-
                 // Looping results
                 for ($i = 0; $i < $sizeof; $i++) {
                     $revised = $results[$i]['revised'];
@@ -1843,8 +1844,14 @@ HOTSPOT;
                     }
 
                     $lp_obj = isset($results[$i]['orig_lp_id']) && isset($lp_list[$results[$i]['orig_lp_id']]) ? $lp_list[$results[$i]['orig_lp_id']] : null;
+                    if (empty($lp_obj)) {
+                        // Try to get the old id (id instead of iid)
+                        $lpNewId = isset($results[$i]['orig_lp_id']) && isset($oldIds[$results[$i]['orig_lp_id']]) ? $oldIds[$results[$i]['orig_lp_id']] : null;
+                        if ($lpNewId) {
+                            $lp_obj = isset($lp_list[$lpNewId]) ? $lp_list[$lpNewId] : null;
+                        }
+                    }
                     $lp_name = null;
-
                     if ($lp_obj) {
                         $url = api_get_path(WEB_CODE_PATH) . 'lp/lp_controller.php?' . api_get_cidreq() . '&action=view&lp_id=' . $results[$i]['orig_lp_id'];
                         $lp_name = Display::url(
@@ -1854,9 +1861,8 @@ HOTSPOT;
                         );
                     }
 
-                    //Add all groups by user
+                    // Add all groups by user
                     $group_name_list = null;
-
                     if ($is_empty_sql_inner_join_tbl_user) {
                         $group_list = GroupManager::get_group_ids(
                             api_get_course_int_id(),

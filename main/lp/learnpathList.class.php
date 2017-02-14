@@ -176,6 +176,7 @@ class LearnpathList
                 //'category_id'       => $row['category_id'],
                 'subscribe_users' => $row->getSubscribeUsers(),
                 'lp_old_id' => $row->getId(),
+                'iid' => $row->getIid(),
                 'prerequisite' => $row->getPrerequisite()
             );
             $names[$row->getName()] = $row->getIid();

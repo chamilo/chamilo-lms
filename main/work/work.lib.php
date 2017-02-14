@@ -325,15 +325,17 @@ function get_work_assignment_by_id($id, $courseId = null)
  * @param int $id
  * @param array $my_folder_data
  * @param string $add_in_where_query
+ * @param int $course_id
+ * @param int $session_id
  *
  * @return array
  */
-function getWorkList($id, $my_folder_data, $add_in_where_query = null)
+function getWorkList($id, $my_folder_data, $add_in_where_query = null, $course_id = 0, $session_id = 0)
 {
     $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
-    $course_id = api_get_course_int_id();
-    $session_id = api_get_session_id();
+    $course_id = $course_id ? $course_id : api_get_course_int_id();
+    $session_id = $session_id ? $session_id : api_get_session_id();
     $condition_session = api_get_session_condition($session_id);
     $group_id = api_get_group_id();
     $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
@@ -409,11 +411,13 @@ function getWorkList($id, $my_folder_data, $add_in_where_query = null)
 
 /**
  * @param int $userId
+ * @param int $courseId
+ * @param int $sessionId
  * @return array
  */
-function getWorkPerUser($userId)
+function getWorkPerUser($userId, $courseId = 0, $sessionId = 0)
 {
-    $works = getWorkList(null, null, null);
+    $works = getWorkList(null, null, null, $courseId, $sessionId);
     $result = array();
     if (!empty($works)) {
         foreach ($works as $workData) {
@@ -426,7 +430,10 @@ function getWorkPerUser($userId)
                 null,
                 $workId,
                 null,
-                $userId
+                $userId,
+                false,
+                $courseId,
+                $sessionId
             );
         }
     }
@@ -1831,6 +1838,8 @@ function get_work_user_list_from_documents(
  * @param array $where_condition
  * @param int $studentId
  * @param bool $getCount
+ * @param int $courseId
+ * @param int $sessionId
  * @return array
  */
 function get_work_user_list(
@@ -1841,16 +1850,19 @@ function get_work_user_list(
     $work_id,
     $where_condition = null,
     $studentId = null,
-    $getCount = false
+    $getCount = false,
+    $courseId = 0,
+    $sessionId = 0
 ) {
     $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $iprop_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
     $user_table = Database::get_main_table(TABLE_MAIN_USER);
 
-    $session_id = api_get_session_id();
+    $session_id = $sessionId ? $sessionId : api_get_session_id();
     $group_id = api_get_group_id();
     $course_info = api_get_course_info();
-    $course_id = $course_info['real_id'];
+    $course_info = empty($course_info) ? api_get_course_info_by_id($courseId) : $course_info;
+    $course_id = isset($course_info['real_id']) ? $course_info['real_id'] : $courseId;
 
     $work_id = intval($work_id);
     $column = !empty($column) ? Database::escape_string($column) : 'sent_date';
@@ -1861,10 +1873,10 @@ function get_work_user_list(
         $direction = 'desc';
     }
 
-    $work_data = get_work_data_by_id($work_id);
+    $work_data = get_work_data_by_id($work_id, $courseId, $sessionId);
     $is_allowed_to_edit = api_is_allowed_to_edit() || api_is_coach();
     $condition_session  = api_get_session_condition($session_id, true, false, 'work.session_id');
-    $locked = api_resource_is_locked_by_gradebook($work_id, LINK_STUDENTPUBLICATION);
+    $locked = api_resource_is_locked_by_gradebook($work_id, LINK_STUDENTPUBLICATION, $course_info['code']);
 
     $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
         api_get_user_id(),
@@ -1921,8 +1933,7 @@ function get_work_user_list(
         $user_condition = "INNER JOIN $user_table u  ON (work.user_id = u.user_id) ";
         $work_condition = "$iprop_table prop INNER JOIN $work_table work
                            ON (prop.ref = work.id AND prop.c_id = $course_id AND work.c_id = $course_id ) ";
-
-        $work_assignment = get_work_assignment_by_id($work_id);
+        $work_assignment = get_work_assignment_by_id($work_id, $courseId);
 
         if (!empty($studentId)) {
             $where_condition.= " AND u.user_id = ".intval($studentId);

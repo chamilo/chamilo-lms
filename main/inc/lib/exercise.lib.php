@@ -1594,10 +1594,8 @@ HOTSPOT;
 
         if ($is_allowedToEdit) {
             //@todo fix to work with COURSE_RELATION_TYPE_RRHH in both queries
-
             // Hack in order to filter groups
             $sql_inner_join_tbl_user = '';
-
             if (strpos($extra_where_conditions, 'group_id')) {
                 $sql_inner_join_tbl_user = "
                 (
@@ -1817,7 +1815,6 @@ HOTSPOT;
             $lp_list = $lp_list_obj->get_flat_list();
 
             if (is_array($results)) {
-
                 $users_array_id = array();
                 $from_gradebook = false;
                 if (isset($_GET['gradebook']) && $_GET['gradebook'] == 'view') {
@@ -1849,9 +1846,7 @@ HOTSPOT;
                     $lp_name = null;
 
                     if ($lp_obj) {
-                        $url = api_get_path(
-                                WEB_CODE_PATH
-                            ) . 'lp/lp_controller.php?' . api_get_cidreq() . '&action=view&lp_id=' . $results[$i]['orig_lp_id'];
+                        $url = api_get_path(WEB_CODE_PATH) . 'lp/lp_controller.php?' . api_get_cidreq() . '&action=view&lp_id=' . $results[$i]['orig_lp_id'];
                         $lp_name = Display::url(
                             $lp_obj['lp_name'],
                             $url,
@@ -1874,16 +1869,11 @@ HOTSPOT;
                         $results[$i]['group_name'] = $group_name_list;
                     }
 
-                    $results[$i]['exe_duration'] = !empty($results[$i]['exe_duration']) ? round(
-                        $results[$i]['exe_duration'] / 60
-                    ) : 0;
+                    $results[$i]['exe_duration'] = !empty($results[$i]['exe_duration']) ? round($results[$i]['exe_duration'] / 60) : 0;
 
                     $user_list_id[] = $results[$i]['exe_user_id'];
                     $id = $results[$i]['exe_id'];
-
-                    $dt = api_convert_and_format_date(
-                        $results[$i]['exe_weighting']
-                    );
+                    $dt = api_convert_and_format_date($results[$i]['exe_weighting']);
 
                     // we filter the results if we have the permission to
                     if (isset($results[$i]['results_disabled'])) {

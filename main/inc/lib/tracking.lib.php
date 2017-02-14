@@ -125,7 +125,6 @@ class Tracking
         $user_id = intval($user_id);
         $session_id = intval($session_id);
         $origin = Security::remove_XSS($origin);
-
         $list = learnpath :: get_flat_ordered_items_list($lp_id, 0, $courseInfo['real_id']);
 
         $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
@@ -474,7 +473,6 @@ class Tracking
                         }
 
                         $counter++;
-
                         $action = null;
                         if ($type == 'classic') {
                             $action = '<td></td>';
@@ -546,7 +544,6 @@ class Tracking
                     $my_lp_id = $row['mylpid'];
                     $my_lp_view_id = $row['mylpviewid'];
                     $my_path = $row['path'];
-
                     $result_disabled_ext_all = false;
 
                     if ($row['item_type'] == 'quiz') {
@@ -567,7 +564,6 @@ class Tracking
 
                     // Check if there are interactions below
                     $extend_this_attempt = 0;
-
                     $inter_num = learnpath::get_interactions_count_from_db($row['iv_id'], $course_id);
                     $objec_num = learnpath::get_objectives_count_from_db($row['iv_id'], $course_id);
 
@@ -615,7 +611,6 @@ class Tracking
                     $title = $row['mytitle'];
 
                     // Selecting the exe_id from stats attempts tables in order to look the max score value.
-
                     $sql = 'SELECT * FROM ' . $tbl_stats_exercices . '
                              WHERE
                                 exe_exo_id="' . $row['path'] . '" AND
@@ -685,7 +680,7 @@ class Tracking
                                             SELECT DISTINCT
                                                 question_id, marks, ponderation
                                             FROM $tbl_stats_attempts as at
-                                            INNER JOIN  $tbl_quiz_questions as q
+                                            INNER JOIN $tbl_quiz_questions as q
                                             ON (q.id = at.question_id AND q.c_id = $course_id)
                                             WHERE exe_id ='$id_last_attempt'
                                         ) as t";
@@ -765,7 +760,6 @@ class Tracking
                         }
 
                         if ($lp_id == $my_lp_id && false) {
-
                             $output .= '<tr class =' . $oddclass . '>
                                     <td>' . $extend_link . '</td>
                                     <td colspan="4">' . $title . '</td>

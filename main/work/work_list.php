@@ -17,6 +17,17 @@ if (empty($workId)) {
 
 $courseInfo = api_get_course_info();
 
+// Student publications are saved with the iid in a LP
+$origin = api_get_origin();
+if ($origin == 'learnpath') {
+    $em = Database::getManager();
+    /** @var \Chamilo\CourseBundle\Entity\CStudentPublication $work */
+    $work = $em->getRepository('ChamiloCourseBundle:CStudentPublication')->find($workId);
+    if ($work) {
+        $workId = $work->getId();
+    }
+}
+
 protectWork($courseInfo, $workId);
 
 $my_folder_data = get_work_data_by_id($workId);

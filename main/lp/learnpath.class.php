@@ -8153,8 +8153,8 @@ class learnpath
         } elseif (is_numeric($extra_info)) {
             $extra_info = intval($extra_info);
             $sql = "SELECT title, description
-                    FROM " . $tbl_publication . "
-                    WHERE c_id = ".$course_id." AND id = " . $extra_info;
+                    FROM $tbl_publication
+                    WHERE c_id = $course_id AND id = " . $extra_info;
 
             $result = Database::query($sql);
             $row = Database :: fetch_array($result);
@@ -8170,8 +8170,8 @@ class learnpath
             $parent = 0;
         }
 
-        $sql = "SELECT * FROM " . $tbl_lp_item . "
-                WHERE c_id = ".$course_id." AND lp_id = " . $this->lp_id;
+        $sql = "SELECT * FROM $tbl_lp_item 
+                WHERE c_id = $course_id AND lp_id = " . $this->lp_id;
 
         $result = Database::query($sql);
         $arrLP = array();
@@ -8222,9 +8222,7 @@ class learnpath
             ]
         );
 
-        $arrHide = array(
-            $id
-        );
+        $arrHide = array($id);
 
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($action != 'add') {
@@ -9018,7 +9016,6 @@ class learnpath
             $works = getWorkListTeacher(0, 100, null, null, null);
             if (!empty($works)) {
                 foreach ($works as $work) {
-
                     $link = Display::url(
                         Display::return_icon('preview_view.png', get_lang('Preview')),
                         api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$work['iid'],
@@ -11065,8 +11062,11 @@ EOD;
     {
         $finalItem = $this->getFinalItem();
         $doc = DocumentManager::get_document_data_by_id($finalItem->path, $this->cc);
+        if (file_exists($doc['absolute_path'])) {
+            return file_get_contents($doc['absolute_path']);
+        }
 
-        return file_get_contents($doc['absolute_path']);
+        return '';
     }
 
     /**

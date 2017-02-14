@@ -91,7 +91,7 @@ if ($there_is_a_expire_date) {
 }
 
 $defaults['add_to_calendar'] = isset($homework['add_to_calendar']) ? $homework['add_to_calendar'] : null;
-$form = getFormWork($form, $defaults);
+$form = getFormWork($form, $defaults, $workId);
 $form->addElement('hidden', 'work_id', $workId);
 $form->addButtonUpdate(get_lang('ModifyDirectory'));
 

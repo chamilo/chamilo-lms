@@ -250,6 +250,13 @@ function get_work_data_by_id($id, $courseId = null, $sessionId = null)
                 $work['show_content'] = '<img src="'.$work['show_url'].'"/>';
             }
         }
+
+        $fieldValue = new ExtraFieldValue('work');
+        $work['extra'] = $fieldValue->getAllValuesForAnItem(
+            $id,
+            true
+        );
+
     }
 
     return $work;
@@ -2055,9 +2062,13 @@ function get_work_user_list(
                 $work['qualification'] = $qualification_string.$feedback;
                 $work['qualification_only'] = $qualification_string;
 
+                // Date.
+                $work_date = api_convert_and_format_date($work['sent_date']);
+                $date = date_to_str_ago($work['sent_date']). ' ' . $work_date;
+                $work['formatted_date'] = $work_date . ' - ' . $add_string;
+
                 $work['sent_date_from_db'] = $work['sent_date'];
-                $work['sent_date'] = '<div class="date-time">' .
-                        api_get_local_time($work['sent_date']) . ' ' . $add_string . ' </div>';
+                $work['sent_date'] = '<div class="work-date" title="'.$date.'">' . $add_string . ' - ' . $work['sent_date'] . '</div>';
 
                 // Actions.
                 $correction = '';
@@ -3878,6 +3889,12 @@ function addDir($formValues, $user_id, $courseInfo, $group_id, $session_id)
 
             updatePublicationAssignment($id, $formValues, $courseInfo, $group_id);
 
+            // Added the new Work ID to the extra field values
+            $formValues['item_id'] = $id;
+
+            $workFieldValue = new ExtraFieldValue('work');
+            $workFieldValue->saveFieldValues($formValues);
+
             if (api_get_course_setting('email_alert_students_on_new_homework') == 1) {
                 send_email_on_homework_creation($course_id, $session_id, $id);
             }
@@ -3937,6 +3954,9 @@ function updateWork($workId, $params, $courseInfo, $sessionId = 0)
             )
         )
     );
+
+    $workFieldValue = new ExtraFieldValue('work');
+    $workFieldValue->saveFieldValues($params);
 }
 
 /**
@@ -4210,9 +4230,10 @@ function deleteWorkItem($item_id, $courseInfo)
 /**
  * @param FormValidator $form
  * @param array $defaults
+ * @param integer $workId
  * @return FormValidator
  */
-function getFormWork($form, $defaults = array())
+function getFormWork($form, $defaults = array(), $workId = 0)
 {
     if (!empty($defaults)) {
         if (isset($defaults['submit'])) {
@@ -4299,7 +4320,18 @@ function getFormWork($form, $defaults = array())
     $form->addElement('checkbox', 'add_to_calendar', null, get_lang('AddToCalendar'));
     $form->addElement('select', 'allow_text_assignment', get_lang('DocumentType'), getUploadDocumentType());
 
-    $form->addElement('html', '</div>');
+    //Extra fields
+    $extra_field = new ExtraField('work');
+    $extra = $extra_field->addElements($form, $workId);
+
+    $htmlHeadXtra[] = '
+        <script>
+        $(function() {
+            ' . $extra['jquery_ready_content'] . '
+        });
+        </script>';
+
+    $form->addHtml('</div>');
 
     if (isset($defaults['enableExpiryDate']) && isset($defaults['enableEndDate'])) {
         $form->addRule(array('expires_on', 'ends_on'), get_lang('DateExpiredNotBeLessDeadLine'), 'comparedate');

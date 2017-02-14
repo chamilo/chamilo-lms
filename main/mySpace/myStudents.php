@@ -1287,8 +1287,7 @@ if (!empty($student_id)) {
         }
 
         require_once '../work/work.lib.php';
-
-        $userworks = getWorkPerUser($student_id);
+        $userworks = getWorkPerUser($student_id, $courseInfo['real_id'], $sessionId);
         echo '
             <div class="table-responsive">
                 <table class="table table-striped table-hover">
@@ -1315,7 +1314,7 @@ if (!empty($student_id)) {
                     $qualification = !empty($results['qualification']) ? $results['qualification'] : '-';
                     echo '<td class="text-center">' . $qualification. '</td>';
                     echo '<td class="text-center">' . $results['formatted_date']. '</td>';
-                    $assignment = get_work_assignment_by_id($work->id);
+                    $assignment = get_work_assignment_by_id($work->id, $courseInfo['real_id']);
                     echo '<td class="text-center">' . api_convert_and_format_date($assignment['expires_on']) . '</td>';
 
                     $fieldValue = new ExtraFieldValue('work');

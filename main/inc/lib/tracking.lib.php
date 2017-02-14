@@ -632,10 +632,8 @@ class Tracking
                         }
                     }
 
-                    if ($score == 0) {
-                        $maxscore = $row['mymaxscore'];
-                    } else {
-                        if ($row['item_type'] == 'sco') {
+                    switch ($row['item_type']) {
+                        case 'sco':
                             if (!empty($row['myviewmaxscore']) and $row['myviewmaxscore'] > 0) {
                                 $maxscore = $row['myviewmaxscore'];
                             } elseif ($row['myviewmaxscore'] === '') {
@@ -643,61 +641,69 @@ class Tracking
                             } else {
                                 $maxscore = $row['mymaxscore'];
                             }
-                        } else {
-                            if ($row['item_type'] == 'quiz') {
-                                // Get score and total time from last attempt of a exercise en lp.
-                                $sql = "SELECT score
-                                        FROM $TBL_LP_ITEM_VIEW
-                                        WHERE
-                                            c_id = $course_id AND
-                                            lp_item_id = '" . (int) $my_id . "' AND
-                                            lp_view_id = '" . (int) $my_lp_view_id . "'
-                                        ORDER BY view_count DESC limit 1";
-                                $res_score = Database::query($sql);
-                                $row_score = Database::fetch_array($res_score);
+                            break;
+                        case 'quiz':
+                            // Get score and total time from last attempt of a exercise en lp.
+                            $sql = "SELECT score
+                                    FROM $TBL_LP_ITEM_VIEW
+                                    WHERE
+                                        c_id = $course_id AND
+                                        lp_item_id = '" . (int) $my_id . "' AND
+                                        lp_view_id = '" . (int) $my_lp_view_id . "'
+                                    ORDER BY view_count DESC limit 1";
+                            $res_score = Database::query($sql);
+                            $row_score = Database::fetch_array($res_score);
 
-                                $sql = "SELECT SUM(total_time) as total_time
-                                        FROM $TBL_LP_ITEM_VIEW
-                                        WHERE
-                                            c_id = $course_id AND
-                                            lp_item_id = '" . (int) $my_id . "' AND
-                                            lp_view_id = '" . (int) $my_lp_view_id . "'";
-                                $res_time = Database::query($sql);
-                                $row_time = Database::fetch_array($res_time);
+                            $sql = "SELECT SUM(total_time) as total_time
+                                    FROM $TBL_LP_ITEM_VIEW
+                                    WHERE
+                                        c_id = $course_id AND
+                                        lp_item_id = '" . (int) $my_id . "' AND
+                                        lp_view_id = '" . (int) $my_lp_view_id . "'";
+                            $res_time = Database::query($sql);
+                            $row_time = Database::fetch_array($res_time);
 
-                                if (Database::num_rows($res_score) > 0 &&
-                                    Database::num_rows($res_time) > 0
-                                ) {
-                                    $score = (float) $row_score['score'];
-                                    $subtotal_time = (int) $row_time['total_time'];
-                                } else {
-                                    $score = 0;
-                                    $subtotal_time = 0;
-                                }
-                                // Selecting the max score from an attempt.
-                                $sql = "SELECT SUM(t.ponderation) as maxscore
-                                        FROM (
-                                            SELECT DISTINCT
-                                                question_id, marks, ponderation
-                                            FROM $tbl_stats_attempts as at
-                                            INNER JOIN $tbl_quiz_questions as q
-                                            ON (q.id = at.question_id AND q.c_id = $course_id)
-                                            WHERE exe_id ='$id_last_attempt'
-                                        ) as t";
-
-                                $result = Database::query($sql);
-                                $row_max_score = Database :: fetch_array($result);
-                                $maxscore = $row_max_score['maxscore'];
+                            if (Database::num_rows($res_score) > 0 &&
+                                Database::num_rows($res_time) > 0
+                            ) {
+                                $score = (float) $row_score['score'];
+                                $subtotal_time = (int) $row_time['total_time'];
                             } else {
-                                $maxscore = $row['mymaxscore'];
+                                $score = 0;
+                                $subtotal_time = 0;
                             }
-                        }
+
+                            // Selecting the max score from an attempt.
+                            $sql = "SELECT SUM(t.ponderation) as maxscore
+                                    FROM (
+                                        SELECT DISTINCT
+                                            question_id, marks, ponderation
+                                        FROM $tbl_stats_attempts as at
+                                        INNER JOIN $tbl_quiz_questions as q
+                                        ON (q.id = at.question_id AND q.c_id = $course_id)
+                                        WHERE exe_id ='$id_last_attempt'
+                                    ) as t";
+
+                            $result = Database::query($sql);
+                            $row_max_score = Database :: fetch_array($result);
+                            $maxscore = $row_max_score['maxscore'];
+                            break;
+                        default:
+                            $maxscore = $row['mymaxscore'];
+                            break;
                     }
 
                     $time_for_total = $subtotal_time;
-                    $time = learnpathItem::getScormTimeFromParameter('js', $subtotal_time);
+                    $time = learnpathItem::getScormTimeFromParameter(
+                        'js',
+                        $subtotal_time
+                    );
                     if (empty($title)) {
-                        $title = learnpath::rl_get_resource_name($courseInfo['code'], $lp_id, $row['myid']);
+                        $title = learnpath::rl_get_resource_name(
+                            $courseInfo['code'],
+                            $lp_id,
+                            $row['myid']
+                        );
                     }
 
                     $action = null;

@@ -6321,8 +6321,10 @@ class learnpath
                             );
                         }
                         break;
-                    case TOOL_DOCUMENT:
                     case TOOL_LP_FINAL_ITEM:
+                        $return .= $this->getSavedFinalItem();
+                        break;
+                    case TOOL_DOCUMENT:
                         $tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
                         $sql_doc = "SELECT path FROM " . $tbl_doc . "
                                     WHERE c_id = ".$course_id." AND id = " . intval($row['path']);
@@ -6415,12 +6417,12 @@ class learnpath
                     $return .= $this->display_link_form('edit', $item_id, $row);
                     break;
                 case TOOL_LP_FINAL_ITEM:
-                    $_SESSION['finalItem'] = true;
+                    Session::write('finalItem', true);
                     $tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
                     $sql = "SELECT lp.*, doc.path as dir
                             FROM " . $tbl_lp_item . " as lp
                             LEFT JOIN " . $tbl_doc . " as doc
-                            ON doc.id = lp.path
+                            ON (doc.id = lp.path AND lp.c_id = doc.c_id)
                             WHERE
                                 lp.c_id = $course_id AND
                                 doc.c_id = $course_id AND
@@ -8418,7 +8420,7 @@ class learnpath
             $url.'&action=delete_item'
         );
 
-        if ($item_type == TOOL_HOTPOTATOES ) {
+        if ($item_type == TOOL_HOTPOTATOES) {
             $document_data = DocumentManager::get_document_data_by_id($row['path'], $course_code);
             $return .= get_lang('File').': '.$document_data['absolute_path_from_document'];
         }
@@ -11026,7 +11028,7 @@ EOD;
     /**
      * Check and obtain the lp final item if exist
      *
-     * @return array lp items
+     * @return learnpathItem
      */
     private function getFinalItem()
     {
@@ -11061,8 +11063,9 @@ EOD;
     private function getSavedFinalItem()
     {
         $finalItem = $this->getFinalItem();
+
         $doc = DocumentManager::get_document_data_by_id($finalItem->path, $this->cc);
-        if (file_exists($doc['absolute_path'])) {
+        if ($doc && file_exists($doc['absolute_path'])) {
             return file_get_contents($doc['absolute_path']);
         }
 
@@ -11080,7 +11083,7 @@ EOD;
         $title = '';
 
         if ($finalItem) {
-            $title = $finalItem->title;
+            $title = $finalItem->get_title();
             $buttonText = get_lang('Save');
             $content = $this->getSavedFinalItem();
         } else {

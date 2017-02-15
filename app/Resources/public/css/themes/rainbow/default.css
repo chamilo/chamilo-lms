@@ -604,6 +604,9 @@ legend{
     padding-top: 0px;
     margin-right: 5px;
 }
+.sticky-footer {
+    padding-bottom: 0;
+}
 /* Large desktop */
 @media (min-width: 1200px) {
 
@@ -668,8 +671,26 @@ legend{
 }
 
 /* Landscape phone to portrait tablet */
-@media (max-width: 767px) {
-    
+@media (min-width: 480px) and (max-width: 641px) {
+    .navbar-nav li a {
+	padding-top: 6.5px;
+	padding-bottom: 6.5px;
+        font-weight: normal;
+    }
+    .navbar-default .navbar-collapse, .navbar-default .navbar-form {
+	border: none;
+    }
+    .dropdown.avatar-user {
+	text-align: right;
+    }
+    .item-menu{
+        width: 100%;
+        text-align: left;
+        border-bottom: 1px solid #85A70A;
+    }
+    .grid-courses .col-xs-12{
+        width: 48%;
+    }
 }
 
 /* Landscape phones and down */

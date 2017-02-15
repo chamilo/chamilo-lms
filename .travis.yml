@@ -38,10 +38,9 @@ before_script:
   #- which composer
   #- php -d memory_limit=2G /usr/bin/composer update
   #- php -d memory_limit=2G /home/travis/.phpenv/shims/composer update
-  # Previously, fxp/composer-asset-plugin was required but was causing a lot of trouble updating. Now it's disabled.
-  #- composer global require "fxp/composer-asset-plugin:1.0.3"
   # You can either use the composer install method and face the Github limit
   #- composer install -n
+  - composer self-update
   - composer update
   # ...OR you can try the option --prefer-dist, that will reuse composer packages cache
   #- composer update --prefer-dist
@@ -82,6 +81,8 @@ before_script:
   - cd /home/travis/build/chamilo/chamilo-lms
   - composer update
   - sudo php -d date.timezone="Europe/Paris" /home/travis/build/chamilo/chamilo-lms/chash/chash.php chash:chamilo_install 1.11.x /home/travis/build/chamilo/chamilo-lms --no-interaction --sitename="Chamilo" --site_url="http://localhost/" --institution="Chamilo" --institution_url="https://chamilo.org" --encrypt_method="sha1" --firstname="John" --lastname="Doe" --language="english" --driver="pdo_mysql" --host="localhost" --port="3306" --dbname="chamilo" --dbuser="root" --permissions_for_new_directories="0777" --permissions_for_new_files="0666" --linux-user="www-data" --linux-group="www-data" --username="admin" --password="admin" --email="admin@example.com" --phone="555-5555"
+  - sudo chmod -R 777 app/cache app/logs app/courses app/upload
+  - sudo php -d date.timezone="Europe/Paris" chash.php chash:chamilo_status
 
 script:
   # - phpunit -c tests/phpunit

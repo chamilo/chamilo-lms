@@ -10,10 +10,16 @@
             <button class="btn btn-primary" type="button" id="btn-start-record-{{ question_id }}">
                 <span class="fa fa-circle fa-fw" aria-hidden="true"></span> {{ 'StartRecordingAudio'|get_lang }}
             </button>
-            <button class="btn btn-danger" type="button" id="btn-stop-record-{{ question_id }}" disabled>
+            <button class="btn btn-primary hidden" type="button" id="btn-pause-record-{{ question_id }}" disabled>
+                <span class="fa fa-pause fa-fw" aria-hidden="true"></span> {{ 'PauseRecordingAudio'|get_lang }}
+            </button>
+            <button class="btn btn-primary hidden" type="button" id="btn-play-record-{{ question_id }}" disabled>
+                <span class="fa fa-play fa-fw" aria-hidden="true"></span> {{ 'PlayRecordingAudio'|get_lang }}
+            </button>
+            <button class="btn btn-danger hidden" type="button" id="btn-stop-record-{{ question_id }}" disabled>
                 <span class="fa fa-square fa-fw" aria-hidden="true"></span> {{ 'StopRecordingAudio'|get_lang }}
             </button>
-            <button class="btn btn-success" type="button" id="btn-save-record-{{ question_id }}" disabled>
+            <button class="btn btn-success hidden" type="button" id="btn-save-record-{{ question_id }}" disabled>
                 <span class="fa fa-send fa-fw" aria-hidden="true"></span> {{ 'SaveRecordedAudio'|get_lang }}
             </button>
         </div>
@@ -36,6 +42,8 @@ $(document).on('ready', function () {
         var mediaConstraints = {audio: true},
                 recordRTC = null,
                 btnStart = $('#btn-start-record-{{ question_id }}'),
+                btnPause = $('#btn-pause-record-{{ question_id }}'),
+                btnPlay = $('#btn-play-record-{{ question_id }}'),
                 btnStop = $('#btn-stop-record-{{ question_id }}'),
                 btnSave = $('#btn-save-record-{{ question_id }}'),
                 tagAudio = $('#record-preview-{{ question_id }}');
@@ -59,9 +67,10 @@ $(document).on('ready', function () {
                 });
                 recordRTC.startRecording();
 
-                btnSave.prop('disabled', true);
-                btnStop.prop('disabled', false);
-                btnStart.prop('disabled', true);
+                btnSave.prop('disabled', true).addClass('hidden');
+                btnStop.prop('disabled', false).removeClass('hidden');
+                btnStart.prop('disabled', true).addClass('hidden');
+                btnPause.prop('disabled', false).removeClass('hidden');
                 tagAudio.removeClass('show').addClass('hidden');
             }
 
@@ -70,15 +79,38 @@ $(document).on('ready', function () {
             }
         });
 
+        btnPause.on('click', function () {
+            if (!recordRTC) {
+                return;
+            }
+
+            btnPause.prop('disabled', true).addClass('hidden');
+            btnPlay.prop('disabled', false).removeClass('hidden');
+            btnStop.prop('disabled', true).addClass('hidden');
+            recordRTC.pauseRecording();
+        });
+
+        btnPlay.on('click', function () {
+            if (!recordRTC) {
+                return;
+            }
+
+            btnPlay.prop('disabled', true).addClass('hidden');
+            btnPause.prop('disabled', false).removeClass('hidden');
+            btnStop.prop('disabled', false).removeClass('hidden');
+            recordRTC.resumeRecording();
+        });
+
         btnStop.on('click', function () {
             if (!recordRTC) {
                 return;
             }
 
             recordRTC.stopRecording(function (audioURL) {
-                btnStart.prop('disabled', false);
-                btnStop.prop('disabled', true);
-                btnSave.prop('disabled', false);
+                btnStart.prop('disabled', false).removeClass('hidden');
+                btnPause.prop('disabled', true).addClass('hidden');
+                btnStop.prop('disabled', true).addClass('hidden');
+                btnSave.prop('disabled', false).removeClass('hidden');
 
                 tagAudio
                         .removeClass('hidden')
@@ -112,9 +144,9 @@ $(document).on('ready', function () {
                 contentType: false,
                 type: 'POST'
             }).then(function () {
-                btnSave.prop('disabled', true);
-                btnStop.prop('disabled', true);
-                btnStart.prop('disabled', false);
+                btnSave.prop('disabled', true).addClass('hidden');
+                btnStop.prop('disabled', true).addClass('hidden');
+                btnStart.prop('disabled', false).removeClass('hidden');
             });
         });
     }

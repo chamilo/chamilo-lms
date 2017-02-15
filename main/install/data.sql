@@ -1963,12 +1963,4 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_down
 
 
 
-UPDATE settings_current SET selected_value = '1.11.0.7' WHERE variable = 'chamilo_database_version';
-
-INSERT INTO `settings_current` (`id`, `variable`, `subkey`, `type`, `category`, `selected_value`, `title`, `comment`, `scope`, `subkeytext`, `access_url`, `access_url_changeable`, `access_url_locked`) VALUES (NULL, 'my_course_progress', NULL, 'radio', 'Course', 'false', 'MyCourseProgressTitle', 'MyCourseProgressTemplateTitle', NULL, NULL, '1', '0', '0');
-
-INSERT INTO `settings_options` (`id`, `variable`, `value`, `display_text`) VALUES (NULL, 'my_course_progress', 'true', 'Yes');
-INSERT INTO `settings_options` (`id`, `variable`, `value`, `display_text`) VALUES (NULL, 'my_course_progress', 'false', 'No');
-
--- Version 1.11.0.7
 

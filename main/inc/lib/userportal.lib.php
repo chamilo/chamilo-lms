@@ -1144,7 +1144,7 @@ class IndexManager
 
             //Course option (show student progress)
             //This code will add a new variables (Progress, Score, Certificate)
-            if (api_get_setting('my_course_progress') === 'true' && api_is_student() === true) {
+            if (api_get_configuration_value('my_course_progress') === true && api_is_student() === true) {
                 
                 foreach($specialCourses as $key => $specialCourseInfo) {
                     $progress = Tracking::get_avg_student_progress( $user_id, $specialCourseInfo['course_code'] );
@@ -1319,7 +1319,7 @@ class IndexManager
 
                                         //Course option (show student progress)
                                         //This code will add a new variables (Progress, Score, Certificate)
-                                        if (api_get_setting('my_course_progress') === 'true' && api_is_student() === true) {
+                                        if (api_get_configuration_value('my_course_progress') === true && api_is_student() === true) {
                                             $progress = Tracking::get_avg_student_progress( $user_id, $course['course_code'], array(), $session_id );
                                             $percentage_score = Tracking::get_avg_student_score( $user_id, $course['course_code'], array(), $session_id);
                                             $course_session['student_info']['progress']  = $progress;

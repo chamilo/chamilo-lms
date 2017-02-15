@@ -277,3 +277,5 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 // $_configuration['allow_course_introduction_low_security'] = false;
 // Prevents the duplicate upload in assignments
 // $_configuration['assignment_prevent_duplicate_upload'] = false;
+//Show student progress in My courses page
+//$_configuration['my_course_progress'] = false;

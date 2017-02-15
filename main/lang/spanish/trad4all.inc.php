@@ -7978,4 +7978,6 @@ $OnlyUsersFromCourseSession = "Solo usuarios de un curso en una sesión";
 $ServerXForwardedForInfo = "Si su servidor está detrás de un reverse proxy o un firewall (y únicamente en estos casos), podría usar la cabecera HTTP X_FORWARDED_FOR para mostrar la dirección IP del usuario distante (usted, en este caso).";
 $GeolocalizationCoordinates = "Geolocalización por coordenadas";
 $ExportUsersOfACourse = "Exportar usuarios de un curso";
+$PauseRecordingAudio = "Pausar grabación";
+$PlayRecordingAudio = "Reanudar grabación";
 ?>

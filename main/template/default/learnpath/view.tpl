@@ -117,12 +117,12 @@
                 <div class="lp-view-tabs">
                     <ul id="navTabs" class="nav nav-tabs" role="tablist">
                         <li role="presentation" class="active">
-                            <a href="#lp-view-content" aria-controls="lp-view-content" role="tab" data-toggle="tab">
+                            <a href="#lp-view-content" title="{{ 'Lesson'|get_lang }}" aria-controls="lp-view-content" role="tab" data-toggle="tab">
                                 <span class="fa fa-book fa-2x fa-fw" aria-hidden="true"></span><span class="sr-only">{{ 'Lesson'|get_lang }}</span>
                             </a>
                         </li>
                         <li role="presentation">
-                            <a href="#lp-view-forum" aria-controls="lp-view-forum" role="tab" data-toggle="tab">
+                            <a href="#lp-view-forum" title="{{ 'Forum'|get_lang }}" aria-controls="lp-view-forum" role="tab" data-toggle="tab">
                                 <span class="fa fa-commenting-o fa-2x fa-fw" aria-hidden="true"></span><span class="sr-only">{{ 'Forum'|get_lang }}</span>
                             </a>
                         </li>

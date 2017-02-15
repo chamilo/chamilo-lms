@@ -2276,7 +2276,7 @@ class Exercise
                 require_once api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php';
 
                 $form->addElement('checkbox', 'index_document', '', get_lang('SearchFeatureDoIndexDocument'));
-                $form->addElement('select_language', 'language', get_lang('SearchFeatureDocumentLanguage'));
+                $form->addSelectLanguage('language', get_lang('SearchFeatureDocumentLanguage'));
 
                 $specific_fields = get_specific_field_list();
 
@@ -4344,9 +4344,7 @@ class Exercise
                             $user_array = substr($user_array,0,-1);
 
                             if ($next) {
-
                                 $user_answer = $user_array;
-
                                 // we compare only the delineation not the other points
                                 $answer_question = $_SESSION['hotspot_coord'][1];
                                 $answerDestination = $_SESSION['hotspot_dest'][1];
@@ -5138,7 +5136,14 @@ class Exercise
                         }
                     }
                 } else {
-                    Event::saveQuestionAttempt($questionScore, 0, $quesId, $exeId, 0, $this->id);
+                    Event::saveQuestionAttempt(
+                        $questionScore,
+                        0,
+                        $quesId,
+                        $exeId,
+                        0,
+                        $this->id
+                    );
                 }
             } elseif ($answerType == MULTIPLE_ANSWER || $answerType == GLOBAL_MULTIPLE_ANSWER) {
                 if ($choice != 0) {
@@ -5162,7 +5167,14 @@ class Exercise
                         Event::saveQuestionAttempt($questionScore, $ans, $quesId, $exeId, $i, $this->id);
                     }
                 } else {
-                    Event::saveQuestionAttempt($questionScore, 0, $quesId, $exeId, 0, $this->id);
+                    Event::saveQuestionAttempt(
+                        $questionScore,
+                        0,
+                        $quesId,
+                        $exeId,
+                        0,
+                        $this->id
+                    );
                 }
             } elseif (in_array($answerType, [MATCHING, DRAGGABLE, MATCHING_DRAGGABLE])) {
                 if (isset($matching)) {
@@ -5172,7 +5184,14 @@ class Exercise
                 }
             } elseif ($answerType == FREE_ANSWER) {
                 $answer = $choice;
-                Event::saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
+                Event::saveQuestionAttempt(
+                    $questionScore,
+                    $answer,
+                    $quesId,
+                    $exeId,
+                    0,
+                    $this->id
+                );
             } elseif ($answerType == ORAL_EXPRESSION) {
                 $answer = $choice;
                 Event::saveQuestionAttempt(
@@ -6971,9 +6990,7 @@ class Exercise
         }
 
         $html = null;
-
         $questionId = $objQuestionTmp->id;
-
         if ($exercise_feedback != EXERCISE_FEEDBACK_TYPE_END) {
             $show_comment = false;
         }
@@ -7086,24 +7103,22 @@ class Exercise
                 }
                 $form->addElement('html_editor', "choice[".$questionId."]", null, array('id' => "choice[".$questionId."]"), array('ToolbarSet' => $toolBar));
                 $form->setDefaults(array("choice[".$questionId."]" => $content));
-                $s .= $form->return_form();
+                $s .= $form->returnForm();
             } elseif ($answerType == ORAL_EXPRESSION) {
                 // Add nanogong
                 if (api_get_setting('enable_record_audio') === 'true') {
-
                     //@todo pass this as a parameter
                     global $exercise_stat_info, $exerciseId;
-
                     if (!empty($exercise_stat_info)) {
                         $objQuestionTmp->initFile(
-                            api_get_session_id(),
+                            $sessionId,
                             api_get_user_id(),
                             $exercise_stat_info['exe_exo_id'],
                             $exercise_stat_info['exe_id']
                         );
                     } else {
                         $objQuestionTmp->initFile(
-                            api_get_session_id(),
+                            $sessionId,
                             api_get_user_id(),
                             $exerciseId,
                             'temp_exe'
@@ -7170,7 +7185,6 @@ class Exercise
                 $attributes = array();
                 // Unique answer
                 if (in_array($answerType, array(UNIQUE_ANSWER, UNIQUE_ANSWER_IMAGE, UNIQUE_ANSWER_NO_OPTION))) {
-
                     $input_id = 'choice-'.$questionId.'-'.$answerId;
                     if (isset($user_choice[0]['answer']) && $user_choice[0]['answer'] == $numAnswer) {
                         $attributes = array('id' => $input_id, 'checked' => 1, 'selected' => 1);
@@ -7290,9 +7304,7 @@ class Exercise
                         }
                         $s.='</tr>';
                     }
-
                 } elseif ($answerType == MULTIPLE_ANSWER_COMBINATION) {
-
                     // multiple answers
                     $input_id = 'choice-'.$questionId.'-'.$answerId;
 
@@ -7502,7 +7514,6 @@ class Exercise
                 } elseif ($answerType ==  DRAGGABLE) {
                     // matching type, showing suggestions and answers
                     // TODO: replace $answerId by $numAnswer
-
                     if ($answerCorrect != 0) {
                         // only show elements to be answered (not the contents of
                         // the select boxes, who are correct = 0)

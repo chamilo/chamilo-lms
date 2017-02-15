@@ -12,8 +12,6 @@
  */
 class HTML_QuickForm_email extends HTML_QuickForm_input
 {
-    // {{{ constructor
-
     /**
      * Class constructor
      *
@@ -26,14 +24,17 @@ class HTML_QuickForm_email extends HTML_QuickForm_input
      * @return    void
      * @throws
      */
-    public function __construct($elementName=null, $elementLabel=null, $attributes=null)
-    {
+    public function __construct(
+        $elementName = null,
+        $elementLabel = null,
+        $attributes = null
+    ) {
+        if (is_array($attributes) || empty($attributes)) {
+            $attributes['class'] = 'form-control';
+        }
         parent::__construct($elementName, $elementLabel, $attributes);
         $this->setType('email');
-    } //end constructor
-
-    // }}}
-    // {{{ setSize()
+    }
 
     /**
      * Sets size of password element
@@ -46,10 +47,7 @@ class HTML_QuickForm_email extends HTML_QuickForm_input
     function setSize($size)
     {
         $this->updateAttributes(array('size'=>$size));
-    } //end func setSize
-
-    // }}}
-    // {{{ setMaxlength()
+    }
 
     /**
      * Sets maxlength of password element
@@ -62,11 +60,5 @@ class HTML_QuickForm_email extends HTML_QuickForm_input
     function setMaxlength($maxlength)
     {
         $this->updateAttributes(array('maxlength'=>$maxlength));
-    } //end func setMaxlength
-
-    // }}}
-    // {{{ getFrozenHtml()
-
-    // }}}
-
-} //end class HTML_QuickForm_password
+    }
+}

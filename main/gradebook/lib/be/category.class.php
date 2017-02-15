@@ -947,6 +947,11 @@ class Category implements GradebookItem
                 /** @var EvalLink|ExerciseLink $link */
                 foreach ($links as $link) {
                     $link->setStudentList($this->getStudentList());
+
+                    if ($session_id) {
+                        $link->set_session_id($session_id);
+                    }
+
                     $linkres = $link->calc_score($stud_id, null);
                     if (!empty($linkres) && $link->get_weight() != 0) {
                         $students[$stud_id] = $linkres[0];
@@ -1043,6 +1048,11 @@ class Category implements GradebookItem
                 /** @var EvalLink|ExerciseLink $link */
                 foreach ($links as $link) {
                     $link->setStudentList($this->getStudentList());
+
+                    if ($session_id) {
+                        $link->set_session_id($session_id);
+                    }
+	                
                     $linkres = $link->calc_score($stud_id, $type);
                     if (!empty($linkres) && $link->get_weight() != 0) {
                         $students[$stud_id] = $linkres[0];

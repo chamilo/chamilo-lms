@@ -19,7 +19,6 @@ class SocialManager extends UserManager
      */
     public function __construct()
     {
-
     }
 
     /**
@@ -56,7 +55,6 @@ class SocialManager extends UserManager
         $list_type_friend = self::show_list_type_friends();
         foreach ($list_type_friend as $value_type_friend) {
             if (strtolower($value_type_friend['title']) == $relation_type_name) {
-
                 return $value_type_friend['id'];
             }
         }
@@ -1320,10 +1318,10 @@ class SocialManager extends UserManager
      * @param int $userId id of wall shown
      * @param string $messageStatus status wall message
      * @param int|string $parentId id message (Post main)
-     * @param date $start Date from which we want to show the messages, in UTC time
+     * @param string $start Date from which we want to show the messages, in UTC time
      * @param int $limit Limit for the number of parent messages we want to show
      * @param int $offset Wall message query offset
-     * @return boolean
+     * @return array
      * @author Yannick Warnier
      */
     public static function getWallMessages($userId, $messageStatus, $parentId = '', $start = null, $limit = 10, $offset = 0)
@@ -1674,7 +1672,6 @@ class SocialManager extends UserManager
         );
 
         $profileEditionLink = null;
-
         if ($currentUserId === $userId) {
             $profileEditionLink = Display::getProfileEditionLink($userId);
         } else {

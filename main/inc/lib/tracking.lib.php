@@ -125,7 +125,6 @@ class Tracking
         $user_id = intval($user_id);
         $session_id = intval($session_id);
         $origin = Security::remove_XSS($origin);
-
         $list = learnpath :: get_flat_ordered_items_list($lp_id, 0, $courseInfo['real_id']);
 
         $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
@@ -474,7 +473,6 @@ class Tracking
                         }
 
                         $counter++;
-
                         $action = null;
                         if ($type == 'classic') {
                             $action = '<td></td>';
@@ -546,7 +544,6 @@ class Tracking
                     $my_lp_id = $row['mylpid'];
                     $my_lp_view_id = $row['mylpviewid'];
                     $my_path = $row['path'];
-
                     $result_disabled_ext_all = false;
 
                     if ($row['item_type'] == 'quiz') {
@@ -567,7 +564,6 @@ class Tracking
 
                     // Check if there are interactions below
                     $extend_this_attempt = 0;
-
                     $inter_num = learnpath::get_interactions_count_from_db($row['iv_id'], $course_id);
                     $objec_num = learnpath::get_objectives_count_from_db($row['iv_id'], $course_id);
 
@@ -615,7 +611,6 @@ class Tracking
                     $title = $row['mytitle'];
 
                     // Selecting the exe_id from stats attempts tables in order to look the max score value.
-
                     $sql = 'SELECT * FROM ' . $tbl_stats_exercices . '
                              WHERE
                                 exe_exo_id="' . $row['path'] . '" AND
@@ -637,10 +632,8 @@ class Tracking
                         }
                     }
 
-                    if ($score == 0) {
-                        $maxscore = $row['mymaxscore'];
-                    } else {
-                        if ($row['item_type'] == 'sco') {
+                    switch ($row['item_type']) {
+                        case 'sco':
                             if (!empty($row['myviewmaxscore']) and $row['myviewmaxscore'] > 0) {
                                 $maxscore = $row['myviewmaxscore'];
                             } elseif ($row['myviewmaxscore'] === '') {
@@ -648,61 +641,69 @@ class Tracking
                             } else {
                                 $maxscore = $row['mymaxscore'];
                             }
-                        } else {
-                            if ($row['item_type'] == 'quiz') {
-                                // Get score and total time from last attempt of a exercise en lp.
-                                $sql = "SELECT score
-                                        FROM $TBL_LP_ITEM_VIEW
-                                        WHERE
-                                            c_id = $course_id AND
-                                            lp_item_id = '" . (int) $my_id . "' AND
-                                            lp_view_id = '" . (int) $my_lp_view_id . "'
-                                        ORDER BY view_count DESC limit 1";
-                                $res_score = Database::query($sql);
-                                $row_score = Database::fetch_array($res_score);
+                            break;
+                        case 'quiz':
+                            // Get score and total time from last attempt of a exercise en lp.
+                            $sql = "SELECT score
+                                    FROM $TBL_LP_ITEM_VIEW
+                                    WHERE
+                                        c_id = $course_id AND
+                                        lp_item_id = '" . (int) $my_id . "' AND
+                                        lp_view_id = '" . (int) $my_lp_view_id . "'
+                                    ORDER BY view_count DESC limit 1";
+                            $res_score = Database::query($sql);
+                            $row_score = Database::fetch_array($res_score);
 
-                                $sql = "SELECT SUM(total_time) as total_time
-                                        FROM $TBL_LP_ITEM_VIEW
-                                        WHERE
-                                            c_id = $course_id AND
-                                            lp_item_id = '" . (int) $my_id . "' AND
-                                            lp_view_id = '" . (int) $my_lp_view_id . "'";
-                                $res_time = Database::query($sql);
-                                $row_time = Database::fetch_array($res_time);
+                            $sql = "SELECT SUM(total_time) as total_time
+                                    FROM $TBL_LP_ITEM_VIEW
+                                    WHERE
+                                        c_id = $course_id AND
+                                        lp_item_id = '" . (int) $my_id . "' AND
+                                        lp_view_id = '" . (int) $my_lp_view_id . "'";
+                            $res_time = Database::query($sql);
+                            $row_time = Database::fetch_array($res_time);
 
-                                if (Database::num_rows($res_score) > 0 &&
-                                    Database::num_rows($res_time) > 0
-                                ) {
-                                    $score = (float) $row_score['score'];
-                                    $subtotal_time = (int) $row_time['total_time'];
-                                } else {
-                                    $score = 0;
-                                    $subtotal_time = 0;
-                                }
-                                // Selecting the max score from an attempt.
-                                $sql = "SELECT SUM(t.ponderation) as maxscore
-                                        FROM (
-                                            SELECT DISTINCT
-                                                question_id, marks, ponderation
-                                            FROM $tbl_stats_attempts as at
-                                            INNER JOIN  $tbl_quiz_questions as q
-                                            ON (q.id = at.question_id AND q.c_id = $course_id)
-                                            WHERE exe_id ='$id_last_attempt'
-                                        ) as t";
-
-                                $result = Database::query($sql);
-                                $row_max_score = Database :: fetch_array($result);
-                                $maxscore = $row_max_score['maxscore'];
+                            if (Database::num_rows($res_score) > 0 &&
+                                Database::num_rows($res_time) > 0
+                            ) {
+                                $score = (float) $row_score['score'];
+                                $subtotal_time = (int) $row_time['total_time'];
                             } else {
-                                $maxscore = $row['mymaxscore'];
+                                $score = 0;
+                                $subtotal_time = 0;
                             }
-                        }
+
+                            // Selecting the max score from an attempt.
+                            $sql = "SELECT SUM(t.ponderation) as maxscore
+                                    FROM (
+                                        SELECT DISTINCT
+                                            question_id, marks, ponderation
+                                        FROM $tbl_stats_attempts as at
+                                        INNER JOIN $tbl_quiz_questions as q
+                                        ON (q.id = at.question_id AND q.c_id = $course_id)
+                                        WHERE exe_id ='$id_last_attempt'
+                                    ) as t";
+
+                            $result = Database::query($sql);
+                            $row_max_score = Database :: fetch_array($result);
+                            $maxscore = $row_max_score['maxscore'];
+                            break;
+                        default:
+                            $maxscore = $row['mymaxscore'];
+                            break;
                     }
 
                     $time_for_total = $subtotal_time;
-                    $time = learnpathItem::getScormTimeFromParameter('js', $subtotal_time);
+                    $time = learnpathItem::getScormTimeFromParameter(
+                        'js',
+                        $subtotal_time
+                    );
                     if (empty($title)) {
-                        $title = learnpath::rl_get_resource_name($courseInfo['code'], $lp_id, $row['myid']);
+                        $title = learnpath::rl_get_resource_name(
+                            $courseInfo['code'],
+                            $lp_id,
+                            $row['myid']
+                        );
                     }
 
                     $action = null;
@@ -765,7 +766,6 @@ class Tracking
                         }
 
                         if ($lp_id == $my_lp_id && false) {
-
                             $output .= '<tr class =' . $oddclass . '>
                                     <td>' . $extend_link . '</td>
                                     <td colspan="4">' . $title . '</td>
@@ -1686,14 +1686,13 @@ class Tracking
                     $month_filter";
 
         //This query can be very slow (several seconds on an indexed table
-        // with 14M rows). As such, we'll try to use APCU if it is
+        // with 14M rows). As such, we'll try to use APCu if it is
         // available to store the resulting value for a few seconds
-        $cacheEnabled = function_exists('apcu_exists');
-        if ($cacheEnabled) {
+        $cacheAvailable = api_get_configuration_value('apc');
+        if (!empty($cacheAvailable)) {
             $apc = apcu_cache_info(true);
             $apc_end = $apc['start_time'] + $apc['ttl'];
-
-            $apc_var = 'course_access_'.$courseId.'_'.$session_id.'_'.strtotime($roundedStart).'_'.strtotime($roundedStop);
+            $apc_var = api_get_configuration_value('apc_refix') . 'course_access_' . $courseId . '_' . $session_id . '_' . strtotime($roundedStart) . '_' . strtotime($roundedStop);
             if (apcu_exists($apc_var) && (time() < $apc_end) &&
                 apcu_fetch($apc_var) > 0
             ) {

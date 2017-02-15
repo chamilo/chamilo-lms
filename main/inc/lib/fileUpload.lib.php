@@ -281,6 +281,7 @@ function handle_uploaded_document(
         return false;
     } else {
         // Clean up the name, only ASCII characters should stay. (and strict)
+
         $cleanName = api_replace_dangerous_char($uploadedFile['name'], $treat_spaces_as_hyphens);
 
         // No "dangerous" files

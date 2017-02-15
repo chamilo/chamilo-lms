@@ -706,6 +706,15 @@ class HTML_QuickForm extends HTML_Common
     }
 
     /**
+     * @param string $element
+     * @return bool
+     */
+    public function hasElement($element)
+    {
+        return isset($this->_elementIndex[$element]);
+    }
+
+    /**
      * Returns the element's raw value
      *
      * This returns the value as submitted by the form (not filtered)
@@ -807,9 +816,15 @@ class HTML_QuickForm extends HTML_Common
             }
         }
 
-        $element = $this->getElement($elementName);
-        if (method_exists($element, 'getSubmitValue')) {
-            $value = $element->getSubmitValue($value, $this->_submitValues, $this->_errors);
+        if ($this->hasElement($elementName)) {
+            $element = $this->getElement($elementName);
+            if (method_exists($element, 'getSubmitValue')) {
+                $value = $element->getSubmitValue(
+                    $value,
+                    $this->_submitValues,
+                    $this->_errors
+                );
+            }
         }
 
         return $value;

@@ -36,7 +36,6 @@ $path = isset($_GET['path']) ? Security::remove_XSS($_GET['path']) : null;
 $is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_drh() || api_is_student_boss();
 $is_tutor = api_is_allowed_to_edit(true);
 
-$TBL_QUESTIONS = Database :: get_course_table(TABLE_QUIZ_QUESTION);
 $TBL_TRACK_EXERCISES = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 $TBL_TRACK_ATTEMPT = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 $TBL_TRACK_ATTEMPT_RECORDING = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
@@ -256,7 +255,8 @@ if (isset($_REQUEST['comments']) &&
     // Updating LP score here
     if (in_array($origin, array('tracking_course', 'user_course', 'correct_exercise_in_lp'))
     ) {
-        $sql = "UPDATE $TBL_LP_ITEM_VIEW SET score = '".floatval($tot)."'
+        $sql = "UPDATE $TBL_LP_ITEM_VIEW 
+                SET score = '".floatval($tot)."'
                 WHERE c_id = ".$course_id." AND id = ".$lp_item_view_id;
         Database::query($sql);
         if ($origin == 'tracking_course') {
@@ -398,13 +398,13 @@ $form->addElement('radio', 'export_format', null, get_lang('ExportAsXLS'), 'xls'
 $form->addElement('checkbox', 'load_extra_data', null, get_lang('LoadExtraData'), '0', array('id' => 'export_format_xls_label'));
 $form->addElement('checkbox', 'include_all_users', null, get_lang('IncludeAllUsers'), '0');
 $form->addElement('checkbox', 'only_best_attempts', null, get_lang('OnlyBestAttempts'), '0');
-
 $form->setDefaults(array('export_format' => 'csv'));
-$extra .= $form->return_form();
+$extra .= $form->returnForm();
 $extra .= '</div>';
 
-if ($is_allowedToEdit)
+if ($is_allowedToEdit) {
     echo $extra;
+}
 
 echo $actions;
 
@@ -427,9 +427,7 @@ if (!empty($group_parameters)) {
 $officialCodeInList = api_get_setting('show_official_code_exercise_result_list');
 
 if ($is_allowedToEdit || $is_tutor) {
-
     // The order is important you need to check the the $column variable in the model.ajax.php file
-
     $columns = array(
         get_lang('FirstName'),
         get_lang('LastName'),
@@ -544,7 +542,16 @@ $extra_params['height'] = 'auto';
 
     $(function() {
         <?php
-        echo Display::grid_js('results', $url, $columns, $column_model, $extra_params, array(), $action_links, true);
+        echo Display::grid_js(
+            'results',
+            $url,
+            $columns,
+            $column_model,
+            $extra_params,
+            array(),
+            $action_links,
+            true
+        );
 
         if ($is_allowedToEdit || $is_tutor) {
             ?>
@@ -590,13 +597,10 @@ $extra_params['height'] = 'auto';
 
                 $('#results').on('click', 'a.exercise-recalculate', function (e) {
                     e.preventDefault();
-
                     if (!$(this).data('user') || !$(this).data('exercise') || !$(this).data('id')) {
                         return;
                     }
-
                     var url = '<?php echo api_get_path(WEB_CODE_PATH) ?>exercise/recalculate.php?<?php echo api_get_cidreq() ?>';
-
                     var recalculateXhr = $.post(url, $(this).data());
 
                     $.when(recalculateXhr).done(function (response) {

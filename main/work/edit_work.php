@@ -80,7 +80,7 @@ if (!empty($homework['ends_on'])) {
 }
 
 $defaults['add_to_calendar'] = isset($homework['add_to_calendar']) ? $homework['add_to_calendar'] : null;
-$form = getFormWork($form, $defaults);
+$form = getFormWork($form, $defaults, $workId);
 $form->addElement('hidden', 'work_id', $workId);
 $form->addButtonUpdate(get_lang('ModifyDirectory'));
 
@@ -104,7 +104,7 @@ if ($form->validate()) {
         updateDirName($workData, $params['new_dir']);
 
         $currentUrl = api_get_path(WEB_CODE_PATH).'work/edit_work.php?id='.$workId.'&'.api_get_cidreq();
-        Display::addFlash(Display::return_message(get_lang('FolderEdited'), 'success'));
+        Display::addFlash(Display::return_message(get_lang('Updated'), 'success'));
         header('Location: '.$currentUrl);
         exit;
 

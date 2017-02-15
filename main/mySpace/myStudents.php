@@ -1286,6 +1286,61 @@ if (!empty($student_id)) {
             }
         }
 
+        require_once '../work/work.lib.php';
+        $userworks = getWorkPerUser($student_id, $courseInfo['real_id'], $sessionId);
+        echo '
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>' . get_lang('Tasks') . '</th>
+                            <th class="text-center">' . get_lang('DocumentNumber') . '</th>
+                            <th class="text-center">' . get_lang('Note') . '</th>
+                            <th class="text-center">' . get_lang('HandedOut') . '</th>
+                            <th class="text-center">' . get_lang('HandOutDateLimit') . '</th>
+                            <th class="text-center">' . get_lang('ConsideredWorkingTime') . '</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+        ';
+
+            foreach ($userworks as $work) {
+                $work = $work['work'];
+                foreach ($work->user_results as $key => $results) {
+                    echo '<tr>';
+                    echo '<td>' . $work->title . '</td>';
+                    $documentNumber = $key + 1;
+                    echo '<td class="text-center"><a href="' . api_get_path(WEB_CODE_PATH) . 'work/view.php?cidReq=' . $course_code . '&id_session=' . $sessionId .'&id=' . $results['id'] . '">(' . $documentNumber . ')</a></td>';
+                    $qualification = !empty($results['qualification']) ? $results['qualification'] : '-';
+                    echo '<td class="text-center">' . $qualification. '</td>';
+                    echo '<td class="text-center">' . $results['formatted_date']. '</td>';
+                    $assignment = get_work_assignment_by_id($work->id, $courseInfo['real_id']);
+                    echo '<td class="text-center">' . api_convert_and_format_date($assignment['expires_on']) . '</td>';
+
+                    $fieldValue = new ExtraFieldValue('work');
+                    $resultExtra = $fieldValue->getAllValuesForAnItem(
+                        $work->id,
+                        true
+                    );
+
+                    foreach ($resultExtra as $field) {
+                        $field = $field['value'];
+
+                        if (api_get_configuration_value('considered_working_time') == $field->getField()->getVariable()) {
+                            echo '<td class="text-center">' . $field->getValue() . '</td>';
+                        }
+                    }
+
+                    echo '</tr>';
+                }
+            }
+
+        echo '
+                    </tbody>
+                </table>
+            </div>
+        ';
+
         // line about other tools
         ?>
         <div class="table-responsive">

@@ -244,7 +244,7 @@ class CoursesController
                 );
             } else {
                 Display::addFlash(
-                    Display::return_message($result['message'])
+                    Display::return_message($result['message'], 'normal', false)
                 );
             }
         }
@@ -522,7 +522,7 @@ class CoursesController
         $btnBing = false
     ) {
         if($btnBing){
-            $btnBing = 'btn-lg'; 
+            $btnBing = 'btn-lg';
         }else{
             $btnBing = 'btn-sm';
         }

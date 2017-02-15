@@ -13,6 +13,8 @@
 </p>
 {% endif %}
 
+{{ score_form }}
+
 {% if work.contains_file and work.show_content %}
 <h3>
     {{ 'Content' | get_lang }}

@@ -90,13 +90,13 @@ function search_users($needle, $type)
         }
 
         $needle = Database::escape_string($needle);
-        $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
+        $order_clause = ' ORDER BY lastname, firstname, username';
         $showOfficialCode = false;
 
         $orderListByOfficialCode = api_get_setting('order_user_list_by_official_code');
         if ($orderListByOfficialCode === 'true') {
             $showOfficialCode = true;
-            $order_clause = ' ORDER BY official_code, firstname, lastname, username';
+            $order_clause = ' ORDER BY official_code, lastname, firstname, username';
         }
 
         if (api_is_session_admin() &&
@@ -134,8 +134,8 @@ function search_users($needle, $type)
                         WHERE
                             (
                                 username LIKE "'.$needle.'%" OR
-                                firstname LIKE "'.$needle.'%" OR
-                                lastname LIKE "'.$needle.'%"
+                                lastname LIKE "'.$needle.'%" OR
+                                firstname LIKE "'.$needle.'%"
                             ) AND
                             user.status <> 6 AND
                             user.status <> '.DRH.''.
@@ -146,7 +146,7 @@ function search_users($needle, $type)
                 $sql = 'SELECT user.id, username, lastname, firstname, official_code
                         FROM '.$tbl_user.' user
                         WHERE
-                            '.(api_sort_by_first_name() ? 'firstname' : 'lastname').' LIKE "'.$needle.'%" AND
+                            lastname LIKE "'.$needle.'%" AND
                             user.status <> '.DRH.' AND
                             user.status <> 6 '.$cond_user_id.
                         $order_clause;
@@ -177,8 +177,8 @@ function search_users($needle, $type)
                             access_url_id = '.$access_url_id.' AND
                             (
                                 username LIKE "'.$needle.'%" OR
-                                firstname LIKE "'.$needle.'%" OR
-                                lastname LIKE "'.$needle.'%"
+                                lastname LIKE "'.$needle.'%" OR
+                                firstname LIKE "'.$needle.'%"
                             ) AND user.status<>6 AND
                             user.status<>'.DRH.' '.
                         $order_clause.
@@ -190,7 +190,7 @@ function search_users($needle, $type)
                                 INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.id)
                                 WHERE
                                     access_url_id = '.$access_url_id.' AND
-                                    '.(api_sort_by_first_name() ? 'firstname' : 'lastname').' LIKE "'.$needle.'%" AND
+                                    lastname LIKE "'.$needle.'%" AND
                                     user.status<>'.DRH.' AND
                                     user.status<>6 '.$cond_user_id.
                                 $order_clause;
@@ -219,10 +219,10 @@ function search_users($needle, $type)
             while ($user = Database :: fetch_array($rs)) {
                 $i++;
                 if ($i<=10) {
-                    $person_name = api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].') '.$user['official_code'];
+                    $person_name = $user['lastname'].' '.$user['firstname'].' ('.$user['username'].') '.$user['official_code'];
                     if ($showOfficialCode) {
                         $officialCode = !empty($user['official_code']) ? $user['official_code'].' - ' : '? - ';
-                        $person_name = $officialCode.api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')';
+                        $person_name = $officialCode.$user['lastname'].' '.$user['firstname'].' ('.$user['username'].')';
                     }
 
                     $return .= '<a href="javascript: void(0);" onclick="javascript: add_user_to_session(\''.$user['id'].'\',\''.$person_name.' '.'\')">'.$person_name.' </a><br />';
@@ -236,10 +236,10 @@ function search_users($needle, $type)
             global $nosessionUsersList;
             $return .= '<select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:360px;">';
             while ($user = Database :: fetch_array($rs)) {
-                $person_name = api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].') '.$user['official_code'];
+                $person_name = $user['lastname'].' '.$user['firstname'].' ('.$user['username'].') '.$user['official_code'];
                 if ($showOfficialCode) {
                     $officialCode = !empty($user['official_code']) ? $user['official_code'].' - ' : '? - ';
-                    $person_name = $officialCode.api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')';
+                    $person_name = $officialCode.$user['lastname'].' '.$user['firstname'].' ('.$user['username'].')';
                 }
                 $return .= '<option value="'.$user['id'].'">'.$person_name.' </option>';
             }
@@ -335,13 +335,18 @@ $nosessionUsersList = $sessionUsersList = array();
 $where_filter = null;
 $ajax_search = $add_type == 'unique' ? true : false;
 
-$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
+//$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
+// On this screen, it doesn't make sense to order users by firstname. Always use lastname first
+// api_get_person_name() calls have been removed because ordering users in a simple list must always
+// be done by lastname, even if we like to show user names with the firstname first.
+// By simple logic, lastnames are the smallest common denominator
+$order_clause = ' ORDER BY lastname, firstname, username';
 
 $showOfficialCode = false;
 $orderListByOfficialCode = api_get_setting('order_user_list_by_official_code');
 if ($orderListByOfficialCode === 'true') {
     $showOfficialCode = true;
-    $order_clause = ' ORDER BY official_code, firstname, lastname, username';
+    $order_clause = ' ORDER BY official_code, lastname, firstname, username';
 }
 
 if ($ajax_search) {
@@ -645,10 +650,10 @@ if (!empty($errorMsg)) {
               ?>
                   <option value="<?php echo $uid; ?>" <?php if(in_array($uid,$UserList)) echo 'selected="selected"'; ?>>
                       <?php
-                      $personName = api_get_person_name($enreg['fn'], $enreg['ln']).' ('.$enreg['un'].') '.$enreg['official_code'];
+                      $personName = $enreg['ln'].' '.$enreg['fn'].' ('.$enreg['un'].') '.$enreg['official_code'];
                       if ($showOfficialCode) {
                           $officialCode = !empty($enreg['official_code']) ? $enreg['official_code'].' - ' : '? - ';
-                          $personName = $officialCode.api_get_person_name($enreg['fn'], $enreg['ln']).' ('.$enreg['un'].')';
+                          $personName = $officialCode.$enreg['ln'].' '.$enreg['fn'].' ('.$enreg['un'].')';
                       }
                       echo $personName;
                       ?>
@@ -723,10 +728,10 @@ if (!empty($errorMsg)) {
         ?>
             <option value="<?php echo $enreg['id']; ?>">
             <?php
-                $personName = api_get_person_name($enreg['firstname'], $enreg['lastname']).' ('.$enreg['username'].') '.$enreg['official_code'];
+                $personName = $enreg['lastname'].' '.$enreg['firstname'].' ('.$enreg['username'].') '.$enreg['official_code'];
                 if ($showOfficialCode) {
                     $officialCode = !empty($enreg['official_code']) ? $enreg['official_code'].' - ' : '? - ';
-                    $personName = $officialCode.api_get_person_name($enreg['firstname'], $enreg['lastname']).' ('.$enreg['username'].')';
+                    $personName = $officialCode.$enreg['lastname'].' '.$enreg['firstname'].' ('.$enreg['username'].')';
                 }
                 echo $personName;
             ?>

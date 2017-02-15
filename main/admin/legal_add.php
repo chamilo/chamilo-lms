@@ -137,7 +137,7 @@ if (isset($_POST['language'])) {
     $form->addElement('html', $buttons);
 
 } else {
-	$form->addElement('select_language', 'language', get_lang('Language'),null,array());
+    $form->addSelectLanguage('language', get_lang('Language'), null, array());
 	$form->addButtonSearch(get_lang('Load'), 'send');
 
 }

@@ -923,7 +923,14 @@ switch ($action) {
                 $columns = array_merge(array('official_code'), $columns);
             }
         }
-        $result = ExerciseLib::get_exam_results_data($start, $limit, $sidx, $sord, $exercise_id, $whereCondition);
+        $result = ExerciseLib::get_exam_results_data(
+            $start,
+            $limit,
+            $sidx,
+            $sord,
+            $exercise_id,
+            $whereCondition
+        );
         break;
     case 'get_hotpotatoes_exercise_results':
         $course = api_get_course_info();

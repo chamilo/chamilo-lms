@@ -6,6 +6,11 @@ php:
   - 5.6
   - 7.0
 
+env:
+  - VHOST_URL = my.chamilo.net
+  - VHOST_CONF = my.chamilo.net.conf
+  - CHAMILO_VERSION = 1.11.x
+
 before_install:
   #- sudo apt-get install python-software-properties
   #- sudo add-apt-repository ppa:ondrej/php5 -y
@@ -22,8 +27,12 @@ before_install:
   - echo 'date.timezone = "Europe/Paris"' >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
   # configure apache virtual hosts
-  - sudo cp -f tests/travis-apache /etc/apache2/sites-available/default
-  - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/default
+  - sudo cp -f tests/travis-apache /etc/apache2/sites-available/$VHOST_CONF
+  - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/$VHOST_CONF
+  - sudo sed -e "s?%VHOST_URL%?$VHOST_URL?g" --in-place /etc/apache2/sites-available/$VHOST_CONF
+  - echo "127.0.0.1       $VHOST_URL" | sudo tee -a /etc/hosts
+  - sudo a2enmod rewrite
+  - sudo a2ensite $VHOST_URL
   - sudo service apache2 restart
   # Install additional PHP packages (check http://docs.travis-ci.com/user/ci-environment/#CI-environment-OS
   # for pre-installed packages)
@@ -77,18 +86,19 @@ before_script:
   # - cd /home/travis/build/chamilo/chamilo-lms
   # There's an issue with Chash, starting in version 1.10, whereby PHP CLI on Travis-ci is PHP5.3, whatever the version you ask for.
   # This effectively breaks the installer and renders these tests useless. We are looking for a solution (for example using containers)
-  - sudo php -d date.timezone="Europe/Paris" chash.php chash:chamilo_install 1.11.x /home/travis/build/chamilo/chamilo-lms --download-package --no-interaction --only-download-package
-  - cd /home/travis/build/chamilo/chamilo-lms
+  - sudo php -d date.timezone="Europe/Paris" chash.php chash:chamilo_install $CHAMILO_VERSION $TRAVIS_BUILD_DIR --download-package --no-interaction --only-download-package
+  - cd $TRAVIS_BUILD_DIR
   - composer update
-  - sudo php -d date.timezone="Europe/Paris" /home/travis/build/chamilo/chamilo-lms/chash/chash.php chash:chamilo_install 1.11.x /home/travis/build/chamilo/chamilo-lms --no-interaction --sitename="Chamilo" --site_url="http://localhost/" --institution="Chamilo" --institution_url="https://chamilo.org" --encrypt_method="sha1" --firstname="John" --lastname="Doe" --language="english" --driver="pdo_mysql" --host="localhost" --port="3306" --dbname="chamilo" --dbuser="root" --permissions_for_new_directories="0777" --permissions_for_new_files="0666" --linux-user="www-data" --linux-group="www-data" --username="admin" --password="admin" --email="admin@example.com" --phone="555-5555"
+  - sudo php -d date.timezone="Europe/Paris" $TRAVIS_BUILD_DIR/chash/chash.php chash:chamilo_install $CHAMILO_VERSION $TRAVIS_BUILD_DIR --no-interaction --sitename="Chamilo" --site_url="http://$VHOST_URL/" --institution="Chamilo" --institution_url="https://chamilo.org" --encrypt_method="sha1" --firstname="John" --lastname="Doe" --language="english" --driver="pdo_mysql" --host="localhost" --port="3306" --dbname="chamilo" --dbuser="root" --permissions_for_new_directories="0777" --permissions_for_new_files="0666" --linux-user="www-data" --linux-group="www-data" --username="admin" --password="admin" --email="admin@example.com" --phone="555-5555"
   - sudo chmod -R 777 app/cache app/logs app/courses app/upload
-  - sudo php -d date.timezone="Europe/Paris" /home/travis/build/chamilo/chamilo-lms/chash/chash.php chash:chamilo_status
+  - sudo php -d date.timezone="Europe/Paris" $TRAVIS_BUILD_DIR/chash/chash.php chash:chamilo_status
 
 script:
   # - phpunit -c tests/phpunit
   # pwd shows /home/travis/build/chamilo/chamilo-lms
   - cd tests/behat && ../../vendor/behat/behat/bin/behat -v
-  - sudo cat /var/log/apache2/localhost-error.log
+  - sudo cat /var/log/apache2/$VHOST_URL-error.log
+  - sudo cat /var/log/apache2/$VHOST_URL-access.log
 
 # configure notifications (email, IRC, campfire etc)
 notifications:

@@ -8,9 +8,9 @@ php:
 
 env:
   global:
-    - VHOST_URL = my.chamilo.net
-    - VHOST_CONF = my.chamilo.net.conf
-    - CHAMILO_VERSION = 1.11.x
+    - VHOST_URL=my.chamilo.net
+    - VHOST_CONF=my.chamilo.net.conf
+    - CHAMILO_VERSION=1.11.x
 
 before_install:
   #- sudo apt-get install python-software-properties

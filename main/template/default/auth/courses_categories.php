@@ -61,7 +61,6 @@ $code = isset($code) ? $code : null;
         <?php } ?>
     });
 </script>
-
 <div class="row">
     <div class="col-md-4">
         <h5><?php echo get_lang('Search'); ?></h5>
@@ -131,7 +130,6 @@ $code = isset($code) ? $code : null;
 <div class="row">
 <?php
 if ($showCourses && $action != 'display_sessions') {
-
     if (!empty($message)) {
         Display::display_confirmation_message($message, false);
     }
@@ -149,6 +147,8 @@ if ($showCourses && $action != 'display_sessions') {
 
     $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
     $user_id = api_get_user_id();
+
+    $categoryList = CourseManager::getCategoriesList();
 
     if (!empty($browse_courses_in_category)) {
         foreach ($browse_courses_in_category as $course) {
@@ -174,6 +174,11 @@ if ($showCourses && $action != 'display_sessions') {
             $html = null;
             // display the course bloc
             $html .= '<div class="col-xs-6 col-sm-6 col-md-3"><div class="items items-courses">';
+
+            $course['category_title'] = '';
+            if (isset($course['category'])) {
+                $course['category_title'] = isset($categoryList[$course['category']]) ? $categoryList[$course['category']] : '';
+            }
 
             // display thumbnail
             $html .= returnThumbnail($course);
@@ -267,6 +272,7 @@ echo $cataloguePagination;
 /**
  * Display the course catalog image of a course
  * @param array $course
+ *
  * @return string HTML string
  */
 function returnThumbnail($course)
@@ -285,10 +291,8 @@ function returnThumbnail($course)
 
     $html .= '<div class="image">';
     $html .= '<img class="img-responsive" src="'.$course_medium_image.'" alt="'.api_htmlentities($title).'"/>';
-    $categoryTitle = isset($course['category']) ? $course['category'] : '';
+    $categoryTitle = isset($course['category_title']) ? $course['category_title'] : '';
     if (!empty($categoryTitle)) {
-        $listCategory = CourseManager::getCategoriesList();
-        $categoryTitle = $listCategory[$categoryTitle];
         $html .= '<span class="category">'. $categoryTitle.'</span>';
         $html .= '<div class="cribbon"></div>';
     }
@@ -316,7 +320,6 @@ function returnThumbnail($course)
 
     return $html;
 }
-
 
 /**
  * Display the title of a course in course catalog

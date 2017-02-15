@@ -21,10 +21,11 @@ body{
     position: absolute;
     bottom: 0;
     width: 100%;
-
+    padding-top: 20px;
+    padding-bottom: 20px;
 }
 #content-section, #page-wrap{
-    margin-bottom: 100px;
+    margin-bottom: 230px;
 }
 /* End Sticky footer style */
 select {
@@ -1234,7 +1235,10 @@ a.unread {
 #course_tools .content a {
   font-size: 12px;
 }
-
+.course-tool .make_visible_and_invisible img{
+    margin-top: -3px;
+    margin-right: 5px;
+}
 .big_icon img {
   padding:5px;
   -moz-border-radius:10px;
@@ -6444,3 +6448,35 @@ ul#toolnavbox-two li a.btn{
     height: 14.22222px;
 }
 
+input.form-control[type="color"] {
+    padding: 2px;
+}
+
+.form-separator {
+    font-weight: bold;
+    border-bottom: 2px solid #CCC;
+    padding-bottom: 12px;
+    color: #666;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+/* Extra small devices (phones, less than 768px) */
+/* No media query since this is the default in Bootstrap */
+
+/* Small devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+
+}
+
+/* Medium devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+    div.navbar-collapse {
+        padding-left: 0;
+    }
+}
+
+/* Large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+
+}

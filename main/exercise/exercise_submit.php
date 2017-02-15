@@ -298,10 +298,6 @@ if ($objExercise->selectAttempts() > 0) {
     }
 }
 
-if ($debug) {
-    error_log("4. Setting the exe_id: $exe_id");
-}
-
 /* 5. Getting user exercise info (if the user took the exam before)
    generating exe_id */
 $exercise_stat_info = $objExercise->get_stat_track_exercise_info(
@@ -316,9 +312,8 @@ $questionListUncompressed = $objExercise->getQuestionListWithMediasUncompressed(
 Session::write('question_list_uncompressed', $questionListUncompressed);
 
 $clock_expired_time = null;
-
 if (empty($exercise_stat_info)) {
-    if ($debug)  error_log('5  $exercise_stat_info is empty ');
+    if ($debug) error_log('5  $exercise_stat_info is empty ');
 	$total_weight = 0;
 	$questionList = $objExercise->get_validated_question_list();
 	foreach ($questionListUncompressed as $question_id) {
@@ -358,6 +353,7 @@ if (empty($exercise_stat_info)) {
 	$exe_id = $exercise_stat_info['exe_id'];
     // Remember last question id position.
     $isFirstTime = Session::read('firstTime');
+
     if ($isFirstTime && $objExercise->type == ONE_PER_PAGE) {
         $resolvedQuestions = Event::getAllExerciseEventByExeId($exe_id);
         if (!empty($resolvedQuestions) &&
@@ -485,7 +481,7 @@ if ($time_control) {
 	        if ($debug) {error_log('7.11. Setting the $_SESSION[expired_time]: '.$_SESSION['expired_time'][$current_expired_time_key] ); };
         }
     } else {
-        $clock_expired_time =  $_SESSION['expired_time'][$current_expired_time_key];
+        $clock_expired_time = $_SESSION['expired_time'][$current_expired_time_key];
     }
 } else {
     if ($debug) { error_log("7 No time control"); };
@@ -503,7 +499,6 @@ if ($time_control) { //Sends the exercise form when the expired time is finished
 }
 
 //in LP's is enabled the "remember question" feature?
-
 if (!isset($_SESSION['questionList'])) {
     // selects the list of question ID
     $questionList = $objExercise->get_validated_question_list();
@@ -527,7 +522,11 @@ if (!empty($questionList)) {
 }
 
 if ($current_question > $question_count) {
-    $current_question = 0;
+    // If time control then don't change the current question, otherwise there will be a loop.
+    // @todo
+    if ($time_control == false) {
+        $current_question = 0;
+    }
 }
 
 if ($formSent && isset($_POST)) {
@@ -600,7 +599,7 @@ if ($formSent && isset($_POST)) {
 
     // the script "exercise_result.php" will take the variable $exerciseResult from the session
     Session::write('exerciseResult', $exerciseResult);
-    Session::write('remind_list', $remind_list);
+//    Session::write('remind_list', $remind_list);
     Session::write('exerciseResultCoordinates',$exerciseResultCoordinates);
 
     // if all questions on one page OR if it is the last question (only for an exercise with one question per page)
@@ -766,6 +765,7 @@ $is_visible_return = $objExercise->is_visible(
     $learnpath_item_id,
     $learnpath_item_view_id
 );
+
 if ($is_visible_return['value'] == false) {
     echo $is_visible_return['message'];
     if ($origin != 'learnpath') {
@@ -774,6 +774,7 @@ if ($is_visible_return['value'] == false) {
     exit;
 }
 
+$exercise_timeover = false;
 $limit_time_exists = (!empty($objExercise->start_time) || !empty($objExercise->end_time)) ? true : false;
 
 if ($limit_time_exists) {
@@ -789,8 +790,6 @@ if ($limit_time_exists) {
     if ($_SERVER['REQUEST_METHOD'] != 'POST') {
         if (!empty($objExercise->end_time)) {
             $exercise_timeover = (($time_now - $exercise_end_time) > 0) ? true : false;
-        } else {
-            $exercise_timeover = false;
         }
     }
 
@@ -1135,12 +1134,12 @@ if (!empty($error)) {
 
 	// Show list of questions
     $i = 1;
-    $attempt_list = array();
+    $attempt_list = [];
     if (isset($exe_id)) {
         $attempt_list = Event::getAllExerciseEventByExeId($exe_id);
     }
 
-    $remind_list  = array();
+    $remind_list = [];
     if (isset($exercise_stat_info['questions_to_check']) && !empty($exercise_stat_info['questions_to_check'])) {
         $remind_list = explode(',', $exercise_stat_info['questions_to_check']);
     }

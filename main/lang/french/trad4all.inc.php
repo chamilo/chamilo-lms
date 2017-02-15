@@ -7626,7 +7626,7 @@ $NowDownloadYourCertificateClickHere = "Télécharge ton certificat en cliquant 
 $AdditionallyYouHaveObtainedTheFollowingSkills = "En plus, tu as acquis les compétences suivantes";
 $IHaveObtainedSkillXOnY = "J'ai acquis la compétence %s sur %s";
 $AnotherAttempt = "Nouvelle tentative";
-$RemainingXAttempts = "%s tentatives restantes";
+$RemainingXAttempts = "Nombre de tentatives restantes: %s";
 $Map = "Carte";
 $MyLocation = "Ma position";
 $ShowCourseInUserLanguage = "Afficher les îlots dans la langue de l'utilisateur";
@@ -7899,6 +7899,12 @@ $AllowMyFilesTitle = "Activer la page 'Mes fichiers'";
 $AllowMyFilesComment = "Permettre aux utilisateurs de télécharger des fichiers vers un espace personnel sur la plate-forme.";
 $InstallMultiURLDetectedNotMainURL = "Vous utilisez actuellement la fonctionnalité de multi-URL et êtes sur le point de mettre à jour votre portail en utilisant une URL secondaire. Merci de vous connecter à l'URL principale pour continuer le processus de mise à jour: %s";
 $OnlyXQuestionsPickedRandomly = "Seules %s questions seront tirées au hasard selon les règles établies dans la configuration de l'exercice.";
+$AllowDownloadDocumentsByApiKeyTitle = "Permettre le téléchargement de documents par API";
+$AllowDownloadDocumentsByApiKeyComment = "Permettre le téléchargement de documents du cours via une authentification sur base de la clef API d'un utilisateur. Cette option est utile pour l'application mobile et ne devrait être utilisée que si votre portail est en HTTPS.";
+$UploadCorrectionsExplanationWithDownloadLinkX = "Veuillez d'abord télécharger les corrections <a href=\"%s\">ici</a> puis les décompresser et éditer les fichiers sans changer leurs noms. Ensuite, créez un fichier zip avec les fichiers modifiés et téléchargez-le vers le serveur sous cette forme.";
+$PostsPendingModeration = "Participations en attente de modération";
+$OnlyUsersFromCourseSession = "Seulement les utilisateurs d'un cours dans une session";
+$ServerXForwardedForInfo = "Si le serveur est derrière un proxy ou un firewall (et uniquement dans ces cas), il pourrait utiliser le header HTTP X_FORWARDED_FOR pour montrer l'adresse IP de l'utilisateur distant (la vôtre, dans ce cas précis).";
 
 // Ofaj
 

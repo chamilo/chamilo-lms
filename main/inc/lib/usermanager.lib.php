@@ -409,7 +409,14 @@ class UserManager
                     null,
                     PERSON_NAME_EMAIL_ADDRESS
                 );
-                $tplSubject = new Template(null, false, false, false, false, false);
+                $tplSubject = new Template(
+                    null,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                );
                 $layoutSubject = $tplSubject->get_template(
                     'mail/subject_registration_platform.tpl'
                 );
@@ -574,7 +581,6 @@ class UserManager
                     WHERE status=1 AND c_id = " . intval($course->c_id);
             $res2 = Database::query($sql);
             if (Database::num_rows($res2) == 1) {
-
                 return false;
             }
         }
@@ -618,11 +624,14 @@ class UserManager
         $table_work = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
 
         // Unsubscribe the user from all groups in all his courses
-        $sql = "SELECT c.id FROM $table_course c, $table_course_user cu
+        $sql = "SELECT c.id 
+                FROM $table_course c 
+                INNER JOIN $table_course_user cu
+                ON (c.id = cu.c_id)
                 WHERE
                     cu.user_id = '".$user_id."' AND
-                    relation_type<>".COURSE_RELATION_TYPE_RRHH." AND
-                    c.id = cu.c_id";
+                    relation_type<>".COURSE_RELATION_TYPE_RRHH."
+                ";
 
         $res = Database::query($sql);
         while ($course = Database::fetch_object($res)) {
@@ -851,7 +860,6 @@ class UserManager
     public static function activate_users($ids = array())
     {
         if (empty($ids)) {
-
             return false;
         }
 
@@ -1226,7 +1234,6 @@ class UserManager
     public static function create_username($firstname, $lastname)
     {
         if (empty($firstname) && empty($lastname)) {
-
             return false;
         }
 
@@ -1501,9 +1508,9 @@ class UserManager
         if (count($order_by) > 0) {
             $sql_query .= ' ORDER BY '.Database::escape_string(implode(',', $order_by), null, false);
         }
+
         $sql_result = Database::query($sql_query);
         while ($result = Database::fetch_array($sql_result)) {
-
             $result['complete_name'] = api_get_person_name(
                 $result['firstname'],
                 $result['lastname']
@@ -1593,7 +1600,7 @@ class UserManager
      *
      * @return    array     Array of 2 elements: 'dir' and 'file' which contain
      * the dir and file as the name implies if image does not exist it will
-     * return the unknow image if anonymous parameter is true if not it returns an empty array
+     * return the unknown image if anonymous parameter is true if not it returns an empty array
      */
     public static function getUserPicturePathById($id, $type = 'web', $userInfo = [])
     {
@@ -5394,7 +5401,7 @@ EOF;
     }
 
     /**
-     * Get the boss user list from a followed user id
+     * Get the boss user ID from a followed user id
      * @param $userId
      * @return bool
      */

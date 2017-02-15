@@ -5128,6 +5128,10 @@ function protectWork($courseInfo, $workId)
     }
 }
 
+/**
+ * @param array $courseInfo
+ * @param array $work
+ */
 function deleteCorrection($courseInfo, $work)
 {
     if (isset($work['url_correction']) && !empty($work['url_correction']) && isset($work['iid'])) {

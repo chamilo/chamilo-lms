@@ -137,6 +137,7 @@ class SocialManager extends UserManager
                     'lastName' => $my_user_info['lastName'],
                     'username' => $my_user_info['username'],
                     'image' => $my_user_info['avatar'],
+                    'user_info' => $my_user_info,
                 );
             } else {
                 $list_ids_friends[] = $row;

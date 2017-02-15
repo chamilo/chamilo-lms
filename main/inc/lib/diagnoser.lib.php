@@ -430,6 +430,8 @@ class Diagnoser
 
         $array[] = $this->build_setting(self :: STATUS_INFORMATION, '[SERVER]', 'php_uname()', 'http://be2.php.net/php_uname', php_uname(), null, null, get_lang('UnameInfo'));
 
+        $array[] = $this->build_setting(self :: STATUS_INFORMATION, '[SERVER]', '$_SERVER["HTTP_X_FORWARDED_FOR"]', 'http://be.php.net/reserved.variables.server', (!empty($_SERVER["HTTP_X_FORWARDED_FOR"]) ? $_SERVER["HTTP_X_FORWARDED_FOR"] : ''), null, null, get_lang('ServerXForwardedForInfo'));
+
         return $array;
     }
 

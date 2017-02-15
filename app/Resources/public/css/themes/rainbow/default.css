@@ -809,3 +809,7 @@ legend{
 	float: left !important;
     }
 }
+
+.question-result .dl-horizontal {
+    display:none;
+}

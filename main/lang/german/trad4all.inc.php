@@ -6897,6 +6897,7 @@ $HideColumn = "Spalte verstecken";
 $DisplayColumn = "Spalte anzeigen";
 $LegalAgreementAccepted = "Nutzungsbedingungen akzeptiert";
 $DateFormatLongNoDayJS = "dd MM yy";
+$RemainingXAttempts = "Anzahl der verbleibenden Versuche: %s";
 $Contact = "Kontakt";
 $YourPasswordCannotBeTheSameAsYourEmail = "Ihr Passwort kann nicht die gleiche sein wie Ihre E-Mail";
 $YourPasswordCannotContainYourUsername = "Ihr Passwort kann nicht enthalten Ihren Benutzernamen";

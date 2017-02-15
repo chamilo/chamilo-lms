@@ -27,7 +27,6 @@ $interbreadcrumb[]= array('url' => 'usergroups.php','name' => get_lang('Classes'
 $tool_name = get_lang('SubscribeUsersToClass');
 
 $id = intval($_GET['id']);
-
 $relation = isset($_REQUEST['relation']) ? intval($_REQUEST['relation']) : '';
 
 $htmlHeadXtra[] = '
@@ -98,7 +97,7 @@ $new_field_list = array();
 if (is_array($extra_field_list)) {
     foreach ($extra_field_list as $extra_field) {
         //if is enabled to filter and is a "<select>" field type
-        if ($extra_field[8]==1 && $extra_field[2]==4 ) {
+        if ($extra_field[8] == 1 && $extra_field[2] == 4) {
             $new_field_list[] = array(
                 'name'=> $extra_field[3],
                 'variable' => $extra_field[1], 'data'=> $extra_field[9]
@@ -139,7 +138,6 @@ if (isset($_GET['action']) && $_GET['action'] == 'export') {
     $groupInfo = $usergroup->get($id);
     $users = $usergroup->getUserListByUserGroup($id);
     if (!empty($users)) {
-
         $data = array(
             array('UserName', 'ClassName')
         );
@@ -152,11 +150,10 @@ if (isset($_GET['action']) && $_GET['action'] == 'export') {
     }
 }
 
-
 // Filter by Extra Fields
 $use_extra_fields = false;
 if (is_array($extra_field_list)) {
-    if (is_array($new_field_list) && count($new_field_list)>0 ) {
+    if (is_array($new_field_list) && count($new_field_list) > 0) {
         foreach ($new_field_list as $new_field) {
             $varname = 'field_'.$new_field['variable'];
             if (UserManager::is_extra_field_available($new_field['variable'])) {
@@ -250,6 +247,7 @@ if (!empty($complete_user_list)) {
                 continue;
             }
         }
+
         // Avoid anonymous users
         if ($item['status'] == 6) {
             continue;
@@ -347,38 +345,36 @@ echo '</div>';
 <?php
 echo '<legend>'.$tool_name.': '.$data['name'].'</legend>';
 
-
-    if (is_array($extra_field_list)) {
-        if (is_array($new_field_list) && count($new_field_list)>0) {
-            echo '<h3>'.get_lang('FilterByUser').'</h3>';
-            foreach ($new_field_list as $new_field) {
-                echo $new_field['name'];
-                $varname = 'field_'.$new_field['variable'];
-                echo '&nbsp;<select name="'.$varname.'">';
-                echo '<option value="0">--'.get_lang('Select').'--</option>';
-                foreach ($new_field['data'] as $option) {
-                    $checked='';
-                    if (isset($_POST[$varname])) {
-                        if ($_POST[$varname] == $option[1]) {
-                            $checked = 'selected="true"';
-                        }
+if (is_array($extra_field_list)) {
+    if (is_array($new_field_list) && count($new_field_list)>0) {
+        echo '<h3>'.get_lang('FilterByUser').'</h3>';
+        foreach ($new_field_list as $new_field) {
+            echo $new_field['name'];
+            $varname = 'field_'.$new_field['variable'];
+            echo '&nbsp;<select name="'.$varname.'">';
+            echo '<option value="0">--'.get_lang('Select').'--</option>';
+            foreach ($new_field['data'] as $option) {
+                $checked='';
+                if (isset($_POST[$varname])) {
+                    if ($_POST[$varname] == $option[1]) {
+                        $checked = 'selected="true"';
                     }
-                    echo '<option value="'.$option[1].'" '.$checked.'>'.$option[1].'</option>';
                 }
-                echo '</select>';
-                echo '&nbsp;&nbsp;';
+                echo '<option value="'.$option[1].'" '.$checked.'>'.$option[1].'</option>';
             }
-            echo '<input type="button" value="'.get_lang('Filter').'" onclick="validate_filter()" />';
-            echo '<br /><br />';
+            echo '</select>';
+            echo '&nbsp;&nbsp;';
         }
+        echo '<input type="button" value="'.get_lang('Filter').'" onclick="validate_filter()" />';
+        echo '<br /><br />';
     }
+}
 
 echo Display::input('hidden', 'id', $id);
 echo Display::input('hidden', 'form_sent', '1');
 echo Display::input('hidden', 'add_type', null);
 
 ?>
-
 <div class="row">
     <div class="col-md-5">
         <?php if ($data['group_type'] == UserGroup::SOCIAL_CLASS) { ?>
@@ -412,7 +408,12 @@ echo Display::input('hidden', 'add_type', null);
         'elements_not_in_name',
         $elements_not_in,
         '',
-        array('class'=>'col-md-7', 'multiple'=>'multiple','id'=>'elements_not_in','size'=>'15px'),
+        array(
+            'class' => 'form-control',
+            'multiple' => 'multiple',
+            'id' => 'elements_not_in',
+            'size' => '15px',
+        ),
         false
     );
     ?>
@@ -442,14 +443,18 @@ echo Display::input('hidden', 'add_type', null);
             'elements_in_name[]',
             $elements_in,
             '',
-            array('class'=>'col-md-7', 'multiple'=>'multiple','id'=>'elements_in','size'=>'15px'),
+            array(
+                'class' => 'form-control',
+                'multiple' => 'multiple',
+                'id' => 'elements_in',
+                'size' => '15px'
+            ),
             false
         );
         unset($sessionUsersList);
     ?>
     </div>
 </div>
-
 <?php
     echo '<button class="btn btn-primary" type="button" value="" onclick="valide()" ><em class="fa fa-check"></em>'.
         get_lang('SubscribeUsersToClass').'</button>';
@@ -469,7 +474,6 @@ function moveItem(origin , destination) {
 }
 
 function sortOptions(options) {
-
     newOptions = new Array();
     for (i = 0 ; i<options.length ; i++)
         newOptions[i] = options[i];

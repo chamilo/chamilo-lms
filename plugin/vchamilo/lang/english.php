@@ -117,3 +117,8 @@ $strings['CoursePath'] = 'Path to courses directory';
 $strings['HomePath'] = 'Path to home directory';
 $strings['UploadPath'] = 'Path to upload directory';
 
+$strings['ArchiveUrl'] = 'Archive URL';
+$strings['HomeUrl'] = 'Home URL';
+$strings['UploadUrl'] = 'Upload URL';
+$strings['CourseUrl'] = 'Course URL';
+

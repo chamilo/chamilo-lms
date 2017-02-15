@@ -33,4 +33,3 @@ var disconnect_lang = '{{ "ChatDisconnected"|get_lang }}';
 
 {{ css_custom_file_to_string }}
 {{ css_style_print }}
-{{ header_extra_content }}

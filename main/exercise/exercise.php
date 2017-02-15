@@ -69,6 +69,7 @@ Session::erase('objQuestion');
 Session::erase('objAnswer');
 Session::erase('questionList');
 Session::erase('exerciseResult');
+Session::erase('firstTime');
 
 //General POST/GET/SESSION/COOKIES parameters recovery
 $origin = isset($_REQUEST['origin']) ? Security::remove_XSS($_REQUEST['origin']) : null;

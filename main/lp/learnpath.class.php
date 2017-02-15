@@ -2651,6 +2651,7 @@ class learnpath
             if (isset($size)) {
                 $info = pathinfo($preview_image);
                 $image_custom_size = $info['filename'].'.'.$size.'.'.$info['extension'];
+
                 if (file_exists($image_sys_path.$image_custom_size)) {
                     if ($path_type == 'web') {
                         return $image_path.$image_custom_size;
@@ -5915,7 +5916,7 @@ class learnpath
                     ])
                 ),
             );
-            $actionsRight = Display::group_button(get_lang('PrerequisitesOptions'), $buttons);
+            $actionsRight = Display::groupButtonWithDropDown(get_lang('PrerequisitesOptions'), $buttons);
         }
 
         $toolbar = Display::toolbarAction('actions-lp-controller', array($actionsLeft, $actionsRight));
@@ -8714,7 +8715,7 @@ class learnpath
         $row = Database :: fetch_array($result);
         $prerequisiteId = $row['prerequisite'];
         $session_id = api_get_session_id();
-        $session_condition = api_get_session_condition($session_id);
+        $session_condition = api_get_session_condition($session_id, true, true);
         $sql = "SELECT * FROM $tbl_lp
                 WHERE c_id = $course_id $session_condition
                 ORDER BY display_order ";
@@ -8822,7 +8823,7 @@ class learnpath
         $tbl_quiz = Database :: get_course_table(TABLE_QUIZ_TEST);
 
         $session_id = api_get_session_id();
-        $condition_session = api_get_session_condition($session_id);
+        $condition_session = api_get_session_condition($session_id, true, true);
 
         $setting = api_get_configuration_value('show_invisible_exercise_in_lp_list');
 
@@ -8868,7 +8869,7 @@ class learnpath
             $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
             $return .= '</a> ';
             $return .= Display::return_icon('quizz_small.gif', '', array(), ICON_SIZE_TINY);
-            $return .= '<a href="' . api_get_self() . '?'.api_get_cidreq().'&action=add_item&type=' . TOOL_QUIZ . '&file=' . $row_quiz['id'] . '&lp_id=' . $this->lp_id . '">' .
+            $return .= '<a class="moved" href="' . api_get_self() . '?'.api_get_cidreq().'&action=add_item&type=' . TOOL_QUIZ . '&file=' . $row_quiz['id'] . '&lp_id=' . $this->lp_id . '">' .
                 Security :: remove_XSS(cut($row_quiz['title'], 80)).
                 '</a>';
 
@@ -8894,9 +8895,15 @@ class learnpath
         $moveEverywhereIcon = Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
 
         $session_id = api_get_session_id();
-        $condition_session = api_get_session_condition($session_id, true, null, "link.session_id");
+        $condition_session = api_get_session_condition(
+            $session_id,
+            true,
+            true,
+            "link.session_id"
+        );
 
-        $sql = "SELECT link.id as link_id,
+        $sql = "SELECT 
+                    link.id as link_id,
                     link.title as link_title,
                     link.category_id as category_id,
                     link_category.category_title as category_title
@@ -8956,7 +8963,7 @@ class learnpath
                             $moveEverywhereIcon.
                         '</a>
                         '.Display::return_icon('lp_link.png').'
-                        <a href="'.$selfUrl.'?'.$courseIdReq.'&action=add_item&type='.
+                        <a class="moved" href="'.$selfUrl.'?'.$courseIdReq.'&action=add_item&type='.
                         TOOL_LINK.'&file='.$key.'&lp_id='.$this->lp_id.'">'.
                         Security::remove_XSS($title).
                         '</a>
@@ -9104,10 +9111,10 @@ class learnpath
                 $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
                 $return .= ' </a>';
                 $return .= Display::return_icon('lp_forum.png', '', array(), ICON_SIZE_TINY);
-                $return .= '<a style="cursor:hand" onclick="javascript: toggle_forum(' . $forum['forum_id'] . ')" style="vertical-align:middle">
+                $return .= '<a onclick="toggle_forum(' . $forum['forum_id'] . ');" style="cursor:hand; vertical-align:middle">
                                 <img src="' . Display::returnIconPath('add.gif').'" id="forum_' . $forum['forum_id'] . '_opener" align="absbottom" />
                             </a>
-                            <a href="' . api_get_self() . '?'.api_get_cidreq().'&action=add_item&type=' . TOOL_FORUM . '&forum_id=' . $forum['forum_id'] . '&lp_id=' . $this->lp_id . '" style="vertical-align:middle">' .
+                            <a class="moved" href="' . api_get_self() . '?'.api_get_cidreq().'&action=add_item&type=' . TOOL_FORUM . '&forum_id=' . $forum['forum_id'] . '&lp_id=' . $this->lp_id . '" style="vertical-align:middle">' .
                     Security :: remove_XSS($forum['forum_title']) . '</a>';
 
                 $return .= '</li>';

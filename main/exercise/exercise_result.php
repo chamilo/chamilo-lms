@@ -161,11 +161,6 @@ if ($objExercise->selectAttempts() > 0) {
             );
             $attemptMessage = sprintf(get_lang('RemainingXAttempts'), $remainingAttempts);
             $remainingMessage = sprintf("<p>%s</p> %s", $attemptMessage, $attemptButton);
-
-            Display::display_normal_message(
-                $remainingMessage,
-                false
-            );
         }
     }
 }
@@ -180,7 +175,12 @@ $max_score = $objExercise->get_max_score();
 Display::display_normal_message(get_lang('Saved').'<br />',false);
 
 // Display and save questions
-ExerciseLib::display_question_list_by_attempt($objExercise, $exe_id, true);
+ExerciseLib::display_question_list_by_attempt(
+    $objExercise,
+    $exe_id,
+    true,
+    $remainingMessage
+);
 
 //Unset session for clock time
 ExerciseLib::exercise_time_control_delete(

@@ -37,7 +37,9 @@
 <section id="content-section">
     <div class="container">
         {% block breadcrumb %}
-            {{ breadcrumb }}
+            <div id="page-breadcrumb">
+                {{ breadcrumb }}
+            </div>
         {% endblock %}
         {{ flash_messages }}
 {% endif %}

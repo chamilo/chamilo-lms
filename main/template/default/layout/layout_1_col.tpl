@@ -1,6 +1,7 @@
 {% extends template ~ "/layout/page.tpl" %}
 
 {% block body %}
+    <div class="row">
     {% if plugin_main_top %}
         <div id="plugin_main_top" class="col-md-12">
             {{ plugin_main_top }}
@@ -35,4 +36,5 @@
             {{ plugin_main_bottom }}
         </div>
     {% endif %}
+    </div>
 {% endblock %}

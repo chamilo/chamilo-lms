@@ -593,7 +593,7 @@ legend{
 
 /* Large desktop */
 @media (min-width: 1200px) {
-    
+
 }
 
 /* Portrait tablet to landscape and desktop */
@@ -636,7 +636,7 @@ legend{
 
 /* Landscape phone to portrait tablet */
 @media (max-width: 767px) {
-    
+
 }
 
 /* Landscape phones and down */
@@ -748,4 +748,8 @@ legend{
 	font-weight: bold;
 	margin: 10px 0;
     }
+}
+
+.question-result .dl-horizontal {
+    display:none;
 }

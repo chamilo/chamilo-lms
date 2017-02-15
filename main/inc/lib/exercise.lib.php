@@ -3466,11 +3466,13 @@ HOTSPOT;
      * @param Exercise $objExercise
      * @param int $exe_id
      * @param bool $save_user_result save users results (true) or just show the results (false)
+     * @param string $remainingMessage
      */
     public static function display_question_list_by_attempt(
         $objExercise,
         $exe_id,
-        $save_user_result = false
+        $save_user_result = false,
+        $remainingMessage = ''
     ) {
         global $origin;
 
@@ -3755,7 +3757,6 @@ HOTSPOT;
             $exercise_content
         );
 
-
         echo $total_score_text;
 
         // Ofaj change BT#11784
@@ -3769,8 +3770,11 @@ HOTSPOT;
             echo $total_score_text;
         }
 
-        if ($save_user_result) {
+        if (!empty($remainingMessage)) {
+            Display::display_normal_message($remainingMessage, false);
+        }
 
+        if ($save_user_result) {
             // Tracking of results
             $learnpath_id = $exercise_stat_info['orig_lp_id'];
             $learnpath_item_id = $exercise_stat_info['orig_lp_item_id'];

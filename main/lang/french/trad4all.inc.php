@@ -7912,4 +7912,5 @@ $GeolocalizationCoordinates = "Géolocalisation par coordonnées";
 $ExportUsersOfACourse = "Exporter les utilisateurs d'un cours";
 $PauseRecordingAudio = "Pause d'enregistrement";
 $PlayRecordingAudio = "Reprendre l'enregistrement";
+$YourSessionTimeHasExpired = "Vous êtes déjà inscrit mais votre période d'accès au cours a expiré.";
 ?>

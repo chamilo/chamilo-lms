@@ -262,7 +262,7 @@ footer #footer_right{
 }
 .grid-courses .items.session{
     min-height: 230px;
-    border: 3px solid #19BF69;
+    border: 1px solid #19BF69;
 }
 .section-title{
     font-size: 32px;
@@ -483,6 +483,7 @@ footer #footer_right{
   margin-bottom: 21px;
   list-style: outside none none;
   background-color: #ECF0F1;
+  font-size: 12px;
 }
 .panel-default{
   border-color: #ddd;
@@ -491,6 +492,15 @@ footer #footer_right{
   color: #666;
   background-color:#ECF0F1;
   border-color: #ECF0F1;
+}
+.menu-column .nav li a img{
+    vertical-align: middle;
+}
+.form-horizontal .control-label{
+    font-size: 12px;
+}
+.panel-default .panel-heading h4{
+    font-size: 12px;
 }
 .question_row_score .title-score .total{
    background: #162A83;
@@ -590,7 +600,10 @@ legend{
     content: "* ";
     color: #f00;
 }
-
+#breadcrumb-bar #view_as_link {
+    padding-top: 0px;
+    margin-right: 5px;
+}
 /* Large desktop */
 @media (min-width: 1200px) {
 
@@ -632,6 +645,26 @@ legend{
     .home-information .item-icon .circle .fa {
 	font-size: 2em;
     }
+    .partners{
+        text-align: center;
+        padding-top: 30px;
+    }
+    footer #footer_right {
+	text-align: center;
+    }
+    .block-faq .title {
+	font-size: 16px;
+	margin-bottom: 15px;
+    }
+    .page-faq .title, .page-contact .title {
+	margin-top: 5px;
+	margin-bottom: 5px;
+        font-size: 20px;
+    }
+    .breadcrumb{
+        font-size: 12px;
+    }
+    
 }
 
 /* Landscape phone to portrait tablet */
@@ -747,6 +780,12 @@ legend{
 	font-size: 16px;
 	font-weight: bold;
 	margin: 10px 0;
+    }
+    .grid-courses .items.session {
+	border: 1px solid #19BF69;
+    }
+    .pull-right {
+	float: left !important;
     }
 }
 

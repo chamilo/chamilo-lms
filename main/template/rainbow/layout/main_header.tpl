@@ -62,7 +62,7 @@
                 <div class="row">
                     <div class="col-xs-6 col-md-4">
                         <div class="logo pull-left">
-                            {{ logo }}    
+                            <a href="{{ _p.web }}"><img class="img-responsive" src="{{ _p.web_css_theme }}images/header-logo.png"/></a>
                         </div>
                         <!-- <h2><a href="{{ _p.web }}">{{ _s.site_name }}</a></h2> -->
                     </div>
@@ -71,7 +71,7 @@
                     </div>
                         <div class="col-xs-6 col-md-4">
                             <div class="logo-ofaj pull-right">
-                                <a href="#"><img src="{{ _p.web_css_theme }}images/logo-ofaj.png"/></a> 
+                                <a href="#"><img class="img-responsive" src="{{ _p.web_css_theme }}images/logo-ofaj.png"/></a> 
                             </div>
                         </div>
                 </div>

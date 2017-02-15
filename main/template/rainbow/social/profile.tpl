@@ -65,6 +65,24 @@
             </div>
         </div>
         {% endif %}
+        <!-- Block maps --> 
+             <div class="panel-group" id="maps-block" role="tablist" aria-multiselectable="true">
+                <div class="panel panel-default">
+                    <div class="panel-heading" role="tab" id="headingOne">
+                        <h4 class="panel-title">
+                            <a role="button" data-toggle="collapse" data-parent="#maps-block" href="#mapsList" aria-expanded="true" aria-controls="mapsList">
+                               {{ "Geolocalization" | get_lang }}
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="mapsList" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                        <div class="panel-body">
+                            <a href="{{ _p.web }}plugin/google_maps/src/map_coordinates.php" target="_blank">{{ "Map" | get_lang }}</a>
+                        </div>
+                    </div>
+                </div>
+             </div>
+            <!-- end block maps -->
         <!-- Block session list -->
         {% if session_list != null %}
         <div class="panel-group" id="session-block" role="tablist" aria-multiselectable="true">

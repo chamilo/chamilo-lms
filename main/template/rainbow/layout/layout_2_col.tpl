@@ -38,7 +38,7 @@
             <!-- block statistics -->
             <div class="statistics">
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-xs-4 col-md-4">
                         <ul class="items">
                             <li><i class="fa fa-user fa-4x icon-color" aria-hidden="true"></i></li>
                             <li>
@@ -47,7 +47,7 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-xs-4 col-md-4">
                         <ul class="items">
                             <li><i class="fa fa-book fa-4x icon-color" aria-hidden="true"></i></li>
                             <li>
@@ -56,7 +56,7 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-xs-4 col-md-4">
                         <ul class="items">
                             <li><i class="fa fa-signal fa-4x icon-color" aria-hidden="true"></i></li>
                             <li>

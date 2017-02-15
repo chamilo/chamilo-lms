@@ -72,11 +72,11 @@
                         {% if is_allowed_to_edit %}
                             <th>{{ "PublicationDate"|get_lang }}</th>
                             <th>{{ "ExpirationDate"|get_lang }}</th>
-                            <th>{{ "Progress"|get_lang }}</th>
+                            <th>{{ "Progress"|get_lang }} (*)</th>
                             <th>{{ "AuthoringOptions"|get_lang }}</th>
                         {% else %}
                             {% if not is_invitee %}
-                                <th>{{ "Progress"|get_lang }}</th>
+                                <th>{{ "Progress"|get_lang }} (*)</th>
                             {% endif %}
 
                             <th>{{ "Actions"|get_lang }}</th>

@@ -138,8 +138,8 @@ switch ($action) {
 
                 $json['type'] = api_htmlentities($file['type']);
                 $json['size'] = format_file_size($file['size']);
-
             }
+
             if (isset($result['url'])) {
                 $json['result'] = Display::return_icon(
                     'accept.png',

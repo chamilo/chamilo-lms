@@ -177,7 +177,7 @@ $defaults['qualification'] = $work_item['qualification'];
 
 if ($is_allowed_to_edit && !empty($item_id)) {
     // Get qualification from parent_id that will allow the validation qualification over
-    $sql = "SELECT qualification FROM $work_table
+    /*$sql = "SELECT qualification FROM $work_table
             WHERE c_id = $course_id AND id ='$work_id' ";
     $result = Database::query($sql);
     $row = Database::fetch_array($result);
@@ -185,7 +185,7 @@ if ($is_allowed_to_edit && !empty($item_id)) {
     if (!empty($qualification_over) && intval($qualification_over) > 0) {
         $form->addText('qualification', array(get_lang('Qualification'), " / ".$qualification_over), false, 'size="10"');
         $form->addElement('hidden', 'qualification_over', $qualification_over);
-    }
+    }*/
 
     $form->addCheckBox(
         'send_email',
@@ -239,9 +239,9 @@ if ($form->validate()) {
 
             $add_to_update = null;
             if ($is_allowed_to_edit && ($_POST['qualification'] !='' )) {
-                $add_to_update = ', qualificator_id ='."'".api_get_user_id()."', ";
+                /*$add_to_update = ', qualificator_id ='."'".api_get_user_id()."', ";
                 $add_to_update .= ' qualification = '."'".api_float_val($_POST['qualification'])."',";
-                $add_to_update .= ' date_of_qualification = '."'".api_get_utc_datetime()."'";
+                $add_to_update .= ' date_of_qualification = '."'".api_get_utc_datetime()."'";*/
 
                 if (isset($_POST['send_email'])) {
                     $url = api_get_path(WEB_CODE_PATH).'work/view.php?'.api_get_cidreq().'&id='.$item_to_edit_id;
@@ -306,19 +306,20 @@ if (!empty($work_id)) {
         if (api_resource_is_locked_by_gradebook($work_id, LINK_STUDENTPUBLICATION)) {
             echo Display::display_warning_message(get_lang('ResourceLockedByGradebook'));
         } else {
-            $comments = getWorkComments($work_item);
+            /*$comments = getWorkComments($work_item);
 
             $template = $tpl->get_template('work/comments.tpl');
             $tpl->assign('comments', $comments);
 
             $commentForm = getWorkCommentForm($work_item, 'edit');
-
+            */
             if (api_is_allowed_to_session_edit()) {
-                $tpl->assign('form', $commentForm);
+                //$tpl->assign('form', $commentForm);
             }
-
             $content .= $form->returnForm();
-            $content .= $tpl->fetch($template);
+
+            /*$content .= $form->returnForm();
+            $content .= $tpl->fetch($template);*/
         }
     } elseif ($is_author) {
         if (empty($work_item['qualificator_id']) || $work_item['qualificator_id'] == 0) {

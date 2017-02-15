@@ -1745,7 +1745,7 @@ function get_work_user_list_from_documents(
     $editIcon = Display::return_icon('edit.png', get_lang('Edit'));
     $addIcon = Display::return_icon('add.png', get_lang('Add'));
     $deleteIcon = Display::return_icon('delete.png', get_lang('Delete'));
-    $viewIcon = Display::return_icon('default.png', get_lang('View'));
+    $viewIcon = Display::return_icon('rate_work.png', get_lang('CorrectAndRate'));
     $allowEdition = api_get_course_setting('student_delete_own_publication');
 
     $workList = array();
@@ -1957,6 +1957,11 @@ function get_work_user_list(
         $url = api_get_path(WEB_CODE_PATH).'work/';
         $unoconv = api_get_configuration_value('unoconv.binaries');
 
+        $loadingText = addslashes(get_lang('Loading'));
+        $uploadedText = addslashes(get_lang('Uploaded'));
+        $failsUploadText = addslashes(get_lang('UplNoFileUploaded'));
+        $failsUploadIcon = Display::return_icon('closed-circle.png', '', [], ICON_SIZE_TINY);
+
         while ($work = Database::fetch_array($result, 'ASSOC')) {
             $item_id = $work['id'];
 
@@ -2009,7 +2014,6 @@ function get_work_user_list(
             }
 
             $work['qualification_score'] = $work['qualification'];
-
             $add_string = '';
             $time_expires = '';
             if (!empty($work_assignment['expires_on'])) {
@@ -2021,7 +2025,7 @@ function get_work_user_list(
 
             if (!empty($work_assignment['expires_on']) &&
                 !empty($time_expires) && ($time_expires < api_strtotime($work['sent_date'], 'UTC'))) {
-                $add_string = Display::label(get_lang('Expired'), 'important');
+                $add_string = Display::label(get_lang('Expired'), 'important').' - ';
             }
 
             if (($can_read && $work['accepted'] == '1') ||
@@ -2044,7 +2048,6 @@ function get_work_user_list(
 
                 // File name.
                 $link_to_download = null;
-
                 // If URL is present then there's a file to download keep BC.
                 if ($work['contains_file'] || !empty($work['url'])) {
                     $link_to_download = '<a href="'.$url.'download.php?id='.$item_id.'&'.api_get_cidreq().'">'.
@@ -2069,14 +2072,13 @@ function get_work_user_list(
                 // Date.
                 $work_date = api_convert_and_format_date($work['sent_date']);
                 $date = date_to_str_ago($work['sent_date']). ' ' . $work_date;
-                $work['formatted_date'] = $work_date . ' - ' . $add_string;
+                $work['formatted_date'] = $work_date . ' ' . $add_string;
 
                 $work['sent_date_from_db'] = $work['sent_date'];
-                $work['sent_date'] = '<div class="work-date" title="'.$date.'">' . $add_string . ' - ' . $work['sent_date'] . '</div>';
+                $work['sent_date'] = '<div class="work-date" title="'.$date.'">' . $add_string . ' ' . $work['sent_date'] . '</div>';
 
                 // Actions.
                 $correction = '';
-
                 $action = '';
                 if (api_is_allowed_to_edit()) {
                     if (!empty($work['url_correction'])) {
@@ -2087,16 +2089,13 @@ function get_work_user_list(
                     }
 
                     $action .= '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.
-                        Display::return_icon('default.png', get_lang('View'), array(), ICON_SIZE_SMALL).'</a> ';
+                        Display::return_icon('rate_work.png', get_lang('CorrectAndRate'), array(), ICON_SIZE_SMALL).'</a> ';
 
                     if ($unoconv && empty($work['contains_file'])) {
                         $action .=  '<a href="'.$url.'work_list_all.php?'.api_get_cidreq().'&id='.$work_id.'&action=export_to_doc&item_id='.$item_id.'" title="'.get_lang('ExportToDoc').'" >'.
                             Display::return_icon('export_doc.png', get_lang('ExportToDoc'),array(), ICON_SIZE_SMALL).'</a> ';
                     }
-                    $loadingText = addslashes(get_lang('Loading'));
-                    $uploadedText = addslashes(get_lang('Uploaded'));
-                    $failsUploadText = addslashes(get_lang('UplNoFileUploaded'));
-                    $failsUploadIcon = Display::return_icon('closed-circle.png', '', [], ICON_SIZE_TINY);
+
                     $correction = '
                         <form
                         id="file_upload_'.$item_id.'"
@@ -2138,14 +2137,14 @@ function get_work_user_list(
 
                     if ($locked) {
                         if ($qualification_exists) {
-                            $action .= Display::return_icon('rate_work_na.png', get_lang('CorrectAndRate'),array(), ICON_SIZE_SMALL);
+                            $action .= Display::return_icon('edit_na.png', get_lang('CorrectAndRate'),array(), ICON_SIZE_SMALL);
                         } else {
                             $action .= Display::return_icon('edit_na.png', get_lang('Comment'), array(), ICON_SIZE_SMALL);
                         }
                     } else {
                         if ($qualification_exists) {
                             $action .= '<a href="'.$url.'edit.php?'.api_get_cidreq().'&item_id='.$item_id.'&id='.$work['parent_id'].'" title="'.get_lang('Edit').'"  >'.
-                                Display::return_icon('rate_work.png', get_lang('CorrectAndRate'), array(), ICON_SIZE_SMALL).'</a>';
+                                Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>';
                         } else {
                             $action .= '<a href="'.$url.'edit.php?'.api_get_cidreq().'&item_id='.$item_id.'&id='.$work['parent_id'].'" title="'.get_lang('Modify').'">'.
                                 Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>';
@@ -2154,7 +2153,12 @@ function get_work_user_list(
 
                     if ($work['contains_file']) {
                         if ($locked) {
-                            $action .= Display::return_icon('move_na.png', get_lang('Move'),array(), ICON_SIZE_SMALL);
+                            $action .= Display::return_icon(
+                                'move_na.png',
+                                get_lang('Move'),
+                                array(),
+                                ICON_SIZE_SMALL
+                            );
                         } else {
                             $action .= '<a href="'.$url.'work.php?'.api_get_cidreq().'&action=move&item_id='.$item_id.'&id='.$work['parent_id'].'" title="'.get_lang('Move').'">'.
                                 Display::return_icon('move.png', get_lang('Move'),array(), ICON_SIZE_SMALL).'</a>';
@@ -3458,12 +3462,14 @@ function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo 
     }
 
     $curdirpath = basename($my_folder_data['url']);
+
     // If we come from the group tools the groupid will be saved in $work_table
     if (is_dir($updir.$curdirpath) || empty($curdirpath)) {
         $result = move_uploaded_file(
             $file['tmp_name'],
             $updir.$curdirpath.'/'.$new_file_name
         );
+
     } else {
         return array(
             'error' => Display :: return_message(

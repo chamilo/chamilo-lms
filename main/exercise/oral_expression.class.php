@@ -207,6 +207,7 @@ class OralExpression extends Question
         $recordAudioView->assign('directory', $directory);
         $recordAudioView->assign('user_id', $this->userId);
         $recordAudioView->assign('file_name', $this->fileName);
+        $recordAudioView->assign('question_id', $this->id);
 
         $template = $recordAudioView->get_template('exercise/oral_expression.tpl');
 

@@ -7033,10 +7033,12 @@ class SessionManager
         // Database Table Definitions
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 
-        $form->addElement('text', 'name', get_lang('SessionName'), array(
-            'maxlength' => 150,
-        ));
-        $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
+        $form->addText(
+            'name',
+            get_lang('SessionName'),
+            true,
+            ['maxlength' => 150]
+        );
         $form->addRule('name', get_lang('SessionNameAlreadyExists'), 'callback', 'check_session_name');
 
         if (!api_is_platform_admin() && api_is_teacher()) {
@@ -7144,7 +7146,13 @@ class SessionManager
             SESSION_VISIBLE => get_lang('SessionAccessible'),
             SESSION_INVISIBLE => api_ucfirst(get_lang('SessionNotAccessible')),
         ));
-        $form->addGroup($visibilityGroup, 'visibility_group', get_lang('SessionVisibility'), null, false);
+        $form->addGroup(
+            $visibilityGroup,
+            'visibility_group',
+            get_lang('SessionVisibility'),
+            null,
+            false
+        );
 
         $options = [
             0 => get_lang('ByDuration'),
@@ -7156,7 +7164,7 @@ class SessionManager
             'id' => 'access'
         ));
 
-        $form->addElement('html', '<div id="duration" style="display:none">');
+        $form->addHtml('<div id="duration" style="display:none">');
 
         $form->addElement(
             'number',
@@ -7170,8 +7178,8 @@ class SessionManager
             )
         );
 
-        $form->addElement('html', '</div>');
-        $form->addElement('html', '<div id="date_fields" style="display:none">');
+        $form->addHtml('</div>');
+        $form->addHtml('<div id="date_fields" style="display:none">');
 
         // Dates
         $form->addDateTimePicker(
@@ -7201,6 +7209,7 @@ class SessionManager
             ),
             array('id' => 'display_start_date')
         );
+
         $form->addDateTimePicker(
             'display_end_date',
             array(

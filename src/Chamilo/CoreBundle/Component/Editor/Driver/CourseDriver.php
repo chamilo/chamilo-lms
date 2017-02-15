@@ -210,12 +210,11 @@ class CourseDriver extends Driver implements DriverInterface
     /**
      * {@inheritdoc}
      */
-    public function upload($fp, $dst, $name, $tmpname)
+    public function upload($fp, $dst, $name, $tmpname, $hashes = array())
     {
         $this->setConnectorFromPlugin();
 
         if ($this->allowToEdit()) {
-
             // upload file by elfinder.
             $result = parent::upload($fp, $dst, $name, $tmpname);
             $name = $result['name'];

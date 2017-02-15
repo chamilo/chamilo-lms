@@ -37,6 +37,11 @@ class SessionManager
     public static function fetch($id)
     {
         $em = Database::getManager();
+
+        if (empty($id)) {
+            return [];
+        }
+
         /** @var Session $session */
         $session = $em->find('ChamiloCoreBundle:Session', $id);
 
@@ -8102,7 +8107,6 @@ class SessionManager
     public static function getHtmlNamedSessionCourseForCoach($userId)
     {
         $htmlRes = '';
-
         $listInfo = self::getNamedSessionCourseForCoach($userId);
         foreach ($listInfo as $i => $listCoursesInfo) {
             $courseInfo = $listCoursesInfo['course'];
@@ -8187,26 +8191,20 @@ class SessionManager
     }
 
     /**
-     * subsscribe and redirect to session after inscription
+     * Subscribe and redirect to session after inscription
      */
     public static function redirectToSession()
     {
         $sessionId = ChamiloSession::read('session_redirect');
         $onlyOneCourseSessionToRedirect = ChamiloSession::read('only_one_course_session_redirect');
-        $userId = api_get_user_id();
         $sessionInfo = api_get_session_info($sessionId);
-
         if (!empty($sessionInfo)) {
-
+            $userId = api_get_user_id();
             $response = self::isUserSubscribedAsStudent($sessionId, $userId);
-
             if ($response) {
-
                 $urlToRedirect = api_get_path(WEB_CODE_PATH) . 'session/index.php?session_id=' . $sessionId;
-
                 if (!empty($onlyOneCourseSessionToRedirect)) {
-
-                        $urlToRedirect = api_get_path(WEB_PATH) . 'courses/' . $onlyOneCourseSessionToRedirect . '/index.php?id_session=' . $sessionId;
+                    $urlToRedirect = api_get_path(WEB_PATH) . 'courses/' . $onlyOneCourseSessionToRedirect . '/index.php?id_session=' . $sessionId;
                 }
 
                 header('Location: ' . $urlToRedirect);

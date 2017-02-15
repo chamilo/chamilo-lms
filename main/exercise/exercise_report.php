@@ -139,17 +139,8 @@ if (isset($_REQUEST['comments']) &&
     $lp_id = $track_exercise_info['orig_lp_id'];
     $lp_item_view_id = $track_exercise_info['orig_lp_item_view_id'];
     $exerciseId = $track_exercise_info['exe_exo_id'];
-
     $course_info = api_get_course_info();
 
-    // Teacher data
-    $teacher_info = api_get_user_info(api_get_user_id());
-    $from_name = api_get_person_name(
-        $teacher_info['firstname'],
-        $teacher_info['lastname'],
-        null,
-        PERSON_NAME_EMAIL_ADDRESS
-    );
     $url = api_get_path(WEB_CODE_PATH).'exercise/result.php?id='.$track_exercise_info['exe_id'].'&'.api_get_cidreq().'&show_headers=1&id_session='.$session_id;
 
     $my_post_info = array();
@@ -222,20 +213,16 @@ if (isset($_REQUEST['comments']) &&
     if (isset($_POST['send_notification'])) {
         //@todo move this somewhere else
         $subject = get_lang('ExamSheetVCC');
+        /*$message = ExerciseLib::getEmailNotification(
+            api_get_user_id(),
+            $course_info,
+            $test,
+            $lp_id,
+            $url
+        );*/
 
-        $message = '<p>'.get_lang('DearStudentEmailIntroduction').'</p><p>'.get_lang('AttemptVCC');
-        $message .= '<h3>'.get_lang('CourseName').'</h3><p>'.Security::remove_XSS($course_info['name']).'';
-        $message .= '<h3>'.get_lang('Exercise').'</h3><p>'.Security::remove_XSS($test);
+        $message = isset($_POST['notification_content']) ? $_POST['notification_content'] : '';
 
-        // Only for exercises not in a LP
-        if ($lp_id == 0) {
-            $message .= '<p>'.get_lang('ClickLinkToViewComment').' <br /><a href="#url#">#url#</a><br />';
-        }
-
-        $message .= '<p>'.get_lang('Regards').'</p>';
-        $message .= $from_name;
-        $message = str_replace("#test#", Security::remove_XSS($test), $message);
-        $message = str_replace("#url#", $url, $message);
         MessageManager::send_message_simple(
             $student_id,
             $subject,

@@ -31,6 +31,11 @@
                 {% endif %}
             </div>
             <div id="footer_right" class="col-md-4">
+                {% if session_teachers is not null %}
+                    <div class="session-teachers">
+                        {{ session_teachers }}
+                    </div>
+                {% endif %}
                 {% if teachers is not null %}
                     <div id="teachers">
                         {{ teachers }}

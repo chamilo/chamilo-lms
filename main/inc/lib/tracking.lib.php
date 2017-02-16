@@ -114,7 +114,7 @@ class Tracking
         $extendedAttempt = null,
         $extendedAll = null,
         $type = 'classic',
-        $allowExtend =  true
+        $allowExtend = true
     ) {
         if (empty($courseInfo) || empty($lp_id)) {
             return null;
@@ -741,25 +741,35 @@ class Tracking
                             $resultLastAttempt = Database::query($sql);
                             $num = Database :: num_rows($resultLastAttempt);
                             if ($num > 0) {
+                                $linkId = 'link_'.$my_id;
                                 if ($extendedAttempt == 1 &&
                                     $lp_id == $my_lp_id &&
                                     $lp_item_id == $my_id
                                 ) {
                                     $correct_test_link = Display::url(
-                                        Display::return_icon('view_less_stats.gif', get_lang('HideAllAttempts')),
-                                        api_get_self() . '?action=stats' . $my_url_suffix . '&session_id=' . $session_id . '&lp_item_id=' . $my_id
+                                        Display::return_icon(
+                                            'view_less_stats.gif',
+                                            get_lang('HideAllAttempts')
+                                        ),
+                                        api_get_self().'?action=stats'.$my_url_suffix.'&session_id='.$session_id.'&lp_item_id='.$my_id.'#'.$linkId,
+                                        ['id' => $linkId]
                                     );
                                 } else {
                                     $correct_test_link = Display::url(
-                                        Display::return_icon('view_more_stats.gif', get_lang('ShowAllAttemptsByExercise')),
-                                        api_get_self() . '?action=stats&extend_attempt=1' . $my_url_suffix . '&session_id=' . $session_id . '&lp_item_id=' . $my_id
+                                        Display::return_icon(
+                                            'view_more_stats.gif',
+                                            get_lang(
+                                                'ShowAllAttemptsByExercise'
+                                            )
+                                        ),
+                                        api_get_self().'?action=stats&extend_attempt=1'.$my_url_suffix.'&session_id='.$session_id.'&lp_item_id='.$my_id.'#'.$linkId,
+                                        ['id' => $linkId]
                                     );
                                 }
                             }
                         }
 
                         $title = Security::remove_XSS($title);
-
                         $action = null;
                         if ($type == 'classic') {
                             $action =  '<td>' . $correct_test_link . '</td>';

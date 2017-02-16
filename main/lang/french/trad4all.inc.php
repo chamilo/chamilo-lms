@@ -7910,4 +7910,7 @@ $OnlyUsersFromCourseSession = "Seulement les utilisateurs d'un cours dans une se
 $ServerXForwardedForInfo = "Si le serveur est derrière un proxy ou un firewall (et uniquement dans ces cas), il pourrait utiliser le header HTTP X_FORWARDED_FOR pour montrer l'adresse IP de l'utilisateur distant (la vôtre, dans ce cas précis).";
 $GeolocalizationCoordinates = "Géolocalisation par coordonnées";
 $ExportUsersOfACourse = "Exporter les utilisateurs d'un cours";
+$PauseRecordingAudio = "Pause d'enregistrement";
+$PlayRecordingAudio = "Reprendre l'enregistrement";
+$YourSessionTimeHasExpired = "Vous êtes déjà inscrit mais votre période d'accès au cours a expiré.";
 ?>

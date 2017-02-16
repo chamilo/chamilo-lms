@@ -598,7 +598,7 @@ class CourseCategory
             $without_special_courses = ' AND course.id NOT IN ("'.implode('","', $specialCourseList).'")';
         }
 
-        $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition('course');
+        $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition('course', true);
 
         $categoryFilter = '';
         if ($categoryCode === 'ALL') {
@@ -663,7 +663,7 @@ class CourseCategory
         if (!empty($specialCourseList)) {
             $without_special_courses = ' AND course.id NOT IN ("'.implode('","', $specialCourseList).'")';
         }
-        $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition("course");
+        $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition('course', true);
 
         if (!empty($random_value)) {
             $random_value = intval($random_value);

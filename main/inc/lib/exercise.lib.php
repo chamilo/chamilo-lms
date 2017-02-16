@@ -3454,11 +3454,13 @@ HOTSPOT;
      * @param Exercise $objExercise
      * @param int $exe_id
      * @param bool $save_user_result save users results (true) or just show the results (false)
+     * @param string $remainingMessage
      */
     public static function display_question_list_by_attempt(
         $objExercise,
         $exe_id,
-        $save_user_result = false
+        $save_user_result = false,
+        $remainingMessage = ''
     ) {
         global $origin;
 
@@ -3750,6 +3752,10 @@ HOTSPOT;
             echo $total_score_text;
         }
 
+        if (!empty($remainingMessage)) {
+            Display::display_normal_message($remainingMessage, false);
+        }
+
         if ($save_user_result) {
 
             // Tracking of results
@@ -3875,5 +3881,42 @@ HOTSPOT;
             }
         }
         return $limits[0];
+    }
+
+    /**
+     * @param int $senderId
+     * @param array $course_info
+     * @param string $test
+     * @param int $lp_id
+     * @param string $url
+     *
+     * @return string
+     */
+    public static function getEmailNotification($senderId, $course_info, $test, $lp_id, $url)
+    {
+        $teacher_info = api_get_user_info($senderId);
+
+        $from_name = api_get_person_name(
+            $teacher_info['firstname'],
+            $teacher_info['lastname'],
+            null,
+            PERSON_NAME_EMAIL_ADDRESS
+        );
+
+        $message = '<p>'.get_lang('DearStudentEmailIntroduction').'</p><p>'.get_lang('AttemptVCC');
+        $message .= '<h3>'.get_lang('CourseName').'</h3><p>'.Security::remove_XSS($course_info['name']).'';
+        $message .= '<h3>'.get_lang('Exercise').'</h3><p>'.Security::remove_XSS($test);
+
+        // Only for exercises not in a LP
+        if ($lp_id == 0) {
+            $message .= '<p>'.get_lang('ClickLinkToViewComment').' <br /><a href="#url#">#url#</a><br />';
+        }
+
+        $message .= '<p>'.get_lang('Regards').'</p>';
+        $message .= $from_name;
+        $message = str_replace("#test#", Security::remove_XSS($test), $message);
+        $message = str_replace("#url#", $url, $message);
+
+        return $message;
     }
 }

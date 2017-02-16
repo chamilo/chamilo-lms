@@ -4913,14 +4913,18 @@ class CourseManager
     /**
      * Returns the SQL conditions to filter course only visible by the user in the catalogue
      *
-     * @param $courseTableAlias Alias of the course table
+     * @param string $courseTableAlias Alias of the course table
+     * @param bool $hideClosed Whether to hide closed and hidden courses
      * @return string SQL conditions
      */
-    public static function getCourseVisibilitySQLCondition($courseTableAlias) {
+    public static function getCourseVisibilitySQLCondition($courseTableAlias, $hideClosed = false) {
         $visibilityCondition = '';
         $hidePrivate = api_get_setting('course_catalog_hide_private');
         if ($hidePrivate === 'true') {
-            $visibilityCondition = ' AND '.$courseTableAlias.'.visibility <> 1';
+            $visibilityCondition .= ' AND '.$courseTableAlias.'.visibility <> '.COURSE_VISIBILITY_REGISTERED;
+        }
+        if ($hideClosed) {
+            $visibilityCondition .= ' AND ' . $courseTableAlias . '.visibility NOT IN (' . COURSE_VISIBILITY_CLOSED .','. COURSE_VISIBILITY_HIDDEN .')';
         }
 
         // Check if course have users allowed to see it in the catalogue, then show only if current user is allowed to see it
@@ -4960,7 +4964,7 @@ class CourseManager
             $withoutSpecialCourses = ' AND c.id NOT IN ("' . implode('","', $specialCourseList) . '")';
         }
 
-        $visibilityCondition = self::getCourseVisibilitySQLCondition('c');
+        $visibilityCondition = self::getCourseVisibilitySQLCondition('c', true);
 
         if (!empty($accessUrlId) && $accessUrlId == intval($accessUrlId)) {
             $sql = "SELECT count(c.id) FROM $tableCourse c, $tableCourseRelAccessUrl u

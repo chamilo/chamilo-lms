@@ -231,7 +231,7 @@ class CoursesController
         } else {
             // Redirect to subscription
             if (api_is_anonymous()) {
-                header('Location: '.api_get_path(WEB_CODE_PATH).'auth/inscription.php&c='.$course_code);
+                header('Location: '.api_get_path(WEB_CODE_PATH).'auth/inscription.php?c='.$course_code);
                 exit;
             }
             $result = $this->model->subscribe_user($course_code);

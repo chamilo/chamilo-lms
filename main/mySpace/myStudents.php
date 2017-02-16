@@ -1208,18 +1208,30 @@ if (!empty($student_id)) {
                 $result_last_attempt = Database::query($sql);
                 if (Database :: num_rows($result_last_attempt) > 0) {
                     $id_last_attempt = Database :: result($result_last_attempt, 0, 0);
-                    if ($count_attempts > 0)
-                        echo '<a href="../exercise/exercise_show.php?id=' . $id_last_attempt . '&cidReq='.$course_code.'&session_id='.$sessionId.'&student='.$student_id.'&origin='.(empty($origin)?'tracking':$origin).'">
+                    if ($count_attempts > 0) {
+                        echo '<a href="../exercise/exercise_show.php?id='.$id_last_attempt.'&cidReq='.$course_code.'&session_id='.$sessionId.'&student='.$student_id.'&origin='.(empty($origin) ? 'tracking' : $origin).'">
                         '.Display::return_icon('quiz.png').'
                      </a>';
+                    }
                 }
                 echo '</td>';
 
                 echo '<td>';
-                $all_attempt_url = "../exercise/exercise_report.php?exerciseId=$exercise_id&cidReq=$course_code&filter_by_user=$student_id&id_session=$sessionId";
-                echo Display::url(Display::return_icon('test_results.png', get_lang('AllAttempts'), array(), ICON_SIZE_SMALL), $all_attempt_url );
+                if ($count_attempts > 0) {
+                    $all_attempt_url = "../exercise/exercise_report.php?exerciseId=$exercise_id&cidReq=$course_code&filter_by_user=$student_id&id_session=$sessionId";
+                    echo Display::url(
+                        Display::return_icon(
+                            'test_results.png',
+                            get_lang('AllAttempts'),
+                            array(),
+                            ICON_SIZE_SMALL
+                        ),
+                        $all_attempt_url
+                    );
+                }
+                echo '</td>';
 
-                echo '</td></tr>';
+                echo '</tr>';
                 $data_exercices[$i][] = $exercices['title'];
                 $data_exercices[$i][] = $score_percentage . '%';
                 $data_exercices[$i][] = $count_attempts;

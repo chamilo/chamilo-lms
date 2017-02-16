@@ -369,9 +369,9 @@ class GradebookTable extends SortableTable
                     // Student result
                     $row[] = $value_data;
                     $totalResultAverageValue = strip_tags($scoredisplay->display_score($totalResult, SCORE_AVERAGE));
-                    $this->dataForGraph['my_result'][] = str_replace('%', '', $totalResultAverageValue);
+                    $this->dataForGraph['my_result'][] = floatval($totalResultAverageValue);
                     $totalAverageValue = strip_tags($scoredisplay->display_score($totalAverage, SCORE_AVERAGE));
-                    $this->dataForGraph['average'][] =  str_replace('%', '', $totalAverageValue);
+                    $this->dataForGraph['average'][] = floatval($totalAverageValue);
                     // Ranking
                     $row[] = $ranking;
                     // Best

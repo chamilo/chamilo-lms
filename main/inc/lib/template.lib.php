@@ -730,7 +730,8 @@ class Template
 
         // Loading email_editor js
         if (!api_is_anonymous() && api_get_setting('allow_email_editor') == 'true') {
-            $js_file_to_string .= $this->fetch('default/mail_editor/email_link.js.tpl');
+            $template = $this->get_template('mail_editor/email_link.js.tpl');
+            $js_file_to_string .= $this->fetch($template);
         }
 
         if (!$disable_js_and_css_files) {

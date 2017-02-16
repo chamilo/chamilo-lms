@@ -702,7 +702,8 @@ $tpl->assign('social_auto_extend_link', $socialAutoExtendLink);
 
 $formModalTpl =  new Template();
 $formModalTpl->assign('invitation_form', MessageManager::generate_invitation_form('send_invitation'));
-$formModals = $formModalTpl->fetch('default/social/form_modals.tpl');
+$template = $formModalTpl->get_template('social/form_modals.tpl');
+$formModals = $formModalTpl->fetch($template);
 
 $tpl->assign('form_modals', $formModals);
 $social_layout = $tpl->get_template('social/profile.tpl');

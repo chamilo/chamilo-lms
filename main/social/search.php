@@ -242,7 +242,8 @@ $tpl->assign('search_form', $searchForm);
 
 $formModalTpl =  new Template();
 $formModalTpl->assign('invitation_form', MessageManager::generate_invitation_form('send_invitation'));
-$formModals = $formModalTpl->fetch('default/social/form_modals.tpl');
+$template = $formModalTpl->get_template('social/form_modals.tpl');
+$formModals = $formModalTpl->fetch($template);
 
 $tpl->assign('form_modals', $formModals);
 

@@ -197,8 +197,7 @@ $form->addText('department_url', get_lang('CourseDepartmentURL'), false, array('
 $form->applyFilter('department_url', 'html_filter');
 $form->applyFilter('department_url', 'trim');
 
-$form->addElement('select_language', 'course_language', get_lang('CourseLanguage'));
-$form->applyFilter('select_language', 'html_filter');
+$form->addSelectLanguage('course_language', get_lang('CourseLanguage'));
 
 $group = array();
 $group[]= $form->createElement('radio', 'visibility', get_lang("CourseAccess"), get_lang('OpenToTheWorld'), COURSE_VISIBILITY_OPEN_WORLD);

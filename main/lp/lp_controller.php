@@ -379,7 +379,7 @@ switch ($action) {
             $_SESSION['refresh'] = 1;
 
             if (isset($_POST['submit_button']) && !empty($post_title)) {
-                // If a title was sumbitted:
+                // If a title was submitted:
 
                 //Updating the lp.modified_on
                 $_SESSION['oLP']->set_modified_on();

@@ -37,6 +37,11 @@ class SessionManager
     public static function fetch($id)
     {
         $em = Database::getManager();
+
+        if (empty($id)) {
+            return [];
+        }
+
         /** @var Session $session */
         $session = $em->find('ChamiloCoreBundle:Session', $id);
 
@@ -7028,10 +7033,12 @@ class SessionManager
         // Database Table Definitions
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 
-        $form->addElement('text', 'name', get_lang('SessionName'), array(
-            'maxlength' => 150,
-        ));
-        $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
+        $form->addText(
+            'name',
+            get_lang('SessionName'),
+            true,
+            ['maxlength' => 150]
+        );
         $form->addRule('name', get_lang('SessionNameAlreadyExists'), 'callback', 'check_session_name');
 
         if (!api_is_platform_admin() && api_is_teacher()) {
@@ -7139,7 +7146,13 @@ class SessionManager
             SESSION_VISIBLE => get_lang('SessionAccessible'),
             SESSION_INVISIBLE => api_ucfirst(get_lang('SessionNotAccessible')),
         ));
-        $form->addGroup($visibilityGroup, 'visibility_group', get_lang('SessionVisibility'), null, false);
+        $form->addGroup(
+            $visibilityGroup,
+            'visibility_group',
+            get_lang('SessionVisibility'),
+            null,
+            false
+        );
 
         $options = [
             0 => get_lang('ByDuration'),
@@ -7151,7 +7164,7 @@ class SessionManager
             'id' => 'access'
         ));
 
-        $form->addElement('html', '<div id="duration" style="display:none">');
+        $form->addHtml('<div id="duration" style="display:none">');
 
         $form->addElement(
             'number',
@@ -7165,8 +7178,8 @@ class SessionManager
             )
         );
 
-        $form->addElement('html', '</div>');
-        $form->addElement('html', '<div id="date_fields" style="display:none">');
+        $form->addHtml('</div>');
+        $form->addHtml('<div id="date_fields" style="display:none">');
 
         // Dates
         $form->addDateTimePicker(
@@ -7196,6 +7209,7 @@ class SessionManager
             ),
             array('id' => 'display_start_date')
         );
+
         $form->addDateTimePicker(
             'display_end_date',
             array(
@@ -8102,7 +8116,6 @@ class SessionManager
     public static function getHtmlNamedSessionCourseForCoach($userId)
     {
         $htmlRes = '';
-
         $listInfo = self::getNamedSessionCourseForCoach($userId);
         foreach ($listInfo as $i => $listCoursesInfo) {
             $courseInfo = $listCoursesInfo['course'];
@@ -8187,26 +8200,20 @@ class SessionManager
     }
 
     /**
-     * subsscribe and redirect to session after inscription
+     * Subscribe and redirect to session after inscription
      */
     public static function redirectToSession()
     {
         $sessionId = ChamiloSession::read('session_redirect');
         $onlyOneCourseSessionToRedirect = ChamiloSession::read('only_one_course_session_redirect');
-        $userId = api_get_user_id();
         $sessionInfo = api_get_session_info($sessionId);
-
         if (!empty($sessionInfo)) {
-
+            $userId = api_get_user_id();
             $response = self::isUserSubscribedAsStudent($sessionId, $userId);
-
             if ($response) {
-
                 $urlToRedirect = api_get_path(WEB_CODE_PATH) . 'session/index.php?session_id=' . $sessionId;
-
                 if (!empty($onlyOneCourseSessionToRedirect)) {
-
-                        $urlToRedirect = api_get_path(WEB_PATH) . 'courses/' . $onlyOneCourseSessionToRedirect . '/index.php?id_session=' . $sessionId;
+                    $urlToRedirect = api_get_path(WEB_PATH) . 'courses/' . $onlyOneCourseSessionToRedirect . '/index.php?id_session=' . $sessionId;
                 }
 
                 header('Location: ' . $urlToRedirect);

@@ -19,7 +19,7 @@ if (!isset($error)) {
     $token = Security::get_token();
 }
 
-$attendance_weight = floatval($attendance_weight);
+$attendance_weight = api_float_val($attendance_weight);
 // display form
 $form = new FormValidator(
     'attendance_edit',

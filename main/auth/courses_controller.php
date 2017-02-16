@@ -231,7 +231,7 @@ class CoursesController
         } else {
             // Redirect to subscription
             if (api_is_anonymous()) {
-                header('Location: '.api_get_path(WEB_CODE_PATH).'auth/inscription.php&c='.$course_code);
+                header('Location: '.api_get_path(WEB_CODE_PATH).'auth/inscription.php?c='.$course_code);
                 exit;
             }
             $result = $this->model->subscribe_user($course_code);
@@ -244,7 +244,7 @@ class CoursesController
                 );
             } else {
                 Display::addFlash(
-                    Display::return_message($result['message'])
+                    Display::return_message($result['message'], 'normal', false)
                 );
             }
         }
@@ -522,7 +522,7 @@ class CoursesController
         $btnBing = false
     ) {
         if($btnBing){
-            $btnBing = 'btn-lg'; 
+            $btnBing = 'btn-lg';
         }else{
             $btnBing = 'btn-sm';
         }

@@ -60,7 +60,7 @@ $interbreadcrumb[] = array('url' => "session_list.php","name" => get_lang('Sessi
 $interbreadcrumb[] = array('url' => "resume_session.php?id_session=".$id,"name" => get_lang('SessionOverview'));
 
 if (isset($_POST['formSent']) && $_POST['formSent']) {
-	$formSent = 1;
+    $formSent = 1;
 }
 
 $order_clause = 'ORDER BY ';

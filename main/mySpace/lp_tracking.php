@@ -34,8 +34,9 @@ $name = $userInfo['complete_name'];
 
 if (!api_is_platform_admin(true) &&
     !CourseManager :: is_course_teacher(api_get_user_id(), $courseCode) &&
-    !Tracking :: is_allowed_to_coach_student(api_get_user_id(), $user_id) && !api_is_drh() && !api_is_course_tutor()) {
-	api_not_allowed();
+    !Tracking :: is_allowed_to_coach_student(api_get_user_id(), $user_id) && !api_is_drh() && !api_is_course_tutor()
+) {
+    api_not_allowed();
 }
 
 if ($origin == 'user_course') {
@@ -50,9 +51,13 @@ if ($origin == 'user_course') {
  	$nameTools=get_lang("DetailsStudentInCourse");
 }
 
-$interbreadcrumb[] = array("url" => "myStudents.php?student=".$user_id."&course=".$courseCode."&details=true&origin=".$origin , "name" => get_lang("DetailsStudentInCourse"));
+$interbreadcrumb[] = array(
+    "url" => "myStudents.php?student=".$user_id."&course=".$courseCode."&details=true&origin=".$origin,
+    "name" => get_lang("DetailsStudentInCourse"),
+);
 $nameTools = get_lang('LearningPathDetails');
-$sql = 'SELECT name	FROM '.Database::get_course_table(TABLE_LP_MAIN).' WHERE c_id = '.$course_info['real_id'].' AND id='.$lp_id;
+$sql = 'SELECT name	FROM '.Database::get_course_table(TABLE_LP_MAIN).' 
+        WHERE c_id = '.$course_info['real_id'].' AND id='.$lp_id;
 $rs  = Database::query($sql);
 $lp_title = Database::result($rs, 0, 0);
 

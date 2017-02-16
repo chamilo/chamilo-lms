@@ -7983,4 +7983,7 @@ $StudentCourseScore = "Puntuación: %s&#x00025;";
 $StudentCourseCertificate = "Certificado: %s";
 $MyCourseProgressTitle = "Mostrar progreso del curso al estudiante";
 $MyCourseProgressTemplateComment = "Al activar esta opción se les mostrarán a los estudiantes el progreso de sus cursos en la página 'Mis cursos'.";
+$PauseRecordingAudio = "Pausar grabación";
+$PlayRecordingAudio = "Reanudar grabación";
+$YourSessionTimeHasExpired = "Usted ya está registrado pero su periodo de permanencia en este curso ya expiró.";
 ?>

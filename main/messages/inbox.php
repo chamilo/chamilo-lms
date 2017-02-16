@@ -1,8 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * 	@package chamilo.messages
  */
+
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';

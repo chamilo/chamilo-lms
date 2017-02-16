@@ -72,11 +72,66 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
         }
 
         switch ($action) {
+            case 'update_score':
+                if (api_is_allowed_to_edit()) {
+                    $work_table = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
+                    $sql = "UPDATE $work_table 
+                            SET	
+                                qualificator_id = '".api_get_user_id()."',
+                                qualification = '".api_float_val($_POST['qualification'])."',
+                                date_of_qualification = '".api_get_utc_datetime()."'
+                            WHERE c_id = ".$courseInfo['real_id']." AND id = $id";
+                    Database::query($sql);
+                    $resultUpload = uploadWork($my_folder_data, $courseInfo, true, $work);
+                    if ($resultUpload) {
+                        $work_table = Database:: get_course_table(
+                            TABLE_STUDENT_PUBLICATION
+                        );
+
+                        if (isset($resultUpload['url']) && !empty($resultUpload['url'])) {
+                            $title = isset($resultUpload['filename']) && !empty($resultUpload['filename']) ? $resultUpload['filename'] : get_lang('Untitled');
+                            $urlToSave = Database::escape_string($resultUpload['url']);
+                            $title = Database::escape_string($title);
+                            $sql = "UPDATE $work_table SET
+                                        url_correction = '".$urlToSave."',
+                                        title_correction = '".$title."'
+                                    WHERE iid = ".$work['iid'];
+                            Database::query($sql);
+                            Display::addFlash(
+                                Display::return_message(get_lang('FileUploadSucces'))
+                            );
+                        }
+                    }
+
+                    if (isset($_POST['send_email'])) {
+                        $urlToSave = api_get_path(WEB_CODE_PATH).'work/view.php?'.api_get_cidreq().'&id='.$id;
+                        $subject = sprintf(get_lang('ThereIsANewWorkFeedback'), $work['title']);
+                        $message = sprintf(get_lang('ThereIsANewWorkFeedbackInWorkXHere'), $work['title'], $urlToSave);
+
+                        MessageManager::send_message_simple(
+                            $work['user_id'],
+                            $subject,
+                            $message,
+                            api_get_user_id(),
+                            isset($_POST['send_to_drh_users'])
+                        );
+
+                        Display::addFlash(
+                            Display::return_message(get_lang('MessageSent'))
+                        );
+                    }
+                    Display::addFlash(
+                        Display::return_message(get_lang('Updated'))
+                    );
+                }
+                header('Location: '.$url);
+                exit;
+
+                break;
             case 'send_comment':
                 if (isset($_FILES["file"])) {
                     $_POST['file'] = $_FILES["file"];
                 }
-
                 addWorkComment(
                     api_get_course_info(),
                     api_get_user_id(),
@@ -159,6 +214,40 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
                     }
                 }
             }
+        }
+
+        $qualification = $my_folder_data['qualification'];
+        if (api_is_allowed_to_edit() && !empty($qualification) && intval($qualification) > 0) {
+            $form = new FormValidator(
+                'form',
+                'POST',
+                api_get_self()."?action=update_score&".api_get_cidreq()."&id=".$id,
+                '',
+                array('enctype' => "multipart/form-data")
+            );
+            $form->addElement('hidden', 'id', $id);
+            $form->addFloat(
+                'qualification',
+                array(get_lang('Qualification'), " / ".$qualification),
+                false,
+                [],
+                false,
+                0,
+                $qualification
+            );
+
+            $form->addFile('file', get_lang('Correction'));
+            $form->addCheckBox(
+                'send_email',
+                null,
+                get_lang('SendMailToStudent')
+            );
+            $form->setDefaults(['qualification' => $work['qualification']]);
+
+            $form->addButtonUpdate(get_lang('Update'));
+            $tpl->assign('score_form', $form->returnForm());
+        } else {
+            $tpl->assign('score_form', $actions);
         }
 
         $tpl->assign('actions', $actions);

@@ -279,3 +279,5 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 // $_configuration['assignment_prevent_duplicate_upload'] = false;
 //Show student progress in My courses page
 //$_configuration['my_course_progress'] = false;
+// Set ConsideredWorkingTime work extra field variable to show in MyStudents page works report
+// $_configuration['considered_working_time'] = 'work_time';

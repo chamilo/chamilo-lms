@@ -1,0 +1,11 @@
+default:
+    extensions:
+        Behat\MinkExtension:
+          base_url: http://my.chamilo.net
+          goutte: ~
+          selenium2: ~
+    suites:
+        default:
+            paths: [ %paths.base%/features ]
+    formatters:
+        pretty: true

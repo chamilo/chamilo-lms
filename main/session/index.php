@@ -18,7 +18,10 @@ if (empty($_GET['session_id'])) {
 
 $session_id = isset($_GET['session_id']) ? intval($_GET['session_id']): null;
 $sessionField = new ExtraFieldValue('session');
-$valueAllowVisitors = $sessionField->get_values_by_handler_and_field_variable($session_id, 'allow_visitors');
+$valueAllowVisitors = $sessionField->get_values_by_handler_and_field_variable(
+    $session_id,
+    'allow_visitors'
+);
 $allowVisitors = $valueAllowVisitors != false;
 
 if (!$allowVisitors) {

@@ -16,7 +16,7 @@ Feature: Access to portal reports as admin
 
   Scenario: Access the resumed version of the company report
     Given I am a platform administrator
-    And I am on "/main/admin/company_reports_resumed.php"
+    And I am on "/main/mySpace/company_reports_resumed.php"
     Then I should not see "not authorized"
 
   Scenario: See the company reports link on the admin page

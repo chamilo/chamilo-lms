@@ -7968,4 +7968,7 @@ $StudentCourseScore = "Rating: %s&#x00025;";
 $StudentCourseCertificate = "Certificate: %s";
 $MyCourseProgressTitle = "Show course progress to student";
 $MyCourseProgressTemplateComment = "By activating this option, the students will see their course progress in the page 'My Courses'.";
+$PauseRecordingAudio = "Pause recording";
+$PlayRecordingAudio = "Resume recording";
+$YourSessionTimeHasExpired = "You are already registered but your allowed access time has expired.";
 ?>

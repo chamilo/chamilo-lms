@@ -319,7 +319,7 @@ if (isset ($_GET['search']) && $_GET['search'] === 'advanced') {
         )
     );
 
-    $el = $form->addElement('select_language', 'keyword_language', get_lang('CourseLanguage'));
+    $el = $form->addSelectLanguage('keyword_language', get_lang('CourseLanguage'));
     $el->addOption(get_lang('All'), '%');
     $form->addElement('radio', 'keyword_visibility', get_lang("CourseAccess"), get_lang('OpenToTheWorld'), COURSE_VISIBILITY_OPEN_WORLD);
     $form->addElement('radio', 'keyword_visibility', null, get_lang('OpenToThePlatform'), COURSE_VISIBILITY_OPEN_PLATFORM);

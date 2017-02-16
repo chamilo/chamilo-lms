@@ -1260,13 +1260,13 @@ function api_is_self_registration_allowed()
  *
  * example: The function can be used to check if a user is logged in
  *          if (api_get_user_id())
- * @return integer the id of the current user, 0 if is empty
+ * @return int the id of the current user, 0 if is empty
  */
 function api_get_user_id()
 {
     $userInfo = Session::read('_user');
     if ($userInfo && isset($userInfo['user_id'])) {
-        return $userInfo['user_id'];
+        return (int) $userInfo['user_id'];
     }
     return 0;
 }
@@ -1322,29 +1322,26 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
 {
     $result = array();
 
-    $firstname = null;
-    $lastname = null;
-    if (isset($user['firstname']) && isset($user['lastname'])) {
-        $firstname = $user['firstname'];
-        $lastname = $user['lastname'];
-    } elseif (isset($user['firstName']) && isset($user['lastName'])) {
-        $firstname = isset($user['firstName']) ? $user['firstName'] : null;
-        $lastname = isset($user['lastName']) ? $user['lastName'] : null;
+    $result['firstname'] = null;
+    $result['lastname'] = null;
+    if (isset($user['firstname']) && isset($user['lastname'])) { // with only lowercase
+        $result['firstname'] = $user['firstname'];
+        $result['lastname'] = $user['lastname'];
+    } elseif (isset($user['firstName']) && isset($user['lastName'])) { // with uppercase letters
+        $result['firstname'] = isset($user['firstName']) ? $user['firstName'] : null;
+        $result['lastname'] = isset($user['lastName']) ? $user['lastName'] : null;
     }
 
-    $result['complete_name'] = api_get_person_name($firstname, $lastname);
+    $result['complete_name'] = api_get_person_name($result['firstname'], $result['lastname']);
     $result['complete_name_with_username'] = $result['complete_name'];
 
     if (!empty($user['username'])) {
         $result['complete_name_with_username'] = $result['complete_name'].' ('.$user['username'].')';
     }
 
-    $result['firstname'] = $firstname;
-    $result['lastname'] = $lastname;
-
     // Kept for historical reasons
-    $result['firstName'] = $firstname;
-    $result['lastName'] = $lastname;
+    $result['firstName'] = $result['firstname'];
+    $result['lastName'] = $result['lastname'];
 
     $attributes = array(
         'phone',
@@ -1459,17 +1456,45 @@ function api_get_user_info(
     $loadOnlyVisibleExtraData = false,
     $loadAvatars = true
 ) {
+    $apcVar = null;
+    $user = false;
+    $cacheAvailable = api_get_configuration_value('apc');
     if (empty($user_id)) {
         $userFromSession = Session::read('_user');
         if (isset($userFromSession)) {
-            return _api_format_user($userFromSession, $showPassword, $loadAvatars);
+            if (!empty($cacheAvailable)) {
+                $apcVar = api_get_configuration_value('apc_prefix') . 'userinfo_' . $userFromSession['user_id'];
+                if (apcu_exists($apcVar)) {
+                    $user = apcu_fetch($apcVar);
+                } else {
+                    $user = _api_format_user($userFromSession, $showPassword, $loadAvatars);
+                    apcu_store($apcVar, $user, 60);
+                }
+            } else {
+                $user = _api_format_user($userFromSession, $showPassword, $loadAvatars);
+            }
+
+            return $user;
         }
 
         return false;
     }
 
-    $sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)."
-            WHERE id='".intval($user_id)."'";
+    // Make sure user_id is safe
+    $user_id = intval($user_id);
+
+    // Re-use user information if not stale and already stored in APCu
+    if (!empty($cacheAvailable)) {
+        $apcVar = api_get_configuration_value('apc_prefix') . 'userinfo_' . $user_id;
+        if (apcu_exists($apcVar)) {
+            $user = apcu_fetch($apcVar);
+
+            return $user;
+        }
+    }
+
+    $sql = "SELECT * FROM " . Database:: get_main_table(TABLE_MAIN_USER) . "
+            WHERE id = $user_id";
     $result = Database::query($sql);
     if (Database::num_rows($result) > 0) {
         $result_array = Database::fetch_array($result);
@@ -1500,10 +1525,12 @@ function api_get_user_info(
             );
         }
         $user = _api_format_user($result_array, $showPassword, $loadAvatars);
-
-        return $user;
     }
-    return false;
+    if (!empty($cacheAvailable)) {
+        apcu_store($apcVar, $user, 60);
+    }
+
+    return $user;
 }
 
 /**
@@ -7755,9 +7782,7 @@ function api_mail_html(
         $senderName = $platform_email['SMTP_FROM_NAME'];
         $senderEmail = $platform_email['SMTP_FROM_EMAIL'];
     }
-    $mail->SetFrom($defaultEmail, $defaultName);
-    $mail->From = $defaultEmail;
-    $mail->Sender = $defaultEmail;
+    $mail->SetFrom($senderEmail, $senderName);
     $mail->Subject = $subject;
     $mail->AltBody = strip_tags(
         str_replace('<br />', "\n", api_html_entity_decode($message))

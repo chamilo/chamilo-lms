@@ -119,24 +119,24 @@ class LearnpathList
             // it prevents ' to be slashed and the input (done by learnpath.class.php::toggle_visibility())
             // is done using domesticate()
             $name = domesticate($row->getName());
-            $link = 'lp/lp_controller.php?action=view&lp_id=' . $row->getIid() . '&id_session='.$session_id;
-            $oldLink = 'newscorm/lp_controller.php?action=view&lp_id=' . $row->getIid() . '&id_session='.$session_id;
+            $link = 'lp/lp_controller.php?action=view&lp_id=' . $row->getId() . '&id_session='.$session_id;
+            $oldLink = 'newscorm/lp_controller.php?action=view&lp_id=' . $row->getId() . '&id_session='.$session_id;
 
             $sql2 = "SELECT * FROM $tbl_tool
                      WHERE
-                        c_id = $course_id AND (
-                            name='$name' AND
-                            image='scormbuilder.gif' AND
-                            (
-                                link LIKE '$link%' OR
-                                link LIKE '$oldLink%'                                
-                            )
-                      )";
-
+                        c_id = $course_id AND 
+                        name = '$name' AND
+                        image = 'scormbuilder.gif' AND
+                        (
+                            link LIKE '$link%' OR
+                            link LIKE '$oldLink%'                                
+                        )
+                      ";
             $res2 = Database::query($sql2);
             if (Database::num_rows($res2) > 0) {
                 $row2 = Database::fetch_array($res2);
                 $pub = $row2['visibility'];
+
             } else {
                 $pub = 'i';
             }
@@ -176,6 +176,7 @@ class LearnpathList
                 //'category_id'       => $row['category_id'],
                 'subscribe_users' => $row->getSubscribeUsers(),
                 'lp_old_id' => $row->getId(),
+                'iid' => $row->getIid(),
                 'prerequisite' => $row->getPrerequisite()
             );
             $names[$row->getName()] = $row->getIid();

@@ -196,8 +196,9 @@ $template->assign(
 
 $plugin = BuyCoursesPlugin::create();
 $checker = $plugin->get('paypal_enable') || $plugin->get('transfer_enable') || $plugin->get('culqi_enable');
+$sessionIsPremium = $plugin->getItemByProduct($sessionId, BuyCoursesPlugin::PRODUCT_TYPE_SESSION);
 
-if ($checker) {
+if ($checker && $sessionIsPremium) {
     Session::write('SessionIsPremium', true);
     Session::write('sessionId', $sessionId);
 }

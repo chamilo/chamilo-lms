@@ -110,19 +110,25 @@ if ($typeUser) {
 } elseif ($typeCourse) {
     $user = $em->getRepository('ChamiloUserBundle:User')->find($currentUserId);
     $courses = $user->getCourses();
-    if (!empty($courses)) {
-        foreach ($courses as $course) {
-            $selectOptions[$course->getCourse()->getId()] = $course->getCourse()->getTitle();
-        }
+    $checker = false;
+    foreach ($courses as $course) {
+        $checker = true;
+        $selectOptions[$course->getCourse()->getId()] = $course->getCourse()->getTitle();
+    }
+    if (!$checker) {
+        $form->addHtml(Display::return_message($plugin->get_lang('YouNeedToBeRegisteredInAtLeastOneCourse'), 'error'));
     }
     $form->addSelect('info_select', get_lang('Course'), $selectOptions);
 } elseif ($typeSession) {
     $user = $em->getRepository('ChamiloUserBundle:User')->find($currentUserId);
     $sessions = $user->getSessionCourseSubscriptions();
-    if (!empty($sessions)) {
-        foreach ($sessions as $session) {
-            $selectOptions[$session->getSession()->getId()] = $session->getSession()->getName();
-        }
+    $checker = false;
+    foreach ($sessions as $session) {
+        $checker = true;
+        $selectOptions[$session->getSession()->getId()] = $session->getSession()->getName();
+    }
+    if (!$checker) {
+        $form->addHtml(Display::return_message($plugin->get_lang('YouNeedToBeRegisteredInAtLeastOneSession'), 'error'));
     }
     $form->addSelect('info_select', get_lang('Session'), $selectOptions);
 }

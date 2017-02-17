@@ -1912,6 +1912,10 @@ class BuyCoursesPlugin extends Plugin
             $conditions = ['WHERE' => ['ss.node_type = ? AND ss.node_id = ?' => [$nodeType, $nodeId]], 'ORDER' => 'id ASC'];
         }
 
+        if ($nodeType && $nodeId && $buyerId && is_numeric($status)) {
+            $conditions = ['WHERE' => ['ss.node_type = ? AND ss.node_id = ? AND ss.buyer_id = ? AND ss.status = ?' => [$nodeType, $nodeId, $buyerId, $status]], 'ORDER' => 'id ASC'];
+        }
+
         if ($hot) {
             $hot = "count(ss.service_id) as hot, ";
             $conditions = ['ORDER' => 'hot DESC', 'LIMIT' => '6'];

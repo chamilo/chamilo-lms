@@ -17,6 +17,7 @@ api_protect_course_script(true);
 
 // Get environment variables
 $courseCode = api_get_course_id();
+$courseId = api_get_course_int_id();
 $userId = api_get_user_id();
 $sessionId = api_get_session_id();
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
@@ -26,6 +27,29 @@ $lpId = isset($_GET['lp_id']) ? intval($_GET['lp_id']) : 0;
 if (!$id && !$lpId) {
     Display::display_warning_message(get_lang('FileNotFound'));
     exit;
+}
+
+// Certificate and Skills Premium with Service check
+$plugin = BuyCoursesPlugin::create();
+$checker = ($plugin->get('paypal_enable') || $plugin->get('transfer_enable') || $plugin->get('culqi_enable')) && $plugin->get('include_services');
+
+if ($checker) {
+    $serviceSale = $plugin->getServiceSale(
+        null,
+        $userId,
+        BuyCoursesPlugin::SERVICE_STATUS_COMPLETED,
+        $sessionId ? BuyCoursesPlugin::SERVICE_TYPE_SESSION : BuyCoursesPlugin::SERVICE_TYPE_COURSE,
+        $sessionId ? $sessionId : $courseId
+    );
+
+    if (empty($serviceSale)) {
+        // Instance a new template : No page tittle, No header, No footer
+        $tpl = new Template(null, false, false);
+        $content = sprintf(Display::return_message($plugin->get_lang('IfYouWantToGetTheCertificateAndOrSkillsAsociatedToThisCourseYouNeedToBuyTheCertificateServiceYouCanGoToServiceCatalogClickingHere'), 'normal', false), api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/service_catalog.php');
+        $tpl->assign('content', $content);
+        $tpl->display_blank_template();
+        exit;
+    }
 }
 
 // Initialize variables required for the template

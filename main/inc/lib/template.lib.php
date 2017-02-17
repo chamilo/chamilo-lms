@@ -137,6 +137,7 @@ class Template
         $this->twig->addFilter('format_date', new Twig_Filter_Function('Template::format_date'));
         $this->twig->addFilter('api_get_local_time', new Twig_Filter_Function('api_get_local_time'));
         $this->twig->addFilter('user_info', new Twig_Filter_Function('api_get_user_info'));
+        $this->twig->addFilter('get_configuration_value', new Twig_Filter_Function('api_get_configuration_value'));
 
         /*
           $lexer = new Twig_Lexer($this->twig, array(

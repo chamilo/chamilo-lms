@@ -25,7 +25,7 @@ $lpId = isset($_GET['lp_id']) ? intval($_GET['lp_id']) : 0;
 
 // This page can only be shown from inside a learning path
 if (!$id && !$lpId) {
-    Display::display_warning_message(get_lang('FileNotFound'));
+    Display::return_message(get_lang('FileNotFound'), 'warning');
     exit;
 }
 
@@ -34,18 +34,25 @@ $plugin = BuyCoursesPlugin::create();
 $checker = ($plugin->get('paypal_enable') || $plugin->get('transfer_enable') || $plugin->get('culqi_enable')) && $plugin->get('include_services');
 
 if ($checker) {
-    $serviceSale = $plugin->getServiceSale(
+    $userServiceSale = $plugin->getServiceSale(
         null,
         $userId,
         BuyCoursesPlugin::SERVICE_STATUS_COMPLETED,
-        $sessionId ? BuyCoursesPlugin::SERVICE_TYPE_SESSION : BuyCoursesPlugin::SERVICE_TYPE_COURSE,
-        $sessionId ? $sessionId : $courseId
+        BuyCoursesPlugin::SERVICE_TYPE_LP_FINAL_ITEM,
+        $lpId
     );
 
-    if (empty($serviceSale)) {
+    if (empty($userServiceSale)) {
         // Instance a new template : No page tittle, No header, No footer
         $tpl = new Template(null, false, false);
-        $content = sprintf(Display::return_message($plugin->get_lang('IfYouWantToGetTheCertificateAndOrSkillsAsociatedToThisCourseYouNeedToBuyTheCertificateServiceYouCanGoToServiceCatalogClickingHere'), 'normal', false), api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/service_catalog.php');
+        $content = sprintf(
+            Display::return_message(
+                $plugin->get_lang('IfYouWantToGetTheCertificateAndOrSkillsAsociatedToThisCourseYouNeedToBuyTheCertificateServiceYouCanGoToServiceCatalogClickingHere'),
+                'normal',
+                false
+            ),
+            api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/service_catalog.php'
+        );
         $tpl->assign('content', $content);
         $tpl->display_blank_template();
         exit;

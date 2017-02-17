@@ -56,7 +56,7 @@
         {% elseif buying_service %}
             <div class="col-sm-12 col-md-12 col-xs-12">
                 <a href='{{ _p.web }}service/{{ service.id }}'>
-                    <img alt="{{ service.name }}" class="img-responsive" src="{{ _p.web }}plugin/buycourses/uploads/services/images/{{ service.image }}">
+                    <img alt="{{ service.name }}" class="img-responsive" src="{{ service.image ? _p.web ~ 'plugin/buycourses/uploads/services/images/' ~ service.image : 'session_default.png'|icon() }}">
                 </a>
             </div>
             <div class="col-sm-12 col-md-12 col-xs-12">
@@ -72,10 +72,14 @@
                         <li><em class="fa fa-hand-o-right"></em> {{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }} {{ 'Course' | get_lang }}</li>
                     {% elseif service.applies_to == 3 %}
                         <li><em class="fa fa-hand-o-right"></em> {{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }} {{ 'Session' | get_lang }}</li>
+                    {% elseif service.applies_to == 4 %}
+                        <li><em class="fa fa-hand-o-right"></em> {{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }} {{ 'TemplateTitleCertificate' | get_lang }}</li>
                     {% endif %}
                     <li><em class="fa fa-money"></em> {{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }} : {{ service.currency == 'BRL' ? 'R$' : service.currency }} {{ service.price }} / {{ service.duration_days == 0 ? 'NoLimit' | get_lang  : service.duration_days ~ ' ' ~ 'Days' | get_lang }} </li>
-                    <li><em class="fa fa-user"></em> {{ service.owner_name }}</li>
-                    <li><em class="fa fa-align-justify"></em> {{ service.description }}</li>
+                    <li><em class="fa fa-user"></em> {{ service.owner.name }}</li>
+                    {% if service.description %}
+                        <li><em class="fa fa-align-justify"></em> {{ service.description }}</li>
+                    {% endif %}
                 </ul>
                 <p id="n-price" class="lead text-right" style="color: white;"><span class="label label-primary">{{ service.currency == 'BRL' ? 'R$' : service.currency }} {{ service.price }}</span></p>
                 <p id="s-price" class="lead text-right"></p>

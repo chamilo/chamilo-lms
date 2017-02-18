@@ -1787,6 +1787,11 @@ class BuyCoursesPlugin extends Plugin
      */
     public function deleteService($id)
     {
+        Database::delete(
+            Database::get_main_table(self::TABLE_SERVICES_SALE),
+            ['service_id = ?' => intval($id)]
+        );
+
         return Database::delete(
             Database::get_main_table(self::TABLE_SERVICES),
             ['id = ?' => intval($id)]

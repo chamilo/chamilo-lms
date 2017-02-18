@@ -167,4 +167,6 @@ $strings['YouNeedToBeRegisteredInAtLeastOneCourse'] = "Necesitas estar registrad
 $strings['YouNeedToBeRegisteredInAtLeastOneSession'] = "Necesitas estar registrado en al menos una sesión";
 $strings['IfYouWantToGetTheCertificateAndOrSkillsAsociatedToThisCourseYouNeedToBuyTheCertificateServiceYouCanGoToServiceCatalogClickingHere'] = "Si quieres obtener el certificado y/o las competencias asociadas a este curso, necesitas comprar el servicio de <b> Certificado </b>, puedes ir al catálogo de servicios para comprarlo haciendo click <a target='_blank' href='%s'>AQUÍ</a>";
 $strings['AdditionalInfoRequired'] = 'Se requiere que se elija la información adicional antes de proceder';
+$strings['ServiceDeleted'] = 'Servicio eliminado';
+$strings['DeleteThisService'] = 'Eliminar este servicio';
 

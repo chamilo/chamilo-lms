@@ -126,14 +126,27 @@ $form->addText('video_url', get_lang('VideoUrl'), false);
 $form->addHtmlEditor('service_information', $plugin->get_lang('ServiceInformation'), false);
 $form->addHidden('id', $serviceId);
 $form->addButtonSave(get_lang('Edit'));
+$form->addHtml('<br /><br /><br /><br />');
+$form->addButtonDelete($plugin->get_lang('DeleteThisService'), 'delete_service');
 $form->setDefaults($formDefaultValues);
 if ($form->validate()) {
     $values = $form->getSubmitValues();
-    $plugin->updateService($values, $serviceId);
 
-    Display::addFlash(
-        Display::return_message($plugin->get_lang('ServiceEdited'), 'success')
-    );
+    if (isset($values['delete_service'])) {
+
+        $plugin->deleteService($serviceId);
+        Display::addFlash(
+            Display::return_message($plugin->get_lang('ServiceDeleted'), 'error')
+        );
+    } else {
+
+        $plugin->updateService($values, $serviceId);
+        Display::addFlash(
+            Display::return_message($plugin->get_lang('ServiceEdited'), 'success')
+        );
+    }
+
+
 
     header('Location: configuration.php');
     exit;

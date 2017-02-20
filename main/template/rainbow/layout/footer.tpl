@@ -50,6 +50,9 @@
 	                <a href="{{_p.web}}" target="_blank">{{ "PoweredByX" |get_lang | format(_s.software_name) }}</a>
                     &copy; {{ "now"|date("Y") }}
                 </div>
+                <div id="mentions_legales">
+                        <a href="{{_p.web}}{{ "MentionsLegalesLink" |get_lang }}" target="_blank">{{ "MentionsLegales" |get_lang }}</a>
+                </div>
                 &nbsp;
             </div><!-- end of #footer_right -->
         </div><!-- end of #row -->

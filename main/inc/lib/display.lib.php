@@ -257,6 +257,17 @@ class Display
         }
     }
 
+    /**
+     * Returns an HTML table with sortable column (through complete page refresh)
+     * @param array $header
+     * @param array $content Array of row arrays
+     * @param array $sorting_options
+     * @param array $paging_options
+     * @param array $query_vars
+     * @param array $form_actions
+     * @param string $style
+     * @return string HTML string for array
+     */
     public static function return_sortable_table(
         $header,
         $content,

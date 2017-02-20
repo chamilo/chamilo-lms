@@ -136,7 +136,10 @@ class Template
         $this->twig->addFilter('img', new Twig_Filter_Function('Template::get_image'));
         $this->twig->addFilter('format_date', new Twig_Filter_Function('Template::format_date'));
         $this->twig->addFilter('api_get_local_time', new Twig_Filter_Function('api_get_local_time'));
+        // a combination of the two previous functions
+        $this->twig->addFilter('local_format_date', new Twig_Filter_Function('api_convert_and_format_date'));
         $this->twig->addFilter('user_info', new Twig_Filter_Function('api_get_user_info'));
+        $this->twig->addFilter('get_configuration_value', new Twig_Filter_Function('api_get_configuration_value'));
 
         /*
           $lexer = new Twig_Lexer($this->twig, array(
@@ -730,7 +733,8 @@ class Template
 
         // Loading email_editor js
         if (!api_is_anonymous() && api_get_setting('allow_email_editor') == 'true') {
-            $js_file_to_string .= $this->fetch('default/mail_editor/email_link.js.tpl');
+            $template = $this->get_template('mail_editor/email_link.js.tpl');
+            $js_file_to_string .= $this->fetch($template);
         }
 
         if (!$disable_js_and_css_files) {

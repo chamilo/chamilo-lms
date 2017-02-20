@@ -469,6 +469,8 @@ switch ($action) {
             $nodeType = get_lang('Course');
         } else if ($nodeType == BuyCoursesPlugin::SERVICE_TYPE_SESSION) {
             $nodeType = get_lang('Session');
+        } else if ($nodeType == BuyCoursesPlugin::SERVICE_TYPE_LP_FINAL_ITEM) {
+            $nodeType = get_lang('TemplateTitleCertificate');
         }
         $html .= "<li><b>{$plugin->get_lang('AppliesTo')}:</b> $nodeType</li> ";
         $html .= "<li><b>{$plugin->get_lang('Price')}:</b> {$serviceSale['service']['price']} {$serviceSale['currency']}</li> ";

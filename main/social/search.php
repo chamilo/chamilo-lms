@@ -111,7 +111,7 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2)) {
                 ]
             );
 
-            if ($user_info['user_is_online']) {
+            if (!empty($user_info['user_is_online'])) {
                 $status_icon = Display::return_icon('online.png', get_lang('OnLine'), null, ICON_SIZE_TINY);
             } else {
                 $status_icon = Display::return_icon('offline.png', get_lang('Disconnected'), null, ICON_SIZE_TINY);
@@ -242,7 +242,8 @@ $tpl->assign('search_form', $searchForm);
 
 $formModalTpl =  new Template();
 $formModalTpl->assign('invitation_form', MessageManager::generate_invitation_form('send_invitation'));
-$formModals = $formModalTpl->fetch('default/social/form_modals.tpl');
+$template = $formModalTpl->get_template('social/form_modals.tpl');
+$formModals = $formModalTpl->fetch($template);
 
 $tpl->assign('form_modals', $formModals);
 

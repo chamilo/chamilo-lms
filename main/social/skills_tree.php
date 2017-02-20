@@ -33,6 +33,7 @@ $tpl = new Template(null, false, false);
 $tpl->assign('url', $url);
 $tpl->assign('skill_visualizer', $skill_visualizer);
 
-$content = $tpl->fetch('default/skill/skill_tree_student.tpl');
+$template = $tpl->get_template('skill/skill_tree_student.tpl');
+$content = $tpl->fetch($template);
 $tpl->assign('content', $content);
 $tpl->display_no_layout_template();

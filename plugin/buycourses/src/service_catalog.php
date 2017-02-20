@@ -49,7 +49,8 @@ $appliesToOptions = [
     0 => get_lang('None'),
     1 => get_lang('User'),
     2 => get_lang('Course'),
-    3 => get_lang('Session')
+    3 => get_lang('Session'),
+    4 => get_lang('TemplateTitleCertificate')
 ];
 $form->addSelect('applies_to', $plugin->get_lang('AppliesTo'), $appliesToOptions);
 $form->addHtml('<hr>');

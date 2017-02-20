@@ -146,7 +146,7 @@
                                                 {% elseif service.applies_to == 3 %}
                                                     <li><em class="fa fa-hand-o-right"></em> {{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }} {{ 'Session' | get_lang }}</li>
                                                 {% elseif service.applies_to == 4 %}
-                                                    <li><em class="fa fa-hand-o-right"></em> {{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }} {{ 'SubscriptionPackage' | get_plugin_lang('BuyCoursesPlugin') }}</li>
+                                                    <li><em class="fa fa-hand-o-right"></em> {{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }} {{ 'TemplateTitleCertificate' | get_plugin_lang('BuyCoursesPlugin') }}</li>
                                                 {% endif %}
                                                 <li><em class="fa fa-user"></em> {{ service.owner_name }}</li>
                                             </ul>

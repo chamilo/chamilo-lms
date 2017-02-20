@@ -6,6 +6,7 @@ use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\UserBundle\Entity\Repository\UserRepository;
 use Chamilo\UserBundle\Entity\User;
+use ChamiloSession as Session;
 
 /**
  * Session about page
@@ -193,12 +194,21 @@ $template->assign(
 
 );
 
+$plugin = BuyCoursesPlugin::create();
+$checker = $plugin->get('paypal_enable') || $plugin->get('transfer_enable') || $plugin->get('culqi_enable');
+$sessionIsPremium = $plugin->getItemByProduct($sessionId, BuyCoursesPlugin::PRODUCT_TYPE_SESSION);
+
+if ($checker && $sessionIsPremium) {
+    Session::write('SessionIsPremium', true);
+    Session::write('sessionId', $sessionId);
+}
+
 $redirectToSession = api_get_configuration_value('allow_redirect_to_session_after_inscription_about');
 $redirectToSession = $redirectToSession ? '?s=' . $sessionId : false;
 
 $coursesInThisSession = SessionManager::get_course_list_by_session_id($sessionId);
 $coursesCount = count($coursesInThisSession);
-$redirectToSession = $coursesCount == 1 ? $redirectToSession . '&cr=' . array_values($coursesInThisSession)[0]['directory'] : $redirectToSession;
+$redirectToSession = $coursesCount == 1 && $redirectToSession ? $redirectToSession . '&cr=' . array_values($coursesInThisSession)[0]['directory'] : $redirectToSession;
 
 $template->assign('redirect_to_session', $redirectToSession);
 $template->assign('courses', $courses);

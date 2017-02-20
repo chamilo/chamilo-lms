@@ -44,6 +44,7 @@ class BuyCoursesPlugin extends Plugin
     const SERVICE_TYPE_USER = 1;
     const SERVICE_TYPE_COURSE = 2;
     const SERVICE_TYPE_SESSION = 3;
+    const SERVICE_TYPE_LP_FINAL_ITEM = 4;
     const CULQI_INTEGRATION_TYPE = 'INTEG';
     const CULQI_PRODUCTION_TYPE = 'PRODUC';
 
@@ -1049,7 +1050,8 @@ class BuyCoursesPlugin extends Plugin
         return [
             self::SERVICE_TYPE_USER => get_lang('User'),
             self::SERVICE_TYPE_COURSE => get_lang('Course'),
-            self::SERVICE_TYPE_SESSION => get_lang('Session')
+            self::SERVICE_TYPE_SESSION => get_lang('Session'),
+            self::SERVICE_TYPE_LP_FINAL_ITEM => get_lang('TemplateTitleCertificate')
         ];
     }
 
@@ -1720,13 +1722,13 @@ class BuyCoursesPlugin extends Plugin
                 'applies_to' => intval($service['applies_to']),
                 'owner_id' => intval($service['owner_id']),
                 'visibility' => intval($service['visibility']),
-                'image' => 'simg.png',
+                'image' => '',
                 'video_url' => $service['video_url'],
                 'service_information' => $service['service_information']
             ]
         );
 
-        if ($return) {
+        if ($return && !empty($service['picture_crop_image_base_64']) && !empty($service['picture_crop_result'])) {
             $img = str_replace('data:image/png;base64,', '', $service['picture_crop_image_base_64']);
             $img = str_replace(' ', '+', $img);
             $data = base64_decode($img);
@@ -1738,10 +1740,9 @@ class BuyCoursesPlugin extends Plugin
                 ['image' => 'simg-'.$return.'.png'],
                 ['id = ?' => intval($return)]
             );
-            return $return;
         }
 
-        return false;
+        return $return;
     }
 
     /**
@@ -1786,6 +1787,11 @@ class BuyCoursesPlugin extends Plugin
      */
     public function deleteService($id)
     {
+        Database::delete(
+            Database::get_main_table(self::TABLE_SERVICES_SALE),
+            ['service_id = ?' => intval($id)]
+        );
+
         return Database::delete(
             Database::get_main_table(self::TABLE_SERVICES),
             ['id = ?' => intval($id)]
@@ -1910,6 +1916,10 @@ class BuyCoursesPlugin extends Plugin
 
         if ($nodeType && $nodeId) {
             $conditions = ['WHERE' => ['ss.node_type = ? AND ss.node_id = ?' => [$nodeType, $nodeId]], 'ORDER' => 'id ASC'];
+        }
+
+        if ($nodeType && $nodeId && $buyerId && is_numeric($status)) {
+            $conditions = ['WHERE' => ['ss.node_type = ? AND ss.node_id = ? AND ss.buyer_id = ? AND ss.status = ?' => [$nodeType, $nodeId, $buyerId, $status]], 'ORDER' => 'id ASC'];
         }
 
         if ($hot) {
@@ -2086,7 +2096,7 @@ class BuyCoursesPlugin extends Plugin
             $services[$index]['owner_id'] = $service['owner_id'];
             $services[$index]['owner_name'] = api_get_person_name($service['firstname'], $service['lastname']);
             $services[$index]['visibility'] = $service['visibility'];
-            $services[$index]['image'] = api_get_path(WEB_PLUGIN_PATH).'buycourses/uploads/services/images/'.$service['image'];
+            $services[$index]['image'] = !empty($service['image']) ? api_get_path(WEB_PLUGIN_PATH).'buycourses/uploads/services/images/'.$service['image'] : null;
             $services[$index]['video_url'] = $service['video_url'];
             $services[$index]['service_information'] = $service['service_information'];
         }

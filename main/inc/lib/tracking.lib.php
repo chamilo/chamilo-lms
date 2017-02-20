@@ -1702,7 +1702,7 @@ class Tracking
         if (!empty($cacheAvailable)) {
             $apc = apcu_cache_info(true);
             $apc_end = $apc['start_time'] + $apc['ttl'];
-            $apc_var = api_get_configuration_value('apc_refix') . 'course_access_' . $courseId . '_' . $session_id . '_' . strtotime($roundedStart) . '_' . strtotime($roundedStop);
+            $apc_var = api_get_configuration_value('apc_prefix') . 'course_access_' . $courseId . '_' . $session_id . '_' . strtotime($roundedStart) . '_' . strtotime($roundedStop);
             if (apcu_exists($apc_var) && (time() < $apc_end) &&
                 apcu_fetch($apc_var) > 0
             ) {

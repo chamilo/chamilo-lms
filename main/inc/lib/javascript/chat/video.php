@@ -44,7 +44,8 @@ $template->assign('chat_user', $chatUser);
 $template->assign('user_local', $userLocal);
 $template->assign('block_friends', $friend_html);
 
-$content = $template->fetch('default/chat/video.tpl');
+$tpl = $template->get_template('chat/video.tpl');
+$content = $template->fetch($tpl);
 
 $templateHeader = Display::returnFontAwesomeIcon('video-camera', 'lg', true)
     . $chatVideo->getRoomName();

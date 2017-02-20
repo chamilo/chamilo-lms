@@ -481,7 +481,9 @@ header{
 }
 .actions a{
     text-decoration: none;
-    margin-right: 10px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    display: inline-block;
 }
 .actions a:hover{
     text-decoration: none;
@@ -6143,6 +6145,12 @@ ul#toolnavbox-two li a.btn{
   .navbar-nav{
     margin: -2.5px -15px;
   }
+  .btn{
+      font-size: 12px;
+  }
+  .btn-toolbar{
+        margin-left: 10px;
+    }
 }
 @media (min-width:320px) and (max-width: 479px){
     footer {
@@ -6174,6 +6182,24 @@ ul#toolnavbox-two li a.btn{
     }
     .installer{
         display: inline-table;
+    }
+    .actions a{
+        text-decoration: none;
+        margin-right: 5px;
+        margin-bottom: 5px;
+        display: inline-block;
+    }
+    .btn{
+        font-size: 12px;
+    }
+    .notification-panel{
+        display: none;
+    }
+    .btn-toolbar{
+        margin-left: 10px;
+    }
+    .btn-group{
+        margin-bottom: 10px;
     }
 }
 

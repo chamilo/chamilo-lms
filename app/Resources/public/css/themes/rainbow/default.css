@@ -607,6 +607,9 @@ legend{
 .sticky-footer {
     padding-bottom: 0;
 }
+.navbar-brand{
+    display: none;
+}
 /* Large desktop */
 @media (min-width: 1200px) {
 
@@ -691,10 +694,28 @@ legend{
     .grid-courses .col-xs-12{
         width: 48%;
     }
+    .statistics .items{
+        margin-left: 0;
+    }
+    .statistics .items li h2{
+        padding: 0;
+        margin: 0;
+        font-size: 25px;
+        text-align: center;
+        display: inline-block;
+    }
+    .statistics .items li{
+        display: inline-block;
+        width: 100%;
+        text-align: center;
+    }
 }
 
 /* Landscape phones and down */
 @media (max-width: 480px) {
+    .header-logo-top{
+        display: none;
+    }
     #user_image_block{
         display: none;
     }
@@ -807,6 +828,26 @@ legend{
     }
     .pull-right {
 	float: left !important;
+    }
+    .navbar-brand{
+        display: block;
+    }
+    .statistics .items li h2{
+        padding: 0;
+        margin: 0;
+        font-size: 25px;
+        text-align: center;
+        display: inline-block;
+    }
+    .statistics .icon-color.fa-4x{
+        font-size: 3em;
+    }
+    .statistics .items li{
+        display: inline-block;
+        width: 100%;
+    }
+    .statistics .text{
+        font-size: 12px;
     }
 }
 

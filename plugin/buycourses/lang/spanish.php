@@ -169,4 +169,4 @@ $strings['IfYouWantToGetTheCertificateAndOrSkillsAsociatedToThisCourseYouNeedToB
 $strings['AdditionalInfoRequired'] = 'Se requiere que se elija la información adicional antes de proceder';
 $strings['ServiceDeleted'] = 'Servicio eliminado';
 $strings['DeleteThisService'] = 'Eliminar este servicio';
-
+$strings['YourCoursesNeedAtLeastOneLearningPath'] = 'Los cursos en los que estás registrado necesitan tener al menos una lección que contenga un item de cerficado final';

@@ -51,7 +51,7 @@
     
         <header>
             <div class="extra-header">{{ header_extra_content }}</div>
-            <section id="main" class="container">
+            <section id="main" class="container header-logo-top">
                 {% if plugin_header_main %}
                 <div class="row">
                     <div class="col-lg-12">

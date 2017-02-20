@@ -265,7 +265,7 @@ footer #footer_right{
     border: 1px solid #19BF69;
 }
 .section-title{
-    font-size: 32px;
+    font-size: 28px;
     color: #96BD0D;
     text-align: center;
 }
@@ -904,6 +904,18 @@ legend{
     }
     .home-information .item-icon .circle .fa-3x{
         font-size: 2em;
+    }
+    #panel-scorm .panel-body{
+        padding: 0;
+    }
+    #learning_path_toc{
+        margin-top: 10px;
+    }
+    #panel-scorm.panel-body{
+        padding: 0;
+    }
+    #panel-scorm .image-avatar{
+        padding-top: 0;
     }
 }
 

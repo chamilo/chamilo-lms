@@ -610,6 +610,10 @@ legend{
 .navbar-brand{
     display: none;
 }
+.block-items-admin{
+    font-size: 12px;
+}
+
 /* Large desktop */
 @media (min-width: 1200px) {
 
@@ -670,7 +674,9 @@ legend{
     .breadcrumb{
         font-size: 12px;
     }
-    
+    #user_image_block{
+        display: none;
+    } 
 }
 
 /* Landscape phone to portrait tablet */
@@ -708,6 +714,9 @@ legend{
         display: inline-block;
         width: 100%;
         text-align: center;
+    }
+    #user_image_block{
+        display: none;
     }
 }
 
@@ -848,6 +857,36 @@ legend{
     }
     .statistics .text{
         font-size: 12px;
+    }
+    .actions img{
+        padding: 0;
+        border: none;
+        width: 30px;
+    }
+    .form-group{
+        margin-bottom: 5px;
+    }
+    .actions .form-inline{
+        margin-right: 0;
+    }
+    .actions fieldset {
+	margin-top: 10px;
+    }
+    .actions .form-inline .form-group,
+    #settings .form-inline .form-group{
+	display: inline-block;
+	margin-bottom: 0;
+	vertical-align: middle;
+    }
+    #settings .form-control{
+        width: 65%;
+        display: inline-block;
+    }
+    .list-items-admin{
+        padding-left: 15px;
+    }
+    .admin-edit-block.pull-right{
+        float: right !important;
     }
 }
 

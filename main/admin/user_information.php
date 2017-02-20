@@ -178,7 +178,7 @@ $data = array(
     get_lang('Email') => $user['email'],
     get_lang('Phone') => $user['phone'],
     get_lang('OfficialCode') => $user['official_code'],
-    get_lang('Online') => $user['user_is_online'] ?
+    get_lang('Online') => !empty($user['user_is_online']) ?
         Display::return_icon('online.png') : Display::return_icon(
             'offline.png'
         ),
@@ -255,6 +255,37 @@ $tbl_session = Database:: get_main_table(TABLE_MAIN_SESSION);
 $tbl_course = Database:: get_main_table(TABLE_MAIN_COURSE);
 $tbl_user = Database:: get_main_table(TABLE_MAIN_USER);
 
+
+/**
+ * Show social activity
+ */
+if (api_get_setting('allow_social_tool') === 'true') {
+    $em = Database::getManager();
+    $userObject = $em->find('ChamiloUserBundle:User', $user['user_id']);
+    $header  = ['Value' => 'CurrentData'];
+    $data = [];
+
+    // Calculate values
+    if (api_get_setting('allow_message_tool') === 'true') {
+        $messagesSent = \SocialManager::getCountMessagesSent($user['user_id']);
+        $data[] = [get_lang('MessagesSent'), $messagesSent];
+        $messagesReceived = \SocialManager::getCountMessagesReceived($user['user_id']);
+        $data[] = [get_lang('MessagesReceived'), $messagesReceived];
+    }
+    $wallMessagesPosted = \SocialManager::getCountWallPostedMessages($user['user_id']);
+    $data[] = [get_lang('WallMessagesPosted'), $wallMessagesPosted];
+
+
+    $socialInformation = Display::return_sortable_table(
+        $header,
+        $data
+    );
+
+}
+
+/**
+ * Show the sessions in which this user is subscribed
+ */
 $sessions = SessionManager::get_sessions_by_user($userId, true);
 $personal_course_list = array();
 $courseToolInformationTotal = null;
@@ -554,6 +585,11 @@ echo '</div>';
 if ($studentBossList) {
     echo Display::page_subheader(get_lang('StudentBossList'));
     echo $studentBossListToString;
+}
+
+if (api_get_setting('allow_social_tool') === 'true') {
+    echo Display::page_subheader(get_lang('SocialData'));
+    echo $socialInformation;
 }
 
 echo Display::page_subheader(get_lang('SessionList'));

@@ -263,6 +263,62 @@ class SocialManager extends UserManager
     }
 
     /**
+     * Get number of messages sent to other users
+     * @param int $sender_id
+     * @return int
+     */
+    public static function getCountMessagesSent($sender_id)
+    {
+        $tbl_message = Database::get_main_table(TABLE_MESSAGE);
+        $sql = 'SELECT COUNT(*) FROM '.$tbl_message.'
+                WHERE
+                    user_sender_id='.intval($sender_id).' AND
+                    msg_status < 5';
+        $res = Database::query($sql);
+        $row = Database::fetch_row($res);
+
+        return $row[0];
+    }
+
+    /**
+     * Get number of messages received from other users
+     * @param int $receiver_id
+     * @return int
+     */
+    public static function getCountMessagesReceived($receiver_id)
+    {
+        $tbl_message = Database::get_main_table(TABLE_MESSAGE);
+        $sql = 'SELECT COUNT(*) FROM '.$tbl_message.'
+                WHERE
+                    user_receiver_id='.intval($receiver_id).' AND
+                    msg_status < 4';
+        $res = Database::query($sql);
+        $row = Database::fetch_row($res);
+
+        return $row[0];
+    }
+
+    /**
+     * Get number of messages posted on own wall
+     * @param int $sender_id
+     * @return int
+     */
+    public static function getCountWallPostedMessages($sender_id)
+    {
+        $tbl_message = Database::get_main_table(TABLE_MESSAGE);
+        $sql = 'SELECT COUNT(*) FROM '.$tbl_message.'
+                WHERE
+                    user_sender_id='.intval($sender_id).' AND
+                    (msg_status = '.MESSAGE_STATUS_WALL.' OR 
+                    msg_status = '.MESSAGE_STATUS_WALL_POST.') AND 
+                    parent_id = 0';
+        $res = Database::query($sql);
+        $row = Database::fetch_row($res);
+
+        return $row[0];
+    }
+
+    /**
      * Get invitation list received by user
      * @author isaac flores paz
      * @param int user id
@@ -1809,7 +1865,7 @@ class SocialManager extends UserManager
                     $name_user = api_get_person_name($friend['firstName'], $friend['lastName']);
                     $user_info_friend = api_get_user_info($friend['friend_user_id'], true);
 
-                    if ($user_info_friend['user_is_online']) {
+                    if (!empty($user_info_friend['user_is_online'])) {
                         $statusIcon = Display::return_icon('statusonline.png',get_lang('Online'));
                         $status=1;
                     } else {

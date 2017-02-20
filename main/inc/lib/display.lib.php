@@ -2413,7 +2413,7 @@ class Display
             </div>';
         } else {
             for ($i = 0; $i < $col; $i++) {
-                $html .= '<div class="col-md-' . $columns . '">';
+                $html .= '<div class="col-xs-12 col-md-' . $columns . '">';
                 if ($col == 2 && $i == 1) {
                     if ($right === true) {
                         $html .= '<div class="pull-right">';

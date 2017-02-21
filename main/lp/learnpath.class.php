@@ -4141,7 +4141,7 @@ class learnpath
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             $row = Database :: fetch_array($result);
-            $name = domesticate($row['name']);
+            $name = Database::escape_string($row['name']);
             if ($set_visibility == 'i') {
                 $v = 0;
             }

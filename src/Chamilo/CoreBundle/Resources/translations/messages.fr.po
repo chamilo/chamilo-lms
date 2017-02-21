@@ -53,4 +53,11 @@ msgid "OFAJ"
 msgstr "Office franco-allemand pour la Jeunesse"
 
 msgid "DemoMenuLink"
-msgstr "https://ofaj.beeznest.com/courses/DEMO/index.php"
+msgstr "https://ofaj.beeznest.com/web/app_dev.php/page-de-dmo-francais"
+
+msgid "MentionsLegales"
+msgstr "Mentions Légales"
+
+msgid "MentionsLegalesLink"
+msgstr "https://www.dfparkur.org/web/app_dev.php/mentions-lgales"
+

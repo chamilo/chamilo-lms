@@ -3657,12 +3657,14 @@ function processWorkForm(
     $url = null;
     $filesize = null;
     $workData = [];
+    $message = null;
 
     if ($values['contains_file']) {
         if ($checkDuplicated) {
             if (checkExistingWorkFileName($file['name'], $workInfo['id'])) {
                 $saveWork = false;
-                $workData['error'] = get_lang('YouAlreadySentThisFile');
+                $result['error'] = get_lang('YouAlreadySentThisFile');
+                $workData['error'] = get_lang('UplAlreadyExists');
             } else {
                 $result = uploadWork($workInfo, $courseInfo, false, [], $file);
             }
@@ -3673,14 +3675,12 @@ function processWorkForm(
         if (isset($result['error'])) {
             if ($showFlashMessage) {
                 $message = $result['error'];
-                Display::addFlash($message);
             }
 
             $saveWork = false;
         }
     }
 
-    $workData = [];
     if ($saveWork) {
         $filename = isset($result['filename']) ? $result['filename'] : null;
         if (empty($title)) {
@@ -3764,7 +3764,7 @@ function processWorkForm(
         if ($showFlashMessage) {
             Display::addFlash(
                 Display::return_message(
-                    get_lang('IsNotPosibleSaveTheDocument'),
+                    $message ? $message : get_lang('IsNotPosibleSaveTheDocument'),
                     'error'
                 )
             );

@@ -13,7 +13,7 @@
 </p>
 {% endif %}
 
-{{ score_form }}
+{{ form }}
 
 {% if work.contains_file and work.show_content %}
 <h3>

@@ -3166,6 +3166,7 @@ function getWorkComment($id, $courseInfo = array())
         $comment['file_path'] = $filePath;
         $comment['file_url'] = $fileUrl;
         $comment['file_name_to_show'] = $fileName;
+        $comment['sent_at_with_label'] = Display::dateToStringAgoAndLongDate($comment['sent_at']);
     }
 
     return $comment;
@@ -3204,7 +3205,13 @@ function deleteCommentFile($id, $courseInfo = array())
  */
 function addWorkComment($courseInfo, $userId, $parentWork, $work, $data)
 {
+    $fileData = isset($data['attachment']) ? $data['attachment'] : null;
     $commentTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT_COMMENT);
+
+    // If no attachment and no comment then don't save comment
+    if (empty($fileData['name']) && empty($data['comment'])) {
+        return false;
+    }
 
     $params = array(
         'work_id' => $work['id'],
@@ -3217,12 +3224,14 @@ function addWorkComment($courseInfo, $userId, $parentWork, $work, $data)
     $commentId = Database::insert($commentTable, $params);
 
     if ($commentId) {
+        Display::addFlash(
+            Display::return_message(get_lang('CommentAdded'))
+        );
         $sql = "UPDATE $commentTable SET id = iid WHERE iid = $commentId";
         Database::query($sql);
     }
 
     $userIdListToSend = array();
-
     if (api_is_allowed_to_edit()) {
         if (isset($data['send_mail']) && $data['send_mail']) {
             // Teacher sends a feedback
@@ -3263,7 +3272,6 @@ function addWorkComment($courseInfo, $userId, $parentWork, $work, $data)
         }
     }
 
-    $fileData = isset($data['file']) ? $data['file'] : null;
     if (!empty($commentId) && !empty($fileData)) {
         $workParent = get_work_data_by_id($work['parent_id']);
         if (!empty($workParent)) {
@@ -3285,25 +3293,51 @@ function addWorkComment($courseInfo, $userId, $parentWork, $work, $data)
 
 /**
  * @param array $work
- * @param string $page
+ *
  * @return string
  */
-function getWorkCommentForm($work, $page = 'view')
+function getWorkCommentForm($work, $workParent)
 {
-    $url = api_get_path(WEB_CODE_PATH).'work/view.php?id='.$work['id'].'&action=send_comment&'.api_get_cidreq().'&page='.$page;
+    $url = api_get_path(WEB_CODE_PATH).'work/view.php?id='.$work['id'].'&action=send_comment&'.api_get_cidreq();
     $form = new FormValidator(
         'work_comment',
         'post',
-        $url
+        $url,
+        '',
+        array('enctype' => "multipart/form-data")
     );
 
-    $form->addElement('file', 'file', get_lang('Attachment'));
-    $form->addHtmlEditor('comment', get_lang('Comment'));
-    $form->addElement('hidden', 'id', $work['id']);
-    $form->addElement('hidden', 'page', $page);
+    $qualification = $workParent['qualification'];
+
     if (api_is_allowed_to_edit()) {
-        $form->addElement('checkbox', 'send_mail', null, get_lang('SendMail'));
+        if (!empty($qualification) && intval($qualification) > 0) {
+            $form->addFloat(
+                'qualification',
+                array(get_lang('Qualification'), " / ".$qualification),
+                false,
+                [],
+                false,
+                0,
+                $qualification
+            );
+
+            $form->addFile('file', get_lang('Correction'));
+            $form->setDefaults(['qualification' => $work['qualification']]);
+        }
     }
+
+    $form->addHtmlEditor('comment', get_lang('Comment'), false);
+    $form->addFile('attachment', get_lang('Attachment'));
+    $form->addElement('hidden', 'id', $work['id']);
+
+    if (api_is_allowed_to_edit()) {
+        $form->addCheckBox(
+            'send_email',
+            null,
+            get_lang('SendMailToStudent')
+        );
+    }
+
     $form->addButtonSend(get_lang('Send'), 'button');
 
     return $form->returnForm();

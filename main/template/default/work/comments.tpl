@@ -1,4 +1,4 @@
-<hr>
+<hr />
 <h3>
     {{ 'Comments' | get_lang }}
 </h3>
@@ -9,7 +9,7 @@
         <div class="page-header">
             <a href="{{ _p.web_code }}">
                 <img height="24" src="{{ comment.picture }}"/> {{ comment.complete_name }}
-            </a>- {{ comment.sent_at | api_get_local_time }}
+            </a>- {{ comment.sent_at_with_label }}
         </div>
         <p>
             {% if comment.comment is not empty %}
@@ -35,6 +35,3 @@
 {% endfor %}
 </ul>
 <br />
-<hr>
-{{ form }}
-

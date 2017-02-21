@@ -279,3 +279,6 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 // $_configuration['assignment_prevent_duplicate_upload'] = false;
 // Set ConsideredWorkingTime work extra field variable to show in MyStudents page works report
 // $_configuration['considered_working_time'] = 'work_time';
+// During CSV special imports update users emails to x@example.com
+// $_configuration['update_users_email_to_dummy_except_admins'] = false;
+

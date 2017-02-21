@@ -48,6 +48,7 @@ class ImportCsv
     public $daysCoachAccessBeforeBeginning = 14;
     public $daysCoachAccessAfterBeginning = 14;
     public $conditions;
+    private $updateEmailToDummy;
 
     /**
      * @param Monolog\Logger $logger
@@ -57,6 +58,7 @@ class ImportCsv
     {
         $this->logger = $logger;
         $this->conditions = $conditions;
+        $this->updateEmailToDummy = false;
     }
 
     /**
@@ -522,6 +524,8 @@ class ImportCsv
         if ($moveFile) {
             $this->moveFile($file);
         }
+
+        $this->updateUsersEmails();
     }
 
     /**
@@ -748,6 +752,8 @@ class ImportCsv
         if ($moveFile) {
             $this->moveFile($file);
         }
+
+        $this->updateUsersEmails();
     }
 
     /**
@@ -767,6 +773,8 @@ class ImportCsv
     private function importCalendarStatic($file, $moveFile = true)
     {
         $this->fixCSVFile($file);
+
+        $this->updateUsersEmails();
         $data = Import::csvToArray($file);
 
         if (!empty($data)) {
@@ -2253,6 +2261,35 @@ class ImportCsv
             fwrite($f, '";');
         }*/
     }
+
+    /**
+     * @return mixed
+     */
+    public function getUpdateEmailToDummy()
+    {
+        return $this->updateEmailToDummy;
+    }
+
+    /**
+     * @param mixed $updateEmailToDummy
+     */
+    public function setUpdateEmailToDummy($updateEmailToDummy)
+    {
+        $this->updateEmailToDummy = $updateEmailToDummy;
+    }
+
+    /**
+     * Change emails of all users except admins
+     *
+     */
+    public function updateUsersEmails()
+    {
+        if ($this->getUpdateEmailToDummy() === true) {
+            $sql = "UPDATE user SET email = CONCAT(username,'@example.com') WHERE id NOT IN (SELECT user_id FROM admin)";
+            Database::query($sql);
+        }
+    }
+
 }
 
 use Monolog\Logger;
@@ -2309,6 +2346,8 @@ if (isset($_configuration['import_csv_disable_dump']) &&
 } else {
     $import->setDumpValues($dump);
 }
+
+$import->setUpdateEmailToDummy(api_get_configuration_value('update_users_email_to_dummy_except_admins'));
 
 // Do not moves the files to treated
 if (isset($_configuration['import_csv_test'])) {

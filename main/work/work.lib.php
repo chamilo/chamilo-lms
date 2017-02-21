@@ -3980,6 +3980,8 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
             }
         }
 
+        $eventColor = $agenda->eventStudentPublicationColor;
+
         if (empty($agendaId)) {
             $agendaId = $agenda->addEvent(
                 $date,
@@ -3987,7 +3989,13 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
                 'false',
                 $title,
                 $content,
-                array('GROUP:'.$groupId)
+                array('GROUP:'.$groupId),
+                false,
+                null,
+                [],
+                [],
+                null,
+                $eventColor
             );
         } else {
             $agenda->editEvent(
@@ -3996,7 +4004,12 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
                 $end_date,
                 'false',
                 $title,
-                $content
+                $content,
+                [],
+                [],
+                [],
+                null,
+                $eventColor
             );
         }
     }

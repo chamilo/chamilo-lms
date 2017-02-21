@@ -22,6 +22,7 @@ class Agenda
     public $comment;
     /** @var bool */
     private $isAllowedToEdit;
+    public $eventStudentPublicationColor;
 
     /**
      * Constructor
@@ -116,6 +117,7 @@ class Agenda
         $this->event_session_color = '#00496D'; // kind of green
         $this->eventOtherSessionColor = '#999';
         $this->event_personal_color = 'steel blue'; //steel blue
+        $this->eventStudentPublicationColor = '#FF8C00'; //DarkOrange
     }
 
     /**

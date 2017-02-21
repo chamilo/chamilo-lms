@@ -3882,13 +3882,13 @@ class learnpath
         $course_id = api_get_course_int_id();
         $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
         $sql = "SELECT * FROM $lp_table
-                WHERE c_id = ".$course_id."
+                WHERE c_id = $course_id
                 ORDER BY display_order";
         $res = Database::query($sql);
         if ($res === false)
             return false;
         $lps = array ();
-        $lp_order = array ();
+        $lp_order = array();
         $num = Database :: num_rows($res);
         // First check the order is correct, globally (might be wrong because
         // of versions < 1.8.4)
@@ -3929,7 +3929,7 @@ class learnpath
         $course_id = api_get_course_int_id();
         $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
         $sql = "SELECT * FROM $lp_table
-                WHERE c_id = ".$course_id."
+                WHERE c_id = $course_id
                 ORDER BY display_order";
         $res = Database::query($sql);
         if ($res === false) {

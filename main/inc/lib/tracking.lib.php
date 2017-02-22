@@ -19,6 +19,7 @@ class Tracking
 {
     public static function get_group_reporting(
         $course_id,
+        $sessionId = null,
         $group_id = null,
         $type = 'all',
         $start = 0,
@@ -31,6 +32,7 @@ class Tracking
             return null;
         }
         $course_info = api_get_course_info_by_id($course_id);
+        $sessionId = (int) $sessionId;
         $table_group = Database :: get_course_table(TABLE_GROUP);
         $course_id = intval($course_id);
 
@@ -39,12 +41,16 @@ class Tracking
             $select = ' count(id) as count ';
         }
 
-        $default_where = array('c_id = ? ' => array($course_id));
+        if (empty($sessionId)) {
+            $default_where = array('c_id = ? AND (session_id = 0 or session_id IS NULL)' => array($course_id));
+        } else {
+            $default_where = array('c_id = ? AND session_id = ? ' => array($course_id, $sessionId));
+        }
 
         $result = Database::select($select, $table_group, array(
-                'limit' => " $start, $limit",
-                'where' => $default_where,
-                'order' => "$sidx $sord")
+            'limit' => " $start, $limit",
+            'where' => $default_where,
+            'order' => "$sidx $sord")
         );
 
         if ($type == 'count') {
@@ -63,25 +69,30 @@ class Tracking
                 $messages = 0;
 
                 foreach ($users as $user_data) {
-                    $time += Tracking::get_time_spent_on_the_course($user_data['user_id'], $course_info['code'], 0);
-                    $avg_student_score += Tracking::get_avg_student_score($user_data['user_id'], $course_info['code'], array(), 0);
-                    $avg_student_progress += Tracking::get_avg_student_progress($user_data['user_id'], $course_info['code'], array(), 0);
-                    $work += Tracking::count_student_assignments($user_data['user_id'], $course_info['code'], 0);
-                    $messages += Tracking::count_student_messages($user_data['user_id'], $course_info['code'], 0);
+                    $time += Tracking::get_time_spent_on_the_course($user_data['user_id'], $course_info['code'], $sessionId);
+                    $avg_student_score += Tracking::get_avg_student_score($user_data['user_id'], $course_info['code'], array(), $sessionId);
+                    $avg_student_progress += Tracking::get_avg_student_progress($user_data['user_id'], $course_info['code'], array(), $sessionId);
+                    $work += Tracking::count_student_assignments($user_data['user_id'], $course_info['code'], $sessionId);
+                    $messages += Tracking::count_student_messages($user_data['user_id'], $course_info['code'], $sessionId);
                 }
+
+                $countUsers = count($users);
+                $averageProgress = empty($countUsers) ? 0 : $avg_student_progress/$countUsers;
+                $averageScore = empty($countUsers) ? 0 : $avg_student_score/$countUsers;
 
                 $group_item = array(
                     'id' => $group['id'],
                     'name' => $group['name'],
                     'time' => api_time_to_hms($time),
-                    'progress' => $avg_student_progress,
-                    'score' => $avg_student_score,
+                    'progress' => $averageProgress,
+                    'score' => $averageScore,
                     'works' => $work,
                     'messages' => $messages,
                 );
                 $parsed_result[] = $group_item;
             }
         }
+
         return $parsed_result;
     }
 

@@ -8206,18 +8206,20 @@ class SessionManager
     {
         $sessionId = ChamiloSession::read('session_redirect');
         $onlyOneCourseSessionToRedirect = ChamiloSession::read('only_one_course_session_redirect');
-        $sessionInfo = api_get_session_info($sessionId);
-        if (!empty($sessionInfo)) {
-            $userId = api_get_user_id();
-            $response = self::isUserSubscribedAsStudent($sessionId, $userId);
-            if ($response) {
-                $urlToRedirect = api_get_path(WEB_CODE_PATH) . 'session/index.php?session_id=' . $sessionId;
-                if (!empty($onlyOneCourseSessionToRedirect)) {
-                    $urlToRedirect = api_get_path(WEB_PATH) . 'courses/' . $onlyOneCourseSessionToRedirect . '/index.php?id_session=' . $sessionId;
-                }
+        if ($sessionId) {
+            $sessionInfo = api_get_session_info($sessionId);
+            if (!empty($sessionInfo)) {
+                $userId = api_get_user_id();
+                $response = self::isUserSubscribedAsStudent($sessionId, $userId);
+                if ($response) {
+                    $urlToRedirect = api_get_path(WEB_CODE_PATH) . 'session/index.php?session_id=' . $sessionId;
+                    if (!empty($onlyOneCourseSessionToRedirect)) {
+                        $urlToRedirect = api_get_path(WEB_PATH) . 'courses/' . $onlyOneCourseSessionToRedirect . '/index.php?id_session=' . $sessionId;
+                    }
 
-                header('Location: ' . $urlToRedirect);
-                exit;
+                    header('Location: ' . $urlToRedirect);
+                    exit;
+                }
             }
         }
     }

@@ -306,20 +306,7 @@ if (!empty($work_id)) {
         if (api_resource_is_locked_by_gradebook($work_id, LINK_STUDENTPUBLICATION)) {
             echo Display::display_warning_message(get_lang('ResourceLockedByGradebook'));
         } else {
-            /*$comments = getWorkComments($work_item);
-
-            $template = $tpl->get_template('work/comments.tpl');
-            $tpl->assign('comments', $comments);
-
-            $commentForm = getWorkCommentForm($work_item, 'edit');
-            */
-            if (api_is_allowed_to_session_edit()) {
-                //$tpl->assign('form', $commentForm);
-            }
             $content .= $form->returnForm();
-
-            /*$content .= $form->returnForm();
-            $content .= $tpl->fetch($template);*/
         }
     } elseif ($is_author) {
         if (empty($work_item['qualificator_id']) || $work_item['qualificator_id'] == 0) {

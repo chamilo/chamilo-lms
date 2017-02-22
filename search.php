@@ -177,6 +177,7 @@ if (!empty($items)) {
     /** @var ExtraFieldSavedSearch $item */
     foreach ($items as $item) {
         $variable = 'extra_'.$item->getField()->getVariable();
+
         if ($item->getField()->getFieldType() == Extrafield::FIELD_TYPE_TAG) {
             $tagsData[$variable] = $item->getValue();
         }
@@ -473,7 +474,6 @@ $fieldsToShow = [
     'domaine',
     $theme
 ];
-
 $extra = $extraFieldSession->addElements(
     $userForm,
     api_get_user_id(),
@@ -617,9 +617,9 @@ $domaine2 = $userForm->getElementByName('extra_domaine[1]');
 $domaine3 = $userForm->getElementByName('extra_domaine[2]');
 
 $domainList = array_merge(
-    is_array($domaine1) ? $domaine1->getValue() : [],
-    is_array($domaine3) ? $domaine3->getValue() : [],
-    is_array($domaine2) ? $domaine2->getValue() : []
+    is_object($domaine1) ? $domaine1->getValue() : [],
+    is_object($domaine3) ? $domaine3->getValue() : [],
+    is_object($domaine2) ? $domaine2->getValue() : []
 );
 
 $themeList = [];

@@ -458,10 +458,11 @@ $domaine2 = $form->getElementByName('extra_domaine[1]');
 $domaine3 = $form->getElementByName('extra_domaine[2]');
 $userForm->setDefaults($defaults);
 $domainList = array_merge(
-    $domaine1->getValue(),
-    $domaine3->getValue(),
-    $domaine2->getValue()
+    is_object($domaine1) ? $domaine1->getValue() : [],
+    is_object($domaine3) ? $domaine3->getValue() : [],
+    is_object($domaine2) ? $domaine2->getValue() : []
 );
+
 $themeList = [];
 $extraField = new ExtraField('session');
 $resultOptions = $extraField->searchOptionsFromTags('extra_domaine', 'extra_'.$theme, $domainList);

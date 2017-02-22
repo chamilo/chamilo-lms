@@ -26,7 +26,7 @@
                     {% endfor %}
                 {% endif %}
                 {% if _u.logged == 1 %}
-                    <li class="item-menu menu-5"><a href="{{ _p.web }}web/app_dev.php/faq?_locale={{ document_language }}">{{ "FAQ"|get_lang }}</a></li>
+                    <li class="item-menu menu-5"><a href="{{ _p.web_url }}faq?_locale={{ document_language }}">{{ "FAQ"|get_lang }}</a></li>
                 {% endif %}
 
                 {% if _u.logged == 0 %}
@@ -34,13 +34,13 @@
                         <a href="{{ _p.web }}?language={{ current_language }}">{{ "CampusHomepage"|get_lang }}</a>
                     </li>
                     <li class="item-menu menu-2">
-                        <a href="{{ _p.web }}web/app_dev.php/faq?_locale={{ document_language }}">{{ "FAQ"|get_lang }}</a>
+                        <a href="{{ _p.web_url }}faq?_locale={{ document_language }}">{{ "FAQ"|get_lang }}</a>
                     </li>
                     <li class="item-menu menu-3 {% if _p.basename == 'inscription.php' %} active {% endif %}">
                         <a href="{{ _p.web }}main/auth/inscription.php?language={{ current_language }}">{{ "Subscription"|get_lang }}</a>
                     </li>
                     <li class="item-menu menu-4"><a href="{{ "DemoMenuLink"|get_lang }}">{{ "Demo"|get_lang }}</a></li>
-                    <li class="item-menu menu-5"><a href="{{ _p.web }}web/app_dev.php/contact?_locale={{ document_language }}">{{ "Contact"|get_lang }}</a></li>
+                    <li class="item-menu menu-5"><a href="{{ _p.web_url }}contact?_locale={{ document_language }}">{{ "Contact"|get_lang }}</a></li>
                 {% endif %}
             </ul>
            {% if _u.logged == 1 %}

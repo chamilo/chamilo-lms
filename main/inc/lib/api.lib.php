@@ -8150,3 +8150,15 @@ function api_number_format($number, $decimals = 0)
 
     return number_format($number, $decimals);
 }
+
+/**
+ * @return string
+ */
+function api_get_web_url()
+{
+    if (api_get_setting('server_type') == 'test') {
+        return api_get_path(WEB_PATH) . 'web/app_dev.php/';
+    } else {
+        return api_get_path(WEB_PATH) . 'web/';
+    }
+}

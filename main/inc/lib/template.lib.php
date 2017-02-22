@@ -489,6 +489,7 @@ class Template
         $this->theme = api_get_visual_theme();
         //Setting app paths/URLs
         $_p = array(
+            'web_url' => api_get_web_url(),
             'web' => api_get_path(WEB_PATH),
             'web_relative' => api_get_path(REL_PATH),
             'web_course' => api_get_path(WEB_COURSE_PATH),

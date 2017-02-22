@@ -53,12 +53,12 @@ msgid "OFAJ"
 msgstr "Deutsch-Französisches Jugendwerk"
 
 msgid "DemoMenuLink"
-msgstr "https://ofaj.beeznest.com/web/app_dev.php/de/demo-seite?_locale=de"
+msgstr "https://ofaj.beeznest.com/web/de/demo-seite?_locale=de"
 
 msgid "MentionsLegales"
 msgstr "Impressum"
 
 msgid "MentionsLegalesLink"
-msgstr "https://www.dfparkur.org/web/app_dev.php/de/impressum"
+msgstr "https://www.dfparkur.org/web/de/impressum"
 
 

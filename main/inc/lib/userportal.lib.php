@@ -1279,22 +1279,23 @@ class IndexManager
                                 'id' => $session_id
                             );
                             $session_box = Display::get_session_title_box($session_id);
-
-                            $actions = null;
-                            if (api_is_platform_admin()) {
-                                $actions = api_get_path(WEB_CODE_PATH) .'session/resume_session.php?id_session='.$session_id;
-                            }
-
+                            $actions = api_get_path(WEB_CODE_PATH) .'session/resume_session.php?id_session='.$session_id;
                             $coachId = $session_box['id_coach'];
                             $extraFieldValue = new ExtraFieldValue('session');
-                            $imageField = $extraFieldValue->get_values_by_handler_and_field_variable($session_id, 'image');
+                            $imageField = $extraFieldValue->get_values_by_handler_and_field_variable(
+                                $session_id,
+                                'image'
+                            );
 
                             $params['category_id'] = $session_box['category_id'];
                             $params['title'] = $session_box['title'];
                             $params['id_coach'] = $coachId;
                             $params['coach_url'] = api_get_path(WEB_AJAX_PATH) . 'user_manager.ajax.php?a=get_user_popup&user_id=' . $coachId;
                             $params['coach_name'] = !empty($session_box['coach']) ? $session_box['coach'] : null;
-                            $params['coach_avatar'] = UserManager::getUserPicture($coachId, USER_IMAGE_SIZE_SMALL);
+                            $params['coach_avatar'] = UserManager::getUserPicture(
+                                $coachId,
+                                USER_IMAGE_SIZE_SMALL
+                            );
                             $params['date'] = $session_box['dates'];
                             $params['image'] = isset($imageField['value']) ? $imageField['value'] : null;
                             $params['duration'] = isset($session_box['duration']) ? ' ' . $session_box['duration'] : null;

@@ -718,6 +718,17 @@ legend{
     #user_image_block{
         display: none;
     }
+    .notification-panel{
+        display: none;
+    }
+    .partners {
+	padding-bottom: 20px;
+	padding-top: 20px;
+	text-align: center;
+    }
+    footer #footer_right {
+	text-align: center;
+    }
 }
 
 /* Landscape phones and down */
@@ -916,6 +927,9 @@ legend{
     }
     #panel-scorm .image-avatar{
         padding-top: 0;
+    }
+    .notification-panel{
+        display: none;
     }
 }
 

@@ -396,6 +396,14 @@ $extra = $extraFieldSession->addElements(
     false,
     $forceShowFields //$forceShowFields = false
 );
+
+$userForm->addRule(
+    array('extra_access_start_date', 'extra_access_end_date'),
+    get_lang('StartDateMustBeBeforeTheEndDate'),
+    'compare_datetime_text',
+    '< allow_empty'
+);
+
 $jqueryExtra .= $extra['jquery_ready_content'];
 
 $elements = $userForm->getElements();
@@ -453,6 +461,14 @@ $extra = $extraField->addElements(
     [],
     false,
     $forceShowFields //$forceShowFields = false
+);
+
+
+$userForm->addRule(
+    array('extra_datedebutstage', 'extra_datefinstage'),
+    get_lang('StartDateMustBeBeforeTheEndDate'),
+    'compare_datetime_text',
+    '< allow_empty'
 );
 
 $jqueryExtra .= $extra['jquery_ready_content'];
@@ -643,8 +659,6 @@ if ($resultOptions) {
     }
 }
 
-$userFormToString = $userForm->returnForm();
-
 if ($userForm->validate()) {
     // Saving to user extra fields
     $extraFieldValue = new ExtraFieldValue('user');
@@ -790,9 +804,10 @@ if ($userForm->validate()) {
         header('Location:'.api_get_self().'?result=1');
     }
 
-
     exit;
 }
+
+$userFormToString = $userForm->returnForm();
 
 $result = isset($_GET['result']) ? true : false;
 $tpl = new Template(get_lang('Diagnosis'));

@@ -7,13 +7,13 @@
                     <div class="col-md-2">
                         {% if item.visibility == constant('COURSE_VISIBILITY_CLOSED') %}
                             <span class="thumbnail">
-                                        {% if item.thumbnails != '' %}
-                                            <img src="{{ item.thumbnails }}" title="{{ item.title }}"
-                                                 alt="{{ item.title }}"/>
-                                        {% else %}
-                                            {{ 'blackboard.png' | img(48, item.title ) }}
-                                        {% endif %}
-                                    </span>
+                                {% if item.thumbnails != '' %}
+                                    <img src="{{ item.thumbnails }}" title="{{ item.title }}"
+                                         alt="{{ item.title }}"/>
+                                {% else %}
+                                    {{ 'blackboard.png' | img(48, item.title ) }}
+                                {% endif %}
+                            </span>
                         {% else %}
                             <a href="{{ item.link }}" class="thumbnail">
                                 {% if item.thumbnails != '' %}

@@ -1,50 +1,52 @@
 {#<footer {% block footer_open_attributes %}{% endblock footer_open_attributes %}>#}
-<footer>
-    <!-- start of #footer section -->
-    <div class="container">
-        <div class="row">
-            <div id="footer_left" class="col-md-8">
-               <div class="sub-footer">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="partners">
-                                <a href="#">
-                                    <img src="{{ asset('css/themes/'~ theme ~'/images/rbs_logo_rgb.png') }}"/>
-                                </a>
-                                <a href="#">
-                                    <img src="{{ asset('css/themes/'~ theme ~'/images/logo_cavilam.png') }}"/>
-                                </a>
+<footer class="sticky-footer">
+    <div class="pre-footer"></div>
+    <div class="sub-footer">
+        <div class="container">
+            <div class="row">
+                <div id="footer_left" class="col-md-8">
+                   <div class="sub-footer">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="partners">
+                                    <a href="#">
+                                        <img src="{{ asset('css/themes/'~ theme ~'/images/rbs_logo_rgb.png') }}"/>
+                                    </a>
+                                    <a href="#">
+                                        <img src="{{ asset('css/themes/'~ theme ~'/images/logo_cavilam.png') }}"/>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div id="footer_right" class="col-md-4">
+                <div id="footer_right" class="col-md-4">
 
-                <div id="admin_name">
-                    <a href="{{ "URLOFAJ" | trans }}">{{ "OFAJ" | trans }}</a>
-                </div>
-
-                <div id="software_name">
-                    <a href="" target="_blank">
-                        {{ "PoweredByX" | trans | format(software_name) }}
-                    </a>
-                    &copy; {{ "now"|date("Y") }}
-                </div>
-                <div id="mentions_legales">
-                        <a href="{{ "MentionsLegalesLink" | trans }}" target="_blank">{{ "MentionsLegales" | trans }}</a>
-                </div>
-
-                {#   Plugins for footer section  #}
-                {% if plugin_footer_right is not null %}
-                    <div id="plugin_footer_right">
-                        {{ plugin_footer_right }}
+                    <div id="admin_name">
+                        <a href="{{ "URLOFAJ" | trans }}">{{ "OFAJ" | trans }}</a>
                     </div>
-                {% endif %}
-                &nbsp;
-            </div><!-- end of #footer_right -->
-        </div><!-- end of #row -->
-    </div><!-- end of #container -->
+
+                    <div id="software_name">
+                        <a href="" target="_blank">
+                            {{ "PoweredByX" | trans | format(software_name) }}
+                        </a>
+                        &copy; {{ "now"|date("Y") }}
+                    </div>
+                    <div id="mentions_legales">
+                            <a href="{{ "MentionsLegalesLink" | trans }}" target="_blank">{{ "MentionsLegales" | trans }}</a>
+                    </div>
+
+                    {#   Plugins for footer section  #}
+                    {% if plugin_footer_right is not null %}
+                        <div id="plugin_footer_right">
+                            {{ plugin_footer_right }}
+                        </div>
+                    {% endif %}
+                    &nbsp;
+                </div>
+            </div>
+        </div>
+    </div>
 </footer>
 
 {{ footer_extra_content }}

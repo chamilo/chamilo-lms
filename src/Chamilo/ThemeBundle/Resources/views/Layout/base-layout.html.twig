@@ -167,9 +167,20 @@
             {% block menu %}
                 <div class="container">
                     <nav class="navbar navbar-default">
-                        <div class="collapse navbar-collapse">
-                        {{ mopa_bootstrap_menu('ChamiloCoreBundle:NavBuilder:leftMenu', {'automenu': 'navbar', 'stacked' : false}) }}
-                        {{ mopa_bootstrap_menu('ChamiloCoreBundle:NavBuilder:rightMenu', {'automenu': 'navbar', 'pull-right' : true} ) }}
+                        <div class="container-fluid">
+                          <div class="navbar-header">
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#menu-faq" aria-expanded="false">
+                              <span class="sr-only">Toggle navigation</span>
+                              <span class="icon-bar"></span>
+                              <span class="icon-bar"></span>
+                              <span class="icon-bar"></span>
+                            </button>
+                            <a class="navbar-brand" href="{{ "URLOFAJ" | trans }}">PARKUR</a></a>
+                          </div>
+                          <div class="collapse navbar-collapse" id="menu-faq">
+                                {{ mopa_bootstrap_menu('ChamiloCoreBundle:NavBuilder:leftMenu', {'automenu': 'navbar', 'stacked' : false}) }}
+                                {{ mopa_bootstrap_menu('ChamiloCoreBundle:NavBuilder:rightMenu', {'automenu': 'navbar', 'pull-right' : true} ) }} 
+                          </div>
                         </div>
                     </nav>
                 </div>

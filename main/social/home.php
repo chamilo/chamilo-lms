@@ -227,7 +227,7 @@ SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'home');
 
 $tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_friend_block', $friend_html);
-$tpl->assign('sessionList', $social_session_block);
+$tpl->assign('session_list', $social_session_block);
 $tpl->assign('social_search_block', $social_search_block);
 $tpl->assign('social_skill_block', SocialManager::getSkillBlock($user_id));
 $tpl->assign('social_group_block', $social_group_block);

@@ -369,9 +369,9 @@ class GradebookTable extends SortableTable
                     // Student result
                     $row[] = $value_data;
                     $totalResultAverageValue = strip_tags($scoredisplay->display_score($totalResult, SCORE_AVERAGE));
-                    $this->dataForGraph['my_result'][] = str_replace('%', '', $totalResultAverageValue);
+                    $this->dataForGraph['my_result'][] = floatval($totalResultAverageValue);
                     $totalAverageValue = strip_tags($scoredisplay->display_score($totalAverage, SCORE_AVERAGE));
-                    $this->dataForGraph['average'][] =  str_replace('%', '', $totalAverageValue);
+                    $this->dataForGraph['average'][] = floatval($totalAverageValue);
                     // Ranking
                     $row[] = $ranking;
                     // Best
@@ -807,8 +807,8 @@ class GradebookTable extends SortableTable
             $pChart->drawRectangle(
                 0,
                 0,
-                $xSize - 10,
-                $ySize - 10,
+                $xSize - 1,
+                $ySize - 1,
                 array("R" => 0, "G" => 0, "B" => 0)
             );
             $pChart->drawText(
@@ -817,7 +817,7 @@ class GradebookTable extends SortableTable
                 get_lang('Results'),
                 array("FontSize" => 11, "Align" => TEXT_ALIGN_BOTTOMMIDDLE)
             );
-            $pChart->setGraphArea(50, 30, $xSize-50, $ySize-50);
+            $pChart->setGraphArea(50, 30, $xSize - 50, $ySize - 70);
             $pChart->setFontProperties(
                 array(
                     'FontName' => api_get_path(SYS_FONTS_PATH) . 'opensans/OpenSans-Regular.ttf',
@@ -827,7 +827,7 @@ class GradebookTable extends SortableTable
 
             /* Draw the scale */
             $scaleSettings = array(
-                "XMargin" => 10,
+                "XMargin" => AUTO,
                 "YMargin" => 10,
                 "Floating" => true,
                 "GridR" => 200,
@@ -835,6 +835,7 @@ class GradebookTable extends SortableTable
                 "GridB" => 200,
                 "DrawSubTicks" => true,
                 "CycleBackground" => true,
+                'LabelRotation' => 10
             );
             $pChart->drawScale($scaleSettings);
 

@@ -13,5 +13,5 @@
     title: "خصائص الصورة",
     uploadTab: "رفع",
     urlMissing: "عنوان مصدر الصورة مفقود",
-    responsive: 'Is responsive'
+    responsive: "Make responsive"
 });

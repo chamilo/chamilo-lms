@@ -37,6 +37,7 @@ class HTML_QuickForm_receivers extends HTML_QuickForm_group
 		$this->_appendName = true;
 		$this->_type = 'receivers';
 	}
+
 	/**
 	 * Create the form elements to build this element group
 	 */
@@ -48,6 +49,7 @@ class HTML_QuickForm_receivers extends HTML_QuickForm_group
 		$this->_elements[] = new HTML_QuickForm_advmultiselect('to', '', $this->receivers);
 		$this->_elements[2]->setSelected($this->receivers_selected);
 	}
+
 	/**
 	 * HTML representation
 	 */
@@ -92,4 +94,3 @@ class HTML_QuickForm_receivers extends HTML_QuickForm_group
 		$renderer->renderElement($this, $required, $error);
 	}
 }
-?>

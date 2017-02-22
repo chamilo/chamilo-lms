@@ -13,5 +13,5 @@
     title: "Propiedades de Imagen",
     uploadTab: "Cargar",
     urlMissing: "Debe indicar la URL de la imagen.",
-    responsive: 'Is responsive'
+    responsive: "Hacer responsive"
 });

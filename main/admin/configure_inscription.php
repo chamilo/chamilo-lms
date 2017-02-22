@@ -230,7 +230,12 @@ if ($display_all_form) {
 
     //	LANGUAGE
     if (api_get_setting('registration', 'language') == 'true') {
-        $form->addElement('select_language', 'language', get_lang('Language'), '', array('disabled' => 'disabled'));
+        $form->addSelectLanguage(
+            'language',
+            get_lang('Language'),
+            '',
+            array('disabled' => 'disabled')
+        );
     }
 
     //	STUDENT/TEACHER

@@ -28,7 +28,7 @@ $tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
 $archivePath = api_get_path(SYS_ARCHIVE_PATH);
-$archiveURL = api_get_path(WEB_CODE_PATH).'course_info/download.php?archive=';
+$archiveURL = api_get_path(WEB_CODE_PATH).'course_info/download.php?archive_path=&archive=';
 
 $tool_name = get_lang('ExportSessionListXMLCSV');
 
@@ -80,15 +80,9 @@ if (isset($_POST['formSent'])) {
 	}
 
 	if (Database::num_rows($result)) {
-
-
-
 		$sessionListToExport = [];
-
 		if (in_array($file_type, ['csv', 'xls'])) {
-
 			$archiveFile = 'export_sessions_'.$session_id.'_'.api_get_local_time();
-
 			$cvs = true;
 			$sessionListToExport[] = [
 				'SessionName',
@@ -121,7 +115,6 @@ if (isset($_POST['formSent'])) {
 			fputs($fp, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Sessions>\n");
 		}
 
-
 		while ($row = Database::fetch_array($result)) {
 			$row['name'] = str_replace(';',',',$row['name']);
 			$row['username'] = str_replace(';',',',$row['username']);
@@ -129,8 +122,6 @@ if (isset($_POST['formSent'])) {
 			$row['access_end_date'] = str_replace(';',',',$row['access_end_date']);
 			$row['visibility'] = str_replace(';',',',$row['visibility']);
 			$row['session_category'] = str_replace(';',',',$row['session_category_id']);
-
-
 			// users
 			$sql = "SELECT DISTINCT $tbl_user.username
 					FROM $tbl_user

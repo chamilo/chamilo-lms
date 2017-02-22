@@ -52,7 +52,7 @@ switch ($action) {
         delete_category_form();
         break;
     case 'export_category':
-        $archiveFile = 'export_exercise_categoroes_'.api_get_course_id().'_'.api_get_local_time();
+        $archiveFile = 'export_exercise_categories_'.api_get_course_id().'_'.api_get_local_time();
         $categories = $category->getCategories($courseId, $sessionId);
         $export = [];
         $export[] = ['title', 'description'];
@@ -246,7 +246,7 @@ function displayActionBar()
             Display::return_icon('back.png', get_lang('GoBackToQuestionList'), '', ICON_SIZE_MEDIUM) . '</a>';
 
     echo '<a href="' . api_get_self() . '?action=addcategory&'.api_get_cidreq().'">' .
-        Display::return_icon('question_category.gif', get_lang('AddACategory')) . '</a>';
+        Display::return_icon('new_folder.png', get_lang('AddACategory'), null, ICON_SIZE_MEDIUM) . '</a>';
 
     echo Display::url(
         Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), [], ICON_SIZE_MEDIUM),

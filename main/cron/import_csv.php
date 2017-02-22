@@ -48,6 +48,7 @@ class ImportCsv
     public $daysCoachAccessBeforeBeginning = 14;
     public $daysCoachAccessAfterBeginning = 14;
     public $conditions;
+    private $updateEmailToDummy;
 
     /**
      * @param Monolog\Logger $logger
@@ -57,6 +58,7 @@ class ImportCsv
     {
         $this->logger = $logger;
         $this->conditions = $conditions;
+        $this->updateEmailToDummy = false;
     }
 
     /**
@@ -242,6 +244,8 @@ class ImportCsv
                     }
                 }
             }
+            $this->logger->addInfo("teacher backup");
+            $this->logger->addInfo(print_r($teacherBackup, 1));
         }
     }
 
@@ -520,6 +524,8 @@ class ImportCsv
         if ($moveFile) {
             $this->moveFile($file);
         }
+
+        $this->updateUsersEmails();
     }
 
     /**
@@ -746,6 +752,8 @@ class ImportCsv
         if ($moveFile) {
             $this->moveFile($file);
         }
+
+        $this->updateUsersEmails();
     }
 
     /**
@@ -765,6 +773,8 @@ class ImportCsv
     private function importCalendarStatic($file, $moveFile = true)
     {
         $this->fixCSVFile($file);
+
+        $this->updateUsersEmails();
         $data = Import::csvToArray($file);
 
         if (!empty($data)) {
@@ -1296,7 +1306,8 @@ class ImportCsv
                             false,
                             true,
                             false,
-                            $teacherBackup
+                            $teacherBackup,
+                            $this->logger
                         );
                     } else {
                         CourseManager::updateTeachers(
@@ -1305,7 +1316,8 @@ class ImportCsv
                             false,
                             false,
                             false,
-                            $teacherBackup
+                            $teacherBackup,
+                            $this->logger
                         );
                     }
 
@@ -1960,7 +1972,7 @@ class ImportCsv
      * @param $file
      * @param bool $moveFile
      */
-    private function importSubscribeUserToCourse($file, $moveFile = false)
+    private function importSubscribeUserToCourse($file, $moveFile = false, &$teacherBackup = [])
     {
         $data = Import::csv_reader($file);
 
@@ -1991,13 +2003,24 @@ class ImportCsv
                     continue;
                 }
 
+                $userCourseCategory = '';
+                if (isset($teacherBackup[$userId]) &&
+                    isset($teacherBackup[$userId][$courseInfo['code']])
+                ) {
+                    $courseUserData = $teacherBackup[$userId][$courseInfo['code']];
+                    $userCourseCategory = $courseUserData['user_course_cat'];
+                }
+
                 CourseManager::subscribe_user(
                     $userId,
                     $courseInfo['code'],
-                    $status
+                    $status,
+                    0,
+                    $userCourseCategory
                 );
+
                 $this->logger->addInfo(
-                    "User $userId added to course $chamiloCourseCode as $status"
+                    "User $userId added to course ".$courseInfo['code']." with status '$status' with course category: '$userCourseCategory'"
                 );
             }
         }
@@ -2051,12 +2074,16 @@ class ImportCsv
                 $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
                         WHERE
                             user_id = ".$userId." AND
-                            course_code = '".$courseInfo['code']."'
+                            c_id = '".$courseInfo['real_id']."'
                         ";
-
                 $result = Database::query($sql);
-                $userCourseData = Database::fetch_array($result, 'ASSOC');
-                $teacherBackup[$userId][$courseInfo['code']] = $userCourseData;
+                $rows = Database::num_rows($result);
+                if ($rows > 0) {
+                    $userCourseData = Database::fetch_array($result, 'ASSOC');
+                    if (!empty($userCourseData)) {
+                        $teacherBackup[$userId][$courseInfo['code']] = $userCourseData;
+                    }
+                }
 
                 $sql = "SELECT * FROM ".Database::get_course_table(TABLE_GROUP_USER)."
                         WHERE
@@ -2234,6 +2261,35 @@ class ImportCsv
             fwrite($f, '";');
         }*/
     }
+
+    /**
+     * @return mixed
+     */
+    public function getUpdateEmailToDummy()
+    {
+        return $this->updateEmailToDummy;
+    }
+
+    /**
+     * @param mixed $updateEmailToDummy
+     */
+    public function setUpdateEmailToDummy($updateEmailToDummy)
+    {
+        $this->updateEmailToDummy = $updateEmailToDummy;
+    }
+
+    /**
+     * Change emails of all users except admins
+     *
+     */
+    public function updateUsersEmails()
+    {
+        if ($this->getUpdateEmailToDummy() === true) {
+            $sql = "UPDATE user SET email = CONCAT(username,'@example.com') WHERE id NOT IN (SELECT user_id FROM admin)";
+            Database::query($sql);
+        }
+    }
+
 }
 
 use Monolog\Logger;
@@ -2290,6 +2346,8 @@ if (isset($_configuration['import_csv_disable_dump']) &&
 } else {
     $import->setDumpValues($dump);
 }
+
+$import->setUpdateEmailToDummy(api_get_configuration_value('update_users_email_to_dummy_except_admins'));
 
 // Do not moves the files to treated
 if (isset($_configuration['import_csv_test'])) {

@@ -281,7 +281,7 @@ class ScoreDisplay
      */
     public function format_score($score)
     {
-        return floatval(number_format($score, $this->get_number_decimals()));
+        return api_number_format($score, $this->get_number_decimals());
     }
 
     /**

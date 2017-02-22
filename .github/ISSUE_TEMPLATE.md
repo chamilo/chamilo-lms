@@ -1,5 +1,8 @@
+### Current behavior / Resultado actual / Résultat actuel
+
 ### Expected behavior / Resultado esperado / Résultat attendu
 
-### Actual behavior / Resultado real / Résultat réel
-
 ### Steps to reproduce / Pasos para reproducir / Étapes pour reproduire
+
+### Chamilo Version / Versión de Chamilo / Version de Chamilo
+

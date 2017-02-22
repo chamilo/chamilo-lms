@@ -13,5 +13,5 @@
     title: "מאפייני התמונה",
     uploadTab: "העלאה",
     urlMissing: "כתובת התמונה חסרה.",
-    responsive: 'Is responsive'
+    responsive: "Make responsive"
 });

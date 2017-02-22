@@ -13,5 +13,5 @@
     title: "Resim Özellikleri",
     uploadTab: "Karşıya Yükle",
     urlMissing: "Resmin URL kaynağı bulunamadı.",
-    responsive: 'Is responsive'
+    responsive: "Make responsive"
 });

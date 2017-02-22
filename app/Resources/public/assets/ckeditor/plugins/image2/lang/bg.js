@@ -13,5 +13,5 @@
     title: "Настройки на изображението",
     uploadTab: "Качване",
     urlMissing: "URL адреса на изображението липсва.",
-    responsive: 'Is responsive'
+    responsive: "Make responsive"
 });

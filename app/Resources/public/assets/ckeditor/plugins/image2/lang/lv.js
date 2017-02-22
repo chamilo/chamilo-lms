@@ -13,5 +13,5 @@
     title: "Attēla īpašības",
     uploadTab: "Augšupielādēt",
     urlMissing: "Trūkst attēla atrašanās adrese.",
-    responsive: 'Is responsive'
+    responsive: "Make responsive"
 });

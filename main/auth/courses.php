@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use \Chamilo\CoreBundle\Entity\SequenceResource;
+use Chamilo\CoreBundle\Entity\SequenceResource;
 
 /**
 * Template (front controller in MVC pattern) used for distpaching

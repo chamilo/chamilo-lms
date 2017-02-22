@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Sets needed course variables and then jumps to the exercises result page.
  * This intermediate page is needed because the user is not inside a course
@@ -35,7 +36,17 @@ if (isset($_GET['doexercise'])) {
 
 // no support for hot potatoes
 if ($type == LINK_HOTPOTATOES) {
-    $doExerciseUrl = api_get_path(WEB_CODE_PATH) . 'exercise/exercice.php?session_id='.$session_id.'&cidReq='.Security::remove_XSS($cidReq);
+    $exerciseId = $_GET['exerciseId'];
+    $path = Security::remove_XSS($_GET['path']);
+    $doExerciseUrl = api_get_path(WEB_CODE_PATH) . 'exercise/showinframes.php?'.http_build_query([
+        'session_id' => $session_id,
+        'cidReq' => Security::remove_XSS($cidReq),
+        'file' => $path,
+        'cid' => api_get_course_id(),
+        'uid' => api_get_user_id(),
+    ]);
+    header('Location: '.$doExerciseUrl);
+    exit;
 }
 
 if (isset($_GET['doexercise'])) {

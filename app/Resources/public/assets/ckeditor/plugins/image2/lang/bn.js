@@ -13,5 +13,5 @@
     title: "ছবির প্রোপার্টি",
     uploadTab: "আপলোড",
     urlMissing: "Image source URL is missing.",
-    responsive: 'Is responsive'
+    responsive: "Make responsive"
 });

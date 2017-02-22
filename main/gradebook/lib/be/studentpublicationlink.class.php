@@ -423,7 +423,7 @@ class StudentPublicationLink extends AbstractLink
         }
         $id = $data['id'];
 
-        $weight = (float) $this->get_weight();
+        $weight = api_float_val($this->get_weight());
         if (!empty($id)) {
             //Cleans works
             $sql = 'UPDATE '.$this->get_studpub_table().' 
@@ -433,10 +433,12 @@ class StudentPublicationLink extends AbstractLink
         }
     }
 
+    /**
+     * @return string
+     */
     public function delete_linked_data()
     {
         $data = $this->get_exercise_data();
-
         if (empty($data)) {
             return '';
         }
@@ -444,7 +446,7 @@ class StudentPublicationLink extends AbstractLink
         if (!empty($id)) {
             //Cleans works
             $sql = 'UPDATE '.$this->get_studpub_table().' 
-                    SET weight=0
+                    SET weight = 0
                     WHERE c_id = '.$this->course_id.' AND id ='.$id;
             Database::query($sql);
         }

@@ -13,5 +13,5 @@
     title: "Eigindi myndar",
     uploadTab: "Senda upp",
     urlMissing: "Image source URL is missing.",
-    responsive: 'Is responsive'
+    responsive: "Make responsive"
 });

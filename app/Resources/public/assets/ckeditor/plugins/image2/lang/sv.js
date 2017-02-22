@@ -13,5 +13,5 @@
     title: "Bildegenskaper",
     uploadTab: "Ladda upp",
     urlMissing: "Bildkällans URL saknas.",
-    responsive: 'Is responsive'
+    responsive: "Make responsive"
 });

@@ -1711,8 +1711,10 @@ function generateCSSDownloadLink($style)
         $zip = new PclZip($arch);
         // Remove path prefix except the style name and put file on disk
         $zip->create($dir, PCLZIP_OPT_REMOVE_PATH, substr($dir,0,-strlen($style)));
+        $url = api_get_path(WEB_CODE_PATH) . 'course_info/download.php?archive_path=&archive=' . str_replace(api_get_path(SYS_ARCHIVE_PATH), '', $arch);
+
         //@TODO: use more generic script to download.
-        $str = '<a class="btn btn-primary btn-large" href="' . api_get_path(WEB_CODE_PATH) . 'course_info/download.php?archive=' . str_replace(api_get_path(SYS_ARCHIVE_PATH), '', $arch) . '">'.get_lang('ClickHereToDownloadTheFile').'</a>';
+        $str = '<a class="btn btn-primary btn-large" href="' .$url. '">'.get_lang('ClickHereToDownloadTheFile').'</a>';
         Display::display_normal_message($str, false);
     } else {
         Display::addFlash(Display::return_message(get_lang('FileNotFound'), 'warning'));

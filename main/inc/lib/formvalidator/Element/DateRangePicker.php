@@ -119,6 +119,15 @@ class DateRangePicker extends HTML_QuickForm_text
                         customRangeLabel: '".addslashes(get_lang('CustomRange'))."',
                     }
                 });
+                
+                $('#$id').on('change', function() {
+                    var myPickedDates = $('#$id').val().split('/');
+                    var {$id}_start = myPickedDates[0].trim();
+                    var {$id}_end = myPickedDates[1].trim();
+                    
+                    $('input[name={$id}_start]').val({$id}_start);
+                    $('input[name={$id}_end]').val({$id}_end);
+                });
             });
         </script>";
 
@@ -166,5 +175,27 @@ class DateRangePicker extends HTML_QuickForm_text
         }
 
         return true;
+    }
+
+    /**
+     * @param mixed $value
+     * @param array $submitValues
+     * @param array $errors
+     * @return string
+     */
+    public function getSubmitValue($value, &$submitValues, &$errors)
+    {
+        /** @var DateRangePicker $element */
+        $elementName = $this->getName();
+        $parsedDates = $this->parseDateRange($value);
+        $validateFormat = $this->getAttribute('validate_format');
+
+        if (!$this->validateDates($parsedDates, $validateFormat)) {
+            $errors[$elementName] = get_lang('CheckDates');
+        }
+        $submitValues[$elementName.'_start'] = $parsedDates['start'];
+        $submitValues[$elementName.'_end'] = $parsedDates['end'];
+
+        return $value;
     }
 }

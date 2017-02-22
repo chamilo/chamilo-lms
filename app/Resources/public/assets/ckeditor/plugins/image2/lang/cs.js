@@ -13,5 +13,5 @@
     title: "Vlastnosti obrázku",
     uploadTab: "Odeslat",
     urlMissing: "Zadané URL zdroje obrázku nebylo nalezeno.",
-    responsive: 'Is responsive'
+    responsive: "Make responsive"
 });

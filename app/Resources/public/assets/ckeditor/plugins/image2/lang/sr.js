@@ -13,5 +13,5 @@
     title: "Особине слика",
     uploadTab: "Пошаљи",
     urlMissing: "Недостаје УРЛ слике.",
-    responsive: 'Is responsive'
+    responsive: "Make responsive"
 });

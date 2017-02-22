@@ -13,5 +13,5 @@
     title: "Vlastnosti obrázka",
     uploadTab: "Nahrať",
     urlMissing: "Chýba URL zdroja obrázka.",
-    responsive: 'Is responsive'
+    responsive: "Make responsive"
 });

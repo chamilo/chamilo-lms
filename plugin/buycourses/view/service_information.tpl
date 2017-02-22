@@ -29,6 +29,8 @@
                                 {{ 'Course' | get_lang }}
                             {% elseif service.applies_to == 3 %}
                                 {{ 'Session' | get_lang }}
+                            {% elseif service.applies_to == 4 %}
+                                {{ 'TemplateTitleCertificate' | get_lang }}
                             {% endif %}
                         </p>
                         <p><em class="fa fa-money"></em> <b>{{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}</b> : {{ service.currency == 'BRL' ? 'R$' : service.currency }} {{ service.price }}</p>

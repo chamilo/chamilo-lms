@@ -13,5 +13,5 @@
     title: "คุณสมบัติของ รูปภาพ",
     uploadTab: "อัพโหลดไฟล์",
     urlMissing: "Image source URL is missing.",
-    responsive: 'Is responsive'
+    responsive: "Make responsive"
 });

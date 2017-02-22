@@ -1,8 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
 *	@package chamilo.admin
 */
+
 $cidReset = true;
 // Including necessary libraries.
 require_once __DIR__.'/../inc/global.inc.php';
@@ -99,27 +101,27 @@ $tool_name = get_lang('AddUsers');
 $form = new FormValidator('user_add');
 $form->addElement('header', '', $tool_name);
 if (api_is_western_name_order()) {
-	// Firstname
-	$form->addElement('text', 'firstname', get_lang('FirstName'));
-	$form->applyFilter('firstname', 'html_filter');
-	$form->applyFilter('firstname', 'trim');
-	$form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
-	// Lastname
-	$form->addElement('text', 'lastname', get_lang('LastName'));
-	$form->applyFilter('lastname', 'html_filter');
-	$form->applyFilter('lastname', 'trim');
-	$form->addRule('lastname', get_lang('ThisFieldIsRequired'), 'required');
+    // Firstname
+    $form->addElement('text', 'firstname', get_lang('FirstName'));
+    $form->applyFilter('firstname', 'html_filter');
+    $form->applyFilter('firstname', 'trim');
+    $form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
+    // Lastname
+    $form->addElement('text', 'lastname', get_lang('LastName'));
+    $form->applyFilter('lastname', 'html_filter');
+    $form->applyFilter('lastname', 'trim');
+    $form->addRule('lastname', get_lang('ThisFieldIsRequired'), 'required');
 } else {
-	// Lastname
-	$form->addElement('text', 'lastname', get_lang('LastName'));
-	$form->applyFilter('lastname', 'html_filter');
-	$form->applyFilter('lastname', 'trim');
-	$form->addRule('lastname', get_lang('ThisFieldIsRequired'), 'required');
-	// Firstname
-	$form->addElement('text', 'firstname', get_lang('FirstName'));
-	$form->applyFilter('firstname', 'html_filter');
-	$form->applyFilter('firstname', 'trim');
-	$form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
+    // Lastname
+    $form->addElement('text', 'lastname', get_lang('LastName'));
+    $form->applyFilter('lastname', 'html_filter');
+    $form->applyFilter('lastname', 'trim');
+    $form->addRule('lastname', get_lang('ThisFieldIsRequired'), 'required');
+    // Firstname
+    $form->addElement('text', 'firstname', get_lang('FirstName'));
+    $form->applyFilter('firstname', 'html_filter');
+    $form->applyFilter('firstname', 'trim');
+    $form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
 }
 // Official code
 $form->addElement('text', 'official_code', get_lang('OfficialCode'), array('size' => '40'));
@@ -163,7 +165,7 @@ $group = array();
 $auth_sources = 0; //make available wider as we need it in case of form reset (see below)
 $nb_ext_auth_source_added = 0;
 if (isset($extAuthSource) && count($extAuthSource) > 0) {
-	$auth_sources = array();
+    $auth_sources = array();
     foreach ($extAuthSource as $key => $info) {
         // @todo : make uniform external authentification configuration (ex : cas and external_login ldap)
         // Special case for CAS. CAS is activated from Chamilo > Administration > Configuration > CAS
@@ -175,9 +177,9 @@ if (isset($extAuthSource) && count($extAuthSource) > 0) {
         }
     }
 	if ($nb_ext_auth_source_added > 0) {
-    	$group[] = $form->createElement('radio', 'password_auto', null, get_lang('ExternalAuthentication').' ', 2);
-    	$group[] = $form->createElement('select', 'auth_source', null, $auth_sources);
-    	$group[] = $form->createElement('static', '', '', '<br />');
+        $group[] = $form->createElement('radio', 'password_auto', null, get_lang('ExternalAuthentication').' ', 2);
+        $group[] = $form->createElement('select', 'auth_source', null, $auth_sources);
+        $group[] = $form->createElement('static', '', '', '<br />');
     }
 }
 
@@ -246,12 +248,12 @@ $display = isset($_POST['status']) && $_POST['status'] == STUDENT  || !isset($_P
 $form->addElement('html', '<div id="drh_list" style="display:'.$display.';">');
 
 if (isset($drh_list) && is_array($drh_list)) {
-	foreach ($drh_list as $drh) {
+    foreach ($drh_list as $drh) {
         $drh_select->addOption(
             api_get_person_name($drh['firstname'], $drh['lastname']),
             $drh['user_id']
         );
-	}
+    }
 }
 $form->addElement('html', '</div>');
 
@@ -265,7 +267,7 @@ if (api_is_platform_admin()) {
     $form->addElement('html', '</div>');
 }
 
-$form->addElement('select_language', 'language', get_lang('Language'), null);
+$form->addSelectLanguage('language', get_lang('Language'), null);
 
 // Send email
 $group = array();
@@ -291,7 +293,6 @@ $form->addElement('radio', 'active', '', get_lang('Inactive'), 0);
 
 $extraField = new ExtraField('user');
 $returnParams = $extraField->addElements($form);
-
 $jquery_ready_content = $returnParams['jquery_ready_content'];
 
 // the $jquery_ready_content variable collects all functions that will be load in the $(document).ready javascript function
@@ -325,9 +326,10 @@ $form->addGroup($html_results_enabled);
 
 // Validate form
 if ($form->validate()) {
-	$check = Security::check_token('post');
+    $check = Security::check_token('post');
     if ($check) {
         $user = $form->exportValues();
+
         $lastname = $user['lastname'];
         $firstname = $user['firstname'];
         $official_code = $user['official_code'];
@@ -341,15 +343,15 @@ if ($form->validate()) {
         $send_mail = intval($user['mail']['send_mail']);
         $hr_dept_id = isset($user['hr_dept_id']) ? intval($user['hr_dept_id']) : 0;
 
-		if (isset($extAuthSource) && count($extAuthSource) > 0 &&
+        if (isset($extAuthSource) && count($extAuthSource) > 0 &&
             $user['password']['password_auto'] == '2'
         ) {
-			$auth_source = $user['password']['auth_source'];
-			$password = 'PLACEHOLDER';
-		} else {
-			$auth_source = PLATFORM_AUTH_SOURCE;
-			$password = $user['password']['password_auto'] == '1' ? api_generate_password() : $user['password']['password'];
-		}
+            $auth_source = $user['password']['auth_source'];
+            $password = 'PLACEHOLDER';
+        } else {
+            $auth_source = PLATFORM_AUTH_SOURCE;
+            $password = $user['password']['password_auto'] == '1' ? api_generate_password() : $user['password']['password'];
+        }
 
         if ($user['radio_expiration_date'] == '1') {
             $expiration_date = $user['expiration_date'];
@@ -358,7 +360,6 @@ if ($form->validate()) {
         }
 
 		$active = intval($user['active']);
-
         if (api_get_setting('login_is_email') == 'true') {
             $username = $email;
         }
@@ -388,12 +389,12 @@ if ($form->validate()) {
             $extra,
             null,
             $send_mail,
-			$platform_admin
+            $platform_admin
         );
 
 		Security::clear_token();
 		$tok = Security::get_token();
-		if (!empty($user_id)) {
+        if (!empty($user_id)) {
             if (!empty($picture['name'])) {
                 $picture_uri = UserManager::update_user_picture(
                     $user_id,
@@ -420,33 +421,37 @@ if ($form->validate()) {
                     null,
                     $language
                 );
-			}
+            }
 
             $extraFieldValues = new ExtraFieldValue('user');
             $user['item_id'] = $user_id;
             $extraFieldValues->saveFieldValues($user);
-			$message = get_lang('UserAdded');
-		}
+            $message = get_lang('UserAdded').': '.
+                Display::url(
+                    api_get_person_name($firstname, $lastname),
+                    api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user_id
+                );
+        }
 
-		if (isset($user['submit_plus'])) {
-			//we want to add more. Prepare report message and redirect to the same page (to clean the form)
-            Display::addFlash(Display::return_message($message));
-			header('Location: user_add.php?sec_token='.$tok);
-			exit;
-		} else {
-			$tok = Security::get_token();
-            Display::addFlash(Display::return_message($message));
-			header('Location: user_list.php?sec_token='.$tok);
-			exit;
-		}
-	}
+        Display::addFlash(Display::return_message($message, 'normal', false));
+
+        if (isset($_POST['submit_plus'])) {
+            //we want to add more. Prepare report message and redirect to the same page (to clean the form)
+            header('Location: user_add.php?sec_token='.$tok);
+            exit;
+        } else {
+            $tok = Security::get_token();
+            header('Location: user_list.php?sec_token='.$tok);
+            exit;
+        }
+    }
 } else {
-	if (isset($_POST['submit'])) {
-		Security::clear_token();
-	}
-	$token = Security::get_token();
-	$form->addElement('hidden', 'sec_token');
-	$form->setConstants(array('sec_token' => $token));
+    if (isset($_POST['submit'])) {
+        Security::clear_token();
+    }
+    $token = Security::get_token();
+    $form->addElement('hidden', 'sec_token');
+    $form->setConstants(array('sec_token' => $token));
 }
 
 if (!empty($message)){

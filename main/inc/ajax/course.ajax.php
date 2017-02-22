@@ -11,7 +11,7 @@ $user_id = api_get_user_id();
 switch ($action) {
     case 'add_course_vote':
         $course_id = intval($_REQUEST['course_id']);
-        $star      = intval($_REQUEST['star']);
+        $star = intval($_REQUEST['star']);
 
         if (!api_is_anonymous()) {
             CourseManager::add_course_vote($user_id, $star, $course_id, 0);
@@ -25,7 +25,13 @@ switch ($action) {
             false
         );
         echo $rating;
-
+        break;
+    case 'get_course_image':
+        $courseInfo = api_get_course_info($_REQUEST['code']);
+        $image = isset($_REQUEST['image']) && in_array($_REQUEST['image'], ['course_image_large_source', 'course_image_source']) ? $_REQUEST['image'] : '';
+        if ($courseInfo && $image) {
+            DocumentManager::file_send_for_download($courseInfo[$image]);
+        }
         break;
     case 'get_user_courses':
         if (api_is_platform_admin()) {

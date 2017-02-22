@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * This tool allows platform admins to add users by uploading a CSV or XML file
  * @package chamilo.admin
@@ -60,8 +61,8 @@ function validate_data($users)
                     $user['error'] = get_lang('UserNameNotAvailable');
                     $errors[] = $user;
                 }
-             }
-          }
+            }
+        }
 
         // 3. Check status.
         if (isset($user['Status']) && !api_status_exists($user['Status'])) {
@@ -94,7 +95,6 @@ function validate_data($users)
             }
         }
     }
-
     return $errors;
 }
 
@@ -205,7 +205,11 @@ function updateUsers($users)
             if (!empty($user['ClassId'])) {
                 $classId = explode('|', trim($user['ClassId']));
                 foreach ($classId as $id) {
-                    $usergroup->subscribe_users_to_usergroup($id, array($user_id), false);
+                    $usergroup->subscribe_users_to_usergroup(
+                        $id,
+                        array($user_id),
+                        false
+                    );
                 }
             }
 
@@ -215,9 +219,13 @@ function updateUsers($users)
             // We are sure that the extra field exists.
             foreach ($extra_fields as $extras) {
                 if (isset($user[$extras[1]])) {
-                    $key 	= $extras[1];
-                    $value 	= $user[$extras[1]];
-                    UserManager::update_extra_field_value($user_id, $key, $value);
+                    $key = $extras[1];
+                    $value = $user[$extras[1]];
+                    UserManager::update_extra_field_value(
+                        $user_id,
+                        $key,
+                        $value
+                    );
                 }
             }
         }
@@ -336,10 +344,8 @@ $extra_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', true);
 $user_id_error = array();
 $error_message = '';
 
-if (isset($_POST['formSent']) && $_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
-
+if (isset($_POST['formSent']) && $_POST['formSent'] && $_FILES['import_file']['size'] !== 0) {
     $file_type = 'csv';
-
     Security::clear_token();
     $tok = Security::get_token();
     $allowed_file_mimetype = array('csv', 'xml');
@@ -350,7 +356,7 @@ if (isset($_POST['formSent']) && $_POST['formSent'] AND $_FILES['import_file']['
 
     if (in_array($ext_import_file, $allowed_file_mimetype)) {
         if (strcmp($file_type, 'csv') === 0 && $ext_import_file == $allowed_file_mimetype[0]) {
-            $users	= parse_csv_data($_FILES['import_file']['tmp_name']);
+            $users = parse_csv_data($_FILES['import_file']['tmp_name']);
             $errors = validate_data($users);
             $error_kind_file = false;
         } elseif (strcmp($file_type, 'xml') === 0 && $ext_import_file == $allowed_file_mimetype[1]) {
@@ -358,7 +364,6 @@ if (isset($_POST['formSent']) && $_POST['formSent'] AND $_FILES['import_file']['
             $errors = validate_data($users);
             $error_kind_file = false;
         } else {
-
             $error_kind_file = true;
         }
     } else {
@@ -456,13 +461,12 @@ if ($count_fields > 0) {
 
 ?>
 <p><?php echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
-
-    <blockquote>
-        <pre>
-            <b>UserName</b>;LastName;FirstName;Email;NewUserName;Password;AuthSource;OfficialCode;PhoneNumber;Status;ExpiryDate;Active;Language;Courses;ClassId;
-            xxx;xxx;xxx;xxx;xxx;xxx;xxx;xxx;xxx;user/teacher/drh;0000-00-00 00:00:00;0/1;xxx;<span style="color:red;"><?php if (count($list_reponse) > 0) echo implode(';', $list_reponse).';'; ?></span>xxx1|xxx2|xxx3;1;<br />
-        </pre>
-    </blockquote>
+<blockquote>
+    <pre>
+        <b>UserName</b>;LastName;FirstName;Email;NewUserName;Password;AuthSource;OfficialCode;PhoneNumber;Status;ExpiryDate;Active;Language;Courses;ClassId;
+        xxx;xxx;xxx;xxx;xxx;xxx;xxx;xxx;xxx;user/teacher/drh;YYYY-MM-DD 00:00:00;0/1;xxx;<span style="color:red;"><?php if (count($list_reponse) > 0) echo implode(';', $list_reponse).';'; ?></span>xxx1|xxx2|xxx3;1;<br />
+    </pre>
+</blockquote>
 <p><?php
 
 Display :: display_footer();

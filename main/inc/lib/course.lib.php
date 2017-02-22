@@ -531,7 +531,7 @@ class CourseManager
         $courseInfo = api_get_course_info($course_code);
         $courseId = $courseInfo['real_id'];
         $courseCode = $courseInfo['code'];
-        //$userCourseCategoryId = intval($userCourseCategoryId);
+        $userCourseCategoryId = intval($userCourseCategoryId);
 
         if (empty($user_id) || empty($course_code)) {
             return false;
@@ -569,7 +569,12 @@ class CourseManager
         if (!empty($session_id)) {
             SessionManager::subscribe_users_to_session_course(array($user_id), $session_id, $courseCode);
         } else {
-            CourseManager::add_user_to_course($user_id, $courseCode, $status);
+            CourseManager::add_user_to_course(
+                $user_id,
+                $courseCode,
+                $status,
+                $userCourseCategoryId
+            );
 
             // Add event to the system log
             Event::addEvent(
@@ -727,7 +732,7 @@ class CourseManager
             'status' => $status,
             'sort' => $max_sort + 1,
             'relation_type' => 0,
-            'user_course_cat' => $userCourseCategoryId
+            'user_course_cat' => (int) $userCourseCategoryId
         ];
         $insertId = Database::insert($course_user_table, $params);
 
@@ -3320,17 +3325,20 @@ class CourseManager
 
     /**
      * Update course picture
-     * @param   string  Course code
+     * @param   array  $courseInfo
      * @param   string  File name
      * @param   string  The full system name of the image from which course picture will be created.
      * @param   string $cropParameters Optional string that contents "x,y,width,height" of a cropped image format
      * @return  bool    Returns the resulting. In case of internal error or negative validation returns FALSE.
      */
-    public static function update_course_picture($course_code, $filename, $source_file = null, $cropParameters = null)
+    public static function update_course_picture($courseInfo, $filename, $source_file = null, $cropParameters = null)
     {
-        $course_info = api_get_course_info($course_code);
+        if (empty($courseInfo)) {
+            return false;
+        }
+
         // course path
-        $store_path = api_get_path(SYS_COURSE_PATH) . $course_info['path'];
+        $store_path = api_get_path(SYS_COURSE_PATH) . $courseInfo['path'];
         // image name for courses
         $course_image = $store_path . '/course-pic.png';
         $course_medium_image = $store_path . '/course-pic85x85.png';
@@ -4903,14 +4911,18 @@ class CourseManager
     /**
      * Returns the SQL conditions to filter course only visible by the user in the catalogue
      *
-     * @param $courseTableAlias Alias of the course table
+     * @param string $courseTableAlias Alias of the course table
+     * @param bool $hideClosed Whether to hide closed and hidden courses
      * @return string SQL conditions
      */
-    public static function getCourseVisibilitySQLCondition($courseTableAlias) {
+    public static function getCourseVisibilitySQLCondition($courseTableAlias, $hideClosed = false) {
         $visibilityCondition = '';
         $hidePrivate = api_get_setting('course_catalog_hide_private');
         if ($hidePrivate === 'true') {
-            $visibilityCondition = ' AND '.$courseTableAlias.'.visibility <> 1';
+            $visibilityCondition .= ' AND '.$courseTableAlias.'.visibility <> '.COURSE_VISIBILITY_REGISTERED;
+        }
+        if ($hideClosed) {
+            $visibilityCondition .= ' AND ' . $courseTableAlias . '.visibility NOT IN (' . COURSE_VISIBILITY_CLOSED .','. COURSE_VISIBILITY_HIDDEN .')';
         }
 
         // Check if course have users allowed to see it in the catalogue, then show only if current user is allowed to see it
@@ -4950,7 +4962,7 @@ class CourseManager
             $withoutSpecialCourses = ' AND c.id NOT IN ("' . implode('","', $specialCourseList) . '")';
         }
 
-        $visibilityCondition = self::getCourseVisibilitySQLCondition('c');
+        $visibilityCondition = self::getCourseVisibilitySQLCondition('c', true);
 
         if (!empty($accessUrlId) && $accessUrlId == intval($accessUrlId)) {
             $sql = "SELECT count(c.id) FROM $tableCourse c, $tableCourseRelAccessUrl u
@@ -5047,6 +5059,7 @@ class CourseManager
      * @param bool $editTeacherInSessions
      * @param bool $deleteSessionTeacherNotInList
      * @param array $teacherBackup
+     * @param Monolog\Logger $logger
      *
      * @return false|null
      */
@@ -5056,7 +5069,8 @@ class CourseManager
         $deleteTeachersNotInList = true,
         $editTeacherInSessions = false,
         $deleteSessionTeacherNotInList = false,
-        $teacherBackup = array()
+        $teacherBackup = array(),
+        $logger = null
     ) {
         if (!is_array($teachers)) {
             $teachers = array($teachers);
@@ -5119,11 +5133,14 @@ class CourseManager
                     ) {
                         $courseUserData = $teacherBackup[$userId][$course_code];
                         $userCourseCategory = $courseUserData['user_course_cat'];
+                        if ($logger) {
+                            $logger->addInfo("Recovering user_course_cat: $userCourseCategory");
+                        }
                     }
 
-                    $sql = "INSERT INTO " . $course_user_table . " SET
-                            c_id = " . $courseId . ",
-                            user_id = " . $userId . ",
+                    $sql = "INSERT INTO $course_user_table SET
+                            c_id = $courseId,
+                            user_id = $userId,
                             status = '1',
                             is_tutor = '0',
                             sort = '0',

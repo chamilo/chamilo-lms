@@ -823,6 +823,10 @@ class FillBlanks extends Question
         $tblTrackEAttempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
         $tblTrackEExercise = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $courseId = api_get_course_int_id();
+        // If no user has answered questions, no need to go further. Return empty array.
+        if (empty($studentsIdList)) {
+            return array();
+        }
         // request to have all the answers of student for this question
         // student may have doing it several time
         // student may have not answered the bracket id, in this case, is result of the answer is empty

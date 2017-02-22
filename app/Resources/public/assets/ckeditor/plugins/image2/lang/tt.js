@@ -13,5 +13,5 @@
     title: "Рәсем үзлекләре",
     uploadTab: "Йөкләү",
     urlMissing: "Image source URL is missing.",
-    responsive: 'Is responsive'
+    responsive: "Make responsive"
 });

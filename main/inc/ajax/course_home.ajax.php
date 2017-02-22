@@ -33,7 +33,7 @@ switch ($action) {
                     null,
                     true
                 );
-                $na_image   = str_replace('.png', '_na.png', $tool_image);
+                $na_image = str_replace('.png', '_na.png', $tool_image);
             }
 
             if (isset($tool_info['custom_icon']) && !empty($tool_info['custom_icon'])) {

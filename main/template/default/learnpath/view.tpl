@@ -99,7 +99,7 @@
         <div id="learning_path_right_zone" class="content-scorm">
             <div class="lp-view-zone-container">
                 <div id="lp_navigation_elem" class="navegation-bar pull-right text-right">
-                    <a href="#" id="lp-view-expand-toggle" class="icon-toolbar expand" role="button">
+                    <a href="#" title = "{{ 'Expand'|get_lang }}" id="lp-view-expand-toggle" class="icon-toolbar expand" role="button">
                         {% if lp_mode == 'embedframe' %}
                             <span class="fa fa-compress" aria-hidden="true"></span>
                             <span class="sr-only">{{ 'Expand'|get_lang }}</span>
@@ -108,7 +108,7 @@
                             <span class="sr-only">{{ 'Expand'|get_lang }}</span>
                         {% endif %}
                     </a>
-                    <a id="home-course" href="{{ button_home_url }}" class="icon-toolbar" target="_self" onclick="javascript: window.parent.API.save_asset();">
+                    <a id="home-course" title = "{{ 'Home'|get_lang }}" href="{{ button_home_url }}" class="icon-toolbar" target="_self" onclick="javascript: window.parent.API.save_asset();">
                         <em class="fa fa-home"></em> <span class="hidden-xs hidden-sm"></span>
                     </a>
                     {{ navigation_bar }}
@@ -117,12 +117,12 @@
                 <div class="lp-view-tabs">
                     <ul id="navTabs" class="nav nav-tabs" role="tablist">
                         <li role="presentation" class="active">
-                            <a href="#lp-view-content" aria-controls="lp-view-content" role="tab" data-toggle="tab">
+                            <a href="#lp-view-content" title="{{ 'Lesson'|get_lang }}" aria-controls="lp-view-content" role="tab" data-toggle="tab">
                                 <span class="fa fa-book fa-2x fa-fw" aria-hidden="true"></span><span class="sr-only">{{ 'Lesson'|get_lang }}</span>
                             </a>
                         </li>
                         <li role="presentation">
-                            <a href="#lp-view-forum" aria-controls="lp-view-forum" role="tab" data-toggle="tab">
+                            <a href="#lp-view-forum" title="{{ 'Forum'|get_lang }}" aria-controls="lp-view-forum" role="tab" data-toggle="tab">
                                 <span class="fa fa-commenting-o fa-2x fa-fw" aria-hidden="true"></span><span class="sr-only">{{ 'Forum'|get_lang }}</span>
                             </a>
                         </li>
@@ -175,9 +175,14 @@
             e.preventDefault();
 
             $('#learning_path_main').toggleClass('lp-view-collapsed');
-
             $('#lp-view-expand-toggle span.fa').toggleClass('fa-compress');
             $('#lp-view-expand-toggle span.fa').toggleClass('fa-expand');
+            var className = $('#lp-view-expand-toggle span.fa').attr('class');
+            if (className == 'fa fa-expand') {
+                $(this).attr('title', '{{ "Expand" | get_lang }}');
+            } else {
+                $(this).attr('title', '{{ "Collapse" | get_lang }}');
+            }
         });
         {% else %}
         $('#lp-view-expand-button, #lp-view-expand-toggle').on('click', function (e) {
@@ -187,6 +192,15 @@
 
             $('#lp-view-expand-toggle span.fa').toggleClass('fa-expand');
             $('#lp-view-expand-toggle span.fa').toggleClass('fa-compress');
+
+            var className = $('#lp-view-expand-toggle span.fa').attr('class');
+            if (className == 'fa fa-expand') {
+                $(this).attr('title', '{{ "Expand" | get_lang }}');
+            } else {
+                $(this).attr('title', '{{ "Collapse" | get_lang }}');
+            }
+
+
         });
 
         {% endif %}

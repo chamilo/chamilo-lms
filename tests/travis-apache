@@ -1,18 +1,17 @@
 <VirtualHost *:80>
-    ServerAdmin webmaster@localhost
-    ServerName localhost
-    DocumentRoot /home/travis/build/chamilo/chamilo-lms
+    DocumentRoot %TRAVIS_BUILD_DIR%
+    ServerName %VHOST_URL%
 
-    <Directory "/home/travis/build/chamilo/chamilo-lms">
+    <Directory "%TRAVIS_BUILD_DIR%">
         Options Indexes FollowSymLinks MultiViews
         AllowOverride None
         Order allow,deny
         allow from all
     </Directory>
 
-    ErrorLog ${APACHE_LOG_DIR}/localhost-error.log
+    ErrorLog ${APACHE_LOG_DIR}/%VHOST_URL%-error.log
     LogLevel warn
-    CustomLog ${APACHE_LOG_DIR}/localhost-access.log combined
+    CustomLog ${APACHE_LOG_DIR}/%VHOST_URL%-access.log combined
 
     # Wire up Apache to use Travis CI's php-fpm.
     <IfModule mod_fastcgi.c>

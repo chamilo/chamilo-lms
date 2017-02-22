@@ -13,5 +13,5 @@
     title: "Priodweddau Delwedd",
     uploadTab: "Lanlwytho",
     urlMissing: "URL gwreiddiol y ddelwedd ar goll.",
-    responsive: 'Is responsive'
+    responsive: "Make responsive"
 });

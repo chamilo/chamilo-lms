@@ -13,5 +13,5 @@
     title: "Bildeegenskaper",
     uploadTab: "Last opp",
     urlMissing: "Bildets adresse mangler.",
-    responsive: 'Is responsive'
+    responsive: "Make responsive"
 });

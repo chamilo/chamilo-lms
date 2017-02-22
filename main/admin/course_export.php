@@ -18,9 +18,6 @@ $interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAd
 
 set_time_limit(0);
 
-$archivePath = api_get_path(SYS_ARCHIVE_PATH);
-$archiveURL = api_get_path(WEB_CODE_PATH).'course_info/download.php?archive=';
-
 $course_list = CourseManager::get_courses_list();
 $formSent = null;
 $courses = $selected_courses = array();
@@ -47,9 +44,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
     }
 
 	if (!empty($courses)) {
-
         $archiveFile = 'export_courses_list_'.api_get_local_time();
-
         $listToExport[] = [
             'Code',
             'Title',
@@ -116,7 +111,6 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
         );
 	}
 }
-
 
 Display:: display_header($tool_name);
 

@@ -13,5 +13,5 @@
     title: "Svojstva slike",
     uploadTab: "Šalji",
     urlMissing: "Image source URL is missing.",
-    responsive: 'Is responsive'
+    responsive: "Make responsive"
 });

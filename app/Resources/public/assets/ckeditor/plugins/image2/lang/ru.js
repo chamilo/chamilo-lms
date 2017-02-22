@@ -13,5 +13,5 @@
     title: "Свойства изображения",
     uploadTab: "Загрузка файла",
     urlMissing: "Не указана ссылка на изображение.",
-    responsive: 'Is responsive'
+    responsive: "Make responsive"
 });

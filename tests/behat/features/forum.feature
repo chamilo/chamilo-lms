@@ -7,7 +7,7 @@ Feature: Forum tool
     And I am on course "TEMP" homepage
 
   Scenario: Create a forum category
-    Given I am on "/main/forum/index.php?action=add&content=forumcategory"
+    Given I am on "/main/forum/index.php?action=add&content=forumcategory&cidReq=TEMP"
     When I fill in the following:
       | forum_category_title   | Forum Category Test                       |
       | forum_category_comment | This is the first forum category for test |
@@ -15,7 +15,7 @@ Feature: Forum tool
     Then I should see "The forum category has been added"
 
   Scenario: Create a forum
-    Given I am on "/main/forum/index.php?action=add&content=forum"
+    Given I am on "/main/forum/index.php?action=add&content=forum&cidReq=TEMP"
     When I fill in the following:
       | forum_title   | Forum Test                       |
       | forum_comment | This is the first forum for test |
@@ -23,7 +23,9 @@ Feature: Forum tool
     Then I should see "The forum has been added"
 
   Scenario: Create a forum thread
-    Given I am on "/main/forum/newthread.php?forum=1"
+    Given I am on "/main/forum/index.php?cidReq=TEMP"
+    And I follow "Forum Test"
+    And I follow "Create thread"
     When I fill in the following:
       | post_title | Thread One                                     |
       | post_text  | This is a the first thread in a forum for test |
@@ -31,17 +33,21 @@ Feature: Forum tool
     Then I should see "The new thread has been added"
 
   Scenario: Reply to forum message
-    Given I am on "/main/forum/viewthread.php?forum=1&thread=1"
-    When I follow "reply-to-post-1"
+    Given I am on "/main/forum/index.php?cidReq=TEMP"
+    And I follow "Forum Test"
+    When I follow "Thread One"
+    When I follow "Reply to this thread"
     And I fill in the following:
+      | post_title | Reply |
       | post_text | This is a reply to the first message for test |
     And I press "SubmitPost"
     Then I should see "The reply has been added"
 
   Scenario: Delete a forum message
-    Given I am on "/main/forum/viewthread.php?forum=1&thread=1"
-    When I follow "delete-post-2"
-    Then I should see "Post has been deleted"
+    Given I am on "/main/forum/index.php?cidReq=TEMP"
+    And I follow "Forum Test"
+    When I follow "Delete"
+    Then I should see "Thread deleted"
 
 # This test is commented because to quote a message is necessary load HTML code inside of textarea.
 # And this breaks the page for Behat

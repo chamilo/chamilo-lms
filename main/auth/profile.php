@@ -225,7 +225,7 @@ if (is_profile_editable() && api_get_setting('profile', 'picture') == 'true') {
 }
 
 //    LANGUAGE
-$form->addElement('select_language', 'language', get_lang('Language'));
+$form->addSelectLanguage('language', get_lang('Language'));
 if (api_get_setting('profile', 'language') !== 'true') {
     $form->freeze('language');
 }

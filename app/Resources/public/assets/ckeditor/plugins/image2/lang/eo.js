@@ -13,5 +13,5 @@
     title: "Atributoj de Bildo",
     uploadTab: "Alŝuti",
     urlMissing: "La fontretadreso de la bildo mankas.",
-    responsive: 'Is responsive'
+    responsive: "Make responsive"
 });

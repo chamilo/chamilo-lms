@@ -13,5 +13,5 @@
     title: "Својства на сликата",
     uploadTab: "Прикачи",
     urlMissing: "Недостасува URL-то на сликата.",
-    responsive: 'Is responsive'
+    responsive: "Make responsive"
 });

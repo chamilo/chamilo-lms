@@ -13,5 +13,5 @@
     title: "Karakteristikat e Fotografisë",
     uploadTab: "Ngarko",
     urlMissing: "Mungon URL e burimit të fotografisë.",
-    responsive: 'Is responsive'
+    responsive: "Make responsive"
 });

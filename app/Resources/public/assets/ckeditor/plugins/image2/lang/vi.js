@@ -13,5 +13,5 @@
     title: "Thuộc tính của ảnh",
     uploadTab: "Tải lên",
     urlMissing: "Thiếu đường dẫn hình ảnh",
-    responsive: 'Is responsive'
+    responsive: "Make responsive"
 });

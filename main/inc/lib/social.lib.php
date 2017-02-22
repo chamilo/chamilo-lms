@@ -19,7 +19,6 @@ class SocialManager extends UserManager
      */
     public function __construct()
     {
-
     }
 
     /**
@@ -56,7 +55,6 @@ class SocialManager extends UserManager
         $list_type_friend = self::show_list_type_friends();
         foreach ($list_type_friend as $value_type_friend) {
             if (strtolower($value_type_friend['title']) == $relation_type_name) {
-
                 return $value_type_friend['id'];
             }
         }
@@ -262,6 +260,62 @@ class SocialManager extends UserManager
         $row = Database::fetch_array($res, 'ASSOC');
 
         return $row['count_message_in_box'];
+    }
+
+    /**
+     * Get number of messages sent to other users
+     * @param int $sender_id
+     * @return int
+     */
+    public static function getCountMessagesSent($sender_id)
+    {
+        $tbl_message = Database::get_main_table(TABLE_MESSAGE);
+        $sql = 'SELECT COUNT(*) FROM '.$tbl_message.'
+                WHERE
+                    user_sender_id='.intval($sender_id).' AND
+                    msg_status < 5';
+        $res = Database::query($sql);
+        $row = Database::fetch_row($res);
+
+        return $row[0];
+    }
+
+    /**
+     * Get number of messages received from other users
+     * @param int $receiver_id
+     * @return int
+     */
+    public static function getCountMessagesReceived($receiver_id)
+    {
+        $tbl_message = Database::get_main_table(TABLE_MESSAGE);
+        $sql = 'SELECT COUNT(*) FROM '.$tbl_message.'
+                WHERE
+                    user_receiver_id='.intval($receiver_id).' AND
+                    msg_status < 4';
+        $res = Database::query($sql);
+        $row = Database::fetch_row($res);
+
+        return $row[0];
+    }
+
+    /**
+     * Get number of messages posted on own wall
+     * @param int $sender_id
+     * @return int
+     */
+    public static function getCountWallPostedMessages($sender_id)
+    {
+        $tbl_message = Database::get_main_table(TABLE_MESSAGE);
+        $sql = 'SELECT COUNT(*) FROM '.$tbl_message.'
+                WHERE
+                    user_sender_id='.intval($sender_id).' AND
+                    (msg_status = '.MESSAGE_STATUS_WALL.' OR 
+                    msg_status = '.MESSAGE_STATUS_WALL_POST.') AND 
+                    parent_id = 0';
+        $res = Database::query($sql);
+        $row = Database::fetch_row($res);
+
+        return $row[0];
     }
 
     /**
@@ -1345,10 +1399,10 @@ class SocialManager extends UserManager
      * @param int $userId id of wall shown
      * @param string $messageStatus status wall message
      * @param int|string $parentId id message (Post main)
-     * @param date $start Date from which we want to show the messages, in UTC time
+     * @param string $start Date from which we want to show the messages, in UTC time
      * @param int $limit Limit for the number of parent messages we want to show
      * @param int $offset Wall message query offset
-     * @return boolean
+     * @return array
      * @author Yannick Warnier
      */
     public static function getWallMessages($userId, $messageStatus, $parentId = '', $start = null, $limit = 10, $offset = 0)
@@ -1699,7 +1753,6 @@ class SocialManager extends UserManager
         );
 
         $profileEditionLink = null;
-
         if ($currentUserId === $userId) {
             $profileEditionLink = Display::getProfileEditionLink($userId);
         } else {
@@ -1837,7 +1890,7 @@ class SocialManager extends UserManager
                     $name_user = api_get_person_name($friend['firstName'], $friend['lastName']);
                     $user_info_friend = api_get_user_info($friend['friend_user_id'], true);
 
-                    if ($user_info_friend['user_is_online']) {
+                    if (!empty($user_info_friend['user_is_online'])) {
                         $statusIcon = Display::return_icon('statusonline.png',get_lang('Online'));
                         $status=1;
                     } else {

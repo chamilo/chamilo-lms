@@ -13,5 +13,5 @@
     title: "Irudiaren propietateak",
     uploadTab: "Kargatu",
     urlMissing: "Irudiaren iturburuaren URLa falta da.",
-    responsive: 'Is responsive'
+    responsive: "Make responsive"
 });

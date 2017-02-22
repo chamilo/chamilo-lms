@@ -290,7 +290,7 @@ class Attendance
         $course_id = $_course['real_id'];
         $title_gradebook= $this->attendance_qualify_title;
         $value_calification = 0;
-        $weight_calification = floatval($this->attendance_weight);
+        $weight_calification = api_float_val($this->attendance_weight);
 
         $params = [
             'c_id' => $course_id,
@@ -369,10 +369,9 @@ class Attendance
         $course_id = $_course['real_id'];
         $title_gradebook = $this->attendance_qualify_title;
         $value_calification = 0;
-        $weight_calification = floatval($this->attendance_weight);
+        $weight_calification = api_float_val($this->attendance_weight);
 
         if (!empty($attendance_id)) {
-
             $params = [
                 'name' => $this->name,
                 'description' => $this->description,
@@ -906,7 +905,7 @@ class Attendance
         $count_done_calendar = self::get_done_attendance_calendar($attendance_id);
 
         $sql = "UPDATE $tbl_attendance SET
-                attendance_qualify_max = '$count_done_calendar'
+                    attendance_qualify_max = '$count_done_calendar'
                 WHERE c_id = $course_id AND id = '$attendance_id'";
         Database::query($sql);
     }

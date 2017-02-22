@@ -21,7 +21,7 @@
                     <td class="text-right">{{ user.lp_score }}</td>
                     <td class="text-center">{{ user.lp_last_connection }}</td>
                     <td>
-                        <button class="btn btn-success btn-sm" data-id="{{ user.id }}">{{ 'Details'|get_lang }}</button>
+                        <button class="btn btn-primary btn-sm" data-id="{{ user.id }}">{{ 'Details'|get_lang }}</button>
                     </td>
                 </tr>
                 <tr class="hide"></tr>
@@ -34,19 +34,16 @@
 $(document).on('ready', function () {
     $('tr td button').on('click', function (e) {
         e.preventDefault();
-
         var self = $(this);
         var userId = self.data('id') || 0;
         var trHead = self.parents('tr');
         var trDetail = trHead.next();
-
         if (self.is('.active')) {
             self.removeClass('active');
 
             trDetail.html('').addClass('hide');
         } else {
             self.addClass('active');
-
             var newTD = $('<td>', {
                 colspan: 7
             });

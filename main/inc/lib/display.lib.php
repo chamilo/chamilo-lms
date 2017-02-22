@@ -257,6 +257,17 @@ class Display
         }
     }
 
+    /**
+     * Returns an HTML table with sortable column (through complete page refresh)
+     * @param array $header
+     * @param array $content Array of row arrays
+     * @param array $sorting_options
+     * @param array $paging_options
+     * @param array $query_vars
+     * @param array $form_actions
+     * @param string $style
+     * @return string HTML string for array
+     */
     public static function return_sortable_table(
         $header,
         $content,
@@ -1432,7 +1443,8 @@ class Display
                 if ($toolName == 'student_publication') {
                     $toolName = 'work';
                 }
-                $toolName = Database::escape_string($toolName);
+                $toolName = addslashes(Database::escape_string($toolName));
+
                 $sql = "SELECT * FROM $tool_edit_table 
                         WHERE
                             c_id = $course_id AND
@@ -1440,14 +1452,13 @@ class Display
                             lastedit_type NOT LIKE '%Deleted%' AND
                             lastedit_type NOT LIKE '%deleted%' AND
                             lastedit_type NOT LIKE '%DocumentInvisible%' AND
-                            lastedit_date > '$oldestTrackDate' AND 
-                            lastedit_user_id != $user_id $sessionCondition AND 
+                            lastedit_date > '$oldestTrackDate' AND
+                            lastedit_user_id != $user_id $sessionCondition AND
                             visibility != 2 AND
                             (to_user_id IN ('$user_id', '0') OR to_user_id IS NULL) AND
-                            (to_group_id IN ('".implode("','",$group_ids)."') OR to_group_id IS NULL)       
+                            (to_group_id IN ('".implode("','",$group_ids)."') OR to_group_id IS NULL)
                         ORDER BY lastedit_date DESC
                         LIMIT 1";
-
                 $result = Database::query($sql);
                 $latestChange = Database::fetch_array($result);
                 if ($latestChange) {

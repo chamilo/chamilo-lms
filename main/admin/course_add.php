@@ -106,14 +106,12 @@ if (count($languages['name']) === 1) {
     // If there's only one language available, there's no point in asking
     $form->addElement('hidden', 'course_language', $languages['folder'][0]);
 } else {
-    $form->addElement(
-        'select_language',
+    $form->addSelectLanguage(
         'course_language',
         get_lang('Ln'),
         array(),
         array('style' => 'width:150px')
     );
-    $form->applyFilter('select_language', 'html_filter');
 }
 
 if (api_get_setting('teacher_can_select_course_template') === 'true') {

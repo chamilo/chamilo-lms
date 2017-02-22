@@ -4054,7 +4054,7 @@ class SessionManager
         // api_protect_admin_script(true);
         if (self::allowToManageSessions()) {
 
-            if (api_is_platform_admin()) {
+            if (api_is_platform_admin() && self::allowed($id)) {
                 return true;
             }
 

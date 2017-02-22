@@ -42,7 +42,7 @@ Feature: Course tools basic testing
 
   Scenario: Make sure the tests tool is available
     Given I am on course "TEMP" homepage
-    And I am on "/main/exercice/exercise.php"
+    And I am on "/main/exercise/exercise.php"
     Then I should not see an ".alert-danger" element
 
   Scenario: Make sure the announcements tool is available

@@ -7173,7 +7173,7 @@ function api_get_password_checker_js($usernameInputId, $passwordInputId)
     $js = api_get_asset('pwstrength-bootstrap/dist/pwstrength-bootstrap.min.js');
 
     $js .=  "<script>
-    $(document).ready(function() {      
+    $(document).ready(function() {
         var lang = ".json_encode($translations).";            
         var options = {
             common : {
@@ -7226,9 +7226,9 @@ function api_get_password_checker_js($usernameInputId, $passwordInputId)
             onLoad : function () {
                 //$('#messages').text('Start typing password');
             },
-            onKeyUp: function (evt) {
-                $(evt.target).pwstrength('outputErrorList');
-            },
+            onKeyUp: function (evt) {            
+                $(evt.target).pwstrength('outputErrorList');                
+            },            
             viewports: {
                 progress: '#password_progress',
                 verdict: '#password-verdict',
@@ -7243,6 +7243,12 @@ function api_get_password_checker_js($usernameInputId, $passwordInputId)
             }
         };
         $('".$passwordInputId."').pwstrength(options);
+        
+        $('".$passwordInputId."').on('input', function() {
+            $(this).parent().find('.help-inline').hide();
+            
+        });
+        
     });
     </script>";
 

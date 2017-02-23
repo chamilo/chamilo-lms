@@ -8,6 +8,7 @@ $action = $_GET['a'];
 
 
 switch ($action) {
+    // At this date : 23/02/2017, a minor review can't determine where is used this case 'access_detail'
     case 'access_detail':
         $user_id = intval($_REQUEST['student']);
         $course_code = Security::remove_XSS($_REQUEST['course']);

@@ -84,10 +84,27 @@ $form = getFormWork($form, $defaults, $workId);
 $form->addElement('hidden', 'work_id', $workId);
 $form->addButtonUpdate(get_lang('ModifyDirectory'));
 
+$currentUrl = api_get_path(WEB_CODE_PATH).'work/edit_work.php?id='.$workId.'&'.api_get_cidreq();
 if ($form->validate()) {
     $params = $form->getSubmitValues();
     $params['enableEndDate'] = isset($params['enableEndDate']) ? true : false;
     $params['enableExpiryDate'] = isset($params['enableExpiryDate']) ? true : false;
+
+    if ($params['enableExpiryDate'] &&
+        $params['enableEndDate']
+    ) {
+        if ($params['expires_on'] > $params['ends_on']) {
+            Display::addFlash(
+                Display::return_message(
+                    get_lang('DateExpiredNotBeLessDeadLine'),
+                    'warning'
+                )
+            );
+            header('Location: '.$currentUrl);
+            exit;
+        }
+    }
+
     $workId = $params['work_id'];
     $editCheck = false;
     $workData = get_work_data_by_id($workId);
@@ -103,7 +120,6 @@ if ($form->validate()) {
         updatePublicationAssignment($workId, $params, $courseInfo, $groupId);
         updateDirName($workData, $params['new_dir']);
 
-        $currentUrl = api_get_path(WEB_CODE_PATH).'work/edit_work.php?id='.$workId.'&'.api_get_cidreq();
         Display::addFlash(Display::return_message(get_lang('Updated'), 'success'));
         header('Location: '.$currentUrl);
         exit;

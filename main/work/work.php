@@ -163,10 +163,11 @@ switch ($action) {
         if (!$is_allowed_to_edit) {
             api_not_allowed();
         }
+        $addUrl = api_get_path(WEB_CODE_PATH) . 'work/work.php?action=create_dir&' . api_get_cidreq();
         $form = new FormValidator(
             'form1',
             'post',
-            api_get_path(WEB_CODE_PATH) . 'work/work.php?action=create_dir&' . api_get_cidreq()
+            $addUrl
         );
         $form->addElement('header', get_lang('CreateAssignment'));
         $form->addElement('hidden', 'action', 'add');
@@ -186,6 +187,7 @@ switch ($action) {
             if ($result) {
                 $message = Display::return_message(get_lang('DirectoryCreated'), 'success');
             } else {
+                $currentUrl = $addUrl;
                 $message = Display::return_message(get_lang('CannotCreateDir'), 'error');
             }
 

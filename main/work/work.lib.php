@@ -3838,7 +3838,7 @@ function processWorkForm(
  * @param array $formValues
  * @param int $user_id
  * @param array $courseInfo
- * @param int $group_id
+ * @param int $groupId
  * @param int $session_id
  * @return bool|int
  * @note $params can have the following elements, but should at least have the 2 first ones: (
@@ -3872,6 +3872,21 @@ function addDir($formValues, $user_id, $courseInfo, $groupId, $session_id)
 
     if (empty($created_dir)) {
         return false;
+    }
+
+    $enableEndDate = isset($formValues['enableEndDate']) ? true : false;
+    $enableExpiryDate = isset($formValues['enableExpiryDate']) ? true : false;
+
+    if ($enableEndDate && $enableExpiryDate ) {
+        if ($formValues['expires_on'] > $formValues['ends_on']) {
+            Display::addFlash(
+                Display::return_message(
+                    get_lang('DateExpiredNotBeLessDeadLine'),
+                    'warning'
+                )
+            );
+            return false;
+        }
     }
 
     $dirName = '/'.$created_dir;
@@ -4386,11 +4401,6 @@ function getFormWork($form, $defaults = array(), $workId = 0)
         </script>';
 
     $form->addHtml('</div>');
-
-    if (isset($defaults['enableExpiryDate']) && $defaults['enableExpiryDate'] &&
-        isset($defaults['enableEndDate']) && $defaults['enableEndDate']) {
-        $form->addRule(array('expires_on', 'ends_on'), get_lang('DateExpiredNotBeLessDeadLine'), 'comparedate');
-    }
     if (!empty($defaults)) {
         $form->setDefaults($defaults);
     }

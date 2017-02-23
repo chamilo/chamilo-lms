@@ -7917,4 +7917,5 @@ $ConsideredWorkingTime = "Temps de réalisation";
 $DocumentNumber = "ID du document";
 $SocialData = "Données sociales";
 $WallMessagesPosted = "Messages postés par lui/elle-même sur son mur";
+$SeeAccesses = "Visualiser les accès";
 ?>

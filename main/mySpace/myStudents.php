@@ -535,7 +535,7 @@ if (!empty($student_id)) {
                 <td><?php echo get_lang('OnLine') . ' : '.$online; ?> </td>
             </tr>
             <tr>
-                <td><a href="access_details.php?student=<?php echo $student_id; ?>&course=<?php echo $course_code; ?>&origin=<?php echo $origin; ?>&cidReq=<?php echo $course_code; ?>&id_session=<?php echo $sessionId; ?>"><?php echo get_lang('SeeAccess'); ?></a></td>
+                <td><a href="access_details.php?student=<?php echo $student_id; ?>&course=<?php echo $course_code; ?>&origin=<?php echo $origin; ?>&cidReq=<?php echo $course_code; ?>&id_session=<?php echo $sessionId; ?>"><?php echo get_lang('SeeAccesses'); ?></a></td>
             </tr>
             <?php
 

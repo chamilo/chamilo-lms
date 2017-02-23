@@ -7970,4 +7970,5 @@ $ConsideredWorkingTime = "Assignment work time";
 $DocumentNumber = "Document ID";
 $SocialData = "Social data";
 $WallMessagesPosted = "Wall messages posted by him/herself";
+$SeeAccesses = "See accesses";
 ?>

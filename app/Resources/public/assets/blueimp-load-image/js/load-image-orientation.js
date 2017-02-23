@@ -6,7 +6,7 @@
  * https://blueimp.net
  *
  * Licensed under the MIT license:
- * http://www.opensource.org/licenses/MIT
+ * https://opensource.org/licenses/MIT
  */
 
 /* global define */
@@ -168,7 +168,7 @@
         newOptions.bottom = options.right
         break
     }
-    if (options.orientation > 4) {
+    if (newOptions.orientation > 4) {
       newOptions.maxWidth = options.maxHeight
       newOptions.maxHeight = options.maxWidth
       newOptions.minWidth = options.minHeight

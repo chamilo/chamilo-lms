@@ -7981,4 +7981,6 @@ $ExportUsersOfACourse = "Exportar usuarios de un curso";
 $PauseRecordingAudio = "Pausar grabación";
 $PlayRecordingAudio = "Reanudar grabación";
 $YourSessionTimeHasExpired = "Usted ya está registrado pero su periodo de permanencia en este curso ya expiró.";
+$ConsideredWorkingTime = "Tiempo de preparación";
+$DocumentNumber = "ID de documento";
 ?>

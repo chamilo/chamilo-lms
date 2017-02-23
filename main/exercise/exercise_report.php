@@ -213,14 +213,6 @@ if (isset($_REQUEST['comments']) &&
     if (isset($_POST['send_notification'])) {
         //@todo move this somewhere else
         $subject = get_lang('ExamSheetVCC');
-        /*$message = ExerciseLib::getEmailNotification(
-            api_get_user_id(),
-            $course_info,
-            $test,
-            $lp_id,
-            $url
-        );*/
-
         $message = isset($_POST['notification_content']) ? $_POST['notification_content'] : '';
 
         MessageManager::send_message_simple(

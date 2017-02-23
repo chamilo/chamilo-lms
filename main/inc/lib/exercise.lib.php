@@ -1995,9 +1995,7 @@ HOTSPOT;
                             }
 
                         } else {
-                            $attempt_url = api_get_path(
-                                    WEB_CODE_PATH
-                                ) . 'exercise/result.php?' . api_get_cidreq() . '&id=' . $results[$i]['exe_id'] . '&id_session=' . $sessionId;
+                            $attempt_url = api_get_path(WEB_CODE_PATH) . 'exercise/result.php?' . api_get_cidreq() . '&id=' . $results[$i]['exe_id'] . '&id_session=' . $sessionId;
                             $attempt_link = Display::url(
                                 get_lang('Show'),
                                 $attempt_url,

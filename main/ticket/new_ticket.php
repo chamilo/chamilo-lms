@@ -288,8 +288,7 @@ function show_form_send_ticket()
         )
     );
 
-    $form->addElement(
-        'select',
+    $form->addSelect(
         'category_id',
         get_lang('Category'),
         $categoryList,
@@ -450,13 +449,13 @@ function show_form_send_ticket()
  */
 function save_ticket()
 {
-    $category_id = $_POST['category_id'];
     $content = $_POST['content'];
     if ($_POST['phone'] != '') {
         $content .= '<p style="color:red">&nbsp;' . get_lang('Phone') . ': ' . Security::remove_XSS($_POST['phone']). '</p>';
     }
     $course_id = isset($_POST['course_id']) ? $_POST['course_id'] : '';
     $sessionId = isset($_POST['session_id']) ? $_POST['session_id'] : '';
+    $category_id = isset($_POST['category_id']) ? $_POST['category_id'] : '';
 
     $project_id = $_POST['project_id'];
     $subject = $_POST['subject'];

@@ -238,6 +238,15 @@ if (!isset($_POST['compose'])) {
     }
 
     Display::display_header();
+    $projectId = $ticket['ticket']['project_id'];
+    echo '<div class="actions" >';
+    echo Display::url(
+        Display::return_icon('back.png', get_lang('Categories'), [], ICON_SIZE_MEDIUM),
+        api_get_path(WEB_CODE_PATH) . 'ticket/tickets.php?project_id='.$projectId
+    );
+    echo '</span>';
+    echo '</div>';
+
     $form_close_ticket = '';
         if ($ticket['ticket']['status_id'] != TicketManager::STATUS_FORWARDED &&
             $ticket['ticket']['status_id'] != TicketManager::STATUS_CLOSE &&
@@ -264,7 +273,6 @@ if (!isset($_POST['compose'])) {
         }
     }
     $bold = '';
-
     if ($ticket['ticket']['status_id'] == TicketManager::STATUS_CLOSE) {
         $bold = 'style = "font-weight: bold;"';
         echo "<style>
@@ -483,7 +491,8 @@ function show_form_send_message($ticket)
         );
 
         $admins = UserManager::get_user_list_like(
-            array('status' => COURSEMANAGER), array('username'),
+            array('status' => COURSEMANAGER),
+            array('username'),
             true
         );
 
@@ -541,7 +550,7 @@ function show_form_send_message($ticket)
         $form->addElement(
             'checkbox',
             'confirmation',
-             null,
+            null,
             get_lang('RequestConfirmation')
         );
     }

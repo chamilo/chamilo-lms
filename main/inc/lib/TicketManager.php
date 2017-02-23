@@ -289,6 +289,10 @@ class TicketManager
             TABLE_TICKET_CATEGORY
         );
 
+        if (empty($category_id)) {
+            return false;
+        }
+
         $now = api_get_utc_datetime();
         $course_id = intval($course_id);
         $category_id = intval($category_id);

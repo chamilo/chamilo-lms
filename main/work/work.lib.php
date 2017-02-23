@@ -1430,15 +1430,23 @@ function getWorkListStudent(
         );
 
         $count = getTotalWorkComment($workList, $courseInfo);
+        $lastWork = getLastWorkStudentFromParentByUser($userId, $work, $courseInfo);
 
         if (!is_null($count) && !empty($count)) {
-            $work['feedback'] = ' '.Display::label($count.' '.get_lang('Feedback'), 'info');
+            $urlView = api_get_path(WEB_CODE_PATH).'work/view.php?id='.$lastWork['id'].'&'.api_get_cidreq();
+
+            $feedback = '&nbsp;'.Display::url(
+                Display::returnFontAwesomeIcon('comments-o'),
+                $urlView,
+                ['title' => get_lang('View')]
+            );
+
+            $work['feedback'] = ' '.Display::label($count.' '.get_lang('Feedback'), 'info').$feedback;
+
         }
 
-        $lastWork = getLastWorkStudentFromParentByUser($userId, $work['id'], $courseInfo);
-
         if (!empty($lastWork)) {
-            $work['last_upload'] = (!empty($lastWork['qualification'])) ? Display::label($lastWork['qualification'], 'warning').' - ' : '';
+            $work['last_upload'] = (!empty($lastWork['qualification'])) ? $lastWork['qualification_rounded'].' - ' : '';
             $work['last_upload'] .= api_get_local_time($lastWork['sent_date']);
         }
 
@@ -2011,17 +2019,7 @@ function get_work_user_list(
                 if ($work['qualification'] == '') {
                     $qualification_string = Display::label('-');
                 } else {
-                    $label = 'info';
-                    $relativeScore = $work['qualification']/$work_data['qualification'];
-                    if ($relativeScore < 0.5) {
-                        $label = 'important';
-                    } elseif ($relativeScore < 0.75) {
-                        $label = 'warning';
-                    }
-                    $qualification_string = Display::label(
-                        $work['qualification'].' / '.$work_data['qualification'],
-                        $label
-                    );
+                    $qualification_string = formatWorkScore($work['qualification'], $work_data['qualification']);
                 }
             }
 
@@ -2092,9 +2090,10 @@ function get_work_user_list(
                 // Actions.
                 $correction = '';
                 $action = '';
+                $hasCorrection = '';
                 if (api_is_allowed_to_edit()) {
                     if (!empty($work['url_correction'])) {
-                        $action .= Display::url(
+                        $hasCorrection = Display::url(
                             Display::return_icon('check-circle.png', get_lang('Correction'), null, ICON_SIZE_SMALL),
                             api_get_path(WEB_CODE_PATH).'work/download.php?id='.$item_id.'&'.api_get_cidreq().'&correction=1'
                         );
@@ -2217,7 +2216,7 @@ function get_work_user_list(
                 } else {
                     $qualificator_id = Display::label(get_lang('Revised'), 'success');
                 }
-                $work['qualificator_id'] = $qualificator_id;
+                $work['qualificator_id'] = $qualificator_id.' '.$hasCorrection;
                 $work['actions'] = '<div class="work-action">'.$send_to.$link_to_download.$action.'</div>';
                 $work['correction'] = $correction;
 
@@ -3079,14 +3078,14 @@ function getLastWorkStudentFromParent(
 
 /**
  * Get last work information from parent
- * @param int $parentId
+ * @param array $parentInfo
  * @param array $courseInfo
  * @param int $sessionId
  * @return int
  */
 function getLastWorkStudentFromParentByUser(
     $userId,
-    $parentId,
+    $parentInfo,
     $courseInfo = array(),
     $sessionId = 0
 ) {
@@ -3102,7 +3101,11 @@ function getLastWorkStudentFromParentByUser(
 
     $userId = intval($userId);
     $work = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-    $parentId = intval($parentId);
+    if (empty($parentInfo)) {
+        return false;
+    }
+    $parentId = $parentInfo['id'];
+
     $sessionCondition = api_get_session_condition($sessionId);
 
     $sql = "SELECT *
@@ -3118,11 +3121,33 @@ function getLastWorkStudentFromParentByUser(
     $result = Database::query($sql);
     if (Database::num_rows($result)) {
         $work = Database::fetch_array($result, 'ASSOC');
+        $work['qualification_rounded'] = formatWorkScore($work['qualification'], $parentInfo['qualification']);
 
         return $work;
     }
 
     return array();
+}
+
+/**
+ * @param float $score
+ * @param int $weight
+ *
+ * @return string
+ */
+function formatWorkScore($score, $weight)
+{
+    $label = 'info';
+    $relativeScore = $score/$weight;
+    if ($relativeScore < 0.5) {
+        $label = 'important';
+    } elseif ($relativeScore < 0.75) {
+        $label = 'warning';
+    }
+    return Display::label(
+    api_number_format($score, 1) . ' / '.(int) $weight,
+        $label
+    );
 }
 
 /**
@@ -4275,8 +4300,7 @@ function getFormWork($form, $defaults = array(), $workId = 0)
     }
 
     // Create the form that asks for the directory name
-    $form->addElement('text', 'new_dir', get_lang('AssignmentName'));
-    $form->addRule('new_dir', get_lang('ThisFieldIsRequired'), 'required');
+    $form->addText('new_dir', get_lang('AssignmentName'));
     $form->addHtmlEditor('description', get_lang('Description'), false, false, getWorkDescriptionToolbar());
     $form->addButtonAdvancedSettings('advanced_params', get_lang('AdvancedParameters'));
 
@@ -4350,7 +4374,7 @@ function getFormWork($form, $defaults = array(), $workId = 0)
     $form->addElement('checkbox', 'add_to_calendar', null, get_lang('AddToCalendar'));
     $form->addElement('select', 'allow_text_assignment', get_lang('DocumentType'), getUploadDocumentType());
 
-    //Extra fields
+    // Extra fields
     $extra_field = new ExtraField('work');
     $extra = $extra_field->addElements($form, $workId);
 
@@ -4363,7 +4387,8 @@ function getFormWork($form, $defaults = array(), $workId = 0)
 
     $form->addHtml('</div>');
 
-    if (isset($defaults['enableExpiryDate']) && isset($defaults['enableEndDate'])) {
+    if (isset($defaults['enableExpiryDate']) && $defaults['enableExpiryDate'] &&
+        isset($defaults['enableEndDate']) && $defaults['enableEndDate']) {
         $form->addRule(array('expires_on', 'ends_on'), get_lang('DateExpiredNotBeLessDeadLine'), 'comparedate');
     }
     if (!empty($defaults)) {
@@ -5016,23 +5041,20 @@ function exportAllStudentWorkFromPublication(
                     if (!empty($work['qualification_only'])) {
                         $score = $work['qualification_only'];
                     }
-                    //$content .= get_lang('Description').': '.$work['description'].'<br />';
+
                     $comments = getWorkComments($work);
 
                     $feedback = null;
                     if (!empty($comments)) {
                         $content .= '<h4>'.get_lang('Feedback').': </h4>';
                         foreach ($comments as $comment) {
-                            $feedback .= get_lang('User').': '.api_get_person_name(
-                                    $comment['firstname'],
-                                    $comment['lastname']
-                                ).'<br />';
+                            $feedback .= get_lang('User').': '.$comment['complete_name'].
+                                '<br />';
                             $feedback .= $comment['comment'].'<br />';
                         }
                     }
-
                     $table->setCellContents($row, 0, strip_tags($workData['title']));
-                    $table->setCellContents($row, 1, api_get_person_name(strip_tags($work['firstname']), strip_tags($work['lastname'])));
+                    $table->setCellContents($row, 1, strip_tags($work['fullname']));
                     $table->setCellContents($row, 2, $expiresOn);
                     $table->setCellContents($row, 3, api_get_local_time($work['sent_date_from_db']));
                     $table->setCellContents($row, 4, strip_tags($work['title']));

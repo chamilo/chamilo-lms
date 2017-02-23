@@ -1490,17 +1490,11 @@ switch ($action) {
             'field_order',
         );
         $result = $obj->getAllGrid($sidx, $sord, $start, $limit);
-        /*$result = Database::select(
-            '*',
-            $obj->table,
-            array('order' => "$sidx $sord", 'LIMIT' => "$start , $limit")
-        );*/
         $new_result = array();
         if (!empty($result)) {
+            $checkIcon = Display::return_icon('check-circle.png', get_lang('Yes'));
+            $timesIcon = Display::return_icon('closed-circle.png', get_lang('No'));
             foreach ($result as $item) {
-                $checkIcon = Display::return_icon('check-circle.png', get_lang('Yes'));
-                $timesIcon = Display::return_icon('closed-circle.png', get_lang('No'));
-
                 $item['display_text'] = ExtraField::translateDisplayName($item['variable'], $item['displayText']);
                 $item['field_type'] = $obj->get_field_type_by_id($item['fieldType']);
                 $item['changeable'] = $item['changeable'] ? $checkIcon : $timesIcon;

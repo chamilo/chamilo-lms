@@ -7983,4 +7983,6 @@ $PlayRecordingAudio = "Reanudar grabación";
 $YourSessionTimeHasExpired = "Usted ya está registrado pero su periodo de permanencia en este curso ya expiró.";
 $ConsideredWorkingTime = "Tiempo de preparación";
 $DocumentNumber = "ID de documento";
+$SocialData = "Datos sociales";
+$WallMessagesPosted = "Mensajes publicados en su muro (por el/ella)";
 ?>

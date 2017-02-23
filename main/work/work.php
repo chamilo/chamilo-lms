@@ -171,7 +171,9 @@ switch ($action) {
         );
         $form->addElement('header', get_lang('CreateAssignment'));
         $form->addElement('hidden', 'action', 'add');
-        $defaults = isset($_POST) ? $_POST : array();
+        // Set default values
+        $defaults = !empty($_POST) ? $_POST : ['allow_text_assignment' => 2];
+
         $form = getFormWork($form, $defaults);
         $form->addButtonCreate(get_lang('CreateDirectory'));
 

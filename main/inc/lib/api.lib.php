@@ -7177,78 +7177,75 @@ function api_get_password_checker_js($usernameInputId, $passwordInputId)
         var lang = ".json_encode($translations).";            
         var options = {
             common : {
-                minChar: 5,
+                minChar: 5,                
+                usernameField: '$usernameInputId',
+                onLoad : function () {
+                //$('#messages').text('Start typing password');
+                },
+                onKeyUp: function (evt, data) {            
+                    //$(evt.target).pwstrength('outputErrorList');
+                     //console.log('Current length: ' + $(evt.target).val().length + ' and score: ' + data.score);    
+                }
             },
             ui: {
+                debug: true,
                 showErrors: true,
+                viewports: {
+                    progress: '#password_progress',
+                    verdict: '#password-verdict',
+                    errors: '#password-errors'
+                }
             },
             rules : {
-                scores: {
+                scores: {  
                   wordNotEmail: -100,
                   wordLength: -50,
                   wordSimilarToUsername: -100,
                   wordSequences: -50,
-                  wordTwoCharacterClasses: 2,
+                  wordTwoCharacterClasses: 5,
                   wordRepetitions: -25,
-                  wordLowercase: 1,
-                  wordUppercase: 3,
-                  wordOneNumber: 3,
-                  wordThreeNumbers: 5,
-                  wordOneSpecialChar: 3,
-                  wordTwoSpecialChar: 5,
-                  wordUpperLowerCombo: 2,
-                  wordLetterNumberCombo: 2,
-                  wordLetterNumberCharCombo: 2
+                  wordLowercase: 0,
+                  wordUppercase: 20,
+                  wordOneNumber: 10,
+                  wordThreeNumbers: 10,
+                  wordOneSpecialChar: 10,
+                  wordTwoSpecialChar: 10,
+                  wordUpperLowerCombo: 1,
+                  wordLetterNumberCombo: 10,
+                  wordLetterNumberCharCombo: 10
                 },
                 activated: {
                     wordNotEmail: true,
                     wordRepetitions: true,
                     wordUpperLowerCombo: true,
                     wordLetterNumberCombo: true,
-                    wordSequences: true,
-                    wordNotEmail: true,
+                    wordSequences: true,                    
                     wordLength: true,
-                    wordSimilarToUsername: true,
-                    wordSequences: true,
-                    wordTwoCharacterClasses: true,
-                    wordRepetitions: true,
+                    wordSimilarToUsername: true,                    
+                    wordTwoCharacterClasses: true,                    
                     wordLowercase: true,
                     wordUppercase: true,
                     wordOneNumber: true,
                     wordThreeNumbers: true,
                     wordOneSpecialChar: true,
                     wordTwoSpecialChar: true,
-                    wordUpperLowerCombo: true,
-                    wordLetterNumberCombo: true,
                     wordLetterNumberCharCombo: true
                 }
-            },
-            onLoad : function () {
-                //$('#messages').text('Start typing password');
-            },
-            onKeyUp: function (evt) {            
-                $(evt.target).pwstrength('outputErrorList');                
-            },            
-            viewports: {
-                progress: '#password_progress',
-                verdict: '#password-verdict',
-                errors: '#password-errors'
-            },
-            usernameField: '$usernameInputId'
-        };     
+            }
+        };
+        options.ui.scores = [0, 10, 40, 70, 80];
         options.i18n = {
             t: function (key) {
                 var result = lang[key];
-                return result === key ? '' : result;                
+                return result === key ? '' : result;
             }
         };
         $('".$passwordInputId."').pwstrength(options);
-        
         $('".$passwordInputId."').on('input', function() {
             $(this).parent().find('.help-inline').hide();
-            
+
         });
-        
+
     });
     </script>";
 

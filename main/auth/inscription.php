@@ -230,18 +230,27 @@ if ($user_already_registered_show_terms === false) {
         $form->addRule('username', get_lang('UserTaken'), 'username_available');
     }
 
+    $passDiv = '<div id="password_progress"></div><div id="password-verdict"></div><div id="password-errors"></div>';
+
+    $checkPass = api_get_setting('allow_strength_pass_checker');
+    if ($checkPass === 'true') {
+        $checkPass = '';
+    }
+
     // PASSWORD
     $form->addElement(
         'password',
         'pass1',
-        get_lang('Pass'),
+        [get_lang('Pass'), $passDiv],
         array('id' => 'pass1', 'size' => 20, 'autocomplete' => 'off')
     );
 
     $checkPass = api_get_setting('allow_strength_pass_checker');
-    if ($checkPass === 'true') {
-        $form->addElement('label', null, '<div id="password_progress"></div>');
-    }
+//    if ($checkPass === 'true') {
+//        $form->addLabel(null,
+//        '<div id="password_progress"></div><div id="password-verdict"></div><div id="password-errors"></div>'
+//        );
+//    }
 
     $form->addElement(
         'password',

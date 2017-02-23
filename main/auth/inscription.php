@@ -287,33 +287,6 @@ if ($user_already_registered_show_terms === false) {
             );
         }
     }
-    if ($userGeolocalization) {
-        // Geo location
-        if (in_array('address', $allowedFields)) {
-            $form->addElement('text', 'address', get_lang('AddressField'), ['id' => 'address']);
-            $form->addHtml('
-                <div class="form-group">
-                    <label for="geolocalization" class="col-sm-2 control-label"></label>
-                    <div class="col-sm-8">
-                        <button class="null btn btn-default " id="geolocalization" name="geolocalization" type="submit"><em class="fa fa-map-marker"></em> '.get_lang('Geolocalization').'</button>
-                        <button class="null btn btn-default " id="myLocation" name="myLocation" type="submit"><em class="fa fa-crosshairs"></em> '.get_lang('MyLocation').'</button>
-                    </div>
-                </div>
-            ');
-
-            $form->addHtml('
-                <div class="form-group">
-                    <label for="map" class="col-sm-2 control-label">
-                        '.get_lang('Map').'
-                    </label>
-                    <div class="col-sm-8">
-                        <div name="map" id="map" style="width:100%; height:300px;">
-                        </div>
-                    </div>
-                </div>
-            ');
-        }
-    }
 
     // Language
     if (in_array('language', $allowedFields)) {
@@ -564,16 +537,23 @@ if (!CustomPages::enabled()) {
 }
 
 $blockButton = false;
-
+$termActivated = false;
 // Terms and conditions
 if (api_get_setting('allow_terms_conditions') == 'true') {
     if (!api_is_platform_admin()) {
         if (api_get_setting('show_terms_if_profile_completed') === 'true') {
-            $userInfo = api_get_user_info(api_get_user_id(), false, false, true);
+            $userInfo = api_get_user_info(
+                api_get_user_id(),
+                false,
+                false,
+                true
+            );
             if ($userInfo && $userInfo['status'] != ANONYMOUS) {
                 $extraFieldValue = new ExtraFieldValue('user');
-                $termActivated = false;
-                $value = $extraFieldValue->get_values_by_handler_and_field_variable(api_get_user_id(), 'termactivated');
+                $value = $extraFieldValue->get_values_by_handler_and_field_variable(
+                    api_get_user_id(),
+                    'termactivated'
+                );
                 if (isset($value['value'])) {
                     $termActivated = !empty($value['value']) && $value['value'] == 1;
                 }
@@ -627,37 +607,36 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
             }
         }
 
-        // Version and language
-        $form->addElement(
-            'hidden',
-            'legal_accept_type',
-            $term_preview['version'].':'.$term_preview['language_id']
-        );
-        $form->addElement(
-            'hidden',
-            'legal_info',
-            $term_preview['id'].':'.$term_preview['language_id']
-        );
-
-        if ($term_preview['type'] == 1) {
+        // ofaj
+        if ($termActivated !== false) {
+            // Version and language
             $form->addElement(
-                'checkbox',
-                'legal_accept',
-                null,
-                get_lang(
-                    'IHaveReadAndAgree'
-                ).'&nbsp;<a href="inscription.php?legal" target="_blank">'.get_lang(
-                    'TermsAndConditions'
-                ).'</a>'
+                'hidden',
+                'legal_accept_type',
+                $term_preview['version'].':'.$term_preview['language_id']
             );
-            $form->addRule(
-                'legal_accept',
-                get_lang('ThisFieldIsRequired'),
-                'required'
+            $form->addElement(
+                'hidden',
+                'legal_info',
+                $term_preview['id'].':'.$term_preview['language_id']
             );
-        } else {
-            $preview = LegalManager::show_last_condition($term_preview);
-            $form->addElement('label', null, $preview);
+            if ($term_preview['type'] == 1) {
+                $form->addElement(
+                    'checkbox',
+                    'legal_accept',
+                    null,
+                    get_lang('IHaveReadAndAgree').'&nbsp;<a href="inscription.php?legal" target="_blank">'.
+                    get_lang('TermsAndConditions').'</a>'
+                );
+                $form->addRule(
+                    'legal_accept',
+                    get_lang('ThisFieldIsRequired'),
+                    'required'
+                );
+            } else {
+                $preview = LegalManager::show_last_condition($term_preview);
+                $form->addElement('label', null, $preview);
+            }
         }
     }
 }

@@ -74,7 +74,7 @@ var ui = {};
                 "'><div class='";
         } else {
             // Bootstrap 3 & 4
-            progressbar += "'><div class='" +
+            progressbar += options.ui.progressExtraCssClasses + "'><div class='" +
                 options.ui.progressBarExtraCssClasses + " progress-";
         }
         progressbar += "bar'>";

@@ -296,7 +296,13 @@ class ExerciseResult
         $hotpotato_name = null
     ) {
         global $charset;
-        $this->getExercisesReporting($document_path, $user_id, $export_filter, $exercise_id, $hotpotato_name);
+        $this->getExercisesReporting(
+            $document_path,
+            $user_id,
+            $export_filter,
+            $exercise_id,
+            $hotpotato_name
+        );
         $now = api_get_local_time();
         $filename = 'exercise_results_'.$now.'.csv';
         if (!empty($user_id)) {
@@ -304,7 +310,6 @@ class ExerciseResult
         }
 
         $filename = api_replace_dangerous_char($filename);
-
         $data = '';
         if (api_is_western_name_order()) {
             if (!empty($this->results[0]['first_name'])) {
@@ -391,11 +396,12 @@ class ExerciseResult
                     }
                 }
             }
+            $duration = !empty($row['duration']) ? round($row['duration'] / 60) : 0;
 
             $data .= str_replace("\r\n",'  ', api_html_entity_decode(strip_tags($row['title']), ENT_QUOTES, $charset)).';';
             $data .= str_replace("\r\n", '  ', $row['start_date']).';';
             $data .= str_replace("\r\n", '  ', $row['end_date']).';';
-            $data .= str_replace("\r\n", '  ', $row['duration']).';';
+            $data .= str_replace("\r\n", '  ', $duration).';';
             $data .= str_replace("\r\n", '  ', $row['result']).';';
             $data .= str_replace("\r\n", '  ', $row['max']).';';
             $data .= str_replace("\r\n", '  ', $row['status']).';';
@@ -427,7 +433,14 @@ class ExerciseResult
 
     /**
      * Exports the complete report as an XLS file
-     * @return	boolean		False on error
+     *
+     * @param string $document_path
+     * @param null $user_id
+     * @param bool $export_user_fields
+     * @param int $export_filter
+     * @param int $exercise_id
+     * @param null $hotpotato_name
+     * @return bool
      */
     public function exportCompleteReportXLS(
         $document_path = '',
@@ -438,17 +451,24 @@ class ExerciseResult
         $hotpotato_name = null
     ) {
         global $charset;
-        $this->getExercisesReporting($document_path, $user_id, $export_filter, $exercise_id, $hotpotato_name);
-        $filename = 'exercise_results_'.api_get_local_time().'.xlsx';
+        $this->getExercisesReporting(
+            $document_path,
+            $user_id,
+            $export_filter,
+            $exercise_id,
+            $hotpotato_name
+        );
+        $now = api_get_local_time();
+        $filename = 'exercise_results_'.$now.'.xlsx';
         if (!empty($user_id)) {
-            $filename = 'exercise_results_user_'.$user_id.'_'.api_get_local_time().'.xlsx';
+            $filename = 'exercise_results_user_'.$user_id.'_'.$now.'.xlsx';
         }
 
         $spreadsheet = new PHPExcel();
         $spreadsheet->setActiveSheetIndex(0);
         $worksheet = $spreadsheet->getActiveSheet();
 
-        $line = 0;
+        $line = 1; // Skip first line
         $column = 0; //skip the first column (row titles)
 
         // check if exists column 'user'
@@ -648,7 +668,8 @@ class ExerciseResult
             $column++;
             $worksheet->setCellValueByColumnAndRow($column, $line, $row['end_date']);
             $column++;
-            $worksheet->setCellValueByColumnAndRow($column, $line, $row['duration']);
+            $duration = !empty($row['duration']) ? round($row['duration'] / 60) : 0;
+            $worksheet->setCellValueByColumnAndRow($column, $line, $duration);
             $column++;
             $worksheet->setCellValueByColumnAndRow($column, $line, $row['result']);
             $column++;

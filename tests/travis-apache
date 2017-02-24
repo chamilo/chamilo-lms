@@ -10,7 +10,7 @@
     </Directory>
 
     ErrorLog ${APACHE_LOG_DIR}/%VHOST_URL%-error.log
-    LogLevel warn
+    LogLevel notice
     CustomLog ${APACHE_LOG_DIR}/%VHOST_URL%-access.log combined
 
     # Wire up Apache to use Travis CI's php-fpm.

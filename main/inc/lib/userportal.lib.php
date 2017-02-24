@@ -1326,9 +1326,7 @@ class IndexManager
                                 'id' => $session_id
                             );
                             $session_box = Display::get_session_title_box($session_id);
-
                             $actions = api_get_path(WEB_CODE_PATH) .'session/resume_session.php?id_session='.$session_id;
-
                             $coachId = $session_box['id_coach'];
                             $extraFieldValue = new ExtraFieldValue('session');
                             $imageField = $extraFieldValue->get_values_by_handler_and_field_variable(
@@ -1338,7 +1336,6 @@ class IndexManager
 
                             $params['category_id'] = $session_box['category_id'];
                             $params['title'] = $session_box['title'];
-                            //$params['subtitle'] = $extra_info;
                             $params['id_coach'] = $coachId;
                             $params['coach_url'] = api_get_path(WEB_AJAX_PATH) . 'user_manager.ajax.php?a=get_user_popup&user_id=' . $coachId;
                             $params['coach_name'] = !empty($session_box['coach']) ? $session_box['coach'] : null;
@@ -1346,7 +1343,7 @@ class IndexManager
                                 $coachId,
                                 USER_IMAGE_SIZE_SMALL
                             );
-                            $params['date'] =  $session_box['dates'];
+                            $params['date'] = $session_box['dates'];
                             $params['image'] = isset($imageField['value']) ? $imageField['value'] : null;
                             $params['duration'] = isset($session_box['duration']) ? ' ' . $session_box['duration'] : null;
                             $params['edit_actions'] = $actions;
@@ -1358,7 +1355,6 @@ class IndexManager
                             $params['num_users'] = $session_box['num_users'];
                             $params['num_courses'] = $session_box['num_courses'];
                             $params['courses'] = $html_courses_session;
-                            //$params['extra_fields'] = $session_box['extra_fields'];
                             if ($showSimpleSessionInfo) {
                                 $params['show_simple_session_info'] = true;
                             }
@@ -1447,7 +1443,7 @@ class IndexManager
                             $sessionParams = [];
                             // Category
                             if ($count > 0) {
-                                $session_box = Display:: get_session_title_box($session_id);
+                                $session_box = Display::get_session_title_box($session_id);
                                 $sessionParams[0]['id'] = $session_id;
                                 $sessionParams[0]['date'] = $session_box['dates'];
                                 $sessionParams[0]['course_list_session_style'] = $coursesListSessionStyle;
@@ -1456,7 +1452,6 @@ class IndexManager
                                 $sessionParams[0]['show_actions'] = api_is_platform_admin();
                                 $sessionParams[0]['courses'] = $html_courses_session;
                                 $sessionParams[0]['show_simple_session_info'] = false;
-                                //$sessionParams['show_link_to_session'] = !api_is_drh() && $sessionTitleLink;
                                 if ($showSimpleSessionInfo) {
                                     $sessionParams[0]['show_simple_session_info'] = true;
                                 }
@@ -1537,7 +1532,7 @@ class IndexManager
             $this->tpl->assign('show_tutor', (api_get_setting('show_session_coach')==='true' ? true : false));
             $this->tpl->assign('gamification_mode', $gameModeIsActive);
 
-            if (api_get_configuration_value('view_grid_courses')){
+            if (api_get_configuration_value('view_grid_courses')) {
                 $sessions_with_no_category = $this->tpl->fetch(
                     $this->tpl->get_template('/user_portal/grid_session.tpl')
                 );

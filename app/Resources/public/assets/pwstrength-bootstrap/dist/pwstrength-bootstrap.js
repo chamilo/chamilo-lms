@@ -1,6 +1,6 @@
 /*!
 * jQuery Password Strength plugin for Twitter Bootstrap
-* Version: 2.0.6
+* Version: 2.0.7
 *
 * Copyright (c) 2008-2013 Tane Piper
 * Copyright (c) 2013 Alejandro Blanco
@@ -282,6 +282,7 @@ defaultOptions.ui.colorClasses = [
 defaultOptions.ui.showProgressBar = true;
 defaultOptions.ui.progressBarEmptyPercentage = 1;
 defaultOptions.ui.progressBarMinPercentage = 1;
+defaultOptions.ui.progressExtraCssClasses = '';
 defaultOptions.ui.progressBarExtraCssClasses = '';
 defaultOptions.ui.showPopover = false;
 defaultOptions.ui.popoverPlacement = "bottom";
@@ -391,7 +392,7 @@ var ui = {};
                 "'><div class='";
         } else {
             // Bootstrap 3 & 4
-            progressbar += "'><div class='" +
+            progressbar += options.ui.progressExtraCssClasses + "'><div class='" +
                 options.ui.progressBarExtraCssClasses + " progress-";
         }
         progressbar += "bar'>";

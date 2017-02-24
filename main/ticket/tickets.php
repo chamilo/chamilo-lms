@@ -231,7 +231,7 @@ if ($isAdmin) {
                     Display::return_icon('export_excel.png', get_lang('Export'), '', ICON_SIZE_MEDIUM) . '</a>';
 
         echo Display::url(
-            Display::return_icon('settings.png', get_lang('Categories')),
+            Display::return_icon('settings.png', get_lang('Categories'), [], ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH) . 'ticket/settings.php'
         );
         echo '</span>';

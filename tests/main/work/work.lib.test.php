@@ -80,7 +80,7 @@ class TestWork extends UnitTestCase {
 		ob_end_clean();
 		//var_dump($res);
 	}
-    
+
 	/**
 	 * Transform an all directory structure (only directories) in an array
 	 * @param	string path of the directory
@@ -223,31 +223,6 @@ class TestWork extends UnitTestCase {
 	function testto_javascript_work() {
 		$res=to_javascript_work();
 		$this->assertTrue(is_string($res));
-		//var_dump($res);
-	}
-
-	/**
-	* converts 1-9 to 01-09
-	*/
-
-	function testtwo_digits() {
-		$number=1;
-		$res=two_digits($number);
-		$this->assertTrue(is_numeric($res));
-		//var_dump($res);
-	}
-
-	/**
-	 * Update the url of a dir in the student_publication table
-	 * @param	string old path
-	 * @param	string new path
-	 */
-	function testupdate_dir_name() {
-		global $base_work_dir;
-		$path='';
-		$new_name='';
-		$res=update_dir_name($path,$new_name);
-		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
 

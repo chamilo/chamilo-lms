@@ -14,6 +14,13 @@ $action = isset($_GET['action']) ? $_GET['action'] : 'projects';
 
 Display::display_header(get_lang('Settings'));
 
+echo '<div class="actions">';
+echo Display::url(
+    Display::return_icon('back.png', get_lang('Tickets'), [], ICON_SIZE_MEDIUM),
+    api_get_path(WEB_CODE_PATH) . 'ticket/tickets.php'
+);
+echo '</div>';
+
 echo TicketManager::getSettingsMenu();
 
 Display::display_footer();

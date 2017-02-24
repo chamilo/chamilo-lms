@@ -558,8 +558,9 @@ class TicketManager
      *
      * @param int $ticket_id
      * @param int $user_id
+     * @param bool $createNewTicket
      */
-    public static function assign_ticket_user($ticket_id, $user_id)
+    public static function assign_ticket_user($ticket_id, $user_id, $createNewTicket = true)
     {
         $ticket_id = intval($ticket_id);
         $user_id = intval($user_id);
@@ -594,25 +595,31 @@ class TicketManager
             $result = Database::query($sql);
             if (Database::affected_rows($result) > 0) {
                 $insert_id = api_get_user_id();
-                $params = [
-                    'ticket_id' => $ticket_id,
-                    'user_id' => $user_id,
-                    'assigned_date' => $now,
-                    'sys_insert_user_id' => $insert_id
-                ];
-                Database::insert($table_support_assigned_log, $params);
+                if ($createNewTicket) {
+                    $params = [
+                        'ticket_id' => $ticket_id,
+                        'user_id' => $user_id,
+                        'assigned_date' => $now,
+                        'sys_insert_user_id' => $insert_id
+                    ];
+                    Database::insert($table_support_assigned_log, $params);
 
-                $subject = '';
-                $content = sprintf(get_lang('AssignedChangeFromXToY'), $oldUserName, $userCompleteName);
+                    $subject = '';
+                    $content = sprintf(
+                        get_lang('AssignedChangeFromXToY'),
+                        $oldUserName,
+                        $userCompleteName
+                    );
 
-                self::insert_message(
-                    $ticket_id,
-                    $subject,
-                    $content,
-                    [],
-                    api_get_user_id(),
-                    'NOL'
-                );
+                    self::insert_message(
+                        $ticket_id,
+                        $subject,
+                        $content,
+                        [],
+                        api_get_user_id(),
+                        'NOL'
+                    );
+                }
 
                 if ($insert_id !== $user_id) {
                     $info = api_get_user_info($user_id);
@@ -643,11 +650,11 @@ class TicketManager
 
     /**
      * Insert message between Users and Admins
-     * @param $ticket_id
-     * @param $subject
-     * @param $content
-     * @param $file_attachments
-     * @param $user_id
+     * @param int $ticket_id
+     * @param string $subject
+     * @param string $content
+     * @param array $file_attachments
+     * @param int $user_id
      * @param string $status
      * @param bool $sendConfirmation
      * @return bool
@@ -1453,7 +1460,6 @@ class TicketManager
         $userId
     ) {
         $now = api_get_utc_datetime();
-
         $table = Database::get_main_table(TABLE_TICKET_TICKET);
         $newParams = [
             'priority_id' => isset($params['priority_id']) ? $params['priority_id'] : '',
@@ -1463,7 +1469,7 @@ class TicketManager
         ];
         Database::update($table, $newParams, ['id = ? ' => $ticketId]);
 
-         self::sendNotification(
+        self::sendNotification(
             $ticketId,
             $userId,
             get_lang('TicketUpdated'),

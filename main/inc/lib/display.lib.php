@@ -805,7 +805,6 @@ class Display
 
         if ($return_only_path) {
             return $icon;
-
         }
 
         $img = self::img($icon, $alt_text, $additional_attributes);
@@ -827,7 +826,7 @@ class Display
      * @param boolean $filterPath Optional. Whether filter the image path. Default is true
      * @author Julio Montoya 2010
      */
-    public static function img($image_path, $alt_text = '', $additional_attributes = array(), $filterPath = true)
+    public static function img($image_path, $alt_text = '', $additional_attributes = null, $filterPath = true)
     {
         if (empty($image_path)) {
             // For some reason, the call to img() happened without a proper
@@ -846,6 +845,10 @@ class Display
         // alt text = the image name if there is none provided (for XHTML compliance)
         if ($alt_text == '') {
             $alt_text = basename($image_path);
+        }
+
+        if (empty($additional_attributes)) {
+            $additional_attributes = [];
         }
 
         $additional_attributes['src'] = $image_path;

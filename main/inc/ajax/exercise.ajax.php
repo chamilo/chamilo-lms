@@ -140,7 +140,10 @@ switch ($action) {
                             GROUP by question_id
                         ) as count_table";
                 $result_count = Database::query($sql);
-                $count_questions = Database::fetch_array($result_count,'ASSOC');
+                $count_questions = Database::fetch_array(
+                    $result_count,
+                    'ASSOC'
+                );
                 $count_questions = $count_questions['count_question_id'];
 
                 $row['count_questions'] = $count_questions;

@@ -27,7 +27,7 @@ $session_id = intval($_GET['id_session']);
 $type = isset($_REQUEST['type']) ? Security::remove_XSS($_REQUEST['type']) : '';
 $course_code = isset($_REQUEST['course']) ? Security::remove_XSS($_REQUEST['course']) : '';
 $courseInfo = api_get_course_info($course_code);
-$courseId = $courseInfo['real_id'];
+$courseId = (!empty($courseInfo['real_id'])?$courseInfo['real_id']:null);
 $connections = MySpace::get_connections_to_course($user_id, $courseId, $session_id);
 $quote_simple = "'";
 

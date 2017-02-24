@@ -109,15 +109,6 @@ function settingsForm($defaults)
 }
 
 /**
- * converts 1-9 to 01-09
- */
-function two_digits($number)
-{
-    $number = (int)$number;
-    return ($number < 10) ? '0'.$number : $number;
-}
-
-/**
  * @param string $path
  * @param int $courseId
  *
@@ -404,7 +395,12 @@ function getUniqueStudentAttemptsTotal($workId, $groupId, $course_id, $sessionId
     $workId = intval($workId);
     $sessionId = intval($sessionId);
     $groupId = intval($groupId);
-    $sessionCondition = api_get_session_condition($sessionId, true, false, 'w.session_id');
+    $sessionCondition = api_get_session_condition(
+        $sessionId,
+        true,
+        false,
+        'w.session_id'
+    );
 
     $groupIid = 0;
     if ($groupId) {

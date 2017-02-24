@@ -166,8 +166,7 @@ while ($not_deleted_file = Database::fetch_assoc($query)) {
             'my_pre_add_callback'
         );
     } else {
-    // Convert texts in html files
-    //if ($not_deleted_file['contains_file'] == 0) {
+        // Convert texts in html files
         $filename = trim($filename).".html";
         $work_temp = api_get_path(SYS_ARCHIVE_PATH).api_get_unique_id().'_'.$filename;
         file_put_contents($work_temp, $not_deleted_file['description']);

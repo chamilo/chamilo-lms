@@ -601,6 +601,14 @@ $interbreadcrumb[] = array(
 
 if (!isset($_POST['compose'])) {
     Display::display_header(get_lang('ComposeMessage'));
+
+    echo '<div class="actions">';
+    echo Display::url(
+        Display::return_icon('back.png', get_lang('Tickets'), [], ICON_SIZE_MEDIUM),
+        api_get_path(WEB_CODE_PATH) . 'ticket/tickets.php'
+    );
+    echo '</div>';
+
     show_form_send_ticket();
 } else {
     save_ticket();

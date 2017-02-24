@@ -141,7 +141,6 @@ $query = Database::query($sql);
 
 //add tem to the zip file
 while ($not_deleted_file = Database::fetch_assoc($query)) {
-
     $user_info = api_get_user_info($not_deleted_file['insert_user_id']);
     $insert_date = api_get_local_time($not_deleted_file['insert_date']);
     $insert_date = str_replace(array(':', '-', ' '), '_', $insert_date);

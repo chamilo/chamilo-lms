@@ -1025,6 +1025,7 @@ switch ($action) {
                     }
                 }
             }
+            Display::addFlash(Display::return_message(get_lang('Updated')));
             $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
             header('Location: '.$url);
             exit;

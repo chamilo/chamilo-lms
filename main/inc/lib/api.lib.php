@@ -1459,8 +1459,10 @@ function api_get_user_info(
     $apcVar = null;
     $user = false;
     $cacheAvailable = api_get_configuration_value('apc');
+
     if (empty($user_id)) {
         $userFromSession = Session::read('_user');
+
         if (isset($userFromSession)) {
             if (!empty($cacheAvailable)) {
                 $apcVar = api_get_configuration_value('apc_prefix') . 'userinfo_' . $userFromSession['user_id'];

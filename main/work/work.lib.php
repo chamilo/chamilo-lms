@@ -109,15 +109,6 @@ function settingsForm($defaults)
 }
 
 /**
- * converts 1-9 to 01-09
- */
-function two_digits($number)
-{
-    $number = (int)$number;
-    return ($number < 10) ? '0'.$number : $number;
-}
-
-/**
  * @param string $path
  * @param int $courseId
  *
@@ -404,7 +395,12 @@ function getUniqueStudentAttemptsTotal($workId, $groupId, $course_id, $sessionId
     $workId = intval($workId);
     $sessionId = intval($sessionId);
     $groupId = intval($groupId);
-    $sessionCondition = api_get_session_condition($sessionId, true, false, 'w.session_id');
+    $sessionCondition = api_get_session_condition(
+        $sessionId,
+        true,
+        false,
+        'w.session_id'
+    );
 
     $groupIid = 0;
     if ($groupId) {
@@ -2091,14 +2087,13 @@ function get_work_user_list(
                 $correction = '';
                 $action = '';
                 $hasCorrection = '';
+                if (!empty($work['url_correction'])) {
+                    $hasCorrection = Display::url(
+                        Display::return_icon('check-circle.png', get_lang('Correction'), null, ICON_SIZE_SMALL),
+                        api_get_path(WEB_CODE_PATH).'work/download.php?id='.$item_id.'&'.api_get_cidreq().'&correction=1'
+                    );
+                }
                 if (api_is_allowed_to_edit()) {
-                    if (!empty($work['url_correction'])) {
-                        $hasCorrection = Display::url(
-                            Display::return_icon('check-circle.png', get_lang('Correction'), null, ICON_SIZE_SMALL),
-                            api_get_path(WEB_CODE_PATH).'work/download.php?id='.$item_id.'&'.api_get_cidreq().'&correction=1'
-                        );
-                    }
-
                     $action .= '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.
                         Display::return_icon('rate_work.png', get_lang('CorrectAndRate'), array(), ICON_SIZE_SMALL).'</a> ';
 
@@ -2207,7 +2202,7 @@ function get_work_user_list(
                 } else {
                     $action .= '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.
                         Display::return_icon('default.png', get_lang('View'), array(), ICON_SIZE_SMALL).'</a>';
-                    $action .= Display::return_icon('edit_na.png', get_lang('Modify'), array(), ICON_SIZE_SMALL);
+                    //$action .= Display::return_icon('edit_na.png', get_lang('Modify'), array(), ICON_SIZE_SMALL);
                 }
 
                 // Status.
@@ -2219,7 +2214,6 @@ function get_work_user_list(
                 $work['qualificator_id'] = $qualificator_id.' '.$hasCorrection;
                 $work['actions'] = '<div class="work-action">'.$send_to.$link_to_download.$action.'</div>';
                 $work['correction'] = $correction;
-
                 $works[] = $work;
             }
         }
@@ -4875,7 +4869,7 @@ function getFileContents($id, $course_info, $sessionId = 0, $correction = false)
             */
 
             $work_is_visible = $item_info['visibility'] == 1 && $row['accepted'] == 1;
-            $doc_visible_for_all = ($course_info['show_score'] == 1);
+            $doc_visible_for_all = $course_info['show_score'] == 1;
 
             $is_editor = api_is_allowed_to_edit(true, true, true);
             $student_is_owner_of_work = user_is_author($row['id'], $row['user_id']);
@@ -4893,7 +4887,18 @@ function getFileContents($id, $course_info, $sessionId = 0, $correction = false)
                 }
 
                 $title = str_replace(' ', '_', $title);
+
+                if ($correction == false) {
+                    $userInfo = api_get_user_info($row['user_id']);
+                    if ($userInfo) {
+                        $date = api_get_local_time($row['sent_date']);
+                        $date = str_replace(array(':', '-', ' '), '_', $date);
+                        $title = $date.'_'.$userInfo['username'].'_'.$title;
+                    }
+                }
+
                 Event::event_download($title);
+
                 if (Security::check_abs_path(
                     $full_file_name,
                     api_get_path(SYS_COURSE_PATH).api_get_course_path().'/')

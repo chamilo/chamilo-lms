@@ -655,7 +655,18 @@ if ($user_already_registered_show_terms === false) {
 }
 
 if ($blockButton) {
-    $form->addButton('submit', get_lang('RegisterUserOk'), 'check', 'primary', null, null, ['disabled' => 'disabled'], false);
+    if ($termActivated !== false) {
+        $form->addButton(
+            'submit',
+            get_lang('RegisterUserOk'),
+            'check',
+            'primary',
+            null,
+            null,
+            ['disabled' => 'disabled'],
+            false
+        );
+    }
 } else {
     $form->addButton('submit', get_lang('RegisterUser'));
 }
@@ -1101,8 +1112,12 @@ if ($form->validate()) {
         }
 
         $tpl = new Template($tool_name);
-
-        $tpl->assign('inscription_header', Display::page_header($tool_name));
+        if ($termActivated !== false) {
+            $tpl->assign(
+                'inscription_header',
+                Display::page_header($tool_name)
+            );
+        }
         $tpl->assign('inscription_content', $content);
         $tpl->assign('form', $form->returnForm());
         $tpl->assign('hide_header', $hideHeaders);

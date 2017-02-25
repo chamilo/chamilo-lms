@@ -3858,7 +3858,7 @@ function processWorkForm(
                         // The student only uploaded one doc so far, so add the
                         // considered work time to his course connection time
                         $ip = api_get_real_ip();
-                        Event::eventCourseVirtualLogin($courseId, $userId, $sessionId, $workingTime, $ip);
+                        Event::eventAddVirtualCourseTime($courseId, $userId, $sessionId, $workingTime, $ip);
                     }
                 }
             }
@@ -4287,12 +4287,46 @@ function deleteWorkItem($item_id, $courseInfo)
         )
     ) {
         // We found the current user is the author
-        $sql = "SELECT url, contains_file FROM $work_table
+        $sql = "SELECT url, contains_file, user_id, session_id, parent_id FROM $work_table
                 WHERE c_id = $course_id AND id = $item_id";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
 
         if (Database::num_rows($result) > 0) {
+
+            // If the "considered_working_time" option is enabled, check
+            // whether some time should be removed from track_e_course_access
+            $consideredWorkingTime = api_get_configuration_value('considered_working_time');
+            if ($consideredWorkingTime) {
+                // Get the "considered work time" defined for this work
+                $fieldValue = new ExtraFieldValue('work');
+                $resultExtra = $fieldValue->getAllValuesForAnItem(
+                    $row['parent_id'],
+                    true
+                );
+
+                $workingTime = null;
+                foreach ($resultExtra as $field) {
+                    $field = $field['value'];
+
+                    if ($consideredWorkingTime == $field->getField()->getVariable()) {
+                        $workingTime = $field->getValue();
+                    }
+                }
+                // If no time was defined, or a time of "0" was set, do nothing
+                if (!empty($workingTime)) {
+                    $sessionId = empty($row['session_id']) ? 0 : $row['session_id'];
+                    // Getting false from the following call would mean the
+                    // time record
+                    $removalResult = Event::eventRemoveVirtualCourseTime(
+                        $course_id,
+                        $row['user_id'],
+                        $sessionId,
+                        $workingTime
+                    );
+                }
+            } // fin de sección sobre considered_working_time
+
             $sql = "UPDATE $work_table SET active = 2
                     WHERE c_id = $course_id AND id = $item_id";
             Database::query($sql);
@@ -4344,6 +4378,7 @@ function deleteWorkItem($item_id, $courseInfo)
             }
         }
     }
+
     return $file_deleted;
 }
 

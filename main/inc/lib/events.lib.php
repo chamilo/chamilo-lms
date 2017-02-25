@@ -1807,7 +1807,7 @@ class Event
      * @param string $ip IP address to go on record for this time record
      * @return True on successful insertion, false otherwise
      */
-    public static function eventCourseVirtualLogin($courseId, $userId, $sessionId, $virtualTime = '', $ip = '')
+    public static function eventAddVirtualCourseTime($courseId, $userId, $sessionId, $virtualTime = '', $ip = '')
     {
         $courseTrackingTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $time = $loginDate = $logoutDate = api_get_utc_datetime();
@@ -1873,6 +1873,70 @@ class Event
                         WHERE 
                             course_access_id = ".intval($courseAccessId)." AND 
                             session_id = ".$sessionId;
+            $result = Database::query($sql);
+
+            return $result;
+        }
+
+        return false;
+    }
+    /**
+     * Removes a "fake" time spent on the platform, for example to match the
+     * estimated time he took to author an assignment/work, see configuration
+     * setting considered_working_time.
+     * This method should be called when something that generated a fake
+     * time record is removed. Given the database link is weak (no real
+     * relationship kept between the deleted item and this record), this
+     * method just looks for the latest record that has the same time as the
+     * item's fake time, is in the past and in this course+session. If such a
+     * record cannot be found, it doesn't do anything.
+     * The IP address is not considered a useful filter here.
+     * @param int $courseId The course in which to add the time
+     * @param int $userId The user for whom to add the time
+     * @param $sessionId The session in which to add the time (if any)
+     * @param string $virtualTime The amount of time to be added, in a hh:mm:ss format. If int, we consider it is expressed in hours.
+     * @return True on successful removal, false otherwise
+     */
+    public static function eventRemoveVirtualCourseTime($courseId, $userId, $sessionId = 0, $virtualTime = '')
+    {
+        if (empty($virtualTime)) {
+            return false;
+        }
+        $courseTrackingTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $time = $loginDate = $logoutDate = api_get_utc_datetime();
+
+        $courseId = intval($courseId);
+        $userId = intval($userId);
+        $sessionId = intval($sessionId);
+        // Change $virtualTime format from hh:mm:ss to hhmmss which is the
+        // format returned by SQL for a subtraction of two datetime values
+        // @todo make sure this is portable between DBMSes
+        if (preg_match('/:/', $virtualTime)) {
+            $virtualTime = preg_replace('/:/', '', $virtualTime);
+        } else {
+            $virtualTime *= 10000;
+        }
+
+        // Get the current latest course connection register. We need that
+        // record to re-use the data and create a new record.
+        $sql = "SELECT course_access_id
+                        FROM $courseTrackingTable
+                        WHERE
+                            user_id = $userId AND
+                            c_id = $courseId  AND
+                            session_id  = $sessionId AND
+                            counter = 0 AND
+                            logout_course_date - login_course_date = '$virtualTime'
+                        ORDER BY login_course_date DESC LIMIT 0,1";
+        $result = Database::query($sql);
+
+        // Ignore if we didn't find any course connection record in the last
+        // hour. In this case it wouldn't be right to add a "fake" time record.
+        if (Database::num_rows($result) > 0) {
+            // Found the latest connection
+            $row = Database::fetch_row($result);
+            $courseAccessId = $row[0];
+            $sql = "DELETE FROM $courseTrackingTable WHERE course_access_id = $courseAccessId";
             $result = Database::query($sql);
 
             return $result;

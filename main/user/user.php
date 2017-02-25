@@ -28,7 +28,7 @@ if (!api_is_platform_admin(true)) {
 }
 
 /* Constants and variables */
-$course_code = Database::escape_string(api_get_course_id());
+$course_code = api_get_course_id();
 $sessionId = api_get_session_id();
 $is_western_name_order = api_is_western_name_order();
 $sort_by_first_name = api_sort_by_first_name();

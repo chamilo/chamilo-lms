@@ -3809,9 +3809,18 @@ function processWorkForm(
             sendAlertToUsers($workId, $courseInfo, $sessionId);
             Event::event_upload($workId);
 
+            // The following feature requires the creation of a work-type
+            // extra_field and the following setting in the configuration file
+            // (until moved to the database). It allows te teacher to set a
+            // "considered work time", meaning the time we assume a student
+            // would have spent, approximately, to prepare the task before
+            // handing it in Chamilo, adding this time to the student total
+            // course use time, as a register of time spent *before* his
+            // connection to the platform to hand the work in.
             $consideredWorkingTime = api_get_configuration_value('considered_working_time');
 
             if ($consideredWorkingTime) {
+                // Get the "considered work time" defined for this work
                 $fieldValue = new ExtraFieldValue('work');
                 $resultExtra = $fieldValue->getAllValuesForAnItem(
                     $workInfo['id'],
@@ -3828,8 +3837,10 @@ function processWorkForm(
                     }
                 }
 
+                // If no time was defined, or a time of "0" was set, do nothing
                 if (!empty($workingTime)) {
-
+                    // If some time is set, get the list of docs handed in by
+                    // this student (to make sure we count the time only once)
                     $userWorks = get_work_user_list(
                         0,
                         100,
@@ -3844,8 +3855,10 @@ function processWorkForm(
                     );
 
                     if (count($userWorks) == 1) {
-                        Event::eventCourseVirtualLogin($courseId, $userId, $sessionId, $workingTime);
-
+                        // The student only uploaded one doc so far, so add the
+                        // considered work time to his course connection time
+                        $ip = api_get_real_ip();
+                        Event::eventCourseVirtualLogin($courseId, $userId, $sessionId, $workingTime, $ip);
                     }
                 }
             }

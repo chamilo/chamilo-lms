@@ -146,4 +146,30 @@ class ChamiloApi
         }
         return $string;
     }
+    /**
+     * Adds or Subtract a time in hh:mm:ss to a datetime
+     * @param string $time Time in hh:mm:ss format
+     * @param string $datetime Datetime as accepted by the Datetime class constructor
+     * @param bool $operation True for Add, False to Subtract
+     * @return string
+     */
+    public static function addOrSubTimeToDateTime($time, $datetime = 'now', $operation = true)
+    {
+        $date = new \DateTime($datetime);
+
+        $hours = $minutes = $seconds = 0;
+
+        sscanf($time, "%d:%d:%d", $hours, $minutes, $seconds);
+
+        $timeSeconds = isset($seconds) ? $hours * 3600 + $minutes * 60 + $seconds : $hours * 60 + $minutes;
+
+        if ($operation) {
+            $date->add(new \DateInterval('PT' . $timeSeconds . 'S'));
+        } else {
+            $date->sub(new \DateInterval('PT' . $timeSeconds . 'S'));
+        }
+
+
+        return $date->format('Y-m-d H:i:s');
+    }
 }

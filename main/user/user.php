@@ -552,7 +552,7 @@ if (isset($origin) && $origin == 'learnpath') {
 }
 
 /*	Setting the permissions for this page */
-$is_allowed_to_track = ($is_courseAdmin || $is_courseTutor);
+$is_allowed_to_track = ($is_courseAdmin || $is_courseTutor) || api_is_platform_admin();
 
 // Tool introduction
 Display::display_introduction_section(TOOL_USER, 'left');

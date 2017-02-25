@@ -1768,11 +1768,19 @@ class Event
      * @param int $courseId
      * @param int $user_id
      * @param int $session_id
+     * @param string $virtualTime - Minor modification to add a virtual time in hh:mm:ss to the logout datetime - see BT#12212
      */
-    public static function event_course_login($courseId, $user_id, $session_id)
+    public static function event_course_login($courseId, $user_id, $session_id, $virtualTime = '')
     {
         $course_tracking_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-        $time = api_get_utc_datetime();
+        $loginDate = $logoutDate = api_get_utc_datetime();
+
+        $counter = 1;
+
+        if (!empty($virtualTime)) {
+            $logoutDate = api_add_sub_hours_to_date_time(api_get_utc_datetime(), $virtualTime, true);
+            $counter = 0;
+        }
 
         $courseId = intval($courseId);
         $user_id = intval($user_id);
@@ -1780,11 +1788,54 @@ class Event
         $ip = api_get_real_ip();
 
         $sql = "INSERT INTO $course_tracking_table(c_id, user_ip, user_id, login_course_date, logout_course_date, counter, session_id)
-                VALUES('".$courseId."', '".$ip."', '".$user_id."', '$time', '$time', '1', '".$session_id."')";
+                VALUES('".$courseId."', '".$ip."', '".$user_id."', '$loginDate', '$logoutDate', $counter, '".$session_id."')";
         Database::query($sql);
 
         // Course catalog stats modifications see #4191
         CourseManager::update_course_ranking(null, null, null, null, true, false);
+    }
+
+    public static function eventCourseVirtualLogin($courseId, $userId, $sessionId, $virtualTime = '')
+    {
+        $courseTrackingTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $time = $loginDate = $logoutDate = api_get_utc_datetime();
+
+        $courseId = intval($courseId);
+        $userId = intval($userId);
+        $sessionId = intval($sessionId);
+        $ip = api_get_real_ip();
+
+        $sql = "SELECT *
+                        FROM $courseTrackingTable
+                        WHERE
+                            user_id = ".$userId." AND
+                            c_id = ".$courseId."  AND
+                            session_id  = ".$sessionId." AND
+                            login_course_date > '$time' - INTERVAL 3600 SECOND
+                        ORDER BY login_course_date DESC LIMIT 0,1";
+        $result = Database::query($sql);
+
+        if (Database::num_rows($result) > 0) {
+            $row = Database::fetch_row($result);
+            $courseAccessId = $row[0];
+            $courseAccessLoginDate = $row[3];
+            $courseAccessLogoutDate = $row[4];
+            $counter = $row[5];
+            $counter = $counter ? $counter : 0;
+
+            $sql = "INSERT INTO $courseTrackingTable(c_id, user_ip, user_id, login_course_date, logout_course_date, counter, session_id)
+                VALUES('".$courseId."', '".$ip."', '".$userId."', '$courseAccessLoginDate', '$logoutDate', $counter, '".$sessionId."')";
+            Database::query($sql);
+
+            $loginDate = api_add_sub_hours_to_date_time($courseAccessLoginDate, $virtualTime, false);
+            // We update the course tracking table
+            $sql = "UPDATE $courseTrackingTable  
+                            SET login_course_date = '$loginDate', logout_course_date = '$courseAccessLoginDate', counter = 0
+                            WHERE 
+                                course_access_id = ".intval($courseAccessId)." AND 
+                                session_id = ".$sessionId;
+            Database::query($sql);
+        }
     }
 
     /**

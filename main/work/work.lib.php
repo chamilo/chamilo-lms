@@ -3808,6 +3808,47 @@ function processWorkForm(
             );
             sendAlertToUsers($workId, $courseInfo, $sessionId);
             Event::event_upload($workId);
+
+            $consideredWorkingTime = api_get_configuration_value('considered_working_time');
+
+            if ($consideredWorkingTime) {
+                $fieldValue = new ExtraFieldValue('work');
+                $resultExtra = $fieldValue->getAllValuesForAnItem(
+                    $workInfo['id'],
+                    true
+                );
+
+                $workingTime = null;
+
+                foreach ($resultExtra as $field) {
+                    $field = $field['value'];
+
+                    if ($consideredWorkingTime == $field->getField()->getVariable()) {
+                        $workingTime = $field->getValue();
+                    }
+                }
+
+                if (!empty($workingTime)) {
+
+                    $userWorks = get_work_user_list(
+                        0,
+                        100,
+                        null,
+                        null,
+                        $workInfo['id'],
+                        null,
+                        $userId,
+                        false,
+                        $courseId,
+                        $sessionId
+                    );
+
+                    if (count($userWorks) == 1) {
+                        Event::eventCourseVirtualLogin($courseId, $userId, $sessionId, $workingTime);
+
+                    }
+                }
+            }
             $workData = get_work_data_by_id($workId);
             if ($showFlashMessage) {
                 Display::addFlash(Display::return_message(get_lang('DocAdd')));

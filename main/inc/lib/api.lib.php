@@ -8234,3 +8234,66 @@ function stripGivenTags($string, $tags) {
     return $string;
 }
 
+/**
+ * Converts string value to float value
+ *
+ * 3.141516 => 3.141516
+ * 3,141516 => 3.141516
+ * @todo WIP
+ *
+ * @param string $number
+ * @return float
+ */
+function api_float_val($number)
+{
+    $number = (float) str_replace(',', '.', trim($number));
+    return $number;
+}
+
+/**
+ * Converts float values
+ * Example if $decimals = 2
+ *
+ * 3.141516 => 3.14
+ * 3,141516 => 3,14
+ *
+ * @todo WIP
+ *
+ * @param string $number number in iso code
+ * @param int $decimals
+ * @return bool|string
+ */
+function api_number_format($number, $decimals = 0)
+{
+    $number = api_float_val($number);
+
+    return number_format($number, $decimals);
+}
+
+/**
+ * Adds or Subtract a time in hh:mm:ss to a datetime
+ *
+ * @param $datetime
+ * @param $time
+ * @param $operation - True for Add, False to Subtract
+ * @return string
+ */
+function api_add_sub_hours_to_date_time($datetime, $time, $operation)
+{
+    $date = new DateTime($datetime);
+
+    $hours = $minutes = $seconds = 0;
+
+    sscanf($time, "%d:%d:%d", $hours, $minutes, $seconds);
+
+    $timeSeconds = isset($seconds) ? $hours * 3600 + $minutes * 60 + $seconds : $hours * 60 + $minutes;
+
+    if ($operation) {
+        $date->add(new DateInterval('PT' . $timeSeconds . 'S'));
+    } else {
+        $date->sub(new DateInterval('PT' . $timeSeconds . 'S'));
+    }
+
+
+    return $date->format('Y-m-d H:i:s');
+}

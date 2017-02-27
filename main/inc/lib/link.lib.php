@@ -917,7 +917,8 @@ class Link extends Model
                     visibility,
                     description,
                     title,
-                    target
+                    target,
+                    on_homepage
                 FROM $tbl_link link
                 INNER JOIN $TABLE_ITEM_PROPERTY ip
                 ON (link.id = ip.ref AND link.c_id = ip.c_id)

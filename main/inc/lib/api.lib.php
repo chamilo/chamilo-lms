@@ -1477,17 +1477,7 @@ function api_get_user_info(
     if (empty($user_id)) {
         $userFromSession = Session::read('_user');
         if (isset($userFromSession)) {
-            if ($cacheAvailable === true) {
-                $apcVar = api_get_configuration_value('apc_prefix') . 'userinfo_' . $userFromSession['user_id'];
-                if (apcu_exists($apcVar)) {
-                    $user = apcu_fetch($apcVar);
-                } else {
-                    $user = _api_format_user($userFromSession, $showPassword, $loadAvatars);
-                    apcu_store($apcVar, $user, 60);
-                }
-            } else {
-                $user = _api_format_user($userFromSession, $showPassword, $loadAvatars);
-            }
+            $user = _api_format_user($userFromSession, $showPassword, $loadAvatars);
 
             return $user;
         }

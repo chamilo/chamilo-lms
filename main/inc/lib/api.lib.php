@@ -1464,7 +1464,7 @@ function api_get_user_info(
         $userFromSession = Session::read('_user');
 
         if (isset($userFromSession)) {
-            if (!empty($cacheAvailable)) {
+            if ($cacheAvailable === true) {
                 $apcVar = api_get_configuration_value('apc_prefix') . 'userinfo_' . $userFromSession['user_id'];
                 if (apcu_exists($apcVar)) {
                     $user = apcu_fetch($apcVar);
@@ -1486,7 +1486,7 @@ function api_get_user_info(
     $user_id = intval($user_id);
 
     // Re-use user information if not stale and already stored in APCu
-    if (!empty($cacheAvailable)) {
+    if ($cacheAvailable === true) {
         $apcVar = api_get_configuration_value('apc_prefix') . 'userinfo_' . $user_id;
         if (apcu_exists($apcVar)) {
             $user = apcu_fetch($apcVar);

@@ -2129,6 +2129,10 @@ function get_work_user_list(
                                 //$('#file_$item_id').remove();
                                 data.context = $('#progress_$item_id').html('$loadingText <br /> <em class=\"fa fa-spinner fa-pulse fa-fw\"></em>');
                                 data.submit();
+                                $(this).removeClass('hover');
+                            },
+                            dragover: function (e, data) {
+                                $(this).addClass('hover');
                             },
                             done: function (e, data) {
                                 if (data._response.result.name) {
@@ -2136,8 +2140,13 @@ function get_work_user_list(
                                 } else {
                                     $('#progress_$item_id').html('$failsUploadText $failsUploadIcon');
                                 }
+                                $(this).removeClass('hover');
                             }
                         });
+                        $('#file_upload_".$item_id."').on('dragleave', function (e) {
+                            // dragleave callback implementation
+                            $(this).removeClass('hover');
+                        });                             
                     });
                     </script>";
 

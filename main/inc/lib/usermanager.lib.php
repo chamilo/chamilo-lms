@@ -756,7 +756,7 @@ class UserManager
             $user_id_manager
         );
         $cacheAvailable = api_get_configuration_value('apc');
-        if (!empty($cacheAvailable)) {
+        if ($cacheAvailable === true) {
             $apcVar = api_get_configuration_value('apc_prefix') . 'userinfo_' . $user_id;
             if (apcu_exists($apcVar)) {
                 apcu_delete($apcVar);
@@ -1083,7 +1083,7 @@ class UserManager
         }
 
         $cacheAvailable = api_get_configuration_value('apc');
-        if (!empty($cacheAvailable)) {
+        if ($cacheAvailable === true) {
             $apcVar = api_get_configuration_value('apc_prefix') . 'userinfo_' . $user_id;
             if (apcu_exists($apcVar)) {
                 apcu_delete($apcVar);

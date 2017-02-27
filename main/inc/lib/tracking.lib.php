@@ -1710,7 +1710,7 @@ class Tracking
         // with 14M rows). As such, we'll try to use APCu if it is
         // available to store the resulting value for a few seconds
         $cacheAvailable = api_get_configuration_value('apc');
-        if (!empty($cacheAvailable)) {
+        if ($cacheAvailable === true) {
             $apc = apcu_cache_info(true);
             $apc_end = $apc['start_time'] + $apc['ttl'];
             $apc_var = api_get_configuration_value('apc_prefix') . 'course_access_' . $courseId . '_' . $session_id . '_' . strtotime($roundedStart) . '_' . strtotime($roundedStop);

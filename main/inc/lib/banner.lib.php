@@ -728,7 +728,7 @@ function getOnlineUsersCount()
 {
     $number = 0;
     $cacheAvailable = api_get_configuration_value('apc');
-    if (!empty($cacheAvailable)) {
+    if ($cacheAvailable === true) {
         $apcVar = api_get_configuration_value('apc_prefix') . 'my_campus_whoisonline_count_simple';
         if (apcu_exists($apcVar)) {
             $number = apcu_fetch($apcVar);
@@ -754,7 +754,7 @@ function getOnlineUsersInCourseCount($userId, $_course)
     $cacheAvailable = api_get_configuration_value('apc');
     $numberOnlineInCourse = 0;
     if (!empty($_course['id'])) {
-        if (!empty($cacheAvailable)) {
+        if ($cacheAvailable === true) {
             $apcVar = api_get_configuration_value('apc_prefix') . 'my_campus_whoisonline_count_simple_' . $_course['id'];
             if (apcu_exists($apcVar)) {
                 $numberOnlineInCourse = apcu_fetch($apcVar);

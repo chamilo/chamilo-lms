@@ -28,7 +28,7 @@ class MessageManager
         static $count;
         if (!isset($count)) {
             $cacheAvailable = api_get_configuration_value('apc');
-            if (!empty($cacheAvailable)) {
+            if ($cacheAvailable === true) {
                 $var = api_get_configuration_value('apc_prefix') . 'social_messages_unread_u_' . $userId;
                 if (apcu_exists($var)) {
                     $count = apcu_fetch($var);

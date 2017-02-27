@@ -2076,12 +2076,12 @@ function get_work_user_list(
                 $work['qualification_only'] = $qualification_string;
 
                 // Date.
-                $work_date = api_convert_and_format_date($work['sent_date']);
+                $work_date = api_get_local_time($work['sent_date']);
                 $date = date_to_str_ago($work['sent_date']). ' ' . $work_date;
                 $work['formatted_date'] = $work_date . ' ' . $add_string;
 
                 $work['sent_date_from_db'] = $work['sent_date'];
-                $work['sent_date'] = '<div class="work-date" title="'.$date.'">' . $add_string . ' ' . $work['sent_date'] . '</div>';
+                $work['sent_date'] = '<div class="work-date" title="'.$date.'">' . $add_string . ' ' . $work_date . '</div>';
 
                 // Actions.
                 $correction = '';

@@ -127,7 +127,8 @@ if ($form->validate()) {
         $finalResult = [];
         foreach ($result as $item) {
             $title = $item['title_clean'];
-            $title = api_replace_dangerous_char($title);
+            $insert_date = str_replace(array(':', '-', ' '), '_', api_get_local_time($item['sent_date_from_db']));
+            $title =  api_replace_dangerous_char($insert_date.'_'.$item['username'].'_'.$title);
             $finalResult[$title] = $item['id'];
         }
 
@@ -138,13 +139,10 @@ if ($form->validate()) {
         $finder = new Finder();
         $finder->files()->in($destinationDir);
         $table = Database:: get_course_table(TABLE_STUDENT_PUBLICATION);
-
+        //var_dump($finalResult);
         /** @var SplFileInfo $file */
         foreach ($finder as $file) {
             $fileName = $file->getBasename();
-            $fileName = substr($fileName, 20, strlen($fileName));
-            $pos = strpos($fileName, '_') + 1;
-            $fileName = substr($fileName, $pos, strlen($fileName));
 
             if (isset($finalResult[$fileName])) {
                 $workStudentId = $finalResult[$fileName];

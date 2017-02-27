@@ -8095,3 +8095,19 @@ function api_number_format($number, $decimals = 0)
 
     return number_format($number, $decimals);
 }
+
+/**
+ * Set location url with a exit break by default
+ *
+ * @param $url
+ * @param bool $exit
+ * @return void
+ */
+function location($url, $exit = true)
+{
+    header('Location: ' . $url);
+
+    if ($exit) {
+        exit;
+    }
+}

@@ -479,7 +479,8 @@ if (!CustomPages::enabled()) {
                     $term_preview = LegalManager::get_last_condition($language);
                 }
                 $tool_name = get_lang('TermsAndConditions');
-                Display::display_header($tool_name);
+                //Not showing the header as wanted by ofaj in #11196
+                //Display::display_header($tool_name);
 
                 if (!empty($term_preview['content'])) {
                     echo $term_preview['content'];

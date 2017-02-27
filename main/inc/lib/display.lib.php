@@ -2556,13 +2556,18 @@ HTML;
     }
 
     /**
-     * @param $userInfo
+     * @param array $userInfo
      * @param string $status
      * @param string $toolbar
+     *
      * @return string
      */
     public static function getUserCard($userInfo, $status= '', $toolbar = '')
     {
+        if (empty($userInfo)) {
+            return '';
+        }
+
         if (!empty($status)) {
             $status = '<div class="items-user-status">'.$status.'</div>';
         }
@@ -2571,7 +2576,7 @@ HTML;
             $toolbar = '<div class="btn-group pull-right">'.$toolbar.'</div>';
         }
 
-        return '<div class="col-md-12">                    
+        return '<div id="user_card_'.$userInfo['id'].'" class="col-md-12">                    
                     <div class="row">
                         <div class="col-md-2">                            
                             <img src="'.$userInfo['avatar'].'" class="img-responsive img-circle">
@@ -2591,5 +2596,4 @@ HTML;
                     <hr />
               </div>';
     }
-
 }

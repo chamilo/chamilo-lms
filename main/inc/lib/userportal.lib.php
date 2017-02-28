@@ -62,7 +62,7 @@ class IndexManager
     {
         $exercise_list = array();
         if (!empty($personal_course_list)) {
-            foreach ($personal_course_list as  $course_item) {
+            foreach ($personal_course_list as $course_item) {
                 $course_code = $course_item['c'];
                 $session_id = $course_item['id_session'];
 
@@ -271,7 +271,6 @@ class IndexManager
             }
 
             $home_top_temp = '';
-
             // Try language specific home
             if (file_exists($this->home.'home_top_'.$user_selected_language.'.html')) {
                 $home_top_temp = file_get_contents($this->home.'home_top_'.$user_selected_language.'.html');
@@ -288,17 +287,17 @@ class IndexManager
                 }
             }
 
-			if (trim($home_top_temp) == '' && api_is_platform_admin()) {
-				$home_top_temp = '<div class="welcome-mascot">' . get_lang('PortalHomepageDefaultIntroduction') . '</div>';
-			} else {
-				$home_top_temp = '<div class="welcome-home-top-temp">' . $home_top_temp . '</div>';
-			}
-			$open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top_temp);
-			$html = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
-		}
+            if (trim($home_top_temp) == '' && api_is_platform_admin()) {
+                $home_top_temp = '<div class="welcome-mascot">' . get_lang('PortalHomepageDefaultIntroduction') . '</div>';
+            } else {
+                $home_top_temp = '<div class="welcome-home-top-temp">' . $home_top_temp . '</div>';
+            }
+            $open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top_temp);
+            $html = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
+        }
 
-		return $html;
-	}
+        return $html;
+    }
 
     /**
      * @return string
@@ -395,7 +394,8 @@ class IndexManager
         if (api_get_setting('allow_public_certificates') == 'true') {
             $searchItem = Display::tag(
                 'li',
-                Display::url(Display::return_icon('search_graduation.png',get_lang('Search'),null,ICON_SIZE_SMALL).
+                Display::url(
+                    Display::return_icon('search_graduation.png', get_lang('Search'),null,ICON_SIZE_SMALL).
                     get_lang('Search'),
                     api_get_path(WEB_CODE_PATH) . "gradebook/search.php"
                 )
@@ -419,10 +419,14 @@ class IndexManager
             );
             $allowSkillsManagement = api_get_setting('allow_hr_skills_management') == 'true';
             if (($allowSkillsManagement && api_is_drh()) || api_is_platform_admin()) {
-                $content .= Display::tag('li',
-                    Display::url(Display::return_icon('edit-skill.png', get_lang('MySkills'), null,
+                $content .= Display::tag(
+                    'li',
+                    Display::url(
+                        Display::return_icon('edit-skill.png', get_lang('MySkills'), null,
                             ICON_SIZE_SMALL) . get_lang('ManageSkills'),
-                        api_get_path(WEB_CODE_PATH) . 'admin/skills_wheel.php'));
+                        api_get_path(WEB_CODE_PATH) . 'admin/skills_wheel.php'
+                    )
+                );
             }
         }
 
@@ -612,7 +616,9 @@ class IndexManager
             }
             foreach ($course_list as $course) {
                 // $setting_show_also_closed_courses
-                if ($course['visibility'] == COURSE_VISIBILITY_HIDDEN) { continue; }
+                if ($course['visibility'] == COURSE_VISIBILITY_HIDDEN) {
+                    continue;
+                }
                 if (!$setting_show_also_closed_courses) {
                     // If we do not show the closed courses
                     // we only show the courses that are open to the world (to everybody)
@@ -650,9 +656,10 @@ class IndexManager
                         || ($user_identified && array_key_exists($course['code'], $courses_of_user)
                             && $course['visibility'] != COURSE_VISIBILITY_CLOSED)
                         || $courses_of_user[$course['code']]['status'] == '1'
-                        || api_is_platform_admin()) {
-                            $courses_list_string .= '<a href="'.$web_course_path.$course['directory'].'/">';
-                        }
+                        || api_is_platform_admin()
+                    ) {
+                        $courses_list_string .= '<a href="'.$web_course_path.$course['directory'].'/">';
+                    }
                     $courses_list_string .= $course['title'];
                     if ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD
                         || ($user_identified && $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM)
@@ -704,6 +711,7 @@ class IndexManager
                 Display :: return_icon('back.png', get_lang('BackToHomePage')).
                 get_lang('BackToHomePage') . '</a></p>';
         }
+
         return $result;
     }
 
@@ -721,16 +729,16 @@ class IndexManager
         // and sort these according to the sort of the category
         $user_id = intval($user_id);
         $sql = "SELECT
-                course.code k,
-                course.visual_code vc,
-                course.subscribe subscr,
-                course.unsubscribe unsubscr,
-                course.title i,
-                course.tutor_name t,
-                course.directory dir,
-                course_rel_user.status status,
-                course_rel_user.sort sort,
-                course_rel_user.user_course_cat user_course_cat
+                    course.code k,
+                    course.visual_code vc,
+                    course.subscribe subscr,
+                    course.unsubscribe unsubscr,
+                    course.title i,
+                    course.tutor_name t,
+                    course.directory dir,
+                    course_rel_user.status status,
+                    course_rel_user.sort sort,
+                    course_rel_user.user_course_cat user_course_cat
                 FROM
                     $table_course course,
                     $table_course_user course_rel_user

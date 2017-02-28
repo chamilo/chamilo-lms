@@ -275,4 +275,23 @@ class FeatureContext extends MinkContext
             'action' => 'delete'
         ]));
     }
+
+    /**
+   * @Then /^I fill in wysiwyg field "([^"]*)" with "([^"]*)"$/
+   */
+    public function iFillInWysiwygOnFieldWith($locator, $value)
+    {
+        $el = $this->getSession()->getPage()->findField($locator);
+        $fieldId = $el->getAttribute('id');
+
+        if (empty($fieldId)) {
+            throw new Exception(
+                'Could not find an id for field with locator: '.$locator
+            );
+        }
+
+        $this->getSession()->executeScript(
+            "CKEDITOR.instances[\"$fieldId\"].setData(\"$value\");"
+        );
+    }
 }

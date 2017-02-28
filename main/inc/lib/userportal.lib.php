@@ -1323,7 +1323,17 @@ class IndexManager
 
                         if ($count_courses_session > 0) {
                             $session_box = Display::get_session_title_box($session_id);
+
                             $actions = api_get_path(WEB_CODE_PATH) .'session/resume_session.php?id_session='.$session_id;
+                            // Ofaj fix see BT#12325 1 session has 1 course
+                            $firstCourse = current($session['courses']);
+                            if ($firstCourse && isset($firstCourse)) {
+                                $firstCourseInfo = api_get_course_info_by_id($firstCourse['real_id']);
+                                if ($firstCourseInfo) {
+                                    $actions = $firstCourseInfo['course_public_url'].'&id_session='.$session_id;
+                                }
+                            }
+
                             $coachId = $session_box['id_coach'];
                             $extraFieldValue = new ExtraFieldValue('session');
                             $imageField = $extraFieldValue->get_values_by_handler_and_field_variable(

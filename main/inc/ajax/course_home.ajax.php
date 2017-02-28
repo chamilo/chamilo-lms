@@ -85,7 +85,7 @@ switch ($action) {
                 WHERE c_id = ".$course_info['real_id']." AND session_id = 0
                 ORDER BY id";
         $result = Database::query($sql);
-        if (Database::num_rows($result) > 0 ) {
+        if (Database::num_rows($result) > 0) {
             while ($description = Database::fetch_object($result)) {
                 $descriptions[$description->id] = $description;
             }
@@ -104,7 +104,6 @@ switch ($action) {
          * @todo this functions need to belong to a class or a special
          * wrapper to process the AJAX petitions from the jqgrid
          */
-
         require_once __DIR__.'/../global.inc.php';
         $now = time();
         $page  = intval($_REQUEST['page']);     //page
@@ -122,7 +121,7 @@ switch ($action) {
         if (!api_is_platform_admin()) {
             $new_session_list = UserManager::get_personal_session_course_list(api_get_user_id());
             $my_session_list  = array();
-            foreach($new_session_list as $item) {
+            foreach ($new_session_list as $item) {
                 if (!empty($item['id_session']))
                     $my_session_list[] = $item['id_session'];
             }
@@ -208,7 +207,7 @@ switch ($action) {
 
         $i =0;
         $response = new stdClass();
-        foreach($temp as $key=>$row) {
+        foreach ($temp as $key=>$row) {
             $row = $row['cell'];
             if (!empty($row)) {
                 if ($key >= $start  && $key < ($start + $limit)) {
@@ -219,7 +218,7 @@ switch ($action) {
             }
         }
 
-        if($count > 0 && $limit > 0) {
+        if ($count > 0 && $limit > 0) {
             $total_pages = ceil($count/$limit);
         } else {
             $total_pages = 0;
@@ -254,9 +253,10 @@ switch ($action) {
         if (!api_is_platform_admin()) {
             $new_session_list = UserManager::get_personal_session_course_list(api_get_user_id());
             $my_session_list  = array();
-            foreach($new_session_list as $item) {
-                if (!empty($item['id_session']))
+            foreach ($new_session_list as $item) {
+                if (!empty($item['id_session'])) {
                     $my_session_list[] = $item['id_session'];
+                }
             }
             if (!in_array($session_id, $my_session_list)) {
                 break;

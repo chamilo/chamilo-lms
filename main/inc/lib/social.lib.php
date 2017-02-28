@@ -31,7 +31,8 @@ class SocialManager extends UserManager
         $friend_relation_list = array();
         $tbl_my_friend_relation_type = Database :: get_main_table(TABLE_MAIN_USER_FRIEND_RELATION_TYPE);
         $sql = 'SELECT id,title FROM '.$tbl_my_friend_relation_type.'
-                WHERE id<>6 ORDER BY id ASC';
+                WHERE id<>6 
+                ORDER BY id ASC';
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             $friend_relation_list[] = $row;

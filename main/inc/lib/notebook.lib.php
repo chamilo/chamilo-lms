@@ -81,7 +81,13 @@ class NotebookManager
             Database::query($sql);
 
             //insert into item_property
-            api_item_property_update($courseInfo, TOOL_NOTEBOOK, $id, 'NotebookAdded', $userId);
+            api_item_property_update(
+                $courseInfo,
+                TOOL_NOTEBOOK,
+                $id,
+                'NotebookAdded',
+                $userId
+            );
 
             return $id;
         }

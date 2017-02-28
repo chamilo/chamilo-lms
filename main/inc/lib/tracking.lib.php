@@ -47,10 +47,14 @@ class Tracking
             $default_where = array('c_id = ? AND session_id = ? ' => array($course_id, $sessionId));
         }
 
-        $result = Database::select($select, $table_group, array(
-            'limit' => " $start, $limit",
-            'where' => $default_where,
-            'order' => "$sidx $sord")
+        $result = Database::select(
+            $select,
+            $table_group,
+            array(
+                'limit' => " $start, $limit",
+                'where' => $default_where,
+                'order' => "$sidx $sord",
+            )
         );
 
         if ($type == 'count') {
@@ -372,7 +376,6 @@ class Tracking
                     }
 
                     $attemptCount = 1;
-
                     do {
                         // Check if there are interactions below.
                         $extend_attempt_link = '';

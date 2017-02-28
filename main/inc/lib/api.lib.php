@@ -558,7 +558,7 @@ define('TIMELINE_STATUS_ACTIVE', '1');
 define('TIMELINE_STATUS_INACTIVE', '2');
 
 // Event email template class
-define('EVENT_EMAIL_TEMPLATE_ACTIVE',  1);
+define('EVENT_EMAIL_TEMPLATE_ACTIVE', 1);
 define('EVENT_EMAIL_TEMPLATE_INACTIVE', 0);
 
 // Course home

@@ -758,7 +758,8 @@ class TicketManager
         $user_id = api_get_user_id();
         $ticket_id = intval($ticket_id);
         $new_file_name = add_ext_on_mime(
-            stripslashes($file_attach['name']), $file_attach['type']
+            stripslashes($file_attach['name']),
+            $file_attach['type']
         );
         $file_name = $file_attach['name'];
         $table_support_message_attachments = Database::get_main_table(TABLE_TICKET_MESSAGE_ATTACHMENTS);

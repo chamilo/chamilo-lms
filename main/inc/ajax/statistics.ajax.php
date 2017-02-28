@@ -14,9 +14,7 @@ $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
 switch ($action) {
     case 'recentlogins':
         header('Content-type: application/json');
-
         $list = [];
-
         $all = Statistics::getRecentLoginStats();
         $distinct = Statistics::getRecentLoginStats(true);
 

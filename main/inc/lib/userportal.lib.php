@@ -1322,9 +1322,6 @@ class IndexManager
                         }
 
                         if ($count_courses_session > 0) {
-                            $params = array(
-                                'id' => $session_id
-                            );
                             $session_box = Display::get_session_title_box($session_id);
                             $actions = api_get_path(WEB_CODE_PATH) .'session/resume_session.php?id_session='.$session_id;
                             $coachId = $session_box['id_coach'];
@@ -1333,7 +1330,8 @@ class IndexManager
                                 $session_id,
                                 'image'
                             );
-
+                            $params = [];
+                            $params['id'] = $session_id;
                             $params['category_id'] = $session_box['category_id'];
                             $params['title'] = $session_box['title'];
                             $params['id_coach'] = $coachId;

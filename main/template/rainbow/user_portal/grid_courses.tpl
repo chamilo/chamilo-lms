@@ -12,7 +12,7 @@
                 <div class="cribbon"></div>
                 {% endif %}
                 <div class="black-shadow">
-                    <div class="author-card">  
+                    <div class="author-card">
                     {% for teacher in item.teachers %}
                         {% set counter = counter + 1 %}
                         {% if counter <= 3 %}
@@ -25,7 +25,7 @@
                                     {{ teacher.firstname }} {{ teacher.lastname }}
                                 </a>
                              </h5>
-                        </div>       
+                        </div>
                         {% endif %}
                     {% endfor %}
                     </div>
@@ -42,7 +42,7 @@
                                     <i class="fa fa-pencil" aria-hidden="true"></i>
                                 </a>
                                 {{ item.document }}
-                            </div> 
+                            </div>
                         {% endif %}
                     </div>
                 {% endif %}
@@ -56,7 +56,7 @@
                     {% endif %}
                 </h4>
                 <div class="notifications">{{ item.notifications }}</div>
-                
+
             </div>
         </div>
     </div>
@@ -85,7 +85,7 @@
                                 <div class="cribbon"></div>
                                 {% endif %}
                                 <div class="black-shadow">
-                                    <div class="author-card">  
+                                    <div class="author-card">
                                     {% for teacher in item.teachers %}
                                         {% set counter = counter + 1 %}
                                         {% if counter <= 3 %}
@@ -98,7 +98,7 @@
                                                     {{ teacher.firstname }} {{ teacher.lastname }}
                                                 </a>
                                              </h5>
-                                        </div>       
+                                        </div>
                                         {% endif %}
                                     {% endfor %}
                                     </div>
@@ -115,7 +115,7 @@
                                                     <i class="fa fa-pencil" aria-hidden="true"></i>
                                                 </a>
                                                 {{ item.document }}
-                                            </div> 
+                                            </div>
                                         {% endif %}
                                     </div>
                                 {% endif %}
@@ -136,7 +136,7 @@
                 {% endfor %}
             </div>
         </div>
-    </div> 
+    </div>
 {% endfor %}
 <!-- end courses in category -->
     <div class="row">
@@ -150,7 +150,7 @@
                         <div class="cribbon"></div>
                         {% endif %}
                         <div class="black-shadow">
-                            <div class="author-card">  
+                            <div class="author-card">
                             {% for teacher in item.teachers %}
                                 {% set counter = counter + 1 %}
                                 {% if counter <= 3 %}
@@ -163,7 +163,7 @@
                                             {{ teacher.firstname }} {{ teacher.lastname }}
                                         </a>
                                      </h5>
-                                </div>       
+                                </div>
                                 {% endif %}
                             {% endfor %}
                             </div>
@@ -180,7 +180,7 @@
                                             <i class="fa fa-pencil" aria-hidden="true"></i>
                                         </a>
                                         {{ item.document }}
-                                    </div> 
+                                    </div>
                                 {% endif %}
                             </div>
                         {% endif %}

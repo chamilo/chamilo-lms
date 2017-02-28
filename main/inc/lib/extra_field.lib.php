@@ -1395,6 +1395,7 @@ class ExtraField extends Model
                                 }
                             }*/
                             // ofaj
+
                             for ($i = 0; $i < $separateValue; $i++) {
                                 $tagsSelect = $form->addElement(
                                     'select',
@@ -1410,12 +1411,28 @@ class ExtraField extends Model
                                         ''
                                     );
                                 }
+
+                                /*if (!empty($extraData) && isset($extraData['extra_'.$field_details['variable']])) {
+                                    $data = $extraData['extra_'.$field_details['variable']];
+                                    foreach ($data as $option) {
+                                        $tagsSelect->addOption(
+                                            $option,
+                                            $option,
+                                            [
+                                                'selected' => 'selected',
+                                                'class' => 'selected'
+                                            ]
+                                        );
+                                    }
+                                }*/
+
                                 foreach ($fieldTags as $fieldTag) {
                                     $tag = $em->find('ChamiloCoreBundle:Tag', $fieldTag->getTagId());
 
                                     if (empty($tag)) {
                                         continue;
                                     }
+
                                     $tagsSelect->addOption(
                                         $tag->getTag(),
                                         $tag->getTag()

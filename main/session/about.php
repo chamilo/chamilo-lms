@@ -195,12 +195,17 @@ $template->assign(
 );
 
 $plugin = BuyCoursesPlugin::create();
-$checker = $plugin->get('paypal_enable') || $plugin->get('transfer_enable') || $plugin->get('culqi_enable');
-$sessionIsPremium = $plugin->getItemByProduct($sessionId, BuyCoursesPlugin::PRODUCT_TYPE_SESSION);
+$checker = $plugin->isEnabled();
 
-if ($checker && $sessionIsPremium) {
-    Session::write('SessionIsPremium', true);
-    Session::write('sessionId', $sessionId);
+if ($checker) {
+    $sessionIsPremium = $plugin->getItemByProduct(
+        $sessionId,
+        BuyCoursesPlugin::PRODUCT_TYPE_SESSION
+    );
+    if ($sessionIsPremium) {
+        Session::write('SessionIsPremium', true);
+        Session::write('sessionId', $sessionId);
+    }
 }
 
 $redirectToSession = api_get_configuration_value('allow_redirect_to_session_after_inscription_about');

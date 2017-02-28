@@ -139,11 +139,11 @@
                             </div>
                         {% endif %}
 
-                        {% if course_data.assesment %}
+                        {% if course_data.assessment %}
                             <div class="topics">
-                                <h4 class="title-info"><em class="fa fa-book"></em> {{ course_data.assesment.getTitle }}</h4>
+                                <h4 class="title-info"><em class="fa fa-book"></em> {{ course_data.assessment.getTitle }}</h4>
                                 <div class="content-info">
-                                    {{ course_data.assesment.getContent }}
+                                    {{ course_data.assessment.getContent }}
                                 </div>
                             </div>
                         {% endif %}

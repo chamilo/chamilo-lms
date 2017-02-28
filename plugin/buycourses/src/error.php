@@ -10,3 +10,4 @@
 unset($_SESSION['bc_sale_id']);
 
 header('Location: course_catalog.php');
+exit;

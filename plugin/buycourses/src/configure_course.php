@@ -1,12 +1,11 @@
 <?php
 /* For license terms, see /license.txt */
+
 /**
  * Configuration script for the Buy Courses plugin
  * @package chamilo.plugin.buycourses
  */
-/**
- * Initialization
- */
+
 $cidReset = true;
 
 require_once '../config.php';
@@ -219,7 +218,7 @@ if ($editingCourse) {
 
 if ($commissionsEnable === 'true') {
     $platformCommission = $plugin->getPlatformCommission();
-    $form->addHtml( ''
+    $form->addHtml(''
             . '<div class="form-group">'
                 . '<label for="sliders" class="col-sm-2 control-label">'
                     . get_plugin_lang('Commissions', 'BuyCoursesPlugin')

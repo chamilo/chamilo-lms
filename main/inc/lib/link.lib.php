@@ -405,7 +405,7 @@ class Link extends Model
                     api_get_user_id()
                 );
                 self::delete_link_from_search_engine(api_get_course_id(), $id);
-                Display:: display_confirmation_message(get_lang('LinkDeleted'));
+                Display::addFlash(Display::return_message(get_lang('LinkDeleted')));
                 $result = true;
                 break;
             case 'category':

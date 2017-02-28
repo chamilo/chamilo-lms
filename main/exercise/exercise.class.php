@@ -2772,7 +2772,7 @@ class Exercise
                         // This should be moved to the duplicate function
                         $new_answer_obj = new Answer($old_question_id);
                         $new_answer_obj->read();
-                        $new_answer_obj->duplicate($new_id);
+                        $new_answer_obj->duplicate($new_question_obj);
                     }
                 }
             }

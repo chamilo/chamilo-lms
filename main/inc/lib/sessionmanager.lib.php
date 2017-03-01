@@ -2689,7 +2689,7 @@ class SessionManager
         }
 
         //Setting session_category_id to 0
-        $sql = "UPDATE $tbl_session SET session_category_id = 0
+        $sql = "UPDATE $tbl_session SET session_category_id = NULL
                 WHERE session_category_id IN (" . $id_checked . ")";
         Database::query($sql);
 

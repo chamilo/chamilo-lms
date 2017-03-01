@@ -277,7 +277,7 @@ class FeatureContext extends MinkContext
     }
 
     /**
-   * @Then /^I fill in wysiwyg field "([^"]*)" with "([^"]*)"$/
+   * @Then /^I fill in ckeditor field "([^"]*)" with "([^"]*)"$/
    */
     public function iFillInWysiwygOnFieldWith($locator, $value)
     {
@@ -370,5 +370,18 @@ class FeatureContext extends MinkContext
     {
         //$this->getSession()->wait(10000, "document.readyState === 'complete'");
         $this->getSession()->wait(3000);
+    }
+
+    /**
+     * @When /^I check the "([^"]*)" radio button$/
+     */
+    public function iCheckTheRadioButton($radioLabel)
+    {
+        $radioButton = $this->getSession()->getPage()->findField($radioLabel);
+        if (null === $radioButton) {
+            throw new Exception("Cannot find radio button ".$radioLabel);
+        }
+        //$value = $radioButton->getAttribute('value');
+        $this->getSession()->getDriver()->click($radioButton->getXPath());
     }
 }

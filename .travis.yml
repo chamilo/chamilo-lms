@@ -1,11 +1,6 @@
 services:
   - mysql
 
-addons:
-    apt:
-        packages:
-          - oracle-java8-installer
-
 language: php
 
 php:

@@ -1,10 +1,12 @@
 services:
   - mysql
 
-language: php
+addons:
+    apt:
+        packages:
+          - oracle-java8-installer
 
-jdk:
-  - oraclejdk8
+language: php
 
 php:
   #- 5.4 // Removed because of Chash dependencies on PHP 5.5

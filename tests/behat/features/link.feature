@@ -6,7 +6,7 @@ Feature: Link tool
     Given I am a platform administrator
     And I am on course "TEMP" homepage
 
-    Scenario: Create a link category
+  Scenario: Create a link category
     Given I am on "/main/link/link.php?action=addcategory&cidReq=TEMP"
     When I fill in the following:
       | category_title | Category 1 |

@@ -6,12 +6,10 @@ Feature: Work tool
     Given I am a platform administrator
     And I am on course "TEMP" homepage
 
-    Scenario: Create a work
+  Scenario: Create a work
     Given I am on "/main/work/work.php?action=create_dir&cidReq=TEMP"
     When I fill in the following:
       | new_dir | Work 1 |
       | description    | Work description |
     And I press "submit"
     Then I should see "Directory created"
-
-

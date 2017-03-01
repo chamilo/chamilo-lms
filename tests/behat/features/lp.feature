@@ -6,14 +6,14 @@ Feature: LP tool
     Given I am a platform administrator
     And I am on course "TEMP" homepage
 
-    Scenario: Create a LP category
+  Scenario: Create a LP category
     Given I am on "/main/lp/lp_controller.php?cidReq=TEMP&action=add_lp_category"
     When I fill in the following:
       | name | LP category 1 |
     And I press "submit"
     Then I should see "Added"
 
-    Scenario: Create a LP
+  Scenario: Create a LP
     Given I am on "/main/lp/lp_controller.php?cidReq=TEMP&action=add_lp"
     When I fill in the following:
       | lp_name | LP 1 |
@@ -30,12 +30,12 @@ Feature: LP tool
 #    And I press "submit_button"
 #    Then I should see "Document 1"
 
-    Scenario: Delete a LP category
+  Scenario: Delete a LP category
     Given I am on "/main/lp/lp_controller.php?cidReq=TEMP&action=list"
     And I follow "Delete"
     Then I should not see "LP category 1"
 
-    Scenario: Delete a LP
+  Scenario: Delete a LP
     Given I am on "/main/lp/lp_controller.php?cidReq=TEMP&action=list"
     And I follow "Delete"
     Then I should not see "LP 1"

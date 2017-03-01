@@ -6,7 +6,7 @@ Feature: Exercise tool
     Given I am a platform administrator
     And I am on course "TEMP" homepage
 
-    Scenario: Create an exercise
+  Scenario: Create an exercise
     Given I am on "/main/exercise/exercise_admin.php?cidReq=TEMP"
     When I fill in the following:
       | exercise_title | Exercise 1 |

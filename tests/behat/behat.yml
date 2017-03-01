@@ -3,7 +3,12 @@ default:
         Behat\MinkExtension:
           base_url: http://my.chamilo.net
           goutte: ~
-          selenium2: ~
+          show_cmd: 'open %s'
+          selenium2:
+              wd_host: "http://127.0.0.1:4444/wd/hub"
+              browser: chrome
+          default_session: selenium2
+          javascript_session: selenium2
     suites:
         default:
             paths: [ %paths.base%/features ]

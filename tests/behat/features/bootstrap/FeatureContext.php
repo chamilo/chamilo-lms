@@ -294,4 +294,81 @@ class FeatureContext extends MinkContext
             "CKEDITOR.instances[\"$fieldId\"].setData(\"$value\");"
         );
     }
+
+    /**
+     * @Given /^I fill hidden field "([^"]*)" with "([^"]*)"$/
+     */
+    public function iFillHiddenFieldWith($field, $value)
+    {
+        $this->getSession()->getPage()->find(
+            'css',
+            'input[name="'.$field.'"]'
+        )->setValue($value);
+    }
+
+    /**
+     * @When /^(?:|I )fill in select2 input "(?P<field>(?:[^"]|\\")*)" with id "(?P<id>(?:[^"]|\\")*)" and value "(?P<value>(?:[^"]|\\")*)"$/
+     */
+    public function iFillInSelectInputWithAndSelect($field, $id, $value)
+    {
+        $page = $this->getSession()->getPage();
+        $this->getSession()->executeScript("$('$field').select2({data : [{id: $id, text: '$value'}]});");
+    }
+
+    /**
+     * @When /^(?:|I )confirm the popup$/
+     */
+    public function confirmPopup()
+    {
+        // See
+        // https://gist.github.com/blazarecki/2888851
+        /** @var \Behat\Mink\Driver\Selenium2Driver $driver Needed because no cross-driver way yet */
+        //$driver = $this->getSession()->getDriver();
+        $this->getSession()->getDriver()->getWebDriverSession()->accept_alert();
+    }
+
+     /**
+     * @When /^(?:|I )fill in select bootstrap input "(?P<field>(?:[^"]|\\")*)" with "(?P<value>(?:[^"]|\\")*)" and select "(?P<entry>(?:[^"]|\\")*)"$/
+     */
+    public function iFillInSelectBootstrapInputWithAndSelect($field, $value, $entry)
+    {
+        $page = $this->getSession()->getPage();
+
+        $inputField = $page->find('css', $field);
+        if (!$inputField) {
+            throw new \Exception('No field found');
+        }
+
+        $choice = $inputField->getParent()->find('css', '.bootstrap-select');
+        if (!$choice) {
+            throw new \Exception('No select bootstrap choice found');
+        }
+        $choice->press();
+
+        $selectInput = $inputField->getParent()->find('css', '.bootstrap-select .form-control');
+        if (!$selectInput) {
+            throw new \Exception('No input found');
+        }
+
+        $selectInput->setValue($value);
+        $this->getSession()->wait(3000);
+
+        $chosenResults = $inputField->getParent()->findAll('css', '.dropdown-menu inner li');
+        foreach ($chosenResults as $result) {
+            //$option = $result->find('css', '.text');
+            if ($result->getText() == $entry) {
+                $result->click();
+                break;
+            }
+        }
+    }
+
+    /**
+     * @When /^wait for the page to be loaded$/
+     */
+    public function waitForThePageToBeLoaded()
+    {
+        //$this->getSession()->wait(10000, "document.readyState === 'complete'");
+        $this->getSession()->wait(3000);
+    }
 }

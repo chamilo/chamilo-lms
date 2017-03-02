@@ -65,7 +65,18 @@ Feature: Exercise tool
     Then I follow "Next question"
     And wait for the page to be loaded
     And I check the "Answer true" radio button
+    And wait for the page to be loaded
     Then I follow "End test"
+    Then I should see "Score for the test: 100 / 100"
+#
+  Scenario: Check exercise result
+    Given I am on "/main/exercise/exercise.php?cidReq=TEMP"
+    And I follow "Exercise 1"
+    And I follow "Edit"
+    And I follow "Results and feedback"
+    Then I should see "Learner score"
+    And wait for the page to be loaded
+    And I follow "Grade activity"
     Then I should see "Score for the test: 100 / 100"
 
   Scenario: Delete an exercise

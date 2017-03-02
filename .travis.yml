@@ -1,13 +1,6 @@
 services:
   - mysql
 
-addons:
-  apt:
-    sources:
-      - google-chrome
-    packages:
-      - google-chrome-stable
-
 language: php
 
 php:
@@ -58,6 +51,10 @@ before_install:
   #- sudo apt-get install -qq php5-cli php5-fpm
 
 before_script:
+  # Get Chrome
+  - sudo apt-get install -y libappindicator1 fonts-liberation
+  - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+  - sudo dpkg -i google-chrome*.deb
   # Get Chrome driver
   - wget https://chromedriver.storage.googleapis.com/2.27/chromedriver_linux64.zip && unzip chromedriver_linux64.zip && sudo mv chromedriver /usr/bin
   # Setup display for Selenium
@@ -132,3 +129,4 @@ script:
 notifications:
   # IRC notifications - disabled for creating a lot of noise on the channel
   irc: "irc.freenode.org#chamilodev"
+

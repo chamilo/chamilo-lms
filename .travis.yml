@@ -1,8 +1,12 @@
 services:
   - mysql
 
-jdk:
-  - oraclejdk8
+addons:
+  apt:
+    sources:
+      - google-chrome
+    packages:
+      - google-chrome-stable
 
 language: php
 

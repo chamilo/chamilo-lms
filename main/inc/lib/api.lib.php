@@ -5935,9 +5935,11 @@ function api_check_term_condition($user_id)
             $user_conditions = explode(':', $rowv);
             $version = $user_conditions[0];
             $lang_id = $user_conditions[1];
-            $real_version = LegalManager::get_last_version($lang_id);
-
+            // Ofaj
+            /*$real_version = LegalManager::get_last_version($lang_id);
             return $version >= $real_version;
+            */
+            return LegalManager::hasVersion($lang_id, $version);
         }
         return false;
     }

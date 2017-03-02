@@ -116,8 +116,10 @@ class LegalManager
     }
 
     /**
+     * Check if an specific version of an agreement exists
+     *
      * @param int $language
-     * @param string $version
+     * @param int $version
      *
      * @return bool
      */
@@ -125,7 +127,11 @@ class LegalManager
     {
         $table = Database::get_main_table(TABLE_MAIN_LEGAL);
         $language = intval($language);
-        $version = Database::escape_string($version);
+        $version = intval($version);
+
+        if (empty($language)) {
+            return false;
+        }
 
         $sql = "SELECT version FROM $table
                 WHERE 

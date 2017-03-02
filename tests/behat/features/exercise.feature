@@ -35,14 +35,37 @@ Feature: Exercise tool
     And I press "submitQuestion"
     Then I should see "Item added"
 
+  Scenario: Add question "Multiple answer" to exercise created "Exercise 1"
+    Given I am on "/main/exercise/exercise.php?cidReq=TEMP"
+    And I follow "Exercise 1"
+    And I follow "Edit"
+    And I follow "Multiple answer"
+    When I fill in the following:
+      | questionName | Question Multiple answer |
+      | weighting[1] | 10 |
+    Then I check the "correct[1]" radio button
+    Then I fill in ckeditor field "answer[1]" with "Answer true"
+    Then I fill in ckeditor field "answer[2]" with "Answer false"
+    Then I fill in ckeditor field "answer[3]" with "Answer false"
+    Then I fill in ckeditor field "answer[4]" with "Answer false"
+
+    Then I fill in ckeditor field "comment[1]" with "Comment true"
+    Then I fill in ckeditor field "comment[2]" with "Comment false"
+    Then I fill in ckeditor field "comment[3]" with "Comment false"
+    Then I fill in ckeditor field "comment[4]" with "Comment false"
+    And I press "submitQuestion"
+    Then I should see "Item added"
+
   Scenario: Try exercise "Exercise 1"
     Given I am on "/main/exercise/exercise.php?cidReq=TEMP"
     And I follow "Exercise 1"
     And I follow "Start test"
     Then I should see "Question Multiple choice"
     And I check the "Answer true" radio button
-    Then I follow "End test"
+    Then I follow "Next question"
     And wait for the page to be loaded
+    And I check the "Answer true" radio button
+    Then I follow "End test"
     Then I should see "Score for the test: 100 / 100"
 
   Scenario: Delete an exercise

@@ -1330,7 +1330,7 @@ class IndexManager
                             if ($firstCourse && isset($firstCourse)) {
                                 $firstCourseInfo = api_get_course_info_by_id($firstCourse['real_id']);
                                 if ($firstCourseInfo) {
-                                    $actions = $firstCourseInfo['course_public_url'].'&id_session='.$session_id;
+                                    $actions = $firstCourseInfo['course_public_url'].'?id_session='.$session_id;
                                 }
                             }
 

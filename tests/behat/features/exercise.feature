@@ -15,7 +15,7 @@ Feature: Exercise tool
     And I press "submitExercise"
     Then I should see "Exercise added"
 
-  Scenario: Add question to exercise created "Exercise 1"
+  Scenario: Add question "Multiple choice" to exercise created "Exercise 1"
     Given I am on "/main/exercise/exercise.php?cidReq=TEMP"
     And I follow "Exercise 1"
     And I follow "Edit"

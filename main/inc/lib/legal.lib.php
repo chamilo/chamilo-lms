@@ -116,6 +116,31 @@ class LegalManager
     }
 
     /**
+     * @param int $language
+     * @param string $version
+     *
+     * @return bool
+     */
+    public static function hasVersion($language, $version)
+    {
+        $table = Database::get_main_table(TABLE_MAIN_LEGAL);
+        $language = intval($language);
+        $version = Database::escape_string($version);
+
+        $sql = "SELECT version FROM $table
+                WHERE 
+                    language_id = '$language' AND 
+                    version = '$version'                
+                LIMIT 1 ";
+        $result = Database::query($sql);
+        if (Database::num_rows($result) > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * @param string $content
      * @return string
      */

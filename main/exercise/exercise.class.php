@@ -2353,7 +2353,7 @@ class Exercise
                 }
 
                 $defaults['start_time'] = !empty($this->start_time) ? api_get_local_time($this->start_time) : date('Y-m-d 12:00:00');
-                $defaults['end_time'] = empty($this->end_time) ? api_get_local_time($this->end_time) : date('Y-m-d 12:00:00', time()+84600);
+                $defaults['end_time'] = !empty($this->end_time) ? api_get_local_time($this->end_time) : date('Y-m-d 12:00:00', time()+84600);
 
                 // Get expired time
                 if ($this->expired_time != '0') {

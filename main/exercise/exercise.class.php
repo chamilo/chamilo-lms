@@ -5831,11 +5831,11 @@ class Exercise
             // check if we are before-or-after end-or-start date
             if ($existsStartDate && $timeNow < api_strtotime($this->start_time, 'UTC')) {
                 $nowIsAfterStartDate = false;
-                    }
+            }
 
             if ($existsEndDate & $timeNow >= api_strtotime($this->end_time, 'UTC')) {
                 $nowIsBeforeEndDate = false;
-                }
+            }
 
             // lets check all cases
             if ($existsStartDate && !$existsEndDate) {
@@ -5871,7 +5871,7 @@ class Exercise
                         // after start date and before end date
                         $isVisible = true;
                         $message = sprintf(get_lang('ExerciseIsActivatedFromXToY'),
-                    api_convert_and_format_date($this->start_time),
+                            api_convert_and_format_date($this->start_time),
                             api_convert_and_format_date($this->end_time));
                     } else {
                         // after start date and after end date

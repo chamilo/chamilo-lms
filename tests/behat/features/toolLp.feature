@@ -57,5 +57,6 @@ Feature: LP tool
   Scenario: Delete a LP
     Given I am on "/main/lp/lp_controller.php?cidReq=TEMP&action=list"
     And I follow "Delete"
+    And I confirm the popup
     Then I should not see "LP 1"
 

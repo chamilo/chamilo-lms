@@ -34,6 +34,7 @@ Feature: Link tool
   Scenario: Delete link
     Given I am on "/main/link/link.php?cidReq=TEMP"
     And I follow "Delete"
+    And I confirm the popup
     Then I should see "The link has been deleted"
 
   Scenario: Delete link category

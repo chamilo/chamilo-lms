@@ -32,6 +32,7 @@ Feature: Courses management as admin
     And I fill in "course-search-keyword" with "TESTCOURSE1"
     And I press "submit"
     When I follow "Delete"
+    And I confirm the popup
     Then I should see "Course list"
     And I should not see "not be deleted"
 

@@ -10,7 +10,7 @@ Feature: Announcement tool
     Given I am on "/main/announcements/announcements.php?action=add&cidReq=TEMP"
     When I fill in the following:
       | title   | Announcement test                       |
-    And I select "admin admin" from "users-f"
+    And I select "John Doe" from "users-f"
     And I press "add"
     And I fill in ckeditor field "content" with "Announcement description"
     And I press "submit"
@@ -19,7 +19,7 @@ Feature: Announcement tool
   Scenario: Delete all announcements
     Given I am on "/main/announcements/announcements.php?cidReq=TEMP"
     When I follow "Clear list of announcements"
-#    And I confirm the popup
+    And I confirm the popup
     Then I should see "All announcements have been deleted"
 
 

@@ -1,7 +1,11 @@
 In order to run tests locally:
 
 - An administrator user should be created with:
-Username "admin" and password "admin" with user_id = 1 
+    - Username "admin" 
+    - Password "admin"
+    - First name John
+    - Last name Doe
+    - user_id = 1 
 
 - Edit file tests/behat/behat.yml
   An update your Chamilo URL.

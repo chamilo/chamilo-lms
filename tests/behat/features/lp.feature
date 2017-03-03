@@ -31,12 +31,23 @@ Feature: LP tool
     And I press "submit_button"
     Then I should see "Document 1"
 
+  Scenario: Add an exercise to LP
+    Given I am on "/main/lp/lp_controller.php?cidReq=TEMP&action=list"
+    And I follow "Edit learnpath"
+    And I follow "Tests"
+    And I follow "Exercise 1"
+    Then I should see "Adding a test to the course"
+    And I press "submit_button"
+    Then I should see "Click on the [Learner view] button to see your learning path"
+    And I should see "Exercise 1"
+
   Scenario: Enter LP
     Given I am on "/main/lp/lp_controller.php?cidReq=TEMP&action=list"
     And I follow "LP 1"
     And wait for the page to be loaded
     Then I should see "LP 1"
     And I should see "Document 1"
+    And I should see "Exercise 1"
 
   Scenario: Delete a LP category
     Given I am on "/main/lp/lp_controller.php?cidReq=TEMP&action=list"

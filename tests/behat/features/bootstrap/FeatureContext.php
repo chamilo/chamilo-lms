@@ -311,7 +311,6 @@ class FeatureContext extends MinkContext
      */
     public function iFillInSelectInputWithAndSelect($field, $id, $value)
     {
-        $page = $this->getSession()->getPage();
         $this->getSession()->executeScript("$('$field').select2({data : [{id: $id, text: '$value'}]});");
     }
 
@@ -364,6 +363,14 @@ class FeatureContext extends MinkContext
     }
 
     /**
+     * @When /^(?:|I )fill in select bootstrap static input "(?P<field>(?:[^"]|\\")*)" select "(?P<value>(?:[^"]|\\")*)"$/
+     */
+    public function iFillInSelectStaticBootstrapInputWithAndSelect($field, $value)
+    {
+        $this->getSession()->executeScript("$(input[name='$field']).selectpicker('val', '$value');");
+    }
+
+    /**
      * @When /^wait for the page to be loaded$/
      */
     public function waitForThePageToBeLoaded()
@@ -383,5 +390,21 @@ class FeatureContext extends MinkContext
         }
         //$value = $radioButton->getAttribute('value');
         $this->getSession()->getDriver()->click($radioButton->getXPath());
+    }
+
+     /**
+     * @When /^I select "([^"]*)" from select with label "([^"]*)"/
+     */
+    public function iSelectFromSelectWithLabel($option, $label)
+    {
+        $label = $this->getSession()->getPage()->findField($label);
+        if (null === $label) {
+            throw new Exception("Cannot find label ".$label);
+        }
+        $select = $label->getParent()->getParent()->find('select');
+        if (null === $select) {
+            throw new Exception("Select not found: ".$select);
+        }
+        $select->selectOption($option);
     }
 }

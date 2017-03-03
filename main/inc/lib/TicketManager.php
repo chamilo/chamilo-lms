@@ -513,17 +513,26 @@ class TicketManager
             global $data_files;
             if ($other_area) {
                 // Send email to "other area" email
-                api_mail_html(
-                    get_lang('VirtualSupport'),
-                    $email,
+                if (!empty($email)) {
+                    api_mail_html(
+                        get_lang('VirtualSupport'),
+                        $email,
+                        get_lang('IncidentResentToVirtualSupport'),
+                        $helpDeskMessage,
+                        $user['firstname'].' '.$user['lastname'],
+                        $personalEmail,
+                        array(),
+                        $data_files
+                    );
+                }
+
+                MessageManager::send_message_simple(
+                    $user['id'],
                     get_lang('IncidentResentToVirtualSupport'),
-                    $helpDeskMessage,
-                    $user['firstname'].' '.$user['lastname'],
-                    $personalEmail,
-                    array(),
-                    $data_files
+                    $helpDeskMessage
                 );
 
+                /*
                 // Send email to user
                 api_mail_html(
                     get_lang('VirtualSupport'),
@@ -534,7 +543,7 @@ class TicketManager
                     $personalEmail,
                     array(),
                     $data_files
-                );
+                );*/
 
                 $studentMessage = sprintf(get_lang('YourQuestionWasSentToTheResponableAreaX'), $email, $email);
                 $studentMessage .= sprintf(get_lang('YourAnswerToTheQuestionWillBeSentToX'), $personalEmail);
@@ -632,7 +641,20 @@ class TicketManager
                         $ticket_id
                     );
                     $mailTitle = sprintf(get_lang('TicketXAssigned'), $ticket_id);
-                    api_mail_html(
+
+                    MessageManager::send_message_simple(
+                        $user_id,
+                        $mailTitle,
+                        $message
+                    );
+
+                    MessageManager::send_message_simple(
+                        $insert_id,
+                        $mailTitle,
+                        $message
+                    );
+
+                    /*api_mail_html(
                         $info['complete_name'],
                         $info['mail'],
                         $mailTitle,
@@ -642,7 +664,7 @@ class TicketManager
                         array(
                             'cc' => $sender['email']
                         ) // should be support e-mail (platform admin) here
-                    );
+                    );*/
                 }
             }
         }
@@ -1424,6 +1446,18 @@ class TicketManager
         $messageEmail .= '<hr /><br />';
         $messageEmail .= $message;
 
+        MessageManager::send_message_simple(
+            $userInfo['id'],
+            $titleEmail,
+            $messageEmail
+        );
+
+        MessageManager::send_message_simple(
+            $requestUserInfo['id'],
+            $titleEmail,
+            $messageEmail
+        );
+        /*
         api_mail_html(
             $requestUserInfo['complete_name'],
             $requestUserInfo['email'],
@@ -1445,7 +1479,7 @@ class TicketManager
             null,
             array(),
             null
-        );
+        );*/
     }
 
     /**

@@ -47,6 +47,7 @@ Feature: Forum tool
     Given I am on "/main/forum/index.php?cidReq=TEMP"
     And I follow "Forum Test"
     When I follow "Delete"
+    And I confirm the popup
     Then I should see "Thread deleted"
 
 # This test is commented because to quote a message is necessary load HTML code inside of textarea.

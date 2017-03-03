@@ -1571,15 +1571,15 @@ abstract class Question
 
     /**
      * abstract function which creates the form to create / edit the answers of the question
-     * @param the FormValidator instance
+     * @param FormValidator $form
      */
-    abstract function createAnswersForm($form);
+    abstract public function createAnswersForm($form);
 
     /**
      * abstract function which process the creation of answers
-     * @param the FormValidator instance
+     * @param the FormValidator $form
      */
-    abstract function processAnswersCreation($form);
+    abstract public function processAnswersCreation($form);
 
     /**
      * Displays the menu of question types

@@ -88,7 +88,7 @@ before_install:
 
 script:
   - cd tests/behat && ../../vendor/behat/behat/bin/behat -v
-  - sudo cat /var/log/apache2/$VHOST_URL-error.log
+  #- sudo cat /var/log/apache2/$VHOST_URL-error.log
   #- sudo cat /var/log/apache2/$VHOST_URL-access.log
 
 # configure notifications (email, IRC, campfire etc)

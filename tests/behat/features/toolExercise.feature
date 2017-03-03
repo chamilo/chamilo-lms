@@ -41,7 +41,7 @@ Feature: Exercise tool
     And I follow "Edit"
     And I follow "Multiple answer"
     When I fill in the following:
-      | questionName | Question Multiple answer |
+      | questionName | Question Multiple |
       | weighting[1] | 10 |
     Then I check the "correct[1]" radio button
     Then I fill in ckeditor field "answer[1]" with "Answer true"
@@ -56,6 +56,21 @@ Feature: Exercise tool
     And I press "submitQuestion"
     Then I should see "Item added"
 
+#  Scenario: Add question "Matching" to exercise created "Exercise 1"
+#    Given I am on "/main/exercise/exercise.php?cidReq=TEMP"
+#    And I follow "Exercise 1"
+#    And I follow "Edit"
+#    And I follow "Matching"
+#    When I fill in the following:
+#      | questionName | Question Matching |
+#      | answer[1] | Answer A |
+#      | answer[2] | Answer B |
+#      | option[1] | Option A |
+#      | option[2] | Option B |
+#    And I fill in select bootstrap static input "matches[2]" select "B"
+#    And I press "submitQuestion"
+#    Then I should see "Item added"
+
   Scenario: Try exercise "Exercise 1"
     Given I am on "/main/exercise/exercise.php?cidReq=TEMP"
     And I follow "Exercise 1"
@@ -66,9 +81,13 @@ Feature: Exercise tool
     And wait for the page to be loaded
     And I check the "Answer true" radio button
     And wait for the page to be loaded
+#    Then I follow "Next question"
+#    And wait for the page to be loaded
+#    Then I select "A" from select with label "Answer A"
+#    Then I select "B" from select with label "Answer B"
     Then I follow "End test"
     Then I should see "Score for the test: 100 / 100"
-#
+
   Scenario: Check exercise result
     Given I am on "/main/exercise/exercise.php?cidReq=TEMP"
     And I follow "Exercise 1"
@@ -78,6 +97,13 @@ Feature: Exercise tool
     And wait for the page to be loaded
     And I follow "Grade activity"
     Then I should see "Score for the test: 100 / 100"
+
+  Scenario: Duplicate exercise
+    Given I am on "/main/exercise/exercise.php?cidReq=TEMP"
+    And I follow "Copy this exercise as a new one"
+    And I confirm the popup
+    Then I should see "Exercise copied"
+    And I should see "Exercise 1 - Copy"
 
   Scenario: Delete an exercise
     Given I am on "/main/exercise/exercise.php?cidReq=TEMP"

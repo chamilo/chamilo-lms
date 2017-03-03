@@ -9,8 +9,8 @@ Feature: Forum tool
   Scenario: Create a forum category
     Given I am on "/main/forum/index.php?action=add&content=forumcategory&cidReq=TEMP"
     When I fill in the following:
-      | forum_category_title   | Forum Category Test                       |
-      | forum_category_comment | This is the first forum category for test |
+      | forum_category_title   | Forum Category Test |
+    And I fill in ckeditor field "forum_category_comment" with "This is the first forum category for test"
     And I press "SubmitForumCategory"
     Then I should see "The forum category has been added"
 
@@ -18,7 +18,7 @@ Feature: Forum tool
     Given I am on "/main/forum/index.php?action=add&content=forum&cidReq=TEMP"
     When I fill in the following:
       | forum_title   | Forum Test                       |
-      | forum_comment | This is the first forum for test |
+    And I fill in ckeditor field "forum_comment" with "This is the first forum for test"
     And I press "SubmitForum"
     Then I should see "The forum has been added"
 
@@ -28,7 +28,7 @@ Feature: Forum tool
     And I follow "Create thread"
     When I fill in the following:
       | post_title | Thread One                                     |
-      | post_text  | This is a the first thread in a forum for test |
+    And I fill in ckeditor field "post_text" with "This is a the first thread in a forum for test"
     And I press "SubmitPost"
     Then I should see "The new thread has been added"
 
@@ -39,7 +39,7 @@ Feature: Forum tool
     When I follow "Reply to this thread"
     And I fill in the following:
       | post_title | Reply |
-      | post_text | This is a reply to the first message for test |
+    And I fill in ckeditor field "post_text" with "This is a reply to the first message for test"
     And I press "SubmitPost"
     Then I should see "The reply has been added"
 

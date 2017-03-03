@@ -86,7 +86,7 @@ Feature: Exercise tool
 #    Then I select "A" from select with label "Answer A"
 #    Then I select "B" from select with label "Answer B"
     Then I follow "End test"
-    Then I should see "Score for the test: 100 / 100"
+    Then I should see "Score for the test: 20 / 20"
 
   Scenario: Check exercise result
     Given I am on "/main/exercise/exercise.php?cidReq=TEMP"
@@ -96,7 +96,7 @@ Feature: Exercise tool
     Then I should see "Learner score"
     And wait for the page to be loaded
     And I follow "Grade activity"
-    Then I should see "Score for the test: 100 / 100"
+    Then I should see "Score for the test: 20 / 20"
 
   Scenario: Duplicate exercise
     Given I am on "/main/exercise/exercise.php?cidReq=TEMP"

@@ -22,14 +22,14 @@ Feature: Link tool
     And I press "submitLink"
     Then I should see "The link has been added"
 
-  Scenario: Create a link with category
-    Given I am on "/main/link/link.php?action=addlink&cidReq=TEMP"
-    When I fill in the following:
-      | url   | http://www.chamilo.org |
-      | title | Chamilo in category 1 |
-    And I select "Category 1" from "category_id"
-    And I press "submitLink"
-    Then I should see "The link has been added"
+#  Scenario: Create a link with category
+#    Given I am on "/main/link/link.php?action=addlink&cidReq=TEMP"
+#    When I fill in the following:
+#      | url   | http://www.chamilo.org |
+#      | title | Chamilo in category 1 |
+#    And I select "Category 1" from "category_id"
+#    And I press "submitLink"
+#    Then I should see "The link has been added"
 
   Scenario: Delete link
     Given I am on "/main/link/link.php?cidReq=TEMP"

@@ -17,7 +17,7 @@ Feature: Forum tool
   Scenario: Create a forum
     Given I am on "/main/forum/index.php?action=add&content=forum&cidReq=TEMP"
     When I fill in the following:
-      | forum_title   | Forum Test                       |
+      | forum_title   | Forum Test |
     And I fill in ckeditor field "forum_comment" with "This is the first forum for test"
     And I press "SubmitForum"
     Then I should see "The forum has been added"
@@ -26,8 +26,9 @@ Feature: Forum tool
     Given I am on "/main/forum/index.php?cidReq=TEMP"
     And I follow "Forum Test"
     And I follow "Create thread"
+    And wait for the page to be loaded
     When I fill in the following:
-      | post_title | Thread One                                     |
+      | post_title | Thread One |
     And I fill in ckeditor field "post_text" with "This is a the first thread in a forum for test"
     And I press "SubmitPost"
     Then I should see "The new thread has been added"

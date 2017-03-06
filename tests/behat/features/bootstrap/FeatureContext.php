@@ -281,6 +281,9 @@ class FeatureContext extends MinkContext
    */
     public function iFillInWysiwygOnFieldWith($locator, $value)
     {
+        // Just in case wait that ckeditor is loaded
+        $this->getSession()->wait(2000);
+
         $el = $this->getSession()->getPage()->findField($locator);
         $fieldId = $el->getAttribute('id');
 

@@ -255,6 +255,7 @@ $tbl_session = Database:: get_main_table(TABLE_MAIN_SESSION);
 $tbl_course = Database:: get_main_table(TABLE_MAIN_COURSE);
 $tbl_user = Database:: get_main_table(TABLE_MAIN_USER);
 
+$socialInformation = '';
 
 /**
  * Show social activity
@@ -262,25 +263,32 @@ $tbl_user = Database:: get_main_table(TABLE_MAIN_USER);
 if (api_get_setting('allow_social_tool') === 'true') {
     $em = Database::getManager();
     $userObject = $em->find('ChamiloUserBundle:User', $user['user_id']);
-    $header  = ['Value' => 'CurrentData'];
+
     $data = [];
 
     // Calculate values
     if (api_get_setting('allow_message_tool') === 'true') {
-        $messagesSent = \SocialManager::getCountMessagesSent($user['user_id']);
+        $messagesSent = SocialManager::getCountMessagesSent($user['user_id']);
         $data[] = [get_lang('MessagesSent'), $messagesSent];
-        $messagesReceived = \SocialManager::getCountMessagesReceived($user['user_id']);
+        $messagesReceived = SocialManager::getCountMessagesReceived($user['user_id']);
         $data[] = [get_lang('MessagesReceived'), $messagesReceived];
     }
-    $wallMessagesPosted = \SocialManager::getCountWallPostedMessages($user['user_id']);
+    $wallMessagesPosted = SocialManager::getCountWallPostedMessages($user['user_id']);
     $data[] = [get_lang('WallMessagesPosted'), $wallMessagesPosted];
 
+    $friends = SocialManager::getCountFriends($user['user_id']);
+    $data[] = [get_lang('Friends'), $friends];
+
+    $count = SocialManager::getCountInvitationSent($user['user_id']);
+    $data[] = [get_lang('InvitationSent'), $count];
+
+    $count = SocialManager::get_message_number_invitation_by_user_id($user['user_id']);
+    $data[] = [get_lang('InvitationReceived'), $count];
 
     $socialInformation = Display::return_sortable_table(
-        $header,
+        '',
         $data
     );
-
 }
 
 /**

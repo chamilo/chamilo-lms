@@ -5290,24 +5290,25 @@ function getWorkCreatedByUser($user_id, $courseId, $sessionId)
         $sessionId
     );
 
-    $forumList = array();
+    $list = array();
     if (!empty($items)) {
-        foreach ($items as $forum) {
+        foreach ($items as $work) {
             $item = get_work_data_by_id(
-                $forum['ref'],
+                $work['ref'],
                 $courseId,
                 $sessionId
             );
-
-            $forumList[] = array(
-                $item['title'],
-                api_get_local_time($forum['insert_date']),
-                api_get_local_time($forum['lastedit_date'])
-            );
+            if (!empty($item)) {
+                $list[] = array(
+                    $item['title'],
+                    api_get_local_time($work['insert_date']),
+                    api_get_local_time($work['lastedit_date'])
+                );
+            }
         }
     }
 
-    return $forumList;
+    return $list;
 }
 
 /**

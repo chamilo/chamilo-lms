@@ -268,12 +268,12 @@ unset($Courses);
             } else {
                 ?>
                 <div class="separate-action">
-                    <button class="btn btn-primary" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))">
+                    <button name="add_course" class="btn btn-primary" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))">
                         <em class="fa fa-chevron-right"></em>
                     </button>
                 </div>
                 <div class="separate-action">
-                    <button class="btn btn-primary" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))">
+                    <button name="remove_course" class="btn btn-primary" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))">
                         <em class="fa fa-chevron-left"></em>
                     </button>
                 </div>
@@ -287,9 +287,9 @@ unset($Courses);
             <?php
             echo '<div class="separate-action">';
             if (isset($_GET['add'])) {
-                echo '<button class="btn btn-success" type="button" value="" onclick="valide()" >'.get_lang('NextStep').'</button>';
+                echo '<button name="next" class="btn btn-success" type="button" value="" onclick="valide()" >'.get_lang('NextStep').'</button>';
             } else {
-                echo '<button class="btn btn-success" type="button" value="" onclick="valide()" >'.get_lang('SubscribeCoursesToSession').'</button>';
+                echo '<button name="next" class="btn btn-success" type="button" value="" onclick="valide()" >'.get_lang('SubscribeCoursesToSession').'</button>';
             }
             echo '</div>';
             ?>

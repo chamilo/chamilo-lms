@@ -558,7 +558,7 @@ define('TIMELINE_STATUS_ACTIVE', '1');
 define('TIMELINE_STATUS_INACTIVE', '2');
 
 // Event email template class
-define('EVENT_EMAIL_TEMPLATE_ACTIVE',  1);
+define('EVENT_EMAIL_TEMPLATE_ACTIVE', 1);
 define('EVENT_EMAIL_TEMPLATE_INACTIVE', 0);
 
 // Course home
@@ -1459,10 +1459,12 @@ function api_get_user_info(
     $apcVar = null;
     $user = false;
     $cacheAvailable = api_get_configuration_value('apc');
+
     if (empty($user_id)) {
         $userFromSession = Session::read('_user');
+
         if (isset($userFromSession)) {
-            if (!empty($cacheAvailable)) {
+            if ($cacheAvailable === true) {
                 $apcVar = api_get_configuration_value('apc_prefix') . 'userinfo_' . $userFromSession['user_id'];
                 if (apcu_exists($apcVar)) {
                     $user = apcu_fetch($apcVar);
@@ -1484,7 +1486,7 @@ function api_get_user_info(
     $user_id = intval($user_id);
 
     // Re-use user information if not stale and already stored in APCu
-    if (!empty($cacheAvailable)) {
+    if ($cacheAvailable === true) {
         $apcVar = api_get_configuration_value('apc_prefix') . 'userinfo_' . $user_id;
         if (apcu_exists($apcVar)) {
             $user = apcu_fetch($apcVar);
@@ -8092,4 +8094,20 @@ function api_number_format($number, $decimals = 0)
     $number = api_float_val($number);
 
     return number_format($number, $decimals);
+}
+
+/**
+ * Set location url with a exit break by default
+ *
+ * @param $url
+ * @param bool $exit
+ * @return void
+ */
+function location($url, $exit = true)
+{
+    header('Location: ' . $url);
+
+    if ($exit) {
+        exit;
+    }
 }

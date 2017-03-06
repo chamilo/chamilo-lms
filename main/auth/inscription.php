@@ -144,6 +144,7 @@ if ($user_already_registered_show_terms === false) {
         $form->addText(
             'username',
             get_lang('UserName'),
+            true,
             array(
                 'id' => 'username',
                 'size' => USERNAME_MAX_LENGTH,

@@ -57,7 +57,6 @@ switch ($action) {
             }
 
             $list = [];
-
             foreach ($categories as $item) {
                 $list['items'][] = [
                     'id' => $item['code'],
@@ -173,9 +172,8 @@ switch ($action) {
         break;
     case 'search_user_by_course':
         if (api_is_platform_admin()) {
-            $user                   = Database :: get_main_table(TABLE_MAIN_USER);
-            $session_course_user    = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-
+            $user = Database :: get_main_table(TABLE_MAIN_USER);
+            $session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
             $course = api_get_course_info_by_id($_GET['course_id']);
 
             $json = [
@@ -184,7 +182,8 @@ switch ($action) {
 
             $sql = "SELECT u.user_id as id, u.username, u.lastname, u.firstname
                     FROM $user u
-                    INNER JOIN $session_course_user r ON u.user_id = r.user_id
+                    INNER JOIN $session_course_user r 
+                    ON u.user_id = r.user_id
                     WHERE session_id = %d AND c_id =  '%s'
                     AND (u.firstname LIKE '%s' OR u.username LIKE '%s' OR u.lastname LIKE '%s')";
             $needle = '%' . $_GET['q'] . '%';
@@ -207,7 +206,14 @@ switch ($action) {
         if (api_is_platform_admin()) {
             $course = api_get_course_info_by_id($_GET['course_id']);
             $session_id = (!empty($_GET['session_id'])) ?  intval($_GET['session_id']) : 0 ;
-            $exercises = ExerciseLib::get_all_exercises($course, $session_id, false, $_GET['q'], true, 3);
+            $exercises = ExerciseLib::get_all_exercises(
+                $course,
+                $session_id,
+                false,
+                $_GET['q'],
+                true,
+                3
+            );
 
             foreach ($exercises as $exercise) {
                 $data[] = array('id' => $exercise['id'], 'text' => html_entity_decode($exercise['title']) );
@@ -255,7 +261,6 @@ switch ($action) {
     case 'display_sessions_courses':
         $sessionId = intval($_GET['session']);
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
-
         $coursesData = SessionManager::get_course_list_by_session_id($sessionId);
 
         $courses = array();
@@ -273,11 +278,11 @@ switch ($action) {
                 $coachName = api_get_person_name($userResult['firstname'], $userResult['lastname']);
             }
 
-           $courses[] = array(
-               'id' => $courseId,
-               'name' => $course['title'],
-               'coachName' => $coachName,
-           );
+            $courses[] = array(
+                'id' => $courseId,
+                'name' => $course['title'],
+                'coachName' => $coachName,
+            );
         }
 
         echo json_encode($courses);

@@ -2,6 +2,7 @@
 /* See license terms in /license.txt */
 
 //use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 
 /**
  * Class Event
@@ -1764,15 +1765,18 @@ class Event
     }
 
     /**
-     * User logs in for the first time to a course
-     * @param int $courseId
-     * @param int $user_id
-     * @param int $session_id
+     * Registers in track_e_course_access when user logs in for the first time to a course
+     * @param int $courseId ID of the course
+     * @param int $user_id ID of the user
+     * @param int $session_id ID of the session (if any)
      */
     public static function event_course_login($courseId, $user_id, $session_id)
     {
         $course_tracking_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-        $time = api_get_utc_datetime();
+        $loginDate = $logoutDate = api_get_utc_datetime();
+
+        //$counter represents the number of time this record has been refreshed
+        $counter = 1;
 
         $courseId = intval($courseId);
         $user_id = intval($user_id);
@@ -1780,11 +1784,165 @@ class Event
         $ip = api_get_real_ip();
 
         $sql = "INSERT INTO $course_tracking_table(c_id, user_ip, user_id, login_course_date, logout_course_date, counter, session_id)
-                VALUES('".$courseId."', '".$ip."', '".$user_id."', '$time', '$time', '1', '".$session_id."')";
+                VALUES('".$courseId."', '".$ip."', '".$user_id."', '$loginDate', '$logoutDate', $counter, '".$session_id."')";
         Database::query($sql);
 
         // Course catalog stats modifications see #4191
         CourseManager::update_course_ranking(null, null, null, null, true, false);
+    }
+
+    /**
+     * Register a "fake" time spent on the platform, for example to match the
+     * estimated time he took to author an assignment/work, see configuration
+     * setting considered_working_time.
+     * This assumes there is already some connection of the student to the
+     * course, otherwise he wouldn't be able to upload an assignment.
+     * This works by creating a new record, copy of the current one, then
+     * updating the current one to be just the considered_working_time and
+     * end at the same second as the user connected to the course.
+     * @param int $courseId The course in which to add the time
+     * @param int $userId The user for whom to add the time
+     * @param $sessionId The session in which to add the time (if any)
+     * @param string $virtualTime The amount of time to be added, in a hh:mm:ss format. If int, we consider it is expressed in hours.
+     * @param string $ip IP address to go on record for this time record
+     * @return True on successful insertion, false otherwise
+     */
+    public static function eventAddVirtualCourseTime($courseId, $userId, $sessionId, $virtualTime = '', $ip = '')
+    {
+        $courseTrackingTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $time = $loginDate = $logoutDate = api_get_utc_datetime();
+
+        $courseId = intval($courseId);
+        $userId = intval($userId);
+        $sessionId = intval($sessionId);
+        $ip = Database::escape_string($ip);
+
+        // Get the current latest course connection register. We need that
+        // record to re-use the data and create a new record.
+        $sql = "SELECT *
+                        FROM $courseTrackingTable
+                        WHERE
+                            user_id = ".$userId." AND
+                            c_id = ".$courseId."  AND
+                            session_id  = ".$sessionId." AND
+                            login_course_date > '$time' - INTERVAL 3600 SECOND
+                        ORDER BY login_course_date DESC LIMIT 0,1";
+        $result = Database::query($sql);
+
+        // Ignore if we didn't find any course connection record in the last
+        // hour. In this case it wouldn't be right to add a "fake" time record.
+        if (Database::num_rows($result) > 0) {
+            // Found the latest connection
+            $row = Database::fetch_row($result);
+            $courseAccessId = $row[0];
+            $courseAccessLoginDate = $row[3];
+            $counter = $row[5];
+            $counter = $counter ? $counter : 0;
+            // Insert a new record, copy of the current one (except the logout
+            // date that we update to the current time)
+            $sql = "INSERT INTO $courseTrackingTable(
+                    c_id,
+                    user_ip, 
+                    user_id, 
+                    login_course_date, 
+                    logout_course_date, 
+                    counter, 
+                    session_id
+                ) VALUES(
+                    $courseId, 
+                    '$ip', 
+                    $userId, 
+                    '$courseAccessLoginDate', 
+                    '$logoutDate', 
+                    $counter, 
+                    $sessionId
+                )";
+            Database::query($sql);
+
+            $loginDate = ChamiloApi::addOrSubTimeToDateTime(
+                $virtualTime,
+                $courseAccessLoginDate,
+                false
+            );
+            // We update the course tracking table
+            $sql = "UPDATE $courseTrackingTable  
+                        SET 
+                            login_course_date = '$loginDate',
+                            logout_course_date = '$courseAccessLoginDate',
+                            counter = 0
+                        WHERE 
+                            course_access_id = ".intval($courseAccessId)." AND 
+                            session_id = ".$sessionId;
+            $result = Database::query($sql);
+
+            return $result;
+        }
+
+        return false;
+    }
+    /**
+     * Removes a "fake" time spent on the platform, for example to match the
+     * estimated time he took to author an assignment/work, see configuration
+     * setting considered_working_time.
+     * This method should be called when something that generated a fake
+     * time record is removed. Given the database link is weak (no real
+     * relationship kept between the deleted item and this record), this
+     * method just looks for the latest record that has the same time as the
+     * item's fake time, is in the past and in this course+session. If such a
+     * record cannot be found, it doesn't do anything.
+     * The IP address is not considered a useful filter here.
+     * @param int $courseId The course in which to add the time
+     * @param int $userId The user for whom to add the time
+     * @param $sessionId The session in which to add the time (if any)
+     * @param string $virtualTime The amount of time to be added, in a hh:mm:ss format. If int, we consider it is expressed in hours.
+     * @return True on successful removal, false otherwise
+     */
+    public static function eventRemoveVirtualCourseTime($courseId, $userId, $sessionId = 0, $virtualTime = '')
+    {
+        if (empty($virtualTime)) {
+            return false;
+        }
+        $courseTrackingTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $time = $loginDate = $logoutDate = api_get_utc_datetime();
+
+        $courseId = intval($courseId);
+        $userId = intval($userId);
+        $sessionId = intval($sessionId);
+        // Change $virtualTime format from hh:mm:ss to hhmmss which is the
+        // format returned by SQL for a subtraction of two datetime values
+        // @todo make sure this is portable between DBMSes
+        if (preg_match('/:/', $virtualTime)) {
+            $virtualTime = preg_replace('/:/', '', $virtualTime);
+        } else {
+            $virtualTime *= 10000;
+        }
+
+        // Get the current latest course connection register. We need that
+        // record to re-use the data and create a new record.
+        $sql = "SELECT course_access_id
+                        FROM $courseTrackingTable
+                        WHERE
+                            user_id = $userId AND
+                            c_id = $courseId  AND
+                            session_id  = $sessionId AND
+                            counter = 0 AND
+                            logout_course_date - login_course_date = '$virtualTime'
+                        ORDER BY login_course_date DESC LIMIT 0,1";
+        $result = Database::query($sql);
+
+        // Ignore if we didn't find any course connection record in the last
+        // hour. In this case it wouldn't be right to add a "fake" time record.
+        if (Database::num_rows($result) > 0) {
+            // Found the latest connection
+            $row = Database::fetch_row($result);
+            $courseAccessId = $row[0];
+            $sql = "DELETE FROM $courseTrackingTable WHERE course_access_id = $courseAccessId";
+            $result = Database::query($sql);
+
+            return $result;
+        }
+
+        return false;
     }
 
     /**

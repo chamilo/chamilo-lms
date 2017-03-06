@@ -1,11 +1,9 @@
 <?php
 /* For license terms, see /license.txt */
+
 /**
  * Create new Services for the Buy Courses plugin
  * @package chamilo.plugin.buycourses
- */
-/**
- * Init
  */
 
 $cidReset = true;

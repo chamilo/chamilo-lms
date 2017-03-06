@@ -73,7 +73,7 @@ if (api_is_allowed_to_edit() || api_is_coach()) {
                 title,
                 description,
                 insert_user_id,
-                insert_date,
+                sent_date,
                 contains_file
                 $filenameCondition
             FROM $tbl_student_publication AS work
@@ -115,7 +115,7 @@ if (api_is_allowed_to_edit() || api_is_coach()) {
                 title,
                 description,
                 insert_user_id,
-                insert_date,
+                sent_date,
                 contains_file
                 $filenameCondition
             FROM $tbl_student_publication AS work
@@ -141,9 +141,8 @@ $query = Database::query($sql);
 
 //add tem to the zip file
 while ($not_deleted_file = Database::fetch_assoc($query)) {
-
     $user_info = api_get_user_info($not_deleted_file['insert_user_id']);
-    $insert_date = api_get_local_time($not_deleted_file['insert_date']);
+    $insert_date = api_get_local_time($not_deleted_file['sent_date']);
     $insert_date = str_replace(array(':', '-', ' '), '_', $insert_date);
 
     $title = basename($not_deleted_file['title']);
@@ -167,8 +166,7 @@ while ($not_deleted_file = Database::fetch_assoc($query)) {
             'my_pre_add_callback'
         );
     } else {
-    // Convert texts in html files
-    //if ($not_deleted_file['contains_file'] == 0) {
+        // Convert texts in html files
         $filename = trim($filename).".html";
         $work_temp = api_get_path(SYS_ARCHIVE_PATH).api_get_unique_id().'_'.$filename;
         file_put_contents($work_temp, $not_deleted_file['description']);

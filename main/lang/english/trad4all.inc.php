@@ -7966,4 +7966,12 @@ $ExportUsersOfACourse = "Export users of a course";
 $PauseRecordingAudio = "Pause recording";
 $PlayRecordingAudio = "Resume recording";
 $YourSessionTimeHasExpired = "You are already registered but your allowed access time has expired.";
+$ConsideredWorkingTime = "Assignment work time";
+$DocumentNumber = "Document ID";
+$SocialData = "Social data";
+$WallMessagesPosted = "Wall messages posted by him/herself";
+$SeeAccesses = "See accesses";
+$PriorityChangeFromXToY = "Priority change from %s to %s";
+$StatusChangeFromXToY = "Status change from %s to %s";
+
 ?>

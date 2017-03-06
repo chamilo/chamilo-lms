@@ -58,7 +58,7 @@ if (!is_dir($saveDir)) {
 
 //avoid duplicates
 $waminame_to_save = $waminame;
-$waminame_noex    = basename($waminame, ".wav");
+$waminame_noex = basename($waminame, ".wav");
 if (file_exists($saveDir.'/'.$waminame_noex.'.'.$ext)) {
     $i = 1;
     while (file_exists($saveDir.'/'.$waminame_noex.'_'.$i.'.'.$ext)) {

@@ -706,6 +706,20 @@ class HTML_QuickForm extends HTML_Common
     }
 
     /**
+     * @param string $name
+     * @return mixed
+     */
+    public function getElementByName($name)
+    {
+        foreach ($this->_elements as &$element) {
+            $elementName = $element->getName();
+            if ($elementName == $name) {
+                return $element;
+            }
+        }
+    }
+
+    /**
      * @param string $element
      * @return bool
      */

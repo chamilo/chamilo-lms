@@ -119,7 +119,7 @@ class FillBlanks extends Question
                         }
                         
                         // get input size
-                        var inputSize = 200;                        
+                        var inputSize = 100;                        
                         var textValue = blanks[i].substr(1, blanks[i].length - 2);
                         var btoaValue = textValue.hashCode();
                                                                       
@@ -133,7 +133,7 @@ class FillBlanks extends Question
                         if (document.getElementById("weighting["+i+"]")) {
                             var value = document.getElementById("weighting["+i+"]").value;
                         } else {
-                            var value = "10";    
+                            var value = "1";    
                         }                                            
                         
                         fields += "<tr>";

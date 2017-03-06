@@ -87,9 +87,8 @@ foreach ($sessionCourses as $sessionCourse) {
             ]
         );
 
-    $courseDescription = $courseObjectives = $courseTopics = $courseMethodology = $courseMaterial = $courseResources = $courseAssesment = null;
+    $courseDescription = $courseObjectives = $courseTopics = $courseMethodology = $courseMaterial = $courseResources = $courseAssessment = '';
     $courseCustom = [];
-
     foreach ($courseDescriptionTools as $descriptionTool) {
         switch ($descriptionTool->getDescriptionType()) {
             case CCourseDescription::TYPE_DESCRIPTION:
@@ -111,7 +110,7 @@ foreach ($sessionCourses as $sessionCourse) {
                 $courseResources = $descriptionTool;
                 break;
             case CCourseDescription::TYPE_ASSESMENT:
-                $courseAssesment = $descriptionTool;
+                $courseAssessment = $descriptionTool;
                 break;
             case CCourseDescription::TYPE_CUSTOM:
                 $courseCustom[] = $descriptionTool;
@@ -128,21 +127,26 @@ foreach ($sessionCourses as $sessionCourse) {
         'methodology' => $courseMethodology,
         'material' => $courseMaterial,
         'resources' => $courseResources,
-        'assesment' => $courseAssesment,
+        'assessment' => $courseAssessment,
         'custom' => array_reverse($courseCustom),
         'coaches' => $coachesData,
-        'extra_fields' => $courseValues->getAllValuesForAnItem($sessionCourse->getId(), null, true)
+        'extra_fields' => $courseValues->getAllValuesForAnItem(
+            $sessionCourse->getId(),
+            null,
+            true
+        ),
     ];
 }
 
-$sessionDates = SessionManager::parseSessionDates([
-    'display_start_date' => $session->getDisplayStartDate(),
-    'display_end_date' => $session->getDisplayEndDate(),
-    'access_start_date' => $session->getAccessStartDate(),
-    'access_end_date' => $session->getAccessEndDate(),
-    'coach_access_start_date' => $session->getCoachAccessStartDate(),
-    'coach_access_end_date' => $session->getCoachAccessEndDate()
-],
+$sessionDates = SessionManager::parseSessionDates(
+    [
+        'display_start_date' => $session->getDisplayStartDate(),
+        'display_end_date' => $session->getDisplayEndDate(),
+        'access_start_date' => $session->getAccessStartDate(),
+        'access_end_date' => $session->getAccessEndDate(),
+        'coach_access_start_date' => $session->getCoachAccessStartDate(),
+        'coach_access_end_date' => $session->getCoachAccessEndDate(),
+    ],
     true
 );
 
@@ -195,12 +199,17 @@ $template->assign(
 );
 
 $plugin = BuyCoursesPlugin::create();
-$checker = $plugin->get('paypal_enable') || $plugin->get('transfer_enable') || $plugin->get('culqi_enable');
-$sessionIsPremium = $plugin->getItemByProduct($sessionId, BuyCoursesPlugin::PRODUCT_TYPE_SESSION);
+$checker = $plugin->isEnabled();
 
-if ($checker && $sessionIsPremium) {
-    Session::write('SessionIsPremium', true);
-    Session::write('sessionId', $sessionId);
+if ($checker) {
+    $sessionIsPremium = $plugin->getItemByProduct(
+        $sessionId,
+        BuyCoursesPlugin::PRODUCT_TYPE_SESSION
+    );
+    if ($sessionIsPremium) {
+        Session::write('SessionIsPremium', true);
+        Session::write('sessionId', $sessionId);
+    }
 }
 
 $redirectToSession = api_get_configuration_value('allow_redirect_to_session_after_inscription_about');

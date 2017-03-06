@@ -1,114 +1,98 @@
-services:
-  - mysql
-
 language: php
+
+addons:
+    apt:
+        packages:
+        - apache2
+        - postfix
+        - libapache2-mod-fastcgi
+        - libappindicator1
+        - fonts-liberation
+
+services:
+    - mysql
+
+sudo: required
+dist: trusty
 
 php:
   #- 5.4 // Removed because of Chash dependencies on PHP 5.5
   - 5.5
   - 5.6
   - 7.0
-  - 7.1
 
 env:
   global:
-    - VHOST_URL=my.chamilo.net
-    - VHOST_CONF=my.chamilo.net.conf
+    - VHOST_URL=localhost
     - CHAMILO_VERSION=1.11.x
 
 before_install:
-  #- sudo apt-get install python-software-properties
-  #- sudo add-apt-repository ppa:ondrej/php5 -y
-  - sudo apt-get update -qq
-  - sudo apt-get install -qq mysql-server
-  - sudo apt-get install -qq apache2 libapache2-mod-fastcgi
-  # enable php-fpm
-  - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
-  - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.0" ]]; then sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/www.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/www.conf ; fi
-  - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.1" ]]; then sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/www.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/www.conf ; fi
+  # Get Chrome
+  - wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+  - sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+  - sudo apt-get update
+  - sudo apt-get install google-chrome-stable
+  # Get Chrome driver
+  - wget https://chromedriver.storage.googleapis.com/2.27/chromedriver_linux64.zip && unzip chromedriver_linux64.zip && sudo mv chromedriver /usr/bin
+  # Setup display for Selenium
+  - sh -e /etc/init.d/xvfb start
+  - export DISPLAY=:99.0
+  # Get Selenium
+  - wget http://selenium-release.storage.googleapis.com/3.1/selenium-server-standalone-3.1.0.jar
+  # Check java
+  - java -version
+  - sudo apt-get install oracle-java8-installer
+  - java -version
+  - java -jar selenium-server-standalone-3.1.0.jar -log selenium.log > /dev/null &
+  - nohup bash -c "webdriver-manager start 2>&1 &"
+  - sleep 10
 
-  - sudo a2enmod rewrite actions fastcgi alias
-  - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - echo "memory_limit = 2G" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - echo "phar.readonly = 0" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - echo 'date.timezone = "Europe/Paris"' >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
-  # configure apache virtual hosts
-  - sudo cp -f tests/travis-apache /etc/apache2/sites-available/$VHOST_CONF
-  - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/$VHOST_CONF
-  - sudo sed -e "s?%VHOST_URL%?$VHOST_URL?g" --in-place /etc/apache2/sites-available/$VHOST_CONF
-  - echo "127.0.0.1       $VHOST_URL" | sudo tee -a /etc/hosts
-  - sudo a2enmod rewrite
-  - sudo a2ensite $VHOST_CONF
-  - sudo service apache2 restart
-  - echo mysql --version
-  # Install additional PHP packages (check http://docs.travis-ci.com/user/ci-environment/#CI-environment-OS
-  # for pre-installed packages)
-  #- sudo apt-get install -qq php5-imagick
-  # Following http://docs.travis-ci.com/user/languages/php/#PHP-installation,
-  # php is compiled with --enable-fpm, so no install of FPM is needed.
-  # However, not installing it generates errors with service php5-fpm restart
-  # further down (need to use php-fpm without 5)
-  #- sudo apt-get install -qq php5-cli php5-fpm
+  # Apache & php-fpm configuration
+  - bash tests/travis/setup-php-fpm.sh
+  - bash tests/travis/setup-apache.sh
 
-before_script:
-  #- which composer
-  #- php -d memory_limit=2G /usr/bin/composer update
-  #- php -d memory_limit=2G /home/travis/.phpenv/shims/composer update
-  # You can either use the composer install method and face the Github limit
-  #- composer install -n
-  - composer self-update
-  - composer update
-  # ...OR you can try the option --prefer-dist, that will reuse composer packages cache
-  #- composer update --prefer-dist
-  # ...OR you can try the --prefer-source option to download from source whenever it's possible (but it's much slower)
-  #- composer update --prefer-source
-  # ...OR use the proxy repository to download the necessary dependencies, but this repo is not always updated
-  #- git clone -b 1.10.x --depth=1 https://github.com/ywarnier/chamilo-vendors.git
-  #- sudo mv chamilo-vendors/vendor .
-  #- sudo mv chamilo-vendors/web .
-  #- sudo mv chamilo-vendors/composer.lock .
-  #- sudo rm -rf chamilo-vendors
-  # Continue...
-  - phpenv config-add tests/travis-php-config.ini
-  # enable php-fpm
-  # configure apache virtual hosts
+  - mysqld --version
+  - apache2 -v
   - php -v
-  # install Chash, a database, and then install Chamilo
+  - sudo cat /etc/hosts
+
+  - composer update
+  - phpenv config-add tests/travis-php-config.ini
+
+  # Install Chash, a database, and then install Chamilo
   - git clone https://github.com/chamilo/chash
   - cd chash
-  #- composer install
   - composer update
   - php -d phar.readonly=0 createPhar.php
   - chmod +x chash.phar
   - sudo mv chash.phar /usr/local/bin/chash
-  #- cd ..
-  #- git clone -b nophpversioncheck --single-branch https://github.com/ywarnier/chamilo-cli-install.git
-  #- cp chamilo-cli-install/chamilo-cli-installer.php main/install/
-  #- mysql -u root -e 'create database chamilo'
-  #- sudo chmod -R 0777 app/config app main/default_course_document/images main/lang
-  #- cd main/install/
-  #- sudo php5 chamilo-cli-installer.php -l admin -p admin -U travis -u 'http://localhost/' -X travis -L english -z 'admin@example.com' -f 'John' -g 'Doe' -b '555-5555' -c 'Test campus' -y 'Chamilo' -x 'https://chamilo.org'
-  #- cd ../..
-  # install Chamilo with Chash - see reference https://github.com/sonnym/travis-ci-drupal-module-example/blob/master/.travis.yml
-  # - cd /home/travis/build/chamilo/chamilo-lms
-  # There's an issue with Chash, starting in version 1.10, whereby PHP CLI on Travis-ci is PHP5.3, whatever the version you ask for.
-  # This effectively breaks the installer and renders these tests useless. We are looking for a solution (for example using containers)
-  - sudo php -d date.timezone="Europe/Paris" chash.php chash:chamilo_install $CHAMILO_VERSION $TRAVIS_BUILD_DIR --download-package --no-interaction --only-download-package
+  # Download chamilo
+  - php -d date.timezone="Europe/Paris" chash.php chash:chamilo_install $CHAMILO_VERSION $TRAVIS_BUILD_DIR --download-package --no-interaction --only-download-package
   - cd $TRAVIS_BUILD_DIR
+  - pwd
+  # Install vendors
   - composer update
-  - sudo php -d date.timezone="Europe/Paris" $TRAVIS_BUILD_DIR/chash/chash.php chash:chamilo_install $CHAMILO_VERSION $TRAVIS_BUILD_DIR --no-interaction --sitename="Chamilo" --site_url="http://$VHOST_URL/" --institution="Chamilo" --institution_url="https://chamilo.org" --encrypt_method="sha1" --firstname="John" --lastname="Doe" --language="english" --driver="pdo_mysql" --host="localhost" --port="3306" --dbname="chamilo" --dbuser="root" --permissions_for_new_directories="0777" --permissions_for_new_files="0666" --linux-user="www-data" --linux-group="www-data" --username="admin" --password="admin" --email="admin@example.com" --phone="555-5555"
+  # Install chamilo
+  - php -d date.timezone="Europe/Paris" $TRAVIS_BUILD_DIR/chash/chash.php chash:chamilo_install $CHAMILO_VERSION $TRAVIS_BUILD_DIR --no-interaction --sitename="Chamilo" --site_url="http://$VHOST_URL/" --institution="Chamilo" --institution_url="https://chamilo.org" --encrypt_method="sha1" --firstname="John" --lastname="Doe" --language="english" --driver="pdo_mysql" --host="localhost" --port="3306" --dbname="chamilo" --dbuser="root" --permissions_for_new_directories="0777" --permissions_for_new_files="0666" --linux-user="www-data" --linux-group="www-data" --username="admin" --password="admin" --email="admin@example.com" --phone="555-5555"
   - sudo chmod -R 777 app/cache app/logs app/courses app/upload
-  - sudo php -d date.timezone="Europe/Paris" $TRAVIS_BUILD_DIR/chash/chash.php chash:chamilo_status
+  # Check chamilo status
+  - php -d date.timezone="Europe/Paris" $TRAVIS_BUILD_DIR/chash/chash.php chash:chamilo_status
+  - ls -la
+  - ls -la /var/www
+  # Permissions
+  - sudo chown -R www-data:www-data $TRAVIS_BUILD_DIR
+  - sudo chown -R 775 $TRAVIS_BUILD_DIR
+  - sudo chmod +x /home/travis/build
+  - sudo service apache2 restart
+  - curl $VHOST_URL
 
 script:
-  # - phpunit -c tests/phpunit
-  # pwd shows /home/travis/build/chamilo/chamilo-lms
   - cd tests/behat && ../../vendor/behat/behat/bin/behat -v
-  - sudo cat /var/log/apache2/$VHOST_URL-error.log
-  - sudo cat /var/log/apache2/$VHOST_URL-access.log
+  #- sudo cat /var/log/apache2/$VHOST_URL-error.log
+  #- sudo cat /var/log/apache2/$VHOST_URL-access.log
 
 # configure notifications (email, IRC, campfire etc)
 notifications:
   # IRC notifications - disabled for creating a lot of noise on the channel
   irc: "irc.freenode.org#chamilodev"
+

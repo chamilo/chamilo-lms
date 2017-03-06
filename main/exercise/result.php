@@ -74,15 +74,14 @@ if ($show_headers) {
 }
 
 $message = Session::read('attempt_remaining');
-if (!empty($message)) {
-    Display::display_normal_message(
-        $message,
-        false
-    );
-}
 Session::erase('attempt_remaining');
 
-ExerciseLib::display_question_list_by_attempt($objExercise, $id, false);
+ExerciseLib::display_question_list_by_attempt(
+    $objExercise,
+    $id,
+    false,
+    $message
+);
 
 if ($show_headers) {
     Display::display_footer();

@@ -46,8 +46,7 @@ class ExerciseResult
         $exercise_id = 0,
         $hotpotato_name = null
     ) {
-		$return = array();
-
+        $return = array();
         $TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);
         $TBL_TABLE_LP_MAIN = Database::get_course_table(TABLE_LP_MAIN);
 
@@ -69,19 +68,19 @@ class ExerciseResult
         if (empty($user_id)) {
             $user_id_and = null;
             $sql = "SELECT ".(api_is_western_name_order() ? "firstname as userpart1, lastname userpart2" : "lastname as userpart1, firstname as userpart2").",
-                        official_code,
-                        ce.title as extitle,
-                        te.exe_result as exresult ,
-                        te.exe_weighting as exweight,
-                        te.exe_date as exdate,
-                        te.exe_id as exid,
-                        email as exemail,
-                        te.start_date as exstart,
-                        steps_counter as exstep,
-                        exe_user_id as excruid,
-                        te.exe_duration as duration,
-                        te.orig_lp_id as orig_lp_id,
-                        tlm.name as lp_name
+                    official_code,
+                    ce.title as extitle,
+                    te.exe_result as exresult ,
+                    te.exe_weighting as exweight,
+                    te.exe_date as exdate,
+                    te.exe_id as exid,
+                    email as exemail,
+                    te.start_date as exstart,
+                    steps_counter as exstep,
+                    exe_user_id as excruid,
+                    te.exe_duration as duration,
+                    te.orig_lp_id as orig_lp_id,
+                    tlm.name as lp_name
                 FROM $TBL_EXERCISES  AS ce
                 INNER JOIN $TBL_TRACK_EXERCISES AS te 
                 ON (te.exe_exo_id = ce.id)
@@ -97,21 +96,21 @@ class ExerciseResult
         } else {
             $user_id_and = ' AND te.exe_user_id = ' . api_get_user_id() . ' ';
             // get only this user's results
-            $sql="SELECT ".(api_is_western_name_order() ? "firstname as userpart1, lastname userpart2" : "lastname as userpart1, firstname as userpart2").",
-                    official_code,
-                    ce.title as extitle,
-                    te.exe_result as exresult,
-                    te.exe_weighting as exweight,
-                    te.exe_date as exdate,
-                    te.exe_id as exid,
-                    email as exemail,
-                    te.start_date as exstart,
-                    steps_counter as exstep,
-                    exe_user_id as excruid,
-                    te.exe_duration as duration,
-                    ce.results_disabled as exdisabled,
-                    te.orig_lp_id as orig_lp_id,
-                    tlm.name as lp_name
+            $sql = "SELECT ".(api_is_western_name_order() ? "firstname as userpart1, lastname userpart2" : "lastname as userpart1, firstname as userpart2").",
+                        official_code,
+                        ce.title as extitle,
+                        te.exe_result as exresult,
+                        te.exe_weighting as exweight,
+                        te.exe_date as exdate,
+                        te.exe_id as exid,
+                        email as exemail,
+                        te.start_date as exstart,
+                        steps_counter as exstep,
+                        exe_user_id as excruid,
+                        te.exe_duration as duration,
+                        ce.results_disabled as exdisabled,
+                        te.orig_lp_id as orig_lp_id,
+                        tlm.name as lp_name
                     FROM $TBL_EXERCISES  AS ce
                     INNER JOIN $TBL_TRACK_EXERCISES AS te 
                     ON (te.exe_exo_id = ce.id)
@@ -177,10 +176,12 @@ class ExerciseResult
             $i = 0;
             foreach ($results as $result) {
                 $revised = false;
-
                 //revised or not
-                $sql_exe = "SELECT exe_id FROM $TBL_TRACK_ATTEMPT_RECORDING
-                            WHERE author != '' AND exe_id = ".Database :: escape_string($result['exid'])."
+                $sql_exe = "SELECT exe_id 
+                            FROM $TBL_TRACK_ATTEMPT_RECORDING
+                            WHERE 
+                                author != '' AND 
+                                exe_id = ".Database :: escape_string($result['exid'])."
                             LIMIT 1";
                 $query = Database::query($sql_exe);
 
@@ -276,8 +277,7 @@ class ExerciseResult
     }
 
 	/**
-	 * Exports the complete report as a CSV file
-     *
+     * Exports the complete report as a CSV file     *
      * @param    string $document_path Document path inside the document tool
      * @param    integer $user_id Optional user ID
      * @param    boolean $export_user_fields Whether to include user fields or not
@@ -296,7 +296,13 @@ class ExerciseResult
         $hotpotato_name = null
     ) {
         global $charset;
-        $this->getExercisesReporting($document_path, $user_id, $export_filter, $exercise_id, $hotpotato_name);
+        $this->getExercisesReporting(
+            $document_path,
+            $user_id,
+            $export_filter,
+            $exercise_id,
+            $hotpotato_name
+        );
         $now = api_get_local_time();
         $filename = 'exercise_results_'.$now.'.csv';
         if (!empty($user_id)) {
@@ -304,7 +310,6 @@ class ExerciseResult
         }
 
         $filename = api_replace_dangerous_char($filename);
-
         $data = '';
         if (api_is_western_name_order()) {
             if (!empty($this->results[0]['first_name'])) {
@@ -391,11 +396,12 @@ class ExerciseResult
                     }
                 }
             }
+            $duration = !empty($row['duration']) ? round($row['duration'] / 60) : 0;
 
             $data .= str_replace("\r\n",'  ', api_html_entity_decode(strip_tags($row['title']), ENT_QUOTES, $charset)).';';
             $data .= str_replace("\r\n", '  ', $row['start_date']).';';
             $data .= str_replace("\r\n", '  ', $row['end_date']).';';
-            $data .= str_replace("\r\n", '  ', $row['duration']).';';
+            $data .= str_replace("\r\n", '  ', $duration).';';
             $data .= str_replace("\r\n", '  ', $row['result']).';';
             $data .= str_replace("\r\n", '  ', $row['max']).';';
             $data .= str_replace("\r\n", '  ', $row['status']).';';
@@ -404,7 +410,7 @@ class ExerciseResult
             $data .= "\n";
         }
 
-        //output the results
+        // output the results
         $len = strlen($data);
         header('Content-type: application/octet-stream');
         header('Content-Type: application/force-download');
@@ -427,7 +433,14 @@ class ExerciseResult
 
     /**
      * Exports the complete report as an XLS file
-     * @return	boolean		False on error
+     *
+     * @param string $document_path
+     * @param null $user_id
+     * @param bool $export_user_fields
+     * @param int $export_filter
+     * @param int $exercise_id
+     * @param null $hotpotato_name
+     * @return bool
      */
     public function exportCompleteReportXLS(
         $document_path = '',
@@ -438,17 +451,24 @@ class ExerciseResult
         $hotpotato_name = null
     ) {
         global $charset;
-        $this->getExercisesReporting($document_path, $user_id, $export_filter, $exercise_id, $hotpotato_name);
-        $filename = 'exercise_results_'.api_get_local_time().'.xlsx';
+        $this->getExercisesReporting(
+            $document_path,
+            $user_id,
+            $export_filter,
+            $exercise_id,
+            $hotpotato_name
+        );
+        $now = api_get_local_time();
+        $filename = 'exercise_results_'.$now.'.xlsx';
         if (!empty($user_id)) {
-            $filename = 'exercise_results_user_'.$user_id.'_'.api_get_local_time().'.xlsx';
+            $filename = 'exercise_results_user_'.$user_id.'_'.$now.'.xlsx';
         }
 
         $spreadsheet = new PHPExcel();
         $spreadsheet->setActiveSheetIndex(0);
         $worksheet = $spreadsheet->getActiveSheet();
 
-        $line = 0;
+        $line = 1; // Skip first line
         $column = 0; //skip the first column (row titles)
 
         // check if exists column 'user'
@@ -642,13 +662,23 @@ class ExerciseResult
                 }
             }
 
-            $worksheet->setCellValueByColumnAndRow($column, $line, api_html_entity_decode(strip_tags($row['title']), ENT_QUOTES, $charset));
+            $worksheet->setCellValueByColumnAndRow(
+                $column,
+                $line,
+                api_html_entity_decode(
+                    strip_tags($row['title']),
+                    ENT_QUOTES,
+                    $charset
+                )
+            );
+
             $column++;
             $worksheet->setCellValueByColumnAndRow($column, $line, $row['start_date']);
             $column++;
             $worksheet->setCellValueByColumnAndRow($column, $line, $row['end_date']);
             $column++;
-            $worksheet->setCellValueByColumnAndRow($column, $line, $row['duration']);
+            $duration = !empty($row['duration']) ? round($row['duration'] / 60) : 0;
+            $worksheet->setCellValueByColumnAndRow($column, $line, $duration);
             $column++;
             $worksheet->setCellValueByColumnAndRow($column, $line, $row['result']);
             $column++;

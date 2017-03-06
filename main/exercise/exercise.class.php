@@ -2353,7 +2353,7 @@ class Exercise
                 }
 
                 $defaults['start_time'] = !empty($this->start_time) ? api_get_local_time($this->start_time) : date('Y-m-d 12:00:00');
-                $defaults['end_time'] = empty($this->end_time) ? api_get_local_time($this->end_time) : date('Y-m-d 12:00:00', time()+84600);
+                $defaults['end_time'] = !empty($this->end_time) ? api_get_local_time($this->end_time) : date('Y-m-d 12:00:00', time()+84600);
 
                 // Get expired time
                 if ($this->expired_time != '0') {
@@ -2772,7 +2772,7 @@ class Exercise
                         // This should be moved to the duplicate function
                         $new_answer_obj = new Answer($old_question_id);
                         $new_answer_obj->read();
-                        $new_answer_obj->duplicate($new_id);
+                        $new_answer_obj->duplicate($new_question_obj);
                     }
                 }
             }
@@ -3492,14 +3492,15 @@ class Exercise
                     break;
                 case FILL_IN_BLANKS:
                     $str = '';
+                    $answerFromDatabase = '';
                     if ($from_database) {
                         $sql = "SELECT answer
-                                    FROM $TBL_TRACK_ATTEMPT
-                                    WHERE
-                                        exe_id = $exeId AND
-                                        question_id= ".intval($questionId);
+                                FROM $TBL_TRACK_ATTEMPT
+                                WHERE
+                                    exe_id = $exeId AND
+                                    question_id= ".intval($questionId);
                         $result = Database::query($sql);
-                        $str = Database::result($result, 0, 'answer');
+                        $str = $answerFromDatabase = Database::result($result, 0, 'answer');
                     }
 
                     if ($saved_results == false && strpos($str, 'font color') !== false) {
@@ -3552,12 +3553,7 @@ class Exercise
                                 break;
                             }
                             if ($from_database) {
-                                $queryfill = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT."
-                                          WHERE
-                                            exe_id = '".$exeId."' AND
-                                            question_id= ".intval($questionId)."";
-                                $resfill = Database::query($queryfill);
-                                $str = Database::result($resfill, 0, 'answer');
+                                $str = $answerFromDatabase;
                                 api_preg_match_all('#\[([^[]*)\]#', $str, $arr);
                                 $str = str_replace('\r\n', '', $str);
 
@@ -3649,15 +3645,8 @@ class Exercise
 
                         // get existing user data in n the BDD
                         if ($from_database) {
-                            $sql = "SELECT answer
-                                    FROM $TBL_TRACK_ATTEMPT
-                                    WHERE
-                                        exe_id = $exeId AND
-                                        question_id= ".intval($questionId);
-                            $result = Database::query($sql);
-                            $str = Database::result($result, 0, 'answer');
                             $listStudentResults = FillBlanks::getAnswerInfo(
-                                $str,
+                                $answerFromDatabase,
                                 true
                             );
                             $choice = $listStudentResults['studentanswer'];
@@ -3672,10 +3661,14 @@ class Exercise
 
                                 // This value is the user input, not escaped while correct answer is escaped by fckeditor
                                 // Works with cyrillic alphabet and when using ">" chars see #7718 #7610 #7618
+                                // ENT_QUOTES is used in order to transform ' to &#039;
                                 if (!$from_database) {
                                     $studentAnswer = htmlentities(
-                                        api_utf8_encode($studentAnswer)
+                                        api_utf8_encode($studentAnswer),
+                                        ENT_QUOTES
                                     );
+                                    // fix apostrophe
+                                    $studentAnswer = str_replace('&#039;', '&#39;', $studentAnswer);
                                 }
 
                                 $isAnswerCorrect = 0;
@@ -3695,9 +3688,7 @@ class Exercise
                             $listTeacherAnswerTemp = $listCorrectAnswers['tabwords'];
                             // for every teacher answer, check if there is a student answer
                             for ($i = 0; $i < count($listStudentAnswerTemp); $i++) {
-                                $studentAnswer = trim(
-                                    $listStudentAnswerTemp[$i]
-                                );
+                                $studentAnswer = trim($listStudentAnswerTemp[$i]);
                                 $found = false;
                                 for ($j = 0; $j < count($listTeacherAnswerTemp); $j++) {
                                     $correctAnswer = $listTeacherAnswerTemp[$j];
@@ -3709,7 +3700,7 @@ class Exercise
                                         ) {
                                             $questionScore += $answerWeighting[$i];
                                             $totalScore += $answerWeighting[$i];
-                                            $listTeacherAnswerTemp[$j] = "";
+                                            $listTeacherAnswerTemp[$j] = '';
                                             $found = true;
                                         }
                                     }
@@ -3839,9 +3830,11 @@ class Exercise
                     break;
                 case FREE_ANSWER:
                     if ($from_database) {
-                        $query  = "SELECT answer, marks FROM ".$TBL_TRACK_ATTEMPT."
-                                   WHERE exe_id = '".$exeId."' AND question_id= '".$questionId."'";
-                        $resq = Database::query($query);
+                        $sql  = "SELECT answer, marks FROM $TBL_TRACK_ATTEMPT
+                                 WHERE 
+                                    exe_id = $exeId AND 
+                                    question_id= ".$questionId;
+                        $resq = Database::query($sql);
                         $data = Database::fetch_array($resq);
 
                         $choice = $data['answer'];
@@ -5014,7 +5007,6 @@ class Exercise
                     }
 
                     //save the score attempts
-
                     if (1) {
                         //getting the answer 1 or 0 comes from exercise_submit_modal.php
                         $final_answer = $hotspot_delineation_result[1];
@@ -5839,11 +5831,11 @@ class Exercise
             // check if we are before-or-after end-or-start date
             if ($existsStartDate && $timeNow < api_strtotime($this->start_time, 'UTC')) {
                 $nowIsAfterStartDate = false;
-                    }
+            }
 
             if ($existsEndDate & $timeNow >= api_strtotime($this->end_time, 'UTC')) {
                 $nowIsBeforeEndDate = false;
-                }
+            }
 
             // lets check all cases
             if ($existsStartDate && !$existsEndDate) {
@@ -5879,7 +5871,7 @@ class Exercise
                         // after start date and before end date
                         $isVisible = true;
                         $message = sprintf(get_lang('ExerciseIsActivatedFromXToY'),
-                    api_convert_and_format_date($this->start_time),
+                            api_convert_and_format_date($this->start_time),
                             api_convert_and_format_date($this->end_time));
                     } else {
                         // after start date and after end date

@@ -84,7 +84,7 @@ if ($is_allowedToEdit) {
             $new_answer_obj = new Answer($old_question_id, $origin_course_id);
             $new_answer_obj->read();
             //Duplicating the Answers in the current course
-            $new_answer_obj->duplicate($new_id, $current_course);
+            $new_answer_obj->duplicate($new_question_obj, $current_course);
             // destruction of the Question object
             unset($new_question_obj);
             unset($old_question_obj);
@@ -154,7 +154,7 @@ if ($is_allowedToEdit) {
                     $new_answer_obj->read();
 
                     //Duplicating the Answers in the current course
-                    $new_answer_obj->duplicate($new_id, $current_course);
+                    $new_answer_obj->duplicate($new_question_obj, $current_course);
 
                     // destruction of the Question object
                     unset($new_question_obj);

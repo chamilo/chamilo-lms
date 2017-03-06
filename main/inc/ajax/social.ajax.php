@@ -83,8 +83,8 @@ switch ($action) {
         if ($number_friends != 0) {
             $number_loop = ($number_friends/$number_of_images);
             $loop_friends = ceil($number_loop);
-            $j=0;
-            for ($k=0; $k<$loop_friends; $k++) {
+            $j = 0;
+            for ($k = 0; $k < $loop_friends; $k++) {
                 if ($j==$number_of_images) {
                     $number_of_images=$number_of_images*2;
                 }
@@ -195,7 +195,7 @@ switch ($action) {
                 break;
         }
         break;
-    case 'listWallMessage':
+    case 'list_wall_message':
         $start = isset($_REQUEST['start']) ? intval($_REQUEST['start']) - 1 : 0;
         $length = isset($_REQUEST['length']) ? intval($_REQUEST['length']) : 10;
         $userId = isset($_REQUEST['u']) ? intval($_REQUEST['u']) : api_get_user_id();
@@ -204,7 +204,7 @@ switch ($action) {
         if (!empty($array)) {
             ksort($array);
             $html = '';
-            for($i = 0; $i < count($array); $i++) {
+            for ($i = 0; $i < count($array); $i++) {
                 $post = $array[$i]['html'];
                 $comment = SocialManager::getWallMessagesHTML($userId, $friendId, $array[$i]['id']);
                 $html .= '<div class="panel panel-info"><div class="panel-body">'.$post.$comment.'</div></div>';
@@ -212,7 +212,7 @@ switch ($action) {
             $html .= Display::div(
                 Display::url(
                     get_lang('SeeMore'),
-                    api_get_self() . '?u=' . $userId . '&a=listWallMessage&start=' .
+                    api_get_self() . '?u=' . $userId . '&a=list_wall_message&start=' .
                     ($start + $length + 1) . '&length=' . $length,
                     array(
                         'class' => 'nextPage',
@@ -226,7 +226,7 @@ switch ($action) {
         }
         break;
         // Read the Url using OpenGraph and returns the hyperlinks content
-    case 'readUrlWithOpenGraph':
+    case 'read_url_with_open_graph':
         $url = isset($_POST['social_wall_new_msg_main']) ? $_POST['social_wall_new_msg_main'] : '';
         $url = trim($url);
         $html = '';
@@ -236,8 +236,6 @@ switch ($action) {
             );
         }
         echo $html;
-        break;
-    case 'voteMsg':
         break;
     default:
         echo '';

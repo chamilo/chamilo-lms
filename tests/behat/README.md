@@ -1,7 +1,11 @@
 In order to run tests locally:
 
 - An administrator user should be created with:
-Username "admin" and password "admin" with user_id = 1 
+    - Username "admin" 
+    - Password "admin"
+    - First name John
+    - Last name Doe
+    - user_id = 1 
 
 - Edit file tests/behat/behat.yml
   An update your Chamilo URL.
@@ -10,7 +14,23 @@ Username "admin" and password "admin" with user_id = 1
 
 - Social network tool must be available.
 
-After executing a composer update 
+- Install Selenium 3
+ 
+http://www.seleniumhq.org/download/
+
+And run with:
+
+```
+java -jar /my-dir/selenium-server-standalone-3.1.0.jar
+```
+
+- Install Chrome driver, unzip and copy into /usr/bin
+
+https://sites.google.com/a/chromium.org/chromedriver/downloads
+
+```
+ - wget https://chromedriver.storage.googleapis.com/2.27/chromedriver_linux64.zip && unzip chromedriver_linux64.zip && sudo mv chromedriver /usr/bin 
+```
 
 Run:
 

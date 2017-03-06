@@ -161,7 +161,11 @@ switch ($action) {
         $sessionId = isset($_GET['session_id']) ? (int) $_GET['session_id'] : 0;
         $courseList = [];
         if (empty($sessionId)) {
-            $preCourseList = CourseManager::get_courses_list_by_user_id($userId, false, true);
+            $preCourseList = CourseManager::get_courses_list_by_user_id(
+                $userId,
+                false,
+                true
+            );
             $courseList = array_column($preCourseList, 'real_id');
         } else {
             if ($isAdmin) {
@@ -175,7 +179,7 @@ switch ($action) {
 
         $courseListToSelect = [];
         if (!empty($courseList)) {
-            //Course List
+            // Course List
             foreach ($courseList as $courseId) {
                 $courseInfo = api_get_course_info_by_id($courseId);
                 $courseListToSelect[] = [

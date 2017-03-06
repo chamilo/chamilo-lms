@@ -37,7 +37,8 @@ var methods = {};
                     if (value) { userInputs.push(value); }
                 });
                 userInputs = userInputs.concat(options.common.zxcvbnTerms);
-                score = Math.log2(zxcvbn(word, userInputs).guesses);
+                score = zxcvbn(word, userInputs).guesses;
+                score = Math.log(score) * Math.LOG2E;
             } else {
                 score = rulesEngine.executeRules(options, word);
             }

@@ -28,7 +28,7 @@ if (!api_is_platform_admin(true)) {
 }
 
 /* Constants and variables */
-$course_code = Database::escape_string(api_get_course_id());
+$course_code = api_get_course_id();
 $sessionId = api_get_session_id();
 $is_western_name_order = api_is_western_name_order();
 $sort_by_first_name = api_sort_by_first_name();
@@ -454,6 +454,195 @@ if (!api_is_allowed_in_course()) {
 // Statistics
 Event::event_access_tool(TOOL_USER);
 
+$default_column = 3;
+$tableLabel = $type === STUDENT ? 'student' : 'teacher';
+$table = new SortableTable($tableLabel.'_list', 'get_number_of_users', 'get_user_data', $default_column);
+$parameters['keyword'] = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
+$parameters['sec_token'] = Security::get_token();
+$parameters['id_session'] = api_get_session_id();
+$parameters['type'] = $type;
+
+$table->set_additional_parameters($parameters);
+$header_nr = 0;
+$indexList = array();
+$table->set_header($header_nr++, '', false);
+
+$indexList['photo'] = $header_nr;
+$table->set_header($header_nr++, get_lang('Photo'), false);
+
+$table->set_header($header_nr++, get_lang('OfficialCode'));
+$indexList['official_code'] = $header_nr;
+
+if ($is_western_name_order) {
+    $indexList['firstname'] = $header_nr;
+    $table->set_header($header_nr++, get_lang('FirstName'));
+    $indexList['lastname'] = $header_nr;
+    $table->set_header($header_nr++, get_lang('LastName'));
+} else {
+    $indexList['lastname'] = $header_nr;
+    $table->set_header($header_nr++, get_lang('LastName'));
+    $indexList['firstname'] = $header_nr;
+    $table->set_header($header_nr++, get_lang('FirstName'));
+}
+$indexList['username'] = $header_nr;
+$table->set_header($header_nr++, get_lang('LoginName'));
+$indexList['groups'] = $header_nr;
+$table->set_header($header_nr++, get_lang('GroupSingle'), false);
+
+/*
+if (api_is_allowed_to_edit(null, true) && api_get_setting('allow_user_course_subscription_by_course_admin') == 'true') {
+
+} else {
+    $table->set_column_filter(0, 'hide_field');
+}
+*/
+
+$hideFields = api_get_configuration_value('hide_user_field_from_list');
+if (!empty($hideFields)) {
+    foreach ($hideFields as $fieldToHide) {
+        if (isset($indexList[$fieldToHide])) {
+            $table->setHideColumn($indexList[$fieldToHide]);
+        }
+    }
+}
+
+if (api_is_allowed_to_edit(null, true)) {
+    $table->set_header($header_nr++, get_lang('Status'), false);
+    $table->set_header($header_nr++, get_lang('Active'), false);
+    if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true') {
+        $table->set_column_filter(8, 'active_filter');
+    } else {
+        $table->set_column_filter(8, 'active_filter');
+    }
+
+    foreach ($extraFields as $extraField) {
+        $table->set_header($header_nr++, $extraField['display_text'], false);
+    }
+
+    // Actions column
+    $table->set_header($header_nr++, get_lang('Action'), false);
+    $table->set_column_filter($header_nr-1, 'modify_filter');
+
+    if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true') {
+        $table->set_form_actions(array('unsubscribe' => get_lang('Unreg')), 'user');
+    }
+} else {
+    if ($course_info['unsubscribe'] == 1) {
+        $table->set_header($header_nr++, get_lang('Action'), false);
+        $table->set_column_filter($header_nr-1, 'modify_filter');
+    }
+}
+
+/*	Header */
+if (isset($origin) && $origin == 'learnpath') {
+    Display::display_reduced_header();
+} else {
+
+    if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
+        $interbreadcrumb[] = array(
+            "url" => "user.php?".api_get_cidreq(),
+            "name" => get_lang("Users"),
+        );
+        $tool_name = get_lang('SearchResults');
+    } else {
+        $tool_name = get_lang('Users');
+        $origin = 'users';
+    }
+    Display::display_header($tool_name, "User");
+}
+
+/*	Setting the permissions for this page */
+$is_allowed_to_track = ($is_courseAdmin || $is_courseTutor) || api_is_platform_admin();
+
+// Tool introduction
+Display::display_introduction_section(TOOL_USER, 'left');
+$actions = '';
+$selectedTab = 1;
+
+if (api_is_allowed_to_edit(null, true)) {
+    echo '<div class="actions">';
+
+    switch ($type) {
+        case STUDENT:
+            $selectedTab = 1;
+            $url = api_get_path(WEB_CODE_PATH).'user/subscribe_user.php?'.api_get_cidreq().'&type='.STUDENT;
+            $icon = Display::url(
+                Display::return_icon('add-user.png', get_lang('Add'), '', ICON_SIZE_MEDIUM),
+                $url
+            );
+            break;
+        case COURSEMANAGER:
+            $selectedTab = 2;
+            $url = api_get_path(WEB_CODE_PATH).'user/subscribe_user.php?'.api_get_cidreq().'&type='.COURSEMANAGER;
+            $icon = Display::url(
+                Display::return_icon('add-teacher.png', get_lang('Add'), '', ICON_SIZE_MEDIUM),
+                $url
+            );
+            break;
+    }
+
+    echo '<div class="row">';
+    echo '<div class="col-md-6">';
+    echo $icon;
+    $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&format=csv&type='.$type.'">'.
+        Display::return_icon('export_csv.png', get_lang('ExportAsCSV'),'',ICON_SIZE_MEDIUM).'</a> ';
+    $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&format=xls&type='.$type.'">'.
+        Display::return_icon('export_excel.png', get_lang('ExportAsXLS'),'',ICON_SIZE_MEDIUM).'</a> ';
+
+    if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true' ||
+        api_is_platform_admin()
+    ) {
+        $actions .= '<a href="user_import.php?'.api_get_cidreq().'&action=import">'.
+            Display::return_icon('import_csv.png', get_lang('ImportUsersToACourse'),'',ICON_SIZE_MEDIUM).'</a> ';
+    }
+
+    $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&format=pdf&type='.$type.'">'.
+        Display::return_icon('pdf.png', get_lang('ExportToPDF'),'',ICON_SIZE_MEDIUM).'</a> ';
+    echo $actions;
+
+    echo '</div>';
+    echo '<div class="col-md-6">';
+    echo '<div class="pull-right">';
+    // Build search-form
+    $form = new FormValidator(
+        'search_user',
+        'get',
+        api_get_self().'?type='.$type,
+        '',
+        null,
+        FormValidator::LAYOUT_INLINE
+    );
+    $form->addHidden('type', $type);
+    $form->addText('keyword', '', false);
+    $form->addElement('hidden', 'cidReq', api_get_course_id());
+    $form->addButtonSearch(get_lang('SearchButton'));
+    $form->display();
+    echo '</div>';
+    echo '</div>';
+    echo '</div>';
+
+    $allowTutors = api_get_setting('allow_tutors_to_assign_students_to_session');
+    if (api_is_allowed_to_edit() && $allowTutors === 'true') {
+        $actions .= ' <a class="btn btn-default" href="session_list.php?'.api_get_cidreq().'">'.
+            get_lang('Sessions').'</a>';
+    }
+    echo '</div>';
+}
+
+echo UserManager::getUserSubscriptionTab($selectedTab);
+$table->display();
+
+if (!empty($_GET['keyword']) && !empty($_GET['submit'])) {
+    $keyword_name = Security::remove_XSS($_GET['keyword']);
+    echo '<br/>'.get_lang('SearchResultsFor').' <span style="font-style: italic ;"> '.$keyword_name.' </span><br>';
+}
+
+if (!isset($origin) || $origin != 'learnpath') {
+    Display::display_footer();
+}
+
+
+/* Helper functions for the users lists in course */
 /**
  * Get the users to display on the current page.
  */
@@ -629,13 +818,13 @@ function get_user_data($from, $number_of_items, $column, $direction)
 
     foreach ($a_course_users as $user_id => $o_course_user) {
         if ((
-            isset($_GET['keyword']) &&
-            searchUserKeyword(
-                $o_course_user['firstname'],
-                $o_course_user['lastname'],
-                $o_course_user['username'],
-                $o_course_user['official_code'],
-                $_GET['keyword'])
+                isset($_GET['keyword']) &&
+                searchUserKeyword(
+                    $o_course_user['firstname'],
+                    $o_course_user['lastname'],
+                    $o_course_user['username'],
+                    $o_course_user['official_code'],
+                    $_GET['keyword'])
             ) || !isset($_GET['keyword']) || empty($_GET['keyword'])
         ) {
 
@@ -845,191 +1034,4 @@ function modify_filter($user_id, $row, $data)
 function hide_field()
 {
     return null;
-}
-
-$default_column = 3;
-$tableLabel = $type === STUDENT ? 'student' : 'teacher';
-$table = new SortableTable($tableLabel.'_list', 'get_number_of_users', 'get_user_data', $default_column);
-$parameters['keyword'] = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
-$parameters['sec_token'] = Security::get_token();
-$parameters['id_session'] = api_get_session_id();
-$parameters['type'] = $type;
-
-$table->set_additional_parameters($parameters);
-$header_nr = 0;
-$indexList = array();
-$table->set_header($header_nr++, '', false);
-
-$indexList['photo'] = $header_nr;
-$table->set_header($header_nr++, get_lang('Photo'), false);
-
-$table->set_header($header_nr++, get_lang('OfficialCode'));
-$indexList['official_code'] = $header_nr;
-
-if ($is_western_name_order) {
-    $indexList['firstname'] = $header_nr;
-    $table->set_header($header_nr++, get_lang('FirstName'));
-    $indexList['lastname'] = $header_nr;
-    $table->set_header($header_nr++, get_lang('LastName'));
-} else {
-    $indexList['lastname'] = $header_nr;
-    $table->set_header($header_nr++, get_lang('LastName'));
-    $indexList['firstname'] = $header_nr;
-    $table->set_header($header_nr++, get_lang('FirstName'));
-}
-$indexList['username'] = $header_nr;
-$table->set_header($header_nr++, get_lang('LoginName'));
-$indexList['groups'] = $header_nr;
-$table->set_header($header_nr++, get_lang('GroupSingle'), false);
-
-/*
-if (api_is_allowed_to_edit(null, true) && api_get_setting('allow_user_course_subscription_by_course_admin') == 'true') {
-
-} else {
-    $table->set_column_filter(0, 'hide_field');
-}
-*/
-
-$hideFields = api_get_configuration_value('hide_user_field_from_list');
-if (!empty($hideFields)) {
-    foreach ($hideFields as $fieldToHide) {
-        if (isset($indexList[$fieldToHide])) {
-            $table->setHideColumn($indexList[$fieldToHide]);
-        }
-    }
-}
-
-if (api_is_allowed_to_edit(null, true)) {
-    $table->set_header($header_nr++, get_lang('Status'), false);
-    $table->set_header($header_nr++, get_lang('Active'), false);
-    if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true') {
-        $table->set_column_filter(8, 'active_filter');
-    } else {
-        $table->set_column_filter(8, 'active_filter');
-    }
-
-    foreach ($extraFields as $extraField) {
-        $table->set_header($header_nr++, $extraField['display_text'], false);
-    }
-
-    // Actions column
-    $table->set_header($header_nr++, get_lang('Action'), false);
-    $table->set_column_filter($header_nr-1, 'modify_filter');
-
-    if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true') {
-        $table->set_form_actions(array('unsubscribe' => get_lang('Unreg')), 'user');
-    }
-} else {
-    if ($course_info['unsubscribe'] == 1) {
-        $table->set_header($header_nr++, get_lang('Action'), false);
-        $table->set_column_filter($header_nr-1, 'modify_filter');
-    }
-}
-
-/*	Header */
-if (isset($origin) && $origin == 'learnpath') {
-    Display::display_reduced_header();
-} else {
-
-    if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
-        $interbreadcrumb[] = array(
-            "url" => "user.php?".api_get_cidreq(),
-            "name" => get_lang("Users"),
-        );
-        $tool_name = get_lang('SearchResults');
-    } else {
-        $tool_name = get_lang('Users');
-        $origin = 'users';
-    }
-    Display::display_header($tool_name, "User");
-}
-
-/*	Setting the permissions for this page */
-$is_allowed_to_track = ($is_courseAdmin || $is_courseTutor);
-
-// Tool introduction
-Display::display_introduction_section(TOOL_USER, 'left');
-$actions = '';
-$selectedTab = 1;
-
-if (api_is_allowed_to_edit(null, true)) {
-    echo '<div class="actions">';
-
-    switch ($type) {
-        case STUDENT:
-            $selectedTab = 1;
-            $url = api_get_path(WEB_CODE_PATH).'user/subscribe_user.php?'.api_get_cidreq().'&type='.STUDENT;
-            $icon = Display::url(
-                Display::return_icon('add-user.png', get_lang('Add'), '', ICON_SIZE_MEDIUM),
-                $url
-            );
-            break;
-        case COURSEMANAGER:
-            $selectedTab = 2;
-            $url = api_get_path(WEB_CODE_PATH).'user/subscribe_user.php?'.api_get_cidreq().'&type='.COURSEMANAGER;
-            $icon = Display::url(
-                Display::return_icon('add-teacher.png', get_lang('Add'), '', ICON_SIZE_MEDIUM),
-                $url
-            );
-            break;
-    }
-
-    echo '<div class="row">';
-    echo '<div class="col-md-6">';
-    echo $icon;
-    $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&format=csv&type='.$type.'">'.
-        Display::return_icon('export_csv.png', get_lang('ExportAsCSV'),'',ICON_SIZE_MEDIUM).'</a> ';
-    $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&format=xls&type='.$type.'">'.
-        Display::return_icon('export_excel.png', get_lang('ExportAsXLS'),'',ICON_SIZE_MEDIUM).'</a> ';
-
-    if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true' ||
-        api_is_platform_admin()
-    ) {
-        $actions .= '<a href="user_import.php?'.api_get_cidreq().'&action=import">'.
-            Display::return_icon('import_csv.png', get_lang('ImportUsersToACourse'),'',ICON_SIZE_MEDIUM).'</a> ';
-    }
-
-    $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&format=pdf&type='.$type.'">'.
-        Display::return_icon('pdf.png', get_lang('ExportToPDF'),'',ICON_SIZE_MEDIUM).'</a> ';
-    echo $actions;
-
-    echo '</div>';
-    echo '<div class="col-md-6">';
-    echo '<div class="pull-right">';
-    // Build search-form
-    $form = new FormValidator(
-        'search_user',
-        'get',
-        api_get_self().'?type='.$type,
-        '',
-        null,
-        FormValidator::LAYOUT_INLINE
-    );
-    $form->addHidden('type', $type);
-    $form->addText('keyword', '', false);
-    $form->addElement('hidden', 'cidReq', api_get_course_id());
-    $form->addButtonSearch(get_lang('SearchButton'));
-    $form->display();
-    echo '</div>';
-    echo '</div>';
-    echo '</div>';
-
-    $allowTutors = api_get_setting('allow_tutors_to_assign_students_to_session');
-    if (api_is_allowed_to_edit() && $allowTutors === 'true') {
-        $actions .= ' <a class="btn btn-default" href="session_list.php?'.api_get_cidreq().'">'.
-            get_lang('Sessions').'</a>';
-    }
-    echo '</div>';
-}
-
-echo UserManager::getUserSubscriptionTab($selectedTab);
-$table->display();
-
-if (!empty($_GET['keyword']) && !empty($_GET['submit'])) {
-    $keyword_name = Security::remove_XSS($_GET['keyword']);
-    echo '<br/>'.get_lang('SearchResultsFor').' <span style="font-style: italic ;"> '.$keyword_name.' </span><br>';
-}
-
-if (!isset($origin) || $origin != 'learnpath') {
-    Display::display_footer();
 }

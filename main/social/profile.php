@@ -269,7 +269,7 @@ $social_post_wall_block = empty($posts) ? '<p>'.get_lang("NoPosts").'</p>' : $po
 
 $socialAutoExtendLink = Display::url(
     get_lang('SeeMore'),
-    $socialAjaxUrl . '?u='. $my_user_id . '&a=listWallMessage&start=10&length=5',
+    $socialAjaxUrl . '?u='. $my_user_id . '&a=list_wall_message&start=10&length=5',
     array(
         'class' => 'nextPage next',
     )
@@ -296,7 +296,7 @@ $(document).ready(function() {
                 '");
             },
             type: "POST",
-            url: "'. api_get_path(WEB_AJAX_PATH) .'social.ajax.php?a=readUrlWithOpenGraph",
+            url: "'. api_get_path(WEB_AJAX_PATH) .'social.ajax.php?a=read_url_with_open_graph",
             data: "social_wall_new_msg_main=" + e.originalEvent.clipboardData.getData("text"),
             success: function(response) {
                 $("[name=\'wall_post_button\']").prop( "disabled", false );

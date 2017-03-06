@@ -1,11 +1,9 @@
 <?php
 /* For license terms, see /license.txt */
+
 /**
  * Process payments for the Buy Courses plugin
  * @package chamilo.plugin.buycourses
- */
-/**
- * Initialization
  */
 require_once '../config.php';
 
@@ -48,7 +46,7 @@ $form = new FormValidator('confirm_sale');
 
 if ($form->validate()) {
     $formValues = $form->getSubmitValues();
-    
+
     if (!$formValues['payment_type']) {
         Display::addFlash(
             Display::return_message($plugin->get_lang('NeedToSelectPaymentType'), 'error', false)
@@ -56,12 +54,12 @@ if ($form->validate()) {
         header('Location:' . api_get_self() . '?' . $queryString);
         exit;
     }
-    
+
     $saleId = $plugin->registerSale($item['id'], $formValues['payment_type']);
 
     if ($saleId !== false) {
         $_SESSION['bc_sale_id'] = $saleId;
-        header('Location: ' . api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/process_confirm.php');  
+        header('Location: ' . api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/process_confirm.php');
     }
 
     exit;

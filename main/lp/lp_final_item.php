@@ -31,7 +31,7 @@ if (!$id && !$lpId) {
 
 // Certificate and Skills Premium with Service check
 $plugin = BuyCoursesPlugin::create();
-$checker = ($plugin->get('paypal_enable') || $plugin->get('transfer_enable') || $plugin->get('culqi_enable')) && $plugin->get('include_services');
+$checker = $plugin->isEnabled() && $plugin->get('include_services');
 
 if ($checker) {
     $userServiceSale = $plugin->getServiceSale(

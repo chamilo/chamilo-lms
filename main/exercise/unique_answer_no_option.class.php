@@ -17,20 +17,18 @@ class UniqueAnswerNoOption extends Question
 	public static $typePicture = 'mcuao.png';
 	public static $explanationLangVar = 'UniqueAnswerNoOption';
 
-	/**
-	 * Constructor
-	 */
-	public function __construct()
+    /**
+     * Constructor
+     */
+    public function __construct()
     {
-		parent::__construct();
-		$this -> type = UNIQUE_ANSWER_NO_OPTION;
-		$this -> isContent = $this-> getIsContent();
-	}
+        parent::__construct();
+        $this -> type = UNIQUE_ANSWER_NO_OPTION;
+        $this -> isContent = $this-> getIsContent();
+    }
 
-	/**
-     * function which redifines Question::createAnswersForm
-     * @param the formvalidator instance
-     * @param the answers number to display
+    /**
+     * @inheritdoc
      */
     public function createAnswersForm($form)
     {

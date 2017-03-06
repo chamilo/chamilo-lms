@@ -42,7 +42,7 @@ Feature: Course tools basic testing
 
   Scenario: Make sure the tests tool is available
     Given I am on course "TEMP" homepage
-    And I am on "/main/exercice/exercice.php"
+    And I am on "/main/exercise/exercise.php"
     Then I should not see an ".alert-danger" element
 
   Scenario: Make sure the announcements tool is available
@@ -62,7 +62,7 @@ Feature: Course tools basic testing
 
   Scenario: Make sure the attendances tool is available
     Given I am on course "TEMP" homepage
-    And I am on "/main/attendances/index.php"
+    And I am on "/main/attendance/index.php"
     Then I should not see an ".alert-danger" element
 
   Scenario: Make sure the course progress tool is available
@@ -87,7 +87,7 @@ Feature: Course tools basic testing
 
   Scenario: Make sure the users tool is available
     Given I am on course "TEMP" homepage
-    And I am on "/main/user/index.php"
+    And I am on "/main/user/user.php"
     Then I should not see an ".alert-danger" element
 
   Scenario: Make sure the groups tool is available
@@ -97,7 +97,7 @@ Feature: Course tools basic testing
 
   Scenario: Make sure the chat tool is available
     Given I am on course "TEMP" homepage
-    And I am on "/main/chat/index.php"
+    And I am on "/main/chat/chat.php"
     Then I should not see an ".alert-danger" element
 
   Scenario: Make sure the assignments tool is available

@@ -7913,4 +7913,9 @@ $ExportUsersOfACourse = "Exporter les utilisateurs d'un cours";
 $PauseRecordingAudio = "Pause d'enregistrement";
 $PlayRecordingAudio = "Reprendre l'enregistrement";
 $YourSessionTimeHasExpired = "Vous êtes déjà inscrit mais votre période d'accès au cours a expiré.";
+$ConsideredWorkingTime = "Temps de réalisation";
+$DocumentNumber = "ID du document";
+$SocialData = "Données sociales";
+$WallMessagesPosted = "Messages postés par lui/elle-même sur son mur";
+$SeeAccesses = "Visualiser les accès";
 ?>

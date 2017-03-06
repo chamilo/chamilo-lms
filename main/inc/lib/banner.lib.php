@@ -552,20 +552,19 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
 
         switch (api_get_setting('breadcrumbs_course_homepage')) {
             case 'get_lang':
-                
-                $navigation_item['title'] = Display::return_icon('home.png', get_lang('CourseHomepageLink'), null, ICON_SIZE_TINY);
+                $navigation_item['title'] = Display::return_icon('home.png', get_lang('CourseHomepageLink'), [], ICON_SIZE_TINY);
                 break;
             case 'course_code':
-                $navigation_item['title'] =  Display::return_icon('home.png', $_course['official_code'], null, ICON_SIZE_TINY).' '.$_course['official_code'];
+                $navigation_item['title'] =  Display::return_icon('home.png', $_course['official_code'], [], ICON_SIZE_TINY).' '.$_course['official_code'];
                 break;
             case 'session_name_and_course_title':
-                $navigation_item['title'] = Display::return_icon('home.png', $_course['name'].$my_session_name, null, ICON_SIZE_TINY).' '.$course_title.$my_session_name;
+                $navigation_item['title'] = Display::return_icon('home.png', $_course['name'].$my_session_name, [], ICON_SIZE_TINY).' '.$course_title.$my_session_name;
                 break;
             default:
                 if (api_get_session_id() != -1 ) {
-                    $navigation_item['title'] = Display::return_icon('home.png', $_course['name'].$my_session_name, null, ICON_SIZE_TINY).' '.$course_title.$my_session_name;
+                    $navigation_item['title'] = Display::return_icon('home.png', $_course['name'].$my_session_name, [], ICON_SIZE_TINY).' '.$course_title.$my_session_name;
                 } else {
-                    $navigation_item['title'] = Display::return_icon('home.png', $_course['name'], null, ICON_SIZE_TINY).' '.$course_title;
+                    $navigation_item['title'] = Display::return_icon('home.png', $_course['name'], [], ICON_SIZE_TINY).' '.$course_title;
                 }
                 break;
         }
@@ -729,7 +728,7 @@ function getOnlineUsersCount()
 {
     $number = 0;
     $cacheAvailable = api_get_configuration_value('apc');
-    if (!empty($cacheAvailable)) {
+    if ($cacheAvailable === true) {
         $apcVar = api_get_configuration_value('apc_prefix') . 'my_campus_whoisonline_count_simple';
         if (apcu_exists($apcVar)) {
             $number = apcu_fetch($apcVar);
@@ -755,7 +754,7 @@ function getOnlineUsersInCourseCount($userId, $_course)
     $cacheAvailable = api_get_configuration_value('apc');
     $numberOnlineInCourse = 0;
     if (!empty($_course['id'])) {
-        if (!empty($cacheAvailable)) {
+        if ($cacheAvailable === true) {
             $apcVar = api_get_configuration_value('apc_prefix') . 'my_campus_whoisonline_count_simple_' . $_course['id'];
             if (apcu_exists($apcVar)) {
                 $numberOnlineInCourse = apcu_fetch($apcVar);

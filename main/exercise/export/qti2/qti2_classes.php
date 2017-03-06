@@ -14,7 +14,7 @@ class Ims2Question extends Question
      */
     public function setAnswer()
     {
-        switch($this->type) {
+        switch ($this->type) {
             case MCUA:
                 $answer = new ImsAnswerMultipleChoice($this->id);
 
@@ -23,7 +23,7 @@ class Ims2Question extends Question
                 $answer = new ImsAnswerMultipleChoice($this->id);
 
                 return $answer;
-            case TF :
+            case TF:
                 $answer = new ImsAnswerMultipleChoice($this->id);
 
                 return $answer;
@@ -150,11 +150,11 @@ class ImsAnswerFillInBlanks extends Answer
      */
     public function imsExportResponses($questionIdent, $questionStatment)
     {
-		$this->answerList = $this->getAnswersList(true);
-        $text = '';
-        $text .= $this->answerText;
+        $this->answerList = $this->getAnswersList(true);
+
+        $text = isset($this->answerText) ? $this->answerText : '';
         if (is_array($this->answerList)) {
-            foreach ($this->answerList as $key=>$answer) {
+            foreach ($this->answerList as $key => $answer) {
                 $key = $answer['id'];
                 $answer = $answer['answer'];
                 $len = api_strlen($answer);
@@ -210,13 +210,10 @@ class ImsAnswerMatching extends Answer
 		$this->answerList = $this->getAnswersList(true);
 		$maxAssociation = max(count($this->leftList), count($this->rightList));
 
-        $out = "";
-
-        $out .= '<matchInteraction responseIdentifier="' . $questionIdent . '" maxAssociations="'. $maxAssociation .'">'. "\n";
+        $out = '<matchInteraction responseIdentifier="' . $questionIdent . '" maxAssociations="'. $maxAssociation .'">'. "\n";
         $out .= $questionStatment;
 
         //add left column
-
         $out .= '  <simpleMatchSet>'. "\n";
 		if (is_array($this->leftList)) {
 	        foreach ($this->leftList as $leftKey=>$leftElement) {
@@ -230,9 +227,7 @@ class ImsAnswerMatching extends Answer
         $out .= '  </simpleMatchSet>'. "\n";
 
         //add right column
-
         $out .= '  <simpleMatchSet>'. "\n";
-
         $i = 0;
 
 		if (is_array($this->rightList)) {
@@ -259,13 +254,12 @@ class ImsAnswerMatching extends Answer
         $out .= '    <correctResponse>' . "\n";
 
         $gradeArray = array();
-		if (is_array($this->leftList)) {
-	        foreach ($this->leftList as $leftKey=>$leftElement) {
+		if (isset($this->leftList) && is_array($this->leftList)) {
+            foreach ($this->leftList as $leftKey => $leftElement) {
 	            $i=0;
 	            foreach ($this->rightList as $rightKey=>$rightElement) {
 	                if (($leftElement['match'] == $rightElement['code'])) {
 	                    $out .= '      <value>left_' . $leftKey . ' right_'.$i.'</value>'. "\n";
-
 	                    $gradeArray['left_' . $leftKey . ' right_'.$i] = $leftElement['grade'];
 	                }
 	                $i++;

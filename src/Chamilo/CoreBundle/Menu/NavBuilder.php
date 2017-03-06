@@ -57,7 +57,13 @@ class NavBuilder extends ContainerAware
     {
         $checker = $this->container->get('security.authorization_checker');
         $translator = $this->container->get('translator');
-        $locale = $this->container->get('request')->getLocale();
+        // Locale from URL
+        $locale = $this->container->get('request')->get('_locale');
+        if (empty($locale)) {
+            // Try locale from symfony2
+            $locale = $this->container->get('request')->getLocale();
+        }
+
         $chamiloLocale = 'french2';
         switch ($locale) {
             case 'de':

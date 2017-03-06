@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use ChamiloSession as Session;
 
 /**
  * Code
@@ -675,6 +676,15 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
             api_get_setting('student_view_enabled') === 'true' && api_get_course_info()
         ) {
             $view_as_student_link = api_display_tool_view_option();
+
+            // Only show link if LP can be editable
+            /** @var learnpath $learnPath */
+            $learnPath = Session::read('oLP');
+            if (!empty($learnPath) && !empty($view_as_student_link)) {
+                if ((int)$learnPath->get_lp_session_id() != (int)api_get_session_id()) {
+                    $view_as_student_link = '';
+                }
+            }
         }
     }
 

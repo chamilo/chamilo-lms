@@ -7918,4 +7918,7 @@ $DocumentNumber = "ID du document";
 $SocialData = "Données sociales";
 $WallMessagesPosted = "Messages postés par lui/elle-même sur son mur";
 $SeeAccesses = "Visualiser les accès";
+$PriorityChangeFromXToY = "Priorité modifiée de %s à %s";
+$StatusChangeFromXToY = "Statut modifié de %s à %s";
+$SkillFromCourseXDeletedSinceThen = "Cette compétence a été obtenue au travers du cours %s qui a été éliminé depuis.";
 ?>

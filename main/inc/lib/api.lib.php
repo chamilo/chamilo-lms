@@ -2901,9 +2901,9 @@ function api_is_allowed_to_edit(
     $session_coach = false,
     $check_student_view = true
 ) {
-    $my_session_id = api_get_session_id();
+    $sessionId = api_get_session_id();
     $is_allowed_coach_to_edit = api_is_coach(null, null, $check_student_view);
-    $session_visibility = api_get_session_visibility($my_session_id);
+    $session_visibility = api_get_session_visibility($sessionId);
 
     // Admins can edit anything.
     if (api_is_platform_admin(false)) {
@@ -2944,7 +2944,7 @@ function api_is_allowed_to_edit(
 
     // Check if the student_view is enabled, and if so, if it is activated.
     if (api_get_setting('student_view_enabled') == 'true') {
-        if (!empty($my_session_id)) {
+        if (!empty($sessionId)) {
             // Check if session visibility is read only for coaches.
             if ($session_visibility == SESSION_VISIBLE_READ_ONLY) {
                 $is_allowed_coach_to_edit = false;

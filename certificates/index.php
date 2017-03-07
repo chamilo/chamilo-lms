@@ -25,14 +25,18 @@ switch ($action) {
             $certificatePathList[] = $certificate->html_file;
 
             $pdfParams = array(
-                'orientation' => 'landscape',
                 'top' => 0,
                 'right' => 0,
                 'bottom' => 0,
                 'left' => 0
             );
 
+            $orientation = api_get_configuration_value('certificate_pdf_orientation');
             $pdfParams['orientation'] = 'landscape';
+            if (!empty($orientation)) {
+                $pdfParams['orientation'] = $orientation;
+            }
+
             $pageFormat = $pdfParams['orientation'] === 'landscape' ? 'A4-L' : 'A4';
             $userInfo = api_get_user_info($certificate->user_id);
             $pdfName = api_replace_dangerous_char(get_lang('Certificate') . ' ' . $userInfo['username']);

@@ -4,7 +4,7 @@
 namespace Chamilo\CoreBundle\Admin;
 
 use Chamilo\CoreBundle\Entity\Promotion;
-use Sonata\AdminBundle\Admin\Admin;
+use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -13,7 +13,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
  * Class PromotionAdmin
  * @package Chamilo\CoreBundle\Admin
  */
-class PromotionAdmin extends Admin
+class PromotionAdmin extends AbstractAdmin
 {
     /**
      * @param FormMapper $formMapper

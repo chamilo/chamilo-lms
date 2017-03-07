@@ -257,6 +257,17 @@ class Display
         }
     }
 
+    /**
+     * Returns an HTML table with sortable column (through complete page refresh)
+     * @param array $header
+     * @param array $content Array of row arrays
+     * @param array $sorting_options
+     * @param array $paging_options
+     * @param array $query_vars
+     * @param array $form_actions
+     * @param string $style
+     * @return string HTML string for array
+     */
     public static function return_sortable_table(
         $header,
         $content,
@@ -794,7 +805,6 @@ class Display
 
         if ($return_only_path) {
             return $icon;
-
         }
 
         $img = self::img($icon, $alt_text, $additional_attributes);
@@ -816,7 +826,7 @@ class Display
      * @param boolean $filterPath Optional. Whether filter the image path. Default is true
      * @author Julio Montoya 2010
      */
-    public static function img($image_path, $alt_text = '', $additional_attributes = array(), $filterPath = true)
+    public static function img($image_path, $alt_text = '', $additional_attributes = null, $filterPath = true)
     {
         if (empty($image_path)) {
             // For some reason, the call to img() happened without a proper
@@ -835,6 +845,10 @@ class Display
         // alt text = the image name if there is none provided (for XHTML compliance)
         if ($alt_text == '') {
             $alt_text = basename($image_path);
+        }
+
+        if (empty($additional_attributes)) {
+            $additional_attributes = [];
         }
 
         $additional_attributes['src'] = $image_path;
@@ -1036,7 +1050,16 @@ class Display
             if ($i == 1) {
                 $active = ' active';
             }
-            $item = self::tag('a', $item, array('href'=>'#'.$id.'-'.$i, 'role'=> 'tab', 'data-toggle' => 'tab', 'id' => $id . $i));
+            $item = self::tag(
+                'a',
+                $item,
+                array(
+                    'href' => '#'.$id.'-'.$i,
+                    'role' => 'tab',
+                    'data-toggle' => 'tab',
+                    'id' => $id.$i,
+                )
+            );
             $ul_attributes['role'] = 'presentation';
             $ul_attributes['class'] = $active;
             $lis .= self::tag('li', $item, $ul_attributes);
@@ -1063,7 +1086,11 @@ class Display
         $attributes['role'] = 'tabpanel';
         $attributes['class'] = 'tab-wrapper';
 
-        $main_div = self::tag('div', $ul.self::tag('div', $divs, ['class' => 'tab-content']), $attributes);
+        $main_div = self::tag(
+            'div',
+            $ul.self::tag('div', $divs, ['class' => 'tab-content']),
+            $attributes
+        );
 
         return $main_div ;
     }
@@ -1419,7 +1446,8 @@ class Display
                 if ($toolName == 'student_publication') {
                     $toolName = 'work';
                 }
-                $toolName = Database::escape_string($toolName);
+                $toolName = addslashes(Database::escape_string($toolName));
+
                 $sql = "SELECT * FROM $tool_edit_table 
                         WHERE
                             c_id = $course_id AND
@@ -1427,14 +1455,13 @@ class Display
                             lastedit_type NOT LIKE '%Deleted%' AND
                             lastedit_type NOT LIKE '%deleted%' AND
                             lastedit_type NOT LIKE '%DocumentInvisible%' AND
-                            lastedit_date > '$oldestTrackDate' AND 
-                            lastedit_user_id != $user_id $sessionCondition AND 
+                            lastedit_date > '$oldestTrackDate' AND
+                            lastedit_user_id != $user_id $sessionCondition AND
                             visibility != 2 AND
                             (to_user_id IN ('$user_id', '0') OR to_user_id IS NULL) AND
-                            (to_group_id IN ('".implode("','",$group_ids)."') OR to_group_id IS NULL)       
+                            (to_group_id IN ('".implode("','",$group_ids)."') OR to_group_id IS NULL)
                         ORDER BY lastedit_date DESC
                         LIMIT 1";
-
                 $result = Database::query($sql);
                 $latestChange = Database::fetch_array($result);
                 if ($latestChange) {
@@ -2072,6 +2099,7 @@ class Display
      * @param string $link
      * @param bool $isMedia
      * @param bool $addHeaders
+     * @param array $linkAttributes
      * @return string
      */
     public static function progressPaginationBar(
@@ -2079,11 +2107,11 @@ class Display
         $list,
         $current,
         $fixedValue = null,
-        $conditions = array(),
+        $conditions = [],
         $link = null,
         $isMedia = false,
         $addHeaders = true,
-        $linkAttributes = array()
+        $linkAttributes = []
     ) {
         if ($addHeaders) {
             $pagination_size = 'pagination-mini';
@@ -2121,6 +2149,7 @@ class Display
         if ($addHeaders) {
             $html .= '</ul></div>';
         }
+
         return $html;
     }
     /**
@@ -2133,6 +2162,8 @@ class Display
      * @param bool $isMedia
      * @param int $localCounter
      * @param int $fixedValue
+     * @param array $linkAttributes
+     *
      * @return string
      */
     public static function parsePaginationItem(
@@ -2144,8 +2175,8 @@ class Display
         $isMedia = false,
         $localCounter = null,
         $fixedValue = null,
-        $linkAttributes = array())
-    {
+        $linkAttributes = []
+    ) {
         $defaultClass = "before";
         $class = $defaultClass;
         foreach ($conditions as $condition) {
@@ -2191,6 +2222,7 @@ class Display
             $link_to_show = $link.$fixedValue.'#questionanchor'.$itemId;
         }
         $link = Display::url($label.' ', $link_to_show, $linkAttributes);
+
         return  '<li class = "'.$class.'">'.$link.'</li>';
     }
 
@@ -2265,14 +2297,12 @@ class Display
     public static function getProfileEditionLink($userId, $asAdmin = false)
     {
         $editProfileUrl = api_get_path(WEB_CODE_PATH).'auth/profile.php';
-
         if ($asAdmin) {
             $editProfileUrl = api_get_path(WEB_CODE_PATH)."admin/user_edit.php?user_id=".intval($userId);
         }
 
         if (api_get_setting('sso_authentication') === 'true') {
             $subSSOClass = api_get_setting('sso_authentication_subclass');
-
             $objSSO = null;
 
             if (!empty($subSSOClass)) {
@@ -2542,13 +2572,18 @@ HTML;
     }
 
     /**
-     * @param $userInfo
+     * @param array $userInfo
      * @param string $status
      * @param string $toolbar
+     *
      * @return string
      */
     public static function getUserCard($userInfo, $status= '', $toolbar = '')
     {
+        if (empty($userInfo)) {
+            return '';
+        }
+
         if (!empty($status)) {
             $status = '<div class="items-user-status">'.$status.'</div>';
         }
@@ -2557,7 +2592,7 @@ HTML;
             $toolbar = '<div class="btn-group pull-right">'.$toolbar.'</div>';
         }
 
-        return '<div class="col-md-12">                    
+        return '<div id="user_card_'.$userInfo['id'].'" class="col-md-12">                    
                     <div class="row">
                         <div class="col-md-2">                            
                             <img src="'.$userInfo['avatar'].'" class="img-responsive img-circle">
@@ -2577,5 +2612,4 @@ HTML;
                     <hr />
               </div>';
     }
-
 }

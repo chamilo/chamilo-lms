@@ -27,9 +27,9 @@ class MessageManager
 
         static $count;
         if (!isset($count)) {
-            $cacheEnabled = function_exists('apcu_exists');
-            if ($cacheEnabled) {
-                $var = 'social_messages_unread_u_'.$userId;
+            $cacheAvailable = api_get_configuration_value('apc');
+            if ($cacheAvailable === true) {
+                $var = api_get_configuration_value('apc_prefix') . 'social_messages_unread_u_' . $userId;
                 if (apcu_exists($var)) {
                     $count = apcu_fetch($var);
                 } else {
@@ -63,21 +63,6 @@ class MessageManager
         $row = Database::fetch_assoc($result);
 
         return $row['count'];
-    }
-
-    /**
-     * Get the list of user_ids of users who are online.
-     */
-    public static function users_connected_by_id()
-    {
-        $count = who_is_online_count();
-        $user_connect = who_is_online(0, $count, null, null, 30, true);
-        $user_id_list = array();
-        for ($i = 0; $i < count($user_connect); $i++) {
-            $user_id_list[$i] = $user_connect[$i][0];
-        }
-
-        return $user_id_list;
     }
 
     /**
@@ -496,8 +481,8 @@ class MessageManager
                     content='{$row_message['content']}' AND
                     group_id='{$row_message['group_id']}' AND
                     user_receiver_id='$receiver_user_id'";
-        $rs_msg_id = Database::query($sql);
-        $row = Database::fetch_array($rs_msg_id);
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result);
 
         // update parent_id for other user receiver
         $sql = "UPDATE $table_message SET parent_id = " . $row['id'] . "
@@ -526,8 +511,11 @@ class MessageManager
             // delete attachment file
             self::delete_message_attachment_file($id, $user_receiver_id);
             // delete message
-            $query = "UPDATE $table_message SET msg_status=3
-                      WHERE user_receiver_id=" . $user_receiver_id . " AND id=" . $id;
+            $query = "UPDATE $table_message 
+                      SET msg_status = 3
+                      WHERE 
+                        user_receiver_id=" . $user_receiver_id . " AND 
+                        id = " . $id;
             Database::query($query);
 
             return true;
@@ -1087,6 +1075,7 @@ class MessageManager
                 $message_content .= get_lang('From') . ':&nbsp;' . $name . '</b> ' . api_strtolower(get_lang('To')) . ' <b>' . get_lang('Me') . '</b>';
             }
         }
+
         $message_content .= '
 		        <br />
 		        <hr style="color:#ddd" />
@@ -1455,6 +1444,7 @@ class MessageManager
                 $html_items = Display::div($html_items, array('class' => '', 'style' => 'margin-left:' . $indent . 'px'));
                 $array_html_items[] = array($html_items);
             }
+
             // grids for items with paginations
             $options = array('hide_navigation' => false, 'per_page' => $items_per_page);
             $visibility = array(true, true, true, false);
@@ -1592,11 +1582,10 @@ class MessageManager
     }
 
     /**
-     * @param $id
-     * @param array $params
+     *
      * @return string
      */
-    public static function generate_message_form($id, $params = array())
+    public static function generate_message_form()
     {
         $form = new FormValidator('send_message');
         $form->addText('subject', get_lang('Subject'), false, ['id' => 'subject_id']);

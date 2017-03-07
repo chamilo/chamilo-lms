@@ -22,6 +22,7 @@ class Agenda
     public $comment;
     /** @var bool */
     private $isAllowedToEdit;
+    public $eventStudentPublicationColor;
 
     /**
      * Constructor
@@ -37,12 +38,8 @@ class Agenda
         $sessionId = 0
     ) {
         // Table definitions
-        $this->tbl_global_agenda = Database::get_main_table(
-            TABLE_MAIN_SYSTEM_CALENDAR
-        );
-        $this->tbl_personal_agenda = Database::get_main_table(
-            TABLE_PERSONAL_AGENDA
-        );
+        $this->tbl_global_agenda = Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
+        $this->tbl_personal_agenda = Database::get_main_table(TABLE_PERSONAL_AGENDA);
         $this->tbl_course_agenda = Database::get_course_table(TABLE_AGENDA);
         $this->table_repeat = Database::get_course_table(TABLE_AGENDA_REPEAT);
 
@@ -116,6 +113,7 @@ class Agenda
         $this->event_session_color = '#00496D'; // kind of green
         $this->eventOtherSessionColor = '#999';
         $this->event_personal_color = 'steel blue'; //steel blue
+        $this->eventStudentPublicationColor = '#FF8C00'; //DarkOrange
     }
 
     /**
@@ -140,7 +138,6 @@ class Agenda
     public function setType($type)
     {
         $typeList = $this->getTypes();
-
         if (in_array($type, $typeList)) {
             $this->type = $type;
         }
@@ -736,7 +733,6 @@ class Agenda
                 }
 
                 $groupId = api_get_group_id();
-
                 $groupIid = 0;
                 if ($groupId) {
                     $groupInfo = GroupManager::get_group_properties($groupId);
@@ -1116,9 +1112,7 @@ class Agenda
         $course_id = null,
         $groupId = null,
         $user_id = 0,
-        $format = 'json',
-        $startLimit = 0,
-        $endLimit = 0
+        $format = 'json'
     ) {
         switch ($this->type) {
             case 'admin':
@@ -1296,6 +1290,7 @@ class Agenda
      */
     public function resizeEvent($id, $minute_delta)
     {
+        $id = (int) $id;
         $delta = intval($minute_delta);
         $event = $this->get_event($id);
         if (!empty($event)) {
@@ -1303,21 +1298,21 @@ class Agenda
                 case 'personal':
                     $sql = "UPDATE $this->tbl_personal_agenda SET
                             enddate = DATE_ADD(enddate, INTERVAL $delta MINUTE)
-							WHERE id=".intval($id);
+							WHERE id = ".$id;
                     Database::query($sql);
                     break;
                 case 'course':
                     $sql = "UPDATE $this->tbl_course_agenda SET
                             end_date = DATE_ADD(end_date, INTERVAL $delta MINUTE)
-							WHERE c_id = ".$this->course['real_id']." AND id=".intval(
-                            $id
-                        );
+							WHERE 
+							    c_id = ".$this->course['real_id']." AND 
+							    id = ".$id;
                     Database::query($sql);
                     break;
                 case 'admin':
                     $sql = "UPDATE $this->tbl_global_agenda SET
                             end_date = DATE_ADD(end_date, INTERVAL $delta MINUTE)
-							WHERE id=".intval($id);
+							WHERE id = ".$id;
                     Database::query($sql);
                     break;
             }
@@ -1334,11 +1329,13 @@ class Agenda
      */
     public function move_event($id, $minute_delta, $allDay)
     {
+        $id = (int) $id;
         $event = $this->get_event($id);
 
         if (empty($event)) {
             return false;
         }
+
         // we convert the hour delta into minutes and add the minute delta
         $delta = intval($minute_delta);
         $allDay = intval($allDay);
@@ -1349,7 +1346,7 @@ class Agenda
                     $sql = "UPDATE $this->tbl_personal_agenda SET
                             all_day = $allDay, date = DATE_ADD(date, INTERVAL $delta MINUTE),
                             enddate = DATE_ADD(enddate, INTERVAL $delta MINUTE)
-							WHERE id=".intval($id);
+							WHERE id=".$id;
                     Database::query($sql);
                     break;
                 case 'course':
@@ -1357,9 +1354,9 @@ class Agenda
                             all_day = $allDay, 
                             start_date = DATE_ADD(start_date, INTERVAL $delta MINUTE),
                             end_date = DATE_ADD(end_date, INTERVAL $delta MINUTE)
-							WHERE c_id = ".$this->course['real_id']." AND id=".intval(
-                            $id
-                        );
+							WHERE 
+							    c_id = ".$this->course['real_id']." AND 
+							    id=".$id;
                     Database::query($sql);
                     break;
                 case 'admin':
@@ -1367,7 +1364,7 @@ class Agenda
                             all_day = $allDay,
                             start_date = DATE_ADD(start_date,INTERVAL $delta MINUTE),
                             end_date = DATE_ADD(end_date, INTERVAL $delta MINUTE)
-							WHERE id=".intval($id);
+							WHERE id=".$id;
                     Database::query($sql);
                     break;
             }
@@ -1617,7 +1614,6 @@ class Agenda
                 );
             }
         }
-
     }
 
     /**
@@ -1640,12 +1636,8 @@ class Agenda
         $user_id = 0,
         $color = ''
     ) {
-        $start = isset($start) && !empty($start) ? api_get_utc_datetime(
-            intval($start)
-        ) : null;
-        $end = isset($end) && !empty($end) ? api_get_utc_datetime(
-            intval($end)
-        ) : null;
+        $start = isset($start) && !empty($start) ? api_get_utc_datetime(intval($start)) : null;
+        $end = isset($end) && !empty($end) ? api_get_utc_datetime(intval($end)) : null;
 
         if (empty($courseInfo)) {
             return array();
@@ -1779,8 +1771,7 @@ class Agenda
                 }
                 $visibilityCondition = " (ip.visibility IN ('1', '0')) AND ";
             } else {
-                $where_condition = " ( (ip.to_user_id = ".api_get_user_id(
-                    )." OR ip.to_user_id IS NULL) AND ip.to_group_id IS NULL) AND ";
+                $where_condition = " ( (ip.to_user_id = ".api_get_user_id()." OR ip.to_user_id IS NULL) AND ip.to_group_id IS NULL) AND ";
             }
 
             if (empty($session_id)) {
@@ -1874,11 +1865,9 @@ class Agenda
                             get_lang('Attachment')
                         );
                         $user_filename = $attachment['filename'];
-                        $url = api_get_path(
-                                WEB_CODE_PATH
-                            ).'calendar/download.php?file='.$attachment['path'].'&course_id='.$course_id.'&'.api_get_cidreq(
-                            );
-                        $event['attachment'] .= $has_attachment.Display::url(
+                        $url = api_get_path(WEB_CODE_PATH).'calendar/download.php?file='.$attachment['path'].'&course_id='.$course_id.'&'.api_get_cidreq();
+                        $event['attachment'] .= $has_attachment.
+                            Display::url(
                                 $user_filename,
                                 $url
                             ).'<br />';
@@ -2277,16 +2266,13 @@ class Agenda
      */
     public function getForm($params = [])
     {
-        $action = isset($params['action']) ? Security::remove_XSS(
-            $params['action']
-        ) : null;
+        $action = isset($params['action']) ? Security::remove_XSS($params['action']) : null;
         $id = isset($params['id']) ? intval($params['id']) : null;
+
         if ($this->type == 'course') {
-            $url = api_get_self().'?'.api_get_cidreq(
-                ).'&action='.$action.'&id='.$id.'&type='.$this->type;
+            $url = api_get_self().'?'.api_get_cidreq().'&action='.$action.'&id='.$id.'&type='.$this->type;
         } else {
-            $url = api_get_self(
-                ).'?action='.$action.'&id='.$id.'&type='.$this->type;
+            $url = api_get_self().'?action='.$action.'&id='.$id.'&type='.$this->type;
         }
 
         $form = new FormValidator(

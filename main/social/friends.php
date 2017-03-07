@@ -18,18 +18,16 @@ $this_section = SECTION_SOCIAL;
 
 $htmlHeadXtra[] = '<script>
 function delete_friend (element_div) {
-	id_image=$(element_div).attr("id");
-	user_id=id_image.split("_");
+	id_image = $(element_div).attr("id");
+	user_id = id_image.split("_");
 	if (confirm("'.get_lang('Delete', '').'")) {
-		 $.ajax({
-			contentType: "application/x-www-form-urlencoded",
+        $.ajax({
+            contentType: "application/x-www-form-urlencoded",
 			type: "POST",
 			url: "'.api_get_path(WEB_AJAX_PATH).'social.ajax.php?a=delete_friend",
 			data: "delete_friend_id="+user_id[1],
-			success: function(datos) {
-			 $("div#"+"div_"+user_id[1]).hide("slow");
-			 $("div#"+"div_"+user_id[1]).html("");
-			 clear_form ();
+			success: function(datos) {			
+			    $("#user_card_"+user_id[1]).hide("slow");
 			}
 		});
 	}
@@ -64,12 +62,6 @@ function hide_icon_delete(element_html)  {
 	$(ident).attr("src","'.Display::returnIconPath('blank.gif').'");
 	$(ident).attr("alt","");
 	$(ident).attr("title","");
-}
-
-function clear_form () {
-	$("input[@type=radio]").attr("checked", false);
-	$("div#div_qualify_image").html("");
-	$("div#div_info_user").html("");
 }
 
 </script>';
@@ -126,7 +118,7 @@ if (count($friends) == 0) {
         while ($j < $number_friends) {
             if (isset($friends[$j])) {
                 $friend = $friends[$j];
-                 $toolBar = '<button class="btn btn-danger" onclick="delete_friend(this)" id=img_' . $friend['friend_user_id'] . '>
+                $toolBar = '<button class="btn btn-danger" onclick="delete_friend(this)" id=img_' . $friend['friend_user_id'] . '>
                     ' . get_lang('Delete') . '
                 </button>';
                 $url = api_get_path(WEB_PATH).'main/social/profile.php?u='.$friend['friend_user_id'];

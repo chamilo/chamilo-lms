@@ -1,4 +1,4 @@
-<div id="record-audio-recordrtc" class="row text-center">
+<div id="record-audio-recordrtc-{{ question_id }}" class="row text-center">
     <div class="col-sm-4 col-sm-offset-4">
         <div class="form-group">
             <span class="fa fa-microphone fa-5x fa-fw" aria-hidden="true"></span>
@@ -7,38 +7,46 @@
     </div>
     <div class="col-sm-12">
         <div class="form-group">
-            <button class="btn btn-primary" type="button" id="btn-start-record">
+            <button class="btn btn-primary" type="button" id="btn-start-record-{{ question_id }}">
                 <span class="fa fa-circle fa-fw" aria-hidden="true"></span> {{ 'StartRecordingAudio'|get_lang }}
             </button>
-            <button class="btn btn-danger" type="button" id="btn-stop-record" disabled>
+            <button class="btn btn-primary hidden" type="button" id="btn-pause-record-{{ question_id }}" disabled>
+                <span class="fa fa-pause fa-fw" aria-hidden="true"></span> {{ 'PauseRecordingAudio'|get_lang }}
+            </button>
+            <button class="btn btn-primary hidden" type="button" id="btn-play-record-{{ question_id }}" disabled>
+                <span class="fa fa-play fa-fw" aria-hidden="true"></span> {{ 'PlayRecordingAudio'|get_lang }}
+            </button>
+            <button class="btn btn-danger hidden" type="button" id="btn-stop-record-{{ question_id }}" disabled>
                 <span class="fa fa-square fa-fw" aria-hidden="true"></span> {{ 'StopRecordingAudio'|get_lang }}
             </button>
-            <button class="btn btn-success" type="button" id="btn-save-record" disabled>
+            <button class="btn btn-success hidden" type="button" id="btn-save-record-{{ question_id }}" disabled>
                 <span class="fa fa-send fa-fw" aria-hidden="true"></span> {{ 'SaveRecordedAudio'|get_lang }}
             </button>
         </div>
         <div class="form-group">
-            <audio class="skip hidden center-block" controls id="record-preview"></audio>
+            <audio class="skip hidden center-block" controls id="record-preview-{{ question_id }}"></audio>
         </div>
     </div>
 </div>
 
-<div class="row" id="record-audio-wami">
+<div class="row" id="record-audio-wami-{{ question_id }}">
     <div class="col-sm-4 col-sm-offset-4 text-center">
-        <div id="record-audio-wami-container" class="wami-container"></div>
+        <div id="record-audio-wami-container-{{ question_id }}" class="wami-container"></div>
     </div>
 </div>
 
 <script>
 $(document).on('ready', function () {
     function useRecordRTC() {
-        $('#record-audio-recordrtc').show();
+        $('#record-audio-recordrtc-{{ question_id }}').show();
         var mediaConstraints = {audio: true},
                 recordRTC = null,
-                btnStart = $('#btn-start-record'),
-                btnStop = $('#btn-stop-record'),
-                btnSave = $('#btn-save-record'),
-                tagAudio = $('#record-preview');
+                btnStart = $('#btn-start-record-{{ question_id }}'),
+                btnPause = $('#btn-pause-record-{{ question_id }}'),
+                btnPlay = $('#btn-play-record-{{ question_id }}'),
+                btnStop = $('#btn-stop-record-{{ question_id }}'),
+                btnSave = $('#btn-save-record-{{ question_id }}'),
+                tagAudio = $('#record-preview-{{ question_id }}');
 
         btnStart.on('click', function () {
             navigator.getUserMedia = navigator.getUserMedia ||
@@ -59,9 +67,10 @@ $(document).on('ready', function () {
                 });
                 recordRTC.startRecording();
 
-                btnSave.prop('disabled', true);
-                btnStop.prop('disabled', false);
-                btnStart.prop('disabled', true);
+                btnSave.prop('disabled', true).addClass('hidden');
+                btnStop.prop('disabled', false).removeClass('hidden');
+                btnStart.prop('disabled', true).addClass('hidden');
+                btnPause.prop('disabled', false).removeClass('hidden');
                 tagAudio.removeClass('show').addClass('hidden');
             }
 
@@ -70,15 +79,38 @@ $(document).on('ready', function () {
             }
         });
 
+        btnPause.on('click', function () {
+            if (!recordRTC) {
+                return;
+            }
+
+            btnPause.prop('disabled', true).addClass('hidden');
+            btnPlay.prop('disabled', false).removeClass('hidden');
+            btnStop.prop('disabled', true).addClass('hidden');
+            recordRTC.pauseRecording();
+        });
+
+        btnPlay.on('click', function () {
+            if (!recordRTC) {
+                return;
+            }
+
+            btnPlay.prop('disabled', true).addClass('hidden');
+            btnPause.prop('disabled', false).removeClass('hidden');
+            btnStop.prop('disabled', false).removeClass('hidden');
+            recordRTC.resumeRecording();
+        });
+
         btnStop.on('click', function () {
             if (!recordRTC) {
                 return;
             }
 
             recordRTC.stopRecording(function (audioURL) {
-                btnStart.prop('disabled', false);
-                btnStop.prop('disabled', true);
-                btnSave.prop('disabled', false);
+                btnStart.prop('disabled', false).removeClass('hidden');
+                btnPause.prop('disabled', true).addClass('hidden');
+                btnStop.prop('disabled', true).addClass('hidden');
+                btnSave.prop('disabled', false).removeClass('hidden');
 
                 tagAudio
                         .removeClass('hidden')
@@ -112,25 +144,25 @@ $(document).on('ready', function () {
                 contentType: false,
                 type: 'POST'
             }).then(function () {
-                btnSave.prop('disabled', true);
-                btnStop.prop('disabled', true);
-                btnStart.prop('disabled', false);
+                btnSave.prop('disabled', true).addClass('hidden');
+                btnStop.prop('disabled', true).addClass('hidden');
+                btnStart.prop('disabled', false).removeClass('hidden');
             });
         });
     }
 
     function useWami() {
-        $('#record-audio-wami').show();
+        $('#record-audio-wami-{{ question_id }}').show();
 
         Wami.setup({
-            id: "record-audio-wami-container",
+            id: "record-audio-wami-container-{{ question_id }}",
             onReady: setupGUI,
             swfUrl: '{{ _p.web_lib }}wami-recorder/Wami.swf'
         });
 
         function setupGUI() {
             var gui = new Wami.GUI({
-                    id: 'record-audio-wami-container',
+                    id: 'record-audio-wami-container-{{ question_id }}',
                     singleButton: true,
                     recordUrl: '{{ _p.web_ajax }}record_audio_wami.ajax.php?' + $.param({
                         waminame: '{{ file_name }}.wav',
@@ -146,7 +178,7 @@ $(document).on('ready', function () {
         }
     }
 
-    $('#record-audio-recordrtc, #record-audio-wami').hide();
+    $('#record-audio-recordrtc-{{ question_id }}, #record-audio-wami-{{ question_id }}').hide();
 
     var webRTCIsEnabled = navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.getUserMedia ||
             navigator.mediaDevices.getUserMedia;

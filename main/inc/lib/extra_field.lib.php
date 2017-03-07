@@ -126,6 +126,10 @@ class ExtraField extends Model
                 break;
             case 'skill':
                 $this->extraFieldType = EntityExtraField::SKILL_FIELD_TYPE;
+                break;
+            case 'work':
+                $this->extraFieldType = EntityExtraField::WORK_FIELD_TYPE;
+                break;
         }
 
         $this->pageUrl  = 'extra_fields.php?type='.$this->type;
@@ -154,7 +158,8 @@ class ExtraField extends Model
             'lp',
             'calendar_event',
             'lp_item',
-            'skill'
+            'skill',
+            'work'
         );
     }
 
@@ -1160,8 +1165,6 @@ class ExtraField extends Model
                                 $form->freeze('extra_'.$field_details['variable']);
                             }
                         }
-
-                        $form->applyFilter('theme', 'trim');
                         break;
                     case ExtraField::FIELD_TYPE_DATETIME:
                         $form->addDateTimePicker(
@@ -1178,7 +1181,6 @@ class ExtraField extends Model
                                 $form->freeze('extra_'.$field_details['variable']);
                             }
                         }
-                        $form->applyFilter('theme', 'trim');
                         break;
                     case ExtraField::FIELD_TYPE_DOUBLE_SELECT:
                         $first_select_id = 'first_extra_'.$field_details['variable'];

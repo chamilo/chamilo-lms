@@ -89,7 +89,6 @@ class UserGroup extends Model
 
             return 0;
         } else {
-
             $typeCondition = '';
             if ($type != -1) {
                 $type = intval($type);
@@ -378,6 +377,7 @@ class UserGroup extends Model
                 $sql .= " LIMIT ".$limits[0].', '.$limits[1];
             }
         }
+
         $result = Database::query($sql);
         $array = Database::store_result($result, 'ASSOC');
 

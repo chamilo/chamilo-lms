@@ -5,13 +5,25 @@
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-2">
-                        <a href="{{ item.link }}" class="thumbnail">
-                            {% if item.thumbnails != '' %}
-                                <img src="{{ item.thumbnails }}" title="{{ item.title }}" alt="{{ item.title }}"/>
-                            {% else %}
-                                {{ 'blackboard.png' | img(48, item.title ) }}
-                            {% endif %}
-                        </a>
+                        {% if item.visibility == constant('COURSE_VISIBILITY_CLOSED') %}
+                            <span class="thumbnail">
+                                {% if item.thumbnails != '' %}
+                                    <img src="{{ item.thumbnails }}" title="{{ item.title }}"
+                                         alt="{{ item.title }}"/>
+                                {% else %}
+                                    {{ 'blackboard.png' | img(48, item.title ) }}
+                                {% endif %}
+                            </span>
+                        {% else %}
+                            <a href="{{ item.link }}" class="thumbnail">
+                                {% if item.thumbnails != '' %}
+                                    <img src="{{ item.thumbnails }}" title="{{ item.title }}"
+                                         alt="{{ item.title }}"/>
+                                {% else %}
+                                    {{ 'blackboard.png' | img(48, item.title ) }}
+                                {% endif %}
+                            </a>
+                        {% endif %}
                     </div>
                     <div class="col-md-10">
                         {% if item.edit_actions != '' %}

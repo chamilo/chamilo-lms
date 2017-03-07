@@ -166,6 +166,10 @@ if ($origin != 'learnpath') {
             document.getElementById(comment).style.display = 'none';
         }
 
+        function openEmailWrapper() {
+            $('#email_content_wrapper').toggle();
+        }
+
         function getFCK(vals, marksid) {
             var f = document.getElementById('myform');
 
@@ -849,7 +853,7 @@ if ($isFeedbackAllowed) {
     }
 }
 
-if ($isFeedbackAllowed) {
+if ($isFeedbackAllowed && $origin != 'learnpath' && $origin != 'student_progress') {
     if (in_array($origin, array('tracking_course', 'user_course', 'correct_exercise_in_lp'))) {
         $formUrl = api_get_path(WEB_CODE_PATH) . 'exercise/exercise_report.php?' . api_get_cidreq() . '&';
         $formUrl .= http_build_query([
@@ -863,12 +867,12 @@ if ($isFeedbackAllowed) {
         ]);
         $formUrl .= $fromlink;
 
-        echo '<form name="myform" id="myform" action="' . $formUrl . '" method="post">';
-        echo '<input type = "hidden" name="lp_item_id"       value="' . $learnpath_id . '">';
-        echo '<input type = "hidden" name="lp_item_view_id"  value="' . $lp_item_view_id . '">';
-        echo '<input type = "hidden" name="student_id"       value="' . $student_id . '">';
-        echo '<input type = "hidden" name="total_score"      value="' . $totalScore . '"> ';
-        echo '<input type = "hidden" name="my_exe_exo_id"    value="' . $exercise_id . '"> ';
+        $emailForm = new FormValidator('myform', 'post', $formUrl, '', ['id' => 'myform']);
+        $emailForm->addHidden('lp_item_id', $learnpath_id);
+        $emailForm->addHidden('lp_item_view_id', $lp_item_view_id);
+        $emailForm->addHidden('student_id', $student_id);
+        $emailForm->addHidden('total_score', $totalScore);
+        $emailForm->addHidden('my_exe_exo_id', $exercise_id);
     } else {
         $formUrl = api_get_path(WEB_CODE_PATH) . 'exercise/exercise_report.php?' . api_get_cidreq() . '&';
         $formUrl .= http_build_query([
@@ -878,20 +882,45 @@ if ($isFeedbackAllowed) {
             'exeid' => $id
         ]);
 
-        echo ' <form name="myform" id="myform" action="' . $formUrl . '" method="post">';
+        $emailForm = new FormValidator('myform', 'post', $formUrl, '', ['id' => 'myform']);
     }
 
-    if ($origin != 'learnpath' && $origin != 'student_progress') {
-        echo '<label><input type= "checkbox" name="send_notification"> ' . get_lang('SendEmail') . '</label>';
-        ?>
-        <br/>
-        <button type="submit" class="btn btn-primary" value="<?php echo get_lang('Ok'); ?>"
-                onclick="getFCK('<?php echo $strids; ?>','<?php echo $marksid; ?>');">
-            <?php echo get_lang('CorrectTest'); ?>
-        </button>
-        </form>
-        <?php
-    }
+    $emailForm->addCheckBox(
+        'send_notification',
+        get_lang('SendEmail'),
+        get_lang('SendEmail'),
+        ['onclick' => 'openEmailWrapper();']
+    );
+    $emailForm->addHtml('<span id="email_content_wrapper" style="display:none">');
+    $emailForm->addHtmlEditor(
+        'notification_content',
+        get_lang('Content'),
+        false
+    );
+    $emailForm->addHtml('</span>');
+
+    $url = api_get_path(WEB_CODE_PATH).'exercise/result.php?id='.$track_exercise_info['exe_id'].'&'.api_get_cidreq().'&show_headers=1&id_session='.api_get_session_id();
+
+    $content = ExerciseLib::getEmailNotification(
+        api_get_user_id(),
+        api_get_course_info(),
+        $track_exercise_info['title'],
+        $track_exercise_info['orig_lp_id'],
+        $url
+    );
+
+    $emailForm->setDefaults(['notification_content' => $content]);
+
+
+    $emailForm->addButtonSend(
+        get_lang('CorrectTest'),
+        'submit',
+        false,
+        ['onclick' => "getFCK('$strids', '$marksid')"]
+    );
+
+    echo $emailForm->returnForm();
+
 }
 
 //Came from lpstats in a lp

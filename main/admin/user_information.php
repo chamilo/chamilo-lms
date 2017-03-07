@@ -164,7 +164,6 @@ if (isset($_GET['action'])) {
     }
 }
 
-
 // Show info about who created this user and when
 $creatorId = $user['creator_id'];
 $creatorInfo = api_get_user_info($creatorId);
@@ -179,7 +178,7 @@ $data = array(
     get_lang('Email') => $user['email'],
     get_lang('Phone') => $user['phone'],
     get_lang('OfficialCode') => $user['official_code'],
-    get_lang('Online') => $user['user_is_online'] ?
+    get_lang('Online') => !empty($user['user_is_online']) ?
         Display::return_icon('online.png') : Display::return_icon(
             'offline.png'
         ),
@@ -216,7 +215,10 @@ $data = array(
 
 if (api_get_setting('allow_terms_conditions') === 'true') {
     $extraFieldValue = new ExtraFieldValue('user');
-    $value = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'legal_accept');
+    $value = $extraFieldValue->get_values_by_handler_and_field_variable(
+        $userId,
+        'legal_accept'
+    );
     $icon = Display::return_icon('accept_na.png');
     if (isset($value['value'])) {
         list($legalId, $legalLanguageId, $legalTime) = explode(':', $value['value']);
@@ -253,6 +255,45 @@ $tbl_session = Database:: get_main_table(TABLE_MAIN_SESSION);
 $tbl_course = Database:: get_main_table(TABLE_MAIN_COURSE);
 $tbl_user = Database:: get_main_table(TABLE_MAIN_USER);
 
+$socialInformation = '';
+
+/**
+ * Show social activity
+ */
+if (api_get_setting('allow_social_tool') === 'true') {
+    $em = Database::getManager();
+    $userObject = $em->find('ChamiloUserBundle:User', $user['user_id']);
+
+    $data = [];
+
+    // Calculate values
+    if (api_get_setting('allow_message_tool') === 'true') {
+        $messagesSent = SocialManager::getCountMessagesSent($user['user_id']);
+        $data[] = [get_lang('MessagesSent'), $messagesSent];
+        $messagesReceived = SocialManager::getCountMessagesReceived($user['user_id']);
+        $data[] = [get_lang('MessagesReceived'), $messagesReceived];
+    }
+    $wallMessagesPosted = SocialManager::getCountWallPostedMessages($user['user_id']);
+    $data[] = [get_lang('WallMessagesPosted'), $wallMessagesPosted];
+
+    $friends = SocialManager::getCountFriends($user['user_id']);
+    $data[] = [get_lang('Friends'), $friends];
+
+    $count = SocialManager::getCountInvitationSent($user['user_id']);
+    $data[] = [get_lang('InvitationSent'), $count];
+
+    $count = SocialManager::get_message_number_invitation_by_user_id($user['user_id']);
+    $data[] = [get_lang('InvitationReceived'), $count];
+
+    $socialInformation = Display::return_sortable_table(
+        '',
+        $data
+    );
+}
+
+/**
+ * Show the sessions in which this user is subscribed
+ */
 $sessions = SessionManager::get_sessions_by_user($userId, true);
 $personal_course_list = array();
 $courseToolInformationTotal = null;
@@ -552,6 +593,11 @@ echo '</div>';
 if ($studentBossList) {
     echo Display::page_subheader(get_lang('StudentBossList'));
     echo $studentBossListToString;
+}
+
+if (api_get_setting('allow_social_tool') === 'true') {
+    echo Display::page_subheader(get_lang('SocialData'));
+    echo $socialInformation;
 }
 
 echo Display::page_subheader(get_lang('SessionList'));

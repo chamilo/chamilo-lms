@@ -40,9 +40,9 @@
                     </div>
                     {% endif %}
 
-                    {% if _s.software_name != '' %}
+                    {% if _s.software_name is not empty %}
                         <div class="software-name">
-                        <a href="{{_p.web}}" target="_blank">
+                            <a href="{{_p.web}}" target="_blank">
                                 {{ "PoweredByX" |get_lang | format(_s.software_name) }}
                             </a>&copy; {{ "now"|date("Y") }}
                         </div>

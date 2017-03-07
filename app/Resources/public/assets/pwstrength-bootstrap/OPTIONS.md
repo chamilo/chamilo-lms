@@ -204,6 +204,28 @@ Let's see the options of each section.
 
   Displays the password strength in a progress bar.
 
+* __progressExtraCssClasses__: (Bootstrap 3&4 only)
+
+  Default: `""` (String)
+
+  CSS classes to be added to the generated progress wrapper of the progress-bar. It is meant to make
+  use of the extra classes provided by Bootstrap. The classes will be added to
+  the proper DOM element depending of which version of Bootstrap is being
+  used.
+  
+  E.g.
+  ```css
+    div.progress.custom-class {
+        height: 4px;
+        border-radius: 0px;
+        background-color: transparent;
+    }
+    div.progress.custom-class > .progress-bar {
+        line-height: 4px;
+        font-size: 2px;
+    }
+  ```
+
 * __progressBarEmptyPercentage__:
 
   Default: `1` (Integer)

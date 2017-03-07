@@ -140,7 +140,10 @@ $form->addElement(
     $categories,
     ['style'=>'width:350px', 'id'=>'category_code']
 );
-$form->addElement('select_language', 'course_language', array(get_lang('Ln'), get_lang('TipLang')));
+$form->addSelectLanguage(
+    'course_language',
+    array(get_lang('Ln'), get_lang('TipLang'))
+);
 
 $group = array(
     $form->createElement('radio', 'show_course_in_user_language', null, get_lang('Yes'), 1),
@@ -698,7 +701,7 @@ if ($form->validate() && is_settings_editable()) {
     $picture = $_FILES['picture'];
     if (!empty($picture['name'])) {
         $picture_uri = CourseManager::update_course_picture(
-            $course_code,
+            $_course,
             $picture['name'],
             $picture['tmp_name'],
             $updateValues['picture_crop_result']

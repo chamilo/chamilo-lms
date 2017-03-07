@@ -535,6 +535,15 @@ if (!empty($student_id)) {
                 <td><?php echo get_lang('OnLine') . ' : '.$online; ?> </td>
             </tr>
             <?php
+            if (!empty($course_code)) {
+            ?>
+                <tr>
+                    <td>
+                        <a href="access_details.php?student=<?php echo $student_id; ?>&course=<?php echo $course_code; ?>&origin=<?php echo $origin; ?>&cidReq=<?php echo $course_code; ?>&id_session=<?php echo $sessionId; ?>"><?php echo get_lang('SeeAccesses'); ?></a>
+                    </td>
+                </tr>
+            <?php
+            }
 
             // Display timezone if the user selected one and if the admin allows the use of user's timezone
             $timezone = null;
@@ -679,7 +688,12 @@ if (!empty($student_id)) {
             $access_start_date = '';
             $access_end_date = '';
             $date_session = '';
-            $title = Display::return_icon('course.png', get_lang('Courses'), array(), ICON_SIZE_SMALL).' '.get_lang('Courses');
+            $title = Display::return_icon(
+                    'course.png',
+                    get_lang('Courses'),
+                    array(),
+                    ICON_SIZE_SMALL
+                ).' '.get_lang('Courses');
 
             $session_info = api_get_session_info($sId);
             if ($session_info) {
@@ -1203,18 +1217,30 @@ if (!empty($student_id)) {
                 $result_last_attempt = Database::query($sql);
                 if (Database :: num_rows($result_last_attempt) > 0) {
                     $id_last_attempt = Database :: result($result_last_attempt, 0, 0);
-                    if ($count_attempts > 0)
-                        echo '<a href="../exercise/exercise_show.php?id=' . $id_last_attempt . '&cidReq='.$course_code.'&session_id='.$sessionId.'&student='.$student_id.'&origin='.(empty($origin)?'tracking':$origin).'">
+                    if ($count_attempts > 0) {
+                        echo '<a href="../exercise/exercise_show.php?id='.$id_last_attempt.'&cidReq='.$course_code.'&session_id='.$sessionId.'&student='.$student_id.'&origin='.(empty($origin) ? 'tracking' : $origin).'">
                         '.Display::return_icon('quiz.png').'
                      </a>';
+                    }
                 }
                 echo '</td>';
 
                 echo '<td>';
-                $all_attempt_url = "../exercise/exercise_report.php?exerciseId=$exercise_id&cidReq=$course_code&filter_by_user=$student_id&id_session=$sessionId";
-                echo Display::url(Display::return_icon('test_results.png', get_lang('AllAttempts'), array(), ICON_SIZE_SMALL), $all_attempt_url );
+                if ($count_attempts > 0) {
+                    $all_attempt_url = "../exercise/exercise_report.php?exerciseId=$exercise_id&cidReq=$course_code&filter_by_user=$student_id&id_session=$sessionId";
+                    echo Display::url(
+                        Display::return_icon(
+                            'test_results.png',
+                            get_lang('AllAttempts'),
+                            array(),
+                            ICON_SIZE_SMALL
+                        ),
+                        $all_attempt_url
+                    );
+                }
+                echo '</td>';
 
-                echo '</td></tr>';
+                echo '</tr>';
                 $data_exercices[$i][] = $exercices['title'];
                 $data_exercices[$i][] = $score_percentage . '%';
                 $data_exercices[$i][] = $count_attempts;
@@ -1280,6 +1306,61 @@ if (!empty($student_id)) {
                 echo $table->toHtml();
             }
         }
+
+        require_once '../work/work.lib.php';
+        $userworks = getWorkPerUser($student_id, $courseInfo['real_id'], $sessionId);
+        echo '
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>' . get_lang('Tasks') . '</th>
+                            <th class="text-center">' . get_lang('DocumentNumber') . '</th>
+                            <th class="text-center">' . get_lang('Note') . '</th>
+                            <th class="text-center">' . get_lang('HandedOut') . '</th>
+                            <th class="text-center">' . get_lang('HandOutDateLimit') . '</th>
+                            <th class="text-center">' . get_lang('ConsideredWorkingTime') . '</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+        ';
+
+            foreach ($userworks as $work) {
+                $work = $work['work'];
+                foreach ($work->user_results as $key => $results) {
+                    echo '<tr>';
+                    echo '<td>' . $work->title . '</td>';
+                    $documentNumber = $key + 1;
+                    echo '<td class="text-center"><a href="' . api_get_path(WEB_CODE_PATH) . 'work/view.php?cidReq=' . $course_code . '&id_session=' . $sessionId .'&id=' . $results['id'] . '">(' . $documentNumber . ')</a></td>';
+                    $qualification = !empty($results['qualification']) ? $results['qualification'] : '-';
+                    echo '<td class="text-center">' . $qualification. '</td>';
+                    echo '<td class="text-center">' . $results['formatted_date']. '</td>';
+                    $assignment = get_work_assignment_by_id($work->id, $courseInfo['real_id']);
+                    echo '<td class="text-center">' . api_convert_and_format_date($assignment['expires_on']) . '</td>';
+
+                    $fieldValue = new ExtraFieldValue('work');
+                    $resultExtra = $fieldValue->getAllValuesForAnItem(
+                        $work->id,
+                        true
+                    );
+
+                    foreach ($resultExtra as $field) {
+                        $field = $field['value'];
+
+                        if (api_get_configuration_value('considered_working_time') == $field->getField()->getVariable()) {
+                            echo '<td class="text-center">' . $field->getValue() . '</td>';
+                        }
+                    }
+
+                    echo '</tr>';
+                }
+            }
+
+        echo '
+                    </tbody>
+                </table>
+            </div>
+        ';
 
         // line about other tools
         ?>

@@ -6,7 +6,7 @@
  * https://blueimp.net
  *
  * Licensed under the MIT license:
- * http://www.opensource.org/licenses/MIT
+ * https://opensource.org/licenses/MIT
  */
 
 /* global describe, it, Blob */
@@ -336,6 +336,23 @@
         done()
       }, {sourceWidth: 40, sourceHeight: 40, crop: true, pixelRatio: 2})).to.be.ok
     })
+
+    it('Crop using maxWidth/maxHeight with the given downsamplingRatio', function (done) {
+      expect(loadImage(blobGIF, function (img) {
+        expect(img.width).to.equal(10)
+        expect(img.height).to.equal(10)
+
+        var data = img.getContext('2d').getImageData(0, 0, 10, 10).data
+        for (var i = 0; i < data.length / 4; i += 4) {
+          expect(data[i]).to.equal(0)
+          expect(data[i + 1]).to.equal(0)
+          expect(data[i + 2]).to.equal(0)
+          expect(data[i + 3]).to.equal(255)
+        }
+
+        done()
+      }, {maxWidth: 10, maxHeight: 10, crop: true, downsamplingRatio: 0.5})).to.be.ok
+    })
   })
 
   describe('Orientation', function () {
@@ -365,10 +382,10 @@
 
     it('Should adjust constraints to new coordinates', function (done) {
       expect(loadImage(blobGIF, function (img) {
-        expect(img.width).to.equal(60)
-        expect(img.height).to.equal(80)
+        expect(img.width).to.equal(30)
+        expect(img.height).to.equal(40)
         done()
-      }, {orientation: 6, maxWidth: 60, maxHeight: 80})).to.be.ok
+      }, {orientation: 6, maxWidth: 30, maxHeight: 40})).to.be.ok
     })
 
     it('Should adjust left and top to new coordinates', function (done) {
@@ -449,12 +466,20 @@
         done()
       }, {orientation: true})).to.be.ok
     })
+
+    it('Should adjust constraints based on the exif orientation value', function (done) {
+      expect(loadImage(blobJPEG, function (img) {
+        expect(img.width).to.equal(10)
+        expect(img.height).to.equal(20)
+        done()
+      }, {orientation: true, minWidth: 10, minHeight: 20})).to.be.ok
+    })
   })
 
   describe('Canvas', function () {
     it('Return img element to callback if canvas is not true', function (done) {
       expect(loadImage(blobGIF, function (img) {
-        expect(img.getContext).to.not.be.ok
+        expect(img.getContext).to.be.falsy
         expect(img.nodeName.toLowerCase()).to.equal('img')
         done()
       })).to.be.ok
@@ -525,6 +550,30 @@
       }, {meta: true})).to.be.ok
     })
   })
+
+  if ('fetch' in window && 'Request' in window) {
+    describe('Fetch', function () {
+      it('Should fetch blob from URL if meta is true', function (done) {
+        expect(loadImage(imageUrlJPEG, function (img, data) {
+          expect(data).to.be.ok
+          expect(data.imageHead).to.be.ok
+          expect(data.exif).to.be.ok
+          expect(data.exif.get('Orientation')).to.equal(6)
+          done()
+        }, {meta: true})).to.be.ok
+      })
+
+      it('Should not fetch blob from URL if meta is false', function (done) {
+        expect(loadImage(imageUrlJPEG, function (img, data) {
+          expect(data.imageHead).to.be.falsy
+          expect(data.exif).to.be.falsy
+          expect(img.width).to.equal(2)
+          expect(img.height).to.equal(1)
+          done()
+        })).to.be.ok
+      })
+    })
+  }
 }(
   this.chai.expect,
   this.loadImage

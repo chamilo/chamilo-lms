@@ -755,6 +755,13 @@ class UserManager
             api_get_utc_datetime(),
             $user_id_manager
         );
+        $cacheAvailable = api_get_configuration_value('apc');
+        if ($cacheAvailable === true) {
+            $apcVar = api_get_configuration_value('apc_prefix') . 'userinfo_' . $user_id;
+            if (apcu_exists($apcVar)) {
+                apcu_delete($apcVar);
+            }
+        }
 
         return true;
     }
@@ -1073,6 +1080,14 @@ class UserManager
 
         if (!empty($hook)) {
             $hook->notifyUpdateUser(HOOK_EVENT_TYPE_POST);
+        }
+
+        $cacheAvailable = api_get_configuration_value('apc');
+        if ($cacheAvailable === true) {
+            $apcVar = api_get_configuration_value('apc_prefix') . 'userinfo_' . $user_id;
+            if (apcu_exists($apcVar)) {
+                apcu_delete($apcVar);
+            }
         }
 
         return $user->getId();
@@ -1448,7 +1463,7 @@ class UserManager
         $user_table = Database :: get_main_table(TABLE_MAIN_USER);
         $tblAccessUrlRelUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $return_array = array();
-        $sql_query = "SELECT * FROM $user_table ";
+        $sql_query = "SELECT user.id FROM $user_table user ";
 
         if (api_is_multiple_url_enabled()) {
             $sql_query .= " INNER JOIN $tblAccessUrlRelUser auru ON auru.user_id = user.id ";
@@ -1484,11 +1499,8 @@ class UserManager
 
         $sql_result = Database::query($sql_query);
         while ($result = Database::fetch_array($sql_result)) {
-            $result['complete_name'] = api_get_person_name(
-                $result['firstname'],
-                $result['lastname']
-            );
-            $return_array[] = $result;
+            $userInfo = api_get_user_info($result['id']);
+            $return_array[] = $userInfo;
         }
 
         return $return_array;

@@ -3882,13 +3882,13 @@ class learnpath
         $course_id = api_get_course_int_id();
         $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
         $sql = "SELECT * FROM $lp_table
-                WHERE c_id = ".$course_id."
+                WHERE c_id = $course_id
                 ORDER BY display_order";
         $res = Database::query($sql);
         if ($res === false)
             return false;
         $lps = array ();
-        $lp_order = array ();
+        $lp_order = array();
         $num = Database :: num_rows($res);
         // First check the order is correct, globally (might be wrong because
         // of versions < 1.8.4)
@@ -3929,7 +3929,7 @@ class learnpath
         $course_id = api_get_course_int_id();
         $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
         $sql = "SELECT * FROM $lp_table
-                WHERE c_id = ".$course_id."
+                WHERE c_id = $course_id
                 ORDER BY display_order";
         $res = Database::query($sql);
         if ($res === false) {
@@ -4141,7 +4141,7 @@ class learnpath
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             $row = Database :: fetch_array($result);
-            $name = domesticate($row['name']);
+            $name = Database::escape_string($row['name']);
             if ($set_visibility == 'i') {
                 $v = 0;
             }
@@ -4167,6 +4167,7 @@ class learnpath
                         )
                         $session_condition
                     ";
+
             $result = Database::query($sql);
             $num = Database :: num_rows($result);
             if ($set_visibility == 'i' && $num > 0) {
@@ -4199,7 +4200,9 @@ class learnpath
                             session_id = $session_id
                         WHERE
                             c_id = ".$course_id." AND
-                            (link='$link' and image='scormbuilder.gif' $session_condition)
+                            (link = '$link' OR link = '$oldLink') AND 
+                            image='scormbuilder.gif' 
+                            $session_condition
                         ";
                 Database::query($sql);
             } else {
@@ -6318,8 +6321,10 @@ class learnpath
                             );
                         }
                         break;
-                    case TOOL_DOCUMENT:
                     case TOOL_LP_FINAL_ITEM:
+                        $return .= $this->getSavedFinalItem();
+                        break;
+                    case TOOL_DOCUMENT:
                         $tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
                         $sql_doc = "SELECT path FROM " . $tbl_doc . "
                                     WHERE c_id = ".$course_id." AND id = " . intval($row['path']);
@@ -6412,12 +6417,12 @@ class learnpath
                     $return .= $this->display_link_form('edit', $item_id, $row);
                     break;
                 case TOOL_LP_FINAL_ITEM:
-                    $_SESSION['finalItem'] = true;
+                    Session::write('finalItem', true);
                     $tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
                     $sql = "SELECT lp.*, doc.path as dir
                             FROM " . $tbl_lp_item . " as lp
                             LEFT JOIN " . $tbl_doc . " as doc
-                            ON doc.id = lp.path
+                            ON (doc.id = lp.path AND lp.c_id = doc.c_id)
                             WHERE
                                 lp.c_id = $course_id AND
                                 doc.c_id = $course_id AND
@@ -8150,8 +8155,8 @@ class learnpath
         } elseif (is_numeric($extra_info)) {
             $extra_info = intval($extra_info);
             $sql = "SELECT title, description
-                    FROM " . $tbl_publication . "
-                    WHERE c_id = ".$course_id." AND id = " . $extra_info;
+                    FROM $tbl_publication
+                    WHERE c_id = $course_id AND id = " . $extra_info;
 
             $result = Database::query($sql);
             $row = Database :: fetch_array($result);
@@ -8167,8 +8172,8 @@ class learnpath
             $parent = 0;
         }
 
-        $sql = "SELECT * FROM " . $tbl_lp_item . "
-                WHERE c_id = ".$course_id." AND lp_id = " . $this->lp_id;
+        $sql = "SELECT * FROM $tbl_lp_item 
+                WHERE c_id = $course_id AND lp_id = " . $this->lp_id;
 
         $result = Database::query($sql);
         $arrLP = array();
@@ -8219,9 +8224,7 @@ class learnpath
             ]
         );
 
-        $arrHide = array(
-            $id
-        );
+        $arrHide = array($id);
 
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($action != 'add') {
@@ -8417,7 +8420,7 @@ class learnpath
             $url.'&action=delete_item'
         );
 
-        if ($item_type == TOOL_HOTPOTATOES ) {
+        if ($item_type == TOOL_HOTPOTATOES) {
             $document_data = DocumentManager::get_document_data_by_id($row['path'], $course_code);
             $return .= get_lang('File').': '.$document_data['absolute_path_from_document'];
         }
@@ -9015,7 +9018,6 @@ class learnpath
             $works = getWorkListTeacher(0, 100, null, null, null);
             if (!empty($works)) {
                 foreach ($works as $work) {
-
                     $link = Display::url(
                         Display::return_icon('preview_view.png', get_lang('Preview')),
                         api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$work['iid'],
@@ -11026,7 +11028,7 @@ EOD;
     /**
      * Check and obtain the lp final item if exist
      *
-     * @return array lp items
+     * @return learnpathItem
      */
     private function getFinalItem()
     {
@@ -11061,9 +11063,13 @@ EOD;
     private function getSavedFinalItem()
     {
         $finalItem = $this->getFinalItem();
-        $doc = DocumentManager::get_document_data_by_id($finalItem->path, $this->cc);
 
-        return file_get_contents($doc['absolute_path']);
+        $doc = DocumentManager::get_document_data_by_id($finalItem->path, $this->cc);
+        if ($doc && file_exists($doc['absolute_path'])) {
+            return file_get_contents($doc['absolute_path']);
+        }
+
+        return '';
     }
 
     /**
@@ -11077,7 +11083,7 @@ EOD;
         $title = '';
 
         if ($finalItem) {
-            $title = $finalItem->title;
+            $title = $finalItem->get_title();
             $buttonText = get_lang('Save');
             $content = $this->getSavedFinalItem();
         } else {

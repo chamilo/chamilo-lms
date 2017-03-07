@@ -1186,7 +1186,7 @@ HTML;
                 ';
 
                 if (!empty($answers_hotspot)) {
-                    Session::write('hotspot_ordered', array_keys($answers_hotspot));
+                    Session::write("hotspot_ordered$questionId", array_keys($answers_hotspot));
                     $countAnswers = 1;
                     foreach ($answers_hotspot as $value) {
                         $answerList .= "<li><p>{$countAnswers} - {$value}</p></li>";
@@ -1594,10 +1594,8 @@ HOTSPOT;
 
         if ($is_allowedToEdit) {
             //@todo fix to work with COURSE_RELATION_TYPE_RRHH in both queries
-
             // Hack in order to filter groups
             $sql_inner_join_tbl_user = '';
-
             if (strpos($extra_where_conditions, 'group_id')) {
                 $sql_inner_join_tbl_user = "
                 (
@@ -1816,8 +1814,9 @@ HOTSPOT;
             $lp_list_obj = new LearnpathList(api_get_user_id());
             $lp_list = $lp_list_obj->get_flat_list();
 
-            if (is_array($results)) {
+            $oldIds = array_column($lp_list, 'lp_old_id', 'iid');
 
+            if (is_array($results)) {
                 $users_array_id = array();
                 $from_gradebook = false;
                 if (isset($_GET['gradebook']) && $_GET['gradebook'] == 'view') {
@@ -1830,7 +1829,6 @@ HOTSPOT;
                     $exercise_id,
                     LINK_EXERCISE
                 );
-
                 // Looping results
                 for ($i = 0; $i < $sizeof; $i++) {
                     $revised = $results[$i]['revised'];
@@ -1846,12 +1844,16 @@ HOTSPOT;
                     }
 
                     $lp_obj = isset($results[$i]['orig_lp_id']) && isset($lp_list[$results[$i]['orig_lp_id']]) ? $lp_list[$results[$i]['orig_lp_id']] : null;
+                    if (empty($lp_obj)) {
+                        // Try to get the old id (id instead of iid)
+                        $lpNewId = isset($results[$i]['orig_lp_id']) && isset($oldIds[$results[$i]['orig_lp_id']]) ? $oldIds[$results[$i]['orig_lp_id']] : null;
+                        if ($lpNewId) {
+                            $lp_obj = isset($lp_list[$lpNewId]) ? $lp_list[$lpNewId] : null;
+                        }
+                    }
                     $lp_name = null;
-
                     if ($lp_obj) {
-                        $url = api_get_path(
-                                WEB_CODE_PATH
-                            ) . 'lp/lp_controller.php?' . api_get_cidreq() . '&action=view&lp_id=' . $results[$i]['orig_lp_id'];
+                        $url = api_get_path(WEB_CODE_PATH) . 'lp/lp_controller.php?' . api_get_cidreq() . '&action=view&lp_id=' . $results[$i]['orig_lp_id'];
                         $lp_name = Display::url(
                             $lp_obj['lp_name'],
                             $url,
@@ -1859,9 +1861,8 @@ HOTSPOT;
                         );
                     }
 
-                    //Add all groups by user
+                    // Add all groups by user
                     $group_name_list = null;
-
                     if ($is_empty_sql_inner_join_tbl_user) {
                         $group_list = GroupManager::get_group_ids(
                             api_get_course_int_id(),
@@ -1874,16 +1875,11 @@ HOTSPOT;
                         $results[$i]['group_name'] = $group_name_list;
                     }
 
-                    $results[$i]['exe_duration'] = !empty($results[$i]['exe_duration']) ? round(
-                        $results[$i]['exe_duration'] / 60
-                    ) : 0;
+                    $results[$i]['exe_duration'] = !empty($results[$i]['exe_duration']) ? round($results[$i]['exe_duration'] / 60) : 0;
 
                     $user_list_id[] = $results[$i]['exe_user_id'];
                     $id = $results[$i]['exe_id'];
-
-                    $dt = api_convert_and_format_date(
-                        $results[$i]['exe_weighting']
-                    );
+                    $dt = api_convert_and_format_date($results[$i]['exe_weighting']);
 
                     // we filter the results if we have the permission to
                     if (isset($results[$i]['results_disabled'])) {
@@ -1999,9 +1995,7 @@ HOTSPOT;
                             }
 
                         } else {
-                            $attempt_url = api_get_path(
-                                    WEB_CODE_PATH
-                                ) . 'exercise/result.php?' . api_get_cidreq() . '&id=' . $results[$i]['exe_id'] . '&id_session=' . $sessionId;
+                            $attempt_url = api_get_path(WEB_CODE_PATH) . 'exercise/result.php?' . api_get_cidreq() . '&id=' . $results[$i]['exe_id'] . '&id_session=' . $sessionId;
                             $attempt_link = Display::url(
                                 get_lang('Show'),
                                 $attempt_url,
@@ -3458,11 +3452,13 @@ HOTSPOT;
      * @param Exercise $objExercise
      * @param int $exe_id
      * @param bool $save_user_result save users results (true) or just show the results (false)
+     * @param string $remainingMessage
      */
     public static function display_question_list_by_attempt(
         $objExercise,
         $exe_id,
-        $save_user_result = false
+        $save_user_result = false,
+        $remainingMessage = ''
     ) {
         global $origin;
 
@@ -3754,6 +3750,10 @@ HOTSPOT;
             echo $total_score_text;
         }
 
+        if (!empty($remainingMessage)) {
+            Display::display_normal_message($remainingMessage, false);
+        }
+
         if ($save_user_result) {
 
             // Tracking of results
@@ -3762,7 +3762,7 @@ HOTSPOT;
             $learnpath_item_view_id = $exercise_stat_info['orig_lp_item_view_id'];
 
             if (api_is_allowed_to_session_edit()) {
-                Event::update_event_exercice(
+                Event::update_event_exercise(
                     $exercise_stat_info['exe_id'],
                     $objExercise->selectId(),
                     $total_score,
@@ -3879,5 +3879,42 @@ HOTSPOT;
             }
         }
         return $limits[0];
+    }
+
+    /**
+     * @param int $senderId
+     * @param array $course_info
+     * @param string $test
+     * @param int $lp_id
+     * @param string $url
+     *
+     * @return string
+     */
+    public static function getEmailNotification($senderId, $course_info, $test, $lp_id, $url)
+    {
+        $teacher_info = api_get_user_info($senderId);
+
+        $from_name = api_get_person_name(
+            $teacher_info['firstname'],
+            $teacher_info['lastname'],
+            null,
+            PERSON_NAME_EMAIL_ADDRESS
+        );
+
+        $message = '<p>'.get_lang('DearStudentEmailIntroduction').'</p><p>'.get_lang('AttemptVCC');
+        $message .= '<h3>'.get_lang('CourseName').'</h3><p>'.Security::remove_XSS($course_info['name']).'';
+        $message .= '<h3>'.get_lang('Exercise').'</h3><p>'.Security::remove_XSS($test);
+
+        // Only for exercises not in a LP
+        if ($lp_id == 0) {
+            $message .= '<p>'.get_lang('ClickLinkToViewComment').' <br /><a href="#url#">#url#</a><br />';
+        }
+
+        $message .= '<p>'.get_lang('Regards').'</p>';
+        $message .= $from_name;
+        $message = str_replace("#test#", Security::remove_XSS($test), $message);
+        $message = str_replace("#url#", $url, $message);
+
+        return $message;
     }
 }

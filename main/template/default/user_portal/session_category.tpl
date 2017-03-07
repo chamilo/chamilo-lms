@@ -24,7 +24,6 @@
                 {% endif %}
 
                 <h4 class="title">{{ session_category.title }}</h4>
-
                 {% if session_category.subtitle %}
                     <div class="subtitle-session">{{ session_category.subtitle }}</div>
                 {% endif %}

@@ -6,7 +6,7 @@ var where = 'client'; // where to install: 'client' or 'server'. For both, pass 
 
 Package.describe({
     name: packageName,
-    version: '0.2.10',
+    version: '0.2.11',
     // Brief, one-line summary of the package.
     summary: 'Cross-browser CSS customizable scrollbar with advanced features.',
     // URL to the Git repository containing the source code for this package.

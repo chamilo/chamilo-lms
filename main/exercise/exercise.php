@@ -564,7 +564,6 @@ if (isset($list_ordered) && !empty($list_ordered)) {
 }
 
 $tableRows = [];
-
 /*  Listing exercises  */
 if (!empty($exerciseList)) {
     if ($origin != 'learnpath') {
@@ -742,7 +741,7 @@ if (!empty($exerciseList)) {
 
                     // Export
                     $actions .= Display::url(
-                        Display::return_icon('cd.gif', get_lang('CopyExercise')),
+                        Display::return_icon('cd.png', get_lang('CopyExercise')),
                         '',
                         array(
                             'onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToCopy'), ENT_QUOTES, $charset))." ".addslashes($row['title'])."?"."')) return false;",
@@ -1023,22 +1022,24 @@ $hotpotatoes_exist = false;
 
 if ($is_allowedToEdit) {
     $sql = "SELECT d.path as path, d.comment as comment, ip.visibility as visibility
-            FROM $TBL_DOCUMENT d, $TBL_ITEM_PROPERTY ip
+            FROM $TBL_DOCUMENT d 
+            INNER JOIN $TBL_ITEM_PROPERTY ip
+            ON (d.id = ip.ref AND d.c_id = ip.c_id)
             WHERE
                 d.c_id = $courseId AND
-                ip.c_id = $courseId AND
-                d.id = ip.ref AND
+                ip.c_id = $courseId AND                
                 ip.tool = '".TOOL_DOCUMENT."' AND
                 (d.path LIKE '%htm%') AND
                 d.path  LIKE '".Database :: escape_string($uploadPath.'/%/%')."'
             LIMIT ".$from.",".$limit; // only .htm or .html files listed
 } else {
     $sql = "SELECT d.path as path, d.comment as comment, ip.visibility as visibility
-            FROM $TBL_DOCUMENT d, $TBL_ITEM_PROPERTY ip
+            FROM $TBL_DOCUMENT d 
+            INNER JOIN $TBL_ITEM_PROPERTY ip
+            ON (d.id = ip.ref AND d.c_id = ip.c_id)
             WHERE
                 d.c_id = $courseId AND
-                ip.c_id = $courseId AND
-                d.id = ip.ref AND
+                ip.c_id = $courseId AND                
                 ip.tool = '".TOOL_DOCUMENT."' AND
                 (d.path LIKE '%htm%') AND
                 d.path  LIKE '".Database :: escape_string($uploadPath.'/%/%')."' AND

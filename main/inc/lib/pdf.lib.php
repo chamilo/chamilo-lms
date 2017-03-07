@@ -561,7 +561,6 @@ class PDF
             $course_info = api_get_course_info($course_code);
             // course path
             $store_path  = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/'.api_get_current_access_url_id().'_pdf_watermark.png';
-
         } else {
             // course path
             $store_path = api_get_path(SYS_CODE_PATH).'default_course_document/images/'.api_get_current_access_url_id().'_pdf_watermark.png';

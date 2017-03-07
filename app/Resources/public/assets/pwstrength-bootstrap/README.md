@@ -38,7 +38,7 @@ from this [repository](https://github.com/ablanco/jquery.pwstrength.bootstrap/tr
 Load it into your HTML after your original bootstrap and jQuery javascript files:
 
 ```html
-<script type="text/javascript" src="file/location/pwstrength-bootstrap-1.2.8.min.js"></script>
+<script type="text/javascript" src="dist/pwstrength-bootstrap.min.js"></script>
 ```
 
 Then just invoke the plugin on the password fields you want to attach a strength

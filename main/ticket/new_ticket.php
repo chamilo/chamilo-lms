@@ -288,8 +288,7 @@ function show_form_send_ticket()
         )
     );
 
-    $form->addElement(
-        'select',
+    $form->addSelect(
         'category_id',
         get_lang('Category'),
         $categoryList,
@@ -322,8 +321,7 @@ function show_form_send_ticket()
     );
 
     if (api_is_platform_admin()) {
-        $form->addElement(
-            'SelectAjax',
+        $form->addSelectAjax(
             'user_id',
             get_lang('Assign'),
             null,
@@ -450,18 +448,17 @@ function show_form_send_ticket()
  */
 function save_ticket()
 {
-    $category_id = $_POST['category_id'];
     $content = $_POST['content'];
     if ($_POST['phone'] != '') {
-        $content .= '<p style="color:red">&nbsp;' . get_lang('Phone') . ': ' . Security::remove_XSS($_POST['phone']). '</p>';
+        $content .= '<p style="color:red">&nbsp;' . get_lang('Phone') . ': ' . $_POST['phone']. '</p>';
     }
     $course_id = isset($_POST['course_id']) ? $_POST['course_id'] : '';
     $sessionId = isset($_POST['session_id']) ? $_POST['session_id'] : '';
+    $category_id = isset($_POST['category_id']) ? $_POST['category_id'] : '';
 
     $project_id = $_POST['project_id'];
     $subject = $_POST['subject'];
     $other_area = (int) $_POST['other_area'];
-    $email = $_POST['email'];
     $personal_email = $_POST['personal_email'];
     $source = $_POST['source_id'];
     $user_id = isset($_POST['user_id']) ? $_POST['user_id'] : 0;
@@ -475,7 +472,6 @@ function save_ticket()
         $sessionId,
         $project_id,
         $other_area,
-        $email,
         $subject,
         $content,
         $personal_email,
@@ -602,6 +598,14 @@ $interbreadcrumb[] = array(
 
 if (!isset($_POST['compose'])) {
     Display::display_header(get_lang('ComposeMessage'));
+
+    echo '<div class="actions">';
+    echo Display::url(
+        Display::return_icon('back.png', get_lang('Tickets'), [], ICON_SIZE_MEDIUM),
+        api_get_path(WEB_CODE_PATH) . 'ticket/tickets.php'
+    );
+    echo '</div>';
+
     show_form_send_ticket();
 } else {
     save_ticket();

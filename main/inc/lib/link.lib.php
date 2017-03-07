@@ -405,7 +405,7 @@ class Link extends Model
                     api_get_user_id()
                 );
                 self::delete_link_from_search_engine(api_get_course_id(), $id);
-                Display:: display_confirmation_message(get_lang('LinkDeleted'));
+                Display::addFlash(Display::return_message(get_lang('LinkDeleted')));
                 $result = true;
                 break;
             case 'category':
@@ -765,7 +765,6 @@ class Link extends Model
                 $_user['user_id']
             );
             Display::addFlash(Display::return_message(get_lang('VisibilityChanged')));
-
         } elseif ($scope == TOOL_LINK_CATEGORY) {
             api_item_property_update(
                 $_course,
@@ -805,7 +804,7 @@ class Link extends Model
         $sql = "SELECT *, linkcat.id
                 FROM $tblLinkCategory linkcat
                 WHERE
-                    linkcat.c_id = " . $courseId . "
+                    linkcat.c_id = $courseId
                     $sessionCondition
                 ORDER BY linkcat.display_order DESC";
 
@@ -862,8 +861,12 @@ class Link extends Model
      *
      * @return array
      */
-    public static function getLinksPerCategory($categoryId, $courseId, $sessionId, $withBaseContent = true)
-    {
+    public static function getLinksPerCategory(
+        $categoryId,
+        $courseId,
+        $sessionId,
+        $withBaseContent = true
+    ) {
         $tbl_link = Database:: get_course_table(TABLE_LINK);
         $TABLE_ITEM_PROPERTY = Database:: get_course_table(TABLE_ITEM_PROPERTY);
         $courseId = (int) $courseId;
@@ -874,22 +877,58 @@ class Link extends Model
         $condition_session = api_get_session_condition(
             $sessionId,
             true,
-            $withBaseContent,
-            'link.session_id'
+            false,
+            'ip.session_id'
         );
 
-        $sql = "SELECT *, link.id 
+        if (!empty($sessionId)) {
+            $conditionBaseSession = api_get_session_condition(
+                0,
+                true,
+                $withBaseContent,
+                'ip.session_id'
+            );
+            $condition = " AND 
+                (
+                    (ip.visibility = '1' $conditionBaseSession) OR
+                     
+                    (
+                        (ip.visibility = '0' OR ip.visibility = '1')
+                        $condition_session
+                    )
+                )
+            ";
+        } else {
+            $condition = api_get_session_condition(
+                0,
+                true,
+                false,
+                'ip.session_id'
+            );
+            $condition .=  " AND (ip.visibility = '0' OR ip.visibility = '1') $condition " ;
+        }
+
+        $sql = "SELECT 
+                    link.id,
+                    ip.session_id,
+                    link.session_id link_session_id,
+                    url,
+                    category_id,
+                    visibility,
+                    description,
+                    title,
+                    target,
+                    on_homepage
                 FROM $tbl_link link
                 INNER JOIN $TABLE_ITEM_PROPERTY ip
                 ON (link.id = ip.ref AND link.c_id = ip.c_id)
                 WHERE
                     ip.tool = '" . TOOL_LINK . "' AND
                     link.category_id = '" . $categoryId . "' AND
-                    (ip.visibility = '0' OR ip.visibility = '1')
-                    $condition_session AND
                     link.c_id = $courseId AND
-                    ip.c_id = $courseId 
-                ORDER BY link.display_order ASC";
+                    ip.c_id = $courseId
+                    $condition
+                ORDER BY link.display_order ASC, ip.session_id DESC";
 
         $result = Database:: query($sql);
 
@@ -914,15 +953,25 @@ class Link extends Model
 
         $links = self::getLinksPerCategory($catid, $courseId, $session_id);
         $content = '';
-        $numberoflinks = count($links);
+        $numberOfLinks = count($links);
 
         if (!empty($links)) {
             $content .= '<div class="link list-group">';
             $i = 1;
+            $linksAdded = [];
             foreach ($links as $myrow) {
+                $linkId = $myrow['id'];
+
+                if (in_array($linkId, $linksAdded)) {
+                    continue;
+                }
+
+                $linksAdded[] = $linkId;
+                $categoryId = $myrow['category_id'];
+
                 // Validation when belongs to a session.
                 $session_img = api_get_session_image(
-                    $myrow['session_id'],
+                    $myrow['link_session_id'],
                     $_user['status']
                 );
 
@@ -935,22 +984,21 @@ class Link extends Model
                         'check-circle-o',
                         'default btn-sm',
                         array(
-                            'onclick' => "check_url('" . $myrow['id'] . "', '" . addslashes($myrow['url']) . "');",
+                            'onclick' => "check_url('" . $linkId . "', '" . addslashes($myrow['url']) . "');",
                             'title' => get_lang('CheckURL')
                         )
                     );
+
                     $link_validator .= Display::span(
                         '',
                         array(
-                        'id' => 'url_id_' . $myrow['id'],
+                        'id' => 'url_id_' . $linkId,
                         'class' => 'check-link'
                         )
                     );
 
-                    if ($session_id == $myrow['session_id']) {
-                        $url = api_get_self().'?' .api_get_cidreq().'&action=editlink&category=' .(!empty ($category) ? $category : '').
-                            '&id=' . $myrow['id'] .
-                            '&category_id=' . $myrow['id'];
+                    if ($session_id == $myrow['link_session_id']) {
+                        $url = api_get_self().'?'.api_get_cidreq().'&action=editlink&id='.$linkId;
                         $title = get_lang('Edit');
                         $toolbar .= Display::toolbarButton(
                             '',
@@ -961,48 +1009,53 @@ class Link extends Model
                                 'title' => $title
                             )
                         );
+                    }
 
-                        if ($myrow['visibility'] == '1') {
-                            $url .= 'link.php?' . api_get_cidreq() .
-                                '&sec_token=' . $token .
-                                '&action=invisible&id=' . $myrow['id'] .
-                                '&scope=link&category_id=' . $myrow['category_id'];
+                    $urlVisibility = api_get_self().'?'.api_get_cidreq() .
+                            '&sec_token=' . $token .
+                            '&id=' . $linkId .
+                            '&scope=link&category_id=' . $categoryId;
+
+                    switch ($myrow['visibility']) {
+                        case '1':
+                            $urlVisibility .= '&action=invisible';
                             $title = get_lang('MakeInvisible');
                             $toolbar .= Display::toolbarButton(
                                 '',
-                                $url,
+                                $urlVisibility,
                                 'eye',
                                 'default btn-sm',
                                 array(
                                     'title' => $title
                                 )
                             );
-                        }
-
-                        if ($myrow['visibility'] == '0') {
-                            $url .= 'link.php?' . api_get_cidreq() .'&sec_token=' . $token .'&action=visible&id=' . $myrow['id'] .'&scope=link&category_id=' . $myrow['category_id'];
+                            break;
+                        case '0':
+                            $urlVisibility .= '&action=visible';
                             $title = get_lang('MakeVisible');
                             $toolbar .= Display::toolbarButton(
                                 '',
-                                $url,
+                                $urlVisibility,
                                 'eye-slash',
                                 'primary btn-sm',
                                 array(
                                     'title' => $title
                                 )
                             );
-                        }
+                            break;
+                    }
 
+                    if ($session_id == $myrow['link_session_id']) {
                         $moveLinkParams = [
-                            'id' => $myrow['id'],
+                            'id' => $linkId,
                             'scope' => 'category',
-                            'category_id' => $myrow['category_id'],
+                            'category_id' => $categoryId,
                             'action' => 'move_link_up'
                         ];
 
                         $toolbar .= Display::toolbarButton(
                             get_lang('MoveUp'),
-                            'link.php?' . api_get_cidreq() . '&' . http_build_query($moveLinkParams),
+                            api_get_self() . '?'.api_get_cidreq() . '&' . http_build_query($moveLinkParams),
                             'level-up',
                             'default',
                             ['class' => 'btn-sm ' . ($i === 1 ? 'disabled' : '')],
@@ -1012,14 +1065,14 @@ class Link extends Model
                         $moveLinkParams['action'] = 'move_link_down';
                         $toolbar .= Display::toolbarButton(
                             get_lang('MoveDown'),
-                            'link.php?' . api_get_cidreq() . '&' . http_build_query($moveLinkParams),
+                            api_get_self().'?' . api_get_cidreq() . '&' . http_build_query($moveLinkParams),
                             'level-down',
                             'default',
-                            ['class' => 'btn-sm ' . ($i === $numberoflinks ? 'disabled' : '')],
+                            ['class' => 'btn-sm ' . ($i === $numberOfLinks ? 'disabled' : '')],
                             false
                         );
 
-                        $url .= api_get_self() . '?' . api_get_cidreq() .'&sec_token=' . $token .'&action=deletelink&id=' . $myrow['id'] .'&category_id=' . $myrow['category_id'];
+                        $url .= api_get_self().'?'.api_get_cidreq() .'&sec_token=' . $token .'&action=deletelink&id=' . $linkId .'&category_id=' . $categoryId;
                         $event = "javascript: if(!confirm('" . get_lang('LinkDelconfirm') . "'))return false;";
                         $title = get_lang('Delete');
 
@@ -1033,19 +1086,9 @@ class Link extends Model
                                 'title' => $title
                             )
                         );
-                    } else {
-                        $title = get_lang('EditionNotAvailableFromSession');
-                        $toolbar .= Display::toolbarButton(
-                            '',
-                            '#',
-                            'trash-o',
-                            'default btn-sm',
-                            array(
-                                'title' => $title
-                            )
-                        );
                     }
                 }
+
                 $iconLink = Display::return_icon(
                     'url.png',
                     get_lang('Link'),
@@ -1058,7 +1101,7 @@ class Link extends Model
                     $content .= '<div class="pull-right"><div class="btn-group">'.$toolbar.'</div></div>';
                     $content .= '<h4 class="list-group-item-heading">';
                     $content .= $iconLink;
-                    $url =  'link_goto.php?' . api_get_cidreq() .'&link_id=' . $myrow['id'] .'&link_url=' . urlencode($myrow['url']);
+                    $url = api_get_path(WEB_CODE_PATH).'link/link_goto.php?' . api_get_cidreq() .'&link_id=' . $linkId .'&link_url=' . urlencode($myrow['url']);
                     $content .= Display::tag(
                         'a',
                         Security:: remove_XSS($myrow['title']),
@@ -1079,7 +1122,7 @@ class Link extends Model
                         $content .= '<div class="pull-right"><div class="btn-group">'.$toolbar.'</div></div>';
                         $content .= '<h4 class="list-group-item-heading">';
                         $content .= $iconLink;
-                        $url = 'link_goto.php?' . api_get_cidreq() .'&link_id=' . $myrow['id'] . "&link_url=" . urlencode($myrow['url']);
+                        $url = api_get_path(WEB_CODE_PATH).'link/link_goto.php?' . api_get_cidreq() .'&link_id=' . $linkId . "&link_url=" . urlencode($myrow['url']);
                         $content .= Display::tag(
                             'a',
                             Security:: remove_XSS($myrow['title']),
@@ -1609,6 +1652,7 @@ class Link extends Model
 
             $header .= Security::remove_XSS($myrow['category_title']).'</a>';
             $header .= '<div class="pull-right">';
+
             if (api_is_allowed_to_edit(null, true)) {
                 if ($session_id == $myrow['session_id']) {
                     $header .= $strVisibility;

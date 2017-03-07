@@ -1,11 +1,11 @@
 <?php
+/* For license terms, see /license.txt */
+
 /**
  * List of courses
  * @package chamilo.plugin.buycourses
  */
-/**
- * Initialization
- */
+
 $cidReset = true;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
@@ -22,7 +22,14 @@ $nameFilter = null;
 $minFilter = 0;
 $maxFilter = 0;
 
-$form = new FormValidator('search_filter_form', 'get', null, null, [], FormValidator::LAYOUT_INLINE);
+$form = new FormValidator(
+    'search_filter_form',
+    'get',
+    null,
+    null,
+    [],
+    FormValidator::LAYOUT_INLINE
+);
 
 if ($form->validate()) {
     $formValues = $form->getSubmitValues();

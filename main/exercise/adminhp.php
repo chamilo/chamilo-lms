@@ -21,7 +21,7 @@ if (isset($_REQUEST["cancel"])) {
 
 $newName = !empty($_REQUEST['newName']) ? $_REQUEST['newName'] : '';
 $hotpotatoesName = !empty($_REQUEST['hotpotatoesName']) ? Security::remove_XSS($_REQUEST['hotpotatoesName']) : '';
-$is_allowedToEdit=api_is_allowed_to_edit(null,true);
+$is_allowedToEdit = api_is_allowed_to_edit(null, true);
 
 // document path
 $documentPath=api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
@@ -67,8 +67,8 @@ require_once api_get_path(SYS_CODE_PATH).'/exercise/hotpotatoes.lib.php';
 if (isset($newName)) {
     if ($newName!="") {
         //alter database record for that test
-        SetComment($hotpotatoesName,$newName);
-        echo "<script language='Javascript' type='text/javascript'> window.location='exercise.php'; </script>";
+        SetComment($hotpotatoesName, $newName);
+        echo "<script> window.location='exercise.php'; </script>";
     }
 }
 
@@ -79,10 +79,10 @@ echo "<input type=\"text\" name=\"newName\" value=\"";
 $lstrComment = '';
 $lstrComment = GetComment($hotpotatoesName);
 if ($lstrComment == '') {
-    $lstrComment = GetQuizName($hotpotatoesName,$documentPath);
+    $lstrComment = GetQuizName($hotpotatoesName, $documentPath);
 }
 if ($lstrComment == '') {
-    $lstrComment = basename($hotpotatoesName,$documentPath);
+    $lstrComment = basename($hotpotatoesName, $documentPath);
 }
 
 echo $lstrComment;

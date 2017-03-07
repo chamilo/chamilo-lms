@@ -1,12 +1,11 @@
 <?php
 /* For license terms, see /license.txt */
+
 /**
  * Process purchase confirmation script for the Buy Courses plugin
  * @package chamilo.plugin.buycourses
  */
-/**
- * Init
- */
+
 require_once '../config.php';
 
 $plugin = BuyCoursesPlugin::create();
@@ -83,21 +82,6 @@ switch ($serviceSale['payment_type']) {
         break;
     case BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER:
 
-        switch ($serviceSale['node_type']) {
-            case BuyCoursesPlugin::SERVICE_TYPE_USER:
-                $buyingCourse = true;
-                $user = api_get_user_info(intval($serviceSale['node_id']));
-                break;
-            case BuyCoursesPlugin::SERVICE_TYPE_COURSE:
-                $buyingCourse = true;
-                $course = $plugin->getCourseInfo($serviceSale['node_id']);
-                break;
-            case BuyCoursesPlugin::SERVICE_TYPE_SESSION:
-                $buyingSession = true;
-                $session = $plugin->getSessionInfo($serviceSale['node_id']);
-                break;
-        }
-
         $transferAccounts = $plugin->getTransferAccounts();
 
         $form = new FormValidator('success', 'POST', api_get_self(), null, null, FormValidator::LAYOUT_INLINE);
@@ -155,8 +139,8 @@ switch ($serviceSale['payment_type']) {
             exit;
         }
 
-        $form->addButton('confirm', $plugin->get_lang('ConfirmOrder'), 'check', 'success');
-        $form->addButtonCancel($plugin->get_lang('CancelOrder'), 'cancel');
+        $form->addButton('confirm', $plugin->get_lang('ConfirmOrder'), 'check', 'success', 'default', null, ['id' => 'confirm']);
+        $form->addButton('cancel', $plugin->get_lang('CancelOrder'), 'times', 'danger', 'default', null, ['id' => 'cancel']);
 
         $template = new Template();
 
@@ -166,7 +150,7 @@ switch ($serviceSale['payment_type']) {
         $template->assign('currency', $serviceSale['currency_id']);
         $template->assign('buying_service', $serviceSale);
         $template->assign('user', $userInfo);
-        $template->assign('service', $serviceSale);
+        $template->assign('service', $serviceSale['service']);
         $template->assign('transfer_accounts', $transferAccounts);
         $template->assign('form', $form->returnForm());
 

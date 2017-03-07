@@ -558,7 +558,7 @@ define('TIMELINE_STATUS_ACTIVE', '1');
 define('TIMELINE_STATUS_INACTIVE', '2');
 
 // Event email template class
-define('EVENT_EMAIL_TEMPLATE_ACTIVE',  1);
+define('EVENT_EMAIL_TEMPLATE_ACTIVE', 1);
 define('EVENT_EMAIL_TEMPLATE_INACTIVE', 0);
 
 // Course home
@@ -1260,13 +1260,13 @@ function api_is_self_registration_allowed()
  *
  * example: The function can be used to check if a user is logged in
  *          if (api_get_user_id())
- * @return integer the id of the current user, 0 if is empty
+ * @return int the id of the current user, 0 if is empty
  */
 function api_get_user_id()
 {
     $userInfo = Session::read('_user');
     if ($userInfo && isset($userInfo['user_id'])) {
-        return $userInfo['user_id'];
+        return (int) $userInfo['user_id'];
     }
     return 0;
 }
@@ -1322,29 +1322,26 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
 {
     $result = array();
 
-    $firstname = null;
-    $lastname = null;
-    if (isset($user['firstname']) && isset($user['lastname'])) {
-        $firstname = $user['firstname'];
-        $lastname = $user['lastname'];
-    } elseif (isset($user['firstName']) && isset($user['lastName'])) {
-        $firstname = isset($user['firstName']) ? $user['firstName'] : null;
-        $lastname = isset($user['lastName']) ? $user['lastName'] : null;
+    $result['firstname'] = null;
+    $result['lastname'] = null;
+    if (isset($user['firstname']) && isset($user['lastname'])) { // with only lowercase
+        $result['firstname'] = $user['firstname'];
+        $result['lastname'] = $user['lastname'];
+    } elseif (isset($user['firstName']) && isset($user['lastName'])) { // with uppercase letters
+        $result['firstname'] = isset($user['firstName']) ? $user['firstName'] : null;
+        $result['lastname'] = isset($user['lastName']) ? $user['lastName'] : null;
     }
 
-    $result['complete_name'] = api_get_person_name($firstname, $lastname);
+    $result['complete_name'] = api_get_person_name($result['firstname'], $result['lastname']);
     $result['complete_name_with_username'] = $result['complete_name'];
 
     if (!empty($user['username'])) {
         $result['complete_name_with_username'] = $result['complete_name'].' ('.$user['username'].')';
     }
 
-    $result['firstname'] = $firstname;
-    $result['lastname'] = $lastname;
-
     // Kept for historical reasons
-    $result['firstName'] = $firstname;
-    $result['lastName'] = $lastname;
+    $result['firstName'] = $result['firstname'];
+    $result['lastName'] = $result['lastname'];
 
     $attributes = array(
         'phone',
@@ -1459,17 +1456,47 @@ function api_get_user_info(
     $loadOnlyVisibleExtraData = false,
     $loadAvatars = true
 ) {
+    $apcVar = null;
+    $user = false;
+    $cacheAvailable = api_get_configuration_value('apc');
+
     if (empty($user_id)) {
         $userFromSession = Session::read('_user');
+
         if (isset($userFromSession)) {
-            return _api_format_user($userFromSession, $showPassword, $loadAvatars);
+            if ($cacheAvailable === true) {
+                $apcVar = api_get_configuration_value('apc_prefix') . 'userinfo_' . $userFromSession['user_id'];
+                if (apcu_exists($apcVar)) {
+                    $user = apcu_fetch($apcVar);
+                } else {
+                    $user = _api_format_user($userFromSession, $showPassword, $loadAvatars);
+                    apcu_store($apcVar, $user, 60);
+                }
+            } else {
+                $user = _api_format_user($userFromSession, $showPassword, $loadAvatars);
+            }
+
+            return $user;
         }
 
         return false;
     }
 
-    $sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)."
-            WHERE id='".intval($user_id)."'";
+    // Make sure user_id is safe
+    $user_id = intval($user_id);
+
+    // Re-use user information if not stale and already stored in APCu
+    if ($cacheAvailable === true) {
+        $apcVar = api_get_configuration_value('apc_prefix') . 'userinfo_' . $user_id;
+        if (apcu_exists($apcVar)) {
+            $user = apcu_fetch($apcVar);
+
+            return $user;
+        }
+    }
+
+    $sql = "SELECT * FROM " . Database:: get_main_table(TABLE_MAIN_USER) . "
+            WHERE id = $user_id";
     $result = Database::query($sql);
     if (Database::num_rows($result) > 0) {
         $result_array = Database::fetch_array($result);
@@ -1500,10 +1527,12 @@ function api_get_user_info(
             );
         }
         $user = _api_format_user($result_array, $showPassword, $loadAvatars);
-
-        return $user;
     }
-    return false;
+    if (!empty($cacheAvailable)) {
+        apcu_store($apcVar, $user, 60);
+    }
+
+    return $user;
 }
 
 /**
@@ -2872,9 +2901,9 @@ function api_is_allowed_to_edit(
     $session_coach = false,
     $check_student_view = true
 ) {
-    $my_session_id = api_get_session_id();
+    $sessionId = api_get_session_id();
     $is_allowed_coach_to_edit = api_is_coach(null, null, $check_student_view);
-    $session_visibility = api_get_session_visibility($my_session_id);
+    $session_visibility = api_get_session_visibility($sessionId);
 
     // Admins can edit anything.
     if (api_is_platform_admin(false)) {
@@ -2915,7 +2944,7 @@ function api_is_allowed_to_edit(
 
     // Check if the student_view is enabled, and if so, if it is activated.
     if (api_get_setting('student_view_enabled') == 'true') {
-        if (!empty($my_session_id)) {
+        if (!empty($sessionId)) {
             // Check if session visibility is read only for coaches.
             if ($session_visibility == SESSION_VISIBLE_READ_ONLY) {
                 $is_allowed_coach_to_edit = false;
@@ -2981,8 +3010,7 @@ function api_is_coach_of_course_in_session($sessionId)
             // Checking session visibility
             $sessionCourseVisibility = api_get_session_visibility(
                 $sessionId,
-                $course['real_id'],
-                $ignore_visibility_for_admins
+                $course['real_id']
             );
 
             $courseIsVisible = !in_array(
@@ -7755,9 +7783,7 @@ function api_mail_html(
         $senderName = $platform_email['SMTP_FROM_NAME'];
         $senderEmail = $platform_email['SMTP_FROM_EMAIL'];
     }
-    $mail->SetFrom($defaultEmail, $defaultName);
-    $mail->From = $defaultEmail;
-    $mail->Sender = $defaultEmail;
+    $mail->SetFrom($senderEmail, $senderName);
     $mail->Subject = $subject;
     $mail->AltBody = strip_tags(
         str_replace('<br />', "\n", api_html_entity_decode($message))
@@ -8067,4 +8093,20 @@ function api_number_format($number, $decimals = 0)
     $number = api_float_val($number);
 
     return number_format($number, $decimals);
+}
+
+/**
+ * Set location url with a exit break by default
+ *
+ * @param $url
+ * @param bool $exit
+ * @return void
+ */
+function location($url, $exit = true)
+{
+    header('Location: ' . $url);
+
+    if ($exit) {
+        exit;
+    }
 }

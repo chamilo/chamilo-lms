@@ -2333,7 +2333,9 @@ class CourseManager
 
             // Skills
             $table = Database::get_main_table(TABLE_MAIN_SKILL_REL_USER);
-            $sql = "DELETE FROM $table WHERE course_id = $courseId";
+            $argumentation = Database::escape_string(sprintf(get_lang('SkillFromCourseXDeletedSinceThen'), $course['code']));
+            error_log($argumentation);
+            $sql = "UPDATE $table SET course_id = NULL, session_id = NULL, argumentation = '$argumentation' WHERE course_id = $courseId";
             Database::query($sql);
 
             // Delete the course from the database
@@ -3326,17 +3328,20 @@ class CourseManager
 
     /**
      * Update course picture
-     * @param   string  Course code
+     * @param   array  $courseInfo
      * @param   string  File name
      * @param   string  The full system name of the image from which course picture will be created.
      * @param   string $cropParameters Optional string that contents "x,y,width,height" of a cropped image format
      * @return  bool    Returns the resulting. In case of internal error or negative validation returns FALSE.
      */
-    public static function update_course_picture($course_code, $filename, $source_file = null, $cropParameters = null)
+    public static function update_course_picture($courseInfo, $filename, $source_file = null, $cropParameters = null)
     {
-        $course_info = api_get_course_info($course_code);
+        if (empty($courseInfo)) {
+            return false;
+        }
+
         // course path
-        $store_path = api_get_path(SYS_COURSE_PATH) . $course_info['path'];
+        $store_path = api_get_path(SYS_COURSE_PATH) . $courseInfo['path'];
         // image name for courses
         $course_image = $store_path . '/course-pic.png';
         $course_medium_image = $store_path . '/course-pic85x85.png';
@@ -4790,7 +4795,10 @@ class CourseManager
             // start buycourse validation
             // display the course price and buy button if the buycourses plugin is enabled and this course is configured
             $plugin = BuyCoursesPlugin::create();
-            $isThisCourseInSale = $plugin->buyCoursesForGridCatalogVerificator($course_info['real_id'], BuyCoursesPlugin::PRODUCT_TYPE_COURSE);
+            $isThisCourseInSale = $plugin->buyCoursesForGridCatalogValidator(
+                $course_info['real_id'],
+                BuyCoursesPlugin::PRODUCT_TYPE_COURSE
+            );
             if ($isThisCourseInSale) {
                 // set the price label
                 $my_course['price'] = $isThisCourseInSale['html'];
@@ -4910,14 +4918,18 @@ class CourseManager
     /**
      * Returns the SQL conditions to filter course only visible by the user in the catalogue
      *
-     * @param $courseTableAlias Alias of the course table
+     * @param string $courseTableAlias Alias of the course table
+     * @param bool $hideClosed Whether to hide closed and hidden courses
      * @return string SQL conditions
      */
-    public static function getCourseVisibilitySQLCondition($courseTableAlias) {
+    public static function getCourseVisibilitySQLCondition($courseTableAlias, $hideClosed = false) {
         $visibilityCondition = '';
         $hidePrivate = api_get_setting('course_catalog_hide_private');
         if ($hidePrivate === 'true') {
-            $visibilityCondition = ' AND '.$courseTableAlias.'.visibility <> 1';
+            $visibilityCondition .= ' AND '.$courseTableAlias.'.visibility <> '.COURSE_VISIBILITY_REGISTERED;
+        }
+        if ($hideClosed) {
+            $visibilityCondition .= ' AND ' . $courseTableAlias . '.visibility NOT IN (' . COURSE_VISIBILITY_CLOSED .','. COURSE_VISIBILITY_HIDDEN .')';
         }
 
         // Check if course have users allowed to see it in the catalogue, then show only if current user is allowed to see it
@@ -4957,7 +4969,7 @@ class CourseManager
             $withoutSpecialCourses = ' AND c.id NOT IN ("' . implode('","', $specialCourseList) . '")';
         }
 
-        $visibilityCondition = self::getCourseVisibilitySQLCondition('c');
+        $visibilityCondition = self::getCourseVisibilitySQLCondition('c', true);
 
         if (!empty($accessUrlId) && $accessUrlId == intval($accessUrlId)) {
             $sql = "SELECT count(c.id) FROM $tableCourse c, $tableCourseRelAccessUrl u

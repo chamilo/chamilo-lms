@@ -85,7 +85,6 @@ if (isset($typeSelected) && $typeSelected != '0') {
 
         $parent_cat = Category::load($addvalues['select_gradebook']);
         $global_weight = $category[0]->get_weight();
-
         $link->set_weight($addvalues['weight_mask']);
 
         if ($link->needs_max()) {
@@ -103,19 +102,24 @@ if (isset($typeSelected) && $typeSelected != '0') {
             (isset($addvalues['select_link']) && $addvalues['select_link'] <> "")
         ) {
             $sql1 = 'SELECT thread_title from '.$tbl_forum_thread.'
-					 WHERE c_id = '.$course_info['real_id'].' AND thread_id='.$addvalues['select_link'];
+					 WHERE 
+					    c_id = '.$course_info['real_id'].' AND 
+					    thread_id = '.$addvalues['select_link'];
             $res1 = Database::query($sql1);
             $rowtit = Database::fetch_row($res1);
             $course_id = api_get_course_id();
             $sql_l = 'SELECT count(*) FROM '.$tbl_link.'
-                      WHERE ref_id='.$addvalues['select_link'].' and course_code="'.$course_id.'" and type=5;';
+                      WHERE 
+                            ref_id='.$addvalues['select_link'].' AND 
+                            course_code="'.$course_id.'" AND 
+                            type = 5;';
             $res_l = Database::query($sql_l);
             $row = Database::fetch_row($res_l);
             if ($row[0] == 0) {
                 $link->add();
                 $sql = 'UPDATE '.$tbl_forum_thread.' SET
-                            thread_qualify_max= "'.$addvalues['weight'].'",
-                            thread_weight= "'.$addvalues['weight'].'",
+                            thread_qualify_max= "'.api_float_val($addvalues['weight']).'",
+                            thread_weight= "'.api_float_val($addvalues['weight']).'",
                             thread_title_qualify = "'.$rowtit[0].'"
 						WHERE 
 						    thread_id='.$addvalues['select_link'].' AND 

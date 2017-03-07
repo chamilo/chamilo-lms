@@ -1,4 +1,6 @@
 <?php
+/* For license terms, see /license.txt */
+
 /**
  * List of courses
  * @package chamilo.plugin.buycourses

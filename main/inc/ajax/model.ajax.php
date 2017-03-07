@@ -194,7 +194,8 @@ switch ($action) {
     case 'get_group_reporting':
         $course_id = isset($_REQUEST['course_id']) ? $_REQUEST['course_id'] : null;
         $group_id = isset($_REQUEST['gidReq']) ? $_REQUEST['gidReq'] : null;
-        $count = Tracking::get_group_reporting($course_id, $group_id, 'count');
+        $sessionId = isset($_REQUEST['session_id']) ? $_REQUEST['session_id'] : null;
+        $count = Tracking::get_group_reporting($course_id, $sessionId, $group_id, 'count');
         break;
     case 'get_user_course_report':
     case 'get_user_course_report_resumed':
@@ -613,6 +614,7 @@ switch ($action) {
 
         $result = Tracking::get_group_reporting(
             $course_id,
+            $sessionId,
             $group_id,
             'all',
             $start,
@@ -923,7 +925,14 @@ switch ($action) {
                 $columns = array_merge(array('official_code'), $columns);
             }
         }
-        $result = ExerciseLib::get_exam_results_data($start, $limit, $sidx, $sord, $exercise_id, $whereCondition);
+        $result = ExerciseLib::get_exam_results_data(
+            $start,
+            $limit,
+            $sidx,
+            $sord,
+            $exercise_id,
+            $whereCondition
+        );
         break;
     case 'get_hotpotatoes_exercise_results':
         $course = api_get_course_info();
@@ -1481,17 +1490,11 @@ switch ($action) {
             'field_order',
         );
         $result = $obj->getAllGrid($sidx, $sord, $start, $limit);
-        /*$result = Database::select(
-            '*',
-            $obj->table,
-            array('order' => "$sidx $sord", 'LIMIT' => "$start , $limit")
-        );*/
         $new_result = array();
         if (!empty($result)) {
+            $checkIcon = Display::return_icon('check-circle.png', get_lang('Yes'));
+            $timesIcon = Display::return_icon('closed-circle.png', get_lang('No'));
             foreach ($result as $item) {
-                $checkIcon = Display::return_icon('check-circle.png', get_lang('Yes'));
-                $timesIcon = Display::return_icon('closed-circle.png', get_lang('No'));
-
                 $item['display_text'] = ExtraField::translateDisplayName($item['variable'], $item['displayText']);
                 $item['field_type'] = $obj->get_field_type_by_id($item['fieldType']);
                 $item['changeable'] = $item['changeable'] ? $checkIcon : $timesIcon;

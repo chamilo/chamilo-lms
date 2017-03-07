@@ -76,12 +76,15 @@ if ($form->validate()) {
     }
 
     //Update weight into forum thread
-    $sql_t = 'UPDATE '.$tbl_forum_thread.' SET thread_weight='.$final_weight.'
-			  WHERE c_id = '.$course_id.' AND thread_id=(
+    $sql = 'UPDATE '.$tbl_forum_thread.' SET 
+                thread_weight = '.api_float_val($final_weight).'
+            WHERE 
+			    c_id = '.$course_id.' AND 
+			    thread_id = (
                     SELECT ref_id FROM '.$tbl_grade_links.'
-			        WHERE id='.intval($_GET['editlink']).' and type=5
-              ) ';
-    Database::query($sql_t);
+			        WHERE id='.intval($_GET['editlink']).' AND type = 5
+            )';
+    Database::query($sql);
 
     //Update weight into student publication(work)
     $em

@@ -108,6 +108,9 @@ class Virtual
                     $_configuration['password_encryption'] = $passwordEncryption;
                 }
 
+                // Instance cannot have multiple urls
+                $_configuration['multiple_access_urls'] = false;
+
                 $virtualChamilo = $data;
             } else {
                 exit("This portal is disabled. Please contact your administrator");

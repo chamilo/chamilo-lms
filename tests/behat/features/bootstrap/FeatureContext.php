@@ -411,4 +411,17 @@ class FeatureContext extends MinkContext
         }
         $select->selectOption($option);
     }
+
+     /**
+     * Clicks link with specified id|title|alt|text
+     * Example: When I follow "Log In"
+     * Example: And I follow "Log In"
+     *
+     * @When /^(?:|I )focus "(?P<link>(?:[^"]|\\")*)"$/
+     */
+    public function focus($input)
+    {
+        $input = $this->getSession()->getPage()->findField($input);
+        $input->focus();
+    }
 }

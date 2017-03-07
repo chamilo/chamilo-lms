@@ -8,7 +8,7 @@ In order to run tests locally:
     - user_id = 1 
 
 - Edit file tests/behat/behat.yml
-  An update your Chamilo URL.
+  Update with your Chamilo local URL.
   
 - The main platform language must be in English.
 

@@ -533,7 +533,7 @@ $template->assign(
 
 $template->assign('lp_author', $_SESSION['oLP']->get_author());
 $template->assign('lp_mode', $_SESSION['oLP']->mode);
-$template->assign('lp_title_scorm',$_SESSION['oLP']->name);
+$template->assign('lp_title_scorm', $_SESSION['oLP']->name);
 $template->assign(
     'lp_html_toc',
     $_SESSION['oLP']->get_html_toc($get_toc_list)

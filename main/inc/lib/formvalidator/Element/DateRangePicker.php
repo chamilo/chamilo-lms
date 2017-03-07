@@ -96,8 +96,7 @@ class DateRangePicker extends HTML_QuickForm_text
         // timeFormat: 'hh:mm'
         $js .= "<script>
             $(function() {
-                $('#$id').daterangepicker({
-                    format: '$format',
+                $('#$id').daterangepicker({                    
                     timePicker: $timePicker,
                     timePickerIncrement: 30,
                     timePicker12Hour: false,
@@ -110,8 +109,10 @@ class DateRangePicker extends HTML_QuickForm_text
                          '".addslashes(get_lang('NextWeek'))."': [moment().weekday(8), moment().weekday(12)]
                     },
                     //showDropdowns : true,
-                    separator: ' / ',
+                    
                     locale: {
+                        separator: ' / ',
+                        format: '$format',
                         applyLabel: '".addslashes(get_lang('Ok'))."',
                         cancelLabel: '".addslashes(get_lang('Cancel'))."',
                         fromLabel: '".addslashes(get_lang('From'))."',

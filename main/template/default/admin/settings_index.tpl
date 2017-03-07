@@ -40,8 +40,10 @@ $(document).ready(function() {
 </script>
 
 <section id="settings">
+    {% set columns = 2 %}
     {% for block_item in blocks %}
-        {% if loop.index % 2 == 0 %}
+
+        {% if loop.first or loop.index0 is divisibleby(columns) %}
         <div class="row">
         {% endif %}
 
@@ -86,7 +88,8 @@ $(document).ready(function() {
             </div>
         </div>
 
-        {% if loop.index % 2 == 0 %}
+
+        {% if loop.last or loop.index is divisibleby(columns) %}
             </div>
         {% endif %}
     {% endfor %}

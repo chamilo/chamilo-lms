@@ -538,7 +538,6 @@ class Template
 
         // Default CSS Bootstrap
         $bowerCSSFiles = [
-            'bootstrap-daterangepicker/daterangepicker-bs3.css',
             'fontawesome/css/font-awesome.min.css',
             'jquery-ui/themes/smoothness/theme.css',
             'jquery-ui/themes/smoothness/jquery-ui.min.css',
@@ -546,6 +545,7 @@ class Template
             'jqueryui-timepicker-addon/dist/jquery-ui-timepicker-addon.min.css',
             'bootstrap/dist/css/bootstrap.min.css',
             'jquery.scrollbar/jquery.scrollbar.css',
+            'bootstrap-daterangepicker/daterangepicker.css',
         ];
 
         foreach ($bowerCSSFiles as $file) {

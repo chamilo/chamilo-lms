@@ -84,9 +84,16 @@ if (api_is_allowed_to_edit(null, true)) {
                                 $courseId,
                                 $isTutor
                             );
-                            Display::addFlash(Display::return_message(get_lang('Updated')));
+                            Display::addFlash(
+                                Display::return_message(get_lang('Updated'))
+                            );
                         } else {
-                            Display::addFlash(Display::return_message(get_lang('InviteesCantBeTutors'), 'error'));
+                            Display::addFlash(
+                                Display::return_message(
+                                    get_lang('InviteesCantBeTutors'),
+                                    'error'
+                                )
+                            );
                         }
                     }
                 }
@@ -428,9 +435,15 @@ if (api_is_allowed_to_edit(null, true)) {
             $row = Database::fetch_array($result, 'ASSOC');
             if ($row['user_id'] == $user_id || $row['user_id'] == "") {
                 CourseManager::unsubscribe_user($_GET['user_id'], $courseCode);
-                Display::addFlash(Display::return_message(get_lang('UserUnsubscribed')));
+                Display::addFlash(
+                    Display::return_message(get_lang('UserUnsubscribed'))
+                );
             } else {
-                Display::addFlash(Display::return_message(get_lang('ThisStudentIsSubscribeThroughASession')));
+                Display::addFlash(
+                    Display::return_message(
+                        get_lang('ThisStudentIsSubscribeThroughASession')
+                    )
+                );
             }
         }
     }
@@ -456,7 +469,12 @@ Event::event_access_tool(TOOL_USER);
 
 $default_column = 3;
 $tableLabel = $type === STUDENT ? 'student' : 'teacher';
-$table = new SortableTable($tableLabel.'_list', 'get_number_of_users', 'get_user_data', $default_column);
+$table = new SortableTable(
+    $tableLabel.'_list',
+    'get_number_of_users',
+    'get_user_data',
+    $default_column
+);
 $parameters['keyword'] = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
 $parameters['sec_token'] = Security::get_token();
 $parameters['id_session'] = api_get_session_id();
@@ -488,14 +506,6 @@ $indexList['username'] = $header_nr;
 $table->set_header($header_nr++, get_lang('LoginName'));
 $indexList['groups'] = $header_nr;
 $table->set_header($header_nr++, get_lang('GroupSingle'), false);
-
-/*
-if (api_is_allowed_to_edit(null, true) && api_get_setting('allow_user_course_subscription_by_course_admin') == 'true') {
-
-} else {
-    $table->set_column_filter(0, 'hide_field');
-}
-*/
 
 $hideFields = api_get_configuration_value('hide_user_field_from_list');
 if (!empty($hideFields)) {
@@ -537,7 +547,6 @@ if (api_is_allowed_to_edit(null, true)) {
 if (isset($origin) && $origin == 'learnpath') {
     Display::display_reduced_header();
 } else {
-
     if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
         $interbreadcrumb[] = array(
             "url" => "user.php?".api_get_cidreq(),
@@ -550,9 +559,6 @@ if (isset($origin) && $origin == 'learnpath') {
     }
     Display::display_header($tool_name, "User");
 }
-
-/*	Setting the permissions for this page */
-$is_allowed_to_track = ($is_courseAdmin || $is_courseTutor) || api_is_platform_admin();
 
 // Tool introduction
 Display::display_introduction_section(TOOL_USER, 'left');
@@ -722,7 +728,8 @@ function get_number_of_users()
  * @param $keyword
  * @return bool
  */
-function searchUserKeyword($firstname, $lastname, $username, $official_code, $keyword) {
+function searchUserKeyword($firstname, $lastname, $username, $official_code, $keyword)
+{
     if (
         api_strripos($firstname, $keyword) !== false ||
         api_strripos($lastname, $keyword) !== false ||
@@ -824,7 +831,8 @@ function get_user_data($from, $number_of_items, $column, $direction)
                     $o_course_user['lastname'],
                     $o_course_user['username'],
                     $o_course_user['official_code'],
-                    $_GET['keyword'])
+                    $_GET['keyword']
+                )
             ) || !isset($_GET['keyword']) || empty($_GET['keyword'])
         ) {
 
@@ -961,7 +969,9 @@ function active_filter($active, $urlParams, $row)
  */
 function modify_filter($user_id, $row, $data)
 {
-    global $is_allowed_to_track, $charset;
+    global $charset;
+
+    $is_allowed_to_track = api_is_allowed_to_edit(true, true);
 
     $user_id = $data[0];
     $userInfo = api_get_user_info($user_id);
@@ -1009,14 +1019,13 @@ function modify_filter($user_id, $row, $data)
                     ).'&nbsp;';
             }
         }
+
         // edit
         if (api_get_setting('allow_user_course_subscription_by_course_admin') === 'true' or api_is_platform_admin()) {
             // unregister
             if ($user_id != $current_user_id || api_is_platform_admin()) {
                 $result .= '<a class="btn btn-small btn-danger" href="'.api_get_self().'?'.api_get_cidreq().'&type='.$type.'&unregister=yes&user_id='.$user_id.'" title="'.get_lang('Unreg').' " onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;">'.
                     get_lang('Unreg').'</a>&nbsp;';
-            } else {
-                //$result .= Display::return_icon('unsubscribe_course_na.png', get_lang('Unreg'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
             }
         }
     } else {
@@ -1028,10 +1037,6 @@ function modify_filter($user_id, $row, $data)
             }
         }
     }
-    return $result;
-}
 
-function hide_field()
-{
-    return null;
+    return $result;
 }

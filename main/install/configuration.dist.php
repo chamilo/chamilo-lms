@@ -282,4 +282,7 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 // $_configuration['considered_working_time'] = 'work_time';
 // During CSV special imports update users emails to x@example.com
 // $_configuration['update_users_email_to_dummy_except_admins'] = false;
+// Certification pdf export orientation
+// $_configuration['certificate_pdf_orientation'] = 'landscape'; // It can be 'portrait' or 'landscape'
+
 

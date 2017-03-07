@@ -17,6 +17,19 @@ use Chamilo\CoreBundle\Entity\Session;
  */
 class Tracking
 {
+    /**
+     * Get group reporting
+     * @param int $course_id
+     * @param int $sessionId
+     * @param int $group_id
+     * @param string $type
+     * @param int $start
+     * @param int $limit
+     * @param int $sidx
+     * @param string $sord
+     * @param array $where_condition
+     * @return array|null
+     */
     public static function get_group_reporting(
         $course_id,
         $sessionId = null,
@@ -65,7 +78,6 @@ class Tracking
         if (!empty($result)) {
             foreach ($result as $group) {
                 $users = GroupManager::get_users($group['id'], true);
-
                 $time = 0;
                 $avg_student_score = 0;
                 $avg_student_progress = 0;
@@ -141,7 +153,6 @@ class Tracking
         $session_id = intval($session_id);
         $origin = Security::remove_XSS($origin);
         $list = learnpath :: get_flat_ordered_items_list($lp_id, 0, $courseInfo['real_id']);
-
         $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
         $course_id = $courseInfo['real_id'];
         $courseCode = $courseInfo['code'];
@@ -162,7 +173,6 @@ class Tracking
                 Display::return_icon('view_less_stats.gif', get_lang('HideAllAttempts')),
                 api_get_self() . '?action=stats' . $url_suffix
             );
-
             $extend_all = 1;
         } else {
             $extend_all_link = Display::url(
@@ -207,7 +217,6 @@ class Tracking
         // Going through the items using the $items[] array instead of the database order ensures
         // we get them in the same order as in the imsmanifest file, which is rather random when using
         // the database table.
-
         $TBL_LP_ITEM = Database :: get_course_table(TABLE_LP_ITEM);
         $TBL_LP_ITEM_VIEW = Database :: get_course_table(TABLE_LP_ITEM_VIEW);
         $TBL_LP_VIEW = Database :: get_course_table(TABLE_LP_VIEW);
@@ -1232,7 +1241,6 @@ class Tracking
             }
             $sessions = SessionManager::get_sessions_followed_by_drh($userId);
         } else {
-
             $studentList = UserManager::getUsersFollowedByUser(
                 $userId,
                 STUDENT,
@@ -1357,10 +1365,11 @@ class Tracking
     /**
      * Calculates the time spent on the platform by a user
      * @param   int|array User id
-     * @param   string type of time filter: 'last_week' or 'custom'
-     * @param   string  start date date('Y-m-d H:i:s')
-     * @param   string  end date date('Y-m-d H:i:s')
-     * @return timestamp $nb_seconds
+     * @param   string $timeFilter type of time filter: 'last_week' or 'custom'
+     * @param   string  $start_date start date date('Y-m-d H:i:s')
+     * @param   string  $end_date end date date('Y-m-d H:i:s')
+     *
+     * @return int $nb_seconds
      */
     public static function get_time_spent_on_the_platform(
         $userId,
@@ -1394,7 +1403,7 @@ class Tracking
                 $newDate = new DateTime('-30 days', new DateTimeZone('UTC'));
                 $condition_time = " AND (login_date >= '{$newDate->format('Y-m-d H:i:s')}'";
                 $condition_time .= "AND logout_date <= '{$today->format('Y-m-d H:i:s')}') ";
-               break;
+                break;
             case 'custom':
                 if (!empty($start_date) && !empty($end_date)) {
                     $start_date = Database::escape_string($start_date);
@@ -1404,10 +1413,10 @@ class Tracking
                 break;
         }
 
-    	$sql = 'SELECT SUM(TIMESTAMPDIFF(SECOND, login_date, logout_date)) diff
+        $sql = 'SELECT SUM(TIMESTAMPDIFF(SECOND, login_date, logout_date)) diff
     	        FROM '.$tbl_track_login.'
                 WHERE '.$userCondition.$condition_time;
-    	$rs = Database::query($sql);
+        $rs = Database::query($sql);
         $row = Database::fetch_array($rs, 'ASSOC');
         $diff = $row['diff'];
 
@@ -1429,19 +1438,18 @@ class Tracking
     public static function get_time_spent_on_the_course($user_id, $courseId, $session_id = 0)
     {
         $courseId = intval($courseId);
-    	$session_id  = intval($session_id);
+        $session_id  = intval($session_id);
+        $tbl_track_course = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        if (is_array($user_id)) {
+            $user_id = array_map('intval', $user_id);
+            $condition_user = " AND user_id IN (".implode(',',$user_id).") ";
+        } else {
+            $user_id = intval($user_id);
+            $condition_user = " AND user_id = $user_id ";
+        }
 
-    	$tbl_track_course = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-    	if (is_array($user_id)) {
-    	    $user_id = array_map('intval', $user_id);
-    		$condition_user = " AND user_id IN (".implode(',',$user_id).") ";
-    	} else {
-    		$user_id = intval($user_id);
-    		$condition_user = " AND user_id = $user_id ";
-    	}
-
-    	$sql = "SELECT
-    	        SUM(UNIX_TIMESTAMP(logout_course_date) - UNIX_TIMESTAMP(login_course_date)) as nb_seconds
+        $sql = "SELECT
+                SUM(UNIX_TIMESTAMP(logout_course_date) - UNIX_TIMESTAMP(login_course_date)) as nb_seconds
                 FROM $tbl_track_course
                 WHERE UNIX_TIMESTAMP(logout_course_date) > UNIX_TIMESTAMP(login_course_date) ";
 
@@ -1455,9 +1463,9 @@ class Tracking
 
         $sql .= $condition_user;
         $rs = Database::query($sql);
-    	$row = Database::fetch_array($rs);
+        $row = Database::fetch_array($rs);
 
-    	return $row['nb_seconds'];
+        return $row['nb_seconds'];
     }
 
     /**
@@ -1468,25 +1476,25 @@ class Tracking
      */
     public static function get_first_connection_date($student_id)
     {
-    	$tbl_track_login = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-    	$sql = 'SELECT login_date
-    	        FROM ' . $tbl_track_login . '
+        $tbl_track_login = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+        $sql = 'SELECT login_date
+                FROM ' . $tbl_track_login . '
                 WHERE login_user_id = ' . intval($student_id) . '
                 ORDER BY login_date ASC
                 LIMIT 0,1';
 
-    	$rs = Database::query($sql);
-    	if (Database::num_rows($rs)>0) {
-    		if ($first_login_date = Database::result($rs, 0, 0)) {
+        $rs = Database::query($sql);
+        if (Database::num_rows($rs)>0) {
+            if ($first_login_date = Database::result($rs, 0, 0)) {
                 return api_convert_and_format_date(
                     $first_login_date,
                     DATE_FORMAT_SHORT,
                     date_default_timezone_get()
                 );
-    		}
-    	}
+            }
+        }
 
-    	return false;
+        return false;
     }
 
     /**
@@ -1499,37 +1507,37 @@ class Tracking
      */
     public static function get_last_connection_date($student_id, $warning_message = false, $return_timestamp = false)
     {
-    	$table = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-    	$sql = 'SELECT login_date
-    	        FROM ' . $table . '
+        $table = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+        $sql = 'SELECT login_date
+                FROM ' . $table . '
                 WHERE login_user_id = ' . intval($student_id) . '
                 ORDER BY login_date
                 DESC LIMIT 0,1';
 
-    	$rs = Database::query($sql);
-    	if (Database::num_rows($rs) > 0) {
-    		if ($last_login_date = Database::result($rs, 0, 0)) {
-    			$last_login_date = api_get_local_time($last_login_date);
-    			if ($return_timestamp) {
-    				return api_strtotime($last_login_date,'UTC');
-    			} else {
-    				if (!$warning_message) {
-    					return api_format_date($last_login_date, DATE_FORMAT_SHORT);
-    				} else {
-    					$timestamp = api_strtotime($last_login_date,'UTC');
-    					$currentTimestamp = time();
+        $rs = Database::query($sql);
+        if (Database::num_rows($rs) > 0) {
+            if ($last_login_date = Database::result($rs, 0, 0)) {
+                $last_login_date = api_get_local_time($last_login_date);
+                if ($return_timestamp) {
+                    return api_strtotime($last_login_date,'UTC');
+                } else {
+                    if (!$warning_message) {
+                        return api_format_date($last_login_date, DATE_FORMAT_SHORT);
+                    } else {
+                        $timestamp = api_strtotime($last_login_date,'UTC');
+                        $currentTimestamp = time();
 
-    					//If the last connection is > than 7 days, the text is red
-    					//345600 = 7 days in seconds
-    					if ($currentTimestamp - $timestamp > 604800) {
-    						return '<span style="color: #F00;">' . api_format_date($last_login_date, DATE_FORMAT_SHORT) . '</span>';
-    					} else {
-    						return api_format_date($last_login_date, DATE_FORMAT_SHORT);
-    					}
-    				}
-    			}
-    		}
-    	}
+                        //If the last connection is > than 7 days, the text is red
+                        //345600 = 7 days in seconds
+                        if ($currentTimestamp - $timestamp > 604800) {
+                            return '<span style="color: #F00;">' . api_format_date($last_login_date, DATE_FORMAT_SHORT) . '</span>';
+                        } else {
+                            return api_format_date($last_login_date, DATE_FORMAT_SHORT);
+                        }
+                    }
+                }
+            }
+        }
     	return false;
     }
 
@@ -1812,7 +1820,7 @@ class Tracking
     		}
 
     		// Compose a filter based on optional session id given
-    		$condition_session = "";
+    		$condition_session = '';
     		if (isset($session_id)) {
     			$session_id = intval($session_id);
     			$condition_session = " AND session_id = $session_id ";
@@ -1866,7 +1874,6 @@ class Tracking
     			}
 
     			$count_quiz = Database::fetch_row(Database::query($sql));
-
     			$sql = "SELECT
     			        SUM(exe_result/exe_weighting*100) as avg_score,
     			        COUNT(*) as num_attempts
@@ -4378,7 +4385,6 @@ class Tracking
         $html = '';
 
         // Course list
-
         if ($show_courses) {
             if (!empty($courses)) {
                 $html .= Display::page_subheader(
@@ -4472,11 +4478,9 @@ class Tracking
             $main_session_graph = '';
             //Load graphics only when calling to an specific session
             $session_graph = array();
-
             $all_exercise_graph_name_list = array();
             $my_results = array();
             $all_exercise_graph_list = array();
-
             $all_exercise_start_time = array();
 
             foreach ($course_in_session as $my_session_id => $session_data) {
@@ -4501,9 +4505,7 @@ class Tracking
                         $exercise_obj->read($exercise_data['id']);
                         //Exercise is not necessary to be visible to show results check the result_disable configuration instead
                         //$visible_return = $exercise_obj->is_visible();
-
                         if ($exercise_data['results_disabled'] == 0 || $exercise_data['results_disabled'] == 2) {
-
                             $best_average = intval(
                                 ExerciseLib::get_best_average_score_by_exercise(
                                     $exercise_data['id'],

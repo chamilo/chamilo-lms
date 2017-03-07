@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use ChamiloSession as Session;
 
 /**
  * Code
@@ -545,7 +546,6 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
     $my_session_name = is_null($session_name) ? '' : '&nbsp;('.$session_name.')';
 
     if (!empty($_course) && !isset($_GET['hide_course_breadcrumb'])) {
-
         $navigation_item['url'] = $web_course_path . $_course['path'].'/index.php'.(!empty($session_id) ? '?id_session='.$session_id : '');
         $_course['name'] = api_htmlentities($_course['name']);
         $course_title = cut($_course['name'], MAX_LENGTH_BREADCRUMB);
@@ -668,9 +668,23 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
     /* Part 4 . Show the teacher view/student view button at the right of the breadcrumb */
     $view_as_student_link = null;
     if ($user_id && isset($course_id)) {
-        if ((api_is_course_admin() || api_is_platform_admin() || api_is_coach(null, null, false)) &&
-            api_get_setting('student_view_enabled') === 'true' && api_get_course_info()) {
+        if ((
+                api_is_course_admin() ||
+                api_is_platform_admin() ||
+                api_is_coach(null, null, false)
+            ) &&
+            api_get_setting('student_view_enabled') === 'true' && api_get_course_info()
+        ) {
             $view_as_student_link = api_display_tool_view_option();
+
+            // Only show link if LP can be editable
+            /** @var learnpath $learnPath */
+            $learnPath = Session::read('oLP');
+            if (!empty($learnPath) && !empty($view_as_student_link)) {
+                if ((int)$learnPath->get_lp_session_id() != (int)api_get_session_id()) {
+                    $view_as_student_link = '';
+                }
+            }
         }
     }
 
@@ -706,7 +720,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
         }
 
         if (!empty($navigation_right)) {
-            foreach($navigation_right as $item) {
+            foreach ($navigation_right as $item) {
                 $extra_class = isset($item['class']) ? $item['class'] : null;
                 $lis.= Display::tag('li', $item['title'], array('class' => $extra_class.' pull-right'));
             }
@@ -715,7 +729,6 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
         if (!empty($lis)) {
             $html .= Display::tag('ul', $lis, array('class'=>'breadcrumb'));
         }
-
     }
     return $html;
 }

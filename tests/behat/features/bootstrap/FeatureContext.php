@@ -281,6 +281,9 @@ class FeatureContext extends MinkContext
    */
     public function iFillInWysiwygOnFieldWith($locator, $value)
     {
+        // Just in case wait that ckeditor is loaded
+        $this->getSession()->wait(2000);
+
         $el = $this->getSession()->getPage()->findField($locator);
         $fieldId = $el->getAttribute('id');
 
@@ -322,7 +325,6 @@ class FeatureContext extends MinkContext
         // See
         // https://gist.github.com/blazarecki/2888851
         /** @var \Behat\Mink\Driver\Selenium2Driver $driver Needed because no cross-driver way yet */
-        //$driver = $this->getSession()->getDriver();
         $this->getSession()->getDriver()->getWebDriverSession()->accept_alert();
     }
 
@@ -406,5 +408,18 @@ class FeatureContext extends MinkContext
             throw new Exception("Select not found: ".$select);
         }
         $select->selectOption($option);
+    }
+
+     /**
+     * Clicks link with specified id|title|alt|text
+     * Example: When I follow "Log In"
+     * Example: And I follow "Log In"
+     *
+     * @When /^(?:|I )focus "(?P<link>(?:[^"]|\\")*)"$/
+     */
+    public function focus($input)
+    {
+        $input = $this->getSession()->getPage()->findField($input);
+        $input->focus();
     }
 }

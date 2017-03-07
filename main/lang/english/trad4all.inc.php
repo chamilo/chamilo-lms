@@ -7971,7 +7971,7 @@ $DocumentNumber = "Document ID";
 $SocialData = "Social data";
 $WallMessagesPosted = "Wall messages posted by him/herself";
 $SeeAccesses = "See accesses";
-$PriorityChangeFromXToY = "Priority change from %s to %s";
-$StatusChangeFromXToY = "Status change from %s to %s";
-
+$PriorityChangeFromXToY = "Priority changed from %s to %s";
+$StatusChangeFromXToY = "Status changed from %s to %s";
+$SkillFromCourseXDeletedSinceThen = "This skill was obtained through course %s which has been removed since then.";
 ?>

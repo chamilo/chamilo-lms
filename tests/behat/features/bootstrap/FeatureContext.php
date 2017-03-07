@@ -326,6 +326,7 @@ class FeatureContext extends MinkContext
         // https://gist.github.com/blazarecki/2888851
         /** @var \Behat\Mink\Driver\Selenium2Driver $driver Needed because no cross-driver way yet */
         //$driver = $this->getSession()->getDriver();
+        $this->getSession()->wait(1000);
         $this->getSession()->getDriver()->getWebDriverSession()->accept_alert();
     }
 

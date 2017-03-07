@@ -162,9 +162,18 @@ class CourseArchiver
             foreach ($course->resources[RESOURCE_ASSET] as $asset) {
                 $doc_dir = $backup_dir . $asset->path;
                 @mkdir(dirname($doc_dir), $perm_dirs, true);
-                if (file_exists($course->path . $asset->path)) {
-                    copy($course->path . $asset->path, $doc_dir);
+                $assetPath = $course->path . $asset->path;
+
+                if (!file_exists($assetPath)) {
+                    continue;
                 }
+
+                if (is_dir($course->path . $asset->path)) {
+                    copyDirTo($course->path . $asset->path, $doc_dir);
+                    continue;
+                }
+
+                copy($course->path . $asset->path, $doc_dir);
             }
         }
 
@@ -185,6 +194,11 @@ class CourseArchiver
     {
         $backup_files = array();
         $dirname = self::getBackupDir();
+
+        if (!file_exists($dirname)) {
+            $dirname = self::createBackupDir();
+        }
+
         if ($dir = opendir($dirname)) {
             while (($file = readdir($dir)) !== false) {
                 $file_parts = explode('_', $file);

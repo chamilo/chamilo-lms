@@ -1186,7 +1186,7 @@ HTML;
                 ';
 
                 if (!empty($answers_hotspot)) {
-                    Session::write('hotspot_ordered', array_keys($answers_hotspot));
+                    Session::write("hotspot_ordered$questionId", array_keys($answers_hotspot));
                     $countAnswers = 1;
                     foreach ($answers_hotspot as $value) {
                         $answerList .= "<li><p>{$countAnswers} - {$value}</p></li>";

@@ -7,8 +7,8 @@
 /**
  * Initialization
  */
-//require_once('main/inc/global.inc.php');
-require_once('language.php');
+require_once(api_get_path(SYS_PATH).'main/inc/global.inc.php');
+require_once(api_get_path(SYS_PATH).'/custompages/language.php');
 
 /**
  * Homemade micro-controller

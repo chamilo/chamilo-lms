@@ -112,11 +112,7 @@ See https://support.chamilo.org/issues/6976
 }
 .level_0 {
     margin: 0;
-<<<<<<< HEAD
-    padding-left: 20px;
-=======
     padding-left: 30px;
->>>>>>> 3466fc2... fix padding items scorm
 }
 .level_1 {
     margin: 0 0.5em 0 20px;
@@ -242,11 +238,7 @@ See https://support.chamilo.org/issues/6976
   color: #009AB8;
 }
 .scorm_highlight.scorm_completed .item{
-<<<<<<< HEAD
-  background:url("../../main/img/scorm/scorm_current.png") no-repeat left center !important;
-=======
   background:url("../../main/img/scorm/scorm_current.png") no-repeat 10px center !important;
->>>>>>> 3466fc2... fix padding items scorm
 }
 .scorm_highlight.scorm_failed .item{
     background:url("../../main/img/scorm/scorm_failed.png") no-repeat 10px center !important;
@@ -255,12 +247,9 @@ See https://support.chamilo.org/issues/6976
   color: #FFFFFF !important;
 }
 .scorm_item_normal.scorm_highlight{
-    background-color: #00AAD4;
+    background-color: #00829C;
 }
-
 /* END SCORM CSS BASE*/
-
-
 #scorm-info{
     padding: 10px;
     margin-bottom: 5px;

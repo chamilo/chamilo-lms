@@ -2076,12 +2076,12 @@ function get_work_user_list(
                 $work['qualification_only'] = $qualification_string;
 
                 // Date.
-                $work_date = api_convert_and_format_date($work['sent_date']);
+                $work_date = api_get_local_time($work['sent_date']);
                 $date = date_to_str_ago($work['sent_date']). ' ' . $work_date;
                 $work['formatted_date'] = $work_date . ' ' . $add_string;
 
                 $work['sent_date_from_db'] = $work['sent_date'];
-                $work['sent_date'] = '<div class="work-date" title="'.$date.'">' . $add_string . ' ' . $work['sent_date'] . '</div>';
+                $work['sent_date'] = '<div class="work-date" title="'.$date.'">' . $add_string . ' ' . $work_date . '</div>';
 
                 // Actions.
                 $correction = '';
@@ -2129,6 +2129,10 @@ function get_work_user_list(
                                 //$('#file_$item_id').remove();
                                 data.context = $('#progress_$item_id').html('$loadingText <br /> <em class=\"fa fa-spinner fa-pulse fa-fw\"></em>');
                                 data.submit();
+                                $(this).removeClass('hover');
+                            },
+                            dragover: function (e, data) {
+                                $(this).addClass('hover');
                             },
                             done: function (e, data) {
                                 if (data._response.result.name) {
@@ -2136,8 +2140,13 @@ function get_work_user_list(
                                 } else {
                                     $('#progress_$item_id').html('$failsUploadText $failsUploadIcon');
                                 }
+                                $(this).removeClass('hover');
                             }
                         });
+                        $('#file_upload_".$item_id."').on('dragleave', function (e) {
+                            // dragleave callback implementation
+                            $(this).removeClass('hover');
+                        });                             
                     });
                     </script>";
 
@@ -3808,6 +3817,58 @@ function processWorkForm(
             );
             sendAlertToUsers($workId, $courseInfo, $sessionId);
             Event::event_upload($workId);
+
+            // The following feature requires the creation of a work-type
+            // extra_field and the following setting in the configuration file
+            // (until moved to the database). It allows te teacher to set a
+            // "considered work time", meaning the time we assume a student
+            // would have spent, approximately, to prepare the task before
+            // handing it in Chamilo, adding this time to the student total
+            // course use time, as a register of time spent *before* his
+            // connection to the platform to hand the work in.
+            $consideredWorkingTime = api_get_configuration_value('considered_working_time');
+
+            if ($consideredWorkingTime) {
+                // Get the "considered work time" defined for this work
+                $fieldValue = new ExtraFieldValue('work');
+                $resultExtra = $fieldValue->getAllValuesForAnItem(
+                    $workId,
+                    true
+                );
+
+                $workingTime = null;
+                foreach ($resultExtra as $field) {
+                    $field = $field['value'];
+                    if ($consideredWorkingTime == $field->getField()->getVariable()) {
+                        $workingTime = $field->getValue();
+                    }
+                }
+
+                // If no time was defined, or a time of "0" was set, do nothing
+                if (!empty($workingTime)) {
+                    // If some time is set, get the list of docs handed in by
+                    // this student (to make sure we count the time only once)
+                    $userWorks = get_work_user_list(
+                        0,
+                        100,
+                        null,
+                        null,
+                        $workInfo['id'],
+                        null,
+                        $userId,
+                        false,
+                        $courseId,
+                        $sessionId
+                    );
+
+                    if (count($userWorks) == 1) {
+                        // The student only uploaded one doc so far, so add the
+                        // considered work time to his course connection time
+                        $ip = api_get_real_ip();
+                        Event::eventAddVirtualCourseTime($courseId, $userId, $sessionId, $workingTime, $ip);
+                    }
+                }
+            }
             $workData = get_work_data_by_id($workId);
             if ($showFlashMessage) {
                 Display::addFlash(Display::return_message(get_lang('DocAdd')));
@@ -4233,12 +4294,46 @@ function deleteWorkItem($item_id, $courseInfo)
         )
     ) {
         // We found the current user is the author
-        $sql = "SELECT url, contains_file FROM $work_table
+        $sql = "SELECT url, contains_file, user_id, session_id, parent_id FROM $work_table
                 WHERE c_id = $course_id AND id = $item_id";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
 
         if (Database::num_rows($result) > 0) {
+
+            // If the "considered_working_time" option is enabled, check
+            // whether some time should be removed from track_e_course_access
+            $consideredWorkingTime = api_get_configuration_value('considered_working_time');
+            if ($consideredWorkingTime) {
+                // Get the "considered work time" defined for this work
+                $fieldValue = new ExtraFieldValue('work');
+                $resultExtra = $fieldValue->getAllValuesForAnItem(
+                    $row['parent_id'],
+                    true
+                );
+
+                $workingTime = null;
+                foreach ($resultExtra as $field) {
+                    $field = $field['value'];
+
+                    if ($consideredWorkingTime == $field->getField()->getVariable()) {
+                        $workingTime = $field->getValue();
+                    }
+                }
+                // If no time was defined, or a time of "0" was set, do nothing
+                if (!empty($workingTime)) {
+                    $sessionId = empty($row['session_id']) ? 0 : $row['session_id'];
+                    // Getting false from the following call would mean the
+                    // time record
+                    $removalResult = Event::eventRemoveVirtualCourseTime(
+                        $course_id,
+                        $row['user_id'],
+                        $sessionId,
+                        $workingTime
+                    );
+                }
+            } // fin de sección sobre considered_working_time
+
             $sql = "UPDATE $work_table SET active = 2
                     WHERE c_id = $course_id AND id = $item_id";
             Database::query($sql);
@@ -4290,6 +4385,7 @@ function deleteWorkItem($item_id, $courseInfo)
             }
         }
     }
+
     return $file_deleted;
 }
 
@@ -5192,24 +5288,25 @@ function getWorkCreatedByUser($user_id, $courseId, $sessionId)
         $sessionId
     );
 
-    $forumList = array();
+    $list = array();
     if (!empty($items)) {
-        foreach ($items as $forum) {
+        foreach ($items as $work) {
             $item = get_work_data_by_id(
-                $forum['ref'],
+                $work['ref'],
                 $courseId,
                 $sessionId
             );
-
-            $forumList[] = array(
-                $item['title'],
-                api_get_local_time($forum['insert_date']),
-                api_get_local_time($forum['lastedit_date'])
-            );
+            if (!empty($item)) {
+                $list[] = array(
+                    $item['title'],
+                    api_get_local_time($work['insert_date']),
+                    api_get_local_time($work['lastedit_date'])
+                );
+            }
         }
     }
 
-    return $forumList;
+    return $list;
 }
 
 /**

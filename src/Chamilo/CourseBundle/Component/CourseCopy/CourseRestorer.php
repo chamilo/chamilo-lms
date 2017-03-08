@@ -1861,7 +1861,7 @@ class CourseRestorer
             $allAnswers = [];
             $onlyAnswers = [];
 
-           if (in_array($question->quiz_type, [DRAGGABLE, MATCHING, MATCHING_DRAGGABLE])) {
+            if (in_array($question->quiz_type, [DRAGGABLE, MATCHING, MATCHING_DRAGGABLE])) {
                 $allAnswers = array_column($question->answers, 'answer', 'id');
             }
 
@@ -1872,6 +1872,23 @@ class CourseRestorer
                 }
 
                 foreach ($temp as $index => $answer) {
+                    // check resources inside html from ckeditor tool and copy correct urls into recipient course
+                    $answer['answer'] = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+                        $answer['answer'],
+                        $this->course->code,
+                        $this->course->destination_path,
+                        $this->course->backup_path,
+                        $this->course->info['path']
+                    );
+
+                    $answer['comment'] = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+                        $answer['comment'],
+                        $this->course->code,
+                        $this->course->destination_path,
+                        $this->course->backup_path,
+                        $this->course->info['path']
+                    );
+
                     $quizAnswer = new CQuizAnswer();
                     $quizAnswer
                         ->setCId($this->destination_course_id)
@@ -1903,7 +1920,6 @@ class CourseRestorer
                     }
 				}
 			} else {
-
 				foreach ($question->answers as $index => $answer) {
 					// check resources inside html from ckeditor tool and copy correct urls into recipient course
                     $answer['answer'] = DocumentManager::replace_urls_inside_content_html_from_copy_course(
@@ -2060,8 +2076,7 @@ class CourseRestorer
                                     $this->destination_course_id,
                                     $new_id,
                                 ),
-                            ),
-                            false
+                            )
                         );
                     }
                 }

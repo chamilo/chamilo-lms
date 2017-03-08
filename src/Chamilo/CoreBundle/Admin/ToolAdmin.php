@@ -3,7 +3,7 @@
 
 namespace Chamilo\CoreBundle\Admin;
 
-use Sonata\AdminBundle\Admin\Admin;
+use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -12,7 +12,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
  * Class ToolAdmin
  * @package Chamilo\CoreBundle\Admin
  */
-class ToolAdmin extends Admin
+class ToolAdmin extends AbstractAdmin
 {
     /**
      * @inheritdoc

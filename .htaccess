@@ -7,13 +7,10 @@
 #</Directory>
 
 RewriteEngine on
-RewriteCond %{QUERY_STRING} ^id=(.*)$
 
 # http://my.chamilo.net/certificates/?id=123 to http://my.chamilo.net/certificates/index.php?id=123
+RewriteCond %{QUERY_STRING} ^id=(.*)$
 RewriteRule ^certificates/$ certificates/index.php?id=%1 [L]
-
-# http://my.chamilo.net/jdoe to http://my.chamilo.net/user.php?jdoe
-RewriteRule ^([^/.]+)/?$ user.php?$1 [L]
 
 # Course redirection
 RewriteRule ^courses/([^/]+)/?$ main/course_home/course_home.php?cDir=$1 [QSA,L]
@@ -57,6 +54,10 @@ RewriteRule ^main/newscorm/(.*)$ main/lp/$1 [QSA,L]
 
 # service Information
 RewriteRule ^service/(\d{1,})$ plugin/buycourses/src/service_information.php?service_id=$1 [L]
+
+# This rule is very generic and should always remain at the bottom of .htaccess
+# http://my.chamilo.net/jdoe to http://my.chamilo.net/user.php?jdoe
+RewriteRule ^([^/.]+)/?$ user.php?$1 [L]
 
 # Deny access
 RewriteRule ^(tests|.git) - [F,L,NC]

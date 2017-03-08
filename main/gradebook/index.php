@@ -801,11 +801,19 @@ if (!api_is_allowed_to_edit(null, true)) {
     );
 }
 
-echo $toolbar = Display::toolbarAction('gradebook-student-actions', array($actionsLeft));
+if (!empty($actionsLeft)) {
+    echo $toolbar = Display::toolbarAction(
+        'gradebook-student-actions',
+        array($actionsLeft)
+    );
+}
 
 if (api_is_allowed_to_edit(null, true)) {
     // Tool introduction
-    Display::display_introduction_section(TOOL_GRADEBOOK, array('ToolbarSet' => 'AssessmentsIntroduction'));
+    Display::display_introduction_section(
+        TOOL_GRADEBOOK,
+        array('ToolbarSet' => 'AssessmentsIntroduction')
+    );
 
     if (((empty($selectCat)) || (isset($_GET['cidReq']) && $_GET['cidReq'] !== '')) ||
         (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'false')
@@ -825,7 +833,15 @@ if (api_is_allowed_to_edit(null, true)) {
 if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null,true)) {
     echo '<meta http-equiv="refresh" content="0;url='.api_get_self().'?'.api_get_cidreq().'" />';
 } else {
-    $cats = Category::load(null, null, $course_code, null, null, $session_id, false);
+    $cats = Category::load(
+        null,
+        null,
+        $course_code,
+        null,
+        null,
+        $session_id,
+        false
+    );
 
     if (!empty($cats)) {
         if ((api_get_setting('gradebook_enable_grade_model') === 'true') &&
@@ -874,7 +890,15 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null,true))
                             $gradebook->save($params);
                         }
                         // Reloading cats
-                        $cats = Category :: load(null, null, $course_code, null, null, $session_id, false);
+                        $cats = Category:: load(
+                            null,
+                            null,
+                            $course_code,
+                            null,
+                            null,
+                            $session_id,
+                            false
+                        );
                     } else {
                         $form_grade->display();
                     }

@@ -1,0 +1,25 @@
+<VirtualHost *:80>
+    DocumentRoot %TRAVIS_BUILD_DIR%
+    ServerName %VHOST_URL%
+
+    <Directory "%TRAVIS_BUILD_DIR%">
+        Options Indexes FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+
+    ErrorLog ${APACHE_LOG_DIR}/%VHOST_URL%-error.log
+    LogLevel notice
+    CustomLog ${APACHE_LOG_DIR}/%VHOST_URL%-access.log combined
+
+    <IfModule mod_fastcgi.c>
+        AddHandler php5-fcgi .php
+        Action php5-fcgi /php5-fcgi
+        Alias /php5-fcgi /usr/lib/cgi-bin/php5-fcgi
+        FastCgiExternalServer /usr/lib/cgi-bin/php5-fcgi -host 127.0.0.1:9000 -pass-header Authorization
+    </IfModule>
+
+    <Directory /usr/lib/cgi-bin>
+        Require all granted
+    </Directory>
+</VirtualHost>

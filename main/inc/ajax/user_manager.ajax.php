@@ -66,12 +66,7 @@ switch ($action) {
                 });';
 
             echo '</script>';
-            echo MessageManager::generate_message_form(
-                'send_message',
-                array(),
-                'block'
-            );
-
+            echo MessageManager::generate_message_form();
             echo '
                 <div class="row">
                     <div class="col-sm-10 col-sm-offset-2">
@@ -129,7 +124,9 @@ switch ($action) {
 
             if (!empty($user_id)) {
                 $user_table = Database :: get_main_table(TABLE_MAIN_USER);
-                $sql="UPDATE $user_table SET active='".$status."' WHERE user_id='".$user_id."'";
+                $sql = "UPDATE $user_table 
+                        SET active='".$status."' 
+                        WHERE user_id='".$user_id."'";
                 $result = Database::query($sql);
 
                 //Send and email if account is active

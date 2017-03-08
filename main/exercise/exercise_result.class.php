@@ -46,8 +46,7 @@ class ExerciseResult
         $exercise_id = 0,
         $hotpotato_name = null
     ) {
-		$return = array();
-
+        $return = array();
         $TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);
         $TBL_TABLE_LP_MAIN = Database::get_course_table(TABLE_LP_MAIN);
 
@@ -69,19 +68,19 @@ class ExerciseResult
         if (empty($user_id)) {
             $user_id_and = null;
             $sql = "SELECT ".(api_is_western_name_order() ? "firstname as userpart1, lastname userpart2" : "lastname as userpart1, firstname as userpart2").",
-                        official_code,
-                        ce.title as extitle,
-                        te.exe_result as exresult ,
-                        te.exe_weighting as exweight,
-                        te.exe_date as exdate,
-                        te.exe_id as exid,
-                        email as exemail,
-                        te.start_date as exstart,
-                        steps_counter as exstep,
-                        exe_user_id as excruid,
-                        te.exe_duration as duration,
-                        te.orig_lp_id as orig_lp_id,
-                        tlm.name as lp_name
+                    official_code,
+                    ce.title as extitle,
+                    te.exe_result as exresult ,
+                    te.exe_weighting as exweight,
+                    te.exe_date as exdate,
+                    te.exe_id as exid,
+                    email as exemail,
+                    te.start_date as exstart,
+                    steps_counter as exstep,
+                    exe_user_id as excruid,
+                    te.exe_duration as duration,
+                    te.orig_lp_id as orig_lp_id,
+                    tlm.name as lp_name
                 FROM $TBL_EXERCISES  AS ce
                 INNER JOIN $TBL_TRACK_EXERCISES AS te 
                 ON (te.exe_exo_id = ce.id)
@@ -97,21 +96,21 @@ class ExerciseResult
         } else {
             $user_id_and = ' AND te.exe_user_id = ' . api_get_user_id() . ' ';
             // get only this user's results
-            $sql="SELECT ".(api_is_western_name_order() ? "firstname as userpart1, lastname userpart2" : "lastname as userpart1, firstname as userpart2").",
-                    official_code,
-                    ce.title as extitle,
-                    te.exe_result as exresult,
-                    te.exe_weighting as exweight,
-                    te.exe_date as exdate,
-                    te.exe_id as exid,
-                    email as exemail,
-                    te.start_date as exstart,
-                    steps_counter as exstep,
-                    exe_user_id as excruid,
-                    te.exe_duration as duration,
-                    ce.results_disabled as exdisabled,
-                    te.orig_lp_id as orig_lp_id,
-                    tlm.name as lp_name
+            $sql = "SELECT ".(api_is_western_name_order() ? "firstname as userpart1, lastname userpart2" : "lastname as userpart1, firstname as userpart2").",
+                        official_code,
+                        ce.title as extitle,
+                        te.exe_result as exresult,
+                        te.exe_weighting as exweight,
+                        te.exe_date as exdate,
+                        te.exe_id as exid,
+                        email as exemail,
+                        te.start_date as exstart,
+                        steps_counter as exstep,
+                        exe_user_id as excruid,
+                        te.exe_duration as duration,
+                        ce.results_disabled as exdisabled,
+                        te.orig_lp_id as orig_lp_id,
+                        tlm.name as lp_name
                     FROM $TBL_EXERCISES  AS ce
                     INNER JOIN $TBL_TRACK_EXERCISES AS te 
                     ON (te.exe_exo_id = ce.id)
@@ -177,10 +176,12 @@ class ExerciseResult
             $i = 0;
             foreach ($results as $result) {
                 $revised = false;
-
                 //revised or not
-                $sql_exe = "SELECT exe_id FROM $TBL_TRACK_ATTEMPT_RECORDING
-                            WHERE author != '' AND exe_id = ".Database :: escape_string($result['exid'])."
+                $sql_exe = "SELECT exe_id 
+                            FROM $TBL_TRACK_ATTEMPT_RECORDING
+                            WHERE 
+                                author != '' AND 
+                                exe_id = ".Database :: escape_string($result['exid'])."
                             LIMIT 1";
                 $query = Database::query($sql_exe);
 
@@ -276,8 +277,7 @@ class ExerciseResult
     }
 
 	/**
-	 * Exports the complete report as a CSV file
-     *
+     * Exports the complete report as a CSV file     *
      * @param    string $document_path Document path inside the document tool
      * @param    integer $user_id Optional user ID
      * @param    boolean $export_user_fields Whether to include user fields or not
@@ -410,7 +410,7 @@ class ExerciseResult
             $data .= "\n";
         }
 
-        //output the results
+        // output the results
         $len = strlen($data);
         header('Content-type: application/octet-stream');
         header('Content-Type: application/force-download');
@@ -662,7 +662,16 @@ class ExerciseResult
                 }
             }
 
-            $worksheet->setCellValueByColumnAndRow($column, $line, api_html_entity_decode(strip_tags($row['title']), ENT_QUOTES, $charset));
+            $worksheet->setCellValueByColumnAndRow(
+                $column,
+                $line,
+                api_html_entity_decode(
+                    strip_tags($row['title']),
+                    ENT_QUOTES,
+                    $charset
+                )
+            );
+
             $column++;
             $worksheet->setCellValueByColumnAndRow($column, $line, $row['start_date']);
             $column++;

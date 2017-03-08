@@ -33,4 +33,5 @@ Feature: Users management as admin
     And I fill in "keyword" with "smarshall"
     And I press "submit"
     When I follow "Delete"
+    And I confirm the popup
     Then I should see "The user has been deleted"

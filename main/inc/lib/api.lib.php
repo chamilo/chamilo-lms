@@ -558,7 +558,7 @@ define('TIMELINE_STATUS_ACTIVE', '1');
 define('TIMELINE_STATUS_INACTIVE', '2');
 
 // Event email template class
-define('EVENT_EMAIL_TEMPLATE_ACTIVE',  1);
+define('EVENT_EMAIL_TEMPLATE_ACTIVE', 1);
 define('EVENT_EMAIL_TEMPLATE_INACTIVE', 0);
 
 // Course home
@@ -2907,9 +2907,9 @@ function api_is_allowed_to_edit(
     $session_coach = false,
     $check_student_view = true
 ) {
-    $my_session_id = api_get_session_id();
+    $sessionId = api_get_session_id();
     $is_allowed_coach_to_edit = api_is_coach(null, null, $check_student_view);
-    $session_visibility = api_get_session_visibility($my_session_id);
+    $session_visibility = api_get_session_visibility($sessionId);
 
     // Admins can edit anything.
     if (api_is_platform_admin(false)) {
@@ -2950,7 +2950,7 @@ function api_is_allowed_to_edit(
 
     // Check if the student_view is enabled, and if so, if it is activated.
     if (api_get_setting('student_view_enabled') == 'true') {
-        if (!empty($my_session_id)) {
+        if (!empty($sessionId)) {
             // Check if session visibility is read only for coaches.
             if ($session_visibility == SESSION_VISIBLE_READ_ONLY) {
                 $is_allowed_coach_to_edit = false;
@@ -3016,8 +3016,7 @@ function api_is_coach_of_course_in_session($sessionId)
             // Checking session visibility
             $sessionCourseVisibility = api_get_session_visibility(
                 $sessionId,
-                $course['real_id'],
-                $ignore_visibility_for_admins
+                $course['real_id']
             );
 
             $courseIsVisible = !in_array(
@@ -4524,7 +4523,7 @@ function api_get_permissions_for_new_files() {
     static $permissions;
     if (!isset($permissions)) {
         $permissions = trim(api_get_setting('permissions_for_new_files'));
-        // The default value 0666 is according to that in the platform administration panel after fresh system installation.
+        // The default value 0666 is according to that in the platform
         // administration panel after fresh system installation.
         $permissions = octdec(!empty($permissions) ? $permissions : '0666');
     }
@@ -8149,6 +8148,22 @@ function api_number_format($number, $decimals = 0)
     $number = api_float_val($number);
 
     return number_format($number, $decimals);
+}
+
+/**
+ * Set location url with a exit break by default
+ *
+ * @param $url
+ * @param bool $exit
+ * @return void
+ */
+function location($url, $exit = true)
+{
+    header('Location: ' . $url);
+
+    if ($exit) {
+        exit;
+    }
 }
 
 /**

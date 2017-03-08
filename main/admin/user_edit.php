@@ -387,6 +387,7 @@ if ($form->validate()) {
 		$reset_password = intval($user['reset_password']);
 		$hr_dept_id = isset($user['hr_dept_id']) ? intval($user['hr_dept_id']) : null;
 		$language = $user['language'];
+        $address = isset($user['address']) ? $user['address'] : null;
 
 		if ($user['radio_expiration_date'] == '1' && !$user_data['platform_admin']) {
             $expiration_date = $user['expiration_date'];
@@ -426,7 +427,7 @@ if ($form->validate()) {
             null,
             $send_mail,
             $reset_password,
-			$user['address']
+            $address
         );
 
         if (isset($user['student_boss'])) {

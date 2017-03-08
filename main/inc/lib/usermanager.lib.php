@@ -759,6 +759,12 @@ class UserManager
             Database::query($sql);
         }
 
+        // Delete user/ticket relationships :(
+        $tableExists = $connection->getSchemaManager()->tablesExist(['ticket_ticket']);
+        if ($tableExists) {
+            TicketManager::deleteUserFromTicketSystem($user_id);
+        }
+
         // Delete user from database
         $sql = "DELETE FROM $table_user WHERE id = '".$user_id."'";
         Database::query($sql);
@@ -782,7 +788,7 @@ class UserManager
             $user_id_manager
         );
         $cacheAvailable = api_get_configuration_value('apc');
-        if (!empty($cacheAvailable)) {
+        if ($cacheAvailable === true) {
             $apcVar = api_get_configuration_value('apc_prefix') . 'userinfo_' . $user_id;
             if (apcu_exists($apcVar)) {
                 apcu_delete($apcVar);
@@ -1110,7 +1116,7 @@ class UserManager
         }
 
         $cacheAvailable = api_get_configuration_value('apc');
-        if (!empty($cacheAvailable)) {
+        if ($cacheAvailable === true) {
             $apcVar = api_get_configuration_value('apc_prefix') . 'userinfo_' . $user_id;
             if (apcu_exists($apcVar)) {
                 apcu_delete($apcVar);
@@ -1490,7 +1496,7 @@ class UserManager
         $user_table = Database :: get_main_table(TABLE_MAIN_USER);
         $tblAccessUrlRelUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $return_array = array();
-        $sql_query = "SELECT * FROM $user_table ";
+        $sql_query = "SELECT user.id FROM $user_table user ";
 
         if (api_is_multiple_url_enabled()) {
             $sql_query .= " INNER JOIN $tblAccessUrlRelUser auru ON auru.user_id = user.id ";
@@ -1526,11 +1532,8 @@ class UserManager
 
         $sql_result = Database::query($sql_query);
         while ($result = Database::fetch_array($sql_result)) {
-            $result['complete_name'] = api_get_person_name(
-                $result['firstname'],
-                $result['lastname']
-            );
-            $return_array[] = $result;
+            $userInfo = api_get_user_info($result['id']);
+            $return_array[] = $userInfo;
         }
 
         return $return_array;
@@ -3377,7 +3380,7 @@ class UserManager
      */
     public static function is_admin($user_id)
     {
-        if (empty($user_id) or $user_id != strval(intval($user_id))) {
+        if (empty($user_id) || $user_id != strval(intval($user_id))) {
             return false;
         }
         $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);

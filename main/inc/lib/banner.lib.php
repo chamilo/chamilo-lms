@@ -448,6 +448,10 @@ function menuArray()
             if (api_get_user_id() && !api_is_anonymous()) {
                 $list = explode("\n", $openMenuTabsLoggedIn);
                 foreach ($list as $link) {
+                    if (strpos($link, 'class="hide_menu"') !== false) {
+                        continue;
+                    }
+
                     $matches = array();
                     $match = preg_match('$href="([^"]*)" target="([^"]*)">([^<]*)</a>$', $link, $matches);
                     if ($match) {
@@ -462,6 +466,10 @@ function menuArray()
             } else {
                 $list = explode("\n", $open);
                 foreach ($list as $link) {
+                    if (strpos($link, 'class="hide_menu"') !== false) {
+                        continue;
+                    }
+
                     $matches = array();
                     $match = preg_match('$href="([^"]*)" target="([^"]*)">([^<]*)</a>$', $link, $matches);
                     if ($match) {

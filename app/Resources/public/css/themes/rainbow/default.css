@@ -613,7 +613,43 @@ legend{
 .block-items-admin{
     font-size: 12px;
 }
-
+.cookieUsageValidation{
+    background-color: #ECECEC;
+    color: #666;
+    position: fixed;
+    z-index: 999;
+    width: 100%;
+    padding: 15px 10px;
+    border-bottom: 2px solid #D8D8D8;
+}
+.cookieUsageValidation .more{
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+.cookieUsageValidation .more a{
+    color: #96BD0D;
+}
+.cookieUsageValidation .link{
+    cursor: pointer;
+    margin-left: 10px;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    border: 1px solid #6B1D82;
+    border-radius: 4px;
+    background-color: #6B1D82;
+    color: #FFF;
+}
+.cookieUsageValidation .link:hover{
+    color: #FFF;
+    background-color: #162A83;
+    border-color: #162A83;
+}
 /* Large desktop */
 @media (min-width: 1200px) {
 

@@ -21,13 +21,14 @@
         <input value=1 type="hidden" name="acceptCookies"/>
         <div class="cookieUsageValidation">
             {{ "YouAcceptCookies" | get_lang }}
-            <span style="margin-left:20px;" onclick="$(this).next().toggle('slow'); $(this).toggle('slow')">
+            
+            <span class="link" onclick="$(this).next().toggle('slow'); $(this).toggle('slow')">
                 ({{"More" | get_lang }})
             </span>
-            <div style="display:none; margin:20px 0;">
+            <div class="more" style="display:none;">
                 {{ "HelpCookieUsageValidation" | get_lang}}
             </div>
-            <span style="margin-left:20px;" onclick="$(this).parent().parent().submit()">
+            <span class="link" onclick="$(this).parent().parent().submit()">
                 ({{"Accept" | get_lang }})
             </span>
         </div>

@@ -7,11 +7,21 @@
 <body style="margin:0; padding:0;">
 <table border="0" cellpadding="0" cellspacing="0" style="width:726px;" align="center">
     <tr>
+        <td>
+            &nbsp;
+        </td>
+    </tr>
+    <tr>
+        <td>
+            &nbsp;
+        </td>
+    </tr>
+    <tr>
 	<td><img src="{{ _p.web_css_theme }}images/header_de.png" style="display: block;"></td>
     </tr>
 	<tr>
             <td>
-		<table border="0" cellspacing="0" cellpadding="0">
+                <table border="0" cellspacing="0" cellpadding="0" width="100%">
                     <tr>
 			<td bgcolor="#80CC28"><img src="{{ _p.web_css_theme }}images/lado-a.png" style="display:block;"></td>
 			<td style="font-family: Courier; line-height: 26px; color:#80CC28; padding: 40px;">
@@ -38,6 +48,7 @@
                                     {% endif %}
                                 Berlin/Paris, den <span style="font-weight: bold; color: #672290;">21.12.2016</span><br>
                                 Das Team von PARKUR
+                                <br><br><br><br><br><br><br><br><br>
                             </td>
 			<td bgcolor="#80CC28"><img src="{{ _p.web_css_theme }}images/lado-b.png" style="display:block;"></td>
                     </tr>

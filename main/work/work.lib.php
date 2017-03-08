@@ -3832,14 +3832,13 @@ function processWorkForm(
                 // Get the "considered work time" defined for this work
                 $fieldValue = new ExtraFieldValue('work');
                 $resultExtra = $fieldValue->getAllValuesForAnItem(
-                    $workInfo['id'],
+                    $workId,
                     true
                 );
 
                 $workingTime = null;
                 foreach ($resultExtra as $field) {
                     $field = $field['value'];
-
                     if ($consideredWorkingTime == $field->getField()->getVariable()) {
                         $workingTime = $field->getValue();
                     }
@@ -3847,7 +3846,6 @@ function processWorkForm(
 
                 // If no time was defined, or a time of "0" was set, do nothing
                 if (!empty($workingTime)) {
-
                     // If some time is set, get the list of docs handed in by
                     // this student (to make sure we count the time only once)
                     $userWorks = get_work_user_list(

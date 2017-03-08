@@ -125,6 +125,10 @@ See https://support.chamilo.org/issues/6976
 .level_3 {
     margin: 0 0.5em 0 60px;
     padding-left: 30px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 5px;
+    line-height: 14px;
 }
 .level_4 {
     margin: 0 0.5em 0 70px;

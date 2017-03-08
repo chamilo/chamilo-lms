@@ -1336,7 +1336,12 @@ if (!empty($student_id)) {
                     echo '<td class="text-center">' . $qualification. '</td>';
                     echo '<td class="text-center">' . $results['formatted_date']. '</td>';
                     $assignment = get_work_assignment_by_id($work->id, $courseInfo['real_id']);
-                    echo '<td class="text-center">' . api_convert_and_format_date($assignment['expires_on']) . '</td>';
+
+                    echo '<td class="text-center">';
+                    if (!empty($assignment['expires_on'])) {
+                        echo api_convert_and_format_date($assignment['expires_on']);
+                    }
+                    echo '</td>';
 
                     $fieldValue = new ExtraFieldValue('work');
                     $resultExtra = $fieldValue->getAllValuesForAnItem(
@@ -1346,7 +1351,6 @@ if (!empty($student_id)) {
 
                     foreach ($resultExtra as $field) {
                         $field = $field['value'];
-
                         if (api_get_configuration_value('considered_working_time') == $field->getField()->getVariable()) {
                             echo '<td class="text-center">' . $field->getValue() . '</td>';
                         }

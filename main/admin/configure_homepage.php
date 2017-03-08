@@ -1216,7 +1216,8 @@ switch ($action) {
                                 array('href="' . api_get_path(WEB_CODE_PATH) . 'admin/' . basename($selfUrl) . '?action=open_link&link=', $edit_link . $delete_link . '</li>'),
                                 $enreg
                             );
-                            $tab_string = str_replace(array('<li>', '</li>', 'class="hide_menu"', 'hide_menu'), '', $tab_string);
+                            $tab_string = str_replace([' class="hide_menu"', ' class="show_menu"'], '', $tab_string);
+                            $tab_string = str_replace(array('<li>', '</li>'), '', $tab_string);
                             $link_list .= Display::tag('li', $tab_string, array('class' => 'list-group-item'));
                             $tab_counter++;
                         }

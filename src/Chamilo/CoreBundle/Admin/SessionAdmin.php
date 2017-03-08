@@ -4,7 +4,7 @@
 namespace Chamilo\CoreBundle\Admin;
 
 use Chamilo\CoreBundle\Entity\Session;
-use Sonata\AdminBundle\Admin\Admin;
+use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -14,7 +14,7 @@ use Sonata\AdminBundle\Show\ShowMapper;
  * Class SessionAdmin
  * @package Chamilo\CoreBundle\Admin
  */
-class SessionAdmin extends Admin
+class SessionAdmin extends AbstractAdmin
 {
     /**
      * @param FormMapper $formMapper

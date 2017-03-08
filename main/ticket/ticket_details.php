@@ -286,8 +286,6 @@ if (!isset($_POST['compose'])) {
         ';
     echo '</table>';
     $messages = $ticket['messages'];
-
-    $logs = TicketManager::get_assign_log($ticket_id);
     $counter = 1;
     foreach ($messages as $message) {
         $date = Display::url(

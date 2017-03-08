@@ -733,6 +733,12 @@ class UserManager
             Database::query($sql);
         }
 
+        // Delete user/ticket relationships :(
+        $tableExists = $connection->getSchemaManager()->tablesExist(['ticket_ticket']);
+        if ($tableExists) {
+            TicketManager::deleteUserFromTicketSystem($user_id);
+        }
+
         // Delete user from database
         $sql = "DELETE FROM $table_user WHERE id = '".$user_id."'";
         Database::query($sql);
@@ -3347,7 +3353,7 @@ class UserManager
      */
     public static function is_admin($user_id)
     {
-        if (empty($user_id) or $user_id != strval(intval($user_id))) {
+        if (empty($user_id) || $user_id != strval(intval($user_id))) {
             return false;
         }
         $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);

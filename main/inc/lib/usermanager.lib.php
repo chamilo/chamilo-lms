@@ -2748,7 +2748,7 @@ class UserManager
                 if ($blockedCourseCount === count($courseList)) {
                     $visibility = SESSION_INVISIBLE;
                 } else {
-                    $visibility = SESSION_VISIBLE;
+                    $visibility = $sessionCourseVisibility;
                 }
             }
 

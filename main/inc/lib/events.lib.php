@@ -1802,13 +1802,19 @@ class Event
      * end at the same second as the user connected to the course.
      * @param int $courseId The course in which to add the time
      * @param int $userId The user for whom to add the time
-     * @param $sessionId The session in which to add the time (if any)
+     * @param int $sessionId The session in which to add the time (if any)
      * @param string $virtualTime The amount of time to be added, in a hh:mm:ss format. If int, we consider it is expressed in hours.
      * @param string $ip IP address to go on record for this time record
+     *
      * @return True on successful insertion, false otherwise
      */
-    public static function eventAddVirtualCourseTime($courseId, $userId, $sessionId, $virtualTime = '', $ip = '')
-    {
+    public static function eventAddVirtualCourseTime(
+        $courseId,
+        $userId,
+        $sessionId,
+        $virtualTime = '',
+        $ip = ''
+    ) {
         $courseTrackingTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $time = $loginDate = $logoutDate = api_get_utc_datetime();
 
@@ -1820,13 +1826,13 @@ class Event
         // Get the current latest course connection register. We need that
         // record to re-use the data and create a new record.
         $sql = "SELECT *
-                        FROM $courseTrackingTable
-                        WHERE
-                            user_id = ".$userId." AND
-                            c_id = ".$courseId."  AND
-                            session_id  = ".$sessionId." AND
-                            login_course_date > '$time' - INTERVAL 3600 SECOND
-                        ORDER BY login_course_date DESC LIMIT 0,1";
+                FROM $courseTrackingTable
+                WHERE
+                    user_id = ".$userId." AND
+                    c_id = ".$courseId."  AND
+                    session_id  = ".$sessionId." AND
+                    login_course_date > '$time' - INTERVAL 3600 SECOND
+                ORDER BY login_course_date DESC LIMIT 0,1";
         $result = Database::query($sql);
 
         // Ignore if we didn't find any course connection record in the last
@@ -1866,16 +1872,16 @@ class Event
             );
             // We update the course tracking table
             $sql = "UPDATE $courseTrackingTable  
-                        SET 
-                            login_course_date = '$loginDate',
-                            logout_course_date = '$courseAccessLoginDate',
-                            counter = 0
-                        WHERE 
-                            course_access_id = ".intval($courseAccessId)." AND 
-                            session_id = ".$sessionId;
-            $result = Database::query($sql);
+                    SET 
+                        login_course_date = '$loginDate',
+                        logout_course_date = '$courseAccessLoginDate',
+                        counter = 0
+                    WHERE 
+                        course_access_id = ".intval($courseAccessId)." AND 
+                        session_id = ".$sessionId;
+            Database::query($sql);
 
-            return $result;
+            return true;
         }
 
         return false;

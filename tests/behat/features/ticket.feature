@@ -1,0 +1,39 @@
+Feature: Ticket
+  In order to use the ticket tool
+  The admin should be able to create a ticket
+
+  Background:
+    Given I am a platform administrator
+
+  Scenario: Create a ticket
+    Given I am on "/main/ticket/new_ticket.php?project_id=1"
+    Then I should see "Compose message"
+    When I fill in the following:
+      | subject | First ticket |
+    And I fill in ckeditor field "content" with "Ticket description"
+    And I press "Send message"
+    Then I should see "created"
+
+  Scenario: Create ticket project
+    Given I am on "/main/ticket/projects.php?action=add"
+    When I fill in the following:
+      | name | Project 2 |
+    And I fill in ckeditor field "description" with "Project description"
+    And I press "Save"
+    Then I should see "Added"
+
+  Scenario: Create ticket status
+    Given I am on "/main/ticket/status.php?action=add"
+    When I fill in the following:
+      | name | Status 1 |
+    And I fill in ckeditor field "description" with "Status"
+    And I press "Save"
+    Then I should see "Added"
+
+  Scenario: Create priority
+    Given I am on "/main/ticket/priorities.php?action=add"
+    When I fill in the following:
+      | name | Priority 1 |
+    And I fill in ckeditor field "description" with "Priority"
+    And I press "Save"
+    Then I should see "Added"

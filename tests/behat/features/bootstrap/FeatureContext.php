@@ -369,7 +369,12 @@ class FeatureContext extends MinkContext
      */
     public function iFillInSelectStaticBootstrapInputWithAndSelect($field, $value)
     {
-        $this->getSession()->executeScript("$(input[name='$field']).selectpicker('val', '$value');");
+        $this->getSession()->wait(1000);
+        $this->getSession()->executeScript("
+            $(function() {
+                $('$field').selectpicker('val', '$value');
+            });
+        ");
     }
 
     /**

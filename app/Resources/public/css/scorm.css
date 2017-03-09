@@ -127,6 +127,10 @@ body{
 .level_3 {
     margin: 0 0.5em 0 60px;
     padding-left: 30px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 5px;
+    line-height: 14px;
 }
 .level_4 {
     margin: 0 0.5em 0 70px;
@@ -249,12 +253,9 @@ body{
   color: #FFFFFF !important;
 }
 .scorm_item_normal.scorm_highlight{
-    background-color: #00AAD4;
+    background-color: #00829C;
 }
-
 /* END SCORM CSS BASE*/
-
-
 #scorm-info{
     padding: 10px;
     margin-bottom: 5px;

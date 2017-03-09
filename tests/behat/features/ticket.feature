@@ -11,6 +11,8 @@ Feature: Ticket
     When I fill in the following:
       | subject | First ticket |
     And I fill in ckeditor field "content" with "Ticket description"
+    And I fill in select bootstrap static input "#category_id" select "1"
+    #category id = 1 => Enrollment: Tickets about enrollment
     And I press "Send message"
     Then I should see "created"
 

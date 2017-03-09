@@ -55,51 +55,44 @@ $interbreadcrumb[] = array(
 
 // Getting the survey information
 if (!empty($_GET['survey_id'])) {
-	$course_code = api_get_course_id();
-	if ($course_code!=-1) {
-		$survey_data = SurveyManager::get_survey($survey_id);
-	} else {
-		Display :: display_header(get_lang('ToolSurvey'));
-		Display :: display_error_message(get_lang('NotAllowed'), false);
-		Display :: display_footer();
-		exit;
-	}
+    $course_code = api_get_course_id();
+    if ($course_code!=-1) {
+        $survey_data = SurveyManager::get_survey($survey_id);
+    } else {
+        api_not_allowed(true);
+    }
 } else {
-    Display :: display_header(get_lang('ToolSurvey'));
-    Display :: display_error_message(get_lang('NotAllowed'), false);
-    Display :: display_footer();
-    exit;
+    api_not_allowed(true);
 }
 
 $tool_name = strip_tags($survey_data['title']);
-
 $is_survey_type_1 = $survey_data['survey_type'] == 1;
 
 if (api_strlen(strip_tags($survey_data['title'])) > 40) {
-	$tool_name .= '...';
+    $tool_name .= '...';
 }
 
 if ($is_survey_type_1 && ($action == 'addgroup' || $action == 'deletegroup')) {
-	$_POST['name'] = trim($_POST['name']);
-	if ($action == 'addgroup') {
-		if (!empty($_POST['group_id'])) {
-			Database::query('UPDATE '.$table_survey_question_group.' SET description = \''.Database::escape_string($_POST['description']).'\'
-			                 WHERE c_id = '.$course_id.' AND id = \''.Database::escape_string($_POST['group_id']).'\'');
-			$sendmsg = 'GroupUpdatedSuccessfully';
-		} elseif(!empty($_POST['name'])) {
-			Database::query('INSERT INTO '.$table_survey_question_group.' (c_id, name,description,survey_id) values ('.$course_id.', \''.Database::escape_string($_POST['name']).'\',\''.Database::escape_string($_POST['description']).'\',\''.Database::escape_string($survey_id).'\') ');
-			$sendmsg = 'GroupCreatedSuccessfully';
-		} else {
-			$sendmsg = 'GroupNeedName';
-		}
-	}
+    $_POST['name'] = trim($_POST['name']);
+    if ($action == 'addgroup') {
+        if (!empty($_POST['group_id'])) {
+            Database::query('UPDATE '.$table_survey_question_group.' SET description = \''.Database::escape_string($_POST['description']).'\'
+                             WHERE c_id = '.$course_id.' AND id = \''.Database::escape_string($_POST['group_id']).'\'');
+            $sendmsg = 'GroupUpdatedSuccessfully';
+        } elseif(!empty($_POST['name'])) {
+            Database::query('INSERT INTO '.$table_survey_question_group.' (c_id, name,description,survey_id) values ('.$course_id.', \''.Database::escape_string($_POST['name']).'\',\''.Database::escape_string($_POST['description']).'\',\''.Database::escape_string($survey_id).'\') ');
+            $sendmsg = 'GroupCreatedSuccessfully';
+        } else {
+            $sendmsg = 'GroupNeedName';
+        }
+    }
 
-	if ($action == 'deletegroup') {
-		Database::query('DELETE FROM '.$table_survey_question_group.' WHERE c_id = '.$course_id.' AND id = '.intval($_GET['gid']).' and survey_id = '.intval($survey_id));
-		$sendmsg = 'GroupDeletedSuccessfully';
-	}
-	header('Location: '.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&sendmsg='.$sendmsg);
-	exit;
+    if ($action == 'deletegroup') {
+        Database::query('DELETE FROM '.$table_survey_question_group.' WHERE c_id = '.$course_id.' AND id = '.intval($_GET['gid']).' and survey_id = '.intval($survey_id));
+        $sendmsg = 'GroupDeletedSuccessfully';
+    }
+    header('Location: '.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&sendmsg='.$sendmsg);
+    exit;
 }
 
 // Displaying the header
@@ -108,9 +101,9 @@ Display::display_header($tool_name, 'Survey');
 
 // Action handling
 $my_action_survey = Security::remove_XSS($action);
-$my_question_id_survey  = isset($_GET['question_id']) ? Security::remove_XSS($_GET['question_id']) : null;
-$my_survey_id_survey    = Security::remove_XSS($_GET['survey_id']);
-$message_information    = isset($_GET['message']) ? Security::remove_XSS($_GET['message']) : null;
+$my_question_id_survey = isset($_GET['question_id']) ? Security::remove_XSS($_GET['question_id']) : null;
+$my_survey_id_survey = Security::remove_XSS($_GET['survey_id']);
+$message_information = isset($_GET['message']) ? Security::remove_XSS($_GET['message']) : null;
 
 if (isset($action)) {
 	if (($action == 'moveup' || $action == 'movedown') && isset($_GET['question_id'])) {

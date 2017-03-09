@@ -76,6 +76,10 @@ $people_filled = SurveyManager::get_people_who_filled_survey(
 SurveyUtil::check_parameters($people_filled);
 
 $survey_data = SurveyManager::get_survey($survey_id);
+// Getting the survey information
+if (empty($survey_data)) {
+    api_not_allowed(true);
+}
 
 $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
     api_get_user_id(),
@@ -98,16 +102,6 @@ if (!api_is_allowed_to_edit(false, true) || $isDrhOfCourse) {
 // Database table definitions
 $table_course = Database:: get_main_table(TABLE_MAIN_COURSE);
 $table_user = Database:: get_main_table(TABLE_MAIN_USER);
-
-// Getting the survey information
-
-if (empty($survey_data)) {
-    Display :: display_header(get_lang('ToolSurvey'));
-    Display :: display_error_message(get_lang('InvallidSurvey'), false);
-    Display :: display_footer();
-    exit;
-}
-
 $urlname = strip_tags(api_substr(api_html_entity_decode($survey_data['title'], ENT_QUOTES), 0, 40));
 if (api_strlen(strip_tags($survey_data['title'])) > 40) {
     $urlname .= '...';

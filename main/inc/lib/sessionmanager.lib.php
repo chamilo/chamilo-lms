@@ -7501,7 +7501,7 @@ class SessionManager
                     'name' => $field['variable'],
                     'index' => $field['variable'],
                     'width' => '80',
-                    'align' => 'left',
+                    'align' => 'center',
                     'search' => 'false'
                 );
             }

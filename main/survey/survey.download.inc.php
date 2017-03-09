@@ -65,7 +65,7 @@ function check_download_survey($course, $invitation, $doc_url)
             echo '</select>';
             echo '  <input type="submit" name="Submit" value="'.get_lang('Ok').'" />';
             echo '</form>';
-            display::display_footer();
+            Display::display_footer();
             exit;
         }
     } else {

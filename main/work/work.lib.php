@@ -3828,11 +3828,11 @@ function processWorkForm(
             // connection to the platform to hand the work in.
             $consideredWorkingTime = api_get_configuration_value('considered_working_time');
 
-            if ($consideredWorkingTime) {
+            if (!empty($consideredWorkingTime)) {
                 // Get the "considered work time" defined for this work
                 $fieldValue = new ExtraFieldValue('work');
                 $resultExtra = $fieldValue->getAllValuesForAnItem(
-                    $workId,
+                    $workInfo['iid'], //the ID of the work *folder*, not the document uploaded by the student
                     true
                 );
 

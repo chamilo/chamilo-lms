@@ -293,14 +293,14 @@ if (!empty($gradebook) && $gradebook=='view') {
 }
 
 $interbreadcrumb[] = array("url" => "exercise.php","name" => get_lang('Exercises'));
-if (isset($_GET['newQuestion']) || isset($_GET['editQuestion']) ) {
+if (isset($_GET['newQuestion']) || isset($_GET['editQuestion'])) {
     $interbreadcrumb[] = array("url" => "admin.php?exerciseId=".$objExercise->id, "name" => $objExercise->name);
 } else {
     $interbreadcrumb[] = array("url" => "#", "name" => $objExercise->name);
 }
 
 // shows a link to go back to the question pool
-if (!$exerciseId && $nameTools != get_lang('ExerciseManagement')){
+if (!$exerciseId && $nameTools != get_lang('ExerciseManagement')) {
     $interbreadcrumb[]=array(
         "url" => api_get_path(WEB_CODE_PATH)."exercise/question_pool.php?fromExercise=$fromExercise&".api_get_cidreq(),
         "name" => get_lang('QuestionPool')
@@ -309,7 +309,7 @@ if (!$exerciseId && $nameTools != get_lang('ExerciseManagement')){
 
 // if the question is duplicated, disable the link of tool name
 if ($modifyIn == 'thisExercise') {
-    if($buttonBack)	{
+    if ($buttonBack)	{
         $modifyIn='allExercises';
     } else {
         $noPHP_SELF=true;

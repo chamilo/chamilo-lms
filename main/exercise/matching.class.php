@@ -2,15 +2,15 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *  Class Matching
- *  Matching questions type class
+ * Class Matching
+ * Matching questions type class
  *
- *  This class allows to instantiate an object of
- *  type MULTIPLE_ANSWER (MULTIPLE CHOICE, MULTIPLE ANSWER)
- *	extending the class question
+ * This class allows to instantiate an object of
+ * type MULTIPLE_ANSWER (MULTIPLE CHOICE, MULTIPLE ANSWER)
+ * extending the class question
  *
- *	@author Eric Marguin
- *	@package chamilo.exercise
+ * @author Eric Marguin
+ * @package chamilo.exercise
  */
 class Matching extends Question
 {
@@ -43,7 +43,6 @@ class Matching extends Question
         if (isset($this->id)) {
             $answer = new Answer($this->id);
             $answer->read();
-
             if (count($answer->nbrAnswers) > 0) {
                 for ($i = 1; $i <= $answer->nbrAnswers; $i++) {
                     $correct = $answer->isCorrect($i);
@@ -121,7 +120,9 @@ class Matching extends Question
 
         if ($nb_matches < 1) {
             $nb_matches = 1;
-            Display::display_normal_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
+            Display::addFlash(
+                Display::return_message(get_lang('YouHaveToCreateAtLeastOneAnswer'))
+            );
         }
 
         for ($i = 1; $i <= $nb_matches; ++$i) {
@@ -172,22 +173,21 @@ class Matching extends Question
 
         if ($nb_options < 1) {
             $nb_options = 1;
-            Display::display_normal_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
+            Display::addFlash(
+                Display::return_message(get_lang('YouHaveToCreateAtLeastOneAnswer'))
+            );
         }
 
         for ($i = 1; $i <= $nb_options; ++$i) {
             $renderer = &$form->defaultRenderer();
-
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error -->{element}</td>',
                 "option[$i]"
             );
 
             $form->addHtml('<tr>');
-
             $form->addHtml('<td>' . chr(64 + $i) . '</td>');
             $form->addText("option[$i]", null);
-
             $form->addHtml('</tr>');
         }
 
@@ -228,7 +228,6 @@ class Matching extends Question
         $nb_options = $form->getSubmitValue('nb_options');
         $this->weighting = 0;
         $position = 0;
-
         $objAnswer = new Answer($this->id);
 
         // Insert the options

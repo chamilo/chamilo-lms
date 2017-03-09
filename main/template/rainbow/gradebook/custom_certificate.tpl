@@ -46,6 +46,7 @@
                                 {{ complete_name }}
                             </h3>
                                 <p>{{ 'UserHasParticipateDansDePlatformeXTheContratDateXCertificateDateXTimeX' | get_lang | format(_s.site_name, certificate_generated_date, terms_validation_date, time_in_platform)}}</p>
+                                <p>{{ 'ThisTrainingHasXhours' | get_lang | time_in_platform}}</p>
                                 <p>{{ 'TheContentsAreValidated' | get_lang }}:</p>
                                     {% if sessions %}
                                         <ul style="color: #672290;">
@@ -54,8 +55,8 @@
                                             {% endfor %}
                                         </ul>
                                     {% endif %}
-                                <h4 style="color: #672290;">Erika Mustermann</h4>
-                                <p>{{ 'SkillsValidatedOfUserX' | get_lang | format(complete_name) }}:</p>
+                                <h4 style="color: #672290;">{{ complete_name }}</h4>
+                                <p>{{ 'SkillsValidated' | get_lang }}:</p>
                                     {% if skills %}
                                         <ul style="color: #672290;">
                                         {% for skill in skills %}
@@ -63,8 +64,8 @@
                                         {% endfor %}
                                         </ul>
                                     {% endif %}
-                                Berlin/Paris, den <span style="font-weight: bold; color: #672290;">21.12.2016</span><br>
-                                Das Team von PARKUR
+                                Berlin/Paris, {{ 'The' | get_lang }} <span style="font-weight: bold; color: #672290;">certificate_generated_date</span><br>
+                                {{ 'ThePlatformTeam' | get_lang }}
                                 <br>
                             </td>
 			<td height=700 bgcolor="#80CC28"><img src="{{ _p.web_css_theme }}images/lado-b.png" style="display:block;"></td>
@@ -88,12 +89,4 @@
 </table>
 </body>
 </html>
-
-
-
-
-
-
-
-
 

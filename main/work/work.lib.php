@@ -4332,7 +4332,7 @@ function deleteWorkItem($item_id, $courseInfo)
                         $workingTime
                     );
                 }
-            } // fin de sección sobre considered_working_time
+            } // end of considered_working_time section
 
             $sql = "UPDATE $work_table SET active = 2
                     WHERE c_id = $course_id AND id = $item_id";

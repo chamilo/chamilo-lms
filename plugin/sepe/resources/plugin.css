@@ -1,0 +1,127 @@
+.cleared{
+	content: ".";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+	line-height:0;
+}
+.campo_texto{
+	color: #00829c;
+    font-size: 1.3em;
+    font-weight: normal;
+	padding-top: 2px;
+}
+
+.sepe_borrar_link {
+    background: url("icon-delete.png") no-repeat scroll 0px 10px;
+    padding-left: 30px;
+	font-size:1.3em;
+}
+.sepe_editar_link {
+    background: url("icon-edit.png") no-repeat scroll 0 10px;
+    padding-left: 30px;
+	font-size:1.3em;
+}
+.sepe_listado_link {
+    background: url("options-lines.png") no-repeat scroll 0 10px;
+    padding-left: 30px;
+	font-size:1.3em;
+}
+input.btn_menu_lateral{
+	width:100%;
+	margin-bottom:10px;
+}
+legend.subcampo {
+    font-size: 16px;
+    line-height: 16px;
+    padding-bottom: 10px;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+}
+.well.subcampo {
+    background: none repeat scroll 0 0 #fafafa;
+}
+em.span4 {
+    float: none;
+    margin: 0;
+    padding: 5px;
+	display:inline-block;
+}
+em{
+    float: none;
+    margin: 5px 0 0 0;
+    padding: 5px;
+	display: block;
+}
+.mensaje_info{
+	padding:5px 10px;
+}
+.slt_fecha {
+	width:auto; 
+	display:inline-block;
+}
+textarea.accion_formativa, input.accion_formativa {
+    margin-bottom: 5px;
+    width: 95%;
+}
+
+input.numerico {
+    text-align: center;
+    width: 60px;
+}
+
+.subcampo2 {
+    font-size: 16px;
+    text-align: center;
+}
+
+.mlateral{
+	margin: 0 5px;
+}
+
+#tabla_info_nif{
+	width:90%;
+	margin:5px auto;	
+}
+
+#tabla_info_nif td, #tabla_info_nif th {
+    background: none repeat scroll 0 0 white;
+    border: 1px solid;
+    color: #333;
+    font-weight: bold;
+	text-align:center;
+}
+
+.va_middle, .table td.va_middle{
+	vertical-align:middle;
+}
+
+.box_centrado{
+	margin:0 auto;
+}
+
+
+.dinline{
+	display:inline;
+}
+
+.fright{
+	float:right;
+}
+
+.cursor{
+	cursor:pointer;
+}
+
+.ta-center{
+	text-align:center;
+}
+
+.mtop5{
+	margin-top:5px;
+}
+
+
+

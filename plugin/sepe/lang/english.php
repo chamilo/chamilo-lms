@@ -1,0 +1,43 @@
+<?php
+//Needed in order to show the plugin title
+
+$strings['plugin_title'] = "Manager SEPE";
+$strings['plugin_comment'] = "Informes de seguimiento para las certificaciones.";
+$strings['datos_centro'] = "Datos identificativos del centro";
+$strings['editar_datos_centro'] = "Formulario datos identificativos del centro";
+$strings['formulario_acciones_formativas'] = "Formulario acciones formativas";
+$strings['listado_acciones_formativas'] = "Listado acciones formativas";
+$strings['accion_formativa'] = "Datos acción formativa";
+$strings['editar_accion_formativa'] = "Formulario acción formativa";
+$strings['new_accion_formativa'] = "Formulario crear acción formativa";
+$strings['new_specialty_accion'] = "Formulario crear especialidad acción formativa";
+$strings['edit_specialty_accion'] = "Formulario especialidad acción formativa";
+$strings['new_participant_accion'] = "Formulario crear participante acción formativa";
+$strings['edit_participant_accion'] = "Formulario participante acción formativa";
+$strings['informes'] = "Informes";
+$strings['configuracion_sepe'] = "Configuración";
+$strings['informe_plataforma'] = "Informe plataforma";
+$strings['sepe_enable'] = "Habilitar SEPE";
+$strings['sepe_url'] = "URL SEPE";
+$strings['ProblemToDeleteInfoCenter'] = 'Problema para eliminar los datos identificativos del centro.';
+$strings['ProblemToDeleteInfoAction'] = 'Problema para eliminar los datos de la acción formativa.';
+$strings['ProblemToDesvincularInfoAction'] = 'Problema para desvincular los datos de la acción formativa.';
+$strings['ProblemToDeleteInfoSpecialty'] = 'Problema para eliminar los datos de la especialidad de la acción formativa.';
+$strings['ProblemToDeleteInfoParticipant'] = 'Problema para eliminar los datos del participante de la acción formativa.';
+$strings['ProblemToDeleteInfoSpecialtyClassroom'] = 'Problema para eliminar los datos del centro presencial de la especialidad de la acción formativa.';
+$strings['ProblemToDeleteInfoSpecialtyTutor'] = 'Problema para eliminar los datos del tutor de la especialidad de la acción formativa.';
+$strings['DeleteOk'] = 'Borrado con éxito';
+$strings['especialidad_accion_formativa'] = "Especialidad de la acción formativa";
+$strings['participante_accion_formativa'] = "Participante de la acción formativa";
+$strings['participante_especialidad_formativa'] = "Especialidad participante";
+$strings['new_specialty_classroom'] = "Formulario crear centro presencial";
+$strings['edit_specialty_classroom'] = "Formulario centro presencial";
+$strings['new_specialty_tutor'] = "Formulario crear tutor-formador";
+$strings['edit_specialty_tutor'] = "Formulario tutor-formador";
+$strings['new_specialty_participant'] = "Formulario crear especialidad del participante";
+$strings['edit_specialty_participant'] = "Formulario especialidad del participante";
+$strings['new_tutorial'] = "Formulario crear tutoria presencial";
+$strings['edit_tutorial'] = "Formulario tutoria presencial";
+$strings['Inicio'] = "Inicio";
+$strings['menu_sepe_administracion'] = 'Menu SEPE Administración';
+$strings['menu_sepe'] = 'Menu SEPE';

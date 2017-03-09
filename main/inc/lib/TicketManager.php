@@ -1983,8 +1983,10 @@ class TicketManager
     public static function deleteProject($id)
     {
         $project = self::getProject($id);
-        Database::getManager()->remove($project);
-        Database::getManager()->flush();
+        if ($project) {
+            Database::getManager()->remove($project);
+            Database::getManager()->flush();
+        }
     }
 
     /**
@@ -2101,8 +2103,10 @@ class TicketManager
     public static function deleteStatus($id)
     {
         $item = self::getStatus($id);
-        Database::getManager()->remove($item);
-        Database::getManager()->flush();
+        if ($item) {
+            Database::getManager()->remove($item);
+            Database::getManager()->flush();
+        }
     }
 
     /**
@@ -2223,9 +2227,11 @@ class TicketManager
      */
     public static function deletePriority($id)
     {
-        $item = self::getStatus($id);
-        Database::getManager()->remove($item);
-        Database::getManager()->flush();
+        $item = self::getPriority($id);
+        if ($item) {
+            Database::getManager()->remove($item);
+            Database::getManager()->flush();
+        }
     }
 
     /**

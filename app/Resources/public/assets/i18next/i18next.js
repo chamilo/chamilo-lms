@@ -1331,11 +1331,6 @@ var Interpolator = function () {
     var clonedOptions = _extends({}, options);
     clonedOptions.applyPostProcessor = false; // avoid post processing on nested lookup
 
-    function regexSafe(val) {
-      return val.replace(/\$/g, '$$$$');
-    }
-
-    // if value is something like "myKey": "lorem $(anotherKey, { "count": {{aValueInOptions}} })"
     function handleHasOptions(key) {
       if (key.indexOf(',') < 0) return key;
 
@@ -1794,7 +1789,7 @@ var I18n = function (_EventEmitter) {
     _this.options = transformOptions(options);
     _this.services = {};
     _this.logger = baseLogger;
-    _this.modules = {};
+    _this.modules = { external: [] };
 
     if (callback && !_this.isInitialized && !options.isClone) _this.init(options, callback);
     return _this;
@@ -1882,6 +1877,10 @@ var I18n = function (_EventEmitter) {
         }
 
         _this2.emit.apply(_this2, [event].concat(args));
+      });
+
+      this.modules.external.forEach(function (m) {
+        if (m.init) m.init(_this2);
       });
     }
 
@@ -1980,6 +1979,10 @@ var I18n = function (_EventEmitter) {
 
     if (module.type === 'postProcessor') {
       postProcessor.addPostProcessor(module);
+    }
+
+    if (module.type === '3rdParty') {
+      this.modules.external.push(module);
     }
 
     return this;

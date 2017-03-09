@@ -1630,7 +1630,10 @@ class SurveyManager
         if ($all_user_info) {
             $order_clause = api_sort_by_first_name() ? ' ORDER BY user.firstname, user.lastname' : ' ORDER BY user.lastname, user.firstname';
             $sql = "SELECT DISTINCT
-			            answered_user.user as invited_user, user.firstname, user.lastname, user.user_id
+			            answered_user.user as invited_user, 
+			            user.firstname, 
+			            user.lastname, 
+			            user.user_id
                     FROM $table_survey_answer answered_user
                     LEFT JOIN $table_user as user ON answered_user.user = user.user_id
                     WHERE
@@ -1645,6 +1648,8 @@ class SurveyManager
         $res = Database::query($sql);
         while ($row = Database::fetch_array($res, 'ASSOC')) {
             if ($all_user_info) {
+                $userInfo = api_get_user_info($row['user_id']);
+                $row['user_info'] = $userInfo;
                 $return[] = $row;
             } else {
                 $return[] = $row['user'];
@@ -1741,7 +1746,6 @@ class SurveyUtil
         $error = false;
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             if ($counter == 1 && $row['type'] == 'pagebreak') {
-
                 Display::display_error_message(get_lang('PagebreakNotFirst'), false);
                 $error = true;
             }
@@ -1900,6 +1904,8 @@ class SurveyUtil
 
     /**
      * This function deals with the action handling
+     * @param array $survey_data
+     * @param array $people_filled
      * @return	void
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version February 2007
@@ -2040,12 +2046,13 @@ class SurveyUtil
         }
 		</script>";
         echo get_lang('SelectUserWhoFilledSurvey').'<br />';
+
         echo '<select name="user" onchange="jumpMenu(\'parent\',this,0)">';
         echo '<option value="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action='.Security::remove_XSS($_GET['action']).'&survey_id='.Security::remove_XSS($_GET['survey_id']).'">'.get_lang('SelectUser').'</option>';
 
         foreach ($people_filled as $key => & $person) {
             if ($survey_data['anonymous'] == 0) {
-                $name = api_get_person_name($person['firstname'], $person['lastname']);
+                $name = $person['user_info']['complete_name_with_username'];
                 $id = $person['user_id'];
                 if ($id == '') {
                     $id = $person['invited_user'];
@@ -2379,7 +2386,9 @@ class SurveyUtil
             echo '<ul>';
             while ($row = Database::fetch_array($result, 'ASSOC')) {
                 $user_info = api_get_user_info($row['user']);
-                echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=userreport&survey_id='.$surveyId.'&user='.$row['user'].'">'.$user_info['complete_name'].'</a></li>';
+                echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=userreport&survey_id='.$surveyId.'&user='.$row['user'].'">'.
+                    $user_info['complete_name_with_username'].
+                    '</a></li>';
             }
             echo '</ul>';
             echo '</div>';
@@ -2717,10 +2726,10 @@ class SurveyUtil
      * This function displays a row (= a user and his/her answers) in the table of the complete report.
      *
      * @param array $survey_data
-     * @param 	array	Possible options
-     * @param 	array 	User answers
-     * @param	mixed	User ID or user details string
-     * @param	boolean	Whether to show extra user fields or not
+     * @param array	Possible options
+     * @param array 	User answers
+     * @param mixed	User ID or user details string
+     * @param boolean	Whether to show extra user fields or not
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version February 2007 - Updated March 2008
      */
@@ -2738,7 +2747,7 @@ class SurveyUtil
             if (intval($user) !== 0) {
                 $userInfo = api_get_user_info($user);
                 if (!empty($userInfo)) {
-                    $user_displayed = $userInfo['complete_name'];
+                    $user_displayed = $userInfo['complete_name_with_username'];
                 } else {
                     $user_displayed = '-';
                 }
@@ -2981,7 +2990,7 @@ class SurveyUtil
                 $userInfo = api_get_user_info($user);
 
                 if (!empty($userInfo)) {
-                    $user_displayed = $userInfo['complete_name'];
+                    $user_displayed = $userInfo['complete_name_with_username'];
                 } else {
                     $user_displayed = '-';
                 }
@@ -3284,12 +3293,9 @@ class SurveyUtil
         $return = array();
         if ($survey_data['anonymous'] == 0) {
             if (intval($user) !== 0) {
-                $sql = 'SELECT firstname, lastname
-                        FROM '.Database::get_main_table(TABLE_MAIN_USER).'
-                        WHERE user_id='.intval($user);
-                $rs = Database::query($sql);
-                if($row = Database::fetch_array($rs)) {
-                    $user_displayed = api_get_person_name($row['firstname'], $row['lastname']);
+                $userInfo = api_get_user_info($user);
+                if ($userInfo) {
+                    $user_displayed = $userInfo['complete_name_with_username'];
                 } else {
                     $user_displayed = '-';
                 }
@@ -3429,7 +3435,6 @@ class SurveyUtil
 
             // Displaying the table
             $tableHtml = '<table border="1" class="data_table">';
-
             $xOptions = array();
             // The header
             $tableHtml .= '<tr>';

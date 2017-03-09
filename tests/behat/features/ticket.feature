@@ -21,16 +21,16 @@ Feature: Ticket
     Given I am on "/main/ticket/priorities.php"
     Then I should see "Normal"
 
-#  Scenario: Create a ticket
-#    Given I am on "/main/ticket/new_ticket.php?project_id=1"
-#    Then I should see "Compose message"
-#    When I fill in the following:
-#      | subject | First ticket |
-#    And I fill in ckeditor field "content" with "Ticket description"
-#    And I fill in select bootstrap static input "#category_id" select "1"
-#    #category id = 1 => Enrollment: Tickets about enrollment
-#    And I press "Send message"
-#    Then I should see "created"
+  Scenario: Create a ticket
+    Given I am on "/main/ticket/new_ticket.php?project_id=1"
+    Then I should see "Compose message"
+    When I fill in the following:
+      | subject | First ticket |
+    And I fill in ckeditor field "content" with "Ticket description"
+    And I fill in select bootstrap static input "#category_id" select "1"
+    #category id = 1 => Enrollment: Tickets about enrollment
+    And I press "Send message"
+    Then I should see "created"
 #
 #  Scenario: Create ticket project
 #    Given I am on "/main/ticket/projects.php?action=add"

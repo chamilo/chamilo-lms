@@ -5,6 +5,9 @@ use Doctrine\ORM\EntityManager;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldOptions;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
+use Chamilo\TicketBundle\Entity\Project as TicketProject;
+use Chamilo\TicketBundle\Entity\Category as TicketCategory;
+use Chamilo\TicketBundle\Entity\Priority as TicketPriority;
 
 /**
  * Chamilo LMS
@@ -2734,7 +2737,100 @@ function finishInstallation(
 ) {
     $sysPath = !empty($sysPath) ? $sysPath : api_get_path(SYS_PATH);
 
-    // Inserting data
+    $connection = $manager->getConnection();
+
+    // Add version table
+    $connection->executeQuery('CREATE TABLE IF NOT EXISTS version (id int unsigned NOT NULL AUTO_INCREMENT, version varchar(20), PRIMARY KEY(id), UNIQUE(version))');
+
+    // Add tickets defaults
+    $ticketProject = new TicketProject();
+    $ticketProject
+        ->setId(1)
+        ->setName('Ticket System')
+        ->setInsertUserId(1);
+
+    $manager->persist($ticketProject);
+    $manager->flush();
+
+    $categories = array(
+        get_lang('TicketEnrollment') => get_lang('TicketsAboutEnrollment'),
+        get_lang('TicketGeneralInformation') => get_lang('TicketsAboutGeneralInformation'),
+        get_lang('TicketRequestAndPapework') => get_lang('TicketsAboutRequestAndPapework'),
+        get_lang('TicketAcademicIncidence') => get_lang('TicketsAboutAcademicIncidence'),
+        get_lang('TicketVirtualCampus') => get_lang('TicketsAboutVirtualCampus'),
+        get_lang('TicketOnlineEvaluation') => get_lang('TicketsAboutOnlineEvaluation')
+    );
+
+    $i = 1;
+
+    /**
+     * @var string $category
+     * @var string $description
+     */
+    foreach ($categories as $category => $description) {
+        // Online evaluation requires a course
+        $ticketCategory = new TicketCategory();
+        $ticketCategory
+            ->setId($i)
+            ->setName($category)
+            ->setDescription($description)
+            ->setProject($ticketProject)
+            ->setInsertUserId(1);
+
+        $isRequired = $i == 6;
+        $ticketCategory->setCourseRequired($isRequired);
+
+        $manager->persist($ticketCategory);
+        $manager->flush();
+
+        $i++;
+    }
+
+    // Default Priorities
+    $defaultPriorities = array(
+        TicketManager::PRIORITY_NORMAL => get_lang('PriorityNormal'),
+        TicketManager::PRIORITY_HIGH => get_lang('PriorityHigh'),
+        TicketManager::PRIORITY_LOW => get_lang('PriorityLow')
+    );
+
+    $table = Database::get_main_table(TABLE_TICKET_PRIORITY);
+    $i = 1;
+    foreach ($defaultPriorities as $code => $priority) {
+        $ticketPriority = new TicketPriority();
+        $ticketPriority
+            ->setId($i)
+            ->setName($priority)
+            ->setCode($code)
+            ->setInsertUserId(1);
+
+        $manager->persist($ticketPriority);
+        $manager->flush();
+        $i++;
+    }
+
+    $table = Database::get_main_table(TABLE_TICKET_STATUS);
+
+    // Default status
+    $defaultStatus = array(
+        TicketManager::STATUS_NEW => get_lang('StatusNew'),
+        TicketManager::STATUS_PENDING => get_lang('StatusPending'),
+        TicketManager::STATUS_UNCONFIRMED => get_lang('StatusUnconfirmed'),
+        TicketManager::STATUS_CLOSE => get_lang('StatusClose'),
+        TicketManager::STATUS_FORWARDED => get_lang('StatusForwarded')
+    );
+
+    $i = 1;
+    foreach ($defaultStatus as $code => $status) {
+        $attributes = array(
+            'id' => $i,
+            'code' => $code,
+            'name' => $status
+        );
+        Database::insert($table, $attributes);
+        $i++;
+    }
+
+    // Inserting data.sql
     $data = file_get_contents($sysPath.'main/install/data.sql');
     $result = $manager->getConnection()->prepare($data);
     $result->execute();

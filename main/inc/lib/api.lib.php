@@ -2277,17 +2277,6 @@ function api_get_session_visibility(
             $isCoach = api_is_coach($session_id, $courseId);
 
             if ($isCoach) {
-                // Test end date.
-                if (!empty($row['coach_access_end_date'])) {
-                    $endDateCoach = api_strtotime($row['coach_access_end_date'], 'UTC');
-
-                    if ($endDateCoach >= $now) {
-                        $visibility = SESSION_AVAILABLE;
-                    } else {
-                        $visibility = SESSION_INVISIBLE;
-                    }
-                }
-
                 // Test start date.
                 if (!empty($row['coach_access_start_date'])) {
                     $start = api_strtotime($row['coach_access_start_date'], 'UTC');
@@ -2295,6 +2284,19 @@ function api_get_session_visibility(
                         $visibility = SESSION_AVAILABLE;
                     } else {
                         $visibility = SESSION_INVISIBLE;
+                    }
+                }
+
+                // Test end date.
+                if (!empty($row['coach_access_end_date'])) {
+                    if ($visibility = SESSION_AVAILABLE) {
+                        $endDateCoach = api_strtotime($row['coach_access_end_date'], 'UTC');
+
+                        if ($endDateCoach >= $now) {
+                            $visibility = SESSION_AVAILABLE;
+                        } else {
+                            $visibility = $row['visibility'];
+                        }
                     }
                 }
             }

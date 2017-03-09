@@ -23,13 +23,13 @@
             {{ "YouAcceptCookies" | get_lang }}
             
             <span class="link" onclick="$(this).next().toggle('slow'); $(this).toggle('slow')">
-                ({{"More" | get_lang }})
+                {{"ReadMore" | get_lang }}
             </span>
             <div class="more" style="display:none;">
                 {{ "HelpCookieUsageValidation" | get_lang}}
             </div>
             <span class="link" onclick="$(this).parent().parent().submit()">
-                ({{"Accept" | get_lang }})
+                {{"Accept" | get_lang }}
             </span>
         </div>
     </form>

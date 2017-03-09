@@ -284,5 +284,5 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 // $_configuration['update_users_email_to_dummy_except_admins'] = false;
 // Certification pdf export orientation
 // $_configuration['certificate_pdf_orientation'] = 'landscape'; // It can be 'portrait' or 'landscape'
-
-
+// Hide main navigation menu (left column in userportal)
+// $_configuration['hide_main_navigation_menu'] = false;

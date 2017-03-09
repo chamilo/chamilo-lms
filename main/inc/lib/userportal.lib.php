@@ -1013,6 +1013,11 @@ class IndexManager
             unset($this->tpl->menu_navigation['myprofile']);
         }
 
+        $hideMenu = api_get_configuration_value('hide_main_navigation_menu');
+        if ($hideMenu === true) {
+            return '';
+        }
+
         // Main navigation section.
         // Tabs that are deactivated are added here.
         if (!empty($this->tpl->menu_navigation)) {

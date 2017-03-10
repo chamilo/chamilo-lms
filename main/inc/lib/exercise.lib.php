@@ -560,13 +560,11 @@ class ExerciseLib
                         // display the question, with field empty, for student to fill it,
                         // or filled to display the answer in the Question preview of the exercise/admin.php page
                         $displayForStudent = true;
-                        $listAnswerInformations = FillBlanks::getAnswerInfo($answer);
-                        $separatorStartRegexp = FillBlanks::escapeForRegexp($listAnswerInformations['blankseparatorstart']);
-                        $separatorEndRegexp = FillBlanks::escapeForRegexp($listAnswerInformations['blankseparatorend']);
+                        $listAnswerInfo = FillBlanks::getAnswerInfo($answer);
 
                         list($answer) = explode('::', $answer);
                         // Correct answers
-                        $correctAnswerList = $listAnswerInformations['tabwords'];
+                        $correctAnswerList = $listAnswerInfo['tabwords'];
 
                         // Student's answer
                         $studentAnswerList = array();
@@ -583,70 +581,51 @@ class ExerciseLib
                         }
 
                         if (!empty($correctAnswerList) && !empty($studentAnswerList)) {
-                            $answer = "";
-                            for ($i = 0; $i < count($listAnswerInformations["commonwords"]) - 1; $i++) {
+                            $answer = '';
+                            for ($i = 0; $i < count($listAnswerInfo['commonwords']) - 1; $i++) {
                                 // display the common word
-                                $answer .= $listAnswerInformations["commonwords"][$i];
+                                $answer .= $listAnswerInfo['commonwords'][$i];
                                 // display the blank word
-                                $correctItem = $listAnswerInformations["tabwords"][$i];
-                                $correctItemRegexp = $correctItem;
-                                // replace / with \/ to allow the preg_replace bellow and all the regexp char
-                                $correctItemRegexp = FillBlanks::getRegexpProtected($correctItemRegexp);
+                                $correctItem = $listAnswerInfo['tabwords'][$i];
                                 if (isset($studentAnswerList[$i])) {
                                     // If student already started this test and answered this question,
                                     // fill the blank with his previous answers
                                     // may be "" if student viewed the question, but did not fill the blanks
                                     $correctItem = $studentAnswerList[$i];
                                 }
-                                $attributes["style"] = "width:" . $listAnswerInformations["tabinputsize"][$i] . "px";
+                                $attributes['style'] = "width:" . $listAnswerInfo['tabinputsize'][$i] . "px";
                                 $answer .= FillBlanks::getFillTheBlankHtml(
-                                    $separatorStartRegexp,
-                                    $separatorEndRegexp,
-                                    $correctItemRegexp,
                                     $questionId,
                                     $correctItem,
                                     $attributes,
                                     $answer,
-                                    $listAnswerInformations,
+                                    $listAnswerInfo,
                                     $displayForStudent,
                                     $i
                                 );
                             }
                             // display the last common word
-                            $answer .= $listAnswerInformations["commonwords"][$i];
+                            $answer .= $listAnswerInfo['commonwords'][$i];
                         } else {
                             // display empty [input] with the right width for student to fill it
-                            $separatorStartRegexp = FillBlanks::escapeForRegexp(
-                                $listAnswerInformations['blankseparatorstart']
-                            );
-                            $separatorEndRegexp = FillBlanks::escapeForRegexp(
-                                $listAnswerInformations['blankseparatorend']
-                            );
                             $answer = '';
-                            for ($i = 0; $i < count($listAnswerInformations["commonwords"]) - 1; $i++) {
+                            for ($i = 0; $i < count($listAnswerInfo['commonwords']) - 1; $i++) {
                                 // display the common words
-                                $answer .= $listAnswerInformations["commonwords"][$i];
+                                $answer .= $listAnswerInfo['commonwords'][$i];
                                 // display the blank word
-                                $attributes["style"] = "width:" . $listAnswerInformations["tabinputsize"][$i] . "px";
-                                $correctItem = $listAnswerInformations["tabwords"][$i];
-                                $correctItemRegexp = $correctItem;
-                                // replace / with \/ to allow the preg_replace bellow and all the regexp char
-                                $correctItemRegexp = FillBlanks::getRegexpProtected($correctItemRegexp);
+                                $attributes["style"] = "width:" . $listAnswerInfo['tabinputsize'][$i] . "px";
                                 $answer .= FillBlanks::getFillTheBlankHtml(
-                                    $separatorStartRegexp,
-                                    $separatorEndRegexp,
-                                    $correctItemRegexp,
                                     $questionId,
                                     '',
                                     $attributes,
                                     $answer,
-                                    $listAnswerInformations,
+                                    $listAnswerInfo,
                                     $displayForStudent,
                                     $i
                                 );
                             }
                             // display the last common word
-                            $answer .= $listAnswerInformations["commonwords"][$i];
+                            $answer .= $listAnswerInfo['commonwords'][$i];
                         }
                         $s .= $answer;
                         break;

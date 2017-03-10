@@ -334,7 +334,6 @@ class FeatureContext extends MinkContext
     public function iFillInSelectBootstrapInputWithAndSelect($field, $value, $entry)
     {
         $page = $this->getSession()->getPage();
-
         $inputField = $page->find('css', $field);
         if (!$inputField) {
             throw new \Exception('No field found');
@@ -397,6 +396,18 @@ class FeatureContext extends MinkContext
         }
         //$value = $radioButton->getAttribute('value');
         $this->getSession()->getDriver()->click($radioButton->getXPath());
+    }
+
+    /**
+     * @When /^I check radio button with label "([^"]*)"$/
+     */
+    public function iCheckTheRadioButtonWithLabel($label)
+    {
+        $this->getSession()->executeScript("
+            $(function() {
+                $(':contains(\$label\")').parent().find('input').prop('checked', true);
+            });
+        ");
     }
 
      /**

@@ -42,8 +42,8 @@ class MultipleAnswerCombination extends Question
         $html .= '<tr>';
         $html .= '<th width="10">' . get_lang('Number') . '</th>';
         $html .= '<th width="10">' . get_lang('True') . '</th>';
-        $html .= '<th width="50%">' . get_lang('Comment') . '</th>';
         $html .= '<th width="50%">' . get_lang('Answer') . '</th>';
+        $html .= '<th width="50%">' . get_lang('Comment') . '</th>';
         $html .= '</tr>';
         $html .= '</thead>';
         $html .= '<tbody>';

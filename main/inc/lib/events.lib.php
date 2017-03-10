@@ -1918,9 +1918,10 @@ class Event
         // format returned by SQL for a subtraction of two datetime values
         // @todo make sure this is portable between DBMSes
         if (preg_match('/:/', $virtualTime)) {
-            $virtualTime = preg_replace('/:/', '', $virtualTime);
+            list($h, $m, $s) = preg_split('/:/', $virtualTime);
+            $virtualTime = $h * 3600 + $m * 60 + $s;
         } else {
-            $virtualTime *= 10000;
+            $virtualTime *= 3600;
         }
 
         // Get the current latest course connection register. We need that
@@ -1932,7 +1933,7 @@ class Event
                             c_id = $courseId  AND
                             session_id  = $sessionId AND
                             counter = 0 AND
-                            logout_course_date - login_course_date = '$virtualTime'
+                            (UNIX_TIMESTAMP(logout_course_date) - UNIX_TIMESTAMP(login_course_date)) = '$virtualTime'
                         ORDER BY login_course_date DESC LIMIT 0,1";
         $result = Database::query($sql);
 

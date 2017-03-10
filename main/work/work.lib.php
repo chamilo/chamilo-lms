@@ -4298,41 +4298,57 @@ function deleteWorkItem($item_id, $courseInfo)
                 WHERE c_id = $course_id AND id = $item_id";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
+        $count = Database::num_rows($result);
 
-        if (Database::num_rows($result) > 0) {
+        if ($count > 0) {
 
             // If the "considered_working_time" option is enabled, check
             // whether some time should be removed from track_e_course_access
             $consideredWorkingTime = api_get_configuration_value('considered_working_time');
             if ($consideredWorkingTime) {
-                // Get the "considered work time" defined for this work
-                $fieldValue = new ExtraFieldValue('work');
-                $resultExtra = $fieldValue->getAllValuesForAnItem(
+                $userWorks = get_work_user_list(
+                    0,
+                    100,
+                    null,
+                    null,
                     $row['parent_id'],
-                    true
+                    null,
+                    $row['user_id'],
+                    false,
+                    $course_id,
+                    $row['session_id']
                 );
+                // We're only interested in deleting the time if this is the latest work sent
+                if (count($userWorks) == 1) {
+                    // Get the "considered work time" defined for this work
+                    $fieldValue = new ExtraFieldValue('work');
+                    $resultExtra = $fieldValue->getAllValuesForAnItem(
+                        $row['parent_id'],
+                        true
+                    );
 
-                $workingTime = null;
-                foreach ($resultExtra as $field) {
-                    $field = $field['value'];
+                    $workingTime = null;
+                    foreach ($resultExtra as $field) {
+                        $field = $field['value'];
 
-                    if ($consideredWorkingTime == $field->getField()->getVariable()) {
-                        $workingTime = $field->getValue();
+                        if ($consideredWorkingTime == $field->getField()->getVariable()) {
+                            $workingTime = $field->getValue();
+                        }
+                    }
+                    // If no time was defined, or a time of "0" was set, do nothing
+                    if (!empty($workingTime)) {
+                        $sessionId = empty($row['session_id']) ? 0 : $row['session_id'];
+                        // Getting false from the following call would mean the
+                        // time record
+                        $removalResult = Event::eventRemoveVirtualCourseTime(
+                            $course_id,
+                            $row['user_id'],
+                            $sessionId,
+                            $workingTime
+                        );
                     }
                 }
-                // If no time was defined, or a time of "0" was set, do nothing
-                if (!empty($workingTime)) {
-                    $sessionId = empty($row['session_id']) ? 0 : $row['session_id'];
-                    // Getting false from the following call would mean the
-                    // time record
-                    $removalResult = Event::eventRemoveVirtualCourseTime(
-                        $course_id,
-                        $row['user_id'],
-                        $sessionId,
-                        $workingTime
-                    );
-                }
-            } // end of considered_working_time section
+            } // end of considered_working_time check section
 
             $sql = "UPDATE $work_table SET active = 2
                     WHERE c_id = $course_id AND id = $item_id";

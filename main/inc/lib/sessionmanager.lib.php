@@ -7436,7 +7436,15 @@ class SessionManager
         $session_field = new ExtraFieldModel('session');
         $rules = $session_field->getRules($columns, $column_model);
 
-        $column_model[] = array('name'=>'actions', 'index'=>'actions', 'width'=>'80',  'align'=>'left','formatter'=>'action_formatter','sortable'=>'false', 'search' => 'false');
+        $column_model[] = array(
+            'name' => 'actions',
+            'index' => 'actions',
+            'width' => '80',
+            'align' => 'left',
+            'formatter' => 'action_formatter',
+            'sortable' => 'false',
+            'search' => 'false',
+        );
         $columns[] = get_lang('Actions');
 
         foreach ($column_model as $col_model) {

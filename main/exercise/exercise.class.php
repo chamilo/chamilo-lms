@@ -132,7 +132,6 @@ class Exercise
 
         $id  = intval($id);
         if (empty($this->course_id)) {
-
             return false;
         }
         $sql = "SELECT * FROM $TBL_EXERCISES 
@@ -408,14 +407,6 @@ class Exercise
      */
     public function isRandomByCat()
     {
-        /*$res = 0;
-        if ($this->randomByCat == 1) {
-            $res = 1;
-        } else if ($this->randomByCat == 2) {
-            $res = 2;
-        }
-        */
-
         $res = EXERCISE_CATEGORY_RANDOM_DISABLED;
         if ($this->randomByCat == EXERCISE_CATEGORY_RANDOM_SHUFFLED) {
             $res = EXERCISE_CATEGORY_RANDOM_SHUFFLED;
@@ -435,10 +426,12 @@ class Exercise
      */
     public function updateRandomByCat($random)
     {
-        if (in_array($random, array(
+        if (in_array(
+            $random,
+            array(
                 EXERCISE_CATEGORY_RANDOM_SHUFFLED,
                 EXERCISE_CATEGORY_RANDOM_ORDERED,
-                EXERCISE_CATEGORY_RANDOM_DISABLED
+                EXERCISE_CATEGORY_RANDOM_DISABLED,
             )
         )) {
             $this->randomByCat = $random;
@@ -466,7 +459,7 @@ class Exercise
      */
     public function isRandom()
     {
-        if($this->random > 0 || $this->random == -1) {
+        if ($this->random > 0 || $this->random == -1) {
             return true;
         } else {
             return false;
@@ -505,7 +498,7 @@ class Exercise
     /**
      * If false the question list will be managed as always if true the question will be filtered
      * depending of the exercise settings (table c_quiz_rel_category)
-     * @param bool active or inactive grouping
+     * @param bool $status active or inactive grouping
      **/
     public function setCategoriesGrouping($status)
     {
@@ -575,7 +568,10 @@ class Exercise
     public function getQuestionListPagination($start, $limit, $sidx, $sord, $where_condition = array(), $extraFields = array())
     {
         if (!empty($this->id)) {
-            $category_list = TestCategory::getListOfCategoriesNameForTest($this->id, false);
+            $category_list = TestCategory::getListOfCategoriesNameForTest(
+                $this->id,
+                false
+            );
             $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
             $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
 
@@ -589,7 +585,6 @@ class Exercise
 
             if (!empty($sidx) && !empty($sord)) {
                 if ($sidx == 'question') {
-
                     if (in_array(strtolower($sord), array('desc', 'asc'))) {
                         $orderCondition = " ORDER BY q.$sidx $sord";
                     }
@@ -597,9 +592,7 @@ class Exercise
             }
 
             $sql .= $orderCondition;
-
             $limitCondition = null;
-
             if (isset($start) && isset($limit)) {
                 $start = intval($start);
                 $limit = intval($limit);
@@ -635,7 +628,7 @@ class Exercise
 
                     $questionType = Display::tag(
                         'div',
-                            Display::return_icon($typeImg, $typeExpl, array(), ICON_SIZE_MEDIUM).$question_media
+                        Display::return_icon($typeImg, $typeExpl, array(), ICON_SIZE_MEDIUM).$question_media
                     );
 
                     $question = array(
@@ -704,7 +697,7 @@ class Exercise
                 ON (e.question_id= q.id AND e.c_id = q.c_id)
                 WHERE 
                     e.c_id = {$this->course_id} AND 
-                    e.exercice_id	= '".Database::escape_string($this->id)."'
+                    e.exercice_id = '".Database::escape_string($this->id)."'
                 ORDER BY q.question";
         $result = Database::query($sql);
         $list = array();
@@ -721,7 +714,6 @@ class Exercise
     private function getQuestionOrderedList()
     {
         $questionList = array();
-
         $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
 
@@ -736,7 +728,6 @@ class Exercise
                   e.exercice_id	= ".Database::escape_string($this->id);
 
         $result = Database::query($sql);
-
         $count_question_orders = Database::num_rows($result);
 
         // Getting question list from the order (question list drag n drop interface ).
@@ -817,7 +808,6 @@ class Exercise
 
         if (!empty($questions_by_category)) {
             $temp_question_list = array();
-
             foreach ($questions_by_category as $category_id => & $categoryQuestionList) {
                 if (isset($categoryCountArray) && !empty($categoryCountArray)) {
                     if (isset($categoryCountArray[$category_id])) {
@@ -875,7 +865,6 @@ class Exercise
         $cat = new TestCategory();
 
         // Setting category order.
-
         switch ($questionSelectionType) {
             case EX_Q_SELECTION_ORDERED: // 1
             case EX_Q_SELECTION_RANDOM:  // 2
@@ -895,7 +884,6 @@ class Exercise
                     $question_list,
                     $categoriesAddedInExercise
                 );
-
 
                 $question_list = $this->pickQuestionsPerCategory(
                     $categoriesAddedInExercise,
@@ -1022,7 +1010,6 @@ class Exercise
         $result['category_with_questions_list'] = isset($questions_by_category) ? $questions_by_category : array();
 
         // Adding category info in the category list with question list:
-
         if (!empty($questions_by_category)) {
             /*$em = Database::getManager();
             $repo = $em->getRepository('ChamiloCoreBundle:CQuizCategory');*/
@@ -1167,34 +1154,6 @@ class Exercise
      */
     public function selectRandomList($adminView = false)
     {
-        /*$nbQuestions	= $this->selectNbrQuestions();
-        $temp_list		= $this->questionList;
-
-        //Not a random exercise, or if there are not at least 2 questions
-        if($this->random == 0 || $nbQuestions < 2) {
-            return $this->questionList;
-        }
-        if ($nbQuestions != 0) {
-            shuffle($temp_list);
-            $my_random_list = array_combine(range(1,$nbQuestions),$temp_list);
-            $my_question_list = array();
-            // $this->random == -1 if random with all questions
-            if ($this->random > 0) {
-                $i = 0;
-                foreach ($my_random_list as $item) {
-                    if ($i < $this->random) {
-                        $my_question_list[$i] = $item;
-                    } else {
-                        break;
-                    }
-                    $i++;
-                }
-            } else {
-                $my_question_list = $my_random_list;
-            }
-            return $my_question_list;
-        }*/
-
         $TBL_EXERCISE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
 
@@ -1419,11 +1378,13 @@ class Exercise
         $TBL_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
 
         if ($sound['size'] && (strstr($sound['type'],'audio') || strstr($sound['type'],'video'))) {
-            $this->sound=$sound['name'];
+            $this->sound = $sound['name'];
 
             if (@move_uploaded_file($sound['tmp_name'],$audioPath.'/'.$this->sound)) {
                 $sql = "SELECT 1 FROM $TBL_DOCUMENT
-                        WHERE c_id = ".$this->course_id." AND path='".str_replace($documentPath,'',$audioPath).'/'.$this->sound."'";
+                        WHERE 
+                            c_id = ".$this->course_id." AND 
+                            path='".str_replace($documentPath,'',$audioPath).'/'.$this->sound."'";
                 $result = Database::query($sql);
 
                 if (!Database::num_rows($result)) {
@@ -1448,8 +1409,8 @@ class Exercise
                     );
                 }
             }
-        } elseif($delete && is_file($audioPath.'/'.$this->sound)) {
-            $this->sound='';
+        } elseif ($delete && is_file($audioPath.'/'.$this->sound)) {
+            $this->sound = '';
         }
     }
 
@@ -1687,7 +1648,6 @@ class Exercise
             $this->id = Database::insert($TBL_EXERCISES, $params);
 
             if ($this->id) {
-
                 $sql = "UPDATE $TBL_EXERCISES SET id = iid WHERE iid = {$this->id} ";
                 Database::query($sql);
 
@@ -1784,8 +1744,7 @@ class Exercise
     public function removeFromList($questionId)
     {
         // searches the position of the question ID in the list
-        $pos = array_search($questionId,$this->questionList);
-
+        $pos = array_search($questionId, $this->questionList);
         // question not found
         if ($pos === false) {
             return false;
@@ -1817,10 +1776,25 @@ class Exercise
         $sql = "UPDATE $TBL_EXERCISES SET active='-1'
                 WHERE c_id = ".$this->course_id." AND id = ".intval($this->id);
         Database::query($sql);
-        api_item_property_update($this->course, TOOL_QUIZ, $this->id, 'QuizDeleted', api_get_user_id());
-        api_item_property_update($this->course, TOOL_QUIZ, $this->id, 'delete', api_get_user_id());
 
-        if (api_get_setting('search_enabled')=='true' && extension_loaded('xapian') ) {
+        api_item_property_update(
+            $this->course,
+            TOOL_QUIZ,
+            $this->id,
+            'QuizDeleted',
+            api_get_user_id()
+        );
+        api_item_property_update(
+            $this->course,
+            TOOL_QUIZ,
+            $this->id,
+            'delete',
+            api_get_user_id()
+        );
+
+        if (api_get_setting('search_enabled')=='true' &&
+            extension_loaded('xapian')
+        ) {
             $this->search_engine_delete();
         }
     }
@@ -1829,7 +1803,7 @@ class Exercise
      * Creates the form to create / edit an exercise
      * @param FormValidator $form
      */
-    public function createForm($form, $type='full')
+    public function createForm($form, $type = 'full')
     {
         if (empty($type)) {
             $type = 'full';
@@ -1860,7 +1834,7 @@ class Exercise
             'Width' => '100%',
             'Height' => '150',
         );
-        if (is_array($type)){
+        if (is_array($type)) {
             $editor_config = array_merge($editor_config, $type);
         }
 
@@ -1966,7 +1940,6 @@ class Exercise
             } else {
                 // if is Directfeedback but has not questions we can allow to modify the question type
                 if ($this->selectNbrQuestions() == 0) {
-
                     // feedback type
                     $radios_feedback = array();
                     $radios_feedback[] = $form->createElement('radio', 'exerciseFeedbackType', null, get_lang('ExerciseAtTheEndOfTheTest'),'0',array('id' =>'exerciseType_0', 'onclick' => 'check_feedback()'));
@@ -1989,7 +1962,6 @@ class Exercise
                     $radios[] = $form->createElement('radio', 'exerciseType', null, get_lang('SimpleExercise'),    '1');
                     $radios[] = $form->createElement('radio', 'exerciseType', null, get_lang('SequentialExercise'),'2');
                     $form->addGroup($radios, null, get_lang('ExerciseType'));
-
                 } else {
                     //Show options freeze
                     $radios_results_disabled[] = $form->createElement('radio', 'results_disabled', null, get_lang('ShowScoreAndRightAnswer'), '0', array('id'=>'result_disabled_0'));
@@ -2190,9 +2162,7 @@ class Exercise
             }
 
             $form->addElement('date_time_picker', 'start_time');
-
             $form->addElement('html','</div>');
-
             $form->addElement('checkbox', 'activate_end_date_check', null , get_lang('EnableEndTime'), array('onclick' => 'activate_end_date()'));
 
             if (!empty($this->end_time)) {
@@ -2271,7 +2241,6 @@ class Exercise
             );
 
             $defaults = array();
-
             if (api_get_setting('search_enabled') === 'true') {
                 require_once api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php';
 
@@ -3281,7 +3250,6 @@ class Exercise
             $answerWeighting = (float)$objAnswerTmp->selectWeighting($answerId);
             $answerAutoId = $objAnswerTmp->selectAutoId($answerId);
             $answerIid = isset($objAnswerTmp->iid[$answerId]) ? $objAnswerTmp->iid[$answerId] : '';
-
             $answer_correct_array[$answerId] = (bool)$answerCorrect;
 
             if ($debug) {
@@ -5411,8 +5379,8 @@ class Exercise
                     .'</table>';
         $open_question_list = null;
         foreach ($question_list_answers as $item) {
-            $question    = $item['question'];
-            $answer      = $item['answer'];
+            $question = $item['question'];
+            $answer = $item['answer'];
             $answer_type = $item['answer_type'];
 
             if (!empty($question) && !empty($answer) && $answer_type == FREE_ANSWER) {
@@ -6972,7 +6940,6 @@ class Exercise
         $categoryMinusOne = true
     ) {
         // Text direction for the current language
-        //$is_ltr_text_direction = api_get_text_direction() != 'rtl';
         // Change false to true in the following line to enable answer hinting
         $debug_mark_answer = $show_answers; //api_is_allowed_to_edit() && false;
         // Reads question information
@@ -7045,7 +7012,6 @@ class Exercise
             // suggestions here, for the sake of comprehensions, while the ones
             // on the right side are called answers
             $num_suggestions = 0;
-
             if ($answerType == MATCHING || $answerType == DRAGGABLE) {
                 if ($answerType == DRAGGABLE) {
                     $s .= '<div class="ui-widget ui-helper-clearfix">
@@ -7059,7 +7025,6 @@ class Exercise
                 $letter = 'A'; //mark letters for each answer
                 $answer_matching = array();
                 $capital_letter = array();
-                //for ($answerId=1; $answerId <= $nbrAnswers; $answerId++) {
                 foreach ($objAnswerTmp->answer as $answerId => $answer_item) {
                     $answerCorrect = $objAnswerTmp->isCorrect($answerId);
                     $answer = $objAnswerTmp->selectAnswer($answerId);
@@ -7067,7 +7032,6 @@ class Exercise
                         // options (A, B, C, ...) that will be put into the list-box
                         // have the "correct" field set to 0 because they are answer
                         $capital_letter[$j] = $letter;
-                        //$answer_matching[$j]=$objAnswerTmp->selectAnswerByAutoId($numAnswer);
                         $answer_matching[$j] = array('id' => $answerId, 'answer' => $answer);
                         $j++;
                         $letter++;
@@ -7079,7 +7043,6 @@ class Exercise
                 $select_items[0]['id'] = 0;
                 $select_items[0]['letter'] = '--';
                 $select_items[0]['answer'] = '';
-
                 foreach ($answer_matching as $id => $value) {
                     $select_items[$i]['id'] = $value['id'];
                     $select_items[$i]['letter'] = $capital_letter[$id];
@@ -7428,12 +7391,9 @@ class Exercise
                                     <b>'.$lines_count.'</b>.&nbsp'.$parsed_answer.'
                                 </div>
                                 </td>';
-
                         // middle part (matches selects)
-
                         $s .= '<td width="10%" align="center">&nbsp;&nbsp;';
                         $s .= '<div style="display:block">';
-
                         $s .= '<select id="window_'.$windowId.'_select" name="choice['.$questionId.']['.$numAnswer.']">';
                         $selectedValue = 0;
                         // fills the list-box
@@ -7452,7 +7412,6 @@ class Exercise
                                 $selected = 'selected="selected"';
                                 $selectedValue = $val['id'];
                             }
-                            //$s .= '<option value="'.$val['id'].'" '.$selected.'>'.$val['letter'].'</option>';
                             $s .= '<option value="'.$item.'" '.$selected.'>'.$val['letter'].'</option>';
                             $item++;
                         }
@@ -7474,7 +7433,6 @@ class Exercise
                         $s .= '</select></div></td>';
 
                         $s.='<td width="45%" valign="top" >';
-
                         if (isset($select_items[$lines_count])) {
                             $s.= '<div id="window_'.$windowId.'_answer" class="window window_right_question">
                                     <b>'.$select_items[$lines_count]['letter'].'.</b> '.$select_items[$lines_count]['answer'].'

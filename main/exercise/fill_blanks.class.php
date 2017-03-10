@@ -481,6 +481,7 @@ class FillBlanks extends Question
     }
 
     /**
+     * @param int $currentQuestion
      * @param int $questionId
      * @param string $correctItem
      * @param array $attributes
@@ -491,6 +492,7 @@ class FillBlanks extends Question
      * @return string
      */
     public static function getFillTheBlankHtml(
+        $currentQuestion,
         $questionId,
         $correctItem,
         $attributes,
@@ -510,7 +512,7 @@ class FillBlanks extends Question
                 // display a menu from answer separated with |
                 // if display for student, shuffle the correct answer menu
                 $listMenu = self::getFillTheBlankMenuAnswers($inTeacherSolution, $displayForStudent);
-                $result .= '<select name="choice['.$questionId.'][]">';
+                $result .= '<select id="choice_id_'.$currentQuestion.'_'.$inBlankNumber.'" name="choice['.$questionId.'][]">';
                 for ($k=0; $k < count($listMenu); $k++) {
                     $selected = '';
                     if ($correctItem == $listMenu[$k]) {
@@ -534,6 +536,7 @@ class FillBlanks extends Question
                 //no break
             case self::FILL_THE_BLANK_STANDARD:
             default:
+                $attributes['id'] = 'choice_id_'.$currentQuestion.'_'.$inBlankNumber;
                 $result = Display::input(
                     'text',
                     "choice[$questionId][]",

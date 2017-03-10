@@ -595,6 +595,7 @@ class ExerciseLib
                                 }
                                 $attributes['style'] = "width:" . $listAnswerInfo['tabinputsize'][$i] . "px";
                                 $answer .= FillBlanks::getFillTheBlankHtml(
+                                    $current_item,
                                     $questionId,
                                     $correctItem,
                                     $attributes,
@@ -615,6 +616,7 @@ class ExerciseLib
                                 // display the blank word
                                 $attributes["style"] = "width:" . $listAnswerInfo['tabinputsize'][$i] . "px";
                                 $answer .= FillBlanks::getFillTheBlankHtml(
+                                    $current_item,
                                     $questionId,
                                     '',
                                     $attributes,

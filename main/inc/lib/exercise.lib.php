@@ -60,7 +60,6 @@ class ExerciseLib
 
         if ($answerType != HOT_SPOT && $answerType != HOT_SPOT_DELINEATION) {
             // Question is not a hotspot
-
             if (!$only_questions) {
                 $questionDescription = $objQuestionTmp->selectDescription();
                 if ($show_title) {
@@ -85,11 +84,9 @@ class ExerciseLib
             }
 
             echo '<div class="question_options">';
-
             // construction of the Answer object (also gets all answers details)
             $objAnswerTmp = new Answer($questionId);
             $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
-
             $quiz_question_options = Question::readQuestionOption(
                 $questionId,
                 $course_id
@@ -156,13 +153,20 @@ class ExerciseLib
                 $num_suggestions = ($nbrAnswers - $x) + 1;
             } elseif ($answerType == FREE_ANSWER) {
                 $fck_content = isset($user_choice[0]) && !empty($user_choice[0]['answer']) ? $user_choice[0]['answer'] : null;
-
                 $form = new FormValidator('free_choice_' . $questionId);
                 $config = array(
                     'ToolbarSet' => 'TestFreeAnswer'
                 );
-                $form->addHtmlEditor("choice[" . $questionId . "]", null, false, false, $config);
-                $form->setDefaults(array("choice[" . $questionId . "]" => $fck_content));
+                $form->addHtmlEditor(
+                    "choice[".$questionId."]",
+                    null,
+                    false,
+                    false,
+                    $config
+                );
+                $form->setDefaults(
+                    array("choice[".$questionId."]" => $fck_content)
+                );
                 $s .= $form->returnForm();
             } elseif ($answerType == ORAL_EXPRESSION) {
                 // Add nanog
@@ -193,15 +197,19 @@ class ExerciseLib
                 $config = array(
                     'ToolbarSet' => 'TestFreeAnswer'
                 );
-                $form->addHtmlEditor("choice[" . $questionId . "]", null, false, false, $config);
-                //$form->setDefaults(array("choice[" . $questionId . "]" => $fck_content));
+                $form->addHtmlEditor(
+                    "choice[".$questionId."]",
+                    null,
+                    false,
+                    false,
+                    $config
+                );
                 $s .= $form->returnForm();
             }
 
             // Now navigate through the possible answers, using the max number of
             // answers for the question as a limiter
             $lines_count = 1; // a counter for matching-type answers
-
             if ($answerType == MULTIPLE_ANSWER_TRUE_FALSE ||
                 $answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE
             ) {
@@ -231,17 +239,17 @@ class ExerciseLib
 
             if ($show_comment) {
                 if (
-                in_array(
-                    $answerType,
-                    array(
-                        MULTIPLE_ANSWER,
-                        MULTIPLE_ANSWER_COMBINATION,
-                        UNIQUE_ANSWER,
-                        UNIQUE_ANSWER_IMAGE,
-                        UNIQUE_ANSWER_NO_OPTION,
-                        GLOBAL_MULTIPLE_ANSWER
+                    in_array(
+                        $answerType,
+                        array(
+                            MULTIPLE_ANSWER,
+                            MULTIPLE_ANSWER_COMBINATION,
+                            UNIQUE_ANSWER,
+                            UNIQUE_ANSWER_IMAGE,
+                            UNIQUE_ANSWER_NO_OPTION,
+                            GLOBAL_MULTIPLE_ANSWER
+                        )
                     )
-                )
                 ) {
                     $header = Display::tag('th', get_lang('Options'));
                     if ($exercise_feedback == EXERCISE_FEEDBACK_TYPE_END) {
@@ -269,7 +277,6 @@ class ExerciseLib
                 $answerCorrect = $objAnswerTmp->isCorrect($answerId);
                 $numAnswer = $objAnswerTmp->selectAutoId($answerId);
                 $comment = $objAnswerTmp->selectComment($answerId);
-
                 $attributes = array();
 
                 switch ($answerType) {
@@ -317,7 +324,6 @@ class ExerciseLib
                         }
 
                         $answer = Security::remove_XSS($answer, STUDENT);
-
                         $s .= Display::input(
                             'hidden',
                             'choice2[' . $questionId . ']',
@@ -406,7 +412,6 @@ class ExerciseLib
                                 $s .= $answer_input;
                             }
                         } elseif ($answerType == MULTIPLE_ANSWER_TRUE_FALSE) {
-
                             $my_choice = array();
                             if (!empty($user_choice_array)) {
                                 foreach ($user_choice_array as $item) {
@@ -420,7 +425,6 @@ class ExerciseLib
 
                             if (!empty($quiz_question_options)) {
                                 foreach ($quiz_question_options as $id => $item) {
-
                                     if (isset($my_choice[$numAnswer]) && $id == $my_choice[$numAnswer]) {
                                         $attributes = array(
                                             'checked' => 1,
@@ -518,7 +522,6 @@ class ExerciseLib
                         $answer = Security::remove_XSS($answer, STUDENT);
                         $s .= '<tr>';
                         $s .= Display::tag('td', $answer);
-
                         foreach ($objQuestionTmp->options as $key => $item) {
                             if (isset($my_choice[$numAnswer]) && $key == $my_choice[$numAnswer]) {
                                 $attributes = array(
@@ -562,11 +565,10 @@ class ExerciseLib
                         $separatorEndRegexp = FillBlanks::escapeForRegexp($listAnswerInformations['blankseparatorend']);
 
                         list($answer) = explode('::', $answer);
-
-                        //Correct answers
+                        // Correct answers
                         $correctAnswerList = $listAnswerInformations['tabwords'];
 
-                        //Student's answer
+                        // Student's answer
                         $studentAnswerList = array();
                         if (isset($user_choice[0]['answer'])) {
                             $arrayStudentAnswer = FillBlanks::getAnswerInfo($user_choice[0]['answer'], true);
@@ -605,7 +607,7 @@ class ExerciseLib
                             // display empty [input] with the right width for student to fill it
                             $separatorStartRegexp = FillBlanks::escapeForRegexp($listAnswerInformations['blankseparatorstart']);
                             $separatorEndRegexp = FillBlanks::escapeForRegexp($listAnswerInformations['blankseparatorend']);
-                            $answer = "";
+                            $answer = '';
                             for ($i = 0; $i < count($listAnswerInformations["commonwords"]) - 1; $i++) {
                                 // display the common words
                                 $answer .= $listAnswerInformations["commonwords"][$i];
@@ -770,16 +772,14 @@ class ExerciseLib
                     case MATCHING:
                         // matching type, showing suggestions and answers
                         // TODO: replace $answerId by $numAnswer
-
                         if ($answerCorrect != 0) {
                             // only show elements to be answered (not the contents of
-                            // the select boxes, who are corrrect = 0)
+                            // the select boxes, who are correct = 0)
                             $s .= '<tr><td width="45%" valign="top">';
                             $parsed_answer = $answer;
-                            //left part questions
+                            // Left part questions
                             $s .= '<p class="indent">' . $lines_count . '.&nbsp;' . $parsed_answer . '</p></td>';
-                            //middle part (matches selects)
-
+                            // Middle part (matches selects)
                             $s .= '<td width="10%" valign="top" align="center" >
                                 <div class="select-matching">
                                 <select name="choice[' . $questionId . '][' . $numAnswer . ']">';

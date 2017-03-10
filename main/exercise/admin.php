@@ -392,6 +392,11 @@ if ($inATest) {
     }
 
     echo '</div>';
+
+    if ($objExercise->added_in_lp()) {
+        echo Display::return_message(get_lang('AddedToLPCannotBeAccessed'), 'warning');
+    }
+
     echo '<div class="alert alert-info">'.
         sprintf(get_lang('XQuestionsWithTotalScoreY'), $objExercise->selectNbrQuestions(), $maxScoreAllQuestions);
     if ($objExercise->random > 0) {

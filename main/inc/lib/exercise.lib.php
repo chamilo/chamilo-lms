@@ -599,14 +599,29 @@ class ExerciseLib
                                     $correctItem = $studentAnswerList[$i];
                                 }
                                 $attributes["style"] = "width:" . $listAnswerInformations["tabinputsize"][$i] . "px";
-                                $answer .= FillBlanks::getFillTheBlankHtml($separatorStartRegexp, $separatorEndRegexp, $correctItemRegexp, $questionId, $correctItem, $attributes, $answer, $listAnswerInformations, $displayForStudent, $i);
+                                $answer .= FillBlanks::getFillTheBlankHtml(
+                                    $separatorStartRegexp,
+                                    $separatorEndRegexp,
+                                    $correctItemRegexp,
+                                    $questionId,
+                                    $correctItem,
+                                    $attributes,
+                                    $answer,
+                                    $listAnswerInformations,
+                                    $displayForStudent,
+                                    $i
+                                );
                             }
                             // display the last common word
                             $answer .= $listAnswerInformations["commonwords"][$i];
                         } else {
                             // display empty [input] with the right width for student to fill it
-                            $separatorStartRegexp = FillBlanks::escapeForRegexp($listAnswerInformations['blankseparatorstart']);
-                            $separatorEndRegexp = FillBlanks::escapeForRegexp($listAnswerInformations['blankseparatorend']);
+                            $separatorStartRegexp = FillBlanks::escapeForRegexp(
+                                $listAnswerInformations['blankseparatorstart']
+                            );
+                            $separatorEndRegexp = FillBlanks::escapeForRegexp(
+                                $listAnswerInformations['blankseparatorend']
+                            );
                             $answer = '';
                             for ($i = 0; $i < count($listAnswerInformations["commonwords"]) - 1; $i++) {
                                 // display the common words
@@ -617,7 +632,18 @@ class ExerciseLib
                                 $correctItemRegexp = $correctItem;
                                 // replace / with \/ to allow the preg_replace bellow and all the regexp char
                                 $correctItemRegexp = FillBlanks::getRegexpProtected($correctItemRegexp);
-                                $answer .= FillBlanks::getFillTheBlankHtml($separatorStartRegexp, $separatorEndRegexp, $correctItemRegexp, $questionId, '', $attributes, $answer, $listAnswerInformations, $displayForStudent, $i);
+                                $answer .= FillBlanks::getFillTheBlankHtml(
+                                    $separatorStartRegexp,
+                                    $separatorEndRegexp,
+                                    $correctItemRegexp,
+                                    $questionId,
+                                    '',
+                                    $attributes,
+                                    $answer,
+                                    $listAnswerInformations,
+                                    $displayForStudent,
+                                    $i
+                                );
                             }
                             // display the last common word
                             $answer .= $listAnswerInformations["commonwords"][$i];

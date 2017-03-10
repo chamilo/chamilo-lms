@@ -90,9 +90,6 @@ class CourseCategory
         $result = Database::query($sql);
 
         $categories = Database::store_result($result);
-        foreach ($categories as &$categoryItem) {
-            $categoryItem['nbr_courses'] = 1;
-        }
 
         return $categories;
     }
@@ -411,7 +408,7 @@ class CourseCategory
             $row = 0;
             $headers = array(
                 get_lang('Category'),
-                get_lang('CategoriesNumber'),
+                get_lang('SubCat'),
                 get_lang('Courses'),
                 get_lang('Actions')
             );

@@ -1931,7 +1931,8 @@ function get_work_user_list(
                         qualification,
                         weight,
                         allow_text_assignment,
-                        CONCAT (u.firstname," ",u.lastname) as fullname,
+                        u.firstname,
+                        u.lastname,
                         u.username,
                         parent_id,
                         accepted,
@@ -2039,7 +2040,9 @@ function get_work_user_list(
                 ($is_allowed_to_edit || api_is_drh())
             ) {
                 // Firstname, lastname, username
-                $work['fullname'] = Display::div($work['fullname'], array('class' => 'work-name'));
+                $work['fullname'] = Display::div(
+                    api_get_person_name($work['firstname'], $work['lastname']), ['class' => 'work-name']
+                );
                 $work['title_clean'] = $work['title'];
 
                 if (strlen($work['title']) > 30) {

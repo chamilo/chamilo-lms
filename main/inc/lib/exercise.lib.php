@@ -780,9 +780,10 @@ class ExerciseLib
                             // Left part questions
                             $s .= '<p class="indent">' . $lines_count . '.&nbsp;' . $parsed_answer . '</p></td>';
                             // Middle part (matches selects)
-                            $s .= '<td width="10%" valign="top" align="center" >
+                            // Id of select is # question + # of option
+                            $s .= '<td width="10%" valign="top" align="center">
                                 <div class="select-matching">
-                                <select name="choice[' . $questionId . '][' . $numAnswer . ']">';
+                                <select id="choice_id_'.$current_item.'_'.$lines_count.'" name="choice[' . $questionId . '][' . $numAnswer . ']">';
 
                             // fills the list-box
                             foreach ($select_items as $key => $val) {

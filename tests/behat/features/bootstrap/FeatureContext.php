@@ -400,19 +400,11 @@ class FeatureContext extends MinkContext
     }
 
      /**
-     * @When /^I select "([^"]*)" from select with label "([^"]*)"/
+     * @When /^I press advanced settings$/
      */
-    public function iSelectFromSelectWithLabel($option, $label)
+    public function iSelectFromSelectWithLabel()
     {
-        $label = $this->getSession()->getPage()->findField($label);
-        if (null === $label) {
-            throw new Exception("Cannot find label ".$label);
-        }
-        $select = $label->getParent()->getParent()->find('select');
-        if (null === $select) {
-            throw new Exception("Select not found: ".$select);
-        }
-        $select->selectOption($option);
+        $this->pressButton('Advanced settings');
     }
 
      /**

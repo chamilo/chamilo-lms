@@ -57,7 +57,7 @@ before_install:
   - sudo cat /etc/hosts
 
   - composer update
-  - phpenv config-add tests/travis-php-config.ini
+  - phpenv config-add tests/travis/php-config.ini
 
   # Install Chash, a database, and then install Chamilo
   - git clone https://github.com/chamilo/chash
@@ -87,7 +87,8 @@ before_install:
   - curl $VHOST_URL
 
 script:
-  - cd tests/behat && ../../vendor/behat/behat/bin/behat -v
+  - cd tests/behat
+  - travis_wait ../../vendor/behat/behat/bin/behat -v
   #- sudo cat /var/log/apache2/$VHOST_URL-error.log
   #- sudo cat /var/log/apache2/$VHOST_URL-access.log
 

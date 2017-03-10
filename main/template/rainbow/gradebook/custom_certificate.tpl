@@ -46,7 +46,7 @@
                                 {{ complete_name }}
                             </h3>
                                 <p>{{ 'UserHasParticipateDansDePlatformeXTheContratDateXCertificateDateXTimeX' | get_lang | format(_s.site_name, certificate_generated_date, terms_validation_date, time_in_platform)}}</p>
-                                <p>{{ 'ThisTrainingHasXhours' | get_lang | time_in_platform}}</p>
+                                <p>{{ 'ThisTrainingHasXHours' | get_lang | format(time_in_platform)}}</p>
                                 <p>{{ 'TheContentsAreValidated' | get_lang }}:</p>
                                     {% if sessions %}
                                         <ul style="color: #672290;">
@@ -64,7 +64,7 @@
                                         {% endfor %}
                                         </ul>
                                     {% endif %}
-                                Berlin/Paris, {{ 'The' | get_lang }} <span style="font-weight: bold; color: #672290;">certificate_generated_date</span><br>
+                                Berlin/Paris, {{ 'The' | get_lang }} <span style="font-weight: bold; color: #672290;">{{ certificate_generated_date }}</span><br>
                                 {{ 'ThePlatformTeam' | get_lang }}
                                 <br>
                             </td>

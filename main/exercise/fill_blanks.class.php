@@ -305,7 +305,7 @@ class FillBlanks extends Question
         // answer
         $form->addLabel(
             null,
-            '<br /><br />'.get_lang('TypeTextBelow').', '.get_lang('And').' '.get_lang('UseTagForBlank')
+            get_lang('TypeTextBelow').', '.get_lang('And').' '.get_lang('UseTagForBlank')
         );
         $form->addElement(
             'html_editor',

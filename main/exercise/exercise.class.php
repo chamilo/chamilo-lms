@@ -7039,7 +7039,6 @@ class Exercise
                 }
 
                 $i = 1;
-
                 $select_items[0]['id'] = 0;
                 $select_items[0]['letter'] = '--';
                 $select_items[0]['answer'] = '';
@@ -7056,7 +7055,13 @@ class Exercise
                 if ($modelType == EXERCISE_MODEL_TYPE_COMMITTEE) {
                     $toolBar = 'TestFreeAnswerStrict';
                 }
-                $form->addElement('html_editor', "choice[".$questionId."]", null, array('id' => "choice[".$questionId."]"), array('ToolbarSet' => $toolBar));
+                $form->addElement(
+                    'html_editor',
+                    "choice[".$questionId."]",
+                    null,
+                    array('id' => "choice[".$questionId."]"),
+                    array('ToolbarSet' => $toolBar)
+                );
                 $form->setDefaults(array("choice[".$questionId."]" => $content));
                 $s .= $form->returnForm();
             } elseif ($answerType == ORAL_EXPRESSION) {
@@ -7091,13 +7096,12 @@ class Exercise
                     array('ToolbarSet' => 'TestFreeAnswer')
                 );
                 //$form->setDefaults(array("choice[".$questionId."]" => $content));
-                $s .= $form->return_form();
+                $s .= $form->returnForm();
             }
 
             // Now navigate through the possible answers, using the max number of
             // answers for the question as a limiter
             $lines_count = 1; // a counter for matching-type answers
-
             if ($answerType == MULTIPLE_ANSWER_TRUE_FALSE || $answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {
                 $header = Display::tag('th', get_lang('Options'));
                 foreach ($objQuestionTmp->options as $item) {
@@ -7133,8 +7137,6 @@ class Exercise
                 $answer = $objAnswerTmp->selectAnswer($answerId);
                 $answerCorrect = $objAnswerTmp->isCorrect($answerId);
                 $comment = $objAnswerTmp->selectComment($answerId);
-
-                //$numAnswer       = $objAnswerTmp->selectAutoId($answerId);
                 $numAnswer = $answerId;
 
                 $attributes = array();
@@ -7183,7 +7185,6 @@ class Exercise
                     } else {
                         $s .= $answer_input;
                     }
-
                 } elseif (in_array($answerType, array(MULTIPLE_ANSWER, MULTIPLE_ANSWER_TRUE_FALSE, GLOBAL_MULTIPLE_ANSWER))) {
                     $input_id = 'choice-'.$questionId.'-'.$answerId;
                     $answer = Security::remove_XSS($answer);
@@ -7203,7 +7204,6 @@ class Exercise
 
                     if ($answerType == MULTIPLE_ANSWER || $answerType == GLOBAL_MULTIPLE_ANSWER) {
                         $s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />';
-
                         $answer_input = '<label class="checkbox">';
                         $answer_input .= Display::input('checkbox', 'choice['.$questionId.']['.$numAnswer.']', $numAnswer, $attributes);
                         $answer_input .= $answer;
@@ -7221,7 +7221,6 @@ class Exercise
                             $s .= $answer_input;
                         }
                     } elseif ($answerType == MULTIPLE_ANSWER_TRUE_FALSE) {
-
                         $my_choice = array();
                         if (!empty($user_choice_array)) {
                             foreach ($user_choice_array as $item) {
@@ -7333,17 +7332,16 @@ class Exercise
                     $s.='</tr>';
                 } elseif ($answerType == FILL_IN_BLANKS) {
                     list($answer) = explode('::', $answer);
-
-                    //Correct answer
+                    // Correct answer
                     api_preg_match_all('/\[[^]]+\]/', $answer, $correct_answer_list);
 
-                    //Student's answezr
+                    // Student's answer
                     if (isset($user_choice[0]['answer'])) {
                         api_preg_match_all('/\[[^]]+\]/', $user_choice[0]['answer'], $student_answer_list);
                         $student_answer_list = $student_answer_list[0];
                     }
 
-                    //If debug
+                    // If debug
                     if ($debug_mark_answer) {
                         $student_answer_list = $correct_answer_list[0];
                     }
@@ -7386,12 +7384,12 @@ class Exercise
                         $s .= '<tr><td width="45%">';
                         $parsed_answer = $answer;
                         $windowId = $questionId.'_'.$lines_count;
-                        //left part questions
+                        // Left part questions
                         $s .= ' <div id="window_'.$windowId.'" class="window window_left_question window'.$questionId.'_question">
                                     <b>'.$lines_count.'</b>.&nbsp'.$parsed_answer.'
                                 </div>
                                 </td>';
-                        // middle part (matches selects)
+                        // Middle part (matches selects)
                         $s .= '<td width="10%" align="center">&nbsp;&nbsp;';
                         $s .= '<div style="display:block">';
                         $s .= '<select id="window_'.$windowId.'_select" name="choice['.$questionId.']['.$numAnswer.']">';
@@ -7408,7 +7406,9 @@ class Exercise
                                     $selectedValue = $val['id'];
                                 }
                             }
-                            if (isset($user_choice[$matching_correct_answer]) && $val['id'] == $user_choice[$matching_correct_answer]['answer']) {
+                            if (isset($user_choice[$matching_correct_answer]) &&
+                                $val['id'] == $user_choice[$matching_correct_answer]['answer']
+                            ) {
                                 $selected = 'selected="selected"';
                                 $selectedValue = $val['id'];
                             }
@@ -7431,7 +7431,6 @@ class Exercise
                                 </script>';
                         }
                         $s .= '</select></div></td>';
-
                         $s.='<td width="45%" valign="top" >';
                         if (isset($select_items[$lines_count])) {
                             $s.= '<div id="window_'.$windowId.'_answer" class="window window_right_question">
@@ -7546,7 +7545,6 @@ class Exercise
 
             if ($answerType == DRAGGABLE) {
                 $s .= '</ul><div class="clear"></div>';
-
                 $counterAnswer = 1;
                 foreach ($objAnswerTmp->answer as $answerId => $answer_item) {
                     $answerCorrect = $objAnswerTmp->isCorrect($answerId);
@@ -7566,10 +7564,8 @@ class Exercise
 
             // destruction of the Answer object
             unset($objAnswerTmp);
-
             // destruction of the Question object
             unset($objQuestionTmp);
-
             $html .= $s;
             return $html;
         } elseif ($answerType == HOT_SPOT || $answerType == HOT_SPOT_DELINEATION) {

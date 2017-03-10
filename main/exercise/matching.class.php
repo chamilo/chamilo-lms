@@ -141,7 +141,6 @@ class Matching extends Question
             );
 
             $form->addHtml('<tr>');
-
             $form->addHtml("<td>$i</td>");
             $form->addText("answer[$i]", null);
 
@@ -151,6 +150,7 @@ class Matching extends Question
                 $matches,
                 ['id' => 'matches_'.$i]
             );
+
             $form->addText(
                 "weighting[$i]",
                 null,
@@ -163,7 +163,6 @@ class Matching extends Question
 
         $form->addHtml('</tbody></table>');
         $group = array();
-
         $form->addGroup($group);
 
         // DISPLAY OPTIONS
@@ -286,6 +285,8 @@ class Matching extends Question
      * Check if a answer is correct
      * @param int $position
      * @param int $answer
+     * @param int $questionId
+     *
      * @return bool
      */
     public static function isCorrect($position, $answer, $questionId)

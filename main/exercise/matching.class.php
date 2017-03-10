@@ -28,15 +28,13 @@ class Matching extends Question
     }
 
     /**
-     * function which redefines Question::createAnswersForm
-     * @param FormValidator $form
+     * @inheritdoc
      */
     public function createAnswersForm($form)
     {
         $defaults = array();
         $nb_matches = $nb_options = 2;
         $matches = array();
-
         $answer = null;
         $counter = 1;
 
@@ -127,7 +125,6 @@ class Matching extends Question
 
         for ($i = 1; $i <= $nb_matches; ++$i) {
             $renderer = &$form->defaultRenderer();
-
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error -->{element}</td>',
                 "answer[$i]"
@@ -148,8 +145,18 @@ class Matching extends Question
             $form->addHtml("<td>$i</td>");
             $form->addText("answer[$i]", null);
 
-            $form->addSelect("matches[$i]", null, $matches);
-            $form->addText("weighting[$i]", null, true, ['value' => 10]);
+            $form->addSelect(
+                "matches[$i]",
+                null,
+                $matches,
+                ['id' => 'matches_'.$i]
+            );
+            $form->addText(
+                "weighting[$i]",
+                null,
+                true,
+                ['id' => 'weighting_'.$i, 'value' => 10]
+            );
 
             $form->addHtml('</tr>');
         }

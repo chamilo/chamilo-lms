@@ -136,7 +136,7 @@ class ThematicController
                                     api_get_session_id()
                                 );
                                 $current_thematic = $thematic->thematic_save();
-                                $description_type = 0;
+                                $description_type = 1;
                                 break;
                             case 'plan':
                                 $thematic->set_thematic_plan_attributes(

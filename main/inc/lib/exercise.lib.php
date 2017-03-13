@@ -3589,10 +3589,15 @@ HOTSPOT;
         $loadChoiceFromSession = false;
         $fromDatabase = true;
         $exerciseResult = null;
+        $exerciseResultCoordinates = null;
+        $delineationResults = null;
         if ($objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
             $loadChoiceFromSession = true;
             $fromDatabase = false;
             $exerciseResult = Session::read('exerciseResult');
+            $exerciseResultCoordinates = Session::read('exerciseResultCoordinates');
+            $delineationResults = Session::read('hotspot_delineation_result');
+            $delineationResults = isset($delineationResults[$objExercise->id]) ? $delineationResults[$objExercise->id] : null;
         }
 
         // Loop over all question to show results for each of them, one by one
@@ -3604,8 +3609,10 @@ HOTSPOT;
                 // This variable came from exercise_submit_modal.php
                 ob_start();
                 $choice = null;
+                $delineationChoice = null;
                 if ($loadChoiceFromSession) {
                     $choice = isset($exerciseResult[$questionId]) ? $exerciseResult[$questionId] : null;
+                    $delineationChoice = isset($delineationResults[$questionId]) ? $delineationResults[$questionId] : null;
                 }
 
                 // We're inside *one* question. Go through each possible answer for this question
@@ -3614,12 +3621,12 @@ HOTSPOT;
                     $questionId,
                     $choice,
                     'exercise_result',
-                    [],
+                    $exerciseResultCoordinates,
                     $save_user_result,
                     $fromDatabase,
                     $show_results,
                     $objExercise->selectPropagateNeg(),
-                    [],
+                    $delineationChoice,
                     $showTotalScoreAndUserChoicesInLastAttempt
                 );
 

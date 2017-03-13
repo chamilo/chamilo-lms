@@ -2828,16 +2828,37 @@ class DocumentManager
     }
 
     /**
+     * Export document to PDF
+     *
      * @param int $document_id
-     * @param string $course_code
+     * @param string $courseCode
+     * @param string $orientation
+     * @param bool $showHeaderAndFooter
      */
-    public static function export_to_pdf($document_id, $course_code)
-    {
-        $course_data = api_get_course_info($course_code);
-        $document_data = self::get_document_data_by_id($document_id, $course_code);
+    public static function export_to_pdf(
+        $document_id,
+        $courseCode,
+        $orientation = 'landscape',
+        $showHeaderAndFooter = true
+    ) {
+        $course_data = api_get_course_info($courseCode);
+        $document_data = self::get_document_data_by_id($document_id, $courseCode);
         $file_path = api_get_path(SYS_COURSE_PATH) . $course_data['path'] . '/document' . $document_data['path'];
-        $pdf = new PDF('A4-L', 'L');
-        $pdf->html_to_pdf($file_path, $document_data['title'], $course_code);
+        if ($orientation == 'landscape') {
+            $pageFormat = 'A4-L';
+            $pdfOrientation = 'L';
+        } else {
+            $pageFormat = 'A4';
+            $pdfOrientation = 'P';
+        }
+        $pdf = new PDF($pageFormat, $pdfOrientation);
+        $pdf->html_to_pdf(
+            $file_path,
+            $document_data['title'],
+            $courseCode,
+            true,
+            $showHeaderAndFooter
+        );
     }
 
     /**
@@ -5377,7 +5398,7 @@ class DocumentManager
                 $filetype == 'file' &&
                 in_array($extension, array('html', 'htm'))
             ) {
-                $pdf_icon = ' <a style="float:right".' . $prevent_multiple_click . ' href="' . api_get_self() . '?' . $courseParams . '&action=export_to_pdf&id=' . $document_data['id'] . '">' .
+                $pdf_icon = ' <a style="float:right".' . $prevent_multiple_click . ' href="' . api_get_self() . '?' . $courseParams . '&action=export_to_pdf&id=' . $document_data['id'] . '&curdirpath='.$curdirpath.'">' .
                     Display::return_icon('pdf.png', get_lang('Export2PDF'), array(), ICON_SIZE_SMALL) . '</a> ';
             }
 
@@ -5867,7 +5888,7 @@ class DocumentManager
                 $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?' . $courseParams . '&curdirpath=' . $curdirpath . '&amp;remove_as_template=' . $id. '&amp;' . $sort_params . '">' .
                     Display::return_icon('wizard_na.png', get_lang('RemoveAsTemplate'), '', ICON_SIZE_SMALL) . '</a>';
             }
-            $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?' . $courseParams . '&action=export_to_pdf&id=' . $id . '">' .
+            $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?' . $courseParams . '&action=export_to_pdf&id=' . $id . '&curdirpath='.$curdirpath.'">' .
                 Display::return_icon('pdf.png', get_lang('Export2PDF'), array(), ICON_SIZE_SMALL) . '</a>';
         }
 

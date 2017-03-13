@@ -72,7 +72,10 @@ if ($action === 'thematic_plan_list') {
         }
         $form->setDefaults($default);
     }
-    $form->addButtonSave(get_lang('Save'));
+    $form->addGroup([
+        $form->addButton('add_item', get_lang('SaveAndAddNewItem'), 'plus', 'info', 'default', null, [], true),
+        $form->addButtonSave(get_lang('Save'), 'submit', true)
+    ]);
     $form->display();
 } elseif ($action == 'thematic_plan_add' || $action == 'thematic_plan_edit') {
     if ($description_type >= ADD_THEMATIC_PLAN) {

@@ -45,7 +45,7 @@
                     &copy; {{ "now"|date("Y") }}
                 </div>
                 <div id="mentions_legales">
-                        <a href="{{_p.web}}{{ "MentionsLegalesLink" |get_lang }}" target="_blank">{{ "MentionsLegales" |get_lang }}</a>
+                        <a href="{{_p.web}}{{ "MentionsLegalesLink" |get_lang }}" target="_blank">{{ "MentionsLegales" |get_lang }}</a> - <a href="{{_p.web}}{{ "CGULink" |get_lang }}" target="_blank">{{ "CGU" |get_lang }}</a> 
                 </div>
                 &nbsp;
             </div><!-- end of #footer_right -->

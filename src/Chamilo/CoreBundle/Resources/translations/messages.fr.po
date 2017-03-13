@@ -61,3 +61,8 @@ msgstr "Mentions Légales"
 msgid "MentionsLegalesLink"
 msgstr "https://www.dfparkur.org/web/mentions-lgales"
 
+msgid "CGU"
+msgstr "CGU"
+
+msgid "CGULink"
+msgstr "https://www.dfparkur.org/doc/Conditions_d_utilisation_Parkur.pdf"

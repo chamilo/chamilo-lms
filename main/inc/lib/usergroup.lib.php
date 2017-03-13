@@ -1214,9 +1214,7 @@ class UserGroup extends Model
     public function delete($id)
     {
         if ($this->useMultipleUrl) {
-            if ($result) {
-                $this->unsubscribeToUrl($id, api_get_current_access_url_id());
-            }
+            $this->unsubscribeToUrl($id, api_get_current_access_url_id());
         }
 
         $sql = "DELETE FROM $this->usergroup_rel_user_table
@@ -1342,15 +1340,13 @@ class UserGroup extends Model
 
         //Name
         $form->addElement('text', 'name', get_lang('Name'), array('maxlength'=>255));
-        $form->applyFilter('name', 'html_filter');
         $form->applyFilter('name', 'trim');
 
         $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
         $form->addRule('name', '', 'maxlength', 255);
 
         // Description
-        $form->addElement('textarea', 'description', get_lang('Description'), array('cols' => 58));
-        $form->applyFilter('description', 'html_filter');
+        $form->addTextarea('description', get_lang('Description'), array('cols' => 58));
         $form->applyFilter('description', 'trim');
 
         if ($this->showGroupTypeSetting) {
@@ -1364,7 +1360,6 @@ class UserGroup extends Model
 
         // url
         $form->addElement('text', 'url', get_lang('Url'));
-        $form->applyFilter('url', 'html_filter');
         $form->applyFilter('url', 'trim');
 
         // Picture
@@ -1387,7 +1382,6 @@ class UserGroup extends Model
 
         $form->addElement('select', 'visibility', get_lang('GroupPermissions'), $this->getGroupStatusList());
         $form->setRequiredNote('<span class="form_required">*</span> <small>'.get_lang('ThisFieldIsRequired').'</small>');
-
         $form->addElement('checkbox', 'allow_members_leave_group', '', get_lang('AllowMemberLeaveGroup'));
 
         // Setting the form elements
@@ -1417,16 +1411,16 @@ class UserGroup extends Model
         }
 
         switch ($size_picture) {
-            case GROUP_IMAGE_SIZE_ORIGINAL :
+            case GROUP_IMAGE_SIZE_ORIGINAL:
                 $size_picture = '';
                 break;
-            case GROUP_IMAGE_SIZE_BIG :
+            case GROUP_IMAGE_SIZE_BIG:
                 $size_picture = 'big_';
                 break;
-            case GROUP_IMAGE_SIZE_MEDIUM :
+            case GROUP_IMAGE_SIZE_MEDIUM:
                 $size_picture = 'medium_';
                 break;
-            case GROUP_IMAGE_SIZE_SMALL :
+            case GROUP_IMAGE_SIZE_SMALL:
                 $size_picture = 'small_';
                 break;
             default:
@@ -1450,9 +1444,10 @@ class UserGroup extends Model
             if (file_exists($file) && !is_dir($file)) {
                 $picture['file'] = $image_array['dir'].$picture_file;
             } else {
-                $picture['file'] = Display::returnIconPath('group_na.png',64);
+                $picture['file'] = Display::returnIconPath('group_na.png', 64);
             }
         }
+
         return $picture;
     }
 
@@ -1554,7 +1549,7 @@ class UserGroup extends Model
         if (empty($user_id)) {
             $user_id = api_get_user_id();
         }
-        $user_role	= $this->get_user_group_role($user_id, $group_id);
+        $user_role = $this->get_user_group_role($user_id, $group_id);
         if (in_array($user_role, array(GROUP_USER_PERMISSION_ADMIN))) {
             return true;
         } else {
@@ -1572,7 +1567,7 @@ class UserGroup extends Model
         if (empty($user_id)) {
             $user_id = api_get_user_id();
         }
-        $user_role	= $this->get_user_group_role($user_id, $group_id);
+        $user_role = $this->get_user_group_role($user_id, $group_id);
         if (in_array($user_role, array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_MODERATOR))) {
             return true;
         } else {

@@ -20,8 +20,8 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
 
 // Setting breadcrumbs.
-$interbreadcrumb[] = array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array('url' => 'usergroups.php','name' => get_lang('Classes'));
+$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'usergroups.php', 'name' => get_lang('Classes'));
 
 // Setting the name of the tool.
 $tool_name = get_lang('SubscribeClassToCourses');
@@ -96,7 +96,7 @@ $filters = array(
 
 $searchForm = new FormValidator('search', 'get', api_get_self().'?id='.$id);
 $searchForm->addHeader(get_lang('AdvancedSearch'));
-$renderer =& $searchForm->defaultRenderer();
+$renderer = & $searchForm->defaultRenderer();
 $searchForm->addElement('hidden', 'id', $id);
 foreach ($filters as $param) {
     $searchForm->addElement($param['type'], $param['name'], $param['label']);
@@ -149,7 +149,7 @@ if (!empty($course_list)) {
 $ajax_search = $add_type == 'unique' ? true : false;
 
 //checking for extra field with filter on
-function search($needle,$type)
+function search($needle, $type)
 {
     global $elements_in;
     $xajax_response = new xajaxResponse();
@@ -194,7 +194,7 @@ if ($add_type == 'multiple') {
 }
 
 echo '<div class="actions">';
-echo '<a href="usergroups.php">'.Display::return_icon('back.png',get_lang('Back'), array(), ICON_SIZE_MEDIUM).'</a>';
+echo '<a href="usergroups.php">'.Display::return_icon('back.png', get_lang('Back'), array(), ICON_SIZE_MEDIUM).'</a>';
 echo Display::url(get_lang('AdvancedSearch'), '#', array('class' => 'advanced_options', 'id' => 'advanced_search'));
 echo '</div>';
 
@@ -204,7 +204,7 @@ echo '</div>';
 
 ?>
 
-<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $id; if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
+<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $id; if (!empty($_GET['add'])) echo '&add=true'; ?>" style="margin:0px;" <?php if ($ajax_search) {echo ' onsubmit="valide();"'; }?>>
 
 <?php echo '<legend>'.$data['name'].': '.$tool_name.'</legend>';
 echo Display::input('hidden', 'id', $id);
@@ -223,7 +223,7 @@ if (!empty($errorMsg)) {
   <td align="center"><b><?php echo get_lang('CoursesInGroup') ?> :</b></td>
 </tr>
 
-<?php if ($add_type=='multiple') { ?>
+<?php if ($add_type == 'multiple') { ?>
 <tr>
 <td align="center">
 <?php echo get_lang('FirstLetterCourseTitle'); ?> :
@@ -241,7 +241,7 @@ if (!empty($errorMsg)) {
   <td align="center">
   <div id="content_source">
       <?php
-      if (!($add_type=='multiple')) {
+      if (!($add_type == 'multiple')) {
         ?>
         <input type="text" id="user_to_add" onkeyup="xajax_search_users(this.value,'single')" />
         <div id="ajax_list_users_single"></div>
@@ -249,7 +249,7 @@ if (!empty($errorMsg)) {
       } else {
       ?>
       <div id="ajax_list_multiple">
-        <?php echo Display::select('elements_not_in_name', $elements_not_in, '', array('style'=>'width:360px', 'multiple'=>'multiple','id'=>'elements_not_in','size'=>'15px'),false); ?>
+        <?php echo Display::select('elements_not_in_name', $elements_not_in, '', array('style'=>'width:360px', 'multiple'=>'multiple', 'id'=>'elements_not_in', 'size'=>'15px'), false); ?>
       </div>
     <?php
       }
@@ -280,7 +280,7 @@ if (!empty($errorMsg)) {
   </td>
   <td align="center">
 <?php
-    echo Display::select('elements_in_name[]', $elements_in, '', array('style'=>'width:360px', 'multiple'=>'multiple','id'=>'elements_in','size'=>'15px'),false );
+    echo Display::select('elements_in_name[]', $elements_in, '', array('style'=>'width:360px', 'multiple'=>'multiple', 'id'=>'elements_in', 'size'=>'15px'), false);
     unset($sessionUsersList);
 ?>
  </td>

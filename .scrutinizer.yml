@@ -42,7 +42,113 @@ filter:
         - main/inc/lib/wami-recorder/*
         - main/inc/lib/xajax/*
         - main/auth/cas/lib/CAS/*
+
 checks:
-    php:
+    php:    
         code_rating: true
         duplication: true
+        fix_php_opening_tag: false
+        remove_php_closing_tag: true
+        one_class_per_file: true
+        side_effects_or_types: false
+        no_mixed_inline_html: false
+        require_braces_around_control_structures: true
+        php5_style_constructor: true
+        no_global_keyword: false
+        avoid_usage_of_logical_operators: false
+        psr2_class_declaration: true
+        no_underscore_prefix_in_properties: false
+        no_underscore_prefix_in_methods: false
+        blank_line_after_namespace_declaration: true
+        single_namespace_per_use: false
+        psr2_switch_declaration: true
+        psr2_control_structure_declaration: true
+        avoid_superglobals: false
+        security_vulnerabilities: false
+        no_exit: false
+        uppercase_constants: true
+        prefer_while_loop_over_for_loop: true
+        newline_at_end_of_file: true
+        line_length:
+            max_length: '120'
+        parameter_doc_comments: true
+        parameters_in_camelcaps: true
+        return_doc_comments: true
+        use_self_instead_of_fqcn: true
+        overriding_parameter: false
+        avoid_entity_manager_injection: false
+
+coding_style:
+    php:
+        spaces:
+            general:
+                linefeed_character: newline
+            around_operators:
+                concatenation: false
+        braces:
+            classes_functions:
+                class: undefined
+                function: undefined
+                closure: undefined
+            if:
+                opening: undefined
+            for:
+                opening: undefined
+            while:
+                opening: undefined
+            do_while:
+                opening: undefined
+            switch:
+                opening: undefined
+            try:
+                opening: undefined
+        upper_lower_casing:
+            keywords:
+                general: undefined
+            constants:
+                true_false_null: undefined
+                
+tools:
+    php_mess_detector:
+        enabled: true
+        extensions:
+            - php
+        command: phpmd
+        filter:
+            paths: {  }
+            excluded_paths:
+                - 'tests/*'
+                - 'vendor/*'
+        config:
+            rulesets:
+                - codesize
+  
+    php_analyzer:
+        enabled: true
+        filter:
+            excluded_paths:
+                - 'tests/*'
+        extensions:
+            - php
+    php_code_sniffer:
+        enabled: true
+        config:
+            standard: PSR2
+        extensions:
+            - php
+        command: phpcs
+        filter:
+            excluded_paths:
+                - 'tests/*'
+    sensiolabs_security_checker:
+        enabled: true
+    php_pdepend:
+        command: pdepend
+        configuration_file:   ~
+        suffixes:
+            - php
+        excluded_dirs:
+            - vendor
+            - Tests
+        enabled: true
+    php_code_coverage: true

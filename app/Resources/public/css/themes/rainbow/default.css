@@ -175,8 +175,6 @@ a:focus {
  margin-right: 0;
 }
 .partners{
-    padding-bottom: 10px;
-    padding-top: 10px;
     text-align: left;
 }
 .partners a{
@@ -530,6 +528,8 @@ footer #footer_right{
 }
 footer .sub-footer{
   background-color:#ECECEC;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 footer{
   color: #333333;

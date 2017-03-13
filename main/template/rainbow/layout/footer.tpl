@@ -11,24 +11,18 @@
     <div class="sub-footer">
     <div class="container">
         <div class="row">
-            <div id="footer_left" class="col-md-4">
-               <div class="sub-footer">
-                        <div class="row">
-                                <div class="col-md-12">
-                                    <div class="partners">
-                                        <a href="#"><img src="{{ _p.web_css_theme }}images/rbs_logo_rgb.png"/></a>
-                                        <a href="#"><img src="{{ _p.web_css_theme }}images/logo_cavilam.png"/></a>
-                                    </div>
-                                </div>
-                        </div>
+            <div id="footer_left" class="col-md-8">              
+                <div class="partners">
+                    <a href="http://www.cavilam.com" target="_blank">
+                        <img src="{{ _p.web_css_theme }}images/rbs_logo_rgb.png"/>
+                    </a>
+                    <a href="http://www.bosch-stiftung.de" target="_blank">
+                        <img src="{{ _p.web_css_theme }}images/logo_cavilam.png"/>
+                    </a>
+                    <a href="http://www.dw.com" target="_blank">
+                        <img src="{{ _p.web_css_theme }}images/logo-dw.png"/>
+                    </a>
                 </div>
-            </div>
-            <div id="footer_center" class="col-md-4">
-                {% if plugin_footer_center is not null %}
-                <div id="plugin_footer_center">
-                    {{ plugin_footer_center }}
-                </div>
-                {% endif %}
             </div>
             <div id="footer_right" class="col-md-4">
                 {% if session_teachers is not null %}

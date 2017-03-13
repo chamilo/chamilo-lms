@@ -53,17 +53,17 @@ msgid "OFAJ"
 msgstr "Deutsch-Französisches Jugendwerk"
 
 msgid "DemoMenuLink"
-msgstr "https://www.dfparkur.org/web/de/demo-seite?_locale=de"
+msgstr "https://parkur.ofaj.org/web/de/demo-seite?_locale=de"
 
 msgid "MentionsLegales"
 msgstr "Impressum"
 
 msgid "MentionsLegalesLink"
-msgstr "https://www.dfparkur.org/web/de/impressum"
+msgstr "https://parkur.ofaj.org/web/de/impressum"
 
 msgid "CGU"
 msgstr "Nutzungsbedingungen"
 
 msgid "CGULink"
-msgstr "https://www.dfparkur.org/doc/AllgemeineNutzungsbedingungenParkur.pdf"
+msgstr "https://parkur.ofaj.org/doc/AllgemeineNutzungsbedingungenParkur.pdf"
 

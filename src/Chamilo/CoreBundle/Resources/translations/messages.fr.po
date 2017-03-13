@@ -53,16 +53,16 @@ msgid "OFAJ"
 msgstr "Office franco-allemand pour la Jeunesse"
 
 msgid "DemoMenuLink"
-msgstr "https://www.dfparkur.org/web/page-de-dmo-francais"
+msgstr "https://parkur.ofaj.org/web/page-de-dmo-francais"
 
 msgid "MentionsLegales"
 msgstr "Mentions Légales"
 
 msgid "MentionsLegalesLink"
-msgstr "https://www.dfparkur.org/web/mentions-lgales"
+msgstr "https://parkur.ofaj.org/web/mentions-lgales"
 
 msgid "CGU"
 msgstr "CGU"
 
 msgid "CGULink"
-msgstr "https://www.dfparkur.org/doc/Conditions_d_utilisation_Parkur.pdf"
+msgstr "https://parkur.ofaj.org/doc/Conditions_d_utilisation_Parkur.pdf"

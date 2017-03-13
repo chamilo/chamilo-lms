@@ -3101,9 +3101,7 @@ class Exercise
         //needed in order to use in the exercise_attempt() for the time
         global $learnpath_id, $learnpath_item_id;
         require_once api_get_path(LIBRARY_PATH).'geometry.lib.php';
-
         $em = Database::getManager();
-
         $feedback_type = $this->selectFeedbackType();
         $results_disabled = $this->selectResultsDisabled();
 
@@ -3122,7 +3120,6 @@ class Exercise
             error_log('$choice: '.print_r($choice, 1));
         }
 
-        $extra_data = array();
         $final_overlap = 0;
         $final_missing = 0;
         $final_excess = 0;
@@ -3132,10 +3129,8 @@ class Exercise
         $threadhold1 = 0;
         $threadhold2 = 0;
         $threadhold3 = 0;
-
         $arrques = null;
         $arrans  = null;
-
         $questionId = intval($questionId);
         $exeId = intval($exeId);
         $TBL_TRACK_ATTEMPT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
@@ -3154,8 +3149,9 @@ class Exercise
         $answerType = $objQuestionTmp->selectType();
         $quesId = $objQuestionTmp->selectId();
         $extra = $objQuestionTmp->extra;
-
         $next = 1; //not for now
+        $totalWeighting = 0;
+        $totalScore = 0;
 
         // Extra information of the question
         if (!empty($extra)) {
@@ -3168,9 +3164,6 @@ class Exercise
             $false_score = floatval(trim($extra[1]));
             $doubt_score = floatval(trim($extra[2]));
         }
-
-        $totalWeighting = 0;
-        $totalScore = 0;
 
         // Construction of the Answer object
         $objAnswerTmp = new Answer($questionId);
@@ -3206,7 +3199,6 @@ class Exercise
         }
 
         $user_answer = '';
-
         // Get answer list for matching
         $sql = "SELECT id_auto, id, answer
                 FROM $table_ans
@@ -6114,7 +6106,12 @@ class Exercise
         return $new_question_list;
     }
 
-    function get_validated_question_list()
+    /**
+     * Get question list depend on the random settings.
+     *
+     * @return array
+     */
+    public function get_validated_question_list()
     {
         $tabres = array();
         $isRandomByCategory = $this->isRandomByCat();

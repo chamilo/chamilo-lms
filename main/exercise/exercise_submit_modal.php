@@ -138,7 +138,7 @@ if (is_array($choice)) {
         // if the user didn't already answer this question
         if (!isset($exerciseResult[$key])) {
             // stores the user answer into the array
-            $exerciseResult[$key]=$choice[$key];
+            $exerciseResult[$key] = $choice[$key];
         }
     }
 }

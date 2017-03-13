@@ -7989,4 +7989,5 @@ $SeeAccesses = "Ver accesos";
 $PriorityChangeFromXToY = "Prioridad modificada de %s a %s";
 $StatusChangeFromXToY = "Estado modificado de %s a %s";
 $SkillFromCourseXDeletedSinceThen = "Esta competencia fue adquirida a través del curso %s que ha sido eliminado desde entonces.";
+$SaveAndAddNewItem = "Guardar y agregar nuevo elemento";
 ?>

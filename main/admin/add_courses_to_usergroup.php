@@ -3,6 +3,7 @@
 /**
 *   @package chamilo.admin
 */
+
 // Resetting the course id.
 $cidReset = true;
 
@@ -26,7 +27,7 @@ $interbreadcrumb[] = array('url' => 'usergroups.php','name' => get_lang('Classes
 $tool_name = get_lang('SubscribeClassToCourses');
 
 $add_type = 'multiple';
-if (isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
+if (isset($_REQUEST['add_type']) && $_REQUEST['add_type'] != '') {
     $add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
@@ -66,8 +67,8 @@ function validate_filter() {
 }
 </script>';
 
-$form_sent  = 0;
-$errorMsg   = '';
+$form_sent = 0;
+$errorMsg = '';
 $sessions = array();
 $usergroup = new UserGroup();
 $id = intval($_GET['id']);
@@ -89,10 +90,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 // Filters
 $filters = array(
     array('type' => 'text', 'name' => 'code', 'label' => get_lang('CourseCode')),
-    array('type' => 'text', 'name' => 'title', 'label' => get_lang('Title')),
-    /*array('type' => 'text', 'name' => 'lastname', 'label' => get_lang('LastName')),
-    array('type' => 'text', 'name' => 'official_code', 'label' => get_lang('OfficialCode')),
-    array('type' => 'text', 'name' => 'email', 'label' => get_lang('Email'))*/
+    array('type' => 'text', 'name' => 'title', 'label' => get_lang('Title'))
 );
 
 $searchForm = new FormValidator('search', 'get', api_get_self().'?id='.$id);
@@ -123,7 +121,17 @@ if (!empty($filters) && !empty($filterData)) {
 
 $data = $usergroup->get($id);
 $course_list_in = $usergroup->get_courses_by_usergroup($id, true);
-$course_list = CourseManager::get_courses_list(0, 0, 'title', 'asc', -1, null, api_get_current_access_url_id(), false, $conditions);
+$course_list = CourseManager::get_courses_list(
+    0,
+    0,
+    'title',
+    'asc',
+    -1,
+    null,
+    api_get_current_access_url_id(),
+    false,
+    $conditions
+);
 
 $elements_not_in = $elements_in = array();
 
@@ -140,7 +148,6 @@ if (!empty($course_list)) {
 $ajax_search = $add_type == 'unique' ? true : false;
 
 //checking for extra field with filter on
-
 function search($needle,$type)
 {
     global $elements_in;
@@ -148,7 +155,14 @@ function search($needle,$type)
     $return = '';
     if (!empty($needle) && !empty($type)) {
         if ($type != 'single') {
-            $list = CourseManager::get_courses_list(0, 0, 2, 'ASC', -1, $needle);
+            $list = CourseManager::get_courses_list(
+                0,
+                0,
+                2,
+                'ASC',
+                -1,
+                $needle
+            );
         }
         if ($type != 'single') {
             $return .= '<select id="elements_not_in" name="elements_not_in_name[]" multiple="multiple" size="15" style="width:360px;">';
@@ -284,7 +298,6 @@ if (!empty($errorMsg)) {
 
 <script type="text/javascript">
 function moveItem(origin , destination) {
-
     for(var i = 0 ; i<origin.options.length ; i++) {
         if(origin.options[i].selected) {
             destination.options[destination.length] = new Option(origin.options[i].text,origin.options[i].value);
@@ -298,7 +311,6 @@ function moveItem(origin , destination) {
 }
 
 function sortOptions(options) {
-
     newOptions = new Array();
     for (i = 0 ; i<options.length ; i++)
         newOptions[i] = options[i];
@@ -307,7 +319,6 @@ function sortOptions(options) {
     options.length = 0;
     for(i = 0 ; i < newOptions.length ; i++)
         options[i] = newOptions[i];
-
 }
 
 function mysort(a, b){
@@ -339,7 +350,6 @@ function loadUsersInSelect(select) {
 
     xhr_object.open("POST", "loadUsersInSelect.ajax.php");
     xhr_object.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
     nosessionUsers = makepost(document.getElementById('elements_not_in'));
     sessionUsers = makepost(document.getElementById('elements_in'));
     nosessionClasses = makepost(document.getElementById('origin_classes'));

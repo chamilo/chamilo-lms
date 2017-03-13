@@ -586,19 +586,21 @@ class Event
 
     /**
      * Record an hotspot spot for this attempt at answering an hotspot question
-     * @param	int		Exercise ID
-     * @param	int		Question ID
-     * @param	int		Answer ID
-     * @param	int		Whether this answer is correct (1) or not (0)
-     * @param	string	Coordinates of this point (e.g. 123;324)
-     * @param	bool update results?
-     * @return	boolean	Result of the insert query
+     * @param int $exeId
+     * @param int $questionId Question ID
+     * @param int $answerId Answer ID
+     * @param int $correct
+     * @param string $coords Coordinates of this point (e.g. 123;324)
+     * @param bool $updateResults
+     * @param int $exerciseId
+     *
+     * @return bool Result of the insert query
      * @uses Course code and user_id from global scope $_cid and $_user
      */
     public static function saveExerciseAttemptHotspot(
-        $exe_id,
-        $question_id,
-        $answer_id,
+        $exeId,
+        $questionId,
+        $answerId,
         $correct,
         $coords,
         $updateResults = false,
@@ -613,35 +615,39 @@ class Event
             }
         }
 
-        $tbl_track_e_hotspot = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
+        if (empty($exeId)) {
+            return false;
+        }
+
+        $table = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
         if ($updateResults) {
             $params = array(
                 'hotspot_correct' => $correct,
                 'hotspot_coordinate' => $coords
             );
             Database::update(
-                $tbl_track_e_hotspot,
+                $table,
                 $params,
                 array(
                     'hotspot_user_id = ? AND hotspot_exe_id = ? AND hotspot_question_id = ? AND hotspot_answer_id = ? ' => array(
                         api_get_user_id(),
-                        $exe_id,
-                        $question_id,
-                        $answer_id
+                        $exeId,
+                        $questionId,
+                        $answerId
                     )
                 )
             );
 
         } else {
             return Database::insert(
-                $tbl_track_e_hotspot,
+                $table,
                 [
                     'hotspot_course_code' => api_get_course_id(),
                     'hotspot_user_id' => api_get_user_id(),
                     'c_id' => api_get_course_int_id(),
-                    'hotspot_exe_id' => $exe_id,
-                    'hotspot_question_id' => $question_id,
-                    'hotspot_answer_id' => $answer_id,
+                    'hotspot_exe_id' => $exeId,
+                    'hotspot_question_id' => $questionId,
+                    'hotspot_answer_id' => $answerId,
                     'hotspot_correct' => $correct,
                     'hotspot_coordinate' => $coords
                 ]

@@ -196,7 +196,7 @@ class TestCategory
         if (empty($courseId)) {
             $courseId = api_get_course_int_id();
         }
-
+        $courseId = (int) $courseId;
         $table = Database :: get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
         $in_field = Database::escape_string($in_field);
         $categories = array();
@@ -236,6 +236,7 @@ class TestCategory
         if (empty($courseId)) {
             $courseId = api_get_course_int_id();
         }
+        $courseId = (int) $courseId;
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
         $questionId = intval($questionId);
         $sql = "SELECT category_id
@@ -245,7 +246,7 @@ class TestCategory
         $result = 0;
         if (Database::num_rows($res) > 0) {
             $data = Database::fetch_array($res);
-            $result = $data['category_id'];
+            $result = (int) $data['category_id'];
         }
 
         return $result;
@@ -280,15 +281,15 @@ class TestCategory
         if (empty($courseId)) {
             $courseId = api_get_course_int_id();
         }
+        $courseId = (int) $courseId;
         $categoryId = TestCategory::getCategoryForQuestion($questionId, $courseId);
-        $result = '';
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-        $categoryId = intval($categoryId);
         $sql = "SELECT title 
                 FROM $table
                 WHERE id = $categoryId AND c_id = $courseId";
         $res = Database::query($sql);
         $data = Database::fetch_array($res);
+        $result = '';
         if (Database::num_rows($res) > 0) {
             $result = $data['title'];
         }
@@ -814,7 +815,7 @@ class TestCategory
             return false;
         }
 
-        $courseId = intval($courseId);
+        $courseId = (int) $courseId;
         $table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
         $categoryTable = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
         $sql = "SELECT * FROM $table qc
@@ -1116,7 +1117,6 @@ class TestCategory
     {
         $categories = $this->getCategories($courseId, $sessionId);
         $html = '';
-
         foreach ($categories as $category) {
             $tmpobj = new TestCategory();
             $tmpobj = $tmpobj->getCategory($category['id']);

@@ -3484,6 +3484,9 @@ HOTSPOT;
             if ($save_user_result == false) {
                 $question_list = $objExercise->get_validated_question_list();
             }
+            if ($objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
+                $question_list = $objExercise->get_validated_question_list();
+            }
         }
 
         $counter = 1;
@@ -3583,25 +3586,37 @@ HOTSPOT;
         $media_list = array();
         $category_list = array();
 
+        $loadChoiceFromSession = false;
+        $fromDatabase = true;
+        $exerciseResult = null;
+        if ($objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
+            $loadChoiceFromSession = true;
+            $fromDatabase = false;
+            $exerciseResult = Session::read('exerciseResult');
+        }
+
         // Loop over all question to show results for each of them, one by one
         if (!empty($question_list)) {
             foreach ($question_list as $questionId) {
-
                 // creates a temporary Question object
                 $objQuestionTmp = Question::read($questionId);
 
                 // This variable came from exercise_submit_modal.php
                 ob_start();
+                $choice = null;
+                if ($loadChoiceFromSession) {
+                    $choice = isset($exerciseResult[$questionId]) ? $exerciseResult[$questionId] : null;
+                }
 
                 // We're inside *one* question. Go through each possible answer for this question
                 $result = $objExercise->manage_answer(
-                    $exercise_stat_info['exe_id'],
+                    $exe_id,
                     $questionId,
-                    null,
+                    $choice,
                     'exercise_result',
                     [],
                     $save_user_result,
-                    true,
+                    $fromDatabase,
                     $show_results,
                     $objExercise->selectPropagateNeg(),
                     [],

@@ -15,16 +15,16 @@ api_protect_limit_for_session_admin();
 //Add the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_jqgrid_js();
 // setting breadcrumbs
-$interbreadcrumb[] = array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : null;
 if ($action == 'add') {
-    $interbreadcrumb[] = array('url' => 'usergroups.php','name' => get_lang('Classes'));
-    $interbreadcrumb[] = array('url' => '#','name' => get_lang('Add'));
+    $interbreadcrumb[] = array('url' => 'usergroups.php', 'name' => get_lang('Classes'));
+    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Add'));
 } elseif ($action == 'edit') {
-    $interbreadcrumb[] = array('url' => 'usergroups.php','name' => get_lang('Classes'));
-    $interbreadcrumb[] = array('url' => '#','name' => get_lang('Edit'));
+    $interbreadcrumb[] = array('url' => 'usergroups.php', 'name' => get_lang('Classes'));
+    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Edit'));
 } else {
-    $interbreadcrumb[] = array('url' => '#','name' => get_lang('Classes'));
+    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Classes'));
 }
 
 // The header.
@@ -55,13 +55,13 @@ $columns = array(
 );
 
 //Column config
-$column_model   = array(
-    array('name'=>'name',           'index'=>'name',        'width'=>'35',  'align'=>'left'),
-    array('name'=>'users',    		'index'=>'users', 		'width'=>'15',  'align'=>'left'),
-    array('name'=>'courses',    	'index'=>'courses', 	'width'=>'15',  'align'=>'left'),
-    array('name'=>'sessions',    	'index'=>'sessions', 	'width'=>'15',  'align'=>'left'),
-    array('name'=>'group_type',    	'index'=>'group_type', 	'width'=>'15',  'align'=>'center'),
-    array('name'=>'actions',        'index'=>'actions',     'width'=>'20',  'align'=>'center', 'sortable'=>'false','formatter'=>'action_formatter'),
+$column_model = array(
+    array('name'=>'name', 'index'=>'name', 'width'=>'35', 'align'=>'left'),
+    array('name'=>'users', 'index'=>'users', 'width'=>'15', 'align'=>'left'),
+    array('name'=>'courses', 'index'=>'courses', 'width'=>'15', 'align'=>'left'),
+    array('name'=>'sessions', 'index'=>'sessions', 'width'=>'15', 'align'=>'left'),
+    array('name'=>'group_type', 'index'=>'group_type', 'width'=>'15', 'align'=>'center'),
+    array('name'=>'actions', 'index'=>'actions', 'width'=>'20', 'align'=>'center', 'sortable'=>'false', 'formatter'=>'action_formatter'),
 );
 
 //Autowidth
@@ -73,11 +73,11 @@ $extra_params['sortorder'] = 'desc';
 //With this function we can add actions to the jgrid
 $action_links = 'function action_formatter (cellvalue, options, rowObject) {
     return \''
-    .' <a href="add_users_to_usergroup.php?id=\'+options.rowId+\'">' . Display::return_icon('user_to_class.png', get_lang('SubscribeUsersToClass'), null, ICON_SIZE_MEDIUM) . '</a>'
-    .' <a href="add_courses_to_usergroup.php?id=\'+options.rowId+\'">' . Display::return_icon('course_to_class.png', get_lang('SubscribeClassToCourses'), null, ICON_SIZE_MEDIUM) . '</a>'
-    .' <a href="add_sessions_to_usergroup.php?id=\'+options.rowId+\'">' . Display::return_icon('sessions_to_class.png', get_lang('SubscribeClassToSessions'), null, ICON_SIZE_MEDIUM) . '</a>'
-    .' <a href="?action=edit&id=\'+options.rowId+\'">' . Display::return_icon('edit.png', get_lang('Edit'), null, ICON_SIZE_SMALL) . '</a>'
-    .' <a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="?action=delete&id=\'+options.rowId+\'">' . Display::return_icon('delete.png', get_lang('Delete'), null, ICON_SIZE_SMALL) . '</a>\';
+    .' <a href="add_users_to_usergroup.php?id=\'+options.rowId+\'">'.Display::return_icon('user_to_class.png', get_lang('SubscribeUsersToClass'), null, ICON_SIZE_MEDIUM).'</a>'
+    .' <a href="add_courses_to_usergroup.php?id=\'+options.rowId+\'">'.Display::return_icon('course_to_class.png', get_lang('SubscribeClassToCourses'), null, ICON_SIZE_MEDIUM).'</a>'
+    .' <a href="add_sessions_to_usergroup.php?id=\'+options.rowId+\'">'.Display::return_icon('sessions_to_class.png', get_lang('SubscribeClassToSessions'), null, ICON_SIZE_MEDIUM).'</a>'
+    .' <a href="?action=edit&id=\'+options.rowId+\'">'.Display::return_icon('edit.png', get_lang('Edit'), null, ICON_SIZE_SMALL).'</a>'
+    .' <a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."\'".')) return false;"  href="?action=delete&id=\'+options.rowId+\'">'.Display::return_icon('delete.png', get_lang('Delete'), null, ICON_SIZE_SMALL).'</a>\';
 }';
 
 ?>
@@ -135,7 +135,7 @@ if ($action == 'add') {
     } else {
         echo '<div class="actions">';
         echo '<a href="'.api_get_self().'">'.
-                Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM).'</a>';
+                Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
         echo '</div>';
         $token = Security::get_token();
         $form->addElement('hidden', 'sec_token');

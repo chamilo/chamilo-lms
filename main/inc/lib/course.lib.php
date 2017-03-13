@@ -2327,8 +2327,14 @@ class CourseManager
             Database::query($sql);
 
             // Update ticket
-            $ticket = Database::get_main_table(TABLE_TICKET_TICKET);
-            $sql = "UPDATE $ticket SET course_id = NULL WHERE course_id = $courseId";
+            $table = Database::get_main_table(TABLE_TICKET_TICKET);
+            $sql = "UPDATE $table SET course_id = NULL WHERE course_id = $courseId";
+            Database::query($sql);
+
+            // Class
+            $table = Database::get_main_table(TABLE_USERGROUP_REL_COURSE);
+            $sql = "DELETE FROM $table
+                    WHERE course_id = $courseId";
             Database::query($sql);
 
             // Skills

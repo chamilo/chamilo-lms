@@ -37,14 +37,12 @@ class UserGroup extends Model
     public function __construct()
     {
         $this->table = Database::get_main_table(TABLE_USERGROUP);
-
         $this->usergroup_rel_user_table = Database::get_main_table(TABLE_USERGROUP_REL_USER);
         $this->usergroup_rel_course_table = Database::get_main_table(TABLE_USERGROUP_REL_COURSE);
         $this->usergroup_rel_session_table = Database::get_main_table(TABLE_USERGROUP_REL_SESSION);
         $this->access_url_rel_usergroup = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USERGROUP);
         $this->table_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $this->table_user = Database::get_main_table(TABLE_MAIN_USER);
-
         $this->useMultipleUrl = api_get_configuration_value('multiple_access_urls');
     }
 
@@ -684,37 +682,58 @@ class UserGroup extends Model
         if (!empty($new_items)) {
             foreach ($new_items as $course_id) {
                 $course_info = api_get_course_info_by_id($course_id);
-                if (!empty($user_list)) {
-                    foreach ($user_list as $user_id) {
-                        CourseManager::subscribe_user($user_id, $course_info['code']);
+                if ($course_info) {
+                    if (!empty($user_list)) {
+                        foreach ($user_list as $user_id) {
+                            CourseManager::subscribe_user(
+                                $user_id,
+                                $course_info['code']
+                            );
+                        }
                     }
+                    $params = array(
+                        'course_id' => $course_id,
+                        'usergroup_id' => $usergroup_id,
+                    );
+                    Database::insert(
+                        $this->usergroup_rel_course_table,
+                        $params
+                    );
                 }
-                $params = array('course_id' => $course_id, 'usergroup_id' => $usergroup_id);
-                Database::insert($this->usergroup_rel_course_table, $params);
             }
         }
     }
 
     /**
      * @param int $usergroup_id
-     * @param bool $delete_items
+     * @param array $delete_items
      */
     public function unsubscribe_courses_from_usergroup($usergroup_id, $delete_items)
     {
         // Deleting items.
         if (!empty($delete_items)) {
             $user_list = self::get_users_by_usergroup($usergroup_id);
-            foreach ($delete_items as $course_id) {
-                $course_info = api_get_course_info_by_id($course_id);
-                if (!empty($user_list)) {
-                    foreach ($user_list as $user_id) {
-                        CourseManager::unsubscribe_user($user_id, $course_info['code']);
+            if (!empty($user_list)) {
+                foreach ($delete_items as $course_id) {
+                    $course_info = api_get_course_info_by_id($course_id);
+                    if ($course_info) {
+                        foreach ($user_list as $user_id) {
+                            CourseManager::unsubscribe_user(
+                                $user_id,
+                                $course_info['code']
+                            );
+                        }
+                        Database::delete(
+                            $this->usergroup_rel_course_table,
+                            array(
+                                'usergroup_id = ? AND course_id = ?' => array(
+                                    $usergroup_id,
+                                    $course_id
+                                )
+                            )
+                        );
                     }
                 }
-                Database::delete(
-                    $this->usergroup_rel_course_table,
-                    array('usergroup_id = ? AND course_id = ?' => array($usergroup_id, $course_id))
-                );
             }
         }
     }

@@ -137,7 +137,7 @@ $_configuration['cdn'] = array(
 /**
  * Misc. settings
  */
-// security word for password recovery
+// Security word for password recovery
 $_configuration['security_key'] = '{SECURITY_KEY}';
 // Hash function method
 $_configuration['password_encryption'] = '{ENCRYPT_PASSWORD}';
@@ -146,10 +146,14 @@ $_configuration['session_stored_in_db'] = false;
 // Session lifetime
 $_configuration['session_lifetime'] = SESSION_LIFETIME;
 // Activation for multi-url access
+// When enabling multi-url, settings can be configured by multi-url using a simple
+// sub-element. E.g. $_configuration['session_lifetime'] = true; could be turned into
+// something like $_configuration['session_lifetime'][2] = false; to affect only URL
+// with ID 2. The ID can be found in the access_url table.
 //$_configuration['multiple_access_urls'] = true;
 $_configuration['software_name'] = 'Chamilo';
 $_configuration['software_url'] = 'https://chamilo.org/';
-//Deny the elimination of users
+// Deny the elimination of users
 $_configuration['deny_delete_users'] = false;
 // Version settings
 $_configuration['system_version'] = '{NEW_VERSION}';

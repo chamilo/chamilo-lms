@@ -81,6 +81,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     }
     if ($form_sent == 1) {
         $usergroup->subscribe_courses_to_usergroup($id, $elements_posted);
+        Display::addFlash(Display::return_message(get_lang('Updated')));
         header('Location: usergroups.php');
         exit;
     }
@@ -180,7 +181,6 @@ function search($needle,$type)
 }
 
 $xajax->processRequests();
-
 Display::display_header($tool_name);
 
 if ($add_type == 'multiple') {
@@ -296,7 +296,7 @@ if (!empty($errorMsg)) {
 </table>
 </form>
 
-<script type="text/javascript">
+<script>
 function moveItem(origin , destination) {
     for(var i = 0 ; i<origin.options.length ; i++) {
         if(origin.options[i].selected) {
@@ -307,7 +307,6 @@ function moveItem(origin , destination) {
     }
     destination.selectedIndex = -1;
     sortOptions(destination.options);
-
 }
 
 function sortOptions(options) {
@@ -340,7 +339,6 @@ function valide(){
 
 function loadUsersInSelect(select) {
     var xhr_object = null;
-
     if(window.XMLHttpRequest) // Firefox
         xhr_object = new XMLHttpRequest();
     else if(window.ActiveXObject) // Internet Explorer

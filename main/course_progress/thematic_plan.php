@@ -45,8 +45,16 @@ if ($action === 'thematic_plan_list') {
     $form->addElement('hidden', 'thematic_id', $thematic_id);
 
     foreach ($default_thematic_plan_title as $id => $title) {
+        $btnDelete = Display::toolbarButton(
+            get_lang('Delete'),
+            '#',
+            'times',
+            'danger',
+            ['role' => 'button', 'data-id' => $id, 'class' => 'btn-delete']
+        );
+
         $form->addElement('hidden', 'description_type['.$id.']', $id);
-        $form->addText('title['.$id.']', get_lang('Title'), false, array('size'=>'50'));
+        $form->addText("title[$id]", [get_lang('Title'), null, $btnDelete], false);
         $form->addHtmlEditor(
            'description['.$id.']',
            get_lang('Description'),

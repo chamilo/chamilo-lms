@@ -230,6 +230,27 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
     $interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('NewThematicAdvance'));
 }
 
+if ($action == 'thematic_plan_list') {
+    $htmlHeadXtra[] = "
+        <script>
+            $(function () {
+                $('.btn-delete').on('click', function (e) {
+                    e.preventDefault();
+                    
+                    var id = $(this).data('id') || 0;
+                    
+                    if (!id) {
+                        return;
+                    }
+                    
+                    //$('[name=\"title[' + id + ']\"]').val('');
+                    CKEDITOR.instances['description[' + id + ']'].setData('');
+                });
+            });
+        </script>
+    ";
+}
+
 // Distpacher actions to controller
 switch ($action) {
     case 'thematic_add':

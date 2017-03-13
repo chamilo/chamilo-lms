@@ -1,0 +1,39 @@
+preset: symfony
+
+enabled:
+  - class_keyword_remove
+  - combine_consecutive_unsets
+  - long_array_syntax
+  - newline_after_open_tag
+  - no_php4_constructor
+  - no_useless_else
+  - ordered_class_elements
+  - ordered_use
+
+finder:
+  exclude:
+    - 'tests/*'
+    - 'main/img/*'
+    - 'main/lang/*'
+    - 'app/cache/*'
+    - 'app/logs/*'
+    - 'web/*'
+    - 'vendor/*
+    - 'main/admin/db.php'
+    - 'app/Migrations/*'
+    - 'main/inc/lib/browser/*'
+    - 'main/inc/lib/elfinder/*'
+    - 'main/inc/lib/freemindflashbrowser/*'
+    - 'main/inc/lib/kses-0.2.2/*'
+    - 'main/inc/lib/mimetex/*'
+    - 'main/inc/lib/nanogong/*'
+    - 'main/inc/lib/pclzip/*'
+    - 'main/inc/lib/pear/*'
+    - 'main/inc/lib/phpmailer/*'
+    - 'main/inc/lib/phpseclib/*'
+    - 'main/inc/lib/svg-edit/*'
+    - 'main/inc/lib/swfobject/*'
+    - 'main/inc/lib/wami-recorder/*'
+    - 'main/inc/lib/xajax/*'
+    -' main/auth/cas/lib/CAS/*'
+  

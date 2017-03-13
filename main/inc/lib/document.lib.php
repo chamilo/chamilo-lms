@@ -2856,7 +2856,7 @@ class DocumentManager
             $file_path,
             $document_data['title'],
             $courseCode,
-            true,
+            false,
             $showHeaderAndFooter
         );
     }

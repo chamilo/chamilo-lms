@@ -12,15 +12,11 @@ enabled:
 
 finder:
   exclude:
-    - 'tests/*'
-    - 'main/img/*'
-    - 'main/lang/*'
     - 'app/cache/*'
     - 'app/logs/*'
-    - 'web/*'
-    - 'vendor/*
-    - 'main/admin/db.php'
     - 'app/Migrations/*'
+    - 'main/admin/db.php'
+    - 'main/auth/cas/lib/CAS/*'
     - 'main/inc/lib/browser/*'
     - 'main/inc/lib/elfinder/*'
     - 'main/inc/lib/freemindflashbrowser/*'
@@ -35,5 +31,8 @@ finder:
     - 'main/inc/lib/swfobject/*'
     - 'main/inc/lib/wami-recorder/*'
     - 'main/inc/lib/xajax/*'
-    -' main/auth/cas/lib/CAS/*'
-  
+    - 'main/img/*'
+    - 'main/lang/*'
+    - 'tests/*'
+    - 'vendor/*'
+    - 'web/*'

@@ -44,7 +44,7 @@ filter:
         - main/auth/cas/lib/CAS/*
 
 checks:
-    php:    
+    php:
         code_rating: true
         duplication: true
         fix_php_opening_tag: false
@@ -107,7 +107,7 @@ coding_style:
                 general: undefined
             constants:
                 true_false_null: undefined
-                
+
 tools:
     php_mess_detector:
         enabled: true
@@ -122,7 +122,7 @@ tools:
         config:
             rulesets:
                 - codesize
-  
+
     php_analyzer:
         enabled: true
         filter:
@@ -148,7 +148,7 @@ tools:
         suffixes:
             - php
         excluded_dirs:
-            - vendor
-            - Tests
+            - 'vendor'
+            - 'tests/*'
         enabled: true
     php_code_coverage: true

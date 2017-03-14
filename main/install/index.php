@@ -1,10 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session,
-    Chamilo\TicketBundle\Entity\Project as TicketProject,
-    Chamilo\TicketBundle\Entity\Category as TicketCategory,
-    Chamilo\TicketBundle\Entity\Priority as TicketPriority;
+use ChamiloSession as Session;
 
 /**
  * Chamilo installation
@@ -881,97 +878,6 @@ if (@$_POST['step2']) {
         $connection->executeQuery("ALTER TABLE faq_category_translation ADD CONSTRAINT FK_5493B0FC2C2AC5D3 FOREIGN KEY (translatable_id) REFERENCES faq_category (id) ON DELETE CASCADE;");
         $connection->executeQuery("ALTER TABLE faq_question ADD CONSTRAINT FK_4A55B05912469DE2 FOREIGN KEY (category_id) REFERENCES faq_category (id);");
         */
-
-        // Add version table
-        $connection->executeQuery('CREATE TABLE IF NOT EXISTS version (id int unsigned NOT NULL AUTO_INCREMENT, version varchar(20), PRIMARY KEY(id), UNIQUE(version))');
-
-        // Tickets
-        $ticketProject = new TicketProject();
-        $ticketProject
-            ->setId(1)
-            ->setName('Ticket System')
-            ->setInsertUserId(1);
-
-        $manager->persist($ticketProject);
-        $manager->flush();
-
-        $categories = array(
-            get_lang('TicketEnrollment') => get_lang('TicketsAboutEnrollment'),
-            get_lang('TicketGeneralInformation') => get_lang('TicketsAboutGeneralInformation'),
-            get_lang('TicketRequestAndPapework') => get_lang('TicketsAboutRequestAndPapework'),
-            get_lang('TicketAcademicIncidence') => get_lang('TicketsAboutAcademicIncidence'),
-            get_lang('TicketVirtualCampus') => get_lang('TicketsAboutVirtualCampus'),
-            get_lang('TicketOnlineEvaluation') => get_lang('TicketsAboutOnlineEvaluation')
-        );
-
-        $i = 1;
-
-        /**
-         * @var string $category
-         * @var string $description
-         */
-        foreach ($categories as $category => $description) {
-            // Online evaluation requires a course
-            $ticketCategory = new TicketCategory();
-            $ticketCategory
-                ->setId($i)
-                ->setName($category)
-                ->setDescription($description)
-                ->setProject($ticketProject)
-                ->setInsertUserId(1);
-
-            $isRequired = $i == 6;
-            $ticketCategory->setCourseRequired($isRequired);
-
-            $manager->persist($ticketCategory);
-            $manager->flush();
-
-            $i++;
-        }
-
-        // Default Priorities
-        $defaultPriorities = array(
-            TicketManager::PRIORITY_NORMAL => get_lang('PriorityNormal'),
-            TicketManager::PRIORITY_HIGH => get_lang('PriorityHigh'),
-            TicketManager::PRIORITY_LOW => get_lang('PriorityLow')
-        );
-
-        $table = Database::get_main_table(TABLE_TICKET_PRIORITY);
-        $i = 1;
-        foreach ($defaultPriorities as $code => $priority) {
-            $ticketPriority = new TicketPriority();
-            $ticketPriority
-                ->setId($i)
-                ->setName($priority)
-                ->setCode($code)
-                ->setInsertUserId(1);
-
-            $manager->persist($ticketPriority);
-            $manager->flush();
-            $i++;
-        }
-
-        $table = Database::get_main_table(TABLE_TICKET_STATUS);
-
-        // Default status
-        $defaultStatus = array(
-            TicketManager::STATUS_NEW => get_lang('StatusNew'),
-            TicketManager::STATUS_PENDING => get_lang('StatusPending'),
-            TicketManager::STATUS_UNCONFIRMED => get_lang('StatusUnconfirmed'),
-            TicketManager::STATUS_CLOSE => get_lang('StatusClose'),
-            TicketManager::STATUS_FORWARDED => get_lang('StatusForwarded')
-        );
-
-        $i = 1;
-        foreach ($defaultStatus as $code => $status) {
-            $attributes = array(
-                'id' => $i,
-                'code' => $code,
-                'name' => $status
-            );
-            Database::insert($table, $attributes);
-            $i++;
-        }
 
         $sysPath = api_get_path(SYS_PATH);
 

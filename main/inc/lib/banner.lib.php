@@ -445,34 +445,26 @@ function menuArray()
                 $mainNavigation['navigation'][SECTION_CAMPUS]  = null;
             }
         } else {
-            if (api_get_user_id() && !api_is_anonymous()) {
-                $list = explode("\n", $openMenuTabsLoggedIn);
-                foreach ($list as $link) {
-                    $matches = array();
-                    $match = preg_match('$href="([^"]*)" target="([^"]*)">([^<]*)</a>$', $link, $matches);
-                    if ($match) {
-                        $mainNavigation['navigation'][$matches[3]] = array(
-                            'url' => $matches[1],
-                            'target' => $matches[2],
-                            'title' => $matches[3],
-                            'key' => 'page-' . str_replace(' ', '-', strtolower($matches[3]))
-                        );
-                    }
+            $list = explode("\n", api_get_user_id() && !api_is_anonymous() ? $openMenuTabsLoggedIn : $open);
+
+            foreach ($list as $link) {
+                if (strpos($link, 'class="hide_menu"') !== false) {
+                    continue;
                 }
-            } else {
-                $list = explode("\n", $open);
-                foreach ($list as $link) {
-                    $matches = array();
-                    $match = preg_match('$href="([^"]*)" target="([^"]*)">([^<]*)</a>$', $link, $matches);
-                    if ($match) {
-                        $mainNavigation['navigation'][$matches[3]] = array(
-                            'url' => $matches[1],
-                            'target' => $matches[2],
-                            'title' => $matches[3],
-                            'key' => 'page-' . str_replace(' ', '-', strtolower($matches[3]))
-                        );
-                    }
+
+                $matches = array();
+                $match = preg_match('$href="([^"]*)" target="([^"]*)">([^<]*)</a>$', $link, $matches);
+
+                if (!$match) {
+                    continue;
                 }
+
+                $mainNavigation['navigation'][$matches[3]] = array(
+                    'url' => $matches[1],
+                    'target' => $matches[2],
+                    'title' => $matches[3],
+                    'key' => 'page-' . str_replace(' ', '-', strtolower($matches[3]))
+                );
             }
         }
     }

@@ -60,7 +60,6 @@ class ExerciseLib
 
         if ($answerType != HOT_SPOT && $answerType != HOT_SPOT_DELINEATION) {
             // Question is not a hotspot
-
             if (!$only_questions) {
                 $questionDescription = $objQuestionTmp->selectDescription();
                 if ($show_title) {
@@ -85,11 +84,9 @@ class ExerciseLib
             }
 
             echo '<div class="question_options">';
-
             // construction of the Answer object (also gets all answers details)
             $objAnswerTmp = new Answer($questionId);
             $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
-
             $quiz_question_options = Question::readQuestionOption(
                 $questionId,
                 $course_id
@@ -156,13 +153,20 @@ class ExerciseLib
                 $num_suggestions = ($nbrAnswers - $x) + 1;
             } elseif ($answerType == FREE_ANSWER) {
                 $fck_content = isset($user_choice[0]) && !empty($user_choice[0]['answer']) ? $user_choice[0]['answer'] : null;
-
                 $form = new FormValidator('free_choice_' . $questionId);
                 $config = array(
                     'ToolbarSet' => 'TestFreeAnswer'
                 );
-                $form->addHtmlEditor("choice[" . $questionId . "]", null, false, false, $config);
-                $form->setDefaults(array("choice[" . $questionId . "]" => $fck_content));
+                $form->addHtmlEditor(
+                    "choice[".$questionId."]",
+                    null,
+                    false,
+                    false,
+                    $config
+                );
+                $form->setDefaults(
+                    array("choice[".$questionId."]" => $fck_content)
+                );
                 $s .= $form->returnForm();
             } elseif ($answerType == ORAL_EXPRESSION) {
                 // Add nanog
@@ -193,15 +197,19 @@ class ExerciseLib
                 $config = array(
                     'ToolbarSet' => 'TestFreeAnswer'
                 );
-                $form->addHtmlEditor("choice[" . $questionId . "]", null, false, false, $config);
-                //$form->setDefaults(array("choice[" . $questionId . "]" => $fck_content));
+                $form->addHtmlEditor(
+                    "choice[".$questionId."]",
+                    null,
+                    false,
+                    false,
+                    $config
+                );
                 $s .= $form->returnForm();
             }
 
             // Now navigate through the possible answers, using the max number of
             // answers for the question as a limiter
             $lines_count = 1; // a counter for matching-type answers
-
             if ($answerType == MULTIPLE_ANSWER_TRUE_FALSE ||
                 $answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE
             ) {
@@ -231,17 +239,17 @@ class ExerciseLib
 
             if ($show_comment) {
                 if (
-                in_array(
-                    $answerType,
-                    array(
-                        MULTIPLE_ANSWER,
-                        MULTIPLE_ANSWER_COMBINATION,
-                        UNIQUE_ANSWER,
-                        UNIQUE_ANSWER_IMAGE,
-                        UNIQUE_ANSWER_NO_OPTION,
-                        GLOBAL_MULTIPLE_ANSWER
+                    in_array(
+                        $answerType,
+                        array(
+                            MULTIPLE_ANSWER,
+                            MULTIPLE_ANSWER_COMBINATION,
+                            UNIQUE_ANSWER,
+                            UNIQUE_ANSWER_IMAGE,
+                            UNIQUE_ANSWER_NO_OPTION,
+                            GLOBAL_MULTIPLE_ANSWER
+                        )
                     )
-                )
                 ) {
                     $header = Display::tag('th', get_lang('Options'));
                     if ($exercise_feedback == EXERCISE_FEEDBACK_TYPE_END) {
@@ -269,7 +277,6 @@ class ExerciseLib
                 $answerCorrect = $objAnswerTmp->isCorrect($answerId);
                 $numAnswer = $objAnswerTmp->selectAutoId($answerId);
                 $comment = $objAnswerTmp->selectComment($answerId);
-
                 $attributes = array();
 
                 switch ($answerType) {
@@ -317,7 +324,6 @@ class ExerciseLib
                         }
 
                         $answer = Security::remove_XSS($answer, STUDENT);
-
                         $s .= Display::input(
                             'hidden',
                             'choice2[' . $questionId . ']',
@@ -406,7 +412,6 @@ class ExerciseLib
                                 $s .= $answer_input;
                             }
                         } elseif ($answerType == MULTIPLE_ANSWER_TRUE_FALSE) {
-
                             $my_choice = array();
                             if (!empty($user_choice_array)) {
                                 foreach ($user_choice_array as $item) {
@@ -420,7 +425,6 @@ class ExerciseLib
 
                             if (!empty($quiz_question_options)) {
                                 foreach ($quiz_question_options as $id => $item) {
-
                                     if (isset($my_choice[$numAnswer]) && $id == $my_choice[$numAnswer]) {
                                         $attributes = array(
                                             'checked' => 1,
@@ -518,7 +522,6 @@ class ExerciseLib
                         $answer = Security::remove_XSS($answer, STUDENT);
                         $s .= '<tr>';
                         $s .= Display::tag('td', $answer);
-
                         foreach ($objQuestionTmp->options as $key => $item) {
                             if (isset($my_choice[$numAnswer]) && $key == $my_choice[$numAnswer]) {
                                 $attributes = array(
@@ -557,16 +560,13 @@ class ExerciseLib
                         // display the question, with field empty, for student to fill it,
                         // or filled to display the answer in the Question preview of the exercise/admin.php page
                         $displayForStudent = true;
-                        $listAnswerInformations = FillBlanks::getAnswerInfo($answer);
-                        $separatorStartRegexp = FillBlanks::escapeForRegexp($listAnswerInformations['blankseparatorstart']);
-                        $separatorEndRegexp = FillBlanks::escapeForRegexp($listAnswerInformations['blankseparatorend']);
+                        $listAnswerInfo = FillBlanks::getAnswerInfo($answer);
 
                         list($answer) = explode('::', $answer);
+                        // Correct answers
+                        $correctAnswerList = $listAnswerInfo['tabwords'];
 
-                        //Correct answers
-                        $correctAnswerList = $listAnswerInformations['tabwords'];
-
-                        //Student's answer
+                        // Student's answer
                         $studentAnswerList = array();
                         if (isset($user_choice[0]['answer'])) {
                             $arrayStudentAnswer = FillBlanks::getAnswerInfo($user_choice[0]['answer'], true);
@@ -581,44 +581,53 @@ class ExerciseLib
                         }
 
                         if (!empty($correctAnswerList) && !empty($studentAnswerList)) {
-                            $answer = "";
-                            for ($i = 0; $i < count($listAnswerInformations["commonwords"]) - 1; $i++) {
+                            $answer = '';
+                            for ($i = 0; $i < count($listAnswerInfo['commonwords']) - 1; $i++) {
                                 // display the common word
-                                $answer .= $listAnswerInformations["commonwords"][$i];
+                                $answer .= $listAnswerInfo['commonwords'][$i];
                                 // display the blank word
-                                $correctItem = $listAnswerInformations["tabwords"][$i];
-                                $correctItemRegexp = $correctItem;
-                                // replace / with \/ to allow the preg_replace bellow and all the regexp char
-                                $correctItemRegexp = FillBlanks::getRegexpProtected($correctItemRegexp);
+                                $correctItem = $listAnswerInfo['tabwords'][$i];
                                 if (isset($studentAnswerList[$i])) {
                                     // If student already started this test and answered this question,
                                     // fill the blank with his previous answers
                                     // may be "" if student viewed the question, but did not fill the blanks
                                     $correctItem = $studentAnswerList[$i];
                                 }
-                                $attributes["style"] = "width:" . $listAnswerInformations["tabinputsize"][$i] . "px";
-                                $answer .= FillBlanks::getFillTheBlankHtml($separatorStartRegexp, $separatorEndRegexp, $correctItemRegexp, $questionId, $correctItem, $attributes, $answer, $listAnswerInformations, $displayForStudent, $i);
+                                $attributes['style'] = "width:" . $listAnswerInfo['tabinputsize'][$i] . "px";
+                                $answer .= FillBlanks::getFillTheBlankHtml(
+                                    $current_item,
+                                    $questionId,
+                                    $correctItem,
+                                    $attributes,
+                                    $answer,
+                                    $listAnswerInfo,
+                                    $displayForStudent,
+                                    $i
+                                );
                             }
                             // display the last common word
-                            $answer .= $listAnswerInformations["commonwords"][$i];
+                            $answer .= $listAnswerInfo['commonwords'][$i];
                         } else {
                             // display empty [input] with the right width for student to fill it
-                            $separatorStartRegexp = FillBlanks::escapeForRegexp($listAnswerInformations['blankseparatorstart']);
-                            $separatorEndRegexp = FillBlanks::escapeForRegexp($listAnswerInformations['blankseparatorend']);
-                            $answer = "";
-                            for ($i = 0; $i < count($listAnswerInformations["commonwords"]) - 1; $i++) {
+                            $answer = '';
+                            for ($i = 0; $i < count($listAnswerInfo['commonwords']) - 1; $i++) {
                                 // display the common words
-                                $answer .= $listAnswerInformations["commonwords"][$i];
+                                $answer .= $listAnswerInfo['commonwords'][$i];
                                 // display the blank word
-                                $attributes["style"] = "width:" . $listAnswerInformations["tabinputsize"][$i] . "px";
-                                $correctItem = $listAnswerInformations["tabwords"][$i];
-                                $correctItemRegexp = $correctItem;
-                                // replace / with \/ to allow the preg_replace bellow and all the regexp char
-                                $correctItemRegexp = FillBlanks::getRegexpProtected($correctItemRegexp);
-                                $answer .= FillBlanks::getFillTheBlankHtml($separatorStartRegexp, $separatorEndRegexp, $correctItemRegexp, $questionId, '', $attributes, $answer, $listAnswerInformations, $displayForStudent, $i);
+                                $attributes["style"] = "width:" . $listAnswerInfo['tabinputsize'][$i] . "px";
+                                $answer .= FillBlanks::getFillTheBlankHtml(
+                                    $current_item,
+                                    $questionId,
+                                    '',
+                                    $attributes,
+                                    $answer,
+                                    $listAnswerInfo,
+                                    $displayForStudent,
+                                    $i
+                                );
                             }
                             // display the last common word
-                            $answer .= $listAnswerInformations["commonwords"][$i];
+                            $answer .= $listAnswerInfo['commonwords'][$i];
                         }
                         $s .= $answer;
                         break;
@@ -770,19 +779,18 @@ class ExerciseLib
                     case MATCHING:
                         // matching type, showing suggestions and answers
                         // TODO: replace $answerId by $numAnswer
-
                         if ($answerCorrect != 0) {
                             // only show elements to be answered (not the contents of
-                            // the select boxes, who are corrrect = 0)
+                            // the select boxes, who are correct = 0)
                             $s .= '<tr><td width="45%" valign="top">';
                             $parsed_answer = $answer;
-                            //left part questions
+                            // Left part questions
                             $s .= '<p class="indent">' . $lines_count . '.&nbsp;' . $parsed_answer . '</p></td>';
-                            //middle part (matches selects)
-
-                            $s .= '<td width="10%" valign="top" align="center" >
+                            // Middle part (matches selects)
+                            // Id of select is # question + # of option
+                            $s .= '<td width="10%" valign="top" align="center">
                                 <div class="select-matching">
-                                <select name="choice[' . $questionId . '][' . $numAnswer . ']">';
+                                <select id="choice_id_'.$current_item.'_'.$lines_count.'" name="choice[' . $questionId . '][' . $numAnswer . ']">';
 
                             // fills the list-box
                             foreach ($select_items as $key => $val) {
@@ -3476,6 +3484,9 @@ HOTSPOT;
             if ($save_user_result == false) {
                 $question_list = $objExercise->get_validated_question_list();
             }
+            if ($objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
+                $question_list = $objExercise->get_validated_question_list();
+            }
         }
 
         $counter = 1;
@@ -3547,17 +3558,21 @@ HOTSPOT;
         }
 
         if ($show_results || $show_only_score) {
-            $user_info = api_get_user_info($exercise_stat_info['exe_user_id']);
-            //Shows exercise header
-            echo $objExercise->show_exercise_result_header(
-                $user_info,
-                api_convert_and_format_date(
-                    $exercise_stat_info['start_date'],
-                    DATE_TIME_FORMAT_LONG
-                ),
-                $exercise_stat_info['duration'],
-                $exercise_stat_info['user_ip']
-            );
+            if (isset($exercise_stat_info['exe_user_id'])) {
+                $user_info = api_get_user_info($exercise_stat_info['exe_user_id']);
+                if ($user_info) {
+                    // Shows exercise header
+                    echo $objExercise->show_exercise_result_header(
+                        $user_info,
+                        api_convert_and_format_date(
+                            $exercise_stat_info['start_date'],
+                            DATE_TIME_FORMAT_LONG
+                        ),
+                        $exercise_stat_info['duration'],
+                        $exercise_stat_info['user_ip']
+                    );
+                }
+            }
         }
 
         // Display text when test is finished #4074 and for LP #4227
@@ -3571,28 +3586,47 @@ HOTSPOT;
         $media_list = array();
         $category_list = array();
 
+        $loadChoiceFromSession = false;
+        $fromDatabase = true;
+        $exerciseResult = null;
+        $exerciseResultCoordinates = null;
+        $delineationResults = null;
+        if ($objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
+            $loadChoiceFromSession = true;
+            $fromDatabase = false;
+            $exerciseResult = Session::read('exerciseResult');
+            $exerciseResultCoordinates = Session::read('exerciseResultCoordinates');
+            $delineationResults = Session::read('hotspot_delineation_result');
+            $delineationResults = isset($delineationResults[$objExercise->id]) ? $delineationResults[$objExercise->id] : null;
+        }
+
         // Loop over all question to show results for each of them, one by one
         if (!empty($question_list)) {
             foreach ($question_list as $questionId) {
-
                 // creates a temporary Question object
                 $objQuestionTmp = Question::read($questionId);
 
                 // This variable came from exercise_submit_modal.php
                 ob_start();
+                $choice = null;
+                $delineationChoice = null;
+                if ($loadChoiceFromSession) {
+                    $choice = isset($exerciseResult[$questionId]) ? $exerciseResult[$questionId] : null;
+                    $delineationChoice = isset($delineationResults[$questionId]) ? $delineationResults[$questionId] : null;
+                }
 
                 // We're inside *one* question. Go through each possible answer for this question
                 $result = $objExercise->manage_answer(
-                    $exercise_stat_info['exe_id'],
+                    $exe_id,
                     $questionId,
-                    null,
+                    $choice,
                     'exercise_result',
-                    [],
+                    $exerciseResultCoordinates,
                     $save_user_result,
-                    true,
+                    $fromDatabase,
                     $show_results,
                     $objExercise->selectPropagateNeg(),
-                    [],
+                    $delineationChoice,
                     $showTotalScoreAndUserChoicesInLastAttempt
                 );
 
@@ -3755,27 +3789,28 @@ HOTSPOT;
         }
 
         if ($save_user_result) {
-
             // Tracking of results
-            $learnpath_id = $exercise_stat_info['orig_lp_id'];
-            $learnpath_item_id = $exercise_stat_info['orig_lp_item_id'];
-            $learnpath_item_view_id = $exercise_stat_info['orig_lp_item_view_id'];
+            if ($exercise_stat_info) {
+                $learnpath_id = $exercise_stat_info['orig_lp_id'];
+                $learnpath_item_id = $exercise_stat_info['orig_lp_item_id'];
+                $learnpath_item_view_id = $exercise_stat_info['orig_lp_item_view_id'];
 
-            if (api_is_allowed_to_session_edit()) {
-                Event::update_event_exercise(
-                    $exercise_stat_info['exe_id'],
-                    $objExercise->selectId(),
-                    $total_score,
-                    $total_weight,
-                    api_get_session_id(),
-                    $learnpath_id,
-                    $learnpath_item_id,
-                    $learnpath_item_view_id,
-                    $exercise_stat_info['exe_duration'],
-                    $question_list,
-                    '',
-                    array()
-                );
+                if (api_is_allowed_to_session_edit()) {
+                    Event::update_event_exercise(
+                        $exercise_stat_info['exe_id'],
+                        $objExercise->selectId(),
+                        $total_score,
+                        $total_weight,
+                        api_get_session_id(),
+                        $learnpath_id,
+                        $learnpath_item_id,
+                        $learnpath_item_view_id,
+                        $exercise_stat_info['exe_duration'],
+                        $question_list,
+                        '',
+                        array()
+                    );
+                }
             }
 
             // Send notification

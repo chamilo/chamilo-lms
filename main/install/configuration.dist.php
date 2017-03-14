@@ -137,7 +137,7 @@ $_configuration['cdn'] = array(
 /**
  * Misc. settings
  */
-// security word for password recovery
+// Security word for password recovery
 $_configuration['security_key'] = '{SECURITY_KEY}';
 // Hash function method
 $_configuration['password_encryption'] = '{ENCRYPT_PASSWORD}';
@@ -146,10 +146,14 @@ $_configuration['session_stored_in_db'] = false;
 // Session lifetime
 $_configuration['session_lifetime'] = SESSION_LIFETIME;
 // Activation for multi-url access
+// When enabling multi-url, settings can be configured by multi-url using a simple
+// sub-element. E.g. $_configuration['session_lifetime'] = true; could be turned into
+// something like $_configuration['session_lifetime'][2] = false; to affect only URL
+// with ID 2. The ID can be found in the access_url table.
 //$_configuration['multiple_access_urls'] = true;
 $_configuration['software_name'] = 'Chamilo';
 $_configuration['software_url'] = 'https://chamilo.org/';
-//Deny the elimination of users
+// Deny the elimination of users
 $_configuration['deny_delete_users'] = false;
 // Version settings
 $_configuration['system_version'] = '{NEW_VERSION}';
@@ -251,6 +255,8 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 //$_configuration['announcements_hide_send_to_hrm_users'] = true;
 // Hide certificate link in index/userportal pages
 //$_configuration['hide_my_certificate_link'] = false;
+// Hide header and footer in certificate pdf
+//$_configuration['hide_header_footer_in_certificate'] = false;
 // Send only quiz answer notifications to course coaches and not general coach
 //$_configuration['block_quiz_mail_notification_general_coach'] = false;
 // Security: block direct access from logged in users to contents in OPEN (but not public) courses. Set to true to block
@@ -284,5 +290,5 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 // $_configuration['update_users_email_to_dummy_except_admins'] = false;
 // Certification pdf export orientation
 // $_configuration['certificate_pdf_orientation'] = 'landscape'; // It can be 'portrait' or 'landscape'
-
-
+// Hide main navigation menu (left column in userportal)
+// $_configuration['hide_main_navigation_menu'] = false;

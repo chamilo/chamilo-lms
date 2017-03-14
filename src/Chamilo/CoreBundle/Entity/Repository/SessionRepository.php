@@ -17,7 +17,6 @@ use Chamilo\CoreBundle\Entity\Course;
  */
 class SessionRepository extends EntityRepository
 {
-
     /**
      * Get session's courses ordered by position in session_rel_course
      * @param Session $session The session

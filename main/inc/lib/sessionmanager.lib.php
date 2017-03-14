@@ -1549,6 +1549,8 @@ class SessionManager
         $tbl_item_properties = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $tbl_student_publication = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
         $tbl_student_publication_assignment = Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
+        $userGroupSessionTable = Database::get_main_table(TABLE_USERGROUP_REL_SESSION);
+
         $ticket = Database::get_main_table(TABLE_TICKET_TICKET);
         $em = Database::getManager();
 
@@ -1612,6 +1614,11 @@ class SessionManager
                 my_delete($currentCourseRepositorySys.'/'.$work['url']);
             }
         }
+
+        // Class
+        $sql = "DELETE FROM $userGroupSessionTable
+                WHERE session_id IN($id_checked)";
+        Database::query($sql);
 
         Database::query("DELETE FROM $tbl_student_publication WHERE session_id IN($id_checked)");
         Database::query("DELETE FROM $tbl_session_rel_course WHERE session_id IN($id_checked)");
@@ -7436,7 +7443,15 @@ class SessionManager
         $session_field = new ExtraFieldModel('session');
         $rules = $session_field->getRules($columns, $column_model);
 
-        $column_model[] = array('name'=>'actions', 'index'=>'actions', 'width'=>'80',  'align'=>'left','formatter'=>'action_formatter','sortable'=>'false', 'search' => 'false');
+        $column_model[] = array(
+            'name' => 'actions',
+            'index' => 'actions',
+            'width' => '80',
+            'align' => 'left',
+            'formatter' => 'action_formatter',
+            'sortable' => 'false',
+            'search' => 'false',
+        );
         $columns[] = get_lang('Actions');
 
         foreach ($column_model as $col_model) {

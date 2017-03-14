@@ -49,9 +49,10 @@ class HTML_QuickForm_advanced_settings extends HTML_QuickForm_static
         return '<div class="form-group">
                     <label class="col-sm-2 control-label"></label>
                     <div class="col-sm-10">
-                        <a id="'.$name.'" class="btn btn-default advanced_options" href="#">
-                        <em class="fa fa-bars"></em>  '.$text.'
-                        </a>
+                        <button id="' . $name . '" type="button" class="btn btn-default advanced_options"
+                                data-toggle="button" aria-pressed="false" autocomplete="off">
+                            <em class="fa fa-bars"></em> '.$text.'
+                        </button>
                     </div>
                  </div>';
     }

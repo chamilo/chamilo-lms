@@ -1,3 +1,9 @@
+### 7.1.1
+- change to named plugins for 3rd party - just calling init
+
+### 7.1.0
+- add option to include plugins not directly related - they get called their init function with current instance of i18next on init
+
 ### 7.0.1
 - fix issue in fallback lng detection if no code was detected
 - check for having a lng in append when searching locals to load on loadResources - avoid error on express middleware

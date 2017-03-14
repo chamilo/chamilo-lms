@@ -1,9 +1,9 @@
 <?php
 
 $reports_template['CourseArticulate'] = array(
-	'description' => 'CourseArticulate',
-	'getSQL' => 'reports_template_CourseArticulate_getSQL',
-	'wizard' =>
+    'description' => 'CourseArticulate',
+    'getSQL' => 'reports_template_CourseArticulate_getSQL',
+    'wizard' =>
 '
 <span id="CourseArticulate" class="step">
 	<span class="font_normal_07em_black">This report does not need any particular settings</span><br />
@@ -12,113 +12,113 @@ $reports_template['CourseArticulate'] = array(
 ');
 
 function reports_template_CourseArticulate_getSQL() {
-	// settings
+    // settings
 
 
-	// Nom, prenom
-	$query = 'select u.lastname as "Last name", u.firstname as "First name" ';
-	$query .= 'from '.Database::get_main_table(TABLE_MAIN_USER).' u ';
-	$query .= ' where u.user_id in ('.reports_getVisibilitySQL().') ';
-	$query .= ' order by u.user_id ';
-	$queries[0] = $query;
-	$extraFieldType = \Chamilo\CoreBundle\Entity\ExtraField::USER_FIELD_TYPE;
-	// Custom Field
-	foreach (array("tags" => "tags") as $k => $v) { // FIXME
-		$query = 'select ufv.value  as "'.$v.'" ';
-		$query .= 'from '.Database::get_main_table(TABLE_MAIN_USER).' u ';
-		$query .= 'left join'.Database::get_main_table(TABLE_EXTRA_FIELD).' uf ';
-		$query .= ' on uf.variable ="'.$k.'" ';
-		$query .= 'left outer join '.Database::get_main_table(TABLE_EXTRA_FIELD_VALUES).' ufv ';
-		$query .= ' on ufv.item_id = u.user_id and ufv.field_id = uf.id ';
-		$query .= 'where ufv.extra_field_type = '.$extraFieldType.' AND u.user_id in ('.reports_getVisibilitySQL().') ';
-		$query .= ' order by u.user_id ';
-		$queries[] = $query;
-	}
+    // Nom, prenom
+    $query = 'select u.lastname as "Last name", u.firstname as "First name" ';
+    $query .= 'from '.Database::get_main_table(TABLE_MAIN_USER).' u ';
+    $query .= ' where u.user_id in ('.reports_getVisibilitySQL().') ';
+    $query .= ' order by u.user_id ';
+    $queries[0] = $query;
+    $extraFieldType = \Chamilo\CoreBundle\Entity\ExtraField::USER_FIELD_TYPE;
+    // Custom Field
+    foreach (array("tags" => "tags") as $k => $v) { // FIXME
+        $query = 'select ufv.value  as "'.$v.'" ';
+        $query .= 'from '.Database::get_main_table(TABLE_MAIN_USER).' u ';
+        $query .= 'left join'.Database::get_main_table(TABLE_EXTRA_FIELD).' uf ';
+        $query .= ' on uf.variable ="'.$k.'" ';
+        $query .= 'left outer join '.Database::get_main_table(TABLE_EXTRA_FIELD_VALUES).' ufv ';
+        $query .= ' on ufv.item_id = u.user_id and ufv.field_id = uf.id ';
+        $query .= 'where ufv.extra_field_type = '.$extraFieldType.' AND u.user_id in ('.reports_getVisibilitySQL().') ';
+        $query .= ' order by u.user_id ';
+        $queries[] = $query;
+    }
 
 
-	// Stored Value
-	$sv = array();
-	foreach ($sv as $k => $v) {
+    // Stored Value
+    $sv = array();
+    foreach ($sv as $k => $v) {
         if (!isset($v['sql']))
                 $v['sql'] = 'FIELD';
         $sqlField = str_replace('FIELD', 'sv.sv_value', $v['sql']);
         $query = 'select '.$sqlField.' as "'.$v['title'].'" ';
 //		$query = 'select sec_to_time(sv.sv_value) as "'.$v.'" ';
-		$query .= 'from '.Database::get_main_table(TABLE_MAIN_USER).' u ';
-		$query .= ' left outer join '.Database::get_main_table(TABLE_TRACK_STORED_VALUES).' sv ';
-		$query .= 'on sv.user_id = u.user_id and sv_key = "'.$k.'" ';
-		$query .= ' where u.user_id in ('.reports_getVisibilitySQL().') ';
-		$query .= ' group by u.user_id ';
-		$query .= ' order by u.user_id ';
-		$queries[] = $query;
-	}
+        $query .= 'from '.Database::get_main_table(TABLE_MAIN_USER).' u ';
+        $query .= ' left outer join '.Database::get_main_table(TABLE_TRACK_STORED_VALUES).' sv ';
+        $query .= 'on sv.user_id = u.user_id and sv_key = "'.$k.'" ';
+        $query .= ' where u.user_id in ('.reports_getVisibilitySQL().') ';
+        $query .= ' group by u.user_id ';
+        $query .= ' order by u.user_id ';
+        $queries[] = $query;
+    }
 
-	// first and last connection
-	$query = 'select min(tel.login_date) as "First connection", max(tel.logout_date) as "Latest connection"  ';
-	$query .= 'from '.Database::get_main_table(TABLE_MAIN_USER).' u ';
-	$query .= 'left outer join '.Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN).' tel ';
-	$query .= ' on tel.login_user_id = u.user_id ';
-	$query .= ' where u.user_id in ('.reports_getVisibilitySQL().') ';
-	$query .= ' group by u.user_id ';
-	$query .= ' order by u.user_id ';
-	$queries[] = $query;
+    // first and last connection
+    $query = 'select min(tel.login_date) as "First connection", max(tel.logout_date) as "Latest connection"  ';
+    $query .= 'from '.Database::get_main_table(TABLE_MAIN_USER).' u ';
+    $query .= 'left outer join '.Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN).' tel ';
+    $query .= ' on tel.login_user_id = u.user_id ';
+    $query .= ' where u.user_id in ('.reports_getVisibilitySQL().') ';
+    $query .= ' group by u.user_id ';
+    $query .= ' order by u.user_id ';
+    $queries[] = $query;
 
-	// SCORM Data
-	$scormData = array();
+    // SCORM Data
+    $scormData = array();
     $course_list = CourseManager::get_courses_list();
-	foreach ($course_list as $code => $details) {
-		$courseId = $details['id'];
-		$list = Database::query('SELECT l.id as lid, l.name as lname, li.id as liid, li.title as lititle '.
-					' FROM '.Database::get_course_table(TABLE_LP_MAIN).' l, '.Database::get_course_table(TABLE_LP_ITEM).' li '.
-					' WHERE l.c_id = '.$courseId.' AND li.c_id = '.$courseId.' AND l.id = li.lp_id');
-		while ($lpItem = Database::fetch_assoc($list)) {
-			$scormData[] = array(
-						//'coursedb' => $details['db_name'],
-						'lid' => $lpItem['lid'],
-						'liid' => $lpItem['liid'],
-						'target_view_count' => 1,
-						'target_indicator' => 'score',
-						'title' => $details['title'].'/'.$lpItem['lname'].'/'.$lpItem['lititle'].'/1/score',
-						'sql' => 'FIELD');
-			$scormData[] = array(
-						//'coursedb' => $details['db_name'],
-						'lid' => $lpItem['lid'],
-						'liid' => $lpItem['liid'],
-						'target_view_count' => 2,
-						'target_indicator' => 'score',
-						'title' => $details['title'].'/'.$lpItem['lname'].'/'.$lpItem['lititle'].'/2/score',
-						'sql' => 'FIELD');
-			$scormData[] = array(
-						//'coursedb' => $details['db_name'],
-						'lid' => $lpItem['lid'],
-						'liid' => $lpItem['liid'],
-						'target_view_count' => null,
-						'target_indicator' => 'score',
-						'title' => $details['title'].'/'.$lpItem['lname'].'/'.$lpItem['lititle'].'/all/score',
-						'sql' => 'avg(FIELD)');
-		}
-	}
+    foreach ($course_list as $code => $details) {
+        $courseId = $details['id'];
+        $list = Database::query('SELECT l.id as lid, l.name as lname, li.id as liid, li.title as lititle '.
+                    ' FROM '.Database::get_course_table(TABLE_LP_MAIN).' l, '.Database::get_course_table(TABLE_LP_ITEM).' li '.
+                    ' WHERE l.c_id = '.$courseId.' AND li.c_id = '.$courseId.' AND l.id = li.lp_id');
+        while ($lpItem = Database::fetch_assoc($list)) {
+            $scormData[] = array(
+                        //'coursedb' => $details['db_name'],
+                        'lid' => $lpItem['lid'],
+                        'liid' => $lpItem['liid'],
+                        'target_view_count' => 1,
+                        'target_indicator' => 'score',
+                        'title' => $details['title'].'/'.$lpItem['lname'].'/'.$lpItem['lititle'].'/1/score',
+                        'sql' => 'FIELD');
+            $scormData[] = array(
+                        //'coursedb' => $details['db_name'],
+                        'lid' => $lpItem['lid'],
+                        'liid' => $lpItem['liid'],
+                        'target_view_count' => 2,
+                        'target_indicator' => 'score',
+                        'title' => $details['title'].'/'.$lpItem['lname'].'/'.$lpItem['lititle'].'/2/score',
+                        'sql' => 'FIELD');
+            $scormData[] = array(
+                        //'coursedb' => $details['db_name'],
+                        'lid' => $lpItem['lid'],
+                        'liid' => $lpItem['liid'],
+                        'target_view_count' => null,
+                        'target_indicator' => 'score',
+                        'title' => $details['title'].'/'.$lpItem['lname'].'/'.$lpItem['lititle'].'/all/score',
+                        'sql' => 'avg(FIELD)');
+        }
+    }
 
-	foreach ($scormData as $v) {
+    foreach ($scormData as $v) {
         if (!isset($v['sql'])) {
             $v['sql'] = 'FIELD';
         }
         $sqlField = str_replace('FIELD', $v['target_indicator'], $v['sql']);
         $query = 'select '.$sqlField.' as "'.$v['title'].'" ';
         $query .= 'from '.Database::get_main_table(TABLE_MAIN_USER).' u ';
-		$query .= 'left outer join '.Database::get_course_table(TABLE_LP_VIEW).' lv ';
-		$query .= ' on u.user_id = lv.user_id and lv.lp_id = '.$v['lid'];
-		$query .= ' left outer join '.Database::get_course_table(TABLE_LP_ITEM_VIEW).' liv ';
-		$query .= ' on lv.id = liv.lp_view_id ';
-		if ($v['target_view_count'])
-			$query .= ' and liv.view_count = '.$v['target_view_count'];
-		$query .= ' and liv.lp_item_id = '.$v['liid'].' ';
-		$query .= ' where u.user_id in ('.reports_getVisibilitySQL().') ';
-		$query .= ' group by u.user_id ';
-		$query .= ' order by u.user_id ';
-		$queries[] = $query;
-	}
+        $query .= 'left outer join '.Database::get_course_table(TABLE_LP_VIEW).' lv ';
+        $query .= ' on u.user_id = lv.user_id and lv.lp_id = '.$v['lid'];
+        $query .= ' left outer join '.Database::get_course_table(TABLE_LP_ITEM_VIEW).' liv ';
+        $query .= ' on lv.id = liv.lp_view_id ';
+        if ($v['target_view_count'])
+            $query .= ' and liv.view_count = '.$v['target_view_count'];
+        $query .= ' and liv.lp_item_id = '.$v['liid'].' ';
+        $query .= ' where u.user_id in ('.reports_getVisibilitySQL().') ';
+        $query .= ' group by u.user_id ';
+        $query .= ' order by u.user_id ';
+        $queries[] = $query;
+    }
 
-	return $queries;
+    return $queries;
 }
 

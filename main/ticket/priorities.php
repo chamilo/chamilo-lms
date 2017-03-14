@@ -86,16 +86,16 @@ switch ($action) {
         );
         $url = api_get_self().'?action=edit&id='.$id;
         $form = TicketManager::getPriorityForm($url);
-
         $item = TicketManager::getPriority($_GET['id']);
-        $form->setDefaults([
-            'name' => $item->getName(),
-            'description' => $item->getDescription()]
+        $form->setDefaults(
+            [
+                'name' => $item->getName(),
+                'description' => $item->getDescription(),
+            ]
         );
         $formToString = $form->returnForm();
         if ($form->validate()) {
             $values =$form->getSubmitValues();
-
             $params = [
                 'name' => $values['name'],
                 'description' => $values['description']
@@ -136,7 +136,7 @@ function modify_filter($id, $params, $row)
         );
     }
 
-	return $result;
+    return $result;
 }
 
 $table->set_header(0, '', false);

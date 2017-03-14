@@ -9,6 +9,7 @@
   ],
   "dependencies": {
     "bootstrap": "3.*",
+    "bootstrap-select": "1.12.*",
     "fontawesome": "4.7.*",
     "jquery": "2.2.0",
     "jquery-ui": "1.11.*",

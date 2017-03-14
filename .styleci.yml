@@ -1,0 +1,48 @@
+preset: symfony
+
+enabled:
+  - class_keyword_remove
+  - combine_consecutive_unsets
+  - long_array_syntax
+  - newline_after_open_tag
+  - no_php4_constructor
+  - no_useless_else
+  - ordered_class_elements
+  - ordered_use
+
+finder:
+  exclude:
+    - 'app/cache/*'
+    - 'app/logs/*'
+    - 'documentation/*'
+    - 'app/Migrations/*'
+    - 'app/Resources/*'
+    - 'main/admin/db.php'
+    - 'main/auth/cas/lib/CAS/*'
+    - 'main/inc/lib/browser/*'
+    - 'main/inc/lib/freemindflashbrowser/*'
+    - 'main/inc/lib/internationalization_database/*'
+    - 'main/inc/lib/javascript/*'
+    - 'main/inc/lib/kses-0.2.2/*'
+    - 'main/inc/lib/mimetex/*'
+    - 'main/inc/lib/nanogong/*'
+    - 'main/inc/lib/nusoap/*'
+    - 'main/inc/lib/opengraph/*'
+    - 'main/inc/lib/ppt2png/*'
+    - 'main/inc/lib/phpseclib'
+    - 'main/inc/lib/pear/*'
+    - 'main/inc/lib/phpmailer/*'
+    - 'main/inc/lib/phpseclib/*'
+    - 'main/inc/lib/svg-edit/*'
+    - 'main/inc/lib/swfobject/*'
+    - 'main/inc/lib/wami-recorder/*'
+    - 'main/inc/lib/xajax/*'
+    - 'main/lp/packaging/*'
+    - 'main/template/*'
+    - 'main/img/*'
+    - 'main/lang/*'
+    - 'main/default_course_document'
+    - 'fonts'
+    - 'tests/*'
+    - 'vendor/*'
+    - 'web/*'

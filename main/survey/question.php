@@ -19,10 +19,13 @@ $(document).ready( function() {
 
 /** @todo this has to be moved to a more appropriate place (after the display_header of the code)*/
 if (!api_is_allowed_to_edit(false, true)) {
-	Display :: display_header();
-	Display :: display_error_message(get_lang('NotAllowed'), false);
-	Display :: display_footer();
-	exit;
+    api_not_allowed(true);
+}
+
+// Getting the survey information
+$surveyData = SurveyManager::get_survey($_GET['survey_id']);
+if (empty($surveyData)) {
+    api_not_allowed(true);
 }
 
 // Is valid request
@@ -32,40 +35,27 @@ $is_valid_request = isset($_REQUEST['is_executable']) ? $_REQUEST['is_executable
 $table_survey = Database:: get_course_table(TABLE_SURVEY);
 $table_survey_question = Database:: get_course_table(TABLE_SURVEY_QUESTION);
 $table_survey_question_option = Database:: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
-
 $table_course = Database:: get_main_table(TABLE_MAIN_COURSE);
 $table_user = Database:: get_main_table(TABLE_MAIN_USER);
-
 $course_id = api_get_course_int_id();
-
-// Getting the survey information
-$surveyData = SurveyManager::get_survey($_GET['survey_id']);
-
-if (empty($surveyData)) {
-	Display :: display_header(get_lang('ToolSurvey'));
-	Display :: display_error_message(get_lang('InvallidSurvey'), false);
-	Display :: display_footer();
-	exit;
-}
-
 $urlname = api_substr(api_html_entity_decode($surveyData['title'], ENT_QUOTES), 0, 40);
 if (api_strlen(strip_tags($surveyData['title'])) > 40) {
-	$urlname .= '...';
+    $urlname .= '...';
 }
 
 if ($surveyData['survey_type'] == 1) {
-	$sql = 'SELECT id FROM '.Database :: get_course_table(TABLE_SURVEY_QUESTION_GROUP).'
-	        WHERE
+    $sql = 'SELECT id FROM '.Database :: get_course_table(TABLE_SURVEY_QUESTION_GROUP).'
+            WHERE
                 c_id = '.$course_id.' AND
                 survey_id = '.(int)$_GET['survey_id'].' LIMIT 1';
-	$rs = Database::query($sql);
-	if (Database::num_rows($rs)===0) {
+    $rs = Database::query($sql);
+    if (Database::num_rows($rs)===0) {
         Display::addFlash(
             Display::return_message(get_lang('YouNeedToCreateGroups'))
         );
-		header('Location: '.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.(int)$_GET['survey_id']);
-		exit;
-	}
+        header('Location: '.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.(int)$_GET['survey_id']);
+        exit;
+    }
 }
 
 // Breadcrumbs
@@ -155,8 +145,8 @@ $surveyQuestion->getForm()->setDefaults($formData);
 $surveyQuestion->renderForm();
 
 if ($surveyQuestion->getForm()->validate()) {
-	$values = $surveyQuestion->getForm()->getSubmitValues();
-	$surveyQuestion->save($surveyData, $values);
+    $values = $surveyQuestion->getForm()->getSubmitValues();
+    $surveyQuestion->save($surveyData, $values);
 }
 
 Display::display_header($tool_name, 'Survey');

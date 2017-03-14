@@ -136,7 +136,7 @@ class ThematicController
                                     api_get_session_id()
                                 );
                                 $current_thematic = $thematic->thematic_save();
-                                $description_type = 0;
+                                $description_type = 1;
                                 break;
                             case 'plan':
                                 $thematic->set_thematic_plan_attributes(
@@ -324,12 +324,29 @@ class ThematicController
                                 );
                                 $thematic->thematic_plan_save();
                             }
-                            unset($_SESSION['thematic_plan_token']);
-                            $data['message'] = 'ok';
 
                             $saveRedirect = api_get_path(WEB_PATH) . 'main/course_progress/index.php?';
                             $saveRedirect.= api_get_cidreq() . '&';
-                            $saveRedirect.= 'thematic_plan_save_message=ok';
+
+                            if (isset($_REQUEST['add_item'])) {
+                                $thematic->set_thematic_plan_attributes(
+                                    $_REQUEST['thematic_id'],
+                                    '',
+                                    '',
+                                    $i
+                                );
+                                $thematic->thematic_plan_save();
+
+                                $saveRedirect .= http_build_query([
+                                    'action' => 'thematic_plan_list',
+                                    'thematic_id' => $_REQUEST['thematic_id']
+                                ]);
+                            } else {
+                                $saveRedirect.= 'thematic_plan_save_message=ok';
+
+                                unset($_SESSION['thematic_plan_token']);
+                                $data['message'] = 'ok';
+                            }
 
                             header("Location: $saveRedirect");
                             exit;

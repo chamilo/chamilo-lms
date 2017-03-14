@@ -14,7 +14,7 @@ use JeroenDesloovere\VCard\VCard;
 api_block_anonymous_users();
 
 if (isset($_REQUEST['userId'])) {
-	$userId = intval($_REQUEST['userId']);
+    $userId = intval($_REQUEST['userId']);
 } else {
     api_not_allowed();
 }

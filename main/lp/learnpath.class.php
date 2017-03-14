@@ -2487,7 +2487,7 @@ class learnpath
     {
         $text = $percentage . $text_add;
         $output = '<div class="progress">
-                        <div id="progress_bar_value" class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="' .$percentage. '" aria-valuemin="0" aria-valuemax="100" style="width: '.$text.';">
+                        <div id="progress_bar_value" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="' .$percentage. '" aria-valuemin="0" aria-valuemax="100" style="width: '.$text.';">
                         '. $text .'
                         </div>
                     </div>';
@@ -8657,8 +8657,8 @@ class learnpath
 
             $return .= '<tr>';
             $return .= '<td class="radio"' . (($item['item_type'] != TOOL_QUIZ && $item['item_type'] != TOOL_HOTPOTATOES) ? ' colspan="3"' : '') . '>';
-            $return .= '<label for="id' . $item['id'] . '">';
             $return .= '<input' . (in_array($prerequisiteId, array($item['id'], $item['ref'])) ? ' checked="checked" ' : '') . ($item['item_type'] == 'dir' ? ' disabled="disabled" ' : ' ') . 'id="id' . $item['id'] . '" name="prerequisites" style="margin-left:' . $item['depth'] * 10 . 'px; margin-right:10px;" type="radio" value="' . $item['id'] . '" />';
+            $return .= '<label for="id' . $item['id'] . '">';
             $icon_name = str_replace(' ', '', $item['item_type']);
 
             if (file_exists('../img/lp_' . $icon_name . '.png')) {

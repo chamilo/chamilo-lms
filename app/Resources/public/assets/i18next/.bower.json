@@ -18,12 +18,12 @@
     "karma.conf.js"
   ],
   "homepage": "https://github.com/i18next/i18next",
-  "version": "7.0.1",
-  "_release": "7.0.1",
+  "version": "7.1.1",
+  "_release": "7.1.1",
   "_resolution": {
     "type": "version",
-    "tag": "v7.0.1",
-    "commit": "1a46f0a20e1bbfc609f981349fdacde2b9c3ba4c"
+    "tag": "v7.1.1",
+    "commit": "2ac9c1f6bf107946b92053cf66e0111bc2464394"
   },
   "_source": "https://github.com/i18next/i18next.git",
   "_target": ">=2.4.0",

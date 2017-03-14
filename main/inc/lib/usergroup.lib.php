@@ -37,14 +37,12 @@ class UserGroup extends Model
     public function __construct()
     {
         $this->table = Database::get_main_table(TABLE_USERGROUP);
-
         $this->usergroup_rel_user_table = Database::get_main_table(TABLE_USERGROUP_REL_USER);
         $this->usergroup_rel_course_table = Database::get_main_table(TABLE_USERGROUP_REL_COURSE);
         $this->usergroup_rel_session_table = Database::get_main_table(TABLE_USERGROUP_REL_SESSION);
         $this->access_url_rel_usergroup = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USERGROUP);
         $this->table_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $this->table_user = Database::get_main_table(TABLE_MAIN_USER);
-
         $this->useMultipleUrl = api_get_configuration_value('multiple_access_urls');
     }
 
@@ -684,37 +682,58 @@ class UserGroup extends Model
         if (!empty($new_items)) {
             foreach ($new_items as $course_id) {
                 $course_info = api_get_course_info_by_id($course_id);
-                if (!empty($user_list)) {
-                    foreach ($user_list as $user_id) {
-                        CourseManager::subscribe_user($user_id, $course_info['code']);
+                if ($course_info) {
+                    if (!empty($user_list)) {
+                        foreach ($user_list as $user_id) {
+                            CourseManager::subscribe_user(
+                                $user_id,
+                                $course_info['code']
+                            );
+                        }
                     }
+                    $params = array(
+                        'course_id' => $course_id,
+                        'usergroup_id' => $usergroup_id,
+                    );
+                    Database::insert(
+                        $this->usergroup_rel_course_table,
+                        $params
+                    );
                 }
-                $params = array('course_id' => $course_id, 'usergroup_id' => $usergroup_id);
-                Database::insert($this->usergroup_rel_course_table, $params);
             }
         }
     }
 
     /**
      * @param int $usergroup_id
-     * @param bool $delete_items
+     * @param array $delete_items
      */
     public function unsubscribe_courses_from_usergroup($usergroup_id, $delete_items)
     {
         // Deleting items.
         if (!empty($delete_items)) {
             $user_list = self::get_users_by_usergroup($usergroup_id);
-            foreach ($delete_items as $course_id) {
-                $course_info = api_get_course_info_by_id($course_id);
-                if (!empty($user_list)) {
-                    foreach ($user_list as $user_id) {
-                        CourseManager::unsubscribe_user($user_id, $course_info['code']);
+            if (!empty($user_list)) {
+                foreach ($delete_items as $course_id) {
+                    $course_info = api_get_course_info_by_id($course_id);
+                    if ($course_info) {
+                        foreach ($user_list as $user_id) {
+                            CourseManager::unsubscribe_user(
+                                $user_id,
+                                $course_info['code']
+                            );
+                        }
+                        Database::delete(
+                            $this->usergroup_rel_course_table,
+                            array(
+                                'usergroup_id = ? AND course_id = ?' => array(
+                                    $usergroup_id,
+                                    $course_id
+                                )
+                            )
+                        );
                     }
                 }
-                Database::delete(
-                    $this->usergroup_rel_course_table,
-                    array('usergroup_id = ? AND course_id = ?' => array($usergroup_id, $course_id))
-                );
             }
         }
     }
@@ -1195,9 +1214,7 @@ class UserGroup extends Model
     public function delete($id)
     {
         if ($this->useMultipleUrl) {
-            if ($result) {
-                $this->unsubscribeToUrl($id, api_get_current_access_url_id());
-            }
+            $this->unsubscribeToUrl($id, api_get_current_access_url_id());
         }
 
         $sql = "DELETE FROM $this->usergroup_rel_user_table
@@ -1323,15 +1340,13 @@ class UserGroup extends Model
 
         //Name
         $form->addElement('text', 'name', get_lang('Name'), array('maxlength'=>255));
-        $form->applyFilter('name', 'html_filter');
         $form->applyFilter('name', 'trim');
 
         $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
         $form->addRule('name', '', 'maxlength', 255);
 
         // Description
-        $form->addElement('textarea', 'description', get_lang('Description'), array('cols' => 58));
-        $form->applyFilter('description', 'html_filter');
+        $form->addTextarea('description', get_lang('Description'), array('cols' => 58));
         $form->applyFilter('description', 'trim');
 
         if ($this->showGroupTypeSetting) {
@@ -1345,7 +1360,6 @@ class UserGroup extends Model
 
         // url
         $form->addElement('text', 'url', get_lang('Url'));
-        $form->applyFilter('url', 'html_filter');
         $form->applyFilter('url', 'trim');
 
         // Picture
@@ -1368,7 +1382,6 @@ class UserGroup extends Model
 
         $form->addElement('select', 'visibility', get_lang('GroupPermissions'), $this->getGroupStatusList());
         $form->setRequiredNote('<span class="form_required">*</span> <small>'.get_lang('ThisFieldIsRequired').'</small>');
-
         $form->addElement('checkbox', 'allow_members_leave_group', '', get_lang('AllowMemberLeaveGroup'));
 
         // Setting the form elements
@@ -1398,16 +1411,16 @@ class UserGroup extends Model
         }
 
         switch ($size_picture) {
-            case GROUP_IMAGE_SIZE_ORIGINAL :
+            case GROUP_IMAGE_SIZE_ORIGINAL:
                 $size_picture = '';
                 break;
-            case GROUP_IMAGE_SIZE_BIG :
+            case GROUP_IMAGE_SIZE_BIG:
                 $size_picture = 'big_';
                 break;
-            case GROUP_IMAGE_SIZE_MEDIUM :
+            case GROUP_IMAGE_SIZE_MEDIUM:
                 $size_picture = 'medium_';
                 break;
-            case GROUP_IMAGE_SIZE_SMALL :
+            case GROUP_IMAGE_SIZE_SMALL:
                 $size_picture = 'small_';
                 break;
             default:
@@ -1431,9 +1444,10 @@ class UserGroup extends Model
             if (file_exists($file) && !is_dir($file)) {
                 $picture['file'] = $image_array['dir'].$picture_file;
             } else {
-                $picture['file'] = Display::returnIconPath('group_na.png',64);
+                $picture['file'] = Display::returnIconPath('group_na.png', 64);
             }
         }
+
         return $picture;
     }
 
@@ -1535,7 +1549,7 @@ class UserGroup extends Model
         if (empty($user_id)) {
             $user_id = api_get_user_id();
         }
-        $user_role	= $this->get_user_group_role($user_id, $group_id);
+        $user_role = $this->get_user_group_role($user_id, $group_id);
         if (in_array($user_role, array(GROUP_USER_PERMISSION_ADMIN))) {
             return true;
         } else {
@@ -1553,7 +1567,7 @@ class UserGroup extends Model
         if (empty($user_id)) {
             $user_id = api_get_user_id();
         }
-        $user_role	= $this->get_user_group_role($user_id, $group_id);
+        $user_role = $this->get_user_group_role($user_id, $group_id);
         if (in_array($user_role, array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_MODERATOR))) {
             return true;
         } else {

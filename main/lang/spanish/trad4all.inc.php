@@ -1213,7 +1213,7 @@ $ShowAndSubscribeClosed = "Visible / Cerrado";
 $AdminThisUser = "Volver a este usuario";
 $Manage = "Administrar la Plataforma";
 $EnrollToCourseSuccessful = "Su inscripción en el curso se ha completado";
-$SubCat = "sub-categorías";
+$SubCat = "Subcategorías";
 $UnsubscribeNotAllowed = "En este curso no está permitido que los propios usuarios puedan anular su inscripción.";
 $CourseAdminUnsubscribeNotAllowed = "Actualmente es el administrador de este curso";
 $CourseManagement = "Catálogo de cursos";
@@ -7989,4 +7989,5 @@ $SeeAccesses = "Ver accesos";
 $PriorityChangeFromXToY = "Prioridad modificada de %s a %s";
 $StatusChangeFromXToY = "Estado modificado de %s a %s";
 $SkillFromCourseXDeletedSinceThen = "Esta competencia fue adquirida a través del curso %s que ha sido eliminado desde entonces.";
+$SaveAndAddNewItem = "Guardar y agregar nuevo elemento";
 ?>

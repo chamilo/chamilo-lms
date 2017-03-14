@@ -2277,17 +2277,6 @@ function api_get_session_visibility(
             $isCoach = api_is_coach($session_id, $courseId);
 
             if ($isCoach) {
-                // Test end date.
-                if (!empty($row['coach_access_end_date'])) {
-                    $endDateCoach = api_strtotime($row['coach_access_end_date'], 'UTC');
-
-                    if ($endDateCoach >= $now) {
-                        $visibility = SESSION_AVAILABLE;
-                    } else {
-                        $visibility = SESSION_INVISIBLE;
-                    }
-                }
-
                 // Test start date.
                 if (!empty($row['coach_access_start_date'])) {
                     $start = api_strtotime($row['coach_access_start_date'], 'UTC');
@@ -2295,6 +2284,19 @@ function api_get_session_visibility(
                         $visibility = SESSION_AVAILABLE;
                     } else {
                         $visibility = SESSION_INVISIBLE;
+                    }
+                }
+
+                // Test end date.
+                if (!empty($row['coach_access_end_date'])) {
+                    if ($visibility = SESSION_AVAILABLE) {
+                        $endDateCoach = api_strtotime($row['coach_access_end_date'], 'UTC');
+
+                        if ($endDateCoach >= $now) {
+                            $visibility = SESSION_AVAILABLE;
+                        } else {
+                            $visibility = $row['visibility'];
+                        }
                     }
                 }
             }
@@ -7502,15 +7504,29 @@ function api_warn_hosting_contact($limitName)
 }
 
 /**
+ * Gets value of a variable from app/config/configuration.php
  * @param string $variable
+ *
  * @return bool|mixed
  */
 function api_get_configuration_value($variable)
 {
     global $_configuration;
+    // Check the current url id, id = 1 by default
+    $urlId = isset($_configuration['access_url']) ? (int) $_configuration['access_url'] : 1;
+
+    // Check if variable exists
     if (isset($_configuration[$variable])) {
+        if (is_array($_configuration[$variable])) {
+            // Check if it exists for the sub portal
+            if (array_key_exists($urlId, $_configuration[$variable])) {
+                return $_configuration[$variable][$urlId];
+            }
+        }
+
         return $_configuration[$variable];
     }
+
     return false;
 }
 

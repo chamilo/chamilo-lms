@@ -586,19 +586,21 @@ class Event
 
     /**
      * Record an hotspot spot for this attempt at answering an hotspot question
-     * @param	int		Exercise ID
-     * @param	int		Question ID
-     * @param	int		Answer ID
-     * @param	int		Whether this answer is correct (1) or not (0)
-     * @param	string	Coordinates of this point (e.g. 123;324)
-     * @param	bool update results?
-     * @return	boolean	Result of the insert query
+     * @param int $exeId
+     * @param int $questionId Question ID
+     * @param int $answerId Answer ID
+     * @param int $correct
+     * @param string $coords Coordinates of this point (e.g. 123;324)
+     * @param bool $updateResults
+     * @param int $exerciseId
+     *
+     * @return bool Result of the insert query
      * @uses Course code and user_id from global scope $_cid and $_user
      */
     public static function saveExerciseAttemptHotspot(
-        $exe_id,
-        $question_id,
-        $answer_id,
+        $exeId,
+        $questionId,
+        $answerId,
         $correct,
         $coords,
         $updateResults = false,
@@ -613,35 +615,39 @@ class Event
             }
         }
 
-        $tbl_track_e_hotspot = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
+        if (empty($exeId)) {
+            return false;
+        }
+
+        $table = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
         if ($updateResults) {
             $params = array(
                 'hotspot_correct' => $correct,
                 'hotspot_coordinate' => $coords
             );
             Database::update(
-                $tbl_track_e_hotspot,
+                $table,
                 $params,
                 array(
                     'hotspot_user_id = ? AND hotspot_exe_id = ? AND hotspot_question_id = ? AND hotspot_answer_id = ? ' => array(
                         api_get_user_id(),
-                        $exe_id,
-                        $question_id,
-                        $answer_id
+                        $exeId,
+                        $questionId,
+                        $answerId
                     )
                 )
             );
 
         } else {
             return Database::insert(
-                $tbl_track_e_hotspot,
+                $table,
                 [
                     'hotspot_course_code' => api_get_course_id(),
                     'hotspot_user_id' => api_get_user_id(),
                     'c_id' => api_get_course_int_id(),
-                    'hotspot_exe_id' => $exe_id,
-                    'hotspot_question_id' => $question_id,
-                    'hotspot_answer_id' => $answer_id,
+                    'hotspot_exe_id' => $exeId,
+                    'hotspot_question_id' => $questionId,
+                    'hotspot_answer_id' => $answerId,
                     'hotspot_correct' => $correct,
                     'hotspot_coordinate' => $coords
                 ]
@@ -1802,13 +1808,19 @@ class Event
      * end at the same second as the user connected to the course.
      * @param int $courseId The course in which to add the time
      * @param int $userId The user for whom to add the time
-     * @param $sessionId The session in which to add the time (if any)
+     * @param int $sessionId The session in which to add the time (if any)
      * @param string $virtualTime The amount of time to be added, in a hh:mm:ss format. If int, we consider it is expressed in hours.
      * @param string $ip IP address to go on record for this time record
+     *
      * @return True on successful insertion, false otherwise
      */
-    public static function eventAddVirtualCourseTime($courseId, $userId, $sessionId, $virtualTime = '', $ip = '')
-    {
+    public static function eventAddVirtualCourseTime(
+        $courseId,
+        $userId,
+        $sessionId,
+        $virtualTime = '',
+        $ip = ''
+    ) {
         $courseTrackingTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $time = $loginDate = $logoutDate = api_get_utc_datetime();
 
@@ -1820,13 +1832,13 @@ class Event
         // Get the current latest course connection register. We need that
         // record to re-use the data and create a new record.
         $sql = "SELECT *
-                        FROM $courseTrackingTable
-                        WHERE
-                            user_id = ".$userId." AND
-                            c_id = ".$courseId."  AND
-                            session_id  = ".$sessionId." AND
-                            login_course_date > '$time' - INTERVAL 3600 SECOND
-                        ORDER BY login_course_date DESC LIMIT 0,1";
+                FROM $courseTrackingTable
+                WHERE
+                    user_id = ".$userId." AND
+                    c_id = ".$courseId."  AND
+                    session_id  = ".$sessionId." AND
+                    login_course_date > '$time' - INTERVAL 3600 SECOND
+                ORDER BY login_course_date DESC LIMIT 0,1";
         $result = Database::query($sql);
 
         // Ignore if we didn't find any course connection record in the last
@@ -1866,16 +1878,16 @@ class Event
             );
             // We update the course tracking table
             $sql = "UPDATE $courseTrackingTable  
-                        SET 
-                            login_course_date = '$loginDate',
-                            logout_course_date = '$courseAccessLoginDate',
-                            counter = 0
-                        WHERE 
-                            course_access_id = ".intval($courseAccessId)." AND 
-                            session_id = ".$sessionId;
-            $result = Database::query($sql);
+                    SET 
+                        login_course_date = '$loginDate',
+                        logout_course_date = '$courseAccessLoginDate',
+                        counter = 0
+                    WHERE 
+                        course_access_id = ".intval($courseAccessId)." AND 
+                        session_id = ".$sessionId;
+            Database::query($sql);
 
-            return $result;
+            return true;
         }
 
         return false;
@@ -1912,9 +1924,10 @@ class Event
         // format returned by SQL for a subtraction of two datetime values
         // @todo make sure this is portable between DBMSes
         if (preg_match('/:/', $virtualTime)) {
-            $virtualTime = preg_replace('/:/', '', $virtualTime);
+            list($h, $m, $s) = preg_split('/:/', $virtualTime);
+            $virtualTime = $h * 3600 + $m * 60 + $s;
         } else {
-            $virtualTime *= 10000;
+            $virtualTime *= 3600;
         }
 
         // Get the current latest course connection register. We need that
@@ -1926,7 +1939,7 @@ class Event
                             c_id = $courseId  AND
                             session_id  = $sessionId AND
                             counter = 0 AND
-                            logout_course_date - login_course_date = '$virtualTime'
+                            (UNIX_TIMESTAMP(logout_course_date) - UNIX_TIMESTAMP(login_course_date)) = '$virtualTime'
                         ORDER BY login_course_date DESC LIMIT 0,1";
         $result = Database::query($sql);
 

@@ -37,8 +37,8 @@ $sql = "SELECT s.name, c.title
 $result = Database::query($sql);
 
 if (!list($session_name,$course_title) = Database::fetch_row($result)) {
-	header('Location: session_course_list.php?id_session='.$id_session);
-	exit();
+    header('Location: session_course_list.php?id_session='.$id_session);
+    exit();
 }
 
 //$interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
@@ -48,63 +48,63 @@ $interbreadcrumb[]=array('url' => "session_course_list.php?id_session=$id_sessio
 
 $arr_infos = array();
 if (isset($_POST['formSent']) && $_POST['formSent']) {
-	$formSent = 1;
+    $formSent = 1;
 
-	// get all tutor by course_code in the session
-	$sql = "SELECT user_id
+    // get all tutor by course_code in the session
+    $sql = "SELECT user_id
 	        FROM $tbl_session_rel_course_rel_user
 	        WHERE session_id = '$id_session' AND c_id = '".$courseId."' AND status = 2";
-	$rs_coaches = Database::query($sql);
+    $rs_coaches = Database::query($sql);
 
-	$coaches_course_session = array();
-	if (Database::num_rows($rs_coaches) > 0){
-		while ($row_coaches = Database::fetch_row($rs_coaches)) {
-			$coaches_course_session[] = $row_coaches[0];
-		}
-	}
+    $coaches_course_session = array();
+    if (Database::num_rows($rs_coaches) > 0){
+        while ($row_coaches = Database::fetch_row($rs_coaches)) {
+            $coaches_course_session[] = $row_coaches[0];
+        }
+    }
 
-	$id_coaches= $_POST['id_coach'];
+    $id_coaches= $_POST['id_coach'];
 
-	if (is_array($id_coaches) && count($id_coaches) > 0) {
+    if (is_array($id_coaches) && count($id_coaches) > 0) {
 
-		foreach ($id_coaches as $id_coach) {
-			$id_coach = intval($id_coach);
+        foreach ($id_coaches as $id_coach) {
+            $id_coach = intval($id_coach);
             $rs1 = SessionManager::set_coach_to_course_session(
                 $id_coach,
                 $id_session,
                 $courseId
             );
-		}
+        }
 
-		// set status to 0 other tutors from multiple list
-		$array_intersect = array_diff($coaches_course_session,$id_coaches);
+        // set status to 0 other tutors from multiple list
+        $array_intersect = array_diff($coaches_course_session,$id_coaches);
 
-		foreach ($array_intersect as $no_coach_user_id) {
-			$rs2 = SessionManager::set_coach_to_course_session(
-				$no_coach_user_id,
-				$id_session,
+        foreach ($array_intersect as $no_coach_user_id) {
+            $rs2 = SessionManager::set_coach_to_course_session(
+                $no_coach_user_id,
+                $id_session,
                 $courseId,
-				true
-			);
-		}
+                true
+            );
+        }
 
-		header('Location: '.Security::remove_XSS($_GET['page']).'?id_session='.$id_session);
-		exit();
-	}
+        header('Location: '.Security::remove_XSS($_GET['page']).'?id_session='.$id_session);
+        exit();
+    }
 } else {
-	$sql = "SELECT user_id
+    $sql = "SELECT user_id
 	        FROM $tbl_session_rel_course_rel_user
 	        WHERE
                 session_id = '$id_session' AND
                 c_id = '".$courseId."' AND
                 status = 2 ";
-	$rs = Database::query($sql);
+    $rs = Database::query($sql);
 
-	if (Database::num_rows($rs) > 0) {
-		while ($infos = Database::fetch_array($rs)) {
-			$arr_infos[] = $infos['user_id'];
-		}
-	}
+    if (Database::num_rows($rs) > 0) {
+        while ($infos = Database::fetch_array($rs)) {
+            $arr_infos[] = $infos['user_id'];
+        }
+    }
 }
 
 $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';

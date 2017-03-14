@@ -4,17 +4,17 @@
 namespace Chamilo\CoreBundle\Admin;
 
 use Chamilo\CoreBundle\Entity\ToolResourceRights;
-use Sonata\AdminBundle\Admin\Admin;
+use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
-use Sonata\AdminBundle\Show\ShowMapper;
+
 
 /**
  * Class ToolResourceRightsAdmin
  * @package Chamilo\CoreBundle\Admin
  */
-class ToolResourceRightsAdmin extends Admin
+class ToolResourceRightsAdmin extends AbstractAdmin
 {
     /**
      * @inheritdoc

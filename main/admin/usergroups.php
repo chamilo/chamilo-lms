@@ -16,7 +16,7 @@ api_protect_limit_for_session_admin();
 $htmlHeadXtra[] = api_get_jqgrid_js();
 // setting breadcrumbs
 $interbreadcrumb[] = array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
-$action = isset($_GET['action']) ? $_GET['action'] : null;
+$action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : null;
 if ($action == 'add') {
     $interbreadcrumb[] = array('url' => 'usergroups.php','name' => get_lang('Classes'));
     $interbreadcrumb[] = array('url' => '#','name' => get_lang('Add'));
@@ -31,11 +31,11 @@ if ($action == 'add') {
 Display::display_header();
 
 // Tool name
-if (isset($_GET['action']) && $_GET['action'] == 'add') {
+if ($action == 'add') {
     $tool = 'Add';
     $interbreadcrumb[] = array('url' => api_get_self(), 'name' => get_lang('Group'));
 }
-if (isset($_GET['action']) && $_GET['action'] == 'edit') {
+if ($action == 'edit') {
     $tool = 'Modify';
     $interbreadcrumb[] = array('url' => api_get_self(), 'name' => get_lang('Group'));
 }
@@ -103,7 +103,7 @@ $(function() {
 $usergroup = new UserGroup();
 $usergroup->showGroupTypeSetting = true;
 // Action handling: Adding a note
-if (isset($_GET['action']) && $_GET['action'] == 'add') {
+if ($action == 'add') {
     if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
         api_not_allowed();
     }
@@ -111,7 +111,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
     $form = new FormValidator(
         'usergroup',
         'post',
-        api_get_self().'?action='.Security::remove_XSS($_GET['action'])
+        api_get_self().'?action='.$action
     );
     $usergroup->setForm($form, 'add');
 
@@ -142,9 +142,13 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
         $form->setConstants(array('sec_token' => $token));
         $form->display();
     }
-} elseif (isset($_GET['action']) && $_GET['action'] == 'edit' && is_numeric($_GET['id'])) {
+} elseif ($action == 'edit' && is_numeric($_GET['id'])) {
     $id = intval($_GET['id']);
-    $form = new FormValidator('usergroup', 'post', api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&id='.$id);
+    $form = new FormValidator(
+        'usergroup',
+        'post',
+        api_get_self().'?action='.$action.'&id='.$id
+    );
     $defaults = $usergroup->get($id);
     $usergroup->setForm($form, 'edit', $defaults);
 
@@ -179,7 +183,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
         echo '</div>';
         $form->display();
     }
-} elseif (isset($_GET['action']) && $_GET['action'] == 'delete' && is_numeric($_GET['id'])) {
+} elseif ($action == 'delete' && is_numeric($_GET['id'])) {
     $res = $usergroup->delete($_GET['id']);
     if ($res) {
         Display::display_confirmation_message(get_lang('Deleted'));

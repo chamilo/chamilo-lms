@@ -334,7 +334,6 @@ class FeatureContext extends MinkContext
     public function iFillInSelectBootstrapInputWithAndSelect($field, $value, $entry)
     {
         $page = $this->getSession()->getPage();
-
         $inputField = $page->find('css', $field);
         if (!$inputField) {
             throw new \Exception('No field found');
@@ -369,7 +368,12 @@ class FeatureContext extends MinkContext
      */
     public function iFillInSelectStaticBootstrapInputWithAndSelect($field, $value)
     {
-        $this->getSession()->executeScript("$(input[name='$field']).selectpicker('val', '$value');");
+        $this->getSession()->wait(1000);
+        $this->getSession()->executeScript("
+            $(function() {
+                $('$field').selectpicker('val', '$value');
+            });
+        ");
     }
 
     /**
@@ -394,20 +398,24 @@ class FeatureContext extends MinkContext
         $this->getSession()->getDriver()->click($radioButton->getXPath());
     }
 
-     /**
-     * @When /^I select "([^"]*)" from select with label "([^"]*)"/
+    /**
+     * @When /^I check radio button with label "([^"]*)"$/
      */
-    public function iSelectFromSelectWithLabel($option, $label)
+    public function iCheckTheRadioButtonWithLabel($label)
     {
-        $label = $this->getSession()->getPage()->findField($label);
-        if (null === $label) {
-            throw new Exception("Cannot find label ".$label);
-        }
-        $select = $label->getParent()->getParent()->find('select');
-        if (null === $select) {
-            throw new Exception("Select not found: ".$select);
-        }
-        $select->selectOption($option);
+        $this->getSession()->executeScript("
+            $(function() {
+                $(':contains(\$label\")').parent().find('input').prop('checked', true);
+            });
+        ");
+    }
+
+     /**
+     * @When /^I press advanced settings$/
+     */
+    public function iSelectFromSelectWithLabel()
+    {
+        $this->pressButton('Advanced settings');
     }
 
      /**

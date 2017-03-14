@@ -30,26 +30,26 @@ $sort   = in_array($_GET['sort'],array('title','nbr_users'))?$_GET['sort']:'titl
 $result = Database::query("SELECT name FROM $tbl_session WHERE id='$id_session'");
 
 if (!list($session_name)=Database::fetch_row($result)) {
-	header('Location: session_list.php');
-	exit;
+    header('Location: session_list.php');
+    exit;
 }
 
 if ($action == 'delete') {
-	$idChecked = $_REQUEST['idChecked'];
-	if (is_array($idChecked) && count($idChecked)>0) {
-		$my_temp = array();
-		foreach ($idChecked as $id){
-			$my_temp[]= Database::escape_string($id);// forcing the escape_string
-		}
-		$idChecked = $my_temp;
-		$idChecked="'".implode("','", $idChecked)."'";
-		$result = Database::query("DELETE FROM $tbl_session_rel_course WHERE session_id='$id_session' AND c_id IN($idChecked)");
-		$nbr_affected_rows=Database::affected_rows($result);
-		Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE session_id='$id_session' AND c_id IN($idChecked)");
-		Database::query("UPDATE $tbl_session SET nbr_courses=nbr_courses-$nbr_affected_rows WHERE id='$id_session'");
-	}
-	header('Location: '.api_get_self().'?id_session='.$id_session.'&sort='.$sort);
-	exit();
+    $idChecked = $_REQUEST['idChecked'];
+    if (is_array($idChecked) && count($idChecked)>0) {
+        $my_temp = array();
+        foreach ($idChecked as $id){
+            $my_temp[]= Database::escape_string($id);// forcing the escape_string
+        }
+        $idChecked = $my_temp;
+        $idChecked="'".implode("','", $idChecked)."'";
+        $result = Database::query("DELETE FROM $tbl_session_rel_course WHERE session_id='$id_session' AND c_id IN($idChecked)");
+        $nbr_affected_rows=Database::affected_rows($result);
+        Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE session_id='$id_session' AND c_id IN($idChecked)");
+        Database::query("UPDATE $tbl_session SET nbr_courses=nbr_courses-$nbr_affected_rows WHERE id='$id_session'");
+    }
+    header('Location: '.api_get_self().'?id_session='.$id_session.'&sort='.$sort);
+    exit();
 }
 
 $limit  = 20;
@@ -82,17 +82,17 @@ $tableHeader[] = array(get_lang('Actions'));
 $tableCourses = array();
 
 foreach ($Courses as $key=>$enreg) {
-	$course = array();
-	$course[] = '<input type="checkbox" name="idChecked[]" value="'.$enreg['id'].'">';
-	$course[] = api_htmlentities($enreg['title'],ENT_QUOTES,$charset);
-	$course[] = '<a href="session_course_user_list.php?id_session='.$id_session.'&course_code='.$enreg['code'].'">'.$enreg['nbr_users'].' '.get_lang('Users').'</a>';
-	$course[] = '<a href="'.api_get_path(WEB_COURSE_PATH).$enreg['code'].'/?id_session='.$id_session.'">'.
-		Display::return_icon('course_home.gif', get_lang('Course')).'</a>
+    $course = array();
+    $course[] = '<input type="checkbox" name="idChecked[]" value="'.$enreg['id'].'">';
+    $course[] = api_htmlentities($enreg['title'],ENT_QUOTES,$charset);
+    $course[] = '<a href="session_course_user_list.php?id_session='.$id_session.'&course_code='.$enreg['code'].'">'.$enreg['nbr_users'].' '.get_lang('Users').'</a>';
+    $course[] = '<a href="'.api_get_path(WEB_COURSE_PATH).$enreg['code'].'/?id_session='.$id_session.'">'.
+        Display::return_icon('course_home.gif', get_lang('Course')).'</a>
 			<a href="session_course_edit.php?id_session='.$id_session.'&page=session_course_list.php&course_code='.$enreg['code'].'">'.
-		Display::return_icon('edit.png', get_lang('Edit')).'</a>
+        Display::return_icon('edit.png', get_lang('Edit')).'</a>
 			<a href="'.api_get_self().'?id_session='.$id_session.'&sort='.$sort.'&action=delete&idChecked[]='.$enreg['id'].'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)).'\')) return false;">'.
-		Display::return_icon('delete.png', get_lang('Delete')).'</a>';
-	$tableCourses[] = $course;
+        Display::return_icon('delete.png', get_lang('Delete')).'</a>';
+    $tableCourses[] = $course;
 }
 echo '<form method="post" action="'.api_get_self().'">';
 Display :: display_sortable_table($tableHeader, $tableCourses, array (), array ());

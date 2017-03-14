@@ -88,15 +88,15 @@ $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
 
 /** @todo this has to be moved to a more appropriate place (after the display_header of the code)*/
 if (!api_is_allowed_to_edit(false, true) || $isDrhOfCourse) {
-	Display :: display_header(get_lang('ToolSurvey'));
+    Display :: display_header(get_lang('ToolSurvey'));
     // Show error message if the survey can be seen only by tutors
     if ($survey_data['visible_results'] != SURVEY_VISIBLE_TUTOR) {
         SurveyUtil::handle_reporting_actions($survey_data, $people_filled);
     } else {
         Display :: display_error_message(get_lang('NotAllowed'), false);
     }
-	Display :: display_footer();
-	exit;
+    Display :: display_footer();
+    exit;
 }
 
 // Database table definitions

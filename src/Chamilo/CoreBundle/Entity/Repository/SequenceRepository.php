@@ -25,7 +25,7 @@ class SequenceRepository extends EntityRepository
      */
     public function findRequirementForResource($resourceId, $type)
     {
-  /*      $criteria = Criteria::create()
+    /*      $criteria = Criteria::create()
             ->where(Criteria::expr()->eq("resourceId", $resourceId))
             ->andWhere(Criteria::expr()->eq("type", $type));
 */

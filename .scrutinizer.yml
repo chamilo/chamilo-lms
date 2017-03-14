@@ -48,6 +48,7 @@ filter:
       - 'web/*'
 checks:
     php:
+        no_trailing_whitespace: true
         code_rating: true
         duplication: true
         fix_php_opening_tag: false
@@ -83,6 +84,12 @@ checks:
 
 coding_style:
     php:
+        indentation:
+            general:
+                use_tabs: false
+                size: 4
+            switch:
+                indent_case: true
         spaces:
             general:
                 linefeed_character: newline
@@ -90,26 +97,26 @@ coding_style:
                 concatenation: false
         braces:
             classes_functions:
-                class: undefined
-                function: undefined
-                closure: undefined
+                class: new-line
+                function: new-line
+                closure: end-of-line
             if:
-                opening: undefined
+                opening: end-of-line
             for:
-                opening: undefined
+                opening: end-of-line
             while:
-                opening: undefined
+                opening: end-of-line
             do_while:
-                opening: undefined
+                opening: end-of-line
             switch:
-                opening: undefined
+                opening: end-of-line
             try:
-                opening: undefined
+                opening: end-of-line
         upper_lower_casing:
             keywords:
-                general: undefined
+                general: lower
             constants:
-                true_false_null: undefined
+                true_false_null: lower
 
 tools:
     php_mess_detector:

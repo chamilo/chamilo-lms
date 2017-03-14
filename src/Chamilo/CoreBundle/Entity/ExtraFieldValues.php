@@ -75,7 +75,6 @@ class ExtraFieldValues extends BaseAttributeValue
      */
     public function __construct()
     {
-
     }
 
     /**
@@ -158,13 +157,13 @@ class ExtraFieldValues extends BaseAttributeValue
         return $this;
     }
 
-        /**
-         * Set comment
-         *
-         * @param string $comment
-         *
-         * @return ExtraFieldValues
-         */
+    /**
+     * Set comment
+     *
+     * @param string $comment
+     *
+     * @return ExtraFieldValues
+     */
     public function setComment($comment)
     {
         $this->comment = $comment;

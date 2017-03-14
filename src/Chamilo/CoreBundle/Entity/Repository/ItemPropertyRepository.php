@@ -22,8 +22,8 @@ class ItemPropertyRepository extends EntityRepository
      * @param $tool learnpath | document | etc
      * @param $itemId
      * @param Course $course
-     * @param int $sessionId
-     * @param int $groupId
+     * @param Session $session
+     * @param Group $group
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -191,7 +191,6 @@ class ItemPropertyRepository extends EntityRepository
                 }
 
                 if ($unsubscribeUserToo) {
-
                     //Adding users from this group to the item
                     $users = \GroupManager::getStudentsAndTutors($groupId);
                     $newUserList = array();

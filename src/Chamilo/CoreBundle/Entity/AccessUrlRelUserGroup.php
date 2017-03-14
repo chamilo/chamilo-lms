@@ -36,7 +36,6 @@ class AccessUrlRelUserGroup
      */
     private $userGroupId;
 
-
     /**
      * Set accessUrlId
      *

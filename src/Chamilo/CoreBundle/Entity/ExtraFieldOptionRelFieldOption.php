@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
@@ -7,7 +8,10 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * ExtraFieldOptionRelFieldOption
  *
- * @ORM\Table(name="extra_field_option_rel_field_option", uniqueConstraints={@ORM\UniqueConstraint(name="idx", columns={"field_id", "role_id", "field_option_id", "related_field_option_id"})})
+ * @ORM\Table(
+ *     name="extra_field_option_rel_field_option",
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="idx", columns={"field_id", "role_id", "field_option_id", "related_field_option_id"})}
+ * )
  * @ORM\Entity
  */
 class ExtraFieldOptionRelFieldOption
@@ -42,11 +46,11 @@ class ExtraFieldOptionRelFieldOption
      */
     protected $relatedFieldOptionId;
 
-        /**
-         * @var integer
-         *
-         * @ORM\Column(name="role_id", type="integer", precision=0, scale=0, nullable=true, unique=false)
-         */
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="role_id", type="integer", precision=0, scale=0, nullable=true, unique=false)
+     */
     protected $roleId;
 
     /**
@@ -128,12 +132,12 @@ class ExtraFieldOptionRelFieldOption
         return $this->relatedFieldOptionId;
     }
 
-        /**
-         * Set roleId
-         *
-         * @param integer $roleId
-         * @return ExtraFieldOptionRelFieldOption
-         */
+    /**
+     * Set roleId
+     *
+     * @param integer $roleId
+     * @return ExtraFieldOptionRelFieldOption
+     */
     public function setRoleId($roleId)
     {
         $this->roleId = $roleId;

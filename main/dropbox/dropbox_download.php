@@ -86,7 +86,7 @@ if (!$allowed_to_download) {
             'error'
         )
     );
-	exit;
+    exit;
 } else {
     /*      DOWNLOAD THE FILE */
     // the user is allowed to download the file

@@ -77,7 +77,7 @@ Display::toolbarAction('toolbar-slideshow', $content)
                     if ($image_resizing == 'noresizing' || $image_resizing == '') {
                             echo ' checked';
                     }
-		?>>
+        ?>>
             </label>
             <?php echo '<b>'. get_lang('NoResizing') . '</b>, ' . get_lang('NoResizingComment') ;?>
         </div>
@@ -87,7 +87,7 @@ Display::toolbarAction('toolbar-slideshow', $content)
                         if ($image_resizing == 'resizing_auto' || $image_resizing == '') {
                                 echo ' checked';
                         }
-		?>>
+        ?>>
             </label>
             <?php echo '<b>'. get_lang('ResizingAuto') . '</b>, ' . get_lang('ResizingAutoComment');?>
 	</div>
@@ -99,7 +99,7 @@ Display::toolbarAction('toolbar-slideshow', $content)
                             $width = $_SESSION['image_resizing_width'];
                             $height = $_SESSION['image_resizing_height'];
                     }
-		?>>
+        ?>>
             </label>
             <?php echo '<b>'. get_lang('Resizing') . '</b>, ' . get_lang('ResizingComment'); ?>
 	</div>
@@ -107,13 +107,13 @@ Display::toolbarAction('toolbar-slideshow', $content)
             <label class="col-sm-1 control-label"><?php echo get_lang('Width'); ?></label>
             <div class="col-sm-3">
                 <input class="form-control" name="width" type="text" id="width" <?php
-		if ($image_resizing == 'resizing') {
-			echo ' value="'.$width.'"';
-			echo ' class="enabled_input"';
+        if ($image_resizing == 'resizing') {
+            echo ' value="'.$width.'"';
+            echo ' class="enabled_input"';
                     } else {
                     echo ' class="disabled_input"';
                 }
-		?> >
+        ?> >
             </div>
             <div class="col-sm-8"></div>
         </div>
@@ -121,13 +121,13 @@ Display::toolbarAction('toolbar-slideshow', $content)
             <label class="col-sm-1 control-label"><?php echo get_lang('Height'); ?></label>
             <div class="col-sm-3">
                 <input class="form-control" name="height" type="text" id="height" <?php
-		if ($image_resizing == 'resizing') {
-			echo ' value="'.$height.'"';
-			echo ' class="enabled_input"';
-		} else {
+        if ($image_resizing == 'resizing') {
+            echo ' value="'.$height.'"';
+            echo ' class="enabled_input"';
+        } else {
                         echo ' class="disabled_input"';
                 }
-		?> >
+        ?> >
             </div>
             <div class="col-sm-8"></div>
         </div>

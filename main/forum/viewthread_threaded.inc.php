@@ -457,8 +457,8 @@ if (!empty($attachment_list) && is_array($attachment_list)) {
 
 // The post has been displayed => it can be removed from the what's new array
 if (isset($whatsnew_post_info[$forumId][$threadId][$row['post_id']])) {
-  unset($whatsnew_post_info[$forumId][$threadId][$row['post_id']]);
-  unset($_SESSION['whatsnew_post_info'][$forumId][$threadId][$row['post_id']]);
+    unset($whatsnew_post_info[$forumId][$threadId][$row['post_id']]);
+    unset($_SESSION['whatsnew_post_info'][$forumId][$threadId][$row['post_id']]);
 }
 echo "</table>";
 

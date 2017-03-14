@@ -196,12 +196,12 @@ if (!empty($OkMsg)) {
         if (!empty($rows_session_category)) {
             foreach($rows_session_category as $category) {
                 if($category['id'] == $categoryId)
-                      echo '<option value="'.$category['id'].'" selected>'.$category['name'].'</option>';
-                  else
-                      echo '<option value="'.$category['id'].'">'.$category['name'].'</option>';
+                        echo '<option value="'.$category['id'].'" selected>'.$category['name'].'</option>';
+                    else
+                        echo '<option value="'.$category['id'].'">'.$category['name'].'</option>';
             }
         }
-          ?>
+            ?>
       </select>
     </td>
 </tr>

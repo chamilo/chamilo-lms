@@ -42,11 +42,11 @@ class ExtraFieldOptionRelFieldOption
      */
     protected $relatedFieldOptionId;
 
-     /**
-     * @var integer
-     *
-     * @ORM\Column(name="role_id", type="integer", precision=0, scale=0, nullable=true, unique=false)
-     */
+        /**
+         * @var integer
+         *
+         * @ORM\Column(name="role_id", type="integer", precision=0, scale=0, nullable=true, unique=false)
+         */
     protected $roleId;
 
     /**
@@ -128,12 +128,12 @@ class ExtraFieldOptionRelFieldOption
         return $this->relatedFieldOptionId;
     }
 
-     /**
-     * Set roleId
-     *
-     * @param integer $roleId
-     * @return ExtraFieldOptionRelFieldOption
-     */
+        /**
+         * Set roleId
+         *
+         * @param integer $roleId
+         * @return ExtraFieldOptionRelFieldOption
+         */
     public function setRoleId($roleId)
     {
         $this->roleId = $roleId;

@@ -26,7 +26,6 @@ class AccessUrlRelUserGroup
      * @var integer
      *
      * @ORM\Column(name="access_url_id", type="integer")
-
      */
     private $accessUrlId;
 

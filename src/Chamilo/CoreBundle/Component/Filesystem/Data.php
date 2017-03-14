@@ -86,13 +86,13 @@ class Data
         return $this->get($file);
     }
 
-     /**
-     * Gets a file from the data/courses/MATHS/scorm directory
-     * @param string $courseCode
-     * @param string $file
-      *
-     * @return SplFileInfo
-     */
+        /**
+         * Gets a file from the data/courses/MATHS/scorm directory
+         * @param string $courseCode
+         * @param string $file
+         *
+         * @return SplFileInfo
+         */
     public function getCourseScormDocument($courseCode, $file)
     {
         $file = 'courses/'.$courseCode.'/scorm/'.$file;

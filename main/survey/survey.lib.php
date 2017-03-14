@@ -1184,16 +1184,16 @@ class SurveyManager
     }
 
     /**
-    * This function saves the question in the shared database
-    *
-    * @param array $form_content all the information of the form
-    * @param array $survey_data all the information of the survey
-    *
-    * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-    * @version February 2007
-    *
-    * @todo editing of a shared question
-    */
+     * This function saves the question in the shared database
+     *
+     * @param array $form_content all the information of the form
+     * @param array $survey_data all the information of the survey
+     *
+     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     * @version February 2007
+     *
+     * @todo editing of a shared question
+     */
     public function save_shared_question($form_content, $survey_data)
     {
         $_course = api_get_course_info();

@@ -1973,7 +1973,6 @@ function get_work_user_list(
 
         $url = api_get_path(WEB_CODE_PATH).'work/';
         $unoconv = api_get_configuration_value('unoconv.binaries');
-
         $loadingText = addslashes(get_lang('Loading'));
         $uploadedText = addslashes(get_lang('Uploaded'));
         $failsUploadText = addslashes(get_lang('UplNoFileUploaded'));
@@ -2041,7 +2040,8 @@ function get_work_user_list(
             ) {
                 // Firstname, lastname, username
                 $work['fullname'] = Display::div(
-                    api_get_person_name($work['firstname'], $work['lastname']), ['class' => 'work-name']
+                    api_get_person_name($work['firstname'], $work['lastname']),
+                    ['class' => 'work-name']
                 );
                 $work['title_clean'] = $work['title'];
 
@@ -2064,7 +2064,6 @@ function get_work_user_list(
                 }
 
                 $send_to = Portfolio::share('work', $work['id'],  array('style' => 'white-space:nowrap;'));
-
                 $feedback = null;
                 $count = getWorkCommentCount($item_id, $course_info);
                 if (!is_null($count) && !empty($count)) {

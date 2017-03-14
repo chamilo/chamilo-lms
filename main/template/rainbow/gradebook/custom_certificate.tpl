@@ -56,7 +56,7 @@
                                         </ul>
                                     {% endif %}
                                 <h4 style="color: #672290;">{{ complete_name }}</h4>
-                                <p>{{ 'SkillsValidated' | get_lang }}:</p>
+                                <p style="color:#80CC28;">{{ 'SkillsValidated' | get_lang }}:</p>
                                     {% if skills %}
                                         <ul style="color: #672290;">
                                         {% for skill in skills %}
@@ -64,8 +64,8 @@
                                         {% endfor %}
                                         </ul>
                                     {% endif %}
-                                Berlin/Paris, {{ 'The' | get_lang }} <span style="font-weight: bold; color: #672290;">{{ certificate_generated_date }}</span><br>
-                                {{ 'ThePlatformTeam' | get_lang }}
+                                <p style="color:#80CC28;">Berlin/Paris, {{ 'The' | get_lang }} <span style="font-weight: bold; color: #672290;">{{ certificate_generated_date }}</span><br>
+                                    {{ 'ThePlatformTeam' | get_lang }}</p>
                                 <br>
                             </td>
 			<td height=700 bgcolor="#80CC28"><img src="{{ _p.web_css_theme }}images/lado-b.png" style="display:block;"></td>

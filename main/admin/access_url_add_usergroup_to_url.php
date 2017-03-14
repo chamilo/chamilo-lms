@@ -87,7 +87,7 @@ $db_urls = Database::store_result($result);
                   <?php
                     echo Display::get_alphabet_options($firstLetterUserGroup);
                     echo Display::get_numeric_options(0, 9, $firstLetterUserGroup);
-                  ?>
+                    ?>
             </select>
         </td>
         <td width="20%">&nbsp;</td>

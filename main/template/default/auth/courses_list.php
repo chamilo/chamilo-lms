@@ -29,11 +29,11 @@ if (!empty($message)) {
 
 // COURSES WITH CATEGORIES
 if (!empty($user_course_categories)) {
-       foreach ($user_course_categories as $row) {
-           echo Display::page_subheader($row['title']);
-           echo '<a name="category'.$row['id'].'"></a>';
+        foreach ($user_course_categories as $row) {
+            echo Display::page_subheader($row['title']);
+            echo '<a name="category'.$row['id'].'"></a>';
 
-           if (isset($_GET['categoryid']) && $_GET['categoryid'] == $row['id']) { ?>
+            if (isset($_GET['categoryid']) && $_GET['categoryid'] == $row['id']) { ?>
             <!-- We display the edit form for the category -->
 
             <form name="edit_course_category" method="post" action="courses.php?action=<?php echo $action; ?>">
@@ -241,15 +241,15 @@ if (!empty($courses_without_category)) {
                     </a>
             <?php } else {
                     echo Display::display_icon('up_na.png', get_lang('Up'),'',22);
-                  }
+                    }
 
-                  if ($key < $number_of_courses - 1) { ?>
+                    if ($key < $number_of_courses - 1) { ?>
                     <a href="courses.php?action=<?php echo $action; ?>&amp;move=down&amp;course=<?php echo $course['code']; ?>&amp;category=<?php echo $course['user_course_cat']; ?>&amp;sec_token=<?php echo $stok; ?>">
                     <?php echo Display::display_icon('down.png', get_lang('Down'),'',22); ?>
                     </a>
             <?php } else {
                     echo Display::display_icon('down_na.png', get_lang('Down'),'',22);
-                  }?>
+                    }?>
                 </div>
                  <div style="float:left; margin-right:10px;">
                   <!-- cancel subscrioption-->
@@ -267,7 +267,7 @@ if (!empty($courses_without_category)) {
                     </div>
               <?php }
                 }
-              ?>
+                ?>
             </td>
             </tr>
             <?php

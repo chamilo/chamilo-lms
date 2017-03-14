@@ -10,7 +10,7 @@
  */
 
 //the plugin title
-$plugin_info['title']      = 'Hide/Unhide the Login/Password default form';
+$plugin_info['title'] = 'Hide/Unhide the Login/Password default form';
 
 //the comments that go with the plugin
 $plugin_info['comment']     = "If you use another way of authentication than local, you may want to hide the Login/Password default Form to avoid users mistakes. This plugin replace the Login/Password form with a text that unhide the Login/Password form if you click on it.";
@@ -31,4 +31,4 @@ $form->setDefaults($defaults);
 $plugin_info['settings_form'] = $form;
 
 //set the templates that are going to be used
-$plugin_info['templates']   = array('template.tpl');
+$plugin_info['templates'] = array('template.tpl');

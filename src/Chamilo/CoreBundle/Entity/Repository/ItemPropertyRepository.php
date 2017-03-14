@@ -196,7 +196,7 @@ class ItemPropertyRepository extends EntityRepository
                     $users = \GroupManager::getStudentsAndTutors($groupId);
                     $newUserList = array();
                     if (!empty($users)) {
-                        foreach($users as $user) {
+                        foreach ($users as $user) {
                             $newUserList[] = $user['user_id'];
                         }
                         $this->unsubcribeUsersToItem(

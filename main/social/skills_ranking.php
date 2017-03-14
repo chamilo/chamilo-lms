@@ -13,7 +13,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 //Add the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
-$interbreadcrumb[] = array("url" => "index.php","name" => get_lang('Skills'));
+$interbreadcrumb[] = array("url" => "index.php", "name" => get_lang('Skills'));
 
 //jqgrid will use this URL to do the selects
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_user_skill_ranking';
@@ -28,7 +28,7 @@ $columns = array(
     get_lang('Rank')
 );
 
-$column_model   = array(
+$column_model = array(
     array(
         'name' => 'photo',
         'index' => 'photo',

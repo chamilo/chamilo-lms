@@ -18,31 +18,34 @@ build:
             - php -d memory_limit=2G /usr/bin/composer.phar -v update
 filter:
     excluded_paths:
-        - tests/*
-        - main/img/*
-        - main/lang/*
-        - app/cache/*
-        - app/logs/*
-        - web/*
-        - vendor/*
-        - main/admin/db.php
-        - app/Migrations/*
-        - main/inc/lib/browser/*
-        - main/inc/lib/elfinder/*
-        - main/inc/lib/freemindflashbrowser/*
-        - main/inc/lib/kses-0.2.2/*
-        - main/inc/lib/mimetex/*
-        - main/inc/lib/nanogong/*
-        - main/inc/lib/pclzip/*
-        - main/inc/lib/pear/*
-        - main/inc/lib/phpmailer/*
-        - main/inc/lib/phpseclib/*
-        - main/inc/lib/svg-edit/*
-        - main/inc/lib/swfobject/*
-        - main/inc/lib/wami-recorder/*
-        - main/inc/lib/xajax/*
-        - main/auth/cas/lib/CAS/*
-
+      - 'app/cache/*'
+      - 'app/logs/*'
+      - 'app/Migrations/*'
+      - 'app/Resources/*'
+      - 'main/admin/db.php'
+      - 'main/auth/cas/lib/CAS/*'
+      - 'main/inc/lib/browser/*'
+      - 'main/inc/lib/freemindflashbrowser/*'
+      - 'main/inc/lib/internationalization_database/*'
+      - 'main/inc/lib/javascript/*'
+      - 'main/inc/lib/kses-0.2.2/*'
+      - 'main/inc/lib/mimetex/*'
+      - 'main/inc/lib/nanogong/*'
+      - 'main/inc/lib/ppt2png/*'
+      - 'main/inc/lib/pear/*'
+      - 'main/inc/lib/phpmailer/*'
+      - 'main/inc/lib/phpseclib/*'
+      - 'main/inc/lib/svg-edit/*'
+      - 'main/inc/lib/swfobject/*'
+      - 'main/inc/lib/wami-recorder/*'
+      - 'main/inc/lib/xajax/*'
+      - 'main/lp/packaging/*'
+      - 'main/template/*'
+      - 'main/img/*'
+      - 'main/lang/*'
+      - 'tests/*'
+      - 'vendor/*'
+      - 'web/*'
 checks:
     php:
         code_rating: true

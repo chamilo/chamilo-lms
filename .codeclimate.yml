@@ -13,21 +13,25 @@ engines:
 
 ratings:
   paths:
-  - '*.php'
+  - '**.php'
+  - '**.js'
+  - '**.css'
 
 exclude_paths:
 - 'app/cache/*'
 - 'app/logs/*'
 - 'app/Migrations/*'
+- 'app/Resources/*'
 - 'main/admin/db.php'
 - 'main/auth/cas/lib/CAS/*'
 - 'main/inc/lib/browser/*'
-- 'main/inc/lib/elfinder/*'
 - 'main/inc/lib/freemindflashbrowser/*'
+- 'main/inc/lib/internationalization_database/*'
+- 'main/inc/lib/javascript/*'
 - 'main/inc/lib/kses-0.2.2/*'
 - 'main/inc/lib/mimetex/*'
 - 'main/inc/lib/nanogong/*'
-- 'main/inc/lib/pclzip/*'
+- 'main/inc/lib/ppt2png/*'
 - 'main/inc/lib/pear/*'
 - 'main/inc/lib/phpmailer/*'
 - 'main/inc/lib/phpseclib/*'
@@ -35,6 +39,8 @@ exclude_paths:
 - 'main/inc/lib/swfobject/*'
 - 'main/inc/lib/wami-recorder/*'
 - 'main/inc/lib/xajax/*'
+- 'main/lp/packaging/*'
+- 'main/template/*'
 - 'main/img/*'
 - 'main/lang/*'
 - 'tests/*'

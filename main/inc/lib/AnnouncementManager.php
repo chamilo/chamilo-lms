@@ -1475,7 +1475,7 @@ class AnnouncementManager
                         // No group
                         $cond_user_id = " AND (
                             ip.lastedit_user_id = '".$user_id."' OR (
-                                ip.to_user_id='".$user_id."' OR
+                                (ip.to_user_id='$user_id' OR ip.to_user_id IS NULL) OR
                                 (ip.to_group_id IS NULL OR ip.to_group_id IN (0, ".implode(", ", $group_memberships)."))
                             )
                         ) ";
@@ -1487,11 +1487,11 @@ class AnnouncementManager
                 } else {
                     if ($group_id == 0) {
                         $cond_user_id = " AND (
-                            ip.to_user_id = $user_id AND (ip.to_group_id IS NULL OR ip.to_group_id IN (0, ".implode(", ", $group_memberships)."))
+                            (ip.to_user_id='$user_id' OR ip.to_user_id IS NULL) AND (ip.to_group_id IS NULL OR ip.to_group_id IN (0, ".implode(", ", $group_memberships)."))
                         ) ";
                     } else {
                        $cond_user_id = " AND (
-                            ip.to_user_id = $user_id AND (ip.to_group_id IS NULL OR ip.to_group_id IN (0, ".$group_id."))
+                            (ip.to_user_id='$user_id' OR ip.to_user_id IS NULL) AND (ip.to_group_id IS NULL OR ip.to_group_id IN (0, ".$group_id."))
                         )";
                     }
                 }
@@ -1514,10 +1514,10 @@ class AnnouncementManager
                     if ($allowUserEditSetting && !api_is_anonymous()) {
                         $cond_user_id = " AND (
                             ip.lastedit_user_id = '".api_get_user_id()."' OR
-                            (ip.to_user_id='".$user_id."' AND (ip.to_group_id='0' OR ip.to_group_id IS NULL))
+                            ((ip.to_user_id='$user_id' OR ip.to_user_id IS NULL) AND (ip.to_group_id='0' OR ip.to_group_id IS NULL))
                         ) ";
                     } else {
-                        $cond_user_id = " AND (ip.to_user_id='".$user_id."' AND (ip.to_group_id='0' OR ip.to_group_id IS NULL) ) ";
+                        $cond_user_id = " AND ((ip.to_user_id='$user_id' OR ip.to_user_id IS NULL) AND (ip.to_group_id='0' OR ip.to_group_id IS NULL) ) ";
                     }
 
                     $sql = "SELECT $select

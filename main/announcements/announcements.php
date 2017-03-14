@@ -378,6 +378,9 @@ switch ($action) {
 
         $nameTools = $form_name;
         $form->addElement('header', $form_name);
+        $form->addButtonAdvancedSettings('choose_recipients', [get_lang('ChooseRecipients'), get_lang('AnnouncementChooseRecipientsDescription')]);
+        $form->addHtml('<div id="choose_recipients_options" style="display: none;">');
+
         $to = [];
         if (empty($group_id)) {
             if (isset($_GET['remind_inactive'])) {
@@ -436,7 +439,8 @@ switch ($action) {
             $element = CourseManager::addGroupMultiSelect($form, $group_properties['iid'], array());
         }
 
-        $form->setRequired($element);
+        $form->addHtml('</div>');
+//        $form->setRequired($element);
         $form->addCheckBox('email_ann', '', get_lang('EmailOption'));
 
         if (!isset($announcement_to_modify)) {
@@ -458,6 +462,21 @@ switch ($action) {
             $defaults = array();
             if (!empty($to)) {
                 $defaults['users'] = $to;
+            }
+        }
+
+        foreach ($defaults['users'] as $value) {
+            $parts = explode(':', $value);
+
+            if (isset($parts[1]) && !empty($parts[1])) {
+                $form->addHtml("
+                    <script>
+                        $(document).on('ready', function () {
+                            $('#choose_recipients').click();
+                        });
+                    </script>
+                ");
+                break;
             }
         }
 
@@ -500,6 +519,7 @@ switch ($action) {
 
         if ($form->validate()) {
             $data = $form->getSubmitValues();
+            $data['users'] = isset($data['users']) ? $data['users'] : ['everyone'];
 
             $sendToUsersInSession = isset($data['send_to_users_in_session']) ? true : false;
 

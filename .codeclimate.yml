@@ -11,11 +11,12 @@ engines:
     enabled: true
     config:
     standard: "PSR1,PSR2"
+    checks:
+      PSR1 Classes ClassDeclaration MissingNamespace:
+        enabled: false
+
   duplication:
-    enabled: true
-    config:
-      languages:
-      - php
+    enabled: false
 
 ratings:
   paths:

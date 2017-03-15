@@ -2802,7 +2802,6 @@ function getStudentSubscribedToWork(
     } else {
         return $usersInWork;
     }
-
 }
 
 /**
@@ -4944,15 +4943,15 @@ function getFileContents($id, $course_info, $sessionId = 0, $correction = false)
                 $sessionId
             );
 
+            if (empty($item_info)) {
+                return false;
+            }
+
             allowOnlySubscribedUser(
                 api_get_user_id(),
                 $row['parent_id'],
                 $course_info['real_id']
             );
-
-            if (empty($item_info)) {
-                api_not_allowed();
-            }
 
             /*
             field show_score in table course :
@@ -4989,7 +4988,7 @@ function getFileContents($id, $course_info, $sessionId = 0, $correction = false)
             $student_is_owner_of_work = user_is_author($row['id'], $row['user_id']);
 
             if ($is_editor ||
-                ($student_is_owner_of_work) ||
+                $student_is_owner_of_work ||
                 ($doc_visible_for_all && $work_is_visible)
             ) {
                 $title = $row['title'];
@@ -5011,12 +5010,12 @@ function getFileContents($id, $course_info, $sessionId = 0, $correction = false)
                     }
                 }
 
-                Event::event_download($title);
-
                 if (Security::check_abs_path(
                     $full_file_name,
                     api_get_path(SYS_COURSE_PATH).api_get_course_path().'/')
                 ) {
+                    Event::event_download($title);
+
                     return array(
                         'path' => $full_file_name,
                         'title' => $title,

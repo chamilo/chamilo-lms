@@ -26,7 +26,7 @@
                     <td bgcolor="#80CC28" width=58 height=91>
                         <img src="{{ _p.web_css_theme }}images/lado-b.png" style="display:block;">
                     </td>
-                    <td bgcolor="#80CC28" width=610 height=91 style="font-family:ccourier; line-height: 26px; color:#FFF; font-size: 34px;">
+                    <td bgcolor="#80CC28" width=610 height=91 style="font-family:ccourier; line-height: 45px; font-weight: bold; color:#FFF; font-size: 45px;">
                         {{ 'CertificateHeader' | get_lang }}
                     </td>
                     <td bgcolor="#80CC28" width=58 height=91>
@@ -41,24 +41,24 @@
                 <table border="0" cellspacing="0" cellpadding="0" width="100%" height=900>
                     <tr>
 			<td bgcolor="#80CC28" height=700><img src="{{ _p.web_css_theme }}images/lado-a.png" style="display:block;"></td>
-			<td height=700 style="font-family: ccourier; line-height: 26px; color:#80CC28; padding: 40px; font-size: 18px;" valign="top">
-                            <h3 style="color: #672290;">
+			<td height=700 style="font-family: ccourier; line-height: 22px; color:#80CC28; padding: 40px; font-size: 18px;" valign="top">
+                            <h3 style="color: #672290; font-size: 24px;">
                                 {{ complete_name }}
                             </h3>
-                                <p style="font-size: 14px;">{{ 'UserHasParticipateDansDePlatformeXTheContratDateXCertificateDateXTimeX' | get_lang | format(_s.site_name, certificate_generated_date, terms_validation_date, time_in_platform)}}</p>
-                                <p style="font-size: 14px;">{{ 'ThisTrainingHasXHours' | get_lang | format(time_in_platform)}}</p>
+                                <p style="font-size: 14px;">{{ 'UserHasParticipateDansDePlatformeXTheContratDateXCertificateDateXTimeX' | get_lang | format(_s.site_name, certificate_generated_date, terms_validation_date, time_in_platform)}}</p><br>
+                                <p style="font-size: 14px;">{{ 'ThisTrainingHasXHours' | get_lang | format(time_in_platform)}}</p><br>
                                 <p style="font-size: 14px;">{{ 'TheContentsAreValidated' | get_lang }}:</p>
                                     {% if sessions %}
-                                        <ul style="color: #672290;">
+                                        <ul style="color: #672290; font-size: 14px;">
                                             {% for session in sessions %}
                                                 <li>  {{ session.session_name }}</li>
                                             {% endfor %}
                                         </ul>
                                     {% endif %}
-                                <h4 style="color: #672290;">{{ complete_name }}</h4>
+                                <h4 style="color: #672290; font-size: 14px;">{{ complete_name }}</h4>
                                 <p style="color:#80CC28; font-size: 14px;">{{ 'SkillsValidated' | get_lang }}:</p>
                                     {% if skills %}
-                                        <ul style="color: #672290;">
+                                        <ul style="color: #672290; font-size: 14px;">
                                         {% for skill in skills %}
                                             <li>{{ skill.name }}</li>
                                         {% endfor %}

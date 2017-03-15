@@ -12,10 +12,7 @@ engines:
     config:
     standard: "PSR1,PSR2"
   duplication:
-    enabled: true
-    config:
-      languages:
-      - php
+    enabled: false
 
 ratings:
   paths:

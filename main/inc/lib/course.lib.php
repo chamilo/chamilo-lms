@@ -2683,13 +2683,15 @@ class CourseManager
      * @param boolean $include_sessions Whether to include courses from session or not
      * @param boolean $adminGetsAllCourses If the user is platform admin,
      * whether he gets all the courses or just his. Note: This does *not* include all sessions
+     * @param bool $loadSpecialCourses
      * @return array    List of codes and db name
      * @author isaac flores paz
      */
     public static function get_courses_list_by_user_id(
         $user_id,
         $include_sessions = false,
-        $adminGetsAllCourses = false
+        $adminGetsAllCourses = false,
+        $loadSpecialCourses = true
     ) {
         $user_id = intval($user_id);
         $urlId = api_get_current_access_url_id();
@@ -2700,7 +2702,7 @@ class CourseManager
         $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $tbl_user_course_category = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
         $tableCourseUrl = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $special_course_list = self::get_special_course_list();
+
         if ($adminGetsAllCourses && UserManager::is_admin($user_id)) {
             // get the whole courses list
             $sql = "SELECT DISTINCT(course.code), course.id as real_id
@@ -2710,32 +2712,41 @@ class CourseManager
                     WHERE url.access_url_id = $urlId      
                 ";
         } else {
-            $with_special_courses = $without_special_courses = '';
-            if (!empty($special_course_list)) {
-                $sc_string = '"' . implode('","', $special_course_list) . '"';
-                $with_special_courses = ' AND course.id IN (' . $sc_string . ')';
-                $without_special_courses = ' AND course.id NOT IN (' . $sc_string . ')';
-            }
+            $withSpecialCourses = $withoutSpecialCourses = '';
+            if ($loadSpecialCourses) {
+                $specialCourseList = self::get_special_course_list();
 
-            if (!empty($with_special_courses)) {
-                $sql = "SELECT DISTINCT(course.code), course.id as real_id
-                        FROM $tbl_course_user course_rel_user
-                        LEFT JOIN $tbl_course course
-                        ON course.id = course_rel_user.c_id
-                        LEFT JOIN $tbl_user_course_category user_course_category
-                        ON course_rel_user.user_course_cat = user_course_category.id
-                        INNER JOIN $tableCourseUrl url 
-                        ON (course.id = url.c_id)  
-                        WHERE url.access_url_id = $urlId $with_special_courses                        
-                        GROUP BY course.code
-                        ORDER BY user_course_category.sort, course.title, course_rel_user.sort ASC
-                ";
-                $rs_special_course = Database::query($sql);
-                if (Database::num_rows($rs_special_course) > 0) {
-                    while ($result_row = Database::fetch_array($rs_special_course)) {
-                        $result_row['special_course'] = 1;
-                        $course_list[] = $result_row;
-                        $codes[] = $result_row['real_id'];
+                if (!empty($specialCourseList)) {
+                    $specialCourseToString = '"'.implode(
+                            '","',
+                            $specialCourseList
+                        ).'"';
+                    $withSpecialCourses = ' AND course.id IN ('.$specialCourseToString.')';
+                    $withoutSpecialCourses = ' AND course.id NOT IN ('.$specialCourseToString.')';
+                }
+
+                if (!empty($withSpecialCourses)) {
+                    $sql = "SELECT DISTINCT(course.code), course.id as real_id
+                            FROM $tbl_course_user course_rel_user
+                            LEFT JOIN $tbl_course course
+                            ON course.id = course_rel_user.c_id
+                            LEFT JOIN $tbl_user_course_category user_course_category
+                            ON course_rel_user.user_course_cat = user_course_category.id
+                            INNER JOIN $tableCourseUrl url 
+                            ON (course.id = url.c_id)  
+                            WHERE url.access_url_id = $urlId $withSpecialCourses                        
+                            GROUP BY course.code
+                            ORDER BY user_course_category.sort, course.title, course_rel_user.sort ASC
+                    ";
+                    $rs_special_course = Database::query($sql);
+                    if (Database::num_rows($rs_special_course) > 0) {
+                        while ($result_row = Database::fetch_array(
+                            $rs_special_course
+                        )) {
+                            $result_row['special_course'] = 1;
+                            $course_list[] = $result_row;
+                            $codes[] = $result_row['real_id'];
+                        }
                     }
                 }
             }
@@ -2751,7 +2762,9 @@ class CourseManager
                     WHERE 
                         url.access_url_id = $urlId AND 
                         cru.user_id = '$user_id' 
-                        $without_special_courses";
+                        $withoutSpecialCourses
+                    ORDER BY course.title
+                    ";
         }
         $result = Database::query($sql);
 

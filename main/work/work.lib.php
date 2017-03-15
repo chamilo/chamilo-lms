@@ -250,6 +250,13 @@ function get_work_data_by_id($id, $courseId = null, $sessionId = null)
                 $work['show_content'] = '<img src="'.$work['show_url'].'"/>';
             }
         }
+
+        $fieldValue = new ExtraFieldValue('work');
+        $work['extra'] = $fieldValue->getAllValuesForAnItem(
+            $id,
+            true
+        );
+
     }
 
     return $work;
@@ -2055,9 +2062,13 @@ function get_work_user_list(
                 $work['qualification'] = $qualification_string.$feedback;
                 $work['qualification_only'] = $qualification_string;
 
+                // Date.
+                $work_date = api_convert_and_format_date($work['sent_date']);
+                $date = date_to_str_ago($work['sent_date']). ' ' . $work_date;
+                $work['formatted_date'] = $work_date . ' - ' . $add_string;
+
                 $work['sent_date_from_db'] = $work['sent_date'];
-                $work['sent_date'] = '<div class="date-time">' .
-                        api_get_local_time($work['sent_date']) . ' ' . $add_string . ' </div>';
+                $work['sent_date'] = '<div class="work-date" title="'.$date.'">' . $add_string . ' - ' . $work['sent_date'] . '</div>';
 
                 // Actions.
                 $correction = '';
@@ -3792,6 +3803,58 @@ function processWorkForm(
             );
             sendAlertToUsers($workId, $courseInfo, $sessionId);
             Event::event_upload($workId);
+
+            // The following feature requires the creation of a work-type
+            // extra_field and the following setting in the configuration file
+            // (until moved to the database). It allows te teacher to set a
+            // "considered work time", meaning the time we assume a student
+            // would have spent, approximately, to prepare the task before
+            // handing it in Chamilo, adding this time to the student total
+            // course use time, as a register of time spent *before* his
+            // connection to the platform to hand the work in.
+            $consideredWorkingTime = api_get_configuration_value('considered_working_time');
+
+            if (!empty($consideredWorkingTime)) {
+                // Get the "considered work time" defined for this work
+                $fieldValue = new ExtraFieldValue('work');
+                $resultExtra = $fieldValue->getAllValuesForAnItem(
+                    $workInfo['iid'], //the ID of the work *folder*, not the document uploaded by the student
+                    true
+                );
+
+                $workingTime = null;
+                foreach ($resultExtra as $field) {
+                    $field = $field['value'];
+                    if ($consideredWorkingTime == $field->getField()->getVariable()) {
+                        $workingTime = $field->getValue();
+                    }
+                }
+
+                // If no time was defined, or a time of "0" was set, do nothing
+                if (!empty($workingTime)) {
+                    // If some time is set, get the list of docs handed in by
+                    // this student (to make sure we count the time only once)
+                    $userWorks = get_work_user_list(
+                        0,
+                        100,
+                        null,
+                        null,
+                        $workInfo['id'],
+                        null,
+                        $userId,
+                        false,
+                        $courseId,
+                        $sessionId
+                    );
+
+                    if (count($userWorks) == 1) {
+                        // The student only uploaded one doc so far, so add the
+                        // considered work time to his course connection time
+                        $ip = api_get_real_ip();
+                        Event::eventAddVirtualCourseTime($courseId, $userId, $sessionId, $workingTime, $ip);
+                    }
+                }
+            }
             $workData = get_work_data_by_id($workId);
             Display::addFlash(Display::return_message(get_lang('DocAdd')));
         }
@@ -3878,6 +3941,12 @@ function addDir($formValues, $user_id, $courseInfo, $group_id, $session_id)
 
             updatePublicationAssignment($id, $formValues, $courseInfo, $group_id);
 
+            // Added the new Work ID to the extra field values
+            $formValues['item_id'] = $id;
+
+            $workFieldValue = new ExtraFieldValue('work');
+            $workFieldValue->saveFieldValues($formValues);
+
             if (api_get_course_setting('email_alert_students_on_new_homework') == 1) {
                 send_email_on_homework_creation($course_id, $session_id, $id);
             }
@@ -3937,6 +4006,9 @@ function updateWork($workId, $params, $courseInfo, $sessionId = 0)
             )
         )
     );
+
+    $workFieldValue = new ExtraFieldValue('work');
+    $workFieldValue->saveFieldValues($params);
 }
 
 /**
@@ -4162,12 +4234,62 @@ function deleteWorkItem($item_id, $courseInfo)
         )
     ) {
         // We found the current user is the author
-        $sql = "SELECT url, contains_file FROM $work_table
+        $sql = "SELECT url, contains_file, user_id, session_id, parent_id FROM $work_table
                 WHERE c_id = $course_id AND id = $item_id";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
+        $count = Database::num_rows($result);
 
-        if (Database::num_rows($result) > 0) {
+        if ($count > 0) {
+
+            // If the "considered_working_time" option is enabled, check
+            // whether some time should be removed from track_e_course_access
+            $consideredWorkingTime = api_get_configuration_value('considered_working_time');
+            if ($consideredWorkingTime) {
+                $userWorks = get_work_user_list(
+                    0,
+                    100,
+                    null,
+                    null,
+                    $row['parent_id'],
+                    null,
+                    $row['user_id'],
+                    false,
+                    $course_id,
+                    $row['session_id']
+                );
+                // We're only interested in deleting the time if this is the latest work sent
+                if (count($userWorks) == 1) {
+                    // Get the "considered work time" defined for this work
+                    $fieldValue = new ExtraFieldValue('work');
+                    $resultExtra = $fieldValue->getAllValuesForAnItem(
+                        $row['parent_id'],
+                        true
+                    );
+
+                    $workingTime = null;
+                    foreach ($resultExtra as $field) {
+                        $field = $field['value'];
+
+                        if ($consideredWorkingTime == $field->getField()->getVariable()) {
+                            $workingTime = $field->getValue();
+                        }
+                    }
+                    // If no time was defined, or a time of "0" was set, do nothing
+                    if (!empty($workingTime)) {
+                        $sessionId = empty($row['session_id']) ? 0 : $row['session_id'];
+                        // Getting false from the following call would mean the
+                        // time record
+                        $removalResult = Event::eventRemoveVirtualCourseTime(
+                            $course_id,
+                            $row['user_id'],
+                            $sessionId,
+                            $workingTime
+                        );
+                    }
+                }
+            } // end of considered_working_time check section
+
             $sql = "UPDATE $work_table SET active = 2
                     WHERE c_id = $course_id AND id = $item_id";
             Database::query($sql);
@@ -4204,15 +4326,17 @@ function deleteWorkItem($item_id, $courseInfo)
             }
         }
     }
+
     return $file_deleted;
 }
 
 /**
  * @param FormValidator $form
  * @param array $defaults
+ * @param integer $workId
  * @return FormValidator
  */
-function getFormWork($form, $defaults = array())
+function getFormWork($form, $defaults = array(), $workId = 0)
 {
     if (!empty($defaults)) {
         if (isset($defaults['submit'])) {
@@ -4299,7 +4423,18 @@ function getFormWork($form, $defaults = array())
     $form->addElement('checkbox', 'add_to_calendar', null, get_lang('AddToCalendar'));
     $form->addElement('select', 'allow_text_assignment', get_lang('DocumentType'), getUploadDocumentType());
 
-    $form->addElement('html', '</div>');
+    //Extra fields
+    $extra_field = new ExtraField('work');
+    $extra = $extra_field->addElements($form, $workId);
+
+    $htmlHeadXtra[] = '
+        <script>
+        $(function() {
+            ' . $extra['jquery_ready_content'] . '
+        });
+        </script>';
+
+    $form->addHtml('</div>');
 
     if (isset($defaults['enableExpiryDate']) && isset($defaults['enableEndDate'])) {
         $form->addRule(array('expires_on', 'ends_on'), get_lang('DateExpiredNotBeLessDeadLine'), 'comparedate');

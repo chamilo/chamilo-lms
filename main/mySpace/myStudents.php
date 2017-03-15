@@ -512,6 +512,9 @@ if (!empty($student_id)) {
             <tr>
                 <td><?php echo get_lang('OnLine') . ' : '.$online; ?> </td>
             </tr>
+            <tr>
+                <td><a href="access_details.php?student=<?php echo $student_id; ?>&course=<?php echo $course_code; ?>&origin=<?php echo $origin; ?>&cidReq=<?php echo $course_code; ?>&id_session=<?php echo $sessionId; ?>"><?php echo get_lang('SeeAccess'); ?></a></td>
+            </tr>
             <?php
 
             // Display timezone if the user selected one and if the admin allows the use of user's timezone
@@ -1187,6 +1190,64 @@ if (!empty($student_id)) {
                 echo $table->toHtml();
             }
         }
+
+        require_once '../work/work.lib.php';
+        $userWorks = getWorkPerUser($student_id, $courseInfo['real_id'], $sessionId);
+        echo '
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>' . get_lang('Tasks') . '</th>
+                            <th class="text-center">' . get_lang('DocumentNumber') . '</th>
+                            <th class="text-center">' . get_lang('Note') . '</th>
+                            <th class="text-center">' . get_lang('HandedOut') . '</th>
+                            <th class="text-center">' . get_lang('HandOutDateLimit') . '</th>
+                            <th class="text-center">' . get_lang('ConsideredWorkingTime') . '</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+        ';
+        $workingTime = api_get_configuration_value('considered_working_time');
+
+        foreach ($userWorks as $work) {
+            $work = $work['work'];
+            foreach ($work->user_results as $key => $results) {
+                echo '<tr>';
+                echo '<td>' . $work->title . '</td>';
+                $documentNumber = $key + 1;
+                echo '<td class="text-center"><a href="' . api_get_path(WEB_CODE_PATH) . 'work/view.php?cidReq=' . $course_code . '&id_session=' . $sessionId .'&id=' . $results['id'] . '">(' . $documentNumber . ')</a></td>';
+                $qualification = !empty($results['qualification']) ? $results['qualification'] : '-';
+                echo '<td class="text-center">' . $qualification. '</td>';
+                echo '<td class="text-center">' . $results['formatted_date']. '</td>';
+                $assignment = get_work_assignment_by_id($work->id, $courseInfo['real_id']);
+
+                echo '<td class="text-center">';
+                if (!empty($assignment['expires_on'])) {
+                    echo api_convert_and_format_date($assignment['expires_on']);
+                }
+                echo '</td>';
+                $fieldValue = new ExtraFieldValue('work');
+                $resultExtra = $fieldValue->getAllValuesForAnItem(
+                    $work->iid,
+                    true
+                );
+
+                foreach ($resultExtra as $field) {
+                    $field = $field['value'];
+                    if ($workingTime == $field->getField()->getVariable()) {
+                        echo '<td class="text-center">' . $field->getValue() . '</td>';
+                    }
+                }
+
+                echo '</tr>';
+            }
+        }
+
+        echo '</tbody>
+                </table>
+            </div>
+        ';
 
         // line about other tools
         ?>

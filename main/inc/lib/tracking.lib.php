@@ -2891,13 +2891,18 @@ class Tracking
 
     /**
      * This function gets last connection time to one learning path
-     * @param     int|array    Student id(s)
-     * @param     string         Course code
-     * @param     int         Learning path id
-     * @return     int         Total time
+     * @param int|array $student_id Student id(s)
+     * @param string $course_code      Course code
+     * @param int $lp_id    Learning path id
+     * @param int $session_id
+     * @return int         Total time
      */
-    public static function get_last_connection_time_in_lp($student_id, $course_code, $lp_id, $session_id = 0)
-    {
+    public static function get_last_connection_time_in_lp(
+        $student_id,
+        $course_code,
+        $lp_id,
+        $session_id = 0
+    ) {
         $course = CourseManager :: get_course_information($course_code);
         $student_id = intval($student_id);
         $lp_id = intval($lp_id);
@@ -2905,16 +2910,15 @@ class Tracking
         $session_id = intval($session_id);
 
         if (!empty($course)) {
-
-            $course_id	 = $course['real_id'];
-
-            $lp_table    = Database :: get_course_table(TABLE_LP_MAIN);
-            $t_lpv       = Database :: get_course_table(TABLE_LP_VIEW);
-            $t_lpiv      = Database :: get_course_table(TABLE_LP_ITEM_VIEW);
+            $course_id = $course['real_id'];
+            $lp_table = Database:: get_course_table(TABLE_LP_MAIN);
+            $t_lpv = Database:: get_course_table(TABLE_LP_VIEW);
+            $t_lpiv = Database:: get_course_table(TABLE_LP_ITEM_VIEW);
 
             // Check the real number of LPs corresponding to the filter in the
             // database (and if no list was given, get them all)
-            $res_row_lp = Database::query("SELECT id FROM $lp_table WHERE c_id = $course_id AND id = $lp_id ");
+            $sql = "SELECT id FROM $lp_table WHERE c_id = $course_id AND id = $lp_id ";
+            $res_row_lp = Database::query($sql);
             $count_row_lp = Database::num_rows($res_row_lp);
 
             // calculates last connection time
@@ -2922,7 +2926,7 @@ class Tracking
                 $sql = 'SELECT MAX(start_time)
                         FROM ' . $t_lpiv . ' AS item_view
                         INNER JOIN ' . $t_lpv . ' AS view
-                            ON item_view.lp_view_id = view.id
+                        ON (item_view.lp_view_id = view.id)
                         WHERE
                             item_view.c_id 		= '.$course_id.' AND
                             view.c_id 			= '.$course_id.' AND
@@ -2941,7 +2945,7 @@ class Tracking
 
     /**
      * gets the list of students followed by coach
-     * @param     int     Coach id
+     * @param     int     $coach_id Coach id
      * @return     array     List of students
      */
     public static function get_student_followed_by_coach($coach_id)

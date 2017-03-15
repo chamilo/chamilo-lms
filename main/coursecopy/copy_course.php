@@ -6,6 +6,7 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 
 /**
+ * @todo rework file in order to use addFlash
  * @package chamilo.backup
  */
 
@@ -84,17 +85,17 @@ if (Security::check_token('post') && (
     $table_cu = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
     $user_info = api_get_user_info();
     $course_info = api_get_course_info();
+
     $courseList = CourseManager::get_courses_list_by_user_id(
         $user_info['user_id'],
         false,
         false,
-        false
+        false,
+        [$course_info['real_id']]
     );
 
     if (empty($courseList)) {
-        Display::addFlash(
-            Display::return_message(get_lang('NoDestinationCoursesAvailable'))
-        );
+        Display::display_normal_message(get_lang('NoDestinationCoursesAvailable'));
     } else {
         $options = array();
         foreach ($courseList as $courseItem) {

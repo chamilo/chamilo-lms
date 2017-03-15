@@ -2679,19 +2679,22 @@ class CourseManager
 
     /**
      * Get list of courses for a given user
+     *
      * @param int $user_id
      * @param boolean $include_sessions Whether to include courses from session or not
      * @param boolean $adminGetsAllCourses If the user is platform admin,
      * whether he gets all the courses or just his. Note: This does *not* include all sessions
      * @param bool $loadSpecialCourses
-     * @return array    List of codes and db name
+     * @param array $skipCourseList List of course ids to skip
+     * @return array List of codes and db name
      * @author isaac flores paz
      */
     public static function get_courses_list_by_user_id(
         $user_id,
         $include_sessions = false,
         $adminGetsAllCourses = false,
-        $loadSpecialCourses = true
+        $loadSpecialCourses = true,
+        $skipCourseList = []
     ) {
         $user_id = intval($user_id);
         $urlId = api_get_current_access_url_id();
@@ -2770,6 +2773,11 @@ class CourseManager
 
         if (Database::num_rows($result)) {
             while ($row = Database::fetch_array($result, 'ASSOC')) {
+                if (!empty($skipCourseList)) {
+                    if (in_array($row['real_id'], $skipCourseList)) {
+                        continue;
+                    }
+                }
                 $course_list[] = $row;
                 $codes[] = $row['real_id'];
             }
@@ -2782,6 +2790,11 @@ class CourseManager
                     WHERE user_id = $user_id AND s.c_id = c.id";
             $r = Database::query($sql);
             while ($row = Database::fetch_array($r, 'ASSOC')) {
+                if (!empty($skipCourseList)) {
+                    if (in_array($row['real_id'], $skipCourseList)) {
+                        continue;
+                    }
+                }
                 if (!in_array($row['real_id'], $codes)) {
                     $course_list[] = $row;
                 }

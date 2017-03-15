@@ -4409,6 +4409,14 @@ class SessionManager
                     $coach_id = $defaultUserId;
                 }
 
+                $users = explode('|', $enreg['Users']);
+                $courses = explode('|', $enreg['Courses']);
+
+                $deleteOnlyCourseCoaches = false;
+                if (count($courses) == 1) {
+                    $deleteOnlyCourseCoaches = true;
+                }
+
                 if (!$updateSession) {
                     // Always create a session.
                     $unique_name = false;
@@ -4523,6 +4531,11 @@ class SessionManager
                                         WHERE session_id = '$session_id' AND status <> 2";
                                 Database::query($sql);
                             }
+                            if ($deleteOnlyCourseCoaches) {
+                                $sql = "DELETE FROM $tbl_session_course_user
+                                        WHERE session_id = '$session_id' AND status in ('2')";
+                                Database::query($sql);
+                            }
                         }
                     } else {
                         // Updating the session.
@@ -4613,6 +4626,12 @@ class SessionManager
                                         WHERE session_id = '$session_id' AND status <> 2";
                                 Database::query($sql);
                             }
+
+                            if ($deleteOnlyCourseCoaches) {
+                                $sql = "DELETE FROM $tbl_session_course_user
+                                        WHERE session_id = '$session_id' AND status in ('2')";
+                                Database::query($sql);
+                            }
                         } else {
                             if ($debug) {
                                 $logger->addError(
@@ -4625,11 +4644,9 @@ class SessionManager
                 }
 
                 $sessionList[] = $session_id;
-                $users = explode('|', $enreg['Users']);
 
                 // Adding the relationship "Session - User" for students
                 $userList = array();
-
                 if (is_array($users)) {
                     foreach ($users as $user) {
                         $user_id = UserManager::get_user_id_from_username($user);
@@ -4668,7 +4685,6 @@ class SessionManager
                     }
                 }
 
-                $courses = explode('|', $enreg['Courses']);
 
                 // See BT#6449
                 $onlyAddFirstCoachOrTeacher = false;

@@ -465,10 +465,14 @@ switch ($action) {
             }
         }
 
-        foreach ($defaults['users'] as $value) {
-            $parts = explode(':', $value);
+        if (isset($defaults['users'])) {
+            foreach ($defaults['users'] as $value) {
+                $parts = explode(':', $value);
 
-            if (isset($parts[1]) && !empty($parts[1])) {
+                if (!isset($parts[1]) || empty($parts[1])) {
+                    continue;
+                }
+
                 $form->addHtml("
                     <script>
                         $(document).on('ready', function () {

@@ -10,6 +10,7 @@ Feature: Announcement tool
     Given I am on "/main/announcements/announcements.php?action=add&cidReq=TEMP"
     When I fill in the following:
       | title   | Announcement test                       |
+    And I press "choose_recipients"
     And I select "John Doe" from "users-f"
     And I press "add"
     And I fill in ckeditor field "content" with "Announcement description"

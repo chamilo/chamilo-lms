@@ -45,9 +45,9 @@
                             <h3 style="color: #672290;">
                                 {{ complete_name }}
                             </h3>
-                                <p>{{ 'UserHasParticipateDansDePlatformeXTheContratDateXCertificateDateXTimeX' | get_lang | format(_s.site_name, certificate_generated_date, terms_validation_date, time_in_platform)}}</p>
-                                <p>{{ 'ThisTrainingHasXHours' | get_lang | format(time_in_platform)}}</p>
-                                <p>{{ 'TheContentsAreValidated' | get_lang }}:</p>
+                                <p style="font-size: 14px;">{{ 'UserHasParticipateDansDePlatformeXTheContratDateXCertificateDateXTimeX' | get_lang | format(_s.site_name, certificate_generated_date, terms_validation_date, time_in_platform)}}</p>
+                                <p style="font-size: 14px;">{{ 'ThisTrainingHasXHours' | get_lang | format(time_in_platform)}}</p>
+                                <p style="font-size: 14px;">{{ 'TheContentsAreValidated' | get_lang }}:</p>
                                     {% if sessions %}
                                         <ul style="color: #672290;">
                                             {% for session in sessions %}
@@ -56,7 +56,7 @@
                                         </ul>
                                     {% endif %}
                                 <h4 style="color: #672290;">{{ complete_name }}</h4>
-                                <p style="color:#80CC28;">{{ 'SkillsValidated' | get_lang }}:</p>
+                                <p style="color:#80CC28; font-size: 14px;">{{ 'SkillsValidated' | get_lang }}:</p>
                                     {% if skills %}
                                         <ul style="color: #672290;">
                                         {% for skill in skills %}
@@ -65,7 +65,7 @@
                                         </ul>
                                     {% endif %}
                                     <br>
-                                <p style="color:#80CC28;">Berlin/Paris, {{ 'The' | get_lang }} <span style="font-weight: bold; color: #672290;">{{ certificate_generated_date }}</span><br>
+                                <p style="color:#80CC28; font-size: 14px;">Berlin/Paris, {{ 'The' | get_lang }} <span style="font-weight: bold; color: #672290;">{{ certificate_generated_date }}</span><br>
                                     {{ 'ThePlatformTeam' | get_lang }}</p>
                                 <br>
                             </td>

@@ -26,7 +26,7 @@
                     <td bgcolor="#80CC28" width=58 height=91>
                         <img src="{{ _p.web_css_theme }}images/lado-b.png" style="display:block;">
                     </td>
-                    <td bgcolor="#80CC28" width=610 height=91 style="font-family:ccourier; line-height: 45px; font-weight: bold; color:#FFF; font-size: 45px;">
+                    <td bgcolor="#80CC28" width=610 height=91 style="font-family:Courier; line-height: 38px; color:#FFF; font-size: 40px;">
                         {{ 'CertificateHeader' | get_lang }}
                     </td>
                     <td bgcolor="#80CC28" width=58 height=91>
@@ -41,7 +41,7 @@
                 <table border="0" cellspacing="0" cellpadding="0" width="100%" height=900>
                     <tr>
 			<td bgcolor="#80CC28" height=700><img src="{{ _p.web_css_theme }}images/lado-a.png" style="display:block;"></td>
-			<td height=700 style="font-family: ccourier; line-height: 22px; color:#80CC28; padding: 40px; font-size: 18px;" valign="top">
+			<td height=700 style="font-family: Courier; line-height: 22px; color:#80CC28; padding: 40px; font-size: 18px;" valign="top">
                             <h3 style="color: #672290; font-size: 24px;">
                                 {{ complete_name }}
                             </h3>
@@ -54,7 +54,7 @@
                                                 <li>  {{ session.session_name }}</li>
                                             {% endfor %}
                                         </ul>
-                                    {% endif %}
+                                    {% endif %}<br>
                                 <h4 style="color: #672290; font-size: 14px;">{{ complete_name }}</h4>
                                 <p style="color:#80CC28; font-size: 14px;">{{ 'SkillsValidated' | get_lang }}:</p>
                                     {% if skills %}
@@ -79,7 +79,7 @@
             <table border="0" cellspacing="0" cellpadding="0" width="100%" height=91>
                 <tr>
                     <td bgcolor="#80CC28" width=58 height=91><img src="{{ _p.web_css_theme }}images/lado-b.png"  style="display:block;"></td>
-                    <td bgcolor="#80CC28" width=400 height=91 style="font-family: ccourier; line-height: 18px; color:#FFF;">
+                    <td bgcolor="#80CC28" width=400 height=91 style="font-family: Courier; line-height: 18px; color:#FFF;">
                         {{ 'CertificateFooter' | get_lang }}
                     </td>
                     <td bgcolor="#80CC28" width=245 height=91><img src="{{ _p.web_css_theme }}images/lado-footer.png" style="display:block;"></td>

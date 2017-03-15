@@ -114,6 +114,7 @@ class CourseManager
      * Returns all the information of a given course code
      * @param string $course_code , the course code
      * @return array with all the fields of the course table
+     * @deprecated Use api_get_course_info() instead
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @assert ('') === false
      */

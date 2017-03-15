@@ -7990,4 +7990,6 @@ $PriorityChangeFromXToY = "Prioridad modificada de %s a %s";
 $StatusChangeFromXToY = "Estado modificado de %s a %s";
 $SkillFromCourseXDeletedSinceThen = "Esta competencia fue adquirida a través del curso %s que ha sido eliminado desde entonces.";
 $SaveAndAddNewItem = "Guardar y agregar nuevo elemento";
+$AnnouncementChooseRecipientsDescription = "De forma predeterminada, este anuncio será enviado a todos los usuarios. Pero también puede seleccionar otros destinatarios.";
+$ChooseRecipients = "Elegir destinatarios";
 ?>

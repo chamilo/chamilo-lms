@@ -5209,15 +5209,21 @@ class CourseManager
 
         if ($editTeacherInSessions) {
             $sessions = SessionManager::get_session_by_course($courseId);
-
             if (!empty($sessions)) {
+                if ($logger) {
+                    $logger->addInfo("Edit teachers in sessions");
+                }
                 foreach ($sessions as $session) {
+                    $sessionId = $session['id'];
                     // Remove old and add new
                     if ($deleteSessionTeacherNotInList) {
                         foreach ($teachers as $userId) {
+                            if ($logger) {
+                                $logger->addInfo("Set coach #$userId in session #$sessionId of course #$courseId ");
+                            }
                             SessionManager::set_coach_to_course_session(
                                 $userId,
-                                $session['id'],
+                                $sessionId,
                                 $courseId
                             );
                         }
@@ -5229,9 +5235,12 @@ class CourseManager
 
                         if (!empty($teachersToDelete)) {
                             foreach ($teachersToDelete as $userId) {
+                                if ($logger) {
+                                    $logger->addInfo("Delete coach #$userId in session #$sessionId of course #$courseId ");
+                                }
                                 SessionManager::set_coach_to_course_session(
                                     $userId,
-                                    $session['id'],
+                                    $sessionId,
                                     $courseId,
                                     true
                                 );
@@ -5240,9 +5249,12 @@ class CourseManager
                     } else {
                         // Add new teachers only
                         foreach ($teachers as $userId) {
+                            if ($logger) {
+                                $logger->addInfo("Add coach #$userId in session #$sessionId of course #$courseId ");
+                            }
                             SessionManager::set_coach_to_course_session(
                                 $userId,
-                                $session['id'],
+                                $sessionId,
                                 $courseId
                             );
                         }

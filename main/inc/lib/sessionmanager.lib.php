@@ -4549,7 +4549,6 @@ class SessionManager
                         if (isset($sessionId) && !empty($sessionId)) {
                             $session_id = $sessionId;
                             if (!empty($enreg['SessionName'])) {
-                                ///$params['name'] = $enreg['SessionName'];
                                 $sessionName = Database::escape_string($enreg['SessionName']);
                                 $sql = "UPDATE $tbl_session SET name = '$sessionName' WHERE id = $session_id";
                                 Database::query($sql);
@@ -5119,7 +5118,7 @@ class SessionManager
 
         $coaches = array();
         if (Database::num_rows($result) > 0) {
-            while ($row = Database::fetch_row($result)) {
+            while ($row = Database::fetch_array($result)) {
                 $coaches[] = $row['user_id'];
             }
         }

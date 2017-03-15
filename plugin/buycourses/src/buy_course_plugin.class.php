@@ -1895,26 +1895,31 @@ class BuyCoursesPlugin extends Plugin
      * @return array
      */
     public function getServiceSale(
-        $id = null,
-        $buyerId = null,
-        $status = null,
-        $nodeType = null,
-        $nodeId = null,
+        $id = 0,
+        $buyerId = 0,
+        $status = 0,
+        $nodeType = 0,
+        $nodeId = 0,
         $hot = false
     ) {
         $servicesTable = Database::get_main_table(BuyCoursesPlugin::TABLE_SERVICES);
         $servicesSaleTable = Database::get_main_table(BuyCoursesPlugin::TABLE_SERVICES_SALE);
 
         $conditions = null;
-        $showData = "all";
-        $groupBy = "";
+        $showData = 'all';
+        $groupBy = '';
+        $id = (int) $id;
+        $buyerId = (int) $buyerId;
+        $status = (int) $status;
+        $nodeType = (int) $nodeType;
+        $nodeId = (int) $nodeId;
 
-        if ($id) {
+        if (!empty($id)) {
             $conditions = ['WHERE' => ['ss.id = ?' => $id]];
             $showData = "first";
         }
 
-        if ($buyerId) {
+        if (!empty($buyerId)) {
             $conditions = ['WHERE' => ['ss.buyer_id = ?' => $buyerId], 'ORDER' => 'id ASC'];
         }
 

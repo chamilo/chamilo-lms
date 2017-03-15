@@ -701,7 +701,7 @@ if (!empty($student_id)) {
                             $scoretotal_display =
                                 round($scoretotal[0], 1 ).'/'.
                                 round($scoretotal[1], 1).
-                                ' ('.round(($scoretotal[0] / $scoretotal[1]) * 100, 2).' %)';
+                                ' ('.round(($scoretotal[0] / ($scoretotal[1] ? $scoretotal[1] : 1)) * 100, 2).' %)';
                         }
 
                         $progress = Tracking::get_avg_student_progress($user_info['user_id'], $courseCodeItem, null, $sessionId);

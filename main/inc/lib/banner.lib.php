@@ -36,9 +36,7 @@ function get_tabs($courseId = null)
     $navigation[SECTION_CATALOG]['key'] = 'catalog';
     $navigation[SECTION_CATALOG]['icon'] = 'catalog.png';
 
-
     // My Courses
-
     if (api_is_allowed_to_create_course()) {
         // Link to my courses for teachers
         $navigation['mycourses']['url'] = api_get_path(WEB_PATH).'user_portal.php?nosession=true';
@@ -49,7 +47,6 @@ function get_tabs($courseId = null)
     $navigation['mycourses']['title'] = get_lang('MyCourses');
     $navigation['mycourses']['key'] = 'my-course';
     $navigation['mycourses']['icon'] = 'my-course.png';
-
 
     // My Profile
     $navigation['myprofile']['url'] = api_get_path(WEB_CODE_PATH).'auth/profile.php'.(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '' );
@@ -71,7 +68,7 @@ function get_tabs($courseId = null)
 	}
 
 	// Reporting
-	if (api_is_allowed_to_create_course() || api_is_drh() || api_is_session_admin()) {
+	if (api_is_teacher() || api_is_drh() || api_is_session_admin()) {
         // Link to my space
         $navigation['session_my_space']['url'] = api_get_path(WEB_CODE_PATH).'mySpace/'.(api_is_drh()?'session.php':'');
         $navigation['session_my_space']['title'] = get_lang('MySpace');
@@ -292,13 +289,13 @@ function return_navigation_array()
 
         // Reporting
         if (api_get_setting('show_tabs', 'reporting') == 'true') {
-            if (api_is_allowed_to_create_course() || api_is_drh() || api_is_session_admin() || api_is_student_boss()) {
+            if (api_is_teacher() || api_is_drh() || api_is_session_admin() || api_is_student_boss()) {
                 $navigation['session_my_space'] = $possible_tabs['session_my_space'];
             } else {
                 $navigation['session_my_space'] = $possible_tabs['session_my_progress'];
             }
         } else {
-            if (api_is_allowed_to_create_course() || api_is_drh() || api_is_session_admin() || api_is_student_boss()) {
+            if (api_is_teacher() || api_is_drh() || api_is_session_admin() || api_is_student_boss()) {
                 $menu_navigation['session_my_space'] = $possible_tabs['session_my_space'];
             } else {
                 $menu_navigation['session_my_space'] = $possible_tabs['session_my_progress'];

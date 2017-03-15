@@ -125,44 +125,39 @@ tools:
         extensions:
             - php
         command: phpmd
-        filter:
-            paths: {  }
-            excluded_paths:
-                - 'tests/*'
-                - 'vendor/*'
         config:
             rulesets:
                 - codesize
 
-    php_analyzer:
-        enabled: true
-        filter:
-            excluded_paths:
-                - 'tests/*'
-        extensions:
-            - php
-    php_code_sniffer:
-        enabled: true
-        config:
-            standard: PSR2
-        extensions:
-            - php
-        command: phpcs
-        filter:
-            excluded_paths:
-                - 'tests/*'
-    sensiolabs_security_checker:
-        enabled: true
-    php_pdepend:
-        command: pdepend
-        configuration_file:   ~
-        suffixes:
-            - php
-        excluded_dirs:
-            - 'vendor'
-            - 'tests/*'
-        enabled: true
-    php_code_coverage: true
+#    php_analyzer:
+#        enabled: true
+#        filter:
+#            excluded_paths:
+#                - 'tests/*'
+#        extensions:
+#            - php
+#    php_code_sniffer:
+#        enabled: true
+#        config:
+#            standard: PSR2
+#        extensions:
+#            - php
+#        command: phpcs
+#        filter:
+#            excluded_paths:
+#                - 'tests/*'
+#    sensiolabs_security_checker:
+#        enabled: true
+#    php_pdepend:
+#        command: pdepend
+#        configuration_file:   ~
+#        suffixes:
+#            - php
+#        excluded_dirs:
+#            - 'vendor'
+#            - 'tests/*'
+#        enabled: true
+#    php_code_coverage: true
 
 filter:
       excluded_paths:

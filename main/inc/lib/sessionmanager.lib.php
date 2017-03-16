@@ -81,7 +81,7 @@ class SessionManager
             'coach_access_end_date' => $session->getCoachAccessEndDate()
                 ? $session->getCoachAccessEndDate()->format('Y-m-d H:i:s')
                 : null,
-            'send_subscription_notification' => $session->getSendSubscriptionNotification()
+            'send_subscription_notification' => $session->getSendSubscriptionNotification(),
         ];
     }
 
@@ -199,7 +199,7 @@ class SessionManager
                     'visibility' => $visibility,
                     'description' => $description,
                     'show_description' => intval($showDescription),
-                    'send_subscription_notification' => (int) $sendSubscriptionNotification
+                    'send_subscription_notification' => (int) $sendSubscriptionNotification,
                 );
 
                 if (!empty($startDate)) {
@@ -1315,7 +1315,7 @@ class SessionManager
                 'clicks' => $info['counter'], //+ $clicks[$info['user_id']],
                 'ip' => '',
                 'timeLoggedIn' => gmdate("H:i:s", strtotime($info['logout_course_date']) - strtotime($info['login_course_date'])),
-                'session' => $session['name']
+                'session' => $session['name'],
             );
         }
 
@@ -1478,7 +1478,7 @@ class SessionManager
                     'display_start_date' => null,
                     'display_end_date' => null,
                     'coach_access_start_date' => null,
-                    'coach_access_end_date' => null
+                    'coach_access_end_date' => null,
                 ];
 
                 if (!empty($sessionAdminId)) {
@@ -1601,7 +1601,7 @@ class SessionManager
                 '*',
                 $tbl_student_publication,
                 [
-                    'where' => ['session_id = ? AND c_id = ?' => [$id_checked, $courseId]]
+                    'where' => ['session_id = ? AND c_id = ?' => [$id_checked, $courseId]],
                 ]
             );
 
@@ -2300,11 +2300,44 @@ class SessionManager
                 if ($copyEvaluation) {
                     $cats = Category::load(null, null, $courseInfo['code']);
                     if (!empty($cats)) {
+                        $sessionCategory = Category:: load(
+                            null,
+                            null,
+                            $courseInfo['code'],
+                            null,
+                            null,
+                            $sessionId,
+                            false
+                        );
+
+                        // @todo remove commented code
+                        if (empty($sessionCategory)) {
+                            // There is no category for this course+session, so create one
+                            $cat = new Category();
+                            $sessionName = api_get_session_name($sessionId);
+                            $cat->set_name($courseInfo['code'].' - '.get_lang('Session').' '.$sessionName);
+                            $cat->set_session_id($sessionId);
+                            $cat->set_course_code($courseInfo['code']);
+                            $cat->set_description(null);
+                            //$cat->set_user_id($stud_id);
+                            $cat->set_parent_id(0);
+                            $cat->set_weight(100);
+                            $cat->set_visible(0);
+                            $cat->set_certificate_min_score(75);
+                            $cat->add();
+                            $sessionGradeBookCategoryId = $cat->get_id();
+                        } else {
+                            if (!empty($sessionCategory[0])) {
+                                $sessionGradeBookCategoryId = $sessionCategory[0]->get_id();
+                            }
+                        }
+
                         $categoryIdList = [];
                         /** @var Category $cat */
                         foreach ($cats as $cat) {
                             $categoryIdList[$cat->get_id()] = $cat->get_id();
                         }
+
                         $newCategoryIdList = [];
                         foreach ($cats as $cat) {
                             $links = $cat->get_links(
@@ -2314,23 +2347,45 @@ class SessionManager
                                 0
                             );
 
-                            $cat->set_session_id($sessionId);
-                            $oldCategoryId= $cat->get_id();
-                            $newId = $cat->add();
-                            $newCategoryIdList[$oldCategoryId] = $newId;
-                            $parentId = $cat->get_parent_id();
+                            //$cat->set_session_id($sessionId);
+                            //$oldCategoryId = $cat->get_id();
+                            //$newId = $cat->add();
+                            //$newCategoryIdList[$oldCategoryId] = $newId;
+                            //$parentId = $cat->get_parent_id();
 
-                            if (!empty($parentId)) {
+                            /*if (!empty($parentId)) {
                                 $newParentId = $newCategoryIdList[$parentId];
                                 $cat->set_parent_id($newParentId);
                                 $cat->save();
+                            }*/
+
+                            if (!empty($links)) {
+                                /** @var AbstractLink $link */
+                                foreach ($links as $link) {
+                                    //$newCategoryId = $newCategoryIdList[$link->get_category_id()];
+                                    $link->set_category_id(
+                                        $sessionGradeBookCategoryId
+                                    );
+                                    $link->add();
+                                }
                             }
 
-                            /** @var AbstractLink $link */
-                            foreach ($links as $link) {
-                                $newCategoryId = $newCategoryIdList[$link->get_category_id()];
-                                $link->set_category_id($newCategoryId);
-                                $link->add();
+                            $evaluationList = $cat->get_evaluations(
+                                null,
+                                false,
+                                $courseInfo['code'],
+                                0
+                            );
+
+                            if (!empty($evaluationList)) {
+                                /** @var Evaluation $evaluation */
+                                foreach ($evaluationList as $evaluation) {
+                                    //$evaluationId = $newCategoryIdList[$evaluation->get_category_id()];
+                                    $evaluation->set_category_id(
+                                        $sessionGradeBookCategoryId
+                                    );
+                                    $evaluation->add();
+                                }
                             }
                         }
 
@@ -2590,7 +2645,7 @@ class SessionManager
         $params = [
             'name' => $name,
             'date_start' => $date_start,
-            'access_url_id' => $access_url_id
+            'access_url_id' => $access_url_id,
         ];
 
         if (!empty($date_end)) {
@@ -2774,7 +2829,7 @@ class SessionManager
         $availableFields = array(
             's.id',
             's.name',
-            'c.id'
+            'c.id',
         );
 
         $availableOperator = array(
@@ -3047,7 +3102,7 @@ class SessionManager
             DRH,
             SESSIONADMIN,
             PLATFORM_ADMIN,
-            COURSE_TUTOR
+            COURSE_TUTOR,
         );
         $isAdmin = api_is_platform_admin_by_id($userInfo['user_id']);
         if (!$isAdmin && !in_array($userInfo['status'], $rolesAllowed)) {
@@ -4554,7 +4609,7 @@ class SessionManager
                             'display_start_date' => $dateStart,
                             'display_end_date' => $dateEnd,
                             'visibility' => $visibilityAfterExpirationPerSession,
-                            'session_category_id' => $session_category_id
+                            'session_category_id' => $session_category_id,
                         );
 
                         if (!empty($sessionDescription)) {
@@ -6386,7 +6441,7 @@ class SessionManager
 
         return $scuRepo->findBy([
             'user' => $coachId,
-            'status' => SessionRelCourseRelUser::STATUS_COURSE_COACH
+            'status' => SessionRelCourseRelUser::STATUS_COURSE_COACH,
         ]);
     }
 
@@ -7026,7 +7081,7 @@ class SessionManager
         $result = [
             'access' => $accessDates,
             'display' => $displayDates,
-            'coach' => $coachDates
+            'coach' => $coachDates,
         ];
 
         return $result;
@@ -7051,7 +7106,7 @@ class SessionManager
         $userInfo = api_get_user_info();
 
         $categoriesOptions = array(
-            '0' => get_lang('None')
+            '0' => get_lang('None'),
         );
 
         if ($categoriesList != false) {
@@ -7186,12 +7241,12 @@ class SessionManager
 
         $options = [
             0 => get_lang('ByDuration'),
-            1 => get_lang('ByDates')
+            1 => get_lang('ByDates'),
         ];
 
         $form->addSelect('access', get_lang('Access'), $options, array(
             'onchange' => 'accessSwitcher()',
-            'id' => 'access'
+            'id' => 'access',
         ));
 
         $form->addHtml('<div id="duration" style="display:none">');
@@ -7287,7 +7342,7 @@ class SessionManager
             'send_subscription_notification',
             [
                 get_lang('SendSubscriptionNotification'),
-                get_lang('SendAnEmailWhenAUserBeingSubscribed')
+                get_lang('SendAnEmailWhenAUserBeingSubscribed'),
             ]
         );
 

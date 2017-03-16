@@ -14,6 +14,8 @@ engines:
     checks:
       PSR1 Classes ClassDeclaration MissingNamespace:
         enabled: false
+      PSR1 Files SideEffects FoundWithSymbols:
+        enabled: false
 
   duplication:
     enabled: false

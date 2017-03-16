@@ -33,8 +33,7 @@ class OralExpression extends Question
     }
 
     /**
-     * function which redefine Question::createAnswersForm
-     * @param FormValidator $form
+     * @inheritdoc
      */
     public function createAnswersForm($form)
     {

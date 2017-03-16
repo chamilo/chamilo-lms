@@ -48,7 +48,7 @@ $columns        = array(get_lang('Name'), get_lang('Actions'));
 $column_model   = array(
                         array('name'=>'name',           'index'=>'name',        'width'=>'120',   'align'=>'left'),
                         array('name'=>'actions',        'index'=>'actions',     'width'=>'100',  'align'=>'left', 'sortable'=>'false')
-                       );
+                        );
 //Autowidth
 $extra_params['autowidth'] = 'true';
 //height auto

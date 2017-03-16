@@ -1213,7 +1213,7 @@ $ShowAndSubscribeClosed = "Visible / Closed";
 $AdminThisUser = "Back to user";
 $Manage = "Manage Portal";
 $EnrollToCourseSuccessful = "You have been registered to the course";
-$SubCat = "sub-categories";
+$SubCat = "Sub-categories";
 $UnsubscribeNotAllowed = "Unsubscribing from this course is not allowed.";
 $CourseAdminUnsubscribeNotAllowed = "You are a trainer in this course";
 $CourseManagement = "Courses catalog";
@@ -7974,4 +7974,7 @@ $SeeAccesses = "See accesses";
 $PriorityChangeFromXToY = "Priority changed from %s to %s";
 $StatusChangeFromXToY = "Status changed from %s to %s";
 $SkillFromCourseXDeletedSinceThen = "This skill was obtained through course %s which has been removed since then.";
+$SaveAndAddNewItem = "Save and add new item";
+$AnnouncementChooseRecipientsDescription = "By default, this announcement will be sent to all users. But you can also select others recipients.";
+$ChooseRecipients = "Choose recipients";
 ?>

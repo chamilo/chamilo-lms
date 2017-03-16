@@ -74,8 +74,10 @@ if (empty($id)) {
     api_not_allowed(true);
 }
 
+$current_user_id = api_get_user_id();
+
 if (api_is_course_session_coach(
-    api_get_user_id(),
+    $current_user_id,
     api_get_course_int_id(),
     api_get_session_id()
 )) {
@@ -105,7 +107,6 @@ $student_id = $track_exercise_info['exe_user_id'];
 $learnpath_id = $track_exercise_info['orig_lp_id'];
 $learnpath_item_id = $track_exercise_info['orig_lp_item_id'];
 $lp_item_view_id = $track_exercise_info['orig_lp_item_view_id'];
-$current_user_id = api_get_user_id();
 
 if (api_is_excluded_user_type(true, $student_id)) {
     api_not_allowed(true);
@@ -214,17 +215,13 @@ if (!empty($track_exercise_info)) {
             $show_results = false;
             $show_only_total_score = true;
             if ($origin != 'learnpath') {
-                echo '<table width="100%" border="0" cellspacing="0" cellpadding="0">
-                      <tr>
-                        <td colspan="2">';
-                Display::display_warning_message(get_lang('ThankYouForPassingTheTest'), false);
-                echo '</td>
-                </tr>
-                </table>';
+                if ($current_user_id == $student_id) {
+                    echo Display::return_message(get_lang('ThankYouForPassingTheTest'), 'warning', false);
+                }
             }
         } elseif ($result_disabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
             $attempts = Event::getExerciseResultsByUser(
-                api_get_user_id(),
+                $current_user_id,
                 $objExercise->id,
                 api_get_course_int_id(),
                 api_get_session_id(),
@@ -902,7 +899,7 @@ if ($isFeedbackAllowed && $origin != 'learnpath' && $origin != 'student_progress
     $url = api_get_path(WEB_CODE_PATH).'exercise/result.php?id='.$track_exercise_info['exe_id'].'&'.api_get_cidreq().'&show_headers=1&id_session='.api_get_session_id();
 
     $content = ExerciseLib::getEmailNotification(
-        api_get_user_id(),
+        $current_user_id,
         api_get_course_info(),
         $track_exercise_info['title'],
         $track_exercise_info['orig_lp_id'],

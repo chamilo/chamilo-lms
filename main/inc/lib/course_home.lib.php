@@ -1125,8 +1125,19 @@ class CourseHome
             while ($row = Database::fetch_array($sql_result)) {
                 $navigation_items[$row['id']] = $row;
                 if (stripos($row['link'], 'http://') === false && stripos($row['link'], 'https://') === false) {
-                    $navigation_items[$row['id']]['link'] = api_get_path(WEB_CODE_PATH).$row['link'];
-                    $navigation_items[$row['id']]['name'] = CourseHome::translate_tool_name($row);
+                    $navigation_items[$row['id']]['link'] = api_get_path(WEB_CODE_PATH);
+
+                    if ($row['category'] == 'plugin') {
+                        $plugin = new AppPlugin();
+                        $pluginInfo = $plugin->getPluginInfo($row['name']);
+
+                        $navigation_items[$row['id']]['link'] = api_get_path(WEB_PLUGIN_PATH);
+                        $navigation_items[$row['id']]['name'] = $pluginInfo['title'];
+                    } else {
+                        $navigation_items[$row['id']]['name'] = CourseHome::translate_tool_name($row);
+                    }
+
+                    $navigation_items[$row['id']]['link'] .= $row['link'];
                 }
             }
 

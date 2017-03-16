@@ -13,8 +13,8 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_global_admin_script();
 if (!api_get_multiple_access_url()) {
-	header('Location: index.php');
-	exit;
+    header('Location: index.php');
+    exit;
 }
 
 $form_sent = 0;
@@ -44,36 +44,36 @@ echo '</div>';
 api_display_tool_title($tool_name);
 
 if ($_POST['form_sent']) {
-	$form_sent = $_POST['form_sent'];
-	$users = is_array($_POST['user_list']) ? $_POST['user_list'] : array() ;
-	$url_list = is_array($_POST['url_list']) ? $_POST['url_list'] : array() ;
-	$first_letter_user = $_POST['first_letter_user'];
+    $form_sent = $_POST['form_sent'];
+    $users = is_array($_POST['user_list']) ? $_POST['user_list'] : array() ;
+    $url_list = is_array($_POST['url_list']) ? $_POST['url_list'] : array() ;
+    $first_letter_user = $_POST['first_letter_user'];
 
-	foreach($users as $key => $value) {
-		$users[$key] = intval($value);
-	}
+    foreach($users as $key => $value) {
+        $users[$key] = intval($value);
+    }
 
-	if ($form_sent == 1) {
-		if (count($users) == 0 || count($url_list) == 0) {
-			Display :: display_error_message(get_lang('AtLeastOneUserAndOneURL'));
-		} else {
-			UrlManager::add_users_to_urls($users,$url_list);
-			Display :: display_confirmation_message(get_lang('UsersBelongURL'));
-		}
-	}
+    if ($form_sent == 1) {
+        if (count($users) == 0 || count($url_list) == 0) {
+            Display :: display_error_message(get_lang('AtLeastOneUserAndOneURL'));
+        } else {
+            UrlManager::add_users_to_urls($users,$url_list);
+            Display :: display_confirmation_message(get_lang('UsersBelongURL'));
+        }
+    }
 }
 
 /*	Display GUI	*/
 if (empty($first_letter_user)) {
-	$sql = "SELECT count(*) as nb_users FROM $tbl_user";
-	$result = Database::query($sql);
-	$num_row = Database::fetch_array($result);
+    $sql = "SELECT count(*) as nb_users FROM $tbl_user";
+    $result = Database::query($sql);
+    $num_row = Database::fetch_array($result);
     if ($num_row['nb_users']>1000) {
         //if there are too much users to gracefully handle with the HTML select list,
         // assign a default filter on users names
         $first_letter_user = 'A';
     }
-	unset($result);
+    unset($result);
 }
 $first_letter_user_lower = Database::escape_string(api_strtolower($first_letter_user));
 
@@ -104,7 +104,7 @@ unset($result);
       <option value="">--</option>
       <?php
         echo Display :: get_alphabet_options($first_letter_user);
-      ?>
+        ?>
      </select>
     </td>
         <td width="20%">&nbsp;</td>
@@ -116,14 +116,14 @@ unset($result);
     <td width="40%" align="center">
      <select name="user_list[]" multiple="multiple" size="20" style="width:380px;">
 		<?php
-		foreach ($db_users as $user) {
-		?>
+        foreach ($db_users as $user) {
+        ?>
             <option value="<?php echo $user['user_id']; ?>" <?php if(in_array($user['user_id'], $users)) echo 'selected="selected"'; ?>>
                 <?php echo api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')'; ?>
             </option>
 		<?php
-		}
-		?>
+        }
+        ?>
     </select>
    </td>
    <td width="20%" valign="middle" align="center">
@@ -132,14 +132,14 @@ unset($result);
    <td width="40%" align="center">
     <select name="url_list[]" multiple="multiple" size="20" style="width:230px;">
 		<?php
-		foreach ($db_urls as $url_obj) {
-			?>
+        foreach ($db_urls as $url_obj) {
+            ?>
 			<option value="<?php echo $url_obj['id']; ?>" <?php if(in_array($url_obj['id'],$url_list)) echo 'selected="selected"'; ?>>
                 <?php echo $url_obj['url']; ?>
 			</option>
 			<?php
-		}
-		?>
+        }
+        ?>
     </select>
    </td>
   </tr>

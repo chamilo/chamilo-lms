@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CLp;
 /**
  * Implements the tracking of students in the Reporting pages
  * @package chamilo.reporting
@@ -74,7 +75,7 @@ if ($export) {
 $csv_content = array();
 $from_myspace = false;
 
-if (isset ($_GET['from']) && $_GET['from'] == 'myspace') {
+if (isset($_GET['from']) && $_GET['from'] == 'myspace') {
     $from_myspace = true;
     $this_section = SECTION_TRACKING;
 } else {
@@ -743,18 +744,26 @@ if (!empty($student_id)) {
                     $courseInfoItem = api_get_course_info_by_id($courseId);
                     $courseId = $courseInfoItem['real_id'];
                     $courseCodeItem = $courseInfoItem['code'];
-
-                    if (CourseManager :: is_user_subscribed_in_course($student_id, $courseCodeItem, true)) {
+                    $isSubscribed = CourseManager:: is_user_subscribed_in_course(
+                        $student_id,
+                        $courseCodeItem,
+                        true
+                    );
+                    if ($isSubscribed) {
                         $time_spent_on_course = api_time_to_hms(
                             Tracking :: get_time_spent_on_the_course($user_info['user_id'], $courseId, $sId)
                         );
 
                         // get average of faults in attendances by student
-                        $results_faults_avg = $attendance->get_faults_average_by_course($student_id, $courseCodeItem, $sId);
+                        $results_faults_avg = $attendance->get_faults_average_by_course(
+                            $student_id,
+                            $courseCodeItem,
+                            $sId
+                        );
                         if (!empty($results_faults_avg['total'])) {
                             if (api_is_drh()) {
                                 $attendances_faults_avg =
-                                    '<a title="'.get_lang('GoAttendance').'" href="'.api_get_path(WEB_CODE_PATH).'attendance/index.php?cidReq='.$courseCodeItem.$extraParam.'&id_session='.$sId.'&student_id='.$student_id.'">'.
+                                    '<a title="'.get_lang('GoAttendance').'" href="'.api_get_path(WEB_CODE_PATH).'attendance/index.php?cidReq='.$courseCodeItem.'&id_session='.$sId.'&student_id='.$student_id.'">'.
                                     $results_faults_avg['faults'].'/'.$results_faults_avg['total'].' ('.$results_faults_avg['porcent'].'%)</a>';
                             } else {
                                 $attendances_faults_avg =
@@ -789,7 +798,7 @@ if (!empty($student_id)) {
                         $scoretotal_display = '0/0 (0%)';
                         if (!empty($scoretotal) && !empty($scoretotal[1])) {
                             $scoretotal_display =
-                                round($scoretotal[0], 1 ).'/'.
+                                round($scoretotal[0], 1).'/'.
                                 round($scoretotal[1], 1).
                                 ' ('.round(($scoretotal[0] / $scoretotal[1]) * 100, 2).' %)';
                         }
@@ -958,7 +967,7 @@ if (!empty($student_id)) {
                 <?php
 
                 $i = 0;
-                /** @var \Chamilo\CourseBundle\Entity\CLp $learnpath */
+                /** @var CLp $learnpath */
                 foreach ($lps as $learnpath) {
                     $lp_id = $learnpath->getId();
                     $lp_name = $learnpath->getName();

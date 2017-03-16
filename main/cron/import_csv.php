@@ -1300,6 +1300,7 @@ class ImportCsv
                     }
 
                     if ($addTeacherToSession) {
+                        $this->logger->addInfo("Add teacher to all course sessions");
                         CourseManager::updateTeachers(
                             $courseInfo,
                             $row['teachers'],
@@ -1313,7 +1314,7 @@ class ImportCsv
                         CourseManager::updateTeachers(
                             $courseInfo,
                             $row['teachers'],
-                            false,
+                            true,
                             false,
                             false,
                             $teacherBackup,

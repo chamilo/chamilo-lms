@@ -503,7 +503,7 @@ if ($action_forums != 'add') {
                 $html .= '</div>';
                 $html .= '</div></div>';
             }
-           echo $html;
+            echo $html;
         }
     }
     if (count($forum_list) == 0) {

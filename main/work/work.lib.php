@@ -1931,7 +1931,8 @@ function get_work_user_list(
                         qualification,
                         weight,
                         allow_text_assignment,
-                        CONCAT (u.firstname," ",u.lastname) as fullname,
+                        u.firstname,
+                        u.lastname,
                         u.username,
                         parent_id,
                         accepted,
@@ -1972,7 +1973,6 @@ function get_work_user_list(
 
         $url = api_get_path(WEB_CODE_PATH).'work/';
         $unoconv = api_get_configuration_value('unoconv.binaries');
-
         $loadingText = addslashes(get_lang('Loading'));
         $uploadedText = addslashes(get_lang('Uploaded'));
         $failsUploadText = addslashes(get_lang('UplNoFileUploaded'));
@@ -2039,7 +2039,10 @@ function get_work_user_list(
                 ($is_allowed_to_edit || api_is_drh())
             ) {
                 // Firstname, lastname, username
-                $work['fullname'] = Display::div($work['fullname'], array('class' => 'work-name'));
+                $work['fullname'] = Display::div(
+                    api_get_person_name($work['firstname'], $work['lastname']),
+                    ['class' => 'work-name']
+                );
                 $work['title_clean'] = $work['title'];
 
                 if (strlen($work['title']) > 30) {
@@ -2061,7 +2064,6 @@ function get_work_user_list(
                 }
 
                 $send_to = Portfolio::share('work', $work['id'],  array('style' => 'white-space:nowrap;'));
-
                 $feedback = null;
                 $count = getWorkCommentCount($item_id, $course_info);
                 if (!is_null($count) && !empty($count)) {
@@ -2800,7 +2802,6 @@ function getStudentSubscribedToWork(
     } else {
         return $usersInWork;
     }
-
 }
 
 /**
@@ -3828,11 +3829,11 @@ function processWorkForm(
             // connection to the platform to hand the work in.
             $consideredWorkingTime = api_get_configuration_value('considered_working_time');
 
-            if ($consideredWorkingTime) {
+            if (!empty($consideredWorkingTime)) {
                 // Get the "considered work time" defined for this work
                 $fieldValue = new ExtraFieldValue('work');
                 $resultExtra = $fieldValue->getAllValuesForAnItem(
-                    $workId,
+                    $workInfo['iid'], //the ID of the work *folder*, not the document uploaded by the student
                     true
                 );
 
@@ -4298,41 +4299,57 @@ function deleteWorkItem($item_id, $courseInfo)
                 WHERE c_id = $course_id AND id = $item_id";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
+        $count = Database::num_rows($result);
 
-        if (Database::num_rows($result) > 0) {
+        if ($count > 0) {
 
             // If the "considered_working_time" option is enabled, check
             // whether some time should be removed from track_e_course_access
             $consideredWorkingTime = api_get_configuration_value('considered_working_time');
             if ($consideredWorkingTime) {
-                // Get the "considered work time" defined for this work
-                $fieldValue = new ExtraFieldValue('work');
-                $resultExtra = $fieldValue->getAllValuesForAnItem(
+                $userWorks = get_work_user_list(
+                    0,
+                    100,
+                    null,
+                    null,
                     $row['parent_id'],
-                    true
+                    null,
+                    $row['user_id'],
+                    false,
+                    $course_id,
+                    $row['session_id']
                 );
+                // We're only interested in deleting the time if this is the latest work sent
+                if (count($userWorks) == 1) {
+                    // Get the "considered work time" defined for this work
+                    $fieldValue = new ExtraFieldValue('work');
+                    $resultExtra = $fieldValue->getAllValuesForAnItem(
+                        $row['parent_id'],
+                        true
+                    );
 
-                $workingTime = null;
-                foreach ($resultExtra as $field) {
-                    $field = $field['value'];
+                    $workingTime = null;
+                    foreach ($resultExtra as $field) {
+                        $field = $field['value'];
 
-                    if ($consideredWorkingTime == $field->getField()->getVariable()) {
-                        $workingTime = $field->getValue();
+                        if ($consideredWorkingTime == $field->getField()->getVariable()) {
+                            $workingTime = $field->getValue();
+                        }
+                    }
+                    // If no time was defined, or a time of "0" was set, do nothing
+                    if (!empty($workingTime)) {
+                        $sessionId = empty($row['session_id']) ? 0 : $row['session_id'];
+                        // Getting false from the following call would mean the
+                        // time record
+                        $removalResult = Event::eventRemoveVirtualCourseTime(
+                            $course_id,
+                            $row['user_id'],
+                            $sessionId,
+                            $workingTime
+                        );
                     }
                 }
-                // If no time was defined, or a time of "0" was set, do nothing
-                if (!empty($workingTime)) {
-                    $sessionId = empty($row['session_id']) ? 0 : $row['session_id'];
-                    // Getting false from the following call would mean the
-                    // time record
-                    $removalResult = Event::eventRemoveVirtualCourseTime(
-                        $course_id,
-                        $row['user_id'],
-                        $sessionId,
-                        $workingTime
-                    );
-                }
-            } // fin de sección sobre considered_working_time
+            } // end of considered_working_time check section
 
             $sql = "UPDATE $work_table SET active = 2
                     WHERE c_id = $course_id AND id = $item_id";
@@ -4926,15 +4943,15 @@ function getFileContents($id, $course_info, $sessionId = 0, $correction = false)
                 $sessionId
             );
 
+            if (empty($item_info)) {
+                return false;
+            }
+
             allowOnlySubscribedUser(
                 api_get_user_id(),
                 $row['parent_id'],
                 $course_info['real_id']
             );
-
-            if (empty($item_info)) {
-                api_not_allowed();
-            }
 
             /*
             field show_score in table course :
@@ -4971,7 +4988,7 @@ function getFileContents($id, $course_info, $sessionId = 0, $correction = false)
             $student_is_owner_of_work = user_is_author($row['id'], $row['user_id']);
 
             if ($is_editor ||
-                ($student_is_owner_of_work) ||
+                $student_is_owner_of_work ||
                 ($doc_visible_for_all && $work_is_visible)
             ) {
                 $title = $row['title'];
@@ -4993,12 +5010,12 @@ function getFileContents($id, $course_info, $sessionId = 0, $correction = false)
                     }
                 }
 
-                Event::event_download($title);
-
                 if (Security::check_abs_path(
                     $full_file_name,
                     api_get_path(SYS_COURSE_PATH).api_get_course_path().'/')
                 ) {
+                    Event::event_download($title);
+
                     return array(
                         'path' => $full_file_name,
                         'title' => $title,

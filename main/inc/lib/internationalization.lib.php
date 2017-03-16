@@ -678,7 +678,16 @@ function date_to_str_ago($date, $timeZone = 'UTC')
     }
 
     $getOldTimezone = api_get_timezone();
-    $timeAgo = new TimeAgo($timeZone, api_get_language_isocode());
+
+    $isoCode = api_get_language_isocode();
+    if ($isoCode == 'pt') {
+        $isoCode = 'pt-BR';
+    }
+    $checkFile = api_get_path(SYS_PATH).'vendor/jimmiw/php-time-ago/translations/'.$isoCode.'.php';
+    if (!file_exists($checkFile)) {
+        $isoCode = 'en';
+    }
+    $timeAgo = new TimeAgo($timeZone, $isoCode);
     $value = $timeAgo->inWords($date);
 
     date_default_timezone_set($getOldTimezone);

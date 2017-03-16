@@ -1,6 +1,10 @@
 # Cache directories
+
 app/cache/*
-!app/cache/.htaccess
+!app/cache/.gitkeep
+
+app/logs/*
+!app/logs/.gitkeep
 
 # Chamilo configuration
 /app/config/parameters.yml
@@ -18,9 +22,6 @@ app/courses/*
 
 # Home
 app/home/*
-
-app/logs/*
-app/Resources/views/*
 
 # Upload content
 app/upload/*

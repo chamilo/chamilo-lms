@@ -204,7 +204,10 @@ if (!$inATest) {
         $styleLevel = "level";
         $styleScore = "score";
 
-        $category_list = TestCategory::getListOfCategoriesNameForTest($objExercise->id, false);
+        $category_list = TestCategory::getListOfCategoriesNameForTest(
+            $objExercise->id,
+            false
+        );
 
         if (is_array($questionList)) {
             foreach ($questionList as $id) {
@@ -214,7 +217,6 @@ if (!$inATest) {
                 }
                 /** @var Question $objQuestionTmp */
                 $objQuestionTmp = Question::read($id);
-                $question_class = get_class($objQuestionTmp);
 
                 $clone_link = '<a href="'.api_get_self().'?'.api_get_cidreq().'&clone_question='.$id.'">'.
                     Display::return_icon('cd.png',get_lang('Copy'), array(), ICON_SIZE_SMALL).'</a>';
@@ -248,17 +250,14 @@ if (!$inATest) {
                 ), array ('class'=>'btn-actions'));
 
                 $title = Security::remove_XSS($objQuestionTmp->selectTitle());
-                /* $move = Display::return_icon(
-                    'all_directions.png',
-                    get_lang('Move'),
-                    array('class'=>'moved', 'style'=>'margin-bottom:-0.3em;')
-                ); */
                 $move = Display::returnFontAwesomeIcon("arrows moved", 'lg');
 
                 // Question name
                 $questionName = Display::tag(
                     'td',
-                    '<a href="#" title = "'.Security::remove_XSS($title).'">'.$move.' '.cut($title, 42).'</a>',
+                    '<a href="#" title = "'.Security::remove_XSS($title).'">
+                        '.$move.' '.cut($title, 42).'
+                    </a>',
                     array('class' => $styleQuestion)
                 );
 

@@ -29,10 +29,9 @@ class MultipleAnswerCombination extends Question
     }
 
     /**
-     * function which redefines Question::createAnswersForm
-     * @param FormValidator $form
+     * @inheritdoc
      */
-    function createAnswersForm($form)
+    public function createAnswersForm($form)
     {
         $nb_answers = isset($_POST['nb_answers']) ? $_POST['nb_answers'] : 2;
         $nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
@@ -43,8 +42,8 @@ class MultipleAnswerCombination extends Question
         $html .= '<tr>';
         $html .= '<th width="10">' . get_lang('Number') . '</th>';
         $html .= '<th width="10">' . get_lang('True') . '</th>';
-        $html .= '<th width="50%">' . get_lang('Comment') . '</th>';
         $html .= '<th width="50%">' . get_lang('Answer') . '</th>';
+        $html .= '<th width="50%">' . get_lang('Comment') . '</th>';
         $html .= '</tr>';
         $html .= '</thead>';
         $html .= '<tbody>';

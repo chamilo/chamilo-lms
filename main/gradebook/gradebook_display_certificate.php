@@ -162,17 +162,17 @@ if ($filter === 'true') {
 
     if ($form->validate()) {
         $officialCode = $form->getSubmitValue('filter');
-         if ($officialCode == 'all') {
+            if ($officialCode == 'all') {
             $certificate_list = GradebookUtils::get_list_users_certificates($cat_id);
         } else {
-             $userList = UserManager::getUsersByOfficialCode($officialCode);
-             if (!empty($userList)) {
-                 $certificate_list = GradebookUtils::get_list_users_certificates(
-                     $cat_id,
-                     $userList
-                 );
-             }
-         }
+                $userList = UserManager::getUsersByOfficialCode($officialCode);
+                if (!empty($userList)) {
+                    $certificate_list = GradebookUtils::get_list_users_certificates(
+                        $cat_id,
+                        $userList
+                    );
+                }
+            }
     } else {
         $certificate_list = GradebookUtils::get_list_users_certificates($cat_id);
     }

@@ -24,7 +24,7 @@ class UniqueAnswerImage extends UniqueAnswer
     }
 
     /**
-     * @param FormValidator $form
+     * @inheritdoc
      * @throws Exception
      */
     public function createAnswersForm($form)

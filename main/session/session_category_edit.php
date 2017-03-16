@@ -29,15 +29,15 @@ $interbreadcrumb[] = array(
 $sql = "SELECT * FROM $tbl_session_category WHERE id='".$id."' ORDER BY name";
 $result = Database::query($sql);
 if (!$infos = Database::fetch_array($result)) {
-	header('Location: session_list.php');
-	exit();
+    header('Location: session_list.php');
+    exit();
 }
 
 list($year_start,$month_start,$day_start)=explode('-',$infos['date_start']);
 list($year_end,$month_end,$day_end)=explode('-',$infos['date_end']);
 
 if (!api_is_platform_admin() && $infos['session_admin_id']!=$_user['user_id'] && !api_is_session_admin()) {
-	api_not_allowed(true);
+    api_not_allowed(true);
 }
 
 if (isset($_POST['formSent']) && $_POST['formSent']) {
@@ -60,7 +60,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
         $day_end
     );
     if ($return == strval(intval($return))) {
-		Display::addFlash(Display::return_message(get_lang('SessionCategoryUpdate')));
+        Display::addFlash(Display::return_message(get_lang('SessionCategoryUpdate')));
         header('Location: session_category_list.php');
         exit();
     }
@@ -73,7 +73,7 @@ $thisDay = date('d');
 // display the header
 Display::display_header($tool_name);
 if (!empty($return)) {
-	Display::display_error_message($return,false);
+    Display::display_error_message($return,false);
 }
 ?>
 <div class="row">

@@ -45,8 +45,16 @@ if ($action === 'thematic_plan_list') {
     $form->addElement('hidden', 'thematic_id', $thematic_id);
 
     foreach ($default_thematic_plan_title as $id => $title) {
+        $btnDelete = Display::toolbarButton(
+            get_lang('Delete'),
+            '#',
+            'times',
+            'danger',
+            ['role' => 'button', 'data-id' => $id, 'class' => 'btn-delete']
+        );
+
         $form->addElement('hidden', 'description_type['.$id.']', $id);
-        $form->addText('title['.$id.']', get_lang('Title'), false, array('size'=>'50'));
+        $form->addText("title[$id]", [get_lang('Title'), null, $btnDelete], false);
         $form->addHtmlEditor(
            'description['.$id.']',
            get_lang('Description'),
@@ -72,7 +80,10 @@ if ($action === 'thematic_plan_list') {
         }
         $form->setDefaults($default);
     }
-    $form->addButtonSave(get_lang('Save'));
+    $form->addGroup([
+        $form->addButton('add_item', get_lang('SaveAndAddNewItem'), 'plus', 'info', 'default', null, [], true),
+        $form->addButtonSave(get_lang('Save'), 'submit', true)
+    ]);
     $form->display();
 } elseif ($action == 'thematic_plan_add' || $action == 'thematic_plan_edit') {
     if ($description_type >= ADD_THEMATIC_PLAN) {

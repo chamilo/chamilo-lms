@@ -33,6 +33,7 @@ exclude_paths:
 - app/Resources/
 - main/admin/db.php
 - main/auth/cas/lib/CAS/
+- main/auth/shibboleth
 - main/inc/lib/browser/
 - main/inc/lib/freemindflashbrowser/
 - main/inc/lib/internationalization_database/

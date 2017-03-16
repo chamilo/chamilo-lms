@@ -11,42 +11,6 @@ build:
                 'phar.readonly': false
         hosts:
             my.chamilodev.net: '127.0.0.1'
-filter:
-    excluded_paths:
-      - 'app/cache/*'
-      - 'app/logs/*'
-      - 'documentation/*'
-      - 'app/Migrations/*'
-      - 'app/Resources/*'
-      - 'main/admin/db.php'
-      - 'main/auth/cas/lib/CAS/*'
-      - 'main/inc/lib/browser/*'
-      - 'main/inc/lib/freemindflashbrowser/*'
-      - 'main/inc/lib/internationalization_database/*'
-      - 'main/inc/lib/javascript/*'
-      - 'main/inc/lib/kses-0.2.2/*'
-      - 'main/inc/lib/mimetex/*'
-      - 'main/inc/lib/nanogong/*'
-      - 'main/inc/lib/nusoap/*'
-      - 'main/inc/lib/opengraph/*'
-      - 'main/inc/lib/ppt2png/*'
-      - 'main/inc/lib/phpseclib'
-      - 'main/inc/lib/pear/*'
-      - 'main/inc/lib/phpmailer/*'
-      - 'main/inc/lib/phpseclib/*'
-      - 'main/inc/lib/svg-edit/*'
-      - 'main/inc/lib/swfobject/*'
-      - 'main/inc/lib/wami-recorder/*'
-      - 'main/inc/lib/xajax/*'
-      - 'main/lp/packaging/*'
-      - 'main/template/*'
-      - 'main/img/*'
-      - 'main/lang/*'
-      - 'main/default_course_document'
-      - 'fonts'
-      - 'tests/*'
-      - 'vendor/*'
-      - 'web/*'
 checks:
     php:
         no_trailing_whitespace: true
@@ -119,15 +83,15 @@ coding_style:
             constants:
                 true_false_null: lower
 
-tools:
-    php_mess_detector:
-        enabled: true
-        extensions:
-            - php
-        command: phpmd
-        config:
-            rulesets:
-                - codesize
+#tools:
+#    php_mess_detector:
+#        enabled: true
+#        extensions:
+#            - php
+#        command: phpmd
+#        config:
+#            rulesets:
+#                - codesize
 
 #    php_analyzer:
 #        enabled: true
@@ -168,6 +132,7 @@ filter:
         - 'app/Resources/*'
         - 'main/admin/db.php'
         - 'main/auth/cas/lib/CAS/*'
+        - 'main/auth/shibboleth'
         - 'main/inc/lib/browser/*'
         - 'main/inc/lib/freemindflashbrowser/*'
         - 'main/inc/lib/internationalization_database/*'

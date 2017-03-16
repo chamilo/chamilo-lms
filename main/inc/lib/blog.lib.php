@@ -746,7 +746,7 @@ class Blog
     public static function get_personal_task_list()
     {
         $_user = api_get_user_info();
-
+        $html = null;
         $tbl_blogs = Database::get_course_table(TABLE_BLOGS);
         $tbl_blogs_tasks_rel_user 	= Database::get_course_table(TABLE_BLOGS_TASKS_REL_USER);
         $tbl_blogs_tasks = Database::get_course_table(TABLE_BLOGS_TASKS);
@@ -771,17 +771,18 @@ class Blog
             $result = Database::query($sql);
 
             if (Database::num_rows($result) > 0) {
-                echo '<ul>';
+                $html.= '<ul>';
                 while ($mytask = Database::fetch_array($result)) {
-                    echo '<li><a href="blog.php?action=execute_task&blog_id=' . $mytask['blog_id'] . '&task_id='.stripslashes($mytask['task_id']) . '" title="[Blog: '.stripslashes($mytask['blog_name']) . '] ' . get_lang('ExecuteThisTask') . '">'.stripslashes($mytask['title']) . '</a></li>';
+                    $html.= '<li><a href="blog.php?action=execute_task&blog_id=' . $mytask['blog_id'] . '&task_id='.stripslashes($mytask['task_id']) . '" title="[Blog: '.stripslashes($mytask['blog_name']) . '] ' . get_lang('ExecuteThisTask') . '">'.stripslashes($mytask['title']) . '</a></li>';
                 }
-                echo '<ul>';
+                $html.= '<ul>';
             } else {
-                echo get_lang('NoTasks');
+                $html.= get_lang('NoTasks');
             }
         } else {
-            echo get_lang('NoTasks');
+            $html.= get_lang('NoTasks');
         }
+        return $html;
     }
 
     /**
@@ -859,6 +860,7 @@ class Blog
         // Display
         if(Database::num_rows($result) > 0) {
             $limit = 200;
+            
             while ($blog_post = Database::fetch_array($result)) {
                 // Get number of comments
                 $sql = "SELECT COUNT(1) as number_of_comments
@@ -869,52 +871,36 @@ class Blog
                             post_id = '" . (int)$blog_post['post_id']."'";
                 $tmp = Database::query($sql);
                 $blog_post_comments = Database::fetch_array($tmp);
-
+               
+                $fileArray = get_blog_attachment($blog_id,$blog_post['post_id'],0);
+                
                 // Prepare data
-                $blog_post_id = $blog_post['post_id'];
-                $blog_post_text = make_clickable(stripslashes($blog_post['full_text']));
-                $blog_post_date = api_convert_and_format_date($blog_post['date_creation'], null, date_default_timezone_get());
+                $article = [
+                    'id_blog' => $blog_post['blog_id'],
+                    'c_id' => $blog_post['c_id'],
+                    'id_post' => $blog_post['post_id'],
+                    'id_autor' => $blog_post['author_id'],
+                    'autor' => $blog_post['firstname'].' ' . $blog_post['lastname'],
+                    'username' => $blog_post['username'],
+                    'title' => stripslashes($blog_post['title']),
+                    'extract' =>  api_get_short_text_from_html(stripslashes($blog_post['full_text']),400),
+                    'content' =>  stripslashes($blog_post['full_text']),
+                    'post_date' => api_convert_and_format_date($blog_post['date_creation'], null, date_default_timezone_get()),
+                    'n_comments' => $blog_post_comments['number_of_comments'],
+                    'files' => $fileArray
 
-                // Create an introduction text (but keep FULL sentences)
-                $words = 0;
-                $blog_post_text_cut = cut($blog_post_text, $limit) ;
-                $words = strlen($blog_post_text);
+                ];
 
-                if ($words >= $limit) {
-                    $readMoreLink = ' <div class="link" onclick="document.getElementById(\'blogpost_text_' . $blog_post_id . '\').style.display=\'block\'; document.getElementById(\'blogpost_introduction_' . $blog_post_id . '\').style.display=\'none\'">' . get_lang('ReadMore') . '</div>';
-                    $introduction_text = $blog_post_text_cut;
-                } else {
-                    $introduction_text = $blog_post_text;
-                    $readMoreLink = '';
-                }
-
-                $introduction_text = stripslashes($introduction_text);
-
-                echo '<div class="blogpost">';
-                echo '<span class="blogpost_title"><a href="blog.php?action=view_post&blog_id=' . $blog_id . '&post_id=' . $blog_post['post_id'] . '#add_comment" title="' . get_lang('ReadPost') . '" >'.stripslashes($blog_post['title']) . '</a></span>';
-                echo '<span class="blogpost_date"><a href="blog.php?action=view_post&blog_id=' . $blog_id . '&post_id=' . $blog_post['post_id'] . '#add_comment" title="' . get_lang('ReadPost') . '" >' . $blog_post_date . '</a></span>';
-                echo '<div class="blogpost_introduction" id="blogpost_introduction_'.$blog_post_id.'">' . $introduction_text.$readMoreLink.'</div>';
-                echo '<div class="blogpost_text" id="blogpost_text_' . $blog_post_id . '" style="display: none">' . $blog_post_text . '</div>';
-
-                $file_name_array = get_blog_attachment($blog_id,$blog_post_id,0);
-
-                if (!empty($file_name_array)) {
-                    echo '<br /><br />';
-                    echo Display::return_icon('attachment.gif',get_lang('Attachment'));
-                    echo '<a href="download.php?file=';
-                    echo $file_name_array['path'];
-                    echo ' "> '.$file_name_array['filename'].' </a><br />';
-                    echo '</span>';
-                }
-                $username = api_htmlentities(sprintf(get_lang('LoginX'), $blog_post['username']), ENT_QUOTES);
-                echo '<span class="blogpost_info">' . get_lang('Author') . ': ' . Display::tag('span', api_get_person_name($blog_post['firstname'], $blog_post['lastname']), array('title'=>$username)) .' - <a href="blog.php?action=view_post&blog_id=' . $blog_id . '&post_id=' . $blog_post['post_id'] . '#add_comment" title="' . get_lang('ReadPost') . '" >' . get_lang('Comments') . ': ' . $blog_post_comments['number_of_comments'] . '</a></span>';
-                echo '</div>';
+                $listArticle[]= $article;
+                
             }
+            return $listArticle;
+            
         } else {
             if($filter == '1=1') {
-                echo get_lang('NoArticles');
+                return get_lang('NoArticles');
             } else {
-                echo get_lang('NoArticleMatches');
+                return get_lang('NoArticleMatches');
             }
         }
     }
@@ -972,6 +958,7 @@ class Blog
         $tbl_blogs_posts = Database::get_course_table(TABLE_BLOGS_POSTS);
         $tbl_blogs_comments = Database::get_course_table(TABLE_BLOGS_COMMENTS);
         $tbl_users = Database::get_main_table(TABLE_MAIN_USER);
+        $listComments = null;
 
         global $charset, $dateFormatLong;
 
@@ -989,20 +976,46 @@ class Blog
                 ORDER BY post_id DESC";
         $result = Database::query($sql);
         $blog_post = Database::fetch_array($result);
-
+        
         // Get number of comments
         $sql = "SELECT COUNT(1) as number_of_comments
                 FROM $tbl_blogs_comments
                 WHERE c_id = $course_id AND blog_id = '".(int)$blog_id."' AND post_id = '".(int)$post_id."'";
         $result = Database::query($sql);
         $blog_post_comments = Database::fetch_array($result);
-
-        // Prepare data
-        $blog_post_text = make_clickable(stripslashes($blog_post['full_text']));
-        $blog_post_date = api_convert_and_format_date($blog_post['date_creation'], null, date_default_timezone_get());
-        $blog_post_actions = "";
-
+        
         $task_id = (isset($_GET['task_id']) && is_numeric($_GET['task_id'])) ? intval($_GET['task_id']) : 0;
+        
+        // Display comments if there are any
+        if($blog_post_comments['number_of_comments'] > 0) {
+            $commentsHtml = Blog::get_threaded_comments(0, 0, $blog_id, $post_id, $task_id);
+        }
+        // Display comment form
+        if (api_is_allowed('BLOG_' . $blog_id, 'article_comments_add')) {
+            $formComments = Blog::display_new_comment_form($blog_id, $post_id, $blog_post['title'], false);
+        }
+        // Prepare data
+        $fileArray = get_blog_attachment($blog_id, $post_id);
+        $article = [
+                    'id_blog' => $blog_post['blog_id'],
+                    'c_id' => $blog_post['c_id'],
+                    'id_post' => $blog_post['post_id'],
+                    'id_autor' => $blog_post['author_id'],
+                    'autor' => $blog_post['firstname'].' ' . $blog_post['lastname'],
+                    'username' => $blog_post['username'],
+                    'title' => stripslashes($blog_post['title']),
+                    'extract' =>  api_get_short_text_from_html(stripslashes($blog_post['full_text']),400),
+                    'content' =>  stripslashes($blog_post['full_text']),
+                    'post_date' => api_convert_and_format_date($blog_post['date_creation'], null, date_default_timezone_get()),
+                    'n_comments' => $blog_post_comments['number_of_comments'],
+                    'files' => $fileArray,
+                    'id_task' => $task_id,
+                    'comments_html' => $commentsHtml,
+                    'form_html' => $formComments
+                ];
+
+
+        /* $task_id = (isset($_GET['task_id']) && is_numeric($_GET['task_id'])) ? intval($_GET['task_id']) : 0;
 
         if (api_is_allowed('BLOG_' . $blog_id, 'article_edit', $task_id)) {
             $blog_post_actions .= '<a href="blog.php?action=edit_post&blog_id=' . $blog_id . '&post_id=' . $post_id . '&article_id=' . $blog_post['post_id'] . '&task_id=' . $task_id . '" title="' . get_lang('EditThisPost') . '">';
@@ -1014,50 +1027,14 @@ class Blog
             $blog_post_actions .= '<a href="blog.php?action=view_post&blog_id=' . $blog_id . '&post_id=' . $post_id . '&do=delete_article&article_id=' . $blog_post['post_id'] . '&task_id=' . $task_id . '" title="' . get_lang('DeleteThisArticle') . '" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)). '\')) return false;">';
             $blog_post_actions .= Display::return_icon('delete.png');
             $blog_post_actions .= '</a>';
-        }
+        } */
 
-        if (api_is_allowed('BLOG_' . $blog_id, 'article_rate'))
+        if (api_is_allowed('BLOG_' . $blog_id, 'article_rate')){
             $rating_select = Blog::display_rating_form('post',$blog_id,$post_id);
-
-        $blog_post_text=stripslashes($blog_post_text);
-
-        // Display post
-        echo '<div class="blogpost">';
-        echo '<span class="blogpost_title"><a href="blog.php?action=view_post&blog_id=' . $blog_id . '&post_id=' . $blog_post['post_id'] . '" title="' . get_lang('ReadPost') . '" >'.stripslashes($blog_post['title']) . '</a></span>';
-        echo '<span class="blogpost_date">' . $blog_post_date . '</span>';
-        echo '<span class="blogpost_text">' . $blog_post_text . '</span><br />';
-
-        $file_name_array = get_blog_attachment($blog_id, $post_id);
-
-        if (!empty($file_name_array)) {
-            echo ' <br />';
-            echo Display::return_icon('attachment.gif',get_lang('Attachment'));
-            echo '<a href="download.php?file=';
-            echo $file_name_array['path'];
-            echo ' "> '.$file_name_array['filename'].' </a>';
-            echo '</span>';
-            echo '<span class="attachment_comment">';
-            echo $file_name_array['comment'];
-            echo '</span>';
-            echo '<br />';
         }
-        $username = api_htmlentities(sprintf(get_lang('LoginX'), $blog_post['username']), ENT_QUOTES);
-        echo '<span class="blogpost_info">'.get_lang('Author').': ' .Display::tag('span', api_get_person_name($blog_post['firstname'], $blog_post['lastname']), array('title'=>$username)).' - '.get_lang('Comments').': '.$blog_post_comments['number_of_comments'].' - '.get_lang('Rating').': '.Blog::display_rating('post',$blog_id,$post_id).$rating_select.'</span>';
-        echo '<span class="blogpost_actions">' . $blog_post_actions . '</span>';
-        echo '</div>';
-
-        // Display comments if there are any
-        if($blog_post_comments['number_of_comments'] > 0) {
-            echo '<div class="comments">';
-                echo '<span class="blogpost_title">' . get_lang('Comments') . '</span><br />';
-                Blog::get_threaded_comments(0, 0, $blog_id, $post_id, $task_id);
-            echo '</div>';
-        }
-
-        // Display comment form
-        if (api_is_allowed('BLOG_' . $blog_id, 'article_comments_add')) {
-            Blog::display_new_comment_form($blog_id, $post_id, $blog_post['title']);
-        }
+        
+        return $article;
+        
     }
 
     /**
@@ -1253,29 +1230,31 @@ class Blog
 
             // Output...
             $margin = $current_level * 30;
-            echo '<div class="blogpost_comment" style="margin-left: ' . $margin . 'px;' . $border_color . '">';
-                echo '<span class="blogpost_comment_title"><a href="#add_comment" onclick="document.getElementById(\'comment_parent_id\').value=\'' . $comment['comment_id'] . '\'; document.getElementById(\'comment_title\').value=\'Re: '.addslashes($comment['title']) . '\'" title="' . get_lang('ReplyToThisComment') . '" >'.stripslashes($comment['title']) . '</a></span>';
-                echo '<span class="blogpost_comment_date">' . $blog_comment_date . '</span>';
-                echo '<span class="blogpost_text">' . $comment_text . '</span>';
+            $html = null;
+            $html.=  '<div class="blogpost_comment" style="margin-left: ' . $margin . 'px;' . $border_color . '">';
+                $html.= '<span class="blogpost_comment_title"><a href="#add_comment" onclick="document.getElementById(\'comment_parent_id\').value=\'' . $comment['comment_id'] . '\'; document.getElementById(\'comment_title\').value=\'Re: '.addslashes($comment['title']) . '\'" title="' . get_lang('ReplyToThisComment') . '" >'.stripslashes($comment['title']) . '</a></span>';
+                $html.= '<span class="blogpost_comment_date">' . $blog_comment_date . '</span>';
+                $html.= '<span class="blogpost_text">' . $comment_text . '</span>';
 
                 $file_name_array = get_blog_attachment($blog_id,$post_id, $comment['comment_id']);
                 if (!empty($file_name_array)) {
-                    echo '<br /><br />';
-                    echo Display::return_icon('attachment.gif',get_lang('Attachment'));
-                    echo '<a href="download.php?file=';
-                    echo $file_name_array['path'];
-                    echo ' "> '.$file_name_array['filename'].' </a>';
-                    echo '<span class="attachment_comment">';
-                    echo $file_name_array['comment'];
-                    echo '</span><br />';
+                    $html.= '<br /><br />';
+                    $html.= Display::return_icon('attachment.gif',get_lang('Attachment'));
+                    $html.= '<a href="download.php?file=';
+                    $html.= $file_name_array['path'];
+                    $html.= ' "> '.$file_name_array['filename'].' </a>';
+                    $html.= '<span class="attachment_comment">';
+                    $html.= $file_name_array['comment'];
+                    $html.= '</span><br />';
                 }
                 $username = api_htmlentities(sprintf(get_lang('LoginX'), $comment['username']), ENT_QUOTES);
-                echo '<span class="blogpost_comment_info">'.get_lang('Author').': '.Display::tag('span', api_get_person_name($comment['firstname'], $comment['lastname']), array('title'=>$username)).' - '.get_lang('Rating').': '.Blog::display_rating('comment', $blog_id, $comment['comment_id']).$rating_select.'</span>';
-                echo '<span class="blogpost_actions">' . $blog_comment_actions . '</span>';
-            echo '</div>';
-
+                $html.= '<span class="blogpost_comment_info">'.get_lang('Author').': '.Display::tag('span', api_get_person_name($comment['firstname'], $comment['lastname']), array('title'=>$username)).' - '.get_lang('Rating').': '.Blog::display_rating('comment', $blog_id, $comment['comment_id']).$rating_select.'</span>';
+                $html.= '<span class="blogpost_actions">' . $blog_comment_actions . '</span>';
+            $html.= '</div>';
+            
+            return $html;
             // Go further down the tree.
-            Blog::get_threaded_comments($comment['comment_id'], $next_level, $blog_id, $post_id);
+            //return $html.= Blog::get_threaded_comments($comment['comment_id'], $next_level, $blog_id, $post_id);
         }
     }
 
@@ -2265,7 +2244,7 @@ class Blog
      * @param Integer $blog_id
      * @param integer $post_id
      */
-    public static function display_new_comment_form($blog_id, $post_id, $title)
+    public static function display_new_comment_form($blog_id, $post_id, $title, $echo = true)
     {
         $form = new FormValidator(
             'add_post',
@@ -2303,7 +2282,11 @@ class Blog
             $form->addHidden('new_comment_submit', 'true');
         }
         $form->addButton('save', get_lang('Save'));
-        $form->display();
+        if($echo){
+            $form->display();
+        }else{
+            return $form->return_form();
+        }
     }
 
 
@@ -2323,6 +2306,7 @@ class Blog
         $_user = api_get_user_info();
         global $DaysShort;
         global $MonthsLong;
+        $html = null;
 
         $posts = array();
         $tasks = array();
@@ -2401,24 +2385,24 @@ class Blog
             }
         }
 
-        echo 	'<table id="smallcalendar" class="table table-responsive">',
-                "<tr id=\"title\">",
-                "<th width=\"10%\"><a href=\"", $backwardsURL, "\">&laquo;</a></th>",
-                "<th align=\"center\" width=\"80%\" colspan=\"5\">", $monthName, " ", $year, "</th>",
-                "<th width=\"10%\" align=\"right\"><a href=\"", $forewardsURL, "\">&raquo;</a></th>", "</tr>";
+        $html.= '<table id="smallcalendar" class="table table-responsive">
+                <tr id="title">
+                <th width="10%"><a href="'.$backwardsURL.'">&laquo;</a></th>
+                <th align="center" width="80%" colspan="5">'. $monthName .' '.$year.'</th>
+                <th width="10%" align="right"><a href="'. $forewardsURL.'">&raquo;</a></th></tr>';
 
-        echo "<tr>";
+        $html.= '<tr>';
 
         for($ii = 1; $ii < 8; $ii ++)
-            echo "<td class=\"weekdays\">", $DaysShort[$ii % 7], "</td>";
+            $html.= '<td class="weekdays">'.$DaysShort[$ii % 7].'</td>';
 
-        echo "</tr>";
+        $html.= '</tr>';
 
         $curday = -1;
         $today = getdate();
 
         while ($curday <= $numberofdays[$month]) {
-            echo "<tr>";
+            $html.=  '<tr>';
             for ($ii = 0; $ii < 7; $ii ++) {
                 if (($curday == -1) && ($ii == $startdayofweek))
                     $curday = 1;
@@ -2432,33 +2416,35 @@ class Blog
                         $class = "class=\"days_today\"";
                     }
 
-                    echo "<td " . $class.">";
+                    $html.=  '<td ' . $class . '>';
 
                     // If there are posts on this day, create a filter link.
                     if(in_array($curday, $posts))
-                        echo '<a href="blog.php?blog_id=' . $blog_id . '&filter=' . $year . '-' . $month . '-' . $curday . '&month=' . $month . '&year=' . $year . '" title="' . get_lang('ViewPostsOfThisDay') . '">' . $curday . '</a>';
+                        $html.= '<a href="blog.php?blog_id=' . $blog_id . '&filter=' . $year . '-' . $month . '-' . $curday . '&month=' . $month . '&year=' . $year . '" title="' . get_lang('ViewPostsOfThisDay') . '">' . $curday . '</a>';
                     else
-                        echo $dayheader;
+                        $html.= $dayheader;
 
                     if (count($tasks) > 0) {
                         if (isset($tasks[$curday]) && is_array($tasks[$curday])) {
                             // Add tasks to calendar
                             foreach ($tasks[$curday] as $task) {
-                                echo '<a href="blog.php?action=execute_task&blog_id=' . $task['blog_id'] . '&task_id='.stripslashes($task['task_id']) . '" title="' . $task['title'] . ' : ' . get_lang('InBlog') . ' : ' . $task['blog_name'] . ' - ' . get_lang('ExecuteThisTask') . '">';
-                                echo Display::return_icon('blog_task.gif', get_lang('ExecuteThisTask'));
-                                echo '</a>';
+                                $html.= '<a href="blog.php?action=execute_task&blog_id=' . $task['blog_id'] . '&task_id='.stripslashes($task['task_id']) . '" title="' . $task['title'] . ' : ' . get_lang('InBlog') . ' : ' . $task['blog_name'] . ' - ' . get_lang('ExecuteThisTask') . '">';
+                                $html.= Display::return_icon('blog_task.gif', get_lang('ExecuteThisTask'));
+                                $html.= '</a>';
                             }
                         }
                     }
 
-                    echo "</td>";
+                    $html.= '</td>';
                     $curday ++;
                 } else
-                    echo "<td>&nbsp;</td>";
+                    $html.= '<td>&nbsp;</td>';
             }
-            echo "</tr>";
+            $html.= '</tr>';
         }
-        echo "</table>";
+        $html.= '</table>';
+        
+        return $html;
     }
 
     /**

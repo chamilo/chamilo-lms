@@ -285,68 +285,37 @@ if (!empty($return_message)) {
 	}
 }
 
-// actions
-echo '<div class=actions>';
-?>
-	<a href="<?php echo api_get_self(); ?>?blog_id=<?php echo $blog_id ?>&<?php echo api_get_cidreq(); ?>" title="<?php echo get_lang('Home') ?>">
-    <?php echo Display::return_icon('blog.png', get_lang('Home'),'',ICON_SIZE_MEDIUM); ?></a>
-	<?php if(api_is_allowed('BLOG_'.$blog_id, 'article_add')) { ?>
-    <a href="<?php echo api_get_self(); ?>?action=new_post&amp;blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('NewPost') ?>">
-    <?php echo Display::return_icon('new_article.png', get_lang('NewPost'),'',ICON_SIZE_MEDIUM); ?></a><?php } ?>
-	<?php if(api_is_allowed('BLOG_'.$blog_id, 'task_management')) { ?>
-    <a href="<?php echo api_get_self(); ?>?action=manage_tasks&amp;blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('ManageTasks') ?>">
-    <?php echo Display::return_icon('blog_tasks.png', get_lang('TaskManager'),'',ICON_SIZE_MEDIUM); ?></a><?php } ?>
-	<?php if(api_is_allowed('BLOG_'.$blog_id, 'member_management')) { ?>
-    <a href="<?php echo api_get_self(); ?>?action=manage_members&amp;blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('ManageMembers') ?>">
-    <?php echo Display::return_icon('blog_admin_users.png', get_lang('MemberManager'),'',ICON_SIZE_MEDIUM); ?></a><?php } ?>
-<?php
-echo '</div>';
+    $html = null;
+        $actionsLeft = Display::url(Display::return_icon('blog.png', get_lang('Home'),'',ICON_SIZE_MEDIUM), api_get_self().'?blog_id='.$blog_id.'&'. api_get_cidreq());
+            if(api_is_allowed('BLOG_'.$blog_id, 'article_add')) {
+        $actionsLeft .= Display::url(Display::return_icon('new_article.png', get_lang('NewPost'),'',ICON_SIZE_MEDIUM), api_get_self().'?action=new_post&amp;blog_id='.$blog_id);
+            }
+        if(api_is_allowed('BLOG_'.$blog_id, 'task_management')) {
+            $actionsLeft .= Display::url(Display::return_icon('blog_tasks.png', get_lang('TaskManager'),'',ICON_SIZE_MEDIUM), api_get_self().'?action=manage_tasks&amp;blog_id='.$blog_id);
+        }
+        if(api_is_allowed('BLOG_'.$blog_id, 'member_management')) {
+            $actionsLeft .= Display::url(Display::return_icon('blog_admin_users.png', get_lang('MemberManager'),'',ICON_SIZE_MEDIUM), api_get_self().'?action=manage_members&amp;blog_id='.$blog_id);
+        }
+    $html.= Display::toolbarAction('action-blog', array($actionsLeft));
+
+echo $html;
 
 // Tool introduction
 Display::display_introduction_section(TOOL_BLOGS);
 
-?>
-<div class="blog-title"><h1><?php echo Blog::get_blog_title($blog_id); ?></h1></div>
-<div class="sectioncomment"><p><?php echo Blog::get_blog_subtitle($blog_id); ?></p></div>
+$titleBlog = Blog::get_blog_title($blog_id);
+$descriptionBlog = Blog::get_blog_subtitle($blog_id);
+$idBlog = $blog_id;
 
-<div class="row">
-	<div class="col-md-3">
-        <div class="panel panel-default">
-            <div class="panel-heading"><?php echo get_lang('Calendar') ?></div>
-            <div class="panel-body">
-                <?php
-                    $month = isset($_GET['month']) ? (int)$_GET['month'] : (int) date('m');
-                    $year = isset($_GET['year']) ? (int)$_GET['year'] : date('Y');
-                    Blog::display_minimonthcalendar($month, $year, $blog_id);
-                ?>
-            </div>
-        </div>
+$searchBlog = isset($_GET['q']) ? Security::remove_XSS($_GET['q']) : '';
+//calendar blog
+$month = isset($_GET['month']) ? (int)$_GET['month'] : (int) date('m');
+$year = isset($_GET['year']) ? (int)$_GET['year'] : date('Y');
+$calendarBlog = Blog::display_minimonthcalendar($month, $year, $blog_id);
+//task blogs
+$taskBlog = Blog::get_personal_task_list();
 
-        <div class="panel panel-default">
-            <div class="panel-heading"><?php echo get_lang('Search') ?></div>
-            <div class="panel-body">
-                <form action="blog.php" method="get" enctype="multipart/form-data">
-                    <div class="form-group">
-                        <input type="hidden" name="blog_id" value="<?php echo $blog_id ?>" />
-                        <input type="hidden" name="action" value="view_search_result" />
-                        <input type="text" class="form-control" size="20" name="q" value="<?php echo isset($_GET['q']) ? Security::remove_XSS($_GET['q']) : ''; ?>" />
-                    </div>
-                    <button class="btn btn-default btn-block" type="submit">
-                        <em class="fa fa-search"></em> <?php echo get_lang('Search'); ?>
-                    </button>
-                </form>
-            </div>
-        </div>
 
-        <div class="panel panel-default">
-            <div class="panel-heading"><?php echo get_lang('MyTasks') ?></div>
-            <div class="panel-body">
-                <?php Blog::get_personal_task_list(); ?>
-            </div>
-        </div>
-	</div>
-	<div class="col-md-9">
-		<?php
 
 if (isset($error)) {
 	Display :: display_error_message($message);
@@ -382,6 +351,15 @@ if (isset ($_GET['task_id']) && is_numeric($_GET['task_id'])) {
 		$user_task = true;
 }
 
+$tpl = new Template(get_lang('Blog'));
+$tpl->assign('title', $titleBlog);
+$tpl->assign('description', $descriptionBlog);
+$tpl->assign('id_blog', $idBlog);
+$tpl->assign('calendar', $calendarBlog);
+$tpl->assign('search', $searchBlog);
+$tpl->assign('task', $taskBlog);
+$blogLayout = null;
+
 switch ($action) {
 	case 'new_post':
 		if (api_is_allowed('BLOG_'.$blog_id, 'article_add', $user_task ? $task_id : 0)) {
@@ -406,7 +384,9 @@ switch ($action) {
 		}
 		break;
 	case 'view_post' :
-		Blog :: display_post($blog_id, intval($_GET['post_id']));
+		$postArticle = Blog :: display_post($blog_id, intval($_GET['post_id']));
+                $tpl->assign('post', $postArticle);
+                $blogLayout = $tpl->get_template('blog/post.tpl');
 		break;
 	case 'edit_post' :
 		$task_id = (isset ($_GET['task_id']) && is_numeric($_GET['task_id'])) ? $_GET['task_id'] : 0;
@@ -487,13 +467,16 @@ switch ($action) {
 		if (isset ($_GET['filter']) && !empty ($_GET['filter'])) {
 			Blog :: display_day_results($blog_id, Database::escape_string($_GET['filter']));
 		} else {
-			Blog :: display_blog_posts($blog_id);
+			$listArticles = Blog :: display_blog_posts($blog_id);
+                        $tpl->assign('articles', $listArticles);
+                        $blogLayout = $tpl->get_template('blog/blog.tpl');
 		}
         break;
 }
-?>
-</div>
-</div>
-<?php
 
+
+$tpl->display($blogLayout);
+
+// Display the footer
 Display::display_footer();
+?>      

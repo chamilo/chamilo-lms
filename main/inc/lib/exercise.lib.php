@@ -3711,7 +3711,8 @@ HOTSPOT;
 
         $total_score_text = null;
 
-        if ($origin != 'learnpath') {
+        // Ofaj
+        //if ($origin != 'learnpath') {
             if ($show_results || $show_only_score) {
                 $total_score_text .= '<div class="question_row_score">';
                 $total_score_text .= self::get_question_ribbon(
@@ -3722,7 +3723,7 @@ HOTSPOT;
                 );
                 $total_score_text .= '</div>';
             }
-        }
+        //}
 
         if (!empty($category_list) && ($show_results || $show_only_score)) {
             //Adding total

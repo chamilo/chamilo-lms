@@ -508,14 +508,6 @@ class Certificate extends Model
         $value = $extraFieldValue->get_values_by_handler_and_field_variable($this->user_id, 'legal_accept');
         list($id, $id2, $termsValidationDate) = explode(':', $value['value']);
 
-        $time = api_time_to_hms(Tracking::get_time_spent_on_the_platform($this->user_id));
-
-        $tplContent = new Template(null, false, false, false, false, false);
-        // variables for the default template
-        $tplContent->assign('complete_name', $userInfo['complete_name']);
-        $tplContent->assign('time_in_platform', $time);
-        $tplContent->assign('certificate_generated_date', api_get_local_time($myCertificate['created_at']));
-
         $sessions = SessionManager::get_sessions_by_user($this->user_id);
         $sessionsApproved = [];
         if ($sessions) {
@@ -555,8 +547,38 @@ class Certificate extends Model
 
         $skill = new Skill();
         $skills = $skill->getStudentSkills($this->user_id);
+        $time = api_time_to_hms(Tracking::get_time_spent_on_the_platform($this->user_id));
 
+        $tplContent = new Template(null, false, false, false, false, false);
+
+        // variables for the default template
+        $tplContent->assign('complete_name', $userInfo['complete_name']);
+        $tplContent->assign('time_in_platform', $time);
+        $tplContent->assign('certificate_generated_date', api_get_local_time($myCertificate['created_at']));
         $tplContent->assign('terms_validation_date', api_get_local_time($termsValidationDate));
+
+        // Ofaj
+        $tplContent->assign('time_in_platform_in_hours', round($time/3600, 1));
+        $tplContent->assign(
+            'certificate_generated_date_no_time',
+            api_get_local_time(
+                $myCertificate['created_at'],
+                null,
+                null,
+                false,
+                false
+            )
+        );
+        $tplContent->assign(
+            'terms_validation_date_no_time',
+            api_get_local_time(
+                $termsValidationDate,
+                null,
+                null,
+                false,
+                false
+            )
+        );
         $tplContent->assign('skills', $skills);
         $tplContent->assign('sessions', $sessionsApproved);
 

@@ -125,8 +125,10 @@ coding_style:
 
 filter:
       excluded_paths:
+        - 'cli-config.php'
         - 'app/cache/*'
         - 'app/logs/*'
+        - 'app/config/*'
         - 'documentation/*'
         - 'app/Migrations/*'
         - 'app/Resources/*'

@@ -27,8 +27,10 @@ ratings:
   - '**.css'
 
 exclude_paths:
+- cli-config.php
 - app/cache/
 - app/logs/
+- app/config/
 - app/Migrations/
 - app/Resources/
 - main/admin/db.php

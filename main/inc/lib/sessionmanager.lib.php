@@ -2197,13 +2197,13 @@ class SessionManager
 
     /**
      * Subscribes courses to the given session and optionally (default)
-     * unsubscribes previous users
+     * unsubscribe previous users
      * @author Carlos Vargas from existing code
      * @param	int		$sessionId
      * @param	array	$courseList List of courses int ids
      * @param	bool	$removeExistingCoursesWithUsers Whether to unsubscribe
      * existing courses and users (true, default) or not (false)
-     * @param $copyEvaluation from base course to session course
+     * @param bool $copyEvaluation from base course to session course
      * @return	void	Nothing, or false on error
      * */
     public static function add_courses_to_session(
@@ -2307,7 +2307,12 @@ class SessionManager
                         }
                         $newCategoryIdList = [];
                         foreach ($cats as $cat) {
-                            $links = $cat->get_links(null, false, $courseInfo['code'], 0);
+                            $links = $cat->get_links(
+                                null,
+                                false,
+                                $courseInfo['code'],
+                                0
+                            );
 
                             $cat->set_session_id($sessionId);
                             $oldCategoryId= $cat->get_id();
@@ -4414,6 +4419,9 @@ class SessionManager
 
                 $deleteOnlyCourseCoaches = false;
                 if (count($courses) == 1) {
+                    if ($logger) {
+                        $logger->addInfo('Only one course delete old coach list');
+                    }
                     $deleteOnlyCourseCoaches = true;
                 }
 

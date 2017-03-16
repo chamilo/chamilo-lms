@@ -35,8 +35,8 @@ if (isset($_GET["user_id"]) && $_GET["user_id"] != "" && !isset($_GET["type"])) 
 
 function count_courses()
 {
-	global $nb_courses;
-	return $nb_courses;
+    global $nb_courses;
+    return $nb_courses;
 }
 
 // Checking if the current coach is the admin coach

@@ -3675,6 +3675,8 @@ class CourseManager
     public static function returnCoursesCategories($user_category_id, $load_dirs = false)
     {
         $user_id = api_get_user_id();
+        $user_category_id = (int) $user_category_id;
+
         // Table definitions
         $TABLECOURS = Database:: get_main_table(TABLE_MAIN_COURSE);
         $TABLECOURSUSER = Database:: get_main_table(TABLE_MAIN_COURSE_USER);
@@ -3683,13 +3685,17 @@ class CourseManager
 
         // Get course list auto-register
         $special_course_list = self::get_special_course_list();
-
         $without_special_courses = '';
         if (!empty($special_course_list)) {
             $without_special_courses = ' AND course.id NOT IN ("' . implode('","', $special_course_list) . '")';
         }
 
-        $sql = "SELECT
+        $userCategoryCondition = " (course_rel_user.user_course_cat = $user_category_id) ";
+        if (empty($user_category_id)) {
+            $userCategoryCondition = ' (course_rel_user.user_course_cat = 0 OR course_rel_user.user_course_cat IS NULL) ';
+        }
+
+        $sql = "SELECT DISTINCT
                     course.id,
                     course_rel_user.status status
                 FROM $TABLECOURS course 
@@ -3699,27 +3705,32 @@ class CourseManager
                 ON (url.c_id = course.id)
                 WHERE
                     course_rel_user.user_id = '" . $user_id . "' AND
-                    course_rel_user.user_course_cat = '" . $user_category_id . "'
+                    $userCategoryCondition
                     $without_special_courses ";
 
         // If multiple URL access mode is enabled, only fetch courses
         // corresponding to the current URL.
         if (api_get_multiple_access_url() && $current_url_id != -1) {
-            $sql .= " AND url.c_id = course.id AND access_url_id='" . $current_url_id . "'";
+            $sql .= " AND access_url_id='" . $current_url_id . "'";
         }
         // Use user's classification for courses (if any).
         $sql .= " ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC";
-
         $result = Database::query($sql);
 
         $courseList = array();
         $showCustomIcon = api_get_setting('course_images_in_courses_list');
         // Browse through all courses.
+        $courseAdded = [];
         while ($row = Database::fetch_array($result)) {
             $course_info = api_get_course_info_by_id($row['id']);
             if (isset($course_info['visibility']) &&
                 $course_info['visibility'] == COURSE_VISIBILITY_HIDDEN
             ) {
+                continue;
+            }
+
+            // Skip if already in list
+            if (in_array($course_info['real_id'], $courseAdded)) {
                 continue;
             }
             $course_info['id_session'] = null;
@@ -3784,7 +3795,7 @@ class CourseManager
             if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED) {
                 $params['notifications'] = $showNotification;
             }
-
+            $courseAdded[] = $course_info['real_id'];
             $courseList[] = $params;
         }
 

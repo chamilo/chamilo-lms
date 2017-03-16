@@ -158,6 +158,8 @@ filter:
         - 'main/img/*'
         - 'main/lang/*'
         - 'main/default_course_document'
+        - 'plugin/buycourses/src/Culqi/*'
+        - 'plugin/buycourses/src/Requests/*'
         - 'plugin/kannelsms/vendor/*'
         - 'plugin/clockworksms/vendor/*'
         - 'tests/*'

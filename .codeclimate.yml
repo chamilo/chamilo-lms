@@ -55,6 +55,8 @@ exclude_paths:
 - main/template/
 - main/img/
 - main/lang/
+- plugin/buycourses/src/Culqi/
+- plugin/buycourses/src/Requests/
 - plugin/kannelsms/vendor/
 - plugin/clockworksms/vendor/
 - tests/

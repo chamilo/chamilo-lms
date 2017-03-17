@@ -1052,7 +1052,7 @@ class Category implements GradebookItem
                     if ($session_id) {
                         $link->set_session_id($session_id);
                     }
-	                
+
                     $linkres = $link->calc_score($stud_id, $type);
                     if (!empty($linkres) && $link->get_weight() != 0) {
                         $students[$stud_id] = $linkres[0];
@@ -1825,9 +1825,9 @@ class Category implements GradebookItem
                 WHERE parent_id = '.intval($catId);
 
         $result = Database::query($sql);
-        $allcats = Category::create_category_objects_from_sql_result($result);
+        $categories = Category::create_category_objects_from_sql_result($result);
 
-        return $allcats;
+        return $categories;
     }
 
     /**

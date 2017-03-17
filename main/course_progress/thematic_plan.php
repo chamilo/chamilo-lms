@@ -10,9 +10,9 @@
 // actions menu
 $new_thematic_plan_data = array();
 if (!empty($thematic_plan_data)) {
-    foreach($thematic_plan_data as $thematic_item) {
-      $thematic_simple_list[] = $thematic_item['description_type'];
-      $new_thematic_plan_data[$thematic_item['description_type']] = $thematic_item;
+    foreach ($thematic_plan_data as $thematic_item) {
+        $thematic_simple_list[] = $thematic_item['description_type'];
+        $new_thematic_plan_data[$thematic_item['description_type']] = $thematic_item;
     }
 }
 
@@ -57,21 +57,21 @@ if ($action === 'thematic_plan_list') {
         $form->addElement('hidden', 'description_type['.$id.']', $id);
         $form->addText("title[$id]", [get_lang('Title'), null, $btnDelete], false);
         $form->addHtmlEditor(
-           'description['.$id.']',
-           get_lang('Description'),
-           false,
-           false,
-           array(
-               'ToolbarStartExpanded' => 'false',
-               'ToolbarSet' => 'TrainingDescription',
-               'Height' => '150'
-           )
+            'description['.$id.']',
+            get_lang('Description'),
+            false,
+            false,
+            array(
+                'ToolbarStartExpanded' => 'false',
+                'ToolbarSet' => 'TrainingDescription',
+                'Height' => '150'
+            )
         );
 
         if (!empty($thematic_simple_list) && in_array($id, $thematic_simple_list)) {
             $thematic_plan = $new_thematic_plan_data[$id];
             // set default values
-            $default['title['.$id.']']       = $thematic_plan['title'];
+            $default['title['.$id.']'] = $thematic_plan['title'];
             $default['description['.$id.']'] = $thematic_plan['description'];
             $thematic_plan = null;
         } else {
@@ -82,7 +82,16 @@ if ($action === 'thematic_plan_list') {
         $form->setDefaults($default);
     }
     $form->addGroup([
-        $form->addButton('add_item', get_lang('SaveAndAddNewItem'), 'plus', 'info', 'default', null, [], true),
+        $form->addButton(
+            'add_item',
+            get_lang('SaveAndAddNewItem'),
+            'plus',
+            'info',
+            'default',
+            null,
+            [],
+            true
+        ),
         $form->addButtonSave(get_lang('Save'), 'submit', true)
     ]);
     $form->display();
@@ -125,7 +134,7 @@ if ($action === 'thematic_plan_list') {
             'ToolbarStartExpanded' => 'false',
             'ToolbarSet' => 'TrainingDescription',
             'Width' => '80%',
-            'Height' => '150',
+            'Height' => '150'
         )
     );
     $form->addButtonSave(get_lang('Save'));

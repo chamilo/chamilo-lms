@@ -1,115 +1,107 @@
 <script>
 {% if constant('CHAMILO_LOAD_WYSIWYG') %}
-// External plugins not part of the default Ckeditor package.
-var plugins = [
-    'asciimath',
-    'asciisvg',
-    'audio',
-    'ckeditor_wiris',
-    'dialogui',
-    'glossary',
-    'leaflet',
-    'mapping',
-    'maximize',
-    'mathjax',
-    'oembed',
-    'toolbar',
-    'toolbarswitch',
-    'video',
-    'wikilink',
-    'wordcount',
-    'youtube',
-    'flash',
-    'inserthtml'
-];
+    // External plugins not part of the default Ckeditor package.
+    var plugins = [
+        'asciimath',
+        'asciisvg',
+        'audio',
+        'ckeditor_wiris',
+        'dialogui',
+        'glossary',
+        'leaflet',
+        'mapping',
+        'maximize',
+        'mathjax',
+        'oembed',
+        'toolbar',
+        'toolbarswitch',
+        'video',
+        'wikilink',
+        'wordcount',
+        'youtube',
+        'flash',
+        'inserthtml'
+    ];
 
-plugins.forEach(function(plugin) {
-    CKEDITOR.plugins.addExternal(plugin, '{{ _p.web_main ~ 'inc/lib/javascript/ckeditor/plugins/' }}' + plugin + '/');
-});
-
-/**
- * Function use to load templates in a div
- **/
-var showTemplates = function (ckeditorName) {
-    var editorName = 'content';
-    if (ckeditorName && ckeditorName.length > 0) {
-        editorName = ckeditorName;
-    }
-    CKEDITOR.editorConfig(CKEDITOR.config);
-    CKEDITOR.loadTemplates(CKEDITOR.config.templates_files, function (a){
-        var templatesConfig = CKEDITOR.getTemplates("default");
-
-        var $templatesUL = $("<ul>");
-
-        $.each(templatesConfig.templates, function () {
-            var template = this;
-            var $templateLi = $("<li>");
-
-            var templateHTML = "<img src=\"" + templatesConfig.imagesPath + template.image + "\" ><div>";
-            templateHTML += "<b>" + template.title + "</b>";
-
-            if (template.description) {
-                templateHTML += "<div class=description>" + template.description + "</div>";
-            }
-
-            templateHTML += "</div>";
-
-            $("<a>", {
-                href: "#",
-                html: templateHTML,
-                click: function (e) {
-                    e.preventDefault();
-                    if (CKEDITOR.instances[editorName]) {
-                        CKEDITOR.instances[editorName].setData(template.html, function () {
-                            this.checkDirty();
-                        });
-                    }
-                }
-            }).appendTo($templateLi);
-            $templatesUL.append($templateLi);
-        });
-        $templatesUL.appendTo("#frmModel");
+    plugins.forEach(function(plugin) {
+        CKEDITOR.plugins.addExternal(plugin, '{{ _p.web_main ~ 'inc/lib/javascript/ckeditor/plugins/' }}' + plugin + '/');
     });
-};
-{% endif %}
-var id;
-$(window).resize(function() {
-    clearTimeout(id);
-    id = setTimeout(doneResizing, 200);
-});
 
-function doneResizing(){
-  var widhtWindow = $(window).width();
-  if ((widhtWindow>=1024) && (widhtWindow>=768)) {
+    /**
+     * Function use to load templates in a div
+     **/
+    var showTemplates = function (ckeditorName) {
+        var editorName = 'content';
+        if (ckeditorName && ckeditorName.length > 0) {
+            editorName = ckeditorName;
+        }
+        CKEDITOR.editorConfig(CKEDITOR.config);
+        CKEDITOR.loadTemplates(CKEDITOR.config.templates_files, function (a) {
+            var templatesConfig = CKEDITOR.getTemplates("default");
+            var $templatesUL = $("<ul>");
+            if (templatesConfig) {
+                $.each(templatesConfig.templates, function () {
+                    var template = this;
+                    var $templateLi = $("<li>");
+                    var templateHTML = "<img src=\"" + templatesConfig.imagesPath + template.image + "\" ><div>";
+                    templateHTML += "<b>" + template.title + "</b>";
+
+                    if (template.description) {
+                        templateHTML += "<div class=description>" + template.description + "</div>";
+                    }
+                    templateHTML += "</div>";
+
+                    $("<a>", {
+                        href: "#",
+                        html: templateHTML,
+                        click: function (e) {
+                            e.preventDefault();
+                            if (CKEDITOR.instances[editorName]) {
+                                CKEDITOR.instances[editorName].setData(template.html, function () {
+                                    this.checkDirty();
+                                });
+                            }
+                        }
+                    }).appendTo($templateLi);
+                    $templatesUL.append($templateLi);
+                });
+            }
+            $templatesUL.appendTo("#frmModel");
+        });
+    };
+{% endif %}
+
+
+function doneResizing() {
+    var widhtWindow = $(window).width();
+    if ((widhtWindow>=1024) && (widhtWindow>=768)) {
         $("#profileCollapse").addClass("in");
         $("#courseCollapse").addClass("in");
         $("#skillsCollapse").addClass("in");
         $("#sn-sidebar-collapse").addClass("in");
-        $("#user_image_block").removeClass("invisible");
+        $("#user_image_block").removeClass("text-muted");
     } else {
         $("#profileCollapse").removeClass("in");
         $("#courseCollapse").removeClass("in");
         $("#skillsCollapse").removeClass("in");
         $("#sn-avatar-one").removeClass("in");
-        $("#user_image_block").addClass("invisible");
+        $("#user_image_block").addClass("text-muted");
     }
 };
-$(document).ready(function(){
+
+$(document).ready(function() {
     $("#open-view-list").click(function(){
         $("#student-list-work").fadeIn(300);
     });
     $("#closed-view-list").click(function(){
         $("#student-list-work").fadeOut(300);
     });
-
     check_brand();
-    //if exists the toolbar admin
-
-    if($('#toolbar-admin').length){
-        var heigthToolBar= $('#toolbar-admin').height();
-        $('header').css('margin-top', heigthToolBar+'px');
-        $('#page-back').css('padding-top', heigthToolBar+20+'px');
-    }
+    var id;
+    $(window).resize(function() {
+        clearTimeout(id);
+        id = setTimeout(doneResizing, 200);
+    });
 
     // Removes the yellow input in Chrome
     if (navigator.userAgent.toLowerCase().indexOf("chrome") >= 0) {
@@ -134,15 +126,9 @@ $(document).ready(function(){
     $('body').on('click', 'a.ajax', function(e) {
         e.preventDefault();
 
-        var panelId = $('#' + this.id+ '_panel');
-        if (panelId.length) {
-            var loadModalContent = panelId.html();
-            self = $(this);
-        } else {
-            var contentUrl = this.href,
-            loadModalContent = $.get(contentUrl),
-            self = $(this);
-        }
+        var contentUrl = this.href,
+                loadModalContent = $.get(contentUrl),
+                self = $(this);
 
         $.when(loadModalContent).done(function(modalContent) {
             var modalDialog = $('#global-modal').find('.modal-dialog'),
@@ -196,7 +182,7 @@ $(document).ready(function(){
         return false;
     });
 
-   // old jquery.menu.js
+    // old jquery.menu.js
     $('#navigation a').stop().animate({
         'marginLeft':'50px'
     },1000);
@@ -254,6 +240,18 @@ $(window).resize(function() {
 });
 
 $(document).scroll(function() {
+    var valor = $('body').outerHeight() - 700;
+    if ($(this).scrollTop() > 100) {
+        $('.bottom_actions').addClass('bottom_actions_fixed');
+    } else {
+        $('.bottom_actions').removeClass('bottom_actions_fixed');
+    }
+
+    if ($(this).scrollTop() > valor) {
+        $('.bottom_actions').removeClass('bottom_actions_fixed');
+    } else {
+        $('.bottom_actions').addClass('bottom_actions_fixed');
+    }
 
     //Exercise warning fixed at the top
     var fixed =  $("#exercise_clock_warning");
@@ -291,41 +289,13 @@ $(document).scroll(function() {
                 }
                 $('.new_actions').attr('data-top', offset.top + more_top);
             }
-
-            if ($('.new_actions').attr('data-top') - $('.new_actions').outerHeight() <= $(this).scrollTop()) {
+            // Check if the height is enough before fixing the icons menu (or otherwise removing it)
+            // Added a 30px offset otherwise sometimes the menu plays ping-pong when scrolling to
+            // the bottom of the page on short pages.
+            if ($('.new_actions').attr('data-top') - $('.new_actions').outerHeight() <= $(this).scrollTop() + 30) {
                 $('.new_actions').addClass('new_actions-fixed');
             } else {
                 $('.new_actions').removeClass('new_actions-fixed');
-            }
-        }
-    }
-
-    // Bottom actions.
-    if ($('.bottom_actions').length) {
-        if (!$('.bottom_actions').attr('data-top')) {
-            // If already fixed, then do nothing
-            if ($('.bottom_actions').hasClass('bottom_actions_fixed')) return;
-
-            // Remember top position
-            var offset = $('.bottom_actions').offset();
-            $('.bottom_actions').attr('data-top', offset.top);
-        }
-
-        if ($('.bottom_actions').attr('data-top') > $('body').outerHeight()) {
-            if ( ($('.bottom_actions').attr('data-top') - $('body').outerHeight() - $('.bottom_actions').outerHeight()) >= $(this).scrollTop()) {
-                $('.bottom_actions').addClass('bottom_actions_fixed');
-                $('.bottom_actions').css("width", "100%");
-            } else {
-                $('.bottom_actions').css("width", "");
-                $('.bottom_actions').removeClass('bottom_actions_fixed');
-            }
-        } else {
-            if ( ($('.bottom_actions').attr('data-top') -  $('.bottom_actions').outerHeight()) <= $(this).scrollTop()) {
-                $('.bottom_actions').addClass('bottom_actions_fixed');
-                $('.bottom_actions').css("width", "100%");
-            } else {
-                $('.bottom_actions').removeClass('bottom_actions_fixed');
-                $('.bottom_actions').css("width", "");
             }
         }
     }
@@ -457,5 +427,41 @@ function hideUnhide(inId, inIdTxt, inTxtHide, inTxtUnhide)
         $('#'+inId).hide(400);
         $('#'+inIdTxt).attr("value", inTxtHide);
     }
+}
+
+function expandColumnToogle(buttonSelector, col1Info, col2Info)
+{
+    $(buttonSelector).on('click', function (e) {
+        e.preventDefault();
+
+        col1Info = $.extend({
+            selector: '',
+            width: 4
+        }, col1Info);
+        col2Info = $.extend({
+            selector: '',
+            width: 8
+        }, col2Info);
+
+        if (!col1Info.selector || !col2Info.selector) {
+            return;
+        }
+
+        var col1 = $(col1Info.selector),
+            col2 = $(col2Info.selector);
+
+        $('#expand').toggleClass('hide');
+        $('#contract').toggleClass('hide');
+
+        if (col2.is('.col-md-' + col2Info.width)) {
+            col2.removeClass('col-md-' + col2Info.width).addClass('col-md-12');
+            col1.removeClass('col-md-' + col1Info.width).addClass('hide');
+
+            return;
+        }
+
+        col2.removeClass('col-md-12').addClass('col-md-' + col2Info.width);
+        col1.removeClass('hide').addClass('col-md-' + col1Info.width);
+    });
 }
 </script>

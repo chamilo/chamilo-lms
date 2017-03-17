@@ -29,7 +29,8 @@ class Finder extends \elFinder
      * @param  array  elFinder and roots configurations
      * @author Dmitry (dio) Levashov
      */
-    public function __construct($opts) {
+    public function __construct($opts)
+    {
         // set error handler of WARNING, NOTICE
         $errLevel = E_WARNING | E_NOTICE | E_USER_WARNING | E_USER_NOTICE | E_STRICT | E_RECOVERABLE_ERROR;
         if (defined('E_DEPRECATED')) {

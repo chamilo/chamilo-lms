@@ -9,10 +9,11 @@
 
 // actions menu
 $new_thematic_plan_data = array();
-if (!empty($thematic_plan_data))
-foreach ($thematic_plan_data as $thematic_item) {
-    $thematic_simple_list[] = $thematic_item['description_type'];
-    $new_thematic_plan_data[$thematic_item['description_type']] = $thematic_item;
+if (!empty($thematic_plan_data)) {
+    foreach($thematic_plan_data as $thematic_item) {
+      $thematic_simple_list[] = $thematic_item['description_type'];
+      $new_thematic_plan_data[$thematic_item['description_type']] = $thematic_item;
+    }
 }
 
 $new_id = ADD_THEMATIC_PLAN;

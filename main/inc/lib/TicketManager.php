@@ -1567,7 +1567,6 @@ class TicketManager
                 WHERE ticket_id = $ticketId
                 ORDER BY assigned_date DESC";
         $result = Database::query($sql);
-        echo $sql;
         $history = [];
         $webpath = api_get_path(WEB_PATH);
         while ($row = Database::fetch_assoc($result)) {

@@ -162,7 +162,6 @@ if (isset($_GET['action']) && $_GET['action'] == 'subscribe') {
 /*	Is the user allowed here? */
 api_protect_course_script(true);
 
-
 /*  STATISTICS */
 
 if (!isset($coursesAlreadyVisited[$course_code])) {
@@ -199,11 +198,9 @@ if (!empty($auto_launch)) {
                     WHERE c_id = $course_id AND autolaunch = 1 $condition
                     LIMIT 1";
             $result = Database::query($sql);
-            //If we found nothing in the session we just called the session_id =  0 autolaunch
+            // If we found nothing in the session we just called the session_id =  0 autolaunch
             if (Database::num_rows($result) ==  0) {
                 $condition = '';
-            } else {
-            	//great, there is an specific auto launch for this session we leave the $condition
             }
         }
 
@@ -212,7 +209,7 @@ if (!empty($auto_launch)) {
                 LIMIT 1";
         $result = Database::query($sql);
         if (Database::num_rows($result) >  0) {
-            $lp_data = Database::fetch_array($result,'ASSOC');
+            $lp_data = Database::fetch_array($result, 'ASSOC');
             if (!empty($lp_data['id'])) {
                 if (api_is_platform_admin() || api_is_allowed_to_edit()) {
                 	$show_autolaunch_lp_warning = true;

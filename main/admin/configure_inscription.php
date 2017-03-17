@@ -46,7 +46,7 @@ $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdm
 $tool_name = get_lang('ConfigureInscription');
 if (!empty($action)) {
     $interbreadcrumb[] = array('url' => 'configure_inscription.php', 'name' => get_lang('ConfigureInscription'));
-    switch($action) {
+    switch ($action) {
         case 'edit_top':
             $tool_name = get_lang('EditTopRegister');
             break;

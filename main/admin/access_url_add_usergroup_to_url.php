@@ -1,12 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-*	This script allows platform admins to add users to urls.
-*	It displays a list of users and a list of courses;
-*	you can select multiple users and courses and then click on
-*	@package chamilo.admin
-*	@author Julio Montoya <gugli100@gmail.com>
-*/
+ *  This script allows platform admins to add users to urls.
+ *  It displays a list of users and a list of courses;
+ *  you can select multiple users and courses and then click on
+ *  @package chamilo.admin
+ *  @author Julio Montoya <gugli100@gmail.com>
+ */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -18,7 +18,6 @@ if (!api_get_multiple_access_url()) {
 }
 
 $userGroup = new UserGroup();
-
 $form_sent = 0;
 $firstLetterUserGroup = null;
 $courses = array();
@@ -84,10 +83,10 @@ $db_urls = Database::store_result($result);
              <?php echo get_lang('FirstLetter'); ?> :
              <select name="first_letter_user_group" onchange="javascript:document.formulaire.form_sent.value='2'; document.formulaire.submit();">
                 <option value="">--</option>
-                  <?php
+                <?php
                     echo Display::get_alphabet_options($firstLetterUserGroup);
                     echo Display::get_numeric_options(0, 9, $firstLetterUserGroup);
-                    ?>
+                ?>
             </select>
         </td>
         <td width="20%">&nbsp;</td>
@@ -109,7 +108,7 @@ $db_urls = Database::store_result($result);
    </td>
    <td width="40%" align="center">
     <select name="url_list[]" multiple="multiple" size="20" style="width:300px;">
-		<?php foreach ($db_urls as $url_obj) { ?>
+        <?php foreach ($db_urls as $url_obj) { ?>
         <option value="<?php echo $url_obj['id']; ?>" <?php if (in_array($url_obj['id'], $url_list)) echo 'selected="selected"'; ?>><?php echo $url_obj['url']; ?>
         </option>
 		<?php } ?>

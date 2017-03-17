@@ -44,12 +44,12 @@ if (UserManager::is_admin($user_id)) {
 }
 
 $add_type = 'multiple';
-if(isset($_GET['add_type']) && $_GET['add_type']!='') {
-	$add_type = Security::remove_XSS($_REQUEST['add_type']);
+if (isset($_GET['add_type']) && $_GET['add_type'] != '') {
+    $add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
 if (!api_is_platform_admin()) {
-	api_not_allowed(true);
+    api_not_allowed(true);
 }
 
 function search_courses($needle, $type)
@@ -60,8 +60,7 @@ function search_courses($needle, $type)
     $return = '';
     if (!empty($needle) && !empty($type)) {
         // xajax send utf8 datas... datas in db can be non-utf8 datas
-		$needle = Database::escape_string($needle);
-
+        $needle = Database::escape_string($needle);
         $assigned_courses_to_hrm = CourseManager::get_courses_followed_by_drh($user_id);
         $assigned_courses_code = array_keys($assigned_courses_to_hrm);
         foreach ($assigned_courses_code as &$value) {
@@ -90,14 +89,14 @@ function search_courses($needle, $type)
 
 		$rs	= Database::query($sql);
 
-		$return .= '<select id="origin" name="NoAssignedCoursesList[]" multiple="multiple" size="20" >';
-		while ($course = Database :: fetch_array($rs)) {
-			$return .= '<option value="'.$course['code'].'" title="'.htmlspecialchars($course['title'],ENT_QUOTES).'">'.$course['title'].' ('.$course['code'].')</option>';
-		}
-		$return .= '</select>';
-		$xajax_response -> addAssign('ajax_list_courses_multiple','innerHTML',api_utf8_encode($return));
-	}
-	return $xajax_response;
+        $return .= '<select id="origin" name="NoAssignedCoursesList[]" multiple="multiple" size="20" >';
+        while ($course = Database :: fetch_array($rs)) {
+            $return .= '<option value="'.$course['code'].'" title="'.htmlspecialchars($course['title'],ENT_QUOTES).'">'.$course['title'].' ('.$course['code'].')</option>';
+        }
+        $return .= '</select>';
+        $xajax_response -> addAssign('ajax_list_courses_multiple','innerHTML',api_utf8_encode($return));
+    }
+    return $xajax_response;
 }
 
 $xajax->processRequests();
@@ -160,7 +159,7 @@ $msg = '';
 if (isset($_POST['formSent']) && intval($_POST['formSent']) == 1) {
     $courses_list = isset($_POST['CoursesList']) ? $_POST['CoursesList'] : [];
     $affected_rows = CourseManager::subscribeCoursesToDrhManager($user_id, $courses_list);
-    if ($affected_rows)	{
+    if ($affected_rows) {
         $msg = get_lang('AssignedCoursesHaveBeenUpdatedSuccessfully');
     }
 }

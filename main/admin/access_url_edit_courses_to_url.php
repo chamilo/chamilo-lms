@@ -36,12 +36,12 @@ $interbreadcrumb[] = array('url' => 'access_urls.php', 'name' => get_lang('Multi
 
 $add_type = 'multiple';
 if (isset($_REQUEST['add_type']) && $_REQUEST['add_type'] != '') {
-	$add_type = Security::remove_XSS($_REQUEST['add_type']);
+    $add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
 $access_url_id = 1;
 if (isset($_REQUEST['access_url_id']) && $_REQUEST['access_url_id'] != '') {
-	$access_url_id = Security::remove_XSS($_REQUEST['access_url_id']);
+    $access_url_id = Security::remove_XSS($_REQUEST['access_url_id']);
 }
 
 $xajax -> processRequests();
@@ -325,7 +325,6 @@ $url_list = UrlManager::get_url_data();
 			nosessionClasses = makepost(document.getElementById('origin_classes'));
 			sessionClasses = makepost(document.getElementById('destination_classes'));
 			xhr_object.send("nosessionusers="+nosessionUsers+"&sessionusers="+sessionUsers+"&nosessionclasses="+nosessionClasses+"&sessionclasses="+sessionClasses);
-
 			xhr_object.onreadystatechange = function() {
 				if(xhr_object.readyState == 4) {
 					document.getElementById('content_source').innerHTML = result = xhr_object.responseText;

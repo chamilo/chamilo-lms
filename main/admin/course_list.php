@@ -30,7 +30,7 @@ function get_number_of_courses()
                  ON (c.id = url_rel_course.c_id)";
     }
 
-    if (isset ($_GET['keyword'])) {
+    if (isset($_GET['keyword'])) {
         $keyword = Database::escape_string("%".$_GET['keyword']."%");
         $sql .= " WHERE (
                         c.title LIKE '".$keyword."' OR
@@ -105,7 +105,7 @@ function get_course_data($from, $number_of_items, $column, $direction)
                  ON (course.id = url_rel_course.c_id)";
     }
 
-    if (isset ($_GET['keyword'])) {
+    if (isset($_GET['keyword'])) {
         $keyword = Database::escape_string("%".trim($_GET['keyword'])."%");
         $sql .= " WHERE (
             title LIKE '".$keyword."' OR

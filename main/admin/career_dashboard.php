@@ -18,8 +18,14 @@ $this_section = SECTION_PLATFORM_ADMIN;
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
 // setting breadcrumbs
-$interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[]=array('url' => 'career_dashboard.php','name' => get_lang('CareersAndPromotions'));
+$interbreadcrumb[] = array(
+    'url' => 'index.php',
+    'name' => get_lang('PlatformAdmin')
+);
+$interbreadcrumb[] = array(
+    'url' => 'career_dashboard.php',
+    'name' => get_lang('CareersAndPromotions')
+);
 
 Display :: display_header(null);
 
@@ -142,19 +148,19 @@ if (!empty($career_arrayer)) {
                 if (!empty($sessions)) {
                     foreach ($sessions as $session) {
                         $course_list = $session['courses'];
-
-                        $url = Display::url($session['data']['name'],
-                            '../session/resume_session.php?id_session=' . $session['data']['id']);
+                        $url = Display::url(
+                            $session['data']['name'],
+                            '../session/resume_session.php?id_session='.$session['data']['id']
+                        );
                         echo '<tr>';
-                        //Session name
+                        // Session name
                         echo Display::tag('td', $url);
                         echo '<td>';
-                        //Courses
+                        // Courses
                         echo '<table>';
                         if (!empty($course_list)) {
                             foreach ($course_list as $course) {
                                 echo '<tr>';
-
                                 $url = Display::url(
                                     $course['title'],
                                     api_get_path(WEB_COURSE_PATH) . $course['directory'] . '/index.php?id_session=' . $session['data']['id']

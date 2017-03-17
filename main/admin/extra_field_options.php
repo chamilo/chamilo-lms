@@ -9,7 +9,6 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
-
 $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
 
 api_protect_admin_script();

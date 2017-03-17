@@ -13,10 +13,10 @@ class View
 
     /**
      * Constructor, init tool path for rendering
-     * @param string  tool name (optional)
+     * @param string $toolname tool name (optional)
      * @param string $template_path
      */
-    public function __construct($toolname = '', $template_path=null)
+    public function __construct($toolname = '', $template_path = null)
     {
         if (!empty($toolname)) {
             if (isset($template_path)) {

@@ -22,7 +22,6 @@ $id = intval($_GET['id']);
 $caller = intval($_GET['caller']);
 
 if ($course_validation_feature) {
-
     // Retrieve request's data from the corresponding database record.
     $course_request_info = CourseRequestManager::get_course_request_info($id);
     if (!is_array($course_request_info)) {
@@ -30,7 +29,6 @@ if ($course_validation_feature) {
         $message = get_lang('CourseRequestHasNotBeenFound');
         $is_error_message = true;
     } else {
-
         // Ensure the database prefix + database name do not get over 40 characters.
         $maxlength = 40;
 
@@ -225,7 +223,8 @@ if ($course_validation_feature) {
 // Functions.
 
 // Converts the given numerical id to the name of the page that opened this editor.
-function get_caller_name($caller_id) {
+function get_caller_name($caller_id)
+{
     switch ($caller_id) {
         case 1:
             return 'course_request_accepted.php';

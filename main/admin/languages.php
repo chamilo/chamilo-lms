@@ -13,9 +13,6 @@
  * @since Dokeos 1.6
  * @package chamilo.admin
  */
-/**
- * 	   INIT SECTION
- */
 
 // we are in the admin area so we do not need a course id
 $cidReset = true;

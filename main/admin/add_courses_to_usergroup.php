@@ -32,7 +32,6 @@ if (isset($_REQUEST['add_type']) && $_REQUEST['add_type'] != '') {
 }
 
 $add = isset($_GET['add']) ? Security::remove_XSS($_GET['add']) : null;
-
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
 $htmlHeadXtra[] = '<script>
 function add_user_to_session (code, content) {
@@ -86,7 +85,6 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
         exit;
     }
 }
-
 
 // Filters
 $filters = array(
@@ -201,11 +199,8 @@ echo '</div>';
 echo '<div id="advanced_search_options" style="display:none">';
 $searchForm->display();
 echo '</div>';
-
 ?>
-
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $id; if (!empty($_GET['add'])) echo '&add=true'; ?>" style="margin:0px;" <?php if ($ajax_search) {echo ' onsubmit="valide();"'; }?>>
-
 <?php echo '<legend>'.$data['name'].': '.$tool_name.'</legend>';
 echo Display::input('hidden', 'id', $id);
 echo Display::input('hidden', 'form_sent', '1');

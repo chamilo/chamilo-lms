@@ -677,7 +677,7 @@ class Agenda
      * @param bool $updateContent
      * @param int $authorId
      *
-     * @return null|false
+     * @return bool
      */
     public function editEvent(
         $id,
@@ -1379,7 +1379,7 @@ class Agenda
     /**
      * Gets a single event
      *
-     * @param int event id
+     * @param int $id event id
      * @return array
      */
     public function get_event($id)

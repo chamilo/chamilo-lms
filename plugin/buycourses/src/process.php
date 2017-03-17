@@ -13,7 +13,7 @@ use ChamiloSession as Session;
 $currentUserId = api_get_user_id();
 
 if (empty($currentUserId)) {
-    Session::write('urlReturn', $_SERVER['REQUEST_URI']);
+    Session::write('urlReturn', Security :: remove_XSS($_SERVER['REQUEST_URI']));
     header('Location: ' . api_get_path(WEB_CODE_PATH) . 'auth/inscription.php');
     exit;
 }

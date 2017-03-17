@@ -43,17 +43,9 @@
                 <div class="panel-body">
                     <div id="blog-header">
                         <div id="post-action" class="pull-right">
-                            <div class="btn-group" role="group" aria-label="...">
-                                <a class="btn btn-default" href="blog.php?action=edit_post&blog_id={{ post.id_blog }}&post_id={{ post.id_post }}&article_id={{ post.id_post }}&task_id={{ post.id_task }}" title="{{ 'EditThisPost' | get_lang }}">
-                                {{ 'edit.png' |img }}
-                                </a>
-                                <a class="btn btn-default" href="blog.php?action=view_post&blog_id={{ post.id_blog }}&post_id={{ post.id_post }}&do=delete_article&article_id={{ post.id_post }}&task_id={{ post.id_task }}" 
-                                   title="{{ 'DeleteThisArticle' | get_lang}}" 
-                                   onclick="javascript:if(!confirm('{{ 'ConfirmYourChoice' | get_lang }}')) return false;" >
-                                    {{ 'delete.png' |img }}
-                                </a>
+                            <div class="btn-group btn-group-sm" role="group" aria-label="...">
+                                {{ post.actions }}
                             </div>
-                            
                         </div>
                         <div class="title">
                             <h1 title="{{ post.title }}">{{ post.title }}</h1>
@@ -64,7 +56,7 @@
                             <span class="autor"><i class="fa fa-user"></i> {{ post.autor }}</span>
                         </div>
                         <div class="content-post">
-                                {{ post.content }}
+                            {{ post.content }}
                         </div>
                         {% if post.files  %}
                             <div class="files">
@@ -72,8 +64,32 @@
                             </div>
                         {% endif %}
                         <div class="comments-post">
-                            <h3>{{ post.n_comments }} {{ 'Comments' | get_lang }} </h3>
-                            {{ post.comments_html }}
+                            <h3 class="title">{{ post.n_comments }} {{ 'Comments' | get_lang }} </h3>
+                            <div id="list-comments">  
+                                {% for item in post.comments %}
+                                <div class="media">
+                                    <div class="media-left">
+                                      <a href="{{ _p.web }}main/social/profile.php?u={{ item.id_author }}">
+                                        <img class="media-object thumbnail avatar" src="{{ item.info_user.dir }}{{ item.info_user.file }}" alt="{{ item.name_author }}">
+                                      </a>
+                                    </div>
+                                    <div class="media-body">
+                                        <div class="pull-right">
+                                            {{ item.actions }}
+                                        </div>
+                                        <h4 class="media-heading">{{ item.title }}</h4>
+                                        <div class="info-post">
+                                            <span class="date"><i class="fa fa-clock-o"></i> {{ item.comment_date }}</span> 
+                                            <span class="autor"><i class="fa fa-user"></i> {{ item.name_author }}</span>
+                                        </div>
+                                      {{ item.content }}
+                                      <div class="ranking">
+                                          {{ item.ranking }}
+                                      </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
                         </div>
                         <div class="form-post">
                             {{ post.form_html }}

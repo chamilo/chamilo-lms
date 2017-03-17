@@ -12,6 +12,7 @@ $blog_id = intval($_GET['blog_id']);
 if (empty($blog_id)) {
     api_not_allowed(true);
 }
+$tpl = new Template(get_lang('Blog'));
 
 $this_section = SECTION_COURSES;
 $current_course_tool = TOOL_BLOGS;
@@ -351,7 +352,6 @@ if (isset ($_GET['task_id']) && is_numeric($_GET['task_id'])) {
 		$user_task = true;
 }
 
-$tpl = new Template(get_lang('Blog'));
 $tpl->assign('title', $titleBlog);
 $tpl->assign('description', $descriptionBlog);
 $tpl->assign('id_blog', $idBlog);
@@ -479,4 +479,3 @@ $tpl->display($blogLayout);
 
 // Display the footer
 Display::display_footer();
-?>      

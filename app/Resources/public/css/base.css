@@ -5999,7 +5999,22 @@ ul#toolnavbox-two li a.btn{
 .blog .article-post{
     margin-bottom: 20px;
     margin-top: 10px;
-    
+}
+.blog .media .avatar{
+    width: 70px;
+}
+.blog .comments-post{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.blog .comments-post .title{
+    padding-bottom: 20px;
+}
+.blog .comments-post .media{
+    border-top: 1px solid #eaeaea;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    margin-bottom: 10px;
 }
 /* CSS NEW TOP ******************************************************************************/
 /* CSS Responsive */

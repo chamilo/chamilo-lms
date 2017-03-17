@@ -983,12 +983,13 @@ class Blog
                 WHERE c_id = $course_id AND blog_id = '".(int)$blog_id."' AND post_id = '".(int)$post_id."'";
         $result = Database::query($sql);
         $blog_post_comments = Database::fetch_array($result);
+        $blogActions = null;
         
         $task_id = (isset($_GET['task_id']) && is_numeric($_GET['task_id'])) ? intval($_GET['task_id']) : 0;
         
         // Display comments if there are any
         if($blog_post_comments['number_of_comments'] > 0) {
-            $commentsHtml = Blog::get_threaded_comments(0, 0, $blog_id, $post_id, $task_id);
+            $listComments = Blog::get_threaded_comments(0, 0, $blog_id, $post_id, $task_id);
         }
         // Display comment form
         if (api_is_allowed('BLOG_' . $blog_id, 'article_comments_add')) {
@@ -996,6 +997,26 @@ class Blog
         }
         // Prepare data
         $fileArray = get_blog_attachment($blog_id, $post_id);
+        
+        $post_text = make_clickable(stripslashes($blog_post['full_text']));
+        $post_text = stripslashes($post_text);
+        
+        if (api_is_allowed('BLOG_' . $blog_id, 'article_edit', $task_id)) {
+            $blogActions .= '<a class="btn btn-default" href="blog.php?action=edit_post&blog_id=' . $blog_id . '&post_id=' . $post_id . '&article_id=' . $blog_post['post_id'] . '&task_id=' . $task_id . '" title="' . get_lang('EditThisPost') . '">';
+            $blogActions .=  Display::return_icon('edit.png',get_lang('Edit'), null, ICON_SIZE_TINY);
+            $blogActions .= '</a>';
+        }
+
+        if (api_is_allowed('BLOG_' . $blog_id, 'article_delete', $task_id)) {
+            $blogActions .= '<a class="btn btn-default" href="blog.php?action=view_post&blog_id=' . $blog_id . '&post_id=' . $post_id . '&do=delete_article&article_id=' . $blog_post['post_id'] . '&task_id=' . $task_id . '" title="' . get_lang('DeleteThisArticle') . '" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)). '\')) return false;">';
+            $blogActions .= Display::return_icon('delete.png', get_lang('Delete'), null, ICON_SIZE_TINY);
+            $blogActions .= '</a>';
+        } 
+        
+        if (api_is_allowed('BLOG_' . $blog_id, 'article_rate')){
+            $ratingSelect = Blog::display_rating_form('post',$blog_id,$post_id);
+        }
+        
         $article = [
                     'id_blog' => $blog_post['blog_id'],
                     'c_id' => $blog_post['c_id'],
@@ -1005,33 +1026,15 @@ class Blog
                     'username' => $blog_post['username'],
                     'title' => stripslashes($blog_post['title']),
                     'extract' =>  api_get_short_text_from_html(stripslashes($blog_post['full_text']),400),
-                    'content' =>  stripslashes($blog_post['full_text']),
+                    'content' =>  $post_text,
                     'post_date' => api_convert_and_format_date($blog_post['date_creation'], null, date_default_timezone_get()),
                     'n_comments' => $blog_post_comments['number_of_comments'],
                     'files' => $fileArray,
                     'id_task' => $task_id,
-                    'comments_html' => $commentsHtml,
-                    'form_html' => $formComments
+                    'comments' => $listComments,
+                    'form_html' => $formComments,
+                    'actions' => $blogActions
                 ];
-
-
-        /* $task_id = (isset($_GET['task_id']) && is_numeric($_GET['task_id'])) ? intval($_GET['task_id']) : 0;
-
-        if (api_is_allowed('BLOG_' . $blog_id, 'article_edit', $task_id)) {
-            $blog_post_actions .= '<a href="blog.php?action=edit_post&blog_id=' . $blog_id . '&post_id=' . $post_id . '&article_id=' . $blog_post['post_id'] . '&task_id=' . $task_id . '" title="' . get_lang('EditThisPost') . '">';
-            $blog_post_actions .=  Display::return_icon('edit.png');
-            $blog_post_actions .= '</a>';
-        }
-
-        if (api_is_allowed('BLOG_' . $blog_id, 'article_delete', $task_id)) {
-            $blog_post_actions .= '<a href="blog.php?action=view_post&blog_id=' . $blog_id . '&post_id=' . $post_id . '&do=delete_article&article_id=' . $blog_post['post_id'] . '&task_id=' . $task_id . '" title="' . get_lang('DeleteThisArticle') . '" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)). '\')) return false;">';
-            $blog_post_actions .= Display::return_icon('delete.png');
-            $blog_post_actions .= '</a>';
-        } */
-
-        if (api_is_allowed('BLOG_' . $blog_id, 'article_rate')){
-            $rating_select = Blog::display_rating_form('post',$blog_id,$post_id);
-        }
         
         return $article;
         
@@ -1121,7 +1124,8 @@ class Blog
         $_user = api_get_user_info();
         $tbl_blogs_rating = Database::get_course_table(TABLE_BLOGS_RATING);
         $course_id = api_get_course_int_id();
-
+        $html = null;
+        
         if ($type == 'post') {
             // Check if the user has already rated this post
             $sql = "SELECT rating_id FROM $tbl_blogs_rating
@@ -1133,7 +1137,15 @@ class Blog
             $result = Database::query($sql);
             // Add rating
             if (Database::num_rows($result) == 0) {
-                return ' - ' . get_lang('RateThis') . ': <form method="get" action="blog.php" style="display: inline" id="frm_rating_' . $type . '_' . $post_id . '" name="frm_rating_' . $type . '_' . $post_id . '"><select name="rating" onchange="document.forms[\'frm_rating_' . $type . '_' . $post_id . '\'].submit()"><option value="">-</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select><input type="hidden" name="action" value="view_post" /><input type="hidden" name="type" value="' . $type . '" /><input type="hidden" name="do" value="rate" /><input type="hidden" name="blog_id" value="' . $blog_id . '" /><input type="hidden" name="post_id" value="' . $post_id . '" /></form>';
+                $html .= '<form class="form-horizontal" method="get" action="blog.php" id="frm_rating_' . $type . '_' . $post_id . '" name="frm_rating_' . $type . '_' . $post_id . '">';
+                $html .= '<div class="form-group">';
+                $html .= '<label class="col-sm-3 control-label">' . get_lang('RateThis') . '</label>';
+                $html .= '<div class="col-sm-9">';
+                $html .= '<select class="selectpicker" name="rating" onchange="document.forms[\'frm_rating_' . $type . '_' . $post_id . '\'].submit()"><option value="">-</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select><input type="hidden" name="action" value="view_post" /><input type="hidden" name="type" value="' . $type . '" /><input type="hidden" name="do" value="rate" /><input type="hidden" name="blog_id" value="' . $blog_id . '" /><input type="hidden" name="post_id" value="' . $post_id . '" />';
+                $html .= '</div>';
+                $html .= '</div>';
+                $html .= '</form>';
+                return $html;               
             } else {
                 return '';
             }
@@ -1145,11 +1157,18 @@ class Blog
                     WHERE c_id = $course_id AND blog_id = '".(int)$blog_id ."'
                     AND item_id = '".(int)$comment_id."'
                     AND rating_type = '".Database::escape_string($type)."'
-                    AND user_id = '".(int)$_user['user_id']."'";
+                    AND user_id = '".(int)$_user['user_id']."' ";
             $result = Database::query($sql);
-
             if (Database::num_rows($result) == 0) {
-                return ' - ' . get_lang('RateThis') . ': <form method="get" action="blog.php" style="display: inline" id="frm_rating_' . $type . '_' . $comment_id . '" name="frm_rating_' . $type . '_' . $comment_id . '"><select name="rating" onchange="document.forms[\'frm_rating_' . $type . '_' . $comment_id . '\'].submit()"><option value="">-</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select><input type="hidden" name="action" value="view_post" /><input type="hidden" name="type" value="' . $type . '" /><input type="hidden" name="do" value="rate" /><input type="hidden" name="blog_id" value="' . $blog_id . '" /><input type="hidden" name="post_id" value="' . $post_id . '" /><input type="hidden" name="comment_id" value="' . $comment_id . '" /></form>';
+                $html .=  '<form class="form-horizontal" method="get" action="blog.php" id="frm_rating_' . $type . '_' . $comment_id . '" name="frm_rating_' . $type . '_' . $comment_id . '">';
+                $html .= '<div class="form-group">';
+                $html .= '<label class="col-sm-3 control-label">' . get_lang('RateThis') . '</label>';
+                $html .= '<div class="col-sm-9">';
+                $html .= '<select  name="rating" onchange="document.forms[\'frm_rating_' . $type . '_' . $comment_id . '\'].submit()"><option value="">-</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select><input type="hidden" name="action" value="view_post" /><input type="hidden" name="type" value="' . $type . '" /><input type="hidden" name="do" value="rate" /><input type="hidden" name="blog_id" value="' . $blog_id . '" /><input type="hidden" name="post_id" value="' . $post_id . '" /><input type="hidden" name="comment_id" value="' . $comment_id . '" />';
+                $html .= '</div>';
+                $html .= '</div>';
+                $html .= '</form>';
+                return $html;
             } else {
                 return '';
             }
@@ -1170,7 +1189,8 @@ class Blog
         $tbl_users = Database::get_main_table(TABLE_MAIN_USER);
         $tbl_blogs_tasks = Database::get_course_table(TABLE_BLOGS_TASKS);
         global $charset;
-
+        
+        
         $course_id = api_get_course_int_id();
 
         // Select top level comments
@@ -1186,8 +1206,9 @@ class Blog
                     parent_comment_id = $current AND
                     comments.blog_id = '".(int)$blog_id."' AND
                     comments.post_id = '".(int)$post_id."'";
+        
         $result = Database::query($sql);
-
+        $html = null;
         while($comment = Database::fetch_array($result)) {
             // Select the children recursivly
             $tmp = "SELECT comments.*, user.lastname, user.firstname, user.username
@@ -1196,41 +1217,68 @@ class Blog
                     ON comments.author_id = user.user_id
                     WHERE
                         comments.c_id = $course_id AND
-                        comment_id = $current
+                        comment_id = ".$comment['comment_id']."
                         AND blog_id = '".(int)$blog_id."'
                         AND post_id = '".(int)$post_id."'";
             $tmp = Database::query($tmp);
             $tmp = Database::fetch_array($tmp);
+            $commentActions = null;
+            $ratingSelect = null;
             $parent_cat = $tmp['parent_comment_id'];
-            $border_color = '';
-
-            // Prepare data
+           
             $comment_text = make_clickable(stripslashes($comment['comment']));
-            $blog_comment_date = api_convert_and_format_date($comment['date_creation'], null, date_default_timezone_get());
-            $blog_comment_actions = "";
+            $comment_text = stripslashes($comment_text);
+            $infoUser = UserManager::get_user_picture_path_by_id($comment['author_id']);
+            
             if (api_is_allowed('BLOG_'.$blog_id, 'article_comments_delete', $task_id)) {
-                $blog_comment_actions .= '<a href="blog.php?action=view_post&blog_id='.$blog_id.'&post_id='.$post_id.'&do=delete_comment&comment_id='.$comment['comment_id'].'&task_id='.$task_id.'" title="'.get_lang(
+                $commentActions .= '<a class="btn btn-default" href="blog.php?action=view_post&blog_id='.$blog_id.'&post_id='.$post_id.'&do=delete_comment&comment_id='.$comment['comment_id'].'&task_id='.$task_id.'" title="'.get_lang(
                         'DeleteThisComment'
                     ).'" onclick="javascript:if(!confirm(\''.addslashes(
                         api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset)
                     ).'\')) return false;">';
-                $blog_comment_actions .= Display::return_icon('delete.png');
-                $blog_comment_actions .= '</a>';
+                $commentActions .= Display::returnFontAwesomeIcon('trash');
+                $commentActions .= '</a>';
             }
-
             if (api_is_allowed('BLOG_'.$blog_id, 'article_comments_rate')) {
-                $rating_select = Blog::display_rating_form('comment', $blog_id, $post_id, $comment['comment_id']);
+                $ratingSelect = Blog::display_rating_form('comment', $blog_id, $post_id, $comment['comment_id']);
             }
+            
+            $comments = [
+                'iid' => $comment['iid'],
+                'id_comment' => $comment['comment_id'],
+                'id_curso' => $comment['c_id'],
+                'title' => $comment['title'],
+                'content' => $comment_text,
+                'id_author' => $comment['author_id'],
+                'comment_date' =>  api_convert_and_format_date($comment['date_creation'], null, date_default_timezone_get()),
+                'id_blog' => $comment['blog_id'],
+                'id_post' => $comment['post_id'],
+                'id_task' => $comment['task_id'],
+                'id_parent' => $parent_cat,
+                'name_author' => api_get_person_name($comment['firstname'], $comment['lastname']),
+                'info_user' => $infoUser,
+                'username' => $comment['username'],
+                'color' => $comment['color'],
+                'actions' => $commentActions,
+                'ranking' => $ratingSelect
+            ];
+            
+            $listComments[] = $comments;
+            
+            // Prepare data
+            
+           /* 
+            
 
             if (!is_null($comment['task_id'])) {
                 $border_color = ' border-left: 3px solid #' . $comment['color'];
             }
 
-            $comment_text = stripslashes($comment_text);
+            
 
             // Output...
             $margin = $current_level * 30;
-            $html = null;
+            
             $html.=  '<div class="blogpost_comment" style="margin-left: ' . $margin . 'px;' . $border_color . '">';
                 $html.= '<span class="blogpost_comment_title"><a href="#add_comment" onclick="document.getElementById(\'comment_parent_id\').value=\'' . $comment['comment_id'] . '\'; document.getElementById(\'comment_title\').value=\'Re: '.addslashes($comment['title']) . '\'" title="' . get_lang('ReplyToThisComment') . '" >'.stripslashes($comment['title']) . '</a></span>';
                 $html.= '<span class="blogpost_comment_date">' . $blog_comment_date . '</span>';
@@ -1252,10 +1300,11 @@ class Blog
                 $html.= '<span class="blogpost_actions">' . $blog_comment_actions . '</span>';
             $html.= '</div>';
             
-            return $html;
+            */
             // Go further down the tree.
             //return $html.= Blog::get_threaded_comments($comment['comment_id'], $next_level, $blog_id, $post_id);
         }
+        return $listComments;
     }
 
     /**

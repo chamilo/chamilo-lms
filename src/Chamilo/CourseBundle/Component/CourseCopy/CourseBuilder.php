@@ -569,7 +569,7 @@ class CourseBuilder
         $table_doc = Database:: get_course_table(TABLE_DOCUMENT);
 
         if (!empty($courseId) && !empty($session_id)) {
-            $session_id  = intval($session_id);
+            $session_id = intval($session_id);
             if ($with_base_content) {
                 $session_condition = api_get_session_condition(
                     $session_id,

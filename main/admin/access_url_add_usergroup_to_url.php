@@ -30,8 +30,8 @@ $tbl_user = Database:: get_main_table(TABLE_MAIN_USER);
 $tbl_course = Database:: get_main_table(TABLE_MAIN_COURSE);
 
 $tool_name = get_lang('AddUserGroupToURL');
-$interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array ('url' => 'access_urls.php', 'name' => get_lang('MultipleAccessURLs'));
+$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'access_urls.php', 'name' => get_lang('MultipleAccessURLs'));
 
 Display::display_header($tool_name);
 
@@ -46,8 +46,8 @@ api_display_tool_title($tool_name);
 
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];
-    $userGroups = is_array($_POST['user_group_list']) ? $_POST['user_group_list'] : array() ;
-    $urlList = is_array($_POST['url_list']) ? $_POST['url_list'] : array() ;
+    $userGroups = is_array($_POST['user_group_list']) ? $_POST['user_group_list'] : array();
+    $urlList = is_array($_POST['url_list']) ? $_POST['url_list'] : array();
     $firstLetterUserGroup = $_POST['first_letter_user_group'];
 
     if ($form_sent == 1) {

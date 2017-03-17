@@ -76,8 +76,8 @@ if ($action === 'thematic_plan_list') {
             $thematic_plan = null;
         } else {
             $thematic_plan = null;
-            $default['title['.$id.']']       = $title;
-            $default['description['.$id.']']= '';
+            $default['title['.$id.']'] = $title;
+            $default['description['.$id.']'] = '';
         }
         $form->setDefaults($default);
     }

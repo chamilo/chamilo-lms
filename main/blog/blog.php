@@ -229,7 +229,7 @@ switch ($action) {
             'url' => "blog.php?blog_id=$blog_id&".api_get_cidreq(),
             "name" => Blog:: get_blog_title($blog_id),
         );
-		Display :: display_header($nameTools, 'Blogs');
+		Display::display_header($nameTools, 'Blogs');
 		break;
         case 'view_post' :
 		$nameTools = '';
@@ -237,7 +237,7 @@ switch ($action) {
                     'url' => "blog.php?blog_id=$blog_id&".api_get_cidreq(),
                     "name" => Blog:: get_blog_title($blog_id),
                 );
-		Display :: display_header($nameTools, 'Blogs');
+		Display::display_header($nameTools, 'Blogs');
 		break;
 	case 'manage_tasks' :
 		$nameTools = get_lang('TaskManager');
@@ -245,7 +245,7 @@ switch ($action) {
             'url' => "blog.php?blog_id=$blog_id&".api_get_cidreq(),
             "name" => Blog:: get_blog_title($blog_id),
         );
-		Display :: display_header($nameTools, 'Blogs');
+		Display::display_header($nameTools, 'Blogs');
 		break;
 	case 'manage_members' :
 		$nameTools = get_lang('MemberManager');
@@ -253,7 +253,7 @@ switch ($action) {
             'url' => "blog.php?blog_id=$blog_id&".api_get_cidreq(),
             "name" => Blog:: get_blog_title($blog_id),
         );
-		Display :: display_header($nameTools, 'Blogs');
+		Display::display_header($nameTools, 'Blogs');
 		break;
 	case 'manage_rights' :
 		$nameTools = get_lang('RightsManager');
@@ -261,7 +261,7 @@ switch ($action) {
             'url' => "blog.php?blog_id=$blog_id&".api_get_cidreq(),
             'name' => Blog:: get_blog_title($blog_id),
         );
-		Display :: display_header($nameTools, 'Blogs');
+		Display::display_header($nameTools, 'Blogs');
 		break;
 	case 'view_search_result' :
 		$nameTools = get_lang('SearchResults');
@@ -269,7 +269,7 @@ switch ($action) {
             'url' => "blog.php?blog_id=$blog_id&".api_get_cidreq(),
             'name' => Blog:: get_blog_title($blog_id),
         );
-		Display :: display_header($nameTools, 'Blogs');
+		Display::display_header($nameTools, 'Blogs');
 		break;
 	case 'execute_task' :
 		$nameTools = get_lang('ExecuteThisTask');
@@ -277,11 +277,11 @@ switch ($action) {
             'url' => "blog.php?blog_id=$blog_id&".api_get_cidreq(),
             'name' => Blog:: get_blog_title($blog_id),
         );
-		Display :: display_header($nameTools, 'Blogs');
+		Display::display_header($nameTools, 'Blogs');
 		break;
 	default :
 		$nameTools = Blog :: get_blog_title($blog_id);
-		Display :: display_header($nameTools, 'Blogs');
+		Display::display_header($nameTools, 'Blogs');
 }
 
 // feedback messages
@@ -327,12 +327,12 @@ $taskBlog = Blog::get_personal_task_list();
   
 
 if (isset($error)) {
-	Display :: display_error_message($message);
+	Display::display_error_message($message);
 }
 
 if (isset($flag) && $flag == '1') {
 	$action = "manage_tasks";
-	Blog :: display_assign_task_form($blog_id);
+	Blog::display_assign_task_form($blog_id);
 }
 
 $user_task = false;
@@ -379,12 +379,12 @@ switch ($action) {
 				if ($_POST) {
 					Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'));
 				}
-			$formAdd = Blog :: display_form_new_post($blog_id);
+			$formAdd = Blog::display_form_new_post($blog_id);
 		} else {
 				if (isset($_GET['filter']) && !empty($_GET['filter'])) {
-					Blog :: display_day_results($blog_id, Database::escape_string($_GET['filter']));
+					Blog::display_day_results($blog_id, Database::escape_string($_GET['filter']));
 				} else {
-					Blog :: display_blog_posts($blog_id);
+					Blog::display_blog_posts($blog_id);
 				}
 			}
 		} else {
@@ -394,7 +394,7 @@ switch ($action) {
                 $blogLayout = $tpl->get_template('blog/layout.tpl');
 		break;
 	case 'view_post' :
-		$postArticle = Blog :: display_post($blog_id, intval($_GET['post_id']));
+		$postArticle = Blog::display_post($blog_id, intval($_GET['post_id']));
                 $tpl->assign('post', $postArticle);
                 $blogLayout = $tpl->get_template('blog/post.tpl');
 		break;
@@ -410,12 +410,12 @@ switch ($action) {
 				if ($_POST) {
 					Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'));
 				}
-                $formEdit = Blog :: display_form_edit_post($blog_id, intval($_GET['post_id']));
+                $formEdit = Blog::display_form_edit_post($blog_id, intval($_GET['post_id']));
 			} else {
 				if (isset ($_GET['filter']) && !empty ($_GET['filter'])) {
-					Blog :: display_day_results($blog_id, Database::escape_string($_GET['filter']));
+					Blog::display_day_results($blog_id, Database::escape_string($_GET['filter']));
 				} else {
-					Blog :: display_blog_posts($blog_id);
+					Blog::display_blog_posts($blog_id);
 				}
 			}
 		} else {
@@ -427,9 +427,9 @@ switch ($action) {
 	case 'manage_members' :
                 $manage = null;
 		if (api_is_allowed('BLOG_'.$blog_id, 'member_management')) {
-			$manage .= Blog :: display_form_user_subscribe($blog_id);
+			$manage .= Blog::display_form_user_subscribe($blog_id);
 			echo '<br /><br />';
-			$manage .= Blog :: display_form_user_unsubscribe($blog_id);
+			$manage .= Blog::display_form_user_unsubscribe($blog_id);
 		} else {
 			api_not_allowed();
                 }
@@ -437,7 +437,7 @@ switch ($action) {
                 $blogLayout = $tpl->get_template('blog/layout.tpl');
 		break;
 	case 'manage_rights' :
-		$manage =Blog :: display_form_user_rights($blog_id);
+		$manage =Blog::display_form_user_rights($blog_id);
                 $tpl->assign('content', $manage);
                 $blogLayout = $tpl->get_template('blog/layout.tpl');
 		break;
@@ -445,13 +445,13 @@ switch ($action) {
 		if (api_is_allowed('BLOG_'.$blog_id, 'task_management')) {
                     $taks = null;
                     if (isset($_GET['do']) && $_GET['do'] == 'add') {
-				$taks .= Blog:: display_new_task_form($blog_id);
+				$taks .= Blog::display_new_task_form($blog_id);
 			}
 			if (isset($_GET['do']) && $_GET['do'] == 'assign') {
-				$taks .= Blog:: display_assign_task_form($blog_id);
+				$taks .= Blog::display_assign_task_form($blog_id);
 			}
 			if (isset($_GET['do']) && $_GET['do'] == 'edit') {
-				$taks .= Blog:: display_edit_task_form(
+				$taks .= Blog::display_edit_task_form(
 					$blog_id,
 					intval($_GET['task_id'])
 				);
@@ -459,9 +459,9 @@ switch ($action) {
 			if (isset($_GET['do']) && $_GET['do'] == 'edit_assignment') {
 				$taks .= Blog :: display_edit_assigned_task_form($blog_id, intval($_GET['task_id']), intval($_GET['user_id']));
 			}
-			$taks .= Blog :: display_task_list($blog_id);
+			$taks .= Blog::display_task_list($blog_id);
 			
-			$taks .= Blog :: display_assigned_task_list($blog_id);
+			$taks .= Blog::display_assigned_task_list($blog_id);
 			
                         
                         $tpl->assign('content', $taks);
@@ -473,9 +473,9 @@ switch ($action) {
 		break;
 	case 'execute_task' :
         if (isset ($_GET['post_id'])) {
-            Blog:: display_post($blog_id, intval($_GET['post_id']));
+            Blog::display_post($blog_id, intval($_GET['post_id']));
         } else {
-            Blog:: display_select_task_post($blog_id, intval($_GET['task_id']));
+            Blog::display_select_task_post($blog_id, intval($_GET['task_id']));
         }
 		break;
 	case 'view_search_result' :
@@ -484,9 +484,9 @@ switch ($action) {
     case '':
     default:
 		if (isset ($_GET['filter']) && !empty ($_GET['filter'])) {
-			Blog :: display_day_results($blog_id, Database::escape_string($_GET['filter']));
+			Blog::display_day_results($blog_id, Database::escape_string($_GET['filter']));
 		} else {
-			$listArticles = Blog :: display_blog_posts($blog_id);
+			$listArticles = Blog::display_blog_posts($blog_id);
                         $tpl->assign('articles', $listArticles);
                         $blogLayout = $tpl->get_template('blog/blog.tpl');
 		}

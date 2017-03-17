@@ -17,7 +17,6 @@ require_once __DIR__.'/../inc/global.inc.php';
 ini_set('memory_limit', -1);
 ini_set('max_execution_time', 0);
 ini_set('log_errors', '1');
-error_reporting(-1);
 
 /**
  * Class ImportCsv
@@ -978,8 +977,8 @@ class ImportCsv
                         ];
                         /** @var CItemProperty $itemProperty */
                         $itemProperty = $em->getRepository('ChamiloCourseBundle:CItemProperty')->findOneBy($criteria);
-                        if ($itemProperty) {
-                            $courseEntity = $em->getRepository('ChamiloCourseBundle:Course')->find($courseInfo['real_id']);
+                        $courseEntity = $em->getRepository('ChamiloCoreBundle:Course')->find($courseInfo['real_id']);
+                        if ($itemProperty && $courseEntity) {
                             $itemProperty->setCourse($courseEntity);
                             $em->persist($itemProperty);
                             $em->flush();

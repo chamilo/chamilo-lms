@@ -119,7 +119,8 @@ class TaskModel implements TaskInterface
         return $this->title;
     }
 
-    public function getIdentifier() {
+    public function getIdentifier()
+    {
         return $this->title;
     }
 

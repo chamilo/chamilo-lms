@@ -127,8 +127,8 @@ $user_id = api_get_user_id();
 $isAdmin = api_is_platform_admin();
 
 Display::display_header(get_lang('MyTickets'));
-if (!empty($projectId))
-if ($isAdmin) {
+if (!empty($projectId)) {
+    if ($isAdmin) {
     $getParameters = [
         'keyword',
         'keyword_status',
@@ -140,6 +140,7 @@ if ($isAdmin) {
         'Tickets_per_page',
         'Tickets_column'
     ];
+}
     $get_parameter = '';
     foreach ($getParameters as $getParameter) {
         if (isset($_GET[$getParameter])) {

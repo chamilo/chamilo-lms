@@ -121,7 +121,7 @@ class SkillRelUser
 
     /**
      * Get user
-     * @return \User
+     * @return User
      */
     public function getUser()
     {
@@ -390,7 +390,7 @@ class SkillRelUser
 
     /**
      * Calculate the average value from the feedback comments
-     * @return int
+     * @return string
      */
     public function getAverage()
     {

@@ -242,6 +242,9 @@ class Thematic
     /**
      * get thematic list
      * @param	int		Thematic id (optional), get list by id
+     * @param integer $thematic_id
+     * @param string $course_code
+     * @param integer $session_id
      * @return	array	Thematic data
      */
     public static function get_thematic_list(
@@ -799,6 +802,7 @@ class Thematic
     /**
      * delete  thematic advance
      * @param	int		Thematic advance id
+     * @param integer $thematic_advance_id
      * @return	int		Affected rows
      */
     public function thematic_advance_destroy($thematic_advance_id)
@@ -1116,6 +1120,7 @@ class Thematic
     /**
      * update done thematic advances from thematic details interface
      * @param 	int		Thematic id
+     * @param integer $thematic_advance_id
      * @return	int		Affected rows
      */
     public function update_done_thematic_advances($thematic_advance_id)
@@ -1343,6 +1348,7 @@ class Thematic
      * Get average of advances by thematic
      * @param	int		Thematic id
      * @param	string	Course code (optional)
+     * @param string $course_code
      * @return 	float	Average of thematic advances
      */
     public function get_average_of_advances_by_thematic($thematic_id, $course_code = null)
@@ -1407,6 +1413,7 @@ class Thematic
      * @param	string	Content
      * @param	string	Date and time
      * @param	int		Duration in hours
+     * @param integer $id
      * @return void
      */
     public function set_thematic_advance_attributes(
@@ -1437,7 +1444,7 @@ class Thematic
 
     /**
      * get thematic id
-     * @return void
+     * @return integer
      */
     public function get_thematic_id()
     {

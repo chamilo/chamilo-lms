@@ -138,7 +138,7 @@ class HookManagement implements HookManagementInterface
 
     /**
      * Return a list an associative array where keys are the active hook observer class name
-     * @param $eventName
+     * @param string $eventName
      *
      * @return array
      */

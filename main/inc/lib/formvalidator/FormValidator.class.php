@@ -233,8 +233,8 @@ EOT;
     }
 
     /**
-     * @param $name
-     * @param $label
+     * @param string $name
+     * @param string $label
      * @param array $options
      * @param array $attributes
      * @throws
@@ -1063,7 +1063,7 @@ EOT;
     /**
      * This function has been created for avoiding changes directly within QuickForm class.
      * When we use it, the element is threated as 'required' to be dealt during validation.
-     * @param array $element The array of elements
+     * @param array $elements The array of elements
      * @param string $message The message displayed
      */
     public function add_multiple_required_rule($elements, $message)
@@ -1339,12 +1339,12 @@ EOT;
     }
 
     /**
-     * @param $name
+     * @param string $name
      * @param $label
      * @param bool $required
      * @param array $attributes
      * @param bool $allowNegative
-     * @param null $minValue
+     * @param integer $minValue
      * @param null $maxValue
      */
     public function addFloat(

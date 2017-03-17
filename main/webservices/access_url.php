@@ -17,6 +17,9 @@ define('WS_ERROR_NOT_FOUND_RESULT', 2);
 define('WS_ERROR_INVALID_INPUT', 3);
 define('WS_ERROR_SETTING', 4);
 
+/**
+ * @param integer $code
+ */
 function return_error($code) {
     $fault = null;
     switch ($code) {

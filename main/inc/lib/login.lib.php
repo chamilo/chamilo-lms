@@ -276,6 +276,7 @@ class Login
      * @global bool   $is_platformAdmin
      * @global bool   $is_allowedCreateCourse
      * @global object $_user
+     * @param boolean $reset
      */
     public static function init_user($user_id, $reset)
     {
@@ -366,7 +367,7 @@ class Login
      * @global type $is_allowed_in_course
      *
      * @param type $course_id
-     * @param type $reset
+     * @param boolean $reset
      */
     static function init_course($course_id, $reset)
     {

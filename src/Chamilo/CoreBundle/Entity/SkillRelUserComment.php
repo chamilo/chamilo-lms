@@ -108,7 +108,7 @@ class SkillRelUserComment
 
     /**
      * Get feedbackDateTime
-     * @return type
+     * @return \DateTime
      */
     public function getFeedbackDateTime()
     {

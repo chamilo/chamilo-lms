@@ -32,9 +32,9 @@ $options = getopt("", $longopts);
 
 echo "\n\n";
 
-if (array_key_exists('help', $options))
+if (array_key_exists('help', $options)) {
 	echo "help message\n";
-else if (array_key_exists('clearAll', $options)) {
+} else if (array_key_exists('clearAll', $options)) {
 	reports_clearAll();
 } else if (array_key_exists('build', $options)) {
 	reports_build();
@@ -51,8 +51,9 @@ else if (array_key_exists('clearAll', $options)) {
 			$options['ssci'], $options['sscn'],
 			$options['link']);
 	echo "\n";
-} else
+} else {
 	echo "action not found\n";
+}
 
 echo "\n";
 ?>

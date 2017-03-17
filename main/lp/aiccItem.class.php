@@ -117,7 +117,7 @@ class aiccItem extends learnpathItem
         $abs_order++;
         $i = 1;
         foreach ($this->sub_items as $id => $dummy) {
-            $oSubitem =& $this->sub_items[$id];
+            $oSubitem = & $this->sub_items[$id];
             $oSubitem->get_flat_list($list, $abs_order, $i, $level + 1);
             $i++;
         }

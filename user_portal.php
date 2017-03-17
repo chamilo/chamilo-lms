@@ -190,7 +190,9 @@ if (api_get_setting('go_to_course_after_login') == 'true') {
     if (!isset($_SESSION['coursesAlreadyVisited']) &&
         $count_of_sessions == 0 && $count_of_courses_no_sessions == 1
     ) {
-        $courses = CourseManager::get_courses_list_by_user_id($userId);
+        $courses = CourseManager::get_courses_list_by_user_id(
+            $userId
+        );
 
         if (!empty($courses) && isset($courses[0]) && isset($courses[0]['code'])) {
             $courseInfo = api_get_course_info_by_id($courses[0]['real_id']);
@@ -205,7 +207,10 @@ if (api_get_setting('go_to_course_after_login') == 'true') {
 
 // Show the chamilo mascot
 if (empty($courseAndSessions['html']) && !isset($_GET['history'])) {
-	$controller->tpl->assign('welcome_to_course_block', $controller->return_welcome_to_course_block());
+    $controller->tpl->assign(
+        'welcome_to_course_block',
+        $controller->return_welcome_to_course_block()
+    );
 }
 
 $controller->tpl->assign('content', $courseAndSessions['html']);

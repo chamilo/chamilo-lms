@@ -14,9 +14,7 @@
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
-
 $this_section = SECTION_PLATFORM_ADMIN;
-
 api_protect_admin_script();
 
 // A check whether the course validation feature is enabled.
@@ -28,7 +26,6 @@ $message = isset($_GET['message']) ? trim(Security::remove_XSS(stripslashes(urld
 $is_error_message = !empty($_GET['is_error_message']);
 
 if ($course_validation_feature) {
-
     /**
      * Deletion of a course request.
      */
@@ -50,7 +47,7 @@ if ($course_validation_feature) {
     elseif (isset($_POST['action'])) {
         switch ($_POST['action']) {
             // Delete selected courses
-            case 'delete_course_requests' :
+            case 'delete_course_requests':
                 $course_requests = $_POST['course_request'];
                 if (is_array($_POST['course_request']) && !empty($_POST['course_request'])) {
                     $success = true;
@@ -87,7 +84,7 @@ function get_request_data($from, $number_of_items, $column, $direction)
     $from = intval($from);
     $number_of_items = intval($number_of_items);
     $column = intval($column);
-    $direction = !in_array(strtolower(trim($direction)), ['asc','desc']) ? 'asc' : $direction;
+    $direction = !in_array(strtolower(trim($direction)), ['asc', 'desc']) ? 'asc' : $direction;
 
     $sql = "SELECT
                 id AS col0,

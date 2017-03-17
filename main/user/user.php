@@ -933,7 +933,6 @@ function get_user_data($from, $number_of_items, $column, $direction)
  * lock = the user can no longer use this account
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @param int $active the current state of the account
- * @param int $user_id The user id
  * @param string $urlParams
  *
  * @return string Some HTML-code with the lock/unlock button

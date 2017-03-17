@@ -203,7 +203,7 @@ class AnnouncementEmail
      *
      * @return array
      */
-    public function sender($key = '',  $userId = '')
+    public function sender($key = '', $userId = '')
     {
         $_user = api_get_user_info($userId);
 

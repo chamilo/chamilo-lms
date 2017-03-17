@@ -38,9 +38,9 @@ if ($form->validate()) {
 $nameTools = get_lang('AddGroup');
 $this_section = SECTION_SOCIAL;
 
-$interbreadcrumb[]= array ('url' =>'home.php','name' => get_lang('Social'));
-$interbreadcrumb[]= array ('url' =>'groups.php','name' => get_lang('Groups'));
-$interbreadcrumb[]= array ('url' =>'#','name' => $nameTools);
+$interbreadcrumb[] = array('url' =>'home.php', 'name' => get_lang('Social'));
+$interbreadcrumb[] = array('url' =>'groups.php', 'name' => get_lang('Groups'));
+$interbreadcrumb[] = array('url' =>'#', 'name' => $nameTools);
 
 $social_avatar_block = SocialManager::show_social_avatar_block('group_add');
 $social_menu_block = SocialManager::show_social_menu('group_add');

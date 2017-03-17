@@ -1,12 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-* This script allows platform admins to add users to urls.
-*	It displays a list of users and a list of courses;
-*	you can select multiple users and courses and then click on
-*	@package chamilo.admin
-*	@author Julio Montoya <gugli100@gmail.com>
-*/
+ * This script allows platform admins to add users to urls.
+ *    It displays a list of users and a list of courses;
+ *    you can select multiple users and courses and then click on
+ * @package chamilo.admin
+ * @author Julio Montoya <gugli100@gmail.com>
+ */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -20,13 +20,13 @@ if (!api_get_multiple_access_url()) {
 $form_sent = 0;
 $first_letter_user = '';
 $first_letter_course = '';
-$courses = array ();
+$courses = array();
 $url_list = array();
 $users = array();
 
 $tbl_access_url_rel_user = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-$tbl_access_url = Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
-$tbl_user 		= Database :: get_main_table(TABLE_MAIN_USER);
+$tbl_access_url = Database:: get_main_table(TABLE_MAIN_ACCESS_URL);
+$tbl_user = Database:: get_main_table(TABLE_MAIN_USER);
 
 /*	Header	*/
 $tool_name = get_lang('AddUsersToURL');
@@ -37,8 +37,9 @@ Display :: display_header($tool_name);
 
 echo '<div class="actions">';
 echo Display::url(
-    Display::return_icon('edit.png', get_lang('EditUsersToURL'),''),
-    api_get_path(WEB_CODE_PATH).'admin/access_url_edit_users_to_url.php');
+    Display::return_icon('edit.png', get_lang('EditUsersToURL'), ''),
+    api_get_path(WEB_CODE_PATH).'admin/access_url_edit_users_to_url.php'
+);
 echo '</div>';
 
 api_display_tool_title($tool_name);
@@ -48,17 +49,18 @@ if ($_POST['form_sent']) {
     $users = is_array($_POST['user_list']) ? $_POST['user_list'] : array() ;
     $url_list = is_array($_POST['url_list']) ? $_POST['url_list'] : array() ;
     $first_letter_user = $_POST['first_letter_user'];
-
-    foreach($users as $key => $value) {
+    foreach ($users as $key => $value) {
         $users[$key] = intval($value);
     }
 
     if ($form_sent == 1) {
         if (count($users) == 0 || count($url_list) == 0) {
-            Display :: display_error_message(get_lang('AtLeastOneUserAndOneURL'));
+            Display:: display_error_message(
+                get_lang('AtLeastOneUserAndOneURL')
+            );
         } else {
-            UrlManager::add_users_to_urls($users,$url_list);
-            Display :: display_confirmation_message(get_lang('UsersBelongURL'));
+            UrlManager::add_users_to_urls($users, $url_list);
+            Display:: display_confirmation_message(get_lang('UsersBelongURL'));
         }
     }
 }
@@ -115,13 +117,13 @@ unset($result);
    <tr>
     <td width="40%" align="center">
      <select name="user_list[]" multiple="multiple" size="20" style="width:380px;">
-		<?php
+        <?php
         foreach ($db_users as $user) {
         ?>
             <option value="<?php echo $user['user_id']; ?>" <?php if(in_array($user['user_id'], $users)) echo 'selected="selected"'; ?>>
-                <?php echo api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')'; ?>
+            <?php echo api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')'; ?>
             </option>
-		<?php
+        <?php
         }
         ?>
     </select>

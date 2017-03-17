@@ -61,7 +61,7 @@ class ChatVideo
      * Set fromUser
      *
      * @param integer $fromUser
-     * @return Chat
+     * @return ChatVideo
      */
     public function setFromUser($fromUser)
     {
@@ -84,7 +84,7 @@ class ChatVideo
      * Set toUser
      *
      * @param integer $toUser
-     * @return Chat
+     * @return ChatVideo
      */
     public function setToUser($toUser)
     {
@@ -107,7 +107,7 @@ class ChatVideo
      * Set room_name
      *
      * @param string $roomName
-     * @return Chat
+     * @return ChatVideo
      */
     public function setRoomName($roomName)
     {
@@ -130,7 +130,7 @@ class ChatVideo
      * Set datetime
      *
      * @param \DateTime $datetime
-     * @return Chat
+     * @return ChatVideo
      */
     public function setDatetime($datetime)
     {

@@ -2032,14 +2032,18 @@ class Display
 
     /**
      * @todo use twig
+     * @param string $title
+     * @param array $elements
+     * @param bool $alignToRight
+     * @return string
      */
-    public static function groupButtonWithDropDown($title, $elements)
+    public static function groupButtonWithDropDown($title, $elements, $alignToRight = false)
     {
         $html = '<div class="btn-group">
                 <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                 '.$title.'
                 <span class="caret"></span></button>
-                <ul class="dropdown-menu">';
+                <ul class="dropdown-menu ' . ($alignToRight ? 'dropdown-menu-right' : '') . '">';
         foreach ($elements as $item) {
             $html .= Display::tag('li', Display::url($item['title'], $item['href']));
         }

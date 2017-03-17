@@ -115,7 +115,7 @@ class GradeModel extends Model
         }
 
         $form->addElement('hidden', 'maxvalue', '100');
-		$form->addElement('hidden', 'minvalue', '0');
+        $form->addElement('hidden', 'minvalue', '0');
         $renderer = & $form->defaultRenderer();
 
         $component_array = array();
@@ -191,7 +191,7 @@ class GradeModel extends Model
         // Setting the rules
         $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
 
-		return $form;
+        return $form;
     }
 
     /**

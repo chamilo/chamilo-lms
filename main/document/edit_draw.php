@@ -96,13 +96,14 @@ if (!empty($group_id)) {
 
 $is_certificate_mode = DocumentManager::is_certificate_mode($dir);
 
-if (!$is_certificate_mode)
+if (!$is_certificate_mode) {
     $interbreadcrumb[] = array(
         "url" => "./document.php?curdirpath=".urlencode($my_cur_dir_path).'&'.api_get_cidreq(),
         "name" => get_lang('Documents'),
     );
-else
+} else {
     $interbreadcrumb[] = array('url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('Gradebook'));
+}
 
 // Interbreadcrumb for the current directory root path
 if (empty($document_data['parents'])) {

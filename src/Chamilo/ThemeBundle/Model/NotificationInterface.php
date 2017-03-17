@@ -8,7 +8,8 @@
 namespace Chamilo\ThemeBundle\Model;
 
 
-interface NotificationInterface {
+interface NotificationInterface
+{
     public function getMessage();
     public function getType();
     public function getIcon();

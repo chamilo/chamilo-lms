@@ -58,7 +58,7 @@ class LinkFactory
      * @param string $name_mask search string
      * @return array link objects matching the search criterium
      */
-    public function find_links($name_mask,$selectcat)
+    public function find_links($name_mask, $selectcat)
     {
         return AbstractLink::find_links($name_mask, $selectcat);
     }
@@ -98,7 +98,7 @@ class LinkFactory
     public static function get_all_types()
     {
         //LINK_DROPBOX,
-        return array (
+        return array(
             LINK_EXERCISE,
             //LINK_DROPBOX,
             LINK_HOTPOTATOES,

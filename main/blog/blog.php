@@ -324,7 +324,7 @@ $calendarBlog = Blog::display_minimonthcalendar($month, $year, $blog_id);
 //task blogs
 $taskBlog = Blog::get_personal_task_list();
 
-
+  
 
 if (isset($error)) {
 	Display :: display_error_message($message);
@@ -481,6 +481,7 @@ switch ($action) {
 		}
         break;
 }
+
 
 
 $tpl->display($blogLayout);

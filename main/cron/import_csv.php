@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CCalendarEvent;
+use Chamilo\CourseBundle\Entity\CItemProperty;
+
 if (PHP_SAPI != 'cli') {
     die('Run this script through the command line or comment this line in the code');
 }
@@ -13,6 +16,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 ini_set('memory_limit', -1);
 ini_set('max_execution_time', 0);
+ini_set('log_errors', '1');
 
 /**
  * Class ImportCsv
@@ -907,10 +911,7 @@ class ImportCsv
                 return 0;
             }
 
-            $this->logger->addInfo(
-                "Ready to insert events"
-            );
-
+            $this->logger->addInfo('Ready to insert # '.count($eventsToCreate).' events');
             $batchSize = $this->batchSize;
             $counter = 1;
             $em = Database::getManager();
@@ -919,11 +920,10 @@ class ImportCsv
             $report = [
                 'mail_sent' => 0,
                 'mail_not_sent_announcement_exists' => 0,
-                'mail_not_sent_because_date' => 0,
+                'mail_not_sent_because_date' => 0
             ];
 
             $eventsToCreateFinal = [];
-
             foreach ($eventsToCreate as $event) {
                 $update = false;
                 $item = null;
@@ -955,11 +955,40 @@ class ImportCsv
                 }
 
                 $courseInfo = api_get_course_info_by_id($event['course_id']);
-                $event['course_info']  = $courseInfo;
-                $event['update']  = $update;
-                $event['item']  = $item;
-                $event['external_event_id']  = $externalEventId;
+                $event['course_info'] = $courseInfo;
+                $event['update'] = $update;
+                $event['item'] = $item;
 
+                /* Check if event changed of course code */
+                /** @var CCalendarEvent $calendarEvent */
+                $calendarEvent = $em->getRepository('ChamiloCourseBundle:CCalendarEvent')->find($item['item_id']);
+                if ($calendarEvent) {
+                    $this->logger->addInfo('Calendar event found '.$item['item_id']);
+                    if ($calendarEvent->getCId() != $courseInfo['real_id']) {
+                        $this->logger->addInfo('Move from course #'.$calendarEvent->getCId().' to #'.$courseInfo['real_id']);
+                        // Seems that the course id changed in the csv
+                        $calendarEvent->setCId($courseInfo['real_id']);
+                        $em->persist($calendarEvent);
+                        $em->flush();
+
+                        $criteria = [
+                            'tool' => 'calendar_event',
+                            'ref' => $item['item_id']
+                        ];
+                        /** @var CItemProperty $itemProperty */
+                        $itemProperty = $em->getRepository('ChamiloCourseBundle:CItemProperty')->findOneBy($criteria);
+                        $courseEntity = $em->getRepository('ChamiloCoreBundle:Course')->find($courseInfo['real_id']);
+                        if ($itemProperty && $courseEntity) {
+                            $itemProperty->setCourse($courseEntity);
+                            $em->persist($itemProperty);
+                            $em->flush();
+                        }
+                    }
+                } else {
+                    $this->logger->addInfo('Calendar event not found '.$item['item_id']);
+                }
+
+                $event['external_event_id'] = $externalEventId;
                 if (isset($eventStartDateList[$courseInfo['real_id']]) &&
                     isset($eventStartDateList[$courseInfo['real_id']][$event['session_id']])
                 ) {
@@ -983,7 +1012,6 @@ class ImportCsv
                 $item = $event['item'];
                 $update = $event['update'];
                 $externalEventId = $event['external_event_id'];
-
                 $info = 'Course: '.$courseInfo['real_id'].' ('.$courseInfo['code'].') - Session: '.$event['session_id'];
 
                 $agenda = new Agenda(
@@ -996,7 +1024,6 @@ class ImportCsv
                 $agenda->setSessionId($event['session_id']);
                 $agenda->setSenderId($event['sender_id']);
                 $agenda->setIsAllowedToEdit(true);
-
                 $eventComment = $event['comment'];
                 $color = $event['color'];
 
@@ -1094,7 +1121,7 @@ class ImportCsv
                         1
                     );
 
-                    if (count($announcementsWithTitleList) == 0) {
+                    if (count($announcementsWithTitleList) === 0) {
                         $this->logger->addInfo(
                             "Mail to be sent because start date: ".$event['start']." and no announcement found."
                         );
@@ -1133,7 +1160,7 @@ class ImportCsv
                     } else {
                         $report['mail_not_sent_announcement_exists']++;
                         $this->logger->addInfo(
-                            "Mail NOT sent. An announcement seems to be already saved in $info"
+                            "Mail NOT sent. An announcement seems to be already saved in '$info'"
                         );
                     }
                 } else {
@@ -1141,7 +1168,6 @@ class ImportCsv
                         $report['mail_not_sent_because_date']++;
                     }
                 }
-
                 $content = '';
                 if ($update && isset($item['item_id'])) {
                     //the event already exists, just update
@@ -1158,7 +1184,8 @@ class ImportCsv
                         $eventComment,
                         $color,
                         false,
-                        false
+                        false,
+                        $this->defaultAdminId
                     );
 
                     if ($eventResult !== false) {
@@ -1188,7 +1215,6 @@ class ImportCsv
                     );
 
                     if (!empty($eventId)) {
-                        //$extraFieldValue->is_course_model = true;
                         $extraFieldValue->save(
                             array(
                                 'value' => $externalEventId,

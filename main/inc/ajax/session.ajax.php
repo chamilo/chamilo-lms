@@ -15,7 +15,7 @@ switch ($action) {
             $list_sessions = SessionManager::get_sessions_by_user($user_id, true);
             if (!empty($list_sessions)) {
                 foreach ($list_sessions as $session_item) {
-                    echo $session_item['session_name'] . '<br />';
+                    echo $session_item['session_name'].'<br />';
                 }
             } else {
                 echo get_lang('NoSessionsForThisUser');
@@ -29,7 +29,7 @@ switch ($action) {
                 [
                     's.name' => [
                         'operator' => 'LIKE',
-                        'value' => "%" . $_REQUEST['q'] . "%"
+                        'value' => "%".$_REQUEST['q']."%"
                     ]
                 ]
             );

@@ -30,7 +30,6 @@ $message = isset($_GET['message']) ? trim(Security::remove_XSS(stripslashes(urld
 $is_error_message = !empty($_GET['is_error_message']);
 
 if ($course_validation_feature) {
-
     /**
      * Acceptance and creation of the requested course.
      */
@@ -77,7 +76,7 @@ if ($course_validation_feature) {
          */
         switch ($_POST['action']) {
             // Delete selected courses
-            case 'delete_course_requests' :
+            case 'delete_course_requests':
                 $course_requests = $_POST['course_request'];
                 if (is_array($_POST['course_request']) && !empty($_POST['course_request'])) {
                     $success = true;
@@ -99,7 +98,8 @@ if ($course_validation_feature) {
 /**
  * Get the number of courses which will be displayed.
  */
-function get_number_of_requests() {
+function get_number_of_requests()
+{
     return CourseRequestManager::count_course_requests(COURSE_REQUEST_REJECTED);
 }
 
@@ -164,7 +164,6 @@ function modify_filter($id) {
 
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array('url' => 'course_list.php', 'name' => get_lang('CourseList'));
-
 
 $tool_name = get_lang('RejectedCourseRequests');
 Display :: display_header($tool_name);

@@ -268,8 +268,7 @@ if (!empty($attempts)) {
         case RESULT_DISABLE_SHOW_SCORE_ONLY:
             if ($objExercise->feedback_type != EXERCISE_FEEDBACK_TYPE_END) {
                $header_names = array(get_lang('Attempt'), get_lang('StartDate'), get_lang('IP'), get_lang('Score'));
-            }
-            else {
+            } else {
                 $header_names = array(get_lang('Attempt'), get_lang('StartDate'), get_lang('IP'), get_lang('Score'), get_lang('Details'));
             }
             break;

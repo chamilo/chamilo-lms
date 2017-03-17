@@ -33,7 +33,6 @@ $is_error_message = isset($_GET['is_error_message']) ? !empty($_GET['is_error_me
 $keyword = isset($_GET['keyword']) ? Database::escape_string(trim($_GET['keyword'])) : '';
 
 if ($course_validation_feature) {
-
     /**
      * Course acceptance and creation.
      */

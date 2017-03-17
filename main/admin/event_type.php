@@ -4,9 +4,7 @@
  * Definition of new system event types
  * @package chamilo.admin.events
  */
-/**
- * Init and access validation
- */
+
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -49,9 +47,7 @@ if ($action == 'modEventType') {
 }
 
 $ets = Event::get_all_event_types();
-
 $languages = api_get_languages();
-
 $ajaxPath = api_get_path(WEB_CODE_PATH) . 'inc/ajax/events.ajax.php';
 
 $action_array = array(

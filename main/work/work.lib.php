@@ -2045,6 +2045,7 @@ function get_work_user_list(
                 );
                 $work['title_clean'] = $work['title'];
 
+                $work['title'] = Security::remove_XSS($work['title']);
                 if (strlen($work['title']) > 30) {
                     $short_title = substr($work['title'], 0, 27).'...';
                     $work['title'] = Display::span($short_title, array('class' => 'work-title', 'title' => $work['title']));

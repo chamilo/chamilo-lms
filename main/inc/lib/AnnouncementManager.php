@@ -120,7 +120,7 @@ class AnnouncementManager
     /**
      * This functions switches the visibility a course resource
      * using the visibility field in 'item_property'
-     * @param    array	$_course
+     * @param    array $_course
      * @param    int     $id ID of the element of the corresponding type
      * @return   bool    False on failure, True on success
      */
@@ -300,6 +300,8 @@ class AnnouncementManager
     /**
      * Displays one specific announcement
      * @param int $announcement_id, the id of the announcement you want to display
+     *
+     * @return string
      */
     public static function display_announcement($announcement_id)
     {

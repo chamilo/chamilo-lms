@@ -931,7 +931,7 @@ class CourseRestorer
      * see #7029
 	 */
 	public function restore_scorm_documents()
-    {
+	{
 		$perm = api_get_permissions_for_new_directories();
 
 		if ($this->course->has_resources(RESOURCE_SCORM)) {
@@ -1008,7 +1008,7 @@ class CourseRestorer
      * @param int $sessionId
      */
 	public function restore_forums($sessionId = 0)
-    {
+	{
 		if ($this->course->has_resources(RESOURCE_FORUM)) {
             $sessionId = intval($sessionId);
 			$table_forum = Database::get_course_table(TABLE_FORUM);
@@ -2676,7 +2676,7 @@ class CourseRestorer
 
 				// Updating prerequisites
 				foreach ($old_prerequisite  as $key=>$my_old_prerequisite) {
-					if ($my_old_prerequisite != ''){
+					if ($my_old_prerequisite != '') {
 						$sql = "UPDATE ".$table_item." SET prerequisite = '".$my_old_prerequisite."'
 						        WHERE c_id = ".$this->destination_course_id." AND id = '".$key."'  ";
 						Database::query($sql);
@@ -2694,7 +2694,7 @@ class CourseRestorer
 
 				foreach ($parent_item_ids as $new_item_id => $parent_item_old_id) {
 					$parent_new_id = 0;
-					if($parent_item_old_id != 0){
+					if($parent_item_old_id != 0) {
 						$parent_new_id = $new_item_ids[$parent_item_old_id];
 					}
 					$sql = "UPDATE ".$table_item." SET parent_item_id = '".$parent_new_id."'
@@ -2703,7 +2703,7 @@ class CourseRestorer
 				}
 				foreach ($previous_item_ids as $new_item_id => $previous_item_old_id) {
 					$previous_new_id = 0;
-					if ($previous_item_old_id != 0){
+					if ($previous_item_old_id != 0) {
 						$previous_new_id = $new_item_ids[$previous_item_old_id];
 					}
 					$sql = "UPDATE ".$table_item." SET previous_item_id = '".$previous_new_id."'
@@ -2713,7 +2713,7 @@ class CourseRestorer
 
 				foreach ($next_item_ids as $new_item_id => $next_item_old_id) {
 					$next_new_id = 0;
-					if ($next_item_old_id != 0){
+					if ($next_item_old_id != 0) {
 						$next_new_id = $new_item_ids[$next_item_old_id];
 					}
 					$sql = "UPDATE ".$table_item." SET next_item_id = '".$next_new_id."'
@@ -2723,7 +2723,7 @@ class CourseRestorer
 
 				foreach ($prerequisite_ids as $new_item_id => $prerequisite_old_id) {
 					$prerequisite_new_id = 0;
-					if ($prerequisite_old_id != 0){
+					if ($prerequisite_old_id != 0) {
 						$prerequisite_new_id = $new_item_ids[$prerequisite_old_id];
 					}
 					$sql = "UPDATE ".$table_item." SET prerequisite = '".$prerequisite_new_id."'
@@ -2741,7 +2741,7 @@ class CourseRestorer
      *
 	 */
 	public function restore_student_publication($sessionId = 0)
-    {
+	{
         $sessionId = intval($sessionId);
         $work_assignment_table = Database:: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
         $work_table = Database:: get_course_table(TABLE_STUDENT_PUBLICATION);
@@ -2841,8 +2841,10 @@ class CourseRestorer
         if (!is_dir($dest)) {
             mkdir($dest, api_get_permissions_for_new_directories());
         }
-        if ($handle = opendir($source)) {        // if the folder exploration is sucsessful, continue
-            while (false !== ($file = readdir($handle))) { // as long as storing the next file to $file is successful, continue
+        if ($handle = opendir($source)) {
+// if the folder exploration is sucsessful, continue
+            while (false !== ($file = readdir($handle))) {
+// as long as storing the next file to $file is successful, continue
                 if ($file != '.' && $file != '..') {
                     $path = $source . '/' . $file;
                     if (is_file($path)) {
@@ -2851,8 +2853,9 @@ class CourseRestorer
                             echo '<font color="red">File ('.$path.') '.get_lang('NotHavePermission').'</font>';
                         }*/
                     } elseif(is_dir($path)) {
-                        if (!is_dir($dest . '/' . $file))
-                        mkdir($dest . '/' . $file);
+                        if (!is_dir($dest . '/' . $file)) {
+                                                mkdir($dest . '/' . $file);
+                        }
                         self:: allow_create_all_directory($path, $dest . '/' . $file, $overwrite);
                     }
                 }
@@ -3380,7 +3383,7 @@ class CourseRestorer
     public function DBUTF8_array($array)
     {
         if (UTF8_CONVERT) {
-            foreach ($array as &$item)  {
+            foreach ($array as &$item) {
                 $item = utf8_encode($item);
             }
             return $array;

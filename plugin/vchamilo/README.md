@@ -18,6 +18,15 @@ Once the plugin is fully setup, you will be able to create new Chamilo instances
 Changelog
 =========
 
+*Version 1.6*
+
+Database upgrade needed:
+
+  ALTER TABLE vchamilo ADD COLUMN archive_url varchar(255);
+  ALTER TABLE vchamilo ADD COLUMN home_url varchar(255);
+  ALTER TABLE vchamilo ADD COLUMN upload_url varchar(255);
+  ALTER TABLE vchamilo ADD COLUMN course_url varchar(255);
+
 *Version 1.5*
 
 Improved usability and added validations. No DB update required.

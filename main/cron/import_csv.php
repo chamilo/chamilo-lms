@@ -15,6 +15,9 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 ini_set('memory_limit', -1);
 ini_set('max_execution_time', 0);
+ini_set('display_errors', '1');
+ini_set('log_errors', '1');
+error_reporting(-1);
 
 /**
  * Class ImportCsv
@@ -909,10 +912,7 @@ class ImportCsv
                 return 0;
             }
 
-            $this->logger->addInfo(
-                "Ready to insert events"
-            );
-
+            $this->logger->addInfo('Ready to insert # '.count($eventsToCreate).' events');
             $batchSize = $this->batchSize;
             $counter = 1;
             $em = Database::getManager();
@@ -921,11 +921,10 @@ class ImportCsv
             $report = [
                 'mail_sent' => 0,
                 'mail_not_sent_announcement_exists' => 0,
-                'mail_not_sent_because_date' => 0,
+                'mail_not_sent_because_date' => 0
             ];
 
             $eventsToCreateFinal = [];
-
             foreach ($eventsToCreate as $event) {
                 $update = false;
                 $item = null;
@@ -963,18 +962,21 @@ class ImportCsv
 
                 /* Check if event changed of course code */
                 /** @var CCalendarEvent $calendarEvent */
-                $calendarEvent = $em->getRepository('ChamiloCourseBundle:CCalendarEvent')->find($item['id']);
+                $calendarEvent = $em->getRepository('ChamiloCourseBundle:CCalendarEvent')->find($item['item_id']);
                 if ($calendarEvent) {
+                    $this->logger->addInfo('Calendar event found '.$item['item_id']);
                     if ($calendarEvent->getCId() != $courseInfo['real_id']) {
+                        $this->logger->addInfo('Move from course #'.$courseInfo['real_id'].' to #'.$calendarEvent->getCId());
                         // Seems that the course id changed in the csv
                         $calendarEvent->setCId($courseInfo['real_id']);
                         $em->persist($calendarEvent);
                         $em->flush();
                     }
+                } else {
+                    $this->logger->addInfo('Calendar event not found '.$item['item_id']);
                 }
 
                 $event['external_event_id'] = $externalEventId;
-
                 if (isset($eventStartDateList[$courseInfo['real_id']]) &&
                     isset($eventStartDateList[$courseInfo['real_id']][$event['session_id']])
                 ) {
@@ -998,7 +1000,6 @@ class ImportCsv
                 $item = $event['item'];
                 $update = $event['update'];
                 $externalEventId = $event['external_event_id'];
-
                 $info = 'Course: '.$courseInfo['real_id'].' ('.$courseInfo['code'].') - Session: '.$event['session_id'];
 
                 $agenda = new Agenda(
@@ -1011,7 +1012,6 @@ class ImportCsv
                 $agenda->setSessionId($event['session_id']);
                 $agenda->setSenderId($event['sender_id']);
                 $agenda->setIsAllowedToEdit(true);
-
                 $eventComment = $event['comment'];
                 $color = $event['color'];
 

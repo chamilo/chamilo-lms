@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CCalendarEvent;
+
 if (PHP_SAPI != 'cli') {
     die('Run this script through the command line or comment this line in the code');
 }
@@ -955,10 +957,23 @@ class ImportCsv
                 }
 
                 $courseInfo = api_get_course_info_by_id($event['course_id']);
-                $event['course_info']  = $courseInfo;
-                $event['update']  = $update;
-                $event['item']  = $item;
-                $event['external_event_id']  = $externalEventId;
+                $event['course_info'] = $courseInfo;
+                $event['update'] = $update;
+                $event['item'] = $item;
+
+                /* Check if event changed of course code */
+                /** @var CCalendarEvent $calendarEvent */
+                $calendarEvent = $em->getRepository('ChamiloCourseBundle:CCalendarEvent')->find($item['id']);
+                if ($calendarEvent) {
+                    if ($calendarEvent->getCId() != $courseInfo['real_id']) {
+                        // Seems that the course id changed in the csv
+                        $calendarEvent->setCId($courseInfo['real_id']);
+                        $em->persist($calendarEvent);
+                        $em->flush();
+                    }
+                }
+
+                $event['external_event_id'] = $externalEventId;
 
                 if (isset($eventStartDateList[$courseInfo['real_id']]) &&
                     isset($eventStartDateList[$courseInfo['real_id']][$event['session_id']])
@@ -1094,7 +1109,7 @@ class ImportCsv
                         1
                     );
 
-                    if (count($announcementsWithTitleList) == 0) {
+                    if (count($announcementsWithTitleList) === 0) {
                         $this->logger->addInfo(
                             "Mail to be sent because start date: ".$event['start']." and no announcement found."
                         );

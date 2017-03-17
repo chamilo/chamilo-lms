@@ -49,7 +49,6 @@ class ThematicController
                     if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {
                         if (trim($_POST['title']) !== '') {
                             if (api_is_allowed_to_edit(null, true)) {
-
                                 $id = isset($_POST['thematic_id']) ? $_POST['thematic_id'] : null;
                                 $title = trim($_POST['title']);
                                 $content = trim($_POST['content']);
@@ -121,7 +120,6 @@ class ThematicController
 
                     // Import the progress.
                     $current_thematic = null;
-
                     foreach ($csv_import_array as $key => $item) {
                         if (!$key) {
                             continue;

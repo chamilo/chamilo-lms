@@ -21,7 +21,7 @@ class AddCourseToSession
 		$course_title = null;
 		$xajax_response = new xajaxResponse();
 		$return = '';
-		if(!empty($needle) && !empty($type)) {
+		if (!empty($needle) && !empty($type)) {
 			// xajax send utf8 datas... datas in db can be non-utf8 datas
 			$charset = api_get_system_encoding();
 			$needle = api_convert_encoding($needle, $charset, 'utf-8');
@@ -38,7 +38,7 @@ class AddCourseToSession
 					while ($row = Database::fetch_row($res)) {
 						$course_codes .= '\''.$row[0].'\',';
 					}
-					$course_codes = substr($course_codes,0,(strlen($course_codes)-1));
+					$course_codes = substr($course_codes, 0, (strlen($course_codes) - 1));
 
 					$cond_course_code = ' AND course.id NOT IN('.$course_codes.') ';
 				}
@@ -69,9 +69,9 @@ class AddCourseToSession
 			if (api_is_multiple_url_enabled()) {
 				$tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 				$access_url_id = api_get_current_access_url_id();
-				if ($access_url_id != -1){
+				if ($access_url_id != -1) {
 
-					if ($type=='single') {
+					if ($type == 'single') {
 						$sql = 'SELECT
                                     course.id,
 						            course.visual_code,
@@ -104,19 +104,19 @@ class AddCourseToSession
             if ($type == 'single') {
 				while ($course = Database :: fetch_array($rs)) {
 					$course_list[] = $course['code'];
-					$course_title=str_replace("'","\'",$course_title);
+					$course_title = str_replace("'", "\'", $course_title);
                     $return .= '<a href="javascript: void(0);" onclick="javascript: add_course_to_session(\''.$course['id'].'\',\''.$course_title.' ('.$course['visual_code'].')'.'\')">'.$course['title'].' ('.$course['visual_code'].')</a><br />';
 				}
-				$xajax_response -> addAssign('ajax_list_courses_single','innerHTML',api_utf8_encode($return));
+				$xajax_response -> addAssign('ajax_list_courses_single', 'innerHTML', api_utf8_encode($return));
 			} else {
 				$return .= '<select id="origin" name="NoSessionCoursesList[]" multiple="multiple" size="20" style="width:340px;">';
-				while($course = Database :: fetch_array($rs)) {
+				while ($course = Database :: fetch_array($rs)) {
 					$course_list[] = $course['code'];
-					$course_title=str_replace("'","\'",$course_title);
-                    $return .= '<option value="'.$course['id'].'" title="'.htmlspecialchars($course['title'].' ('.$course['visual_code'].')',ENT_QUOTES).'">'.$course['title'].' ('.$course['visual_code'].')</option>';
+					$course_title = str_replace("'", "\'", $course_title);
+                    $return .= '<option value="'.$course['id'].'" title="'.htmlspecialchars($course['title'].' ('.$course['visual_code'].')', ENT_QUOTES).'">'.$course['title'].' ('.$course['visual_code'].')</option>';
 				}
 				$return .= '</select>';
-				$xajax_response -> addAssign('ajax_list_courses_multiple','innerHTML',api_utf8_encode($return));
+				$xajax_response -> addAssign('ajax_list_courses_multiple', 'innerHTML', api_utf8_encode($return));
 			}
 		}
 		$_SESSION['course_list'] = $course_list;

@@ -15,18 +15,18 @@ api_protect_admin_script(true);
 
 $tool_name = get_lang('SessionOverview');
 
-$interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[]=array('url' => 'session_list.php','name' => get_lang('SessionList'));
+$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'session_list.php', 'name' => get_lang('SessionList'));
 
 // Database Table Definitions
-$tbl_user							= Database::get_main_table(TABLE_MAIN_USER);
-$tbl_session_rel_user				= Database::get_main_table(TABLE_MAIN_SESSION_USER);
+$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
+$tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 $table_access_url_user              = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 $url_id                             = api_get_current_access_url_id();
 
 $action = $_GET['action'];
 
-switch($action) {
+switch ($action) {
     case 'add_user_to_url':
         $user_id = $_REQUEST['user_id'];
         $result = UrlManager::add_user_to_url($user_id, $url_id);
@@ -58,7 +58,7 @@ if ($show_users_with_problems) {
 }
 
 
-foreach($session_list  as $session_item) {
+foreach ($session_list  as $session_item) {
     $session_id = $session_item['id'];
     $html .= '<h3>'.$session_item['name'].'</h3>';
 

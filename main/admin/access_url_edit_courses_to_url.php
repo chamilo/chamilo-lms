@@ -35,12 +35,12 @@ $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdm
 $interbreadcrumb[] = array('url' => 'access_urls.php', 'name' => get_lang('MultipleAccessURLs'));
 
 $add_type = 'multiple';
-if (isset($_REQUEST['add_type']) && $_REQUEST['add_type']!='') {
+if (isset($_REQUEST['add_type']) && $_REQUEST['add_type'] != '') {
 	$add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
 $access_url_id = 1;
-if (isset($_REQUEST['access_url_id']) && $_REQUEST['access_url_id']!='') {
+if (isset($_REQUEST['access_url_id']) && $_REQUEST['access_url_id'] != '') {
 	$access_url_id = Security::remove_XSS($_REQUEST['access_url_id']);
 }
 
@@ -157,23 +157,23 @@ $url_list = UrlManager::get_url_data();
 		<?php echo $link_add_type_unique ?>&nbsp;|&nbsp;<?php echo $link_add_type_multiple ?>
 	</div>
 	<br /><br />
-	<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?> >
+	<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>" style="margin:0px;" <?php if ($ajax_search) {echo ' onsubmit="valide();"'; }?> >
 		<?php echo get_lang('SelectUrl').' : '; ?>
 		<select name="access_url_id" onchange="javascript:send();">
 			<option value="0">-- <?php echo get_lang('SelectUrl')?> -- </option>
 			<?php
-			$url_selected='';
+			$url_selected = '';
 			foreach ($url_list as $url_obj) {
 				$checked = '';
 				if (!empty($access_url_id)) {
-					if ($url_obj[0]==$access_url_id) {
+					if ($url_obj[0] == $access_url_id) {
 						$checked = 'selected=true';
-						$url_selected=$url_obj[1];
+						$url_selected = $url_obj[1];
 					}
 				}
-				if ($url_obj['active']==1) {
+				if ($url_obj['active'] == 1) {
 					?>
-					<option <?php echo $checked;?> value="<?php echo $url_obj[0]; ?>"> <?php echo $url_obj[1]; ?></option>
+					<option <?php echo $checked; ?> value="<?php echo $url_obj[0]; ?>"> <?php echo $url_obj[1]; ?></option>
 				<?php
 				}
 			}
@@ -196,7 +196,7 @@ $url_list = UrlManager::get_url_data();
 				<td align="center">
 					<div id="content_source">
 						<?php
-						if($ajax_search) {
+						if ($ajax_search) {
 							?>
 							<input type="text" id="course_to_add" onkeyup="xajax_search_courses(this.value,document.formulaire.access_url_id.options[document.formulaire.access_url_id.selectedIndex].value)" />
 							<div id="ajax_list_courses"></div>
@@ -205,7 +205,7 @@ $url_list = UrlManager::get_url_data();
 							?>
 							<select id="origin_users" name="no_course_list[]" multiple="multiple" size="15" style="width:380px;">
 								<?php
-								foreach($no_course_list as $no_course) {
+								foreach ($no_course_list as $no_course) {
 									?>
 									<option value="<?php echo $no_course['id']; ?>"><?php echo $no_course['title'].' ('.$no_course['code'].')'; ?></option>
 								<?php
@@ -220,7 +220,7 @@ $url_list = UrlManager::get_url_data();
 				</td>
 				<td width="10%" valign="middle" align="center">
 					<?php
-					if($ajax_search) {
+					if ($ajax_search) {
 						?>
 						<button class="btn btn-default" type="button" onclick="remove_item(document.getElementById('destination_users'))" >
                             <em class="fa fa-arrow-left"></em>
@@ -243,7 +243,7 @@ $url_list = UrlManager::get_url_data();
 				<td align="center">
 					<select id="destination_users" name="course_list[]" multiple="multiple" size="15" style="width:380px;">
 						<?php
-						foreach($course_list as $course) {
+						foreach ($course_list as $course) {
 							$courseInfo = api_get_course_info_by_id($course['id']);
 							?>
 							<option value="<?php echo $course['id']; ?>"><?php echo $course['title'].' ('.$courseInfo['code'].')'; ?></option>
@@ -258,7 +258,7 @@ $url_list = UrlManager::get_url_data();
 				<td colspan="3" align="center">
 					<br />
 					<?php
-					if(isset($_GET['add']))
+					if (isset($_GET['add']))
 						echo '<button class="btn btn-default" onclick="valide()" >'.get_lang('AddCoursesToURL').'</button>';
 					else
 						echo '<button class="btn btn-default" onclick="valide()" >'.get_lang('EditCoursesToURL').'</button>';

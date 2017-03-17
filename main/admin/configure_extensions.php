@@ -26,7 +26,7 @@ if (isset($_POST['activeExtension'])) {
 
 			$rs = Database::query($sql);
 
-			if (Database::affected_rows($rs)>0){
+			if (Database::affected_rows($rs) > 0) {
 				$message = get_lang('ServiceActivated');
 			}
 
@@ -76,18 +76,18 @@ $sql = 'SELECT variable FROM '.$tbl_settings_current.'
 		WHERE variable LIKE "service_%" AND subkey="active" and selected_value="true"';
 
 $rs = Database::query($sql);
-while($row = Database::fetch_array($rs)){
+while ($row = Database::fetch_array($rs)) {
 	$listActiveServices[] = $row['variable'];
 }
 
 // javascript to handle accordion behaviour
 $javascript_message = '';
-if(!empty($message)){
+if (!empty($message)) {
 	$javascript_message = '
 	document.getElementById("message").style.display = "block";
 	var timer = setTimeout(hideMessage, 5000);';
 }
-$htmlHeadXtra[]= '<script>
+$htmlHeadXtra[] = '<script>
 var listeDiv;
 var extensionsHeader = new Array();
 var extensionsContent = new Array();
@@ -135,7 +135,7 @@ Display::display_header($nameTool);
 ?>
 <div id="message" style="display: none">
 	<?php
-	if(!empty($message))
+	if (!empty($message))
 		Display::display_normal_message($message)
 	?>
 </div>

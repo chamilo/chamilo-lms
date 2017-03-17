@@ -10,7 +10,7 @@
 // actions menu
 $new_thematic_plan_data = array();
 if (!empty($thematic_plan_data))
-foreach($thematic_plan_data as $thematic_item) {
+foreach ($thematic_plan_data as $thematic_item) {
     $thematic_simple_list[] = $thematic_item['description_type'];
     $new_thematic_plan_data[$thematic_item['description_type']] = $thematic_item;
 }
@@ -25,7 +25,7 @@ if (!empty($thematic_simple_list)) {
     }
 }
 
-$i=1;
+$i = 1;
 
 echo Display::tag('h2', $thematic_data['title']);
 echo $thematic_data['content'];
@@ -75,8 +75,8 @@ if ($action === 'thematic_plan_list') {
             $thematic_plan = null;
         } else {
             $thematic_plan = null;
-            $default['title['.$id.']']       = $title;
-            $default['description['.$id.']']= '';
+            $default['title['.$id.']'] = $title;
+            $default['description['.$id.']'] = '';
         }
         $form->setDefaults($default);
     }

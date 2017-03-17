@@ -87,7 +87,7 @@ function get_request_data($from, $number_of_items, $column, $direction)
     $from = intval($from);
     $number_of_items = intval($number_of_items);
     $column = intval($column);
-    $direction = !in_array(strtolower(trim($direction)), ['asc','desc']) ? 'asc' : $direction;
+    $direction = !in_array(strtolower(trim($direction)), ['asc', 'desc']) ? 'asc' : $direction;
 
     $sql = "SELECT
                 id AS col0,

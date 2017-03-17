@@ -18,7 +18,7 @@ api_protect_admin_script();
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
 // setting breadcrumbs
-$interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 
 $tool_name = null;
 
@@ -39,23 +39,23 @@ $check = Security::check_token('request');
 $token = Security::get_token();
 
 if ($action == 'add') {
-    $interbreadcrumb[]=array('url' => 'extra_fields.php?type='.$extra_field->type,'name' => $extra_field->pageName);
-    $interbreadcrumb[]=array('url' => 'extra_fields.php?type='.$extra_field->type.'&action=edit&id='.$extra_field_info['id'],'name' => $extra_field_info['display_text']);
-    $interbreadcrumb[]=array('url' => 'extra_field_options.php?type='.$extra_field->type.'&field_id='.$extra_field_info['id'], 'name' => get_lang('EditExtraFieldOptions'));
-    $interbreadcrumb[]=array('url' => '#','name' => get_lang('Add'));
+    $interbreadcrumb[] = array('url' => 'extra_fields.php?type='.$extra_field->type, 'name' => $extra_field->pageName);
+    $interbreadcrumb[] = array('url' => 'extra_fields.php?type='.$extra_field->type.'&action=edit&id='.$extra_field_info['id'], 'name' => $extra_field_info['display_text']);
+    $interbreadcrumb[] = array('url' => 'extra_field_options.php?type='.$extra_field->type.'&field_id='.$extra_field_info['id'], 'name' => get_lang('EditExtraFieldOptions'));
+    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Add'));
 } elseif ($action == 'edit') {
-    $interbreadcrumb[]=array('url' => 'extra_fields.php?type='.$extra_field->type,'name' => $extra_field->pageName);
-    $interbreadcrumb[]=array('url' => 'extra_fields.php?type='.$extra_field->type.'&action=edit&id='.$extra_field_info['id'],'name' => $extra_field_info['display_text']);
-    $interbreadcrumb[]=array('url' => 'extra_field_options.php?type='.$extra_field->type.'&field_id='.$extra_field_info['id'], 'name' => get_lang('EditExtraFieldOptions'));
+    $interbreadcrumb[] = array('url' => 'extra_fields.php?type='.$extra_field->type, 'name' => $extra_field->pageName);
+    $interbreadcrumb[] = array('url' => 'extra_fields.php?type='.$extra_field->type.'&action=edit&id='.$extra_field_info['id'], 'name' => $extra_field_info['display_text']);
+    $interbreadcrumb[] = array('url' => 'extra_field_options.php?type='.$extra_field->type.'&field_id='.$extra_field_info['id'], 'name' => get_lang('EditExtraFieldOptions'));
 
-    $interbreadcrumb[]=array('url' => '#','name' => get_lang('Edit'));
+    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Edit'));
 } else {
-    $interbreadcrumb[]=array('url' => 'extra_fields.php?type='.$extra_field->type,'name' => $extra_field->pageName);
-    $interbreadcrumb[]=array(
+    $interbreadcrumb[] = array('url' => 'extra_fields.php?type='.$extra_field->type, 'name' => $extra_field->pageName);
+    $interbreadcrumb[] = array(
         'url' =>  'extra_fields.php?type='.$extra_field->type.'&action=edit&id='.$extra_field_info['id'],
         'name' => $extra_field_info['display_text']
     );
-    $interbreadcrumb[]=array('url' => '#','name' => get_lang('EditExtraFieldOptions'));
+    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('EditExtraFieldOptions'));
 }
 
 //jqgrid will use this URL to do the selects
@@ -108,12 +108,12 @@ $extra_params['height'] = 'auto';
 
 //With this function we can add actions to the jgrid (edit, delete, etc)
 $action_links = 'function action_formatter(cellvalue, options, rowObject) {
-    return \'<a href="?action=edit&'.$params.'&id=\'+options.rowId+\'">'.Display::return_icon('edit.png',get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>'.
-    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(get_lang("ConfirmYourChoice"))."\'".')) return false;"  href="?sec_token='.$token.'&action=delete&'.$params.'&id=\'+options.rowId+\'">'.Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>'.
+    return \'<a href="?action=edit&'.$params.'&id=\'+options.rowId+\'">'.Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>'.
+    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(get_lang("ConfirmYourChoice"))."\'".')) return false;"  href="?sec_token='.$token.'&action=delete&'.$params.'&id=\'+options.rowId+\'">'.Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>'.
     '\';
  }';
 
-$htmlHeadXtra[]='<script>
+$htmlHeadXtra[] = '<script>
 $(function() {
     // grid definition see the $obj->display() function
     '.Display::grid_js(

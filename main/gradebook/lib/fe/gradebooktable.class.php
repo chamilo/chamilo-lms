@@ -254,10 +254,11 @@ class GradebookTable extends SortableTable
         }
 
         // Categories.
-        if (!empty($data_array))
-        foreach ($data_array as $data) {
+        if (!empty($data_array)) {
+                foreach ($data_array as $data) {
             // list of items inside the gradebook (exercises, lps, forums, etc)
             $row  = array();
+        }
             /** @var AbstractLink $item */
             $item = $mainCategory = $data[0];
 

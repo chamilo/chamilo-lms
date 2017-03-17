@@ -38,7 +38,7 @@ if ($action == 'delete') {
     $idChecked = $_REQUEST['idChecked'];
     if (is_array($idChecked) && count($idChecked)>0) {
         $my_temp = array();
-        foreach ($idChecked as $id){
+        foreach ($idChecked as $id) {
             $my_temp[]= Database::escape_string($id);// forcing the escape_string
         }
         $idChecked = $my_temp;

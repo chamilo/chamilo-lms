@@ -379,7 +379,7 @@ switch ($action) {
 				if ($_POST) {
 					Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'));
 				}
-			Blog :: display_form_new_post($blog_id);
+			$formAdd = Blog :: display_form_new_post($blog_id);
 		} else {
 				if (isset($_GET['filter']) && !empty($_GET['filter'])) {
 					Blog :: display_day_results($blog_id, Database::escape_string($_GET['filter']));
@@ -390,6 +390,8 @@ switch ($action) {
 		} else {
 			api_not_allowed();
 		}
+                $tpl->assign('content', $formAdd);
+                $blogLayout = $tpl->get_template('blog/layout.tpl');
 		break;
 	case 'view_post' :
 		$postArticle = Blog :: display_post($blog_id, intval($_GET['post_id']));
@@ -408,7 +410,7 @@ switch ($action) {
 				if ($_POST) {
 					Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'));
 				}
-                Blog :: display_form_edit_post($blog_id, intval($_GET['post_id']));
+                $formEdit = Blog :: display_form_edit_post($blog_id, intval($_GET['post_id']));
 			} else {
 				if (isset ($_GET['filter']) && !empty ($_GET['filter'])) {
 					Blog :: display_day_results($blog_id, Database::escape_string($_GET['filter']));
@@ -419,42 +421,51 @@ switch ($action) {
 		} else {
 			api_not_allowed();
 		}
-
+                $tpl->assign('content', $formEdit);
+                $blogLayout = $tpl->get_template('blog/layout.tpl');
 		break;
 	case 'manage_members' :
+                $manage = null;
 		if (api_is_allowed('BLOG_'.$blog_id, 'member_management')) {
-			Blog :: display_form_user_subscribe($blog_id);
+			$manage .= Blog :: display_form_user_subscribe($blog_id);
 			echo '<br /><br />';
-			Blog :: display_form_user_unsubscribe($blog_id);
+			$manage .= Blog :: display_form_user_unsubscribe($blog_id);
 		} else {
 			api_not_allowed();
-        }
-
+                }
+                $tpl->assign('content', $manage);
+                $blogLayout = $tpl->get_template('blog/layout.tpl');
 		break;
 	case 'manage_rights' :
-		Blog :: display_form_user_rights($blog_id);
+		$manage =Blog :: display_form_user_rights($blog_id);
+                $tpl->assign('content', $manage);
+                $blogLayout = $tpl->get_template('blog/layout.tpl');
 		break;
 	case 'manage_tasks' :
 		if (api_is_allowed('BLOG_'.$blog_id, 'task_management')) {
-			if (isset($_GET['do']) && $_GET['do'] == 'add') {
-				Blog:: display_new_task_form($blog_id);
+                    $taks = null;
+                    if (isset($_GET['do']) && $_GET['do'] == 'add') {
+				$taks .= Blog:: display_new_task_form($blog_id);
 			}
 			if (isset($_GET['do']) && $_GET['do'] == 'assign') {
-				Blog:: display_assign_task_form($blog_id);
+				$taks .= Blog:: display_assign_task_form($blog_id);
 			}
 			if (isset($_GET['do']) && $_GET['do'] == 'edit') {
-				Blog:: display_edit_task_form(
+				$taks .= Blog:: display_edit_task_form(
 					$blog_id,
 					intval($_GET['task_id'])
 				);
 			}
 			if (isset($_GET['do']) && $_GET['do'] == 'edit_assignment') {
-				Blog :: display_edit_assigned_task_form($blog_id, intval($_GET['task_id']), intval($_GET['user_id']));
+				$taks .= Blog :: display_edit_assigned_task_form($blog_id, intval($_GET['task_id']), intval($_GET['user_id']));
 			}
-			Blog :: display_task_list($blog_id);
-			echo '<br /><br />';
-			Blog :: display_assigned_task_list($blog_id);
-			echo '<br /><br />';
+			$taks .= Blog :: display_task_list($blog_id);
+			
+			$taks .= Blog :: display_assigned_task_list($blog_id);
+			
+                        
+                        $tpl->assign('content', $taks);
+                        $blogLayout = $tpl->get_template('blog/layout.tpl');
         } else {
             api_not_allowed();
         }

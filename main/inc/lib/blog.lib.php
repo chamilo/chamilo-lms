@@ -1341,7 +1341,7 @@ class Blog
             $form->addHidden('new_post_submit', 'true');
             $form->addButton('save', get_lang('Save'));
 
-            $form->display();
+            return $form->return_form();
         } else {
             api_not_allowed();
         }
@@ -1394,7 +1394,7 @@ class Blog
         $form->addHidden('post_id', intval($_GET['post_id']));
         $form->addButton('save', get_lang('Save'));
         $form->setDefaults($blog_post);
-        $form->display();
+        return $form->return_form();
     }
 
     /**
@@ -1407,7 +1407,7 @@ class Blog
     {
         global $charset;
         $course_id = api_get_course_int_id();
-
+        $html = null;
         if (api_is_allowed('BLOG_' . $blog_id, 'article_add')) {
             $tbl_blogs_tasks = Database::get_course_table(TABLE_BLOGS_TASKS);
             $counter = 0;

@@ -1160,7 +1160,7 @@ class ImportCsv
                     } else {
                         $report['mail_not_sent_announcement_exists']++;
                         $this->logger->addInfo(
-                            "Mail NOT sent. An announcement seems to be already saved in $info"
+                            "Mail NOT sent. An announcement seems to be already saved in '$info'"
                         );
                     }
                 } else {
@@ -1168,7 +1168,6 @@ class ImportCsv
                         $report['mail_not_sent_because_date']++;
                     }
                 }
-
                 $content = '';
                 if ($update && isset($item['item_id'])) {
                     //the event already exists, just update
@@ -1185,7 +1184,8 @@ class ImportCsv
                         $eventComment,
                         $color,
                         false,
-                        false
+                        false,
+                        $this->defaultAdminId
                     );
 
                     if ($eventResult !== false) {
@@ -1215,7 +1215,6 @@ class ImportCsv
                     );
 
                     if (!empty($eventId)) {
-                        //$extraFieldValue->is_course_model = true;
                         $extraFieldValue->save(
                             array(
                                 'value' => $externalEventId,

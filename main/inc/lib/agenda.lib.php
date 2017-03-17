@@ -675,6 +675,7 @@ class Agenda
      * @param string $color
      * @param bool $addAnnouncement
      * @param bool $updateContent
+     * @param int $authorId
      *
      * @return null|false
      */
@@ -691,11 +692,13 @@ class Agenda
         $comment = null,
         $color = '',
         $addAnnouncement = false,
-        $updateContent = true
+        $updateContent = true,
+        $authorId = 0
     ) {
         $start = api_get_utc_datetime($start);
         $end = api_get_utc_datetime($end);
         $allDay = isset($allDay) && $allDay == 'true' ? 1 : 0;
+        $authorId = empty($authorId) ? api_get_user_id() : (int) $authorId;
 
         switch ($this->type) {
             case 'personal':
@@ -846,7 +849,7 @@ class Agenda
                                 TOOL_CALENDAR_EVENT,
                                 $id,
                                 'visible',
-                                api_get_user_id(),
+                                $authorId,
                                 $groupIid,
                                 null,
                                 $start,
@@ -882,7 +885,7 @@ class Agenda
                                         TOOL_CALENDAR_EVENT,
                                         $id,
                                         'visible',
-                                        api_get_user_id(),
+                                        $authorId,
                                         $groupIidItem,
                                         0,
                                         $start,
@@ -924,7 +927,7 @@ class Agenda
                                         TOOL_CALENDAR_EVENT,
                                         $id,
                                         'visible',
-                                        api_get_user_id(),
+                                        $authorId,
                                         $groupIid,
                                         $userId,
                                         $start,

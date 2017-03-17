@@ -132,6 +132,13 @@ if ($action == 'thematic_list') {
                     }
                 }
                 if (api_get_session_id() == $thematic['session_id']) {
+                    $actions_first_col .= Display::url(
+                        Display::return_icon('pdf.png'),
+                        api_get_self().'?'.api_get_cidreq()."$url_token&".http_build_query([
+                            'action' => 'export_single_thematic',
+                            'thematic_id' => $my_thematic_id
+                        ])
+                    );
                     $actions_first_col .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_edit&thematic_id='
                         .$my_thematic_id.$params.$url_token.'">'
                         .Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>';

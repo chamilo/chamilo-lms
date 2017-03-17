@@ -73,8 +73,9 @@ if ($global) {
 //$form->addElement('submit','submit',get_lang('Filter'));
 $form->addButtonFilter(get_lang('Filter'));
 
-if (!empty($_REQUEST['course_code']))
+if (!empty($_REQUEST['course_code'])) {
     $selected_course = $_REQUEST['course_code'];
+}
 if (!empty($selected_course)) {
     $selected_course = api_get_course_info($selected_course);
     $course_list = array($selected_course);

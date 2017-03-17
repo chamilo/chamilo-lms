@@ -23,8 +23,9 @@ $chamilo_langs = array(
 );
 $lang_match = $chamilo_langs[get_preferred_language($available_langs)];
 // recover previous value ...
-if (isset($_SESSION['user_language_choice']))
+if (isset($_SESSION['user_language_choice'])) {
 	$lang_match = $_SESSION['user_language_choice'];
+}
 
 // Chamilo parameter, on logout
 if (isset($_REQUEST['language']) && !empty($_REQUEST['language']) && in_array($_REQUEST['language'], $chamilo_langs)) {

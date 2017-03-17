@@ -1021,8 +1021,8 @@ class Blog
                     'id_blog' => $blog_post['blog_id'],
                     'c_id' => $blog_post['c_id'],
                     'id_post' => $blog_post['post_id'],
-                    'id_autor' => $blog_post['author_id'],
-                    'autor' => $blog_post['firstname'].' ' . $blog_post['lastname'],
+                    'id_author' => $blog_post['author_id'],
+                    'author' => $blog_post['firstname'].' ' . $blog_post['lastname'],
                     'username' => $blog_post['username'],
                     'title' => stripslashes($blog_post['title']),
                     'extract' =>  api_get_short_text_from_html(stripslashes($blog_post['full_text']),400),
@@ -1243,6 +1243,11 @@ class Blog
                 $ratingSelect = Blog::display_rating_form('comment', $blog_id, $post_id, $comment['comment_id']);
             }
             
+            $scoreRanking = Blog::display_rating('comment', $blog_id, $comment['comment_id']);
+            
+            //Files
+            $fileArray = get_blog_attachment($blog_id,$post_id, $comment['comment_id']);
+            
             $comments = [
                 'iid' => $comment['iid'],
                 'id_comment' => $comment['comment_id'],
@@ -1259,8 +1264,10 @@ class Blog
                 'info_user' => $infoUser,
                 'username' => $comment['username'],
                 'color' => $comment['color'],
+                'files' => $fileArray,
                 'actions' => $commentActions,
-                'ranking' => $ratingSelect
+                'form_ranking' => $ratingSelect,
+                'score_ranking' => $scoreRanking
             ];
             
             $listComments[] = $comments;
@@ -1268,13 +1275,9 @@ class Blog
             // Prepare data
             
            /* 
-            
-
             if (!is_null($comment['task_id'])) {
                 $border_color = ' border-left: 3px solid #' . $comment['color'];
             }
-
-            
 
             // Output...
             $margin = $current_level * 30;

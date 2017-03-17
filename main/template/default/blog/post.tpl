@@ -53,13 +53,17 @@
                         <div class="info-post">
                             <span class="date"><i class="fa fa-clock-o"></i> {{ post.post_date }}</span> 
                             <span class='comments'><i class="fa fa-comment-o"></i> {{ post.n_comments }} {{ 'Comments' | get_lang }} </span>
-                            <span class="autor"><i class="fa fa-user"></i> {{ post.autor }}</span>
+                            <span class="autor"><i class="fa fa-user"></i>
+                                <a href="{{ _p.web }}main/social/profile.php?u={{ post.id_author }}">
+                                {{ post.author }}
+                                </a>
+                            </span>
                         </div>
                         <div class="content-post">
                             {{ post.content }}
                         </div>
                         {% if post.files  %}
-                            <div class="files">
+                            <div class="well well-sm files">
                                 <i class="fa fa-paperclip" aria-hidden="true"></i> <a href="download.php?file={{ post.files.path }}">{{ post.files.filename }}</a>
                             </div>
                         {% endif %}
@@ -80,11 +84,24 @@
                                         <h4 class="media-heading">{{ item.title }}</h4>
                                         <div class="info-post">
                                             <span class="date"><i class="fa fa-clock-o"></i> {{ item.comment_date }}</span> 
-                                            <span class="autor"><i class="fa fa-user"></i> {{ item.name_author }}</span>
+                                            <span class="autor"><i class="fa fa-user"></i>
+                                                <a href="{{ _p.web }}main/social/profile.php?u={{ item.id_author }}">
+                                                    {{ item.name_author }}
+                                                </a>
+                                            </span>
+                                            <span class="score"><i class="fa fa-star" aria-hidden="true"></i> {{ item.score_ranking  }}</span>
                                         </div>
-                                      {{ item.content }}
+                                        {{ item.content }}
+                                      
+                                        {% if item.files  %}
+                                            <div class="well well-sm files">
+                                                <i class="fa fa-paperclip" aria-hidden="true"></i> <a href="download.php?file={{ item.files.path }}">{{ item.files.filename }}</a>
+                                                <p>{{ item.files.comment }}</p>
+                                            </div>
+                                        {% endif %}
+                                      
                                       <div class="ranking">
-                                          {{ item.ranking }}
+                                          {{ item.form_ranking }} 
                                       </div>
                                     </div>
                                 </div>

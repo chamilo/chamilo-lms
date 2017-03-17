@@ -52,7 +52,7 @@
                 <article id="post-{{ item.id_post }}" class="article-post">
                     <div class="panel panel-default">
                         <div class="panel-body">
-                            <h3 class="title-post"><a href="blog.php?action=view_post&blog_id={{ item.id_blog }}&post_id={{item.id_post}}#add_comment" title="{{ item.title }}">{{ item.title }}</a></h3>
+                            <h3 class="title-post"><a href="blog.php?action=view_post&{{ _p.web_cid_query }}&blog_id={{ item.id_blog }}&post_id={{item.id_post}}#add_comment" title="{{ item.title }}">{{ item.title }}</a></h3>
 
                             <div class="info-post">
                                 <span class="date"><i class="fa fa-clock-o"></i> {{ item.post_date }}</span> 
@@ -63,7 +63,7 @@
                                 <p>{{ item.extract }} <a title="{{ 'ReadMore' | get_lang}}" href="blog.php?action=view_post&blog_id={{ item.id_blog }}&post_id={{item.id_post}}#add_comment">{{ 'ReadMore' | get_lang}}</a></p>
                             </div>
                             {% if item.files  %}
-                                <div class="files">
+                                <div class="well well-sm files">
                                     <i class="fa fa-paperclip" aria-hidden="true"></i> <a href="download.php?file={{ item.files.path }}">{{ item.files.filename }}</a>
                                 </div>
                             {% endif %}

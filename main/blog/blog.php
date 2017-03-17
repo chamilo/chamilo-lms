@@ -231,6 +231,14 @@ switch ($action) {
         );
 		Display :: display_header($nameTools, 'Blogs');
 		break;
+        case 'view_post' :
+		$nameTools = '';
+                $interbreadcrumb[] = array(
+                    'url' => "blog.php?blog_id=$blog_id&".api_get_cidreq(),
+                    "name" => Blog:: get_blog_title($blog_id),
+                );
+		Display :: display_header($nameTools, 'Blogs');
+		break;
 	case 'manage_tasks' :
 		$nameTools = get_lang('TaskManager');
         $interbreadcrumb[] = array(

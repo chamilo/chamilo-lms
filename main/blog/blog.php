@@ -400,27 +400,26 @@ switch ($action) {
 		break;
 	case 'edit_post' :
 		$task_id = (isset ($_GET['task_id']) && is_numeric($_GET['task_id'])) ? $_GET['task_id'] : 0;
-
 		if (api_is_allowed('BLOG_'.$blog_id, 'article_edit', $task_id)) {
-			// we show the form if
-			// 1. no post data
-			// 2. there is post data and the required field is empty
-			if (!$_POST OR (!empty($_POST) AND empty($_POST['post_title']))) {
-				// if there is post data there is certainly an error in the form
-				if ($_POST) {
-					Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'));
-				}
-                $formEdit = Blog::display_form_edit_post($blog_id, intval($_GET['post_id']));
-			} else {
-				if (isset ($_GET['filter']) && !empty ($_GET['filter'])) {
-					Blog::display_day_results($blog_id, Database::escape_string($_GET['filter']));
-				} else {
-					Blog::display_blog_posts($blog_id);
-				}
-			}
+                    // we show the form if
+                    // 1. no post data
+                    // 2. there is post data and the required field is empty
+                    if (!$_POST OR (!empty($_POST) AND empty($_POST['post_title']))) {
+                            // if there is post data there is certainly an error in the form
+                        if ($_POST) {
+                            Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'));
+                        }                        
+                    } else {
+                        if (isset ($_GET['filter']) && !empty ($_GET['filter'])) {
+                            Blog::display_day_results($blog_id, Database::escape_string($_GET['filter']));
+                        } else {
+                            Blog::display_blog_posts($blog_id);    
+                        }
+                    }
 		} else {
 			api_not_allowed();
 		}
+                $formEdit = Blog::display_form_edit_post($blog_id, intval($_GET['post_id']));
                 $tpl->assign('content', $formEdit);
                 $blogLayout = $tpl->get_template('blog/layout.tpl');
 		break;
@@ -479,12 +478,21 @@ switch ($action) {
         }
 		break;
 	case 'view_search_result' :
-		Blog :: display_search_results($blog_id, Database::escape_string($_GET['q']));
+		$listArticles = Blog :: display_search_results($blog_id, Database::escape_string($_GET['q']));
+                $titleSearch = get_lang('SearchResults');
+                $tpl->assign('search', $titleSearch);
+                $tpl->assign('articles', $listArticles);
+                $blogLayout = $tpl->get_template('blog/blog.tpl');
 		break;
     case '':
     default:
 		if (isset ($_GET['filter']) && !empty ($_GET['filter'])) {
-			Blog::display_day_results($blog_id, Database::escape_string($_GET['filter']));
+			$listArticles = Blog::display_day_results($blog_id, Database::escape_string($_GET['filter']));
+                        $dateSearch = api_format_date($_GET['filter'], DATE_FORMAT_LONG);
+                        $titleSearch = get_lang('PostsOf') . ' ' . $dateSearch;
+                        $tpl->assign('search', $titleSearch);
+                        $tpl->assign('articles', $listArticles);
+                        $blogLayout = $tpl->get_template('blog/blog.tpl');
 		} else {
 			$listArticles = Blog::display_blog_posts($blog_id);
                         $tpl->assign('articles', $listArticles);

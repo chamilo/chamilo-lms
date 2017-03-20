@@ -923,8 +923,8 @@ class Blog
         $query_string = '('.implode('OR',$query_string) . ')';
 
         // Display the posts
-        echo '<span class="blogpost_title">' . get_lang('SearchResults') . '</span>';
-        Blog::display_blog_posts($blog_id, $query_string);
+        //echo '<span class="blogpost_title">' . get_lang('SearchResults') . '</span>';
+        return Blog::display_blog_posts($blog_id, $query_string);
     }
 
     /**
@@ -935,16 +935,16 @@ class Blog
      */
     public static function display_day_results($blog_id, $query_string)
     {
-        $date_output = $query_string;
+        //$date_output = $query_string;
         $date = explode('-',$query_string);
         $query_string = ' DAYOFMONTH(date_creation) =' . intval($date[2]) . ' AND MONTH(date_creation) =' . intval($date[1]) . ' AND YEAR(date_creation) =' . intval($date[0]);
-
         // Put date in correct output format
-        $date_output = api_format_date($date_output, DATE_FORMAT_LONG);
-
+        //$date_output = api_format_date($date_output, DATE_FORMAT_LONG);
         // Display the posts
-        echo '<span class="blogpost_title">' . get_lang('PostsOf') . ': ' . $date_output . '</span>';
-        Blog::display_blog_posts($blog_id, $query_string);
+        //echo '<span class="blogpost_title">' . get_lang('PostsOf') . ': ' . $date_output . '</span>';
+        $list = Blog::display_blog_posts($blog_id, $query_string);
+        
+        return $list;
     }
 
     /**

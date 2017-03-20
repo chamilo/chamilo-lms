@@ -40,12 +40,18 @@
     <div class="col-md-9">
         <div class="blog">
             <div id="blog-header">
+                {% if not search %}
                 <div class="title">
                     <h1>{{ title }}</h1>
                 </div>
                 <div class="description">
                     {{ description }}
                 </div>
+                {% else %}
+                <div class="title">
+                    <h1>{{ search }}</h1>
+                </div>
+                {% endif %}
             </div>
             <div id="list-articles">
                 {% for item in articles %}

@@ -12,7 +12,6 @@ $blog_id = intval($_GET['blog_id']);
 if (empty($blog_id)) {
     api_not_allowed(true);
 }
-$tpl = new Template(get_lang('Blog'));
 
 $this_section = SECTION_COURSES;
 $current_course_tool = TOOL_BLOGS;
@@ -229,7 +228,6 @@ switch ($action) {
             'url' => "blog.php?blog_id=$blog_id&".api_get_cidreq(),
             "name" => Blog:: get_blog_title($blog_id),
         );
-        Display::display_header($nameTools, 'Blogs');
         break;
     case 'view_post' :
         $nameTools = '';
@@ -237,7 +235,6 @@ switch ($action) {
             'url' => "blog.php?blog_id=$blog_id&".api_get_cidreq(),
             "name" => Blog:: get_blog_title($blog_id),
         );
-        Display::display_header($nameTools, 'Blogs');
         break;
     case 'manage_tasks' :
         $nameTools = get_lang('TaskManager');
@@ -245,7 +242,6 @@ switch ($action) {
             'url' => "blog.php?blog_id=$blog_id&".api_get_cidreq(),
             "name" => Blog:: get_blog_title($blog_id),
         );
-        Display::display_header($nameTools, 'Blogs');
         break;
     case 'manage_members' :
         $nameTools = get_lang('MemberManager');
@@ -253,7 +249,6 @@ switch ($action) {
             'url' => "blog.php?blog_id=$blog_id&".api_get_cidreq(),
             "name" => Blog:: get_blog_title($blog_id),
         );
-        Display::display_header($nameTools, 'Blogs');
         break;
     case 'manage_rights' :
         $nameTools = get_lang('RightsManager');
@@ -261,7 +256,6 @@ switch ($action) {
             'url' => "blog.php?blog_id=$blog_id&".api_get_cidreq(),
             'name' => Blog:: get_blog_title($blog_id),
         );
-        Display::display_header($nameTools, 'Blogs');
         break;
     case 'view_search_result' :
         $nameTools = get_lang('SearchResults');
@@ -269,7 +263,6 @@ switch ($action) {
             'url' => "blog.php?blog_id=$blog_id&".api_get_cidreq(),
             'name' => Blog:: get_blog_title($blog_id),
         );
-        Display::display_header($nameTools, 'Blogs');
         break;
     case 'execute_task' :
         $nameTools = get_lang('ExecuteThisTask');
@@ -277,11 +270,9 @@ switch ($action) {
             'url' => "blog.php?blog_id=$blog_id&".api_get_cidreq(),
             'name' => Blog:: get_blog_title($blog_id),
         );
-        Display::display_header($nameTools, 'Blogs');
         break;
     default :
         $nameTools = Blog:: get_blog_title($blog_id);
-        Display::display_header($nameTools, 'Blogs');
 }
 
 // feedback messages
@@ -294,35 +285,29 @@ if (!empty($return_message)) {
     }
 }
 
-$html = null;
-$actionsLeft = Display::url(
+$actionsLeft = [];
+$actionsLeft[] = Display::url(
     Display::return_icon('blog.png', get_lang('Home'), '', ICON_SIZE_MEDIUM),
     api_get_self().'?blog_id='.$blog_id.'&'.api_get_cidreq()
 );
 if (api_is_allowed('BLOG_'.$blog_id, 'article_add')) {
-    $actionsLeft .= Display::url(
+    $actionsLeft[] = Display::url(
         Display::return_icon('new_article.png', get_lang('NewPost'), '', ICON_SIZE_MEDIUM),
         api_get_self().'?action=new_post&amp;blog_id='.$blog_id
     );
 }
 if (api_is_allowed('BLOG_'.$blog_id, 'task_management')) {
-    $actionsLeft .= Display::url(
+    $actionsLeft[] = Display::url(
         Display::return_icon('blog_tasks.png', get_lang('TaskManager'), '', ICON_SIZE_MEDIUM),
         api_get_self().'?action=manage_tasks&amp;blog_id='.$blog_id
     );
 }
 if (api_is_allowed('BLOG_'.$blog_id, 'member_management')) {
-    $actionsLeft .= Display::url(
+    $actionsLeft[] = Display::url(
         Display::return_icon('blog_admin_users.png', get_lang('MemberManager'), '', ICON_SIZE_MEDIUM),
         api_get_self().'?action=manage_members&amp;blog_id='.$blog_id
     );
 }
-$html .= Display::toolbarAction('action-blog', array($actionsLeft));
-
-echo $html;
-
-// Tool introduction
-Display::display_introduction_section(TOOL_BLOGS);
 
 $titleBlog = Blog::get_blog_title($blog_id);
 $descriptionBlog = Blog::get_blog_subtitle($blog_id);
@@ -372,6 +357,8 @@ if (isset ($_GET['task_id']) && is_numeric($_GET['task_id'])) {
     }
 }
 
+$tpl = new Template($nameTools);
+$tpl->setHelp('Blogs');
 $tpl->assign('title', $titleBlog);
 $tpl->assign('description', $descriptionBlog);
 $tpl->assign('id_blog', $idBlog);
@@ -517,8 +504,8 @@ switch ($action) {
         break;
 }
 
-
-$tpl->display($blogLayout);
-
-// Display the footer
-Display::display_footer();
+$content = Display::return_introduction_section(TOOL_BLOGS);
+$content .= $tpl->fetch($blogLayout);
+$tpl->assign('actions', implode(PHP_EOL, $actionsLeft));
+$tpl->assign('content', $content);
+$tpl->display_one_col_template();

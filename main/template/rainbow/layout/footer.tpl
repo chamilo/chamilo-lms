@@ -13,10 +13,10 @@
         <div class="row">
             <div id="footer_left" class="col-md-8">              
                 <div class="partners">
-                    <a href="http://www.cavilam.com" target="_blank">
+                    <a href="http://www.bosch-stiftung.de" target="_blank">
                         <img src="{{ _p.web_css_theme }}images/rbs_logo_rgb.png"/>
                     </a>
-                    <a href="http://www.bosch-stiftung.de" target="_blank">
+                    <a href="http://www.cavilam.com" target="_blank">
                         <img src="{{ _p.web_css_theme }}images/logo_cavilam.png"/>
                     </a>
                     <a href="http://www.dw.com" target="_blank">

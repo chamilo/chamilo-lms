@@ -59,18 +59,6 @@ if (!empty($_POST['edit_post_submit'])) {
     $return_message = array('type' => 'confirmation', 'message' => get_lang('BlogEdited'));
 }
 
-if (!empty($_POST['new_comment_submit'])) {
-    Blog:: create_comment(
-        $_POST['title'],
-        $_POST['comment'],
-        $_POST['post_file_comment'],
-        $blog_id,
-        $_GET['post_id'],
-        $_POST['comment_parent_id']
-    );
-    $return_message = array('type' => 'confirmation', 'message' => get_lang('CommentAdded'));
-}
-
 if (!empty($_POST['new_task_submit'])) {
     Blog:: create_task(
         $blog_id,
@@ -127,20 +115,6 @@ if (isset($_POST['assign_task_edit_submit'])) {
     $return_message = array(
         'type' => 'confirmation',
         'message' => get_lang('AssignedTaskEdited'),
-    );
-}
-if (!empty($_POST['new_task_execution_submit'])) {
-    Blog:: create_comment(
-        $safe_comment_title,
-        $safe_comment_text,
-        $blog_id,
-        (int) $_GET['post_id'],
-        $_POST['comment_parent_id'],
-        $_POST['task_id']
-    );
-    $return_message = array(
-        'type' => 'confirmation',
-        'message' => get_lang('CommentCreated'),
     );
 }
 if (!empty($_POST['register'])) {
@@ -475,10 +449,15 @@ switch ($action) {
         break;
     case 'execute_task' :
         if (isset ($_GET['post_id'])) {
-            Blog::display_post($blog_id, intval($_GET['post_id']));
+            $post = Blog::display_post($blog_id, intval($_GET['post_id']));
+
+            $tpl->assign('post', $post);
         } else {
-            Blog::display_select_task_post($blog_id, intval($_GET['task_id']));
+            $taskPost = Blog::display_select_task_post($blog_id, intval($_GET['task_id']));
+            $tpl->assign('content', $taskPost);
         }
+
+        $blogLayout = $tpl->get_template('blog/post.tpl');
         break;
     case 'view_search_result' :
         $listArticles = Blog:: display_search_results($blog_id, Database::escape_string($_GET['q']));

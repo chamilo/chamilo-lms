@@ -1103,10 +1103,6 @@ class Blog
             $blogActions .= '</a>';
         }
 
-        if (api_is_allowed('BLOG_'.$blog_id, 'article_rate')) {
-            $ratingSelect = Blog::display_rating_form('post', $blog_id, $post_id);
-        }
-
         $article = [
             'id_blog' => $blog_post['blog_id'],
             'c_id' => $blog_post['c_id'],
@@ -1124,6 +1120,9 @@ class Blog
             'comments' => $listComments,
             'form_html' => $formComments,
             'actions' => $blogActions,
+            'frm_rating' => api_is_allowed('BLOG_'.$blog_id, 'article_rate')
+                ? Blog::display_rating_form('post', $blog_id, $post_id)
+                : null
         ];
 
         return $article;
@@ -1145,9 +1144,8 @@ class Blog
         $tbl_blogs_tasks = Database::get_course_table(TABLE_BLOGS_TASKS);
         global $charset;
 
-
         $course_id = api_get_course_int_id();
-
+        $listComments = [];
         // Select top level comments
         $next_level = $current_level + 1;
         $sql = "SELECT comments.*, user.lastname, user.firstname, user.username, task.color
@@ -1185,8 +1183,17 @@ class Blog
             $comment_text = stripslashes($comment_text);
             $infoUser = UserManager::get_user_picture_path_by_id($comment['author_id']);
 
+            $commentActions .= Display::toolbarButton(
+                get_lang('ReplyToThisComment'),
+                '#',
+                'reply',
+                'default',
+                ['data-id' => $comment['iid'], 'role' => 'button', 'class' => 'btn-reply-to'],
+                false
+            );
+
             if (api_is_allowed('BLOG_'.$blog_id, 'article_comments_delete', $task_id)) {
-                $commentActions .= '<a class="btn btn-default" href="blog.php?action=view_post&blog_id='.$blog_id.'&post_id='.$post_id.'&do=delete_comment&comment_id='.$comment['comment_id'].'&task_id='.$task_id.'" title="'.get_lang(
+                $commentActions .= ' <a class="btn btn-default" href="blog.php?action=view_post&blog_id='.$blog_id.'&post_id='.$post_id.'&do=delete_comment&comment_id='.$comment['comment_id'].'&task_id='.$task_id.'" title="'.get_lang(
                         'DeleteThisComment'
                     ).'" onclick="javascript:if(!confirm(\''.addslashes(
                         api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset)
@@ -1227,44 +1234,10 @@ class Blog
                 'actions' => $commentActions,
                 'form_ranking' => $ratingSelect,
                 'score_ranking' => $scoreRanking,
+                'comments' => self::get_threaded_comments($comment['iid'], $next_level, $blog_id, $post_id)
             ];
 
             $listComments[] = $comments;
-
-            // Prepare data
-
-            /*
-             if (!is_null($comment['task_id'])) {
-                 $border_color = ' border-left: 3px solid #' . $comment['color'];
-             }
-
-             // Output...
-             $margin = $current_level * 30;
-
-             $html.=  '<div class="blogpost_comment" style="margin-left: ' . $margin . 'px;' . $border_color . '">';
-                 $html.= '<span class="blogpost_comment_title"><a href="#add_comment" onclick="document.getElementById(\'comment_parent_id\').value=\'' . $comment['comment_id'] . '\'; document.getElementById(\'comment_title\').value=\'Re: '.addslashes($comment['title']) . '\'" title="' . get_lang('ReplyToThisComment') . '" >'.stripslashes($comment['title']) . '</a></span>';
-                 $html.= '<span class="blogpost_comment_date">' . $blog_comment_date . '</span>';
-                 $html.= '<span class="blogpost_text">' . $comment_text . '</span>';
-
-                 $file_name_array = get_blog_attachment($blog_id,$post_id, $comment['comment_id']);
-                 if (!empty($file_name_array)) {
-                     $html.= '<br /><br />';
-                     $html.= Display::return_icon('attachment.gif',get_lang('Attachment'));
-                     $html.= '<a href="download.php?file=';
-                     $html.= $file_name_array['path'];
-                     $html.= ' "> '.$file_name_array['filename'].' </a>';
-                     $html.= '<span class="attachment_comment">';
-                     $html.= $file_name_array['comment'];
-                     $html.= '</span><br />';
-                 }
-                 $username = api_htmlentities(sprintf(get_lang('LoginX'), $comment['username']), ENT_QUOTES);
-                 $html.= '<span class="blogpost_comment_info">'.get_lang('Author').': '.Display::tag('span', api_get_person_name($comment['firstname'], $comment['lastname']), array('title'=>$username)).' - '.get_lang('Rating').': '.Blog::display_rating('comment', $blog_id, $comment['comment_id']).$rating_select.'</span>';
-                 $html.= '<span class="blogpost_actions">' . $blog_comment_actions . '</span>';
-             $html.= '</div>';
-
-             */
-            // Go further down the tree.
-            //return $html.= Blog::get_threaded_comments($comment['comment_id'], $next_level, $blog_id, $post_id);
         }
 
         return $listComments;
@@ -1368,22 +1341,24 @@ class Blog
      * @param Integer $blog_id
      * @param integer $post_id
      */
-    public static function display_new_comment_form($blog_id, $post_id, $title, $echo = true)
+    public static function display_new_comment_form($blog_id, $post_id, $title)
     {
+        $taskId = !empty($_GET['task_id']) ? (int) $_GET['task_id'] : 0;
+
         $form = new FormValidator(
             'add_post',
             'post',
-            api_get_path(WEB_CODE_PATH)."blog/blog.php?action=view_post&blog_id=".intval($blog_id)."&post_id=".intval(
-                $post_id
-            )."&".api_get_cidreq(),
+            api_get_self().'?'.api_get_cidreq().'&'.http_build_query([
+                'action' => 'view_post',
+                'blog_id' => (int) $blog_id,
+                'post_id' => (int) $post_id,
+                'task_id' => (int) $taskId
+            ]),
             null,
             array('enctype' => 'multipart/form-data')
         );
 
-        $header = get_lang('AddNewComment');
-        if (isset($_GET['task_id'])) {
-            $header = get_lang('ExecuteThisTask');
-        }
+        $header = $taskId ? get_lang('ExecuteThisTask') : get_lang('AddNewComment');
         $form->addHeader($header);
         $form->addText('title', get_lang('Title'));
 
@@ -1395,24 +1370,46 @@ class Blog
         }
         $form->addHtmlEditor('comment', get_lang('Comment'), false, false, $config);
         $form->addFile('user_upload', get_lang('AddAnAttachment'));
-
         $form->addTextarea('post_file_comment', get_lang('FileComment'));
-
         $form->addHidden('action', null);
         $form->addHidden('comment_parent_id', 0);
-
-        if (isset($_GET['task_id'])) {
-            $form->addHidden('new_task_execution_submit', 'true');
-            $form->addHidden('task_id', intval($_GET['task_id']));
-        } else {
-            $form->addHidden('new_comment_submit', 'true');
-        }
+        $form->addHidden('task_id', $taskId);
         $form->addButton('save', get_lang('Save'));
-        if ($echo) {
-            $form->display();
-        } else {
-            return $form->return_form();
+
+        if ($form->validate()) {
+            $values = $form->exportValues();
+
+            Blog::create_comment(
+                $values['title'],
+                $values['comment'],
+                $values['post_file_comment'],
+                $blog_id,
+                $post_id,
+                $values['comment_parent_id'],
+                $taskId
+            );
+
+            Display::addFlash(
+                Display::return_message(get_lang('CommentAdded'), 'success')
+            );
+
+            header(
+                'Location: '
+                .api_get_self()
+                .'?'
+                .api_get_cidreq()
+                .'&'
+                .http_build_query([
+                    'blog_id' => $blog_id,
+                    'post_id' => $post_id,
+                    'action' => 'view_post',
+                    'task_id' => $taskId
+                ])
+            );
+            exit;
         }
+
+        return $form->returnForm();
     }
 
     /**

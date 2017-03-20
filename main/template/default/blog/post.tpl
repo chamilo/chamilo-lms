@@ -76,6 +76,8 @@
                                 <a href="download.php?file={{ post.files.path }}">{{ post.files.filename }}</a>
                             </aside>
                         {% endif %}
+
+                        {{ post.frm_rating ?: '' }}
                     </article>
                     <div class="comments-post">
                         <h3 class="title">{{ post.n_comments }} {{ 'Comments' | get_lang }} </h3>
@@ -93,7 +95,7 @@
                                         <div class="pull-right">
                                             {{ item.actions }}
                                         </div>
-                                        <h4 class="media-heading">{{ item.title }}</h4>
+                                        <h4 class="media-heading" id="comment-{{ item.iid }}-title">{{ item.title }}</h4>
                                         <ul class="info-post list-inline">
                                             <li class="date">
                                                 <i class="fa fa-clock-o"></i> {{ item.comment_date }}
@@ -108,7 +110,7 @@
                                                 <i class="fa fa-comment" aria-hidden="true"></i> {{ item.score_ranking }}
                                             </li>
                                         </ul>
-                                        <div class="comment-content">
+                                        <div id="comment-{{ item.iid }}-content">
                                             {{ item.content }}
                                         </div>
                                         {% if item.files %}
@@ -122,6 +124,52 @@
                                         <div class="ranking">
                                             {{ item.form_ranking }}
                                         </div>
+
+                                        {% for item2 in item.comments %}
+                                            <li class="media {{ item2.iid }}">
+                                                <div class="media-left">
+                                                    <a href="{{ _p.web }}main/social/profile.php?u={{ item2.id_author }}">
+                                                        <img class="media-object thumbnail avatar"
+                                                             src="{{ item2.info_user.dir }}{{ item2.info_user.file }}"
+                                                             alt="{{ item2.name_author }}">
+                                                    </a>
+                                                </div>
+                                                <div class="media-body">
+                                                    <div class="pull-right">
+                                                        {{ item2.actions }}
+                                                    </div>
+                                                    <h4 class="media-heading" id="comment-{{ item2.iid }}-title">{{ item2.title }}</h4>
+                                                    <ul class="info-post list-inline">
+                                                        <li class="date">
+                                                            <i class="fa fa-clock-o"></i> {{ item2.comment_date }}
+                                                        </li>
+                                                        <li class="autor">
+                                                            <i class="fa fa-user"></i>
+                                                            <a href="{{ _p.web }}main/social/profile.php?u={{ item2.id_author }}">
+                                                                {{ item2.name_author }}
+                                                            </a>
+                                                        </li>
+                                                        <li class="score">
+                                                            <i class="fa fa-comment" aria-hidden="true"></i> {{ item2.score_ranking }}
+                                                        </li>
+                                                    </ul>
+                                                    <div id="comment-{{ item2.iid }}-content">
+                                                        {{ item2.content }}
+                                                    </div>
+                                                    {% if item2.files %}
+                                                        <aside class="well well-sm files">
+                                                            <i class="fa fa-paperclip" aria-hidden="true"></i> <a
+                                                                    href="download.php?file={{ item2.files.path }}">{{ item2.files.filename }}</a>
+                                                            <p>{{ item2.files.comment }}</p>
+                                                        </aside>
+                                                    {% endif %}
+
+                                                    <div class="ranking">
+                                                        {{ item2.form_ranking }}
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        {% endfor %}
                                     </div>
                                 </li>
                             {% endfor %}
@@ -136,3 +184,25 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(document).on('ready', function () {
+        $('.btn-reply-to').on('click', function (e) {
+            e.preventDefault();
+
+            var id = $(this).data('id') || 0;
+
+            if (!id) {
+                return;
+            }
+
+            var $frm = $('form#add_post'),
+                title = $('#comment-' + id + '-title'),
+                content = $('#comment-' + id + '-content');
+
+            $frm.find('[name="comment_parent_id"]').val(id);
+            $frm.find('[name="title"]').val('Re: ' + title.text().trim());
+            CKEDITOR.instances.comment.setData('<blockquote>' + content.text().trim() + '</blockquote><br>');
+        });
+    });
+</script>

@@ -25,7 +25,7 @@ if (!empty($gradebook) && $gradebook == 'view') {
         'name' => get_lang('ToolGradebook')
     );
 }
-$interbreadcrumb[] = array('url' => 'lp_controller.php?action=list?'.api_get_cidreq(), 'name' => get_lang('LearningPaths'));
+$interbreadcrumb[] = array('url' => 'lp_controller.php?action=list&'.api_get_cidreq(), 'name' => get_lang('LearningPaths'));
 $interbreadcrumb[] = array(
     'url' => api_get_self()."?action=build&lp_id=".$_SESSION['oLP']->get_id().'&'.api_get_cidreq(),
     'name' => $_SESSION['oLP']->get_name()

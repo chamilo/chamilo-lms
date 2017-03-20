@@ -2619,8 +2619,8 @@ class UserManager
     /**
      * Gives a list of [session_category][session_id] for the current user.
      * @param integer $user_id
-     * @param boolean whether to fill the first element or not (to give space for courses out of categories)
-     * @param boolean  optional true if limit time from session is over, false otherwise
+     * @param boolean $is_time_over whether to fill the first element or not (to give space for courses out of categories)
+     * @param boolean $ignore_visibility_for_admins optional true if limit time from session is over, false otherwise
      * @param boolean $ignoreTimeLimit ignore time start/end
      * @return array  list of statuses [session_category][session_id]
      *
@@ -2650,15 +2650,18 @@ class UserManager
                     sc.dateEnd AS session_category_date_end,
                     s.coachAccessStartDate AS coach_access_start_date,
                     s.coachAccessEndDate AS coach_access_end_date
-                FROM ChamiloCoreBundle:Session AS s                                
+                FROM ChamiloCoreBundle:Session AS s
                 INNER JOIN ChamiloCoreBundle:SessionRelCourseRelUser AS scu WITH scu.session = s
+                INNER JOIN ChamiloCoreBundle:AccessUrlRelSession AS url WITH url.sessionId = s.id
                 LEFT JOIN ChamiloCoreBundle:SessionCategory AS sc WITH s.category = sc
-                WHERE scu.user = :user OR s.generalCoach = :user
+                WHERE (scu.user = :user OR s.generalCoach = :user) AND url.accessUrlId = :url
                 ORDER BY sc.name, s.name";
 
         $dql = Database::getManager()
             ->createQuery($dql)
-            ->setParameters(['user' => $user_id])
+            ->setParameters(
+                ['user' => $user_id, 'url' => api_get_current_access_url_id()]
+            )
         ;
 
         $sessionData = $dql->getResult();

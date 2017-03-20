@@ -45,10 +45,8 @@ $htmlHeadXtra[] = '
 function add_user_to_url(code, content) {
 	document.getElementById("course_to_add").value = "";
 	document.getElementById("ajax_list_courses").innerHTML = "";
-
 	destination = document.getElementById("destination_users");
 	destination.options[destination.length] = new Option(content,code);
-
 	destination.selectedIndex = -1;
 	sortOptions(destination.options);
 }

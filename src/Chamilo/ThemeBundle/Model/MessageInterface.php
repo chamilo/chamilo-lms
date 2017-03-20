@@ -12,7 +12,8 @@ namespace Chamilo\ThemeBundle\Model;
  * Representation of a displayable message in the theme's messages section
  *
  */
-interface MessageInterface {
+interface MessageInterface
+{
     /**
      * Returns the sender
      *

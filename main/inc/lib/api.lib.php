@@ -7504,15 +7504,29 @@ function api_warn_hosting_contact($limitName)
 }
 
 /**
+ * Gets value of a variable from app/config/configuration.php
  * @param string $variable
+ *
  * @return bool|mixed
  */
 function api_get_configuration_value($variable)
 {
     global $_configuration;
+    // Check the current url id, id = 1 by default
+    $urlId = isset($_configuration['access_url']) ? (int) $_configuration['access_url'] : 1;
+
+    // Check if variable exists
     if (isset($_configuration[$variable])) {
+        if (is_array($_configuration[$variable])) {
+            // Check if it exists for the sub portal
+            if (array_key_exists($urlId, $_configuration[$variable])) {
+                return $_configuration[$variable][$urlId];
+            }
+        }
+
         return $_configuration[$variable];
     }
+
     return false;
 }
 

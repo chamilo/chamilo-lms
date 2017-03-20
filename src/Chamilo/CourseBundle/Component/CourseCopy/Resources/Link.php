@@ -46,7 +46,7 @@ class Link extends Resource
         $category_id,
         $on_homepage
     ) {
-        parent::__construct($id,RESOURCE_LINK);
+        parent::__construct($id, RESOURCE_LINK);
         $this->title = $title;
         $this->url = $url;
         $this->description = $description;

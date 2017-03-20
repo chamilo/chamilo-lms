@@ -7,7 +7,7 @@ $tool_name = get_lang('SystemAnnouncements');
 
 $actions = '';
 if (api_is_platform_admin()) {
-	$actions = '<a href="'.api_get_path(WEB_PATH).'main/admin/system_announcements.php">'.
+    $actions = '<a href="'.api_get_path(WEB_PATH).'main/admin/system_announcements.php">'.
         Display::return_icon('edit.png', get_lang('EditSystemAnnouncement'), array(), 32).'</a>';
 }
 

@@ -1,11 +1,11 @@
 
 Chamilo LMS - elearning and course management software
 
-Copyright (c) 2008-2012 BeezNest Latino SAC, Peru & BeezNest Belgium SPRL, Belgium
+Copyright (c) 2008-2017 BeezNest Latino SAC, Peru & BeezNest Belgium SPRL, Belgium
 Copyright (c) 2012 Université de Genève, Switzerland
-Copyright (c) 2010-2012 Université de Grenoble, France
+Copyright (c) 2010-2017 Université de Grenoble, France
 Copyright (c) 2011-2012 CBlue SPRL, Belgium
-Copyright (c) Juan Carlos Raña (independent), Spain
+Copyright (c) 2004-2012 Juan Carlos Raña (independent), Spain
 Copyright (c) 2004-2009 Dokeos SPRL, Belgium
 Copyright (c) 2003-2007 Ghent University (UGent)
 Copyright (c) 2001-2004 Universite catholique de Louvain (UCL)

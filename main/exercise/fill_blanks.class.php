@@ -1099,13 +1099,14 @@ class FillBlanks extends Question
     /**
      * return the HTML display of the answer
      * @param string $answer
-     * @param bool   $resultsDisabled
+     * @param int $feedbackType
+     * @param bool $resultsDisabled
      * @param bool $showTotalScoreAndUserChoices
-     *
      * @return string
      */
     public static function getHtmlDisplayForAnswer(
         $answer,
+        $feedbackType,
         $resultsDisabled = false,
         $showTotalScoreAndUserChoices = false
     ) {
@@ -1127,13 +1128,17 @@ class FillBlanks extends Question
                 $listStudentAnswerInfo['studentanswer'][$i] = self::getHtmlRightAnswer(
                     $listStudentAnswerInfo['studentanswer'][$i],
                     $listStudentAnswerInfo['tabwords'][$i],
-                    $resultsDisabled
+                    $feedbackType,
+                    $resultsDisabled,
+                    $showTotalScoreAndUserChoices
                 );
             } else {
                 $listStudentAnswerInfo['studentanswer'][$i] = self::getHtmlWrongAnswer(
                     $listStudentAnswerInfo['studentanswer'][$i],
                     $listStudentAnswerInfo['tabwords'][$i],
-                    $resultsDisabled
+                    $feedbackType,
+                    $resultsDisabled,
+                    $showTotalScoreAndUserChoices
                 );
             }
         }
@@ -1155,12 +1160,26 @@ class FillBlanks extends Question
      * @param string $answer
      * @param string $correct
      * @param string $right
-     * @param bool   $resultsDisabled
-     *
+     * @param int $feedbackType
+     * @param bool $resultsDisabled
+     * @param bool $showTotalScoreAndUserChoices
      * @return string
      */
-    public static function getHtmlAnswer($answer, $correct, $right, $resultsDisabled = false)
+    public static function getHtmlAnswer($answer, $correct, $right, $feedbackType, $resultsDisabled = false, $showTotalScoreAndUserChoices = false)
     {
+        $hideExpectedAnswer = false;
+        if ($feedbackType == 0 && ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ONLY)) {
+            $hideExpectedAnswer = true;
+        }
+
+        if ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
+            if ($showTotalScoreAndUserChoices) {
+                $hideExpectedAnswer = false;
+            } else {
+                $hideExpectedAnswer = true;
+            }
+        }
+
         $style = "color: green";
         if (!$right) {
             $style = "color: red; text-decoration: line-through;";
@@ -1193,7 +1212,7 @@ class FillBlanks extends Question
                 $correctAnswerHtml = "<span style='color: green'>".$correct."</span>";
         }
 
-        if ($resultsDisabled) {
+        if ($hideExpectedAnswer) {
             $correctAnswerHtml = "<span title='".get_lang("ExerciseWithFeedbackWithoutCorrectionComment")."'> - </span>";
         }
 
@@ -1214,9 +1233,9 @@ class FillBlanks extends Question
      *
      * @return string
      */
-    public static function getHtmlRightAnswer($answer, $correct, $resultsDisabled = false)
+    public static function getHtmlRightAnswer($answer, $correct, $feedbackType, $resultsDisabled = false, $showTotalScoreAndUserChoices = false)
     {
-        return self::getHtmlAnswer($answer, $correct, true, $resultsDisabled);
+        return self::getHtmlAnswer($answer, $correct, true, $feedbackType, $resultsDisabled, $showTotalScoreAndUserChoices);
     }
 
     /**
@@ -1227,9 +1246,9 @@ class FillBlanks extends Question
      *
      * @return string
      */
-    public static function getHtmlWrongAnswer($answer, $correct, $resultsDisabled = false)
+    public static function getHtmlWrongAnswer($answer, $correct, $feedbackType, $resultsDisabled = false, $showTotalScoreAndUserChoices = false)
     {
-        return self::getHtmlAnswer($answer, $correct, false, $resultsDisabled);
+        return self::getHtmlAnswer($answer, $correct, false, $feedbackType, $resultsDisabled, $showTotalScoreAndUserChoices);
     }
 
     /**

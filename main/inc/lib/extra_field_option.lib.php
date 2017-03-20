@@ -216,7 +216,7 @@ class ExtraFieldOption extends Model
 
                         foreach ($sub_options as $sub_option) {
                             if (!empty($sub_option)) {
-                                $new_params  = array(
+                                $new_params = array(
                                     'field_id' => $field_id,
                                     'option_value' => $sub_id,
                                     'display_text' => $sub_option,
@@ -660,7 +660,7 @@ class ExtraFieldOption extends Model
         $form->addElement('hidden', 'field_id', $this->field_id);
 
         if ($action == 'edit') {
-            $translateUrl = api_get_path(WEB_CODE_PATH) . 'extrafield/translate.php?' . http_build_query([
+            $translateUrl = api_get_path(WEB_CODE_PATH).'extrafield/translate.php?'.http_build_query([
                 'extra_field_option' => $id
             ]);
             $translateButton = Display::toolbarButton(get_lang('TranslateThisTerm'), $translateUrl, 'language', 'link');

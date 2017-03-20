@@ -37,7 +37,7 @@ if (isset($_GET['skill_id'])) {
 $url = api_get_path(WEB_AJAX_PATH)."skill.ajax.php?a=get_skills_tree_json&load_user=$load_user";
 $tpl->assign('wheel_url', $url);
 
-$url  = api_get_path(WEB_AJAX_PATH).'skill.ajax.php?1=1';
+$url = api_get_path(WEB_AJAX_PATH).'skill.ajax.php?1=1';
 $tpl->assign('url', $url);
 $tpl->assign('isAdministration', true);
 

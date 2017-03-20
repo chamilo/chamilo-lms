@@ -361,15 +361,12 @@ class IndexManager
     }
 
     /**
-     * @return null|string
+     * Generate the block for show a panel with links to My Certificates and Certificates Search pages
+     * @return string The HTML code for the panel
      */
     public function return_skills_links()
     {
         $content = '<ul class="nav nav-pills nav-stacked">';
-        /**
-         * Generate the block for show a panel with links to My Certificates and Certificates Search pages
-         * @return string The HTML code for the panel
-         */
         $certificatesItem = '';
         if (!api_is_anonymous()) {
             $allow = api_get_configuration_value('hide_my_certificate_link');
@@ -395,7 +392,12 @@ class IndexManager
             $searchItem = Display::tag(
                 'li',
                 Display::url(
-                    Display::return_icon('search_graduation.png', get_lang('Search'),null,ICON_SIZE_SMALL).
+                    Display::return_icon(
+                        'search_graduation.png',
+                        get_lang('Search'),
+                        null,
+                        ICON_SIZE_SMALL
+                    ).
                     get_lang('Search'),
                     api_get_path(WEB_CODE_PATH) . "gradebook/search.php"
                 )
@@ -413,7 +415,12 @@ class IndexManager
             $content .= Display::tag(
                 'li',
                 Display::url(
-                    Display::return_icon('skill-badges.png',get_lang('MySkills'),null,ICON_SIZE_SMALL).get_lang('MySkills'),
+                    Display::return_icon(
+                        'skill-badges.png',
+                        get_lang('MySkills'),
+                        null,
+                        ICON_SIZE_SMALL
+                    ).get_lang('MySkills'),
                     api_get_path(WEB_CODE_PATH).'social/my_skills_report.php'
                 )
             );
@@ -422,8 +429,12 @@ class IndexManager
                 $content .= Display::tag(
                     'li',
                     Display::url(
-                        Display::return_icon('edit-skill.png', get_lang('MySkills'), null,
-                            ICON_SIZE_SMALL) . get_lang('ManageSkills'),
+                        Display::return_icon(
+                            'edit-skill.png',
+                            get_lang('MySkills'),
+                            null,
+                            ICON_SIZE_SMALL
+                        ) . get_lang('ManageSkills'),
                         api_get_path(WEB_CODE_PATH) . 'admin/skills_wheel.php'
                     )
                 );

@@ -15,12 +15,12 @@ $this_section = SECTION_PLATFORM_ADMIN; // TODO: Platform admin section?
 $tool_name = get_lang('ImportUserListXMLCSV');
 api_block_anonymous_users();
 
-$interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('MySpace'));
+$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('MySpace'));
 $id_session = '';
 if (isset($_GET['id_session']) && $_GET['id_session'] != '') {
  	$id_session = intval($_GET['id_session']);
-	$interbreadcrumb[] = array ('url' => 'session.php', 'name' => get_lang('Sessions'));
-	$interbreadcrumb[] = array ('url' => 'course.php?id_session='.$id_session.'', 'name' => get_lang('Course'));
+	$interbreadcrumb[] = array('url' => 'session.php', 'name' => get_lang('Sessions'));
+	$interbreadcrumb[] = array('url' => 'course.php?id_session='.$id_session.'', 'name' => get_lang('Course'));
 }
 
 // Set this option to true to enforce strict purification for usenames.
@@ -62,7 +62,7 @@ if ($_POST['formSent'] && $_FILES['import_file']['size'] !== 0) {
 
         if (count($errors) == 0) {
             if (!empty($id_session)) {
-                $tbl_session_rel_course	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+                $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
                 // Selecting all the courses from the session id requested.
                 $sql = "SELECT c_id FROM $tbl_session_rel_course WHERE session_id ='$id_session'";
                 $result = Database::query($sql);
@@ -105,10 +105,10 @@ if (count($errors) != 0) {
 
 $form = new FormValidator('user_import');
 $form->addElement('hidden', 'formSent');
-$form->addElement('hidden', 'id_session',$id_session);
+$form->addElement('hidden', 'id_session', $id_session);
 $form->addElement('file', 'import_file', get_lang('ImportFileLocation'));
 $form->addRule('import_file', get_lang('ThisFieldIsRequired'), 'required');
-$allowed_file_types = array ('xml', 'csv');
+$allowed_file_types = array('xml', 'csv');
 $form->addRule('import_file', get_lang('InvalidExtension').' ('.implode(',', $allowed_file_types).')', 'filetype', $allowed_file_types);
 $form->addElement('radio', 'file_type', get_lang('FileType'), 'XML (<a href="../admin/example.xml" target="_blank">'.get_lang('ExampleXMLFile').'</a>)', 'xml');
 $form->addElement('radio', 'file_type', null, 'CSV (<a href="../admin/example.csv" target="_blank">'.get_lang('ExampleCSVFile').'</a>)', 'csv');

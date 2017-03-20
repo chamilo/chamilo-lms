@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
@@ -29,7 +30,6 @@ class CourseRelClass
      * @ORM\GeneratedValue(strategy="NONE")
      */
     private $classId;
-
 
 
     /**

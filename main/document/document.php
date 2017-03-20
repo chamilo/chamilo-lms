@@ -37,12 +37,9 @@ $current_course_tool = TOOL_DOCUMENT;
 $this_section = SECTION_COURSES;
 $to_user_id = null;
 $parent_id = null;
-
 $lib_path = api_get_path(LIBRARY_PATH);
 $actionsRight = '';
-
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
-
 $allowUseTool = false;
 
 if ($allowDownloadDocumentsByApiKey) {
@@ -85,13 +82,21 @@ $base_work_dir = $sys_course_path . $course_dir;
 $http_www = api_get_path(WEB_COURSE_PATH).$courseInfo['directory'] . '/document';
 $document_path = $base_work_dir;
 $usePpt2lp = api_get_setting('service_ppt2lp', 'active') == 'true';
-
 $course_dir = $courseInfo['directory'].'/document';
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
 $base_work_dir = $sys_course_path.$course_dir;
 $http_www = api_get_path(WEB_COURSE_PATH).$courseInfo['directory'].'/document';
 $document_path = $base_work_dir;
 $currentUrl = api_get_self().'?'.api_get_cidreq();
+
+// I'm in the certification module?
+$is_certificate_mode = false;
+if (isset($_GET['curdirpath'])) {
+    $is_certificate_mode = DocumentManager::is_certificate_mode($_GET['curdirpath']);
+}
+if (isset($_REQUEST['certificate']) && $_REQUEST['certificate'] == 'true') {
+    $is_certificate_mode = true;
+}
 
 // Removing sessions
 unset($_SESSION['draw_dir']);
@@ -369,7 +374,19 @@ switch ($action) {
         break;
     case 'export_to_pdf':
         if (api_get_setting('students_export2pdf') == 'true' || $isAllowedToEdit || api_is_platform_admin()) {
-            DocumentManager::export_to_pdf($document_id, $course_code);
+            $orientation = 'landscape';
+            $showHeaderAndFooter = true;
+            if ($is_certificate_mode) {
+                $orientation = api_get_configuration_value('certificate_pdf_orientation');
+                $showHeaderAndFooter = !api_get_configuration_value('hide_header_footer_in_certificate');
+            }
+
+            DocumentManager::export_to_pdf(
+                $document_id,
+                $course_code,
+                $orientation,
+                $showHeaderAndFooter
+            );
         }
         break;
     case 'copytomyfiles':
@@ -548,15 +565,6 @@ switch ($action) {
             }
         }
         break;
-}
-
-// I'm in the certification module?
-$is_certificate_mode = false;
-if (isset($_GET['curdirpath'])) {
-    $is_certificate_mode = DocumentManager::is_certificate_mode($_GET['curdirpath']);
-}
-if (isset($_REQUEST['certificate']) && $_REQUEST['certificate'] == 'true') {
-    $is_certificate_mode = true;
 }
 
 // If no actions we proceed to show the document (Hack in order to use document.php?id=X)

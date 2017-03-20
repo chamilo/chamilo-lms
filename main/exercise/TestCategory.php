@@ -49,9 +49,9 @@ class TestCategory
         return  false;
     }
 
-	/**
+    /**
      * add TestCategory in the database if name doesn't already exists
-	 */
+     */
     public function addCategoryInBDD()
     {
         $table = Database :: get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
@@ -140,19 +140,18 @@ class TestCategory
         $id = intval($this->id);
         $name = Database::escape_string($this->name);
         $description = Database::escape_string($this->description);
-
         $cat = $this->getCategory($id);
+        $courseId = api_get_course_int_id();
 
         if ($cat) {
             $sql = "UPDATE $table SET
                 title = '$name',
                 description = '$description'
-                WHERE id = $id AND c_id=".api_get_course_int_id();
+                WHERE id = $id AND c_id = ".$courseId;
             Database::query($sql);
 
             // item_property update
-            $course_id = api_get_course_int_id();
-            $course_info = api_get_course_info_by_id($course_id);
+            $course_info = api_get_course_info_by_id($courseId);
             api_item_property_update(
                 $course_info,
                 TOOL_TEST_CATEGORY,
@@ -172,10 +171,10 @@ class TestCategory
     public function getCategoryQuestionsNumber()
     {
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
-        $in_id = intval($this->id);
+        $id = intval($this->id);
         $sql = "SELECT count(*) AS nb
                 FROM $table
-                WHERE category_id=$in_id AND c_id=".api_get_course_int_id();
+                WHERE category_id = $id AND c_id=".api_get_course_int_id();
         $res = Database::query($sql);
         $row = Database::fetch_array($res);
 
@@ -197,6 +196,7 @@ class TestCategory
         if (empty($courseId)) {
             $courseId = api_get_course_int_id();
         }
+        $courseId = (int) $courseId;
         $table = Database :: get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
         $in_field = Database::escape_string($in_field);
         $categories = array();
@@ -236,6 +236,7 @@ class TestCategory
         if (empty($courseId)) {
             $courseId = api_get_course_int_id();
         }
+        $courseId = (int) $courseId;
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
         $questionId = intval($questionId);
         $sql = "SELECT category_id
@@ -245,7 +246,7 @@ class TestCategory
         $result = 0;
         if (Database::num_rows($res) > 0) {
             $data = Database::fetch_array($res);
-            $result = $data['category_id'];
+            $result = (int) $data['category_id'];
         }
 
         return $result;
@@ -280,15 +281,15 @@ class TestCategory
         if (empty($courseId)) {
             $courseId = api_get_course_int_id();
         }
+        $courseId = (int) $courseId;
         $categoryId = TestCategory::getCategoryForQuestion($questionId, $courseId);
-        $result = '';
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-        $categoryId = intval($categoryId);
         $sql = "SELECT title 
                 FROM $table
                 WHERE id = $categoryId AND c_id = $courseId";
         $res = Database::query($sql);
         $data = Database::fetch_array($res);
+        $result = '';
         if (Database::num_rows($res) > 0) {
             $result = $data['title'];
         }
@@ -330,7 +331,6 @@ class TestCategory
     {
         // parcourir les questions d'un test, recup les categories uniques dans un tableau
         $categories_in_exercise = array();
-        // $question_list = $exercise_obj->getQuestionList();
         $question_list = $exercise_obj->getQuestionOrderedListByName();
 
         // the array given by selectQuestionList start at indice 1 and not at indice 0 !!! ???
@@ -353,7 +353,7 @@ class TestCategory
     }
 
     /**
-     * Return the list of differents categories NAME for a test
+     * Return the list of different categories NAME for a test
      * @param int exercise id
      * @param bool
      * @return integer of string
@@ -477,12 +477,12 @@ class TestCategory
             $courseId = api_get_course_int_id();
         }
         $categories = TestCategory::getCategoryListInfo('', $courseId);
-        $tabresult = array('0' => get_lang('NoCategorySelected'));
-        for ($i=0; $i < count($categories); $i++) {
-            $tabresult[$categories[$i]->id] = $categories[$i]->name;
+        $result = array('0' => get_lang('NoCategorySelected'));
+        for ($i = 0; $i < count($categories); $i++) {
+            $result[$categories[$i]->id] = $categories[$i]->name;
         }
 
-        return $tabresult;
+        return $result;
     }
 
     /**
@@ -496,7 +496,7 @@ class TestCategory
     * @param int $exerciseId
     * @return array
     */
-    static function getQuestionsByCat(
+    public static function getQuestionsByCat(
         $exerciseId,
         $check_in_question_list = array(),
         $categoriesAddedInExercise = array()
@@ -567,9 +567,7 @@ class TestCategory
                     }
                 }
             }
-
             $categories = $newCategoryList;
-
         }
 
         return $categories;
@@ -612,7 +610,9 @@ class TestCategory
             $in_display_category_name = $objExercise->display_category_name;
         }
         $content = null;
-        if (TestCategory::getCategoryNameForQuestion($questionId) != '' && ($in_display_category_name == 1 || !$is_student)) {
+        if (TestCategory::getCategoryNameForQuestion($questionId) != '' &&
+            ($in_display_category_name == 1 || !$is_student)
+        ) {
             $content .= '<div class="page-header">';
             $content .= '<h4>'.get_lang('Category').": ".TestCategory::getCategoryNameForQuestion($questionId).'</h4>';
             $content .= "</div>";
@@ -723,16 +723,16 @@ class TestCategory
 
     /**
      * Returns a category summary report
-     * @params int exercise id
+     * @params int $exerciseId
      * @params array pre filled array with the category_id, score, and weight
      * example: array(1 => array('score' => '10', 'total' => 20));
      */
-    public static function get_stats_table_by_attempt($exercise_id, $category_list = array())
+    public static function get_stats_table_by_attempt($exerciseId, $category_list = array())
     {
         if (empty($category_list)) {
             return null;
         }
-        $category_name_list = TestCategory::getListOfCategoriesNameForTest($exercise_id);
+        $category_name_list = TestCategory::getListOfCategoriesNameForTest($exerciseId);
 
         $table = new HTML_Table(array('class' => 'data_table'));
         $table->setHeaderContents(0, 0, get_lang('Categories'));
@@ -794,7 +794,7 @@ class TestCategory
 
     /**
      * @param Exercise $exercise
-     * @param int $course_id
+     * @param int $courseId
      * @param string $order
      * @param bool $shuffle
      * @param bool $excludeCategoryWithNoQuestions
@@ -802,7 +802,7 @@ class TestCategory
      */
     public function getCategoryExerciseTree(
         $exercise,
-        $course_id,
+        $courseId,
         $order = null,
         $shuffle = false,
         $excludeCategoryWithNoQuestions = true
@@ -815,13 +815,13 @@ class TestCategory
             return false;
         }
 
-        $course_id = intval($course_id);
+        $courseId = (int) $courseId;
         $table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
         $categoryTable = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
         $sql = "SELECT * FROM $table qc
                 LEFT JOIN $categoryTable c
                 ON (qc.c_id = c.c_id AND c.id = qc.category_id)
-                WHERE qc.c_id = $course_id AND exercise_id = {$exercise->id} ";
+                WHERE qc.c_id = $courseId AND exercise_id = {$exercise->id} ";
 
         if (!empty($order)) {
             $sql .= "ORDER BY $order";
@@ -872,7 +872,17 @@ class TestCategory
         $form->addElement('header', $header);
         $form->addElement('hidden', 'category_id');
         $form->addElement('text', 'category_name', get_lang('CategoryName'), array('class' => 'span6'));
-        $form->add_html_editor('category_description', get_lang('CategoryDescription'), false, false, array('ToolbarSet' => 'test_category', 'Width' => '90%', 'Height' => '200'));
+        $form->add_html_editor(
+            'category_description',
+            get_lang('CategoryDescription'),
+            false,
+            false,
+            array(
+                'ToolbarSet' => 'test_category',
+                'Width' => '90%',
+                'Height' => '200',
+            )
+        );
         $category_parent_list = array();
 
         $options = array(
@@ -923,7 +933,10 @@ class TestCategory
 
             $warning = null;
             if ($nbQuestionsTotal != $real_question_count) {
-                $warning = Display::return_message(get_lang('CheckThatYouHaveEnoughQuestionsInYourCategories'), 'warning');
+                $warning = Display::return_message(
+                    get_lang('CheckThatYouHaveEnoughQuestionsInYourCategories'),
+                    'warning'
+                );
             }
 
             $return .= $warning;
@@ -989,7 +1002,6 @@ class TestCategory
         $categories = TestCategory::getCategoryListInfo('title');
         foreach ($categories as $title) {
             if ($title == $name) {
-
                 return true;
             }
         }
@@ -1105,21 +1117,16 @@ class TestCategory
     {
         $categories = $this->getCategories($courseId, $sessionId);
         $html = '';
-
         foreach ($categories as $category) {
             $tmpobj = new TestCategory();
             $tmpobj = $tmpobj->getCategory($category['id']);
             $nb_question = $tmpobj->getCategoryQuestionsNumber();
             $rowname = self::protectJSDialogQuote($category['title']);
             $nb_question_label = $nb_question == 1 ? $nb_question . ' ' . get_lang('Question') : $nb_question . ' ' . get_lang('Questions');
-
-            //$html .= '<div class="sectiontitle" id="id_cat' . $category['id'] . '">';
             $content = "<span style='float:right'>" . $nb_question_label . "</span>";
-
             $content .= '<div class="sectioncomment">';
             $content .= $category['description'];
             $content .= '</div>';
-
             $links = '<a href="' . api_get_self() . '?action=editcategory&category_id=' . $category['id'] . '&'.api_get_cidreq().'">' .
                 Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL) . '</a>';
             $links .= ' <a href="' . api_get_self() . '?'.api_get_cidreq().'&action=deletecategory&category_id=' . $category['id'] . '" ';

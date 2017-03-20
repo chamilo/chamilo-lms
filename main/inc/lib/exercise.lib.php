@@ -3484,6 +3484,9 @@ HOTSPOT;
             if ($save_user_result == false) {
                 $question_list = $objExercise->get_validated_question_list();
             }
+            if ($objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
+                $question_list = $objExercise->get_validated_question_list();
+            }
         }
 
         $counter = 1;
@@ -3555,17 +3558,21 @@ HOTSPOT;
         }
 
         if ($show_results || $show_only_score) {
-            $user_info = api_get_user_info($exercise_stat_info['exe_user_id']);
-            //Shows exercise header
-            echo $objExercise->show_exercise_result_header(
-                $user_info,
-                api_convert_and_format_date(
-                    $exercise_stat_info['start_date'],
-                    DATE_TIME_FORMAT_LONG
-                ),
-                $exercise_stat_info['duration'],
-                $exercise_stat_info['user_ip']
-            );
+            if (isset($exercise_stat_info['exe_user_id'])) {
+                $user_info = api_get_user_info($exercise_stat_info['exe_user_id']);
+                if ($user_info) {
+                    // Shows exercise header
+                    echo $objExercise->show_exercise_result_header(
+                        $user_info,
+                        api_convert_and_format_date(
+                            $exercise_stat_info['start_date'],
+                            DATE_TIME_FORMAT_LONG
+                        ),
+                        $exercise_stat_info['duration'],
+                        $exercise_stat_info['user_ip']
+                    );
+                }
+            }
         }
 
         // Display text when test is finished #4074 and for LP #4227
@@ -3579,28 +3586,47 @@ HOTSPOT;
         $media_list = array();
         $category_list = array();
 
+        $loadChoiceFromSession = false;
+        $fromDatabase = true;
+        $exerciseResult = null;
+        $exerciseResultCoordinates = null;
+        $delineationResults = null;
+        if ($objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
+            $loadChoiceFromSession = true;
+            $fromDatabase = false;
+            $exerciseResult = Session::read('exerciseResult');
+            $exerciseResultCoordinates = Session::read('exerciseResultCoordinates');
+            $delineationResults = Session::read('hotspot_delineation_result');
+            $delineationResults = isset($delineationResults[$objExercise->id]) ? $delineationResults[$objExercise->id] : null;
+        }
+
         // Loop over all question to show results for each of them, one by one
         if (!empty($question_list)) {
             foreach ($question_list as $questionId) {
-
                 // creates a temporary Question object
                 $objQuestionTmp = Question::read($questionId);
 
                 // This variable came from exercise_submit_modal.php
                 ob_start();
+                $choice = null;
+                $delineationChoice = null;
+                if ($loadChoiceFromSession) {
+                    $choice = isset($exerciseResult[$questionId]) ? $exerciseResult[$questionId] : null;
+                    $delineationChoice = isset($delineationResults[$questionId]) ? $delineationResults[$questionId] : null;
+                }
 
                 // We're inside *one* question. Go through each possible answer for this question
                 $result = $objExercise->manage_answer(
-                    $exercise_stat_info['exe_id'],
+                    $exe_id,
                     $questionId,
-                    null,
+                    $choice,
                     'exercise_result',
-                    [],
+                    $exerciseResultCoordinates,
                     $save_user_result,
-                    true,
+                    $fromDatabase,
                     $show_results,
                     $objExercise->selectPropagateNeg(),
-                    [],
+                    $delineationChoice,
                     $showTotalScoreAndUserChoicesInLastAttempt
                 );
 
@@ -3763,27 +3789,28 @@ HOTSPOT;
         }
 
         if ($save_user_result) {
-
             // Tracking of results
-            $learnpath_id = $exercise_stat_info['orig_lp_id'];
-            $learnpath_item_id = $exercise_stat_info['orig_lp_item_id'];
-            $learnpath_item_view_id = $exercise_stat_info['orig_lp_item_view_id'];
+            if ($exercise_stat_info) {
+                $learnpath_id = $exercise_stat_info['orig_lp_id'];
+                $learnpath_item_id = $exercise_stat_info['orig_lp_item_id'];
+                $learnpath_item_view_id = $exercise_stat_info['orig_lp_item_view_id'];
 
-            if (api_is_allowed_to_session_edit()) {
-                Event::update_event_exercise(
-                    $exercise_stat_info['exe_id'],
-                    $objExercise->selectId(),
-                    $total_score,
-                    $total_weight,
-                    api_get_session_id(),
-                    $learnpath_id,
-                    $learnpath_item_id,
-                    $learnpath_item_view_id,
-                    $exercise_stat_info['exe_duration'],
-                    $question_list,
-                    '',
-                    array()
-                );
+                if (api_is_allowed_to_session_edit()) {
+                    Event::update_event_exercise(
+                        $exercise_stat_info['exe_id'],
+                        $objExercise->selectId(),
+                        $total_score,
+                        $total_weight,
+                        api_get_session_id(),
+                        $learnpath_id,
+                        $learnpath_item_id,
+                        $learnpath_item_view_id,
+                        $exercise_stat_info['exe_duration'],
+                        $question_list,
+                        '',
+                        array()
+                    );
+                }
             }
 
             // Send notification

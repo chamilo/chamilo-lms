@@ -1973,7 +1973,6 @@ function get_work_user_list(
 
         $url = api_get_path(WEB_CODE_PATH).'work/';
         $unoconv = api_get_configuration_value('unoconv.binaries');
-
         $loadingText = addslashes(get_lang('Loading'));
         $uploadedText = addslashes(get_lang('Uploaded'));
         $failsUploadText = addslashes(get_lang('UplNoFileUploaded'));
@@ -2041,10 +2040,12 @@ function get_work_user_list(
             ) {
                 // Firstname, lastname, username
                 $work['fullname'] = Display::div(
-                    api_get_person_name($work['firstname'], $work['lastname']), ['class' => 'work-name']
+                    api_get_person_name($work['firstname'], $work['lastname']),
+                    ['class' => 'work-name']
                 );
                 $work['title_clean'] = $work['title'];
 
+                $work['title'] = Security::remove_XSS($work['title']);
                 if (strlen($work['title']) > 30) {
                     $short_title = substr($work['title'], 0, 27).'...';
                     $work['title'] = Display::span($short_title, array('class' => 'work-title', 'title' => $work['title']));
@@ -2064,7 +2065,6 @@ function get_work_user_list(
                 }
 
                 $send_to = Portfolio::share('work', $work['id'],  array('style' => 'white-space:nowrap;'));
-
                 $feedback = null;
                 $count = getWorkCommentCount($item_id, $course_info);
                 if (!is_null($count) && !empty($count)) {
@@ -2803,7 +2803,6 @@ function getStudentSubscribedToWork(
     } else {
         return $usersInWork;
     }
-
 }
 
 /**
@@ -4945,15 +4944,15 @@ function getFileContents($id, $course_info, $sessionId = 0, $correction = false)
                 $sessionId
             );
 
+            if (empty($item_info)) {
+                return false;
+            }
+
             allowOnlySubscribedUser(
                 api_get_user_id(),
                 $row['parent_id'],
                 $course_info['real_id']
             );
-
-            if (empty($item_info)) {
-                api_not_allowed();
-            }
 
             /*
             field show_score in table course :
@@ -4990,7 +4989,7 @@ function getFileContents($id, $course_info, $sessionId = 0, $correction = false)
             $student_is_owner_of_work = user_is_author($row['id'], $row['user_id']);
 
             if ($is_editor ||
-                ($student_is_owner_of_work) ||
+                $student_is_owner_of_work ||
                 ($doc_visible_for_all && $work_is_visible)
             ) {
                 $title = $row['title'];
@@ -5012,12 +5011,12 @@ function getFileContents($id, $course_info, $sessionId = 0, $correction = false)
                     }
                 }
 
-                Event::event_download($title);
-
                 if (Security::check_abs_path(
                     $full_file_name,
                     api_get_path(SYS_COURSE_PATH).api_get_course_path().'/')
                 ) {
+                    Event::event_download($title);
+
                     return array(
                         'path' => $full_file_name,
                         'title' => $title,

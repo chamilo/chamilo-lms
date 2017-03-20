@@ -212,15 +212,15 @@ if (!empty($my_folder_data['description'])) {
 
 $check_qualification = intval($my_folder_data['qualification']);
 
+$orderName = api_is_western_name_order() ? 'firstname' : 'lastname';
+
 if (!empty($work_data['enable_qualification']) &&
     !empty($check_qualification)
 ) {
     $type = 'simple';
 
     $columns = array(
-        //get_lang('Type'),
         get_lang('FullUserName'),
-        //get_lang('LastName'),
         get_lang('Title'),
         get_lang('Feedback'),
         get_lang('Date'),
@@ -230,28 +230,13 @@ if (!empty($work_data['enable_qualification']) &&
     );
 
     $column_model = array(
-        /*array(
-            'name' => 'type',
-            'index' => 'file',
-            'width' => '8',
-            'align' => 'left',
-            'search' => 'false',
-            'sortable' => 'false',
-        ),*/
         array(
             'name' => 'fullname',
-            'index' => 'fullname',
+            'index' => $orderName,
             'width' => '30',
             'align' => 'left',
             'search' => 'true',
         ),
-        /*array(
-            'name' => 'lastname',
-            'index' => 'lastname',
-            'width' => '35',
-            'align' => 'left',
-            'search' => 'true',
-        ),*/
         array(
             'name' => 'title',
             'index' => 'title',
@@ -304,7 +289,6 @@ if (!empty($work_data['enable_qualification']) &&
     $type = 'complex';
 
     $columns = array(
-        //get_lang('Type'),
         get_lang('FullUserName'),
         get_lang('Title'),
         get_lang('Feedback'),
@@ -314,17 +298,9 @@ if (!empty($work_data['enable_qualification']) &&
     );
 
     $column_model = array(
-        /*array(
-            'name' => 'type',
-            'index' => 'file',
-            'width' => '8',
-            'align' => 'left',
-            'search' => 'false',
-            'sortable' => 'false',
-        ),*/
         array(
             'name' => 'fullname',
-            'index' => 'fullname',
+            'index' => $orderName,
             'width' => '35',
             'align' => 'left',
             'search' => 'true',
@@ -374,10 +350,10 @@ if (!empty($work_data['enable_qualification']) &&
 }
 
 $extra_params = array(
-    'autowidth' =>  'true',
-    'height' =>  'auto',
-    'sortname' => 'fullname',
-    'sortable' => 'false'
+    'autowidth' => 'true',
+    'height' => 'auto',
+    'sortname' => $orderName,
+    'sortable' => 'false',
 );
 
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_work_user_list_all&work_id='.$workId.'&type='.$type.'&'.api_get_cidreq();

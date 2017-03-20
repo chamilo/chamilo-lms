@@ -464,7 +464,7 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements DriverInterface
      * @return resource|false
      * @author Dmitry (dio) Levashov
      **/
-    protected function _fopen($path, $mode='rb') {
+    protected function _fopen($path, $mode = 'rb') {
         $fp = $this->tmbPath
             ? @fopen($this->tmpname($path), 'w+')
             : @tmpfile();
@@ -491,7 +491,7 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements DriverInterface
      * @return bool
      * @author Dmitry (dio) Levashov
      **/
-    protected function _fclose($fp, $path='') {
+    protected function _fclose($fp, $path = '') {
         @fclose($fp);
         if ($path) {
             @unlink($this->tmpname($path));
@@ -633,8 +633,8 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements DriverInterface
     }
 
     /**
-    * {@inheritdoc}
-    */
+     * {@inheritdoc}
+     */
     protected function _archive($dir, $files, $name, $arc) {
         return false;
     }

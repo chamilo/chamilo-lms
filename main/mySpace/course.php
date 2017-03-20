@@ -15,7 +15,7 @@ $this_section = SECTION_TRACKING;
 $sessionId = isset($_GET['session_id']) ? intval($_GET['session_id']) : null;
 
 api_block_anonymous_users();
-$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('MySpace'));
+$interbreadcrumb[] = array("url" => "index.php", "name" => get_lang('MySpace'));
 
 if (isset($_GET["id_session"]) && $_GET["id_session"] != "") {
     $interbreadcrumb[] = array("url" => "session.php", "name" => get_lang('Sessions'));
@@ -35,8 +35,8 @@ if (isset($_GET["user_id"]) && $_GET["user_id"] != "" && !isset($_GET["type"])) 
 
 function count_courses()
 {
-	global $nb_courses;
-	return $nb_courses;
+    global $nb_courses;
+    return $nb_courses;
 }
 
 // Checking if the current coach is the admin coach
@@ -63,7 +63,7 @@ if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
             $user_id = intval($_GET['user_id']);
             $user_info = api_get_user_info($user_id);
             $title = get_lang('AssignedCoursesTo').' '.api_get_person_name($user_info['firstname'], $user_info['lastname']);
-            $courses  = CourseManager::get_course_list_of_user_as_course_admin($user_id);
+            $courses = CourseManager::get_course_list_of_user_as_course_admin($user_id);
         } else {
             $title = get_lang('YourCourseList');
             $courses = CourseManager::get_courses_followed_by_drh(api_get_user_id());
@@ -78,7 +78,7 @@ if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
 
     if (!api_is_session_admin()) {
         $menu_items[] = Display::url(
-            Display::return_icon('stats.png', get_lang('MyStats'),'',ICON_SIZE_MEDIUM),
+            Display::return_icon('stats.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH)."auth/my_progress.php"
         );
         $menu_items[] = Display::url(

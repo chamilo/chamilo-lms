@@ -8,7 +8,8 @@
 namespace Chamilo\ThemeBundle\Model;
 
 
-class UserModel implements  UserInterface {
+class UserModel implements  UserInterface
+{
 
     /**
      * @var string
@@ -124,7 +125,8 @@ class UserModel implements  UserInterface {
         return $this->getIsOnline();
     }
 
-    public function getIdentifier() {
+    public function getIdentifier()
+    {
         return str_replace(' ', '-', $this->getUsername());
     }
 }

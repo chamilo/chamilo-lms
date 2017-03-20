@@ -452,12 +452,15 @@ switch ($action) {
             $post = Blog::display_post($blog_id, intval($_GET['post_id']));
 
             $tpl->assign('post', $post);
+
+            $blogLayout = $tpl->get_template('blog/post.tpl');
         } else {
             $taskPost = Blog::display_select_task_post($blog_id, intval($_GET['task_id']));
-            $tpl->assign('content', $taskPost);
-        }
 
-        $blogLayout = $tpl->get_template('blog/post.tpl');
+            $tpl->assign('content', $taskPost);
+
+            $blogLayout = $tpl->get_template('blog/layout.tpl');
+        }
         break;
     case 'view_search_result' :
         $listArticles = Blog:: display_search_results($blog_id, Database::escape_string($_GET['q']));

@@ -1563,39 +1563,37 @@ class Blog
     {
         global $charset;
         $course_id = api_get_course_int_id();
-        $html = null;
+        $html = '';
         if (api_is_allowed('BLOG_'.$blog_id, 'article_add')) {
             $tbl_blogs_tasks = Database::get_course_table(TABLE_BLOGS_TASKS);
             $counter = 0;
             global $color2;
 
-            echo '<div class="actions">';
-            echo '<a href="'.api_get_self().'?action=manage_tasks&blog_id='.$blog_id.'&do=add">';
-            echo Display::return_icon('blog_newtasks.gif', get_lang('AddTasks'));
-            echo get_lang('AddTasks').'</a> ';
-            echo '<a href="'.api_get_self().'?action=manage_tasks&blog_id='.$blog_id.'&do=assign">';
-            echo Display::return_icon('blog_task.gif', get_lang('AssignTasks'));
-            echo get_lang('AssignTasks').'</a>';
-            ?>
-            <a href="<?php echo api_get_self(); ?>?action=manage_rights&blog_id=<?php echo $blog_id ?>"
-               title="<?php echo get_lang('ManageRights') ?>">
-                <?php echo Display::return_icon(
-                        'blog_admin_users.png',
-                        get_lang('RightsManager'),
-                        '',
-                        ICON_SIZE_SMALL
-                    ).get_lang('RightsManager') ?></a>
-            <?php
-            echo '</div>';
+            $html .= '<div class="actions">';
+            $html .= '<a href="'.api_get_self().'?action=manage_tasks&blog_id='.$blog_id.'&do=add">';
+            $html .= Display::return_icon('blog_newtasks.gif', get_lang('AddTasks'));
+            $html .= get_lang('AddTasks').'</a> ';
+            $html .= '<a href="'.api_get_self().'?action=manage_tasks&blog_id='.$blog_id.'&do=assign">';
+            $html .= Display::return_icon('blog_task.gif', get_lang('AssignTasks'));
+            $html .= get_lang('AssignTasks').'</a>';
+            $html .= Display::url(
+                Display::return_icon('blog_admin_users.png', get_lang('RightsManager')),
+                api_get_self().'?'.http_build_query([
+                    'action' => 'manage_rights',
+                    'blog_id' => $blog_id
+                ]),
+                ['title' => get_lang('ManageRights')]
+            );
 
-            echo '<span class="blogpost_title">'.get_lang('TaskList').'</span><br />';
-            echo "<table class=\"data_table\">";
-            echo "<tr bgcolor=\"$color2\" align=\"center\" valign=\"top\">",
-            "<th width='240'><b>", get_lang('Title'), "</b></th>",
-            "<th><b>", get_lang('Description'), "</b></th>",
-            "<th><b>", get_lang('Color'), "</b></th>",
-            "<th width='50'><b>", get_lang('Modify'), "</b></th>",
-            "</tr>";
+            $html .= '</div>';
+
+            $html .= '<span class="blogpost_title">'.get_lang('TaskList').'</span><br />';
+            $html .= "<table class=\"data_table\">";
+            $html .= "<tr bgcolor=\"$color2\" align=\"center\" valign=\"top\">"
+                ."<th width='240'><b>".get_lang('Title')."</b></th>"
+                ."<th><b>".get_lang('Description')."</b></th>"
+                ."<th><b>".get_lang('Color')."</b></th>"
+                ."<th width='50'><b>".get_lang('Modify')."</b></th></tr>";
 
 
             $sql = " SELECT
@@ -1622,25 +1620,27 @@ class Blog
                         api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset)
                     ).'\')) return false;"';
 
-                echo '<tr class="'.$css_class.'" valign="top">';
-                echo '<td width="240">'.Security::remove_XSS($task['title']).'</td>';
-                echo '<td>'.Security::remove_XSS($task['description']).'</td>';
-                echo '<td><span style="background-color: #'.$task['color'].'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>';
-                echo '<td width="50">';
-                echo '<a href="'.api_get_self(
+                $html .= '<tr class="'.$css_class.'" valign="top">';
+                $html .= '<td width="240">'.Security::remove_XSS($task['title']).'</td>';
+                $html .= '<td>'.Security::remove_XSS($task['description']).'</td>';
+                $html .= '<td><span style="background-color: #'.$task['color'].'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>';
+                $html .= '<td width="50">';
+                $html .= '<a href="'.api_get_self(
                     ).'?action=manage_tasks&blog_id='.$task['blog_id'].'&do=edit&task_id='.$task['task_id'].'">';
-                echo Display::return_icon('edit.png', get_lang('EditTask'));
-                echo "</a>";
-                echo '<a href="'.$delete_link.'"';
-                echo $delete_confirm;
-                echo '>';
-                echo Display::return_icon($delete_icon, $delete_title);
-                echo "</a>";
-                echo '</td>';
-                echo '</tr>';
+                $html .= Display::return_icon('edit.png', get_lang('EditTask'));
+                $html .= "</a>";
+                $html .= '<a href="'.$delete_link.'"';
+                $html .= $delete_confirm;
+                $html .= '>';
+                $html .= Display::return_icon($delete_icon, $delete_title);
+                $html .= "</a>";
+                $html .= '</td>';
+                $html .= '</tr>';
             }
-            echo "</table>";
+            $html .= "</table>";
         }
+
+        return $html;
     }
 
     /**
@@ -1658,15 +1658,15 @@ class Blog
         $counter = 0;
         global $charset, $color2;
 
-        echo '<span class="blogpost_title">'.get_lang('AssignedTasks').'</span><br />';
-        echo "<table class=\"data_table\">";
-        echo "<tr bgcolor=\"$color2\" align=\"center\" valign=\"top\">",
-        "<th width='240'><b>", get_lang('Member'), "</b></th>",
-        "<th><b>", get_lang('Task'), "</b></th>",
-        "<th><b>", get_lang('Description'), "</b></th>",
-        "<th><b>", get_lang('TargetDate'), "</b></th>",
-        "<th width='50'><b>", get_lang('Modify'), "</b></th>",
-        "</tr>";
+        $return = '<span class="blogpost_title">'.get_lang('AssignedTasks').'</span><br />';
+        $return .= "<table class=\"data_table\">";
+        $return .= "<tr bgcolor=\"$color2\" align=\"center\" valign=\"top\">"
+            ."<th width='240'><b>".get_lang('Member')."</b></th>"
+            ."<th><b>".get_lang('Task')."</b></th>"
+            ."<th><b>".get_lang('Description')."</b></th>"
+            ."<th><b>".get_lang('TargetDate')."</b></th>"
+            ."<th width='50'><b>".get_lang('Modify')."</b></th>"
+            ."</tr>";
 
         $course_id = api_get_course_int_id();
 
@@ -1694,31 +1694,33 @@ class Blog
 
             $username = api_htmlentities(sprintf(get_lang('LoginX'), $assignment['username']), ENT_QUOTES);
 
-            echo '<tr class="'.$css_class.'" valign="top">';
-            echo '<td width="240">'.Display::tag(
+            $return .='<tr class="'.$css_class.'" valign="top">';
+            $return .='<td width="240">'.Display::tag(
                     'span',
                     api_get_person_name($assignment['firstname'], $assignment['lastname']),
                     array('title' => $username)
                 ).'</td>';
-            echo '<td>'.stripslashes($assignment['title']).'</td>';
-            echo '<td>'.stripslashes($assignment['description']).'</td>';
-            echo '<td>'.$assignment['target_date'].'</td>';
-            echo '<td width="50">';
-            echo '<a href="'.api_get_self(
+            $return .= '<td>'.stripslashes($assignment['title']).'</td>';
+            $return .= '<td>'.stripslashes($assignment['description']).'</td>';
+            $return .= '<td>'.$assignment['target_date'].'</td>';
+            $return .= '<td width="50">';
+            $return .= '<a href="'.api_get_self(
                 ).'?action=manage_tasks&blog_id='.$assignment['blog_id'].'&do=edit_assignment&task_id='.$assignment['task_id'].'&user_id='.$assignment['user_id'].'">';
-            echo Display::return_icon('edit.png', get_lang('EditTask'));
-            echo "</a>";
-            echo '<a href="'.api_get_self(
+            $return .= Display::return_icon('edit.png', get_lang('EditTask'));
+            $return .= "</a>";
+            $return .= '<a href="'.api_get_self(
                 ).'?action=manage_tasks&blog_id='.$assignment['blog_id'].'&do=delete_assignment&task_id='.$assignment['task_id'].'&user_id='.$assignment['user_id'].'" ';
-            echo 'onclick="javascript:if(!confirm(\''.addslashes(
+            $return .= 'onclick="javascript:if(!confirm(\''.addslashes(
                     api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset)
                 ).'\')) return false;"';
-            echo Display::return_icon($delete_icon, $delete_title);
-            echo "</a>";
-            echo '</td>';
-            echo '</tr>';
+            $return .= Display::return_icon($delete_icon, $delete_title);
+            $return .= "</a>";
+            $return .= '</td>';
+            $return .= '</tr>';
         }
-        echo "</table>";
+        $return .= "</table>";
+
+        return $return;
     }
 
     /**
@@ -1748,13 +1750,13 @@ class Blog
         );
 
         // form
-        echo '<form name="add_task" method="post" action="blog.php?action=manage_tasks&blog_id='.$blog_id.'">';
+        $return = '<form name="add_task" method="post" action="blog.php?action=manage_tasks&blog_id='.$blog_id.'">';
 
         // form title
-        echo '<legend>'.get_lang('AddTask').'</legend>';
+        $return .= '<legend>'.get_lang('AddTask').'</legend>';
 
         // task title
-        echo '	<div class="control-group">
+        $return .= '	<div class="control-group">
                     <label class="control-label">
                         <span class="form_required">*</span>'.get_lang('Title').'
                     </label>
@@ -1764,7 +1766,7 @@ class Blog
                 </div>';
 
         // task comment
-        echo '	<div class="control-group">
+        $return .= '	<div class="control-group">
                     <label class="control-label">
                         '.get_lang('Description').'
                     </label>
@@ -1774,57 +1776,59 @@ class Blog
                 </div>';
 
         // task management
-        echo '	<div class="control-group">
+        $return .= '	<div class="control-group">
                     <label class="control-label">
                         '.get_lang('TaskManager').'
                     </label>
                     <div class="controls">';
-        echo '<table class="data_table" cellspacing="0" style="border-collapse:collapse; width:446px;">';
-        echo '<tr>';
-        echo '<th colspan="2" style="width:223px;">'.get_lang('ArticleManager').'</th>';
-        echo '<th width:223px;>'.get_lang('CommentManager').'</th>';
-        echo '</tr>';
-        echo '<tr>';
-        echo '<th style="width:111px;"><label for="articleDelete">'.get_lang('Delete').'</label></th>';
-        echo '<th style="width:112px;"><label for="articleEdit">'.get_lang('Edit').'</label></th>';
-        echo '<th style="width:223px;"><label for="commentsDelete">'.get_lang('Delete').'</label></th>';
-        echo '</tr>';
-        echo '<tr>';
-        echo '<td style="text-align:center;"><input id="articleDelete" name="chkArticleDelete" type="checkbox" /></td>';
-        echo '<td style="text-align:center;"><input id="articleEdit" name="chkArticleEdit" type="checkbox" /></td>';
-        echo '<td style="border:1px dotted #808080; text-align:center;"><input id="commentsDelete" name="chkCommentsDelete" type="checkbox" /></td>';
-        echo '</tr>';
-        echo '</table>';
-        echo '		</div>
+        $return .= '<table class="data_table" cellspacing="0" style="border-collapse:collapse; width:446px;">';
+        $return .= '<tr>';
+        $return .= '<th colspan="2" style="width:223px;">'.get_lang('ArticleManager').'</th>';
+        $return .= '<th width:223px;>'.get_lang('CommentManager').'</th>';
+        $return .= '</tr>';
+        $return .= '<tr>';
+        $return .= '<th style="width:111px;"><label for="articleDelete">'.get_lang('Delete').'</label></th>';
+        $return .= '<th style="width:112px;"><label for="articleEdit">'.get_lang('Edit').'</label></th>';
+        $return .= '<th style="width:223px;"><label for="commentsDelete">'.get_lang('Delete').'</label></th>';
+        $return .= '</tr>';
+        $return .= '<tr>';
+        $return .= '<td style="text-align:center;"><input id="articleDelete" name="chkArticleDelete" type="checkbox" /></td>';
+        $return .= '<td style="text-align:center;"><input id="articleEdit" name="chkArticleEdit" type="checkbox" /></td>';
+        $return .= '<td style="border:1px dotted #808080; text-align:center;"><input id="commentsDelete" name="chkCommentsDelete" type="checkbox" /></td>';
+        $return .= '</tr>';
+        $return .= '</table>';
+        $return .= '		</div>
                 </div>';
 
 
         // task color
-        echo '	<div class="control-group">
+        $return .= '	<div class="control-group">
                     <label class="control-label">
                         '.get_lang('Color').'
                     </label>
                     <div class="controls">';
-        echo '<select name="task_color" id="color" style="width: 150px; background-color: #eeeeee" onchange="document.getElementById(\'color\').style.backgroundColor=\'#\'+document.getElementById(\'color\').value" onkeypress="document.getElementById(\'color\').style.backgroundColor=\'#\'+document.getElementById(\'color\').value">';
+        $return .= '<select name="task_color" id="color" style="width: 150px; background-color: #eeeeee" onchange="document.getElementById(\'color\').style.backgroundColor=\'#\'+document.getElementById(\'color\').value" onkeypress="document.getElementById(\'color\').style.backgroundColor=\'#\'+document.getElementById(\'color\').value">';
         foreach ($colors as $color) {
             $style = 'style="background-color: #'.$color.'"';
-            echo '<option value="'.$color.'" '.$style.'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>';
+            $return .= '<option value="'.$color.'" '.$style.'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>';
         }
-        echo '</select>';
-        echo '		</div>
+        $return .= '</select>';
+        $return .= '		</div>
                 </div>';
 
         // submit
-        echo '	<div class="control-group">
+        $return .= '	<div class="control-group">
                     <div class="controls">
                             <input type="hidden" name="action" value="" />
                             <input type="hidden" name="new_task_submit" value="true" />
                         <button class="save" type="submit" name="Submit">'.get_lang('Save').'</button>
                     </div>
                 </div>';
-        echo '</form>';
+        $return .= '</form>';
 
-        echo '<div style="clear:both; margin-bottom: 10px;"></div>';
+        $return .= '<div style="clear:both; margin-bottom: 10px;"></div>';
+
+        return $return;
     }
 
     /**
@@ -1860,7 +1864,7 @@ class Blog
         $task = Database::fetch_array($result);
 
         // Display
-        echo '<form name="edit_task" method="post" action="blog.php?action=manage_tasks&blog_id='.$blog_id.'">
+        $return = '<form name="edit_task" method="post" action="blog.php?action=manage_tasks&blog_id='.$blog_id.'">
                     <legend>'.get_lang('EditTask').'</legend>
                     <table width="100%" border="0" cellspacing="2">
                         <tr>
@@ -1885,48 +1889,48 @@ class Blog
             $arrPermissions[] = $row['action'];
         }
 
-        echo '<tr>';
-        echo '<td style="text-align:right; vertical-align:top;">'.get_lang('TaskManager').':&nbsp;&nbsp;</td>';
-        echo '<td>';
-        echo '<table  class="data_table" cellspacing="0" style="border-collapse:collapse; width:446px;">';
-        echo '<tr>';
-        echo '<th colspan="2" style="width:223px;">'.get_lang('ArticleManager').'</th>';
-        echo '<th width:223px;>'.get_lang('CommentManager').'</th>';
-        echo '</tr>';
-        echo '<tr>';
-        echo '<th style="width:111px;"><label for="articleDelete">'.get_lang('Delete').'</label></th>';
-        echo '<th style="width:112px;"><label for="articleEdit">'.get_lang('Edit').'</label></th>';
-        echo '<th style="width:223px;"><label for="commentsDelete">'.get_lang('Delete').'</label></th>';
-        echo '</tr>';
-        echo '<tr>';
-        echo '<td style="text-align:center;"><input '.((in_array(
+        $return .= '<tr>';
+        $return .= '<td style="text-align:right; vertical-align:top;">'.get_lang('TaskManager').':&nbsp;&nbsp;</td>';
+        $return .= '<td>';
+        $return .= '<table  class="data_table" cellspacing="0" style="border-collapse:collapse; width:446px;">';
+        $return .= '<tr>';
+        $return .= '<th colspan="2" style="width:223px;">'.get_lang('ArticleManager').'</th>';
+        $return .= '<th width:223px;>'.get_lang('CommentManager').'</th>';
+        $return .= '</tr>';
+        $return .= '<tr>';
+        $return .= '<th style="width:111px;"><label for="articleDelete">'.get_lang('Delete').'</label></th>';
+        $return .= '<th style="width:112px;"><label for="articleEdit">'.get_lang('Edit').'</label></th>';
+        $return .= '<th style="width:223px;"><label for="commentsDelete">'.get_lang('Delete').'</label></th>';
+        $return .= '</tr>';
+        $return .= '<tr>';
+        $return .= '<td style="text-align:center;"><input '.((in_array(
                 'article_delete',
                 $arrPermissions
             )) ? 'checked ' : '').'id="articleDelete" name="chkArticleDelete" type="checkbox" /></td>';
-        echo '<td style="text-align:center;"><input '.((in_array(
+        $return .= '<td style="text-align:center;"><input '.((in_array(
                 'article_edit',
                 $arrPermissions
             )) ? 'checked ' : '').'id="articleEdit" name="chkArticleEdit" type="checkbox" /></td>';
-        echo '<td style="text-align:center;"><input '.((in_array(
+        $return .= '<td style="text-align:center;"><input '.((in_array(
                 'article_comments_delete',
                 $arrPermissions
             )) ? 'checked ' : '').'id="commentsDelete" name="chkCommentsDelete" type="checkbox" /></td>';
-        echo '</tr>';
-        echo '</table>';
-        echo '</td>';
-        echo '</tr>';
+        $return .= '</tr>';
+        $return .= '</table>';
+        $return .= '</td>';
+        $return .= '</tr>';
         /* end of edit */
 
-        echo '<tr>
+        $return .= '<tr>
                        <td align="right">'.get_lang('Color').':&nbsp;&nbsp;</td>
                        <td>
                         <select name="task_color" id="color" style="width: 150px; background-color: #'.$task['color'].'" onchange="document.getElementById(\'color\').style.backgroundColor=\'#\'+document.getElementById(\'color\').value" onkeypress="document.getElementById(\'color\').style.backgroundColor=\'#\'+document.getElementById(\'color\').value">';
         foreach ($colors as $color) {
             $selected = ($color == $task['color']) ? ' selected' : '';
             $style = 'style="background-color: #'.$color.'"';
-            echo '<option value="'.$color.'" '.$style.' '.$selected.' >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>';
+            $return .= '<option value="'.$color.'" '.$style.' '.$selected.' >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>';
         }
-        echo '			   </select>
+        $return .= '			   </select>
                           </td>
                         </tr>
                         <tr>
@@ -1939,6 +1943,8 @@ class Blog
                         </tr>
                     </table>
                 </form>';
+
+        return $return;
     }
 
     /**
@@ -1950,8 +1956,10 @@ class Blog
     {
         $form = self::getTaskForm($blog_id);
         $form->addHidden('assign_task_submit', 'true');
-        $form->display();
-        echo '<div style="clear: both; margin-bottom:10px;"></div>';
+
+        return $form->returnForm()
+            . PHP_EOL
+            . '<div style="clear: both; margin-bottom:10px;"></div>';
     }
 
     /**
@@ -2052,7 +2060,8 @@ class Blog
         $form->addHidden('old_target_date', $date);
         $form->addHidden('assign_task_edit_submit', 'true');
         $form->setDefaults($defaults);
-        $form->display();
+
+        return $form->returnForm();
     }
 
     /**
@@ -2181,25 +2190,29 @@ class Blog
         $result = Database::query($sql);
 
         // Display
-        echo '<span class="blogpost_title">'.get_lang('SelectTaskArticle').' "'.stripslashes($row['title']).'"</span>';
-        echo '<span style="font-style: italic;"">'.stripslashes($row['description']).'</span><br><br>';
+        $return = '<span class="blogpost_title">'.get_lang('SelectTaskArticle').' "'.stripslashes($row['title']).'"</span>';
+        $return .= '<span style="font-style: italic;"">'.stripslashes($row['description']).'</span><br><br>';
 
-        if (Database::num_rows($result) > 0) {
-            while ($blog_post = Database::fetch_array($result)) {
-                $username = api_htmlentities(sprintf(get_lang('LoginX'), $blog_post['username']), ENT_QUOTES);
-                echo '<a href="blog.php?action=execute_task&blog_id='.$blog_id.'&task_id='.$task_id.'&post_id='.$blog_post['post_id'].'#add_comment">'.stripslashes(
-                        $blog_post['title']
-                    ).'</a>, '.get_lang('WrittenBy').' '.stripslashes(
-                        Display::tag(
-                            'span',
-                            api_get_person_name($blog_post['firstname'], $blog_post['lastname']),
-                            array('title' => $username)
-                        )
-                    ).'<br />';
-            }
-        } else {
-            echo get_lang('NoArticles');
+        if (Database::num_rows($result) == 0) {
+            $return .= get_lang('NoArticles');
+
+            return $return;
         }
+
+        while ($blog_post = Database::fetch_array($result)) {
+            $username = api_htmlentities(sprintf(get_lang('LoginX'), $blog_post['username']), ENT_QUOTES);
+            $return .= '<a href="blog.php?action=execute_task&blog_id='.$blog_id.'&task_id='.$task_id.'&post_id='.$blog_post['post_id'].'#add_comment">'.stripslashes(
+                    $blog_post['title']
+                ).'</a>, '.get_lang('WrittenBy').' '.stripslashes(
+                    Display::tag(
+                        'span',
+                        api_get_person_name($blog_post['firstname'], $blog_post['lastname']),
+                        array('title' => $username)
+                    )
+                ).'<br />';
+        }
+
+        return $return;
     }
 
     /**

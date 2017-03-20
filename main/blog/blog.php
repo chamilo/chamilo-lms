@@ -47,7 +47,9 @@ if (!empty($_POST['new_post_submit'])) {
         $_POST['post_file_comment'],
         $blog_id
     );
-    $return_message = array('type' => 'confirmation', 'message' => get_lang('BlogAdded'));
+    Display::addFlash(
+        Display::return_message(get_lang('BlogAdded'), 'success')
+    );
 }
 if (!empty($_POST['edit_post_submit'])) {
     Blog:: edit_post(
@@ -56,7 +58,9 @@ if (!empty($_POST['edit_post_submit'])) {
         $_POST['full_text'],
         $blog_id
     );
-    $return_message = array('type' => 'confirmation', 'message' => get_lang('BlogEdited'));
+    Display::addFlash(
+        Display::return_message(get_lang('BlogEdited'), 'success')
+    );
 }
 
 if (!empty($_POST['new_task_submit'])) {
@@ -69,7 +73,10 @@ if (!empty($_POST['new_task_submit'])) {
         (isset($_POST['chkCommentsDelete']) ? $_POST['chkCommentsDelete'] : null),
         (isset($_POST['task_color']) ? $_POST['task_color'] : null)
     );
-    $return_message = array('type' => 'confirmation', 'message' => get_lang('TaskCreated'));
+
+    Display::addFlash(
+        Display::return_message(get_lang('TaskCreated'), 'success')
+    );
 }
 
 if (isset($_POST['edit_task_submit'])) {
@@ -83,9 +90,8 @@ if (isset($_POST['edit_task_submit'])) {
         $_POST['chkCommentsDelete'],
         $_POST['task_color']
     );
-    $return_message = array(
-        'type' => 'confirmation',
-        'message' => get_lang('TaskEdited'),
+    Display::addFlash(
+        Display::return_message(get_lang('TaskEdited'), 'success')
     );
 }
 
@@ -96,9 +102,8 @@ if (!empty($_POST['assign_task_submit'])) {
         $_POST['task_task_id'],
         $_POST['task_day']
     );
-    $return_message = array(
-        'type' => 'confirmation',
-        'message' => get_lang('TaskAssigned'),
+    Display::addFlash(
+        Display::return_message(get_lang('TaskAssigned'), 'success')
     );
 }
 
@@ -112,9 +117,8 @@ if (isset($_POST['assign_task_edit_submit'])) {
         $_POST['old_task_id'],
         $_POST['old_target_date']
     );
-    $return_message = array(
-        'type' => 'confirmation',
-        'message' => get_lang('AssignedTaskEdited'),
+    Display::addFlash(
+        Display::return_message(get_lang('AssignedTaskEdited'), 'success')
     );
 }
 if (!empty($_POST['register'])) {
@@ -133,7 +137,9 @@ if (!empty($_POST['unregister'])) {
 }
 if (!empty($_GET['register'])) {
     Blog:: set_user_subscribed((int) $_GET['blog_id'], (int) $_GET['user_id']);
-    $return_message = array('type' => 'confirmation', 'message' => get_lang('UserRegistered'));
+    Display::addFlash(
+        Display::return_message(get_lang('UserRegistered'), 'success')
+    );
     $flag = 1;
 }
 if (!empty($_GET['unregister'])) {
@@ -143,12 +149,16 @@ if (!empty($_GET['unregister'])) {
 if (isset($_GET['action']) && $_GET['action'] == 'manage_tasks') {
     if (isset($_GET['do']) && $_GET['do'] == 'delete') {
         Blog:: delete_task($blog_id, (int) $_GET['task_id']);
-        $return_message = array('type' => 'confirmation', 'message' => get_lang('TaskDeleted'));
+        Display::addFlash(
+            Display::return_message(get_lang('TaskDeleted'), 'success')
+        );
     }
 
     if (isset($_GET['do']) && $_GET['do'] == 'delete_assignment') {
         Blog:: delete_assigned_task($blog_id, intval($_GET['task_id']), intval($_GET['user_id']));
-        $return_message = array('type' => 'confirmation', 'message' => get_lang('TaskAssignmentDeleted'));
+        Display::addFlash(
+            Display::return_message(get_lang('TaskAssignmentDeleted'), 'success')
+        );
     }
 }
 
@@ -158,10 +168,13 @@ if (isset($_GET['action']) && $_GET['action'] == 'view_post') {
     if (isset($_GET['do']) && $_GET['do'] == 'delete_comment') {
         if (api_is_allowed('BLOG_'.$blog_id, 'article_comments_delete', $task_id)) {
             Blog:: delete_comment($blog_id, (int) $_GET['post_id'], (int) $_GET['comment_id']);
-            $return_message = array('type' => 'confirmation', 'message' => get_lang('CommentDeleted'));
+            Display::addFlash(
+                Display::return_message(get_lang('CommentDeleted'), 'success')
+            );
         } else {
-            $error = true;
-            $message = get_lang('ActionNotAllowed');
+            Display::addFlash(
+                Display::return_message(get_lang('ActionNotAllowed'), 'error')
+            );
         }
     }
 
@@ -169,23 +182,30 @@ if (isset($_GET['action']) && $_GET['action'] == 'view_post') {
         if (api_is_allowed('BLOG_'.$blog_id, 'article_delete', $task_id)) {
             Blog:: delete_post($blog_id, (int) $_GET['article_id']);
             $action = ''; // Article is gone, go to blog home
-            $return_message = array('type' => 'confirmation', 'message' => get_lang('BlogDeleted'));
+            Display::addFlash(
+                Display::return_message(get_lang('BlogDeleted'), 'success')
+            );
         } else {
-            $error = true;
-            $message = get_lang('ActionNotAllowed');
+            Display::addFlash(
+                Display::return_message(get_lang('ActionNotAllowed'), 'error')
+            );
         }
     }
     if (isset($_GET['do']) && $_GET['do'] == 'rate') {
         if (isset($_GET['type']) && $_GET['type'] == 'post') {
             if (api_is_allowed('BLOG_'.$blog_id, 'article_rate')) {
                 Blog:: add_rating('post', $blog_id, (int) $_GET['post_id'], (int) $_GET['rating']);
-                $return_message = array('type' => 'confirmation', 'message' => get_lang('RatingAdded'));
+                Display::addFlash(
+                    Display::return_message(get_lang('RatingAdded'), 'success')
+                );
             }
         }
         if (isset($_GET['type']) && $_GET['type'] == 'comment') {
             if (api_is_allowed('BLOG_'.$blog_id, 'article_comments_add')) {
                 Blog:: add_rating('comment', $blog_id, (int) $_GET['comment_id'], (int) $_GET['rating']);
-                $return_message = array('type' => 'confirmation', 'message' => get_lang('RatingAdded'));
+                Display::addFlash(
+                    Display::return_message(get_lang('RatingAdded'), 'success')
+                );
             }
         }
     }
@@ -249,16 +269,6 @@ switch ($action) {
         $nameTools = Blog:: get_blog_title($blog_id);
 }
 
-// feedback messages
-if (!empty($return_message)) {
-    if ($return_message['type'] == 'confirmation') {
-        Display::display_confirmation_message($return_message['message']);
-    }
-    if ($return_message['type'] == 'error') {
-        Display::display_error_message($return_message['message']);
-    }
-}
-
 $actionsLeft = [];
 $actionsLeft[] = Display::url(
     Display::return_icon('blog.png', get_lang('Home'), '', ICON_SIZE_MEDIUM),
@@ -294,11 +304,6 @@ $year = isset($_GET['year']) ? (int) $_GET['year'] : date('Y');
 $calendarBlog = Blog::display_minimonthcalendar($month, $year, $blog_id);
 //task blogs
 $taskBlog = Blog::get_personal_task_list();
-
-
-if (isset($error)) {
-    Display::display_error_message($message);
-}
 
 if (isset($flag) && $flag == '1') {
     $action = "manage_tasks";

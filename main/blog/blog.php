@@ -22,7 +22,7 @@ $current_course_tool = TOOL_BLOGS;
 api_protect_course_script(true);
 
 $lib_path = api_get_path(LIBRARY_PATH);
-$blog_table_attachment 	= Database::get_course_table(TABLE_BLOGS_ATTACHMENT);
+$blog_table_attachment = Database::get_course_table(TABLE_BLOGS_ATTACHMENT);
 
 $nameTools  = get_lang('Blogs');
 $DaysShort  = api_get_week_days_short();
@@ -182,7 +182,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'manage_tasks') {
 if (isset($_GET['action']) && $_GET['action'] == 'view_post') {
 	$task_id = (isset ($_GET['task_id']) && is_numeric($_GET['task_id'])) ? $_GET['task_id'] : 0;
 
-	if (isset($_GET['do']) && $_GET['do'] == 'delete_comment')	{
+	if (isset($_GET['do']) && $_GET['do'] == 'delete_comment'){
 		if (api_is_allowed('BLOG_'.$blog_id, 'article_comments_delete', $task_id)) {
 			Blog :: delete_comment($blog_id, (int)$_GET['post_id'],(int)$_GET['comment_id']);
 			$return_message = array('type' => 'confirmation', 'message' => get_lang('CommentDeleted'));
@@ -192,7 +192,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'view_post') {
 		}
 	}
 
-	if (isset($_GET['do']) && $_GET['do'] == 'delete_article')	{
+	if (isset($_GET['do']) && $_GET['do'] == 'delete_article'){
 		if (api_is_allowed('BLOG_'.$blog_id, 'article_delete', $task_id)) {
 			Blog :: delete_post($blog_id, (int)$_GET['article_id']);
 			$action = ''; // Article is gone, go to blog home

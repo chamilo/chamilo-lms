@@ -87,8 +87,8 @@ class UserTable extends SortableTable
         // generate the data to display
         $sortable_data = array();
         foreach ($data_array as $data) {
-            if ($data[2]!="") {//filter by course removed
-                $row = array ();
+            if ($data[2] != "") {//filter by course removed
+                $row = array();
                 $row[] = $this->build_type_column($data[0]);
                 $row[] = $this->build_name_link($data[0]);
                 $row[] = $data[2];
@@ -124,15 +124,15 @@ class UserTable extends SortableTable
             // evaluation
             case 'E':
                 return '&nbsp;'
-                . '<a href="gradebook_view_result.php?selecteval=' . $item->get_id() . '">'
+                . '<a href="gradebook_view_result.php?selecteval='.$item->get_id().'">'
                 . $item->get_name()
                 . '</a>';
             // link
             case 'L':
-                return '&nbsp;<a href="' . $item->get_link() . '">'
+                return '&nbsp;<a href="'.$item->get_link().'">'
                 . $item->get_name()
                 . '</a>'
-                . '&nbsp;[' . $item->get_type_name() . ']';
+                . '&nbsp;['.$item->get_type_name().']';
         }
     }
 }

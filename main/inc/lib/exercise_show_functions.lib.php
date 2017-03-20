@@ -37,7 +37,7 @@ class ExerciseShowFunctions
 	    $originalStudentAnswer = '',
 	    $showTotalScoreAndUserChoices
     ) {
-        $answerHTML = FillBlanks::getHtmlDisplayForAnswer($answer, $resultsDisabled, $showTotalScoreAndUserChoices);
+        $answerHTML = FillBlanks::getHtmlDisplayForAnswer($answer, $feedbackType, $resultsDisabled, $showTotalScoreAndUserChoices);
         if (strpos($originalStudentAnswer, 'font color') !== false) {
             $answerHTML = $originalStudentAnswer;
         }

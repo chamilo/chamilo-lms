@@ -22,9 +22,9 @@ class Glossary extends Resource
      * @param string $description
      * @param int $display_order
      */
-    public function __construct($id,$name,$description,$display_order)
+    public function __construct($id, $name, $description, $display_order)
     {
-        parent::__construct($id,RESOURCE_GLOSSARY);
+        parent::__construct($id, RESOURCE_GLOSSARY);
         $this->glossary_id = $id;
         $this->name = $name;
         $this->description = $description;

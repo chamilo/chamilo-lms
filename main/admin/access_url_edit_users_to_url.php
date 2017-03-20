@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * 	@package chamilo.admin
- * 	@author Julio Montoya <gugli100@gmail.com>
+ * @package chamilo.admin
+ * @author Julio Montoya <gugli100@gmail.com>
  */
 // resetting the course id
 $cidReset = true;
@@ -48,10 +48,8 @@ $htmlHeadXtra[] = '<script>
 function add_user_to_url(code, content) {
 	document.getElementById("user_to_add").value = "";
 	document.getElementById("ajax_list_users").innerHTML = "";
-
 	destination = document.getElementById("destination_users");
 	destination.options[destination.length] = new Option(content,code);
-
 	destination.selectedIndex = -1;
 	sortOptions(destination.options);
 }

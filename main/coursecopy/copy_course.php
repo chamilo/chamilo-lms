@@ -6,6 +6,7 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 
 /**
+ * @todo rework file in order to use addFlash
  * @package chamilo.backup
  */
 
@@ -48,7 +49,6 @@ if (Security::check_token('post') && (
 ) {
     // Clear token
     Security::clear_token();
-
     if (isset($_POST['action']) && $_POST['action'] == 'course_select_form') {
         $course = CourseSelectForm::get_posted_course('copy_course');
     } else {
@@ -85,24 +85,22 @@ if (Security::check_token('post') && (
     $table_cu = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
     $user_info = api_get_user_info();
     $course_info = api_get_course_info();
-    $sql = 'SELECT *
-            FROM '.$table_c.' c, '.$table_cu.' cu
-            WHERE cu.c_id = c.id';
-    if (!api_is_platform_admin()) {
-        $sql .= ' AND cu.status=1 ';
-    }
-    $sql .= ' AND
-            cu.user_id = '.$user_info['user_id'].' AND
-            c.id != '."'".$course_info['real_id']."'".'
-            ORDER BY title ASC';
-    $res = Database::query($sql);
-    if (Database::num_rows($res) == 0) {
+
+    $courseList = CourseManager::get_courses_list_by_user_id(
+        $user_info['user_id'],
+        false,
+        false,
+        false,
+        [$course_info['real_id']]
+    );
+
+    if (empty($courseList)) {
         Display::display_normal_message(get_lang('NoDestinationCoursesAvailable'));
     } else {
         $options = array();
-        while ($obj = Database::fetch_object($res)) {
-            $courseInfo = api_get_course_info_by_id($obj->c_id);
-            $options[$courseInfo['code']] = $obj->title.' ('.$obj->code.')';
+        foreach ($courseList as $courseItem) {
+            $courseInfo = api_get_course_info_by_id($courseItem['real_id']);
+            $options[$courseInfo['code']] = $courseInfo['title'].' ('.$courseInfo['code'].')';
         }
 
         $form = new FormValidator(

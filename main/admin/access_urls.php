@@ -79,16 +79,24 @@ foreach ($url_list as $my_url) {
         $url_string .= $my_url['url'].' <br />';
     }
 }
-if(!empty($url_string)) {
-	Display :: display_warning_message(get_lang('AdminShouldBeRegisterInSite').'<br />'.$url_string,false);
+if (!empty($url_string)) {
+    Display:: display_warning_message(
+        get_lang('AdminShouldBeRegisterInSite').'<br />'.$url_string,
+        false
+    );
 }
 
 // checking the current installation
-if ($current_access_url_id==-1) {
-	Display::display_warning_message(get_lang('URLNotConfiguredPleaseChangedTo').': '.api_get_path(WEB_PATH));
-} elseif(api_is_platform_admin()) {
-    $quant= UrlManager::relation_url_user_exist(api_get_user_id(),$current_access_url_id);
-    if ($quant==0) {
+if ($current_access_url_id == -1) {
+    Display::display_warning_message(
+        get_lang('URLNotConfiguredPleaseChangedTo').': '.api_get_path(WEB_PATH)
+    );
+} elseif (api_is_platform_admin()) {
+    $quant = UrlManager::relation_url_user_exist(
+        api_get_user_id(),
+        $current_access_url_id
+    );
+    if ($quant == 0) {
         Display:: display_warning_message(
             '<a href="'.api_get_self().'?action=register&sec_token='.$parameters['sec_token'].'">'.get_lang('ClickToRegisterAdmin').'</a>',
             false
@@ -135,13 +143,13 @@ foreach ($sortable_data as $row) {
 
     //Status
     $active = $row['active'];
-    if ($active=='1') {
-        $action='lock';
-        $image='right';
+    if ($active == '1') {
+        $action = 'lock';
+        $image = 'right';
     }
-    if ($active=='0') {
-        $action='unlock';
-        $image='wrong';
+    if ($active == '0') {
+        $action = 'unlock';
+        $image = 'wrong';
     }
     // you cannot lock the default
     if ($row['id']=='1') {

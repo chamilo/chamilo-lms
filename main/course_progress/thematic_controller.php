@@ -49,7 +49,6 @@ class ThematicController
                     if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {
                         if (trim($_POST['title']) !== '') {
                             if (api_is_allowed_to_edit(null, true)) {
-
                                 $id = isset($_POST['thematic_id']) ? $_POST['thematic_id'] : null;
                                 $title = trim($_POST['title']);
                                 $content = trim($_POST['content']);
@@ -121,7 +120,6 @@ class ThematicController
 
                     // Import the progress.
                     $current_thematic = null;
-
                     foreach ($csv_import_array as $key => $item) {
                         if (!$key) {
                             continue;
@@ -217,20 +215,58 @@ class ThematicController
                                     continue;
                                 }
 
-                                $plan_html .= '<strong>' . $plan['title'] . '</strong><br /> ' . $plan['description'] . '<br />';
+                                $plan_html .= '<strong>'.$plan['title'].'</strong><br /> '.$plan['description'].'<br />';
                             }
                         }
                         $data = $thematic->get_thematic_advance_by_thematic_id($theme['id']);
                         $advance_html = null;
                         if (!empty($data)) {
                             foreach ($data as $advance) {
-                                $advance_html .= api_convert_and_format_date($advance['start_date'], DATE_FORMAT_LONG) . ' ('.$advance['duration'].' '.get_lang('HourShort').')<br />'.$advance['content'].'<br />';
+                                $advance_html .= api_convert_and_format_date($advance['start_date'], DATE_FORMAT_LONG).' ('.$advance['duration'].' '.get_lang('HourShort').')<br />'.$advance['content'].'<br />';
                             }
                         }
                         $table[] = array($theme['title'], $plan_html, $advance_html);
                     }
                     $params = array(
-                        'filename' => get_lang('Thematic') . '-' . api_get_local_time(),
+                        'filename' => get_lang('Thematic').'-'.api_get_local_time(),
+                        'pdf_title' => get_lang('Thematic'),
+                        'add_signatures' => true,
+                        'format' => 'A4-L',
+                        'orientation' => 'L'
+                    );
+                    Export::export_table_pdf($table, $params);
+                    break;
+                case 'export_single_thematic':
+                    $theme = $thematic->get_thematic_list($thematic_id);
+                    $table = array();
+                    $table[] = array(
+                        get_lang('Thematic'),
+                        get_lang('ThematicPlan'),
+                        get_lang('ThematicAdvance')
+                    );
+                    $data = $thematic->get_thematic_plan_data($theme['id']);
+                    $plan_html = null;
+                    if (!empty($data)) {
+                        foreach ($data as $plan) {
+                            if (empty($plan['description'])) {
+                                continue;
+                            }
+
+                            $plan_html .= '<h6>'.$plan['title'].'</h6>'.$plan['description'].'<br />';
+                        }
+                    }
+                    $data = $thematic->get_thematic_advance_by_thematic_id($theme['id']);
+                    $advance_html = null;
+                    if (!empty($data)) {
+                        foreach ($data as $advance) {
+                            $advance_html .= api_convert_and_format_date($advance['start_date'], DATE_FORMAT_LONG)
+                                .' ('.$advance['duration'].' '.get_lang('HourShort').')'
+                                .'<br />'.$advance['content'].'<br />';
+                        }
+                    }
+                    $table[] = array($theme['title'], $plan_html, $advance_html);
+                    $params = array(
+                        'filename' => get_lang('Thematic').'-'.api_get_local_time(),
                         'pdf_title' => get_lang('Thematic'),
                         'add_signatures' => true,
                         'format' => 'A4-L',
@@ -325,8 +361,8 @@ class ThematicController
                                 $thematic->thematic_plan_save();
                             }
 
-                            $saveRedirect = api_get_path(WEB_PATH) . 'main/course_progress/index.php?';
-                            $saveRedirect.= api_get_cidreq() . '&';
+                            $saveRedirect = api_get_path(WEB_PATH).'main/course_progress/index.php?';
+                            $saveRedirect .= api_get_cidreq().'&';
 
                             if (isset($_REQUEST['add_item'])) {
                                 $thematic->set_thematic_plan_attributes(
@@ -342,7 +378,7 @@ class ThematicController
                                     'thematic_id' => $_REQUEST['thematic_id']
                                 ]);
                             } else {
-                                $saveRedirect.= 'thematic_plan_save_message=ok';
+                                $saveRedirect .= 'thematic_plan_save_message=ok';
 
                                 unset($_SESSION['thematic_plan_token']);
                                 $data['message'] = 'ok';

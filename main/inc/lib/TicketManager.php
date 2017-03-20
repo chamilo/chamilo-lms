@@ -594,6 +594,15 @@ class TicketManager
                     WHERE id = $ticketId";
             Database::query($sql);
 
+            $table = Database::get_main_table(TABLE_TICKET_ASSIGNED_LOG);
+            $params = [
+                'ticket_id' => $ticketId,
+                'user_id' => $userId,
+                'sys_insert_user_id' => api_get_user_id(),
+                'assigned_date' => api_get_utc_datetime()
+            ];
+            Database::insert($table, $params);
+
             return true;
         } else {
             return false;
@@ -1567,7 +1576,6 @@ class TicketManager
                 WHERE ticket_id = $ticketId
                 ORDER BY assigned_date DESC";
         $result = Database::query($sql);
-        echo $sql;
         $history = [];
         $webpath = api_get_path(WEB_PATH);
         while ($row = Database::fetch_assoc($result)) {

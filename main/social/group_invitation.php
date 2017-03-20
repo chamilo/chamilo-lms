@@ -18,7 +18,7 @@ $this_section = SECTION_SOCIAL;
 
 // Database Table Definitions
 $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
-$tbl_group_rel_user	= Database::get_main_table(TABLE_USERGROUP_REL_USER);
+$tbl_group_rel_user = Database::get_main_table(TABLE_USERGROUP_REL_USER);
 
 // setting the name of the tool
 $tool_name = get_lang('SubscribeUsersToGroup');
@@ -40,7 +40,7 @@ if (empty($group_id)) {
     }
 }
 
-$interbreadcrumb[] = array('url' =>'groups.php','name' => get_lang('Groups'));
+$interbreadcrumb[] = array('url' =>'groups.php', 'name' => get_lang('Groups'));
 $interbreadcrumb[] = array('url' => 'group_view.php?id='.$group_id, 'name' => $group_info['name']);
 $interbreadcrumb[] = array('url' =>'#', 'name' => get_lang('SubscribeUsersToGroup'));
 
@@ -74,7 +74,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 
         if (is_array($user_list) && count($user_list) > 0) {
             //send invitation message
-            foreach ($user_list as $user_id){
+            foreach ($user_list as $user_id) {
                 $result = MessageManager::send_message(
                     $user_id,
                     $title,
@@ -110,8 +110,8 @@ if (!$friends) {
 
             if (!isset($group_friend_list[$group_id]) ||
                 isset($group_friend_list[$group_id]) &&
-                $group_friend_list[$group_id]['relation_type'] == '' ) {
-                $Users[$friend['friend_user_id']]= array(
+                $group_friend_list[$group_id]['relation_type'] == '') {
+                $Users[$friend['friend_user_id']] = array(
                     'user_id' => $friend['friend_user_id'],
                     'firstname' => $friend['firstName'],
                     'lastname' => $friend['lastName'],
@@ -120,7 +120,7 @@ if (!$friends) {
                 );
             }
         } else {
-            $Users[$friend['friend_user_id']]= array(
+            $Users[$friend['friend_user_id']] = array(
                 'user_id' => $friend['friend_user_id'],
                 'firstname' =>$friend['firstName'],
                 'lastname' => $friend['lastName'],
@@ -131,7 +131,7 @@ if (!$friends) {
     }
 }
 
-if (is_array($Users) && count($Users) > 0 ) {
+if (is_array($Users) && count($Users) > 0) {
     foreach ($Users as $user) {
         if ($user['group_id'] != $group_id) {
             $nosessionUsersList[$user['user_id']] = api_get_person_name(
@@ -143,7 +143,7 @@ if (is_array($Users) && count($Users) > 0 ) {
 }
 
 $social_left_content = SocialManager::show_social_menu('invite_friends', $group_id);
-$social_right_content =  '<h3 class="group-title">'.Security::remove_XSS($group_info['name'], STUDENT, true).'</h3>';
+$social_right_content = '<h3 class="group-title">'.Security::remove_XSS($group_info['name'], STUDENT, true).'</h3>';
 
 if (count($nosessionUsersList) == 0) {
     $friends = SocialManager::get_friends(api_get_user_id());
@@ -179,7 +179,7 @@ $members = $usergroup->get_users_by_group(
     array(GROUP_USER_PERMISSION_PENDING_INVITATION)
 );
 
-if (is_array($members) && count($members)>0) {
+if (is_array($members) && count($members) > 0) {
     foreach ($members as &$member) {
         $image = UserManager::getUserPicture($member['id']);
         $member['image'] = '<img class="img-circle" src="'.$image.'"  width="50px" height="50px"  />';

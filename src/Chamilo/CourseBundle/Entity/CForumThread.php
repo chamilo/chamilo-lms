@@ -181,7 +181,7 @@ class CForumThread
 
     /**
      * set threadPeerQualify
-     * @param $threadPeerQualify
+     * @param integer $threadPeerQualify
      * @return $this
      */
     public function setThreadPeerQualify($threadPeerQualify)

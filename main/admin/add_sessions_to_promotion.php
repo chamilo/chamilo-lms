@@ -65,9 +65,9 @@ function validate_filter() {
 </script>';
 
 
-$form_sent  = 0;
-$errorMsg   = '';
-$users      =$sessions=array();
+$form_sent = 0;
+$errorMsg = '';
+$users = $sessions = array();
 $promotion = new Promotion();
 $id = intval($_GET['id']);
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
@@ -86,7 +86,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 
 $promotion_data = $promotion->get($id);
 $session_list = SessionManager::get_sessions_list(array(), array('name'));
-$session_not_in_promotion = $session_in_promotion= array();
+$session_not_in_promotion = $session_in_promotion = array();
 
 if (!empty($session_list)) {
     foreach ($session_list as $session) {

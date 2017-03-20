@@ -23,7 +23,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 // Forbidden to retrieve the lost password
 if (api_get_setting('allow_lostpassword') == 'false') {
-	api_not_allowed(true);
+    api_not_allowed(true);
 }
 
 $reset = Request::get('reset');

@@ -11,7 +11,7 @@ $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-$sessionId = isset($_GET['id_session']) ? intval($_GET['id_session']) : null;
+$sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
 $add = isset($_GET['add']) ? Security::remove_XSS($_GET['add']) : null;
 
 SessionManager::protectSession($sessionId);
@@ -23,9 +23,11 @@ $xajax->registerFunction(array('search_courses', 'AddCourseToSession', 'search_c
 $this_section = SECTION_PLATFORM_ADMIN;
 
 // setting breadcrumbs
-//$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
-$interbreadcrumb[] = array('url' => "resume_session.php?id_session=".$sessionId, "name" => get_lang('SessionOverview'));
+$interbreadcrumb[] = array(
+    'url' => "resume_session.php?id_session=".$sessionId,
+    'name' => get_lang('SessionOverview')
+);
 
 // Database Table Definitions
 $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -38,7 +40,7 @@ $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
 $tool_name= get_lang('SubscribeCoursesToSession');
 
 $add_type = 'multiple';
-if (isset($_GET['add_type']) && $_GET['add_type']!=''){
+if (isset($_GET['add_type']) && $_GET['add_type'] != '') {
     $add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
@@ -79,7 +81,6 @@ $CourseList = $SessionList = array();
 $courses = $sessions = array();
 
 if (isset($_POST['formSent']) && $_POST['formSent']) {
-
     $courseList = $_POST['SessionCoursesList'];
     $copyEvaluation = isset($_POST['copy_evaluation']);
 
@@ -123,24 +124,23 @@ echo '</div>';
 $ajax_search = $add_type == 'unique' ? true : false;
 $nosessionCourses = $sessionCourses = array();
 if ($ajax_search) {
-
-    $sql="SELECT course.id, code, title, visual_code, session_id
+    $sql = "SELECT course.id, code, title, visual_code, session_id
 			FROM $tbl_course course
 			INNER JOIN $tbl_session_rel_course session_rel_course
             ON
                 course.id = session_rel_course.c_id AND
-                session_rel_course.session_id = ".intval($sessionId)."
+                session_rel_course.session_id = ".$sessionId."
 			ORDER BY ".(sizeof($courses)?"(code IN(".implode(',', $courses).")) DESC,":"")." title";
 
     if (api_is_multiple_url_enabled()) {
         $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $access_url_id = api_get_current_access_url_id();
-        if ($access_url_id != -1){
+        if ($access_url_id != -1) {
             $sql = "SELECT course.id, code, title, visual_code, session_id
                     FROM $tbl_course course
                     INNER JOIN $tbl_session_rel_course session_rel_course
                         ON course.id = session_rel_course.c_id
-                        AND session_rel_course.session_id = ".intval($sessionId)."
+                        AND session_rel_course.session_id = ".$sessionId."
                         INNER JOIN $tbl_course_rel_access_url url_course
                         ON (url_course.c_id = course.id)
                     WHERE access_url_id = $access_url_id
@@ -150,9 +150,8 @@ if ($ajax_search) {
 
     $result = Database::query($sql);
     $Courses = Database::store_result($result);
-
     foreach ($Courses as $course) {
-        $sessionCourses[$course['id']] = $course ;
+        $sessionCourses[$course['id']] = $course;
     }
 } else {
     $sql = "SELECT course.id, code, title, visual_code, session_id
@@ -160,19 +159,19 @@ if ($ajax_search) {
 			LEFT JOIN $tbl_session_rel_course session_rel_course
             ON
                 course.id = session_rel_course.c_id AND
-                session_rel_course.session_id = ".intval($sessionId)."
+                session_rel_course.session_id = ".$sessionId."
 			ORDER BY ".(sizeof($courses)?"(code IN(".implode(',',$courses).")) DESC,":"")." title";
 
     if (api_is_multiple_url_enabled()) {
         $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $access_url_id = api_get_current_access_url_id();
-        if ($access_url_id != -1){
+        if ($access_url_id != -1) {
             $sql = "SELECT course.id, code, title, visual_code, session_id
                     FROM $tbl_course course
                     LEFT JOIN $tbl_session_rel_course session_rel_course
                     ON
                         course.id = session_rel_course.c_id AND
-                        session_rel_course.session_id = ".intval($sessionId)."
+                        session_rel_course.session_id = ".$sessionId."
                     INNER JOIN $tbl_course_rel_access_url url_course
                     ON (url_course.c_id = course.id)
                     WHERE access_url_id = $access_url_id

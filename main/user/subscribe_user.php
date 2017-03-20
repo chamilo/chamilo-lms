@@ -710,7 +710,6 @@ function reg_filter($user_id)
  * lock = the user can no longer use this account
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @param int $active the current state of the account
- * @param int $user_id The user id
  * @param string $url_params
  * @return string Some HTML-code with the lock/unlock button
  */

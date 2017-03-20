@@ -239,11 +239,11 @@ class Promotion extends Model
         foreach ($careers as $item) {
             $career_list[$item['id']] = $item['name'];
         }
-        $form->addElement(
-            'select',
+        $form->addSelect(
             'career_id',
             get_lang('Career'),
-            $career_list
+            $career_list,
+            ['id' => 'career_id']
         );
         $status_list = $this->get_status_list();
         $form->addElement('select', 'status', get_lang('Status'), $status_list);

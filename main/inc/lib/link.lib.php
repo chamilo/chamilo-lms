@@ -470,6 +470,7 @@ class Link extends Model
      *
      * Get link info
      * @param int link id
+     * @param integer $id
      * @return array link info
      *
      **/
@@ -854,7 +855,7 @@ class Link extends Model
     }
 
     /**
-     * @param $categoryId
+     * @param integer $categoryId
      * @param $courseId
      * @param $sessionId
      * @param bool $withBaseContent
@@ -941,8 +942,8 @@ class Link extends Model
      * @author Julio Montoya
      *
      * @param $catid
-     * @param $courseId
-     * @param $session_id
+     * @param integer $courseId
+     * @param integer $session_id
      * @return string
      */
     public static function showLinksPerCategory($catid, $courseId, $session_id)
@@ -1150,6 +1151,8 @@ class Link extends Model
     /**
      * Displays the edit, delete and move icons
      * @param int   Category ID
+     * @param integer $currentCategory
+     * @param integer $countCategories
      * @return string
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
@@ -1290,6 +1293,7 @@ class Link extends Model
     /**
      * CSV file import functions
      * @author René Haentjens , Ghent University
+     * @param string $catname
      */
     public static function get_cat($catname)
     {
@@ -1324,6 +1328,11 @@ class Link extends Model
     /**
      * CSV file import functions
      * @author René Haentjens , Ghent University
+     * @param string $url
+     * @param string $title
+     * @param string $description
+     * @param string $on_homepage
+     * @param string $hidden
      */
     public static function put_link($url, $cat, $title, $description, $on_homepage, $hidden)
     {

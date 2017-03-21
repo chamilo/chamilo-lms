@@ -1,3 +1,4 @@
+
 <nav id="menubar" class="navbar navbar-default">
     <div class="container">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -9,6 +10,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
+            <a class="navbar-brand" href="{{ _p.web }}">{{ _s.site_name }}</a>
         </div>
         <div class="collapse navbar-collapse" id="menuone">
             <ul class="nav navbar-nav">

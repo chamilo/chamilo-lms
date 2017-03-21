@@ -3784,6 +3784,17 @@ class CourseManager
                 $params['code_course'] = '(' . $course_info['visual_code'] . ') ';
             }
 
+            $params['current_user_is_teacher'] = false;
+
+            /** @var array $teacher */
+            foreach ($teachers as $teacher) {
+                if ($teacher['id'] != $user_id) {
+                    continue;
+                }
+
+                $params['current_user_is_teacher'] = true;
+            }
+
             $params['visibility'] = $course_info['visibility'];
             $params['link'] = $courseUrl;
             $params['thumbnails'] = $thumbnails;

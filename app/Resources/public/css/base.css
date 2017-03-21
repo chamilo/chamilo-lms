@@ -3960,12 +3960,12 @@ i.size-32.icon-new-work{
   color: #666;
 }
 /* Items menus sidebar */
-.menu-column .nav li a{
-  padding: 5px;
+.sidebar .nav li a{
+  padding: 2px;
   font-size: 12px;
 }
-.menu-column .nav li a img{
-  vertical-align: text-bottom;
+.sidebar .nav li a img{
+  vertical-align: middle;
   margin-right: 5px;
 }
 .social-network-menu .nav li a, #groups-acordeon .nav li a{

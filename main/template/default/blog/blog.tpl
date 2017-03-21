@@ -69,6 +69,7 @@
                                         <i class="fa fa-comment-o"></i> {{ item.n_comments }} {{ 'Comments' | get_lang }}
                                     </span>
                                     <span class="autor"><i class="fa fa-user"></i> {{ item.autor }}</span>
+                                    <span class="score"><i class="fa fa-star"></i> {{ item.score_ranking }}</span>
                                 </div>
                                 <div class="content-post">
                                     <p>

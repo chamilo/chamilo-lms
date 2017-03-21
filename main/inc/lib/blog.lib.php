@@ -972,7 +972,7 @@ class Blog
                 $blog_post_comments = Database::fetch_array($tmp);
 
                 $fileArray = get_blog_attachment($blog_id, $blog_post['post_id'], 0);
-
+                $scoreRanking = Blog::display_rating('post',$blog_id,$blog_post['post_id']); 
                 // Prepare data
                 $article = [
                     'id_blog' => $blog_post['blog_id'],
@@ -991,6 +991,7 @@ class Blog
                     ),
                     'n_comments' => $blog_post_comments['number_of_comments'],
                     'files' => $fileArray,
+                    'score_ranking' => $scoreRanking
 
                 ];
 
@@ -1102,7 +1103,7 @@ class Blog
             $blogActions .= Display::return_icon('delete.png', get_lang('Delete'), null, ICON_SIZE_TINY);
             $blogActions .= '</a>';
         }
-
+        $scoreRanking = Blog::display_rating('post',$blog_id,$post_id);
         $article = [
             'id_blog' => $blog_post['blog_id'],
             'c_id' => $blog_post['c_id'],
@@ -1120,6 +1121,7 @@ class Blog
             'comments' => $listComments,
             'form_html' => $formComments,
             'actions' => $blogActions,
+            'score_ranking' => (int)$scoreRanking,
             'frm_rating' => api_is_allowed('BLOG_'.$blog_id, 'article_rate')
                 ? Blog::display_rating_form('post', $blog_id, $post_id)
                 : null

@@ -36,7 +36,6 @@
             </div>
         </div>
     </div>
-{{ post | var_dump }}
     <div class="col-md-9">
         <div class="blog" id="post-{{ post.id_post }}">
             <div class="panel panel-default" id="blog-header">
@@ -64,6 +63,9 @@
                                 <li class="autor">
                                     <i class="fa fa-user" aria-hidden="true"></i>
                                     <a href="{{ _p.web }}main/social/profile.php?u={{ post.id_author }}">{{ post.author }}</a>
+                                </li>
+                                <li class="score">
+                                    <i class="fa fa-star" aria-hidden="true"></i> {{ post.score_ranking }}
                                 </li>
                             </ul>
                         </header>
@@ -107,7 +109,7 @@
                                                 </a>
                                             </li>
                                             <li class="score">
-                                                <i class="fa fa-comment" aria-hidden="true"></i> {{ item.score_ranking }}
+                                                <i class="fa fa-star" aria-hidden="true"></i> {{ item.score_ranking }}
                                             </li>
                                         </ul>
                                         <div id="comment-{{ item.iid }}-content">
@@ -150,7 +152,7 @@
                                                             </a>
                                                         </li>
                                                         <li class="score">
-                                                            <i class="fa fa-comment" aria-hidden="true"></i> {{ item2.score_ranking }}
+                                                            <i class="fa fa-star" aria-hidden="true"></i> {{ item2.score_ranking }}
                                                         </li>
                                                     </ul>
                                                     <div id="comment-{{ item2.iid }}-content">

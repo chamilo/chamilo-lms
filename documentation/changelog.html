@@ -68,7 +68,9 @@
         <li>One <a href="https://support.chamilo.org/projects/chamilo-18/wiki/Security_issues#Issue-23-2017-02-09-Moderate-risk-PHP-File-Upload">more important fix for a PHP file upload flaw</a> that happens in the social network, for registered users only</li>
     </ul>
     <h3>Possibly breaking changes</h3>
-    <p>None in this version.</p>
+      <ul>
+        <li>As Chamilo becomes more popular, we are facing new security-based challenges that come as consequences of the simplicity that we offer our users. As such, in this version of Chamilo, the administrator *must* enable a configuration setting as follows in order <b>to authorize teachers and students to use iframes</b> (embedding things from outside) inside the online text areas in their courses and personal spaces. to enable those, edit the app/config/configuration.php file and paste the following just after the last setting: <pre>$_configuration['allow_course_introduction_low_security'] = true;</pre></li>
+      </ul>
 
     <h3>Notable new Features</h3>
     <h4>For end-users, teachers and Chamilo admins</h4>

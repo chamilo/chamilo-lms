@@ -374,7 +374,7 @@ class Blog
                 $file_name = $_FILES['user_upload']['name'];
 
                 if (!filter_extension($new_file_name)) {
-                    Display:: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
+                    Display::display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
                 } else {
                     $new_file_name = uniqid('');
                     $new_path = $updir.'/'.$new_file_name;
@@ -910,7 +910,6 @@ class Blog
 
     /**
      * Display the search results
-     *
      * @param Integer $blog_id
      * @param String $query_string
      */
@@ -1144,7 +1143,7 @@ class Blog
         $tbl_blogs_comments = Database::get_course_table(TABLE_BLOGS_COMMENTS);
         $tbl_users = Database::get_main_table(TABLE_MAIN_USER);
         $tbl_blogs_tasks = Database::get_course_table(TABLE_BLOGS_TASKS);
-        global $charset;
+        $charset = api_get_system_encoding();
 
         $course_id = api_get_course_int_id();
         $listComments = [];
@@ -1341,9 +1340,9 @@ class Blog
      * @author Toon Keppens
      *
      * @param Integer $blog_id
-     * @param integer $post_id
+     * @param Integer $post_id
      */
-    public static function display_new_comment_form($blog_id, $post_id, $title)
+    public static function display_new_comment_form($blog_id, $post_id)
     {
         $taskId = !empty($_GET['task_id']) ? (int) $_GET['task_id'] : 0;
 

@@ -419,13 +419,13 @@ switch ($action) {
         if (api_is_allowed('BLOG_'.$blog_id, 'task_management')) {
             $taks = null;
             if (isset($_GET['do']) && $_GET['do'] == 'add') {
-                $taks .= Blog::display_new_task_form($blog_id);
+                $task .= Blog::display_new_task_form($blog_id);
             }
             if (isset($_GET['do']) && $_GET['do'] == 'assign') {
-                $taks .= Blog::display_assign_task_form($blog_id);
+                $task .= Blog::display_assign_task_form($blog_id);
             }
             if (isset($_GET['do']) && $_GET['do'] == 'edit') {
-                $taks .= Blog::display_edit_task_form(
+                $task .= Blog::display_edit_task_form(
                     $blog_id,
                     intval($_GET['task_id'])
                 );
@@ -437,12 +437,12 @@ switch ($action) {
                     intval($_GET['user_id'])
                 );
             }
-            $taks .= Blog::display_task_list($blog_id);
+            $task .= Blog::display_task_list($blog_id);
 
-            $taks .= Blog::display_assigned_task_list($blog_id);
+            $task .= Blog::display_assigned_task_list($blog_id);
 
 
-            $tpl->assign('content', $taks);
+            $tpl->assign('content', $task);
             $blogLayout = $tpl->get_template('blog/layout.tpl');
         } else {
             api_not_allowed();

@@ -417,7 +417,7 @@ switch ($action) {
         break;
     case 'manage_tasks' :
         if (api_is_allowed('BLOG_'.$blog_id, 'task_management')) {
-            $taks = null;
+            $task = null;
             if (isset($_GET['do']) && $_GET['do'] == 'add') {
                 $task .= Blog::display_new_task_form($blog_id);
             }

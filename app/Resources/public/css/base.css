@@ -3960,12 +3960,12 @@ i.size-32.icon-new-work{
   color: #666;
 }
 /* Items menus sidebar */
-.menu-column .nav li a{
-  padding: 5px;
+.sidebar .nav li a{
+  padding: 2px;
   font-size: 12px;
 }
-.menu-column .nav li a img{
-  vertical-align: text-bottom;
+.sidebar .nav li a img{
+  vertical-align: middle;
   margin-right: 5px;
 }
 .social-network-menu .nav li a, #groups-acordeon .nav li a{
@@ -5970,6 +5970,12 @@ ul#toolnavbox-two li a.btn{
 .panel-invitations{
     padding: 10px;
 }
+.navbar .container .navbar-brand{
+    display: none;
+}
+.username-movil{
+    display: none;
+}
 /** BLOG **/
 .blog{
     padding: 0;
@@ -6225,6 +6231,10 @@ ul#toolnavbox-two li a.btn{
         margin-left: 5%;
         margin-right: 5%;
     }
+    .navbar .container .navbar-brand{
+        display: block;
+        font-size: 16px;
+    }
     .navbar-nav .open .dropdown-menu .user-header{
         width: 100%;
     }
@@ -6236,6 +6246,20 @@ ul#toolnavbox-two li a.btn{
     }
     .installer{
         display: inline-table;
+    }
+    .header-movil{
+        display: none;
+    }
+    .username-movil{
+        display: inline-block;
+        padding-right: 10px;
+        padding-left: 10px;
+    }
+    #user_image_block{
+        display: none;
+    }
+    .navbar-default{
+        border: none;
     }
 }
 

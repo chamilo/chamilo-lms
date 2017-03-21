@@ -21,7 +21,7 @@ $type = isset($_GET['type']) ? $_GET['type'] : null;
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
 if ((!$is_allowed_to_edit) || ($isStudentView)) {
-    error_log('New LP - User not authorized in lp_add_item.php');
+    error_log('New LP - User not authorized in lp_add_audio.php');
     header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);
     exit;
 }

@@ -65,7 +65,7 @@ $submit = isset($_POST['submit_button']) ? $_POST['submit_button'] : null;
 /* MAIN CODE */
 
 if ((!$is_allowed_to_edit) || ($isStudentView)) {
-    error_log('New LP - User not authorized in lp_add_item.php');
+    error_log('New LP - User not authorized in lp_edit_item.php');
     header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);
     exit;
 }

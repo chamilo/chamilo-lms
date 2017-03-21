@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
@@ -19,6 +20,15 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class ChatVideo
 {
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
     /**
      * @var integer
      *
@@ -48,21 +58,10 @@ class ChatVideo
     private $datetime;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-
-
-    /**
      * Set fromUser
      *
      * @param integer $fromUser
-     * @return Chat
+     * @return ChatVideo
      */
     public function setFromUser($fromUser)
     {
@@ -85,7 +84,7 @@ class ChatVideo
      * Set toUser
      *
      * @param integer $toUser
-     * @return Chat
+     * @return ChatVideo
      */
     public function setToUser($toUser)
     {
@@ -108,7 +107,7 @@ class ChatVideo
      * Set room_name
      *
      * @param string $roomName
-     * @return Chat
+     * @return ChatVideo
      */
     public function setRoomName($roomName)
     {
@@ -131,7 +130,7 @@ class ChatVideo
      * Set datetime
      *
      * @param \DateTime $datetime
-     * @return Chat
+     * @return ChatVideo
      */
     public function setDatetime($datetime)
     {

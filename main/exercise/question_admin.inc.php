@@ -2,7 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *	Statement (?) administration
  *	This script allows to manage the statements of questions.
  * 	It is included from the script admin.php
  *	@package chamilo.exercise
@@ -35,7 +34,7 @@ if (is_object($objQuestion)) {
     $form_title_extra = isset($typesInformation[$type][1]) ? get_lang($typesInformation[$type][1]) : null;
 
     // form title
-    $form->addElement('header', $text.': '.$form_title_extra);
+    $form->addHeader($text.': '.$form_title_extra);
 
     // question form elements
     $objQuestion->createForm($form);

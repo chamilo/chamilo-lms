@@ -28,11 +28,9 @@ class MultipleAnswer extends Question
     }
 
     /**
-     * function which redifines Question::createAnswersForm
-     * @param the formvalidator instance
-     * @param the answers number to display
+     * @inheritdoc
      */
-    function createAnswersForm($form)
+    public function createAnswersForm($form)
     {
         $editorConfig = array(
             'ToolbarSet' => 'TestProposedAnswer',

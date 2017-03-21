@@ -7,13 +7,10 @@
 #</Directory>
 
 RewriteEngine on
-RewriteCond %{QUERY_STRING} ^id=(.*)$
 
 # http://my.chamilo.net/certificates/?id=123 to http://my.chamilo.net/certificates/index.php?id=123
+RewriteCond %{QUERY_STRING} ^id=(.*)$
 RewriteRule ^certificates/$ certificates/index.php?id=%1 [L]
-
-# http://my.chamilo.net/jdoe to http://my.chamilo.net/user.php?jdoe
-RewriteRule ^([^/.]+)/?$ user.php?$1 [L]
 
 # Course redirection
 RewriteRule ^courses/([^/]+)/?$ main/course_home/course_home.php?cDir=$1 [QSA,L]
@@ -27,15 +24,17 @@ RewriteRule ^courses/([^/]+)/scorm/(.*)$ main/document/download_scorm.php?doc_ur
 RewriteRule ^courses/([^/]+)/document/certificates/(.*)$ app/courses/$1/document/certificates/$2 [QSA,L]
 RewriteRule ^courses/([^/]+)/document/(.*)$ main/document/download.php?doc_url=/$2&cDir=$1 [QSA,L]
 
+# Course upload files
+RewriteRule ^courses/([^/]+)/upload/([^/]+)/(.*)$ main/document/download_uploaded_files.php?code=$1&type=$2&file=$3 [QSA,L]
+
 # Rewrite everything in the work folder
 RewriteRule ^courses/([^/]+)/work/(.*)$ main/work/download.php?file=work/$2&cDir=$1 [QSA,L]
 
-# Course upload files
-RewriteRule ^courses/([^/]+)/upload/([^/]+)/(.*)$ main/document/download_uploaded_files.php?code=$1&type=$2&file=$3 [QSA,L]
-RewriteRule ^courses/([^/]+)/(.*)$ app/courses/$1/$2 [QSA,L]
+RewriteRule ^courses/([^/]+)/course-pic85x85.png$ main/inc/ajax/course.ajax.php?a=get_course_image&code=$1&image=course_image_source [QSA,L]
+RewriteRule ^courses/([^/]+)/course-pic.png$ main/inc/ajax/course.ajax.php?a=get_course_image&code=$1&image=course_image_large_source [QSA,L]
 
-RewriteRule ^courses/([^/]+)/course-pic85x85.png$ app/courses/$1/course-pic85x85.png [QSA,L]
-RewriteRule ^courses/([^/]+)/course-pic.png$ app/courses/$1/course-pic.png [QSA,L]
+# Redirect all courses/ to app/courses/
+RewriteRule ^courses/([^/]+)/(.*)$ app/courses/$1/$2 [QSA,L]
 
 # About session
 RewriteRule ^session/(\d{1,})/about/?$ main/session/about.php?session_id=$1 [L]
@@ -55,6 +54,10 @@ RewriteRule ^main/newscorm/(.*)$ main/lp/$1 [QSA,L]
 
 # service Information
 RewriteRule ^service/(\d{1,})$ plugin/buycourses/src/service_information.php?service_id=$1 [L]
+
+# This rule is very generic and should always remain at the bottom of .htaccess
+# http://my.chamilo.net/jdoe to http://my.chamilo.net/user.php?jdoe
+RewriteRule ^([^/.]+)/?$ user.php?$1 [L]
 
 # Deny access
 RewriteRule ^(tests|.git) - [F,L,NC]

@@ -14031,7 +14031,6 @@ var ListViewGrid = Grid.extend({
 		var tableEl = $('<table class="fc-list-table"><tbody/></table>');
 		var tbodyEl = tableEl.find('tbody');
 
-
 		for (dayIndex = 0; dayIndex < segsByDay.length; dayIndex++) {
 			daySegs = segsByDay[dayIndex];
 			if (daySegs) { // sparse array, so might be undefined
@@ -14188,4 +14187,3 @@ fcViews.listYear = {
 		listDayAltFormat: 'dddd' // day-of-week is nice-to-have
 	}
 };
-

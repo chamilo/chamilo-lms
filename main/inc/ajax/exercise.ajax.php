@@ -140,7 +140,10 @@ switch ($action) {
                             GROUP by question_id
                         ) as count_table";
                 $result_count = Database::query($sql);
-                $count_questions = Database::fetch_array($result_count,'ASSOC');
+                $count_questions = Database::fetch_array(
+                    $result_count,
+                    'ASSOC'
+                );
                 $count_questions = $count_questions['count_question_id'];
 
                 $row['count_questions'] = $count_questions;
@@ -359,8 +362,13 @@ switch ($action) {
                 $objQuestionTmp = Question::read($my_question_id, $course_id);
 
                 // Getting free choice data.
-                if ($objQuestionTmp->type  == FREE_ANSWER && $type == 'all') {
-                    $my_choice = isset($_REQUEST['free_choice'][$my_question_id]) && !empty($_REQUEST['free_choice'][$my_question_id]) ? $_REQUEST['free_choice'][$my_question_id]: null;
+                if (
+                    ($objQuestionTmp->type  == FREE_ANSWER || $objQuestionTmp->type  == ORAL_EXPRESSION)
+                    && $type == 'all'
+                ) {
+                    $my_choice = isset($_REQUEST['free_choice'][$my_question_id]) && !empty($_REQUEST['free_choice'][$my_question_id])
+                        ? $_REQUEST['free_choice'][$my_question_id]
+                        : null;
                 }
 
                 if ($type == 'all') {

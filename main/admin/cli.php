@@ -6,9 +6,7 @@
 * @author Arnaud Ligot, CBlue SPRL
 * @package chamilo.admin.cli
 */
-/**
- * Init section
- */
+
 // we are in the admin area so we do not need a course id
 $cidReset = true;
 // include global script

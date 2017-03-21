@@ -27,7 +27,7 @@ $session_id = intval($_GET['id_session']);
 $type = isset($_REQUEST['type']) ? Security::remove_XSS($_REQUEST['type']) : '';
 $course_code = isset($_REQUEST['course']) ? Security::remove_XSS($_REQUEST['course']) : '';
 $courseInfo = api_get_course_info($course_code);
-$courseId = $courseInfo['real_id'];
+$courseId = (!empty($courseInfo['real_id'])?$courseInfo['real_id']:null);
 $connections = MySpace::get_connections_to_course($user_id, $courseId, $session_id);
 $quote_simple = "'";
 
@@ -132,28 +132,38 @@ echo Display::page_subheader(
 $form->setDefaults(array('from' => $from, 'to' => $to));
 $form->display();
 ?>
-<div id="cev_results" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
-    <div class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
-        <?php echo get_lang('Statistics'); ?>
-    </div><br />
-    <div id="cev_cont_stats">
-    <?php
-    if ($result_to_print != "")  {
-        $rst = get_stats($user_id, $courseId);
-        $foo_stats = '<strong>'.get_lang('Total').': </strong>'.$rst['total'].'<br />';
-        $foo_stats .= '<strong>'.get_lang('Average').': </strong>'.$rst['avg'].'<br />';
-        $foo_stats .= '<strong>'.get_lang('Quantity').' : </strong>'.$rst['times'].'<br />';
-        echo $foo_stats;
-    } else {
-        echo Display::display_warning_message(get_lang('NoDataAvailable'));
-    }
-    ?>
+<br />
+<br />
+<div class="text-center" id="graph"></div>
+<br />
+<br />
+<div class="row">
+    <div id="cev_results" class="ui-tabs ui-widget ui-widget-content ui-corner-all col-md-6">
+        <div class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+            <?php echo get_lang('Statistics'); ?>
+        </div><br />
+        <div id="cev_cont_stats">
+            <?php
+            if ($result_to_print != "") {
+                $rst = get_stats($user_id, $courseId);
+                $foo_stats = '<strong>'.get_lang('Total').': </strong>'.$rst['total'].'<br />';
+                $foo_stats .= '<strong>'.get_lang('Average').': </strong>'.$rst['avg'].'<br />';
+                $foo_stats .= '<strong>'.get_lang('Quantity').' : </strong>'.$rst['times'].'<br />';
+                echo $foo_stats;
+            } else {
+                echo Display::display_warning_message(get_lang('NoDataAvailable'));
+            }
+            ?>
+        </div>
+        <br />
     </div>
-    <br />
-</div><br />
-
-<div id="messages"></div>
-<div id="graph"></div>
+    <div class="ui-tabs ui-widget ui-widget-content ui-corner-all col-md-6 col-md-6">
+        <div class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+            <?php echo get_lang('Details'); ?>
+        </div><br />
+        <div id="messages"></div>
+    </div>
+</div>
 
 <?php
 Display:: display_footer();

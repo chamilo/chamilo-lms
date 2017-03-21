@@ -36,7 +36,7 @@ class LpItem
 
     public function __construct($in_c_id = 0, $in_id = 0)
     {
-        if ($in_c_id > 0 && $in_id >0) {
+        if ($in_c_id > 0 && $in_id > 0) {
             $item_view_table = Database::get_course_table(TABLE_LP_ITEM);
             $sql = "SELECT * FROM $item_view_table
                     WHERE

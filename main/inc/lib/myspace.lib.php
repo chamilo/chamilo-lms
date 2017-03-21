@@ -1,9 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use CpChart\Classes\pCache as pCache;
-use CpChart\Classes\pData as pData;
-use CpChart\Classes\pImage as pImage;
+use CpChart\Chart\Cache as pCache;
+use CpChart\Chart\Data as pData;
+use CpChart\Chart\Image as pImage;
 
 /**
  * Class MySpace
@@ -2814,23 +2814,38 @@ function grapher($sql_result, $start_date, $end_date, $type = "")
     if (empty($start_date)) { $start_date =""; }
     if (empty($end_date)) { $end_date =""; }
     if ($type == ""){ $type = 'day'; }
-    $main_year  = $main_month_year = $main_day = array();
-    // get last 8 days/months
-    $last_days      = 5;
-    $last_months    = 3;
-    for ($i = $last_days; $i >= 0; $i--) {
-        $main_day[date ('d-m-Y', time () - $i * 3600 * 24)] = 0;
+    $main_year  = $main_month_year = $main_day = [];
+
+    $period = new DatePeriod(
+        new DateTime($start_date),
+        new DateInterval('P1D'),
+        new DateTime($end_date)
+    );
+
+    foreach ($period as $date) {
+        $main_day[$date->format('d-m-Y')] = 0;
     }
-    for ($i = $last_months; $i >= 0; $i--) {
-        $main_month_year[date ('m-Y', time () - $i * 30 * 3600 * 24)] = 0;
+
+    $period = new DatePeriod(
+        new DateTime($start_date),
+        new DateInterval('P1M'),
+        new DateTime($end_date)
+    );
+
+    foreach ($period as $date) {
+        $main_month_year[$date->format('m-Y')] = 0;
     }
 
     $i = 0;
     if (is_array($sql_result) && count($sql_result) > 0) {
         foreach ($sql_result as $key => $data) {
             //creating the main array
-            $main_month_year[date('m-Y', $data['login'])] += float_format(($data['logout'] - $data['login']) / 60, 0);
-            $main_day[date('d-m-Y', $data['login'])] += float_format(($data['logout'] - $data['login']) / 60, 0);
+            if (isset($main_month_year[date('m-Y', $data['login'])])) {
+                $main_month_year[date('m-Y', $data['login'])] += float_format(($data['logout'] - $data['login']) / 60, 0);
+            }
+            if (isset($main_day[date('d-m-Y', $data['login'])])) {
+                $main_day[date('d-m-Y', $data['login'])] += float_format(($data['logout'] - $data['login']) / 60, 0);
+            }
             if ($i > 500) {
                 break;
             }

@@ -30,6 +30,7 @@ if ($from == 'myspace') {
 // Access restrictions.
 $is_allowedToTrack =
     api_is_platform_admin() ||
+    SessionManager::user_is_general_coach(api_get_user_id(), $session_id) ||
     api_is_allowed_to_create_course() ||
     api_is_session_admin() ||
     api_is_drh() ||

@@ -11,7 +11,6 @@ use \Chamilo\CoreBundle\Entity\SequenceResource;
  */
 class SequenceResourceManager
 {
-
     /**
      * Check if the ser has completed the requirements for the sequences
      * @param array $sequences The sequences
@@ -23,7 +22,6 @@ class SequenceResourceManager
     public static function checkRequirementsForUser(array $sequences, $type, $userId = 0)
     {
         $sequenceList = [];
-
         switch ($type) {
             case SequenceResource::SESSION_TYPE:
                 $sequenceList = self::checkSessionRequirementsForUser($sequences, $userId);

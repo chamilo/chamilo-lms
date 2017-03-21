@@ -379,7 +379,7 @@ switch ($action) {
             $_SESSION['refresh'] = 1;
 
             if (isset($_POST['submit_button']) && !empty($post_title)) {
-                // If a title was sumbitted:
+                // If a title was submitted:
 
                 //Updating the lp.modified_on
                 $_SESSION['oLP']->set_modified_on();
@@ -1025,6 +1025,7 @@ switch ($action) {
                     }
                 }
             }
+            Display::addFlash(Display::return_message(get_lang('Updated')));
             $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
             header('Location: '.$url);
             exit;

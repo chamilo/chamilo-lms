@@ -21,7 +21,7 @@ $current_course_tool = TOOL_BLOGS;
 api_protect_course_script(true);
 
 $lib_path = api_get_path(LIBRARY_PATH);
-$blog_table_attachment 	= Database::get_course_table(TABLE_BLOGS_ATTACHMENT);
+$blog_table_attachment = Database::get_course_table(TABLE_BLOGS_ATTACHMENT);
 
 $nameTools  = get_lang('Blogs');
 $DaysShort  = api_get_week_days_short();
@@ -134,7 +134,7 @@ if (!empty($_POST['new_task_execution_submit'])) {
 		$safe_comment_title,
 		$safe_comment_text,
 		$blog_id,
-		(int)$_GET['post_id'],
+		(int) $_GET['post_id'],
 		$_POST['comment_parent_id'],
 		$_POST['task_id']
 	);
@@ -146,29 +146,29 @@ if (!empty($_POST['new_task_execution_submit'])) {
 if (!empty($_POST['register'])) {
 	if (is_array($_POST['user'])) {
 		foreach ($_POST['user'] as $index => $user_id) {
-			Blog :: set_user_subscribed((int)$_GET['blog_id'], $user_id);
+			Blog :: set_user_subscribed((int) $_GET['blog_id'], $user_id);
 		}
 	}
 }
 if (!empty($_POST['unregister'])) {
 	if (is_array($_POST['user'])) {
 		foreach ($_POST['user'] as $index => $user_id) {
-			Blog :: set_user_unsubscribed((int)$_GET['blog_id'], $user_id);
+			Blog :: set_user_unsubscribed((int) $_GET['blog_id'], $user_id);
 		}
 	}
 }
 if (!empty($_GET['register'])) {
-	Blog :: set_user_subscribed((int)$_GET['blog_id'], (int)$_GET['user_id']);
+	Blog :: set_user_subscribed((int) $_GET['blog_id'], (int) $_GET['user_id']);
 	$return_message = array('type' => 'confirmation', 'message' => get_lang('UserRegistered'));
 	$flag = 1;
 }
 if (!empty($_GET['unregister'])) {
-	Blog :: set_user_unsubscribed((int)$_GET['blog_id'], (int)$_GET['user_id']);
+	Blog :: set_user_unsubscribed((int) $_GET['blog_id'], (int) $_GET['user_id']);
 }
 
 if (isset($_GET['action']) && $_GET['action'] == 'manage_tasks') {
 	if (isset($_GET['do']) && $_GET['do'] == 'delete') {
-		Blog :: delete_task($blog_id, (int)$_GET['task_id']);
+		Blog :: delete_task($blog_id, (int) $_GET['task_id']);
 		$return_message = array('type' => 'confirmation', 'message' => get_lang('TaskDeleted'));
 	}
 
@@ -181,9 +181,9 @@ if (isset($_GET['action']) && $_GET['action'] == 'manage_tasks') {
 if (isset($_GET['action']) && $_GET['action'] == 'view_post') {
 	$task_id = (isset ($_GET['task_id']) && is_numeric($_GET['task_id'])) ? $_GET['task_id'] : 0;
 
-	if (isset($_GET['do']) && $_GET['do'] == 'delete_comment')	{
+	if (isset($_GET['do']) && $_GET['do'] == 'delete_comment') {
 		if (api_is_allowed('BLOG_'.$blog_id, 'article_comments_delete', $task_id)) {
-			Blog :: delete_comment($blog_id, (int)$_GET['post_id'],(int)$_GET['comment_id']);
+			Blog :: delete_comment($blog_id, (int) $_GET['post_id'], (int) $_GET['comment_id']);
 			$return_message = array('type' => 'confirmation', 'message' => get_lang('CommentDeleted'));
 		} else {
 			$error = true;
@@ -191,9 +191,9 @@ if (isset($_GET['action']) && $_GET['action'] == 'view_post') {
 		}
 	}
 
-	if (isset($_GET['do']) && $_GET['do'] == 'delete_article')	{
+	if (isset($_GET['do']) && $_GET['do'] == 'delete_article') {
 		if (api_is_allowed('BLOG_'.$blog_id, 'article_delete', $task_id)) {
-			Blog :: delete_post($blog_id, (int)$_GET['article_id']);
+			Blog :: delete_post($blog_id, (int) $_GET['article_id']);
 			$action = ''; // Article is gone, go to blog home
 			$return_message = array('type' => 'confirmation', 'message' => get_lang('BlogDeleted'));
 		} else {
@@ -204,13 +204,13 @@ if (isset($_GET['action']) && $_GET['action'] == 'view_post') {
 	if (isset($_GET['do']) && $_GET['do'] == 'rate') {
 		if (isset($_GET['type']) && $_GET['type'] == 'post') {
 			if (api_is_allowed('BLOG_'.$blog_id, 'article_rate')) {
-				Blog :: add_rating('post', $blog_id, (int)$_GET['post_id'], (int)$_GET['rating']);
+				Blog :: add_rating('post', $blog_id, (int) $_GET['post_id'], (int) $_GET['rating']);
 				$return_message = array('type' => 'confirmation', 'message' => get_lang('RatingAdded'));
 			}
 		}
 		if (isset($_GET['type']) && $_GET['type'] == 'comment') {
 			if (api_is_allowed('BLOG_'.$blog_id, 'article_comments_add')) {
-				Blog :: add_rating('comment', $blog_id, (int)$_GET['comment_id'], (int)$_GET['rating']);
+				Blog :: add_rating('comment', $blog_id, (int) $_GET['comment_id'], (int) $_GET['rating']);
 				$return_message = array('type' => 'confirmation', 'message' => get_lang('RatingAdded'));
 			}
 		}
@@ -289,16 +289,16 @@ if (!empty($return_message)) {
 echo '<div class=actions>';
 ?>
 	<a href="<?php echo api_get_self(); ?>?blog_id=<?php echo $blog_id ?>&<?php echo api_get_cidreq(); ?>" title="<?php echo get_lang('Home') ?>">
-    <?php echo Display::return_icon('blog.png', get_lang('Home'),'',ICON_SIZE_MEDIUM); ?></a>
-	<?php if(api_is_allowed('BLOG_'.$blog_id, 'article_add')) { ?>
+    <?php echo Display::return_icon('blog.png', get_lang('Home'), '', ICON_SIZE_MEDIUM); ?></a>
+	<?php if (api_is_allowed('BLOG_'.$blog_id, 'article_add')) { ?>
     <a href="<?php echo api_get_self(); ?>?action=new_post&amp;blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('NewPost') ?>">
-    <?php echo Display::return_icon('new_article.png', get_lang('NewPost'),'',ICON_SIZE_MEDIUM); ?></a><?php } ?>
-	<?php if(api_is_allowed('BLOG_'.$blog_id, 'task_management')) { ?>
+    <?php echo Display::return_icon('new_article.png', get_lang('NewPost'), '', ICON_SIZE_MEDIUM); ?></a><?php } ?>
+	<?php if (api_is_allowed('BLOG_'.$blog_id, 'task_management')) { ?>
     <a href="<?php echo api_get_self(); ?>?action=manage_tasks&amp;blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('ManageTasks') ?>">
-    <?php echo Display::return_icon('blog_tasks.png', get_lang('TaskManager'),'',ICON_SIZE_MEDIUM); ?></a><?php } ?>
-	<?php if(api_is_allowed('BLOG_'.$blog_id, 'member_management')) { ?>
+    <?php echo Display::return_icon('blog_tasks.png', get_lang('TaskManager'), '', ICON_SIZE_MEDIUM); ?></a><?php } ?>
+	<?php if (api_is_allowed('BLOG_'.$blog_id, 'member_management')) { ?>
     <a href="<?php echo api_get_self(); ?>?action=manage_members&amp;blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('ManageMembers') ?>">
-    <?php echo Display::return_icon('blog_admin_users.png', get_lang('MemberManager'),'',ICON_SIZE_MEDIUM); ?></a><?php } ?>
+    <?php echo Display::return_icon('blog_admin_users.png', get_lang('MemberManager'), '', ICON_SIZE_MEDIUM); ?></a><?php } ?>
 <?php
 echo '</div>';
 
@@ -315,8 +315,8 @@ Display::display_introduction_section(TOOL_BLOGS);
             <div class="panel-heading"><?php echo get_lang('Calendar') ?></div>
             <div class="panel-body">
                 <?php
-                    $month = isset($_GET['month']) ? (int)$_GET['month'] : (int) date('m');
-                    $year = isset($_GET['year']) ? (int)$_GET['year'] : date('Y');
+                    $month = isset($_GET['month']) ? (int) $_GET['month'] : (int) date('m');
+                    $year = isset($_GET['year']) ? (int) $_GET['year'] : date('Y');
                     Blog::display_minimonthcalendar($month, $year, $blog_id);
                 ?>
             </div>
@@ -362,7 +362,7 @@ $user_task = false;
 $course_id = api_get_course_int_id();
 
 if (isset ($_GET['task_id']) && is_numeric($_GET['task_id'])) {
-	$task_id = (int)$_GET['task_id'];
+	$task_id = (int) $_GET['task_id'];
 } else {
 	$task_id = 0;
 	$tbl_blogs_tasks_rel_user = Database :: get_course_table(TABLE_BLOGS_TASKS_REL_USER);

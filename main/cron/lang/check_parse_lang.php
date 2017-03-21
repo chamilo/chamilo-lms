@@ -1,6 +1,6 @@
 <?php /* For licensing terms, see /license.txt */
 /**
- * Cron script to list unused, but defined, language variables
+ * Script to check that no language file has parse errors
  * @package chamilo.cron.lang
  */
 /**

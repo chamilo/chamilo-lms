@@ -91,8 +91,8 @@ switch($action) {
         // Add an announcement.
         $values['action'] = 'add';
         // Set default time window: NOW -> NEXT WEEK
-        $values['start'] = date('Y-m-d H:i:s', api_strtotime(api_get_local_time()));
-        $values['end']   = date('Y-m-d H:i:s', api_strtotime(api_get_local_time()) + (7 * 24 * 60 * 60));
+        $values['range_start'] = date('Y-m-d H:i:s', api_strtotime(api_get_local_time()));
+        $values['range_end']   = date('Y-m-d H:i:s', api_strtotime(api_get_local_time()) + (7 * 24 * 60 * 60));
 
         $values['range'] =
             substr(api_get_local_time(time()), 0, 16).' / '.
@@ -158,7 +158,7 @@ if ($action_todo) {
             'Height' => '300',
         )
     );
-    $form->addDateRangePicker('range', get_lang('StartTimeWindow'), true, array('id' => 'date_range'));
+    $form->addDateRangePicker('range', get_lang('StartTimeWindow'), true, array('id' => 'range'));
 
     $group = array();
 

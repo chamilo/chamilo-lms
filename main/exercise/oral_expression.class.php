@@ -33,12 +33,15 @@ class OralExpression extends Question
     }
 
     /**
-     * function which redefine Question::createAnswersForm
-     * @param FormValidator $form
+     * @inheritdoc
      */
-    function createAnswersForm($form)
+    public function createAnswersForm($form)
     {
-        $form -> addElement('text','weighting', get_lang('Weighting'), array('class' => 'span1'));
+        $form->addText(
+            'weighting',
+            get_lang('Weighting'),
+            array('class' => 'span1')
+        );
         global $text, $class;
         // setting the save button here and not in the question class.php
         $form->addButtonSave($text, 'submitQuestion');
@@ -190,10 +193,20 @@ class OralExpression extends Question
     public function returnRecorder()
     {
         $directory = '/..' . $this->generateRelativeDirectory();
-        $recordAudioView = new Template('', false, false,false, false, false, false);
+        $recordAudioView = new Template(
+            '',
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        );
+
         $recordAudioView->assign('directory', $directory);
         $recordAudioView->assign('user_id', $this->userId);
         $recordAudioView->assign('file_name', $this->fileName);
+        $recordAudioView->assign('question_id', $this->id);
 
         $template = $recordAudioView->get_template('exercise/oral_expression.tpl');
 
@@ -238,12 +251,21 @@ class OralExpression extends Question
         }
 
         foreach ($this->available_extensions as $extension) {
-            $file = "{$this->storePath}$fileName.$extension";
-            if (!is_file($file)) {
-                continue;
+            $audioFile = $this->storePath.$fileName;
+            $file = "$audioFile.$extension";
+
+            if (is_file($file)) {
+                return $file;
             }
 
-            return $file;
+            // Function handle_uploaded_document() adds the session and group id by default.
+            $file = "$audioFile"."__".$this->sessionId."__0.$extension";
+
+            if (is_file($file)) {
+                return $file;
+            }
+
+            continue;
         }
 
         return '';

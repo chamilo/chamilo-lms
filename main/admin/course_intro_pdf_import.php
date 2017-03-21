@@ -89,26 +89,26 @@ function import_pdfs($file, $subDir = '/')
 {
     $baseDir = api_get_path(SYS_ARCHIVE_PATH);
     $uploadPath = 'pdfimport/';
-    $errors = array ();
+    $errors = array();
     if (!is_dir($baseDir.$uploadPath)) {
         @mkdir($baseDir.$uploadPath);
     }
-    if (!unzip_uploaded_file($_FILES['import_file'], $uploadPath, $baseDir, 1024*1024*1024)) {
+    if (!unzip_uploaded_file($_FILES['import_file'], $uploadPath, $baseDir, 1024 * 1024 * 1024)) {
         error_log('Could not unzip uploaded file in '.__FILE__.', line '.__LINE__);
         return $errors;
     }
     $list = scandir($baseDir.$uploadPath);
     $i = 0;
     foreach ($list as $file) {
-        if (substr($file,0,1) == '.' or !is_file($baseDir.$uploadPath.$file)) {
+        if (substr($file, 0, 1) == '.' or !is_file($baseDir.$uploadPath.$file)) {
             continue;
         }
-        $parts = preg_split('/_/',$file);
+        $parts = preg_split('/_/', $file);
         $course = api_get_course_info($parts[0]);
         if (count($course) > 0) {
             // Build file info because handle_uploaded_document() needs it (name, type, size, tmp_name)
             $fileSize = filesize($baseDir.$uploadPath.$file);
-            $docId = add_document($course, $subDir.'/'.$file, 'file', $fileSize, $parts[1].' '.substr($parts[2],0,-4));
+            $docId = add_document($course, $subDir.'/'.$file, 'file', $fileSize, $parts[1].' '.substr($parts[2], 0, -4));
             if ($docId > 0) {
                 if (!is_file($baseDir.$uploadPath.$file)) {
                     error_log($baseDir.$uploadPath.$file.' does not exists in '.__FILE__);

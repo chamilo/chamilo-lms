@@ -4,6 +4,7 @@
 /**
  * Report from students for learning path
  */
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 $isAllowedToEdit = api_is_allowed_to_edit(null, true);

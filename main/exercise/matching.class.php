@@ -2,15 +2,15 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *  Class Matching
- *  Matching questions type class
+ * Class Matching
+ * Matching questions type class
  *
- *  This class allows to instantiate an object of
- *  type MULTIPLE_ANSWER (MULTIPLE CHOICE, MULTIPLE ANSWER)
- *	extending the class question
+ * This class allows to instantiate an object of
+ * type MULTIPLE_ANSWER (MULTIPLE CHOICE, MULTIPLE ANSWER)
+ * extending the class question
  *
- *	@author Eric Marguin
- *	@package chamilo.exercise
+ * @author Eric Marguin
+ * @package chamilo.exercise
  */
 class Matching extends Question
 {
@@ -28,22 +28,19 @@ class Matching extends Question
     }
 
     /**
-     * function which redefines Question::createAnswersForm
-     * @param FormValidator $form
+     * @inheritdoc
      */
     public function createAnswersForm($form)
     {
         $defaults = array();
         $nb_matches = $nb_options = 2;
         $matches = array();
-
         $answer = null;
         $counter = 1;
 
         if (isset($this->id)) {
             $answer = new Answer($this->id);
             $answer->read();
-
             if (count($answer->nbrAnswers) > 0) {
                 for ($i = 1; $i <= $answer->nbrAnswers; $i++) {
                     $correct = $answer->isCorrect($i);
@@ -121,12 +118,13 @@ class Matching extends Question
 
         if ($nb_matches < 1) {
             $nb_matches = 1;
-            Display::display_normal_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
+            Display::addFlash(
+                Display::return_message(get_lang('YouHaveToCreateAtLeastOneAnswer'))
+            );
         }
 
         for ($i = 1; $i <= $nb_matches; ++$i) {
             $renderer = &$form->defaultRenderer();
-
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error -->{element}</td>',
                 "answer[$i]"
@@ -143,19 +141,28 @@ class Matching extends Question
             );
 
             $form->addHtml('<tr>');
-
             $form->addHtml("<td>$i</td>");
             $form->addText("answer[$i]", null);
 
-            $form->addSelect("matches[$i]", null, $matches);
-            $form->addText("weighting[$i]", null, true, ['value' => 10]);
+            $form->addSelect(
+                "matches[$i]",
+                null,
+                $matches,
+                ['id' => 'matches_'.$i]
+            );
+
+            $form->addText(
+                "weighting[$i]",
+                null,
+                true,
+                ['id' => 'weighting_'.$i, 'value' => 10]
+            );
 
             $form->addHtml('</tr>');
         }
 
         $form->addHtml('</tbody></table>');
         $group = array();
-
         $form->addGroup($group);
 
         // DISPLAY OPTIONS
@@ -172,22 +179,21 @@ class Matching extends Question
 
         if ($nb_options < 1) {
             $nb_options = 1;
-            Display::display_normal_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
+            Display::addFlash(
+                Display::return_message(get_lang('YouHaveToCreateAtLeastOneAnswer'))
+            );
         }
 
         for ($i = 1; $i <= $nb_options; ++$i) {
             $renderer = &$form->defaultRenderer();
-
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error -->{element}</td>',
                 "option[$i]"
             );
 
             $form->addHtml('<tr>');
-
             $form->addHtml('<td>' . chr(64 + $i) . '</td>');
             $form->addText("option[$i]", null);
-
             $form->addHtml('</tr>');
         }
 
@@ -228,7 +234,6 @@ class Matching extends Question
         $nb_options = $form->getSubmitValue('nb_options');
         $this->weighting = 0;
         $position = 0;
-
         $objAnswer = new Answer($this->id);
 
         // Insert the options
@@ -280,6 +285,8 @@ class Matching extends Question
      * Check if a answer is correct
      * @param int $position
      * @param int $answer
+     * @param int $questionId
+     *
      * @return bool
      */
     public static function isCorrect($position, $answer, $questionId)

@@ -204,7 +204,7 @@ if (count($pending_invitations) > 0) {
         $img = '<img class="img-responsive" src="'.$picture['file'].'" />';
         $invitation['picture_uri'] = '<a href="group_view.php?id='.$invitation['id'].'">'.$img.'</a>';
         $invitation['name'] = '<a href="group_view.php?id='.$invitation['id'].'">'.cut($invitation['name'],120,true).'</a>';
-        $invitation['description'] = cut($invitation['description'],220,true);
+        $invitation['description'] = cut($invitation['description'], 220, true);
         $new_invitation[]=$invitation;
         $waitingInvitation .= '<div class="panel-invitations"><div class="row">';
         $waitingInvitation .= '<div class="col-md-3">'.$invitation['picture_uri'].'</div>';
@@ -235,7 +235,7 @@ if (count($pending_invitations) > 0) {
 $tpl = new Template(null);
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'invitations');
 $tpl->assign('social_menu_block', $social_menu_block);
-$tpl->assign('social_invitations_block',$socialInvitationsBlock);
+$tpl->assign('social_invitations_block', $socialInvitationsBlock);
 $tpl->assign('content', $content);
 $social_layout = $tpl->get_template('social/invitations.tpl');
 $tpl->display($social_layout);

@@ -127,7 +127,6 @@ switch ($action) {
         if ($sequenceResource->getSequence()->hasGraph()) {
             $graph = $sequenceResource->getSequence()->getUnSerializeGraph();
             if ($graph->hasVertex($vertexId)) {
-
                 $edgeIterator = $graph->getEdges()->getIterator();
                 $edgeToDelete = null;
                 foreach ($edgeIterator as $edge) {
@@ -197,10 +196,7 @@ switch ($action) {
                                 $em->remove($sequenceResource);
                                 $em->remove($sequenceResourceToDelete);
                             }
-
                         }
-
-
                     }
                 }
 

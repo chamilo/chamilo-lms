@@ -1,0 +1,66 @@
+engines:
+  fixme:
+    enabled: true
+    config:
+      strings:
+      - FIXME
+      - BUG
+      - '@todo'
+      - todo
+  phpcodesniffer:
+    enabled: true
+    config:
+    standard: "PSR1,PSR2"
+    checks:
+      PSR1 Classes ClassDeclaration MissingNamespace:
+        enabled: false
+      PSR1 Files SideEffects FoundWithSymbols:
+        enabled: false
+
+  duplication:
+    enabled: false
+
+ratings:
+  paths:
+  - '**.php'
+  - '**.js'
+  - '**.css'
+
+exclude_paths:
+- cli-config.php
+- app/cache/
+- app/logs/
+- app/config/
+- app/Migrations/
+- app/Resources/
+- main/admin/db.php
+- main/auth/cas/lib/CAS/
+- main/auth/shibboleth
+- main/auth/openid
+- main/inc/lib/browser/
+- main/inc/lib/freemindflashbrowser/
+- main/inc/lib/internationalization_database/
+- main/inc/lib/javascript/
+- main/inc/lib/kses-0.2.2/
+- main/inc/lib/mimetex/
+- main/inc/lib/nanogong/
+- main/inc/lib/ppt2png/
+- main/inc/lib/pear/
+- main/inc/lib/phpmailer/
+- main/inc/lib/phpseclib/
+- main/inc/lib/svg-edit/
+- main/inc/lib/swfobject/
+- main/inc/lib/wami-recorder/
+- main/inc/lib/xajax/
+- main/lp/packaging/
+- main/template/
+- main/img/
+- main/lang/
+- plugin/buycourses/src/Culqi/
+- plugin/buycourses/src/Requests/
+- plugin/kannelsms/vendor/
+- plugin/clockworksms/vendor/
+- plugin/pens/lib
+- tests/
+- vendor/
+- web/

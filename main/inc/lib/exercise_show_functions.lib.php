@@ -37,7 +37,7 @@ class ExerciseShowFunctions
 	    $originalStudentAnswer = '',
 	    $showTotalScoreAndUserChoices
     ) {
-        $answerHTML = FillBlanks::getHtmlDisplayForAnswer($answer, $resultsDisabled, $showTotalScoreAndUserChoices);
+        $answerHTML = FillBlanks::getHtmlDisplayForAnswer($answer, $feedbackType, $resultsDisabled, $showTotalScoreAndUserChoices);
         if (strpos($originalStudentAnswer, 'font color') !== false) {
             $answerHTML = $originalStudentAnswer;
         }
@@ -266,19 +266,22 @@ class ExerciseShowFunctions
 		<?php
 	}
 
-	/**
-	 * Display the answers to a multiple choice question
-	 * @param int $feedback_type Feedback type
-	 * @param integer Answer type
-	 * @param integer Student choice
-	 * @param string  Textual answer
-	 * @param string  Comment on answer
-	 * @param string  Correct answer comment
-	 * @param integer Exercise ID
-	 * @param integer Question ID
-	 * @param boolean Whether to show the answer comment or not
-	 * @return void
-	 */
+    /**
+     * Display the answers to a multiple choice question
+     * @param int $feedback_type Feedback type
+     * @param int $answerType Answer type
+     * @param int $studentChoice Student choice
+     * @param string $answer Textual answer
+     * @param string $answerComment Comment on answer
+     * @param string $answerCorrect Correct answer comment
+     * @param int $id Exercise ID
+     * @param int $questionId Question ID
+     * @param boolean $ans Whether to show the answer comment or not
+     * @param bool $resultsDisabled
+     * @param bool $showTotalScoreAndUserChoices
+     *
+     * @return void
+     */
 	public static function display_unique_or_multiple_answer(
         $feedback_type,
         $answerType,
@@ -292,7 +295,6 @@ class ExerciseShowFunctions
         $resultsDisabled,
         $showTotalScoreAndUserChoices
     ) {
-
         $hide_expected_answer = false;
         if ($feedback_type == 0 && ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ONLY)) {
             $hide_expected_answer = true;
@@ -309,7 +311,6 @@ class ExerciseShowFunctions
         $icon = in_array($answerType, array(UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION)) ? 'radio':'checkbox';
 		$icon .= $studentChoice?'_on':'_off';
 		$icon .= '.gif';
-
 		$iconAnswer = in_array($answerType, array(UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION)) ? 'radio':'checkbox';
 		$iconAnswer .= $answerCorrect?'_on':'_off';
 		$iconAnswer .= '.gif';

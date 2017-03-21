@@ -93,7 +93,7 @@ class Security
             $rel_path = '/'.$rel_path;
         }
         $abs_path = $current_path.$rel_path;
-        $true_path=str_replace("\\", '/', realpath($abs_path));
+        $true_path = str_replace("\\", '/', realpath($abs_path));
         $found = strpos($true_path.'/', $checker_path);
         if ($found === 0) {
             return true;
@@ -278,7 +278,7 @@ class Security
         }
 
         if ($user_status == COURSEMANAGERLOWSECURITY) {
-            return $var;  // No filtering.
+            return $var; // No filtering.
         }
 
         static $purifier = array();
@@ -301,7 +301,7 @@ class Security
             }
 
             // Shows _target attribute in anchors
-            $config->set('Attr.AllowedFrameTargets', array('_blank','_top','_self', '_parent'));
+            $config->set('Attr.AllowedFrameTargets', array('_blank', '_top', '_self', '_parent'));
 
             if ($user_status == STUDENT) {
                 global $allowed_html_student;

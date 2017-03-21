@@ -16,7 +16,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
 
 // setting breadcrumbs
-$interbreadcrumb[] = array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 
 $form = new FormValidator('archive_cleanup_form', 'post', '', '', array(), FormValidator::LAYOUT_BOX);
 $form->addButtonSend(get_lang('ArchiveDirCleanupProceedButton'));

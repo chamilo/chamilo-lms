@@ -1,3 +1,95 @@
+### 7.1.1
+- change to named plugins for 3rd party - just calling init
+
+### 7.1.0
+- add option to include plugins not directly related - they get called their init function with current instance of i18next on init
+
+### 7.0.1
+- fix issue in fallback lng detection if no code was detected
+- check for having a lng in append when searching locals to load on loadResources - avoid error on express middleware
+
+### 7.0.0
+- [BREAKING] Removed special cases for norwegian which resolved nb-NO to nb-NO, no will now resolve to nb-NO, nb [#870](https://github.com/i18next/i18next/issues/870) using norwegian you could migrate to old behaviour like:
+
+    fallbackLng: {
+      'nb': ['no', 'en'],
+      'nn': ['no', 'en'],
+      'default': ['en']
+    }
+
+- adding exports for named import (destruction es6) [#873](https://github.com/i18next/i18next/issues/873)
+- change entry point for umd build to /src/i18next to avoid mixed export
+- replace cloning in interpolation nesting to use object assign instead of json.stringify/parse so circular structures can be used [#875](https://github.com/i18next/i18next/issues/875)
+- update all build dependencies
+
+### 6.1.2
+- fixes fix in 6.1.1
+
+### 6.1.1
+- patching same separators to lookup if the ns exists - else guess the first item is just part of the key and not meant as a namespace
+
+### 6.1.0
+- you now can use same nsSeparator and keySeparator (eg. use a dot for both)
+
+### 6.0.3
+- do not loop over objectTree if keySeparator is set to false
+
+### 6.0.2
+- fixes init flow of clone
+
+### 6.0.1
+- fixes issue in event emitter, assert all emitters get called even if one called get removed and changes the array index
+
+### 6.0.0
+- Return namespace in cimode with appendNamespaceToCIMode option (default now will only return key without namespace - independent of call to t function) [#863](https://github.com/i18next/i18next/issues/863)
+
+### 5.0.0
+- Nested keys should not be escaped by default [#854](https://github.com/i18next/i18next/issues/854)
+- Make sure i18next.init() runs for i18next.cloneInstance() [#860](https://github.com/i18next/i18next/pull/860)
+
+### 4.2.0
+- adds i18next.isInitialized when isInitialized
+- triggers backend loaded event before initialized
+
+### 4.1.3 / 4.1.4
+- smaller changes suggested to still inofficial support ie8 [#852](https://github.com/i18next/i18next/issues/852)
+
+### 4.1.2
+- fixes same interpolation object with multiple getFixedT() in different locales yields wrong translation [#851](https://github.com/i18next/i18next/issues/851)
+- updated all build deps
+
+### 4.1.1
+- remove subs array from logger - no longer keep changing debug flag on subs if changing on main
+
+### 4.1.0
+- Custom escape function, single-quotes in nested [#843](https://github.com/i18next/i18next/pull/843)
+
+### 4.0.0
+- [BREAKING; only webpack2-beta users] will add module entry point used by webpack2, this might break your current build with webpack2-beta if configured incorrectly, see: [#836](https://github.com/i18next/i18next/issues/836)
+
+### 3.5.2
+- remove the module entry point again will be added in 4.0.0
+
+### 3.5.1
+- fix build output add a test file to test the generated build
+
+### 3.5.0
+- Setting options on individual translations override, rather than merge global configs [#832](https://github.com/i18next/i18next/issues/832)
+- Create an new translator when cloning i18next instance [#834](https://github.com/i18next/i18next/pull/834)
+- allows fallbackLng to be an string, an array or an object defining fallbacks for lng, lng-region plus default, eg
+
+  fallbackLng: {
+    'de-CH': ['fr', 'it', 'en'],
+    'de': ['fr', 'en'],
+    'zh-Hans': ['zh-Hant', 'en'],
+    'zh-Hant': ['zh-Hans', 'en'],
+    'default': ['en']
+  }
+
+
+### 3.4.4
+- Fix Interpolator.escapeValue defaulting to undefined in some cases [#826](https://github.com/i18next/i18next/issues/826)
+
 ### 3.4.3
 - Fix Interpolator formatter exception error propagation due to not reset RegExp indices [#820](https://github.com/i18next/i18next/issues/820)
 

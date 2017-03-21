@@ -318,7 +318,7 @@ $(function() {
     <?php } ?>
 });
 </script>
-<form id="export_report_form" method="post" action="hotpotatoes_exercise_report.php">
+<form id="export_report_form" method="post" action="hotpotatoes_exercise_report.php?<?php echo api_get_cidreq(); ?>">
     <input type="hidden" name="csvBuffer" id="csvBuffer" value="" />
     <input type="hidden" name="export_report" id="export_report" value="1" />
     <input type="hidden" name="path" id="path" value="<?php echo $hotpotatoes_path ?>" />

@@ -108,9 +108,9 @@ if (!empty($exercise_stat_info['data_tracking'])) {
 	$question_list = explode(',', $exercise_stat_info['data_tracking']);
 }
 
-$learnpath_id = $exercise_stat_info['orig_lp_id'];
-$learnpath_item_id = $exercise_stat_info['orig_lp_item_id'];
-$learnpath_item_view_id = $exercise_stat_info['orig_lp_item_view_id'];
+$learnpath_id = isset($exercise_stat_info['orig_lp_id']) ? $exercise_stat_info['orig_lp_id'] : 0;
+$learnpath_item_id = isset($exercise_stat_info['orig_lp_item_id']) ? $exercise_stat_info['orig_lp_item_id'] : 0;
+$learnpath_item_view_id = isset($exercise_stat_info['orig_lp_item_view_id']) ? $exercise_stat_info['orig_lp_item_view_id'] : 0;
 
 if ($origin == 'learnpath') {
 ?>
@@ -125,7 +125,7 @@ if ($origin == 'learnpath') {
 $i = $total_score = $max_score = 0;
 $remainingMessage = '';
 
-//We check if the user attempts before sending to the exercise_result.php
+// We check if the user attempts before sending to the exercise_result.php
 if ($objExercise->selectAttempts() > 0) {
     $attempt_count = Event::get_attempt_count(
         api_get_user_id(),
@@ -161,11 +161,6 @@ if ($objExercise->selectAttempts() > 0) {
             );
             $attemptMessage = sprintf(get_lang('RemainingXAttempts'), $remainingAttempts);
             $remainingMessage = sprintf("<p>%s</p> %s", $attemptMessage, $attemptButton);
-
-            Display::display_normal_message(
-                $remainingMessage,
-                false
-            );
         }
     }
 }
@@ -180,7 +175,12 @@ $max_score = $objExercise->get_max_score();
 Display::display_normal_message(get_lang('Saved').'<br />',false);
 
 // Display and save questions
-ExerciseLib::display_question_list_by_attempt($objExercise, $exe_id, true);
+ExerciseLib::display_question_list_by_attempt(
+    $objExercise,
+    $exe_id,
+    true,
+    $remainingMessage
+);
 
 //Unset session for clock time
 ExerciseLib::exercise_time_control_delete(

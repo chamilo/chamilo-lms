@@ -6,9 +6,7 @@
  */
 
 $cidReset = true;
-
 require_once __DIR__.'/../inc/global.inc.php';
-
 Display::display_header(null);
 
 $form = new FormValidator('export_certificate');

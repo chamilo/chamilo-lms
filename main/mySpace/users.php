@@ -20,14 +20,14 @@ api_block_anonymous_users();
 
 $this_section = SECTION_TRACKING;
 
-$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('MySpace'));
+$interbreadcrumb[] = array("url" => "index.php", "name" => get_lang('MySpace'));
 
 if (isset($_GET["user_id"]) && $_GET["user_id"] != "" && !isset($_GET["type"])) {
-    $interbreadcrumb[] = array ("url" => "teachers.php", "name" => get_lang('Teachers'));
+    $interbreadcrumb[] = array("url" => "teachers.php", "name" => get_lang('Teachers'));
 }
 
-if (isset($_GET["user_id"]) && $_GET["user_id"]!="" && isset($_GET["type"]) && $_GET["type"] == "coach") {
-    $interbreadcrumb[] = array ("url" => "coaches.php", "name" => get_lang('Tutors'));
+if (isset($_GET["user_id"]) && $_GET["user_id"] != "" && isset($_GET["type"]) && $_GET["type"] == "coach") {
+    $interbreadcrumb[] = array("url" => "coaches.php", "name" => get_lang('Tutors'));
 }
 
 function get_count_users()
@@ -163,7 +163,7 @@ function get_users($from, $limit, $column, $direction)
             $detailsLink = '<a href="myStudents.php?student='.$student_id.'&id_coach='.$coach_id.'&id_session='.$sessionId.'">
 				            '.Display::return_icon('2rightarrow.png', get_lang('Details')).'</a>';
         } else {
-            $detailsLink =  '<a href="myStudents.php?student='.$student_id.'">
+            $detailsLink = '<a href="myStudents.php?student='.$student_id.'">
 				            '.Display::return_icon('2rightarrow.png', get_lang('Details')).'</a>';
         }
         $row[] = $detailsLink;
@@ -184,7 +184,7 @@ $actionsLeft = '';
 
 if (api_is_drh()) {
     $menu_items = array(
-        Display::url(Display::return_icon('stats.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM), api_get_path(WEB_CODE_PATH)."auth/my_progress.php" ),
+        Display::url(Display::return_icon('stats.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM), api_get_path(WEB_CODE_PATH)."auth/my_progress.php"),
         Display::url(Display::return_icon('user_na.png', get_lang('Students'), array(), ICON_SIZE_MEDIUM), '#'),
         Display::url(Display::return_icon('teacher.png', get_lang('Trainers'), array(), ICON_SIZE_MEDIUM), 'teachers.php'),
         Display::url(Display::return_icon('course.png', get_lang('Courses'), array(), ICON_SIZE_MEDIUM), 'course.php'),
@@ -240,14 +240,14 @@ $table->set_header(4, get_lang('Details'), false);
 
 if ($export_csv) {
     if ($is_western_name_order) {
-        $csv_header[] = array (
+        $csv_header[] = array(
             get_lang('FirstName'),
             get_lang('LastName'),
             get_lang('FirstLogin'),
             get_lang('LastConnexion')
         );
     } else {
-        $csv_header[] = array (
+        $csv_header[] = array(
             get_lang('LastName'),
             get_lang('FirstName'),
             get_lang('FirstLogin'),

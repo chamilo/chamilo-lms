@@ -90,9 +90,6 @@ class CourseCategory
         $result = Database::query($sql);
 
         $categories = Database::store_result($result);
-        foreach ($categories as &$categoryItem) {
-            $categoryItem['nbr_courses'] = 1;
-        }
 
         return $categories;
     }
@@ -411,7 +408,7 @@ class CourseCategory
             $row = 0;
             $headers = array(
                 get_lang('Category'),
-                get_lang('CategoriesNumber'),
+                get_lang('SubCat'),
                 get_lang('Courses'),
                 get_lang('Actions')
             );
@@ -598,7 +595,7 @@ class CourseCategory
             $without_special_courses = ' AND course.id NOT IN ("'.implode('","', $specialCourseList).'")';
         }
 
-        $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition('course');
+        $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition('course', true);
 
         $categoryFilter = '';
         if ($categoryCode === 'ALL') {
@@ -663,7 +660,7 @@ class CourseCategory
         if (!empty($specialCourseList)) {
             $without_special_courses = ' AND course.id NOT IN ("'.implode('","', $specialCourseList).'")';
         }
-        $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition("course");
+        $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition('course', true);
 
         if (!empty($random_value)) {
             $random_value = intval($random_value);

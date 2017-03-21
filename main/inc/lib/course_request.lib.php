@@ -48,7 +48,7 @@ class CourseRequestManager
      * @param string $description
      * @param string $category_code
      * @param string $course_language
-     * @param string $objetives
+     * @param string $objectives
      * @param string $target_audience
      * @param int $user_id
      * @return mixed The database id of the newly created course request or FALSE on failure.
@@ -59,7 +59,7 @@ class CourseRequestManager
         $description,
         $category_code,
         $course_language,
-        $objetives,
+        $objectives,
         $target_audience,
         $user_id,
         $exemplary_content
@@ -122,7 +122,7 @@ class CourseRequestManager
             Database::escape_string($tutor_name),
             Database::escape_string($visual_code),
             Database::escape_string($request_date),
-            Database::escape_string($objetives),
+            Database::escape_string($objectives),
             Database::escape_string($target_audience),
             Database::escape_string($status),
             Database::escape_string($info),
@@ -151,7 +151,7 @@ class CourseRequestManager
         $email_body .= get_lang('Professor', null, $email_language).': '.api_get_person_name($user_info['firstname'], $user_info['lastname'], null, null, $email_language)."\n";
         $email_body .= get_lang('Email', null, $email_language).': '.$user_info['mail']."\n";
         $email_body .= get_lang('Description', null, $email_language).': '.$description."\n";
-        $email_body .= get_lang('Objectives', null, $email_language).': '.$objetives."\n";
+        $email_body .= get_lang('Objectives', null, $email_language).': '.$objectives."\n";
         $email_body .= get_lang('TargetAudience', null, $email_language).': '.$target_audience."\n";
         $email_body .= get_lang('Ln', null, $email_language).': '.$course_language."\n";
         $email_body .= get_lang('FillWithExemplaryContent', null, $email_language).': '.($exemplary_content ? get_lang('Yes', null, $email_language) : get_lang('No', null, $email_language))."\n";
@@ -225,7 +225,6 @@ class CourseRequestManager
         );
 
         return $last_insert_id;
-
     }
 
     /**
@@ -236,7 +235,7 @@ class CourseRequestManager
      * @param string $description
      * @param string $category_code
      * @param string $course_language
-     * @param string $objetives
+     * @param string $objectives
      * @param string $target_audience
      * @param int $user_id
      * @return bool Returns TRUE on success or FALSE on failure.
@@ -248,7 +247,7 @@ class CourseRequestManager
         $description,
         $category_code,
         $course_language,
-        $objetives,
+        $objectives,
         $target_audience,
         $user_id,
         $exemplary_content
@@ -341,7 +340,7 @@ class CourseRequestManager
             Database::escape_string($tutor_name),
             Database::escape_string($visual_code),
             Database::escape_string($request_date),
-            Database::escape_string($objetives),
+            Database::escape_string($objectives),
             Database::escape_string($target_audience),
             Database::escape_string($status),
             Database::escape_string($info),
@@ -350,13 +349,12 @@ class CourseRequestManager
         $result_sql = Database::query($sql);
 
         return $result_sql !== false;
-
     }
 
     /**
      * Deletes a given course request.
-     * @param int $id            The id (an integer number) of the corresponding database record.
-     * @return bool                     Returns TRUE on success or FALSE on failure.
+     * @param int $id The id (an integer number) of the corresponding database record.
+     * @return bool Returns TRUE on success or FALSE on failure.
      */
     public static function delete_course_request($id)
     {
@@ -499,7 +497,6 @@ class CourseRequestManager
             $sender_email = api_get_setting('emailAdministrator');
             $recipient_name = api_get_person_name($user_info['firstname'], $user_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
             $recipient_email = $user_info['mail'];
-            $extra_headers = 'Bcc: '.$sender_email;
 
             $additionalParameters = array(
                 'smsType' => SmsPlugin::COURSE_OPENING_REQUEST_CODE_APPROVED,
@@ -522,13 +519,14 @@ class CourseRequestManager
 
             return $course_info['code'];
         }
+
         return false;
     }
 
     /**
      * Rejects a given course request.
-     * @param int $id            The id (an integer number) of the corresponding database record.
-     * @return bool                     Returns TRUE on success or FALSE on failure.
+     * @param int $id The id (an integer number) of the corresponding database record.
+     * @return bool Returns TRUE on success or FALSE on failure.
      */
     public static function reject_course_request($id)
     {
@@ -605,8 +603,8 @@ class CourseRequestManager
 
     /**
      * Asks the author (through e-mail) for additional information about the given course request.
-     * @param int $id            The database primary id of the given request.
-     * @return bool                     Returns TRUE on success or FALSE on failure.
+     * @param int $id The database primary id of the given request.
+     * @return bool Returns TRUE on success or FALSE on failure.
      */
     public static function ask_for_additional_info($id)
     {

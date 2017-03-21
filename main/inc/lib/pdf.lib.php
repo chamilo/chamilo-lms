@@ -177,9 +177,12 @@ class PDF
      *     0 => array('title'=>'Hello','path'=>'file.html'),
      *     1 => array('title'=>'Bye','path'=>'file2.html')
      * );
-     * @param   string  pdf name
-     * @param   string  course code (if you are using html that are located in the document tool you must provide this)
-     * @param bool Whether to print the header, footer and watermark (true) or just the content (false)
+     * @param string $pdf_name pdf name
+     * @param string $course_code (if you are using html that are located in the document tool you must provide this)
+     * @param bool $print_title add title
+     * @param bool $complete_style show header and footer if true
+     * @param bool $addStyle
+     *
      * @return bool
      */
     public function html_to_pdf(
@@ -190,10 +193,6 @@ class PDF
         $complete_style = true,
         $addStyle = true
     ) {
-        if ($complete_style === false) {
-            error_log(__FUNCTION__.' with no style');
-        }
-
         if (empty($html_file_array)) {
             return false;
         }
@@ -224,6 +223,7 @@ class PDF
 
         // Formatting the pdf
         self::format_pdf($course_data, $complete_style);
+
         $counter = 1;
         foreach ($html_file_array as $file) {
             //Add a page break per file
@@ -261,7 +261,6 @@ class PDF
             if ($addStyle) {
                 $css_file = api_get_path(SYS_CSS_PATH).'/print.css';
                 $css = file_exists($css_file) ? @file_get_contents($css_file) : '';
-
                 $this->pdf->WriteHTML($css, 1);
             }
 
@@ -282,7 +281,7 @@ class PDF
 
                 if ($extension === 'html') {
                     $filename = basename($filename, '.html');
-                } elseif($extension === 'htm'){
+                } elseif ($extension === 'htm') {
                     $filename = basename($filename, '.htm');
                 }
 
@@ -328,7 +327,6 @@ class PDF
                                             if (strpos($old_src, 'courses/'.$course_data['path'].'/document/') !== false) {
                                                 $old_src_fixed = str_replace('courses/'.$course_data['path'].'/document/', '', $old_src);
                                             } else {
-
                                                 // Try with the dirname if exists
                                                 if (file_exists($dirName.'/'.$old_src)) {
                                                     $document_path = '';
@@ -539,12 +537,12 @@ class PDF
             $course_info = api_get_course_info($course_code);
             $store_path = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/'.api_get_current_access_url_id().'_pdf_watermark.png';   // course path
             if (file_exists($store_path)) {
-                $web_path   = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/'.api_get_current_access_url_id().'_pdf_watermark.png';
+                $web_path = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/'.api_get_current_access_url_id().'_pdf_watermark.png';
             }
         } else {
             $store_path = api_get_path(SYS_CODE_PATH).'default_course_document/images/'.api_get_current_access_url_id().'_pdf_watermark.png';   // course path
             if (file_exists($store_path))
-                $web_path   = api_get_path(WEB_CODE_PATH).'default_course_document/images/'.api_get_current_access_url_id().'_pdf_watermark.png';
+                $web_path = api_get_path(WEB_CODE_PATH).'default_course_document/images/'.api_get_current_access_url_id().'_pdf_watermark.png';
         }
         return $web_path;
     }
@@ -560,7 +558,7 @@ class PDF
         if (!empty($course_code) && api_get_setting('pdf_export_watermark_by_course') == 'true') {
             $course_info = api_get_course_info($course_code);
             // course path
-            $store_path  = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/'.api_get_current_access_url_id().'_pdf_watermark.png';
+            $store_path = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/'.api_get_current_access_url_id().'_pdf_watermark.png';
         } else {
             // course path
             $store_path = api_get_path(SYS_CODE_PATH).'default_course_document/images/'.api_get_current_access_url_id().'_pdf_watermark.png';
@@ -838,7 +836,10 @@ class PDF
                     $watermark_text = api_get_setting('pdf_export_watermark_text');
                 }
                 if (!empty($watermark_text)) {
-                    $this->pdf->SetWatermarkText(strcode2utf($watermark_text),0.1);
+                    $this->pdf->SetWatermarkText(
+                        strcode2utf($watermark_text),
+                        0.1
+                    );
                     $this->pdf->showWatermarkText = true;
                 }
             }
@@ -846,8 +847,8 @@ class PDF
             if (empty($this->custom_header)) {
                 self::set_header($course_data);
             } else {
-                $this->pdf->SetHTMLHeader($this->custom_header,'E');
-                $this->pdf->SetHTMLHeader($this->custom_header,'O');
+                $this->pdf->SetHTMLHeader($this->custom_header, 'E');
+                $this->pdf->SetHTMLHeader($this->custom_header, 'O');
             }
 
             if (empty($this->custom_footer)) {

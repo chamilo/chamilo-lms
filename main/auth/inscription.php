@@ -61,6 +61,10 @@ $user_already_registered_show_terms = false;
 if (api_get_setting('allow_terms_conditions') == 'true') {
     $user_already_registered_show_terms = isset($_SESSION['term_and_condition']['user_id']);
 }
+
+$sessionPremiumChecker = Session::read('SessionIsPremium');
+$sessionId = Session::read('sessionId');
+
 // Direct Link Session Subscription feature #12220
 $sessionRedirect = isset($_REQUEST['s']) && !empty($_REQUEST['s']) ? $_REQUEST['s'] : null;
 $onlyOneCourseSessionRedirect = isset($_REQUEST['cr']) && !empty($_REQUEST['cr']) ? $_REQUEST['cr'] : null;
@@ -140,6 +144,7 @@ if ($user_already_registered_show_terms === false) {
         $form->addText(
             'username',
             get_lang('UserName'),
+            true,
             array(
                 'id' => 'username',
                 'size' => USERNAME_MAX_LENGTH,
@@ -629,7 +634,7 @@ if ($form->validate()) {
             }
 
             // Saving user to Session if it was set
-            if (!empty($sessionToRedirect)) {
+            if (!empty($sessionToRedirect) && !$sessionPremiumChecker) {
                 $sessionInfo = api_get_session_info($sessionToRedirect);
                 if (!empty($sessionInfo)) {
                     SessionManager::subscribe_users_to_session(
@@ -850,6 +855,13 @@ if ($form->validate()) {
                 array('class' => 'btn btn-primary btn-large')
             );
         }
+    }
+
+    if ($sessionPremiumChecker && $sessionId) {
+        header('Location:' . api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/process.php?i=' . $sessionId . '&t=2');
+        Session::erase('SessionIsPremium');
+        Session::erase('sessionId');
+        exit;
     }
 
     SessionManager::redirectToSession();

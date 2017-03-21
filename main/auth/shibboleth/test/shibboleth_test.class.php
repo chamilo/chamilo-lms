@@ -205,7 +205,7 @@ class ShibbolethTest
             $message = "Assert failed $message <br/>";
             echo $message;
             // Dump variable for debug
-            error_log(print_r(debug_backtrace(),1));
+            error_log(print_r(debug_backtrace(), 1));
             die;
         }
         else

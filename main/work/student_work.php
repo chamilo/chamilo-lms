@@ -177,7 +177,7 @@ foreach ($workPerUser as $work) {
         if (api_is_allowed_to_edit()) {
             $url = api_get_path(WEB_CODE_PATH).'work/edit.php?'.api_get_cidreq().'&item_id='.$itemId.'&id='.$workId.'&parent_id='.$workId;
             $links .= Display::url(
-                Display::return_icon('rate_work.png', get_lang('Comment')),
+                Display::return_icon('edit.png', get_lang('Comment')),
                 $url
             );
         }

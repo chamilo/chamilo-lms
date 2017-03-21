@@ -169,7 +169,6 @@ $actionsLeft = '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_
     Display::return_icon('back.png', get_lang('BackToWorksList'), '', ICON_SIZE_MEDIUM).'</a>';
 
 if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !$isDrhOfCourse) {
-
     $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'work/add_document.php?'.api_get_cidreq().'&id='.$workId.'">';
     $actionsLeft .= Display::return_icon('new_document.png', get_lang('AddDocument'), '', ICON_SIZE_MEDIUM).'</a>';
 
@@ -213,15 +212,15 @@ if (!empty($my_folder_data['description'])) {
 
 $check_qualification = intval($my_folder_data['qualification']);
 
+$orderName = api_is_western_name_order() ? 'firstname' : 'lastname';
+
 if (!empty($work_data['enable_qualification']) &&
     !empty($check_qualification)
 ) {
     $type = 'simple';
 
     $columns = array(
-        //get_lang('Type'),
         get_lang('FullUserName'),
-        //get_lang('LastName'),
         get_lang('Title'),
         get_lang('Feedback'),
         get_lang('Date'),
@@ -231,28 +230,13 @@ if (!empty($work_data['enable_qualification']) &&
     );
 
     $column_model = array(
-        /*array(
-            'name' => 'type',
-            'index' => 'file',
-            'width' => '8',
-            'align' => 'left',
-            'search' => 'false',
-            'sortable' => 'false',
-        ),*/
         array(
             'name' => 'fullname',
-            'index' => 'fullname',
+            'index' => $orderName,
             'width' => '30',
             'align' => 'left',
             'search' => 'true',
         ),
-        /*array(
-            'name' => 'lastname',
-            'index' => 'lastname',
-            'width' => '35',
-            'align' => 'left',
-            'search' => 'true',
-        ),*/
         array(
             'name' => 'title',
             'index' => 'title',
@@ -305,7 +289,6 @@ if (!empty($work_data['enable_qualification']) &&
     $type = 'complex';
 
     $columns = array(
-        //get_lang('Type'),
         get_lang('FullUserName'),
         get_lang('Title'),
         get_lang('Feedback'),
@@ -315,17 +298,9 @@ if (!empty($work_data['enable_qualification']) &&
     );
 
     $column_model = array(
-        /*array(
-            'name' => 'type',
-            'index' => 'file',
-            'width' => '8',
-            'align' => 'left',
-            'search' => 'false',
-            'sortable' => 'false',
-        ),*/
         array(
             'name' => 'fullname',
-            'index' => 'fullname',
+            'index' => $orderName,
             'width' => '35',
             'align' => 'left',
             'search' => 'true',
@@ -375,10 +350,10 @@ if (!empty($work_data['enable_qualification']) &&
 }
 
 $extra_params = array(
-    'autowidth' =>  'true',
-    'height' =>  'auto',
-    'sortname' => 'fullname',
-    'sortable' => 'false'
+    'autowidth' => 'true',
+    'height' => 'auto',
+    'sortname' => $orderName,
+    'sortable' => 'false',
 );
 
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_work_user_list_all&work_id='.$workId.'&type='.$type.'&'.api_get_cidreq();

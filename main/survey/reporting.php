@@ -76,6 +76,10 @@ $people_filled = SurveyManager::get_people_who_filled_survey(
 SurveyUtil::check_parameters($people_filled);
 
 $survey_data = SurveyManager::get_survey($survey_id);
+// Getting the survey information
+if (empty($survey_data)) {
+    api_not_allowed(true);
+}
 
 $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
     api_get_user_id(),
@@ -84,30 +88,20 @@ $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
 
 /** @todo this has to be moved to a more appropriate place (after the display_header of the code)*/
 if (!api_is_allowed_to_edit(false, true) || $isDrhOfCourse) {
-	Display :: display_header(get_lang('ToolSurvey'));
+    Display :: display_header(get_lang('ToolSurvey'));
     // Show error message if the survey can be seen only by tutors
     if ($survey_data['visible_results'] != SURVEY_VISIBLE_TUTOR) {
         SurveyUtil::handle_reporting_actions($survey_data, $people_filled);
     } else {
         Display :: display_error_message(get_lang('NotAllowed'), false);
     }
-	Display :: display_footer();
-	exit;
+    Display :: display_footer();
+    exit;
 }
 
 // Database table definitions
 $table_course = Database:: get_main_table(TABLE_MAIN_COURSE);
 $table_user = Database:: get_main_table(TABLE_MAIN_USER);
-
-// Getting the survey information
-
-if (empty($survey_data)) {
-    Display :: display_header(get_lang('ToolSurvey'));
-    Display :: display_error_message(get_lang('InvallidSurvey'), false);
-    Display :: display_footer();
-    exit;
-}
-
 $urlname = strip_tags(api_substr(api_html_entity_decode($survey_data['title'], ENT_QUOTES), 0, 40));
 if (api_strlen(strip_tags($survey_data['title'])) > 40) {
     $urlname .= '...';

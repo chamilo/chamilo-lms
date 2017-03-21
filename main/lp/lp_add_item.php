@@ -19,8 +19,34 @@ $this_section = SECTION_COURSES;
 
 api_protect_course_script();
 
+$isStudentView = isset($_REQUEST['isStudentView']) ? $_REQUEST['isStudentView'] : null;
+$learnpath_id = isset($_REQUEST['lp_id']) ? intval($_REQUEST['lp_id']) : null;
+$submit = isset($_POST['submit_button']) ? $_POST['submit_button'] : null;
+$type = isset($_GET['type']) ? $_GET['type'] : null;
+$action = isset($_GET['action']) ? $_GET['action'] : null;
+
+$is_allowed_to_edit = api_is_allowed_to_edit(null, false);
+
+$listUrl = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?action=view&lp_id='.$learnpath_id.'&'.api_get_cidreq().'&isStudentView=true';
+if (!$is_allowed_to_edit) {
+    error_log('New LP - User not authorized in lp_add_item.php');
+    header("Location: $listUrl");
+    exit;
+}
+
 /** @var learnpath $learnPath */
 $learnPath = Session::read('oLP');
+
+if (empty($learnPath)) {
+    api_not_allowed();
+}
+
+if ((int)$learnPath->get_lp_session_id() != (int)api_get_session_id()) {
+    // You cannot edit an LP from a base course.
+    header("Location: $listUrl");
+
+    exit;
+}
 
 $htmlHeadXtra[] = '<script>'.
 $learnPath->get_js_dropdown_array()."
@@ -62,22 +88,7 @@ $(function() {
 });
 </script>";
 
-/* Constants and variables */
-
-$isStudentView = isset($_REQUEST['isStudentView']) ? $_REQUEST['isStudentView'] : null;
-$learnpath_id = isset($_REQUEST['lp_id']) ? intval($_REQUEST['lp_id']) : null;
-$submit = isset($_POST['submit_button']) ? $_POST['submit_button'] : null;
-
-$type = isset($_GET['type']) ? $_GET['type'] : null;
-$action = isset($_GET['action']) ? $_GET['action'] : null;
-
-if (!$is_allowed_to_edit) {
-    error_log('New LP - User not authorized in lp_add_item.php');
-    header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);
-    exit;
-}
 /* SHOWING THE ADMIN TOOLS */
-
 if (isset($_SESSION['gradebook'])) {
     $gradebook = $_SESSION['gradebook'];
 }

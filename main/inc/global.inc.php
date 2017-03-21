@@ -195,7 +195,7 @@ if (!empty($_configuration['multiple_access_urls'])) {
 // Check if APCu is available. If so, store the value in $_configuration
 if (extension_loaded('apcu')) {
     $_configuration['apc'] = true;
-    $_configuration['apcPrefix'] = $_configuration['main_database'].'_'.$_configuration['access_url'].'_';
+    $_configuration['apc_prefix'] = $_configuration['main_database'].'_'.$_configuration['access_url'].'_';
 }
 
 $charset = 'UTF-8';

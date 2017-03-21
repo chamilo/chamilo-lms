@@ -364,7 +364,7 @@ class DisplayGradebook
                     $my_api_cidreq = 'cidReq=' . $my_category['course_code'];
                 }
                 if ($show_add_link && !$message_resource) {
-                   $actionsLeft .= '<a href="gradebook_add_eval.php?' . $my_api_cidreq . '&selectcat=' . $catobj->get_id() . '" >' .
+                    $actionsLeft .= '<a href="gradebook_add_eval.php?' . $my_api_cidreq . '&selectcat=' . $catobj->get_id() . '" >' .
                         Display::return_icon('new_evaluation.png', get_lang('NewEvaluation'), '', ICON_SIZE_MEDIUM) . '</a>';
                     $cats = Category :: load($selectcat);
 

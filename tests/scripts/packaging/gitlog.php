@@ -38,7 +38,7 @@ $logs = $git->getRevisions('DESC', $number);
 $i = 0;
 foreach ($logs as $log) {
     if ($showDate) {
-      echo $log['date']->format('Y-m-d H:i:s').' '.substr($log['sha1'],0,8).PHP_EOL;
+        echo $log['date']->format('Y-m-d H:i:s').' '.substr($log['sha1'],0,8).PHP_EOL;
     }
     // Check for Minor importance messages to ignore...
     if (strncasecmp($log['message'], 'Minor', 5) === 0) {
@@ -101,7 +101,7 @@ foreach ($logs as $log) {
         if ($hasRefs = stripos($log['message'], ' -refs ')) {
             $log['message'] = substr($log['message'], 0, $hasRefs);
         }
-        
+
     }
     $commitLink = '';
     if ($formatHTML) {

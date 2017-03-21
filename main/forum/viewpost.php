@@ -29,7 +29,7 @@ $(document).ready(function(){ $(\'.hide-me\').slideUp() });
 // Are we in a lp ?
 $origin = '';
 if (isset($_GET['origin'])) {
-    $origin =  Security::remove_XSS($_GET['origin']);
+    $origin = Security::remove_XSS($_GET['origin']);
 }
 
 /* MAIN DISPLAY SECTION */
@@ -46,12 +46,12 @@ $whatsnew_post_info = $_SESSION['whatsnew_post_info'];
 
 /* Header and Breadcrumbs */
 
-if (isset($_SESSION['gradebook'])){
+if (isset($_SESSION['gradebook'])) {
     $gradebook = $_SESSION['gradebook'];
 }
 
 if (!empty($gradebook) && $gradebook == 'view') {
-    $interbreadcrumb[] = array (
+    $interbreadcrumb[] = array(
         'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
         'name' => get_lang('ToolGradebook')
     );
@@ -181,7 +181,7 @@ if ($message != 'PostDeletedSpecial') {
     echo "\t<tr>\n\t\t<th style=\"padding-left:5px;\" align=\"left\" colspan=\"6\">";
     echo '<span class="forum_title">'.prepare4display($current_thread['thread_title']).'</span><br />';
 
-    if ($origin!='learnpath') {
+    if ($origin != 'learnpath') {
         echo '<span class="forum_low_description">'.prepare4display($current_forum_category['cat_title']).' - ';
     }
 

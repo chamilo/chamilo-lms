@@ -6,7 +6,7 @@
     {% include template ~ "/layout/topbar.tpl" %}
 {% endblock %}
 <div class="extra-header">{{ header_extra_content }}</div>
-<header id="header-section">
+<header id="header-section" class="header-movil">
     <div class="container">
         <div class="row">
             <div class="col-md-3">

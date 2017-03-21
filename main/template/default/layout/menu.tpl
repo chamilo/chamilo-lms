@@ -40,8 +40,10 @@
                         <li class="dropdown avatar-user">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                                aria-expanded="false">
-                                <img class="img-circle" src="{{ _u.avatar_small }}" alt="{{ _u.complete_name }}"/> <span
-                                        class="caret"></span>
+                                
+                                <img class="img-circle" src="{{ _u.avatar_small }}" alt="{{ _u.complete_name }}"/>
+                                <span class="username-movil">{{ _u.complete_name }}</span>
+                                <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
                                 <li class="user-header">

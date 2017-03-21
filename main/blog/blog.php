@@ -384,22 +384,20 @@ switch ($action) {
             // 2. there is post data and the required field is empty
             if (!$_POST OR (!empty($_POST) AND empty($_POST['post_title']))) {
                 // if there is post data there is certainly an error in the form
+                $formEdit = Blog::display_form_edit_post($blog_id, intval($_GET['post_id']));
+                $tpl->assign('content', $formEdit);
+                $blogLayout = $tpl->get_template('blog/layout.tpl');
+                
                 if ($_POST) {
-                    Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'));
-                }
-            } else {
-                if (isset ($_GET['filter']) && !empty ($_GET['filter'])) {
-                    Blog::display_day_results($blog_id, Database::escape_string($_GET['filter']));
-                } else {
-                    Blog::display_blog_posts($blog_id);
+                    $post = Blog::display_post($blog_id, intval($_GET['post_id']));
+                    $tpl->assign('post', $post);
+                    $blogLayout = $tpl->get_template('blog/post.tpl');
                 }
             }
         } else {
             api_not_allowed();
         }
-        $formEdit = Blog::display_form_edit_post($blog_id, intval($_GET['post_id']));
-        $tpl->assign('content', $formEdit);
-        $blogLayout = $tpl->get_template('blog/layout.tpl');
+        
         break;
     case 'manage_members' :
         $manage = null;
@@ -454,9 +452,7 @@ switch ($action) {
     case 'execute_task' :
         if (isset ($_GET['post_id'])) {
             $post = Blog::display_post($blog_id, intval($_GET['post_id']));
-
             $tpl->assign('post', $post);
-
             $blogLayout = $tpl->get_template('blog/post.tpl');
         } else {
             $taskPost = Blog::display_select_task_post($blog_id, intval($_GET['task_id']));

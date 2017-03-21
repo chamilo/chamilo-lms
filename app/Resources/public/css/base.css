@@ -6015,6 +6015,22 @@ ul#toolnavbox-two li a.btn{
     padding-bottom: 10px;
     padding-top: 10px;
     margin-bottom: 10px;
+    overflow: visible;
+}
+.blog .comments-post .media .media-body{
+    overflow: visible;
+}
+.blog article header{
+    padding-top: 0;
+}
+.blog .form-inline .form-group label{
+    padding-right: 10px;
+}
+.blog .form-inline .form-group .bootstrap-select{
+    margin-right: 10px;
+}
+#smallcalendar .month{
+    text-align: center;
 }
 /* CSS NEW TOP ******************************************************************************/
 /* CSS Responsive */

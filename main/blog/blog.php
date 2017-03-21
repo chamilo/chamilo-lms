@@ -405,7 +405,6 @@ switch ($action) {
         $manage = null;
         if (api_is_allowed('BLOG_'.$blog_id, 'member_management')) {
             $manage .= Blog::display_form_user_subscribe($blog_id);
-            echo '<br /><br />';
             $manage .= Blog::display_form_user_unsubscribe($blog_id);
         } else {
             api_not_allowed();

@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-md-12">
-        <div class="blog" id="post-{{ post.id_post }}">
+        <div class="blog">
             {{ content }}
         </div>
     </div>

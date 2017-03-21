@@ -1297,7 +1297,7 @@ class Blog
                 $html .= '<div class="form-group">';
                 $html .= '<label class="col-sm-3 control-label">'.get_lang('RateThis').'</label>';
                 $html .= '<div class="col-sm-9">';
-                $html .= '<select  name="rating" onchange="document.forms[\'frm_rating_'.$type.'_'.$comment_id.'\'].submit()"><option value="">-</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select><input type="hidden" name="action" value="view_post" /><input type="hidden" name="type" value="'.$type.'" /><input type="hidden" name="do" value="rate" /><input type="hidden" name="blog_id" value="'.$blog_id.'" /><input type="hidden" name="post_id" value="'.$post_id.'" /><input type="hidden" name="comment_id" value="'.$comment_id.'" />';
+                $html .= '<select  class="selectpicker" name="rating" onchange="document.forms[\'frm_rating_'.$type.'_'.$comment_id.'\'].submit()"><option value="">-</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select><input type="hidden" name="action" value="view_post" /><input type="hidden" name="type" value="'.$type.'" /><input type="hidden" name="do" value="rate" /><input type="hidden" name="blog_id" value="'.$blog_id.'" /><input type="hidden" name="post_id" value="'.$post_id.'" /><input type="hidden" name="comment_id" value="'.$comment_id.'" />';
                 $html .= '</div>';
                 $html .= '</div>';
                 $html .= '</form>';
@@ -2258,8 +2258,9 @@ class Blog
         $currentCourse = $_course['code'];
         $tbl_users = Database::get_main_table(TABLE_MAIN_USER);
         $tbl_blogs_rel_user = Database::get_course_table(TABLE_BLOGS_REL_USER);
+        $html = null;
 
-        echo '<legend>'.get_lang('SubscribeMembers').'</legend>';
+        $html .= '<legend>'.get_lang('SubscribeMembers').'</legend>';
 
         $properties["width"] = "100%";
 
@@ -2329,21 +2330,26 @@ class Blog
         // Display
         $query_vars['action'] = 'manage_members';
         $query_vars['blog_id'] = $blog_id;
-        echo '<form method="post" action="blog.php?action=manage_members&blog_id='.$blog_id.'">';
-        Display::display_sortable_table($column_header, $user_data, null, null, $query_vars);
+        $html .= '<form class="form-inline" method="post" action="blog.php?action=manage_members&blog_id='.$blog_id.'">';
+        $html.= Display::return_sortable_table($column_header, $user_data, null, null, $query_vars);
         $link = '';
         $link .= isset ($_GET['action']) ? 'action='.Security::remove_XSS($_GET['action']).'&' : '';
         $link .= "blog_id=$blog_id&";
 
-        echo '<a href="blog.php?'.$link.'selectall=subscribe">'.get_lang('SelectAll').'</a> - ';
-        echo '<a href="blog.php?'.$link.'">'.get_lang('UnSelectAll').'</a> ';
-        echo get_lang('WithSelected').' : ';
-        echo '<select name="action">';
-        echo '<option value="select_subscribe">'.get_lang('Register').'</option>';
-        echo '</select>';
-        echo '<input type="hidden" name="register" value="true" />';
-        echo '<button class="save" type="submit">'.get_lang('Ok').'</button>';
-        echo '</form>';
+        $html .= '<a class="btn btn-default" href="blog.php?'.$link.'selectall=subscribe">'.get_lang('SelectAll').'</a> - ';
+        $html .= '<a class="btn btn-default" href="blog.php?'.$link.'">'.get_lang('UnSelectAll').'</a> ';
+        $html .= '<div class="form-group">';
+        $html .= '<label>';
+        $html .= get_lang('WithSelected').' : ';
+        $html .= '</label>';
+        $html .= '<select class="selectpicker" name="action">';
+        $html .= '<option value="select_subscribe">'.get_lang('Register').'</option>';
+        $html .= '</select>';
+        $html .= '<input type="hidden" name="register" value="true" />';
+        $html .= '<button class="btn btn-default" type="submit">'.get_lang('Ok').'</button>';
+        $html .= '</div>';
+        $html .= '</form>';
+        return $html;
     }
 
     /**
@@ -2359,12 +2365,13 @@ class Blog
     {
         $_user = api_get_user_info();
         $is_western_name_order = api_is_western_name_order();
+        $html = null;
 
         // Init
         $tbl_users = Database::get_main_table(TABLE_MAIN_USER);
         $tbl_blogs_rel_user = Database::get_course_table(TABLE_BLOGS_REL_USER);
 
-        echo '<legend>'.get_lang('UnsubscribeMembers').'</legend>';
+        $html.= '<legend>'.get_lang('UnsubscribeMembers').'</legend>';
 
         $properties["width"] = "100%";
         //table column titles
@@ -2440,21 +2447,27 @@ class Blog
 
         $query_vars['action'] = 'manage_members';
         $query_vars['blog_id'] = $blog_id;
-        echo '<form method="post" action="blog.php?action=manage_members&blog_id='.$blog_id.'">';
-        Display::display_sortable_table($column_header, $user_data, null, null, $query_vars);
+        $html.= '<form class="form-inline" method="post" action="blog.php?action=manage_members&blog_id='.$blog_id.'">';
+        $html.= Display::return_sortable_table($column_header, $user_data, null, null, $query_vars);
         $link = '';
         $link .= isset ($_GET['action']) ? 'action='.Security::remove_XSS($_GET['action']).'&' : '';
         $link .= "blog_id=$blog_id&";
 
-        echo '<a href="blog.php?'.$link.'selectall=unsubscribe">'.get_lang('SelectAll').'</a> - ';
-        echo '<a href="blog.php?'.$link.'">'.get_lang('UnSelectAll').'</a> ';
-        echo get_lang('WithSelected').' : ';
-        echo '<select name="action">';
-        echo '<option value="select_unsubscribe">'.get_lang('UnRegister').'</option>';
-        echo '</select>';
-        echo '<input type="hidden" name="unregister" value="true" />';
-        echo '<button class="save" type="submit">'.get_lang('Ok').'</button>';
-        echo '</form>';
+        $html.= '<a class="btn btn-default" href="blog.php?'.$link.'selectall=unsubscribe">'.get_lang('SelectAll').'</a> - ';
+        $html.= '<a class="btn btn-default" href="blog.php?'.$link.'">'.get_lang('UnSelectAll').'</a> ';
+        $html.= '<div class="form-group">';
+        $html.= '<label>';
+        $html.= get_lang('WithSelected').' : ';
+        $html.= '</label>';
+        $html.= '<select name="action" class="selectpicker">';
+        $html.= '<option value="select_unsubscribe">'.get_lang('UnRegister').'</option>';
+        $html.= '</select>';
+        $html.= '<input type="hidden" name="unregister" value="true" />';
+        $html.= '<button class="btn btn-default" type="submit">'.get_lang('Ok').'</button>';
+        $html.= '</div>';
+        $html.= '</form>';
+        
+        return $html;
     }
 
     /**
@@ -2574,7 +2587,7 @@ class Blog
         $html .= '<table id="smallcalendar" class="table table-responsive">
                 <tr id="title">
                 <th width="10%"><a href="'.$backwardsURL.'">&laquo;</a></th>
-                <th align="center" width="80%" colspan="5">'.$monthName.' '.$year.'</th>
+                <th align="center" width="80%" colspan="5" class="month">'.$monthName.' '.$year.'</th>
                 <th width="10%" align="right"><a href="'.$forewardsURL.'">&raquo;</a></th></tr>';
 
         $html .= '<tr>';

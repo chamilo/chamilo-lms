@@ -36,7 +36,7 @@
             </div>
         </div>
     </div>
-
+{{ post | var_dump }}
     <div class="col-md-9">
         <div class="blog" id="post-{{ post.id_post }}">
             <div class="panel panel-default" id="blog-header">

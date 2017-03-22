@@ -82,10 +82,10 @@
                         {{ post.frm_rating ?: '' }}
                     </article>
                     <div class="comments-post">
-                        <h3 class="title">{{ post.n_comments }} {{ 'Comments' | get_lang }} </h3>
-                        <ul id="list-comments" class="media-list">
+                        <h3 class="title">{{ 'XComments'|get_lang|format(post.n_comments) }}</h3>
+                        <div id="list-comments" class="media-list">
                             {% for item in post.comments %}
-                                <li class="media">
+                                <div class="media">
                                     <div class="media-left">
                                         <a href="{{ _p.web }}main/social/profile.php?u={{ item.id_author }}">
                                             <img class="media-object thumbnail avatar"
@@ -128,7 +128,7 @@
                                         </div>
 
                                         {% for item2 in item.comments %}
-                                            <li class="media {{ item2.iid }}">
+                                            <div class="media {{ item2.iid }}">
                                                 <div class="media-left">
                                                     <a href="{{ _p.web }}main/social/profile.php?u={{ item2.id_author }}">
                                                         <img class="media-object thumbnail avatar"
@@ -170,12 +170,12 @@
                                                         {{ item2.form_ranking }}
                                                     </div>
                                                 </div>
-                                            </li>
+                                            </div>
                                         {% endfor %}
                                     </div>
-                                </li>
+                                </div>
                             {% endfor %}
-                        </ul>
+                        </div>
                     </div>
                     <div class="form-post">
                         {{ post.form_html }}

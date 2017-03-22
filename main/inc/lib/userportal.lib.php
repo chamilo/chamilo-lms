@@ -1168,8 +1168,7 @@ class IndexManager
 
             //Course option (show student progress)
             //This code will add a new variables (Progress, Score, Certificate)
-            if(api_get_configuration_value('my_course_progress') === true
-               && api_is_student() === true) {
+            if(api_get_configuration_value('my_course_progress') === true && api_is_student() === true) {
                 
                 foreach($specialCourses as $key => $specialCourseInfo) {
                     $progress = Tracking::get_avg_student_progress(
@@ -1395,8 +1394,7 @@ class IndexManager
 
                                         //Course option (show student progress)
                                         //This code will add a new variables (Progress, Score, Certificate)
-                                        if(api_get_configuration_value('my_course_progress') === true
-                                           && api_is_student() === true) {
+                                        if(api_get_configuration_value('my_course_progress') === true && api_is_student() === true) {
                                             $progress = Tracking::get_avg_student_progress(
                                                 $user_id,
                                                 $course['course_code'],
@@ -1412,7 +1410,14 @@ class IndexManager
                                             $course_session['student_info']['progress']  = ($progress === false)? null : $progress;
                                             $course_session['student_info']['score'] = $percentage_score;
     
-                                            $category = Category::load( null, null, $course['course_code'], null, null, $session_id );
+                                            $category = Category::load(
+                                                null,
+                                                null,
+                                                $course['course_code'],
+                                                null,
+                                                null,
+                                                $session_id
+                                            );
                                             $course_session['student_info']['certificate'] = null;
                                             if (isset($category[0])) {
                                                 if($category[0]->is_certificate_available($user_id)) {

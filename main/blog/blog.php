@@ -41,7 +41,7 @@ $safe_task_name = isset($_POST['task_name']) ? Security::remove_XSS($_POST['task
 $safe_task_description = isset($_POST['task_description']) ? Security::remove_XSS($_POST['task_description']) : null;
 
 if (!empty($_POST['new_post_submit'])) {
-    Blog:: create_post(
+    Blog::createPost(
         $_POST['title'],
         $_POST['full_text'],
         $_POST['post_file_comment'],
@@ -52,7 +52,7 @@ if (!empty($_POST['new_post_submit'])) {
     );
 }
 if (!empty($_POST['edit_post_submit'])) {
-    Blog:: edit_post(
+    Blog::editPost(
         $_POST['post_id'],
         $_POST['title'],
         $_POST['full_text'],
@@ -64,7 +64,7 @@ if (!empty($_POST['edit_post_submit'])) {
 }
 
 if (!empty($_POST['new_task_submit'])) {
-    Blog:: create_task(
+    Blog::addTask(
         $blog_id,
         $safe_task_name,
         $safe_task_description,
@@ -80,7 +80,7 @@ if (!empty($_POST['new_task_submit'])) {
 }
 
 if (isset($_POST['edit_task_submit'])) {
-    Blog:: edit_task(
+    Blog::editTask(
         $_POST['blog_id'],
         $_POST['task_id'],
         $safe_task_name,
@@ -96,7 +96,7 @@ if (isset($_POST['edit_task_submit'])) {
 }
 
 if (!empty($_POST['assign_task_submit'])) {
-    Blog:: assign_task(
+    Blog::assignTask(
         $blog_id,
         $_POST['task_user_id'],
         $_POST['task_task_id'],
@@ -108,7 +108,7 @@ if (!empty($_POST['assign_task_submit'])) {
 }
 
 if (isset($_POST['assign_task_edit_submit'])) {
-    Blog:: edit_assigned_task(
+    Blog::updateAssignedTask(
         $blog_id,
         $_POST['task_user_id'],
         $_POST['task_task_id'],
@@ -124,38 +124,38 @@ if (isset($_POST['assign_task_edit_submit'])) {
 if (!empty($_POST['register'])) {
     if (is_array($_POST['user'])) {
         foreach ($_POST['user'] as $index => $user_id) {
-            Blog:: set_user_subscribed((int) $_GET['blog_id'], $user_id);
+            Blog::subscribeUser((int) $_GET['blog_id'], $user_id);
         }
     }
 }
 if (!empty($_POST['unregister'])) {
     if (is_array($_POST['user'])) {
         foreach ($_POST['user'] as $index => $user_id) {
-            Blog:: set_user_unsubscribed((int) $_GET['blog_id'], $user_id);
+            Blog::unsubscribeUser($_GET['blog_id'], $user_id);
         }
     }
 }
 if (!empty($_GET['register'])) {
-    Blog:: set_user_subscribed((int) $_GET['blog_id'], (int) $_GET['user_id']);
+    Blog::subscribeUser((int) $_GET['blog_id'], (int) $_GET['user_id']);
     Display::addFlash(
         Display::return_message(get_lang('UserRegistered'), 'success')
     );
     $flag = 1;
 }
 if (!empty($_GET['unregister'])) {
-    Blog:: set_user_unsubscribed((int) $_GET['blog_id'], (int) $_GET['user_id']);
+    Blog::unsubscribeUser($_GET['blog_id'], $_GET['user_id']);
 }
 
 if (isset($_GET['action']) && $_GET['action'] == 'manage_tasks') {
     if (isset($_GET['do']) && $_GET['do'] == 'delete') {
-        Blog:: delete_task($blog_id, (int) $_GET['task_id']);
+        Blog::deleteTask($blog_id, (int) $_GET['task_id']);
         Display::addFlash(
             Display::return_message(get_lang('TaskDeleted'), 'success')
         );
     }
 
     if (isset($_GET['do']) && $_GET['do'] == 'delete_assignment') {
-        Blog:: delete_assigned_task($blog_id, intval($_GET['task_id']), intval($_GET['user_id']));
+        Blog::deleteAssignedTask($blog_id, intval($_GET['task_id']), intval($_GET['user_id']));
         Display::addFlash(
             Display::return_message(get_lang('TaskAssignmentDeleted'), 'success')
         );
@@ -167,7 +167,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'view_post') {
 
     if (isset($_GET['do']) && $_GET['do'] == 'delete_comment') {
         if (api_is_allowed('BLOG_'.$blog_id, 'article_comments_delete', $task_id)) {
-            Blog:: delete_comment($blog_id, (int) $_GET['post_id'], (int) $_GET['comment_id']);
+            Blog::deleteComment($blog_id, (int) $_GET['post_id'], (int) $_GET['comment_id']);
             Display::addFlash(
                 Display::return_message(get_lang('CommentDeleted'), 'success')
             );
@@ -180,7 +180,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'view_post') {
 
     if (isset($_GET['do']) && $_GET['do'] == 'delete_article') {
         if (api_is_allowed('BLOG_'.$blog_id, 'article_delete', $task_id)) {
-            Blog:: delete_post($blog_id, (int) $_GET['article_id']);
+            Blog::deletePost($blog_id, (int) $_GET['article_id']);
             $action = ''; // Article is gone, go to blog home
             Display::addFlash(
                 Display::return_message(get_lang('BlogDeleted'), 'success')
@@ -194,7 +194,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'view_post') {
     if (isset($_GET['do']) && $_GET['do'] == 'rate') {
         if (isset($_GET['type']) && $_GET['type'] == 'post') {
             if (api_is_allowed('BLOG_'.$blog_id, 'article_rate')) {
-                Blog:: add_rating('post', $blog_id, (int) $_GET['post_id'], (int) $_GET['rating']);
+                Blog::addRating('post', $blog_id, (int) $_GET['post_id'], (int) $_GET['rating']);
                 Display::addFlash(
                     Display::return_message(get_lang('RatingAdded'), 'success')
                 );
@@ -202,7 +202,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'view_post') {
         }
         if (isset($_GET['type']) && $_GET['type'] == 'comment') {
             if (api_is_allowed('BLOG_'.$blog_id, 'article_comments_add')) {
-                Blog:: add_rating('comment', $blog_id, (int) $_GET['comment_id'], (int) $_GET['rating']);
+                Blog::addRating('comment', $blog_id, (int) $_GET['comment_id'], (int) $_GET['rating']);
                 Display::addFlash(
                     Display::return_message(get_lang('RatingAdded'), 'success')
                 );
@@ -220,53 +220,53 @@ switch ($action) {
         $nameTools = get_lang('NewPost');
         $interbreadcrumb[] = array(
             'url' => "blog.php?blog_id=$blog_id&".api_get_cidreq(),
-            "name" => Blog:: get_blog_title($blog_id),
+            "name" => Blog::getBlogTitle($blog_id),
         );
         break;
     case 'view_post' :
         $nameTools = '';
         $interbreadcrumb[] = array(
             'url' => "blog.php?blog_id=$blog_id&".api_get_cidreq(),
-            "name" => Blog:: get_blog_title($blog_id),
+            "name" => Blog::getBlogTitle($blog_id),
         );
         break;
     case 'manage_tasks' :
         $nameTools = get_lang('TaskManager');
         $interbreadcrumb[] = array(
             'url' => "blog.php?blog_id=$blog_id&".api_get_cidreq(),
-            "name" => Blog:: get_blog_title($blog_id),
+            "name" => Blog::getBlogTitle($blog_id),
         );
         break;
     case 'manage_members' :
         $nameTools = get_lang('MemberManager');
         $interbreadcrumb[] = array(
             'url' => "blog.php?blog_id=$blog_id&".api_get_cidreq(),
-            "name" => Blog:: get_blog_title($blog_id),
+            "name" => Blog::getBlogTitle($blog_id),
         );
         break;
     case 'manage_rights' :
         $nameTools = get_lang('RightsManager');
         $interbreadcrumb[] = array(
             'url' => "blog.php?blog_id=$blog_id&".api_get_cidreq(),
-            'name' => Blog:: get_blog_title($blog_id),
+            'name' => Blog::getBlogTitle($blog_id),
         );
         break;
     case 'view_search_result' :
         $nameTools = get_lang('SearchResults');
         $interbreadcrumb[] = array(
             'url' => "blog.php?blog_id=$blog_id&".api_get_cidreq(),
-            'name' => Blog:: get_blog_title($blog_id),
+            'name' => Blog::getBlogTitle($blog_id),
         );
         break;
     case 'execute_task' :
         $nameTools = get_lang('ExecuteThisTask');
         $interbreadcrumb[] = array(
             'url' => "blog.php?blog_id=$blog_id&".api_get_cidreq(),
-            'name' => Blog:: get_blog_title($blog_id),
+            'name' => Blog::getBlogTitle($blog_id),
         );
         break;
     default :
-        $nameTools = Blog:: get_blog_title($blog_id);
+        $nameTools = Blog::getBlogTitle($blog_id);
 }
 
 $actionsLeft = [];
@@ -293,21 +293,21 @@ if (api_is_allowed('BLOG_'.$blog_id, 'member_management')) {
     );
 }
 
-$titleBlog = Blog::get_blog_title($blog_id);
-$descriptionBlog = Blog::get_blog_subtitle($blog_id);
+$titleBlog = Blog::getBlogTitle($blog_id);
+$descriptionBlog = Blog::getBlogSubtitle($blog_id);
 $idBlog = $blog_id;
 
 $searchBlog = isset($_GET['q']) ? Security::remove_XSS($_GET['q']) : '';
 //calendar blog
 $month = isset($_GET['month']) ? (int) $_GET['month'] : (int) date('m');
 $year = isset($_GET['year']) ? (int) $_GET['year'] : date('Y');
-$calendarBlog = Blog::display_minimonthcalendar($month, $year, $blog_id);
+$calendarBlog = Blog::displayMiniMonthCalendar($month, $year, $blog_id);
 //task blogs
-$taskBlog = Blog::get_personal_task_list();
+$taskBlog = Blog::getPersonalTasksList();
 
 if (isset($flag) && $flag == '1') {
     $action = "manage_tasks";
-    Blog::display_assign_task_form($blog_id);
+    Blog::displayTaskAssignmentForm($blog_id);
 }
 
 $user_task = false;
@@ -318,7 +318,7 @@ if (isset ($_GET['task_id']) && is_numeric($_GET['task_id'])) {
     $task_id = (int) $_GET['task_id'];
 } else {
     $task_id = 0;
-    $tbl_blogs_tasks_rel_user = Database:: get_course_table(TABLE_BLOGS_TASKS_REL_USER);
+    $tbl_blogs_tasks_rel_user = Database::get_course_table(TABLE_BLOGS_TASKS_REL_USER);
 
     $sql = "SELECT COUNT(*) as number
 			FROM ".$tbl_blogs_tasks_rel_user."
@@ -357,12 +357,12 @@ switch ($action) {
                 if ($_POST) {
                     Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'));
                 }
-                $formAdd = Blog::display_form_new_post($blog_id);
+                $formAdd = Blog::displayPostCreateForm($blog_id);
             } else {
                 if (isset($_GET['filter']) && !empty($_GET['filter'])) {
-                    Blog::display_day_results($blog_id, Database::escape_string($_GET['filter']));
+                    Blog::getDailyResults($blog_id, Database::escape_string($_GET['filter']));
                 } else {
-                    Blog::display_blog_posts($blog_id);
+                    Blog::getPosts($blog_id);
                 }
             }
         } else {
@@ -372,7 +372,7 @@ switch ($action) {
         $blogLayout = $tpl->get_template('blog/layout.tpl');
         break;
     case 'view_post' :
-        $postArticle = Blog::display_post($blog_id, intval($_GET['post_id']));
+        $postArticle = Blog::getSinglePost($blog_id, intval($_GET['post_id']));
         $tpl->assign('post', $postArticle);
         $blogLayout = $tpl->get_template('blog/post.tpl');
         break;
@@ -384,12 +384,12 @@ switch ($action) {
             // 2. there is post data and the required field is empty
             if (!$_POST OR (!empty($_POST) AND empty($_POST['post_title']))) {
                 // if there is post data there is certainly an error in the form
-                $formEdit = Blog::display_form_edit_post($blog_id, intval($_GET['post_id']));
+                $formEdit = Blog::displayPostEditForm($blog_id, intval($_GET['post_id']));
                 $tpl->assign('content', $formEdit);
                 $blogLayout = $tpl->get_template('blog/layout.tpl');
                 
                 if ($_POST) {
-                    $post = Blog::display_post($blog_id, intval($_GET['post_id']));
+                    $post = Blog::getSinglePost($blog_id, intval($_GET['post_id']));
                     $tpl->assign('post', $post);
                     $blogLayout = $tpl->get_template('blog/post.tpl');
                 }
@@ -402,8 +402,8 @@ switch ($action) {
     case 'manage_members' :
         $manage = null;
         if (api_is_allowed('BLOG_'.$blog_id, 'member_management')) {
-            $manage .= Blog::display_form_user_subscribe($blog_id);
-            $manage .= Blog::display_form_user_unsubscribe($blog_id);
+            $manage .= Blog::displayUserSubscriptionForm($blog_id);
+            $manage .= Blog::displayUserUnsubscriptionForm($blog_id);
         } else {
             api_not_allowed();
         }
@@ -411,7 +411,7 @@ switch ($action) {
         $blogLayout = $tpl->get_template('blog/layout.tpl');
         break;
     case 'manage_rights' :
-        $manage = Blog::display_form_user_rights($blog_id);
+        $manage = Blog::displayUserRightsForm($blog_id);
         $tpl->assign('content', $manage);
         $blogLayout = $tpl->get_template('blog/layout.tpl');
         break;
@@ -419,27 +419,27 @@ switch ($action) {
         if (api_is_allowed('BLOG_'.$blog_id, 'task_management')) {
             $task = null;
             if (isset($_GET['do']) && $_GET['do'] == 'add') {
-                $task .= Blog::display_new_task_form($blog_id);
+                $task .= Blog::displayTaskCreateForm($blog_id);
             }
             if (isset($_GET['do']) && $_GET['do'] == 'assign') {
-                $task .= Blog::display_assign_task_form($blog_id);
+                $task .= Blog::displayTaskAssignmentForm($blog_id);
             }
             if (isset($_GET['do']) && $_GET['do'] == 'edit') {
-                $task .= Blog::display_edit_task_form(
+                $task .= Blog::displayTaskEditForm(
                     $blog_id,
                     intval($_GET['task_id'])
                 );
             }
             if (isset($_GET['do']) && $_GET['do'] == 'edit_assignment') {
-                $taks .= Blog:: display_edit_assigned_task_form(
+                $taks .= Blog::displayAssignedTaskEditForm(
                     $blog_id,
                     intval($_GET['task_id']),
                     intval($_GET['user_id'])
                 );
             }
-            $task .= Blog::display_task_list($blog_id);
+            $task .= Blog::displayTasksList($blog_id);
 
-            $task .= Blog::display_assigned_task_list($blog_id);
+            $task .= Blog::displayAssignedTasksList($blog_id);
 
 
             $tpl->assign('content', $task);
@@ -451,11 +451,11 @@ switch ($action) {
         break;
     case 'execute_task' :
         if (isset ($_GET['post_id'])) {
-            $post = Blog::display_post($blog_id, intval($_GET['post_id']));
+            $post = Blog::getSinglePost($blog_id, intval($_GET['post_id']));
             $tpl->assign('post', $post);
             $blogLayout = $tpl->get_template('blog/post.tpl');
         } else {
-            $taskPost = Blog::display_select_task_post($blog_id, intval($_GET['task_id']));
+            $taskPost = Blog::displayPostSelectionForTask($blog_id, intval($_GET['task_id']));
 
             $tpl->assign('content', $taskPost);
 
@@ -463,7 +463,7 @@ switch ($action) {
         }
         break;
     case 'view_search_result' :
-        $listArticles = Blog:: display_search_results($blog_id, Database::escape_string($_GET['q']));
+        $listArticles = Blog::getSearchResults($blog_id, Database::escape_string($_GET['q']));
         $titleSearch = get_lang('SearchResults');
         $tpl->assign('search', $titleSearch);
         $tpl->assign('articles', $listArticles);
@@ -472,14 +472,14 @@ switch ($action) {
     case '':
     default:
         if (isset ($_GET['filter']) && !empty ($_GET['filter'])) {
-            $listArticles = Blog::display_day_results($blog_id, Database::escape_string($_GET['filter']));
+            $listArticles = Blog::getDailyResults($blog_id, Database::escape_string($_GET['filter']));
             $dateSearch = api_format_date($_GET['filter'], DATE_FORMAT_LONG);
             $titleSearch = get_lang('PostsOf').' '.$dateSearch;
             $tpl->assign('search', $titleSearch);
             $tpl->assign('articles', $listArticles);
             $blogLayout = $tpl->get_template('blog/blog.tpl');
         } else {
-            $listArticles = Blog::display_blog_posts($blog_id);
+            $listArticles = Blog::getPosts($blog_id);
             $tpl->assign('articles', $listArticles);
             $blogLayout = $tpl->get_template('blog/blog.tpl');
         }

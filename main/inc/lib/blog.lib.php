@@ -221,7 +221,6 @@ class Blog
             $sql = "UPDATE $tbl_user_permissions SET id = iid WHERE iid = $id";
             Database::query($sql);
         }
-
     }
 
     /**
@@ -2553,7 +2552,7 @@ class Blog
         $html.= '<button class="btn btn-default" type="submit">'.get_lang('Ok').'</button>';
         $html.= '</div>';
         $html.= '</form>';
-        
+
         return $html;
     }
 
@@ -2888,7 +2887,7 @@ class Blog
      * @author Julio Montoya
      * @version avril 2008, dokeos 1.8.5
      */
-    function getBlogAttachments($blog_id, $post_id = null, $comment_id = null)
+    public static function getBlogAttachments($blog_id, $post_id = 0, $comment_id = 0)
     {
         $blog_table_attachment = Database::get_course_table(TABLE_BLOGS_ATTACHMENT);
 
@@ -2930,10 +2929,10 @@ class Blog
      * @author Julio Montoya
      * @version avril 2008, dokeos 1.8.5
      */
-    function deleteAllBlogAttachments(
+    public static function deleteAllBlogAttachments(
         $blog_id,
-        $post_id = null,
-        $comment_id = null
+        $post_id = 0,
+        $comment_id = 0
     ) {
         $_course = api_get_course_info();
         $blog_table_attachment = Database::get_course_table(TABLE_BLOGS_ATTACHMENT);
@@ -2983,7 +2982,7 @@ class Blog
      * @param string $courseCode
      * @return string
      */
-    function getBlogPostFromUser($courseId, $userId, $courseCode)
+    public static function getBlogPostFromUser($courseId, $userId, $courseCode)
     {
         $tbl_blogs = Database::get_course_table(TABLE_BLOGS);
         $tbl_blog_post = Database::get_course_table(TABLE_BLOGS_POSTS);
@@ -3027,7 +3026,7 @@ class Blog
      * @param string $courseCode
      * @return string
      */
-    function getBlogCommentsFromUser($courseId, $userId, $courseCode)
+    public static function getBlogCommentsFromUser($courseId, $userId, $courseCode)
     {
         $tbl_blogs = Database::get_course_table(TABLE_BLOGS);
         $tbl_blog_comment = Database::get_course_table(TABLE_BLOGS_COMMENTS);

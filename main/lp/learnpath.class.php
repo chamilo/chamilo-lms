@@ -8843,13 +8843,13 @@ class learnpath
     public function get_exercises()
     {
         $course_id = api_get_course_int_id();
+        $session_id = api_get_session_id();
+        $userInfo = api_get_user_info();
 
         // New for hotpotatoes.
         $uploadPath = DIR_HOTPOTATOES; //defined in main_api
         $tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
         $tbl_quiz = Database :: get_course_table(TABLE_QUIZ_TEST);
-
-        $session_id = api_get_session_id();
         $condition_session = api_get_session_condition($session_id, true, true);
 
         $setting = api_get_configuration_value('show_invisible_exercise_in_lp_list');
@@ -8896,8 +8896,11 @@ class learnpath
             $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
             $return .= '</a> ';
             $return .= Display::return_icon('quizz_small.gif', '', array(), ICON_SIZE_TINY);
+
+            $sessionStar = api_get_session_image($row_quiz['session_id'], $userInfo['status']);
+
             $return .= '<a class="moved" href="' . api_get_self() . '?'.api_get_cidreq().'&action=add_item&type=' . TOOL_QUIZ . '&file=' . $row_quiz['id'] . '&lp_id=' . $this->lp_id . '">' .
-                Security :: remove_XSS(cut($row_quiz['title'], 80)).
+                Security :: remove_XSS(cut($row_quiz['title'], 80)).$sessionStar.
                 '</a>';
 
             $return .= '</li>';

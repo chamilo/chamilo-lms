@@ -6554,9 +6554,9 @@ class learnpath
 
     /**
      * Return HTML form to add/edit a quiz
-     * @param	string	Action (add/edit)
-     * @param	integer	Item ID if already exists
-     * @param	mixed	Extra information (quiz ID if integer)
+     * @param	string	$action Action (add/edit)
+     * @param	integer	$id Item ID if already exists
+     * @param	mixed	$extra_info Extra information (quiz ID if integer)
      * @return	string	HTML form
      */
     public function display_quiz_form($action = 'add', $id = 0, $extra_info = '')
@@ -6570,8 +6570,8 @@ class learnpath
             $item_description = $extra_info['description'];
         } elseif (is_numeric($extra_info)) {
             $sql = "SELECT title, description
-                    FROM " . $tbl_quiz . "
-                    WHERE c_id = ".$course_id." AND id = " . $extra_info;
+                    FROM $tbl_quiz
+                    WHERE c_id = $course_id AND id = " . $extra_info;
 
             $result = Database::query($sql);
             $row = Database::fetch_array($result);
@@ -6581,21 +6581,22 @@ class learnpath
             $item_title = '';
             $item_description = '';
         }
-        $item_title			= Security::remove_XSS($item_title);
-        $item_description 	= Security::remove_XSS($item_description);
+        $item_title = Security::remove_XSS($item_title);
+        $item_description = Security::remove_XSS($item_description);
 
-        if ($id != 0 && is_array($extra_info))
+        if ($id != 0 && is_array($extra_info)) {
             $parent = $extra_info['parent_item_id'];
-        else
+        } else {
             $parent = 0;
+        }
 
-        $sql = "SELECT * FROM " . $tbl_lp_item . "
-                WHERE c_id = ".$course_id." AND lp_id = " . $this->lp_id;
+        $sql = "SELECT * FROM $tbl_lp_item 
+                WHERE c_id = $course_id AND lp_id = " . $this->lp_id;
 
         $result = Database::query($sql);
         $arrLP = array ();
         while ($row = Database :: fetch_array($result)) {
-            $arrLP[] = array (
+            $arrLP[] = array(
                 'id' => $row['id'],
                 'item_type' => $row['item_type'],
                 'title' => $row['title'],
@@ -6617,7 +6618,11 @@ class learnpath
         $arrLP = isset($this->arrMenu) ? $this->arrMenu : null;
         unset ($this->arrMenu);
 
-        $form = new FormValidator('quiz_form', 'POST', api_get_self() . '?' .$_SERVER['QUERY_STRING']);
+        $form = new FormValidator(
+            'quiz_form',
+            'POST',
+            api_get_self().'?'.$_SERVER['QUERY_STRING']
+        );
         $defaults = [];
 
         if ($action == 'add') {
@@ -6776,7 +6781,6 @@ class learnpath
 
         $form->addHidden('type', TOOL_QUIZ);
         $form->addHidden('post_time', time());
-
         $form->setDefaults($defaults);
 
         return '<div class="sectioncomment">' . $form->returnForm() . '</div>';
@@ -6833,7 +6837,7 @@ class learnpath
         $result = Database::query($sql);
         $arrLP = array ();
         while ($row = Database :: fetch_array($result)) {
-            $arrLP[] = array (
+            $arrLP[] = array(
                 'id' => $row['id'],
                 'item_type' => $row['item_type'],
                 'title' => $row['title'],
@@ -7011,7 +7015,7 @@ class learnpath
         $arrLP = array();
 
         while ($row = Database :: fetch_array($result)) {
-            $arrLP[] = array (
+            $arrLP[] = array(
                 'id' => $row['id'],
                 'item_type' => $row['item_type'],
                 'title' => $row['title'],
@@ -7046,7 +7050,12 @@ class learnpath
         $form->addHeader($legend);
 
         if ($action != 'move') {
-            $form->addText('title', get_lang('Title'), true, ['id' => 'idTitle', 'class' => 'learnpath_item_form']);
+            $form->addText(
+                'title',
+                get_lang('Title'),
+                true,
+                ['id' => 'idTitle', 'class' => 'learnpath_item_form']
+            );
             $defaults['title'] = $item_title;
         }
 
@@ -7202,11 +7211,9 @@ class learnpath
 
         $sql = "SELECT * FROM " . $tbl_lp_item . "
                 WHERE c_id = ".$course_id." AND lp_id = " . $this->lp_id;
-
         $result = Database::query($sql);
 
-        $arrLP = array ();
-
+        $arrLP = array();
         while ($row = Database :: fetch_array($result)) {
             $arrLP[] = array (
                 'id' => $row['id'],
@@ -7418,11 +7425,12 @@ class learnpath
                     lp_id = " . $this->lp_id . " AND
                     id != $id";
 
-        if ($item_type == 'dir')
+        if ($item_type == 'dir') {
             $sql .= " AND parent_item_id = 0";
+        }
 
         $result = Database::query($sql);
-        $arrLP = array ();
+        $arrLP = [];
 
         while ($row = Database :: fetch_array($result)) {
             $arrLP[] = array(

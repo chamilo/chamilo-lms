@@ -7658,7 +7658,7 @@ class learnpath
                 WHERE c_id = $course_id AND lp_id = ".$this->lp_id;
 
         $result = Database::query($sql);
-        $arrLP = array ();
+        $arrLP = array();
         while ($row = Database :: fetch_array($result)) {
             $arrLP[] = array(
                 'id' => $row['id'],

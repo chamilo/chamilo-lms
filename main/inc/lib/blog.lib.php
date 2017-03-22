@@ -404,6 +404,8 @@ class Blog
                     }
                 }
             }
+
+            return $last_post_id;
         } else {
             Display::display_error_message(get_lang('UplNoFileUploaded'));
         }
@@ -1518,33 +1520,53 @@ class Blog
     public static function displayPostCreateForm($blog_id)
     {
         $blog_id = intval($blog_id);
-        if (api_is_allowed('BLOG_'.$blog_id, 'article_add')) {
-            $form = new FormValidator(
-                'add_post',
-                'post',
-                api_get_path(WEB_CODE_PATH)."blog/blog.php?action=new_post&blog_id=".$blog_id."&".api_get_cidreq(),
-                null,
-                array('enctype' => 'multipart/form-data')
-            );
-            $form->addHidden('post_title_edited', 'false');
-            $form->addHeader(get_lang('NewPost'));
-            $form->addText('title', get_lang('Title'));
-            $config = array();
-            if (!api_is_allowed_to_edit()) {
-                $config['ToolbarSet'] = 'ProjectStudent';
-            } else {
-                $config['ToolbarSet'] = 'Project';
-            }
-            $form->addHtmlEditor('full_text', get_lang('Content'), false, false, $config);
-            $form->addFile('user_upload', get_lang('AddAnAttachment'));
-            $form->addTextarea('post_file_comment', get_lang('FileComment'));
-            $form->addHidden('new_post_submit', 'true');
-            $form->addButton('save', get_lang('Save'));
-
-            return $form->return_form();
-        } else {
+        if (!api_is_allowed('BLOG_'.$blog_id, 'article_add')) {
             api_not_allowed();
         }
+
+        $form = new FormValidator(
+            'add_post',
+            'post',
+            api_get_path(WEB_CODE_PATH)."blog/blog.php?action=new_post&blog_id=".$blog_id."&".api_get_cidreq(),
+            null,
+            array('enctype' => 'multipart/form-data')
+        );
+        $form->addHidden('post_title_edited', 'false');
+        $form->addHeader(get_lang('NewPost'));
+        $form->addText('title', get_lang('Title'));
+        $config = array();
+        $config['ToolbarSet'] = !api_is_allowed_to_edit() ? 'ProjectStudent' : 'Project';
+        $form->addHtmlEditor('full_text', get_lang('Content'), false, false, $config);
+        $form->addFile('user_upload', get_lang('AddAnAttachment'));
+        $form->addTextarea('post_file_comment', get_lang('FileComment'));
+        $form->addHidden('new_post_submit', 'true');
+        $form->addButton('save', get_lang('Save'));
+
+        if ($form->validate()) {
+            $values = $form->exportValues();
+
+            $postId = Blog::createPost(
+                $values['title'],
+                $values['full_text'],
+                $values['post_file_comment'],
+                $blog_id
+            );
+
+            if ($postId) {
+                Display::addFlash(
+                    Display::return_message(get_lang('BlogAdded'), 'success')
+                );
+
+                header('Location: '.api_get_self().'?'.api_get_cidreq().'&'.http_build_query([
+                    'action' => 'view_post',
+                    'blog_id' => $blog_id,
+                    'post_id' => $postId,
+                ]));
+                exit;
+            }
+        }
+
+        return $form->returnForm();
     }
 
     /**

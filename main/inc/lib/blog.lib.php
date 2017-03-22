@@ -1001,11 +1001,7 @@ class Blog
                     'title' => stripslashes($blog_post['title']),
                     'extract' => api_get_short_text_from_html(stripslashes($blog_post['full_text']), 400),
                     'content' => stripslashes($blog_post['full_text']),
-                    'post_date' => api_convert_and_format_date(
-                        $blog_post['date_creation'],
-                        null,
-                        date_default_timezone_get()
-                    ),
+                    'post_date' => api_convert_and_format_date($blog_post['date_creation']),
                     'n_comments' => $blog_post_comments['number_of_comments'],
                     'files' => $fileArray,
                     'score_ranking' => $scoreRanking
@@ -1128,7 +1124,7 @@ class Blog
             'title' => stripslashes($blog_post['title']),
             'extract' => api_get_short_text_from_html(stripslashes($blog_post['full_text']), 400),
             'content' => $post_text,
-            'post_date' => api_convert_and_format_date($blog_post['date_creation'], null, date_default_timezone_get()),
+            'post_date' => api_convert_and_format_date($blog_post['date_creation']),
             'n_comments' => $blog_post_comments['number_of_comments'],
             'files' => $fileArray,
             'id_task' => $task_id,
@@ -1255,11 +1251,7 @@ class Blog
                 'title' => $comment['title'],
                 'content' => $comment_text,
                 'id_author' => $comment['author_id'],
-                'comment_date' => api_convert_and_format_date(
-                    $comment['date_creation'],
-                    null,
-                    date_default_timezone_get()
-                ),
+                'comment_date' => api_convert_and_format_date($comment['date_creation']),
                 'id_blog' => $comment['blog_id'],
                 'id_post' => $comment['post_id'],
                 'id_task' => $comment['task_id'],

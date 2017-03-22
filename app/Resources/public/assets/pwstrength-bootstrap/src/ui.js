@@ -37,7 +37,7 @@ var ui = {};
     };
 
     ui.getUIElements = function (options, $el) {
-        var $container, selector, result;
+        var $container, result;
 
         if (options.instances.viewports) {
             return options.instances.viewports;
@@ -46,12 +46,7 @@ var ui = {};
         $container = ui.getContainer(options, $el);
 
         result = {};
-        if (options.ui.bootstrap4) {
-            selector = "progress.progress";
-        } else {
-            selector = "div.progress";
-        }
-        result.$progressbar = ui.findElement($container, options.ui.viewports.progress, selector);
+        result.$progressbar = ui.findElement($container, options.ui.viewports.progress, "div.progress");
         if (options.ui.showVerdictsInsideProgressBar) {
             result.$verdict = result.$progressbar.find("span.password-verdict");
         }
@@ -77,28 +72,18 @@ var ui = {};
             // Boostrap 2
             progressbar += options.ui.progressBarExtraCssClasses +
                 "'><div class='";
-        } else if (!options.ui.bootstrap2 && !options.ui.bootstrap4) {
-            // Bootstrap 3
-            progressbar += "'><div class='" +
+        } else {
+            // Bootstrap 3 & 4
+            progressbar += options.ui.progressExtraCssClasses + "'><div class='" +
                 options.ui.progressBarExtraCssClasses + " progress-";
         }
         progressbar += "bar'>";
-
-        if (options.ui.bootstrap4) {
-            // Boostrap 4
-            progressbar = "<progress class='progress " +
-                options.ui.progressBarExtraCssClasses + "' value='0' max='100'>";
-        }
 
         if (options.ui.showVerdictsInsideProgressBar) {
             progressbar += "<span class='password-verdict'></span>";
         }
 
-        if (options.ui.bootstrap4) {
-            progressbar += "</progress>";
-        } else {
-            progressbar += "</div></div>";
-        }
+        progressbar += "</div></div>";
 
         if (options.ui.viewports.progress) {
             $container.find(options.ui.viewports.progress).append(progressbar);
@@ -170,18 +155,17 @@ var ui = {};
 
         $.each(options.ui.colorClasses, function (idx, value) {
             if (options.ui.bootstrap4) {
-                $progressbar.removeClass(cssPrefix + value);
+                $bar.removeClass("bg-" + value);
             } else {
                 $bar.removeClass(cssPrefix + "bar-" + value);
             }
         });
         if (options.ui.bootstrap4) {
-            $progressbar.addClass(cssPrefix + options.ui.colorClasses[cssClass]);
-            $progressbar.val(percentage);
+            $bar.addClass("bg-" + options.ui.colorClasses[cssClass]);
         } else {
             $bar.addClass(cssPrefix + "bar-" + options.ui.colorClasses[cssClass]);
-            $bar.css("width", percentage + '%');
         }
+        $bar.css("width", percentage + '%');
     };
 
     ui.updateVerdict = function (options, $el, cssClass, text) {

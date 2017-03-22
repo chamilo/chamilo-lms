@@ -24,8 +24,8 @@ class PersonalDriver extends Driver implements DriverInterface
                 mkdir($dir);
             }
 
-            if (!is_dir($dir . 'my_files')) {
-                mkdir($dir . 'my_files');
+            if (!is_dir($dir.'my_files')) {
+                mkdir($dir.'my_files');
             }
         }
     }

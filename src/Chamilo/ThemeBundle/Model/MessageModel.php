@@ -157,7 +157,8 @@ class MessageModel implements MessageInterface
      *
      * @return string
      */
-    public function getIdentifier() {
+    public function getIdentifier()
+    {
         return $this->getSubject();
     }
 

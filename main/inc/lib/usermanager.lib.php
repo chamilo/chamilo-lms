@@ -733,6 +733,12 @@ class UserManager
             Database::query($sql);
         }
 
+        // Delete user/ticket relationships :(
+        $tableExists = $connection->getSchemaManager()->tablesExist(['ticket_ticket']);
+        if ($tableExists) {
+            TicketManager::deleteUserFromTicketSystem($user_id);
+        }
+
         // Delete user from database
         $sql = "DELETE FROM $table_user WHERE id = '".$user_id."'";
         Database::query($sql);
@@ -756,7 +762,7 @@ class UserManager
             $user_id_manager
         );
         $cacheAvailable = api_get_configuration_value('apc');
-        if (!empty($cacheAvailable)) {
+        if ($cacheAvailable === true) {
             $apcVar = api_get_configuration_value('apc_prefix') . 'userinfo_' . $user_id;
             if (apcu_exists($apcVar)) {
                 apcu_delete($apcVar);
@@ -1083,7 +1089,7 @@ class UserManager
         }
 
         $cacheAvailable = api_get_configuration_value('apc');
-        if (!empty($cacheAvailable)) {
+        if ($cacheAvailable === true) {
             $apcVar = api_get_configuration_value('apc_prefix') . 'userinfo_' . $user_id;
             if (apcu_exists($apcVar)) {
                 apcu_delete($apcVar);
@@ -1463,7 +1469,7 @@ class UserManager
         $user_table = Database :: get_main_table(TABLE_MAIN_USER);
         $tblAccessUrlRelUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $return_array = array();
-        $sql_query = "SELECT * FROM $user_table ";
+        $sql_query = "SELECT user.id FROM $user_table user ";
 
         if (api_is_multiple_url_enabled()) {
             $sql_query .= " INNER JOIN $tblAccessUrlRelUser auru ON auru.user_id = user.id ";
@@ -1499,11 +1505,8 @@ class UserManager
 
         $sql_result = Database::query($sql_query);
         while ($result = Database::fetch_array($sql_result)) {
-            $result['complete_name'] = api_get_person_name(
-                $result['firstname'],
-                $result['lastname']
-            );
-            $return_array[] = $result;
+            $userInfo = api_get_user_info($result['id']);
+            $return_array[] = $userInfo;
         }
 
         return $return_array;
@@ -2616,8 +2619,8 @@ class UserManager
     /**
      * Gives a list of [session_category][session_id] for the current user.
      * @param integer $user_id
-     * @param boolean whether to fill the first element or not (to give space for courses out of categories)
-     * @param boolean  optional true if limit time from session is over, false otherwise
+     * @param boolean $is_time_over whether to fill the first element or not (to give space for courses out of categories)
+     * @param boolean $ignore_visibility_for_admins optional true if limit time from session is over, false otherwise
      * @param boolean $ignoreTimeLimit ignore time start/end
      * @return array  list of statuses [session_category][session_id]
      *
@@ -2647,15 +2650,18 @@ class UserManager
                     sc.dateEnd AS session_category_date_end,
                     s.coachAccessStartDate AS coach_access_start_date,
                     s.coachAccessEndDate AS coach_access_end_date
-                FROM ChamiloCoreBundle:Session AS s                                
+                FROM ChamiloCoreBundle:Session AS s
                 INNER JOIN ChamiloCoreBundle:SessionRelCourseRelUser AS scu WITH scu.session = s
+                INNER JOIN ChamiloCoreBundle:AccessUrlRelSession AS url WITH url.sessionId = s.id
                 LEFT JOIN ChamiloCoreBundle:SessionCategory AS sc WITH s.category = sc
-                WHERE scu.user = :user OR s.generalCoach = :user
+                WHERE (scu.user = :user OR s.generalCoach = :user) AND url.accessUrlId = :url
                 ORDER BY sc.name, s.name";
 
         $dql = Database::getManager()
             ->createQuery($dql)
-            ->setParameters(['user' => $user_id])
+            ->setParameters(
+                ['user' => $user_id, 'url' => api_get_current_access_url_id()]
+            )
         ;
 
         $sessionData = $dql->getResult();
@@ -2745,7 +2751,7 @@ class UserManager
                 if ($blockedCourseCount === count($courseList)) {
                     $visibility = SESSION_INVISIBLE;
                 } else {
-                    $visibility = SESSION_VISIBLE;
+                    $visibility = $sessionCourseVisibility;
                 }
             }
 
@@ -3352,7 +3358,7 @@ class UserManager
      */
     public static function is_admin($user_id)
     {
-        if (empty($user_id) or $user_id != strval(intval($user_id))) {
+        if (empty($user_id) || $user_id != strval(intval($user_id))) {
             return false;
         }
         $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);

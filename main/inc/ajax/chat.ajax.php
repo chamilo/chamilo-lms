@@ -37,7 +37,7 @@ if (!isset($_SESSION['openChatBoxes'])) {
 }
 
 $chat = new Chat();
-if (chat::disableChat()){
+if (chat::disableChat()) {
     exit;
 }
 if ($chat->is_chat_blocked_by_exercises()) {

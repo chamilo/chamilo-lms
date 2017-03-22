@@ -100,7 +100,7 @@ if ($form->validate()) {
             $session_id,
             $group_id,
             $user_id,
-            [],
+            $_FILES['file'],
             api_get_configuration_value('assignment_prevent_duplicate_upload')
         );
         $script = 'work_list.php';

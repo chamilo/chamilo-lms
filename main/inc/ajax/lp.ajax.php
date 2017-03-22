@@ -245,7 +245,6 @@ switch ($action) {
         }
 
         $forumThread = $lpItem->getForumThread($course_id, $sessionId);
-
         if (empty($forumThread)) {
             $lpItem->createForumThread($forumId);
             $forumThread = $lpItem->getForumThread($course_id, $sessionId);

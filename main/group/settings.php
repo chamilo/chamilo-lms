@@ -3,7 +3,7 @@
 
 /**
  *	This script displays an area where teachers can edit the group properties and member list.
-  *
+ *
  *	@author various contributors
  *	@author Roan Embrechts (VUB), partial code cleanup, initial virtual course support
  *	@package chamilo.group

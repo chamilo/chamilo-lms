@@ -19,7 +19,7 @@ body { background: none;}
 Display::display_reduced_header();
 
 if (isset($_GET['error'])) {
-    switch ($_GET['error']){
+    switch ($_GET['error']) {
         case 'document_deleted':
             echo '<br /><br />';
             Display::display_error_message(get_lang('DocumentHasBeenDeleted'));

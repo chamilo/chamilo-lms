@@ -71,7 +71,7 @@ class TableSort
         usort($data, create_function('$a, $b', $compare_function));
 
         return $data;
-	}
+    }
 
 	/**
 	 * Sorts 2-dimensional table. It is possile changing the columns that will be shown and the way that the columns are to be sorted.

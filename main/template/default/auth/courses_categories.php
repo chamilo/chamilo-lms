@@ -189,7 +189,7 @@ if ($showCourses && $action != 'display_sessions') {
             // start buycourse validation
             // display the course price and buy button if the buycourses plugin is enabled and this course is configured
             $plugin = BuyCoursesPlugin::create();
-            $isThisCourseInSale = $plugin->buyCoursesForGridCatalogVerificator(
+            $isThisCourseInSale = $plugin->buyCoursesForGridCatalogValidator(
                 $course['real_id'],
                 BuyCoursesPlugin::PRODUCT_TYPE_COURSE
             );

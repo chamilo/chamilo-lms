@@ -24,7 +24,7 @@ switch ($action) {
             // set URL and other appropriate options
             $defaults = array(
                 CURLOPT_URL => $url,
-                CURLOPT_FOLLOWLOCATION => true,         // follow redirects accept youtube.com
+                CURLOPT_FOLLOWLOCATION => true, // follow redirects accept youtube.com
                 CURLOPT_HEADER => 0,
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_TIMEOUT => 4

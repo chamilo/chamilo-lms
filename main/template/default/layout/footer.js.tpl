@@ -38,7 +38,6 @@
             event.preventDefault();
             var id = $(this).attr('id') + '_options';
             var button = $(this);
-            button.toggleClass('active');
             $("#" + id).toggle();
         });
 

@@ -17,6 +17,7 @@ api_protect_course_script(true);
 
 // Get environment variables
 $courseCode = api_get_course_id();
+$courseId = api_get_course_int_id();
 $userId = api_get_user_id();
 $sessionId = api_get_session_id();
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
@@ -24,8 +25,38 @@ $lpId = isset($_GET['lp_id']) ? intval($_GET['lp_id']) : 0;
 
 // This page can only be shown from inside a learning path
 if (!$id && !$lpId) {
-    Display::display_warning_message(get_lang('FileNotFound'));
+    Display::return_message(get_lang('FileNotFound'), 'warning');
     exit;
+}
+
+// Certificate and Skills Premium with Service check
+$plugin = BuyCoursesPlugin::create();
+$checker = $plugin->isEnabled() && $plugin->get('include_services');
+
+if ($checker) {
+    $userServiceSale = $plugin->getServiceSale(
+        null,
+        $userId,
+        BuyCoursesPlugin::SERVICE_STATUS_COMPLETED,
+        BuyCoursesPlugin::SERVICE_TYPE_LP_FINAL_ITEM,
+        $lpId
+    );
+
+    if (empty($userServiceSale)) {
+        // Instance a new template : No page tittle, No header, No footer
+        $tpl = new Template(null, false, false);
+        $content = sprintf(
+            Display::return_message(
+                $plugin->get_lang('IfYouWantToGetTheCertificateAndOrSkillsAsociatedToThisCourseYouNeedToBuyTheCertificateServiceYouCanGoToServiceCatalogClickingHere'),
+                'normal',
+                false
+            ),
+            api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/service_catalog.php'
+        );
+        $tpl->assign('content', $content);
+        $tpl->display_blank_template();
+        exit;
+    }
 }
 
 // Initialize variables required for the template

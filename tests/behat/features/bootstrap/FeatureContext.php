@@ -275,4 +275,159 @@ class FeatureContext extends MinkContext
             'action' => 'delete'
         ]));
     }
+
+    /**
+   * @Then /^I fill in ckeditor field "([^"]*)" with "([^"]*)"$/
+   */
+    public function iFillInWysiwygOnFieldWith($locator, $value)
+    {
+        // Just in case wait that ckeditor is loaded
+        $this->getSession()->wait(2000);
+
+        $el = $this->getSession()->getPage()->findField($locator);
+        $fieldId = $el->getAttribute('id');
+
+        if (empty($fieldId)) {
+            throw new Exception(
+                'Could not find an id for field with locator: '.$locator
+            );
+        }
+
+        $this->getSession()->executeScript(
+            "CKEDITOR.instances[\"$fieldId\"].setData(\"$value\");"
+        );
+    }
+
+    /**
+     * @Given /^I fill hidden field "([^"]*)" with "([^"]*)"$/
+     */
+    public function iFillHiddenFieldWith($field, $value)
+    {
+        $this->getSession()->getPage()->find(
+            'css',
+            'input[name="'.$field.'"]'
+        )->setValue($value);
+    }
+
+    /**
+     * @When /^(?:|I )fill in select2 input "(?P<field>(?:[^"]|\\")*)" with id "(?P<id>(?:[^"]|\\")*)" and value "(?P<value>(?:[^"]|\\")*)"$/
+     */
+    public function iFillInSelectInputWithAndSelect($field, $id, $value)
+    {
+        $this->getSession()->executeScript("$('$field').select2({data : [{id: $id, text: '$value'}]});");
+    }
+
+    /**
+     * @When /^(?:|I )confirm the popup$/
+     */
+    public function confirmPopup()
+    {
+        // See
+        // https://gist.github.com/blazarecki/2888851
+        /** @var \Behat\Mink\Driver\Selenium2Driver $driver Needed because no cross-driver way yet */
+        $this->getSession()->getDriver()->getWebDriverSession()->accept_alert();
+    }
+
+     /**
+     * @When /^(?:|I )fill in select bootstrap input "(?P<field>(?:[^"]|\\")*)" with "(?P<value>(?:[^"]|\\")*)" and select "(?P<entry>(?:[^"]|\\")*)"$/
+     */
+    public function iFillInSelectBootstrapInputWithAndSelect($field, $value, $entry)
+    {
+        $page = $this->getSession()->getPage();
+        $inputField = $page->find('css', $field);
+        if (!$inputField) {
+            throw new \Exception('No field found');
+        }
+
+        $choice = $inputField->getParent()->find('css', '.bootstrap-select');
+        if (!$choice) {
+            throw new \Exception('No select bootstrap choice found');
+        }
+        $choice->press();
+
+        $selectInput = $inputField->getParent()->find('css', '.bootstrap-select .form-control');
+        if (!$selectInput) {
+            throw new \Exception('No input found');
+        }
+
+        $selectInput->setValue($value);
+        $this->getSession()->wait(3000);
+
+        $chosenResults = $inputField->getParent()->findAll('css', '.dropdown-menu inner li');
+        foreach ($chosenResults as $result) {
+            //$option = $result->find('css', '.text');
+            if ($result->getText() == $entry) {
+                $result->click();
+                break;
+            }
+        }
+    }
+
+    /**
+     * @When /^(?:|I )fill in select bootstrap static input "(?P<field>(?:[^"]|\\")*)" select "(?P<value>(?:[^"]|\\")*)"$/
+     */
+    public function iFillInSelectStaticBootstrapInputWithAndSelect($field, $value)
+    {
+        $this->getSession()->wait(1000);
+        $this->getSession()->executeScript("
+            $(function() {
+                $('$field').selectpicker('val', '$value');
+            });
+        ");
+    }
+
+    /**
+     * @When /^wait for the page to be loaded$/
+     */
+    public function waitForThePageToBeLoaded()
+    {
+        //$this->getSession()->wait(10000, "document.readyState === 'complete'");
+        $this->getSession()->wait(3000);
+    }
+
+    /**
+     * @When /^I check the "([^"]*)" radio button$/
+     */
+    public function iCheckTheRadioButton($radioLabel)
+    {
+        $radioButton = $this->getSession()->getPage()->findField($radioLabel);
+        if (null === $radioButton) {
+            throw new Exception("Cannot find radio button ".$radioLabel);
+        }
+        //$value = $radioButton->getAttribute('value');
+        $this->getSession()->getDriver()->click($radioButton->getXPath());
+    }
+
+    /**
+     * @When /^I check radio button with label "([^"]*)"$/
+     */
+    public function iCheckTheRadioButtonWithLabel($label)
+    {
+        $this->getSession()->executeScript("
+            $(function() {
+                $(':contains(\$label\")').parent().find('input').prop('checked', true);
+            });
+        ");
+    }
+
+     /**
+     * @When /^I press advanced settings$/
+     */
+    public function iSelectFromSelectWithLabel()
+    {
+        $this->pressButton('Advanced settings');
+    }
+
+     /**
+     * Clicks link with specified id|title|alt|text
+     * Example: When I follow "Log In"
+     * Example: And I follow "Log In"
+     *
+     * @When /^(?:|I )focus "(?P<link>(?:[^"]|\\")*)"$/
+     */
+    public function focus($input)
+    {
+        $input = $this->getSession()->getPage()->findField($input);
+        $input->focus();
+    }
 }

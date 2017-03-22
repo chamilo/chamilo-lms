@@ -96,8 +96,7 @@ class DateRangePicker extends HTML_QuickForm_text
         // timeFormat: 'hh:mm'
         $js .= "<script>
             $(function() {
-                $('#$id').daterangepicker({
-                    format: '$format',
+                $('#$id').daterangepicker({                    
                     timePicker: $timePicker,
                     timePickerIncrement: 30,
                     timePicker12Hour: false,
@@ -110,14 +109,25 @@ class DateRangePicker extends HTML_QuickForm_text
                          '".addslashes(get_lang('NextWeek'))."': [moment().weekday(8), moment().weekday(12)]
                     },
                     //showDropdowns : true,
-                    separator: ' / ',
+                    
                     locale: {
+                        separator: ' / ',
+                        format: '$format',
                         applyLabel: '".addslashes(get_lang('Ok'))."',
                         cancelLabel: '".addslashes(get_lang('Cancel'))."',
                         fromLabel: '".addslashes(get_lang('From'))."',
                         toLabel: '".addslashes(get_lang('Until'))."',
                         customRangeLabel: '".addslashes(get_lang('CustomRange'))."',
                     }
+                });
+                
+                $('#$id').on('change', function() {
+                    var myPickedDates = $('#$id').val().split('/');
+                    var {$id}_start = myPickedDates[0].trim();
+                    var {$id}_end = myPickedDates[1].trim();
+                    
+                    $('input[name={$id}_start]').val({$id}_start);
+                    $('input[name={$id}_end]').val({$id}_end);
                 });
             });
         </script>";
@@ -172,6 +182,7 @@ class DateRangePicker extends HTML_QuickForm_text
      * @param mixed $value
      * @param array $submitValues
      * @param array $errors
+     * @return string
      */
     public function getSubmitValue($value, &$submitValues, &$errors)
     {
@@ -185,5 +196,7 @@ class DateRangePicker extends HTML_QuickForm_text
         }
         $submitValues[$elementName.'_start'] = $parsedDates['start'];
         $submitValues[$elementName.'_end'] = $parsedDates['end'];
+
+        return $value;
     }
 }

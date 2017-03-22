@@ -50,8 +50,8 @@ $sql = "SELECT s.name, c.title
 
 $result = Database::query($sql);
 if (!list($session_name,$course_title) = Database::fetch_row($result)) {
-	header('Location: session_course_list.php?id_session='.$id_session);
-	exit();
+    header('Location: session_course_list.php?id_session='.$id_session);
+    exit();
 }
 
 switch ($action) {
@@ -122,7 +122,7 @@ if($page) {
 <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&page=<?php echo $page-1; ?>&sort=<?php echo $sort; ?>"><?php echo get_lang('Previous');?></a>
 <?php
 } else {
-	echo get_lang('Previous');
+    echo get_lang('Previous');
 }
 ?>
 |
@@ -132,7 +132,7 @@ if($nbr_results > $limit) {
 <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&page=<?php echo $page+1; ?>&sort=<?php echo $sort; ?>"><?php echo get_lang('Next');?></a>
 <?php
 } else {
-	echo get_lang('Next');
+    echo get_lang('Next');
 }
 ?>
 </div>
@@ -154,9 +154,9 @@ if($nbr_results > $limit) {
 $i=0;
 foreach ($users as $key => $enreg) {
 
-	if ($key == $limit) {
-		break;
-	}
+    if ($key == $limit) {
+        break;
+    }
     ?>
     <tr class="<?php echo $i?'row_odd':'row_even'; ?>">
         <td><input type="checkbox" name="idChecked[]" value="<?php echo $enreg['user_id']; ?>"></td>

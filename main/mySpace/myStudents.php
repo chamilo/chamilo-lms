@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CLp;
 /**
  * Implements the tracking of students in the Reporting pages
  * @package chamilo.reporting
@@ -74,7 +75,7 @@ if ($export) {
 $csv_content = array();
 $from_myspace = false;
 
-if (isset ($_GET['from']) && $_GET['from'] == 'myspace') {
+if (isset($_GET['from']) && $_GET['from'] == 'myspace') {
     $from_myspace = true;
     $this_section = SECTION_TRACKING;
 } else {
@@ -203,7 +204,10 @@ switch ($action) {
         break;
     case 'delete_legal':
         $extraFieldValue = new ExtraFieldValue('user');
-        $value = $extraFieldValue->get_values_by_handler_and_field_variable($student_id, 'legal_accept');
+        $value = $extraFieldValue->get_values_by_handler_and_field_variable(
+            $student_id,
+            'legal_accept'
+        );
         $result = $extraFieldValue->delete($value['id']);
         if ($result) {
             Display::addFlash(Display::return_message(get_lang('Deleted')));
@@ -477,17 +481,19 @@ if (!empty($student_id)) {
     $coachs_name  = '';
     $session_name = '';
     $table_title = Display::return_icon(
-            'user.png',
-            get_lang('User'),
-            array(),
-            ICON_SIZE_SMALL
-        ).$user_info['complete_name'];
+        'user.png',
+        get_lang('User'),
+        array(),
+        ICON_SIZE_SMALL
+    ).$user_info['complete_name'];
 
     echo Display::page_subheader($table_title);
-
     $userPicture = UserManager::getUserPicture($user_info['user_id']);
     $userGroupManager = new UserGroup();
-    $userGroups = $userGroupManager->getNameListByUser($user_info['user_id'], UserGroup::NORMAL_CLASS);
+    $userGroups = $userGroupManager->getNameListByUser(
+        $user_info['user_id'],
+        UserGroup::NORMAL_CLASS
+    );
     ?>
     <img src="<?php echo $userPicture ?>">
     <div class="row">
@@ -503,9 +509,11 @@ if (!empty($student_id)) {
                 <td><?php echo get_lang('Name') . ' : '.$user_info['complete_name']; ?></td>
             </tr>
             <tr>
-                <td><?php echo get_lang('Email') . ' : ';
-                    if (!empty ($user_info['email'])) {
-                        echo '<a href="mailto:' . $user_info['email'] . '">' . $user_info['email'] . '</a>';
+                <td>
+                    <?php
+                    echo get_lang('Email') . ' : ';
+                    if (!empty($user_info['email'])) {
+                        echo '<a href="mailto:'.$user_info['email'].'">'.$user_info['email'].'</a>';
                     } else {
                         echo get_lang('NoEmail');
                     } ?>
@@ -513,7 +521,7 @@ if (!empty($student_id)) {
             </tr>
             <tr>
                 <td> <?php echo get_lang('Tel') . ' : ';
-                    if (!empty ($user_info['phone'])) {
+                    if (!empty($user_info['phone'])) {
                         echo $user_info['phone'];
                     } else {
                         echo get_lang('NoTel');
@@ -522,8 +530,10 @@ if (!empty($student_id)) {
                 </td>
             </tr>
             <tr>
-                <td> <?php echo get_lang('OfficialCode') . ' : ';
-                    if (!empty ($user_info['official_code'])) {
+                <td>
+                    <?php
+                    echo get_lang('OfficialCode').' : ';
+                    if (!empty($user_info['official_code'])) {
                         echo $user_info['official_code'];
                     } else {
                         echo get_lang('NoOfficialCode');
@@ -535,10 +545,22 @@ if (!empty($student_id)) {
                 <td><?php echo get_lang('OnLine') . ' : '.$online; ?> </td>
             </tr>
             <?php
+            if (!empty($course_code)) {
+            ?>
+                <tr>
+                    <td>
+                        <a href="access_details.php?student=<?php echo $student_id; ?>&course=<?php echo $course_code; ?>&origin=<?php echo $origin; ?>&cidReq=<?php echo $course_code; ?>&id_session=<?php echo $sessionId; ?>"><?php echo get_lang('SeeAccesses'); ?></a>
+                    </td>
+                </tr>
+            <?php
+            }
 
             // Display timezone if the user selected one and if the admin allows the use of user's timezone
             $timezone = null;
-            $timezone_user = UserManager::get_extra_user_data_by_field($user_info['user_id'], 'timezone');
+            $timezone_user = UserManager::get_extra_user_data_by_field(
+                $user_info['user_id'],
+                'timezone'
+            );
             $use_users_timezone = api_get_setting('use_users_timezone', 'timezones');
             if ($timezone_user['timezone'] != null && $use_users_timezone == 'true') {
                 $timezone = $timezone_user['timezone'];
@@ -612,7 +634,6 @@ if (!empty($student_id)) {
 
             if (api_get_setting('allow_terms_conditions') === 'true') {
                 $isBoss = UserManager::userIsBossOfStudent(api_get_user_id(), $student_id);
-
                 if ($isBoss || api_is_platform_admin()) {
                     $extraFieldValue = new ExtraFieldValue('user');
                     $value = $extraFieldValue->get_values_by_handler_and_field_variable($student_id, 'legal_accept');
@@ -680,11 +701,11 @@ if (!empty($student_id)) {
             $access_end_date = '';
             $date_session = '';
             $title = Display::return_icon(
-                    'course.png',
-                    get_lang('Courses'),
-                    array(),
-                    ICON_SIZE_SMALL
-                ).' '.get_lang('Courses');
+                'course.png',
+                get_lang('Courses'),
+                array(),
+                ICON_SIZE_SMALL
+            ).' '.get_lang('Courses');
 
             $session_info = api_get_session_info($sId);
             if ($session_info) {
@@ -725,14 +746,22 @@ if (!empty($student_id)) {
                     $courseInfoItem = api_get_course_info_by_id($courseId);
                     $courseId = $courseInfoItem['real_id'];
                     $courseCodeItem = $courseInfoItem['code'];
-
-                    if (CourseManager :: is_user_subscribed_in_course($student_id, $courseCodeItem, true)) {
+                    $isSubscribed = CourseManager:: is_user_subscribed_in_course(
+                        $student_id,
+                        $courseCodeItem,
+                        true
+                    );
+                    if ($isSubscribed) {
                         $time_spent_on_course = api_time_to_hms(
                             Tracking :: get_time_spent_on_the_course($user_info['user_id'], $courseId, $sId)
                         );
 
                         // get average of faults in attendances by student
-                        $results_faults_avg = $attendance->get_faults_average_by_course($student_id, $courseCodeItem, $sId);
+                        $results_faults_avg = $attendance->get_faults_average_by_course(
+                            $student_id,
+                            $courseCodeItem,
+                            $sId
+                        );
                         if (!empty($results_faults_avg['total'])) {
                             if (api_is_drh()) {
                                 $attendances_faults_avg =
@@ -771,7 +800,7 @@ if (!empty($student_id)) {
                         $scoretotal_display = '0/0 (0%)';
                         if (!empty($scoretotal) && !empty($scoretotal[1])) {
                             $scoretotal_display =
-                                round($scoretotal[0], 1 ).'/'.
+                                round($scoretotal[0], 1).'/'.
                                 round($scoretotal[1], 1).
                                 ' ('.round(($scoretotal[0] / $scoretotal[1]) * 100, 2).' %)';
                         }
@@ -940,7 +969,7 @@ if (!empty($student_id)) {
                 <?php
 
                 $i = 0;
-                /** @var \Chamilo\CourseBundle\Entity\CLp $learnpath */
+                /** @var CLp $learnpath */
                 foreach ($lps as $learnpath) {
                     $lp_id = $learnpath->getId();
                     $lp_name = $learnpath->getName();
@@ -1299,7 +1328,7 @@ if (!empty($student_id)) {
         }
 
         require_once '../work/work.lib.php';
-        $userworks = getWorkPerUser($student_id, $courseInfo['real_id'], $sessionId);
+        $userWorks = getWorkPerUser($student_id, $courseInfo['real_id'], $sessionId);
         echo '
             <div class="table-responsive">
                 <table class="table table-striped table-hover">
@@ -1315,40 +1344,43 @@ if (!empty($student_id)) {
                     </thead>
                     <tbody>
         ';
+        $workingTime = api_get_configuration_value('considered_working_time');
+        foreach ($userWorks as $work) {
+            $work = $work['work'];
+            foreach ($work->user_results as $key => $results) {
+                echo '<tr>';
+                echo '<td>' . $work->title . '</td>';
+                $documentNumber = $key + 1;
+                echo '<td class="text-center"><a href="' . api_get_path(WEB_CODE_PATH) . 'work/view.php?cidReq=' . $course_code . '&id_session=' . $sessionId .'&id=' . $results['id'] . '">(' . $documentNumber . ')</a></td>';
+                $qualification = !empty($results['qualification']) ? $results['qualification'] : '-';
+                echo '<td class="text-center">' . $qualification. '</td>';
+                echo '<td class="text-center">' . $results['formatted_date']. '</td>';
+                $assignment = get_work_assignment_by_id($work->id, $courseInfo['real_id']);
 
-            foreach ($userworks as $work) {
-                $work = $work['work'];
-                foreach ($work->user_results as $key => $results) {
-                    echo '<tr>';
-                    echo '<td>' . $work->title . '</td>';
-                    $documentNumber = $key + 1;
-                    echo '<td class="text-center"><a href="' . api_get_path(WEB_CODE_PATH) . 'work/view.php?cidReq=' . $course_code . '&id_session=' . $sessionId .'&id=' . $results['id'] . '">(' . $documentNumber . ')</a></td>';
-                    $qualification = !empty($results['qualification']) ? $results['qualification'] : '-';
-                    echo '<td class="text-center">' . $qualification. '</td>';
-                    echo '<td class="text-center">' . $results['formatted_date']. '</td>';
-                    $assignment = get_work_assignment_by_id($work->id, $courseInfo['real_id']);
-                    echo '<td class="text-center">' . api_convert_and_format_date($assignment['expires_on']) . '</td>';
-
-                    $fieldValue = new ExtraFieldValue('work');
-                    $resultExtra = $fieldValue->getAllValuesForAnItem(
-                        $work->id,
-                        true
-                    );
-
-                    foreach ($resultExtra as $field) {
-                        $field = $field['value'];
-
-                        if (api_get_configuration_value('considered_working_time') == $field->getField()->getVariable()) {
-                            echo '<td class="text-center">' . $field->getValue() . '</td>';
-                        }
-                    }
-
-                    echo '</tr>';
+                echo '<td class="text-center">';
+                if (!empty($assignment['expires_on'])) {
+                    echo api_convert_and_format_date($assignment['expires_on']);
                 }
-            }
+                echo '</td>';
 
-        echo '
-                    </tbody>
+                $fieldValue = new ExtraFieldValue('work');
+                $resultExtra = $fieldValue->getAllValuesForAnItem(
+                    $work->iid,
+                    true
+                );
+
+                foreach ($resultExtra as $field) {
+                    $field = $field['value'];
+                    if ($workingTime == $field->getField()->getVariable()) {
+                        echo '<td class="text-center">' . $field->getValue() . '</td>';
+                    }
+                }
+
+                echo '</tr>';
+            }
+        }
+
+        echo '</tbody>
                 </table>
             </div>
         ';

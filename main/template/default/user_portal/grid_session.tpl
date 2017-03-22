@@ -2,8 +2,8 @@
     <div id="session-{{ item.id }}" class="session panel panel-default">
         <div class="panel-heading">
             <img id="session_img_{{ row.id }}" src="{{ "window_list.png"|icon(32) }}" width="32" height="32"
-                 alt="{{ row.title }}" title="{{ row.title }}"/> {{ row.title }}
-
+                 alt="{{ row.title }}" title="{{ row.title }}"/>
+            {{ row.title }}
             {% if row.edit_actions != '' %}
                 <div class="pull-right">
                     <a class="btn btn-default btn-sm" href="{{ row.edit_actions }}">
@@ -18,14 +18,15 @@
             {% endif %}
             <div class="info-session">
                 {% if row.coach_name  != '' %}
-                    <span><i class="fa fa-user" aria-hidden="true"></i>
+                    <span>
+                        <i class="fa fa-user" aria-hidden="true"></i>
                         {{ row.coach_name }}
-                </span>
+                    </span>
                 {% endif %}
-                </span>
-                <span><i class="fa fa-calendar" aria-hidden="true"></i>
+                <span>
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
                     {{ row.date }}
-            </span>
+                </span>
             </div>
             <div class="grid-courses">
                 <div class="row">

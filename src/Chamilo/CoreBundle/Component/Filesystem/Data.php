@@ -26,7 +26,7 @@ class Data
     /** @var array Chamilo paths */
     private $paths;
 
-    /** @var Filesystem  */
+    /** @var Filesystem */
     private $fs;
     private $connector;
     private $converter;
@@ -86,11 +86,11 @@ class Data
         return $this->get($file);
     }
 
-     /**
+    /**
      * Gets a file from the data/courses/MATHS/scorm directory
      * @param string $courseCode
      * @param string $file
-      *
+     *
      * @return SplFileInfo
      */
     public function getCourseScormDocument($courseCode, $file)
@@ -116,9 +116,9 @@ class Data
 
     /**
      * Create folders
-     * @param array            $folderList
-     * @param OutputInterface  $output
-     * @param string           $folderPermissions
+     * @param array $folderList
+     * @param OutputInterface $output
+     * @param string $folderPermissions
      */
     public function createFolders(
         array $folderList,
@@ -142,7 +142,7 @@ class Data
     }
 
     /**
-     * @param array           $folderList
+     * @param array $folderList
      * @param OutputInterface $output
      */
     public function copyFolders(array $folderList, OutputInterface $output = null)
@@ -254,7 +254,8 @@ class Data
             $fileName = $fileInfo['filename'];
             $newFilePath = str_replace(
                 $fileInfo['basename'],
-                $fileName.'.'.$format, $filePath
+                $fileName.'.'.$format,
+                $filePath
             );
             /** @var \MediaAlchemyst\DriversContainer $drivers */
             $drivers = $this->converter->getDrivers();
@@ -264,7 +265,6 @@ class Data
             $unoconv->transcode($filePath, $format, $newFilePath);
             if ($this->fs->exists($newFilePath)) {
                 return $newFilePath;
-
             }
         }
 

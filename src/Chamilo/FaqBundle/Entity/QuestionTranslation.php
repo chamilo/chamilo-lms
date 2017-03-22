@@ -58,7 +58,7 @@ class QuestionTranslation
 
     /**
      * @param string $headline
-     * @return CategoryTranslation
+     * @return QuestionTranslation
      */
     public function setHeadline($headline)
     {
@@ -77,7 +77,7 @@ class QuestionTranslation
 
     /**
      * @param string $body
-     * @return CategoryTranslation
+     * @return QuestionTranslation
      */
     public function setBody($body)
     {

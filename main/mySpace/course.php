@@ -15,7 +15,7 @@ $this_section = SECTION_TRACKING;
 $sessionId = isset($_GET['session_id']) ? intval($_GET['session_id']) : null;
 
 api_block_anonymous_users();
-$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('MySpace'));
+$interbreadcrumb[] = array("url" => "index.php", "name" => get_lang('MySpace'));
 
 if (isset($_GET["id_session"]) && $_GET["id_session"] != "") {
     $interbreadcrumb[] = array("url" => "session.php", "name" => get_lang('Sessions'));
@@ -35,23 +35,20 @@ if (isset($_GET["user_id"]) && $_GET["user_id"] != "" && !isset($_GET["type"])) 
 
 function count_courses()
 {
-	global $nb_courses;
-	return $nb_courses;
+    global $nb_courses;
+    return $nb_courses;
 }
 
-//checking if the current coach is the admin coach
-$show_import_icon = false;
-
+// Checking if the current coach is the admin coach
+$showImportIcon = false;
 if (api_get_setting('add_users_by_coach') == 'true') {
     if (!api_is_platform_admin()) {
-        $sql = 'SELECT id_coach
-                FROM '.Database::get_main_table(TABLE_MAIN_SESSION).'
-                WHERE id='.$sessionId;
-        $rs = Database::query($sql);
-        if (Database::result($rs, 0, 0) != $_user['user_id']) {
-            api_not_allowed(true);
-        } else {
-            $show_import_icon = true;
+        $isGeneralCoach = SessionManager::user_is_general_coach(
+            api_get_user_id(),
+            $sessionId
+        );
+        if ($isGeneralCoach) {
+            $showImportIcon = true;
         }
     }
 }
@@ -66,14 +63,14 @@ if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
             $user_id = intval($_GET['user_id']);
             $user_info = api_get_user_info($user_id);
             $title = get_lang('AssignedCoursesTo').' '.api_get_person_name($user_info['firstname'], $user_info['lastname']);
-            $courses  = CourseManager::get_course_list_of_user_as_course_admin($user_id);
+            $courses = CourseManager::get_course_list_of_user_as_course_admin($user_id);
         } else {
             $title = get_lang('YourCourseList');
             $courses = CourseManager::get_courses_followed_by_drh(api_get_user_id());
         }
     } else {
         $session_name = api_get_session_name($sessionId);
-        $title = api_htmlentities($session_name, ENT_QUOTES, $charset).' : '.get_lang('CourseListInSession');
+        $title = $session_name.' : '.get_lang('CourseListInSession');
         $courses = Tracking::get_courses_list_from_session($sessionId);
     }
 
@@ -81,7 +78,7 @@ if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
 
     if (!api_is_session_admin()) {
         $menu_items[] = Display::url(
-            Display::return_icon('stats.png', get_lang('MyStats'),'',ICON_SIZE_MEDIUM),
+            Display::return_icon('stats.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH)."auth/my_progress.php"
         );
         $menu_items[] = Display::url(
@@ -129,11 +126,7 @@ if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
     echo Display::page_header($title);
 }
 
-// Database Table Definitions
-$tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-$tbl_user_course = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-
-if ($show_import_icon) {
+if ($showImportIcon) {
     echo "<div align=\"right\">";
     echo '<a href="user_import.php?id_session='.$sessionId.'&action=export&amp;type=xml">'.
             Display::return_icon('excel.gif', get_lang('ImportUserListXMLCSV')).'&nbsp;'.get_lang('ImportUserListXMLCSV').'</a>';

@@ -98,15 +98,13 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
         exit;
     }
 }
-$data               = $usergroup->get($id);
-$session_list_in    = $usergroup->get_sessions_by_usergroup($id);
-$session_list       = SessionManager::get_sessions_list(array(), array('name'));
-
-//api_display_tool_title($tool_name.' ('.$session_info['name'].')');
-$elements_not_in = $elements_in= array();
+$data = $usergroup->get($id);
+$session_list_in = $usergroup->get_sessions_by_usergroup($id);
+$session_list = SessionManager::get_sessions_list(array(), array('name'));
+$elements_not_in = $elements_in = array();
 
 if (!empty($session_list)) {
-    foreach($session_list as $session) {
+    foreach ($session_list as $session) {
         if (in_array($session['id'], $session_list_in)) {
             $elements_in[$session['id']] = $session['name'];
         } else {
@@ -134,17 +132,19 @@ function search_usergroup_sessions($needle,$type) {
                 array('s.name' => array('operator' => 'LIKE', 'value' => "$needle%"))
             );
         }
-        $i=0;
         if ($type != 'single') {
             $return .= '<select id="elements_not_in" name="elements_not_in_name[]" multiple="multiple" size="15" style="width:360px;">';
-
-            foreach ($session_list as $row ) {
+            foreach ($session_list as $row) {
                 if (!in_array($row['id'], array_keys($elements_in))) {
                     $return .= '<option value="'.$row['id'].'">'.$row['name'].'</option>';
                 }
             }
             $return .= '</select>';
-            $xajax_response -> addAssign('ajax_list_multiple','innerHTML',api_utf8_encode($return));
+            $xajax_response->addAssign(
+                'ajax_list_multiple',
+                'innerHTML',
+                api_utf8_encode($return)
+            );
         }
     }
 
@@ -176,10 +176,10 @@ echo '<div id="advancedSearch" style="display: none">'. get_lang('SearchSessions
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $id; if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
 <?php
 echo '<legend>'.$data['name'].': '.$tool_name.'</legend>';
-echo Display::input('hidden','id',$id);
-echo Display::input('hidden','form_sent','1');
-echo Display::input('hidden','add_type',null);
-if(!empty($errorMsg)) {
+echo Display::input('hidden', 'id', $id);
+echo Display::input('hidden', 'form_sent', '1');
+echo Display::input('hidden', 'add_type', null);
+if (!empty($errorMsg)) {
     Display::display_normal_message($errorMsg); //main API
 }
 ?>
@@ -266,7 +266,7 @@ if(!empty($errorMsg)) {
 </table>
 </form>
 
-<script type="text/javascript">
+<script>
 function moveItem(origin , destination) {
     for(var i = 0 ; i<origin.options.length ; i++) {
         if(origin.options[i].selected) {

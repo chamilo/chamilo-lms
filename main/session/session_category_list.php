@@ -31,6 +31,7 @@ $action = isset($_REQUEST['action']) ? Security::remove_XSS($_REQUEST['action'])
 $sort = isset($_GET['sort']) && in_array($_GET['sort'], array('name', 'nbr_session', 'date_start', 'date_end')) ? Security::remove_XSS($_GET['sort']) : 'name';
 $idChecked = isset($_REQUEST['idChecked']) ? Security::remove_XSS($_REQUEST['idChecked']) : null;
 $order = isset($_REQUEST['order']) ? Security::remove_XSS($_REQUEST['order']) : 'ASC';
+$keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
 
 if ($action == 'delete_on_session' || $action == 'delete_off_session') {
     $delete_session = ($action == 'delete_on_session') ? true : false;
@@ -63,9 +64,9 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
     //if user is crfp admin only list its sessions
     $where = null;
     if (!api_is_platform_admin()) {
-        $where .= (empty($_REQUEST['keyword']) ? "" : " WHERE name LIKE '%".Database::escape_string(trim($_REQUEST['keyword']))."%'");
+        $where .= (empty($keyword) ? "" : " WHERE name LIKE '%".Database::escape_string(trim($_REQUEST['keyword']))."%'");
     } else {
-        $where .= (empty($_REQUEST['keyword']) ? "" : " WHERE name LIKE '%".Database::escape_string(trim($_REQUEST['keyword']))."%'");
+        $where .= (empty($keyword) ? "" : " WHERE name LIKE '%".Database::escape_string(trim($_REQUEST['keyword']))."%'");
     }
     if (empty($where)) {
         $where = " WHERE access_url_id = ".api_get_current_access_url_id()." ";
@@ -98,7 +99,7 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
     $nbr_results = sizeof($Sessions);
     $tool_name = get_lang('ListSessionCategory');
     Display::display_header($tool_name);
-    $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
+
     ?>
 
     <div class="actions">
@@ -132,7 +133,7 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
             if ($num > $limit) {
                 if ($page) {
                     ?>
-                    <a href="<?php echo api_get_self(); ?>?page=<?php echo $page - 1; ?>&sort=<?php echo $sort; ?>&order=<?php echo Security::remove_XSS($_REQUEST['order']); ?>&keyword=<?php echo $_REQUEST['keyword']; ?><?php echo @$cond_url; ?>"><?php echo get_lang('Previous'); ?></a>
+                    <a href="<?php echo api_get_self(); ?>?page=<?php echo $page - 1; ?>&sort=<?php echo $sort; ?>&order=<?php echo Security::remove_XSS($order); ?>&keyword=<?php echo $keyword; ?><?php echo @$cond_url; ?>"><?php echo get_lang('Previous'); ?></a>
                     <?php
                 } else {
                     echo get_lang('Previous');
@@ -142,7 +143,7 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
                 <?php
                 if ($nbr_results > $limit) {
                     ?>
-                    <a href="<?php echo api_get_self(); ?>?page=<?php echo $page + 1; ?>&sort=<?php echo $sort; ?>&order=<?php echo Security::remove_XSS($_REQUEST['order']); ?>&keyword=<?php echo $_REQUEST['keyword']; ?><?php echo @$cond_url; ?>"><?php echo get_lang('Next'); ?></a>
+                    <a href="<?php echo api_get_self(); ?>?page=<?php echo $page + 1; ?>&sort=<?php echo $sort; ?>&order=<?php echo Security::remove_XSS($order); ?>&keyword=<?php echo $keyword; ?><?php echo @$cond_url; ?>"><?php echo get_lang('Next'); ?></a>
                     <?php
                 } else {
                     echo get_lang('Next');

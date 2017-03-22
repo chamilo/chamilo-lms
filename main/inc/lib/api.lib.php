@@ -558,7 +558,7 @@ define('TIMELINE_STATUS_ACTIVE', '1');
 define('TIMELINE_STATUS_INACTIVE', '2');
 
 // Event email template class
-define('EVENT_EMAIL_TEMPLATE_ACTIVE',  1);
+define('EVENT_EMAIL_TEMPLATE_ACTIVE', 1);
 define('EVENT_EMAIL_TEMPLATE_INACTIVE', 0);
 
 // Course home
@@ -1459,10 +1459,12 @@ function api_get_user_info(
     $apcVar = null;
     $user = false;
     $cacheAvailable = api_get_configuration_value('apc');
+
     if (empty($user_id)) {
         $userFromSession = Session::read('_user');
+
         if (isset($userFromSession)) {
-            if (!empty($cacheAvailable)) {
+            if ($cacheAvailable === true) {
                 $apcVar = api_get_configuration_value('apc_prefix') . 'userinfo_' . $userFromSession['user_id'];
                 if (apcu_exists($apcVar)) {
                     $user = apcu_fetch($apcVar);
@@ -1484,7 +1486,7 @@ function api_get_user_info(
     $user_id = intval($user_id);
 
     // Re-use user information if not stale and already stored in APCu
-    if (!empty($cacheAvailable)) {
+    if ($cacheAvailable === true) {
         $apcVar = api_get_configuration_value('apc_prefix') . 'userinfo_' . $user_id;
         if (apcu_exists($apcVar)) {
             $user = apcu_fetch($apcVar);
@@ -2275,17 +2277,6 @@ function api_get_session_visibility(
             $isCoach = api_is_coach($session_id, $courseId);
 
             if ($isCoach) {
-                // Test end date.
-                if (!empty($row['coach_access_end_date'])) {
-                    $endDateCoach = api_strtotime($row['coach_access_end_date'], 'UTC');
-
-                    if ($endDateCoach >= $now) {
-                        $visibility = SESSION_AVAILABLE;
-                    } else {
-                        $visibility = SESSION_INVISIBLE;
-                    }
-                }
-
                 // Test start date.
                 if (!empty($row['coach_access_start_date'])) {
                     $start = api_strtotime($row['coach_access_start_date'], 'UTC');
@@ -2293,6 +2284,19 @@ function api_get_session_visibility(
                         $visibility = SESSION_AVAILABLE;
                     } else {
                         $visibility = SESSION_INVISIBLE;
+                    }
+                }
+
+                // Test end date.
+                if (!empty($row['coach_access_end_date'])) {
+                    if ($visibility = SESSION_AVAILABLE) {
+                        $endDateCoach = api_strtotime($row['coach_access_end_date'], 'UTC');
+
+                        if ($endDateCoach >= $now) {
+                            $visibility = SESSION_AVAILABLE;
+                        } else {
+                            $visibility = $row['visibility'];
+                        }
                     }
                 }
             }
@@ -2899,9 +2903,9 @@ function api_is_allowed_to_edit(
     $session_coach = false,
     $check_student_view = true
 ) {
-    $my_session_id = api_get_session_id();
+    $sessionId = api_get_session_id();
     $is_allowed_coach_to_edit = api_is_coach(null, null, $check_student_view);
-    $session_visibility = api_get_session_visibility($my_session_id);
+    $session_visibility = api_get_session_visibility($sessionId);
 
     // Admins can edit anything.
     if (api_is_platform_admin(false)) {
@@ -2942,7 +2946,7 @@ function api_is_allowed_to_edit(
 
     // Check if the student_view is enabled, and if so, if it is activated.
     if (api_get_setting('student_view_enabled') == 'true') {
-        if (!empty($my_session_id)) {
+        if (!empty($sessionId)) {
             // Check if session visibility is read only for coaches.
             if ($session_visibility == SESSION_VISIBLE_READ_ONLY) {
                 $is_allowed_coach_to_edit = false;
@@ -3008,8 +3012,7 @@ function api_is_coach_of_course_in_session($sessionId)
             // Checking session visibility
             $sessionCourseVisibility = api_get_session_visibility(
                 $sessionId,
-                $course['real_id'],
-                $ignore_visibility_for_admins
+                $course['real_id']
             );
 
             $courseIsVisible = !in_array(
@@ -7501,15 +7504,29 @@ function api_warn_hosting_contact($limitName)
 }
 
 /**
+ * Gets value of a variable from app/config/configuration.php
  * @param string $variable
+ *
  * @return bool|mixed
  */
 function api_get_configuration_value($variable)
 {
     global $_configuration;
+    // Check the current url id, id = 1 by default
+    $urlId = isset($_configuration['access_url']) ? (int) $_configuration['access_url'] : 1;
+
+    // Check if variable exists
     if (isset($_configuration[$variable])) {
+        if (is_array($_configuration[$variable])) {
+            // Check if it exists for the sub portal
+            if (array_key_exists($urlId, $_configuration[$variable])) {
+                return $_configuration[$variable][$urlId];
+            }
+        }
+
         return $_configuration[$variable];
     }
+
     return false;
 }
 
@@ -8092,4 +8109,20 @@ function api_number_format($number, $decimals = 0)
     $number = api_float_val($number);
 
     return number_format($number, $decimals);
+}
+
+/**
+ * Set location url with a exit break by default
+ *
+ * @param $url
+ * @param bool $exit
+ * @return void
+ */
+function location($url, $exit = true)
+{
+    header('Location: ' . $url);
+
+    if ($exit) {
+        exit;
+    }
 }

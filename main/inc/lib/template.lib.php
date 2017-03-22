@@ -136,7 +136,10 @@ class Template
         $this->twig->addFilter('img', new Twig_Filter_Function('Template::get_image'));
         $this->twig->addFilter('format_date', new Twig_Filter_Function('Template::format_date'));
         $this->twig->addFilter('api_get_local_time', new Twig_Filter_Function('api_get_local_time'));
+        // a combination of the two previous functions
+        $this->twig->addFilter('local_format_date', new Twig_Filter_Function('api_convert_and_format_date'));
         $this->twig->addFilter('user_info', new Twig_Filter_Function('api_get_user_info'));
+        $this->twig->addFilter('get_configuration_value', new Twig_Filter_Function('api_get_configuration_value'));
 
         /*
           $lexer = new Twig_Lexer($this->twig, array(
@@ -535,7 +538,6 @@ class Template
 
         // Default CSS Bootstrap
         $bowerCSSFiles = [
-            'bootstrap-daterangepicker/daterangepicker-bs3.css',
             'fontawesome/css/font-awesome.min.css',
             'jquery-ui/themes/smoothness/theme.css',
             'jquery-ui/themes/smoothness/jquery-ui.min.css',
@@ -543,12 +545,14 @@ class Template
             'jqueryui-timepicker-addon/dist/jquery-ui-timepicker-addon.min.css',
             'bootstrap/dist/css/bootstrap.min.css',
             'jquery.scrollbar/jquery.scrollbar.css',
+            'bootstrap-daterangepicker/daterangepicker.css',
+            'bootstrap-select/dist/css/bootstrap-select.min.css'
         ];
 
         foreach ($bowerCSSFiles as $file) {
             $css[] = api_get_path(WEB_PATH).'web/assets/'.$file;
         }
-        $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/bootstrap-select/css/bootstrap-select.min.css';
+
         $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/chosen/chosen.css';
         $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/tag/style.css';
 
@@ -657,19 +661,15 @@ class Template
     public function set_js_files()
     {
         global $disable_js_and_css_files, $htmlHeadXtra;
-
         $isoCode = api_get_language_isocode();
-
-        $selectLink = 'bootstrap-select/js/i18n/defaults-' . $isoCode . '_' . strtoupper($isoCode) . '.min.js';
+        $selectLink = 'bootstrap-select/dist/js/i18n/defaults-' . $isoCode . '_' . strtoupper($isoCode) . '.min.js';
 
         if ($isoCode == 'en') {
-            $selectLink = 'bootstrap-select/js/i18n/defaults-' . $isoCode . '_US.min.js';
+            $selectLink = 'bootstrap-select/dist/js/i18n/defaults-' . $isoCode . '_US.min.js';
         }
         // JS files
         $js_files = array(
-            'chosen/chosen.jquery.min.js',
-            'bootstrap-select/js/bootstrap-select.min.js',
-            $selectLink
+            'chosen/chosen.jquery.min.js'
         );
 
         $viewBySession = api_get_setting('my_courses_view_by_session') === 'true';
@@ -705,7 +705,9 @@ class Template
             'jqueryui-timepicker-addon/dist/jquery-ui-timepicker-addon.min.js',
             'image-map-resizer/js/imageMapResizer.min.js',
             'jquery.scrollbar/jquery.scrollbar.min.js',
-            'readmore-js/readmore.min.js'
+            'readmore-js/readmore.min.js',
+            'bootstrap-select/dist/js/bootstrap-select.min.js',
+            $selectLink
         ];
         if (CHAMILO_LOAD_WYSIWYG == true) {
             $bowerJsFiles[] = 'ckeditor/ckeditor.js';
@@ -730,7 +732,8 @@ class Template
 
         // Loading email_editor js
         if (!api_is_anonymous() && api_get_setting('allow_email_editor') == 'true') {
-            $js_file_to_string .= $this->fetch('default/mail_editor/email_link.js.tpl');
+            $template = $this->get_template('mail_editor/email_link.js.tpl');
+            $js_file_to_string .= $this->fetch($template);
         }
 
         if (!$disable_js_and_css_files) {
@@ -797,8 +800,14 @@ class Template
             }
         }
 
-        $this->assign('online_button', Display::return_icon('statusonline.png', null, null, ICON_SIZE_ATOM));
-        $this->assign('offline_button',Display::return_icon('statusoffline.png', null, null, ICON_SIZE_ATOM));
+        $this->assign(
+        'online_button',
+            Display::return_icon('statusonline.png', null, [], ICON_SIZE_ATOM)
+        );
+        $this->assign(
+            'offline_button',
+            Display::return_icon('statusoffline.png', null, [], ICON_SIZE_ATOM)
+        );
 
         // Get language iso-code for this page - ignore errors
         $this->assign('document_language', api_get_language_isocode());
@@ -890,7 +899,7 @@ class Template
 
         //@todo move this in the template
         $rightFloatMenu = '';
-        $iconBug = Display::return_icon('bug.png', get_lang('ReportABug'), null, ICON_SIZE_LARGE);
+        $iconBug = Display::return_icon('bug.png', get_lang('ReportABug'), [], ICON_SIZE_LARGE);
         if (api_get_setting('show_link_bug_notification') == 'true' && $this->user_is_logged_in) {
             $rightFloatMenu = '<div class="report">
 		<a href="https://github.com/chamilo/chamilo-lms/wiki/How-to-report-issues" target="_blank">
@@ -901,7 +910,7 @@ class Template
 
         if (api_get_setting('show_link_ticket_notification') == 'true' && $this->user_is_logged_in) {
             // by default is project_id = 1
-            $iconTicket = Display::return_icon('bug.png', get_lang('Ticket'), null, ICON_SIZE_LARGE);
+            $iconTicket = Display::return_icon('bug.png', get_lang('Ticket'), [], ICON_SIZE_LARGE);
             $courseInfo = api_get_course_info();
             $courseParams = '';
             if (!empty($courseInfo)) {

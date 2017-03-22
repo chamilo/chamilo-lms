@@ -24,10 +24,9 @@ class FreeAnswer extends Question
     }
 
     /**
-     * function which redifines Question::createAnswersForm
-     * @param formvalidator $form
+     * @inheritdoc
      */
-    function createAnswersForm($form)
+    public function createAnswersForm($form)
     {
         $form->addElement('text', 'weighting', get_lang('Weighting'));
         global $text, $class;

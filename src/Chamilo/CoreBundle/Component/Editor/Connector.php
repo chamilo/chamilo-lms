@@ -51,7 +51,7 @@ class Connector
             'root_sys' => api_get_path(SYS_PATH),
             'sys_root' => api_get_path(SYS_PATH), // just an alias
             'sys_course_path' => api_get_path(SYS_COURSE_PATH),
-         //   'sys_config_path' => $app['path.config'],
+            //   'sys_config_path' => $app['path.config'],
             'path.temp' => api_get_path(SYS_ARCHIVE_PATH),
             //'sys_log_path' => $app['path.logs']
         );
@@ -207,7 +207,8 @@ class Connector
                 'application/pdf',
                 'application/xml',
                 'application/vnd.oasis.opendocument.text',
-                'application/x-shockwave-flash'
+                'application/x-shockwave-flash',
+                'application/vnd.adobe.flash.movie'
             ), # allow files
             //'uploadDeny' => array('text/x-php'),
             'uploadOrder' => array('allow'), // only executes allow
@@ -325,9 +326,9 @@ class Connector
      **/
     public function access($attr, $path, $data, $volume)
     {
-    	return strpos(basename($path), '.') === 0       // if file/folder begins with '.' (dot)
-    		? !($attr == 'read' || $attr == 'write')    // set read+write to false, other (locked+hidden) set to true
-    		:  null;                                    // else elFinder decide it itself
+        return strpos(basename($path), '.') === 0       // if file/folder begins with '.' (dot)
+            ? !($attr == 'read' || $attr == 'write')    // set read+write to false, other (locked+hidden) set to true
+            :  null;                                    // else elFinder decide it itself
     }
 
     /**

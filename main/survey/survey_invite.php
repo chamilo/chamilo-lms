@@ -18,10 +18,16 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
 if (!api_is_allowed_to_edit(false, true)) {
-	Display :: display_header(get_lang('ToolSurvey'));
-	Display :: display_error_message(get_lang('NotAllowed'), false);
-	Display :: display_footer();
-	exit;
+    api_not_allowed(true);
+}
+
+$course_id = api_get_course_int_id();
+
+// Getting the survey information
+$survey_id = Security::remove_XSS($_GET['survey_id']);
+$survey_data = SurveyManager::get_survey($survey_id);
+if (empty($survey_data)) {
+    api_not_allowed(true);
 }
 
 // Database table definitions
@@ -31,21 +37,9 @@ $table_survey_question_option = Database :: get_course_table(TABLE_SURVEY_QUESTI
 $table_course = Database:: get_main_table(TABLE_MAIN_COURSE);
 $table_user = Database:: get_main_table(TABLE_MAIN_USER);
 
-$course_id = api_get_course_int_id();
-
-// Getting the survey information
-$survey_id = Security::remove_XSS($_GET['survey_id']);
-$survey_data = SurveyManager::get_survey($survey_id);
-if (empty($survey_data)) {
-	Display :: display_header(get_lang('ToolSurvey'));
-	Display :: display_error_message(get_lang('InvallidSurvey'), false);
-	Display :: display_footer();
-	exit;
-}
-
 $urlname = strip_tags(api_substr(api_html_entity_decode($survey_data['title'], ENT_QUOTES), 0, 40));
 if (api_strlen(strip_tags($survey_data['title'])) > 40) {
-	$urlname .= '...';
+    $urlname .= '...';
 }
 
 // Breadcrumbs
@@ -64,7 +58,7 @@ if (api_is_course_admin()) {
 $tool_name = get_lang('SurveyPublication');
 
 // Displaying the header
-Display::display_header($tool_name,'Survey');
+Display::display_header($tool_name, 'Survey');
 
 echo '<script>
 $(function() {
@@ -109,9 +103,8 @@ $complete_user_list = CourseManager::get_user_list_from_course_code(
 );
 $possible_users = array();
 foreach ($complete_user_list as & $user) {
-	$possible_users[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']);
+    $possible_users[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']);
 }
-
 
 CourseManager::addUserGroupMultiSelect($form, array());
 

@@ -33,10 +33,9 @@ class OralExpression extends Question
     }
 
     /**
-     * function which redefine Question::createAnswersForm
-     * @param FormValidator $form
+     * @inheritdoc
      */
-    function createAnswersForm($form)
+    public function createAnswersForm($form)
     {
         $form->addText(
             'weighting',

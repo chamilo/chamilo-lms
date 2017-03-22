@@ -3,6 +3,7 @@
 /**
 *   @package chamilo.admin
 */
+
 // Resetting the course id.
 $cidReset = true;
 
@@ -19,19 +20,18 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
 
 // Setting breadcrumbs.
-$interbreadcrumb[] = array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array('url' => 'usergroups.php','name' => get_lang('Classes'));
+$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'usergroups.php', 'name' => get_lang('Classes'));
 
 // Setting the name of the tool.
 $tool_name = get_lang('SubscribeClassToCourses');
 
 $add_type = 'multiple';
-if (isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
+if (isset($_REQUEST['add_type']) && $_REQUEST['add_type'] != '') {
     $add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
 $add = isset($_GET['add']) ? Security::remove_XSS($_GET['add']) : null;
-
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
 $htmlHeadXtra[] = '<script>
 function add_user_to_session (code, content) {
@@ -66,8 +66,8 @@ function validate_filter() {
 }
 </script>';
 
-$form_sent  = 0;
-$errorMsg   = '';
+$form_sent = 0;
+$errorMsg = '';
 $sessions = array();
 $usergroup = new UserGroup();
 $id = intval($_GET['id']);
@@ -80,24 +80,21 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     }
     if ($form_sent == 1) {
         $usergroup->subscribe_courses_to_usergroup($id, $elements_posted);
+        Display::addFlash(Display::return_message(get_lang('Updated')));
         header('Location: usergroups.php');
         exit;
     }
 }
 
-
 // Filters
 $filters = array(
     array('type' => 'text', 'name' => 'code', 'label' => get_lang('CourseCode')),
-    array('type' => 'text', 'name' => 'title', 'label' => get_lang('Title')),
-    /*array('type' => 'text', 'name' => 'lastname', 'label' => get_lang('LastName')),
-    array('type' => 'text', 'name' => 'official_code', 'label' => get_lang('OfficialCode')),
-    array('type' => 'text', 'name' => 'email', 'label' => get_lang('Email'))*/
+    array('type' => 'text', 'name' => 'title', 'label' => get_lang('Title'))
 );
 
 $searchForm = new FormValidator('search', 'get', api_get_self().'?id='.$id);
 $searchForm->addHeader(get_lang('AdvancedSearch'));
-$renderer =& $searchForm->defaultRenderer();
+$renderer = & $searchForm->defaultRenderer();
 $searchForm->addElement('hidden', 'id', $id);
 foreach ($filters as $param) {
     $searchForm->addElement($param['type'], $param['name'], $param['label']);
@@ -123,7 +120,17 @@ if (!empty($filters) && !empty($filterData)) {
 
 $data = $usergroup->get($id);
 $course_list_in = $usergroup->get_courses_by_usergroup($id, true);
-$course_list = CourseManager::get_courses_list(0, 0, 'title', 'asc', -1, null, api_get_current_access_url_id(), false, $conditions);
+$course_list = CourseManager::get_courses_list(
+    0,
+    0,
+    'title',
+    'asc',
+    -1,
+    null,
+    api_get_current_access_url_id(),
+    false,
+    $conditions
+);
 
 $elements_not_in = $elements_in = array();
 
@@ -140,15 +147,21 @@ if (!empty($course_list)) {
 $ajax_search = $add_type == 'unique' ? true : false;
 
 //checking for extra field with filter on
-
-function search($needle,$type)
+function search($needle, $type)
 {
     global $elements_in;
     $xajax_response = new xajaxResponse();
     $return = '';
     if (!empty($needle) && !empty($type)) {
         if ($type != 'single') {
-            $list = CourseManager::get_courses_list(0, 0, 2, 'ASC', -1, $needle);
+            $list = CourseManager::get_courses_list(
+                0,
+                0,
+                2,
+                'ASC',
+                -1,
+                $needle
+            );
         }
         if ($type != 'single') {
             $return .= '<select id="elements_not_in" name="elements_not_in_name[]" multiple="multiple" size="15" style="width:360px;">';
@@ -166,7 +179,6 @@ function search($needle,$type)
 }
 
 $xajax->processRequests();
-
 Display::display_header($tool_name);
 
 if ($add_type == 'multiple') {
@@ -180,18 +192,15 @@ if ($add_type == 'multiple') {
 }
 
 echo '<div class="actions">';
-echo '<a href="usergroups.php">'.Display::return_icon('back.png',get_lang('Back'), array(), ICON_SIZE_MEDIUM).'</a>';
+echo '<a href="usergroups.php">'.Display::return_icon('back.png', get_lang('Back'), array(), ICON_SIZE_MEDIUM).'</a>';
 echo Display::url(get_lang('AdvancedSearch'), '#', array('class' => 'advanced_options', 'id' => 'advanced_search'));
 echo '</div>';
 
 echo '<div id="advanced_search_options" style="display:none">';
 $searchForm->display();
 echo '</div>';
-
 ?>
-
-<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $id; if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
-
+<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $id; if (!empty($_GET['add'])) echo '&add=true'; ?>" style="margin:0px;" <?php if ($ajax_search) {echo ' onsubmit="valide();"'; }?>>
 <?php echo '<legend>'.$data['name'].': '.$tool_name.'</legend>';
 echo Display::input('hidden', 'id', $id);
 echo Display::input('hidden', 'form_sent', '1');
@@ -209,7 +218,7 @@ if (!empty($errorMsg)) {
   <td align="center"><b><?php echo get_lang('CoursesInGroup') ?> :</b></td>
 </tr>
 
-<?php if ($add_type=='multiple') { ?>
+<?php if ($add_type == 'multiple') { ?>
 <tr>
 <td align="center">
 <?php echo get_lang('FirstLetterCourseTitle'); ?> :
@@ -227,7 +236,7 @@ if (!empty($errorMsg)) {
   <td align="center">
   <div id="content_source">
       <?php
-      if (!($add_type=='multiple')) {
+      if (!($add_type == 'multiple')) {
         ?>
         <input type="text" id="user_to_add" onkeyup="xajax_search_users(this.value,'single')" />
         <div id="ajax_list_users_single"></div>
@@ -235,7 +244,7 @@ if (!empty($errorMsg)) {
       } else {
       ?>
       <div id="ajax_list_multiple">
-        <?php echo Display::select('elements_not_in_name', $elements_not_in, '', array('style'=>'width:360px', 'multiple'=>'multiple','id'=>'elements_not_in','size'=>'15px'),false); ?>
+        <?php echo Display::select('elements_not_in_name', $elements_not_in, '', array('style'=>'width:360px', 'multiple'=>'multiple', 'id'=>'elements_not_in', 'size'=>'15px'), false); ?>
       </div>
     <?php
       }
@@ -266,7 +275,7 @@ if (!empty($errorMsg)) {
   </td>
   <td align="center">
 <?php
-    echo Display::select('elements_in_name[]', $elements_in, '', array('style'=>'width:360px', 'multiple'=>'multiple','id'=>'elements_in','size'=>'15px'),false );
+    echo Display::select('elements_in_name[]', $elements_in, '', array('style'=>'width:360px', 'multiple'=>'multiple', 'id'=>'elements_in', 'size'=>'15px'), false);
     unset($sessionUsersList);
 ?>
  </td>
@@ -282,9 +291,8 @@ if (!empty($errorMsg)) {
 </table>
 </form>
 
-<script type="text/javascript">
+<script>
 function moveItem(origin , destination) {
-
     for(var i = 0 ; i<origin.options.length ; i++) {
         if(origin.options[i].selected) {
             destination.options[destination.length] = new Option(origin.options[i].text,origin.options[i].value);
@@ -294,11 +302,9 @@ function moveItem(origin , destination) {
     }
     destination.selectedIndex = -1;
     sortOptions(destination.options);
-
 }
 
 function sortOptions(options) {
-
     newOptions = new Array();
     for (i = 0 ; i<options.length ; i++)
         newOptions[i] = options[i];
@@ -307,7 +313,6 @@ function sortOptions(options) {
     options.length = 0;
     for(i = 0 ; i < newOptions.length ; i++)
         options[i] = newOptions[i];
-
 }
 
 function mysort(a, b){
@@ -329,7 +334,6 @@ function valide(){
 
 function loadUsersInSelect(select) {
     var xhr_object = null;
-
     if(window.XMLHttpRequest) // Firefox
         xhr_object = new XMLHttpRequest();
     else if(window.ActiveXObject) // Internet Explorer
@@ -339,7 +343,6 @@ function loadUsersInSelect(select) {
 
     xhr_object.open("POST", "loadUsersInSelect.ajax.php");
     xhr_object.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
     nosessionUsers = makepost(document.getElementById('elements_not_in'));
     sessionUsers = makepost(document.getElementById('elements_in'));
     nosessionClasses = makepost(document.getElementById('origin_classes'));

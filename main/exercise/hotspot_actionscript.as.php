@@ -133,9 +133,9 @@ if (!empty($attemptList)) {
 $data['nmbrTries'] = $nmbrTries;
 $data['done'] = 'done';
 
-if (Session::has('hotspot_ordered')) {
+if (Session::has("hotspot_ordered$questionId")) {
     $tempHotspots = [];
-    $hotspotOrdered = Session::read('hotspot_ordered');
+    $hotspotOrdered = Session::read("hotspot_ordered$questionId");
 
     foreach ($hotspotOrdered as $hotspotOrder) {
         foreach ($data['hotspots'] as $hotspot) {
@@ -149,7 +149,7 @@ if (Session::has('hotspot_ordered')) {
 
     $data['hotspots'] = $tempHotspots;
 
-    Session::erase('hotspot_ordered');
+    Session::erase("hotspot_ordered$questionId");
 }
 
 header('Content-Type: application/json');

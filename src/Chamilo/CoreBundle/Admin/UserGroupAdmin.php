@@ -3,19 +3,19 @@
 
 namespace Chamilo\CoreBundle\Admin;
 
-use Sonata\AdminBundle\Admin\Admin;
+use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Chamilo\CoreBundle\Entity\Course;
-use Knp\Menu\ItemInterface as MenuItemInterface;
+
 
 /**
  * Class UserGroupAdmin
  * @package Chamilo\CoreBundle\Admin
  */
-class UserGroupAdmin extends Admin
+class UserGroupAdmin extends AbstractAdmin
 {
     /**
      * @param FormMapper $formMapper

@@ -1,11 +1,9 @@
 <?php
 /* For license terms, see /license.txt */
+
 /**
  * Create new Services for the Buy Courses plugin
  * @package chamilo.plugin.buycourses
- */
-/**
- * Init
  */
 
 $cidReset = true;
@@ -84,6 +82,13 @@ $form->addElement(
     get_lang('Session'),
     3
 );
+$form->addElement(
+    'radio',
+    'applies_to',
+    null,
+    get_lang('TemplateTitleCertificate'),
+    4
+);
 $form->addSelect(
     'owner_id',
     get_lang('Owner'),
@@ -104,13 +109,13 @@ $form->setDefaults($formDefaultValues);
 
 if ($form->validate()) {
     $values = $form->getSubmitValues();
-    
+
     $plugin->storeService($values);
 
     Display::addFlash(
         Display::return_message($plugin->get_lang('ServiceAdded'), 'success')
     );
-    
+
     header('Location: configuration.php');
     exit;
 }

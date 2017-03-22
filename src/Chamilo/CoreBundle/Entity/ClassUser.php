@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
@@ -29,8 +30,6 @@ class ClassUser
      * @ORM\GeneratedValue(strategy="NONE")
      */
     private $userId;
-
-
 
     /**
      * Set classId

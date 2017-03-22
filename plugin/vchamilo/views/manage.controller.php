@@ -302,7 +302,7 @@ switch ($action) {
     case 'clearcache':
         // Removes cache directory.
         if (empty($automation)) {
-            if (array_key_exists('vids', $_REQUEST))  {
+            if (array_key_exists('vids', $_REQUEST)) {
                 $toclear = Database::select('*', 'vchamilo', array('where' => array("id IN ('$vidlist')" => array())));
             } else {
                 $vid = isset($_REQUEST['vid']) ? $_REQUEST['vid'] : 0;

@@ -110,7 +110,8 @@ $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('MyFiles'));
 $tpl = new Template();
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'myfiles');
 $editor = new \Chamilo\CoreBundle\Component\Editor\Editor();
-$editor = $tpl->fetch('default/'.$editor->getEditorStandAloneTemplate());
+$template = $tpl->get_template($editor->getEditorStandAloneTemplate());
+$editor = $tpl->fetch($template);
 
 $tpl->assign('show_media_element', 0);
 

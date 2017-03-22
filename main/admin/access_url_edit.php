@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * 	@package chamilo.admin
- * 	@author Julio Montoya <gugli100@gmail.com>
+ * @package chamilo.admin
+ * @author Julio Montoya <gugli100@gmail.com>
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -51,7 +51,8 @@ if ($form->validate()) {
                             unlink($url_images_dir . $url_id . '_' . $image_field . '.png');
                         }
                         move_uploaded_file(
-                            $_FILES[$image_field]['tmp_name'], $url_images_dir . $url_id . '_' . $image_field . '.png'
+                            $_FILES[$image_field]['tmp_name'],
+                            $url_images_dir.$url_id.'_'.$image_field.'.png'
                         );
                     }
                     // else fail silently

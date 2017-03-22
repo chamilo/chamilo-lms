@@ -1187,21 +1187,8 @@ class Blog
         $result = Database::query($sql);
         $html = null;
         while ($comment = Database::fetch_array($result)) {
-            // Select the children recursivly
-            $tmp = "SELECT comments.*, user.lastname, user.firstname, user.username
-                    FROM $tbl_blogs_comments comments
-                    INNER JOIN $tbl_users user
-                    ON comments.author_id = user.user_id
-                    WHERE
-                        comments.c_id = $course_id AND
-                        comment_id = ".$comment['comment_id']."
-                        AND blog_id = $blog_id
-                        AND post_id = $post_id";
-            $tmp = Database::query($tmp);
-            $tmp = Database::fetch_array($tmp);
             $commentActions = null;
             $ratingSelect = null;
-            $parent_cat = $tmp['parent_comment_id'];
             $comment_text = make_clickable(stripslashes($comment['comment']));
             $comment_text = stripslashes($comment_text);
             $infoUser = UserManager::get_user_picture_path_by_id($comment['author_id']);
@@ -1257,7 +1244,7 @@ class Blog
                 'id_blog' => $comment['blog_id'],
                 'id_post' => $comment['post_id'],
                 'id_task' => $comment['task_id'],
-                'id_parent' => $parent_cat,
+                'id_parent' => $comment['parent_comment_id'],
                 'name_author' => api_get_person_name($comment['firstname'], $comment['lastname']),
                 'info_user' => $infoUser,
                 'username' => $comment['username'],

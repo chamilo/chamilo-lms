@@ -1,3 +1,59 @@
+{% macro comment_template(item) %}
+    <div class="media {{ item.iid }}">
+        <div class="media-left">
+            <a href="{{ _p.web }}main/social/profile.php?u={{ item.id_author }}">
+                <img class="media-object thumbnail avatar"
+                     src="{{ item.info_user.dir }}{{ item.info_user.file }}"
+                     alt="{{ item.name_author }}">
+            </a>
+        </div>
+        <div class="media-body">
+            <div class="pull-right">
+                {{ item.actions }}
+            </div>
+            <h4 class="media-heading"
+                id="comment-{{ item.iid }}-title">{{ item.title }}</h4>
+            <ul class="info-post list-inline">
+                <li class="date">
+                    <i class="fa fa-clock-o"></i> {{ item.comment_date }}
+                </li>
+                <li class="autor">
+                    <i class="fa fa-user"></i>
+                    <a href="{{ _p.web }}main/social/profile.php?u={{ item.id_author }}">
+                        {{ item.name_author }}
+                    </a>
+                </li>
+                <li class="score">
+                    <i class="fa fa-star"
+                       aria-hidden="true"></i> {{ item.score_ranking }}
+                </li>
+            </ul>
+            <div id="comment-{{ item.iid }}-content">
+                {{ item.content }}
+            </div>
+            {% if item.files %}
+                <aside class="well well-sm files">
+                    <i class="fa fa-paperclip" aria-hidden="true"></i>
+                    <a href="download.php?file={{ item.files.path }}">{{ item.files.filename }}</a>
+                    <p>{{ item.files.comment }}</p>
+                </aside>
+            {% endif %}
+
+            <div class="ranking">
+                {{ item.form_ranking }}
+            </div>
+
+            {% import _self as nested %}
+
+            {% for item2 in item.comments %}
+                {{ nested.comment_template(item2) }}
+            {% endfor %}
+        </div>
+    </div>
+{% endmacro %}
+
+{% import _self as nested %}
+
 <div class="row">
     <div class="col-md-3">
         <div class="sidebar">
@@ -85,98 +141,7 @@
                         <h3 class="title">{{ 'XComments'|get_lang|format(post.n_comments) }}</h3>
                         <div id="list-comments" class="media-list">
                             {% for item in post.comments %}
-                                <div class="media">
-                                    <div class="media-left">
-                                        <a href="{{ _p.web }}main/social/profile.php?u={{ item.id_author }}">
-                                            <img class="media-object thumbnail avatar"
-                                                 src="{{ item.info_user.dir }}{{ item.info_user.file }}"
-                                                 alt="{{ item.name_author }}">
-                                        </a>
-                                    </div>
-                                    <div class="media-body">
-                                        <div class="pull-right">
-                                            {{ item.actions }}
-                                        </div>
-                                        <h4 class="media-heading"
-                                            id="comment-{{ item.iid }}-title">{{ item.title }}</h4>
-                                        <ul class="info-post list-inline">
-                                            <li class="date">
-                                                <i class="fa fa-clock-o"></i> {{ item.comment_date }}
-                                            </li>
-                                            <li class="autor">
-                                                <i class="fa fa-user"></i>
-                                                <a href="{{ _p.web }}main/social/profile.php?u={{ item.id_author }}">
-                                                    {{ item.name_author }}
-                                                </a>
-                                            </li>
-                                            <li class="score">
-                                                <i class="fa fa-star" aria-hidden="true"></i> {{ item.score_ranking }}
-                                            </li>
-                                        </ul>
-                                        <div id="comment-{{ item.iid }}-content">
-                                            {{ item.content }}
-                                        </div>
-                                        {% if item.files %}
-                                            <aside class="well well-sm files">
-                                                <i class="fa fa-paperclip" aria-hidden="true"></i>
-                                                <a href="download.php?file={{ item.files.path }}">{{ item.files.filename }}</a>
-                                                <p>{{ item.files.comment }}</p>
-                                            </aside>
-                                        {% endif %}
-
-                                        <div class="ranking">
-                                            {{ item.form_ranking }}
-                                        </div>
-
-                                        {% for item2 in item.comments %}
-                                            <div class="media {{ item2.iid }}">
-                                                <div class="media-left">
-                                                    <a href="{{ _p.web }}main/social/profile.php?u={{ item2.id_author }}">
-                                                        <img class="media-object thumbnail avatar"
-                                                             src="{{ item2.info_user.dir }}{{ item2.info_user.file }}"
-                                                             alt="{{ item2.name_author }}">
-                                                    </a>
-                                                </div>
-                                                <div class="media-body">
-                                                    <div class="pull-right">
-                                                        {{ item2.actions }}
-                                                    </div>
-                                                    <h4 class="media-heading"
-                                                        id="comment-{{ item2.iid }}-title">{{ item2.title }}</h4>
-                                                    <ul class="info-post list-inline">
-                                                        <li class="date">
-                                                            <i class="fa fa-clock-o"></i> {{ item2.comment_date }}
-                                                        </li>
-                                                        <li class="autor">
-                                                            <i class="fa fa-user"></i>
-                                                            <a href="{{ _p.web }}main/social/profile.php?u={{ item2.id_author }}">
-                                                                {{ item2.name_author }}
-                                                            </a>
-                                                        </li>
-                                                        <li class="score">
-                                                            <i class="fa fa-star"
-                                                               aria-hidden="true"></i> {{ item2.score_ranking }}
-                                                        </li>
-                                                    </ul>
-                                                    <div id="comment-{{ item2.iid }}-content">
-                                                        {{ item2.content }}
-                                                    </div>
-                                                    {% if item2.files %}
-                                                        <aside class="well well-sm files">
-                                                            <i class="fa fa-paperclip" aria-hidden="true"></i>
-                                                            <a href="download.php?file={{ item2.files.path }}">{{ item2.files.filename }}</a>
-                                                            <p>{{ item2.files.comment }}</p>
-                                                        </aside>
-                                                    {% endif %}
-
-                                                    <div class="ranking">
-                                                        {{ item2.form_ranking }}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        {% endfor %}
-                                    </div>
-                                </div>
+                                {{ nested.comment_template(item) }}
                             {% endfor %}
                         </div>
                     </div>

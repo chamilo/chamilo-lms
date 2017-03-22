@@ -348,6 +348,7 @@ $blogLayout = null;
 
 switch ($action) {
     case 'new_post':
+        $formAdd = '';
         if (api_is_allowed('BLOG_'.$blog_id, 'article_add', $user_task ? $task_id : 0)) {
             // we show the form if
             // 1. no post data

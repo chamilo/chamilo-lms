@@ -7961,3 +7961,14 @@ $URLOFAJ = "https://www.ofaj.org/";
 $TotalAvailableHours = "Total d'heures disponibles";
 $SumHoursSessionsSubscribed = "Sommes des heures de sessions inscrites";
 $CountHoursAvailable = "Nombre d'heures encore disponible";
+
+// Fin Ofaj
+
+$SaveAndAddNewItem = "Enregister et ajouter un nouvel élément";
+$AnnouncementChooseRecipientsDescription = "Cette annonce sera envoyée à tous les utilisateurs par défaut, mais vous pouvez également sélectionner d'autres destinataires.";
+$ChooseRecipients = "Sélectionnez les destinataires";
+$StudentCourseProgressX = "Progrès: %s %";
+$SessionDurationNotStartedMaxX = "Cette session a une durée maximale de %s jours.";
+$StudentCourseScoreX = "Score: %s %";
+$StudentCourseCertificateX = "Certificat: %s";
+?>

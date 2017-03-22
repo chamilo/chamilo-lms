@@ -7992,4 +7992,8 @@ $SkillFromCourseXDeletedSinceThen = "Esta competencia fue adquirida a través de
 $SaveAndAddNewItem = "Guardar y agregar nuevo elemento";
 $AnnouncementChooseRecipientsDescription = "De forma predeterminada, este anuncio será enviado a todos los usuarios. Pero también puede seleccionar otros destinatarios.";
 $ChooseRecipients = "Elegir destinatarios";
+$StudentCourseProgressX = "Progreso: %s %";
+$SessionDurationNotStartedMaxX = "Esta sesión tiene una duración máxima de %s días.";
+$StudentCourseScoreX = "Nota: %s %";
+$StudentCourseCertificateX = "Certificado: %s";
 ?>

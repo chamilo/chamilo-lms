@@ -7977,4 +7977,8 @@ $SkillFromCourseXDeletedSinceThen = "This skill was obtained through course %s w
 $SaveAndAddNewItem = "Save and add new item";
 $AnnouncementChooseRecipientsDescription = "By default, this announcement will be sent to all users. But you can also select others recipients.";
 $ChooseRecipients = "Choose recipients";
+$StudentCourseProgressX = "Progress: %s&#x00025;";
+$SessionDurationNotStartedMaxX = "This session has a maximum duration of %s days.";
+$StudentCourseScoreX = "Score: %s&#x00025;";
+$StudentCourseCertificateX = "Certificate: %s";
 ?>

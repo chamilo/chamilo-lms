@@ -96,9 +96,6 @@ a.thumbnail:hover{
 .cursor-pointer {
     cursor: pointer;
 }
-.invisible {
-  visibility: visible;
-}
 .logo{
   margin-bottom: 20px;
   padding: 5px;
@@ -1314,19 +1311,17 @@ a.unread {
 }
 
 .lp_resource_element, .lp_resource_element_no_link {
-    background-image:-moz-linear-gradient(top,#fefefe,#eee);
-    background-image:-webkit-gradient(linear,left top,left bottom,color-stop(0,#fdfdfd),color-stop(1,#eee));
-    border: 1px solid #CCCCCC;
+    border: 1px solid #DDDDDD;
     color: #444444;
     cursor: pointer;
-    font-weight: bold;
     text-decoration: none;
-    text-shadow: 0 1px 1px #F6F6F6;
     margin:5px;
-    padding:5px;
-    list-style: none outside none;
+    padding:5px 10px;
+    list-style: none;
     border-radius: 5px;
-    width:80% !important;
+}
+.lp_resource_element:hover{
+    background-color: #E6E6E6;
 }
 .lp_resource_element_new a {
   font-size: 14px;
@@ -1532,15 +1527,15 @@ div.admin_section h4 {
 }
 
 #lp_item_list ul, #lp_item_list li{
-    /* float:left;*/
     width:100%;
 }
-
 #lp_item_list .item_data {
-    padding:5px 0px 5px 0px;
+    padding:0;
     /* float:left;*/
 }
-
+#lp_item_list .item_data span{
+    margin-left: 5px;
+}
 .item_data .button_actions {
     display: none;
     margin: 5px 0px;
@@ -1564,16 +1559,15 @@ div.admin_section h4 {
     border-radius: 5px;
     border: 1px dashed #B0B0B0
 }
-
 #question_list .header_operations {
-    height:45px;
+    height:30px;
     margin-bottom:5px;
     clear: both;
     background: #F5F5F5;
     font-size: 12px;
     padding: 2px;
 }
-
+#question_list .header_operations:hover{
     background: #FFEEAA;
     border-color: #FFDE57;
 }
@@ -2276,12 +2270,6 @@ form .formw .freeze {
 .label{
     font-weight: normal;
     font-size: 90%;
-}
-.invisible {
-    color: #999;
-}
-.invisible h2 {
-    color: #999;
 }
 .requirements td {
     padding:5px;
@@ -3506,11 +3494,9 @@ i.size-32.icon-new-work{
   line-height: 14px;
   background-color: #e6e6e6;
 }
-
 .password-verdict {
     padding-right:5px;
 }
-
 #password_progress {
     width: 220px;
 }
@@ -3979,12 +3965,12 @@ i.size-32.icon-new-work{
   color: #666;
 }
 /* Items menus sidebar */
-.menu-column .nav li a{
-  padding: 5px;
+.sidebar .nav li a{
+  padding: 2px;
   font-size: 12px;
 }
-.menu-column .nav li a img{
-  vertical-align: text-bottom;
+.sidebar .nav li a img{
+  vertical-align: middle;
   margin-right: 5px;
 }
 .social-network-menu .nav li a, #groups-acordeon .nav li a{
@@ -4063,22 +4049,20 @@ ul.holder{
   padding: 0;
 }
 ul.holder li.bit-input input{
-    width: 100%;
-    display: block;
-    height: 38px;
-    padding: 8px 12px;
-    font-size: 14px;
-    line-height: 1.42857;
-    color: #555;
-    background-color: #ffffff;
-    background-image: none;
-    border: 1px solid #cccccc;
-    border-radius: 4px;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset;
-    border: 1px solid #cccccc !important;
-    width: 500px !important;
+  width: 100%;
+  display: block;
+  height: 38px;
+  padding: 8px 12px;
+  font-size: 14px;
+  line-height: 1.42857;
+  color: #555;
+  background-color: #ffffff;
+  background-image: none;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset;
 }
 ul.holder li.bit-box{
   padding-right: 15px;
@@ -5744,9 +5728,6 @@ a.sessionView {
     margin-top: 20px;
 }
 #resource_tab li a {
-    padding: 5px 10px;
-}
-#resource_tab li.lp_resource_element a{
     padding: 5px;
 }
 /* Gravatar */
@@ -5892,7 +5873,6 @@ ul#toolnavbox-two li a.btn{
     font-size: 120%;
     margin-bottom: 0;
 }
-
 #upload_form .fa-plus-square-o, #upload_form .fa-minus-square-o {
     cursor:pointer;
 }
@@ -5994,6 +5974,84 @@ ul#toolnavbox-two li a.btn{
 }
 .panel-invitations{
     padding: 10px;
+}
+.navbar .container .navbar-brand{
+    display: none;
+}
+.username-movil{
+    display: none;
+}
+/** BLOG **/
+.blog{
+    padding: 0;
+}
+.blog .title-post{
+    font-size: 30px;
+    margin-bottom: 10px;
+    letter-spacing: 0;
+    margin-top: 5px;
+}
+.blog .info-post{
+    display: block;
+    border-bottom: #eaeaea 1px dotted;
+    padding-bottom: 10px;
+}
+.blog .info-post span{
+    margin-right: 20px;
+    color: #888;
+}
+.blog .content-post{
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+.blog .content-post p{
+    font-size: 15px;
+}
+.blog .article-post{
+    margin-bottom: 20px;
+    margin-top: 10px;
+}
+.blog .media .avatar{
+    width: 70px;
+}
+.blog .comments-post{
+    margin-top: 50px;
+    margin-bottom: 20px;
+}
+.blog .comments-post .title{
+    padding-bottom: 20px;
+}
+.blog .comments-post .media{
+    border-top: 1px solid #eaeaea;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    margin-bottom: 10px;
+    overflow: visible;
+}
+.blog .comments-post .media .media-body{
+    overflow: visible;
+}
+.blog article header{
+    padding-top: 0;
+}
+.blog .form-inline .form-group label{
+    padding-right: 10px;
+}
+.blog .form-inline .form-group .bootstrap-select{
+    margin-right: 10px;
+}
+#smallcalendar .month{
+    text-align: center;
+}
+.list-message{
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+.list-message li{
+    display: inline-block;
+    margin-right: 10px;
+    vertical-align: middle;
 }
 /* CSS NEW TOP ******************************************************************************/
 /* CSS Responsive */
@@ -6194,6 +6252,10 @@ ul#toolnavbox-two li a.btn{
         margin-left: 5%;
         margin-right: 5%;
     }
+    .navbar .container .navbar-brand{
+        display: block;
+        font-size: 16px;
+    }
     .navbar-nav .open .dropdown-menu .user-header{
         width: 100%;
     }
@@ -6211,6 +6273,7 @@ ul#toolnavbox-two li a.btn{
         margin-right: 5px;
         margin-bottom: 5px;
         display: inline-block;
+    
     }
     .btn{
         font-size: 12px;
@@ -6218,11 +6281,32 @@ ul#toolnavbox-two li a.btn{
     .notification-panel{
         display: none;
     }
+    .navbar-default{
+        border: none;
+    }
     .btn-toolbar{
         margin-left: 10px;
     }
     .btn-group{
         margin-bottom: 10px;
+    }
+.navbar-default{
+        border: none;
+    }
+    .question_options .radio {
+	min-height: 18px;
+	margin-left: 20px;
+        font-size: 12px;
+    }
+    .question_options .checkbox{
+        margin-left: 20px;
+    }
+    .main-question .question_title {
+	font-size: 16px;
+	font-weight: bold;
+	margin: 15px 0px;
+	color: #666666;
+        line-height: 20px;
     }
 }
 

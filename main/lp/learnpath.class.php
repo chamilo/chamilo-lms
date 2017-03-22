@@ -10346,7 +10346,7 @@ EOD;
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::clear_prerequisites()', 0);
         }
-        $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
+        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $lp_id = $this->get_id();
         //Cleaning prerequisites
         $sql = "UPDATE $tbl_lp_item SET prerequisite = ''
@@ -10361,7 +10361,7 @@ EOD;
 
     public function set_previous_step_as_prerequisite_for_all_items()
     {
-        $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
+        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $course_id = $this->get_course_int_id();
         $lp_id = $this->get_id();
 

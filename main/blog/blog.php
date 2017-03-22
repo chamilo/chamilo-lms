@@ -207,56 +207,32 @@ if (isset($_GET['action']) && $_GET['action'] == 'view_post') {
 switch ($action) {
     case 'new_post' :
         $nameTools = get_lang('NewPost');
-        $interbreadcrumb[] = array(
-            'url' => "blog.php?blog_id=$blog_id&".api_get_cidreq(),
-            "name" => Blog::getBlogTitle($blog_id),
-        );
         break;
     case 'view_post' :
         $nameTools = '';
-        $interbreadcrumb[] = array(
-            'url' => "blog.php?blog_id=$blog_id&".api_get_cidreq(),
-            "name" => Blog::getBlogTitle($blog_id),
-        );
         break;
     case 'manage_tasks' :
         $nameTools = get_lang('TaskManager');
-        $interbreadcrumb[] = array(
-            'url' => "blog.php?blog_id=$blog_id&".api_get_cidreq(),
-            "name" => Blog::getBlogTitle($blog_id),
-        );
         break;
     case 'manage_members' :
         $nameTools = get_lang('MemberManager');
-        $interbreadcrumb[] = array(
-            'url' => "blog.php?blog_id=$blog_id&".api_get_cidreq(),
-            "name" => Blog::getBlogTitle($blog_id),
-        );
         break;
     case 'manage_rights' :
         $nameTools = get_lang('RightsManager');
-        $interbreadcrumb[] = array(
-            'url' => "blog.php?blog_id=$blog_id&".api_get_cidreq(),
-            'name' => Blog::getBlogTitle($blog_id),
-        );
         break;
     case 'view_search_result' :
         $nameTools = get_lang('SearchResults');
-        $interbreadcrumb[] = array(
-            'url' => "blog.php?blog_id=$blog_id&".api_get_cidreq(),
-            'name' => Blog::getBlogTitle($blog_id),
-        );
         break;
     case 'execute_task' :
         $nameTools = get_lang('ExecuteThisTask');
-        $interbreadcrumb[] = array(
-            'url' => "blog.php?blog_id=$blog_id&".api_get_cidreq(),
-            'name' => Blog::getBlogTitle($blog_id),
-        );
         break;
-    default :
+    default:
         $nameTools = Blog::getBlogTitle($blog_id);
 }
+$interbreadcrumb[] = array(
+    'url' => "blog.php?blog_id=$blog_id&".api_get_cidreq(),
+    'name' => Blog::getBlogTitle($blog_id),
+);
 
 $actionsLeft = [];
 $actionsLeft[] = Display::url(

@@ -9,7 +9,7 @@
                     {% for item in category.courses %}
                         <div class="row">
                             <div class="col-md-2">
-                                {% if item.visibility == constant('COURSE_VISIBILITY_CLOSED') %}
+                                {% if item.visibility == constant('COURSE_VISIBILITY_CLOSED') and not item.current_user_is_teacher %}
                                     <span class="thumbnail">
                                         {% if item.thumbnails != '' %}
                                             <img src="{{ item.thumbnails }}" title="{{ item.title }}"
@@ -47,7 +47,7 @@
                                     </div>
                                 {% endif %}
                                 <h4 class="course-items-title">
-                                    {% if item.visibility == constant('COURSE_VISIBILITY_CLOSED') %}
+                                    {% if item.visibility == constant('COURSE_VISIBILITY_CLOSED') and not item.current_user_is_teacher %}
                                         {{ item.title }} {{ item.code_course }}
                                     {% else %}
                                         <a href="{{ item.link }}">

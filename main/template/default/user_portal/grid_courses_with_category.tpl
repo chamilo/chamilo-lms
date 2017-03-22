@@ -57,7 +57,7 @@
                                 </div>
                                 <div class="description">
                                     <h4 class="title">
-                                        {% if item.visibility == constant('COURSE_VISIBILITY_CLOSED') %}
+                                        {% if item.visibility == constant('COURSE_VISIBILITY_CLOSED') and not item.current_user_is_teacher %}
                                             {{ item.title }} {{ item.code_course }}
                                         {% else %}
                                             <a href="{{ item.link }}">{{ item.title }} {{ item.code_course }}</a>

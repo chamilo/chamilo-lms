@@ -2,25 +2,23 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *	This file will show documents in a separate frame.
- *	We don't like frames, but it was the best of two bad things.
+ *  This file will show documents in a separate frame.
+ *  We don't like frames, but it was the best of two bad things.
  *
- *	display html files within Chamilo - html files have the Chamilo header.
+ *  display html files within Chamilo - html files have the Chamilo header.
  *
- *	--- advantages ---
- *	users "feel" like they are in Chamilo,
- *	and they can use the navigation context provided by the header.
+ *  --- advantages ---
+ *  users "feel" like they are in Chamilo,
+ *  and they can use the navigation context provided by the header.
+ * --- design ---
+ *  a file gets a parameter (an html file) and shows
+ *    - chamilo header
+ *    - html file from parameter
+ *    - (removed) chamilo footer
  *
- *	--- design ---
- *	a file gets a parameter (an html file)
- *	and shows
- *	- chamilo header
- *	- html file from parameter
- *	- (removed) chamilo footer
- *
- *	@version 0.6
- *	@author Roan Embrechts (roan.embrechts@vub.ac.be)
- *	@package chamilo.document
+ * @version 0.6
+ * @author Roan Embrechts (roan.embrechts@vub.ac.be)
+ * @package chamilo.document
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -30,7 +28,6 @@ $noPHP_SELF = true;
 $header_file = isset($_GET['file']) ? Security::remove_XSS($_GET['file']) : null;
 $document_id = intval($_GET['id']);
 $originIsLearnpath = isset($_GET['origin']) && $_GET['origin'] === 'learnpathitem';
-
 $courseInfo = api_get_course_info();
 $course_code = api_get_course_id();
 $session_id = api_get_session_id();
@@ -52,7 +49,7 @@ $document_data = DocumentManager::get_document_data_by_id(
     $session_id
 );
 
-if ($session_id != 0 and !$document_data) {
+if ($session_id != 0 && !$document_data) {
     $document_data = DocumentManager::get_document_data_by_id(
         $document_id,
         $course_code,
@@ -67,11 +64,9 @@ if (empty($document_data)) {
 
 $header_file  = $document_data['path'];
 $name_to_show = $document_data['title'];
-
 $path_array = explode('/', str_replace('\\', '/', $header_file));
 $path_array = array_map('urldecode', $path_array);
 $header_file = implode('/', $path_array);
-
 $file = Security::remove_XSS(urldecode($document_data['path']));
 $file_root = $courseInfo['path'].'/document'.str_replace('%2F', '/', $file);
 $file_url_sys = api_get_path(SYS_COURSE_PATH).$file_root;
@@ -149,7 +144,7 @@ if (empty($document_data['parents'])) {
         );
     }
 } else {
-    foreach($document_data['parents'] as $document_sub_data) {
+    foreach ($document_data['parents'] as $document_sub_data) {
         if (!isset($_GET['createdir']) && $document_sub_data['id'] ==  $document_data['id']) {
             $document_sub_data['document_url'] = '#';
         }
@@ -178,8 +173,6 @@ $frameheight = 135;
 if ($is_courseAdmin) {
     $frameheight = 165;
 }
-$js_glossary_in_documents = '';
-
 $js_glossary_in_documents =	'
   $.frameReady(function(){
    //  $("<div>I am a div courses</div>").prependTo("body");
@@ -254,7 +247,7 @@ if ($isChatFolder) {
 $execute_iframe = true;
 if ($jplayer_supported) {
     $extension = api_strtolower($pathinfo['extension']);
-    if ($extension == 'mp4')  {
+    if ($extension == 'mp4') {
         $extension = 'm4v';
     }
     $js_path = api_get_path(WEB_LIBRARY_PATH).'javascript/';
@@ -301,8 +294,7 @@ if ($is_freemind_available) {
 }
 
 if (!$jplayer_supported && $execute_iframe) {
-
-    $htmlHeadXtra[] = '<script type="text/javascript">
+    $htmlHeadXtra[] = '<script>
     <!--
         var jQueryFrameReadyConfigPath = \''.api_get_jquery_web_path().'\';
     -->

@@ -290,7 +290,7 @@ class Blog
         $blog_id = intval($blog_id);
 
         // Delete posts from DB and the attachments
-        delete_all_blog_attachment($blog_id);
+        self::delete_all_blog_attachment($blog_id);
 
         //Delete comments
         $sql = "DELETE FROM $tbl_blogs_comment WHERE c_id = $course_id AND blog_id = $blog_id";
@@ -470,7 +470,7 @@ class Blog
         Database::query($sql);
 
         // Delete posts and attachments
-        delete_all_blog_attachment($blog_id, $post_id);
+        self::delete_all_blog_attachment($blog_id, $post_id);
     }
 
     /**
@@ -587,7 +587,7 @@ class Blog
         $comment_id = intval($comment_id);
         $course_id = api_get_course_int_id();
 
-        delete_all_blog_attachment($blog_id, $post_id, $comment_id);
+        self::delete_all_blog_attachment($blog_id, $post_id, $comment_id);
 
         // Delete ratings on this comment
         $sql = "DELETE FROM $tbl_blogs_rating
@@ -994,7 +994,7 @@ class Blog
                 $tmp = Database::query($sql);
                 $blog_post_comments = Database::fetch_array($tmp);
 
-                $fileArray = get_blog_attachment($blog_id, $blog_post['post_id'], 0);
+                $fileArray = self::get_blog_attachment($blog_id, $blog_post['post_id'], 0);
                 $scoreRanking = Blog::display_rating('post',$blog_id,$blog_post['post_id']); 
                 // Prepare data
                 $article = [
@@ -1106,7 +1106,7 @@ class Blog
             $formComments = Blog::display_new_comment_form($blog_id, $post_id, $blog_post['title'], false);
         }
         // Prepare data
-        $fileArray = get_blog_attachment($blog_id, $post_id);
+        $fileArray = self::get_blog_attachment($blog_id, $post_id);
 
         $post_text = make_clickable(stripslashes($blog_post['full_text']));
         $post_text = stripslashes($post_text);
@@ -1238,10 +1238,10 @@ class Blog
                 $ratingSelect = Blog::display_rating_form('comment', $blog_id, $post_id, $comment['comment_id']);
             }
 
-            $scoreRanking = Blog::display_rating('comment', $blog_id, $comment['comment_id']);
+            $scoreRanking = self::display_rating('comment', $blog_id, $comment['comment_id']);
 
             //Files
-            $fileArray = get_blog_attachment($blog_id, $post_id, $comment['comment_id']);
+            $fileArray = self::get_blog_attachment($blog_id, $post_id, $comment['comment_id']);
 
             $comments = [
                 'iid' => $comment['iid'],
@@ -2878,192 +2878,186 @@ class Blog
             $table->display();
         }
     }
-}
 
-/**
- *
- * END CLASS BLOG
- *
- */
+    /**
+     * Show a list with all the attachments according the parameter's
+     * @param int $blog_id the blog's id
+     * @param int $post_id the post's id
+     * @param int $comment_id the comment's id
+     * @return array with the post info according the parameters
+     * @author Julio Montoya
+     * @version avril 2008, dokeos 1.8.5
+     */
+    function get_blog_attachment($blog_id, $post_id = null, $comment_id = null)
+    {
+        $blog_table_attachment = Database::get_course_table(TABLE_BLOGS_ATTACHMENT);
 
-/**
- * Show a list with all the attachments according the parameter's
- * @param int $blog_id the blog's id
- * @param int $post_id the post's id
- * @param int $comment_id the comment's id
- * @return array with the post info according the parameters
- * @author Julio Montoya
- * @version avril 2008, dokeos 1.8.5
- */
-function get_blog_attachment($blog_id, $post_id = null, $comment_id = null)
-{
-    $blog_table_attachment = Database::get_course_table(TABLE_BLOGS_ATTACHMENT);
-
-    $blog_id = intval($blog_id);
-    $comment_id = intval($comment_id);
-    $post_id = intval($post_id);
-    $row = array();
-    $where = '';
-    if (!empty ($post_id) && is_numeric($post_id)) {
-        $where .= " AND post_id = $post_id ";
-    }
-
-    if (!empty ($comment_id) && is_numeric($comment_id)) {
-        if (!empty ($post_id)) {
-            $where .= ' AND ';
+        $blog_id = intval($blog_id);
+        $comment_id = intval($comment_id);
+        $post_id = intval($post_id);
+        $row = array();
+        $where = '';
+        if (!empty ($post_id) && is_numeric($post_id)) {
+            $where .= " AND post_id = $post_id ";
         }
-        $where .= " comment_id = $comment_id ";
-    }
 
-    $course_id = api_get_course_int_id();
+        if (!empty ($comment_id) && is_numeric($comment_id)) {
+            if (!empty ($post_id)) {
+                $where .= ' AND ';
+            }
+            $where .= " comment_id = $comment_id ";
+        }
 
-    $sql = "SELECT path, filename, comment FROM $blog_table_attachment
+        $course_id = api_get_course_int_id();
+
+        $sql = "SELECT path, filename, comment FROM $blog_table_attachment
 	        WHERE c_id = $course_id AND blog_id = $blog_id  $where";
 
-    $result = Database::query($sql);
-    if (Database::num_rows($result) != 0) {
-        $row = Database::fetch_array($result);
-    }
-
-    return $row;
-}
-
-/**
- * Delete the all the attachments according the parameters.
- * @param int $blog_id
- * @param int $post_id post's id
- * @param int $comment_id the comment's id
- * @return void
- * @author Julio Montoya
- * @version avril 2008, dokeos 1.8.5
- */
-function delete_all_blog_attachment(
-    $blog_id,
-    $post_id = null,
-    $comment_id = null
-) {
-    $_course = api_get_course_info();
-    $blog_table_attachment = Database::get_course_table(TABLE_BLOGS_ATTACHMENT);
-    $blog_id = intval($blog_id);
-    $comment_id = intval($comment_id);
-    $post_id = intval($post_id);
-
-    $course_id = api_get_course_int_id();
-    $where = null;
-
-    // delete files in DB
-    if (!empty ($post_id) && is_numeric($post_id)) {
-        $where .= " AND post_id = $post_id ";
-    }
-
-    if (!empty ($comment_id) && is_numeric($comment_id)) {
-        if (!empty ($post_id)) {
-            $where .= ' AND ';
+        $result = Database::query($sql);
+        if (Database::num_rows($result) != 0) {
+            $row = Database::fetch_array($result);
         }
-        $where .= " comment_id = $comment_id ";
+
+        return $row;
     }
 
-    // delete all files in directory
-    $courseDir = $_course['path'].'/upload/blog';
-    $sys_course_path = api_get_path(SYS_COURSE_PATH);
-    $updir = $sys_course_path.$courseDir;
+    /**
+     * Delete the all the attachments according the parameters.
+     * @param int $blog_id
+     * @param int $post_id post's id
+     * @param int $comment_id the comment's id
+     * @return void
+     * @author Julio Montoya
+     * @version avril 2008, dokeos 1.8.5
+     */
+    function delete_all_blog_attachment(
+        $blog_id,
+        $post_id = null,
+        $comment_id = null
+    ) {
+        $_course = api_get_course_info();
+        $blog_table_attachment = Database::get_course_table(TABLE_BLOGS_ATTACHMENT);
+        $blog_id = intval($blog_id);
+        $comment_id = intval($comment_id);
+        $post_id = intval($post_id);
 
-    $sql = "SELECT path FROM $blog_table_attachment
+        $course_id = api_get_course_int_id();
+        $where = null;
+
+        // delete files in DB
+        if (!empty ($post_id) && is_numeric($post_id)) {
+            $where .= " AND post_id = $post_id ";
+        }
+
+        if (!empty ($comment_id) && is_numeric($comment_id)) {
+            if (!empty ($post_id)) {
+                $where .= ' AND ';
+            }
+            $where .= " comment_id = $comment_id ";
+        }
+
+        // delete all files in directory
+        $courseDir = $_course['path'].'/upload/blog';
+        $sys_course_path = api_get_path(SYS_COURSE_PATH);
+        $updir = $sys_course_path.$courseDir;
+
+        $sql = "SELECT path FROM $blog_table_attachment
 	        WHERE c_id = $course_id AND blog_id = $blog_id $where";
-    $result = Database::query($sql);
+        $result = Database::query($sql);
 
-    while ($row = Database::fetch_row($result)) {
-        $file = $updir.'/'.$row[0];
-        if (Security::check_abs_path($file, $updir)) {
-            @ unlink($file);
+        while ($row = Database::fetch_row($result)) {
+            $file = $updir.'/'.$row[0];
+            if (Security::check_abs_path($file, $updir)) {
+                @ unlink($file);
+            }
         }
-    }
-    $sql = "DELETE FROM $blog_table_attachment
+        $sql = "DELETE FROM $blog_table_attachment
 	        WHERE c_id = $course_id AND  blog_id = $blog_id $where";
-    Database::query($sql);
-}
+        Database::query($sql);
+    }
 
-/**
- * Gets all the post from a given user id
- * @param string $course_code
- * @param int $user_id
- * @return string
- */
-function get_blog_post_from_user($course_code, $user_id)
-{
-    $tbl_blogs = Database::get_course_table(TABLE_BLOGS);
-    $tbl_blog_post = Database::get_course_table(TABLE_BLOGS_POSTS);
-    $course_info = api_get_course_info($course_code);
-    $course_id = $course_info['real_id'];
-    $user_id = intval($user_id);
+    /**
+     * Gets all the post from a given user id
+     * @param int $courseId
+     * @param int $userId
+     * @param string $courseCode
+     * @return string
+     */
+    function get_blog_post_from_user($courseId, $userId, $courseCode)
+    {
+        $tbl_blogs = Database::get_course_table(TABLE_BLOGS);
+        $tbl_blog_post = Database::get_course_table(TABLE_BLOGS_POSTS);
+        $courseId = intval($courseId);
+        $userId = intval($userId);
 
-    $sql = "SELECT DISTINCT blog.blog_id, post_id, title, full_text, post.date_creation
+        $sql = "SELECT DISTINCT blog.blog_id, post_id, title, full_text, post.date_creation
 			FROM $tbl_blogs blog
 			INNER JOIN  $tbl_blog_post post
 			ON (blog.blog_id = post.blog_id)
 			WHERE
-				blog.c_id = $course_id AND
-				post.c_id = $course_id AND
-				author_id =  $user_id AND visibility = 1
+				blog.c_id = $courseId AND
+				post.c_id = $courseId AND
+				author_id =  $userId AND visibility = 1
 			ORDER BY post.date_creation DESC ";
-    $result = Database::query($sql);
-    $return_data = '';
+        $result = Database::query($sql);
+        $return_data = '';
 
-    if (Database::num_rows($result) != 0) {
-        while ($row = Database::fetch_array($result)) {
-            $return_data .= '<div class="clear"></div><br />';
-            $return_data .= '<div class="actions" style="margin-left:5px;margin-right:5px;">'.Display::return_icon(
-                    'blog_article.png',
-                    get_lang('BlogPosts')
-                ).' '.$row['title'].'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="float:right;margin-top:-18px"><a href="../blog/blog.php?blog_id='.$row['blog_id'].'&gidReq=&cidReq='.$my_course_id.' " >'.get_lang(
-                    'SeeBlog'
-                ).'</a></div></div>';
-            $return_data .= '<br / >';
-            $return_data .= $row['full_text'];
-            $return_data .= '<br /><br />';
+        if (Database::num_rows($result) != 0) {
+            while ($row = Database::fetch_array($result)) {
+                $return_data .= '<div class="clear"></div><br />';
+                $return_data .= '<div class="actions" style="margin-left:5px;margin-right:5px;">'.Display::return_icon(
+                        'blog_article.png',
+                        get_lang('BlogPosts')
+                    ).' '.$row['title'].'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="float:right;margin-top:-18px"><a href="../blog/blog.php?blog_id='.$row['blog_id'].'&gidReq=&cidReq='.$courseCode.' " >'.get_lang(
+                        'SeeBlog'
+                    ).'</a></div></div>';
+                $return_data .= '<br / >';
+                $return_data .= $row['full_text'];
+                $return_data .= '<br /><br />';
+            }
         }
+
+        return $return_data;
     }
 
-    return $return_data;
-}
+    /**
+     * Gets all the post comments from a given user id
+     * @param int $courseId
+     * @param int $userId
+     * @param string $courseCode
+     * @return string
+     */
+    function get_blog_comment_from_user($courseId, $userId, $courseCode)
+    {
+        $tbl_blogs = Database::get_course_table(TABLE_BLOGS);
+        $tbl_blog_comment = Database::get_course_table(TABLE_BLOGS_COMMENTS);
 
-/**
- * Gets all the post comments from a given user id
- * @param string $course_code
- * @param int $user_id
- * @return string
- */
-function get_blog_comment_from_user($course_code, $user_id)
-{
-    $tbl_blogs = Database::get_course_table(TABLE_BLOGS);
-    $tbl_blog_comment = Database::get_course_table(TABLE_BLOGS_COMMENTS);
-    $user_id = intval($user_id);
+        $userId = intval($userId);
+        $courseId = intval($courseId);
 
-    $course_info = api_get_course_info($course_code);
-    $course_id = $course_info['real_id'];
-
-    $sql = "SELECT DISTINCT blog.blog_id, comment_id, title, comment, comment.date_creation
+        $sql = "SELECT DISTINCT blog.blog_id, comment_id, title, comment, comment.date_creation
 			FROM $tbl_blogs blog INNER JOIN  $tbl_blog_comment comment
 			ON (blog.blog_id = comment.blog_id)
-			WHERE 	blog.c_id = $course_id AND
-					comment.c_id = $course_id AND
-					author_id =  $user_id AND
+			WHERE 	blog.c_id = $courseId AND
+					comment.c_id = $courseId AND
+					author_id =  $userId AND
 					visibility = 1
 			ORDER BY blog_name";
-    $result = Database::query($sql);
-    $return_data = '';
-    if (Database::num_rows($result) != 0) {
-        while ($row = Database::fetch_array($result)) {
-            $return_data .= '<div class="clear"></div><br />';
-            $return_data .= '<div class="actions" style="margin-left:5px;margin-right:5px;">'.$row['title'].'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="float:right;margin-top:-18px"><a href="../blog/blog.php?blog_id='.$row['blog_id'].'&gidReq=&cidReq='.Security::remove_XSS(
-                    $course_code
-                ).' " >'.get_lang('SeeBlog').'</a></div></div>';
-            $return_data .= '<br / >';
-            $return_data .= $row['comment'];
-            $return_data .= '<br />';
+        $result = Database::query($sql);
+        $return_data = '';
+        if (Database::num_rows($result) != 0) {
+            while ($row = Database::fetch_array($result)) {
+                $return_data .= '<div class="clear"></div><br />';
+                $return_data .= '<div class="actions" style="margin-left:5px;margin-right:5px;">'.$row['title'].'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="float:right;margin-top:-18px"><a href="../blog/blog.php?blog_id='.$row['blog_id'].'&gidReq=&cidReq='.Security::remove_XSS(
+                        $courseCode
+                    ).' " >'.get_lang('SeeBlog').'</a></div></div>';
+                $return_data .= '<br / >';
+                $return_data .= $row['comment'];
+                $return_data .= '<br />';
+            }
         }
-    }
 
-    return $return_data;
+        return $return_data;
+    }
 }
 

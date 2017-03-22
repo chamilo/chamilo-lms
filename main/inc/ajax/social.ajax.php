@@ -154,7 +154,7 @@ switch ($action) {
                     }
 
                     //------Blog posts
-                    $result = get_blog_post_from_user($course_code, $user_id);
+                    $result = Blog::get_blog_post_from_user($course_id, $user_id, $course_code );
 
                     if (!empty($result)) {
                         api_display_tool_title(api_xml_http_response_encode(get_lang('Blog')));
@@ -166,7 +166,7 @@ switch ($action) {
                     }
 
                     //------Blog comments
-                    $result = get_blog_comment_from_user($course_code, $user_id);
+                    $result = Blog::get_blog_comment_from_user($course_id, $user_id, $course_code);
                     if (!empty($result)) {
                         echo '<div  style="background:#FAF9F6; padding-left:10px;">';
                         api_display_tool_title(api_xml_http_response_encode(get_lang('BlogComments')));

@@ -7580,9 +7580,9 @@ class learnpath
 
     /**
      * Returns the form to update or create a document
-     * @param	string	Action (add/edit)
-     * @param	integer	ID of the lp_item (if already exists)
-     * @param	mixed	Integer if document ID, string if info ('new')
+     * @param	string	$action (add/edit)
+     * @param	integer	$id ID of the lp_item (if already exists)
+     * @param	mixed	$extra_info Integer if document ID, string if info ('new')
      * @return	string	HTML form
      */
     public function display_document_form($action = 'add', $id = 0, $extra_info = 'new')
@@ -7596,7 +7596,7 @@ class learnpath
         $item_description = '';
         //If action==edit document
         //We don't display the document form if it's not an editable document (html or txt file)
-        if ($action == "edit") {
+        if ($action == 'edit') {
             if (is_array($extra_info)) {
                 $path_parts = pathinfo($extra_info['dir']);
                 if ($path_parts['extension'] != "txt" && $path_parts['extension'] != "html") {
@@ -7608,14 +7608,14 @@ class learnpath
 
         // If action==add an existing document
         // We don't display the document form if it's not an editable document (html or txt file).
-        if ($action == "add") {
+        if ($action == 'add') {
             if (is_numeric($extra_info)) {
-                $sql_doc = "SELECT path FROM " . $tbl_doc . "
-                            WHERE c_id = ".$course_id." AND id = " . intval($extra_info);
+                $sql_doc = "SELECT path FROM $tbl_doc 
+                            WHERE c_id = $course_id AND id = " . intval($extra_info);
                 $result = Database::query($sql_doc);
                 $path_file = Database :: result($result, 0, 0);
                 $path_parts = pathinfo($path_file);
-                if ($path_parts['extension'] != "txt" && $path_parts['extension'] != "html") {
+                if ($path_parts['extension'] != 'txt' && $path_parts['extension'] != 'html') {
                     $no_display_add = true;
                 }
             }
@@ -7629,7 +7629,7 @@ class learnpath
                 $item_title = stripslashes($path_parts['filename']);
             }
         } elseif (is_numeric($extra_info)) {
-            $sql_doc = "SELECT path, title FROM " . $tbl_doc . "
+            $sql_doc = "SELECT path, title FROM $tbl_doc
                         WHERE
                             c_id = ".$course_id." AND
                             id = " . intval($extra_info);
@@ -7751,9 +7751,9 @@ class learnpath
         }
 
         $parent_select = $form->addSelect('parent', get_lang('Parent'), [], ['id' => 'idParent', 'onchange' => 'javascript: load_cbo(this.value);']);
-        $my_count=0;
+        $my_count = 0;
         foreach ($arrHide as $key => $value) {
-            if ($my_count!=0) {
+            if ($my_count != 0) {
                 // The LP name is also the first section and is not in the same charset like the other sections.
                 $value['value'] = Security :: remove_XSS($value['value']);
                 $parent_select->addOption($value['value'], $key, 'style="padding-left:' . $value['padding'] . 'px;"');
@@ -7828,18 +7828,23 @@ class learnpath
             if (!$no_display_add) {
                 $item_type = isset($extra_info['item_type']) ? $extra_info['item_type'] : null;
                 $edit = isset($_GET['edit']) ? $_GET['edit'] : null;
-                if (($extra_info == 'new' || $item_type == TOOL_DOCUMENT || $item_type == TOOL_LP_FINAL_ITEM || $edit == 'true')) {
-                    if (isset ($_POST['content']))
+                if ($extra_info == 'new' || $item_type == TOOL_DOCUMENT || $item_type == TOOL_LP_FINAL_ITEM || $edit == 'true') {
+                    if (isset ($_POST['content'])) {
                         $content = stripslashes($_POST['content']);
-                    elseif (is_array($extra_info)) {
+                    } elseif (is_array($extra_info)) {
                         //If it's an html document or a text file
                         if (!$no_display_edit_textarea) {
                             $content = $this->display_document($extra_info['path'], false, false);
                         }
-                    } elseif (is_numeric($extra_info))
-                        $content = $this->display_document($extra_info, false, false);
-                    else
+                    } elseif (is_numeric($extra_info)) {
+                        $content = $this->display_document(
+                            $extra_info,
+                            false,
+                            false
+                        );
+                    } else {
                         $content = '';
+                    }
 
                     if (!$no_display_edit_textarea) {
                         // We need to calculate here some specific settings for the online editor.

@@ -62,9 +62,19 @@
                                         {% if item.student_info %}
                                         <div class="course-student-info">
                                             <div class="student-info">
+
+                                                {% if (item.student_info.progress is not null) %}
                                                 {{ "StudentCourseProgress" | get_lang | format(item.student_info.progress) }}
+                                                {% endif %}
+
+                                                {% if (item.student_info.score is not null) %}
                                                 {{ "StudentCourseScore" | get_lang | format(item.student_info.score) }}
+                                                {% endif %}
+
+                                                {% if (item.student_info.certificate is not null) %}
                                                 {{ "StudentCourseCertificate" | get_lang | format(item.student_info.certificate) }}
+                                                {% endif %}
+
                                             </div>
                                         </div>
                                         {% endif %}

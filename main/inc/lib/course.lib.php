@@ -3643,7 +3643,8 @@ class CourseManager
 
         $sql = "SELECT
                     course.id,
-                    course_rel_user.status status
+                    course_rel_user.status status,
+                    course.code as course_code
                 FROM $TABLECOURS course 
                 INNER JOIN $TABLECOURSUSER course_rel_user
                 ON (course.id = course_rel_user.c_id)
@@ -3683,7 +3684,7 @@ class CourseManager
 
             $params = array();
             //Param (course_code) needed to get the student process
-            $params['course_code'] = $course['code'];
+            $params['course_code'] = $row['course_code'];
 
             if ($showCustomIcon === 'true' && $iconName != 'course.png') {
                 $params['thumbnails'] = $course_info['course_image'];
@@ -3829,7 +3830,7 @@ class CourseManager
 
             $params = array();
             //Param (course_code) needed to get the student process
-            $params['course_code'] = $course['code'];
+            $params['course_code'] = $row['code'];
             $params['edit_actions'] = '';
             $params['document'] = '';
             if (api_is_platform_admin()) {

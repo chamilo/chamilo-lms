@@ -1101,7 +1101,7 @@ class Blog
         $post_text = stripslashes($post_text);
 
         if (api_is_allowed('BLOG_'.$blog_id, 'article_edit', $task_id)) {
-            $blogActions .= '<a class="btn btn-default" href="blog.php?action=editPost&blog_id='.$blog_id.'&post_id='.$post_id.'&article_id='.$blog_post['post_id'].'&task_id='.$task_id.'" title="'.get_lang('EditThisPost').'">';
+            $blogActions .= '<a class="btn btn-default" href="blog.php?action=edit_post&blog_id='.$blog_id.'&post_id='.$post_id.'&article_id='.$blog_post['post_id'].'&task_id='.$task_id.'" title="'.get_lang('EditThisPost').'">';
             $blogActions .= Display::return_icon('edit.png', get_lang('Edit'), null, ICON_SIZE_TINY);
             $blogActions .= '</a>';
         }
@@ -1216,7 +1216,7 @@ class Blog
             );
 
             if (api_is_allowed('BLOG_'.$blog_id, 'article_comments_delete', $task_id)) {
-                $commentActions .= ' <a class="btn btn-default" href="blog.php?action=view_post&blog_id='.$blog_id.'&post_id='.$post_id.'&do=deleteComment&comment_id='.$comment['comment_id'].'&task_id='.$task_id.'" title="'.get_lang(
+                $commentActions .= ' <a class="btn btn-default" href="blog.php?action=view_post&blog_id='.$blog_id.'&post_id='.$post_id.'&do=delete_comment&comment_id='.$comment['comment_id'].'&task_id='.$task_id.'" title="'.get_lang(
                         'DeleteThisComment'
                     ).'" onclick="javascript:if(!confirm(\''.addslashes(
                         api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset)

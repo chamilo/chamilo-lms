@@ -97,7 +97,8 @@
                                         <div class="pull-right">
                                             {{ item.actions }}
                                         </div>
-                                        <h4 class="media-heading" id="comment-{{ item.iid }}-title">{{ item.title }}</h4>
+                                        <h4 class="media-heading"
+                                            id="comment-{{ item.iid }}-title">{{ item.title }}</h4>
                                         <ul class="info-post list-inline">
                                             <li class="date">
                                                 <i class="fa fa-clock-o"></i> {{ item.comment_date }}
@@ -117,8 +118,8 @@
                                         </div>
                                         {% if item.files %}
                                             <aside class="well well-sm files">
-                                                <i class="fa fa-paperclip" aria-hidden="true"></i> <a
-                                                        href="download.php?file={{ item.files.path }}">{{ item.files.filename }}</a>
+                                                <i class="fa fa-paperclip" aria-hidden="true"></i>
+                                                <a href="download.php?file={{ item.files.path }}">{{ item.files.filename }}</a>
                                                 <p>{{ item.files.comment }}</p>
                                             </aside>
                                         {% endif %}
@@ -140,7 +141,8 @@
                                                     <div class="pull-right">
                                                         {{ item2.actions }}
                                                     </div>
-                                                    <h4 class="media-heading" id="comment-{{ item2.iid }}-title">{{ item2.title }}</h4>
+                                                    <h4 class="media-heading"
+                                                        id="comment-{{ item2.iid }}-title">{{ item2.title }}</h4>
                                                     <ul class="info-post list-inline">
                                                         <li class="date">
                                                             <i class="fa fa-clock-o"></i> {{ item2.comment_date }}
@@ -152,7 +154,8 @@
                                                             </a>
                                                         </li>
                                                         <li class="score">
-                                                            <i class="fa fa-star" aria-hidden="true"></i> {{ item2.score_ranking }}
+                                                            <i class="fa fa-star"
+                                                               aria-hidden="true"></i> {{ item2.score_ranking }}
                                                         </li>
                                                     </ul>
                                                     <div id="comment-{{ item2.iid }}-content">
@@ -160,8 +163,8 @@
                                                     </div>
                                                     {% if item2.files %}
                                                         <aside class="well well-sm files">
-                                                            <i class="fa fa-paperclip" aria-hidden="true"></i> <a
-                                                                    href="download.php?file={{ item2.files.path }}">{{ item2.files.filename }}</a>
+                                                            <i class="fa fa-paperclip" aria-hidden="true"></i>
+                                                            <a href="download.php?file={{ item2.files.path }}">{{ item2.files.filename }}</a>
                                                             <p>{{ item2.files.comment }}</p>
                                                         </aside>
                                                     {% endif %}

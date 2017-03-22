@@ -2121,7 +2121,7 @@ function api_set_anonymous() {
  */
 function api_get_session_id()
 {
-    return Session::read('id_session', 0);
+    return (int) Session::read('id_session', 0);
 }
 
 /**

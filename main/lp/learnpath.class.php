@@ -2610,7 +2610,7 @@ class learnpath
 
     /**
      * Gets the learnpath session id
-     * @return	string	Learnpath theme
+     * @return int
      */
     public function get_lp_session_id()
     {
@@ -2618,7 +2618,7 @@ class learnpath
             error_log('New LP - In learnpath::get_lp_session_id()', 0);
         }
         if (!empty ($this->lp_session_id)) {
-            return $this->lp_session_id;
+            return (int) $this->lp_session_id;
         } else {
             return 0;
         }

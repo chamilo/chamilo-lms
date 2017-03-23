@@ -1589,10 +1589,10 @@ function getWorkListTeacher(
                 api_get_path(WEB_CODE_PATH).'work/edit_work.php?id='.$workId.'&'.api_get_cidreq()
             );
 
-            $correctionLink = Display::url(
-                Display::return_icon('upload_file.png', get_lang('UploadCorrections'), '', ICON_SIZE_SMALL),
+            $correctionLink = '&nbsp;'.Display::url(
+                Display::return_icon('upload_package.png', get_lang('UploadCorrections'), '', ICON_SIZE_SMALL),
                 api_get_path(WEB_CODE_PATH).'work/upload_corrections.php?'.api_get_cidreq().'&id='.$workId
-            );
+            ).'&nbsp;';
 
             if ($countUniqueAttempts > 0) {
                 $downloadLink = Display::url(

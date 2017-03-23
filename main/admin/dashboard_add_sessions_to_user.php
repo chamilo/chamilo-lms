@@ -100,8 +100,7 @@ function search_sessions($needle, $type)
 
 $xajax->processRequests();
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
-$htmlHeadXtra[] = '
-<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 function moveItem(origin , destination) {
 	for(var i = 0 ; i<origin.options.length ; i++) {
 		if(origin.options[i].selected) {
@@ -151,7 +150,7 @@ function remove_item(origin) {
 }
 </script>';
 
-$formSent=0;
+$formSent = 0;
 $firstLetterSession = isset($_POST['firstLetterSession']) ? $_POST['firstLetterSession'] : null;
 $errorMsg = '';
 $UserList = array();
@@ -174,6 +173,7 @@ if (isset($_POST['formSent']) && intval($_POST['formSent']) == 1) {
 Display::display_header($tool_name);
 
 // Actions
+$actionsLeft = '';
 if ($user_info['status'] != SESSIONADMIN) {
     $actionsLeft = '<a href="dashboard_add_users_to_user.php?user='.$user_id.'">' .
         Display::return_icon('add-user.png', get_lang('AssignUsers'), null, ICON_SIZE_MEDIUM ) . '</a>';

@@ -23,8 +23,8 @@ class CoursesController
     public function __construct()
     {
         $this->toolname = 'auth';
-        $actived_theme_path = api_get_template();
-        $this->view = new View($this->toolname, $actived_theme_path);
+        //$actived_theme_path = api_get_template();
+        $this->view = new View($this->toolname);
         $this->model = new Auth();
     }
 
@@ -150,7 +150,7 @@ class CoursesController
         // render to the view
 
         $this->view->set_data($data);
-        $this->view->set_layout('catalog_layout');
+        $this->view->set_layout('layout');
         $this->view->set_template('courses_categories');
         $this->view->render();
     }

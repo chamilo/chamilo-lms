@@ -711,36 +711,34 @@ class GradebookUtils
         $new_content_html = str_replace('/main/default_course_document', $path_image_in_default_course, $new_content_html);
         $new_content_html = str_replace(SYS_CODE_PATH . 'img/', api_get_path(WEB_IMG_PATH), $new_content_html);
 
-        $dom = new DOMDocument();
-        @$dom->loadHTML($new_content_html);
-
         //add print header
         if (!$hide_print_button) {
-            $head = $dom->getElementsByTagName('head');
-            $body = $dom->getElementsByTagName('body');
-            $printStyle = $dom->createElement('style');
-            $printStyle->setAttribute('media', 'print');
-            $printStyle->setAttribute('type', 'text/css');
-            $printStyle->textContent = '#print_div {visibility:hidden;}';
+            $print = '<style>#print_div {               
+                padding:4px;border: 0 none;position: absolute;top: 0px;right: 0px;
+            }            
+            @media print {
+                #print_div  {
+                    display: none !important;
+                }
+            }
+            </style>';
 
-            $head->item(0)->appendChild($printStyle);
-
-            $printIcon = $dom->createDocumentFragment();
-            $printIcon->appendXML(Display::return_icon('printmgr.gif', get_lang('Print')));
-
-            $printA = $dom->createElement('button');
-            $printA->setAttribute('onclick', 'window.print();');
-            $printA->setAttribute('id', 'print_div');
-            $printA->setAttribute('style', 'float:right; padding:4px; border: 0 none;');
-            $printA->appendChild($printIcon);
-
-            $body->item(0)->insertBefore($printA, $body->item(0)->firstChild);
+            $print .= Display::div(
+                Display::url(
+                    Display::return_icon('printmgr.gif', get_lang('Print')),
+                    'javascript:void()',
+                    ['onclick' => 'window.print();']
+                ),
+                ['id' => 'print_div']
+            );
+            $print .= '</html>';
+            $new_content_html = str_replace('</html>', $print, $new_content_html);
         }
 
-        return array(
-            'content' => $dom->saveHTML(),
+        return [
+            'content' => $new_content_html,
             'variables' => $variables
-        );
+        ];
     }
 
     /**

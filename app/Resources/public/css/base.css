@@ -6048,6 +6048,10 @@ ul#toolnavbox-two li a.btn{
     margin-right: 10px;
     vertical-align: middle;
 }
+#homepage-home, .welcome-home-top-temp{
+    display: block;
+    width: 100%;
+}
 /* CSS NEW TOP ******************************************************************************/
 /* CSS Responsive */
 @media (min-width: 1025px) and (max-width: 1200px) {

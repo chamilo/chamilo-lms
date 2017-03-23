@@ -687,10 +687,21 @@ class GradebookUtils
      *
      * @return array
      */
-    public static function get_user_certificate_content($user_id, $course_code, $sessionId, $is_preview = false, $hide_print_button = false)
-    {
+    public static function get_user_certificate_content(
+        $user_id,
+        $course_code,
+        $sessionId,
+        $is_preview = false,
+        $hide_print_button = false
+    ) {
         // Generate document HTML
-        $content_html = DocumentManager::replace_user_info_into_html($user_id, $course_code, $sessionId, $is_preview);
+        $content_html = DocumentManager::replace_user_info_into_html(
+            $user_id,
+            $course_code,
+            $sessionId,
+            $is_preview
+        );
+
         $new_content_html = isset($content_html['content']) ? $content_html['content'] : null;
         $variables = isset($content_html['variables']) ? $content_html['variables'] : null;
         $path_image = api_get_path(WEB_COURSE_PATH) . api_get_course_path($course_code) . '/document/images/gallery';
@@ -707,7 +718,6 @@ class GradebookUtils
         if (!$hide_print_button) {
             $head = $dom->getElementsByTagName('head');
             $body = $dom->getElementsByTagName('body');
-
             $printStyle = $dom->createElement('style');
             $printStyle->setAttribute('media', 'print');
             $printStyle->setAttribute('type', 'text/css');

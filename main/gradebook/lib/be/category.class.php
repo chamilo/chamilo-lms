@@ -1937,6 +1937,7 @@ class Category implements GradebookItem
         $courseId = api_get_course_int_id();
         $courseCode = api_get_course_id();
         $sessionId = api_get_session_id();
+
         // Generating the total score for a course
         $cats_course = Category::load(
             $category_id,
@@ -1965,7 +1966,6 @@ class Category implements GradebookItem
         }
 
         $main_weight = $cats_course[0]->get_weight();
-
         $cattotal = Category::load($category_id);
         $scoretotal = $cattotal[0]->calc_score($user_id);
 
@@ -1977,7 +1977,16 @@ class Category implements GradebookItem
         // A student always sees only the teacher's repartition
         $scoretotal_display = $scoredisplay->display_score($scoretotal, SCORE_DIV_PERCENT);
 
-        if (!self::userFinishedCourse($user_id, $cats_course[0], 0, $courseCode, $sessionId, true)) {
+        $userFinishedCourse = self::userFinishedCourse(
+            $user_id,
+            $cats_course[0],
+            0,
+            $courseCode,
+            $sessionId,
+            true
+        );
+
+        if (!$userFinishedCourse) {
             return false;
         }
 
@@ -2033,8 +2042,12 @@ class Category implements GradebookItem
 
             if (!empty($fileWasGenerated)) {
                 $url = api_get_path(WEB_PATH) . 'certificates/index.php?id=' . $my_certificate['id'];
-
-                $certificates = Display::toolbarButton(get_lang('DisplayCertificate'), $url, 'eye', 'primary');
+                $certificates = Display::toolbarButton(
+                    get_lang('DisplayCertificate'),
+                    $url,
+                    'eye',
+                    'primary'
+                );
 
                 $exportToPDF = Display::url(
                     Display::return_icon(
@@ -2066,6 +2079,7 @@ class Category implements GradebookItem
                     );
                 }
             }
+
             return $html;
         }
     }

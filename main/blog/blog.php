@@ -40,17 +40,6 @@ $safe_comment_title = isset($_POST['comment_title']) ? Security::remove_XSS($_PO
 $safe_task_name = isset($_POST['task_name']) ? Security::remove_XSS($_POST['task_name']) : null;
 $safe_task_description = isset($_POST['task_description']) ? Security::remove_XSS($_POST['task_description']) : null;
 
-if (!empty($_POST['new_post_submit'])) {
-    Blog::createPost(
-        $_POST['title'],
-        $_POST['full_text'],
-        $_POST['post_file_comment'],
-        $blog_id
-    );
-    Display::addFlash(
-        Display::return_message(get_lang('BlogAdded'), 'success')
-    );
-}
 if (!empty($_POST['edit_post_submit'])) {
     Blog::editPost(
         $_POST['post_id'],
@@ -218,56 +207,32 @@ if (isset($_GET['action']) && $_GET['action'] == 'view_post') {
 switch ($action) {
     case 'new_post' :
         $nameTools = get_lang('NewPost');
-        $interbreadcrumb[] = array(
-            'url' => "blog.php?blog_id=$blog_id&".api_get_cidreq(),
-            "name" => Blog::getBlogTitle($blog_id),
-        );
         break;
     case 'view_post' :
         $nameTools = '';
-        $interbreadcrumb[] = array(
-            'url' => "blog.php?blog_id=$blog_id&".api_get_cidreq(),
-            "name" => Blog::getBlogTitle($blog_id),
-        );
         break;
     case 'manage_tasks' :
         $nameTools = get_lang('TaskManager');
-        $interbreadcrumb[] = array(
-            'url' => "blog.php?blog_id=$blog_id&".api_get_cidreq(),
-            "name" => Blog::getBlogTitle($blog_id),
-        );
         break;
     case 'manage_members' :
         $nameTools = get_lang('MemberManager');
-        $interbreadcrumb[] = array(
-            'url' => "blog.php?blog_id=$blog_id&".api_get_cidreq(),
-            "name" => Blog::getBlogTitle($blog_id),
-        );
         break;
     case 'manage_rights' :
         $nameTools = get_lang('RightsManager');
-        $interbreadcrumb[] = array(
-            'url' => "blog.php?blog_id=$blog_id&".api_get_cidreq(),
-            'name' => Blog::getBlogTitle($blog_id),
-        );
         break;
     case 'view_search_result' :
         $nameTools = get_lang('SearchResults');
-        $interbreadcrumb[] = array(
-            'url' => "blog.php?blog_id=$blog_id&".api_get_cidreq(),
-            'name' => Blog::getBlogTitle($blog_id),
-        );
         break;
     case 'execute_task' :
         $nameTools = get_lang('ExecuteThisTask');
-        $interbreadcrumb[] = array(
-            'url' => "blog.php?blog_id=$blog_id&".api_get_cidreq(),
-            'name' => Blog::getBlogTitle($blog_id),
-        );
         break;
-    default :
+    default:
         $nameTools = Blog::getBlogTitle($blog_id);
 }
+$interbreadcrumb[] = array(
+    'url' => "blog.php?blog_id=$blog_id&".api_get_cidreq(),
+    'name' => Blog::getBlogTitle($blog_id),
+);
 
 $actionsLeft = [];
 $actionsLeft[] = Display::url(
@@ -350,27 +315,12 @@ switch ($action) {
     case 'new_post':
         $formAdd = '';
         if (api_is_allowed('BLOG_'.$blog_id, 'article_add', $user_task ? $task_id : 0)) {
-            // we show the form if
-            // 1. no post data
-            // 2. there is post data and the required field is empty
-            if (!$_POST OR (!empty($_POST) AND empty($_POST['title']))) {
-                // if there is post data there is certainly an error in the form
-                if ($_POST) {
-                    Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'));
-                }
-                $formAdd = Blog::displayPostCreateForm($blog_id);
-            } else {
-                if (isset($_GET['filter']) && !empty($_GET['filter'])) {
-                    Blog::getDailyResults($blog_id, Database::escape_string($_GET['filter']));
-                } else {
-                    Blog::getPosts($blog_id);
-                }
-            }
+            $formAdd = Blog::displayPostCreateForm($blog_id);
+            $tpl->assign('content', $formAdd);
+            $blogLayout = $tpl->get_template('blog/layout.tpl');
         } else {
             api_not_allowed();
         }
-        $tpl->assign('content', $formAdd);
-        $blogLayout = $tpl->get_template('blog/layout.tpl');
         break;
     case 'view_post' :
         $postArticle = Blog::getSinglePost($blog_id, intval($_GET['post_id']));

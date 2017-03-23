@@ -29,7 +29,6 @@ $is_allowed_to_edit = api_is_allowed_to_edit(null, false);
 
 $listUrl = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?action=view&lp_id='.$learnpath_id.'&'.api_get_cidreq().'&isStudentView=true';
 if (!$is_allowed_to_edit) {
-    error_log('New LP - User not authorized in lp_add_item.php');
     header("Location: $listUrl");
     exit;
 }
@@ -41,10 +40,9 @@ if (empty($learnPath)) {
     api_not_allowed();
 }
 
-if ((int)$learnPath->get_lp_session_id() != (int)api_get_session_id()) {
+if ($learnPath->get_lp_session_id() != api_get_session_id()) {
     // You cannot edit an LP from a base course.
     header("Location: $listUrl");
-
     exit;
 }
 

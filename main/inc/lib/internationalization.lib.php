@@ -213,10 +213,11 @@ function api_get_interface_language(
 
 /**
  * Returns a purified language id, without possible suffixes that will disturb language identification in certain cases.
- * @param string $language	The input language identificator, for example 'french_unicode'.
- * @param string			The same purified or filtered language identificator, for example 'french'.
+ * @param string $language The input language identificator, for example 'french_unicode'.
+ * @param string            The same purified or filtered language identificator, for example 'french'.
  */
-function api_purify_language_id($language) {
+function api_purify_language_id($language)
+{
     static $purified = array();
     if (!isset($purified[$language])) {
         $purified[$language] = trim(str_replace(array('_unicode', '_latin', '_corporate', '_org', '_km'), '', strtolower($language)));
@@ -226,10 +227,10 @@ function api_purify_language_id($language) {
 
 /**
  * Gets language isocode column from the language table, taking the given language as a query parameter.
- * @param string $language		This is the name of the folder containing translations for the corresponding language (e.g arabic, english).
- * @param string $default_code	This is the value to be returned if there was no code found corresponding to the given language.
+ * @param string $language This is the name of the folder containing translations for the corresponding language (e.g arabic, english).
+ * @param string $default_code This is the value to be returned if there was no code found corresponding to the given language.
  * If $language is omitted, interface language is assumed then.
- * @return string			The found isocode or null on error.
+ * @return string The found isocode or null on error.
  * Returned codes are according to the following standards (in order of preference):
  * -  ISO 639-1 : Alpha-2 code (two-letters code - en, fr, es, ...)
  * -  RFC 4646  : five-letter code based on the ISO 639 two-letter language codes
@@ -289,11 +290,11 @@ function api_get_platform_isocodes()
 
 /**
  * Gets text direction according to the given language.
- * @param string $language	This is the name of the
+ * @param string $language This is the name of the
  * folder containing translations for the corresponding language (e.g 'arabic', 'english', ...).
  * ISO-codes are acceptable too ('ar', 'en', ...).
  * If $language is omitted, interface language is assumed then.
- * @return string			The correspondent to the language text direction ('ltr' or 'rtl').
+ * @return string   The correspondent to the language text direction ('ltr' or 'rtl').
  */
 function api_get_text_direction($language = null)
 {
@@ -517,8 +518,8 @@ function api_strtotime($time, $timezone = null)
  *
  * @param mixed Timestamp or datetime string
  * @param mixed Date format (string or int; see date formats in the Chamilo system: TIME_NO_SEC_FORMAT, DATE_FORMAT_SHORT, DATE_FORMAT_LONG, DATE_TIME_FORMAT_LONG)
- * @param string $language (optional)		Language identificator. If it is omited, the current interface language is assumed.
- * @return string							Returns the formatted date.
+ * @param string $language (optional)        Language identificator. If it is omited, the current interface language is assumed.
+ * @return string                            Returns the formatted date.
  *
  * @link http://php.net/manual/en/function.strftime.php
  */
@@ -704,7 +705,8 @@ function date_to_str_ago($date, $timeZone = 'UTC')
  *
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  */
-function api_convert_and_format_date($time = null, $format = null, $from_timezone = null) {
+function api_convert_and_format_date($time = null, $format = null, $from_timezone = null)
+{
     // First, convert the datetime to the right timezone
     $time = api_get_local_time($time, null, $from_timezone);
     // Second, localize the date
@@ -730,7 +732,8 @@ function api_get_week_days_short($language = null) {
  * Example: api_get_week_days_long('english') means array('Sunday, 'Monday', ... 'Saturday').
  * Note: For all languges returned days are in the English order.
  */
-function api_get_week_days_long($language = null) {
+function api_get_week_days_long($language = null)
+{
     $days = &_api_get_day_month_names($language);
     return $days['days_long'];
 }
@@ -741,7 +744,8 @@ function api_get_week_days_long($language = null) {
  * @return string						Returns an array of months (short names).
  * Example: api_get_months_short('english') means array('Jan', 'Feb', ... 'Dec').
  */
-function api_get_months_short($language = null) {
+function api_get_months_short($language = null)
+{
     $months = &_api_get_day_month_names($language);
     return $months['months_short'];
 }
@@ -752,7 +756,8 @@ function api_get_months_short($language = null) {
  * @return string						Returns an array of months.
  * Example: api_get_months_long('english') means array('January, 'February' ... 'December').
  */
-function api_get_months_long($language = null) {
+function api_get_months_long($language = null)
+{
     $months = &_api_get_day_month_names($language);
     return $months['months_long'];
 }
@@ -792,7 +797,6 @@ function api_get_person_name(
         $format = PERSON_NAME_COMMON_CONVENTION;
     }
     //We check if the language is supported, otherwise we check the interface language of the parent language of sublanguage
-
     if (empty($language)) {
         // Do not set $setParentLanguageName because this function is called before
         // the main language is loaded in global.inc.php
@@ -1713,7 +1717,9 @@ function api_detect_encoding($string, $language = null) {
 
 /**
  * Checks a string for UTF-8 validity.
+ * @param string $string
  *
+ * @return string
  */
 function api_is_valid_utf8($string)
 {

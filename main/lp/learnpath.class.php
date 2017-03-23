@@ -2610,7 +2610,7 @@ class learnpath
 
     /**
      * Gets the learnpath session id
-     * @return	string	Learnpath theme
+     * @return int
      */
     public function get_lp_session_id()
     {
@@ -2618,7 +2618,7 @@ class learnpath
             error_log('New LP - In learnpath::get_lp_session_id()', 0);
         }
         if (!empty ($this->lp_session_id)) {
-            return $this->lp_session_id;
+            return (int) $this->lp_session_id;
         } else {
             return 0;
         }
@@ -6554,9 +6554,9 @@ class learnpath
 
     /**
      * Return HTML form to add/edit a quiz
-     * @param	string	Action (add/edit)
-     * @param	integer	Item ID if already exists
-     * @param	mixed	Extra information (quiz ID if integer)
+     * @param	string	$action Action (add/edit)
+     * @param	integer	$id Item ID if already exists
+     * @param	mixed	$extra_info Extra information (quiz ID if integer)
      * @return	string	HTML form
      */
     public function display_quiz_form($action = 'add', $id = 0, $extra_info = '')
@@ -6570,8 +6570,8 @@ class learnpath
             $item_description = $extra_info['description'];
         } elseif (is_numeric($extra_info)) {
             $sql = "SELECT title, description
-                    FROM " . $tbl_quiz . "
-                    WHERE c_id = ".$course_id." AND id = " . $extra_info;
+                    FROM $tbl_quiz
+                    WHERE c_id = $course_id AND id = " . $extra_info;
 
             $result = Database::query($sql);
             $row = Database::fetch_array($result);
@@ -6581,21 +6581,22 @@ class learnpath
             $item_title = '';
             $item_description = '';
         }
-        $item_title			= Security::remove_XSS($item_title);
-        $item_description 	= Security::remove_XSS($item_description);
+        $item_title = Security::remove_XSS($item_title);
+        $item_description = Security::remove_XSS($item_description);
 
-        if ($id != 0 && is_array($extra_info))
+        if ($id != 0 && is_array($extra_info)) {
             $parent = $extra_info['parent_item_id'];
-        else
+        } else {
             $parent = 0;
+        }
 
-        $sql = "SELECT * FROM " . $tbl_lp_item . "
-                WHERE c_id = ".$course_id." AND lp_id = " . $this->lp_id;
+        $sql = "SELECT * FROM $tbl_lp_item 
+                WHERE c_id = $course_id AND lp_id = " . $this->lp_id;
 
         $result = Database::query($sql);
         $arrLP = array ();
         while ($row = Database :: fetch_array($result)) {
-            $arrLP[] = array (
+            $arrLP[] = array(
                 'id' => $row['id'],
                 'item_type' => $row['item_type'],
                 'title' => $row['title'],
@@ -6617,7 +6618,11 @@ class learnpath
         $arrLP = isset($this->arrMenu) ? $this->arrMenu : null;
         unset ($this->arrMenu);
 
-        $form = new FormValidator('quiz_form', 'POST', api_get_self() . '?' .$_SERVER['QUERY_STRING']);
+        $form = new FormValidator(
+            'quiz_form',
+            'POST',
+            api_get_self().'?'.$_SERVER['QUERY_STRING']
+        );
         $defaults = [];
 
         if ($action == 'add') {
@@ -6776,7 +6781,6 @@ class learnpath
 
         $form->addHidden('type', TOOL_QUIZ);
         $form->addHidden('post_time', time());
-
         $form->setDefaults($defaults);
 
         return '<div class="sectioncomment">' . $form->returnForm() . '</div>';
@@ -6833,7 +6837,7 @@ class learnpath
         $result = Database::query($sql);
         $arrLP = array ();
         while ($row = Database :: fetch_array($result)) {
-            $arrLP[] = array (
+            $arrLP[] = array(
                 'id' => $row['id'],
                 'item_type' => $row['item_type'],
                 'title' => $row['title'],
@@ -7011,7 +7015,7 @@ class learnpath
         $arrLP = array();
 
         while ($row = Database :: fetch_array($result)) {
-            $arrLP[] = array (
+            $arrLP[] = array(
                 'id' => $row['id'],
                 'item_type' => $row['item_type'],
                 'title' => $row['title'],
@@ -7046,7 +7050,12 @@ class learnpath
         $form->addHeader($legend);
 
         if ($action != 'move') {
-            $form->addText('title', get_lang('Title'), true, ['id' => 'idTitle', 'class' => 'learnpath_item_form']);
+            $form->addText(
+                'title',
+                get_lang('Title'),
+                true,
+                ['id' => 'idTitle', 'class' => 'learnpath_item_form']
+            );
             $defaults['title'] = $item_title;
         }
 
@@ -7202,11 +7211,9 @@ class learnpath
 
         $sql = "SELECT * FROM " . $tbl_lp_item . "
                 WHERE c_id = ".$course_id." AND lp_id = " . $this->lp_id;
-
         $result = Database::query($sql);
 
-        $arrLP = array ();
-
+        $arrLP = array();
         while ($row = Database :: fetch_array($result)) {
             $arrLP[] = array (
                 'id' => $row['id'],
@@ -7418,11 +7425,12 @@ class learnpath
                     lp_id = " . $this->lp_id . " AND
                     id != $id";
 
-        if ($item_type == 'dir')
+        if ($item_type == 'dir') {
             $sql .= " AND parent_item_id = 0";
+        }
 
         $result = Database::query($sql);
-        $arrLP = array ();
+        $arrLP = [];
 
         while ($row = Database :: fetch_array($result)) {
             $arrLP[] = array(
@@ -7580,9 +7588,9 @@ class learnpath
 
     /**
      * Returns the form to update or create a document
-     * @param	string	Action (add/edit)
-     * @param	integer	ID of the lp_item (if already exists)
-     * @param	mixed	Integer if document ID, string if info ('new')
+     * @param	string	$action (add/edit)
+     * @param	integer	$id ID of the lp_item (if already exists)
+     * @param	mixed	$extra_info Integer if document ID, string if info ('new')
      * @return	string	HTML form
      */
     public function display_document_form($action = 'add', $id = 0, $extra_info = 'new')
@@ -7596,7 +7604,7 @@ class learnpath
         $item_description = '';
         //If action==edit document
         //We don't display the document form if it's not an editable document (html or txt file)
-        if ($action == "edit") {
+        if ($action == 'edit') {
             if (is_array($extra_info)) {
                 $path_parts = pathinfo($extra_info['dir']);
                 if ($path_parts['extension'] != "txt" && $path_parts['extension'] != "html") {
@@ -7608,14 +7616,14 @@ class learnpath
 
         // If action==add an existing document
         // We don't display the document form if it's not an editable document (html or txt file).
-        if ($action == "add") {
+        if ($action == 'add') {
             if (is_numeric($extra_info)) {
-                $sql_doc = "SELECT path FROM " . $tbl_doc . "
-                            WHERE c_id = ".$course_id." AND id = " . intval($extra_info);
+                $sql_doc = "SELECT path FROM $tbl_doc 
+                            WHERE c_id = $course_id AND id = " . intval($extra_info);
                 $result = Database::query($sql_doc);
                 $path_file = Database :: result($result, 0, 0);
                 $path_parts = pathinfo($path_file);
-                if ($path_parts['extension'] != "txt" && $path_parts['extension'] != "html") {
+                if ($path_parts['extension'] != 'txt' && $path_parts['extension'] != 'html') {
                     $no_display_add = true;
                 }
             }
@@ -7629,7 +7637,7 @@ class learnpath
                 $item_title = stripslashes($path_parts['filename']);
             }
         } elseif (is_numeric($extra_info)) {
-            $sql_doc = "SELECT path, title FROM " . $tbl_doc . "
+            $sql_doc = "SELECT path, title FROM $tbl_doc
                         WHERE
                             c_id = ".$course_id." AND
                             id = " . intval($extra_info);
@@ -7658,7 +7666,7 @@ class learnpath
                 WHERE c_id = $course_id AND lp_id = ".$this->lp_id;
 
         $result = Database::query($sql);
-        $arrLP = array ();
+        $arrLP = array();
         while ($row = Database :: fetch_array($result)) {
             $arrLP[] = array(
                 'id' => $row['id'],
@@ -7751,9 +7759,9 @@ class learnpath
         }
 
         $parent_select = $form->addSelect('parent', get_lang('Parent'), [], ['id' => 'idParent', 'onchange' => 'javascript: load_cbo(this.value);']);
-        $my_count=0;
+        $my_count = 0;
         foreach ($arrHide as $key => $value) {
-            if ($my_count!=0) {
+            if ($my_count != 0) {
                 // The LP name is also the first section and is not in the same charset like the other sections.
                 $value['value'] = Security :: remove_XSS($value['value']);
                 $parent_select->addOption($value['value'], $key, 'style="padding-left:' . $value['padding'] . 'px;"');
@@ -7828,18 +7836,23 @@ class learnpath
             if (!$no_display_add) {
                 $item_type = isset($extra_info['item_type']) ? $extra_info['item_type'] : null;
                 $edit = isset($_GET['edit']) ? $_GET['edit'] : null;
-                if (($extra_info == 'new' || $item_type == TOOL_DOCUMENT || $item_type == TOOL_LP_FINAL_ITEM || $edit == 'true')) {
-                    if (isset ($_POST['content']))
+                if ($extra_info == 'new' || $item_type == TOOL_DOCUMENT || $item_type == TOOL_LP_FINAL_ITEM || $edit == 'true') {
+                    if (isset ($_POST['content'])) {
                         $content = stripslashes($_POST['content']);
-                    elseif (is_array($extra_info)) {
+                    } elseif (is_array($extra_info)) {
                         //If it's an html document or a text file
                         if (!$no_display_edit_textarea) {
                             $content = $this->display_document($extra_info['path'], false, false);
                         }
-                    } elseif (is_numeric($extra_info))
-                        $content = $this->display_document($extra_info, false, false);
-                    else
+                    } elseif (is_numeric($extra_info)) {
+                        $content = $this->display_document(
+                            $extra_info,
+                            false,
+                            false
+                        );
+                    } else {
                         $content = '';
+                    }
 
                     if (!$no_display_edit_textarea) {
                         // We need to calculate here some specific settings for the online editor.
@@ -8830,13 +8843,13 @@ class learnpath
     public function get_exercises()
     {
         $course_id = api_get_course_int_id();
+        $session_id = api_get_session_id();
+        $userInfo = api_get_user_info();
 
         // New for hotpotatoes.
         $uploadPath = DIR_HOTPOTATOES; //defined in main_api
         $tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
         $tbl_quiz = Database :: get_course_table(TABLE_QUIZ_TEST);
-
-        $session_id = api_get_session_id();
         $condition_session = api_get_session_condition($session_id, true, true);
 
         $setting = api_get_configuration_value('show_invisible_exercise_in_lp_list');
@@ -8883,8 +8896,9 @@ class learnpath
             $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
             $return .= '</a> ';
             $return .= Display::return_icon('quizz_small.gif', '', array(), ICON_SIZE_TINY);
+            $sessionStar = api_get_session_image($row_quiz['session_id'], $userInfo['status']);
             $return .= '<a class="moved" href="' . api_get_self() . '?'.api_get_cidreq().'&action=add_item&type=' . TOOL_QUIZ . '&file=' . $row_quiz['id'] . '&lp_id=' . $this->lp_id . '">' .
-                Security :: remove_XSS(cut($row_quiz['title'], 80)).
+                Security :: remove_XSS(cut($row_quiz['title'], 80)).$sessionStar.
                 '</a>';
 
             $return .= '</li>';
@@ -8903,6 +8917,8 @@ class learnpath
         $selfUrl = api_get_self();
         $courseIdReq = api_get_cidreq();
         $course = api_get_course_info();
+        $userInfo = api_get_user_info();
+
         $course_id = $course['real_id'];
         $tbl_link = Database::get_course_table(TABLE_LINK);
         $linkCategoryTable = Database::get_course_table(TABLE_LINK_CATEGORY);
@@ -8919,6 +8935,7 @@ class learnpath
         $sql = "SELECT 
                     link.id as link_id,
                     link.title as link_title,
+                    link.session_id as link_session_id,
                     link.category_id as category_id,
                     link_category.category_title as category_title
                 FROM $tbl_link as link
@@ -8926,17 +8943,16 @@ class learnpath
                 ON (link.category_id = link_category.id AND link.c_id = link_category.c_id)
                 WHERE link.c_id = ".$course_id." $condition_session
                 ORDER BY link_category.category_title ASC, link.title ASC";
-        $links = Database::query($sql);
-
+        $result = Database::query($sql);
         $categorizedLinks = array();
         $categories = array();
 
-        while ($link = Database :: fetch_array($links)) {
+        while ($link = Database :: fetch_array($result)) {
             if (!$link['category_id']) {
                 $link['category_title'] = get_lang('Uncategorized');
             }
             $categories[$link['category_id']] = $link['category_title'];
-            $categorizedLinks[$link['category_id']][$link['link_id']] = $link['link_title'];
+            $categorizedLinks[$link['category_id']][$link['link_id']] = $link;
         }
 
         $linksHtmlCode =
@@ -8962,7 +8978,9 @@ class learnpath
 
         foreach ($categorizedLinks as $categoryId => $links) {
             $linkNodes = null;
-            foreach ($links as $key => $title) {
+            foreach ($links as $key => $linkInfo) {
+                $title = $linkInfo['link_title'];
+                $linkSessionId = $linkInfo['link_session_id'];
 
                 $link = Display::url(
                     Display::return_icon('preview_view.png', get_lang('Preview')),
@@ -8971,6 +8989,7 @@ class learnpath
                 );
 
                 if (api_get_item_visibility($course, TOOL_LINK, $key, $session_id) != 2)  {
+                    $sessionStar = api_get_session_image($linkSessionId, $userInfo['status']);
                     $linkNodes .=
                         '<li class="lp_resource_element" data_id="'.$key.'" data_type="'.TOOL_LINK.'" title="'.$title.'" >
                         <a class="moved" href="#">'.
@@ -8979,7 +8998,7 @@ class learnpath
                         '.Display::return_icon('lp_link.png').'
                         <a class="moved" href="'.$selfUrl.'?'.$courseIdReq.'&action=add_item&type='.
                         TOOL_LINK.'&file='.$key.'&lp_id='.$this->lp_id.'">'.
-                        Security::remove_XSS($title).
+                        Security::remove_XSS($title).$sessionStar.
                         '</a>
                     </li>';
                 }
@@ -10327,7 +10346,7 @@ EOD;
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::clear_prerequisites()', 0);
         }
-        $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
+        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $lp_id = $this->get_id();
         //Cleaning prerequisites
         $sql = "UPDATE $tbl_lp_item SET prerequisite = ''
@@ -10342,7 +10361,7 @@ EOD;
 
     public function set_previous_step_as_prerequisite_for_all_items()
     {
-        $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
+        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $course_id = $this->get_course_int_id();
         $lp_id = $this->get_id();
 

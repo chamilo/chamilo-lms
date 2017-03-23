@@ -404,6 +404,8 @@ class Blog
                     }
                 }
             }
+
+            return $last_post_id;
         } else {
             Display::display_error_message(get_lang('UplNoFileUploaded'));
         }
@@ -1001,11 +1003,7 @@ class Blog
                     'title' => stripslashes($blog_post['title']),
                     'extract' => api_get_short_text_from_html(stripslashes($blog_post['full_text']), 400),
                     'content' => stripslashes($blog_post['full_text']),
-                    'post_date' => api_convert_and_format_date(
-                        $blog_post['date_creation'],
-                        null,
-                        date_default_timezone_get()
-                    ),
+                    'post_date' => api_convert_and_format_date($blog_post['date_creation']),
                     'n_comments' => $blog_post_comments['number_of_comments'],
                     'files' => $fileArray,
                     'score_ranking' => $scoreRanking
@@ -1103,7 +1101,7 @@ class Blog
         $post_text = stripslashes($post_text);
 
         if (api_is_allowed('BLOG_'.$blog_id, 'article_edit', $task_id)) {
-            $blogActions .= '<a class="btn btn-default" href="blog.php?action=editPost&blog_id='.$blog_id.'&post_id='.$post_id.'&article_id='.$blog_post['post_id'].'&task_id='.$task_id.'" title="'.get_lang('EditThisPost').'">';
+            $blogActions .= '<a class="btn btn-default" href="blog.php?action=edit_post&blog_id='.$blog_id.'&post_id='.$post_id.'&article_id='.$blog_post['post_id'].'&task_id='.$task_id.'" title="'.get_lang('EditThisPost').'">';
             $blogActions .= Display::return_icon('edit.png', get_lang('Edit'), null, ICON_SIZE_TINY);
             $blogActions .= '</a>';
         }
@@ -1128,7 +1126,7 @@ class Blog
             'title' => stripslashes($blog_post['title']),
             'extract' => api_get_short_text_from_html(stripslashes($blog_post['full_text']), 400),
             'content' => $post_text,
-            'post_date' => api_convert_and_format_date($blog_post['date_creation'], null, date_default_timezone_get()),
+            'post_date' => api_convert_and_format_date($blog_post['date_creation']),
             'n_comments' => $blog_post_comments['number_of_comments'],
             'files' => $fileArray,
             'id_task' => $task_id,
@@ -1189,21 +1187,8 @@ class Blog
         $result = Database::query($sql);
         $html = null;
         while ($comment = Database::fetch_array($result)) {
-            // Select the children recursivly
-            $tmp = "SELECT comments.*, user.lastname, user.firstname, user.username
-                    FROM $tbl_blogs_comments comments
-                    INNER JOIN $tbl_users user
-                    ON comments.author_id = user.user_id
-                    WHERE
-                        comments.c_id = $course_id AND
-                        comment_id = ".$comment['comment_id']."
-                        AND blog_id = $blog_id
-                        AND post_id = $post_id";
-            $tmp = Database::query($tmp);
-            $tmp = Database::fetch_array($tmp);
             $commentActions = null;
             $ratingSelect = null;
-            $parent_cat = $tmp['parent_comment_id'];
             $comment_text = make_clickable(stripslashes($comment['comment']));
             $comment_text = stripslashes($comment_text);
             $infoUser = UserManager::get_user_picture_path_by_id($comment['author_id']);
@@ -1218,7 +1203,7 @@ class Blog
             );
 
             if (api_is_allowed('BLOG_'.$blog_id, 'article_comments_delete', $task_id)) {
-                $commentActions .= ' <a class="btn btn-default" href="blog.php?action=view_post&blog_id='.$blog_id.'&post_id='.$post_id.'&do=deleteComment&comment_id='.$comment['comment_id'].'&task_id='.$task_id.'" title="'.get_lang(
+                $commentActions .= ' <a class="btn btn-default" href="blog.php?action=view_post&blog_id='.$blog_id.'&post_id='.$post_id.'&do=delete_comment&comment_id='.$comment['comment_id'].'&task_id='.$task_id.'" title="'.get_lang(
                         'DeleteThisComment'
                     ).'" onclick="javascript:if(!confirm(\''.addslashes(
                         api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset)
@@ -1255,15 +1240,11 @@ class Blog
                 'title' => $comment['title'],
                 'content' => $comment_text,
                 'id_author' => $comment['author_id'],
-                'comment_date' => api_convert_and_format_date(
-                    $comment['date_creation'],
-                    null,
-                    date_default_timezone_get()
-                ),
+                'comment_date' => api_convert_and_format_date($comment['date_creation']),
                 'id_blog' => $comment['blog_id'],
                 'id_post' => $comment['post_id'],
                 'id_task' => $comment['task_id'],
-                'id_parent' => $parent_cat,
+                'id_parent' => $comment['parent_comment_id'],
                 'name_author' => api_get_person_name($comment['firstname'], $comment['lastname']),
                 'info_user' => $infoUser,
                 'username' => $comment['username'],
@@ -1526,33 +1507,53 @@ class Blog
     public static function displayPostCreateForm($blog_id)
     {
         $blog_id = intval($blog_id);
-        if (api_is_allowed('BLOG_'.$blog_id, 'article_add')) {
-            $form = new FormValidator(
-                'add_post',
-                'post',
-                api_get_path(WEB_CODE_PATH)."blog/blog.php?action=new_post&blog_id=".$blog_id."&".api_get_cidreq(),
-                null,
-                array('enctype' => 'multipart/form-data')
-            );
-            $form->addHidden('post_title_edited', 'false');
-            $form->addHeader(get_lang('NewPost'));
-            $form->addText('title', get_lang('Title'));
-            $config = array();
-            if (!api_is_allowed_to_edit()) {
-                $config['ToolbarSet'] = 'ProjectStudent';
-            } else {
-                $config['ToolbarSet'] = 'Project';
-            }
-            $form->addHtmlEditor('full_text', get_lang('Content'), false, false, $config);
-            $form->addFile('user_upload', get_lang('AddAnAttachment'));
-            $form->addTextarea('post_file_comment', get_lang('FileComment'));
-            $form->addHidden('new_post_submit', 'true');
-            $form->addButton('save', get_lang('Save'));
-
-            return $form->return_form();
-        } else {
+        if (!api_is_allowed('BLOG_'.$blog_id, 'article_add')) {
             api_not_allowed();
         }
+
+        $form = new FormValidator(
+            'add_post',
+            'post',
+            api_get_path(WEB_CODE_PATH)."blog/blog.php?action=new_post&blog_id=".$blog_id."&".api_get_cidreq(),
+            null,
+            array('enctype' => 'multipart/form-data')
+        );
+        $form->addHidden('post_title_edited', 'false');
+        $form->addHeader(get_lang('NewPost'));
+        $form->addText('title', get_lang('Title'));
+        $config = array();
+        $config['ToolbarSet'] = !api_is_allowed_to_edit() ? 'ProjectStudent' : 'Project';
+        $form->addHtmlEditor('full_text', get_lang('Content'), false, false, $config);
+        $form->addFile('user_upload', get_lang('AddAnAttachment'));
+        $form->addTextarea('post_file_comment', get_lang('FileComment'));
+        $form->addHidden('new_post_submit', 'true');
+        $form->addButton('save', get_lang('Save'));
+
+        if ($form->validate()) {
+            $values = $form->exportValues();
+
+            $postId = self::createPost(
+                $values['title'],
+                $values['full_text'],
+                $values['post_file_comment'],
+                $blog_id
+            );
+
+            if ($postId) {
+                Display::addFlash(
+                    Display::return_message(get_lang('BlogAdded'), 'success')
+                );
+
+                header('Location: '.api_get_self().'?'.api_get_cidreq().'&'.http_build_query([
+                    'action' => 'view_post',
+                    'blog_id' => $blog_id,
+                    'post_id' => $postId,
+                ]));
+                exit;
+            }
+        }
+
+        return $form->returnForm();
     }
 
     /**
@@ -1607,7 +1608,7 @@ class Blog
         $form->addButton('save', get_lang('Save'));
         $form->setDefaults($blog_post);
 
-        return $form->return_form();
+        return $form->returnForm();
     }
 
     /**

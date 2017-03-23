@@ -7921,4 +7921,11 @@ $SeeAccesses = "Visualiser les accès";
 $PriorityChangeFromXToY = "Priorité modifiée de %s à %s";
 $StatusChangeFromXToY = "Statut modifié de %s à %s";
 $SkillFromCourseXDeletedSinceThen = "Cette compétence a été obtenue au travers du cours %s qui a été éliminé depuis.";
+$SaveAndAddNewItem = "Enregister et ajouter un nouvel élément";
+$AnnouncementChooseRecipientsDescription = "Cette annonce sera envoyée à tous les utilisateurs par défaut, mais vous pouvez également sélectionner d'autres destinataires.";
+$ChooseRecipients = "Sélectionnez les destinataires";
+$StudentCourseProgressX = "Progrès: %s %";
+$SessionDurationNotStartedMaxX = "Cette session a une durée maximale de %s jours.";
+$StudentCourseScoreX = "Score: %s %";
+$StudentCourseCertificateX = "Certificat: %s";
 ?>

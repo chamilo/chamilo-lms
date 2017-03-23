@@ -245,6 +245,7 @@ class ExtraField extends Model
                 $conditions
                 ORDER BY field_order ASC
         ";
+
         $result = Database::query($sql);
         $extraFields = Database::store_result($result, 'ASSOC');
 
@@ -445,6 +446,9 @@ class ExtraField extends Model
      * @param int $itemId
      * @param array $exclude variables of extra field to exclude
      * @param bool $filter
+     * @param bool $useTagAsSelect
+     * @param array $showOnlyThisFields
+     * @param array $orderFields
      *
      * @return array|bool
      */
@@ -461,7 +465,7 @@ class ExtraField extends Model
             return false;
         }
 
-        $itemId = intval($itemId);
+        $itemId = (int) $itemId;
         $form->addHidden('item_id', $itemId);
         $extraData = false;
         if (!empty($itemId)) {
@@ -509,9 +513,9 @@ class ExtraField extends Model
 
         if (!empty($fields) > 0) {
             foreach ($fields as $field) {
-
                 $field_value = $field_values->get_values_by_handler_and_field_id(
-                    $itemId, $field['id']
+                    $itemId,
+                    $field['id']
                 );
 
                 if ($field['field_type'] == ExtraField::FIELD_TYPE_TAG) {
@@ -1327,7 +1331,6 @@ class ExtraField extends Model
                             }
 
                             if ($useTagAsSelect) {
-
                                 $fieldTags = $em
                                     ->getRepository('ChamiloCoreBundle:ExtraFieldRelTag')
                                     ->findBy([
@@ -1362,21 +1365,20 @@ class ExtraField extends Model
                         }
 
                         if ($useTagAsSelect == false) {
-                        $complete_text = get_lang('StartToType');
+                            $complete_text = get_lang('StartToType');
+                            //if cache is set to true the jquery will be called 1 time
 
-                        //if cache is set to true the jquery will be called 1 time
-
-                        $jquery_ready_content .= <<<EOF
-                            $("#extra_$variable").fcbkcomplete({
-                                json_url: "$url?a=search_tags&field_id=$field_id&type={$this->type}",
-                                cache: false,
-                                filter_case: true,
-                                filter_hide: true,
-                                complete_text:"$complete_text",
-                                firstselected: false,
-                                filter_selected: true,                        
-                                newel: true
-                            });
+                            $jquery_ready_content .= <<<EOF
+                                $("#extra_$variable").fcbkcomplete({
+                                    json_url: "$url?a=search_tags&field_id=$field_id&type={$this->type}",
+                                    cache: false,
+                                    filter_case: true,
+                                    filter_hide: true,
+                                    complete_text:"$complete_text",
+                                    firstselected: false,
+                                    filter_selected: true,                        
+                                    newel: true
+                                });
 EOF;
                         }
                         break;
@@ -1473,7 +1475,6 @@ EOF;
                         ];
 
                         if (is_array($extraData) && array_key_exists($fieldVariable, $extraData)) {
-
                             if (file_exists(api_get_path(SYS_UPLOAD_PATH) . $extraData[$fieldVariable])) {
                                 $fieldTexts[] = Display::img(
                                     api_get_path(WEB_UPLOAD_PATH) . $extraData[$fieldVariable],
@@ -1665,10 +1666,8 @@ EOF;
 
                         $form->addHtml(
                             '<script>
-                                $(document).ready(function() {
-                                    
-                                    if (typeof google === "object") {
-                                        
+                                $(document).ready(function() {                                    
+                                    if (typeof google === "object") {                                        
                                         var address = "' . $dataValue . '";
                                         initializeGeo'.$field_details['variable'].'(address, false);
     
@@ -1692,8 +1691,7 @@ EOF;
                                         
                                     } else {
                                         $("#map_extra_'.$field_details['variable'].'").html("<div class=\"alert alert-info\">' . get_lang('YouNeedToActivateTheGoogleMapsPluginInAdminPlatformToSeeTheMap') . '</div>");
-                                    }
-                                    
+                                    }                                    
                                 });
 
                                 function myLocation'.$field_details['variable'].'() {
@@ -1976,7 +1974,6 @@ EOF;
             $breadcrumb[] = array('url' => '#', 'name' => $this->pageName);
         }
     }
-
 
     /**
      * Displays the title + grid
@@ -2355,8 +2352,8 @@ JAVASCRIPT;
                         'stype' => 'select',
                         'searchoptions' => $search_options,
                     );
-                    $columns[]      = $field['display_text'].' (2)';
-                    $rules[]        = array('field' => 'extra_'.$field['variable'].'_second', 'op' => 'cn');
+                    $columns[] = $field['display_text'].' (2)';
+                    $rules[] = array('field' => 'extra_'.$field['variable'].'_second', 'op' => 'cn');
                     continue;
                 } else {
                     $search_options['value'] = $extraFieldOption->getFieldOptionsToString(
@@ -2366,16 +2363,19 @@ JAVASCRIPT;
                     );
                 }
                 $column_model[] = array(
-                    'name'          => 'extra_'.$field['variable'],
-                    'index'         => 'extra_'.$field['variable'],
-                    'width'         => '100',
-                    'hidden'        => 'true',
-                    'search'        => 'true',
-                    'stype'         => $type,
-                    'searchoptions' => $search_options
+                    'name' => 'extra_'.$field['variable'],
+                    'index' => 'extra_'.$field['variable'],
+                    'width' => '100',
+                    'hidden' => 'true',
+                    'search' => 'true',
+                    'stype' => $type,
+                    'searchoptions' => $search_options,
                 );
-                $columns[]      = $field['display_text'];
-                $rules[]        = array('field' => 'extra_'.$field['variable'], 'op' => 'cn');
+                $columns[] = $field['display_text'];
+                $rules[] = array(
+                    'field' => 'extra_'.$field['variable'],
+                    'op' => 'cn'
+                );
             }
         }
 
@@ -2818,7 +2818,6 @@ JAVASCRIPT;
         $result = Database::store_result($result, 'ASSOC');
 
         $skillList = [];
-
         foreach ($result as $index => $value) {
             $skillList[$value['id']] = $value['id'];
         }

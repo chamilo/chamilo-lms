@@ -935,6 +935,10 @@ function api_sort_by_first_name($language = null) {
  */
 function api_convert_encoding($string, $to_encoding, $from_encoding = 'UTF-8')
 {
+    if (strtoupper($to_encoding) === strtoupper($from_encoding)) {
+        return $string;
+    }
+
     return mb_convert_encoding($string, $to_encoding, $from_encoding);
 }
 

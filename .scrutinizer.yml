@@ -59,7 +59,7 @@ coding_style:
             general:
                 linefeed_character: newline
             around_operators:
-                concatenation: false
+                concatenation: true
         braces:
             classes_functions:
                 class: new-line

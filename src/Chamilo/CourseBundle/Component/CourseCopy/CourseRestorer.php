@@ -347,15 +347,22 @@ class CourseRestorer
                             $my_session_id
                         );
                     } else {
+                        $insertUserId = isset($document->item_properties[0]['insert_user_id']) ? $document->item_properties[0]['insert_user_id'] : api_get_user_id();
+                        $insertUserId = $this->checkUserId($insertUserId);
+
+                        // Check if user exists in platform
+                        $toUserId = isset($document->item_properties[0]['to_user_id']) ? $document->item_properties[0]['to_user_id'] : null;
+                        $toUserId = $this->checkUserId($toUserId, true);
+
                         // if folder exists then just refresh it
                         api_item_property_update(
                             $course_info,
                             TOOL_DOCUMENT,
                             $documentData,
                             'FolderUpdated',
-                            $document->item_properties[0]['insert_user_id'],
+                            $insertUserId,
                             $document->item_properties[0]['to_group_id'],
-                            $document->item_properties[0]['to_user_id'],
+                            $toUserId,
                             null,
                             null,
                             $my_session_id

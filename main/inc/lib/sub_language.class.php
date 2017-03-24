@@ -39,8 +39,8 @@ class SubLanguageManager
 
     /**
      * Get all files of lang folder (forum.inc.php,gradebook.inc.php,notebook.inc.php)
-     * @param string The lang path folder  (/var/www/my_lms/main/lang/spanish)
-     * @param bool true if we only want the "subname" trad4all instead of  trad4all.inc.php
+     * @param string $path The lang path folder  (/var/www/my_lms/main/lang/spanish)
+     * @param bool $only_main_name true if we only want the "subname" trad4all instead of trad4all.inc.php
      *
      * @return array All file of lang folder
      */
@@ -61,24 +61,26 @@ class SubLanguageManager
                 }
             }
             closedir($dh);
-
-            return $content_dir;
         }
+
+        return $content_dir;
     }
 
     /**
      * Get all information of sub-language
-     * @param Integer The parent id(Language father id)
-     * @param Integer The sub language id
+     * @param int $parent_id The parent id(Language father id)
+     * @param int $sub_language_id The sub language id
      * @return array All information about sub-language
      */
     public static function get_all_information_of_sub_language($parent_id, $sub_language_id)
     {
         $table = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-        $sql = 'SELECT * FROM ' . $table . '
+        $parent_id = intval($parent_id);
+        $sub_language_id = intval($sub_language_id);
+        $sql = "SELECT * FROM $table 
                 WHERE
-                    parent_id= ' . intval($parent_id).' AND
-                    id= ' . intval($sub_language_id) . '';
+                    parent_id = $parent_id AND
+                    id = $sub_language_id";
         $rs = Database::query($sql);
         $all_information = array();
         while ($row = Database::fetch_array($rs, 'ASSOC')) {
@@ -90,7 +92,7 @@ class SubLanguageManager
 
     /**
      * Get all information of language
-     * @param Integer The parent id(Language father id)
+     * @param int $parent_id The parent id(Language father id)
      * @return array All information about language
      */
     public static function get_all_information_of_language($parent_id)
@@ -108,8 +110,8 @@ class SubLanguageManager
 
     /**
      * Get all information of chamilo file
-     * @param string The chamilo path file (/var/www/chamilo/main/lang/spanish/gradebook.inc.php)
-     * @patam Bool Whether we want to remove the '$' prefix in the results or not
+     * @param string $system_path_file The chamilo path file (/var/www/chamilo/main/lang/spanish/gradebook.inc.php)
+     * @param bool $get_as_string_index Whether we want to remove the '$' prefix in the results or not
      * @return array Contains all information of chamilo file
      */
     public static function get_all_language_variable_in_file($system_path_file, $get_as_string_index = false)
@@ -137,7 +139,7 @@ class SubLanguageManager
 
     /**
      * Add file in sub-language directory and add header(tag php)
-     * @param string The chamilo path file (/var/www/chamilo/main/lang/spanish/gradebook.inc.php)
+     * @param string $system_path_file The chamilo path file (/var/www/chamilo/main/lang/spanish/gradebook.inc.php)
      *
      * @return bool
      */
@@ -150,9 +152,9 @@ class SubLanguageManager
 
     /**
      * Write in file of sub-language
-     * @param string The path file (/var/www/chamilo/main/lang/spanish/gradebook.inc.php)
-     * @param string The new sub-language
-     * @param string The language variable
+     * @param string $path_file The path file (/var/www/chamilo/main/lang/spanish/gradebook.inc.php)
+     * @param string $new_term The new sub-language
+     * @param string $new_variable The language variable
      * @return Boolean True on success, False on error
      */
     public static function write_data_in_file($path_file, $new_term, $new_variable)
@@ -194,8 +196,9 @@ class SubLanguageManager
     /**
      * Delete sub-language.
      * In order to avoid deletion of main laguages, we check the existence of a parent
-     * @param int The parent id
-     * @return bool    True on success, false on error
+     * @param int $parent_id The parent id
+     * @param bool $sub_language_id
+     * @return mixed True on success, false on error
      */
     public static function remove_sub_language($parent_id, $sub_language_id)
     {
@@ -227,7 +230,7 @@ class SubLanguageManager
 
     /**
      * Remove directory for sub-language
-     * @param string The sub-language path directory ( e.g. 'spanish_corporate'' )
+     * @param string $sub_language_dir The sub-language path directory ( e.g. 'spanish_corporate'' )
      * @return boolean  True on success, false on failure
      */
     public static function remove_language_directory($sub_language_dir)
@@ -277,15 +280,16 @@ class SubLanguageManager
 
     /**
      * Get name of language by id
-     * @param int The language id
+     * @param int $language_id The language id
      * @return string The original name of language
      */
     public static function get_name_of_language_by_id($language_id)
     {
         $table = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-        $sql = 'SELECT original_name
-                FROM ' . $table . '
-                WHERE id= ' . intval($language_id) . '';
+        $language_id = intval($language_id);
+        $sql = "SELECT original_name
+                FROM $table
+                WHERE id = $language_id";
         $rs = Database::query($sql);
         if (Database::num_rows($rs) > 0) {
             return Database::result($rs, 0, 'original_name');
@@ -334,7 +338,7 @@ class SubLanguageManager
 
     /**
      * Verified if language is father of an sub-language
-     * @param int The language id
+     * @param int $language_id The language id
      * @return Boolean
      */
     public static function check_if_language_is_father($language_id)
@@ -353,8 +357,8 @@ class SubLanguageManager
 
     /**
      * Make unavailable the language
-     * @param int The language id
-     * @return void()
+     * @param int $language_id The language id
+     * @return bool
      */
     public static function make_unavailable_language($language_id)
     {
@@ -368,8 +372,8 @@ class SubLanguageManager
 
     /**
      * Make available the language
-     * @param int The language id
-     * @return void
+     * @param int $language_id language id
+     * @return bool
      */
     public static function make_available_language($language_id)
     {
@@ -383,7 +387,7 @@ class SubLanguageManager
 
     /**
      * Set platform language
-     * @param int The language id
+     * @param int $language_id The language id
      * @return bool
      */
     public static function set_platform_language($language_id)
@@ -391,13 +395,14 @@ class SubLanguageManager
         if (empty($language_id) or (intval($language_id) != $language_id)) {
             return false;
         }
+        $language_id = intval($language_id);
         $tbl_admin_languages = Database::get_main_table(TABLE_MAIN_LANGUAGE);
         $tbl_settings_current = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
-        $sql = "SELECT english_name FROM " . $tbl_admin_languages . "
-                WHERE id= " . intval($language_id) . "";
+        $sql = "SELECT english_name FROM $tbl_admin_languages
+                WHERE id = $language_id";
         $result = Database::query($sql);
         $lang = Database::fetch_array($result);
-        $sql_update_2 = "UPDATE " . $tbl_settings_current . " SET selected_value='" . $lang['english_name'] . "'
+        $sql_update_2 = "UPDATE $tbl_settings_current SET selected_value = '" . $lang['english_name'] . "'
                          WHERE variable='platformLanguage'";
         $result_2 = Database::query($sql_update_2);
         Event::addEvent(
@@ -417,7 +422,7 @@ class SubLanguageManager
     {
         $name = api_get_setting('platformLanguage');
         $tbl_admin_languages = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-        $sql = "SELECT id FROM " . $tbl_admin_languages . " WHERE english_name ='$name'";
+        $sql = "SELECT id FROM $tbl_admin_languages WHERE english_name ='$name'";
         $res = Database::query($sql);
         if (Database::num_rows($res) < 1) {
             return false;
@@ -429,7 +434,7 @@ class SubLanguageManager
 
     /**
      * Get parent language path (or null if no parent)
-     * @param    string  Children language path
+     * @param    string  $language_path Children language path
      * @return   string  Parent language path or null
      */
     public static function get_parent_language_path($language_path)

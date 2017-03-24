@@ -228,7 +228,7 @@ class NavBuilder extends ContainerAware
                         'name' => 'auth/inscription.php',
                         'language' => $chamiloLocale
                     )*/
-                    'uri' => $chamiloHost.'auth/inscription.php?language='.$chamiloLocale
+                    'uri' => $chamiloHost.'main/auth/inscription.php?language='.$chamiloLocale
                 )
             )->setAttribute('class', 'item-menu menu-3');
 

@@ -165,7 +165,6 @@ if (!empty($message)) {
     Display :: display_confirmation_message(get_lang($message));
 }
 
-if ($allowToQualify) {
     $currentThread = get_thread_information($currentForum['forum_id'], $_GET['thread']);
     $threadId = $currentThread['thread_id'];
     // Show max qualify in my form
@@ -345,7 +344,6 @@ if ($allowToQualify) {
 
         echo $table_list;
     }
-}
 
 if ($origin!='learnpath') {
     Display :: display_footer();

@@ -79,7 +79,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                 case 'teacher' :
                                     $status = 1;
                                     break;
-                                default :
+                                default:
                                     $status = 5;
                                     $error_message .= get_lang('StudentStatusWasGivenTo').' : '.$username.'<br />';
                             }

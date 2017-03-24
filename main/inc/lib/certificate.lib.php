@@ -163,7 +163,7 @@ class Certificate extends Model
         $params['hide_print_button'] = isset($params['hide_print_button']) ? true : false;
 
         if (isset($this->certificate_data) && isset($this->certificate_data['cat_id'])) {
-            $my_category = Category :: load($this->certificate_data['cat_id']);
+            $my_category = Category::load($this->certificate_data['cat_id']);
         }
 
         if (isset($my_category[0]) &&

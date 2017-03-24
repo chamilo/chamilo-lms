@@ -61,7 +61,7 @@ class HTML_QuickForm_receivers extends HTML_QuickForm_group
 		$renderer->setElementTemplate('{element}');
 		$select_boxes = $this->_elements[2];
 		$select_boxes->setElementTemplate('<div style="margin-left:20px;display:block;" id="receivers_'.$select_boxes->getName().'">'.$select_boxes->_elementTemplate.'</div>');
-		parent :: accept($renderer);
+		parent::accept($renderer);
 		$js = $this->getElementJS();
 		return $renderer->toHtml().$js;
 	}

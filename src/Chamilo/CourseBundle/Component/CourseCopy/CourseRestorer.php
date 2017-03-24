@@ -3236,12 +3236,14 @@ class CourseRestorer
                         if (!empty($workData)) {
                             continue;
                         }
+                        break;
                     case FILE_OVERWRITE:
                         // Creating folder.
                         $workData = get_work_data_by_path(
                             $path,
                             $this->destination_course_info['real_id']
                         );
+                        break;
                     case FILE_RENAME:
                         $obj->params['new_dir'] = $obj->params['title'];
 

@@ -22,7 +22,7 @@ class ch_dropdown extends survey_question
             }
         }
 
-        parent :: addRemoveButtons($formData);
+        parent::addRemoveButtons($formData);
     }
 
     /**

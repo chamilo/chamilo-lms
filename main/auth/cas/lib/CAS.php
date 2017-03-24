@@ -1013,7 +1013,7 @@ class phpCAS
             self::trace('user is not authenticated, redirecting to the CAS server');
             $PHPCAS_CLIENT->forceAuthentication();
         } else {
-            self::trace('no need to authenticate (user `' . phpCAS:: getUser() . '\' is already authenticated)');
+            self::trace('no need to authenticate (user `' . self::getUser() . '\' is already authenticated)');
         }
 
         self::traceEnd();

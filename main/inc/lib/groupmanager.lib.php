@@ -911,7 +911,7 @@ class GroupManager
 
         if (!empty($groups)) {
             foreach ($groups as $group) {
-                GroupManager::set_group_properties(
+                self::set_group_properties(
                     $group['id'],
                     $group['name'],
                     $group['description'],
@@ -2143,7 +2143,7 @@ class GroupManager
                 $row[] = $this_group['id'];
             }
 
-            if (GroupManager::userHasAccessToBrowse($user_id, $this_group, $session_id)) {
+            if (self::userHasAccessToBrowse($user_id, $this_group, $session_id)) {
                 // Group name
                 $groupNameClass = null;
                 if ($this_group['status'] == 0) {

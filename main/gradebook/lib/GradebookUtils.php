@@ -35,7 +35,7 @@ class GradebookUtils
         $session_id = 0,
         $link_id = null
     ) {
-        $link = LinkFactory :: create($resource_type);
+        $link = LinkFactory::create($resource_type);
         $link->set_user_id(api_get_user_id());
         $link->set_course_code($course_code);
 
@@ -78,7 +78,7 @@ class GradebookUtils
         $course_code = Database::escape_string($course_code);
         if (!empty($link_id)) {
             $link_id = intval($link_id);
-            $sql = 'UPDATE ' . Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK) . '
+            $sql = 'UPDATE ' . Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK) . '
                     SET weight = ' . "'" . api_float_val($weight) . "'" . '
                     WHERE course_code = "' . $course_code . '" AND id = ' . $link_id;
             Database::query($sql);
@@ -477,7 +477,7 @@ class GradebookUtils
         $count = (($offset + 10) > $datagen->get_total_items_count()) ? ($datagen->get_total_items_count() - $offset) : GRADEBOOK_ITEM_LIMIT;
         $header_names = $datagen->get_header_names($offset, $count, true);
         $data_array = $datagen->get_data(
-            FlatViewDataGenerator :: FVDG_SORT_LASTNAME,
+            FlatViewDataGenerator::FVDG_SORT_LASTNAME,
             0,
             null,
             $offset,
@@ -540,7 +540,7 @@ class GradebookUtils
 
     public static function overwritescore($resid, $importscore, $eval_max)
     {
-        $result = Result :: load($resid);
+        $result = Result::load($resid);
         if ($importscore > $eval_max) {
             header('Location: gradebook_view_result.php?selecteval=' . Security::remove_XSS($_GET['selecteval']) . '&overwritemax=');
             exit;
@@ -811,7 +811,7 @@ class GradebookUtils
         self::create_default_course_gradebook();
 
         // Cat list
-        $all_categories = Category :: load(null, null, $course_code, null, null, $session_id, false);
+        $all_categories = Category::load(null, null, $course_code, null, null, $session_id, false);
         $select_gradebook = $form->addElement('select', 'category_id', get_lang('SelectGradebook'));
 
         if (!empty($all_categories)) {
@@ -860,7 +860,7 @@ class GradebookUtils
         // HTML report creation first
         $course_code = trim($cat[0]->get_course_code());
 
-        $displayscore = ScoreDisplay :: instance();
+        $displayscore = ScoreDisplay::instance();
         $customdisplays = $displayscore->get_custom_score_display_settings();
 
         $total = array();
@@ -1063,7 +1063,7 @@ class GradebookUtils
 
         // By default add all user in course
         $coursecodes[api_get_course_id()] = '1';
-        $users = GradebookUtils::get_users_in_course(api_get_course_id());
+        $users = self::get_users_in_course(api_get_course_id());
 
         foreach ($evals as $eval) {
             $coursecode = $eval->get_course_code();
@@ -1071,12 +1071,12 @@ class GradebookUtils
             if (isset($coursecode) && !empty($coursecode)) {
                 if (!array_key_exists($coursecode, $coursecodes)) {
                     $coursecodes[$coursecode] = '1';
-                    $users = array_merge($users, GradebookUtils::get_users_in_course($coursecode));
+                    $users = array_merge($users, self::get_users_in_course($coursecode));
                 }
             } else {
                 // course independent evaluation
-                $tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
-                $tbl_res = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
+                $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
+                $tbl_res = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
 
                 $sql = 'SELECT user.user_id, lastname, firstname, user.official_code
                         FROM '.$tbl_res.' as res, '.$tbl_user.' as user
@@ -1090,7 +1090,7 @@ class GradebookUtils
                 }
 
                 $result = Database::query($sql);
-                $users = array_merge($users, GradebookUtils::get_user_array_from_sql_result($result));
+                $users = array_merge($users, self::get_user_array_from_sql_result($result));
             }
         }
 
@@ -1099,7 +1099,7 @@ class GradebookUtils
             $coursecode = $link->get_course_code();
             if (!array_key_exists($coursecode,$coursecodes)) {
                 $coursecodes[$coursecode] = '1';
-                $users = array_merge($users, GradebookUtils::get_users_in_course($coursecode));
+                $users = array_merge($users, self::get_users_in_course($coursecode));
             }
         }
 
@@ -1118,8 +1118,8 @@ class GradebookUtils
         }
         $mask = Database::escape_string($mask);
 
-        $tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
-        $tbl_cru = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+        $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
+        $tbl_cru = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $sql = 'SELECT DISTINCT user.user_id, user.lastname, user.firstname, user.email, user.official_code
                 FROM ' . $tbl_user . ' user';
         if (!api_is_platform_admin()) {
@@ -1264,7 +1264,7 @@ class GradebookUtils
 
             $courseGradebookId = $courseGradebookCategory[0]->get_id();
 
-            $certificateInfo = GradebookUtils::get_certificate_by_user_id($courseGradebookId, $userId);
+            $certificateInfo = self::get_certificate_by_user_id($courseGradebookId, $userId);
 
             if (empty($certificateInfo)) {
                 continue;
@@ -1326,7 +1326,7 @@ class GradebookUtils
 
                 $courseGradebookId = $courseGradebookCategory[0]->get_id();
 
-                $certificateInfo = GradebookUtils::get_certificate_by_user_id(
+                $certificateInfo = self::get_certificate_by_user_id(
                     $courseGradebookId,
                     $userId
                 );

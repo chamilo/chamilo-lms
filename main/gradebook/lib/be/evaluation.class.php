@@ -221,7 +221,7 @@ class Evaluation implements GradebookItem
         $visible = null,
         $locked = null
     ) {
-        $tbl_grade_evaluations = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
+        $tbl_grade_evaluations = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
         $sql = 'SELECT * FROM '.$tbl_grade_evaluations;
         $paramcount = 0;
 
@@ -265,7 +265,7 @@ class Evaluation implements GradebookItem
         }
 
         $result = Database::query($sql);
-        $allEval = Evaluation::create_evaluation_objects_from_sql_result($result);
+        $allEval = self::create_evaluation_objects_from_sql_result($result);
 
         return $allEval;
     }
@@ -312,7 +312,7 @@ class Evaluation implements GradebookItem
             isset($this->eval_max) &&
             isset($this->visible)
         ) {
-            $tbl_grade_evaluations = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
+            $tbl_grade_evaluations = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
 
             $sql = 'INSERT INTO '.$tbl_grade_evaluations
                 .' (name, user_id, weight, max, visible';
@@ -362,8 +362,8 @@ class Evaluation implements GradebookItem
     public function add_evaluation_log($idevaluation)
     {
         if (!empty($idevaluation)) {
-            $tbl_grade_evaluations = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
-            $tbl_grade_linkeval_log = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);
+            $tbl_grade_evaluations = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
+            $tbl_grade_linkeval_log = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);
             $eval = new Evaluation();
             $dateobject = $eval->load($idevaluation,null,null,null,null);
             $arreval = get_object_vars($dateobject[0]);
@@ -393,7 +393,7 @@ class Evaluation implements GradebookItem
      */
     public function save()
     {
-        $tbl_grade_evaluations = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
+        $tbl_grade_evaluations = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
         $sql = 'UPDATE '.$tbl_grade_evaluations
             ." SET name = '".Database::escape_string($this->get_name())."'"
             .', description = ';
@@ -431,7 +431,7 @@ class Evaluation implements GradebookItem
      */
     public function delete()
     {
-        $tbl_grade_evaluations = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
+        $tbl_grade_evaluations = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
         $sql = 'DELETE FROM '.$tbl_grade_evaluations.' WHERE id = '.intval($this->id);
         Database::query($sql);
     }
@@ -447,7 +447,7 @@ class Evaluation implements GradebookItem
             $name = $this->name;
             $parent = $this->category;
         }
-        $tbl_grade_evaluations = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
+        $tbl_grade_evaluations = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
         $sql = 'SELECT count(id) AS number'
             .' FROM '.$tbl_grade_evaluations
             ." WHERE name = '".Database::escape_string($name)."'";
@@ -459,7 +459,7 @@ class Evaluation implements GradebookItem
             $courseId = $courseInfo['real_id'];
 
             if (isset($code) && $code != '0') {
-                $main_course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+                $main_course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
                 $sql .= ' AND user_id IN (
                      SELECT user_id FROM '.$main_course_user_table.'
                      WHERE
@@ -490,7 +490,7 @@ class Evaluation implements GradebookItem
      */
     public function has_results()
     {
-        $tbl_grade_results = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
+        $tbl_grade_results = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
         $sql = 'SELECT count(id) AS number
                 FROM '.$tbl_grade_results.'
                 WHERE evaluation_id = '.intval($this->id);
@@ -505,7 +505,7 @@ class Evaluation implements GradebookItem
      */
     public function delete_results()
     {
-        $tbl_grade_results = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
+        $tbl_grade_results = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
         $sql = 'DELETE FROM '.$tbl_grade_results.'
                 WHERE evaluation_id = '.intval($this->id);
         Database::query($sql);
@@ -695,8 +695,8 @@ class Evaluation implements GradebookItem
      */
     public static function get_evaluations_with_result_for_student($cat_id = null, $stud_id)
     {
-        $tbl_grade_evaluations = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
-        $tbl_grade_results = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
+        $tbl_grade_evaluations = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
+        $tbl_grade_results = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
 
         $sql = 'SELECT * FROM '.$tbl_grade_evaluations.'
                 WHERE id IN (
@@ -713,7 +713,7 @@ class Evaluation implements GradebookItem
         }
 
         $result = Database::query($sql);
-        $alleval = Evaluation::create_evaluation_objects_from_sql_result($result);
+        $alleval = self::create_evaluation_objects_from_sql_result($result);
 
         return $alleval;
     }
@@ -723,8 +723,8 @@ class Evaluation implements GradebookItem
      */
     public function get_not_subscribed_students($first_letter_user = '')
     {
-        $tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
-        $tbl_grade_results = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
+        $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
+        $tbl_grade_results = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
 
         $sql = 'SELECT user_id,lastname,firstname,username FROM '.$tbl_user
             ." WHERE lastname LIKE '".Database::escape_string($first_letter_user)."%'"

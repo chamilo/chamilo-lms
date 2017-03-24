@@ -39,7 +39,7 @@ class UserDataGenerator
             $toadd = true;
             $coursecode = $eval->get_course_code();
             if (isset($coursecode)) {
-                $result = Result :: load(null, $userid, $eval->get_id());
+                $result = Result::load(null, $userid, $eval->get_id());
                 if (count($result) == 0) {
                     $toadd = false;
                 }
@@ -93,28 +93,28 @@ class UserDataGenerator
         $allitems = $this->items;
 
         // sort users array
-        if ($sorting & self :: UDG_SORT_TYPE) {
+        if ($sorting & self::UDG_SORT_TYPE) {
             usort($allitems, array('UserDataGenerator', 'sort_by_type'));
-        }elseif ($sorting & self :: UDG_SORT_NAME) {
+        }elseif ($sorting & self::UDG_SORT_NAME) {
             usort($allitems, array('UserDataGenerator', 'sort_by_name'));
-        } elseif ($sorting & self :: UDG_SORT_COURSE) {
+        } elseif ($sorting & self::UDG_SORT_COURSE) {
             usort($allitems, array('UserDataGenerator', 'sort_by_course'));
-        } elseif ($sorting & self :: UDG_SORT_CATEGORY) {
+        } elseif ($sorting & self::UDG_SORT_CATEGORY) {
             usort($allitems, array('UserDataGenerator', 'sort_by_category'));
-        } elseif ($sorting & self :: UDG_SORT_AVERAGE) {
+        } elseif ($sorting & self::UDG_SORT_AVERAGE) {
             // if user sorts on average scores, first calculate them and cache them
             foreach ($allitems as $item) {
                 $this->avgcache[$item->get_item_type() . $item->get_id()]= $item->calc_score();
             }
             usort($allitems, array('UserDataGenerator', 'sort_by_average'));
-        } elseif ($sorting & self :: UDG_SORT_SCORE) {
+        } elseif ($sorting & self::UDG_SORT_SCORE) {
             // if user sorts on student's scores, first calculate them and cache them
             foreach ($allitems as $item) {
                 $this->scorecache[$item->get_item_type() . $item->get_id()]
                     = $item->calc_score($this->userid);
             }
             usort($allitems, array('UserDataGenerator', 'sort_by_score'));
-        } elseif ($sorting & self :: UDG_SORT_MASK) {
+        } elseif ($sorting & self::UDG_SORT_MASK) {
             // if user sorts on student's masks, first calculate scores and cache them
             foreach ($allitems as $item) {
                 $this->scorecache[$item->get_item_type() . $item->get_id()]
@@ -123,7 +123,7 @@ class UserDataGenerator
             usort($allitems, array('UserDataGenerator', 'sort_by_mask'));
         }
 
-        if ($sorting & self :: UDG_SORT_DESC) {
+        if ($sorting & self::UDG_SORT_DESC) {
             $allitems = array_reverse($allitems);
         }
         // select the items we have to display
@@ -138,7 +138,7 @@ class UserDataGenerator
 
         }
         // generate the data to display
-        $scoredisplay = ScoreDisplay :: instance();
+        $scoredisplay = ScoreDisplay::instance();
         $data = array();
         foreach ($visibleitems as $item) {
             $row = array ();
@@ -242,7 +242,7 @@ class UserDataGenerator
         $score1 = $this->scorecache[$item1->get_item_type() . $item1->get_id()];
         $score2 = $this->scorecache[$item2->get_item_type() . $item2->get_id()];
 
-        return ScoreDisplay :: compare_scores_by_custom_display($score1, $score2);
+        return ScoreDisplay::compare_scores_by_custom_display($score1, $score2);
     }
 
     /**
@@ -296,7 +296,7 @@ class UserDataGenerator
             $avgscore = $item->calc_score();
         }
 
-        $scoredisplay = ScoreDisplay :: instance();
+        $scoredisplay = ScoreDisplay::instance();
         $displaytype = SCORE_AVERAGE;
         /*if ($ignore_score_color)
             $displaytype |= SCORE_IGNORE_SPLIT;
@@ -312,7 +312,7 @@ class UserDataGenerator
     private function build_result_column($item, $ignore_score_color)
     {
         $studscore = $this->scorecache[$item->get_item_type() . $item->get_id()];
-        $scoredisplay = ScoreDisplay :: instance();
+        $scoredisplay = ScoreDisplay::instance();
         $displaytype = SCORE_DIV_PERCENT;
         if ($ignore_score_color) {
             $displaytype |= SCORE_IGNORE_SPLIT;
@@ -329,7 +329,7 @@ class UserDataGenerator
     private function build_mask_column($item, $ignore_score_color)
     {
         $studscore = $this->scorecache[$item->get_item_type() . $item->get_id()];
-        $scoredisplay = ScoreDisplay :: instance();
+        $scoredisplay = ScoreDisplay::instance();
         $displaytype = SCORE_DIV_PERCENT;
         if ($ignore_score_color) {
             $displaytype |= SCORE_IGNORE_SPLIT;

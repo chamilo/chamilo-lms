@@ -29,7 +29,7 @@ class SocialManager extends UserManager
     public static function show_list_type_friends()
     {
         $friend_relation_list = array();
-        $table = Database :: get_main_table(TABLE_MAIN_USER_FRIEND_RELATION_TYPE);
+        $table = Database::get_main_table(TABLE_MAIN_USER_FRIEND_RELATION_TYPE);
         $sql = 'SELECT id, title FROM '.$table.'
                 WHERE id<>6 
                 ORDER BY id ASC';
@@ -70,8 +70,8 @@ class SocialManager extends UserManager
      */
     public static function get_relation_between_contacts($user_id, $user_friend)
     {
-        $table = Database :: get_main_table(TABLE_MAIN_USER_FRIEND_RELATION_TYPE);
-        $userRelUserTable = Database :: get_main_table(TABLE_MAIN_USER_REL_USER);
+        $table = Database::get_main_table(TABLE_MAIN_USER_FRIEND_RELATION_TYPE);
+        $userRelUserTable = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
         $sql = 'SELECT rt.id as id 
                 FROM '.$table.' rt
                 WHERE rt.id = (
@@ -101,7 +101,7 @@ class SocialManager extends UserManager
      */
     public static function getCountFriends($userId)
     {
-        $tbl_my_friend = Database :: get_main_table(TABLE_MAIN_USER_REL_USER);
+        $tbl_my_friend = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
         $userId = (int) $userId;
         if (empty($userId)) {
             return 0;
@@ -135,8 +135,8 @@ class SocialManager extends UserManager
     public static function get_friends($user_id, $id_group = null, $search_name = null, $load_extra_info = true)
     {
         $list_ids_friends = array();
-        $tbl_my_friend = Database :: get_main_table(TABLE_MAIN_USER_REL_USER);
-        $tbl_my_user = Database :: get_main_table(TABLE_MAIN_USER);
+        $tbl_my_friend = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
+        $tbl_my_user = Database::get_main_table(TABLE_MAIN_USER);
         $sql = 'SELECT friend_user_id FROM '.$tbl_my_friend.'
                 WHERE
                     relation_type NOT IN ('.USER_RELATION_TYPE_DELETED.', '.USER_RELATION_TYPE_RRHH.') AND
@@ -628,8 +628,8 @@ class SocialManager extends UserManager
     {
         $result = '';
         // Table definitions
-        $main_user_table = Database :: get_main_table(TABLE_MAIN_USER);
-        $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
+        $main_user_table = Database::get_main_table(TABLE_MAIN_USER);
+        $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
         $course_directory = $my_course['course_info']['directory'];
         $course_title = $my_course['course_info']['title'];
         $course_visibility = $my_course['course_info']['visibility'];
@@ -1065,7 +1065,7 @@ class SocialManager extends UserManager
                 $links .= '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/invitations.php">'.Display::return_icon('invitation.png', get_lang('YouAlreadySentAnInvitation')).'&nbsp;&nbsp;'.get_lang('YouAlreadySentAnInvitation').'</a></li>';
             } else {
                 if (!$show_full_profile) {
-                    $links .= '<li><a class="btn-to-send-invitation" href="#" data-send-to="' . $user_id . '" title="'.get_lang('SendInvitation').'">'.Display :: return_icon('invitation.png', get_lang('SocialInvitationToFriends')).'&nbsp;'.get_lang('SendInvitation').'</a></li>';
+                    $links .= '<li><a class="btn-to-send-invitation" href="#" data-send-to="' . $user_id . '" title="'.get_lang('SendInvitation').'">'.Display::return_icon('invitation.png', get_lang('SocialInvitationToFriends')).'&nbsp;'.get_lang('SendInvitation').'</a></li>';
                 }
             }
 
@@ -1266,7 +1266,7 @@ class SocialManager extends UserManager
                 $html .= Display::page_subheader(get_lang('MyTeach'));
                 $html .= '<p>'.$user_object->teach.'</p>';
             }
-            SocialManager::display_productions($user_object->user_id);
+            self::display_productions($user_object->user_id);
             if ($user_object->openarea) {
                 $html .= Display::page_subheader(get_lang('MyPersonalOpenArea'));
                 $html .= '<p>'.$user_object->openarea.'</p>';
@@ -1809,7 +1809,7 @@ class SocialManager extends UserManager
         $userId = intval($userId);
         $userRelationType = 0;
 
-        $socialAvatarBlock = SocialManager::show_social_avatar_block(
+        $socialAvatarBlock = self::show_social_avatar_block(
             $groupBlock,
             $groupId,
             $userId
@@ -1819,7 +1819,7 @@ class SocialManager extends UserManager
         if ($currentUserId === $userId) {
             $profileEditionLink = Display::getProfileEditionLink($userId);
         } else {
-            $userRelationType = SocialManager::get_relation_between_contacts(
+            $userRelationType = self::get_relation_between_contacts(
                 $currentUserId,
                 $userId
             );
@@ -1870,7 +1870,7 @@ class SocialManager extends UserManager
     public static function listMyFriends($user_id, $link_shared, $show_full_profile)
     {
         //SOCIALGOODFRIEND , USER_RELATION_TYPE_FRIEND, USER_RELATION_TYPE_PARENT
-        $friends = SocialManager::get_friends($user_id, USER_RELATION_TYPE_FRIEND);
+        $friends = self::get_friends($user_id, USER_RELATION_TYPE_FRIEND);
         $number_of_images = 30;
         $number_friends = count($friends);
         $friendHtml = '';
@@ -1935,7 +1935,7 @@ class SocialManager extends UserManager
     public static function listMyFriendsBlock($user_id, $link_shared = '', $show_full_profile = '')
     {
         //SOCIALGOODFRIEND , USER_RELATION_TYPE_FRIEND, USER_RELATION_TYPE_PARENT
-        $friends = SocialManager::get_friends($user_id, USER_RELATION_TYPE_FRIEND);
+        $friends = self::get_friends($user_id, USER_RELATION_TYPE_FRIEND);
         $number_of_images = 30;
         $number_friends = count($friends);
         $friendHtml = '';
@@ -2031,12 +2031,12 @@ class SocialManager extends UserManager
      */
     public static function getWallMessagesByUser($userId, $friendId)
     {
-        $messages = SocialManager::getWallMessagesPostHTML($userId, $friendId);
+        $messages = self::getWallMessagesPostHTML($userId, $friendId);
         $html = '';
 
         foreach ($messages as $message) {
             $post = $message['html'];
-            $comment = SocialManager::getWallMessagesHTML($userId, $friendId, $message['id']);
+            $comment = self::getWallMessagesHTML($userId, $friendId, $message['id']);
             $html .= Display::panel($post.$comment, '');
         }
 

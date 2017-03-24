@@ -15,8 +15,8 @@ use Symfony\Component\Finder\Finder;
  * and SCORM learnpaths. It is used by the scorm class.
  *
  * @package chamilo.learnpath
- * @author	Yannick Warnier <ywarnier@beeznest.org>
- * @author	Julio Montoya   <gugli100@gmail.com> Several improvements and fixes
+ * @author  Yannick Warnier <ywarnier@beeznest.org>
+ * @author  Julio Montoya   <gugli100@gmail.com> Several improvements and fixes
  */
 class learnpath
 {
@@ -457,22 +457,22 @@ class learnpath
      */
     public function set_course_int_id($course_id)
     {
-        return $this->course_int_id = intval($course_id);
+        return $this->course_int_id = (int) $course_id;
     }
 
     /**
      * Get the depth level of LP item
-     * @param $in_tab_items
-     * @param $in_current_item_id
+     * @param array $items
+     * @param int $currentItemId
      * @return int
      */
-    private static function get_level_for_item($in_tab_items, $in_current_item_id)
+    private static function get_level_for_item($items, $currentItemId)
     {
-        $parent_item_id = $in_tab_items[$in_current_item_id]->parent;
-        if ($parent_item_id == 0) {
+        $parentItemId = $items[$currentItemId]->parent;
+        if ($parentItemId == 0) {
             return 0;
         } else {
-            return learnpath::get_level_for_item($in_tab_items, $parent_item_id) + 1;
+            return learnpath::get_level_for_item($items, $parentItemId) + 1;
         }
     }
 
@@ -890,7 +890,7 @@ class learnpath
 
     /**
      * Auto completes the parents of an item in case it's been completed or passed
-     * @param	integer	$item Optional ID of the item from which to look for parents
+     * @param int $item Optional ID of the item from which to look for parents
      */
     public function autocomplete_parents($item)
     {
@@ -1006,7 +1006,6 @@ class learnpath
      */
     public function autosave()
     {
-
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::autosave()', 0);
         }
@@ -1018,14 +1017,14 @@ class learnpath
      * Stops the timer
      * Saves into the database if required
      * Clears the current resource data from this object
-     * @return	boolean	True on success, false on failure
+     * @return boolean    True on success, false on failure
      */
     public function close()
     {
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::close()', 0);
         }
-        if (empty ($this->lp_id)) {
+        if (empty($this->lp_id)) {
             $this->error = 'Trying to close this learnpath but no ID is set';
             return false;
         }
@@ -1338,7 +1337,19 @@ class learnpath
             if ($pi['extension'] == 'mp3') {
                 $c_det = api_get_course_info($this->cc);
                 $bp = api_get_path(SYS_COURSE_PATH) . $c_det['path'] . '/document';
-                $path = handle_uploaded_document($c_det, $audio, $bp, '/audio', api_get_user_id(), 0, null, 0, 'rename', false, 0);
+                $path = handle_uploaded_document(
+                    $c_det,
+                    $audio,
+                    $bp,
+                    '/audio',
+                    api_get_user_id(),
+                    0,
+                    null,
+                    0,
+                    'rename',
+                    false,
+                    0
+                );
                 $path = substr($path, 7);
                 // Update reference in lp_item - audio path is the path from inside de document/audio/ dir.
                 $audio_update_sql = ", audio = '" . Database::escape_string($path) . "' ";
@@ -1398,7 +1409,6 @@ class learnpath
             /* END -- virtually remove the current item id */
 
             /* BEGIN -- update the current item id to his new location */
-
             if ($previous == 0) {
                 // Select the data of the item that should come after the current item.
                 $sql = "SELECT id, display_order
@@ -1585,7 +1595,7 @@ class learnpath
     /**
      * Gets all the chapters belonging to the same parent as the item/chapter given
      * Can also be called as abstract method
-     * @param	integer	Item ID
+     * @param	integer	$id Item ID
      * @return	array	A list of all the "brother items" (or an empty array on failure)
      */
     public function getSiblingDirectories($id)
@@ -1630,7 +1640,7 @@ class learnpath
     /**
      * Gets all the items belonging to the same parent as the item given
      * Can also be called as abstract method
-     * @param	integer	Item ID
+     * @param	integer	$id Item ID
      * @return	array	A list of all the "brother items" (or an empty array on failure)
      */
     public function get_brother_items($id)
@@ -2286,23 +2296,29 @@ class learnpath
     }
 
     /**
-     * @param int $lpId
+     * @param int $studentId
+     * @param int $prerequisite
      * @param array $courseInfo
+     * @param int $sessionId
+     *
      * @return bool
      *
      */
-    public static function isBlockedByPrerequisite($student_id, $prerequisite, $courseInfo, $sessionId)
-    {
+    public static function isBlockedByPrerequisite(
+        $studentId,
+        $prerequisite,
+        $courseInfo,
+        $sessionId
+    ) {
         $isBlocked = false;
 
         if (!empty($prerequisite)) {
             $progress = self::getProgress(
                 $prerequisite,
-                $student_id,
+                $studentId,
                 $courseInfo['real_id'],
                 $sessionId
             );
-            $progress = intval($progress);
             if ($progress < 100) {
                 $isBlocked = true;
             }
@@ -2473,7 +2489,7 @@ class learnpath
             $progress = $row['progress'];
         }
 
-        return $progress;
+        return (int) $progress;
     }
 
     /**
@@ -11304,8 +11320,12 @@ EOD;
      * @param   int $lpViewId
      * @return string
      */
-    public static function rl_get_resource_link_for_learnpath($course_id, $learningPathId, $id_in_path, $lpViewId)
-    {
+    public static function rl_get_resource_link_for_learnpath(
+        $course_id,
+        $learningPathId,
+        $id_in_path,
+        $lpViewId
+    ) {
         $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $course_info = api_get_course_info_by_id($course_id);
         $course_id = $course_info['real_id'];

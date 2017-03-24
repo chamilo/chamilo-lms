@@ -142,7 +142,7 @@ class ExtraField extends Model
      */
     public function getExtraFieldType()
     {
-        return $this->extraFieldType;
+        return (int) $this->extraFieldType;
     }
 
     /**
@@ -622,7 +622,7 @@ class ExtraField extends Model
      * into
      * array(
      *   'France' =>
-     *      array('Paris', 'Bregtane', 'Marseille'),
+     *      array('Paris', 'Bretagne', 'Marseille'),
      *   'Belgique' =>
      *      array('Namur', 'Liège')
      * ), etc
@@ -799,22 +799,20 @@ class ExtraField extends Model
      * Add an element that matches the given extra field to the given $form object
      * @param FormValidator $form
      * @param array $extraData
-     * @param bool $admin_permissions
+     * @param bool $adminPermissions
      * @param array $extra
      * @param int $itemId
      * @param array $exclude variables of extra field to exclude
      * @param bool $useTagAsSelect
      * @param array $showOnlyThisFields
      * @param array $orderFields
-     * @param bool $canModify
-     * @param bool $visibleToSelf
      *
      * @return array If relevant, returns a one-element array with JS code to be added to the page HTML headers
      */
     public function set_extra_fields_in_form(
         $form,
         $extraData,
-        $admin_permissions = false,
+        $adminPermissions = false,
         $extra = array(),
         $itemId = null,
         $exclude = [],
@@ -863,7 +861,7 @@ class ExtraField extends Model
                     }
                 }
 
-                if (!$admin_permissions) {
+                if (!$adminPermissions) {
                     if ($field_details['visible_to_self'] == 0) {
                         continue;
                     }
@@ -874,7 +872,7 @@ class ExtraField extends Model
                 }
 
                 $freezeElement = false;
-                if (!$admin_permissions) {
+                if (!$adminPermissions) {
                     $freezeElement = $field_details['visible_to_self'] == 0 || $field_details['changeable'] == 0;
                 }
 
@@ -2748,12 +2746,12 @@ JAVASCRIPT;
     public function getAllSkillPerTag($fieldId, $tagId)
     {
         $skillTable = Database::get_main_table(TABLE_MAIN_SKILL);
-        $tagRelXtraTable = Database::get_main_table(TABLE_MAIN_EXTRA_FIELD_REL_TAG);
+        $tagRelExtraTable = Database::get_main_table(TABLE_MAIN_EXTRA_FIELD_REL_TAG);
         $fieldId = intval($fieldId);
         $tagId = intval($tagId);
 
         $sql = "SELECT s.id
-                FROM $skillTable s INNER JOIN $tagRelXtraTable t
+                FROM $skillTable s INNER JOIN $tagRelExtraTable t
                 ON t.item_id = s.id
                 WHERE tag_id = $tagId AND t.field_id = $fieldId;
         ";

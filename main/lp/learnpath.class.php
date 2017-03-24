@@ -5683,42 +5683,67 @@ class learnpath
                 }
 
                 $delete_icon .= ' <a href="'.api_get_self().'?'.api_get_cidreq().'&action=delete_item&id=' . $arrLP[$i]['id'] . '&lp_id=' . $this->lp_id . '" onclick="return confirmation(\'' . addslashes($title) . '\');" class="btn btn-default">';
-                $delete_icon .= Display::return_icon('delete.png', get_lang('LearnpathDeleteModule'), array(), ICON_SIZE_TINY);
+                $delete_icon .= Display::return_icon(
+                    'delete.png',
+                    get_lang('LearnpathDeleteModule'),
+                    [],
+                    ICON_SIZE_TINY
+                );
                 $delete_icon .= '</a>';
 
                 $url = api_get_self() . '?'.api_get_cidreq().'&view=build&id='.$arrLP[$i]['id'] .'&lp_id='.$this->lp_id;
+                $previewImage = Display::return_icon(
+                    'preview_view.png',
+                    get_lang('Preview'),
+                    [],
+                    ICON_SIZE_TINY
+                );
 
-                if (in_array($arrLP[$i]['item_type'], ['document', 'final_item'])) {
-                    $urlPreviewLink = api_get_self().'?'.api_get_cidreq().'&action=view_item&mode=preview_document&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id;
-                    $previewIcon = Display::url(
-                        Display::return_icon('preview_view.png', get_lang('Preview'), array(), ICON_SIZE_TINY),
-                        $urlPreviewLink,
-                        array(
-                            'class' => 'btn btn-default ajax',
-                            'data-title' => $arrLP[$i]['title']
-                        )
-                    );
-                } elseif (in_array($arrLP[$i]['item_type'], ['forum', 'thread'])) {
-                    $link = $this->rl_get_resource_link_for_learnpath(
-                        $this->course_int_id,
-                        $this->lp_id,
-                        $arrLP[$i]['id'],
-                        0
-                    );
-                    //$urlPreviewLink = api_get_self().'?'.api_get_cidreq().'&action=view_item&mode=preview_document&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id;
-                    $previewIcon = Display::url(
-                        Display::return_icon('preview_view.png', get_lang('Preview'), array(), ICON_SIZE_TINY),
-                        $link,
-                        array(
-                            'class' => 'btn btn-default ajax',
-                            'data-title' => $arrLP[$i]['title']
-                        )
-                    );
-                } else {
-                    $previewIcon = Display::url(
-                        Display::return_icon('preview_view.png', get_lang('Preview'), array(), ICON_SIZE_TINY),
-                        $url.'&action=view_item', ['class' => 'btn btn-default']
-                    );
+                switch ($arrLP[$i]['item_type']) {
+                    case TOOL_DOCUMENT:
+                    case TOOL_LP_FINAL_ITEM:
+                        $urlPreviewLink = api_get_self().'?'.api_get_cidreq().'&action=view_item&mode=preview_document&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id;
+                        $previewIcon = Display::url(
+                            $previewImage,
+                            $urlPreviewLink,
+                            array(
+                                'class' => 'btn btn-default ajax',
+                                'data-title' => $arrLP[$i]['title']
+                            )
+                        );
+                        break;
+                    case TOOL_FORUM:
+                    case TOOL_LP_FINAL_ITEM:
+                    case TOOL_LINK:
+                        $target = '';
+                        $class = 'btn btn-default ajax';
+                        if ($arrLP[$i]['item_type'] == TOOL_LINK) {
+                            $class = 'btn btn-default';
+                            $target = '_blank';
+                        }
+
+                        $link = self::rl_get_resource_link_for_learnpath(
+                            $this->course_int_id,
+                            $this->lp_id,
+                            $arrLP[$i]['id'],
+                            0
+                        );
+                        $previewIcon = Display::url(
+                            $previewImage,
+                            $link,
+                            [
+                                'class' => $class,
+                                'data-title' => $arrLP[$i]['title'],
+                                'target' => $target
+                            ]
+                        );
+                        break;
+                    default:
+                        $previewIcon = Display::url(
+                            $previewImage,
+                            $url.'&action=view_item', ['class' => 'btn btn-default']
+                        );
+                        break;
                 }
 
                 if ($arrLP[$i]['item_type'] != 'dir') {

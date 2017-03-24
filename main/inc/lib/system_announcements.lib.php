@@ -18,8 +18,8 @@ class SystemAnnouncementManager
 	public static function display_announcements($visible, $id = -1)
     {
         $user_selected_language = api_get_interface_language();
-        $db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
-        $tbl_announcement_group = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS);
+        $db_table = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
+        $tbl_announcement_group = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS);
         $userGroup = new UserGroup();
 
         $temp_user_groups = $userGroup->get_groups_by_user(api_get_user_id(),0);
@@ -109,7 +109,7 @@ class SystemAnnouncementManager
         $user_selected_language = api_get_interface_language();
         $start = intval($start);
         $userGroup = new UserGroup();
-        $tbl_announcement_group = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS);
+        $tbl_announcement_group = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS);
         $temp_user_groups = $userGroup->get_groups_by_user(api_get_user_id(),0);
         $groups = array();
         foreach ($temp_user_groups as $user_group) {
@@ -120,7 +120,7 @@ class SystemAnnouncementManager
         // Checks if tables exists to not break platform not updated
         $groups_string = '('.implode($groups,',').')';
 
-        $db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
+        $db_table = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
         $now  = api_get_utc_datetime();
 
         $sql = "SELECT * FROM ".$db_table."
@@ -165,7 +165,7 @@ class SystemAnnouncementManager
             $content .= '<table align="center">';
                 $content .= '<tr>';
                     $content .= '<td>';
-                        $content .= SystemAnnouncementManager :: display_arrow($user_id);
+                        $content .= self::display_arrow($user_id);
                     $content .= '</td>';
                 $content .= '</tr>';
             $content .= '</table>';
@@ -188,7 +188,7 @@ class SystemAnnouncementManager
             $content .= '<table align="center">';
                 $content .= '<tr>';
                     $content .= '<td>';
-                        $content .= SystemAnnouncementManager :: display_arrow($user_id);
+                        $content .= self::display_arrow($user_id);
                     $content .= '</td>';
                 $content .= '</tr>';
             $content .= '</table>';
@@ -205,7 +205,7 @@ class SystemAnnouncementManager
     public static function display_arrow($user_id)
     {
         $start = (int)$_GET['start'];
-        $nb_announcement = SystemAnnouncementManager :: count_nb_announcement($start, $user_id);
+        $nb_announcement = self::count_nb_announcement($start, $user_id);
         $next = ((int)$_GET['start']+19);
         $prev = ((int)$_GET['start']-19);
         $content = '';
@@ -232,7 +232,7 @@ class SystemAnnouncementManager
         $start = intval($start);
         $visibility = api_is_allowed_to_create_course() ? self::VISIBLE_TEACHER : self::VISIBLE_STUDENT;
         $user_selected_language = api_get_interface_language();
-        $db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
+        $db_table = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
         $sql = 'SELECT id FROM '.$db_table.'
                 WHERE (lang="'.$user_selected_language.'" OR lang IS NULL) ';
         if (isset($user_id)) {
@@ -271,7 +271,7 @@ class SystemAnnouncementManager
      */
     public static function get_all_announcements()
     {
-        $table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
+        $table = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
         $now = api_get_utc_datetime();
         $sql = "SELECT *, IF ( '$now'  >= date_start AND '$now' <= date_end, '1', '0') AS visible
                 FROM $table";
@@ -332,7 +332,7 @@ class SystemAnnouncementManager
         $a_arrayEH = explode(':', $a_dateE[1]);
         $date_end_to_compare = array_merge($a_arrayED, $a_arrayEH);
 
-        $db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
+        $db_table = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 
         if (!checkdate($date_start_to_compare[1], $date_start_to_compare[2], $date_start_to_compare[0])) {
             Display::addFlash(Display::return_message(get_lang('InvalidStartDate'), 'warning'));
@@ -387,7 +387,7 @@ class SystemAnnouncementManager
 
         if ($resultId) {
             if ($sendEmailTest) {
-                SystemAnnouncementManager::send_system_announcement_by_email(
+                self::send_system_announcement_by_email(
                     $title,
                     $content,
                     $visible_teacher,
@@ -397,7 +397,7 @@ class SystemAnnouncementManager
                 );
             } else {
                 if ($send_mail == 1) {
-                    SystemAnnouncementManager::send_system_announcement_by_email(
+                    self::send_system_announcement_by_email(
                         $title,
                         $content,
                         $visible_teacher,
@@ -468,8 +468,8 @@ class SystemAnnouncementManager
     **/
     public static function get_announcement_groups($announcement_id)
     {
-        $tbl_announcement_group = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS);
-        $tbl_group = Database :: get_main_table(TABLE_USERGROUP);
+        $tbl_announcement_group = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS);
+        $tbl_group = Database::get_main_table(TABLE_USERGROUP);
         //first delete all group associations for this announcement
 
         $sql = "SELECT
@@ -537,7 +537,7 @@ class SystemAnnouncementManager
             $date_end_to_compare[0]) &&
             !checkdate($date_end_to_compare[1], $date_end_to_compare[2], $date_end_to_compare[0])
         ) {
-			Display :: display_normal_message(get_lang('InvalidEndDate'));
+			Display::display_normal_message(get_lang('InvalidEndDate'));
 
 			return false;
 		}
@@ -558,7 +558,7 @@ class SystemAnnouncementManager
         $content = str_replace('file='.api_get_path(REL_HOME_PATH), 'file='.api_get_path(WEB_PATH).api_get_path(REL_HOME_PATH), $content);
 
         if ($sendEmailTest) {
-            SystemAnnouncementManager::send_system_announcement_by_email(
+            self::send_system_announcement_by_email(
                 $title,
                 $content,
                 null,
@@ -568,7 +568,7 @@ class SystemAnnouncementManager
             );
         } else {
             if ($send_mail==1) {
-                SystemAnnouncementManager::send_system_announcement_by_email(
+                self::send_system_announcement_by_email(
                     $title,
                     $content,
                     $visible_teacher,
@@ -605,7 +605,7 @@ class SystemAnnouncementManager
 	 */
 	public static function delete_announcement($id)
     {
-		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
+		$db_table = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 		$id = intval($id);
 		$sql = "DELETE FROM ".$db_table." WHERE id =".$id;
 		$res = Database::query($sql);
@@ -622,7 +622,7 @@ class SystemAnnouncementManager
 	 */
 	public static function get_announcement($id)
     {
-		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
+		$db_table = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 		$id = intval($id);
 		$sql = "SELECT * FROM ".$db_table." WHERE id = ".$id;
 		$announcement = Database::fetch_object(Database::query($sql));
@@ -687,10 +687,10 @@ class SystemAnnouncementManager
             return true;
         }
 
-        $user_table = Database :: get_main_table(TABLE_MAIN_USER);
+        $user_table = Database::get_main_table(TABLE_MAIN_USER);
         if (api_is_multiple_url_enabled()) {
             $current_access_url_id = api_get_current_access_url_id();
-            $url_rel_user = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+            $url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
             $url_condition = " INNER JOIN $url_rel_user uu ON uu.user_id = u.user_id ";
         }
 
@@ -761,7 +761,7 @@ class SystemAnnouncementManager
     public static function display_announcements_slider($visible, $id = null)
     {
         $user_selected_language = Database::escape_string(api_get_interface_language());
-        $table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
+        $table = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 
         $cut_size = 500;
         $now = api_get_utc_datetime();
@@ -837,7 +837,7 @@ class SystemAnnouncementManager
     public static function displayAnnouncement($announcementId, $visibility)
     {
         $selectedUserLanguage = Database::escape_string(api_get_interface_language());
-        $announcementTable = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
+        $announcementTable = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 
         $now = api_get_utc_datetime();
 

@@ -22,7 +22,7 @@ class SubLanguageManager
      */
     public static function getAllLanguages($onlyActive = false)
     {
-        $table = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
+        $table = Database::get_main_table(TABLE_MAIN_LANGUAGE);
         $sql = 'SELECT * FROM ' . $table;
         if ($onlyActive) {
             $sql .= ' WHERE available = 1';
@@ -74,7 +74,7 @@ class SubLanguageManager
      */
     public static function get_all_information_of_sub_language($parent_id, $sub_language_id)
     {
-        $table = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
+        $table = Database::get_main_table(TABLE_MAIN_LANGUAGE);
         $sql = 'SELECT * FROM ' . $table . '
                 WHERE
                     parent_id= ' . intval($parent_id).' AND
@@ -95,7 +95,7 @@ class SubLanguageManager
      */
     public static function get_all_information_of_language($parent_id)
     {
-        $table = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
+        $table = Database::get_main_table(TABLE_MAIN_LANGUAGE);
         $sql = 'SELECT * FROM ' . $table . ' WHERE id = "' . intval($parent_id) . '"';
         $rs = Database::query($sql);
         $all_information = array();
@@ -206,7 +206,7 @@ class SubLanguageManager
         ) {
             return false;
         }
-        $table = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
+        $table = Database::get_main_table(TABLE_MAIN_LANGUAGE);
         $sql = 'SELECT dokeos_folder FROM ' . $table . '
                 WHERE parent_id = ' . $parent_id . ' and id = ' . $sub_language_id;
         $res = Database::query($sql);
@@ -214,7 +214,7 @@ class SubLanguageManager
             return false;
         }
         $row = Database::fetch_assoc($res);
-        $res = SubLanguageManager::remove_language_directory($row['dokeos_folder']);
+        $res = self::remove_language_directory($row['dokeos_folder']);
         if ($res === false) {
             return false;
         } //can't delete dir, so do not delete language record
@@ -239,7 +239,7 @@ class SubLanguageManager
         if (!is_dir($dir)) {
             return true;
         } //even if the dir does not exist, we reach the objective of not having the directory there
-        $content = SubLanguageManager::get_lang_folder_files_list($dir);
+        $content = self::get_lang_folder_files_list($dir);
 
         if (count($content) > 0) {
             foreach ($content as $value_content) {
@@ -259,7 +259,7 @@ class SubLanguageManager
      */
     public static function check_if_exist_language_by_id($language_id)
     {
-        $table = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
+        $table = Database::get_main_table(TABLE_MAIN_LANGUAGE);
         $sql = 'SELECT count(*) as count
                 FROM ' . $table . '
                 WHERE id="' . intval($language_id) . '"';
@@ -282,7 +282,7 @@ class SubLanguageManager
      */
     public static function get_name_of_language_by_id($language_id)
     {
-        $table = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
+        $table = Database::get_main_table(TABLE_MAIN_LANGUAGE);
         $sql = 'SELECT original_name
                 FROM ' . $table . '
                 WHERE id= ' . intval($language_id) . '';
@@ -302,7 +302,7 @@ class SubLanguageManager
      */
     public static function check_if_language_is_sub_language($language_id)
     {
-        $table = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
+        $table = Database::get_main_table(TABLE_MAIN_LANGUAGE);
         $sql = 'SELECT count(*) AS count FROM ' . $table . '
                 WHERE id = ' . intval($language_id) . ' AND NOT ISNULL(parent_id)';
         $rs = Database::query($sql);
@@ -321,7 +321,7 @@ class SubLanguageManager
     public static function check_if_language_is_used($language_id)
     {
         $language_info = self::get_all_information_of_language($language_id);
-        $table = Database :: get_main_table(TABLE_MAIN_USER);
+        $table = Database::get_main_table(TABLE_MAIN_USER);
         $sql = 'SELECT count(*) AS count FROM ' . $table . '
                 WHERE language ="' . Database::escape_string($language_info['english_name']).'"';
         $rs = Database::query($sql);
@@ -339,7 +339,7 @@ class SubLanguageManager
      */
     public static function check_if_language_is_father($language_id)
     {
-        $table = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
+        $table = Database::get_main_table(TABLE_MAIN_LANGUAGE);
         $sql = 'SELECT count(*) AS count FROM ' . $table . '
                 WHERE parent_id= ' . intval($language_id) . ' AND NOT ISNULL(parent_id);';
         $rs = Database::query($sql);
@@ -358,7 +358,7 @@ class SubLanguageManager
      */
     public static function make_unavailable_language($language_id)
     {
-        $tbl_admin_languages = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
+        $tbl_admin_languages = Database::get_main_table(TABLE_MAIN_LANGUAGE);
         $sql = "UPDATE $tbl_admin_languages SET available='0'
                 WHERE id = " . intval($language_id) . "";
         $result = Database::query($sql);
@@ -373,7 +373,7 @@ class SubLanguageManager
      */
     public static function make_available_language($language_id)
     {
-        $tbl_admin_languages = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
+        $tbl_admin_languages = Database::get_main_table(TABLE_MAIN_LANGUAGE);
         $sql = "UPDATE $tbl_admin_languages SET available='1'
                 WHERE id = " . intval($language_id) . "";
         $result = Database::query($sql);
@@ -391,8 +391,8 @@ class SubLanguageManager
         if (empty($language_id) or (intval($language_id) != $language_id)) {
             return false;
         }
-        $tbl_admin_languages = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
-        $tbl_settings_current = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+        $tbl_admin_languages = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+        $tbl_settings_current = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
         $sql = "SELECT english_name FROM " . $tbl_admin_languages . "
                 WHERE id= " . intval($language_id) . "";
         $result = Database::query($sql);
@@ -416,7 +416,7 @@ class SubLanguageManager
     public static function get_platform_language_id()
     {
         $name = api_get_setting('platformLanguage');
-        $tbl_admin_languages = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
+        $tbl_admin_languages = Database::get_main_table(TABLE_MAIN_LANGUAGE);
         $sql = "SELECT id FROM " . $tbl_admin_languages . " WHERE english_name ='$name'";
         $res = Database::query($sql);
         if (Database::num_rows($res) < 1) {
@@ -434,7 +434,7 @@ class SubLanguageManager
      */
     public static function get_parent_language_path($language_path)
     {
-        $tbl_admin_languages = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
+        $tbl_admin_languages = Database::get_main_table(TABLE_MAIN_LANGUAGE);
         $sql = "SELECT dokeos_folder
                 FROM " . $tbl_admin_languages . "
                 WHERE id = (
@@ -458,7 +458,7 @@ class SubLanguageManager
     public static function getLanguageFromIsocode($isocode)
     {
         $isocode = Database::escape_string($isocode);
-        $adminLanguagesTable = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
+        $adminLanguagesTable = Database::get_main_table(TABLE_MAIN_LANGUAGE);
         // select language - if case several languages match, get the last (more recent) one
         $sql = "SELECT english_name
                 FROM " . $adminLanguagesTable . "

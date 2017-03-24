@@ -3387,9 +3387,7 @@ class learnpath
                                     $linkProtocol = substr($file, 0, 5);
                                     if ($linkProtocol === 'http:') {
                                         //this is the special intervention case
-                                        $file = api_get_path(
-                                                WEB_CODE_PATH
-                                            ) . 'lp/embed.php?type=nonhttps&source='.urlencode($file);
+                                        $file = api_get_path(WEB_CODE_PATH).'lp/embed.php?type=nonhttps&source='.urlencode($file);
                                     }
                                 }
                             }
@@ -3443,7 +3441,7 @@ class learnpath
                                 $file .= '&not_multiple_attempt='.$not_multiple_attempt;
                             }
                             break;
-                        }
+                    }
 
                     $tmp_array = explode('/', $file);
                     $document_name = $tmp_array[count($tmp_array) - 1];
@@ -5684,6 +5682,22 @@ class learnpath
                             'data-title' => $arrLP[$i]['title']
                         )
                     );
+                } elseif (in_array($arrLP[$i]['item_type'], ['forum', 'thread'])) {
+                    $link = $this->rl_get_resource_link_for_learnpath(
+                        $this->course_int_id,
+                        $this->lp_id,
+                        $arrLP[$i]['id'],
+                        0
+                    );
+                    //$urlPreviewLink = api_get_self().'?'.api_get_cidreq().'&action=view_item&mode=preview_document&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id;
+                    $previewIcon = Display::url(
+                        Display::return_icon('preview_view.png', get_lang('Preview'), array(), ICON_SIZE_TINY),
+                        $link,
+                        array(
+                            'class' => 'btn btn-default ajax',
+                            'data-title' => $arrLP[$i]['title']
+                        )
+                    );
                 } else {
                     $previewIcon = Display::url(
                         Display::return_icon('preview_view.png', get_lang('Preview'), array(), ICON_SIZE_TINY),
@@ -6308,7 +6322,28 @@ class learnpath
                     $return .= $msg;
 
                 $return .= '<h3>'.$row['title'].'</h3>';
+
                 switch ($row['item_type']) {
+                    case TOOL_THREAD:
+                        $link = $this->rl_get_resource_link_for_learnpath(
+                            $course_id,
+                            $row['lp_id'],
+                            $item_id,
+                            0
+                        );
+                        $return .= Display::url(
+                            get_lang('GoToThread'),
+                            $link,
+                            ['class' => 'btn btn-primary']
+                        );
+                        break;
+                    case TOOL_FORUM:
+                        $return .= Display::url(
+                            get_lang('GoToForum'),
+                            api_get_path(WEB_CODE_PATH) . 'forum/viewforum.php?' . api_get_cidreq() . '&forum=' . $row['path'],
+                            ['class' => 'btn btn-primary']
+                        );
+                        break;
                     case TOOL_QUIZ:
                         if (!empty($row['path'])) {
                             $exercise = new Exercise();
@@ -11300,7 +11335,7 @@ EOD;
                 WHERE
                     c_id = $course_id AND
                     lp_item_id = " . $row_item['id'] . " AND
-                    lp_view_id = " . $lpViewId . "
+                    lp_view_id = $lpViewId
                 ORDER BY view_count DESC";
         $learnpathItemViewResult = Database::query($sql);
         $learnpathItemViewData = Database::fetch_array($learnpathItemViewResult, 'ASSOC');
@@ -11344,7 +11379,7 @@ EOD;
                     $link .= $main_dir_path . 'exercise/overview.php?cidReq='.$course_code.'&session_id='.$session_id.'&lp_init=1&origin='.$origin.'&learnpath_item_view_id='.$learnpathItemViewId.'&learnpath_id='.$learningPathId.'&learnpath_item_id='.$id_in_path.'&exerciseId='.$id;
                 }
                 break;
-            case 'hotpotatoes': //lowercase because of strtolower above
+            case TOOL_HOTPOTATOES: //lowercase because of strtolower above
                 $TBL_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
                 $result = Database::query("SELECT * FROM ".$TBL_DOCUMENT." WHERE c_id = $course_id AND id=$id");
                 $myrow = Database::fetch_array($result);
@@ -11361,17 +11396,14 @@ EOD;
                     $sql = "SELECT * FROM $tbl_topics WHERE c_id = $course_id AND thread_id=$id";
                     $result = Database::query($sql);
                     $myrow = Database::fetch_array($result);
-                    $link .= $main_dir_path.'forum/viewthread.php?origin=learnpath&thread='.$id.'' .
-                            '&forum='.$myrow['forum_id'].'&lp=true';
+                    $link .= $main_dir_path.'forum/viewthread.php?origin=learnpath&thread='.$id.'&forum='.$myrow['forum_id'].'&lp=true';
                 }
                 break;
             case TOOL_POST:
                 $tbl_post = Database::get_course_table(TABLE_FORUM_POST);
                 $result = Database::query("SELECT * FROM $tbl_post WHERE c_id = $course_id AND post_id=$id");
                 $myrow = Database::fetch_array($result);
-                $link .= $main_dir_path.'forum/viewthread.php?post='.$id.'' .
-                        '&thread='.$myrow['thread_id'].'&forum='.$myrow['forum_id'].'' .
-                        '&lp=true';
+                $link .= $main_dir_path.'forum/viewthread.php?post='.$id.'&thread='.$myrow['thread_id'].'&forum='.$myrow['forum_id'].'&lp=true';
                 break;
             case TOOL_DOCUMENT:
                 $document = $em

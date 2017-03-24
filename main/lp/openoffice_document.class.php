@@ -132,14 +132,17 @@ abstract class OpenofficeDocument extends learnpath
 
             if ($return != 0) { // If the java application returns an error code.
                 switch ($return) {
-                    // Can't connect to openoffice.
-                    case 1: $this->error = get_lang('CannotConnectToOpenOffice');
+                    case 1:
+                        // Can't connect to openoffice.
+                        $this->error = get_lang('CannotConnectToOpenOffice');
                         break;
-                    // Conversion failed in openoffice.
-                    case 2: $this->error = get_lang('OogieConversionFailed');
+                    case 2:
+                        // Conversion failed in openoffice.
+                        $this->error = get_lang('OogieConversionFailed');
                         break;
-                    // Conversion can't be launch because command failed.
-                    case 255: $this->error = get_lang('OogieUnknownError');
+                    case 255:
+                        // Conversion can't be launch because command failed.
+                        $this->error = get_lang('OogieUnknownError');
                         break;
                 }
                 DocumentManager::delete_document($_course, $this->created_dir, $this->base_work_dir);
@@ -311,14 +314,17 @@ abstract class OpenofficeDocument extends learnpath
 
             if ($return != 0) { // If the java application returns an error code.
                 switch ($return) {
-                    // Can't connect to openoffice.
-                    case 1: $this->error = get_lang('CannotConnectToOpenOffice');
+                    case 1:
+                        // Can't connect to openoffice.
+                        $this->error = get_lang('CannotConnectToOpenOffice');
                         break;
-                    // Conversion failed in openoffice.
-                    case 2: $this->error = get_lang('OogieConversionFailed');
+                    case 2:
+                        // Conversion failed in openoffice.
+                        $this->error = get_lang('OogieConversionFailed');
                         break;
-                    // Conversion can't be launch because command failed.
-                    case 255: $this->error = get_lang('OogieUnknownError');
+                    case 255:
+                        // Conversion can't be launch because command failed.
+                        $this->error = get_lang('OogieUnknownError');
                         break;
                 }
                 DocumentManager::delete_document($_course, $this->created_dir, $this->base_work_dir);

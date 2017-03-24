@@ -1736,7 +1736,7 @@ class Wiki
         $session_id=api_get_session_id();
         $course_id = api_get_course_int_id();
 
-        $group_properties  = GroupManager :: get_group_properties($groupId);
+        $group_properties  = GroupManager::get_group_properties($groupId);
         $group_name = $group_properties['name'];
         $allow_send_mail = false; //define the variable to below
         $email_assignment = null;
@@ -1972,7 +1972,7 @@ class Wiki
 
         if (0 != $groupId) {
             $groupPart = '_group' . $groupId; // and add groupId to put the same document title in different groups
-            $group_properties  = GroupManager :: get_group_properties($groupId);
+            $group_properties  = GroupManager::get_group_properties($groupId);
             $groupPath = $group_properties['directory'];
         } else {
             $groupPart = '';
@@ -2119,8 +2119,8 @@ class Wiki
             }
         } else {
             //extract group members
-            $subscribed_users = GroupManager :: get_subscribed_users($groupInfo['iid']);
-            $subscribed_tutors = GroupManager :: get_subscribed_tutors($groupInfo['iid']);
+            $subscribed_users = GroupManager::get_subscribed_users($groupInfo['iid']);
+            $subscribed_tutors = GroupManager::get_subscribed_tutors($groupInfo['iid']);
             $a_users_to_add_with_duplicates = array_merge($subscribed_users, $subscribed_tutors);
 
             //remove duplicates
@@ -3540,7 +3540,7 @@ class Wiki
                 }//end discuss lock
 
                 echo '<hr noshade size="1">';
-                $user_table = Database :: get_main_table(TABLE_MAIN_USER);
+                $user_table = Database::get_main_table(TABLE_MAIN_USER);
 
                 $sql = "SELECT *
                         FROM $tbl_wiki_discuss reviews, $user_table user
@@ -4248,7 +4248,7 @@ class Wiki
                 //Only teacher, platform admin and group members can edit a wiki group
                 if (api_is_allowed_to_edit(false,true) ||
                     api_is_platform_admin() ||
-                    GroupManager :: is_user_in_group($userId, $groupInfo['iid']) ||
+                    GroupManager::is_user_in_group($userId, $groupInfo['iid']) ||
                     api_is_allowed_in_course()
                 ) {
                     $PassEdit = true;
@@ -4880,7 +4880,7 @@ class Wiki
                 //Only teacher, platform admin and group members can edit a wiki group
                 if (api_is_allowed_to_edit(false,true) ||
                     api_is_platform_admin() ||
-                    GroupManager :: is_user_in_group($userId, $groupInfo['iid'])
+                    GroupManager::is_user_in_group($userId, $groupInfo['iid'])
                 ) {
                     $PassEdit = true;
                 } else {

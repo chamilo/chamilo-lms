@@ -41,7 +41,7 @@ class ScoreDisplay
         } elseif (!isset($score2)) {
             return -1;
         } else {
-            $scoredisplay = ScoreDisplay :: instance();
+            $scoredisplay = ScoreDisplay::instance();
             $custom1 = $scoredisplay->display_custom($score1);
             $custom2 = $scoredisplay->display_custom($score2);
             if ($custom1 == $custom2) {
@@ -169,7 +169,7 @@ class ScoreDisplay
      */
     private function get_current_gradebook_category_id()
     {
-        $tbl_gradebook_category = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+        $tbl_gradebook_category = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $curr_course_code = api_get_course_id();
         $curr_session_id = api_get_session_id();
 
@@ -209,7 +209,7 @@ class ScoreDisplay
         }
 
         // remove previous settings
-        $table = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY);
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY);
         $sql = 'DELETE FROM '.$table.' WHERE category_id = '.$category_id;
         Database::query($sql);
 
@@ -248,7 +248,7 @@ class ScoreDisplay
             100 => get_lang('GradebookExcellent')
         );
 
-        $tbl_display = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY);
+        $tbl_display = Database::get_main_table(TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY);
         foreach($display as $value => $text) {
             $params = array(
                 'score' => $value,
@@ -472,7 +472,7 @@ class ScoreDisplay
      */
     private function get_score_color_percent($category_id = null)
     {
-        $tbl_display = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY);
+        $tbl_display = Database::get_main_table(TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY);
         if (isset($category_id)) {
             $category_id = intval($category_id);
         } else {
@@ -499,7 +499,7 @@ class ScoreDisplay
      */
     private function get_custom_displays($category_id = null)
     {
-        $tbl_display = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY);
+        $tbl_display = Database::get_main_table(TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY);
         if (isset($category_id)) {
             $category_id = intval($category_id);
         } else {

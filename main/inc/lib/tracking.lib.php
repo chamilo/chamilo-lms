@@ -4411,21 +4411,21 @@ class Tracking
                     $courseInfo = api_get_course_info($course_code);
                     $courseId = $courseInfo['real_id'];
 
-                    $total_time_login = Tracking::get_time_spent_on_the_course(
+                    $total_time_login = self::get_time_spent_on_the_course(
                         $user_id,
                         $courseId
                     );
                     $time = api_time_to_hms($total_time_login);
-                    $progress = Tracking::get_avg_student_progress(
+                    $progress = self::get_avg_student_progress(
                         $user_id,
                         $course_code
                     );
-                    $percentage_score = Tracking::get_avg_student_score(
+                    $percentage_score = self::get_avg_student_score(
                         $user_id,
                         $course_code,
                         array()
                     );
-                    $last_connection = Tracking::get_last_connection_date_on_the_course(
+                    $last_connection = self::get_last_connection_date_on_the_course(
                         $user_id,
                         $courseInfo
                     );
@@ -6129,7 +6129,7 @@ class TrackingCourseLog
     	$thematic_tools = array('thematic', 'thematic_advance', 'thematic_plan');
     	while ($row = Database::fetch_array($res)) {
     		$ref = $row['ref'];
-    		$table_name = TrackingCourseLog::get_tool_name_table($row['col0']);
+    		$table_name = self::get_tool_name_table($row['col0']);
     		$table_tool = Database::get_course_table($table_name['table_name']);
 
     		$id = $table_name['id_tool'];

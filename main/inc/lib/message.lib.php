@@ -415,7 +415,7 @@ class MessageManager
         $sendCopyToDrhUsers = false,
         $directMessage = false
     ) {
-        $result = MessageManager::send_message(
+        $result = self::send_message(
             $receiver_user_id,
             $subject,
             $message,
@@ -439,7 +439,7 @@ class MessageManager
                             $userInfo['complete_name']
                         ) . ' <br />' . $message;
 
-                    MessageManager::send_message_simple(
+                    self::send_message_simple(
                         $drhInfo['user_id'],
                         $subject,
                         $message,
@@ -1617,7 +1617,7 @@ class MessageManager
                     $number_of_selected_messages = count($_POST['id']);
                     if (is_array($_POST['id'])) {
                         foreach ($_POST['id'] as $index => $message_id) {
-                            MessageManager::update_message_status(api_get_user_id(), $message_id, MESSAGE_STATUS_UNREAD);
+                            self::update_message_status(api_get_user_id(), $message_id, MESSAGE_STATUS_UNREAD);
                         }
                     }
                     $html .= Display::return_message(api_xml_http_response_encode($success_unread), 'normal', false);
@@ -1626,7 +1626,7 @@ class MessageManager
                     $number_of_selected_messages = count($_POST['id']);
                     if (is_array($_POST['id'])) {
                         foreach ($_POST['id'] as $index => $message_id) {
-                            MessageManager::update_message_status(api_get_user_id(), $message_id, MESSAGE_STATUS_NEW);
+                            self::update_message_status(api_get_user_id(), $message_id, MESSAGE_STATUS_NEW);
                         }
                     }
                     $html .= Display::return_message(api_xml_http_response_encode($success_read), 'normal', false);
@@ -1634,12 +1634,12 @@ class MessageManager
                 case 'delete' :
                     $number_of_selected_messages = count($_POST['id']);
                     foreach ($_POST['id'] as $index => $message_id) {
-                        MessageManager::delete_message_by_user_receiver(api_get_user_id(), $message_id);
+                        self::delete_message_by_user_receiver(api_get_user_id(), $message_id);
                     }
                     $html .= Display::return_message(api_xml_http_response_encode($success), 'normal', false);
                     break;
                 case 'deleteone' :
-                    MessageManager::delete_message_by_user_receiver(api_get_user_id(), $_GET['id']);
+                    self::delete_message_by_user_receiver(api_get_user_id(), $_GET['id']);
                     $html .= Display::return_message(api_xml_http_response_encode($success), 'confirmation', false);
                     break;
             }
@@ -1699,13 +1699,13 @@ class MessageManager
                     $number_of_selected_messages = count($_POST['id']);
                     if ($number_of_selected_messages != 0) {
                         foreach ($_POST['id'] as $index => $message_id) {
-                            MessageManager::delete_message_by_user_receiver(api_get_user_id(), $message_id);
+                            self::delete_message_by_user_receiver(api_get_user_id(), $message_id);
                         }
                     }
                     $html .= Display::return_message(api_xml_http_response_encode($success), 'normal', false);
                     break;
                 case 'deleteone':
-                    MessageManager::delete_message_by_user_receiver(api_get_user_id(), $_GET['id']);
+                    self::delete_message_by_user_receiver(api_get_user_id(), $_GET['id']);
                     $html .= Display::return_message(api_xml_http_response_encode($success), 'normal', false);
                     $html .= '<br/>';
                     break;
@@ -1880,7 +1880,7 @@ class MessageManager
         $admins = UserManager::get_all_administrators();
 
         foreach ($admins as $admin_info) {
-            MessageManager::send_message(
+            self::send_message(
                 $admin_info['user_id'],
                 $emailsubject,
                 $emailbody,

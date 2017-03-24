@@ -1438,7 +1438,7 @@ class Link extends Model
             return 0; // 0 = fail
         }
 
-        $cat = ($catname = trim($linkdata['category'])) ? Link::get_cat($catname) : 0;
+        $cat = ($catname = trim($linkdata['category'])) ? self::get_cat($catname) : 0;
 
         $regs = array(); // Will be passed to ereg()
         $d = '';
@@ -1466,7 +1466,7 @@ class Link extends Model
             $d = substr($d, 2) . ' - ';
         }
 
-        return Link::put_link(
+        return self::put_link(
             $url,
             $cat,
             $title,
@@ -1597,7 +1597,7 @@ class Link extends Model
                 Display::return_icon('new_folder.png', get_lang('CategoryAdd'),'',ICON_SIZE_MEDIUM).'</a>';
         }
 
-        $categories = Link::getLinkCategories($course_id, $session_id);
+        $categories = self::getLinkCategories($course_id, $session_id);
         $count = count($categories);
         if (!empty($count)) {
             echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=list&show=none">';
@@ -1617,7 +1617,7 @@ class Link extends Model
 
         if ($count !== 0) {
             echo Display::panel(
-                Link::showLinksPerCategory(
+                self::showLinksPerCategory(
                     0,
                     api_get_course_int_id(),
                     api_get_session_id()
@@ -1643,11 +1643,11 @@ class Link extends Model
             $visibilityClass = null;
             if ($myrow['visibility'] == '1') {
                 $strVisibility =  '<a href="link.php?' . api_get_cidreq() .  '&sec_token='.$token.'&action=invisible&id=' . $myrow['id'] . '&scope=' . TOOL_LINK_CATEGORY . '" title="' . get_lang('Hide') . '">' .
-                    Display :: return_icon('visible.png', get_lang('Hide'), array (), ICON_SIZE_SMALL) . '</a>';
+                    Display::return_icon('visible.png', get_lang('Hide'), array (), ICON_SIZE_SMALL) . '</a>';
             } elseif ($myrow['visibility'] == '0') {
                 $visibilityClass = 'text-muted';
                 $strVisibility =  ' <a href="link.php?' . api_get_cidreq() .  '&sec_token='.$token.'&action=visible&id=' . $myrow['id'] . '&scope=' . TOOL_LINK_CATEGORY . '" title="' . get_lang('Show') . '">' .
-                    Display :: return_icon('invisible.png', get_lang('Show'), array (), ICON_SIZE_SMALL) . '</a>';
+                    Display::return_icon('invisible.png', get_lang('Show'), array (), ICON_SIZE_SMALL) . '</a>';
             }
 
             $header = '';
@@ -1665,7 +1665,7 @@ class Link extends Model
             if (api_is_allowed_to_edit(null, true)) {
                 if ($session_id == $myrow['session_id']) {
                     $header .= $strVisibility;
-                    $header .= Link::showCategoryAdminTools($myrow, $counter, count($categories));
+                    $header .= self::showCategoryAdminTools($myrow, $counter, count($categories));
                 } else {
                     $header .= get_lang('EditionNotAvailableFromSession');
                 }
@@ -1673,7 +1673,7 @@ class Link extends Model
 
             $childrenContent = '';
             if ($showChildren) {
-                $childrenContent = Link::showLinksPerCategory(
+                $childrenContent = self::showLinksPerCategory(
                     $myrow['id'],
                     api_get_course_int_id(),
                     api_get_session_id()
@@ -1697,7 +1697,7 @@ class Link extends Model
     {
         $course_id = api_get_course_int_id();
         $session_id = api_get_session_id();
-        $linkInfo = Link::get_link_info($linkId);
+        $linkInfo = self::get_link_info($linkId);
         $categoryId = isset($linkInfo['category_id']) ? $linkInfo['category_id'] : '';
         $lpId = isset($_GET['lp_id']) ? Security::remove_XSS($_GET['lp_id']) : null;
 
@@ -1740,7 +1740,7 @@ class Link extends Model
         $form->addText('title', get_lang('LinkName'));
         $form->addTextarea('description', get_lang('Description'));
 
-        $resultcategories = Link::getLinkCategories($course_id, $session_id);
+        $resultcategories = self::getLinkCategories($course_id, $session_id);
         $options = ['0' => '--'];
         if (!empty($resultcategories)) {
             foreach ($resultcategories as $myrow) {

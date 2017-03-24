@@ -3176,7 +3176,8 @@ class Exercise
 
         if ($answerType == FREE_ANSWER ||
             $answerType == ORAL_EXPRESSION ||
-            $answerType == CALCULATED_ANSWER
+            $answerType == CALCULATED_ANSWER ||
+            $answerType == ANNOTATION
         ) {
             $nbrAnswers = 1;
         }
@@ -3221,7 +3222,7 @@ class Exercise
         $answer_correct_array = array();
         $orderedHotspots = [];
 
-        if ($answerType == HOT_SPOT) {
+        if ($answerType == HOT_SPOT || $answerType == ANNOTATION) {
             $orderedHotspots = $em
                 ->getRepository('ChamiloCoreBundle:TrackEHotspot')
                 ->findBy([
@@ -4156,6 +4157,35 @@ class Exercise
                     $_SESSION['hotspot_coord'][1] = $delineation_cord;
                     $_SESSION['hotspot_dest'][1] = $answer_delineation_destination;
                     break;
+                case ANNOTATION:
+                    if ($from_database) {
+                        $sql  = "SELECT answer, marks FROM $TBL_TRACK_ATTEMPT
+                                 WHERE 
+                                    exe_id = $exeId AND 
+                                    question_id= ".$questionId;
+                        $resq = Database::query($sql);
+                        $data = Database::fetch_array($resq);
+
+                        $choice = $data['answer'];
+                        $choice = str_replace('\r\n', '', $choice);
+                        $choice = stripslashes($choice);
+
+                        $questionScore = empty($data['marks']) ? 0 : $data['marks'];
+                        $totalScore += $questionScore == -1 ? 0 : $questionScore;
+
+                        $arrques = $questionName;
+                        $arrans  = $choice;
+
+                        break;
+                    }
+
+                    $studentChoice = $choice;
+
+                    if ($studentChoice) {
+                        $questionScore = 0;
+                        $totalScore += 0;
+                    }
+                    break;
             } // end switch Answertype
 
             if ($show_result) {
@@ -4455,6 +4485,15 @@ class Exercise
                                 )
                             );
                             echo '</tr>';
+                        } else if ($answerType == ANNOTATION) {
+                            ExerciseShowFunctions::displayAnnotationAnswer(
+                                $feedback_type,
+                                $choice,
+                                $exeId,
+                                $questionId,
+                                $questionScore,
+                                $results_disabled
+                            );
                         }
                     }
                 } else {
@@ -4801,6 +4840,16 @@ class Exercise
                             echo '</tr>';
 
                             break;
+                        case ANNOTATION:
+                            ExerciseShowFunctions::displayAnnotationAnswer(
+                                $feedback_type,
+                                $choice,
+                                $exeId,
+                                $questionId,
+                                $questionScore,
+                                $results_disabled
+                            );
+                            break;
                     }
                 }
             }
@@ -5020,11 +5069,13 @@ class Exercise
                 }
             }
 
+            $relPath = api_get_path(WEB_CODE_PATH);
+
             if ($answerType == HOT_SPOT || $answerType == HOT_SPOT_ORDER) {
                 // We made an extra table for the answers
 
                 if ($show_result) {
-                    $relPath = api_get_path(WEB_CODE_PATH);
+
                     //	if ($origin != 'learnpath') {
                     echo '</table></td></tr>';
                     echo "
@@ -5047,6 +5098,26 @@ class Exercise
                         </tr>
                     ";
                     //	}
+                }
+            } else if ($answerType == ANNOTATION) {
+                if ($show_result) {
+                    echo '</table></td></tr>';
+                    echo '
+                        <tr>
+                            <td colspan="2">
+                                <p><em>' . get_lang('Annotation') . '</em></p>
+                                <div id="annotation-canvas-'.$questionId.'"></div>
+                                <script>
+                                    AnnotationQuestion({
+                                        use: \'solution\',
+                                        questionId: parseInt('.$questionId.'),
+                                        exerciseId: parseInt('.$exeId.'),
+                                        relPath: \''.$relPath.'\'
+                                    });
+                                </script>
+                            </td>
+                        </tr>
+                    ';
                 }
             }
 
@@ -5167,7 +5238,7 @@ class Exercise
                 $answer = $choice;
                 Event::saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
                 //            } elseif ($answerType == HOT_SPOT || $answerType == HOT_SPOT_DELINEATION) {
-            } elseif ($answerType == HOT_SPOT) {
+            } elseif ($answerType == HOT_SPOT || $answerType == ANNOTATION) {
                 $answer = [];
                 if (isset($exerciseResultCoordinates[$questionId]) && !empty($exerciseResultCoordinates[$questionId])) {
                     Database::delete(

@@ -1581,12 +1581,11 @@ EOT;
                     data.submit().always(function () {
                         \$this.remove();
                     });
-                });
-
+                });               
+                
             $('#".$inputName."').fileupload({
                 url: url,
                 dataType: 'json',
-                autoUpload: true,
                 // Enable image resizing, except for Android and Opera,
                 // which actually support image resizing, but fail to
                 // send Blob objects via XHR requests:
@@ -1594,15 +1593,13 @@ EOT;
                 previewMaxWidth: 100,
                 previewMaxHeight: 100,
                 previewCrop: true,
-                dropzone: $('#dropzone')
-             }).on('fileuploadadd', function (e, data) {
+                dropzone: $('#dropzone'),                                
+            }).on('fileuploadadd', function (e, data) {
                 data.context = $('<div class=\"row\" style=\"margin-bottom:35px\" />').appendTo('#files');
                 $.each(data.files, function (index, file) {
                     var node = $('<div class=\"col-sm-5\">').text(file.name);                    
                     node.appendTo(data.context);
-                }
-            );
-            
+                });
             }).on('fileuploadprocessalways', function (e, data) {
                 var index = data.index,
                     file = data.files[index],
@@ -1633,8 +1630,7 @@ EOT;
                         var link = $('<a>')
                             .attr('target', '_blank')
                             .prop('href', file.url);
-                        $(data.context.children()[index]).parent().wrap(link);
-                        
+                        $(data.context.children()[index]).parent().wrap(link);                        
                         var successMessage = $('<div class=\"col-sm-3\">').html($('<span class=\"alert alert-success\"/>').text('" . addslashes(get_lang('UplUploadSucceeded')) . "'));
                         $(data.context.children()[index]).parent().append(successMessage);
                     } else if (file.error) {
@@ -1642,17 +1638,25 @@ EOT;
                         $(data.context.children()[index]).parent().append(error);
                     }
                 });
+                $('#dropzone').removeClass('hover');
             }).on('fileuploadfail', function (e, data) {
                 $.each(data.files, function (index) {
                     var failedMessage = '" . addslashes(get_lang('UplUploadFailed')) . "';
                     var error = $('<div class=\"col-sm-3\">').html($('<span class=\"alert alert-danger\"/>').text(failedMessage));
                     $(data.context.children()[index]).parent().append(error);
                 });
-            }).prop('disabled', !$.support.fileInput)
-                .parent().addClass($.support.fileInput ? undefined : 'disabled');
-
+                $('#dropzone').removeClass('hover');
+            }).prop('disabled', !$.support.fileInput).parent().addClass($.support.fileInput ? undefined : 'disabled');            
+            
+            $('#dropzone').on('dragover', function (e) {
+                // dragleave callback implementation                
+                $('#dropzone').addClass('hover');
+            });
+            
+            $('#dropzone').on('dragleave', function (e) {                
+                $('#dropzone').removeClass('hover');
+            });
             $('.fileinput-button').hide();
-
         });
         </script>");
     }

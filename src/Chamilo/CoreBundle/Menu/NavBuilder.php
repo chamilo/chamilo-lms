@@ -48,6 +48,49 @@ class NavBuilder extends ContainerAware
     }
 
     /**
+     * Get chamilo root
+     * @return string
+     */
+    private function getChamiloRoot()
+    {
+        $urlAppend = $this->container->getParameter('url_append');
+        $chamiloHost = $this->container->get('request')->getSchemeAndHttpHost();
+        if (!empty($urlAppend)) {
+            $chamiloHost .= '/'.$urlAppend.'/';
+        } else {
+            $chamiloHost .= '/';
+        }
+
+        return $chamiloHost;
+    }
+
+    /**
+     * Get chamilo locale
+     * @return string
+     */
+    private function getChamiloLocale()
+    {
+        // Locale from URL
+        $locale = $this->container->get('request')->get('_locale');
+        if (empty($locale)) {
+            // Try locale from symfony2
+            $locale = $this->container->get('request')->getLocale();
+        }
+
+        $chamiloLocale = 'french2';
+        switch ($locale) {
+            case 'de':
+                $chamiloLocale = 'german2';
+                break;
+            case 'fr':
+                $chamiloLocale = 'french2';
+                break;
+        }
+
+        return $chamiloLocale;
+    }
+
+    /**
      * Top menu left
      * @param FactoryInterface $factory
      * @param array $options
@@ -76,15 +119,16 @@ class NavBuilder extends ContainerAware
 
         $menu = $factory->createItem('root');
         $menu->setChildrenAttribute('class', 'nav navbar-nav');
-
+        $chamiloHost = $this->getChamiloRoot();
         $menu->addChild(
             $translator->trans('Homepage'),
             array(
-                'route' => 'main',
+                /*'route' => 'main',
                 'routeParameters' => array(
                     'name' => '../index.php',
                     'language' => $chamiloLocale
-                )
+                )*/
+                'uri' => $chamiloHost.'index.php?language='.$chamiloLocale
             )
         )->setAttribute('class', 'item-menu menu-1 homepage');
 
@@ -92,11 +136,12 @@ class NavBuilder extends ContainerAware
             $menu->addChild(
                 $translator->trans('My courses'),
                 array(
-                    'route' => 'main',
+                    /*'route' => 'main',
                     'routeParameters' => array(
                         'name' => '../user_portal.php',
                         'language' => $chamiloLocale
-                    ),
+                    ),*/
+                    'uri' => $chamiloHost.'user_portal.php?language='.$chamiloLocale
                 )
             )->setAttribute('class', 'item-menu menu-2 my-course');
 
@@ -113,26 +158,27 @@ class NavBuilder extends ContainerAware
             $menu->addChild(
                 $translator->trans('Reporting'),
                 array(
-                    'route' => 'main',
+                    /*'route' => 'main',
                     'routeParameters' => array(
                         'name' => 'mySpace/index.php',
                         'language' => $chamiloLocale
-                    ),
+                    ),*/
+                    'uri' => $chamiloHost.'main/mySpace/index.php?language='.$chamiloLocale
                 )
             )->setAttribute('class', 'item-menu menu-3 my-space');
 
             $menu->addChild(
                 $translator->trans('Social network'),
                 array(
-                    'route' => 'main',
+                    /*'route' => 'main',
                     'routeParameters' => array(
                         'name' => 'social/home.php',
                         'language' => $chamiloLocale
-                    ),
+                    ),*/
+                    'uri' => $chamiloHost.'main/social/home.php?language='.$chamiloLocale
                 )
             )->setAttribute('class', 'item-menu menu-4 social-network ');
             if ($checker->isGranted('ROLE_ADMIN')) {
-
                 /*$menu->addChild(
                     $translator->trans('Dashboard'),
                     array(
@@ -177,11 +223,12 @@ class NavBuilder extends ContainerAware
             $menu->addChild(
                 $translator->trans('Subscription'),
                 array(
-                    'route' => 'main',
+                    /*'route' => 'main',
                     'routeParameters' => array(
                         'name' => 'auth/inscription.php',
                         'language' => $chamiloLocale
-                    )
+                    )*/
+                    'uri' => $chamiloHost.'auth/inscription.php?language='.$chamiloLocale
                 )
             )->setAttribute('class', 'item-menu menu-3');
 
@@ -271,9 +318,10 @@ class NavBuilder extends ContainerAware
     public function rightMenu(FactoryInterface $factory, array $options)
     {
         $checker = $this->container->get('security.authorization_checker');
-
         $translator = $this->container->get('translator');
         $menu = $factory->createItem('root');
+        $chamiloHost = $this->getChamiloRoot();
+        $chamiloLocale = $this->getChamiloLocale();
 
         if ($checker->isGranted('IS_AUTHENTICATED_FULLY')) {
             $token = $this->container->get('security.token_storage');
@@ -305,10 +353,11 @@ class NavBuilder extends ContainerAware
                 $dropdown->addChild(
                     $translator->trans('Administration'),
                     array(
-                        'route' => 'main',
+                        /*'route' => 'main',
                         'routeParameters' => array(
                             'name' => 'admin/',
-                        ),
+                        ),*/
+                        'uri' => $chamiloHost.'main/admin/index.php?language='.$chamiloLocale,
                         'icon' => ' fa fa-cog'
                     )
                 );
@@ -317,10 +366,11 @@ class NavBuilder extends ContainerAware
             $dropdown->addChild(
                 $translator->trans('Personal agenda'),
                 array(
-                    'route' => 'main',
+                    /*'route' => 'main',
                     'routeParameters' => array(
                         'name' => 'calendar/agenda_js.php',
-                    ),
+                    ),*/
+                    'uri' => $chamiloHost.'main/calendar/agenda_js.php?language='.$chamiloLocale,
                     'icon' => ' fa fa-calendar'
                 )
             );
@@ -335,10 +385,11 @@ class NavBuilder extends ContainerAware
             $dropdown->addChild(
                 $translator->trans('Profile'),
                 array(
-                    'route' => 'main',
+                    /*'route' => 'main',
                     'routeParameters' => array(
                         'name' => 'social/home.php'
-                    ),
+                    ),*/
+                    'uri' => $chamiloHost.'main/social/home.php?language='.$chamiloLocale,
                     'icon' => ' fa fa-user'
                 )
             )->setAttribute('divider_append', true);
@@ -346,10 +397,11 @@ class NavBuilder extends ContainerAware
             $dropdown->addChild(
                 $translator->trans('Inbox'),
                 array(
-                    'route' => 'main',
+                    /*'route' => 'main',
                     'routeParameters' => array(
                         'name' => 'messages/inbox.php',
-                    ),
+                    ),*/
+                    'uri' => $chamiloHost.'main/messages/inbox.php?language='.$chamiloLocale,
                     'icon' => ' fa fa-envelope'
                 )
             )->setAttribute('divider_append', true);
@@ -357,10 +409,11 @@ class NavBuilder extends ContainerAware
            $dropdown->addChild(
                 $translator->trans('My certificates'),
                 array(
-                    'route' => 'main',
+                    /*'route' => 'main',
                     'routeParameters' => array(
                         'name' => 'gradebook/my_certificates.php',
-                    ),
+                    ),*/
+                    'uri' => $chamiloHost.'main/gradebook/my_certificates.php?language='.$chamiloLocale,
                     'icon' => ' fa fa-graduation-cap'
                 )
             )->setAttribute('divider_append', true);
@@ -369,12 +422,13 @@ class NavBuilder extends ContainerAware
             $dropdown->addChild(
                 $translator->trans('Logout'),
                 array(
-                    'route' => 'main',
+                    /*'route' => 'main',
                     'routeParameters' => array(
                         'name' => '../index.php',
                         'logout' => 'logout',
                         'uid' => $user->getId(),
-                    ),
+                    ),*/
+                    'uri' => $chamiloHost.'index.php?logout=logout&uid='.$user->getId(),
                     'query' => '1',
                     'icon' => ' fa fa-sign-out'
                 )

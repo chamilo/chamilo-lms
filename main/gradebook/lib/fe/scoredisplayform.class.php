@@ -16,8 +16,8 @@ class ScoreDisplayForm extends FormValidator
 	 */
 	public function __construct($form_name, $action= null)
 	{
-		parent :: __construct($form_name, 'post', $action);
-		$displayscore = ScoreDisplay :: instance();
+		parent::__construct($form_name, 'post', $action);
+		$displayscore = ScoreDisplay::instance();
 		$customdisplays = $displayscore->get_custom_score_display_settings();
 
 		$nr_items = (count($customdisplays)!='0') ? count($customdisplays) : '1';
@@ -158,6 +158,6 @@ class ScoreDisplayForm extends FormValidator
 
     public function validate()
     {
-        return parent :: validate();
+        return parent::validate();
     }
 }

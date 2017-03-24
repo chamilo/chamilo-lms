@@ -64,8 +64,8 @@ class CourseArchiver
      */
     public static function createBackup($course)
     {
-        CourseArchiver::cleanBackupDir();
-        CourseArchiver::createBackupDir();
+        self::cleanBackupDir();
+        self::createBackupDir();
 
         $perm_dirs = api_get_permissions_for_new_directories();
         $backupDirectory = self::getBackupDir();
@@ -255,7 +255,7 @@ class CourseArchiver
      */
     public static function readCourse($filename, $delete = false)
     {
-        CourseArchiver::cleanBackupDir();
+        self::cleanBackupDir();
         // Create a temp directory
         $tmp_dir_name = 'CourseArchiver_'.uniqid('');
         $unzip_dir = self::getBackupDir().$tmp_dir_name;

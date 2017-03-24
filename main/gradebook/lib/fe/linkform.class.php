@@ -34,7 +34,7 @@ class LinkForm extends FormValidator
         $action = null,
         $extra = null
     ) {
-        parent :: __construct($form_name, $method, $action);
+        parent::__construct($form_name, $method, $action);
 
         if (isset ($category_object)) {
             $this->category_object = $category_object;
@@ -47,9 +47,9 @@ class LinkForm extends FormValidator
         if (isset($extra)) {
             $this->extra = $extra;
         }
-        if ($form_type == self :: TYPE_CREATE) {
+        if ($form_type == self::TYPE_CREATE) {
             $this->build_create();
-        } elseif ($form_type == self :: TYPE_MOVE) {
+        } elseif ($form_type == self::TYPE_MOVE) {
             $this->build_move();
         }
     }

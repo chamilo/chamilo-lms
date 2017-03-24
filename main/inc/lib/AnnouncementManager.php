@@ -1195,7 +1195,7 @@ class AnnouncementManager
 
             if (!filter_extension($new_file_name)) {
                 $return = -1;
-                Display :: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
+                Display::display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
             } else {
                 $new_file_name = uniqid('');
                 $new_path = $updir . '/' . $new_file_name;
@@ -1252,7 +1252,7 @@ class AnnouncementManager
 
             if (!filter_extension($new_file_name)) {
                 $return = -1;
-                Display :: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
+                Display::display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
             } else {
                 $new_file_name = uniqid('');
                 $new_path = $updir . '/' . $new_file_name;
@@ -1270,7 +1270,7 @@ class AnnouncementManager
                 $result = Database::query($sql);
                 if ($result === false) {
                     $return = -1;
-                    Display :: display_error_message(get_lang('UplUnableToSaveFile'));
+                    Display::display_error_message(get_lang('UplUnableToSaveFile'));
                 } else {
                     $return = 1;
                 }
@@ -1593,7 +1593,7 @@ class AnnouncementManager
                 $myrow['visibility'] = $item_visibility;
 
                 // show attachment list
-                $attachment_list = AnnouncementManager::get_attachment($myrow['id']);
+                $attachment_list = self::get_attachment($myrow['id']);
 
                 $attachment_icon = '';
                 if (count($attachment_list)>0) {

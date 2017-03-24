@@ -252,42 +252,61 @@ if ($action == 'thematic_plan_list') {
     ";
 }
 
-// Distpacher actions to controller
+// Dispatch actions to controller
 switch ($action) {
     case 'thematic_add':
+        //no break
     case 'thematic_edit':
+        //no break
     case 'thematic_delete':
+        //no break
     case 'thematic_delete_select':
+        //no break
     case 'thematic_copy':
+        //no break
     case 'thematic_import_select':
+        //no break
     case 'thematic_import':
+        //no break
     case 'moveup':
+        //no break
     case 'movedown':
         if (!api_is_allowed_to_edit(null, true)) {
             api_not_allowed();
         }
+        //no break
     case 'thematic_list':
+        //no break
     case 'thematic_export':
+        //no break
     case 'thematic_export_pdf':
+        //no break
     case 'thematic_details':
+        //no break
     case 'export_single_thematic':
         $thematic_controller->thematic($action);
         break;
     case 'thematic_plan_add':
+        //no break
     case 'thematic_plan_edit':
+        //no break
     case 'thematic_plan_delete':
         if (!api_is_allowed_to_edit(null, true)) {
             api_not_allowed();
         }
+        //no break
     case 'thematic_plan_list':
         $thematic_controller->thematic_plan($action);
         break;
     case 'thematic_advance_add':
+        //no break
     case 'thematic_advance_edit':
+        //no break
     case 'thematic_advance_delete':
         if (!api_is_allowed_to_edit(null, true)) {
             api_not_allowed();
         }
+    //no break
     case 'thematic_advance_list':
         $thematic_controller->thematic_advance($action);
         break;

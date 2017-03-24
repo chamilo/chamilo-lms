@@ -115,8 +115,8 @@ class BlockTeacher extends Block
 	 			$lastname 	= $teacher['lastname'];
 	 			$username	= $teacher['username'];
 
-	 			$time_on_platform = api_time_to_hms(Tracking :: get_time_spent_on_the_platform($teacher_id));
-	 			$last_connection = Tracking :: get_last_connection_date($teacher_id);
+	 			$time_on_platform = api_time_to_hms(Tracking::get_time_spent_on_the_platform($teacher_id));
+	 			$last_connection = Tracking::get_last_connection_date($teacher_id);
 
 				if ($i%2 == 0) $class_tr = 'row_odd';
 			    else $class_tr = 'row_even';
@@ -172,7 +172,7 @@ class BlockTeacher extends Block
 	 			$firstname  = $teacher['firstname'];
 	 			$lastname   = $teacher['lastname'];
 				$username	= $teacher['username'];
-	 			$time_on_platform = api_time_to_hms(Tracking :: get_time_spent_on_the_platform($teacher_id,true));
+	 			$time_on_platform = api_time_to_hms(Tracking::get_time_spent_on_the_platform($teacher_id,true));
 
 	 			if ($i%2 == 0) $class_tr = 'row_odd';
 	    		else $class_tr = 'row_even';

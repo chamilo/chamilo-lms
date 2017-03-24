@@ -494,6 +494,7 @@ function startElementQti2($parser, $name, $attributes)
             if (isset($attributes['DEFAULTVALUE'])) {
                 $exercise_info['question'][$current_question_ident]['default_weighting'] = $attributes['DEFAULTVALUE'];
             }
+            // no break ?
         case 'ITEMBODY':
             $record_item_body = true;
             $current_question_item_body = '';
@@ -660,7 +661,7 @@ function elementDataQti2($parser, $data)
                     $exercise_info['description'] = $data;
                 }
             }
-
+            break;
     }
 }
 
@@ -797,6 +798,7 @@ function startElementQti1($parser, $name, $attributes)
                     $exercise_info['question'][$current_question_ident]['title'] = $current_question_item_body;
                 }
             }
+            break;
     }
 }
 
@@ -860,6 +862,7 @@ function endElementQti1($parser, $name, $attributes)
                     $current_question_item_body = '';
                 }
             }
+            // no break ?
         case 'RESPONSE_LID':
             // Retrieve question type
             if (!isset($exercise_info['question'][$current_question_ident]['type'])) {
@@ -921,6 +924,7 @@ function elementDataQti1($parser, $data)
                 $lastLabelFieldName = $current_element;
                 $lastLabelFieldValue = $data;
             }
+            // no break ?
         case 'FIELDENTRY':
             $current_question_item_body = $data;
             switch ($lastLabelFieldValue) {

@@ -28,7 +28,9 @@ $nameTools = get_lang('ToolForum');
 
 $allowed_to_edit = api_is_allowed_to_edit(null, true);
 $currentThread = get_thread_information($forumId, $_GET['thread']);
-$currentForum = get_forum_information($currentThread['forum_id']);
+$forumId = $currentThread['forum_id'];
+$currentForum = get_forums($currentThread['forum_id']);
+$threadId = $currentThread['thread_id'];
 
 $allowToQualify = false;
 if ($allowed_to_edit) {
@@ -39,6 +41,41 @@ if ($allowed_to_edit) {
 
 if (!$allowToQualify) {
     api_not_allowed(true);
+}
+
+// Show max qualify in my form
+$maxQualify = showQualify('2', $userIdToQualify, $threadId);
+$score = 0;
+
+if (isset($_POST['idtextqualify'])) {
+    $score = floatval($_POST['idtextqualify']);
+
+    if ($score < $maxQualify) {
+        saveThreadScore(
+            $currentThread,
+            $userIdToQualify,
+            $threadId,
+            $score,
+            api_get_utc_datetime(),
+            api_get_session_id()
+        );
+
+        header(
+            'Location: '.api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq().'&'
+            .http_build_query([
+                'forum' => $forumId,
+                'action' => 'liststd',
+                'content' => 'thread',
+                'id' => $threadId,
+                'list' => 'qualify'
+            ])
+        );
+        exit;
+    }
+
+    Display::addFlash(
+        Display::return_message(get_lang('QualificationCanNotBeGreaterThanMaxScore'), 'error')
+    );
 }
 
 /*     Including necessary files */
@@ -164,31 +201,6 @@ if ($action == 'move' && isset($_GET['post'])) {
 */
 if (!empty($message)) {
     Display:: display_confirmation_message(get_lang($message));
-}
-
-$currentThread = get_thread_information($currentForum['forum_id'], $_GET['thread']);
-$threadId = $currentThread['thread_id'];
-// Show max qualify in my form
-$maxQualify = showQualify('2', $userIdToQualify, $threadId);
-
-$score = isset($_POST['idtextqualify']) ? Security::remove_XSS($_POST['idtextqualify']) : '';
-
-if ($score > $maxQualify) {
-    Display:: display_error_message(
-        get_lang('QualificationCanNotBeGreaterThanMaxScore'),
-        false
-    );
-}
-
-if (!empty($score)) {
-    $saveResult = saveThreadScore(
-        $currentThread,
-        $userIdToQualify,
-        $threadId,
-        $score,
-        api_get_utc_datetime(),
-        api_get_session_id()
-    );
 }
 
 // show qualifications history

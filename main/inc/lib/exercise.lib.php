@@ -58,7 +58,7 @@ class ExerciseLib
         $pictureName = $objQuestionTmp->selectPicture();
         $s = '';
 
-        if ($answerType != HOT_SPOT && $answerType != HOT_SPOT_DELINEATION) {
+        if ($answerType != HOT_SPOT && $answerType != HOT_SPOT_DELINEATION && $answerType != ANNOTATION) {
             // Question is not a hotspot
             if (!$only_questions) {
                 $questionDescription = $objQuestionTmp->selectDescription();
@@ -1248,6 +1248,71 @@ HOTSPOT;
                         </div>
                     </div>
 HOTSPOT;
+        } elseif ($answerType == ANNOTATION) {
+            global $exerciseId, $exe_id;
+
+            $relPath = api_get_path(WEB_CODE_PATH);
+
+            if ($freeze) {
+                echo <<<HTML
+    <div id="annotation-canvas-$questionId" class="center-block"></div>
+    <script>
+        AnnotationQuestion({
+            questionId: $questionId,
+            exerciseId: $exe_id,
+            relPath: '$relPath',
+            use: 'user'
+        });
+    </script>
+HTML;
+                return '';
+            }
+
+            if (api_is_platform_admin() || api_is_course_admin()) {
+                $course = api_get_course_info();
+                $docId = DocumentManager::get_document_id($course, '/images/' . $pictureName);
+
+                if (is_numeric($docId)) {
+                    $images_folder_visibility = api_get_item_visibility(
+                        $course,
+                        'document',
+                        $docId,
+                        api_get_session_id()
+                    );
+
+                    if (!$images_folder_visibility) {
+                        echo Display::return_message(get_lang('ChangeTheVisibilityOfTheCurrentImage'), 'warning');
+                    }
+                }
+            }
+
+            if (!$only_questions) {
+                if ($show_title) {
+                    TestCategory::displayCategoryAndTitle($objQuestionTmp->id);
+                    echo '<div class="question_title">'.$current_item.'. '.$objQuestionTmp->selectTitle().'</div>';
+                }
+
+                echo <<<HTML
+    <input type="hidden" name="hidden_hotspot_id" value="$questionId" />
+    <div class="exercise_questions">
+        {$objQuestionTmp->selectDescription()}
+        <div id="annotation-canvas-$questionId" class="annotation-canvas center-block"></div>
+        <script>
+            AnnotationQuestion({
+                questionId: $questionId,
+                exerciseId: $exe_id,
+                relPath: '$relPath',
+                use: 'user'
+            });
+        </script>
+    </div>
+HTML;
+            }
+
+            $objAnswerTmp = new Answer($questionId);
+            $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
+
+            unset($objAnswerTmp, $objQuestionTmp);
         }
         return $nbrAnswers;
     }

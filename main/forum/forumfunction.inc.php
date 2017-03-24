@@ -2204,7 +2204,7 @@ function get_thread_users_qualify($thread_id)
                 FROM $t_posts post , $t_users user, $t_session_rel_user scu, $t_qualify qualify
                 WHERE poster_id = user.id
                     AND post.poster_id = qualify.user_id
-                    AND user.id = session_rel_user_rel_course.user_id
+                    AND user.id = scu.user_id
                     AND scu.status<>'2'
                     AND scu.user_id NOT IN ($user_to_avoid)
                     AND qualify.thread_id = ".intval($thread_id)."

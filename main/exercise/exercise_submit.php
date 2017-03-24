@@ -62,6 +62,7 @@ $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.epiclock.min.js');
 $htmlHeadXtra[] = api_get_js('epiclock/renderers/minute/epiclock.minute.js');
 $htmlHeadXtra[] = '<link rel="stylesheet" href="' . api_get_path(WEB_LIBRARY_JS_PATH) . 'hotspot/css/hotspot.css">';
 $htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_JS_PATH) . 'hotspot/js/hotspot.js"></script>';
+$htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_JS_PATH) . 'annotation/js/annotation.js"></script>';
 
 if (api_get_setting('enable_record_audio') === 'true') {
     $htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_JS_PATH) . 'rtc/RecordRTC.js"></script>';

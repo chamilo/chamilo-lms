@@ -103,7 +103,7 @@ class Blog
         $_user = api_get_user_info();
         $course_id = api_get_course_int_id();
 
-        $current_date = date('Y-m-d H:i:s', time());
+        $current_date = api_get_utc_datetime();
         $session_id = api_get_session_id();
         $tbl_blogs = Database::get_course_table(TABLE_BLOGS);
         $tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);

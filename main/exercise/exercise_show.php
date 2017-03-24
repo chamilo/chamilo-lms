@@ -145,6 +145,7 @@ $this_section = SECTION_COURSES;
 
 $htmlHeadXtra[] = '<link rel="stylesheet" href="' . api_get_path(WEB_LIBRARY_JS_PATH) . 'hotspot/css/hotspot.css">';
 $htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_JS_PATH) . 'hotspot/js/hotspot.js"></script>';
+$htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_JS_PATH) . 'annotation/js/annotation.js"></script>';
 
 if ($origin != 'learnpath') {
     Display::display_header('');
@@ -362,6 +363,8 @@ foreach ($questionList as $questionId) {
         $choice = array();
     }
 
+    $relPath = api_get_path(WEB_CODE_PATH);
+
     switch ($answerType) {
         case MULTIPLE_ANSWER_COMBINATION:
             //no break
@@ -431,7 +434,6 @@ foreach ($questionList as $questionId) {
             $totalScore += $question_result['score'];
 
             if ($show_results) {
-                $relPath = api_get_path(WEB_CODE_PATH);
                 echo '</table></td></tr>';
                 echo "
                         <tr>
@@ -612,6 +614,39 @@ foreach ($questionList as $questionId) {
                 ";
             }
             break;
+        case ANNOTATION:
+            $question_result = $objExercise->manage_answer(
+                $id,
+                $questionId,
+                $choice,
+                'exercise_show',
+                array(),
+                false,
+                true,
+                $show_results,
+                $objExercise->selectPropagateNeg(),
+                [],
+                $showTotalScoreAndUserChoicesInLastAttempt
+            );
+            $questionScore = $question_result['score'];
+            $totalScore += $question_result['score'];
+
+            if ($show_results) {
+                echo '
+                    <div id="annotation-canvas-'.$questionId.'"></div>
+                    <script>
+                        $(document).on(\'ready\', function () {
+                            AnnotationQuestion({
+                                questionId: '.(int) $questionId.',
+                                exerciseId: '.(int) $id.',
+                                use: \'solution\',
+                                relPath: \''.$relPath.'\'
+                            });
+                        });
+                    </script>
+                ';
+            }
+            break;
     }
 
     if ($answerType == MULTIPLE_ANSWER_TRUE_FALSE) {
@@ -642,7 +677,7 @@ foreach ($questionList as $questionId) {
         if ($isFeedbackAllowed) {
             $name = "fckdiv" . $questionId;
             $marksname = "marksName" . $questionId;
-            if (in_array($answerType, array(FREE_ANSWER, ORAL_EXPRESSION))) {
+            if (in_array($answerType, array(FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION))) {
                 $url_name = get_lang('EditCommentsAndMarks');
             } else {
                 if ($action == 'edit') {
@@ -704,7 +739,7 @@ foreach ($questionList as $questionId) {
         }
 
         if ($is_allowedToEdit && $isFeedbackAllowed) {
-            if (in_array($answerType, array(FREE_ANSWER, ORAL_EXPRESSION))) {
+            if (in_array($answerType, array(FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION))) {
                 $marksname = "marksName" . $questionId;
                 echo '<div id="' . $marksname . '" style="display:none">';
                 echo '<form name="marksform_' . $questionId . '" method="post" action="">';

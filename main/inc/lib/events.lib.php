@@ -619,7 +619,7 @@ class Event
             return false;
         }
 
-        $table = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
         if ($updateResults) {
             $params = array(
                 'hotspot_correct' => $correct,
@@ -924,7 +924,7 @@ class Event
      */
     public static function get_attempt_count($user_id, $exerciseId, $lp_id, $lp_item_id, $lp_item_view_id)
     {
-        $stat_table = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $stat_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $user_id = intval($user_id);
         $exerciseId = intval($exerciseId);
         $lp_id = intval($lp_id);
@@ -945,7 +945,7 @@ class Event
 
         $query = Database::query($sql);
         if (Database::num_rows($query) > 0) {
-            $attempt = Database :: fetch_array($query, 'ASSOC');
+            $attempt = Database::fetch_array($query, 'ASSOC');
             return $attempt['count'];
         } else {
             return 0;
@@ -961,7 +961,7 @@ class Event
      */
     public static function get_attempt_count_not_finished($user_id, $exerciseId, $lp_id, $lp_item_id)
     {
-        $stat_table = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $stat_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $user_id = intval($user_id);
         $exerciseId = intval($exerciseId);
         $lp_id = intval($lp_id);
@@ -981,7 +981,7 @@ class Event
 
         $query = Database::query($sql);
         if (Database::num_rows($query) > 0) {
-            $attempt = Database :: fetch_array($query, 'ASSOC');
+            $attempt = Database::fetch_array($query, 'ASSOC');
             return $attempt['count'];
         } else {
             return 0;
@@ -1081,7 +1081,7 @@ class Event
             Database::query($sql);
         }
 
-        Event::addEvent(
+        self::addEvent(
             LOG_LP_ATTEMPT_DELETE,
             LOG_LP_ID,
             $lp_id,
@@ -1116,7 +1116,7 @@ class Event
                         session_id = $session_id AND
                         status = 'incomplete' ";
             Database::query($sql);
-            Event::addEvent(
+            self::addEvent(
                 LOG_EXERCISE_RESULT_DELETE,
                 LOG_EXERCISE_AND_USER_ID,
                 $exercise_id . '-' . $user_id,
@@ -1630,7 +1630,7 @@ class Event
      */
     public static function get_all_exercises_from_lp($lp_id, $course_id)
     {
-        $lp_item_table = Database :: get_course_table(TABLE_LP_ITEM);
+        $lp_item_table = Database::get_course_table(TABLE_LP_ITEM);
         $course_id = intval($course_id);
         $lp_id = intval($lp_id);
         $sql = "SELECT * FROM $lp_item_table
@@ -1722,7 +1722,7 @@ class Event
                     question_id = $question_id ";
         Database::query($sql);
 
-        Event::addEvent(
+        self::addEvent(
             LOG_QUESTION_RESULT_DELETE,
             LOG_EXERCISE_ATTEMPT_QUESTION_ID,
             $exe_id . '-' . $question_id,
@@ -1759,7 +1759,7 @@ class Event
                     c_id = $courseId AND
                     hotspot_question_id = $question_id ";
         Database::query($sql);
-        Event::addEvent(
+        self::addEvent(
             LOG_QUESTION_RESULT_DELETE,
             LOG_EXERCISE_ATTEMPT_QUESTION_ID,
             $exe_id . '-' . $question_id,

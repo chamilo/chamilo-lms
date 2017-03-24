@@ -53,25 +53,25 @@ class EvalForm extends FormValidator
             $this->extra = $extra1;
         }
         switch ($form_type) {
-            case self :: TYPE_EDIT:
+            case self::TYPE_EDIT:
                 $this->build_editing_form();
                 break;
-            case self :: TYPE_ADD:
+            case self::TYPE_ADD:
                 $this->build_add_form();
                 break;
-            case self :: TYPE_MOVE:
+            case self::TYPE_MOVE:
                 $this->build_editing_form();
                 break;
-            case self :: TYPE_RESULT_ADD:
+            case self::TYPE_RESULT_ADD:
                 $this->build_result_add_form();
                 break;
-            case self :: TYPE_RESULT_EDIT:
+            case self::TYPE_RESULT_EDIT:
                 $this->build_result_edit_form();
                 break;
-            case self :: TYPE_ALL_RESULTS_EDIT:
+            case self::TYPE_ALL_RESULTS_EDIT:
                 $this->build_all_results_edit_form();
                 break;
-            case self :: TYPE_ADD_USERS_TO_EVAL:
+            case self::TYPE_ADD_USERS_TO_EVAL:
                 $this->build_add_user_to_eval();
                 break;
         }
@@ -398,12 +398,12 @@ class EvalForm extends FormValidator
      */
     protected function build_editing_form()
     {
-        $parent_cat = Category :: load($this->evaluation_object->get_category_id());
+        $parent_cat = Category::load($this->evaluation_object->get_category_id());
         //@TODO $weight_mask is replaced?
         if ($parent_cat[0]->get_parent_id() == 0) {
             $weight_mask = $this->evaluation_object->get_weight();
         } else {
-            $cat = Category :: load($parent_cat[0]->get_parent_id());
+            $cat = Category::load($parent_cat[0]->get_parent_id());
             $global_weight = $cat[0]->get_weight();
             $weight_mask = $global_weight * $this->evaluation_object->get_weight() / $parent_cat[0]->get_weight();
         }
@@ -565,12 +565,12 @@ class EvalForm extends FormValidator
 
     function display()
     {
-        parent :: display();
+        parent::display();
     }
 
     function setDefaults($defaults = array(), $filter = null)
     {
-        parent :: setDefaults($defaults, $filter);
+        parent::setDefaults($defaults, $filter);
     }
 
     /**
@@ -586,7 +586,7 @@ class EvalForm extends FormValidator
         $opendocurl_end = '';
         // evaluation's origin is a link
         if ($this->evaluation_object->get_category_id() < 0) {
-            $link = LinkFactory :: get_evaluation_link($this->evaluation_object->get_id());
+            $link = LinkFactory::get_evaluation_link($this->evaluation_object->get_id());
             $doc_url = $link->get_view_url($id);
             if ($doc_url != null) {
                 $opendocurl_start .= '<a href="' . $doc_url . '" target="_blank">';

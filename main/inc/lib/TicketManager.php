@@ -322,7 +322,7 @@ class TicketManager
 
         if (!empty($category_id)) {
             if (empty($assignedUserId)) {
-                $usersInCategory = TicketManager::getUsersInCategory($category_id);
+                $usersInCategory = self::getUsersInCategory($category_id);
                 if (!empty($usersInCategory) && count($usersInCategory) > 0) {
                     $userCategoryInfo = $usersInCategory[0];
                     if (isset($userCategoryInfo['user_id'])) {
@@ -481,7 +481,7 @@ class TicketManager
                     $admins = UserManager::get_all_administrators();
                     foreach ($admins as $userId => $data) {
                         if ($data['active']) {
-                            TicketManager::send_message_simple(
+                            self::send_message_simple(
                                 $userId,
                                 $warningSubject,
                                 $helpDeskMessage
@@ -490,13 +490,13 @@ class TicketManager
                     }
                 }
             } else {
-                $categoryInfo = TicketManager::getCategory($category_id);
-                $usersInCategory = TicketManager::getUsersInCategory($category_id);
+                $categoryInfo = self::getCategory($category_id);
+                $usersInCategory = self::getUsersInCategory($category_id);
 
                 $message = '<h2>'.get_lang('TicketInformation').'</h2><br />'.$helpDeskMessage;
 
                 if (api_get_setting('ticket_warn_admin_no_user_in_category') === 'true') {
-                    $usersInCategory = TicketManager::getUsersInCategory($category_id);
+                    $usersInCategory = self::getUsersInCategory($category_id);
                     if (empty($usersInCategory)) {
                         $subject = sprintf(
                             get_lang('WarningCategoryXDoesntHaveUsers'),
@@ -516,7 +516,7 @@ class TicketManager
                             $admins = UserManager::get_all_administrators();
                             foreach ($admins as $userId => $data) {
                                 if ($data['active']) {
-                                    TicketManager::sendNotification(
+                                    self::sendNotification(
                                         $ticketId,
                                         $subject,
                                         $message,
@@ -534,7 +534,7 @@ class TicketManager
                 if (!empty($usersInCategory)) {
                     foreach ($usersInCategory as $data) {
                         if ($data['user_id']) {
-                            TicketManager::sendNotification(
+                            self::sendNotification(
                                 $ticketId,
                                 $subject,
                                 $message,
@@ -554,7 +554,7 @@ class TicketManager
                 );
             }
 
-            TicketManager::sendNotification(
+            self::sendNotification(
                 $ticketId,
                 $titleCreated,
                 $helpDeskMessage
@@ -713,7 +713,7 @@ class TicketManager
         $file_name = $file_attach['name'];
         $table_support_message_attachments = Database::get_main_table(TABLE_TICKET_MESSAGE_ATTACHMENTS);
         if (!filter_extension($new_file_name)) {
-            Display :: display_error_message(
+            Display::display_error_message(
                 get_lang('UplUnableToSaveFileFilteredExtension')
             );
         } else {
@@ -885,7 +885,7 @@ class TicketManager
                 $sql .= " AND ticket.source = '$keyword_source' ";
             }
             if ($keyword_course != '') {
-                $course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
+                $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
                 $sql .= " AND ticket.course_id IN ( 
                          SELECT id FROM $course_table
                          WHERE (
@@ -1150,7 +1150,7 @@ class TicketManager
                 $sql .= " AND ticket.priority_id = '$keyword_priority' ";
             }
             if ($keyword_course != '') {
-                $course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
+                $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
                 $sql .= " AND ticket.course_id IN ( ";
                 $sql .= "SELECT id
                          FROM $course_table
@@ -1734,7 +1734,7 @@ class TicketManager
                 $sql .= " AND ticket.priority_id = '$keyword_priority' ";
             }
             if ($keyword_course != '') {
-                $course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
+                $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
                 $sql .= " AND ticket.course_id IN ( ";
                 $sql .= "SELECT id
                          FROM $course_table

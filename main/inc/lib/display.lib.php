@@ -713,7 +713,7 @@ class Display
      */
     public static function returnIconPath($icon, $size = ICON_SIZE_SMALL)
     {
-        return Display::return_icon($icon, null, null, $size, null, true, false);
+        return self::return_icon($icon, null, null, $size, null, true, false);
     }
 
     /**
@@ -1531,8 +1531,8 @@ class Display
 
             $image = substr($notification['image'], 0, -4).'.png';
 
-            $return .= Display::url(
-                Display::return_icon($image, $label),
+            $return .= self::url(
+                self::return_icon($image, $label),
                 api_get_path(WEB_CODE_PATH).
                 $notification['link'].'&cidReq='.$course_code.
                 '&ref='.$notification['ref'].
@@ -1560,8 +1560,8 @@ class Display
         $output = array();
         $active = false;
         if (!$nosession) {
-            $main_user_table = Database :: get_main_table(TABLE_MAIN_USER);
-            $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
+            $main_user_table = Database::get_main_table(TABLE_MAIN_USER);
+            $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
             // Request for the name of the general coach
             $sql ='SELECT tu.lastname, tu.firstname, ts.*
                     FROM '.$tbl_session.' ts
@@ -1729,14 +1729,14 @@ class Display
 		$labels[]= $point_info['user_vote']  ? get_lang('YourVote').' ['.$point_info['user_vote'].']' : get_lang('YourVote'). ' [?] ';
 
 		if (!$add_div_wrapper && api_is_anonymous()) {
-			$labels[]= Display::tag('span', get_lang('LoginToVote'), array('class' => 'error'));
+			$labels[]= self::tag('span', get_lang('LoginToVote'), array('class' => 'error'));
 		}
 
-        $html .= Display::div(implode(' | ', $labels) , array('id' =>  'vote_label_'.$id, 'class' => 'vote_label_info'));
-        $html .= ' '.Display::span(' ', array('id' =>  'vote_label2_'.$id));
+        $html .= self::div(implode(' | ', $labels) , array('id' =>  'vote_label_'.$id, 'class' => 'vote_label_info'));
+        $html .= ' '.self::span(' ', array('id' =>  'vote_label2_'.$id));
 
         if ($add_div_wrapper) {
-			$html = Display::div($html, array('id' => 'rating_wrapper_'.$id));
+			$html = self::div($html, array('id' => 'rating_wrapper_'.$id));
 		}
 
         return $html;
@@ -2045,7 +2045,7 @@ class Display
                 <span class="caret"></span></button>
                 <ul class="dropdown-menu ' . ($alignToRight ? 'dropdown-menu-right' : '') . '">';
         foreach ($elements as $item) {
-            $html .= Display::tag('li', Display::url($item['title'], $item['href']));
+            $html .= self::tag('li', self::url($item['title'], $item['href']));
         }
         $html .= '</ul>
             </div>';
@@ -2225,7 +2225,7 @@ class Display
             $label = ($fixedValue + 1) .' '.chr(97 + $localCounter);
             $link_to_show = $link.$fixedValue.'#questionanchor'.$itemId;
         }
-        $link = Display::url($label.' ', $link_to_show, $linkAttributes);
+        $link = self::url($label.' ', $link_to_show, $linkAttributes);
 
         return  '<li class = "'.$class.'">'.$link.'</li>';
     }
@@ -2548,7 +2548,7 @@ HTML;
                 $html .= '<div class="panel-heading">'.$title.'</div>' . PHP_EOL;
             }
             $html.= '<div class="panel-body">'.$content.'</div>' . PHP_EOL;
-            $html = Display::div($html, $params);
+            $html = self::div($html, $params);
         }
         return $html;
     }

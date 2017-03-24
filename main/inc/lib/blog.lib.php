@@ -1532,7 +1532,7 @@ class Blog
         if ($form->validate()) {
             $values = $form->exportValues();
 
-            $postId = Blog::createPost(
+            $postId = self::createPost(
                 $values['title'],
                 $values['full_text'],
                 $values['post_file_comment'],
@@ -1608,7 +1608,7 @@ class Blog
         $form->addButton('save', get_lang('Save'));
         $form->setDefaults($blog_post);
 
-        return $form->return_form();
+        return $form->returnForm();
     }
 
     /**

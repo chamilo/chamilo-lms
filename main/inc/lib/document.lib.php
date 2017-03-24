@@ -1842,15 +1842,19 @@ class DocumentManager
     }
 
     /**
-     * allow replace user info in file html
+     * Allow replace user info in file html
      * @param int $user_id
      * @param string $course_code
      * @param int $sessionId
      * @param bool $is_preview
      * @return string The html content of the certificate
      */
-    public static function replace_user_info_into_html($user_id, $course_code, $sessionId, $is_preview = false)
-    {
+    public static function replace_user_info_into_html(
+        $user_id,
+        $course_code,
+        $sessionId,
+        $is_preview = false
+    ) {
         $user_id = intval($user_id);
         $course_info = api_get_course_info($course_code);
         $tbl_document = Database::get_course_table(TABLE_DOCUMENT);
@@ -1874,7 +1878,11 @@ class DocumentManager
                 if (is_file($filepath)) {
                     $my_content_html = file_get_contents($filepath);
                 }
-                $all_user_info = self::get_all_info_to_certificate($user_id, $course_code, $is_preview);
+                $all_user_info = self::get_all_info_to_certificate(
+                    $user_id,
+                    $course_code,
+                    $is_preview
+                );
 
                 $info_to_be_replaced_in_content_html = $all_user_info[0];
                 $info_to_replace_in_content_html = $all_user_info[1];
@@ -1885,12 +1893,13 @@ class DocumentManager
                 );
             }
 
-            return array(
+            return [
                 'content' => $new_content,
-                'variables' => $all_user_info,
-            );
+                'variables' => $all_user_info
+            ];
         }
-        return array();
+
+        return [];
     }
 
     /**
@@ -1904,10 +1913,9 @@ class DocumentManager
     {
         $info_list = array();
         $user_id = intval($user_id);
-
         $course_info = api_get_course_info($course_id);
 
-        //info portal
+        // Portal infor
         $organization_name = api_get_setting('Institution');
         $portal_name = api_get_setting('siteName');
 
@@ -1930,7 +1938,7 @@ class DocumentManager
         $last_name = $user_info['lastname'];
         $official_code = $user_info['official_code'];
 
-        //Teacher information
+        // Teacher information
         $info_teacher_id = UserManager::get_user_id_of_course_admin_or_session_admin($course_info);
         $teacher_info = api_get_user_info($info_teacher_id);
         $teacher_first_name = $teacher_info['firstname'];
@@ -1938,7 +1946,6 @@ class DocumentManager
 
         // info gradebook certificate
         $info_grade_certificate = UserManager::get_info_gradebook_certificate($course_id, $user_id);
-
         $date_certificate = $info_grade_certificate['created_at'];
         $date_long_certificate = '';
 
@@ -1954,7 +1961,6 @@ class DocumentManager
         }
 
         $url = api_get_path(WEB_PATH) . 'certificates/index.php?id=' . $info_grade_certificate['id'];
-
         $externalStyleFile = api_get_path(SYS_CSS_PATH) . 'themes/' . api_get_visual_theme() . '/certificate.css';
         $externalStyle = '';
 
@@ -1962,7 +1968,7 @@ class DocumentManager
             $externalStyle = file_get_contents($externalStyleFile);
         }
 
-        //replace content
+        // Replace content
         $info_to_replace_in_content_html = array(
             $first_name,
             $last_name,
@@ -1982,7 +1988,8 @@ class DocumentManager
             $externalStyle
         );
 
-        $info_to_be_replaced_in_content_html = array('((user_firstname))',
+        $info_to_be_replaced_in_content_html = array(
+            '((user_firstname))',
             '((user_lastname))',
             '((gradebook_institution))',
             '((gradebook_sitename))',

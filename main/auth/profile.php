@@ -322,7 +322,10 @@ if (is_platform_authentication() &&
 }
 
 $extraField = new ExtraField('user');
-$return = $extraField->addElements($form, api_get_user_id());
+$return = $extraField->addElements(
+    $form,
+    api_get_user_id()
+);
 
 $jquery_ready_content = $return['jquery_ready_content'];
 

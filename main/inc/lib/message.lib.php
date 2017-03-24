@@ -1041,30 +1041,21 @@ class MessageManager
             $message_content .= '<div class="row">';
 
             if ($source == 'outbox') {
-                $message_content .= '<div class="col-md-1">';
-                $message_content .= $user_image;
+                $message_content .= '<div class="col-md-12">';
+                $message_content .= '<ul class="list-message">';
+                $message_content .= '<li>' . $user_image . '</li>';
+                $message_content .= '<li><a href="' . api_get_path(WEB_PATH) . 'main/social/profile.php?u=' . $user_sender_id . '">' . $name . '</a> ';
+                $message_content .= api_strtolower(get_lang('To')) . '&nbsp;<b>' . $receiverUserInfo['complete_name'].'</b></li>';
+                $message_content .= '<li>' . Display::dateToStringAgoAndLongDate($row['send_date']) . '</li>';
+                $message_content .= '</ul>';
                 $message_content .= '</div>';
-
-                $message_content .= '<div class="col-md-4">';
-                $message_content .= '<a href="' . api_get_path(WEB_PATH) . 'main/social/profile.php?u=' . $user_sender_id . '">' . $name . '</a> ';
-                $message_content .= api_strtolower(get_lang('To')) . '&nbsp;<b>' . $receiverUserInfo['complete_name'];
-                $message_content .= '</div>';
-
-                $message_content .= '<div class="col-md-2 col-md-offset-5">';
-                $message_content .= Display::dateToStringAgoAndLongDate($row['send_date']);
-                $message_content .= '</div>';
-
             } else {
-                $message_content .= '<div class="col-md-1">';
-                $message_content .= $user_image;
-                $message_content .= '</div>';
-
-                $message_content .= '<div class="col-md-4">';
-                $message_content .= '<a href="' . api_get_path(WEB_PATH) . 'main/social/profile.php?u=' . $user_sender_id . '">' . $name . '</a> ';
-                $message_content .= '</div>';
-
-                $message_content .= '<div class="col-md-2 col-md-offset-5">';
-                $message_content .= Display::dateToStringAgoAndLongDate($row['send_date']);
+                $message_content .= '<div class="col-md-12">';
+                $message_content .= '<ul class="list-message">';
+                $message_content .= '<li>' . $user_image . '</li>';
+                $message_content .= '<li><a href="' . api_get_path(WEB_PATH) . 'main/social/profile.php?u=' . $user_sender_id . '">' . $name . '</a> </li>';
+                $message_content .= '<li>'. Display::dateToStringAgoAndLongDate($row['send_date']) . '</li>';
+                $message_content .= '</ul>';
                 $message_content .= '</div>';
             }
             $message_content .= '</div>';
@@ -1077,7 +1068,7 @@ class MessageManager
         }
 
         $message_content .= '
-		        <br />
+		        
 		        <hr style="color:#ddd" />
 		        <table width="100%">
 		            <tr>

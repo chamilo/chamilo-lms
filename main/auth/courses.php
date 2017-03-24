@@ -195,8 +195,9 @@ switch ($action) {
         if (!$user_can_view_page) {
             api_not_allowed(true);
         }
-
-        if (!CoursesAndSessionsCatalog::is(CATALOG_SESSIONS)) {
+        header('Location: ' . api_get_self());
+        exit;
+        /* if (!CoursesAndSessionsCatalog::is(CATALOG_SESSIONS)) {
             $courses_controller->courses_categories(
                 $action,
                 $categoryCode,
@@ -208,7 +209,7 @@ switch ($action) {
         } else {
             header('Location: ' . api_get_self());
             exit;
-        }
+        }*/
         break;
     case 'display_random_courses':
         if (!$user_can_view_page) {

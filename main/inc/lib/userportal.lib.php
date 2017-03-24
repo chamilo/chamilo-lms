@@ -10,7 +10,8 @@ class IndexManager
     const VIEW_BY_SESSION = 1;
 
     // An instance of the template engine
-    public $tpl = false;
+    //No need to initialize because IndexManager is not static, and the constructor immediately instantiates a Template
+    public $tpl;
     public $name = '';
     public $home = '';
     public $default_home = 'home/';

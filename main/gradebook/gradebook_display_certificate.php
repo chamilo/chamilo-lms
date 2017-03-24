@@ -51,17 +51,17 @@ switch ($action) {
         Category::exportAllCertificates($cat_id, $userList);
         break;
     case 'generate_all_certificates':
-        $user_list = CourseManager::get_user_list_from_course_code(
+        $userList = CourseManager::get_user_list_from_course_code(
             api_get_course_id(),
             api_get_session_id()
         );
 
-        if (!empty($user_list)) {
-            foreach ($user_list as $user_info) {
-                if ($user_info['status'] == INVITEE) {
+        if (!empty($userList)) {
+            foreach ($userList as $userInfo) {
+                if ($userInfo['status'] == INVITEE) {
                     continue;
                 }
-                Category::register_user_certificate($cat_id, $user_info['user_id']);
+                Category::register_user_certificate($cat_id, $userInfo['user_id']);
             }
         }
         break;
@@ -72,11 +72,13 @@ switch ($action) {
 
 $course_code = api_get_course_id();
 
-$interbreadcrumb[] = array('url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?',	'name' => get_lang('Gradebook'));
+$interbreadcrumb[] = array(
+    'url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?',
+    'name' => get_lang('Gradebook'),
+);
 $interbreadcrumb[] = array('url' => '#','name' => get_lang('GradebookListOfStudentsCertificates'));
 
 $this_section = SECTION_COURSES;
-
 Display::display_header('');
 
 if (isset($_GET['action']) && $_GET['action'] == 'delete') {
@@ -85,7 +87,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete') {
         $certificate = new Certificate($_GET['certificate_id']);
         $result = $certificate->delete(true);
         Security::clear_token();
-        if ($result ==true) {
+        if ($result == true) {
             Display::display_confirmation_message(get_lang('CertificateRemoved'));
         } else {
             Display::display_error_message(get_lang('CertificateNotRemoved'));
@@ -94,14 +96,12 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete') {
 }
 
 $token = Security::get_token();
-
 echo Display::page_header(get_lang('GradebookListOfStudentsCertificates'));
 
 //@todo replace all this code with something like get_total_weight()
-$cats = Category :: load($cat_id, null, null, null, null, null, false);
+$cats = Category:: load($cat_id, null, null, null, null, null, false);
 
 if (!empty($cats)) {
-
     //with this fix the teacher only can view 1 gradebook
     if (api_is_platform_admin()) {
         $stud_id= (api_is_allowed_to_edit() ? null : api_get_user_id());
@@ -110,12 +110,15 @@ if (!empty($cats)) {
     }
 
     $total_weight = $cats[0]->get_weight();
-
-    $allcat  = $cats[0]->get_subcategories($stud_id, api_get_course_id(), api_get_session_id());
+    $allcat = $cats[0]->get_subcategories(
+        $stud_id,
+        api_get_course_id(),
+        api_get_session_id()
+    );
     $alleval = $cats[0]->get_evaluations($stud_id);
     $alllink = $cats[0]->get_links($stud_id);
 
-    $datagen = new GradebookDataGenerator ($allcat,$alleval, $alllink);
+    $datagen = new GradebookDataGenerator($allcat, $alleval, $alllink);
 
     $total_resource_weight = 0;
     if (!empty($datagen)) {
@@ -132,7 +135,7 @@ if (!empty($cats)) {
                 $newarray[] = array_slice($data, 1);
             }
 
-            foreach($newarray as $item) {
+            foreach ($newarray as $item) {
                 $total_resource_weight = $total_resource_weight + $item['2'];
             }
         }
@@ -162,17 +165,17 @@ if ($filter === 'true') {
 
     if ($form->validate()) {
         $officialCode = $form->getSubmitValue('filter');
-            if ($officialCode == 'all') {
+        if ($officialCode == 'all') {
             $certificate_list = GradebookUtils::get_list_users_certificates($cat_id);
         } else {
-                $userList = UserManager::getUsersByOfficialCode($officialCode);
-                if (!empty($userList)) {
-                    $certificate_list = GradebookUtils::get_list_users_certificates(
-                        $cat_id,
-                        $userList
-                    );
-                }
+            $userList = UserManager::getUsersByOfficialCode($officialCode);
+            if (!empty($userList)) {
+                $certificate_list = GradebookUtils::get_list_users_certificates(
+                    $cat_id,
+                    $userList
+                );
             }
+        }
     } else {
         $certificate_list = GradebookUtils::get_list_users_certificates($cat_id);
     }
@@ -196,13 +199,11 @@ echo '</div>';
 
 echo $filterForm;
 
-if (count($certificate_list) == 0 ) {
+if (count($certificate_list) == 0) {
     echo Display::display_warning_message(get_lang('NoResultsAvailable'));
 } else {
-
     echo '<br /><br /><table class="data_table">';
-
-    foreach ($certificate_list as $index=>$value) {
+    foreach ($certificate_list as $index => $value) {
         echo '<tr>
                 <td width="100%" class="actions">'.get_lang('Student').' : '.api_get_person_name($value['firstname'], $value['lastname']).' ('.$value['username'].')</td>';
         echo '</tr>';

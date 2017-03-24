@@ -214,19 +214,19 @@ class SurveyUtil
         $survey_data['number_of_questions'] = count($questions_data);
 
         if ($action == 'questionreport') {
-            SurveyUtil::display_question_report($survey_data);
+            self::display_question_report($survey_data);
         }
         if ($action == 'userreport') {
-            SurveyUtil::display_user_report($people_filled, $survey_data);
+            self::display_user_report($people_filled, $survey_data);
         }
         if ($action == 'comparativereport') {
-            SurveyUtil::display_comparative_report();
+            self::display_comparative_report();
         }
         if ($action == 'completereport') {
-            SurveyUtil::display_complete_report($survey_data);
+            self::display_complete_report($survey_data);
         }
         if ($action == 'deleteuserreport') {
-            SurveyUtil::delete_user_report($_GET['survey_id'], $_GET['user']);
+            self::delete_user_report($_GET['survey_id'], $_GET['user']);
         }
     }
 
@@ -536,7 +536,7 @@ class SurveyUtil
 
             if ($question['type'] == 'score') {
                 /** @todo This function should return the options as this is needed further in the code */
-                $options = SurveyUtil::display_question_report_score($survey_data, $question, $offset);
+                $options = self::display_question_report_score($survey_data, $question, $offset);
             } elseif ($question['type'] == 'open') {
                 /** @todo Also get the user who has answered this */
                 $sql = "SELECT * FROM $table_survey_answer
@@ -970,7 +970,7 @@ class SurveyUtil
                     $userParam = $i;
                     $i++;
                 }
-                SurveyUtil::display_complete_report_row(
+                self::display_complete_report_row(
                     $survey_data,
                     $possible_answers,
                     $answers_of_user,
@@ -992,7 +992,7 @@ class SurveyUtil
             $userParam = $i;
             $i++;
         }
-        SurveyUtil::display_complete_report_row(
+        self::display_complete_report_row(
             $survey_data,
             $possible_answers,
             $answers_of_user,
@@ -1219,7 +1219,7 @@ class SurveyUtil
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
             if ($old_user != $row['user'] && $old_user != '') {
-                $return .= SurveyUtil::export_complete_report_row(
+                $return .= self::export_complete_report_row(
                     $survey_data,
                     $possible_answers,
                     $answers_of_user,
@@ -1238,7 +1238,7 @@ class SurveyUtil
             $old_user = $row['user'];
         }
         // This is to display the last user
-        $return .= SurveyUtil::export_complete_report_row(
+        $return .= self::export_complete_report_row(
             $survey_data,
             $possible_answers,
             $answers_of_user,
@@ -1510,7 +1510,7 @@ class SurveyUtil
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
             if ($old_user != $row['user'] && $old_user != '') {
-                $return = SurveyUtil::export_complete_report_row_xls(
+                $return = self::export_complete_report_row_xls(
                     $survey_data,
                     $possible_answers,
                     $answers_of_user,
@@ -1535,7 +1535,7 @@ class SurveyUtil
             $old_user = $row['user'];
         }
 
-        $return = SurveyUtil::export_complete_report_row_xls(
+        $return = self::export_complete_report_row_xls(
             $survey_data,
             $possible_answers,
             $answers_of_user,
@@ -1713,8 +1713,8 @@ class SurveyUtil
 
         if (is_numeric($xAxis) && is_numeric($yAxis)) {
             // Getting the answers of the two questions
-            $answers_x = SurveyUtil::get_answers_of_question_by_user($surveyId, $xAxis);
-            $answers_y = SurveyUtil::get_answers_of_question_by_user($surveyId, $yAxis);
+            $answers_x = self::get_answers_of_question_by_user($surveyId, $xAxis);
+            $answers_y = self::get_answers_of_question_by_user($surveyId, $yAxis);
 
             // Displaying the table
             $tableHtml = '<table border="1" class="data_table">';
@@ -1757,7 +1757,7 @@ class SurveyUtil
                                         break;
                                     } else {
                                         $tableHtml .=  '<td align="center">';
-                                        $votes = SurveyUtil::comparative_check(
+                                        $votes = self::comparative_check(
                                             $answers_x,
                                             $answers_y,
                                             $question_x['answersid'][($ii - 1)],
@@ -1782,7 +1782,7 @@ class SurveyUtil
                                     $tableHtml .= '<th>'.$question_y['answers'][$ij].' '.$y.'</th>';
                                 } else {
                                     $tableHtml .= '<td align="center">';
-                                    $votes = SurveyUtil::comparative_check(
+                                    $votes = self::comparative_check(
                                         $answers_x,
                                         $answers_y,
                                         $question_x['answersid'][($ii - 1)],
@@ -1817,7 +1817,7 @@ class SurveyUtil
                                     break;
                                 } else {
                                     $tableHtml .=  '<td align="center">';
-                                    $votes =  SurveyUtil::comparative_check(
+                                    $votes =  self::comparative_check(
                                         $answers_x,
                                         $answers_y,
                                         $question_x['answersid'][($ii-1)],
@@ -1842,7 +1842,7 @@ class SurveyUtil
                                 $tableHtml .=  '<th>'.$question_y['answers'][($ij)].'</th>';
                             } else {
                                 $tableHtml .=  '<td align="center">';
-                                $votes = SurveyUtil::comparative_check($answers_x, $answers_y, $question_x['answersid'][($ii-1)], $question_y['answersid'][($ij)]);
+                                $votes = self::comparative_check($answers_x, $answers_y, $question_x['answersid'][($ii-1)], $question_y['answersid'][($ij)]);
                                 $tableHtml .= $votes;
                                 array_push(
                                     $chartData,
@@ -2066,8 +2066,8 @@ class SurveyUtil
 
         // Getting the survey information
         $survey_data = SurveyManager::get_survey($_GET['survey_id']);
-        $survey_invitations = SurveyUtil::get_invitations($survey_data['survey_code']);
-        $already_invited = SurveyUtil::get_invited_users($survey_data['code']);
+        $survey_invitations = self::get_invitations($survey_data['survey_code']);
+        $already_invited = self::get_invited_users($survey_data['code']);
 
         // Remind unanswered is a special version of remind all reminder
         $exclude_users = array();
@@ -2156,7 +2156,7 @@ class SurveyUtil
                     $invitation_text = str_replace('src="../../', 'src="'.api_get_path(WEB_PATH), $invitation_text);
                     $invitation_text = trim(stripslashes($invitation_text));
                 }
-                SurveyUtil::send_invitation_mail($value, $invitation_code, $invitation_title, $invitation_text);
+                self::send_invitation_mail($value, $invitation_code, $invitation_title, $invitation_text);
                 $counter++;
             }
         }
@@ -2680,7 +2680,7 @@ class SurveyUtil
         $table_survey = Database::get_course_table(TABLE_SURVEY);
         $course_id = api_get_course_int_id();
 
-        $search_restriction = SurveyUtil::survey_search_restriction();
+        $search_restriction = self::survey_search_restriction();
         if ($search_restriction) {
             $search_restriction = 'WHERE c_id = '.$course_id.' AND '.$search_restriction;
         } else {
@@ -2721,7 +2721,7 @@ class SurveyUtil
         $_user = api_get_user_info();
 
         // Searching
-        $search_restriction = SurveyUtil::survey_search_restriction();
+        $search_restriction = self::survey_search_restriction();
         if ($search_restriction) {
             $search_restriction = ' AND '.$search_restriction;
         }

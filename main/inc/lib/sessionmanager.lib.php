@@ -626,8 +626,8 @@ class SessionManager
         //escaping vars
         $sessionId = $sessionId == 'T' ? 'T' : intval($sessionId);
         $courseId = intval($courseId);
-        $date_from = Database :: escape_string($date_from);
-        $date_to = Database :: escape_string($date_to);
+        $date_from = Database::escape_string($date_from);
+        $date_to = Database::escape_string($date_to);
 
         //tables
         $session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -641,10 +641,10 @@ class SessionManager
         /* if (empty($sessionId)
           {
           // Registered students in a course outside session.
-          $users = CourseManager :: get_student_list_from_course_code($course_code);
+          $users = CourseManager::get_student_list_from_course_code($course_code);
           } else {
           // Registered students in session.
-          $users = CourseManager :: get_student_list_from_course_code($course_code, true, $sessionId);
+          $users = CourseManager::get_student_list_from_course_code($course_code, true, $sessionId);
           } */
 
         $sessionCond = 'and session_id = %s';
@@ -1185,7 +1185,7 @@ class SessionManager
      */
     public static function get_number_of_tracking_access_overview()
     {
-        $table = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $sql = "SELECT COUNT(course_access_id) count FROM $table";
         $result = Database::query($sql);
         $row = Database::fetch_assoc($result);
@@ -1218,11 +1218,11 @@ class SessionManager
         $date_to = Database::escape_string($date_to);
 
         // database table definition
-        $user = Database :: get_main_table(TABLE_MAIN_USER);
-        $course = Database :: get_main_table(TABLE_MAIN_COURSE);
-        $track_e_login = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-        $track_e_course_access = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-        $sessionTable = Database :: get_main_table(TABLE_MAIN_SESSION);
+        $user = Database::get_main_table(TABLE_MAIN_USER);
+        $course = Database::get_main_table(TABLE_MAIN_COURSE);
+        $track_e_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+        $track_e_course_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
 
         global $export_csv;
         if ($export_csv) {
@@ -1548,7 +1548,7 @@ class SessionManager
         $tbl_url_session = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
         $tbl_item_properties = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $tbl_student_publication = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-        $tbl_student_publication_assignment = Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
+        $tbl_student_publication_assignment = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
         $userGroupSessionTable = Database::get_main_table(TABLE_USERGROUP_REL_SESSION);
 
         $ticket = Database::get_main_table(TABLE_TICKET_TICKET);
@@ -1576,7 +1576,7 @@ class SessionManager
             $id_checked = intval($id_checked);
         }
 
-        if (SessionManager::allowed($id_checked) && !$from_ws) {
+        if (self::allowed($id_checked) && !$from_ws) {
             $qb = $em
                 ->createQuery('
                     SELECT s.sessionAdminId FROM ChamiloCoreBundle:Session s
@@ -1592,7 +1592,7 @@ class SessionManager
         }
 
         // Delete documents inside a session
-        $courses = SessionManager::getCoursesInSession($id_checked);
+        $courses = self::getCoursesInSession($id_checked);
         foreach ($courses as $courseId) {
             $courseInfo = api_get_course_info_by_id($courseId);
             DocumentManager::deleteDocumentsFromSession($courseInfo, $id_checked);
@@ -2162,7 +2162,7 @@ class SessionManager
         Database::query($sql);
 
         // Get the list of courses related to this session
-        $course_list = SessionManager::get_course_list_by_session_id($session_id);
+        $course_list = self::get_course_list_by_session_id($session_id);
 
         if (!empty($course_list)) {
             foreach ($course_list as $course) {
@@ -2766,9 +2766,9 @@ class SessionManager
             $session_id = $rows['id'];
             if ($delete_session) {
                 if ($from_ws) {
-                    SessionManager::delete($session_id, true);
+                    self::delete($session_id, true);
                 } else {
-                    SessionManager::delete($session_id);
+                    self::delete($session_id);
                 }
             }
         }
@@ -3488,7 +3488,7 @@ class SessionManager
             $orderBy = Database::escape_string($orderBy);
             $orderBy = " ORDER BY $orderBy";
         } else {
-            if (SessionManager::orderCourseIsEnabled()) {
+            if (self::orderCourseIsEnabled()) {
                 $orderBy .= " ORDER BY position ";
             } else {
                 $orderBy .= " ORDER BY title ";
@@ -3537,7 +3537,7 @@ class SessionManager
         $keyword = null
     ) {
         if (empty($sessionId)) {
-            $sessionsSQL = SessionManager::get_sessions_followed_by_drh(
+            $sessionsSQL = self::get_sessions_followed_by_drh(
                 $userId,
                 null,
                 null,
@@ -4562,7 +4562,7 @@ class SessionManager
                         Database::query($sql);
 
                         // We get the last insert id.
-                        $my_session_result = SessionManager::get_session_by_name($enreg['SessionName']);
+                        $my_session_result = self::get_session_by_name($enreg['SessionName']);
                         $session_id = $my_session_result['id'];
 
                         if ($session_id) {
@@ -4630,7 +4630,7 @@ class SessionManager
                                 Database::query($sql);
                             }
                         } else {
-                            $my_session_result = SessionManager::get_session_by_name($session_name);
+                            $my_session_result = self::get_session_by_name($session_name);
                             $session_id = $my_session_result['id'];
                         }
 
@@ -4775,7 +4775,7 @@ class SessionManager
                                 SET c_id = '$courseId', session_id='$session_id'";
                         Database::query($sql);
 
-                        SessionManager::installCourse($session_id, $courseInfo['real_id']);
+                        self::installCourse($session_id, $courseInfo['real_id']);
 
                         if ($debug) {
                             $logger->addInfo("Sessions - Adding course '$course_code' to session #$session_id");
@@ -4799,7 +4799,7 @@ class SessionManager
                         // If any user provided for a course, use the users array.
                         if (empty($course_users)) {
                             if (!empty($userList)) {
-                                SessionManager::subscribe_users_to_session_course(
+                                self::subscribe_users_to_session_course(
                                     $userList,
                                     $session_id,
                                     $course_code
@@ -4838,7 +4838,7 @@ class SessionManager
                                     $coach_id = UserManager::get_user_id_from_username($course_coach);
                                     if ($coach_id !== false) {
                                         // Just insert new coaches
-                                        SessionManager::updateCoaches(
+                                        self::updateCoaches(
                                             $session_id,
                                             $courseId,
                                             array($coach_id),
@@ -4926,7 +4926,7 @@ class SessionManager
                                 }
 
                                 if (!empty($teacherToAdd)) {
-                                    SessionManager::updateCoaches(
+                                    self::updateCoaches(
                                         $session_id,
                                         $courseId,
                                         array($teacherToAdd),
@@ -5110,7 +5110,7 @@ class SessionManager
                             // Continue default behaviour.
                             if ($onlyAddFirstCoachOrTeacher == false) {
                                 // Checking one more time see BT#6449#note-149
-                                $coaches = SessionManager::getCoachesByCourseSession($session_id, $courseId);
+                                $coaches = self::getCoachesByCourseSession($session_id, $courseId);
                                 // Update coaches if only there's 1 course see BT#6449#note-189
                                 if (empty($coaches) || count($courses) == 1) {
                                     foreach ($course_coaches as $course_coach) {
@@ -5118,7 +5118,7 @@ class SessionManager
                                         $coach_id = UserManager::get_user_id_from_username($course_coach);
                                         if ($coach_id !== false) {
                                             // Just insert new coaches
-                                            SessionManager::updateCoaches(
+                                            self::updateCoaches(
                                                 $session_id,
                                                 $courseId,
                                                 array($coach_id),
@@ -5145,7 +5145,7 @@ class SessionManager
                                 $user_id = UserManager::get_user_id_from_username($user);
 
                                 if ($user_id !== false) {
-                                    SessionManager::subscribe_users_to_session_course(
+                                    self::subscribe_users_to_session_course(
                                         array($user_id),
                                         $session_id,
                                         $course_code
@@ -5260,11 +5260,11 @@ class SessionManager
      */
     public static function getAllCoursesFromAllSessionFromDrh($userId)
     {
-        $sessions = SessionManager::get_sessions_followed_by_drh($userId);
+        $sessions = self::get_sessions_followed_by_drh($userId);
         $coursesFromSession = array();
         if (!empty($sessions)) {
             foreach ($sessions as $session) {
-                $courseList = SessionManager::get_course_list_by_session_id($session['id']);
+                $courseList = self::get_course_list_by_session_id($session['id']);
                 foreach ($courseList as $course) {
                     $coursesFromSession[] = $course['code'];
                 }
@@ -5280,11 +5280,11 @@ class SessionManager
      */
     public static function getAllCoursesFromAllSessions()
     {
-        $sessions = SessionManager::get_sessions_list();
+        $sessions = self::get_sessions_list();
         $coursesFromSession = array();
         if (!empty($sessions)) {
             foreach ($sessions as $session) {
-                $courseList = SessionManager::get_course_list_by_session_id($session['id']);
+                $courseList = self::get_course_list_by_session_id($session['id']);
                 foreach ($courseList as $course) {
                     $coursesFromSession[$course['code'].':'.$session['id']] = $course['visual_code'] . ' - ' . $course['title'] . ' (' . $session['name'] . ')';
                 }
@@ -5391,7 +5391,7 @@ class SessionManager
             case 'drh_all':
                 // Show all by DRH
                 if (empty($sessionIdList)) {
-                    $sessionsListSql = SessionManager::get_sessions_followed_by_drh(
+                    $sessionsListSql = self::get_sessions_followed_by_drh(
                         $userId,
                         null,
                         null,
@@ -5577,7 +5577,7 @@ class SessionManager
                                 continue;
                             }
                             $messages[] = Display::return_message(get_lang('StudentList') . '<br />' . $userToString, 'info', false);
-                            SessionManager::subscribe_users_to_session(
+                            self::subscribe_users_to_session(
                                 $sessionDestinationId,
                                 $newUserList,
                                 SESSION_VISIBLE_READ_ONLY,
@@ -5751,7 +5751,7 @@ class SessionManager
             // Followed teachers by drh
             if (api_drh_can_access_all_session_content()) {
                 if (empty($sessionIdList)) {
-                    $sessions = SessionManager::get_sessions_followed_by_drh($userId);
+                    $sessions = self::get_sessions_followed_by_drh($userId);
                     $sessionIdList = array();
                     foreach ($sessions as $session) {
                         $sessionIdList[] = $session['id'];
@@ -7102,7 +7102,7 @@ class SessionManager
             $coachInfo = api_get_user_info($sessionInfo['id_coach']);
         };
 
-        $categoriesList = SessionManager::get_all_session_category();
+        $categoriesList = self::get_all_session_category();
         $userInfo = api_get_user_info();
 
         $categoriesOptions = array(
@@ -8081,7 +8081,7 @@ class SessionManager
             foreach ($listSessionId as $i => $sessionId) {
                 // here we got all session for this course
                 // lets check there session categories
-                $sessionInfo = SessionManager::fetch($sessionId);
+                $sessionInfo = self::fetch($sessionId);
                 $catId = $sessionInfo['session_category_id'];
                 if (!isset($listCat[$catId])) {
                     $listCatInfo = self::get_session_category($catId);
@@ -8090,7 +8090,7 @@ class SessionManager
                     $listCat[$catId]['catSessionName'] = $listCatInfo['name'];
                     $listCat[$catId]['sessionList'] = array();
                 }
-                $listSessionInfo = SessionManager::fetch($sessionId);
+                $listSessionInfo = self::fetch($sessionId);
                 $listSessionIdName = array(
                     "sessionId" => $sessionId,
                     "sessionName" => $listSessionInfo['name'],

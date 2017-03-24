@@ -336,7 +336,7 @@ class SurveyManager
             }
 
             if ($values['survey_type'] == 1 && !empty($values['parent_id'])) {
-                SurveyManager::copy_survey($values['parent_id'], $survey_id);
+                self::copy_survey($values['parent_id'], $survey_id);
             }
 
             Display::addFlash(
@@ -613,7 +613,7 @@ class SurveyManager
         Database::query($sql);
 
         // Deleting the questions of the survey
-        SurveyManager::delete_all_survey_questions($survey_id, $shared);
+        self::delete_all_survey_questions($survey_id, $shared);
 
         // Update into item_property (delete)
         api_item_property_update(
@@ -773,7 +773,7 @@ class SurveyManager
 
         $course_id = $courseId ? $courseId : api_get_course_int_id();
 
-        $datas = SurveyManager::get_survey($survey_id);
+        $datas = self::get_survey($survey_id);
         $session_where = '';
         if (api_get_session_id() != 0) {
             $session_where = ' AND session_id = "'.api_get_session_id().'" ';
@@ -816,7 +816,7 @@ class SurveyManager
         $session_id = $survey_data['session_id'];
 
         // Getting a list with all the people who have filled the survey
-        $people_filled = SurveyManager::get_people_who_filled_survey($survey_id, false, $course_id);
+        $people_filled = self::get_people_who_filled_survey($survey_id, false, $course_id);
 
         $number = intval(count($people_filled));
 
@@ -1061,11 +1061,11 @@ class SurveyManager
                 $tbl_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
 
                 // Getting all the information of the survey
-                $survey_data = SurveyManager::get_survey($form_content['survey_id']);
+                $survey_data = self::get_survey($form_content['survey_id']);
 
                 // Storing the question in the shared database
                 if (is_numeric($survey_data['survey_share']) && $survey_data['survey_share'] != 0) {
-                    $shared_question_id = SurveyManager::save_shared_question($form_content, $survey_data);
+                    $shared_question_id = self::save_shared_question($form_content, $survey_data);
                     $form_content['shared_question_id'] = $shared_question_id;
                 }
 
@@ -1169,7 +1169,7 @@ class SurveyManager
                 }
 
                 // Storing the options of the question
-                SurveyManager::save_question_options($form_content, $survey_data);
+                self::save_question_options($form_content, $survey_data);
             } else {
                 $return_message = 'PleasFillAllAnswer';
             }
@@ -1321,10 +1321,10 @@ class SurveyManager
         Database::query($sql);
 
         // Deleting all the options of the questions of the survey
-        SurveyManager::delete_all_survey_questions_options($survey_id, $shared);
+        self::delete_all_survey_questions_options($survey_id, $shared);
 
         // Deleting all the answers on this survey
-        SurveyManager::delete_all_survey_answers($survey_id);
+        self::delete_all_survey_answers($survey_id);
     }
 
     /**
@@ -1345,7 +1345,7 @@ class SurveyManager
         // Table definitions
         $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
         if ($shared) {
-            SurveyManager::delete_shared_survey_question($survey_id, $question_id);
+            self::delete_shared_survey_question($survey_id, $question_id);
         }
 
         // Deleting the survey questions
@@ -1357,7 +1357,7 @@ class SurveyManager
         Database::query($sql);
 
         // Deleting the options of the question of the survey
-        SurveyManager::delete_survey_question_option($survey_id, $question_id, $shared);
+        self::delete_survey_question_option($survey_id, $question_id, $shared);
     }
 
     /**
@@ -1378,7 +1378,7 @@ class SurveyManager
         $table_survey_question_option = Database::get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION);
 
         // First we have to get the shared_question_id
-        $question_data = SurveyManager::get_question($question_id);
+        $question_data = self::get_question($question_id);
 
         // Deleting the survey questions
         $sql = "DELETE FROM $table_survey_question
@@ -1411,7 +1411,7 @@ class SurveyManager
         }
 
         if (is_numeric($survey_data['survey_share']) && $survey_data['survey_share'] != 0) {
-            SurveyManager::save_shared_question_options($form_content, $survey_data);
+            self::save_shared_question_options($form_content, $survey_data);
         }
 
         // Table definition

@@ -277,7 +277,7 @@ class CourseRestorer
             return;
         }
 
-        $table = Database :: get_course_table(TABLE_DOCUMENT);
+        $table = Database::get_course_table(TABLE_DOCUMENT);
         $resources = $this->course->resources;
         $path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/';
 
@@ -1092,7 +1092,7 @@ class CourseRestorer
 	 */
     public function restore_forum_category($my_id = null, $sessionId = 0)
     {
-		$forum_cat_table = Database :: get_course_table(TABLE_FORUM_CATEGORY);
+		$forum_cat_table = Database::get_course_table(TABLE_FORUM_CATEGORY);
 		$resources = $this->course->resources;
         if (!empty($resources[RESOURCE_FORUMCATEGORY])) {
             foreach ($resources[RESOURCE_FORUMCATEGORY] as $id => $forum_cat) {
@@ -1139,7 +1139,7 @@ class CourseRestorer
 	 */
     public function restore_topic($thread_id, $forum_id, $sessionId = 0)
     {
-		$table = Database :: get_course_table(TABLE_FORUM_THREAD);
+		$table = Database::get_course_table(TABLE_FORUM_THREAD);
 		$topic = $this->course->resources[RESOURCE_FORUMTOPIC][$thread_id];
 
         $params = (array)$topic->obj;
@@ -1196,7 +1196,7 @@ class CourseRestorer
 	 */
     public function restore_post($id, $topic_id, $forum_id, $sessionId = 0)
     {
-		$table_post = Database :: get_course_table(TABLE_FORUM_POST);
+		$table_post = Database::get_course_table(TABLE_FORUM_POST);
 		$post = $this->course->resources[RESOURCE_FORUMPOST][$id];
         $params = (array) $post->obj;
         $params['c_id'] = $this->destination_course_id;
@@ -1244,7 +1244,7 @@ class CourseRestorer
     public function restore_links($session_id = 0)
     {
 		if ($this->course->has_resources(RESOURCE_LINK)) {
-			$link_table = Database :: get_course_table(TABLE_LINK);
+			$link_table = Database::get_course_table(TABLE_LINK);
 			$resources = $this->course->resources;
 
 			foreach ($resources[RESOURCE_LINK] as $id => $link) {
@@ -1309,7 +1309,7 @@ class CourseRestorer
         if ($id == 0) {
             return 0;
         }
-        $link_cat_table = Database :: get_course_table(TABLE_LINK_CATEGORY);
+        $link_cat_table = Database::get_course_table(TABLE_LINK_CATEGORY);
         $resources = $this->course->resources;
         $link_cat = $resources[RESOURCE_LINKCATEGORY][$id];
         if (is_object($link_cat) && !$link_cat->is_restored()) {
@@ -1345,7 +1345,7 @@ class CourseRestorer
     {
 		if ($this->course->has_resources(RESOURCE_TOOL_INTRO)) {
             $sessionId = intval($sessionId);
-			$tool_intro_table = Database :: get_course_table(TABLE_TOOL_INTRO);
+			$tool_intro_table = Database::get_course_table(TABLE_TOOL_INTRO);
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_TOOL_INTRO] as $id => $tool_intro) {
 				$sql = "DELETE FROM $tool_intro_table
@@ -1388,7 +1388,7 @@ class CourseRestorer
     {
 		if ($this->course->has_resources(RESOURCE_EVENT)) {
             $sessionId = intval($sessionId);
-			$table = Database :: get_course_table(TABLE_AGENDA);
+			$table = Database::get_course_table(TABLE_AGENDA);
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_EVENT] as $id => $event) {
 				// check resources inside html from ckeditor tool and copy correct urls into recipient course
@@ -1427,7 +1427,7 @@ class CourseRestorer
 
 				if (!empty($this->course->orig)) {
 
-					$table_attachment = Database :: get_course_table(TABLE_AGENDA_ATTACHMENT);
+					$table_attachment = Database::get_course_table(TABLE_AGENDA_ATTACHMENT);
 					$sql = 'SELECT path, comment, size, filename
 					        FROM '.$table_attachment.'
 					        WHERE c_id = '.$this->destination_course_id.' AND agenda_id = '.$id;
@@ -1444,7 +1444,7 @@ class CourseRestorer
                         );
 						//$copy_result = true;
 						if ($copy_result) {
-							$table_attachment = Database :: get_course_table(TABLE_AGENDA_ATTACHMENT);
+							$table_attachment = Database::get_course_table(TABLE_AGENDA_ATTACHMENT);
 
 							$params = [
                                 'c_id' => $this->destination_course_id,
@@ -1473,7 +1473,7 @@ class CourseRestorer
                             $destination_path.$new_filename
                         );
 						if ($copy_result) {
-							$table_attachment = Database :: get_course_table(TABLE_AGENDA_ATTACHMENT);
+							$table_attachment = Database::get_course_table(TABLE_AGENDA_ATTACHMENT);
 
                             $params = [
                                 'c_id' => $this->destination_course_id,
@@ -1502,7 +1502,7 @@ class CourseRestorer
     public function restore_course_descriptions($session_id = 0)
     {
 		if ($this->course->has_resources(RESOURCE_COURSEDESCRIPTION)) {
-			$table = Database :: get_course_table(TABLE_COURSE_DESCRIPTION);
+			$table = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_COURSEDESCRIPTION] as $id => $cd) {
                 $courseDescription = (array) $cd;
@@ -1551,7 +1551,7 @@ class CourseRestorer
     {
 		if ($this->course->has_resources(RESOURCE_ANNOUNCEMENT)) {
             $sessionId = intval($sessionId);
-			$table = Database :: get_course_table(TABLE_ANNOUNCEMENT);
+			$table = Database::get_course_table(TABLE_ANNOUNCEMENT);
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_ANNOUNCEMENT] as $id => $announcement) {
 
@@ -1611,7 +1611,7 @@ class CourseRestorer
                         );
 
 						if ($copy_result) {
-							$table_attachment = Database :: get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
+							$table_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
 
                             $params = [
                                 'c_id' => $this->destination_course_id,
@@ -1640,7 +1640,7 @@ class CourseRestorer
 						$copy_result = copy($origin_path.$announcement->attachment_path, $destination_path.$new_filename);
 
 						if ($copy_result) {
-							$table_attachment = Database :: get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
+							$table_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
 
                             $params = [
                                 'c_id' => $this->destination_course_id,
@@ -1674,9 +1674,9 @@ class CourseRestorer
         $respect_base_content = false
     ) {
 		if ($this->course->has_resources(RESOURCE_QUIZ)) {
-			$table_qui = Database :: get_course_table(TABLE_QUIZ_TEST);
-			$table_rel = Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION);
-			$table_doc = Database :: get_course_table(TABLE_DOCUMENT);
+			$table_qui = Database::get_course_table(TABLE_QUIZ_TEST);
+			$table_rel = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+			$table_doc = Database::get_course_table(TABLE_DOCUMENT);
 			$resources = $this->course->resources;
 
 			foreach ($resources[RESOURCE_QUIZ] as $id => $quiz) {
@@ -2180,9 +2180,9 @@ class CourseRestorer
         $sessionId = intval($sessionId);
 
         if ($this->course->has_resources(RESOURCE_SURVEY)) {
-			$table_sur = Database :: get_course_table(TABLE_SURVEY);
-			$table_que = Database :: get_course_table(TABLE_SURVEY_QUESTION);
-			$table_ans = Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
+			$table_sur = Database::get_course_table(TABLE_SURVEY);
+			$table_que = Database::get_course_table(TABLE_SURVEY_QUESTION);
+			$table_ans = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_SURVEY] as $id => $survey) {
 
@@ -2296,7 +2296,7 @@ class CourseRestorer
 							if (isset($survey_data['survey_share']) && is_numeric($survey_data['survey_share'])) {
                                 SurveyManager::delete_survey($survey_data['survey_share'], true,$this->destination_course_id);
 							}
-							SurveyManager :: delete_survey($survey_data['survey_id'],false,$this->destination_course_id);
+							SurveyManager::delete_survey($survey_data['survey_id'],false,$this->destination_course_id);
 
 							// Insert the new source survey
                             $new_id = Database::insert($table_sur, $params);
@@ -2356,7 +2356,7 @@ class CourseRestorer
 	 */
     public function is_survey_code_available($survey_code)
     {
-		$table_sur = Database :: get_course_table(TABLE_SURVEY);
+		$table_sur = Database::get_course_table(TABLE_SURVEY);
 		$sql = "SELECT * FROM $table_sur
 		        WHERE
 		            c_id = ".$this->destination_course_id." AND
@@ -2383,8 +2383,8 @@ class CourseRestorer
 			if ($question->is_restored()) {
 				return $question->destination_id;
 			}
-			$table_que = Database :: get_course_table(TABLE_SURVEY_QUESTION);
-			$table_ans = Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
+			$table_que = Database::get_course_table(TABLE_SURVEY_QUESTION);
+			$table_ans = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
 
 			// check resources inside html from ckeditor tool and copy correct urls into recipient course
             $question->survey_question = DocumentManager::replace_urls_inside_content_html_from_copy_course(
@@ -2906,7 +2906,7 @@ class CourseRestorer
     public function restore_glossary($session_id = 0)
     {
 		if ($this->course->has_resources(RESOURCE_GLOSSARY)) {
-			$table_glossary = Database :: get_course_table(TABLE_GLOSSARY);
+			$table_glossary = Database::get_course_table(TABLE_GLOSSARY);
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_GLOSSARY] as $id => $glossary) {
 
@@ -2961,8 +2961,8 @@ class CourseRestorer
     {
 		if ($this->course->has_resources(RESOURCE_WIKI)) {
 			// wiki table of the target course
-			$table_wiki = Database :: get_course_table(TABLE_WIKI);
-			$table_wiki_conf = Database :: get_course_table(TABLE_WIKI_CONF);
+			$table_wiki = Database::get_course_table(TABLE_WIKI);
+			$table_wiki_conf = Database::get_course_table(TABLE_WIKI_CONF);
 
 			// storing all the resources that have to be copied in an array
 			$resources = $this->course->resources;
@@ -3141,8 +3141,8 @@ class CourseRestorer
     public function restore_attendance($session_id = 0)
     {
 		if ($this->course->has_resources(RESOURCE_ATTENDANCE)) {
-			$table_attendance = Database :: get_course_table(TABLE_ATTENDANCE);
-			$table_attendance_calendar = Database :: get_course_table(TABLE_ATTENDANCE_CALENDAR);
+			$table_attendance = Database::get_course_table(TABLE_ATTENDANCE);
+			$table_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
 
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_ATTENDANCE] as $id => $obj) {
@@ -3203,7 +3203,7 @@ class CourseRestorer
     {
         require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
         if ($this->course->has_resources(RESOURCE_WORK)) {
-            $table_work_assignment = Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
+            $table_work_assignment = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
 
             $resources = $this->course->resources;
             foreach ($resources[RESOURCE_WORK] as $obj) {

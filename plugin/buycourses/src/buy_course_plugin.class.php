@@ -216,7 +216,7 @@ class BuyCoursesPlugin extends Plugin
     {
         return Database::select(
             '*',
-            Database::get_main_table(BuyCoursesPlugin::TABLE_CURRENCY),
+            Database::get_main_table(self::TABLE_CURRENCY),
             [
                 'where' => ['status = ?' => true]
             ],
@@ -232,7 +232,7 @@ class BuyCoursesPlugin extends Plugin
     {
         return Database::select(
             '*',
-            Database::get_main_table(BuyCoursesPlugin::TABLE_CURRENCY)
+            Database::get_main_table(self::TABLE_CURRENCY)
         );
     }
 
@@ -243,7 +243,7 @@ class BuyCoursesPlugin extends Plugin
     public function selectCurrency($selectedId)
     {
         $currencyTable = Database::get_main_table(
-            BuyCoursesPlugin::TABLE_CURRENCY
+            self::TABLE_CURRENCY
         );
 
         Database::update(
@@ -265,7 +265,7 @@ class BuyCoursesPlugin extends Plugin
     public function savePaypalParams($params)
     {
         return Database::update(
-            Database::get_main_table(BuyCoursesPlugin::TABLE_PAYPAL),
+            Database::get_main_table(self::TABLE_PAYPAL),
             [
                 'username' => $params['username'],
                 'password' => $params['password'],
@@ -284,7 +284,7 @@ class BuyCoursesPlugin extends Plugin
     {
         return Database::select(
             '*',
-            Database::get_main_table(BuyCoursesPlugin::TABLE_PAYPAL),
+            Database::get_main_table(self::TABLE_PAYPAL),
             ['id = ?' => 1],
             'first'
         );
@@ -367,8 +367,8 @@ class BuyCoursesPlugin extends Plugin
      */
     public function getItemByProduct($productId, $itemType)
     {
-        $buyItemTable = Database::get_main_table(BuyCoursesPlugin::TABLE_ITEM);
-        $buyCurrencyTable = Database::get_main_table(BuyCoursesPlugin::TABLE_CURRENCY);
+        $buyItemTable = Database::get_main_table(self::TABLE_ITEM);
+        $buyCurrencyTable = Database::get_main_table(self::TABLE_CURRENCY);
 
         $fakeItemFrom = "
             $buyItemTable i
@@ -875,8 +875,8 @@ class BuyCoursesPlugin extends Plugin
      */
     public function getSaleListByPaymentType($paymentType = self::PAYMENT_TYPE_PAYPAL)
     {
-        $saleTable = Database::get_main_table(BuyCoursesPlugin::TABLE_SALE);
-        $currencyTable = Database::get_main_table(BuyCoursesPlugin::TABLE_CURRENCY);
+        $saleTable = Database::get_main_table(self::TABLE_SALE);
+        $currencyTable = Database::get_main_table(self::TABLE_CURRENCY);
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
 
         $innerJoins = "
@@ -903,7 +903,7 @@ class BuyCoursesPlugin extends Plugin
     {
         return Database::select(
             '*',
-            Database::get_main_table(BuyCoursesPlugin::TABLE_CURRENCY),
+            Database::get_main_table(self::TABLE_CURRENCY),
             [
                 'where' => ['id = ?' => intval($currencyId)]
             ],
@@ -996,8 +996,8 @@ class BuyCoursesPlugin extends Plugin
      */
     public function getSaleListByStatus($status = self::SALE_STATUS_PENDING)
     {
-        $saleTable = Database::get_main_table(BuyCoursesPlugin::TABLE_SALE);
-        $currencyTable = Database::get_main_table(BuyCoursesPlugin::TABLE_CURRENCY);
+        $saleTable = Database::get_main_table(self::TABLE_SALE);
+        $currencyTable = Database::get_main_table(self::TABLE_CURRENCY);
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
 
         $innerJoins = "
@@ -1239,8 +1239,8 @@ class BuyCoursesPlugin extends Plugin
             return [];
         }
 
-        $saleTable = Database::get_main_table(BuyCoursesPlugin::TABLE_SALE);
-        $currencyTable = Database::get_main_table(BuyCoursesPlugin::TABLE_CURRENCY);
+        $saleTable = Database::get_main_table(self::TABLE_SALE);
+        $currencyTable = Database::get_main_table(self::TABLE_CURRENCY);
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
 
         $innerJoins = "
@@ -1273,8 +1273,8 @@ class BuyCoursesPlugin extends Plugin
             return [];
         }
 
-        $saleTable = Database::get_main_table(BuyCoursesPlugin::TABLE_SALE);
-        $currencyTable = Database::get_main_table(BuyCoursesPlugin::TABLE_CURRENCY);
+        $saleTable = Database::get_main_table(self::TABLE_SALE);
+        $currencyTable = Database::get_main_table(self::TABLE_CURRENCY);
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
 
         $innerJoins = "
@@ -1287,7 +1287,7 @@ class BuyCoursesPlugin extends Plugin
             "$saleTable s $innerJoins",
             [
                 'where' => [
-                    'u.id = ? AND s.status = ?' => [intval($id), BuyCoursesPlugin::SALE_STATUS_COMPLETED]
+                    'u.id = ? AND s.status = ?' => [intval($id), self::SALE_STATUS_COMPLETED]
                 ],
                 'order' => 'id DESC'
             ]
@@ -1334,8 +1334,8 @@ class BuyCoursesPlugin extends Plugin
      */
     public function getSessionForConfiguration(Session $session, $defaultCurrency = null)
     {
-        $buyItemTable = Database::get_main_table(BuyCoursesPlugin::TABLE_ITEM);
-        $buyCurrencyTable = Database::get_main_table(BuyCoursesPlugin::TABLE_CURRENCY);
+        $buyItemTable = Database::get_main_table(self::TABLE_ITEM);
+        $buyCurrencyTable = Database::get_main_table(self::TABLE_CURRENCY);
 
         $fakeItemFrom = "
             $buyItemTable i
@@ -1418,7 +1418,7 @@ class BuyCoursesPlugin extends Plugin
      */
     public function deleteItem($itemId)
     {
-        $itemTable = Database::get_main_table(BuyCoursesPlugin::TABLE_ITEM);
+        $itemTable = Database::get_main_table(self::TABLE_ITEM);
         $affectedRows = Database::delete(
             $itemTable,
             ['id = ?' => intval($itemId)]
@@ -1438,7 +1438,7 @@ class BuyCoursesPlugin extends Plugin
      */
     public function registerItem(array $itemData)
     {
-        $itemTable = Database::get_main_table(BuyCoursesPlugin::TABLE_ITEM);
+        $itemTable = Database::get_main_table(self::TABLE_ITEM);
 
         return Database::insert($itemTable, $itemData);
     }
@@ -1452,7 +1452,7 @@ class BuyCoursesPlugin extends Plugin
      */
     public function updateItem(array $itemData, $productId, $productType)
     {
-        $itemTable = Database::get_main_table(BuyCoursesPlugin::TABLE_ITEM);
+        $itemTable = Database::get_main_table(self::TABLE_ITEM);
 
         return Database::update(
             $itemTable,
@@ -1471,7 +1471,7 @@ class BuyCoursesPlugin extends Plugin
      */
     public function deleteItemBeneficiaries($itemId)
     {
-        $beneficiaryTable = Database::get_main_table(BuyCoursesPlugin::TABLE_ITEM_BENEFICIARY);
+        $beneficiaryTable = Database::get_main_table(self::TABLE_ITEM_BENEFICIARY);
 
         return Database::delete(
             $beneficiaryTable,
@@ -1486,7 +1486,7 @@ class BuyCoursesPlugin extends Plugin
      */
     public function registerItemBeneficiaries($itemId, array $userIds)
     {
-        $beneficiaryTable = Database::get_main_table(BuyCoursesPlugin::TABLE_ITEM_BENEFICIARY);
+        $beneficiaryTable = Database::get_main_table(self::TABLE_ITEM_BENEFICIARY);
 
         $this->deleteItemBeneficiaries($itemId);
 
@@ -1546,9 +1546,9 @@ class BuyCoursesPlugin extends Plugin
         $condition = ($payoutId) ? 'AND p.id = '. intval($payoutId) : '';
         $condition2 = ($userId) ? ' AND p.user_id = ' . intval($userId) : '';
         $typeResult = ($condition) ? 'first' : 'all';
-        $payoutsTable = Database::get_main_table(BuyCoursesPlugin::TABLE_PAYPAL_PAYOUTS);
-        $saleTable = Database::get_main_table(BuyCoursesPlugin::TABLE_SALE);
-        $currencyTable = Database::get_main_table(BuyCoursesPlugin::TABLE_CURRENCY);
+        $payoutsTable = Database::get_main_table(self::TABLE_PAYPAL_PAYOUTS);
+        $saleTable = Database::get_main_table(self::TABLE_SALE);
+        $currencyTable = Database::get_main_table(self::TABLE_CURRENCY);
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
         $extraFieldTable = Database::get_main_table(TABLE_EXTRA_FIELD);
         $extraFieldValues = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
@@ -1637,7 +1637,7 @@ class BuyCoursesPlugin extends Plugin
      */
     public function storePayouts($saleId)
     {
-        $payoutsTable = Database::get_main_table(BuyCoursesPlugin::TABLE_PAYPAL_PAYOUTS);
+        $payoutsTable = Database::get_main_table(self::TABLE_PAYPAL_PAYOUTS);
         $platformCommission = $this->getPlatformCommission();
 
         $sale = $this->getSale($saleId);
@@ -1668,7 +1668,7 @@ class BuyCoursesPlugin extends Plugin
      */
     public function setStatusPayouts($payoutId, $status)
     {
-        $payoutsTable = Database::get_main_table(BuyCoursesPlugin::TABLE_PAYPAL_PAYOUTS);
+        $payoutsTable = Database::get_main_table(self::TABLE_PAYPAL_PAYOUTS);
 
         Database::update(
             $payoutsTable,
@@ -1685,7 +1685,7 @@ class BuyCoursesPlugin extends Plugin
     {
         return Database::select(
             '*',
-            Database::get_main_table(BuyCoursesPlugin::TABLE_COMMISSION),
+            Database::get_main_table(self::TABLE_COMMISSION),
             ['id = ?' => 1],
             'first'
         );
@@ -1698,7 +1698,7 @@ class BuyCoursesPlugin extends Plugin
      */
     public function updateCommission($params)
     {
-        $commissionTable = Database::get_main_table(BuyCoursesPlugin::TABLE_COMMISSION);
+        $commissionTable = Database::get_main_table(self::TABLE_COMMISSION);
 
         return Database::update(
             $commissionTable,
@@ -1714,7 +1714,7 @@ class BuyCoursesPlugin extends Plugin
      */
     public function storeService($service)
     {
-        $servicesTable = Database::get_main_table(BuyCoursesPlugin::TABLE_SERVICES);
+        $servicesTable = Database::get_main_table(self::TABLE_SERVICES);
 
         $return = Database::insert(
             $servicesTable,
@@ -1759,7 +1759,7 @@ class BuyCoursesPlugin extends Plugin
      */
     public function updateService($service, $id)
     {
-        $servicesTable = Database::get_main_table(BuyCoursesPlugin::TABLE_SERVICES);
+        $servicesTable = Database::get_main_table(self::TABLE_SERVICES);
         if (!empty($service['picture_crop_image_base_64'])) {
             $img = str_replace('data:image/png;base64,', '', $service['picture_crop_image_base_64']);
             $img = str_replace(' ', '+', $img);
@@ -1811,7 +1811,7 @@ class BuyCoursesPlugin extends Plugin
      */
     public function getServices($id = null)
     {
-        $servicesTable = Database::get_main_table(BuyCoursesPlugin::TABLE_SERVICES);
+        $servicesTable = Database::get_main_table(self::TABLE_SERVICES);
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
 
         $conditions = null;
@@ -1902,8 +1902,8 @@ class BuyCoursesPlugin extends Plugin
         $nodeId = 0,
         $hot = false
     ) {
-        $servicesTable = Database::get_main_table(BuyCoursesPlugin::TABLE_SERVICES);
-        $servicesSaleTable = Database::get_main_table(BuyCoursesPlugin::TABLE_SERVICES_SALE);
+        $servicesTable = Database::get_main_table(self::TABLE_SERVICES);
+        $servicesSaleTable = Database::get_main_table(self::TABLE_SERVICES_SALE);
 
         $conditions = null;
         $showData = 'all';
@@ -2065,7 +2065,7 @@ class BuyCoursesPlugin extends Plugin
      */
     public function getCatalogServiceList($name = null, $min = 0, $max = 0, $appliesTo = '')
     {
-        $servicesTable = Database::get_main_table(BuyCoursesPlugin::TABLE_SERVICES);
+        $servicesTable = Database::get_main_table(self::TABLE_SERVICES);
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
 
         $whereConditions = [
@@ -2190,7 +2190,7 @@ class BuyCoursesPlugin extends Plugin
     public function saveCulqiParameters($params)
     {
         return Database::update(
-            Database::get_main_table(BuyCoursesPlugin::TABLE_CULQI),
+            Database::get_main_table(self::TABLE_CULQI),
             [
                 'commerce_code' => $params['commerce_code'],
                 'api_key' => $params['api_key'],
@@ -2208,7 +2208,7 @@ class BuyCoursesPlugin extends Plugin
     {
         return Database::select(
             '*',
-            Database::get_main_table(BuyCoursesPlugin::TABLE_CULQI),
+            Database::get_main_table(self::TABLE_CULQI),
             ['id = ?' => 1],
             'first'
         );
@@ -2222,7 +2222,7 @@ class BuyCoursesPlugin extends Plugin
     public function saveGlobalParameters($params)
     {
         return Database::update(
-            Database::get_main_table(BuyCoursesPlugin::TABLE_GLOBAL_CONFIG),
+            Database::get_main_table(self::TABLE_GLOBAL_CONFIG),
             [
                 'terms_and_conditions' => $params['terms_and_conditions']
             ],
@@ -2238,7 +2238,7 @@ class BuyCoursesPlugin extends Plugin
     {
         return Database::select(
             '*',
-            Database::get_main_table(BuyCoursesPlugin::TABLE_GLOBAL_CONFIG),
+            Database::get_main_table(self::TABLE_GLOBAL_CONFIG),
             ['id = ?' => 1],
             'first'
         );

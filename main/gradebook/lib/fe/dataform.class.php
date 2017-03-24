@@ -25,15 +25,15 @@ class DataForm extends FormValidator
     {
         parent:: __construct($form_name, $method, $action, $target);
         $this->form_type = $form_type;
-        if ($this->form_type == self :: TYPE_IMPORT) {
+        if ($this->form_type == self::TYPE_IMPORT) {
             $this->build_import_form();
-        } elseif ($this->form_type == self :: TYPE_EXPORT) {
+        } elseif ($this->form_type == self::TYPE_EXPORT) {
             if ($locked_status == 0) {
                 $this->build_export_form_option(false);
             } else {
                 $this->build_export_form();
             }
-        } elseif ($this->form_type == self :: TYPE_EXPORT_PDF) {
+        } elseif ($this->form_type == self::TYPE_EXPORT_PDF) {
             $this->build_pdf_export_form();
         }
         $this->setDefaults();
@@ -106,11 +106,11 @@ class DataForm extends FormValidator
 
     public function display()
     {
-        parent :: display();
+        parent::display();
     }
 
     public function setDefaults($defaults = array(), $filter = null)
     {
-        parent :: setDefaults($defaults, $filter);
+        parent::setDefaults($defaults, $filter);
     }
 }

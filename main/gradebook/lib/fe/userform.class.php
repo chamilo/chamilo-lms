@@ -22,7 +22,7 @@ class UserForm extends FormValidator
      */
     public function __construct($form_type, $user, $form_name, $method= 'post', $action= null)
     {
-        parent :: __construct($form_name, $method, $action);
+        parent::__construct($form_name, $method, $action);
         $this->form_type= $form_type;
         if (isset ($user)) {
             $this->user_info= $user;
@@ -30,10 +30,10 @@ class UserForm extends FormValidator
         if (isset ($result_object)) {
             $this->result_object= $result_object;
         }
-        if ($this->form_type == self :: TYPE_USER_INFO) {
+        if ($this->form_type == self::TYPE_USER_INFO) {
             $this->build_user_info_form();
         }
-        elseif ($this->form_type == self :: TYPE_SIMPLE_SEARCH) {
+        elseif ($this->form_type == self::TYPE_SIMPLE_SEARCH) {
             $this->build_simple_search();
         }
         $this->setDefaults();
@@ -70,11 +70,11 @@ class UserForm extends FormValidator
 
     function display()
     {
-        parent :: display();
+        parent::display();
     }
 
     function setDefaults($defaults= array(), $filter = null)
     {
-        parent :: setDefaults($defaults, $filter);
+        parent::setDefaults($defaults, $filter);
     }
 }

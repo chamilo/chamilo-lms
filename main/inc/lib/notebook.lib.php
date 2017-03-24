@@ -55,7 +55,7 @@ class NotebookManager
             return false;
         }
         // Database table definition
-        $table = Database :: get_course_table(TABLE_NOTEBOOK);
+        $table = Database::get_course_table(TABLE_NOTEBOOK);
         $userId = $userId ?: api_get_user_id();
         $courseId = $courseId ?: api_get_course_int_id();
         $courseInfo = api_get_course_info_by_id($courseId);
@@ -103,7 +103,7 @@ class NotebookManager
             return array();
         }
         // Database table definition
-        $t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);
+        $t_notebook = Database::get_course_table(TABLE_NOTEBOOK);
         $course_id = api_get_course_int_id();
 
         $sql = "SELECT
@@ -136,7 +136,7 @@ class NotebookManager
             return false;
         }
         // Database table definition
-        $table = Database :: get_course_table(TABLE_NOTEBOOK);
+        $table = Database::get_course_table(TABLE_NOTEBOOK);
 
         $course_id = api_get_course_int_id();
         $sessionId = api_get_session_id();
@@ -183,7 +183,7 @@ class NotebookManager
             return false;
         }
         // Database table definition
-        $t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);
+        $t_notebook = Database::get_course_table(TABLE_NOTEBOOK);
 
         $course_id = api_get_course_int_id();
 
@@ -252,7 +252,7 @@ class NotebookManager
         }
 
         // Database table definition
-        $t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);
+        $t_notebook = Database::get_course_table(TABLE_NOTEBOOK);
         if ($_SESSION['notebook_view'] == 'creation_date' || $_SESSION['notebook_view'] == 'update_date') {
             $order_by = " ORDER BY " . $_SESSION['notebook_view'] . " $sort_direction ";
         } else {

@@ -38,7 +38,7 @@ class ExerciseLink extends AbstractLink
         if (empty($this->course_code)) {
             die('Error in get_not_created_links() : course code not set');
         }
-        $tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+        $tbl_grade_links = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
         $sql = 'SELECT id, title FROM '.$this->get_exercise_table().' exe
                 WHERE id NOT IN (
@@ -64,10 +64,10 @@ class ExerciseLink extends AbstractLink
      */
     public function get_all_links($getOnlyHotPotatoes = false)
     {
-        $TBL_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT);
-        $TBL_ITEM_PROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
+        $TBL_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
+        $TBL_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $exerciseTable = $this->get_exercise_table();
-        $lpItemTable = Database :: get_course_table(TABLE_LP_ITEM);
+        $lpItemTable = Database::get_course_table(TABLE_LP_ITEM);
 
         $documentPath = api_get_path(SYS_COURSE_PATH).$this->course_code."/document";
         if (empty($this->course_code)) {
@@ -106,7 +106,7 @@ class ExerciseLink extends AbstractLink
                     ip.tool = '".TOOL_DOCUMENT."' AND
                     (d.path LIKE '%htm%') AND 
                     (d.path LIKE '%HotPotatoes_files%') AND
-                    d.path  LIKE '".Database :: escape_string($uploadPath.'/%/%')."' AND
+                    d.path  LIKE '".Database::escape_string($uploadPath.'/%/%')."' AND
                     ip.visibility = '1'
                 ";
 
@@ -428,7 +428,7 @@ class ExerciseLink extends AbstractLink
      */
     private function get_exercise_table()
     {
-        $this->exercise_table = Database :: get_course_table(TABLE_QUIZ_TEST);
+        $this->exercise_table = Database::get_course_table(TABLE_QUIZ_TEST);
 
         return $this->exercise_table;
     }
@@ -438,9 +438,9 @@ class ExerciseLink extends AbstractLink
      */
     private function get_exercise_data()
     {
-        $TBL_ITEM_PROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
+        $TBL_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
         if ($this->is_hp == 1) {
-            $tbl_exercise = Database :: get_course_table(TABLE_DOCUMENT);
+            $tbl_exercise = Database::get_course_table(TABLE_DOCUMENT);
         } else {
             $tbl_exercise = $this->get_exercise_table();
         }

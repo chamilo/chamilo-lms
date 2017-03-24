@@ -64,7 +64,7 @@ class ResultsDataGenerator
         if ($count < 0) {
             $count = 0;
         }
-        $scoredisplay = ScoreDisplay :: instance();
+        $scoredisplay = ScoreDisplay::instance();
         // generate actual data array
         $table = array();
         foreach($this->results as $result) {
@@ -108,16 +108,16 @@ class ResultsDataGenerator
 
 
         // sort array
-        if ($sorting & self :: RDG_SORT_LASTNAME) {
+        if ($sorting & self::RDG_SORT_LASTNAME) {
             usort($table, array('ResultsDataGenerator', 'sort_by_last_name'));
-        } elseif ($sorting & self :: RDG_SORT_FIRSTNAME) {
+        } elseif ($sorting & self::RDG_SORT_FIRSTNAME) {
             usort($table, array('ResultsDataGenerator', 'sort_by_first_name'));
-        } elseif ($sorting & self :: RDG_SORT_SCORE) {
+        } elseif ($sorting & self::RDG_SORT_SCORE) {
             usort($table, array('ResultsDataGenerator', 'sort_by_score'));
-        } elseif ($sorting & self :: RDG_SORT_MASK) {
+        } elseif ($sorting & self::RDG_SORT_MASK) {
             usort($table, array('ResultsDataGenerator', 'sort_by_mask'));
         }
-        if ($sorting & self :: RDG_SORT_DESC) {
+        if ($sorting & self::RDG_SORT_DESC) {
             $table = array_reverse($table);
         }
         $return = array_slice($table, $start, $count);
@@ -137,7 +137,7 @@ class ResultsDataGenerator
     private function get_score_display ($score, $realscore, $ignore_score_color = false)
     {
         if ($score != null) {
-            $scoredisplay = ScoreDisplay :: instance();
+            $scoredisplay = ScoreDisplay::instance();
             $type = SCORE_CUSTOM;
             if ($realscore === true) {
                 $type = SCORE_DIV_PERCENT ;
@@ -178,6 +178,6 @@ class ResultsDataGenerator
     {
         $score1 = (isset($item1['score']) ? array($item1['score'],$this->evaluation->get_max()) : null);
         $score2 = (isset($item2['score']) ? array($item2['score'],$this->evaluation->get_max()) : null);
-        return ScoreDisplay :: compare_scores_by_custom_display($score1, $score2);
+        return ScoreDisplay::compare_scores_by_custom_display($score1, $score2);
     }
 }

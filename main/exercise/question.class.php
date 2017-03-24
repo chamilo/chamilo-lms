@@ -130,7 +130,7 @@ abstract class Question
 
         // if the question has been found
         if ($object = Database::fetch_object($result)) {
-            $objQuestion = Question::getInstance($object->type);
+            $objQuestion = self::getInstance($object->type);
             if (!empty($objQuestion)) {
                 $objQuestion->id = $id;
                 $objQuestion->question = $object->question;
@@ -1481,7 +1481,7 @@ abstract class Question
 
             // Advanced parameters
 
-            $select_level = Question::get_default_levels();
+            $select_level = self::get_default_levels();
             $form->addElement('select', 'questionLevel', get_lang('Difficulty'), $select_level);
 
             // Categories
@@ -1498,7 +1498,7 @@ abstract class Question
             }
 
             //Medias
-            //$course_medias = Question::prepare_course_media_select(api_get_course_int_id());
+            //$course_medias = self::prepare_course_media_select(api_get_course_int_id());
             //$form->addElement('select', 'parent_id', get_lang('AttachToMedia'), $course_medias);
         }
 
@@ -1871,7 +1871,7 @@ abstract class Question
     public function get_type_icon_html()
     {
         $type = $this->selectType();
-        $tabQuestionList = Question::get_question_type_list(); // [0]=file to include [1]=type name
+        $tabQuestionList = self::get_question_type_list(); // [0]=file to include [1]=type name
 
         require_once $tabQuestionList[$type][0];
 
@@ -1971,7 +1971,7 @@ abstract class Question
     {
         $html = null;
         if ($this->parent_id != 0) {
-            $parent_question = Question::read($this->parent_id);
+            $parent_question = self::read($this->parent_id);
             $html = $parent_question->show_media_content();
         } else {
             $html .= Display::page_subheader($this->selectTitle());

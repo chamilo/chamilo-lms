@@ -1485,7 +1485,7 @@ class UserGroup extends Model
         }
 
         $id = intval($id);
-        $group_table = Database :: get_main_table(TABLE_USERGROUP);
+        $group_table = Database::get_main_table(TABLE_USERGROUP);
         $sql = "SELECT picture FROM $group_table WHERE id = ".$id;
         $res = Database::query($sql);
 
@@ -2031,7 +2031,7 @@ class UserGroup extends Model
                             Display::return_icon('invitation_friend.png', get_lang('InviteFriends')).get_lang('InviteFriends').'</a></li>';
                 $links .= '<li><a href="group_view.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.
                             Display::return_icon('group_leave.png', get_lang('LeaveGroup')).get_lang('LeaveGroup').'</a></li>';
-                if (UserGroup::canLeave($group_info)) {
+                if (self::canLeave($group_info)) {
                     $links .= '<li><a href="group_view.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.
                         Display::return_icon('group_leave.png', get_lang('LeaveGroup')).get_lang('LeaveGroup').'</a></li>';
                 }
@@ -2044,7 +2044,7 @@ class UserGroup extends Model
                             Display::return_icon('waiting_list.png', get_lang('WaitingList')).get_lang('WaitingList').'</a></li>';
                 $links .= '<li class="'.($show == 'invite_friends' ? 'active' : '').'"><a href="group_invitation.php?id='.$group_id.'">'.
                             Display::return_icon('invitation_friend.png', get_lang('InviteFriends')).get_lang('InviteFriends').'</a></li>';
-                if (UserGroup::canLeave($group_info)) {
+                if (self::canLeave($group_info)) {
                     $links .= '<li><a href="group_view.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.
                         Display::return_icon('group_leave.png', get_lang('LeaveGroup')).get_lang('LeaveGroup').'</a></li>';
                 }
@@ -2066,7 +2066,7 @@ class UserGroup extends Model
                 }
                 $links .= '<li><a href="group_invitation.php?id='.$group_id.'">'.
                             Display::return_icon('invitation_friend.png', get_lang('InviteFriends')).get_lang('InviteFriends').'</a></li>';
-                if (UserGroup::canLeave($group_info)) {
+                if (self::canLeave($group_info)) {
                     $links .= '<li><a href="group_view.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.
                         Display::return_icon('group_leave.png', get_lang('LeaveGroup')).get_lang('LeaveGroup').'</a></li>';
                 }
@@ -2201,7 +2201,7 @@ class UserGroup extends Model
      */
     public static function get_parent_groups($group_id)
     {
-        $t_rel_group = Database :: get_main_table(TABLE_USERGROUP_REL_USERGROUP);
+        $t_rel_group = Database::get_main_table(TABLE_USERGROUP_REL_USERGROUP);
         $max_level = 10;
         $select_part = "SELECT ";
         $cond_part = '';
@@ -2298,7 +2298,7 @@ class UserGroup extends Model
         $groupId = intval($groupId);
 
         $groupTable = Database::get_main_table(TABLE_USERGROUP);
-        $groupRelGroupTable = Database :: get_main_table(TABLE_USERGROUP_REL_USERGROUP);
+        $groupRelGroupTable = Database::get_main_table(TABLE_USERGROUP_REL_USERGROUP);
 
         $select = "SELECT ";
         $from = "FROM $groupTable g1 ";
@@ -2341,7 +2341,7 @@ class UserGroup extends Model
      **/
     public static function set_parent_group($group_id, $parent_group_id, $relation_type = 1)
     {
-        $table = Database :: get_main_table(TABLE_USERGROUP_REL_USERGROUP);
+        $table = Database::get_main_table(TABLE_USERGROUP_REL_USERGROUP);
         $group_id = intval($group_id);
         $parent_group_id = intval($parent_group_id);
         if ($parent_group_id == 0) {

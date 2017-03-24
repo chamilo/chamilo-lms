@@ -3312,6 +3312,8 @@ class DocumentManager
 
         $overwrite_url = Security::remove_XSS($overwrite_url);
         $user_id = api_get_user_id();
+        $userInfo = api_get_user_info();
+
         $user_in_course = false;
 
         if (api_is_platform_admin()) {
@@ -3488,6 +3490,7 @@ class DocumentManager
         }
 
         $write_result = self::write_resources_tree(
+            $userInfo,
             $course_info,
             $session_id,
             $documents,
@@ -3578,6 +3581,9 @@ class DocumentManager
     }
 
     /**
+     * Parse file information into a link
+     *
+     * @param array $userInfo Current user info
      * @param array $course_info
      * @param int $session_id
      * @param array $resource
@@ -3588,6 +3594,7 @@ class DocumentManager
      * @return null|string
      */
     private static function parseFile(
+        $userInfo,
         $course_info,
         $session_id,
         $resource,
@@ -3665,6 +3672,8 @@ class DocumentManager
             $return .= '</a> ';
         }
         $return .= $link;
+        $sessionStar = api_get_session_image($resource['session_id'], $userInfo['status']);
+        $return .= $sessionStar;
         $return .= '</div></li>';
 
         return $return;
@@ -3756,6 +3765,8 @@ class DocumentManager
      * Generate and return an HTML list of resources based on a given array.
      * This list is used to show the course creator a list of available resources to choose from
      * when creating a learning path.
+     *
+     * @param array $userInfo current user info
      * @param array $course_info
      * @param int $session_id
      * @param array $documents
@@ -3768,6 +3779,7 @@ class DocumentManager
      * @return string
      */
     public static function write_resources_tree(
+        $userInfo,
         $course_info,
         $session_id,
         $documents,
@@ -3793,6 +3805,7 @@ class DocumentManager
 
                     if (isset($resource['files'])) {
                         $return .= self::write_resources_tree(
+                            $userInfo,
                             $course_info,
                             $session_id,
                             $resource['files'],
@@ -3809,6 +3822,7 @@ class DocumentManager
                         $return .= self::parseFolder($folderId, $resource, $lp_id);
                     } else {
                         $return .= self::parseFile(
+                            $userInfo,
                             $course_info,
                             $session_id,
                             $resource,

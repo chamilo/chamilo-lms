@@ -8727,13 +8727,13 @@ class learnpath
     public function get_exercises()
     {
         $course_id = api_get_course_int_id();
+        $session_id = api_get_session_id();
+        $userInfo = api_get_user_info();
 
         // New for hotpotatoes.
         $uploadPath = DIR_HOTPOTATOES; //defined in main_api
         $tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
         $tbl_quiz = Database :: get_course_table(TABLE_QUIZ_TEST);
-
-        $session_id = api_get_session_id();
         $condition_session = api_get_session_condition($session_id, true, true);
 
         $setting = api_get_configuration_value('show_invisible_exercise_in_lp_list');
@@ -8781,8 +8781,9 @@ class learnpath
             $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
             $return .= '</a> ';
             $return .= Display::return_icon('quizz_small.gif', '', array(), ICON_SIZE_TINY);
+            $sessionStar = api_get_session_image($row_quiz['session_id'], $userInfo['status']);
             $return .= '<a href="' . api_get_self() . '?'.api_get_cidreq().'&action=add_item&type=' . TOOL_QUIZ . '&file=' . $row_quiz['id'] . '&lp_id=' . $this->lp_id . '">' .
-                Security :: remove_XSS(cut($row_quiz['title'], 80)).
+                Security :: remove_XSS(cut($row_quiz['title'], 80)).$sessionStar.
                 '</a>';
             $return .= '</li>';
         }
@@ -8801,6 +8802,8 @@ class learnpath
         $selfUrl = api_get_self();
         $courseIdReq = api_get_cidreq();
         $course = api_get_course_info();
+        $userInfo = api_get_user_info();
+        
         $course_id = $course['real_id'];
         $tbl_link = Database::get_course_table(TABLE_LINK);
         $linkCategoryTable = Database::get_course_table(TABLE_LINK_CATEGORY);
@@ -8816,6 +8819,7 @@ class learnpath
 
         $sql = "SELECT link.id as link_id,
                     link.title as link_title,
+                    link.session_id as link_session_id,
                     link.category_id as category_id,
                     link_category.category_title as category_title
                 FROM $tbl_link as link
@@ -8833,7 +8837,7 @@ class learnpath
                 $link['category_title'] = get_lang('Uncategorized');
             }
             $categories[$link['category_id']] = $link['category_title'];
-            $categorizedLinks[$link['category_id']][$link['link_id']] = $link['link_title'];
+            $categorizedLinks[$link['category_id']][$link['link_id']] = $link;
         }
 
         $linksHtmlCode =
@@ -8859,8 +8863,11 @@ class learnpath
 
         foreach ($categorizedLinks as $categoryId => $links) {
             $linkNodes = null;
-            foreach ($links as $key => $title) {
+            foreach ($links as $key => $linkInfo) {
+                $title = $linkInfo['link_title'];
+                $linkSessionId = $linkInfo['link_session_id'];
                 if (api_get_item_visibility($course, TOOL_LINK, $key, $session_id) != 2)  {
+                    $sessionStar = api_get_session_image($linkSessionId, $userInfo['status']);
                     $linkNodes .=
                         '<li class="lp_resource_element" data_id="'.$key.'" data_type="'.TOOL_LINK.'" title="'.$title.'" >
                         <a class="moved" href="#">'.
@@ -8869,7 +8876,7 @@ class learnpath
                         '.Display::return_icon('lp_link.png').'
                         <a href="'.$selfUrl.'?'.$courseIdReq.'&action=add_item&type='.
                         TOOL_LINK.'&file='.$key.'&lp_id='.$this->lp_id.'">'.
-                        Security::remove_XSS($title).
+                        Security::remove_XSS($title).$sessionStar.
                         '</a>
                     </li>';
                 }

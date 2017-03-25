@@ -57,7 +57,7 @@ class DropboxLink extends EvalLink
      */
     private function get_dropbox_table()
     {
-        $this->dropbox_table = Database :: get_course_table(TABLE_DROPBOX_FILE);
+        $this->dropbox_table = Database::get_course_table(TABLE_DROPBOX_FILE);
         return $this->dropbox_table;
     }
 

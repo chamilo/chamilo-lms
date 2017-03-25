@@ -24,7 +24,7 @@ class Redirect
     public static function go($url = '')
     {
         if (empty($url)) {
-            Redirect::session_request_uri();
+            self::session_request_uri();
             $www = self::www();
             self::navigate($www);
         }

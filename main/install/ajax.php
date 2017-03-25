@@ -62,7 +62,6 @@ switch ($action) {
         echo $countOfTables;
         break;
     case 'remove_crs_tables':
-
         $statement = $manager
             ->getConnection()
             ->executeQuery("SHOW TABLES LIKE '$db_c_prefix$db_prefix%'");

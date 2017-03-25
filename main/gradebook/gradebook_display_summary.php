@@ -31,7 +31,6 @@ $userList = CourseManager::get_user_list_from_course_code(
 
 switch ($action) {
     case 'export_all':
-
         $params = array();
         $pdf = new PDF('A4', 'P', $params);
 

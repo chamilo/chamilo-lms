@@ -1364,7 +1364,7 @@ HTML;
         $result = Database::query($sql);
         $row = Database::fetch_array($result, 'ASSOC');
         if (!empty($row['expired_time'])) {
-            $current_expired_time_key = ExerciseLib::get_time_control_key(
+            $current_expired_time_key = self::get_time_control_key(
                 $exercise_id,
                 $lp_id,
                 $lp_item_id

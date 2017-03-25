@@ -99,6 +99,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                 break;
             case 'csv':
                 Export::arrayToCsv($listToExport, $archiveFile);
+                break;
             case 'xls':
                 Export::arrayToXls($listToExport, $archiveFile);
                 break;

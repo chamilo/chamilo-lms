@@ -4307,7 +4307,7 @@ class learnpath
 
     /**
      * Saves the given item
-     * @param	integer	$item_id. Optional (will take from $_REQUEST if null)
+     * @param	integer	$item_id Optional (will take from $_REQUEST if null)
      * @param	boolean	$from_outside Save from url params (true) or from current attributes (false). Optional. Defaults to true
      * @return	boolean
      */

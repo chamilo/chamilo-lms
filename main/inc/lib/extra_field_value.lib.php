@@ -622,7 +622,8 @@ class ExtraFieldValue extends Model
      * @param int $item_id Item ID from the original table
      * @param string $field_variable The name of the field we are looking for
      * @param bool $transform
-     * @param bool $allVisibility
+     * @param bool $filterByVisibility
+     * @param int $visibility
      *
      * @return mixed Array of results, or false on error or not found
      * @assert (-1,'') === false
@@ -730,6 +731,7 @@ class ExtraFieldValue extends Model
     }
 
     /**
+     * Get all the values stored for one specific field
      * @param int $fieldId
      *
      * @return array|bool

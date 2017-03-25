@@ -2602,7 +2602,7 @@ class SessionManager
      * @param 	integer		year_end
      * @param 	integer		month_end
      * @param 	integer		day_end
-     * @return $id_session;
+     * @return int session ID
      * */
     public static function create_category_session(
         $sname,
@@ -2668,7 +2668,7 @@ class SessionManager
     }
 
     /**
-     * Edit a sessions categories
+     * Edit a sessions category
      * @author Jhon Hinojosa <jhon.hinojosa@dokeos.com>,from existing code
      * @param	integer		id
      * @param	string 		name
@@ -2678,7 +2678,7 @@ class SessionManager
      * @param 	integer		year_end
      * @param 	integer		month_end
      * @param 	integer		day_end
-     * @return $id;
+     * @return bool
      * The parameter id is a primary key
      * */
     public static function edit_category_session(
@@ -5672,7 +5672,7 @@ class SessionManager
      * @param string $lastConnectionDate
      * @param array $sessionIdList
      * @param array $studentIdList
-     * @param int $userStatus STUDENT|COURSEMANAGER constants
+     * @param int $filterUserStatus STUDENT|COURSEMANAGER constants
      *
      * @return array|int
      */

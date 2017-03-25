@@ -866,7 +866,7 @@ function get_work_path($id)
  * @param string  $new_path Destination directory where the work has been moved (must end with a '/')
  * @param int $parent_id
  *
- * @return  -1 on error, sql query result on success
+ * @return mixed Int -1 on error, sql query result on success
  */
 function updateWorkUrl($id, $new_path, $parent_id)
 {
@@ -985,13 +985,13 @@ function directory_to_array($directory)
     return $array_items;
 }
 
+
 /**
  * Insert into the DB of the course all the directories
- * @param   string path of the /work directory of the course
- * @return  -1 on error, sql query result on success
+ * @param   string $base_work_dir path of the /work directory of the course
+ * @return  mixed Int -1 on error, sql query result on success
  * @author  Julio Montoya
  * @version April 2008
- * @param string $base_work_dir
  */
 
 function insert_all_directory_in_course_table($base_work_dir)
@@ -1029,7 +1029,6 @@ function insert_all_directory_in_course_table($base_work_dir)
         Database::insert($work_table, $params);
     }
 }
-
 /**
  * This function displays the number of files contained in a directory
  *

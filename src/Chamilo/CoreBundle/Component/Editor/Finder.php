@@ -26,7 +26,7 @@ class Finder extends \elFinder
     /**
      * Constructor
      *
-     * @param  array  elFinder and roots configurations
+     * @param  array  $opts elFinder and roots configurations
      * @author Dmitry (dio) Levashov
      */
     public function __construct($opts)

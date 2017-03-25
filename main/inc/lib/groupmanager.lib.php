@@ -784,10 +784,18 @@ class GroupManager
      * Create group category
      * @param string $title The title of the new category
      * @param string $description The description of the new category
-     * @param bool $self_registration_allowed
-     * @param bool $self_unregistration_allowed
-     * @param int $max_number_of_students
+     * @param int $doc_state
+     * @param int $work_state
+     * @param int $calendar_state
+     * @param int $announcements_state
+     * @param int $forum_state
+     * @param int $wiki_state
+     * @param int $chat_state
+     * @param int $self_registration_allowed
+     * @param int $self_unregistration_allowed
+     * @param int $maximum_number_of_students
      * @param int $groups_per_user
+     * @return mixed
      */
     public static function create_category(
         $title,
@@ -1776,10 +1784,9 @@ class GroupManager
     /**
      * Get all group's from a given course in which a given user is unsubscribed
      * @author  Patrick Cool
-     * @param     int  course id
-     * retrieve the groups for
-     * @param integer $user_id: the ID of the user you want to know all its
-     * group memberships
+     * @param int  $course_id retrieve the groups for
+     * @param int $user_id the ID of the user you want to know all its group memberships
+     * @return array
      */
     public static function get_group_ids($course_id, $user_id)
     {
@@ -1819,8 +1826,9 @@ class GroupManager
      * Filter out duplicates in a multidimensional array
      * by comparing field $compare_field.
      *
-     * @param $user_array_in list of users (must be sorted).
-     * @param string $compare_field, the field to be compared
+     * @param array $user_array_in List of users (must be sorted).
+     * @param string $compare_field The field to be compared
+     * @return array
      */
     public static function filter_duplicates($user_array_in, $compare_field)
     {
@@ -1839,6 +1847,8 @@ class GroupManager
     /**
      * Remove all users that are not students and all users who have tutor status
      * from  the list.
+     * @param array $user_array_in
+     * @return array
      */
     public static function filter_only_students($user_array_in)
     {

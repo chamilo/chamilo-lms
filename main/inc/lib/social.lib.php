@@ -386,8 +386,7 @@ class SocialManager extends UserManager
      * Get invitation list sent by user
      * @author Julio Montoya <gugli100@gmail.com>
      * @param int $userId
-     *
-     * @return array()
+     * @return array
      */
     public static function get_list_invitation_sent_by_user_id($userId)
     {
@@ -491,11 +490,12 @@ class SocialManager extends UserManager
     }
 
     /**
-     * allow attach to group
-     * @author isaac flores paz
-     * @param int user to qualify
-     * @param int kind of rating
-     * @return void()
+     * Allow attaching to group
+     * @author Isaac Flores Paz
+     * @param int $id_friend_qualify User to qualify
+     * @param int $type_qualify Kind of rating
+     * @return void
+     * @deprecated 2017-03
      */
     public static function qualify_friend($id_friend_qualify, $type_qualify)
     {

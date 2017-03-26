@@ -1139,8 +1139,8 @@ class Virtual
 
         if (!$id) {
             // Show data detail to help debug
-            var_dump($data);
-            throw new Exception('Was not registered');
+            //var_dump($data);
+            throw new Exception('New/Imported instance was not registered - edit ' . __FILE__ . ' on line ' . __LINE__ . 'to var_dump');
         }
 
         if (empty($slug)) {

@@ -93,6 +93,33 @@
     };
 
     /**
+     * @param userAttributes
+     * @constructor
+     */
+    var TextModel = function (userAttributes) {
+        var attributes = $.extend({
+            text: '',
+            x: 0,
+            y: 0,
+            color: 'red',
+            fontSize: 20
+        }, userAttributes);
+
+        SvgElementModel.call(this, attributes);
+    };
+    TextModel.prototype = Object.create(SvgElementModel.prototype);
+    TextModel.prototype.encode = function () {
+        return 'T)(' + this.get('text') + ')(' + this.get('x') + ';' + this.get('y');
+    };
+    TextModel.decode = function (textInfo) {
+        return new TextModel({
+            text: textInfo.text,
+            x: textInfo.x,
+            y: textInfo.y
+        })
+    };
+
+    /**
      * @param Object model
      * @constructor
      */
@@ -127,14 +154,39 @@
     };
 
     /**
+     * @param model
      * @constructor
      */
-    var PathsCollection = function () {
+    var TextView = function (model) {
+        var self = this;
+
+        this.model = model;
+        this.model.onChange(function () {
+            self.render();
+        });
+
+        this.el = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        this.el.setAttribute('fill', this.model.get('color'));
+        this.el.setAttribute('font-size', this.model.get('fontSize'));
+        this.el.setAttribute('stroke', 'none');
+    };
+    TextView.prototype.render = function () {
+        this.el.setAttribute('x', this.model.get('x'));
+        this.el.setAttribute('y', this.model.get('y'));
+        this.el.textContent = this.model.get('text');
+
+        return this;
+    };
+
+    /**
+     * @constructor
+     */
+    var ElementsCollection = function () {
         this.models = [];
         this.length = 0;
         this.addEvent = null;
     };
-    PathsCollection.prototype.add = function (pathModel) {
+    ElementsCollection.prototype.add = function (pathModel) {
         pathModel.id = ++this.length;
 
         this.models.push(pathModel);
@@ -143,10 +195,10 @@
             this.addEvent(pathModel);
         }
     };
-    PathsCollection.prototype.get = function (index) {
+    ElementsCollection.prototype.get = function (index) {
         return this.models[index];
     };
-    PathsCollection.prototype.onAdd = function (callback) {
+    ElementsCollection.prototype.onAdd = function (callback) {
         this.addEvent = callback;
     };
 
@@ -156,7 +208,7 @@
      * @param questionId
      * @constructor
      */
-    var AnnotationCanvasView = function (pathsCollection, image, questionId) {
+    var AnnotationCanvasView = function (pathsCollection, textsCollection, image, questionId)   {
         var self = this;
 
         this.el = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -168,12 +220,21 @@
 
         this.pathsCollection = pathsCollection;
         this.pathsCollection.onAdd(function (pathModel) {
-            self.renderPath(pathModel);
+            self.renderElement(pathModel);
         });
+
+        this.textsCollection = textsCollection;
+        this.textsCollection.onAdd(function (textModel) {
+            self.renderElement(textModel);
+        });
+
+        this.$rdbOptions = null;
     };
     AnnotationCanvasView.prototype.render = function () {
         this.el.setAttribute('version', '1.1');
         this.el.setAttribute('viewBox', '0 0 ' + this.image.width + ' ' + this.image.height);
+        this.el.style.width = this.image.width + 'px';
+        this.el.style.height = this.image.height + 'px';
 
         var svgImage = document.createElementNS('http://www.w3.org/2000/svg', 'image');
         svgImage.setAttributeNS('http://www.w3.org/1999/xlink', 'href', this.image.src);
@@ -183,13 +244,15 @@
         this.el.appendChild(svgImage);
         this.setEvents();
 
+        this.$rdbOptions = $('[name="' + this.questionId + '-options"]');
+
         return this;
     };
     AnnotationCanvasView.prototype.setEvents = function () {
         var self = this;
 
         var isMoving = false,
-            pathModel = null;
+            elementModel = null;
 
         self.$el
             .on('dragstart', function (e) {
@@ -200,9 +263,16 @@
 
                 var point = getPointOnImage(self.el, e.clientX, e.clientY);
 
-                pathModel = new SvgPathModel({points: [[point.x, point.y]]});
+                switch (self.$rdbOptions.filter(':checked').val()) {
+                    case '0':
+                        elementModel = new SvgPathModel({points: [[point.x, point.y]]});
+                        break;
+                    case '1':
+                        elementModel = new TextModel({x: point.x, y: point.y, text: 'Hola, mundo'});
+                        break;
+                }
 
-                self.pathsCollection.add(pathModel);
+                self.pathsCollection.add(elementModel);
 
                 isMoving = true;
             })
@@ -213,13 +283,18 @@
                     return;
                 }
 
-                var point = getPointOnImage(self.el, e.clientX, e.clientY);
-
-                if (!pathModel) {
+                if (!elementModel) {
                     return;
                 }
 
-                pathModel.addPoint(point.x, point.y);
+                var point = getPointOnImage(self.el, e.clientX, e.clientY);
+
+                if (elementModel instanceof SvgPathModel) {
+                    elementModel.addPoint(point.x, point.y);
+                } else if (elementModel instanceof TextModel) {
+                    elementModel.set('x', point.x);
+                    elementModel.set('y', point.y);
+                }
             })
             .on('mouseup', function (e) {
                 e.preventDefault();
@@ -228,49 +303,80 @@
                     return;
                 }
 
-                $('input[name="choice[' + self.questionId + '][' + pathModel.id + ']"]').val(pathModel.encode());
-                $('input[name="hotspot[' + self.questionId + '][' + pathModel.id + ']"]').val(pathModel.encode());
+                $('input[name="choice[' + self.questionId + '][' + elementModel.id + ']"]').val(elementModel.encode());
+                $('input[name="hotspot[' + self.questionId + '][' + elementModel.id + ']"]').val(elementModel.encode());
 
-                pathModel = null;
+                elementModel = null;
 
                 isMoving = false;
             });
     };
-    AnnotationCanvasView.prototype.renderPath = function (pathModel) {
-        var pathView = new SvgPathView(pathModel);
+    AnnotationCanvasView.prototype.renderElement = function (elementModel) {
+        var elementView = null,
+            self = this;
 
-        this.el.appendChild(pathView.render().el);
+        if (elementModel instanceof SvgPathModel) {
+            elementView = new SvgPathView(elementModel);
+        } else if (elementModel instanceof TextModel) {
+            elementView = new TextView(elementModel);
+        }
+
+        if (!elementView) {
+            return;
+        }
+
+        this.el.appendChild(elementView.render().el);
 
         $('<input>')
             .attr({
                 type: 'hidden',
-                name: 'choice[' + this.questionId + '][' + pathModel.id + ']'
+                name: 'choice[' + this.questionId + '][' + elementModel.id + ']'
             })
-            .val(pathModel.encode())
+            .val(elementModel.encode())
             .appendTo(this.el.parentNode);
 
         $('<input>')
             .attr({
                 type: 'hidden',
-                name: 'hotspot[' + this.questionId + '][' + pathModel.id + ']'
+                name: 'hotspot[' + this.questionId + '][' + elementModel.id + ']'
             })
-            .val(pathModel.encode())
+            .val(elementModel.encode())
             .appendTo(this.el.parentNode);
+
+        if (elementModel instanceof TextModel) {
+            $('<input>')
+                .attr({
+                    type: 'text',
+                    name: 'text[' + this.questionId + '][' + elementModel.id + ']'
+                })
+                .addClass('form-control input-sm')
+                .on('change', function (e) {
+                    elementModel.set('text', this.value);
+
+                    $('input[name="choice[' + self.questionId + '][' + elementModel.id + ']"]').val(elementModel.encode());
+                    $('input[name="hotspot[' + self.questionId + '][' + elementModel.id + ']"]').val(elementModel.encode());
+
+                    e.preventDefault();
+                })
+                .val(elementModel.get('text'))
+                .appendTo('#annotation-toolbar-' + this.questionId + ' ul')
+                .wrap('<li class="form-group">');
+        }
     };
 
     window.AnnotationQuestion = function (userSettings) {
-        var settings = $.extend({
-            questionId: 0,
-            exerciseId: 0,
-            relPath: '/',
-            use: 'user'
-        }, userSettings);
-
-        var xhrUrl = (settings.use == 'preview')
-            ? 'exercise/annotation_preview.php'
-            : (settings.use == 'admin')
-                ? 'exercise/annotation_admin.php'
-                : 'exercise/annotation_user.php';
+        $(document).on('ready', function () {
+        var
+            settings = $.extend(
+                {questionId: 0, exerciseId: 0, relPath: '/', use: 'user'},
+                userSettings
+            ),
+            xhrUrl = (settings.use == 'preview')
+                ? 'exercise/annotation_preview.php'
+                : (settings.use == 'admin')
+                    ? 'exercise/annotation_admin.php'
+                    : 'exercise/annotation_user.php',
+            $container = $('#annotation-canvas-' + settings.questionId);
 
         $
             .getJSON(settings.relPath + xhrUrl, {
@@ -280,11 +386,11 @@
             .done(function (questionInfo) {
                 var image = new Image();
                 image.onload = function () {
-                    var pathsCollection = new PathsCollection(),
-                        canvas = new AnnotationCanvasView(pathsCollection, this, settings.questionId);
+                    var pathsCollection = new ElementsCollection(),
+                        textsCollection = new ElementsCollection(),
+                        canvas = new AnnotationCanvasView(pathsCollection, textsCollection, this, settings.questionId);
 
-                    $('#annotation-canvas-' + settings.questionId)
-                        .css({width: this.width})
+                    $container
                         .html(canvas.render().el);
 
                     $.each(questionInfo.answers.paths, function (i, pathInfo) {
@@ -292,8 +398,16 @@
 
                         pathsCollection.add(pathModel);
                     });
+
+                    $(questionInfo.answers.texts).each(function (i, textInfo) {
+                        var textModel = TextModel.decode(textInfo);
+
+                        textsCollection.add(textModel);
+                    });
                 };
                 image.src = questionInfo.image.path;
             });
+
+        });
     };
 })(window);

@@ -1280,15 +1280,39 @@ HOTSPOT;
                     <input type="hidden" name="hidden_hotspot_id" value="'.$questionId.'" />
                     <div class="exercise_questions">
                         '.$objQuestionTmp->selectDescription().'
-                        <div id="annotation-canvas-'.$questionId.'" class="annotation-canvas center-block"></div>
-                        <script>
-                            AnnotationQuestion({
-                                questionId: '.$questionId.',
-                                exerciseId: '.$exe_id.',
-                                relPath: \''.$relPath.'\',
-                                use: \'user\'
-                            });
-                        </script>
+                        <div class="row">
+                            <div class="col-sm-8 col-md-9">
+                                <div id="annotation-canvas-'.$questionId.'" class="annotation-canvas center-block">
+                                </div>
+                                <script>
+                                    AnnotationQuestion({
+                                        questionId: '.$questionId.',
+                                        exerciseId: '.$exe_id.',
+                                        relPath: \''.$relPath.'\',
+                                        use: \'user\'
+                                    });
+                                </script>
+                            </div>
+                            <div class="col-sm-4 col-md-3">
+                                <div class="well well-sm" id="annotation-toolbar-'.$questionId.'">
+                                    <div class="btn-toolbar">
+                                        <div class="btn-group" data-toggle="buttons">
+                                            <label class="btn btn-default active"
+                                                aria-label="'.get_lang('AddAnnotationPath').'">
+                                                <input type="radio" value="0" name="'.$questionId.'-options" autocomplete="off" checked>
+                                                <span class="fa fa-pencil" aria-hidden="true"></span>
+                                            </label>
+                                            <label class="btn btn-default"
+                                                aria-label="'.get_lang('AddAnnotationText').'">
+                                                <input type="radio" value="1" name="'.$questionId.'-options" autocomplete="off">
+                                                <span class="fa fa-font fa-fw" aria-hidden="true"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <ul class="list-unstyled"></ul>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 ';
             }

@@ -2014,6 +2014,7 @@ class SocialManager extends UserManager
                 [
                     'placeholder' => $socialWallPlaceholder,
                     'cols-size' => [1, 10, 1],
+                    'aria-label' => $socialWallPlaceholder
                 ]
             );
             $form->addHidden('url_content', '');

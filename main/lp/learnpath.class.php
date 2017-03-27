@@ -9075,7 +9075,7 @@ class learnpath
                         '.Display::return_icon('lp_link.png').'
                         <a class="moved" href="'.$selfUrl.'?'.$courseIdReq.'&action=add_item&type='.
                         TOOL_LINK.'&file='.$key.'&lp_id='.$this->lp_id.'">'.
-                        Security::remove_XSS($title).$sessionStar.
+                        Security::remove_XSS($title).$sessionStar.$link.
                         '</a>
                     </li>';
                 }
@@ -9220,11 +9220,11 @@ class learnpath
                 $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
                 $return .= ' </a>';
                 $return .= Display::return_icon('lp_forum.png', '', array(), ICON_SIZE_TINY);
-                $return .= '<a onclick="toggle_forum(' . $forum['forum_id'] . ');" style="cursor:hand; vertical-align:middle">
+                $return .= '<a onclick="javascript:toggle_forum(' . $forum['forum_id'] . ');" style="cursor:hand; vertical-align:middle">
                                 <img src="' . Display::returnIconPath('add.gif').'" id="forum_' . $forum['forum_id'] . '_opener" align="absbottom" />
                             </a>
                             <a class="moved" href="' . api_get_self() . '?'.api_get_cidreq().'&action=add_item&type=' . TOOL_FORUM . '&forum_id=' . $forum['forum_id'] . '&lp_id=' . $this->lp_id . '" style="vertical-align:middle">' .
-                    Security::remove_XSS($forum['forum_title']) . '</a>';
+                    Security::remove_XSS($forum['forum_title']) . ' '.$link.'</a>';
 
                 $return .= '</li>';
 
@@ -11407,11 +11407,18 @@ EOD;
                 $link .= $main_dir_path.'announcements/announcements.php?origin='.$origin.'&ann_id='.$id;
                 break;
             case TOOL_LINK:
-                $TABLETOOLLINK = Database::get_course_table(TABLE_LINK);
+                $link .= $main_dir_path.'link/link_goto.php?'.api_get_cidreq().'&link_id='.$id;
+                /*$TABLETOOLLINK = Database::get_course_table(TABLE_LINK);
                 $result = Database::query("SELECT * FROM $TABLETOOLLINK WHERE c_id = $course_id AND id=$id");
                 $myrow = Database::fetch_array($result);
                 $thelink = $myrow["url"];
-                $link .= $thelink;
+
+                  $link = Display::url(
+                    Display::return_icon('preview_view.png', get_lang('Preview')),
+                    api_get_path(WEB_CODE_PATH).'link/link_goto.php?'.api_get_cidreq().'&link_id='.$key,
+                    ['target' => '_blank']
+                );
+                $link .= $thelink;*/
                 break;
             case TOOL_QUIZ:
                 if (!empty($id)) {

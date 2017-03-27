@@ -40,11 +40,7 @@ if (isset($_GET['post']) && $_GET['post']) {
 }
 
 // Are we in a lp ?
-$origin = '';
-if (isset($_GET['origin'])) {
-    $origin =  Security::remove_XSS($_GET['origin']);
-}
-
+$origin = api_get_origin();
 // Delete attachment file.
 if (
     isset($_GET['action']) &&
@@ -347,7 +343,7 @@ if ($userCanQualify) {
                 "&forum=" . $forumId . "&thread=" . $threadId .
                 "&action=list&post=" . $rows[$display_post_id]['post_id'] .
                 "&user=" . $rows[$display_post_id]['user_id'] . "&user_id=" .
-                $rows[$display_post_id]['user_id'] . "&origin=" . $origin .
+                $rows[$display_post_id]['user_id'].
                 "&idtextqualify=" . $current_qualify_thread .
                 "\" >" . Display::return_icon(
                     'quiz.png',

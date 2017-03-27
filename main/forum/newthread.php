@@ -40,10 +40,7 @@ require_once 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
 
 // Are we in a lp ?
-$origin = '';
-if (isset($_GET['origin'])) {
-    $origin = Security::remove_XSS($_GET['origin']);
-}
+$origin = api_get_origin();
 
 /* MAIN DISPLAY SECTION */
 $current_forum = get_forum_information($_GET['forum']);
@@ -168,7 +165,7 @@ if ($form) {
     $form->display();
 }
 
-if (isset($origin) && $origin == 'learnpath') {
+if ($origin == 'learnpath') {
     Display::display_reduced_footer();
 } else {
     Display::display_footer();

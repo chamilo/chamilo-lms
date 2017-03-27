@@ -11,11 +11,7 @@ use Chamilo\CourseBundle\Entity\CForumPost;
  */
 
 // Are we in a lp ?
-$origin = '';
-if (isset($_GET['origin'])) {
-    $origin = Security::remove_XSS($_GET['origin']);
-}
-
+$origin = api_get_origin();
 //delete attachment file
 if (isset($_GET['action']) &&
     $_GET['action'] == 'delete_attach' &&

@@ -653,7 +653,7 @@ class CoursesController
         $cataloguePagination = $pageTotal > 1 ?
             CourseCategory::getCatalogPagination($limit['current'], $limit['length'], $pageTotal) :
             '';
-        $sessionsBlocks = $this->getFormatedSessionsBlock($sessions);
+        $sessionsBlocks = $this->getFormattedSessionsBlock($sessions);
 
         // Get session search catalogue URL
         $courseUrl = CourseCategory::getCourseCategoryUrl(
@@ -694,7 +694,7 @@ class CoursesController
         $courseUrl = CourseCategory::getCourseCategoryUrl(1, $limit['length'], null, 0, 'subscribe');
 
         $sessions = $this->model->browseSessionsByTags($searchTag, $limit);
-        $sessionsBlocks = $this->getFormatedSessionsBlock($sessions);
+        $sessionsBlocks = $this->getFormattedSessionsBlock($sessions);
 
         $tpl = new Template();
 
@@ -726,7 +726,7 @@ class CoursesController
         $searchDate = isset($_POST['date']) ? $_POST['date'] : date('Y-m-d');
 
         $sessions = $this->model->browseSessionsBySearch($q, $limit);
-        $sessionsBlocks = $this->getFormatedSessionsBlock($sessions);
+        $sessionsBlocks = $this->getFormattedSessionsBlock($sessions);
 
         $tpl = new Template();
         $tpl->assign('show_courses', CoursesAndSessionsCatalog::showCourses());
@@ -746,16 +746,15 @@ class CoursesController
     }
 
     /**
-     * Get the formated data for sessions block to be displayed on Session Catalog page
+     * Get the formatted data for sessions block to be displayed on Session Catalog page
      * @param array $sessions The session list
      * @return array
      */
-    private function getFormatedSessionsBlock(array $sessions)
+    private function getFormattedSessionsBlock(array $sessions)
     {
         $extraFieldValue = new ExtraFieldValue('session');
         $userId = api_get_user_id();
         $sessionsBlocks = [];
-
         $entityManager = Database::getManager();
         $sessionRelCourseRepo = $entityManager->getRepository('ChamiloCoreBundle:SessionRelCourse');
         $extraFieldRepo = $entityManager->getRepository('ChamiloCoreBundle:ExtraField');
@@ -763,8 +762,9 @@ class CoursesController
 
         $tagsField = $extraFieldRepo->findOneBy([
             'extraFieldType' => Chamilo\CoreBundle\Entity\ExtraField::COURSE_FIELD_TYPE,
-            'variable' => 'tags',
+            'variable' => 'tags'
         ]);
+
         /** @var \Chamilo\CoreBundle\Entity\Session $session */
         foreach ($sessions as $session) {
             $sessionDates = SessionManager::parseSessionDates([
@@ -776,13 +776,14 @@ class CoursesController
                 'coach_access_end_date' => $session->getCoachAccessEndDate(),
             ]);
 
-            $imageField = $extraFieldValue->get_values_by_handler_and_field_variable($session->getId(), 'image');
-
+            $imageField = $extraFieldValue->get_values_by_handler_and_field_variable(
+                $session->getId(),
+                'image'
+            );
             $sessionCourseTags = [];
-
             if (!is_null($tagsField)) {
                 $sessionRelCourses = $sessionRelCourseRepo->findBy([
-                    'session' => $session,
+                    'session' => $session
                 ]);
 
                 foreach ($sessionRelCourses as $sessionRelCourse) {

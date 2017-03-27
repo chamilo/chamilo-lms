@@ -5712,6 +5712,7 @@ class learnpath
                             )
                         );
                         break;
+                    case TOOL_THREAD:
                     case TOOL_FORUM:
                     case TOOL_LP_FINAL_ITEM:
                     case TOOL_LINK:

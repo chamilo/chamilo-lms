@@ -75,9 +75,9 @@ class HtmlEditor extends HTML_QuickForm_textarea
             $styleCss = $this->editor->getConfigAttribute('style');
 
             if ($styleCss) {
-               $style = true;
+                $style = true;
             } else {
-               $style = false;
+                $style = false;
             }
 
             return $this->buildEditor($style);

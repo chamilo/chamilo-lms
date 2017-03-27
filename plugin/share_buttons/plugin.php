@@ -17,4 +17,4 @@ $plugin_info['version']     = '1.0';
 // The plugin author.
 $plugin_info['author']      = 'Julio Montoya';
 // For bigger icons change this value to addthis_32x32_style
-$plugin_info['icon_class']   = '';
+$plugin_info['icon_class'] = '';

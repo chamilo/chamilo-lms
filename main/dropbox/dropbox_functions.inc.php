@@ -504,7 +504,12 @@ function display_add_form($dropbox_unid, $viewReceivedCategory, $viewSentCategor
     $form->addElement('hidden', 'dropbox_unid', $dropbox_unid);
     $form->addElement('hidden', 'sec_token', $token);
     $form->addElement('hidden', 'origin', $origin);
-    $form->addElement('file', 'file', get_lang('UploadFile'), array('onChange' => 'javascript: checkfile(this.value);'));
+    $form->addElement(
+        'file',
+        'file',
+        get_lang('UploadFile'),
+        array('onChange' => 'javascript: checkfile(this.value);')
+    );
 
     $allowOverwrite = api_get_setting('dropbox_allow_overwrite');
     if ($allowOverwrite == 'true') {

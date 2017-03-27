@@ -12,13 +12,9 @@ require_once 'forumfunction.inc.php';
 
 $nameTools = get_lang('ToolForum');
 $this_section = SECTION_COURSES;
-
 $message = '';
 //are we in a lp ?
-$origin = '';
-if (isset($_GET['origin'])) {
-    $origin = Security::remove_XSS($_GET['origin']);
-}
+$origin = api_get_origin();
 
 $currentUserId = api_get_user_id();
 $userIdToQualify = isset($_GET['user_id']) ? intval($_GET['user_id']) : null;

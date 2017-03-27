@@ -19,6 +19,7 @@ class Annotation extends Question
     {
         parent::__construct();
         $this->type = ANNOTATION;
+        $this->isContent = $this->getIsContent();
     }
 
     public function display()
@@ -32,6 +33,16 @@ class Annotation extends Question
     public function createForm(&$form, $fck_config = 0)
     {
         parent::createForm($form, $fck_config);
+
+        $form->addElement('number', 'weighting', get_lang('Weighting'), ['step' => '0.1']);
+
+        if (!empty($this->id)) {
+            $form->setDefaults(array('weighting' => float_format($this->weighting, 1)));
+        } else {
+            if ($this->isContent == 1) {
+                $form->setDefaults(array('weighting' => '10'));
+            }
+        }
 
         if (isset($_GET['editQuestion'])) {
             $form->addButtonUpdate(get_lang('ModifyExercise'), 'submitQuestion');
@@ -79,6 +90,7 @@ class Annotation extends Question
             }
 
             $this->resizePicture('width', 800);
+            $this->weighting = $form->getSubmitValue('weighting');
             $this->save();
 
             return true;
@@ -98,6 +110,7 @@ class Annotation extends Question
      */
     function processAnswersCreation($form)
     {
-        // nothing
+        $this->weighting = $form->getSubmitValue('weighting');
+        $this->save();
     }
 }

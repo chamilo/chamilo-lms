@@ -20,7 +20,14 @@ switch ($action) {
             $tool_image = $tool_info['image'];
 
             if (api_get_setting('homepage_view') != 'activity_big') {
-                $tool_image = Display::return_icon($tool_image, null, null, null, null, true);
+                $tool_image = Display::return_icon(
+                    $tool_image,
+                    null,
+                    null,
+                    null,
+                    null,
+                    true
+                );
                 $na_image = str_replace('.gif', '_na.gif', $tool_image);
             } else {
                 // Display::return_icon() also checks in the app/Resources/public/css/themes/{theme}/icons folder
@@ -46,7 +53,6 @@ switch ($action) {
             $requested_message = ($tool_visibility == 0 ) ? 'is_active' : 'is_inactive';
             $requested_view = ($tool_visibility == 0 ) ? 'visible.png' : 'invisible.png';
             $requested_visible = ($tool_visibility == 0 ) ? 1 : 0;
-
             $requested_view = ($tool_visibility == 0 ) ? 'visible.png' : 'invisible.png';
             $requested_visible = ($tool_visibility == 0 ) ? 1 : 0;
 
@@ -122,8 +128,9 @@ switch ($action) {
             $new_session_list = UserManager::get_personal_session_course_list(api_get_user_id());
             $my_session_list  = array();
             foreach ($new_session_list as $item) {
-                if (!empty($item['id_session']))
+                if (!empty($item['id_session'])) {
                     $my_session_list[] = $item['id_session'];
+                }
             }
             if (!in_array($session_id, $my_session_list)) {
                 break;
@@ -207,7 +214,7 @@ switch ($action) {
 
         $i =0;
         $response = new stdClass();
-        foreach ($temp as $key=>$row) {
+        foreach ($temp as $key => $row) {
             $row = $row['cell'];
             if (!empty($row)) {
                 if ($key >= $start  && $key < ($start + $limit)) {
@@ -217,13 +224,11 @@ switch ($action) {
                 }
             }
         }
-
+        $total_pages = 0;
         if ($count > 0 && $limit > 0) {
             $total_pages = ceil($count/$limit);
-        } else {
-            $total_pages = 0;
         }
-        $response->total    = $total_pages;
+        $response->total = $total_pages;
         if ($page > $total_pages) {
             $response->page= $total_pages;
         } else {
@@ -235,19 +240,17 @@ switch ($action) {
     case 'session_courses_lp_by_week':
         require_once __DIR__.'/../global.inc.php';
         $now = time();
-
-        $page  = intval($_REQUEST['page']);     //page
+        $page = intval($_REQUEST['page']);     //page
         $limit = intval($_REQUEST['rows']);     // quantity of rows
-        $sidx  = isset($_REQUEST['sidx']) && !empty($_REQUEST['sidx']) ? $_REQUEST['sidx'] : 'course';
+        $sidx = isset($_REQUEST['sidx']) && !empty($_REQUEST['sidx']) ? $_REQUEST['sidx'] : 'course';
         $sidx = str_replace(array('week desc,', ' '), '', $sidx);
-
-        $sord  = $_REQUEST['sord'];    //asc or desc
+        $sord = $_REQUEST['sord'];    //asc or desc
         if (!in_array($sord, array('asc','desc'))) {
             $sord = 'desc';
         }
 
-        $session_id  = intval($_REQUEST['session_id']);
-        $course_id   = intval($_REQUEST['course_id']);
+        $session_id = intval($_REQUEST['session_id']);
+        $course_id = intval($_REQUEST['course_id']);
 
         //Filter users that does not belong to the session
         if (!api_is_platform_admin()) {
@@ -263,7 +266,7 @@ switch ($action) {
             }
         }
 
-        $start = $limit*$page - $limit;
+        $start = $limit * $page - $limit;
         $course_list = SessionManager::get_course_list_by_session_id($session_id);
 
         $count = 0;
@@ -354,7 +357,7 @@ switch ($action) {
 
         $response = new stdClass();
         $i =0;
-        foreach($temp as $key=>$row) {
+        foreach ($temp as $key => $row) {
             $row = $row['cell'];
             if (!empty($row)) {
                 if ($key >= $start  && $key < ($start + $limit)) {
@@ -364,11 +367,9 @@ switch ($action) {
                 }
             }
         }
-
+        $total_pages = 0;
         if ($count > 0 && $limit > 0) {
             $total_pages = ceil($count/$limit);
-        } else {
-            $total_pages = 0;
         }
         $response->total = $total_pages;
         if ($page > $total_pages) {
@@ -397,10 +398,11 @@ switch ($action) {
         //Filter users that does not belong to the session
         if (!api_is_platform_admin()) {
             $new_session_list = UserManager::get_personal_session_course_list(api_get_user_id());
-            $my_session_list  = array();
-            foreach($new_session_list as $item) {
-                if (!empty($item['id_session']))
+            $my_session_list = array();
+            foreach ($new_session_list as $item) {
+                if (!empty($item['id_session'])) {
                     $my_session_list[] = $item['id_session'];
+                }
             }
             if (!in_array($session_id, $my_session_list)) {
                 break;
@@ -418,7 +420,11 @@ switch ($action) {
                 }
             }
 
-            $list = new LearnpathList(api_get_user_id(),$item['code'],$session_id);
+            $list = new LearnpathList(
+                api_get_user_id(),
+                $item['code'],
+                $session_id
+            );
             $flat_list = $list->get_flat_list();
             $lps[$item['code']] = $flat_list;
             $item['title'] = Display::url(
@@ -478,7 +484,6 @@ switch ($action) {
         }
 
         $temp = msort($temp, $sidx, $sord);
-
         $response = new stdClass();
         $i =0;
         foreach ($temp as $key => $row) {
@@ -491,17 +496,14 @@ switch ($action) {
                 }
             }
         }
-
+        $total_pages = 0;
         if ($count > 0 && $limit > 0) {
             $total_pages = ceil($count / $limit);
-        } else {
-            $total_pages = 0;
         }
         $response->total = $total_pages;
+        $response->page = $page;
         if ($page > $total_pages) {
             $response->page = $total_pages;
-        } else {
-            $response->page = $page;
         }
         $response->records = $count;
 

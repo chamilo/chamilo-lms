@@ -26,12 +26,7 @@ $this_section = SECTION_COURSES;
 api_protect_course_script(true);
 
 $nameTools = get_lang('ForumCategories');
-
-$origin = '';
-if (isset($_GET['origin'])) {
-    $origin =  Security::remove_XSS($_GET['origin']);
-    $origin_string = '&origin='.$origin;
-}
+$origin = api_get_origin();
 
 /* Including necessary files */
 require_once 'forumconfig.inc.php';
@@ -95,9 +90,9 @@ if (!empty($gradebook) && $gradebook == 'view') {
         'name' => get_lang('ToolGradebook')
     );
 }
-
-if ($origin == 'group') {
-    $_clean['toolgroup'] = api_get_group_id();
+$groupId = api_get_group_id();
+if (!empty($groupId)) {
+    $_clean['toolgroup'] = $groupId;
     $group_properties = GroupManager :: get_group_properties($_clean['toolgroup']);
     $interbreadcrumb[] = array(
         'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
@@ -110,11 +105,11 @@ if ($origin == 'group') {
     );
 
     $interbreadcrumb[] = array(
-        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?origin='.$origin.'&forum='.$forumId.'&'.api_get_cidreq(),
+        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?forum='.$forumId.'&'.api_get_cidreq(),
         'name' => $current_forum['forum_title']
     );
     $interbreadcrumb[] = array(
-        'url' => api_get_path(WEB_CODE_PATH).'forum/viewthread.php?origin='.$origin.'&gradebook='.$gradebook.'&forum='.$forumId.'&thread='.$threadId.'&'.api_get_cidreq(),
+        'url' => api_get_path(WEB_CODE_PATH).'forum/viewthread.php?gradebook='.$gradebook.'&forum='.$forumId.'&thread='.$threadId.'&'.api_get_cidreq(),
         'name' => $current_thread['thread_title']
     );
 
@@ -132,11 +127,11 @@ if ($origin == 'group') {
         'name' => $current_forum_category['cat_title']
     );
     $interbreadcrumb[] = array(
-        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?origin='.$origin.'&forum='.$forumId.'&'.api_get_cidreq(),
+        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?forum='.$forumId.'&'.api_get_cidreq(),
         'name' => $current_forum['forum_title']
     );
     $interbreadcrumb[] = array(
-        'url' => api_get_path(WEB_CODE_PATH).'forum/viewthread.php?origin='.$origin.'&gradebook='.$gradebook.'&forum='.$forumId.'&thread='.$threadId.'&'.api_get_cidreq(),
+        'url' => api_get_path(WEB_CODE_PATH).'forum/viewthread.php?gradebook='.$gradebook.'&forum='.$forumId.'&thread='.$threadId.'&'.api_get_cidreq(),
         'name' => $current_thread['thread_title']
     );
     $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Reply'));

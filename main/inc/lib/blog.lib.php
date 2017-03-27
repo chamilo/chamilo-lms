@@ -1001,7 +1001,7 @@ class Blog
                     'autor' => $blog_post['firstname'].' '.$blog_post['lastname'],
                     'username' => $blog_post['username'],
                     'title' => stripslashes($blog_post['title']),
-                    'extract' => api_get_short_text_from_html(stripslashes($blog_post['full_text']), 400),
+                    'extract' => api_get_short_text_from_html(stripslashes($blog_post['full_text']), 800),
                     'content' => stripslashes($blog_post['full_text']),
                     'post_date' => api_convert_and_format_date($blog_post['date_creation']),
                     'n_comments' => $blog_post_comments['number_of_comments'],

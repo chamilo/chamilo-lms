@@ -41,6 +41,7 @@ class ExerciseLib
         $show_answers = false
     ) {
         $course_id = api_get_course_int_id();
+        $course = api_get_course_info_by_id($course_id);
         // Change false to true in the following line to enable answer hinting
         $debug_mark_answer = $show_answers;
 
@@ -1129,7 +1130,6 @@ HTML;
             // Question is a HOT_SPOT
             //checking document/images visibility
             if (api_is_platform_admin() || api_is_course_admin()) {
-                $course = api_get_course_info();
                 $doc_id = DocumentManager::get_document_id(
                     $course,
                     '/images/' . $pictureName
@@ -1249,30 +1249,14 @@ HOTSPOT;
                     </div>
 HOTSPOT;
         } elseif ($answerType == ANNOTATION) {
-            global $exerciseId, $exe_id;
+            global $exe_id;
 
             $relPath = api_get_path(WEB_CODE_PATH);
 
-            if ($freeze) {
-                echo <<<HTML
-    <div id="annotation-canvas-$questionId" class="center-block"></div>
-    <script>
-        AnnotationQuestion({
-            questionId: $questionId,
-            exerciseId: $exe_id,
-            relPath: '$relPath',
-            use: 'user'
-        });
-    </script>
-HTML;
-                return '';
-            }
-
             if (api_is_platform_admin() || api_is_course_admin()) {
-                $course = api_get_course_info();
                 $docId = DocumentManager::get_document_id($course, '/images/' . $pictureName);
 
-                if (is_numeric($docId)) {
+                if ($docId) {
                     $images_folder_visibility = api_get_item_visibility(
                         $course,
                         'document',
@@ -1284,6 +1268,16 @@ HTML;
                         echo Display::return_message(get_lang('ChangeTheVisibilityOfTheCurrentImage'), 'warning');
                     }
                 }
+
+                if ($freeze) {
+                    echo Display::img(
+                        api_get_path(WEB_COURSE_PATH).$course['path'].'/document/images/'.$pictureName,
+                        $objQuestionTmp->selectTitle(),
+                        ['width' => '600px']
+                    );
+
+                    return 0;
+                }
             }
 
             if (!$only_questions) {
@@ -1292,21 +1286,44 @@ HTML;
                     echo '<div class="question_title">'.$current_item.'. '.$objQuestionTmp->selectTitle().'</div>';
                 }
 
-                echo <<<HTML
-    <input type="hidden" name="hidden_hotspot_id" value="$questionId" />
-    <div class="exercise_questions">
-        {$objQuestionTmp->selectDescription()}
-        <div id="annotation-canvas-$questionId" class="annotation-canvas center-block"></div>
-        <script>
-            AnnotationQuestion({
-                questionId: $questionId,
-                exerciseId: $exe_id,
-                relPath: '$relPath',
-                use: 'user'
-            });
-        </script>
-    </div>
-HTML;
+                echo '
+                    <input type="hidden" name="hidden_hotspot_id" value="'.$questionId.'" />
+                    <div class="exercise_questions">
+                        '.$objQuestionTmp->selectDescription().'
+                        <div class="row">
+                            <div class="col-sm-8 col-md-9">
+                                <div id="annotation-canvas-'.$questionId.'" class="annotation-canvas center-block">
+                                </div>
+                                <script>
+                                    AnnotationQuestion({
+                                        questionId: '.$questionId.',
+                                        exerciseId: '.$exe_id.',
+                                        relPath: \''.$relPath.'\'
+                                    });
+                                </script>
+                            </div>
+                            <div class="col-sm-4 col-md-3">
+                                <div class="well well-sm" id="annotation-toolbar-'.$questionId.'">
+                                    <div class="btn-toolbar">
+                                        <div class="btn-group" data-toggle="buttons">
+                                            <label class="btn btn-default active"
+                                                aria-label="'.get_lang('AddAnnotationPath').'">
+                                                <input type="radio" value="0" name="'.$questionId.'-options" autocomplete="off" checked>
+                                                <span class="fa fa-pencil" aria-hidden="true"></span>
+                                            </label>
+                                            <label class="btn btn-default"
+                                                aria-label="'.get_lang('AddAnnotationText').'">
+                                                <input type="radio" value="1" name="'.$questionId.'-options" autocomplete="off">
+                                                <span class="fa fa-font fa-fw" aria-hidden="true"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <ul class="list-unstyled"></ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                ';
             }
 
             $objAnswerTmp = new Answer($questionId);

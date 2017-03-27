@@ -32,7 +32,7 @@ function display_action_links($id, $cur_dir_path, $action)
     }
 
     $display_output = '';
-    $origin = isset($_GET['origin']) ? Security::remove_XSS($_GET['origin']) : '';
+    $origin = api_get_origin();
 
     if (!empty($id)) {
         $display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&gradebook='.$gradebook.'&id='.$my_back_id.'">'.
@@ -3142,14 +3142,19 @@ function getLastWorkStudentFromParentByUser(
 function formatWorkScore($score, $weight)
 {
     $label = 'info';
-    $relativeScore = $score/$weight;
+    $weight = (int) $weight;
+    $relativeScore = 0;
+    if (!empty($weight)) {
+        $relativeScore = $score / $weight;
+    }
     if ($relativeScore < 0.5) {
         $label = 'important';
     } elseif ($relativeScore < 0.75) {
         $label = 'warning';
     }
+
     return Display::label(
-    api_number_format($score, 1) . ' / '.(int) $weight,
+    api_number_format($score, 1) . ' / '.$weight,
         $label
     );
 }

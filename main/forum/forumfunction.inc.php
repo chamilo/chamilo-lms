@@ -6163,3 +6163,26 @@ function getCountPostsWithStatus($status, $forumInfo, $threadId = null)
 
     return $qb->getQuery()->getSingleScalarResult();
 }
+
+/**
+ * @param array $forum
+ * @param array $post
+ *
+ * @return bool
+ */
+function postIsEditableByStudent($forum, $post)
+{
+    if (api_is_platform_admin() || api_is_allowed_to_edit()) {
+        return true;
+    }
+
+    if ($forum['moderated'] == 1) {
+        if (is_null($post['status'])) {
+            return true;
+        } else {
+            return $post['status'] == CForumPost::STATUS_WAITING_MODERATION;
+        }
+    } else {
+        return true;
+    }
+}

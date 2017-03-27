@@ -43,7 +43,6 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
      * @access    private
      */
     public $_value = null;
-    
     private $columnsSize;
     // }}}
     // {{{ constructor
@@ -132,7 +131,7 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
 
     // }}}
     // {{{ setWrap()
-    
+
     /**
      * Sets wrap type for textarea element
      *
@@ -224,7 +223,7 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
         }
         return $html . $this->_getPersistantData();
     }
-    
+
     /**
      * @return null
      */
@@ -240,7 +239,7 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
     {
         $this->columnsSize = $columnsSize;
     }
-    
+
     /**
      * @param string $layout
      *
@@ -250,7 +249,7 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
     {
         $size = $this->getColumnsSize();
         $this->removeAttribute('cols-size');
-        
+
         if (empty($size)) {
             $size = [2, 8, 2];
         }
@@ -291,7 +290,7 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
                         <!-- END label_3 -->
                     </div>
                 </div>';
-                
+
                 break;
             case FormValidator::LAYOUT_BOX_NO_LABEL:
                 return '
@@ -304,6 +303,6 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
                 break;
         }
     }
-    
- 
+
+
 }

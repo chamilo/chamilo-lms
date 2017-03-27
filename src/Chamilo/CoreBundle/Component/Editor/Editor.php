@@ -89,7 +89,7 @@ class Editor
     public function createHtml()
     {
         $html = '<textarea id="'.$this->getName().'" name="'.$this->getName().'">'.$this->value.'</textarea>';
-        //$html .= $this->editorReplace();
+
         return $html;
     }
 
@@ -102,6 +102,7 @@ class Editor
         $toolbar->setLanguage($this->getLocale());
         $config = $toolbar->getConfig();
         $javascript = $this->toJavascript($config);
+
         $html = "<script>
            CKEDITOR.replace('".$this->name."',
                $javascript
@@ -141,7 +142,7 @@ class Editor
                     addslashes($var)
                 ).'"';
                 break;
-             case 'array':
+            case 'array':
                 // Arrays in JSON can't be associative. If the array is empty or if it
                 // has sequential whole number keys starting with 0, it's not associative
                 // so we can go ahead and convert it as an array.

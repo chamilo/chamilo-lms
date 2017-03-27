@@ -158,12 +158,13 @@ class Result
             $paramcount ++;
         }
         if (!empty($user_id)) {
-            if ($paramcount != 0)
+            if ($paramcount != 0) {
                 $sql .= ' AND';
-            else
+            } else {
                 $sql .= ' WHERE';
-            $sql .= ' gr.user_id = ' . intval($user_id);
-            $paramcount ++;
+            }
+            $sql .= ' gr.user_id = '.intval($user_id);
+            $paramcount++;
         }
         if (!empty($evaluation_id)) {
             if ($paramcount != 0) {

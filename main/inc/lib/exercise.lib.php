@@ -41,6 +41,7 @@ class ExerciseLib
         $show_answers = false
     ) {
         $course_id = api_get_course_int_id();
+        $course = api_get_course_info_by_id($course_id);
         // Change false to true in the following line to enable answer hinting
         $debug_mark_answer = $show_answers;
 
@@ -1129,7 +1130,6 @@ HTML;
             // Question is a HOT_SPOT
             //checking document/images visibility
             if (api_is_platform_admin() || api_is_course_admin()) {
-                $course = api_get_course_info();
                 $doc_id = DocumentManager::get_document_id(
                     $course,
                     '/images/' . $pictureName
@@ -1249,30 +1249,14 @@ HOTSPOT;
                     </div>
 HOTSPOT;
         } elseif ($answerType == ANNOTATION) {
-            global $exerciseId, $exe_id;
+            global $exe_id;
 
             $relPath = api_get_path(WEB_CODE_PATH);
 
-            if ($freeze) {
-                echo <<<HTML
-    <div id="annotation-canvas-$questionId" class="center-block"></div>
-    <script>
-        AnnotationQuestion({
-            questionId: $questionId,
-            exerciseId: $exe_id,
-            relPath: '$relPath',
-            use: 'user'
-        });
-    </script>
-HTML;
-                return '';
-            }
-
             if (api_is_platform_admin() || api_is_course_admin()) {
-                $course = api_get_course_info();
                 $docId = DocumentManager::get_document_id($course, '/images/' . $pictureName);
 
-                if (is_numeric($docId)) {
+                if ($docId) {
                     $images_folder_visibility = api_get_item_visibility(
                         $course,
                         'document',
@@ -1292,21 +1276,21 @@ HTML;
                     echo '<div class="question_title">'.$current_item.'. '.$objQuestionTmp->selectTitle().'</div>';
                 }
 
-                echo <<<HTML
-    <input type="hidden" name="hidden_hotspot_id" value="$questionId" />
-    <div class="exercise_questions">
-        {$objQuestionTmp->selectDescription()}
-        <div id="annotation-canvas-$questionId" class="annotation-canvas center-block"></div>
-        <script>
-            AnnotationQuestion({
-                questionId: $questionId,
-                exerciseId: $exe_id,
-                relPath: '$relPath',
-                use: 'user'
-            });
-        </script>
-    </div>
-HTML;
+                echo '
+                    <input type="hidden" name="hidden_hotspot_id" value="'.$questionId.'" />
+                    <div class="exercise_questions">
+                        '.$objQuestionTmp->selectDescription().'
+                        <div id="annotation-canvas-'.$questionId.'" class="annotation-canvas center-block"></div>
+                        <script>
+                            AnnotationQuestion({
+                                questionId: '.$questionId.',
+                                exerciseId: '.$exe_id.',
+                                relPath: \''.$relPath.'\',
+                                use: \'user\'
+                            });
+                        </script>
+                    </div>
+                ';
             }
 
             $objAnswerTmp = new Answer($questionId);

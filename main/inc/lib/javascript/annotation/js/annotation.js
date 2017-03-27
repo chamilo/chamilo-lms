@@ -208,24 +208,13 @@
      * @param questionId
      * @constructor
      */
-    var AnnotationCanvasView = function (elementsCollection, image, questionId)   {
+    var AnnotationCanvasView = function (elementsCollection, image, questionId) {
         var self = this;
 
-        this.el = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-        this.$el = $(this.el);
-
         this.questionId = parseInt(questionId);
-
         this.image = image;
 
-        this.elementsCollection = elementsCollection;
-        this.elementsCollection.onAdd(function (pathModel) {
-            self.renderElement(pathModel);
-        });
-
-        this.$rdbOptions = null;
-    };
-    AnnotationCanvasView.prototype.render = function () {
+        this.el = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
         this.el.setAttribute('version', '1.1');
         this.el.setAttribute('viewBox', '0 0 ' + this.image.width + ' ' + this.image.height);
         this.el.style.width = this.image.width + 'px';
@@ -237,6 +226,17 @@
         svgImage.setAttribute('height', this.image.height);
 
         this.el.appendChild(svgImage);
+
+        this.$el = $(this.el);
+
+        this.elementsCollection = elementsCollection;
+        this.elementsCollection.onAdd(function (pathModel) {
+            self.renderElement(pathModel);
+        });
+
+        this.$rdbOptions = null;
+    };
+    AnnotationCanvasView.prototype.render = function () {
         this.setEvents();
 
         this.$rdbOptions = $('[name="' + this.questionId + '-options"]');
@@ -298,9 +298,6 @@
                     return;
                 }
 
-                $('input[name="choice[' + self.questionId + '][' + elementModel.id + ']"]').val(elementModel.encode());
-                $('input[name="hotspot[' + self.questionId + '][' + elementModel.id + ']"]').val(elementModel.encode());
-
                 elementModel = null;
 
                 isMoving = false;
@@ -320,8 +317,6 @@
             return;
         }
 
-        this.el.appendChild(elementView.render().el);
-
         $('<input>')
             .attr({
                 type: 'hidden',
@@ -338,6 +333,15 @@
             .val(elementModel.encode())
             .appendTo(this.el.parentNode);
 
+        this.el.appendChild(elementView.render().el);
+
+        elementModel.onChange(function () {
+            elementView.render();
+
+            $('input[name="choice[' + self.questionId + '][' + elementModel.id + ']"]').val(elementModel.encode());
+            $('input[name="hotspot[' + self.questionId + '][' + elementModel.id + ']"]').val(elementModel.encode());
+        });
+
         if (elementModel instanceof TextModel) {
             $('<input>')
                 .attr({
@@ -347,9 +351,6 @@
                 .addClass('form-control input-sm')
                 .on('change', function (e) {
                     elementModel.set('text', this.value);
-
-                    $('input[name="choice[' + self.questionId + '][' + elementModel.id + ']"]').val(elementModel.encode());
-                    $('input[name="hotspot[' + self.questionId + '][' + elementModel.id + ']"]').val(elementModel.encode());
 
                     e.preventDefault();
                 })

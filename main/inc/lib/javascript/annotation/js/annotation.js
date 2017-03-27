@@ -203,12 +203,12 @@
     };
 
     /**
-     * @param pathsCollection
+     * @param elementsCollection
      * @param image
      * @param questionId
      * @constructor
      */
-    var AnnotationCanvasView = function (pathsCollection, textsCollection, image, questionId)   {
+    var AnnotationCanvasView = function (elementsCollection, image, questionId)   {
         var self = this;
 
         this.el = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -218,14 +218,9 @@
 
         this.image = image;
 
-        this.pathsCollection = pathsCollection;
-        this.pathsCollection.onAdd(function (pathModel) {
+        this.elementsCollection = elementsCollection;
+        this.elementsCollection.onAdd(function (pathModel) {
             self.renderElement(pathModel);
-        });
-
-        this.textsCollection = textsCollection;
-        this.textsCollection.onAdd(function (textModel) {
-            self.renderElement(textModel);
         });
 
         this.$rdbOptions = null;
@@ -272,7 +267,7 @@
                         break;
                 }
 
-                self.pathsCollection.add(elementModel);
+                self.elementsCollection.add(elementModel);
 
                 isMoving = true;
             })
@@ -386,9 +381,8 @@
             .done(function (questionInfo) {
                 var image = new Image();
                 image.onload = function () {
-                    var pathsCollection = new ElementsCollection(),
-                        textsCollection = new ElementsCollection(),
-                        canvas = new AnnotationCanvasView(pathsCollection, textsCollection, this, settings.questionId);
+                    var elementsCollection = new ElementsCollection(),
+                        canvas = new AnnotationCanvasView(elementsCollection, this, settings.questionId);
 
                     $container
                         .html(canvas.render().el);
@@ -396,13 +390,13 @@
                     $.each(questionInfo.answers.paths, function (i, pathInfo) {
                         var pathModel = SvgPathModel.decode(pathInfo);
 
-                        pathsCollection.add(pathModel);
+                        elementsCollection.add(pathModel);
                     });
 
                     $(questionInfo.answers.texts).each(function (i, textInfo) {
                         var textModel = TextModel.decode(textInfo);
 
-                        textsCollection.add(textModel);
+                        elementsCollection.add(textModel);
                     });
                 };
                 image.src = questionInfo.image.path;

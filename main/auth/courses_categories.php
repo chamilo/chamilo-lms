@@ -339,7 +339,6 @@ function return_teacher($course)
                     <a href="'.$value['url'].'" class="ajax" data-title="'.$name.'">'
                     . $name . '</a></h5><p>'. get_lang('Teacher').'</p></div>';
         }
-        //$count ++;
     }
     $html .= '</div>';
     return $html;

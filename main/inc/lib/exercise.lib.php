@@ -1268,6 +1268,16 @@ HOTSPOT;
                         echo Display::return_message(get_lang('ChangeTheVisibilityOfTheCurrentImage'), 'warning');
                     }
                 }
+
+                if ($freeze) {
+                    echo Display::img(
+                        api_get_path(WEB_COURSE_PATH).$course['path'].'/document/images/'.$pictureName,
+                        $objQuestionTmp->selectTitle(),
+                        ['width' => '600px']
+                    );
+
+                    return 0;
+                }
             }
 
             if (!$only_questions) {

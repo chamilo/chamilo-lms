@@ -253,19 +253,33 @@
             .on('dragstart', function (e) {
                 e.preventDefault();
             })
+            .on('click', function (e) {
+                e.preventDefault();
+
+                if (self.$rdbOptions.filter(':checked').val() != '1') {
+                    return;
+                }
+
+                var point = getPointOnImage(self.el, e.clientX, e.clientY);
+
+                elementModel = new TextModel({x: point.x, y: point.y, text: ''});
+
+                self.elementsCollection.add(elementModel);
+
+                elementModel = null;
+
+                isMoving = false;
+            })
             .on('mousedown', function (e) {
                 e.preventDefault();
 
                 var point = getPointOnImage(self.el, e.clientX, e.clientY);
 
-                switch (self.$rdbOptions.filter(':checked').val()) {
-                    case '0':
-                        elementModel = new SvgPathModel({points: [[point.x, point.y]]});
-                        break;
-                    case '1':
-                        elementModel = new TextModel({x: point.x, y: point.y, text: 'Hola, mundo'});
-                        break;
+                if (isMoving || self.$rdbOptions.filter(':checked').val() != '0' || elementModel) {
+                    return;
                 }
+
+                elementModel = new SvgPathModel({points: [[point.x, point.y]]});
 
                 self.elementsCollection.add(elementModel);
 
@@ -274,27 +288,18 @@
             .on('mousemove', function (e) {
                 e.preventDefault();
 
-                if (!isMoving) {
-                    return;
-                }
-
-                if (!elementModel) {
+                if (!isMoving || self.$rdbOptions.filter(':checked').val() != '0' || !elementModel) {
                     return;
                 }
 
                 var point = getPointOnImage(self.el, e.clientX, e.clientY);
 
-                if (elementModel instanceof SvgPathModel) {
-                    elementModel.addPoint(point.x, point.y);
-                } else if (elementModel instanceof TextModel) {
-                    elementModel.set('x', point.x);
-                    elementModel.set('y', point.y);
-                }
+                elementModel.addPoint(point.x, point.y);
             })
             .on('mouseup', function (e) {
                 e.preventDefault();
 
-                if (!isMoving) {
+                if (!isMoving || self.$rdbOptions.filter(':checked').val() != '0' || !elementModel) {
                     return;
                 }
 
@@ -356,7 +361,8 @@
                 })
                 .val(elementModel.get('text'))
                 .appendTo('#annotation-toolbar-' + this.questionId + ' ul')
-                .wrap('<li class="form-group">');
+                .wrap('<li class="form-group">')
+                .focus();
         }
     };
 

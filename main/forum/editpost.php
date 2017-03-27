@@ -56,11 +56,18 @@ $current_thread = get_thread_information($_GET['forum'], $_GET['thread']);
 $current_forum = get_forum_information($_GET['forum']);
 $current_forum_category = get_forumcategory_information($current_forum['forum_category']);
 $current_post = get_post_information($_GET['post']);
+if (empty($current_post)) {
+    api_not_allowed(true);
+}
 
 api_block_course_item_locked_by_gradebook($_GET['thread'], LINK_FORUM_THREAD);
 
-/* Header and Breadcrumbs */
+$isEditable = postIsEditableByStudent($current_forum, $current_post);
+if (!$isEditable) {
+    api_not_allowed(true);
+}
 
+/* Header and Breadcrumbs */
 if (isset($_SESSION['gradebook'])) {
     $gradebook = $_SESSION['gradebook'];
 }

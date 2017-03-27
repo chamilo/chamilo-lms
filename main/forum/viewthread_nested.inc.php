@@ -121,9 +121,10 @@ foreach ($rows as $post) {
 
     if ((isset($groupInfo['iid']) && $tutorGroup) ||
         ($current_forum['allow_edit'] == 1 && $post['user_id'] == $userId) ||
-        (api_is_allowed_to_edit(false, true) && !(api_is_course_coach() && $current_forum['session_id'] != $sessionId))
+        (api_is_allowed_to_edit(false, true) &&
+        !(api_is_course_coach() && $current_forum['session_id'] != $sessionId))
     ) {
-        if ($locked == false) {
+        if ($locked == false && postIsEditableByStudent($current_forum, $post)) {
             $editUrl = api_get_path(WEB_CODE_PATH).'forum/editpost.php?'.api_get_cidreq();
             $editUrl .= "&forum=$clean_forum_id&thread=$clean_thread_id&post={$post['post_id']}&id_attach=$id_attach";
 

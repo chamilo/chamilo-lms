@@ -32,7 +32,7 @@ function display_action_links($id, $cur_dir_path, $action)
     }
 
     $display_output = '';
-    $origin = isset($_GET['origin']) ? Security::remove_XSS($_GET['origin']) : '';
+    $origin = api_get_origin();
 
     if (!empty($id)) {
         $display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&gradebook='.$gradebook.'&id='.$my_back_id.'">'.

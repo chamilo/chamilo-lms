@@ -34,10 +34,7 @@ include 'forumfunction.inc.php';
 include 'forumconfig.inc.php';
 
 // Are we in a lp ?
-$origin = '';
-if (isset($_GET['origin'])) {
-    $origin =  Security::remove_XSS($_GET['origin']);
-}
+$origin = api_get_origin();
 
 // Name of the tool
 $nameTools = get_lang('ToolForum');

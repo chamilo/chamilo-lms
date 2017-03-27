@@ -75,6 +75,7 @@ if (empty($id)) {
 }
 
 $current_user_id = api_get_user_id();
+$courseInfo = api_get_course_info();
 
 if (api_is_course_session_coach(
     $current_user_id,
@@ -635,13 +636,10 @@ foreach ($questionList as $questionId) {
                 echo '
                     <div id="annotation-canvas-'.$questionId.'"></div>
                     <script>
-                        $(document).on(\'ready\', function () {
-                            AnnotationQuestion({
-                                questionId: '.(int) $questionId.',
-                                exerciseId: '.(int) $id.',
-                                use: \'solution\',
-                                relPath: \''.$relPath.'\'
-                            });
+                        AnnotationQuestion({
+                            questionId: '.(int) $questionId.',
+                            exerciseId: '.(int) $id.',
+                            relPath: \''.$relPath.'\'
                         });
                     </script>
                 ';

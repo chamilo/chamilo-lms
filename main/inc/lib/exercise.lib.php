@@ -1298,8 +1298,7 @@ HOTSPOT;
                                     AnnotationQuestion({
                                         questionId: '.$questionId.',
                                         exerciseId: '.$exe_id.',
-                                        relPath: \''.$relPath.'\',
-                                        use: \'user\'
+                                        relPath: \''.$relPath.'\'
                                     });
                                 </script>
                             </div>

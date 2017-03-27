@@ -361,7 +361,7 @@
                 })
                 .val(elementModel.get('text'))
                 .appendTo('#annotation-toolbar-' + this.questionId + ' ul')
-                .wrap('<li class="form-group">')
+                .wrap('<li class="form-group"></li>')
                 .focus();
         }
     };
@@ -370,14 +370,10 @@
         $(document).on('ready', function () {
         var
             settings = $.extend(
-                {questionId: 0, exerciseId: 0, relPath: '/', use: 'user'},
+                {questionId: 0, exerciseId: 0, relPath: '/'},
                 userSettings
             ),
-            xhrUrl = (settings.use == 'preview')
-                ? 'exercise/annotation_preview.php'
-                : (settings.use == 'admin')
-                    ? 'exercise/annotation_admin.php'
-                    : 'exercise/annotation_user.php',
+            xhrUrl = 'exercise/annotation_user.php',
             $container = $('#annotation-canvas-' + settings.questionId);
 
         $

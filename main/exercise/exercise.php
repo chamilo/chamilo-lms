@@ -525,7 +525,7 @@ if (!empty($exerciseList) &&
             foreach ($exerciseList as $exercise) {
                 if ($exercise['session_id'] == 0) {
                     $visibilityInfo = api_get_item_property_info(
-                        $courseInfo,
+                        $courseId,
                         TOOL_QUIZ,
                         $exercise['iid'],
                         $sessionId

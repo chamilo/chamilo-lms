@@ -3977,7 +3977,9 @@ class UserManager
             FormValidator::LAYOUT_HORIZONTAL
         );
 
-        $form->addText('q', get_lang('UsersGroups'), false);
+        $form->addText('q', get_lang('UsersGroups'), false, array(
+            "id" => "q"
+        ));
         $options = array(
             0 => get_lang('Select'),
             1 => get_lang('User'),
@@ -3987,7 +3989,7 @@ class UserManager
             'search_type',
             get_lang('Type'),
             $options,
-            array('onchange' => 'javascript: extra_field_toogle();')
+            array('onchange' => 'javascript: extra_field_toogle();', 'id' => 'search_type')
         );
 
         // Extra fields

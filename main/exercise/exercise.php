@@ -367,6 +367,7 @@ if ($is_allowedToEdit) {
     }
 }
 
+
 // Actions div bar
 if ($is_allowedToEdit) {
     echo '<div class="actions">';
@@ -513,10 +514,9 @@ if (!empty($exerciseList) &&
     if (!empty($sessionId)) {
         $changeDefaultVisibility = true;
         if (api_get_setting('configure_exercise_visibility_in_course') === 'true') {
+            $changeDefaultVisibility = false;
             if (api_get_course_setting('exercise_invisible_in_session') == 1) {
                 $changeDefaultVisibility = true;
-            } else {
-                $changeDefaultVisibility = false;
             }
         }
 
@@ -584,7 +584,7 @@ if (!empty($exerciseList)) {
 
             $locked = $exercise->is_gradebook_locked;
             $i++;
-            //validacion when belongs to a session
+            // Validation when belongs to a session
             $session_img = api_get_session_image($row['session_id'], $userInfo['status']);
 
             $time_limits = false;
@@ -687,12 +687,10 @@ if (!empty($exerciseList)) {
                     $title = $cut_title;
                 }
 
-                $count_exercise_not_validated = intval(
-                    Event::count_exercise_result_not_validated(
-                        $my_exercise_id,
-                        $courseId,
-                        $session_id
-                    )
+                $count_exercise_not_validated = (int)Event::count_exercise_result_not_validated(
+                    $my_exercise_id,
+                    $courseId,
+                    $session_id
                 );
 
                 $move = Display::return_icon(
@@ -701,7 +699,6 @@ if (!empty($exerciseList)) {
                     array('class'=>'moved', 'style'=>'margin-bottom:-0.5em;')
                 );
                 $move = null;
-
                 $class_tip = '';
 
                 if (!empty($count_exercise_not_validated)) {
@@ -709,7 +706,7 @@ if (!empty($exerciseList)) {
                     $title .= '<span class="exercise_tooltip" style="display: none;">'.$count_exercise_not_validated.' '.$results_text.' </span>';
                     $class_tip = 'link_tooltip';
                 }
-                //$class_tip = 'exercise_link';
+
                 $url = $move.'<a '.$alt_title.' class="'.$class_tip.'" id="tooltip_'.$row['id'].'" href="overview.php?'.api_get_cidreq().$myorigin.$mylpid.$mylpitemid.'&exerciseId='.$row['id'].'">
                              '.Display::return_icon('quiz.png', $row['title']).'
                  '.$title.' </a>';
@@ -769,10 +766,28 @@ if (!empty($exerciseList)) {
                         $actions .= Display::return_icon('invisible.png', get_lang('AddedToLPCannotBeAccessed'), '', ICON_SIZE_SMALL);
                     } else {
                         if ($row['active'] == 0 || $visibility == 0) {
-                            $actions .= Display::url(Display::return_icon('invisible.png', get_lang('Activate'), '', ICON_SIZE_SMALL), 'exercise.php?'.api_get_cidreq().'&choice=enable&sec_token='.$token.'&page='.$page.'&exerciseId='.$row['id']);
+                            $actions .= Display::url(
+                                Display::return_icon(
+                                    'invisible.png',
+                                    get_lang('Activate'),
+                                    '',
+                                    ICON_SIZE_SMALL
+                                ),
+                                'exercise.php?'.api_get_cidreq(
+                                ).'&choice=enable&sec_token='.$token.'&page='.$page.'&exerciseId='.$row['id']
+                            );
                         } else {
                             // else if not active
-                            $actions .= Display::url(Display::return_icon('visible.png', get_lang('Deactivate'), '', ICON_SIZE_SMALL), 'exercise.php?'.api_get_cidreq().'&choice=disable&sec_token='.$token.'&page='.$page.'&exerciseId='.$row['id']);
+                            $actions .= Display::url(
+                                Display::return_icon(
+                                    'visible.png',
+                                    get_lang('Deactivate'),
+                                    '',
+                                    ICON_SIZE_SMALL
+                                ),
+                                'exercise.php?'.api_get_cidreq(
+                                ).'&choice=disable&sec_token='.$token.'&page='.$page.'&exerciseId='.$row['id']
+                            );
                         }
                     }
                     // Export qti ...

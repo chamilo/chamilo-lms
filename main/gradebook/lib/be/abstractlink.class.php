@@ -246,16 +246,22 @@ abstract class AbstractLink implements GradebookItem
             $paramcount ++;
         }
         if (isset($type)) {
-            if ($paramcount != 0) $sql .= ' AND';
-            else $sql .= ' WHERE';
+            if ($paramcount != 0) {
+                $sql .= ' AND';
+            } else {
+                $sql .= ' WHERE';
+            }
             $sql .= ' type = '.intval($type);
-            $paramcount ++;
+            $paramcount++;
         }
         if (isset($ref_id)) {
-            if ($paramcount != 0) $sql .= ' AND';
-            else $sql .= ' WHERE';
+            if ($paramcount != 0) {
+                $sql .= ' AND';
+            } else {
+                $sql .= ' WHERE';
+            }
             $sql .= ' ref_id = '.intval($ref_id);
-            $paramcount ++;
+            $paramcount++;
         }
         if (isset($user_id)) {
             if ($paramcount != 0) {
@@ -464,7 +470,7 @@ abstract class AbstractLink implements GradebookItem
         $targets = array();
         $level = 0;
 
-        $crscats = Category::load(null,null,$this->get_course_code(),0);
+        $crscats = Category::load(null, null, $this->get_course_code(), 0);
         foreach ($crscats as $cat) {
             $targets[] = array($cat->get_id(), $cat->get_name(), $level+1);
             $targets = $this->add_target_subcategories($targets, $level+1, $cat->get_id());
@@ -479,7 +485,7 @@ abstract class AbstractLink implements GradebookItem
      */
     private function add_target_subcategories($targets, $level, $catid)
     {
-        $subcats = Category::load(null,null,null,$catid);
+        $subcats = Category::load(null, null, null, $catid);
         foreach ($subcats as $cat) {
             $targets[] = array ($cat->get_id(), $cat->get_name(), $level+1);
             $targets = $this->add_target_subcategories($targets, $level+1, $cat->get_id());

@@ -677,10 +677,11 @@ class Display
         $result = '';
         for ($i = $min; $i <= $max; $i ++) {
             $result .= '<option value="'.$i.'"';
-            if (is_int($selected_num))
+            if (is_int($selected_num)) {
                 if ($selected_num == $i) {
                     $result .= ' selected="selected"';
                 }
+            }
             $result .= '>'.$i.'</option>';
         }
         return $result;

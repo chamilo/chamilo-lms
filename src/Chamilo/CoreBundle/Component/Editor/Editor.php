@@ -154,7 +154,7 @@ class Editor
 
                     return '[ '.implode(', ', $output).' ]';
                 }
-                break;
+                //no break
             case 'object':
                 // Otherwise, fall through to convert the array as an object.
                 $output = array();

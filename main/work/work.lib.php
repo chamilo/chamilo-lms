@@ -3142,14 +3142,19 @@ function getLastWorkStudentFromParentByUser(
 function formatWorkScore($score, $weight)
 {
     $label = 'info';
-    $relativeScore = $score/$weight;
+    $weight = (int) $weight;
+    $relativeScore = 0;
+    if (!empty($weight)) {
+        $relativeScore = $score / $weight;
+    }
     if ($relativeScore < 0.5) {
         $label = 'important';
     } elseif ($relativeScore < 0.75) {
         $label = 'warning';
     }
+
     return Display::label(
-    api_number_format($score, 1) . ' / '.(int) $weight,
+    api_number_format($score, 1) . ' / '.$weight,
         $label
     );
 }

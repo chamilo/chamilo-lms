@@ -1862,7 +1862,9 @@ class MessageManager
             FormValidator::LAYOUT_INLINE
         );
 
-        $form->addElement('text', 'keyword');
+        $form->addElement('text', 'keyword', false, array(
+            'aria-label' => get_lang('Search')
+        ));
         $form->addButtonSearch(get_lang('Search'));
 
         return $form;

@@ -4923,7 +4923,8 @@ class CourseManager
                     [
                         'class' => 'btn btn-default btn-sm ajax',
                         'data-title' => get_lang('Description'),
-                        'title' => get_lang('Description')
+                        'title' => get_lang('Description'),
+                        'aria-label' => get_lang('Description')
                     ]
                 );
             //}

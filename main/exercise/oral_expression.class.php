@@ -42,14 +42,14 @@ class OralExpression extends Question
             get_lang('Weighting'),
             array('class' => 'span1')
         );
-        global $text, $class;
+        global $text;
         // setting the save button here and not in the question class.php
         $form->addButtonSave($text, 'submitQuestion');
         if (!empty($this->id)) {
             $form -> setDefaults(array('weighting' => float_format($this->weighting, 1)));
         } else {
-            if ($this -> isContent == 1) {
-                $form -> setDefaults(array('weighting' => '10'));
+            if ($this->isContent == 1) {
+                $form->setDefaults(array('weighting' => '10'));
             }
         }
     }

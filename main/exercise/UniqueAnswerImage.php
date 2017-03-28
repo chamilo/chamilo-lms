@@ -30,7 +30,6 @@ class UniqueAnswerImage extends UniqueAnswer
     public function createAnswersForm($form)
     {
         $objExercise = Session::read('objExercise');
-
         $editorConfig = array(
             'ToolbarSet' => 'TestFreeAnswer',
             'Width' => '100%',
@@ -129,10 +128,11 @@ class UniqueAnswerImage extends UniqueAnswer
                     $correct = $i;
                 }
 
-                $defaults['answer[' . $i . ']'] = $answer->answer[$i];
-                $defaults['comment[' . $i . ']'] = $answer->comment[$i];
-                $defaults['weighting[' . $i . ']'] = float_format(
-                    $answer->weighting[$i], 1
+                $defaults['answer['.$i.']'] = $answer->answer[$i];
+                $defaults['comment['.$i.']'] = $answer->comment[$i];
+                $defaults['weighting['.$i.']'] = float_format(
+                    $answer->weighting[$i],
+                    1
                 );
 
                 $itemList = explode('@@', $answer->destination[$i]);
@@ -143,13 +143,11 @@ class UniqueAnswerImage extends UniqueAnswer
                 $url = $itemList[3];
 
                 $try = 0;
-
                 if ($try != 0) {
                     $tryResult = 1;
                 }
 
                 $urlResult = '';
-
                 if ($url != 0) {
                     $urlResult = $url;
                 }
@@ -169,9 +167,7 @@ class UniqueAnswerImage extends UniqueAnswer
             }
 
             $defaults['scenario'] = $tempScenario;
-
             $renderer = $form->defaultRenderer();
-
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
                 'correct'
@@ -202,9 +198,15 @@ class UniqueAnswerImage extends UniqueAnswer
             $form->addRule('answer[' . $i . ']', get_lang('ThisFieldIsRequired'), 'required');
 
             if ($objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
-                $form->addHtmlEditor('comment[' . $i . ']', null, null, false, $editorConfig);
+                $form->addHtmlEditor(
+                    'comment['.$i.']',
+                    null,
+                    null,
+                    false,
+                    $editorConfig
+                );
                 // Direct feedback
-                //Adding extra feedback fields
+                // Adding extra feedback fields
                 $group = array();
                 $group['try' . $i] = $form->createElement('checkbox', 'try' . $i, null, get_lang('TryAgain'));
                 $group['lp' . $i] = $form->createElement(
@@ -243,16 +245,13 @@ class UniqueAnswerImage extends UniqueAnswer
         $form->addHtml('</tbody>');
         $form->addHtml('</table>');
 
-        global $text, $class;
-
+        global $text;
         $buttonGroup = [];
-
         if ($objExercise->edit_exercise_in_lp == true) {
             //setting the save button here and not in the question class.php
             $buttonGroup[] = $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers', true);
             $buttonGroup[] = $form->addButtonCreate(get_lang('PlusAnswer'), 'moreAnswers', true);
             $buttonGroup[] = $form->addButtonSave($text, 'submitQuestion', true);
-
             $form->addGroup($buttonGroup);
         }
 
@@ -318,8 +317,7 @@ class UniqueAnswerImage extends UniqueAnswer
               $destinationStr.=$destination_id.';';
               } */
 
-            $goodAnswer = ($correct == $i) ? true : false;
-
+            $goodAnswer = $correct == $i ? true : false;
             if ($goodAnswer) {
                 $nbrGoodAnswers++;
                 $weighting = abs($weighting);
@@ -348,7 +346,16 @@ class UniqueAnswerImage extends UniqueAnswer
             //1@@1;2;@@2;4;4;@@http://www.chamilo.org
             $dest = $try . '@@' . $lp . '@@' . $destination . '@@' . $url;
 
-            $objAnswer->createAnswer($answer, $goodAnswer, $comment, $weighting, $i, null, null, $dest);
+            $objAnswer->createAnswer(
+                $answer,
+                $goodAnswer,
+                $comment,
+                $weighting,
+                $i,
+                null,
+                null,
+                $dest
+            );
         }
 
         // saves the answers into the data base

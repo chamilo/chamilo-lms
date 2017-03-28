@@ -75,8 +75,6 @@ class MultipleAnswerTrueFalse extends Question
         }
 
         $form->addElement('hidden', 'nb_answers');
-        $boxes_names = array();
-
         if ($nb_answers < 1) {
             $nb_answers = 1;
             Display::display_normal_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
@@ -138,8 +136,6 @@ class MultipleAnswerTrueFalse extends Question
                 $defaults['comment[' . $i . ']'] = '';
                 $defaults['correct[' . $i . ']'] = '';
             }
-
-            $boxes_names[] = 'correct[' . $i . ']';
 
             $form->addHtmlEditor(
                 "answer[$i]",
@@ -221,7 +217,6 @@ class MultipleAnswerTrueFalse extends Question
         }
 
         global $text;
-
         if ($obj_ex->edit_exercise_in_lp == true) {
             // setting the save button here and not in the question class.php
             $buttonGroup[] = $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers', true);
@@ -234,9 +229,7 @@ class MultipleAnswerTrueFalse extends Question
         if (!empty($this->id)) {
             $form->setDefaults($defaults);
         } else {
-            //if ($this -> isContent == 1) {
             $form->setDefaults($defaults);
-            //}
         }
         $form->setConstants(array('nb_answers' => $nb_answers));
     }
@@ -263,14 +256,14 @@ class MultipleAnswerTrueFalse extends Question
                 Question::updateQuestionOption($id, $optionData, $course_id);
             }
         } else {
-            for ($i=1 ; $i <= 3 ; $i++) {
+            for ($i = 1; $i <= 3; $i++) {
                 $last_id = Question::saveQuestionOption(
                     $this->id,
                     $this->options[$i],
                     $course_id,
                     $i
                 );
-               $correct[$i] = $last_id;
+                $correct[$i] = $last_id;
             }
         }
 
@@ -278,7 +271,6 @@ class MultipleAnswerTrueFalse extends Question
         it's possible that there are more options in the future */
 
         $new_options = Question::readQuestionOption($this->id, $course_id);
-
         $sorted_by_position = array();
         foreach ($new_options as $item) {
         	$sorted_by_position[$item['position']] = $item;
@@ -288,13 +280,13 @@ class MultipleAnswerTrueFalse extends Question
         the true, false, doubt options registered in this format
         XX:YY:ZZZ where XX is a float score value.*/
         $extra_values = array();
-        for ($i=1 ; $i <= 3 ; $i++) {
+        for ($i = 1; $i <= 3; $i++) {
             $score = trim($form -> getSubmitValue('option['.$i.']'));
             $extra_values[]= $score;
         }
         $this->setExtra(implode(':', $extra_values));
 
-		for ($i = 1; $i <= $nb_answers; $i++) {
+        for ($i = 1; $i <= $nb_answers; $i++) {
             $answer = trim($form->getSubmitValue('answer['.$i.']'));
             $comment = trim($form->getSubmitValue('comment['.$i.']'));
             $goodAnswer = trim($form->getSubmitValue('correct['.$i.']'));
@@ -304,17 +296,15 @@ class MultipleAnswerTrueFalse extends Question
                 $goodAnswer = $sorted_by_position[$goodAnswer]['id'];
             }
     	    $questionWeighting += $extra_values[0]; //By default 0 has the correct answers
-
-        	$objAnswer->createAnswer($answer, $goodAnswer, $comment,'',$i);
+            $objAnswer->createAnswer($answer, $goodAnswer, $comment, '', $i);
         }
 
-    	// saves the answers into the data base
+        // saves the answers into the database
         $objAnswer->save();
-
         // sets the total weighting of the question
         $this->updateWeighting($questionWeighting);
         $this->save();
-	}
+    }
 
     /**
      * @param int $feedback_type
@@ -325,17 +315,17 @@ class MultipleAnswerTrueFalse extends Question
     function return_header($feedback_type = null, $counter = null, $score = null)
     {
         $header = parent::return_header($feedback_type, $counter, $score);
-  	    $header .= '<table class="'.$this->question_table_class .'">
-		<tr>
-			<th>'.get_lang("Choice").'</th>
-			<th>'. get_lang("ExpectedChoice").'</th>
-			<th>'. get_lang("Answer").'</th>';
-			if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
-				$header .= '<th>'.get_lang("Comment").'</th>';
-			} else {
-				$header .= '<th>&nbsp;</th>';
-			}
+        $header .= '<table class="'.$this->question_table_class .'">
+        <tr>
+            <th>'.get_lang("Choice").'</th>
+            <th>'. get_lang("ExpectedChoice").'</th>
+            <th>'. get_lang("Answer").'</th>';
+            if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
+                $header .= '<th>'.get_lang("Comment").'</th>';
+            } else {
+                $header .= '<th>&nbsp;</th>';
+            }
         $header .= '</tr>';
         return $header;
-	}
+    }
 }

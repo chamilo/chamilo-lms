@@ -54,7 +54,6 @@ if (!empty($attemptList) && isset($attemptList[$questionId])) {
                     $data['answers']['paths'][] = $points;
                     break;
                 case 'T':
-
                     $text = [
                         'text' => array_shift($parts)
                     ];

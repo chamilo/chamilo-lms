@@ -12,7 +12,7 @@ class GlobalMultipleAnswer extends Question
     public static $explanationLangVar = 'GlobalMultipleAnswer';
 
     /**
-     *
+     * GlobalMultipleAnswer constructor.
      */
     public function __construct()
     {
@@ -107,26 +107,51 @@ class GlobalMultipleAnswer extends Question
             $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'comment['.$i.']');
             //$renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'weighting['.$i.']');
 
-            $answer_number = $form->addElement('text', 'counter[' . $i . ']', null, 'value="' . $i . '"');
+            $answer_number = $form->addElement(
+                'text',
+                'counter['.$i.']',
+                null,
+                'value="'.$i.'"'
+            );
             $answer_number->freeze();
 
             $form->addElement('checkbox', 'correct[' . $i . ']', null, null, 'class="checkbox"');
             $boxes_names[] = 'correct[' . $i . ']';
 
-            $form->addElement('html_editor', 'answer[' . $i . ']', null, array(), array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'));
+            $form->addElement(
+                'html_editor',
+                'answer['.$i.']',
+                null,
+                array(),
+                array(
+                    'ToolbarSet' => 'TestProposedAnswer',
+                    'Width' => '100%',
+                    'Height' => '100',
+                )
+            );
             $form->addRule('answer[' . $i . ']', get_lang('ThisFieldIsRequired'), 'required');
-
-            $form->addElement('html_editor', 'comment[' . $i . ']', null, array(), array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'));
+            $form->addElement(
+                'html_editor',
+                'comment['.$i.']',
+                null,
+                array(),
+                array(
+                    'ToolbarSet' => 'TestProposedAnswer',
+                    'Width' => '100%',
+                    'Height' => '100',
+                )
+            );
 
             $form->addElement('html', '</tr>');
         }
         //--------- Mise en variable du score global lors d'une modification de la question/r�ponse
         $defaults['weighting[1]'] = (round($scoreG));
-
         $form->addElement('html', '</div></div></table>');
-
-        //$form -> addElement ('html', '<br />');
-        $form->add_multiple_required_rule($boxes_names, get_lang('ChooseAtLeastOneCheckbox'), 'multiple_required');
+        $form->add_multiple_required_rule(
+            $boxes_names,
+            get_lang('ChooseAtLeastOneCheckbox'),
+            'multiple_required'
+        );
 
         //only 1 answer the all deal ...
         $form->addElement('text', 'weighting[1]', get_lang('Score'));
@@ -138,7 +163,7 @@ class GlobalMultipleAnswer extends Question
         // Affiche un message si le score n'est pas renseign�
         $form->addRule('weighting[1]', get_lang('ThisFieldIsRequired'), 'required');
 
-        global $text, $class;
+        global $text;
 
         if ($obj_ex->edit_exercise_in_lp == true) {
             $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers');

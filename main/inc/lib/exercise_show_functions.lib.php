@@ -572,7 +572,6 @@ class ExerciseShowFunctions
 
     public static function displayAnnotationAnswer(
         $feedback_type,
-	    $answer,
 	    $exe_id,
 	    $questionId,
 	    $questionScore = null,

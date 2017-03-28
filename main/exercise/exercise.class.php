@@ -4166,16 +4166,10 @@ class Exercise
                         $resq = Database::query($sql);
                         $data = Database::fetch_array($resq);
 
-                        $choice = $data['answer'];
-                        $choice = str_replace('\r\n', '', $choice);
-                        $choice = stripslashes($choice);
-
                         $questionScore = empty($data['marks']) ? 0 : $data['marks'];
                         $totalScore += $questionScore == -1 ? 0 : $questionScore;
 
                         $arrques = $questionName;
-                        $arrans  = $choice;
-
                         break;
                     }
 
@@ -4488,7 +4482,6 @@ class Exercise
                         } else if ($answerType == ANNOTATION) {
                             ExerciseShowFunctions::displayAnnotationAnswer(
                                 $feedback_type,
-                                $choice,
                                 $exeId,
                                 $questionId,
                                 $questionScore,
@@ -4843,7 +4836,6 @@ class Exercise
                         case ANNOTATION:
                             ExerciseShowFunctions::displayAnnotationAnswer(
                                 $feedback_type,
-                                $choice,
                                 $exeId,
                                 $questionId,
                                 $questionScore,
@@ -5101,28 +5093,22 @@ class Exercise
                 }
             } else if ($answerType == ANNOTATION) {
                 if ($show_result) {
-                    echo '</table></td></tr>';
                     echo '
-                        <tr>
-                            <td colspan="2">
-                                <p><em>' . get_lang('Annotation') . '</em></p>
-                                <div id="annotation-canvas-'.$questionId.'"></div>
-                                <script>
-                                    AnnotationQuestion({
-                                        use: \'solution\',
-                                        questionId: parseInt('.$questionId.'),
-                                        exerciseId: parseInt('.$exeId.'),
-                                        relPath: \''.$relPath.'\'
-                                    });
-                                </script>
-                            </td>
-                        </tr>
+                        <p><em>' . get_lang('Annotation') . '</em></p>
+                        <div id="annotation-canvas-'.$questionId.'"></div>
+                        <script>
+                            AnnotationQuestion({
+                                questionId: parseInt('.$questionId.'),
+                                exerciseId: parseInt('.$exeId.'),
+                                relPath: \''.$relPath.'\'
+                            });
+                        </script>
                     ';
                 }
             }
 
             //if ($origin != 'learnpath') {
-            if ($show_result) {
+            if ($show_result && $answerType != ANNOTATION) {
                 echo '</table>';
             }
             //	}

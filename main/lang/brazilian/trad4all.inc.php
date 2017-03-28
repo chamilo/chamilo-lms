@@ -7861,5 +7861,8 @@ $SkillFromCourseXDeletedSinceThen = "Esta habilidade foi obtida através do curs
 $SaveAndAddNewItem = "Salvar e adicionar novo item";
 $AnnouncementChooseRecipientsDescription = "Por padrão, este anúncio será enviado a todos os usuários. Mas você também pode selecionar outros destinatários.";
 $ChooseRecipients = "Escolha destinatários";
+$StudentCourseProgressX = "Progresso: %s%";
 $SessionDurationNotStartedMaxX = "Esta sessão tem uma duração máxima de %s dias.";
+$StudentCourseScoreX = "Pontuação: %s%";
+$StudentCourseCertificateX = "Certificado: %s";
 ?>

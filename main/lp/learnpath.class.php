@@ -1042,7 +1042,7 @@ class learnpath
         // TODO: Implement a way of getting this to work when the current object is not set.
         // In clear: implement this in the item class as well (abstract class) and use the given ID in queries.
         // If an ID is specifically given and the current LP is not the same, prevent delete.
-        if (!empty ($id) && ($id != $this->lp_id)) {
+        if (!empty($id) && ($id != $this->lp_id)) {
             return false;
         }
 
@@ -1652,13 +1652,13 @@ class learnpath
             $sql_bros = "SELECT * FROM $lp_item WHERE c_id = ".$course_id." AND parent_item_id = $parent
                          ORDER BY display_order";
             $res_bros = Database::query($sql_bros);
-            $list = array ();
+            $list = [];
             while ($row_bro = Database::fetch_array($res_bros)) {
                 $list[] = $row_bro;
             }
             return $list;
         }
-        return array ();
+        return [];
     }
 
     /**
@@ -1845,10 +1845,10 @@ class learnpath
                 ) AND $index < $this->max_ordered_items) {
                 $index++;
             }
-            $this->last     = $this->current;
+            $this->last = $this->current;
             // current is
-            $this->current  = isset($this->ordered_items[$index]) ? $this->ordered_items[$index] : null;
-            $this->index    = $index;
+            $this->current = isset($this->ordered_items[$index]) ? $this->ordered_items[$index] : null;
+            $this->index = $index;
             if ($this->debug > 2) {
                 error_log('$index ' . $index);
             }
@@ -3228,7 +3228,6 @@ class learnpath
         $is_allowed_to_edit = api_is_allowed_to_edit(null, true, false, false);
         $hide_teacher_icons_lp = api_get_configuration_value('hide_teacher_icons_lp');
         $html = '';
-
         if ($is_allowed_to_edit && $hide_teacher_icons_lp == false) {
             $gradebook = '';
             if (!empty($_GET['gradebook'])) {
@@ -3500,7 +3499,6 @@ class learnpath
                                 $decoded = html_entity_decode($lp_item_path);
                                 list ($decoded) = explode('?', $decoded);
                                 if (!is_file(realpath($sys_course_path . '/scorm/' . $lp_path . '/' . $decoded))) {
-
                                     $file = self::rl_get_resource_link_for_learnpath(
                                         $course_id,
                                         $this->get_id(),
@@ -3892,8 +3890,9 @@ class learnpath
                 WHERE c_id = $course_id
                 ORDER BY display_order";
         $res = Database::query($sql);
-        if ($res === false)
+        if ($res === false) {
             return false;
+        }
         $lps = array ();
         $lp_order = array();
         $num = Database::num_rows($res);
@@ -4628,8 +4627,6 @@ class learnpath
                 }
                 $di->getDb()->replace_document((int) $se_ref['search_did'], $doc);
                 $di->getDb()->flush();
-            } else {
-                //@todo What we should do here?
             }
         }
         return true;
@@ -5116,8 +5113,9 @@ class learnpath
 
         $sql = "SELECT * FROM $lp_table WHERE c_id = ".$course_id." ORDER BY display_order";
         $res = Database::query($sql);
-        if ($res === false)
+        if ($res === false) {
             return false;
+        }
 
         $num = Database::num_rows($res);
         // First check the order is correct, globally (might be wrong because
@@ -5422,14 +5420,16 @@ class learnpath
      *
      * @return array
      */
-    public function sort_tree_array($array) {
+    public function sort_tree_array($array)
+    {
         foreach ($array as $key => $row) {
             $parent[$key] = $row['parent_item_id'];
             $position[$key] = $row['display_order'];
         }
 
-        if (count($array) > 0)
+        if (count($array) > 0) {
             array_multisort($parent, SORT_ASC, $position, SORT_ASC, $array);
+        }
 
         return $array;
     }
@@ -5437,7 +5437,6 @@ class learnpath
     /**
      * Function that creates a html list of learning path items so that we can add audio files to them
      * @author Kevin Van Den Haute
-     * @param int $lp_id
      * @return string
      */
     public function overview()
@@ -5507,7 +5506,6 @@ class learnpath
     {
         $return = '';
         $is_allowed_to_edit = api_is_allowed_to_edit(null,true);
-
         $course_id = api_get_course_int_id();
         $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 
@@ -5543,13 +5541,11 @@ class learnpath
         unset ($this->arrMenu);
         $default_data = null;
         $default_content = null;
-
         $elements = array();
         $return_audio = null;
 
         for ($i = 0; $i < count($arrLP); $i++) {
             $title = $arrLP[$i]['title'];
-
             $title_cut = cut($arrLP[$i]['title'], 25);
 
             // Link for the documents
@@ -6276,17 +6272,21 @@ class learnpath
         // Please, do not modify this dirname formatting.
         $dir = isset($_GET['dir']) ? $_GET['dir'] : $_POST['dir'];
 
-        if (strstr($dir, '..'))
+        if (strstr($dir, '..')) {
             $dir = '/';
+        }
 
-        if ($dir[0] == '.')
+        if ($dir[0] == '.') {
             $dir = substr($dir, 1);
+        }
 
-        if ($dir[0] != '/')
-            $dir = '/' . $dir;
+        if ($dir[0] != '/') {
+            $dir = '/'.$dir;
+        }
 
-        if ($dir[strlen($dir) - 1] != '/')
+        if ($dir[strlen($dir) - 1] != '/') {
             $dir .= '/';
+        }
 
         $filepath = api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document' . $dir;
 
@@ -6353,8 +6353,9 @@ class learnpath
                 }
                 $return .= '<div style="padding:10px;">';
 
-                if ($msg != '')
+                if ($msg != '') {
                     $return .= $msg;
+                }
 
                 $return .= '<h3>'.$row['title'].'</h3>';
 
@@ -7083,7 +7084,6 @@ class learnpath
                     lp_id = " . $this->lp_id;
         $result = Database::query($sql);
         $arrLP = array();
-
         while ($row = Database::fetch_array($result)) {
             $arrLP[] = array(
                 'id' => $row['id'],
@@ -7596,7 +7596,13 @@ class learnpath
             }
         }
 
-        $position = $form->addElement('select', 'previous', get_lang('Position'), '', array('id' => 'previous'));
+        $position = $form->addElement(
+            'select',
+            'previous',
+            get_lang('Position'),
+            '',
+            array('id' => 'previous')
+        );
         $padding = isset($value['padding']) ? $value['padding'] : 0;
         $position->addOption(get_lang('FirstPosition'), 0, 'style="padding-left:' . $padding . 'px;"');
 
@@ -7828,7 +7834,15 @@ class learnpath
             }
         }
 
-        $parent_select = $form->addSelect('parent', get_lang('Parent'), [], ['id' => 'idParent', 'onchange' => 'javascript: load_cbo(this.value);']);
+        $parent_select = $form->addSelect(
+            'parent',
+            get_lang('Parent'),
+            [],
+            [
+                'id' => 'idParent',
+                'onchange' => 'javascript: load_cbo(this.value);',
+            ]
+        );
         $my_count = 0;
         foreach ($arrHide as $key => $value) {
             if ($my_count != 0) {
@@ -8534,10 +8548,10 @@ class learnpath
         $return .= 'child_name[0] = new Array();' . "\n";
         $return .= 'child_value[0] = new Array();' . "\n\n";
         $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-        $sql_zero = "SELECT * FROM " . $tbl_lp_item . "
-                    WHERE c_id = ".$course_id." AND lp_id = " . $this->lp_id . " AND parent_item_id = 0
-                    ORDER BY display_order ASC";
-        $res_zero = Database::query($sql_zero);
+        $sql = "SELECT * FROM " . $tbl_lp_item . "
+                WHERE c_id = ".$course_id." AND lp_id = " . $this->lp_id . " AND parent_item_id = 0
+                ORDER BY display_order ASC";
+        $res_zero = Database::query($sql);
         $i = 0;
 
         while ($row_zero = Database::fetch_array($res_zero)) {
@@ -8591,7 +8605,6 @@ class learnpath
 
             $sql = "SELECT * FROM " . $tbl_lp_item . "
                     WHERE c_id = ".$course_id." AND id = " . $item_id;
-
             $res = Database::query($sql);
             $row = Database::fetch_array($res);
 
@@ -8921,12 +8934,11 @@ class learnpath
         $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
         $tbl_quiz = Database::get_course_table(TABLE_QUIZ_TEST);
         $condition_session = api_get_session_condition($session_id, true, true);
-
         $setting = api_get_configuration_value('show_invisible_exercise_in_lp_list');
 
-        $activeCondition = " active <> -1 ";
+        $activeCondition = ' active <> -1 ';
         if ($setting) {
-            $activeCondition = " active = 1 ";
+            $activeCondition = ' active = 1 ';
         }
 
         $sql_quiz = "SELECT * FROM $tbl_quiz
@@ -10594,7 +10606,7 @@ EOD;
     /**
      * @param int $id
      *
-     * @return mixed
+     * @return CLpCategory
      */
     public static function getCategory($id)
     {
@@ -10691,7 +10703,6 @@ EOD;
     public static function getLpFromSession($courseCode, $lp_id, $user_id)
     {
         $learnPath = null;
-
         $lpObject = Session::read('lpobject');
         if ($lpObject !== null) {
             $learnPath = unserialize($lpObject);
@@ -10907,7 +10918,6 @@ EOD;
         // Calculate stars chapters evaluation
         $exercisesItems = $this->getExercisesItems();
         $finalEvaluationItem = $this->getFinalEvaluationItem();
-
         $totalExercisesResult = 0;
         $totalEvaluationResult = 0;
 
@@ -11042,11 +11052,7 @@ EOD;
             'first'
         );
 
-        if ($resultData['qty'] > 0) {
-            return true;
-        }
-
-        return false;
+        return $resultData['qty'] > 0;
     }
 
     /**
@@ -11165,7 +11171,6 @@ EOD;
     private function getSavedFinalItem()
     {
         $finalItem = $this->getFinalItem();
-
         $doc = DocumentManager::get_document_data_by_id($finalItem->path, $this->cc);
         if ($doc && file_exists($doc['absolute_path'])) {
             return file_get_contents($doc['absolute_path']);

@@ -12,7 +12,6 @@
 class learnpathItem
 {
     const debug = 0; // Logging parameter.
-
     public $attempt_id; // Also called "objectives" SCORM-wise.
     public $audio; // The path to an audio file (stored in document/audio/).
     public $children = array(); // Contains the ids of children items.
@@ -86,7 +85,6 @@ class learnpathItem
      * @param   null|integer $user_id User ID
      * @param   null|integer $course_id Course int id
      * @param   null|array  $item_content An array with the contents of the item
-     * @return  bool    True on success, false on failure
      */
     public function __construct(
         $id,
@@ -119,9 +117,7 @@ class learnpathItem
                     WHERE c_id = $course_id AND id = $id";
             $res = Database::query($sql);
             if (Database::num_rows($res) < 1) {
-                $this->error =
-                'Could not find given learnpath item in learnpath_item table';
-                return false;
+                $this->error = 'Could not find given learnpath item in learnpath_item table';
             }
             $row = Database::fetch_array($res);
         } else {
@@ -209,8 +205,6 @@ class learnpathItem
                 0
             );
         }
-
-        return true;
     }
 
     /**

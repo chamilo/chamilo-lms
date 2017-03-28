@@ -89,7 +89,6 @@ class learnpath
      * @param   string $course Course code
      * @param   integer $lp_id
      * @param   integer $user_id
-     * @return  mixed True on success, false on error
      */
     public function __construct($course, $lp_id, $user_id)
     {
@@ -99,7 +98,6 @@ class learnpath
         }
         if (empty($course)) {
             $this->error = 'Course code is empty';
-            return false;
         } else {
             $course_info = api_get_course_info($course);
             if (!empty($course_info)) {
@@ -108,7 +106,6 @@ class learnpath
                 $course_id = $course_info['real_id'];
             } else {
                 $this->error = 'Course code does not exist in database.';
-                return false;
             }
         }
 
@@ -117,7 +114,6 @@ class learnpath
         // Check learnpath ID.
         if (empty($lp_id)) {
             $this->error = 'Learnpath ID is empty';
-            return false;
         } else {
             // TODO: Make it flexible to use any course_code (still using env course code here).
             $lp_table = Database::get_course_table(TABLE_LP_MAIN);
@@ -170,24 +166,18 @@ class learnpath
                 $this->mode = $row['default_view_mod'];
             } else {
                 $this->error = 'Learnpath ID does not exist in database ('.$sql.')';
-
-                return false;
             }
         }
 
         // Check user ID.
         if (empty($user_id)) {
             $this->error = 'User ID is empty';
-
-            return false;
         } else {
             $user_info = api_get_user_info($user_id);
             if (!empty($user_info)) {
                 $this->user_id = $user_info['user_id'];
             } else {
                 $this->error = 'User ID does not exist in database ('.$sql.')';
-
-                return false;
             }
         }
 
@@ -432,7 +422,6 @@ class learnpath
         if ($this->debug > 2) {
             error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - End of learnpath constructor for learnpath ' . $this->get_id(), 0);
         }
-        return true;
     }
 
     /**

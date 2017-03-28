@@ -526,7 +526,7 @@ class learnpath
         $num = $row['num'];
 
         if ($num > 0) {
-            if ($previous == 0) {
+            if (empty($previous)) {
                 $sql = "SELECT id, next_item_id, display_order
                         FROM " . $tbl_lp_item . "
                         WHERE
@@ -620,12 +620,15 @@ class learnpath
             $sql = "UPDATE $tbl_lp_item SET id = iid WHERE iid = $new_item_id";
             Database::query($sql);
 
-            // Update the item that should come after the new item.
-            $sql = " UPDATE $tbl_lp_item SET
-                        previous_item_id =  $new_item_id,
-                        next_item_id = $new_item_id,
-                        id = $new_item_id
-                     WHERE iid = $new_item_id";
+            $sql = "UPDATE $tbl_lp_item
+                    SET previous_item_id = $new_item_id 
+                    WHERE c_id = $course_id AND id = $next";
+            Database::query($sql);
+
+            // Update the item that should be before the new item.
+            $sql = "UPDATE $tbl_lp_item
+                    SET next_item_id = $new_item_id
+                    WHERE c_id = $course_id AND id = $tmp_previous";
             Database::query($sql);
 
             // Update all the items after the new item.
@@ -7681,6 +7684,21 @@ class learnpath
     }
 
     /**
+     * @return string
+     */
+    public function getCurrentUrlBuild()
+    {
+        $pathItem = isset($_GET['path_item']) ? (int) $_GET['path_item'] : '';
+        $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
+        $id = isset($_GET['id']) ? (int) $_GET['id'] : '';
+        $view = isset($_GET['view']) ? Security::remove_XSS($_GET['view']) : '';
+
+        $currentUrl = api_get_self().'?'.api_get_cidreq().'&action='.$action.'&lp_id='.$this->lp_id.'&path_item='.$pathItem.'&view='.$view.'&id='.$id;
+
+        return $currentUrl;
+    }
+
+    /**
      * Returns the form to update or create a document
      * @param	string	$action (add/edit)
      * @param	integer	$id ID of the lp_item (if already exists)
@@ -7731,12 +7749,11 @@ class learnpath
                 $item_title = stripslashes($path_parts['filename']);
             }
         } elseif (is_numeric($extra_info)) {
-            $sql_doc = "SELECT path, title FROM $tbl_doc
-                        WHERE
-                            c_id = ".$course_id." AND
-                            id = " . intval($extra_info);
-
-            $result = Database::query($sql_doc);
+            $sql = "SELECT path, title FROM $tbl_doc
+                    WHERE
+                        c_id = ".$course_id." AND
+                        id = " . intval($extra_info);
+            $result = Database::query($sql);
             $row 	= Database::fetch_array($result);
             $item_title = $row['title'];
             $item_title = str_replace('_', ' ', $item_title);
@@ -7790,16 +7807,16 @@ class learnpath
         } else {
             $return .= get_lang('EditTheCurrentDocument');
         }
-
         $return .= '</legend>';
 
-        if (isset ($_GET['edit']) && $_GET['edit'] == 'true') {
+        if (isset($_GET['edit']) && $_GET['edit'] == 'true') {
             $return .= Display::return_message('<strong>' . get_lang('Warning') . ' !</strong><br />' . get_lang('WarningEditingDocument'), false);
         }
+
         $form = new FormValidator(
             'form',
             'POST',
-            api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']),
+            $this->getCurrentUrlBuild(),
             '',
             array('enctype' => 'multipart/form-data')
         );
@@ -7812,26 +7829,32 @@ class learnpath
 
         if ($action != 'move') {
             $data = $this->generate_lp_folder($_course);
-
-            $folders = DocumentManager::get_all_document_folders(
-                $_course,
-                0,
-                true
-            );
-            DocumentManager::build_directory_selector(
-                $folders,
-                '',
-                array(),
-                true,
-                $form,
-                'directory_parent_id'
-            );
+            if ($action != 'edit') {
+                $folders = DocumentManager::get_all_document_folders(
+                    $_course,
+                    0,
+                    true
+                );
+                DocumentManager::build_directory_selector(
+                    $folders,
+                    '',
+                    array(),
+                    true,
+                    $form,
+                    'directory_parent_id'
+                );
+            }
 
             if (isset($data['id'])) {
                 $defaults['directory_parent_id'] = $data['id'];
             }
 
-            $form->addElement('text', 'title', get_lang('Title'), array('id' => 'idTitle', 'class' => 'col-md-4'));
+            $form->addElement(
+                'text',
+                'title',
+                get_lang('Title'),
+                array('id' => 'idTitle', 'class' => 'col-md-4')
+            );
             $form->applyFilter('title', 'html_filter');
         }
 
@@ -7867,6 +7890,7 @@ class learnpath
                 'onchange' => 'javascript: load_cbo(this.value);',
             ]
         );
+
         $my_count = 0;
         foreach ($arrHide as $key => $value) {
             if ($my_count != 0) {
@@ -7894,14 +7918,25 @@ class learnpath
         $arrHide = array();
         $s_selected_position = null;
 
-        //POSITION
+        // POSITION
+        $lastPosition = null;
+
         for ($i = 0; $i < count($arrLP); $i++) {
-            if ($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id || $arrLP[$i]['item_type'] == TOOL_LP_FINAL_ITEM) {
-                if (isset($extra_info['previous_item_id']) && $extra_info['previous_item_id'] == $arrLP[$i]['id'] || $action == 'add') {
+            if (($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id) ||
+                $arrLP[$i]['item_type'] == TOOL_LP_FINAL_ITEM
+            ) {
+                if ((isset($extra_info['previous_item_id']) &&
+                    $extra_info['previous_item_id'] == $arrLP[$i]['id']) || $action == 'add'
+                ) {
                     $s_selected_position = $arrLP[$i]['id'];
                 }
                 $arrHide[$arrLP[$i]['id']]['value'] = get_lang('After') . ' "' . $arrLP[$i]['title'] . '"';
             }
+            $lastPosition = $arrLP[$i]['id'];
+        }
+
+        if (empty($s_selected_position)) {
+            $s_selected_position = $lastPosition;
         }
 
         $position = $form->addSelect('previous', get_lang('Position'), [], ['id' => 'previous']);
@@ -7909,9 +7944,12 @@ class learnpath
 
         foreach ($arrHide as $key => $value) {
             $padding = isset($value['padding']) ? $value['padding']: 20;
-            $position->addOption($value['value'], $key, 'style="padding-left:' . $padding . 'px;"');
+            $position->addOption(
+                $value['value'],
+                $key,
+                'style="padding-left:'.$padding.'px;"'
+            );
         }
-
         $position->setSelected($s_selected_position);
 
         if (is_array($arrLP)) {

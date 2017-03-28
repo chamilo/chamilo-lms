@@ -2341,14 +2341,18 @@ class learnpath
         $lp_id,
         $student_id,
         $courseCode = null,
-        $sessionId = null
+        $sessionId = 0
     ) {
-        $lp_id = (int)$lp_id;
         $courseInfo = api_get_course_info($courseCode);
-        $sessionId = intval($sessionId);
+        $lp_id = (int) $lp_id;
+        $sessionId = (int) $sessionId;
 
         if (empty($sessionId)) {
             $sessionId = api_get_session_id();
+        }
+
+        if (empty($courseInfo)) {
+            return false;
         }
 
         $itemInfo = api_get_item_property_info(

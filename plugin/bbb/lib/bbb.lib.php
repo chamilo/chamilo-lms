@@ -722,8 +722,11 @@ class bbb
 
                 $actionLinks = $this->getActionLinks($meetingDB, $record, $isGlobal, $isAdminReport);
                 $item['show_links']  = $recordLink;
-                $item['action_links'] = implode(PHP_EOL, $actionLinks);
+            } else {
+                $actionLinks = $this->getActionLinks($meetingDB, []);
             }
+
+            $item['action_links'] = implode(PHP_EOL, $actionLinks);
 
             $item['created_at'] = api_convert_and_format_date($meetingDB['created_at']);
             // created_at

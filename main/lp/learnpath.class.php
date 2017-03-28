@@ -6452,17 +6452,27 @@ class learnpath
                 case 'sco':
                     if (isset($_GET['view']) && $_GET['view'] == 'build') {
                         $return .= $this->display_manipulate($item_id, $row['item_type']);
-                        $return .= $this->display_item_form($row['item_type'], get_lang('EditCurrentChapter') . ' :', 'edit', $item_id, $row);
+                        $return .= $this->display_item_form(
+                            $row['item_type'],
+                            get_lang('EditCurrentChapter').' :',
+                            'edit',
+                            $item_id,
+                            $row
+                        );
                     } else {
-                        $return .= $this->display_item_small_form($row['item_type'], get_lang('EditCurrentChapter') . ' :', $row);
+                        $return .= $this->display_item_small_form(
+                            $row['item_type'],
+                            get_lang('EditCurrentChapter').' :',
+                            $row
+                        );
                     }
                     break;
                 case TOOL_DOCUMENT:
                     $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
                     $sql = "SELECT lp.*, doc.path as dir
-                            FROM " . $tbl_lp_item . " as lp
-                            LEFT JOIN " . $tbl_doc . " as doc
-                            ON doc.id = lp.path
+                            FROM $tbl_lp_item as lp
+                            LEFT JOIN $tbl_doc as doc
+                            ON (doc.id = lp.path AND lp.c_id = doc.c_id)
                             WHERE
                                 lp.c_id = $course_id AND
                                 doc.c_id = $course_id AND
@@ -6491,8 +6501,8 @@ class learnpath
                     Session::write('finalItem', true);
                     $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
                     $sql = "SELECT lp.*, doc.path as dir
-                            FROM " . $tbl_lp_item . " as lp
-                            LEFT JOIN " . $tbl_doc . " as doc
+                            FROM $tbl_lp_item as lp
+                            LEFT JOIN $tbl_doc as doc
                             ON (doc.id = lp.path AND lp.c_id = doc.c_id)
                             WHERE
                                 lp.c_id = $course_id AND

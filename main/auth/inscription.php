@@ -25,9 +25,9 @@ $allowedFields = [
 ];
 
 $allowedFieldsConfiguration = api_get_configuration_value('allow_fields_inscription');
-
 if ($allowedFieldsConfiguration !== false) {
-    $allowedFields = $allowedFieldsConfiguration;
+    $allowedFields = isset($allowedFieldsConfiguration['fields']) ? $allowedFieldsConfiguration['fields'] : [];
+    $allowedFields['extra_fields'] = isset($allowedFieldsConfiguration['extra_fields']) ? $allowedFieldsConfiguration['extra_fields'] : [];
 }
 
 $gMapsPlugin = GoogleMapsPlugin::create();
@@ -70,7 +70,6 @@ $sessionRedirect = isset($_REQUEST['s']) && !empty($_REQUEST['s']) ? $_REQUEST['
 $onlyOneCourseSessionRedirect = isset($_REQUEST['cr']) && !empty($_REQUEST['cr']) ? $_REQUEST['cr'] : null;
 
 if (api_get_configuration_value('allow_redirect_to_session_after_inscription_about')) {
-
     if (!empty($sessionRedirect)) {
         Session::write('session_redirect', $sessionRedirect);
         Session::write('only_one_course_session_redirect', $onlyOneCourseSessionRedirect);
@@ -333,9 +332,10 @@ if ($user_already_registered_show_terms === false) {
     }
 
     // EXTRA FIELDS
-    if (array_key_exists('extra_fields', $allowedFields) || in_array('extra_fields', $allowedFields)) {
+    if (array_key_exists('extra_fields', $allowedFields) ||
+        in_array('extra_fields', $allowedFields)
+    ) {
         $extraField = new ExtraField('user');
-
         $extraFieldList = isset($allowedFields['extra_fields']) && is_array($allowedFields['extra_fields']) ? $allowedFields['extra_fields'] : [];
         $returnParams = $extraField->addElements($form, 0, [], false, false, $extraFieldList);
     }

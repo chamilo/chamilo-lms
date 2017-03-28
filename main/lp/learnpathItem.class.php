@@ -106,7 +106,6 @@ class learnpathItem
             );
         }
         $id = intval($id);
-
         if (empty($item_content)) {
             if (empty($course_id)) {
                 $course_id = api_get_course_int_id();
@@ -150,17 +149,17 @@ class learnpathItem
         $this->db_id = $id;
 
         // Load children list
-        $sql = "SELECT id FROM $items_table
-                WHERE
-                    c_id = $course_id AND
-                    lp_id = ".$this->lp_id." AND
-                    parent_item_id = $id";
-        $res = Database::query($sql);
-        if (Database::num_rows($res) < 1) {
-            // Nothing to do (no children)
-        } else {
-            while ($row = Database::fetch_assoc($res)) {
-                $this->children[] = $row['id'];
+        if (!empty($this->lp_id)) {
+            $sql = "SELECT id FROM $items_table
+                    WHERE
+                        c_id = $course_id AND
+                        lp_id = ".$this->lp_id." AND
+                        parent_item_id = $id";
+            $res = Database::query($sql);
+            if (Database::num_rows($res) > 0) {
+                while ($row = Database::fetch_assoc($res)) {
+                    $this->children[] = $row['id'];
+                }
             }
         }
 

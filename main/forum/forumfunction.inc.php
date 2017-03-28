@@ -2188,6 +2188,7 @@ function get_thread_users_qualify($thread_id)
     $t_session_rel_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
     $course_id = api_get_course_int_id();
+    $sessionId = api_get_session_id();
 
     $is_western_name_order = api_is_western_name_order();
     if ($is_western_name_order) {
@@ -2196,8 +2197,8 @@ function get_thread_users_qualify($thread_id)
         $orderby = 'ORDER BY user.lastname, user.firstname';
     }
 
-    if (api_get_session_id()) {
-        $session_info = api_get_session_info(api_get_session_id());
+    if ($sessionId) {
+        $session_info = api_get_session_info($sessionId);
         $user_to_avoid = "'".$session_info['id_coach']."', '".$session_info['session_admin_id']."'";
         //not showing coaches
         $sql = "SELECT DISTINCT post.poster_id, user.lastname, user.firstname, post.thread_id,user.id,qualify.qualify
@@ -2209,7 +2210,7 @@ function get_thread_users_qualify($thread_id)
                     AND scu.user_id NOT IN ($user_to_avoid)
                     AND qualify.thread_id = ".intval($thread_id)."
                     AND post.thread_id = ".intval($thread_id)."
-                    AND session_id = ".api_get_session_id()."
+                    AND scu.session_id = $sessionId
                     AND scu.c_id = ".$course_id." AND
                     qualify.c_id = $course_id AND
                     post.c_id = $course_id

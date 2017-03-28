@@ -45,7 +45,7 @@ class Accessurleditcoursestourl
                    ' LIMIT 11';
             $rs = Database::query($sql);
             $i=0;
-            while ($course = Database :: fetch_array($rs)) {
+            while ($course = Database::fetch_array($rs)) {
                 $i++;
                 if ($i<=10) {
                      $return .= '<a href="javascript: void(0);" onclick="javascript: add_user_to_url(\''.addslashes($course['code']).'\',\''.addslashes($course['title']).' ('.addslashes($course['code']).')'.'\')">'.$course['title'].' ('.$course['code'].')</a><br />';

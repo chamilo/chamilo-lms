@@ -221,7 +221,7 @@ class BlockDaily extends Block
             }
 
             // Score
-            $tbl_grade_categories = Database :: get_main_table(
+            $tbl_grade_categories = Database::get_main_table(
                 TABLE_MAIN_GRADEBOOK_CATEGORY
             );
             $sql = "SELECT id from " . $tbl_grade_categories . "

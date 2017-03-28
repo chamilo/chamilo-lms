@@ -2,11 +2,11 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *	Class FillBlanks
+ *  Class FillBlanks
  *
- *	@author Eric Marguin
- * 	@author Julio Montoya multiple fill in blank option added
- *	@package chamilo.exercise
+ * @author Eric Marguin
+ * @author Julio Montoya multiple fill in blank option added
+ * @package chamilo.exercise
  **/
 class FillBlanks extends Question
 {
@@ -36,7 +36,7 @@ class FillBlanks extends Question
         if (!empty($this->id)) {
             $objectAnswer = new Answer($this->id);
             $answer = $objectAnswer->selectAnswer(1);
-            $listAnswersInfo = FillBlanks::getAnswerInfo($answer);
+            $listAnswersInfo = self::getAnswerInfo($answer);
             if ($listAnswersInfo['switchable']) {
                 $defaults['multiple_answer'] = 1;
             } else {
@@ -357,7 +357,7 @@ class FillBlanks extends Question
         //$answer = api_html_entity_decode($answer, ENT_QUOTES, $charset);
         //$answer = htmlentities(api_utf8_encode($answer));
 
-        // remove the :: eventually written by the user
+        // remove the "::" eventually written by the user
         $answer = str_replace('::', '', $answer);
 
         // remove starting and ending space and &nbsp;
@@ -430,7 +430,7 @@ class FillBlanks extends Question
 
             // input width
             $answer .= ":";
-            for ($i=0; $i < $nb; ++$i) {
+            for ($i = 0; $i < $nb; ++$i) {
                 // enter the width of input for word $i
                 $answer .= $form->getSubmitValue('sizeofinput['.$i.']');
                 // not the last word, add ","
@@ -844,24 +844,24 @@ class FillBlanks extends Question
         $tabUserResult = array();
         // foreach attempts for all students starting with his older attempt
         while ($data = Database::fetch_array($res)) {
-            $tabAnswer = FillBlanks::getAnswerInfo($data['answer'], true);
+            $tabAnswer = self::getAnswerInfo($data['answer'], true);
 
             // for each bracket to find in this question
             foreach ($tabAnswer['studentanswer'] as $bracketNumber => $studentAnswer) {
                 if ($tabAnswer['studentanswer'][$bracketNumber] != '') {
                     // student has answered this bracket, cool
-                    switch (FillBlanks::getFillTheBlankAnswerType($tabAnswer['tabwords'][$bracketNumber])) {
+                    switch (self::getFillTheBlankAnswerType($tabAnswer['tabwords'][$bracketNumber])) {
                         case self::FILL_THE_BLANK_MENU:
                             // get the indice of the choosen answer in the menu
                             // we know that the right answer is the first entry of the menu, ie 0
                             // (remember, menu entries are shuffled when taking the test)
-                            $tabUserResult[$data['user_id']][$bracketNumber] = FillBlanks::getFillTheBlankMenuAnswerNum(
+                            $tabUserResult[$data['user_id']][$bracketNumber] = self::getFillTheBlankMenuAnswerNum(
                                 $tabAnswer['tabwords'][$bracketNumber],
                                 $tabAnswer['studentanswer'][$bracketNumber]
                             );
                             break;
                         default:
-                            if (FillBlanks::isGoodStudentAnswer(
+                            if (self::isGoodStudentAnswer(
                                 $tabAnswer['studentanswer'][$bracketNumber],
                                 $tabAnswer['tabwords'][$bracketNumber]
                             )
@@ -1165,8 +1165,14 @@ class FillBlanks extends Question
      * @param bool $showTotalScoreAndUserChoices
      * @return string
      */
-    public static function getHtmlAnswer($answer, $correct, $right, $feedbackType, $resultsDisabled = false, $showTotalScoreAndUserChoices = false)
-    {
+    public static function getHtmlAnswer(
+        $answer,
+        $correct,
+        $right,
+        $feedbackType,
+        $resultsDisabled = false,
+        $showTotalScoreAndUserChoices = false
+    ) {
         $hideExpectedAnswer = false;
         if ($feedbackType == 0 && ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ONLY)) {
             $hideExpectedAnswer = true;
@@ -1184,14 +1190,14 @@ class FillBlanks extends Question
         if (!$right) {
             $style = "color: red; text-decoration: line-through;";
         }
-        $type = FillBlanks::getFillTheBlankAnswerType($correct);
+        $type = self::getFillTheBlankAnswerType($correct);
         switch ($type) {
             case self::FILL_THE_BLANK_MENU:
                 $correctAnswerHtml = '';
-                $listPossibleAnswers = FillBlanks::getFillTheBlankMenuAnswers($correct, false);
+                $listPossibleAnswers = self::getFillTheBlankMenuAnswers($correct, false);
                 $correctAnswerHtml .= "<span style='color: green'>".$listPossibleAnswers[0]."</span>";
                 $correctAnswerHtml .= " <span style='font-weight:normal'>(";
-                for ($i=1; $i < count($listPossibleAnswers); $i++) {
+                for ($i = 1; $i < count($listPossibleAnswers); $i++) {
                     $correctAnswerHtml .= $listPossibleAnswers[$i];
                     if ($i != count($listPossibleAnswers) - 1) {
                         $correctAnswerHtml .= " | ";
@@ -1233,9 +1239,21 @@ class FillBlanks extends Question
      *
      * @return string
      */
-    public static function getHtmlRightAnswer($answer, $correct, $feedbackType, $resultsDisabled = false, $showTotalScoreAndUserChoices = false)
-    {
-        return self::getHtmlAnswer($answer, $correct, true, $feedbackType, $resultsDisabled, $showTotalScoreAndUserChoices);
+    public static function getHtmlRightAnswer(
+        $answer,
+        $correct,
+        $feedbackType,
+        $resultsDisabled = false,
+        $showTotalScoreAndUserChoices = false
+    ) {
+        return self::getHtmlAnswer(
+            $answer,
+            $correct,
+            true,
+            $feedbackType,
+            $resultsDisabled,
+            $showTotalScoreAndUserChoices
+        );
     }
 
     /**
@@ -1246,9 +1264,21 @@ class FillBlanks extends Question
      *
      * @return string
      */
-    public static function getHtmlWrongAnswer($answer, $correct, $feedbackType, $resultsDisabled = false, $showTotalScoreAndUserChoices = false)
-    {
-        return self::getHtmlAnswer($answer, $correct, false, $feedbackType, $resultsDisabled, $showTotalScoreAndUserChoices);
+    public static function getHtmlWrongAnswer(
+        $answer,
+        $correct,
+        $feedbackType,
+        $resultsDisabled = false,
+        $showTotalScoreAndUserChoices = false
+    ) {
+        return self::getHtmlAnswer(
+            $answer,
+            $correct,
+            false,
+            $feedbackType,
+            $resultsDisabled,
+            $showTotalScoreAndUserChoices
+        );
     }
 
     /**
@@ -1258,13 +1288,13 @@ class FillBlanks extends Question
      */
     public static function isCorrect($answerText)
     {
-        $answerInfo = FillBlanks::getAnswerInfo($answerText, true);
+        $answerInfo = self::getAnswerInfo($answerText, true);
         $correctAnswerList = $answerInfo['tabwords'];
         $studentAnswer = $answerInfo['studentanswer'];
         $isCorrect = true;
 
         foreach ($correctAnswerList as $i => $correctAnswer) {
-            $isGoodStudentAnswer = FillBlanks::isGoodStudentAnswer($studentAnswer[$i], $correctAnswer);
+            $isGoodStudentAnswer = self::isGoodStudentAnswer($studentAnswer[$i], $correctAnswer);
             $isCorrect = $isCorrect && $isGoodStudentAnswer;
         }
 

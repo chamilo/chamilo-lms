@@ -81,7 +81,7 @@ class StudentPublicationLink extends AbstractLink
         if (empty($this->course_code)) {
             die('Error in get_not_created_links() : course code not set');
         }
-        $tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+        $tbl_grade_links = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
         $sql = 'SELECT id, url from '.$this->get_studpub_table()
             .' pup WHERE c_id = '.$this->course_id.' AND has_properties != '."''".' AND id NOT IN'
@@ -241,6 +241,7 @@ class StudentPublicationLink extends AbstractLink
                 $dql .= ' ORDER BY a.sentDate DESC';
                 break;
             case 'first':
+                //no break
             default:
                 // first attempt
                 $dql .= ' ORDER BY a.id';
@@ -312,7 +313,7 @@ class StudentPublicationLink extends AbstractLink
      */
     private function get_studpub_table()
     {
-        return $this->studpub_table = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
+        return $this->studpub_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     }
 
     /**
@@ -320,7 +321,7 @@ class StudentPublicationLink extends AbstractLink
      */
     private function get_itemprop_table()
     {
-        return $this->itemprop_table = Database :: get_course_table(TABLE_ITEM_PROPERTY);
+        return $this->itemprop_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
     }
 
     public function needs_name_and_description()

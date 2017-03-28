@@ -21,10 +21,7 @@ $nameTools = get_lang('Forum');
 $forumUrl = api_get_path(WEB_CODE_PATH).'forum/';
 
 // Are we in a lp ?
-$origin = '';
-if (isset($_GET['origin'])) {
-    $origin =  Security::remove_XSS($_GET['origin']);
-}
+$origin = api_get_origin();
 $my_search = null;
 $gradebook = null;
 
@@ -78,7 +75,7 @@ $(function() {
     
 </script>';
 
-if ($origin == 'group') {
+if (!empty($groupId)) {
     $interbreadcrumb[] = array(
         'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
         'name' => get_lang('Groups')

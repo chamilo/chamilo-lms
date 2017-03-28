@@ -569,4 +569,21 @@ class ExerciseShowFunctions
         </tr>
         <?php
     }
+
+    public static function displayAnnotationAnswer(
+        $feedback_type,
+	    $exe_id,
+	    $questionId,
+	    $questionScore = null,
+	    $results_disabled = 0
+    )
+    {
+        $comments = Event::get_comments($exe_id, $questionId);
+
+        if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
+            if ($questionScore <= 0 && empty($comments)) {
+                echo '<br>'.Display::return_message(get_lang('notCorrectedYet'));
+            }
+        }
+    }
 }

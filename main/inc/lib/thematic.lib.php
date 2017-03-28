@@ -40,7 +40,7 @@ class Thematic
      */
     public function get_number_of_thematics()
     {
-        $tbl_thematic = Database :: get_course_table(TABLE_THEMATIC);
+        $tbl_thematic = Database::get_course_table(TABLE_THEMATIC);
         $condition_session = '';
         if (!api_get_session_id()) {
             $condition_session = api_get_session_condition(0);
@@ -65,7 +65,7 @@ class Thematic
      */
     public function get_thematic_data($from, $number_of_items, $column, $direction)
     {
-        $tbl_thematic = Database :: get_course_table(TABLE_THEMATIC);
+        $tbl_thematic = Database::get_course_table(TABLE_THEMATIC);
         $condition_session = '';
         if (!api_get_session_id()) {
             $condition_session = api_get_session_condition(0);
@@ -157,7 +157,7 @@ class Thematic
     public function get_max_thematic_item($use_session = true)
     {
         // Database table definition
-        $tbl_thematic = Database :: get_course_table(TABLE_THEMATIC);
+        $tbl_thematic = Database::get_course_table(TABLE_THEMATIC);
         $session_id   = api_get_session_id();
         if ($use_session) {
             $condition_session = api_get_session_condition($session_id);
@@ -183,7 +183,7 @@ class Thematic
     public function move_thematic($direction, $thematic_id)
     {
         // Database table definition
-        $tbl_thematic = Database :: get_course_table(TABLE_THEMATIC);
+        $tbl_thematic = Database::get_course_table(TABLE_THEMATIC);
 
         // sort direction
         if ($direction == 'up') {
@@ -469,7 +469,7 @@ class Thematic
     public static function get_number_of_thematic_advances()
     {
         global $thematic_id;
-        $tbl_thematic_advance = Database :: get_course_table(TABLE_THEMATIC_ADVANCE);
+        $tbl_thematic_advance = Database::get_course_table(TABLE_THEMATIC_ADVANCE);
         $course_id = api_get_course_int_id();
 
         $sql = "SELECT COUNT(id) AS total_number_of_items 
@@ -493,7 +493,7 @@ class Thematic
     public static function get_thematic_advance_data($from, $number_of_items, $column, $direction)
     {
         global $thematic_id;
-        $tbl_thematic_advance = Database :: get_course_table(TABLE_THEMATIC_ADVANCE);
+        $tbl_thematic_advance = Database::get_course_table(TABLE_THEMATIC_ADVANCE);
         $column = intval($column);
         $from   = intval($from);
         $number_of_items = intval($number_of_items);

@@ -326,7 +326,7 @@ class Category implements GradebookItem
     {
         if (isset($id) && (int)$id === 0) {
             $cats = array();
-            $cats[] = Category::create_root_category();
+            $cats[] = self::create_root_category();
             return $cats;
         }
 
@@ -335,7 +335,7 @@ class Category implements GradebookItem
         $session_id = intval($session_id);
 
         if (!empty($session_id)) {
-            $tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+            $tbl_grade_categories = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
             $sql = 'SELECT id, course_code
                     FROM '.$tbl_grade_categories. '
                     WHERE session_id = '.$session_id;
@@ -345,7 +345,7 @@ class Category implements GradebookItem
                 while ($data_session = Database::fetch_array($result_session)) {
                     $parent_id = $data_session['id'];
                     if ($data_session['course_code'] == $courseCode) {
-                        $categories = Category::load($parent_id);
+                        $categories = self::load($parent_id);
                         $categoryList = array_merge($categoryList, $categories);
                     }
                 }
@@ -379,12 +379,12 @@ class Category implements GradebookItem
         // a root category object (in memory)
         if (isset($id) && (int)$id === 0) {
             $cats = array();
-            $cats[] = Category::create_root_category();
+            $cats[] = self::create_root_category();
 
             return $cats;
         }
 
-        $tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+        $tbl_grade_categories = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $sql = 'SELECT * FROM '.$tbl_grade_categories;
         $paramcount = 0;
         if (isset($id)) {
@@ -460,7 +460,7 @@ class Category implements GradebookItem
 
         $categories = array();
         if (Database::num_rows($result) > 0) {
-            $categories = Category::create_category_objects_from_sql_result(
+            $categories = self::create_category_objects_from_sql_result(
                 $result
             );
         }
@@ -720,7 +720,7 @@ class Category implements GradebookItem
      */
     public function delete()
     {
-        $tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+        $tbl_grade_categories = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $sql = 'DELETE FROM '.$tbl_grade_categories.' WHERE id = '.intval($this->id);
         Database::query($sql);
     }
@@ -730,7 +730,7 @@ class Category implements GradebookItem
      */
     public function update_category_delete($course_id)
     {
-        $tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+        $tbl_grade_categories = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $sql = 'UPDATE '.$tbl_grade_categories.' SET 
                     visible = 3
                 WHERE course_code ="'.Database::escape_string($course_id).'"';
@@ -742,7 +742,7 @@ class Category implements GradebookItem
      */
     public function show_message_resource_delete($course_id)
     {
-        $tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+        $tbl_grade_categories = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $sql = 'SELECT count(*) AS num 
                 FROM '.$tbl_grade_categories.'
                 WHERE
@@ -765,7 +765,7 @@ class Category implements GradebookItem
         if ($selectcat == '') {
             return null;
         } else {
-            $tbl_category = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+            $tbl_category = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
             $sql = 'SELECT name,description,user_id,course_code,parent_id,weight,visible,certif_min_score,session_id, generate_certificates, is_requirement
                     FROM '.$tbl_category.' c
                     WHERE c.id='.intval($selectcat);
@@ -787,18 +787,18 @@ class Category implements GradebookItem
             $name = $this->name;
             $parent = $this->parent;
         }
-        $tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+        $tbl_grade_categories = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $sql = 'SELECT count(id) AS number'
             .' FROM '.$tbl_grade_categories
             ." WHERE name = '".Database::escape_string($name)."'";
 
         if (api_is_allowed_to_edit()) {
-            $parent = Category::load($parent);
+            $parent = self::load($parent);
             $code = $parent[0]->get_course_code();
             $courseInfo = api_get_course_info($code);
             $courseId = $courseInfo['real_id'];
             if (isset($code) && $code != '0') {
-                $main_course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+                $main_course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
                 $sql .= ' AND user_id IN (
                             SELECT user_id FROM '.$main_course_user_table.'
                             WHERE c_id = '.$courseId.' AND status = '.COURSEMANAGER.'
@@ -1107,7 +1107,7 @@ class Category implements GradebookItem
      */
     public function delete_all()
     {
-        $cats  = Category::load(null, null, $this->course_code, $this->id, null);
+        $cats  = self::load(null, null, $this->course_code, $this->id, null);
         $evals = Evaluation::load(null, null, $this->course_code, $this->id, null);
         $links = LinkFactory::load(null, null, null, null, $this->course_code, $this->id, null);
         if (!empty($cats)) {
@@ -1140,9 +1140,9 @@ class Category implements GradebookItem
      */
     public function get_root_categories_for_student($stud_id, $course_code = null, $session_id = null)
     {
-        $main_course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-        $courseTable = Database :: get_main_table(TABLE_MAIN_COURSE);
-        $tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+        $main_course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
+        $tbl_grade_categories = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
 
         $sql = "SELECT * FROM $tbl_grade_categories WHERE parent_id = 0";
 
@@ -1202,11 +1202,11 @@ class Category implements GradebookItem
             }
         }
         $result = Database::query($sql);
-        $cats = Category::create_category_objects_from_sql_result($result);
+        $cats = self::create_category_objects_from_sql_result($result);
 
         // course independent categories
         if (empty($course_code)) {
-            $cats = Category::get_independent_categories_with_result_for_student(
+            $cats = self::get_independent_categories_with_result_for_student(
                 0,
                 $stud_id,
                 $cats
@@ -1228,12 +1228,12 @@ class Category implements GradebookItem
     public function get_root_categories_for_teacher($user_id, $course_code = null, $session_id = null)
     {
         if ($user_id == null) {
-            return Category::load(null,null,$course_code,0,null,$session_id);
+            return self::load(null,null,$course_code,0,null,$session_id);
         }
 
-        $courseTable = Database :: get_main_table(TABLE_MAIN_COURSE);
-        $main_course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-        $tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
+        $main_course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $tbl_grade_categories = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
 
         $sql = 'SELECT * FROM '.$tbl_grade_categories.'
                 WHERE parent_id = 0';
@@ -1253,10 +1253,10 @@ class Category implements GradebookItem
                 )';
         }
         $result = Database::query($sql);
-        $cats = Category::create_category_objects_from_sql_result($result);
+        $cats = self::create_category_objects_from_sql_result($result);
         // course independent categories
         if (isset($course_code)) {
-            $indcats = Category::load(
+            $indcats = self::load(
                 null,
                 $user_id,
                 $course_code,
@@ -1306,7 +1306,7 @@ class Category implements GradebookItem
             $targets[] = $root;
 
             if (isset($this->course_code) && !empty($this->course_code)) {
-                $crscats = Category::load(null,null,$this->course_code,0);
+                $crscats = self::load(null,null,$this->course_code,0);
                 foreach ($crscats as $cat) {
                     if ($this->can_be_moved_to_cat($cat)) {
                         $targets[] = array ($cat->get_id(), $cat->get_name(), $level+1);
@@ -1315,7 +1315,7 @@ class Category implements GradebookItem
                 }
             }
 
-            $indcats = Category::load(null,$user,0,0);
+            $indcats = self::load(null,$user,0,0);
             foreach ($indcats as $cat) {
                 if ($this->can_be_moved_to_cat($cat)) {
                     $targets[] = array ($cat->get_id(), $cat->get_name(), $level+1);
@@ -1333,7 +1333,7 @@ class Category implements GradebookItem
      */
     private function add_target_subcategories($targets, $level, $catid)
     {
-        $subcats = Category::load(null,null,null,$catid);
+        $subcats = self::load(null,null,null,$catid);
         foreach ($subcats as $cat) {
             if ($this->can_be_moved_to_cat($cat)) {
                 $targets[] = array ($cat->get_id(), $cat->get_name(), $level+1);
@@ -1377,7 +1377,7 @@ class Category implements GradebookItem
      */
     private function apply_course_code_to_children()
     {
-        $cats = Category::load(null, null, null, $this->id, null);
+        $cats = self::load(null, null, null, $this->id, null);
         $evals = Evaluation::load(null, null, null, $this->id, null);
         $links = LinkFactory::load(null,null,null,null,null,$this->id,null);
 
@@ -1410,17 +1410,17 @@ class Category implements GradebookItem
         // course or platform admin
         if (api_is_allowed_to_edit()) {
             $user = (api_is_platform_admin() ? null : api_get_user_id());
-            $cats = Category::get_root_categories_for_teacher($user);
+            $cats = self::get_root_categories_for_teacher($user);
             foreach ($cats as $cat) {
                 $targets[] = array ($cat->get_id(), $cat->get_name(), $level+1);
-                $targets = Category::add_subtree($targets, $level+1, $cat->get_id(),null);
+                $targets = self::add_subtree($targets, $level+1, $cat->get_id(),null);
             }
         } else {
             // student
-            $cats = Category::get_root_categories_for_student(api_get_user_id());
+            $cats = self::get_root_categories_for_student(api_get_user_id());
             foreach ($cats as $cat) {
                 $targets[] = array ($cat->get_id(), $cat->get_name(), $level+1);
-                $targets = Category::add_subtree($targets, $level+1, $cat->get_id(), 1);
+                $targets = self::add_subtree($targets, $level+1, $cat->get_id(), 1);
             }
         }
 
@@ -1434,12 +1434,12 @@ class Category implements GradebookItem
      */
     private function add_subtree ($targets, $level, $catid, $visible)
     {
-        $subcats = Category::load(null,null,null,$catid,$visible);
+        $subcats = self::load(null,null,null,$catid,$visible);
 
         if (!empty($subcats)) {
             foreach ($subcats as $cat) {
                 $targets[] = array ($cat->get_id(), $cat->get_name(), $level+1);
-                $targets = Category::add_subtree($targets, $level+1, $cat->get_id(),$visible);
+                $targets = self::add_subtree($targets, $level+1, $cat->get_id(),$visible);
             }
         }
 
@@ -1453,9 +1453,9 @@ class Category implements GradebookItem
      */
     public function get_not_created_course_categories ($user_id)
     {
-        $tbl_main_courses = Database :: get_main_table(TABLE_MAIN_COURSE);
-        $tbl_main_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-        $tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+        $tbl_main_courses = Database::get_main_table(TABLE_MAIN_COURSE);
+        $tbl_main_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $tbl_grade_categories = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
 
         $sql = 'SELECT DISTINCT(code), title
                 FROM '.$tbl_main_courses.' cc, '.$tbl_main_course_user.' cu'
@@ -1488,8 +1488,8 @@ class Category implements GradebookItem
      */
     public function get_all_courses ($user_id)
     {
-        $tbl_main_courses = Database :: get_main_table(TABLE_MAIN_COURSE);
-        $tbl_main_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+        $tbl_main_courses = Database::get_main_table(TABLE_MAIN_COURSE);
+        $tbl_main_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $sql = 'SELECT DISTINCT(code), title
                 FROM '.$tbl_main_courses.' cc, '.$tbl_main_course_user.' cu
                 WHERE cc.id = cu.c_id AND cu.status = '.COURSEMANAGER;
@@ -1511,7 +1511,7 @@ class Category implements GradebookItem
      */
     public function apply_visibility_to_children()
     {
-        $cats = Category::load(null, null, null, $this->id, null);
+        $cats = self::load(null, null, null, $this->id, null);
         $evals = Evaluation::load(null, null, null, $this->id, null);
         $links = LinkFactory::load(null,null,null,null,null,$this->id,null);
         if (!empty($cats)) {
@@ -1544,7 +1544,7 @@ class Category implements GradebookItem
         if (count($evals) != 0) {
             return true;
         } else {
-            $cats = Category::load(
+            $cats = self::load(
                 null,
                 null,
                 null,
@@ -1572,7 +1572,7 @@ class Category implements GradebookItem
     {
         $creator = api_is_allowed_to_edit() && !api_is_platform_admin() ? api_get_user_id() : null;
 
-        $crsindcats = Category::load(
+        $crsindcats = self::load(
             null,
             $creator,
             '0',
@@ -1611,13 +1611,13 @@ class Category implements GradebookItem
     public function get_subcategories($stud_id = null, $course_code = null, $session_id = null, $order = null)
     {
         if (!empty($session_id)) {
-            /*$tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+            /*$tbl_grade_categories = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
             $sql = 'SELECT id FROM '.$tbl_grade_categories. ' WHERE session_id = '.$session_id;
             $result_session = Database::query($sql);
             if (Database::num_rows($result_session) > 0) {
                 $data_session = Database::fetch_array($result_session);
                 $parent_id = $data_session['id'];
-                return Category::load(null, null, null, $parent_id, null, null, $order);
+                return self::load(null, null, null, $parent_id, null, null, $order);
             }*/
         }
 
@@ -1625,9 +1625,9 @@ class Category implements GradebookItem
         if (isset($stud_id)) {
             // Special case: this is the root
             if ($this->id == 0) {
-                return Category::get_root_categories_for_student($stud_id, $course_code, $session_id);
+                return self::get_root_categories_for_student($stud_id, $course_code, $session_id);
             } else {
-                return Category::load(
+                return self::load(
                     null,
                     null,
                     $course_code,
@@ -1647,17 +1647,17 @@ class Category implements GradebookItem
                     return $this->get_root_categories_for_teacher(api_get_user_id(), $course_code, $session_id, false);
                     // inside a course
                 } elseif (!empty($this->course_code)) {
-                    return Category::load(null, null, $this->course_code, $this->id, null, $session_id, $order);
+                    return self::load(null, null, $this->course_code, $this->id, null, $session_id, $order);
                 } elseif (!empty($course_code)) {
-                    return Category::load(null, null, $course_code, $this->id, null, $session_id, $order);
+                    return self::load(null, null, $course_code, $this->id, null, $session_id, $order);
                     // course independent
                 } else {
-                    return Category::load(null, api_get_user_id(), 0, $this->id, null);
+                    return self::load(null, api_get_user_id(), 0, $this->id, null);
                 }
             } elseif (api_is_platform_admin()) {
                 // platform admin
                 // we explicitly avoid listing subcats from another session
-                return Category::load(null, null, $course_code, $this->id, null, $session_id, $order);
+                return self::load(null, null, $course_code, $this->id, null, $session_id, $order);
             }
         }
 
@@ -1820,12 +1820,12 @@ class Category implements GradebookItem
      */
     public function getCategories($catId)
     {
-        $tblGradeCategories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+        $tblGradeCategories = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $sql = 'SELECT * FROM '.$tblGradeCategories.'
                 WHERE parent_id = '.intval($catId);
 
         $result = Database::query($sql);
-        $categories = Category::create_category_objects_from_sql_result($result);
+        $categories = self::create_category_objects_from_sql_result($result);
 
         return $categories;
     }
@@ -1937,8 +1937,9 @@ class Category implements GradebookItem
         $courseId = api_get_course_int_id();
         $courseCode = api_get_course_id();
         $sessionId = api_get_session_id();
+
         // Generating the total score for a course
-        $cats_course = Category::load(
+        $cats_course = self::load(
             $category_id,
             null,
             null,
@@ -1954,7 +1955,7 @@ class Category implements GradebookItem
         //@todo move these in a function
         $sum_categories_weight_array = array();
         if (isset($cats_course) && !empty($cats_course)) {
-            $categories = Category::load(null, null, null, $category_id);
+            $categories = self::load(null, null, null, $category_id);
             if (!empty($categories)) {
                 foreach ($categories as $subCategory) {
                     $sum_categories_weight_array[$subCategory->get_id()] = $subCategory->get_weight();
@@ -1965,8 +1966,7 @@ class Category implements GradebookItem
         }
 
         $main_weight = $cats_course[0]->get_weight();
-
-        $cattotal = Category::load($category_id);
+        $cattotal = self::load($category_id);
         $scoretotal = $cattotal[0]->calc_score($user_id);
 
         // Do not remove this the gradebook/lib/fe/gradebooktable.class.php
@@ -1977,7 +1977,16 @@ class Category implements GradebookItem
         // A student always sees only the teacher's repartition
         $scoretotal_display = $scoredisplay->display_score($scoretotal, SCORE_DIV_PERCENT);
 
-        if (!self::userFinishedCourse($user_id, $cats_course[0], 0, $courseCode, $sessionId, true)) {
+        $userFinishedCourse = self::userFinishedCourse(
+            $user_id,
+            $cats_course[0],
+            0,
+            $courseCode,
+            $sessionId,
+            true
+        );
+
+        if (!$userFinishedCourse) {
             return false;
         }
 
@@ -2033,8 +2042,12 @@ class Category implements GradebookItem
 
             if (!empty($fileWasGenerated)) {
                 $url = api_get_path(WEB_PATH) . 'certificates/index.php?id=' . $my_certificate['id'];
-
-                $certificates = Display::toolbarButton(get_lang('DisplayCertificate'), $url, 'eye', 'primary');
+                $certificates = Display::toolbarButton(
+                    get_lang('DisplayCertificate'),
+                    $url,
+                    'eye',
+                    'primary'
+                );
 
                 $exportToPDF = Display::url(
                     Display::return_icon(
@@ -2066,6 +2079,7 @@ class Category implements GradebookItem
                     );
                 }
             }
+
             return $html;
         }
     }
@@ -2182,7 +2196,7 @@ class Category implements GradebookItem
         $sessionId = empty($sessionId) ? api_get_session_id() : $sessionId;
 
         if (is_null($category) && !empty($categoryId)) {
-            $cats_course = Category::load(
+            $cats_course = self::load(
                 $categoryId,
                 null,
                 $courseCode,
@@ -2258,7 +2272,7 @@ class Category implements GradebookItem
      */
     private static function calculateCurrentScore($userId, $categoryId, $courseCode, $sessionId)
     {
-        $cats_course = Category::load(
+        $cats_course = self::load(
             $categoryId,
             null,
             $courseCode,

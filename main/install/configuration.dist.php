@@ -214,11 +214,15 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 
 // Only shows the fields in this list
 /*$_configuration['allow_fields_inscription'] = [
-    'official_code',
-    'phone',
-    'status',
-    'language',
-    'extra_fields'
+    'fields' => [
+        'official_code',
+        'phone',
+        'status',
+        'language'
+    ],
+    'extra_fields' => [
+        'birthday'
+    ]
 ];*/
 // Boost option to ignore encoding check for learning paths
 //$_configuration['lp_fixed_encoding'] = 'false';
@@ -292,3 +296,5 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 // $_configuration['certificate_pdf_orientation'] = 'landscape'; // It can be 'portrait' or 'landscape'
 // Hide main navigation menu (left column in userportal)
 // $_configuration['hide_main_navigation_menu'] = false;
+// PDF image dpi value
+// $_configuration['pdf_img_dpi'] = 96;

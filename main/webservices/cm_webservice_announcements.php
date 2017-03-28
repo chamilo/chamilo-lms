@@ -63,7 +63,7 @@ class WSCMAnnouncements extends WSCM
                     $field_table = "content";
                     $announcements[0][$field_table] = nl2br_revert($announcements[0][$field_table]);
                     break;
-                default :
+                default:
                     $field_table = "title";
             }
 

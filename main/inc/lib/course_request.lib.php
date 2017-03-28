@@ -29,7 +29,7 @@ class CourseRequestManager
         if ($code_exists = CourseManager::course_code_exists($wanted_course_code)) {
             return $code_exists;
         }
-        $table_course_request = Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST);
+        $table_course_request = Database::get_main_table(TABLE_MAIN_COURSE_REQUEST);
         $wanted_course_code = Database::escape_string($wanted_course_code);
         $sql = sprintf(
             'SELECT COUNT(id) AS number FROM %s WHERE visual_code = "%s"',
@@ -359,7 +359,7 @@ class CourseRequestManager
     public static function delete_course_request($id)
     {
         $id = (int)$id;
-        $sql = "DELETE FROM ".Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST)."
+        $sql = "DELETE FROM ".Database::get_main_table(TABLE_MAIN_COURSE_REQUEST)."
                 WHERE id = ".$id;
         $result = Database::query($sql);
         return $result !== false;
@@ -372,7 +372,7 @@ class CourseRequestManager
      */
     public static function count_course_requests($status = null)
     {
-        $course_table = Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST);
+        $course_table = Database::get_main_table(TABLE_MAIN_COURSE_REQUEST);
         if (is_null($status)) {
             $sql = "SELECT COUNT(id) AS number FROM ".$course_table;
         } else {
@@ -397,7 +397,7 @@ class CourseRequestManager
     {
         $id = (int)$id;
         $sql = "SELECT *
-                FROM ".Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST)."
+                FROM ".Database::get_main_table(TABLE_MAIN_COURSE_REQUEST)."
                 WHERE id = ".$id;
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
@@ -415,7 +415,7 @@ class CourseRequestManager
     {
         $id = (int)$id;
         $sql = "SELECT code
-                FROM ".Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST)."
+                FROM ".Database::get_main_table(TABLE_MAIN_COURSE_REQUEST)."
                 WHERE id = ".$id;
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
@@ -471,7 +471,7 @@ class CourseRequestManager
         $course_info = CourseManager::create_course($params);
         if (!empty($course_info)) {
             // Mark the request as accepted.
-            $sql = "UPDATE ".Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST)."
+            $sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_COURSE_REQUEST)."
                     SET status = ".COURSE_REQUEST_ACCEPTED."
                     WHERE id = ".$id;
             Database::query($sql);
@@ -549,7 +549,7 @@ class CourseRequestManager
 
         $code = $course_request_info['code'];
 
-        $sql = "UPDATE ".Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST)."
+        $sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_COURSE_REQUEST)."
                 SET status = ".COURSE_REQUEST_REJECTED."
                 WHERE id = ".$id;
         if (Database::query($sql) === false) {
@@ -685,7 +685,7 @@ class CourseRequestManager
         }
 
         // Marking the fact that additional information about the request has been asked.
-        $sql = "UPDATE ".Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST)."
+        $sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_COURSE_REQUEST)."
                 SET info = 1 WHERE id = ".$id;
         $result = Database::query($sql) !== false;
 
@@ -700,7 +700,7 @@ class CourseRequestManager
     public static function additional_info_asked($id)
     {
         $id = (int)$id;
-        $sql = "SELECT id FROM ".Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST)."
+        $sql = "SELECT id FROM ".Database::get_main_table(TABLE_MAIN_COURSE_REQUEST)."
                 WHERE (id = ".$id." AND info > 0)";
         $result = Database::num_rows(Database::query($sql));
         return !empty($result);

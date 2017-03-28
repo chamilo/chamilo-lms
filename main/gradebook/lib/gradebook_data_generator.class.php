@@ -213,7 +213,7 @@ class GradebookDataGenerator
             api_get_session_id()
         );
 
-        $scoreDisplay = ScoreDisplay :: instance();
+        $scoreDisplay = ScoreDisplay::instance();
         $display = $scoreDisplay->display_score($score, SCORE_DIV_PERCENT_WITH_CUSTOM, SCORE_BOTH, true);
         $type = $item->get_item_type();
         if ($type == 'L' && get_class($item) == 'ExerciseLink') {
@@ -234,7 +234,7 @@ class GradebookDataGenerator
     private function buildAverageResultColumn(GradebookItem $item)
     {
         $score = $item->calc_score(null, 'average');
-        $scoreDisplay = ScoreDisplay :: instance();
+        $scoreDisplay = ScoreDisplay::instance();
         $display = $scoreDisplay->display_score($score, SCORE_DIV_PERCENT_WITH_CUSTOM, SCORE_BOTH, true);
         $type = $item->get_item_type();
 

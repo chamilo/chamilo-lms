@@ -83,8 +83,12 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
         $header = str_replace('absolute', 'relative', $header);
 
         switch ($this->split_steps) {
-            case 'per_page': $this -> dealPerPage($header, $body); break;
-            case 'per_chapter': $this -> dealPerChapter($header, $body); break;
+            case 'per_page':
+                $this -> dealPerPage($header, $body);
+                break;
+            case 'per_chapter':
+                $this -> dealPerChapter($header, $body);
+                break;
         }
     }
 

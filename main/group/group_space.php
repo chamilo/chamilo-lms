@@ -339,10 +339,10 @@ $table = new SortableTable(
     'get_group_user_data',
     (api_is_western_name_order() xor api_sort_by_first_name()) ? 2 : 1
 );
+$origin = api_get_origin();
 $my_cidreq = isset($_GET['cidReq']) ? Security::remove_XSS($_GET['cidReq']) : '';
-$my_origin = isset($_GET['origin']) ? Security::remove_XSS($_GET['origin']) : '';
 $my_gidreq = isset($_GET['gidReq']) ? Security::remove_XSS($_GET['gidReq']) : '';
-$parameters = array('cidReq' => $my_cidreq, 'origin'=> $my_origin, 'gidReq' => $my_gidreq);
+$parameters = array('cidReq' => $my_cidreq, 'origin'=> $origin, 'gidReq' => $my_gidreq);
 $table->set_additional_parameters($parameters);
 $table->set_header(0, '');
 
@@ -532,8 +532,6 @@ function user_name_filter($name, $url_params, $row)
     return UserManager::getUserProfileLink($userInfo);
 }
 
-// Footer
-$orig = isset($origin) ? $origin : '';
-if ($orig != 'learnpath') {
+if ($origin != 'learnpath') {
     Display::display_footer();
 }

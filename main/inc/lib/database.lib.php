@@ -465,11 +465,10 @@ class Database
             $updateSql = '';
             $count = 1;
 
-            if ($showQuery) {
-                var_dump($attributes);
-            }
-
             foreach ($attributes as $key => $value) {
+                if ($showQuery) {
+                    echo $key . ': ' . $value . PHP_EOL;
+                }
                 $updateSql .= "$key = :$key ";
                 if ($count < count($attributes)) {
                     $updateSql.= ', ';

@@ -86,10 +86,10 @@ class Result
      */
     public static function load($id = null, $user_id = null, $evaluation_id = null)
     {
-        $tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
-        $tbl_grade_results = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
-        $tbl_course_rel_course = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-        $tbl_session_rel_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
+        $tbl_grade_results = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
+        $tbl_course_rel_course = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $tbl_session_rel_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $sessionId = api_get_session_id();
         $list_user_course_list = array();
 
@@ -158,12 +158,13 @@ class Result
             $paramcount ++;
         }
         if (!empty($user_id)) {
-            if ($paramcount != 0)
+            if ($paramcount != 0) {
                 $sql .= ' AND';
-            else
+            } else {
                 $sql .= ' WHERE';
-            $sql .= ' gr.user_id = ' . intval($user_id);
-            $paramcount ++;
+            }
+            $sql .= ' gr.user_id = '.intval($user_id);
+            $paramcount++;
         }
         if (!empty($evaluation_id)) {
             if ($paramcount != 0) {
@@ -196,7 +197,7 @@ class Result
     public function add()
     {
         if (isset($this->user_id) && isset($this->evaluation)) {
-            $tbl_grade_results = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
+            $tbl_grade_results = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
             $sql = "INSERT INTO " . $tbl_grade_results
                 . " (user_id, evaluation_id,
 					created_at";
@@ -222,7 +223,7 @@ class Result
     public function add_result__log($userid, $evaluationid)
     {
         if (isset($userid) && isset($evaluationid)) {
-            $tbl_grade_results_log = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT_LOG);
+            $tbl_grade_results_log = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT_LOG);
             $result = new Result();
 
             $arr_result = $result->load(null, $userid, $evaluationid);
@@ -252,7 +253,7 @@ class Result
      */
     public function save()
     {
-        $tbl_grade_results = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
+        $tbl_grade_results = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
         $sql = 'UPDATE ' . $tbl_grade_results . '
                 SET user_id = ' . $this->get_user_id()
             . ', evaluation_id = ' . $this->get_evaluation_id()
@@ -272,7 +273,7 @@ class Result
      */
     public function delete()
     {
-        $tbl_grade_results = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
+        $tbl_grade_results = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
         $sql = 'DELETE FROM ' . $tbl_grade_results . ' WHERE id = ' . $this->id;
         Database::query($sql);
     }

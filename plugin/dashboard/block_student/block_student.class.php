@@ -122,7 +122,7 @@ class BlockStudent extends Block
 						$courseInfo = api_get_course_info($course_code);
 						$courseId = $courseInfo['real_id'];
 		 				$course_title = $course['title'];
-		 				$time = api_time_to_hms(Tracking :: get_time_spent_on_the_course($student['user_id'], $courseId));
+		 				$time = api_time_to_hms(Tracking::get_time_spent_on_the_course($student['user_id'], $courseId));
 		 				$students_table .= '<tr '.$style.'>
 											<td align="right">'.$course_title.'</td>
 											<td align="right">'.$time.'</td>

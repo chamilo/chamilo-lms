@@ -112,8 +112,9 @@ class MultipleAnswerCombination extends Question
             $answer_number = $form->addElement('text', 'counter[' . $i . ']', null, 'value="' . $i . '"');
             $answer_number->freeze();
 
-            $form->addElement('checkbox',
-                'correct[' . $i . ']',
+            $form->addElement(
+                'checkbox',
+                'correct['.$i.']',
                 null,
                 null,
                 'class="checkbox" style="margin-left: 0em;"'
@@ -141,7 +142,6 @@ class MultipleAnswerCombination extends Question
         }
 
         $form->addElement('html', '</tbody></table>');
-
         $form->add_multiple_required_rule(
             $boxes_names,
             get_lang('ChooseAtLeastOneCheckbox'),
@@ -152,9 +152,7 @@ class MultipleAnswerCombination extends Question
         $form->addText('weighting[1]', get_lang('Score'), false, ['value' => 10]);
 
         global $text;
-        //ie6 fix
         if ($obj_ex->edit_exercise_in_lp == true) {
-
             // setting the save button here and not in the question class.php
             $buttonGroup = [
                 $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers', true),
@@ -222,7 +220,7 @@ class MultipleAnswerCombination extends Question
         // sets the total weighting of the question
         $this->updateWeighting($questionWeighting);
         $this->save();
-	}
+    }
 
     function return_header($feedback_type = null, $counter = null, $score = null)
     {

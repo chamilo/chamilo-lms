@@ -322,7 +322,10 @@ if (is_platform_authentication() &&
 }
 
 $extraField = new ExtraField('user');
-$return = $extraField->addElements($form, api_get_user_id());
+$return = $extraField->addElements(
+    $form,
+    api_get_user_id()
+);
 
 $jquery_ready_content = $return['jquery_ready_content'];
 
@@ -366,7 +369,8 @@ $form->setDefaults($user_data);
  *
  * @return  boolean if auth_source is platform
  */
-function is_platform_authentication() {
+function is_platform_authentication()
+{
     $tab_user_info = api_get_user_info();
     return $tab_user_info['auth_source'] == PLATFORM_AUTH_SOURCE;
 }
@@ -419,7 +423,8 @@ function upload_user_production($user_id)
  * @return    bool true o false
  * @uses Gets user ID from global variable
  */
-function check_user_email($email) {
+function check_user_email($email)
+{
     $user_id = api_get_user_id();
     if ($user_id != strval(intval($user_id)) || empty($email)) {
         return false;

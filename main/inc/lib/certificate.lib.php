@@ -163,7 +163,7 @@ class Certificate extends Model
         $params['hide_print_button'] = isset($params['hide_print_button']) ? true : false;
 
         if (isset($this->certificate_data) && isset($this->certificate_data['cat_id'])) {
-            $my_category = Category :: load($this->certificate_data['cat_id']);
+            $my_category = Category::load($this->certificate_data['cat_id']);
         }
 
         if (isset($my_category[0]) &&
@@ -206,7 +206,7 @@ class Certificate extends Model
                             $my_path_certificate = $this->certification_user_path.$name;
                             $path_certificate    ='/'.$name;
 
-                            //Getting QR filename
+                            // Getting QR filename
                             $file_info = pathinfo($path_certificate);
                             $qr_code_filename = $this->certification_user_path.$file_info['filename'].'_qr.png';
 
@@ -215,7 +215,8 @@ class Certificate extends Model
                                 Display::img($this->certification_web_user_path.$file_info['filename'].'_qr.png', 'QR'),
                                 $new_content_html['content']
                             );
-                            $my_new_content_html = mb_convert_encoding(
+
+                            $my_new_content_html = api_convert_encoding(
                                 $my_new_content_html,
                                 'UTF-8',
                                 api_get_system_encoding()
@@ -223,7 +224,7 @@ class Certificate extends Model
 
                             $result = @file_put_contents($my_path_certificate, $my_new_content_html);
                             if ($result) {
-                                //Updating the path
+                                // Updating the path
                                 self::update_user_info_about_certificate(
                                     $this->certificate_data['cat_id'],
                                     $this->user_id,
@@ -310,7 +311,7 @@ class Certificate extends Model
     /**
      * Transforms certificate tags into text values. This function is very static
      * (it doesn't allow for much flexibility in terms of what tags are printed).
-     * @param array $array Contains two array entris: first are the headers,
+     * @param array $array Contains two array entries: first are the headers,
      * second is an array of contents
      * @return string The translated string
      */
@@ -423,12 +424,12 @@ class Certificate extends Model
     {
         header('Content-Type: text/html; charset='. api_get_system_encoding());
 
-        $user_certificate = $this->certification_user_path . basename($this->certificate_data['path_certificate']);
-        $certificateContent = file_get_contents($user_certificate);
-
-        $certificate = new DOMDocument();
-        $certificate->loadHTML($certificateContent);
-
-        echo $certificate->saveHTML();
+        $user_certificate = $this->certification_user_path.basename($this->certificate_data['path_certificate']);
+        if (file_exists($user_certificate)) {
+            $certificateContent = (string) file_get_contents($user_certificate);
+            echo $certificateContent;
+            exit;
+        }
+        api_not_allowed(true);
     }
 }

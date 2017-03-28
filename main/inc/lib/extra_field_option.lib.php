@@ -253,7 +253,7 @@ class ExtraFieldOption extends Model
                     $option = trim($option);
 
                     if ($option_info == false) {
-                        $order      = self::get_max_order($field_id);
+                        $order = self::get_max_order($field_id);
 
                         $new_params = array(
                             'field_id' => $field_id,
@@ -332,7 +332,7 @@ class ExtraFieldOption extends Model
                 WHERE
                     field_id = $field_id AND
                     option_value = '".$option_value."' AND
-                    sf.extra_field_type = ".$extraFieldType."
+                    sf.extra_field_type = $extraFieldType
                 ";
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
@@ -361,7 +361,7 @@ class ExtraFieldOption extends Model
                 WHERE
                     field_id = $field_id AND
                     s.display_text = '".$option_display_text."' AND
-                    sf.extra_field_type = ".$extraFieldType."
+                    sf.extra_field_type = $extraFieldType
                 ";
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
@@ -419,7 +419,6 @@ class ExtraFieldOption extends Model
         $field_id = intval($field_id);
 
         $orderBy = null;
-
         switch ($ordered_by) {
             case 'id':
                 $orderBy = ['id' => 'ASC'];
@@ -453,7 +452,6 @@ class ExtraFieldOption extends Model
         }
 
         $options = [];
-
         foreach ($result as $row) {
             $option = [
                 'id' => $row->getId(),
@@ -467,10 +465,8 @@ class ExtraFieldOption extends Model
 
             if ($add_id_in_array) {
                 $options[$row->getId()] = $option;
-
                 continue;
             }
-
             $options[] = $option;
         }
 
@@ -663,7 +659,12 @@ class ExtraFieldOption extends Model
             $translateUrl = api_get_path(WEB_CODE_PATH).'extrafield/translate.php?'.http_build_query([
                 'extra_field_option' => $id
             ]);
-            $translateButton = Display::toolbarButton(get_lang('TranslateThisTerm'), $translateUrl, 'language', 'link');
+            $translateButton = Display::toolbarButton(
+                get_lang('TranslateThisTerm'),
+                $translateUrl,
+                'language',
+                'link'
+            );
 
             $form->addText(
                 'display_text',

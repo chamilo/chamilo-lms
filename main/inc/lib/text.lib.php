@@ -39,7 +39,8 @@ function api_html_to_text($string)
  * @param  string $string                The input html-formatted text.
  * @return string                        Returns the detected encoding.
  */
-function api_detect_encoding_html($string) {
+function api_detect_encoding_html($string)
+{
     if (@preg_match('/<head.*(<meta[^>]*content=[^>]*>).*<\/head>/si', $string, $matches)) {
         if (@preg_match('/<meta[^>]*charset=(.*)["\';][^>]*>/si', $matches[1], $matches)) {
             return api_refine_encoding_id(trim($matches[1]));
@@ -53,7 +54,8 @@ function api_detect_encoding_html($string) {
  * @param string $string                The input full-html document.
  * @param string                        The new encoding value to be set.
  */
-function api_set_encoding_html(&$string, $encoding) {
+function api_set_encoding_html(&$string, $encoding)
+{
     $old_encoding = api_detect_encoding_html($string);
     if (@preg_match('/(.*<head.*)(<meta[^>]*content=[^>]*>)(.*<\/head>.*)/si', $string, $matches)) {
         $meta = $matches[2];
@@ -77,7 +79,8 @@ function api_set_encoding_html(&$string, $encoding) {
  * @param string $$output_encoding      The encoding of the retrieved title. If the value is not set, the system encoding is assumend.
  * @return string                       The retrieved title, html-entities and extra-whitespace between the words are cleaned.
  */
-function api_get_title_html(&$string, $output_encoding = null, $input_encoding = null) {
+function api_get_title_html(&$string, $output_encoding = null, $input_encoding = null)
+{
     if (@preg_match('/<head.+<title[^>]*>(.*)<\/title>/msi', $string, $matches)) {
         if (empty($output_encoding)) {
             $output_encoding = api_get_system_encoding();
@@ -214,7 +217,8 @@ function api_contains_asciimathml($html) {
  * @param string $html      The input html text.
  * @return bool             Returns TRUE when there is a graph found or FALSE otherwise.
  */
-function api_contains_asciisvg($html) {
+function api_contains_asciisvg($html)
+{
     if (!preg_match_all('/<embed([^>]*?)>/mi', $html, $matches)) {
         return false;
     }
@@ -235,7 +239,8 @@ function api_contains_asciisvg($html) {
  * @param string $string                            The input string (ASCII)
  * @return string                                   The converted result string
  */
-function api_camel_case_to_underscore($string) {
+function api_camel_case_to_underscore($string)
+{
     return strtolower(preg_replace('/([a-z])([A-Z])/', "$1_$2", $string));
 }
 
@@ -246,7 +251,8 @@ function api_camel_case_to_underscore($string) {
  * @param bool $capitalise_first_char (optional)    If true (default), the function capitalises the first char in the result string.
  * @return string                                   The converted result string
  */
-function api_underscore_to_camel_case($string, $capitalise_first_char = true) {
+function api_underscore_to_camel_case($string, $capitalise_first_char = true)
+{
     if ($capitalise_first_char) {
         $string = ucfirst($string);
     }
@@ -254,7 +260,8 @@ function api_underscore_to_camel_case($string, $capitalise_first_char = true) {
 }
 
 // A function for internal use, only for this library.
-function _api_camelize($match) {
+function _api_camelize($match)
+{
     return strtoupper($match[1]);
 }
 
@@ -269,7 +276,8 @@ function _api_camelize($match) {
  * @param  boolean $middle               If this parameter is true, truncation is done in the middle of the string.
  * @return string                        Truncated string, decorated with the given suffix (replacement).
  */
-function api_trunc_str($text, $length = 30, $suffix = '...', $middle = false, $encoding = null) {
+function api_trunc_str($text, $length = 30, $suffix = '...', $middle = false, $encoding = null)
+{
     if (empty($encoding)) {
         $encoding = api_get_system_encoding();
     }
@@ -289,7 +297,8 @@ function api_trunc_str($text, $length = 30, $suffix = '...', $middle = false, $e
  * @author Denes Nagy
  * @param  string variable - the variable to be revised
  */
-function domesticate($input) {
+function domesticate($input)
+{
     $input = stripslashes($input);
     $input = str_replace("'", "''", $input);
     $input = str_replace('"', "''", $input);
@@ -712,34 +721,30 @@ function get_week_from_day($date) {
 
 function substrwords($text,$maxchar,$end='...')
 {
-	if(strlen($text)>$maxchar)
-	{
-		$words=explode(" ",$text);
-		$output = '';
-		$i=0;
-		while(1)
-		{
-			$length = (strlen($output)+strlen($words[$i]));
-			if($length>$maxchar)
-			{
-				break;
-			}
-			else
-			{
-				$output = $output." ".$words[$i];
-				$i++;
-			};
-		};
-	}
-	else
-	{
-		$output = $text;
-		return $output;
-	}
-	return $output.$end;
+    if (strlen($text) > $maxchar) {
+        $words = explode(" ", $text);
+        $output = '';
+        $i = 0;
+        while (1) {
+            $length = (strlen($output) + strlen($words[$i]));
+            if ($length > $maxchar) {
+                break;
+            } else {
+                $output = $output." ".$words[$i];
+                $i++;
+            }
+        }
+    } else {
+        $output = $text;
+
+        return $output;
+    }
+
+    return $output.$end;
 }
 
-function implode_with_key($glue, $array) {
+function implode_with_key($glue, $array)
+{
     if (!empty($array)) {
         $string = '';
         foreach($array as $key => $value) {

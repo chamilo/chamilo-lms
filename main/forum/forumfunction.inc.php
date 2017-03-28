@@ -672,7 +672,7 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
                 $_FILES['picture']['type']
             );
             if (!filter_extension($new_file_name)) {
-                //Display :: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
+                //Display::addFlash(Display::return_message(get_lang('UplUnableToSaveFileFilteredExtension'), 'error'));
                 $image_moved = false;
             } else {
                 $file_extension = explode('.', $_FILES['picture']['name']);
@@ -2204,7 +2204,7 @@ function get_thread_users_qualify($thread_id)
                 FROM $t_posts post , $t_users user, $t_session_rel_user scu, $t_qualify qualify
                 WHERE poster_id = user.id
                     AND post.poster_id = qualify.user_id
-                    AND user.id = session_rel_user_rel_course.user_id
+                    AND user.id = scu.user_id
                     AND scu.status<>'2'
                     AND scu.user_id NOT IN ($user_to_avoid)
                     AND qualify.thread_id = ".intval($thread_id)."
@@ -2462,7 +2462,7 @@ function updateThread($values)
     }
 
     $message = get_lang('EditPostStored').'<br />';
-    Display :: display_confirmation_message($message, false);
+    Display::addFlash(Display::return_message($message, 'confirmation', false));
 }
 
 /**
@@ -2693,9 +2693,10 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
 
         if (!filter_extension($new_file_name)) {
             if ($showMessage) {
-                Display:: display_error_message(
-                    get_lang('UplUnableToSaveFileFilteredExtension')
-                );
+                Display::addFlash(Display::return_message(
+                    get_lang('UplUnableToSaveFileFilteredExtension'),
+                    'error'
+                ));
             }
         } else {
             if ($result) {
@@ -2855,11 +2856,12 @@ function showUpdateThreadForm($currentForum, $forumSetting, $formValues = '')
                 $values['thread_qualify_gradebook'] == '1' &&
                 empty($values['weight_calification'])
             ) {
-                Display::display_error_message(
+                Display::addFlash(Display::return_message(
                     get_lang('YouMustAssignWeightOfQualification').'&nbsp;<a href="javascript:window.history.go(-1);">'.
                     get_lang('Back').'</a>',
+                    'error',
                     false
-                );
+                ));
                 return false;
             }
             Security::clear_token();
@@ -3751,7 +3753,7 @@ function show_edit_post_form(
         if (isset($values['thread_qualify_gradebook']) && $values['thread_qualify_gradebook'] == '1' &&
             empty($values['weight_calification'])
         ) {
-            Display::display_error_message(get_lang('YouMustAssignWeightOfQualification').'&nbsp;<a href="javascript:window.history.go(-1);">'.get_lang('Back').'</a>', false);
+            Display::addFlash(Display::return_message(get_lang('YouMustAssignWeightOfQualification').'&nbsp;<a href="javascript:window.history.go(-1);">'.get_lang('Back').'</a>', 'error', false));
             return false;
         }
         return $values;
@@ -3960,7 +3962,7 @@ function updateThreadInfo($thread_id, $last_post_id, $post_date)
  */
 function forum_not_allowed_here()
 {
-    Display :: display_error_message(get_lang('NotAllowedHere'));
+    Display::addFlash(Display::return_message(get_lang('NotAllowedHere'), 'error'));
     Display :: display_footer();
 
     return false;
@@ -4823,7 +4825,7 @@ function add_forum_attachment_file($file_comment, $last_id)
         $file_name = $attachment['name'];
 
         if (!filter_extension($new_file_name)) {
-            Display :: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
+            Display::addFlash(Display::return_message(get_lang('UplUnableToSaveFileFilteredExtension'), 'error'));
 
             return;
         }
@@ -4911,7 +4913,7 @@ function edit_forum_attachment_file($file_comment, $post_id, $id_attach)
         $file_name = $attachment['name'];
 
         if (!filter_extension($new_file_name)) {
-            Display :: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
+            Display::addFlash(Display::return_message(get_lang('UplUnableToSaveFileFilteredExtension'), 'error'));
         } else {
             $new_file_name = uniqid('');
             $new_path = $updir.'/'.$new_file_name;
@@ -6160,4 +6162,27 @@ function getCountPostsWithStatus($status, $forumInfo, $threadId = null)
         ->addCriteria($criteria);
 
     return $qb->getQuery()->getSingleScalarResult();
+}
+
+/**
+ * @param array $forum
+ * @param array $post
+ *
+ * @return bool
+ */
+function postIsEditableByStudent($forum, $post)
+{
+    if (api_is_platform_admin() || api_is_allowed_to_edit()) {
+        return true;
+    }
+
+    if ($forum['moderated'] == 1) {
+        if (is_null($post['status'])) {
+            return true;
+        } else {
+            return $post['status'] == CForumPost::STATUS_WAITING_MODERATION;
+        }
+    } else {
+        return true;
+    }
 }

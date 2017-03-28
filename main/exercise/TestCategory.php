@@ -54,7 +54,7 @@ class TestCategory
      */
     public function addCategoryInBDD()
     {
-        $table = Database :: get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
+        $table = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
         $name = Database::escape_string($this->name);
         $description = Database::escape_string($this->description);
         // check if name already exists
@@ -100,7 +100,7 @@ class TestCategory
      */
     public function removeCategory($id)
     {
-        $table = Database :: get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
+        $table = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
         $tbl_question_rel_cat = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
         $id = intval($id);
         $course_id = api_get_course_int_id();
@@ -136,7 +136,7 @@ class TestCategory
      */
     public function modifyCategory()
     {
-        $table = Database :: get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
+        $table = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
         $id = intval($this->id);
         $name = Database::escape_string($this->name);
         $description = Database::escape_string($this->description);
@@ -197,7 +197,7 @@ class TestCategory
             $courseId = api_get_course_int_id();
         }
         $courseId = (int) $courseId;
-        $table = Database :: get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
+        $table = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
         $in_field = Database::escape_string($in_field);
         $categories = array();
         if ($in_field == '') {
@@ -260,7 +260,7 @@ class TestCategory
      */
     public static function isQuestionHasCategory($questionId)
     {
-        if (TestCategory::getCategoryForQuestion($questionId) > 0) {
+        if (self::getCategoryForQuestion($questionId) > 0) {
             return true;
         }
 
@@ -282,7 +282,7 @@ class TestCategory
             $courseId = api_get_course_int_id();
         }
         $courseId = (int) $courseId;
-        $categoryId = TestCategory::getCategoryForQuestion($questionId, $courseId);
+        $categoryId = self::getCategoryForQuestion($questionId, $courseId);
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
         $sql = "SELECT title 
                 FROM $table
@@ -407,7 +407,7 @@ class TestCategory
      */
     public static function getNumberOfCategoriesForTest($id)
     {
-        return count(TestCategory::getListOfCategoriesIDForTest($id));
+        return count(self::getListOfCategoriesIDForTest($id));
     }
 
     /**
@@ -427,7 +427,7 @@ class TestCategory
         $questionList = $quiz->selectQuestionList();
         // the array given by selectQuestionList start at indice 1 and not at indice 0 !!! ? ? ?
         for ($i=1; $i <= count($questionList); $i++) {
-            if (TestCategory::getCategoryForQuestion($questionList[$i]) == $categoryId) {
+            if (self::getCategoryForQuestion($questionList[$i]) == $categoryId) {
                 $nbCatResult++;
             }
         }
@@ -444,13 +444,13 @@ class TestCategory
     public static function getNumberOfQuestionRandomByCategory($exerciseId, $in_nbrandom)
     {
         $count = 0;
-        $categories = TestCategory::getListOfCategoriesIDForTest($exerciseId);
+        $categories = self::getListOfCategoriesIDForTest($exerciseId);
         foreach ($categories as $category) {
             if (empty($category['id'])) {
                 continue;
             }
 
-            $nbQuestionInThisCat = TestCategory::getNumberOfQuestionsInCategoryForTest($exerciseId, $category['id']);
+            $nbQuestionInThisCat = self::getNumberOfQuestionsInCategoryForTest($exerciseId, $category['id']);
 
             if ($nbQuestionInThisCat > $in_nbrandom) {
                 $count += $in_nbrandom;
@@ -476,7 +476,7 @@ class TestCategory
         if (empty($courseId)) {
             $courseId = api_get_course_int_id();
         }
-        $categories = TestCategory::getCategoryListInfo('', $courseId);
+        $categories = self::getCategoryListInfo('', $courseId);
         $result = array('0' => get_lang('NoCategorySelected'));
         for ($i = 0; $i < count($categories); $i++) {
             $result[$categories[$i]->id] = $categories[$i]->name;
@@ -610,11 +610,11 @@ class TestCategory
             $in_display_category_name = $objExercise->display_category_name;
         }
         $content = null;
-        if (TestCategory::getCategoryNameForQuestion($questionId) != '' &&
+        if (self::getCategoryNameForQuestion($questionId) != '' &&
             ($in_display_category_name == 1 || !$is_student)
         ) {
             $content .= '<div class="page-header">';
-            $content .= '<h4>'.get_lang('Category').": ".TestCategory::getCategoryNameForQuestion($questionId).'</h4>';
+            $content .= '<h4>'.get_lang('Category').": ".self::getCategoryNameForQuestion($questionId).'</h4>';
             $content .= "</div>";
         }
         return $content;
@@ -704,14 +704,14 @@ class TestCategory
     {
         $res_num_max = 0;
         // foreach question
-        $categories = TestCategory::getListOfCategoriesIDForTest($exerciseId);
+        $categories = self::getListOfCategoriesIDForTest($exerciseId);
 
         foreach ($categories as $category) {
             if (empty($category['id'])) {
                 continue;
             }
 
-            $nbQuestionInThisCat = TestCategory::getNumberOfQuestionsInCategoryForTest($exerciseId, $category['id']);
+            $nbQuestionInThisCat = self::getNumberOfQuestionsInCategoryForTest($exerciseId, $category['id']);
 
             if ($nbQuestionInThisCat > $res_num_max) {
                 $res_num_max = $nbQuestionInThisCat;
@@ -732,7 +732,7 @@ class TestCategory
         if (empty($category_list)) {
             return null;
         }
-        $category_name_list = TestCategory::getListOfCategoriesNameForTest($exerciseId);
+        $category_name_list = self::getListOfCategoriesNameForTest($exerciseId);
 
         $table = new HTML_Table(array('class' => 'data_table'));
         $table->setHeaderContents(0, 0, get_lang('Categories'));
@@ -999,7 +999,7 @@ class TestCategory
      */
     public static function category_exists_with_title($name)
     {
-        $categories = TestCategory::getCategoryListInfo('title');
+        $categories = self::getCategoryListInfo('title');
         foreach ($categories as $title) {
             if ($title == $name) {
                 return true;
@@ -1047,7 +1047,7 @@ class TestCategory
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
         // if question doesn't have a category
         // @todo change for 1.10 when a question can have several categories
-        if (TestCategory::getCategoryForQuestion($questionId, $courseId) == 0 &&
+        if (self::getCategoryForQuestion($questionId, $courseId) == 0 &&
             $questionId > 0 &&
             $courseId > 0
         ) {

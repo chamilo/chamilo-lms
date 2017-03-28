@@ -225,7 +225,7 @@ if (isset($_REQUEST['load_ajax'])) {
                             $sql = "UPDATE $TBL_TRACK_E_LAST_ACCESS SET access_session_id = $new_session_id WHERE access_id = $id";
                             if ($debug) echo $sql;
                             $res = Database::query($sql);
-                            if ($debug) var_dump($res);
+                            //if ($debug) var_dump($res);
                             $result_message[$TBL_TRACK_E_LAST_ACCESS]++;
                         }
                     }

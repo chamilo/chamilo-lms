@@ -1554,6 +1554,7 @@ class Skill extends Model
 
                     return true;
                 }
+                break;
             case DRH:
                 return UserManager::is_user_followed_by_drh($toUser->getId(), $fromUser->getId());
         }

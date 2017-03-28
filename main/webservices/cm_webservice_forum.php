@@ -41,8 +41,8 @@ class WSCMForum extends WSCM
         if($this->verifyUserPass($username, $password) == "valid")
         {
             $course_db = CourseManager::get_course_information($course_code);
-            $table_forums = Database :: get_course_table(TABLE_FORUM, $course_db['db_name']);
-            $table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY, $course_db['db_name']);
+            $table_forums = Database::get_course_table(TABLE_FORUM, $course_db['db_name']);
+            $table_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY, $course_db['db_name']);
 
             $sql="SELECT * FROM ".$table_forums." forums, ".$table_item_property." item_properties
                             WHERE item_properties.tool='".TOOL_FORUM."'
@@ -82,8 +82,8 @@ class WSCMForum extends WSCM
         if($this->verifyUserPass($username, $password) == "valid")
         {
             $course_db = CourseManager::get_course_information($course_code);
-            $table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY, $course_db['db_name']);
-            $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD, $course_db['db_name']);
+            $table_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY, $course_db['db_name']);
+            $table_threads = Database::get_course_table(TABLE_FORUM_THREAD, $course_db['db_name']);
 
             $sql="SELECT * FROM ".$table_threads." threads, ".$table_item_property." item_properties
                             WHERE item_properties.tool='".TOOL_FORUM_THREAD."'
@@ -109,7 +109,7 @@ class WSCMForum extends WSCM
                     $user_info = api_get_user_info($user_id);
                     return $user_info['firstname'];
                     break;
-                default :
+                default:
                     $field_table = "title";
             }
 
@@ -124,8 +124,8 @@ class WSCMForum extends WSCM
         if($this->verifyUserPass($username, $password) == "valid")
         {
             $course_db = CourseManager::get_course_information($course_code);
-            $table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY, $course_db['db_name']);
-            $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD, $course_db['db_name']);
+            $table_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY, $course_db['db_name']);
+            $table_threads = Database::get_course_table(TABLE_FORUM_THREAD, $course_db['db_name']);
 
             $sql="SELECT * FROM ".$table_threads." threads, ".$table_item_property." item_properties
                             WHERE item_properties.tool='".TOOL_FORUM_THREAD."'
@@ -150,8 +150,8 @@ class WSCMForum extends WSCM
         {
             $course_db = CourseManager::get_course_information($course_code);
 
-            $table_users = Database :: get_main_table(TABLE_MAIN_USER);
-            $table_posts = Database :: get_course_table(TABLE_FORUM_POST, $course_db['db_name']);
+            $table_users = Database::get_main_table(TABLE_MAIN_USER);
+            $table_posts = Database::get_course_table(TABLE_FORUM_POST, $course_db['db_name']);
 
             // note: change these SQL so that only the relevant fields of the user table are used
             if (api_is_allowed_to_edit(null,true)) {
@@ -194,8 +194,8 @@ class WSCMForum extends WSCM
         {
             $course_db = CourseManager::get_course_information($course_code);
 
-            $table_posts 	= Database :: get_course_table(TABLE_FORUM_POST, $course_db['db_name']);
-            $table_users 	= Database :: get_main_table(TABLE_MAIN_USER);
+            $table_posts 	= Database::get_course_table(TABLE_FORUM_POST, $course_db['db_name']);
+            $table_users 	= Database::get_main_table(TABLE_MAIN_USER);
 
             $sql="SELECT * FROM ".$table_posts."posts, ".$table_users." users WHERE posts.poster_id=users.user_id AND posts.post_id='".Database::escape_string($post_id)."'";
             $result=Database::query($sql);
@@ -221,7 +221,7 @@ class WSCMForum extends WSCM
                 case 'sender_name' :
                     $field_table = "firstname";
                     break;
-                default :
+                default:
                     $htmlcode = true;
                     $field_table = "title";
             }
@@ -235,12 +235,12 @@ class WSCMForum extends WSCM
         if($this->verifyUserPass($username, $password) == "valid")
         {
             $em = Database::getManager();
-            $course_db = CourseManager::get_course_information($course_code);
+            $course_db = api_get_course_info($course_code);
 
             $user_id = UserManager::get_user_id_from_username($username);
-            $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD, $course_db['db_name']);
-            $forum_table_attachment = Database :: get_course_table(TABLE_FORUM_ATTACHMENT, $course_db['db_name']);
-            $table_posts = Database :: get_course_table(TABLE_FORUM_POST, $course_db['db_name']);
+            $table_threads = Database::get_course_table(TABLE_FORUM_THREAD, $course_db['db_name']);
+            $forum_table_attachment = Database::get_course_table(TABLE_FORUM_ATTACHMENT, $course_db['db_name']);
+            $table_posts = Database::get_course_table(TABLE_FORUM_POST, $course_db['db_name']);
             $post_date=date('Y-m-d H:i:s');
             $visible=1;
             $has_attachment=false;

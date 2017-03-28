@@ -62,6 +62,7 @@ $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.epiclock.min.js');
 $htmlHeadXtra[] = api_get_js('epiclock/renderers/minute/epiclock.minute.js');
 $htmlHeadXtra[] = '<link rel="stylesheet" href="' . api_get_path(WEB_LIBRARY_JS_PATH) . 'hotspot/css/hotspot.css">';
 $htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_JS_PATH) . 'hotspot/js/hotspot.js"></script>';
+$htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_JS_PATH) . 'annotation/js/annotation.js"></script>';
 
 if (api_get_setting('enable_record_audio') === 'true') {
     $htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_JS_PATH) . 'rtc/RecordRTC.js"></script>';
@@ -897,7 +898,7 @@ if ($objExercise->review_answers) {
 }
 
 if (!empty($error)) {
-    Display :: display_error_message($error, false);
+    Display::addFlash(Display::return_message($error, 'error', false));
 } else {
     if (!empty ($exercise_sound)) {
         echo "<a href=\"../document/download.php?doc_url=%2Faudio%2F" . Security::remove_XSS($exercise_sound) . "\" target=\"_blank\">", "<img src=\"../img/sound.gif\" border=\"0\" align=\"absmiddle\" alt=", get_lang('Sound') . "\" /></a>";

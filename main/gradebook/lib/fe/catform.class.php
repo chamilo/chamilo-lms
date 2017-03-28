@@ -31,18 +31,18 @@ class CatForm extends FormValidator
         $method = 'post',
         $action = null
     ) {
-        parent :: __construct($form_name, $method, $action);
+        parent::__construct($form_name, $method, $action);
         $this->form_type = $form_type;
         if (isset($category_object)) {
             $this->category_object = $category_object;
         }
-        if ($this->form_type == self :: TYPE_EDIT) {
+        if ($this->form_type == self::TYPE_EDIT) {
             $this->build_editing_form();
-        } elseif ($this->form_type == self :: TYPE_ADD) {
+        } elseif ($this->form_type == self::TYPE_ADD) {
             $this->build_add_form();
-        } elseif ($this->form_type == self :: TYPE_MOVE) {
+        } elseif ($this->form_type == self::TYPE_MOVE) {
             $this->build_move_form();
-        } elseif ($this->form_type == self :: TYPE_SELECT_COURSE) {
+        } elseif ($this->form_type == self::TYPE_SELECT_COURSE) {
             $this->build_select_course_form();
         }
         $this->setDefaults();
@@ -88,7 +88,7 @@ class CatForm extends FormValidator
         //check if we are a root category
         //if so, you can only choose between courses
         if ($this->category_object->get_parent_id() == '0') {
-            $coursecat = Category :: get_not_created_course_categories(
+            $coursecat = Category::get_not_created_course_categories(
                 api_get_user_id()
             );
             if (count($coursecat) == 0) {
@@ -310,7 +310,7 @@ class CatForm extends FormValidator
             // Freeze or not
             $course_code = api_get_course_id();
             $session_id = api_get_session_id();
-            $test_cats = Category :: load(
+            $test_cats = Category::load(
                 null,
                 null,
                 $course_code,
@@ -359,7 +359,7 @@ class CatForm extends FormValidator
             $isRequirementCheckbox->setChecked(true);
         }
 
-        if ($this->form_type == self :: TYPE_ADD) {
+        if ($this->form_type == self::TYPE_ADD) {
             $this->addButtonCreate(get_lang('AddCategory'));
         } else {
             $this->addElement('hidden', 'editcat', intval($_GET['editcat']));
@@ -386,7 +386,7 @@ class CatForm extends FormValidator
             array(get_lang('PickACourse'), 'test'),
             null
         );
-        $coursecat = Category :: get_all_courses(api_get_user_id());
+        $coursecat = Category::get_all_courses(api_get_user_id());
         //only return courses that are not yet created by the teacher
 
         foreach ($coursecat as $row) {
@@ -403,7 +403,7 @@ class CatForm extends FormValidator
 
     function display()
     {
-        parent :: display();
+        parent::display();
     }
 
     function setDefaults($defaults = array(), $filter = null)

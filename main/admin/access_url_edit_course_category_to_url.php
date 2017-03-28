@@ -1,16 +1,18 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-*	@package chamilo.admin
-*	@author Julio Montoya <gugli100@gmail.com>
-*/
+ * @package chamilo.admin
+ * @author Julio Montoya <gugli100@gmail.com>
+ */
 
 // resetting the course id
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 $xajax = new xajax();
-$xajax->registerFunction(array('searchCourseCategoryAjax', 'UrlManager', 'searchCourseCategoryAjax'));
+$xajax->registerFunction(
+    array('searchCourseCategoryAjax', 'UrlManager', 'searchCourseCategoryAjax')
+);
 
 // Setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -221,10 +223,11 @@ foreach($userGroupList as $item) {
 	<td colspan="3" align="center">
 		<br />
 		<?php
-		if(isset($_GET['add']))
-			echo '<button class="save" onclick="valide()" >'.get_lang('Add').'</button>';
-		else
-			echo '<button class="save" onclick="valide()" >'.get_lang('Edit').'</button>';
+        if (isset($_GET['add'])) {
+            echo '<button class="save" onclick="valide()" >'.get_lang('Add').'</button>';
+        } else {
+            echo '<button class="save" onclick="valide()" >'.get_lang('Edit').'</button>';
+        }
 		?>
 	</td>
 </tr>
@@ -273,10 +276,8 @@ function valide(){
 	document.forms.formulaire.submit();
 }
 
-function loadUsersInSelect(select){
-
+function loadUsersInSelect(select) {
 	var xhr_object = null;
-
 	if(window.XMLHttpRequest) // Firefox
 		xhr_object = new XMLHttpRequest();
 	else if(window.ActiveXObject) // Internet Explorer
@@ -291,7 +292,6 @@ function loadUsersInSelect(select){
 	nosessionClasses = makepost(document.getElementById('origin_classes'));
 	sessionClasses = makepost(document.getElementById('destination_classes'));
 	xhr_object.send("nosessionusers="+nosessionUsers+"&sessionusers="+sessionUsers+"&nosessionclasses="+nosessionClasses+"&sessionclasses="+sessionClasses);
-
 	xhr_object.onreadystatechange = function() {
 		if(xhr_object.readyState == 4) {
 			document.getElementById('content_source').innerHTML = result = xhr_object.responseText;

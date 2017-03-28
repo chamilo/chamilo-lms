@@ -103,7 +103,7 @@ class Blog
         $_user = api_get_user_info();
         $course_id = api_get_course_int_id();
 
-        $current_date = date('Y-m-d H:i:s', time());
+        $current_date = api_get_utc_datetime();
         $session_id = api_get_session_id();
         $tbl_blogs = Database::get_course_table(TABLE_BLOGS);
         $tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
@@ -175,7 +175,7 @@ class Blog
             }
 
             // Subscribe the teacher to this blog
-            Blog::subscribeUser($this_blog_id, $_user['user_id']);
+            self::subscribeUser($this_blog_id, $_user['user_id']);
         }
     }
 
@@ -604,7 +604,7 @@ class Blog
 
         // Delete them recursively
         while ($comment = Database::fetch_array($result)) {
-            Blog::deleteComment($blog_id, $post_id, $comment['comment_id']);
+            self::deleteComment($blog_id, $post_id, $comment['comment_id']);
         }
 
         // Finally, delete the selected comment to
@@ -939,7 +939,7 @@ class Blog
         $query_string = '('.implode('OR', $query_string).')';
 
         // Display the posts
-        return Blog::getPosts($blog_id, $query_string);
+        return self::getPosts($blog_id, $query_string);
     }
 
     /**
@@ -987,7 +987,7 @@ class Blog
                 $blog_post_comments = Database::fetch_array($tmp);
 
                 $fileArray = self::getBlogAttachments($blog_id, $blog_post['post_id'], 0);
-                $scoreRanking = Blog::displayRating(
+                $scoreRanking = self::displayRating(
                     'post',
                     $blog_id,
                     $blog_post['post_id']
@@ -1001,7 +1001,7 @@ class Blog
                     'autor' => $blog_post['firstname'].' '.$blog_post['lastname'],
                     'username' => $blog_post['username'],
                     'title' => stripslashes($blog_post['title']),
-                    'extract' => api_get_short_text_from_html(stripslashes($blog_post['full_text']), 400),
+                    'extract' => api_get_short_text_from_html(stripslashes($blog_post['full_text']), 800),
                     'content' => stripslashes($blog_post['full_text']),
                     'post_date' => api_convert_and_format_date($blog_post['date_creation']),
                     'n_comments' => $blog_post_comments['number_of_comments'],
@@ -1040,7 +1040,7 @@ class Blog
         //$date_output = api_format_date($date_output, DATE_FORMAT_LONG);
         // Display the posts
         //echo '<span class="blogpost_title">' . get_lang('PostsOf') . ': ' . $date_output . '</span>';
-        $list = Blog::getPosts($blog_id, $query_string);
+        $list = self::getPosts($blog_id, $query_string);
 
         return $list;
     }
@@ -1088,11 +1088,11 @@ class Blog
 
         // Display comments if there are any
         if ($blog_post_comments['number_of_comments'] > 0) {
-            $listComments = Blog::getThreadedComments(0, 0, $blog_id, $post_id, $task_id);
+            $listComments = self::getThreadedComments(0, 0, $blog_id, $post_id, $task_id);
         }
         // Display comment form
         if (api_is_allowed('BLOG_'.$blog_id, 'article_comments_add')) {
-            $formComments = Blog::displayCommentCreateForm($blog_id, $post_id, $blog_post['title'], false);
+            $formComments = self::displayCommentCreateForm($blog_id, $post_id, $blog_post['title'], false);
         }
         // Prepare data
         $fileArray = self::getBlogAttachments($blog_id, $post_id);
@@ -1115,7 +1115,7 @@ class Blog
             $blogActions .= Display::return_icon('delete.png', get_lang('Delete'), null, ICON_SIZE_TINY);
             $blogActions .= '</a>';
         }
-        $scoreRanking = Blog::displayRating('post', $blog_id, $post_id);
+        $scoreRanking = self::displayRating('post', $blog_id, $post_id);
         $article = [
             'id_blog' => $blog_post['blog_id'],
             'c_id' => $blog_post['c_id'],
@@ -1135,7 +1135,7 @@ class Blog
             'actions' => $blogActions,
             'score_ranking' => (int)$scoreRanking,
             'frm_rating' => api_is_allowed('BLOG_'.$blog_id, 'article_rate')
-                ? Blog::displayRatingCreateForm('post', $blog_id, $post_id)
+                ? self::displayRatingCreateForm('post', $blog_id, $post_id)
                 : null
         ];
 
@@ -1212,7 +1212,7 @@ class Blog
                 $commentActions .= '</a>';
             }
             if (api_is_allowed('BLOG_'.$blog_id, 'article_comments_rate')) {
-                $ratingSelect = Blog::displayRatingCreateForm(
+                $ratingSelect = self::displayRatingCreateForm(
                     'comment',
                     $blog_id,
                     $post_id,
@@ -1415,7 +1415,7 @@ class Blog
         if ($form->validate()) {
             $values = $form->exportValues();
 
-            Blog::createComment(
+            self::createComment(
                 $values['title'],
                 $values['comment'],
                 $values['post_file_comment'],

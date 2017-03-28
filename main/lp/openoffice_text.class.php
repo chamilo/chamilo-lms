@@ -34,7 +34,7 @@ class OpenofficeText extends OpenofficeDocument {
      * @param	integer Creator user id
      * @return	void
      */
-    function OpenofficeText($split_steps = false, $course_code = null, $resource_id = null, $user_id = null) {
+    public function __construct($split_steps = false, $course_code = null, $resource_id = null, $user_id = null) {
         $this -> split_steps = $split_steps;
         parent::__construct($course_code, $resource_id, $user_id);
     }
@@ -44,7 +44,7 @@ class OpenofficeText extends OpenofficeDocument {
      * @param	array	The files that will compose the generated learning path. Unused so far.
      * @return	boolean	False if file does not exit. Nothing otherwise.
      */
-    function make_lp($files = array())
+    public function make_lp($files = array())
     {
         $_course = api_get_course_info();
         // We get a content where ||page_break|| indicates where the page is broken.
@@ -87,8 +87,12 @@ class OpenofficeText extends OpenofficeDocument {
         $header = str_replace('absolute', 'relative', $header);
 
         switch ($this->split_steps) {
-            case 'per_page': $this -> dealPerPage($header, $body); break;
-            case 'per_chapter': $this -> dealPerChapter($header, $body); break;
+            case 'per_page':
+                $this -> dealPerPage($header, $body);
+                break;
+            case 'per_chapter':
+                $this -> dealPerChapter($header, $body);
+                break;
         }
     }
 
@@ -98,7 +102,7 @@ class OpenofficeText extends OpenofficeDocument {
      * @param	string	Content
      * @return	void
      */
-    function dealPerChapter($header, $content)
+    public function dealPerChapter($header, $content)
     {
         $_course = api_get_course_info();
         $content = str_replace('||page_break||', '', $content);
@@ -189,7 +193,7 @@ class OpenofficeText extends OpenofficeDocument {
      * @param	string	Page body
      * @return	void
      */
-    function dealPerPage($header, $body)
+    public function dealPerPage($header, $body)
     {
         $_course = api_get_course_info();
         // Split document to pages.
@@ -298,7 +302,7 @@ class OpenofficeText extends OpenofficeDocument {
      * Returns additional Java command parameters
      * @return	string	The additional parameters to be used in the Java call
      */
-    function add_command_parameters(){
+    public function add_command_parameters(){
         return ' -d woogie "'.$this->base_work_dir.'/'.$this->file_path.'"  "'.$this->base_work_dir.$this->created_dir.'/'.$this->file_name.'.html"';
     }
 
@@ -308,7 +312,7 @@ class OpenofficeText extends OpenofficeDocument {
      * @param	string	Page content
      * @return	string	Formatted page content
      */
-    function format_page_content($header, $content) {
+    public function format_page_content($header, $content) {
         // Limit the width of the doc.
         list($max_width, $max_height) = explode('x',api_get_setting('service_ppt2lp','size'));
 
@@ -354,7 +358,7 @@ class OpenofficeText extends OpenofficeDocument {
     /**
      * Add documents to the visioconference (to be implemented)
      */
-    function add_docs_to_visio() {
+    public function add_docs_to_visio() {
 
     }
 }

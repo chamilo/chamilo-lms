@@ -32,7 +32,7 @@ function display_action_links($id, $cur_dir_path, $action)
     }
 
     $display_output = '';
-    $origin = isset($_GET['origin']) ? Security::remove_XSS($_GET['origin']) : '';
+    $origin = api_get_origin();
 
     if (!empty($id)) {
         $display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&gradebook='.$gradebook.'&id='.$my_back_id.'">'.
@@ -866,7 +866,7 @@ function get_work_path($id)
  * @param string  $new_path Destination directory where the work has been moved (must end with a '/')
  * @param int $parent_id
  *
- * @return  -1 on error, sql query result on success
+ * @return mixed Int -1 on error, sql query result on success
  */
 function updateWorkUrl($id, $new_path, $parent_id)
 {
@@ -985,13 +985,13 @@ function directory_to_array($directory)
     return $array_items;
 }
 
+
 /**
  * Insert into the DB of the course all the directories
- * @param   string path of the /work directory of the course
- * @return  -1 on error, sql query result on success
+ * @param   string $base_work_dir path of the /work directory of the course
+ * @return  mixed Int -1 on error, sql query result on success
  * @author  Julio Montoya
  * @version April 2008
- * @param string $base_work_dir
  */
 
 function insert_all_directory_in_course_table($base_work_dir)
@@ -1029,7 +1029,6 @@ function insert_all_directory_in_course_table($base_work_dir)
         Database::insert($work_table, $params);
     }
 }
-
 /**
  * This function displays the number of files contained in a directory
  *
@@ -1589,10 +1588,10 @@ function getWorkListTeacher(
                 api_get_path(WEB_CODE_PATH).'work/edit_work.php?id='.$workId.'&'.api_get_cidreq()
             );
 
-            $correctionLink = Display::url(
-                Display::return_icon('upload_file.png', get_lang('UploadCorrections'), '', ICON_SIZE_SMALL),
+            $correctionLink = '&nbsp;'.Display::url(
+                Display::return_icon('upload_package.png', get_lang('UploadCorrections'), '', ICON_SIZE_SMALL),
                 api_get_path(WEB_CODE_PATH).'work/upload_corrections.php?'.api_get_cidreq().'&id='.$workId
-            );
+            ).'&nbsp;';
 
             if ($countUniqueAttempts > 0) {
                 $downloadLink = Display::url(
@@ -3143,14 +3142,19 @@ function getLastWorkStudentFromParentByUser(
 function formatWorkScore($score, $weight)
 {
     $label = 'info';
-    $relativeScore = $score/$weight;
+    $weight = (int) $weight;
+    $relativeScore = 0;
+    if (!empty($weight)) {
+        $relativeScore = $score / $weight;
+    }
     if ($relativeScore < 0.5) {
         $label = 'important';
     } elseif ($relativeScore < 0.75) {
         $label = 'warning';
     }
+
     return Display::label(
-    api_number_format($score, 1) . ' / '.(int) $weight,
+    api_number_format($score, 1) . ' / '.$weight,
         $label
     );
 }

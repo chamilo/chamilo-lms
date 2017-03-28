@@ -39,11 +39,11 @@ class TableSort
         }
 
         if ($type == SORT_REGULAR) {
-            if (TableSort::is_image_column($data, $column)) {
+            if (self::is_image_column($data, $column)) {
                 $type = SORT_IMAGE;
-            } elseif (TableSort::is_date_column($data, $column)) {
+            } elseif (self::is_date_column($data, $column)) {
                 $type = SORT_DATE;
-            } elseif (TableSort::is_numeric_column($data, $column)) {
+            } elseif (self::is_numeric_column($data, $column)) {
                 $type = SORT_NUMERIC;
             } else {
                 $type = SORT_STRING;
@@ -114,11 +114,11 @@ class TableSort
         }
 
         if ($type == SORT_REGULAR) {
-            if (TableSort::is_image_column($data, $column)) {
+            if (self::is_image_column($data, $column)) {
                 $type = SORT_IMAGE;
-            } elseif (TableSort::is_date_column($data, $column)) {
+            } elseif (self::is_date_column($data, $column)) {
                 $type = SORT_DATE;
-            } elseif (TableSort::is_numeric_column($data, $column)) {
+            } elseif (self::is_numeric_column($data, $column)) {
                 $type = SORT_NUMERIC;
             } else {
                 $type = SORT_STRING;

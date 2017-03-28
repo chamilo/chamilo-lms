@@ -40,7 +40,7 @@ class Attendance
      */
     public static function get_number_of_attendances($active = -1)
     {
-        $tbl_attendance = Database :: get_course_table(TABLE_ATTENDANCE);
+        $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
         $session_id = api_get_session_id();
         $condition_session = api_get_session_condition($session_id);
         $course_id = api_get_course_int_id();
@@ -64,7 +64,7 @@ class Attendance
      */
     public function get_attendances_list($course_id = '', $session_id = null)
     {
-        $tbl_attendance = Database :: get_course_table(TABLE_ATTENDANCE);
+        $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
         $data = array();
 
         if (empty($course_id)) {
@@ -258,7 +258,7 @@ class Attendance
      */
     public function get_attendance_by_id($attendance_id)
     {
-        $tbl_attendance = Database :: get_course_table(TABLE_ATTENDANCE);
+        $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
         $attendance_id = intval($attendance_id);
         $course_id = api_get_course_int_id();
         $attendance_data = array();
@@ -282,7 +282,7 @@ class Attendance
     public function attendance_add($link_to_gradebook = false)
     {
         $_course = api_get_course_info();
-        $tbl_attendance	= Database :: get_course_table(TABLE_ATTENDANCE);
+        $tbl_attendance	= Database::get_course_table(TABLE_ATTENDANCE);
         $table_link = Database:: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
         $session_id = api_get_session_id();
         $user_id = api_get_user_id();
@@ -433,7 +433,7 @@ class Attendance
     public function attendance_restore($attendance_id)
     {
         $_course = api_get_course_info();
-        $tbl_attendance	= Database :: get_course_table(TABLE_ATTENDANCE);
+        $tbl_attendance	= Database::get_course_table(TABLE_ATTENDANCE);
         $user_id = api_get_user_id();
         $course_id = $_course['real_id'];
         if (is_array($attendance_id)) {
@@ -483,7 +483,7 @@ class Attendance
     public function attendance_delete($attendance_id)
     {
         $_course = api_get_course_info();
-        $tbl_attendance	= Database :: get_course_table(TABLE_ATTENDANCE);
+        $tbl_attendance	= Database::get_course_table(TABLE_ATTENDANCE);
         $user_id = api_get_user_id();
         $course_id = $_course['real_id'];
 
@@ -537,7 +537,7 @@ class Attendance
     public function changeVisibility($attendanceId, $status = 1)
     {
         $_course = api_get_course_info();
-        $tbl_attendance	= Database :: get_course_table(TABLE_ATTENDANCE);
+        $tbl_attendance	= Database::get_course_table(TABLE_ATTENDANCE);
         $user_id = api_get_user_id();
         $course_id = $_course['real_id'];
         $status = intval($status);

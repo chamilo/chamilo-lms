@@ -26,8 +26,8 @@ class HotpotatoesExerciseResult
         $TBL_USER = Database::get_main_table(TABLE_MAIN_USER);
         $TBL_TRACK_HOTPOTATOES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
 
-        $cid             = api_get_course_id();
-        $course_id       = api_get_course_int_id();
+        $cid = api_get_course_id();
+        $course_id = api_get_course_int_id();
         //$user_id         = intval($user_id);
         $user_id = null;
         $session_id_and  = ' AND te.session_id = ' . api_get_session_id() . ' ';

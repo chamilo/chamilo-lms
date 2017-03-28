@@ -8,13 +8,16 @@ class CourseHome
 {
     /**
      * Gets the html content to show in the 3 column view
+     * @param string $cat
+     * @param int $userId
+     * @return string
      */
     public static function show_tool_3column($cat, $userId = null)
     {
         $_user = api_get_user_info($userId);
 
-        $TBL_ACCUEIL = Database :: get_course_table(TABLE_TOOL_LIST);
-        $TABLE_TOOLS = Database :: get_main_table(TABLE_MAIN_COURSE_MODULE);
+        $TBL_ACCUEIL = Database::get_course_table(TABLE_TOOL_LIST);
+        $TABLE_TOOLS = Database::get_main_table(TABLE_MAIN_COURSE_MODULE);
 
         $numcols = 3;
         $table = new HTML_Table('width="100%"');
@@ -64,8 +67,8 @@ class CourseHome
 
         // Grabbing all the links that have the property on_homepage set to 1
         if ($cat == 'External') {
-            $tbl_link = Database :: get_course_table(TABLE_LINK);
-            $tbl_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
+            $tbl_link = Database::get_course_table(TABLE_LINK);
+            $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
             if (api_is_allowed_to_edit(null, true)) {
                 $sql_links = "SELECT tl.*, tip.visibility
 								FROM $tbl_link tl
@@ -1111,7 +1114,7 @@ class CourseHome
 
         if (!empty($course_id)) {
 
-            $course_tools_table = Database :: get_course_table(TABLE_TOOL_LIST);
+            $course_tools_table = Database::get_course_table(TABLE_TOOL_LIST);
 
             /* 	Link to the Course homepage */
             $navigation_items['home']['image'] = 'home.gif';
@@ -1134,7 +1137,7 @@ class CourseHome
                         $navigation_items[$row['id']]['link'] = api_get_path(WEB_PLUGIN_PATH);
                         $navigation_items[$row['id']]['name'] = $pluginInfo['title'];
                     } else {
-                        $navigation_items[$row['id']]['name'] = CourseHome::translate_tool_name($row);
+                        $navigation_items[$row['id']]['name'] = self::translate_tool_name($row);
                     }
 
                     $navigation_items[$row['id']]['link'] .= $row['link'];
@@ -1150,7 +1153,7 @@ class CourseHome
                         WHERE c_id = $course_id  AND link='course_info/infocours.php'";
                 $sql_result = Database::query($sql);
                 $course_setting_info = Database::fetch_array($sql_result);
-                $course_setting_visual_name = CourseHome::translate_tool_name($course_setting_info);
+                $course_setting_visual_name = self::translate_tool_name($course_setting_info);
                 if ($sessionId == 0) {
                     // course settings item
                     $navigation_items['course_settings']['image'] = $course_setting_info['image'];

@@ -5868,6 +5868,11 @@ ul#toolnavbox-two li a.btn{
     font-size: 120%;
     margin-bottom: 0;
 }
+
+#dropzone.hover {
+    background: lawngreen;
+}
+
 #upload_form .fa-plus-square-o, #upload_form .fa-minus-square-o {
     cursor:pointer;
 }
@@ -6047,6 +6052,10 @@ ul#toolnavbox-two li a.btn{
     display: inline-block;
     margin-right: 10px;
     vertical-align: middle;
+}
+#homepage-home, .welcome-home-top-temp{
+    display: block;
+    width: 100%;
 }
 /* CSS NEW TOP ******************************************************************************/
 /* CSS Responsive */

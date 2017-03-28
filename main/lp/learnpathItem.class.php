@@ -12,7 +12,6 @@
 class learnpathItem
 {
     const debug = 0; // Logging parameter.
-
     public $attempt_id; // Also called "objectives" SCORM-wise.
     public $audio; // The path to an audio file (stored in document/audio/).
     public $children = array(); // Contains the ids of children items.
@@ -86,7 +85,6 @@ class learnpathItem
      * @param   null|integer $user_id User ID
      * @param   null|integer $course_id Course int id
      * @param   null|array  $item_content An array with the contents of the item
-     * @return  bool    True on success, false on failure
      */
     public function __construct(
         $id,
@@ -119,9 +117,7 @@ class learnpathItem
                     WHERE c_id = $course_id AND id = $id";
             $res = Database::query($sql);
             if (Database::num_rows($res) < 1) {
-                $this->error =
-                'Could not find given learnpath item in learnpath_item table';
-                return false;
+                $this->error = 'Could not find given learnpath item in learnpath_item table';
             }
             $row = Database::fetch_array($res);
         } else {
@@ -209,8 +205,6 @@ class learnpathItem
                 0
             );
         }
-
-        return true;
     }
 
     /**
@@ -1237,7 +1231,7 @@ class learnpathItem
                                                             'local',
                                                             'url'
                                                         );
-                                                        $in_files_list[] = learnpathItem::get_resources_from_source(
+                                                        $in_files_list[] = self::get_resources_from_source(
                                                             TOOL_DOCUMENT,
                                                             $second_part,
                                                             $recursivity + 1
@@ -1276,7 +1270,7 @@ class learnpathItem
                                                             'local',
                                                             'abs'
                                                         );
-                                                        $in_files_list[] = learnpathItem::get_resources_from_source(
+                                                        $in_files_list[] = self::get_resources_from_source(
                                                             TOOL_DOCUMENT,
                                                             $second_part,
                                                             $recursivity + 1
@@ -1307,7 +1301,7 @@ class learnpathItem
                                                         $new_abs_path = realpath(
                                                             $dir . '/' . $second_part
                                                         );
-                                                        $in_files_list[] = learnpathItem::get_resources_from_source(
+                                                        $in_files_list[] = self::get_resources_from_source(
                                                             TOOL_DOCUMENT,
                                                             $new_abs_path,
                                                             $recursivity + 1
@@ -1345,7 +1339,7 @@ class learnpathItem
                                                         $new_abs_path = realpath(
                                                             $dir . '/' . $second_part
                                                         );
-                                                        $in_files_list[] = learnpathItem::get_resources_from_source(
+                                                        $in_files_list[] = self::get_resources_from_source(
                                                             TOOL_DOCUMENT,
                                                             $new_abs_path,
                                                             $recursivity + 1
@@ -1385,7 +1379,7 @@ class learnpathItem
                                                             'local',
                                                             'url'
                                                         );
-                                                        $in_files_list[] = learnpathItem::get_resources_from_source(
+                                                        $in_files_list[] = self::get_resources_from_source(
                                                             TOOL_DOCUMENT,
                                                             $source,
                                                             $recursivity + 1
@@ -1421,7 +1415,7 @@ class learnpathItem
                                                             'local',
                                                             'abs'
                                                         );
-                                                        $in_files_list[] = learnpathItem::get_resources_from_source(
+                                                        $in_files_list[] = self::get_resources_from_source(
                                                             TOOL_DOCUMENT,
                                                             $source,
                                                             $recursivity + 1
@@ -1452,7 +1446,7 @@ class learnpathItem
                                                         $new_abs_path = realpath(
                                                             $dir . '/' . $source
                                                         );
-                                                        $in_files_list[] = learnpathItem::get_resources_from_source(
+                                                        $in_files_list[] = self::get_resources_from_source(
                                                             TOOL_DOCUMENT,
                                                             $new_abs_path,
                                                             $recursivity + 1
@@ -1490,7 +1484,7 @@ class learnpathItem
                                                         $new_abs_path = realpath(
                                                             $dir . '/' . $source
                                                         );
-                                                        $in_files_list[] = learnpathItem::get_resources_from_source(
+                                                        $in_files_list[] = self::get_resources_from_source(
                                                             TOOL_DOCUMENT,
                                                             $new_abs_path,
                                                             $recursivity + 1
@@ -1520,7 +1514,7 @@ class learnpathItem
                                                     'local',
                                                     'url'
                                                 );
-                                                $in_files_list[] = learnpathItem::get_resources_from_source(
+                                                $in_files_list[] = self::get_resources_from_source(
                                                     TOOL_DOCUMENT,
                                                     $source,
                                                     $recursivity + 1
@@ -1548,7 +1542,7 @@ class learnpathItem
                                                     'local',
                                                     'abs'
                                                 );
-                                                $in_files_list[] = learnpathItem::get_resources_from_source(
+                                                $in_files_list[] = self::get_resources_from_source(
                                                     TOOL_DOCUMENT,
                                                     $source,
                                                     $recursivity + 1
@@ -1574,7 +1568,7 @@ class learnpathItem
                                                 $new_abs_path = realpath(
                                                     $dir . '/' . $source
                                                 );
-                                                $in_files_list[] = learnpathItem::get_resources_from_source(
+                                                $in_files_list[] = self::get_resources_from_source(
                                                     TOOL_DOCUMENT,
                                                     $new_abs_path,
                                                     $recursivity + 1
@@ -1619,7 +1613,7 @@ class learnpathItem
                                                 $new_abs_path = realpath(
                                                     $dir . '/' . $source
                                                 );
-                                                $in_files_list[] = learnpathItem::get_resources_from_source(
+                                                $in_files_list[] = self::get_resources_from_source(
                                                     TOOL_DOCUMENT,
                                                     $new_abs_path,
                                                     $recursivity + 1
@@ -2524,7 +2518,7 @@ class learnpathItem
                                             if ($returnstatus) {
                                                 //AND origin_lp_item_id = '.$user_id.'
                                                 $sql = 'SELECT exe_result, exe_weighting
-                                                        FROM ' . Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES) . '
+                                                        FROM ' . Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES) . '
                                                         WHERE
                                                             exe_exo_id = ' . $items[$refs_list[$prereqs_string]]->path . ' AND
                                                             exe_user_id = ' . $user_id . ' AND
@@ -2534,7 +2528,7 @@ class learnpathItem
                                                         ORDER BY exe_date DESC
                                                         LIMIT 0, 1';
                                                 $rs_quiz = Database::query($sql);
-                                                if ($quiz = Database :: fetch_array($rs_quiz)) {
+                                                if ($quiz = Database::fetch_array($rs_quiz)) {
                                                     $minScore = $items[$refs_list[$this->get_id()]]->getPrerequisiteMinScore();
                                                     $maxScore = $items[$refs_list[$this->get_id()]]->getPrerequisiteMaxScore();
 
@@ -2567,7 +2561,7 @@ class learnpathItem
 
                                             // Checking in the database.
                                             $sql = 'SELECT exe_result, exe_weighting
-                                                    FROM ' . Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES) . '
+                                                    FROM ' . Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES) . '
                                                     WHERE
                                                         exe_exo_id = ' . $items[$refs_list[$prereqs_string]]->path . ' AND
                                                         exe_user_id = ' . $user_id . ' AND
@@ -2576,7 +2570,7 @@ class learnpathItem
 
                                             $rs_quiz = Database::query($sql);
                                             if (Database::num_rows($rs_quiz) > 0) {
-                                                while ($quiz = Database :: fetch_array($rs_quiz)) {
+                                                while ($quiz = Database::fetch_array($rs_quiz)) {
 
                                                     $minScore = $items[$refs_list[$this->get_id()]]->getPrerequisiteMinScore();
                                                     $maxScore = $items[$refs_list[$this->get_id()]]->getPrerequisiteMaxScore();
@@ -2649,7 +2643,7 @@ class learnpathItem
                                                         session_id = '.$sessionId.'
                                                     LIMIT 0, 1';
                                             $rs_lp = Database::query($sql);
-                                            $lp_id = Database :: fetch_row(
+                                            $lp_id = Database::fetch_row(
                                                 $rs_lp
                                             );
                                             $my_lp_id = $lp_id[0];
@@ -2661,7 +2655,7 @@ class learnpathItem
                                                         lp_item_id = ' . $refs_list[$prereqs_string] . '
                                                     LIMIT 0, 1';
                                             $rs_lp = Database::query($sql);
-                                            $status_array = Database :: fetch_row(
+                                            $status_array = Database::fetch_row(
                                                 $rs_lp
                                             );
                                             $status = $status_array[0];

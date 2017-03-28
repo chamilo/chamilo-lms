@@ -8,7 +8,7 @@
 namespace Chamilo\ThemeBundle\Model;
 
 
-class UserModel implements  UserInterface
+class UserModel implements UserInterface
 {
 
     /**

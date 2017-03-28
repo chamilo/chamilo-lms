@@ -20,7 +20,7 @@ switch (api_get_setting('cas_protocol')) {
     case 'SAML':
         $cas_auth_ver = SAML_VERSION_1_1;
         break;
-    default :
+    default:
         $cas_auth_ver = CAS_VERSION_2_0;
         break;
 }

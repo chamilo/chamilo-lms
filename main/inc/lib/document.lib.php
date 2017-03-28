@@ -681,7 +681,7 @@ class DocumentManager
                     $temp[$row['id']] = $row;
                 }
 
-                //@todo use the DocumentManager::is_visible function
+                //@todo use the self::is_visible function
                 // Checking visibility in a session
                 foreach ($my_repeat_ids as $id) {
                     foreach ($doc_list as $row) {
@@ -717,7 +717,7 @@ class DocumentManager
                 // Checking parents visibility.
                 $final_document_data = array();
                 foreach ($document_data as $row) {
-                    $is_visible = DocumentManager::check_visibility_tree(
+                    $is_visible = self::check_visibility_tree(
                         $row['id'],
                         $_course['code'],
                         $sessionId,
@@ -835,7 +835,7 @@ class DocumentManager
 
             if ($result && Database::num_rows($result) != 0) {
                 while ($row = Database::fetch_array($result, 'ASSOC')) {
-                    if (DocumentManager::is_folder_to_avoid($row['path'])) {
+                    if (self::is_folder_to_avoid($row['path'])) {
                         continue;
                     }
 
@@ -1079,7 +1079,7 @@ class DocumentManager
         $remove_content_from_db = false
     ) {
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
-        $TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
+        $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
         // Deleting from the DB
         $user_id = api_get_user_id();
@@ -1376,7 +1376,7 @@ class DocumentManager
      */
     public static function get_document_id($courseInfo, $path, $sessionId = null)
     {
-        $table = Database :: get_course_table(TABLE_DOCUMENT);
+        $table = Database::get_course_table(TABLE_DOCUMENT);
         $courseId = $courseInfo['real_id'];
 
         if (!isset($sessionId)) {
@@ -1430,7 +1430,7 @@ class DocumentManager
 
         $session_id = empty($session_id) ? api_get_session_id() : intval($session_id);
         $www = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/document';
-        $TABLE_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT);
+        $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
         $id = intval($id);
 
         $sessionCondition = api_get_session_condition($session_id, true, true);
@@ -1788,7 +1788,7 @@ class DocumentManager
      */
     public static function attach_gradebook_certificate($course_id, $document_id, $session_id = 0)
     {
-        $tbl_category = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+        $tbl_category = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $session_id = intval($session_id);
         if (empty($session_id)) {
             $session_id = api_get_session_id();
@@ -1815,7 +1815,7 @@ class DocumentManager
      */
     public static function get_default_certificate_id($course_id, $session_id = 0)
     {
-        $tbl_category = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+        $tbl_category = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $session_id = intval($session_id);
         if (empty($session_id)) {
             $session_id = api_get_session_id();
@@ -1842,15 +1842,19 @@ class DocumentManager
     }
 
     /**
-     * allow replace user info in file html
+     * Allow replace user info in file html
      * @param int $user_id
      * @param string $course_code
      * @param int $sessionId
      * @param bool $is_preview
      * @return string The html content of the certificate
      */
-    public static function replace_user_info_into_html($user_id, $course_code, $sessionId, $is_preview = false)
-    {
+    public static function replace_user_info_into_html(
+        $user_id,
+        $course_code,
+        $sessionId,
+        $is_preview = false
+    ) {
         $user_id = intval($user_id);
         $course_info = api_get_course_info($course_code);
         $tbl_document = Database::get_course_table(TABLE_DOCUMENT);
@@ -1874,7 +1878,11 @@ class DocumentManager
                 if (is_file($filepath)) {
                     $my_content_html = file_get_contents($filepath);
                 }
-                $all_user_info = self::get_all_info_to_certificate($user_id, $course_code, $is_preview);
+                $all_user_info = self::get_all_info_to_certificate(
+                    $user_id,
+                    $course_code,
+                    $is_preview
+                );
 
                 $info_to_be_replaced_in_content_html = $all_user_info[0];
                 $info_to_replace_in_content_html = $all_user_info[1];
@@ -1885,12 +1893,13 @@ class DocumentManager
                 );
             }
 
-            return array(
+            return [
                 'content' => $new_content,
-                'variables' => $all_user_info,
-            );
+                'variables' => $all_user_info
+            ];
         }
-        return array();
+
+        return [];
     }
 
     /**
@@ -1904,10 +1913,9 @@ class DocumentManager
     {
         $info_list = array();
         $user_id = intval($user_id);
-
         $course_info = api_get_course_info($course_id);
 
-        //info portal
+        // Portal infor
         $organization_name = api_get_setting('Institution');
         $portal_name = api_get_setting('siteName');
 
@@ -1930,7 +1938,7 @@ class DocumentManager
         $last_name = $user_info['lastname'];
         $official_code = $user_info['official_code'];
 
-        //Teacher information
+        // Teacher information
         $info_teacher_id = UserManager::get_user_id_of_course_admin_or_session_admin($course_info);
         $teacher_info = api_get_user_info($info_teacher_id);
         $teacher_first_name = $teacher_info['firstname'];
@@ -1938,7 +1946,6 @@ class DocumentManager
 
         // info gradebook certificate
         $info_grade_certificate = UserManager::get_info_gradebook_certificate($course_id, $user_id);
-
         $date_certificate = $info_grade_certificate['created_at'];
         $date_long_certificate = '';
 
@@ -1954,7 +1961,6 @@ class DocumentManager
         }
 
         $url = api_get_path(WEB_PATH) . 'certificates/index.php?id=' . $info_grade_certificate['id'];
-
         $externalStyleFile = api_get_path(SYS_CSS_PATH) . 'themes/' . api_get_visual_theme() . '/certificate.css';
         $externalStyle = '';
 
@@ -1962,7 +1968,7 @@ class DocumentManager
             $externalStyle = file_get_contents($externalStyleFile);
         }
 
-        //replace content
+        // Replace content
         $info_to_replace_in_content_html = array(
             $first_name,
             $last_name,
@@ -1982,7 +1988,8 @@ class DocumentManager
             $externalStyle
         );
 
-        $info_to_be_replaced_in_content_html = array('((user_firstname))',
+        $info_to_be_replaced_in_content_html = array(
+            '((user_firstname))',
             '((user_lastname))',
             '((gradebook_institution))',
             '((gradebook_sitename))',
@@ -2028,7 +2035,7 @@ class DocumentManager
 
         $default_certificate = self::get_default_certificate_id($course_id);
         if ((int) $default_certificate == (int) $default_certificate_id) {
-            $tbl_category = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+            $tbl_category = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
             $session_id = api_get_session_id();
             if ($session_id == 0 || is_null($session_id)) {
                 $sql_session = 'AND (session_id=' . intval($session_id) . ' OR isnull(session_id)) ';
@@ -2548,7 +2555,7 @@ class DocumentManager
             return false;
         }
 
-        $orig_source_html = DocumentManager::get_resources_from_source_html($content_html);
+        $orig_source_html = self::get_resources_from_source_html($content_html);
         $orig_course_info = api_get_course_info($origin_course_code);
 
         // Course does not exist in the current DB probably this came from a zip file?
@@ -2771,7 +2778,7 @@ class DocumentManager
             $pre_remove .='..\/';
         }
 
-        $orig_source_html = DocumentManager::get_resources_from_source_html($content_html);
+        $orig_source_html = self::get_resources_from_source_html($content_html);
 
         foreach ($orig_source_html as $source) {
 
@@ -2935,7 +2942,7 @@ class DocumentManager
                 }
 
                 if ($new_path) {
-                    $documentId = DocumentManager::get_document_id(
+                    $documentId = self::get_document_id(
                         $course_info,
                         $new_path,
                         $sessionId
@@ -2946,7 +2953,7 @@ class DocumentManager
                         $params = array();
                         /*if ($if_exists == 'rename') {
                             // Remove prefix
-                            $suffix = DocumentManager::getDocumentSuffix(
+                            $suffix = self::getDocumentSuffix(
                                 $course_info,
                                 $sessionId,
                                 api_get_group_id()
@@ -4555,7 +4562,7 @@ class DocumentManager
         );
 
         if ($filePath) {
-            return DocumentManager::get_document_id(
+            return self::get_document_id(
                 $courseInfo,
                 $filePath,
                 $sessionId
@@ -4813,7 +4820,7 @@ class DocumentManager
 
             if (!empty($defaultCertificateId)) {
                 // We have a certificate from the course base
-                $documentData = DocumentManager::get_document_data_by_id(
+                $documentData = self::get_document_data_by_id(
                     $defaultCertificateId,
                     $courseData['code'],
                     false,
@@ -5271,7 +5278,7 @@ class DocumentManager
         $current_session_id = api_get_session_id();
         $courseParams = api_get_cidreq();
         $www = api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/document';
-        $webODFList = DocumentManager::get_web_odf_extension_list();
+        $webODFList = self::get_web_odf_extension_list();
 
         // Get the title or the basename depending on what we're using
         if ($document_data['title'] != '') {
@@ -5364,7 +5371,7 @@ class DocumentManager
                     api_get_setting('students_download_folders') == 'true'
                 ) {
                     //filter: when I am into a shared folder, I can only show "my shared folder" for donwload
-                    if (DocumentManager::is_shared_folder($curdirpath, $current_session_id)) {
+                    if (self::is_shared_folder($curdirpath, $current_session_id)) {
                         if (preg_match('/shared_folder\/sf_user_' . api_get_user_id() . '$/', urldecode($forcedownload_link)) ||
                             preg_match('/shared_folder_session_' . $current_session_id . '\/sf_user_' . api_get_user_id() . '$/', urldecode($forcedownload_link)) ||
                             $isAllowedToEdit || api_is_platform_admin()
@@ -5490,7 +5497,7 @@ class DocumentManager
                     if (preg_match('/mp3$/i', urldecode($checkExtension)) ||
                         (preg_match('/wav$/i', urldecode($checkExtension))) ||
                         preg_match('/ogg$/i', urldecode($checkExtension))) {
-                        $sound_preview = DocumentManager::generate_media_preview($counter);
+                        $sound_preview = self::generate_media_preview($counter);
 
                         return $sound_preview;
                     } elseif (
@@ -5505,16 +5512,16 @@ class DocumentManager
                     ) {
                         $url = 'showinframes.php?' . $courseParams . '&id=' . $document_data['id'];
                         return '<a href="' . $url . '" title="' . $tooltip_title_alt . '" ' . $visibility_class . ' style="float:left">' .
-                        DocumentManager::build_document_icon_tag($filetype, $path, $isAllowedToEdit) .
+                        self::build_document_icon_tag($filetype, $path, $isAllowedToEdit) .
                         Display::return_icon('shared.png', get_lang('ResourceShared'), array()) . '</a>';
                     } else {
                         return '<a href="' . $url . '" title="' . $tooltip_title_alt . '" ' . $visibility_class . ' style="float:left">' .
-                        DocumentManager::build_document_icon_tag($filetype, $path, $isAllowedToEdit) .
+                        self::build_document_icon_tag($filetype, $path, $isAllowedToEdit) .
                         Display::return_icon('shared.png', get_lang('ResourceShared'), array()) . '</a>';
                     }
                 } else {
                     return '<a href="' . $url . '" title="' . $tooltip_title_alt . '" target="' . $target . '"' . $visibility_class . ' style="float:left">' .
-                    DocumentManager::build_document_icon_tag($filetype, $path, $isAllowedToEdit) .
+                    self::build_document_icon_tag($filetype, $path, $isAllowedToEdit) .
                     Display::return_icon('shared.png', get_lang('ResourceShared'), array()) . '</a>';
                 }
             } else {
@@ -5523,7 +5530,7 @@ class DocumentManager
                     if (preg_match('/mp3$/i', urldecode($checkExtension)) ||
                         (preg_match('/wav$/i', urldecode($checkExtension))) ||
                         preg_match('/ogg$/i', urldecode($checkExtension))) {
-                        $sound_preview = DocumentManager::generate_media_preview($counter);
+                        $sound_preview = self::generate_media_preview($counter);
 
                         return $sound_preview;
                     } elseif (
@@ -5540,14 +5547,14 @@ class DocumentManager
                     ) {
                         $url = 'showinframes.php?' . $courseParams . '&id=' . $document_data['id']; //without preview
                         return '<a href="' . $url . '" title="' . $tooltip_title_alt . '" ' . $visibility_class . ' style="float:left">' .
-                        DocumentManager::build_document_icon_tag($filetype, $path, $isAllowedToEdit) . '</a>';
+                        self::build_document_icon_tag($filetype, $path, $isAllowedToEdit) . '</a>';
                     } else {
                         return '<a href="' . $url . '" title="' . $tooltip_title_alt . '" ' . $visibility_class . ' style="float:left">' .
-                        DocumentManager::build_document_icon_tag($filetype, $path, $isAllowedToEdit) . '</a>';
+                        self::build_document_icon_tag($filetype, $path, $isAllowedToEdit) . '</a>';
                     }
                 } else {
                     return '<a href="' . $url . '" title="' . $tooltip_title_alt . '" target="' . $target . '"' . $visibility_class . ' style="float:left">' .
-                    DocumentManager::build_document_icon_tag($filetype, $path, $isAllowedToEdit) . '</a>';
+                    self::build_document_icon_tag($filetype, $path, $isAllowedToEdit) . '</a>';
                 }
             }
         }
@@ -5670,20 +5677,20 @@ class DocumentManager
     {
         $sessionId = api_get_session_id();
         $courseParams = api_get_cidreq();
-        $web_odf_extension_list = DocumentManager::get_web_odf_extension_list();
+        $web_odf_extension_list = self::get_web_odf_extension_list();
         $document_id = $document_data['id'];
         $type = $document_data['filetype'];
         $is_read_only = $document_data['readonly'];
         $path = $document_data['path'];
 
-        $parent_id = DocumentManager::get_document_id(
+        $parent_id = self::get_document_id(
             api_get_course_info(),
             dirname($path),
             0
         );
 
         if (empty($parent_id) && !empty($sessionId)) {
-            $parent_id = DocumentManager::get_document_id(
+            $parent_id = self::get_document_id(
                 api_get_course_info(),
                 dirname($path),
                 $sessionId
@@ -5691,12 +5698,12 @@ class DocumentManager
         }
 
         $curdirpath = dirname($document_data['path']);
-        $is_certificate_mode = DocumentManager::is_certificate_mode($path);
+        $is_certificate_mode = self::is_certificate_mode($path);
         $curdirpath = urlencode($curdirpath);
         $extension = pathinfo($path, PATHINFO_EXTENSION);
         //@todo Implement remote support for converter
         $usePpt2lp = (api_get_setting('service_ppt2lp', 'active') == 'true' && api_get_setting('service_ppt2lp', 'host') == 'localhost');
-        $formatTypeList = DocumentManager::getFormatTypeListConvertor('from', $extension);
+        $formatTypeList = self::getFormatTypeListConvertor('from', $extension);
         $formatType = current($formatTypeList);
 
         // Build URL-parameters for table-sorting
@@ -5746,7 +5753,7 @@ class DocumentManager
             $modify_icons .= '&nbsp;' . Display::return_icon('delete_na.png', get_lang('Delete'), array(), ICON_SIZE_SMALL);
         } else {
             //Edit button
-            if (in_array($path, DocumentManager::get_system_folders())) {
+            if (in_array($path, self::get_system_folders())) {
                 $modify_icons = Display::return_icon('edit_na.png', get_lang('Modify'), '', ICON_SIZE_SMALL);
             } elseif ($is_certificate_mode ) {
                 // gradebook category doesn't seem to be taken into account
@@ -5788,7 +5795,7 @@ class DocumentManager
             }
 
             // Move button.
-            if ($is_certificate_mode || in_array($path, DocumentManager::get_system_folders())) {
+            if ($is_certificate_mode || in_array($path, self::get_system_folders())) {
                 $modify_icons .= '&nbsp;' . Display::return_icon('move_na.png', get_lang('Move'), array(), ICON_SIZE_SMALL) . '</a>';
             } else {
                 if ($sessionId) {
@@ -5820,14 +5827,14 @@ class DocumentManager
             }
 
             // Delete button
-            if (in_array($path, DocumentManager::get_system_folders())) {
+            if (in_array($path, self::get_system_folders())) {
                 $modify_icons .= '&nbsp;' . Display::return_icon('delete_na.png', get_lang('ThisFolderCannotBeDeleted'), array(), ICON_SIZE_SMALL);
             } else {
                 $titleToShow = addslashes(basename($document_data['title']));
 
                 if (isset($_GET['curdirpath']) &&
                     $_GET['curdirpath'] == '/certificates' &&
-                    DocumentManager::get_default_certificate_id(api_get_course_id()) == $id
+                    self::get_default_certificate_id(api_get_course_id()) == $id
                 ) {
                     $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?' . $courseParams . '&amp;curdirpath=' . $curdirpath . '&action=delete_item&id='.$parent_id.'&deleteid='.$document_id.'&amp;' . $sort_params . 'delete_certificate_id=' . $id . '" onclick="return confirmation(\'' . $titleToShow . '\');">' .
                         Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL) . '</a>';
@@ -5853,7 +5860,7 @@ class DocumentManager
 
             // Add action to covert to PDF, will create a new document whit same filename but .pdf extension
             // @TODO: add prompt to select a format target
-            if (in_array($path, DocumentManager::get_system_folders())) {
+            if (in_array($path, self::get_system_folders())) {
                 // nothing to do
             } else {
                 if ($usePpt2lp && $formatType) {
@@ -5878,7 +5885,7 @@ class DocumentManager
                 }
                 if (isset($_GET['curdirpath']) && $_GET['curdirpath'] == '/certificates') {//allow attach certificate to course
                     $visibility_icon_certificate = 'nocertificate';
-                    if (DocumentManager::get_default_certificate_id(api_get_course_id()) == $id) {
+                    if (self::get_default_certificate_id(api_get_course_id()) == $id) {
                         $visibility_icon_certificate = 'certificate';
                         $certificate = get_lang('DefaultCertificate');
                         $preview = get_lang('PreviewCertificate');
@@ -5978,7 +5985,7 @@ class DocumentManager
                     ) {
                         $path_displayed = $folder;
                         // If document title is used, we have to display titles instead of real paths...
-                        $path_displayed = DocumentManager::get_titles_of_path($folder);
+                        $path_displayed = self::get_titles_of_path($folder);
 
                         if (empty($path_displayed)) {
                             $path_displayed = get_lang('Untitled');
@@ -5994,7 +6001,7 @@ class DocumentManager
                     (substr($folder, 0, strlen($move_file) + 1) != $move_file . '/')
                 ) {
                     // Cannot copy dir into his own subdir
-                    $path_displayed = DocumentManager::get_titles_of_path($folder);
+                    $path_displayed = self::get_titles_of_path($folder);
                     $display_folder = substr($path_displayed, strlen($group_dir));
                     $display_folder = ($display_folder == '') ? get_lang('Documents') : $display_folder;
                     //$form .= '<option value="'.$folder.'">'.$display_folder.'</option>';
@@ -6343,7 +6350,7 @@ class DocumentManager
         }
 
         if (Security::check_abs_path($tempZipFile, api_get_path(SYS_ARCHIVE_PATH))) {
-            DocumentManager::file_send_for_download($tempZipFile, true);
+            self::file_send_for_download($tempZipFile, true);
             @unlink($tempZipFile);
             exit;
         }
@@ -6394,7 +6401,7 @@ class DocumentManager
 
             foreach ($documents as $document) {
                 $documentId = $document['id'];
-                DocumentManager::delete_document(
+                self::delete_document(
                     $courseInfo,
                     null,
                     $base_work_dir,

@@ -61,7 +61,7 @@ class DisplayGradebook
             $visible = get_lang('No');
         }
 
-        $scoredisplay = ScoreDisplay :: instance();
+        $scoredisplay = ScoreDisplay::instance();
         $student_score = '';
         $average = '';
         if (($evalobj->has_results())) {
@@ -264,7 +264,7 @@ class DisplayGradebook
             /** @var Category $category */
             $category = $catcourse[0];
             $main_weight = $category->get_weight();
-            $scoredisplay = ScoreDisplay :: instance();
+            $scoredisplay = ScoreDisplay::instance();
             $allevals = $category->get_evaluations($userId, true);
             $alllinks = $category->get_links($userId, true);
             $allEvalsLinks = array_merge($allevals, $alllinks);
@@ -295,7 +295,7 @@ class DisplayGradebook
                 $scoreinfo .= '<strong>' . sprintf(get_lang('TotalX'), $scorecourse_display . $aditionalButtons). '</strong>';
 
             }
-            Display :: display_normal_message($scoreinfo, false);
+            Display::display_normal_message($scoreinfo, false);
         }
 
         // show navigation tree and buttons?
@@ -308,7 +308,7 @@ class DisplayGradebook
             }
             $header .= '<td>' . get_lang('CurrentCategory') . '</td>' .
                     '<td><form name="selector"><select name="selectcat" onchange="document.selector.submit()">';
-            $cats = Category :: load();
+            $cats = Category::load();
 
             $tree = $cats[0]->get_tree();
             unset($cats);
@@ -366,7 +366,7 @@ class DisplayGradebook
                 if ($show_add_link && !$message_resource) {
                     $actionsLeft .= '<a href="gradebook_add_eval.php?' . $my_api_cidreq . '&selectcat=' . $catobj->get_id() . '" >' .
                         Display::return_icon('new_evaluation.png', get_lang('NewEvaluation'), '', ICON_SIZE_MEDIUM) . '</a>';
-                    $cats = Category :: load($selectcat);
+                    $cats = Category::load($selectcat);
 
                     if ($cats[0]->get_course_code() != null && !$message_resource) {
                         $actionsLeft .= '<a href="gradebook_add_link.php?' . $my_api_cidreq . '&selectcat=' . $catobj->get_id() . '">' .
@@ -477,18 +477,18 @@ class DisplayGradebook
         //student
         if (!$is_course_admin) {
             $user = api_get_user_info(api_get_user_id());
-            $catcourse = Category :: load($catobj->get_id());
-            $scoredisplay = ScoreDisplay :: instance();
+            $catcourse = Category::load($catobj->get_id());
+            $scoredisplay = ScoreDisplay::instance();
             $scorecourse = $catcourse[0]->calc_score(api_get_user_id());
             $scorecourse_display = (isset($scorecourse) ? $scoredisplay->display_score($scorecourse, SCORE_AVERAGE) : get_lang('NoResultsAvailable'));
-            $cattotal = Category :: load(0);
+            $cattotal = Category::load(0);
             $scoretotal = $cattotal[0]->calc_score(api_get_user_id());
             $scoretotal_display = (isset($scoretotal) ? $scoredisplay->display_score($scoretotal, SCORE_PERCENT) : get_lang('NoResultsAvailable'));
             $scoreinfo = get_lang('StatsStudent') . ' :<b> ' . $user['complete_name']. '</b><br />';
             if ((!$catobj->get_id() == '0') && (!isset($_GET['studentoverview'])) && (!isset($_GET['search'])))
                 $scoreinfo.= '<br />' . get_lang('TotalForThisCategory') . ' : <b>' . $scorecourse_display . '</b>';
             $scoreinfo.= '<br />' . get_lang('Total') . ' : <b>' . $scoretotal_display . '</b>';
-            Display :: display_normal_message($scoreinfo, false);
+            Display::display_normal_message($scoreinfo, false);
         }
         // show navigation tree and buttons?
         $header = '<div class="actions">';
@@ -517,8 +517,8 @@ class DisplayGradebook
             return '';
         }
 
-        $catcourse = Category :: load($categoryId);
-        $scoredisplay = ScoreDisplay :: instance();
+        $catcourse = Category::load($categoryId);
+        $scoredisplay = ScoreDisplay::instance();
 
         // generating the total score for a course
         $allevals = $catcourse[0]->get_evaluations($userId, true, api_get_course_id());

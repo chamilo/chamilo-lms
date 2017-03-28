@@ -139,7 +139,7 @@ class DashboardManager
      */
     public static function store_dashboard_plugins($plugin_paths)
     {
-        $tbl_block = Database :: get_main_table(TABLE_MAIN_BLOCK);
+        $tbl_block = Database::get_main_table(TABLE_MAIN_BLOCK);
         $affected_rows = 0;
 
         // get all plugins path inside plugin directory
@@ -279,7 +279,7 @@ class DashboardManager
      */
     public static function get_block_data_without_plugin()
     {
-        $tbl_block = Database :: get_main_table(TABLE_MAIN_BLOCK);
+        $tbl_block = Database::get_main_table(TABLE_MAIN_BLOCK);
         $possibleplugins = self::getPossibleDashboardPluginsPath();
 
         // We check if plugin exists inside directory for updating active field
@@ -320,7 +320,7 @@ class DashboardManager
      */
     public static function get_enabled_dashboard_blocks($path = '')
     {
-        $tbl_block = Database :: get_main_table(TABLE_MAIN_BLOCK);
+        $tbl_block = Database::get_main_table(TABLE_MAIN_BLOCK);
         $condition_path = '';
         if (!empty($path)) {
             $path = Database::escape_string($path);

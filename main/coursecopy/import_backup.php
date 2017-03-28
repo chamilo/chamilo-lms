@@ -97,21 +97,21 @@ if (Security::check_token('post') && (
         $cr = new CourseRestorer($course);
         $cr->set_file_option($_POST['same_file_name_option']);
         $cr->restore();
-        Display::display_normal_message(get_lang('ImportFinished'));
+        Display::addFlash(Display::return_message(get_lang('ImportFinished')));
         echo '<a class="btn btn-default" href="' . api_get_path(WEB_COURSE_PATH) . api_get_course_path() . '/index.php">' . get_lang('CourseHomepage') . '</a>';
     } else {
         if (!$error) {
-            Display::display_warning_message(get_lang('NoResourcesInBackupFile'));
+            Display::addFlash(Display::return_message(get_lang('NoResourcesInBackupFile'), 'warning'));
             echo '<a class="btn btn-default" href="import_backup.php?' . api_get_cidreq() . '">' . get_lang('TryAgain') . '</a>';
         } elseif ($filename === false) {
-            Display::display_error_message(get_lang('ArchivesDirectoryNotWriteableContactAdmin'));
+            Display::addFlash(Display::return_message(get_lang('ArchivesDirectoryNotWriteableContactAdmin'), 'error'));
             echo '<a class="btn btn-default" href="import_backup.php?' . api_get_cidreq() . '">' . get_lang('TryAgain') . '</a>';
         } else {
             if ($filename == '') {
-                Display::display_error_message(get_lang('SelectBackupFile'));
+                Display::addFlash(Display::return_message(get_lang('SelectBackupFile'), 'error'));
                 echo '<a class="btn btn-default" href="import_backup.php?' . api_get_cidreq() . '">' . get_lang('TryAgain') . '</a>';
             } else {
-                Display::display_error_message(get_lang('UploadError'));
+                Display::addFlash(Display::return_message(get_lang('UploadError'), 'error'));
                 echo '<a class="btn btn-default" href="import_backup.php?' . api_get_cidreq() . '">' . get_lang('TryAgain') . '</a>';
             }
         }
@@ -141,10 +141,10 @@ if (Security::check_token('post') && (
         $hiddenFields['sec_token'] = Security::get_token();
         CourseSelectForm::display_form($course, $hiddenFields);
     } elseif ($filename === false) {
-        Display::display_error_message(get_lang('ArchivesDirectoryNotWriteableContactAdmin'));
+        Display::addFlash(Display::return_message(get_lang('ArchivesDirectoryNotWriteableContactAdmin'), 'error'));
         echo '<a class="btn btn-default" href="import_backup.php?' . api_get_cidreq() . '">' . get_lang('TryAgain') . '</a>';
     } else {
-        Display::display_warning_message(get_lang('NoResourcesInBackupFile'));
+        Display::addFlash(Display::return_message(get_lang('NoResourcesInBackupFile'), 'warning'));
         echo '<a class="btn btn-default" href="import_backup.php?' . api_get_cidreq() . '">' . get_lang('TryAgain') . '</a>';
     }
 } else {

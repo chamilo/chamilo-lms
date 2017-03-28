@@ -89,7 +89,7 @@ class Editor
     public function createHtml()
     {
         $html = '<textarea id="'.$this->getName().'" name="'.$this->getName().'">'.$this->value.'</textarea>';
-        //$html .= $this->editorReplace();
+
         return $html;
     }
 
@@ -102,6 +102,7 @@ class Editor
         $toolbar->setLanguage($this->getLocale());
         $config = $toolbar->getConfig();
         $javascript = $this->toJavascript($config);
+
         $html = "<script>
            CKEDITOR.replace('".$this->name."',
                $javascript
@@ -128,16 +129,20 @@ class Editor
             case 'boolean':
                 return $var ? 'true' : 'false'; // Lowercase necessary!
             case 'integer':
+                //no break
             case 'double':
                 return (string)$var;
+                //no break
             case 'resource':
+                //no break
             case 'string':
                 return '"'.str_replace(
                     array("\r", "\n", "<", ">", "&"),
                     array('\r', '\n', '\x3c', '\x3e', '\x26'),
                     addslashes($var)
                 ).'"';
-             case 'array':
+                break;
+            case 'array':
                 // Arrays in JSON can't be associative. If the array is empty or if it
                 // has sequential whole number keys starting with 0, it's not associative
                 // so we can go ahead and convert it as an array.
@@ -149,6 +154,7 @@ class Editor
 
                     return '[ '.implode(', ', $output).' ]';
                 }
+                //no break
             case 'object':
                 // Otherwise, fall through to convert the array as an object.
                 $output = array();
@@ -156,6 +162,7 @@ class Editor
                     $output[] = $this->toJavascript(strval($k)).': '.$this->toJavascript($v);
                 }
                 return '{ '.implode(', ', $output).' }';
+                break;
             default:
                 return 'null';
         }

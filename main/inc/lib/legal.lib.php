@@ -31,7 +31,7 @@ class LegalManager
         $time = time();
 
         if ($last['content'] != $content) {
-            $version = intval(LegalManager::get_last_condition_version($language));
+            $version = intval(self::get_last_condition_version($language));
             $version++;
             $params = [
                 'language_id' => $language,

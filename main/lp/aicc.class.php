@@ -709,8 +709,8 @@ class aicc extends learnpath
         $zip_folder->create($scormfoldername.'/', PCLZIP_OPT_REMOVE_PATH, $scormfoldername.'/');
 
         //this file sending implies removing the default mime-type from php.ini
-        //DocumentManager :: file_send_for_download($zipfilename, true, $LPnamesafe.".zip");
-        DocumentManager :: file_send_for_download($zipfilename, true);
+        //DocumentManager::file_send_for_download($zipfilename, true, $LPnamesafe.".zip");
+        DocumentManager::file_send_for_download($zipfilename, true);
 
         // Delete the temporary zip file and directory in fileManage.lib.php
         my_delete($zipfilename);
@@ -933,8 +933,10 @@ class aicc extends learnpath
                         $fldval .= $chr;
                     break;
                 case "\r":
-                    if (!$enclosed&&$data{$i+1} == "\n")
+                    if (!$enclosed&&$data{$i+1} == "\n") {
                         continue;
+                    }
+                    // no break
                 case "\n":
                     if (!$enclosed) {
                         $ret_array[$linecount++][$fldcount] = $fldval;
@@ -944,8 +946,10 @@ class aicc extends learnpath
                         $fldval .= $chr;
                     break;
                 case "\\r":
-                    if (!$enclosed&&$data{$i+1} == "\\n")
+                    if (!$enclosed&&$data{$i+1} == "\\n") {
                         continue;
+                    }
+                    // no break
                 case "\\n":
                     if (!$enclosed) {
                         $ret_array[$linecount++][$fldcount] = $fldval;

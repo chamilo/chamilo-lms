@@ -47,7 +47,7 @@ class WSCMError
     /**
      * Sets the error handler
      *
-     * @param WSErrorHandler Error handler
+     * @param WSErrorHandler $handler Error handler
      */
     public static function setErrorHandler($handler)
     {
@@ -85,7 +85,7 @@ interface WSCMErrorHandler
 	/**
 	 * Handle method
 	 *
-	 * @param WSError Error
+	 * @param WSError $error Error
 	 */
 	public function handle($error);
 }
@@ -113,7 +113,7 @@ class WSCM
 	/**
 	 * Verifies the API key
 	 *
-	 * @param string Secret key
+	 * @param string $secret_key Secret key
 	 * @return mixed WSError in case of failure, null in case of success
 	 */
 	protected function verifyKey($secret_key)
@@ -137,10 +137,10 @@ class WSCM
 	/**
 	 * Verifies if the user is valid
 	 *
-	 * @param <String> $username of the user in chamilo
-	 * @param <String> $pass of the same user (in MD5 of SHA)
+	 * @param string $username of the user in chamilo
+	 * @param string $pass of the same user (in MD5 of SHA)
 	 *
-	 * return "valid" if username e password are correct! Else, return a message error
+	 * @return mixed "valid" if username e password are correct! Else, return a message error
 	 */
 	public function verifyUserPass($username, $pass)
     {
@@ -185,8 +185,8 @@ class WSCM
 	 * Note that if the user id field name is "chamilo_user_id", it will use the user id
 	 * in the system database
 	 *
-	 * @param string User id field name
-	 * @param string User id value
+	 * @param string $user_id_field_name User id field name
+	 * @param string $user_id_value User id value
 	 * @return mixed System user id if the user was found, WSError otherwise
 	 */
     protected function getUserId($user_id_field_name, $user_id_value)
@@ -215,8 +215,8 @@ class WSCM
 	 * Note that if the course id field name is "chamilo_course_id", it will use the course id
 	 * in the system database
 	 *
-	 * @param string Course id field name
-	 * @param string Course id value
+	 * @param string $course_id_field_name Course id field name
+	 * @param string $course_id_value Course id value
 	 * @return mixed System course id if the course was found, WSError otherwise
 	 */
 	protected function getCourseId($course_id_field_name, $course_id_value)
@@ -245,8 +245,8 @@ class WSCM
 	 * Note that if the session id field name is "chamilo_session_id", it will use the session id
 	 * in the system database
 	 *
-	 * @param string Session id field name
-	 * @param string Session id value
+	 * @param string $session_id_field_name Session id field name
+	 * @param string $session_id_value Session id value
 	 * @return mixed System session id if the session was found, WSError otherwise
 	 */
 	protected function getSessionId($session_id_field_name, $session_id_value)
@@ -274,7 +274,7 @@ class WSCM
 	/**
 	 * Handles an error by calling the WSError error handler
 	 *
-	 * @param WSError Error
+	 * @param WSError $error Error
 	 */
 	protected function handleError($error)
 	{
@@ -304,8 +304,8 @@ class WSCM
 
 	/**
 	 * *Strictly* reverts PHP's nl2br() effects (whether it was used in XHTML mode or not)
-	 * @param <type> $string
-	 * @return <type> $string
+	 * @param string $string
+	 * @return string
 	 */
 	public function nl2br_revert($string)
     {

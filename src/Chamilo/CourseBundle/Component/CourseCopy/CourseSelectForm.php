@@ -335,8 +335,8 @@ class CourseSelectForm
     		}
 		}
 
-		CourseSelectForm::display_hidden_quiz_questions($course);
-		CourseSelectForm::display_hidden_scorm_directories($course);
+		self::display_hidden_quiz_questions($course);
+		self::display_hidden_scorm_directories($course);
 		echo '</form>';
         echo '</div>';
 		echo '<div id="dynamic_div" style="display:block;margin-left:40%;margin-top:10px;height:50px;"></div>';
@@ -528,9 +528,13 @@ class CourseSelectForm
                                 }
                             }
                         }
+                        // no break
 					case RESOURCE_LINKCATEGORY:
+					    // no break
 					case RESOURCE_FORUMCATEGORY:
+					    // no break
 					case RESOURCE_QUIZQUESTION:
+					    // no break
 					case RESOURCE_DOCUMENT:
 						// Mark folders to import which are not selected by the user to import,
 						// but in which a document was selected.
@@ -557,7 +561,7 @@ class CourseSelectForm
 									}
 								}
 							}
-					default :
+					default:
 						if (!empty($resources) && is_array($resources)) {
 							foreach ($resources as $id => $obj) {
 								$resource_is_used_elsewhere = $course->is_linked_resource($obj);
@@ -691,8 +695,8 @@ class CourseSelectForm
 			}
 		}
 		echo '<br /><button class="save" type="submit" onclick="checkLearnPath(\''.addslashes(get_lang('DocumentsWillBeAddedToo')).'\')">'.get_lang('Ok').'</button>';
-		CourseSelectForm :: display_hidden_quiz_questions($course);
-		CourseSelectForm :: display_hidden_scorm_directories($course);
+		self::display_hidden_quiz_questions($course);
+		self::display_hidden_scorm_directories($course);
 		echo '</form>';
         echo '</div>';
 		echo '<div id="dynamic_div" style="display:block;margin-left:40%;margin-top:10px;height:50px;"></div>';

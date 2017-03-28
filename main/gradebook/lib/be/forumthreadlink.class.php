@@ -48,7 +48,7 @@ class ForumThreadLink extends AbstractLink
             return [];
         }
 
-        $tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+        $tbl_grade_links = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
         $sql = 'SELECT thread_id,thread_title,thread_title_qualify 
                 FROM '.$this->get_forum_thread_table().'
 			    forum_thread WHERE thread_id NOT IN
@@ -86,8 +86,8 @@ class ForumThreadLink extends AbstractLink
 			return [];
 		}
 
-		$tbl_grade_links 	= Database :: get_course_table(TABLE_FORUM_THREAD);
-		$tbl_item_property	= Database :: get_course_table(TABLE_ITEM_PROPERTY);
+		$tbl_grade_links 	= Database::get_course_table(TABLE_FORUM_THREAD);
+		$tbl_item_property	= Database::get_course_table(TABLE_ITEM_PROPERTY);
 		$session_id = api_get_session_id();
 
 		if ($session_id) {
@@ -126,7 +126,7 @@ class ForumThreadLink extends AbstractLink
     */
     public function has_results()
     {
-        $table = Database :: get_course_table(TABLE_FORUM_POST);
+        $table = Database::get_course_table(TABLE_FORUM_POST);
 
         $sql = "SELECT count(*) AS number FROM $table
                 WHERE
@@ -161,7 +161,7 @@ class ForumThreadLink extends AbstractLink
         );
 
         $sql = 'SELECT thread_qualify_max
-                FROM '.Database :: get_course_table(TABLE_FORUM_THREAD)."
+                FROM '.Database::get_course_table(TABLE_FORUM_THREAD)."
                 WHERE 
                     c_id = ".$this->course_id." AND 
                     thread_id = '".$this->get_ref_id()."'
@@ -264,7 +264,7 @@ class ForumThreadLink extends AbstractLink
      */
     private function get_forum_thread_table()
     {
-        return $this->forum_thread_table = Database :: get_course_table(TABLE_FORUM_THREAD);
+        return $this->forum_thread_table = Database::get_course_table(TABLE_FORUM_THREAD);
     }
 
     public function needs_name_and_description()

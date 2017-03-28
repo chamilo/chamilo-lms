@@ -304,7 +304,7 @@ class ZombieReport implements Countable
 
     function format_email($email)
     {
-        return Display :: encrypted_mailto_link($email, $email);
+        return Display::encrypted_mailto_link($email, $email);
     }
 
     function display($return = false)

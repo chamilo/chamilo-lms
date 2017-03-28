@@ -26,7 +26,7 @@ class AddCourse
         $add_unique_prefix = false,
         $use_code_indepedent_keys = true
     ) {
-        $course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
+        $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
         $wanted_code = CourseManager::generate_course_code($wanted_code);
         $keys_course_code = $wanted_code;
         if (!$use_code_indepedent_keys) {

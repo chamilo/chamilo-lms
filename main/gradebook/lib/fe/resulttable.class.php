@@ -36,7 +36,7 @@ class ResultTable extends SortableTable
         if (isset($addparams)) {
             $this->set_additional_parameters($addparams);
         }
-        $scoredisplay = ScoreDisplay :: instance();
+        $scoredisplay = ScoreDisplay::instance();
         $column= 0;
         if ($this->iscourse == '1') {
             $this->set_header($column++, '', false);
@@ -74,7 +74,7 @@ class ResultTable extends SortableTable
     public function get_table_data($from = 1, $per_page = null, $column = null, $direction = null, $sort = null) {
 
         $is_western_name_order = api_is_western_name_order();
-        $scoredisplay = ScoreDisplay :: instance();
+        $scoredisplay = ScoreDisplay::instance();
 
         // determine sorting type
         $col_adjust = $this->iscourse == '1' ? 1 : 0;
@@ -83,32 +83,32 @@ class ResultTable extends SortableTable
             // first name or last name
             case (0 + $col_adjust):
                 if ($is_western_name_order) {
-                    $sorting = ResultsDataGenerator :: RDG_SORT_FIRSTNAME;
+                    $sorting = ResultsDataGenerator::RDG_SORT_FIRSTNAME;
                 } else {
-                    $sorting = ResultsDataGenerator :: RDG_SORT_LASTNAME;
+                    $sorting = ResultsDataGenerator::RDG_SORT_LASTNAME;
                 }
                 break;
             // first name or last name
             case (1 + $col_adjust):
                 if ($is_western_name_order) {
-                    $sorting = ResultsDataGenerator :: RDG_SORT_LASTNAME;
+                    $sorting = ResultsDataGenerator::RDG_SORT_LASTNAME;
                 } else {
-                    $sorting = ResultsDataGenerator :: RDG_SORT_FIRSTNAME;
+                    $sorting = ResultsDataGenerator::RDG_SORT_FIRSTNAME;
                 }
                 break;
             //Score
             case (2 + $col_adjust):
-                $sorting = ResultsDataGenerator :: RDG_SORT_SCORE;
+                $sorting = ResultsDataGenerator::RDG_SORT_SCORE;
                 break;
             case (3 + $col_adjust):
-                $sorting = ResultsDataGenerator :: RDG_SORT_MASK;
+                $sorting = ResultsDataGenerator::RDG_SORT_MASK;
                 break;
         }
 
         if ($this->direction == 'DESC') {
-            $sorting |= ResultsDataGenerator :: RDG_SORT_DESC;
+            $sorting |= ResultsDataGenerator::RDG_SORT_DESC;
         } else {
-            $sorting |= ResultsDataGenerator :: RDG_SORT_ASC;
+            $sorting |= ResultsDataGenerator::RDG_SORT_ASC;
         }
 
         $data_array = $this->datagen->get_data($sorting, $from, $this->per_page);

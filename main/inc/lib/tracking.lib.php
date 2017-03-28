@@ -192,7 +192,7 @@ class Tracking
             $actionColumn = ' <th>' . get_lang('Actions') . '</th>';
         }
         $output .= '<div class="table-responsive">';
-        $output .= '<table class="table tracking">
+        $output .= '<table id="lp_tracking" class="table tracking">
             <thead>
             <tr class="table-header">
                 <th width="16">' . ($allowExtend == true ? $extend_all_link : '&nbsp;') . '</th>
@@ -205,7 +205,7 @@ class Tracking
                 <th colspan="2">
                     ' . get_lang('ScormScore') . '
                 </th>
-                <th colspan="2">
+                <th class="lp_time" colspan="2">
                     ' . get_lang('ScormTime') . '
                 </th>
                 '.$actionColumn.'
@@ -472,7 +472,7 @@ class Tracking
                                     <td colspan="3">' . get_lang('Attempt') . ' ' . $attemptCount . '</td>
                                     <td colspan="2">' . learnpathItem::humanize_status($lesson_status, true, $type) . '</td>
                                     <td colspan="2">' . $view_score . '</td>
-                                    <td colspan="2">' . $time . '</td>
+                                    <td class="lp_time" colspan="2">' . $time . '</td>
                                     '.$action.'
                                 </tr>';
                             $attemptCount++;
@@ -530,7 +530,7 @@ class Tracking
                                         <td>'.$student_response . '</td>
                                         <td>'.$interaction['result'] . '</td>
                                         <td>'.$interaction['latency'] . '</td>
-                                        <td>'.$interaction['time'] . '</td>
+                                        <td class="lp_time">'.$interaction['time'] . '</td>
                                         '.$action.'
                                     </tr>';
                                 $counter++;
@@ -834,7 +834,7 @@ class Tracking
                                 <td colspan="4">' . $title . '</td>
                                 <td colspan="2">' . learnpathitem::humanize_status($lesson_status) .'</td>
                                 <td colspan="2">'.$scoreItem.'</td>
-                                <td colspan="2">'.$time.'</td>
+                                <td class="lp_time" colspan="2">'.$time.'</td>
                                 '.$action.'
                              ';
                             $output .= '</tr>';
@@ -884,7 +884,7 @@ class Tracking
                                     <td>'.urldecode($interaction['student_response']).'</td>
                                     <td>'.$interaction['result'].'</td>
                                     <td>'.$interaction['latency'].'</td>
-                                    <td>'.$interaction['time'].'</td>
+                                    <td class="lp_time">'.$interaction['time'].'</td>
                                     '.$action.'
                                </tr>';
                             $counter++;
@@ -986,7 +986,7 @@ class Tracking
                                         <td colspan="3">' . get_lang('Attempt').' '. $n.'</td>
                                         <td colspan="2">' . $my_lesson_status . '</td>
                                         <td colspan="2">'.$view_score . '</td>
-                                        <td colspan="2">'.$time_attemp . '</td>';
+                                        <td class="lp_time" colspan="2">'.$time_attemp . '</td>';
                                         if ($action == 'classic') {
                                             if ($origin != 'tracking') {
                                                 if (!$is_allowed_to_edit && $result_disabled_ext_all) {
@@ -1096,10 +1096,8 @@ class Tracking
                     <i>' . get_lang('AccomplishedStepsTotal') .'</i>
                 </td>
                 <td colspan="2">'.$progress.'%</td>
-                <td colspan="2">
-                    ' . $final_score.'
-                </td>
-                <td colspan="2">' . $total_time . '</div>
+                <td colspan="2">' . $final_score.'</td>
+                <td class="lp_time" colspan="2">' . $total_time . '</div>
                 '.$action.'
            </tr>';
 
@@ -4411,21 +4409,21 @@ class Tracking
                     $courseInfo = api_get_course_info($course_code);
                     $courseId = $courseInfo['real_id'];
 
-                    $total_time_login = Tracking::get_time_spent_on_the_course(
+                    $total_time_login = self::get_time_spent_on_the_course(
                         $user_id,
                         $courseId
                     );
                     $time = api_time_to_hms($total_time_login);
-                    $progress = Tracking::get_avg_student_progress(
+                    $progress = self::get_avg_student_progress(
                         $user_id,
                         $course_code
                     );
-                    $percentage_score = Tracking::get_avg_student_score(
+                    $percentage_score = self::get_avg_student_score(
                         $user_id,
                         $course_code,
                         array()
                     );
-                    $last_connection = Tracking::get_last_connection_date_on_the_course(
+                    $last_connection = self::get_last_connection_date_on_the_course(
                         $user_id,
                         $courseInfo
                     );
@@ -6129,7 +6127,7 @@ class TrackingCourseLog
     	$thematic_tools = array('thematic', 'thematic_advance', 'thematic_plan');
     	while ($row = Database::fetch_array($res)) {
     		$ref = $row['ref'];
-    		$table_name = TrackingCourseLog::get_tool_name_table($row['col0']);
+    		$table_name = self::get_tool_name_table($row['col0']);
     		$table_tool = Database::get_course_table($table_name['table_name']);
 
     		$id = $table_name['id_tool'];

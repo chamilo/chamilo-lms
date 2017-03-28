@@ -17,9 +17,8 @@ switch ($_SESSION['whereami']) {
 	case 'document/edit' :
 		$autostart = 'false';
 	break;
-	default :
+	default:
 		$autostart = 'true';
 
 }
 echo utf8_encode('autostart='.$autostart);
-?>

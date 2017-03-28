@@ -409,8 +409,8 @@ class Auth
     public function search_courses($search_term, $limit, $justVisible = false)
     {
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
-        $extraFieldTable = Database :: get_main_table(TABLE_EXTRA_FIELD);
-        $extraFieldValuesTable = Database :: get_main_table(TABLE_EXTRA_FIELD_VALUES);
+        $extraFieldTable = Database::get_main_table(TABLE_EXTRA_FIELD);
+        $extraFieldValuesTable = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
 
         $limitFilter = CourseCategory::getLimitFilterFromArray($limit);
 

@@ -84,7 +84,7 @@ class BlockGlobalInfo extends Block
     	return $data;
     }
 
- 	/**
+    /**
  	 * This method return a content html, it's used inside get_block method for showing it inside dashboard interface
  	 * @return string  content html
  	 */
@@ -95,7 +95,7 @@ class BlockGlobalInfo extends Block
          $content = '<h4>'.get_lang('GlobalPlatformInformation').'</h4>';
          $data_table = null;
          if (!empty($global_data)) {
-             $data_table = '<table class="table table-bordered" width:"95%">';
+             $data_table = '<table class="table table-bordered" width="95%">';
              $i = 1;
              foreach ($global_data as $data) {
                  if ($i%2 == 0) {

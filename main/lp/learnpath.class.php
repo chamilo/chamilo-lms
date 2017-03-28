@@ -8941,26 +8941,39 @@ class learnpath
         $res_hot  = Database::query($sql_hot);
 
         $return = '<ul class="lp_resource">';
-
         $return .= '<li class="lp_resource_element">';
         $return .= Display::return_icon('new_exercice.png');
         $return .= '<a href="' . api_get_path(WEB_CODE_PATH) . 'exercise/exercise_admin.php?'.api_get_cidreq().'&lp_id=' . $this->lp_id . '">' .
             get_lang('NewExercise') . '</a>';
         $return .= '</li>';
 
+        $previewIcon = Display::return_icon('preview_view.png', get_lang('Preview'));
+        $exerciseUrl = api_get_path(WEB_CODE_PATH).'exercise/showinframes.php?'.api_get_cidreq();
+
         // Display hotpotatoes
         while ($row_hot = Database::fetch_array($res_hot)) {
+            $link = Display::url(
+                $previewIcon,
+                $exerciseUrl.'&file='.$row_hot['path'],
+                ['target' => '_blank']
+            );
             $return .= '<li class="lp_resource_element" data_id="'.$row_hot['id'].'" data_type="hotpotatoes" title="'.$row_hot['title'].'" >';
             $return .= '<a class="moved" href="#">';
             $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
             $return .= '</a> ';
             $return .= Display::return_icon('hotpotatoes_s.png');
             $return .= '<a href="' . api_get_self() . '?' . api_get_cidreq().'&action=add_item&type=' . TOOL_HOTPOTATOES . '&file=' . $row_hot['id'] . '&lp_id=' . $this->lp_id . '">'.
-                ((!empty ($row_hot['comment'])) ? $row_hot['comment'] : Security::remove_XSS($row_hot['title'])) . '</a>';
+                ((!empty ($row_hot['comment'])) ? $row_hot['comment'] : Security::remove_XSS($row_hot['title'])) .$link. '</a>';
             $return .= '</li>';
         }
 
+        $exerciseUrl = api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq();
         while ($row_quiz = Database::fetch_array($res_quiz)) {
+            $link = Display::url(
+                $previewIcon,
+                $exerciseUrl.'&exerciseId='.$row_quiz['id'],
+                ['target' => '_blank']
+            );
             $return .= '<li class="lp_resource_element" data_id="'.$row_quiz['id'].'" data_type="quiz" title="'.$row_quiz['title'].'" >';
             $return .= '<a class="moved" href="#">';
             $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
@@ -8968,7 +8981,7 @@ class learnpath
             $return .= Display::return_icon('quizz_small.gif', '', array(), ICON_SIZE_TINY);
             $sessionStar = api_get_session_image($row_quiz['session_id'], $userInfo['status']);
             $return .= '<a class="moved" href="' . api_get_self() . '?'.api_get_cidreq().'&action=add_item&type=' . TOOL_QUIZ . '&file=' . $row_quiz['id'] . '&lp_id=' . $this->lp_id . '">' .
-                Security::remove_XSS(cut($row_quiz['title'], 80)).$sessionStar.
+                Security::remove_XSS(cut($row_quiz['title'], 80)).$link.$sessionStar.
                 '</a>';
 
             $return .= '</li>';

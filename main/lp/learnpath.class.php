@@ -6702,7 +6702,7 @@ class learnpath
         $form = new FormValidator(
             'quiz_form',
             'POST',
-            api_get_self().'?'.$_SERVER['QUERY_STRING']
+            api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING'])
         );
         $defaults = [];
 
@@ -7124,7 +7124,11 @@ class learnpath
             $legend = get_lang('EditCurrentForum');
         }
 
-        $form = new FormValidator('forum_form', 'POST', api_get_self() . '?' .$_SERVER['QUERY_STRING']);
+        $form = new FormValidator(
+            'forum_form',
+            'POST',
+            api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING'])
+        );
         $defaults = [];
 
         $form->addHeader($legend);
@@ -7316,7 +7320,11 @@ class learnpath
         $arrLP = isset($this->arrMenu) ? $this->arrMenu : null;
         unset ($this->arrMenu);
 
-        $form = new FormValidator('thread_form', 'POST', api_get_self() . '?' .$_SERVER['QUERY_STRING']);
+        $form = new FormValidator(
+            'thread_form',
+            'POST',
+            api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING'])
+        );
         $defaults = [];
 
         if ($action == 'add') {
@@ -7788,7 +7796,13 @@ class learnpath
         if (isset ($_GET['edit']) && $_GET['edit'] == 'true') {
             $return .= Display::return_message('<strong>' . get_lang('Warning') . ' !</strong><br />' . get_lang('WarningEditingDocument'), false);
         }
-        $form = new FormValidator('form', 'POST', api_get_self() . '?' .$_SERVER['QUERY_STRING'], '', array('enctype'=> "multipart/form-data"));
+        $form = new FormValidator(
+            'form',
+            'POST',
+            api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']),
+            '',
+            array('enctype' => 'multipart/form-data')
+        );
         $defaults['title'] = Security::remove_XSS($item_title);
         if (empty($item_title)) {
             $defaults['title'] = Security::remove_XSS($item_title);
@@ -8065,9 +8079,12 @@ class learnpath
             $item_url = '';
         }
 
-        $form = new FormValidator('edit_link', 'POST', api_get_self() . '?' .$_SERVER['QUERY_STRING']);
+        $form = new FormValidator(
+            'edit_link',
+            'POST',
+            api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING'])
+        );
         $defaults = [];
-
         if ($id != 0 && is_array($extra_info)) {
             $parent = $extra_info['parent_item_id'];
         } else {
@@ -8887,9 +8904,9 @@ class learnpath
         $form = new FormValidator(
             'form_upload',
             'POST',
-            api_get_self().'?'.$_SERVER['QUERY_STRING'],
+            api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']),
             '',
-            array('enctype' => "multipart/form-data")
+            array('enctype' => 'multipart/form-data')
         );
 
         $folders = DocumentManager::get_all_document_folders(

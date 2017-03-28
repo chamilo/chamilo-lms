@@ -254,7 +254,12 @@ if ($user_already_registered_show_terms === false) {
             )
         );
 
-        $captcha_question =  $form->addElement('CAPTCHA_Image', 'captcha_question', '', $options);
+        $captcha_question = $form->addElement(
+            'CAPTCHA_Image',
+            'captcha_question',
+            '',
+            $options
+        );
         $form->addElement('static', null, null, get_lang('ClickOnTheImageForANewOne'));
 
         $form->addElement('text', 'captcha', get_lang('EnterTheLettersYouSee'), array('size' => 40));
@@ -337,7 +342,14 @@ if ($user_already_registered_show_terms === false) {
     ) {
         $extraField = new ExtraField('user');
         $extraFieldList = isset($allowedFields['extra_fields']) && is_array($allowedFields['extra_fields']) ? $allowedFields['extra_fields'] : [];
-        $returnParams = $extraField->addElements($form, 0, [], false, false, $extraFieldList);
+        $returnParams = $extraField->addElements(
+            $form,
+            0,
+            [],
+            false,
+            false,
+            $extraFieldList
+        );
     }
 }
 if (isset($_SESSION['user_language_choice']) && $_SESSION['user_language_choice'] != '') {
@@ -364,9 +376,7 @@ $defaults['status'] = STUDENT;
 $defaults['extra_mail_notify_invitation'] = 1;
 $defaults['extra_mail_notify_message'] = 1;
 $defaults['extra_mail_notify_group_message'] = 1;
-
 $form->setDefaults($defaults);
-
 $content = null;
 
 if (!CustomPages::enabled()) {
@@ -732,7 +742,11 @@ if ($form->validate()) {
             if (!empty($cond_array[0]) && !empty($cond_array[1])) {
                 $time = time();
                 $condition_to_save = intval($cond_array[0]).':'.intval($cond_array[1]).':'.$time;
-                UserManager::update_extra_field_value($user_id, 'legal_accept', $condition_to_save);
+                UserManager::update_extra_field_value(
+                    $user_id,
+                    'legal_accept',
+                    $condition_to_save
+                );
 
                 $bossList = UserManager::getStudentBossList($user_id);
                 if ($bossList) {
@@ -903,7 +917,8 @@ if ($form->validate()) {
     // Custom pages
     if (CustomPages::enabled()) {
         CustomPages::display(
-            CustomPages::REGISTRATION, array('form' => $form)
+            CustomPages::REGISTRATION,
+            array('form' => $form)
         );
     } else {
         if (!api_is_anonymous()) {

@@ -82,14 +82,14 @@ class learnpathItem
      * Don't forget to use set_lp_view() if applicable after creating the item.
      * Setting an lp_view will finalise the item_view data collection
      * @param   integer $id Learning path item ID
-     * @param   null|integer $user_id User ID
-     * @param   null|integer $course_id Course int id
+     * @param   integer $user_id User ID
+     * @param   integer $course_id Course int id
      * @param   null|array  $item_content An array with the contents of the item
      */
     public function __construct(
         $id,
-        $user_id = null,
-        $course_id = null,
+        $user_id = 0,
+        $course_id = 0,
         $item_content = null
     ) {
         $items_table = Database::get_course_table(TABLE_LP_ITEM);

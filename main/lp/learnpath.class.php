@@ -97,34 +97,31 @@ class learnpath
             error_log('New LP - In learnpath::__construct('.$course.','.$lp_id.','.$user_id.')', 0);
         }
         if (empty($course)) {
-            $this->error = 'Course code is empty';
+            $course = api_get_course_id();
+        }
+        $course_info = api_get_course_info($course);
+        if (!empty($course_info)) {
+            $this->cc = $course_info['code'];
+            $this->course_info = $course_info;
+            $course_id = $course_info['real_id'];
         } else {
-            $course_info = api_get_course_info($course);
-            if (!empty($course_info)) {
-                $this->cc = $course_info['code'];
-                $this->course_info = $course_info;
-                $course_id = $course_info['real_id'];
-            } else {
-                $this->error = 'Course code does not exist in database.';
-            }
+            $this->error = 'Course code does not exist in database.';
         }
 
         $this->set_course_int_id($course_id);
-
+        $lp_id = (int) $lp_id;
         // Check learnpath ID.
         if (empty($lp_id)) {
             $this->error = 'Learnpath ID is empty';
         } else {
             // TODO: Make it flexible to use any course_code (still using env course code here).
             $lp_table = Database::get_course_table(TABLE_LP_MAIN);
-            $lp_id = intval($lp_id);
             $sql = "SELECT * FROM $lp_table
                     WHERE id = '$lp_id' AND c_id = $course_id";
             if ($this->debug > 2) {
                 error_log('New LP - learnpath::__construct() '.__LINE__.' - Querying lp: '.$sql, 0);
             }
             $res = Database::query($sql);
-
             if (Database::num_rows($res) > 0) {
                 $this->lp_id = $lp_id;
                 $row = Database::fetch_array($res);
@@ -164,263 +161,258 @@ class learnpath
                     }
                 }
                 $this->mode = $row['default_view_mod'];
+
+                // Check user ID.
+                if (empty($user_id)) {
+                    $this->error = 'User ID is empty';
+                } else {
+                    $user_info = api_get_user_info($user_id);
+                    if (!empty($user_info)) {
+                        $this->user_id = $user_info['user_id'];
+                    } else {
+                        $this->error = 'User ID does not exist in database ('.$sql.')';
+                    }
+                }
+
+                // End of variables checking.
+                $session_id = api_get_session_id();
+                //  Get the session condition for learning paths of the base + session.
+                $session = api_get_session_condition($session_id);
+                // Now get the latest attempt from this user on this LP, if available, otherwise create a new one.
+                $lp_table = Database::get_course_table(TABLE_LP_VIEW);
+
+                // Selecting by view_count descending allows to get the highest view_count first.
+                $sql = "SELECT * FROM $lp_table
+                        WHERE c_id = $course_id AND lp_id = '$lp_id' AND user_id = '$user_id' $session
+                        ORDER BY view_count DESC";
+                $res = Database::query($sql);
+                if ($this->debug > 2) {
+                    error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - querying lp_view: ' . $sql, 0);
+                }
+
+                if (Database::num_rows($res) > 0) {
+                    if ($this->debug > 2) {
+                        error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - Found previous view', 0);
+                    }
+                    $row = Database::fetch_array($res);
+                    $this->attempt = $row['view_count'];
+                    $this->lp_view_id = $row['id'];
+                    $this->last_item_seen = $row['last_item'];
+                    $this->progress_db = $row['progress'];
+                    $this->lp_view_session_id = $row['session_id'];
+                } else if (!api_is_invitee()) {
+                    if ($this->debug > 2) {
+                        error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - NOT Found previous view', 0);
+                    }
+                    $this->attempt = 1;
+                    $params = [
+                        'c_id' => $course_id,
+                        'lp_id' => $lp_id,
+                        'user_id' => $user_id,
+                        'view_count' => 1,
+                        'session_id' => $session_id,
+                        'last_item' => 0
+                    ];
+                    $this->lp_view_id = Database::insert($lp_table, $params);
+                    if (!empty($this->lp_view_id)) {
+                        $sql = "UPDATE $lp_table SET id = iid WHERE iid = ".$this->lp_view_id;
+                        Database::query($sql);
+                    }
+                }
+
+                // Initialise items.
+                $lp_item_table = Database::get_course_table(TABLE_LP_ITEM);
+                $sql = "SELECT * FROM $lp_item_table
+                        WHERE c_id = $course_id AND lp_id = '".$this->lp_id."'
+                        ORDER BY parent_item_id, display_order";
+                $res = Database::query($sql);
+
+                if ($this->debug > 2) {
+                    error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - query lp items: ' . $sql, 0);
+                    error_log('-- Start while--', 0);
+                }
+
+                $lp_item_id_list = array();
+                while ($row = Database::fetch_array($res)) {
+                    $lp_item_id_list[] = $row['id'];
+                    switch ($this->type) {
+                        case 3: //aicc
+                            $oItem = new aiccItem('db', $row['id'], $course_id);
+                            if (is_object($oItem)) {
+                                $my_item_id = $oItem->get_id();
+                                $oItem->set_lp_view($this->lp_view_id, $course_id);
+                                $oItem->set_prevent_reinit($this->prevent_reinit);
+                                // Don't use reference here as the next loop will make the pointed object change.
+                                $this->items[$my_item_id] = $oItem;
+                                $this->refs_list[$oItem->ref] = $my_item_id;
+                                if ($this->debug > 2) {
+                                    error_log(
+                                        'New LP - learnpath::__construct() - ' .
+                                        'aicc object with id ' . $my_item_id .
+                                        ' set in items[]',
+                                        0
+                                    );
+                                }
+                            }
+                            break;
+                        case 2:
+                            $oItem = new scormItem('db', $row['id'], $course_id);
+                            if (is_object($oItem)) {
+                                $my_item_id = $oItem->get_id();
+                                $oItem->set_lp_view($this->lp_view_id, $course_id);
+                                $oItem->set_prevent_reinit($this->prevent_reinit);
+                                // Don't use reference here as the next loop will make the pointed object change.
+                                $this->items[$my_item_id] = $oItem;
+                                $this->refs_list[$oItem->ref] = $my_item_id;
+                                if ($this->debug > 2) {
+                                    error_log('New LP - object with id ' . $my_item_id . ' set in items[]', 0);
+                                }
+                            }
+                            break;
+                        case 1:
+                        default:
+                            if ($this->debug > 2) {
+                                error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - calling learnpathItem', 0);
+                            }
+                            $oItem = new learnpathItem($row['id'], $user_id, $course_id, $row);
+
+                            if ($this->debug > 2) {
+                                error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - end calling learnpathItem', 0);
+                            }
+                            if (is_object($oItem)) {
+                                $my_item_id = $oItem->get_id();
+                                //$oItem->set_lp_view($this->lp_view_id); // Moved down to when we are sure the item_view exists.
+                                $oItem->set_prevent_reinit($this->prevent_reinit);
+                                // Don't use reference here as the next loop will make the pointed object change.
+                                $this->items[$my_item_id] = $oItem;
+                                $this->refs_list[$my_item_id] = $my_item_id;
+                                if ($this->debug > 2) {
+                                    error_log(
+                                        'New LP - learnpath::__construct() ' . __LINE__ .
+                                        ' - object with id ' . $my_item_id . ' set in items[]',
+                                        0
+                                    );
+                                }
+                            }
+                            break;
+                    }
+
+                    // Setting the object level with variable $this->items[$i][parent]
+                    foreach ($this->items as $itemLPObject) {
+                        $level = learnpath::get_level_for_item($this->items, $itemLPObject->db_id);
+                        $itemLPObject->level = $level;
+                    }
+
+                    // Setting the view in the item object.
+                    if (is_object($this->items[$row['id']])) {
+                        $this->items[$row['id']]->set_lp_view($this->lp_view_id, $course_id);
+                        if ($this->items[$row['id']]->get_type() == TOOL_HOTPOTATOES) {
+                            $this->items[$row['id']]->current_start_time = 0;
+                            $this->items[$row['id']]->current_stop_time	= 0;
+                        }
+                    }
+                }
+
+                if ($this->debug > 2) {
+                    error_log('New LP - learnpath::__construct() ' . __LINE__ . ' ----- end while ----', 0);
+                }
+
+                if (!empty($lp_item_id_list)) {
+                    $lp_item_id_list_to_string = implode("','", $lp_item_id_list);
+                    if (!empty($lp_item_id_list_to_string)) {
+                        // Get last viewing vars.
+                        $itemViewTable = Database:: get_course_table(TABLE_LP_ITEM_VIEW);
+                        // This query should only return one or zero result.
+                        $sql = "SELECT lp_item_id, status
+                                FROM $itemViewTable
+                                WHERE
+                                    c_id = $course_id AND
+                                    lp_view_id = ".$this->lp_view_id." AND
+                                    lp_item_id IN ('".$lp_item_id_list_to_string."')
+                                ORDER BY view_count DESC ";
+
+                        if ($this->debug > 2) {
+                            error_log(
+                                'New LP - learnpath::__construct() - Selecting item_views: '.$sql,
+                                0
+                            );
+                        }
+
+                        $status_list = array();
+                        $res = Database::query($sql);
+                        while ($row = Database:: fetch_array($res)) {
+                            $status_list[$row['lp_item_id']] = $row['status'];
+                        }
+
+                        foreach ($lp_item_id_list as $item_id) {
+                            if (isset($status_list[$item_id])) {
+                                $status = $status_list[$item_id];
+                                if (is_object($this->items[$item_id])) {
+                                    $this->items[$item_id]->set_status($status);
+                                    if (empty($status)) {
+                                        $this->items[$item_id]->set_status(
+                                            $this->default_status
+                                        );
+                                    }
+                                }
+                            } else {
+                                if (!api_is_invitee()) {
+                                    if (is_object($this->items[$item_id])) {
+                                        $this->items[$item_id]->set_status(
+                                            $this->default_status
+                                        );
+                                    }
+
+                                    if (!empty($this->lp_view_id)) {
+                                        // Add that row to the lp_item_view table so that we have something to show in the stats page.
+                                        $params = [
+                                            'c_id' => $course_id,
+                                            'lp_item_id' => $course_id,
+                                            'lp_view_id' => $this->lp_view_id,
+                                            'view_count' => 1,
+                                            'status' => 'not attempted',
+                                            'start_time' => api_get_utc_datetime(),
+                                            'total_time' => 0,
+                                            'score' => 0
+                                        ];
+                                        $insertId = Database::insert($lp_item_view_table, $params);
+
+                                        if ($insertId) {
+                                            $sql = "UPDATE $lp_item_view_table SET id = iid
+                                                    WHERE iid = $insertId";
+                                            Database::query($sql);
+                                        }
+
+                                        $this->items[$item_id]->set_lp_view(
+                                            $this->lp_view_id,
+                                            $course_id
+                                        );
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                $this->ordered_items = self::get_flat_ordered_items_list(
+                    $this->get_id(),
+                    0,
+                    $course_id
+                );
+                $this->max_ordered_items = 0;
+                foreach ($this->ordered_items as $index => $dummy) {
+                    if ($index > $this->max_ordered_items && !empty($dummy)) {
+                        $this->max_ordered_items = $index;
+                    }
+                }
+                // TODO: Define the current item better.
+                $this->first();
+                if ($this->debug > 2) {
+                    error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - End of learnpath constructor for learnpath ' . $this->get_id(), 0);
+                }
             } else {
                 $this->error = 'Learnpath ID does not exist in database ('.$sql.')';
             }
-        }
-
-        // Check user ID.
-        if (empty($user_id)) {
-            $this->error = 'User ID is empty';
-        } else {
-            $user_info = api_get_user_info($user_id);
-            if (!empty($user_info)) {
-                $this->user_id = $user_info['user_id'];
-            } else {
-                $this->error = 'User ID does not exist in database ('.$sql.')';
-            }
-        }
-
-        // End of variables checking.
-        $session_id = api_get_session_id();
-        //  Get the session condition for learning paths of the base + session.
-        $session = api_get_session_condition($session_id);
-        // Now get the latest attempt from this user on this LP, if available, otherwise create a new one.
-        $lp_table = Database::get_course_table(TABLE_LP_VIEW);
-
-        // Selecting by view_count descending allows to get the highest view_count first.
-        $sql = "SELECT * FROM $lp_table
-                WHERE c_id = $course_id AND lp_id = '$lp_id' AND user_id = '$user_id' $session
-                ORDER BY view_count DESC";
-        $res = Database::query($sql);
-        if ($this->debug > 2) {
-            error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - querying lp_view: ' . $sql, 0);
-        }
-
-        if (Database::num_rows($res) > 0) {
-            if ($this->debug > 2) {
-                error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - Found previous view', 0);
-            }
-            $row = Database::fetch_array($res);
-            $this->attempt = $row['view_count'];
-            $this->lp_view_id = $row['id'];
-            $this->last_item_seen = $row['last_item'];
-            $this->progress_db = $row['progress'];
-            $this->lp_view_session_id = $row['session_id'];
-        } else if (!api_is_invitee()) {
-            if ($this->debug > 2) {
-                error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - NOT Found previous view', 0);
-            }
-            $this->attempt = 1;
-            $params = [
-                'c_id' => $course_id,
-                'lp_id' => $lp_id,
-                'user_id' => $user_id,
-                'view_count' => 1,
-                'session_id' => $session_id,
-                'last_item' => 0
-            ];
-            Database::insert($lp_table, $params);
-            $this->lp_view_id = Database::insert_id();
-
-            if ($this->debug > 2) {
-                error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - inserting new lp_view: ' . $sql, 0);
-            }
-
-            $sql = "UPDATE $lp_table SET id = iid WHERE iid = ".$this->lp_view_id;
-            Database::query($sql);
-        }
-
-        // Initialise items.
-        $lp_item_table = Database::get_course_table(TABLE_LP_ITEM);
-        $sql = "SELECT * FROM $lp_item_table
-                WHERE c_id = $course_id AND lp_id = '".$this->lp_id."'
-                ORDER BY parent_item_id, display_order";
-        $res = Database::query($sql);
-
-        if ($this->debug > 2) {
-            error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - query lp items: ' . $sql, 0);
-            error_log('-- Start while--', 0);
-        }
-
-        $lp_item_id_list = array();
-
-        while ($row = Database::fetch_array($res)) {
-            $lp_item_id_list[] = $row['id'];
-            switch ($this->type) {
-                case 3: //aicc
-                    $oItem = new aiccItem('db', $row['id'], $course_id);
-                    if (is_object($oItem)) {
-                        $my_item_id = $oItem->get_id();
-                        $oItem->set_lp_view($this->lp_view_id, $course_id);
-                        $oItem->set_prevent_reinit($this->prevent_reinit);
-                        // Don't use reference here as the next loop will make the pointed object change.
-                        $this->items[$my_item_id] = $oItem;
-                        $this->refs_list[$oItem->ref] = $my_item_id;
-                        if ($this->debug > 2) {
-                            error_log(
-                                'New LP - learnpath::__construct() - ' .
-                                'aicc object with id ' . $my_item_id .
-                                ' set in items[]',
-                                0
-                            );
-                        }
-                    }
-                    break;
-                case 2:
-                    $oItem = new scormItem('db', $row['id'], $course_id);
-                    if (is_object($oItem)) {
-                        $my_item_id = $oItem->get_id();
-                        $oItem->set_lp_view($this->lp_view_id, $course_id);
-                        $oItem->set_prevent_reinit($this->prevent_reinit);
-                        // Don't use reference here as the next loop will make the pointed object change.
-
-                        $this->items[$my_item_id] = $oItem;
-
-                        $this->refs_list[$oItem->ref] = $my_item_id;
-                        if ($this->debug > 2) {
-                            error_log('New LP - object with id ' . $my_item_id . ' set in items[]', 0);
-                        }
-                    }
-                    break;
-                case 1:
-                default:
-                    if ($this->debug > 2) {
-                        error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - calling learnpathItem', 0);
-                    }
-                    $oItem = new learnpathItem($row['id'], $user_id, $course_id, $row);
-
-                    if ($this->debug > 2) {
-                        error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - end calling learnpathItem', 0);
-                    }
-                    if (is_object($oItem)) {
-                        $my_item_id = $oItem->get_id();
-                        //$oItem->set_lp_view($this->lp_view_id); // Moved down to when we are sure the item_view exists.
-                        $oItem->set_prevent_reinit($this->prevent_reinit);
-                        // Don't use reference here as the next loop will make the pointed object change.
-                        $this->items[$my_item_id] = $oItem;
-                        $this->refs_list[$my_item_id] = $my_item_id;
-                        if ($this->debug > 2) {
-                            error_log(
-                                'New LP - learnpath::__construct() ' . __LINE__ .
-                                ' - object with id ' . $my_item_id . ' set in items[]',
-                                0
-                            );
-                        }
-                    }
-                    break;
-            }
-
-            // Setting the object level with variable $this->items[$i][parent]
-            foreach ($this->items as $itemLPObject) {
-                $level = learnpath::get_level_for_item($this->items, $itemLPObject->db_id);
-                $itemLPObject->level = $level;
-            }
-
-            // Setting the view in the item object.
-            if (is_object($this->items[$row['id']])) {
-                $this->items[$row['id']]->set_lp_view($this->lp_view_id, $course_id);
-                if ($this->items[$row['id']]->get_type() == TOOL_HOTPOTATOES) {
-                    $this->items[$row['id']]->current_start_time = 0;
-                    $this->items[$row['id']]->current_stop_time	= 0;
-                }
-            }
-        }
-
-        if ($this->debug > 2) {
-            error_log('New LP - learnpath::__construct() ' . __LINE__ . ' ----- end while ----', 0);
-        }
-
-        if (!empty($lp_item_id_list)) {
-            $lp_item_id_list_to_string = implode("','", $lp_item_id_list);
-            if (!empty($lp_item_id_list_to_string)) {
-                // Get last viewing vars.
-                $lp_item_view_table = Database:: get_course_table(
-                    TABLE_LP_ITEM_VIEW
-                );
-                // This query should only return one or zero result.
-                $sql = "SELECT lp_item_id, status
-                        FROM $lp_item_view_table
-                        WHERE
-                            c_id = $course_id AND
-                            lp_view_id = ".$this->lp_view_id." AND
-                            lp_item_id IN ('".$lp_item_id_list_to_string."')
-                        ORDER BY view_count DESC ";
-
-                if ($this->debug > 2) {
-                    error_log(
-                        'New LP - learnpath::__construct() - Selecting item_views: '.$sql,
-                        0
-                    );
-                }
-
-                $status_list = array();
-                $res = Database::query($sql);
-                while ($row = Database:: fetch_array($res)) {
-                    $status_list[$row['lp_item_id']] = $row['status'];
-                }
-
-                foreach ($lp_item_id_list as $item_id) {
-                    if (isset($status_list[$item_id])) {
-                        $status = $status_list[$item_id];
-                        if (is_object($this->items[$item_id])) {
-                            $this->items[$item_id]->set_status($status);
-                            if (empty($status)) {
-                                $this->items[$item_id]->set_status(
-                                    $this->default_status
-                                );
-                            }
-                        }
-                    } else {
-                        if (!api_is_invitee()) {
-                            if (is_object($this->items[$item_id])) {
-                                $this->items[$item_id]->set_status(
-                                    $this->default_status
-                                );
-                            }
-
-                            // Add that row to the lp_item_view table so that we have something to show in the stats page.
-                            $sql = "INSERT INTO $lp_item_view_table (c_id, lp_item_id, lp_view_id, view_count, status, start_time, total_time, score)
-                                    VALUES ($course_id, ".$item_id.",".$this->lp_view_id.", 1, 'not attempted', '".time()."', 0, 0)";
-
-                            if ($this->debug > 2) {
-                                error_log(
-                                    'New LP - learnpath::__construct() '.__LINE__.' - Inserting blank item_view : '.$sql,
-                                    0
-                                );
-                            }
-                            $this->items[$item_id]->set_lp_view(
-                                $this->lp_view_id,
-                                $course_id
-                            );
-
-                            Database::query($sql);
-                            $insertId = Database::insert_id();
-
-                            $sql = "UPDATE $lp_item_view_table SET id = iid
-                                    WHERE iid = $insertId";
-                            Database::query($sql);
-                        }
-                    }
-                }
-            }
-        }
-
-        $this->ordered_items = self::get_flat_ordered_items_list(
-            $this->get_id(),
-            0,
-            $course_id
-        );
-        $this->max_ordered_items = 0;
-        foreach ($this->ordered_items as $index => $dummy) {
-            if ($index > $this->max_ordered_items && !empty($dummy)) {
-                $this->max_ordered_items = $index;
-            }
-        }
-        // TODO: Define the current item better.
-        $this->first();
-        if ($this->debug > 2) {
-            error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - End of learnpath constructor for learnpath ' . $this->get_id(), 0);
         }
     }
 

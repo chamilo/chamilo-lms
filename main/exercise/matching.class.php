@@ -123,6 +123,12 @@ class Matching extends Question
             );
         }
 
+        $editorConfig = array(
+            'ToolbarSet' => 'TestMatching',
+            'Width' => '100%',
+            'Height' => '125'
+        );
+
         for ($i = 1; $i <= $nb_matches; ++$i) {
             $renderer = &$form->defaultRenderer();
             $renderer->setElementTemplate(
@@ -142,7 +148,14 @@ class Matching extends Question
 
             $form->addHtml('<tr>');
             $form->addHtml("<td>$i</td>");
-            $form->addText("answer[$i]", null);
+            //$form->addText("answer[$i]", null);
+            $form->addHtmlEditor(
+                "answer[$i]",
+                null,
+                null,
+                false,
+                $editorConfig
+            );
             $form->addSelect(
                 "matches[$i]",
                 null,
@@ -188,7 +201,14 @@ class Matching extends Question
 
             $form->addHtml('<tr>');
             $form->addHtml('<td>' . chr(64 + $i) . '</td>');
-            $form->addText("option[$i]", null);
+            $form->addHtmlEditor(
+                "option[$i]",
+                null,
+                null,
+                false,
+                $editorConfig
+            );
+
             $form->addHtml('</tr>');
         }
 

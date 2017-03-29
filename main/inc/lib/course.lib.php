@@ -3554,7 +3554,7 @@ class CourseManager
                 }
 
                 $params = [];
-                //Param (course_code) needed to get the student process
+                //Param (course_code) needed to get the student info in page "My courses"
                 $params['course_code'] = $course['code'];
                 // Get notifications.
                 $course_info['id_session'] = null;

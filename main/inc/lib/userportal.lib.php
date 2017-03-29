@@ -1429,7 +1429,6 @@ class IndexManager
                                         if (isset(api_get_configuration_value('course_student_info')['progress']) ||
                                             isset(api_get_configuration_value('course_student_info')['score']) ||
                                             isset(api_get_configuration_value('course_student_info')['certificate'])) {
-    
                                             if (isset(api_get_configuration_value('course_student_info')['progress']) &&
                                                 api_get_configuration_value('course_student_info')['progress'] === true) {
                                                 $progress = Tracking::get_avg_student_progress(
@@ -1471,7 +1470,6 @@ class IndexManager
                                                     }
                                                 }
                                             }
-                                            
                                         }
 
                                         $html_courses_session[] = $course_session;

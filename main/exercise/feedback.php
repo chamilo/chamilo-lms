@@ -5,6 +5,7 @@
 *	Feedback
 *	@package chamilo.exercise
 * 	@author
+ * @deprecated this file seem not used
 * 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
 */
 require_once __DIR__.'/../inc/global.inc.php';

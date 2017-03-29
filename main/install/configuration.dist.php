@@ -297,3 +297,5 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 // $_configuration['hide_main_navigation_menu'] = false;
 // PDF image dpi value. Default value 96
 // $_configuration['pdf_img_dpi'] = 96;
+// Hide the "what's new" icon notifications in course list
+// $_configuration['hide_course_notification'] = true;

@@ -3563,7 +3563,9 @@ class CourseManager
                 } else {
                     $course_info['status'] = $courseUserInfo['status'];
                 }
-                $show_notification = Display::show_notification($course_info);
+                $show_notification = !api_get_configuration_value('hide_course_notification')
+                    ? Display::show_notification($course_info)
+                    : '';
                 $params['edit_actions'] = '';
                 $params['document'] = '';
                 if (api_is_platform_admin()) {
@@ -3737,7 +3739,9 @@ class CourseManager
             $course_info['status'] = $row['status'];
             // For each course, get if there is any notification icon to show
             // (something that would have changed since the user's last visit).
-            $showNotification = Display::show_notification($course_info);
+            $showNotification = !api_get_configuration_value('hide_course_notification')
+                ? Display::show_notification($course_info)
+                : '';
             $iconName = basename($course_info['course_image']);
 
             $params = array();
@@ -3881,7 +3885,9 @@ class CourseManager
 
             // For each course, get if there is any notification icon to show
             // (something that would have changed since the user's last visit).
-            $showNotification = Display::show_notification($course_info);
+            $showNotification = !api_get_configuration_value('hide_course_notification')
+                ? Display::show_notification($course_info)
+                : '';
 
             $thumbnails = null;
             $image = null;
@@ -4086,8 +4092,9 @@ class CourseManager
 
         // Display the "what's new" icons
         $notifications = '';
-        if ($course_visibility != COURSE_VISIBILITY_CLOSED &&
-            $course_visibility != COURSE_VISIBILITY_HIDDEN
+        if (
+            ($course_visibility != COURSE_VISIBILITY_CLOSED && $course_visibility != COURSE_VISIBILITY_HIDDEN) ||
+            !api_get_configuration_value('hide_course_notification')
         ) {
             $notifications .= Display::show_notification($course_info);
         }
@@ -6050,7 +6057,9 @@ class CourseManager
 
         // For each course, get if there is any notification icon to show
         // (something that would have changed since the user's last visit).
-        $show_notification = Display::show_notification($course_info);
+        $show_notification = !api_get_configuration_value('hide_course_notification')
+            ? Display::show_notification($course_info)
+            : '';
 
         // New code displaying the user's status in respect to this course.
         $status_icon = Display::return_icon(

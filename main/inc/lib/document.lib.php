@@ -250,7 +250,6 @@ class DocumentManager
         );
 
         if ($filename === true) {
-
             return $mime_types;
         }
 
@@ -267,7 +266,6 @@ class DocumentManager
 
         //if the extension is found, return the content type
         if (isset($mime_types[$extension])) {
-
             return $mime_types[$extension];
         }
         //else return octet-stream
@@ -300,7 +298,7 @@ class DocumentManager
                             docs.path = '$doc_url'";
             $result = Database::query($query);
 
-            return (Database::num_rows($result) == 0);
+            return Database::num_rows($result) == 0;
         }
     }
 
@@ -333,7 +331,6 @@ class DocumentManager
 
         if ($forced) {
             // Force the browser to save the file instead of opening it
-
             if (isset($sendFileHeaders) &&
                 !empty($sendFileHeaders)) {
                 header("X-Sendfile: $filename");
@@ -364,7 +361,7 @@ class DocumentManager
             $content_type = self::file_get_mime_type($filename);
             $lpFixedEncoding = api_get_configuration_value('lp_fixed_encoding');
 
-            // Comented to let courses content to be cached in order to improve performance:
+            // Commented to let courses content to be cached in order to improve performance:
             //header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
             //header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
 
@@ -859,7 +856,12 @@ class DocumentManager
             // No invisible folders
             // Condition for the session
             $session_id = api_get_session_id();
-            $condition_session = api_get_session_condition($session_id, true, false, 'docs.session_id');
+            $condition_session = api_get_session_condition(
+                $session_id,
+                true,
+                false,
+                'docs.session_id'
+            );
 
             $visibilityCondition = 'last.visibility = 1';
             $fileType = "docs.filetype = 'folder' AND";
@@ -895,9 +897,6 @@ class DocumentManager
                 return $visibleFolders;
             }
 
-            // Condition for the session
-            $session_id = api_get_session_id();
-            $condition_session = api_get_session_condition($session_id, true, false, 'docs.session_id');
             //get invisible folders
             $sql = "SELECT DISTINCT docs.id, path
                     FROM $TABLE_ITEMPROPERTY AS last 
@@ -913,9 +912,6 @@ class DocumentManager
             $result = Database::query($sql);
             $invisibleFolders = array();
             while ($row = Database::fetch_array($result, 'ASSOC')) {
-                //condition for the session
-                $session_id = api_get_session_id();
-                $condition_session = api_get_session_condition($session_id, true, false, 'docs.session_id');
                 //get visible folders in the invisible ones -> they are invisible too
                 $sql = "SELECT DISTINCT docs.id, path
                         FROM $TABLE_ITEMPROPERTY AS last 
@@ -935,7 +931,7 @@ class DocumentManager
                 }
             }
 
-            //if both results are arrays -> //calculate the difference between the 2 arrays -> only visible folders are left :)
+            // If both results are arrays -> //calculate the difference between the 2 arrays -> only visible folders are left :)
             if (is_array($visibleFolders) && is_array($invisibleFolders)) {
                 $document_folders = array_diff($visibleFolders, $invisibleFolders);
                 natsort($document_folders);

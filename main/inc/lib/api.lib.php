@@ -7783,7 +7783,7 @@ function api_mail_html(
     $senderEmail = !empty($senderEmail) ? $senderEmail : $defaultEmail;
 
     // Reply to first
-    if (isset($extra_headers['reply_to'])) {
+    if (isset($extra_headers['reply_to']) && empty($platform_email['SMTP_UNIQUE_REPLY_TO'])) {
         $mail->AddReplyTo(
             $extra_headers['reply_to']['mail'],
             $extra_headers['reply_to']['name']

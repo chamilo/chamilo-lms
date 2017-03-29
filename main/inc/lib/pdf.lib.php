@@ -69,6 +69,12 @@ class PDF
             8,
             $orientation
         );
+
+         // Default value is 96 set in the mpdf library file config.php
+        $value = api_get_configuration_value('pdf_img_dpi');
+        if (!empty($value)) {
+            $this->pdf->img_dpi = (int) $value;
+        }
     }
 
     /**

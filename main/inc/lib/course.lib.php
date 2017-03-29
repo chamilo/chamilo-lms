@@ -4141,6 +4141,7 @@ class CourseManager
         $params['title'] = $session_title;
         $params['edit_actions'] = '';
         $params['document'] = '';
+        $params['category'] = $course_info['categoryName'];
 
         if ($course_visibility != COURSE_VISIBILITY_CLOSED &&
             $course_visibility != COURSE_VISIBILITY_HIDDEN
@@ -6284,5 +6285,20 @@ class CourseManager
 
         $courseFieldValue = new ExtraFieldValue('course');
         $courseFieldValue->saveFieldValues($params);
+    }
+
+    /**
+     * Get the course categories form a course list
+     * @param array $courseList
+     * @return array
+     */
+    public static function getCourseCategoriesFromCourseList(array $courseList)
+    {
+        $allCategories = array_column($courseList, 'category');
+        $categories = array_unique($allCategories);
+
+        sort($categories);
+
+        return $categories;
     }
 }

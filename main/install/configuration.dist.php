@@ -244,6 +244,8 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 //$_configuration['show_invisible_exercise_in_lp_list'] = false;
 // New grid view the list of courses
 //$_configuration['view_grid_courses'] = 'true';
+// Show courses grouped by categories when $_configuration['view_grid_courses'] is enabled
+//$_configuration['view_grid_courses_grouped_categories_in_sessions'] = true;
 // Chamilo is installed/downloaded. Packagers can change this
 // to reflect their packaging method. The default value is 'chamilo'. This will
 // be reflected on the https://version.chamilo.org/stats page in the future.

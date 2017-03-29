@@ -1133,7 +1133,7 @@ class IndexManager
         $listCourse = '';
         $specialCourseList = '';
         $load_history = isset($_GET['history']) && intval($_GET['history']) == 1 ? true : false;
-        $viewGridCourses = api_get_configuration_value('view_grid_courses');
+        $viewGridCourses = api_get_configuration_value('view_grid_courses') === 'true';
         $showSimpleSessionInfo = api_get_configuration_value('show_simple_session_info');
 
         $coursesWithoutCategoryTemplate = '/user_portal/classic_courses_without_category.tpl';
@@ -1330,6 +1330,9 @@ class IndexManager
                             $params['course_list_session_style'] = $coursesListSessionStyle;
                             $params['num_users'] = $session_box['num_users'];
                             $params['num_courses'] = $session_box['num_courses'];
+                            $params['course_categories'] = CourseManager::getCourseCategoriesFromCourseList(
+                                $html_courses_session
+                            );
                             $params['courses'] = $html_courses_session;
 
                             if ($showSimpleSessionInfo) {
@@ -1511,7 +1514,7 @@ class IndexManager
             $this->tpl->assign('show_tutor', (api_get_setting('show_session_coach') === 'true' ? true : false));
             $this->tpl->assign('gamification_mode', $gameModeIsActive);
 
-            if (api_get_configuration_value('view_grid_courses')) {
+            if ($viewGridCourses) {
                 $sessions_with_no_category = $this->tpl->fetch(
                     $this->tpl->get_template('/user_portal/grid_session.tpl')
                 );

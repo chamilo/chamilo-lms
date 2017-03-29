@@ -143,27 +143,22 @@ class Matching extends Question
             $form->addHtml('<tr>');
             $form->addHtml("<td>$i</td>");
             $form->addText("answer[$i]", null);
-
             $form->addSelect(
                 "matches[$i]",
                 null,
                 $matches,
                 ['id' => 'matches_'.$i]
             );
-
             $form->addText(
                 "weighting[$i]",
                 null,
                 true,
                 ['id' => 'weighting_'.$i, 'value' => 10]
             );
-
             $form->addHtml('</tr>');
         }
 
         $form->addHtml('</tbody></table>');
-        $group = array();
-        $form->addGroup($group);
 
         // DISPLAY OPTIONS
         $html = '<table class="table table-striped table-hover">
@@ -198,14 +193,13 @@ class Matching extends Question
         }
 
         $form->addHtml('</table>');
-        $group = array();
-        global $text;
 
+        global $text;
+        $group = array();
         // setting the save button here and not in the question class.php
         $group[] = $form->addButtonDelete(get_lang('DelElem'), 'lessOptions', true);
         $group[] = $form->addButtonCreate(get_lang('AddElem'), 'moreOptions', true);
         $group[] = $form->addButtonSave($text, 'submitQuestion', true);
-
         $form->addGroup($group);
 
         if (!empty($this->id)) {

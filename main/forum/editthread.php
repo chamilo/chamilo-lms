@@ -241,17 +241,17 @@ if ($form->validate()) {
     $check = Security::check_token('post');
     if ($check) {
         $values = $form->exportValues();
-        error_log(print_r($values, true));
-        if (isset($values['thread_qualify_gradebook']) &&
-            $values['thread_qualify_gradebook'] == '1' &&
-            empty($values['weight_calification'])
-        ) {
-            Display::addFlash(
-                Display::return_message(get_lang('YouMustAssignWeightOfQualification'), 'error', false)
-            );
-            header('Location: '.$redirectUrl);
-            exit;
-        }
+
+//        if (isset($values['thread_qualify_gradebook']) &&
+//            $values['thread_qualify_gradebook'] == '1' &&
+//            empty($values['weight_calification'])
+//        ) {
+//            Display::addFlash(
+//                Display::return_message(get_lang('YouMustAssignWeightOfQualification'), 'error', false)
+//            );
+//            header('Location: '.$redirectUrl);
+//            exit;
+//        }
 
         Security::clear_token();
         updateThread($values);

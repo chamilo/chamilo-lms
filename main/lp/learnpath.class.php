@@ -375,10 +375,10 @@ class learnpath
                                             'total_time' => 0,
                                             'score' => 0
                                         ];
-                                        $insertId = Database::insert($lp_item_view_table, $params);
+                                        $insertId = Database::insert($itemViewTable, $params);
 
                                         if ($insertId) {
-                                            $sql = "UPDATE $lp_item_view_table SET id = iid
+                                            $sql = "UPDATE $itemViewTable SET id = iid
                                                     WHERE iid = $insertId";
                                             Database::query($sql);
                                         }

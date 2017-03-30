@@ -181,26 +181,6 @@ class Display
     }
 
     /**
-     *	Displays a localised html file
-     *	tries to show the file "$full_file_name"."_".$language_interface.".html"
-     *	and if this does not exist, shows the file "$full_file_name".".html"
-     *	warning this public function defines a global
-     *	@param $full_file_name, the (path) name of the file, without .html
-     *	@return return a string with the path
-     */
-    public static function display_localised_html_file($full_file_name)
-    {
-        global $language_interface;
-        $localised_file_name = $full_file_name.'_'.$language_interface.'.html';
-        $default_file_name = $full_file_name.'.html';
-        if (file_exists($localised_file_name)) {
-            include $localised_file_name;
-        } else {
-            include $default_file_name;
-        }
-    }
-
-    /**
      * Displays a table
      * @param array $header Titles for the table header
      * 						each item in this array can contain 3 values

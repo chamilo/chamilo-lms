@@ -1704,7 +1704,11 @@ function generateCSSDownloadLink($style)
 {
     $arch = api_get_path(SYS_ARCHIVE_PATH).$style.'.zip';
     $dir = api_get_path(SYS_CSS_PATH).'themes/'.$style;
-    if (is_dir($dir)) {
+    $check = Security::check_abs_path(
+        $dir,
+        api_get_path(SYS_CSS_PATH).'themes'
+    );
+    if (is_dir($dir) && $check) {
         $zip = new PclZip($arch);
         // Remove path prefix except the style name and put file on disk
         $zip->create($dir, PCLZIP_OPT_REMOVE_PATH, substr($dir,0,-strlen($style)));

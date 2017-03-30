@@ -1942,48 +1942,6 @@ function api_format_course_array($course_data)
 }
 
 /**
- * Add a parameter to the existing URL. If this parameter already exists,
- * just replace it with the new value
- * @param   string  The URL
- * @param   string  param=value string
- * @param   boolean Whether to filter XSS or not
- * @return  string  The URL with the added parameter
- */
-function api_add_url_param($url, $param, $filter_xss = true) {
-    if (empty($param)) {
-        return $url;
-    }
-    if (strpos($url, '?') !== false) {
-        if ($param[0] != '&') {
-            $param = '&'.$param;
-        }
-        list (, $query_string) = explode('?', $url);
-        $param_list1 = explode('&', $param);
-        $param_list2 = explode('&', $query_string);
-        $param_list1_keys = $param_list1_vals = array();
-        foreach ($param_list1 as $key => $enreg) {
-            list ($param_list1_keys[$key], $param_list1_vals[$key]) = explode('=', $enreg);
-        }
-        $param_list1 = array ('keys' => $param_list1_keys, 'vals' => $param_list1_vals);
-        foreach ($param_list2 as $enreg) {
-            $enreg = explode('=', $enreg);
-            $key = array_search($enreg[0], $param_list1['keys']);
-            if (!is_null($key) && !is_bool($key)) {
-                $url = str_replace($enreg[0].'='.$enreg[1], $enreg[0].'='.$param_list1['vals'][$key], $url);
-                $param = str_replace('&'.$enreg[0].'='.$param_list1['vals'][$key], '', $param);
-            }
-        }
-        $url .= $param;
-    } else {
-        $url = $url.'?'.$param;
-    }
-    if ($filter_xss === true) {
-        $url = Security::remove_XSS(urldecode($url));
-    }
-    return $url;
-}
-
-/**
  * Returns a difficult to guess password.
  * @param int $length the length of the password
  * @return string the generated password

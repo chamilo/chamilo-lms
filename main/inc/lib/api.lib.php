@@ -1743,7 +1743,8 @@ function api_get_cidreq($addSessionId = true, $addGroupId = true, $origin = '')
 }
 
 /**
- * get gradebook in session
+ * Get if we visited a gradebook page
+ * @return bool
  */
 function api_is_in_gradebook()
 {
@@ -1751,7 +1752,8 @@ function api_is_in_gradebook()
 }
 
 /**
- * set gradebook session
+ * Set that we are in a page inside a gradebook
+ * @return bool
  */
 function api_set_in_gradebook()
 {
@@ -1759,7 +1761,7 @@ function api_set_in_gradebook()
 }
 
 /**
- * remove gradebook session
+ * Remove gradebook session
  */
 function api_remove_in_gradebook()
 {

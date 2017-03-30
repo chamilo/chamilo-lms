@@ -774,9 +774,56 @@ function deleteDirWork($id)
     $t_agenda = Database::get_course_table(TABLE_AGENDA);
 
     $course_id = api_get_course_int_id();
+    $sessionId = api_get_session_id();
 
     if (!empty($work_data['url'])) {
         if ($check) {
+            $consideredWorkingTime = api_get_configuration_value('considered_working_time');
+
+            if (!empty($consideredWorkingTime)) {
+                $fieldValue = new ExtraFieldValue('work');
+                $resultExtra = $fieldValue->getAllValuesForAnItem(
+                    $work_data['id'],
+                    true
+                );
+
+                $workingTime = null;
+
+                foreach ($resultExtra as $field) {
+                    $field = $field['value'];
+                    if ($consideredWorkingTime == $field->getField()->getVariable()) {
+                        $workingTime = $field->getValue();
+
+                        break;
+                    }
+                }
+
+                $courseUsers = CourseManager::get_user_list_from_course_code($_course['code'], $sessionId);
+
+                if (!empty($workingTime)) {
+                    foreach ($courseUsers as $user) {
+                        $userWorks = get_work_user_list(
+                            0,
+                            100,
+                            null,
+                            null,
+                            $work_data['id'],
+                            null,
+                            $user['user_id'],
+                            false,
+                            $course_id,
+                            $sessionId
+                        );
+
+                        if (count($userWorks) != 1) {
+                            continue;
+                        }
+
+                        Event::eventRemoveVirtualCourseTime($course_id, $user['user_id'], $sessionId, $workingTime);
+                    }
+                }
+            }
+
             // Deleting all contents inside the folder
             $sql = "UPDATE $table SET active = 2
                     WHERE c_id = $course_id AND filetype = 'folder' AND id = $id";
@@ -823,7 +870,7 @@ function deleteDirWork($id)
                 null,
                 api_get_user_id(),
                 api_get_course_int_id(),
-                api_get_session_id()
+                $sessionId
             );
 
             $link_info = GradebookUtils::isResourceInCourseGradebook(

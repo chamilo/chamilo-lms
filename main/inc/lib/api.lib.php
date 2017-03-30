@@ -4351,11 +4351,10 @@ function api_get_visual_theme()
  * @return array        List of themes directories from the css folder
  * Note: Directory names (names of themes) in the file system should contain ASCII-characters only.
  */
-function api_get_themes() {
+function api_get_themes()
+{
     $cssdir = api_get_path(SYS_CSS_PATH) . 'themes/';
-    $list_dir = array();
-    $list_name = array();
-
+    $list = [];
     if (is_dir($cssdir)) {
         $themes = @scandir($cssdir);
 
@@ -4368,8 +4367,8 @@ function api_get_themes() {
                         continue;
                     } else {
                         if (is_dir($cssdir.$theme)) {
-                            $list_dir[] = $theme;
-                            $list_name[] = ucwords(str_replace('_', ' ', $theme));
+                            $name = ucwords(str_replace('_', ' ', $theme));
+                            $list[$theme] = $name;
                         }
                     }
                 }
@@ -4377,7 +4376,7 @@ function api_get_themes() {
         }
     }
 
-    return array($list_dir, $list_name);
+    return $list;
 }
 
 /**

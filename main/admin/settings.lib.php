@@ -242,10 +242,8 @@ function handlePlugins()
  */
 function handleStylesheets()
 {
-    // Current style.
-    $currentstyle = api_get_setting('stylesheets');
-
     $is_style_changeable = isStyleChangeable();
+    $allowedFileTypes = ['png'];
 
     $form = new FormValidator(
         'stylesheet_upload',
@@ -334,76 +332,28 @@ function handleStylesheets()
         }
     }
 
-    $form_change = new FormValidator(
-        'stylesheet_upload',
-        'post',
-        api_get_self().'?category=Stylesheets',
-        null,
-        array('id' => 'stylesheets_id')
-    );
-
-    $list_of_names = array();
-    $selected = '';
-    $dirpath = '';
-    $safe_style_dir = '';
-
-    if ($handle = @opendir(CSS_UPLOAD_PATH)) {
-        $counter = 1;
-        while (false !== ($style_dir = readdir($handle))) {
-            if (substr($style_dir, 0, 1) == '.') {
-                // Skip directories starting with a '.'
-                continue;
-            }
-            $dirpath = CSS_UPLOAD_PATH.$style_dir;
-
-            if (is_dir($dirpath)) {
-                if ($style_dir != '.' && $style_dir != '..') {
-                    if (isset($_POST['style']) &&
-                        (isset($_POST['preview']) || isset($_POST['download'])) &&
-                        $_POST['style'] == $style_dir
-                    ) {
-                        $safe_style_dir = $style_dir;
-                    } else {
-                        if ($currentstyle == $style_dir || ($style_dir == 'chamilo' && !$currentstyle)) {
-                            if (isset($_POST['style'])) {
-                                $selected = Database::escape_string($_POST['style']);
-                            } else {
-                                $selected = $style_dir;
-                            }
-                        }
-                    }
-                    $show_name = ucwords(str_replace('_', ' ', $style_dir));
-
-                    if ($is_style_changeable) {
-                        $list_of_names[$style_dir]  = $show_name;
-                    }
-                    $counter++;
-                }
-            }
-        }
-        closedir($handle);
+    // Submit stylesheets.
+    if (isset($_POST['save'])) {
+        storeStylesheets();
+        Display::display_normal_message(get_lang('Saved'));
     }
 
-    // Sort styles in alphabetical order.
-    asort($list_of_names);
-    $select_list = array();
-    foreach ($list_of_names as $style_dir => $item) {
-        $select_list[$style_dir] = $item;
+    // Current style.
+    $selected = $currentStyle = api_get_setting('stylesheets');
+    $styleFromDatabase = api_get_settings_params_simple(['variable = ?' => 'stylesheets']);
+    if ($styleFromDatabase) {
+        $selected = $currentStyle = $styleFromDatabase['selected_value'];
     }
 
-    $styles = &$form_change->addElement('select', 'style', get_lang('NameStylesheet'), $select_list);
-    $styles->setSelected($selected);
-
-    if ($form_change->validate()) {
-        // Submit stylesheets.
-        if (isset($_POST['save'])) {
-            storeStylesheets();
-            Display::display_normal_message(get_lang('Saved'));
-        }
-        if (isset($_POST['download'])) {
-            generateCSSDownloadLink($safe_style_dir);
-        }
+    if (isset($_POST['preview'])) {
+        $selected = $currentStyle = Security::remove_XSS($_POST['style']);
     }
+
+    $dir = api_get_path(SYS_PUBLIC_PATH).'css/themes/' . $selected . '/images/';
+    $url = api_get_path(WEB_CSS_PATH).'themes/' . $selected . '/images/';
+    $logoFileName = 'header-logo.png';
+    $newLogoFileName = 'header-logo-custom' . api_get_current_access_url_id() . '.png';
+    $webPlatformLogoPath = ChamiloApi::getWebPlatformLogoPath($selected);
 
     $logoForm = new FormValidator(
         'logo_upload',
@@ -412,14 +362,15 @@ function handleStylesheets()
     );
 
     $logoForm->addHtml(
-        Display::return_message(sprintf(get_lang('TheLogoMustBeSizeXAndFormatY'), '250 x 70', 'PNG'), 'info')
+        Display::return_message(
+            sprintf(
+                get_lang('TheLogoMustBeSizeXAndFormatY'),
+                '250 x 70',
+                'PNG'
+            ),
+            'info'
+        )
     );
-
-    $dir = api_get_path(SYS_PUBLIC_PATH).'css/themes/' . $selected . '/images/';
-    $url = api_get_path(WEB_CSS_PATH).'themes/' . $selected . '/images/';
-    $logoFileName = 'header-logo.png';
-    $newLogoFileName = 'header-logo-custom' . api_get_current_access_url_id() . '.png';
-    $webPlatformLogoPath = ChamiloApi::getWebPlatformLogoPath();
 
     if ($webPlatformLogoPath !== null) {
         $logoForm->addLabel(
@@ -427,9 +378,15 @@ function handleStylesheets()
             '<img id="header-logo-custom" src="' . $webPlatformLogoPath . '?' . time() . '">'
         );
     }
-
     $logoForm->addFile('new_logo', get_lang('UpdateLogo'));
-    $allowedFileTypes = ['png'];
+    if ($is_style_changeable) {
+        $logoGroup = [
+            $logoForm->addButtonUpload(get_lang('Upload'), 'logo_upload', true),
+            $logoForm->addButtonCancel(get_lang('Reset'), 'logo_reset', true)
+        ];
+
+        $logoForm->addGroup($logoGroup);
+    }
 
     if (isset($_POST['logo_reset'])) {
         if (is_file($dir.$newLogoFileName)) {
@@ -468,6 +425,25 @@ function handleStylesheets()
         }
     }
 
+    if (isset($_POST['download'])) {
+        generateCSSDownloadLink($selected);
+    }
+
+    $form_change = new FormValidator(
+        'stylesheet_upload',
+        'post',
+        api_get_self().'?category=Stylesheets',
+        null,
+        array('id' => 'stylesheets_id')
+    );
+
+    $styles = $form_change->addElement(
+        'selectTheme',
+        'style',
+        get_lang('NameStylesheet')
+    );
+    $styles->setSelected($currentStyle);
+
     if ($is_style_changeable) {
         $group = [
             $form_change->addButtonSave(get_lang('SaveSettings'), 'save', true),
@@ -476,13 +452,6 @@ function handleStylesheets()
         ];
 
         $form_change->addGroup($group);
-
-        $logoGroup = [
-            $logoForm->addButtonUpload(get_lang('Upload'), 'logo_upload', true),
-            $logoForm->addButtonCancel(get_lang('Reset'), 'logo_reset', true)
-        ];
-
-        $logoForm->addGroup($logoGroup);
 
         if ($show_upload_form) {
             echo '<script>
@@ -498,7 +467,7 @@ function handleStylesheets()
             $form_change->display();
         }
 
-        //Little hack to update the logo image in update form when submiting
+        // Little hack to update the logo image in update form when submiting
         if (isset($_POST['logo_reset'])) {
             echo '<script>'
                     . '$("#header-logo-custom").attr("src","'.$url.$logoFileName.'");'

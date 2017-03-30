@@ -66,7 +66,6 @@ class Display
 
         self::$global_template = new Template($tool_name, $showHeader, $showHeader);
 
-
         // Fixing tools with any help it takes xxx part of main/xxx/index.php
         if (empty($help)) {
             $currentURL = api_get_self();
@@ -85,6 +84,7 @@ class Display
         }
 
         self::$global_template->setHelp($help);
+
         if (!empty(self::$preview_style)) {
             self::$global_template->preview_theme = self::$preview_style;
             self::$global_template->setCssFiles();

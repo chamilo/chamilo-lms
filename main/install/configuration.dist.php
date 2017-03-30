@@ -244,15 +244,14 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 //$_configuration['show_invisible_exercise_in_lp_list'] = false;
 // New grid view the list of courses
 //$_configuration['view_grid_courses'] = 'true';
+// Show courses grouped by categories when $_configuration['view_grid_courses'] is enabled
+//$_configuration['view_grid_courses_grouped_categories_in_sessions'] = true;
 // Chamilo is installed/downloaded. Packagers can change this
 // to reflect their packaging method. The default value is 'chamilo'. This will
 // be reflected on the https://version.chamilo.org/stats page in the future.
 //$_configuration['packager'] = 'chamilo';
 // If true exercises added in LP can be modified.
 //$_configuration['force_edit_exercise_in_lp'] = false;
-// to reflect their packaging method. The default value is 'chamilo'. This will
-// be reflected on the https://version.chamilo.org/stats page in the future.
-//$_configuration['packager'] = 'chamilo';
 // List of driver to plugin in ckeditor
 //$_configuration['editor_driver_list'] = ['PersonalDriver', 'CourseDriver'];
 // Hide send to hrm users options in announcements
@@ -298,3 +297,5 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 // $_configuration['hide_main_navigation_menu'] = false;
 // PDF image dpi value. Default value 96
 // $_configuration['pdf_img_dpi'] = 96;
+// Hide the "what's new" icon notifications in course list
+// $_configuration['hide_course_notification'] = true;

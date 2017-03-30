@@ -242,8 +242,6 @@ function handlePlugins()
  */
 function handleStylesheets()
 {
-    global $_configuration;
-
     // Current style.
     $currentstyle = api_get_setting('stylesheets');
 
@@ -254,24 +252,51 @@ function handleStylesheets()
         'post',
         'settings.php?category=Stylesheets#tabs-3'
     );
-    $form->addElement('text', 'name_stylesheet', get_lang('NameStylesheet'),
-        array('size' => '40', 'maxlength' => '40'));
-    $form->addRule('name_stylesheet', get_lang('ThisFieldIsRequired'), 'required');
-    $form->addElement('file', 'new_stylesheet', get_lang('UploadNewStylesheet'));
+    $form->addElement(
+        'text',
+        'name_stylesheet',
+        get_lang('NameStylesheet'),
+        array('size' => '40', 'maxlength' => '40')
+    );
+    $form->addRule(
+        'name_stylesheet',
+        get_lang('ThisFieldIsRequired'),
+        'required'
+    );
+    $form->addElement(
+        'file',
+        'new_stylesheet',
+        get_lang('UploadNewStylesheet')
+    );
     $allowed_file_types = getAllowedFileTypes();
 
-    $form->addRule('new_stylesheet', get_lang('InvalidExtension') . ' (' . implode(',', $allowed_file_types) . ')',
-        'filetype', $allowed_file_types);
-    $form->addRule('new_stylesheet', get_lang('ThisFieldIsRequired'), 'required');
+    $form->addRule(
+        'new_stylesheet',
+        get_lang('InvalidExtension').' ('.implode(',', $allowed_file_types).')',
+        'filetype',
+        $allowed_file_types
+    );
+    $form->addRule(
+        'new_stylesheet',
+        get_lang('ThisFieldIsRequired'),
+        'required'
+    );
     $form->addButtonUpload(get_lang('Upload'), 'stylesheet_upload');
 
     $show_upload_form = false;
+    $urlId = api_get_current_access_url_id();
 
     if (!is_writable(CSS_UPLOAD_PATH)) {
-        Display::display_error_message(CSS_UPLOAD_PATH.get_lang('IsNotWritable'));
+        Display::addFlash(
+            Display::return_message(
+                CSS_UPLOAD_PATH.get_lang('IsNotWritable'),
+                'error',
+                false
+            )
+        );
     } else {
         // Uploading a new stylesheet.
-        if ($_configuration['access_url'] == 1) {
+        if ($urlId == 1) {
             $show_upload_form = true;
         } else {
             if ($is_style_changeable) {
@@ -281,7 +306,6 @@ function handleStylesheets()
     }
 
     // Stylesheet upload.
-
     if (isset($_POST['stylesheet_upload'])) {
         if ($form->validate()) {
             $values = $form->exportValues();
@@ -301,7 +325,11 @@ function handleStylesheets()
             );
 
             if ($result) {
-                Display::display_confirmation_message(get_lang('StylesheetAdded'));
+                Display::addFlash(
+                    Display::return_message(
+                        get_lang('StylesheetAdded')
+                    )
+                );
             }
         }
     }
@@ -314,7 +342,7 @@ function handleStylesheets()
         array('id' => 'stylesheets_id')
     );
 
-    $list_of_names  = array();
+    $list_of_names = array();
     $selected = '';
     $dirpath = '';
     $safe_style_dir = '';

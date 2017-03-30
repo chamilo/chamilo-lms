@@ -1012,7 +1012,7 @@ function addEditTemplate()
     $form->addElement('html_editor', 'template_text', get_lang('Text'), null, array('ToolbarSet' => 'AdminTemplates', 'Width' => '100%', 'Height' => '400'));
 
     // Setting the form elements: the form to upload an image to be used with the template.
-    $form->addElement('file','template_image',get_lang('Image'),'');
+    $form->addElement('file', 'template_image', get_lang('Image'), '');
 
     // Setting the form elements: a little bit information about the template image.
     $form->addElement('static', 'file_comment', '', get_lang('TemplateImageComment100x70'));
@@ -1025,10 +1025,10 @@ function addEditTemplate()
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
 
-        $defaults['template_id']    = intval($_GET['id']);
-        $defaults['template_text']  = $row['content'];
+        $defaults['template_id'] = intval($_GET['id']);
+        $defaults['template_text'] = $row['content'];
         // Forcing get_lang().
-        $defaults['title']          = get_lang($row['title']);
+        $defaults['title'] = get_lang($row['title']);
 
         // Adding an extra field: a hidden field with the id of the template we are editing.
         $form->addElement('hidden', 'template_id');
@@ -1055,7 +1055,6 @@ function addEditTemplate()
 
     // if the form validates (complies to all rules) we save the information, else we display the form again (with error message if needed)
     if ($form->validate()) {
-
         $check = Security::check_token('post');
         if ($check) {
             // Exporting the values.
@@ -1120,7 +1119,7 @@ function addEditTemplate()
         displayTemplates();
     } else {
         $token = Security::get_token();
-        $form->addElement('hidden','sec_token');
+        $form->addElement('hidden', 'sec_token');
         $form->setConstants(array('sec_token' => $token));
         // Display the form.
         $form->display();
@@ -1638,10 +1637,10 @@ function getAllowedFileTypes()
  */
 function setConfigurationSettingsInDatabase($parameters, $accessUrl)
 {
-    $r = api_set_settings_category('Search', 'false', $accessUrl);
+    api_set_settings_category('Search', 'false', $accessUrl);
     // Save the settings.
     foreach ($parameters as $key => $value) {
-        $result = api_set_setting($key, $value, null, null);
+        api_set_setting($key, $value, null, null);
     }
 }
 
@@ -1667,7 +1666,6 @@ function showSearchToolsStatusTable()
     //@todo windows support
     if (api_is_windows_os() == false) {
         $list_of_programs = array('pdftotext', 'ps2pdf', 'catdoc', 'html2text', 'unrtf', 'catppt', 'xls2csv');
-
         foreach($list_of_programs as $program) {
             $output = [];
             $ret_val = null;
@@ -1721,16 +1719,18 @@ function generateCSSDownloadLink($style)
         Display::addFlash(Display::return_message(get_lang('FileNotFound'), 'warning'));
     }
 }
+
 /**
  * Helper function to tell if the style is changeable in the current URL
  * @return bool $changeable Whether the style can be changed in this URL or not
  */
-function isStyleChangeable() {
-    global $_configuration;
+function isStyleChangeable()
+{
     $changeable = false;
-    if ($_configuration['access_url'] != 1) {
+    $urlId = api_get_current_access_url_id();
+    if ($urlId) {
         $style_info = api_get_settings('stylesheets', '', 1, 0);
-        $url_info = api_get_access_url($_configuration['access_url']);
+        $url_info = api_get_access_url($urlId);
         if ($style_info[0]['access_url_changeable'] == 1 && $url_info['active'] == 1) {
             $changeable = true;
         }

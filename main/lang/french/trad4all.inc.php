@@ -7928,4 +7928,12 @@ $StudentCourseProgressX = "Progrès: %s %";
 $SessionDurationNotStartedMaxX = "Cette session a une durée maximale de %s jours.";
 $StudentCourseScoreX = "Score: %s %";
 $StudentCourseCertificateX = "Certificat: %s";
+$ConfigureExerciseVisibilityInCourseTitle = "Permet de supasser la configuration de Exercice invisible dans la session au niveau de chaque cours de base.";
+$ConfigureExerciseVisibilityInCourseComment = "Permet de définir la configuration du paramètre invisible dans la session au niveau du cours de base afin de surpasser la configuration global. Si le paramètre n'est pas mis dans le cours de base, c'est la valeur du paramètre global qui est utilisé.";
+$ExerciseInvisibleInSessionTitle = "Exercice invisible dans les sessions";
+$ExerciseInvisibleInSessionComment = "Si un exercice est visible dans le cours de base alors il apparait invisible dans la session. Si un exercice est invisible dans le cours de base alors il n'apparait pas dans la session.";
+$Ongoing = "En cours";
+$Unclosed = "Non clôturé";
+$AttemptStillOngoingPleaseWait = "Cette tentative est encore en cours. Patience...";
+$MarkAttemptAsClosed = "Marquer comme clôturé";
 ?>

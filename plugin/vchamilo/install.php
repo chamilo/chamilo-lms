@@ -42,6 +42,7 @@ $sql = "
     home_url varchar(255),
     upload_url varchar(255),
     course_url varchar(255),
+    css_theme_folder varchar(255),
     PRIMARY KEY (id)
 ) DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 ";

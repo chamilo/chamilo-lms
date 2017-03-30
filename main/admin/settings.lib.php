@@ -349,8 +349,9 @@ function handleStylesheets()
         $selected = $currentStyle = Security::remove_XSS($_POST['style']);
     }
 
-    $dir = api_get_path(SYS_PUBLIC_PATH).'css/themes/' . $selected . '/images/';
-    $url = api_get_path(WEB_CSS_PATH).'themes/' . $selected . '/images/';
+    $themeDir = Template::getThemeDir($selected);
+    $dir = api_get_path(SYS_PUBLIC_PATH).'css/' . $themeDir . '/images/';
+    $url = api_get_path(WEB_CSS_PATH).'/' . $themeDir . '/images/';
     $logoFileName = 'header-logo.png';
     $newLogoFileName = 'header-logo-custom' . api_get_current_access_url_id() . '.png';
     $webPlatformLogoPath = ChamiloApi::getWebPlatformLogoPath($selected);
@@ -498,8 +499,13 @@ function uploadStylesheet($values, $picture)
     $style_name = api_preg_replace('/[^A-Za-z0-9]/', '', $values['name_stylesheet']);
     $cssToUpload = CSS_UPLOAD_PATH;
 
-    // Create the folder if needed.
+    // Check if a virtual instance vchamilo is used
+    $virtualInstanceTheme = api_get_configuration_value('virtual_css_theme_folder');
+    if (!empty($virtualInstanceTheme)) {
+        $cssToUpload = $cssToUpload.$virtualInstanceTheme.'/';
+    }
 
+    // Create the folder if needed.
     if (!is_dir($cssToUpload.$style_name.'/')) {
         mkdir($cssToUpload.$style_name.'/', api_get_permissions_for_new_directories());
     }
@@ -591,7 +597,12 @@ function uploadStylesheet($values, $picture)
 
     if ($result) {
         $fs = new Filesystem();
-        $fs->mirror($cssToUpload, api_get_path(SYS_PATH).'web/css/themes/');
+        $fs->mirror(
+            CSS_UPLOAD_PATH,
+            api_get_path(SYS_PATH).'web/css/themes/',
+            null,
+            ['override' => true]
+        );
     }
 
     return $result;
@@ -692,13 +703,9 @@ function storeStylesheets()
  */
 function isStyle($style)
 {
-    $dir = CSS_UPLOAD_PATH;
-    $dirs = scandir($dir);
-    $style = str_replace(array('/', '\\'), array('', ''), $style); // Avoid slashes or backslashes.
-    if (in_array($style, $dirs) && is_dir($dir.$style)) {
-        return true;
-    }
-    return false;
+    $themeList = api_get_themes();
+
+    return in_array($style, array_keys($themeList));
 }
 
 /**
@@ -1701,7 +1708,8 @@ function showSearchToolsStatusTable()
 function generateCSSDownloadLink($style)
 {
     $arch = api_get_path(SYS_ARCHIVE_PATH).$style.'.zip';
-    $dir = api_get_path(SYS_CSS_PATH).'themes/'.$style;
+    $themeDir = Template::getThemeDir($style);
+    $dir = api_get_path(SYS_CSS_PATH).$themeDir;
     $check = Security::check_abs_path(
         $dir,
         api_get_path(SYS_CSS_PATH).'themes'

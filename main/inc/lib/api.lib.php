@@ -4260,7 +4260,8 @@ function api_get_language_from_type($lang_type)
  * @param int $languageId
  * @return array
  */
-function api_get_language_info($languageId) {
+function api_get_language_info($languageId)
+{
     $language = Database::getManager()
         ->find('ChamiloCoreBundle:Language', intval($languageId));
 
@@ -4282,7 +4283,7 @@ function api_get_language_info($languageId) {
 /**
  * Returns the name of the visual (CSS) theme to be applied on the current page.
  * The returned name depends on the platform, course or user -wide settings.
- * @return string   The visual theme's name, it is the name of a folder inside .../chamilo/main/css/
+ * @return string The visual theme's name, it is the name of a folder inside web/css/themes
  */
 function api_get_visual_theme()
 {
@@ -4348,32 +4349,41 @@ function api_get_visual_theme()
 
 /**
  * Returns a list of CSS themes currently available in the CSS folder
+ * @param bool $getOnlyThemeFromVirtualInstance Used by the vchamilo plugin
  * @return array        List of themes directories from the css folder
  * Note: Directory names (names of themes) in the file system should contain ASCII-characters only.
  */
-function api_get_themes()
+function api_get_themes($getOnlyThemeFromVirtualInstance = false)
 {
-    $cssdir = api_get_path(SYS_CSS_PATH) . 'themes/';
-    $list = [];
-    if (is_dir($cssdir)) {
-        $themes = @scandir($cssdir);
+    // This configuration value is set by the vchamilo plugin
+    $virtualTheme = api_get_configuration_value('virtual_css_theme_folder');
 
-        if (is_array($themes)) {
-            if ($themes !== false) {
-                sort($themes);
-
-                foreach ($themes as & $theme) {
-                    if (substr($theme, 0, 1) == '.') {
-                        continue;
-                    } else {
-                        if (is_dir($cssdir.$theme)) {
-                            $name = ucwords(str_replace('_', ' ', $theme));
-                            $list[$theme] = $name;
-                        }
-                    }
-                }
+    $readCssFolder = function ($dir) use ($virtualTheme) {
+        $finder = new \Symfony\Component\Finder\Finder();
+        $themes = $finder->directories()->in($dir)->depth(0)->sortByName();
+        $list = [];
+        /** @var Symfony\Component\Finder\SplFileInfo $theme */
+        foreach ($themes as $theme) {
+            $folder = $theme->getFilename();
+            $name = ucwords(str_replace('_', ' ', $folder));
+            if ($folder == $virtualTheme) {
+                continue;
             }
+            $list[$folder] = $name;
         }
+        return $list;
+    };
+
+    $dir = api_get_path(SYS_CSS_PATH).'themes/';
+    $list = $readCssFolder($dir);
+
+    if (!empty($virtualTheme)) {
+        $newList = $readCssFolder($dir.'/'.$virtualTheme);
+        if ($getOnlyThemeFromVirtualInstance) {
+            return $newList;
+        }
+        $list = $list + $newList;
+        asort($list);
     }
 
     return $list;

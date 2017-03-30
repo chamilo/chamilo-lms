@@ -22,6 +22,7 @@ class Template
      * @var string
      */
     public $theme = '';
+    private $themeDir;
 
     /**
      * @var string
@@ -481,20 +482,41 @@ class Template
     }
 
     /**
+     * Get theme dir
+     * @param string $theme
+     * @return string
+     */
+    public static function getThemeDir($theme)
+    {
+        $themeDir = 'themes/' . $theme.'/';
+        $virtualTheme = api_get_configuration_value('virtual_css_theme_folder');
+        if (!empty($virtualTheme)) {
+            $virtualThemeList = api_get_themes(true);
+            $isVirtualTheme = in_array($theme, array_keys($virtualThemeList));
+            if ($isVirtualTheme) {
+                $themeDir = 'themes/' . $virtualTheme.'/'.$theme.'/';
+            }
+        }
+
+        return $themeDir;
+    }
+
+    /**
      * Set system parameters
      */
     private function set_system_parameters()
     {
-        global $_configuration;
         $this->theme = api_get_visual_theme();
-        //Setting app paths/URLs
+        $this->themeDir = self::getThemeDir($this->theme);
+
+        // Setting app paths/URLs
         $_p = array(
             'web' => api_get_path(WEB_PATH),
             'web_relative' => api_get_path(REL_PATH),
             'web_course' => api_get_path(WEB_COURSE_PATH),
             'web_main' => api_get_path(WEB_CODE_PATH),
             'web_css' => api_get_path(WEB_CSS_PATH),
-            'web_css_theme' => api_get_path(WEB_CSS_PATH) . 'themes/' . $this->theme . '/',
+            'web_css_theme' => api_get_path(WEB_CSS_PATH) . $this->themeDir,
             'web_ajax' => api_get_path(WEB_AJAX_PATH),
             'web_img' => api_get_path(WEB_IMG_PATH),
             'web_plugin' => api_get_path(WEB_PLUGIN_PATH),
@@ -507,10 +529,10 @@ class Template
         );
         $this->assign('_p', $_p);
 
-        //Here we can add system parameters that can be use in any template
+        // Here we can add system parameters that can be use in any template
         $_s = array(
-            'software_name' => $_configuration['software_name'],
-            'system_version' => $_configuration['system_version'],
+            'software_name' => api_get_configuration_value('software_name'),
+            'system_version' => api_get_configuration_value('system_version'),
             'site_name' => api_get_setting('siteName'),
             'institution' => api_get_setting('Institution'),
             'date' => api_format_date('now', DATE_FORMAT_LONG),
@@ -529,7 +551,6 @@ class Template
     {
         global $disable_js_and_css_files;
         $css = array();
-
         $this->theme = api_get_visual_theme();
 
         if (!empty($this->preview_theme)) {
@@ -559,11 +580,7 @@ class Template
         if (api_is_global_chat_enabled()) {
             $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/chat/css/chat.css';
         }
-
-        //THEME CSS STYLE
-        // $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'responsive.css');
-
-        $css_file_to_string = null;
+        $css_file_to_string = '';
         foreach ($css as $file) {
             $css_file_to_string .= api_get_css($file);
         }
@@ -579,8 +596,8 @@ class Template
     public function setCSSEditor()
     {
         $cssEditor = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'editor.css');
-        if (is_file(api_get_path(SYS_CSS_PATH).'themes/'.$this->theme.'/editor.css')) {
-            $cssEditor = api_get_path(WEB_CSS_PATH).'themes/'.$this->theme.'/editor.css';
+        if (is_file(api_get_path(SYS_CSS_PATH).$this->themeDir.'editor.css')) {
+            $cssEditor = api_get_path(WEB_CSS_PATH).$this->themeDir.'editor.css';
         }
 
         $this->assign('cssEditor', $cssEditor);
@@ -595,23 +612,22 @@ class Template
     {
         global $disable_js_and_css_files;
         // Base CSS
-
         $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'base.css');
 
         if ($this->show_learnpath) {
             $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'scorm.css');
-            if (is_file(api_get_path(SYS_CSS_PATH).'themes/'.$this->theme.'/learnpath.css')) {
-                $css[] = api_get_path(WEB_CSS_PATH).'themes/'.$this->theme.'/learnpath.css';
+            if (is_file(api_get_path(SYS_CSS_PATH).$this->themeDir.'learnpath.css')) {
+                $css[] = api_get_path(WEB_CSS_PATH).$this->themeDir.'learnpath.css';
             }
         }
 
-        if (is_file(api_get_path(SYS_CSS_PATH).'themes/'.$this->theme.'/editor.css')) {
-            $css[] = api_get_path(WEB_CSS_PATH).'themes/'.$this->theme.'/editor.css';
-        }else{
+        if (is_file(api_get_path(SYS_CSS_PATH).$this->themeDir.'editor.css')) {
+            $css[] = api_get_path(WEB_CSS_PATH).$this->themeDir.'editor.css';
+        } else {
             $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'editor.css');
         }
 
-        $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'themes/'.$this->theme.'/default.css');
+        $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).$this->themeDir.'default.css');
 
         $css_file_to_string = null;
         foreach ($css as $file) {
@@ -642,8 +658,10 @@ class Template
 
             $style_print = '';
             if (is_readable(api_get_path(SYS_CSS_PATH).$this->theme.'/print.css')) {
-                $style_print = api_get_css(api_get_cdn_path(api_get_path(WEB_CSS_PATH) . $this->theme . '/print.css'),
-                    'print');
+                $style_print = api_get_css(
+                    api_get_cdn_path(api_get_path(WEB_CSS_PATH).$this->theme.'/print.css'),
+                    'print'
+                );
             }
             $this->assign('css_style_print', $style_print);
         }
@@ -801,7 +819,7 @@ class Template
         }
 
         $this->assign(
-        'online_button',
+            'online_button',
             Display::return_icon('statusonline.png', null, [], ICON_SIZE_ATOM)
         );
         $this->assign(
@@ -869,11 +887,11 @@ class Template
         $favico = '<link rel="shortcut icon" href="' . api_get_path(WEB_PATH) . 'favicon.ico" type="image/x-icon" />';
 
         //Added to verify if in the current Chamilo Theme exist a favicon
-        $favicoThemeUrl = api_get_path(SYS_CSS_PATH) . 'themes/' . $this->theme . '/images/';
+        $favicoThemeUrl = api_get_path(SYS_CSS_PATH) . $this->themeDir . 'images/';
 
         //If exist pick the current chamilo theme favicon
         if (is_file($favicoThemeUrl . 'favicon.ico')) {
-            $favico = '<link rel="shortcut icon" href="' . api_get_path(WEB_CSS_PATH). 'themes/' . $this->theme . '/images/favicon.ico" type="image/x-icon" />';
+            $favico = '<link rel="shortcut icon" href="' . api_get_path(WEB_CSS_PATH). $this->themeDir . 'images/favicon.ico" type="image/x-icon" />';
         }
 
         if (api_is_multiple_url_enabled()) {

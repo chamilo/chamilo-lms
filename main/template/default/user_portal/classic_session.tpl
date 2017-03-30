@@ -40,17 +40,19 @@
                         {% if row.description != '' %}
                             {{ row.description }}
                         {% endif %}
-                        <div class="info-session">
-                            {% if row.coach_name  != '' %}
-                                <span><i class="fa fa-user" aria-hidden="true"></i>
+                        <ul class="info-session list-inline">
+                            {% if row.coach_name %}
+                                <li>
+                                    <i class="fa fa-user" aria-hidden="true"></i>
                                     {{ row.coach_name }}
-                                </span>
+                                </li>
                             {% endif %}
-                            <span>
+
+                            <li>
                                 <i class="fa fa-calendar" aria-hidden="true"></i>
-                                {{ row.date }}
-                            </span>
-                        </div>
+                                {{ row.date ? row.date : row.duration }}
+                            </li>
+                        </ul>
                         <div class="sessions-items">
                             {% for item in row.courses %}
                                 <div class="courses">
@@ -103,16 +105,7 @@
                     </div>
                     <div class="col-md-10">
                         <div class="info-session">
-                            <div class="date">
-                                <i class="fa fa-calendar" aria-hidden="true"></i>
-                                {{ row.date }}
-                                {% if row.coach_name %}
-                                    <h5 class="teacher-name">{{ "teacher.png"|img(16) }}
-                                        <a class="ajax" href="{{ row.coach_url }}"
-                                           alt="{{ row.coach_name }}">{{ row.coach_name }}</a>
-                                    </h5>
-                                {% endif %}
-                            </div>
+                            <p>{{ row.subtitle }}</p>
                             {% if row.description != '' %}
                                 <div class="description">
                                     {{ row.description }}

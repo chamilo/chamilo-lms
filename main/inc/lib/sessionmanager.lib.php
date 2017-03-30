@@ -6168,7 +6168,7 @@ class SessionManager
 
         // If no previous access, return false
         if (count($courseAccess) == 0) {
-            return false;
+            return $duration;
         }
 
         $firstAccess = api_strtotime($courseAccess['login_course_date'], 'UTC');

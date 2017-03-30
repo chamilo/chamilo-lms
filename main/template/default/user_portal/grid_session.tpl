@@ -81,18 +81,20 @@
             {% if row.description != '' %}
                 {{ row.description }}
             {% endif %}
-            <div class="info-session">
-                {% if row.coach_name  != '' %}
-                    <span>
+
+            <ul class="info-session list-inline">
+                {% if row.coach_name %}
+                    <li>
                         <i class="fa fa-user" aria-hidden="true"></i>
                         {{ row.coach_name }}
-                    </span>
+                    </li>
                 {% endif %}
-                <span>
+
+                <li>
                     <i class="fa fa-calendar" aria-hidden="true"></i>
-                    {{ row.date }}
-                </span>
-            </div>
+                    {{ row.date ? row.date : row.duration }}
+                </li>
+            </ul>
             <div class="grid-courses">
                 {% if not group_courses %}
                     <div class="row">

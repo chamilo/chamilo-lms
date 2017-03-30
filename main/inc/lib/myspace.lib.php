@@ -1178,32 +1178,32 @@ class MySpace
     }
 
     /**
-     * Display a sortable table that contains an overview of all the reporting progress of all sessions and all courses the user is subscribed to
+     * Display a sortable table that contains an overview of all the reporting
+     * progress of all sessions and all courses the user is subscribed to
      * @author Guillaume Viguier <guillaume@viguierjust.com>
      */
     public static function display_tracking_session_overview()
     {
-        $t_head = '    <table style="width: 100%;border:0;padding:0;border-collapse:collapse;table-layout: fixed">';
-        //$t_head .= '  <caption>'.get_lang('CourseInformation').'</caption>';
-        $t_head .=      '<tr>';
-        $t_head .= '        <th width="155px" style="border-left:0;border-bottom:0"><span>'.get_lang('Course').'</span></th>';
-        $t_head .= '        <th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgTimeSpentInTheCourse'), 6, true).'</span></th>';
-        $t_head .= '        <th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgStudentsProgress'), 6, true).'</span></th>';
-        $t_head .= '        <th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgCourseScore'), 6, true).'</span></th>';
-        //$t_head .= '      <th><div style="width:40px">'.get_lang('AvgExercisesScore').'</div></th>';
-        $t_head .= '        <th style="padding:0;border-bottom:0"><span>'.cut(get_lang('TotalNumberOfMessages'), 6, true).'</span></th>';
-        $t_head .= '        <th style="padding:0;border-bottom:0"><span>'.cut(get_lang('TotalNumberOfAssignments'), 6, true).'</span></th>';
-        $t_head .= '        <th width="105px" style="border-bottom:0"><span>'.get_lang('TotalExercisesScoreObtained').'</span></th>';
-        //$t_head .= '      <th><div>'.get_lang('TotalExercisesScorePossible').'</div></th>';
-        $t_head .= '        <th style="padding:0;border-bottom:0"><span>'.cut(get_lang('TotalExercisesAnswered'), 6, true).'</span></th>';
-        //$t_head .= '      <th><div>'.get_lang('TotalExercisesScorePercentage').'</div></th>';
-        //$t_head .= '      <th><div style="width:60px">'.get_lang('FirstLogin').'</div></th>';
-        $t_head .= '        <th style="padding:0;border-bottom:0;border-right:0;"><span>'.get_lang('LatestLogin').'</span></th>';
-        $t_head .= '    </tr></table>';
+        $t_head = '<table style="width: 100%;border:0;padding:0;border-collapse:collapse;table-layout: fixed">';
+        $t_head .= '<tr>';
+        $t_head .= '<th width="155px" style="border-left:0;border-bottom:0"><span>'.get_lang('Course').'</span></th>';
+        $t_head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgTimeSpentInTheCourse'), 6, true).'</span></th>';
+        $t_head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgStudentsProgress'), 6, true).'</span></th>';
+        $t_head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgCourseScore'), 6, true).'</span></th>';
+        $t_head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('TotalNumberOfMessages'), 6, true).'</span></th>';
+        $t_head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('TotalNumberOfAssignments'), 6, true).'</span></th>';
+        $t_head .= '<th width="105px" style="border-bottom:0"><span>'.get_lang('TotalExercisesScoreObtained').'</span></th>';
+        $t_head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('TotalExercisesAnswered'), 6, true).'</span></th>';
+        $t_head .= '<th style="padding:0;border-bottom:0;border-right:0;"><span>'.get_lang('LatestLogin').'</span></th>';
+        $t_head .= '</tr></table>';
 
         $addparams = array('view' => 'admin', 'display' => 'sessionoverview');
-
-        $table = new SortableTable('tracking_session_overview', array('MySpace','get_total_number_sessions'), array('MySpace','get_session_data_tracking_overview'), 1);
+        $table = new SortableTable(
+            'tracking_session_overview',
+            array('MySpace', 'get_total_number_sessions'),
+            array('MySpace', 'get_session_data_tracking_overview'),
+            1
+        );
         $table->additional_parameters = $addparams;
 
         $table->set_header(0, '', false, null, array('style' => 'display: none'));
@@ -1231,10 +1231,10 @@ class MySpace
     /**
      * Get data for the sessions
      *
-     * @param int Inferior limit
-     * @param int Number of items to select
-     * @param string Column to order on
-     * @param string Order direction
+     * @param int $from Inferior limit
+     * @param int $number_of_items Number of items to select
+     * @param string $column Column to order on
+     * @param string $direction Order direction
      * @return array Results
      */
     public static function get_session_data_tracking_overview($from, $number_of_items, $column, $direction)
@@ -1265,21 +1265,6 @@ class MySpace
         $session_id = $row[0];
         // the table header
         $return = '<table class="data_table" style="width: 100%;border:0;padding:0;border-collapse:collapse;table-layout: fixed">';
-        /*$return .= '  <tr>';
-        $return .= '        <th>'.get_lang('Course').'</th>';
-        $return .= '        <th>'.get_lang('AvgTimeSpentInTheCourse').'</th>';
-        $return .= '        <th>'.get_lang('AvgStudentsProgress').'</th>';
-        $return .= '        <th>'.get_lang('AvgCourseScore').'</th>';
-        $return .= '        <th>'.get_lang('AvgExercisesScore').'</th>';
-        $return .= '        <th>'.get_lang('AvgMessages').'</th>';
-        $return .= '        <th>'.get_lang('AvgAssignments').'</th>';
-        $return .= '        <th>'.get_lang('TotalExercisesScoreObtained').'</th>';
-        $return .= '        <th>'.get_lang('TotalExercisesScorePossible').'</th>';
-        $return .= '        <th>'.get_lang('TotalExercisesAnswered').'</th>';
-        $return .= '        <th>'.get_lang('TotalExercisesScorePercentage').'</th>';
-        $return .= '        <th>'.get_lang('FirstLogin').'</th>';
-        $return .= '        <th>'.get_lang('LatestLogin').'</th>';
-        $return .= '    </tr>';*/
 
         // database table definition
         $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);

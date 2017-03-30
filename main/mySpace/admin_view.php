@@ -5,7 +5,7 @@ $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-$exportCSV = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
+$exportCSV = isset($_GET['export']) && $_GET['export'] === 'csv' ? true : false;
 $display = isset($_GET['display']) ? Security::remove_XSS($_GET['display']) : null;
 
 $htmlHeadXtra[] = api_get_jqgrid_js();

@@ -480,12 +480,20 @@ class CourseRequestManager
 
             // E-mail language: The platform language seems to be the best choice
             $email_language = api_get_setting('platformLanguage');
-
             $email_subject = sprintf(get_lang('CourseRequestAcceptedEmailSubject', null, $email_language), '['.api_get_setting('siteName').']', $course_info['code']);
 
             $email_body = get_lang('Dear', null, $email_language).' ';
             $email_body .= api_get_person_name($user_info['firstname'], $user_info['lastname'], null, null, $email_language).",\n\n";
-            $email_body .= sprintf(get_lang('CourseRequestAcceptedEmailText', null, $email_language), $wanted_code, $course_info['code'], api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/')."\n";
+            $email_body .= sprintf(
+                    get_lang(
+                        'CourseRequestAcceptedEmailText',
+                        null,
+                        $email_language
+                    ),
+                    $course_info['code'],
+                    $course_info['code'],
+                    api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/'
+                )."\n";
             $email_body .= "\n".get_lang('Formula', null, $email_language)."\n";
             $email_body .= api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, null, $email_language)."\n";
             $email_body .= get_lang('Manager', null, $email_language).' '.api_get_setting('siteName')."\n";

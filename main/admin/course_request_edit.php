@@ -17,7 +17,7 @@ api_protect_admin_script();
 // A check whether the course validation feature is enabled.
 $course_validation_feature = api_get_setting('course_validation') == 'true';
 
-// Filltering passed to this page parameters.
+// Filtering passed to this page parameters.
 $id = intval($_GET['id']);
 $caller = intval($_GET['caller']);
 
@@ -26,14 +26,23 @@ if ($course_validation_feature) {
     $course_request_info = CourseRequestManager::get_course_request_info($id);
     if (!is_array($course_request_info)) {
         // Prepare an error message notifying that the course request has not been found or does not exist.
-        $message = get_lang('CourseRequestHasNotBeenFound');
-        $is_error_message = true;
+        Display::addFlash(
+            Display::return_message(
+                get_lang('CourseRequestHasNotBeenFound'),
+                'warning',
+                false
+            )
+        );
     } else {
         // Ensure the database prefix + database name do not get over 40 characters.
         $maxlength = 40;
 
         // Build the form.
-        $form = new FormValidator('add_course', 'post', 'course_request_edit.php?id='.$id.'&caller='.$caller);
+        $form = new FormValidator(
+            'add_course',
+            'post',
+            'course_request_edit.php?id='.$id.'&caller='.$caller
+        );
 
         // Form title.
         $form->addElement('header', $tool_name);
@@ -56,7 +65,6 @@ if ($course_validation_feature) {
 
         if (!empty($course_request_info['category_code'])) {
             $data = CourseCategory::getCategory($course_request_info['category_code']);
-
             $courseSelect->addOption($data['name'], $data['code'], ['selected' => 'selected']);
         }
 
@@ -144,7 +152,6 @@ if ($course_validation_feature) {
 
             if ($course_code_ok) {
                 $message = array();
-                $is_error_message = false;
 
                 // Update the course request.
                 $update_ok = CourseRequestManager::update_course_request(
@@ -161,63 +168,138 @@ if ($course_validation_feature) {
                 );
 
                 if ($update_ok) {
-                    $message[] = sprintf(get_lang('CourseRequestUpdated'), $course_request_values['wanted_code']);
+                    Display::addFlash(
+                        Display::return_message(
+                            sprintf(
+                                get_lang('CourseRequestUpdated'),
+                                $course_request_values['wanted_code']
+                            ),
+                            'normal',
+                            false
+                        )
+                    );
 
                     switch ($submit_button) {
                         case 'accept_button':
                             if (CourseRequestManager::accept_course_request($id)) {
-                                $message[] = sprintf(get_lang('CourseRequestAccepted'), $course_request_values['wanted_code'], $course_request_values['wanted_code']);
+                                Display::addFlash(
+                                    Display::return_message(
+                                        sprintf(
+                                            get_lang('CourseRequestAccepted'),
+                                            $course_request_values['wanted_code'],
+                                            $course_request_values['wanted_code']
+                                        ),
+                                        'normal',
+                                        false
+                                    )
+                                );
                             } else {
-                                $message[] = sprintf(get_lang('CourseRequestAcceptanceFailed'), $course_request_values['wanted_code']);
-                                $is_error_message = true;
+                                Display::addFlash(
+                                    Display::return_message(
+                                        sprintf(
+                                            get_lang('CourseRequestAcceptanceFailed'),
+                                            $course_request_values['wanted_code']
+                                        )
+                                    ),
+                                    'error',
+                                    false
+                                );
                             }
                             break;
                         case 'reject_button':
                             if (CourseRequestManager::reject_course_request($id)) {
-                                $message[] = sprintf(get_lang('CourseRequestRejected'), $course_request_values['wanted_code']);
+                                Display::addFlash(
+                                    Display::return_message(
+                                        sprintf(
+                                            get_lang('CourseRequestRejected'),
+                                            $course_request_values['wanted_code']
+                                        )
+                                    ),
+                                    'normal',
+                                    false
+                                );
                             } else {
-                                $message[] = sprintf(get_lang('CourseRequestRejectionFailed'), $course_request_values['wanted_code']);
-                                $is_error_message = true;
+                                Display::addFlash(
+                                    Display::return_message(
+                                        sprintf(
+                                            get_lang('CourseRequestRejectionFailed'),
+                                            $course_request_values['wanted_code']
+                                        )
+                                    ),
+                                    'error',
+                                    false
+                                );
                             }
                             break;
                         case 'ask_info_button':
                             if (CourseRequestManager::ask_for_additional_info($id)) {
-                                $message[] = sprintf(get_lang('CourseRequestInfoAsked'), $course_request_values['wanted_code']);
+                                Display::addFlash(
+                                    Display::return_message(
+                                        sprintf(
+                                            get_lang('CourseRequestInfoAsked'),
+                                            $course_request_values['wanted_code']
+                                        )
+                                    ),
+                                    'normal',
+                                    false
+                                );
                             } else {
-                                $message[] = sprintf(get_lang('CourseRequestInfoFailed'), $course_request_values['wanted_code']);
-                                $is_error_message = true;
+                                Display::addFlash(
+                                    Display::return_message(
+                                        sprintf(
+                                            get_lang('CourseRequestInfoFailed'),
+                                            $course_request_values['wanted_code']
+                                        )
+                                    ),
+                                    'error',
+                                    false
+                                );
                             }
                             break;
                     }
-                    // Line of code for testing purposes, to be removed
-                    //$message = 'The button "'.$submit_button.'" has been pressed.';
-
                 } else {
-                    $message[] = sprintf(get_lang('CourseRequestUpdateFailed'), $course_request_values['wanted_code']);
-                    $is_error_message = true;
+                    Display::addFlash(
+                        Display::return_message(
+                            sprintf(
+                                get_lang('CourseRequestUpdateFailed'),
+                                $course_request_values['wanted_code']
+                            )
+                        ),
+                        'error',
+                        false
+                    );
                 }
 
-                $message = implode(' ', $message);
                 $back_url = get_caller_name($caller);
-                if ($message != '') {
-                    $back_url = api_add_url_param($back_url, 'message='.urlencode(Security::remove_XSS($message)), false);
-                }
-                if ($is_error_message) {
-                    $back_url = api_add_url_param($back_url, 'is_error_message=1', false);
-                }
                 header('location:'.$back_url);
                 exit;
             } else {
-                $message = $course_request_values['wanted_code'].' - '.get_lang('CourseCodeAlreadyExists');
-                $is_error_message = true;
+                Display::addFlash(
+                    Display::return_message(
+                        $course_request_values['wanted_code'].' - '.get_lang('CourseCodeAlreadyExists')
+                    ),
+                    'error',
+                    false
+                );
             }
         }
     }
 } else {
     // Prepare an error message notifying that the course validation feature has not been enabled.
     $link_to_setting = api_get_path(WEB_CODE_PATH).'admin/settings.php?search_field=course_validation&submit_button=&category=search_setting';
-    $message = sprintf(get_lang('PleaseActivateCourseValidationFeature'), sprintf('<strong><a href="%s">%s</a></strong>', $link_to_setting, get_lang('EnableCourseValidation')));
-    $is_error_message = true;
+    $message = sprintf(
+        get_lang('PleaseActivateCourseValidationFeature'),
+        sprintf(
+            '<strong><a href="%s">%s</a></strong>',
+            $link_to_setting,
+            get_lang('EnableCourseValidation')
+        )
+    );
+    Display::addFlash(
+        Display::return_message($message),
+        'error',
+        false
+    );
 }
 
 // Functions.
@@ -240,15 +322,6 @@ $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdm
 $interbreadcrumb[] = array('url' => 'course_list.php', 'name' => get_lang('CourseList'));
 
 Display :: display_header($tool_name);
-
-// Display confirmation or error message.
-if (!empty($message)) {
-    if ($is_error_message) {
-        Display::display_error_message($message, false);
-    } else {
-        Display::display_normal_message($message, false);
-    }
-}
 
 if (!$course_validation_feature) {
     // Disabled course validation feature - show nothing after the error message.

@@ -1425,26 +1425,33 @@ class UserManager
         $limit_to = false
     ) {
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
+        $userUrlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $urlId = api_get_current_access_url_id();
+
         $return_array = array();
-        $sql_query = "SELECT * FROM $user_table";
+        $sql = "SELECT user.* FROM $user_table user
+                INNER JOIN $userUrlTable url_user
+                ON (user.user_id = url_user.user_id)
+                WHERE url_user.access_url_id = $urlId
+        ";
+
         if (count($conditions) > 0) {
-            $sql_query .= ' WHERE ';
             foreach ($conditions as $field => $value) {
                 $field = Database::escape_string($field);
                 $value = Database::escape_string($value);
-                $sql_query .= "$field = '$value'";
+                $sql .= "$field = '$value'";
             }
         }
         if (count($order_by) > 0) {
-            $sql_query .= ' ORDER BY '.Database::escape_string(implode(',', $order_by), null, false);
+            $sql .= ' ORDER BY '.Database::escape_string(implode(',', $order_by), null, false);
         }
 
         if (is_numeric($limit_from) && is_numeric($limit_from)) {
             $limit_from = intval($limit_from);
             $limit_to = intval($limit_to);
-            $sql_query .= " LIMIT $limit_from, $limit_to";
+            $sql .= " LIMIT $limit_from, $limit_to";
         }
-        $sql_result = Database::query($sql_query);
+        $sql_result = Database::query($sql);
         while ($result = Database::fetch_array($sql_result)) {
             $result['complete_name'] = api_get_person_name($result['firstname'], $result['lastname']);
             $return_array[] = $result;
@@ -3372,20 +3379,19 @@ class UserManager
      * @param   int     Access URL ID (optional)
      * @return    mixed    Number of users or false on error
      */
-    public static function get_number_of_users($status = 0, $access_url_id = null)
+    public static function get_number_of_users($status = 0, $access_url_id = 1)
     {
         $t_u = Database::get_main_table(TABLE_MAIN_USER);
         $t_a = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $sql = "SELECT count(*) FROM $t_u u";
-        $sql2 = '';
+        $sql = "SELECT count(u.id) 
+                FROM $t_u u 
+                INNER JOIN $t_a url_user
+                ON (u.id = url_user.user_id)
+                WHERE url_user.access_url_id = $access_url_id                
+        ";
         if (is_int($status) && $status > 0) {
-            $sql2 .= " WHERE u.status = $status ";
+            $sql .= " AND u.status = $status ";
         }
-        if (!empty($access_url_id) && $access_url_id == intval($access_url_id)) {
-            $sql .= ", $t_a a ";
-            $sql2 .= " AND a.access_url_id = $access_url_id AND u.id = a.user_id ";
-        }
-        $sql = $sql.$sql2;
         $res = Database::query($sql);
         if (Database::num_rows($res) === 1) {
             return (int) Database::result($res, 0, 0);

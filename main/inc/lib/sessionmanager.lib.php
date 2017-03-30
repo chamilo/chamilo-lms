@@ -4076,7 +4076,7 @@ class SessionManager
      * @param int $session_id
      * @return bool
      */
-    static function user_is_general_coach($user_id, $session_id)
+    public static function user_is_general_coach($user_id, $session_id)
     {
         $session_id = intval($session_id);
         $user_id = intval($user_id);
@@ -5631,8 +5631,7 @@ class SessionManager
                 }
             }
         }
-        $sessionUrl = api_get_path(WEB_CODE_PATH) . 'admin/resume_session.php?id_session=';
-
+        $sessionUrl = api_get_path(WEB_CODE_PATH) . 'session/resume_session.php?id_session=';
         $htmlResult = null;
 
         if (!empty($result)) {
@@ -6169,7 +6168,7 @@ class SessionManager
 
         // If no previous access, return false
         if (count($courseAccess) == 0) {
-            return false;
+            return $duration;
         }
 
         $firstAccess = api_strtotime($courseAccess['login_course_date'], 'UTC');

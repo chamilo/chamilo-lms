@@ -1326,7 +1326,7 @@ class IndexManager
                             $params['show_description'] = $session_box['show_description'];
                             $params['description'] = $session_box['description'];
                             $params['visibility'] = $session_box['visibility'];
-                            $params['show_simple_session_info'] = false;
+                            $params['show_simple_session_info'] = $showSimpleSessionInfo;
                             $params['course_list_session_style'] = $coursesListSessionStyle;
                             $params['num_users'] = $session_box['num_users'];
                             $params['num_courses'] = $session_box['num_courses'];
@@ -1336,7 +1336,11 @@ class IndexManager
                             $params['courses'] = $html_courses_session;
 
                             if ($showSimpleSessionInfo) {
-                                $params['show_simple_session_info'] = true;
+                                $params['subtitle'] = self::getSimpleSessionDetails(
+                                    $session_box['coach'],
+                                    $session_box['dates'],
+                                    isset($session_box['duration']) ? $session_box['duration'] : null
+                                );
                             }
 
                             if ($gameModeIsActive) {
@@ -1427,15 +1431,21 @@ class IndexManager
                                 $session_box = Display::get_session_title_box($session_id);
                                 $sessionParams[0]['id'] = $session_id;
                                 $sessionParams[0]['date'] = $session_box['dates'];
+                                $sessionParams[0]['duration'] = isset($session_box['duration']) ? ' '.$session_box['duration'] : null;
                                 $sessionParams[0]['course_list_session_style'] = $coursesListSessionStyle;
                                 $sessionParams[0]['title'] = $session_box['title'];
                                 $sessionParams[0]['subtitle'] = (!empty($session_box['coach']) ? $session_box['coach'].' | ' : '').$session_box['dates'];
                                 $sessionParams[0]['show_actions'] = api_is_platform_admin();
                                 $sessionParams[0]['courses'] = $html_courses_session;
-                                $sessionParams[0]['show_simple_session_info'] = false;
+                                $sessionParams[0]['show_simple_session_info'] = $showSimpleSessionInfo;
+                                $sessionParams[0]['coach_name'] = !empty($session_box['coach']) ? $session_box['coach'] : null;
 
                                 if ($showSimpleSessionInfo) {
-                                    $sessionParams[0]['show_simple_session_info'] = true;
+                                    $sessionParams[0]['subtitle'] = self::getSimpleSessionDetails(
+                                        $session_box['coach'],
+                                        $session_box['dates'],
+                                        isset($session_box['duration']) ? $session_box['duration'] : null
+                                    );
                                 }
 
                                 $this->tpl->assign('session', $sessionParams);
@@ -1940,5 +1950,25 @@ class IndexManager
     public static function setDefaultMyCourseView($view, $userId)
     {
         setcookie('defaultMyCourseView'.$userId, $view);
+    }
+
+    /**
+     * Get the session coach name, duration or dates when $_configuration['show_simple_session_info'] is enabled
+     * @param string $coachName
+     * @param string $dates
+     * @param string|null $duration Optional
+     * @return string
+     */
+    private static function getSimpleSessionDetails($coachName, $dates, $duration = null)
+    {
+        $strDetails = [];
+
+        if (!empty($coachName)) {
+            $strDetails[] = $coachName;
+        }
+
+        $strDetails[] = !empty($duration) ? $duration : $dates;
+
+        return implode(' | ', $strDetails);
     }
 }

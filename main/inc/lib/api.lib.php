@@ -1743,7 +1743,8 @@ function api_get_cidreq($addSessionId = true, $addGroupId = true, $origin = '')
 }
 
 /**
- * get gradebook in session
+ * Get if we visited a gradebook page
+ * @return bool
  */
 function api_is_in_gradebook()
 {
@@ -1751,7 +1752,8 @@ function api_is_in_gradebook()
 }
 
 /**
- * set gradebook session
+ * Set that we are in a page inside a gradebook
+ * @return bool
  */
 function api_set_in_gradebook()
 {
@@ -1759,7 +1761,7 @@ function api_set_in_gradebook()
 }
 
 /**
- * remove gradebook session
+ * Remove gradebook session
  */
 function api_remove_in_gradebook()
 {
@@ -1937,48 +1939,6 @@ function api_format_course_array($course_data)
     $_course['course_image_large'] = $url_image;
 
     return $_course;
-}
-
-/**
- * Add a parameter to the existing URL. If this parameter already exists,
- * just replace it with the new value
- * @param   string  The URL
- * @param   string  param=value string
- * @param   boolean Whether to filter XSS or not
- * @return  string  The URL with the added parameter
- */
-function api_add_url_param($url, $param, $filter_xss = true) {
-    if (empty($param)) {
-        return $url;
-    }
-    if (strpos($url, '?') !== false) {
-        if ($param[0] != '&') {
-            $param = '&'.$param;
-        }
-        list (, $query_string) = explode('?', $url);
-        $param_list1 = explode('&', $param);
-        $param_list2 = explode('&', $query_string);
-        $param_list1_keys = $param_list1_vals = array();
-        foreach ($param_list1 as $key => $enreg) {
-            list ($param_list1_keys[$key], $param_list1_vals[$key]) = explode('=', $enreg);
-        }
-        $param_list1 = array ('keys' => $param_list1_keys, 'vals' => $param_list1_vals);
-        foreach ($param_list2 as $enreg) {
-            $enreg = explode('=', $enreg);
-            $key = array_search($enreg[0], $param_list1['keys']);
-            if (!is_null($key) && !is_bool($key)) {
-                $url = str_replace($enreg[0].'='.$enreg[1], $enreg[0].'='.$param_list1['vals'][$key], $url);
-                $param = str_replace('&'.$enreg[0].'='.$param_list1['vals'][$key], '', $param);
-            }
-        }
-        $url .= $param;
-    } else {
-        $url = $url.'?'.$param;
-    }
-    if ($filter_xss === true) {
-        $url = Security::remove_XSS(urldecode($url));
-    }
-    return $url;
 }
 
 /**
@@ -4391,11 +4351,10 @@ function api_get_visual_theme()
  * @return array        List of themes directories from the css folder
  * Note: Directory names (names of themes) in the file system should contain ASCII-characters only.
  */
-function api_get_themes() {
+function api_get_themes()
+{
     $cssdir = api_get_path(SYS_CSS_PATH) . 'themes/';
-    $list_dir = array();
-    $list_name = array();
-
+    $list = [];
     if (is_dir($cssdir)) {
         $themes = @scandir($cssdir);
 
@@ -4408,8 +4367,8 @@ function api_get_themes() {
                         continue;
                     } else {
                         if (is_dir($cssdir.$theme)) {
-                            $list_dir[] = $theme;
-                            $list_name[] = ucwords(str_replace('_', ' ', $theme));
+                            $name = ucwords(str_replace('_', ' ', $theme));
+                            $list[$theme] = $name;
                         }
                     }
                 }
@@ -4417,7 +4376,7 @@ function api_get_themes() {
         }
     }
 
-    return array($list_dir, $list_name);
+    return $list;
 }
 
 /**

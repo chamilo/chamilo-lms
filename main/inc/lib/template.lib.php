@@ -220,7 +220,7 @@ class Template
      * @param string $name
      * @return string
      */
-    public static function get_image($image, $size = ICON_SIZE_SMALL, $name)
+    public static function get_image($image, $size = ICON_SIZE_SMALL, $name = '')
     {
         return Display::return_icon($image, $name, array(), $size);
     }
@@ -649,7 +649,7 @@ class Template
         }
 
         // Logo
-        $logo = return_logo();
+        $logo = return_logo($this->theme);
         $this->assign('logo', $logo);
         $this->assign('show_media_element', 1);
     }

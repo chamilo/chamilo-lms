@@ -118,27 +118,27 @@ class MySpace
     /**
      * Gets the connections to a course as an array of login and logout time
      *
-     * @param   int     User ud
+     * @param   int     $userId User id
      * @param   int   $courseId
-     * @param   int     Session id (optional, default = 0)
-     * @return  array   Conections
+     * @param   int     $sessionId Session id (optional, default = 0)
+     * @return  array   Connections
      */
-    public static function get_connections_to_course($user_id, $courseId, $session_id = 0)
+    public static function get_connections_to_course($userId, $courseId, $sessionId = 0)
     {
         // Database table definitions
         $tbl_track_course = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 
         // protect data
-        $user_id     = intval($user_id);
-        $courseId = intval($courseId);
-        $session_id  = intval($session_id);
+        $userId = (int) $userId;
+        $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
 
         $sql = 'SELECT login_course_date, logout_course_date
                 FROM ' . $tbl_track_course . '
                 WHERE
-                    user_id = '.$user_id.' AND
+                    user_id = '.$userId.' AND
                     c_id = '.$courseId.' AND
-                    session_id = '.$session_id.'
+                    session_id = '.$sessionId.'
                 ORDER BY login_course_date ASC';
         $rs = Database::query($sql);
         $connections = array();
@@ -158,8 +158,11 @@ class MySpace
      * @param int $session_id
      * @return array|bool
      */
-    public static function get_connections_from_course_list($user_id, $course_list, $session_id = 0)
-    {
+    public static function get_connections_from_course_list(
+        $user_id,
+        $course_list,
+        $session_id = 0
+    ) {
         // Database table definitions
         $tbl_track_course = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         if (empty($course_list)) {
@@ -215,22 +218,6 @@ class MySpace
     {
         // the table header
         $return = '<table class="data_table" style="width: 100%;border:0;padding:0;border-collapse:collapse;table-layout: fixed">';
-        /*$return .= '  <tr>';
-        $return .= '        <th>'.get_lang('Course').'</th>';
-        $return .= '        <th>'.get_lang('AvgTimeSpentInTheCourse').'</th>';
-        $return .= '        <th>'.get_lang('AvgStudentsProgress').'</th>';
-        $return .= '        <th>'.get_lang('AvgCourseScore').'</th>';
-        $return .= '        <th>'.get_lang('AvgExercisesScore').'</th>';
-        $return .= '        <th>'.get_lang('AvgMessages').'</th>';
-        $return .= '        <th>'.get_lang('AvgAssignments').'</th>';
-        $return .= '        <th>'.get_lang('TotalExercisesScoreObtained').'</th>';
-        $return .= '        <th>'.get_lang('TotalExercisesScorePossible').'</th>';
-        $return .= '        <th>'.get_lang('TotalExercisesAnswered').'</th>';
-        $return .= '        <th>'.get_lang('TotalExercisesScorePercentage').'</th>';
-        $return .= '        <th>'.get_lang('FirstLogin').'</th>';
-        $return .= '        <th>'.get_lang('LatestLogin').'</th>';
-        $return .= '    </tr>';*/
-
         // database table definition
         $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
@@ -708,7 +695,7 @@ class MySpace
             get_lang('QuestionTitle'),
             get_lang('WorkDescription'),
             get_lang('Answer'),
-            get_lang('Correct'),
+            get_lang('Correct')
         );
 
         /**
@@ -770,7 +757,14 @@ class MySpace
         // include the user manager and formvalidator library
         if (isset($_GET['export']) && $_GET['export'] == 'options') {
             // get all the defined extra fields
-            $extrafields = UserManager::get_extra_fields(0, 50, 5, 'ASC', false, 1);
+            $extrafields = UserManager::get_extra_fields(
+                0,
+                50,
+                5,
+                'ASC',
+                false,
+                1
+            );
 
             // creating the form with all the defined extra fields
             $form = new FormValidator(
@@ -1064,17 +1058,17 @@ class MySpace
 
         // the first line of the csv file with the column headers
         $csv_row = array();
-        $csv_row[] = get_lang('Course', '');
-        $csv_row[] = get_lang('AvgTimeSpentInTheCourse', '');
-        $csv_row[] = get_lang('AvgStudentsProgress', '');
-        $csv_row[] = get_lang('AvgCourseScore', '');
-        $csv_row[] = get_lang('TotalNumberOfMessages', '');
-        $csv_row[] = get_lang('TotalNumberOfAssignments', '');
-        $csv_row[] = get_lang('TotalExercisesScoreObtained', '');
-        $csv_row[] = get_lang('TotalExercisesScorePossible', '');
-        $csv_row[] = get_lang('TotalExercisesAnswered', '');
-        $csv_row[] = get_lang('TotalExercisesScorePercentage', '');
-        $csv_row[] = get_lang('LatestLogin', '');
+        $csv_row[] = get_lang('Course');
+        $csv_row[] = get_lang('AvgTimeSpentInTheCourse');
+        $csv_row[] = get_lang('AvgStudentsProgress');
+        $csv_row[] = get_lang('AvgCourseScore');
+        $csv_row[] = get_lang('TotalNumberOfMessages');
+        $csv_row[] = get_lang('TotalNumberOfAssignments');
+        $csv_row[] = get_lang('TotalExercisesScoreObtained');
+        $csv_row[] = get_lang('TotalExercisesScorePossible');
+        $csv_row[] = get_lang('TotalExercisesAnswered');
+        $csv_row[] = get_lang('TotalExercisesScorePercentage');
+        $csv_row[] = get_lang('LatestLogin');
         $csv_content[] = $csv_row;
 
         // the other lines (the data)
@@ -1415,17 +1409,17 @@ class MySpace
         // the first line of the csv file with the column headers
         $csv_row = array();
         $csv_row[] = get_lang('Session');
-        $csv_row[] = get_lang('Course', '');
-        $csv_row[] = get_lang('AvgTimeSpentInTheCourse', '');
-        $csv_row[] = get_lang('AvgStudentsProgress', '');
-        $csv_row[] = get_lang('AvgCourseScore', '');
-        $csv_row[] = get_lang('TotalNumberOfMessages', '');
-        $csv_row[] = get_lang('TotalNumberOfAssignments', '');
-        $csv_row[] = get_lang('TotalExercisesScoreObtained', '');
-        $csv_row[] = get_lang('TotalExercisesScorePossible', '');
-        $csv_row[] = get_lang('TotalExercisesAnswered', '');
-        $csv_row[] = get_lang('TotalExercisesScorePercentage', '');
-        $csv_row[] = get_lang('LatestLogin', '');
+        $csv_row[] = get_lang('Course');
+        $csv_row[] = get_lang('AvgTimeSpentInTheCourse');
+        $csv_row[] = get_lang('AvgStudentsProgress');
+        $csv_row[] = get_lang('AvgCourseScore');
+        $csv_row[] = get_lang('TotalNumberOfMessages');
+        $csv_row[] = get_lang('TotalNumberOfAssignments');
+        $csv_row[] = get_lang('TotalExercisesScoreObtained');
+        $csv_row[] = get_lang('TotalExercisesScorePossible');
+        $csv_row[] = get_lang('TotalExercisesAnswered');
+        $csv_row[] = get_lang('TotalExercisesScorePercentage');
+        $csv_row[] = get_lang('LatestLogin');
         $csv_content[] = $csv_row;
 
         // the other lines (the data)

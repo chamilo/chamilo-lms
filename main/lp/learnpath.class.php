@@ -6697,7 +6697,7 @@ class learnpath
         $form = new FormValidator(
             'quiz_form',
             'POST',
-            $this->getCurrentUrlBuild()
+            $this->getCurrentBuildingModeURL()
         );
         $defaults = [];
 
@@ -7122,7 +7122,7 @@ class learnpath
         $form = new FormValidator(
             'forum_form',
             'POST',
-            $this->getCurrentUrlBuild()
+            $this->getCurrentBuildingModeURL()
         );
         $defaults = [];
 
@@ -7318,7 +7318,7 @@ class learnpath
         $form = new FormValidator(
             'thread_form',
             'POST',
-            $this->getCurrentUrlBuild()
+            $this->getCurrentBuildingModeURL()
         );
         $defaults = [];
 
@@ -7678,7 +7678,7 @@ class learnpath
     /**
      * @return string
      */
-    public function getCurrentUrlBuild()
+    public function getCurrentBuildingModeURL()
     {
         $pathItem = isset($_GET['path_item']) ? (int) $_GET['path_item'] : '';
         $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
@@ -7808,7 +7808,7 @@ class learnpath
         $form = new FormValidator(
             'form',
             'POST',
-            $this->getCurrentUrlBuild(),
+            $this->getCurrentBuildingModeURL(),
             '',
             array('enctype' => 'multipart/form-data')
         );
@@ -8112,7 +8112,7 @@ class learnpath
         $form = new FormValidator(
             'edit_link',
             'POST',
-            $this->getCurrentUrlBuild()
+            $this->getCurrentBuildingModeURL()
         );
         $defaults = [];
         if ($id != 0 && is_array($extra_info)) {
@@ -8934,7 +8934,7 @@ class learnpath
         $form = new FormValidator(
             'form_upload',
             'POST',
-            $this->getCurrentUrlBuild(),
+            $this->getCurrentBuildingModeURL(),
             '',
             array('enctype' => 'multipart/form-data')
         );

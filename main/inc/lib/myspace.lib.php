@@ -1214,36 +1214,44 @@ class MySpace
      */
     public static function get_total_number_sessions()
     {
-        $table = Database::get_main_table(TABLE_MAIN_SESSION);
-        $sql = "SELECT COUNT(id) count FROM $table";
-        $result = Database::query($sql);
-        $row = Database::fetch_assoc($result);
-
-        return $row['count'];
+        return SessionManager::count_sessions(api_get_current_access_url_id());
     }
 
     /**
      * Get data for the sessions
      *
      * @param int $from Inferior limit
-     * @param int $number_of_items Number of items to select
+     * @param int $numberItems Number of items to select
      * @param string $column Column to order on
      * @param string $direction Order direction
      * @return array Results
      */
-    public static function get_session_data_tracking_overview($from, $number_of_items, $column, $direction)
+    public static function get_session_data_tracking_overview($from, $numberItems, $column, $direction)
     {
-        $main_session_table = Database::get_main_table(TABLE_MAIN_SESSION);
-
-        $sql = "SELECT id AS col0, name AS col1 FROM $main_session_table";
-        $sql .= " ORDER BY col$column $direction ";
-        $sql .= " LIMIT $from,$number_of_items";
-        $result = Database::query($sql);
-        $return = array ();
-        while ($session = Database::fetch_row($result)) {
-            $return[] = $session;
+        $from = (int) $from;
+        $numberItems = (int) $numberItems;
+        $direction = Database::escape_string($direction);
+        $columnName = 'name';
+        if ($column === 1) {
+            $columnName = 'id';
         }
-        return $return;
+
+        $options = [
+            'order' => " $columnName $direction",
+            'limit' => " $from,$numberItems"
+        ];
+        $sessions = SessionManager::get_sessions_admin($options);
+        $list = [];
+        foreach ($sessions as $session) {
+            $list[] = [
+                '0' => $session['id'],
+                'col0' => $session['id'],
+                '1' => $session['name'],
+                'col1' => $session['name']
+            ];
+        }
+
+        return $list;
     }
 
     /**
@@ -1326,27 +1334,27 @@ class MySpace
                 $total_score_possible += $exercise_results_tmp['score_possible'];
                 $total_questions_answered += $exercise_results_tmp['questions_answered'];
             }
-            if($nb_progress_lp > 0) {
+            if ($nb_progress_lp > 0) {
                 $avg_progress = round($progress / $nb_progress_lp, 2);
             } else {
                 $avg_progress = 0;
             }
-            if($nb_score_lp > 0) {
+            if ($nb_score_lp > 0) {
                 $avg_score = round($score / $nb_score_lp, 2);
             } else {
                 $avg_score = '-';
             }
-            if($last_login_date) {
+            if ($last_login_date) {
                 $last_login_date = api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT, date_default_timezone_get());
             } else {
                 $last_login_date = '-';
             }
-            if($total_score_possible > 0) {
+            if ($total_score_possible > 0) {
                 $total_score_percentage = round($total_score_obtained / $total_score_possible * 100, 2);
             } else {
                 $total_score_percentage = 0;
             }
-            if($total_score_percentage > 0) {
+            if ($total_score_percentage > 0) {
                 $total_score = $total_score_obtained.'/'.$total_score_possible.' ('.$total_score_percentage.' %)';
             } else {
                 $total_score = '-';

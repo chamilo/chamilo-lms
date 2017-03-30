@@ -158,7 +158,11 @@ class CalculatedAnswer extends Question
         $form->setDefaults(array('weighting' => '10'));
 
         $form->addElement('text', 'answerVariations', get_lang('AnswerVariations'));
-        $form->addRule('answerVariations', get_lang('GiveAnswerVariations'),'required');
+        $form->addRule(
+            'answerVariations',
+            get_lang('GiveAnswerVariations'),
+            'required'
+        );
         $form->setDefaults(array('answerVariations' => '1'));
 
         global $text;
@@ -199,12 +203,12 @@ class CalculatedAnswer extends Question
             $this->weighting = $form->getSubmitValue('weighting');
 
             // Create as many answers as $answerVariations
-            for ($j=0 ; $j < $answerVariations; $j++) {
+            for ($j = 0; $j < $answerVariations; $j++) {
                 $auxAnswer = $answer;
                 $auxFormula = $formula;
                 $nb = preg_match_all('/\[[^\]]*\]/', $auxAnswer, $blanks);
                 if ($nb > 0) {
-                    for ($i=0 ; $i < $nb; ++$i) {
+                    for ($i = 0; $i < $nb; ++$i) {
                         $blankItem = $blanks[0][$i];
                         $replace = array("[", "]");
                         $newBlankItem = str_replace($replace, "", $blankItem);

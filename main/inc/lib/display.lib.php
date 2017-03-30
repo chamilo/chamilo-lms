@@ -66,7 +66,6 @@ class Display
 
         self::$global_template = new Template($tool_name, $showHeader, $showHeader);
 
-
         // Fixing tools with any help it takes xxx part of main/xxx/index.php
         if (empty($help)) {
             $currentURL = api_get_self();
@@ -85,6 +84,7 @@ class Display
         }
 
         self::$global_template->setHelp($help);
+
         if (!empty(self::$preview_style)) {
             self::$global_template->preview_theme = self::$preview_style;
             self::$global_template->setCssFiles();
@@ -177,26 +177,6 @@ class Display
             $introduction_section = null;
             require api_get_path(SYS_INC_PATH).'introductionSection.inc.php';
             return $introduction_section;
-        }
-    }
-
-    /**
-     *	Displays a localised html file
-     *	tries to show the file "$full_file_name"."_".$language_interface.".html"
-     *	and if this does not exist, shows the file "$full_file_name".".html"
-     *	warning this public function defines a global
-     *	@param $full_file_name, the (path) name of the file, without .html
-     *	@return return a string with the path
-     */
-    public static function display_localised_html_file($full_file_name)
-    {
-        global $language_interface;
-        $localised_file_name = $full_file_name.'_'.$language_interface.'.html';
-        $default_file_name = $full_file_name.'.html';
-        if (file_exists($localised_file_name)) {
-            include $localised_file_name;
-        } else {
-            include $default_file_name;
         }
     }
 
@@ -386,21 +366,19 @@ class Display
     /**
      * Displays a table with a special configuration
      * @param array $header Titles for the table header
-     * 						each item in this array can contain 3 values
-     * 						- 1st element: the column title
-     * 						- 2nd element: true or false (column sortable?)
-     * 						- 3th element: additional attributes for
-     *  						th-tag (eg for column-width)
-     * 						- 4the element: additional attributes for the td-tags
+     * each item in this array can contain 3 values
+     * - 1st element: the column title
+     * - 2nd element: true or false (column sortable?)
+     * - 3th element: additional attributes for th-tag (eg for column-width)
+     * - 4the element: additional attributes for the td-tags
      * @param array $content 2D-array with the tables content
      * @param array $sorting_options Keys are:
-     * 					'column' = The column to use as sort-key
-     * 					'direction' = SORT_ASC or SORT_DESC
+     *  'column' = The column to use as sort-key
+     *  'direction' = SORT_ASC or SORT_DESC
      * @param array $paging_options Keys are:
-     * 					'per_page_default' = items per page when switching from
-     * 										 full-	list to per-page-view
-     * 					'per_page' = number of items to show per page
-     * 					'page_nr' = The page to display
+     *  'per_page_default' = items per page when switching from full list to per-page-view
+     *  'per_page' = number of items to show per page
+     *  'page_nr' = The page to display
      * @param array $query_vars Additional variables to add in the query-string
      * @param array $column_show Array of binaries 1= show columns 0. hide a column
      * @param array $column_order An array of integers that let us decide how the columns are going to be sort.
@@ -494,7 +472,7 @@ class Display
      * @deprecated use Display::addFlash with Display::return_message
      * @return void
      */
-    public static function display_confirmation_message ($message, $filter = true, $returnValue = false)
+    public static function display_confirmation_message($message, $filter = true, $returnValue = false)
     {
         $message = self::return_message($message, 'confirm', $filter);
         if ($returnValue) {
@@ -513,7 +491,7 @@ class Display
      *
      * @return void
      */
-    public static function display_error_message ($message, $filter = true, $returnValue = false)
+    public static function display_error_message($message, $filter = true, $returnValue = false)
     {
         $message = self::return_message($message, 'error', $filter);
         if ($returnValue) {
@@ -677,10 +655,11 @@ class Display
         $result = '';
         for ($i = $min; $i <= $max; $i ++) {
             $result .= '<option value="'.$i.'"';
-            if (is_int($selected_num))
+            if (is_int($selected_num)) {
                 if ($selected_num == $i) {
                     $result .= ' selected="selected"';
                 }
+            }
             $result .= '>'.$i.'</option>';
         }
         return $result;

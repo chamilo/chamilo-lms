@@ -93,7 +93,16 @@ function refreshGrid() {
 
 $(function() {
     <?php
-        echo Display::grid_js('live_stats',  $url, $columns, $column_model, $extra_params, array(), null, true);
+    echo Display::grid_js(
+        'live_stats',
+        $url,
+        $columns,
+        $column_model,
+        $extra_params,
+        array(),
+        null,
+        true
+    );
     ?>
     refreshGrid();
 });

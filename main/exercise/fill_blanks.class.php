@@ -2,11 +2,11 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *	Class FillBlanks
+ *  Class FillBlanks
  *
- *	@author Eric Marguin
- * 	@author Julio Montoya multiple fill in blank option added
- *	@package chamilo.exercise
+ * @author Eric Marguin
+ * @author Julio Montoya multiple fill in blank option added
+ * @package chamilo.exercise
  **/
 class FillBlanks extends Question
 {
@@ -430,7 +430,7 @@ class FillBlanks extends Question
 
             // input width
             $answer .= ":";
-            for ($i=0; $i < $nb; ++$i) {
+            for ($i = 0; $i < $nb; ++$i) {
                 // enter the width of input for word $i
                 $answer .= $form->getSubmitValue('sizeofinput['.$i.']');
                 // not the last word, add ","
@@ -1165,8 +1165,14 @@ class FillBlanks extends Question
      * @param bool $showTotalScoreAndUserChoices
      * @return string
      */
-    public static function getHtmlAnswer($answer, $correct, $right, $feedbackType, $resultsDisabled = false, $showTotalScoreAndUserChoices = false)
-    {
+    public static function getHtmlAnswer(
+        $answer,
+        $correct,
+        $right,
+        $feedbackType,
+        $resultsDisabled = false,
+        $showTotalScoreAndUserChoices = false
+    ) {
         $hideExpectedAnswer = false;
         if ($feedbackType == 0 && ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ONLY)) {
             $hideExpectedAnswer = true;
@@ -1191,7 +1197,7 @@ class FillBlanks extends Question
                 $listPossibleAnswers = self::getFillTheBlankMenuAnswers($correct, false);
                 $correctAnswerHtml .= "<span style='color: green'>".$listPossibleAnswers[0]."</span>";
                 $correctAnswerHtml .= " <span style='font-weight:normal'>(";
-                for ($i=1; $i < count($listPossibleAnswers); $i++) {
+                for ($i = 1; $i < count($listPossibleAnswers); $i++) {
                     $correctAnswerHtml .= $listPossibleAnswers[$i];
                     if ($i != count($listPossibleAnswers) - 1) {
                         $correctAnswerHtml .= " | ";
@@ -1233,9 +1239,21 @@ class FillBlanks extends Question
      *
      * @return string
      */
-    public static function getHtmlRightAnswer($answer, $correct, $feedbackType, $resultsDisabled = false, $showTotalScoreAndUserChoices = false)
-    {
-        return self::getHtmlAnswer($answer, $correct, true, $feedbackType, $resultsDisabled, $showTotalScoreAndUserChoices);
+    public static function getHtmlRightAnswer(
+        $answer,
+        $correct,
+        $feedbackType,
+        $resultsDisabled = false,
+        $showTotalScoreAndUserChoices = false
+    ) {
+        return self::getHtmlAnswer(
+            $answer,
+            $correct,
+            true,
+            $feedbackType,
+            $resultsDisabled,
+            $showTotalScoreAndUserChoices
+        );
     }
 
     /**
@@ -1246,9 +1264,21 @@ class FillBlanks extends Question
      *
      * @return string
      */
-    public static function getHtmlWrongAnswer($answer, $correct, $feedbackType, $resultsDisabled = false, $showTotalScoreAndUserChoices = false)
-    {
-        return self::getHtmlAnswer($answer, $correct, false, $feedbackType, $resultsDisabled, $showTotalScoreAndUserChoices);
+    public static function getHtmlWrongAnswer(
+        $answer,
+        $correct,
+        $feedbackType,
+        $resultsDisabled = false,
+        $showTotalScoreAndUserChoices = false
+    ) {
+        return self::getHtmlAnswer(
+            $answer,
+            $correct,
+            false,
+            $feedbackType,
+            $resultsDisabled,
+            $showTotalScoreAndUserChoices
+        );
     }
 
     /**

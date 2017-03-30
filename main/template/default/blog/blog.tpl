@@ -59,7 +59,7 @@
                         <div class="panel panel-default">
                             <div class="panel-body">
                                 <h3 class="title-post">
-                                    <a href="blog.php?action=view_post&{{ _p.web_cid_query }}&blog_id={{ item.id_blog }}&post_id={{ item.id_post }}#add_comment"
+                                    <a href="{{ _p.web_self ~ '?' ~ _p.web_cid_query ~ '&' ~ {'action':'view_post', 'blog_id':item.id_blog, 'post_id':item.id_post}|url_encode }}#add_comment"
                                        title="{{ item.title }}">{{ item.title }}</a>
                                 </h3>
 
@@ -71,13 +71,22 @@
                                     <span class="autor"><i class="fa fa-user"></i> {{ item.autor }}</span>
                                     <span class="score"><i class="fa fa-star"></i> {{ item.score_ranking }}</span>
                                 </div>
-                                <div class="content-post">
-                                    <p>
-                                        {{ item.extract }}
-                                        <a title="{{ 'ReadMore' | get_lang }}"
-                                           href="blog.php?action=view_post&blog_id={{ item.id_blog }}&post_id={{ item.id_post }}#add_comment">{{ 'ReadMore' | get_lang }}</a>
-                                    </p>
+
+                                {% if item.extract %}
+                                    <div id="post-extract-{{ item.id_post }}" class="show">
+                                        <p>
+                                            {{ item.extract }}
+                                            <button type="button" class="btn btn-link btn-read-more" data-id="{{ item.id_post }}">
+                                                {{ 'ReadMore'|get_lang }}
+                                            </button>
+                                        </p>
+                                    </div>
+                                {% endif %}
+
+                                <div id="post-content-{{ item.id_post }}" class="{{ item.extract ? 'hidden' : '' }}">
+                                    {{ item.content }}
                                 </div>
+
                                 {% if item.files %}
                                     <div class="well well-sm files">
                                         <i class="fa fa-paperclip" aria-hidden="true"></i>
@@ -92,3 +101,19 @@
         </div>
     </div>
 </div>
+<script>
+    $(document).on('ready', function () {
+        $('.btn-read-more').on('click', function (e) {
+            e.preventDefault();
+
+            var postId = $(this).data('id') || 0;
+
+            if (!postId) {
+                return;
+            }
+
+            $('#post-extract-' + postId).removeClass('show').addClass('hidden');
+            $('#post-content-' + postId).removeClass('hidden').addClass('show');
+        });
+    });
+</script>

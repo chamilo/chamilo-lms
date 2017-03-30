@@ -55,10 +55,10 @@ class MessageManager
         }
         $table = Database::get_main_table(TABLE_MESSAGE);
         $sql = "SELECT COUNT(id) as count 
-                        FROM $table
-                        WHERE
-                            user_receiver_id=" . api_get_user_id() . " AND
-                            msg_status = " . MESSAGE_STATUS_UNREAD;
+                FROM $table
+                WHERE
+                    user_receiver_id=" . api_get_user_id() . " AND
+                    msg_status = " . MESSAGE_STATUS_UNREAD;
         $result = Database::query($sql);
         $row = Database::fetch_assoc($result);
 
@@ -680,8 +680,9 @@ class MessageManager
      */
     public static function update_message($user_id, $message_id)
     {
-        if ($message_id != strval(intval($message_id)) || $user_id != strval(intval($user_id)))
+        if ($message_id != strval(intval($message_id)) || $user_id != strval(intval($user_id))) {
             return false;
+        }
 
         $table_message = Database::get_main_table(TABLE_MESSAGE);
         $sql = "UPDATE $table_message SET msg_status = '0'
@@ -721,8 +722,9 @@ class MessageManager
      */
     public static function get_message_by_user($user_id, $message_id)
     {
-        if ($message_id != strval(intval($message_id)) || $user_id != strval(intval($user_id)))
+        if ($message_id != strval(intval($message_id)) || $user_id != strval(intval($user_id))) {
             return false;
+        }
         $table_message = Database::get_main_table(TABLE_MESSAGE);
         $query = "SELECT * FROM $table_message
                   WHERE user_receiver_id=" . intval($user_id) . " AND id='" . intval($message_id) . "'";
@@ -733,7 +735,7 @@ class MessageManager
 
     /**
      * get messages by group id
-     * @param  int        group id
+     * @param  int $group_id group id
      * @return array
      */
     public static function get_messages_by_group($group_id)
@@ -879,12 +881,12 @@ class MessageManager
             $direction = 'DESC';
         } else {
             $column = intval($column);
-            if (!in_array($direction, array('ASC', 'DESC')))
+            if (!in_array($direction, array('ASC', 'DESC'))) {
                 $direction = 'ASC';
+            }
         }
         $table_message = Database::get_main_table(TABLE_MESSAGE);
         $request = api_is_xml_http_request();
-
         $keyword = Session::read('message_sent_search_keyword');
         $keywordCondition = '';
         if (!empty($keyword)) {
@@ -1039,7 +1041,6 @@ class MessageManager
         $message_content .= '<tr>';
         if (api_get_setting('allow_social_tool') == 'true') {
             $message_content .= '<div class="row">';
-
             if ($source == 'outbox') {
                 $message_content .= '<div class="col-md-12">';
                 $message_content .= '<ul class="list-message">';
@@ -1067,8 +1068,7 @@ class MessageManager
             }
         }
 
-        $message_content .= '
-		        
+        $message_content .= '		        
 		        <hr style="color:#ddd" />
 		        <table width="100%">
 		            <tr>
@@ -1853,7 +1853,14 @@ class MessageManager
      */
     public static function getSearchForm($url)
     {
-        $form = new FormValidator('search', 'post', $url, null, [], FormValidator::LAYOUT_INLINE);
+        $form = new FormValidator(
+            'search',
+            'post',
+            $url,
+            null,
+            [],
+            FormValidator::LAYOUT_INLINE
+        );
 
         $form->addElement('text', 'keyword');
         $form->addButtonSearch(get_lang('Search'));
@@ -1867,7 +1874,15 @@ class MessageManager
      */
     public static function sendNotificationByRegisteredUser(User $user)
     {
-        $tplMailBody = new Template(null, false, false, false, false, false, false);
+        $tplMailBody = new Template(
+            null,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        );
         $tplMailBody->assign('user', $user);
         $tplMailBody->assign('is_western_name_order', api_is_western_name_order());
         $tplMailBody->assign('manageUrl', api_get_path(WEB_CODE_PATH) . 'admin/user_edit.php?user_id=' . $user->getId());

@@ -49,7 +49,6 @@ class UniqueAnswerNoOption extends Question
 
         $feedback_title = '';
         $comment_title = '';
-
         if ($obj_ex->selectFeedbackType() == 1) {
             $editor_config['Width'] = '250';
             $editor_config['Height'] = '110';
@@ -86,7 +85,6 @@ class UniqueAnswerNoOption extends Question
         }
 
         $temp_scenario = array();
-
         if ($nb_answers < 1) {
             $nb_answers = 1;
             Display::display_normal_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
@@ -119,7 +117,6 @@ class UniqueAnswerNoOption extends Question
         foreach ($new_list as $key) {
             $i = $key;
             $form->addElement('html', '<tr>');
-
             if (is_object($answer)) {
                 if ($answer->position[$i] == 666) {
                     //we set nothing
@@ -144,15 +141,17 @@ class UniqueAnswerNoOption extends Question
                     $list_dest = $item_list[2];
                     $url = $item_list[3];
 
-                    if ($try == 0)
+                    if ($try == 0) {
                         $try_result = 0;
-                    else
+                    } else {
                         $try_result = 1;
+                    }
 
-                    if ($url == 0)
+                    if ($url == 0) {
                         $url_result = '';
-                    else
+                    } else {
                         $url_result = $url;
+                    }
 
                     $temp_scenario['url' . $i] = $url_result;
                     $temp_scenario['try' . $i] = $try_result;
@@ -257,7 +256,7 @@ class UniqueAnswerNoOption extends Question
 
         $buttonGroup = [];
 
-        global $text, $class;
+        global $text;
         //ie6 fix
         if ($obj_ex->edit_exercise_in_lp == true) {
             //setting the save button here and not in the question class.php
@@ -291,96 +290,115 @@ class UniqueAnswerNoOption extends Question
 	 */
 	function processAnswersCreation($form)
     {
-		$questionWeighting = $nbrGoodAnswers = 0;
-		$correct = $form -> getSubmitValue('correct');
-		$objAnswer = new Answer($this->id);
-		$nb_answers = $form -> getSubmitValue('nb_answers');
-		$minus = 1;
-		if ($form -> getSubmitValue('new_question')) {
-		    $minus = 0;
-		}
+        $questionWeighting = $nbrGoodAnswers = 0;
+        $correct = $form->getSubmitValue('correct');
+        $objAnswer = new Answer($this->id);
+        $nb_answers = $form->getSubmitValue('nb_answers');
+        $minus = 1;
+        if ($form -> getSubmitValue('new_question')) {
+            $minus = 0;
+        }
 
-		for ($i=1 ; $i <= $nb_answers - $minus; $i++) {
-		    $position   = trim($form -> getSubmitValue('position['.$i.']'));
-        	$answer     = trim($form -> getSubmitValue('answer['.$i.']'));
-            $comment    = trim($form -> getSubmitValue('comment['.$i.']'));
-            $weighting  = trim($form -> getSubmitValue('weighting['.$i.']'));
-            $scenario   = $form -> getSubmitValue('scenario');
+        for ($i = 1; $i <= $nb_answers - $minus; $i++) {
+            $position = trim($form->getSubmitValue('position['.$i.']'));
+            $answer = trim($form->getSubmitValue('answer['.$i.']'));
+            $comment = trim($form->getSubmitValue('comment['.$i.']'));
+            $weighting = trim($form->getSubmitValue('weighting['.$i.']'));
+            $scenario = $form->getSubmitValue('scenario');
 
-           	//$list_destination = $form -> getSubmitValue('destination'.$i);
-           	//$destination_str = $form -> getSubmitValue('destination'.$i);
+            //$list_destination = $form -> getSubmitValue('destination'.$i);
+            //$destination_str = $form -> getSubmitValue('destination'.$i);
 
- 		    $try           = $scenario['try'.$i];
-            $lp            = $scenario['lp'.$i];
- 			$destination   = $scenario['destination'.$i];
- 			$url           = trim($scenario['url'.$i]);
+            $try = $scenario['try'.$i];
+            $lp = $scenario['lp'.$i];
+            $destination = $scenario['destination'.$i];
+            $url = trim($scenario['url'.$i]);
 
- 			/*
- 			How we are going to parse the destination value
+            /*
+            How we are going to parse the destination value
 
-			here we parse the destination value which is a string
-		 	1@@3@@2;4;4;@@http://www.chamilo.org
+            here we parse the destination value which is a string
+            1@@3@@2;4;4;@@http://www.chamilo.org
 
-		 	where: try_again@@lp_id@@selected_questions@@url
+            where: try_again@@lp_id@@selected_questions@@url
 
-			try_again = is 1 || 0
-			lp_id = id of a learning path (0 if dont select)
-			selected_questions= ids of questions
-			url= an url
-			*/
-			/*
- 			$destination_str='';
- 			foreach ($list_destination as $destination_id)
- 			{
- 				$destination_str.=$destination_id.';';
- 			}*/
+            try_again = is 1 || 0
+            lp_id = id of a learning path (0 if dont select)
+            selected_questions= ids of questions
+            url= an url
+            */
+            /*
+            $destination_str='';
+            foreach ($list_destination as $destination_id)
+            {
+                $destination_str.=$destination_id.';';
+            }*/
 
-        	$goodAnswer= ($correct == $i) ? true : false;
+            $goodAnswer= ($correct == $i) ? true : false;
 
-        	if ($goodAnswer) {
-        		$nbrGoodAnswers++;
-        		$weighting = abs($weighting);
-        		if($weighting > 0) {
+            if ($goodAnswer) {
+                $nbrGoodAnswers++;
+                $weighting = abs($weighting);
+                if ($weighting > 0) {
                     $questionWeighting += $weighting;
                 }
-        	}
+            }
 
- 			if (empty($try))
- 				$try=0;
+            if (empty($try)) {
+                $try = 0;
+            }
 
- 			if (empty($lp)) {
- 				$lp=0;
- 			}
+            if (empty($lp)) {
+                $lp = 0;
+            }
 
- 			if (empty($destination)) {
- 				$destination=0;
- 			}
+            if (empty($destination)) {
+                $destination = 0;
+            }
 
- 			if ($url=='') {
- 				$url=0;
- 			}
+            if ($url == '') {
+                $url = 0;
+            }
 
- 			//1@@1;2;@@2;4;4;@@http://www.chamilo.org
-			$dest= $try.'@@'.$lp.'@@'.$destination.'@@'.$url;
-        	$objAnswer -> createAnswer($answer,$goodAnswer,$comment,$weighting,$i,NULL,NULL,$dest);
+            //1@@1;2;@@2;4;4;@@http://www.chamilo.org
+            $dest= $try.'@@'.$lp.'@@'.$destination.'@@'.$url;
+            $objAnswer->createAnswer(
+                $answer,
+                $goodAnswer,
+                $comment,
+                $weighting,
+                $i,
+                null,
+                null,
+                $dest
+            );
         }
 
         //Create 666 answer
         $i = 666;
-        $answer     = trim($form -> getSubmitValue('answer['.$i.']'));
-        $comment    = trim($form -> getSubmitValue('comment['.$i.']'));
-        $weighting  = trim($form -> getSubmitValue('weighting['.$i.']'));
-        $goodAnswer= ($correct == $i) ? true : false;
-        $dest       = '';
+        $answer = trim($form->getSubmitValue('answer['.$i.']'));
+        $comment = trim($form->getSubmitValue('comment['.$i.']'));
+        $weighting = trim($form->getSubmitValue('weighting['.$i.']'));
+        $goodAnswer = $correct == $i ? true : false;
+        $dest = '';
 
-        $objAnswer -> createAnswer($answer,$goodAnswer,$comment,$weighting,$i,NULL,NULL,$dest);
+        $objAnswer->createAnswer(
+            $answer,
+            $goodAnswer,
+            $comment,
+            $weighting,
+            $i,
+            null,
+            null,
+            $dest
+        );
 
-    	// saves the answers into the data base
-        $objAnswer -> save();
+        // saves the answers into the data base
+        $objAnswer->save();
 
         // sets the total weighting of the question
-        $this -> updateWeighting($questionWeighting);
-        $this -> save();
+        $this->updateWeighting($questionWeighting);
+        $this->save();
 	}
 
 	function return_header($feedback_type = null, $counter = null, $score = null)
@@ -393,6 +411,7 @@ class UniqueAnswerNoOption extends Question
 				<th>'. get_lang("Answer").'</th>';
         $header .= '<th>'.get_lang("Comment").'</th>';
         $header .= '</tr>';
+
         return $header;
-	}
+    }
 }

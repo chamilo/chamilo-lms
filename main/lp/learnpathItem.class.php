@@ -12,7 +12,6 @@
 class learnpathItem
 {
     const debug = 0; // Logging parameter.
-
     public $attempt_id; // Also called "objectives" SCORM-wise.
     public $audio; // The path to an audio file (stored in document/audio/).
     public $children = array(); // Contains the ids of children items.
@@ -83,15 +82,14 @@ class learnpathItem
      * Don't forget to use set_lp_view() if applicable after creating the item.
      * Setting an lp_view will finalise the item_view data collection
      * @param   integer $id Learning path item ID
-     * @param   null|integer $user_id User ID
-     * @param   null|integer $course_id Course int id
+     * @param   integer $user_id User ID
+     * @param   integer $course_id Course int id
      * @param   null|array  $item_content An array with the contents of the item
-     * @return  bool    True on success, false on failure
      */
     public function __construct(
         $id,
-        $user_id = null,
-        $course_id = null,
+        $user_id = 0,
+        $course_id = 0,
         $item_content = null
     ) {
         $items_table = Database::get_course_table(TABLE_LP_ITEM);
@@ -108,7 +106,6 @@ class learnpathItem
             );
         }
         $id = intval($id);
-
         if (empty($item_content)) {
             if (empty($course_id)) {
                 $course_id = api_get_course_int_id();
@@ -119,9 +116,7 @@ class learnpathItem
                     WHERE c_id = $course_id AND id = $id";
             $res = Database::query($sql);
             if (Database::num_rows($res) < 1) {
-                $this->error =
-                'Could not find given learnpath item in learnpath_item table';
-                return false;
+                $this->error = 'Could not find given learnpath item in learnpath_item table';
             }
             $row = Database::fetch_array($res);
         } else {
@@ -154,17 +149,17 @@ class learnpathItem
         $this->db_id = $id;
 
         // Load children list
-        $sql = "SELECT id FROM $items_table
-                WHERE
-                    c_id = $course_id AND
-                    lp_id = ".$this->lp_id." AND
-                    parent_item_id = $id";
-        $res = Database::query($sql);
-        if (Database::num_rows($res) < 1) {
-            // Nothing to do (no children)
-        } else {
-            while ($row = Database::fetch_assoc($res)) {
-                $this->children[] = $row['id'];
+        if (!empty($this->lp_id)) {
+            $sql = "SELECT id FROM $items_table
+                    WHERE
+                        c_id = $course_id AND
+                        lp_id = ".$this->lp_id." AND
+                        parent_item_id = $id";
+            $res = Database::query($sql);
+            if (Database::num_rows($res) > 0) {
+                while ($row = Database::fetch_assoc($res)) {
+                    $this->children[] = $row['id'];
+                }
             }
         }
 
@@ -209,8 +204,6 @@ class learnpathItem
                 0
             );
         }
-
-        return true;
     }
 
     /**

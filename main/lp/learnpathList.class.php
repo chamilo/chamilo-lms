@@ -108,10 +108,8 @@ class LearnpathList
                     $order
                 ";
 
-        $learningPaths = Database::getManager()
-            ->createQuery($dql)
-            ->getResult();
-
+        $learningPaths = Database::getManager()->createQuery($dql)->getResult();
+        $showBlockedPrerequisite = api_get_configuration_value('show_prerequisite_as_blocked');
         $names = [];
         /** @var CLp $row */
         foreach ($learningPaths as $row) {
@@ -148,6 +146,14 @@ class LearnpathList
                 $row->getId(),
                 $session_id
             );
+
+            // If option is not true then don't show invisible LP to user
+            if ($showBlockedPrerequisite !== true && !api_is_allowed_to_edit()) {
+                $lpVisibility = learnpath::is_lp_visible_for_student($row->getIid(), $user_id);
+                if ($lpVisibility === false) {
+                    continue;
+                }
+            }
 
             $this->list[$row->getIid()] = array(
                 'lp_type' => $row->getLpType(),

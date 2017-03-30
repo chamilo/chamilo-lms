@@ -250,7 +250,6 @@ class DocumentManager
         );
 
         if ($filename === true) {
-
             return $mime_types;
         }
 
@@ -267,7 +266,6 @@ class DocumentManager
 
         //if the extension is found, return the content type
         if (isset($mime_types[$extension])) {
-
             return $mime_types[$extension];
         }
         //else return octet-stream
@@ -300,7 +298,7 @@ class DocumentManager
                             docs.path = '$doc_url'";
             $result = Database::query($query);
 
-            return (Database::num_rows($result) == 0);
+            return Database::num_rows($result) == 0;
         }
     }
 
@@ -333,7 +331,6 @@ class DocumentManager
 
         if ($forced) {
             // Force the browser to save the file instead of opening it
-
             if (isset($sendFileHeaders) &&
                 !empty($sendFileHeaders)) {
                 header("X-Sendfile: $filename");
@@ -364,7 +361,7 @@ class DocumentManager
             $content_type = self::file_get_mime_type($filename);
             $lpFixedEncoding = api_get_configuration_value('lp_fixed_encoding');
 
-            // Comented to let courses content to be cached in order to improve performance:
+            // Commented to let courses content to be cached in order to improve performance:
             //header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
             //header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
 
@@ -859,7 +856,12 @@ class DocumentManager
             // No invisible folders
             // Condition for the session
             $session_id = api_get_session_id();
-            $condition_session = api_get_session_condition($session_id, true, false, 'docs.session_id');
+            $condition_session = api_get_session_condition(
+                $session_id,
+                true,
+                false,
+                'docs.session_id'
+            );
 
             $visibilityCondition = 'last.visibility = 1';
             $fileType = "docs.filetype = 'folder' AND";
@@ -895,9 +897,6 @@ class DocumentManager
                 return $visibleFolders;
             }
 
-            // Condition for the session
-            $session_id = api_get_session_id();
-            $condition_session = api_get_session_condition($session_id, true, false, 'docs.session_id');
             //get invisible folders
             $sql = "SELECT DISTINCT docs.id, path
                     FROM $TABLE_ITEMPROPERTY AS last 
@@ -913,9 +912,6 @@ class DocumentManager
             $result = Database::query($sql);
             $invisibleFolders = array();
             while ($row = Database::fetch_array($result, 'ASSOC')) {
-                //condition for the session
-                $session_id = api_get_session_id();
-                $condition_session = api_get_session_condition($session_id, true, false, 'docs.session_id');
                 //get visible folders in the invisible ones -> they are invisible too
                 $sql = "SELECT DISTINCT docs.id, path
                         FROM $TABLE_ITEMPROPERTY AS last 
@@ -935,7 +931,7 @@ class DocumentManager
                 }
             }
 
-            //if both results are arrays -> //calculate the difference between the 2 arrays -> only visible folders are left :)
+            // If both results are arrays -> //calculate the difference between the 2 arrays -> only visible folders are left :)
             if (is_array($visibleFolders) && is_array($invisibleFolders)) {
                 $document_folders = array_diff($visibleFolders, $invisibleFolders);
                 natsort($document_folders);
@@ -4790,17 +4786,23 @@ class DocumentManager
      */
     public static function generateDefaultCertificate($courseData, $fromBaseCourse = false, $sessionId = 0)
     {
+        if (empty($courseData)) {
+            return false;
+        }
+
         global $css, $img_dir, $default_course_dir, $js;
         $codePath = api_get_path(REL_CODE_PATH);
         $dir = '/certificates';
-
-        $title = get_lang('DefaultCertificate');
         $comment = null;
-
+        $title = get_lang('DefaultCertificate');
         $fileName = api_replace_dangerous_char($title);
-        $filePath = api_get_path(SYS_COURSE_PATH) . "{$courseData['path']}/document{$dir}";
-        $fileFullPath = "{$filePath}/{$fileName}.html";
-        $fileSize = 0;
+        $filePath = api_get_path(SYS_COURSE_PATH) . "{$courseData['directory']}/document$dir";
+
+        if (!is_dir($filePath)) {
+            mkdir($filePath, api_get_permissions_for_new_directories());
+        }
+
+        $fileFullPath = "$filePath/$fileName.html";
         $fileType = 'file';
         $templateContent = file_get_contents(api_get_path(SYS_CODE_PATH).'gradebook/certificate_template/template.html');
 
@@ -4808,16 +4810,13 @@ class DocumentManager
         $replace = array($css.$js, $img_dir, $codePath, $default_course_dir);
 
         $fileContent = str_replace($search, $replace, $templateContent);
-
-        $saveFilePath = "{$dir}/{$fileName}.html";
-
-        if (!is_dir($filePath)) {
-            mkdir($filePath, api_get_permissions_for_new_directories());
-        }
+        $saveFilePath = "$dir/$fileName.html";
 
         if ($fromBaseCourse) {
-            $defaultCertificateId = self::get_default_certificate_id($courseData['code'], 0);
-
+            $defaultCertificateId = self::get_default_certificate_id(
+                $courseData['code'],
+                0
+            );
             if (!empty($defaultCertificateId)) {
                 // We have a certificate from the course base
                 $documentData = self::get_document_data_by_id(
@@ -4833,49 +4832,50 @@ class DocumentManager
             }
         }
 
-        $defaultCertificateFile = $fp = @fopen($fileFullPath, 'w');
+        if (file_exists($fileFullPath) === false) {
+            $result = file_put_contents($fileFullPath, $fileContent);
+            if ($result) {
+                $fileSize = filesize($fileFullPath);
 
-        if ($defaultCertificateFile != false) {
-            @fputs($defaultCertificateFile, $fileContent);
-            fclose($defaultCertificateFile);
-            chmod($fileFullPath, api_get_permissions_for_new_files());
+                $documentId = add_document(
+                    $courseData,
+                    $saveFilePath,
+                    $fileType,
+                    $fileSize,
+                    $title,
+                    $comment,
+                    0,//$readonly = 0,
+                    true, //$save_visibility = true,
+                    null, //$group_id = null,
+                    $sessionId
+                );
 
-            $fileSize = filesize($fileFullPath);
-        }
+                api_item_property_update(
+                    $courseData,
+                    TOOL_DOCUMENT,
+                    $documentId,
+                    'DocumentAdded',
+                    api_get_user_id(),
+                    null,
+                    null,
+                    null,
+                    null,
+                    $sessionId
+                );
 
-        $documentId = add_document(
-            $courseData,
-            $saveFilePath,
-            $fileType,
-            $fileSize,
-            $title,
-            $comment,
-            0,//$readonly = 0,
-            true, //$save_visibility = true,
-            null, //$group_id = null,
-            $sessionId
-        );
+                $defaultCertificateId = self::get_default_certificate_id(
+                    $courseData['code'],
+                    $sessionId
+                );
 
-        api_item_property_update(
-            $courseData,
-            TOOL_DOCUMENT,
-            $documentId,
-            'DocumentAdded',
-            api_get_user_id(),
-            null,
-            null,
-            null,
-            null,
-            $sessionId
-        );
-
-        $defaultCertificateId = self::get_default_certificate_id(
-            $courseData['code'],
-            $sessionId
-        );
-
-        if (!isset($defaultCertificateId)) {
-            self::attach_gradebook_certificate($courseData['code'], $documentId, $sessionId);
+                if (!isset($defaultCertificateId)) {
+                    self::attach_gradebook_certificate(
+                        $courseData['code'],
+                        $documentId,
+                        $sessionId
+                    );
+                }
+            }
         }
     }
 

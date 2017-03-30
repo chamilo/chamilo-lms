@@ -67,9 +67,9 @@ class ChamiloApi
      * Get the platform logo path
      * @return null|string
      */
-    public static function getWebPlatformLogoPath()
+    public static function getWebPlatformLogoPath($theme = '')
     {
-        $theme = api_get_visual_theme();
+        $theme = empty($theme) ? api_get_visual_theme() : $theme;
         $accessUrlId = api_get_current_access_url_id();
         $customLogoPath = "themes/$theme/images/header-logo-custom$accessUrlId.png";
 
@@ -92,9 +92,9 @@ class ChamiloApi
      * @param array $imageAttributes Optional.
      * @return string
      */
-    public static function getPlatformLogo($imageAttributes = [])
+    public static function getPlatformLogo($theme = '', $imageAttributes = [])
     {
-        $logoPath = self::getWebPlatformLogoPath();
+        $logoPath = self::getWebPlatformLogoPath($theme);
         $institution = api_get_setting('Institution');
         $institutionUrl = api_get_setting('InstitutionUrl');
         $siteName = api_get_setting('siteName');

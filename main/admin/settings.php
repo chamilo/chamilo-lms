@@ -177,7 +177,6 @@ if (!empty($_GET['category']) &&
                 $locked_settings = api_get_locked_settings();
                 foreach ($values as $key => $value) {
                     if (!in_array($key, $locked_settings)) {
-
                         $changeable = 0;
                         if ($mark_all) {
                             $changeable = 1;
@@ -369,9 +368,7 @@ if (!empty($_GET['category']) &&
         exit;
     }
 }
-
-$htmlHeadXtra[] = '<script>
-    
+$htmlHeadXtra[] = '<script>    
     var hide_icon = "'.api_get_path(WEB_IMG_PATH).'/icons/32/shared_setting_na.png";
     var show_icon = "'.api_get_path(WEB_IMG_PATH).'/icons/32/shared_setting.png";
     var url       = "'.api_get_path(WEB_AJAX_PATH).'admin.ajax.php?a=update_changeable_setting";
@@ -401,9 +398,6 @@ $htmlHeadXtra[] = '<script>
         });
     });
 </script>';
-
-// Including the header (banner).
-Display :: display_header($tool_name);
 
 // The action images.
 $action_images['platform'] = 'platform.png';
@@ -474,10 +468,8 @@ foreach ($resultcategories as $row) {
     $action_array[] = $url;
 }
 
-echo Display::actions($action_array);
-echo '<br />';
-echo $form_search_html;
 
+ob_start();
 if (!empty($_GET['category'])) {
     switch ($_GET['category']) {
         case 'Regions':
@@ -551,5 +543,13 @@ if (!empty($_GET['category'])) {
             }
     }
 }
+$content = ob_get_clean();
+
+// Including the header (banner).
+Display :: display_header($tool_name);
+echo Display::actions($action_array);
+echo '<br />';
+echo $form_search_html;
+echo $content;
 
 Display :: display_footer();

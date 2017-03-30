@@ -198,21 +198,37 @@ class UniqueAnswer extends Question
             );
 
             $answer_number = $form->addElement(
-                'text', 'counter[' . $i . ']', null, ' value = "' . $i . '"'
+                'text',
+                'counter['.$i.']',
+                null,
+                ' value = "'.$i.'"'
             );
             $answer_number->freeze();
             $form->addElement(
-                'radio', 'correct', null, null, $i, 'class="checkbox"'
+                'radio',
+                'correct',
+                null,
+                null,
+                $i,
+                'class="checkbox"'
             );
 
             $form->addHtmlEditor('answer[' . $i . ']', null, null, true, $editor_config);
 
             $form->addRule(
-                'answer[' . $i . ']', get_lang('ThisFieldIsRequired'), 'required'
+                'answer['.$i.']',
+                get_lang('ThisFieldIsRequired'),
+                'required'
             );
 
             if ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
-                $form->addHtmlEditor('comment[' . $i . ']', null, null, false, $editor_config);
+                $form->addHtmlEditor(
+                    'comment['.$i.']',
+                    null,
+                    null,
+                    false,
+                    $editor_config
+                );
                 // Direct feedback
                 //Adding extra feedback fields
                 $group = array();
@@ -260,16 +276,13 @@ class UniqueAnswer extends Question
         $form->addHtml('</table>');
 
         global $text;
-
         $buttonGroup = [];
         //ie6 fix
         if ($obj_ex->edit_exercise_in_lp == true) {
-
             //setting the save button here and not in the question class.php
             $buttonGroup[] = $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers', true);
             $buttonGroup[] = $form->addButtonCreate(get_lang('PlusAnswer'), 'moreAnswers', true);
             $buttonGroup[] = $form->addButtonSave($text, 'submitQuestion', true);
-
             $form->addGroup($buttonGroup);
         }
 
@@ -440,8 +453,8 @@ class UniqueAnswer extends Question
         $sql = "SELECT max(position) as max_position
                 FROM $tbl_quiz_answer
                 WHERE
-                  c_id = $course_id AND
-                  question_id = $question_id";
+                    c_id = $course_id AND
+                    question_id = $question_id";
         $rs_max = Database::query($sql);
         $row_max = Database::fetch_object($rs_max);
         $position = $row_max->max_position + 1;

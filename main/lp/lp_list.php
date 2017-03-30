@@ -192,8 +192,8 @@ foreach ($categories as $item) {
             );
 
             // Check if the learnpath is visible for student.
-            if (!$is_allowed_to_edit && $lpVisibility == false &&
-                ($isBlocked && $showBlockedPrerequisite == false)
+            if (!$is_allowed_to_edit && $lpVisibility === false &&
+                ($isBlocked && $showBlockedPrerequisite === false)
             ) {
                 continue;
             }
@@ -202,7 +202,7 @@ foreach ($categories as $item) {
             if (!$is_allowed_to_edit) {
                 $time_limits = false;
 
-                //This is an old LP (from a migration 1.8.7) so we do nothing
+                // This is an old LP (from a migration 1.8.7) so we do nothing
                 if ((empty($details['created_on'])) &&
                     (empty($details['modified_on']))
                 ) {
@@ -293,7 +293,10 @@ foreach ($categories as $item) {
             }
 
             // Students can see the lp but is inactive
-            if (!$is_allowed_to_edit && $lpVisibility == false && $showBlockedPrerequisite == true) {
+            if (!$is_allowed_to_edit &&
+                $lpVisibility == false &&
+                $showBlockedPrerequisite == true
+            ) {
                 $my_title = Display::tag(
                     'font',
                     $name,
@@ -331,8 +334,7 @@ foreach ($categories as $item) {
             if ($is_allowed_to_edit) {
                 $dsp_progress = '<center>'.$progress.'</center>';
             } else {
-                $dsp_progress = "";
-
+                $dsp_progress = '';
                 if (!api_is_invitee()) {
                     $dsp_progress = learnpath::get_progress_bar($progress, '%');
                 }
@@ -820,7 +822,7 @@ foreach ($categories as $item) {
             ];
 
             $lpIsShown = true;
-            //counter for number of elements treated
+            // Counter for number of elements treated
             $current++;
 
         } // end foreach ($flat_list)
@@ -828,7 +830,7 @@ foreach ($categories as $item) {
 
     $data[] = [
         'category' => $item,
-        'lp_list' => $listData,
+        'lp_list' => $listData
     ];
 }
 

@@ -1789,7 +1789,7 @@ abstract class Question
             "<div class=\"rib rib-$class\"><h3>$score_label</h3></div> <h4>{$score['result']}</h4>",
             array('class' => 'ribbon')
         );
-        $header .= Display::div($this->description, array('id' => 'question_description'));
+        $header .= Display::div($this->description, array('class' => 'question_description'));
 
         return $header;
     }

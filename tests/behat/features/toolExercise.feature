@@ -101,10 +101,10 @@ Feature: Exercise tool
     And I follow "Matching"
     When I fill in the following:
       | questionName | Matching |
-      | answer[1] | Answer A |
-      | answer[2] | Answer B |
-      | option[1] | Option A |
-      | option[2] | Option B |
+    And I fill in ckeditor field "answer[1]" with "Answer A"
+    And I fill in ckeditor field "answer[2]" with "Answer B"
+    And I fill in ckeditor field "option[1]" with "Option A"
+    And I fill in ckeditor field "option[2]" with "Option B"
     And I fill in select bootstrap static input "#matches_2" select "2"
     And I press "submitQuestion"
     Then I should see "Item added"

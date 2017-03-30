@@ -649,7 +649,7 @@ class Template
         }
 
         // Logo
-        $logo = return_logo();
+        $logo = return_logo($this->theme);
         $this->assign('logo', $logo);
         $this->assign('show_media_element', 1);
     }

@@ -4763,26 +4763,29 @@ div#chat-remote-video video {
     /* position: relative; */
     vertical-align: top;
     white-space: normal;
-    margin: 0px 5px 15px 0px;
+    margin: auto;
     box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05);
     text-align: left;
     background-color: #fff;
-    min-height: 250px;
     border: 1px solid #DFDFDF;
     border-radius: 5px;
     margin-bottom: 20px;
 }
 .grid-courses .items.items-courses,
 .grid-courses .items.items-hotcourse{
-    min-height: 300px;
+    min-height: 450px;
+    width: 310px;
+}
+.grid-courses .items .block-title{
+    margin: 15px 10px 10px 10px;
 }
 .grid-courses .items .title{
     line-height: 1.4;
     padding: 0px;
-    margin: 5px;
-    font-size: 14px;
+    font-size: 17px;
     font-weight: bold;
-    min-height: 40px;
+    height: 42px;
+    margin: 0;
 }
 .grid-courses .items .toolbar{
     text-align: right;
@@ -4808,6 +4811,7 @@ div#chat-remote-video video {
 }
 .grid-courses .items .ranking{
     font-size: 10px;
+    margin: 10px;
 }
 .grid-courses .items .image .black-shadow{
     top: 0px;
@@ -4890,6 +4894,55 @@ div#chat-remote-video video {
 }
 .grid-courses .items .author-card .teachers-details h5 a{
     color: #fff;
+}
+
+/*---- */
+.grid-courses .items .block-author{
+    display: flex;
+    margin-top: 5px;
+    margin-left: 5px;
+}
+.grid-courses .items .block-author img{
+    border: 2px solid #fff;
+}
+.grid-courses .items .block-author .teachers-details{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.grid-courses .items .block-author .teachers-details p{
+    font-size: 10px;
+    margin: 0 10px 0 10px;
+    padding: 0;
+}
+.grid-courses .items .block-author .teachers-details h5{
+    font-size: 10px;
+    font-weight: bold;
+    margin: 0px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.grid-courses .items .block-author .teachers-details h5 a{
+    color: #666;
+}
+/* new grid catalog */
+.section-course-wrapper{
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    margin: auto;
+    align-items: center;
+}
+.section-course-wrapper.show-section{
+    /* display: -webkit-box !important; */
+    /* display: -ms-flexbox !important; */
+    display: flex !important;
 }
 /* Catalog session */
 

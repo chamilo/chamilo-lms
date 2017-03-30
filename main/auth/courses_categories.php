@@ -173,7 +173,7 @@ if ($showCourses && $action != 'display_sessions') {
 
             $html = null;
             // display the course bloc
-            $html .= '<div class="col-xs-6 col-sm-6 col-md-3"><div class="items items-courses">';
+            $html .= '<div class="col-xs-6 col-sm-6 col-md-4"><div class="items items-courses">';
 
             $course['category_title'] = '';
             if (isset($course['category'])) {
@@ -210,6 +210,7 @@ if ($showCourses && $action != 'display_sessions') {
             // display course title and button bloc
             $html .= '<div class="description">';
             $html .= return_title($course);
+            $html .= return_teacher($course);
 
             // display button line
             $html .= '<div class="toolbar">';
@@ -321,6 +322,32 @@ function returnThumbnail($course)
     return $html;
 }
 
+function return_teacher($course){
+    //Info course
+    $courseInfo = api_get_course_info($course['code']);
+    $teachers = CourseManager::getTeachersFromCourse($courseInfo['real_id']);
+    //$count = 0;
+    $html = null;
+    $html .= '<div class="block-author">';
+    $length = count($teachers);
+    foreach ($teachers as $value) {
+        $name = $value['firstname'].' ' . $value['lastname'];
+        if ($length > 2) {
+             $html .= '<a href="'.$value['url'].'" class="ajax" data-title="'.$name.'">
+                    <img src="'.$value['avatar'].'"/></a>';
+        } else {
+            $html .= '<a href="'.$value['url'].'" class="ajax" data-title="'.$name.'">
+                    <img src="'.$value['avatar'].'"/></a>';
+            $html .= '<div class="teachers-details"><h5>
+                    <a href="'.$value['url'].'" class="ajax" data-title="'.$name.'">'
+                    . $name . '</a></h5><p>'. get_lang('Teacher').'</p></div>';            
+        }
+        //$count ++;
+    }
+    $html .= '</div>';
+    return $html;
+}
+
 /**
  * Display the title of a course in course catalog
  * @param $course
@@ -333,7 +360,7 @@ function return_title($course)
     $title = cut($course['title'], 70);
     $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
     $rating = Display::return_rating_system('star_'.$course['real_id'], $ajax_url.'&course_id='.$course['real_id'], $course['point_info']);
-    $html .=  '<h4 class="title"><a href="' . $linkCourse . '">' . cut($title, 60) . '</a></h4>';
+    $html .=  '<div class="block-title"><h4 class="title"><a title="'.$title.'" href="' . $linkCourse . '">' . cut($title, 45) . '</a></h4></div>';
     $html .= '<div class="ranking">'. $rating . '</div>';
 
     return $html;

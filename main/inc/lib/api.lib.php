@@ -4349,6 +4349,7 @@ function api_get_visual_theme()
 
 /**
  * Returns a list of CSS themes currently available in the CSS folder
+ * The folder must have a default.css file
  * @param bool $getOnlyThemeFromVirtualInstance Used by the vchamilo plugin
  * @return array        List of themes directories from the css folder
  * Note: Directory names (names of themes) in the file system should contain ASCII-characters only.
@@ -4365,6 +4366,10 @@ function api_get_themes($getOnlyThemeFromVirtualInstance = false)
         /** @var Symfony\Component\Finder\SplFileInfo $theme */
         foreach ($themes as $theme) {
             $folder = $theme->getFilename();
+            // A theme folder is consider if there's a default.css file
+            if (!file_exists($theme->getPathname().'/default.css')) {
+                continue;
+            }
             $name = ucwords(str_replace('_', ' ', $folder));
             if ($folder == $virtualTheme) {
                 continue;

@@ -233,7 +233,7 @@ if ($showCourses && $action != 'display_sessions') {
                 if ($course_unsubscribe_allowed) {
                     $html .= return_unregister_button($course, $stok, $search_term, $code);
                 }
-                $html .= return_already_registered_label('teacher');
+                //$html .= return_already_registered_label('teacher');
 
             } else {
                 // if user not registered in the course
@@ -280,6 +280,8 @@ function returnThumbnail($course)
 {
     $html = '';
     $title = cut($course['title'], 70);
+    $linkCourse = api_get_course_url($course['code']);
+    
     // course path
     $course_path = api_get_path(SYS_COURSE_PATH).$course['directory'];
 
@@ -291,30 +293,19 @@ function returnThumbnail($course)
     }
 
     $html .= '<div class="image">';
-    $html .= '<img class="img-responsive" src="'.$course_medium_image.'" alt="'.api_htmlentities($title).'"/>';
+    
+    if($course['visibility'] == COURSE_VISIBILITY_REGISTERED){
+        $html .= '<img class="img-responsive" src="'.$course_medium_image.'" alt="'.api_htmlentities($title).'"/>';
+    }else{
+        $html .= '<a href="'.$linkCourse.'" title="'.$course['title'].'"><img class="img-responsive" src="'.$course_medium_image.'" alt="'.api_htmlentities($title).'"/></a>';
+    }
+    
     $categoryTitle = isset($course['category_title']) ? $course['category_title'] : '';
     if (!empty($categoryTitle)) {
         $html .= '<span class="category">'. $categoryTitle.'</span>';
         $html .= '<div class="cribbon"></div>';
     }
-    $courseInfo = api_get_course_info($course['code']);
-    $teachers = CourseManager::getTeachersFromCourse($courseInfo['real_id']);
-    $html .= '<div class="black-shadow">';
-    $html .= '<div class="author-card">';
-    $count = 0;
-    foreach ($teachers as $value) {
-        if ($count > 2) {
-            break;
-        }
-        $name = $value['firstname'].' ' . $value['lastname'];
-        $html .= '<a href="'.$value['url'].'" class="ajax" data-title="'.$name.'">
-                <img src="'.$value['avatar'].'"/></a>';
-        $html .= '<div class="teachers-details"><h5>
-                <a href="'.$value['url'].'" class="ajax" data-title="'.$name.'">'
-                . $name . '</a></h5></div>';
-        $count ++;
-    }
-    $html .= '</div></div>';
+    
     $html .= '<div class="user-actions">';
     $html .= return_description_button($course);
     $html .= '</div></div>';
@@ -360,7 +351,15 @@ function return_title($course)
     $title = cut($course['title'], 70);
     $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
     $rating = Display::return_rating_system('star_'.$course['real_id'], $ajax_url.'&course_id='.$course['real_id'], $course['point_info']);
-    $html .=  '<div class="block-title"><h4 class="title"><a title="'.$title.'" href="' . $linkCourse . '">' . cut($title, 45) . '</a></h4></div>';
+    $html .= '<div class="block-title"><h4 class="title">';
+    
+    if ($course['visibility'] == COURSE_VISIBILITY_REGISTERED){
+       $html .= cut($title, 45);
+    } else {
+       $html .= '<a title="'.$title.'" href="' . $linkCourse . '">' . cut($title, 45) . '</a>';
+    }
+    
+    $html .= '</h4></div>';
     $html .= '<div class="ranking">'. $rating . '</div>';
 
     return $html;

@@ -3280,8 +3280,8 @@ class SurveyUtil
      */
     public static function flagSurveyAsAnswered($surveyCode, $courseId)
     {
-        $currenUserId = api_get_user_id();
-        $flag = sprintf("%s-%s-%d", $courseId, $surveyCode, $currenUserId);
+        $currentUserId = api_get_user_id();
+        $flag = sprintf("%s-%s-%d", $courseId, $surveyCode, $currentUserId);
 
         if (!isset($_SESSION['filled_surveys'])) {
             $_SESSION['filled_surveys'] = array();
@@ -3298,8 +3298,8 @@ class SurveyUtil
      */
     public static function isSurveyAnsweredFlagged($surveyCode, $courseId)
     {
-        $currenUserId = api_get_user_id();
-        $flagToCheck = sprintf("%s-%s-%d", $courseId, $surveyCode, $currenUserId);
+        $currentUserId = api_get_user_id();
+        $flagToCheck = sprintf("%s-%s-%d", $courseId, $surveyCode, $currentUserId);
 
         if (!isset($_SESSION['filled_surveys'])) {
             return false;

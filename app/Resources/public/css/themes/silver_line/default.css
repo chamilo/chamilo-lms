@@ -195,3 +195,12 @@ border-color: #444;
     border: 1px solid #D3D3D3;
     box-shadow: none;
 }
+.navbar-nav .open .dropdown-menu .user-header,
+.navbar-nav .open .dropdown-menu .user-header a,
+.navbar-nav .open .dropdown-menu .user-body a{
+    color: #FFF;
+}
+.navbar-nav .dropdown .dropdown-toggle
+{
+    margin-top: 0;
+}

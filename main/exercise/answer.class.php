@@ -944,7 +944,6 @@ class Answer
                     }
                 }
             }
-
         }
 	}
 

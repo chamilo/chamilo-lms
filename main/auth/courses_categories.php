@@ -158,9 +158,10 @@ if ($showCourses && $action != 'display_sessions') {
                 continue;
             }
 
-            $user_registerd_in_course = CourseManager::is_user_subscribed_in_course($user_id, $course['code']);
-            $user_registerd_in_course_as_teacher = CourseManager::is_course_teacher($user_id, $course['code']);
-            $user_registerd_in_course_as_student = ($user_registerd_in_course && !$user_registerd_in_course_as_teacher);
+            $userRegisterdInCourse = CourseManager::is_user_subscribed_in_course($user_id, $course['code']);
+            $userRegisterdInCourseAsTeacher = CourseManager::is_course_teacher($user_id, $course['code']);
+            $userRegisterd = ($userRegisterdInCourse && $userRegisterdInCourseAsTeacher);
+            
             $course_public = ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD);
             $course_open = ($course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM);
             $course_private = ($course['visibility'] == COURSE_VISIBILITY_REGISTERED);
@@ -181,7 +182,7 @@ if ($showCourses && $action != 'display_sessions') {
             }
 
             // display thumbnail
-            $html .= returnThumbnail($course);
+            $html .= returnThumbnail($course, $userRegisterd);
 
             $separator = '<div class="separator">&nbsp;</div>';
             $subscribeButton = return_register_button($course, $stok, $code, $search_term);
@@ -209,7 +210,7 @@ if ($showCourses && $action != 'display_sessions') {
 
             // display course title and button bloc
             $html .= '<div class="description">';
-            $html .= return_title($course);
+            $html .= return_title($course, $userRegisterd);
             $html .= return_teacher($course);
 
             // display button line
@@ -276,7 +277,7 @@ echo $cataloguePagination;
  *
  * @return string HTML string
  */
-function returnThumbnail($course)
+function returnThumbnail($course, $registeredUser)
 {
     $html = '';
     $title = cut($course['title'], 70);
@@ -294,7 +295,7 @@ function returnThumbnail($course)
 
     $html .= '<div class="image">';
     
-    if($course['visibility'] == COURSE_VISIBILITY_REGISTERED){
+    if(!$registeredUser){
         $html .= '<img class="img-responsive" src="'.$course_medium_image.'" alt="'.api_htmlentities($title).'"/>';
     }else{
         $html .= '<a href="'.$linkCourse.'" title="'.$course['title'].'"><img class="img-responsive" src="'.$course_medium_image.'" alt="'.api_htmlentities($title).'"/></a>';
@@ -344,7 +345,7 @@ function return_teacher($course){
  * @param $course
  * @return string HTML string
  */
-function return_title($course)
+function return_title($course, $registeredUser)
 {
     $html = '';
     $linkCourse = api_get_course_url($course['code']);
@@ -353,7 +354,7 @@ function return_title($course)
     $rating = Display::return_rating_system('star_'.$course['real_id'], $ajax_url.'&course_id='.$course['real_id'], $course['point_info']);
     $html .= '<div class="block-title"><h4 class="title">';
     
-    if ($course['visibility'] == COURSE_VISIBILITY_REGISTERED){
+    if (!$registeredUser){
        $html .= cut($title, 45);
     } else {
        $html .= '<a title="'.$title.'" href="' . $linkCourse . '">' . cut($title, 45) . '</a>';
@@ -431,7 +432,7 @@ function return_already_registered_label($in_status)
 function return_register_button($course, $stok, $code, $search_term)
 {
     $html = ' <a class="btn btn-success btn-sm" title="' . get_lang('Subscribe') . '" href="'.api_get_self().'?action=subscribe_course&sec_token='.$stok.'&subscribe_course='.$course['code'].'&search_term='.$search_term.'&category_code='.$code.'">' .
-    Display::returnFontAwesomeIcon('sign-in') . '</a>';
+    get_lang('Subscribe') .' '. Display::returnFontAwesomeIcon('sign-in') . '</a>';
     return $html;
 }
 

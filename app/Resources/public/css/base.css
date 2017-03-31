@@ -4771,10 +4771,12 @@ div#chat-remote-video video {
     border-radius: 5px;
     margin-bottom: 20px;
 }
-.grid-courses .items.items-courses,
-.grid-courses .items.items-hotcourse{
+.grid-courses .items.items-courses{
     min-height: 425px;
     width: 310px;
+}
+.grid-courses .items.items-hotcourse{
+    min-height: 360px;
 }
 .grid-courses .items .block-title{
     margin: 15px 10px 10px 10px;

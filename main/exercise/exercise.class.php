@@ -2889,7 +2889,8 @@ class Exercise
 
         $nbrQuestions = $this->get_count_question_list();
 
-        $all_button = $html = $label = '';
+        $all_button = [];
+        $html = $label = '';
         $hotspot_get = isset($_POST['hotspot']) ? Security::remove_XSS($_POST['hotspot']):null;
 
         if ($this->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT && $this->type == ONE_PER_PAGE) {
@@ -2938,19 +2939,39 @@ class Exercise
                 if ($this->type == ONE_PER_PAGE) {
                     if ($questionNum != 1) {
                         $prev_question = $questionNum - 2;
-                        $all_button .= '<a href="javascript://" class="btn btn-default" onclick="previous_question_and_save('.$prev_question.', '.$question_id.' ); ">'.get_lang('PreviousQuestion').'</a>';
+                        $all_button[] = Display::button(
+                            'previous_question_and_save',
+                            get_lang('PreviousQuestion'),
+                            [
+                                'type' => 'button',
+                                'class' => 'btn btn-default',
+                                'data-prev' => $prev_question,
+                                'data-question' => $question_id
+                            ]
+                        );
                     }
 
                     //Next question
                     if (!empty($questions_in_media)) {
-                        $questions_in_media = "['".implode("','",$questions_in_media)."']";
-                        $all_button .= '&nbsp;<a href="javascript://" class="'.$class.'" onclick="save_question_list('.$questions_in_media.'); ">'.$label.'</a>';
+                        $all_button[] = Display::button(
+                            'save_question_list',
+                            $label,
+                            [
+                                'type' => 'button',
+                                'class' => $class,
+                                'data-list' => implode(",", $questions_in_media)
+                            ]
+                        );
                     } else {
-                        $all_button .= '&nbsp;<a href="javascript://" class="'.$class.'" onclick="save_now('.$question_id.', \'\', \''.$currentAnswer.'\'); ">'.$label.'</a>';
+                        $all_button[] = Display::button(
+                            'save_now',
+                            $label,
+                            ['type' => 'button', 'class' => $class, 'data-question' => $question_id]
+                        );
                     }
-                    $all_button .= '<span id="save_for_now_'.$question_id.'" class="exercise_save_mini_message"></span>&nbsp;';
+                    $all_button[] = '<span id="save_for_now_'.$question_id.'" class="exercise_save_mini_message"></span>&nbsp;';
 
-                    $html .= $all_button;
+                    $html .= implode(PHP_EOL, $all_button);
                 } else {
                     if ($this->review_answers) {
                         $all_label = get_lang('ReviewQuestions');
@@ -2960,9 +2981,13 @@ class Exercise
                         $class = 'btn btn-warning';
                     }
 					$class .= ' question-validate-btn'; // used to select it with jquery
-                    $all_button = '&nbsp;<a href="javascript://" class="'.$class.'" onclick="validate_all(); ">'.$all_label.'</a>';
-                    $all_button .= '&nbsp;' . Display::span(null, ['id' => 'save_all_reponse']);
-                    $html .= $all_button;
+                    $all_button[] = Display::button(
+                        'validate_all',
+                        $all_label,
+                        ['type' => 'button', 'class' => $class]
+                    );
+                    $all_button[] = '&nbsp;' . Display::span(null, ['id' => 'save_all_reponse']);
+                    $html .= implode(PHP_EOL, $all_button);
                 }
             }
         }

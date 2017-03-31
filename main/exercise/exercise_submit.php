@@ -974,6 +974,50 @@ if (!empty($error)) {
             $(\'form#exercise_form\').prepend($(\'#exercise-description\'));
         });
 
+        $(document).on(\'ready\', function () {
+            $(\'button[name="previous_question_and_save"]\').on(\'click\', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+    
+                var
+                    $this = $(this),
+                    previousId = parseInt($this.data(\'prev\')) || 0,
+                    questionId = parseInt($this.data(\'question\')) || 0;
+
+                previous_question_and_save(previousId, questionId);
+            });
+
+            $(\'button[name="save_question_list"\').on(\'click\', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                var
+                    $this = $(this),
+                    questionList = $this.data(\'list\').split(",");
+
+                save_question_list(questionList);
+            });
+
+            $(\'button[name="save_now"]\').on(\'click\', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                var
+                    $this = $(this),
+                    questionId = parseInt($this.data(\'question\')) || 0,
+                    urlExtra = $this.data(\'url\') || null;
+
+                save_now(questionId, urlExtra);
+            });
+
+            $(\'button[name="validate_all"]\').on(\'click\', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                validate_all();
+            });
+        });
+
 		function previous_question(question_num) {
 			url = "exercise_submit.php?'.$params.'&num="+question_num;
 			window.location = url;
@@ -1064,7 +1108,6 @@ if (!empty($error)) {
                     $("#save_for_now_"+question_id).html(\'' . Display::return_icon('error.png', get_lang('Error'), array(), ICON_SIZE_SMALL) . '\');
                 }
             });
-            return false;
         }
 
         function save_now_all(validate) {
@@ -1119,7 +1162,6 @@ if (!empty($error)) {
 
         function validate_all() {
             save_now_all("validate");
-            return false;
         }
     </script>';
 

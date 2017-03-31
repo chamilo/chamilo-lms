@@ -332,15 +332,11 @@ function handleStylesheets()
         }
     }
 
-    // Submit stylesheets.
-    if (isset($_POST['save'])) {
-        storeStylesheets();
-        Display::display_normal_message(get_lang('Saved'));
-    }
-
     // Current style.
     $selected = $currentStyle = api_get_setting('stylesheets');
-    $styleFromDatabase = api_get_settings_params_simple(['variable = ?' => 'stylesheets']);
+    $styleFromDatabase = api_get_settings_params_simple(
+        ['variable = ? AND access_url = ?' => ['stylesheets', api_get_current_access_url_id()]]
+    );
     if ($styleFromDatabase) {
         $selected = $currentStyle = $styleFromDatabase['selected_value'];
     }
@@ -350,8 +346,8 @@ function handleStylesheets()
     }
 
     $themeDir = Template::getThemeDir($selected);
-    $dir = api_get_path(SYS_PUBLIC_PATH).'css/' . $themeDir . '/images/';
-    $url = api_get_path(WEB_CSS_PATH).'/' . $themeDir . '/images/';
+    $dir = api_get_path(SYS_PUBLIC_PATH).'css/'.$themeDir.'/images/';
+    $url = api_get_path(WEB_CSS_PATH).'/'.$themeDir.'/images/';
     $logoFileName = 'header-logo.png';
     $newLogoFileName = 'header-logo-custom' . api_get_current_access_url_id() . '.png';
     $webPlatformLogoPath = ChamiloApi::getWebPlatformLogoPath($selected);
@@ -698,7 +694,7 @@ function storeStylesheets()
 /**
  * This function checks if the given style is a recognize style that exists in the css directory as
  * a standalone directory.
- * @param string    Style
+ * @param string $style
  * @return bool     True if this style is recognized, false otherwise
  */
 function isStyle($style)

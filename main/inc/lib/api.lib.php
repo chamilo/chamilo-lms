@@ -4289,12 +4289,23 @@ function api_get_visual_theme()
 {
     static $visual_theme;
     if (!isset($visual_theme)) {
-
-        $platform_theme = api_get_setting('stylesheets');
+        // Get style directly from DB
+        $styleFromDatabase = api_get_settings_params_simple(
+            [
+                'variable = ? AND access_url = ?' => [
+                    'stylesheets',
+                    api_get_current_access_url_id(),
+                ],
+            ]
+        );
+        if ($styleFromDatabase) {
+            $platform_theme = $styleFromDatabase['selected_value'];
+        } else {
+            $platform_theme = api_get_setting('stylesheets');
+        }
 
         // Platform's theme.
         $visual_theme = $platform_theme;
-
         if (api_get_setting('user_selected_theme') == 'true') {
             $user_info = api_get_user_info();
             if (isset($user_info['theme'])) {

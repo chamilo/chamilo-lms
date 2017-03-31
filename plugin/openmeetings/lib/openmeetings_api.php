@@ -19,6 +19,6 @@ class OpenMeetingsAPI
     {
         $this->_user = CONFIG_OPENMEETINGS_USER;
         $this->_pass = CONFIG_OPENMEETINGS_PASS;
-        $this->_serverBaseUrl  = CONFIG_OPENMEETINGS_SERVER_URL;
+        $this->_serverBaseUrl = CONFIG_OPENMEETINGS_SERVER_URL;
     }
 }

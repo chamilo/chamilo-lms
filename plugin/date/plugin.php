@@ -9,10 +9,10 @@
  * Plugin details (must be present)
  */
 //the plugin title
-$plugin_info['title']='Date';
+$plugin_info['title'] = 'Date';
 //the comments that go with the plugin
-$plugin_info['comment']="Multinational date display";
+$plugin_info['comment'] = "Multinational date display";
 //the plugin version
-$plugin_info['version']='1.0';
+$plugin_info['version'] = '1.0';
 //the plugin author
-$plugin_info['author']='Yannick Warnier';
+$plugin_info['author'] = 'Yannick Warnier';

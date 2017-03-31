@@ -167,7 +167,8 @@ class Exercise
             $this->review_answers = (isset($object->review_answers) && $object->review_answers == 1) ? true : false;
             $this->globalCategoryId = isset($object->global_category_id) ? $object->global_category_id : null;
             $this->questionSelectionType = isset($object->question_selection_type) ? $object->question_selection_type : null;
-            $this->hideQuestionTitle = intval($object->hide_question_title);
+            $this->hideQuestionTitle = isset($object->hide_question_title) ? (int) $object->hide_question_title : 0;
+
 
             $sql = "SELECT lp_id, max_score
                     FROM $table_lp_item

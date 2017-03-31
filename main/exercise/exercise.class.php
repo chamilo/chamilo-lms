@@ -101,7 +101,6 @@ class Exercise
         $this->text_when_finished = '';
         $this->display_category_name = 0;
         $this->pass_percentage = '';
-
         $this->modelType = 1;
         $this->questionSelectionType = EX_Q_SELECTION_ORDERED;
         $this->endButton = 0;
@@ -167,6 +166,7 @@ class Exercise
             $this->review_answers = (isset($object->review_answers) && $object->review_answers == 1) ? true : false;
             $this->globalCategoryId = isset($object->global_category_id) ? $object->global_category_id : null;
             $this->questionSelectionType = isset($object->question_selection_type) ? $object->question_selection_type : null;
+            $this->hideQuestionTitle = isset($object->hide_question_title) ? $object->hide_question_title : null;
 
             $sql = "SELECT lp_id, max_score
                     FROM $table_lp_item

@@ -260,7 +260,7 @@ if (!empty($clone_question) && !empty($objExercise->id)) {
     // This should be moved to the duplicate function
     $new_answer_obj = new Answer($clone_question);
     $new_answer_obj->read();
-    $new_answer_obj->duplicate($new_id);
+    $new_answer_obj->duplicate($new_question_obj);
 
     //Reloading tne $objExercise obj
     $objExercise->read($objExercise->id);

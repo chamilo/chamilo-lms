@@ -49,7 +49,7 @@ if ($modifyIn) {
         $objQuestion->addToList($exerciseId);
 
         // copies answers from $modifyAnswers to $questionId
-        $objAnswer->duplicate($questionId);
+        $objAnswer->duplicate($objQuestion);
 
         // construction of the duplicated Answers
         $objAnswer = new Answer($questionId);

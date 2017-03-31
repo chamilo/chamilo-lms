@@ -1362,7 +1362,7 @@ abstract class Question
     public function get_question_type_name()
     {
         $key = self::$questionTypes[$this->type];
-        
+
         return get_lang($key[1]);
     }
 

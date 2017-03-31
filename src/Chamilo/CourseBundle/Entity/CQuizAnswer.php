@@ -119,6 +119,18 @@ class CQuizAnswer
      */
     private $answerCode;
 
+    public function __construct()
+    {
+        $this->id = null;
+        $this->idAuto = 0;
+        $this->correct = null;
+        $this->comment = null;
+        $this->ponderation = 0;
+        $this->hotspotCoordinates = null;
+        $this->hotspotType = null;
+        $this->destination = '';
+        $this->answerCode = null;
+    }
 
     /**
      * Set id
@@ -417,5 +429,14 @@ class CQuizAnswer
     public function getCId()
     {
         return $this->cId;
+    }
+
+    /**
+     * Get iid
+     * @return int
+     */
+    public function getIid()
+    {
+        return $this->iid;
     }
 }

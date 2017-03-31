@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CQuizAnswer;
+
 require_once 'Resource.class.php';
 require_once 'GradeBookBackup.php';
 require_once 'Course.class.php';
@@ -1818,6 +1820,7 @@ class CourseRestorer
 	 */
     public function restore_quiz_question($id)
     {
+		$em = Database::getManager();
 		$resources = $this->course->resources;
         $question = isset($resources[RESOURCE_QUIZQUESTION][$id]) ? $resources[RESOURCE_QUIZQUESTION][$id] : null;
 
@@ -1855,7 +1858,6 @@ class CourseRestorer
 			$new_id = Database::insert($table_que, $params);
 
             if ($new_id) {
-
                 $sql = "UPDATE $table_que SET id = iid WHERE iid = $new_id";
                 Database::query($sql);
 
@@ -1868,11 +1870,9 @@ class CourseRestorer
                     $documentPath = api_get_path(SYS_COURSE_PATH).$this->destination_course_info['path'].'/document';
                     // picture path
                     $picturePath = $documentPath.'/images';
-
                     $old_picture = api_get_path(SYS_COURSE_PATH).$this->course->info['path'].'/document/images/'.$question->picture;
                     if (file_exists($old_picture)) {
                         $picture_name = 'quiz-'.$new_id.'.jpg';
-
                         $result = $question_temp->uploadPicture($old_picture, $picture_name, $picturePath);
                         if ($result) {
                             $sql = "UPDATE $table_que SET
@@ -1885,6 +1885,15 @@ class CourseRestorer
                     }
                 }
             }
+
+            $correctAnswers = array();
+            $allAnswers = [];
+            $onlyAnswers = [];
+
+            if (in_array($question->quiz_type, [DRAGGABLE, MATCHING, MATCHING_DRAGGABLE])) {
+                $allAnswers = array_column($question->answers, 'answer', 'id');
+            }
+
             if (in_array($question->quiz_type, [MATCHING, MATCHING_DRAGGABLE])) {
                 $temp = array();
                 foreach ($question->answers as $index => $answer) {
@@ -1892,29 +1901,55 @@ class CourseRestorer
                 }
 
                 foreach ($temp as $index => $answer) {
-                    //id = '".$index."',
-					$params = [
-                        'c_id' => $this->destination_course_id,
-                        'question_id' => $new_id,
-                        'answer' => self::DBUTF8($answer['answer']),
-                        'correct' => $answer['correct'],
-                        'comment' => self::DBUTF8($answer['comment']),
-                        'ponderation' => $answer['ponderation'],
-                        'position' => $answer['position'],
-                        'hotspot_coordinates' => $answer['hotspot_coordinates'],
-                        'hotspot_type' => $answer['hotspot_type'],
-                    ];
-                    $answerId = Database::insert($table_ans, $params);
+                    // check resources inside html from ckeditor tool and copy correct urls into recipient course
+                    $answer['answer'] = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+                        $answer['answer'],
+                        $this->course->code,
+                        $this->course->destination_path,
+                        $this->course->backup_path,
+                        $this->course->info['path']
+                    );
+
+                    $answer['comment'] = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+                        $answer['comment'],
+                        $this->course->code,
+                        $this->course->destination_path,
+                        $this->course->backup_path,
+                        $this->course->info['path']
+                    );
+
+                    $quizAnswer = new CQuizAnswer();
+                    $quizAnswer
+                        ->setCId($this->destination_course_id)
+                        ->setQuestionId($new_id)
+                        ->setAnswer(self::DBUTF8($answer['answer']))
+                        ->setCorrect($answer['correct'])
+                        ->setComment(self::DBUTF8($answer['comment']))
+                        ->setPonderation($answer['ponderation'])
+                        ->setPosition($answer['position'])
+                        ->setHotspotCoordinates($answer['hotspot_coordinates'])
+                        ->setHotspotType($answer['hotspot_type'])
+                        ->setIdAuto(0);
+
+                    $em->persist($quizAnswer);
+                    $em->flush();
+
+                    $answerId = $quizAnswer->getIid();
 
                     if ($answerId) {
-                        $sql = "UPDATE $table_ans SET id = iid, id_auto = iid WHERE iid = $answerId";
-                        Database::query($sql);
+                        $quizAnswer
+                            ->setId($answerId)
+                            ->setIdAuto($answerId);
+
+                        $em->merge($quizAnswer);
+                        $em->flush();
+
+                        $correctAnswers[$answerId] = $answer['correct'];
+                        $onlyAnswers[$answerId] = $answer['answer'];
                     }
 				}
 			} else {
-                $correct_answers = array();
 				foreach ($question->answers as $index => $answer) {
-
 					// check resources inside html from ckeditor tool and copy correct urls into recipient course
                     $answer['answer'] = DocumentManager::replace_urls_inside_content_html_from_copy_course(
                         $answer['answer'],
@@ -1932,8 +1967,6 @@ class CourseRestorer
                         $this->course->info['path']
                     );
 
-                    //                     id = '". ($index + 1)."',
-
                     $params = [
                         'c_id' => $this->destination_course_id,
                         'question_id' => $new_id,
@@ -1944,6 +1977,8 @@ class CourseRestorer
                         'position' => $answer['position'],
                         'hotspot_coordinates' => $answer['hotspot_coordinates'],
                         'hotspot_type' => $answer['hotspot_type'],
+                        'id_auto' => 0,
+                        'destination' => '',
                     ];
 
                     $answerId = Database::insert($table_ans, $params);
@@ -1953,18 +1988,19 @@ class CourseRestorer
                         Database::query($sql);
                     }
 
-                    $correct_answers[$answerId] = $answer['correct'];
+                    $correctAnswers[$answerId] = $answer['correct'];
+                    $onlyAnswers[$answerId] = $answer['answer'];
 				}
 			}
 
-            //Current course id
+            // Current course id
             $course_id = api_get_course_int_id();
 
-            //Moving quiz_question_options
+            // Moving quiz_question_options
             if ($question->quiz_type == MULTIPLE_ANSWER_TRUE_FALSE) {
                 $question_option_list = Question::readQuestionOption($id, $course_id);
 
-                //Question copied from the current platform
+                // Question copied from the current platform
                 if ($question_option_list) {
                     $old_option_ids = array();
                     foreach ($question_option_list as $item) {
@@ -1981,7 +2017,6 @@ class CourseRestorer
                             $sql = "UPDATE $table_options SET id = iid WHERE iid = $question_option_id";
                             Database::query($sql);
                         }
-
                     }
                     if ($old_option_ids) {
                         $new_answers = Database::select(
@@ -2023,7 +2058,6 @@ class CourseRestorer
                             $item['c_id'] = $this->destination_course_id;
                             $item['name'] = $obj->obj->name;
                             $item['position'] = $obj->obj->position;
-
                             $question_option_id = Database::insert($table_options, $item);
 
                             if ($question_option_id) {
@@ -2033,7 +2067,7 @@ class CourseRestorer
                             }
                         }
 
-                        foreach($correct_answers as $answer_id => $correct_answer) {
+                        foreach ($correctAnswers as $answer_id => $correct_answer) {
                             $params = array();
                             $params['correct'] = $new_options[$correct_answer];
                             Database::update(
@@ -2052,8 +2086,34 @@ class CourseRestorer
                     }
                 }
             }
+
+            // Fix correct answers
+            if (in_array($question->quiz_type, [DRAGGABLE, MATCHING, MATCHING_DRAGGABLE])) {
+                $onlyAnswersFlip = array_flip($onlyAnswers);
+                foreach ($correctAnswers as $answer_id => $correct_answer) {
+                    $params = array();
+                    if (isset($allAnswers[$correct_answer]) &&
+                        isset($onlyAnswersFlip[$allAnswers[$correct_answer]])
+                    ) {
+                        $params['correct'] = $onlyAnswersFlip[$allAnswers[$correct_answer]];
+                        Database::update(
+                            $table_ans,
+                            $params,
+                            array(
+                                'id = ? AND c_id = ? AND question_id = ? ' => array(
+                                    $answer_id,
+                                    $this->destination_course_id,
+                                    $new_id,
+                                ),
+                            )
+                        );
+                    }
+                }
+            }
+
 			$this->course->resources[RESOURCE_QUIZQUESTION][$id]->destination_id = $new_id;
 		}
+
 		return $new_id;
 	}
 

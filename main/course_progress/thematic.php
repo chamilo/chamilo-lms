@@ -16,34 +16,37 @@ $url_token = "&sec_token=".$token;
 $user_info = api_get_user_info();
 $params = '&'.api_get_cidreq();
 
-if (api_is_allowed_to_edit(null, true)) {
-    echo '<div class="actions">';
+$tpl = new Template(get_lang('ThematicControl'));
 
+$toolbar = null;
+if (api_is_allowed_to_edit(null, true)) {
+    
     switch ($action) {
         case 'thematic_add':
         case 'thematic_import_select':
-            echo '<a href="index.php?'.api_get_cidreq().'">'.
+            $actionLeft = '<a href="index.php?'.api_get_cidreq().'">'.
                 Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('ThematicDetails'), '', ICON_SIZE_MEDIUM).'</a>';
             break;
         case 'thematic_list':
-            echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_add'.$url_token.'">'.
+            $actionLeft = '<a href="index.php?'.api_get_cidreq().'&action=thematic_add'.$url_token.'">'.
                 Display::return_icon('new_course_progress.png', get_lang('NewThematicSection'), '', ICON_SIZE_MEDIUM).'</a>';
             break;
         case 'thematic_details':
-            echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_add'.$url_token.'">'.
+            $actionLeft = '<a href="index.php?'.api_get_cidreq().'&action=thematic_add'.$url_token.'">'.
                 Display::return_icon('new_course_progress.png', get_lang('NewThematicSection'), '', ICON_SIZE_MEDIUM).'</a>';
-            echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_import_select'.$url_token.'">'.
+            $actionLeft .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_import_select'.$url_token.'">'.
                 Display::return_icon('import_csv.png', get_lang('ImportThematic'), '', ICON_SIZE_MEDIUM).'</a>';
-            echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_export'.$url_token.'">'.
+            $actionLeft .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_export'.$url_token.'">'.
                 Display::return_icon('export_csv.png', get_lang('ExportThematic'), '', ICON_SIZE_MEDIUM).'</a>';
-            echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_export_pdf'.$url_token.'">'.
+            $actionLeft .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_export_pdf'.$url_token.'">'.
                 Display::return_icon('pdf.png', get_lang('ExportToPDF'), '', ICON_SIZE_MEDIUM).'</a>';
             break;
         default:
-            echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_add'.$url_token.'">'.
+            $actionLeft = '<a href="index.php?'.api_get_cidreq().'&action=thematic_add'.$url_token.'">'.
                 Display::return_icon('new_course_progress.png', get_lang('NewThematicSection'), '', ICON_SIZE_MEDIUM).'</a>';
     }
-    echo '</div>';
+    
+    $toolbar= Display::toolbarAction('thematic-bar', array(0 => $actionLeft));
 }
 
 if ($action == 'thematic_list') {
@@ -70,7 +73,7 @@ if ($action == 'thematic_list') {
 
 } elseif ($action == 'thematic_details') {
     if (isset($_GET['thematic_plan_save_message']) && $_GET['thematic_plan_save_message'] == 'ok') {
-        Display::display_confirmation_message(get_lang('ThematicSectionHasBeenCreatedSuccessfull'));
+        $message = Display::display_confirmation_message(get_lang('ThematicSectionHasBeenCreatedSuccessfull'), false, true);
     }
 
     if (isset($last_id) && $last_id) {
@@ -88,10 +91,10 @@ if ($action == 'thematic_list') {
     if (!empty($thematic_id)) {
     } else {
         // display information
-        $message = '<strong>'.get_lang('Information').'</strong><br />';
-        $message .= get_lang('ThematicDetailsDescription');
-        Display::display_normal_message($message, false);
-        echo '<br />';
+        $text = '<h4>'.get_lang('Information').'</h4>';
+        $text .= get_lang('ThematicDetailsDescription');
+        $message = Display::return_message($text,'info', false);
+        
     }
 
     // Display thematic data
@@ -304,3 +307,11 @@ if ($action == 'thematic_list') {
     $form->addButtonImport(get_lang('Import'), 'SubmitImport');
     $form->display();
 }
+
+$tpl->assign('actions', $toolbar);
+$tpl->assign('message', $message);
+$tpl->assign('data',$data);
+$tpl->assign('score_progress', $score);
+$tpl->assign('thamatic', $thematic);
+$thematicLayout = $tpl->get_template('course_progress/progress.tpl');
+$tpl->display($thematicLayout);

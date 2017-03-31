@@ -328,6 +328,7 @@ class ThematicController
         $layoutName = $displayHeader ? 'layout' : 'layout_no_header';
 
         // render to the view
+        
         $this->view->set_data($data);
         $this->view->set_layout($layoutName);
         $this->view->set_template('thematic');
@@ -403,6 +404,7 @@ class ThematicController
                     $data['next_description_type'] = $thematic->get_next_description_type($_POST['thematic_id']);
 
                     // render to the view
+                    
                     $this->view->set_data($data);
                     $this->view->set_layout('layout');
                     $this->view->set_template('thematic_plan');
@@ -445,6 +447,7 @@ class ThematicController
         $data['thematic_data'] = $thematic->get_thematic_list($thematic_id);
 
         //render to the view
+        
         $this->view->set_data($data);
         $this->view->set_layout('layout');
         $this->view->set_template('thematic_plan');
@@ -530,6 +533,7 @@ class ThematicController
         $layoutName = $displayHeader ? 'layout' : 'layout_no_header';
 
         // render to the view
+        
         $this->view->set_data($data);
         $this->view->set_layout($layoutName);
         $this->view->set_template('thematic_advance');

@@ -162,11 +162,11 @@
 
     $(document).on('ready', function () {
         if (/iPhone|iPod|iPad/.test(navigator.userAgent)) {
-          $('#wrapper-iframe').css({
-            'overflow' : 'auto',
-            'position' : 'relative',
-            '-webkit-overflow-scrolling': 'touch'
-          });
+            document.getElementById('wrapper-iframe')
+                .setAttribute(
+                    'style',
+                    'width:100%; height:100%; overflow:auto; position:auto; -webkit-overflow-scrolling:touch !important;'
+                );
         }
 
         {% if lp_mode == 'embedframe' %}

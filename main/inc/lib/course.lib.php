@@ -3259,27 +3259,27 @@ class CourseManager
         $direction = null,
         $getCount = false,
         $keyword = null,
-        $sessionId = null,
+        $sessionId = 0,
         $showAllAssignedCourses = false
     ) {
         // Database Table Definitions
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_course_rel_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $sessionId = intval($sessionId);
-        $user_id = intval($user_id);
+        $sessionId = (int)$sessionId;
+        $user_id = (int)$user_id;
         $select = "SELECT DISTINCT *, c.id as real_id ";
 
         if ($getCount) {
             $select = "SELECT COUNT(DISTINCT c.id) as count";
         }
 
-        $whereConditions = null;
+        $whereConditions = '';
         switch ($status) {
             case COURSEMANAGER:
                 $whereConditions .= " AND cru.user_id = '$user_id'";
                 if (!$showAllAssignedCourses) {
-                    $whereConditions .= " AND status = " . COURSEMANAGER;
+                    $whereConditions .= " AND cru.status = " . COURSEMANAGER;
                 } else {
                     $whereConditions .= " AND relation_type = " . COURSE_RELATION_TYPE_COURSE_MANAGER;
                 }
@@ -3287,7 +3287,7 @@ class CourseManager
             case DRH:
                 $whereConditions .= " AND
                     cru.user_id = '$user_id' AND
-                    status = " . DRH . " AND
+                    cru.status = " . DRH . " AND
                     relation_type = '" . COURSE_RELATION_TYPE_RRHH . "'
                 ";
                 break;
@@ -3303,27 +3303,35 @@ class CourseManager
         $extraInnerJoin = null;
 
         if (!empty($sessionId)) {
-            if (!empty($sessionId)) {
-                $courseList = SessionManager::get_course_list_by_session_id(
-                    $sessionId
-                );
-                if (!empty($courseList)) {
-                    $courseListToString = implode("','", array_keys($courseList));
-                    $whereConditions .= " AND c.id IN ('" . $courseListToString . "')";
-                }
-                $tableSessionRelCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-                $orderBy = ' ORDER BY position';
-                $extraInnerJoin = " INNER JOIN $tableSessionRelCourse src
-                                    ON (c.id = src.c_id AND session_id = $sessionId) ";
+            if ($status == COURSEMANAGER) {
+                // Teacher of course or teacher inside session
+                $whereConditions = " AND (cru.status = " . COURSEMANAGER." OR srcru.status = 2) ";
             }
+            $courseList = SessionManager::get_course_list_by_session_id(
+                $sessionId
+            );
+            if (!empty($courseList)) {
+                $courseListToString = implode("','", array_keys($courseList));
+                $whereConditions .= " AND c.id IN ('" . $courseListToString . "')";
+            }
+            $tableSessionRelCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+            $tableSessionRelCourseRelUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+            $orderBy = ' ORDER BY position';
+            $extraInnerJoin = " INNER JOIN $tableSessionRelCourse src
+                                ON (c.id = src.c_id AND src.session_id = $sessionId)
+                                INNER JOIN $tableSessionRelCourseRelUser srcru 
+                                ON (src.session_id = srcru.session_id AND srcru.c_id = src.c_id)
+                            ";
         }
 
         $whereConditions .= $keywordCondition;
         $sql = "$select
                 FROM $tbl_course c
-                    INNER JOIN $tbl_course_rel_user cru ON (cru.c_id = c.id)
-                    INNER JOIN $tbl_course_rel_access_url a ON (a.c_id = c.id)
-                    $extraInnerJoin
+                INNER JOIN $tbl_course_rel_user cru 
+                ON (cru.c_id = c.id)
+                INNER JOIN $tbl_course_rel_access_url a 
+                ON (a.c_id = c.id)
+                $extraInnerJoin
                 WHERE
                     access_url_id = " . api_get_current_access_url_id() . "
                     $whereConditions

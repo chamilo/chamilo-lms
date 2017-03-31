@@ -121,6 +121,7 @@ class Exercise
      *
      * @author Olivier Brouckaert
      * @param integer $id - exercise Id
+     * @param bool $parseQuestionList
      *
      * @return boolean - true if exercise exists, otherwise false
      */
@@ -129,7 +130,7 @@ class Exercise
         $TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);
         $table_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 
-        $id  = intval($id);
+        $id  = (int)$id;
         if (empty($this->course_id)) {
             return false;
         }
@@ -166,7 +167,7 @@ class Exercise
             $this->review_answers = (isset($object->review_answers) && $object->review_answers == 1) ? true : false;
             $this->globalCategoryId = isset($object->global_category_id) ? $object->global_category_id : null;
             $this->questionSelectionType = isset($object->question_selection_type) ? $object->question_selection_type : null;
-            $this->hideQuestionTitle = isset($object->hide_question_title) ? $object->hide_question_title : null;
+            $this->hideQuestionTitle = isset($object->hide_question_title) ? (int)$object->hide_question_title : 0;
 
             $sql = "SELECT lp_id, max_score
                     FROM $table_lp_item
@@ -518,7 +519,7 @@ class Exercise
      */
     public function setHideQuestionTitle($value)
     {
-        $this->hideQuestionTitle = intval($value);
+        $this->hideQuestionTitle = (int)$value;
     }
 
     /**
@@ -534,7 +535,7 @@ class Exercise
      */
     public function setScoreTypeModel($value)
     {
-        $this->scoreTypeModel = intval($value);
+        $this->scoreTypeModel = (int)$value;
     }
 
     /**
@@ -553,7 +554,7 @@ class Exercise
         if (is_array($value) && isset($value[0])) {
             $value = $value[0];
         }
-        $this->globalCategoryId = intval($value);
+        $this->globalCategoryId = (int)$value;
     }
 
     /**
@@ -1311,7 +1312,7 @@ class Exercise
      */
     public function updateEndButton($value)
     {
-        $this->endButton = intval($value);
+        $this->endButton = (int)$value;
     }
 
     /**
@@ -1888,7 +1889,14 @@ class Exercise
                     '2',
                     array('id' => 'exerciseType_2')
                 );
-                $form->addGroup($radios_feedback, null, array(get_lang('FeedbackType'),get_lang('FeedbackDisplayOptions')));
+                $form->addGroup(
+                    $radios_feedback,
+                    null,
+                    array(
+                        get_lang('FeedbackType'),
+                        get_lang('FeedbackDisplayOptions'),
+                    )
+                );
 
                 // Type of results display on the final page
                 $radios_results_disabled = array();
@@ -1916,7 +1924,6 @@ class Exercise
                     '2',
                     array('id' => 'result_disabled_2')
                 );
-
 
                 $radios_results_disabled[] = $form->createElement(
                     'radio',
@@ -2219,7 +2226,6 @@ class Exercise
                 ]
             );
             $form->addElement('html','</div>');
-
             $form->addElement(
                 'text',
                 'pass_percentage',
@@ -2376,8 +2382,6 @@ class Exercise
                 $element = $form->getElement($elementName);
                 $element->freeze();
             }
-
-            //$radioCatGroup->freeze();
         }
     }
 
@@ -2583,7 +2587,6 @@ class Exercise
                 $this->search_engine_save();
             }
         }
-
     }
 
     function search_engine_delete()

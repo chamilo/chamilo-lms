@@ -6962,18 +6962,36 @@ class Exercise
                     $exercise_actions .= $this->show_button($questionId, $current_question, null, $remindList);
                     break;
                 case ALL_ON_ONE_PAGE:
-                    $button  = '<a href="javascript://" class="btn" onclick="save_now(\''.$questionId.'\', null, true, 1); ">'.get_lang('SaveForNow').'</a>';
-                    $button .= '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>&nbsp;';
-                    $exercise_actions .= Display::div($button, array('class'=>'exercise_save_now_button'));
+                    $button = [
+                        Display::button(
+                            'save_now',
+                            get_lang('SaveForNow'),
+                            ['type' => 'button', 'class' => 'btn btn-primary', 'data-question' => $questionId]
+                        ),
+                        '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>'
+                    ];
+                    $exercise_actions .= Display::div(
+                        implode(PHP_EOL, $button),
+                        array('class'=>'exercise_save_now_button')
+                    );
                     break;
             }
 
             if (!empty($questions_in_media)) {
                 $count_of_questions_inside_media = count($questions_in_media);
                 if ($count_of_questions_inside_media > 1) {
-                    $button  = '<a href="javascript://" class="btn" onclick="save_now(\''.$questionId.'\', false, false, 0); ">'.get_lang('SaveForNow').'</a>';
-                    $button .= '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>&nbsp;';
-                    $exercise_actions = Display::div($button, array('class'=>'exercise_save_now_button'));
+                    $button = [
+                        Display::button(
+                            'save_now',
+                            get_lang('SaveForNow'),
+                            ['type' => 'button', 'class' => 'btn btn-primary', 'data-question' => $questionId]
+                        ),
+                        '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>&nbsp;'
+                    ];
+                    $exercise_actions = Display::div(
+                        implode(PHP_EOL, $button),
+                        array('class'=>'exercise_save_now_button')
+                    );
                 }
 
                 if ($last_question_in_media && $this->type == ONE_PER_PAGE) {

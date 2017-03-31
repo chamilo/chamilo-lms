@@ -1278,9 +1278,18 @@ if (!empty($error)) {
                 $exercise_actions .= $objExercise->show_button($questionId, $current_question);
                 break;
             case ALL_ON_ONE_PAGE :
-                $button  = '<a href="javascript://" class="btn btn-info" onclick="save_now(\''.$questionId.'\'); ">'.get_lang('SaveForNow').'</a>';
-                $button .= '<span id="save_for_now_'.$questionId.'"></span>&nbsp;';
-                $exercise_actions  .= Display::div($button, array('class'=>'exercise_save_now_button'));
+                $button = [
+                    Display::button(
+                        'save_now',
+                        get_lang('SaveForNow'),
+                        ['type' => 'button', 'class' => 'btn btn-info', 'data-question' => $questionId]
+                    ),
+                    '<span id="save_for_now_'.$questionId.'"></span>&nbsp;'
+                ];
+                $exercise_actions  .= Display::div(
+                    implode(PHP_EOL, $button),
+                    array('class'=>'exercise_save_now_button')
+                );
                 break;
         }
 

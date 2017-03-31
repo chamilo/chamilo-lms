@@ -7175,8 +7175,9 @@ function api_get_password_checker_js($usernameInputId, $passwordInputId)
 }
 
 /**
- * @param string $username
  * create an user extra field called 'captcha_blocked_until_date'
+ * @param string $username
+ * @return bool
  */
 function api_block_account_captcha($username)
 {
@@ -7191,10 +7192,12 @@ function api_block_account_captcha($username)
         'captcha_blocked_until_date',
         api_get_utc_datetime($time)
     );
+    return true;
 }
 
 /**
  * @param string $username
+ * @return bool
  */
 function api_clean_account_captcha($username)
 {
@@ -7208,6 +7211,7 @@ function api_clean_account_captcha($username)
         'captcha_blocked_until_date',
         null
     );
+    return true;
 }
 
 /**
@@ -7253,7 +7257,8 @@ function api_get_short_text_from_html($in_html, $in_number_char)
  * @return string
  * @author hubert borderiou
  */
-function api_remove_tags_with_space($in_html, $in_double_quote_replace = true) {
+function api_remove_tags_with_space($in_html, $in_double_quote_replace = true)
+{
     $out_res = $in_html;
     if ($in_double_quote_replace) {
         $out_res = str_replace('"', "''", $out_res);
@@ -7328,7 +7333,6 @@ function api_can_login_as($loginAsUserId, $userId = null)
     }
 
     $userInfo = api_get_user_info($userId);
-
     $isDrh = function() use($loginAsUserId) {
         if (api_is_drh()) {
             if (api_drh_can_access_all_session_content()) {
@@ -7476,6 +7480,10 @@ function api_warn_hosting_contact($limitName)
 
 /**
  * Gets value of a variable from app/config/configuration.php
+ * Variables that are not set in the configuration.php file but set elsewhere:
+ * - virtual_css_theme_folder (vchamilo plugin)
+ * - access_url (global.inc.php)
+ *
  * @param string $variable
  *
  * @return bool|mixed

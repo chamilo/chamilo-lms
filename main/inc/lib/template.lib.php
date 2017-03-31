@@ -221,7 +221,7 @@ class Template
      * @param string $name
      * @return string
      */
-    public static function get_image($image, $size = ICON_SIZE_SMALL, $name)
+    public static function get_image($image, $size = ICON_SIZE_SMALL, $name = '')
     {
         return Display::return_icon($image, $name, array(), $size);
     }

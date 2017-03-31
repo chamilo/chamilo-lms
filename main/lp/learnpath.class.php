@@ -8,6 +8,7 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 use Gedmo\Sortable\Entity\Repository\SortableRepository;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
+use Chamilo\CourseBundle\Entity\CLp;
 
 /**
  * Class learnpath
@@ -375,10 +376,10 @@ class learnpath
                                             'total_time' => 0,
                                             'score' => 0
                                         ];
-                                        $insertId = Database::insert($lp_item_view_table, $params);
+                                        $insertId = Database::insert($itemViewTable, $params);
 
                                         if ($insertId) {
-                                            $sql = "UPDATE $lp_item_view_table SET id = iid
+                                            $sql = "UPDATE $itemViewTable SET id = iid
                                                     WHERE iid = $insertId";
                                             Database::query($sql);
                                         }
@@ -4825,26 +4826,30 @@ class learnpath
      */
     public function set_expired_on($expired_on)
     {
-        $course_id = api_get_course_int_id();
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::set_expired_on()', 0);
         }
 
-        if (!empty($expired_on)) {
-            $this->expired_on = api_get_utc_datetime($expired_on);
-        } else {
-            $this->expired_on = null;
-        }
-        $lp_table = Database::get_course_table(TABLE_LP_MAIN);
-        $lp_id = $this->get_id();
-        if ($this->debug > 2) {
-            error_log('New LP - lp updated with new expired_on : ' . $this->expired_on, 0);
+        $em = Database::getManager();
+        /** @var CLp $lp */
+        $lp = $em
+            ->getRepository('ChamiloCourseBundle:CLp')
+            ->findOneBy(['id' => $this->get_id(), 'cId' => api_get_course_int_id()]);
+
+        if (!$lp) {
+            return false;
         }
 
-        $params = [
-            'expired_on' => $this->expired_on,
-        ];
-        Database::update($lp_table, $params, ['c_id = ? AND id = ?' => [$course_id, $lp_id]]);
+        $this->expired_on = !empty($expired_on) ? api_get_utc_datetime($expired_on, false, true) : null;
+
+        $lp->setExpiredOn($this->expired_on);
+
+        $em->persist($lp);
+        $em->flush();
+
+        if ($this->debug > 2) {
+            error_log('New LP - lp updated with new expired_on : '.$this->expired_on, 0);
+        }
 
         return true;
     }
@@ -4856,24 +4861,30 @@ class learnpath
      */
     public function set_publicated_on($publicated_on)
     {
-        $course_id = api_get_course_int_id();
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::set_expired_on()', 0);
         }
-        if (!empty($publicated_on)) {
-            $this->publicated_on = api_get_utc_datetime($publicated_on);
-        } else {
-            $this->publicated_on = '';
+
+        $em = Database::getManager();
+        /** @var CLp $lp */
+        $lp = $em
+            ->getRepository('ChamiloCourseBundle:CLp')
+            ->findOneBy(['id' => $this->get_id(), 'cId' => api_get_course_int_id()]);
+
+        if (!$lp) {
+            return false;
         }
-        $lp_table = Database::get_course_table(TABLE_LP_MAIN);
-        $lp_id = $this->get_id();
-        $sql = "UPDATE $lp_table SET
-                publicated_on = '" . Database::escape_string($this->publicated_on) . "'
-                WHERE c_id = ".$course_id." AND id = '$lp_id'";
+
+        $this->publicated_on = !empty($publicated_on) ? api_get_utc_datetime($publicated_on, false, true) : null;
+
+        $lp->setPublicatedOn($this->publicated_on);
+
+        $em->persist($lp);
+        $em->flush();
+
         if ($this->debug > 2) {
-            error_log('New LP - lp updated with new publicated_on : ' . $this->publicated_on, 0);
+            error_log('New LP - lp updated with new publicated_on : '.$this->publicated_on, 0);
         }
-        Database::query($sql);
 
         return true;
     }

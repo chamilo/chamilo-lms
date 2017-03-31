@@ -299,3 +299,5 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 // $_configuration['pdf_img_dpi'] = 96;
 // Hide the "what's new" icon notifications in course list
 // $_configuration['hide_course_notification'] = true;
+// Show less session information in course list
+//$_configuration['show_simple_session_info'] = true;

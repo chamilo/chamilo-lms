@@ -1377,7 +1377,6 @@ class UserManager
     public static function get_user_list_by_ids($ids = array(), $active = null, $order = null, $limit = null)
     {
         if (empty($ids)) {
-
             return array();
         }
 
@@ -1419,8 +1418,8 @@ class UserManager
      * @todo security filter order by
      */
     public static function get_user_list(
-        $conditions = array(),
-        $order_by = array(),
+        $conditions = [],
+        $order_by = [],
         $limit_from = false,
         $limit_to = false
     ) {
@@ -1439,9 +1438,10 @@ class UserManager
             foreach ($conditions as $field => $value) {
                 $field = Database::escape_string($field);
                 $value = Database::escape_string($value);
-                $sql .= "$field = '$value'";
+                $sql .= " AND $field = '$value'";
             }
         }
+
         if (count($order_by) > 0) {
             $sql .= ' ORDER BY '.Database::escape_string(implode(',', $order_by), null, false);
         }

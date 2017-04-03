@@ -811,10 +811,6 @@ class TestCategory
             return array();
         }
 
-        if (!$exercise->specialCategoryOrders) {
-            return false;
-        }
-
         $courseId = (int) $courseId;
         $table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
         $categoryTable = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);

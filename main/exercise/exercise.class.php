@@ -946,11 +946,13 @@ class Exercise
                     true,
                     true
                 );
+
                 $questions_by_category = TestCategory::getQuestionsByCat(
                     $this->id,
                     $question_list,
                     $categoriesAddedInExercise
                 );
+
                 $question_list = $this->pickQuestionsPerCategory(
                     $categoriesAddedInExercise,
                     $question_list,

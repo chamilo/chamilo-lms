@@ -7981,4 +7981,12 @@ $StudentCourseProgressX = "Progress: %s&#x00025;";
 $SessionDurationNotStartedMaxX = "This session has a maximum duration of %s days.";
 $StudentCourseScoreX = "Score: %s&#x00025;";
 $StudentCourseCertificateX = "Certificate: %s";
+$ConfigureExerciseVisibilityInCourseTitle = "Enable to bypass the configuration of Exercise invisible in session at a base course level";
+$ConfigureExerciseVisibilityInCourseComment = "To enable the configuration of the exercise invisibility in session in the base course to by pass the global configuration. If not set the global parameter is used.";
+$ExerciseInvisibleInSessionTitle = "Exercise invisible in Session";
+$ExerciseInvisibleInSessionComment = "If an exercise is visible in the base course then it appears invisible in the session. If an exercise is invisible in the base course then it does not appear in the session.";
+$Ongoing = "Ongoing";
+$Unclosed = "Unclosed";
+$AttemptStillOngoingPleaseWait = "Attempt still going on. Please wait.";
+$MarkAttemptAsClosed = "Mark attempt as closed";
 ?>

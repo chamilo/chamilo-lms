@@ -315,7 +315,7 @@ class ThematicController
             // Third column
             $thematic_advance_data = $thematic->get_thematic_advance_list(null, null, true);
 
-            $data['thematic_plan_div'] = $thematic->get_thematic_plan_div($thematic_plan_data);
+            $data['thematic_plan_div'] = $thematic->get_thematic_plan_array($thematic_plan_data);
             $data['thematic_advance_div'] = $thematic->get_thematic_advance_div($thematic_advance_data);
             $data['thematic_plan_data'] = $thematic_plan_data;
             $data['thematic_advance_data'] = $thematic_advance_data;
@@ -328,7 +328,6 @@ class ThematicController
         $layoutName = $displayHeader ? 'layout' : 'layout_no_header';
 
         // render to the view
-        
         $this->view->set_data($data);
         $this->view->set_layout($layoutName);
         $this->view->set_template('thematic');

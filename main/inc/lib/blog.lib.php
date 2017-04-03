@@ -986,7 +986,7 @@ class Blog
                 $tmp = Database::query($sql);
                 $blog_post_comments = Database::fetch_array($tmp);
 
-                $unslashedContent = stripslashes($blog_post['full_text']);
+                $untaggedContent = strip_tags($blog_post['full_text']);
 
                 $fileArray = self::getBlogAttachments($blog_id, $blog_post['post_id'], 0);
                 $scoreRanking = self::displayRating(
@@ -1003,9 +1003,7 @@ class Blog
                     'autor' => $blog_post['firstname'].' '.$blog_post['lastname'],
                     'username' => $blog_post['username'],
                     'title' => stripslashes($blog_post['title']),
-                    'extract' => strlen($unslashedContent) >= 800
-                        ? api_get_short_text_from_html($unslashedContent, 800)
-                        : null,
+                    'extract' => self::getPostExtract($blog_post['full_text'], 800),
                     'content' => stripslashes($blog_post['full_text']),
                     'post_date' => api_convert_and_format_date($blog_post['date_creation']),
                     'n_comments' => $blog_post_comments['number_of_comments'],
@@ -3069,6 +3067,28 @@ class Blog
         }
 
         return $return_data;
+    }
+
+    /**
+     * Filter the post $fullText to get a extract of $length characters
+     * @param string $fullText
+     * @param int $length
+     * @return null|string
+     */
+    private static function getPostExtract($fullText, $length = 800)
+    {
+        $text = strip_tags($fullText);
+        $text = api_html_entity_decode($text);
+        $text = preg_replace('/\s+/', ' ', $text);
+        $text = trim($text);
+
+        if (strlen($text) <= $length) {
+            return null;
+        }
+
+        $extract = cut($text, $length);
+
+        return api_htmlentities($extract);
     }
 }
 

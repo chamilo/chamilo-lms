@@ -823,6 +823,8 @@ class Wiki
         $form->addElement('text', 'title', get_lang('Title'));
         $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
         self::setForm($form);
+        $title = isset($_GET['title']) ? Security::remove_XSS($_GET['title']) : '';
+        $form->setDefaults(['title' => $title]);
         $form->addElement('button', 'SaveWikiNew', get_lang('Save'));
         $form->display();
 

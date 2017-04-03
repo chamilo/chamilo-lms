@@ -488,13 +488,13 @@ class Template
      */
     public static function getThemeDir($theme)
     {
-        $themeDir = 'themes/' . $theme.'/';
+        $themeDir = 'themes/'.$theme.'/';
         $virtualTheme = api_get_configuration_value('virtual_css_theme_folder');
         if (!empty($virtualTheme)) {
             $virtualThemeList = api_get_themes(true);
             $isVirtualTheme = in_array($theme, array_keys($virtualThemeList));
             if ($isVirtualTheme) {
-                $themeDir = 'themes/' . $virtualTheme.'/'.$theme.'/';
+                $themeDir = 'themes/'.$virtualTheme.'/'.$theme.'/';
             }
         }
 
@@ -883,28 +883,29 @@ class Template
         $this->assign('text_direction', api_get_text_direction());
         $this->assign('section_name', 'section-'.$this_section);
 
-        //Defaul root chamilo favicon
-        $favico = '<link rel="shortcut icon" href="' . api_get_path(WEB_PATH) . 'favicon.ico" type="image/x-icon" />';
+        // Default root chamilo favicon
+        $favico = '<link rel="shortcut icon" href="'.api_get_path(WEB_PATH).'favicon.ico" type="image/x-icon" />';
 
         //Added to verify if in the current Chamilo Theme exist a favicon
-        $favicoThemeUrl = api_get_path(SYS_CSS_PATH) . $this->themeDir . 'images/';
+        $favicoThemeUrl = api_get_path(SYS_CSS_PATH).$this->themeDir.'images/';
 
         //If exist pick the current chamilo theme favicon
-        if (is_file($favicoThemeUrl . 'favicon.ico')) {
-            $favico = '<link rel="shortcut icon" href="' . api_get_path(WEB_CSS_PATH). $this->themeDir . 'images/favicon.ico" type="image/x-icon" />';
+        if (is_file($favicoThemeUrl.'favicon.ico')) {
+            $favico = '<link rel="shortcut icon" href="'.api_get_path(WEB_CSS_PATH).$this->themeDir.'images/favicon.ico" type="image/x-icon" />';
         }
 
         if (api_is_multiple_url_enabled()) {
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
-                $url_info  = api_get_access_url($access_url_id);
-                $url       = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $url_info['url']));
+                $url_info = api_get_access_url($access_url_id);
+                $url = api_remove_trailing_slash(
+                    preg_replace('/https?:\/\//i', '', $url_info['url'])
+                );
                 $clean_url = api_replace_dangerous_char($url);
                 $clean_url = str_replace('/', '-', $clean_url);
                 $clean_url .= '/';
-                $homep           = api_get_path(REL_PATH).'home/'.$clean_url; //homep for Home Path
+                $homep = api_get_path(REL_PATH).'home/'.$clean_url; //homep for Home Path
                 $icon_real_homep = api_get_path(SYS_APP_PATH).'home/'.$clean_url;
-
                 //we create the new dir for the new sites
                 if (is_file($icon_real_homep.'favicon.ico')) {
                     $favico = '<link rel="shortcut icon" href="'.$homep.'favicon.ico" type="image/x-icon" />';
@@ -917,18 +918,28 @@ class Template
 
         //@todo move this in the template
         $rightFloatMenu = '';
-        $iconBug = Display::return_icon('bug.png', get_lang('ReportABug'), [], ICON_SIZE_LARGE);
+        $iconBug = Display::return_icon(
+            'bug.png',
+            get_lang('ReportABug'),
+            [],
+            ICON_SIZE_LARGE
+        );
         if (api_get_setting('show_link_bug_notification') == 'true' && $this->user_is_logged_in) {
             $rightFloatMenu = '<div class="report">
-		<a href="https://github.com/chamilo/chamilo-lms/wiki/How-to-report-issues" target="_blank">
-                    '. $iconBug . '
+		        <a href="https://github.com/chamilo/chamilo-lms/wiki/How-to-report-issues" target="_blank">
+                    '.$iconBug.'
                 </a>
-		</div>';
+		        </div>';
         }
 
         if (api_get_setting('show_link_ticket_notification') == 'true' && $this->user_is_logged_in) {
             // by default is project_id = 1
-            $iconTicket = Display::return_icon('bug.png', get_lang('Ticket'), [], ICON_SIZE_LARGE);
+            $iconTicket = Display::return_icon(
+                'bug.png',
+                get_lang('Ticket'),
+                [],
+                ICON_SIZE_LARGE
+            );
             $courseInfo = api_get_course_info();
             $courseParams = '';
             if (!empty($courseInfo)) {
@@ -937,7 +948,7 @@ class Template
             $url = api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id=1&'.$courseParams;
             $rightFloatMenu .= '<div class="report">
 		        <a href="'.$url.'" target="_blank">
-                    '. $iconTicket . '
+                    '.$iconTicket.'
                 </a>
 		    </div>';
         }
@@ -968,10 +979,10 @@ class Template
 
         //Profile link
         if (api_get_setting('allow_social_tool') == 'true') {
-            $profile_url  = api_get_path(WEB_CODE_PATH).'social/home.php';
+            $profile_url = api_get_path(WEB_CODE_PATH).'social/home.php';
 
         } else {
-            $profile_url  = api_get_path(WEB_CODE_PATH).'auth/profile.php';
+            $profile_url = api_get_path(WEB_CODE_PATH).'auth/profile.php';
 
         }
 
@@ -979,9 +990,9 @@ class Template
 
         //Message link
         $message_link = null;
-        $message_url  = null;
+        $message_url = null;
         if (api_get_setting('allow_message_tool') == 'true') {
-            $message_url  = api_get_path(WEB_CODE_PATH).'messages/inbox.php';
+            $message_url = api_get_path(WEB_CODE_PATH).'messages/inbox.php';
             $message_link = '<a href="'.api_get_path(WEB_CODE_PATH).'messages/inbox.php">'.get_lang('Inbox').'</a>';
         }
         $this->assign('message_link', $message_link);
@@ -1009,8 +1020,15 @@ class Template
         $menu = menuArray();
         $this->assign('menu', $menu);
 
-        // Block Breadcrumb
-        $breadcrumb = return_breadcrumb($interbreadcrumb, $language_file, $nameTools);
+        $breadcrumb = '';
+        // Hide breadcrumb in LP
+        if ($this->show_learnpath == false) {
+            $breadcrumb = return_breadcrumb(
+                $interbreadcrumb,
+                $language_file,
+                $nameTools
+            );
+        }
         $this->assign('breadcrumb', $breadcrumb);
 
         //Extra content

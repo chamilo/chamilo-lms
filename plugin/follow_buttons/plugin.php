@@ -23,7 +23,7 @@ $plugin_info['author']      = 'Julio Montoya';
 $plugin_info['templates']   = array('template.tpl');
 
 //For bigger icons change this value to addthis_32x32_style
-$plugin_info['icon_class']   = ''; 
+$plugin_info['icon_class'] = ''; 
 
 //To use vertical alignment change this value to 
-$plugin_info['position']   = 'addthis_default_style'; //addthis_vertical_style
+$plugin_info['position'] = 'addthis_default_style'; //addthis_vertical_style

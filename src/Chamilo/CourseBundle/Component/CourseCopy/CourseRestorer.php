@@ -1681,10 +1681,10 @@ class CourseRestorer
 
 			foreach ($resources[RESOURCE_QUIZ] as $id => $quiz) {
                 if (isset($quiz->obj)) {
-                    //For new imports
+                    // For new imports
                     $quiz = $quiz->obj;
                 } else {
-                    //For backward compatibility
+                    // For backward compatibility
                     $quiz->obj = $quiz;
                 }
 
@@ -1746,6 +1746,7 @@ class CourseRestorer
                         'end_time' => $quiz->end_time,
                         'save_correct_answers' => 0,
                         'display_category_name' => 0,
+                        'hide_question_title' => isset($quiz->hide_question_title) ? $quiz->hide_question_title : 0,
                     );
 
                     if ($respect_base_content) {

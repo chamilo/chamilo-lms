@@ -1,9 +1,9 @@
 <?php
 // A user must be logged in.
-$_template['show_message']   = false;
+$_template['show_message'] = false;
 
 if (!api_is_anonymous()) {
-    $_template['show_message']   = true;
+    $_template['show_message'] = true;
 
     // Getting the current user id.
     $user_id = api_get_user_id();

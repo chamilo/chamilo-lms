@@ -192,10 +192,7 @@ if (!$inATest) {
         //$questionList = $objExercise->getQuestionListWithMediasUncompressed();
 
         // Show all questions no matter the category settings.
-        $tempCategoryOrder = isset($objExercise->specialCategoryOrders) ? $objExercise->specialCategoryOrders : false;
-        $objExercise->specialCategoryOrders = false;
         $questionList = $objExercise->selectQuestionList(true, true);
-        $objExercise->specialCategoryOrders = $tempCategoryOrder;
 
         // Style for columns
         $styleQuestion = "question";

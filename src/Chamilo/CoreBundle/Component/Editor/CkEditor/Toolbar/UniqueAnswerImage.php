@@ -18,8 +18,8 @@ class UniqueAnswerImage extends Basic
     {
         $config['toolbarGroups'] = array(
             '/',
-            array('name' => 'basicstyles',    'groups' =>array('basicstyles', 'cleanup', )),
-            array('name' => 'paragraph',    'groups' =>array('list', 'indent', 'blocks', 'align' )),
+            array('name' => 'basicstyles', 'groups' =>array('basicstyles', 'cleanup',)),
+            array('name' => 'paragraph', 'groups' =>array('list', 'indent', 'blocks', 'align')),
             array('name' => 'links'),
             array('name' => 'insert'),
             '/',

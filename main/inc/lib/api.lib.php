@@ -4260,7 +4260,8 @@ function api_get_language_from_type($lang_type)
  * @param int $languageId
  * @return array
  */
-function api_get_language_info($languageId) {
+function api_get_language_info($languageId)
+{
     $language = Database::getManager()
         ->find('ChamiloCoreBundle:Language', intval($languageId));
 
@@ -4282,18 +4283,29 @@ function api_get_language_info($languageId) {
 /**
  * Returns the name of the visual (CSS) theme to be applied on the current page.
  * The returned name depends on the platform, course or user -wide settings.
- * @return string   The visual theme's name, it is the name of a folder inside .../chamilo/main/css/
+ * @return string The visual theme's name, it is the name of a folder inside web/css/themes
  */
 function api_get_visual_theme()
 {
     static $visual_theme;
     if (!isset($visual_theme)) {
-
-        $platform_theme = api_get_setting('stylesheets');
+        // Get style directly from DB
+        $styleFromDatabase = api_get_settings_params_simple(
+            [
+                'variable = ? AND access_url = ?' => [
+                    'stylesheets',
+                    api_get_current_access_url_id(),
+                ],
+            ]
+        );
+        if ($styleFromDatabase) {
+            $platform_theme = $styleFromDatabase['selected_value'];
+        } else {
+            $platform_theme = api_get_setting('stylesheets');
+        }
 
         // Platform's theme.
         $visual_theme = $platform_theme;
-
         if (api_get_setting('user_selected_theme') == 'true') {
             $user_info = api_get_user_info();
             if (isset($user_info['theme'])) {
@@ -4348,32 +4360,46 @@ function api_get_visual_theme()
 
 /**
  * Returns a list of CSS themes currently available in the CSS folder
+ * The folder must have a default.css file
+ * @param bool $getOnlyThemeFromVirtualInstance Used by the vchamilo plugin
  * @return array        List of themes directories from the css folder
  * Note: Directory names (names of themes) in the file system should contain ASCII-characters only.
  */
-function api_get_themes()
+function api_get_themes($getOnlyThemeFromVirtualInstance = false)
 {
-    $cssdir = api_get_path(SYS_CSS_PATH) . 'themes/';
-    $list = [];
-    if (is_dir($cssdir)) {
-        $themes = @scandir($cssdir);
+    // This configuration value is set by the vchamilo plugin
+    $virtualTheme = api_get_configuration_value('virtual_css_theme_folder');
 
-        if (is_array($themes)) {
-            if ($themes !== false) {
-                sort($themes);
-
-                foreach ($themes as & $theme) {
-                    if (substr($theme, 0, 1) == '.') {
-                        continue;
-                    } else {
-                        if (is_dir($cssdir.$theme)) {
-                            $name = ucwords(str_replace('_', ' ', $theme));
-                            $list[$theme] = $name;
-                        }
-                    }
-                }
+    $readCssFolder = function ($dir) use ($virtualTheme) {
+        $finder = new \Symfony\Component\Finder\Finder();
+        $themes = $finder->directories()->in($dir)->depth(0)->sortByName();
+        $list = [];
+        /** @var Symfony\Component\Finder\SplFileInfo $theme */
+        foreach ($themes as $theme) {
+            $folder = $theme->getFilename();
+            // A theme folder is consider if there's a default.css file
+            if (!file_exists($theme->getPathname().'/default.css')) {
+                continue;
             }
+            $name = ucwords(str_replace('_', ' ', $folder));
+            if ($folder == $virtualTheme) {
+                continue;
+            }
+            $list[$folder] = $name;
         }
+        return $list;
+    };
+
+    $dir = api_get_path(SYS_CSS_PATH).'themes/';
+    $list = $readCssFolder($dir);
+
+    if (!empty($virtualTheme)) {
+        $newList = $readCssFolder($dir.'/'.$virtualTheme);
+        if ($getOnlyThemeFromVirtualInstance) {
+            return $newList;
+        }
+        $list = $list + $newList;
+        asort($list);
     }
 
     return $list;
@@ -7165,8 +7191,9 @@ function api_get_password_checker_js($usernameInputId, $passwordInputId)
 }
 
 /**
- * @param string $username
  * create an user extra field called 'captcha_blocked_until_date'
+ * @param string $username
+ * @return bool
  */
 function api_block_account_captcha($username)
 {
@@ -7181,10 +7208,12 @@ function api_block_account_captcha($username)
         'captcha_blocked_until_date',
         api_get_utc_datetime($time)
     );
+    return true;
 }
 
 /**
  * @param string $username
+ * @return bool
  */
 function api_clean_account_captcha($username)
 {
@@ -7198,6 +7227,7 @@ function api_clean_account_captcha($username)
         'captcha_blocked_until_date',
         null
     );
+    return true;
 }
 
 /**
@@ -7243,7 +7273,8 @@ function api_get_short_text_from_html($in_html, $in_number_char)
  * @return string
  * @author hubert borderiou
  */
-function api_remove_tags_with_space($in_html, $in_double_quote_replace = true) {
+function api_remove_tags_with_space($in_html, $in_double_quote_replace = true)
+{
     $out_res = $in_html;
     if ($in_double_quote_replace) {
         $out_res = str_replace('"', "''", $out_res);
@@ -7318,7 +7349,6 @@ function api_can_login_as($loginAsUserId, $userId = null)
     }
 
     $userInfo = api_get_user_info($userId);
-
     $isDrh = function() use($loginAsUserId) {
         if (api_is_drh()) {
             if (api_drh_can_access_all_session_content()) {
@@ -7466,6 +7496,10 @@ function api_warn_hosting_contact($limitName)
 
 /**
  * Gets value of a variable from app/config/configuration.php
+ * Variables that are not set in the configuration.php file but set elsewhere:
+ * - virtual_css_theme_folder (vchamilo plugin)
+ * - access_url (global.inc.php)
+ *
  * @param string $variable
  *
  * @return bool|mixed

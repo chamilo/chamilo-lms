@@ -987,7 +987,7 @@ if (!empty($error)) {
                 previous_question_and_save(previousId, questionId);
             });
 
-            $(\'button[name="save_question_list"\').on(\'click\', function (e) {
+            $(\'button[name="save_question_list"]\').on(\'click\', function (e) {
                 e.preventDefault();
                 e.stopPropagation();
 

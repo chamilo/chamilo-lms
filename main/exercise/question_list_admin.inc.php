@@ -176,7 +176,7 @@ if (!$inATest) {
     echo "<th style=\"width: 10%;\">" .get_lang('Type'). "</th>";
     echo "<th style=\"width: 20%;\">" .get_lang('Category'). "</th>";
     echo "<th style=\"width: 10%;\">" .get_lang('Difficulty'). "</th>";
-    echo "<th style=\"width: 10%;\">" .get_lang('Score'). "</th>";
+    echo "<th style=\"width: 10%;\">" .get_lang('MaximumScore'). "</th>";
     echo "<th style=\"width: 10%;\">" .get_lang('Actions'). "</th>";
     echo "</tr>";
     echo "</table>";

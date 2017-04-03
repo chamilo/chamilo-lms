@@ -243,43 +243,43 @@ Feature: Exercise tool
     Then I should see "Multiple choice"
     And I check the "Answer true" radio button
     And wait for the page to be loaded
-    Then I follow "Next question"
+    Then I press "Next question"
     # Question 2
     And wait for the page to be loaded
     And I check the "Answer true" radio button
     And wait for the page to be loaded
-    Then I follow "Next question"
+    Then I press "Next question"
     # Question 3
     Then I fill in the following:
       | choice_id_3_0 | Juliet |
     And wait for the page to be loaded
-    Then I follow "Next question"
+    Then I press "Next question"
     # Question 4 - Matching
     Then I select "A" from "choice_id_4_1"
     Then I select "B" from "choice_id_4_2"
-    Then I follow "Next question"
+    Then I press "Next question"
     # Question 5 - Open question
     #Then I fill in ckeditor field "<string>" with "<string>"
     Then wait for the page to be loaded
-    Then I follow "Next question"
+    Then I press "Next question"
     # Question 6 - Oral question
     Then wait for the page to be loaded
-    Then I follow "Next question"
+    Then I press "Next question"
     # Question 7 - Exact answers combination
     #Then I check radio button with label "Answer true"
-    Then I follow "Next question"
+    Then I press "Next question"
     # Question 8 - Unique answer with unknown
     #@todo
-    Then I follow "Next question"
+    Then I press "Next question"
     # Question 9 - Multiple answer true - false - dont know
     #@todo
-    Then I follow "Next question"
+    Then I press "Next question"
      # Question 10 - Combination true - false - don't-know
     #@todo
-    Then I follow "Next question"
+    Then I press "Next question"
     # Question 11 - Global multiple answer
     #Then I check radio button with label "Answer true"
-    Then I follow "End test"
+    Then I press "End test"
     Then I should see "Score for the test: 41 / 105"
 
   Scenario: Check exercise result

@@ -986,8 +986,6 @@ class Blog
                 $tmp = Database::query($sql);
                 $blog_post_comments = Database::fetch_array($tmp);
 
-                $untaggedContent = strip_tags($blog_post['full_text']);
-
                 $fileArray = self::getBlogAttachments($blog_id, $blog_post['post_id'], 0);
                 $scoreRanking = self::displayRating(
                     'post',

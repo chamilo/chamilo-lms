@@ -469,10 +469,13 @@ if (is_array($forumCategories)) {
                         $number_threads = isset($forum['number_of_threads']) ? (int) $forum['number_of_threads'] : 0;
                         $number_posts = isset($forum['number_of_posts']) ? $forum['number_of_posts'] : 0;
 
+                        $linkForum = api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq().'&gidReq='.$groupid.'&forum='.$forum['forum_id'];
+
                         $html .= '<div class="row">';
                         $html .= '<div class="col-md-6">';
                         $html .= '<div class="col-md-3">';
-                        $html .= '<div class="number-post">'.$forum_image.'<p>'.$number_threads.' ' . get_lang('ForumThreads') . '</p>'
+                        $html .= '<div class="number-post">'.Display::url($forum_image, $linkForum);
+                        $html .= '<p>'.$number_threads.' ' . get_lang('ForumThreads') . '</p>'
                             . '</div>';
                         $html .= '</div>';
 
@@ -488,9 +491,7 @@ if (is_array($forumCategories)) {
                             'a',
                             $forum['forum_title'],
                             [
-                                'href' => 'viewforum.php?' . api_get_cidreq()
-                                    . '&gidReq=' . intval($groupid)
-                                    . '&forum=' . intval($forum['forum_id']),
+                                'href' => $linkForum ,
                                 'class' => empty($forum['visibility']) ? 'text-muted' : null
                             ]
                         );

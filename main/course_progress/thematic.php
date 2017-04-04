@@ -86,23 +86,17 @@ if ($action == 'thematic_list') {
             false
         );
     }
-
-    // display title
-    if (!empty($thematic_id)) {
-    } else {
+    if (empty($thematic_id)) {
         // display information
-        $text = '<h4>'.get_lang('Information').'</h4>';
+        $text = '<strong>'.get_lang('Information').': </strong>';
         $text .= get_lang('ThematicDetailsDescription');
         $message = Display::return_message($text,'info', false);
-        
     }
     $list = [];
     // Display thematic data
+
     if (!empty($thematic_data)) {
         // display progress
-        echo '<div style="text-align:right;"><h2>'.get_lang('Progress').': <span id="div_result">'.$total_average_of_advances.'</span> %</h2></div>';
-        echo '<table width="100%" class="data_table">';
-        echo '<tr><th width="33%">'.get_lang('Thematic').'</th><th>'.get_lang('ThematicPlan').'</th><th width="33%">'.get_lang('ThematicAdvance').'</th></tr>';
         foreach ($thematic_data as $thematic) {
             
             $list['id'] = $thematic['id'];
@@ -121,9 +115,7 @@ if ($action == 'thematic_list') {
                     $session_star = api_get_session_image(api_get_session_id(), $user_info['status']);
                 }
             }
-
             //@todo add a validation in order to load or not course thematics in the session thematic
-            echo '<tr>';
             $toolbarThematic = '';
             if (api_is_allowed_to_edit(null, true)) {
                 // Thematic title
@@ -162,110 +154,17 @@ if ($action == 'thematic_list') {
                         .$my_thematic_id.$params.$url_token.'">'
                         .Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_TINY).'</a>';
                 }
-
-               // $actions_first_col = Display::div($actions_first_col, array('id' => 'thematic_id_content_'.$thematic['id'], 'class' => 'thematic_tools'));
-               // $actions_first_col = Display::div($actions_first_col, array('style' => 'height:20px'));
             }
-            
-            echo Display::tag('td', Display::tag('h3', Security::remove_XSS($thematic['title'], STUDENT).$session_star).Security::remove_XSS($thematic['content'], STUDENT).$actions_first_col, array('id' => 'thematic_td_content_'.$thematic['id'], 'class' => 'thematic_content'));
-
-            // Display 2nd column - thematic plan data
-            echo '<td>';
-
             if (empty($thematic_plan_div[$thematic['id']])) {
                 $list['thematic_plan'] = null;
             } else {
                 $list['thematic_plan'] = $thematic_plan_div[$thematic['id']];
             }
-            echo '</td>';
-
-            // Display 3rd column - thematic advance data
-            echo '<td style="vertical-align:top">';
-
-
-            //if (api_is_allowed_to_edit(null, true) &&  api_get_session_id() == $thematic['session_id']) {
-            if (!empty($thematic_advance_data[$thematic['id']])) {
-                
-                $list['thematic_advance'] = $thematic_advance_data[$thematic['id']];
-                
-                echo '<table width="100%">';
-                foreach ($thematic_advance_data[$thematic['id']] as $thematic_advance) {
-                    $thematic_advance['start_date'] = api_get_local_time($thematic_advance['start_date']);
-                    $thematic_advance['start_date'] = api_format_date($thematic_advance['start_date'], DATE_TIME_FORMAT_LONG);
-                    echo '<tr>';
-                    echo '<td width="90%" class="thematic_advance_content" id="thematic_advance_content_id_'.$thematic_advance['id'].'">';
-
-                    $edit_link = '';
-                    if (api_is_allowed_to_edit(null, true)) {
-                        $edit_link = Display::url(
-                            Display::return_icon(
-                                'edit.png',
-                                get_lang('EditThematicAdvance'),
-                                [],
-                                ICON_SIZE_SMALL
-                            ),
-                            'index.php?'.api_get_cidreq().'&'.http_build_query([
-                                'action' => 'thematic_advance_edit',
-                                'thematic_id' => $thematic['id'],
-                                'thematic_advance_id' => $thematic_advance['id']
-                            ])
-                        );
-                        $edit_link .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=thematic_advance_delete&thematic_id='.$thematic['id'].'&thematic_advance_id='.$thematic_advance['id'].'">'.
-                            Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a></center>';
-
-                        // Links
-                        $edit_link = Display::div(
-                            Display::div($edit_link, array('id' => 'thematic_advance_tools_'.$thematic_advance['id'], 'class' => 'thematic_advance_actions')),
-                            array('style' => 'height:20px;')
-                        );
-                    }
-
-                    $thematic_advance_item = isset($thematic_advance_div[$thematic['id']][$thematic_advance['id']]) ? $thematic_advance_div[$thematic['id']][$thematic_advance['id']] : null;
-                    echo Display::div($thematic_advance_item, array('id' => 'thematic_advance_'.$thematic_advance['id']));
-                    echo $edit_link;
-                    echo '</td>';
-
-                    //if (api_is_allowed_to_edit(null, true) && api_get_session_id() == $thematic['session_id']) {
-                    if (api_is_allowed_to_edit(null, true)) {
-                        if (empty($thematic_id)) {
-                            $checked = '';
-                            if ($last_done_thematic_advance == $thematic_advance['id']) {
-                                $checked = 'checked';
-                            }
-                            $style = '';
-                            if ($thematic_advance['done_advance'] == 1) {
-                                $style = ' style="background-color:#E5EDF9" ';
-                            } else {
-                                $style = ' style="background-color:#fff" ';
-                            }
-                            echo '<td id="td_done_thematic_'.$thematic_advance['id'].'" '.$style.'><center>';
-                            echo '<input type="radio" class="done_thematic" id="done_thematic_'.$thematic_advance['id'].'" name="done_thematic" value="'.$thematic_advance['id'].'" '.$checked.' onclick="update_done_thematic_advance(this.value)">';
-                            echo '</center></td>';
-                        } else {
-                            if ($thematic_advance['done_advance'] == 1) {
-                                echo '<td><center>'.get_lang('Done').'</center></td>';
-                            } else {
-                                echo '<td><center>-</center></td>';
-                            }
-                        }
-                    }
-                    echo '</tr>';
-                }
-                echo '</table>';
-            } else {
-                echo '<div><em>'.get_lang('ThereIsNoAThematicAdvance').'</em></div>';
-            }
-            echo '</td>';
-            echo '</tr>';
+            $list['thematic_advance'] = $thematic_advance_data[$thematic['id']];
+            $list['last_done'] = $last_done_thematic_advance;
             $list['toolbar'] = $toolbarThematic;
             $listThematic[] = $list;
         } //End for
-        
-        
-        
-        echo '</table>';
-    } else {
-        echo '<div><em>'.get_lang('ThereIsNoAThematicSection').'</em></div>';
     }
 } elseif ($action == 'thematic_add' || $action == 'thematic_edit') {
     // Display form

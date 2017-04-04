@@ -432,7 +432,7 @@ switch ($action) {
             $description = $keyword;
         }
 
-        if (api_is_drh()) {
+        if (api_is_drh() || api_is_session_admin()) {
             $count = SessionManager::get_sessions_followed_by_drh(
                 api_get_user_id(),
                 null,
@@ -990,7 +990,7 @@ switch ($action) {
         );
         break;
     case 'get_sessions_tracking':
-        if (api_is_drh()) {
+        if (api_is_drh() || api_is_session_admin()) {
             $sessions = SessionManager::get_sessions_followed_by_drh(
                 api_get_user_id(),
                 $start,
@@ -1014,7 +1014,7 @@ switch ($action) {
             );
         }
 
-        $columns =  array(
+        $columns = array(
             'name',
             'date',
             'course_per_session',

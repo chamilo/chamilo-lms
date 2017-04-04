@@ -183,15 +183,19 @@ if (!$inATest) {
     echo "</div>";
     echo '<div id="question_list">';
     if ($nbrQuestions) {
-        //Always getting list from DB
+        // Always getting list from DB
         //$questionList = $objExercise->selectQuestionList(true);
 
+        // In the building exercise mode show question list ordered as is.
         $objExercise->setCategoriesGrouping(false);
 
         // Show exercises as in category settings
         //$questionList = $objExercise->getQuestionListWithMediasUncompressed();
 
-        // Show all questions no matter the category settings.
+        // In building mode show all questions not render by teacher order.
+        $objExercise->questionSelectionType = EX_Q_SELECTION_ORDERED;
+
+        // Get question list
         $questionList = $objExercise->selectQuestionList(true, true);
 
         // Style for columns
@@ -216,7 +220,7 @@ if (!$inATest) {
                 $objQuestionTmp = Question::read($id);
 
                 $clone_link = '<a href="'.api_get_self().'?'.api_get_cidreq().'&clone_question='.$id.'">'.
-                    Display::return_icon('cd.png',get_lang('Copy'), array(), ICON_SIZE_SMALL).'</a>';
+                    Display::return_icon('cd.png', get_lang('Copy'), array(), ICON_SIZE_SMALL).'</a>';
                 $edit_link = ($objQuestionTmp->type == CALCULATED_ANSWER && $objQuestionTmp->isAnswered()) ?
                     '<a>'.Display::return_icon(
                         'edit_na.png',

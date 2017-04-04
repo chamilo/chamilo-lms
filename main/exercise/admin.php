@@ -379,8 +379,10 @@ if ($inATest) {
         Display::return_icon('settings.png', get_lang('ModifyExercise'),'',ICON_SIZE_MEDIUM).'</a>';
 
     $maxScoreAllQuestions = 0;
-    if (!empty($objExercise->questionList)) {
-        foreach ($objExercise->questionList as $q) {
+    //$questionList = $objExercise->getQuestionList();
+    $questionList = $objExercise->selectQuestionList(true, true);
+    if (!empty($questionList)) {
+        foreach ($questionList as $q) {
             $question = Question::read($q);
             if ($question) {
                 $maxScoreAllQuestions += $question->selectWeighting();
@@ -394,8 +396,13 @@ if ($inATest) {
         echo Display::return_message(get_lang('AddedToLPCannotBeAccessed'), 'warning');
     }
 
-    echo '<div class="alert alert-info">'.
-        sprintf(get_lang('XQuestionsWithTotalScoreY'), $objExercise->selectNbrQuestions(), $maxScoreAllQuestions);
+    echo '<div class="alert alert-info">';
+    echo sprintf(
+        get_lang('XQuestionsWithTotalScoreY'),
+        $objExercise->selectNbrQuestions(),
+        $maxScoreAllQuestions
+    );
+
     if ($objExercise->random > 0) {
         echo '<br />' .
             sprintf(get_lang('OnlyXQuestionsPickedRandomly'), $objExercise->random);
@@ -406,7 +413,7 @@ if ($inATest) {
     // we are in create a new question from question pool not in a test
     echo '<div class="actions">';
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/admin.php?'.api_get_cidreq().'">'.
-        Display::return_icon('back.png', get_lang('GoBackToQuestionList'),'',ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('back.png', get_lang('GoBackToQuestionList'),'', ICON_SIZE_MEDIUM).'</a>';
     echo '</div>';
 } else {
     // If we are in question_pool but not in an test, go back to question create in pool

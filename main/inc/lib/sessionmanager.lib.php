@@ -5349,9 +5349,9 @@ class SessionManager
 
         $urlId = api_get_current_access_url_id();
 
-        $sessionConditions = null;
-        $courseConditions = null;
-        $userConditions = null;
+        $sessionConditions = '';
+        $courseConditions = '';
+        $userConditions = '';
 
         if (isset($active)) {
             $active = intval($active);
@@ -5359,7 +5359,6 @@ class SessionManager
         }
 
         $courseList = CourseManager::get_courses_followed_by_drh($userId, DRH);
-//        $courseConditions = ' AND 1 <> 1'; //Why?
         if (!empty($courseList)) {
             $courseIdList = array_column($courseList, 'id');
             $courseConditions = ' AND c.id IN ("'.implode('","', $courseIdList).'")';

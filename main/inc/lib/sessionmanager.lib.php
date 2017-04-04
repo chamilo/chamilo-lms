@@ -5349,9 +5349,9 @@ class SessionManager
 
         $urlId = api_get_current_access_url_id();
 
-        $sessionConditions = null;
-        $courseConditions = null;
-        $userConditions = null;
+        $sessionConditions = '';
+        $courseConditions = '';
+        $userConditions = '';
 
         if (isset($active)) {
             $active = intval($active);
@@ -5359,7 +5359,6 @@ class SessionManager
         }
 
         $courseList = CourseManager::get_courses_followed_by_drh($userId, DRH);
-        $courseConditions = ' AND 1 <> 1';
         if (!empty($courseList)) {
             $courseIdList = array_column($courseList, 'id');
             $courseConditions = ' AND c.id IN ("'.implode('","', $courseIdList).'")';
@@ -5375,8 +5374,11 @@ class SessionManager
                 true,
                 false
             );
-            $studentIdList = array_keys($studentListSql);
-            $studentListSql = "'".implode("','", $studentIdList)."'";
+            if(!empty($studentListSql)){
+                $studentIdList = array_keys($studentListSql);
+                $studentListSql = "'".implode("','", $studentIdList)."'";
+            }
+            
         } else {
             $studentIdList = array_map('intval', $studentIdList);
             $studentListSql = "'".implode("','", $studentIdList)."'";
@@ -5472,6 +5474,7 @@ class SessionManager
                     INNER JOIN $tbl_session_rel_access_url url ON (url.session_id = s.id)
                     $where
                     $sessionConditions
+                    $userConditionsFromDrh
                 ) UNION (
                     $select
                     FROM $tbl_course c
@@ -5480,6 +5483,7 @@ class SessionManager
                     INNER JOIN $tbl_course_rel_access_url url ON (url.c_id = c.id)
                     $where
                     $courseConditions
+                    $userConditionsFromDrh
                 ) $userUnion
                 ) as t1
                 ";

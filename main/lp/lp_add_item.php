@@ -79,10 +79,9 @@ $(function() {
     $('.lp_resource_element').click(function() {
         window.location.href = $('a', this).attr('href');
     });
-    
-     CKEDITOR.on('instanceReady', function (e) {
+    CKEDITOR.on('instanceReady', function (e) {
         showTemplates('content_lp');
-    });    
+    });
 });
 </script>";
 
@@ -203,9 +202,7 @@ $(document).ready(function() {
 
 // document template for new document tab handler
 $(document).on( 'shown.bs.tab', 'a[data-toggle="tab"]', function (e) {
-
     var id = e.target.id;
-
     if (id == 'subtab2') {
         $('#frmModel').show();
     } else {
@@ -214,9 +211,7 @@ $(document).on( 'shown.bs.tab', 'a[data-toggle="tab"]', function (e) {
 })
 </script>
 <?php
-
 /* DISPLAY SECTION */
-
 echo $learnPath->build_action_menu();
 echo '<div class="row">';
 echo '<div id="lp_sidebar" class="col-md-4">';

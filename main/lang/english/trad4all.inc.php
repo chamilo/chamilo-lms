@@ -2653,7 +2653,7 @@ Best Regards,
 %s Team";
 $MailCronCourseExpirationReminderSubject = "Urgent: %s course expiration reminder";
 $ExerciseAndLearningPath = "Exercise and learning path";
-$LearningPathGradebookWarning = "Warning: It is possible to use, in the gradebook, tests that are part of learning paths. If the learning path itself is already included, this test might be part of the gradebook already. The learning paths evaluation is made on the basis of a progress percentage, while the evaluation on tests is made on the basis of a score. Survey evaluation is based on whether the user has answered (1) or not (0). Make sure you test your combinations of gradebook evaluations to avoid mind-blogging situations.";
+$LearningPathGradebookWarning = "Warning: It is possible to use, in the gradebook, tests that are part of learning paths. If the learning path itself is already included, this test might be part of the gradebook already. The learning paths evaluation is made on the basis of a progress percentage, while the evaluation on tests is made on the basis of a score. Survey evaluation is based on whether the user has answered (1) or not (0). Make sure you test your combinations of gradebook evaluations to avoid mind-boggling situations.";
 $ChooseEitherDurationOrTimeLimit = "Choose either duration or time limit";
 $ClearList = "Clear the chat";
 $SessionBanner = "Session banner";
@@ -7977,9 +7977,9 @@ $SkillFromCourseXDeletedSinceThen = "This skill was obtained through course %s w
 $SaveAndAddNewItem = "Save and add new item";
 $AnnouncementChooseRecipientsDescription = "By default, this announcement will be sent to all users. But you can also select others recipients.";
 $ChooseRecipients = "Choose recipients";
-$StudentCourseProgressX = "Progress: %s&#x00025;";
+$StudentCourseProgressX = "Progress: %s %%";
 $SessionDurationNotStartedMaxX = "This session has a maximum duration of %s days.";
-$StudentCourseScoreX = "Score: %s&#x00025;";
+$StudentCourseScoreX = "Score: %s %%";
 $StudentCourseCertificateX = "Certificate: %s";
 $ConfigureExerciseVisibilityInCourseTitle = "Enable to bypass the configuration of Exercise invisible in session at a base course level";
 $ConfigureExerciseVisibilityInCourseComment = "To enable the configuration of the exercise invisibility in session in the base course to by pass the global configuration. If not set the global parameter is used.";

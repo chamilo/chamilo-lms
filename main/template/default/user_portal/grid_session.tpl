@@ -29,6 +29,26 @@
                             {% endif %}
                         {% endfor %}
                     </div>
+                    {% if item.student_info %}
+                    <div class="course-student-info">
+                        <div class="student-info">
+
+                            {% if (item.student_info.progress is not null) %}
+                            {{ "StudentCourseProgressX" | get_lang | format(item.student_info.progress) }}
+                            {% endif %}
+
+                            {% if (item.student_info.score is not null) %}
+                            {{ "StudentCourseScoreX" | get_lang | format(item.student_info.score) }}
+                            {% endif %}
+
+                            {% if (item.student_info.certificate is not null) %}
+                            {{ "StudentCourseCertificateX" | get_lang | format(item.student_info.certificate) }}
+                            {% endif %}
+
+                        </div>
+                    </div>
+                    {% endif %}
+
                 </div>
                 {% if course.edit_actions != '' %}
                     <div class="admin-actions">

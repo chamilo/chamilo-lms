@@ -43,7 +43,7 @@ class DefaultController extends Controller
     }
 
     public function formAction() {
-        $form =$this->createForm( new FormDemoModelType());
+        $form = $this->createForm(new FormDemoModelType());
         return $this->render('ChamiloThemeBundle:Default:form.html.twig', array(
                 'form' => $form->createView()
             ));

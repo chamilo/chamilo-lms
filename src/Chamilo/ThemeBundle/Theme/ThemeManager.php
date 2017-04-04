@@ -36,7 +36,7 @@ class ThemeManager
     function __construct($container, $resolverClass = null)
     {
         $this->container     = $container;
-        $this->resolverClass = $resolverClass?: 'Chamilo\ThemeBundle\Util\DependencyResolver';
+        $this->resolverClass = $resolverClass ?: 'Chamilo\ThemeBundle\Util\DependencyResolver';
     }
 
     public function registerScript($id, $src, $deps = array(), $location = "bottom")
@@ -54,7 +54,7 @@ class ThemeManager
 
     public function registerStyle($id, $src, $deps = array())
     {
-        if(!isset($this->stylesheets[$id])) {
+        if (!isset($this->stylesheets[$id])) {
             $this->stylesheets[$id] = array(
                 'src'      => $src,
                 'deps'     => $deps,
@@ -66,14 +66,14 @@ class ThemeManager
     {
 
         $unsorted = array(); $srcList = array(); $assetList = array();
-        foreach($this->javascripts as $id => $scriptDefinition) {
-            if($scriptDefinition['location'] == $location) {
+        foreach ($this->javascripts as $id => $scriptDefinition) {
+            if ($scriptDefinition['location'] == $location) {
                 $unsorted[$id] = $scriptDefinition;
             }
         }
 
         $queue = $this->getResolver()->register($unsorted)->resolveAll();
-        foreach($queue as $def) {
+        foreach ($queue as $def) {
             $srcList[] = $def['src'];
         }
         return $srcList;
@@ -83,7 +83,7 @@ class ThemeManager
     {
         $srcList = array();
         $queue = $this->getResolver()->register($this->stylesheets)->resolveAll();
-        foreach($queue as $def) {
+        foreach ($queue as $def) {
             $srcList[] = $def['src'];
         }
         return $srcList;

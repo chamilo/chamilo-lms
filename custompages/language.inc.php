@@ -28,7 +28,7 @@ function get_preferred_language($available_langs) {
     }
     krsort($langs, SORT_NUMERIC);
     // Choosing the best match
-    foreach($langs as $weight => $codes) {
+    foreach ($langs as $weight => $codes) {
 		foreach ($codes as $code) {
         	if (in_array($code, $available_langs)) {
             	return $code;

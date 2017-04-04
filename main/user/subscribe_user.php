@@ -11,7 +11,7 @@ use Chamilo\CoreBundle\Entity\ExtraField;
 */
 
 require_once __DIR__.'/../inc/global.inc.php';
-$current_course_tool  = TOOL_USER;
+$current_course_tool = TOOL_USER;
 
 // the section (for the tabs)
 $this_section = SECTION_COURSES;
@@ -54,8 +54,8 @@ if ($keyword) {
 }
 
 $sessionId = api_get_session_id();
-$list_register_user='';
-$list_not_register_user='';
+$list_register_user = '';
+$list_not_register_user = '';
 
 if (isset($_REQUEST['register'])) {
     $userInfo = api_get_user_info($_REQUEST['user_id']);
@@ -154,10 +154,10 @@ if (api_get_setting('show_email_addresses') == 'true') {
     $table->set_column_filter($col - 1, 'email_filter');
 }
 $table->set_header($col++, get_lang('Active'), false);
-$table->set_column_filter($col -1, 'active_filter');
+$table->set_column_filter($col - 1, 'active_filter');
 $table->set_header($col++, get_lang('Actions'), false);
-$table->set_column_filter($col -1, 'reg_filter');
-$table->set_form_actions(array ('subscribe' => get_lang('reg')), 'user');
+$table->set_column_filter($col - 1, 'reg_filter');
+$table->set_form_actions(array('subscribe' => get_lang('reg')), 'user');
 
 if (!empty($_POST['keyword'])) {
     $keyword_name = Security::remove_XSS($_POST['keyword']);
@@ -245,7 +245,7 @@ function get_number_of_users()
 
             if (api_is_multiple_url_enabled()) {
                 $url_access_id = api_get_current_access_url_id();
-                if ($url_access_id !=-1) {
+                if ($url_access_id != -1) {
                     $tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
                     $sql = "SELECT COUNT(u.id)
                             FROM $user_table u
@@ -272,7 +272,7 @@ function get_number_of_users()
 
             if (api_is_multiple_url_enabled()) {
                 $url_access_id = api_get_current_access_url_id();
-                if ($url_access_id !=-1) {
+                if ($url_access_id != -1) {
                     $tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
                     $sql = "SELECT COUNT(u.id)
@@ -302,7 +302,7 @@ function get_number_of_users()
 
             if (api_is_multiple_url_enabled()) {
                 $url_access_id = api_get_current_access_url_id();
-                if ($url_access_id !=-1) {
+                if ($url_access_id != -1) {
                     $tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
                     $sql = "SELECT COUNT(u.id)
                             FROM $user_table u
@@ -330,9 +330,9 @@ function get_number_of_users()
             if (isset($_GET['subscribe_user_filter_value']) &&
                 !empty($_GET['subscribe_user_filter_value']) &&
                 api_get_setting('ProfilingFilterAddingUsers') === 'true'
-            ){
-                $field_identification = explode('*',$_GET['subscribe_user_filter_value']);
-                $sql .=	"
+            ) {
+                $field_identification = explode('*', $_GET['subscribe_user_filter_value']);
+                $sql .= "
                     LEFT JOIN $table_user_field_values field_values
                     ON field_values.item_id = u.user_id
                     WHERE
@@ -341,14 +341,14 @@ function get_number_of_users()
                         field_values.field_id = '".intval($field_identification[0])."' AND
                         field_values.value = '".Database::escape_string($field_identification[1])."'
                     ";
-            } else	{
-                $sql .=	"WHERE cu.user_id IS NULL AND u.status <> ".DRH." ";
+            } else {
+                $sql .= "WHERE cu.user_id IS NULL AND u.status <> ".DRH." ";
             }
 
             if (api_is_multiple_url_enabled()) {
                 $url_access_id = api_get_current_access_url_id();
 
-                if ($url_access_id !=-1) {
+                if ($url_access_id != -1) {
                     $tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
                     $sql = "SELECT COUNT(u.id)
                             FROM $user_table u
@@ -394,7 +394,7 @@ function get_number_of_users()
             $users_of_course[] = $course_user['user_id'];
         }
     }
-    $sql .=" AND u.status <> ".ANONYMOUS." ";
+    $sql .= " AND u.status <> ".ANONYMOUS." ";
     $res = Database::query($sql);
     $count_user = 0;
 
@@ -465,8 +465,8 @@ function get_user_data($from, $number_of_items, $column, $direction)
 				!empty($_GET['subscribe_user_filter_value']) &&
 				api_get_setting('ProfilingFilterAddingUsers') == 'true'
 			) {
-				$field_identification = explode('*',$_GET['subscribe_user_filter_value']);
-				$sql .=	"
+				$field_identification = explode('*', $_GET['subscribe_user_filter_value']);
+				$sql .= "
 					LEFT JOIN $table_user_field_values field_values
 						ON field_values.item_id = u.user_id
 					WHERE
@@ -476,10 +476,10 @@ function get_user_data($from, $number_of_items, $column, $direction)
 						field_values.field_id = '".intval($field_identification[0])."' AND
 						field_values.value = '".Database::escape_string($field_identification[1])."'";
             } else {
-                $sql .=	"WHERE cu.user_id IS NULL AND u.status=1 AND (u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
+                $sql .= "WHERE cu.user_id IS NULL AND u.status=1 AND (u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
             }
 
-            $sql .=	" AND access_url_id = $url_access_id";
+            $sql .= " AND access_url_id = $url_access_id";
 		} else {
 		     // adding a teacher NOT through a session
 			$sql = "SELECT $select_fields
@@ -492,21 +492,21 @@ function get_user_data($from, $number_of_items, $column, $direction)
 					!empty($_GET['subscribe_user_filter_value']) &&
 					api_get_setting('ProfilingFilterAddingUsers') == 'true'
 				) {
-					$field_identification = explode('*',$_GET['subscribe_user_filter_value']);
-					$sql .=	"
+					$field_identification = explode('*', $_GET['subscribe_user_filter_value']);
+					$sql .= "
 						LEFT JOIN $table_user_field_values field_values
 							ON field_values.item_id = u.user_id
 						WHERE
 							cu.user_id IS NULL AND u.status<>".DRH." AND
 							field_values.field_id = '".intval($field_identification[0])."' AND
 							field_values.value = '".Database::escape_string($field_identification[1])."'";
-				} else	{
-					$sql .=	"WHERE cu.user_id IS NULL AND u.status<>".DRH." ";
+				} else {
+					$sql .= "WHERE cu.user_id IS NULL AND u.status<>".DRH." ";
 				}
 
 				// adding a teacher NOT trough a session on a portal with multiple URLs
 				if (api_is_multiple_url_enabled()) {
-					if ($url_access_id !=-1) {
+					if ($url_access_id != -1) {
 						$sql = "SELECT $select_fields
 						FROM $user_table u
 						LEFT JOIN $course_user_table cu
@@ -518,9 +518,9 @@ function get_user_data($from, $number_of_items, $column, $direction)
 					if (isset($_GET['subscribe_user_filter_value']) &&
 						!empty($_GET['subscribe_user_filter_value']) &&
 						api_get_setting('ProfilingFilterAddingUsers') == 'true'
-					){
+					) {
 						$field_identification = explode('*', $_GET['subscribe_user_filter_value']);
-						$sql .=	"
+						$sql .= "
 							LEFT JOIN $table_user_field_values field_values
 								ON field_values.item_id = u.user_id
 							WHERE
@@ -528,8 +528,8 @@ function get_user_data($from, $number_of_items, $column, $direction)
 							 	u.status<>".DRH." AND
 							 	field_values.field_id = '".intval($field_identification[0])."' AND
 							 	field_values.value = '".Database::escape_string($field_identification[1])."'";
-					} else	{
-						$sql .=	"WHERE cu.user_id IS NULL AND u.status<>".DRH." AND access_url_id= $url_access_id ";
+					} else {
+						$sql .= "WHERE cu.user_id IS NULL AND u.status<>".DRH." AND access_url_id= $url_access_id ";
 					}
 				}
 			}
@@ -550,9 +550,9 @@ function get_user_data($from, $number_of_items, $column, $direction)
             }
 
             // applying the filter of the additional user profile fields
-            if (isset($_GET['subscribe_user_filter_value']) AND !empty($_GET['subscribe_user_filter_value'])){
-                $field_identification = explode('*',$_GET['subscribe_user_filter_value']);
-                $sql .=	"
+            if (isset($_GET['subscribe_user_filter_value']) AND !empty($_GET['subscribe_user_filter_value'])) {
+                $field_identification = explode('*', $_GET['subscribe_user_filter_value']);
+                $sql .= "
                     LEFT JOIN $table_user_field_values field_values
                         ON field_values.item_id = u.user_id
                     WHERE
@@ -561,15 +561,15 @@ function get_user_data($from, $number_of_items, $column, $direction)
                     	(u.official_code <> 'ADMIN' OR u.official_code IS NULL) AND
                     	field_values.field_id = '".intval($field_identification[0])."' AND
                     	field_values.value = '".Database::escape_string($field_identification[1])."'";
-            } else	{
-                $sql .=	"WHERE
+            } else {
+                $sql .= "WHERE
                 			cu.user_id IS NULL AND
                 			u.status<>".DRH." AND
                 			(u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
             }
 
             if (api_is_multiple_url_enabled()) {
-                $sql .=  "AND access_url_id = $url_access_id";
+                $sql .= "AND access_url_id = $url_access_id";
             }
 
 		} else {
@@ -582,8 +582,8 @@ function get_user_data($from, $number_of_items, $column, $direction)
 
 			// applying the filter of the additional user profile fields
 			if (isset($_GET['subscribe_user_filter_value']) && !empty($_GET['subscribe_user_filter_value'])) {
-				$field_identification = explode('*',$_GET['subscribe_user_filter_value']);
-				$sql .=	"
+				$field_identification = explode('*', $_GET['subscribe_user_filter_value']);
+				$sql .= "
 					LEFT JOIN $table_user_field_values field_values
 						ON field_values.item_id = u.user_id
 					WHERE
@@ -591,14 +591,14 @@ function get_user_data($from, $number_of_items, $column, $direction)
 						u.status<>".DRH." AND
 						field_values.field_id = '".intval($field_identification[0])."' AND
 						field_values.value = '".Database::escape_string($field_identification[1])."'";
-			} else	{
-				$sql .=	"WHERE cu.user_id IS NULL AND u.status<>".DRH." ";
+			} else {
+				$sql .= "WHERE cu.user_id IS NULL AND u.status<>".DRH." ";
 			}
 
 			//showing only the courses of the current Chamilo access_url_id
 
 			if (api_is_multiple_url_enabled()) {
-				if ($url_access_id !=-1) {
+				if ($url_access_id != -1) {
 					$sql = "SELECT $select_fields
 						FROM $user_table u
 						LEFT JOIN $course_user_table cu
@@ -610,9 +610,9 @@ function get_user_data($from, $number_of_items, $column, $direction)
 					if (isset($_GET['subscribe_user_filter_value']) &&
 						!empty($_GET['subscribe_user_filter_value']) &&
 						api_get_setting('ProfilingFilterAddingUsers') == 'true'
-					){
+					) {
 						$field_identification = explode('*', $_GET['subscribe_user_filter_value']);
-						$sql .=	"
+						$sql .= "
 							LEFT JOIN $table_user_field_values field_values
 								ON field_values.item_id = u.user_id
 							WHERE
@@ -622,8 +622,8 @@ function get_user_data($from, $number_of_items, $column, $direction)
 								field_values.value = '".Database::escape_string($field_identification[1])."' AND
 								access_url_id = $url_access_id
                             ";
-					} else	{
-						$sql .=	"WHERE cu.user_id IS NULL AND u.status<>".DRH." AND access_url_id= $url_access_id ";
+					} else {
+						$sql .= "WHERE cu.user_id IS NULL AND u.status<>".DRH." AND access_url_id= $url_access_id ";
 					}
 				}
 			}
@@ -660,7 +660,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 		}
 	}
 
-	$sql .=" AND u.status != ".ANONYMOUS." ";
+	$sql .= " AND u.status != ".ANONYMOUS." ";
 
 	// Sorting and pagination (used by the sortable table)
 	$sql .= " ORDER BY col$column $direction ";
@@ -669,7 +669,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 	$sql .= " LIMIT $from, $number_of_items";
 
 	$res = Database::query($sql);
-	$users = array ();
+	$users = array();
 	while ($user = Database::fetch_row($res)) {
 		$users[] = $user;
 	}
@@ -729,7 +729,7 @@ function active_filter($active, $url_params, $row)
     if ($row['0'] <> $_user['user_id']) {
 	// you cannot lock yourself out otherwise you could disable all the accounts
 	// including your own => everybody is locked out and nobody can change it anymore.
-		$result = Display::return_icon($image.'.png',  get_lang(ucfirst($action)), array() , ICON_SIZE_TINY);
+		$result = Display::return_icon($image.'.png', get_lang(ucfirst($action)), array(), ICON_SIZE_TINY);
 	}
 
 	return $result;

@@ -7986,4 +7986,9 @@ $Colors = "Colors";
 $DesignWithBadgeStudio = "Dissenyar amb Badge Studio";
 $DesignWithBadgeStudioComment = "Utilitzi Badge Studio per crear la seva pròpia insígnia dins de la seva plataforma";
 $YouAlreadySentThisFile = "Ja va enviar aquest o un altre arxiu amb el mateix nom. Si us plau assegureu-vos d'enviar cada arxiu una sola vegada.";
+$StudentCourseProgress = "Progrés: %s&#x00025;";
+$StudentCourseScore = "Puntuació: %s&#x00025;";
+$StudentCourseCertificate = "Certificat: %s";
+$MyCourseProgressTitle = "Mostra progrés del curs a l'estudiant";
+$MyCourseProgressTemplateComment = "En activar aquesta opció se'ls mostraran als estudiants el progrés dels seus cursos a la pàgina 'Els meus cursos'.";
 ?>

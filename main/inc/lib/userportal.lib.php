@@ -1164,11 +1164,150 @@ class IndexManager
                 $this->load_directories_preview
             );
 
+
+            //Course option (show student progress)
+            //This code will add new variables (Progress, Score, Certificate)
+            if (isset(api_get_configuration_value('course_student_info')['progress']) ||
+                isset(api_get_configuration_value('course_student_info')['score']) ||
+                isset(api_get_configuration_value('course_student_info')['certificate'])) {
+                foreach ($specialCourses as $key => $specialCourseInfo) {
+                    if (isset(api_get_configuration_value('course_student_info')['progress']) &&
+                        api_get_configuration_value('course_student_info')['progress'] === true) {
+                        $progress = Tracking::get_avg_student_progress(
+                            $user_id,
+                            $specialCourseInfo['course_code']
+                        );
+                        $specialCourses[$key]['student_info']['progress'] = ($progress === false)? null : $progress;
+                    }
+    
+                    if (isset(api_get_configuration_value('course_student_info')['score']) &&
+                        api_get_configuration_value('course_student_info')['score'] === true) {
+                        $percentage_score = Tracking::get_avg_student_score(
+                            $user_id,
+                            $specialCourseInfo['course_code'],
+                            array()
+                        );
+                        $specialCourses[$key]['student_info']['score'] = $percentage_score;
+                    }
+    
+                    if (isset(api_get_configuration_value('course_student_info')['certificate']) &&
+                        api_get_configuration_value('course_student_info')['certificate'] === true) {
+                        $category = Category::load(
+                            null,
+                            null,
+                            $specialCourseInfo['course_code'],
+                            null,
+                            null,
+                            null
+                        );
+                        $specialCourses[$key]['student_info']['certificate'] = null;
+                        if (isset($category[0])) {
+                            if ($category[0]->is_certificate_available($user_id)) {
+                                $specialCourses[$key]['student_info']['certificate'] = Display::label(get_lang('Yes'), 'success');
+                            } else {
+                                $specialCourses[$key]['student_info']['certificate'] = Display::label(get_lang('No'));
+                            }
+                        }
+                    }
+                    
+                }
+                
+                if (isset($courses['in_category']) && isset($courses['not_category'])) {
+                    foreach ($courses['in_category'] as $key1 => $value) {
+                        if (isset($courses['in_category'][$key1]['courses'])) {
+                            foreach ($courses['in_category'][$key1]['courses'] as $key2 => $courseInCatInfo) {
+                                if (isset(api_get_configuration_value('course_student_info')['progress']) &&
+                                    api_get_configuration_value('course_student_info')['progress'] === true) {
+                                    $progress = Tracking::get_avg_student_progress(
+                                        $user_id,
+                                        $courseInCatInfo['course_code']
+                                    );
+                                    $courses['in_category'][$key1]['courses'][$key2]['student_info']['progress'] = ($progress === false)? null : $progress;
+                                }
+    
+                                if (isset(api_get_configuration_value('course_student_info')['score']) &&
+                                    api_get_configuration_value('course_student_info')['score'] === true) {
+                                    $percentage_score = Tracking::get_avg_student_score(
+                                        $user_id,
+                                        $specialCourseInfo['course_code'],
+                                        array()
+                                    );
+                                    $courses['in_category'][$key1]['courses'][$key2]['student_info']['score'] = $percentage_score;
+                                }
+    
+                                if (isset(api_get_configuration_value('course_student_info')['certificate']) &&
+                                    api_get_configuration_value('course_student_info')['certificate'] === true) {
+                                    $category = Category::load(
+                                        null,
+                                        null,
+                                        $courseInCatInfo['course_code'],
+                                        null,
+                                        null,
+                                        null
+                                    );
+                                    $courses['in_category'][$key1]['student_info']['certificate'] = null;
+                                    if (isset($category[0])) {
+                                        if ($category[0]->is_certificate_available($user_id)) {
+                                            $courses['in_category'][$key1]['student_info']['certificate'] = Display::label(get_lang('Yes'), 'success');
+                                        } else {
+                                            $courses['in_category'][$key1]['student_info']['certificate'] = Display::label(get_lang('No'));
+                                        }
+                                    }
+                                }
+                                
+                            }
+                        }
+                    }
+                    foreach ($courses['not_category'] as $key => $courseNotInCatInfo) {
+                        if (isset(api_get_configuration_value('course_student_info')['progress']) &&
+                            api_get_configuration_value('course_student_info')['progress'] === true) {
+                            $progress = Tracking::get_avg_student_progress(
+                                $user_id,
+                                $courseNotInCatInfo['course_code']
+                            );
+                            $courses['not_category'][$key]['student_info']['progress'] = ($progress === false)? null : $progress;
+                        }
+    
+                        if (isset(api_get_configuration_value('course_student_info')['score']) &&
+                            api_get_configuration_value('course_student_info')['score'] === true) {
+                            $percentage_score = Tracking::get_avg_student_score(
+                                $user_id,
+                                $courseNotInCatInfo['course_code'],
+                                array()
+                            );
+                            $courses['not_category'][$key]['student_info']['score'] = $percentage_score;
+                        }
+    
+                        if (isset(api_get_configuration_value('course_student_info')['certificate']) &&
+                            api_get_configuration_value('course_student_info')['certificate'] === true) {
+                            $category = Category::load(
+                                null,
+                                null,
+                                $courseNotInCatInfo['course_code'],
+                                null,
+                                null,
+                                null
+                            );
+                            $courses['not_category'][$key]['student_info']['certificate'] = null;
+                            if (isset($category[0])) {
+                                if ($category[0]->is_certificate_available($user_id)) {
+                                    $courses['not_category'][$key]['student_info']['certificate'] = Display::label(get_lang('Yes'), 'success');
+                                } else {
+                                    $courses['not_category'][$key]['student_info']['certificate'] = Display::label(get_lang('No'));
+                                }
+                            }
+                        }
+                        
+                    }
+                }
+                
+            }
+
             if ($viewGridCourses) {
                 $coursesWithoutCategoryTemplate = '/user_portal/grid_courses_without_category.tpl';
                 $coursesWithCategoryTemplate = '/user_portal/grid_courses_with_category.tpl';
             }
-
+            
             if ($specialCourses) {
                 $this->tpl->assign('courses', $specialCourses);
 
@@ -1283,6 +1422,55 @@ class IndexManager
                                     if (isset($courseUserHtml[1])) {
                                         $course_session = $courseUserHtml[1];
                                         $course_session['skill'] = isset($courseUserHtml['skill']) ? $courseUserHtml['skill'] : '';
+
+                                        //Course option (show student progress)
+                                        //This code will add new variables (Progress, Score, Certificate)
+                                        if (isset(api_get_configuration_value('course_student_info')['progress']) ||
+                                            isset(api_get_configuration_value('course_student_info')['score']) ||
+                                            isset(api_get_configuration_value('course_student_info')['certificate'])) {
+                                            if (isset(api_get_configuration_value('course_student_info')['progress']) &&
+                                                api_get_configuration_value('course_student_info')['progress'] === true) {
+                                                $progress = Tracking::get_avg_student_progress(
+                                                    $user_id,
+                                                    $course['course_code'],
+                                                    array(),
+                                                    $session_id
+                                                );
+                                                $course_session['student_info']['progress']  = ($progress === false)? null : $progress;
+                                            }
+    
+                                            if (isset(api_get_configuration_value('course_student_info')['score']) &&
+                                                api_get_configuration_value('course_student_info')['score'] === true) {
+                                                $percentage_score = Tracking::get_avg_student_score(
+                                                    $user_id,
+                                                    $course['course_code'],
+                                                    array(),
+                                                    $session_id
+                                                );
+                                                $course_session['student_info']['score'] = $percentage_score;
+                                            }
+    
+                                            if (isset(api_get_configuration_value('course_student_info')['certificate']) &&
+                                                api_get_configuration_value('course_student_info')['certificate'] === true) {
+                                                $category = Category::load(
+                                                    null,
+                                                    null,
+                                                    $course['course_code'],
+                                                    null,
+                                                    null,
+                                                    $session_id
+                                                );
+                                                $course_session['student_info']['certificate'] = null;
+                                                if (isset($category[0])) {
+                                                    if ($category[0]->is_certificate_available($user_id)) {
+                                                        $course_session['student_info']['certificate'] = Display::label(get_lang('Yes'), 'success');
+                                                    } else {
+                                                        $course_session['student_info']['certificate'] = Display::label(get_lang('No'));
+                                                    }
+                                                }
+                                            }
+                                        }
+
                                         $html_courses_session[] = $course_session;
                                     }
                                 }

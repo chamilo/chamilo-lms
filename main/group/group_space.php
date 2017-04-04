@@ -10,7 +10,7 @@
  */
 
 require_once __DIR__.'/../inc/global.inc.php';
-$current_course_tool  = TOOL_GROUP;
+$current_course_tool = TOOL_GROUP;
 
 // Notice for unauthorized people.
 api_protect_course_script(true);
@@ -68,7 +68,7 @@ if (!empty($_GET['selfUnReg']) &&
 
 echo '<div class="actions">';
 echo '<a href="group.php">'.
-    Display::return_icon('back.png',get_lang('BackToGroupList'),'',ICON_SIZE_MEDIUM).
+    Display::return_icon('back.png', get_lang('BackToGroupList'), '', ICON_SIZE_MEDIUM).
     '</a>';
 
 /*
@@ -85,7 +85,7 @@ if (GroupManager :: is_self_registration_allowed($user_id, $current_group['iid']
  */
 $unsubscribe_group = '';
 if (GroupManager :: is_self_unregistration_allowed($user_id, $current_group['iid'])) {
-    $unsubscribe_group = '<a class="btn btn-default" href="'.api_get_self().'?selfUnReg=1" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."'".')) return false;">'.
+    $unsubscribe_group = '<a class="btn btn-default" href="'.api_get_self().'?selfUnReg=1" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."'".')) return false;">'.
         get_lang("StudentUnsubscribe").'</a>';
 }
 echo '&nbsp;</div>';
@@ -96,8 +96,8 @@ $edit_url = '';
 if (api_is_allowed_to_edit(false, true) ||
     GroupManager::is_tutor_of_group(api_get_user_id(), $current_group['iid'])
 ) {
-    $edit_url =  '<a href="'.api_get_path(WEB_CODE_PATH).'group/settings.php?'.api_get_cidreq().'">'.
-        Display::return_icon('edit.png', get_lang('EditGroup'),'',ICON_SIZE_SMALL).'</a>';
+    $edit_url = '<a href="'.api_get_path(WEB_CODE_PATH).'group/settings.php?'.api_get_cidreq().'">'.
+        Display::return_icon('edit.png', get_lang('EditGroup'), '', ICON_SIZE_SMALL).'</a>';
 }
 
 echo Display::page_header(

@@ -19,7 +19,7 @@
  */
 
 require_once __DIR__.'/../inc/global.inc.php';
-$current_course_tool  = TOOL_LINK;
+$current_course_tool = TOOL_LINK;
 
 $this_section = SECTION_COURSES;
 api_protect_course_script(true);
@@ -187,12 +187,12 @@ switch ($action) {
         break;
     case 'move_link_up':
         Link::moveLinkUp($id);
-        header('Location: ' . $linkListUrl);
+        header('Location: '.$linkListUrl);
         exit;
         break;
     case 'move_link_down':
         Link::moveLinkDown($id);
-        header('Location: ' . $linkListUrl);
+        header('Location: '.$linkListUrl);
         exit;
         break;
     case 'list':

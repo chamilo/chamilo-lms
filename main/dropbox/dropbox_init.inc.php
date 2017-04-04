@@ -118,7 +118,7 @@ $is_allowed_in_course = api_is_allowed_in_course();
 $is_courseTutor = api_is_course_tutor();
 $is_courseAdmin = api_is_course_admin();
 
-$current_course_tool  = TOOL_DROPBOX;
+$current_course_tool = TOOL_DROPBOX;
 
 // the dropbox file that contains additional functions
 require_once 'dropbox_functions.inc.php';
@@ -263,10 +263,10 @@ if ($allowOverwrite == 'true') {
 $javascript .= "
 	</script>";
 $htmlHeadXtra[] = $javascript;
-$htmlHeadXtra[] ="<script>
+$htmlHeadXtra[] = "<script>
 function confirmation (name)
 {
-	if (confirm(\" ". get_lang("AreYouSureToDeleteJS") ." \"+ name + \" ?\"))
+	if (confirm(\" ". get_lang("AreYouSureToDeleteJS")." \"+ name + \" ?\"))
 		{return true;}
 	else
 		{return false;}
@@ -313,7 +313,7 @@ if (($postAction == 'download_received' || $postAction == 'download_sent') and !
 
 if ((!$is_allowed_in_course || !$is_course_member) && !api_is_allowed_to_edit(null, true)) {
     if ($origin != 'learnpath') {
-        api_not_allowed(true);//print headers/footers
+        api_not_allowed(true); //print headers/footers
     } else {
         api_not_allowed();
     }

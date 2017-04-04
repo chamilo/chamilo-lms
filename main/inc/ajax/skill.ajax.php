@@ -41,7 +41,7 @@ switch ($action) {
         $return_skills = array();
         foreach ($skills as $skill) {
             $skill['key'] = $skill['name'];
-            $skill['value'] =  $skill['id'];
+            $skill['value'] = $skill['id'];
             $return_skills[] = $skill;
         }
         echo json_encode($return_skills);
@@ -53,7 +53,7 @@ switch ($action) {
         if (!empty($gradebooks)) {
             foreach ($gradebooks as $gradebook) {
                 if ($gradebook['parent_id'] == 0 && !empty($gradebook['certif_min_score']) && !empty($gradebook['document_id'])) {
-                    $gradebook_list[]  = $gradebook;
+                    $gradebook_list[] = $gradebook;
                     //$gradebook['name'] = $gradebook['name'];
                     //$gradebook_list[]  = $gradebook;
                 } else {
@@ -69,7 +69,7 @@ switch ($action) {
         $return = array();
         foreach ($gradebooks as $item) {
             $item['key'] = $item['name'];
-            $item['value'] =  $item['id'];
+            $item['value'] = $item['id'];
             $return[] = $item;
         }
         echo json_encode($return);
@@ -95,13 +95,13 @@ switch ($action) {
         }
         break;
     case 'get_skills_by_profile':
-        $skill_rel_profile   = new SkillRelProfile();
+        $skill_rel_profile = new SkillRelProfile();
         $profile_id = isset($_REQUEST['profile_id']) ? $_REQUEST['profile_id'] : null;
         $skills = $skill_rel_profile->get_skills_by_profile($profile_id);
         echo json_encode($skills);
         break;
     case 'get_saved_profiles':
-        $skill_profile   = new SkillProfile();
+        $skill_profile = new SkillProfile();
         $profiles = $skill_profile->get_all();
         Display::display_no_header();
         Display::$global_template->assign('profiles', $profiles);
@@ -190,7 +190,7 @@ switch ($action) {
             $success = false;
         }
 
-        $result = array (
+        $result = array(
             'success' => $success,
             'data' => $return
         );
@@ -201,7 +201,7 @@ switch ($action) {
         $skills = $skill->get_direct_parents($id);
         $return = array();
         foreach ($skills as $skill) {
-            $return [$skill['data']['id']] = array (
+            $return [$skill['data']['id']] = array(
                 'id'        => $skill['data']['id'],
                 'parent_id' => $skill['data']['parent_id'],
                 'name'      => $skill['data']['name']
@@ -210,8 +210,8 @@ switch ($action) {
         echo json_encode($return);
         break;
     case 'profile_matches':
-        $skill_rel_user  = new SkillRelUser();
-        $skills = (!empty($_REQUEST['skill_id'])?$_REQUEST['skill_id']:array());
+        $skill_rel_user = new SkillRelUser();
+        $skills = (!empty($_REQUEST['skill_id']) ? $_REQUEST['skill_id'] : array());
 
         $total_skills_to_search = $skills;
         $users  = $skill_rel_user->get_user_by_skills($skills);

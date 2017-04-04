@@ -33,7 +33,7 @@ class ch_dropdown extends survey_question
      */
     public function render(FormValidator $form, $questionData = array(), $answers = '')
     {
-        $name = 'question' . $questionData['question_id'];
+        $name = 'question'.$questionData['question_id'];
         $data = array(0 => '--') + $questionData['options'];
         $form->addSelect($name, null, $data);
         if (!empty($answers)) {

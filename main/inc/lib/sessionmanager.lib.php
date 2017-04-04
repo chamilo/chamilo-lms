@@ -5374,7 +5374,7 @@ class SessionManager
                 true,
                 false
             );
-            if(!empty($studentListSql)){
+            if (!empty($studentListSql)) {
                 $studentIdList = array_keys($studentListSql);
                 $studentListSql = "'".implode("','", $studentIdList)."'";
             }
@@ -8145,7 +8145,7 @@ class SessionManager
     {
         if ($listA['sessionName'] == $listB['sessionName']) {
             return 0;
-        } else if($listA['sessionName'] > $listB['sessionName']) {
+        } else if ($listA['sessionName'] > $listB['sessionName']) {
             return 1;
         } else {
             return -1;
@@ -8165,7 +8165,7 @@ class SessionManager
             return 1;
         } else if ($listA['catSessionName'] == $listB['catSessionName']) {
             return 0;
-        } else if($listA['catSessionName'] > $listB['catSessionName']) {
+        } else if ($listA['catSessionName'] > $listB['catSessionName']) {
             return 1;
         } else {
             return -1;
@@ -8181,7 +8181,7 @@ class SessionManager
     {
         if ($listA['courseInUserCategoryTitle'] == $listB['courseInUserCategoryTitle']) {
             return 0;
-        } else if($listA['courseInUserCategoryTitle'] > $listB['courseInUserCategoryTitle']) {
+        } else if ($listA['courseInUserCategoryTitle'] > $listB['courseInUserCategoryTitle']) {
             return 1;
         } else {
             return -1;
@@ -8197,7 +8197,7 @@ class SessionManager
     {
         if ($listA['title'] == $listB['title']) {
             return 0;
-        } else if($listA['title'] > $listB['title']) {
+        } else if ($listA['title'] > $listB['title']) {
             return 1;
         } else {
             return -1;

@@ -1001,7 +1001,7 @@ class Blog
                     'autor' => $blog_post['firstname'].' '.$blog_post['lastname'],
                     'username' => $blog_post['username'],
                     'title' => stripslashes($blog_post['title']),
-                    'extract' => self::getPostExtract($blog_post['full_text'], 800),
+                    'extract' => self::getPostExtract($blog_post['full_text'], BLOG_MAX_PREVIEW_CHARS),
                     'content' => stripslashes($blog_post['full_text']),
                     'post_date' => api_convert_and_format_date($blog_post['date_creation']),
                     'n_comments' => $blog_post_comments['number_of_comments'],
@@ -3073,19 +3073,30 @@ class Blog
      * @param int $length
      * @return null|string
      */
-    private static function getPostExtract($fullText, $length = 800)
+    private static function getPostExtract($fullText, $length = BLOG_MAX_PREVIEW_CHARS)
     {
+        // Remove any HTML from the string
         $text = strip_tags($fullText);
         $text = api_html_entity_decode($text);
+        // Replace end of lines with spaces
         $text = preg_replace('/\s+/', ' ', $text);
-        $text = trim($text);
+        // Count whitespaces to add to the cut() call below
+        $countBlanks = substr_count($text, ' ');
+        // Get a version of the string without spaces for comparison purposes
+        $textWithoutBlanks = str_replace(' ', '', $text);
+        // utf8_decode replaces non-ISO chars by '?' which avoids counting
+        // multi-byte characters as more than one character
+        $stringLength = strlen(utf8_decode($textWithoutBlanks));
 
-        if (strlen($text) <= $length) {
+        if ($stringLength <= $length) {
             return null;
         }
 
-        $extract = cut($text, $length);
+        // Cut the string to the BLOG_MAX_PREVIEX_CHARS limit, adding
+        // whitespaces
+        $extract = cut($text, $stringLength + $countBlanks);
 
+        // Return an HTML string for printing
         return api_htmlentities($extract);
     }
 }

@@ -3491,44 +3491,52 @@ class Wiki
                 if ($row['addlock_disc']==1 || api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
                     //show comments but students can't add theirs
                     ?>
-                    <form name="form1" method="post" action="">
-                        <table>
-                            <tr>
-                                <td valign="top" ><?php echo get_lang('Comments');?>:</td>
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                    <form name="form1" method="post" action="" class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"><?php echo get_lang('Comments');?>:</label>
+                            <div class="col-sm-10">
                                 <?php  echo '<input type="hidden" name="wpost_id" value="'.md5(uniqid(rand(), true)).'">';//prevent double post ?>
-                                <td><textarea name="comment" cols="80" rows="5" id="comment"></textarea></td>
-                            </tr>
-                            <tr>
-                                <?php
+                                <textarea class="form-control" name="comment" cols="80" rows="5" id="comment"></textarea> 
+                            </div>
+                        </div>
+                        <div class="form-group">
+                             <?php
                                 //check if rating is allowed
                                 if ($row['ratinglock_disc']==1 || api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
                                     ?>
-                                    <td><?php echo get_lang('Rating');?>: </td>
-                                    <td valign="top"><select name="rating" id="rating">
-                                            <option value="-" selected>-</option>
-                                            <option value="0">0</option>
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
-                                            <option value="4">4</option>
-                                            <option value="5">5</option>
-                                            <option value="6">6</option>
-                                            <option value="7">7</option>
-                                            <option value="8">8</option>
-                                            <option value="9">9</option>
-                                            <option value="10">10</option>
-                                        </select></td>
-                                <?php
+                            <label class="col-sm-2 control-label"><?php echo get_lang('Rating');?>:</label>
+                            <div class="col-sm-10">
+                                <select name="rating" id="rating" class="selectpicker">
+                                    <option value="-" selected>-</option>
+                                    <option value="0">0</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                </select>
+                            </div>
+                            <?php
                                 } else {
                                     echo '<input type=hidden name="rating" value="-">';// must pass a default value to avoid rate automatically
                                 }
                                 ?>
-                            </tr>
-                            <tr>
-                                <td>&nbsp;</td>
-                                <td> <?php  echo '<button class="save" type="submit" name="Submit"> '.get_lang('Send').'</button>'; ?></td>
-                            </tr>
-                        </table>
+                            
+                          </div>
+                        <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                  <?php  echo '<button class="btn btn-default" type="submit" name="Submit"> '.get_lang('Send').'</button>'; ?>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
                     </form>
 
                     <?php

@@ -3982,7 +3982,7 @@ function api_get_track_item_property_history($tool, $ref)
             WHERE item_property_id = $item_property_id AND course_id = $course_id
             ORDER BY lastedit_date DESC";
     $result = Database::query($sql);
-    if ($result == false) {
+    if ($result === false or $result === null) {
         $result = array();
     } else {
         $result = Database::store_result($result,'ASSOC');
@@ -5245,6 +5245,9 @@ function &api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $ur
         $sql .= " ORDER BY 1,2 ASC";
     }
     $result = Database::query($sql);
+    if ($result === null) {
+        return array();
+    }
     $result = Database::store_result($result,'ASSOC');
 
     return $result;

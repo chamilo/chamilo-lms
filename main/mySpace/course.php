@@ -55,7 +55,8 @@ if (api_get_setting('add_users_by_coach') == 'true') {
 
 Display :: display_header(get_lang('Courses'));
 $user_id = 0;
-$a_courses = array();
+$a_courses = [];
+$menu_items = [];
 if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
     $title = '';
     if (empty($sessionId)) {

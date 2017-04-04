@@ -3094,7 +3094,7 @@ class Blog
 
         // Cut the string to the BLOG_MAX_PREVIEX_CHARS limit, adding
         // whitespaces
-        $extract = cut($text, $stringLength + $countBlanks);
+        $extract = cut($text, $length + $countBlanks);
 
         // Return an HTML string for printing
         return api_htmlentities($extract);

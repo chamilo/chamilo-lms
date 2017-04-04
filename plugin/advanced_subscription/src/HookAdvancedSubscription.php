@@ -6,7 +6,7 @@
  * @package chamilo.plugin.advanced_subscription
  */
 
-require_once __DIR__ . '/../config.php';
+require_once __DIR__.'/../config.php';
 
 /**
  * Class HookAdvancedSubscription extends the HookObserver to implements
@@ -420,7 +420,7 @@ class HookAdvancedSubscription extends HookObserver implements
 
         if ($debug) {
             error_log(__FUNCTION__);
-            error_log('Params ' . print_r($params, 1));
+            error_log('Params '.print_r($params, 1));
         }
         if (!WSHelperVerifyKey($params)) {
 
@@ -471,7 +471,7 @@ class HookAdvancedSubscription extends HookObserver implements
 
         if ($debug) {
             error_log('WSUserSubscribedInCourse');
-            error_log('Params ' . print_r($params, 1));
+            error_log('Params '.print_r($params, 1));
         }
         if (!WSHelperVerifyKey($params)) {
             return return_error(WS_ERROR_SECRET_KEY);
@@ -576,7 +576,7 @@ class HookAdvancedSubscription extends HookObserver implements
 
         if ($debug) {
             error_log('WSListSessionsDetailsByCategory');
-            error_log('Params ' . print_r($params, 1));
+            error_log('Params '.print_r($params, 1));
         }
         $secretKey = $params['secret_key'];
 

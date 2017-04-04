@@ -8,8 +8,8 @@
 /**
  * Init
  */
-require_once __DIR__ . '/../../../main/inc/global.inc.php';
-require_once __DIR__ . '/../config.php';
+require_once __DIR__.'/../../../main/inc/global.inc.php';
+require_once __DIR__.'/../config.php';
 
 if (!api_is_anonymous()) {
     $currentPageClass = isset($_POST['page_class']) ? $_POST['page_class'] : '';

@@ -23,14 +23,14 @@ if (strcmp($backpack, $configBackpack) !== 0) {
 
 $interbreadcrumb = array(
     array(
-        'url' => api_get_path(WEB_CODE_PATH) . 'admin/index.php',
+        'url' => api_get_path(WEB_CODE_PATH).'admin/index.php',
         'name' => get_lang('Administration')
     )
 );
 
 $toolbar = Display::toolbarButton(
     get_lang('ManageSkills'),
-    api_get_path(WEB_CODE_PATH) . 'admin/skill_list.php',
+    api_get_path(WEB_CODE_PATH).'admin/skill_list.php',
     'list',
     'primary',
     ['title' => get_lang('ManageSkills')]

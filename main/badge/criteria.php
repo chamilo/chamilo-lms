@@ -16,7 +16,7 @@ if (!$skill) {
         Display::return_message(get_lang('SkillNotFound'), 'error')
     );
 
-    header('Location: ' . api_get_path(WEB_PATH));
+    header('Location: '.api_get_path(WEB_PATH));
     exit;
 }
 

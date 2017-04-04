@@ -90,7 +90,6 @@ class ExtraField extends Model
         parent::__construct();
 
         $this->type = $type;
-
         $this->table = Database::get_main_table(TABLE_EXTRA_FIELD);
         $this->table_field_options = Database::get_main_table(TABLE_EXTRA_FIELD_OPTIONS);
         $this->table_field_values = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
@@ -315,7 +314,10 @@ class ExtraField extends Model
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             $row = Database::fetch_array($result, 'ASSOC');
-            $row['display_text'] = self::translateDisplayName($row['variable'], $row['display_text']);
+            $row['display_text'] = self::translateDisplayName(
+                $row['variable'],
+                $row['display_text']
+            );
 
             // All the tags of the field
             $sql = "SELECT * FROM $this->table_field_tag
@@ -1967,41 +1969,41 @@ EOF;
             array(
                 'name' => 'display_text',
                 'index' => 'display_text',
-                'width' => '180',
+                'width' => '140',
                 'align' => 'left',
             ),
             array(
                 'name' => 'variable',
                 'index' => 'variable',
-                'width' => '',
+                'width' => '90',
                 'align' => 'left',
                 'sortable' => 'true',
             ),
             array(
                 'name' => 'field_type',
                 'index' => 'field_type',
-                'width' => '',
+                'width' => '70',
                 'align' => 'left',
                 'sortable' => 'true',
             ),
             array(
                 'name' => 'changeable',
                 'index' => 'changeable',
-                'width' => '50',
+                'width' => '35',
                 'align' => 'left',
                 'sortable' => 'true',
             ),
             array(
                 'name' => 'visible_to_self',
                 'index' => 'visible_to_self',
-                'width' => '40',
+                'width' => '45',
                 'align' => 'left',
                 'sortable' => 'true',
             ),
              array(
                 'name' => 'visible_to_others',
                 'index' => 'visible_to_others',
-                'width' => '40',
+                'width' => '35',
                 'align' => 'left',
                 'sortable' => 'true',
             ),
@@ -2015,14 +2017,14 @@ EOF;
             array(
                 'name' => 'field_order',
                 'index' => 'field_order',
-                'width' => '40',
+                'width' => '25',
                 'align' => 'left',
                 'sortable' => 'true',
             ),
             array(
                 'name' => 'actions',
                 'index' => 'actions',
-                'width' => '100',
+                'width' => '40',
                 'align' => 'left',
                 'formatter' => 'action_formatter',
                 'sortable' => 'false',
@@ -2208,8 +2210,7 @@ JAVASCRIPT;
             </a>
 JAVASCRIPT;
 
-        return "function action_formatter(cellvalue, options, rowObject) {
-        console.log(options);
+        return "function action_formatter(cellvalue, options, rowObject) {        
             return '$editButton $deleteButton';
         }";
     }

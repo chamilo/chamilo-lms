@@ -574,14 +574,18 @@ class TestCategory
     }
 
     /**
-     * return a tab of $in_number random elements of $in_tab
+     * Returns an array of $numberElements from $array
+     * @param array
+     * @param int
+     *
+     * @return array
      */
-    public static function getNElementsFromArray($in_tab, $in_number)
+    public static function getNElementsFromArray($array, $numberElements)
     {
-        $list = $in_tab;
+        $list = $array;
         shuffle($list);
-        if ($in_number < count($list)) {
-            $list = array_slice($list, 0, $in_number);
+        if ($numberElements < count($list)) {
+            $list = array_slice($list, 0, $numberElements);
         }
 
         return $list;

@@ -38,7 +38,7 @@ api_protect_course_script(true);
 
 $origin = isset($_REQUEST['origin']) ? Security::remove_XSS($_REQUEST['origin']) : '';
 
-$is_allowedToEdit = api_is_allowed_to_edit(null,true);
+$is_allowedToEdit = api_is_allowed_to_edit(null, true);
 $glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');
 
 $showGlossary = in_array($glossaryExtraTools, array('true', 'exercise', 'exercise_and_lp'));
@@ -74,7 +74,6 @@ if (api_get_setting('enable_record_audio') === 'true') {
 $template = new Template();
 
 // General parameters passed via POST/GET
-
 $learnpath_id = isset($_REQUEST['learnpath_id']) ? intval($_REQUEST['learnpath_id']) : 0;
 $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? intval($_REQUEST['learnpath_item_id']) : 0;
 $learnpath_item_view_id	= isset($_REQUEST['learnpath_item_view_id']) ? intval($_REQUEST['learnpath_item_view_id']) : 0;
@@ -92,11 +91,10 @@ $choice = empty($choice) ? isset($_REQUEST['choice2']) ? $_REQUEST['choice2'] : 
 
 //From submit modal
 $current_question = isset($_REQUEST['num']) ? intval($_REQUEST['num']) : null;
-
 $currentAnswer = isset($_REQUEST['num_answer']) ? intval($_REQUEST['num_answer']) : null;
 $endExercise = isset($_REQUEST['end_exercise']) && $_REQUEST['end_exercise'] == 1 ? true : false;
 
-//Error message
+// Error message
 $error = '';
 
 //Table calls
@@ -105,7 +103,9 @@ $exercise_attempt_table = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_ATT
 /*  Teacher takes an exam and want to see a preview,
     we delete the objExercise from the session in order to get the latest
     changes in the exercise */
-if (api_is_allowed_to_edit(null, true) && isset($_GET['preview']) && $_GET['preview'] == 1 ) {
+if (api_is_allowed_to_edit(null, true) &&
+    isset($_GET['preview']) && $_GET['preview'] == 1
+) {
     Session::erase('objExercise');
 }
 
@@ -116,7 +116,6 @@ $exerciseInSession = Session::read('objExercise');
 if (!isset($exerciseInSession) || isset($exerciseInSession) && ($exerciseInSession->id != $_GET['exerciseId'])) {
     // Construction of Exercise
     $objExercise = new Exercise();
-
     Session::write('firstTime', true);
     if ($debug) {error_log('1. Setting the $objExercise variable'); };
     Session::erase('questionList');
@@ -126,7 +125,7 @@ if (!isset($exerciseInSession) || isset($exerciseInSession) && ($exerciseInSessi
         (!$objExercise->selectStatus() && !$is_allowedToEdit && $origin != 'learnpath')
     ) {
     	if ($debug) {error_log('1.1. Error while reading the exercise'); };
-        unset ($objExercise);
+        unset($objExercise);
         $error = get_lang('ExerciseNotFound');
     } else {
         // Saves the object into the session
@@ -310,7 +309,6 @@ $exercise_stat_info = $objExercise->get_stat_track_exercise_info(
 
 // Fix in order to get the correct question list.
 $questionListUncompressed = $objExercise->getQuestionListWithMediasUncompressed();
-
 Session::write('question_list_uncompressed', $questionListUncompressed);
 
 $clock_expired_time = null;
@@ -326,8 +324,8 @@ if (empty($exercise_stat_info)) {
 	if ($time_control) {
 		$expected_time = $current_timestamp + $total_seconds;
 
-		if ($debug)  error_log('5.1. $current_timestamp '.$current_timestamp);
-		if ($debug)  error_log('5.2. $expected_time '.$expected_time);
+		if ($debug) error_log('5.1. $current_timestamp '.$current_timestamp);
+		if ($debug) error_log('5.2. $expected_time '.$expected_time);
 
 		$clock_expired_time 	= api_get_utc_datetime($expected_time);
 		if ($debug) error_log('5.3. $expected_time '.$clock_expired_time);
@@ -374,7 +372,7 @@ if (empty($exercise_stat_info)) {
         }
     }
 
-    if ($debug)  error_log("5  exercise_stat_info[] exists getting exe_id $exe_id ");
+    if ($debug) error_log("5  exercise_stat_info[] exists getting exe_id $exe_id ");
 }
 
 $questionListInSession = Session::read('questionList');

@@ -20,7 +20,7 @@ class EventEmailTemplate extends Model
      */
 	public function __construct()
     {
-        $this->table =  Database::get_main_table(TABLE_EVENT_EMAIL_TEMPLATE);
+        $this->table = Database::get_main_table(TABLE_EVENT_EMAIL_TEMPLATE);
 	}
 
     /**
@@ -44,7 +44,7 @@ class EventEmailTemplate extends Model
 		// action links
 		$content = Display::actions(array(
                 array(
-                    'url' => 'event_type.php' ,
+                    'url' => 'event_type.php',
                     'content' => Display::return_icon(
                         'new_document.png',
                         get_lang('Add'),
@@ -132,7 +132,7 @@ class EventEmailTemplate extends Model
 
     public function get_count()
     {
-        $row = Database::select('count(*) as count', $this->table, array(),'first');
+        $row = Database::select('count(*) as count', $this->table, array(), 'first');
 
         return $row['count'];
     }

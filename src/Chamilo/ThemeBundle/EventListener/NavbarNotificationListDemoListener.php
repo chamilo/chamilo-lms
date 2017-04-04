@@ -16,7 +16,7 @@ class NavbarNotificationListDemoListener {
 
     public function onListNotifications(NotificationListEvent $event) {
 
-        foreach($this->getNotifications() as $notify){
+        foreach ($this->getNotifications() as $notify) {
             $event->addNotification($notify);
         }
 

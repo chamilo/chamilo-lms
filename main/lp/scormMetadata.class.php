@@ -88,7 +88,7 @@ class scormMetadata
                      //$keep_href = '';
                      if (is_array($attributes)) {
                          foreach ($attributes as $attrib) {
-                             if (trim($attrib->value) != ''){
+                             if (trim($attrib->value) != '') {
                                  $this->attribs[$attrib->name] = $attrib->value;
                              }
                          }

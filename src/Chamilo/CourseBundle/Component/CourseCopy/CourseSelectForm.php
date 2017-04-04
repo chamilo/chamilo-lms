@@ -143,10 +143,10 @@ class CourseSelectForm
 		<?php
 		// get destination course title
 		if (!empty($hidden_fields['destination_course'])) {
-            $sessionTitle = !empty($hidden_fields['destination_session']) ? ' (' . api_get_session_name($hidden_fields['destination_session']) . ')' : null;
+            $sessionTitle = !empty($hidden_fields['destination_session']) ? ' ('.api_get_session_name($hidden_fields['destination_session']).')' : null;
             $course_infos = CourseManager::get_course_information($hidden_fields['destination_course']);
 			echo '<h3>';
-			echo get_lang('DestinationCourse').' : '.$course_infos['title'] . ' ('.$course_infos['code'].') '.$sessionTitle;
+			echo get_lang('DestinationCourse').' : '.$course_infos['title'].' ('.$course_infos['code'].') '.$sessionTitle;
 			echo '</h3>';
 		}
         echo '<script src="'.api_get_path(WEB_CODE_PATH).'inc/lib/javascript/upload.js" type="text/javascript"></script>';
@@ -305,7 +305,7 @@ class CourseSelectForm
 			/*Documents are avoided due the huge amount of memory that the serialize php function "eats"
 			(when there are directories with hundred/thousand of files) */
 			// this is a known issue of serialize
-			$course->resources['document']= null;
+			$course->resources['document'] = null;
 		}
 
 		echo '<input type="hidden" name="course" value="'.base64_encode(Course::serialize($course)).'"/>';
@@ -322,7 +322,7 @@ class CourseSelectForm
 		    Display::display_warning_message(get_lang('NoDataAvailable'));
 		} else {
     		if (!empty($hidden_fields['destination_session'])) {
-    			echo '<br /><button class="save" type="submit" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES, $charset))."'".')) return false;" >'.
+    			echo '<br /><button class="save" type="submit" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset))."'".')) return false;" >'.
                     get_lang('Ok').'</button>';
     		} else {
                 if ($recycleOption) {
@@ -347,7 +347,7 @@ class CourseSelectForm
      */
     public static function display_hidden_quiz_questions($course)
     {
-		if(is_array($course->resources)){
+		if (is_array($course->resources)) {
 			foreach ($course->resources as $type => $resources) {
 				if (count($resources) > 0) {
 					switch ($type) {
@@ -367,10 +367,10 @@ class CourseSelectForm
      */
     public static function display_hidden_scorm_directories($course)
     {
-        if (is_array($course->resources)){
+        if (is_array($course->resources)) {
 			foreach ($course->resources as $type => $resources) {
 				if (count($resources) > 0) {
-					switch($type) {
+					switch ($type) {
 						case RESOURCE_SCORM:
 							foreach ($resources as $id => $resource) {
 								echo '<input type="hidden" name="resource['.RESOURCE_SCORM.']['.$id.']" id="resource['.RESOURCE_SCORM.']['.$id.']" value="On" />';
@@ -416,7 +416,7 @@ class CourseSelectForm
 			if (is_array($resource)) {
 				$resource = array_keys($resource);
 
-				foreach	($resource as $resource_item) {
+				foreach ($resource as $resource_item) {
 
 					$condition_session = '';
 					if (!empty($session_id)) {
@@ -452,8 +452,8 @@ class CourseSelectForm
                                         tool = '".RESOURCE_DOCUMENT."' AND
                                         ref = $resource_item ";
                             $res = Database::query($sql);
-                            $all_properties = array ();
-                            while ($item_property = Database::fetch_array($res,'ASSOC')) {
+                            $all_properties = array();
+                            while ($item_property = Database::fetch_array($res, 'ASSOC')) {
                                 $all_properties[] = $item_property;
                             }
                             $course->resources[RESOURCE_DOCUMENT][$resource_item]->item_properties = $all_properties;
@@ -468,7 +468,7 @@ class CourseSelectForm
 
 				switch ($type) {
 					case RESOURCE_SURVEYQUESTION:
-						foreach($resources as $id => $obj) {
+						foreach ($resources as $id => $obj) {
 						    if (isset($_POST['resource'][RESOURCE_SURVEY]) &&
                                 is_array($_POST['resource'][RESOURCE_SURVEY]) &&
                                 !in_array($obj->survey_id, array_keys($_POST['resource'][RESOURCE_SURVEY]))
@@ -567,7 +567,7 @@ class CourseSelectForm
 								$resource_is_used_elsewhere = $course->is_linked_resource($obj);
 								// check if document is in a quiz (audio/video)
 								if ($type == RESOURCE_DOCUMENT && $course->has_resources(RESOURCE_QUIZ)) {
-									foreach($course->resources[RESOURCE_QUIZ] as $quiz) {
+									foreach ($course->resources[RESOURCE_QUIZ] as $quiz) {
                                         $quiz = $quiz->obj;
 										if (isset($quiz->media) && $quiz->media == $id) {
 											$resource_is_used_elsewhere = true;
@@ -639,15 +639,15 @@ class CourseSelectForm
 		<?php
 
 		//get destination course title
-		if(!empty($hidden_fields['destination_course'])) {
+		if (!empty($hidden_fields['destination_course'])) {
              if (!empty($hidden_fields['destination_session'])) {
-                 $sessionTitle = ' (' . api_get_session_name($hidden_fields['destination_session']) . ')';
+                 $sessionTitle = ' ('.api_get_session_name($hidden_fields['destination_session']).')';
              } else {
                  $sessionTitle = null;
              }
             $course_infos = CourseManager::get_course_information($hidden_fields['destination_course']);
 			echo '<h3>';
-				echo get_lang('DestinationCourse') . ' : ' . $course_infos['title'] . $sessionTitle;
+				echo get_lang('DestinationCourse').' : '.$course_infos['title'].$sessionTitle;
 			echo '</h3>';
 		}
 
@@ -685,7 +685,7 @@ class CourseSelectForm
 		if ($avoid_serialize) {
 			//Documents are avoided due the huge amount of memory that the serialize php function "eats" (when there are directories with hundred/thousand of files)
 			// this is a known issue of serialize
-			$course->resources['document']= null;
+			$course->resources['document'] = null;
 		}
 		echo '<input type="hidden" name="course" value="'.base64_encode(Course::serialize($course)).'"/>';
 		if (is_array($hidden_fields)) {

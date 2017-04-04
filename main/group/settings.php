@@ -12,7 +12,7 @@
 
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
-$current_course_tool  = TOOL_GROUP;
+$current_course_tool = TOOL_GROUP;
 
 // Notice for unauthorized people.
 api_protect_course_script(true);
@@ -83,7 +83,7 @@ $group = array(
 $form->addGroup(
     $group,
     '',
-    Display::return_icon('user.png', get_lang('GroupSelfRegistration')) . '<span>' . get_lang('GroupSelfRegistration') . '</span>',
+    Display::return_icon('user.png', get_lang('GroupSelfRegistration')).'<span>'.get_lang('GroupSelfRegistration').'</span>',
     null,
     false
 );
@@ -97,7 +97,7 @@ $group = array(
 $form->addGroup(
     $group,
     '',
-    Display::return_icon('folder.png', get_lang('GroupDocument')) . '<span>' . get_lang('GroupDocument') . '</span>',
+    Display::return_icon('folder.png', get_lang('GroupDocument')).'<span>'.get_lang('GroupDocument').'</span>',
     null,
     false
 );
@@ -111,7 +111,7 @@ $group = array(
 $form->addGroup(
     $group,
     '',
-    Display::return_icon('works.png', get_lang('GroupWork')) . '<span>' . get_lang('GroupWork') . '</span>',
+    Display::return_icon('works.png', get_lang('GroupWork')).'<span>'.get_lang('GroupWork').'</span>',
     null,
     false
 );
@@ -125,7 +125,7 @@ $group = array(
 $form->addGroup(
     $group,
     '',
-    Display::return_icon('agenda.png', get_lang('GroupCalendar')) . '<span>' . get_lang('GroupCalendar') . '</span>',
+    Display::return_icon('agenda.png', get_lang('GroupCalendar')).'<span>'.get_lang('GroupCalendar').'</span>',
     null,
     false
 );
@@ -142,7 +142,7 @@ $group = array(
 $form->addGroup(
     $group,
     '',
-    Display::return_icon('announce.png', get_lang('GroupAnnouncements')) . '<span>' . get_lang('GroupAnnouncements') . '</span>',
+    Display::return_icon('announce.png', get_lang('GroupAnnouncements')).'<span>'.get_lang('GroupAnnouncements').'</span>',
     null,
     false
 );
@@ -156,7 +156,7 @@ $group = array(
 $form->addGroup(
     $group,
     '',
-    Display::return_icon('forum.png', get_lang('GroupForum')) . '<span>' . get_lang('GroupForum') . '</span>',
+    Display::return_icon('forum.png', get_lang('GroupForum')).'<span>'.get_lang('GroupForum').'</span>',
     null,
     false
 );
@@ -183,7 +183,7 @@ $group = array(
 $form->addGroup(
     $group,
     '',
-    Display::return_icon('chat.png', get_lang('Chat')) . '<span>' . get_lang('Chat') . '</span>',
+    Display::return_icon('chat.png', get_lang('Chat')).'<span>'.get_lang('Chat').'</span>',
     null,
     false
 );

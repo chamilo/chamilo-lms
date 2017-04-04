@@ -12,7 +12,7 @@ use ChamiloSession as Session;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-$current_course_tool  = TOOL_QUIZ;
+$current_course_tool = TOOL_QUIZ;
 
 // Clear the exercise session just in case
 Session::erase('objExercise');
@@ -70,7 +70,7 @@ if ($origin != 'learnpath') {
 
 $html = '';
 $message = '';
-$html.= '<div class="exercise">';
+$html .= '<div class="exercise">';
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 $edit_link = '';
 if ($is_allowed_to_edit && $objExercise->sessionId == $sessionId) {
@@ -116,7 +116,7 @@ if (isset($exercise_stat_info['exe_id'])) {
 
 // 2. Exercise button
 // Notice we not add there the lp_item_view_id because is not already generated
-$exercise_url = api_get_path(WEB_CODE_PATH) . 'exercise/exercise_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'&origin='.$origin.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.'&learnpath_item_view_id='.$learnpathItemViewId.$extra_params;
+$exercise_url = api_get_path(WEB_CODE_PATH).'exercise/exercise_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'&origin='.$origin.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.'&learnpath_item_view_id='.$learnpathItemViewId.$extra_params;
 $exercise_url_button = Display::url(
     $label,
     $exercise_url,
@@ -181,8 +181,8 @@ if (!empty($attempts)) {
             $attempt_result['exe_result'],
             $attempt_result['exe_weighting']
         );
-        $attempt_url = api_get_path(WEB_CODE_PATH) . 'exercise/result.php?';
-        $attempt_url .= api_get_cidreq() . '&show_headers=1&';
+        $attempt_url = api_get_path(WEB_CODE_PATH).'exercise/result.php?';
+        $attempt_url .= api_get_cidreq().'&show_headers=1&';
         $attempt_url .= http_build_query([
             'id' => $attempt_result['exe_id']
         ]);
@@ -192,7 +192,7 @@ if (!empty($attempts)) {
             get_lang('Show'),
             $attempt_url,
             [
-                'class' => $btn_class . 'btn btn-default',
+                'class' => $btn_class.'btn btn-default',
                 'data-title' => get_lang('Show'),
                 'data-size' => 'lg'
             ]
@@ -210,7 +210,7 @@ if (!empty($attempts)) {
             ),
             'userIp' => $attempt_result['user_ip']
         );
-        $attempt_link .= "&nbsp;&nbsp;&nbsp;" . $teacher_revised;
+        $attempt_link .= "&nbsp;&nbsp;&nbsp;".$teacher_revised;
 
         if (in_array(
             $objExercise->results_disabled,
@@ -305,7 +305,7 @@ if ($objExercise->selectAttempts()) {
 }
 
 if ($time_control) {
-    $html.= $objExercise->return_time_left_div();
+    $html .= $objExercise->return_time_left_div();
 }
 
 $html .= $message;
@@ -325,7 +325,7 @@ $html .= Display::tag(
     $table_content,
     ['class' => 'table-responsive']
 );
-$html.= '</div>';
+$html .= '</div>';
 echo $html;
 
 Display::display_footer();

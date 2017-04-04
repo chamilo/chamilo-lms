@@ -32,11 +32,11 @@ $user_info      = api_get_user_info($user_id);
 $session = array();
 $user_name = $user_info['complete_name'];
 
-$course_list = SessionManager::get_course_list_by_session_id ($session_id);
+$course_list = SessionManager::get_course_list_by_session_id($session_id);
 $session_list = SessionManager::get_session_by_course($course_id);
 $total_quota_bytes = DocumentManager::get_course_quota();
-$quota_bytes = DocumentManager::documents_total_space($course_id, 0 , 0);
-$quota_percentage = round($quota_bytes/$total_quota_bytes, 2)*100;
+$quota_bytes = DocumentManager::documents_total_space($course_id, 0, 0);
+$quota_percentage = round($quota_bytes / $total_quota_bytes, 2) * 100;
 
 $session[] = array(get_lang('Course').' ('.format_file_size($quota_bytes).')', $quota_percentage);
 
@@ -46,11 +46,11 @@ if (!empty($session_list)) {
     foreach ($session_list as $session_data) {
         $quota_percentage = 0;
         $quota_bytes = intval(DocumentManager::documents_total_space($course_id, null, $session_data['id']));
-        if (!empty($quota_bytes))  {
-            $quota_percentage = round($quota_bytes/$total_quota_bytes, 2)*100;
+        if (!empty($quota_bytes)) {
+            $quota_percentage = round($quota_bytes / $total_quota_bytes, 2) * 100;
         }
         if ($session_id == $session_data['id']) {
-            $session_data['name'] = $session_data['name'] . ' * ';
+            $session_data['name'] = $session_data['name'].' * ';
         }
         $used_quota_bytes += $quota_bytes;
         $session[] = array(
@@ -66,11 +66,11 @@ if (!empty($group_list)) {
         $quota_percentage = 0;
         $my_group_id = $group_data['id'];
         $quota_bytes = intval(DocumentManager::documents_total_space($course_id, $my_group_id, 0));
-        if (!empty($quota_bytes))  {
-            $quota_percentage = round($quota_bytes/$total_quota_bytes, 2)*100;
+        if (!empty($quota_bytes)) {
+            $quota_percentage = round($quota_bytes / $total_quota_bytes, 2) * 100;
         }
         if ($group_id == $my_group_id) {
-            $group_data['name'] = $group_data['name'] . ' * ';
+            $group_data['name'] = $group_data['name'].' * ';
         }
         $used_quota_bytes += $quota_bytes;
         $session[] = array(addslashes(get_lang('Group').': '.$group_data['name']).' ('.format_file_size($quota_bytes).')', $quota_percentage);
@@ -85,7 +85,7 @@ if (is_array($document_list)) {
         }
     }
     if ($quota_bytes != 0) {
-       $quota_percentage = round($quota_bytes/$total_quota_bytes, 2)*100;
+       $quota_percentage = round($quota_bytes / $total_quota_bytes, 2) * 100;
     }
 
     $session[] = array(addslashes(get_lang('Teacher').': '.$user_name).' ('.format_file_size($quota_bytes).')', $quota_percentage);
@@ -100,15 +100,15 @@ if (is_array($document_list)) {
                 }
             }
             if ($quota_bytes != 0) {
-                $quota_percentage = round($quota_bytes/$total_quota_bytes, 2)*100;
+                $quota_percentage = round($quota_bytes / $total_quota_bytes, 2) * 100;
             }
         }
-        $session[] = array(addslashes(sprintf(get_lang('TeacherXInSession'),$user_name)), $quota_percentage);
+        $session[] = array(addslashes(sprintf(get_lang('TeacherXInSession'), $user_name)), $quota_percentage);
 
    }
 }
 
-$quota_percentage = round(($total_quota_bytes - $used_quota_bytes)/$total_quota_bytes, 2)*100;
+$quota_percentage = round(($total_quota_bytes - $used_quota_bytes) / $total_quota_bytes, 2) * 100;
 $session[] = array(addslashes(get_lang('ShowCourseQuotaUse')).' ('.format_file_size($total_quota_bytes - $used_quota_bytes).') ', $quota_percentage);
 $quota_data = json_encode($session);
 

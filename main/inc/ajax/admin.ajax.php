@@ -48,9 +48,9 @@ switch ($action) {
             $urlInfo = api_get_access_url($accessUrlId);
             $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $urlInfo['url']));
             $cleanUrl = str_replace('/', '-', $url);
-            $newUrlDir = api_get_path(SYS_APP_PATH) . "home/$cleanUrl/admin/";
+            $newUrlDir = api_get_path(SYS_APP_PATH)."home/$cleanUrl/admin/";
         } else {
-            $newUrlDir = api_get_path(SYS_APP_PATH) . "home/admin/";
+            $newUrlDir = api_get_path(SYS_APP_PATH)."home/admin/";
         }
 
         if (!file_exists($newUrlDir)) {
@@ -173,17 +173,17 @@ function check_system_version()
             }
 
             if (version_compare($system_version, $version_info, '<')) {
-                $output = '<span style="color:red">' . get_lang('YourVersionNotUpToDate') .'<br />
+                $output = '<span style="color:red">'.get_lang('YourVersionNotUpToDate').'<br />
                            '.get_lang('LatestVersionIs').' <b>Chamilo '.$version_info.'</b>.  <br />
-                           '.get_lang('YourVersionIs').' <b>Chamilo '.$system_version. '</b>.  <br />'.str_replace('http://www.chamilo.org', '<a href="http://www.chamilo.org">http://www.chamilo.org</a>', get_lang('PleaseVisitOurWebsite')).'</span>';
+                           '.get_lang('YourVersionIs').' <b>Chamilo '.$system_version.'</b>.  <br />'.str_replace('http://www.chamilo.org', '<a href="http://www.chamilo.org">http://www.chamilo.org</a>', get_lang('PleaseVisitOurWebsite')).'</span>';
             } else {
                 $output = '<span style="color:green">'.get_lang('VersionUpToDate').': Chamilo '.$version_info.'</span>';
             }
         } else {
-            $output = '<span style="color:red">' . get_lang('ImpossibleToContactVersionServerPleaseTryAgain') . '</span>';
+            $output = '<span style="color:red">'.get_lang('ImpossibleToContactVersionServerPleaseTryAgain').'</span>';
         }
     } else {
-        $output = '<span style="color:red">' . get_lang('AllowurlfopenIsSetToOff') . '</span>';
+        $output = '<span style="color:red">'.get_lang('AllowurlfopenIsSetToOff').'</span>';
     }
     return $output;
 }
@@ -207,17 +207,17 @@ function _http_request($ip, $port = 80, $uri = '/', $getdata = array(), $timeout
     $getdata_str = count($getdata) ? '?' : '';
 
     foreach ($getdata as $k => $v) {
-                $getdata_str .= urlencode($k) .'='. urlencode($v) . '&';
+                $getdata_str .= urlencode($k).'='.urlencode($v).'&';
     }
 
     $crlf = "\r\n";
-    $req = $verb .' '. $uri . $getdata_str .' HTTP/1.1' . $crlf;
-    $req .= 'Host: '. $ip . $crlf;
-    $req .= 'User-Agent: Mozilla/5.0 Firefox/3.6.12' . $crlf;
-    $req .= 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8' . $crlf;
-    $req .= 'Accept-Language: en-us,en;q=0.5' . $crlf;
-    $req .= 'Accept-Encoding: deflate' . $crlf;
-    $req .= 'Accept-Charset: utf-8;q=0.7,*;q=0.7' . $crlf;
+    $req = $verb.' '.$uri.$getdata_str.' HTTP/1.1'.$crlf;
+    $req .= 'Host: '.$ip.$crlf;
+    $req .= 'User-Agent: Mozilla/5.0 Firefox/3.6.12'.$crlf;
+    $req .= 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'.$crlf;
+    $req .= 'Accept-Language: en-us,en;q=0.5'.$crlf;
+    $req .= 'Accept-Encoding: deflate'.$crlf;
+    $req .= 'Accept-Charset: utf-8;q=0.7,*;q=0.7'.$crlf;
 
     $req .= $crlf;
 

@@ -13,7 +13,7 @@
 
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
-$current_course_tool  = TOOL_GROUP;
+$current_course_tool = TOOL_GROUP;
 
 // Notice for unauthorized people.
 api_protect_course_script(true);
@@ -22,8 +22,8 @@ $group_id = api_get_group_id();
 $current_group = GroupManager::get_group_properties($group_id);
 
 $nameTools = get_lang('EditGroup');
-$interbreadcrumb[] = array ('url' => 'group.php?'.api_get_cidreq(), 'name' => get_lang('Groups'));
-$interbreadcrumb[] = array ('url' => 'group_space.php?'.api_get_cidreq(), 'name' => $current_group['name']);
+$interbreadcrumb[] = array('url' => 'group.php?'.api_get_cidreq(), 'name' => get_lang('Groups'));
+$interbreadcrumb[] = array('url' => 'group_space.php?'.api_get_cidreq(), 'name' => $current_group['name']);
 
 $is_group_member = GroupManager::is_tutor_of_group(api_get_user_id(), $current_group['iid']);
 

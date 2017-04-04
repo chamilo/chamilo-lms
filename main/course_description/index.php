@@ -9,7 +9,7 @@
 */
 
 require_once __DIR__.'/../inc/global.inc.php';
-$current_course_tool  = TOOL_COURSE_DESCRIPTION;
+$current_course_tool = TOOL_COURSE_DESCRIPTION;
 
 // defining constants
 define('ADD_BLOCK', 8);
@@ -23,7 +23,7 @@ api_protect_course_script(true);
 // get actions
 $actions = array('listing', 'add', 'edit', 'delete', 'history');
 $action = 'listing';
-if (isset($_GET['action']) && in_array($_GET['action'],$actions)) {
+if (isset($_GET['action']) && in_array($_GET['action'], $actions)) {
 	$action = $_GET['action'];
 }
 
@@ -42,7 +42,7 @@ if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true') {
 }
 
 // interbreadcrumb
-$interbreadcrumb[] = array ("url" => "index.php?".api_get_cidreq(), "name" => get_lang('CourseProgram'));
+$interbreadcrumb[] = array("url" => "index.php?".api_get_cidreq(), "name" => get_lang('CourseProgram'));
 if ($description_type == 1) {
     $interbreadcrumb[] = array("url" => "#", "name" => get_lang('GeneralDescription'));
 }

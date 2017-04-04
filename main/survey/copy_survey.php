@@ -6,7 +6,7 @@
 
 // Setting the global file that gets the general configuration, the databases, the languages, ...
 require_once __DIR__.'/../inc/global.inc.php';
-$current_course_tool  = TOOL_COURSE_MAINTENANCE;
+$current_course_tool = TOOL_COURSE_MAINTENANCE;
 api_protect_course_script(true);
 
 // Notice for unauthorized people.

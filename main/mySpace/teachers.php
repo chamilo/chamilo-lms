@@ -20,14 +20,14 @@ api_block_anonymous_users();
 
 $this_section = SECTION_TRACKING;
 
-$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('MySpace'));
+$interbreadcrumb[] = array("url" => "index.php", "name" => get_lang('MySpace'));
 
 if (isset($_GET["user_id"]) && $_GET["user_id"] != "" && !isset($_GET["type"])) {
-    $interbreadcrumb[] = array ("url" => "teachers.php", "name" => get_lang('Teachers'));
+    $interbreadcrumb[] = array("url" => "teachers.php", "name" => get_lang('Teachers'));
 }
 
-if (isset($_GET["user_id"]) && $_GET["user_id"]!="" && isset($_GET["type"]) && $_GET["type"] == "coach") {
-    $interbreadcrumb[] = array ("url" => "coaches.php", "name" => get_lang('Tutors'));
+if (isset($_GET["user_id"]) && $_GET["user_id"] != "" && isset($_GET["type"]) && $_GET["type"] == "coach") {
+    $interbreadcrumb[] = array("url" => "coaches.php", "name" => get_lang('Tutors'));
 }
 
 function get_count_users()
@@ -123,8 +123,8 @@ function get_users($from, $limit, $column, $direction)
                 $courseInfo = api_get_course_info($course_code);
                 $courseId = $courseInfo['real_id'];
                 if (CourseManager :: is_user_subscribed_in_course($student_id, $course_code, true)) {
-                    $avg_time_spent 	+= Tracking :: get_time_spent_on_the_course($student_id, $courseId, $_GET['id_session']);
-                    $my_average 		 = Tracking :: get_avg_student_score($student_id, $course_code);
+                    $avg_time_spent += Tracking :: get_time_spent_on_the_course($student_id, $courseId, $_GET['id_session']);
+                    $my_average = Tracking :: get_avg_student_score($student_id, $course_code);
                     if (is_numeric($my_average)) {
                         $avg_student_score += $my_average;
                     }
@@ -163,7 +163,7 @@ function get_users($from, $limit, $column, $direction)
             $detailsLink = '<a href="myStudents.php?student='.$student_id.'&id_coach='.$coach_id.'&id_session='.$sessionId.'">
 				          '.Display::return_icon('2rightarrow.png', get_lang('Details')).'</a>';
         } else {
-            $detailsLink =  '<a href="myStudents.php?student='.$student_id.'">
+            $detailsLink = '<a href="myStudents.php?student='.$student_id.'">
 				            '.Display::return_icon('2rightarrow.png', get_lang('Details')).'</a>';
         }
         $row[] = $detailsLink;
@@ -182,7 +182,7 @@ $sort_by_first_name = api_sort_by_first_name();
 $actionsLeft = '';
 if (api_is_drh()) {
     $menu_items = array(
-        Display::url(Display::return_icon('stats.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM), api_get_path(WEB_CODE_PATH)."auth/my_progress.php" ),
+        Display::url(Display::return_icon('stats.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM), api_get_path(WEB_CODE_PATH)."auth/my_progress.php"),
         Display::url(Display::return_icon('user.png', get_lang('Students'), array(), ICON_SIZE_MEDIUM), 'student.php'),
         Display::url(Display::return_icon('teacher_na.png', get_lang('Trainers'), array(), ICON_SIZE_MEDIUM), 'teachers.php'),
         Display::url(Display::return_icon('course.png', get_lang('Courses'), array(), ICON_SIZE_MEDIUM), 'course.php'),

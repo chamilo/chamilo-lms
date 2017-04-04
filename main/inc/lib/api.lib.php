@@ -611,6 +611,9 @@ define('ADD_THEMATIC_PLAN', 6);
 // Max online users to show per page (whoisonline)
 define('MAX_ONLINE_USERS', 12);
 
+// Number of characters maximum to show in preview of course blog posts
+define('BLOG_MAX_PREVIEW_CHARS', 800);
+
 // Make sure the CHAMILO_LOAD_WYSIWYG constant is defined
 // To remove CKeditor libs from HTML, set this constant to true before loading
 if (!defined('CHAMILO_LOAD_WYSIWYG')) {

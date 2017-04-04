@@ -165,7 +165,7 @@
             document.getElementById('wrapper-iframe')
                 .setAttribute(
                     'style',
-                    'width:100%; height:100%; overflow:auto; position:auto; -webkit-overflow-scrolling:touch !important;'
+                    'width:100%; overflow:auto; position:auto; -webkit-overflow-scrolling:touch !important;'
                 );
         }
 

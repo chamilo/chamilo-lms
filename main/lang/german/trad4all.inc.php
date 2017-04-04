@@ -7680,8 +7680,8 @@ $SkillFromCourseXDeletedSinceThen = "Diese Fertigkeit wurde durch Kurs %s erworb
 $SaveAndAddNewItem = "Speichern und neues Element hinzufügen";
 $AnnouncementChooseRecipientsDescription = "Standardmäßig wird diese Ankündigung an alle Benutzer gesendet. Aber Sie können auch andere Empfänger auswählen.";
 $ChooseRecipients = "Empfänger auswählen";
-$StudentCourseProgressX = "Fortschritt: %s%";
+$StudentCourseProgressX = "Fortschritt: %s %%";
 $SessionDurationNotStartedMaxX = "Diese Sitzung hat eine maximale Dauer von %s Tagen.";
-$StudentCourseScoreX = "Ergebnis: %s%";
+$StudentCourseScoreX = "Ergebnis: %s %%";
 $StudentCourseCertificateX = "Zertifikat: %s";
 ?>

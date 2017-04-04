@@ -3562,6 +3562,8 @@ class CourseManager
                 }
 
                 $params = [];
+                //Param (course_code) needed to get the student info in page "My courses"
+                $params['course_code'] = $course['code'];
                 // Get notifications.
                 $course_info['id_session'] = null;
                 $courseUserInfo = self::getUserCourseInfo($user_id, $courseId);
@@ -3707,7 +3709,8 @@ class CourseManager
 
         $sql = "SELECT DISTINCT
                     course.id,
-                    course_rel_user.status status
+                    course_rel_user.status status,
+                    course.code as course_code
                 FROM $TABLECOURS course 
                 INNER JOIN $TABLECOURSUSER course_rel_user
                 ON (course.id = course_rel_user.c_id)
@@ -3753,6 +3756,9 @@ class CourseManager
             $iconName = basename($course_info['course_image']);
 
             $params = array();
+            //Param (course_code) needed to get the student process
+            $params['course_code'] = $row['course_code'];
+
             if ($showCustomIcon === 'true' && $iconName != 'course.png') {
                 $params['thumbnails'] = $course_info['course_image'];
                 $params['image'] = $course_info['course_image_large'];
@@ -3909,6 +3915,8 @@ class CourseManager
             }
 
             $params = array();
+            //Param (course_code) needed to get the student process
+            $params['course_code'] = $row['code'];
             $params['edit_actions'] = '';
             $params['document'] = '';
             if (api_is_platform_admin()) {

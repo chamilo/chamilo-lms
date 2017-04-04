@@ -287,7 +287,11 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 // $_configuration['course_introduction_html_strict_filtering'] = true;
 // Prevents the duplicate upload in assignments
 // $_configuration['assignment_prevent_duplicate_upload'] = false;
-// Set ConsideredWorkingTime work extra field variable from main/admin/extra_fields.php?type=work
+//Show student progress in My courses page
+//$_configuration['course_student_info']['score'] = false;
+//$_configuration['course_student_info']['progress'] = false;
+//$_configuration['course_student_info']['certificate'] = false;
+// Set ConsideredWorkingTime work extra field variable to show in MyStudents page works report
 // (with internal id 'work_time' as below) and enable the following line to show in MyStudents page works report
 // $_configuration['considered_working_time'] = 'work_time';
 // During CSV special imports update users emails to x@example.com

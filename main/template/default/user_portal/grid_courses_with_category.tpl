@@ -64,6 +64,27 @@
                                         {% endif %}
                                     </h4>
                                     <div class="notifications">{{ item.notifications }}</div>
+
+                                    {% if item.student_info %}
+                                    <div class="course-student-info">
+                                        <div class="student-info">
+
+                                            {% if (item.student_info.progress is not null) %}
+                                            {{ "StudentCourseProgressX" | get_lang | format(item.student_info.progress) }}
+                                            {% endif %}
+
+                                            {% if (item.student_info.score is not null) %}
+                                            {{ "StudentCourseScoreX" | get_lang | format(item.student_info.score) }}
+                                            {% endif %}
+
+                                            {% if (item.student_info.certificate is not null) %}
+                                            {{ "StudentCourseCertificateX" | get_lang | format(item.student_info.certificate) }}
+                                            {% endif %}
+
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                    
                                 </div>
                             </div>
                         </div>

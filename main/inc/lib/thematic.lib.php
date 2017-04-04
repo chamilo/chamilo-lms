@@ -614,7 +614,7 @@ class Thematic
      * @param array $data
      * @return array
      */
-    public function get_thematic_plan_div($data)
+    public function get_thematic_plan_array($data)
     {
         $final_return = array();
         $uinfo = api_get_user_info();
@@ -632,10 +632,10 @@ class Thematic
                 }
             }
 
-            $no_data = true;
             $session_star = '';
-            $return = '<div id="thematic_plan_'.$thematic_id.'">';
+            $return = array();
             if (!empty($default_thematic_plan_title)) {
+
                 foreach ($default_thematic_plan_title as $id=>$title) {
                     //avoid others
                     if ($title == 'Others' && empty($data[$thematic_id][$id]['description'])) {
@@ -647,17 +647,18 @@ class Thematic
                                 $session_star = api_get_session_image(api_get_session_id(), $uinfo['status']);
                             }
                         }
-                        $return  .= Display::tag('h3', Security::remove_XSS($data[$thematic_id][$id]['title'], STUDENT).$session_star);
-                        $return  .= Security::remove_XSS($data[$thematic_id][$id]['description'], STUDENT);
-                        $no_data  = false;
+                        
+                        $return[$id]['title'] = Security::remove_XSS($data[$thematic_id][$id]['title'], STUDENT).$session_star;
+                        $return[$id]['description'] = Security::remove_XSS($data[$thematic_id][$id]['description'], STUDENT);
                     }
                 }
             }
+            $final_return[$thematic_id] = $return;
+            /*
             if ($no_data) {
                 $return .= '<div><em>'.get_lang('StillDoNotHaveAThematicPlan').'</em></div>';
             }
-            $return  .= '</div>';
-            $final_return[$thematic_id] = $return;
+            */            
         }
 
         return $final_return;

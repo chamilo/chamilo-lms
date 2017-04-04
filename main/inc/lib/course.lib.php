@@ -3605,7 +3605,7 @@ class CourseManager
                 $params['title'] = $course_info['title'];
                 $params['link'] = $course_info['course_public_url'].'?id_session=0&autoreg=1';
                 if (api_get_setting('display_teacher_in_courselist') === 'true') {
-                    $params['teachers'] = self::getTeachersFromCourse($courseId, false);
+                    $params['teachers'] = self::getTeachersFromCourse($courseId, true);
                 }
 
                 if ($showCustomIcon === 'true') {
@@ -3794,7 +3794,7 @@ class CourseManager
             $courseUrl = api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/index.php?id_session=0';
             $teachers = [];
             if (api_get_setting('display_teacher_in_courselist') === 'true') {
-                $teachers = self::getTeachersFromCourse($course_info['real_id'], false);
+                $teachers = self::getTeachersFromCourse($course_info['real_id'], true);
             }
 
             $params['status'] = $row['status'];
@@ -4189,7 +4189,7 @@ class CourseManager
         if (api_get_setting('display_teacher_in_courselist') === 'true') {
             $teacher_list = self::getTeachersFromCourse(
                 $course_info['real_id'],
-                false
+                true
             );
 
             $course_coachs = self::get_coachs_from_course(

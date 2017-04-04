@@ -34,7 +34,6 @@ if (isset($_GET['id_coach']) && $_GET['id_coach'] != '') {
 }
 
 if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
-
     $a_sessions = SessionManager::get_sessions_followed_by_drh(api_get_user_id());
 
     if (!api_is_session_admin()) {

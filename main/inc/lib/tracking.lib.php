@@ -3273,7 +3273,7 @@ class Tracking
             }
         }
 
-        $tbl_session_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+        $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
         $access_url_id = api_get_current_access_url_id();
 
         $sql = "
@@ -3284,7 +3284,8 @@ class Tracking
                     name,
                     access_start_date,
                     access_end_date
-                FROM $tbl_session session INNER JOIN $tbl_session_rel_access_url session_rel_url
+                FROM $tbl_session session 
+                INNER JOIN $tbl_session_rel_access_url session_rel_url
                 ON (session.id = session_rel_url.session_id)
                 WHERE
                     id_coach = $coach_id AND
@@ -3298,7 +3299,8 @@ class Tracking
                     session.access_end_date
                 FROM $tbl_session as session
                 INNER JOIN $tbl_session_course_user as session_course_user
-                    ON session.id = session_course_user.session_id AND
+                ON 
+                    session.id = session_course_user.session_id AND
                     session_course_user.user_id = $coach_id AND
                     session_course_user.status = 2
                 INNER JOIN $tbl_session_rel_access_url session_rel_url

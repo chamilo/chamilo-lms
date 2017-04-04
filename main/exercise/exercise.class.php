@@ -1014,18 +1014,13 @@ class Exercise
 
         // Adding category info in the category list with question list:
         if (!empty($questions_by_category)) {
-            /*$em = Database::getManager();
-            $repo = $em->getRepository('ChamiloCoreBundle:CQuizCategory');*/
             $newCategoryList = array();
-
             foreach ($questions_by_category as $categoryId => $questionList) {
                 $cat = new TestCategory();
                 $cat = $cat->getCategory($categoryId);
 
                 $cat = (array)$cat;
                 $cat['iid'] = $cat['id'];
-                //*$cat['name'] = $cat['name'];
-
                 $categoryParentInfo = null;
                 // Parent is not set no loop here
                 if (!empty($cat['parent_id'])) {
@@ -1074,6 +1069,7 @@ class Exercise
 
             $result['category_with_questions_list'] = $newCategoryList;
         }
+
         return $result;
     }
 
@@ -1992,161 +1988,118 @@ class Exercise
                 }
             }
 
-            if (true) {
-                $option = array(
-                    EX_Q_SELECTION_ORDERED => get_lang('OrderedByUser'),
-                    //  defined by user
-                    EX_Q_SELECTION_RANDOM => get_lang('Random'),
-                    // 1-10, All
-                    'per_categories' => '--------'.get_lang(
-                            'UsingCategories'
-                        ).'----------',
+            $option = array(
+                EX_Q_SELECTION_ORDERED => get_lang('OrderedByUser'),
+                //  Defined by user
+                EX_Q_SELECTION_RANDOM => get_lang('Random'),
+                // 1-10, All
+                'per_categories' => '--------'.get_lang('UsingCategories').'----------',
+                // Base (A 123 {3} B 456 {3} C 789{2} D 0{0}) --> Matrix {3, 3, 2, 0}
+                EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_ORDERED => get_lang('OrderedCategoriesAlphabeticallyWithQuestionsOrdered'),
+                // A 123 B 456 C 78 (0, 1, all)
+                EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_ORDERED => get_lang('RandomCategoriesWithQuestionsOrdered'),
+                // C 78 B 456 A 123
+                EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_RANDOM => get_lang('OrderedCategoriesAlphabeticallyWithRandomQuestions'),
+                // A 321 B 654 C 87
+                EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_RANDOM => get_lang('RandomCategoriesWithRandomQuestions'),
+                // C 87 B 654 A 321
 
-                    // Base (A 123 {3} B 456 {3} C 789{2} D 0{0}) --> Matrix {3, 3, 2, 0}
-                    EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_ORDERED => get_lang(
-                        'OrderedCategoriesAlphabeticallyWithQuestionsOrdered'
-                    ),
-                    // A 123 B 456 C 78 (0, 1, all)
-                    EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_ORDERED => get_lang(
-                        'RandomCategoriesWithQuestionsOrdered'
-                    ),
-                    // C 78 B 456 A 123
-
-                    EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_RANDOM => get_lang(
-                        'OrderedCategoriesAlphabeticallyWithRandomQuestions'
-                    ),
-                    // A 321 B 654 C 87
-                    EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_RANDOM => get_lang(
-                        'RandomCategoriesWithRandomQuestions'
-                    ),
-                    //C 87 B 654 A 321
-
-                    //EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_ORDERED_NO_GROUPED => get_lang('RandomCategoriesWithQuestionsOrderedNoQuestionGrouped'),
-                    /*    B 456 C 78 A 123
-                            456 78 123
-                            123 456 78
-                    */
-                    //EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_RANDOM_NO_GROUPED => get_lang('RandomCategoriesWithRandomQuestionsNoQuestionGrouped'),
-                    /*
-                        A 123 B 456 C 78
-                        B 456 C 78 A 123
-                        B 654 C 87 A 321
-                        654 87 321
-                        165 842 73
-                    */
-                    //EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_ORDERED => get_lang('OrderedCategoriesByParentWithQuestionsOrdered'),
-                    //EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_RANDOM => get_lang('OrderedCategoriesByParentWithQuestionsRandom'),
-                );
-
-                $form->addElement(
-                    'select',
-                    'question_selection_type',
-                    array(get_lang('QuestionSelection')),
-                    $option,
-                    array(
-                        'id' => 'questionSelection',
-                        'onchange' => 'checkQuestionSelection()'
-                    )
-                );
-
-                $displayMatrix = 'none';
-                $displayRandom = 'none';
-                $selectionType = $this->getQuestionSelectionType();
-                switch ($selectionType) {
-                    case EX_Q_SELECTION_RANDOM:
-                        $displayRandom = 'block';
-                        break;
-                    case $selectionType >= EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_ORDERED:
-                        $displayMatrix = 'block';
-                        break;
-                }
-
-                $form->addElement(
-                    'html',
-                    '<div id="hidden_random" style="display:'.$displayRandom.'">'
-                );
-                // Number of random question.
-                $max = ($this->id > 0) ? $this->selectNbrQuestions() : 10;
-                $option = range(0, $max);
-                $option[0] = get_lang('No');
-                $option[-1] = get_lang('AllQuestionsShort');
-                $form->addElement(
-                    'select',
-                    'randomQuestions',
-                    array(
-                        get_lang('RandomQuestions'),
-                        get_lang('RandomQuestionsHelp')
-                    ),
-                    $option,
-                    array('id' => 'randomQuestions')
-                );
-                $form->addElement('html', '</div>');
-
-                $form->addElement(
-                    'html',
-                    '<div id="hidden_matrix" style="display:'.$displayMatrix.'">'
-                );
-
-                // Category selection.
-                $cat = new TestCategory();
-                $cat_form = $cat->returnCategoryForm($this);
-                if (empty($cat_form)) {
-                    $cat_form = '<span class="label label-warning">' . get_lang('NoCategoriesDefined') . '</span>';
-                }
-                $form->addElement('label', null, $cat_form);
-                $form->addElement('html', '</div>');
-
-                // Category name.
-                $radio_display_cat_name = array(
-                    $form->createElement('radio', 'display_category_name', null, get_lang('Yes'), '1'),
-                    $form->createElement('radio', 'display_category_name', null, get_lang('No'), '0')
-                );
-                $form->addGroup($radio_display_cat_name, null, get_lang('QuestionDisplayCategoryName'));
-
-                // Random answers.
-                $radios_random_answers = array(
-                    $form->createElement('radio', 'randomAnswers', null, get_lang('Yes'), '1'),
-                    $form->createElement('radio', 'randomAnswers', null, get_lang('No'), '0')
-                );
-                $form->addGroup($radios_random_answers, null, get_lang('RandomAnswers'));
-
-                // Hide question title.
-                $group = array(
-                    $form->createElement('radio', 'hide_question_title', null, get_lang('Yes'), '1'),
-                    $form->createElement('radio', 'hide_question_title', null, get_lang('No'), '0')
-                );
-                $form->addGroup($group, null, get_lang('HideQuestionTitle'));
-            } else {
-
-                // number of random question
+                //EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_ORDERED_NO_GROUPED => get_lang('RandomCategoriesWithQuestionsOrderedNoQuestionGrouped'),
+                /*    B 456 C 78 A 123
+                        456 78 123
+                        123 456 78
+                */
+                //EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_RANDOM_NO_GROUPED => get_lang('RandomCategoriesWithRandomQuestionsNoQuestionGrouped'),
                 /*
-                $max = ($this->id > 0) ? $this->selectNbrQuestions() : 10 ;
-                $option = range(0, $max);
-                $option[0] = get_lang('No');
-                $option[-1] = get_lang('AllQuestionsShort');
-                $form->addElement('select', 'randomQuestions',array(get_lang('RandomQuestions'), get_lang('RandomQuestionsHelp')), $option, array('id'=>'randomQuestions'));
+                    A 123 B 456 C 78
+                    B 456 C 78 A 123
+                    B 654 C 87 A 321
+                    654 87 321
+                    165 842 73
+                */
+                //EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_ORDERED => get_lang('OrderedCategoriesByParentWithQuestionsOrdered'),
+                //EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_RANDOM => get_lang('OrderedCategoriesByParentWithQuestionsRandom'),
+            );
 
-                // Random answers
-                $radios_random_answers = array();
-                $radios_random_answers[] = $form->createElement('radio', 'randomAnswers', null, get_lang('Yes'),'1');
-                $radios_random_answers[] = $form->createElement('radio', 'randomAnswers', null, get_lang('No'),'0');
-                $form->addGroup($radios_random_answers, null, get_lang('RandomAnswers'), '');
+            $form->addElement(
+                'select',
+                'question_selection_type',
+                array(get_lang('QuestionSelection')),
+                $option,
+                array(
+                    'id' => 'questionSelection',
+                    'onchange' => 'checkQuestionSelection()'
+                )
+            );
 
-                // Random by category
-                $form->addElement('html','<div class="clear">&nbsp;</div>');
-                $radiocat = array();
-                $radiocat[] = $form->createElement('radio', 'randomByCat', null, get_lang('YesWithCategoriesShuffled'),'1');
-                $radiocat[] = $form->createElement('radio', 'randomByCat', null, get_lang('YesWithCategoriesSorted'),'2');
-                $radiocat[] = $form->createElement('radio', 'randomByCat', null, get_lang('No'),'0');
-                $radioCatGroup = $form->addGroup($radiocat, null, get_lang('RandomQuestionByCategory'), '');
-                $form->addElement('html','<div class="clear">&nbsp;</div>');
-
-                // add the radio display the category name for student
-                $radio_display_cat_name = array();
-                $radio_display_cat_name[] = $form->createElement('radio', 'display_category_name', null, get_lang('Yes'), '1');
-                $radio_display_cat_name[] = $form->createElement('radio', 'display_category_name', null, get_lang('No'), '0');
-                $form->addGroup($radio_display_cat_name, null, get_lang('QuestionDisplayCategoryName'), '');*/
+            $displayMatrix = 'none';
+            $displayRandom = 'none';
+            $selectionType = $this->getQuestionSelectionType();
+            switch ($selectionType) {
+                case EX_Q_SELECTION_RANDOM:
+                    $displayRandom = 'block';
+                    break;
+                case $selectionType >= EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_ORDERED:
+                    $displayMatrix = 'block';
+                    break;
             }
+
+            $form->addElement(
+                'html',
+                '<div id="hidden_random" style="display:'.$displayRandom.'">'
+            );
+            // Number of random question.
+            $max = ($this->id > 0) ? $this->selectNbrQuestions() : 10;
+            $option = range(0, $max);
+            $option[0] = get_lang('No');
+            $option[-1] = get_lang('AllQuestionsShort');
+            $form->addElement(
+                'select',
+                'randomQuestions',
+                array(
+                    get_lang('RandomQuestions'),
+                    get_lang('RandomQuestionsHelp')
+                ),
+                $option,
+                array('id' => 'randomQuestions')
+            );
+            $form->addElement('html', '</div>');
+
+            $form->addElement(
+                'html',
+                '<div id="hidden_matrix" style="display:'.$displayMatrix.'">'
+            );
+
+            // Category selection.
+            $cat = new TestCategory();
+            $cat_form = $cat->returnCategoryForm($this);
+            if (empty($cat_form)) {
+                $cat_form = '<span class="label label-warning">' . get_lang('NoCategoriesDefined') . '</span>';
+            }
+            $form->addElement('label', null, $cat_form);
+            $form->addElement('html', '</div>');
+
+            // Category name.
+            $radio_display_cat_name = array(
+                $form->createElement('radio', 'display_category_name', null, get_lang('Yes'), '1'),
+                $form->createElement('radio', 'display_category_name', null, get_lang('No'), '0')
+            );
+            $form->addGroup($radio_display_cat_name, null, get_lang('QuestionDisplayCategoryName'));
+
+            // Random answers.
+            $radios_random_answers = array(
+                $form->createElement('radio', 'randomAnswers', null, get_lang('Yes'), '1'),
+                $form->createElement('radio', 'randomAnswers', null, get_lang('No'), '0')
+            );
+            $form->addGroup($radios_random_answers, null, get_lang('RandomAnswers'));
+
+            // Hide question title.
+            $group = array(
+                $form->createElement('radio', 'hide_question_title', null, get_lang('Yes'), '1'),
+                $form->createElement('radio', 'hide_question_title', null, get_lang('No'), '0')
+            );
+            $form->addGroup($group, null, get_lang('HideQuestionTitle'));
+
             // Attempts
             $attempt_option = range(0, 10);
             $attempt_option[0] = get_lang('Infinite');

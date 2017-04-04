@@ -1,4 +1,6 @@
+{{ actions }}
 {{ message }}
+{{ flash_messages }}
 {% if data is not empty %}
 {% set tutor =  false | isAllowedToEdit(true) %} 
 <div id="course-progress" class="thematic">

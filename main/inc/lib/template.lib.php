@@ -136,7 +136,7 @@ class Template
         $this->twig->addFilter('icon', new Twig_Filter_Function('Template::get_icon_path'));
         $this->twig->addFilter('img', new Twig_Filter_Function('Template::get_image'));
         $this->twig->addFilter('format_date', new Twig_Filter_Function('Template::format_date'));
-        $this->twig->addFilter('isAllowedToEdit', new Twig_Filter_Function('Template::isAllowedToEdit'));
+        $this->twig->addFilter('isAllowedToEdit', new Twig_Filter_Function('api_is_allowed_to_edit'));
         $this->twig->addFilter('api_get_local_time', new Twig_Filter_Function('api_get_local_time'));
         // a combination of the two previous functions
         $this->twig->addFilter('local_format_date', new Twig_Filter_Function('api_convert_and_format_date'));
@@ -236,17 +236,6 @@ class Template
     public static function format_date($timestamp, $format = null)
     {
         return api_format_date($timestamp, $format);
-    }
-    
-    /**
-     * @param string $image
-     * @param int $size
-     * @param string $name
-     * @return string
-     */
-    public static function isAllowedToEdit($tutor= false, $coach = false, $session_coach = false, $check_student_view = true)
-    {
-        return api_is_allowed_to_edit($tutor, $coach,$session_coach, $check_student_view);
     }
     
     /**

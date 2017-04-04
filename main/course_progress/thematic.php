@@ -73,7 +73,7 @@ if ($action == 'thematic_list') {
 
 } elseif ($action == 'thematic_details') {
     if (isset($_GET['thematic_plan_save_message']) && $_GET['thematic_plan_save_message'] == 'ok') {
-        $message = Display::display_confirmation_message(get_lang('ThematicSectionHasBeenCreatedSuccessfull'), false, true);
+        Display::addFlash(Display::return_message(get_lang('ThematicSectionHasBeenCreatedSuccessfull'), 'confirmation', false));
     }
 
     if (isset($last_id) && $last_id) {
@@ -81,16 +81,17 @@ if ($action == 'thematic_list') {
             Display::return_icon('lesson_plan.png', get_lang('ThematicPlan'), array('style' => 'vertical-align:middle;float:none;'), ICON_SIZE_SMALL).'</a>';
         $link_to_thematic_advance = '<a href="index.php?'.api_get_cidreq().'&action=thematic_advance_list&thematic_id='.$last_id.'">'.
             Display::return_icon('lesson_plan_calendar.png', get_lang('ThematicAdvance'), array('style' => 'vertical-align:middle;float:none;'), ICON_SIZE_SMALL).'</a>';
-        Display::display_confirmation_message(
+        Display::addFlash(Display::return_message(
             get_lang('ThematicSectionHasBeenCreatedSuccessfull').'<br />'.sprintf(get_lang('NowYouShouldAddThematicPlanXAndThematicAdvanceX'), $link_to_thematic_plan, $link_to_thematic_advance),
+            'confirmation',
             false
-        );
+        ));
     }
     if (empty($thematic_id)) {
         // display information
         $text = '<strong>'.get_lang('Information').': </strong>';
         $text .= get_lang('ThematicDetailsDescription');
-        $message = Display::return_message($text,'info', false);
+        $message = Display::return_message($text, 'info', false);
     }
     $list = [];
     // Display thematic data
@@ -218,8 +219,8 @@ if ($action == 'thematic_list') {
 
 $tpl->assign('actions', $toolbar);
 $tpl->assign('message', $message);
-$tpl->assign('data',$listThematic);
-$tpl->assign('session_star',$session_star);
+$tpl->assign('data', $listThematic);
+$tpl->assign('session_star', $session_star);
 $tpl->assign('score_progress', $total_average_of_advances);
 $tpl->assign('thamatic', $thematic);
 $thematicLayout = $tpl->get_template('course_progress/progress.tpl');

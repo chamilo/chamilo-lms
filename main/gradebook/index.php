@@ -113,41 +113,6 @@ if (isset($_GET['isStudentView'])) {
     }
 }
 
-if ($selectCat > 0 && (isset($_SESSION['studentview']) && $_SESSION['studentview']=='true')) {
-
-} else {
-    if (empty($selectCat) && (
-        $_SESSION['studentview']=='studentview') || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='true')
-    ) {
-        Display :: display_header(get_lang('Gradebook'));
-
-        //Introduction tool: student view
-        Display::display_introduction_section(
-            TOOL_GRADEBOOK,
-            array('ToolbarSet' => 'AssessmentsIntroduction')
-        );
-        $addparams = array();
-        $cats = Category:: load(0, null, null, null, null, null, false);
-        $allcat = $cats[0]->get_subcategories(
-            $stud_id,
-            $course_code,
-            $session_id
-        );
-        $alleval = $cats[0]->get_evaluations($stud_id);
-        $alllink = $cats[0]->get_links($stud_id);
-        $gradebooktable = new GradebookTable(
-            $cats[0],
-            $allcat,
-            $alleval,
-            $alllink,
-            $addparams
-        );
-        $gradebooktable->display();
-        Display:: display_footer();
-        exit;
-    }
-}
-
 // ACTIONS
 //this is called when there is no data for the course admin
 if (isset($_GET['createallcategories'])) {

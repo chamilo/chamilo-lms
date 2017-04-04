@@ -165,7 +165,9 @@ if ($action == 'thematic_list') {
             } else {
                 $list['thematic_plan'] = $thematic_plan_div[$thematic['id']];
             }
-            $list['thematic_advance'] = $thematic_advance_data[$thematic['id']];
+            $list['thematic_advance'] = isset($thematic_advance_data[$thematic['id']])
+                ? $thematic_advance_data[$thematic['id']]
+                : null;
             $list['last_done'] = $last_done_thematic_advance;
             $list['toolbar'] = $toolbarThematic;
             $listThematic[] = $list;

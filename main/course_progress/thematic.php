@@ -49,6 +49,7 @@ if (api_is_allowed_to_edit(null, true)) {
     $toolbar= Display::toolbarAction('thematic-bar', array(0 => $actionLeft));
 }
 
+
 if ($action == 'thematic_list') {
     $table = new SortableTable(
         'thematic_list',
@@ -116,6 +117,9 @@ if ($action == 'thematic_list') {
                     $session_star = api_get_session_image(api_get_session_id(), $user_info['status']);
                 }
             }
+
+            $tpl->assign('session_star', $session_star);
+
             //@todo add a validation in order to load or not course thematics in the session thematic
             $toolbarThematic = '';
             if (api_is_allowed_to_edit(null, true)) {
@@ -165,6 +169,8 @@ if ($action == 'thematic_list') {
             $list['last_done'] = $last_done_thematic_advance;
             $list['toolbar'] = $toolbarThematic;
             $listThematic[] = $list;
+
+            $tpl->assign('data', $listThematic);
         } //End for
     }
 } elseif ($action == 'thematic_add' || $action == 'thematic_edit') {
@@ -219,9 +225,6 @@ if ($action == 'thematic_list') {
 
 $tpl->assign('actions', $toolbar);
 $tpl->assign('message', $message);
-$tpl->assign('data', $listThematic);
-$tpl->assign('session_star', $session_star);
 $tpl->assign('score_progress', $total_average_of_advances);
-$tpl->assign('thamatic', $thematic);
 $thematicLayout = $tpl->get_template('course_progress/progress.tpl');
 $tpl->display($thematicLayout);

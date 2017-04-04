@@ -967,6 +967,18 @@ legend{
     .notification-panel{
         display: none;
     }
+    footer .sub-footer {
+	background-color: #ECECEC;
+	padding-top: 0;
+	padding-bottom: 0;
+    }
+    .sticky-footer {
+	position: relative;
+	bottom: 0;
+	width: 100%;
+	padding-top: 10px;
+	padding-bottom: 10px;
+    }
 }
 
 .question-result .dl-horizontal {

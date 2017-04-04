@@ -36,7 +36,7 @@ if (api_is_platform_admin() && ($type == 'admin' || $type == 'platform')) {
 if (isset($_REQUEST['cidReq']) && !empty($_REQUEST['cidReq'])) {
     if ($_REQUEST['cidReq'] == -1) {
         // When is out of the course tool (e.g My agenda)
-        header('Location: ' . api_get_self());
+        header('Location: '.api_get_self());
         exit;
     } else {
         $type = 'course';

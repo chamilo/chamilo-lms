@@ -5,4 +5,4 @@
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  * @package chamilo.plugin.createDrupalUser
  */
-require_once __DIR__ . '/config.php';
+require_once __DIR__.'/config.php';

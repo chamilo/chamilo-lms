@@ -30,18 +30,18 @@ $skills = $objSkill->get_all();
 
 $interbreadcrumb = array(
     array(
-        'url' => api_get_path(WEB_CODE_PATH) . 'admin/index.php',
+        'url' => api_get_path(WEB_CODE_PATH).'admin/index.php',
         'name' => get_lang('Administration')
     ),
     array(
-        'url' => api_get_path(WEB_CODE_PATH) . 'admin/skill_badge.php',
+        'url' => api_get_path(WEB_CODE_PATH).'admin/skill_badge.php',
         'name' => get_lang('Badges')
     )
 );
 
 $toolbar = Display::toolbarButton(
     get_lang('ManageSkills'),
-    api_get_path(WEB_CODE_PATH) . 'admin/skill_list.php',
+    api_get_path(WEB_CODE_PATH).'admin/skill_list.php',
     'list',
     'primary',
     ['title' => get_lang('ManageSkills')]

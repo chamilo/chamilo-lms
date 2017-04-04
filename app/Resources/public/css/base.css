@@ -4138,6 +4138,27 @@ ul.holder li.bit-box{
 #thematic .arrow.collapsed{
     background: url("../../main/img/icons/22/arrow-down-collapse.png") no-repeat 99% center;
 }
+.thematic .toolbar-actions{
+    height: 30px;
+    display: block;
+}
+.thematic .thematic-advance{
+    margin-top: 10px;
+    display: inline-block;
+}
+.thematic .score-progress{
+    background-color: #0099FF;
+    border: 1px solid #0099FF;
+    color: #FFF;
+    padding: 12px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+.thematic .score-progress h3{
+    margin: 0;
+    padding: 0;
+}
 .question_options .exercise-unique-answer-image .radio{
   padding-left: 10px;
   margin-left: 0px;

@@ -19,6 +19,7 @@ class ExtraFieldOption extends Model
     );
 
     public $extraField;
+    public $fieldId;
 
     /**
      * Gets the table for the type of object for which we are using an extra field
@@ -114,7 +115,7 @@ class ExtraFieldOption extends Model
      * Delete all the options of a specific field
      * @param int $field_id
      *
-     * @result void
+     * @return void
      * @assert (-1) === false
      */
     public function delete_all_options_by_field_id($field_id)
@@ -653,7 +654,7 @@ class ExtraFieldOption extends Model
 
         $form->addElement('hidden', 'id', $id);
         $form->addElement('hidden', 'type', $this->type);
-        $form->addElement('hidden', 'field_id', $this->field_id);
+        $form->addElement('hidden', 'field_id', $this->fieldId);
 
         if ($action == 'edit') {
             $translateUrl = api_get_path(WEB_CODE_PATH).'extrafield/translate.php?'.http_build_query([

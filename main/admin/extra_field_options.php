@@ -134,7 +134,7 @@ Display::display_header($tool_name);
 echo Display::page_header($extra_field_info['display_text']);
 
 $obj = new ExtraFieldOption($extra_field->type);
-$obj->field_id = $field_id;
+$obj->fieldId = $field_id;
 
 // Action handling: Add
 switch ($action) {

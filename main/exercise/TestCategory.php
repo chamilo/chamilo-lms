@@ -513,12 +513,12 @@ class TestCategory
                 INNER JOIN $TBL_EXERCICE_QUESTION eq
                 ON (eq.question_id = qrc.question_id AND qrc.c_id = eq.c_id)
                 INNER JOIN $categoryTable c
-                ON (c.id = qrc.category_id)
+                ON (c.id = qrc.category_id AND c.c_id = eq.c_id)
                 INNER JOIN $tableQuestion q
-                ON (q.id = qrc.question_id )
+                ON (q.id = qrc.question_id AND q.c_id = eq.c_id)
                 WHERE
-                  exercice_id = $exerciseId AND
-                  qrc.c_id = $courseId
+                    exercice_id = $exerciseId AND
+                    qrc.c_id = $courseId
                 ";
 
         $res = Database::query($sql);

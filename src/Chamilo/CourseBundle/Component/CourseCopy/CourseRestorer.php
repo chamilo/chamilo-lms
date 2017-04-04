@@ -1746,6 +1746,7 @@ class CourseRestorer
                         'end_time' => $quiz->end_time,
                         'save_correct_answers' => 0,
                         'display_category_name' => 0,
+                        'hide_question_title' => isset($quiz->hide_question_title) ? (int) $quiz->hide_question_title : 0,
                     );
 
                     if ($respect_base_content) {

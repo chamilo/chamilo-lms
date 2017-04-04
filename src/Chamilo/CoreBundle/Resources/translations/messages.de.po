@@ -59,7 +59,7 @@ msgid "MentionsLegales"
 msgstr "Impressum"
 
 msgid "MentionsLegalesLink"
-msgstr "https://parkur.ofaj.org/web/de/impressum"
+msgstr "https://parkur.ofaj.org/web/de/impressum?_locale=de"
 
 msgid "CGU"
 msgstr "Nutzungsbedingungen"

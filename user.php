@@ -32,8 +32,8 @@ if (empty($array_keys)) {
     exit;
 }
 
-$username 	= substr($array_keys[0],0,20); // max len of an username
-$friend_id 	= UserManager::get_user_id_from_username($username);
+$username = substr($array_keys[0], 0, 20); // max len of an username
+$friend_id = UserManager::get_user_id_from_username($username);
 
 if (!$friend_id) {
     // we cant find your friend

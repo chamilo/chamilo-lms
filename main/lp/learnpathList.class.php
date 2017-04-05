@@ -140,7 +140,7 @@ class LearnpathList
             }
 
             // Check if visible.
-            $vis = api_get_item_visibility(
+            $visibility = api_get_item_visibility(
                 api_get_course_info($course_code),
                 'learnpath',
                 $row->getId(),
@@ -149,7 +149,11 @@ class LearnpathList
 
             // If option is not true then don't show invisible LP to user
             if ($showBlockedPrerequisite !== true && !api_is_allowed_to_edit()) {
-                $lpVisibility = learnpath::is_lp_visible_for_student($row->getIid(), $user_id);
+                $lpVisibility = learnpath::is_lp_visible_for_student(
+                    $row->getId(),
+                    $user_id,
+                    $course_code
+                );
                 if ($lpVisibility === false) {
                     continue;
                 }
@@ -166,7 +170,7 @@ class LearnpathList
                 'lp_maker' => stripslashes($row->getContentMaker()),
                 'lp_proximity' => $row->getContentLocal(),
                 'lp_encoding' => api_get_system_encoding(),
-                'lp_visibility' => $vis,
+                'lp_visibility' => $visibility,
                 'lp_published' => $pub,
                 'lp_prevent_reinit' => $row->getPreventReinit(),
                 'seriousgame_mode' => $row->getSeriousgameMode(),

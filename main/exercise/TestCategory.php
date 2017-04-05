@@ -513,12 +513,12 @@ class TestCategory
                 INNER JOIN $TBL_EXERCICE_QUESTION eq
                 ON (eq.question_id = qrc.question_id AND qrc.c_id = eq.c_id)
                 INNER JOIN $categoryTable c
-                ON (c.id = qrc.category_id)
+                ON (c.id = qrc.category_id AND c.c_id = eq.c_id)
                 INNER JOIN $tableQuestion q
-                ON (q.id = qrc.question_id )
+                ON (q.id = qrc.question_id AND q.c_id = eq.c_id)
                 WHERE
-                  exercice_id = $exerciseId AND
-                  qrc.c_id = $courseId
+                    exercice_id = $exerciseId AND
+                    qrc.c_id = $courseId
                 ";
 
         $res = Database::query($sql);
@@ -574,14 +574,18 @@ class TestCategory
     }
 
     /**
-     * return a tab of $in_number random elements of $in_tab
+     * Returns an array of $numberElements from $array
+     * @param array
+     * @param int
+     *
+     * @return array
      */
-    public static function getNElementsFromArray($in_tab, $in_number)
+    public static function getNElementsFromArray($array, $numberElements)
     {
-        $list = $in_tab;
+        $list = $array;
         shuffle($list);
-        if ($in_number < count($list)) {
-            $list = array_slice($list, 0, $in_number);
+        if ($numberElements < count($list)) {
+            $list = array_slice($list, 0, $numberElements);
         }
 
         return $list;
@@ -809,10 +813,6 @@ class TestCategory
     ) {
         if (empty($exercise)) {
             return array();
-        }
-
-        if (!$exercise->specialCategoryOrders) {
-            return false;
         }
 
         $courseId = (int) $courseId;

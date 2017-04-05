@@ -3,11 +3,11 @@
 require_once __DIR__.'/../inc/global.inc.php';
 
 
-define ('REPORTS_PROGRESS_COMPLETED', 1);
+define('REPORTS_PROGRESS_COMPLETED', 1);
 
 $reports_modules = array();
 
-$reports_enabled_modules = array('quiz','course','scorm');
+$reports_enabled_modules = array('quiz', 'course', 'scorm');
 
 $reports_enabled_templates = array('exercicesMultiCourses', 'courseTime', 'courseArticulate');
 
@@ -158,7 +158,7 @@ function reports_getToolId($tool) {
 
 // return a sql clause returning triplet of (course, $session, $uid) the
 // current user is authorized to reed
-function reports_getVisibilitySQL () {
+function reports_getVisibilitySQL() {
 	return "select cru.user_id from ".Database::get_main_table(TABLE_MAIN_COURSE_USER).' cru';
 	// fixme sessions
 }

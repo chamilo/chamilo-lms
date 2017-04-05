@@ -244,15 +244,14 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 //$_configuration['show_invisible_exercise_in_lp_list'] = false;
 // New grid view the list of courses
 //$_configuration['view_grid_courses'] = 'true';
+// Show courses grouped by categories when $_configuration['view_grid_courses'] is enabled
+//$_configuration['view_grid_courses_grouped_categories_in_sessions'] = true;
 // Chamilo is installed/downloaded. Packagers can change this
 // to reflect their packaging method. The default value is 'chamilo'. This will
 // be reflected on the https://version.chamilo.org/stats page in the future.
 //$_configuration['packager'] = 'chamilo';
 // If true exercises added in LP can be modified.
 //$_configuration['force_edit_exercise_in_lp'] = false;
-// to reflect their packaging method. The default value is 'chamilo'. This will
-// be reflected on the https://version.chamilo.org/stats page in the future.
-//$_configuration['packager'] = 'chamilo';
 // List of driver to plugin in ckeditor
 //$_configuration['editor_driver_list'] = ['PersonalDriver', 'CourseDriver'];
 // Hide send to hrm users options in announcements
@@ -283,11 +282,16 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 //$_configuration['personal_agenda_show_all_session_events'] = false;
 // Allows to redirect to the session after the inscription in session about
 // $_configuration['allow_redirect_to_session_after_inscription_about'] = false;
-// Allows to do a remove_XSS in course introduction with user status COURSEMANAGERLOWSECURITY in order to accept all embed type videos (like vimeo, wistia, etc)
-// $_configuration['allow_course_introduction_low_security'] = false;
+// Allows to do a remove_XSS in course introduction with user status COURSEMANAGERLOWSECURITY
+// in order to accept all embed type videos (like vimeo, wistia, etc)
+// $_configuration['course_introduction_html_strict_filtering'] = true;
 // Prevents the duplicate upload in assignments
 // $_configuration['assignment_prevent_duplicate_upload'] = false;
-// Set ConsideredWorkingTime work extra field variable from main/admin/extra_fields.php?type=work
+//Show student progress in My courses page
+//$_configuration['course_student_info']['score'] = false;
+//$_configuration['course_student_info']['progress'] = false;
+//$_configuration['course_student_info']['certificate'] = false;
+// Set ConsideredWorkingTime work extra field variable to show in MyStudents page works report
 // (with internal id 'work_time' as below) and enable the following line to show in MyStudents page works report
 // $_configuration['considered_working_time'] = 'work_time';
 // During CSV special imports update users emails to x@example.com
@@ -296,5 +300,11 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 // $_configuration['certificate_pdf_orientation'] = 'landscape'; // It can be 'portrait' or 'landscape'
 // Hide main navigation menu (left column in userportal)
 // $_configuration['hide_main_navigation_menu'] = false;
-// PDF image dpi value
+// PDF image dpi value. Default value 96
 // $_configuration['pdf_img_dpi'] = 96;
+// Hide the "what's new" icon notifications in course list
+// $_configuration['hide_course_notification'] = true;
+// Show less session information in course list
+//$_configuration['show_simple_session_info'] = true;
+// Hide LP time in reports.
+// $_configuration['hide_lp_time'] = false;

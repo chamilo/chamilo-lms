@@ -69,7 +69,12 @@
     </ul>
     <h3>Possibly breaking changes</h3>
       <ul>
-        <li>As Chamilo becomes more popular, we are facing new security-based challenges that come as consequences of the simplicity that we offer our users. As such, in this version of Chamilo, the administrator *must* enable a configuration setting as follows in order <b>to authorize teachers and students to use iframes</b> (embedding things from outside) inside the online text areas in their courses and personal spaces. to enable those, edit the app/config/configuration.php file and paste the following just after the last setting: <pre>$_configuration['allow_course_introduction_low_security'] = true;</pre></li>
+        <li>As Chamilo becomes more popular, we are facing new security-based challenges that come as consequences of the simplicity
+            that we offer our users. As such, in this version of Chamilo, the administrator *must* enable a configuration setting as follows
+            in order <b>to authorize teachers and students to use iframes</b> (embedding things from outside) inside the online text areas in their courses and personal spaces.
+            To enable those, edit the app/config/configuration.php file and paste the following just after the last setting:
+            <pre>$_configuration['course_introduction_html_strict_filtering'] = false;</pre>
+        </li>
       </ul>
 
     <h3>Notable new Features</h3>
@@ -83,7 +88,7 @@
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/e6faa0ee9f5ed69e715cf81f29e7b48a9cb1067b">e6faa0ee</a>) Add hide_main_navigation_menu setting.</li>
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/62083f65953eee0ffea5a7375e9258c7ae308396">62083f65</a> - <a href="https://task.beeznest.com/issues/11019">BT#11019</a> - <a href="https://github.com/chamilo/chamilo-lms/commit/0204752ed1c39a9f91c0a946377d1d4a5c057548">0204752e</a>) Add configuration "certificate_pdf_orientation"</li>
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/ffb966dbc2aafe0982c9c8b428cb2121234e2fb8">ffb966db</a> - <a href="https://support.chamilo.org/issues/12302">CT#12302</a>) Add setting "update_users_email_to_dummy_except_admins"</li>
-        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/5c5795fdfeff259aaa41e9282c6abed19b994711">5c5795fd</a> - <a href="https://task.beeznest.com/issues/12244">BT#12244</a>) Add configuration setting allow_course_introduction_low_security to allow course introduction html in low security for removeXSS</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/5c5795fdfeff259aaa41e9282c6abed19b994711">5c5795fd</a> - <a href="https://task.beeznest.com/issues/12244">BT#12244</a>) Add configuration setting "course_introduction_html_strict_filtering" to allow course introduction html in low security for removeXSS</li>
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/3a04f0d3812ed3e41a18e185cbf49e33193986ba">3a04f0d3</a>) Add setting "personal_agenda_show_all_session_events"</li>
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/632923da80723ac1a506614e39bc1982b2b177ee">632923da</a>) Add differentiation of sessions options based on limit_session_admin_role setting in admin homepage</li>
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/bfdf62f0f2dfa1ad4c23d3cbfb6bbaf3b74dee97">bfdf62f0</a> - <a href="https://task.beeznest.com/issues/12162">BT#12162</a>) Learning paths: Add configuration setting show_prerequisite_as_blocked to show all prerequisites in gray</li>

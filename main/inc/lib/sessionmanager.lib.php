@@ -4076,7 +4076,7 @@ class SessionManager
      * @param int $session_id
      * @return bool
      */
-    static function user_is_general_coach($user_id, $session_id)
+    public static function user_is_general_coach($user_id, $session_id)
     {
         $session_id = intval($session_id);
         $user_id = intval($user_id);
@@ -5349,9 +5349,9 @@ class SessionManager
 
         $urlId = api_get_current_access_url_id();
 
-        $sessionConditions = null;
-        $courseConditions = null;
-        $userConditions = null;
+        $sessionConditions = '';
+        $courseConditions = '';
+        $userConditions = '';
 
         if (isset($active)) {
             $active = intval($active);
@@ -5359,7 +5359,6 @@ class SessionManager
         }
 
         $courseList = CourseManager::get_courses_followed_by_drh($userId, DRH);
-        $courseConditions = ' AND 1 <> 1';
         if (!empty($courseList)) {
             $courseIdList = array_column($courseList, 'id');
             $courseConditions = ' AND c.id IN ("'.implode('","', $courseIdList).'")';
@@ -5375,8 +5374,11 @@ class SessionManager
                 true,
                 false
             );
-            $studentIdList = array_keys($studentListSql);
-            $studentListSql = "'".implode("','", $studentIdList)."'";
+            if (!empty($studentListSql)) {
+                $studentIdList = array_keys($studentListSql);
+                $studentListSql = "'".implode("','", $studentIdList)."'";
+            }
+            
         } else {
             $studentIdList = array_map('intval', $studentIdList);
             $studentListSql = "'".implode("','", $studentIdList)."'";
@@ -5472,6 +5474,7 @@ class SessionManager
                     INNER JOIN $tbl_session_rel_access_url url ON (url.session_id = s.id)
                     $where
                     $sessionConditions
+                    $userConditionsFromDrh
                 ) UNION (
                     $select
                     FROM $tbl_course c
@@ -5480,6 +5483,7 @@ class SessionManager
                     INNER JOIN $tbl_course_rel_access_url url ON (url.c_id = c.id)
                     $where
                     $courseConditions
+                    $userConditionsFromDrh
                 ) $userUnion
                 ) as t1
                 ";
@@ -5631,8 +5635,7 @@ class SessionManager
                 }
             }
         }
-        $sessionUrl = api_get_path(WEB_CODE_PATH) . 'admin/resume_session.php?id_session=';
-
+        $sessionUrl = api_get_path(WEB_CODE_PATH) . 'session/resume_session.php?id_session=';
         $htmlResult = null;
 
         if (!empty($result)) {
@@ -6169,7 +6172,7 @@ class SessionManager
 
         // If no previous access, return false
         if (count($courseAccess) == 0) {
-            return false;
+            return $duration;
         }
 
         $firstAccess = api_strtotime($courseAccess['login_course_date'], 'UTC');
@@ -8142,7 +8145,7 @@ class SessionManager
     {
         if ($listA['sessionName'] == $listB['sessionName']) {
             return 0;
-        } else if($listA['sessionName'] > $listB['sessionName']) {
+        } else if ($listA['sessionName'] > $listB['sessionName']) {
             return 1;
         } else {
             return -1;
@@ -8162,7 +8165,7 @@ class SessionManager
             return 1;
         } else if ($listA['catSessionName'] == $listB['catSessionName']) {
             return 0;
-        } else if($listA['catSessionName'] > $listB['catSessionName']) {
+        } else if ($listA['catSessionName'] > $listB['catSessionName']) {
             return 1;
         } else {
             return -1;
@@ -8178,7 +8181,7 @@ class SessionManager
     {
         if ($listA['courseInUserCategoryTitle'] == $listB['courseInUserCategoryTitle']) {
             return 0;
-        } else if($listA['courseInUserCategoryTitle'] > $listB['courseInUserCategoryTitle']) {
+        } else if ($listA['courseInUserCategoryTitle'] > $listB['courseInUserCategoryTitle']) {
             return 1;
         } else {
             return -1;
@@ -8194,7 +8197,7 @@ class SessionManager
     {
         if ($listA['title'] == $listB['title']) {
             return 0;
-        } else if($listA['title'] > $listB['title']) {
+        } else if ($listA['title'] > $listB['title']) {
             return 1;
         } else {
             return -1;

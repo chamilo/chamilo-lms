@@ -8,11 +8,11 @@
 <table id="session-properties" class="data_table">
     <tr>
         <td>{{ 'CreatedBy'|get_lang }}</td>
-        <td>{{ session_admin.complete_name }}</td>
+        <td>{{ session_admin.complete_name_with_username }}</td>
     </tr>
     <tr>
         <td>{{ 'GeneralCoach' | get_lang}} :</td>
-        <td>{{ general_coach.complete_name }}</td>
+        <td>{{ general_coach.complete_name_with_username }}</td>
     </tr>
     {% if session_category  %}
     <tr>

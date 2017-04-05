@@ -54,7 +54,9 @@ $visibility = api_get_item_visibility(
     $sessionId
 );
 
-if (!api_is_allowed_to_edit(false, true, false, false) && intval($visibility) == 0) {
+if (!api_is_allowed_to_edit(false, true, false, false) &&
+    intval($visibility) == 0
+) {
     api_not_allowed(true);
 }
 
@@ -63,7 +65,6 @@ if (empty($_SESSION['oLP'])) {
 }
 
 $debug = 0;
-
 if ($debug) {
     error_log('------ Entering lp_view.php -------');
 }
@@ -96,7 +97,7 @@ $user_id = api_get_user_id();
 $platform_theme = api_get_setting('stylesheets'); // Platform's css.
 $my_style = $platform_theme;
 
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 <!--
 var jQueryFrameReadyConfigPath = \''.api_get_jquery_web_path().'\';
 -->
@@ -115,7 +116,7 @@ if ($_SESSION['oLP']->mode == 'embedframe' || $_SESSION['oLP']->get_hide_toc_fra
     $htmlHeadXtra[] = '';
 }
 
-//Impress js
+// Impress js
 if ($_SESSION['oLP']->mode == 'impress') {
     $lp_id = $_SESSION['oLP']->get_id();
     $url = api_get_path(WEB_CODE_PATH) . "lp/lp_impress.php?lp_id=$lp_id&" . api_get_cidreq();
@@ -187,8 +188,7 @@ if (!isset($src)) {
                     $file_info = pathinfo($file_info['path']);
                 }
 
-                if (
-                    isset($file_info['extension']) &&
+                if (isset($file_info['extension']) &&
                     api_strtolower(substr($file_info['extension'], 0, 3) == 'pdf')
                 ) {
                     $src = api_get_path(WEB_CODE_PATH).'lp/lp_view_item.php?lp_item_id='.$lp_item_id.'&'.api_get_cidreq();
@@ -244,8 +244,7 @@ if ($debug) {
     error_log('$_GET[lp_item_id]: ' . intval($_GET['lp_item_id']));
 }
 
-if (
-    !empty($_REQUEST['exeId']) &&
+if (!empty($_REQUEST['exeId']) &&
     isset($lp_id) &&
     isset($_GET['lp_item_id'])
 ) {
@@ -259,8 +258,7 @@ if (
     $safe_id = $lp_id;
     $safe_exe_id = intval($_REQUEST['exeId']);
 
-    if (
-        $safe_id == strval(intval($safe_id)) &&
+    if ($safe_id == strval(intval($safe_id)) &&
         $safe_item_id == strval(intval($safe_item_id))
     ) {
         $sql = 'SELECT start_date, exe_date, exe_result, exe_weighting, exe_exo_id
@@ -331,8 +329,7 @@ if (
     if (intval($_GET['fb_type']) > 0) {
         $src = 'blank.php?msg=exerciseFinished';
     } else {
-        $src = api_get_path(WEB_CODE_PATH) . 'exercise/result.php?origin=learnpath&id=' . $safe_exe_id.'&'.api_get_cidreq();
-
+        $src = api_get_path(WEB_CODE_PATH).'exercise/result.php?origin=learnpath&id='.$safe_exe_id.'&'.api_get_cidreq();
         if ($debug) {
             error_log('Calling URL: ' . $src);
         }
@@ -349,7 +346,6 @@ $_setting['show_navigation_menu'] = 'false';
 $scorm_css_header = true;
 $lp_theme_css = $_SESSION['oLP']->get_theme();
 // Sets the css theme of the LP this call is also use at the frames (toc, nav, message).
-
 if ($_SESSION['oLP']->mode == 'fullscreen') {
     $htmlHeadXtra[] = "<script>window.open('$src','content_id','toolbar=0,location=0,status=0,scrollbars=1,resizable=1');</script>";
 }
@@ -369,7 +365,6 @@ $display_none = '';
 $margin_left = '340px';
 
 //Media player code
-
 $display_mode = $_SESSION['oLP']->mode;
 $scorm_css_header = true;
 $lp_theme_css = $_SESSION['oLP']->get_theme();
@@ -449,14 +444,20 @@ if ($_SESSION['oLP']->get_preview_image()) {
 }
 
 if ($_SESSION['oLP']->current == $_SESSION['oLP']->get_last()) {
-    $categories = Category::load(null, null, $course_code, null, null, $sessionId);
+    $categories = Category::load(
+        null,
+        null,
+        $course_code,
+        null,
+        null,
+        $sessionId
+    );
 
     if (!empty($categories)) {
         $gradebookEvaluations = $categories[0]->get_evaluations();
         $gradebookLinks = $categories[0]->get_links();
 
-        if (
-            count($gradebookEvaluations) === 0 &&
+        if (count($gradebookEvaluations) === 0 &&
             count($gradebookLinks) === 1 &&
             $gradebookLinks[0]->get_type() == LINK_LEARNPATH &&
             $gradebookLinks[0]->get_ref_id() == $_SESSION['oLP']->lp_id

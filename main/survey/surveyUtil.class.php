@@ -7,11 +7,13 @@
 class SurveyUtil
 {
     /**
-     * Checks whether the given survey has a pagebreak question as the first or the last question.
+     * Checks whether the given survey has a pagebreak question as the first
+     * or the last question.
      * If so, break the current process, displaying an error message
-     * @param	integer	Survey ID (database ID)
-     * @param	boolean	Optional. Whether to continue the current process or exit when breaking condition found. Defaults to true (do not break).
-     * @return	void
+     * @param    integer $survey_id Survey ID (database ID)
+     * @param    boolean $continue Optional. Whether to continue the current
+     * process or exit when breaking condition found. Defaults to true (do not break).
+     * @return    void
      */
     public static function check_first_last_question($survey_id, $continue = true)
     {
@@ -56,7 +58,8 @@ class SurveyUtil
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version January 2007
      */
-    public static function remove_answer($user, $survey_id, $question_id, $course_id) {
+    public static function remove_answer($user, $survey_id, $question_id, $course_id)
+    {
         $course_id = intval($course_id);
         // table definition
         $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
@@ -83,8 +86,14 @@ class SurveyUtil
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version January 2007
      */
-    public static function store_answer($user, $survey_id, $question_id, $option_id, $option_value, $survey_data)
-    {
+    public static function store_answer(
+        $user,
+        $survey_id,
+        $question_id,
+        $option_id,
+        $option_value,
+        $survey_data
+    ) {
         // If the question_id is empty, don't store an answer
         if (empty($question_id)) {
             return false;
@@ -115,7 +124,8 @@ class SurveyUtil
         Database::query($sql);
         $insertId = Database::insert_id();
 
-        $sql = "UPDATE $table_survey_answer SET answer_id = $insertId WHERE iid = $insertId";
+        $sql = "UPDATE $table_survey_answer SET answer_id = $insertId 
+                WHERE iid = $insertId";
         Database::query($sql);
         return true;
     }
@@ -123,7 +133,7 @@ class SurveyUtil
     /**
      * This function checks the parameters that are used in this page
      *
-     * @return 	string 	The header, an error and the footer if any parameter fails, else it returns true
+     * @return string $people_filled The header, an error and the footer if any parameter fails, else it returns true
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version February 2007
      */
@@ -189,7 +199,7 @@ class SurveyUtil
      * This function deals with the action handling
      * @param array $survey_data
      * @param array $people_filled
-     * @return	void
+     * @return void
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version February 2007
      */
@@ -280,7 +290,7 @@ class SurveyUtil
      * than a one-page display of all the questions
      * of the survey that is filled with the answers of the person who filled the survey.
      *
-     * @return 	string	html code of the one-page survey with the answers of the selected user
+     * @return string html code of the one-page survey with the answers of the selected user
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version February 2007 - Updated March 2008
      */
@@ -379,9 +389,7 @@ class SurveyUtil
 					    survey_question.question_id = survey_question_option.question_id AND
 					    survey_question_option.c_id = $course_id
 					WHERE
-					    survey_question.survey_id = '".Database::escape_string(
-                    $_GET['survey_id']
-                )."' AND
+					    survey_question.survey_id = '".Database::escape_string($_GET['survey_id'])."' AND
                         survey_question.c_id = $course_id
 					ORDER BY survey_question.sort, survey_question_option.sort ASC";
             $result = Database::query($sql);
@@ -1189,7 +1197,7 @@ class SurveyUtil
         while ($row = Database::fetch_array($result)) {
             // We show the options if
             // 1. there is no question filter and the export button has not been clicked
-            // 2. there is a quesiton filter but the question is selected for display
+            // 2. there is a question filter but the question is selected for display
             if (!(isset($_POST['submit_question_filter'])) || (
                 is_array($_POST['questions_filter']) &&
                 in_array($row['question_id'], $_POST['questions_filter']))
@@ -1870,9 +1878,9 @@ class SurveyUtil
     /**
      * Get all the answers of a question grouped by user
      *
-     * @param	integer	Survey ID
-     * @param	integer	Question ID
-     * @return 	Array	Array containing all answers of all users, grouped by user
+     * @param	integer	$survey_id Survey ID
+     * @param	integer	$question_id Question ID
+     * @return 	array	Array containing all answers of all users, grouped by user
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version February 2007 - Updated March 2008
@@ -1911,8 +1919,14 @@ class SurveyUtil
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version February 2007
      */
-    public static function comparative_check($answers_x, $answers_y, $option_x, $option_y, $value_x = 0, $value_y = 0)
-    {
+    public static function comparative_check(
+        $answers_x,
+        $answers_y,
+        $option_x,
+        $option_y,
+        $value_x = 0,
+        $value_y = 0
+    ) {
         if ($value_x == 0) {
             $check_x = $option_x;
         } else {
@@ -2040,11 +2054,11 @@ class SurveyUtil
      * This function saves all the invitations of course users and additional users in the database
      * and sends the invitations by email
      *
-     * @param	array	Users array can be both a list of course uids AND a list of additional emailaddresses
-     * @param 	string	Title of the invitation, used as the title of the mail
-     * @param 	string	Text of the invitation, used as the text of the mail.
-     * 				 The text has to contain a **link** string or this will automatically be added to the end
-     *
+     * @param array Users array can be both a list of course uids AND a list of additional emailaddresses
+     * @param string Title of the invitation, used as the title of the mail
+     * @param string Text of the invitation, used as the text of the mail.
+     *                 The text has to contain a **link** string or this will automatically be added to the end
+     * @return int
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @author Julio Montoya - Adding auto-generated link support
      * @version January 2007
@@ -2222,8 +2236,12 @@ class SurveyUtil
      * $param string $invitation_code - the unique invitation code for the URL
      * @return	void
      */
-    public static function send_invitation_mail($invitedUser, $invitation_code, $invitation_title, $invitation_text)
-    {
+    public static function send_invitation_mail(
+        $invitedUser,
+        $invitation_code,
+        $invitation_title,
+        $invitation_text
+    ) {
         $_user = api_get_user_info();
         $_course = api_get_course_info();
 
@@ -2419,7 +2437,7 @@ class SurveyUtil
     {
         $course_id = api_get_course_int_id();
         // Database table definition
-        $table_survey_invitation 	= Database::get_course_table(TABLE_SURVEY_INVITATION);
+        $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
 
         $sql = "SELECT * FROM $table_survey_invitation
 		        WHERE
@@ -2466,7 +2484,12 @@ class SurveyUtil
         $parameters['cidReq'] = api_get_course_id();
 
         // Create a sortable table with survey-data
-        $table = new SortableTable('surveys', 'get_number_of_surveys', 'get_survey_data_drh', 2);
+        $table = new SortableTable(
+            'surveys',
+            'get_number_of_surveys',
+            'get_survey_data_drh',
+            2
+        );
         $table->set_additional_parameters($parameters);
         $table->set_header(0, '', false);
         $table->set_header(1, get_lang('SurveyName'));
@@ -2502,7 +2525,12 @@ class SurveyUtil
         }
 
         // Create a sortable table with survey-data
-        $table = new SortableTable('surveys', 'get_number_of_surveys', 'get_survey_data', 2);
+        $table = new SortableTable(
+            'surveys',
+            'get_number_of_surveys',
+            'get_survey_data',
+            2
+        );
         $table->set_additional_parameters($parameters);
         $table->set_header(0, '', false);
         $table->set_header(1, get_lang('SurveyName'));
@@ -2536,7 +2564,12 @@ class SurveyUtil
         }
 
         // Create a sortable table with survey-data
-        $table = new SortableTable('surveys_coach', 'get_number_of_surveys_for_coach', 'get_survey_data_for_coach', 2);
+        $table = new SortableTable(
+            'surveys_coach',
+            'get_number_of_surveys_for_coach',
+            'get_survey_data_for_coach',
+            2
+        );
         $table->set_additional_parameters($parameters);
         $table->set_header(0, '', false);
         $table->set_header(1, get_lang('SurveyName'));
@@ -2693,6 +2726,9 @@ class SurveyUtil
         return $obj->total_number_of_items;
     }
 
+    /**
+     * @return int
+     */
     public static function get_number_of_surveys_for_coach()
     {
         $survey_tree = new SurveyTree();
@@ -2707,7 +2743,7 @@ class SurveyUtil
      * @param int $column
      * @param string $direction
      * @param bool $isDrh
-     * @return unknown
+     * @return array
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @author Julio Montoya <gugli100@gmail.com>, Beeznest - Adding intvals
@@ -3244,8 +3280,8 @@ class SurveyUtil
      */
     public static function flagSurveyAsAnswered($surveyCode, $courseId)
     {
-        $currenUserId = api_get_user_id();
-        $flag = sprintf("%s-%s-%d", $courseId, $surveyCode, $currenUserId);
+        $currentUserId = api_get_user_id();
+        $flag = sprintf("%s-%s-%d", $courseId, $surveyCode, $currentUserId);
 
         if (!isset($_SESSION['filled_surveys'])) {
             $_SESSION['filled_surveys'] = array();
@@ -3262,8 +3298,8 @@ class SurveyUtil
      */
     public static function isSurveyAnsweredFlagged($surveyCode, $courseId)
     {
-        $currenUserId = api_get_user_id();
-        $flagToCheck = sprintf("%s-%s-%d", $courseId, $surveyCode, $currenUserId);
+        $currentUserId = api_get_user_id();
+        $flagToCheck = sprintf("%s-%s-%d", $courseId, $surveyCode, $currentUserId);
 
         if (!isset($_SESSION['filled_surveys'])) {
             return false;
@@ -3287,27 +3323,28 @@ class SurveyUtil
     /**
      * Check if the current survey has answers
      *
-     * @param $surveyId
+     * @param int $surveyId
      * @return boolean return true if the survey has answers, false otherwise
      */
     public static function checkIfSurveyHasAnswers($surveyId)
     {
         $tableSurveyAnswer = Database::get_course_table(TABLE_SURVEY_ANSWER);
         $courseId = api_get_course_int_id();
+        $surveyId = (int)$surveyId;
+
+        if (empty($courseId) || empty($surveyId)) {
+            return false;
+        }
 
         $sql = "SELECT * FROM $tableSurveyAnswer
                 WHERE
                     c_id = $courseId AND
-                    survey_id='".$surveyId."'
+                    survey_id = '".$surveyId."'
                 ORDER BY answer_id, user ASC";
         $result = Database::query($sql);
 
         $response = Database::affected_rows($result);
 
-        if ($response > 0) {
-            return true;
-        }
-
-        return false;
+        return $response > 0;
     }
 }

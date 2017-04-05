@@ -2,11 +2,11 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *	This script allows to manage the statements of questions.
- * 	It is included from the script admin.php
- *	@package chamilo.exercise
- * 	@author Olivier Brouckaert
- * 	@version $Id: question_admin.inc.php 22126 2009-07-15 22:38:39Z juliomontoya $
+ * This script allows to manage the statements of questions.
+ * It is included from the script admin.php
+ * @package chamilo.exercise
+ * @author Olivier Brouckaert
+ * @version $Id: question_admin.inc.php 22126 2009-07-15 22:38:39Z juliomontoya $
  */
 
 if (isset($_GET['editQuestion'])) {
@@ -49,10 +49,10 @@ if (is_object($objQuestion)) {
 
     // FORM VALIDATION
     if (isset($_POST['submitQuestion']) && $form->validate()) {
-        // question
+        // Question
         $objQuestion->processCreation($form, $objExercise);
 
-        // answers
+        // Answers
         $nb_answers = isset($nb_answers) ? $nb_answers : 0;
         $objQuestion->processAnswersCreation($form, $nb_answers);
 

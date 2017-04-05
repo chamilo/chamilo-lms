@@ -723,8 +723,8 @@ function build_work_move_to_selector($folders, $curdirpath, $move_file, $group_d
  * @author Hugues Peeters <hugues.peeters@claroline.net>
  * @author Bert Vanderkimpen
  * @author Yannick Warnier <ywarnier@beeznest.org> Adaptation for work tool
- * @param   string $base_work_dir Base work dir (.../work)
- * @param   string $desiredDirName complete path of the desired name
+ * @param  string $base_work_dir Base work dir (.../work)
+ * @param  string $desiredDirName complete path of the desired name
  *
  * @return  string actual directory name if it succeeds, boolean false otherwise
  */
@@ -774,9 +774,56 @@ function deleteDirWork($id)
     $t_agenda = Database::get_course_table(TABLE_AGENDA);
 
     $course_id = api_get_course_int_id();
+    $sessionId = api_get_session_id();
 
     if (!empty($work_data['url'])) {
         if ($check) {
+            $consideredWorkingTime = api_get_configuration_value('considered_working_time');
+
+            if (!empty($consideredWorkingTime)) {
+                $fieldValue = new ExtraFieldValue('work');
+                $resultExtra = $fieldValue->getAllValuesForAnItem(
+                    $work_data['id'],
+                    true
+                );
+
+                $workingTime = null;
+
+                foreach ($resultExtra as $field) {
+                    $field = $field['value'];
+                    if ($consideredWorkingTime == $field->getField()->getVariable()) {
+                        $workingTime = $field->getValue();
+
+                        break;
+                    }
+                }
+
+                $courseUsers = CourseManager::get_user_list_from_course_code($_course['code'], $sessionId);
+
+                if (!empty($workingTime)) {
+                    foreach ($courseUsers as $user) {
+                        $userWorks = get_work_user_list(
+                            0,
+                            100,
+                            null,
+                            null,
+                            $work_data['id'],
+                            null,
+                            $user['user_id'],
+                            false,
+                            $course_id,
+                            $sessionId
+                        );
+
+                        if (count($userWorks) != 1) {
+                            continue;
+                        }
+
+                        Event::eventRemoveVirtualCourseTime($course_id, $user['user_id'], $sessionId, $workingTime);
+                    }
+                }
+            }
+
             // Deleting all contents inside the folder
             $sql = "UPDATE $table SET active = 2
                     WHERE c_id = $course_id AND filetype = 'folder' AND id = $id";
@@ -823,7 +870,7 @@ function deleteDirWork($id)
                 null,
                 api_get_user_id(),
                 api_get_course_int_id(),
-                api_get_session_id()
+                $sessionId
             );
 
             $link_info = GradebookUtils::isResourceInCourseGradebook(
@@ -1657,7 +1704,7 @@ function get_work_user_list_from_documents(
     $direction,
     $workId,
     $studentId = null,
-    $whereCondition,
+    $whereCondition = '',
     $getCount = false
 ) {
     if ($getCount) {
@@ -3489,7 +3536,7 @@ function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo 
             'error' => Display:: return_message(
                 get_lang('UplUploadFailedSizeIsZero'),
                 'error'
-            ),
+            )
         );
     }
     $updir = api_get_path(SYS_COURSE_PATH).$_course['path'].'/work/'; //directory path to upload
@@ -3680,7 +3727,7 @@ function checkExistingWorkFileName($filename, $workId)
     $work_table = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
     $filename = Database::escape_string($filename);
     $sql = "SELECT title FROM $work_table
-                        WHERE parent_id = $workId AND title = '$filename' AND active = 1";
+            WHERE parent_id = $workId AND title = '$filename' AND active = 1";
     $result = Database::query($sql);
     return Database::fetch_assoc($result);
 }
@@ -4279,9 +4326,7 @@ function deleteWorkItem($item_id, $courseInfo)
 {
     $work_table = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
     $TSTDPUBASG = Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
-
     $currentCourseRepositorySys = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/';
-
     $is_allowed_to_edit = api_is_allowed_to_edit();
     $file_deleted = false;
     $item_id = intval($item_id);
@@ -4346,7 +4391,7 @@ function deleteWorkItem($item_id, $courseInfo)
                         $sessionId = empty($row['session_id']) ? 0 : $row['session_id'];
                         // Getting false from the following call would mean the
                         // time record
-                        $removalResult = Event::eventRemoveVirtualCourseTime(
+                        Event::eventRemoveVirtualCourseTime(
                             $course_id,
                             $row['user_id'],
                             $sessionId,
@@ -4428,7 +4473,13 @@ function getFormWork($form, $defaults = array(), $workId = 0)
 
     // Create the form that asks for the directory name
     $form->addText('new_dir', get_lang('AssignmentName'));
-    $form->addHtmlEditor('description', get_lang('Description'), false, false, getWorkDescriptionToolbar());
+    $form->addHtmlEditor(
+        'description',
+        get_lang('Description'),
+        false,
+        false,
+        getWorkDescriptionToolbar()
+    );
     $form->addButtonAdvancedSettings('advanced_params', get_lang('AdvancedParameters'));
 
     if (!empty($defaults) && (isset($defaults['enableEndDate']) || isset($defaults['enableExpiryDate']))) {

@@ -1265,6 +1265,11 @@ class CourseHome
      */
     public static function show_navigation_tool_shortcuts($orientation = SHORTCUTS_HORIZONTAL)
     {
+        $origin = api_get_origin();
+        if ($origin === 'learnpath') {
+            return '';
+        }
+
         $navigation_items = self::get_navigation_items(false);
         $html = '';
         if (!empty($navigation_items)) {

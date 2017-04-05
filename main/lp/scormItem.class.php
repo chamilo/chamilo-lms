@@ -100,7 +100,7 @@ class scormItem extends learnpathItem
                                         }
                                         break;
                                     case 'item':
-                                        $oItem = new scormItem('manifest',$child);
+                                        $oItem = new scormItem('manifest', $child);
                                         if ($oItem->identifier != '') {
                                             $this->sub_items[$oItem->identifier] = $oItem;
                                         }
@@ -119,7 +119,7 @@ class scormItem extends learnpathItem
                         $attributes = $element->attributes;
                         //$keep_href = '';
                         foreach ($attributes as $attrib) {
-                            switch($attrib->name){
+                            switch ($attrib->name) {
                                 case 'identifier':
                                     $this->identifier = $attrib->value;
                                     break;
@@ -172,8 +172,8 @@ class scormItem extends learnpathItem
         );
         $abs_order++;
         $i = 1;
-        foreach($this->sub_items as $id => $dummy) {
-            $oSubitem =& $this->sub_items[$id];
+        foreach ($this->sub_items as $id => $dummy) {
+            $oSubitem = & $this->sub_items[$id];
             $oSubitem->get_flat_list($list, $abs_order, $i, $level + 1);
             $i++;
         }
@@ -188,7 +188,7 @@ class scormItem extends learnpathItem
         parent::save($from_outside, $prereqs_complete);
         // Under certain conditions, the scorm_contact should not be set, because no scorm signal was sent.
         $this->scorm_contact = true;
-        if (!$this->scorm_contact){
+        if (!$this->scorm_contact) {
             //error_log('New LP - was expecting SCORM message but none received', 0);
         }
     }

@@ -233,6 +233,7 @@ class DisplayGradebook
 
         // Student.
         $status = CourseManager::getUserInCourseStatus($userId, $courseId);
+        $sessionStatus = 0;
 
         if (!empty($sessionId)) {
             $sessionStatus = SessionManager::get_user_status_in_course_session(

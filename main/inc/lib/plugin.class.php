@@ -63,7 +63,7 @@ class Plugin
         $this->fields = $settings;
 
         global $language_files;
-        $language_files[] = 'plugin_' . $this->get_name();
+        $language_files[] = 'plugin_'.$this->get_name();
     }
 
     /**
@@ -272,7 +272,7 @@ class Plugin
     {
         $settings = $this->get_settings();
         foreach ($settings as $setting) {
-            if ($setting['variable'] == $this->get_name() . '_' . $name) {
+            if ($setting['variable'] == $this->get_name().'_'.$name) {
                 return $setting['selected_value'];
             }
         }
@@ -406,7 +406,7 @@ class Plugin
         if (!empty($this->course_settings)) {
             foreach ($this->course_settings as $setting) {
                 $variable = $setting['name'];
-                $value ='';
+                $value = '';
                 if (isset($setting['init_value'])) {
                     $value = $setting['init_value'];
                 }
@@ -622,7 +622,7 @@ class Plugin
 
         // Avoid Tab Name Spaces
         $tabNameNoSpaces = preg_replace('/\s+/', '', $tabName);
-        $subkeytext = "Tabs" . $tabNameNoSpaces;
+        $subkeytext = "Tabs".$tabNameNoSpaces;
 
         // Check if it is already added
         $checkCondition = array(
@@ -640,7 +640,7 @@ class Plugin
         }
 
         // End Check
-        $subkey = 'custom_tab_' . $tabNum;
+        $subkey = 'custom_tab_'.$tabNum;
         $attributes = array(
             'variable' => 'show_tabs',
             'subkey' => $subkey,
@@ -658,7 +658,7 @@ class Plugin
 
         // Save the id
         $settings = $this->get_settings();
-        $setData = array (
+        $setData = array(
             'comment' => $subkey
         );
         $whereCondition = array(
@@ -699,7 +699,7 @@ class Plugin
                 $i = 1;
                 foreach ($tabs as $row) {
                     $attributes = array(
-                        'subkey' => 'custom_tab_' . $i
+                        'subkey' => 'custom_tab_'.$i
                     );
                     $this->updateTab($row['subkey'], $attributes);
                     $i++;

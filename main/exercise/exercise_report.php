@@ -316,6 +316,17 @@ if ($is_allowedToEdit || $is_tutor) {
     }
 }
 
+if (($is_allowedToEdit || $is_tutor || api_is_coach()) &&
+    isset($_GET['a']) && $_GET['a'] == 'close' &&
+    !empty($_GET['id']) && $locked == false
+) {
+    // Close the user attempt otherwise left pending
+    $exe_id = intval($_GET['id']);
+    $sql = "UPDATE $TBL_TRACK_EXERCISES SET status = '' WHERE exe_id = $exe_id AND status = 'incomplete'";
+    Database::query($sql);
+}
+
+
 Display :: display_header($nameTools);
 
 // Clean all results for this test before the selected date

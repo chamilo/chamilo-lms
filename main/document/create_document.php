@@ -39,7 +39,7 @@ $(document).on("change", ".selectpicker", function () {
     $.ajax({
         contentType: "application/x-www-form-urlencoded",
         data: "dirValue="+dirValue,
-        url: "' . api_get_path(WEB_AJAX_PATH) . 'document.ajax.php?a=document_destination",
+        url: "' . api_get_path(WEB_AJAX_PATH).'document.ajax.php?a=document_destination",
         type: "POST",
         success: function(response) {
             $("[name=\'dirValue\']").val(response)
@@ -147,7 +147,7 @@ if ($is_certificate_mode) {
 }
 
 $doc_tree  = explode('/', $dir);
-$count_dir = count($doc_tree) -2; // "2" because at the begin and end there are 2 "/"
+$count_dir = count($doc_tree) - 2; // "2" because at the begin and end there are 2 "/"
 
 if (api_is_in_group()) {
     $group_properties = GroupManager::get_group_properties(api_get_group_id());
@@ -162,7 +162,7 @@ for ($i = 0; $i < ($count_dir); $i++) {
 	$relative_url .= '../';
 }
 
-if ($relative_url== '') {
+if ($relative_url == '') {
 	$relative_url = '/';
 }
 
@@ -214,7 +214,7 @@ if (!$is_certificate_mode) {
         "name" => get_lang('Documents'),
     );
 } else {
-	$interbreadcrumb[]= array('url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('Gradebook'));
+	$interbreadcrumb[] = array('url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('Gradebook'));
 }
 
 if (!api_is_allowed_in_course()) {
@@ -253,9 +253,9 @@ $form = new FormValidator(
 $form->addElement('header', $nameTools);
 
 if ($is_certificate_mode) {//added condition for certicate in gradebook
-	$form->addElement('hidden','certificate','true',array('id'=>'certificate'));
+	$form->addElement('hidden', 'certificate', 'true', array('id'=>'certificate'));
 	if (isset($_GET['selectcat'])) {
-		$form->addElement('hidden','selectcat', $select_cat);
+		$form->addElement('hidden', 'selectcat', $select_cat);
     }
 }
 
@@ -334,19 +334,19 @@ if (!$is_certificate_mode &&
         $escaped_folders = array();
         foreach ($folders as $key => & $val) {
             // Hide some folders
-            if ($val=='/HotPotatoes_files' || $val=='/certificates' || basename($val)=='css'){
+            if ($val == '/HotPotatoes_files' || $val == '/certificates' || basename($val) == 'css') {
                 continue;
             }
             // Admin setting for Hide/Show the folders of all users
-            if (api_get_setting('show_users_folders') == 'false' && (strstr($val, '/shared_folder') || strstr($val, 'shared_folder_session_'))){
+            if (api_get_setting('show_users_folders') == 'false' && (strstr($val, '/shared_folder') || strstr($val, 'shared_folder_session_'))) {
                 continue;
             }
             // Admin setting for Hide/Show Default folders to all users
-            if (api_get_setting('show_default_folders') == 'false' && ($val=='/images' || $val=='/flash' || $val=='/audio' || $val=='/video' || strstr($val, '/images/gallery') || $val=='/video/flv')){
+            if (api_get_setting('show_default_folders') == 'false' && ($val == '/images' || $val == '/flash' || $val == '/audio' || $val == '/video' || strstr($val, '/images/gallery') || $val == '/video/flv')) {
                 continue;
             }
             // Admin setting for Hide/Show chat history folder
-            if (api_get_setting('show_chat_folder') == 'false' && $val=='/chat_files'){
+            if (api_get_setting('show_chat_folder') == 'false' && $val == '/chat_files') {
                 continue;
             }
 
@@ -371,13 +371,13 @@ if (!$is_certificate_mode &&
 		if (is_array($folders)) {
 			foreach ($folders as & $folder) {
 				//Hide some folders
-				if ($folder=='/HotPotatoes_files' || $folder=='/certificates' || basename($folder)=='css') {
+				if ($folder == '/HotPotatoes_files' || $folder == '/certificates' || basename($folder) == 'css') {
                     continue;
 				}
 				//Admin setting for Hide/Show the folders of all users
 				if (api_get_setting('show_users_folders') == 'false' &&
                     (strstr($folder, '/shared_folder') || strstr($folder, 'shared_folder_session_'))
-                ){
+                ) {
 					continue;
 				}
 				//Admin setting for Hide/Show Default folders to all users
@@ -390,20 +390,20 @@ if (!$is_certificate_mode &&
                         strstr($folder, '/images/gallery') ||
                         $folder == '/video/flv'
                     )
-                ){
+                ) {
 					continue;
 				}
 				//Admin setting for Hide/Show chat history folder
 				if (api_get_setting('show_chat_folder') == 'false' &&
-                    $folder=='/chat_files'
-                ){
+                    $folder == '/chat_files'
+                ) {
 					continue;
 				}
 
-				$selected = (substr($dir,0,-1) == $folder) ? ' selected="selected"' : '';
+				$selected = (substr($dir, 0, -1) == $folder) ? ' selected="selected"' : '';
 				$path_parts = explode('/', $folder);
 				$folder_titles[$folder] = cut($folder_titles[$folder], 80);
-                $space_counter =count($path_parts) - 2;
+                $space_counter = count($path_parts) - 2;
                 if ($space_counter > 0) {
                     $label = str_repeat('&nbsp;&nbsp;&nbsp;', $space_counter).' &mdash; '.$folder_titles[$folder];
                 } else {
@@ -421,11 +421,11 @@ if (!$is_certificate_mode &&
 				$selected = (substr($dir, 0, -1) == $folder) ? ' selected="selected"' : '';
 				$label = $folder_titles[$folder];
 				if ($folder == $group_dir) {
-					$label = '/ (' . get_lang('HomeDirectory') . ')';
+					$label = '/ ('.get_lang('HomeDirectory').')';
 				} else {
 					$path_parts = explode('/', str_replace($group_dir, '', $folder));
 					$label = cut($label, 80);
-					$label = str_repeat('&nbsp;&nbsp;&nbsp;', count($path_parts) - 2) . ' &mdash; ' . $label;
+					$label = str_repeat('&nbsp;&nbsp;&nbsp;', count($path_parts) - 2).' &mdash; '.$label;
 				}
 				$parent_select->addOption($label, $folder);
 				if ($selected != '') {
@@ -555,7 +555,7 @@ if ($form->validate()) {
                     );
                 }
 			}
-			$dir= substr($dir,0,-1);
+			$dir = substr($dir, 0, -1);
 			$selectcat = '';
             if (isset($_REQUEST['selectcat'])) {
                 $selectcat = "&selectcat=".intval($_REQUEST['selectcat']);
@@ -564,7 +564,7 @@ if ($form->validate()) {
 			if ($is_certificate_mode) {
 				$df = DocumentManager::get_default_certificate_id($_course['code']);
                 if (!isset($df)) {
-                    DocumentManager::attach_gradebook_certificate($_course['code'],$document_id);
+                    DocumentManager::attach_gradebook_certificate($_course['code'], $document_id);
 				}
 				$certificate_condition = '&certificate=true&curdirpath=/certificates';
 			}
@@ -608,16 +608,16 @@ if ($form->validate()) {
 
 	// link back to the documents overview
 	if ($is_certificate_mode) {
-            $actionsLeft =  '<a href="document.php?certificate=true&id='.$folder_id.'&selectcat=' . Security::remove_XSS($_GET['selectcat']).'">'.
-                Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview'),'',ICON_SIZE_MEDIUM).'</a>';
+            $actionsLeft = '<a href="document.php?certificate=true&id='.$folder_id.'&selectcat='.Security::remove_XSS($_GET['selectcat']).'">'.
+                Display::return_icon('back.png', get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview'), '', ICON_SIZE_MEDIUM).'</a>';
             $actionsLeft .= '<a id="hide_bar_template" href="#" role="button">'.
-                Display::return_icon('expand.png',get_lang('Back'),array('id'=>'expand'),ICON_SIZE_MEDIUM).Display::return_icon('contract.png',get_lang('Back'),array('id'=>'contract', 'class'=>'hide'),ICON_SIZE_MEDIUM).'</a>';
+                Display::return_icon('expand.png', get_lang('Back'), array('id'=>'expand'), ICON_SIZE_MEDIUM).Display::return_icon('contract.png', get_lang('Back'), array('id'=>'contract', 'class'=>'hide'), ICON_SIZE_MEDIUM).'</a>';
         } else {
             $actionsLeft = '<a href="document.php?curdirpath='.Security::remove_XSS($dir).'">'.
-                Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
+                Display::return_icon('back.png', get_lang('Back').' '.get_lang('To').' '.get_lang('DocumentsOverview'), '', ICON_SIZE_MEDIUM).'</a>';
             $actionsLeft .= '<a id="hide_bar_template" href="#" role="button">'.
-                Display::return_icon('expand.png',get_lang('Expand'),array('id'=>'expand'),ICON_SIZE_MEDIUM).
-                Display::return_icon('contract.png',get_lang('Collapse'),array('id'=>'contract', 'class'=>'hide'),ICON_SIZE_MEDIUM).'</a>';
+                Display::return_icon('expand.png', get_lang('Expand'), array('id'=>'expand'), ICON_SIZE_MEDIUM).
+                Display::return_icon('contract.png', get_lang('Collapse'), array('id'=>'contract', 'class'=>'hide'), ICON_SIZE_MEDIUM).'</a>';
         }
 
     echo $toolbar = Display::toolbarAction('actions-documents', array($actionsLeft));
@@ -630,10 +630,10 @@ if ($form->validate()) {
 
 		$str_info = '';
 		foreach ($all_information_by_create_certificate[0] as $info_value) {
-			$str_info.=$info_value.'<br/>';
+			$str_info .= $info_value.'<br/>';
 		}
 		$create_certificate = get_lang('CreateCertificateWithTags');
-		Display::display_normal_message($create_certificate.': <br /><br/>'.$str_info,false);
+		Display::display_normal_message($create_certificate.': <br /><br/>'.$str_info, false);
 	}
 
     // HTML-editor

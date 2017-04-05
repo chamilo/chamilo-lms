@@ -294,7 +294,7 @@ $timeReport->sortData($withFilter);
 if (isset($_GET['export'])) {
     $dataToExport = $timeReport->prepareDataToExport($withFilter);
 
-    $fileName = get_lang('TeacherTimeReport') . ' ' . api_get_local_time();
+    $fileName = get_lang('TeacherTimeReport').' '.api_get_local_time();
 
     switch ($_GET['export']) {
         case 'pdf':

@@ -418,6 +418,14 @@ class InstanceForm extends ChamiloForm
         $form->addText('archive_url', $this->_plugin->get_lang('ArchiveUrl'));
         $form->addText('home_url', $this->_plugin->get_lang('HomeUrl'));
         $form->addText('upload_url', $this->_plugin->get_lang('UploadUrl'));
+        $form->addText(
+            'css_theme_folder',
+            [
+                $this->_plugin->get_lang('ThemeFolder'),
+                $this->_plugin->get_lang('ThemeFolderExplanation'),
+            ],
+            false
+        );
         //$form->addText('course_url', $this->_plugin->get_lang('CourseUrl'));
 
         /**

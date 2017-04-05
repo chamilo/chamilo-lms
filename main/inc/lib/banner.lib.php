@@ -171,15 +171,18 @@ function getCustomTabs()
  * @param string $theme The name of the theme folder from web/css/themes/
  * @return string HTML string with logo as an HTML element
  */
-function return_logo()
+function return_logo($theme = '')
 {
     $siteName = api_get_setting('siteName');
 
-    return ChamiloApi::getPlatformLogo([
-        'title' => $siteName,
-        'class' => 'img-responsive',
-        'id' => 'header-logo'
-    ]);
+    return ChamiloApi::getPlatformLogo(
+        $theme,
+        [
+            'title' => $siteName,
+            'class' => 'img-responsive',
+            'id' => 'header-logo',
+        ]
+    );
 }
 
 /**

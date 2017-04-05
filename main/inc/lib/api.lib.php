@@ -611,6 +611,9 @@ define('ADD_THEMATIC_PLAN', 6);
 // Max online users to show per page (whoisonline)
 define('MAX_ONLINE_USERS', 12);
 
+// Number of characters maximum to show in preview of course blog posts
+define('BLOG_MAX_PREVIEW_CHARS', 800);
+
 // Make sure the CHAMILO_LOAD_WYSIWYG constant is defined
 // To remove CKeditor libs from HTML, set this constant to true before loading
 if (!defined('CHAMILO_LOAD_WYSIWYG')) {
@@ -1743,7 +1746,8 @@ function api_get_cidreq($addSessionId = true, $addGroupId = true, $origin = '')
 }
 
 /**
- * get gradebook in session
+ * Get if we visited a gradebook page
+ * @return bool
  */
 function api_is_in_gradebook()
 {
@@ -1751,7 +1755,8 @@ function api_is_in_gradebook()
 }
 
 /**
- * set gradebook session
+ * Set that we are in a page inside a gradebook
+ * @return bool
  */
 function api_set_in_gradebook()
 {
@@ -1759,7 +1764,7 @@ function api_set_in_gradebook()
 }
 
 /**
- * remove gradebook session
+ * Remove gradebook session
  */
 function api_remove_in_gradebook()
 {
@@ -1937,48 +1942,6 @@ function api_format_course_array($course_data)
     $_course['course_image_large'] = $url_image;
 
     return $_course;
-}
-
-/**
- * Add a parameter to the existing URL. If this parameter already exists,
- * just replace it with the new value
- * @param   string  The URL
- * @param   string  param=value string
- * @param   boolean Whether to filter XSS or not
- * @return  string  The URL with the added parameter
- */
-function api_add_url_param($url, $param, $filter_xss = true) {
-    if (empty($param)) {
-        return $url;
-    }
-    if (strpos($url, '?') !== false) {
-        if ($param[0] != '&') {
-            $param = '&'.$param;
-        }
-        list (, $query_string) = explode('?', $url);
-        $param_list1 = explode('&', $param);
-        $param_list2 = explode('&', $query_string);
-        $param_list1_keys = $param_list1_vals = array();
-        foreach ($param_list1 as $key => $enreg) {
-            list ($param_list1_keys[$key], $param_list1_vals[$key]) = explode('=', $enreg);
-        }
-        $param_list1 = array ('keys' => $param_list1_keys, 'vals' => $param_list1_vals);
-        foreach ($param_list2 as $enreg) {
-            $enreg = explode('=', $enreg);
-            $key = array_search($enreg[0], $param_list1['keys']);
-            if (!is_null($key) && !is_bool($key)) {
-                $url = str_replace($enreg[0].'='.$enreg[1], $enreg[0].'='.$param_list1['vals'][$key], $url);
-                $param = str_replace('&'.$enreg[0].'='.$param_list1['vals'][$key], '', $param);
-            }
-        }
-        $url .= $param;
-    } else {
-        $url = $url.'?'.$param;
-    }
-    if ($filter_xss === true) {
-        $url = Security::remove_XSS(urldecode($url));
-    }
-    return $url;
 }
 
 /**
@@ -4019,7 +3982,7 @@ function api_get_track_item_property_history($tool, $ref)
             WHERE item_property_id = $item_property_id AND course_id = $course_id
             ORDER BY lastedit_date DESC";
     $result = Database::query($sql);
-    if ($result == false) {
+    if ($result === false or $result === null) {
         $result = array();
     } else {
         $result = Database::store_result($result,'ASSOC');
@@ -4300,7 +4263,8 @@ function api_get_language_from_type($lang_type)
  * @param int $languageId
  * @return array
  */
-function api_get_language_info($languageId) {
+function api_get_language_info($languageId)
+{
     $language = Database::getManager()
         ->find('ChamiloCoreBundle:Language', intval($languageId));
 
@@ -4322,18 +4286,29 @@ function api_get_language_info($languageId) {
 /**
  * Returns the name of the visual (CSS) theme to be applied on the current page.
  * The returned name depends on the platform, course or user -wide settings.
- * @return string   The visual theme's name, it is the name of a folder inside .../chamilo/main/css/
+ * @return string The visual theme's name, it is the name of a folder inside web/css/themes
  */
 function api_get_visual_theme()
 {
     static $visual_theme;
     if (!isset($visual_theme)) {
-
-        $platform_theme = api_get_setting('stylesheets');
+        // Get style directly from DB
+        $styleFromDatabase = api_get_settings_params_simple(
+            [
+                'variable = ? AND access_url = ?' => [
+                    'stylesheets',
+                    api_get_current_access_url_id(),
+                ],
+            ]
+        );
+        if ($styleFromDatabase) {
+            $platform_theme = $styleFromDatabase['selected_value'];
+        } else {
+            $platform_theme = api_get_setting('stylesheets');
+        }
 
         // Platform's theme.
         $visual_theme = $platform_theme;
-
         if (api_get_setting('user_selected_theme') == 'true') {
             $user_info = api_get_user_info();
             if (isset($user_info['theme'])) {
@@ -4388,36 +4363,49 @@ function api_get_visual_theme()
 
 /**
  * Returns a list of CSS themes currently available in the CSS folder
+ * The folder must have a default.css file
+ * @param bool $getOnlyThemeFromVirtualInstance Used by the vchamilo plugin
  * @return array        List of themes directories from the css folder
  * Note: Directory names (names of themes) in the file system should contain ASCII-characters only.
  */
-function api_get_themes() {
-    $cssdir = api_get_path(SYS_CSS_PATH) . 'themes/';
-    $list_dir = array();
-    $list_name = array();
+function api_get_themes($getOnlyThemeFromVirtualInstance = false)
+{
+    // This configuration value is set by the vchamilo plugin
+    $virtualTheme = api_get_configuration_value('virtual_css_theme_folder');
 
-    if (is_dir($cssdir)) {
-        $themes = @scandir($cssdir);
-
-        if (is_array($themes)) {
-            if ($themes !== false) {
-                sort($themes);
-
-                foreach ($themes as & $theme) {
-                    if (substr($theme, 0, 1) == '.') {
-                        continue;
-                    } else {
-                        if (is_dir($cssdir.$theme)) {
-                            $list_dir[] = $theme;
-                            $list_name[] = ucwords(str_replace('_', ' ', $theme));
-                        }
-                    }
-                }
+    $readCssFolder = function ($dir) use ($virtualTheme) {
+        $finder = new \Symfony\Component\Finder\Finder();
+        $themes = $finder->directories()->in($dir)->depth(0)->sortByName();
+        $list = [];
+        /** @var Symfony\Component\Finder\SplFileInfo $theme */
+        foreach ($themes as $theme) {
+            $folder = $theme->getFilename();
+            // A theme folder is consider if there's a default.css file
+            if (!file_exists($theme->getPathname().'/default.css')) {
+                continue;
             }
+            $name = ucwords(str_replace('_', ' ', $folder));
+            if ($folder == $virtualTheme) {
+                continue;
+            }
+            $list[$folder] = $name;
         }
+        return $list;
+    };
+
+    $dir = api_get_path(SYS_CSS_PATH).'themes/';
+    $list = $readCssFolder($dir);
+
+    if (!empty($virtualTheme)) {
+        $newList = $readCssFolder($dir.'/'.$virtualTheme);
+        if ($getOnlyThemeFromVirtualInstance) {
+            return $newList;
+        }
+        $list = $list + $newList;
+        asort($list);
     }
 
-    return array($list_dir, $list_name);
+    return $list;
 }
 
 /**
@@ -5257,6 +5245,9 @@ function &api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $ur
         $sql .= " ORDER BY 1,2 ASC";
     }
     $result = Database::query($sql);
+    if ($result === null) {
+        return array();
+    }
     $result = Database::store_result($result,'ASSOC');
 
     return $result;
@@ -7206,8 +7197,9 @@ function api_get_password_checker_js($usernameInputId, $passwordInputId)
 }
 
 /**
- * @param string $username
  * create an user extra field called 'captcha_blocked_until_date'
+ * @param string $username
+ * @return bool
  */
 function api_block_account_captcha($username)
 {
@@ -7222,10 +7214,12 @@ function api_block_account_captcha($username)
         'captcha_blocked_until_date',
         api_get_utc_datetime($time)
     );
+    return true;
 }
 
 /**
  * @param string $username
+ * @return bool
  */
 function api_clean_account_captcha($username)
 {
@@ -7239,6 +7233,7 @@ function api_clean_account_captcha($username)
         'captcha_blocked_until_date',
         null
     );
+    return true;
 }
 
 /**
@@ -7284,7 +7279,8 @@ function api_get_short_text_from_html($in_html, $in_number_char)
  * @return string
  * @author hubert borderiou
  */
-function api_remove_tags_with_space($in_html, $in_double_quote_replace = true) {
+function api_remove_tags_with_space($in_html, $in_double_quote_replace = true)
+{
     $out_res = $in_html;
     if ($in_double_quote_replace) {
         $out_res = str_replace('"', "''", $out_res);
@@ -7359,7 +7355,6 @@ function api_can_login_as($loginAsUserId, $userId = null)
     }
 
     $userInfo = api_get_user_info($userId);
-
     $isDrh = function() use($loginAsUserId) {
         if (api_is_drh()) {
             if (api_drh_can_access_all_session_content()) {
@@ -7507,6 +7502,10 @@ function api_warn_hosting_contact($limitName)
 
 /**
  * Gets value of a variable from app/config/configuration.php
+ * Variables that are not set in the configuration.php file but set elsewhere:
+ * - virtual_css_theme_folder (vchamilo plugin)
+ * - access_url (global.inc.php)
+ *
  * @param string $variable
  *
  * @return bool|mixed
@@ -7783,7 +7782,7 @@ function api_mail_html(
     $senderEmail = !empty($senderEmail) ? $senderEmail : $defaultEmail;
 
     // Reply to first
-    if (isset($extra_headers['reply_to'])) {
+    if (isset($extra_headers['reply_to']) && empty($platform_email['SMTP_UNIQUE_REPLY_TO'])) {
         $mail->AddReplyTo(
             $extra_headers['reply_to']['mail'],
             $extra_headers['reply_to']['name']

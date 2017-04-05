@@ -17,13 +17,13 @@ class FormValidator extends HTML_QuickForm
 
     /**
      * Constructor
-     * @param string $name					Name of the form
-     * @param string $method (optional			Method ('post' (default) or 'get')
-     * @param string $action (optional			Action (default is $PHP_SELF)
-     * @param string $target (optional			Form's target defaults to '_self'
-     * @param mixed $attributes (optional)		Extra attributes for <form> tag
+     * @param string $name Name of the form
+     * @param string $method (optional) Method ('post' (default) or 'get')
+     * @param string $action (optional) Action (default is $PHP_SELF)
+     * @param string $target (optional) Form's target defaults to '_self'
+     * @param mixed $attributes (optional) Extra attributes for <form> tag
      * @param string $layout
-     * @param bool $trackSubmit (optional)		Whether to track if the form was
+     * @param bool $trackSubmit (optional) Whether to track if the form was
      * submitted by adding a special hidden field (default = true)
      */
     public function __construct(
@@ -489,7 +489,15 @@ EOT;
      */
     public function addButtonNext($label, $name = 'submit', $attributes = array())
     {
-        return $this->addButton($name, $label, 'arrow-right', 'primary', null, null, $attributes);
+        return $this->addButton(
+            $name,
+            $label,
+            'arrow-right',
+            'primary',
+            null,
+            null,
+            $attributes
+        );
     }
 
     /**
@@ -709,7 +717,13 @@ EOT;
         $group = array();
         foreach ($options as $value => $text) {
             $attributes['value'] = $value;
-            $group[] = $this->createElement('checkbox', $value, null, $text, $attributes);
+            $group[] = $this->createElement(
+                'checkbox',
+                $value,
+                null,
+                $text,
+                $attributes
+            );
         }
 
         return $this->addGroup($group, $name, $label);
@@ -853,8 +867,14 @@ EOT;
      * @param array  $config (optional) Configuration settings for the online editor.
      * @param bool   $style
      */
-    public function addHtmlEditor($name, $label, $required = true, $fullPage = false, $config = array(), $style = false)
-    {
+    public function addHtmlEditor(
+        $name,
+        $label,
+        $required = true,
+        $fullPage = false,
+        $config = array(),
+        $style = false
+    ) {
         $config['rows'] = isset($config['rows']) ? $config['rows'] : 15;
         $config['cols'] = isset($config['cols']) ? $config['cols'] : 80;
         $this->addElement('html_editor', $name, $label, $config, $style);
@@ -1230,10 +1250,10 @@ EOT;
 
     /**
      * Adds a input of type url to the form.
-     * @param type $name The label for the form-element
-     * @param type $label The element name
-     * @param type $required Optional. Is the form-element required (default=true)
-     * @param type $attributes Optional. List of attributes for the form-element
+     * @param string $name The label for the form-element
+     * @param string $label The element name
+     * @param bool $required Optional. Is the form-element required (default=true)
+     * @param array $attributes Optional. List of attributes for the form-element
      */
     public function addUrl($name, $label, $required = true, $attributes = array())
     {

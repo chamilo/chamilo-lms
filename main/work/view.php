@@ -97,22 +97,25 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
 
                     Display::addFlash(Display::return_message(get_lang('Updated')));
 
-                    $resultUpload = uploadWork($my_folder_data, $courseInfo, true, $work);
+                    $resultUpload = uploadWork(
+                        $my_folder_data,
+                        $courseInfo,
+                        true,
+                        $work
+                    );
                     if ($resultUpload) {
                         $work_table = Database:: get_course_table(
                             TABLE_STUDENT_PUBLICATION
                         );
 
                         if (isset($resultUpload['url']) && !empty($resultUpload['url'])) {
-                            $title = isset($resultUpload['filename']) && !empty($resultUpload['filename']) ? $resultUpload['filename'] : get_lang(
-                                'Untitled'
-                            );
+                            $title = isset($resultUpload['filename']) && !empty($resultUpload['filename']) ? $resultUpload['filename'] : get_lang('Untitled');
                             $urlToSave = Database::escape_string($resultUpload['url']);
                             $title = Database::escape_string($title);
                             $sql = "UPDATE $work_table SET
-                                            url_correction = '".$urlToSave."',
-                                            title_correction = '".$title."'
-                                        WHERE iid = ".$work['iid'];
+                                        url_correction = '".$urlToSave."',
+                                        title_correction = '".$title."'
+                                    WHERE iid = ".$work['iid'];
                             Database::query($sql);
                             Display::addFlash(
                                 Display::return_message(get_lang('FileUploadSucces'))

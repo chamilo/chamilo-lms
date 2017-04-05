@@ -30,8 +30,8 @@ class TaskListEvent extends ThemeEvent {
      *
      * @return $this
      */
-    public function addTask(TaskInterface $taskInterface){
-        $this->tasks[]  = $taskInterface;
+    public function addTask(TaskInterface $taskInterface) {
+        $this->tasks[] = $taskInterface;
         return $this;
     }
 

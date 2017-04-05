@@ -57,7 +57,7 @@ class Gradebook extends Model
         }
 
         $c_id = $c_id ? intval($c_id) : api_get_course_int_id();
-        $table  = Database::get_course_table(TABLE_TOOL_LIST);
+        $table = Database::get_course_table(TABLE_TOOL_LIST);
         $sql = "SELECT * from $table
                 WHERE c_id = $c_id and name='$name'
                 LIMIT 1";
@@ -194,7 +194,7 @@ class Gradebook extends Model
         $selected_skills = self::get_skills_by_gradebook($gradebook_id);
         $clean_selected_skills = array();
         if (!empty($selected_skills)) {
-            foreach($selected_skills as $skill) {
+            foreach ($selected_skills as $skill) {
                 $clean_selected_skills[] = $skill['id'];
             }
         }

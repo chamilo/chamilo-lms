@@ -168,7 +168,7 @@ $userStatus = COURSEMANAGER;
 
 // Allows to do a remove_XSS in course introduction with user status COURSEMANAGERLOWSECURITY
 // in order to accept all embed type videos (like vimeo, wistia, etc) - see BT#12244
-if (api_get_configuration_value('allow_course_introduction_low_security')) {
+if (api_get_configuration_value('course_introduction_html_strict_filtering')) {
     $userStatus = COURSEMANAGERLOWSECURITY;
 }
 

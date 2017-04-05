@@ -58,9 +58,9 @@ switch ($action) {
             $db['is_empty'] = false;
             $db['result'] = convert_to_string($sql_result);
             $rst = get_stats($user_id, $courseId, $start_date, $end_date);
-            $foo_stats = '<strong>' . get_lang('Total') . ': </strong>' . $rst['total'] . '<br />';
-            $foo_stats .= '<strong>' . get_lang('Average') . ': </strong>' . $rst['avg'] . '<br />';
-            $foo_stats .= '<strong>' . get_lang('Quantity') . ' : </strong>' . $rst['times'] . '<br />';
+            $foo_stats = '<strong>'.get_lang('Total').': </strong>'.$rst['total'].'<br />';
+            $foo_stats .= '<strong>'.get_lang('Average').': </strong>'.$rst['avg'].'<br />';
+            $foo_stats .= '<strong>'.get_lang('Quantity').' : </strong>'.$rst['times'].'<br />';
             $db['stats'] = $foo_stats;
             $db['graph_result'] = grapher($sql_result, $start_date, $end_date, $type);
         } else {

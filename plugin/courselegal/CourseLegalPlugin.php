@@ -421,7 +421,7 @@ class CourseLegalPlugin extends Plugin
                 array('id = ? ' => $id)
             );
             if (!empty($legalData['filename'])) {
-                $fileToDelete = $coursePath . '/' . $legalData['filename'];
+                $fileToDelete = $coursePath.'/'.$legalData['filename'];
                 if (file_exists($fileToDelete)) {
                     unlink($fileToDelete);
                 }

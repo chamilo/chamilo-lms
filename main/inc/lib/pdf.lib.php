@@ -36,7 +36,6 @@ class PDF
         if (!in_array($orientation, array('P','L'))) {
             $orientation = 'P';
         }
-        //$this->pdf = $pdf = new mPDF('UTF-8', $pageFormat, '', '', 30, 20, 27, 25, 16, 13, $orientation);
         //left, right, top, bottom, margin_header, margin footer
 
         $params['left'] = isset($params['left']) ? $params['left'] : 15;
@@ -69,6 +68,12 @@ class PDF
             8,
             $orientation
         );
+
+        // Default value is 96 set in the mpdf library file config.php
+        $value = api_get_configuration_value('pdf_img_dpi');
+        if (!empty($value)) {
+            $this->pdf->img_dpi = (int) $value;
+        }
     }
 
     /**

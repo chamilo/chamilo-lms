@@ -242,36 +242,59 @@ function handlePlugins()
  */
 function handleStylesheets()
 {
-    global $_configuration;
-
-    // Current style.
-    $currentstyle = api_get_setting('stylesheets');
-
     $is_style_changeable = isStyleChangeable();
+    $allowedFileTypes = ['png'];
 
     $form = new FormValidator(
         'stylesheet_upload',
         'post',
         'settings.php?category=Stylesheets#tabs-3'
     );
-    $form->addElement('text', 'name_stylesheet', get_lang('NameStylesheet'),
-        array('size' => '40', 'maxlength' => '40'));
-    $form->addRule('name_stylesheet', get_lang('ThisFieldIsRequired'), 'required');
-    $form->addElement('file', 'new_stylesheet', get_lang('UploadNewStylesheet'));
+    $form->addElement(
+        'text',
+        'name_stylesheet',
+        get_lang('NameStylesheet'),
+        array('size' => '40', 'maxlength' => '40')
+    );
+    $form->addRule(
+        'name_stylesheet',
+        get_lang('ThisFieldIsRequired'),
+        'required'
+    );
+    $form->addElement(
+        'file',
+        'new_stylesheet',
+        get_lang('UploadNewStylesheet')
+    );
     $allowed_file_types = getAllowedFileTypes();
 
-    $form->addRule('new_stylesheet', get_lang('InvalidExtension') . ' (' . implode(',', $allowed_file_types) . ')',
-        'filetype', $allowed_file_types);
-    $form->addRule('new_stylesheet', get_lang('ThisFieldIsRequired'), 'required');
+    $form->addRule(
+        'new_stylesheet',
+        get_lang('InvalidExtension').' ('.implode(',', $allowed_file_types).')',
+        'filetype',
+        $allowed_file_types
+    );
+    $form->addRule(
+        'new_stylesheet',
+        get_lang('ThisFieldIsRequired'),
+        'required'
+    );
     $form->addButtonUpload(get_lang('Upload'), 'stylesheet_upload');
 
     $show_upload_form = false;
+    $urlId = api_get_current_access_url_id();
 
     if (!is_writable(CSS_UPLOAD_PATH)) {
-        Display::display_error_message(CSS_UPLOAD_PATH.get_lang('IsNotWritable'));
+        Display::addFlash(
+            Display::return_message(
+                CSS_UPLOAD_PATH.get_lang('IsNotWritable'),
+                'error',
+                false
+            )
+        );
     } else {
         // Uploading a new stylesheet.
-        if ($_configuration['access_url'] == 1) {
+        if ($urlId == 1) {
             $show_upload_form = true;
         } else {
             if ($is_style_changeable) {
@@ -281,7 +304,6 @@ function handleStylesheets()
     }
 
     // Stylesheet upload.
-
     if (isset($_POST['stylesheet_upload'])) {
         if ($form->validate()) {
             $values = $form->exportValues();
@@ -301,81 +323,34 @@ function handleStylesheets()
             );
 
             if ($result) {
-                Display::display_confirmation_message(get_lang('StylesheetAdded'));
+                Display::addFlash(
+                    Display::return_message(
+                        get_lang('StylesheetAdded')
+                    )
+                );
             }
         }
     }
 
-    $form_change = new FormValidator(
-        'stylesheet_upload',
-        'post',
-        api_get_self().'?category=Stylesheets',
-        null,
-        array('id' => 'stylesheets_id')
+    // Current style.
+    $selected = $currentStyle = api_get_setting('stylesheets');
+    $styleFromDatabase = api_get_settings_params_simple(
+        ['variable = ? AND access_url = ?' => ['stylesheets', api_get_current_access_url_id()]]
     );
-
-    $list_of_names  = array();
-    $selected = '';
-    $dirpath = '';
-    $safe_style_dir = '';
-
-    if ($handle = @opendir(CSS_UPLOAD_PATH)) {
-        $counter = 1;
-        while (false !== ($style_dir = readdir($handle))) {
-            if (substr($style_dir, 0, 1) == '.') {
-                // Skip directories starting with a '.'
-                continue;
-            }
-            $dirpath = CSS_UPLOAD_PATH.$style_dir;
-
-            if (is_dir($dirpath)) {
-                if ($style_dir != '.' && $style_dir != '..') {
-                    if (isset($_POST['style']) &&
-                        (isset($_POST['preview']) || isset($_POST['download'])) &&
-                        $_POST['style'] == $style_dir
-                    ) {
-                        $safe_style_dir = $style_dir;
-                    } else {
-                        if ($currentstyle == $style_dir || ($style_dir == 'chamilo' && !$currentstyle)) {
-                            if (isset($_POST['style'])) {
-                                $selected = Database::escape_string($_POST['style']);
-                            } else {
-                                $selected = $style_dir;
-                            }
-                        }
-                    }
-                    $show_name = ucwords(str_replace('_', ' ', $style_dir));
-
-                    if ($is_style_changeable) {
-                        $list_of_names[$style_dir]  = $show_name;
-                    }
-                    $counter++;
-                }
-            }
-        }
-        closedir($handle);
+    if ($styleFromDatabase) {
+        $selected = $currentStyle = $styleFromDatabase['selected_value'];
     }
 
-    // Sort styles in alphabetical order.
-    asort($list_of_names);
-    $select_list = array();
-    foreach ($list_of_names as $style_dir => $item) {
-        $select_list[$style_dir] = $item;
+    if (isset($_POST['preview'])) {
+        $selected = $currentStyle = Security::remove_XSS($_POST['style']);
     }
 
-    $styles = &$form_change->addElement('select', 'style', get_lang('NameStylesheet'), $select_list);
-    $styles->setSelected($selected);
-
-    if ($form_change->validate()) {
-        // Submit stylesheets.
-        if (isset($_POST['save'])) {
-            storeStylesheets();
-            Display::display_normal_message(get_lang('Saved'));
-        }
-        if (isset($_POST['download'])) {
-            generateCSSDownloadLink($safe_style_dir);
-        }
-    }
+    $themeDir = Template::getThemeDir($selected);
+    $dir = api_get_path(SYS_PUBLIC_PATH).'css/'.$themeDir.'/images/';
+    $url = api_get_path(WEB_CSS_PATH).'/'.$themeDir.'/images/';
+    $logoFileName = 'header-logo.png';
+    $newLogoFileName = 'header-logo-custom' . api_get_current_access_url_id() . '.png';
+    $webPlatformLogoPath = ChamiloApi::getWebPlatformLogoPath($selected);
 
     $logoForm = new FormValidator(
         'logo_upload',
@@ -384,14 +359,15 @@ function handleStylesheets()
     );
 
     $logoForm->addHtml(
-        Display::return_message(sprintf(get_lang('TheLogoMustBeSizeXAndFormatY'), '250 x 70', 'PNG'), 'info')
+        Display::return_message(
+            sprintf(
+                get_lang('TheLogoMustBeSizeXAndFormatY'),
+                '250 x 70',
+                'PNG'
+            ),
+            'info'
+        )
     );
-
-    $dir = api_get_path(SYS_PUBLIC_PATH).'css/themes/' . $selected . '/images/';
-    $url = api_get_path(WEB_CSS_PATH).'themes/' . $selected . '/images/';
-    $logoFileName = 'header-logo.png';
-    $newLogoFileName = 'header-logo-custom' . api_get_current_access_url_id() . '.png';
-    $webPlatformLogoPath = ChamiloApi::getWebPlatformLogoPath();
 
     if ($webPlatformLogoPath !== null) {
         $logoForm->addLabel(
@@ -399,9 +375,15 @@ function handleStylesheets()
             '<img id="header-logo-custom" src="' . $webPlatformLogoPath . '?' . time() . '">'
         );
     }
-
     $logoForm->addFile('new_logo', get_lang('UpdateLogo'));
-    $allowedFileTypes = ['png'];
+    if ($is_style_changeable) {
+        $logoGroup = [
+            $logoForm->addButtonUpload(get_lang('Upload'), 'logo_upload', true),
+            $logoForm->addButtonCancel(get_lang('Reset'), 'logo_reset', true)
+        ];
+
+        $logoForm->addGroup($logoGroup);
+    }
 
     if (isset($_POST['logo_reset'])) {
         if (is_file($dir.$newLogoFileName)) {
@@ -440,6 +422,25 @@ function handleStylesheets()
         }
     }
 
+    if (isset($_POST['download'])) {
+        generateCSSDownloadLink($selected);
+    }
+
+    $form_change = new FormValidator(
+        'stylesheet_upload',
+        'post',
+        api_get_self().'?category=Stylesheets',
+        null,
+        array('id' => 'stylesheets_id')
+    );
+
+    $styles = $form_change->addElement(
+        'selectTheme',
+        'style',
+        get_lang('NameStylesheet')
+    );
+    $styles->setSelected($currentStyle);
+
     if ($is_style_changeable) {
         $group = [
             $form_change->addButtonSave(get_lang('SaveSettings'), 'save', true),
@@ -448,13 +449,6 @@ function handleStylesheets()
         ];
 
         $form_change->addGroup($group);
-
-        $logoGroup = [
-            $logoForm->addButtonUpload(get_lang('Upload'), 'logo_upload', true),
-            $logoForm->addButtonCancel(get_lang('Reset'), 'logo_reset', true)
-        ];
-
-        $logoForm->addGroup($logoGroup);
 
         if ($show_upload_form) {
             echo '<script>
@@ -470,7 +464,7 @@ function handleStylesheets()
             $form_change->display();
         }
 
-        //Little hack to update the logo image in update form when submiting
+        // Little hack to update the logo image in update form when submiting
         if (isset($_POST['logo_reset'])) {
             echo '<script>'
                     . '$("#header-logo-custom").attr("src","'.$url.$logoFileName.'");'
@@ -501,8 +495,13 @@ function uploadStylesheet($values, $picture)
     $style_name = api_preg_replace('/[^A-Za-z0-9]/', '', $values['name_stylesheet']);
     $cssToUpload = CSS_UPLOAD_PATH;
 
-    // Create the folder if needed.
+    // Check if a virtual instance vchamilo is used
+    $virtualInstanceTheme = api_get_configuration_value('virtual_css_theme_folder');
+    if (!empty($virtualInstanceTheme)) {
+        $cssToUpload = $cssToUpload.$virtualInstanceTheme.'/';
+    }
 
+    // Create the folder if needed.
     if (!is_dir($cssToUpload.$style_name.'/')) {
         mkdir($cssToUpload.$style_name.'/', api_get_permissions_for_new_directories());
     }
@@ -594,7 +593,12 @@ function uploadStylesheet($values, $picture)
 
     if ($result) {
         $fs = new Filesystem();
-        $fs->mirror($cssToUpload, api_get_path(SYS_PATH).'web/css/themes/');
+        $fs->mirror(
+            CSS_UPLOAD_PATH,
+            api_get_path(SYS_PATH).'web/css/themes/',
+            null,
+            ['override' => true]
+        );
     }
 
     return $result;
@@ -690,18 +694,14 @@ function storeStylesheets()
 /**
  * This function checks if the given style is a recognize style that exists in the css directory as
  * a standalone directory.
- * @param string    Style
+ * @param string $style
  * @return bool     True if this style is recognized, false otherwise
  */
 function isStyle($style)
 {
-    $dir = CSS_UPLOAD_PATH;
-    $dirs = scandir($dir);
-    $style = str_replace(array('/', '\\'), array('', ''), $style); // Avoid slashes or backslashes.
-    if (in_array($style, $dirs) && is_dir($dir.$style)) {
-        return true;
-    }
-    return false;
+    $themeList = api_get_themes();
+
+    return in_array($style, array_keys($themeList));
 }
 
 /**
@@ -1015,7 +1015,7 @@ function addEditTemplate()
     $form->addElement('html_editor', 'template_text', get_lang('Text'), null, array('ToolbarSet' => 'AdminTemplates', 'Width' => '100%', 'Height' => '400'));
 
     // Setting the form elements: the form to upload an image to be used with the template.
-    $form->addElement('file','template_image',get_lang('Image'),'');
+    $form->addElement('file', 'template_image', get_lang('Image'), '');
 
     // Setting the form elements: a little bit information about the template image.
     $form->addElement('static', 'file_comment', '', get_lang('TemplateImageComment100x70'));
@@ -1028,10 +1028,10 @@ function addEditTemplate()
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
 
-        $defaults['template_id']    = intval($_GET['id']);
-        $defaults['template_text']  = $row['content'];
+        $defaults['template_id'] = intval($_GET['id']);
+        $defaults['template_text'] = $row['content'];
         // Forcing get_lang().
-        $defaults['title']          = get_lang($row['title']);
+        $defaults['title'] = get_lang($row['title']);
 
         // Adding an extra field: a hidden field with the id of the template we are editing.
         $form->addElement('hidden', 'template_id');
@@ -1058,7 +1058,6 @@ function addEditTemplate()
 
     // if the form validates (complies to all rules) we save the information, else we display the form again (with error message if needed)
     if ($form->validate()) {
-
         $check = Security::check_token('post');
         if ($check) {
             // Exporting the values.
@@ -1123,7 +1122,7 @@ function addEditTemplate()
         displayTemplates();
     } else {
         $token = Security::get_token();
-        $form->addElement('hidden','sec_token');
+        $form->addElement('hidden', 'sec_token');
         $form->setConstants(array('sec_token' => $token));
         // Display the form.
         $form->display();
@@ -1641,10 +1640,10 @@ function getAllowedFileTypes()
  */
 function setConfigurationSettingsInDatabase($parameters, $accessUrl)
 {
-    $r = api_set_settings_category('Search', 'false', $accessUrl);
+    api_set_settings_category('Search', 'false', $accessUrl);
     // Save the settings.
     foreach ($parameters as $key => $value) {
-        $result = api_set_setting($key, $value, null, null);
+        api_set_setting($key, $value, null, null);
     }
 }
 
@@ -1670,7 +1669,6 @@ function showSearchToolsStatusTable()
     //@todo windows support
     if (api_is_windows_os() == false) {
         $list_of_programs = array('pdftotext', 'ps2pdf', 'catdoc', 'html2text', 'unrtf', 'catppt', 'xls2csv');
-
         foreach($list_of_programs as $program) {
             $output = [];
             $ret_val = null;
@@ -1706,8 +1704,13 @@ function showSearchToolsStatusTable()
 function generateCSSDownloadLink($style)
 {
     $arch = api_get_path(SYS_ARCHIVE_PATH).$style.'.zip';
-    $dir = api_get_path(SYS_CSS_PATH).'themes/'.$style;
-    if (is_dir($dir)) {
+    $themeDir = Template::getThemeDir($style);
+    $dir = api_get_path(SYS_CSS_PATH).$themeDir;
+    $check = Security::check_abs_path(
+        $dir,
+        api_get_path(SYS_CSS_PATH).'themes'
+    );
+    if (is_dir($dir) && $check) {
         $zip = new PclZip($arch);
         // Remove path prefix except the style name and put file on disk
         $zip->create($dir, PCLZIP_OPT_REMOVE_PATH, substr($dir,0,-strlen($style)));
@@ -1720,16 +1723,18 @@ function generateCSSDownloadLink($style)
         Display::addFlash(Display::return_message(get_lang('FileNotFound'), 'warning'));
     }
 }
+
 /**
  * Helper function to tell if the style is changeable in the current URL
  * @return bool $changeable Whether the style can be changed in this URL or not
  */
-function isStyleChangeable() {
-    global $_configuration;
+function isStyleChangeable()
+{
     $changeable = false;
-    if ($_configuration['access_url'] != 1) {
+    $urlId = api_get_current_access_url_id();
+    if ($urlId) {
         $style_info = api_get_settings('stylesheets', '', 1, 0);
-        $url_info = api_get_access_url($_configuration['access_url']);
+        $url_info = api_get_access_url($urlId);
         if ($style_info[0]['access_url_changeable'] == 1 && $url_info['active'] == 1) {
             $changeable = true;
         }

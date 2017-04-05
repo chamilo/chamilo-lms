@@ -3259,27 +3259,27 @@ class CourseManager
         $direction = null,
         $getCount = false,
         $keyword = null,
-        $sessionId = null,
+        $sessionId = 0,
         $showAllAssignedCourses = false
     ) {
         // Database Table Definitions
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_course_rel_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $sessionId = intval($sessionId);
-        $user_id = intval($user_id);
+        $sessionId = (int)$sessionId;
+        $user_id = (int)$user_id;
         $select = "SELECT DISTINCT *, c.id as real_id ";
 
         if ($getCount) {
             $select = "SELECT COUNT(DISTINCT c.id) as count";
         }
 
-        $whereConditions = null;
+        $whereConditions = '';
         switch ($status) {
             case COURSEMANAGER:
                 $whereConditions .= " AND cru.user_id = '$user_id'";
                 if (!$showAllAssignedCourses) {
-                    $whereConditions .= " AND status = " . COURSEMANAGER;
+                    $whereConditions .= " AND cru.status = " . COURSEMANAGER;
                 } else {
                     $whereConditions .= " AND relation_type = " . COURSE_RELATION_TYPE_COURSE_MANAGER;
                 }
@@ -3287,7 +3287,7 @@ class CourseManager
             case DRH:
                 $whereConditions .= " AND
                     cru.user_id = '$user_id' AND
-                    status = " . DRH . " AND
+                    cru.status = " . DRH . " AND
                     relation_type = '" . COURSE_RELATION_TYPE_RRHH . "'
                 ";
                 break;
@@ -3303,27 +3303,35 @@ class CourseManager
         $extraInnerJoin = null;
 
         if (!empty($sessionId)) {
-            if (!empty($sessionId)) {
-                $courseList = SessionManager::get_course_list_by_session_id(
-                    $sessionId
-                );
-                if (!empty($courseList)) {
-                    $courseListToString = implode("','", array_keys($courseList));
-                    $whereConditions .= " AND c.id IN ('" . $courseListToString . "')";
-                }
-                $tableSessionRelCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-                $orderBy = ' ORDER BY position';
-                $extraInnerJoin = " INNER JOIN $tableSessionRelCourse src
-                                    ON (c.id = src.c_id AND session_id = $sessionId) ";
+            if ($status == COURSEMANAGER) {
+                // Teacher of course or teacher inside session
+                $whereConditions = " AND (cru.status = " . COURSEMANAGER." OR srcru.status = 2) ";
             }
+            $courseList = SessionManager::get_course_list_by_session_id(
+                $sessionId
+            );
+            if (!empty($courseList)) {
+                $courseListToString = implode("','", array_keys($courseList));
+                $whereConditions .= " AND c.id IN ('" . $courseListToString . "')";
+            }
+            $tableSessionRelCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+            $tableSessionRelCourseRelUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+            $orderBy = ' ORDER BY position';
+            $extraInnerJoin = " INNER JOIN $tableSessionRelCourse src
+                                ON (c.id = src.c_id AND src.session_id = $sessionId)
+                                INNER JOIN $tableSessionRelCourseRelUser srcru 
+                                ON (src.session_id = srcru.session_id AND srcru.c_id = src.c_id)
+                            ";
         }
 
         $whereConditions .= $keywordCondition;
         $sql = "$select
                 FROM $tbl_course c
-                    INNER JOIN $tbl_course_rel_user cru ON (cru.c_id = c.id)
-                    INNER JOIN $tbl_course_rel_access_url a ON (a.c_id = c.id)
-                    $extraInnerJoin
+                INNER JOIN $tbl_course_rel_user cru 
+                ON (cru.c_id = c.id)
+                INNER JOIN $tbl_course_rel_access_url a 
+                ON (a.c_id = c.id)
+                $extraInnerJoin
                 WHERE
                     access_url_id = " . api_get_current_access_url_id() . "
                     $whereConditions
@@ -3554,6 +3562,8 @@ class CourseManager
                 }
 
                 $params = [];
+                //Param (course_code) needed to get the student info in page "My courses"
+                $params['course_code'] = $course['code'];
                 // Get notifications.
                 $course_info['id_session'] = null;
                 $courseUserInfo = self::getUserCourseInfo($user_id, $courseId);
@@ -3563,7 +3573,9 @@ class CourseManager
                 } else {
                     $course_info['status'] = $courseUserInfo['status'];
                 }
-                $show_notification = Display::show_notification($course_info);
+                $show_notification = !api_get_configuration_value('hide_course_notification')
+                    ? Display::show_notification($course_info)
+                    : '';
                 $params['edit_actions'] = '';
                 $params['document'] = '';
                 if (api_is_platform_admin()) {
@@ -3593,7 +3605,7 @@ class CourseManager
                 $params['title'] = $course_info['title'];
                 $params['link'] = $course_info['course_public_url'].'?id_session=0&autoreg=1';
                 if (api_get_setting('display_teacher_in_courselist') === 'true') {
-                    $params['teachers'] = self::getTeachersFromCourse($courseId, false);
+                    $params['teachers'] = self::getTeachersFromCourse($courseId, true);
                 }
 
                 if ($showCustomIcon === 'true') {
@@ -3697,7 +3709,8 @@ class CourseManager
 
         $sql = "SELECT DISTINCT
                     course.id,
-                    course_rel_user.status status
+                    course_rel_user.status status,
+                    course.code as course_code
                 FROM $TABLECOURS course 
                 INNER JOIN $TABLECOURSUSER course_rel_user
                 ON (course.id = course_rel_user.c_id)
@@ -3737,10 +3750,15 @@ class CourseManager
             $course_info['status'] = $row['status'];
             // For each course, get if there is any notification icon to show
             // (something that would have changed since the user's last visit).
-            $showNotification = Display::show_notification($course_info);
+            $showNotification = !api_get_configuration_value('hide_course_notification')
+                ? Display::show_notification($course_info)
+                : '';
             $iconName = basename($course_info['course_image']);
 
             $params = array();
+            //Param (course_code) needed to get the student process
+            $params['course_code'] = $row['course_code'];
+
             if ($showCustomIcon === 'true' && $iconName != 'course.png') {
                 $params['thumbnails'] = $course_info['course_image'];
                 $params['image'] = $course_info['course_image_large'];
@@ -3776,7 +3794,7 @@ class CourseManager
             $courseUrl = api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/index.php?id_session=0';
             $teachers = [];
             if (api_get_setting('display_teacher_in_courselist') === 'true') {
-                $teachers = self::getTeachersFromCourse($course_info['real_id'], false);
+                $teachers = self::getTeachersFromCourse($course_info['real_id'], true);
             }
 
             $params['status'] = $row['status'];
@@ -3881,7 +3899,9 @@ class CourseManager
 
             // For each course, get if there is any notification icon to show
             // (something that would have changed since the user's last visit).
-            $showNotification = Display::show_notification($course_info);
+            $showNotification = !api_get_configuration_value('hide_course_notification')
+                ? Display::show_notification($course_info)
+                : '';
 
             $thumbnails = null;
             $image = null;
@@ -3895,6 +3915,8 @@ class CourseManager
             }
 
             $params = array();
+            //Param (course_code) needed to get the student process
+            $params['course_code'] = $row['code'];
             $params['edit_actions'] = '';
             $params['document'] = '';
             if (api_is_platform_admin()) {
@@ -4086,8 +4108,9 @@ class CourseManager
 
         // Display the "what's new" icons
         $notifications = '';
-        if ($course_visibility != COURSE_VISIBILITY_CLOSED &&
-            $course_visibility != COURSE_VISIBILITY_HIDDEN
+        if (
+            ($course_visibility != COURSE_VISIBILITY_CLOSED && $course_visibility != COURSE_VISIBILITY_HIDDEN) ||
+            !api_get_configuration_value('hide_course_notification')
         ) {
             $notifications .= Display::show_notification($course_info);
         }
@@ -4141,6 +4164,7 @@ class CourseManager
         $params['title'] = $session_title;
         $params['edit_actions'] = '';
         $params['document'] = '';
+        $params['category'] = $course_info['categoryName'];
 
         if ($course_visibility != COURSE_VISIBILITY_CLOSED &&
             $course_visibility != COURSE_VISIBILITY_HIDDEN
@@ -4165,7 +4189,7 @@ class CourseManager
         if (api_get_setting('display_teacher_in_courselist') === 'true') {
             $teacher_list = self::getTeachersFromCourse(
                 $course_info['real_id'],
-                false
+                true
             );
 
             $course_coachs = self::get_coachs_from_course(
@@ -6049,7 +6073,9 @@ class CourseManager
 
         // For each course, get if there is any notification icon to show
         // (something that would have changed since the user's last visit).
-        $show_notification = Display::show_notification($course_info);
+        $show_notification = !api_get_configuration_value('hide_course_notification')
+            ? Display::show_notification($course_info)
+            : '';
 
         // New code displaying the user's status in respect to this course.
         $status_icon = Display::return_icon(
@@ -6284,5 +6310,20 @@ class CourseManager
 
         $courseFieldValue = new ExtraFieldValue('course');
         $courseFieldValue->saveFieldValues($params);
+    }
+
+    /**
+     * Get the course categories form a course list
+     * @param array $courseList
+     * @return array
+     */
+    public static function getCourseCategoriesFromCourseList(array $courseList)
+    {
+        $allCategories = array_column($courseList, 'category');
+        $categories = array_unique($allCategories);
+
+        sort($categories);
+
+        return $categories;
     }
 }

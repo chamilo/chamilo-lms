@@ -17,7 +17,7 @@ class NavbarTaskListDemoListener
     public function onListTasks(TaskListEvent $event)
     {
 
-        foreach($this->getTasks() as $task) {
+        foreach ($this->getTasks() as $task) {
             $event->addTask($task);
         }
 

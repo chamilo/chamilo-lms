@@ -1537,10 +1537,10 @@ abstract class Question
 
             switch ($this->type) {
                 case UNIQUE_ANSWER:
-                    $form->addButton('convertAnswer', get_lang('ConvertToMultipleAnswer'), 'dot-circle-o', 'info');
+                    $form->addButton('convertAnswer', get_lang('ConvertToMultipleAnswer'), 'dot-circle-o', 'default');
                     break;
                 case MULTIPLE_ANSWER:
-                    $form->addButton('convertAnswer', get_lang('ConvertToUniqueAnswer'), 'check-square-o', 'info');
+                    $form->addButton('convertAnswer', get_lang('ConvertToUniqueAnswer'), 'check-square-o', 'default');
                     break;
             }
 

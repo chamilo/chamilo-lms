@@ -21,7 +21,7 @@ $trackExerciseInfo = ExerciseLib::get_exercise_track_exercise_info($exe_id);
 $objExercise = new Exercise(api_get_course_int_id());
 $objExercise->read($trackExerciseInfo['exe_exo_id']);
 $em = Database::getManager();
-$documentPath = api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document';
+$documentPath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 $picturePath = $documentPath . '/images';
 $pictureName = $objQuestion->selectPicture();
 $pictureSize = getimagesize($picturePath . '/' . $objQuestion->selectPicture());
@@ -29,7 +29,6 @@ $pictureWidth = $pictureSize[0];
 $pictureHeight = $pictureSize[1];
 $course_id = api_get_course_int_id();
 
-// Init
 $data = [];
 $data['type'] = 'solution';
 $data['lang'] = [
@@ -56,9 +55,6 @@ $data['image_width'] = $pictureWidth;
 $data['image_height'] = $pictureHeight;
 $data['courseCode'] = $_course['path'];
 $data['hotspots'] = [];
-
-
-
 
 $showTotalScoreAndUserChoicesInLastAttempt = true;
 

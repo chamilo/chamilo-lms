@@ -118,6 +118,5 @@
     </div>
 </div>
 {% else %}
-    {{ content }}
     <div class="alert alert-info" role="alert">{{ 'ThereIsNoAThematicSection' | get_lang }}</div>
 {% endif %}

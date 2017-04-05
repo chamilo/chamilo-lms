@@ -62,7 +62,7 @@ $extra_params['height'] = 'auto';
 $htmlHeadXtra[] = api_get_jqgrid_js();
 $htmlHeadXtra[] = '<script>
 $(function() {
-    '.Display::grid_js('event_email_template',  $url,$columns,$column_model,$extra_params, array(), $action_links,true).'
+    '.Display::grid_js('event_email_template', $url, $columns, $column_model, $extra_params, array(), $action_links, true).'
 });
 </script>';
 

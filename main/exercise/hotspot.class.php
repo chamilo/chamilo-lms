@@ -32,7 +32,7 @@ class HotSpot extends Question
 	 * @param FormValidator $form
 	 * @param int $fck_config
 	 */
-	public function createForm (&$form, $fck_config=0)
+	public function createForm(&$form, $fck_config = 0)
 	{
 		parent::createForm($form, $fck_config);
 
@@ -50,7 +50,7 @@ class HotSpot extends Question
 			// Saving a question
 			$form->addButtonSave(get_lang('GoToQuestion'), 'submitQuestion');
 			//$form->addButtonSave(get_lang('GoToQuestion'), 'submitQuestion');
-			$form->addRule('imageUpload', get_lang('OnlyImagesAllowed'), 'filetype', array ('jpg', 'jpeg', 'png', 'gif'));
+			$form->addRule('imageUpload', get_lang('OnlyImagesAllowed'), 'filetype', array('jpg', 'jpeg', 'png', 'gif'));
 			$form->addRule('imageUpload', get_lang('NoImage'), 'uploadedfile');
 		} else {
 			// setting the save button here and not in the question class.php
@@ -70,7 +70,7 @@ class HotSpot extends Question
 		$_course = api_get_course_info();
 		parent::processCreation($form, $objExercise);
 
-		if(!empty($file_info['tmp_name'])) {
+		if (!empty($file_info['tmp_name'])) {
 			$this->uploadPicture($file_info['tmp_name'], $file_info['name']);
 			$documentPath  = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 			$picturePath   = $documentPath.'/images';
@@ -114,25 +114,25 @@ class HotSpotDelineation extends HotSpot
 
 	}
 
-	function createForm(&$form, $fck_config=0)
+	function createForm(&$form, $fck_config = 0)
 	{
-		parent::createForm ($form, $fck_config);
+		parent::createForm($form, $fck_config);
 	}
 
-	function processCreation ($form, $objExercise = null)
+	function processCreation($form, $objExercise = null)
 	{
 		$file_info = $form -> getSubmitValue('imageUpload');
-		parent::processCreation ($form, $objExercise);
+		parent::processCreation($form, $objExercise);
 	}
 
-	function createAnswersForm ($form)
+	function createAnswersForm($form)
 	{
-		parent::createAnswersForm ($form);
+		parent::createAnswersForm($form);
 	}
 
-	function processAnswersCreation ($form)
+	function processAnswersCreation($form)
 	{
-		parent::processAnswersCreation ($form);
+		parent::processAnswersCreation($form);
 	}
 }
 

@@ -56,7 +56,7 @@ class LinkForm extends FormValidator
 
     protected function build_move()
     {
-        $renderer =& $this->defaultRenderer();
+        $renderer = & $this->defaultRenderer();
         $renderer->setCustomElementTemplate('<span>{element}</span> ');
         $this->addElement(
             'static',
@@ -145,7 +145,7 @@ class LinkForm extends FormValidator
         $link = LinkFactory::create($link);
         if (!empty($courseCode)) {
             $link->set_course_code($courseCode);
-        } elseif(!empty($_GET['course_code'])) {
+        } elseif (!empty($_GET['course_code'])) {
             $link->set_course_code(Database::escape_string($_GET['course_code'], null, false));
         }
 

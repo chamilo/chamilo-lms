@@ -31,11 +31,11 @@ class UserModel implements UserInterface
      */
     protected $isOnline = false;
 
-    function __construct($username='', $avatar = '', $memberSince = null, $isOnline = true)
+    function __construct($username = '', $avatar = '', $memberSince = null, $isOnline = true)
     {
         $this->avatar      = $avatar;
         $this->isOnline    = $isOnline;
-        $this->memberSince = $memberSince ?:new \DateTime();
+        $this->memberSince = $memberSince ?: new \DateTime();
         $this->username    = $username;
     }
 

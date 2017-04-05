@@ -1869,7 +1869,6 @@ class MySpace
      */
     public static function get_user_data_tracking_overview($from, $numberItems, $column, $direction)
     {
-        $conditions = [];
         $isWestern = api_is_western_name_order();
         switch ($column) {
             case '0':
@@ -1892,7 +1891,7 @@ class MySpace
         $order = [
             "$column $direction"
         ];
-        $userList = UserManager::get_user_list($conditions, $order, $from, $numberItems);
+        $userList = UserManager::get_user_list([], $order, $from, $numberItems);
         $return = [];
         foreach ($userList as $user) {
             $firstPosition = $user['lastname'];

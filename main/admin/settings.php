@@ -25,6 +25,12 @@ $_SESSION['this_section'] = $this_section;
 // Access restrictions.
 api_protect_admin_script();
 
+ // Submit stylesheets.
+if (isset($_POST['save']) && isset($_GET['category']) && $_GET['category'] === 'Stylesheets') {
+    storeStylesheets();
+    Display::addFlash(Display::return_message(get_lang('Saved')));
+}
+
 // Settings to avoid
 $settings_to_avoid = array(
     'use_session_mode' => 'true',
@@ -467,7 +473,6 @@ foreach ($resultcategories as $row) {
     }
     $action_array[] = $url;
 }
-
 
 ob_start();
 if (!empty($_GET['category'])) {

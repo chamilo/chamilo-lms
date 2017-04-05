@@ -56,7 +56,7 @@ if ($form->validate()) {
 
         unset($_SESSION['bc_sale_id']);
 
-        header('Location: ' . api_get_path(WEB_PLUGIN_PATH) . 'buycourses/index.php');
+        header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/index.php');
         exit;
     }
 
@@ -165,7 +165,7 @@ if ($form->validate()) {
     }
 
     unset($_SESSION['bc_sale_id']);
-    header('Location: ' . api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/course_catalog.php');
+    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/course_catalog.php');
     exit;
 }
 

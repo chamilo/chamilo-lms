@@ -6,8 +6,8 @@
 */
 require_once __DIR__.'/../inc/global.inc.php';
 
-$interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('Timeline'));
-$interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('Listing'));
+$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('Timeline'));
+$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('Listing'));
 
 $timeline = new Timeline();
 if (empty($_GET['id'])) {
@@ -15,7 +15,7 @@ if (empty($_GET['id'])) {
 }
 $url = $timeline->get_url($_GET['id']);
 $item = $timeline->get($_GET['id']);
-$interbreadcrumb[]=array('url' => '#','name' => $item['headline']);
+$interbreadcrumb[] = array('url' => '#', 'name' => $item['headline']);
 
 $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/timeline/timeline.css');
 $htmlHeadXtra[] = api_get_js('timeline/timeline-min.js');

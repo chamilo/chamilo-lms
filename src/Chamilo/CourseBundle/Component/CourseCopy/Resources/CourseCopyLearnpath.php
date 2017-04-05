@@ -155,18 +155,18 @@ class CourseCopyLearnpath extends Resource
 		$this->js_lib = $js_lib;
 		$this->content_license = $content_license;
 		$this->debug = $debug;
-		$this->visibility=$visibility;
+		$this->visibility = $visibility;
 
-		$this->use_max_score=$use_max_score;
-		$this->autolaunch=$autolaunch;
-		$this->created_on=$created_on;
-		$this->modified_on=$modified_on;
-		$this->publicated_on=$publicated_on;
-		$this->expired_on=$expired_on;
-		$this->session_id=$session_id;
+		$this->use_max_score = $use_max_score;
+		$this->autolaunch = $autolaunch;
+		$this->created_on = $created_on;
+		$this->modified_on = $modified_on;
+		$this->publicated_on = $publicated_on;
+		$this->expired_on = $expired_on;
+		$this->session_id = $session_id;
 
-		$this->author= $author;
-		$this->preview_image= $preview_image;
+		$this->author = $author;
+		$this->preview_image = $preview_image;
 
 		$this->items = $items;
 	}

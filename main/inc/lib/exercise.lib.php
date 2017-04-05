@@ -56,7 +56,7 @@ class ExerciseLib
         }
 
         $answerType = $objQuestionTmp->selectType();
-        $pictureName = $objQuestionTmp->selectPicture();
+        $pictureName = $objQuestionTmp->getPictureFilename();
         $s = '';
 
         if ($answerType != HOT_SPOT && $answerType != HOT_SPOT_DELINEATION && $answerType != ANNOTATION) {
@@ -1130,10 +1130,7 @@ HTML;
             // Question is a HOT_SPOT
             //checking document/images visibility
             if (api_is_platform_admin() || api_is_course_admin()) {
-                $doc_id = DocumentManager::get_document_id(
-                    $course,
-                    '/images/' . $pictureName
-                );
+                $doc_id = $objQuestionTmp->getPictureId();
                 if (is_numeric($doc_id)) {
                     $images_folder_visibility = api_get_item_visibility(
                         $course,
@@ -1186,6 +1183,7 @@ HTML;
             }
 
             $answerList = '';
+            $hotspotColor = 0;
             if ($answerType != HOT_SPOT_DELINEATION) {
                 $answerList = '
                     <div class="well well-sm">
@@ -1197,8 +1195,14 @@ HTML;
                     Session::write("hotspot_ordered$questionId", array_keys($answers_hotspot));
                     $countAnswers = 1;
                     foreach ($answers_hotspot as $value) {
-                        $answerList .= "<li><p>{$countAnswers} - {$value}</p></li>";
-                        $countAnswers++;
+                        $answerList .= "<p>";
+                        if ($freeze) {
+                            $answerList .= "&nbsp<span class='hotspot-color hotspot-color-$hotspotColor'>&nbsp;&nbsp;&nbsp;&nbsp;</span>";
+                        }
+                        $answerList .= "&nbsp{$countAnswers}.&nbsp;";
+                        $answerList .= $value;
+                        $answerList .= "</p>";
+                        $hotspotColor++;
                     }
                 }
 
@@ -1801,9 +1805,11 @@ HOTSPOT;
                     te.exe_id,
                     email as exemail,
                     te.start_date,
+                    ce.expired_time,
                     steps_counter,
                     exe_user_id,
                     te.exe_duration,
+                    te.status as completion_status,
                     propagate_neg,
                     revised,
                     group_name,
@@ -1819,7 +1825,6 @@ HOTSPOT;
                 INNER JOIN $sql_inner_join_tbl_user AS user
                 ON (user.user_id = exe_user_id)
                 WHERE
-                    te.status != 'incomplete' AND
                     te.c_id = " . $course_id . " $session_id_and AND
                     ce.active <>-1 AND 
                     ce.c_id = " . $course_id . "
@@ -1919,9 +1924,34 @@ HOTSPOT;
                     $exercise_id,
                     LINK_EXERCISE
                 );
+
+                $timeNow = strtotime(api_get_utc_datetime());
                 // Looping results
                 for ($i = 0; $i < $sizeof; $i++) {
                     $revised = $results[$i]['revised'];
+                    if ($results[$i]['completion_status'] == 'incomplete') {
+                        // If the exercise was incomplete, we need to determine
+                        // if it is still into the time allowed, or if its
+                        // allowed time has expired and it can be closed
+                        // (it's "unclosed")
+                        $minutes = $results[$i]['expired_time'];
+                        if ($minutes == 0) {
+                            // There's no time limit, so obviously the attempt
+                            // can still be "ongoing", but the teacher should
+                            // be able to choose to close it, so mark it as
+                            // "unclosed" instead of "ongoing"
+                            $revised = 2;
+                        } else {
+                            $allowedSeconds = $minutes * 60;
+                            $timeAttemptStarted = strtotime($results[$i]['start_date']);
+                            $secondsSinceStart = $timeNow - $timeAttemptStarted;
+                            if ($secondsSinceStart > $allowedSeconds) {
+                                $revised = 2; // mark as "unclosed"
+                            } else {
+                                $revised = 3; // mark as "ongoing"
+                            }
+                        }
+                    }
 
                     if ($from_gradebook && ($is_allowedToEdit)) {
                         if (in_array(
@@ -1997,7 +2027,7 @@ HOTSPOT;
 
                         $score = self::show_score($my_res, $my_total);
 
-                        $actions = '';
+                        $actions = '<div class="pull-right">';
                         if ($is_allowedToEdit) {
                             if (isset($teacher_id_list)) {
                                 if (in_array(
@@ -2010,24 +2040,70 @@ HOTSPOT;
                                     );
                                 }
                             }
-                            if ($revised) {
-                                $actions .= "<a href='exercise_show.php?" . api_get_cidreq() . "&action=edit&id=$id'>" .
-                                    Display:: return_icon(
-                                        'edit.png',
-                                        get_lang('Edit'),
-                                        array(),
-                                        ICON_SIZE_SMALL
+                            $revisedLabel = '';
+
+                            switch ($revised) {
+                                case 0:
+                                    $actions .= "<a href='exercise_show.php?" . api_get_cidreq() . "&action=qualify&id=$id'>" .
+                                        Display:: return_icon(
+                                            'quiz.png',
+                                            get_lang('Qualify')
+                                        );
+                                    $actions .= '</a>';
+                                    $revisedLabel = Display::label(
+                                        get_lang('NotValidated'),
+                                        'info'
                                     );
-                                $actions .= '&nbsp;';
-                            } else {
-                                $actions .= "<a href='exercise_show.php?" . api_get_cidreq() . "&action=qualify&id=$id'>" .
-                                    Display:: return_icon(
-                                        'quiz.png',
-                                        get_lang('Qualify')
+                                    break;
+                                case 1:
+                                    $actions .= "<a href='exercise_show.php?" . api_get_cidreq() . "&action=edit&id=$id'>" .
+                                        Display:: return_icon(
+                                            'edit.png',
+                                            get_lang('Edit'),
+                                            array(),
+                                            ICON_SIZE_SMALL
+                                        );
+                                    $actions .= '</a>';
+                                    $revisedLabel = Display::label(
+                                        get_lang('Validated'),
+                                        'success'
                                     );
-                                $actions .= '&nbsp;';
+                                    break;
+                                case 2: //finished but not marked as such
+                                    $actions .= '<a href="exercise_report.php?'
+                                        . api_get_cidreq()
+                                        . '&exerciseId='
+                                        . $exercise_id
+                                        . '&a=close&id='
+                                        . $id
+                                        . '">' .
+                                        Display:: return_icon(
+                                            'lock.png',
+                                            get_lang('MarkAttemptAsClosed'),
+                                            array(),
+                                            ICON_SIZE_SMALL
+                                        );
+                                    $actions .= '</a>';
+                                    $revisedLabel = Display::label(
+                                        get_lang('Unclosed'),
+                                        'warning'
+                                    );
+                                    break;
+                                case 3: //still ongoing
+                                    $actions .= "" .
+                                        Display:: return_icon(
+                                            'clock.png',
+                                            get_lang('AttemptStillOngoingPleaseWait'),
+                                            array(),
+                                            ICON_SIZE_SMALL
+                                        );
+                                    $actions .= '';
+                                    $revisedLabel = Display::label(
+                                        get_lang('Ongoing'),
+                                        'danger'
+                                    );
+                                    break;
                             }
-                            $actions .= "</a>";
 
                             if ($filter == 2) {
                                 $actions .= ' <a href="exercise_history.php?' . api_get_cidreq() . '&exe_id=' . $id . '">' .
@@ -2044,9 +2120,9 @@ HOTSPOT;
                                     api_get_utc_datetime(),
                                     false
                                 );
-                                $actions .= '<a href="http://www.whatsmyip.org/ip-geo-location/?ip=' . $ip . '" target="_blank">
-                                ' . Display::return_icon('info.png', $ip) . '
-                                </a>';
+                                $actions .= '<a href="http://www.whatsmyip.org/ip-geo-location/?ip=' . $ip . '" target="_blank">'
+                                . Display::return_icon('info.png', $ip)
+                                .'</a>';
 
 
                                 $recalculateUrl = api_get_path(WEB_CODE_PATH) . 'exercise/recalculate.php?' .
@@ -2081,7 +2157,10 @@ HOTSPOT;
                                 if (api_is_drh() && !api_is_platform_admin()) {
                                     $delete_link = null;
                                 }
-                                $actions .= $delete_link . '&nbsp;';
+                                if ($revised == 3) {
+                                    $delete_link = null;
+                                }
+                                $actions .= $delete_link;
                             }
 
                         } else {
@@ -2096,29 +2175,18 @@ HOTSPOT;
                             );
                             $actions .= $attempt_link;
                         }
-
-                        if ($revised) {
-                            $revised = Display::label(
-                                get_lang('Validated'),
-                                'success'
-                            );
-                        } else {
-                            $revised = Display::label(
-                                get_lang('NotValidated'),
-                                'info'
-                            );
-                        }
+                        $actions .= '</div>';
 
                         $results[$i]['id'] = $results[$i]['exe_id'];
 
                         if ($is_allowedToEdit) {
-                            $results[$i]['status'] = $revised;
+                            $results[$i]['status'] = $revisedLabel;
                             $results[$i]['score'] = $score;
                             $results[$i]['lp'] = $lp_name;
                             $results[$i]['actions'] = $actions;
                             $list_info[] = $results[$i];
                         } else {
-                            $results[$i]['status'] = $revised;
+                            $results[$i]['status'] = $revisedLabel;
                             $results[$i]['score'] = $score;
                             $results[$i]['actions'] = $actions;
                             $list_info[] = $results[$i];

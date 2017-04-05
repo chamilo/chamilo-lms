@@ -8,6 +8,7 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 use Gedmo\Sortable\Entity\Repository\SortableRepository;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
+use Chamilo\CourseBundle\Entity\CLp;
 
 /**
  * Class learnpath
@@ -375,10 +376,10 @@ class learnpath
                                             'total_time' => 0,
                                             'score' => 0
                                         ];
-                                        $insertId = Database::insert($lp_item_view_table, $params);
+                                        $insertId = Database::insert($itemViewTable, $params);
 
                                         if ($insertId) {
-                                            $sql = "UPDATE $lp_item_view_table SET id = iid
+                                            $sql = "UPDATE $itemViewTable SET id = iid
                                                     WHERE iid = $insertId";
                                             Database::query($sql);
                                         }
@@ -4825,26 +4826,30 @@ class learnpath
      */
     public function set_expired_on($expired_on)
     {
-        $course_id = api_get_course_int_id();
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::set_expired_on()', 0);
         }
 
-        if (!empty($expired_on)) {
-            $this->expired_on = api_get_utc_datetime($expired_on);
-        } else {
-            $this->expired_on = null;
-        }
-        $lp_table = Database::get_course_table(TABLE_LP_MAIN);
-        $lp_id = $this->get_id();
-        if ($this->debug > 2) {
-            error_log('New LP - lp updated with new expired_on : ' . $this->expired_on, 0);
+        $em = Database::getManager();
+        /** @var CLp $lp */
+        $lp = $em
+            ->getRepository('ChamiloCourseBundle:CLp')
+            ->findOneBy(['id' => $this->get_id(), 'cId' => api_get_course_int_id()]);
+
+        if (!$lp) {
+            return false;
         }
 
-        $params = [
-            'expired_on' => $this->expired_on,
-        ];
-        Database::update($lp_table, $params, ['c_id = ? AND id = ?' => [$course_id, $lp_id]]);
+        $this->expired_on = !empty($expired_on) ? api_get_utc_datetime($expired_on, false, true) : null;
+
+        $lp->setExpiredOn($this->expired_on);
+
+        $em->persist($lp);
+        $em->flush();
+
+        if ($this->debug > 2) {
+            error_log('New LP - lp updated with new expired_on : '.$this->expired_on, 0);
+        }
 
         return true;
     }
@@ -4856,24 +4861,30 @@ class learnpath
      */
     public function set_publicated_on($publicated_on)
     {
-        $course_id = api_get_course_int_id();
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::set_expired_on()', 0);
         }
-        if (!empty($publicated_on)) {
-            $this->publicated_on = api_get_utc_datetime($publicated_on);
-        } else {
-            $this->publicated_on = '';
+
+        $em = Database::getManager();
+        /** @var CLp $lp */
+        $lp = $em
+            ->getRepository('ChamiloCourseBundle:CLp')
+            ->findOneBy(['id' => $this->get_id(), 'cId' => api_get_course_int_id()]);
+
+        if (!$lp) {
+            return false;
         }
-        $lp_table = Database::get_course_table(TABLE_LP_MAIN);
-        $lp_id = $this->get_id();
-        $sql = "UPDATE $lp_table SET
-                publicated_on = '" . Database::escape_string($this->publicated_on) . "'
-                WHERE c_id = ".$course_id." AND id = '$lp_id'";
+
+        $this->publicated_on = !empty($publicated_on) ? api_get_utc_datetime($publicated_on, false, true) : null;
+
+        $lp->setPublicatedOn($this->publicated_on);
+
+        $em->persist($lp);
+        $em->flush();
+
         if ($this->debug > 2) {
-            error_log('New LP - lp updated with new publicated_on : ' . $this->publicated_on, 0);
+            error_log('New LP - lp updated with new publicated_on : '.$this->publicated_on, 0);
         }
-        Database::query($sql);
 
         return true;
     }
@@ -5550,7 +5561,7 @@ class learnpath
                     $title_cut,
                     $url,
                     array(
-                            'class' => 'ajax moved',
+                        'class' => 'ajax moved',
                         'data-title' => $title_cut
                     )
                 );
@@ -5567,7 +5578,6 @@ class learnpath
                 $oddClass = 'row_even';
             }
             $return_audio .= '<tr id ="lp_item_'.$arrLP[$i]['id'] .'" class="' . $oddClass . '">';
-
             $icon_name = str_replace(' ', '', $arrLP[$i]['item_type']);
 
             if (file_exists('../img/lp_' . $icon_name . '.png')) {
@@ -5662,6 +5672,12 @@ class learnpath
                     } else {
                         $edit_icon .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=edit_item&id=' . $arrLP[$i]['id'] . '&lp_id=' . $this->lp_id . '&path_item=' . $arrLP[$i]['path'] . '" class="btn btn-default">';
                         $edit_icon .= Display::return_icon('edit.png', get_lang('LearnpathEditModule'), array(), ICON_SIZE_TINY);
+                        $edit_icon .= '</a>';
+                    }
+                } else {
+                    if  ($arrLP[$i]['item_type'] == TOOL_LP_FINAL_ITEM) {
+                        $edit_icon .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=edit_item&id=' . $arrLP[$i]['id'] . '&lp_id=' . $this->lp_id.'" class="btn btn-default">';
+                        $edit_icon .= Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_TINY);
                         $edit_icon .= '</a>';
                     }
                 }
@@ -6114,12 +6130,13 @@ class learnpath
         $dir = $result['dir'];
 
         if (empty($parentId)) {
-            $postDir = isset($_POST['dir']) ? $_POST['dir'] : '';
-            $dir = isset ($_GET['dir']) ? $_GET['dir'] : $postDir; // Please, do not modify this dirname formatting.
+            $postDir = isset($_POST['dir']) ? $_POST['dir'] : $dir;
+            $dir = isset($_GET['dir']) ? $_GET['dir'] : $postDir; // Please, do not modify this dirname formatting.
             // Please, do not modify this dirname formatting.
             if (strstr($dir, '..')) {
                 $dir = '/';
             }
+
             if (!empty($dir[0]) && $dir[0] == '.') {
                 $dir = substr($dir, 1);
             }
@@ -6136,11 +6153,10 @@ class learnpath
             }
         }
 
-        $filepath = api_get_path(SYS_COURSE_PATH) . $courseInfo['path'] . '/document'.$dir;
-
+        $filepath = api_get_path(SYS_COURSE_PATH) . $courseInfo['path'] . '/document/'.$dir;
         if (!is_dir($filepath)) {
             $dir = '/';
-            $filepath = api_get_path(SYS_COURSE_PATH) . $courseInfo['path'] . '/document'.$dir;
+            $filepath = api_get_path(SYS_COURSE_PATH) . $courseInfo['path'] . '/document/'.$dir;
         }
 
         // stripslashes() before calling api_replace_dangerous_char() because $_POST['title']
@@ -6265,21 +6281,22 @@ class learnpath
         $course_id = api_get_course_int_id();
         $urlAppend = api_get_configuration_value('url_append');
         // Please, do not modify this dirname formatting.
-        $dir = isset($_GET['dir']) ? $_GET['dir'] : $_POST['dir'];
+        $postDir = isset($_POST['dir']) ? $_POST['dir'] : '';
+        $dir = isset($_GET['dir']) ? $_GET['dir'] : $postDir;
 
         if (strstr($dir, '..')) {
             $dir = '/';
         }
 
-        if ($dir[0] == '.') {
+        if (isset($dir[0]) && $dir[0] == '.') {
             $dir = substr($dir, 1);
         }
 
-        if ($dir[0] != '/') {
+        if (isset($dir[0]) && $dir[0] != '/') {
             $dir = '/'.$dir;
         }
 
-        if ($dir[strlen($dir) - 1] != '/') {
+        if (isset($dir[strlen($dir) - 1] ) && $dir[strlen($dir) - 1] != '/') {
             $dir .= '/';
         }
 
@@ -6290,6 +6307,7 @@ class learnpath
         }
 
         $table_doc = Database::get_course_table(TABLE_DOCUMENT);
+
         if (isset($_POST['path']) && !empty($_POST['path'])) {
             $document_id = intval($_POST['path']);
             $sql = "SELECT path FROM " . $table_doc . "
@@ -6301,7 +6319,6 @@ class learnpath
 
             if ($fp = @ fopen($file, 'w')) {
                 $content = str_replace(api_get_path(WEB_COURSE_PATH), $urlAppend.api_get_path(REL_COURSE_PATH), $content);
-
                 // Change the path of mp3 to absolute.
                 // The first regexp deals with :// urls.
                 $content = preg_replace("|(flashvars=\"file=)([^:/]+)/|", "$1" . api_get_path(REL_COURSE_PATH) . $_course['path'] . '/document/', $content);
@@ -6313,6 +6330,7 @@ class learnpath
                 $sql = "UPDATE " . $table_doc ." SET
                             title='".Database::escape_string($_POST['title'])."'
                         WHERE c_id = ".$course_id." AND id = " . $document_id;
+
                 Database::query($sql);
             }
         }
@@ -6622,7 +6640,7 @@ class learnpath
         if ($iframe) {
             $return .= '<iframe id="learnpath_preview_frame" frameborder="0" height="400" width="100%" scrolling="auto" src="' . api_get_path(WEB_COURSE_PATH) . $_course['path'] . '/document' . str_replace('%2F', '/', urlencode($row_doc['path'])) . '?' . api_get_cidreq() . '"></iframe>';
         } else {
-            $return .= file_get_contents(api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document' . $row_doc['path']);
+            $return .= file_get_contents(api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document/' . $row_doc['path']);
         }
 
         return $return;
@@ -7804,7 +7822,6 @@ class learnpath
         if (isset($_GET['edit']) && $_GET['edit'] == 'true') {
             $return .= Display::return_message('<strong>' . get_lang('Warning') . ' !</strong><br />' . get_lang('WarningEditingDocument'), false);
         }
-
         $form = new FormValidator(
             'form',
             'POST',
@@ -8057,6 +8074,12 @@ class learnpath
                     $form->addElement('html', $return);
                 }
             }
+        }
+        if (isset($extra_info['item_type'] ) &&
+            $extra_info['item_type'] == TOOL_LP_FINAL_ITEM
+        ) {
+            $parent_select->freeze();
+            $position->freeze();
         }
 
         if ($action == 'move') {
@@ -11476,17 +11499,6 @@ EOD;
                 break;
             case TOOL_LINK:
                 $link .= $main_dir_path.'link/link_goto.php?'.api_get_cidreq().'&link_id='.$id;
-                /*$TABLETOOLLINK = Database::get_course_table(TABLE_LINK);
-                $result = Database::query("SELECT * FROM $TABLETOOLLINK WHERE c_id = $course_id AND id=$id");
-                $myrow = Database::fetch_array($result);
-                $thelink = $myrow["url"];
-
-                  $link = Display::url(
-                    Display::return_icon('preview_view.png', get_lang('Preview')),
-                    api_get_path(WEB_CODE_PATH).'link/link_goto.php?'.api_get_cidreq().'&link_id='.$key,
-                    ['target' => '_blank']
-                );
-                $link .= $thelink;*/
                 break;
             case TOOL_QUIZ:
                 if (!empty($id)) {

@@ -81,6 +81,7 @@ if (!empty($thematic_id)) {
     $thematic_data = $thematic->get_thematic_list($thematic_id);
 }
 
+
 // get default thematic plan title
 $default_thematic_plan_title = $thematic->get_default_thematic_plan_title();
 

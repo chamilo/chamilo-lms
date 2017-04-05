@@ -332,15 +332,11 @@ function handleStylesheets()
         }
     }
 
-    // Submit stylesheets.
-    if (isset($_POST['save'])) {
-        storeStylesheets();
-        Display::display_normal_message(get_lang('Saved'));
-    }
-
     // Current style.
     $selected = $currentStyle = api_get_setting('stylesheets');
-    $styleFromDatabase = api_get_settings_params_simple(['variable = ?' => 'stylesheets']);
+    $styleFromDatabase = api_get_settings_params_simple(
+        ['variable = ? AND access_url = ?' => ['stylesheets', api_get_current_access_url_id()]]
+    );
     if ($styleFromDatabase) {
         $selected = $currentStyle = $styleFromDatabase['selected_value'];
     }
@@ -349,8 +345,9 @@ function handleStylesheets()
         $selected = $currentStyle = Security::remove_XSS($_POST['style']);
     }
 
-    $dir = api_get_path(SYS_PUBLIC_PATH).'css/themes/' . $selected . '/images/';
-    $url = api_get_path(WEB_CSS_PATH).'themes/' . $selected . '/images/';
+    $themeDir = Template::getThemeDir($selected);
+    $dir = api_get_path(SYS_PUBLIC_PATH).'css/'.$themeDir.'/images/';
+    $url = api_get_path(WEB_CSS_PATH).'/'.$themeDir.'/images/';
     $logoFileName = 'header-logo.png';
     $newLogoFileName = 'header-logo-custom' . api_get_current_access_url_id() . '.png';
     $webPlatformLogoPath = ChamiloApi::getWebPlatformLogoPath($selected);
@@ -498,8 +495,13 @@ function uploadStylesheet($values, $picture)
     $style_name = api_preg_replace('/[^A-Za-z0-9]/', '', $values['name_stylesheet']);
     $cssToUpload = CSS_UPLOAD_PATH;
 
-    // Create the folder if needed.
+    // Check if a virtual instance vchamilo is used
+    $virtualInstanceTheme = api_get_configuration_value('virtual_css_theme_folder');
+    if (!empty($virtualInstanceTheme)) {
+        $cssToUpload = $cssToUpload.$virtualInstanceTheme.'/';
+    }
 
+    // Create the folder if needed.
     if (!is_dir($cssToUpload.$style_name.'/')) {
         mkdir($cssToUpload.$style_name.'/', api_get_permissions_for_new_directories());
     }
@@ -591,7 +593,12 @@ function uploadStylesheet($values, $picture)
 
     if ($result) {
         $fs = new Filesystem();
-        $fs->mirror($cssToUpload, api_get_path(SYS_PATH).'web/css/themes/');
+        $fs->mirror(
+            CSS_UPLOAD_PATH,
+            api_get_path(SYS_PATH).'web/css/themes/',
+            null,
+            ['override' => true]
+        );
     }
 
     return $result;
@@ -687,18 +694,14 @@ function storeStylesheets()
 /**
  * This function checks if the given style is a recognize style that exists in the css directory as
  * a standalone directory.
- * @param string    Style
+ * @param string $style
  * @return bool     True if this style is recognized, false otherwise
  */
 function isStyle($style)
 {
-    $dir = CSS_UPLOAD_PATH;
-    $dirs = scandir($dir);
-    $style = str_replace(array('/', '\\'), array('', ''), $style); // Avoid slashes or backslashes.
-    if (in_array($style, $dirs) && is_dir($dir.$style)) {
-        return true;
-    }
-    return false;
+    $themeList = api_get_themes();
+
+    return in_array($style, array_keys($themeList));
 }
 
 /**
@@ -1012,7 +1015,7 @@ function addEditTemplate()
     $form->addElement('html_editor', 'template_text', get_lang('Text'), null, array('ToolbarSet' => 'AdminTemplates', 'Width' => '100%', 'Height' => '400'));
 
     // Setting the form elements: the form to upload an image to be used with the template.
-    $form->addElement('file','template_image',get_lang('Image'),'');
+    $form->addElement('file', 'template_image', get_lang('Image'), '');
 
     // Setting the form elements: a little bit information about the template image.
     $form->addElement('static', 'file_comment', '', get_lang('TemplateImageComment100x70'));
@@ -1025,10 +1028,10 @@ function addEditTemplate()
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
 
-        $defaults['template_id']    = intval($_GET['id']);
-        $defaults['template_text']  = $row['content'];
+        $defaults['template_id'] = intval($_GET['id']);
+        $defaults['template_text'] = $row['content'];
         // Forcing get_lang().
-        $defaults['title']          = get_lang($row['title']);
+        $defaults['title'] = get_lang($row['title']);
 
         // Adding an extra field: a hidden field with the id of the template we are editing.
         $form->addElement('hidden', 'template_id');
@@ -1055,7 +1058,6 @@ function addEditTemplate()
 
     // if the form validates (complies to all rules) we save the information, else we display the form again (with error message if needed)
     if ($form->validate()) {
-
         $check = Security::check_token('post');
         if ($check) {
             // Exporting the values.
@@ -1120,7 +1122,7 @@ function addEditTemplate()
         displayTemplates();
     } else {
         $token = Security::get_token();
-        $form->addElement('hidden','sec_token');
+        $form->addElement('hidden', 'sec_token');
         $form->setConstants(array('sec_token' => $token));
         // Display the form.
         $form->display();
@@ -1638,10 +1640,10 @@ function getAllowedFileTypes()
  */
 function setConfigurationSettingsInDatabase($parameters, $accessUrl)
 {
-    $r = api_set_settings_category('Search', 'false', $accessUrl);
+    api_set_settings_category('Search', 'false', $accessUrl);
     // Save the settings.
     foreach ($parameters as $key => $value) {
-        $result = api_set_setting($key, $value, null, null);
+        api_set_setting($key, $value, null, null);
     }
 }
 
@@ -1667,7 +1669,6 @@ function showSearchToolsStatusTable()
     //@todo windows support
     if (api_is_windows_os() == false) {
         $list_of_programs = array('pdftotext', 'ps2pdf', 'catdoc', 'html2text', 'unrtf', 'catppt', 'xls2csv');
-
         foreach($list_of_programs as $program) {
             $output = [];
             $ret_val = null;
@@ -1703,7 +1704,8 @@ function showSearchToolsStatusTable()
 function generateCSSDownloadLink($style)
 {
     $arch = api_get_path(SYS_ARCHIVE_PATH).$style.'.zip';
-    $dir = api_get_path(SYS_CSS_PATH).'themes/'.$style;
+    $themeDir = Template::getThemeDir($style);
+    $dir = api_get_path(SYS_CSS_PATH).$themeDir;
     $check = Security::check_abs_path(
         $dir,
         api_get_path(SYS_CSS_PATH).'themes'
@@ -1721,16 +1723,18 @@ function generateCSSDownloadLink($style)
         Display::addFlash(Display::return_message(get_lang('FileNotFound'), 'warning'));
     }
 }
+
 /**
  * Helper function to tell if the style is changeable in the current URL
  * @return bool $changeable Whether the style can be changed in this URL or not
  */
-function isStyleChangeable() {
-    global $_configuration;
+function isStyleChangeable()
+{
     $changeable = false;
-    if ($_configuration['access_url'] != 1) {
+    $urlId = api_get_current_access_url_id();
+    if ($urlId) {
         $style_info = api_get_settings('stylesheets', '', 1, 0);
-        $url_info = api_get_access_url($_configuration['access_url']);
+        $url_info = api_get_access_url($urlId);
         if ($style_info[0]['access_url_changeable'] == 1 && $url_info['active'] == 1) {
             $changeable = true;
         }

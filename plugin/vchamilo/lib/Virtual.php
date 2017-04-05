@@ -55,7 +55,6 @@ class Virtual
             $archivePath = '';
             $uploadPath = '';
             $passwordEncryption = '';
-
             foreach ($virtualSettings as $setting) {
                 switch ($setting['variable']) {
                     case 'vchamilo_upload_real_root':
@@ -110,7 +109,10 @@ class Virtual
 
                 // Instance cannot have multiple urls
                 $_configuration['multiple_access_urls'] = false;
-
+                $_configuration['virtual_css_theme_folder'] = '';
+                if (isset($data['css_theme_folder']) && !empty($data['css_theme_folder'])) {
+                    $_configuration['virtual_css_theme_folder'] = $data['css_theme_folder'];
+                }
                 $virtualChamilo = $data;
             } else {
                 exit("This portal is disabled. Please contact your administrator");

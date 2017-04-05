@@ -121,7 +121,7 @@ for ($i = 0; $i < ($count_dir); $i++) {
 }
 
 $editorConfig = array(
-    'ToolbarSet' => (api_is_allowed_to_edit(null, true) ? 'Documents' :'DocumentsStudent'),
+    'ToolbarSet' => (api_is_allowed_to_edit(null, true) ? 'Documents' : 'DocumentsStudent'),
     'Width' => '100%',
     'Height' => '400',
     'cols-size' => [2, 10, 0],
@@ -164,13 +164,13 @@ if (!$is_certificate_mode) {
         "name" => get_lang('Documents'),
     );
 } else {
-    $interbreadcrumb[]= array('url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('Gradebook'));
+    $interbreadcrumb[] = array('url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('Gradebook'));
 }
 
 if (empty($document_data['parents'])) {
     $interbreadcrumb[] = array('url' => '#', 'name' => $document_data['title']);
 } else {
-    foreach($document_data['parents'] as $document_sub_data) {
+    foreach ($document_data['parents'] as $document_sub_data) {
         if ($document_data['title'] == $document_sub_data['title']) {
             continue;
         }
@@ -354,7 +354,7 @@ if ($is_allowed_to_edit) {
 								$dir,
 								api_get_user_id()
 							);
-							header('Location: document.php?id=' . $document_data['parent_id'] . '&' . api_get_cidreq() . ($is_certificate_mode?'&curdirpath=/certificates&selectcat=1':''));
+							header('Location: document.php?id='.$document_data['parent_id'].'&'.api_get_cidreq().($is_certificate_mode ? '&curdirpath=/certificates&selectcat=1' : ''));
 							exit;
 						} else {
                             Display::addFlash(Display::return_message(get_lang('Impossible'), 'warning'));
@@ -397,7 +397,7 @@ if (file_exists($document_data['absolute_path'])) {
 /*	Display user interface */
 
 // Display the header
-$nameTools = get_lang('EditDocument') . ': '.Security::remove_XSS($document_data['title']);
+$nameTools = get_lang('EditDocument').': '.Security::remove_XSS($document_data['title']);
 Display::display_header($nameTools, 'Doc');
 
 $document_info = api_get_item_property_info(
@@ -480,7 +480,7 @@ if ($owner_id == api_get_user_id() ||
 	$form->addElement('textarea', 'comment', get_lang('Comment'), ['cols-size' => [2, 10, 0]]);
 
 	if ($owner_id == api_get_user_id() || api_is_platform_admin()) {
-		$checked =& $form->addElement('checkbox', 'readonly', null, get_lang('ReadOnly'));
+		$checked = & $form->addElement('checkbox', 'readonly', null, get_lang('ReadOnly'));
 		if ($readonly == 1) {
 			$checked->setChecked(true);
 		}
@@ -520,14 +520,14 @@ if ($owner_id == api_get_user_id() ||
 		foreach ($all_information_by_create_certificate[0] as $info_value) {
 			$str_info .= $info_value.'<br/>';
 		}
-		$create_certificate=get_lang('CreateCertificateWithTags');
+		$create_certificate = get_lang('CreateCertificateWithTags');
 		Display::display_normal_message(
 			$create_certificate.': <br /><br />'.$str_info,
 			false
 		);
 	}
 
-	if ($extension=='svg' && !api_browser_support('svg') && api_get_setting('enabled_support_svg') == 'true'){
+	if ($extension == 'svg' && !api_browser_support('svg') && api_get_setting('enabled_support_svg') == 'true') {
 		Display::display_warning_message(get_lang('BrowserDontSupportsSVG'));
 	}
     // HTML-editor
@@ -579,7 +579,7 @@ function change_name($base_work_dir, $source_file, $rename_to, $dir, $doc)
 }
 
 //return button back to
-function show_return($document_id, $path, $call_from_tool='', $slide_id=0, $is_certificate_mode=false)
+function show_return($document_id, $path, $call_from_tool = '', $slide_id = 0, $is_certificate_mode = false)
 {
     $actionsLeft = null;
 
@@ -588,29 +588,29 @@ function show_return($document_id, $path, $call_from_tool='', $slide_id=0, $is_c
 
 	if ($is_certificate_mode) {
 		$selectedCategory = (isset($_GET['curdirpath']) ? Security::remove_XSS($_GET['curdirpath']) : '');
-		$actionsLeft .= '<a href="document.php?curdirpath='. $selectedCategory .'&selectcat=' . $selectedCategory .'">'.
-            Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview'),'',ICON_SIZE_MEDIUM).'</a>';
-        $actionsLeft .= '<a id="hide_bar_template" href="#" role="button">'.Display::return_icon('expand.png',get_lang('Expand'),array('id'=>'expand'),ICON_SIZE_MEDIUM).Display::return_icon('contract.png',get_lang('Collapse'),array('id'=>'contract', 'class'=>'hide'),ICON_SIZE_MEDIUM).'</a>';
-	} elseif($call_from_tool=='slideshow') {
+		$actionsLeft .= '<a href="document.php?curdirpath='.$selectedCategory.'&selectcat='.$selectedCategory.'">'.
+            Display::return_icon('back.png', get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview'), '', ICON_SIZE_MEDIUM).'</a>';
+        $actionsLeft .= '<a id="hide_bar_template" href="#" role="button">'.Display::return_icon('expand.png', get_lang('Expand'), array('id'=>'expand'), ICON_SIZE_MEDIUM).Display::return_icon('contract.png', get_lang('Collapse'), array('id'=>'contract', 'class'=>'hide'), ICON_SIZE_MEDIUM).'</a>';
+	} elseif ($call_from_tool == 'slideshow') {
 		$actionsLeft .= '<a href="'.api_get_path(WEB_PATH).'main/document/slideshow.php?slide_id='.$slide_id.'&curdirpath='.Security::remove_XSS(urlencode($_GET['curdirpath'])).'">'.
-            Display::return_icon('slideshow.png', get_lang('BackTo').' '.get_lang('ViewSlideshow'),'',ICON_SIZE_MEDIUM).'</a>';
-	} elseif($call_from_tool=='editdraw') {
+            Display::return_icon('slideshow.png', get_lang('BackTo').' '.get_lang('ViewSlideshow'), '', ICON_SIZE_MEDIUM).'</a>';
+	} elseif ($call_from_tool == 'editdraw') {
 		$actionsLeft .= '<a href="'.$url.'">'.
-            Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'), '', ICON_SIZE_MEDIUM).'</a>';
 		$actionsLeft .= '<a href="javascript:history.back(1)">'.Display::return_icon('draw.png', get_lang('BackTo').' '.get_lang('Draw'), array(), 32).'</a>';
-	} elseif($call_from_tool=='editodf') {
+	} elseif ($call_from_tool == 'editodf') {
         $actionsLeft .= '<a href="'.$url.'">'.
-            Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'), '', ICON_SIZE_MEDIUM).'</a>';
         $actionsLeft .= '<a href="javascript:history.back(1)">'.Display::return_icon('draw.png', get_lang('BackTo').' '.get_lang('Write'), array(), 32).'</a>';
-        $actionsLeft .= '<a id="hide_bar_template" href="#" role="button">'.Display::return_icon('expand.png',get_lang('Expand'),array('id'=>'expand'),ICON_SIZE_MEDIUM).Display::return_icon('contract.png',get_lang('Collapse'),array('id'=>'contract', 'class'=>'hide'),ICON_SIZE_MEDIUM).'</a>';
-    } elseif($call_from_tool=='editpaint'){
+        $actionsLeft .= '<a id="hide_bar_template" href="#" role="button">'.Display::return_icon('expand.png', get_lang('Expand'), array('id'=>'expand'), ICON_SIZE_MEDIUM).Display::return_icon('contract.png', get_lang('Collapse'), array('id'=>'contract', 'class'=>'hide'), ICON_SIZE_MEDIUM).'</a>';
+    } elseif ($call_from_tool == 'editpaint') {
 		$actionsLeft .= '<a href="'.$url.'">'.
             Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'), array(), ICON_SIZE_MEDIUM).'</a>';
 		$actionsLeft .= '<a href="javascript:history.back(1)">'.Display::return_icon('paint.png', get_lang('BackTo').' '.get_lang('Paint'), array(), 32).'</a>';
 	} else {
 		$actionsLeft .= '<a href="'.$url.'">'.
-            Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
-        $actionsLeft .= '<a id="hide_bar_template" href="#" role="button">'.Display::return_icon('expand.png',get_lang('Expand'),array('id'=>'expand'),ICON_SIZE_MEDIUM).Display::return_icon('contract.png',get_lang('Collapse'),array('id'=>'contract', 'class'=>'hide'),ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'), '', ICON_SIZE_MEDIUM).'</a>';
+        $actionsLeft .= '<a id="hide_bar_template" href="#" role="button">'.Display::return_icon('expand.png', get_lang('Expand'), array('id'=>'expand'), ICON_SIZE_MEDIUM).Display::return_icon('contract.png', get_lang('Collapse'), array('id'=>'contract', 'class'=>'hide'), ICON_SIZE_MEDIUM).'</a>';
 	}
 
     echo $toolbar = Display::toolbarAction('actions-documents', array($actionsLeft));

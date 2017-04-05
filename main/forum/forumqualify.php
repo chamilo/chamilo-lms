@@ -46,7 +46,7 @@ $score = 0;
 if (isset($_POST['idtextqualify'])) {
     $score = floatval($_POST['idtextqualify']);
 
-    if ($score < $maxQualify) {
+    if ($score <= $maxQualify) {
         saveThreadScore(
             $currentThread,
             $userIdToQualify,

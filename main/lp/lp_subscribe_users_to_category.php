@@ -67,7 +67,12 @@ $url = api_get_self().'?'.api_get_cidreq().'&action=add_users_to_category&id='.$
 $formUsers = new \FormValidator('lp_edit', 'post', $url);
 $formUsers->addElement('hidden', 'user_form', 1);
 
-$userMultiSelect = $formUsers->addElement('advmultiselect', 'users', get_lang('Users'), $choices);
+$userMultiSelect = $formUsers->addElement(
+    'advmultiselect',
+    'users',
+    get_lang('Users'),
+    $choices
+);
 $formUsers->addButtonSave(get_lang('Save'));
 
 $defaults = array();
@@ -78,8 +83,7 @@ if (!empty($selectedChoices)) {
 
 $formUsers->setDefaults($defaults);
 
-//Building the form for Groups
-
+// Building the form for Groups
 $tpl = new Template();
 
 $currentUser = $em->getRepository('ChamiloUserBundle:User')->find(api_get_user_id());
@@ -89,30 +93,30 @@ if ($formUsers->validate()) {
 
     // Subscribing users
     $users = isset($values['users']) ? $values['users'] : [];
-    if (!empty($users)) {
-        $deleteUsers = [];
-        if ($subscribedUsersInCategory) {
-            /** @var CLpCategoryUser $user */
-            foreach ($subscribedUsersInCategory as $user) {
-                $userId = $user->getUser()->getId();
 
-                if (!in_array($userId, $users)) {
-                    $category->removeUsers($user);
-                }
+    $deleteUsers = [];
+    if ($subscribedUsersInCategory) {
+        /** @var CLpCategoryUser $user */
+        foreach ($subscribedUsersInCategory as $user) {
+            $userId = $user->getUser()->getId();
+
+            if (!in_array($userId, $users)) {
+                $category->removeUsers($user);
             }
         }
-
-        foreach ($users as $userId) {
-            $categoryUser = new CLpCategoryUser();
-            $user = UserManager::getRepository()->find($userId);
-            $categoryUser->setUser($user);
-            $category->addUser($categoryUser);
-        }
-
-        $em->merge($category);
-        $em->flush();
-        Display::addFlash(Display::return_message(get_lang('Updated')));
     }
+
+    foreach ($users as $userId) {
+        $categoryUser = new CLpCategoryUser();
+        $user = UserManager::getRepository()->find($userId);
+        $categoryUser->setUser($user);
+        $category->addUser($categoryUser);
+    }
+
+    $em->merge($category);
+    $em->flush();
+    Display::addFlash(Display::return_message(get_lang('Updated')));
+
     header("Location: $url");
     exit;
 } else {

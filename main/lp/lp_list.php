@@ -355,7 +355,7 @@ foreach ($categories as $item) {
                 if ($current_session == $details['lp_session']) {
                     $dsp_edit_lp = Display::url(
                         Display::return_icon('settings.png', get_lang('CourseSettings'), '', ICON_SIZE_SMALL),
-                        "lp_controller.php?" . api_get_cidreq() . "&action=edit&lp_id=$id"
+                        "lp_controller.php?".api_get_cidreq()."&action=edit&lp_id=$id"
                     );
                 } else {
                     $dsp_edit_lp = Display::return_icon(
@@ -371,7 +371,7 @@ foreach ($categories as $item) {
                     if ($details['lp_type'] == 1 || $details['lp_type'] == 2) {
                         $dsp_build = Display::url(
                             Display::return_icon('edit.png', get_lang('LearnpathEditLearnpath'), '', ICON_SIZE_SMALL),
-                            'lp_controller.php?' . api_get_cidreq() . '&' . http_build_query([
+                            'lp_controller.php?'.api_get_cidreq().'&'.http_build_query([
                                 'action' => 'add_item',
                                 'type' => 'step',
                                 'lp_id' => $id,
@@ -405,19 +405,19 @@ foreach ($categories as $item) {
                     if ($details['lp_visibility'] == 0) {
                         $dsp_visible = Display::url(
                             Display::return_icon('invisible.png', get_lang('Show'), '', ICON_SIZE_SMALL),
-                            api_get_self() . '?' . api_get_cidreq() . "&lp_id=$id&action=toggle_visible&new_status=1"
+                            api_get_self().'?'.api_get_cidreq()."&lp_id=$id&action=toggle_visible&new_status=1"
                         );
                     } else {
                         $dsp_visible = Display::url(
                             Display::return_icon('visible.png', get_lang('Hide'), '', ICON_SIZE_SMALL),
-                            api_get_self() . '?' . api_get_cidreq() . "&lp_id=$id&action=toggle_visible&new_status=0"
+                            api_get_self().'?'.api_get_cidreq()."&lp_id=$id&action=toggle_visible&new_status=0"
                         );
                     }
                 }
 
                 //Tracking command
                 $trackingActionUrl = 'lp_controller.php?'
-                    . api_get_cidreq() . '&'
+                    . api_get_cidreq().'&'
                     . http_build_query([
                         'action' => 'report',
                         'lp_id' => $id,
@@ -438,7 +438,7 @@ foreach ($categories as $item) {
                                 '',
                                 ICON_SIZE_SMALL
                             ),
-                            api_get_self() . '?' . api_get_cidreq() . "&lp_id=$id&action=toggle_publish&new_status=v"
+                            api_get_self().'?'.api_get_cidreq()."&lp_id=$id&action=toggle_publish&new_status=v"
                         );
                     } else {
                         $dsp_publish = "<a href='".api_get_self()."?".api_get_cidreq()."&lp_id=$id&action=toggle_publish&new_status=i'>".
@@ -455,7 +455,7 @@ foreach ($categories as $item) {
                                 '',
                                 ICON_SIZE_SMALL
                             ),
-                            api_get_self() . '?' . api_get_cidreq() . "&lp_id=$id&action=toggle_publish&new_status=i"
+                            api_get_self().'?'.api_get_cidreq()."&lp_id=$id&action=toggle_publish&new_status=i"
                         );
                     }
                 } else {
@@ -483,7 +483,7 @@ foreach ($categories as $item) {
                                 '',
                                 ICON_SIZE_SMALL
                             ),
-                            "lp_controller.php?" . api_get_cidreq() . "&action=switch_attempt_mode&lp_id=$id"
+                            "lp_controller.php?".api_get_cidreq()."&action=switch_attempt_mode&lp_id=$id"
                         );
                     }
                     if ($details['seriousgame_mode'] == 0 && $details['lp_prevent_reinit'] == 1) { //single mode | next = multiple
@@ -494,7 +494,7 @@ foreach ($categories as $item) {
                                 '',
                                 ICON_SIZE_SMALL
                             ),
-                            "lp_controller.php?" . api_get_cidreq() . "&action=switch_attempt_mode&lp_id=$id"
+                            "lp_controller.php?".api_get_cidreq()."&action=switch_attempt_mode&lp_id=$id"
                         );
                     }
                     if ($details['seriousgame_mode'] == 0 && $details['lp_prevent_reinit'] == 0) { //multiple mode | next = seriousgame
@@ -505,7 +505,7 @@ foreach ($categories as $item) {
                                 '',
                                 ICON_SIZE_SMALL
                             ),
-                            "lp_controller.php?" . api_get_cidreq() . "&action=switch_attempt_mode&lp_id=$id"
+                            "lp_controller.php?".api_get_cidreq()."&action=switch_attempt_mode&lp_id=$id"
                         );
                     }
                 } else {
@@ -528,8 +528,8 @@ foreach ($categories as $item) {
                                     '',
                                     ICON_SIZE_SMALL
                                 ),
-                                'lp_controller.php?' . api_get_cidreq()
-                                . '&action=switch_view_mode&lp_id=' . $id . $token_parameter
+                                'lp_controller.php?'.api_get_cidreq()
+                                . '&action=switch_view_mode&lp_id='.$id.$token_parameter
                             );
                             break;
                         case 'embedded':
@@ -540,8 +540,8 @@ foreach ($categories as $item) {
                                     '',
                                     ICON_SIZE_SMALL
                                 ),
-                                'lp_controller.php?' . api_get_cidreq()
-                                . '&action=switch_view_mode&lp_id=' . $id . $token_parameter
+                                'lp_controller.php?'.api_get_cidreq()
+                                . '&action=switch_view_mode&lp_id='.$id.$token_parameter
                             );
                             break;
                         case 'embedframe':
@@ -552,8 +552,8 @@ foreach ($categories as $item) {
                                     '',
                                     ICON_SIZE_SMALL
                                 ),
-                                'lp_controller.php?' . api_get_cidreq()
-                                . '&action=switch_view_mode&lp_id=' . $id . $token_parameter
+                                'lp_controller.php?'.api_get_cidreq()
+                                . '&action=switch_view_mode&lp_id='.$id.$token_parameter
                             );
                             break;
                         case 'impress':
@@ -564,8 +564,8 @@ foreach ($categories as $item) {
                                     '',
                                     ICON_SIZE_SMALL
                                 ),
-                                'lp_controller.php?' . api_get_cidreq()
-                                . '&action=switch_view_mode&lp_id=' . $id . $token_parameter
+                                'lp_controller.php?'.api_get_cidreq()
+                                . '&action=switch_view_mode&lp_id='.$id.$token_parameter
                             );
                             break;
                     }
@@ -597,7 +597,7 @@ foreach ($categories as $item) {
                                 '',
                                 ICON_SIZE_SMALL
                             ),
-                            "lp_controller.php?" . api_get_cidreq() . "&action=switch_scorm_debug&lp_id=$id"
+                            "lp_controller.php?".api_get_cidreq()."&action=switch_scorm_debug&lp_id=$id"
                         );
                     } else {
                         $dsp_debug = Display::url(
@@ -607,7 +607,7 @@ foreach ($categories as $item) {
                                 '',
                                 ICON_SIZE_SMALL
                             ),
-                            "lp_controller.php?" . api_get_cidreq() . "&action=switch_scorm_debug&lp_id=$id"
+                            "lp_controller.php?".api_get_cidreq()."&action=switch_scorm_debug&lp_id=$id"
                         );
                     }
                 }
@@ -660,7 +660,7 @@ foreach ($categories as $item) {
                 if ($details['subscribe_users'] == 1) {
                     $subscribeUsers = Display::url(
                         Display::return_icon('user.png', get_lang('SubscribeUsersToLp')),
-                        api_get_path(WEB_CODE_PATH) . "lp/lp_subscribe_users.php?lp_id=$id&".api_get_cidreq()
+                        api_get_path(WEB_CODE_PATH)."lp/lp_subscribe_users.php?lp_id=$id&".api_get_cidreq()
                     );
                 }
 
@@ -670,12 +670,12 @@ foreach ($categories as $item) {
                         $autolaunch_exists = true;
                         $lp_auto_launch_icon = Display::url(
                             Display::return_icon('launch.png', get_lang('DisableLPAutoLaunch')),
-                            api_get_self() . '?' . api_get_cidreq() . "&action=auto_launch&status=0&lp_id=$id"
+                            api_get_self().'?'.api_get_cidreq()."&action=auto_launch&status=0&lp_id=$id"
                         );
                     } else {
                         $lp_auto_launch_icon = Display::url(
                             Display::return_icon('launch_na.png', get_lang('EnableLPAutoLaunch')),
-                            api_get_self() . '?' . api_get_cidreq() . "&action=auto_launch&status=1&lp_id=$id"
+                            api_get_self().'?'.api_get_cidreq()."&action=auto_launch&status=1&lp_id=$id"
                         );
                     }
                 }
@@ -688,7 +688,7 @@ foreach ($categories as $item) {
                         '',
                         ICON_SIZE_SMALL
                     ),
-                    api_get_self() . '?' . api_get_cidreq() . "&action=export_to_pdf&lp_id=$id"
+                    api_get_self().'?'.api_get_cidreq()."&action=export_to_pdf&lp_id=$id"
                 );
 
                 /* Delete */
@@ -700,8 +700,8 @@ foreach ($categories as $item) {
                             '',
                             ICON_SIZE_SMALL
                         ),
-                        'lp_controller.php?' . api_get_cidreq() . "&action=delete&lp_id=$id",
-                        ['onclick' => "javascript: return confirmation('" . addslashes($name) . "');"]
+                        'lp_controller.php?'.api_get_cidreq()."&action=delete&lp_id=$id",
+                        ['onclick' => "javascript: return confirmation('".addslashes($name)."');"]
                     );
                 } else {
                     $dsp_delete = Display::return_icon(
@@ -718,23 +718,23 @@ foreach ($categories as $item) {
                     if ($details['lp_display_order'] == 1 && $max != 1) {
                         $dsp_order .= Display::url(
                             Display::return_icon('down.png', get_lang('MoveDown'), '', ICON_SIZE_SMALL),
-                            "lp_controller.php?" . api_get_cidreq() . "&action=move_lp_down&lp_id=$id"
+                            "lp_controller.php?".api_get_cidreq()."&action=move_lp_down&lp_id=$id"
                         );
                     } elseif ($current == $max - 1 && $max != 1) {
                         $dsp_order .= Display::url(
                             Display::return_icon('up.png', get_lang('MoveUp'), '', ICON_SIZE_SMALL),
-                            "lp_controller.php?" . api_get_cidreq() . "&action=move_lp_up&lp_id=$id"
+                            "lp_controller.php?".api_get_cidreq()."&action=move_lp_up&lp_id=$id"
                         );
                     } elseif ($max == 1) {
                         $dsp_order = '';
                     } else {
                         $dsp_order .= Display::url(
                             Display::return_icon('down.png', get_lang('MoveDown'), '', ICON_SIZE_SMALL),
-                            "lp_controller.php?" . api_get_cidreq() . "&action=move_lp_down&lp_id=$id"
+                            "lp_controller.php?".api_get_cidreq()."&action=move_lp_down&lp_id=$id"
                         );
                         $dsp_order .= Display::url(
                             Display::return_icon('up.png', get_lang('MoveUp'), '', ICON_SIZE_SMALL),
-                            "lp_controller.php?" . api_get_cidreq() . "&action=move_lp_up&lp_id=$id"
+                            "lp_controller.php?".api_get_cidreq()."&action=move_lp_up&lp_id=$id"
                         );
                     }
                 }
@@ -750,7 +750,7 @@ foreach ($categories as $item) {
                     if ($details['seriousgame_mode'] == 0) {
                         $actionSeriousGame = Display::toolbarButton(
                             null,
-                            api_get_self() . '?' . api_get_cidreq() . "&lp_id=$id&action=toggle_seriousgame",
+                            api_get_self().'?'.api_get_cidreq()."&lp_id=$id&action=toggle_seriousgame",
                             'trophy',
                             'default',
                             [
@@ -761,7 +761,7 @@ foreach ($categories as $item) {
                     } else {
                         $actionSeriousGame = Display::toolbarButton(
                             null,
-                            api_get_self() . '?' . api_get_cidreq() . "&lp_id=$id&action=toggle_seriousgame",
+                            api_get_self().'?'.api_get_cidreq()."&lp_id=$id&action=toggle_seriousgame",
                             'trophy',
                             'warning',
                             [
@@ -775,7 +775,7 @@ foreach ($categories as $item) {
                 // Student
                 $export_icon = Display::url(
                     Display::return_icon('pdf.png', get_lang('ExportToPDF'), '', ICON_SIZE_SMALL),
-                    api_get_self() . '?' . api_get_cidreq() . "&action=export_to_pdf&lp_id=$id"
+                    api_get_self().'?'.api_get_cidreq()."&action=export_to_pdf&lp_id=$id"
                 );
             }
 

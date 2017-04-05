@@ -20,7 +20,7 @@ class Basic extends Toolbar
         'adobeair',
         'ajax',
         'audio',
-        'image2',
+        'image2_chamilo',
         'bidi',
         'colorbutton',
         'colordialog',
@@ -147,8 +147,8 @@ class Basic extends Toolbar
             $config['toolbar_maxToolbar'] = $this->getMaximizedToolbar();
         }
 
-        $config['customConfig'] = api_get_path(WEB_LIBRARY_JS_PATH) . 'ckeditor/config_js.php';
-        $config['flash_flvPlayer'] = api_get_path(WEB_LIBRARY_JS_PATH) . 'ckeditor/plugins/flash/swf/player.swf';
+        $config['customConfig'] = api_get_path(WEB_LIBRARY_JS_PATH).'ckeditor/config_js.php';
+        $config['flash_flvPlayer'] = api_get_path(WEB_LIBRARY_JS_PATH).'ckeditor/plugins/flash/swf/player.swf';
 
         /*filebrowserFlashBrowseUrl
         filebrowserFlashUploadUrl
@@ -173,7 +173,7 @@ class Basic extends Toolbar
             'wordLimit' => 'unlimited'
         );*/
 
-        $config['skin'] = 'bootstrapck,' . api_get_path(WEB_LIBRARY_JS_PATH) . 'ckeditor/skins/bootstrapck/';
+        $config['skin'] = 'bootstrapck,'.api_get_path(WEB_LIBRARY_JS_PATH).'ckeditor/skins/bootstrapck/';
         //$config['skin'] = 'moono';
 
         if (isset($this->config)) {
@@ -205,7 +205,7 @@ class Basic extends Toolbar
         return [
             $this->getNewPageBlock(),
             ['Undo', 'Redo'],
-            ['Link', 'Image', 'Video', 'Oembed','Flash', 'Youtube', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
+            ['Link', 'Image', 'Video', 'Oembed', 'Flash', 'Youtube', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
             ['Styles', 'Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor', 'Source'],

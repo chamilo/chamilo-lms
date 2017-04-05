@@ -58,12 +58,17 @@ class QuizQuestion extends Resource
     public $question_category;
 
     /**
-     * Create a new QuizQuestion
+     * QuizQuestion constructor.
+     * @param int $id
      * @param string $question
      * @param string $description
      * @param int $ponderation
-     * @param int $type
-     * @param int $position
+     * @param $type
+     * @param $position
+     * @param $picture
+     * @param $level
+     * @param $extra
+     * @param int $question_category
      */
     public function __construct(
         $id,

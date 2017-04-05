@@ -20,7 +20,8 @@
         'wordcount',
         'youtube',
         'flash',
-        'inserthtml'
+        'inserthtml',
+        'image2_chamilo'
     ];
 
     plugins.forEach(function(plugin) {

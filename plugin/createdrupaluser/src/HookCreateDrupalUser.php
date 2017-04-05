@@ -29,7 +29,7 @@ class HookCreateDrupalUser extends HookObserver implements HookCreateUserObserve
         $data = $hook->getEventData();
 
         $drupalDomain = CreateDrupalUser::create()->get('drupal_domain');
-        $drupalDomain = rtrim($drupalDomain, '/') . '/';
+        $drupalDomain = rtrim($drupalDomain, '/').'/';
 
         if ($data['type'] === HOOK_EVENT_TYPE_POST) {
             $return = $data['return'];
@@ -50,7 +50,7 @@ class HookCreateDrupalUser extends HookObserver implements HookCreateUserObserve
             );
 
             $options = array(
-                'location' => $drupalDomain . 'sites/all/modules/chamilo/soap.php?wsdl',
+                'location' => $drupalDomain.'sites/all/modules/chamilo/soap.php?wsdl',
                 'uri' => $drupalDomain
             );
 

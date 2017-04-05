@@ -10,7 +10,7 @@
  */
 
 //the plugin title
-$plugin_info['title']      = 'Add a button to logout from CAS';
+$plugin_info['title'] = 'Add a button to logout from CAS';
 
 //the comments that go with the plugin
 $plugin_info['comment']     = "If CAS is activated, this plugin add a text and a button on the user page to logout from a CAS session. Configure plugin to add title, comment and logo.";
@@ -36,4 +36,4 @@ $form->setDefaults($defaults);
 $plugin_info['settings_form'] = $form;
 
 // Set the templates that are going to be used
-$plugin_info['templates']   = array('template.tpl');
+$plugin_info['templates'] = array('template.tpl');

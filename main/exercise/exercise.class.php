@@ -101,7 +101,6 @@ class Exercise
         $this->text_when_finished = '';
         $this->display_category_name = 0;
         $this->pass_percentage = '';
-
         $this->modelType = 1;
         $this->questionSelectionType = EX_Q_SELECTION_ORDERED;
         $this->endButton = 0;
@@ -122,6 +121,7 @@ class Exercise
      *
      * @author Olivier Brouckaert
      * @param integer $id - exercise Id
+     * @param bool $parseQuestionList
      *
      * @return boolean - true if exercise exists, otherwise false
      */
@@ -130,7 +130,7 @@ class Exercise
         $TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);
         $table_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 
-        $id  = intval($id);
+        $id  = (int)$id;
         if (empty($this->course_id)) {
             return false;
         }
@@ -167,6 +167,7 @@ class Exercise
             $this->review_answers = (isset($object->review_answers) && $object->review_answers == 1) ? true : false;
             $this->globalCategoryId = isset($object->global_category_id) ? $object->global_category_id : null;
             $this->questionSelectionType = isset($object->question_selection_type) ? $object->question_selection_type : null;
+            $this->hideQuestionTitle = isset($object->hide_question_title) ? (int)$object->hide_question_title : 0;
 
             $sql = "SELECT lp_id, max_score
                     FROM $table_lp_item
@@ -518,7 +519,7 @@ class Exercise
      */
     public function setHideQuestionTitle($value)
     {
-        $this->hideQuestionTitle = intval($value);
+        $this->hideQuestionTitle = (int)$value;
     }
 
     /**
@@ -534,7 +535,7 @@ class Exercise
      */
     public function setScoreTypeModel($value)
     {
-        $this->scoreTypeModel = intval($value);
+        $this->scoreTypeModel = (int)$value;
     }
 
     /**
@@ -553,7 +554,7 @@ class Exercise
         if (is_array($value) && isset($value[0])) {
             $value = $value[0];
         }
-        $this->globalCategoryId = intval($value);
+        $this->globalCategoryId = (int)$value;
     }
 
     /**
@@ -945,11 +946,13 @@ class Exercise
                     true,
                     true
                 );
+
                 $questions_by_category = TestCategory::getQuestionsByCat(
                     $this->id,
                     $question_list,
                     $categoriesAddedInExercise
                 );
+
                 $question_list = $this->pickQuestionsPerCategory(
                     $categoriesAddedInExercise,
                     $question_list,
@@ -1011,18 +1014,13 @@ class Exercise
 
         // Adding category info in the category list with question list:
         if (!empty($questions_by_category)) {
-            /*$em = Database::getManager();
-            $repo = $em->getRepository('ChamiloCoreBundle:CQuizCategory');*/
             $newCategoryList = array();
-
             foreach ($questions_by_category as $categoryId => $questionList) {
                 $cat = new TestCategory();
                 $cat = $cat->getCategory($categoryId);
 
                 $cat = (array)$cat;
                 $cat['iid'] = $cat['id'];
-                //*$cat['name'] = $cat['name'];
-
                 $categoryParentInfo = null;
                 // Parent is not set no loop here
                 if (!empty($cat['parent_id'])) {
@@ -1071,6 +1069,7 @@ class Exercise
 
             $result['category_with_questions_list'] = $newCategoryList;
         }
+
         return $result;
     }
 
@@ -1311,7 +1310,7 @@ class Exercise
      */
     public function updateEndButton($value)
     {
-        $this->endButton = intval($value);
+        $this->endButton = (int)$value;
     }
 
     /**
@@ -1888,7 +1887,14 @@ class Exercise
                     '2',
                     array('id' => 'exerciseType_2')
                 );
-                $form->addGroup($radios_feedback, null, array(get_lang('FeedbackType'),get_lang('FeedbackDisplayOptions')));
+                $form->addGroup(
+                    $radios_feedback,
+                    null,
+                    array(
+                        get_lang('FeedbackType'),
+                        get_lang('FeedbackDisplayOptions'),
+                    )
+                );
 
                 // Type of results display on the final page
                 $radios_results_disabled = array();
@@ -1916,7 +1922,6 @@ class Exercise
                     '2',
                     array('id' => 'result_disabled_2')
                 );
-
 
                 $radios_results_disabled[] = $form->createElement(
                     'radio',
@@ -1983,161 +1988,118 @@ class Exercise
                 }
             }
 
-            if (true) {
-                $option = array(
-                    EX_Q_SELECTION_ORDERED => get_lang('OrderedByUser'),
-                    //  defined by user
-                    EX_Q_SELECTION_RANDOM => get_lang('Random'),
-                    // 1-10, All
-                    'per_categories' => '--------'.get_lang(
-                            'UsingCategories'
-                        ).'----------',
+            $option = array(
+                EX_Q_SELECTION_ORDERED => get_lang('OrderedByUser'),
+                //  Defined by user
+                EX_Q_SELECTION_RANDOM => get_lang('Random'),
+                // 1-10, All
+                'per_categories' => '--------'.get_lang('UsingCategories').'----------',
+                // Base (A 123 {3} B 456 {3} C 789{2} D 0{0}) --> Matrix {3, 3, 2, 0}
+                EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_ORDERED => get_lang('OrderedCategoriesAlphabeticallyWithQuestionsOrdered'),
+                // A 123 B 456 C 78 (0, 1, all)
+                EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_ORDERED => get_lang('RandomCategoriesWithQuestionsOrdered'),
+                // C 78 B 456 A 123
+                EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_RANDOM => get_lang('OrderedCategoriesAlphabeticallyWithRandomQuestions'),
+                // A 321 B 654 C 87
+                EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_RANDOM => get_lang('RandomCategoriesWithRandomQuestions'),
+                // C 87 B 654 A 321
 
-                    // Base (A 123 {3} B 456 {3} C 789{2} D 0{0}) --> Matrix {3, 3, 2, 0}
-                    EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_ORDERED => get_lang(
-                        'OrderedCategoriesAlphabeticallyWithQuestionsOrdered'
-                    ),
-                    // A 123 B 456 C 78 (0, 1, all)
-                    EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_ORDERED => get_lang(
-                        'RandomCategoriesWithQuestionsOrdered'
-                    ),
-                    // C 78 B 456 A 123
-
-                    EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_RANDOM => get_lang(
-                        'OrderedCategoriesAlphabeticallyWithRandomQuestions'
-                    ),
-                    // A 321 B 654 C 87
-                    EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_RANDOM => get_lang(
-                        'RandomCategoriesWithRandomQuestions'
-                    ),
-                    //C 87 B 654 A 321
-
-                    //EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_ORDERED_NO_GROUPED => get_lang('RandomCategoriesWithQuestionsOrderedNoQuestionGrouped'),
-                    /*    B 456 C 78 A 123
-                            456 78 123
-                            123 456 78
-                    */
-                    //EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_RANDOM_NO_GROUPED => get_lang('RandomCategoriesWithRandomQuestionsNoQuestionGrouped'),
-                    /*
-                        A 123 B 456 C 78
-                        B 456 C 78 A 123
-                        B 654 C 87 A 321
-                        654 87 321
-                        165 842 73
-                    */
-                    //EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_ORDERED => get_lang('OrderedCategoriesByParentWithQuestionsOrdered'),
-                    //EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_RANDOM => get_lang('OrderedCategoriesByParentWithQuestionsRandom'),
-                );
-
-                $form->addElement(
-                    'select',
-                    'question_selection_type',
-                    array(get_lang('QuestionSelection')),
-                    $option,
-                    array(
-                        'id' => 'questionSelection',
-                        'onchange' => 'checkQuestionSelection()'
-                    )
-                );
-
-                $displayMatrix = 'none';
-                $displayRandom = 'none';
-                $selectionType = $this->getQuestionSelectionType();
-                switch ($selectionType) {
-                    case EX_Q_SELECTION_RANDOM:
-                        $displayRandom = 'block';
-                        break;
-                    case $selectionType >= EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_ORDERED:
-                        $displayMatrix = 'block';
-                        break;
-                }
-
-                $form->addElement(
-                    'html',
-                    '<div id="hidden_random" style="display:'.$displayRandom.'">'
-                );
-                // Number of random question.
-                $max = ($this->id > 0) ? $this->selectNbrQuestions() : 10;
-                $option = range(0, $max);
-                $option[0] = get_lang('No');
-                $option[-1] = get_lang('AllQuestionsShort');
-                $form->addElement(
-                    'select',
-                    'randomQuestions',
-                    array(
-                        get_lang('RandomQuestions'),
-                        get_lang('RandomQuestionsHelp')
-                    ),
-                    $option,
-                    array('id' => 'randomQuestions')
-                );
-                $form->addElement('html', '</div>');
-
-                $form->addElement(
-                    'html',
-                    '<div id="hidden_matrix" style="display:'.$displayMatrix.'">'
-                );
-
-                // Category selection.
-                $cat = new TestCategory();
-                $cat_form = $cat->returnCategoryForm($this);
-                if (empty($cat_form)) {
-                    $cat_form = '<span class="label label-warning">' . get_lang('NoCategoriesDefined') . '</span>';
-                }
-                $form->addElement('label', null, $cat_form);
-                $form->addElement('html', '</div>');
-
-                // Category name.
-                $radio_display_cat_name = array(
-                    $form->createElement('radio', 'display_category_name', null, get_lang('Yes'), '1'),
-                    $form->createElement('radio', 'display_category_name', null, get_lang('No'), '0')
-                );
-                $form->addGroup($radio_display_cat_name, null, get_lang('QuestionDisplayCategoryName'));
-
-                // Random answers.
-                $radios_random_answers = array(
-                    $form->createElement('radio', 'randomAnswers', null, get_lang('Yes'), '1'),
-                    $form->createElement('radio', 'randomAnswers', null, get_lang('No'), '0')
-                );
-                $form->addGroup($radios_random_answers, null, get_lang('RandomAnswers'));
-
-                // Hide question title.
-                $group = array(
-                    $form->createElement('radio', 'hide_question_title', null, get_lang('Yes'), '1'),
-                    $form->createElement('radio', 'hide_question_title', null, get_lang('No'), '0')
-                );
-                $form->addGroup($group, null, get_lang('HideQuestionTitle'));
-            } else {
-
-                // number of random question
+                //EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_ORDERED_NO_GROUPED => get_lang('RandomCategoriesWithQuestionsOrderedNoQuestionGrouped'),
+                /*    B 456 C 78 A 123
+                        456 78 123
+                        123 456 78
+                */
+                //EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_RANDOM_NO_GROUPED => get_lang('RandomCategoriesWithRandomQuestionsNoQuestionGrouped'),
                 /*
-                $max = ($this->id > 0) ? $this->selectNbrQuestions() : 10 ;
-                $option = range(0, $max);
-                $option[0] = get_lang('No');
-                $option[-1] = get_lang('AllQuestionsShort');
-                $form->addElement('select', 'randomQuestions',array(get_lang('RandomQuestions'), get_lang('RandomQuestionsHelp')), $option, array('id'=>'randomQuestions'));
+                    A 123 B 456 C 78
+                    B 456 C 78 A 123
+                    B 654 C 87 A 321
+                    654 87 321
+                    165 842 73
+                */
+                //EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_ORDERED => get_lang('OrderedCategoriesByParentWithQuestionsOrdered'),
+                //EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_RANDOM => get_lang('OrderedCategoriesByParentWithQuestionsRandom'),
+            );
 
-                // Random answers
-                $radios_random_answers = array();
-                $radios_random_answers[] = $form->createElement('radio', 'randomAnswers', null, get_lang('Yes'),'1');
-                $radios_random_answers[] = $form->createElement('radio', 'randomAnswers', null, get_lang('No'),'0');
-                $form->addGroup($radios_random_answers, null, get_lang('RandomAnswers'), '');
+            $form->addElement(
+                'select',
+                'question_selection_type',
+                array(get_lang('QuestionSelection')),
+                $option,
+                array(
+                    'id' => 'questionSelection',
+                    'onchange' => 'checkQuestionSelection()'
+                )
+            );
 
-                // Random by category
-                $form->addElement('html','<div class="clear">&nbsp;</div>');
-                $radiocat = array();
-                $radiocat[] = $form->createElement('radio', 'randomByCat', null, get_lang('YesWithCategoriesShuffled'),'1');
-                $radiocat[] = $form->createElement('radio', 'randomByCat', null, get_lang('YesWithCategoriesSorted'),'2');
-                $radiocat[] = $form->createElement('radio', 'randomByCat', null, get_lang('No'),'0');
-                $radioCatGroup = $form->addGroup($radiocat, null, get_lang('RandomQuestionByCategory'), '');
-                $form->addElement('html','<div class="clear">&nbsp;</div>');
-
-                // add the radio display the category name for student
-                $radio_display_cat_name = array();
-                $radio_display_cat_name[] = $form->createElement('radio', 'display_category_name', null, get_lang('Yes'), '1');
-                $radio_display_cat_name[] = $form->createElement('radio', 'display_category_name', null, get_lang('No'), '0');
-                $form->addGroup($radio_display_cat_name, null, get_lang('QuestionDisplayCategoryName'), '');*/
+            $displayMatrix = 'none';
+            $displayRandom = 'none';
+            $selectionType = $this->getQuestionSelectionType();
+            switch ($selectionType) {
+                case EX_Q_SELECTION_RANDOM:
+                    $displayRandom = 'block';
+                    break;
+                case $selectionType >= EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_ORDERED:
+                    $displayMatrix = 'block';
+                    break;
             }
+
+            $form->addElement(
+                'html',
+                '<div id="hidden_random" style="display:'.$displayRandom.'">'
+            );
+            // Number of random question.
+            $max = ($this->id > 0) ? $this->selectNbrQuestions() : 10;
+            $option = range(0, $max);
+            $option[0] = get_lang('No');
+            $option[-1] = get_lang('AllQuestionsShort');
+            $form->addElement(
+                'select',
+                'randomQuestions',
+                array(
+                    get_lang('RandomQuestions'),
+                    get_lang('RandomQuestionsHelp')
+                ),
+                $option,
+                array('id' => 'randomQuestions')
+            );
+            $form->addElement('html', '</div>');
+
+            $form->addElement(
+                'html',
+                '<div id="hidden_matrix" style="display:'.$displayMatrix.'">'
+            );
+
+            // Category selection.
+            $cat = new TestCategory();
+            $cat_form = $cat->returnCategoryForm($this);
+            if (empty($cat_form)) {
+                $cat_form = '<span class="label label-warning">' . get_lang('NoCategoriesDefined') . '</span>';
+            }
+            $form->addElement('label', null, $cat_form);
+            $form->addElement('html', '</div>');
+
+            // Category name.
+            $radio_display_cat_name = array(
+                $form->createElement('radio', 'display_category_name', null, get_lang('Yes'), '1'),
+                $form->createElement('radio', 'display_category_name', null, get_lang('No'), '0')
+            );
+            $form->addGroup($radio_display_cat_name, null, get_lang('QuestionDisplayCategoryName'));
+
+            // Random answers.
+            $radios_random_answers = array(
+                $form->createElement('radio', 'randomAnswers', null, get_lang('Yes'), '1'),
+                $form->createElement('radio', 'randomAnswers', null, get_lang('No'), '0')
+            );
+            $form->addGroup($radios_random_answers, null, get_lang('RandomAnswers'));
+
+            // Hide question title.
+            $group = array(
+                $form->createElement('radio', 'hide_question_title', null, get_lang('Yes'), '1'),
+                $form->createElement('radio', 'hide_question_title', null, get_lang('No'), '0')
+            );
+            $form->addGroup($group, null, get_lang('HideQuestionTitle'));
+
             // Attempts
             $attempt_option = range(0, 10);
             $attempt_option[0] = get_lang('Infinite');
@@ -2219,7 +2181,6 @@ class Exercise
                 ]
             );
             $form->addElement('html','</div>');
-
             $form->addElement(
                 'text',
                 'pass_percentage',
@@ -2376,8 +2337,6 @@ class Exercise
                 $element = $form->getElement($elementName);
                 $element->freeze();
             }
-
-            //$radioCatGroup->freeze();
         }
     }
 
@@ -2583,7 +2542,6 @@ class Exercise
                 $this->search_engine_save();
             }
         }
-
     }
 
     function search_engine_delete()
@@ -2886,7 +2844,8 @@ class Exercise
 
         $nbrQuestions = $this->get_count_question_list();
 
-        $all_button = $html = $label = '';
+        $all_button = [];
+        $html = $label = '';
         $hotspot_get = isset($_POST['hotspot']) ? Security::remove_XSS($_POST['hotspot']):null;
 
         if ($this->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT && $this->type == ONE_PER_PAGE) {
@@ -2935,19 +2894,39 @@ class Exercise
                 if ($this->type == ONE_PER_PAGE) {
                     if ($questionNum != 1) {
                         $prev_question = $questionNum - 2;
-                        $all_button .= '<a href="javascript://" class="btn btn-default" onclick="previous_question_and_save('.$prev_question.', '.$question_id.' ); ">'.get_lang('PreviousQuestion').'</a>';
+                        $all_button[] = Display::button(
+                            'previous_question_and_save',
+                            get_lang('PreviousQuestion'),
+                            [
+                                'type' => 'button',
+                                'class' => 'btn btn-default',
+                                'data-prev' => $prev_question,
+                                'data-question' => $question_id
+                            ]
+                        );
                     }
 
                     //Next question
                     if (!empty($questions_in_media)) {
-                        $questions_in_media = "['".implode("','",$questions_in_media)."']";
-                        $all_button .= '&nbsp;<a href="javascript://" class="'.$class.'" onclick="save_question_list('.$questions_in_media.'); ">'.$label.'</a>';
+                        $all_button[] = Display::button(
+                            'save_question_list',
+                            $label,
+                            [
+                                'type' => 'button',
+                                'class' => $class,
+                                'data-list' => implode(",", $questions_in_media)
+                            ]
+                        );
                     } else {
-                        $all_button .= '&nbsp;<a href="javascript://" class="'.$class.'" onclick="save_now('.$question_id.', \'\', \''.$currentAnswer.'\'); ">'.$label.'</a>';
+                        $all_button[] = Display::button(
+                            'save_now',
+                            $label,
+                            ['type' => 'button', 'class' => $class, 'data-question' => $question_id]
+                        );
                     }
-                    $all_button .= '<span id="save_for_now_'.$question_id.'" class="exercise_save_mini_message"></span>&nbsp;';
+                    $all_button[] = '<span id="save_for_now_'.$question_id.'" class="exercise_save_mini_message"></span>&nbsp;';
 
-                    $html .= $all_button;
+                    $html .= implode(PHP_EOL, $all_button);
                 } else {
                     if ($this->review_answers) {
                         $all_label = get_lang('ReviewQuestions');
@@ -2957,9 +2936,13 @@ class Exercise
                         $class = 'btn btn-warning';
                     }
 					$class .= ' question-validate-btn'; // used to select it with jquery
-                    $all_button = '&nbsp;<a href="javascript://" class="'.$class.'" onclick="validate_all(); ">'.$all_label.'</a>';
-                    $all_button .= '&nbsp;' . Display::span(null, ['id' => 'save_all_reponse']);
-                    $html .= $all_button;
+                    $all_button[] = Display::button(
+                        'validate_all',
+                        $all_label,
+                        ['type' => 'button', 'class' => $class]
+                    );
+                    $all_button[] = '&nbsp;' . Display::span(null, ['id' => 'save_all_reponse']);
+                    $html .= implode(PHP_EOL, $all_button);
                 }
             }
         }
@@ -6934,18 +6917,36 @@ class Exercise
                     $exercise_actions .= $this->show_button($questionId, $current_question, null, $remindList);
                     break;
                 case ALL_ON_ONE_PAGE:
-                    $button  = '<a href="javascript://" class="btn" onclick="save_now(\''.$questionId.'\', null, true, 1); ">'.get_lang('SaveForNow').'</a>';
-                    $button .= '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>&nbsp;';
-                    $exercise_actions .= Display::div($button, array('class'=>'exercise_save_now_button'));
+                    $button = [
+                        Display::button(
+                            'save_now',
+                            get_lang('SaveForNow'),
+                            ['type' => 'button', 'class' => 'btn btn-primary', 'data-question' => $questionId]
+                        ),
+                        '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>'
+                    ];
+                    $exercise_actions .= Display::div(
+                        implode(PHP_EOL, $button),
+                        array('class'=>'exercise_save_now_button')
+                    );
                     break;
             }
 
             if (!empty($questions_in_media)) {
                 $count_of_questions_inside_media = count($questions_in_media);
                 if ($count_of_questions_inside_media > 1) {
-                    $button  = '<a href="javascript://" class="btn" onclick="save_now(\''.$questionId.'\', false, false, 0); ">'.get_lang('SaveForNow').'</a>';
-                    $button .= '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>&nbsp;';
-                    $exercise_actions = Display::div($button, array('class'=>'exercise_save_now_button'));
+                    $button = [
+                        Display::button(
+                            'save_now',
+                            get_lang('SaveForNow'),
+                            ['type' => 'button', 'class' => 'btn btn-primary', 'data-question' => $questionId]
+                        ),
+                        '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>&nbsp;'
+                    ];
+                    $exercise_actions = Display::div(
+                        implode(PHP_EOL, $button),
+                        array('class'=>'exercise_save_now_button')
+                    );
                 }
 
                 if ($last_question_in_media && $this->type == ONE_PER_PAGE) {

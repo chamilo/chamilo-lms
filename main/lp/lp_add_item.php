@@ -79,10 +79,9 @@ $(function() {
     $('.lp_resource_element').click(function() {
         window.location.href = $('a', this).attr('href');
     });
-    
-     CKEDITOR.on('instanceReady', function (e) {
+    CKEDITOR.on('instanceReady', function (e) {
         showTemplates('content_lp');
-    });    
+    });
 });
 </script>";
 
@@ -92,7 +91,7 @@ if (isset($_SESSION['gradebook'])) {
 }
 
 if (!empty($gradebook) && $gradebook == 'view') {
-    $interbreadcrumb[] = array (
+    $interbreadcrumb[] = array(
         'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
         'name' => get_lang('ToolGradebook')
     );
@@ -114,7 +113,7 @@ switch ($type) {
             'url' => 'lp_controller.php?action=add_item&type=step&lp_id='.$learnPath->get_id().'&'.api_get_cidreq(),
             'name' => get_lang('NewStep'),
         );
-        $interbreadcrumb[]= array('url' => '#', 'name' => get_lang('NewChapter'));
+        $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('NewChapter'));
         break;
     case 'document':
         $interbreadcrumb[] = array(
@@ -123,12 +122,12 @@ switch ($type) {
         );
         break;
     default:
-        $interbreadcrumb[]= array('url' => '#', 'name' => get_lang('NewStep'));
+        $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('NewStep'));
         break;
 }
 
 if ($action == 'add_item' && $type == 'document') {
-    $interbreadcrumb[]= array ('url' => '#', 'name' => get_lang('NewDocumentCreated'));
+    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('NewDocumentCreated'));
 }
 
 // Theme calls.
@@ -203,9 +202,7 @@ $(document).ready(function() {
 
 // document template for new document tab handler
 $(document).on( 'shown.bs.tab', 'a[data-toggle="tab"]', function (e) {
-
     var id = e.target.id;
-
     if (id == 'subtab2') {
         $('#frmModel').show();
     } else {
@@ -214,9 +211,7 @@ $(document).on( 'shown.bs.tab', 'a[data-toggle="tab"]', function (e) {
 })
 </script>
 <?php
-
 /* DISPLAY SECTION */
-
 echo $learnPath->build_action_menu();
 echo '<div class="row">';
 echo '<div id="lp_sidebar" class="col-md-4">';

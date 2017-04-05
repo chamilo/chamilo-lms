@@ -18,7 +18,8 @@ if (!is_object($objQuestion)) {
 
 $questionName = $objQuestion->selectTitle();
 $answerType = $objQuestion->selectType();
-$pictureName = $objQuestion->selectPicture();
+$pictureName = $objQuestion->getPictureFilename();
+
 $debug = 0; // debug variable to get where we are
 $okPicture = empty($pictureName) ? false : true;
 
@@ -636,7 +637,7 @@ if ($modifyAnswers) {
                                 $isSelected = false;
                                 foreach ($flat_list as $id => $details) {
                                     $selected = '';
-                                    if ($id == $lp[$i]) {
+                                    if (isset($lp[$i]) && $id == $lp[$i]) {
                                         $isSelected = true;
                                         $selected = 'selected="selected"';
                                     }

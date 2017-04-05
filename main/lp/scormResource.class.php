@@ -69,7 +69,7 @@ class scormResource
                         }
                     }
                     //$keep_href = '';
-                    if ($element->hasAttributes()){ //in some cases we get here with an empty attributes array
+                    if ($element->hasAttributes()) { //in some cases we get here with an empty attributes array
                         // TODO: Find when and why we get such a case (empty array).
                         $attributes = $element->attributes;
                         foreach ($attributes as $attrib) {

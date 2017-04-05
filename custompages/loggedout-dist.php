@@ -4,15 +4,14 @@
  * Displayed after the user has been logged out.
  * @package chamilo.custompages
  */
-/**
- * Init
- */
+
 $called_direcly = !function_exists('api_get_path');
 if ($called_direcly) {
     return '';
 }
 
-require_once 'language.php';
+require_once __DIR__.'/language.php';
+
 $www = api_get_path('WEB_PATH');
 
 /**

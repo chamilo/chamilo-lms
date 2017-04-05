@@ -65,7 +65,7 @@ switch ($action) {
         $form = TicketManager::getProjectForm($url);
         $formToString = $form->returnForm();
         if ($form->validate()) {
-            $values =$form->getSubmitValues();
+            $values = $form->getSubmitValues();
 
             $params = [
                 'name' => $values['name'],
@@ -95,7 +95,7 @@ switch ($action) {
 
         $formToString = $form->returnForm();
         if ($form->validate()) {
-            $values =$form->getSubmitValues();
+            $values = $form->getSubmitValues();
 
             $params = [
                 'name' => $values['name'],

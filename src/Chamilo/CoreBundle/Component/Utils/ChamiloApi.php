@@ -71,13 +71,14 @@ class ChamiloApi
     {
         $theme = empty($theme) ? api_get_visual_theme() : $theme;
         $accessUrlId = api_get_current_access_url_id();
-        $customLogoPath = "themes/$theme/images/header-logo-custom$accessUrlId.png";
+        $themeDir = \Template::getThemeDir($theme);
+        $customLogoPath = "$themeDir/images/header-logo-custom$accessUrlId.png";
 
         if (file_exists(api_get_path(SYS_PUBLIC_PATH) . "css/$customLogoPath")) {
             return api_get_path(WEB_CSS_PATH) . $customLogoPath;
         }
 
-        $originalLogoPath = "themes/$theme/images/header-logo.png";
+        $originalLogoPath = "$themeDir/images/header-logo.png";
 
         if (file_exists(api_get_path(SYS_CSS_PATH) . $originalLogoPath)) {
             return api_get_path(WEB_CSS_PATH) . $originalLogoPath;

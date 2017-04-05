@@ -27,13 +27,13 @@ $user_id = api_get_user_id();
 $session_id = isset($_GET['session_id']) ? intval($_GET['session_id']) : 0;
 
 $is_coach = api_is_coach($session_id);
-$is_platform_admin 	= api_is_platform_admin();
-$is_drh 			= api_is_drh();
-$is_session_admin 	= api_is_session_admin();
+$is_platform_admin = api_is_platform_admin();
+$is_drh = api_is_drh();
+$is_session_admin = api_is_session_admin();
 
-$count_sessions 	= 0;
-$count_courses		= 0;
-$title 				= null;
+$count_sessions = 0;
+$count_courses = 0;
+$title = null;
 
 // Access control
 api_block_anonymous_users();
@@ -142,7 +142,7 @@ echo '<a href="javascript: void(0);" onclick="javascript: window.print()">'.
 echo '</span>';
 
 if (!empty($session_id) &&
-    !in_array($display, array('accessoverview','lpprogressoverview','progressoverview','exerciseprogress', 'surveyoverview'))
+    !in_array($display, array('accessoverview', 'lpprogressoverview', 'progressoverview', 'exerciseprogress', 'surveyoverview'))
 ) {
     echo '<a href="index.php">'.Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
     if (!api_is_platform_admin()) {
@@ -162,19 +162,19 @@ if (!empty($session_id) &&
     }
 } else {
 	echo Display::url(
-        Display::return_icon('stats.png', get_lang('MyStats'),'',ICON_SIZE_MEDIUM),
+        Display::return_icon('stats.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM),
         api_get_path(WEB_CODE_PATH)."auth/my_progress.php"
     );
     echo Display::url(
         Display::return_icon("certificate_list.png", get_lang("GradebookSeeListOfStudentsCertificates"), array(), ICON_SIZE_MEDIUM),
-        api_get_path(WEB_CODE_PATH) . "gradebook/certificate_report.php"
+        api_get_path(WEB_CODE_PATH)."gradebook/certificate_report.php"
     );
 }
 
 // Actions menu
 $nb_menu_items = count($menu_items);
 if (empty($session_id) ||
-    in_array($display, array('accessoverview','lpprogressoverview', 'progressoverview', 'exerciseprogress', 'surveyoverview'))
+    in_array($display, array('accessoverview', 'lpprogressoverview', 'progressoverview', 'exerciseprogress', 'surveyoverview'))
 ) {
     if ($nb_menu_items > 1) {
         foreach ($menu_items as $key => $item) {
@@ -185,7 +185,7 @@ if (empty($session_id) ||
 
 echo '</div>';
 
-$userId  = api_get_user_id();
+$userId = api_get_user_id();
 $stats = Tracking::getStats($userId);
 
 $students = $stats['students'];
@@ -227,9 +227,9 @@ $avg_courses_per_student = null;
 if (!empty($students)) {
     // Students
     $nb_students = count($students);
-    $progress  = Tracking::get_avg_student_progress($studentIds);
-    $countAssignments = Tracking::count_student_assignments($studentIds);
     $studentIds = array_values($students);
+    $progress = Tracking::get_avg_student_progress($studentIds);
+    $countAssignments = Tracking::count_student_assignments($studentIds);
 
     // average progress
     $avg_total_progress = $progress / $nb_students;

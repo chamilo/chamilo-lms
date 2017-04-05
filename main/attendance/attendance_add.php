@@ -12,7 +12,7 @@ api_protect_course_script(true);
 
 // error messages
 if (isset($error)) {
-    Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'),false);
+    Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'), false);
 }
 
 if (!isset($error)) {
@@ -28,7 +28,7 @@ $form->addElement('header', '', get_lang('CreateANewAttendance'));
 $form->addElement('hidden', 'sec_token', $token);
 
 $form->addText('title', get_lang('Title'), true);
-$form->applyFilter('title','html_filter');
+$form->applyFilter('title', 'html_filter');
 $form->addHtmlEditor(
     'description',
     get_lang('Description'),
@@ -41,7 +41,7 @@ $form->addHtmlEditor(
 if ((api_get_session_id() != 0 && Gradebook::is_active()) || api_get_session_id() == 0) {
     $form->addButtonAdvancedSettings('id_qualify');
 
-    $form->addElement('html','<div id="id_qualify_options" style="display:none">');
+    $form->addElement('html', '<div id="id_qualify_options" style="display:none">');
 
     // Qualify Attendance for gradebook option
     $form->addElement(
@@ -51,7 +51,7 @@ if ((api_get_session_id() != 0 && Gradebook::is_active()) || api_get_session_id(
         get_lang('QualifyAttendanceGradebook'),
         'onclick="javascript: if(this.checked){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"'
     );
-    $form->addElement('html','<div id="options_field" style="display:none">');
+    $form->addElement('html', '<div id="options_field" style="display:none">');
 
     GradebookUtils::load_gradebook_select_in_tool($form);
 
@@ -64,8 +64,8 @@ if ((api_get_session_id() != 0 && Gradebook::is_active()) || api_get_session_id(
         'value="0.00" Style="width:40px" onfocus="javascript: this.select();"'
     );
     $form->applyFilter('attendance_weight', 'html_filter');
-    $form->addElement('html','</div>');
-    $form->addElement('html','</div>');
+    $form->addElement('html', '</div>');
+    $form->addElement('html', '</div>');
 }
 $form->addButtonCreate(get_lang('Save'));
 $form->display();

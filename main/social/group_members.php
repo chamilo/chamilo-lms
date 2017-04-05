@@ -117,7 +117,7 @@ $social_avatar_block = SocialManager::show_social_avatar_block(
     $group_id
 );
 $social_menu_block = SocialManager::show_social_menu('member_list', $group_id);
-$social_right_content = '<h2>' . $group_info['name'] . '</h2>';
+$social_right_content = '<h2>'.$group_info['name'].'</h2>';
 
 foreach ($users as $user) {
     switch ($user['relation_type']) {
@@ -136,24 +136,24 @@ foreach ($users as $user) {
                 )
             )
             ) {
-                $user['link'] = '<a href="group_members.php?id=' . $group_id . '&u=' . $user['id'] . '&action=delete">' .
+                $user['link'] = '<a href="group_members.php?id='.$group_id.'&u='.$user['id'].'&action=delete">'.
                     Display::return_icon(
                         'delete.png',
                         get_lang('DeleteFromGroup')
-                    ) . '</a>' .
-                    '<a href="group_members.php?id=' . $group_id . '&u=' . $user['id'] . '&action=set_moderator">' .
+                    ).'</a>'.
+                    '<a href="group_members.php?id='.$group_id.'&u='.$user['id'].'&action=set_moderator">'.
                     Display::return_icon(
                         'social_moderator_add.png',
                         get_lang('AddModerator')
-                    ) . '</a>';
+                    ).'</a>';
             }
             break;
         case GROUP_USER_PERMISSION_PENDING_INVITATION:
-            $user['link'] = '<a href="group_members.php?id=' . $group_id . '&u=' . $user['id'] . '&action=add">' .
+            $user['link'] = '<a href="group_members.php?id='.$group_id.'&u='.$user['id'].'&action=add">'.
                 Display::return_icon(
                     'pending_invitation.png',
                     get_lang('PendingInvitation')
-                ) . '</a>';
+                ).'</a>';
             break;
         case GROUP_USER_PERMISSION_MODERATOR:
             $user['link'] = Display::return_icon(
@@ -162,17 +162,17 @@ foreach ($users as $user) {
             );
             //only group admin can manage moderators
             if ($user_role == GROUP_USER_PERMISSION_ADMIN) {
-                $user['link'] .= '<a href="group_members.php?id=' . $group_id . '&u=' . $user['id'] . '&action=delete_moderator">'.
+                $user['link'] .= '<a href="group_members.php?id='.$group_id.'&u='.$user['id'].'&action=delete_moderator">'.
                     Display::return_icon(
                         'social_moderator_delete.png',
                         get_lang('DeleteModerator')
-                    ) . '</a>';
+                    ).'</a>';
             }
             break;
     }
 
     $userPicture = UserManager::getUserPicture($user['id']);
-    $user['image'] = '<img src="' . $userPicture . '"  width="50px" height="50px"  />';
+    $user['image'] = '<img src="'.$userPicture.'"  width="50px" height="50px"  />';
     $new_member_list[] = $user;
 }
 if (count($new_member_list) > 0) {

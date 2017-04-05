@@ -45,7 +45,7 @@ if (isset($_GET['submitAuth']) && $_GET['submitAuth'] == 1) {
     Event::addEvent(
         LOG_ATTEMPTED_FORCED_LOGIN,
         'tried_hacking_get',
-        $_SERVER['REMOTE_ADDR'].(empty($_POST['login'])?'':'/'.$_POST['login']),
+        $_SERVER['REMOTE_ADDR'].(empty($_POST['login']) ? '' : '/'.$_POST['login']),
         null,
         $i
     );

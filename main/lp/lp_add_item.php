@@ -91,7 +91,7 @@ if (isset($_SESSION['gradebook'])) {
 }
 
 if (!empty($gradebook) && $gradebook == 'view') {
-    $interbreadcrumb[] = array (
+    $interbreadcrumb[] = array(
         'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
         'name' => get_lang('ToolGradebook')
     );
@@ -113,7 +113,7 @@ switch ($type) {
             'url' => 'lp_controller.php?action=add_item&type=step&lp_id='.$learnPath->get_id().'&'.api_get_cidreq(),
             'name' => get_lang('NewStep'),
         );
-        $interbreadcrumb[]= array('url' => '#', 'name' => get_lang('NewChapter'));
+        $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('NewChapter'));
         break;
     case 'document':
         $interbreadcrumb[] = array(
@@ -122,12 +122,12 @@ switch ($type) {
         );
         break;
     default:
-        $interbreadcrumb[]= array('url' => '#', 'name' => get_lang('NewStep'));
+        $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('NewStep'));
         break;
 }
 
 if ($action == 'add_item' && $type == 'document') {
-    $interbreadcrumb[]= array ('url' => '#', 'name' => get_lang('NewDocumentCreated'));
+    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('NewDocumentCreated'));
 }
 
 // Theme calls.

@@ -23,7 +23,7 @@ api_protect_admin_script(true);
 Display :: display_header($tool_name);
 
 //On sélectionne les user élèves
-$sql = "SELECT user_id FROM ".$table_user." user WHERE user.status= '5' ORDER by lastname " ;
+$sql = "SELECT user_id FROM ".$table_user." user WHERE user.status= '5' ORDER by lastname ";
 $result = Database::query($sql);
 
 while ($row = Database::fetch_array($result)) {

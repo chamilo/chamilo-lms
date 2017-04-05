@@ -56,12 +56,8 @@ class TestCategory
      */
     public function save($courseId = 0)
     {
-        $courseId = (int) $courseId;
-        if (empty($courseId)) {
-            $courseId = api_get_course_int_id();
-        }
-
-        $courseInfo = api_get_course_info($courseId);
+        $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
+        $courseInfo = api_get_course_info_by_id($courseId);
         if (empty($courseInfo)) {
             return false;
         }
@@ -141,27 +137,32 @@ class TestCategory
 
     /**
      * Modify category name or description of category with id=in_id
+     * @param int $courseId
+     * @return bool
      */
-    public function modifyCategory()
+    public function modifyCategory($courseId = 0)
     {
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
         $id = intval($this->id);
         $name = Database::escape_string($this->name);
         $description = Database::escape_string($this->description);
         $cat = $this->getCategory($id);
-        $courseId = api_get_course_int_id();
+        $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
+        $courseInfo = api_get_course_info_by_id($courseId);
+        if (empty($courseInfo)) {
+            return false;
+        }
 
         if ($cat) {
             $sql = "UPDATE $table SET
-                title = '$name',
-                description = '$description'
-                WHERE id = $id AND c_id = ".$courseId;
+                        title = '$name',
+                        description = '$description'
+                    WHERE id = $id AND c_id = ".$courseId;
             Database::query($sql);
 
             // item_property update
-            $course_info = api_get_course_info_by_id($courseId);
             api_item_property_update(
-                $course_info,
+                $courseInfo,
                 TOOL_TEST_CATEGORY,
                 $this->id,
                 'TestCategoryModified',
@@ -201,10 +202,7 @@ class TestCategory
      */
     public static function getCategoryListInfo($in_field = '', $courseId = 0)
     {
-        $courseId = (int) $courseId;
-        if (empty($courseId)) {
-            $courseId = api_get_course_int_id();
-        }
+        $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
 
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
         $in_field = Database::escape_string($in_field);
@@ -227,7 +225,6 @@ class TestCategory
                 $categories[] = $row[$in_field];
             }
         }
-
         return $categories;
     }
 

@@ -2107,38 +2107,36 @@ class CourseRestorer
         $tab_test_category_id_old_new = array(); // used to build the quiz_question_rel_category table
         if ($this->course->has_resources(RESOURCE_TEST_CATEGORY)) {
             $resources = $this->course->resources;
-            foreach ($resources[RESOURCE_TEST_CATEGORY] as $id => $CourseCopyTestCategory ) {
-                $tab_test_category_id_old_new[$CourseCopyTestCategory->source_id] = $id;
+            $destinationCourseId = $this->destination_course_info['real_id'];
+            foreach ($resources[RESOURCE_TEST_CATEGORY] as $id => $courseCopyTestCategory) {
+                $tab_test_category_id_old_new[$courseCopyTestCategory->source_id] = $id;
                 // check if this test_category already exist in the destination BDD
                 // do not Database::escape_string $title and $description, it will be done later
-                $title = $CourseCopyTestCategory->title;
-                $description = $CourseCopyTestCategory->description;
-
-                if (TestCategory::categoryTitleExists($title)) {
+                $title = $courseCopyTestCategory->title;
+                $description = $courseCopyTestCategory->description;
+                if (TestCategory::categoryTitleExists($title, $destinationCourseId)) {
                     switch ($this->file_option) {
                         case FILE_SKIP:
                             //Do nothing
                             break;
                         case FILE_RENAME:
-                            $new_title = $title."_";
-                            while (TestCategory::categoryTitleExists(
-                                $new_title
-                            )) {
+                            $new_title = $title.'_';
+                            while (TestCategory::categoryTitleExists($new_title, $destinationCourseId)) {
                                 $new_title .= '_';
                             }
                             $test_category = new TestCategory();
                             $test_category->name = $new_title;
                             $test_category->description = $description;
-                            $new_id = $test_category->save();
-                            $tab_test_category_id_old_new[$CourseCopyTestCategory->source_id] = $new_id;
+                            $new_id = $test_category->save($destinationCourseId);
+                            $tab_test_category_id_old_new[$courseCopyTestCategory->source_id] = $new_id;
                             break;
                         case FILE_OVERWRITE:
                             $id = TestCategory::get_category_id_for_title($title);
                             $my_cat = new TestCategory();
                             $my_cat = $my_cat->getCategory($id);
                             $my_cat->name = $title;
-                            $my_cat->modifyCategory();
-                            $tab_test_category_id_old_new[$CourseCopyTestCategory->source_id] = $id;
+                            $my_cat->modifyCategory($destinationCourseId);
+                            $tab_test_category_id_old_new[$courseCopyTestCategory->source_id] = $id;
                             break;
                     }
                 } else {
@@ -2146,10 +2144,10 @@ class CourseRestorer
                     $test_category = new TestCategory();
                     $test_category->name = $title;
                     $test_category->description = $description;
-                    $new_id = $test_category->save();
-                    $tab_test_category_id_old_new[$CourseCopyTestCategory->source_id] = $new_id;
+                    $new_id = $test_category->save($destinationCourseId);
+                    $tab_test_category_id_old_new[$courseCopyTestCategory->source_id] = $new_id;
                 }
-                $this->course->resources[RESOURCE_TEST_CATEGORY][$id]->destination_id = $tab_test_category_id_old_new[$CourseCopyTestCategory->source_id];
+                $this->course->resources[RESOURCE_TEST_CATEGORY][$id]->destination_id = $tab_test_category_id_old_new[$courseCopyTestCategory->source_id];
             }
         }
         // lets check if quizzes-question are restored too, to redo the link between test_category and quizzes question for questions restored

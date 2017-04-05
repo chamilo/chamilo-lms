@@ -306,3 +306,5 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 // $_configuration['hide_course_notification'] = true;
 // Show less session information in course list
 //$_configuration['show_simple_session_info'] = true;
+// Hide LP time in reports.
+// $_configuration['hide_lp_time'] = false;

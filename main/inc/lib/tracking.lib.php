@@ -147,6 +147,8 @@ class Tracking
             return null;
         }
 
+        $hideTime = api_get_configuration_value('hide_lp_time');
+
         $lp_id = intval($lp_id);
         $lp_item_id = intval($lp_item_id);
         $user_id = intval($user_id);
@@ -191,6 +193,11 @@ class Tracking
         if ($type == 'classic') {
             $actionColumn = ' <th>' . get_lang('Actions') . '</th>';
         }
+
+        $timeHeader = '<th class="lp_time" colspan="2">'.get_lang('ScormTime').'</th>';
+        if ($hideTime) {
+            $timeHeader = '';
+        }
         $output .= '<div class="table-responsive">';
         $output .= '<table id="lp_tracking" class="table tracking">
             <thead>
@@ -205,9 +212,7 @@ class Tracking
                 <th colspan="2">
                     ' . get_lang('ScormScore') . '
                 </th>
-                <th class="lp_time" colspan="2">
-                    ' . get_lang('ScormTime') . '
-                </th>
+                '.$timeHeader.'
                 '.$actionColumn.'
                 </tr>
             </thead>
@@ -247,9 +252,12 @@ class Tracking
             $csv_content[] = array(
                 get_lang('ScormLessonTitle'),
                 get_lang('ScormStatus'),
-                get_lang('ScormScore'),
-                get_lang('ScormTime')
+                get_lang('ScormScore')
             );
+
+            if ($hideTime === false) {
+                $csv_content[] = get_lang('ScormTime');
+            }
         }
 
         $result_disabled_ext_all = true;
@@ -465,21 +473,26 @@ class Tracking
                             if ($type == 'classic') {
                                 $action = '<td></td>';
                             }
-
+                            $timeRow = '<td class="lp_time" colspan="2">'.$time.'</td>';
+                            if ($hideTime) {
+                                $timeRow = '';
+                            }
                             $output .= '<tr class="' . $oddclass . '">
                                     <td></td>
                                     <td>' . $extend_attempt_link . '</td>
                                     <td colspan="3">' . get_lang('Attempt') . ' ' . $attemptCount . '</td>
                                     <td colspan="2">' . learnpathItem::humanize_status($lesson_status, true, $type) . '</td>
                                     <td colspan="2">' . $view_score . '</td>
-                                    <td class="lp_time" colspan="2">' . $time . '</td>
+                                    '.$timeRow.'
                                     '.$action.'
                                 </tr>';
                             $attemptCount++;
                             if (!empty($export_csv)) {
                                 $temp = array();
                                 $temp[] = $title = Security::remove_XSS($title);
-                                $temp[] = Security::remove_XSS(learnpathItem::humanize_status($lesson_status, false, $type));
+                                $temp[] = Security::remove_XSS(
+                                    learnpathItem::humanize_status($lesson_status, false, $type)
+                                );
 
                                 if ($row['item_type'] == 'quiz') {
                                     if (!$is_allowed_to_edit && $result_disabled_ext_all) {
@@ -490,7 +503,10 @@ class Tracking
                                 } else {
                                     $temp[] = ($score == 0 ? '/' : ($maxscore == 0 ? $score : $score . '/' . float_format($maxscore, 1)));
                                 }
-                                $temp[] = $time;
+
+                                if ($hideTime === false) {
+                                    $temp[] = $time;
+                                }
                                 $csv_content[] = $temp;
                             }
                         }
@@ -520,6 +536,11 @@ class Tracking
                                     $student_response = implode(',', $content_student_response);
                                 }
 
+                                $timeRow = '<td class="lp_time">'.$interaction['time'].'</td>';
+                                if ($hideTime) {
+                                    $timeRow = '';
+                                }
+
                                 $output .= '<tr class="'.$oddclass.'">
                                         <td></td>
                                         <td></td>
@@ -530,7 +551,7 @@ class Tracking
                                         <td>'.$student_response . '</td>
                                         <td>'.$interaction['result'] . '</td>
                                         <td>'.$interaction['latency'] . '</td>
-                                        <td class="lp_time">'.$interaction['time'] . '</td>
+                                        '.$timeRow.'
                                         '.$action.'
                                     </tr>';
                                 $counter++;
@@ -829,12 +850,17 @@ class Tracking
                                 $scoreItem .= $score == 0 ? '/' : ($maxscore == 0 ? $score : $score . '/' . $maxscore);
                             }
 
+                            $timeRow = '<td class="lp_time" colspan="2">'.$time.'</td>';
+                            if ($hideTime) {
+                                $timeRow = '';
+                            }
+
                             $output .= '
                                 <td>'.$extend_link.'</td>
                                 <td colspan="4">' . $title . '</td>
                                 <td colspan="2">' . learnpathitem::humanize_status($lesson_status) .'</td>
                                 <td colspan="2">'.$scoreItem.'</td>
-                                <td class="lp_time" colspan="2">'.$time.'</td>
+                                '.$timeRow.'
                                 '.$action.'
                              ';
                             $output .= '</tr>';
@@ -854,7 +880,10 @@ class Tracking
                             } else {
                                 $temp[] = ($score == 0 ? '/' : ($maxscore == 0 ? $score : $score . '/' . float_format($maxscore, 1)));
                             }
-                            $temp[] = $time;
+
+                            if ($hideTime === false) {
+                                $temp[] = $time;
+                            }
                             $csv_content[] = $temp;
                         }
                     }
@@ -874,6 +903,12 @@ class Tracking
                             } else {
                                 $oddclass = 'row_even';
                             }
+
+                            $timeRow = '<td class="lp_time">'.$interaction['time'].'</td>';
+                            if ($hideTime) {
+                                $timeRow = '';
+                            }
+
                             $output .= '<tr class="'.$oddclass.'">
                                     <td></td>
                                     <td></td>
@@ -884,7 +919,7 @@ class Tracking
                                     <td>'.urldecode($interaction['student_response']).'</td>
                                     <td>'.$interaction['result'].'</td>
                                     <td>'.$interaction['latency'].'</td>
-                                    <td class="lp_time">'.$interaction['time'].'</td>
+                                    '.$timeRow.'
                                     '.$action.'
                                </tr>';
                             $counter++;
@@ -979,6 +1014,10 @@ class Tracking
                                         } elseif ($my_lesson_status == 'incomplete') {
                                             $my_lesson_status = learnpathitem::humanize_status('incomplete');
                                         }
+                                        $timeRow = '<td class="lp_time" colspan="2">'.$time_attemp . '</td>';
+                                        if ($hideTime) {
+                                            $timeRow = '';
+                                        }
 
                                         $output .= '<tr class="' . $oddclass . '" >
                                         <td></td>
@@ -986,7 +1025,8 @@ class Tracking
                                         <td colspan="3">' . get_lang('Attempt').' '. $n.'</td>
                                         <td colspan="2">' . $my_lesson_status . '</td>
                                         <td colspan="2">'.$view_score . '</td>
-                                        <td class="lp_time" colspan="2">'.$time_attemp . '</td>';
+                                        '.$timeRow;
+
                                         if ($action == 'classic') {
                                             if ($origin != 'tracking') {
                                                 if (!$is_allowed_to_edit && $result_disabled_ext_all) {
@@ -1090,6 +1130,11 @@ class Tracking
             $action =  '<td></td>';
         }
 
+        $timeTotal = '<td class="lp_time" colspan="2">'.$total_time.'</div>';
+        if ($hideTime) {
+            $timeTotal = '';
+        }
+
         $output .= '<tr class="'.$oddclass.'">
                 <td></td>
                 <td colspan="4">
@@ -1097,7 +1142,7 @@ class Tracking
                 </td>
                 <td colspan="2">'.$progress.'%</td>
                 <td colspan="2">' . $final_score.'</td>
-                <td class="lp_time" colspan="2">' . $total_time . '</div>
+                '.$timeTotal.'
                 '.$action.'
            </tr>';
 
@@ -1118,9 +1163,13 @@ class Tracking
             $temp = array(
                 get_lang('AccomplishedStepsTotal'),
                 '',
-                $final_score,
-                $total_time
+                $final_score
             );
+
+            if ($hideTime === false) {
+                $temp[] = $total_time;
+            }
+
             $csv_content[] = $temp;
             ob_end_clean();
             Export::arrayToCsv($csv_content, 'reporting_learning_path_details');

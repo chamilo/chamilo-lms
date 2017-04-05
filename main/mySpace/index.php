@@ -227,9 +227,9 @@ $avg_courses_per_student = null;
 if (!empty($students)) {
     // Students
     $nb_students = count($students);
+    $studentIds = array_values($students);
     $progress = Tracking::get_avg_student_progress($studentIds);
     $countAssignments = Tracking::count_student_assignments($studentIds);
-    $studentIds = array_values($students);
 
     // average progress
     $avg_total_progress = $progress / $nb_students;

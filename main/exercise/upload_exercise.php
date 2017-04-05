@@ -301,7 +301,7 @@ function lp_upload_quiz_action_handling()
                     if (empty($categoryId)) {
                         $category = new TestCategory();
                         $category->name = $categoryName;
-                        $categoryId = $category->addCategoryInBDD();
+                        $categoryId = $category->save();
                     }
                 }
 

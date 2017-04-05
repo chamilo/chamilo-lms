@@ -2113,14 +2113,14 @@ class CourseRestorer
                 $title = $CourseCopyTestCategory->title;
                 $description = $CourseCopyTestCategory->description;
 
-                if (TestCategory::category_exists_with_title($title)) {
+                if (TestCategory::categoryTitleExists($title)) {
                     switch ($this->file_option) {
                         case FILE_SKIP:
                             //Do nothing
                             break;
                         case FILE_RENAME:
                             $new_title = $title."_";
-                            while (TestCategory::category_exists_with_title(
+                            while (TestCategory::categoryTitleExists(
                                 $new_title
                             )) {
                                 $new_title .= '_';
@@ -2128,7 +2128,7 @@ class CourseRestorer
                             $test_category = new TestCategory();
                             $test_category->name = $new_title;
                             $test_category->description = $description;
-                            $new_id = $test_category->addCategoryInBDD();
+                            $new_id = $test_category->save();
                             $tab_test_category_id_old_new[$CourseCopyTestCategory->source_id] = $new_id;
                             break;
                         case FILE_OVERWRITE:
@@ -2145,7 +2145,7 @@ class CourseRestorer
                     $test_category = new TestCategory();
                     $test_category->name = $title;
                     $test_category->description = $description;
-                    $new_id = $test_category->addCategoryInBDD();
+                    $new_id = $test_category->save();
                     $tab_test_category_id_old_new[$CourseCopyTestCategory->source_id] = $new_id;
                 }
                 $this->course->resources[RESOURCE_TEST_CATEGORY][$id]->destination_id = $tab_test_category_id_old_new[$CourseCopyTestCategory->source_id];

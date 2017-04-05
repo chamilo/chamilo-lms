@@ -3482,12 +3482,15 @@ class Tracking
 
     /**
      * Count assignments per student
-     * @param    int|array   Student id(s)
-     * @param    string        Course code
-     * @param    int            Session id (optional),
+     * @param $student_id
+     * @param null $course_code
+     * @param null $session_id
+     * @return int Count of assignments
+     * @internal param array|int $Student id(s)
+     * @internal param Course $string code
+     * @internal param Session $int id (optional),
      * if param $session_id is null(default) return count of assignments
      * including sessions, 0 = session is not filtered
-     * @return    int            Count of assignments
      */
     public static function count_student_assignments($student_id, $course_code = null, $session_id = null)
     {
@@ -3498,7 +3501,7 @@ class Tracking
         $conditions = array();
 
         // Get the information of the course
-        $a_course = CourseManager::get_course_information($course_code);
+        $a_course = api_get_course_info($course_code);
         if (!empty($a_course)) {
             $course_id = $a_course['real_id'];
             $conditions[]= " ip.c_id  = $course_id AND pub.c_id  = $course_id ";
@@ -3519,6 +3522,9 @@ class Tracking
             $session_id = intval($session_id);
             $conditions[]= " pub.session_id = $session_id ";
         }
+
+        $conditions[] = ' pub.active <> 2 ';
+
         $conditionToString = implode('AND', $conditions);
 
         $sql = "SELECT count(ip.tool) as count

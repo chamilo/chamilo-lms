@@ -636,7 +636,6 @@ class CourseBuilder
 
         while ($obj = Database::fetch_object($result)) {
             // find the question category
-
             // @todo : need to be adapted for multi category questions in 1.10
             $question_category_id = TestCategory::getCategoryForQuestion(
                 $obj->id,

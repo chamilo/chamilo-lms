@@ -4,6 +4,7 @@
 namespace Chamilo\CourseBundle\Component\CourseCopy;
 
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\GradeBookBackup;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\QuizQuestion;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use DocumentManager;
 use Database;
@@ -37,10 +38,10 @@ class CourseRestorer
     public $set_tools_invisible_by_default;
     public $skip_content;
     public $tools_to_restore = array(
+        'documents', // first restore documents
         'announcements',
         'attendance',
         'course_descriptions',
-        'documents',
         'events',
         'forum_category',
         'forums',
@@ -924,6 +925,18 @@ class CourseRestorer
                     }
                 } // end file doesn't exist
             }
+
+            // add image information for area questions
+            if (preg_match('/^quiz-.*$/', $document->title) &&
+                preg_match('/^document\/images\/.*$/', $document->path)
+            ) {
+                $this->course->resources[RESOURCE_DOCUMENT]['image_quiz'][$document->title] = [
+                    'path' => $document->path,
+                    'title' => $document->title,
+                    'source_id' => $document->source_id,
+                    'destination_id' => $document->destination_id
+                ];
+            }
         } // end for each
 
         // Delete sessions for the copy the new folder in session
@@ -1801,8 +1814,8 @@ class CourseRestorer
     {
         $em = Database::getManager();
 		$resources = $this->course->resources;
+		/** @var QuizQuestion $question */
         $question = isset($resources[RESOURCE_QUIZQUESTION][$id]) ? $resources[RESOURCE_QUIZQUESTION][$id] : null;
-
 		$new_id = 0;
 
 		if (is_object($question)) {
@@ -1822,6 +1835,18 @@ class CourseRestorer
                 $this->course->info['path']
             );
 
+            $imageNewId = '';
+            if (preg_match('/^quiz-.*$/', $question->picture) &&
+                isset($resources[RESOURCE_DOCUMENT]['image_quiz'][$question->picture])
+            ) {
+                $imageNewId = $resources[RESOURCE_DOCUMENT]['image_quiz'][$question->picture]['destination_id'];
+            } else {
+                if (isset($resources[RESOURCE_DOCUMENT][$question->picture])) {
+                    $documentsToRestore = $resources[RESOURCE_DOCUMENT][$question->picture];
+                    $imageNewId = $documentsToRestore->destination_id;
+                }
+            }
+
             $params = [
                 'c_id' => $this->destination_course_id,
                 'question' => self::DBUTF8($question->question),
@@ -1829,7 +1854,7 @@ class CourseRestorer
                 'ponderation' => self::DBUTF8($question->ponderation),
                 'position' => self::DBUTF8($question->position),
                 'type' => self::DBUTF8($question->quiz_type),
-                'picture' => self::DBUTF8($question->picture),
+                'picture' => self::DBUTF8($imageNewId),
                 'level' => self::DBUTF8($question->level),
                 'extra' => self::DBUTF8($question->extra),
             ];
@@ -1839,30 +1864,6 @@ class CourseRestorer
             if ($new_id) {
                 $sql = "UPDATE $table_que SET id = iid WHERE iid = $new_id";
                 Database::query($sql);
-
-                if (!empty($question->picture)) {
-                    $question_temp = Question::read(
-                        $new_id,
-                        $this->destination_course_info['real_id']
-                    );
-
-                    $documentPath = api_get_path(SYS_COURSE_PATH).$this->destination_course_info['path'].'/document';
-                    // picture path
-                    $picturePath = $documentPath.'/images';
-                    $old_picture = api_get_path(SYS_COURSE_PATH).$this->course->info['path'].'/document/images/'.$question->picture;
-                    if (file_exists($old_picture)) {
-                        $picture_name = 'quiz-'.$new_id.'.jpg';
-                        $result = $question_temp->uploadPicture($old_picture, $picture_name, $picturePath);
-                        if ($result) {
-                            $sql = "UPDATE $table_que SET
-                                        picture = '$picture_name'
-                                    WHERE
-                                        c_id = " . $this->destination_course_id . " AND
-                                        id = $new_id ";
-                            Database::query($sql);
-                        }
-                    }
-                }
             }
 
             $correctAnswers = array();
@@ -2157,9 +2158,9 @@ class CourseRestorer
         if ($this->course->has_resources(RESOURCE_QUIZQUESTION)) {
             // check the category number of each question restored
             if (!empty($resources[RESOURCE_QUIZQUESTION])) {
-                foreach ($resources[RESOURCE_QUIZQUESTION] as $id => $CourseCopyQuestion) {
+                foreach ($resources[RESOURCE_QUIZQUESTION] as $id => $courseCopyQuestion) {
                     $new_quiz_question_id = $resources[RESOURCE_QUIZQUESTION][$id]->destination_id;
-                    $question_category = $CourseCopyQuestion->question_category;
+                    $question_category = $courseCopyQuestion->question_category;
                     if ($question_category > 0) {
                         TestCategory::add_category_for_question_id(
                             $tab_test_category_id_old_new[$question_category],
@@ -2179,7 +2180,6 @@ class CourseRestorer
     public function restore_surveys($sessionId = 0)
     {
         $sessionId = intval($sessionId);
-
         if ($this->course->has_resources(RESOURCE_SURVEY)) {
 			$table_sur = Database::get_course_table(TABLE_SURVEY);
 			$table_que = Database::get_course_table(TABLE_SURVEY_QUESTION);

@@ -86,11 +86,11 @@ class HotSpot extends Question
 
         if (!empty($file_info['tmp_name'])) {
             $this->uploadPicture($file_info['tmp_name'], $file_info['name']);
-            $documentPath  = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
-            $picturePath   = $documentPath.'/images';
+            $documentPath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
+            $picturePath = $documentPath.'/images';
 
             // fixed width ang height
-            if (file_exists($picturePath.'/'.$this->picture)) {
+            if (file_exists($picturePath.'/'.$this->getPictureFilename())) {
                 $this->resizePicture('width', 800);
                 $this->save();
             } else {

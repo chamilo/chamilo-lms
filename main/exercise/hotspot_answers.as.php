@@ -23,8 +23,8 @@ $objExercise->read($trackExerciseInfo['exe_exo_id']);
 $em = Database::getManager();
 $documentPath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 $picturePath = $documentPath . '/images';
-$pictureName = $objQuestion->selectPicture();
-$pictureSize = getimagesize($picturePath . '/' . $objQuestion->selectPicture());
+$pictureName = $objQuestion->getPictureFilename();
+$pictureSize = getimagesize($picturePath . '/' . $pictureName);
 $pictureWidth = $pictureSize[0];
 $pictureHeight = $pictureSize[1];
 $course_id = api_get_course_int_id();
@@ -103,17 +103,16 @@ if (!$hideExpectedAnswer) {
         $qb
             ->where($qb->expr()->eq('a.cId', $course_id))
             ->andWhere($qb->expr()->eq('a.questionId', intval($questionId)))
-            ->andWhere($qb->expr()->neq('a.hotspotType', 'noerror'));
+            ->andWhere($qb->expr()->neq('a.hotspotType', 'noerror'))
+            ->orderBy('a.id', 'ASC');
     } else {
         $qb
             ->where($qb->expr()->eq('a.cId', $course_id))
-            ->andWhere($qb->expr()->eq('a.questionId', intval($questionId)));
+            ->andWhere($qb->expr()->eq('a.questionId', intval($questionId)))
+            ->orderBy('a.position', 'ASC');
     }
 
-    $result = $qb
-        ->orderBy('a.id', 'ASC')
-        ->getQuery()
-        ->getResult();
+    $result = $qb->getQuery()->getResult();
 
     /** @var CQuizAnswer $hotSpotAnswer */
     foreach ($result as $hotSpotAnswer) {

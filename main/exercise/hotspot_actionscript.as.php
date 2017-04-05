@@ -23,8 +23,8 @@ $answer_type = $objQuestion->selectType(); //very important
 $TBL_ANSWERS = Database::get_course_table(TABLE_QUIZ_ANSWER);
 $documentPath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 $picturePath = $documentPath.'/images';
-$pictureName = $objQuestion->selectPicture();
-$pictureSize = getimagesize($picturePath.'/'.$objQuestion->selectPicture());
+$pictureName = $objQuestion->getPictureFilename();
+$pictureSize = getimagesize($picturePath.'/'.$pictureName);
 $pictureWidth = $pictureSize[0];
 $pictureHeight = $pictureSize[1];
 $course_id = api_get_course_int_id();
@@ -35,14 +35,14 @@ if ($answer_type == HOT_SPOT_DELINEATION) {
 	        FROM $TBL_ANSWERS
 	        WHERE 
 	            c_id = $course_id AND 
-	            question_id = ".$questionId." AND 
+	            question_id = $questionId AND 
 	            hotspot_type = 'delineation' 
             ORDER BY iid";
 } else {
     $sql = "SELECT iid, id, answer, hotspot_coordinates, hotspot_type, ponderation 
 	        FROM $TBL_ANSWERS
-	        WHERE c_id = $course_id AND question_id = ".$questionId." 
-	        ORDER BY iid";
+	        WHERE c_id = $course_id AND question_id = $questionId 
+	        ORDER BY position";
 }
 $result = Database::query($sql);
 

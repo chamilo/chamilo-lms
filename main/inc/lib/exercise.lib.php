@@ -56,7 +56,7 @@ class ExerciseLib
         }
 
         $answerType = $objQuestionTmp->selectType();
-        $pictureName = $objQuestionTmp->selectPicture();
+        $pictureName = $objQuestionTmp->getPictureFilename();
         $s = '';
 
         if ($answerType != HOT_SPOT && $answerType != HOT_SPOT_DELINEATION && $answerType != ANNOTATION) {
@@ -1130,10 +1130,7 @@ HTML;
             // Question is a HOT_SPOT
             //checking document/images visibility
             if (api_is_platform_admin() || api_is_course_admin()) {
-                $doc_id = DocumentManager::get_document_id(
-                    $course,
-                    '/images/' . $pictureName
-                );
+                $doc_id = $objQuestionTmp->getPictureId();
                 if (is_numeric($doc_id)) {
                     $images_folder_visibility = api_get_item_visibility(
                         $course,
@@ -1186,6 +1183,7 @@ HTML;
             }
 
             $answerList = '';
+            $hotspotColor = 0;
             if ($answerType != HOT_SPOT_DELINEATION) {
                 $answerList = '
                     <div class="well well-sm">
@@ -1197,8 +1195,14 @@ HTML;
                     Session::write("hotspot_ordered$questionId", array_keys($answers_hotspot));
                     $countAnswers = 1;
                     foreach ($answers_hotspot as $value) {
-                        $answerList .= "<li><p>{$countAnswers} - {$value}</p></li>";
-                        $countAnswers++;
+                        $answerList .= "<p>";
+                        if ($freeze) {
+                            $answerList .= "&nbsp<span class='hotspot-color hotspot-color-$hotspotColor'>&nbsp;&nbsp;&nbsp;&nbsp;</span>";
+                        }
+                        $answerList .= "&nbsp{$countAnswers}.&nbsp;";
+                        $answerList .= $value;
+                        $answerList .= "</p>";
+                        $hotspotColor++;
                     }
                 }
 

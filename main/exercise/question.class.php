@@ -261,15 +261,72 @@ abstract class Question
     }
 
     /**
-     * @return string|false
+     * @return string
      */
     public function selectPicturePath()
     {
         if (!empty($this->picture)) {
-            return api_get_path(WEB_COURSE_PATH) . $this->course['path'] . '/document/images/' . $this->picture;
+            return api_get_path(WEB_COURSE_PATH).$this->course['path'].'/document/images/'.$this->getPictureFilename();
         }
 
         return '';
+    }
+
+    /**
+     * @return int|string
+     */
+    public function getPictureId()
+    {
+        // for backward compatibility
+        // when in field picture we had the filename not the document id
+        if (preg_match("/quiz-.*/", $this->picture)) {
+            return DocumentManager::get_document_id(
+                $this->course,
+                $this->selectPicturePath(),
+                api_get_session_id()
+            );
+        }
+
+        return $this->picture;
+    }
+
+    /**
+     * @param int $courseId
+     * @param int $sessionId
+     * @return string
+     */
+    public function getPictureFilename($courseId = 0, $sessionId = 0)
+    {
+        $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
+        $sessionId = empty($sessionId) ? api_get_session_id() : (int) $sessionId;
+
+        if (empty($courseId)) {
+            return '';
+        }
+        // for backward compatibility
+        // when in field picture we had the filename not the document id
+        if (preg_match("/quiz-.*/", $this->picture)) {
+            return $this->picture;
+        }
+
+        $pictureId = $this->getPictureId();
+        $courseInfo = $this->course;
+        $documentInfo = DocumentManager::get_document_data_by_id(
+            $pictureId,
+            $courseInfo['code'],
+            false,
+            $sessionId
+        );
+        $documentFilename = '';
+        if ($documentInfo) {
+            // document in document/images folder
+            $documentFilename = pathinfo(
+                $documentInfo['path'],
+                PATHINFO_BASENAME
+            );
+        }
+
+        return $documentFilename;
     }
 
     /**
@@ -539,10 +596,16 @@ abstract class Question
         if (!file_exists($picturePath)) {
             if (mkdir($picturePath, api_get_permissions_for_new_directories())) {
                 // document path
-                $documentPath = api_get_path(SYS_COURSE_PATH) . $this->course['path'] . "/document";
+                $documentPath = api_get_path(SYS_COURSE_PATH).$this->course['path'].'/document';
                 $path = str_replace($documentPath, '', $picturePath);
                 $title_path = basename($picturePath);
-                $doc_id = add_document($this->course, $path, 'folder', 0, $title_path);
+                $doc_id = add_document(
+                    $this->course,
+                    $path,
+                    'folder',
+                    0,
+                    $title_path
+                );
                 api_item_property_update(
                     $this->course,
                     TOOL_DOCUMENT,
@@ -555,16 +618,18 @@ abstract class Question
 
         // if the question has got an ID
         if ($this->id) {
-            $this->picture = 'quiz-' . $this->id . '.jpg';
-            $o_img = new Image($Picture);
-            $o_img->send_image($picturePath . '/' . $this->picture, -1, 'jpg');
+            $pictureFilename = self::generatePictureName();
+            $img = new Image($Picture);
+            $img->send_image($picturePath.'/'.$pictureFilename, -1, 'jpg');
             $document_id = add_document(
                 $this->course,
-                '/images/' . $this->picture,
+                '/images/'.$pictureFilename,
                 'file',
-                filesize($picturePath . '/' . $this->picture),
-                $this->picture
+                filesize($picturePath.'/'.$pictureFilename),
+                $pictureFilename
             );
+            $this->picture = $document_id;
+
             if ($document_id) {
                 return api_item_property_update(
                     $this->course,
@@ -577,6 +642,20 @@ abstract class Question
         }
 
         return false;
+    }
+
+    /**
+     * return the name for image use in hotspot question
+     * to be unique, name is quiz-[utc unix timestamp].jpg
+     * @param string $prefix
+     * @param string $extension
+     * @return string
+     */
+    public function generatePictureName($prefix = 'quiz-', $extension = 'jpg')
+    {
+        // image name is quiz-xxx.jpg in folder images/
+        $utcTime = time();
+        return $prefix.$utcTime.'.'.$extension;
     }
 
     /**

@@ -24,19 +24,19 @@
  * @licence http://www.gnu.org/licenses/gpl.txt
  */
 
-require_once __DIR__ . '/../../main/inc/global.inc.php';
-require_once __DIR__ . '/lib/pens.php';
-require_once __DIR__ . '/chamilo_pens.php';
+require_once __DIR__.'/../../main/inc/global.inc.php';
+require_once __DIR__.'/lib/pens.php';
+require_once __DIR__.'/chamilo_pens.php';
 
 class ChamiloPackageHandler extends PENSPackageHandler {
 	public function processPackage($request, $path_to_package) {
 		$server = PENSServer::singleton();
 		// Moves the package to archive/pens
-		$path_to_archives = api_get_path(SYS_ARCHIVE_PATH) . 'pens';
-		if(!is_dir($path_to_archives)) {
+		$path_to_archives = api_get_path(SYS_ARCHIVE_PATH).'pens';
+		if (!is_dir($path_to_archives)) {
 			mkdir($path_to_archives, 0777, true);
 		}
-		rename($path_to_package, $path_to_archives . '/' . $request->getFilename());
+		rename($path_to_package, $path_to_archives.'/'.$request->getFilename());
 		// Insert the request in the database
 		$chamilo_pens = new ChamiloPens($request);
 		$chamilo_pens->save();

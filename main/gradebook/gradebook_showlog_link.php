@@ -39,15 +39,15 @@ $sql = "SELECT lk.name,lk.description,lk.weight,lk.visible,lk.type,lk.created_at
         FROM ".$t_link_log." lk inner join ".$t_user." us
         ON lk.user_id_log=us.user_id
         WHERE lk.id_linkeval_log=".$evaledit[0]->get_id()." AND lk.type='link';";
-$result=Database::query($sql);
-$list_info=array();
-while ($row=Database::fetch_row($result)) {
+$result = Database::query($sql);
+$list_info = array();
+while ($row = Database::fetch_row($result)) {
     $list_info[] = $row;
 }
 
 foreach ($list_info as $key => $info_log) {
-    $list_info[$key][5]=($info_log[5]) ? api_convert_and_format_date($info_log[5]) : 'N/A';
-    $list_info[$key][3]=($info_log[3]==1) ? get_lang('GradebookVisible') : get_lang('GradebookInvisible');
+    $list_info[$key][5] = ($info_log[5]) ? api_convert_and_format_date($info_log[5]) : 'N/A';
+    $list_info[$key][3] = ($info_log[3] == 1) ? get_lang('GradebookVisible') : get_lang('GradebookInvisible');
 }
 
 $parameters = array(

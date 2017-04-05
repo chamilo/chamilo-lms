@@ -331,10 +331,16 @@ function return_title($course)
     $html = '';
     $linkCourse = api_get_course_url($course['code']);
     $title = cut($course['title'], 70);
-    $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
-    $rating = Display::return_rating_system('star_'.$course['real_id'], $ajax_url.'&course_id='.$course['real_id'], $course['point_info']);
-    $html .=  '<h4 class="title"><a href="' . $linkCourse . '">' . cut($title, 60) . '</a></h4>';
-    $html .= '<div class="ranking">'. $rating . '</div>';
+    $html .= '<h4 class="title"><a href="'.$linkCourse.'">'.cut($title, 60).'</a></h4>';
+    if (api_get_configuration_value('hide_course_rating') === false) {
+        $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
+        $rating = Display::return_rating_system(
+            'star_'.$course['real_id'],
+            $ajax_url.'&course_id='.$course['real_id'],
+            $course['point_info']
+        );
+        $html .= '<div class="ranking">'.$rating.'</div>';
+    }
 
     return $html;
 }

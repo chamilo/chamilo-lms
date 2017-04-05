@@ -280,7 +280,7 @@ function element_start($parser, $data)
     global $current_tag;
     switch ($data) {
         case 'Contact':
-            $user = array ();
+            $user = array();
             break;
         default:
             $current_tag = $data;
@@ -373,7 +373,7 @@ if (isset($_POST['formSent']) && $_POST['formSent'] AND
     $allowed_file_mimetype = array('csv', 'xml');
     $error_kind_file = false;
 
-    $checkUniqueEmail = isset($_POST['check_unique_email']) ? $_POST['check_unique_email'] :null;
+    $checkUniqueEmail = isset($_POST['check_unique_email']) ? $_POST['check_unique_email'] : null;
 
     $uploadInfo = pathinfo($_FILES['import_file']['name']);
     $ext_import_file = $uploadInfo['extension'];
@@ -382,7 +382,7 @@ if (isset($_POST['formSent']) && $_POST['formSent'] AND
         if (strcmp($file_type, 'csv') === 0 &&
             $ext_import_file == $allowed_file_mimetype[0]
         ) {
-            $users	= parse_csv_data($_FILES['import_file']['tmp_name']);
+            $users = parse_csv_data($_FILES['import_file']['tmp_name']);
             $errors = validate_data($users, $checkUniqueEmail);
             $error_kind_file = false;
         } elseif (strcmp($file_type, 'xml') === 0 && $ext_import_file == $allowed_file_mimetype[1]) {

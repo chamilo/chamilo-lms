@@ -308,3 +308,5 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 //$_configuration['show_simple_session_info'] = true;
 // Hide LP time in reports.
 // $_configuration['hide_lp_time'] = false;
+// Hide rating elements in pages ("Courses catalog" & "Most Popular courses")
+// $_configuration['hide_course_rating'] = false;

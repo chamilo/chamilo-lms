@@ -148,4 +148,3 @@ class HotSpotDelineation extends HotSpot
         parent::processAnswersCreation($form);
     }
 }
-

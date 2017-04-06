@@ -404,16 +404,16 @@ function return_goto_button($course)
  */
 function return_already_registered_label($in_status)
 {
-    $icon = '<em class="fa fa-suitcase"></em>';
+    $icon = '<em class="fa fa-check"></em>';
     $title = get_lang("YouAreATeacherOfThisCourse");
     if ($in_status == 'student') {
-        $icon = '<em class="fa fa-graduation-cap"></em>';
-        $title = get_lang("AlreadyRegisteredToCourse");
+        $icon = '<em class="fa fa-check"></em>';
+        $title = get_lang("AlreadySubscribed");
     }
 
     $html = Display::tag(
         'button',
-        $icon,
+        $icon . ' ' . $title,
         array('id' => 'register', 'class' => 'btn btn-default btn-sm', 'title' => $title)
     );
 

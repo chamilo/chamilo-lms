@@ -72,8 +72,8 @@ class FeatureContext extends MinkContext
     {
         $this->visit('/index.php?logout=logout');
         $this->iAmOnHomepage();
-        $this->fillField('login', 'mbrandybuck');
-        $this->fillField('password', 'mbrandybuck');
+        $this->fillField('login', 'acostea');
+        $this->fillField('password', 'acostea');
         $this->pressButton('submitAuth');
     }
 

@@ -118,7 +118,7 @@ if (!empty($careers)) {
     }
 }
 
-echo '<table class="data_table">';
+echo '<table class="data_table" border="1">';
 
 if (!empty($career_array)) {
     foreach ($career_array as $career_id => $data) {
@@ -156,21 +156,19 @@ if (!empty($career_array)) {
                         echo Display::tag('td', $url);
                         echo '<td>';
                         // Courses
-                        echo '<table>';
+                        echo '<ul>';
                         if (!empty($course_list)) {
                             foreach ($course_list as $course) {
-                                echo '<tr>';
+                                echo '<li>';
                                 $url = Display::url(
                                     $course['title'],
                                     api_get_path(WEB_COURSE_PATH) . $course['directory'] . '/index.php?id_session=' . $session['data']['id']
                                 );
-                                echo Display::tag('td', $url);
-                                echo '</tr>';
+                                echo $url;
+                                echo '</li>';
                             }
-                            echo '</table>';
-                            echo '</td>';
-                            echo '</tr>';
                         }
+                        echo '</ul>';
                     }
                 }
             }

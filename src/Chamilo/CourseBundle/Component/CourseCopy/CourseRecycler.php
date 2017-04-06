@@ -44,7 +44,6 @@ class CourseRecycler
     public function recycle($backupType)
     {
         if (empty($backupType)) {
-
             return false;
         }
 
@@ -106,7 +105,6 @@ class CourseRecycler
             // Delete all content in the documents.
             rmdirr($this->course->backup_path.'/document', true);
         } else {
-
             if ($this->course->has_resources(RESOURCE_DOCUMENT)) {
                 foreach ($this->course->resources[RESOURCE_DOCUMENT] as $document) {
                     rmdirr($this->course->backup_path.'/'.$document->path);
@@ -156,10 +154,10 @@ class CourseRecycler
     public function recycle_glossary()
     {
         if ($this->course->has_resources(RESOURCE_GLOSSARY)) {
-            $table_glossary	= Database::get_course_table(TABLE_GLOSSARY);
+            $table = Database::get_course_table(TABLE_GLOSSARY);
             $ids = implode(',', array_filter(array_keys($this->course->resources[RESOURCE_GLOSSARY])));
             if (!empty($ids)) {
-                $sql = "DELETE FROM ".$table_glossary."
+                $sql = "DELETE FROM $table
                         WHERE c_id = ".$this->course_id." AND glossary_id IN(".$ids.")";
                 Database::query($sql);
             }
@@ -230,7 +228,6 @@ class CourseRecycler
         }
 
         if ($this->course->has_resources(RESOURCE_FORUM)) {
-
             $forum_ids = implode(',', array_filter(array_keys($this->course->resources[RESOURCE_FORUM])));
 
             if (empty($forum_ids)) {
@@ -396,7 +393,6 @@ class CourseRecycler
     public function recycle_quizzes()
     {
         if ($this->course->has_resources(RESOURCE_QUIZ)) {
-
             $table_qui_que = Database::get_course_table(TABLE_QUIZ_QUESTION);
             $table_qui_ans = Database::get_course_table(TABLE_QUIZ_ANSWER);
             $table_qui = Database::get_course_table(TABLE_QUIZ_TEST);
@@ -513,7 +509,6 @@ class CourseRecycler
 
             $ids = implode(',', array_filter(array_keys($this->course->resources[RESOURCE_SURVEY])));
             if (!empty($ids)) {
-
                 $sql = "DELETE FROM $table_survey_a
                         WHERE c_id = ".$this->course_id."  AND survey_id IN(".$ids.")";
                 Database::query($sql);
@@ -629,7 +624,7 @@ class CourseRecycler
             $resources = $this->course->resources;
             foreach ($resources[RESOURCE_THEMATIC] as $last_id => $thematic) {
                 if (is_numeric($last_id)) {
-                    foreach($thematic->thematic_advance_list as $thematic_advance) {
+                    foreach ($thematic->thematic_advance_list as $thematic_advance) {
                         $cond = array(
                             'id = ? AND  c_id = ?' => array(
                                 $thematic_advance['id'],
@@ -646,7 +641,7 @@ class CourseRecycler
                         Database::delete($table_thematic_advance, $cond);
                     }
 
-                    foreach($thematic->thematic_plan_list as $thematic_plan) {
+                    foreach ($thematic->thematic_plan_list as $thematic_plan) {
                         $cond = array(
                             'id = ? AND  c_id = ?' => array(
                                 $thematic_plan['id'],
@@ -675,7 +670,7 @@ class CourseRecycler
                         'ThematicDeleted',
                         api_get_user_id()
                     );
-                    Database::delete($table_thematic,$cond);
+                    Database::delete($table_thematic, $cond);
                 }
             }
         }
@@ -693,7 +688,7 @@ class CourseRecycler
             $resources = $this->course->resources;
             foreach ($resources[RESOURCE_ATTENDANCE] as $last_id => $obj) {
                 if (is_numeric($last_id)) {
-                    foreach($obj->attendance_calendar as $attendance_calendar) {
+                    foreach ($obj->attendance_calendar as $attendance_calendar) {
                         $cond = array('id = ? AND c_id = ? '=>array($attendance_calendar['id'], $this->course_id));
                         Database::delete($table_attendance_calendar, $cond);
                     }
@@ -717,7 +712,7 @@ class CourseRecycler
     public function recycle_work($session_id = 0)
     {
         if ($this->course->has_resources(RESOURCE_WORK)) {
-            $table_work          = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+            $table_work = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
             $table_work_assignment = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
 
             $resources = $this->course->resources;

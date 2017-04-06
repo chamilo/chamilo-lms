@@ -17,12 +17,12 @@ use Chamilo\CourseBundle\Component\CourseCopy\Resources\Document;
  */
 class CourseSelectForm
 {
-	/**
-	 * Display the form
+    /**
+     * Display the form
      * @param array $course
-	 * @param array $hidden_fields Hidden fields to add to the form.
-	 * @param boolean $avoid_serialize the document array will be serialize. This is used in the course_copy.php file
-	 */
+     * @param array $hidden_fields Hidden fields to add to the form.
+     * @param boolean $avoid_serialize the document array will be serialize. This is used in the course_copy.php file
+     */
 	public static function display_form($course, $hidden_fields = null, $avoid_serialize = false)
     {
         global $charset;
@@ -591,9 +591,12 @@ class CourseSelectForm
 	 * @param array $hidden_fields Hidden fields to add to the form.
      * @param boolean $avoid_serialize the document array will be serialize. This is used in the course_copy.php file
 	 */
-	 public static function display_form_session_export($list_course, $hidden_fields = null, $avoid_serialize = false)
-     {
-         ?>
+    public static function display_form_session_export(
+        $list_course,
+        $hidden_fields = null,
+        $avoid_serialize = false
+    ) {
+        ?>
 		<script>
 			function exp(item) {
 				el = document.getElementById('div_'+item);

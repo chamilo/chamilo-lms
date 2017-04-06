@@ -81,7 +81,7 @@ if (!empty($careers)) {
         // Getting all promotions
         $promotions = $promotion->get_all_promotions_by_career_id(
             $career_item['id'],
-            'name DESC'
+            'name ASC'
         );
         $career_content = '';
         $promotion_array = array();
@@ -118,7 +118,7 @@ if (!empty($careers)) {
     }
 }
 
-echo '<table class="data_table" border="1">';
+echo '<table class="data_table">';
 
 if (!empty($career_array)) {
     foreach ($career_array as $career_id => $data) {
@@ -132,33 +132,38 @@ if (!empty($career_array)) {
                 $promotion_name = $promotion['name'];
                 $promotion_url = Display::url($promotion_name, 'promotions.php?action=edit&id=' . $promotion_id);
                 $sessions = $promotion['sessions'];
-                echo '<tr>';
-                $count = count($sessions);
+                $count = count($promotion['sessions']);
                 $rowspan = '';
                 if (!empty($count)) {
-                    $count++;
                     $rowspan = 'rowspan="' . $count . '"';
                 }
-                echo '<td ' . $rowspan . '>';
-                echo Display::tag('h5', $promotion_url);
-                echo '</td>';
-                echo '</tr>';
 
+                echo '<tr style="border-bottom:1px solid #ccc;">'.
+                    '<td ' . $rowspan . ' style="border-right:1px solid #aaa;">'.
+                    Display::tag('h5', $promotion_url).
+                    '</td>';
+
+                $first = true;
                 if (!empty($sessions)) {
                     foreach ($sessions as $session) {
-                        $course_list = $session['courses'];
                         $url = Display::url(
                             $session['data']['name'],
                             '../session/resume_session.php?id_session='.$session['data']['id']
                         );
-                        echo '<tr>';
+                        // Tricky TR because of "rowspan" in previous TD - only
+                        // use TR if not on the first line
+                        if (!$first) {
+                            echo '<tr style="border-bottom:1px solid #ccc;">';
+                        } else {
+                            $first = false;
+                        }
                         // Session name
-                        echo Display::tag('td', $url);
+                        echo Display::tag('td', $url, array('style' => 'border-right:1px solid #aaa;'));
                         echo '<td>';
                         // Courses
                         echo '<ul>';
-                        if (!empty($course_list)) {
-                            foreach ($course_list as $course) {
+                        if (!empty($session['courses'])) {
+                            foreach ($session['courses'] as $course) {
                                 echo '<li>';
                                 $url = Display::url(
                                     $course['title'],
@@ -169,8 +174,11 @@ if (!empty($career_array)) {
                             }
                         }
                         echo '</ul>';
+                        echo '</td>';
+                        echo '</tr>';
                     }
                 }
+                echo '</tr>';
             }
         }
     }

@@ -1148,24 +1148,6 @@ HTML;
             }
             $questionName = $objQuestionTmp->selectTitle();
             $questionDescription = $objQuestionTmp->selectDescription();
-            if ($freeze) {
-                $relPath = api_get_path(WEB_CODE_PATH);
-                echo "
-                    <script>
-//                        $(document).on('ready', function () {
-                            new " . ($answerType == HOT_SPOT ? "HotspotQuestion" : "DelineationQuestion") . "({
-                                questionId: $questionId,
-                                exerciseId: $exerciseId,
-                                selector: '#hotspot-preview-$questionId',
-                                for: 'preview',
-                                relPath: '$relPath'
-                            });
-//                        });
-                    </script>
-                    <div id=\"hotspot-preview-$questionId\"></div>
-                ";
-                return;
-            }
 
             // Get the answers, make a list
             $objAnswerTmp = new Answer($questionId);
@@ -1188,22 +1170,20 @@ HTML;
                 $answerList = '
                     <div class="well well-sm">
                         <h5 class="page-header">' . get_lang('HotspotZones') . '</h5>
-                        <ul>
+                        <ol>
                 ';
 
                 if (!empty($answers_hotspot)) {
                     Session::write("hotspot_ordered$questionId", array_keys($answers_hotspot));
-                    $countAnswers = 1;
                     foreach ($answers_hotspot as $value) {
                         $answerList .= "<li>";
                         if ($freeze) {
-                            $answerList .= "&nbsp<span class='hotspot-color hotspot-color-$hotspotColor'>&nbsp;&nbsp;&nbsp;&nbsp;</span>";
+                            $answerList .= '<span class="hotspot-color-'.$hotspotColor
+                                .' fa fa-square" aria-hidden="true"></span>'.PHP_EOL;
                         }
-                        $answerList .= "&nbsp{$countAnswers}.&nbsp;";
                         $answerList .= $value;
                         $answerList .= "</li>";
                         $hotspotColor++;
-                        $countAnswers++;
                     }
                 }
 
@@ -1211,6 +1191,31 @@ HTML;
                         </ul>
                     </div>
                 ';
+
+                if ($freeze) {
+                    $relPath = api_get_path(WEB_CODE_PATH);
+
+                    echo "
+                        <div class=\"row\">
+                            <div class=\"col-sm-9\">
+                                <div id=\"hotspot-preview-$questionId\"></div>                                
+                            </div>
+                            <div class=\"col-sm-3\">
+                                $answerList
+                            </div>
+                        </div>
+                        <script>
+                                new " . ($answerType == HOT_SPOT ? "HotspotQuestion" : "DelineationQuestion") . "({
+                                    questionId: $questionId,
+                                    exerciseId: $exerciseId,
+                                    selector: '#hotspot-preview-$questionId',
+                                    for: 'preview',
+                                    relPath: '$relPath'
+                                });
+                        </script>
+                    ";
+                    return;
+                }
             }
 
             if (!$only_questions) {

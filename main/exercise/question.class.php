@@ -775,10 +775,18 @@ abstract class Question
 
         // if the question has got an ID and if the picture exists
         if ($this->id && !empty($this->picture)) {
-            $picture = explode('.', $this->picture);
-            $extension = $picture[sizeof($picture) - 1];
-            $picture = 'quiz-'.$questionId.'.'.$extension;
-            $result = @copy($source_path.'/'.$this->picture, $destination_path.'/'.$picture) ? true : false;
+            if (file_exists($source_path.'/'.$this->picture)) {
+                // for backward compatibility
+                $picture = explode('.', $this->picture);
+                $extension = $picture[sizeof($picture) - 1];
+                $picture = 'quiz-'.$questionId.'.'.$extension;
+                $result = @copy($source_path.'/'.$this->picture, $destination_path.'/'.$picture);
+            } else {
+                $imageInfo = DocumentManager::get_document_data_by_id($this->picture, $course_info['code']);
+                $picture = $this->generatePictureName();
+
+                $result = @copy($imageInfo['absolute_path'], $destination_path.'/'.$picture);
+            }
             // If copy was correct then add to the database
             if ($result) {
                 $sql = "UPDATE $TBL_QUESTIONS SET

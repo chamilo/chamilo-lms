@@ -415,23 +415,23 @@ class CourseSelectForm
 		if ($from === 'copy_course') {
 			if (is_array($resource)) {
 				$resource = array_keys($resource);
-
 				foreach ($resource as $resource_item) {
-
-					$condition_session = '';
+					$conditionSession = '';
 					if (!empty($session_id)) {
 						$session_id = intval($session_id);
-						$condition_session = ' AND d.session_id ='.$session_id;
+						$conditionSession = ' AND d.session_id ='.$session_id;
 					}
 
 					$sql = 'SELECT d.id, d.path, d.comment, d.title, d.filetype, d.size
-							FROM '.$table_doc.' d, '.$table_prop.' p
+							FROM '.$table_doc.' d 
+							INNER JOIN '.$table_prop.' p
+							ON (d.c_id = p.c_id)
 							WHERE
 							    d.c_id = '.$course_id.' AND
                                 p.c_id = '.$course_id.' AND
                                 tool = \''.TOOL_DOCUMENT.'\' AND
                                 p.ref = d.id AND p.visibility != 2 AND
-                                d.id = '.$resource_item.$condition_session.'
+                                d.id = '.$resource_item.$conditionSession.'
 							ORDER BY path';
 					$db_result = Database::query($sql);
 					while ($obj = Database::fetch_object($db_result)) {
@@ -465,7 +465,6 @@ class CourseSelectForm
 
 		if (is_array($course->resources)) {
 			foreach ($course->resources as $type => $resources) {
-
 				switch ($type) {
 					case RESOURCE_SURVEYQUESTION:
 						foreach ($resources as $id => $obj) {

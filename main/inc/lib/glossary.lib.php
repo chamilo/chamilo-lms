@@ -47,9 +47,9 @@ class GlossaryManager
      *
      * @return string The glossary description
      */
-    public static function get_glossary_term_by_glossary_id ($glossary_id)
+    public static function get_glossary_term_by_glossary_id($glossary_id)
     {
-        $glossary_table  = Database::get_course_table(TABLE_GLOSSARY);
+        $glossary_table = Database::get_course_table(TABLE_GLOSSARY);
         $course_id = api_get_course_int_id();
         $sql = "SELECT description FROM $glossary_table
                 WHERE c_id = $course_id  AND glossary_id =".intval($glossary_id);
@@ -72,7 +72,7 @@ class GlossaryManager
      */
     public static function get_glossary_term_by_glossary_name($glossary_name)
     {
-        $glossary_table  = Database::get_course_table(TABLE_GLOSSARY);
+        $glossary_table = Database::get_course_table(TABLE_GLOSSARY);
         $session_id = api_get_session_id();
         $course_id = api_get_course_int_id();
         $sql_filter = api_get_session_condition($session_id);
@@ -223,7 +223,7 @@ class GlossaryManager
         $get_max = "SELECT MAX(display_order) FROM $t_glossary
                     WHERE c_id = $course_id ";
         $res_max = Database::query($get_max);
-        if (Database::num_rows($res_max)==0) {
+        if (Database::num_rows($res_max) == 0) {
             return 0;
         }
         $row = Database::fetch_array($res_max);
@@ -252,7 +252,7 @@ class GlossaryManager
                 WHERE
                     c_id = $course_id AND
                     name = '".Database::escape_string($term)."'";
-        if ($not_id<>'') {
+        if ($not_id <> '') {
             $sql .= " AND glossary_id <> '".intval($not_id)."'";
         }
         $result = Database::query($sql);
@@ -375,25 +375,25 @@ class GlossaryManager
         $actionsLeft = '';
         if (api_is_allowed_to_edit(null, true)) {
             $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=addglossary&msg=add?'.api_get_cidreq().'">'.
-                Display::return_icon('new_glossary_term.png',get_lang('TermAddNew'), '', ICON_SIZE_MEDIUM).'</a>';
+                Display::return_icon('new_glossary_term.png', get_lang('TermAddNew'), '', ICON_SIZE_MEDIUM).'</a>';
         }
 
         $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=export">'.
-            Display::return_icon('export_csv.png',get_lang('ExportGlossaryAsCSV'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('export_csv.png', get_lang('ExportGlossaryAsCSV'), '', ICON_SIZE_MEDIUM).'</a>';
         if (api_is_allowed_to_edit(null, true)) {
             $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=import">'.
-                Display::return_icon('import_csv.png',get_lang('ImportGlossary'), '', ICON_SIZE_MEDIUM).'</a>';
+                Display::return_icon('import_csv.png', get_lang('ImportGlossary'), '', ICON_SIZE_MEDIUM).'</a>';
         }
 
         $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=export_to_pdf">'.
-            Display::return_icon('pdf.png',get_lang('ExportToPDF'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('pdf.png', get_lang('ExportToPDF'), '', ICON_SIZE_MEDIUM).'</a>';
 
         if (($view == 'table') || (!isset($view))) {
             $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=list">'.
-                Display::return_icon('view_detailed.png',get_lang('ListView'), '', ICON_SIZE_MEDIUM).'</a>';
+                Display::return_icon('view_detailed.png', get_lang('ListView'), '', ICON_SIZE_MEDIUM).'</a>';
         } else {
             $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=table">'.
-                Display::return_icon('view_text.png',get_lang('TableView'), '', ICON_SIZE_MEDIUM).'</a>';
+                Display::return_icon('view_text.png', get_lang('TableView'), '', ICON_SIZE_MEDIUM).'</a>';
         }
 
         /* BUILD SEARCH FORM */
@@ -430,7 +430,7 @@ class GlossaryManager
             $table->set_header(1, get_lang('TermDefinition'), true);
             if (api_is_allowed_to_edit(null, true)) {
                 $table->set_header(2, get_lang('Actions'), false, 'width=90px', array('class' => 'td_actions'));
-                $table->set_column_filter(2, array('GlossaryManager','actions_filter'));
+                $table->set_column_filter(2, array('GlossaryManager', 'actions_filter'));
             }
             $content .= $table->return_table();
         }
@@ -452,8 +452,8 @@ class GlossaryManager
         $content = '';
         foreach ($glossary_data as $key => $glossary_item) {
             $actions = '';
-            if (api_is_allowed_to_edit(null,true)) {
-                $actions = '<div class="pull-right">'.self::actions_filter($glossary_item[2], '',$glossary_item).'</div>';
+            if (api_is_allowed_to_edit(null, true)) {
+                $actions = '<div class="pull-right">'.self::actions_filter($glossary_item[2], '', $glossary_item).'</div>';
             }
             $content .= Display::panel($glossary_item[1], $glossary_item[0].' '.$actions);
         }
@@ -466,7 +466,7 @@ class GlossaryManager
      * @return integer Count of glossary terms
      *
      */
-    public static function get_number_glossary_terms($session_id=0)
+    public static function get_number_glossary_terms($session_id = 0)
     {
         // Database table definition
         $t_glossary = Database::get_course_table(TABLE_GLOSSARY);
@@ -560,7 +560,7 @@ class GlossaryManager
         while ($data = Database::fetch_array($res)) {
             // Validation when belongs to a session
             $session_img = api_get_session_image($data['session_id'], $_user['status']);
-            $array[0] = $data[0] . $session_img;
+            $array[0] = $data[0].$session_img;
 
             if (!$view || $view === 'table') {
                 $array[1] = str_replace(array('<p>', '</p>'), array('', '<br />'), $data[1]);
@@ -590,13 +590,13 @@ class GlossaryManager
     {
         $glossary_id = $row[2];
         $return = '<a href="'.api_get_self().'?action=edit_glossary&glossary_id='.$glossary_id.'&'.api_get_cidreq().'&msg=edit">'.
-            Display::return_icon('edit.png',get_lang('Edit'),'',22).'</a>';
+            Display::return_icon('edit.png', get_lang('Edit'), '', 22).'</a>';
         $glossary_data = self::get_glossary_information($glossary_id);
         $glossary_term = $glossary_data['name'];
         if (api_is_allowed_to_edit(null, true)) {
             if ($glossary_data['session_id'] == api_get_session_id()) {
                 $return .= '<a href="'.api_get_self().'?action=delete_glossary&glossary_id='.$glossary_id.'&'.api_get_cidreq().'" onclick="return confirmation(\''.$glossary_term.'\');">'.
-                    Display::return_icon('delete.png', get_lang('Delete'),'',22).'</a>';
+                    Display::return_icon('delete.png', get_lang('Delete'), '', 22).'</a>';
             } else {
                 $return = get_lang('EditionNotAvailableFromSession');
             }

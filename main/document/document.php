@@ -1971,7 +1971,7 @@ if (isset($_GET['createdir']) && isset($_POST['dirname']) && $_POST['dirname'] !
     $document_id = DocumentManager::get_document_id($courseInfo, $_POST['dirname']);
 }
 $selector = '';
-if (!$is_certificate_mode) {
+if (!$is_certificate_mode && !isset($_GET['move'])) {
     $selector = DocumentManager::build_directory_selector(
         $folders,
         $document_id,

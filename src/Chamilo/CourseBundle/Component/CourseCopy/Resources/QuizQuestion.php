@@ -97,6 +97,14 @@ class QuizQuestion extends Resource
 
     /**
      * Add an answer to this QuizQuestion
+     * @param int $answer_id
+     * @param string $answer_text
+     * @param string $correct
+     * @param string $comment
+     * @param string $ponderation
+     * @param string $position
+     * @param string $hotspot_coordinates
+     * @param string $hotspot_type
      */
     public function add_answer(
         $answer_id,

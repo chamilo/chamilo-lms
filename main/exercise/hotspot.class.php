@@ -76,27 +76,23 @@ class HotSpot extends Question
     /**
      * @param FormValidator $form
      * @param null $objExercise
-     * @return null|false
+     * @return bool
      */
     public function processCreation($form, $objExercise = null)
     {
         $file_info = $form->getSubmitValue('imageUpload');
-        $_course = api_get_course_info();
         parent::processCreation($form, $objExercise);
 
         if (!empty($file_info['tmp_name'])) {
-            $this->uploadPicture($file_info['tmp_name'], $file_info['name']);
-            $documentPath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
-            $picturePath = $documentPath.'/images';
-
-            // fixed width ang height
-            if (file_exists($picturePath.'/'.$this->getPictureFilename())) {
-                $this->resizePicture('width', 800);
+            $result = $this->uploadPicture($file_info['tmp_name']);
+            if ($result) {
                 $this->save();
+                return true;
             } else {
                 return false;
             }
         }
+        return false;
     }
 
     function createAnswersForm($form)

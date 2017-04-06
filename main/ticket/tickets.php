@@ -128,19 +128,20 @@ $isAdmin = api_is_platform_admin();
 
 Display::display_header(get_lang('MyTickets'));
 if (!empty($projectId)) {
+    $getParameters = [];
     if ($isAdmin) {
-    $getParameters = [
-        'keyword',
-        'keyword_status',
-        'keyword_category',
-        'keyword_request_user',
-        'keyword_admin',
-        'keyword_start_date',
-        'keyword_unread',
-        'Tickets_per_page',
-        'Tickets_column'
-    ];
-}
+        $getParameters = [
+            'keyword',
+            'keyword_status',
+            'keyword_category',
+            'keyword_request_user',
+            'keyword_admin',
+            'keyword_start_date',
+            'keyword_unread',
+            'Tickets_per_page',
+            'Tickets_column',
+        ];
+    }
     $get_parameter = '';
     foreach ($getParameters as $getParameter) {
         if (isset($_GET[$getParameter])) {
@@ -200,7 +201,14 @@ if (!empty($projectId)) {
     ];
 
     // Create a search-box
-    $form = new FormValidator('search_simple', 'get', '', '', array(), FormValidator::LAYOUT_INLINE);
+    $form = new FormValidator(
+        'search_simple',
+        'get',
+        '',
+        '',
+        array(),
+        FormValidator::LAYOUT_INLINE
+    );
     $form->addText('keyword', get_lang('Keyword'), 'size="25"');
     $form->addButtonSearch(get_lang('Search'), 'submit_simple');
     $form->addElement(

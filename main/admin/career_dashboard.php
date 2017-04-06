@@ -87,7 +87,7 @@ if (!empty($careers)) {
         $promotion_array = array();
         if (!empty($promotions)) {
             foreach ($promotions as $promotion_item) {
-                if (!$promotion_item['status']) {
+                if ($promotion_item['status'] == 0) {
                     continue; //avoid status = 0
                 }
 
@@ -95,7 +95,6 @@ if (!empty($careers)) {
                 $sessions = SessionManager::get_all_sessions_by_promotion(
                     $promotion_item['id']
                 );
-
                 $session_list = array();
                 foreach ($sessions as $session_item) {
                     $course_list = SessionManager::get_course_list_by_session_id(
@@ -121,7 +120,7 @@ if (!empty($careers)) {
 
 echo '<table class="data_table">';
 
-if (!empty($career_arrayer)) {
+if (!empty($career_array)) {
     foreach ($career_array as $career_id => $data) {
         $career = $data['name'];
         $promotions = $data['promotions'];

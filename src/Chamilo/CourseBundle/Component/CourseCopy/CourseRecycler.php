@@ -549,7 +549,7 @@ class CourseRecycler
                     if (trim($learnpath->path) != '') {
                         // when $learnpath->path value is incorrect for some reason.
                         // The directory trat contains files of the SCORM package is to be deleted.
-                        $scorm_package_dir = realpath($this->course->path . 'scorm/' . $learnpath->path);
+                        $scorm_package_dir = realpath($this->course->path.'scorm/'.$learnpath->path);
                         rmdirr($scorm_package_dir);
                     }
                 }

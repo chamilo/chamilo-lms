@@ -20,7 +20,9 @@ $toolName = get_lang('WorksInSessionReport');
 
 $em = Database::getManager();
 $session = null;
-$sessionsInfo = SessionManager::getSessionsFollowedByUser(api_get_user_id(), COURSEMANAGER);
+$sessionsInfo = api_is_platform_admin()
+    ? SessionManager::get_sessions_list()
+    : Tracking::get_sessions_coached_by_user(api_get_user_id());
 
 $form = new FormValidator('work_report', 'GET');
 $selectSession = $form->addSelect('session', get_lang('Session'), [0 => get_lang('None')]);

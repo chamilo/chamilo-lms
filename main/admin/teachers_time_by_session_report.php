@@ -21,7 +21,9 @@ if (!api_is_platform_admin(true) && !api_is_teacher()) {
 $toolName = get_lang('TeacherTimeReportBySession');
 
 $em = Database::getManager();
-$sessionsInfo = Tracking::get_sessions_coached_by_user(api_get_user_id());
+$sessionsInfo = api_is_platform_admin()
+    ? SessionManager::get_sessions_list()
+    : Tracking::get_sessions_coached_by_user(api_get_user_id());
 $session = null;
 
 $form = new FormValidator('teacher_time_report_by_session', 'GET');

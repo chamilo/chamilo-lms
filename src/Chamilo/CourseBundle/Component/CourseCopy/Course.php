@@ -67,7 +67,7 @@ class Course
      * @param int $resource_type Check if this course has resources of the
      * given type. If no type is given, check if course has resources of any
      * type.
-     * @return int
+     * @return boolean
      */
     public function has_resources($resource_type = null)
     {

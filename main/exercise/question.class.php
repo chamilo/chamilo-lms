@@ -774,47 +774,52 @@ abstract class Question
         $source_path = api_get_path(SYS_COURSE_PATH).$this->course['path'].'/document/images';
 
         // if the question has got an ID and if the picture exists
-        if ($this->id && !empty($this->picture)) {
-            if (file_exists($source_path.'/'.$this->picture)) {
-                // for backward compatibility
-                $picture = explode('.', $this->picture);
-                $extension = $picture[sizeof($picture) - 1];
-                $picture = 'quiz-'.$questionId.'.'.$extension;
-                $result = @copy($source_path.'/'.$this->picture, $destination_path.'/'.$picture);
-            } else {
-                $imageInfo = DocumentManager::get_document_data_by_id($this->picture, $course_info['code']);
-                $picture = $this->generatePictureName();
-
-                $result = @copy($imageInfo['absolute_path'], $destination_path.'/'.$picture);
-            }
-            // If copy was correct then add to the database
-            if ($result) {
-                $sql = "UPDATE $TBL_QUESTIONS SET
-                        picture = '".Database::escape_string($picture)."'
-                        WHERE c_id = $course_id AND id='".intval($questionId)."'";
-                Database::query($sql);
-
-                $document_id = add_document(
-                    $course_info,
-                    '/images/'.$picture,
-                    'file',
-                    filesize($destination_path.'/'.$picture),
-                    $picture
-                );
-                if ($document_id) {
-                    return api_item_property_update(
-                        $course_info,
-                        TOOL_DOCUMENT,
-                        $document_id,
-                        'DocumentAdded',
-                        api_get_user_id()
-                    );
-                }
-            }
-
-            return $result;
+        if (!$this->id || empty($this->picture)) {
+            return false;
         }
-        return false;
+
+        if (file_exists($source_path.'/'.$this->picture)) {
+            // for backward compatibility
+            $picture = explode('.', $this->picture);
+            $extension = $picture[sizeof($picture) - 1];
+            $picture = 'quiz-'.$questionId.'.'.$extension;
+            $result = @copy($source_path.'/'.$this->picture, $destination_path.'/'.$picture);
+        } else {
+            $imageInfo = DocumentManager::get_document_data_by_id($this->picture, $course_info['code']);
+            $picture = $this->generatePictureName();
+
+            $result = @copy($imageInfo['absolute_path'], $destination_path.'/'.$picture);
+        }
+
+        // If copy was correct then add to the database
+        if (!$result) {
+            return false;
+        }
+
+        $sql = "UPDATE $TBL_QUESTIONS SET
+                picture = '".Database::escape_string($picture)."'
+                WHERE c_id = $course_id AND id='".intval($questionId)."'";
+        Database::query($sql);
+
+        $document_id = add_document(
+            $course_info,
+            '/images/'.$picture,
+            'file',
+            filesize($destination_path.'/'.$picture),
+            $picture
+        );
+
+        if (!$document_id) {
+            return false;
+        }
+
+        return api_item_property_update(
+            $course_info,
+            TOOL_DOCUMENT,
+            $document_id,
+            'DocumentAdded',
+            api_get_user_id()
+        );
     }
 
     /**

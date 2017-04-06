@@ -4142,6 +4142,10 @@ ul.holder li.bit-box{
     height: 30px;
     display: block;
 }
+.alert-thematic{
+    margin-top: 10px;
+    display: inline-block;
+}
 .thematic .thematic-advance{
     margin-top: 10px;
     display: inline-block;

@@ -15,7 +15,7 @@ $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
 api_protect_admin_script();
 
 // setting breadcrumbs
-$interbreadcrumb[] = array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 
 $tool_name = null;
 
@@ -36,16 +36,16 @@ $check = Security::check_token('request');
 $token = Security::get_token();
 
 if ($action == 'add') {
-    $interbreadcrumb[]=array('url' => 'extra_fields.php?type='.$extraField->type,'name' => $extraField->pageName);
-    $interbreadcrumb[]=array(
+    $interbreadcrumb[] = array('url' => 'extra_fields.php?type='.$extraField->type, 'name' => $extraField->pageName);
+    $interbreadcrumb[] = array(
         'url' => 'extra_fields.php?type='.$extraField->type.'&action=edit&id='.$extraFieldInfo['id'],
         'name' => $extraFieldInfo['display_text']
     );
-    $interbreadcrumb[]=array(
+    $interbreadcrumb[] = array(
         'url' => 'extra_field_options.php?type='.$extraField->type.'&field_id='.$extraFieldInfo['id'],
         'name' => get_lang('EditExtraFieldOptions')
     );
-    $interbreadcrumb[]=array('url' => '#','name' => get_lang('Add'));
+    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Add'));
 } elseif ($action == 'edit') {
     $interbreadcrumb[] = array(
         'url' => 'extra_fields.php?type='.$extraField->type,
@@ -83,9 +83,9 @@ $params = 'field_id='.$field_id.'&type='.$extraField->type.'&roleId='.$roleId;
 $paramsNoRole = 'field_id='.$field_id.'&type='.$extraField->type;
 
 //The order is important you need to check the the $column variable in the model.ajax.php file
-$columns = array(get_lang('Name'), get_lang('Value'),  get_lang('Order'), get_lang('Actions'));
+$columns = array(get_lang('Name'), get_lang('Value'), get_lang('Order'), get_lang('Actions'));
 
-$htmlHeadXtra[]='<script>
+$htmlHeadXtra[] = '<script>
 
     function setHidden(obj) {
         var name = $(obj).attr("name");
@@ -186,9 +186,9 @@ foreach ($result as $item) {
 if (!empty($roleId)) {
     $form->addElement('html', $table->toHtml());
     $group = array();
-    $group[]= $form->createElement('button', 'submit', get_lang('Save'));
-    $group[]= $form->createElement('button', 'select_all', get_lang('SelectAll'), array('class' => 'btn select_all'));
-    $group[]= $form->createElement('button', 'unselect_all', get_lang('UnSelectAll'), array('class' => 'btn unselect_all'));
+    $group[] = $form->createElement('button', 'submit', get_lang('Save'));
+    $group[] = $form->createElement('button', 'select_all', get_lang('SelectAll'), array('class' => 'btn select_all'));
+    $group[] = $form->createElement('button', 'unselect_all', get_lang('UnSelectAll'), array('class' => 'btn unselect_all'));
     $form->addGroup($group, '', null, ' ');
 
     $form->setDefaults(array('status' => $roleId));

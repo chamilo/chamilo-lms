@@ -40,7 +40,7 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) ||
         if (!isset($_GET['id'])) {
             if (api_get_setting('allow_social_tool') == 'true') {
                 if (!api_is_anonymous()) {
-                    $query = isset($_GET['q']) ? $_GET['q']: null;
+                    $query = isset($_GET['q']) ? $_GET['q'] : null;
                     $social_search = UserManager::get_search_form($query);
                 }
             }

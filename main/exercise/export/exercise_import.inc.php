@@ -198,7 +198,7 @@ function import_exercise($file)
                     $cat = new TestCategory();
                     $cat->name = $category;
                     $cat->description = '';
-                    $question->category = $cat->addCategoryInBDD();
+                    $question->category = $cat->save();
                 }
             }
 

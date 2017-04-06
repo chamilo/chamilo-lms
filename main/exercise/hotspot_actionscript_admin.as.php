@@ -21,12 +21,11 @@ if (!$isAllowedToEdit) {
 $questionId = intval($_GET['modifyAnswers']);
 $objQuestion = Question::read($questionId);
 $_course = api_get_course_info();
-
 $documentPath  = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
-
 $picturePath = $documentPath.'/images';
-$pictureName = $objQuestion->selectPicture();
-$pictureSize = getimagesize($picturePath.'/'.$objQuestion->selectPicture());
+$pictureName = $objQuestion->getPictureFilename();
+
+$pictureSize = getimagesize($picturePath.'/'.$pictureName);
 $pictureWidth = $pictureSize[0];
 $pictureHeight = $pictureSize[1];
 

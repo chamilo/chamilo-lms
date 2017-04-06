@@ -221,7 +221,7 @@ if ($showCourses && $action != 'display_sessions') {
             $html .= '<div class="right">';
             $html .= '<div class="btn-group">';
             // if user registered as student
-            if ($user_registerd_in_course_as_student) {
+            if ($userRegisterdInCourse) {
                 $html .= return_already_registered_label('student');
 
                 if (!$course_closed) {
@@ -229,7 +229,7 @@ if ($showCourses && $action != 'display_sessions') {
                         $html .= return_unregister_button($course, $stok, $search_term, $code);
                     }
                 }
-            } elseif ($user_registerd_in_course_as_teacher) {
+            } elseif ($userRegisterdInCourseAsTeacher) {
                 // if user registered as teacher
                 if ($course_unsubscribe_allowed) {
                     $html .= return_unregister_button($course, $stok, $search_term, $code);

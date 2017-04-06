@@ -3673,7 +3673,7 @@ class CourseManager
         if ($coursesNotCategory) {
             $listItems['not_category'] = $coursesNotCategory;
         }
-
+        
         return $listItems;
     }
 
@@ -3818,6 +3818,7 @@ class CourseManager
             $params['thumbnails'] = $thumbnails;
             $params['image'] = $image;
             $params['title'] = $course_info['title'];
+            $params['title_cut'] = cut($course_info['title'],45);
             $params['category'] = $course_info['categoryName'];
             $params['teachers'] = $teachers;
 

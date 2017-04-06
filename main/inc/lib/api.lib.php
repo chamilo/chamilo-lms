@@ -3200,7 +3200,7 @@ function api_not_allowed($print_headers = false, $message = null)
         $msg = $message;
     } else {
         $msg = Display::return_message(
-            get_lang('NotAllowedClickBack').'<br/><br/><a href="'.$home_url.'">'.get_lang('ReturnToCourseHomepage').'</a>',
+            get_lang('NotAllowedClickBack').'<br/><br/><button onclick="goBack();">'.get_lang('GoBack').'</button><script>function goBack(){window.history.back();}</script>',
             'error',
             false
         );

@@ -1195,14 +1195,15 @@ HTML;
                     Session::write("hotspot_ordered$questionId", array_keys($answers_hotspot));
                     $countAnswers = 1;
                     foreach ($answers_hotspot as $value) {
-                        $answerList .= "<p>";
+                        $answerList .= "<li>";
                         if ($freeze) {
                             $answerList .= "&nbsp<span class='hotspot-color hotspot-color-$hotspotColor'>&nbsp;&nbsp;&nbsp;&nbsp;</span>";
                         }
                         $answerList .= "&nbsp{$countAnswers}.&nbsp;";
                         $answerList .= $value;
-                        $answerList .= "</p>";
+                        $answerList .= "</li>";
                         $hotspotColor++;
+                        $countAnswers++;
                     }
                 }
 

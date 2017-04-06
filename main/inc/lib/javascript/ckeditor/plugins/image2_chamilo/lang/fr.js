@@ -2,7 +2,7 @@
 Copyright (c) 2003-2017, CKSource - Frederico Knabben. All rights reserved.
 For licensing, see LICENSE.md or http://ckeditor.com/license
 */
-CKEDITOR.plugins.setLang( 'image2-chamilo', 'fr', {
+CKEDITOR.plugins.setLang( 'image2_chamilo', 'fr', {
 	alt: 'Texte alternatif',
 	btnUpload: 'Envoyer sur le serveur',
 	captioned: 'Image légendée',

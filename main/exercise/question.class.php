@@ -266,7 +266,7 @@ abstract class Question
     public function selectPicturePath()
     {
         if (!empty($this->picture)) {
-            return api_get_path(WEB_COURSE_PATH).$this->course['path'].'/document/images/'.$this->getPictureFilename();
+            return api_get_path(WEB_COURSE_PATH).$this->course['directory'].'/document/images/'.$this->getPictureFilename();
         }
 
         return '';
@@ -577,49 +577,52 @@ abstract class Question
     }
 
     /**
+     * Get default hot spot folder in documents
+     * @return string
+     */
+    public function getHotSpotFolderInCourse()
+    {
+        if (empty($this->course) || empty($this->course['directory'])) {
+            // Stop everything if course is not set.
+            api_not_allowed();
+        }
+
+        $pictureAbsolutePath = api_get_path(SYS_COURSE_PATH).$this->course['directory'].'/document/images/';
+        $picturePath = basename($pictureAbsolutePath);
+
+        if (!is_dir($picturePath)) {
+            create_unexisting_directory(
+                $this->course,
+                api_get_user_id(),
+                0,
+                0,
+                0,
+                dirname($pictureAbsolutePath),
+                '/'.$picturePath,
+                $picturePath
+            );
+        }
+
+        return $pictureAbsolutePath;
+    }
+
+    /**
      * adds a picture to the question
      *
-     * @param string $Picture - temporary path of the picture to upload
-     * @param string $PictureName - Name of the picture
-     * @param string $picturePath
+     * @param string $picture - temporary path of the picture to upload
      *
      * @return boolean - true if uploaded, otherwise false
      *
      * @author Olivier Brouckaert
      */
-    public function uploadPicture($Picture, $PictureName, $picturePath = null)
+    public function uploadPicture($picture)
     {
-        if (empty($picturePath)) {
-            global $picturePath;
-        }
-
-        if (!file_exists($picturePath)) {
-            if (mkdir($picturePath, api_get_permissions_for_new_directories())) {
-                // document path
-                $documentPath = api_get_path(SYS_COURSE_PATH).$this->course['path'].'/document';
-                $path = str_replace($documentPath, '', $picturePath);
-                $title_path = basename($picturePath);
-                $doc_id = add_document(
-                    $this->course,
-                    $path,
-                    'folder',
-                    0,
-                    $title_path
-                );
-                api_item_property_update(
-                    $this->course,
-                    TOOL_DOCUMENT,
-                    $doc_id,
-                    'FolderCreated',
-                    api_get_user_id()
-                );
-            }
-        }
+        $picturePath = $this->getHotSpotFolderInCourse();
 
         // if the question has got an ID
         if ($this->id) {
             $pictureFilename = self::generatePictureName();
-            $img = new Image($Picture);
+            $img = new Image($picture);
             $img->send_image($picturePath.'/'.$pictureFilename, -1, 'jpg');
             $document_id = add_document(
                 $this->course,
@@ -628,16 +631,25 @@ abstract class Question
                 filesize($picturePath.'/'.$pictureFilename),
                 $pictureFilename
             );
-            $this->picture = $document_id;
 
             if ($document_id) {
-                return api_item_property_update(
+                $this->picture = $document_id;
+
+                if (!file_exists($picturePath.'/'.$pictureFilename)) {
+                    return false;
+                }
+
+                api_item_property_update(
                     $this->course,
                     TOOL_DOCUMENT,
                     $document_id,
                     'DocumentAdded',
                     api_get_user_id()
                 );
+
+                $this->resizePicture('width', 800);
+
+                return true;
             }
         }
 
@@ -668,9 +680,9 @@ abstract class Question
      *
      * @author Toon Keppens
      */
-    public function resizePicture($Dimension, $Max)
+    private function resizePicture($Dimension, $Max)
     {
-        global $picturePath;
+        $picturePath = $this->getHotSpotFolderInCourse();
 
         // if the question has an ID
         if ($this->id) {
@@ -734,7 +746,7 @@ abstract class Question
      */
     public function removePicture()
     {
-        global $picturePath;
+        $picturePath = $this->getHotSpotFolderInCourse();
 
         // if the question has got an ID and if the picture exists
         if ($this->id) {
@@ -803,17 +815,17 @@ abstract class Question
      * For example, if we first show a confirmation box.
      *
      * @author Olivier Brouckaert
-     * @param string $Picture - temporary path of the picture to move
-     * @param string $PictureName - Name of the picture
+     * @param string $picture - temporary path of the picture to move
+     * @param string $pictureName - Name of the picture
      */
-    public function setTmpPicture($Picture, $PictureName)
+    public function setTmpPicture($picture, $pictureName)
     {
-        global $picturePath;
-        $PictureName = explode('.', $PictureName);
-        $Extension = $PictureName[sizeof($PictureName) - 1];
+        $picturePath = $this->getHotSpotFolderInCourse();
+        $pictureName = explode('.', $pictureName);
+        $Extension = $pictureName[sizeof($pictureName) - 1];
 
         // saves the picture into a temporary file
-        @move_uploaded_file($Picture, $picturePath . '/tmp.' . $Extension);
+        @move_uploaded_file($picture, $picturePath . '/tmp.' . $Extension);
     }
 
     /**

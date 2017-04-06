@@ -69,32 +69,24 @@ class Annotation extends Question
     /**
      * @param FormValidator $form
      * @param null $objExercise
-     * @return null|false
+     * @return bool
      */
     public function processCreation($form, $objExercise = null)
     {
         $fileInfo = $form->getSubmitValue('imageUpload');
-        $courseInfo = api_get_course_info();
-
         parent::processCreation($form, $objExercise);
 
         if (!empty($fileInfo['tmp_name'])) {
-            $this->uploadPicture($fileInfo['tmp_name'], $fileInfo['name']);
-
-            $documentPath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
-            $picturePath = $documentPath.'/images';
-
-            // fixed width ang height
-            if (!file_exists($picturePath.'/'.$this->picture)) {
-                return false;
+            $result = $this->uploadPicture($fileInfo['tmp_name']);
+            if ($result) {
+                $this->weighting = $form->getSubmitValue('weighting');
+                $this->save();
+                return true;
             }
 
-            $this->resizePicture('width', 800);
-            $this->weighting = $form->getSubmitValue('weighting');
-            $this->save();
-
-            return true;
+            return false;
         }
+        return false;
     }
 
     /**

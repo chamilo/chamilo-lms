@@ -8,6 +8,7 @@
 
 use Chamilo\CoreBundle\Entity\Repository\SequenceRepository;
 use Chamilo\CoreBundle\Entity\SequenceResource;
+use Chamilo\CoreBundle\Entity\Promotion;
 
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -381,6 +382,12 @@ if (!empty($requirementAndDependencies['dependencies'])) {
     $dependencies .= implode(', ', array_column($requirementAndDependencies['dependencies'], 'admin_link'));
 }
 
+$promotion = null;
+if (!empty($sessionInfo['promotion_id'])) {
+    $promotion = Database::getManager()->getRepository('ChamiloCoreBundle:Promotion');
+    $promotion = $promotion->find($sessionInfo['promotion_id']);
+}
+
 $tpl = new Template(get_lang('Session'));
 $tpl->assign('session_header', $sessionHeader);
 $tpl->assign('title', $sessionTitle);
@@ -390,6 +397,7 @@ $tpl->assign('session', $sessionInfo);
 $tpl->assign('session_category', is_null($sessionCategory) ? null : $sessionCategory->getName());
 $tpl->assign('session_dates', SessionManager::parseSessionDates($sessionInfo, true));
 $tpl->assign('session_visibility', SessionManager::getSessionVisibility($sessionInfo));
+$tpl->assign('promotion', $promotion);
 $tpl->assign('url_list', $urlList);
 $tpl->assign('extra_fields', $extraFieldData);
 $tpl->assign('course_list', $courseListToShow);

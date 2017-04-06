@@ -613,6 +613,8 @@ define('MAX_ONLINE_USERS', 12);
 
 // Number of characters maximum to show in preview of course blog posts
 define('BLOG_MAX_PREVIEW_CHARS', 800);
+// HTML string to replace with a 'Read more...' link
+define('BLOG_PAGE_BREAK', '<div style="page-break-after: always"><span style="display: none;">&nbsp;</span></div>');
 
 // Make sure the CHAMILO_LOAD_WYSIWYG constant is defined
 // To remove CKeditor libs from HTML, set this constant to true before loading
@@ -3200,7 +3202,7 @@ function api_not_allowed($print_headers = false, $message = null)
         $msg = $message;
     } else {
         $msg = Display::return_message(
-            get_lang('NotAllowedClickBack').'<br/><br/><a href="'.$home_url.'">'.get_lang('ReturnToCourseHomepage').'</a>',
+            get_lang('NotAllowedClickBack').'<br/><br/><button onclick="goBack();">'.get_lang('GoBack').'</button><script>function goBack(){window.history.back();}</script>',
             'error',
             false
         );

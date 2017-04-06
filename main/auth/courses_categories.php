@@ -174,7 +174,7 @@ if ($showCourses && $action != 'display_sessions') {
 
             $html = null;
             // display the course bloc
-            $html .= '<div class="col-xs-6 col-sm-6 col-md-4"><div class="items items-courses">';
+            $html .= '<div class="col-xs-12 col-sm-6 col-md-4"><div class="items items-courses">';
 
             $course['category_title'] = '';
             if (isset($course['category'])) {
@@ -349,15 +349,15 @@ function return_title($course, $registeredUser)
 {
     $html = '';
     $linkCourse = api_get_course_url($course['code']);
-    $title = cut($course['title'], 70);
+    $title = cut($course['title'], 45);
     $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
     $rating = Display::return_rating_system('star_'.$course['real_id'], $ajax_url.'&course_id='.$course['real_id'], $course['point_info']);
     $html .= '<div class="block-title"><h4 class="title">';
     
     if (!$registeredUser){
-       $html .= cut($title, 45);
+       $html .= $title;
     } else {
-       $html .= '<a title="'.$title.'" href="' . $linkCourse . '">' . cut($title, 45) . '</a>';
+       $html .= '<a title="'.$title.'" href="' . $linkCourse . '">' . $title . '</a>';
     }
     
     $html .= '</h4></div>';

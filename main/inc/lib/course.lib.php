@@ -4837,13 +4837,16 @@ class CourseManager
                 $course_info,
                 $my_course_code_list
             );
-
-            $user_registerd_in_course = self::is_user_subscribed_in_course($user_id, $courseCode);
-            $user_registerd_in_course_as_teacher = self::is_course_teacher($user_id, $courseCode);
-            $user_registerd_in_course_as_student = ($user_registerd_in_course && !$user_registerd_in_course_as_teacher);
-
+            
+            $userRegisterdInCourse = self::is_user_subscribed_in_course($user_id, $course_info['code']);
+            $userRegisterdInCourseAsTeacher = self::is_course_teacher($user_id, $course_info['code']);
+            $userRegisterd = ($userRegisterdInCourse && $userRegisterdInCourseAsTeacher);
+            
+            $my_course['is_registerd'] = $userRegisterd;
+            
+            $my_course['title_cut'] = cut($course_info['title'], 45);
             // if user registered as student
-            if ($user_registerd_in_course_as_student) {
+            /* if ($userRegisterdInCourse) {
                 $icon = '<em class="fa fa-graduation-cap"></em>';
                 $title = get_lang("AlreadyRegisteredToCourse");
                 $my_course['already_register_as'] = Display::tag(
@@ -4851,7 +4854,7 @@ class CourseManager
                     $icon,
                     array('id' => 'register', 'class' => 'btn btn-default btn-sm', 'title' => $title)
                 );
-            } elseif ($user_registerd_in_course_as_teacher) {
+            } elseif ($userRegisterdInCourseAsTeacher) {
                 // if user registered as teacher
                 $icon = '<em class="fa fa-suitcase"></em>';
                 $title = get_lang("YouAreATeacherOfThisCourse");
@@ -4860,11 +4863,11 @@ class CourseManager
                     $icon,
                     array('id' => 'register', 'class' => 'btn btn-default btn-sm', 'title' => $title)
                 );
-            }
+            } */
 
             //Course visibility
             if ($access_link && in_array('register', $access_link)) {
-                $my_course['register_button'] = Display::url(
+                $my_course['register_button'] = Display::url(get_lang('Subscribe') . ' ' .
                     Display::returnFontAwesomeIcon('sign-in'),
                     api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/index.php?action=subscribe&sec_token=' . $stok,
                     array('class' => 'btn btn-success btn-sm', 'title' => get_lang('Subscribe')));
@@ -4873,14 +4876,14 @@ class CourseManager
             if ($access_link && in_array('enter',
                     $access_link) || $course_info['visibility'] == COURSE_VISIBILITY_OPEN_WORLD
             ) {
-                $my_course['go_to_course_button'] = Display::url(
+                $my_course['go_to_course_button'] = Display::url(get_lang('GoToCourse'). ' ' .
                     Display::returnFontAwesomeIcon('share'),
                     api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/index.php',
                     array('class' => 'btn btn-default btn-sm', 'title' => get_lang('GoToCourse')));
             }
 
             if ($access_link && in_array('unsubscribe', $access_link)) {
-                $my_course['unsubscribe_button'] = Display::url(
+                $my_course['unsubscribe_button'] = Display::url(get_lang('Unreg') . ' ' .
                     Display::returnFontAwesomeIcon('sign-out'),
                     api_get_path(WEB_CODE_PATH) . 'auth/courses.php?action=unsubscribe&unsubscribe=' . $courseCode . '&sec_token=' . $stok . '&category_code=' . $categoryCode,
                     array('class' => 'btn btn-danger btn-sm', 'title' => get_lang('Unreg')));
@@ -4919,14 +4922,19 @@ class CourseManager
                 );
             //}
             /* get_lang('Description') */
-            $my_course['teachers'] = self::getTeachersFromCourse($course_info['real_id'], false);
+            $my_course['teachers'] = self::getTeachersFromCourse($course_info['real_id'], true);
             $point_info = self::get_course_ranking($course_info['real_id'], 0);
-            $my_course['rating_html'] = Display::return_rating_system('star_' . $course_info['real_id'],
-                $ajax_url . '&course_id=' . $course_info['real_id'], $point_info);
 
+            $my_course['rating_html'] = '';
+            if (api_get_configuration_value('hide_course_rating') === false) {
+                $my_course['rating_html'] = Display::return_rating_system(
+                    'star_'.$course_info['real_id'],
+                    $ajax_url.'&course_id='.$course_info['real_id'],
+                    $point_info
+                );
+            }
             $hotCourses[] = $my_course;
         }
-
         return $hotCourses;
     }
 

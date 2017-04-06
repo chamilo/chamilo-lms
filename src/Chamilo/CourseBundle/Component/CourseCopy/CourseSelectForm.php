@@ -17,14 +17,18 @@ use Chamilo\CourseBundle\Component\CourseCopy\Resources\Document;
  */
 class CourseSelectForm
 {
-	/**
-	 * Display the form
+    /**
+     * Display the form
      * @param array $course
-	 * @param array $hidden_fields Hidden fields to add to the form.
-	 * @param boolean $avoid_serialize the document array will be serialize. This is used in the course_copy.php file
-	 */
-	public static function display_form($course, $hidden_fields = null, $avoid_serialize = false)
-    {
+     * @param array $hidden_fields Hidden fields to add to the form.
+     * @param boolean $avoid_serialize the document array will be serialize.
+     * This is used in the course_copy.php file
+     */
+    public static function display_form(
+        $course,
+        $hidden_fields = null,
+        $avoid_serialize = false
+    ) {
         global $charset;
         $resource_titles[RESOURCE_ASSET] = get_lang('Assets');
         $resource_titles[RESOURCE_GRADEBOOK] = get_lang('Gradebook');
@@ -142,7 +146,7 @@ class CourseSelectForm
 		</script>
 		<?php
 		// get destination course title
-		if (!empty($hidden_fields['destination_course'])) {
+        if (!empty($hidden_fields['destination_course'])) {
             $sessionTitle = !empty($hidden_fields['destination_session']) ? ' ('.api_get_session_name($hidden_fields['destination_session']).')' : null;
             $course_infos = CourseManager::get_course_information($hidden_fields['destination_course']);
 			echo '<h3>';
@@ -259,11 +263,9 @@ class CourseSelectForm
             foreach ($forum_categories as $forum_category_id => $forum_category) {
                 echo '<li>';
                 echo '<label class="checkbox">';
-
                 echo '<input type="checkbox" id="resource_'.RESOURCE_FORUMCATEGORY.'_'.$forum_category_id.'" my_rel="'.$forum_category_id.'" onclick="javascript:check_category(this);"  name="resource['.RESOURCE_FORUMCATEGORY.']['.$forum_category_id.']"  /> ';
                 $forum_category->show();
                 echo '</label>';
-
                 echo '</li>';
 
                 if (isset($forums[$forum_category_id])) {
@@ -394,7 +396,6 @@ class CourseSelectForm
 	public static function get_posted_course($from = '', $session_id = 0, $course_code = '')
     {
         $course = null;
-
         if (isset($_POST['course'])) {
             $course = Course::unserialize(base64_decode($_POST['course']));
         } else {
@@ -415,23 +416,23 @@ class CourseSelectForm
 		if ($from === 'copy_course') {
 			if (is_array($resource)) {
 				$resource = array_keys($resource);
-
 				foreach ($resource as $resource_item) {
-
-					$condition_session = '';
+					$conditionSession = '';
 					if (!empty($session_id)) {
 						$session_id = intval($session_id);
-						$condition_session = ' AND d.session_id ='.$session_id;
+						$conditionSession = ' AND d.session_id ='.$session_id;
 					}
 
 					$sql = 'SELECT d.id, d.path, d.comment, d.title, d.filetype, d.size
-							FROM '.$table_doc.' d, '.$table_prop.' p
+							FROM '.$table_doc.' d 
+							INNER JOIN '.$table_prop.' p
+							ON (d.c_id = p.c_id)
 							WHERE
 							    d.c_id = '.$course_id.' AND
                                 p.c_id = '.$course_id.' AND
                                 tool = \''.TOOL_DOCUMENT.'\' AND
                                 p.ref = d.id AND p.visibility != 2 AND
-                                d.id = '.$resource_item.$condition_session.'
+                                d.id = '.$resource_item.$conditionSession.'
 							ORDER BY path';
 					$db_result = Database::query($sql);
 					while ($obj = Database::fetch_object($db_result)) {
@@ -465,7 +466,6 @@ class CourseSelectForm
 
 		if (is_array($course->resources)) {
 			foreach ($course->resources as $type => $resources) {
-
 				switch ($type) {
 					case RESOURCE_SURVEYQUESTION:
 						foreach ($resources as $id => $obj) {
@@ -592,9 +592,12 @@ class CourseSelectForm
 	 * @param array $hidden_fields Hidden fields to add to the form.
      * @param boolean $avoid_serialize the document array will be serialize. This is used in the course_copy.php file
 	 */
-	 public static function display_form_session_export($list_course, $hidden_fields = null, $avoid_serialize = false)
-     {
-         ?>
+    public static function display_form_session_export(
+        $list_course,
+        $hidden_fields = null,
+        $avoid_serialize = false
+    ) {
+        ?>
 		<script>
 			function exp(item) {
 				el = document.getElementById('div_'+item);

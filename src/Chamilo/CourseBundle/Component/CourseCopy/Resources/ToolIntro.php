@@ -35,8 +35,7 @@ class ToolIntro extends Resource
     public function show()
     {
         parent::show();
-        switch ($this->id)
-        {
+        switch ($this->id) {
             case TOOL_DOCUMENT:
                 $lang_id = 'Documents';
                 break;

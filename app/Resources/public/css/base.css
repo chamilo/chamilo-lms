@@ -4799,9 +4799,21 @@ div#chat-remote-video video {
 .grid-courses .items.items-courses{
     min-height: 425px;
     width: 310px;
+    box-shadow: 2px 4px 15px 0 rgba(46,61,73,.1);
+    transition: box-shadow .3s ease , border .3s ease;
+}
+.grid-courses .items.items-courses:hover{
+    box-shadow: 4px 5px 20px 0 rgba(46,61,73,.15);
+    transition: box-shadow .3s ease , border .3s ease;
 }
 .grid-courses .items.items-hotcourse{
-    min-height: 360px;
+    min-height: 400px;
+    box-shadow: 2px 4px 15px 0 rgba(46,61,73,.1);
+    transition: box-shadow .3s ease , border .3s ease;
+}
+.grid-courses .items.items-hotcourse:hover{
+    box-shadow: 4px 5px 20px 0 rgba(46,61,73,.15);
+    transition: box-shadow .3s ease , border .3s ease;
 }
 .grid-courses .items .block-title{
     margin: 15px 10px 10px 10px;
@@ -4810,6 +4822,14 @@ div#chat-remote-video video {
     line-height: 1.4;
     padding: 0px;
     font-size: 17px;
+    font-weight: bold;
+    height: 42px;
+    margin: 0;
+}
+.hot-courses .grid-courses .items .title{
+    line-height: 1.4;
+    padding: 0px;
+    font-size: 14px;
     font-weight: bold;
     height: 42px;
     margin: 0;
@@ -4877,17 +4897,20 @@ div#chat-remote-video video {
     position: absolute;
     bottom: 0px;
     right: -10px;
-    background-color: #FD6600;
+    background-color: #09F;
     color: #fff;
     padding: 5px 10px;
     font-size: 11px;
     text-transform: uppercase;
     z-index: 2;
+    font-weight: bold;
+    height: 32px;
+    line-height: 20px;
 }
 .grid-courses .items .cribbon{
     width: 0;
     height: 0;
-    border-top: 10px solid #FD3414;
+    border-top: 10px solid #337AB7;
     border-right: 10px solid transparent;
     position: absolute;
     bottom: -10px;
@@ -4951,6 +4974,10 @@ div#chat-remote-video video {
 }
 .grid-courses .items .block-author .teachers-details h5 a{
     color: #666;
+}
+.grid-courses{
+    margin-top: 15px;
+    margin-bottom: 15px;
 }
 /* new grid catalog */
 .section-course-wrapper{
@@ -6374,6 +6401,16 @@ ul#toolnavbox-two li a.btn{
 	margin: 15px 0px;
 	color: #666666;
         line-height: 20px;
+    }
+    .grid-courses .items.items-courses{
+        width: auto;
+    }
+    .grid-courses .items .title{
+        font-size: 14px;
+    }
+    .grid-courses{
+        margin-top: 10px;
+        padding-top: 10px;
     }
 }
 

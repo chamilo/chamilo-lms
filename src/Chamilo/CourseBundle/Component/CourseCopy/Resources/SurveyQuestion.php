@@ -47,15 +47,15 @@ class SurveyQuestion extends Resource
 
     /**
      * Create a new SurveyQuestion
-     * @param int	 $id
-     * @param int 	 $survey_id
+     * @param int $id
+     * @param int $survey_id
      * @param string $survey_question
      * @param string $survey_question_comment
      * @param string $type
      * @param string $display
-     * @param int	 $sort
-     * @param int	 $shared_question_id
-     * @param int	 $max_value
+     * @param int $sort
+     * @param int $shared_question_id
+     * @param int $max_value
      */
     public function __construct(
         $id,
@@ -83,7 +83,7 @@ class SurveyQuestion extends Resource
     /**
      * Add an answer option to this SurveyQuestion
      * @param string $option_text
-     * @param int	 $sort
+     * @param int $sort
      */
     public function add_answer($option_text,$sort)
     {

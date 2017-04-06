@@ -52,7 +52,7 @@ if (empty($path)) {
 
 // A student should not be able to download a root shared directory
 if (($path == '/shared_folder' ||
-    $path == '/shared_folder_session_' . api_get_session_id()) &&
+    $path == '/shared_folder_session_'.api_get_session_id()) &&
     (!api_is_allowed_to_edit() || !api_is_platform_admin())
 ) {
     api_not_allowed(true);
@@ -150,7 +150,7 @@ if (api_is_allowed_to_edit()) {
                 (props.session_id IN ('0', '$sessionId') OR props.session_id IS NULL) AND
                 docs.c_id = ".$courseId." ";
 
-    $sql.= DocumentManager::getSessionFolderFilters($querypath, $sessionId);
+    $sql .= DocumentManager::getSessionFolderFilters($querypath, $sessionId);
 
     $result = Database::query($sql);
 
@@ -215,7 +215,7 @@ if (api_is_allowed_to_edit()) {
                 $groupCondition
             ";
 
-    $sql.= DocumentManager::getSessionFolderFilters($querypath, $sessionId);
+    $sql .= DocumentManager::getSessionFolderFilters($querypath, $sessionId);
     $result = Database::query($sql);
 
     $files = array();
@@ -296,9 +296,9 @@ if (api_is_allowed_to_edit()) {
     // Add all files in our final array to the zipfile
     for ($i = 0; $i < count($files_for_zipfile); $i++) {
         $zip->add(
-            $sysCoursePath . $courseInfo['path'] . '/document' . $files_for_zipfile[$i],
+            $sysCoursePath.$courseInfo['path'].'/document'.$files_for_zipfile[$i],
             PCLZIP_OPT_REMOVE_PATH,
-            $sysCoursePath . $courseInfo['path'] . '/document' . $remove_dir,
+            $sysCoursePath.$courseInfo['path'].'/document'.$remove_dir,
             PCLZIP_CB_PRE_ADD,
             'fixDocumentNameCallback'
         );

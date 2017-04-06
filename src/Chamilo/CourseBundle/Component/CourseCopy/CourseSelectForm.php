@@ -21,10 +21,14 @@ class CourseSelectForm
      * Display the form
      * @param array $course
      * @param array $hidden_fields Hidden fields to add to the form.
-     * @param boolean $avoid_serialize the document array will be serialize. This is used in the course_copy.php file
+     * @param boolean $avoid_serialize the document array will be serialize.
+     * This is used in the course_copy.php file
      */
-	public static function display_form($course, $hidden_fields = null, $avoid_serialize = false)
-    {
+    public static function display_form(
+        $course,
+        $hidden_fields = null,
+        $avoid_serialize = false
+    ) {
         global $charset;
         $resource_titles[RESOURCE_ASSET] = get_lang('Assets');
         $resource_titles[RESOURCE_GRADEBOOK] = get_lang('Gradebook');
@@ -142,7 +146,7 @@ class CourseSelectForm
 		</script>
 		<?php
 		// get destination course title
-		if (!empty($hidden_fields['destination_course'])) {
+        if (!empty($hidden_fields['destination_course'])) {
             $sessionTitle = !empty($hidden_fields['destination_session']) ? ' ('.api_get_session_name($hidden_fields['destination_session']).')' : null;
             $course_infos = CourseManager::get_course_information($hidden_fields['destination_course']);
 			echo '<h3>';
@@ -259,11 +263,9 @@ class CourseSelectForm
             foreach ($forum_categories as $forum_category_id => $forum_category) {
                 echo '<li>';
                 echo '<label class="checkbox">';
-
                 echo '<input type="checkbox" id="resource_'.RESOURCE_FORUMCATEGORY.'_'.$forum_category_id.'" my_rel="'.$forum_category_id.'" onclick="javascript:check_category(this);"  name="resource['.RESOURCE_FORUMCATEGORY.']['.$forum_category_id.']"  /> ';
                 $forum_category->show();
                 echo '</label>';
-
                 echo '</li>';
 
                 if (isset($forums[$forum_category_id])) {
@@ -394,7 +396,6 @@ class CourseSelectForm
 	public static function get_posted_course($from = '', $session_id = 0, $course_code = '')
     {
         $course = null;
-
         if (isset($_POST['course'])) {
             $course = Course::unserialize(base64_decode($_POST['course']));
         } else {

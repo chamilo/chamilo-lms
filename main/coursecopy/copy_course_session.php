@@ -85,7 +85,7 @@ function make_select_session_list($name, $sessions, $attr = array())
 
 function display_form()
 {
-    $html  = '';
+    $html = '';
     $sessions = SessionManager::get_sessions_list(array(), array('name', 'ASC'));
 
     // Link back to the documents overview
@@ -109,7 +109,7 @@ function display_form()
 
     //destination
     $html .= '<div class="form-group">';
-    $html .= '<label class="col-sm-2 control-label">' . get_lang('DestinationCoursesFromSession') . ': </label>';
+    $html .= '<label class="col-sm-2 control-label">'.get_lang('DestinationCoursesFromSession').': </label>';
     $html .= '<div class="col-sm-5" id="ajax_sessions_list_destination">';
     $html .= '<select class="form-control" name="sessions_list_destination" onchange="javascript: xajax_search_courses(this.value,\'destination\');">';
     $html .= '<option value = "0">'.get_lang('ThereIsNotStillASession').'</option></select ></div>';
@@ -131,7 +131,7 @@ function display_form()
     $html .= '<button class="btn btn-success" type="submit" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;"><em class="fa fa-files-o"></em> '.get_lang('CopyCourse').'</button>';
 
     // Add Security token
-    $html .= '<input type="hidden" value="' . Security::get_token() . '" name="sec_token">';
+    $html .= '<input type="hidden" value="'.Security::get_token().'" name="sec_token">';
     $html .= '</div></div>';
     $html .= '</form>';
 
@@ -227,7 +227,7 @@ $xajax->processRequests();
 
 /* HTML head extra */
 
-$htmlHeadXtra[] = $xajax->getJavascript( api_get_path(WEB_LIBRARY_PATH).'xajax/');
+$htmlHeadXtra[] = $xajax->getJavascript(api_get_path(WEB_LIBRARY_PATH).'xajax/');
 $htmlHeadXtra[] = '<script>
 function checkSelected(id_select,id_radio,id_title,id_destination) {
    var num=0;

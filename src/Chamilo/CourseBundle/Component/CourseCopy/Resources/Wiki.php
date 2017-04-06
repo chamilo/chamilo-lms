@@ -47,7 +47,7 @@ class Wiki extends Resource
         $progress,
         $version
     ) {
-        parent::__construct($id,RESOURCE_WIKI);
+        parent::__construct($id, RESOURCE_WIKI);
         $this->id = $id;
         $this->page_id = $page_id;
         $this->reflink = $reflink;

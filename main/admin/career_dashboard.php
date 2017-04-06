@@ -87,7 +87,7 @@ if (!empty($careers)) {
         $promotion_array = array();
         if (!empty($promotions)) {
             foreach ($promotions as $promotion_item) {
-                if (!$promotion_item['status']) {
+                if ($promotion_item['status'] == 0) {
                     continue; //avoid status = 0
                 }
 
@@ -95,7 +95,6 @@ if (!empty($careers)) {
                 $sessions = SessionManager::get_all_sessions_by_promotion(
                     $promotion_item['id']
                 );
-
                 $session_list = array();
                 foreach ($sessions as $session_item) {
                     $course_list = SessionManager::get_course_list_by_session_id(
@@ -119,9 +118,9 @@ if (!empty($careers)) {
     }
 }
 
-echo '<table class="data_table">';
+echo '<table class="data_table" border="1">';
 
-if (!empty($career_arrayer)) {
+if (!empty($career_array)) {
     foreach ($career_array as $career_id => $data) {
         $career = $data['name'];
         $promotions = $data['promotions'];
@@ -157,21 +156,19 @@ if (!empty($career_arrayer)) {
                         echo Display::tag('td', $url);
                         echo '<td>';
                         // Courses
-                        echo '<table>';
+                        echo '<ul>';
                         if (!empty($course_list)) {
                             foreach ($course_list as $course) {
-                                echo '<tr>';
+                                echo '<li>';
                                 $url = Display::url(
                                     $course['title'],
                                     api_get_path(WEB_COURSE_PATH) . $course['directory'] . '/index.php?id_session=' . $session['data']['id']
                                 );
-                                echo Display::tag('td', $url);
-                                echo '</tr>';
+                                echo $url;
+                                echo '</li>';
                             }
-                            echo '</table>';
-                            echo '</td>';
-                            echo '</tr>';
                         }
+                        echo '</ul>';
                     }
                 }
             }

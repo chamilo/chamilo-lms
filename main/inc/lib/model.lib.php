@@ -25,6 +25,7 @@ class Model
 
     /**
      * Useful finder - experimental akelos like only use in notification.lib.php send function
+     * @param string $type
      */
     public function find($type, $options = null)
     {

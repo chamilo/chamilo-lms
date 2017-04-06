@@ -66,11 +66,10 @@ class Announcement extends Resource
         $this->date = $date;
         $this->display_order = $display_order;
         $this->email_sent = $email_sent;
-
-        $this->attachment_path 	= $path;
+        $this->attachment_path = $path;
         $this->attachment_filename = $filename;
-        $this->attachment_size 	= $size;
-        $this->attachment_comment 	= $comment;
+        $this->attachment_size = $size;
+        $this->attachment_comment = $comment;
     }
 
     /**

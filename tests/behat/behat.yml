@@ -1,7 +1,7 @@
 default:
     extensions:
         Behat\MinkExtension:
-          base_url: http://localhost/
+          base_url: http://localhost/chamilo_111/
           goutte: ~
           show_cmd: 'open %s'
           selenium2:

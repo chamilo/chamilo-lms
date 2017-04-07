@@ -168,4 +168,6 @@ if (isset($_GET['firstpage'])) {
     api_delete_firstpage_parameter();
 }
 
+//var_dump(api_check_password('1AAAAAAAAAAA'));
+var_dump(api_check_password(api_generate_password()));
 $controller->tpl->display_two_col_template();

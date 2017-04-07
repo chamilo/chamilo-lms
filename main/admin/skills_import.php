@@ -272,9 +272,9 @@ $toolbar .= Display::toolbarButton(
     'warning',
     ['title' => get_lang('BadgesManagement')]
 );
-$toolbar .= '<br /><br />';
+$actions = '<div class="actions">' . $toolbar . '</div>';
 
-echo $toolbar;
+echo $actions;
 
 $form = new FormValidator('user_import', 'post', 'skills_import.php');
 $form->addElement('header', '', $tool_name);

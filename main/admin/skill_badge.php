@@ -35,13 +35,13 @@ $toolbar = Display::toolbarButton(
     'primary',
     ['title' => get_lang('ManageSkills')]
 );
-
+$actions = '<div class="actions">' . $toolbar . '</div>';
 $tpl = new Template(get_lang('Badges'));
 $tpl->assign('backpack', $backpack);
 
 $templateName = $tpl->get_template('skill/badge.tpl');
 $contentTemplate = $tpl->fetch($templateName);
 
-$tpl->assign('actions', $toolbar);
+$tpl->assign('actions', $actions);
 $tpl->assign('content', $contentTemplate);
 $tpl->display_one_col_template();

@@ -691,3 +691,21 @@ table.border-thin td {
 .text-center {
 	text-align: center;
 }
+.text-left {
+	text-align: left;
+}
+.text-right {
+	text-align: right;
+}
+
+table.page-footer {
+	font-family: serif;
+	font-size: 10pt;
+}
+table.page-footer td{
+	padding: 0;
+}
+
+.border-top {
+	border-top: 1px solid #000;
+}

@@ -43,11 +43,11 @@ class MoodleImport
             }
 
             $folder = api_get_unique_id();
-            $destinationDir = api_get_path(SYS_ARCHIVE_PATH) . $folder;
+            $destinationDir = api_get_path(SYS_ARCHIVE_PATH).$folder;
             $coursePath = api_get_course_path();
             $sessionId = api_get_session_id();
             $groupId = api_get_group_id();
-            $documentPath = api_get_path(SYS_COURSE_PATH) . $coursePath . '/document';
+            $documentPath = api_get_path(SYS_COURSE_PATH).$coursePath.'/document';
             $courseInfo = api_get_course_info();
 
             mkdir($destinationDir, api_get_permissions_for_new_directories(), true);
@@ -814,7 +814,7 @@ class MoodleImport
         if ($weighting > 0) {
             $questionWeighting += $weighting;
         }
-        $goodAnswer =  $correct ? true : false;
+        $goodAnswer = $correct ? true : false;
 
         $this->fixPathInText($importedFiles, $answer);
 
@@ -851,7 +851,7 @@ class MoodleImport
         if ($weighting > 0) {
             $questionWeighting += $weighting;
         }
-        $goodAnswer =  $correct ? true : false;
+        $goodAnswer = $correct ? true : false;
 
         $this->fixPathInText($importedFiles, $answer);
 
@@ -952,7 +952,7 @@ class MoodleImport
                         $answer['questiontext']
                     );
 
-                    $placeholder .= '<p> ' . strip_tags($answer['questiontext']).' '.$currentAnswers . ' </p>';
+                    $placeholder .= '<p> '.strip_tags($answer['questiontext']).' '.$currentAnswers.' </p>';
                 }
 
                 return $optionsValues;

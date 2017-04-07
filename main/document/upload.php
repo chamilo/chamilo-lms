@@ -72,7 +72,7 @@ if (isset($_REQUEST['id'])) {
 }
 
 if (empty($document_data)) {
-    $document_id = $parent_id =  0;
+    $document_id = $parent_id = 0;
     $path = '/';
 } else {
     $document_id = $document_data['id'];
@@ -199,10 +199,10 @@ if (!empty($_FILES)) {
         true
     );
 
-    $redirectUrl = api_get_self() . '?' . api_get_cidreq();
+    $redirectUrl = api_get_self().'?'.api_get_cidreq();
 
     if ($document_data) {
-        $redirectUrl .= '&' . http_build_query([
+        $redirectUrl .= '&'.http_build_query([
             'id' => $document_data['iid']
         ]);
     }
@@ -217,11 +217,11 @@ Display::display_header($nameTools, 'Doc');
 // Actions
 // Link back to the documents overview
 if ($is_certificate_mode) {
-    $actions = '<a href="document.php?id='.$document_id.'&selectcat=' . $selectcat.'&'.api_get_cidreq().'">'.
-        Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('CertificateOverview'),'',ICON_SIZE_MEDIUM).'</a>';
+    $actions = '<a href="document.php?id='.$document_id.'&selectcat='.$selectcat.'&'.api_get_cidreq().'">'.
+        Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('CertificateOverview'), '', ICON_SIZE_MEDIUM).'</a>';
 } else {
     $actions = '<a href="document.php?id='.$document_id.'&'.api_get_cidreq().'">'.
-        Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'), '', ICON_SIZE_MEDIUM).'</a>';
 }
 
 // Link to create a folder

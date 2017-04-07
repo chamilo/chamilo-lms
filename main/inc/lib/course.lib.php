@@ -3818,7 +3818,7 @@ class CourseManager
             $params['thumbnails'] = $thumbnails;
             $params['image'] = $image;
             $params['title'] = $course_info['title'];
-            $params['title_cut'] = cut($course_info['title'],45);
+            $params['title_cut'] = cut($course_info['title'], 45);
             $params['category'] = $course_info['categoryName'];
             $params['teachers'] = $teachers;
 
@@ -4868,26 +4868,32 @@ class CourseManager
 
             //Course visibility
             if ($access_link && in_array('register', $access_link)) {
-                $my_course['register_button'] = Display::url(get_lang('Subscribe') . ' ' .
+                $my_course['register_button'] = Display::url(
+                    get_lang('Subscribe') . ' ' .
                     Display::returnFontAwesomeIcon('sign-in'),
                     api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/index.php?action=subscribe&sec_token=' . $stok,
-                    array('class' => 'btn btn-success btn-sm', 'title' => get_lang('Subscribe')));
+                    array('class' => 'btn btn-success btn-sm', 'title' => get_lang('Subscribe'))
+                );
             }
 
             if ($access_link && in_array('enter',
                     $access_link) || $course_info['visibility'] == COURSE_VISIBILITY_OPEN_WORLD
             ) {
-                $my_course['go_to_course_button'] = Display::url(get_lang('GoToCourse'). ' ' .
+                $my_course['go_to_course_button'] = Display::url(
+                    get_lang('GoToCourse'). ' ' .
                     Display::returnFontAwesomeIcon('share'),
                     api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/index.php',
-                    array('class' => 'btn btn-default btn-sm', 'title' => get_lang('GoToCourse')));
+                    array('class' => 'btn btn-default btn-sm', 'title' => get_lang('GoToCourse'))
+                );
             }
 
             if ($access_link && in_array('unsubscribe', $access_link)) {
-                $my_course['unsubscribe_button'] = Display::url(get_lang('Unreg') . ' ' .
+                $my_course['unsubscribe_button'] = Display::url(
+                    get_lang('Unreg') . ' ' .
                     Display::returnFontAwesomeIcon('sign-out'),
                     api_get_path(WEB_CODE_PATH) . 'auth/courses.php?action=unsubscribe&unsubscribe=' . $courseCode . '&sec_token=' . $stok . '&category_code=' . $categoryCode,
-                    array('class' => 'btn btn-danger btn-sm', 'title' => get_lang('Unreg')));
+                    array('class' => 'btn btn-danger btn-sm', 'title' => get_lang('Unreg'))
+                );
             }
 
             // start buycourse validation

@@ -295,15 +295,19 @@ function returnThumbnail($course, $registeredUser)
 
     $html .= '<div class="image">';
     
-    if(!$registeredUser){
-        $html .= '<img class="img-responsive" src="'.$course_medium_image.'" alt="'.api_htmlentities($title).'"/>';
-    }else{
-        $html .= '<a href="'.$linkCourse.'" title="'.$course['title'].'"><img class="img-responsive" src="'.$course_medium_image.'" alt="'.api_htmlentities($title).'"/></a>';
+    if (!$registeredUser) {
+        $html .= '<img class="img-responsive"'
+                .' src="'.$course_medium_image.'" '
+                .' alt="'.api_htmlentities($title).'"/>';
+    } else {
+        $html .= '<a href="'.$linkCourse.'" title="'.$course['title'].'">'
+                .'<img class="img-responsive" src="'.$course_medium_image.'" '
+                .'alt="'.api_htmlentities($title).'"/></a>';
     }
     
     $categoryTitle = isset($course['category_title']) ? $course['category_title'] : '';
     if (!empty($categoryTitle)) {
-        $html .= '<span class="category">'. $categoryTitle.'</span>';
+        $html .= '<span class="category">'.$categoryTitle.'</span>';
         $html .= '<div class="cribbon"></div>';
     }
     
@@ -314,7 +318,7 @@ function returnThumbnail($course, $registeredUser)
     return $html;
 }
 
-function return_teacher($course){
+function return_teacher($course) {
     //Info course
     $courseInfo = api_get_course_info($course['code']);
     $teachers = CourseManager::getTeachersFromCourse($courseInfo['real_id']);
@@ -332,7 +336,7 @@ function return_teacher($course){
                     <img src="'.$value['avatar'].'"/></a>';
             $html .= '<div class="teachers-details"><h5>
                     <a href="'.$value['url'].'" class="ajax" data-title="'.$name.'">'
-                    . $name . '</a></h5><p>'. get_lang('Teacher').'</p></div>';            
+                    . $name . '</a></h5><p>'. get_lang('Teacher').'</p></div>';
         }
         //$count ++;
     }
@@ -354,10 +358,10 @@ function return_title($course, $registeredUser)
     $rating = Display::return_rating_system('star_'.$course['real_id'], $ajax_url.'&course_id='.$course['real_id'], $course['point_info']);
     $html .= '<div class="block-title"><h4 class="title">';
     
-    if (!$registeredUser){
-       $html .= $title;
+    if (!$registeredUser) {
+        $html .= $title;
     } else {
-       $html .= '<a title="'.$title.'" href="' . $linkCourse . '">' . $title . '</a>';
+        $html .= '<a title="'.$title.'" href="' . $linkCourse . '">' . $title . '</a>';
     }
     
     $html .= '</h4></div>';

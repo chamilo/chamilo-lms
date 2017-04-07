@@ -29,7 +29,6 @@ if ($allowedFieldsConfiguration !== false) {
     $allowedFields = isset($allowedFieldsConfiguration['fields']) ? $allowedFieldsConfiguration['fields'] : [];
     $allowedFields['extra_fields'] = isset($allowedFieldsConfiguration['extra_fields']) ? $allowedFieldsConfiguration['extra_fields'] : [];
 }
-
 $gMapsPlugin = GoogleMapsPlugin::create();
 $geolocalization = $gMapsPlugin->get('enable_api') === 'true';
 
@@ -180,7 +179,7 @@ if ($user_already_registered_show_terms === false) {
     $form->addRule('pass2', get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule(array('pass1', 'pass2'), get_lang('PassTwo'), 'compare');
 
-    if (CHECK_PASS_EASY_TO_FIND) {
+    if (CHECK_PASS_EASY_TO_FIND === true) {
         $form->addRule(
             'pass1',
             get_lang('PassTooEasy') . ': ' . api_generate_password(),

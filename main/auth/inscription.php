@@ -719,6 +719,11 @@ if ($form->validate()) {
         }
     }
 
+    if (!empty($_SESSION['urlReturn'])) {
+        $form_data['action'] = api_get_path(WEB_PATH).$_SESSION['urlReturn'];
+        Session::erase('urlReturn');
+    }
+
     $form_data = CourseManager::redirectToCourse($form_data);
 
     $form_register = new FormValidator('form_register', 'post', $form_data['action']);

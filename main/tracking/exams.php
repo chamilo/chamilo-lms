@@ -80,7 +80,7 @@ $form->setDefaults(array('score' => $filter_score));
 
 if (!$exportToXLS) {
     Display :: display_header(get_lang('Reporting'));
-    $actionsLeft = $actionsRight ='';
+    $actionsLeft = $actionsRight = '';
     if ($global) {
         $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'auth/my_progress.php">'.
         Display::return_icon('stats.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM);
@@ -93,9 +93,9 @@ if (!$exportToXLS) {
         }
 
         $actionsRight .= '<a href="'.api_get_self().'?export=1&score='.$filter_score.'&exercise_id='.$exerciseId.'&'.$courseLink.'">'.
-            Display::return_icon('export_excel.png',get_lang('ExportAsXLS'),'',ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), '', ICON_SIZE_MEDIUM).'</a>';
         $actionsRight .= '<a href="javascript: void(0);" onclick="javascript: window.print()">'.
-            Display::return_icon('printer.png',get_lang('Print'),'',ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('printer.png', get_lang('Print'), '', ICON_SIZE_MEDIUM).'</a>';
 
         $menuItems[] = Display::url(
             Display::return_icon('teacher.png', get_lang('TeacherInterface'), array(), 32),
@@ -199,7 +199,7 @@ if (!empty($courseList) && is_array($courseList)) {
             $countExercises = Database::store_result($result);
             $exerciseSessionCount = $countExercises[0]['count'];
 
-            $exerciseCount =  $exerciseCount + $exerciseCount * count($newSessionList) + $exerciseSessionCount;
+            $exerciseCount = $exerciseCount + $exerciseCount * count($newSessionList) + $exerciseSessionCount;
 
             // Add course and session list.
             if ($exerciseCount == 0) {
@@ -416,7 +416,7 @@ function export_complete_report_xls($filename, $array)
         $column++;
         $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('ExamNotTaken'));
         $column++;
-        $worksheet->setCellValueByColumnAndRow($column, $line, sprintf(get_lang('ExamPassX'), $filter_score) . '%');
+        $worksheet->setCellValueByColumnAndRow($column, $line, sprintf(get_lang('ExamPassX'), $filter_score).'%');
         $column++;
         $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('ExamFail'));
         $column++;
@@ -593,10 +593,10 @@ function processStudentList($filter_score, $global, $exercise, $courseInfo, $ses
         $percentageScore = 0;
 
         if ($weighting != 0) {
-            $percentageScore = round(($score*100)/$weighting);
+            $percentageScore = round(($score * 100) / $weighting);
         }
 
-        if ($attempts['count'] > 0 ) {
+        if ($attempts['count'] > 0) {
             $taken++;
         }
 
@@ -639,7 +639,7 @@ function processStudentList($filter_score, $global, $exercise, $courseInfo, $ses
             } else {
                 $score = '-';
                 $userRow .= '<td>';
-                $userRow .=  '-';
+                $userRow .= '-';
                 $tempArray[] = '-';
                 $userRow .= '</td>';
 
@@ -693,13 +693,13 @@ function processStudentList($filter_score, $global, $exercise, $courseInfo, $ses
         // Exam taken
         $html .= '<td>';
         $html .= $taken;
-        $globalRow[]= $taken;
+        $globalRow[] = $taken;
         $html .= '</td>';
 
         // Exam NOT taken
         $html .= '<td>';
         $html .= $not_taken = $totalStudents - $taken;
-        $globalRow[]= $not_taken;
+        $globalRow[] = $not_taken;
         $html .= '</td>';
 
         // Exam pass
@@ -710,19 +710,19 @@ function processStudentList($filter_score, $global, $exercise, $courseInfo, $ses
         }
 
         $html .= $total_with_parameter_score;
-        $globalRow[]= $total_with_parameter_score;
+        $globalRow[] = $total_with_parameter_score;
         $html .= '</td>';
 
         // Exam fail
         $html .= '<td>';
 
         $html .= $fail = $taken - $total_with_parameter_score;
-        $globalRow[]= $fail;
+        $globalRow[] = $fail;
         $html .= '</td>';
 
         $html .= '<td>';
         $html .= $totalStudents;
-        $globalRow[]= $totalStudents;
+        $globalRow[] = $totalStudents;
 
         $html .= '</td>';
 

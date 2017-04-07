@@ -713,7 +713,7 @@ function display_requirements(
     if (!$properlyAccessUrl) {
         echo '
             <div class="alert alert-danger">
-                ' . Display::return_icon('error.png', get_lang('Error'), [], ICON_SIZE_MEDIUM) .
+                ' . Display::return_icon('error.png', get_lang('Error'), [], ICON_SIZE_MEDIUM, true, false, true) .
             ' ' .
             sprintf(get_lang('InstallMultiURLDetectedNotMainURL'), api_get_configuration_value('root_web')) . '
             </div>
@@ -726,7 +726,15 @@ function display_requirements(
     $timezone = checkPhpSettingExists("date.timezone");
     if (!$timezone) {
         echo "<div class='alert alert-warning'>".
-            Display::return_icon('warning.png', get_lang('Warning'), '', ICON_SIZE_MEDIUM).
+            Display::return_icon(
+                'warning.png',
+                get_lang('Warning'),
+                '',
+                ICON_SIZE_MEDIUM,
+                true,
+                false,
+                false
+            ).
             get_lang("DateTimezoneSettingNotSet")."</div>";
     }
 
@@ -1934,6 +1942,7 @@ function check_course_script_interpretation($course_dir, $course_attempt_name, $
     $content = '<?php echo "123"; exit;';
 
     if (is_writable($file_name)) {
+
         if ($handler = @fopen($file_name, "w")) {
             //write content
             if (fwrite($handler, $content)) {

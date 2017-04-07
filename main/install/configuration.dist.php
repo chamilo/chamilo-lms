@@ -310,3 +310,12 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 // $_configuration['hide_lp_time'] = false;
 // Hide rating elements in pages ("Courses catalog" & "Most Popular courses")
 // $_configuration['hide_course_rating'] = false;
+// Customize password generation and verification
+/*$_configuration['password_requirements'] = [
+    'min' => [
+        'lowercase' => 2,
+        'uppercase' => 2,
+        'numeric' => 2,
+        'length' => 8
+    ]
+];*/

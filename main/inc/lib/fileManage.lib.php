@@ -192,8 +192,14 @@ function move($source, $target, $forceMove = true, $moveContent = false)
 
         /* File case */
         if (is_file($source)) {
-            if ($forceMove && !$isWindowsOS && $canExec) {
-                exec('mv ' . $source . ' ' . $target . '/' . $file_name);
+            if ($forceMove) {
+                if (!$isWindowsOS && $canExec) {
+                    exec('mv '.$source.' '.$target.'/'.$file_name);
+                } else {
+                    // Try copying
+                    copy($source, $target . '/' . $file_name);
+                    unlink($source);
+                }
             } else {
                 copy($source, $target . '/' . $file_name);
                 unlink($source);

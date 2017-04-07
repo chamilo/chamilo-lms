@@ -94,7 +94,7 @@ class CToolIntro
     /**
      * Get id
      *
-     * @return string
+     * @return integer
      */
     public function getId()
     {

@@ -613,6 +613,8 @@ define('MAX_ONLINE_USERS', 12);
 
 // Number of characters maximum to show in preview of course blog posts
 define('BLOG_MAX_PREVIEW_CHARS', 800);
+// HTML string to replace with a 'Read more...' link
+define('BLOG_PAGE_BREAK', '<div style="page-break-after: always"><span style="display: none;">&nbsp;</span></div>');
 
 // Make sure the CHAMILO_LOAD_WYSIWYG constant is defined
 // To remove CKeditor libs from HTML, set this constant to true before loading
@@ -1951,21 +1953,48 @@ function api_format_course_array($course_data)
  */
 function api_generate_password($length = 8)
 {
-    $characters = 'abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-    $numbers = '23456789';
-
     if ($length < 2) {
         $length = 2;
     }
+
+    $charactersLowerCase = 'abcdefghijkmnopqrstuvwxyz';
+    $charactersUpperCase = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
+    $minNumbers = 2;
+    $length = $length - $minNumbers;
+    $minLowerCase = round($length/2);
+    $minUpperCase = $length - $minLowerCase;
+
     $password = '';
-    for ($i = 0; $i < $length; $i ++) {
-        $password .= $characters[rand() % strlen($characters)];
+    $passwordRequirements = api_get_configuration_value('password_requirements');
+
+    $factory = new RandomLib\Factory();
+    $generator = $factory->getGenerator(new SecurityLib\Strength(SecurityLib\Strength::MEDIUM));
+
+    if (!empty($passwordRequirements)) {
+        $length = $passwordRequirements['min']['length'];
+        $minNumbers = $passwordRequirements['min']['numeric'];
+        $minLowerCase = $passwordRequirements['min']['lowercase'];
+        $minUpperCase = $passwordRequirements['min']['uppercase'];
+
+        $rest = $length - $minNumbers - $minLowerCase - $minUpperCase;
+        // Add the rest to fill the length requirement
+        if ($rest > 0) {
+            $password .= $generator->generateString($rest, $charactersLowerCase.$charactersUpperCase);
+        }
     }
 
-    // At least 2 digits
-    for ($i = 0; $i < 2; $i ++) {
-        $password .= $numbers[rand() % strlen($numbers)];
+    // Min digits default 2
+    for ($i = 0; $i < $minNumbers; $i ++) {
+        $password .= $generator->generateInt(2, 9);
     }
+
+    // Min lowercase
+    $password .= $generator->generateString($minLowerCase, $charactersLowerCase);
+
+    // Min uppercase
+    $password .= $generator->generateString($minUpperCase, $charactersUpperCase);
+
+    $password = str_shuffle($password);
 
     return $password;
 }
@@ -1980,37 +2009,57 @@ function api_generate_password($length = 8)
  * 3. The password should contain at least 3 letters.
  * 4. It should contain at least 2 digits.
  * 5. It should not contain 3 or more consequent (according to ASCII table) characters.
+ * Settings will change if the configuration value is set: password_requirements
  */
-function api_check_password($password) {
-    $password_length = api_strlen($password);
-    if ($password_length < 5) {
+function api_check_password($password)
+{
+    $passwordRequirements = api_get_configuration_value('password_requirements');
+
+    $minLength = 5;
+    $minLetters = 3;
+    $minNumbers = 2;
+    $minLowerCase = 0; // Is only use if  password_requirements is set
+    $minUpperCase = 0; // Is only use if  password_requirements is set
+    if (!empty($passwordRequirements)) {
+        $minLength = $passwordRequirements['min']['length'];
+        $minNumbers = $passwordRequirements['min']['numeric'];
+        $minLowerCase = $passwordRequirements['min']['lowercase'];
+        $minUpperCase = $passwordRequirements['min']['uppercase'];
+        $minLetters = $minLowerCase + $minUpperCase;
+    }
+    $passwordLength = api_strlen($password);
+    if ($passwordLength < $minLength) {
         return false;
     }
-    $password = api_strtolower($password);
-    $letters = 0;
+
     $digits = 0;
-    $consequent_characters = 0;
-    $previous_character_code = 0;
-    for ($i = 0; $i < $password_length; $i ++) {
-        $current_character_code = api_ord(api_substr($password, $i, 1));
-        if ($i && abs($current_character_code - $previous_character_code) <= 1) {
-            $consequent_characters ++;
-            if ($consequent_characters == 3) {
-                return false;
-            }
-        } else {
-            $consequent_characters = 1;
+    $lowerCase = 0;
+    $upperCase = 0;
+
+    for ($i = 0; $i < $passwordLength; $i++) {
+        $currentCharacterCode = api_ord(api_substr($password, $i, 1));
+        if ($currentCharacterCode >= 65 && $currentCharacterCode <= 90) {
+            $upperCase++;
         }
-        if ($current_character_code >= 97 && $current_character_code <= 122) {
-            $letters ++;
-        } elseif ($current_character_code >= 48 && $current_character_code <= 57) {
-            $digits ++;
-        } else {
-            return false;
+
+        if ($currentCharacterCode >= 97 && $currentCharacterCode <= 122) {
+            $lowerCase++;
         }
-        $previous_character_code = $current_character_code;
+        if ($currentCharacterCode >= 48 && $currentCharacterCode <= 57) {
+            $digits++;
+        }
     }
-    return ($letters >= 3 && $digits >= 2);
+    $letters = $upperCase + $lowerCase;
+
+    if (!empty($passwordRequirements)) {
+        return (
+            $upperCase >= $minUpperCase &&
+            $lowerCase >= $minLowerCase &&
+            $digits >= $minNumbers
+        );
+    }
+
+    return $letters >= $minLetters && $digits >= $minNumbers;
 }
 
 /**
@@ -2038,7 +2087,8 @@ function api_clear_anonymous($db_check = false)
  * @author Noel Dieschburg
  * @param the int status code
  */
-function get_status_from_code($status_code) {
+function get_status_from_code($status_code)
+{
     switch ($status_code) {
         case STUDENT:
             return get_lang('Student', '');
@@ -2060,7 +2110,8 @@ function get_status_from_code($status_code) {
  * time we get on a course homepage or on a neutral page (index, admin, my space)
  * @return bool     true if set user as anonymous, false if user was already logged in or anonymous id could not be found
  */
-function api_set_anonymous() {
+function api_set_anonymous()
+{
     global $_user;
 
     if (!empty($_user['user_id'])) {
@@ -3200,7 +3251,7 @@ function api_not_allowed($print_headers = false, $message = null)
         $msg = $message;
     } else {
         $msg = Display::return_message(
-            get_lang('NotAllowedClickBack').'<br/><br/><a href="'.$home_url.'">'.get_lang('ReturnToCourseHomepage').'</a>',
+            get_lang('NotAllowedClickBack').'<br/><br/><button onclick="goBack();">'.get_lang('GoBack').'</button><script>function goBack(){window.history.back();}</script>',
             'error',
             false
         );

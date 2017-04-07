@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Entity\TrackEHotspot;
 
 /**
  * Class Exercise
@@ -3213,7 +3214,7 @@ class Exercise
                         'cId' => $course_id,
                         'hotspotExeId' => $exeId
                     ],
-                    ['hotspotId' => 'ASC']
+                    ['hotspotAnswerId' => 'ASC']
                 );
         }
 
@@ -3985,7 +3986,8 @@ class Exercise
                                 WHERE
                                     hotspot_exe_id = $exeId AND
                                     hotspot_question_id= $questionId AND
-                                    hotspot_answer_id = ".intval($answerAutoId);
+                                    hotspot_answer_id = ".intval($answerAutoId)."
+                                ORDER BY hotspot_id ASC";
                         $result = Database::query($sql);
                         if (Database::num_rows($result)) {
                             $studentChoice = Database::result(
@@ -4005,7 +4007,8 @@ class Exercise
                                 WHERE
                                     hotspot_exe_id = $exeId AND
                                     hotspot_question_id= $questionId AND
-                                    hotspot_answer_id = ".intval($answerId);
+                                    hotspot_answer_id = ".intval($answerId)."
+                                ORDER BY hotspot_id ASC";
                             $result = Database::query($sql);
 
                             if (Database::num_rows($result)) {
@@ -4027,7 +4030,8 @@ class Exercise
                                             WHERE
                                                 hotspot_exe_id = $exeId AND
                                                 hotspot_question_id= $questionId AND
-                                                hotspot_answer_id = ".intval($answerIid);
+                                                hotspot_answer_id = ".intval($answerIid)."
+                                            ORDER BY hotspot_id ASC";
                                     $result = Database::query($sql);
 
                                     $studentChoice = Database::result(
@@ -4267,6 +4271,10 @@ class Exercise
                                 $results_disabled
                             );
                         } elseif ($answerType == HOT_SPOT) {
+                            /**
+                             * @var int $correctAnswerId
+                             * @var TrackEHotspot $hotspot
+                             */
                             foreach ($orderedHotspots as $correctAnswerId => $hotspot) {
                                 if ($hotspot->getHotspotAnswerId() == $answerAutoId) {
                                     break;
@@ -4280,7 +4288,7 @@ class Exercise
                                 $studentChoice,
                                 $answerComment,
                                 $results_disabled,
-                                $answerId,
+                                $correctAnswerId,
                                 $showTotalScoreAndUserChoicesInLastAttempt
                             );
                         } elseif ($answerType == HOT_SPOT_ORDER) {

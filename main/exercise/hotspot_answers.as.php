@@ -153,7 +153,7 @@ $rs = $em
             'cId' => $course_id,
             'hotspotExeId' => $exe_id
         ],
-        ['hotspotId' => 'ASC']
+        ['hotspotAnswerId' => 'ASC']
     );
 
 /** @var TrackEHotspot $row */

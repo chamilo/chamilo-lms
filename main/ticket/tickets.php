@@ -10,7 +10,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
 
-$tool_name = get_lang('LastEdit');
+$tool_name = get_lang('Ticket');
 
 $libPath = api_get_path(LIBRARY_PATH);
 $webLibPath = api_get_path(WEB_LIBRARY_PATH);
@@ -53,6 +53,9 @@ function display_advanced_search_form() {
 $this_section = 'tickets';
 unset($_SESSION['this_section']);
 
+$action = isset($_GET['action']) ? $_GET['action'] : '';
+$projectId = isset($_GET['project_id']) ? (int) $_GET['project_id'] : 0;
+
 $table = new SortableTable(
     'Tickets',
     array('TicketManager', 'get_total_tickets_by_user_id'),
@@ -62,12 +65,11 @@ $table = new SortableTable(
     'DESC'
 );
 
+$table->set_additional_parameters(['project_id' => $projectId]);
+
 if ($table->per_page == 0) {
     $table->per_page = 20;
 }
-
-$action = isset($_GET['action']) ? $_GET['action'] : '';
-$projectId = isset($_GET['project_id']) ? (int) $_GET['project_id'] : 0;
 
 switch ($action) {
     case 'alert':
@@ -123,24 +125,26 @@ if (empty($projectId)) {
     }
 }
 
+$currentUrl = api_get_self().'?project_id='.$projectId;
 $user_id = api_get_user_id();
 $isAdmin = api_is_platform_admin();
 
 Display::display_header(get_lang('MyTickets'));
 if (!empty($projectId)) {
+    $getParameters = [];
     if ($isAdmin) {
-    $getParameters = [
-        'keyword',
-        'keyword_status',
-        'keyword_category',
-        'keyword_request_user',
-        'keyword_admin',
-        'keyword_start_date',
-        'keyword_unread',
-        'Tickets_per_page',
-        'Tickets_column'
-    ];
-}
+        $getParameters = [
+            'keyword',
+            'keyword_status',
+            'keyword_category',
+            'keyword_request_user',
+            'keyword_admin',
+            'keyword_start_date',
+            'keyword_unread',
+            'Tickets_per_page',
+            'Tickets_column',
+        ];
+    }
     $get_parameter = '';
     foreach ($getParameters as $getParameter) {
         if (isset($_GET[$getParameter])) {
@@ -178,7 +182,7 @@ if (!empty($projectId)) {
         0 => get_lang('Unassigned')
     ];
     foreach ($admins as $admin) {
-        $selectAdmins[$admin['user_id']] = $admin['complete_name'];
+        $selectAdmins[$admin['user_id']] = $admin['complete_name_with_username'];
     }
     $status = TicketManager::get_all_tickets_status();
     $selectStatus = [];
@@ -186,12 +190,14 @@ if (!empty($projectId)) {
         $selectStatus[$stat['id']] = $stat['name'];
     }
 
+    $selectPriority = TicketManager::getPriorityList();
+    /*var_dump($priorities);
     $selectPriority = [
         '' => get_lang('All'),
         TicketManager::PRIORITY_NORMAL => get_lang('PriorityNormal'),
         TicketManager::PRIORITY_HIGH => get_lang('PriorityHigh'),
         TicketManager::PRIORITY_LOW => get_lang('PriorityLow')
-    ];
+    ];*/
 
     $selectStatusUnread = [
         '' => get_lang('StatusAll'),
@@ -200,9 +206,17 @@ if (!empty($projectId)) {
     ];
 
     // Create a search-box
-    $form = new FormValidator('search_simple', 'get', '', '', array(), FormValidator::LAYOUT_INLINE);
+    $form = new FormValidator(
+        'search_simple',
+        'get',
+        $currentUrl,
+        '',
+        array(),
+        FormValidator::LAYOUT_INLINE
+    );
     $form->addText('keyword', get_lang('Keyword'), 'size="25"');
     $form->addButtonSearch(get_lang('Search'), 'submit_simple');
+    $form->addHidden('project_id', $projectId);
     $form->addElement(
         'static',
         'search_advanced_link',
@@ -233,10 +247,12 @@ if (!empty($projectId)) {
     $advancedSearchForm = new FormValidator(
         'advanced_search',
         'get',
-        api_get_self().'?project_id='.$projectId,
+        $currentUrl,
         null,
         ['style' => 'display:"none"', 'id' => 'advanced_search_form']
     );
+
+    $advancedSearchForm->addHidden('project_id', $projectId);
     $advancedSearchForm->addHeader(get_lang('AdvancedSearch'));
     $advancedSearchForm->addSelect(
         'keyword_category',
@@ -265,39 +281,23 @@ if (!empty($projectId)) {
         $selectPriority,
         ['placeholder' => get_lang('All')]
     );
-    $advancedSearchForm->addSelect(
+    /*$advancedSearchForm->addSelect(
         'keyword_unread',
         get_lang('Status'),
         $selectStatusUnread,
         ['placeholder' => get_lang('All')]
-    );
+    );*/
     $advancedSearchForm->addText('keyword_course', get_lang('Course'), false);
     $advancedSearchForm->addButtonSearch(get_lang('AdvancedSearch'), 'submit_advanced');
     $advancedSearchForm->display();
 } else {
     if (api_get_setting('ticket_allow_student_add') === 'true') {
         echo '<div class="actions" >';
-        echo '<a href="' . api_get_path(WEB_CODE_PATH) . 'ticket/new_ticket.php?project_id='.$projectId.'">' .
+        echo '<a href="' . api_get_path(WEB_CODE_PATH).'ticket/new_ticket.php?project_id='.$projectId.'">' .
                 Display::return_icon('add.png', get_lang('Add'), '', '32') .
              '</a>';
         echo '</div>';
     }
-}
-
-if (empty($projectId)) {
-    $table = new SortableTable(
-        'TicketProject',
-        array('TicketManager', 'getProjectsCount'),
-        array('TicketManager', 'getProjectsSimple'),
-        1
-    );
-
-    $table->set_header(0, '', false);
-    $table->set_header(1, get_lang('Title'), false);
-    $table->set_header(2, get_lang('Description'), true, array("style" => "width:200px"));
-
-    $table->display();
-    Display::display_footer();
 }
 
 if ($isAdmin) {

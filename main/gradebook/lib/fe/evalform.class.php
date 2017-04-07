@@ -346,8 +346,6 @@ class EvalForm extends FormValidator
             )
         );
         $userInfo = api_get_user_info($this->result_object->get_user_id());
-        $renderer = & $this->defaultRenderer();
-        $renderer->setCustomElementTemplate('<span>{element}</span> ');
         $this->addHeader(get_lang('User').': '.$userInfo['complete_name']);
 
         $this->addFloat(

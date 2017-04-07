@@ -4518,10 +4518,10 @@ class Tracking
                         $course_code == $_GET['course'] &&
                         empty($_GET['session_id'])
                     ) {
-                        $html .= '<a href="#">';
+                        $html .= '<a href="#course_session_header">';
                         $html .= Display::return_icon('2rightarrow_na.png', get_lang('Details'));
                     } else {
-                        $html .= '<a href="'.api_get_self().'?course='.$course_code.$extra_params.'">';
+                        $html .= '<a href="'.api_get_self().'?course='.$course_code.$extra_params.'#course_session_header">';
                         $html .= Display::return_icon('2rightarrow.png', get_lang('Details'));
                     }
                     $html .= '</a>';
@@ -4631,8 +4631,16 @@ class Tracking
                 );
             }
 
-            $html .= Display::page_subheader(
-                Display::return_icon('session.png', get_lang('Sessions'), array(), ICON_SIZE_SMALL) . ' ' . get_lang('Sessions')
+            $sessionIcon = Display::return_icon(
+                'session.png',
+                get_lang('Sessions'),
+                array(),
+                ICON_SIZE_SMALL
+            );
+
+            $anchor = Display::url('', '', ['name' => 'course_session_header']);
+            $html .= $anchor.Display::page_subheader(
+                $sessionIcon.' '.get_lang('Sessions')
             );
 
             $html .= '<div class="table-responsive">';

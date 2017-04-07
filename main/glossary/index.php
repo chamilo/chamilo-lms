@@ -53,7 +53,7 @@ switch ($action) {
         if (!api_is_allowed_to_edit(null, true)) {
             api_not_allowed(true);
         }
-        $tool_name =  get_lang('Add');
+        $tool_name = get_lang('Add');
         $form = new FormValidator(
             'glossary',
             'post',
@@ -184,7 +184,7 @@ switch ($action) {
         if (!api_is_allowed_to_edit(null, true)) {
             api_not_allowed(true);
         }
-        $tool_name =  get_lang('ImportGlossary');
+        $tool_name = get_lang('ImportGlossary');
         $form = new FormValidator(
             'glossary',
             'post',
@@ -212,7 +212,7 @@ switch ($action) {
                 foreach (GlossaryManager::get_glossary_terms() as $term) {
                     if (!GlossaryManager::delete_glossary($term['id'], false)) {
                         Display::addFlash(
-                            Display::return_message(get_lang("CannotDeleteGlossary") . ':' . $term['id'], 'error')
+                            Display::return_message(get_lang("CannotDeleteGlossary").':'.$term['id'], 'error')
                         );
                     } else {
                         $termsDeleted[] = $term['name'];
@@ -309,7 +309,7 @@ switch ($action) {
             if (count($badList) > 0) {
                 Display::addFlash(
                     Display::return_message(
-                        get_lang("GlossaryTermAlreadyExists").': ' . implode(', ', $badList),
+                        get_lang("GlossaryTermAlreadyExists").': '.implode(', ', $badList),
                         'error'
                     )
                 );
@@ -352,7 +352,7 @@ switch ($action) {
         GlossaryManager::export_to_pdf();
         break;
     case 'changeview':
-        if (in_array($_GET['view'], array('list','table'))) {
+        if (in_array($_GET['view'], array('list', 'table'))) {
             Session::write('glossary_view', $_GET['view']);
         } else {
             $view = Session::read('glossary_view');

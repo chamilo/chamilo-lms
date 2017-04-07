@@ -51,7 +51,7 @@ function search_coachs($needle)
 				' LIMIT 10';
 
 		if (api_is_multiple_url_enabled()) {
-			$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+			$tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 			$access_url_id = api_get_current_access_url_id();
 			if ($access_url_id != -1) {
 				$sql = 'SELECT username, lastname, firstname
@@ -76,7 +76,7 @@ function search_coachs($needle)
 			$return .= '<a href="javascript: void(0);" onclick="javascript: fill_coach_field(\''.$user['username'].'\')">'.api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')</a><br />';
 		}
 	}
-	$xajax_response -> addAssign('ajax_list_coachs','innerHTML', api_utf8_encode($return));
+	$xajax_response -> addAssign('ajax_list_coachs', 'innerHTML', api_utf8_encode($return));
 	return $xajax_response;
 }
 $xajax -> processRequests();
@@ -138,7 +138,7 @@ $form = new FormValidator('add_session', 'post', $urlAction);
 $form->addElement('header', $tool_name);
 $result = SessionManager::setForm($form);
 
-$htmlHeadXtra[] ='
+$htmlHeadXtra[] = '
 <script>
 $(function() {
     '.$result['js'].'
@@ -148,7 +148,7 @@ $(function() {
 $form->addButtonNext(get_lang('NextStep'));
 
 if (!$formSent) {
-    $formDefaults['access_start_date'] =  $formDefaults['display_start_date'] = api_get_local_time();
+    $formDefaults['access_start_date'] = $formDefaults['display_start_date'] = api_get_local_time();
     $formDefaults['coach_username'] = api_get_user_id();
 } else {
     $formDefaults['name'] = api_htmlentities($name, ENT_QUOTES, $charset);
@@ -173,7 +173,7 @@ if ($form->validate()) {
     $id_visibility = $params['session_visibility'];
     $duration = isset($params['duration']) ? $params['duration'] : null;
     $description = $params['description'];
-    $showDescription = isset($params['show_description']) ? 1: 0;
+    $showDescription = isset($params['show_description']) ? 1 : 0;
     $sendSubscriptionNotification = isset($params['send_subscription_notification']);
     $isThisImageCropped = isset($params['picture_crop_result']);
 
@@ -210,7 +210,7 @@ if ($form->validate()) {
 
     if ($return == strval(intval($return))) {
         // integer => no error on session creation
-        header('Location: add_courses_to_session.php?id_session=' . $return . '&add=true&msg=');
+        header('Location: add_courses_to_session.php?id_session='.$return.'&add=true&msg=');
         exit();
     }
 }
@@ -223,7 +223,7 @@ if (!empty($return)) {
 
 echo '<div class="actions">';
 echo '<a href="../session/session_list.php">'.
-    Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'),'',ICON_SIZE_MEDIUM).'</a>';
+    Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 $form->display();

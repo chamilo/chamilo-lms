@@ -22,7 +22,7 @@ if (isset($_SESSION['gradebook'])) {
 }
 
 if (!empty($gradebook) && $gradebook == 'view') {
-    $interbreadcrumb[]= array(
+    $interbreadcrumb[] = array(
         'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
         'name' => get_lang('ToolGradebook')
     );
@@ -62,8 +62,8 @@ if (isset($_GET['mode']) && in_array($_GET['mode'], array('gallery', 'default'))
 $term_array = array();
 $specific_fields = get_specific_field_list();
 foreach ($specific_fields as $specific_field) {
-    if (!empty($_REQUEST['sf_'. $specific_field['code']])) {
-        $values = $_REQUEST['sf_'. $specific_field['code']];
+    if (!empty($_REQUEST['sf_'.$specific_field['code']])) {
+        $values = $_REQUEST['sf_'.$specific_field['code']];
         if (in_array('__all__', $values)) {
             $sf_terms_for_code = xapian_get_all_terms(1000, $specific_field['code']);
             foreach ($sf_terms_for_code as $term) {
@@ -75,7 +75,7 @@ foreach ($specific_fields as $specific_field) {
             foreach ($values as $term) {
                 if (!empty($term)) {
                     $prefix = $specific_field['code'];
-                    $term_array[] = chamilo_get_boolean_query($prefix . $term);
+                    $term_array[] = chamilo_get_boolean_query($prefix.$term);
                 }
             }
         }
@@ -93,9 +93,9 @@ foreach ($specific_fields as $specific_field) {
 // Get right group of terms to show on multiple select.
 $fixed_queries = array();
 $course_filter = null;
-if (($cid=api_get_course_id()) != -1 ) {
+if (($cid = api_get_course_id()) != -1) {
     // Results only from actual course.
-    $course_filter = chamilo_get_boolean_query(XAPIAN_PREFIX_COURSEID . $cid);
+    $course_filter = chamilo_get_boolean_query(XAPIAN_PREFIX_COURSEID.$cid);
 }
 
 if (count($term_array)) {
@@ -145,12 +145,12 @@ if ($count > 0) {
         }
 
         if ($mode == 'gallery') {
-            $title = $a_prefix.str_replace('_', ' ', $result['title']). $a_suffix;
+            $title = $a_prefix.str_replace('_', ' ', $result['title']).$a_suffix;
             $blocks[] = array(1 =>
-                $a_prefix .'<img src="'.$result['thumbnail'].'" />'. $a_suffix .'<br />'.$title.'<br />'.$result['author'],
+                $a_prefix.'<img src="'.$result['thumbnail'].'" />'.$a_suffix.'<br />'.$title.'<br />'.$result['author'],
             );
         } else {
-            $title = '<div style="text-align:left;">'. $a_prefix . $result['title']. $a_suffix .(!empty($result['author']) ? ' '.$result['author'] : '').'<div>';
+            $title = '<div style="text-align:left;">'.$a_prefix.$result['title'].$a_suffix.(!empty($result['author']) ? ' '.$result['author'] : '').'<div>';
             $blocks[] = array(1 => $title);
         }
     }
@@ -169,12 +169,12 @@ if (count($blocks) > 0) {
     );
     $get_params = '';
     foreach ($specific_fields as $specific_field) {
-        if (isset($_REQUEST['sf_'. $specific_field['code']])) {
-            $values = $_REQUEST['sf_'. $specific_field['code']];
+        if (isset($_REQUEST['sf_'.$specific_field['code']])) {
+            $values = $_REQUEST['sf_'.$specific_field['code']];
             //Sortable additional_parameters doesn't accept multi dimensional arrays
             //$additional_parameters[ 'sf_'. $specific_field['code'] ] = $values;
-            foreach ( $values as $value ) {
-                $get_params .= '&sf_' . $specific_field['code'] .'[]='. $value;
+            foreach ($values as $value) {
+                $get_params .= '&sf_'.$specific_field['code'].'[]='.$value;
             }
             $get_params .= '&';
         }

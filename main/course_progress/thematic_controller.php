@@ -238,41 +238,26 @@ class ThematicController
                     break;
                 case 'export_single_thematic':
                     $theme = $thematic->get_thematic_list($thematic_id);
-                    $table = array();
-                    $table[] = array(
-                        get_lang('Thematic'),
-                        get_lang('ThematicPlan'),
-                        get_lang('ThematicAdvance')
-                    );
-                    $data = $thematic->get_thematic_plan_data($theme['id']);
-                    $plan_html = null;
-                    if (!empty($data)) {
-                        foreach ($data as $plan) {
-                            if (empty($plan['description'])) {
-                                continue;
-                            }
+                    $plans = $thematic->get_thematic_plan_data($theme['id']);
+                    $advances = $thematic->get_thematic_advance_by_thematic_id($theme['id']);
 
-                            $plan_html .= '<h6>'.$plan['title'].'</h6>'.$plan['description'].'<br />';
-                        }
-                    }
-                    $data = $thematic->get_thematic_advance_by_thematic_id($theme['id']);
-                    $advance_html = null;
-                    if (!empty($data)) {
-                        foreach ($data as $advance) {
-                            $advance_html .= api_convert_and_format_date($advance['start_date'], DATE_FORMAT_LONG)
-                                .' ('.$advance['duration'].' '.get_lang('HourShort').')'
-                                .'<br />'.$advance['content'].'<br />';
-                        }
-                    }
-                    $table[] = array($theme['title'], $plan_html, $advance_html);
-                    $params = array(
-                        'filename' => get_lang('Thematic').'-'.api_get_local_time(),
-                        'pdf_title' => get_lang('Thematic'),
-                        'add_signatures' => true,
-                        'format' => 'A4-L',
-                        'orientation' => 'L'
+                    $view = new Template('', false, false, false, true, false, false);
+                    $view->assign('theme', $theme);
+                    $view->assign('plans', $plans);
+                    $view->assign('advances', $advances);
+
+                    $template = $view->get_template('course_progress/pdf_single_thematic.tpl');
+
+                    Export::export_html_to_pdf(
+                        $view->fetch($template),
+                        [
+                            'filename' => get_lang('Thematic').'-'.api_get_local_time(),
+                            'pdf_title' => get_lang('Thematic'),
+                            'add_signatures' => true,
+                            'format' => 'A4-L',
+                            'orientation' => 'L'
+                        ]
                     );
-                    Export::export_table_pdf($table, $params);
                     break;
                 case 'moveup':
                     $thematic->move_thematic('up', $thematic_id);

@@ -449,15 +449,12 @@ class FeatureContext extends MinkContext
      */
     public function iCheckTheRadioButtonWithValue($element, $value)
     {
-        $page = $this->getSession()->getPage();
-        foreach ($page->findAll('css', 'input[type="radio"][name="'.$element.'"]') as $radio) {
-            if ($radio->getAttribute('value') == $value) {
-                $radio->check();
+        $this->getSession()->executeScript("
+            $(function() {
+                $('input[type=\"radio\"][name=".$element."][value=".$value."]').prop('checked', true);
+            });
+        ");
 
-                return true;
-            }
-        }
-
-        return false;
+        return true;
     }
 }

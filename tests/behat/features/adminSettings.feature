@@ -16,6 +16,6 @@ Feature: Settings update
   Scenario: Update 'allow_registration' setting
     Given I am a platform administrator
     And I am on "/main/admin/settings.php"
-    And I check the "allow_registration" radio button with "Yes" value
+    And I check the "allow_registration" radio button with "true" value
     And I press "Save settings"
     Then I should see "Update successful"

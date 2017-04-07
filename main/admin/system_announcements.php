@@ -143,19 +143,16 @@ if ($action_todo) {
     $form = new FormValidator('system_announcement', 'post', $url);
     $form->addElement('header', '', $form_title);
     $form->addText('title', get_lang('Title'), true);
-    $language_list = api_get_languages();
-    $language_list_with_keys = array();
-    $language_list_with_keys['all'] = get_lang('All');
-    for ($i = 0; $i < count($language_list['name']); $i++) {
-        $language_list_with_keys[$language_list['folder'][$i]] = $language_list['name'][$i];
-    }
 
-    $form->addElement(
-        'select',
+    $extraOption = array();
+    $extraOption['all'] = get_lang('All');
+    $form->addSelectLanguage(
         'lang',
         get_lang('Language'),
-        $language_list_with_keys
+        $extraOption,
+        ['set_custom_default' => 'all']
     );
+
     $form->addHtmlEditor(
         'content',
         get_lang('Content'),

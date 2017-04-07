@@ -1572,13 +1572,21 @@ abstract class Question
             // Categories
             $tabCat = TestCategory::getCategoriesIdAndName();
             $form->addElement('select', 'questionCategory', get_lang('Category'), $tabCat);
-
+            
+            global $text;
+            
             switch ($this->type) {
                 case UNIQUE_ANSWER:
-                    $form->addButton('convertAnswer', get_lang('ConvertToMultipleAnswer'), 'dot-circle-o', 'default');
+                    $buttonGroup = array();
+                    $buttonGroup[] = $form->addButton('convertAnswer', get_lang('ConvertToMultipleAnswer'), 'dot-circle-o', 'default', null, null, null, true);
+                    $buttonGroup[] = $form->addButtonSave($text, 'submitQuestion', true);
+                    $form->addGroup($buttonGroup);
                     break;
                 case MULTIPLE_ANSWER:
-                    $form->addButton('convertAnswer', get_lang('ConvertToUniqueAnswer'), 'check-square-o', 'default');
+                    $buttonGroup = array();
+                    $buttonGroup[] = $form->addButton('convertAnswer', get_lang('ConvertToUniqueAnswer'), 'check-square-o', 'default');
+                    $buttonGroup[] = $form->addButtonSave($text, 'submitQuestion', true);
+                    $form->addGroup($buttonGroup);
                     break;
             }
 

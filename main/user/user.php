@@ -397,7 +397,6 @@ if (api_is_allowed_to_edit(null, true)) {
                             array('style' => 'width:500px')
                         );
                         $params = array(
-                            'add_signatures' => false,
                             'filename' => $fileName,
                             'pdf_title' => $pdfTitle,
                             'header_attributes' => $header_attributes

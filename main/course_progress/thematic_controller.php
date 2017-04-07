@@ -230,7 +230,7 @@ class ThematicController
                     $params = array(
                         'filename' => get_lang('Thematic').'-'.api_get_local_time(),
                         'pdf_title' => get_lang('Thematic'),
-                        'add_signatures' => true,
+                        'add_signatures' => ['Drh', 'Teacher', 'Date'],
                         'format' => 'A4-L',
                         'orientation' => 'L'
                     );
@@ -253,7 +253,7 @@ class ThematicController
                         [
                             'filename' => get_lang('Thematic').'-'.api_get_local_time(),
                             'pdf_title' => get_lang('Thematic'),
-                            'add_signatures' => true,
+                            'add_signatures' => ['Drh', 'Teacher', 'Date'],
                             'format' => 'A4-L',
                             'orientation' => 'L'
                         ]

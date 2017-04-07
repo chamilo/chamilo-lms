@@ -599,7 +599,7 @@ class AttendanceController
             'filename' => get_lang('Attendance').'-'.api_get_local_time(),
             'pdf_title' => $courseInfo['title'],
             'course_code' => $courseInfo['code'],
-            'add_signatures' => true,
+            'add_signatures' => ['Drh', 'Teacher', 'Date'],
             'orientation' => 'landscape',
             'pdf_teachers' => $teacherName,
             'pdf_course_category' => $courseCategory['name'],

@@ -680,10 +680,14 @@ table td {
 }
 table.full-width {
 	width: 100%;
-	border-collapse: collapse;
 }
 table.border-thin,
 table.border-thin th,
 table.border-thin td {
-	border: 1px solid #000000;
+	border: 1px solid #000;
+	border-collapse: collapse;
+}
+
+.text-center {
+	text-align: center;
 }

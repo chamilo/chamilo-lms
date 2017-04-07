@@ -34,10 +34,9 @@ if ($edit_result_form->validate()) {
         /** @var Result $result */
         $result = $resultedit[0];
 
-        if ('' == $score) {
-            continue;
+        if (empty($score)){
+            $score = 0;
         }
-
         $result->set_score(api_number_format($score, api_get_setting('gradebook_number_decimals')));
         $result->save();
     }

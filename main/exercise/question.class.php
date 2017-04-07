@@ -764,31 +764,44 @@ abstract class Question
      *
      * @author Olivier Brouckaert
      * @param integer $questionId - ID of the target question
+     * @param array $courseInfo
      * @return boolean - true if copied, otherwise false
      */
-    public function exportPicture($questionId, $course_info)
+    public function exportPicture($questionId, $courseInfo)
     {
-        $course_id = $course_info['real_id'];
+        if (empty($questionId) || empty($courseInfo)) {
+            return false;
+        }
+
+        $course_id = $courseInfo['real_id'];
         $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $destination_path = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/document/images';
-        $source_path = api_get_path(SYS_COURSE_PATH).$this->course['path'].'/document/images';
+        $destination_path = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document/images';
+        $source_path = $this->getHotSpotFolderInCourse();
 
         // if the question has got an ID and if the picture exists
         if (!$this->id || empty($this->picture)) {
             return false;
         }
 
+        $picture = $this->generatePictureName();
+
         if (file_exists($source_path.'/'.$this->picture)) {
             // for backward compatibility
-            $picture = explode('.', $this->picture);
-            $extension = $picture[sizeof($picture) - 1];
-            $picture = 'quiz-'.$questionId.'.'.$extension;
-            $result = @copy($source_path.'/'.$this->picture, $destination_path.'/'.$picture);
+            $result = @copy(
+                $source_path.'/'.$this->picture,
+                $destination_path.'/'.$picture
+            );
         } else {
-            $imageInfo = DocumentManager::get_document_data_by_id($this->picture, $course_info['code']);
-            $picture = $this->generatePictureName();
-
-            $result = @copy($imageInfo['absolute_path'], $destination_path.'/'.$picture);
+            $imageInfo = DocumentManager::get_document_data_by_id(
+                $this->picture,
+                $courseInfo['code']
+            );
+            if (file_exists($imageInfo['absolute_path'])) {
+                $result = @copy(
+                    $imageInfo['absolute_path'],
+                    $destination_path.'/'.$picture
+                );
+            }
         }
 
         // If copy was correct then add to the database
@@ -801,22 +814,22 @@ abstract class Question
                 WHERE c_id = $course_id AND id='".intval($questionId)."'";
         Database::query($sql);
 
-        $document_id = add_document(
-            $course_info,
+        $documentId = add_document(
+            $courseInfo,
             '/images/'.$picture,
             'file',
             filesize($destination_path.'/'.$picture),
             $picture
         );
 
-        if (!$document_id) {
+        if (!$documentId) {
             return false;
         }
 
         return api_item_property_update(
-            $course_info,
+            $courseInfo,
             TOOL_DOCUMENT,
-            $document_id,
+            $documentId,
             'DocumentAdded',
             api_get_user_id()
         );

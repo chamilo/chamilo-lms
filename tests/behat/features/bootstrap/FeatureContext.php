@@ -443,4 +443,21 @@ class FeatureContext extends MinkContext
         $input = $this->getSession()->getPage()->findField($input);
         $input->focus();
     }
+
+    /**
+     * @Given /^I check the "([^"]*)" radio button with "([^"]*)" value$/
+     */
+    public function iCheckTheRadioButtonWithValue($element, $value)
+    {
+        $page = $this->getSession()->getPage();
+        foreach ($page->findAll('css', 'input[type="radio"][name="'.$element.'"]') as $radio) {
+            if ($radio->getAttribute('value') == $value) {
+                $radio->check();
+
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

@@ -42,7 +42,7 @@ if (file_exists($kernel->getConfigurationFile())) {
     if (!$alreadyInstalled) {
         $global_error_code = 2;
         // The system has not been installed yet.
-        require_once __DIR__ . '/../inc/global_error_message.inc.php';
+        require_once __DIR__.'/../inc/global_error_message.inc.php';
         die();
     }
 }
@@ -163,9 +163,9 @@ if (!empty($_configuration['multiple_access_urls'])) {
     $request_url_root = '';
     if (empty($_SERVER['HTTP_HOST'])) {
         if (empty($_SERVER['SERVER_NAME'])) {
-            $request_url_root = $protocol . 'localhost/';
+            $request_url_root = $protocol.'localhost/';
         } else {
-            $request_url_root = $protocol . $_SERVER['SERVER_NAME'] . '/';
+            $request_url_root = $protocol.$_SERVER['SERVER_NAME'].'/';
         }
     } else {
         $request_url_root = $protocol.$_SERVER['HTTP_HOST'].'/';
@@ -468,7 +468,7 @@ if (!empty($valid_languages)) {
     }
 
     if (!empty($language_priority1) && api_get_language_from_type($language_priority1) !== false) {
-        $language_interface =  api_get_language_from_type($language_priority1);
+        $language_interface = api_get_language_from_type($language_priority1);
     } else {
         if (isset($_course['language'])) {
             $language_interface = $_course['language'];

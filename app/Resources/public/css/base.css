@@ -1884,20 +1884,11 @@ div.admin_section h4 {
 }
 .question_row_score .title-score .total{
   border: 1px solid #ddd;
-  border-radius: 4px;
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
+  border-radius: 5px;
   padding: 10px;
   text-align: center;
   color: #666;
-  background: #ffffff; /* Old browsers */
-  background: -moz-linear-gradient(top, #ffffff 0%, #f6f6f6 47%, #ededed 100%); /* FF3.6+ */
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(47%,#f6f6f6), color-stop(100%,#ededed)); /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(top, #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* Chrome10+,Safari5.1+ */
-  background: -o-linear-gradient(top, #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* Opera 11.10+ */
-  background: -ms-linear-gradient(top, #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* IE10+ */
-  background: linear-gradient(to bottom, #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+  background: #FAFAFA;
 }
 .question-result .page-header{
   margin-top: 20px;
@@ -1937,14 +1928,7 @@ div.admin_section h4 {
     border-radius: 3px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     position: relative;
-    background: #ffffff; /* Old browsers */
-    background: -moz-linear-gradient(top, #ffffff 0%, #f6f6f6 47%, #ededed 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(47%,#f6f6f6), color-stop(100%,#ededed)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top, #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top, #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top, #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* IE10+ */
-    background: linear-gradient(to bottom, #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+    background: #FAFAFA;
 }
 
 .ribbon .rib {
@@ -1989,16 +1973,9 @@ div.admin_section h4 {
 }
 
 .ribbon .rib-error, .ribbon .ribbon-total-error {
-  background: #ff3019; /* Old browsers */
-  background: -moz-linear-gradient(top, #ff3019 0%, #cf0404 100%); /* FF3.6+ */
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ff3019), color-stop(100%,#cf0404)); /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(top, #ff3019 0%,#cf0404 100%); /* Chrome10+,Safari5.1+ */
-  background: -o-linear-gradient(top, #ff3019 0%,#cf0404 100%); /* Opera 11.10+ */
-  background: -ms-linear-gradient(top, #ff3019 0%,#cf0404 100%); /* IE10+ */
-  background: linear-gradient(to bottom, #ff3019 0%,#cf0404 100%); /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3019', endColorstr='#cf0404',GradientType=0 ); /* IE6-9 */
-    border-top: 1px solid #ff3019;
-    border-bottom: 1px solid #cf0404;
+    background: #ff3019;
+    border-top: none;
+    border-bottom: none;
     float: left;
 }
 
@@ -2016,15 +1993,9 @@ div.admin_section h4 {
 }
 
 .ribbon .rib-success, .ribbon .ribbon-total-success{
-    background-color: #768E00;
-    background-image: -ms-linear-gradient(top, #9CB80A, #768E00);
-    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#9CB80A), to(#768E00));
-    background-image: -webkit-linear-gradient(top, #9CB80A, #768E00);
-    background-image: -o-linear-gradient(top, #9CB80A, #768E00);
-    background-image: -moz-linear-gradient(top, #9CB80A, #768E00);
-    background-image: linear-gradient(top, #9CB80A, #768E00);
-    border-top: 1px solid #A8C31B;
-    border-bottom: 1px solid #617700;
+    background: #86B404;
+    border-top: none;
+    border-bottom: none;
     float: left;
 }
 
@@ -2067,7 +2038,7 @@ div.admin_section h4 {
 }
 
 .ribbon .rib-success::before {
-    border-color: #66751B transparent transparent transparent;
+    border-color: #4B610B transparent transparent transparent;
 }
 
 .ribbon .rib-gray::before {

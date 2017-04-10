@@ -2477,10 +2477,6 @@ class Tracking
         $getOnlyBestAttempt = false
     ) {
         $debug = false;
-        if (empty($lp_ids)) {
-            $debug = false;
-        }
-
         if ($debug) echo '<h1>Tracking::get_avg_student_score</h1>';
         $tbl_stats_exercices = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $tbl_stats_attempts = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
@@ -4365,6 +4361,7 @@ class Tracking
 
         $user_id = intval($user_id);
         $session_id = intval($session_id);
+        $urlId = api_get_current_access_url_id();
 
         if (api_is_multiple_url_enabled()) {
             $sql = "SELECT c.code, title
@@ -4376,7 +4373,7 @@ class Tracking
                     WHERE
                         cu.user_id = $user_id AND
                         relation_type<> ".COURSE_RELATION_TYPE_RRHH." AND
-                        access_url_id = ".api_get_current_access_url_id()."
+                        access_url_id = ".$urlId."
                     ORDER BY title";
         } else {
             $sql = "SELECT c.code, title
@@ -4422,7 +4419,7 @@ class Tracking
                     $extraInnerJoin
                     WHERE
                         cu.user_id = $user_id AND
-                        access_url_id = ".api_get_current_access_url_id()."
+                        access_url_id = ".$urlId."
                         $sessionCondition
                     $orderBy ";
         } else {
@@ -4460,7 +4457,6 @@ class Tracking
             }
 
             $final_course_data = array();
-
             foreach ($my_course_data as $course_id => $value) {
                 $final_course_data[$course_id] = $course_list[$course_id];
             }
@@ -4479,11 +4475,12 @@ class Tracking
                 $html .= '<div class="table-responsive">';
                 $html .= '<table class="table table-striped table-hover">';
                 $html .= '<thead>';
+                //'.Display::tag('th', get_lang('Score').Display::return_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), array('align' => 'absmiddle', 'hspace' => '3px')), array('class'=>'head')).'
                 $html .= '<tr>
                           '.Display::tag('th', get_lang('Course'), array('width'=>'300px')).'
                           '.Display::tag('th', get_lang('TimeSpentInTheCourse'), array('class'=>'head')).'
                           '.Display::tag('th', get_lang('Progress'), array('class'=>'head')).'
-                          '.Display::tag('th', get_lang('Score').Display::return_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), array('align' => 'absmiddle', 'hspace' => '3px')), array('class'=>'head')).'
+                          '.Display::tag('th', get_lang('BestScore'), array('class'=>'head')).'
                           '.Display::tag('th', get_lang('LastConnexion'), array('class'=>'head')).'
                           '.Display::tag('th', get_lang('Details'), array('class'=>'head')).'
                         </tr>';
@@ -4502,17 +4499,22 @@ class Tracking
                         $user_id,
                         $course_code
                     );
-                    $percentage_score = self::get_avg_student_score(
+                    $bestScore = self::get_avg_student_score(
                         $user_id,
                         $course_code,
-                        array()
+                        array(),
+                        null,
+                        false,
+                        false,
+                        true
                     );
+
                     $last_connection = self::get_last_connection_date_on_the_course(
                         $user_id,
                         $courseInfo
                     );
 
-                    if (is_null($progress)) {
+                    if (is_null($progress) || empty($progress)) {
                         $progress = '0%';
                     } else {
                         $progress = $progress.'%';
@@ -4533,10 +4535,10 @@ class Tracking
                     $html .= '<td align="center">'.$time.'</td>';
                     $html .= '<td align="center">'.$progress.'</td>';
                     $html .= '<td align="center">';
-                    if (is_numeric($percentage_score)) {
-                        $html .= $percentage_score.'%';
+                    if (empty($bestScore)) {
+                        $html .= '-';
                     } else {
-                        $html .= '0%';
+                        $html .= $bestScore;
                     }
                     $html .= '</td>';
                     $html .= '<td align="center">'.$last_connection.'</td>';

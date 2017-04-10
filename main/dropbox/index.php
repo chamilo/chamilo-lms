@@ -398,9 +398,8 @@ if ($action != 'add') {
                     $dropbox_file_data[] = '';
                 }
 
-				$last_upload_date = api_get_local_time($dropbox_file->last_upload_date);
-				$dropbox_file_data[] = date_to_str_ago($dropbox_file->last_upload_date).'<br /><span class="dropbox_date">'.
-                    api_format_date($last_upload_date).'</span>';
+				$lastUploadDate = Display::dateToStringAgoAndLongDate($dropbox_file->last_upload_date);
+				$dropbox_file_data[] = $lastUploadDate;
 
 				$action_icons = check_number_feedback($dropbox_file->id, $number_feedback).' '.get_lang('Feedback').'
                 <a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category='.$viewSentCategory.'&view='.$view.'&action=viewfeedback&id='.$dropbox_file->id.'&'.$sort_params.'">'.Display::return_icon('discuss.png', get_lang('Comment'), '', ICON_SIZE_SMALL).'</a>
@@ -420,7 +419,7 @@ if ($action != 'add') {
 					$dropbox_file_data[] = $action_icons;
 				}
 				$action_icons = '';
-				$dropbox_file_data[] = $last_upload_date;
+				$dropbox_file_data[] = $lastUploadDate;
 				$dropbox_file_data[] = $file_size;
 				$dropbox_data_recieved[] = $dropbox_file_data;
 			}
@@ -547,10 +546,8 @@ if ($action != 'add') {
 		// Here we change the way how the colums are going to be sort
 		// in this case the the column of LastResent ( 4th element in $column_header) we will be order like the column RealDate
 		// because in the column RealDate we have the days in a correct format "2008-03-12 10:35:48"
-
 		$column_order[3] = 8;
 		$column_order[5] = 7;
-
 		// The content of the sortable table = the received files
 		foreach ($dropbox_person->sentWork as $dropbox_file) {
 			$dropbox_file_data = array();
@@ -570,11 +567,9 @@ if ($action != 'add') {
 				}
 				$receivers_celldata = trim(trim($receivers_celldata), ','); // Removing the trailing comma.
 				$dropbox_file_data[] = $receivers_celldata;
-				$last_upload_date = api_get_local_time($dropbox_file->last_upload_date);
-				$dropbox_file_data[] = date_to_str_ago($dropbox_file->last_upload_date).'<br /><span class="dropbox_date">'.
-					api_format_date($last_upload_date).'</span>';
 
-				//$dropbox_file_data[] = $dropbox_file->author;
+				$lastUploadDate = Display::dateToStringAgoAndLongDate($dropbox_file->last_upload_date);
+				$dropbox_file_data[] = $lastUploadDate;
 				$receivers_celldata = '';
 
 				$action_icons = check_number_feedback($dropbox_file->id, $number_feedback).' '.get_lang('Feedback').'
@@ -589,7 +584,7 @@ if ($action != 'add') {
 					$action_icons .= "</td><td colspan=\"7\">".feedback($dropbox_file->feedback2)."</td></tr>";
 				}
 				$dropbox_file_data[] = $action_icons;
-				$dropbox_file_data[] = $last_upload_date;
+				$dropbox_file_data[] = $lastUploadDate;
 				$dropbox_file_data[] = $file_size;
 				$action_icons = '';
 				$dropbox_data_sent[] = $dropbox_file_data;
@@ -610,9 +605,7 @@ if ($action != 'add') {
 					$link_open = '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category='.$category['cat_id'].'&view='.$view.'">';
 					$dropbox_category_data[] = $link_open.DocumentManager::build_document_icon_tag('folder', Security::remove_XSS($category['cat_name'])).'</a>';
 					$dropbox_category_data[] = '<a href="'.api_get_path(WEB_CODE_PATH).'dropbox/dropbox_download.php?'.api_get_cidreq().'&cat_id='.$category['cat_id'].'&action=downloadcategory&sent_received=sent">'.Display::return_icon('save_pack.png', get_lang('Save'), array('style' => 'float:right;'), ICON_SIZE_SMALL).'</a>'.$link_open.Security::remove_XSS($category['cat_name']).'</a>';
-					//$dropbox_category_data[] = '';
 					$dropbox_category_data[] = '';
-					//$dropbox_category_data[] = '';
 					$dropbox_category_data[] = '';
 					$dropbox_category_data[] = '';
 					$dropbox_category_data[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category='.$viewSentCategory.'&view='.$view.'&action=editcategory&id='.$category['cat_id'].'">'.

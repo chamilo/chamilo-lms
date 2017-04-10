@@ -5986,8 +5986,12 @@ class Tracking
      * @return \Chamilo\CourseBundle\Entity\CStudentPublication|null
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public static function getLastStudentPublication(User $user, $tool, Course $course, Session $session = null)
-    {
+    public static function getLastStudentPublication(
+        User $user,
+        $tool,
+        Course $course,
+        Session $session = null
+    ) {
         return Database::getManager()
             ->createQuery("
                 SELECT csp
@@ -5995,7 +5999,7 @@ class Tracking
                 INNER JOIN ChamiloCourseBundle:CItemProperty cip
                     WITH (
                         csp.iid = cip.ref AND
-                        csp.sessionId = cip.session AND
+                        csp.session = cip.session AND
                         csp.cId = cip.course AND
                         csp.userId = cip.lasteditUserId
                     )

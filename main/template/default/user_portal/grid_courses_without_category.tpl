@@ -87,7 +87,10 @@
                                             {% endif %}
 
                                             {% if (item.student_info.certificate is not null) %}
-                                            {{ "StudentCourseCertificateX" | get_lang | format(item.student_info.certificate) }}
+                                                <span title="{{ "StudentCourseCertificateX" | get_lang | format(item.student_info.certificate) }}">
+                                                    <i class="fa fa-certificate" aria-hidden="true"></i>
+                                                    {{ item.student_info.certificate }}
+                                                </span>
                                             {% endif %}
 
                                         </div>

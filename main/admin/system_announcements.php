@@ -171,29 +171,26 @@ if ($action_todo) {
         array('id' => 'range')
     );
 
-    $group = array();
+    $visibleToUsers = [
+        'visible_teacher' => get_lang('Teacher'),
+        'visible_student' => get_lang('Student'),
+        'visible_drh' => get_lang('DRH'),
+        'visible_session_admin' => get_lang('SessionAdministrator'),
+        'visible_boss' => get_lang('StudentBoss'),
+        'visible_guest' => get_lang('Guest')
+    ];
 
-    $group[] = $form->createElement(
-        'checkbox',
-        'visible_teacher',
-        null,
-        get_lang('Teacher')
-    );
-    $group[] = $form->createElement(
-        'checkbox',
-        'visible_student',
-        null,
-        get_lang('Student')
-    );
-    $group[] = $form->createElement(
-        'checkbox',
-        'visible_guest',
-        null,
-        get_lang('Guest')
-    );
+    $group = [];
+    foreach ($visibleToUsers as $key => $name) {
+        $group[] = $form->createElement(
+            'checkbox',
+            $key,
+            null,
+            $name
+        );
+    }
 
     $form->addGroup($group, null, get_lang('Visible'));
-
     $form->addElement('hidden', 'id');
     $userGroup = new UserGroup();
     $group_list = $userGroup->get_all();

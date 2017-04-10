@@ -16,8 +16,7 @@ $nameTools = get_lang('MyProgress');
 api_block_anonymous_users();
 
 $htmlHeadXtra[] = api_get_js('jquery.timelinr-0.9.54.js');
-$htmlHeadXtra[] = "
-<script language='javascript'>
+$htmlHeadXtra[] = "<script>
 $(function() {
     $().timelinr({
         containerDiv: '#my_timeline',
@@ -77,7 +76,6 @@ if (!empty($dates)) {
     if (!empty($content)) {
         $content .= '';
     }
-
     $content .= Display::page_subheader(get_lang('Timeline'));
     $content .= '<div class="row">';
     $content .= '<div class="col-md-12">';
@@ -89,7 +87,6 @@ if (!empty($dates)) {
     $content .= '<a href="#" id="prev"></a>';
     $content .= '<a href="#" id="next"></a>';
     $content .= '</div></div>';
-
 }
 
 $message = null;

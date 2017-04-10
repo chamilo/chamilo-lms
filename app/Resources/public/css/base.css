@@ -4755,6 +4755,12 @@ div#chat-remote-video video {
     padding-top: 10px;
     border-bottom: 1px solid #ECF0F1;
 }
+.course-student-info{
+    background-color: #d9edf7;
+    border: 1px solid #bce8f1;
+    padding: 5px;
+    border-radius: 5px;
+}
 .grid-courses .items{
     /* position: relative; */
     vertical-align: top;

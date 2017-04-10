@@ -298,6 +298,7 @@ class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
             $html = str_replace('{label}', $nameLabel, $this->_templates[$name]);
         } else {
             $customElementTemplate = $this->getCustomElementTemplate();
+
             if (empty($customElementTemplate)) {
                 if (method_exists($element, 'getTemplate')) {
                     $template = $element->getTemplate(
@@ -328,7 +329,6 @@ class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
             $html = preg_replace("/([ \t\n\r]*)?<!-- BEGIN required -->.*<!-- END required -->([ \t\n\r]*)?/isU", '', $html);
         }
         if (isset($error)) {
-
             $html = str_replace('{error}', $error, $html);
             $html = str_replace('{error_class}', 'error has-error', $html);
             $html = str_replace('<!-- BEGIN error -->', '', $html);
@@ -349,9 +349,8 @@ class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
             $html = preg_replace('/\s*<!-- BEGIN label_(\S+) -->.*<!-- END label_\1 -->\s*/is', '', $html);
         }
 
-
         return $html;
-    } // end func _prepareTemplate
+    }
 
    /**
     * Renders an element Html

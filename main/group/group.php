@@ -211,7 +211,7 @@ if (api_is_allowed_to_edit(false, true)) {
 }
 
 $actionsRight = GroupManager::getSearchForm();
-$toolbar = Display::toolbarAction('toolbar-groups', $content = array($actionsLeft, $actionsRight));
+$toolbar = Display::toolbarAction('toolbar-groups', array($actionsLeft, $actionsRight));
 $group_cats = GroupManager::get_categories(api_get_course_id());
 
 echo $toolbar;

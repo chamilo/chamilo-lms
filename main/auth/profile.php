@@ -703,18 +703,14 @@ if ($form->validate()) {
 
 // the header
 
-$actions = null;
+$actions = '';
 if (api_get_setting('allow_social_tool') !== 'true') {
     if (api_get_setting('extended_profile') === 'true') {
-        $actions .= '<div class="actions">';
-
-        if (api_get_setting('allow_social_tool') === 'true' &&
+        if (
             api_get_setting('allow_message_tool') === 'true'
         ) {
             $actions .= '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.
                 Display::return_icon('shared_profile.png', get_lang('ViewSharedProfile')).'</a>';
-        }
-        if (api_get_setting('allow_message_tool') === 'true') {
             $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
                 Display::return_icon('inbox.png', get_lang('Messages')).'</a>';
         }
@@ -727,14 +723,19 @@ if (api_get_setting('allow_social_tool') !== 'true') {
             $actions .= '<a href="profile.php?type=extended'.$show.'">'.
                 Display::return_icon('edit.png', get_lang('EditExtendProfile'), '', 16).'</a>';
         }
-        $actions .= '</div>';
     }
 }
 
 $show_delete_account_button = api_get_setting('platform_unsubscribe_allowed') === 'true' ? true : false;
 
 $tpl = new Template(get_lang('ModifyProfile'));
-$tpl->assign('actions', $actions);
+
+if ($actions) {
+    $tpl->assign(
+        'actions',
+        Display::toolbarAction('toolbar', [$actions])
+    );
+}
 
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'messages');
 

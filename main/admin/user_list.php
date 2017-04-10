@@ -973,14 +973,10 @@ if ($table->get_total_number_of_items() == 0) {
         }
     }
 }
-$toolbarActions = Display::toolbarAction(
-    'toolbarUser',
-    array($actionsLeft, $actionsCenter, $actionsRight),
-    3
-);
+$toolbarActions = Display::toolbarAction('toolbarUser', [$actionsLeft, $actionsCenter, $actionsRight], [4, 4, 4]);
 
 $tpl = new Template($tool_name);
-//$tpl->assign('actions', $toolbarActions);
+$tpl->assign('actions', $toolbarActions);
 $tpl->assign('message', $message);
-$tpl->assign('content', $toolbarActions.$form.$table_result.$extra_search_options);
+$tpl->assign('content', $form.$table_result.$extra_search_options);
 $tpl->display_one_col_template();

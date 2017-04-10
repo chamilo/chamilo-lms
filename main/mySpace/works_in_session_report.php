@@ -152,19 +152,17 @@ $interbreadcrumb[] = [
     'name' => get_lang('MySpace')
 ];
 
-$actions = [];
+$actions = null;
 
 if ($session) {
-    $actions = [
-        Display::url(
-            Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), [], ICON_SIZE_MEDIUM),
-            api_get_self() . '?' . http_build_query(['export' => 'csv', 'session' => $session->getId()])
-        ),
-        Display::url(
-            Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), [], ICON_SIZE_MEDIUM),
-            api_get_self() . '?' . http_build_query(['export' => 'xls', 'session' => $session->getId()])
-        )
-    ];
+    $actions = Display::url(
+        Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), [], ICON_SIZE_MEDIUM),
+        api_get_self() . '?' . http_build_query(['export' => 'csv', 'session' => $session->getId()])
+    );
+    $actions .=Display::url(
+        Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), [], ICON_SIZE_MEDIUM),
+        api_get_self() . '?' . http_build_query(['export' => 'xls', 'session' => $session->getId()])
+    );
 }
 
 $view = new Template($toolName);
@@ -180,6 +178,13 @@ $template = $view->get_template('my_space/works_in_session_report.tpl');
 $content = $view->fetch($template);
 
 $view->assign('header', $toolName);
+
+if ($actions) {
+    $view->assign(
+        'actions',
+        Display::toolbarAction('toolbar', [$actions])
+    );
+}
+
 $view->assign('content', $content);
-$view->assign('actions', implode(' ', $actions));
 $view->display_one_col_template();

@@ -46,7 +46,7 @@ if (api_is_allowed_to_edit(null, true)) {
                 Display::return_icon('new_course_progress.png', get_lang('NewThematicSection'), '', ICON_SIZE_MEDIUM).'</a>';
     }
     
-    $toolbar= Display::toolbarAction('thematic-bar', array(0 => $actionLeft));
+    $toolbar= Display::toolbarAction('thematic-bar', array($actionLeft));
 }
 
 

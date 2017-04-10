@@ -144,7 +144,6 @@ switch ($action) {
             'info',
             ['title' => get_lang('BadgesManagement')]
         );
-        $actions = '<div class="actions">' . $toolbar . '</div>';
         $extraField = new ExtraField('skill');
         $arrayVals = $extraField->get_handler_field_info_by_tags('tags');
         $tags = [];
@@ -179,7 +178,10 @@ switch ($action) {
         $templateName = $tpl->get_template('skill/list.tpl');
         $content = $tpl->fetch($templateName);
 
-        $tpl->assign('actions', $actions);
+        $tpl->assign(
+            'actions',
+            Display::toolbarAction('toolbar', [$toolbar], [12])
+        );
         $tpl->assign('content', $content);
         $tpl->display_one_col_template();
 

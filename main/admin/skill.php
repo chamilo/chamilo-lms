@@ -17,6 +17,7 @@ $profiles = $em->getRepository('ChamiloSkillBundle:Profile')->findAll();
 $list = $em->getRepository('ChamiloCoreBundle:Skill')->findAll();
 
 $listAction = api_get_self();
+$toolbarAction = '';
 
 $action = '';
 if (isset($_GET['action']) && in_array($_GET['action'], ['add', 'edit', 'delete'])) {
@@ -60,7 +61,7 @@ $tpl = new Template($action);
 switch ($action) {
     case 'edit':
         $tpl->assign('form', $formToDisplay);
-        $tpl->assign('actions', Display::url(get_lang('List'), $listAction));
+        $toolbarAction = Display::toolbarAction('toolbar', [Display::url(get_lang('List'), $listAction)]);
 
         if ($form->validate()) {
             $values = $form->exportValues();
@@ -76,7 +77,8 @@ switch ($action) {
 
         break;
     case 'delete':
-        $tpl->assign('actions', Display::url(get_lang('List'), $listAction));
+        $toolbarAction = Display::toolbarAction('toolbar', [Display::url(get_lang('List'), $listAction)]);
+
         $em->remove($item);
         $em->flush();
         header('Location: '.$listAction);
@@ -90,5 +92,6 @@ switch ($action) {
 $tpl->assign('list', $list);
 $view = $tpl->get_template('admin/skill.tpl');
 $contentTemplate = $tpl->fetch($view);
+$tpl->assign('actions', $toolbarAction);
 $tpl->assign('content', $contentTemplate);
 $tpl->display_one_col_template();

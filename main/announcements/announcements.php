@@ -667,7 +667,7 @@ if ($allowToEdit) {
 }
 
 if ($show_actions) {
-    echo Display::toolbarAction('toolbar', array($actionsLeft, $searchFormToString), 2, false);
+    echo Display::toolbarAction('toolbar', array($actionsLeft, $searchFormToString));
 }
 
 echo $content;

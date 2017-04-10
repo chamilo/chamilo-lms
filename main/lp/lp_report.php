@@ -130,6 +130,9 @@ $template->assign('lp_id', $lpId);
 $layout = $template->get_template('learnpath/report.tpl');
 
 $template->assign('header', $lpInfo['name']);
-$template->assign('actions', $actions);
+$template->assign(
+    'actions',
+    Display::toolbarAction('lp_actions', [$actions])
+);
 $template->assign('content', $template->fetch($layout));
 $template->display_one_col_template();

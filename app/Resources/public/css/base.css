@@ -498,6 +498,9 @@ header{
 .actions a:hover{
     text-decoration: none;
 }
+.actions div.text-right {
+    text-align: left;
+}
 .actions img{
     padding: 3px;
     border: 1px solid #dcdcdc;
@@ -6586,7 +6589,13 @@ input.form-control[type="color"] {
 
 /* Small devices (tablets, 768px and up) */
 @media (min-width: 768px) {
-
+    .actions div.text-right{
+        text-align: right;
+    }
+    .actions .row .text-right a{
+      margin-left: 10px;
+      margin-right: 0;
+    }
 }
 
 /* Medium devices (desktops, 992px and up) */

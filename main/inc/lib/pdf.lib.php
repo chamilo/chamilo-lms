@@ -56,6 +56,10 @@ class PDF
         $this->params['show_teacher_as_myself'] = isset($params['show_teacher_as_myself']) ? $params['show_teacher_as_myself'] : true;
         $this->params['pdf_date'] = isset($params['pdf_date']) ? $params['pdf_date'] : api_format_date(api_get_local_time(), DATE_TIME_FORMAT_LONG);
 
+        // Ofaj set custim paths to load ttfonts and font configuration
+        define('_MPDF_SYSTEM_TTFONTS_CONFIG',  api_get_path(LIBRARY_PATH).'mpdf/config.php');
+        define('_MPDF_SYSTEM_TTFONTS',  api_get_path(LIBRARY_PATH).'mpdf/ttfonts/');
+
         $this->pdf = new mPDF(
             'UTF-8',
             $pageFormat,
@@ -69,6 +73,8 @@ class PDF
             8,
             $orientation
         );
+        // No needed
+        //$this->pdf->SetFont('CourierSans-Light');
 
          // Default value is 96 set in the mpdf library file config.php
         $value = api_get_configuration_value('pdf_img_dpi');
@@ -812,7 +818,7 @@ class PDF
         */
         // TODO: To be read from the html document.
         $this->pdf->directionality = api_get_text_direction();
-        $this->pdf->useOnlyCoreFonts = true;
+        $this->pdf->useOnlyCoreFonts = false;
         // Use different Odd/Even headers and footers and mirror margins
         $this->pdf->mirrorMargins       = 1;
 

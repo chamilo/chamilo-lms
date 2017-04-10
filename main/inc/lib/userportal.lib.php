@@ -1153,6 +1153,7 @@ class IndexManager
         // Student info code check (shows student progress information on
         // courses list
         $studentInfo = api_get_configuration_value('course_student_info');
+        $viewGrid = api_get_configuration_value('view_grid_courses');
         $studentInfoProgress = (!empty($studentInfo['progress']) && $studentInfo['progress'] === true);
         $studentInfoScore = (!empty($studentInfo['score']) && $studentInfo['score'] === true);
         $studentInfoCertificate = (!empty($studentInfo['certificate']) && $studentInfo['certificate'] === true);
@@ -1171,10 +1172,11 @@ class IndexManager
                 $this->load_directories_preview
             );
 
-
             //Course option (show student progress)
             //This code will add new variables (Progress, Score, Certificate)
+            
             if ($studentInfoProgress || $studentInfoScore || $studentInfoCertificate) {
+                if(!empty($specialCourses)){
                 foreach ($specialCourses as $key => $specialCourseInfo) {
                     if ($studentInfoProgress) {
                         $progress = Tracking::get_avg_student_progress(
@@ -1207,12 +1209,13 @@ class IndexManager
                             if ($category[0]->is_certificate_available($user_id)) {
                                 $specialCourses[$key]['student_info']['certificate'] = Display::label(get_lang('Yes'), 'success');
                             } else {
-                                $specialCourses[$key]['student_info']['certificate'] = Display::label(get_lang('No'));
+                                $specialCourses[$key]['student_info']['certificate'] = Display::label(get_lang('No'), 'danger');
                             }
                         }
                     }
                     
                 }
+            }
                 
                 if (isset($courses['in_category']) && isset($courses['not_category'])) {
                     foreach ($courses['in_category'] as $key1 => $value) {
@@ -1246,10 +1249,18 @@ class IndexManager
                                     );
                                     $courses['in_category'][$key1]['student_info']['certificate'] = null;
                                     if (isset($category[0])) {
-                                        if ($category[0]->is_certificate_available($user_id)) {
-                                            $courses['in_category'][$key1]['student_info']['certificate'] = Display::label(get_lang('Yes'), 'success');
+                                        if ($viewGrid == 'true') {
+                                            if ($category[0]->is_certificate_available($user_id)) {
+                                                $courses['in_category'][$key1]['student_info']['certificate'] = get_lang('Yes');
+                                            } else {
+                                                $courses['in_category'][$key1]['student_info']['certificate'] = get_lang('No');
+                                            }
                                         } else {
-                                            $courses['in_category'][$key1]['student_info']['certificate'] = Display::label(get_lang('No'));
+                                            if ($category[0]->is_certificate_available($user_id)) {
+                                                $courses['in_category'][$key1]['student_info']['certificate'] = Display::label(get_lang('Yes'), 'success');
+                                            } else {
+                                                $courses['in_category'][$key1]['student_info']['certificate'] = Display::label(get_lang('No'), 'danger');
+                                            }
                                         }
                                     }
                                 }
@@ -1285,11 +1296,20 @@ class IndexManager
                                 null
                             );
                             $courses['not_category'][$key]['student_info']['certificate'] = null;
+                           
                             if (isset($category[0])) {
-                                if ($category[0]->is_certificate_available($user_id)) {
-                                    $courses['not_category'][$key]['student_info']['certificate'] = Display::label(get_lang('Yes'), 'success');
+                                if ($viewGrid == 'true') {
+                                    if ($category[0]->is_certificate_available($user_id)) {
+                                        $courses['not_category'][$key]['student_info']['certificate'] = get_lang('Yes');
+                                    } else {
+                                        $courses['not_category'][$key]['student_info']['certificate'] = get_lang('No');
+                                    }
                                 } else {
-                                    $courses['not_category'][$key]['student_info']['certificate'] = Display::label(get_lang('No'));
+                                    if ($category[0]->is_certificate_available($user_id)) {
+                                        $courses['not_category'][$key]['student_info']['certificate'] = Display::label(get_lang('Yes'), 'success');
+                                    } else {
+                                        $courses['not_category'][$key]['student_info']['certificate'] = Display::label(get_lang('No'), 'danger');
+                                    }
                                 }
                             }
                         }
@@ -1298,7 +1318,7 @@ class IndexManager
                 }
                 
             }
-
+        
             if ($viewGridCourses) {
                 $coursesWithoutCategoryTemplate = '/user_portal/grid_courses_without_category.tpl';
                 $coursesWithCategoryTemplate = '/user_portal/grid_courses_with_category.tpl';

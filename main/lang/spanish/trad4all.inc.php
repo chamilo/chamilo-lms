@@ -8004,4 +8004,13 @@ $Ongoing = "En progreso";
 $Unclosed = "No cerrado";
 $AttemptStillOngoingPleaseWait = "El intento todavía está en progreso. Paciencia...";
 $MarkAttemptAsClosed = "Marcar el intento como cerrado (ya pasó el tiempo máximo)";
+$NewPasswordRequirementsNotMatched = "La nueva contraseña no corresponde a los requerimientos mínimos de seguridad";
+$NewPasswordRequirementMinXLowercase = "Mínimo %s caracter(es) alfabéticos en minúscula";
+$NewPasswordRequirementMinXUppercase = "Mínimo %s caracter(es) alfabéticos en mayúscula";
+$NewPasswordRequirementMinXNumeric = "Mínimo %s caracter(es) numéricos (0-9)";
+$NewPasswordRequirementMinXLength = "Mínimo %s caracteres en total";
+$NewPasswordRequirementMaxXLowercase = "Máximo %s caracter(es) alfabético(s) en minúscula";
+$NewPasswordRequirementMaxXUppercase = "Máximo %s caracter(es) alfabético(s) en mayúscula";
+$NewPasswordRequirementMaxXNumeric = "Máximo %s caracter(es) numéricos (0-9)";
+$NewPasswordRequirementMaxXLength = "Máximo %s caracteres en total";
 ?>

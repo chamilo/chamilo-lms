@@ -7936,4 +7936,13 @@ $Ongoing = "En cours";
 $Unclosed = "Non clôturé";
 $AttemptStillOngoingPleaseWait = "Cette tentative est encore en cours. Patience...";
 $MarkAttemptAsClosed = "Marquer comme clôturé";
+$NewPasswordRequirementsNotMatched = "Le nouveau mot de passe ne respecte pas les pré-requis minimaux de sécurité";
+$NewPasswordRequirementMinXLowercase = "Minimum %s caractère(s) alphabétique en minuscule";
+$NewPasswordRequirementMinXUppercase = "Minimum %s caractère(s) alphabétique en majuscule";
+$NewPasswordRequirementMinXNumeric = "Minimum %s caractère(s) numérique(s)";
+$NewPasswordRequirementMinXLength = "Minimum %s caractère(s) au total";
+$NewPasswordRequirementMaxXLowercase = "Maximum %s caractère(s) alphabétique(s) en minuscule";
+$NewPasswordRequirementMaxXUppercase = "Maximum %s caractère(s) alphabétique(s) en majuscule";
+$NewPasswordRequirementMaxXNumeric = "Maximum %s caractère(s) numérique(s) (0-9)";
+$NewPasswordRequirementMaxXLength = "Maximum %s caractère(s) au total";
 ?>

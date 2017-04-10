@@ -7989,4 +7989,13 @@ $Ongoing = "Ongoing";
 $Unclosed = "Unclosed";
 $AttemptStillOngoingPleaseWait = "Attempt still going on. Please wait.";
 $MarkAttemptAsClosed = "Mark attempt as closed";
+$NewPasswordRequirementsNotMatched = "The new password does not match the minimum security requirements";
+$NewPasswordRequirementMinXLowercase = "Minimum %s lowercase characters";
+$NewPasswordRequirementMinXUppercase = "Minimum %s uppercase characters";
+$NewPasswordRequirementMinXNumeric = "Minimum %s numerical (0-9) characters";
+$NewPasswordRequirementMinXLength = "Minimum %s characters in total";
+$NewPasswordRequirementMaxXLowercase = "Maximum %s lowercase characters";
+$NewPasswordRequirementMaxXUppercase = "Maximum %s uppercase characters";
+$NewPasswordRequirementMaxXNumeric = "Maximum %s numerical (0-9) characters";
+$NewPasswordRequirementMaxXLength = "Maximum %s characters in total";
 ?>

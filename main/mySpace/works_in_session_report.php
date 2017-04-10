@@ -82,7 +82,11 @@ if ($session) {
                 $user->getId(),
                 $course->getCode(),
                 null,
-                $session->getId()
+                $session->getId(),
+                false,
+                false,
+                true
+
             );
             $usersInfo[$user->getId()][$course->getId() . '_progress'] = Tracking::get_avg_student_progress(
                 $user->getId(),
@@ -122,7 +126,7 @@ if (isset($_GET['export']) && $session && ($coursesInfo && $usersInfo)) {
     $dataToExport['headers'][] = get_lang('LatestLoginInPlatform');
 
     foreach ($coursesInfo as $courseCode) {
-        $dataToExport['headers'][] = $courseCode;
+        $dataToExport['headers'][] = $courseCode. ' ('.get_lang('BestScore').')';
         $dataToExport['headers'][] = get_lang('Progress');
         $dataToExport['headers'][] = get_lang('LastSentWorkDate');
     }

@@ -106,7 +106,7 @@ if (isset($_POST['StoreCategory'])) {
 }
 
 // Move a File
-if (($action == 'movesent' || $action == 'movereceived') AND isset($_GET['move_id'])) {
+if (($action == 'movesent' || $action == 'movereceived') && isset($_GET['move_id'])) {
     if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
         api_not_allowed();
     }
@@ -125,7 +125,7 @@ if (isset($_POST['do_move'])) {
 }
 
 // Delete a file
-if (($action == 'deletereceivedfile' || $action == 'deletesentfile') AND isset($_GET['id']) AND is_numeric($_GET['id'])) {
+if (($action == 'deletereceivedfile' || $action == 'deletesentfile') && isset($_GET['id']) && is_numeric($_GET['id'])) {
     if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
         api_not_allowed();
     }
@@ -142,7 +142,7 @@ if (($action == 'deletereceivedfile' || $action == 'deletesentfile') AND isset($
 }
 
 // Delete a category
-if (($action == 'deletereceivedcategory' || $action == 'deletesentcategory') AND isset($_GET['id']) AND is_numeric($_GET['id'])) {
+if (($action == 'deletereceivedcategory' || $action == 'deletesentcategory') && isset($_GET['id']) && is_numeric($_GET['id'])) {
     if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
         api_not_allowed();
     }
@@ -153,7 +153,6 @@ if (($action == 'deletereceivedcategory' || $action == 'deletesentcategory') AND
 // Do an action on multiple files
 // only the download has is handled separately in dropbox_init_inc.php because this has to be done before the headers are sent
 // (which also happens in dropbox_init.inc.php
-
 if (!isset($_POST['feedback']) && (
     strstr($postAction, 'move_received') ||
     strstr($postAction, 'move_sent') ||
@@ -181,7 +180,7 @@ if (isset($_POST['feedback'])) {
 }
 
 // Error Message
-if (isset($_GET['error']) AND !empty($_GET['error'])) {
+if (isset($_GET['error']) && !empty($_GET['error'])) {
     Display :: display_normal_message(get_lang($_GET['error']));
 }
 
@@ -205,7 +204,7 @@ if ($action != 'add') {
     // ACTIONS
     if ($view == 'received' || !$showSentReceivedTabs) {
         // This is for the categories
-        if (isset($viewReceivedCategory) AND $viewReceivedCategory != '') {
+        if (isset($viewReceivedCategory) && $viewReceivedCategory != '') {
             $view_dropbox_category_received = $viewReceivedCategory;
         } else {
             $view_dropbox_category_received = 0;
@@ -239,7 +238,7 @@ if ($action != 'add') {
 
     if (!$view || $view == 'sent' || !$showSentReceivedTabs) {
         // This is for the categories
-        if (isset($viewSentCategory) AND $viewSentCategory != '') {
+        if (isset($viewSentCategory) && $viewSentCategory != '') {
             $view_dropbox_category_sent = $viewSentCategory;
         } else {
             $view_dropbox_category_sent = 0;
@@ -294,7 +293,7 @@ if ($action != 'add') {
     /*	RECEIVED FILES */
     if ($view == 'received' || !$showSentReceivedTabs) {
         // This is for the categories
-        if (isset($viewReceivedCategory) AND $viewReceivedCategory != '') {
+        if (isset($viewReceivedCategory) && $viewReceivedCategory != '') {
             $view_dropbox_category_received = $viewReceivedCategory;
         } else {
             $view_dropbox_category_received = 0;
@@ -347,10 +346,8 @@ if ($action != 'add') {
         // Here we change the way how the columns are going to be sort
         // in this case the the column of LastResent ( 4th element in $column_header) we will be order like the column RealDate
         // because in the column RealDate we have the days in a correct format "2008-03-12 10:35:48"
-
         $column_order[3] = 8;
         $column_order[5] = 7;
-
         // The content of the sortable table = the received files
         foreach ($dropbox_person -> receivedWork as $dropbox_file) {
             $dropbox_file_data = array();
@@ -490,7 +487,7 @@ if ($action != 'add') {
 
     if (!$view || $view == 'sent' || !$showSentReceivedTabs) {
         // This is for the categories
-        if (isset($viewSentCategory) AND $viewSentCategory != '') {
+        if (isset($viewSentCategory) && $viewSentCategory != '') {
             $view_dropbox_category_sent = $viewSentCategory;
         } else {
             $view_dropbox_category_sent = 0;

@@ -663,7 +663,10 @@
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/6e681e096db4f96398022f8ce02545130e28ded7">6e681e09</a>) Announcements: Use getLasteditDate instead of creation date</li>
     </ul>
     <h3>Stylesheets and theming</h3>
-    <p>A series of changes have been applied to the main/template/default/ folder in this version, so if you use your own template, make sure you update it to use the latest displays.</p>
+    <p>A series of changes have been applied to the main/template/default/ folder in this version, so if you use your own template, make sure you update it to use the latest displays. Most notably:</p>
+    <ul>
+        <li>A change has been made to include image2_chamilo in the ckeditor plugins in default/layout/header.js.tpl. If you have a custom version of this file, please search for the image2_chamilo text in the default TPL and make sure you apply the change, otherwise CKeditor might not display anymore.</li>
+    </ul>
     <h3>Web services</h3>
     <ul>
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/3b6816b9c6f2d178e764ea92420d064827bd15be">3b6816b9</a>) Web services: REST: Fix course forum in API v2</li>

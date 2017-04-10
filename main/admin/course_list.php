@@ -372,6 +372,7 @@ if (isset ($_GET['search']) && $_GET['search'] === 'advanced') {
     }
 
     $courseListUrl = api_get_self();
+    $actions .= '<div class="actions">';
     $actions .= '<div class="row">';
     $actions .= '<div class="col-md-2">';
     $actions .= '<a href="course_add.php">'.Display::return_icon('new_course.png', get_lang('AddCourse'), '', ICON_SIZE_MEDIUM).'</a> ';
@@ -389,6 +390,7 @@ if (isset ($_GET['search']) && $_GET['search'] === 'advanced') {
     $actions .= '<div class="col-md-2">';
     $actions .= '<div class="pull-right">';
     $actions .= $advanced;
+    $actions .= '</div>';
     $actions .= '</div>';
     $actions .= '</div>';
     $actions .= '</div>';

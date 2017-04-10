@@ -41,8 +41,8 @@ $file_url = str_replace('/..', '', $file_url);
 $file_url = Database::escape_string($file_url);
 $title = $_GET['title'];
 $path_attachment = api_get_path(SYS_ARCHIVE_PATH);
-$path_message_attach = $path_attachment . 'plugin_ticket_messageattch/';
-$full_file_name = $path_message_attach . $file_url;
+$path_message_attach = $path_attachment.'plugin_ticket_messageattch/';
+$full_file_name = $path_message_attach.$file_url;
 if (Security::check_abs_path($full_file_name, $path_message_attach)) {
     DocumentManager::file_send_for_download($full_file_name, true, $title);
 }

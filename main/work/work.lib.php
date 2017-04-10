@@ -5255,7 +5255,6 @@ function exportAllStudentWorkFromPublication(
                         'filename' => $workData['title'] . '_' . api_get_local_time(),
                         'pdf_title' => api_replace_dangerous_char($workData['title']),
                         'course_code' => $courseInfo['code'],
-                        'add_signatures' => false
                     );
                     $pdf = new PDF('A4', null, $params);
                     $pdf->html_to_pdf_with_template($content);

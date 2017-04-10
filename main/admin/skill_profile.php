@@ -17,7 +17,7 @@ $list = $em->getRepository('ChamiloSkillBundle:Profile')->findAll();
 
 $listAction = api_get_self();
 
-$action =  '';
+$action = '';
 if (isset($_GET['action']) && in_array($_GET['action'], ['add', 'edit', 'delete', 'move_up', 'move_down'])) {
     $action = $_GET['action'];
 }
@@ -43,9 +43,9 @@ if (!empty($item)) {
 }
 $formToDisplay = $form->returnForm();
 
-$interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array ('url' => 'skill.php', 'name' => get_lang('ManageSkillsLevels'));
-$interbreadcrumb[] = array ('url' =>  api_get_self(), 'name' => get_lang('SkillProfile'));
+$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'skill.php', 'name' => get_lang('ManageSkillsLevels'));
+$interbreadcrumb[] = array('url' =>  api_get_self(), 'name' => get_lang('SkillProfile'));
 
 $tpl = new Template($action);
 switch ($action) {
@@ -56,7 +56,7 @@ switch ($action) {
         $position = $item->getPosition();
 
         if (!empty($position)) {
-            $item->setPosition($position-1);
+            $item->setPosition($position - 1);
         }
         $em->persist($item);
         $em->flush();
@@ -69,7 +69,7 @@ switch ($action) {
 
         $position = $item->getPosition();
 
-        $item->setPosition($position+1);
+        $item->setPosition($position + 1);
 
         $em->persist($item);
         $em->flush();

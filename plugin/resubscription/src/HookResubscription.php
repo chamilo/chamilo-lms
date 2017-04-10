@@ -101,7 +101,7 @@ class HookResubscription extends HookObserver implements HookResubscribeObserver
                     $resubscriptionDate = gmdate($limitDateFormat, strtotime($endDate." +$resubscriptionOffset"));
                     $icon = Display::return_icon('students.gif', get_lang('Student'));
                     $canResubscribeFrom = sprintf(get_plugin_lang('CanResubscribeFromX', 'resubscription'), $resubscriptionDate);
-                    throw new Exception(Display::label($icon . ' ' . $canResubscribeFrom, "info"));
+                    throw new Exception(Display::label($icon.' '.$canResubscribeFrom, "info"));
                 }
             }
         }

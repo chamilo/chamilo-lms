@@ -163,13 +163,13 @@ if (!empty($session_id)) {
     }
 }
 
-// Set the user status for the remove_XSS course introduction
-$userStatus = COURSEMANAGER;
+// Default behaviour show iframes.
+$userStatus = COURSEMANAGERLOWSECURITY;
 
 // Allows to do a remove_XSS in course introduction with user status COURSEMANAGERLOWSECURITY
-// in order to accept all embed type videos (like vimeo, wistia, etc) - see BT#12244
+// Block embed type videos (like vimeo, wistia, etc) - see BT#12244 BT#12556
 if (api_get_configuration_value('course_introduction_html_strict_filtering')) {
-    $userStatus = COURSEMANAGERLOWSECURITY;
+    $userStatus = COURSEMANAGER;
 }
 
 $intro_content = Security::remove_XSS($intro_content, $userStatus);

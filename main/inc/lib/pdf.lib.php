@@ -48,7 +48,7 @@ class PDF
         $this->params['course_info'] = isset($params['course_info']) ? $params['course_info'] : api_get_course_info();
         $this->params['session_info'] = isset($params['session_info']) ? $params['session_info'] : api_get_session_info(api_get_session_id());
         $this->params['course_code'] = isset($params['course_code']) ? $params['course_code'] : api_get_course_id();
-        $this->params['add_signatures'] = isset($params['add_signatures']) ? $params['add_signatures'] : false;
+        $this->params['add_signatures'] = isset($params['add_signatures']) ? $params['add_signatures'] : [];
         $this->params['show_real_course_teachers'] = isset($params['show_real_course_teachers']) ? $params['show_real_course_teachers'] : false;
         $this->params['student_info'] = isset($params['student_info']) ? $params['student_info'] : false;
         $this->params['show_grade_generated_date'] = isset($params['show_grade_generated_date']) ? $params['show_grade_generated_date'] : false;
@@ -622,67 +622,16 @@ class PDF
      */
     public function set_footer()
     {
-        $this->pdf->defaultfooterfontsize = 12;   // in pts
-        $this->pdf->defaultfooterfontstyle = 'B';   // blank, B, I, or BI
-        $this->pdf->defaultfooterline = 1;        // 1 to include line below header/above footer
-        $platform_name   = api_get_setting('Institution');
-        $left_content    = $platform_name;
-        $center_content  = '';
-        $right_content   = '{PAGENO} / {nb}';
+        $this->pdf->defaultfooterfontsize = 12; // in pts
+        $this->pdf->defaultfooterfontstyle = 'B'; // blank, B, I, or BI
+        $this->pdf->defaultfooterline = 1; // 1 to include line below header/above footer
 
-        //@todo remove this and use a simpler way
-        $footer = array(
-            'odd' => array(
-                'L' => array(
-                    'content' => $left_content,
-                    'font-size' => 10,
-                    'font-style' => 'B',
-                    'font-family' => 'serif',
-                    'color' => '#000000'
-                ),
-                'C' => array(
-                    'content' => $center_content,
-                    'font-size' => 10,
-                    'font-style' => 'B',
-                    'font-family' => 'serif',
-                    'color' => '#000000'
-                ),
-                'R' => array(
-                    'content' => $right_content,
-                    'font-size' => 10,
-                    'font-style' => 'B',
-                    'font-family' => 'serif',
-                    'color' => '#000000'
-                ),
-                'line' => 1,
-            ),
-            'even' => array(
-                'L' => array(
-                    'content' => $left_content,
-                    'font-size' => 10,
-                    'font-style' => 'B',
-                    'font-family' => 'serif',
-                    'color' => '#000000'
-                ),
-                'C' => array(
-                    'content' => $center_content,
-                    'font-size' => 10,
-                    'font-style' => 'B',
-                    'font-family' => 'serif',
-                    'color' => '#000000'
-                ),
-                'R' => array(
-                    'content' => $right_content,
-                    'font-size' => 10,
-                    'font-style' => 'B',
-                    'font-family' => 'serif',
-                    'color' => '#000000'
-                ),
-                'line' => 1,
-            ),
-        );
-        // defines footer for Odd and Even Pages - placed at Outer margin see http://mpdf1.com/manual/index.php?tid=151&searchstring=setfooter
-        $this->pdf->SetFooter($footer);
+        $view = new Template('', false, false, false, true, false, false);
+        $template = $view->get_template('export/pdf_footer.tpl');
+        $footerHTML = $view->fetch($template);
+
+        $this->pdf->SetHTMLFooter($footerHTML, 'E'); //Even pages
+        $this->pdf->SetHTMLFooter($footerHTML, 'O'); //Odd pages
     }
 
     /**

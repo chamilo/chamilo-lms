@@ -9,7 +9,7 @@ use Chamilo\UserBundle\Entity\User;
 $course_plugin = 'bbb'; //needed in order to load the plugin lang variables
 $cidReset = true;
 
-require_once __DIR__ . '/../../main/inc/global.inc.php';
+require_once __DIR__.'/../../main/inc/global.inc.php';
 
 api_protect_admin_script();
 
@@ -51,7 +51,7 @@ foreach ($meetings as &$meeting) {
         /** @var User $participant */
         $participant = $meetingParticipant['participant'];
         $meeting['participants'][] = $participant->getCompleteName()
-            . ' (' . $participant->getEmail() . ')';
+            . ' ('.$participant->getEmail().')';
     }
 }
 
@@ -98,9 +98,9 @@ if (!$bbb->isServerRunning()) {
 }
 
 $htmlHeadXtra[] = api_get_js_simple(
-    api_get_path(WEB_PLUGIN_PATH) . 'bbb/resources/utils.js'
+    api_get_path(WEB_PLUGIN_PATH).'bbb/resources/utils.js'
 );
-$htmlHeadXtra[] = "<script>var _p = {web_plugin: '" . api_get_path(WEB_PLUGIN_PATH). "'}</script>";
+$htmlHeadXtra[] = "<script>var _p = {web_plugin: '".api_get_path(WEB_PLUGIN_PATH)."'}</script>";
 
 $tpl = new Template($tool_name);
 $tpl->assign('meetings', $meetings);
@@ -112,7 +112,7 @@ $actions = [];
 if ($meetings) {
     $actions[] = Display::toolbarButton(
         get_lang('ExportInExcel'),
-        api_get_self() . '?' . http_build_query([
+        api_get_self().'?'.http_build_query([
             'action' => 'export',
             'search_meeting_start' => $dateStart,
             'search_meeting_end' => $dateEnd

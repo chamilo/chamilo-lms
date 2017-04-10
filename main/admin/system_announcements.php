@@ -2,8 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *	This page allows the administrator to manage the system announcements.
- *	@package chamilo.admin.announcement
+ * This page allows the administrator to manage the system announcements.
+ * @package chamilo.admin.announcement
  */
 
 // Resetting the course id.
@@ -14,7 +14,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 // Setting the section (for the tabs).
 $this_section = SECTION_PLATFORM_ADMIN;
-$_SESSION['this_section']=$this_section;
+$_SESSION['this_section'] = $this_section;
 
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 $action_todo = false;
@@ -35,12 +35,18 @@ if (empty($_GET['lang'])) {
 }
 
 if (!empty($action)) {
-    $interbreadcrumb[] = array ("url" => "system_announcements.php", "name" => get_lang('SystemAnnouncements'));
+    $interbreadcrumb[] = array(
+        "url" => "system_announcements.php",
+        "name" => get_lang('SystemAnnouncements'),
+    );
     if ($action == 'add') {
-        $interbreadcrumb[] = array ("url" => '#', "name" => get_lang('AddAnnouncement'));
+        $interbreadcrumb[] = array(
+            "url" => '#',
+            "name" => get_lang('AddAnnouncement'),
+        );
     }
     if ($action == 'edit') {
-        $interbreadcrumb[] = array ("url" => '#', "name" => get_lang('Edit'));
+        $interbreadcrumb[] = array("url" => '#', "name" => get_lang('Edit'));
     }
 } else {
     $tool_name = get_lang('SystemAnnouncements');
@@ -56,7 +62,6 @@ if ($action != 'add' && $action != 'edit') {
 }
 
 /* MAIN CODE */
-
 $show_announcement_list = true;
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 
@@ -66,14 +71,18 @@ if (isset($_POST['action'])) {
 }
 
 // Actions
-switch($action) {
+switch ($action) {
     case 'make_visible':
     case 'make_invisible':
         $status = false;
         if ($action == 'make_visible') {
             $status = true;
         }
-        SystemAnnouncementManager :: set_visibility($_GET['id'], $_GET['person'], $status);
+        SystemAnnouncementManager:: set_visibility(
+            $_GET['id'],
+            $_GET['person'],
+            $status
+        );
         break;
     case 'delete':
         // Delete an announcement.
@@ -101,7 +110,7 @@ switch($action) {
         break;
     case 'edit':
         // Edit an announcement.
-        $announcement = SystemAnnouncementManager:: get_announcement($_GET['id']);
+        $announcement = SystemAnnouncementManager::get_announcement($_GET['id']);
         $values['id'] = $announcement->id;
         $values['title'] = $announcement->title;
         $values['content'] = $announcement->content;
@@ -134,19 +143,16 @@ if ($action_todo) {
     $form = new FormValidator('system_announcement', 'post', $url);
     $form->addElement('header', '', $form_title);
     $form->addText('title', get_lang('Title'), true);
-    $language_list = api_get_languages();
-    $language_list_with_keys = array();
-    $language_list_with_keys['all'] = get_lang('All');
-    for ($i = 0; $i < count($language_list['name']); $i++) {
-        $language_list_with_keys[$language_list['folder'][$i]] = $language_list['name'][$i];
-    }
 
-    $form->addElement(
-        'select',
+    $extraOption = array();
+    $extraOption['all'] = get_lang('All');
+    $form->addSelectLanguage(
         'lang',
         get_lang('Language'),
-        $language_list_with_keys
+        $extraOption,
+        ['set_custom_default' => 'all']
     );
+
     $form->addHtmlEditor(
         'content',
         get_lang('Content'),
@@ -158,13 +164,33 @@ if ($action_todo) {
             'Height' => '300',
         )
     );
-    $form->addDateRangePicker('range', get_lang('StartTimeWindow'), true, array('id' => 'range'));
+    $form->addDateRangePicker(
+        'range',
+        get_lang('StartTimeWindow'),
+        true,
+        array('id' => 'range')
+    );
 
     $group = array();
 
-    $group[]= $form->createElement('checkbox', 'visible_teacher', null, get_lang('Teacher'));
-    $group[]= $form->createElement('checkbox', 'visible_student', null, get_lang('Student'));
-    $group[]= $form->createElement('checkbox', 'visible_guest', null, get_lang('Guest'));
+    $group[] = $form->createElement(
+        'checkbox',
+        'visible_teacher',
+        null,
+        get_lang('Teacher')
+    );
+    $group[] = $form->createElement(
+        'checkbox',
+        'visible_student',
+        null,
+        get_lang('Student')
+    );
+    $group[] = $form->createElement(
+        'checkbox',
+        'visible_guest',
+        null,
+        get_lang('Guest')
+    );
 
     $form->addGroup($group, null, get_lang('Visible'));
 
@@ -304,7 +330,6 @@ if ($show_announcement_list) {
         $row[] = "<a href=\"?id=".$announcement->id."&person=".SystemAnnouncementManager::VISIBLE_TEACHER."&action=". ($announcement->visible_teacher ? 'make_invisible' : 'make_visible')."\">".Display::return_icon(($announcement->visible_teacher  ? 'eyes.png' : 'eyes-close.png'), get_lang('ShowOrHide'))."</a>";
         $row[] = "<a href=\"?id=".$announcement->id."&person=".SystemAnnouncementManager::VISIBLE_STUDENT."&action=". ($announcement->visible_student  ? 'make_invisible' : 'make_visible')."\">".Display::return_icon(($announcement->visible_student  ? 'eyes.png' : 'eyes-close.png'), get_lang('ShowOrHide'))."</a>";
         $row[] = "<a href=\"?id=".$announcement->id."&person=".SystemAnnouncementManager::VISIBLE_GUEST."&action=". ($announcement->visible_guest ? 'make_invisible' : 'make_visible')."\">".Display::return_icon(($announcement->visible_guest  ? 'eyes.png' : 'eyes-close.png'), get_lang('ShowOrHide'))."</a>";
-
         $row[] = $announcement->lang;
         $row[] = "<a href=\"?action=edit&id=".$announcement->id."\">".Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL)."</a> <a href=\"?action=delete&id=".$announcement->id."\"  onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."')) return false;\">".Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL)."</a>";
         $announcement_data[] = $row;

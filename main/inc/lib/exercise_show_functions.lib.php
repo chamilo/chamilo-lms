@@ -54,7 +54,7 @@ class ExerciseShowFunctions
                 </td>
 
                 <?php
-                if (!api_is_allowed_to_edit(null,true) && $feedbackType != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
+                if (!api_is_allowed_to_edit(null, true) && $feedbackType != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
                     <td>
                         <?php
                         $comm = Event::get_comments($id, $questionId);
@@ -82,7 +82,7 @@ class ExerciseShowFunctions
         $showTotalScoreAndUserChoices
     ) {
         if (empty($id)) {
-            echo '<tr><td>'. Security::remove_XSS($answer).'</td></tr>';
+            echo '<tr><td>'.Security::remove_XSS($answer).'</td></tr>';
         } else {
         ?>
             <tr>
@@ -93,10 +93,10 @@ class ExerciseShowFunctions
                 </td>
 
             <?php
-            if (!api_is_allowed_to_edit(null,true) && $feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
+            if (!api_is_allowed_to_edit(null, true) && $feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
                 <td>
                     <?php
-                    $comm = Event::get_comments($id,$questionId);
+                    $comm = Event::get_comments($id, $questionId);
                     ?>
                 </td>
             <?php } ?>
@@ -151,7 +151,7 @@ class ExerciseShowFunctions
         if (isset($fileUrl)) {
             echo '
                 <tr>
-                    <td><audio src="' . $fileUrl . '" controls></audio></td>
+                    <td><audio src="' . $fileUrl.'" controls></audio></td>
                 </tr>
             ';
         }
@@ -162,7 +162,7 @@ class ExerciseShowFunctions
             echo '</tr>';
             if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
                 echo '<tr>';
-                echo Display::tag('td',get_lang('notCorrectedYet'), array('width'=>'45%'));
+                echo Display::tag('td', get_lang('notCorrectedYet'), array('width'=>'45%'));
                 echo '</tr>';
             } else {
                 echo '<tr><td>&nbsp;</td></tr>';
@@ -175,9 +175,9 @@ class ExerciseShowFunctions
             }
             echo '</td>';
 
-            if (!api_is_allowed_to_edit(null,true) && $feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
+            if (!api_is_allowed_to_edit(null, true) && $feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
                 echo '<td>';
-                $comm = Event::get_comments($id,$questionId);
+                $comm = Event::get_comments($id, $questionId);
                 echo '</td>';
             }
             echo '</tr>';
@@ -352,8 +352,8 @@ class ExerciseShowFunctions
 			?>
 		</td>
 			<?php
-		    if ($ans==1) {
-		        $comm = Event::get_comments($id,$questionId);
+		    if ($ans == 1) {
+		        $comm = Event::get_comments($id, $questionId);
 			}
 		    ?>
 		 <?php } else { ?>
@@ -456,7 +456,7 @@ class ExerciseShowFunctions
             ?>
         </td>
             <?php
-            if ($ans==1) {
+            if ($ans == 1) {
                 $comm = Event::get_comments($id, $questionId);
             }
             ?>
@@ -559,8 +559,8 @@ class ExerciseShowFunctions
             ?>
         </td>
             <?php
-            if ($ans==1) {
-                $comm = Event::get_comments($id,$questionId);
+            if ($ans == 1) {
+                $comm = Event::get_comments($id, $questionId);
             }
             ?>
          <?php } else { ?>

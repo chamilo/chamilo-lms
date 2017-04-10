@@ -950,7 +950,6 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null,true))
                         'session_info' => '',
                         'course_info' => '',
                         'pdf_date' => '',
-                        'add_signatures' => false,
                         'student_info' => api_get_user_info(),
                         'show_grade_generated_date' => true,
                         'show_real_course_teachers' => false,

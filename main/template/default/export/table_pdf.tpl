@@ -81,27 +81,19 @@
 
 {{ pdf_content }}
 
-{% if add_signatures == true %}
+{% if not add_signatures is empty %}
     <br />
     <br />
 
-    <table style="text-align:center" width="100%">
+    <table class="full-width">
         <tr>
-            <td>
-                _____________________________
-                <br />
-                {{ "Drh" | get_lang }}
-            </td>
-            <td>
-                _____________________________
-                <br />
-                {{ "Teacher" | get_lang }}
-            </td>
-            <td>
-                _____________________________
-                <br />
-                {{ "Date" | get_lang }}
-            </td>
+            {% for signature in add_signatures %}
+                <td class="text-center">
+                    _____________________________
+                    <br />
+                    {{ signature|get_lang }}
+                </td>
+            {% endfor %}
         </tr>
     </table>
 {% endif %}

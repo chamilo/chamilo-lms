@@ -28,7 +28,7 @@ class Document extends Resource
     public function __construct($id, $path, $comment, $title, $file_type, $size)
     {
         parent::__construct($id, RESOURCE_DOCUMENT);
-        $this->path = 'document' . $path;
+        $this->path = 'document'.$path;
         $this->comment = $comment;
         $this->title = $title;
         $this->file_type = $file_type;
@@ -44,7 +44,7 @@ class Document extends Resource
         echo preg_replace('@^document@', '', $this->path);
         if (!empty($this->title)) {
             if (strpos($this->path, $this->title) === false) {
-                echo " - " . $this->title;
+                echo " - ".$this->title;
             }
         }
     }

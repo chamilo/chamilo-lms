@@ -61,7 +61,6 @@ switch ($action) {
             'course_info' => '',
             'pdf_date' => '',
             'course_code' => api_get_course_id(),
-            'add_signatures' => false,
             'student_info' => null,
             'show_grade_generated_date' => true,
             'show_real_course_teachers' => false,

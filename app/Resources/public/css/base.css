@@ -4797,12 +4797,19 @@ div#chat-remote-video video {
     margin-bottom: 20px;
 }
 .grid-courses .items.my-courses{
-    min-height: 320px;
+    min-height: 340px;
     box-shadow: 2px 4px 15px 0 rgba(46,61,73,.1);
     transition: box-shadow .3s ease , border .3s ease;
 }
+.grid-courses .items.my-courses .course-student-info{
+    font-size: 10px;
+    text-align: center;
+}
 .grid-courses .items.my-courses .title{
     font-size: 14px;
+}
+.grid-courses .items.my-courses .block-title{
+    margin: 10px;
 }
 .grid-courses .items.items-courses{
     min-height: 425px;
@@ -4867,7 +4874,6 @@ div#chat-remote-video video {
     margin: 10px;
 }
 .grid-courses .items .notifications{
-    padding-top: 5px;
     text-align: center;
 }
 .grid-courses .items .admin-actions,

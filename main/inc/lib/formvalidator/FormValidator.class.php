@@ -1538,21 +1538,20 @@ EOT;
         $this->addMultipleUploadJavascript($url, $inputName);
 
         $this->addHtml('
-            <div class="description-upload">'.get_lang('ClickToSelectOrDragAndDropMultipleFilesOnTheUploadField').'</div>
+            <div class="description-upload">
+            '.get_lang('ClickToSelectOrDragAndDropMultipleFilesOnTheUploadField').'
+            </div>
             <span class="btn btn-success fileinput-button">
                 <i class="glyphicon glyphicon-plus"></i>
                 <span>'.get_lang('AddFiles').'</span>
                 <!-- The file input field used as target for the file upload widget -->
                 <input id="'.$inputName.'" type="file" name="files[]" multiple>
             </span>
-            <br />
-            <br />
             <div id="dropzone">
                 <div class="button-load">
                 '.get_lang('UploadFiles').'
                 </div>
             </div>
-
             <br />
             <!-- The global progress bar -->
             <div id="progress" class="progress">

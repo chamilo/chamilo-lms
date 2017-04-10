@@ -5363,9 +5363,7 @@ div#chat-remote-video video {
 #toolbar-agenda .show-tick{
     width: 420px;
 }
-.description-upload{
-    margin-bottom: 10px;
-}
+
 .files-table{
     padding-top: 20px;
 }
@@ -5899,7 +5897,10 @@ ul#toolnavbox-two li a.btn{
     cursor:pointer;
 }
 #upload, .description-upload{
-    padding-top: 30px;
+    padding-top: 15px;
+}
+.description-upload{
+    margin-bottom: 15px;
 }
 #form-work{
     padding-top: 30px;

@@ -1975,8 +1975,7 @@ if (!$is_certificate_mode && !isset($_GET['move'])) {
     $selector = DocumentManager::build_directory_selector(
         $folders,
         $document_id,
-        (isset($group_properties['directory']) ? $group_properties['directory'] : array()),
-        true
+        (isset($group_properties['directory']) ? $group_properties['directory'] : array())        
     );
 }
 

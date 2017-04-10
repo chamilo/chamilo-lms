@@ -292,7 +292,16 @@ $form->addElement('radio', 'active', get_lang('ActiveAccount'), get_lang('Active
 $form->addElement('radio', 'active', '', get_lang('Inactive'), 0);
 
 $extraField = new ExtraField('user');
-$returnParams = $extraField->addElements($form);
+$returnParams = $extraField->addElements(
+    $form,
+    null,
+    [],
+    false,
+    false,
+    [],
+    [],
+    true
+);
 $jquery_ready_content = $returnParams['jquery_ready_content'];
 
 // the $jquery_ready_content variable collects all functions that will be load in the $(document).ready javascript function

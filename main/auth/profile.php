@@ -33,7 +33,7 @@ $geolocalization = $gMapsPlugin->get('enable_api') === 'true';
 
 if ($geolocalization) {
     $gmapsApiKey = $gMapsPlugin->get('api_key');
-    $htmlHeadXtra[] = '<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=true&key='. $gmapsApiKey . '" ></script>';
+    $htmlHeadXtra[] = '<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=true&key='.$gmapsApiKey.'" ></script>';
 }
 
 $htmlHeadXtra[] = api_get_password_checker_js('#username', '#password1');
@@ -119,10 +119,10 @@ $form = new FormValidator('profile');
 if (api_is_western_name_order()) {
     //    FIRST NAME and LAST NAME
     $form->addElement('text', 'firstname', get_lang('FirstName'), array('size' => 40));
-    $form->addElement('text', 'lastname',  get_lang('LastName'),  array('size' => 40));
+    $form->addElement('text', 'lastname', get_lang('LastName'), array('size' => 40));
 } else {
     //    LAST NAME and FIRST NAME
-    $form->addElement('text', 'lastname',  get_lang('LastName'),  array('size' => 40));
+    $form->addElement('text', 'lastname', get_lang('LastName'), array('size' => 40));
     $form->addElement('text', 'firstname', get_lang('FirstName'), array('size' => 40));
 }
 if (api_get_setting('profile', 'name') !== 'true') {
@@ -131,7 +131,7 @@ if (api_get_setting('profile', 'name') !== 'true') {
 $form->applyFilter(array('lastname', 'firstname'), 'stripslashes');
 $form->applyFilter(array('lastname', 'firstname'), 'trim');
 $form->applyFilter(array('lastname', 'firstname'), 'html_filter');
-$form->addRule('lastname' , get_lang('ThisFieldIsRequired'), 'required');
+$form->addRule('lastname', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
 
 //    USERNAME
@@ -176,7 +176,7 @@ if (api_get_setting('profile', 'email') !== 'true') {
     $form->freeze('email');
 }
 
-if (api_get_setting('registration', 'email') == 'true' &&  api_get_setting('profile', 'email') == 'true') {
+if (api_get_setting('registration', 'email') == 'true' && api_get_setting('profile', 'email') == 'true') {
     $form->applyFilter('email', 'stripslashes');
     $form->applyFilter('email', 'trim');
     $form->addRule('email', get_lang('ThisFieldIsRequired'), 'required');
@@ -316,7 +316,7 @@ if (is_platform_authentication() &&
     $form->addElement('password', 'password2', get_lang('Confirmation'), array('size' => 40));
     //    user must enter identical password twice so we can prevent some user errors
     $form->addRule(array('password1', 'password2'), get_lang('PassTwo'), 'compare');
-    if (CHECK_PASS_EASY_TO_FIND) {
+    if (CHECK_PASS_EASY_TO_FIND === true) {
         $form->addRule('password1', get_lang('CurrentPasswordEmptyOrIncorrect'), 'callback', 'api_check_password');
     }
 }
@@ -331,7 +331,7 @@ $jquery_ready_content = $return['jquery_ready_content'];
 
 // the $jquery_ready_content variable collects all functions that
 // will be load in the $(document).ready javascript function
-$htmlHeadXtra[] ='<script>
+$htmlHeadXtra[] = '<script>
 $(document).ready(function(){
     '.$jquery_ready_content.'
 });

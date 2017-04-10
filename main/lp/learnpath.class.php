@@ -8959,7 +8959,8 @@ class learnpath
             'POST',
             $this->getCurrentBuildingModeURL(),
             '',
-            array('enctype' => 'multipart/form-data')
+            array('enctype' => 'multipart/form-data'),
+            FormValidator::LAYOUT_INLINE
         );
 
         $folders = DocumentManager::get_all_document_folders(
@@ -8977,9 +8978,36 @@ class learnpath
             'directory_parent_id'
         );
 
-        $form->addElement('radio', 'if_exists', get_lang('UplWhatIfFileExists'), get_lang('UplDoNothing'), 'nothing');
+        $form->addHtml('<hr>');
+
+        $group = array(
+            $form->createElement(
+                'radio',
+                'if_exists',
+                get_lang("UplWhatIfFileExists"),
+                get_lang('Yes'),
+                'nothing'
+            ),
+            $form->createElement(
+                'radio',
+                'if_exists',
+                null,
+                get_lang('UplOverwriteLong'),
+                'overwrite'
+            ),
+            $form->createElement(
+                'radio',
+                'if_exists',
+                null,
+                get_lang('UplRenameLong'),
+                'rename'
+            )
+        );
+        $form->addGroup($group, null, get_lang('UplWhatIfFileExists'));
+        $form->addHtml('<br />');
+        /*$form->addElement('radio', 'if_exists', get_lang('UplWhatIfFileExists'), get_lang('UplDoNothing'), 'nothing');
         $form->addElement('radio', 'if_exists', '', get_lang('UplOverwriteLong'), 'overwrite');
-        $form->addElement('radio', 'if_exists', '', get_lang('UplRenameLong'), 'rename');
+        $form->addElement('radio', 'if_exists', '', get_lang('UplRenameLong'), 'rename');*/
         $form->setDefaults(['if_exists' => 'rename']);
 
         // Check box options

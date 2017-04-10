@@ -5378,7 +5378,7 @@ class SessionManager
                 $studentIdList = array_keys($studentListSql);
                 $studentListSql = "'".implode("','", $studentIdList)."'";
             }
-            
+
         } else {
             $studentIdList = array_map('intval', $studentIdList);
             $studentListSql = "'".implode("','", $studentIdList)."'";

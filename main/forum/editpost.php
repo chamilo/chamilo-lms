@@ -149,7 +149,7 @@ if (!api_is_allowed_to_edit(null, true) &&
 
 if (!api_is_allowed_to_edit(null, true) &&
     (
-        ($current_forum_category && $current_forum_category['locked'] <> 0 ) ||
+        ($current_forum_category && $current_forum_category['locked'] <> 0) ||
         $current_forum['locked'] <> 0 ||
         $current_thread['locked'] <> 0
     )
@@ -199,7 +199,7 @@ echo '<div class="forum_title">';
 echo '<h1>';
 echo Display::url(
     prepare4display($current_forum['forum_title']),
-    'viewforum.php?' . api_get_cidreq() . '&' . http_build_query([
+    'viewforum.php?'.api_get_cidreq().'&'.http_build_query([
         'origin' => $origin,
         'forum' => $current_forum['forum_id']
     ]),

@@ -54,7 +54,7 @@ function add_user_to_url(code, content) {
 function send() {
 	if (document.formulaire.access_url_id.value!=0) {
 		document.formulaire.form_sent.value=0;
-		document.formulaire.add_type.value=\'' . $add_type . '\';
+		document.formulaire.add_type.value=\'' . $add_type.'\';
 		document.formulaire.submit();
 	}
 }
@@ -100,7 +100,7 @@ Display::display_header($tool_name);
 echo '<div class="actions">';
 echo Display::url(
     Display::return_icon('view_more_stats.gif', get_lang('AddUserGroupToURL'), ''),
-    api_get_path(WEB_CODE_PATH) . 'admin/access_url_add_usergroup_to_url.php'
+    api_get_path(WEB_CODE_PATH).'admin/access_url_add_usergroup_to_url.php'
 );
 echo '</div>';
 
@@ -138,7 +138,7 @@ if ($add_type == 'multiple') {
             <?php
             echo Display::toolbarButton(
                 get_lang('SessionAddTypeUnique'),
-                api_get_self() . '?' . http_build_query([
+                api_get_self().'?'.http_build_query([
                     'add_type' => 'unique',
                     'access_url_id' => $access_url_id
                 ]),
@@ -148,7 +148,7 @@ if ($add_type == 'multiple') {
             );
             echo Display::toolbarButton(
                 get_lang('SessionAddTypeMultiple'),
-                api_get_self() . '?' . http_build_query([
+                api_get_self().'?'.http_build_query([
                     'add_type' => 'multiple',
                     'access_url_id' => $access_url_id
                 ]),

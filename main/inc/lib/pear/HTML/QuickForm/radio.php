@@ -74,6 +74,9 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
             unset($attributes['radio-class']);
         }
 
+        $columnsSize = isset($attributes['cols-size']) ? $attributes['cols-size'] : null;
+        $this->setColumnsSize($columnsSize);
+
         parent::__construct($elementName, $elementLabel, $attributes);
         if (isset($value)) {
             $this->setValue($value);
@@ -92,7 +95,7 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
      * @access    public
      * @return    void
      */
-    function setChecked($checked)
+    public function setChecked($checked)
     {
         if (!$checked) {
             $this->removeAttribute('checked');
@@ -108,7 +111,7 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
      * @access    public
      * @return    string
      */
-    function getChecked()
+    public function getChecked()
     {
         return $this->getAttribute('checked');
     }
@@ -129,15 +132,21 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
         } else {
             $labelClass = $this->labelClass;
             $radioClass = $this->radioClass;
-            $label = '<div class="'.$radioClass.'"><label class="'.$labelClass.'">' .
-                HTML_QuickForm_input::toHtml().$this->_text .
-                '</label></div>';
+
+            $label = '<div class="'.$radioClass.'">
+                <label class="'.$labelClass.'">' .
+                HTML_QuickForm_input::toHtml().
+                ''.
+                $this->_text .
+                '</label>&nbsp;&nbsp;
+            </div>';
 
             return  $label;
         }
 
         return HTML_QuickForm_input::toHtml() . $label;
     }
+
 
     /**
      * Returns the value of field without HTML tags
@@ -238,4 +247,14 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
 
         return $this->_prepareValue($value, $assoc);
     }
+
+      /**
+     * @return null
+     */
+    public function getColumnsSize()
+    {
+        return $this->columnsSize;
+    }
+
+
 }

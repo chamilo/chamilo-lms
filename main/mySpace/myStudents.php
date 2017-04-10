@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CLp;
+
 /**
  * Implements the tracking of students in the Reporting pages
  * @package chamilo.reporting
@@ -867,8 +868,9 @@ if (!empty($student_id)) {
             $csv_content[] = array(
                 get_lang('Learnpath'),
                 get_lang('Time'),
-                get_lang('AverageScore'),
-                get_lang('LatestAttemptAverageScore'),
+                get_lang('BestScore'),
+                //get_lang('AverageScore'),
+                //get_lang('LatestAttemptAverageScore'),
                 get_lang('Progress'),
                 get_lang('LastConnexion')
             );
@@ -922,23 +924,23 @@ if (!empty($student_id)) {
                     </th>
                     <th>
                         <?php
-                        echo get_lang('AverageScore').' ';
-                        Display:: display_icon(
+                        echo get_lang('BestScore').' ';
+                        /*Display:: display_icon(
                             'info3.gif',
                             get_lang('AverageIsCalculatedBasedInAllAttempts'),
                             array('align' => 'absmiddle', 'hspace' => '3px')
-                        );
+                        );*/
                         ?>
                     </th>
-                    <th><?php
-                        echo get_lang('LatestAttemptAverageScore').' ';
+                    <?php
+                        /*echo get_lang('LatestAttemptAverageScore').' ';
                         Display::display_icon(
                             'info3.gif',
                             get_lang('AverageIsCalculatedBasedInTheLatestAttempts'),
                             array('align' => 'absmiddle', 'hspace' => '3px')
-                        );
+                        );*/
                         ?>
-                    </th>
+
                     <th><?php
                         echo get_lang('Progress').' ';
                         Display:: display_icon(
@@ -1020,7 +1022,7 @@ if (!empty($student_id)) {
                     }
 
                     // Quiz in lp
-                    $score = Tracking::get_avg_student_score(
+                    /*$score = Tracking::get_avg_student_score(
                         $student_id,
                         $course_code,
                         array($lp_id),
@@ -1033,6 +1035,16 @@ if (!empty($student_id)) {
                         $course_code,
                         array($lp_id),
                         $sessionId,
+                        false,
+                        true
+                    );*/
+
+                    $bestScore = Tracking::get_avg_student_score(
+                        $student_id,
+                        $course_code,
+                        array($lp_id),
+                        $sessionId,
+                        false,
                         false,
                         true
                     );
@@ -1049,8 +1061,7 @@ if (!empty($student_id)) {
                     $csv_content[] = array(
                         api_html_entity_decode(stripslashes($lp_name), ENT_QUOTES, $charset),
                         api_time_to_hms($total_time),
-                        $score . '%',
-                        $score_latest . '%',
+                        $bestScore,
                         $progress.'%',
                         $start_time
                     );
@@ -1059,20 +1070,20 @@ if (!empty($student_id)) {
                     echo Display::tag('td', stripslashes($lp_name));
                     echo Display::tag('td', api_time_to_hms($total_time));
 
-                    if (!is_null($score)) {
+                    if (isset($score) && !is_null($score)) {
                         if (is_numeric($score)) {
                             $score = $score.'%';
                         }
                     }
 
-                    echo Display::tag('td', $score);
+                    echo Display::tag('td', $bestScore);
 
-                    if (!is_null($score_latest)) {
+                    if (isset($score_latest) && !is_null($score_latest)) {
                         if (is_numeric($score_latest)) {
                             $score_latest = $score_latest.'%';
                         }
                     }
-                    echo Display::tag('td', $score_latest);
+                    //echo Display::tag('td', $score_latest);
 
                     if (is_numeric($progress)) {
                         $progress = $progress.'%';

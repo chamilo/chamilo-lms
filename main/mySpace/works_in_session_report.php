@@ -1,13 +1,16 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\Course;
+
 /**
  * Courses reporting
  * @package chamilo.reporting
  */
 
 require_once __DIR__.'/../inc/global.inc.php';
-
-use \Chamilo\CoreBundle\Entity\Session;
 
 api_block_anonymous_users(true);
 
@@ -20,21 +23,22 @@ $toolName = get_lang('WorksInSessionReport');
 
 $em = Database::getManager();
 $session = null;
-$sessionsInfo = api_is_platform_admin()
-    ? SessionManager::get_sessions_list()
-    : Tracking::get_sessions_coached_by_user(api_get_user_id());
-
+if (api_is_platform_admin()) {
+    $sessionList = SessionManager::get_sessions_list();
+} else {
+    $sessionList = Tracking::get_sessions_coached_by_user(api_get_user_id());
+}
 $form = new FormValidator('work_report', 'GET');
 $selectSession = $form->addSelect('session', get_lang('Session'), [0 => get_lang('None')]);
 $form->addButtonFilter(get_lang('Filter'));
 
-foreach ($sessionsInfo as $sessionInfo) {
+foreach ($sessionList as $sessionInfo) {
     $selectSession->addOption($sessionInfo['name'], $sessionInfo['id']);
 }
 
 if (isset($_GET['session']) && intval($_GET['session'])) {
     $form->setDefaults(['session' => intval($_GET['session'])]);
-
+    /** @var Session $session */
     $session = $em->find('ChamiloCoreBundle:Session', intval($_GET['session']));
 }
 
@@ -45,11 +49,13 @@ if ($session) {
     $sessionCourses = $session->getCourses();
 
     foreach ($sessionCourses as $sessionCourse) {
+        /** @var Course $course */
         $course = $sessionCourse->getCourse();
         $coursesInfo[$course->getId()] =  $course->getCode();
         $userCourseSubscriptions = $session->getUserCourseSubscriptionsByStatus($course, Session::STUDENT);
 
         foreach ($userCourseSubscriptions as $userCourseSubscription) {
+            /** @var User $user */
             $user = $userCourseSubscription->getUser();
 
             if (!array_key_exists($user->getId(), $usersInfo)) {
@@ -76,7 +82,11 @@ if ($session) {
                 $user->getId(),
                 $course->getCode(),
                 null,
-                $session->getId()
+                $session->getId(),
+                false,
+                false,
+                true
+
             );
             $usersInfo[$user->getId()][$course->getId() . '_progress'] = Tracking::get_avg_student_progress(
                 $user->getId(),
@@ -85,7 +95,12 @@ if ($session) {
                 $session->getId()
             );
 
-            $lastPublication = Tracking::getLastStudentPublication($user, 'work', $course, $session);
+            $lastPublication = Tracking::getLastStudentPublication(
+                $user,
+                'work',
+                $course,
+                $session
+            );
 
             if (!$lastPublication) {
                 continue;
@@ -111,7 +126,7 @@ if (isset($_GET['export']) && $session && ($coursesInfo && $usersInfo)) {
     $dataToExport['headers'][] = get_lang('LatestLoginInPlatform');
 
     foreach ($coursesInfo as $courseCode) {
-        $dataToExport['headers'][] = $courseCode;
+        $dataToExport['headers'][] = $courseCode. ' ('.get_lang('BestScore').')';
         $dataToExport['headers'][] = get_lang('Progress');
         $dataToExport['headers'][] = get_lang('LastSentWorkDate');
     }

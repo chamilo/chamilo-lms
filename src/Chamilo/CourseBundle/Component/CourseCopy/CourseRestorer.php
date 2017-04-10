@@ -1377,7 +1377,7 @@ class CourseRestorer
 
                 $params = [
                     'c_id' => $this->destination_course_id,
-                    'id' => self::DBUTF8($tool_intro->id),
+                    'id' => ($tool_intro->id === false ? '' : self::DBUTF8($tool_intro->id)),
                     'intro_text' => self::DBUTF8($tool_intro->intro_text),
                     'session_id' => $sessionId,
                 ];
@@ -1416,7 +1416,7 @@ class CourseRestorer
                 $params = [
                     'c_id' => $this->destination_course_id,
                     'title' => self::DBUTF8($event->title),
-                    'content' => self::DBUTF8($event->content),
+                    'content' => ($event->content === false ? '' : self::DBUTF8($event->content)),
                     'all_day' => $event->all_day,
                     'start_date' => $event->start_date,
                     'end_date' => $event->end_date,
@@ -1540,7 +1540,7 @@ class CourseRestorer
                 $params['c_id'] = $this->destination_course_id;
                 $params['description_type'] = self::DBUTF8($descriptionType);
                 $params['title'] = self::DBUTF8($title);
-                $params['content'] = self::DBUTF8($description_content);
+                $params['content'] = ($description_content === false ? '' : self::DBUTF8($description_content));
                 $params['progress'] = 0;
 
                 $id = Database::insert($table, $params);
@@ -1580,7 +1580,7 @@ class CourseRestorer
                 $params = [
                     'c_id' => $this->destination_course_id,
                     'title' =>  self::DBUTF8($announcement->title),
-                    'content' => self::DBUTF8($announcement->content),
+                    'content' => ($announcement->content === false ? '' : self::DBUTF8($announcement->content)),
                     'end_date' => $announcement->date,
                     'display_order' => $announcement->display_order,
                     'email_sent' => $announcement->email_sent,
@@ -1739,7 +1739,7 @@ class CourseRestorer
                     $params = array(
                         'c_id' => $this->destination_course_id,
                         'title' => self::DBUTF8($quiz->title),
-                        'description' => self::DBUTF8($quiz->description),
+                        'description' => ($quiz->description === false ? '' : self::DBUTF8($quiz->description)),
                         'type' => isset($quiz->quiz_type) ? $quiz->quiz_type : $quiz->type,
                         'random' => $quiz->random,
                         'active' => $quiz->active,
@@ -1850,7 +1850,7 @@ class CourseRestorer
             $params = [
                 'c_id' => $this->destination_course_id,
                 'question' => self::DBUTF8($question->question),
-                'description' => self::DBUTF8($question->description),
+                'description' => ($question->description === false ? '' : self::DBUTF8($question->description)),
                 'ponderation' => self::DBUTF8($question->ponderation),
                 'position' => self::DBUTF8($question->position),
                 'type' => self::DBUTF8($question->quiz_type),
@@ -1904,7 +1904,7 @@ class CourseRestorer
                         ->setQuestionId($new_id)
                         ->setAnswer(self::DBUTF8($answer['answer']))
                         ->setCorrect($answer['correct'])
-                        ->setComment(self::DBUTF8($answer['comment']))
+                        ->setComment($answer['comment'] === false ? '' : self::DBUTF8($answer['comment']))
                         ->setPonderation($answer['ponderation'])
                         ->setPosition($answer['position'])
                         ->setHotspotCoordinates($answer['hotspot_coordinates'])
@@ -1952,7 +1952,7 @@ class CourseRestorer
                         'question_id' => $new_id,
                         'answer' => self::DBUTF8($answer['answer']),
                         'correct' => $answer['correct'],
-                        'comment' => self::DBUTF8($answer['comment']),
+                        'comment' => ($answer['comment'] === false ? '' : self::DBUTF8($answer['comment'])),
                         'ponderation' => $answer['ponderation'],
                         'position' => $answer['position'],
                         'hotspot_coordinates' => $answer['hotspot_coordinates'],
@@ -2229,16 +2229,16 @@ class CourseRestorer
                 $params = [
                     'c_id' => $this->destination_course_id,
                     'code' => self::DBUTF8($survey->code),
-                    'title' => self::DBUTF8($survey->title),
-                    'subtitle' => self::DBUTF8($survey->subtitle),
+                    'title' => ($survey->title === false ? '' : self::DBUTF8($survey->title)),
+                    'subtitle' => ($survey->subtitle === false ? '' : self::DBUTF8($survey->subtitle)),
                     'author' => self::DBUTF8($survey->author),
                     'lang' => self::DBUTF8($survey->lang),
                     'avail_from' => self::DBUTF8($survey->avail_from),
                     'avail_till' => self::DBUTF8($survey->avail_till),
                     'is_shared' => self::DBUTF8($survey->is_shared),
                     'template' => self::DBUTF8($survey->template),
-                    'intro' => self::DBUTF8($survey->intro),
-                    'surveythanks' => self::DBUTF8($survey->surveythanks),
+                    'intro' => ($survey->intro === false ? '' : self::DBUTF8($survey->intro)),
+                    'surveythanks' => ($survey->surveythanks === false ? '' : self::DBUTF8($survey->surveythanks)),
                     'creation_date' => self::DBUTF8($survey->creation_date),
                     'invited' => '0',
                     'answered' => '0',
@@ -2397,7 +2397,7 @@ class CourseRestorer
             $params = [
                 'c_id' => $this->destination_course_id,
                 'survey_id' => self::DBUTF8($survey_id),
-                'survey_question' => self::DBUTF8($question->survey_question),
+                'survey_question' => ($question->survey_question === false ? '' : self::DBUTF8($question->survey_question)),
                 'survey_question_comment' => self::DBUTF8($question->survey_question_comment),
                 'type' => self::DBUTF8($question->survey_question_type),
                 'display' => self::DBUTF8($question->display),
@@ -2426,7 +2426,7 @@ class CourseRestorer
                     $params = [
                         'c_id' => $this->destination_course_id,
                         'question_id' => $new_id,
-                        'option_text' => self::DBUTF8($answer['option_text']),
+                        'option_text' => ($answer['option_text'] === false ? '' : self::DBUTF8($answer['option_text'])),
                         'sort' => $answer['sort'],
                         'survey_id' => self::DBUTF8($survey_id),
                     ];
@@ -2464,8 +2464,8 @@ class CourseRestorer
 			$destination_path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/upload/learning_path/images/';
 
 			foreach ($resources[RESOURCE_LEARNPATH] as $id => $lp) {
-				$condition_session = '';
-				if (!empty($session_id)) {
+                $condition_session = '';
+                if (!empty($session_id)) {
                     if ($respect_base_content) {
                         $my_session_id = $lp->session_id;
                         if (!empty($lp->session_id)) {
@@ -2476,32 +2476,33 @@ class CourseRestorer
                         $session_id = intval($session_id);
                         $condition_session = $session_id;
                     }
-				}
+                }
 
-				// Adding the author's image
-				if (!empty($lp->preview_image)) {
-					$new_filename = uniqid('').substr($lp->preview_image,strlen($lp->preview_image)-7, strlen($lp->preview_image));
-					if (file_exists($origin_path.$lp->preview_image) && !is_dir($origin_path.$lp->preview_image)) {
-						$copy_result = copy($origin_path.$lp->preview_image, $destination_path.$new_filename);
-						if ($copy_result) {
-							$lp->preview_image = $new_filename;
-						} else {
-							$lp->preview_image ='';
-						}
-					}
-				}
+                // Adding the author's image
+                if (!empty($lp->preview_image)) {
+                    $new_filename = uniqid('') . substr($lp->preview_image, strlen($lp->preview_image) - 7,
+                            strlen($lp->preview_image));
+                    if (file_exists($origin_path . $lp->preview_image) && !is_dir($origin_path . $lp->preview_image)) {
+                        $copy_result = copy($origin_path . $lp->preview_image, $destination_path . $new_filename);
+                        if ($copy_result) {
+                            $lp->preview_image = $new_filename;
+                        } else {
+                            $lp->preview_image = '';
+                        }
+                    }
+                }
 
                 if ($this->add_text_in_items) {
-                    $lp->name = $lp->name.' '.get_lang('CopyLabelSuffix');
+                    $lp->name = $lp->name . ' ' . get_lang('CopyLabelSuffix');
                 }
 
                 if (isset($this->tool_copy_settings['learnpaths'])) {
                     if (isset($this->tool_copy_settings['learnpaths']['reset_dates']) &&
                         $this->tool_copy_settings['learnpaths']['reset_dates']
                     ) {
-                        $lp->created_on     = api_get_utc_datetime();
-                        $lp->modified_on    = api_get_utc_datetime();
-                        $lp->publicated_on  = null;
+                        $lp->created_on = api_get_utc_datetime();
+                        $lp->modified_on = api_get_utc_datetime();
+                        $lp->publicated_on = null;
                     }
                 }
 
@@ -2547,9 +2548,11 @@ class CourseRestorer
                     $params['session_id'] = $condition_session;
                 }
 
-				$new_lp_id = Database::insert($table_main, $params);
+                $new_lp_id = Database::insert($table_main, $params);
 
                 if ($new_lp_id) {
+                    // The following only makes sense if a new LP was
+                    // created in the destination course
 
                     $sql = "UPDATE $table_main SET id = iid WHERE iid = $new_lp_id";
                     Database::query($sql);
@@ -2558,7 +2561,7 @@ class CourseRestorer
                         $params = [
                             'c_id' => $this->destination_course_id,
                             'name' => self::DBUTF8($lp->name),
-                            'link' => 'lp/lp_controller.php?action=view&lp_id=$new_lp_id&id_session='.$session_id,
+                            'link' => 'lp/lp_controller.php?action=view&lp_id=$new_lp_id&id_session=' . $session_id,
                             'image' => 'scormbuilder.gif',
                             'visibility' => '0',
                             'admin' => '0',
@@ -2598,145 +2601,145 @@ class CourseRestorer
                         0,
                         $session_id
                     );
-                }
 
-                $new_item_ids = array();
-                $parent_item_ids = array();
-                $previous_item_ids = array();
-                $next_item_ids = array();
-                $old_prerequisite = array();
-                $old_refs = array();
-                $prerequisite_ids = array();
+                    $new_item_ids = array();
+                    $parent_item_ids = array();
+                    $previous_item_ids = array();
+                    $next_item_ids = array();
+                    $old_prerequisite = array();
+                    $old_refs = array();
+                    $prerequisite_ids = array();
 
-				foreach ($lp->get_items() as $index => $item) {
-					// we set the ref code here and then we update in a for loop
-					$ref = $item['ref'];
+                    foreach ($lp->get_items() as $index => $item) {
+                        // we set the ref code here and then we update in a for loop
+                        $ref = $item['ref'];
 
-					// Dealing with path the same way as ref as some data has
-                    // been put into path when it's a local resource
-					// Only fix the path for no scos
-                    if ($item['item_type'] == 'sco') {
-                        $path = $item['path'];
-                    } else {
-                        $path = $item['path'];
-                        $path = $this->get_new_id($item['item_type'], $path);
+                        // Dealing with path the same way as ref as some data has
+                        // been put into path when it's a local resource
+                        // Only fix the path for no scos
+                        if ($item['item_type'] == 'sco') {
+                            $path = $item['path'];
+                        } else {
+                            $path = $item['path'];
+                            $path = $this->get_new_id($item['item_type'], $path);
+                        }
+
+                        $item['item_type'] = $item['item_type'] == 'dokeos_chapter' ? 'dir' : $item['item_type'];
+
+                        $params = [
+                            'c_id' => $this->destination_course_id,
+                            'lp_id' => self::DBUTF8($new_lp_id),
+                            'item_type' => self::DBUTF8($item['item_type']),
+                            'ref' => self::DBUTF8($ref),
+                            'title' => self::DBUTF8($item['title']),
+                            'description' => self::DBUTF8($item['description']),
+                            'path' => self::DBUTF8($path),
+                            'min_score' => self::DBUTF8($item['min_score']),
+                            'max_score' => self::DBUTF8($item['max_score']),
+                            'mastery_score' => self::DBUTF8($item['mastery_score']),
+                            'parent_item_id' => self::DBUTF8($item['parent_item_id']),
+                            'previous_item_id' => self::DBUTF8($item['previous_item_id']),
+                            'next_item_id' => self::DBUTF8($item['next_item_id']),
+                            'display_order' => self::DBUTF8($item['display_order']),
+                            'prerequisite' => self::DBUTF8($item['prerequisite']),
+                            'parameters' => self::DBUTF8($item['parameters']),
+                            'audio' => self::DBUTF8($item['audio']),
+                            'launch_data' => self::DBUTF8($item['launch_data']),
+                        ];
+
+                        $new_item_id = Database::insert($table_item, $params);
+
+                        $sql = "UPDATE $table_item SET id = iid WHERE iid = $new_item_id";
+                        Database::query($sql);
+
+                        //save a link between old and new item IDs
+                        $new_item_ids[$item['id']] = $new_item_id;
+                        //save a reference of items that need a parent_item_id refresh
+                        $parent_item_ids[$new_item_id] = $item['parent_item_id'];
+                        //save a reference of items that need a previous_item_id refresh
+                        $previous_item_ids[$new_item_id] = $item['previous_item_id'];
+                        //save a reference of items that need a next_item_id refresh
+                        $next_item_ids[$new_item_id] = $item['next_item_id'];
+
+                        if (!empty($item['prerequisite'])) {
+                            if ($lp->lp_type == '2') {
+                                // if is an sco
+                                $old_prerequisite[$new_item_id] = $item['prerequisite'];
+                            } else {
+                                $old_prerequisite[$new_item_id] = $new_item_ids[$item['prerequisite']];
+                            }
+                        }
+
+                        if (!empty($ref)) {
+                            if ($lp->lp_type == '2') {
+                                // if is an sco
+                                $old_refs[$new_item_id] = $ref;
+                            } elseif (isset($new_item_ids[$ref])) {
+                                $old_refs[$new_item_id] = $new_item_ids[$ref];
+                            }
+                        }
+
+                        $prerequisite_ids[$new_item_id] = $item['prerequisite'];
                     }
 
-                    $item['item_type'] = $item['item_type'] == 'dokeos_chapter' ? 'dir' : $item['item_type'];
-
-                    $params = [
-                        'c_id' => $this->destination_course_id,
-                        'lp_id' => self::DBUTF8($new_lp_id),
-                        'item_type' => self::DBUTF8($item['item_type']),
-                        'ref' => self::DBUTF8($ref),
-                        'title' => self::DBUTF8($item['title']),
-                        'description' => self::DBUTF8($item['description']),
-                        'path' => self::DBUTF8($path),
-                        'min_score' => self::DBUTF8($item['min_score']),
-                        'max_score' => self::DBUTF8($item['max_score']),
-                        'mastery_score' => self::DBUTF8($item['mastery_score']),
-                        'parent_item_id' => self::DBUTF8($item['parent_item_id']),
-                        'previous_item_id' => self::DBUTF8($item['previous_item_id']),
-                        'next_item_id' => self::DBUTF8($item['next_item_id']),
-                        'display_order' => self::DBUTF8($item['display_order']),
-                        'prerequisite' => self::DBUTF8($item['prerequisite']),
-                        'parameters' => self::DBUTF8($item['parameters']),
-                        'audio' => self::DBUTF8($item['audio']),
-                        'launch_data' => self::DBUTF8($item['launch_data']),
-                    ];
-
-					$new_item_id = Database::insert($table_item, $params);
-
-                    $sql = "UPDATE $table_item SET id = iid WHERE iid = $new_item_id";
-                    Database::query($sql);
-
-					//save a link between old and new item IDs
-					$new_item_ids[$item['id']] = $new_item_id;
-					//save a reference of items that need a parent_item_id refresh
-					$parent_item_ids[$new_item_id] = $item['parent_item_id'];
-					//save a reference of items that need a previous_item_id refresh
-					$previous_item_ids[$new_item_id] = $item['previous_item_id'];
-					//save a reference of items that need a next_item_id refresh
-					$next_item_ids[$new_item_id] = $item['next_item_id'];
-
-					if (!empty($item['prerequisite'])) {
-						if ($lp->lp_type =='2') {
-							// if is an sco
-							$old_prerequisite[$new_item_id]= $item['prerequisite'];
-						} else {
-							$old_prerequisite[$new_item_id]= $new_item_ids[$item['prerequisite']];
-						}
-					}
-
-					if (!empty($ref)) {
-						if ($lp->lp_type =='2') {
-							// if is an sco
-							$old_refs[$new_item_id]= $ref;
-						} elseif (isset($new_item_ids[$ref])) {
-                            $old_refs[$new_item_id]= $new_item_ids[$ref];
+                    // Updating prerequisites
+                    foreach ($old_prerequisite as $key => $my_old_prerequisite) {
+                        if ($my_old_prerequisite != '') {
+                            $sql = "UPDATE " . $table_item . " SET prerequisite = '" . $my_old_prerequisite . "'
+                                    WHERE c_id = " . $this->destination_course_id . " AND id = '" . $key . "'  ";
+                            Database::query($sql);
                         }
-					}
+                    }
 
-					$prerequisite_ids[$new_item_id] = $item['prerequisite'];
-				}
+                    // Updating refs
+                    foreach ($old_refs as $key => $my_old_ref) {
+                        if ($my_old_ref != '') {
+                            $sql = "UPDATE " . $table_item . " SET ref = '" . $my_old_ref . "'
+                                    WHERE c_id = " . $this->destination_course_id . " AND id = '" . $key . "'  ";
+                            Database::query($sql);
+                        }
+                    }
 
-				// Updating prerequisites
-				foreach ($old_prerequisite  as $key=>$my_old_prerequisite) {
-					if ($my_old_prerequisite != '') {
-						$sql = "UPDATE ".$table_item." SET prerequisite = '".$my_old_prerequisite."'
-						        WHERE c_id = ".$this->destination_course_id." AND id = '".$key."'  ";
-						Database::query($sql);
-					}
-				}
+                    foreach ($parent_item_ids as $new_item_id => $parent_item_old_id) {
+                        $parent_new_id = 0;
+                        if ($parent_item_old_id != 0) {
+                            $parent_new_id = $new_item_ids[$parent_item_old_id];
+                        }
+                        $sql = "UPDATE " . $table_item . " SET parent_item_id = '" . $parent_new_id . "'
+                                WHERE c_id = " . $this->destination_course_id . " AND id = '" . $new_item_id . "'";
+                        Database::query($sql);
+                    }
+                    foreach ($previous_item_ids as $new_item_id => $previous_item_old_id) {
+                        $previous_new_id = 0;
+                        if ($previous_item_old_id != 0) {
+                            $previous_new_id = $new_item_ids[$previous_item_old_id];
+                        }
+                        $sql = "UPDATE " . $table_item . " SET previous_item_id = '" . $previous_new_id . "'
+                                WHERE  c_id = " . $this->destination_course_id . " AND id = '" . $new_item_id . "'";
+                        Database::query($sql);
+                    }
 
-				// Updating refs
-				foreach ($old_refs  as $key=>$my_old_ref) {
-					if ($my_old_ref != '') {
-						$sql = "UPDATE ".$table_item." SET ref = '".$my_old_ref."'
-						        WHERE c_id = ".$this->destination_course_id." AND id = '".$key."'  ";
-						Database::query($sql);
-					}
-				}
+                    foreach ($next_item_ids as $new_item_id => $next_item_old_id) {
+                        $next_new_id = 0;
+                        if ($next_item_old_id != 0) {
+                            $next_new_id = $new_item_ids[$next_item_old_id];
+                        }
+                        $sql = "UPDATE " . $table_item . " SET next_item_id = '" . $next_new_id . "'
+                                WHERE c_id = " . $this->destination_course_id . " AND id = '" . $new_item_id . "'";
+                        Database::query($sql);
+                    }
 
-				foreach ($parent_item_ids as $new_item_id => $parent_item_old_id) {
-					$parent_new_id = 0;
-					if($parent_item_old_id != 0) {
-						$parent_new_id = $new_item_ids[$parent_item_old_id];
-					}
-					$sql = "UPDATE ".$table_item." SET parent_item_id = '".$parent_new_id."'
-					        WHERE c_id = ".$this->destination_course_id." AND id = '".$new_item_id."'";
-					Database::query($sql);
-				}
-				foreach ($previous_item_ids as $new_item_id => $previous_item_old_id) {
-					$previous_new_id = 0;
-					if ($previous_item_old_id != 0) {
-						$previous_new_id = $new_item_ids[$previous_item_old_id];
-					}
-					$sql = "UPDATE ".$table_item." SET previous_item_id = '".$previous_new_id."'
-					        WHERE  c_id = ".$this->destination_course_id." AND id = '".$new_item_id."'";
-					Database::query($sql);
-				}
-
-				foreach ($next_item_ids as $new_item_id => $next_item_old_id) {
-					$next_new_id = 0;
-					if ($next_item_old_id != 0) {
-						$next_new_id = $new_item_ids[$next_item_old_id];
-					}
-					$sql = "UPDATE ".$table_item." SET next_item_id = '".$next_new_id."'
-					        WHERE c_id = ".$this->destination_course_id." AND id = '".$new_item_id."'";
-					Database::query($sql);
-				}
-
-				foreach ($prerequisite_ids as $new_item_id => $prerequisite_old_id) {
-					$prerequisite_new_id = 0;
-					if ($prerequisite_old_id != 0) {
-						$prerequisite_new_id = $new_item_ids[$prerequisite_old_id];
-					}
-					$sql = "UPDATE ".$table_item." SET prerequisite = '".$prerequisite_new_id."'
-					        WHERE c_id = ".$this->destination_course_id." AND id = '".$new_item_id."'";
-					Database::query($sql);
-				}
-				$this->course->resources[RESOURCE_LEARNPATH][$id]->destination_id = $new_lp_id;
+                    foreach ($prerequisite_ids as $new_item_id => $prerequisite_old_id) {
+                        $prerequisite_new_id = 0;
+                        if ($prerequisite_old_id != 0) {
+                            $prerequisite_new_id = $new_item_ids[$prerequisite_old_id];
+                        }
+                        $sql = "UPDATE " . $table_item . " SET prerequisite = '" . $prerequisite_new_id . "'
+                                WHERE c_id = " . $this->destination_course_id . " AND id = '" . $new_item_id . "'";
+                        Database::query($sql);
+                    }
+                    $this->course->resources[RESOURCE_LEARNPATH][$id]->destination_id = $new_lp_id;
+                }
 			}
 		}
 	}
@@ -2925,7 +2928,7 @@ class CourseRestorer
                 );
 
                 $params['c_id'] = $this->destination_course_id;
-                $params['description'] = self::DBUTF8($glossary->description);
+                $params['description'] = ($glossary->description === false ? '' : self::DBUTF8($glossary->description));
                 $params['display_order'] = $glossary->display_order;
                 $params['name'] = self::DBUTF8($glossary->name);
                 $params['glossary_id'] = 0;
@@ -2983,7 +2986,7 @@ class CourseRestorer
                     'page_id' => self::DBUTF8($wiki->page_id),
                     'reflink' => self::DBUTF8($wiki->reflink),
                     'title' => self::DBUTF8($wiki->title),
-                    'content' => self::DBUTF8($wiki->content),
+                    'content' => ($wiki->content === false ? '' : self::DBUTF8($wiki->content)),
                     'user_id' => intval($wiki->user_id),
                     'group_id' => intval($wiki->group_id),
                     'dtime' => self::DBUTF8($wiki->dtime),

@@ -299,7 +299,6 @@ if (isset($_GET['export'])) {
     switch ($_GET['export']) {
         case 'pdf':
             $params = array(
-                'add_signatures' => false,
                 'filename' => $fileName,
                 'pdf_title' => "$reportTitle - $reportSubTitle",
                 'pdf_description' => get_lang('TeacherTimeReport'),

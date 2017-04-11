@@ -4752,7 +4752,6 @@ class Tracking
                 $html .= Display::tag('td', Display::url($session_name, $url, array('target'=>SESSION_LINK_TARGET)));
                 $html .= Display::tag('td', $all_exercises);
                 $html .= Display::tag('td', $all_unanswered_exercises_by_user);
-
                 //$html .= Display::tag('td', $all_done_exercise);
                 $html .= Display::tag('td', ExerciseLib::convert_to_percentage($all_average));
 
@@ -4762,7 +4761,7 @@ class Tracking
                             '2rightarrow_na.png',
                             get_lang('Details')
                         ),
-                        '?session_id='.$my_session_id.'#course_session_list'
+                        api_get_self().'?session_id='.$my_session_id.'#course_session_list'
                     );
                 } else {
                     $icon = Display::url(
@@ -4770,7 +4769,7 @@ class Tracking
                             '2rightarrow.png',
                             get_lang('Details')
                         ),
-                        '?session_id='.$my_session_id.'#course_session_list'
+                        api_get_self().'?session_id='.$my_session_id.'#course_session_list'
                     );
                 }
                 $html .= Display::tag('td', $icon);
@@ -4935,7 +4934,7 @@ class Tracking
                     }
                     // Score
                     $html .= Display::tag('td', $percentage_score, array('align'=>'center'));
-                    if (empty($last_connection) or is_bool($last_connection)) {
+                    if (empty($last_connection) || is_bool($last_connection)) {
                         $last_connection = '';
                     }
                     $html .= Display::tag('td', $last_connection, array('align' => 'center'));
@@ -4944,7 +4943,7 @@ class Tracking
                         $details = '<a href="#">';
                         $details .= Display::return_icon('2rightarrow_na.png', get_lang('Details'));
                     } else {
-                        $details = '<a href="'.api_get_self().'?course='.$course_code.'&session_id='.$session_id_from_get.$extra_params.'">';
+                        $details = '<a href="'.api_get_self().'?course='.$course_code.'&session_id='.$session_id_from_get.$extra_params.'#course_session_data">';
                         $details .= Display::return_icon('2rightarrow.png', get_lang('Details'));
                     }
                     $details .= '</a>';
@@ -4974,6 +4973,7 @@ class Tracking
             $course = Database::escape_string($course_code);
             $course_info = CourseManager::get_course_information($course);
 
+            $html .= '<a name="course_session_data"></a>';
             $html .= Display::page_subheader($course_info['title']);
             $html .= '<div class="table-responsive">';
             $html .= '<table class="table table-striped table-hover">';
@@ -5021,7 +5021,6 @@ class Tracking
             );
 
             $to_graph_exercise_result = array();
-
             if (!empty($exercise_list)) {
                 $score = $weighting = $exe_id = 0;
                 foreach ($exercise_list as $exercices) {
@@ -5095,7 +5094,6 @@ class Tracking
                                 $session_id
                             );
                             if (!empty($exercise_stat)) {
-
                                 // Always getting the BEST attempt
                                 $score = $exercise_stat['exe_result'];
                                 $weighting = $exercise_stat['exe_weighting'];

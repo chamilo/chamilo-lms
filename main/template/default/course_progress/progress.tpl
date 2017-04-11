@@ -6,9 +6,11 @@
 <div id="course-progress" class="thematic">
     <div class="row">
         <div class="col-md-12">
-            <div class="pull-right">
-                <div class="score-progress">
-                    <h3>{{ 'Progress' | get_lang }}: <span id="div_result">{{ score_progress }}</span> %</h3>
+            <div class="bar-progress">
+                <div class="pull-right">
+                    <div class="score-progress">
+                        <h3>{{ 'Progress' | get_lang }}: <span id="div_result">{{ score_progress }}</span> %</h3>
+                    </div>
                 </div>
             </div>
             <div class="table-responsive">

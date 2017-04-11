@@ -39,13 +39,13 @@ $(document).ready(function() {
     $("#advanced_search_form").css("display","none");
 });
 
-function display_advanced_search_form() {
+function display_advanced_search_form () {
     if ($("#advanced_search_form").css("display") == "none") {
         $("#advanced_search_form").css("display","block");
-        $("#img_plus_and_minus").html(\'&nbsp;' . Display::return_icon('div_hide.gif', get_lang('Hide'), array('style' => 'vertical-align:middle')) . '&nbsp;' . get_lang('AdvancedSearch') . '\');
+        $("#img_plus_and_minus").html(\'&nbsp;'. Display::returnFontAwesomeIcon('arrow-down') . ' '. get_lang('AdvancedSearch').'\');
     } else {
         $("#advanced_search_form").css("display","none");
-        $("#img_plus_and_minus").html(\'&nbsp;' . Display::return_icon('div_show.gif', get_lang('Show'), array('style' => 'vertical-align:middle')) . '&nbsp;' . get_lang('AdvancedSearch') . '\');
+        $("#img_plus_and_minus").html(\'&nbsp;'. Display::returnFontAwesomeIcon('arrow-right') . ' '.get_lang('AdvancedSearch').'\');
     }
 }
 </script>';
@@ -210,39 +210,59 @@ if (!empty($projectId)) {
         'search_simple',
         'get',
         $currentUrl,
-        '',
-        array(),
-        FormValidator::LAYOUT_INLINE
+        null,
+        null,
+        'inline'
     );
-    $form->addText('keyword', get_lang('Keyword'), 'size="25"');
+    $form->addText('keyword', get_lang('Keyword'), false);
     $form->addButtonSearch(get_lang('Search'), 'submit_simple');
     $form->addHidden('project_id', $projectId);
-    $form->addElement(
-        'static',
-        'search_advanced_link',
-        null,
-        '<a href="javascript://" class = "advanced-parameters" onclick="display_advanced_search_form();">'
-        . '<span id="img_plus_and_minus">&nbsp;'
-        . Display::return_icon('div_show.gif', get_lang('Show')) . ' '
-        . get_lang('AdvancedSearch') . '</span></a>'
-    );
-
-    echo '<div class="actions" >';
-    if (api_is_platform_admin()) {
-        echo '<span class="left">' .
-                '<a href="' . api_get_path(WEB_CODE_PATH) . 'ticket/new_ticket.php?project_id='.$projectId.'">' .
-                    Display::return_icon('add.png', get_lang('Add'), '', ICON_SIZE_MEDIUM) . '</a>' .
-                '<a href="' . api_get_self() . '?action=export' . $get_parameter . $get_parameter2 . '&project_id='.$projectId.'">' .
-                    Display::return_icon('export_excel.png', get_lang('Export'), '', ICON_SIZE_MEDIUM) . '</a>';
-
-        echo Display::url(
-            Display::return_icon('settings.png', get_lang('Categories'), [], ICON_SIZE_MEDIUM),
-            api_get_path(WEB_CODE_PATH) . 'ticket/settings.php'
+    
+    $advancedSearch = Display::url(
+        '<span id="img_plus_and_minus">&nbsp;'. Display::returnFontAwesomeIcon('arrow-right') .' '.get_lang('AdvancedSearch'),
+        'javascript://',
+        array(
+            'class' => 'btn btn-default advanced-parameters',
+            'onclick'=>'display_advanced_search_form();')
         );
-        echo '</span>';
+    if (api_is_platform_admin()) {
+        
+        $actionRight = Display::url(
+            Display::return_icon(
+                'add.png',
+                get_lang('Add'),
+                null,
+                ICON_SIZE_MEDIUM
+                ),
+            api_get_path(WEB_CODE_PATH).'ticket/new_ticket.php?project_id='.$projectId,
+            [ 'title' => get_lang('Add') ]
+            );
+        
+        $actionRight.= Display::url(
+            Display::return_icon(
+                'export_excel.png',
+                get_lang('Export'),
+                null,
+                ICON_SIZE_MEDIUM
+                ),
+            api_get_self().'?action=export'.$get_parameter.$get_parameter2.'&project_id='.$projectId,
+            [ 'title' => get_lang('Export') ]
+            );
+        
+        $actionRight.= Display::url(
+            Display::return_icon(
+                'settings.png',
+                get_lang('Categories'),
+                null,
+                ICON_SIZE_MEDIUM
+                ),
+            api_get_path(WEB_CODE_PATH).'ticket/settings.php',
+            [ 'title' => get_lang('Settings') ]
+            );
+        
     }
-    $form->display();
-    echo '</div>';
+    
+    echo Display::toolbarAction('toolbar-tickets', array( 0 => $form->return_form(), 1 => $advancedSearch, 2 => $actionRight));
 
     $advancedSearchForm = new FormValidator(
         'advanced_search',

@@ -55,7 +55,10 @@ $tpl->assign('sale_list', $saleList);
 
 $content = $tpl->fetch('buycourses/view/course_panel.tpl');
 
-$tpl->assign('actions', $toolbar);
+$tpl->assign(
+    'actions',
+    Display::toolbarAction('toolbar', [$toolbar])
+);
 $tpl->assign('header', $templateName);
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

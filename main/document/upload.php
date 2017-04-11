@@ -225,7 +225,7 @@ if ($is_certificate_mode) {
 }
 
 // Link to create a folder
-echo $toolbar = Display::toolbarAction('toolbar-upload', array($actions), 1);
+echo $toolbar = Display::toolbarAction('toolbar-upload', array($actions));
 // Form to select directory
 $folders = DocumentManager::get_all_document_folders(
     $_course,

@@ -160,10 +160,9 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
         $tpl->assign('work', $work);
         $tpl->assign('comments', $comments);
 
-        $actions = '';
         if (isset($work['contains_file'])) {
             if (isset($work['download_url'])) {
-                $actions .= Display::url(
+                $actions = Display::url(
                     Display::return_icon(
                         'save.png',
                         get_lang('Download'),
@@ -195,10 +194,14 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
                         );
                     }
                 }
+
+                $tpl->assign(
+                    'actions',
+                    Display::toolbarAction('toolbar', [$actions])
+                );
             }
         }
 
-        $tpl->assign('actions', $actions);
         if (api_is_allowed_to_session_edit()) {
             $tpl->assign('form', $commentForm);
         }

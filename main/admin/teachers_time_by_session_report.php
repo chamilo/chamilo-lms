@@ -176,21 +176,6 @@ $interbreadcrumb[] = [
     'name' => get_lang('FollowedSessions')
 ];
 
-$actions = [];
-
-if ($session) {
-    $actions = [
-        Display::url(
-            Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), [], ICON_SIZE_MEDIUM),
-            api_get_self() . '?' . http_build_query(['export' => 'csv', 'session' => $session->getId()])
-        ),
-        Display::url(
-            Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), [], ICON_SIZE_MEDIUM),
-            api_get_self() . '?' . http_build_query(['export' => 'xls', 'session' => $session->getId()])
-        )
-    ];
-}
-
 $view = new Template($toolName);
 $view->assign('form', $form->returnForm());
 
@@ -198,12 +183,25 @@ if ($session) {
     $view->assign('session', ['id' => $session->getId(), 'name' => $session->getName()]);
     $view->assign('courses', $coursesInfo);
     $view->assign('users', $usersInfo);
+
+    $actions = Display::url(
+        Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), [], ICON_SIZE_MEDIUM),
+        api_get_self() . '?' . http_build_query(['export' => 'csv', 'session' => $session->getId()])
+    );
+    $actions .= Display::url(
+        Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), [], ICON_SIZE_MEDIUM),
+        api_get_self() . '?' . http_build_query(['export' => 'xls', 'session' => $session->getId()])
+    );
+
+    $view->assign(
+        'actions',
+        Display::toolbarAction('toolbar', [$actions])
+    );
 }
 
 $template = $view->get_template('admin/teachers_time_by_session_report.tpl');
 $content = $view->fetch($template);
 
 $view->assign('header', $toolName);
-$view->assign('actions', implode(' ', $actions));
 $view->assign('content', $content);
 $view->display_one_col_template();

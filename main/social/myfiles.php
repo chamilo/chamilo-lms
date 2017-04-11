@@ -73,22 +73,10 @@ $social_menu_block = SocialManager::show_social_menu('myfiles');
 $actions = null;
 
 if (isset($_GET['cidReq'])) {
-    $actions = '<a href="' . api_get_path(
-            WEB_CODE_PATH
-        ) . 'document/document.php?cidReq=' . Security::remove_XSS(
-            $_GET['cidReq']
-        ) . '&amp;id_session=' . Security::remove_XSS(
-            $_GET['id_session']
-        ) . '&amp;gidReq=' . Security::remove_XSS(
-            $_GET['gidReq']
-        ) . '&amp;id=' . Security::remove_XSS(
-            $_GET['parent_id']
-        ) . '">' . Display::return_icon(
-            'back.png',
-            get_lang('BackTo') . ' ' . get_lang('Documents') . ' (' . get_lang(
-                'Course'
-            ) . ')'
-        ) . '</a>';
+    $actions = Display::url(
+        Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('Documents').' ('.get_lang('Course').')'),
+        api_get_self().'?'.api_get_cidreq().'&id='.$_GET['parent_id']
+    );
 }
 
 if (api_get_setting('allow_social_tool') == 'true') {
@@ -122,7 +110,10 @@ if (api_get_setting('allow_social_tool') == 'true') {
     $tpl->display($social_layout);
 } else {
     $controller = new IndexManager(get_lang('MyCourses'));
-    $tpl->assign('actions', $actions);
+    $tpl->assign(
+        'actions',
+        Display::toolbarAction('toolbar', [$actions])
+    );
     $tpl->assign('content', $editor);
     $tpl->assign('profile_block', $controller->return_profile_block());
     $tpl->assign('user_image_block', $controller->return_user_image_block());

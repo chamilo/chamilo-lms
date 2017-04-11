@@ -4,7 +4,8 @@
 /**
  * Report from students for learning path
  */
-require_once '../inc/global.inc.php';
+
+require_once __DIR__.'/../inc/global.inc.php';
 
 $isAllowedToEdit = api_is_allowed_to_edit(null, true);
 
@@ -55,6 +56,7 @@ $lpInfo = Database::select(
 );
 
 $userList = [];
+$showEmail = api_get_setting('show_email_addresses');
 
 if (!empty($users)) {
     foreach ($users as $user) {
@@ -96,6 +98,7 @@ if (!empty($users)) {
             'id' => $user['user_id'],
             'first_name' => $userInfo['firstname'],
             'last_name' => $userInfo['lastname'],
+            'email' => $showEmail === 'true' ? $userInfo['email'] : '',
             'lp_time' => api_time_to_hms($lpTime),
             'lp_score' => is_numeric($lpScore) ? "$lpScore%" : $lpScore,
             'lp_progress' => "$lpProgress%",
@@ -125,6 +128,7 @@ $template->assign('user_list', $userList);
 $template->assign('session_id', api_get_session_id());
 $template->assign('course_code', api_get_course_id());
 $template->assign('lp_id', $lpId);
+$template->assign('show_email', $showEmail === 'true');
 
 $layout = $template->get_template('learnpath/report.tpl');
 

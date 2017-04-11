@@ -210,6 +210,7 @@ $group[] = $form->createElement(
 );
 
 $form->addGroup($group, 'password', get_lang('Password'));
+$form->addPasswordRule('password', 'password');
 $form->addGroupRule('password', get_lang('EnterPassword'), 'required', null, 1);
 
 if ($checkPass) {
@@ -472,3 +473,5 @@ $tpl = new Template($tool_name);
 $tpl->assign('message', $message);
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();
+
+

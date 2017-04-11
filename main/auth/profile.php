@@ -316,9 +316,7 @@ if (is_platform_authentication() &&
     $form->addElement('password', 'password2', get_lang('Confirmation'), array('size' => 40));
     //    user must enter identical password twice so we can prevent some user errors
     $form->addRule(array('password1', 'password2'), get_lang('PassTwo'), 'compare');
-    if (CHECK_PASS_EASY_TO_FIND === true) {
-        $form->addRule('password1', get_lang('CurrentPasswordEmptyOrIncorrect'), 'callback', 'api_check_password');
-    }
+    $form->addPasswordRule('password1');
 }
 
 $extraField = new ExtraField('user');

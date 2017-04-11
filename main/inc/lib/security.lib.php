@@ -432,4 +432,58 @@ class Security
         }
         return $image_path;
     }
+
+    /**
+     * Get password requirements
+     * It checks config value 'password_requirements' or uses the "classic"
+     * Chamilo password requirements.
+     *
+     * @return array
+     */
+    public static function getPasswordRequirements()
+    {
+        // Default
+        $requirements = [
+            'min' => [
+                'lowercase' => 0,
+                'uppercase' => 0,
+                'numeric' => 2,
+                'length' => 5
+            ]
+        ];
+
+        $passwordRequirements = api_get_configuration_value('password_requirements');
+        if (!empty($passwordRequirements)) {
+            $requirements = $passwordRequirements;
+        }
+
+        return $requirements;
+    }
+
+    /**
+     * Gets password requirements in the platform language using get_lang
+     * based in platform settings. See function 'self::getPasswordRequirements'
+     * @return string
+     */
+    public static function getPasswordRequirementsToString($passedConditions = [])
+    {
+        $output = '';
+        $setting = Security::getPasswordRequirements();
+        foreach ($setting as $type => $rules) {
+            foreach ($rules as $rule => $parameter) {
+                if (empty($parameter)) {
+                    continue;
+                }
+                $output .= sprintf(
+                    get_lang(
+                        'NewPasswordRequirement'.ucfirst($type).'X'.ucfirst($rule)
+                    ),
+                    $parameter
+                );
+                $output .= '<br />';
+            }
+        }
+
+        return $output;
+    }
 }

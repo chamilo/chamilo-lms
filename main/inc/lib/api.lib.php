@@ -2008,29 +2008,24 @@ function api_generate_password($length = 8)
  * 2. Only English letters (uppercase or lowercase, it doesn't matter) and digits are allowed.
  * 3. The password should contain at least 3 letters.
  * 4. It should contain at least 2 digits.
- * 5. It should not contain 3 or more consequent (according to ASCII table) characters.
  * Settings will change if the configuration value is set: password_requirements
  */
 function api_check_password($password)
 {
-    $passwordRequirements = api_get_configuration_value('password_requirements');
+    $passwordRequirements = Security::getPasswordRequirements();
 
-    $minLength = 5;
-    $minLetters = 3;
-    $minNumbers = 2;
-    $minLowerCase = 0; // Is only use if  password_requirements is set
-    $minUpperCase = 0; // Is only use if  password_requirements is set
-    if (!empty($passwordRequirements)) {
-        $minLength = $passwordRequirements['min']['length'];
-        $minNumbers = $passwordRequirements['min']['numeric'];
-        $minLowerCase = $passwordRequirements['min']['lowercase'];
-        $minUpperCase = $passwordRequirements['min']['uppercase'];
-        $minLetters = $minLowerCase + $minUpperCase;
-    }
+    $minLength = $passwordRequirements['min']['length'];
+    $minNumbers = $passwordRequirements['min']['numeric'];
+    // Optional
+    $minLowerCase = $passwordRequirements['min']['lowercase'];
+    $minUpperCase = $passwordRequirements['min']['uppercase'];
+
+    $minLetters = $minLowerCase + $minUpperCase;
     $passwordLength = api_strlen($password);
-    if ($passwordLength < $minLength) {
-        return false;
-    }
+
+    $conditions = [
+        'min_length' => $passwordLength >= $minLength
+    ];
 
     $digits = 0;
     $lowerCase = 0;
@@ -2049,17 +2044,40 @@ function api_check_password($password)
             $digits++;
         }
     }
-    $letters = $upperCase + $lowerCase;
 
-    if (!empty($passwordRequirements)) {
-        return (
-            $upperCase >= $minUpperCase &&
-            $lowerCase >= $minLowerCase &&
-            $digits >= $minNumbers
-        );
+    // Min number of digits
+    $conditions['min_numeric'] = $digits >= $minNumbers;
+
+    if (!empty($minUpperCase)) {
+        // Uppercase
+        $conditions['min_uppercase'] = $upperCase >= $minUpperCase;
     }
 
-    return $letters >= $minLetters && $digits >= $minNumbers;
+    if (!empty($minLowerCase)) {
+        // Lowercase
+        $conditions['min_lowercase'] = $upperCase >= $minLowerCase;
+    }
+
+    // Min letters
+    $letters = $upperCase + $lowerCase;
+    $conditions['min_letters'] = $letters >= $minLetters;
+
+    $isPasswordOk = true;
+    foreach ($conditions as $condition) {
+        if ($condition === false) {
+            $isPasswordOk = false;
+            break;
+        }
+    }
+
+    if ($isPasswordOk === false) {
+        $output = get_lang('NewPasswordRequirementsNotMatched').'<br />';
+        $output .= Security::getPasswordRequirementsToString($conditions);
+
+        Display::addFlash(Display::return_message($output, 'warning', false));
+    }
+
+    return $isPasswordOk;
 }
 
 /**

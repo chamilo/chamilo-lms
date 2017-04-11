@@ -402,7 +402,7 @@ if (isset ($_GET['search']) && $_GET['search'] === 'advanced') {
         });
     </script>';
 
-    $actions = Display::toolbarAction('toolbar', [$actions1, $actions2, $actions3, $actions4], [2, 4, 4, 2]);
+    $actions = Display::toolbarAction('toolbar', [$actions1, $actions2, $actions3, $actions4], [2, 4, 3, 3]);
 
     if (isset($_GET['session_id']) && !empty($_GET['session_id'])) {
         // Create a sortable table with the course data filtered by session

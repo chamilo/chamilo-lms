@@ -2391,18 +2391,26 @@ class Display
     /**
      * @param string $id
      * @param array $content
-     * @param array $cols Optional. Columns width
+     * @param array $colsWidth Optional. Columns width
      * @return string
      */
-    public static function toolbarAction($id, $content, $cols = [6, 6])
+    public static function toolbarAction($id, $content, $colsWidth = [])
     {
         $col = count($content);
+
+        if (!$colsWidth) {
+            $width = 12 / $col;
+
+            array_walk($content, function () use ($width, &$colsWidth) {
+                $colsWidth[] = $width;
+            });
+        }
 
         $html = '<div id="'.$id.'" class="actions">';
         $html .= '<div class="row">';
 
         for ($i = 0; $i < $col; $i++) {
-            $class = 'col-sm-'.$cols[$i];
+            $class = 'col-sm-'.$colsWidth[$i];
 
             if ($col > 1) {
                 if ($i > 0 && $i < count($content) -1) {

@@ -5185,6 +5185,7 @@ class Tracking
             $html .= Display::tag('th', get_lang('LatencyTimeSpent'), array('class'=>'head', 'style'=>'color:#000'));
             $html .= Display::tag('th', get_lang('Progress'), array('class'=>'head', 'style'=>'color:#000'));
             $html .= Display::tag('th', get_lang('Score'), array('class'=>'head', 'style'=>'color:#000'));
+            $html .= Display::tag('th', get_lang('BestScore'), array('class'=>'head', 'style'=>'color:#000'));
             $html .= Display::tag('th', get_lang('LastConnexion'), array('class'=>'head', 'style'=>'color:#000'));
             $html .= '</tr></thead><tbody>';
 
@@ -5226,10 +5227,27 @@ class Tracking
                         array($lp_id),
                         $session_id
                     );
+
+                    $bestScore = self::get_avg_student_score(
+                        $user_id,
+                        $course,
+                        array($lp_id),
+                        $session_id,
+                        false,
+                        false,
+                        true
+                    );
+
                     if (is_numeric($percentage_score)) {
                         $percentage_score = $percentage_score.'%';
                     } else {
                         $percentage_score = '0%';
+                    }
+
+                    if (is_numeric($bestScore)) {
+                        $bestScore = $bestScore.'%';
+                    } else {
+                        $bestScore = '0%';
                     }
 
                     $time_spent_in_lp = api_time_to_hms($time_spent_in_lp);
@@ -5249,6 +5267,7 @@ class Tracking
                     }
                     $html .= Display::tag('td', $progress, array('align'=>'center'));
                     $html .= Display::tag('td', $percentage_score);
+                    $html .= Display::tag('td', $bestScore);
 
                     $last_connection = '-';
                     if (!empty($last_connection_in_lp)) {

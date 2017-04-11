@@ -28,13 +28,16 @@ $interbreadcrumb = array(
     )
 );
 
-$toolbar = Display::toolbarButton(
-    get_lang('ManageSkills'),
+$toolbar = Display::url(
+    Display::return_icon(
+        'list_badges.png',
+        get_lang('ManageSkills'),
+        null,
+        ICON_SIZE_MEDIUM),
     api_get_path(WEB_CODE_PATH).'admin/skill_list.php',
-    'list',
-    'primary',
     ['title' => get_lang('ManageSkills')]
-);
+    );
+
 $tpl = new Template(get_lang('Badges'));
 $tpl->assign('backpack', $backpack);
 

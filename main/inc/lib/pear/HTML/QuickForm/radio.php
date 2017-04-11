@@ -147,7 +147,6 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
         return HTML_QuickForm_input::toHtml() . $label;
     }
 
-
     /**
      * Returns the value of field without HTML tags
      *
@@ -255,6 +254,4 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
     {
         return $this->columnsSize;
     }
-
-
 }

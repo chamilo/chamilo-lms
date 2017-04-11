@@ -3063,9 +3063,7 @@ class Agenda
 
         $toolbar = Display::toolbarAction(
             'toolbar-agenda',
-            array(0 => $actionsLeft, 1 => $actionsRight),
-            2,
-            false
+            array($actionsLeft, $actionsRight)
         );
 
         return $toolbar;

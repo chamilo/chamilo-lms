@@ -2389,39 +2389,40 @@ class Display
     }
 
     /**
-     * @param int $id
+     * @param string $id
      * @param array $content
-     * @param int $col
-     * @param bool|true $right
+     * @param array $colsWidth Optional. Columns width
      * @return string
      */
-    public static function toolbarAction($id, $content = array(), $col = 2, $right = true)
+    public static function toolbarAction($id, $content, $colsWidth = [])
     {
-        $columns = 12/$col;
-        $html = '';
-        $html .= '<div id="' . $id . '" class="actions">';
-        $html .= '<div class="row">';
-        if ($col > 4) {
-            $html = '<div class="alert alert-warning" role="alert">
-                Action toolbar design does not work when exceeding four columns - check Display::toolbarAction()
-            </div>';
-        } else {
-            for ($i = 0; $i < $col; $i++) {
-                $html .= '<div class="col-md-' . $columns . '">';
-                if ($col == 2 && $i == 1) {
-                    if ($right === true) {
-                        $html .= '<div class="pull-right">';
-                        $html .= (isset($content[$i]) ? $content[$i] : '');
-                        $html .= '</div>';
-                    } else {
-                        $html .= $content[$i];
-                    }
-                } else {
-                    $html .= $content[$i];
-                }
-                $html .= '</div>';
-            }
+        $col = count($content);
+
+        if (!$colsWidth) {
+            $width = 12 / $col;
+
+            array_walk($content, function () use ($width, &$colsWidth) {
+                $colsWidth[] = $width;
+            });
         }
+
+        $html = '<div id="'.$id.'" class="actions">';
+        $html .= '<div class="row">';
+
+        for ($i = 0; $i < $col; $i++) {
+            $class = 'col-sm-'.$colsWidth[$i];
+
+            if ($col > 1) {
+                if ($i > 0 && $i < count($content) -1) {
+                    $class .= ' text-center';
+                } elseif ($i === count($content) - 1) {
+                    $class .= ' text-right';
+                }
+            }
+
+            $html .= '<div class="'.$class.'">'.$content[$i].'</div>';
+        }
+
         $html .= '</div>';
         $html .= '</div>';
 

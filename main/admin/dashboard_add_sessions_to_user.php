@@ -173,15 +173,15 @@ if (isset($_POST['formSent']) && intval($_POST['formSent']) == 1) {
 Display::display_header($tool_name);
 
 // Actions
-$actionsLeft = '';
 if ($user_info['status'] != SESSIONADMIN) {
     $actionsLeft = '<a href="dashboard_add_users_to_user.php?user='.$user_id.'">' .
         Display::return_icon('add-user.png', get_lang('AssignUsers'), null, ICON_SIZE_MEDIUM ) . '</a>';
     $actionsLeft .= '<a href="dashboard_add_courses_to_user.php?user='.$user_id.'">' .
         Display::return_icon('course-add.png', get_lang('AssignCourses'), null, ICON_SIZE_MEDIUM) . '</a>';
+
+    echo Display::toolbarAction('toolbar-dashboard', array($actionsLeft));
 }
 
-echo Display::toolbarAction('toolbar-dashboard', array($actionsLeft));
 echo Display::page_header(
     sprintf(get_lang('AssignSessionsToX'), api_get_person_name($user_info['firstname'], $user_info['lastname'])),
     null,

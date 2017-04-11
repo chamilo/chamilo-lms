@@ -104,7 +104,7 @@ if ($is_allowed_to_edit) {
             '../upload/upload_ppt.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH
         );
     }
-    $actions = Display::toolbarAction('actions-lp', array(0 => $actionLeft) );
+    $actions = Display::toolbarAction('actions-lp', array($actionLeft));
 }
 
 $token = Security::get_token();

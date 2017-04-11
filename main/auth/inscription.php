@@ -178,15 +178,7 @@ if ($user_already_registered_show_terms === false) {
     $form->addRule('pass1', get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule('pass2', get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule(array('pass1', 'pass2'), get_lang('PassTwo'), 'compare');
-
-    if (CHECK_PASS_EASY_TO_FIND === true) {
-        $form->addRule(
-            'pass1',
-            get_lang('PassTooEasy') . ': ' . api_generate_password(),
-            'callback',
-            'api_check_password'
-        );
-    }
+    $form->addPasswordRule('pass1');
 
     // PHONE
     if (in_array('phone', $allowedFields)) {

@@ -36,8 +36,6 @@ $form->addDatePicker('search_meeting_end', get_lang('DateEnd'));
 $form->addButtonSearch(get_lang('Search'));
 $form->setDefaults($dateRange);
 
-$actions = [];
-
 if ($form->validate()) {
     $dateRange = $form->getSubmitValues();
 }
@@ -107,10 +105,9 @@ $tpl->assign('meetings', $meetings);
 $tpl->assign('search_form', $form->returnForm());
 
 $content = $tpl->fetch('bbb/admin.tpl');
-$actions = [];
 
 if ($meetings) {
-    $actions[] = Display::toolbarButton(
+    $actions = Display::toolbarButton(
         get_lang('ExportInExcel'),
         api_get_self().'?'.http_build_query([
             'action' => 'export',
@@ -120,9 +117,13 @@ if ($meetings) {
         'file-excel-o',
         'success'
     );
+
+    $tpl->assign(
+        'actions',
+        Display::toolbarAction('toolbar', [$actions])
+    );
 }
 
 $tpl->assign('header', $plugin->get_lang('RecordList'));
-$tpl->assign('actions', implode('', $actions));
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

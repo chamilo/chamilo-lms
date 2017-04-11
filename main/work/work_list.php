@@ -82,7 +82,7 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !api_is_in
 
 $tpl = new Template('');
 
-$content = Display::toolbarAction('toolbar-work', array($actionsLeft . $actionsRight));
+$content = Display::toolbarAction('toolbar-work', array($actionsLeft, $actionsRight));
 if (!empty($my_folder_data['title'])) {
     $content .= Display::page_subheader($my_folder_data['title']);
 }

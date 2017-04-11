@@ -4130,7 +4130,6 @@ ul.holder li.bit-box{
     color: #FFF;
     padding: 12px;
     text-transform: uppercase;
-    margin-bottom: 10px;
     border-radius: 5px;
 }
 .thematic .score-progress h3{
@@ -4763,6 +4762,15 @@ div#chat-remote-video video {
     border: 1px solid #bce8f1;
     padding: 5px;
     border-radius: 5px;
+}
+.toolbar-edit{
+    padding: 5px;
+    display: inline-block;
+    width: 100%;
+}
+.bar-progress{
+    display: inline-block;
+    width: 100%;
 }
 .grid-courses .items{
     /* position: relative; */

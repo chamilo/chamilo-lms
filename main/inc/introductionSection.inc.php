@@ -320,7 +320,8 @@ $textIntro = '';
 if ($intro_dispCommand) {
     if (empty($intro_content)) {
         // Displays "Add intro" commands
-        $toolbar = '<div class="btn-group pull-right" role="group">';
+        $toolbar .= '<div class="toolbar-edit">';
+        $toolbar .= '<div class="btn-group pull-right" role="group">';
         if (!empty($courseId)) {
             $textIntro  = '<a class="btn btn-default" title="' . addslashes(get_lang('AddIntro')) . '" href="'.api_get_self().'?' . api_get_cidreq().'&intro_cmdAdd=1">';
             $textIntro .= '<em class="fa fa-file-text"></em> ';
@@ -330,10 +331,11 @@ if ($intro_dispCommand) {
             $toolbar .= '<a class="btn btn-default" href="' . api_get_self() . '?intro_cmdAdd=1">' . get_lang('AddIntro') . '</a>';
             $toolbar .= $editIconButton;
         }
-        $toolbar .= '</div>';
+        $toolbar .= '</div></div>';
 
     } else {
         // Displays "edit intro && delete intro" commands
+        $toolbar .= '<div class="toolbar-edit">';
         $toolbar .= '<div class="btn-group pull-right" rol="group">';
         if (!empty($courseId)) {
             $toolbar .=
@@ -354,7 +356,7 @@ if ($intro_dispCommand) {
                 if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).
                 "')) return false;\"><em class=\"fa fa-trash-o\"></em></a>";
         }
-        $toolbar .=  "</div>";
+        $toolbar .=  "</div></div>";
         // Fix for chrome XSS filter for videos in iframes - BT#7930
         $browser = api_get_navigator();
         if (strpos($introduction_section, '<iframe') !== false && $browser['name'] == 'Chrome') {

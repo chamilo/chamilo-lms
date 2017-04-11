@@ -77,6 +77,9 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
             if (!empty($attributes['class'])) {
                 $oldClass = $attributes['class'];
             }
+            if (empty($attributes)) {
+                $attributes = []; // Initialize variable to avoid warning in PHP 7.1
+            }
             $attributes['class'] = $oldClass . ' selectpicker show-tick form-control';
             $attributes['data-live-search'] = 'true';
 

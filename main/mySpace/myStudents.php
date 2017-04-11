@@ -869,8 +869,8 @@ if (!empty($student_id)) {
                 get_lang('Learnpath'),
                 get_lang('Time'),
                 get_lang('BestScore'),
-                //get_lang('AverageScore'),
-                //get_lang('LatestAttemptAverageScore'),
+                get_lang('AverageScore'),
+                get_lang('LatestAttemptAverageScore'),
                 get_lang('Progress'),
                 get_lang('LastConnexion')
             );
@@ -925,22 +925,18 @@ if (!empty($student_id)) {
                     <th>
                         <?php
                         echo get_lang('BestScore').' ';
-                        /*Display:: display_icon(
-                            'info3.gif',
-                            get_lang('AverageIsCalculatedBasedInAllAttempts'),
-                            array('align' => 'absmiddle', 'hspace' => '3px')
-                        );*/
                         ?>
                     </th>
+                    <th>
                     <?php
-                        /*echo get_lang('LatestAttemptAverageScore').' ';
+                        echo get_lang('LatestAttemptAverageScore').' ';
                         Display::display_icon(
                             'info3.gif',
                             get_lang('AverageIsCalculatedBasedInTheLatestAttempts'),
                             array('align' => 'absmiddle', 'hspace' => '3px')
-                        );*/
+                        );
                         ?>
-
+                    </th>
                     <th><?php
                         echo get_lang('Progress').' ';
                         Display:: display_icon(
@@ -1022,7 +1018,7 @@ if (!empty($student_id)) {
                     }
 
                     // Quiz in lp
-                    /*$score = Tracking::get_avg_student_score(
+                    $score = Tracking::get_avg_student_score(
                         $student_id,
                         $course_code,
                         array($lp_id),
@@ -1037,7 +1033,7 @@ if (!empty($student_id)) {
                         $sessionId,
                         false,
                         true
-                    );*/
+                    );
 
                     $bestScore = Tracking::get_avg_student_score(
                         $student_id,
@@ -1068,6 +1064,7 @@ if (!empty($student_id)) {
                         api_html_entity_decode(stripslashes($lp_name), ENT_QUOTES, $charset),
                         api_time_to_hms($total_time),
                         $bestScore,
+                        $score_latest,
                         $progress.'%',
                         $start_time
                     );
@@ -1081,7 +1078,6 @@ if (!empty($student_id)) {
                             $score = $score.'%';
                         }
                     }
-
                     echo Display::tag('td', $bestScore);
 
                     if (isset($score_latest) && !is_null($score_latest)) {
@@ -1089,7 +1085,7 @@ if (!empty($student_id)) {
                             $score_latest = $score_latest.'%';
                         }
                     }
-                    //echo Display::tag('td', $score_latest);
+                    echo Display::tag('td', $score_latest);
 
                     if (is_numeric($progress)) {
                         $progress = $progress.'%';
@@ -1118,7 +1114,12 @@ if (!empty($student_id)) {
                         echo '<td>';
                         if ($any_result === true) {
                             echo '<a href="myStudents.php?action=reset_lp&sec_token='.$token.'&cidReq='.$course_code.'&course='.$course_code.'&details='.Security::remove_XSS($_GET['details']).'&origin='.$origin.'&lp_id='.$learnpath->getId().'&student='.$user_info['user_id'].'&details=true&id_session='.$sessionId.'">';
-                            echo Display::return_icon('clean.png', get_lang('Clean'),'',ICON_SIZE_SMALL).'</a>';
+                            echo Display::return_icon(
+                                    'clean.png',
+                                    get_lang('Clean'),
+                                    '',
+                                    ICON_SIZE_SMALL
+                                ).'</a>';
                             echo '</a>';
                         }
                         echo '</td>';

@@ -4753,29 +4753,47 @@ class Tracking
                 $html .= Display::tag('td', ExerciseLib::convert_to_percentage($all_average));
 
                 if (isset($_GET['session_id']) && $my_session_id == $_GET['session_id']) {
-                    $icon = Display::url(Display::return_icon('2rightarrow_na.png', get_lang('Details')), '?session_id='.$my_session_id);
+                    $icon = Display::url(
+                        Display::return_icon(
+                            '2rightarrow_na.png',
+                            get_lang('Details')
+                        ),
+                        '?session_id='.$my_session_id.'#course_session_list'
+                    );
                 } else {
-                    $icon = Display::url(Display::return_icon('2rightarrow.png', get_lang('Details')), '?session_id='.$my_session_id);
+                    $icon = Display::url(
+                        Display::return_icon(
+                            '2rightarrow.png',
+                            get_lang('Details')
+                        ),
+                        '?session_id='.$my_session_id.'#course_session_list'
+                    );
                 }
                 $html .= Display::tag('td', $icon);
                 $html .= '</tr>';
             }
             $html .= '</tbody>';
             $html .= '</table></div><br />';
-            $html .= Display::div($main_session_graph, array('id'=>'session_graph', 'class'=>'chart-session', 'style'=>'position:relative; text-align: center;'));
+            $html .= Display::div(
+                $main_session_graph,
+                array(
+                    'id' => 'session_graph',
+                    'class' => 'chart-session',
+                    'style' => 'position:relative; text-align: center;',
+                )
+            );
 
             // Checking selected session.
-
             if (isset($_GET['session_id'])) {
                 $session_id_from_get = intval($_GET['session_id']);
                 $session_data = $course_in_session[$session_id_from_get];
                 $course_list = $session_data['course_list'];
 
+                $html .= '<a name= "course_session_list"></a>';
                 $html .= Display::tag('h3', $session_data['name'].' - '.get_lang('CourseList'));
 
                 $html .= '<div class="table-responsive">';
                 $html .= '<table class="table table-hover table-striped">';
-                //'.Display::tag('th', get_lang('DoneExercises'),         array('class'=>'head')).'
                 $html .= '
                     <thead>
                     <tr>
@@ -4787,6 +4805,7 @@ class Tracking
                       '.Display::tag('th', get_lang('TimeSpentInTheCourse'), array('class'=>'head')).'
                       '.Display::tag('th', get_lang('LPProgress'), array('class'=>'head')).'
                       '.Display::tag('th', get_lang('Score').Display::return_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), array('align' => 'absmiddle', 'hspace' => '3px')), array('class'=>'head')).'
+                      '.Display::tag('th', get_lang('BestScore'), array('class'=>'head')).'
                       '.Display::tag('th', get_lang('LastConnexion'), array('class'=>'head')).'
                       '.Display::tag('th', get_lang('Details'), array('class'=>'head')).'
                     </tr>
@@ -4825,12 +4844,23 @@ class Tracking
                     $average = ExerciseLib::get_average_score_by_course($courseId, $session_id_from_get);
                     $my_average = ExerciseLib::get_average_score_by_course_by_user(api_get_user_id(), $courseId, $session_id_from_get);
 
+                    $bestScore = self::get_avg_student_score(
+                        $user_id,
+                        $course_code,
+                        array(),
+                        $session_id_from_get,
+                        false,
+                        false,
+                        true
+                    );
+
                     $stats_array[$course_code] = array(
                         'exercises' => $count_exercises,
                         'unanswered_exercises_by_user' => $unanswered_exercises,
                         'done_exercises' => $done_exercises,
                         'average' => $average,
-                        'my_average' => $my_average
+                        'my_average' => $my_average,
+                        'best_score' => $bestScore
                     );
 
                     $last_connection = self::get_last_connection_date_on_the_course(
@@ -4875,8 +4905,8 @@ class Tracking
                     $html .= Display::tag('td', $stats_array[$course_code]['unanswered_exercises_by_user']);
                     //$html .= Display::tag('td', $stats_array[$course_code]['done_exercises']);
                     $html .= Display::tag('td', ExerciseLib::convert_to_percentage($stats_array[$course_code]['my_average']));
-
                     $html .= Display::tag('td', $stats_array[$course_code]['average'] == 0 ? '-' : '('.ExerciseLib::convert_to_percentage($stats_array[$course_code]['average']).')');
+                    $html .= Display::tag('td', $stats_array[$course_code]['best_score']);
                     $html .= Display::tag('td', $time, array('align'=>'center'));
 
                     if (is_numeric($progress)) {
@@ -4884,6 +4914,7 @@ class Tracking
                     } else {
                         $progress = '0%';
                     }
+
                     // Progress
                     $html .= Display::tag('td', $progress, array('align'=>'center'));
                     if (is_numeric($percentage_score)) {
@@ -4891,7 +4922,7 @@ class Tracking
                     } else {
                         $percentage_score = '0%';
                     }
-                    //Score
+                    // Score
                     $html .= Display::tag('td', $percentage_score, array('align'=>'center'));
                     if (empty($last_connection) or is_bool($last_connection)) {
                         $last_connection = '';

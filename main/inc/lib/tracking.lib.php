@@ -1639,10 +1639,10 @@ class Tracking
 
     /**
      * Get first user's connection date on the course
-     * @param     int         User id
-     * @param    int        $courseId
-     * @param    int            Session id (optional, default=0)
-     * @return    string|bool    Date with format long without day or false if there is no date
+     * @param int User id
+     * @param int $courseId
+     * @param int Session id (optional, default=0)
+     * @return string|bool Date with format long without day or false if there is no date
      */
     public static function get_first_connection_date_on_the_course(
         $student_id,
@@ -1685,6 +1685,7 @@ class Tracking
      * @param     int         User id
      * @param    array        $courseInfo real_id and code are used
      * @param    int            Session id (optional, default=0)
+     * @param bool $convert_date
      * @return    string|bool    Date with format long without day or false if there is no date
      */
     public static function get_last_connection_date_on_the_course(
@@ -4968,7 +4969,6 @@ class Tracking
     {
         $html = '';
         if (isset($course_code)) {
-
             $user_id = intval($user_id);
             $session_id = intval($session_id);
             $course = Database::escape_string($course_code);
@@ -5029,7 +5029,6 @@ class Tracking
                     $exercise_obj = new Exercise($course_info['real_id']);
                     $exercise_obj->read($exercices['id']);
                     $visible_return = $exercise_obj->is_visible();
-
                     $score = $weighting = $attempts = 0;
 
                     // Getting count of attempts by user
@@ -5098,12 +5097,15 @@ class Tracking
                             if (!empty($exercise_stat)) {
 
                                 // Always getting the BEST attempt
-                                $score          = $exercise_stat['exe_result'];
-                                $weighting      = $exercise_stat['exe_weighting'];
-                                $exe_id         = $exercise_stat['exe_id'];
+                                $score = $exercise_stat['exe_result'];
+                                $weighting = $exercise_stat['exe_weighting'];
+                                $exe_id = $exercise_stat['exe_id'];
 
                                 $latest_attempt_url .= api_get_path(WEB_CODE_PATH).'exercise/result.php?id='.$exe_id.'&cidReq='.$course_info['code'].'&show_headers=1&id_session='.$session_id;
-                                $percentage_score_result = Display::url(ExerciseLib::show_score($score, $weighting), $latest_attempt_url);
+                                $percentage_score_result = Display::url(
+                                    ExerciseLib::show_score($score, $weighting),
+                                    $latest_attempt_url
+                                );
                                 $my_score = 0;
                                 if (!empty($weighting) && intval($weighting) != 0) {
                                     $my_score = $score / $weighting;
@@ -5112,10 +5114,21 @@ class Tracking
                                 if (is_int($user_list)) {
                                     $user_list = array($user_list);
                                 }
-                                $position = ExerciseLib::get_exercise_result_ranking($my_score, $exe_id, $exercices['id'], $course_info['code'], $session_id, $user_list);
+                                $position = ExerciseLib::get_exercise_result_ranking(
+                                    $my_score,
+                                    $exe_id,
+                                    $exercices['id'],
+                                    $course_info['code'],
+                                    $session_id,
+                                    $user_list
+                                );
 
-                                $graph = self::generate_exercise_result_thumbnail_graph($to_graph_exercise_result[$exercices['id']]);
-                                $normal_graph = self::generate_exercise_result_graph($to_graph_exercise_result[$exercices['id']]);
+                                $graph = self::generate_exercise_result_thumbnail_graph(
+                                    $to_graph_exercise_result[$exercices['id']]
+                                );
+                                $normal_graph = self::generate_exercise_result_graph(
+                                    $to_graph_exercise_result[$exercices['id']]
+                                );
                             }
                         }
                         $html .= Display::div(
@@ -5158,7 +5171,6 @@ class Tracking
             }
             $html .= '</tbody></table></div>';
 
-
             // LP table results
             $html .= '<div class="table-responsive">';
             $html .= '<table class="table table-striped table-hover">';
@@ -5184,10 +5196,30 @@ class Tracking
 
             if (!empty($lp_list) > 0) {
                 foreach ($lp_list as $lp_id => $learnpath) {
-                    $progress = self::get_avg_student_progress($user_id, $course, array($lp_id), $session_id);
-                    $last_connection_in_lp = self::get_last_connection_time_in_lp($user_id, $course, $lp_id, $session_id);
-                    $time_spent_in_lp = self::get_time_spent_in_lp($user_id, $course, array($lp_id), $session_id);
-                    $percentage_score = self::get_avg_student_score($user_id, $course, array($lp_id), $session_id);
+                    $progress = self::get_avg_student_progress(
+                        $user_id,
+                        $course,
+                        array($lp_id),
+                        $session_id
+                    );
+                    $last_connection_in_lp = self::get_last_connection_time_in_lp(
+                        $user_id,
+                        $course,
+                        $lp_id,
+                        $session_id
+                    );
+                    $time_spent_in_lp = self::get_time_spent_in_lp(
+                        $user_id,
+                        $course,
+                        array($lp_id),
+                        $session_id
+                    );
+                    $percentage_score = self::get_avg_student_score(
+                        $user_id,
+                        $course,
+                        array($lp_id),
+                        $session_id
+                    );
                     if (is_numeric($percentage_score)) {
                         $percentage_score = $percentage_score.'%';
                     } else {
@@ -5236,9 +5268,9 @@ class Tracking
 
     /**
      * Generates an histogram
-     * @param    array    list of exercise names
-     * @param    array    my results 0 to 100
-     * @param    array    average scores 0-100
+     * @param array $names list of exercise names
+     * @param array $my_results my results 0 to 100
+     * @param array $average average scores 0-100
      * @return string
      */
     static function generate_session_exercise_graph($names, $my_results, $average)

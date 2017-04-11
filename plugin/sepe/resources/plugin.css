@@ -1,38 +1,30 @@
-.cleared{
-	content: ".";
-	display: block;
-	height: 0;
-	clear: both;
-	visibility: hidden;
-	line-height:0;
-}
-.campo_texto{
+.sepe-input-text{
 	color: #00829c;
     font-size: 1.3em;
     font-weight: normal;
 	padding-top: 2px;
 }
 
-.sepe_borrar_link {
+.sepe-delete-link {
     background: url("icon-delete.png") no-repeat scroll 0px 10px;
     padding-left: 30px;
 	font-size:1.3em;
 }
-.sepe_editar_link {
+.sepe-edit-link {
     background: url("icon-edit.png") no-repeat scroll 0 10px;
     padding-left: 30px;
 	font-size:1.3em;
 }
-.sepe_listado_link {
+.sepe-list-link {
     background: url("options-lines.png") no-repeat scroll 0 10px;
     padding-left: 30px;
 	font-size:1.3em;
 }
-input.btn_menu_lateral{
+input.sepe-btn-menu-side{
 	width:100%;
 	margin-bottom:10px;
 }
-legend.subcampo {
+legend.sepe-subfield {
     font-size: 16px;
     line-height: 16px;
     padding-bottom: 10px;
@@ -40,8 +32,11 @@ legend.subcampo {
     padding-right: 0;
     padding-top: 0;
 }
-.well.subcampo {
+.well.sepe-subfield {
     background: none repeat scroll 0 0 #fafafa;
+}
+.well .well {
+    background: white;
 }
 em.span4 {
     float: none;
@@ -55,73 +50,41 @@ em{
     padding: 5px;
 	display: block;
 }
-.mensaje_info{
+.message-info{
 	padding:5px 10px;
 }
-.slt_fecha {
+.sepe-slt-date {
 	width:auto; 
 	display:inline-block;
 }
-textarea.accion_formativa, input.accion_formativa {
-    margin-bottom: 5px;
-    width: 95%;
-}
-
-input.numerico {
+input.sepe-numeric-field {
     text-align: center;
     width: 60px;
 }
-
-.subcampo2 {
+.sepe-subfield2 {
     font-size: 16px;
     text-align: center;
 }
-
-.mlateral{
+.sepe-margin-side{
 	margin: 0 5px;
 }
-
-#tabla_info_nif{
+#sepe-tbl-info-fiscal-number{
 	width:90%;
 	margin:5px auto;	
 }
-
-#tabla_info_nif td, #tabla_info_nif th {
+#sepe-tbl-info-fiscal-number td, #sepe-tbl-info-fiscal-number th {
     background: none repeat scroll 0 0 white;
     border: 1px solid;
     color: #333;
     font-weight: bold;
 	text-align:center;
 }
-
-.va_middle, .table td.va_middle{
+.sepe-vertical-align-middle, .table td.sepe-vertical-align-middle{
 	vertical-align:middle;
 }
-
-.box_centrado{
+.sepe-box-center{
 	margin:0 auto;
 }
-
-
-.dinline{
-	display:inline;
-}
-
-.fright{
-	float:right;
-}
-
-.cursor{
-	cursor:pointer;
-}
-
-.ta-center{
-	text-align:center;
-}
-
-.mtop5{
+.sepe-margin-top{
 	margin-top:5px;
 }
-
-
-

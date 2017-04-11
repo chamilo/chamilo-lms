@@ -10,10 +10,10 @@
 - Seleccionar una región del plugin -> menu_administrator <br>
 - Crear un usuario llamado SEPE con perfil de recursos humanos.<br>
 - Ir al menú del plugin Sepe (en la sección de plugin activos en administración) y seleccionar el link de "Configuración" -> Generar API key. Usar esta clave para realizar pruebas con el SOAP.<br>
-- En el fichero <em>/plugin/sepe/ws/ProveedorCentroTFWS.wsdl</em> modificar la linea 910 para indicar el dominio de la plataforma sustituyendo la cadena ##midominio## por el dominio que corresponda.<br>
+- En el fichero <em>/plugin/sepe/ws/ProveedorCentroTFWS.wsdl</em> modificar la linea 910 para indicar el dominio de la plataforma.<br>
 <br>
 <b>Composer:</b><br>
-- Es necesario incluir (en el caso de que no estuviera añadido) en el fichero <i>composer.json</i> en el apartado de "require" bajo la linea <em>"zendframework/zend-config": "2.3.3",</em> insertar <em>"zendframework/zend-soap": "2.*",</em> <br>
+- Es necesario incluir en el fichero <i>composer.json</i> en el apartado de "require" bajo la linea <em>"zendframework/zend-config": "2.3.3",</em> insertar <em>"zendframework/zend-soap": "2.*",</em> <br>
 - A continuación habrá que actualizar desde la linea de comandos el directorio vendor, usando la orden 'composer update'<br>
 <br>
 <b>Verificación del Webservices:</b><br>

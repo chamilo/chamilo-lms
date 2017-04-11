@@ -907,7 +907,7 @@
   </wsdl:binding>
   <wsdl:service name="ProveedorCentroTFWS">
     <wsdl:port binding="impl:ProveedorCentroEndPointSoapBinding" name="ProveedorCentroEndPoint">
-      <soap:address location="http://##midominio##/plugin/sepe/ws/service.php"/>
+      <soap:address location="http://111.nosolored.pro/plugin/sepe/ws/service.php"/>
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

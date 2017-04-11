@@ -1049,6 +1049,12 @@ if (!empty($student_id)) {
                         true
                     );
 
+                    if (empty($bestScore)) {
+                        $bestScore = '';
+                    } else {
+                        $bestScore = $bestScore.'%';
+                    }
+
                     if ($i % 2 == 0) {
                         $css_class = "row_even";
                     } else {

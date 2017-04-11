@@ -4940,11 +4940,19 @@ class Tracking
                     $html .= Display::tag('td', $last_connection, array('align' => 'center'));
 
                     if ($course_code == $courseCodeFromGet && $_GET['session_id'] == $session_id_from_get) {
-                        $details = '<a href="#">';
-                        $details .= Display::return_icon('2rightarrow_na.png', get_lang('Details'));
+                        $details = Display::url(
+                            Display::return_icon('2rightarrow_na.png', get_lang('Details')),
+                        '#course_session_data'
+                        );
                     } else {
-                        $details = '<a href="'.api_get_self().'?course='.$course_code.'&session_id='.$session_id_from_get.$extra_params.'#course_session_data">';
-                        $details .= Display::return_icon('2rightarrow.png', get_lang('Details'));
+                        $url = api_get_self().'?course='.$course_code.'&session_id='.$session_id_from_get.$extra_params.'#course_session_data';
+                        $details = Display::url(
+                            Display::return_icon(
+                                '2rightarrow.png',
+                                get_lang('Details')
+                            ),
+                            $url
+                        );
                     }
                     $details .= '</a>';
                     $html .= Display::tag('td', $details, array('align'=>'center'));
@@ -5173,7 +5181,7 @@ class Tracking
             $html .= '<div class="table-responsive">';
             $html .= '<table class="table table-striped table-hover">';
             $html .= '<thead><tr>';
-            $html .= Display::tag('th', get_lang('Learnpaths'), array('class'=>'head', 'style'=>'color:#000'));
+            $html .= Display::tag('th', get_lang('LearningPath'), array('class'=>'head', 'style'=>'color:#000'));
             $html .= Display::tag('th', get_lang('LatencyTimeSpent'), array('class'=>'head', 'style'=>'color:#000'));
             $html .= Display::tag('th', get_lang('Progress'), array('class'=>'head', 'style'=>'color:#000'));
             $html .= Display::tag('th', get_lang('Score'), array('class'=>'head', 'style'=>'color:#000'));

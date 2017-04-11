@@ -197,7 +197,7 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !$isDrhOfC
     $actionsLeft .= Display::toolbarButton(get_lang('DeleteCorrections'), $url, 'remove', 'danger');
 }
 
-echo Display::toolbarAction('toolbar-worklist', array($actionsLeft), [12]);
+echo Display::toolbarAction('toolbar-worklist', array($actionsLeft));
 
 if (!empty($my_folder_data['title'])) {
     echo Display::page_subheader($my_folder_data['title']);

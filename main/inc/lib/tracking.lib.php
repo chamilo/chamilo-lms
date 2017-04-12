@@ -6945,53 +6945,51 @@ class TrackingCourseLog
             // store columns in array $users
             $is_western_name_order = api_is_western_name_order();
             $user_row = array();
-            $user_row[] = $user['official_code']; //0
+            $user_row['official_code'] = $user['official_code']; //0
             if ($is_western_name_order) {
-                $user_row[] = $user['firstname'];
-                $user_row[] = $user['lastname'];
+                $user_row['firstname'] = $user['firstname'];
+                $user_row['lastname'] = $user['lastname'];
             } else {
-                $user_row[] = $user['lastname'];
-                $user_row[] = $user['firstname'];
+                $user_row['lastname'] = $user['lastname'];
+                $user_row['firstname'] = $user['firstname'];
             }
-            $user_row[] = $user['username'];
-            $user_row[] = $user['time'];
-            $user_row[] = $user['average_progress'];
-            $user_row[] = $user['exercise_progress'];
-            $user_row[] = $user['exercise_average_best_attempt'];
-            $user_row[] = $user['student_score'];
-            $user_row[] = $user['count_assignments'];
-            $user_row[] = $user['count_messages'];
+            $user_row['username'] = $user['username'];
+            $user_row['time'] = $user['time'];
+            $user_row['average_progress'] = $user['average_progress'];
+            $user_row['exercise_progress'] = $user['exercise_progress'];
+            $user_row['exercise_average_best_attempt'] = $user['exercise_average_best_attempt'];
+            $user_row['student_score'] = $user['student_score'];
+            $user_row['count_assignments'] = $user['count_assignments'];
+            $user_row['count_messages'] = $user['count_messages'];
 
             $userGroupManager = new UserGroup();
-            $user_row[] = $userGroupManager->getLabelsFromNameList($user['user_id'], UserGroup::NORMAL_CLASS);
+            $user_row['classes'] = $userGroupManager->getLabelsFromNameList($user['user_id'], UserGroup::NORMAL_CLASS);
 
             if (empty($session_id)) {
-                $user_row[] = $user['survey'];
+                $user_row['survey'] = $user['survey'];
             }
 
-            $user_row[] = $user['first_connection'];
-            $user_row[] = $user['last_connection'];
+            $user_row['first_connection'] = $user['first_connection'];
+            $user_row['last_connection'] = $user['last_connection'];
             if (isset($_GET['additional_profile_field']) && is_numeric($_GET['additional_profile_field'])) {
-                $user_row[] = $user['additional'];
+                $user_row['additional'] = $user['additional'];
             }
 
-            $user_row[] = $user['link'];
-
-            $users[] = $user_row;
+            $user_row['link'] = $user['link'];
 
             if ($export_csv) {
                 if (empty($session_id)) {
-                    $user_row = array_map('strip_tags', $user_row);
-                    unset($user_row[14]);
-                    unset($user_row[15]);
+                    unset($user_row['classes']);
+                    unset($user_row['link']);
                 } else {
-                    $user_row = array_map('strip_tags', $user_row);
-                    unset($user_row[13]);
-                    unset($user_row[14]);
+                    unset($user_row['classes']);
+                    unset($user_row['link']);
                 }
 
                 $csv_content[] = $user_row;
             }
+
+            $users[] = array_values($user_row);
         }
         return $users;
     }

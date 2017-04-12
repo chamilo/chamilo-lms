@@ -1565,7 +1565,7 @@ function getWorkListTeacher(
                     $condition_session AND
                     $active_condition AND
                     parent_id = 0 AND
-                    post_group_id = $groupIid
+                    post_group_id = $group_id
                     $where_condition
                 ORDER BY $column $direction
                 LIMIT $start, $limit";
@@ -1944,7 +1944,7 @@ function get_work_user_list(
 
     if (!empty($work_data)) {
         if (!empty($group_id)) {
-            $extra_conditions = " work.post_group_id = '".intval($groupIid)."' ";
+            $extra_conditions = " work.post_group_id = '".intval($group_id)."' ";
             // set to select only messages posted by the user's group
         } else {
             $extra_conditions = " (work.post_group_id = '0' OR work.post_group_id is NULL) ";
@@ -2516,7 +2516,7 @@ function get_list_users_without_publication($task_id, $studentId = null)
 
     if ($group_id) {
         $groupInfo = GroupManager::get_group_properties($group_id);
-        $group_user_list = GroupManager::get_subscribed_users($groupInfo['iid']);
+        $group_user_list = GroupManager::get_subscribed_users($groupInfo);
         if (!empty($group_user_list)) {
             foreach($group_user_list as $group_user) {
                 $new_group_user_list[] = $group_user['user_id'];

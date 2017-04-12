@@ -39,7 +39,7 @@ switch ($action) {
         if (api_get_group_id()) {
             $groupInfo = GroupManager::get_group_properties(api_get_group_id());
             // Only course admin or group members allowed
-            if ($is_allowed_to_edit || GroupManager::is_user_in_group(api_get_user_id(), $groupInfo['iid'])) {
+            if ($is_allowed_to_edit || GroupManager::is_user_in_group(api_get_user_id(), $groupInfo)) {
             } else {
                 exit;
             }

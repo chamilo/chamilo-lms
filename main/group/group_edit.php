@@ -25,7 +25,7 @@ $nameTools = get_lang('EditGroup');
 $interbreadcrumb[] = array ('url' => 'group.php?'.api_get_cidreq(), 'name' => get_lang('Groups'));
 $interbreadcrumb[] = array ('url' => 'group_space.php?'.api_get_cidreq(), 'name' => $current_group['name']);
 
-$is_group_member = GroupManager :: is_tutor_of_group(api_get_user_id(), $current_group['iid']);
+$is_group_member = GroupManager :: is_tutor_of_group(api_get_user_id(), $current_group);
 
 if (!api_is_allowed_to_edit(false, true) && !$is_group_member) {
     api_not_allowed(true);
@@ -132,7 +132,7 @@ $form->addText('name', get_lang('GroupName'));
 // Description
 $form->addElement('textarea', 'description', get_lang('Description'), array ('rows' => 6));
 
-$complete_user_list = GroupManager :: fill_groups_list($current_group['iid']);
+$complete_user_list = GroupManager :: fill_groups_list($current_group);
 usort($complete_user_list, 'sort_users');
 
 $possible_users = array();
@@ -141,7 +141,7 @@ foreach ($complete_user_list as $index => $user) {
 }
 
 // Group tutors
-$group_tutor_list = GroupManager :: get_subscribed_tutors($current_group['iid']);
+$group_tutor_list = GroupManager :: get_subscribed_tutors($current_group);
 $selected_users = array();
 $selected_tutors = array();
 foreach ($group_tutor_list as $index => $user) {
@@ -157,7 +157,7 @@ $group_tutors_element = $form->addElement(
 );
 
 // Group members
-$group_member_list = GroupManager::get_subscribed_users($current_group['iid']);
+$group_member_list = GroupManager::get_subscribed_users($current_group);
 
 $selected_users = array ();
 foreach ($group_member_list as $index => $user) {
@@ -335,13 +335,13 @@ if ($form->validate()) {
     // Storing the tutors (we first remove all the tutors and then add only those who were selected)
     GroupManager :: unsubscribe_all_tutors($current_group['iid']);
     if (isset($_POST['group_tutors']) && count($_POST['group_tutors']) > 0) {
-        GroupManager :: subscribe_tutors($values['group_tutors'], $current_group['iid']);
+        GroupManager :: subscribe_tutors($values['group_tutors'], $current_group);
     }
 
     // Storing the users (we first remove all users and then add only those who were selected)
-    GroupManager :: unsubscribe_all_users($current_group['iid']);
+    GroupManager :: unsubscribe_all_users($current_group);
     if (isset($_POST['group_members']) && count($_POST['group_members']) > 0) {
-        GroupManager :: subscribe_users($values['group_members'], $current_group['iid']);
+        GroupManager :: subscribe_users($values['group_members'], $current_group);
     }
 
     // Returning to the group area (note: this is inconsistent with the rest of chamilo)

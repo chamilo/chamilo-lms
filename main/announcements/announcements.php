@@ -436,7 +436,7 @@ switch ($action) {
 
             $element = CourseManager::addUserGroupMultiSelect($form, array());
         } else {
-            $element = CourseManager::addGroupMultiSelect($form, $group_properties['iid'], array());
+            $element = CourseManager::addGroupMultiSelect($form, $group_properties, array());
         }
 
         $form->addHtml('</div>');

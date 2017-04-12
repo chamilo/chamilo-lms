@@ -2163,7 +2163,7 @@ class CourseManager
         $result = Database::query($sql);
 
         while ($group_data = Database::fetch_array($result)) {
-            $group_data['userNb'] = GroupManager::number_of_students($group_data['iid'], $course_id);
+            $group_data['userNb'] = GroupManager::number_of_students($group_data['id'], $course_id);
             $group_list[$group_data['id']] = $group_data;
         }
         return $group_list;
@@ -2252,11 +2252,9 @@ class CourseManager
             // Cleaning groups
             $groups = GroupManager::get_groups($courseId);
             if (!empty($groups)) {
-                $groupList = array_column($groups, 'iid');
-                foreach ($groupList as $groupId) {
-                    GroupManager::delete_groups($groupId, $course['code']);
+                foreach ($groups as $group) {
+                    GroupManager::delete_groups($group, $course['code']);
                 }
-
             }
 
             // Cleaning c_x tables
@@ -5755,12 +5753,12 @@ class CourseManager
     /**
      * Shows the form for sending a message to a specific group or user.
      * @param FormValidator $form
-     * @param int $group_id iid
+     * @param int $group_id id
      * @param array $to
      */
-    public static function addGroupMultiSelect($form, $group_id, $to = array())
+    public static function addGroupMultiSelect($form, $groupInfo, $to = array())
     {
-        $group_users = GroupManager::get_subscribed_users($group_id);
+        $group_users = GroupManager::get_subscribed_users($groupInfo);
         $array = self::buildSelectOptions(null, $group_users, $to);
 
         $result = array();

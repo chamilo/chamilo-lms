@@ -219,7 +219,6 @@ $_SESSION['social_user_id'] = intval($user_id);
 // Setting some course info
 $my_user_id = isset($_GET['u']) ? intval($_GET['u']) : api_get_user_id();
 $personal_course_list = UserManager::get_personal_session_course_list($my_user_id, 50);
-
 $course_list_code = array();
 $i = 1;
 $list = [];

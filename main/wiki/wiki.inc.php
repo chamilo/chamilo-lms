@@ -939,7 +939,7 @@ class Wiki
         if ($row['content'] == '' && $row['title'] == '' && $page == 'index') {
             if (api_is_allowed_to_edit(false, true) ||
                 api_is_platform_admin() ||
-                GroupManager::is_user_in_group(api_get_user_id(), $groupInfo['iid']) ||
+                GroupManager::is_user_in_group(api_get_user_id(), $groupInfo) ||
                 api_is_allowed_in_course()
             ) {
                 //Table structure for better export to pdf
@@ -1002,7 +1002,7 @@ class Wiki
                 $actionsLeft .= $editLink;
             } else {
                 if ((api_is_allowed_in_course() ||
-                    GroupManager::is_user_in_group(api_get_user_id(), $groupInfo['iid']))
+                    GroupManager::is_user_in_group(api_get_user_id(), $groupInfo))
                 ) {
                     $actionsLeft .= $editLink;
                 } else {
@@ -1063,7 +1063,7 @@ class Wiki
             // Only available if row['id'] is set
             if ($row['id']) {
                 if (api_is_allowed_to_session_edit(false, true) && api_is_allowed_to_edit() ||
-                    GroupManager::is_user_in_group(api_get_user_id(), $groupInfo['iid'])
+                    GroupManager::is_user_in_group(api_get_user_id(), $groupInfo)
                 ) {
                     // menu discuss page
                     $actionsRight .= '<a href="index.php?'.api_get_cidreq().'&action=discuss&title='.api_htmlentities(urlencode($page)).'" '.self::is_active_navigation_tab('discuss').'>'.
@@ -2122,8 +2122,8 @@ class Wiki
             }
         } else {
             //extract group members
-            $subscribed_users = GroupManager::get_subscribed_users($groupInfo['iid']);
-            $subscribed_tutors = GroupManager::get_subscribed_tutors($groupInfo['iid']);
+            $subscribed_users = GroupManager::get_subscribed_users($groupInfo);
+            $subscribed_tutors = GroupManager::get_subscribed_tutors($groupInfo);
             $a_users_to_add_with_duplicates = array_merge($subscribed_users, $subscribed_tutors);
             //remove duplicates
             $a_users_to_add = $a_users_to_add_with_duplicates;
@@ -2171,15 +2171,15 @@ class Wiki
                 $name = api_get_person_name($o_user_to_add['firstname'], $o_user_to_add['lastname'])." . ".$username;
                 $photo= '<img src="'.$userPicture.'" alt="'.$name.'"  width="40" height="50" align="bottom" title="'.$name.'"  />';
 
-                $is_tutor_of_group = GroupManager::is_tutor_of_group($assig_user_id, $groupInfo['iid']); //student is tutor
-                $is_tutor_and_member = GroupManager::is_tutor_of_group($assig_user_id, $groupInfo['iid']) &&
-                    GroupManager::is_subscribed($assig_user_id, $groupInfo['iid']);
+                $is_tutor_of_group = GroupManager::is_tutor_of_group($assig_user_id, $groupInfo); //student is tutor
+                $is_tutor_and_member = GroupManager::is_tutor_of_group($assig_user_id, $groupInfo) &&
+                    GroupManager::is_subscribed($assig_user_id, $groupInfo);
                 // student is tutor and member
 
                 if ($is_tutor_and_member) {
                     $status_in_group=get_lang('GroupTutorAndMember');
                 } else {
-                    if($is_tutor_of_group) {
+                    if ($is_tutor_of_group) {
                         $status_in_group=get_lang('GroupTutor');
                     } else {
                         $status_in_group=" "; //get_lang('GroupStandardMember')
@@ -3498,7 +3498,7 @@ class Wiki
                             <label class="col-sm-2 control-label"><?php echo get_lang('Comments');?>:</label>
                             <div class="col-sm-10">
                                 <?php  echo '<input type="hidden" name="wpost_id" value="'.md5(uniqid(rand(), true)).'">';//prevent double post ?>
-                                <textarea class="form-control" name="comment" cols="80" rows="5" id="comment"></textarea> 
+                                <textarea class="form-control" name="comment" cols="80" rows="5" id="comment"></textarea>
                             </div>
                         </div>
                         <div class="form-group">
@@ -3528,7 +3528,7 @@ class Wiki
                                     echo '<input type=hidden name="rating" value="-">';// must pass a default value to avoid rate automatically
                                 }
                                 ?>
-                            
+
                           </div>
                         <div class="form-group">
                                 <div class="col-sm-offset-2 col-sm-10">
@@ -4252,7 +4252,7 @@ class Wiki
                 //Only teacher, platform admin and group members can edit a wiki group
                 if (api_is_allowed_to_edit(false,true) ||
                     api_is_platform_admin() ||
-                    GroupManager::is_user_in_group($userId, $groupInfo['iid']) ||
+                    GroupManager::is_user_in_group($userId, $groupInfo) ||
                     api_is_allowed_in_course()
                 ) {
                     $PassEdit = true;
@@ -4901,7 +4901,7 @@ class Wiki
                 //Only teacher, platform admin and group members can edit a wiki group
                 if (api_is_allowed_to_edit(false,true) ||
                     api_is_platform_admin() ||
-                    GroupManager::is_user_in_group($userId, $groupInfo['iid'])
+                    GroupManager::is_user_in_group($userId, $groupInfo)
                 ) {
                     $PassEdit = true;
                 } else {
@@ -5521,7 +5521,7 @@ class Wiki
                 if (self::checktitle('index')) {
                     if (api_is_allowed_to_edit(false,true) ||
                         api_is_platform_admin() ||
-                        GroupManager::is_user_in_group(api_get_user_id(), $groupInfo['iid']) ||
+                        GroupManager::is_user_in_group(api_get_user_id(), $groupInfo) ||
                         api_is_allowed_in_course()
                     ) {
                         Display::addFlash(Display::return_message(get_lang('GoAndEditMainPage'), 'normal', false));
@@ -5534,7 +5534,7 @@ class Wiki
                     $groupInfo = GroupManager::get_group_properties(api_get_group_id());
                     if (api_is_allowed_to_edit(false,true) ||
                         api_is_platform_admin() ||
-                        GroupManager::is_user_in_group(api_get_user_id(), $groupInfo['iid']) ||
+                        GroupManager::is_user_in_group(api_get_user_id(), $groupInfo) ||
                         $_GET['group_id'] == 0
                     ) {
                         self::display_new_wiki_form();

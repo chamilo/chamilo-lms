@@ -139,14 +139,14 @@ if (
     isset($_GET['content']) &&
     isset($_GET['id']) &&
     (api_is_allowed_to_edit(false, true) ||
-        (isset($group_properties['iid']) && GroupManager::is_tutor_of_group(api_get_user_id(), $group_properties['iid'])))
+        (isset($group_properties['iid']) && GroupManager::is_tutor_of_group(api_get_user_id(), $group_properties)))
 ) {
     $message = delete_post($_GET['id']);
 }
 if (($my_action == 'invisible' || $my_action == 'visible') &&
     isset($_GET['id']) &&
     (api_is_allowed_to_edit(false, true) ||
-        (isset($group_properties['iid']) && GroupManager::is_tutor_of_group(api_get_user_id(), $group_properties['iid'])))
+        (isset($group_properties['iid']) && GroupManager::is_tutor_of_group(api_get_user_id(), $group_properties)))
 ) {
     $message = approve_post($_GET['id'], $_GET['action']);
 }

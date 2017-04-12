@@ -163,7 +163,7 @@ if (isset($current_thread['thread_id'])) {
             // this in the properties of the forum
             // The course admin him/herself can do this off course always
             $groupInfo = GroupManager::get_group_properties($groupId);
-            if ((isset($groupInfo['iid']) && GroupManager::is_tutor_of_group($userId, $groupInfo['iid'])) ||
+            if ((isset($groupInfo['iid']) && GroupManager::is_tutor_of_group($userId, $groupInfo)) ||
                 ($current_forum['allow_edit'] == 1 && $row['user_id'] == $_user['user_id']) ||
                 (
                 api_is_allowed_to_edit(false, true) &&
@@ -181,7 +181,7 @@ if (isset($current_thread['thread_id'])) {
             }
 
             if ($origin != 'learnpath') {
-                if (GroupManager::is_tutor_of_group($userId, $groupInfo['iid']) ||
+                if (GroupManager::is_tutor_of_group($userId, $groupInfo) ||
                     api_is_allowed_to_edit(false, true) &&
                     !(api_is_course_coach() && $current_forum['session_id'] != $sessionId)
                 ) {
@@ -207,7 +207,7 @@ if (isset($current_thread['thread_id'])) {
                 }
 
                 if (
-                    GroupManager::is_tutor_of_group($userId, $groupInfo['iid']) ||
+                    GroupManager::is_tutor_of_group($userId, $groupInfo) ||
                         (api_is_allowed_to_edit(false, true) &&
                         !(api_is_course_coach() && $current_forum['session_id'] != $sessionId)
                         )

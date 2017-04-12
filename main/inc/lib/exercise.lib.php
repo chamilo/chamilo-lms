@@ -1523,11 +1523,9 @@ HOTSPOT;
         $in_hotpot_path,
         $in_get_count = false,
         $where_condition = null
-    )
-    {
+    ) {
         $courseId = api_get_course_int_id();
-        /* by default in_column = 1 If parameters given,
-    it is the name of the column witch is the bdd field name*/
+        // by default in_column = 1 If parameters given, it is the name of the column witch is the bdd field name
         if ($in_column == 1) {
             $in_column = 'firstname';
         }
@@ -1880,8 +1878,10 @@ HOTSPOT;
             api_get_course_id()
         );
         $teacher_id_list = array();
-        foreach ($teacher_list as $teacher) {
-            $teacher_id_list[] = $teacher['user_id'];
+        if (!empty($teacher_list)) {
+            foreach ($teacher_list as $teacher) {
+                $teacher_id_list[] = $teacher['user_id'];
+            }
         }
 
         $list_info = array();
@@ -2708,6 +2708,7 @@ HOTSPOT;
      * @param   int     exercise id
      * @param   string  course code
      * @param   int     session id
+     * @param bool $return_string
      * @return  int     the position of the user between his friends in a course (or course within a session)
      */
     public static function get_exercise_result_ranking_by_attempt(
@@ -2717,8 +2718,7 @@ HOTSPOT;
         $courseId,
         $session_id = 0,
         $return_string = true
-    )
-    {
+    ) {
         if (empty($session_id)) {
             $session_id = 0;
         }

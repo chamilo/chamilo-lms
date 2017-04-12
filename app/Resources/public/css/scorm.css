@@ -343,7 +343,7 @@ See https://support.chamilo.org/issues/6976
     left: 5px;
     position: absolute;
     right: 5px;
-    top: 120px;
+    top: 60px;
 }
 #learning_path_right_zone .tab-pane{
     height: 100%;
@@ -372,23 +372,6 @@ See https://support.chamilo.org/issues/6976
     background: none;
     padding: 0;
     margin: 0;
-}
-.movil-toolbar{
-    width: 100%;
-    height: 40px;
-    padding-top: 5px;
-}
-.btn-movil{
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-}
-.btn-movil li{
-    display: block;
-    float: left;
-    margin-left: 5px;
-    margin-right: 5px;
 }
 .icon-toolbar .fa{
     width: 35px;
@@ -430,10 +413,13 @@ See https://support.chamilo.org/issues/6976
     width: 100%;
     text-align: center;
 }
-.navegation-bar{
-    display: inline-block;
-    width: 100%;
+.navegation-bar {
+    display: block;
     padding: 10px;
+    right: 0;
+    top: 0;
+    position: absolute;
+    z-index: 9999;
 }
 /* Small devices (tablets, 768px and up) */
 @media (min-width: 768px) {
@@ -466,7 +452,7 @@ See https://support.chamilo.org/issues/6976
     #learning_path_right_zone .lp-view-tabs .tab-content {
         bottom: 10px;
         right: 10px;
-        top: 120px;
+        top: 60px;
     }
     #learning_path_right_zone .tab-pane{
     }
@@ -527,6 +513,7 @@ See https://support.chamilo.org/issues/6976
 	height: 45px;
 	line-height: 45px;
 	font-size: 25px;
+        margin-bottom: 3px;
     }
     .btn-movil {
 	width: 130px;
@@ -546,6 +533,18 @@ See https://support.chamilo.org/issues/6976
         width: auto;
     }
     #panel-scorm .image-avatar{
+        display: none;
+    }
+    .navegation-bar {
+	display: block;
+	padding: 10px;
+	position: fixed;
+	top: 0;
+	right: 0;
+	width: 60px;
+	z-index: 999;
+    }
+    .nav-tabs-bar{
         display: none;
     }
 }

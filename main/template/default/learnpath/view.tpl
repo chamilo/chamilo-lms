@@ -1,9 +1,4 @@
 <div id="learning_path_main" class="{{ is_allowed_to_edit ? 'lp-view-include-breadcrumb' }} {{ lp_mode == 'embedframe' ? 'lp-view-collapsed' }}">
-    {% if is_allowed_to_edit %}
-        <div id="learning_path_breadcrumb_zone" class="hidden-xs">
-            {{ breadcrumb }}
-        </div>
-    {% endif %}
         <div id="learning_path_left_zone" class="sidebar-scorm">
             <div class="lp-view-zone-container">
                 <div id="scorm-info">
@@ -98,7 +93,7 @@
         {# right zone #}
         <div id="learning_path_right_zone" class="content-scorm">
             <div class="lp-view-zone-container">
-                <div id="lp_navigation_elem" class="navegation-bar pull-right text-right">
+                <div id="lp_navigation_elem" class="navegation-bar">
                     <a href="#" title = "{{ 'Expand'|get_lang }}" id="lp-view-expand-toggle" class="icon-toolbar expand" role="button">
                         {% if lp_mode == 'embedframe' %}
                             <span class="fa fa-compress" aria-hidden="true"></span>

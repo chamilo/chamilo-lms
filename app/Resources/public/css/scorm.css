@@ -415,7 +415,7 @@ See https://support.chamilo.org/issues/6976
 }
 .navegation-bar {
     display: block;
-    padding: 10px;
+    padding: 5px 10px 5px 5px;
     right: 0;
     top: 0;
     position: absolute;
@@ -491,6 +491,17 @@ See https://support.chamilo.org/issues/6976
 	padding: 0;
 	margin: 0;
     }
+    #learning_path_left_zone .lp-view-zone-container,
+    #learning_path_right_zone .lp-view-zone-container{
+        padding: 0;
+    }
+    #scorm-info {
+	padding: 30px 0 0 0;
+	margin: 0;
+    }
+    .nav-tabs-bar{
+        display: none;
+    }
 }
 /* Landscape phones and down */
 @media (max-width: 480px) {
@@ -509,23 +520,23 @@ See https://support.chamilo.org/issues/6976
         padding: 10px;
     }
     .icon-toolbar .fa {
-	width: 45px;
-	height: 45px;
-	line-height: 45px;
-	font-size: 25px;
-        margin-bottom: 3px;
+	width: 35px;
+	height: 35px;
+	line-height: 35px;
+	font-size: 22px;
     }
     .btn-movil {
 	width: 130px;
 	margin: auto;
     }
     #scorm-info {
-	padding: 0;
+	padding: 30px 0 0 0;
 	margin: 0;
     }
     #learning_path_toc {
-        left: 5px;
-	padding: 0px;
+        left: 0;
+        right: 0;
+	padding: 0;
 	border-radius: 5px;
     }
     #learning_path_right_zone {
@@ -537,14 +548,17 @@ See https://support.chamilo.org/issues/6976
     }
     .navegation-bar {
 	display: block;
-	padding: 10px;
+	padding: 2px;
 	position: fixed;
 	top: 0;
-	right: 0;
-	width: 60px;
+	right: 15px;
 	z-index: 999;
     }
     .nav-tabs-bar{
         display: none;
+    }
+    #learning_path_left_zone .lp-view-zone-container,
+    #learning_path_right_zone .lp-view-zone-container{
+        padding: 0;
     }
 }

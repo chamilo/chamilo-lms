@@ -382,7 +382,7 @@ if (!api_is_invitee()) {
 }
 $navigation_bar = $_SESSION['oLP']->get_navigation_bar();
 $navigation_bar_bottom = $_SESSION['oLP']->get_navigation_bar("control-bottom", "display:none");
-$mediaplayer = $_SESSION['oLP']->get_mediaplayer($autostart);
+$mediaplayer = $_SESSION['oLP']->get_mediaplayer($_SESSION['oLP']->current, $autostart);
 
 $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 $show_audioplayer = false;

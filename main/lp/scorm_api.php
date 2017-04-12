@@ -1649,7 +1649,9 @@ function switch_item(current_item, next_item){
     $.ajax({
         type: "POST",
         url: "lp_nav.php",
-        data: "",
+        data: {
+            lp_item: next_item
+        },
         beforeSend: function() {
             $.each($('audio'), function () {
                 var player = new MediaElementPlayer($(this));

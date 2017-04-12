@@ -3,6 +3,8 @@
 
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\SkillRelUser;
+use Chamilo\CoreBundle\Entity\SkillRelUserComment;
 use Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder;
 use Symfony\Component\Security\Core\Encoder\EncoderFactory;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
@@ -107,7 +109,7 @@ class UserManager
     {
         $encryption = self::getPasswordEncryption();
         $encoders = array(
-            'Chamilo\\UserBundle\\Entity\\User' => new \Chamilo\UserBundle\Security\Encoder($encryption)
+            'Chamilo\\UserBundle\\Entity\\User' => new \Chamilo\UserBundle\Security\Encoder($encryption),
         );
 
         $encoderFactory = new EncoderFactory($encoders);
@@ -470,7 +472,7 @@ class UserManager
                         'smsType' => SmsPlugin::WELCOME_LOGIN_PASSWORD,
                         'userId' => $return,
                         'mobilePhoneNumber' => $phoneNumber,
-                        'password' => $original_password
+                        'password' => $original_password,
                     );
 
                     api_mail_html(
@@ -533,7 +535,7 @@ class UserManager
             if (!empty($hook)) {
                 $hook->setEventData(array(
                     'return' => $userId,
-                    'originalPassword' => $original_password
+                    'originalPassword' => $original_password,
                 ));
                 $hook->notifyCreateUser(HOOK_EVENT_TYPE_POST);
             }
@@ -737,11 +739,26 @@ class UserManager
         Database::query($sql);
 
         // Skills
-        $table = Database::get_main_table(TABLE_MAIN_SKILL_REL_USER);
-        $sql = "DELETE FROM $table WHERE user_id = $user_id";
-        Database::query($sql);
-
         $em = Database::getManager();
+
+        $criteria = ['user' => $user_id];
+        $skills = $em->getRepository('ChamiloCoreBundle:SkillRelUser')->findBy($criteria);
+        if ($skills) {
+            /** @var SkillRelUser $skill */
+            foreach ($skills as $skill) {
+                $comments = $skill->getComments();
+                if ($comments) {
+                    /** @var SkillRelUserComment $comment */
+                    foreach ($comments as $comment) {
+                        $em->remove($comment);
+                    }
+                }
+                $em->remove($skill);
+            }
+            $em->flush();
+        }
+
+        // ExtraFieldSavedSearch
         $criteria = ['user' => $user_id];
         $searchList = $em->getRepository('ChamiloCoreBundle:ExtraFieldSavedSearch')->findBy($criteria);
         if ($searchList) {
@@ -1349,7 +1366,7 @@ class UserManager
             'COUNT(1) AS count',
             Database::get_main_table(TABLE_MAIN_USER),
             [
-                'where' => ['id = ?' => intval($userId)]
+                'where' => ['id = ?' => intval($userId)],
             ],
             'first'
         );
@@ -1569,7 +1586,7 @@ class UserManager
         $anonymousPath = array(
             'dir' => $base.'img/',
             'file' => 'unknown.jpg',
-            'email' => ''
+            'email' => '',
         );
 
         if (empty($id) || empty($type)) {
@@ -1601,7 +1618,7 @@ class UserManager
         return array(
             'dir' => $dir,
             'file' => $pictureFilename,
-            'email' => $user['email']
+            'email' => $user['email'],
         );
     }
 
@@ -1635,7 +1652,7 @@ class UserManager
         $anonymousPath = array(
             'dir' => $base.'img/',
             'file' => 'unknown.jpg',
-            'email' => ''
+            'email' => '',
         );
 
         if (empty($id) || empty($type)) {
@@ -1668,7 +1685,7 @@ class UserManager
         return array(
             'dir' => $dir,
             'file' => $pictureFilename,
-            'email' => $user['email']
+            'email' => $user['email'],
         );
     }
 
@@ -2103,7 +2120,7 @@ class UserManager
         $params = [
             'item_id' => $userId,
             'variable' => $variable,
-            'value' => $value
+            'value' => $value,
         ];
 
         return $extraFieldValue->save($params);
@@ -2137,7 +2154,7 @@ class UserManager
             'display_text',
             'default_value',
             'field_order',
-            'filter'
+            'filter',
         );
         $column = intval($column);
         $sort_direction = '';
@@ -2184,7 +2201,7 @@ class UserManager
                             0 => $rowo['id'],
                             1 => $rowo['option_value'],
                             2 => empty($rowo['display_text']) ? '' : $rowo['display_text'],
-                            3 => $rowo['option_order']
+                            3 => $rowo['option_order'],
                         );
                     }
                 }
@@ -2310,7 +2327,7 @@ class UserManager
             'variable' => $variable,
             'field_type' => $fieldType,
             'display_text' => $displayText,
-            'default_value' => $default
+            'default_value' => $default,
         ];
 
         return $extraField->save($params);
@@ -2740,7 +2757,7 @@ class UserManager
                 'id' => $row['session_category_id'],
                 'name' => $row['session_category_name'],
                 'date_start' => $categoryStart,
-                'date_end' => $categoryEnd
+                'date_end' => $categoryEnd,
             );
 
             $visibility = api_get_session_visibility(
@@ -2754,7 +2771,7 @@ class UserManager
                 $blockedCourseCount = 0;
                 $closedVisibilityList = array(
                     COURSE_VISIBILITY_CLOSED,
-                    COURSE_VISIBILITY_HIDDEN
+                    COURSE_VISIBILITY_HIDDEN,
                 );
 
                 foreach ($courseList as $course) {
@@ -2800,7 +2817,7 @@ class UserManager
                 'access_end_date' => $row['access_end_date'] ? $row['access_end_date']->format('Y-m-d H:i:s') : null,
                 'coach_access_start_date' => $row['coach_access_start_date'] ? $row['coach_access_start_date']->format('Y-m-d H:i:s') : null,
                 'coach_access_end_date' => $row['coach_access_end_date'] ? $row['coach_access_end_date']->format('Y-m-d H:i:s') : null,
-                'courses' => $courseList
+                'courses' => $courseList,
             );
         }
 
@@ -3916,7 +3933,7 @@ class UserManager
                     $extraFiltrableFields[] = array(
                         'name' => $extraField[3],
                         'variable' => $extraField[1],
-                        'data' => $extraField[9]
+                        'data' => $extraField[9],
                     );
                 }
             }
@@ -4013,7 +4030,7 @@ class UserManager
                 $varName = 'field_'.$extraField['variable'];
 
                 $options = [
-                    0 => get_lang('Select')
+                    0 => get_lang('Select'),
                 ];
                 foreach ($extraField['data'] as $option) {
                     $checked = '';
@@ -5065,7 +5082,7 @@ EOF;
                         $field_details[3],
                         array(
                             'size' => 60,
-                            'style' => 'background-image: url(\''.$icon_path.'\'); background-repeat: no-repeat; background-position: 0.4em '.$top.'em; padding-left: '.$leftpad.'em; '
+                            'style' => 'background-image: url(\''.$icon_path.'\'); background-repeat: no-repeat; background-position: 0.4em '.$top.'em; padding-left: '.$leftpad.'em; ',
                         )
                     );
                     $form->applyFilter('extra_'.$field_details[1], 'stripslashes');
@@ -5295,8 +5312,8 @@ EOF;
 
         $resultData = Database::select('user_id, lastname, firstname, username', $userTable, array(
             'where' => array(
-                'status = ?' => COURSEMANAGER
-            )
+                'status = ?' => COURSEMANAGER,
+            ),
         ));
 
         foreach ($resultData as &$teacherData) {
@@ -5367,7 +5384,7 @@ EOF;
         $whereConditions = array(
             'user_id = ? ' => $userId,
             'AND c_id = ? ' => $courseId,
-            'AND session_id = ? ' => $sessionId
+            'AND session_id = ? ' => $sessionId,
         );
 
         if (!empty($from) && !empty($until)) {
@@ -5379,7 +5396,7 @@ EOF;
             'SUM(UNIX_TIMESTAMP(logout_course_date) - UNIX_TIMESTAMP(login_course_date)) as total_time',
             $trackCourseAccessTable,
             array(
-                'where' => $whereConditions
+                'where' => $whereConditions,
             ), 'first'
         );
 
@@ -5408,8 +5425,8 @@ EOF;
                         'user_id = ? AND relation_type = ? LIMIT 1' => array(
                             $userId,
                             USER_RELATION_TYPE_BOSS,
-                        )
-                    )
+                        ),
+                    ),
                 )
             );
             if (!empty($row)) {
@@ -5439,8 +5456,8 @@ EOF;
                         'user_id = ? AND relation_type = ? ' => array(
                             $userId,
                             USER_RELATION_TYPE_BOSS,
-                        )
-                    )
+                        ),
+                    ),
                 ),
                 'all'
             );
@@ -5603,7 +5620,7 @@ SQL;
                 [
                     'url' => $userPath.'class.php?'.api_get_cidreq(),
                     'content' => get_lang('Classes'),
-                ]
+                ],
             ];
 
             return Display::tabsOnlyLink($headers, $optionSelected);

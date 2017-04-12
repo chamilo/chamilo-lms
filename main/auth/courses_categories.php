@@ -318,7 +318,8 @@ function returnThumbnail($course, $registeredUser)
     return $html;
 }
 
-function return_teacher($course) {
+function return_teacher($course)
+{
     //Info course
     $courseInfo = api_get_course_info($course['code']);
     $teachers = CourseManager::getTeachersFromCourse($courseInfo['real_id']);
@@ -355,7 +356,11 @@ function return_title($course, $registeredUser)
     $linkCourse = api_get_course_url($course['code']);
     $title = cut($course['title'], 45);
     $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
-    $rating = Display::return_rating_system('star_'.$course['real_id'], $ajax_url.'&course_id='.$course['real_id'], $course['point_info']);
+    $rating = Display::return_rating_system(
+        'star_'.$course['real_id'],
+        $ajax_url.'&course_id='.$course['real_id'],
+        $course['point_info']
+        );
     $html .= '<div class="block-title"><h4 class="title">';
     
     if (!$registeredUser) {

@@ -60,20 +60,6 @@
                                 {{ progress_bar }}
                             </div>
                         {% endif %}
-                        <div class="visible-xs-block movil-toolbar">
-                            <ul class="btn-movil">
-                                <li>
-                                    <a href="{{ button_home_url }}" class="icon-toolbar" target="_self" onclick="javascript: window.parent.API.save_asset();">
-                                        <em class="fa fa-home"></em> <span class="hidden-xs hidden-sm"></span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <button type="button" id="lp-view-expand-button" class="icon-toolbar expand visible-xs-block">
-                                        <span class="fa fa-expand" aria-hidden="true"></span>
-                                    </button>
-                                </li>
-                            </ul>
-                        </div>
                         {{ teacher_toc_buttons }}
                     </div>
                 </div>
@@ -88,41 +74,40 @@
             </div>
         </div>
         {# end left zone #}
-
+        <div id="lp_navigation_elem" class="navegation-bar">
+            <a href="#" title = "{{ 'Expand'|get_lang }}" id="lp-view-expand-toggle" class="icon-toolbar expand" role="button">
+                {% if lp_mode == 'embedframe' %}
+                    <span class="fa fa-compress" aria-hidden="true"></span>
+                    <span class="sr-only">{{ 'Expand'|get_lang }}</span>
+                {% else %}
+                    <span class="fa fa-expand" aria-hidden="true"></span>
+                    <span class="sr-only">{{ 'Expand'|get_lang }}</span>
+                {% endif %}
+            </a>
+            <a id="home-course" title = "{{ 'Home'|get_lang }}" href="{{ button_home_url }}" class="icon-toolbar" target="_self" onclick="javascript: window.parent.API.save_asset();">
+                <em class="fa fa-home"></em> <span class="hidden-xs hidden-sm"></span>
+            </a>
+            {{ navigation_bar }}
+        </div>
         {# <div id="hide_bar" class="scorm-toggle" style="display:inline-block; width: 25px; height: 1000px;"></div> #}
         {# right zone #}
         <div id="learning_path_right_zone" class="content-scorm">
             <div class="lp-view-zone-container">
-                <div id="lp_navigation_elem" class="navegation-bar">
-                    <a href="#" title = "{{ 'Expand'|get_lang }}" id="lp-view-expand-toggle" class="icon-toolbar expand" role="button">
-                        {% if lp_mode == 'embedframe' %}
-                            <span class="fa fa-compress" aria-hidden="true"></span>
-                            <span class="sr-only">{{ 'Expand'|get_lang }}</span>
-                        {% else %}
-                            <span class="fa fa-expand" aria-hidden="true"></span>
-                            <span class="sr-only">{{ 'Expand'|get_lang }}</span>
-                        {% endif %}
-                    </a>
-                    <a id="home-course" title = "{{ 'Home'|get_lang }}" href="{{ button_home_url }}" class="icon-toolbar" target="_self" onclick="javascript: window.parent.API.save_asset();">
-                        <em class="fa fa-home"></em> <span class="hidden-xs hidden-sm"></span>
-                    </a>
-                    {{ navigation_bar }}
-                </div>
-
                 <div class="lp-view-tabs">
-                    <ul id="navTabs" class="nav nav-tabs" role="tablist">
-                        <li role="presentation" class="active">
-                            <a href="#lp-view-content" title="{{ 'Lesson'|get_lang }}" aria-controls="lp-view-content" role="tab" data-toggle="tab">
-                                <span class="fa fa-book fa-2x fa-fw" aria-hidden="true"></span><span class="sr-only">{{ 'Lesson'|get_lang }}</span>
-                            </a>
-                        </li>
-                        <li role="presentation">
-                            <a href="#lp-view-forum" title="{{ 'Forum'|get_lang }}" aria-controls="lp-view-forum" role="tab" data-toggle="tab">
-                                <span class="fa fa-commenting-o fa-2x fa-fw" aria-hidden="true"></span><span class="sr-only">{{ 'Forum'|get_lang }}</span>
-                            </a>
-                        </li>
-                    </ul>
-
+                    <div id="navTabsbar" class="nav-tabs-bar">
+                        <ul id="navTabs" class="nav nav-tabs" role="tablist">
+                            <li role="presentation" class="active">
+                                <a href="#lp-view-content" title="{{ 'Lesson'|get_lang }}" aria-controls="lp-view-content" role="tab" data-toggle="tab">
+                                    <span class="fa fa-book fa-2x fa-fw" aria-hidden="true"></span><span class="sr-only">{{ 'Lesson'|get_lang }}</span>
+                                </a>
+                            </li>
+                            <li role="presentation">
+                                <a href="#lp-view-forum" title="{{ 'Forum'|get_lang }}" aria-controls="lp-view-forum" role="tab" data-toggle="tab">
+                                    <span class="fa fa-commenting-o fa-2x fa-fw" aria-hidden="true"></span><span class="sr-only">{{ 'Forum'|get_lang }}</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane active" id="lp-view-content">
                             <div id="wrapper-iframe" style="width:100%; height:100%">
@@ -178,6 +163,13 @@
             } else {
                 $(this).attr('title', '{{ "Collapse" | get_lang }}');
             }
+            
+            if($('#navTabsbar').is(':hidden')){
+                $('#navTabsbar').show();
+            } else {
+                $('#navTabsbar').hide();
+            }
+            
         });
         {% else %}
         $('#lp-view-expand-button, #lp-view-expand-toggle').on('click', function (e) {
@@ -194,7 +186,12 @@
             } else {
                 $(this).attr('title', '{{ "Collapse" | get_lang }}');
             }
-
+            
+            if($('#navTabsbar').is(':hidden')){
+                $('#navTabsbar').show();
+            } else {
+                $('#navTabsbar').hide();
+            }
 
         });
 

@@ -83,6 +83,9 @@ class GroupManager
     public static function get_group_list($categoryId = null, $course_code = null, $status = null)
     {
         $course_info = api_get_course_info($course_code);
+        if (empty($course_info)) {
+            return [];
+        }
         $session_id = api_get_session_id();
 
         $course_id = $course_info['real_id'];
@@ -114,7 +117,7 @@ class GroupManager
         }
 
         if (!is_null($status)) {
-            $sql .= "  AND  g.status = '".intval($status)."' ";
+            $sql .= " AND g.status = '".intval($status)."' ";
         }
 
         $sql .= " AND g.c_id = $course_id ";

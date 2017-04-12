@@ -158,9 +158,10 @@ if ($showCourses && $action != 'display_sessions') {
                 continue;
             }
 
-            $user_registerd_in_course = CourseManager::is_user_subscribed_in_course($user_id, $course['code']);
-            $user_registerd_in_course_as_teacher = CourseManager::is_course_teacher($user_id, $course['code']);
-            $user_registerd_in_course_as_student = ($user_registerd_in_course && !$user_registerd_in_course_as_teacher);
+            $userRegisterdInCourse = CourseManager::is_user_subscribed_in_course($user_id, $course['code']);
+            $userRegisterdInCourseAsTeacher = CourseManager::is_course_teacher($user_id, $course['code']);
+            $userRegisterd = ($userRegisterdInCourse && $userRegisterdInCourseAsTeacher);
+            
             $course_public = ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD);
             $course_open = ($course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM);
             $course_private = ($course['visibility'] == COURSE_VISIBILITY_REGISTERED);
@@ -173,7 +174,7 @@ if ($showCourses && $action != 'display_sessions') {
 
             $html = null;
             // display the course bloc
-            $html .= '<div class="col-xs-6 col-sm-6 col-md-3"><div class="items items-courses">';
+            $html .= '<div class="col-xs-12 col-sm-6 col-md-4"><div class="items items-courses">';
 
             $course['category_title'] = '';
             if (isset($course['category'])) {
@@ -181,7 +182,7 @@ if ($showCourses && $action != 'display_sessions') {
             }
 
             // display thumbnail
-            $html .= returnThumbnail($course);
+            $html .= returnThumbnail($course, $userRegisterd);
 
             $separator = '<div class="separator">&nbsp;</div>';
             $subscribeButton = return_register_button($course, $stok, $code, $search_term);
@@ -209,7 +210,8 @@ if ($showCourses && $action != 'display_sessions') {
 
             // display course title and button bloc
             $html .= '<div class="description">';
-            $html .= return_title($course);
+            $html .= return_title($course, $userRegisterd);
+            $html .= return_teacher($course);
 
             // display button line
             $html .= '<div class="toolbar">';
@@ -219,7 +221,7 @@ if ($showCourses && $action != 'display_sessions') {
             $html .= '<div class="right">';
             $html .= '<div class="btn-group">';
             // if user registered as student
-            if ($user_registerd_in_course_as_student) {
+            if ($userRegisterdInCourse) {
                 $html .= return_already_registered_label('student');
 
                 if (!$course_closed) {
@@ -227,12 +229,12 @@ if ($showCourses && $action != 'display_sessions') {
                         $html .= return_unregister_button($course, $stok, $search_term, $code);
                     }
                 }
-            } elseif ($user_registerd_in_course_as_teacher) {
+            } elseif ($userRegisterdInCourseAsTeacher) {
                 // if user registered as teacher
                 if ($course_unsubscribe_allowed) {
                     $html .= return_unregister_button($course, $stok, $search_term, $code);
                 }
-                $html .= return_already_registered_label('teacher');
+                //$html .= return_already_registered_label('teacher');
 
             } else {
                 // if user not registered in the course
@@ -275,10 +277,12 @@ echo $cataloguePagination;
  *
  * @return string HTML string
  */
-function returnThumbnail($course)
+function returnThumbnail($course, $registeredUser)
 {
     $html = '';
     $title = cut($course['title'], 70);
+    $linkCourse = api_get_course_url($course['code']);
+    
     // course path
     $course_path = api_get_path(SYS_COURSE_PATH).$course['directory'];
 
@@ -290,34 +294,54 @@ function returnThumbnail($course)
     }
 
     $html .= '<div class="image">';
-    $html .= '<img class="img-responsive" src="'.$course_medium_image.'" alt="'.api_htmlentities($title).'"/>';
+    
+    if (!$registeredUser) {
+        $html .= '<img class="img-responsive"'
+                .' src="'.$course_medium_image.'" '
+                .' alt="'.api_htmlentities($title).'"/>';
+    } else {
+        $html .= '<a href="'.$linkCourse.'" title="'.$course['title'].'">'
+                .'<img class="img-responsive" src="'.$course_medium_image.'" '
+                .'alt="'.api_htmlentities($title).'"/></a>';
+    }
+    
     $categoryTitle = isset($course['category_title']) ? $course['category_title'] : '';
     if (!empty($categoryTitle)) {
-        $html .= '<span class="category">'. $categoryTitle.'</span>';
+        $html .= '<span class="category">'.$categoryTitle.'</span>';
         $html .= '<div class="cribbon"></div>';
     }
-    $courseInfo = api_get_course_info($course['code']);
-    $teachers = CourseManager::getTeachersFromCourse($courseInfo['real_id']);
-    $html .= '<div class="black-shadow">';
-    $html .= '<div class="author-card">';
-    $count = 0;
-    foreach ($teachers as $value) {
-        if ($count > 2) {
-            break;
-        }
-        $name = $value['firstname'].' ' . $value['lastname'];
-        $html .= '<a href="'.$value['url'].'" class="ajax" data-title="'.$name.'">
-                <img src="'.$value['avatar'].'"/></a>';
-        $html .= '<div class="teachers-details"><h5>
-                <a href="'.$value['url'].'" class="ajax" data-title="'.$name.'">'
-                . $name . '</a></h5></div>';
-        $count ++;
-    }
-    $html .= '</div></div>';
+    
     $html .= '<div class="user-actions">';
     $html .= return_description_button($course);
     $html .= '</div></div>';
 
+    return $html;
+}
+
+function return_teacher($course)
+{
+    //Info course
+    $courseInfo = api_get_course_info($course['code']);
+    $teachers = CourseManager::getTeachersFromCourse($courseInfo['real_id']);
+    //$count = 0;
+    $html = null;
+    $html .= '<div class="block-author">';
+    $length = count($teachers);
+    foreach ($teachers as $value) {
+        $name = $value['firstname'].' ' . $value['lastname'];
+        if ($length > 2) {
+             $html .= '<a href="'.$value['url'].'" class="ajax" data-title="'.$name.'">
+                    <img src="'.$value['avatar'].'"/></a>';
+        } else {
+            $html .= '<a href="'.$value['url'].'" class="ajax" data-title="'.$name.'">
+                    <img src="'.$value['avatar'].'"/></a>';
+            $html .= '<div class="teachers-details"><h5>
+                    <a href="'.$value['url'].'" class="ajax" data-title="'.$name.'">'
+                    . $name . '</a></h5><p>'. get_lang('Teacher').'</p></div>';
+        }
+        //$count ++;
+    }
+    $html .= '</div>';
     return $html;
 }
 
@@ -326,21 +350,27 @@ function returnThumbnail($course)
  * @param $course
  * @return string HTML string
  */
-function return_title($course)
+function return_title($course, $registeredUser)
 {
     $html = '';
     $linkCourse = api_get_course_url($course['code']);
-    $title = cut($course['title'], 70);
-    $html .= '<h4 class="title"><a href="'.$linkCourse.'">'.cut($title, 60).'</a></h4>';
-    if (api_get_configuration_value('hide_course_rating') === false) {
-        $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
-        $rating = Display::return_rating_system(
-            'star_'.$course['real_id'],
-            $ajax_url.'&course_id='.$course['real_id'],
-            $course['point_info']
+    $title = cut($course['title'], 45);
+    $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
+    $rating = Display::return_rating_system(
+        'star_'.$course['real_id'],
+        $ajax_url.'&course_id='.$course['real_id'],
+        $course['point_info']
         );
-        $html .= '<div class="ranking">'.$rating.'</div>';
+    $html .= '<div class="block-title"><h4 class="title">';
+    
+    if (!$registeredUser) {
+        $html .= $title;
+    } else {
+        $html .= '<a title="'.$title.'" href="' . $linkCourse . '">' . $title . '</a>';
     }
+    
+    $html .= '</h4></div>';
+    $html .= '<div class="ranking">'. $rating . '</div>';
 
     return $html;
 }
@@ -383,16 +413,16 @@ function return_goto_button($course)
  */
 function return_already_registered_label($in_status)
 {
-    $icon = '<em class="fa fa-suitcase"></em>';
+    $icon = '<em class="fa fa-check"></em>';
     $title = get_lang("YouAreATeacherOfThisCourse");
     if ($in_status == 'student') {
-        $icon = '<em class="fa fa-graduation-cap"></em>';
-        $title = get_lang("AlreadyRegisteredToCourse");
+        $icon = '<em class="fa fa-check"></em>';
+        $title = get_lang("AlreadySubscribed");
     }
 
     $html = Display::tag(
         'button',
-        $icon,
+        $icon . ' ' . $title,
         array('id' => 'register', 'class' => 'btn btn-default btn-sm', 'title' => $title)
     );
 
@@ -411,7 +441,7 @@ function return_already_registered_label($in_status)
 function return_register_button($course, $stok, $code, $search_term)
 {
     $html = ' <a class="btn btn-success btn-sm" title="' . get_lang('Subscribe') . '" href="'.api_get_self().'?action=subscribe_course&sec_token='.$stok.'&subscribe_course='.$course['code'].'&search_term='.$search_term.'&category_code='.$code.'">' .
-    Display::returnFontAwesomeIcon('sign-in') . '</a>';
+    get_lang('Subscribe') .' '. Display::returnFontAwesomeIcon('sign-in') . '</a>';
     return $html;
 }
 

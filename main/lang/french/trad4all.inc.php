@@ -7918,52 +7918,6 @@ $SeeAccesses = "Visualiser les accès";
 $PriorityChangeFromXToY = "Priorité modifiée de %s à %s";
 $StatusChangeFromXToY = "Statut modifié de %s à %s";
 $SkillFromCourseXDeletedSinceThen = "Cette compétence a été obtenue au travers du cours %s qui a été éliminé depuis.";
-
-// Ofaj
-
-$TCCConnection = 'Connexion à TCC';
-$TCCConnect = 'Se connecter';
-$ForMoreDetailsVisitX = "Pour que nous puissions mieux te connaître et te proposer un parcours sur mesure, tu dois d’abord remplir ce questionnaire %s.
-Si tu ne l’as pas encore fait, n’oublie pas non plus de remplir ton profil pour pouvoir accéder aux activités de la plateforme.";
-$NewStudentRegistered = "Inscription d'un nouvel apprenant";
-$UserHasParticipateDansDePlatformeXTheContratDateXCertificateDateXTimeX = 'a participé à une préparation linguistique en ligne sur la plateforme %s de l’Office Franco-allemand pour la Jeunesse.
-Du %s au %s.
-Cette préparation correspond à un volume horaire d’environ %s heures';
-$TheContentsAreValidated = 'Les contenus suivants ont été validés';
-$SkillsValidatedOfUserX = 'Sur cette plateforme l’investissement dans le réseau social est valorisé et %s a fait preuve des compétences suivantes';
-$MyGeneralCertificate = 'Mon certificat général';
-
-$FiliereExplanation = "";
-$Filiere = "Filière";
-
-$DisponibiliteAvantExplanation = "";
-$DisponibiliteAvant = "Disponibilité avant mon stage";
-
-$DisponibilitePendantMonStageExplanation = "";
-$DisponibilitePendantMonStage = "Disponibilité pendant mon stage";
-
-$ThemesObjectifsExplanation = "";
-$ThemesObjectifs = "Les thèmes qui m’intéressent / Mes objectifs d’apprentissage";
-
-$NiveauLangueExplanation = "";
-$NiveauLangue = "Mon niveau de langue";
-
-$ObjectifsApprentissageExplanation = "";
-$ObjectifsApprentissage = "Mes objectifs d’apprentissage";
-
-$MethodeTravailExplanation = "";
-$MethodeTravail = "Ma méthode de travail";
-
-$SearchTCC = "Déjà inscrit dans TCC?";
-
-$URLOFAJ = "https://www.ofaj.org/";
-
-$TotalAvailableHours = "Total d'heures disponibles";
-$SumHoursSessionsSubscribed = "Sommes des heures de sessions inscrites";
-$CountHoursAvailable = "Nombre d'heures encore disponible";
-
-// Fin Ofaj
-
 $SaveAndAddNewItem = "Enregister et ajouter un nouvel élément";
 $AnnouncementChooseRecipientsDescription = "Cette annonce sera envoyée à tous les utilisateurs par défaut, mais vous pouvez également sélectionner d'autres destinataires.";
 $ChooseRecipients = "Sélectionnez les destinataires";

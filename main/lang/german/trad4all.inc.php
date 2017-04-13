@@ -7865,14 +7865,6 @@ $YourPasswordContainsSequences = "Ihr Passwort enthält Sequenzen";
 $PasswordVeryWeak = "Sehr schwach";
 $UserXHasBeenAssignedToBoss = "Der Schüler %s, die Ihnen zugeordnet";
 $UserXHasBeenAssignedToBossWithUrlX = "Sie wurden Vormund für den Lernenden %s ernannt. Sie können sein Profil zugreifen hier:% s";
-
-// Ofaj
-$ForMoreDetailsVisitX = "Damit wir dich besser kennenlernen und dir einen maßgeschneiderten Lernpfad anbieten, musst du zuerst diesen Fragebogen %s ausfüllen.
-Wenn du es noch nicht getan hast, vergiss auch nicht, dein Profil zu vervollständigen, damit du für die Aktivitäten auf der Plattform eingeschrieben werden kannst.";
-$SearchTCC = "Schon in TCC eingetragen?";
-$URLOFAJ = "https://www.dfjw.org/";
-// Fin Ofaj
-
 $ShortName = "Kurzname";
 $Portal = "Portal";
 $CourseUserDocument = "Kursbenutzerdokument";

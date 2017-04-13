@@ -330,7 +330,7 @@ class ExtraFieldValue extends Model
         if (is_array($value)) {
             $value_to_insert = implode(';', $value);
         } else {
-            $value_to_insert = Database::escape_string($value);
+            $value_to_insert = $value;
         }
 
         $params['value'] = $value_to_insert;

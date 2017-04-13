@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CLp;
+
 /**
  * Implements the tracking of students in the Reporting pages
  * @package chamilo.reporting
@@ -867,6 +868,7 @@ if (!empty($student_id)) {
             $csv_content[] = array(
                 get_lang('Learnpath'),
                 get_lang('Time'),
+                get_lang('BestScore'),
                 get_lang('AverageScore'),
                 get_lang('LatestAttemptAverageScore'),
                 get_lang('Progress'),
@@ -922,15 +924,11 @@ if (!empty($student_id)) {
                     </th>
                     <th>
                         <?php
-                        echo get_lang('AverageScore').' ';
-                        Display:: display_icon(
-                            'info3.gif',
-                            get_lang('AverageIsCalculatedBasedInAllAttempts'),
-                            array('align' => 'absmiddle', 'hspace' => '3px')
-                        );
+                        echo get_lang('BestScore').' ';
                         ?>
                     </th>
-                    <th><?php
+                    <th>
+                    <?php
                         echo get_lang('LatestAttemptAverageScore').' ';
                         Display::display_icon(
                             'info3.gif',
@@ -1037,6 +1035,22 @@ if (!empty($student_id)) {
                         true
                     );
 
+                    $bestScore = Tracking::get_avg_student_score(
+                        $student_id,
+                        $course_code,
+                        array($lp_id),
+                        $sessionId,
+                        false,
+                        false,
+                        true
+                    );
+
+                    if (empty($bestScore)) {
+                        $bestScore = '';
+                    } else {
+                        $bestScore = $bestScore.'%';
+                    }
+
                     if ($i % 2 == 0) {
                         $css_class = "row_even";
                     } else {
@@ -1049,8 +1063,8 @@ if (!empty($student_id)) {
                     $csv_content[] = array(
                         api_html_entity_decode(stripslashes($lp_name), ENT_QUOTES, $charset),
                         api_time_to_hms($total_time),
-                        $score . '%',
-                        $score_latest . '%',
+                        $bestScore,
+                        $score_latest,
                         $progress.'%',
                         $start_time
                     );
@@ -1059,15 +1073,14 @@ if (!empty($student_id)) {
                     echo Display::tag('td', stripslashes($lp_name));
                     echo Display::tag('td', api_time_to_hms($total_time));
 
-                    if (!is_null($score)) {
+                    if (isset($score) && !is_null($score)) {
                         if (is_numeric($score)) {
                             $score = $score.'%';
                         }
                     }
+                    echo Display::tag('td', $bestScore);
 
-                    echo Display::tag('td', $score);
-
-                    if (!is_null($score_latest)) {
+                    if (isset($score_latest) && !is_null($score_latest)) {
                         if (is_numeric($score_latest)) {
                             $score_latest = $score_latest.'%';
                         }
@@ -1101,7 +1114,12 @@ if (!empty($student_id)) {
                         echo '<td>';
                         if ($any_result === true) {
                             echo '<a href="myStudents.php?action=reset_lp&sec_token='.$token.'&cidReq='.$course_code.'&course='.$course_code.'&details='.Security::remove_XSS($_GET['details']).'&origin='.$origin.'&lp_id='.$learnpath->getId().'&student='.$user_info['user_id'].'&details=true&id_session='.$sessionId.'">';
-                            echo Display::return_icon('clean.png', get_lang('Clean'),'',ICON_SIZE_SMALL).'</a>';
+                            echo Display::return_icon(
+                                    'clean.png',
+                                    get_lang('Clean'),
+                                    '',
+                                    ICON_SIZE_SMALL
+                                ).'</a>';
                             echo '</a>';
                         }
                         echo '</td>';

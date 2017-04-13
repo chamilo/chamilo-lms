@@ -110,7 +110,7 @@ if (api_is_allowed_to_edit(null, true) ||
             Display::return_icon('pdf.png', get_lang('ExportToPDF'), '', ICON_SIZE_MEDIUM).'</a>';
 
         $actionsRight = $form->returnForm();
-        $toolbar = Display::toolbarAction('toolbar-attendance', array($actionsLeft, $actionsRight), 2, false);
+        $toolbar = Display::toolbarAction('toolbar-attendance', array($actionsLeft, $actionsRight));
         echo $toolbar;
     }
 

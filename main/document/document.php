@@ -160,7 +160,7 @@ if (!empty($groupId)) {
     $groupIid = isset($group_properties['iid']) ? $group_properties['iid'] : 0;
     $isTutorGroup = GroupManager::is_tutor_of_group(
         $userId,
-        $group_properties['iid'],
+        $group_properties,
         $courseId
     );
     $groupMemberWithEditRights = $isAllowedToEdit || $isTutorGroup;
@@ -170,7 +170,7 @@ if (!empty($groupId)) {
 
     if ($group_properties['doc_state'] == 2) {
         // Documents are private
-        if ($isAllowedToEdit || GroupManager::is_user_in_group($userId, $group_properties['iid'])) {
+        if ($isAllowedToEdit || GroupManager::is_user_in_group($userId, $group_properties)) {
             // Only courseadmin or group members (members + tutors) allowed
             $interbreadcrumb[] = array(
                 'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
@@ -198,8 +198,8 @@ if (!empty($groupId)) {
 
         // Allowed to upload?
         if ($isAllowedToEdit ||
-            GroupManager::is_subscribed($userId, $group_properties['iid']) ||
-            GroupManager::is_tutor_of_group($userId, $group_properties['iid'], $courseId)
+            GroupManager::is_subscribed($userId, $group_properties) ||
+            GroupManager::is_tutor_of_group($userId, $group_properties, $courseId)
         ) {
             // Only course admin or group members can upload
             $group_member_with_upload_rights = true;
@@ -1975,8 +1975,7 @@ if (!$is_certificate_mode && !isset($_GET['move'])) {
     $selector = DocumentManager::build_directory_selector(
         $folders,
         $document_id,
-        (isset($group_properties['directory']) ? $group_properties['directory'] : array()),
-        true
+        (isset($group_properties['directory']) ? $group_properties['directory'] : array())
     );
 }
 

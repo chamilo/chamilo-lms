@@ -74,7 +74,7 @@ if ($groupId) {
         api_not_allowed();
     } elseif ($group_properties['wiki_state'] == 2) {
         if (!api_is_allowed_to_edit(false, true) and
-            !GroupManager :: is_user_in_group(api_get_user_id(), $group_properties['iid'])
+            !GroupManager :: is_user_in_group(api_get_user_id(), $group_properties)
         ) {
             api_not_allowed();
         }

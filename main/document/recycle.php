@@ -56,7 +56,10 @@ $interbreadcrumb[] = array(
 );
 $template = new Template(get_lang('DeletedDocuments'));
 $template->assign('files', $files);
-$template->assign('actions', $actions);
+$template->assign(
+    'actions',
+    Display::toolbarAction('toolbar', [$actions])
+);
 $template->assign('web_cid_query', api_get_cidreq());
 $templateName = $template->get_template('document/recycle.tpl');
 $content = $template->fetch($templateName);

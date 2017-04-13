@@ -142,14 +142,13 @@ $htmlHeadXtra[] = <<<JS
 JS;
 
 // Action links
-$actions = '
-    <div class="actions">
-        <span class="pull-right">'.search_link().'</span>
-        <a href="viewforum.php?forum='.$forumId.'&'.$cidreq.'">'
-            .Display::return_icon('back.png',get_lang('BackToForum'),'',ICON_SIZE_MEDIUM)
-        .'</a>
-    </div>
-';
+$actions = [
+    Display::url(
+        Display::return_icon('back.png', get_lang('BackToForum'), '', ICON_SIZE_MEDIUM),
+        'viewforum.php?forum='.$forumId.'&'.$cidreq
+    ),
+    search_link()
+];
 
 $threadData = getThreadInfo($threadId, $cId);
 
@@ -267,6 +266,9 @@ if ($form->validate()) {
 $orginIsLearpath = $origin == 'learnpath';
 
 $view = new Template('', !$orginIsLearpath, !$orginIsLearpath, $orginIsLearpath, $orginIsLearpath);
-$view->assign('actions', $actions);
+$view->assign(
+    'actions',
+    Display::toolbarAction('toolbar', $actions)
+);
 $view->assign('content', $form->returnForm());
 $view->display_one_col_template();

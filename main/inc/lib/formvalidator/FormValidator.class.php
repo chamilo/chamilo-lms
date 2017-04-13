@@ -1538,21 +1538,20 @@ EOT;
         $this->addMultipleUploadJavascript($url, $inputName);
 
         $this->addHtml('
-            <div class="description-upload">'.get_lang('ClickToSelectOrDragAndDropMultipleFilesOnTheUploadField').'</div>
+            <div class="description-upload">
+            '.get_lang('ClickToSelectOrDragAndDropMultipleFilesOnTheUploadField').'
+            </div>
             <span class="btn btn-success fileinput-button">
                 <i class="glyphicon glyphicon-plus"></i>
                 <span>'.get_lang('AddFiles').'</span>
                 <!-- The file input field used as target for the file upload widget -->
                 <input id="'.$inputName.'" type="file" name="files[]" multiple>
             </span>
-            <br />
-            <br />
             <div id="dropzone">
                 <div class="button-load">
                 '.get_lang('UploadFiles').'
                 </div>
             </div>
-
             <br />
             <!-- The global progress bar -->
             <div id="progress" class="progress">
@@ -1679,6 +1678,47 @@ EOT;
             $('.fileinput-button').hide();
         });
         </script>");
+    }
+
+    /**
+     * @param string $elementName
+     * @param string $groupName if element is inside a group
+     * @throws Exception
+     */
+    public function addPasswordRule($elementName, $groupName = '')
+    {
+        // Constant defined in old config/profile.conf.php
+        if (CHECK_PASS_EASY_TO_FIND === true) {
+            $message = get_lang('PassTooEasy').': '.api_generate_password();
+
+            if (!empty($groupName)) {
+                $groupObj = $this->getElement($groupName);
+
+                if ($groupObj instanceof HTML_QuickForm_group) {
+                    $elementName = $groupObj->getElementName($elementName);
+
+                    if ($elementName === false) {
+                        throw new Exception("The $groupName doesn't have the element $elementName");
+                    }
+
+                    $this->_rules[$elementName][] = array(
+                        'type' => 'callback',
+                        'format' => 'api_check_password',
+                        'message' => $message,
+                        'validation' => '',
+                        'reset' => false,
+                        'group' => $groupName
+                    );
+                }
+            } else {
+                $this->addRule(
+                    $elementName,
+                    $message,
+                    'callback',
+                    'api_check_password'
+                );
+            }
+        }
     }
 }
 

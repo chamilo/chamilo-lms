@@ -259,7 +259,7 @@ $form_search->addElement('hidden', 'session_id', $sessionId);
 $form_search->addElement('hidden', 'id_session', $sessionId);
 $form_search->addElement('text', 'user_keyword');
 $form_search->addButtonSearch(get_lang('SearchUsers'));
-echo Display::toolbarAction('toolbar-courselog', [$actionsLeft, $form_search->returnForm(), $actionsRight], 3);
+echo Display::toolbarAction('toolbar-courselog', [$actionsLeft, $form_search->returnForm(), $actionsRight]);
 
 $course_name = get_lang('Course').' '.$courseInfo['name'];
 if ($session_id) {

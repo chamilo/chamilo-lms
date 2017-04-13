@@ -2210,7 +2210,7 @@ class learnpath
      * Returns the HTML necessary to print a mediaplayer block inside a page
      * @return string	The mediaplayer HTML
      */
-    public function get_mediaplayer($autostart = 'true')
+    public function get_mediaplayer($lpItemId, $autostart = 'true')
     {
         $course_id = api_get_course_int_id();
         $_course = api_get_course_info();
@@ -2222,7 +2222,7 @@ class learnpath
                 INNER JOIN $tbl_lp_item_view as lp_view
                 ON (lp.id = lp_view.lp_item_id AND lp.c_id = lp_view.c_id)
                 WHERE
-                    lp.id = '".$_SESSION['oLP']->current."' AND
+                    lp.id = '$lpItemId' AND
                     lp.c_id = $course_id AND
                     lp_view.c_id = $course_id";
         $result = Database::query($sql);
@@ -2241,7 +2241,7 @@ class learnpath
 
             if ($type_quiz) {
                 if ($_SESSION['oLP']->prevent_reinit == 1) {
-                    $row['status'] === 'completed' ? $autostart_audio = 'false' : $autostart_audio = 'true';
+                    $autostart_audio = $row['status'] === 'completed' ? 'false' : 'true';
                 } else {
                     $autostart_audio = $autostart;
                 }
@@ -8959,7 +8959,8 @@ class learnpath
             'POST',
             $this->getCurrentBuildingModeURL(),
             '',
-            array('enctype' => 'multipart/form-data')
+            array('enctype' => 'multipart/form-data'),
+            FormValidator::LAYOUT_INLINE
         );
 
         $folders = DocumentManager::get_all_document_folders(
@@ -8977,9 +8978,36 @@ class learnpath
             'directory_parent_id'
         );
 
-        $form->addElement('radio', 'if_exists', get_lang('UplWhatIfFileExists'), get_lang('UplDoNothing'), 'nothing');
+        $form->addHtml('<hr>');
+
+        $group = array(
+            $form->createElement(
+                'radio',
+                'if_exists',
+                get_lang("UplWhatIfFileExists"),
+                get_lang('Yes'),
+                'nothing'
+            ),
+            $form->createElement(
+                'radio',
+                'if_exists',
+                null,
+                get_lang('UplOverwriteLong'),
+                'overwrite'
+            ),
+            $form->createElement(
+                'radio',
+                'if_exists',
+                null,
+                get_lang('UplRenameLong'),
+                'rename'
+            )
+        );
+        $form->addGroup($group, null, get_lang('UplWhatIfFileExists'));
+        $form->addHtml('<br />');
+        /*$form->addElement('radio', 'if_exists', get_lang('UplWhatIfFileExists'), get_lang('UplDoNothing'), 'nothing');
         $form->addElement('radio', 'if_exists', '', get_lang('UplOverwriteLong'), 'overwrite');
-        $form->addElement('radio', 'if_exists', '', get_lang('UplRenameLong'), 'rename');
+        $form->addElement('radio', 'if_exists', '', get_lang('UplRenameLong'), 'rename');*/
         $form->setDefaults(['if_exists' => 'rename']);
 
         // Check box options

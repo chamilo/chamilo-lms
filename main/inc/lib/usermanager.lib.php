@@ -2859,7 +2859,6 @@ class UserManager
         $coachCourseConditions = null;
 
         // Getting sessions that are related to a coach in the session_rel_course_rel_user table
-
         if (api_is_allowed_to_create_course()) {
             $sessionListFromCourseCoach = array();
             $sql =" SELECT DISTINCT session_id

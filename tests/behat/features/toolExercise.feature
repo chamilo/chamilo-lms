@@ -59,7 +59,7 @@ Feature: Exercise tool
     Then I fill in ckeditor field "comment[2]" with "Comment false"
     Then I fill in ckeditor field "comment[3]" with "Comment false"
     Then I fill in ckeditor field "comment[4]" with "Comment false"
-    And I press "submitQuestion"
+    And I press "submit-question"
     Then I should see "Item added"
 
   Scenario: Add question "Multiple answer" to exercise created "Exercise 1"
@@ -80,7 +80,7 @@ Feature: Exercise tool
     Then I fill in ckeditor field "comment[2]" with "Comment false"
     Then I fill in ckeditor field "comment[3]" with "Comment false"
     Then I fill in ckeditor field "comment[4]" with "Comment false"
-    And I press "submitQuestion"
+    And I press "submit-question"
     Then I should see "Item added"
 
   Scenario: Add question "Fill in blanks" to "Exercise 1"

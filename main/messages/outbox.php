@@ -150,7 +150,14 @@ if (api_get_setting('allow_social_tool') == 'true') {
     $tpl->display($social_layout);
 } else {
     $content = $social_right_content;
-    $tpl->assign('actions', $actions);
+
+    if ($actions) {
+        $tpl->assign(
+            'actions',
+            Display::toolbarAction('toolbar', [$actions])
+        );
+    }
+
     $tpl->assign('content', $content);
     $tpl->display_one_col_template();
 }

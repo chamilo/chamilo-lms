@@ -43,7 +43,6 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
      * @access    private
      */
     public $_value = null;
-    private $columnsSize;
     // }}}
     // {{{ constructor
 
@@ -222,22 +221,6 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
             $html = nl2br($value)."\n";
         }
         return $html . $this->_getPersistantData();
-    }
-
-    /**
-     * @return null
-     */
-    public function getColumnsSize()
-    {
-        return $this->columnsSize;
-    }
-
-    /**
-     * @param null $columnsSize
-     */
-    public function setColumnsSize($columnsSize)
-    {
-        $this->columnsSize = $columnsSize;
     }
 
     /**

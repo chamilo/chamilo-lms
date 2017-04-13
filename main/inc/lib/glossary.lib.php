@@ -413,7 +413,7 @@ class GlossaryManager
 
         $toolbar = Display::toolbarAction(
             'toolbar-document',
-            array(0 => $actionsLeft, 1 => $actionsRight)
+            array($actionsLeft, $actionsRight)
         );
 
         $content = $toolbar;

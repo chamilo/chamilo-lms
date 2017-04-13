@@ -249,29 +249,34 @@ if (!empty($see_message_import)) {
     Display::display_normal_message($see_message_import);
 }
 
-$toolbar = Display::toolbarButton(
-    get_lang('ManageSkills'),
-    api_get_path(WEB_CODE_PATH).'admin/skill_list.php',
-    'list',
-    'success',
-    ['title' => get_lang('CreateSkill')]
-);
-$toolbar .= '&nbsp;&nbsp;';
-$toolbar .= Display::toolbarButton(
-    get_lang('SkillsWheel'),
-    api_get_path(WEB_CODE_PATH).'admin/skills_wheel.php',
-    'bullseye',
-    'primary',
-    ['title' => get_lang('CreateSkill')]
-);
-$toolbar .= '&nbsp;&nbsp;';
-$toolbar .= Display::toolbarButton(
-    get_lang('BadgesManagement'),
-    api_get_path(WEB_CODE_PATH).'admin/skill_badge_list.php',
-    'shield',
-    'warning',
-    ['title' => get_lang('BadgesManagement')]
-);
+$toolbar = Display::url(
+    Display::return_icon(
+        'list_badges.png',
+        get_lang('ManageSkills'),
+        null,
+        ICON_SIZE_MEDIUM),
+    api_get_path(WEB_CODE_PATH).'admin/skill_list.php'
+    );
+
+$toolbar .= Display::url(
+    Display::return_icon(
+        'wheel_skill.png',
+        get_lang('SkillsWheel'),
+        null,
+        ICON_SIZE_MEDIUM),
+    api_get_path(WEB_CODE_PATH).'admin/skills_wheel.php'
+    );
+
+$toolbar .= Display::url(
+    Display::return_icon(
+        'edit-skill.png',
+        get_lang('BadgesManagement'),
+        null,
+        ICON_SIZE_MEDIUM),
+    api_get_path(WEB_CODE_PATH).'admin/skill_badge_list.php'
+    );
+
+
 $actions = '<div class="actions">' . $toolbar . '</div>';
 
 echo $actions;

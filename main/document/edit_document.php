@@ -425,7 +425,7 @@ if ($owner_id == api_get_user_id() ||
     api_is_platform_admin() ||
     $is_allowed_to_edit || GroupManager:: is_user_in_group(
         api_get_user_id(),
-        $groupInfo['iid']
+        $groupInfo
     )
 ) {
 	$action = api_get_self().'?id='.$document_data['id'].'&'.api_get_cidreq();

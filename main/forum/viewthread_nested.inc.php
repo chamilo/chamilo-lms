@@ -113,7 +113,7 @@ foreach ($rows as $post) {
     // The user who posted it can edit his thread only if the course admin allowed this in the properties of the forum
     // The course admin him/herself can do this off course always
 
-    $tutorGroup = GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo['iid']);
+    $tutorGroup = GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo);
 
     if ((isset($groupInfo['iid']) && $tutorGroup) ||
         ($current_forum['allow_edit'] == 1 && $post['user_id'] == $userId) ||

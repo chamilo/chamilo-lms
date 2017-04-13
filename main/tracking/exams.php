@@ -85,14 +85,9 @@ if (!$exportToXLS) {
         $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'auth/my_progress.php">'.
         Display::return_icon('stats.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM);
         $actionsLeft .= '</a>';
-        $courseLink = '';
         $courseInfo = api_get_course_info();
 
-        if (!empty($courseInfo)) {
-            $courseLink = api_get_cidreq();
-        }
-
-        $actionsRight .= '<a href="'.api_get_self().'?export=1&score='.$filter_score.'&exercise_id='.$exerciseId.'&'.$courseLink.'">'.
+        $actionsRight .= '<a href="'.api_get_self().'?export=1&score='.$filter_score.'&exercise_id='.$exerciseId.'">'.
             Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), '', ICON_SIZE_MEDIUM).'</a>';
         $actionsRight .= '<a href="javascript: void(0);" onclick="javascript: window.print()">'.
             Display::return_icon('printer.png', get_lang('Print'), '', ICON_SIZE_MEDIUM).'</a>';
@@ -146,10 +141,10 @@ if (!$exportToXLS) {
     echo '<h3>'.sprintf(get_lang('FilteringWithScoreX'), $filter_score).'%</h3>';
 }
 
-$html = null;
+$html = '<table  class="data_table">';
 if ($global) {
-    $html .= '<table  class="data_table">';
-    $html .= '<tr><th>'.get_lang('Courses').'</th>';
+    $html .= '<tr>';
+    $html .= '<th>'.get_lang('Courses').'</th>';
     $html .= '<th>'.get_lang('Quiz').'</th>';
     $html .= '<th>'.get_lang('ExamTaken').'</th>';
     $html .= '<th>'.get_lang('ExamNotTaken').'</th>';
@@ -158,8 +153,8 @@ if ($global) {
     $html .= '<th>'.get_lang('TotalStudents').'</th>';
     $html .= '</tr>';
 } else {
-    $html .= '<table class="data_table">';
-    $html .= '<tr><th>'.get_lang('Quiz').'</th>';
+    $html .= '<tr>';
+    $html .= '<th>'.get_lang('Quiz').'</th>';
     $html .= '<th>'.get_lang('User').'</th>';
     //$html .= '<th>'.sprintf(get_lang('ExamPassX'), $filter_score).'</th>';
     $html .= '<th>'.get_lang('Percentage').' %</th>';
@@ -249,8 +244,6 @@ if (!empty($courseList) && is_array($courseList)) {
             $resultExercises = Database::query($sql);
 
             if (Database::num_rows($resultExercises) > 0) {
-                $export_array_global = array();
-
                 while ($exercise = Database::fetch_array($resultExercises, 'ASSOC')) {
 
                     $exerciseSessionId = $exercise['session_id'];
@@ -368,11 +361,7 @@ if (!$exportToXLS) {
 $filename = 'exam-reporting-'.api_get_local_time().'.xlsx';
 
 if ($exportToXLS) {
-    if ($global) {
-        export_complete_report_xls($filename, $export_array_global);
-    } else {
-        export_complete_report_xls($filename, $export_array);
-    }
+    export_complete_report_xls($filename, $export_array_global);
     exit;
 }
 /**
@@ -404,7 +393,7 @@ function export_complete_report_xls($filename, $array)
     $spreadsheet->setActiveSheetIndex(0);
     $worksheet = $spreadsheet->getActiveSheet();
 
-    $line = 0;
+    $line = 1;
     $column = 0; //skip the first column (row titles)
 
     if ($global) {
@@ -434,33 +423,28 @@ function export_complete_report_xls($filename, $array)
         }
         $line++;
     } else {
-        $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('Exercises'));
-        $column++;
-        $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('User'));
-        $column++;
-        $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('Percentage'));
-        $column++;
-        $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('Status'));
-        $column++;
-        $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('Attempts'));
-        $column++;
+        $worksheet->setCellValueByColumnAndRow(0, $line, get_lang('Exercises'));
+        $worksheet->setCellValueByColumnAndRow(1, $line, get_lang('User'));
+        $worksheet->setCellValueByColumnAndRow(2, $line, get_lang('Percentage'));
+        $worksheet->setCellValueByColumnAndRow(3, $line, get_lang('Status'));
+        $worksheet->setCellValueByColumnAndRow(4, $line, get_lang('Attempts'));
         $line++;
+
         foreach ($array as $row) {
-            $column = 0;
             $worksheet->setCellValueByColumnAndRow(
+                0,
                 $line,
-                $column,
                 html_entity_decode(strip_tags($row['exercise']))
             );
-            $column++;
+
             foreach ($row['users'] as $key => $user) {
-                $column = 1;
                 $worksheet->setCellValueByColumnAndRow(
-                    $column,
+                    1,
                     $line,
                     html_entity_decode(strip_tags($user))
                 );
-                $column++;
+                $column = 2;
+
                 foreach ($row['results'][$key] as $result_item) {
                     $worksheet->setCellValueByColumnAndRow(
                         $column,
@@ -469,10 +453,10 @@ function export_complete_report_xls($filename, $array)
                     );
                     $column++;
                 }
+
                 $line++;
             }
         }
-        $line++;
     }
 
     $file = api_get_path(SYS_ARCHIVE_PATH).api_replace_dangerous_char($filename);
@@ -731,7 +715,7 @@ function processStudentList($filter_score, $global, $exercise, $courseInfo, $ses
     }
     return array(
         'html' => $html,
-        'export_array_global' => $export_array_global,
+        'export_array_global' => $global ? $export_array_global : $export_array,
         'total_students' => $totalStudents
     );
 }

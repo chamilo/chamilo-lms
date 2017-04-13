@@ -1817,12 +1817,18 @@ function get_threads($forum_id, $courseId = null, $sessionId = null)
     $courseId = $courseId !== null ? intval($courseId) : api_get_course_int_id();
     $groupInfo = GroupManager::get_group_properties($groupId);
     $groupCondition = '';
+
     if (!empty($groupInfo)) {
         $groupIid = $groupInfo['iid'];
         $groupCondition =  " AND item_properties.to_group_id = '$groupIid' ";
     }
 
-    $sessionCondition = api_get_session_condition($sessionId, true, false, 'item_properties.session_id');
+    $sessionCondition = api_get_session_condition(
+        $sessionId,
+        true,
+        false,
+        'item_properties.session_id'
+    );
 
     // important note:  it might seem a little bit awkward that we have 'thread.locked as locked' in the sql statement
     // because we also have thread.* in it. This is because thread has a field locked and post also has the same field
@@ -1874,6 +1880,7 @@ function get_threads($forum_id, $courseId = null, $sessionId = null)
                     thread.forum_id = ".intval($forum_id)." AND
                     thread.c_id = $courseId 
                 ORDER BY thread.thread_sticky DESC, thread.thread_date DESC";
+
     }
     $result = Database::query($sql);
     $list = array();
@@ -1964,7 +1971,7 @@ function getPosts(
             $filterModerated = false;
         }
     } else {
-        if (GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo['iid']) || api_is_allowed_to_edit(false, true)) {
+        if (GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo) || api_is_allowed_to_edit(false, true)) {
             $filterModerated = false;
         }
     }
@@ -4915,14 +4922,14 @@ function delete_attachment($post_id, $id_attach = 0, $display = true)
  *
  * @todo this is basically the same code as the get_forums function. Consider merging the two.
  */
-function get_forums_of_group($groupId)
+function get_forums_of_group($groupInfo)
 {
     $table_forums = Database :: get_course_table(TABLE_FORUM);
     $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
     $table_posts = Database :: get_course_table(TABLE_FORUM_POST);
     $table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
     $course_id = api_get_course_int_id();
-    $groupId = (int) $groupId;
+    $groupId = (int) $groupInfo['id'];
 
     // Student
     // Select all the forum information of all forums (that are visible to students).

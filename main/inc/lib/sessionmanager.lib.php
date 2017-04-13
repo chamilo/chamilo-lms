@@ -4962,9 +4962,10 @@ class SessionManager
                                         !empty($groupBackup['user'][$teacherToAdd][$course_code])
                                     ) {
                                         foreach ($groupBackup['user'][$teacherToAdd][$course_code] as $data) {
+                                            $groupInfo = GroupManager::get_group_properties($data['group_id']);
                                             GroupManager::subscribe_users(
                                                 $teacherToAdd,
-                                                $data['group_id'],
+                                                $groupInfo,
                                                 $data['c_id']
                                             );
                                         }
@@ -4975,9 +4976,10 @@ class SessionManager
                                         !empty($groupBackup['tutor'][$teacherToAdd][$course_code])
                                     ) {
                                         foreach ($groupBackup['tutor'][$teacherToAdd][$course_code] as $data) {
+                                            $groupInfo = GroupManager::get_group_properties($data['group_id']);
                                             GroupManager::subscribe_tutors(
                                                 $teacherToAdd,
-                                                $data['group_id'],
+                                                $groupInfo,
                                                 $data['c_id']
                                             );
                                         }
@@ -5083,9 +5085,10 @@ class SessionManager
                                             !empty($groupBackup['user'][$teacherId][$course_code])
                                         ) {
                                             foreach ($groupBackup['user'][$teacherId][$course_code] as $data) {
+                                                $groupInfo = GroupManager::get_group_properties($data['group_id']);
                                                 GroupManager::subscribe_users(
                                                     $teacherId,
-                                                    $data['group_id'],
+                                                    $groupInfo,
                                                     $data['c_id']
                                                 );
                                             }
@@ -5096,9 +5099,10 @@ class SessionManager
                                             !empty($groupBackup['tutor'][$teacherId][$course_code])
                                         ) {
                                             foreach ($groupBackup['tutor'][$teacherId][$course_code] as $data) {
+                                                $groupInfo = GroupManager::get_group_properties($data['group_id']);
                                                 GroupManager::subscribe_tutors(
                                                     $teacherId,
-                                                    $data['group_id'],
+                                                    $groupInfo,
                                                     $data['c_id']
                                                 );
                                             }
@@ -5378,7 +5382,7 @@ class SessionManager
                 $studentIdList = array_keys($studentListSql);
                 $studentListSql = "'".implode("','", $studentIdList)."'";
             }
-            
+
         } else {
             $studentIdList = array_map('intval', $studentIdList);
             $studentListSql = "'".implode("','", $studentIdList)."'";

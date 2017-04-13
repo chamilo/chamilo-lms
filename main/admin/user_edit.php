@@ -231,7 +231,9 @@ $group[] = $form->createElement(
     null,
     array('onkeydown' => 'javascript: password_switch_radio_button();')
 );
+
 $form->addGroup($group, 'password', null, null, false);
+$form->addPasswordRule('password', 'password');
 
 // Status
 $status = array();

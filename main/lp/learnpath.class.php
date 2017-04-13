@@ -5691,7 +5691,7 @@ class learnpath
                 );
                 $delete_icon .= '</a>';
 
-                $url = api_get_self() . '?'.api_get_cidreq().'&view=build&id='.$arrLP[$i]['id'] .'&lp_id='.$this->lp_id;
+                $url = api_get_self().'?'.api_get_cidreq().'&view=build&id='.$arrLP[$i]['id'] .'&lp_id='.$this->lp_id;
                 $previewImage = Display::return_icon(
                     'preview_view.png',
                     get_lang('Preview'),
@@ -8573,17 +8573,29 @@ class learnpath
             </script>';
         }
 
-        $url = api_get_self().'?cidReq='.api_get_cidreq().'&view=build&id='.$item_id .'&lp_id='.$this->lp_id;
+        $url = api_get_self().'?'.api_get_cidreq().'&view=build&id='.$item_id .'&lp_id='.$this->lp_id;
 
-        $return .= Display::url(
-            Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL),
-            $url.'&action=edit_item&path_item=' . $row['path']
-        );
+        if ($item_type != TOOL_LP_FINAL_ITEM) {
+            $return .= Display::url(
+                Display::return_icon(
+                    'edit.png',
+                    get_lang('Edit'),
+                    array(),
+                    ICON_SIZE_SMALL
+                ),
+                $url.'&action=edit_item&path_item='.$row['path']
+            );
 
-        $return .= Display::url(
-            Display::return_icon('move.png', get_lang('Move'), array(), ICON_SIZE_SMALL),
-            $url.'&action=move_item'
-        );
+            $return .= Display::url(
+                Display::return_icon(
+                    'move.png',
+                    get_lang('Move'),
+                    array(),
+                    ICON_SIZE_SMALL
+                ),
+                $url.'&action=move_item'
+            );
+        }
 
         // Commented for now as prerequisites cannot be added to chapters.
         if ($item_type != 'dir') {

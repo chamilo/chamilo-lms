@@ -319,5 +319,23 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
         'length' => 8
     ]
 ];*/
+// Customize course session tracking columns
+/*
+$_configuration['tracking_columns'] = [
+    'course_session' => [
+        'course_title' => true,
+        'published_exercises' => true,
+        'new_exercises' => true,
+        'my_average' => true,
+        'average_exercise_result' => true,
+        'time_spent' => true,
+        'lp_progress' => true,
+        'score' => true,
+        'best_score' => true,
+        'last_connection' => true,
+        'details' => true,
+    ],
+];
+*/
 // Hide session link of course_block on index/userportal
 //$_configuration['remove_session_url']= true ;

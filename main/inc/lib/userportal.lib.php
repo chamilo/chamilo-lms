@@ -1722,6 +1722,7 @@ class IndexManager
             $this->tpl->assign('session', $listSession);
             $this->tpl->assign('show_tutor', (api_get_setting('show_session_coach') === 'true' ? true : false));
             $this->tpl->assign('gamification_mode', $gameModeIsActive);
+            $this->tpl->assign('remove_session_url',api_get_configuration_value('remove_session_url'));
 
             if ($viewGridCourses) {
                 $sessions_with_no_category = $this->tpl->fetch(

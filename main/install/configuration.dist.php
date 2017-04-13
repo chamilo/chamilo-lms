@@ -319,3 +319,5 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
         'length' => 8
     ]
 ];*/
+// Hide session link of course_block on index/userportal
+//$_configuration['remove_session_url']= true ;

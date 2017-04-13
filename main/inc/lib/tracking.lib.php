@@ -4364,6 +4364,27 @@ class Tracking
         $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tbl_access_rel_session = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 
+        $trackingColumns = [
+            'course_session' => [
+                'course_title' => false,
+                'published_exercises' => true,
+                'new_exercises' => true,
+                'my_average' => true,
+                'average_exercise_result' => true,
+                'time_spent' => true,
+                'lp_progress' => true,
+                'score' => true,
+                'best_score' => true,
+                'last_connection' => true,
+                'details' => true,
+            ],
+        ];
+
+        $trackingColumnsConfig = api_get_configuration_value('tracking_columns');
+        if (!empty($trackingColumnsConfig)) {
+            $trackingColumns = $trackingColumnsConfig;
+        }
+
         $user_id = intval($user_id);
         $session_id = intval($session_id);
         $urlId = api_get_current_access_url_id();
@@ -4800,24 +4821,65 @@ class Tracking
 
                 $html .= '<div class="table-responsive">';
                 $html .= '<table class="table table-hover table-striped">';
-                $html .= '
-                    <thead>
-                    <tr>
-                      <th width="300px">'.get_lang('Course').'</th>
-                      '.Display::tag('th', get_lang('PublishedExercises'), array('class'=>'head')).'
-                      '.Display::tag('th', get_lang('NewExercises'), array('class'=>'head')).'
-                      '.Display::tag('th', get_lang('MyAverage'), array('class'=>'head')).'
-                      '.Display::tag('th', get_lang('AverageExerciseResult'), array('class'=>'head')).'
-                      '.Display::tag('th', get_lang('TimeSpentInTheCourse'), array('class'=>'head')).'
-                      '.Display::tag('th', get_lang('LPProgress'), array('class'=>'head')).'
-                      '.Display::tag('th', get_lang('Score').Display::return_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), array('align' => 'absmiddle', 'hspace' => '3px')), array('class'=>'head')).'
-                      '.Display::tag('th', get_lang('BestScore'), array('class'=>'head')).'
-                      '.Display::tag('th', get_lang('LastConnexion'), array('class'=>'head')).'
-                      '.Display::tag('th', get_lang('Details'), array('class'=>'head')).'
-                    </tr>
+
+                $columnHeaders = [
+                    'course_title' => [
+                        get_lang('Course'),
+                        array('width'=>'300px')
+                    ],
+                    'published_exercises' => [
+                        get_lang('PublishedExercises'),
+                        array('class' => 'head'),
+                    ],
+                    'new_exercises' => [
+                        get_lang('NewExercises'),
+                        array('class' => 'head'),
+                    ],
+                    'my_average' => [
+                        get_lang('MyAverage'),
+                        array('class' => 'head'),
+                    ],
+                    'average_exercise_result'  => [
+                        get_lang('AverageExerciseResult'),
+                        array('class' => 'head'),
+                    ],
+                    'time_spent'  => [
+                        get_lang('TimeSpentInTheCourse'),
+                        array('class' => 'head'),
+                    ],
+                    'lp_progress'  => [
+                        get_lang('LPProgress'),
+                        array('class' => 'head'),
+                    ],
+                    'score'  => [
+                        get_lang('Score').Display::return_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), array('align' => 'absmiddle', 'hspace' => '3px')),
+                        array('class' => 'head'),
+                    ],
+                    'best_score'  => [
+                        get_lang('BestScore'),
+                        array('class' => 'head'),
+                    ],
+                    'last_connection'  => [
+                        get_lang('LastConnexion'),
+                        array('class' => 'head'),
+                    ],
+                    'details'  => [
+                        get_lang('Details'),
+                        array('class' => 'head'),
+                    ],
+                ];
+
+                $html .= '<thead><tr>';
+                foreach ($columnHeaders as $key => $columnSetting) {
+                    if (in_array($key, $trackingColumns['course_session'])
+                        && $trackingColumns['course_session'][$key]
+                    ) {
+                         $html .= Display::tag('th', $columnSetting[0], $columnSetting[1]);
+                    }
+                }
+                $html .= '</tr>
                     </thead>
-                    <tbody>
-                ';
+                    <tbody>';
 
                 foreach ($course_list as $course_data) {
                     $course_code  = $course_data['code'];
@@ -4867,8 +4929,6 @@ class Tracking
                         true
                     );
 
-
-
                     $stats_array[$course_code] = array(
                         'exercises' => $count_exercises,
                         'unanswered_exercises_by_user' => $unanswered_exercises,
@@ -4904,9 +4964,6 @@ class Tracking
                         array(),
                         $session_id_from_get
                     );
-
-
-
                     $courseCodeFromGet = isset($_GET['course']) ? $_GET['course'] : null;
 
                     if ($course_code == $courseCodeFromGet && $_GET['session_id'] == $session_id_from_get) {
@@ -4918,42 +4975,26 @@ class Tracking
                     $url = api_get_course_url($course_code, $session_id_from_get);
                     $course_url = Display::url($course_title, $url, array('target' => SESSION_LINK_TARGET));
 
-                    $html .= Display::tag('td', $course_url);
-                    $html .= Display::tag('td', $stats_array[$course_code]['exercises']); // exercuse available
-                    $html .= Display::tag('td', $stats_array[$course_code]['unanswered_exercises_by_user']); // new exercises
-                    //$html .= Display::tag('td', $stats_array[$course_code]['done_exercises']);
-                    $html .= Display::tag('td', ExerciseLib::convert_to_percentage($stats_array[$course_code]['my_average'])); // My average
-                    $html .= Display::tag('td', $stats_array[$course_code]['average'] == 0 ? '-' : '('.ExerciseLib::convert_to_percentage($stats_array[$course_code]['average']).')'); // average exercise result
-                    $html .= Display::tag('td', $time, array('align'=>'center'));
-
                     if (is_numeric($progress)) {
                         $progress = $progress.'%';
                     } else {
                         $progress = '0%';
                     }
-
-                    // Progress
-                    $html .= Display::tag('td', $progress, array('align'=>'center'));
                     if (is_numeric($percentage_score)) {
                         $percentage_score = $percentage_score.'%';
                     } else {
                         $percentage_score = '0%';
                     }
-                    // Score
-                    $html .= Display::tag('td', $percentage_score, array('align'=>'center'));
 
-                    // Best score
                     if (is_numeric($stats_array[$course_code]['best_score'])) {
                         $bestScore = $stats_array[$course_code]['best_score'].'%';
                     } else {
                         $bestScore = '-';
                     }
 
-                    $html .= Display::tag('td', $bestScore);
                     if (empty($last_connection) || is_bool($last_connection)) {
                         $last_connection = '';
                     }
-                    $html .= Display::tag('td', $last_connection, array('align' => 'center'));
 
                     if ($course_code == $courseCodeFromGet && $_GET['session_id'] == $session_id_from_get) {
                         $details = Display::url(
@@ -4971,7 +5012,31 @@ class Tracking
                         );
                     }
                     $details .= '</a>';
-                    $html .= Display::tag('td', $details, array('align'=>'center'));
+
+
+
+
+                    $data = [
+                        'course_title' => $course_url,
+                        'published_exercises' => $stats_array[$course_code]['exercises'], // exercise available
+                        'new_exercises' => $stats_array[$course_code]['unanswered_exercises_by_user'],
+                        'my_average' => ExerciseLib::convert_to_percentage($stats_array[$course_code]['my_average']),
+                        'average_exercise_result' => $stats_array[$course_code]['average'] == 0 ? '-' : '('.ExerciseLib::convert_to_percentage($stats_array[$course_code]['average']).')',
+                        'time_spent' => $time,
+                        'lp_progress' => $progress,
+                        'score' => $percentage_score,
+                        'best_score' => $bestScore,
+                        'last_connection' => $last_connection,
+                        'details' => $details,
+                    ];
+
+                    foreach ($data as $key => $value) {
+                        if (in_array($key, $trackingColumns['course_session'])
+                            && $trackingColumns['course_session'][$key]
+                        ) {
+                            $html .= Display::tag('td', $value);
+                        }
+                    }
                     $html .= '</tr>';
                 }
                 $html .= '</tbody></table></div>';
@@ -5470,7 +5535,6 @@ class Tracking
     }
 
     /**
-     *
      * Returns a thumbnail of the function generate_exercise_result_graph
      * @param  array $attempts
      */

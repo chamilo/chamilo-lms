@@ -476,7 +476,12 @@ function getUniqueStudentAttempts(
         $groupIid = $groupInfo['iid'];
     }
 
-    $sessionCondition = api_get_session_condition($sessionId, true, false, 'w.session_id');
+    $sessionCondition = api_get_session_condition(
+        $sessionId,
+        true,
+        false,
+        'w.session_id'
+    );
 
     $sql = "SELECT count(*) FROM (
                 SELECT count(*), w.parent_id
@@ -1276,7 +1281,12 @@ function get_count_work($work_id, $onlyMeUserId = null, $notMeUserId = null)
 
     $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
     $session_id = api_get_session_id();
-    $condition_session = api_get_session_condition($session_id, true, false, 'work.session_id');
+    $condition_session = api_get_session_condition(
+        $session_id,
+        true,
+        false,
+        'work.session_id'
+    );
 
     $group_id = api_get_group_id();
     $course_info = api_get_course_info();
@@ -1288,7 +1298,6 @@ function get_count_work($work_id, $onlyMeUserId = null, $notMeUserId = null)
         $groupInfo = GroupManager::get_group_properties($group_id);
         $groupIid = $groupInfo['iid'];
     }
-
 
     if (!empty($group_id)) {
         // set to select only messages posted by the user's group
@@ -1565,7 +1574,7 @@ function getWorkListTeacher(
                     $condition_session AND
                     $active_condition AND
                     parent_id = 0 AND
-                    post_group_id = $group_id
+                    post_group_id = $groupIid
                     $where_condition
                 ORDER BY $column $direction
                 LIMIT $start, $limit";
@@ -1944,7 +1953,7 @@ function get_work_user_list(
 
     if (!empty($work_data)) {
         if (!empty($group_id)) {
-            $extra_conditions = " work.post_group_id = '".intval($group_id)."' ";
+            $extra_conditions = " work.post_group_id = '".intval($groupIid)."' ";
             // set to select only messages posted by the user's group
         } else {
             $extra_conditions = " (work.post_group_id = '0' OR work.post_group_id is NULL) ";

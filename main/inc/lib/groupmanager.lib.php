@@ -1038,7 +1038,7 @@ class GroupManager
         $sql = "$select
                 FROM $group_user_table gu
                 INNER JOIN $groupTable g
-                ON (gu.group_id = g.iid and g.c_id = gu.c_id)
+                ON (gu.group_id = g.id and g.c_id = gu.c_id)
                 INNER JOIN $user_table u
                 ON (u.id = gu.user_id)
                 WHERE 
@@ -1056,7 +1056,6 @@ class GroupManager
             $limit = intval($limit);
             $sql .= " LIMIT $start, $limit";
         }
-
         $res = Database::query($sql);
         $users = array();
         while ($obj = Database::fetch_object($res)) {
@@ -1461,7 +1460,7 @@ class GroupManager
     public static function is_subscribed($user_id, $groupInfo)
     {
         $course_id = api_get_course_int_id();
-        if (empty($user_id) || empty($group_id) || empty($course_id)) {
+        if (empty($user_id) || empty($groupInfo) || empty($course_id)) {
             return false;
         }
         $table_group_user = Database::get_course_table(TABLE_GROUP_USER);

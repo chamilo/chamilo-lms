@@ -4504,11 +4504,11 @@ class Tracking
                 //'.Display::tag('th', get_lang('Score').Display::return_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), array('align' => 'absmiddle', 'hspace' => '3px')), array('class'=>'head')).'
                 $html .= '<tr>
                           '.Display::tag('th', get_lang('Course'), array('width'=>'300px')).'
-                          '.Display::tag('th', get_lang('TimeSpentInTheCourse'), array('class'=>'head')).'
-                          '.Display::tag('th', get_lang('Progress'), array('class'=>'head')).'
-                          '.Display::tag('th', get_lang('BestScore'), array('class'=>'head')).'
-                          '.Display::tag('th', get_lang('LastConnexion'), array('class'=>'head')).'
-                          '.Display::tag('th', get_lang('Details'), array('class'=>'head')).'
+                          '.Display::tag('th', get_lang('TimeSpentInTheCourse')).'
+                          '.Display::tag('th', get_lang('Progress')).'
+                          '.Display::tag('th', get_lang('BestScore')).'
+                          '.Display::tag('th', get_lang('LastConnexion')).'
+                          '.Display::tag('th', get_lang('Details')).'
                         </tr>';
                 $html .= '</thead><tbody>';
 
@@ -4703,9 +4703,9 @@ class Tracking
             $html .= '<tr>
                   '.Display::tag('th', get_lang('Session'), array('width'=>'300px')).'
                   '.Display::tag('th', get_lang('PublishedExercises'), array('width'=>'300px')).'
-                  '.Display::tag('th', get_lang('NewExercises'), array('class'=>'head')).'
-                  '.Display::tag('th', get_lang('AverageExerciseResult'), array('class'=>'head')).'
-                  '.Display::tag('th', get_lang('Details'), array('class'=>'head')).'
+                  '.Display::tag('th', get_lang('NewExercises')).'
+                  '.Display::tag('th', get_lang('AverageExerciseResult')).'
+                  '.Display::tag('th', get_lang('Details')).'
                   </tr>';
             $html .= '</thead>';
             $html .= '<tbody>';
@@ -4828,55 +4828,51 @@ class Tracking
                         array('width'=>'300px')
                     ],
                     'published_exercises' => [
-                        get_lang('PublishedExercises'),
-                        array('class' => 'head'),
+                        get_lang('PublishedExercises')
                     ],
                     'new_exercises' => [
                         get_lang('NewExercises'),
-                        array('class' => 'head'),
                     ],
                     'my_average' => [
                         get_lang('MyAverage'),
-                        array('class' => 'head'),
                     ],
                     'average_exercise_result'  => [
                         get_lang('AverageExerciseResult'),
-                        array('class' => 'head'),
                     ],
                     'time_spent'  => [
                         get_lang('TimeSpentInTheCourse'),
-                        array('class' => 'head'),
                     ],
                     'lp_progress'  => [
                         get_lang('LPProgress'),
-                        array('class' => 'head'),
                     ],
                     'score'  => [
                         get_lang('Score').Display::return_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), array('align' => 'absmiddle', 'hspace' => '3px')),
-                        array('class' => 'head'),
                     ],
                     'best_score'  => [
                         get_lang('BestScore'),
-                        array('class' => 'head'),
                     ],
                     'last_connection'  => [
                         get_lang('LastConnexion'),
-                        array('class' => 'head'),
                     ],
                     'details'  => [
                         get_lang('Details'),
-                        array('class' => 'head'),
                     ],
                 ];
 
                 $html .= '<thead><tr>';
                 foreach ($columnHeaders as $key => $columnSetting) {
-                    if (in_array($key, $trackingColumns['course_session'])
-                        && $trackingColumns['course_session'][$key]
+                    if (in_array($key, $trackingColumns['course_session']) &&
+                        $trackingColumns['course_session'][$key]
                     ) {
-                         $html .= Display::tag('th', $columnSetting[0], $columnSetting[1]);
+                        $settings = isset($columnSetting[1]) ? $columnSetting[1] : [];
+                        $html .= Display::tag(
+                             'th',
+                             $columnSetting[0],
+                             $settings
+                         );
                     }
                 }
+
                 $html .= '</tr>
                     </thead>
                     <tbody>';
@@ -5262,12 +5258,12 @@ class Tracking
             $html .= '<div class="table-responsive">';
             $html .= '<table class="table table-striped table-hover">';
             $html .= '<thead><tr>';
-            $html .= Display::tag('th', get_lang('LearningPath'), array('class'=>'head', 'style'=>'color:#000'));
-            $html .= Display::tag('th', get_lang('LatencyTimeSpent'), array('class'=>'head', 'style'=>'color:#000'));
-            $html .= Display::tag('th', get_lang('Progress'), array('class'=>'head', 'style'=>'color:#000'));
-            $html .= Display::tag('th', get_lang('Score'), array('class'=>'head', 'style'=>'color:#000'));
-            $html .= Display::tag('th', get_lang('BestScore'), array('class'=>'head', 'style'=>'color:#000'));
-            $html .= Display::tag('th', get_lang('LastConnexion'), array('class'=>'head', 'style'=>'color:#000'));
+            $html .= Display::tag('th', get_lang('LearningPath'));
+            $html .= Display::tag('th', get_lang('LatencyTimeSpent'));
+            $html .= Display::tag('th', get_lang('Progress'));
+            $html .= Display::tag('th', get_lang('Score'));
+            $html .= Display::tag('th', get_lang('BestScore'));
+            $html .= Display::tag('th', get_lang('LastConnexion'));
             $html .= '</tr></thead><tbody>';
 
             $list = new LearnpathList(

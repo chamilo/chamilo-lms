@@ -4366,7 +4366,7 @@ class Tracking
 
         $trackingColumns = [
             'course_session' => [
-                'course_title' => false,
+                'course_title' => true,
                 'published_exercises' => true,
                 'new_exercises' => true,
                 'my_average' => true,

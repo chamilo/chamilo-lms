@@ -2495,7 +2495,7 @@ class Tracking
             $course_id = $course['real_id'];
 
             // Compose a filter based on optional learning paths list given
-            $condition_lp = "";
+            $condition_lp = '';
             if (count($lp_ids) > 0) {
                 $condition_lp = " AND id IN(".implode(',', $lp_ids).") ";
             }
@@ -2554,7 +2554,11 @@ class Tracking
                             $condition_user1 AND
                             session_id = $session_id
                         GROUP BY lp_id, user_id";
-                if ($debug) var_dump($sql);
+                if ($debug) {
+                    echo 'get LP results';
+                    var_dump($sql);
+                }
+
                 $rs_last_lp_view_id = Database::query($sql);
                 $global_result = 0;
 
@@ -2562,13 +2566,18 @@ class Tracking
                     // Cycle through each line of the results (grouped by lp_id, user_id)
                     while ($row_lp_view = Database::fetch_array($rs_last_lp_view_id)) {
                         $count_items = 0;
-                        $lp_partial_total = 0;
+                        $lpPartialTotal = 0;
 
                         $list = array();
                         $lp_view_id = $row_lp_view['id'];
                         $lp_id = $row_lp_view['lp_id'];
                         $user_id = $row_lp_view['user_id'];
-                        if ($debug) echo '<h2>LP id '.$lp_id.'</h2>';
+
+                        if ($debug) {
+                            echo '<h2>LP id '.$lp_id.'</h2>';
+                            echo "get_only_latest_attempt_results: $get_only_latest_attempt_results <br />";
+                            echo "getOnlyBestAttempt: $getOnlyBestAttempt <br />";
+                        }
 
                         if ($get_only_latest_attempt_results || $getOnlyBestAttempt) {
                             // Getting lp_items done by the user
@@ -2579,7 +2588,11 @@ class Tracking
                                         lp_view_id = $lp_view_id
                                     ORDER BY lp_item_id";
                             $res_lp_item = Database::query($sql);
-                            if ($debug) var_dump($sql);
+                            if ($debug) {
+                                echo 'Getting lp_items done by the user<br />';
+                                var_dump($sql);
+                            }
+
                             while ($row_lp_item = Database::fetch_array($res_lp_item, 'ASSOC')) {
                                 $my_lp_item_id = $row_lp_item['lp_item_id'];
                                 $order = ' view_count DESC';
@@ -2670,9 +2683,13 @@ class Tracking
                                 }
                                 // Avoid division by zero errors
                                 if (!empty($max_score)) {
-                                    $lp_partial_total += $score / $max_score;
+                                    $lpPartialTotal += $score / $max_score;
                                 }
-                                if ($debug) echo '<b>$lp_partial_total, $score, $max_score '.$lp_partial_total.' '.$score.' '.$max_score.'</b><br />';
+                                if ($debug) {
+                                    var_dump("lpPartialTotal: $lpPartialTotal");
+                                    var_dump("score: $score");
+                                    var_dump("max_score: $max_score");
+                                }
                             } else {
                                 // Case of a TOOL_QUIZ element
                                 $item_id = $row_max_score['iid'];
@@ -2705,11 +2722,12 @@ class Tracking
                                     $attemptResult = Database::fetch_array($result_last_attempt, 'ASSOC');
                                     $id_last_attempt = $attemptResult['exe_id'];
                                     // We overwrite the score with the best one not the one saved in the LP (latest)
-                                    if ($getOnlyBestAttempt || $get_only_latest_attempt_results == false) {
+                                    if ($getOnlyBestAttempt && $get_only_latest_attempt_results == false) {
+                                        if ($debug) echo "Following score comes from the track_exercise table not in the LP because the score is the best<br />";
                                         $score = $attemptResult['exe_result'];
                                     }
 
-                                    if ($debug) echo $id_last_attempt.'<br />';
+                                    if ($debug) echo "Attempt id: $id_last_attempt with score $score<br />";
                                     // Within the last attempt number tracking, get the sum of
                                     // the max_scores of all questions that it was
                                     // made of (we need to make this call dynamic because of random questions selection)
@@ -2735,9 +2753,13 @@ class Tracking
                                         $max_score = $row_max_score_bis['maxscore'];
                                     }
                                     if (!empty($max_score) && floatval($max_score) > 0) {
-                                        $lp_partial_total += $score / $max_score;
+                                        $lpPartialTotal += $score / $max_score;
                                     }
-                                    if ($debug) var_dump('$lp_partial_total, $score, $max_score <b>'.$lp_partial_total.' '.$score.' '.$max_score.'</b><br />');
+                                    if ($debug) {
+                                        var_dump("score: $score");
+                                        var_dump("max_score: $max_score");
+                                        var_dump("lpPartialTotal: $lpPartialTotal");
+                                    }
                                 }
                             }
 
@@ -2754,13 +2776,14 @@ class Tracking
                             }
                         } //end for
 
-                        $score_of_scorm_calculate += $count_items ? (($lp_partial_total / $count_items) * 100) : 0;
-
-                        if ($debug) echo '<h3>$count_items '.$count_items.'</h3>';
-                        if ($debug) echo '<h3>$score_of_scorm_calculate '.$score_of_scorm_calculate.'</h3>';
-
+                        $score_of_scorm_calculate += $count_items ? (($lpPartialTotal / $count_items) * 100) : 0;
                         $global_result += $score_of_scorm_calculate;
-                        if ($debug) echo '<h3>$global_result '.$global_result.'</h3>';
+
+                        if ($debug) {
+                            var_dump("count_items: $count_items");
+                            var_dump("score_of_scorm_calculate: $score_of_scorm_calculate");
+                            var_dump("global_result: $global_result");
+                        }
                     } // end while
                 }
 
@@ -2773,9 +2796,10 @@ class Tracking
                                 c_id = $course_id AND
                                 (item_type = 'quiz' OR item_type = 'sco') AND
                                 lp_id = ".$lp_id;
-                    if ($debug) echo $sql;
+                    if ($debug) {
+                        var_dump($sql);
+                    }
                     $result_have_quiz = Database::query($sql);
-
                     if (Database::num_rows($result_have_quiz) > 0) {
                         $row = Database::fetch_array($result_have_quiz, 'ASSOC');
                         if (is_numeric($row['count']) && $row['count'] != 0) {
@@ -2869,7 +2893,7 @@ class Tracking
         }
 
         $conditionsToString = implode('AND ', $conditions);
-        $sql = "SELECT  
+        $sql = "SELECT
                     SUM(lp_iv.score) sum_score,
                     SUM(lp_i.max_score) sum_max_score
                 FROM $lp_table as lp
@@ -2943,13 +2967,13 @@ class Tracking
                             FROM '.$t_lpiv.' AS item_view
                             INNER JOIN '.$t_lpv.' AS view
                             ON (
-                                item_view.lp_view_id = view.id AND 
+                                item_view.lp_view_id = view.id AND
                                 item_view.c_id = view.c_id
                             )
                             WHERE
                                 item_view.c_id = '.$course_id.' AND
                                 view.c_id = '.$course_id.' AND
-                                view.lp_id = '.$lp_id.' AND 
+                                view.lp_id = '.$lp_id.' AND
                                 view.user_id = '.$student_id.' AND
                                 session_id = '.$session_id;
 
@@ -3061,11 +3085,11 @@ class Tracking
             $id_session = $a_courses['session_id'];
 
             $sql = "SELECT DISTINCT srcru.user_id
-                    FROM $tbl_session_course_user AS srcru 
+                    FROM $tbl_session_course_user AS srcru
                     INNER JOIN $tbl_session_user sru
                     ON (srcru.user_id = sru.user_id AND srcru.session_id = sru.session_id)
                     WHERE
-                        sru.relation_type<>".SESSION_RELATION_TYPE_RRHH." AND                         
+                        sru.relation_type<>".SESSION_RELATION_TYPE_RRHH." AND
                         srcru.c_id = '$courseId' AND
                         srcru.session_id = '$id_session'";
 
@@ -3361,7 +3385,7 @@ class Tracking
                     name,
                     access_start_date,
                     access_end_date
-                FROM $tbl_session session 
+                FROM $tbl_session session
                 INNER JOIN $tbl_session_rel_access_url session_rel_url
                 ON (session.id = session_rel_url.session_id)
                 WHERE
@@ -3376,7 +3400,7 @@ class Tracking
                     session.access_end_date
                 FROM $tbl_session as session
                 INNER JOIN $tbl_session_course_user as session_course_user
-                ON 
+                ON
                     session.id = session_course_user.session_id AND
                     session_course_user.user_id = $coach_id AND
                     session_course_user.status = 2
@@ -3492,10 +3516,10 @@ class Tracking
             }
 
             $sql = "SELECT count(ip.tool) AS count
-                    FROM $tbl_item_property ip 
+                    FROM $tbl_item_property ip
                     INNER JOIN $tbl_document pub
                     ON (ip.ref = pub.id AND ip.c_id = pub.c_id)
-                    WHERE 	
+                    WHERE
                         ip.c_id  = $course_id AND
                         pub.c_id  = $course_id AND
                         pub.filetype ='file' AND
@@ -3557,7 +3581,7 @@ class Tracking
 
         $sql = "SELECT count(ip.tool) as count
                 FROM $tbl_item_property ip
-                INNER JOIN $tbl_student_publication pub 
+                INNER JOIN $tbl_student_publication pub
                 ON (ip.ref = pub.id AND ip.c_id = pub.c_id)
                 WHERE
                     ip.tool='work' AND
@@ -3598,7 +3622,7 @@ class Tracking
 
         if (empty($courseCode)) {
             $sql = "SELECT count(poster_id) as count
-                    FROM $tbl_forum_post post 
+                    FROM $tbl_forum_post post
                     INNER JOIN $tbl_forum forum
                     ON (forum.forum_id = post.forum_id AND forum.c_id = post.c_id)
                     WHERE $conditionsToString";
@@ -4276,9 +4300,9 @@ class Tracking
         if (!empty($session_id)) {
             $condition_session = ' AND down_session_id = '.$session_id;
         }
-        $sql = "SELECT 
-                    down_doc_path, 
-                    COUNT(DISTINCT down_user_id), 
+        $sql = "SELECT
+                    down_doc_path,
+                    COUNT(DISTINCT down_user_id),
                     COUNT(down_doc_path) as count_down
                 FROM $TABLETRACK_DOWNLOADS
                 WHERE c_id = $courseId

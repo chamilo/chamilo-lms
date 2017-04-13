@@ -5,7 +5,11 @@
             <div class="panel-heading">
                 {% if row.course_list_session_style == 1 %}
                     {# Classic #}
-                    <a href="{{ _p.web_main ~ 'session/index.php?session_id=' ~ row.id }}">
+                    {% if remove_session_url == true %}
+                        <a style="cursor:default">
+                    {% else %}
+                        <a href="{{ _p.web_main ~ 'session/index.php?session_id=' ~ row.id }}">
+                    {% endif %}
                         <img id="session_img_{{ row.id }}" src="{{ "window_list.png"|icon(32) }}" width="32" height="32"
                              alt="{{ row.title }}" title="{{ row.title }}">
                         {{ row.title }}

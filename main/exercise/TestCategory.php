@@ -15,8 +15,8 @@ class TestCategory
     public $name;
     public $description;
 
-	/**
-	 * Constructor of the class Category
+    /**
+     * Constructor of the class Category
      */
     public function __construct()
     {
@@ -1054,7 +1054,7 @@ class TestCategory
      *
      * @return string|false
      */
-    public static function add_category_for_question_id($categoryId, $questionId, $courseId)
+    public static function addCategoryToQuestion($categoryId, $questionId, $courseId)
     {
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
         // if question doesn't have a category

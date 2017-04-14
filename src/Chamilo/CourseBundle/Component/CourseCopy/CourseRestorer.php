@@ -2102,12 +2102,11 @@ class CourseRestorer
      */
     public function restore_test_category($session_id, $respect_base_content, $destination_course_code)
     {
-        $course_id = api_get_course_int_id();
+        $destinationCourseId = $this->destination_course_info['real_id'];
         // Let's restore the categories
         $categoryOldVsNewList = array(); // used to build the quiz_question_rel_category table
         if ($this->course->has_resources(RESOURCE_TEST_CATEGORY)) {
             $resources = $this->course->resources;
-            $destinationCourseId = $this->destination_course_info['real_id'];
             foreach ($resources[RESOURCE_TEST_CATEGORY] as $id => $courseCopyTestCategory) {
                 $categoryOldVsNewList[$courseCopyTestCategory->source_id] = $id;
                 // check if this test_category already exist in the destination BDD
@@ -2159,20 +2158,21 @@ class CourseRestorer
         // to redo the link between test_category and quizzes question for questions restored
         // we can use the source_id field
         // question source_id => category source_id
-        if ($this->course->has_resources(RESOURCE_QUIZQUESTION)) {
+        if (!empty($newQuestionId) && $this->course->has_resources(RESOURCE_QUIZQUESTION)) {
             // check the category number of each question restored
             if (!empty($resources[RESOURCE_QUIZQUESTION])) {
                 foreach ($resources[RESOURCE_QUIZQUESTION] as $id => $courseCopyQuestion) {
                     $newQuestionId = $resources[RESOURCE_QUIZQUESTION][$id]->destination_id;
                     $questionCategoryId = $courseCopyQuestion->question_category;
-                    if ($newQuestionId > 0) {
-                        if ($questionCategoryId > 0 && isset($categoryOldVsNewList[$questionCategoryId])) {
-                            TestCategory::add_category_for_question_id(
-                                $categoryOldVsNewList[$questionCategoryId],
-                                $newQuestionId,
-                                $destinationCourseId
-                            );
-                        }
+                    if ($newQuestionId > 0 &&
+                        $questionCategoryId > 0 &&
+                        isset($categoryOldVsNewList[$questionCategoryId])
+                    ) {
+                        TestCategory::addCategoryToQuestion(
+                            $categoryOldVsNewList[$questionCategoryId],
+                            $newQuestionId,
+                            $destinationCourseId
+                        );
                     }
                 }
             }
@@ -2192,7 +2192,6 @@ class CourseRestorer
 			$table_ans = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_SURVEY] as $id => $survey) {
-
 				$sql = 'SELECT survey_id FROM '.$table_sur.'
                         WHERE
                             c_id = '.$this->destination_course_id.' AND

@@ -710,10 +710,11 @@ class TestCategory
     }
 
     /**
-     * return the number max of question in a category
+     * Return the number max of question in a category
      * count the number of questions in all categories, and return the max
      * @param int $exerciseId
      * @author - hubert borderiou
+     * @return int
     */
     public static function getNumberMaxQuestionByCat($exerciseId)
     {
@@ -741,6 +742,8 @@ class TestCategory
      * @params int $exerciseId
      * @params array pre filled array with the category_id, score, and weight
      * example: array(1 => array('score' => '10', 'total' => 20));
+     *
+     * @return string
      */
     public static function get_stats_table_by_attempt($exerciseId, $category_list = array())
     {
@@ -788,7 +791,7 @@ class TestCategory
             return $table->toHtml();
         }
 
-        return null;
+        return '';
     }
 
     /**
@@ -879,7 +882,7 @@ class TestCategory
                 break;
         }
 
-        // settting the form elements
+        // Setting the form elements
         $form->addElement('header', $header);
         $form->addElement('hidden', 'category_id');
         $form->addElement('text', 'category_name', get_lang('CategoryName'), array('class' => 'span6'));

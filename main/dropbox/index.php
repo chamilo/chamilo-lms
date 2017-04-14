@@ -410,7 +410,14 @@ if ($action != 'add') {
 
                 if ($action == 'viewfeedback' && isset($_GET['id']) && is_numeric($_GET['id']) && $dropbox_file->id == $_GET['id']) {
                     $action_icons .= "</td></tr>"; // Ending the normal row of the sortable table
-                    $action_icons .= '<tr><td colspan="2"><a href="'.api_get_path(WEB_CODE_PATH).'dropbox/index.php?"'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory."&view_sent_category=".$viewSentCategory."&view=".$view.'&'.$sort_params."\">".get_lang('CloseFeedback')."</a></td><td colspan=\"7\">".feedback($dropbox_file->feedback2)."</td></tr>";
+                    $action_icons .= '<tr>
+                        <td colspan="2">
+                            <a class = "btn btn-default" href="'.api_get_path(WEB_CODE_PATH).'dropbox/index.php?"'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory."&view_sent_category=".$viewSentCategory."&view=".$view.'&'.$sort_params."\">".
+                            get_lang('CloseFeedback')."</a>
+                        </td>
+                        <td colspan=\"7\">".
+                        feedback($dropbox_file->feedback2).
+                        "</td></tr>";
                 }
                 if (api_get_session_id() == 0) {
                     $dropbox_file_data[] = $action_icons;
@@ -587,7 +594,7 @@ if ($action != 'add') {
                 if ($action == 'viewfeedback' && isset($_GET['id']) && is_numeric($_GET['id']) && $dropbox_file->id == $_GET['id']) {
                     $action_icons .= "</td></tr>\n"; // ending the normal row of the sortable table
                     $action_icons .= "<tr><td colspan=\"2\">";
-                    $action_icons .= "<a href=\"".api_get_path(WEB_CODE_PATH)."dropbox/index.php?".api_get_cidreq()."&view_received_category=".$viewReceivedCategory."&view_sent_category=".$viewSentCategory."&view=".$view.'&'.$sort_params."\">".
+                    $action_icons .= "<a class=\"btn btn-default\" href=\"".api_get_path(WEB_CODE_PATH)."dropbox/index.php?".api_get_cidreq()."&view_received_category=".$viewReceivedCategory."&view_sent_category=".$viewSentCategory."&view=".$view.'&'.$sort_params."\">".
                         get_lang('CloseFeedback')."</a>";
                     $action_icons .= "</td><td colspan=\"7\">".feedback($dropbox_file->feedback2)."</td></tr>";
                 }

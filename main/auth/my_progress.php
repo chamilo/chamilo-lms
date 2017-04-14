@@ -53,16 +53,16 @@ if (!empty($course_user_list)) {
         }
         $course_info = api_get_course_info_by_id($result['c_id']);
         $course_image = '<img src="'.$course_info['course_image_large'].'">';
-        $dates .= '<li><a href="#'.$login.'">' . api_convert_and_format_date($login, DATE_FORMAT_SHORT) . '</a></li>';
+        $dates .= '<li><a href="#'.$login.'">'.api_convert_and_format_date($login, DATE_FORMAT_SHORT).'</a></li>';
         $issues .= '<li id ="'.$login.'">';
         $issues .= '<div class="img-course">'.$course_image.'</div>';
 
         $issues .= '<div class="text-course">';
-        $issues .= '<p>' . sprintf(
+        $issues .= '<p>'.sprintf(
                 get_lang('YouHaveEnteredTheCourseXInY'),
-                '" '. $courseInfo['name'] .' "',
+                '" '.$courseInfo['name'].' "',
                 api_convert_and_format_date($login, DATE_TIME_FORMAT_LONG)
-                ) . '</p>';
+                ).'</p>';
         $issues .= '</div>';
         $issues .= '</li>';
         $count++;
@@ -80,8 +80,8 @@ if (!empty($dates)) {
     $content .= '<div class="row">';
     $content .= '<div class="col-md-12">';
     $content .= '<div id="my_timeline">';
-    $content .= '<ul id="dates">' . $dates . '</ul>';
-    $content .= '<ul id="issues">' . $issues . '</ul>';
+    $content .= '<ul id="dates">'.$dates.'</ul>';
+    $content .= '<ul id="issues">'.$issues.'</ul>';
     $content .= '<div id="grad_left"></div>';
     $content .= '<div id="grad_right"></div>';
     $content .= '<a href="#" id="prev"></a>';

@@ -47,7 +47,7 @@ if ($reset && $userId) {
     Display::addFlash(
         Display::return_message($messageText, 'info', false)
     );
-    header('Location: ' . api_get_path(WEB_PATH));
+    header('Location: '.api_get_path(WEB_PATH));
     exit;
 }
 
@@ -74,7 +74,7 @@ if ($form->validate()) {
         Display::addFlash(
             Display::return_message($messageText, 'error', false)
         );
-        header('Location: ' . api_get_self());
+        header('Location: '.api_get_self());
         exit;
     }
 
@@ -94,7 +94,7 @@ if ($form->validate()) {
         Display::addFlash(
             Display::return_message($messageText, 'info', false)
         );
-        header('Location: ' . api_get_path(WEB_PATH));
+        header('Location: '.api_get_path(WEB_PATH));
         exit;
     }
 
@@ -102,7 +102,7 @@ if ($form->validate()) {
         Display::addFlash(
             Display::return_message(get_lang('CouldNotResetPasswordBecauseLDAP'), 'info', false)
         );
-        header('Location: ' . api_get_path(WEB_PATH));
+        header('Location: '.api_get_path(WEB_PATH));
         exit;
     }
 
@@ -121,7 +121,7 @@ if ($form->validate()) {
             exit;
         }
 
-        header('Location: ' . api_get_path(WEB_PATH));
+        header('Location: '.api_get_path(WEB_PATH));
         exit;
     }
 
@@ -138,7 +138,7 @@ if ($form->validate()) {
     Display::addFlash(
         Display::return_message($messageText, 'info', false)
     );
-    header('Location: ' . api_get_path(WEB_PATH));
+    header('Location: '.api_get_path(WEB_PATH));
     exit;
 }
 

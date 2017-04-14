@@ -67,7 +67,7 @@ class CourseChatUtils
             return '';
         }
 
-        Emojione\Emojione::$imagePathPNG = api_get_path(WEB_LIBRARY_PATH) . 'javascript/emojione/png/';
+        Emojione\Emojione::$imagePathPNG = api_get_path(WEB_LIBRARY_PATH).'javascript/emojione/png/';
         Emojione\Emojione::$ascii = true;
 
         $message = trim($message);
@@ -113,15 +113,15 @@ class CourseChatUtils
         $user = $em->find('ChamiloUserBundle:User', $this->userId);
         $courseInfo = api_get_course_info_by_id($this->courseId);
         $isMaster = (bool) api_is_course_admin();
-        $document_path = api_get_path(SYS_COURSE_PATH) . $courseInfo['path'] . '/document';
+        $document_path = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
         $basepath_chat = '/chat_files';
 
         if (!$this->groupId) {
             $group_info = GroupManager::get_group_properties($this->groupId);
-            $basepath_chat = $group_info['directory'] . '/chat_files';
+            $basepath_chat = $group_info['directory'].'/chat_files';
         }
 
-        $chat_path = $document_path . $basepath_chat . '/';
+        $chat_path = $document_path.$basepath_chat.'/';
 
         if (!is_dir($chat_path)) {
             if (is_file($chat_path)) {
@@ -131,25 +131,25 @@ class CourseChatUtils
 
         $date_now = date('Y-m-d');
         $timeNow = date('d/m/y H:i:s');
-        $basename_chat = 'messages-' . $date_now;
+        $basename_chat = 'messages-'.$date_now;
 
         if ($this->groupId && !$friendId) {
-            $basename_chat = 'messages-' . $date_now . '_gid-' . $this->groupId;
+            $basename_chat = 'messages-'.$date_now.'_gid-'.$this->groupId;
         } elseif ($this->sessionId && !$friendId) {
-            $basename_chat = 'messages-' . $date_now . '_sid-' . $this->sessionId;
+            $basename_chat = 'messages-'.$date_now.'_sid-'.$this->sessionId;
         } elseif ($friendId) {
             if ($this->userId < $friendId) {
-                $basename_chat = 'messages-' . $date_now . '_uid-' . $this->userId . '-' . $friendId;
+                $basename_chat = 'messages-'.$date_now.'_uid-'.$this->userId.'-'.$friendId;
             } else {
-                $basename_chat = 'messages-' . $date_now . '_uid-' . $friendId . '-' . $this->userId;
+                $basename_chat = 'messages-'.$date_now.'_uid-'.$friendId.'-'.$this->userId;
             }
         }
 
         $message = self::prepareMessage($message);
 
-        $fileTitle = $basename_chat . '.log.html';
-        $filePath = $basepath_chat . '/' . $fileTitle;
-        $absoluteFilePath = $chat_path . $fileTitle;
+        $fileTitle = $basename_chat.'.log.html';
+        $filePath = $basepath_chat.'/'.$fileTitle;
+        $absoluteFilePath = $chat_path.$fileTitle;
 
         if (!file_exists($absoluteFilePath)) {
             $doc_id = add_document($courseInfo, $filePath, 'file', 0, $fileTitle);
@@ -182,23 +182,23 @@ class CourseChatUtils
             $fileContent = '
                 <div class="message-teacher">
                     <div class="content-message">
-                        <div class="chat-message-block-name">' . $user->getCompleteName() . '</div>
-                        <div class="chat-message-block-content">' . $message . '</div>
-                        <div class="message-date">' . $timeNow . '</div>
+                        <div class="chat-message-block-name">' . $user->getCompleteName().'</div>
+                        <div class="chat-message-block-content">' . $message.'</div>
+                        <div class="message-date">' . $timeNow.'</div>
                     </div>
                     <div class="icon-message"></div>
-                    <img class="chat-image" src="' . $userPhoto . '">
+                    <img class="chat-image" src="' . $userPhoto.'">
                 </div>
             ';
         } else {
             $fileContent = '
                 <div class="message-student">
-                    <img class="chat-image" src="' . $userPhoto . '">
+                    <img class="chat-image" src="' . $userPhoto.'">
                     <div class="icon-message"></div>
                     <div class="content-message">
-                        <div class="chat-message-block-name">' . $user->getCompleteName() . '</div>
-                        <div class="chat-message-block-content">' . $message . '</div>
-                        <div class="message-date">' . $timeNow . '</div>
+                        <div class="chat-message-block-name">' . $user->getCompleteName().'</div>
+                        <div class="chat-message-block-content">' . $message.'</div>
+                        <div class="message-date">' . $timeNow.'</div>
                     </div>
                 </div>
             ';
@@ -293,9 +293,9 @@ class CourseChatUtils
         $extraCondition = null;
 
         if ($this->groupId) {
-            $extraCondition = 'AND ccc.toGroupId = ' . intval($this->groupId);
+            $extraCondition = 'AND ccc.toGroupId = '.intval($this->groupId);
         } else {
-            $extraCondition = 'AND ccc.sessionId = ' . intval($this->sessionId);
+            $extraCondition = 'AND ccc.sessionId = '.intval($this->sessionId);
         }
 
         $currentTime = new DateTime(api_get_utc_datetime(), new DateTimeZone('UTC'));
@@ -1394,7 +1394,7 @@ class CourseChatUtils
     {
         return [
             ':bowtie:',
-            ':smile:'|
+            ':smile:' |
             ':laughing:',
             ':blush:',
             ':smiley:',
@@ -1467,17 +1467,17 @@ class CourseChatUtils
     public function getFileName($absolute = false, $friendId = 0)
     {
         $date = date('Y-m-d');
-        $base = 'messages-' . $date . '.log.html';
+        $base = 'messages-'.$date.'.log.html';
 
         if ($this->groupId && !$friendId) {
-            $base = 'messages-' . $date . '_gid-' . $this->groupId . '.log.html';
+            $base = 'messages-'.$date.'_gid-'.$this->groupId.'.log.html';
         } elseif ($this->sessionId && !$friendId) {
-            $base = 'messages-' . $date . '_sid-' . $this->sessionId . '.log.html';
+            $base = 'messages-'.$date.'_sid-'.$this->sessionId.'.log.html';
         } elseif ($friendId) {
             if ($this->userId < $friendId) {
-                $base = 'messages-' . $date . '_uid-' . $this->userId . '-' . $friendId . '.log.html';
+                $base = 'messages-'.$date.'_uid-'.$this->userId.'-'.$friendId.'.log.html';
             } else {
-                $base = 'messages-' . $date . '_uid-' . $friendId . '-' . $this->userId . '.log.html';
+                $base = 'messages-'.$date.'_uid-'.$friendId.'-'.$this->userId.'.log.html';
             }
         }
 
@@ -1486,16 +1486,16 @@ class CourseChatUtils
         }
 
         $courseInfo = api_get_course_info_by_id($this->courseId);
-        $document_path = api_get_path(SYS_COURSE_PATH) . $courseInfo['path'] . '/document';
+        $document_path = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
 
-        $chatPath = $document_path . '/chat_files/';
+        $chatPath = $document_path.'/chat_files/';
 
         if ($this->groupId) {
             $group_info = GroupManager::get_group_properties($this->groupId);
-            $chatPath = $document_path . $group_info['directory'] . '/chat_files/';
+            $chatPath = $document_path.$group_info['directory'].'/chat_files/';
         }
 
-        return $chatPath . $base;
+        return $chatPath.$base;
     }
 
     /**
@@ -1508,16 +1508,16 @@ class CourseChatUtils
     {
         $courseInfo = api_get_course_info_by_id($this->courseId);
         $date_now = date('Y-m-d');
-        $isMaster = (bool)api_is_course_admin();
+        $isMaster = (bool) api_is_course_admin();
         $basepath_chat = '/chat_files';
-        $document_path = api_get_path(SYS_COURSE_PATH) . $courseInfo['path'] . '/document';
+        $document_path = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
 
         if ($this->groupId) {
             $group_info = GroupManager:: get_group_properties($this->groupId);
-            $basepath_chat = $group_info['directory'] . '/chat_files';
+            $basepath_chat = $group_info['directory'].'/chat_files';
         }
 
-        $chat_path = $document_path . $basepath_chat . '/';
+        $chat_path = $document_path.$basepath_chat.'/';
 
         if (!is_dir($chat_path)) {
             if (is_file($chat_path)) {
@@ -1544,24 +1544,24 @@ class CourseChatUtils
             }
         }
 
-        $filename_chat = 'messages-' . $date_now . '.log.html';
+        $filename_chat = 'messages-'.$date_now.'.log.html';
 
         if ($this->groupId && !$friendId) {
-            $filename_chat = 'messages-' . $date_now . '_gid-' . $this->groupId . '.log.html';
+            $filename_chat = 'messages-'.$date_now.'_gid-'.$this->groupId.'.log.html';
         } else if ($this->sessionId && !$friendId) {
-            $filename_chat = 'messages-' . $date_now . '_sid-' . $this->sessionId . '.log.html';
+            $filename_chat = 'messages-'.$date_now.'_sid-'.$this->sessionId.'.log.html';
         } elseif ($friendId) {
             if ($this->userId < $friendId) {
-                $filename_chat = 'messages-' . $date_now . '_uid-' . $this->userId . '-' . $friendId . '.log.html';
+                $filename_chat = 'messages-'.$date_now.'_uid-'.$this->userId.'-'.$friendId.'.log.html';
             } else {
-                $filename_chat = 'messages-' . $date_now . '_uid-' . $friendId . '-' . $this->userId . '.log.html';
+                $filename_chat = 'messages-'.$date_now.'_uid-'.$friendId.'-'.$this->userId.'.log.html';
             }
         }
 
-        if (!file_exists($chat_path . $filename_chat)) {
-            @fclose(fopen($chat_path . $filename_chat, 'w'));
+        if (!file_exists($chat_path.$filename_chat)) {
+            @fclose(fopen($chat_path.$filename_chat, 'w'));
             if (!api_is_anonymous()) {
-                $doc_id = add_document($courseInfo, $basepath_chat . '/' . $filename_chat, 'file', 0, $filename_chat);
+                $doc_id = add_document($courseInfo, $basepath_chat.'/'.$filename_chat, 'file', 0, $filename_chat);
                 api_item_property_update(
                     $courseInfo,
                     TOOL_DOCUMENT,
@@ -1590,17 +1590,17 @@ class CourseChatUtils
             }
         }
 
-        $basename_chat = 'messages-' . $date_now;
+        $basename_chat = 'messages-'.$date_now;
 
         if ($this->groupId && !$friendId) {
-            $basename_chat = 'messages-' . $date_now . '_gid-' . $this->groupId;
+            $basename_chat = 'messages-'.$date_now.'_gid-'.$this->groupId;
         } else if ($this->sessionId && !$friendId) {
-            $basename_chat = 'messages-' . $date_now . '_sid-' . $this->sessionId;
+            $basename_chat = 'messages-'.$date_now.'_sid-'.$this->sessionId;
         } elseif ($friendId) {
             if ($this->userId < $friendId) {
-                $basename_chat = 'messages-' . $date_now . '_uid-' . $this->userId . '-' . $friendId;
+                $basename_chat = 'messages-'.$date_now.'_uid-'.$this->userId.'-'.$friendId;
             } else {
-                $basename_chat = 'messages-' . $date_now . '_uid-' . $friendId . '-' . $this->userId;
+                $basename_chat = 'messages-'.$date_now.'_uid-'.$friendId.'-'.$this->userId;
             }
         }
 
@@ -1608,19 +1608,19 @@ class CourseChatUtils
 
             $i = 1;
 
-            while (file_exists($chat_path . $basename_chat . '-' . $i . '.log.html')) {
+            while (file_exists($chat_path.$basename_chat.'-'.$i.'.log.html')) {
                 $i++;
             }
 
-            @rename($chat_path . $basename_chat . '.log.html', $chat_path . $basename_chat . '-' . $i . '.log.html');
-            @fclose(fopen($chat_path . $basename_chat . '.log.html', 'w'));
+            @rename($chat_path.$basename_chat.'.log.html', $chat_path.$basename_chat.'-'.$i.'.log.html');
+            @fclose(fopen($chat_path.$basename_chat.'.log.html', 'w'));
 
             $doc_id = add_document(
                 $courseInfo,
-                $basepath_chat . '/' . $basename_chat . '-' . $i . '.log.html',
+                $basepath_chat.'/'.$basename_chat.'-'.$i.'.log.html',
                 'file',
-                filesize($chat_path . $basename_chat . '-' . $i . '.log.html'),
-                $basename_chat . '-' . $i . '.log.html'
+                filesize($chat_path.$basename_chat.'-'.$i.'.log.html'),
+                $basename_chat.'-'.$i.'.log.html'
             );
 
             api_item_property_update(
@@ -1651,7 +1651,7 @@ class CourseChatUtils
 
             $doc_id = DocumentManager::get_document_id(
                 $courseInfo,
-                $basepath_chat . '/' . $basename_chat . '.log.html'
+                $basepath_chat.'/'.$basename_chat.'.log.html'
             );
 
             update_existing_document($courseInfo, $doc_id, 0);
@@ -1660,8 +1660,8 @@ class CourseChatUtils
         $remove = 0;
         $content = array();
 
-        if (file_exists($chat_path . $basename_chat . '.log.html')) {
-            $content = file($chat_path . $basename_chat . '.log.html');
+        if (file_exists($chat_path.$basename_chat.'.log.html')) {
+            $content = file($chat_path.$basename_chat.'.log.html');
             $nbr_lines = sizeof($content);
             $remove = $nbr_lines - 100;
         }
@@ -1674,7 +1674,7 @@ class CourseChatUtils
 
         if (isset($_GET['origin']) && $_GET['origin'] == 'whoisonline') {
             //the caller
-            $content[0] = get_lang('CallSent') . '<br />' . $content[0];
+            $content[0] = get_lang('CallSent').'<br />'.$content[0];
         }
 
         $history = '<div id="content-chat">';
@@ -1689,7 +1689,7 @@ class CourseChatUtils
             $history .= '
                 <div id="clear-chat">
                     <button type="button" id="chat-reset" class="btn btn-danger btn-sm">
-                        ' . get_lang('ClearList') . '
+                        ' . get_lang('ClearList').'
                     </button>
                 </div>
             ';
@@ -1710,9 +1710,9 @@ class CourseChatUtils
         $extraCondition = null;
 
         if ($this->groupId) {
-            $extraCondition = 'AND ccc.toGroupId = ' . intval($this->groupId);
+            $extraCondition = 'AND ccc.toGroupId = '.intval($this->groupId);
         } else {
-            $extraCondition = 'AND ccc.sessionId = ' . intval($this->sessionId);
+            $extraCondition = 'AND ccc.sessionId = '.intval($this->sessionId);
         }
 
         $number = Database::getManager()
@@ -1742,9 +1742,9 @@ class CourseChatUtils
         $extraCondition = null;
 
         if ($this->groupId) {
-            $extraCondition = 'AND ccc.toGroupId = ' . intval($this->groupId);
+            $extraCondition = 'AND ccc.toGroupId = '.intval($this->groupId);
         } else {
-            $extraCondition = 'AND ccc.sessionId = ' . intval($this->sessionId);
+            $extraCondition = 'AND ccc.sessionId = '.intval($this->sessionId);
         }
 
         $number = Database::getManager()
@@ -1780,7 +1780,7 @@ class CourseChatUtils
                 'lastname' => $user->getLastname(),
                 'status' => !$this->sessionId ? $subscription->getStatus() : $user->getStatus(),
                 'image_url' => UserManager::getUserPicture($user->getId(), USER_IMAGE_SIZE_MEDIUM),
-                'profile_url' => api_get_path(WEB_CODE_PATH) . 'social/profile.php?u=' . $user->getId(),
+                'profile_url' => api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user->getId(),
                 'complete_name' => $user->getCompleteName(),
                 'username' => $user->getUsername(),
                 'email' => $user->getEmail(),

@@ -15,11 +15,21 @@ switch ($action) {
         $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
         $recipients = isset($_POST['recipients']) ? $_POST['recipients'] : '';
+        $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
-        if (empty($recipients)) {
+        if (empty($recipients) && empty($id)) {
             $resultList[] = ['error' => get_lang('YouMustSelectAtLeastOneDestinee')];
             echo json_encode(['files' => $resultList]);
             exit;
+        }
+        $work = null;
+        if (!empty($id)) {
+            $work = new Dropbox_SentWork($id);
+            if (empty($work)) {
+                $resultList[] = ['error' => get_lang('Error')];
+                echo json_encode(['files' => $resultList]);
+                exit;
+            }
         }
 
         if (!empty($_FILES)) {
@@ -38,10 +48,9 @@ switch ($action) {
                 $globalFile = [];
                 $globalFile['files'] = $file;
                 /** @var Dropbox_SentWork $result */
-                $result = store_add_dropbox($file);
+                $result = store_add_dropbox($file, $work);
 
                 $json = array();
-
                 if (!empty($result)) {
                     $json['name'] = Display::url(
                         api_htmlentities($result->title),

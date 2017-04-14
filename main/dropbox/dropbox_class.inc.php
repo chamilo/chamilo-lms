@@ -7,32 +7,32 @@
  *
  * 3 classes have been defined:
  * - Dropbox_Work:
- * 		. id
- * 		. uploader_id	=> who sent it
- *		. filename		=> name of file stored on the server
- * 		. filesize
- * 		. title			=> name of file returned to user. This is the original name of the file
- * 							except when the original name contained spaces. In that case the spaces
- * 							will be replaced by _
- * 		. description
- * 		. author
- * 		. upload_date	=> date when file was first sent
- * 		. last_upload_date => date when file was last sent
- *  	. isOldWork 	=> has the work already been uploaded before
+ *        . id
+ *        . uploader_id    => who sent it
+ *        . filename        => name of file stored on the server
+ *        . filesize
+ *        . title            => name of file returned to user. This is the original name of the file
+ *                            except when the original name contained spaces. In that case the spaces
+ *                            will be replaced by _
+ *        . description
+ *        . author
+ *        . upload_date    => date when file was first sent
+ *        . last_upload_date => date when file was last sent
+ *    . isOldWork    => has the work already been uploaded before
  *
  *      . feedback_date  => date of most recent feedback
  *      . feedback      => feedback text (or HTML?)
  *
  * - Dropbox_SentWork extends Dropbox_Work
- * 		. recipients	=> array of ["id"]["name"] lists the recipients of the work
+ *        . recipients    => array of ["id"]["name"] lists the recipients of the work
  *
  * - Dropbox_Person:
- * 		. userId
- * 		. receivedWork 	=> array of Dropbox_Work objects
- * 		. sentWork 		=> array of Dropbox_SentWork objects
- * 		. isCourseTutor
- * 		. isCourseAdmin
- * 		. _orderBy		=> private property used for determining the field by which the works have to be ordered
+ *        . userId
+ *        . receivedWork    => array of Dropbox_Work objects
+ *        . sentWork        => array of Dropbox_SentWork objects
+ *        . isCourseTutor
+ *        . isCourseAdmin
+ *        . _orderBy        => private property used for determining the field by which the works have to be ordered
  *
  * @version 1.30
  * @copyright 2004
@@ -223,6 +223,36 @@ class Dropbox_Work
             $this->feedback2 = $feedback2;
         }
 	}
+
+    /**
+     * @return bool
+     */
+	public function updateFile()
+    {
+        $course_id = api_get_course_int_id();
+        if (empty($this->id) || empty($course_id)) {
+            return false;
+        }
+
+        $params = [
+            'uploader_id' => $this->uploader_id,
+            'filename' => $this->filename,
+            'filesize' => $this->filesize,
+            'title' => $this->title,
+            'description' => $this->description,
+            'author' => $this->author,
+            'upload_date' => $this->upload_date,
+            'last_upload_date' => $this->last_upload_date,
+            'session_id' => api_get_session_id()
+        ];
+
+        Database::update(
+            Database::get_course_table(TABLE_DROPBOX_FILE),
+            $params,
+            ['c_id = ? AND id = ?' => [$course_id, $this->id]]
+        );
+        return true;
+    }
 }
 
 class Dropbox_SentWork extends Dropbox_Work
@@ -264,7 +294,6 @@ class Dropbox_SentWork extends Dropbox_Work
 	 */
 	public function _createNewSentWork($uploader_id, $title, $description, $author, $filename, $filesize, $recipient_ids)
     {
-        $dropbox_cnf = getDropboxConf();
         $_course = api_get_course_info();
 
 		// Call constructor of Dropbox_Work object
@@ -357,12 +386,11 @@ class Dropbox_SentWork extends Dropbox_Work
 	/**
 	 * private function creating existing object by retreiving info from db
 	 *
-	 * @param unknown_type $id
+	 * @param int $id
 	 */
 	public function _createExistingSentWork($id)
     {
         $id = intval($id);
-
 		$course_id = api_get_course_int_id();
 
 		// Call constructor of Dropbox_Work object
@@ -378,7 +406,6 @@ class Dropbox_SentWork extends Dropbox_Work
 			// Check for deleted users
 			$dest_user_id = $res['dest_user_id'];
 			$user_info = api_get_user_info($dest_user_id);
-			//$this->category = $res['cat_id'];
 			if (!$user_info) {
 				$this->recipients[] = array('id' => -1, 'name' => get_lang('Unknown', ''));
 			} else {
@@ -551,7 +578,7 @@ class Dropbox_Person
 	/**
 	 * Deletes a sent dropbox file of this person with id=$id
 	 *
-	 * @param unknown_type $id
+	 * @param int $id
 	 */
 	public function deleteSentWork($id)
     {

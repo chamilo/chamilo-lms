@@ -63,19 +63,18 @@ class TestCategory
         }
 
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-        $name = Database::escape_string($this->name);
-        $description = Database::escape_string($this->description);
+
         // check if name already exists
         $sql = "SELECT count(*) AS nb FROM $table
-                WHERE title = '$name' AND c_id=".$courseId;
+                WHERE title = '".$this->name."' AND c_id=$courseId";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
         // lets add in BDD if not the same name
         if ($row['nb'] <= 0) {
             $params = [
                 'c_id' => $courseId,
-                'title' => $name,
-                'description' => $description
+                'title' => $this->name,
+                'description' => $this->description
             ];
             $newId = Database::insert($table, $params);
 

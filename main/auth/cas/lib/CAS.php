@@ -527,7 +527,7 @@ class phpCAS
      *
      * @private
      */
-    private function log($str)
+    public function log($str)
     {
         $indent_str = ".";
         global $PHPCAS_DEBUG;
@@ -549,7 +549,7 @@ class phpCAS
      *
      * @private
      */
-    private function error($msg)
+    public function error($msg)
     {
         $dbg = self::backtrace();
         $function = '?';

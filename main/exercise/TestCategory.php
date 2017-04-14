@@ -25,15 +25,16 @@ class TestCategory
     /**
      * return the TestCategory object with id=in_id
      * @param int $id
-     *
+     * @param int $courseId
      * @return TestCategory
      */
-    public function getCategory($id)
+    public function getCategory($id, $courseId = 0)
     {
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
         $id = intval($id);
+        $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
         $sql = "SELECT * FROM $table
-                WHERE id = $id AND c_id=".api_get_course_int_id();
+                WHERE id = $id AND c_id = ".$courseId;
         $res = Database::query($sql);
 
         if (Database::num_rows($res)) {
@@ -46,7 +47,7 @@ class TestCategory
             return $this;
         }
 
-        return  false;
+        return false;
     }
 
     /**

@@ -94,7 +94,7 @@ class Export
         $file = api_get_path(SYS_ARCHIVE_PATH).uniqid('').'.xls';
         $handle = fopen($file, 'a+');
         $systemEncoding = api_get_system_encoding();
-        fwrite($handle, '<!DOCTYPE html><html><meta http-equiv="Content-Type" content="text/html" charset="utf-8" /><body><table>');
+        fwrite($handle, '<!DOCTYPE html><html><meta http-equiv="Content-Type" content="text/html" charset="'.$encoding.'" /><body><table>');
         foreach ($data as $id => $row) {
             foreach ($row as $id2 => $row2) {
                 $data[$id][$id2] = api_htmlentities($row2);

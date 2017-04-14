@@ -2150,6 +2150,7 @@ class CourseRestorer
                 $this->course->resources[RESOURCE_TEST_CATEGORY][$id]->destination_id = $tab_test_category_id_old_new[$courseCopyTestCategory->source_id];
             }
         }
+
         // lets check if quizzes-question are restored too, to redo the link between test_category and quizzes question for questions restored
         // we can use the source_id field
         // question source_id => category source_id
@@ -2159,7 +2160,9 @@ class CourseRestorer
                 foreach ($resources[RESOURCE_QUIZQUESTION] as $id => $courseCopyQuestion) {
                     $new_quiz_question_id = $resources[RESOURCE_QUIZQUESTION][$id]->destination_id;
                     $question_category = $courseCopyQuestion->question_category;
-                    if ($question_category > 0) {
+                    if ($question_category > 0 &&
+                        isset($tab_test_category_id_old_new[$question_category])
+                    ) {
                         TestCategory::add_category_for_question_id(
                             $tab_test_category_id_old_new[$question_category],
                             $new_quiz_question_id,

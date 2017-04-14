@@ -122,7 +122,11 @@ $(document).ready( function() {
  </script>';
 
 // Build form
-$form = new FormValidator('group_edit', 'post', api_get_self().'?'.api_get_cidreq());
+$form = new FormValidator(
+    'group_edit',
+    'post',
+    api_get_self().'?'.api_get_cidreq()
+);
 $form->addElement('hidden', 'action');
 $form->addElement('hidden', 'max_student', $current_group['max_student']);
 $complete_user_list = GroupManager::fill_groups_list($current_group);
@@ -178,8 +182,7 @@ $group_members_element = $form->addElement(
     'advmultiselect',
     'group_members',
     get_lang('GroupMembers'),
-    $possible_users,
-    'style="width: 280px;"'
+    $possible_users
 );
 $form->addFormRule('check_group_members');
 

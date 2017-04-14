@@ -122,6 +122,7 @@ EOT;
     }
 
     /**
+     * @todo this function should be added in the element class
      * @return string
      */
     public function getDefaultElementTemplate()

@@ -191,22 +191,22 @@ class TestCategory
 
     /**
      * Return an array of all Category objects in the database
-     * If in_field=="" Return an array of all category objects in the database
+     * If $field=="" Return an array of all category objects in the database
      * Otherwise, return an array of all in_field value
      * in the database (in_field = id or name or description)
      *
-     * @param string $in_field
+     * @param string $field
      * @param int $courseId
      * @return array
      */
-    public static function getCategoryListInfo($in_field = '', $courseId = 0)
+    public static function getCategoryListInfo($field = '', $courseId = 0)
     {
         $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
 
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-        $in_field = Database::escape_string($in_field);
+        $field = Database::escape_string($field);
         $categories = array();
-        if ($in_field == '') {
+        if (empty($field)) {
             $sql = "SELECT id FROM $table
                     WHERE c_id = $courseId 
                     ORDER BY title ASC";
@@ -216,12 +216,12 @@ class TestCategory
                 $categories[] = $category->getCategory($row['id']);
             }
         } else {
-            $sql = "SELECT $in_field FROM $table
+            $sql = "SELECT $field FROM $table
                     WHERE c_id = $courseId
-                    ORDER BY $in_field ASC";
+                    ORDER BY $field ASC";
             $res = Database::query($sql);
             while ($row = Database::fetch_array($res)) {
-                $categories[] = $row[$in_field];
+                $categories[] = $row[$field];
             }
         }
         return $categories;

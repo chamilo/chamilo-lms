@@ -556,13 +556,13 @@ class CourseBuilder
      * @param int $session_id Internal session ID
      * @param int $courseId Internal course ID
      * @param bool $with_base_content Whether to include content from the course without session or not
-     * @param array $id_list If you want to restrict the structure to only the given IDs
+     * @param array $idList If you want to restrict the structure to only the given IDs
      */
     public function build_quizzes(
         $session_id = 0,
         $courseId = 0,
         $with_base_content = false,
-        $id_list = array()
+        $idList = array()
     ) {
         $table_qui = Database:: get_course_table(TABLE_QUIZ_TEST);
         $table_rel = Database:: get_course_table(TABLE_QUIZ_TEST_QUESTION);
@@ -590,6 +590,8 @@ class CourseBuilder
                     WHERE c_id = $courseId AND active >=0 AND (session_id = 0 OR session_id IS NULL)";
             //select only quizzes with active = 0 or 1 (not -1 which is for deleted quizzes)
         }
+
+        $sql .= 'ORDER BY title';
 
         $db_result = Database::query($sql);
         while ($obj = Database::fetch_object($db_result)) {
@@ -861,32 +863,28 @@ class CourseBuilder
 
     /**
      * Build the test category
-     * @param int $session_id Internal session ID
+     * @param int $sessionId Internal session ID
      * @param int $courseId Internal course ID
-     * @param bool $with_base_content Whether to include content from the course without session or not
-     * @param array $id_list If you want to restrict the structure to only the given IDs
+     * @param bool $withBaseContent Whether to include content from the course without session or not
+     * @param array $idList If you want to restrict the structure to only the given IDs
      * @todo add course session
      */
     public function build_test_category(
-        $session_id = 0,
+        $sessionId = 0,
         $courseId = 0,
-        $with_base_content = false,
-        $id_list = array()
+        $withBaseContent = false,
+        $idList = array()
     ) {
         // get all test category in course
-        $tab_test_categories_id = TestCategory::getCategoryListInfo(
-            "id",
-            $courseId
-        );
-        foreach ($tab_test_categories_id as $test_category_id) {
-            $test_category = new TestCategory();
-            $test_category = $test_category->getCategory($test_category_id);
-            $copy_course_test_category = new CourseCopyTestCategory(
-                $test_category_id,
-                $test_category->name,
-                $test_category->description
+        $categories = TestCategory::getCategoryListInfo('', $courseId);
+        foreach ($categories as $category) {
+            /** @var TestCategory $category */
+            $courseCopyTestCategory = new CourseCopyTestCategory(
+                $category->id,
+                $category->name,
+                $category->description
             );
-            $this->course->add_resource($copy_course_test_category);
+            $this->course->add_resource($courseCopyTestCategory);
         }
     }
 

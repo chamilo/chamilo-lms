@@ -7,7 +7,7 @@
  * @package chamilo.exercise
  */
 
-require dirname(__FILE__) . '/qti2_classes.php';
+require __DIR__.'/qti2_classes.php';
 
 /**
  * An IMS/QTI item. It corresponds to a single question.

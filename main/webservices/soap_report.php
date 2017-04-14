@@ -4,8 +4,8 @@
  * Configures the WSReport SOAP service
  * @package chamilo.webservices
  */
-require_once(dirname(__FILE__).'/webservice_report.php');
-require_once(dirname(__FILE__).'/soap.php');
+require_once __DIR__.'/webservice_report.php';
+require_once __DIR__.'/soap.php';
 $s = WSSoapServer::singleton();
 
 $s->wsdl->addComplexType(

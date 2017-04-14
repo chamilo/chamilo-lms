@@ -40,7 +40,7 @@ if (!$_SERVER['REQUEST_URI']) {
 // another one by Vangelis Haniotakis also to make phpCAS work with PHP5
 //
 if (version_compare(PHP_VERSION, '5', '>=')) {
-    require_once(dirname(__FILE__) . '/CAS/domxml-php4-to-php5.php');
+    require_once __DIR__.'/CAS/domxml-php4-to-php5.php';
 }
 
 /**
@@ -322,7 +322,7 @@ $GLOBALS['PHPCAS_DEBUG'] = array(
 // ########################################################################
 
 // include client class
-include_once(dirname(__FILE__) . '/CAS/client.php');
+include_once __DIR__.'/CAS/client.php';
 
 // ########################################################################
 //  INTERFACE CLASS

@@ -1,7 +1,11 @@
 <?php
+/* For licensing terms, see /license.txt */
 
-require_once(dirname(__FILE__).'/cm_webservice_course.php');
-require_once(dirname(__FILE__).'/cm_soap.php');
+/**
+ * @package chamilo.webservices
+ */
+require_once __DIR__.'/cm_webservice_course.php';
+require_once __DIR__.'/cm_soap.php';
 
 /**
  * Configures the WSCourse SOAP service

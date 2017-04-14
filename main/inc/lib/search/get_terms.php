@@ -17,7 +17,7 @@ if (empty($_GET['term']) || empty($_GET['prefix']) || !in_array($_GET['operator'
     return;
 }
 
-require_once dirname(__FILE__).'../../../global.inc.php';
+require_once __DIR__.'../../../global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'search/ChamiloQuery.php';
 
 /**

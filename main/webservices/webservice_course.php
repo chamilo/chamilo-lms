@@ -3,9 +3,9 @@
 /**
  * @package chamilo.webservices
  */
-require_once(dirname(__FILE__).'/../inc/global.inc.php');
+require_once __DIR__.'/../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
-require_once(dirname(__FILE__).'/webservice.php');
+require_once __DIR__.'/webservice.php';
 
 /**
  * Web services available for the Course module. This class extends the WS class

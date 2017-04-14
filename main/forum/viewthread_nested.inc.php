@@ -52,7 +52,7 @@ foreach ($rows as $post) {
     $indent = $post['indent_cnt'];
 
     $html = '';
-    $html .= '<div class="col-md-offset-' . $indent . '" >';
+    $html .= '<div class="col-md-offset-'.$indent.'" >';
     $html .= '<div class="panel panel-default forum-post">';
     $html .= '<div class="panel-body">';
     $html .= '<div class="row">';
@@ -67,7 +67,7 @@ foreach ($rows as $post) {
 
     if ($origin != 'learnpath') {
         if ($allowUserImageForum) {
-            $html .= '<div class="thumbnail">' . display_user_image($post['user_id'], $name, $origin) . '</div>';
+            $html .= '<div class="thumbnail">'.display_user_image($post['user_id'], $name, $origin).'</div>';
         }
 
         $html .= Display::tag(
@@ -77,7 +77,7 @@ foreach ($rows as $post) {
         );
     } else {
         if ($allowUserImageForum) {
-            $html .= '<div class="thumbnail">' . display_user_image($post['user_id'], $name, $origin) . '</div>';
+            $html .= '<div class="thumbnail">'.display_user_image($post['user_id'], $name, $origin).'</div>';
         }
 
         $html .= Display::tag(
@@ -142,7 +142,7 @@ foreach ($rows as $post) {
         !(api_is_course_coach() && $current_forum['session_id'] != $sessionId)
     ) {
         if ($locked == false) {
-            $deleteUrl = api_get_self() . '?' . api_get_cidreq() . '&' . http_build_query([
+            $deleteUrl = api_get_self().'?'.api_get_cidreq().'&'.http_build_query([
                     'forum' => $clean_forum_id,
                     'thread' => $clean_thread_id,
                     'action' => 'delete',
@@ -180,9 +180,9 @@ foreach ($rows as $post) {
         );
 
         if ($count > 0) {
-            $iconEdit .= "<a href=\"viewthread.php?" . api_get_cidreq()
+            $iconEdit .= "<a href=\"viewthread.php?".api_get_cidreq()
                 . "&forum=$clean_forum_id&thread=$clean_thread_id&action=move&post={$post['post_id']}"
-                . "\">" . Display::return_icon('move.png', get_lang('MovePost'), array(), ICON_SIZE_SMALL) . "</a>";
+                . "\">".Display::return_icon('move.png', get_lang('MovePost'), array(), ICON_SIZE_SMALL)."</a>";
         }
     }
 
@@ -203,11 +203,11 @@ foreach ($rows as $post) {
                 $_GET['thread']
             );
             if ($locked == false) {
-                $iconEdit .= "<a href=\"forumqualify.php?" . api_get_cidreq()
+                $iconEdit .= "<a href=\"forumqualify.php?".api_get_cidreq()
                     . "&forum=$clean_forum_id&thread=$clean_thread_id&action=list&post={$post['post_id']}"
                     . "&user={$post['user_id']}&user_id={$post['user_id']}"
                     . "&idtextqualify=$current_qualify_thread"
-                    . "\" >" . Display::return_icon('quiz.png', get_lang('Qualify')) . "</a>";
+                    . "\" >".Display::return_icon('quiz.png', get_lang('Qualify'))."</a>";
             }
         }
     }
@@ -215,7 +215,7 @@ foreach ($rows as $post) {
     $statusIcon = getPostStatus($current_forum, $post);
 
     if ($iconEdit != '') {
-        $html .= '<div class="tools-icons">' . $iconEdit . ' '.$statusIcon.'</div>';
+        $html .= '<div class="tools-icons">'.$iconEdit.' '.$statusIcon.'</div>';
     }
 
     $buttonReply = '';
@@ -229,7 +229,7 @@ foreach ($rows as $post) {
             if (!api_is_anonymous() && api_is_allowed_to_session_edit(false, true)) {
                 $buttonReply = Display::toolbarButton(
                     get_lang('ReplyToMessage'),
-                    'reply.php?' . api_get_cidreq() . '&' . http_build_query([
+                    'reply.php?'.api_get_cidreq().'&'.http_build_query([
                         'forum' => $clean_forum_id,
                         'thread' => $clean_thread_id,
                         'post' => $post['post_id'],
@@ -242,7 +242,7 @@ foreach ($rows as $post) {
 
                 $buttonQuote = Display::toolbarButton(
                     get_lang('QuoteMessage'),
-                    'reply.php?' . api_get_cidreq() . '&' . http_build_query([
+                    'reply.php?'.api_get_cidreq().'&'.http_build_query([
                         'forum' => $clean_forum_id,
                         'thread' => $clean_thread_id,
                         'post' => $post['post_id'],
@@ -266,21 +266,21 @@ foreach ($rows as $post) {
         if ($current_forum_category && $current_forum_category['locked'] == 1) {
             $closedPost = Display::tag(
                 'div',
-                '<em class="fa fa-exclamation-triangle"></em> ' . get_lang('ForumcategoryLocked'),
+                '<em class="fa fa-exclamation-triangle"></em> '.get_lang('ForumcategoryLocked'),
                 array('class' => 'alert alert-warning post-closed')
             );
         }
         if ($current_forum['locked'] == 1) {
             $closedPost = Display::tag(
                 'div',
-                '<em class="fa fa-exclamation-triangle"></em> ' . get_lang('ForumLocked'),
+                '<em class="fa fa-exclamation-triangle"></em> '.get_lang('ForumLocked'),
                 array('class' => 'alert alert-warning post-closed')
             );
         }
         if ($current_thread['locked'] == 1) {
             $closedPost = Display::tag(
                 'div',
-                '<em class="fa fa-exclamation-triangle"></em> ' . get_lang('ThreadLocked'),
+                '<em class="fa fa-exclamation-triangle"></em> '.get_lang('ThreadLocked'),
                 array('class' => 'alert alert-warning post-closed')
             );
         }
@@ -328,16 +328,16 @@ foreach ($rows as $post) {
             $html .= Display::return_icon('attachment.gif', get_lang('Attachment'));
             $html .= '<a href="download.php?file=';
             $html .= $attachment['path'];
-            $html .= ' "> ' . $user_filename . ' </a>';
-            $html .= '<span class="forum_attach_comment" >' . $attachment['comment'] . '</span>';
+            $html .= ' "> '.$user_filename.' </a>';
+            $html .= '<span class="forum_attach_comment" >'.$attachment['comment'].'</span>';
             if (($current_forum['allow_edit'] == 1 && $post['user_id'] == $userId) ||
                 (api_is_allowed_to_edit(false, true) && !(api_is_course_coach() && $current_forum['session_id'] != $sessionId))
             ) {
-                $html .= '&nbsp;&nbsp;<a href="' . api_get_self() . '?' . api_get_cidreq() . '&action=delete_attach&id_attach='
-                    . $attachment['iid'] . '&forum=' . $clean_forum_id . '&thread=' . $clean_thread_id
+                $html .= '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&action=delete_attach&id_attach='
+                    . $attachment['iid'].'&forum='.$clean_forum_id.'&thread='.$clean_thread_id
                     . '" onclick="javascript:if(!confirm(\''
-                    . addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)) . '\')) return false;">'
-                    . Display::return_icon('delete.gif', get_lang('Delete')) . '</a><br />';
+                    . addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)).'\')) return false;">'
+                    . Display::return_icon('delete.gif', get_lang('Delete')).'</a><br />';
             }
         }
     }

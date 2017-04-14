@@ -125,8 +125,7 @@ if (!empty($groupId)) {
 
 // If the user is not a course administrator and the forum is hidden
 // then the user is not allowed here.
-if (
-    !api_is_allowed_to_edit(false, true) &&
+if (!api_is_allowed_to_edit(false, true) &&
     ($current_forum['visibility'] == 0 || $current_thread['visibility'] == 0)
 ) {
     api_not_allowed(false);
@@ -134,8 +133,7 @@ if (
 
 /* Actions */
 $my_action = isset($_GET['action']) ? $_GET['action'] : '';
-if (
-    $my_action == 'delete' &&
+if ($my_action == 'delete' &&
     isset($_GET['content']) &&
     isset($_GET['id']) &&
     (api_is_allowed_to_edit(false, true) ||
@@ -181,8 +179,7 @@ if ($my_message != 'PostDeletedSpecial') {
     // The reply to thread link should only appear when the forum_category is
     // not locked AND the forum is not locked AND the thread is not locked.
     // If one of the three levels is locked then the link should not be displayed.
-    if (
-        ($current_forum_category &&
+    if (($current_forum_category &&
         $current_forum_category['locked'] == 0) &&
         $current_forum['locked'] == 0 &&
         $current_thread['locked'] == 0 ||
@@ -199,8 +196,7 @@ if ($my_message != 'PostDeletedSpecial') {
                     . '</a>';
             }
             // new thread link
-            if (
-                (
+            if ((
                     api_is_allowed_to_edit(false, true) &&
                     !(api_is_course_coach() && $current_forum['session_id'] != $sessionId)
                 ) ||

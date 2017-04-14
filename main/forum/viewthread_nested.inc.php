@@ -23,7 +23,7 @@ if (isset($_GET['action']) &&
 // Decide whether we show the latest post first
 $sortDirection = isset($_GET['posts_order']) && $_GET['posts_order'] === 'desc' ? 'DESC' : ($origin != 'learnpath' ? 'ASC' : 'DESC');
 
-$rows = getPosts($current_forum, $_GET['thread'], $sortDirection, true);
+$posts = getPosts($current_forum, $_GET['thread'], $sortDirection, true);
 $count = 0;
 $clean_forum_id = intval($_GET['forum']);
 $clean_thread_id = intval($_GET['thread']);
@@ -37,7 +37,7 @@ $postCount = 1;
 
 $allowUserImageForum = api_get_course_setting('allow_user_image_forum');
 
-foreach ($rows as $post) {
+foreach ($posts as $post) {
     // The style depends on the status of the message: approved or not.
     if ($post['visible'] == '0') {
         $titleclass = 'forum_message_post_title_2_be_approved';
@@ -162,8 +162,7 @@ foreach ($rows as $post) {
         }
     }
 
-    if (
-        api_is_allowed_to_edit(false, true) &&
+    if (api_is_allowed_to_edit(false, true) &&
         !(
             api_is_course_coach() &&
             $current_forum['session_id'] != $sessionId
@@ -213,9 +212,12 @@ foreach ($rows as $post) {
     }
 
     $statusIcon = getPostStatus($current_forum, $post);
-
-    if ($iconEdit != '') {
+    if (!empty($iconEdit)) {
         $html .= '<div class="tools-icons">'.$iconEdit.' '.$statusIcon.'</div>';
+    } else {
+        if (!empty(strip_tags($statusIcon))) {
+            $html .= '<div class="tools-icons">'.$statusIcon.'</div>';
+        }
     }
 
     $buttonReply = '';

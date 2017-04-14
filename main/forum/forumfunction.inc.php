@@ -1985,13 +1985,13 @@ function getPosts(
         ->addCriteria($criteria)
         ->addOrderBy('p.postId', $orderDirection);
 
-
     if ($filterModerated && $forumInfo['moderated'] == 1) {
         if (!api_is_allowed_to_edit(false, true)) {
             $userId = api_get_user_id();
             $qb->andWhere(
                 "p.status = 1 OR 
                     (p.status = ".CForumPost::STATUS_WAITING_MODERATION." AND p.posterId = $userId) OR
+                    (p.status = ".CForumPost::STATUS_REJECTED." AND p.posterId = $userId) OR
                     (p.status IS NULL AND p.posterId = $userId) 
                     "
             );
@@ -3564,7 +3564,7 @@ function show_edit_post_form(
         $form->addElement('html', '</div>');
     }
 
-    if ($current_forum['moderated']) {
+    if ($current_forum['moderated'] && api_is_allowed_to_edit(null, true)) {
         $group = array();
         $group[] = $form->createElement('radio', 'status', null, get_lang('Validated'), 1);
         $group[] = $form->createElement('radio', 'status', null, get_lang('WaitingModeration'), 2);
@@ -3687,19 +3687,27 @@ function store_edit_post($forumInfo, $values)
     }
 
     $status = '';
+    $updateStatus = false;
     if ($forumInfo['moderated']) {
-        $status = $values['status']['status'];
+        if (api_is_allowed_to_edit(null, true)) {
+            $status = $values['status']['status'];
+            $updateStatus = true;
+        } else {
+            $status = CForumPost::STATUS_WAITING_MODERATION;
+            $updateStatus = true;
+        }
     }
 
     // Update the post_title and the post_text.
     $params = [
-        'status' => $status,
         'post_title' => $values['post_title'],
         'post_text' => $values['post_text'],
         'post_notification' => isset($values['post_notification']) ? $values['post_notification'] : '',
     ];
+    if ($updateStatus) {
+        $params['status'] = $status;
+    }
     $where = ['c_id = ? AND post_id = ?' => [$course_id, $values['post_id']]];
-
     Database::update($table_posts, $params, $where);
 
     // Update attached files
@@ -5968,8 +5976,13 @@ function getPostStatus($current_forum, $row, $addWrapper = true)
         $row['status'] = empty($row['status']) ? 2 : $row['status'];
 
         $addUrl = false;
+        $showStatus = false;
         if (api_is_allowed_to_edit(false, true)) {
             $addUrl = true;
+        } else {
+            if ($row['user_id'] == api_get_user_id()) {
+                $showStatus = true;
+            }
         }
 
         $label = '';
@@ -6002,10 +6015,12 @@ function getPostStatus($current_forum, $row, $addWrapper = true)
                 ['class' => 'change_post_status']
             );
         } else {
-            $statusIcon .= Display::label(
-                Display::returnFontAwesomeIcon($icon).$label,
-                $buttonType
-            );
+            if ($showStatus) {
+                $statusIcon .= Display::label(
+                    Display::returnFontAwesomeIcon($icon).$label,
+                    $buttonType
+                );
+            }
         }
 
         if ($addWrapper) {
@@ -6059,9 +6074,15 @@ function postIsEditableByStudent($forum, $post)
         if (is_null($post['status'])) {
             return true;
         } else {
-            return $post['status'] == CForumPost::STATUS_WAITING_MODERATION;
+            return in_array($post['status'],
+                [
+                    CForumPost::STATUS_WAITING_MODERATION,
+                    CForumPost::STATUS_REJECTED,
+                ]
+            );
         }
     } else {
         return true;
     }
 }
+

@@ -1431,6 +1431,7 @@ class CourseBuilder
         $table_thematic_advance = Database::get_course_table(TABLE_THEMATIC_ADVANCE);
         $table_thematic_plan = Database::get_course_table(TABLE_THEMATIC_PLAN);
 
+        $courseInfo = api_get_course_info_by_id($courseId);
         $session_id = intval($session_id);
         if ($with_base_content) {
             $session_condition = api_get_session_condition(
@@ -1457,7 +1458,7 @@ class CourseBuilder
 
             $items = api_get_item_property_by_tool(
                 'thematic_plan',
-                api_get_course_id(),
+                $courseInfo['code'],
                 $session_id
             );
 

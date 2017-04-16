@@ -4852,7 +4852,12 @@ class CourseManager
                 $my_course['already_register_as'] = Display::tag(
                     'button',
                     $icon,
-                    array('id' => 'register', 'class' => 'btn btn-default btn-sm', 'title' => $title, 'aria-label' => $title)
+                    array(
+                        'id' => 'register', 
+                        'class' => 'btn btn-default btn-sm', 
+                        'title' => $title, 
+                        'aria-label' => $title
+                    )
                 );
             } elseif ($userRegisterdInCourseAsTeacher) {
                 // if user registered as teacher
@@ -4861,7 +4866,12 @@ class CourseManager
                 $my_course['already_register_as'] = Display::tag(
                     'button',
                     $icon,
-                    array('id' => 'register', 'class' => 'btn btn-default btn-sm', 'title' => $title, 'aria-label' => $title)
+                    array(
+                        'id' => 'register', 
+                        'class' => 'btn btn-default btn-sm', 
+                        'title' => $title, 
+                        'aria-label' => $title
+                    )
                 );
             } */
 
@@ -4870,7 +4880,8 @@ class CourseManager
                 $my_course['register_button'] = Display::url(
                     get_lang('Subscribe') . ' ' .
                     Display::returnFontAwesomeIcon('sign-in'),
-                    api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/index.php?action=subscribe&sec_token=' . $stok,
+                    api_get_path(WEB_COURSE_PATH) . $course_info['path'] .
+                     '/index.php?action=subscribe&sec_token=' . $stok,
                     array(
                         'class' => 'btn btn-success btn-sm',
                         'title' => get_lang('Subscribe'),
@@ -4898,8 +4909,8 @@ class CourseManager
                 $my_course['unsubscribe_button'] = Display::url(
                     get_lang('Unreg') . ' ' .
                     Display::returnFontAwesomeIcon('sign-out'),
-                    api_get_path(WEB_CODE_PATH) . 'auth/courses.php?action=unsubscribe&unsubscribe='
-                    . $courseCode . '&sec_token=' . $stok . '&category_code=' . $categoryCode,
+                    api_get_path(WEB_CODE_PATH) . 'auth/courses.php?action=unsubscribe&unsubscribe=' . $courseCode
+                    . '&sec_token=' . $stok . '&category_code=' . $categoryCode,
                     array(
                         'class' => 'btn btn-danger btn-sm',
                         'title' => get_lang('Unreg'),

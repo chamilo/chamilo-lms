@@ -911,16 +911,21 @@ class CourseRestorer
                             $my_session_id
                         );
                     } else {
-                        if (is_file($this->course->backup_path.'/'.$document->path) &&
-                            is_readable($this->course->backup_path.'/'.$document->path)
-                        ) {
-                            error_log('Course copy generated an ignoreable error while trying to copy '.$this->course->backup_path.'/'.$document->path.': file not found');
+                        // There was an error in checking existence and
+                        // permissions for files to copy. Try to determine
+                        // the exact issue
+                        // Issue with origin document?
+                        if (!is_file($this->course->backup_path.'/'.$document->path)) {
+                            error_log('Course copy generated an ignorable error while trying to copy '.$this->course->backup_path.'/'.$document->path.': origin file not found');
+                        } elseif (!is_readable($this->course->backup_path.'/'.$document->path)) {
+                            error_log('Course copy generated an ignorable error while trying to copy '.$this->course->backup_path.'/'.$document->path.': origin file not readable');
                         }
+                        // Issue with destination directories?
                         if (!is_dir(dirname($path.$document->path))) {
-                            error_log('Course copy generated an ignoreable error while trying to copy to '.dirname($path.$document->path).': directory not found');
+                            error_log('Course copy generated an ignorable error while trying to copy to '.dirname($path.$document->path).': destination directory not found');
                         }
                         if (!is_writeable(dirname($path.$document->path))) {
-                            error_log('Course copy generated an ignoreable error while trying to copy to '.dirname($path.$document->path).': directory not writeable');
+                            error_log('Course copy generated an ignorable error while trying to copy to '.dirname($path.$document->path).': destination directory not writable');
                         }
                     }
                 } // end file doesn't exist

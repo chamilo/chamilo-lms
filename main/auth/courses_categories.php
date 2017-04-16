@@ -407,11 +407,12 @@ function return_description_button($course)
  */
 function return_goto_button($course)
 {
-    $title=get_lang('GoToCourse');    
+    $title=get_lang('GoToCourse');   
     $html = Display::url(
         Display::returnFontAwesomeIcon('share'),
         api_get_course_url($course['code']),
-        array('class' => 'btn btn-default btn-sm', 'title' => $title, 'aria-label' => $title));
+        array('class' => 'btn btn-default btn-sm', 'title' => $title, 'aria-label' => $title)
+    );
     return $html;
 }
 

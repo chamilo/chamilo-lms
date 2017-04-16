@@ -31,7 +31,7 @@ if (isset($_GET["user_id"]) && $_GET["user_id"] != "" && !isset($_GET["type"])) 
     );
 }
 
-if (isset($_GET["user_id"]) && $_GET["user_id"]!="" && isset($_GET["type"]) && $_GET["type"] == "coach") {
+if (isset($_GET["user_id"]) && $_GET["user_id"] != "" && isset($_GET["type"]) && $_GET["type"] == "coach") {
     $interbreadcrumb[] = array("url" => "coaches.php", "name" => get_lang('Tutors'));
 }
 
@@ -120,7 +120,7 @@ function get_users($from, $limit, $column, $direction)
             $courses = Tracking :: get_course_list_in_session_from_student($student_id, $sessionId);
         }
 
-        $avg_time_spent = $avg_student_score = $avg_student_progress = $total_assignments = $total_messages = 0;
+        $avg_time_spent = $avg_student_score = $avg_student_progress = 0;
         $nb_courses_student = 0;
         if (!empty($courses)) {
             foreach ($courses as $course_code) {
@@ -133,8 +133,6 @@ function get_users($from, $limit, $column, $direction)
                         $avg_student_score += $my_average;
                     }
                     $avg_student_progress += Tracking :: get_avg_student_progress($student_id, $course_code);
-                    $total_assignments += Tracking :: count_student_assignments($student_id, $course_code);
-                    $total_messages += Tracking :: count_student_messages($student_id, $course_code);
                     $nb_courses_student++;
                 }
             }
@@ -167,7 +165,7 @@ function get_users($from, $limit, $column, $direction)
             $detailsLink = '<a href="myStudents.php?student='.$student_id.'&id_coach='.$coach_id.'&id_session='.$sessionId.'">
 				            '.Display::return_icon('2rightarrow.png').'</a>';
         } else {
-            $detailsLink =  '<a href="myStudents.php?student='.$student_id.'">
+            $detailsLink = '<a href="myStudents.php?student='.$student_id.'">
 				             '.Display::return_icon('2rightarrow.png').'</a>';
         }
 
@@ -239,7 +237,7 @@ if (api_is_drh()) {
     );
     $actionsLeft .= Display::url(
         Display::return_icon("statistics.png", get_lang("CompanyReport"), array(), ICON_SIZE_MEDIUM),
-        api_get_path(WEB_CODE_PATH) . "mySpace/company_reports.php"
+        api_get_path(WEB_CODE_PATH)."mySpace/company_reports.php"
     );
     $actionsLeft .= Display::url(
         Display::return_icon(
@@ -248,7 +246,7 @@ if (api_is_drh()) {
             [],
             ICON_SIZE_MEDIUM
         ),
-        api_get_path(WEB_CODE_PATH) . "gradebook/certificate_report.php"
+        api_get_path(WEB_CODE_PATH)."gradebook/certificate_report.php"
     );
 }
 

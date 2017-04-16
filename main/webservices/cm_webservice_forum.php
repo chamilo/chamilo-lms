@@ -1,13 +1,15 @@
 <?php
 /* For licensing terms, see /license.txt */
-
-require_once(dirname(__FILE__).'/../inc/global.inc.php');
-require_once(dirname(__FILE__).'/../forum/forumconfig.inc.php');
-require_once(dirname(__FILE__).'/../forum/forumfunction.inc.php');
+/**
+ * @package chamilo.webservices
+ */
+require_once __DIR__.'/../inc/global.inc.php';
+require_once __DIR__.'/../forum/forumconfig.inc.php';
+require_once __DIR__.'/../forum/forumfunction.inc.php';
 
 $libpath = api_get_path(LIBRARY_PATH);
 
-require_once(dirname(__FILE__).'/cm_webservice.php');
+require_once __DIR__.'/cm_webservice.php';
 
 /**
  * Description of cm_soap_inbox

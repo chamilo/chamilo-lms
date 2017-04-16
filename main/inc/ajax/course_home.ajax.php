@@ -126,10 +126,10 @@ switch ($action) {
         //Filter users that does not belong to the session
         if (!api_is_platform_admin()) {
             $new_session_list = UserManager::get_personal_session_course_list(api_get_user_id());
-            $my_session_list  = array();
+            $my_session_list = array();
             foreach ($new_session_list as $item) {
-                if (!empty($item['id_session'])) {
-                    $my_session_list[] = $item['id_session'];
+                if (!empty($item['session_id'])) {
+                    $my_session_list[] = $item['session_id'];
                 }
             }
             if (!in_array($session_id, $my_session_list)) {
@@ -255,10 +255,10 @@ switch ($action) {
         //Filter users that does not belong to the session
         if (!api_is_platform_admin()) {
             $new_session_list = UserManager::get_personal_session_course_list(api_get_user_id());
-            $my_session_list  = array();
+            $my_session_list = array();
             foreach ($new_session_list as $item) {
-                if (!empty($item['id_session'])) {
-                    $my_session_list[] = $item['id_session'];
+                if (!empty($item['session_id'])) {
+                    $my_session_list[] = $item['session_id'];
                 }
             }
             if (!in_array($session_id, $my_session_list)) {
@@ -400,8 +400,8 @@ switch ($action) {
             $new_session_list = UserManager::get_personal_session_course_list(api_get_user_id());
             $my_session_list = array();
             foreach ($new_session_list as $item) {
-                if (!empty($item['id_session'])) {
-                    $my_session_list[] = $item['id_session'];
+                if (!empty($item['session_id'])) {
+                    $my_session_list[] = $item['session_id'];
                 }
             }
             if (!in_array($session_id, $my_session_list)) {

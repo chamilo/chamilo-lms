@@ -3075,6 +3075,12 @@ class Blog
      */
     private static function getPostExtract($fullText, $length = BLOG_MAX_PREVIEW_CHARS)
     {
+        $parts = explode(BLOG_PAGE_BREAK, $fullText);
+
+        if (count($parts) > 1) {
+            return $parts[0];
+        }
+
         // Remove any HTML from the string
         $text = strip_tags($fullText);
         $text = api_html_entity_decode($text);

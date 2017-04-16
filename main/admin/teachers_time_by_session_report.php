@@ -22,7 +22,9 @@ if (!api_is_platform_admin(true) && !api_is_teacher()) {
 $toolName = get_lang('TeacherTimeReportBySession');
 
 $em = Database::getManager();
-$sessionsInfo = Tracking::get_sessions_coached_by_user(api_get_user_id());
+$sessionsInfo = api_is_platform_admin()
+    ? SessionManager::get_sessions_list()
+    : Tracking::get_sessions_coached_by_user(api_get_user_id());
 $session = null;
 
 $form = new FormValidator('teacher_time_report_by_session', 'GET');
@@ -174,21 +176,6 @@ $interbreadcrumb[] = [
     'name' => get_lang('FollowedSessions')
 ];
 
-$actions = [];
-
-if ($session) {
-    $actions = [
-        Display::url(
-            Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), [], ICON_SIZE_MEDIUM),
-            api_get_self() . '?' . http_build_query(['export' => 'csv', 'session' => $session->getId()])
-        ),
-        Display::url(
-            Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), [], ICON_SIZE_MEDIUM),
-            api_get_self() . '?' . http_build_query(['export' => 'xls', 'session' => $session->getId()])
-        )
-    ];
-}
-
 $view = new Template($toolName);
 $view->assign('form', $form->returnForm());
 
@@ -196,12 +183,25 @@ if ($session) {
     $view->assign('session', ['id' => $session->getId(), 'name' => $session->getName()]);
     $view->assign('courses', $coursesInfo);
     $view->assign('users', $usersInfo);
+
+    $actions = Display::url(
+        Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), [], ICON_SIZE_MEDIUM),
+        api_get_self() . '?' . http_build_query(['export' => 'csv', 'session' => $session->getId()])
+    );
+    $actions .= Display::url(
+        Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), [], ICON_SIZE_MEDIUM),
+        api_get_self() . '?' . http_build_query(['export' => 'xls', 'session' => $session->getId()])
+    );
+
+    $view->assign(
+        'actions',
+        Display::toolbarAction('toolbar', [$actions])
+    );
 }
 
 $template = $view->get_template('admin/teachers_time_by_session_report.tpl');
 $content = $view->fetch($template);
 
 $view->assign('header', $toolName);
-$view->assign('actions', implode(' ', $actions));
 $view->assign('content', $content);
 $view->display_one_col_template();

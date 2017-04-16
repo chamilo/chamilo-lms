@@ -20,7 +20,7 @@ class Basic extends Toolbar
         'adobeair',
         'ajax',
         'audio',
-        'image2',
+        'image2_chamilo',
         'bidi',
         'colorbutton',
         'colordialog',

@@ -1,4 +1,5 @@
 <?php
+/* For license terms, see /license.txt */
 exit;
 /**
  * This file is a cron microclock script.
@@ -19,7 +20,7 @@ exit;
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL
  */
 define('CLI_SCRIPT', true); // for chamilo imported code
-require_once dirname(dirname(dirname(__FILE__))).'/main/inc/global.inc.php';
+require_once dirname(dirname(__DIR__)).'/main/inc/global.inc.php';
 
 global $DB;
 $DB = new DatabaseManager();

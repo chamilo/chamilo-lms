@@ -29,7 +29,6 @@ if ($allowedFieldsConfiguration !== false) {
     $allowedFields = isset($allowedFieldsConfiguration['fields']) ? $allowedFieldsConfiguration['fields'] : [];
     $allowedFields['extra_fields'] = isset($allowedFieldsConfiguration['extra_fields']) ? $allowedFieldsConfiguration['extra_fields'] : [];
 }
-
 $gMapsPlugin = GoogleMapsPlugin::create();
 $geolocalization = $gMapsPlugin->get('enable_api') === 'true';
 
@@ -179,15 +178,7 @@ if ($user_already_registered_show_terms === false) {
     $form->addRule('pass1', get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule('pass2', get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule(array('pass1', 'pass2'), get_lang('PassTwo'), 'compare');
-
-    if (CHECK_PASS_EASY_TO_FIND) {
-        $form->addRule(
-            'pass1',
-            get_lang('PassTooEasy') . ': ' . api_generate_password(),
-            'callback',
-            'api_check_password'
-        );
-    }
+    $form->addPasswordRule('pass1');
 
     // PHONE
     if (in_array('phone', $allowedFields)) {
@@ -879,6 +870,13 @@ if ($form->validate()) {
     }
 
     SessionManager::redirectToSession();
+
+    $redirectBuyCourse = Session::read('buy_course_redirect');
+    if (!empty($redirectBuyCourse)) {
+        $form_data['action'] = api_get_path(WEB_PATH).$redirectBuyCourse;
+        Session::erase('buy_course_redirect');
+    }
+
     $form_data = CourseManager::redirectToCourse($form_data);
 
     $form_register = new FormValidator('form_register', 'post', $form_data['action']);

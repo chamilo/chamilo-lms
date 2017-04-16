@@ -70,7 +70,7 @@ class Finder extends \elFinder
         }
 
         if (! interface_exists('elFinderSessionInterface')) {
-            include_once dirname(__FILE__).'/elFinderSessionInterface.php';
+            include_once __DIR__.'/elFinderSessionInterface.php';
         }
 
         // session handler
@@ -85,7 +85,7 @@ class Finder extends \elFinder
                 )
             );
             if (! class_exists('elFinderSession')) {
-                include_once dirname(__FILE__) . '/elFinderSession.php';
+                include_once __DIR__.'/elFinderSession.php';
             }
             $this->session = new elFinderSession($sessionOpts);
         }

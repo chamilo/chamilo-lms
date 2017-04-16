@@ -58,7 +58,6 @@ $content  = '<form name="settingsform" action="'.$thisurl.'">';
 $content .= '<input type="hidden" name="what" value="" />';
 $content .=  $table->toHtml();
 $content .=  '</form>';
-$actions = '';
 
 Display::addFlash(Display::return_message($plugin->get_lang('Sync your master settings to all instances.')));
 
@@ -80,6 +79,5 @@ function ajax_sync_setting(settingid) {
 </script>";
 
 $tpl = new Template($plugin->get_lang('SyncSettings'), true, true, false, true, false);
-$tpl->assign('actions', $actions);
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

@@ -1,7 +1,10 @@
 <?php
-
+/* For licensing terms, see /license.txt */
+/**
+ * @package chamilo.webservices
+ */
 require_once __DIR__.'/../inc/global.inc.php';
-require_once(dirname(__FILE__).'/cm_webservice.php');
+require_once __DIR__.'/cm_webservice.php';
 $libpath = api_get_path(LIBRARY_PATH);
 
 /**
@@ -104,11 +107,11 @@ $s->register(
         ''
 );
 
-require_once(dirname(__FILE__).'/cm_soap_inbox.php');
-require_once(dirname(__FILE__).'/cm_soap_user.php');
-require_once(dirname(__FILE__).'/cm_soap_courses.php');
-require_once(dirname(__FILE__).'/cm_soap_announcements.php');
-require_once(dirname(__FILE__).'/cm_soap_forum.php');
+require_once __DIR__.'/cm_soap_inbox.php';
+require_once __DIR__.'/cm_soap_user.php';
+require_once __DIR__.'/cm_soap_courses.php';
+require_once __DIR__.'/cm_soap_announcements.php';
+require_once __DIR__.'/cm_soap_forum.php';
 
 // Use the request to (try to) invoke the service
 $HTTP_RAW_POST_DATA = isset($HTTP_RAW_POST_DATA) ? $HTTP_RAW_POST_DATA : '';

@@ -739,6 +739,12 @@ class UserManager
             TicketManager::deleteUserFromTicketSystem($user_id);
         }
 
+        $tableExists = $connection->getSchemaManager()->tablesExist(['c_lp_category_user']);
+        if ($tableExists) {
+            $sql = "DELETE FROM c_lp_category_user WHERE user_id = $user_id";
+            Database::query($sql);
+        }
+
         // Delete user from database
         $sql = "DELETE FROM $table_user WHERE id = '".$user_id."'";
         Database::query($sql);
@@ -2853,7 +2859,6 @@ class UserManager
         $coachCourseConditions = null;
 
         // Getting sessions that are related to a coach in the session_rel_course_rel_user table
-
         if (api_is_allowed_to_create_course()) {
             $sessionListFromCourseCoach = array();
             $sql =" SELECT DISTINCT session_id

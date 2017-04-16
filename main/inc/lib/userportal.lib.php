@@ -1153,6 +1153,7 @@ class IndexManager
         // Student info code check (shows student progress information on
         // courses list
         $studentInfo = api_get_configuration_value('course_student_info');
+        $viewGrid = api_get_configuration_value('view_grid_courses');
         $studentInfoProgress = (!empty($studentInfo['progress']) && $studentInfo['progress'] === true);
         $studentInfoScore = (!empty($studentInfo['score']) && $studentInfo['score'] === true);
         $studentInfoCertificate = (!empty($studentInfo['certificate']) && $studentInfo['certificate'] === true);
@@ -1171,49 +1172,50 @@ class IndexManager
                 $this->load_directories_preview
             );
 
-
             //Course option (show student progress)
             //This code will add new variables (Progress, Score, Certificate)
             if ($studentInfoProgress || $studentInfoScore || $studentInfoCertificate) {
-                foreach ($specialCourses as $key => $specialCourseInfo) {
-                    if ($studentInfoProgress) {
-                        $progress = Tracking::get_avg_student_progress(
-                            $user_id,
-                            $specialCourseInfo['course_code']
-                        );
-                        $specialCourses[$key]['student_info']['progress'] = ($progress === false)? null : $progress;
-                    }
-    
-                    if ($studentInfoScore) {
-                        $percentage_score = Tracking::get_avg_student_score(
-                            $user_id,
-                            $specialCourseInfo['course_code'],
-                            array()
-                        );
-                        $specialCourses[$key]['student_info']['score'] = $percentage_score;
-                    }
-    
-                    if ($studentInfoCertificate) {
-                        $category = Category::load(
-                            null,
-                            null,
-                            $specialCourseInfo['course_code'],
-                            null,
-                            null,
-                            null
-                        );
-                        $specialCourses[$key]['student_info']['certificate'] = null;
-                        if (isset($category[0])) {
-                            if ($category[0]->is_certificate_available($user_id)) {
-                                $specialCourses[$key]['student_info']['certificate'] = Display::label(get_lang('Yes'), 'success');
-                            } else {
-                                $specialCourses[$key]['student_info']['certificate'] = Display::label(get_lang('No'));
+                if (!empty($specialCourses)) {
+                    foreach ($specialCourses as $key => $specialCourseInfo) {
+                        if ($studentInfoProgress) {
+                            $progress = Tracking::get_avg_student_progress(
+                                $user_id,
+                                $specialCourseInfo['course_code']
+                            );
+                            $specialCourses[$key]['student_info']['progress'] = ($progress === false)? null : $progress;
+                        }
+
+                        if ($studentInfoScore) {
+                            $percentage_score = Tracking::get_avg_student_score(
+                                $user_id,
+                                $specialCourseInfo['course_code'],
+                                array()
+                            );
+                            $specialCourses[$key]['student_info']['score'] = $percentage_score;
+                        }
+
+                        if ($studentInfoCertificate) {
+                            $category = Category::load(
+                                null,
+                                null,
+                                $specialCourseInfo['course_code'],
+                                null,
+                                null,
+                                null
+                            );
+                            $specialCourses[$key]['student_info']['certificate'] = null;
+                            if (isset($category[0])) {
+                                if ($category[0]->is_certificate_available($user_id)) {
+                                    $specialCourses[$key]['student_info']['certificate'] = Display::label(get_lang('Yes'), 'success');
+                                } else {
+                                    $specialCourses[$key]['student_info']['certificate'] = Display::label(get_lang('No'), 'danger');
+                                }
                             }
                         }
+
                     }
-                    
                 }
-                
+
                 if (isset($courses['in_category']) && isset($courses['not_category'])) {
                     foreach ($courses['in_category'] as $key1 => $value) {
                         if (isset($courses['in_category'][$key1]['courses'])) {
@@ -1225,7 +1227,7 @@ class IndexManager
                                     );
                                     $courses['in_category'][$key1]['courses'][$key2]['student_info']['progress'] = ($progress === false)? null : $progress;
                                 }
-    
+
                                 if ($studentInfoScore) {
                                     $percentage_score = Tracking::get_avg_student_score(
                                         $user_id,
@@ -1234,7 +1236,7 @@ class IndexManager
                                     );
                                     $courses['in_category'][$key1]['courses'][$key2]['student_info']['score'] = $percentage_score;
                                 }
-    
+
                                 if ($studentInfoCertificate) {
                                     $category = Category::load(
                                         null,
@@ -1246,14 +1248,22 @@ class IndexManager
                                     );
                                     $courses['in_category'][$key1]['student_info']['certificate'] = null;
                                     if (isset($category[0])) {
-                                        if ($category[0]->is_certificate_available($user_id)) {
-                                            $courses['in_category'][$key1]['student_info']['certificate'] = Display::label(get_lang('Yes'), 'success');
+                                        if ($viewGrid == 'true') {
+                                            if ($category[0]->is_certificate_available($user_id)) {
+                                                $courses['in_category'][$key1]['student_info']['certificate'] = get_lang('Yes');
+                                            } else {
+                                                $courses['in_category'][$key1]['student_info']['certificate'] = get_lang('No');
+                                            }
                                         } else {
-                                            $courses['in_category'][$key1]['student_info']['certificate'] = Display::label(get_lang('No'));
+                                            if ($category[0]->is_certificate_available($user_id)) {
+                                                $courses['in_category'][$key1]['student_info']['certificate'] = Display::label(get_lang('Yes'), 'success');
+                                            } else {
+                                                $courses['in_category'][$key1]['student_info']['certificate'] = Display::label(get_lang('No'), 'danger');
+                                            }
                                         }
                                     }
                                 }
-                                
+
                             }
                         }
                     }
@@ -1265,7 +1275,7 @@ class IndexManager
                             );
                             $courses['not_category'][$key]['student_info']['progress'] = ($progress === false)? null : $progress;
                         }
-    
+
                         if ($studentInfoScore) {
                             $percentage_score = Tracking::get_avg_student_score(
                                 $user_id,
@@ -1274,7 +1284,7 @@ class IndexManager
                             );
                             $courses['not_category'][$key]['student_info']['score'] = $percentage_score;
                         }
-    
+
                         if ($studentInfoCertificate) {
                             $category = Category::load(
                                 null,
@@ -1285,25 +1295,34 @@ class IndexManager
                                 null
                             );
                             $courses['not_category'][$key]['student_info']['certificate'] = null;
+
                             if (isset($category[0])) {
-                                if ($category[0]->is_certificate_available($user_id)) {
-                                    $courses['not_category'][$key]['student_info']['certificate'] = Display::label(get_lang('Yes'), 'success');
+                                if ($viewGrid == 'true') {
+                                    if ($category[0]->is_certificate_available($user_id)) {
+                                        $courses['not_category'][$key]['student_info']['certificate'] = get_lang('Yes');
+                                    } else {
+                                        $courses['not_category'][$key]['student_info']['certificate'] = get_lang('No');
+                                    }
                                 } else {
-                                    $courses['not_category'][$key]['student_info']['certificate'] = Display::label(get_lang('No'));
+                                    if ($category[0]->is_certificate_available($user_id)) {
+                                        $courses['not_category'][$key]['student_info']['certificate'] = Display::label(get_lang('Yes'), 'success');
+                                    } else {
+                                        $courses['not_category'][$key]['student_info']['certificate'] = Display::label(get_lang('No'), 'danger');
+                                    }
                                 }
                             }
                         }
-                        
+
                     }
                 }
-                
+
             }
 
             if ($viewGridCourses) {
                 $coursesWithoutCategoryTemplate = '/user_portal/grid_courses_without_category.tpl';
                 $coursesWithCategoryTemplate = '/user_portal/grid_courses_with_category.tpl';
             }
-            
+
             if ($specialCourses) {
                 $this->tpl->assign('courses', $specialCourses);
 
@@ -1431,7 +1450,7 @@ class IndexManager
                                                 );
                                                 $course_session['student_info']['progress']  = ($progress === false)? null : $progress;
                                             }
-    
+
                                             if ($studentInfoScore) {
                                                 $percentage_score = Tracking::get_avg_student_score(
                                                     $user_id,
@@ -1441,7 +1460,7 @@ class IndexManager
                                                 );
                                                 $course_session['student_info']['score'] = $percentage_score;
                                             }
-    
+
                                             if ($studentInfoCertificate) {
                                                 $category = Category::load(
                                                     null,
@@ -1666,15 +1685,11 @@ class IndexManager
                                 $session_category_end_date
                             );
                         } else {
-                            if (
-                            !empty($session_category_start_date)
-                            ) {
+                            if (!empty($session_category_start_date)) {
                                 $categoryParams['subtitle'] = get_lang('From').' '.$session_category_start_date;
                             }
 
-                            if (
-                            !empty($session_category_end_date)
-                            ) {
+                            if (!empty($session_category_end_date)) {
                                 $categoryParams['subtitle'] = get_lang('Until').' '.$session_category_end_date;
                             }
                         }
@@ -1688,7 +1703,6 @@ class IndexManager
             }
 
             $allCoursesInSessions = [];
-
             foreach ($listSession as $currentSession) {
                 $coursesInSessions = $currentSession['courses'];
                 unset($currentSession['courses']);
@@ -1702,6 +1716,7 @@ class IndexManager
             $this->tpl->assign('session', $listSession);
             $this->tpl->assign('show_tutor', (api_get_setting('show_session_coach') === 'true' ? true : false));
             $this->tpl->assign('gamification_mode', $gameModeIsActive);
+            $this->tpl->assign('remove_session_url', api_get_configuration_value('remove_session_url'));
 
             if ($viewGridCourses) {
                 $sessions_with_no_category = $this->tpl->fetch(
@@ -2141,7 +2156,6 @@ class IndexManager
     private static function getSimpleSessionDetails($coachName, $dates, $duration = null)
     {
         $strDetails = [];
-
         if (!empty($coachName)) {
             $strDetails[] = $coachName;
         }

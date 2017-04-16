@@ -5,7 +5,11 @@
             <div class="panel-heading">
                 {% if row.course_list_session_style == 1 %}
                     {# Classic #}
-                    <a href="{{ _p.web_main ~ 'session/index.php?session_id=' ~ row.id }}">
+                    {% if remove_session_url == true %}
+                        <a style="cursor:default">
+                    {% else %}
+                        <a href="{{ _p.web_main ~ 'session/index.php?session_id=' ~ row.id }}">
+                    {% endif %}
                         <img id="session_img_{{ row.id }}" src="{{ "window_list.png"|icon(32) }}" width="32" height="32"
                              alt="{{ row.title }}" title="{{ row.title }}">
                         {{ row.title }}
@@ -80,25 +84,26 @@
                                         </div>
 
                                         {% if item.student_info %}
-                                        <div class="course-student-info">
-                                            <div class="student-info">
+                                            {% if (item.student_info.progress is not null) and (item.student_info.score is not null) %}
+                                                <div class="course-student-info">
+                                                    <div class="student-info">
 
-                                                {% if (item.student_info.progress is not null) %}
-                                                {{ "StudentCourseProgressX" | get_lang | format(item.student_info.progress) }}
-                                                {% endif %}
+                                                        {% if (item.student_info.progress is not null) %}
+                                                        {{ "StudentCourseProgressX" | get_lang | format(item.student_info.progress) }}
+                                                        {% endif %}
 
-                                                {% if (item.student_info.score is not null) %}
-                                                {{ "StudentCourseScoreX" | get_lang | format(item.student_info.score) }}
-                                                {% endif %}
+                                                        {% if (item.student_info.score is not null) %}
+                                                        {{ "StudentCourseScoreX" | get_lang | format(item.student_info.score) }}
+                                                        {% endif %}
 
-                                                {% if (item.student_info.certificate is not null) %}
-                                                {{ "StudentCourseCertificateX" | get_lang | format(item.student_info.certificate) }}
-                                                {% endif %}
+                                                        {% if (item.student_info.certificate is not null) %}
+                                                        {{ "StudentCourseCertificateX" | get_lang | format(item.student_info.certificate) }}
+                                                        {% endif %}
 
-                                            </div>
-                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
                                         {% endif %}
-                                        
                                     </div>
                                 </div>
                             {% endfor %}

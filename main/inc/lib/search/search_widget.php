@@ -7,7 +7,7 @@
 /**
  * Code
  */
-require_once dirname(__FILE__) . '/IndexableChunk.class.php';
+require_once __DIR__.'/IndexableChunk.class.php';
 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 
 /**

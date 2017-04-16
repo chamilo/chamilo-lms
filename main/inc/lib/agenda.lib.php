@@ -85,7 +85,7 @@ class Agenda
                         ) &&
                         GroupManager::is_tutor_of_group(
                             api_get_user_id(),
-                            $groupInfo['iid']
+                            $groupInfo
                         );
                     if ($isGroupAccess) {
                         $isAllowToEdit = true;
@@ -2955,16 +2955,14 @@ class Agenda
 
         $form = '';
         if (api_is_allowed_to_edit(false, true) ||
-            (api_get_course_setting(
-                    'allow_user_edit_agenda'
-                ) && !api_is_anonymous()) &&
+            (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()) &&
             api_is_allowed_to_session_edit(false, true) ||
             (GroupManager::user_has_access(
                     api_get_user_id(),
                     $groupIid,
                     GroupManager::GROUP_TOOL_CALENDAR
                 ) &&
-                GroupManager::is_tutor_of_group(api_get_user_id(), $groupIid))
+                GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo))
         ) {
             $actionsLeft .= Display::url(
                 Display::return_icon(
@@ -3063,9 +3061,7 @@ class Agenda
 
         $toolbar = Display::toolbarAction(
             'toolbar-agenda',
-            array(0 => $actionsLeft, 1 => $actionsRight),
-            2,
-            false
+            array($actionsLeft, $actionsRight)
         );
 
         return $toolbar;

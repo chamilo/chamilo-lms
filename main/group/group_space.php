@@ -33,7 +33,7 @@ $interbreadcrumb[] = array('url' => 'group.php?'.api_get_cidreq(), 'name' => get
 
 /*	Ensure all private groups // Juan Carlos Raña Trabado */
 
-$forums_of_groups = get_forums_of_group($current_group['iid']);
+$forums_of_groups = get_forums_of_group($current_group);
 
 if (!GroupManager::userHasAccessToBrowse($user_id, $current_group, api_get_session_id())) {
     api_not_allowed(true);
@@ -50,9 +50,9 @@ Display::display_introduction_section(TOOL_GROUP);
  * User wants to register in this group
  */
 if (!empty($_GET['selfReg']) &&
-    GroupManager :: is_self_registration_allowed($user_id, $current_group['iid'])
+    GroupManager :: is_self_registration_allowed($user_id, $current_group)
 ) {
-    GroupManager :: subscribe_users($user_id, $current_group['iid']);
+    GroupManager :: subscribe_users($user_id, $current_group);
     Display :: display_normal_message(get_lang('GroupNowMember'));
 }
 
@@ -60,9 +60,9 @@ if (!empty($_GET['selfReg']) &&
  * User wants to unregister from this group
  */
 if (!empty($_GET['selfUnReg']) &&
-    GroupManager :: is_self_unregistration_allowed($user_id, $current_group['iid'])
+    GroupManager :: is_self_unregistration_allowed($user_id, $current_group)
 ) {
-    GroupManager::unsubscribe_users($user_id, $current_group['iid']);
+    GroupManager::unsubscribe_users($user_id, $current_group);
     Display::display_normal_message(get_lang('StudentDeletesHimself'));
 }
 
@@ -75,7 +75,7 @@ echo '<a href="group.php">'.
  * Register to group
  */
 $subscribe_group = '';
-if (GroupManager :: is_self_registration_allowed($user_id, $current_group['iid'])) {
+if (GroupManager :: is_self_registration_allowed($user_id, $current_group)) {
     $subscribe_group = '<a class="btn btn-default" href="'.api_get_self().'?selfReg=1&group_id='.$current_group['id'].'" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."'".')) return false;">'.
         get_lang("RegIntoGroup").'</a>';
 }
@@ -84,7 +84,7 @@ if (GroupManager :: is_self_registration_allowed($user_id, $current_group['iid']
  * Unregister from group
  */
 $unsubscribe_group = '';
-if (GroupManager :: is_self_unregistration_allowed($user_id, $current_group['iid'])) {
+if (GroupManager :: is_self_unregistration_allowed($user_id, $current_group)) {
     $unsubscribe_group = '<a class="btn btn-default" href="'.api_get_self().'?selfUnReg=1" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."'".')) return false;">'.
         get_lang("StudentUnsubscribe").'</a>';
 }
@@ -94,7 +94,7 @@ echo '&nbsp;</div>';
 
 $edit_url = '';
 if (api_is_allowed_to_edit(false, true) ||
-    GroupManager::is_tutor_of_group(api_get_user_id(), $current_group['iid'])
+    GroupManager::is_tutor_of_group(api_get_user_id(), $current_group)
 ) {
     $edit_url = '<a href="'.api_get_path(WEB_CODE_PATH).'group/settings.php?'.api_get_cidreq().'">'.
         Display::return_icon('edit.png', get_lang('EditGroup'), '', ICON_SIZE_SMALL).'</a>';
@@ -111,13 +111,14 @@ if (!empty($current_group['description'])) {
 /*
  * Group Tools
  */
+
 // If the user is subscribed to the group or the user is a tutor of the group then
 if (api_is_allowed_to_edit(false, true) ||
-    GroupManager::is_user_in_group(api_get_user_id(), $current_group['iid'])
+    GroupManager::is_user_in_group(api_get_user_id(), $current_group)
 ) {
     $actions_array = array();
     // Link to the forum of this group
-    $forums_of_groups = get_forums_of_group($current_group['iid']);
+    $forums_of_groups = get_forums_of_group($current_group);
 
     if (is_array($forums_of_groups)) {
         if ($current_group['forum_state'] != GroupManager::TOOL_NOT_AVAILABLE) {
@@ -222,7 +223,7 @@ if (api_is_allowed_to_edit(false, true) ||
     $actions_array = array();
 
     // Link to the forum of this group
-    $forums_of_groups = get_forums_of_group($current_group['iid']);
+    $forums_of_groups = get_forums_of_group($current_group);
 
     if (is_array($forums_of_groups)) {
         if ($current_group['forum_state'] == GroupManager::TOOL_PUBLIC) {
@@ -300,7 +301,7 @@ if (api_is_allowed_to_edit(false, true) ||
 /*
  * List all the tutors of the current group
  */
-$tutors = GroupManager::get_subscribed_tutors($current_group['iid']);
+$tutors = GroupManager::get_subscribed_tutors($current_group);
 
 $tutor_info = '';
 if (count($tutors) == 0) {
@@ -425,6 +426,7 @@ function get_group_user_data($from, $number_of_items, $column, $direction)
     // Database table definition
     $table_group_user = Database:: get_course_table(TABLE_GROUP_USER);
     $table_user = Database:: get_main_table(TABLE_MAIN_USER);
+    $tableGroup = Database:: get_course_table(TABLE_GROUP);
 
     // Query
     if (api_get_setting('show_email_addresses') === 'true') {
@@ -437,12 +439,14 @@ function get_group_user_data($from, $number_of_items, $column, $direction)
 				user.firstname 	AS col2,"
             )."
 				user.email		AS col3
-				FROM $table_user user, 
+				FROM $table_user user INNER JOIN 
 				$table_group_user group_rel_user
+				ON (group_rel_user.user_id = user.id)
+				INNER JOIN $tableGroup g
+				ON (group_rel_user.group_id = g.id)
 				WHERE 
 				    group_rel_user.c_id = $course_id AND 
-				    group_rel_user.user_id = user.id AND 
-				    group_rel_user.group_id = '".$groupInfo['iid']."'
+				    g.iid = '".$groupInfo['iid']."'
                 ORDER BY col$column $direction 
                 LIMIT $from, $number_of_items";
     } else {
@@ -458,8 +462,12 @@ function get_group_user_data($from, $number_of_items, $column, $direction)
                         u.email		AS col3
                     FROM $table_user u 
                     INNER JOIN $table_group_user gu 
-                    ON (gu.user_id = u.id) AND gu.c_id = $course_id
-                    WHERE gu.group_id = '".$groupInfo['iid']."'
+                    ON (gu.user_id = u.id)
+                    INNER JOIN $tableGroup g
+				    ON (gu.group_id = g.id)
+                    WHERE 
+                        g.iid = '".$groupInfo['iid']."' AND 
+                        gu.c_id = $course_id
                     ORDER BY col$column $direction 
                     LIMIT $from, $number_of_items";
         } else {
@@ -472,11 +480,16 @@ function get_group_user_data($from, $number_of_items, $column, $direction)
                     "user.lastname 	AS col1,
 						user.firstname 	AS col2 "
                     )."
-                    FROM $table_user user, $table_group_user group_rel_user
+                    FROM $table_user user 
+                    INNER JOIN $table_group_user group_rel_user
+                    ON (group_rel_user.user_id = user.id)
+                    INNER JOIN $tableGroup g
+                    ON (group_rel_user.group_id = g.id)
                     WHERE 
+                        g.iid = '".$groupInfo['iid']."' AND 
                         group_rel_user.c_id = $course_id AND  
                         group_rel_user.user_id = user.id AND 
-                        group_rel_user.group_id = '".$groupInfo['iid']."'
+                        g.iid = '".$groupInfo['iid']."'
                     ORDER BY col$column $direction 
                     LIMIT $from, $number_of_items";
         }

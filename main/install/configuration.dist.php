@@ -308,3 +308,34 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 //$_configuration['show_simple_session_info'] = true;
 // Hide LP time in reports.
 // $_configuration['hide_lp_time'] = false;
+// Hide rating elements in pages ("Courses catalog" & "Most Popular courses")
+// $_configuration['hide_course_rating'] = false;
+// Customize password generation and verification
+/*$_configuration['password_requirements'] = [
+    'min' => [
+        'lowercase' => 2,
+        'uppercase' => 2,
+        'numeric' => 2,
+        'length' => 8
+    ]
+];*/
+// Customize course session tracking columns
+/*
+$_configuration['tracking_columns'] = [
+    'course_session' => [
+        'course_title' => true,
+        'published_exercises' => true,
+        'new_exercises' => true,
+        'my_average' => true,
+        'average_exercise_result' => true,
+        'time_spent' => true,
+        'lp_progress' => true,
+        'score' => true,
+        'best_score' => true,
+        'last_connection' => true,
+        'details' => true,
+    ],
+];
+*/
+// Hide session link of course_block on index/userportal
+//$_configuration['remove_session_url']= false ;

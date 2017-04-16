@@ -41,7 +41,7 @@ $url = 'slideshowoptions.php?curdirpath='.$pathurl;
 $originaltoolname = '<b>'.get_lang('SlideshowOptions').'</b>';
 $interbreadcrumb[] = array('url' => $url, 'name' => $originaltoolname );
 
-Display::display_header($originalToolName, 'Doc');
+Display::display_header($originaltoolname, 'Doc');
 $image_resizing = isset($_SESSION['image_resizing']) ? $_SESSION['image_resizing'] : null;
 
 ?>
@@ -65,7 +65,7 @@ window.onload = <?php echo $image_resizing == 'resizing' ? 'enableresizing' : 'd
 <?php
 $actions = '<a href="document.php?action=exit_slideshow&curdirpath='.$pathurl.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
 $actions .= '<a href="slideshow.php?curdirpath='.$pathurl.'">'.Display::return_icon('slideshow.png',get_lang('BackTo').' '.get_lang('SlideShow'),'',ICON_SIZE_MEDIUM).'</a>';
-Display::toolbarAction('toolbar-slideshow', $content)
+echo Display::toolbarAction('toolbar-slideshow', [$actions])
 ?>
 <div class="panel panel-default">
     <div class="panel-body">

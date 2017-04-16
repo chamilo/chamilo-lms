@@ -46,7 +46,7 @@ if (api_is_allowed_to_edit(null, true)) {
                 Display::return_icon('new_course_progress.png', get_lang('NewThematicSection'), '', ICON_SIZE_MEDIUM).'</a>';
     }
     
-    $toolbar= Display::toolbarAction('thematic-bar', array(0 => $actionLeft));
+    $toolbar= Display::toolbarAction('thematic-bar', array($actionLeft));
 }
 
 
@@ -175,6 +175,7 @@ if ($action == 'thematic_list') {
             $tpl->assign('data', $listThematic);
         } //End for
     }
+    $thematicLayout = $tpl->get_template('course_progress/progress.tpl');
 } elseif ($action == 'thematic_add' || $action == 'thematic_edit') {
     // Display form
     $form = new FormValidator('thematic_add', 'POST', 'index.php?action=thematic_add&'.api_get_cidreq());
@@ -213,7 +214,8 @@ if ($action == 'thematic_list') {
         Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'), false);
     }
     if ($show_form) {
-        $form->display();
+        $html = $form->return_form();
+        
     }
 } elseif ($action == 'thematic_import_select') {
     // Create form to upload csv file.
@@ -222,11 +224,15 @@ if ($action == 'thematic_list') {
     $form->addElement('file', 'file');
     $form->addElement('checkbox', 'replace', null, get_lang('DeleteAllThematic'));
     $form->addButtonImport(get_lang('Import'), 'SubmitImport');
-    $form->display();
+    $html = $form->return_form();
 }
-
 $tpl->assign('actions', $toolbar);
-$tpl->assign('message', $message);
-$tpl->assign('score_progress', $total_average_of_advances);
-$thematicLayout = $tpl->get_template('course_progress/progress.tpl');
+if (!empty($html)) {
+    $tpl->assign('content', $html);
+    $thematicLayout = $tpl->get_template('course_progress/layout.tpl');
+}
+if (!empty($message) && !empty($total_average_of_advances)) {
+    $tpl->assign('message', $message);
+    $tpl->assign('score_progress', $total_average_of_advances);
+}
 $tpl->display($thematicLayout);

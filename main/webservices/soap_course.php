@@ -4,8 +4,8 @@
  * Configures the WSCourse SOAP service
  * @package chamilo.webservices
  */
-require_once dirname(__FILE__).'/webservice_course.php';
-require_once dirname(__FILE__).'/soap.php';
+require_once __DIR__.'/webservice_course.php';
+require_once __DIR__.'/soap.php';
 
 /**
  * Configures the WSCourse SOAP service

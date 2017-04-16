@@ -30,17 +30,14 @@ if (isset($current_thread['thread_id'])) {
     $increment = 0;
     $clean_forum_id = intval($_GET['forum']);
     $clean_thread_id = intval($_GET['thread']);
-
     $locked = api_resource_is_locked_by_gradebook(
         $clean_thread_id,
         LINK_FORUM_THREAD
     );
 
     $closedPost = null;
-
     if (!empty($rows)) {
         $postCount = count($rows);
-
         foreach ($rows as $row) {
             if ($row['user_id'] == '0') {
                 $name = prepare4display($row['poster_name']);
@@ -141,13 +138,13 @@ if (isset($current_thread['thread_id'])) {
             if ($origin != 'learnpath') {
                 $html .= Display::tag(
                     'p',
-                    api_convert_and_format_date($row['post_date']),
+                    Display::dateToStringAgoAndLongDate($row['post_date']),
                     array('class' => 'post-date')
                 );
             } else {
                 $html .= Display::tag(
                     'p',
-                    api_convert_and_format_date($row['post_date'], DATE_TIME_FORMAT_SHORT),
+                    Display::dateToStringAgoAndLongDate($row['post_date']),
                     array('class' => 'text-muted')
                 );
             }
@@ -157,13 +154,11 @@ if (isset($current_thread['thread_id'])) {
             $id_attach = !empty($attachment_list) ? $attachment_list['iid'] : '';
             $iconEdit = '';
             $statusIcon = '';
-
-
             // The user who posted it can edit his thread only if the course admin allowed
             // this in the properties of the forum
             // The course admin him/herself can do this off course always
             $groupInfo = GroupManager::get_group_properties($groupId);
-            if ((isset($groupInfo['iid']) && GroupManager::is_tutor_of_group($userId, $groupInfo['iid'])) ||
+            if ((isset($groupInfo['iid']) && GroupManager::is_tutor_of_group($userId, $groupInfo)) ||
                 ($current_forum['allow_edit'] == 1 && $row['user_id'] == $_user['user_id']) ||
                 (
                 api_is_allowed_to_edit(false, true) &&
@@ -171,7 +166,7 @@ if (isset($current_thread['thread_id'])) {
                 )
             ) {
                 if (api_is_allowed_to_session_edit(false, true)) {
-                    if ($locked == false) {
+                    if ($locked == false && postIsEditableByStudent($current_forum, $row)) {
                         $iconEdit .= "<a href=\"editpost.php?" . api_get_cidreq() . "&forum=" . $clean_forum_id
                             . "&thread=" . $clean_thread_id . "&post=" . $row['post_id']
                             . "&edit=edition&id_attach=" . $id_attach . "\">"
@@ -181,7 +176,7 @@ if (isset($current_thread['thread_id'])) {
             }
 
             if ($origin != 'learnpath') {
-                if (GroupManager::is_tutor_of_group($userId, $groupInfo['iid']) ||
+                if (GroupManager::is_tutor_of_group($userId, $groupInfo) ||
                     api_is_allowed_to_edit(false, true) &&
                     !(api_is_course_coach() && $current_forum['session_id'] != $sessionId)
                 ) {
@@ -206,13 +201,13 @@ if (isset($current_thread['thread_id'])) {
                     }
                 }
 
-                if (
-                    GroupManager::is_tutor_of_group($userId, $groupInfo['iid']) ||
-                        (api_is_allowed_to_edit(false, true) &&
-                        !(api_is_course_coach() && $current_forum['session_id'] != $sessionId)
-                        )
+                $statusIcon = getPostStatus($current_forum, $row);
+
+                if (GroupManager::is_tutor_of_group($userId, $groupInfo) ||
+                    (api_is_allowed_to_edit(false, true) &&
+                    !(api_is_course_coach() && $current_forum['session_id'] != $sessionId)
+                    )
                 ) {
-                    $statusIcon = getPostStatus($current_forum, $row);
                     $iconEdit .= return_visible_invisible_icon(
                         'post',
                         $row['post_id'],
@@ -245,9 +240,12 @@ if (isset($current_thread['thread_id'])) {
                 }
 
                 $userCanEdit = $current_thread['thread_peer_qualify'] == 1 && $row['poster_id'] != $userId;
+                /*if ($row['poster_id'] != $userId && $current_forum['moderated'] == 1 && $row['status']) {
+                }*/
                 if (api_is_allowed_to_edit(null, true)) {
                     $userCanEdit = true;
                 }
+
                 if ($increment > 0 && $locked == false && $userCanEdit) {
                     $iconEdit .= "<a href=\"forumqualify.php?" . api_get_cidreq() . "&forum=" . $my_forum_id
                         . "&thread=" . $clean_thread_id . "&action=list&post=" . $row['post_id']
@@ -257,8 +255,13 @@ if (isset($current_thread['thread_id'])) {
                         . "</a> ";
                 }
             }
-            if ($iconEdit != '') {
-                $html .= '<div class="tools-icons">' . $iconEdit . $statusIcon.'</div>';
+
+            if (!empty($iconEdit)) {
+                $html .= '<div class="tools-icons">'.$iconEdit.' '.$statusIcon.'</div>';
+            } else {
+                if (!empty(strip_tags($statusIcon))) {
+                    $html .= '<div class="tools-icons">'.$statusIcon.'</div>';
+                }
             }
             $html .= $closedPost;
             $html .= '</div>';

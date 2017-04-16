@@ -498,6 +498,9 @@ header{
 .actions a:hover{
     text-decoration: none;
 }
+.actions div.text-right {
+    text-align: left;
+}
 .actions img{
     padding: 3px;
     border: 1px solid #dcdcdc;
@@ -1884,20 +1887,11 @@ div.admin_section h4 {
 }
 .question_row_score .title-score .total{
   border: 1px solid #ddd;
-  border-radius: 4px;
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
+  border-radius: 5px;
   padding: 10px;
   text-align: center;
   color: #666;
-  background: #ffffff; /* Old browsers */
-  background: -moz-linear-gradient(top, #ffffff 0%, #f6f6f6 47%, #ededed 100%); /* FF3.6+ */
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(47%,#f6f6f6), color-stop(100%,#ededed)); /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(top, #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* Chrome10+,Safari5.1+ */
-  background: -o-linear-gradient(top, #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* Opera 11.10+ */
-  background: -ms-linear-gradient(top, #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* IE10+ */
-  background: linear-gradient(to bottom, #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+  background: #FAFAFA;
 }
 .question-result .page-header{
   margin-top: 20px;
@@ -1937,14 +1931,7 @@ div.admin_section h4 {
     border-radius: 3px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     position: relative;
-    background: #ffffff; /* Old browsers */
-    background: -moz-linear-gradient(top, #ffffff 0%, #f6f6f6 47%, #ededed 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(47%,#f6f6f6), color-stop(100%,#ededed)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top, #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top, #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top, #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* IE10+ */
-    background: linear-gradient(to bottom, #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+    background: #FAFAFA;
 }
 
 .ribbon .rib {
@@ -1989,16 +1976,9 @@ div.admin_section h4 {
 }
 
 .ribbon .rib-error, .ribbon .ribbon-total-error {
-  background: #ff3019; /* Old browsers */
-  background: -moz-linear-gradient(top, #ff3019 0%, #cf0404 100%); /* FF3.6+ */
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ff3019), color-stop(100%,#cf0404)); /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(top, #ff3019 0%,#cf0404 100%); /* Chrome10+,Safari5.1+ */
-  background: -o-linear-gradient(top, #ff3019 0%,#cf0404 100%); /* Opera 11.10+ */
-  background: -ms-linear-gradient(top, #ff3019 0%,#cf0404 100%); /* IE10+ */
-  background: linear-gradient(to bottom, #ff3019 0%,#cf0404 100%); /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3019', endColorstr='#cf0404',GradientType=0 ); /* IE6-9 */
-    border-top: 1px solid #ff3019;
-    border-bottom: 1px solid #cf0404;
+    background: #ff3019;
+    border-top: none;
+    border-bottom: none;
     float: left;
 }
 
@@ -2016,15 +1996,9 @@ div.admin_section h4 {
 }
 
 .ribbon .rib-success, .ribbon .ribbon-total-success{
-    background-color: #768E00;
-    background-image: -ms-linear-gradient(top, #9CB80A, #768E00);
-    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#9CB80A), to(#768E00));
-    background-image: -webkit-linear-gradient(top, #9CB80A, #768E00);
-    background-image: -o-linear-gradient(top, #9CB80A, #768E00);
-    background-image: -moz-linear-gradient(top, #9CB80A, #768E00);
-    background-image: linear-gradient(top, #9CB80A, #768E00);
-    border-top: 1px solid #A8C31B;
-    border-bottom: 1px solid #617700;
+    background: #86B404;
+    border-top: none;
+    border-bottom: none;
     float: left;
 }
 
@@ -2067,7 +2041,7 @@ div.admin_section h4 {
 }
 
 .ribbon .rib-success::before {
-    border-color: #66751B transparent transparent transparent;
+    border-color: #4B610B transparent transparent transparent;
 }
 
 .ribbon .rib-gray::before {
@@ -3113,10 +3087,6 @@ a.forum_group_link {
 }
 
 /* actions */
-.actions_lp {
-    width:100%;
-    text-align: center;
-}
 .actions_lp img {
     vertical-align:middle;
 }
@@ -4142,6 +4112,10 @@ ul.holder li.bit-box{
     height: 30px;
     display: block;
 }
+.alert-thematic{
+    margin-top: 10px;
+    display: inline-block;
+}
 .thematic .thematic-advance{
     margin-top: 10px;
     display: inline-block;
@@ -4152,7 +4126,6 @@ ul.holder li.bit-box{
     color: #FFF;
     padding: 12px;
     text-transform: uppercase;
-    margin-bottom: 10px;
     border-radius: 5px;
 }
 .thematic .score-progress h3{
@@ -4780,30 +4753,86 @@ div#chat-remote-video video {
     padding-top: 10px;
     border-bottom: 1px solid #ECF0F1;
 }
+.grid-courses .items .course-student-info{
+    background-color: #d9edf7;
+    border: 1px solid #bce8f1;
+    padding: 5px;
+    border-radius: 5px;
+}
+.toolbar-edit{
+    padding: 5px;
+    display: inline-block;
+    width: 100%;
+}
+.bar-progress{
+    display: inline-block;
+    width: 100%;
+}
 .grid-courses .items{
     /* position: relative; */
     vertical-align: top;
     white-space: normal;
-    margin: 0px 5px 15px 0px;
+    margin: auto;
     box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05);
     text-align: left;
     background-color: #fff;
-    min-height: 250px;
     border: 1px solid #DFDFDF;
     border-radius: 5px;
     margin-bottom: 20px;
 }
-.grid-courses .items.items-courses,
+.grid-courses .items.my-courses{
+    min-height: 340px;
+    box-shadow: 2px 4px 15px 0 rgba(46,61,73,.1);
+    transition: box-shadow .3s ease , border .3s ease;
+}
+.grid-courses .items.my-courses .course-student-info{
+    font-size: 10px;
+    text-align: center;
+    background: none;
+    border:none;
+    padding: 0;
+}
+.grid-courses .items.my-courses .title{
+    font-size: 14px;
+}
+.grid-courses .items.my-courses .block-title{
+    margin: 10px;
+}
+.grid-courses .items.items-courses{
+    min-height: 425px;
+    width: 310px;
+    box-shadow: 2px 4px 15px 0 rgba(46,61,73,.1);
+    transition: box-shadow .3s ease , border .3s ease;
+}
+.grid-courses .items.items-courses:hover,
+.grid-courses .items.my-courses:hover,
+.grid-courses .items.items-hotcourse:hover{
+    box-shadow: 4px 5px 20px 0 rgba(46,61,73,.15);
+    transition: box-shadow .3s ease , border .3s ease;
+}
 .grid-courses .items.items-hotcourse{
-    min-height: 300px;
+    min-height: 400px;
+    box-shadow: 2px 4px 15px 0 rgba(46,61,73,.1);
+    transition: box-shadow .3s ease , border .3s ease;
+}
+.grid-courses .items .block-title{
+    margin: 15px 10px 10px 10px;
 }
 .grid-courses .items .title{
     line-height: 1.4;
     padding: 0px;
-    margin: 5px;
+    font-size: 17px;
+    font-weight: bold;
+    height: 42px;
+    margin: 0;
+}
+.hot-courses .grid-courses .items .title{
+    line-height: 1.4;
+    padding: 0px;
     font-size: 14px;
     font-weight: bold;
-    min-height: 40px;
+    height: 42px;
+    margin: 0;
 }
 .grid-courses .items .toolbar{
     text-align: right;
@@ -4829,33 +4858,19 @@ div#chat-remote-video video {
 }
 .grid-courses .items .ranking{
     font-size: 10px;
-}
-.grid-courses .items .image .black-shadow{
-    top: 0px;
-    left: 0px;
-    width: 100%;
-    height: 100%;
-    padding-top: 40px;
-    opacity: 0;
-    box-sizing: border-box;
-    position: absolute;
-    background: rgba(0, 0, 0, 0.7) none repeat scroll 0% 0%;
-    padding: 10px;
-}
-.grid-courses .items .image .hovered-course{
-    opacity: 1;
-    transition: all 0.3s ease 0s;
+    margin: 10px;
 }
 .grid-courses .items .notifications{
-    padding-top: 5px;
     text-align: center;
 }
-.grid-courses .items .admin-actions, .grid-courses .items .user-actions{
+.grid-courses .items .admin-actions,
+.grid-courses .items .user-actions{
     position: absolute;
     bottom: 0px;
     left: 0px;
 }
-.grid-courses .items .admin-actions .btn-sm,.grid-courses .items .user-actions .btn-sm{
+.grid-courses .items .admin-actions .btn-sm,
+.grid-courses .items .user-actions .btn-sm{
     border-radius: 0;
     border: none;
 }
@@ -4867,17 +4882,20 @@ div#chat-remote-video video {
     position: absolute;
     bottom: 0px;
     right: -10px;
-    background-color: #FD6600;
+    background-color: #09F;
     color: #fff;
     padding: 5px 10px;
     font-size: 11px;
     text-transform: uppercase;
     z-index: 2;
+    font-weight: bold;
+    height: 32px;
+    line-height: 20px;
 }
 .grid-courses .items .cribbon{
     width: 0;
     height: 0;
-    border-top: 10px solid #FD3414;
+    border-top: 10px solid #337AB7;
     border-right: 10px solid transparent;
     position: absolute;
     bottom: -10px;
@@ -4911,6 +4929,58 @@ div#chat-remote-video video {
 }
 .grid-courses .items .author-card .teachers-details h5 a{
     color: #fff;
+}
+/*---- */
+.grid-courses .items .block-author{
+    display: flex;
+    margin-top: 5px;
+    margin-left: 5px;
+}
+.grid-courses .items .block-author img{
+    border: 2px solid #fff;
+}
+.grid-courses .items .block-author .teachers-details{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.grid-courses .items .block-author .teachers-details p{
+    font-size: 10px;
+    margin: 0 10px 0 10px;
+    padding: 0;
+}
+.grid-courses .items .block-author .teachers-details h5{
+    font-size: 10px;
+    font-weight: bold;
+    margin: 0px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.grid-courses .items .block-author .teachers-details h5 a{
+    color: #666;
+}
+.grid-courses{
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+/* new grid catalog */
+.section-course-wrapper{
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    margin: auto;
+    align-items: center;
+}
+.section-course-wrapper.show-section{
+    /* display: -webkit-box !important; */
+    /* display: -ms-flexbox !important; */
+    display: flex !important;
 }
 /* Catalog session */
 
@@ -5362,9 +5432,7 @@ div#chat-remote-video video {
 #toolbar-agenda .show-tick{
     width: 420px;
 }
-.description-upload{
-    margin-bottom: 10px;
-}
+
 .files-table{
     padding-top: 20px;
 }
@@ -5898,7 +5966,10 @@ ul#toolnavbox-two li a.btn{
     cursor:pointer;
 }
 #upload, .description-upload{
-    padding-top: 30px;
+    padding-top: 15px;
+}
+.description-upload{
+    margin-bottom: 15px;
 }
 #form-work{
     padding-top: 30px;
@@ -6251,6 +6322,9 @@ ul#toolnavbox-two li a.btn{
   .navbar-nav{
     margin: -2.5px -15px;
   }
+  .grid-courses .items.my-courses{
+        width: 310px;
+   }
 }
 @media (min-width:320px) and (max-width: 479px){
     footer {
@@ -6315,6 +6389,16 @@ ul#toolnavbox-two li a.btn{
 	margin: 15px 0px;
 	color: #666666;
         line-height: 20px;
+    }
+    .grid-courses .items.items-courses{
+        width: auto;
+    }
+    .grid-courses .items .title{
+        font-size: 14px;
+    }
+    .grid-courses{
+        margin-top: 10px;
+        padding-top: 10px;
     }
 }
 
@@ -6607,7 +6691,13 @@ input.form-control[type="color"] {
 
 /* Small devices (tablets, 768px and up) */
 @media (min-width: 768px) {
-
+    .actions div.text-right{
+        text-align: right;
+    }
+    .actions .row .text-right a{
+      margin-left: 10px;
+      margin-right: 0;
+    }
 }
 
 /* Medium devices (desktops, 992px and up) */

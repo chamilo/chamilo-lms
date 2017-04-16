@@ -1794,7 +1794,14 @@ class Event
         Database::query($sql);
 
         // Course catalog stats modifications see #4191
-        CourseManager::update_course_ranking(null, null, null, null, true, false);
+        CourseManager::update_course_ranking(
+            null,
+            null,
+            null,
+            null,
+            true,
+            false
+        );
     }
 
     /**
@@ -1905,7 +1912,7 @@ class Event
      * The IP address is not considered a useful filter here.
      * @param int $courseId The course in which to add the time
      * @param int $userId The user for whom to add the time
-     * @param $sessionId The session in which to add the time (if any)
+     * @param int $sessionId The session in which to add the time (if any)
      * @param string $virtualTime The amount of time to be added, in a hh:mm:ss format. If int, we consider it is expressed in hours.
      * @return True on successful removal, false otherwise
      */

@@ -11,10 +11,9 @@
  * Please edit the facebook.conf.php file to adapt it to your fb application parameter
  */
 
-require_once dirname(__FILE__) . '/../../inc/global.inc.php';
-require_once dirname(__FILE__) . '/facebook.init.php';
-
-require_once dirname(__FILE__) . '/functions.inc.php';
+require_once __DIR__.'/../../inc/global.inc.php';
+require_once __DIR__.'/facebook.init.php';
+require_once __DIR__.'/functions.inc.php';
 
 /**
  * This function connect to facebook and retrieves the user info

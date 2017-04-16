@@ -92,7 +92,7 @@ class StudentPublicationLink extends AbstractLink
 
         $result = Database::query($sql);
 
-        $cats=array();
+        $cats = array();
         while ($data = Database::fetch_array($result)) {
             $cats[] = array($data['id'], $data['url']);
         }
@@ -135,9 +135,9 @@ class StudentPublicationLink extends AbstractLink
             if (empty($work_name)) {
                 $work_name = basename($data->getUrl());
             }
-            $cats[] = array ($data->getId(), $work_name);
+            $cats[] = array($data->getId(), $work_name);
         }
-        $cats=isset($cats) ? $cats : array();
+        $cats = isset($cats) ? $cats : array();
         return $cats;
     }
 
@@ -264,7 +264,7 @@ class StudentPublicationLink extends AbstractLink
             ];
         }
 
-        $students = array();  // user list, needed to make sure we only
+        $students = array(); // user list, needed to make sure we only
         // take first attempts into account
         $rescount = 0;
         $sum = 0;
@@ -297,7 +297,7 @@ class StudentPublicationLink extends AbstractLink
                 return array($bestResult, $weight);
                 break;
             case 'average':
-                return array($sumResult/$rescount, $weight);
+                return array($sumResult / $rescount, $weight);
                 break;
             case 'ranking':
                 return AbstractLink::getCurrentUserRanking($stud_id, $students);

@@ -162,7 +162,6 @@ switch ($action) {
                 $content .= '</div>';
 
                 $tpl = new Template(get_lang('Snapshot'), true, true, false, true, false);
-                $tpl->assign('actions', '');
                 $tpl->assign('message', '<h4>'.$plugin->get_lang('vchamilosnapshot1').'</h4>');
                 $tpl->assign('content', $content);
                 $tpl->display_one_col_template();
@@ -227,7 +226,6 @@ switch ($action) {
                     }
 
                     $tpl = new Template(get_lang('Snapshot'), true, true, false, true, false);
-                    $tpl->assign('actions', '');
                     $tpl->assign('message', '<h4>'.$message.'</h4>');
                     $tpl->assign('content', $content);
                     $tpl->display_one_col_template();
@@ -290,7 +288,6 @@ switch ($action) {
                 $content .= '</form>';
 
                 $tpl = new Template(get_lang('Snapshot'), true, true, false, true, false);
-                $tpl->assign('actions', '');
                 $tpl->assign('message', $plugin->get_lang('vchamilosnapshot3'));
                 $tpl->assign('content', $content);
                 $tpl->display_one_col_template();

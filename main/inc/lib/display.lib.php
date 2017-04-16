@@ -1670,14 +1670,18 @@ class Display
     /**
      * Return the five star HTML
      *
-     * @param  string  id of the rating ul element
-     * @param  string  url that will be added (for jquery see hot_courses.tpl)
-	 * @param	string	point info array see function CourseManager::get_course_ranking()
-	 * @param	bool	add a div wrapper
-	 * @todo	use     templates
+     * @param string $id of the rating ul element
+     * @param string $url that will be added (for jquery see hot_courses.tpl)
+     * @param array $point_info point info array see function CourseManager::get_course_ranking()
+	 * @param bool $add_div_wrapper add a div wrapper
+	 * @return string
      **/
-    public static function return_rating_system($id, $url, $point_info = array(), $add_div_wrapper = true)
-    {
+    public static function return_rating_system(
+        $id,
+        $url,
+        $point_info = [],
+        $add_div_wrapper = true
+    ) {
 		$number_of_users_who_voted = isset($point_info['users_who_voted']) ? $point_info['users_who_voted'] : null;
 		$percentage = isset($point_info['point_average']) ? $point_info['point_average'] : 0;
 
@@ -1685,7 +1689,6 @@ class Display
             $percentage = $percentage*125/100;
         }
 		$accesses =  isset($point_info['accesses']) ? $point_info['accesses'] : 0;
-
 		$star_label = sprintf(get_lang('XStarsOutOf5'), $point_info['point_average_star']);
 
         $html = '<ul id="'.$id.'" class="star-rating">
@@ -1701,10 +1704,6 @@ class Display
 
 		$labels[]= $number_of_users_who_voted == 1 ? $number_of_users_who_voted.' '.get_lang('Vote') : $number_of_users_who_voted.' '.get_lang('Votes');
 		$labels[]= $accesses == 1 ? $accesses.' '.get_lang('Visit') : $accesses.' '.get_lang('Visits');
-		/* if (!empty($number_of_users_who_voted)) {
-			$labels[]= get_lang('Average').' '.$point_info['point_average_star'].'/5';
-		} */
-
 		$labels[]= $point_info['user_vote']  ? get_lang('YourVote').' ['.$point_info['user_vote'].']' : get_lang('YourVote'). ' [?] ';
 
 		if (!$add_div_wrapper && api_is_anonymous()) {
@@ -2390,39 +2389,40 @@ class Display
     }
 
     /**
-     * @param int $id
+     * @param string $id
      * @param array $content
-     * @param int $col
-     * @param bool|true $right
+     * @param array $colsWidth Optional. Columns width
      * @return string
      */
-    public static function toolbarAction($id, $content = array(), $col = 2, $right = true)
+    public static function toolbarAction($id, $content, $colsWidth = [])
     {
-        $columns = 12/$col;
-        $html = '';
-        $html .= '<div id="' . $id . '" class="actions">';
-        $html .= '<div class="row">';
-        if ($col > 4) {
-            $html = '<div class="alert alert-warning" role="alert">
-                Action toolbar design does not work when exceeding four columns - check Display::toolbarAction()
-            </div>';
-        } else {
-            for ($i = 0; $i < $col; $i++) {
-                $html .= '<div class="col-md-' . $columns . '">';
-                if ($col == 2 && $i == 1) {
-                    if ($right === true) {
-                        $html .= '<div class="pull-right">';
-                        $html .= (isset($content[$i]) ? $content[$i] : '');
-                        $html .= '</div>';
-                    } else {
-                        $html .= $content[$i];
-                    }
-                } else {
-                    $html .= $content[$i];
-                }
-                $html .= '</div>';
-            }
+        $col = count($content);
+
+        if (!$colsWidth) {
+            $width = 12 / $col;
+
+            array_walk($content, function () use ($width, &$colsWidth) {
+                $colsWidth[] = $width;
+            });
         }
+
+        $html = '<div id="'.$id.'" class="actions">';
+        $html .= '<div class="row">';
+
+        for ($i = 0; $i < $col; $i++) {
+            $class = 'col-sm-'.$colsWidth[$i];
+
+            if ($col > 1) {
+                if ($i > 0 && $i < count($content) -1) {
+                    $class .= ' text-center';
+                } elseif ($i === count($content) - 1) {
+                    $class .= ' text-right';
+                }
+            }
+
+            $html .= '<div class="'.$class.'">'.$content[$i].'</div>';
+        }
+
         $html .= '</div>';
         $html .= '</div>';
 

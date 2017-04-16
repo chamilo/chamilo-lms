@@ -5,7 +5,7 @@
  * This files is included by newUser.ldap.php and login.ldap.php
  * It implements the functions nedded by both files
  * */
-require_once dirname(__FILE__).'/../../inc/global.inc.php';
+require_once __DIR__.'/../../inc/global.inc.php';
 
 $debug = false;
 

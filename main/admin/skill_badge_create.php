@@ -115,13 +115,15 @@ $toolbar = Display::toolbarButton(
     'primary',
     ['title' => get_lang('ManageSkills')]
 );
-
 $tpl = new Template(get_lang('CreateBadge'));
 $tpl->assign('platformAdminEmail', api_get_setting('emailAdministrator'));
 $tpl->assign('skill', $skill);
 $tpl->assign('badge_studio', $badgeStudio);
 $templateName = $tpl->get_template('skill/badge_create.tpl');
 $contentTemplate = $tpl->fetch($templateName);
-$tpl->assign('actions', $toolbar);
+$tpl->assign(
+    'actions',
+    Display::toolbarAction('toolbar', [$toolbar])
+);
 $tpl->assign('content', $contentTemplate);
 $tpl->display_one_col_template();

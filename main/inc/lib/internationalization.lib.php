@@ -1092,7 +1092,8 @@ function api_transliterate($string, $unknown = '?', $from_encoding = null)
  * @link http://php.net/manual/en/function.ord.php
  * Note the difference with the original funtion ord(): ord('') returns 0, api_ord('') returns 0xFFFD (unknown character).
  */
-function api_ord($character, $encoding = null) {
+function api_ord($character, $encoding = 'UTF-8')
+{
     return Utf8::ord(api_utf8_encode($character, $encoding));
 }
 
@@ -1824,7 +1825,7 @@ function _api_get_person_name_convention($language, $type)
     static $conventions;
     $language = api_purify_language_id($language);
     if (!isset($conventions)) {
-        $file = dirname(__FILE__).'/internationalization_database/name_order_conventions.php';
+        $file = __DIR__.'/internationalization_database/name_order_conventions.php';
         if (file_exists($file)) {
             $conventions = include ($file);
         } else {
@@ -1912,7 +1913,7 @@ function _api_get_character_map_name($encoding)
 {
     static $character_map_selector;
     if (!isset($character_map_selector)) {
-        $file = dirname(__FILE__).'/internationalization_database/conversion/character_map_selector.php';
+        $file = __DIR__.'/internationalization_database/conversion/character_map_selector.php';
         if (file_exists($file)) {
             $character_map_selector = include ($file);
         } else {

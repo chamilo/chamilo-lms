@@ -139,11 +139,8 @@ $templateName = $plugin->get_lang('SalesReport');
 
 $template = new Template($templateName);
 
-$toolbar = '';
-
 if ($paypalEnable == "true" && $commissionsEnable == "true") {
-
-    $toolbar .= Display::toolbarButton(
+    $toolbar = Display::toolbarButton(
         $plugin->get_lang('PaypalPayoutCommissions'),
         api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/paypal_payout.php',
         'paypal',
@@ -151,13 +148,14 @@ if ($paypalEnable == "true" && $commissionsEnable == "true") {
         ['title' => $plugin->get_lang('PaypalPayoutCommissions')]
     );
 
-    $template->assign('actions', $toolbar);
-
+    $template->assign(
+        'actions',
+        Display::toolbarAction('toolbar', [$toolbar])
+    );
 }
 
 if ($commissionsEnable == "true") {
-
-    $toolbar .= Display::toolbarButton(
+    $toolbar = Display::toolbarButton(
         $plugin->get_lang('PayoutReport'),
         api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/payout_report.php',
         'money',
@@ -165,8 +163,10 @@ if ($commissionsEnable == "true") {
         ['title' => $plugin->get_lang('PayoutReport')]
     );
 
-    $template->assign('actions', $toolbar);
-
+    $template->assign(
+        'actions',
+        Display::toolbarAction('toolbar', [$toolbar])
+    );
 }
 $template->assign('form', $form->returnForm());
 $template->assign('selected_sale', $selectedSale);

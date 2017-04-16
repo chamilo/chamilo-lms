@@ -11,9 +11,9 @@ namespace Shibboleth;
  * @license see /license.txt
  * @author Laurent Opprecht <laurent@opprecht.info>, Nicolas Rod for the University of Geneva
  */
-$dir = dirname(__FILE__);
-include_once($dir . '/../init.php');
-include_once($dir . '/../app/lib/scaffolder/scaffolder.class.php');
+$dir = __DIR__;
+include_once $dir.'/../init.php';
+include_once $dir.'/../app/lib/scaffolder/scaffolder.class.php';
 
 if (!ShibbolethTest::is_enabled())
 {

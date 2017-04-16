@@ -73,7 +73,7 @@ if (!is_dir($filepath)) {
 $groupId = api_get_group_id();
 
 if (!empty($groupId)) {
-	$interbreadcrumb[] = array (
+	$interbreadcrumb[] = array(
         "url" => "../group/group_space.php?".api_get_cidreq(),
         "name" => get_lang('GroupSpace')
     );
@@ -134,7 +134,7 @@ Display :: display_header($nameTools, 'Doc');
 
 echo '<div class="actions">';
 echo '<a href="document.php?id='.$document_id.'">'.
-    Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
+    Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 if (api_browser_support('svg')) {
@@ -144,7 +144,7 @@ if (api_browser_support('svg')) {
 	$langsvgedit = api_get_language_isocode();
 	$langsvgedit = isset($svgedit_code_translation_table[$langsvgedit]) ? $svgedit_code_translation_table[$langsvgedit] : $langsvgedit;
 	$langsvgedit = file_exists(api_get_path(LIBRARY_PATH).'javascript/svgedit/locale/lang.'.$langsvgedit.'.js') ? $langsvgedit : 'en';
-	$svg_url= api_get_path(WEB_LIBRARY_PATH).'javascript/svgedit/svg-editor.php?lang='.$langsvgedit;
+	$svg_url = api_get_path(WEB_LIBRARY_PATH).'javascript/svgedit/svg-editor.php?lang='.$langsvgedit;
 	?>
 	<script>
 		document.write ('<iframe id="frame" frameborder="0" scrolling="no" src="<?php echo  $svg_url; ?>" width="100%" height="100%"><noframes><p>Sorry, your browser does not handle frames</p></noframes></iframe>');

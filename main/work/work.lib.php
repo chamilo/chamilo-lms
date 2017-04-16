@@ -476,7 +476,12 @@ function getUniqueStudentAttempts(
         $groupIid = $groupInfo['iid'];
     }
 
-    $sessionCondition = api_get_session_condition($sessionId, true, false, 'w.session_id');
+    $sessionCondition = api_get_session_condition(
+        $sessionId,
+        true,
+        false,
+        'w.session_id'
+    );
 
     $sql = "SELECT count(*) FROM (
                 SELECT count(*), w.parent_id
@@ -1276,7 +1281,12 @@ function get_count_work($work_id, $onlyMeUserId = null, $notMeUserId = null)
 
     $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
     $session_id = api_get_session_id();
-    $condition_session = api_get_session_condition($session_id, true, false, 'work.session_id');
+    $condition_session = api_get_session_condition(
+        $session_id,
+        true,
+        false,
+        'work.session_id'
+    );
 
     $group_id = api_get_group_id();
     $course_info = api_get_course_info();
@@ -1288,7 +1298,6 @@ function get_count_work($work_id, $onlyMeUserId = null, $notMeUserId = null)
         $groupInfo = GroupManager::get_group_properties($group_id);
         $groupIid = $groupInfo['iid'];
     }
-
 
     if (!empty($group_id)) {
         // set to select only messages posted by the user's group
@@ -2516,7 +2525,7 @@ function get_list_users_without_publication($task_id, $studentId = null)
 
     if ($group_id) {
         $groupInfo = GroupManager::get_group_properties($group_id);
-        $group_user_list = GroupManager::get_subscribed_users($groupInfo['iid']);
+        $group_user_list = GroupManager::get_subscribed_users($groupInfo);
         if (!empty($group_user_list)) {
             foreach($group_user_list as $group_user) {
                 $new_group_user_list[] = $group_user['user_id'];
@@ -5255,7 +5264,6 @@ function exportAllStudentWorkFromPublication(
                         'filename' => $workData['title'] . '_' . api_get_local_time(),
                         'pdf_title' => api_replace_dangerous_char($workData['title']),
                         'course_code' => $courseInfo['code'],
-                        'add_signatures' => false
                     );
                     $pdf = new PDF('A4', null, $params);
                     $pdf->html_to_pdf_with_template($content);

@@ -5200,11 +5200,6 @@ class DocumentManager
             $attributes
         );
 
-        if ($change_renderer) {
-            $renderer = $form->defaultRenderer();
-            $renderer->setElementTemplate('<span>{label} : {element}</span> ', 'curdirpath');
-        }
-
         // Group documents cannot be uploaded in the root
         if (empty($group_dir)) {
             $parent_select->addOption(get_lang('Documents'), '/');

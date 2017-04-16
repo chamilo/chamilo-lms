@@ -10,41 +10,41 @@
  */
 
 require_once __DIR__.'/../inc/global.inc.php';
-$this_section=SECTION_COURSES;
+$this_section = SECTION_COURSES;
 api_protect_course_script(true);
 
 // moved down to fix bug: http://www.dokeos.com/forum/viewtopic.php?p=18609#18609
 $show = (isset($_GET['show']) && $_GET['show'] == 'result') ? 'result' : 'test';
 
 /* 	Constants and variables */
-$is_allowedToEdit = api_is_allowed_to_edit(null,true);
+$is_allowedToEdit = api_is_allowed_to_edit(null, true);
 $is_tutor = api_is_allowed_to_edit(true);
 
-if (!$is_allowedToEdit){
-    header('Location: ' . api_get_path(WEB_CODE_PATH) . 'exercise/exercise.php?' . api_get_cidreq());
+if (!$is_allowedToEdit) {
+    header('Location: '.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq());
     exit;
 }
 
-$interbreadcrumb[]= array ('url' => 'exercise_report.php?'.api_get_cidreq(),'name' => get_lang('Exercises'));
-$interbreadcrumb[]= array ('url' => 'exercise_report.php?filter=2&'.api_get_cidreq(),'name' => get_lang('StudentScore'));
-$interbreadcrumb[]= array ('url' => 'exercise_history.php?exe_id='.intval($_GET['exe_id']).'&'.api_get_cidreq(), 'name' => get_lang('Details'));
+$interbreadcrumb[] = array('url' => 'exercise_report.php?'.api_get_cidreq(), 'name' => get_lang('Exercises'));
+$interbreadcrumb[] = array('url' => 'exercise_report.php?filter=2&'.api_get_cidreq(), 'name' => get_lang('StudentScore'));
+$interbreadcrumb[] = array('url' => 'exercise_history.php?exe_id='.intval($_GET['exe_id']).'&'.api_get_cidreq(), 'name' => get_lang('Details'));
 
 $TBL_USER = Database::get_main_table(TABLE_MAIN_USER);
 $TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);
 $TBL_EXERCISES_QUESTION = Database::get_course_table(TABLE_QUIZ_QUESTION);
-$TBL_TRACK_ATTEMPT_RECORDING= Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
-Display::display_header($nameTools,get_lang('Exercise'));
+$TBL_TRACK_ATTEMPT_RECORDING = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
+Display::display_header($nameTools, get_lang('Exercise'));
 
 if (isset($_GET['message'])) {
     if (in_array($_GET['message'], array('ExerciseEdited'))) {
-        $my_message_history=Security::remove_XSS($_GET['message']);
+        $my_message_history = Security::remove_XSS($_GET['message']);
         Display::display_confirmation_message(get_lang($my_message_history));
     }
 }
 
 echo '<div class="actions">';
-echo '<a href="exercise_report.php?' . api_get_cidreq() . '&filter=2">' .
-    Display :: return_icon('back.png', get_lang('BackToResultList'),'',ICON_SIZE_MEDIUM).'</a>';
+echo '<a href="exercise_report.php?'.api_get_cidreq().'&filter=2">'.
+    Display :: return_icon('back.png', get_lang('BackToResultList'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 ?>
@@ -65,10 +65,10 @@ $sql = "SELECT *, quiz_question.question, firstname, lastname
         WHERE 
             quiz_question.id = question_id AND 
             user_id = author AND 
-            exe_id = '".(int)$_GET['exe_id']."' 
+            exe_id = '".(int) $_GET['exe_id']."' 
         ORDER BY position";
 $query = Database::query($sql);
-while($row = Database::fetch_array($query)){
+while ($row = Database::fetch_array($query)) {
     echo '<tr';
     if ($i % 2 == 0) {
         echo 'class="row_odd"';

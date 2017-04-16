@@ -6,9 +6,11 @@
 <div id="course-progress" class="thematic">
     <div class="row">
         <div class="col-md-12">
-            <div class="pull-right">
-                <div class="score-progress">
-                    <h3>{{ 'Progress' | get_lang }}: <span id="div_result">{{ score_progress }}</span> %</h3>
+            <div class="bar-progress">
+                <div class="pull-right">
+                    <div class="score-progress">
+                        <h3>{{ 'Progress' | get_lang }}: <span id="div_result">{{ score_progress }}</span> %</h3>
+                    </div>
                 </div>
             </div>
             <div class="table-responsive">
@@ -41,7 +43,9 @@
                                 {% endif %}        
                                 <div class="thematic_plan_{{ item.id }}">
                                     {% if item.thematic_plan is empty %}
-                                        <p>{{ 'StillDoNotHaveAThematicPlan' | get_lang }}</p>
+                                    <div class="alert-thematic">
+                                        <div class="alert alert-info" role="alert">{{ 'StillDoNotHaveAThematicPlan' | get_lang }}</div>
+                                    </div>
                                     {% else %}
                                         {% for subitem in item.thematic_plan %}
                                         <h4>{{ subitem.title }}</h4>

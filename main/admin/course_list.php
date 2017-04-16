@@ -372,40 +372,37 @@ if (isset ($_GET['search']) && $_GET['search'] === 'advanced') {
     }
 
     $courseListUrl = api_get_self();
-    $actions .= '<div class="row">';
-    $actions .= '<div class="col-md-2">';
-    $actions .= '<a href="course_add.php">'.Display::return_icon('new_course.png', get_lang('AddCourse'), '', ICON_SIZE_MEDIUM).'</a> ';
+    $actions1 = Display::url(
+        Display::return_icon('new_course.png', get_lang('AddCourse'), [], ICON_SIZE_MEDIUM),
+        api_get_path(WEB_CODE_PATH).'admin/course_add.php'
+    );
+
     if (api_get_setting('course_validation') === 'true') {
-        $actions .= '<a href="course_request_review.php">'.
-            Display::return_icon('course_request_pending.png', get_lang('ReviewCourseRequests'), '', ICON_SIZE_MEDIUM).'</a>';
+        $actions1 .= Display::url(
+            Display::return_icon('course_request_pending.png', get_lang('ReviewCourseRequests'), [], ICON_SIZE_MEDIUM),
+            api_get_path(WEB_CODE_PATH).'admin/course_request_review.php'
+        );
     }
-    $actions .= '</div>';
-    $actions .= '<div class="col-md-4">';
-    $actions .= $form->returnForm();
-    $actions .= '</div>';
-    $actions .= '<div class="col-md-4">';
-    $actions .= $sessionFilter->returnForm();
-    $actions .= '</div>';
-    $actions .= '<div class="col-md-2">';
-    $actions .= '<div class="pull-right">';
-    $actions .= $advanced;
-    $actions .= '</div>';
-    $actions .= '</div>';
-    $actions .= '</div>';
-    $actions .= '
+
+    $actions2 = $form->returnForm();
+    $actions3 = $sessionFilter->returnForm();
+    $actions4 = $advanced;
+    $actions4 .= '
     <script>
-    $(function() {
-        $("#session_name").on("change", function() {
-            var sessionId = $(this).val();
-
-            if (!sessionId) {
-                return;
-            }
-
-            window.location = "'.$courseListUrl.'?session_id="+sessionId;
+        $(function() {
+            $("#session_name").on("change", function() {
+                var sessionId = $(this).val();
+    
+                if (!sessionId) {
+                    return;
+                }
+    
+                window.location = "'.$courseListUrl.'?session_id="+sessionId;
+            });
         });
-    });
     </script>';
+
+    $actions = Display::toolbarAction('toolbar', [$actions1, $actions2, $actions3, $actions4], [2, 4, 3, 3]);
 
     if (isset($_GET['session_id']) && !empty($_GET['session_id'])) {
         // Create a sortable table with the course data filtered by session

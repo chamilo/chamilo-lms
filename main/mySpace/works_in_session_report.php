@@ -1,13 +1,16 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\Course;
+
 /**
  * Courses reporting
  * @package chamilo.reporting
  */
 
 require_once __DIR__.'/../inc/global.inc.php';
-
-use \Chamilo\CoreBundle\Entity\Session;
 
 api_block_anonymous_users(true);
 
@@ -20,19 +23,22 @@ $toolName = get_lang('WorksInSessionReport');
 
 $em = Database::getManager();
 $session = null;
-$sessionsInfo = SessionManager::getSessionsFollowedByUser(api_get_user_id(), COURSEMANAGER);
-
+if (api_is_platform_admin()) {
+    $sessionList = SessionManager::get_sessions_list();
+} else {
+    $sessionList = Tracking::get_sessions_coached_by_user(api_get_user_id());
+}
 $form = new FormValidator('work_report', 'GET');
 $selectSession = $form->addSelect('session', get_lang('Session'), [0 => get_lang('None')]);
 $form->addButtonFilter(get_lang('Filter'));
 
-foreach ($sessionsInfo as $sessionInfo) {
+foreach ($sessionList as $sessionInfo) {
     $selectSession->addOption($sessionInfo['name'], $sessionInfo['id']);
 }
 
 if (isset($_GET['session']) && intval($_GET['session'])) {
     $form->setDefaults(['session' => intval($_GET['session'])]);
-
+    /** @var Session $session */
     $session = $em->find('ChamiloCoreBundle:Session', intval($_GET['session']));
 }
 
@@ -43,11 +49,13 @@ if ($session) {
     $sessionCourses = $session->getCourses();
 
     foreach ($sessionCourses as $sessionCourse) {
+        /** @var Course $course */
         $course = $sessionCourse->getCourse();
         $coursesInfo[$course->getId()] =  $course->getCode();
         $userCourseSubscriptions = $session->getUserCourseSubscriptionsByStatus($course, Session::STUDENT);
 
         foreach ($userCourseSubscriptions as $userCourseSubscription) {
+            /** @var User $user */
             $user = $userCourseSubscription->getUser();
 
             if (!array_key_exists($user->getId(), $usersInfo)) {
@@ -74,7 +82,11 @@ if ($session) {
                 $user->getId(),
                 $course->getCode(),
                 null,
-                $session->getId()
+                $session->getId(),
+                false,
+                false,
+                true
+
             );
             $usersInfo[$user->getId()][$course->getId() . '_progress'] = Tracking::get_avg_student_progress(
                 $user->getId(),
@@ -83,7 +95,12 @@ if ($session) {
                 $session->getId()
             );
 
-            $lastPublication = Tracking::getLastStudentPublication($user, 'work', $course, $session);
+            $lastPublication = Tracking::getLastStudentPublication(
+                $user,
+                'work',
+                $course,
+                $session
+            );
 
             if (!$lastPublication) {
                 continue;
@@ -109,7 +126,7 @@ if (isset($_GET['export']) && $session && ($coursesInfo && $usersInfo)) {
     $dataToExport['headers'][] = get_lang('LatestLoginInPlatform');
 
     foreach ($coursesInfo as $courseCode) {
-        $dataToExport['headers'][] = $courseCode;
+        $dataToExport['headers'][] = $courseCode. ' ('.get_lang('BestScore').')';
         $dataToExport['headers'][] = get_lang('Progress');
         $dataToExport['headers'][] = get_lang('LastSentWorkDate');
     }
@@ -135,19 +152,17 @@ $interbreadcrumb[] = [
     'name' => get_lang('MySpace')
 ];
 
-$actions = [];
+$actions = null;
 
 if ($session) {
-    $actions = [
-        Display::url(
-            Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), [], ICON_SIZE_MEDIUM),
-            api_get_self() . '?' . http_build_query(['export' => 'csv', 'session' => $session->getId()])
-        ),
-        Display::url(
-            Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), [], ICON_SIZE_MEDIUM),
-            api_get_self() . '?' . http_build_query(['export' => 'xls', 'session' => $session->getId()])
-        )
-    ];
+    $actions = Display::url(
+        Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), [], ICON_SIZE_MEDIUM),
+        api_get_self() . '?' . http_build_query(['export' => 'csv', 'session' => $session->getId()])
+    );
+    $actions .=Display::url(
+        Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), [], ICON_SIZE_MEDIUM),
+        api_get_self() . '?' . http_build_query(['export' => 'xls', 'session' => $session->getId()])
+    );
 }
 
 $view = new Template($toolName);
@@ -163,6 +178,13 @@ $template = $view->get_template('my_space/works_in_session_report.tpl');
 $content = $view->fetch($template);
 
 $view->assign('header', $toolName);
+
+if ($actions) {
+    $view->assign(
+        'actions',
+        Display::toolbarAction('toolbar', [$actions])
+    );
+}
+
 $view->assign('content', $content);
-$view->assign('actions', implode(' ', $actions));
 $view->display_one_col_template();

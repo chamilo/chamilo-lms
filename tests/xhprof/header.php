@@ -1,4 +1,5 @@
 <?php
+/* For license terms, see /license.txt */
 /**
  * @package chamilo.profiling
  */
@@ -11,7 +12,7 @@
  * directory.
  */
 if (extension_loaded('tideways')) {
-    //include_once dirname(__FILE__).'/xhprof_lib/utils/xhprof_lib.php';
-    //include_once dirname(__FILE__).'/xhprof_lib/utils/xhprof_runs.php';
+    //include_once __DIR__.'/xhprof_lib/utils/xhprof_lib.php';
+    //include_once __DIR__.'/xhprof_lib/utils/xhprof_runs.php';
     tideways_enable(TIDEWAYS_FLAGS_NO_SPANS);
 }

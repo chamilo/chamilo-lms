@@ -13,12 +13,12 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 // setting breadcrumbs
-$interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
+$interbreadcrumb[] = array('url' => 'session_list.php', 'name' => get_lang('SessionList'));
 
 // Setting the name of the tool
 $tool_name = get_lang('SubscribeStudentsToSession');
 $add_type = 'multiple';
-if (isset($_REQUEST['add_type']) && $_REQUEST['add_type']!='') {
+if (isset($_REQUEST['add_type']) && $_REQUEST['add_type'] != '') {
     $add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 $form_sent  = 0;

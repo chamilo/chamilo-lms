@@ -14,7 +14,7 @@ use ChamiloSession as Session;
 $wsUrl = '';
 
 // include common authentication functions
-require_once dirname(__FILE__) . '/functions.inc.php';
+require_once __DIR__.'/functions.inc.php';
 // call the login checker (defined below)
 $isValid = loginWSAuthenticate($login, $password, $wsUrl);
 

@@ -246,7 +246,7 @@ EOT;
         $base_group_options = array();
         $groups = GroupManager :: get_group_list();
         foreach ($groups as $index => $group) {
-            $number_of_students = GroupManager :: number_of_students($group['iid']);
+            $number_of_students = GroupManager :: number_of_students($group['id']);
             if ($number_of_students > 0) {
                 $base_group_options[$group['id']] = $group['name'].' ('.$number_of_students.' '.get_lang('Users').')';
             }

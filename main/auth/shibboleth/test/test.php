@@ -8,7 +8,7 @@ namespace Shibboleth;
  * @license see /license.txt
  * @author Laurent Opprecht <laurent@opprecht.info>, Nicolas Rod for the University of Geneva
  */
-include_once(dirname(__FILE__) . '/../init.php');
+include_once __DIR__.'/../init.php';
 
 if (!ShibbolethTest::is_enabled())
 {

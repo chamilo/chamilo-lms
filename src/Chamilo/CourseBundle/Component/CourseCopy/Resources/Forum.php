@@ -117,5 +117,4 @@ class Forum extends Resource
         parent::show();
         echo $this->obj->forum_title;
     }
-
 }

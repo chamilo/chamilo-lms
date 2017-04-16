@@ -7,7 +7,7 @@ This script must not exit.
 
 use ChamiloSession as Session;
 
-require_once(dirname(__FILE__) . '/functions.inc.php');
+require_once __DIR__.'/functions.inc.php';
 
 //MAIN CODE
 //$uData variable is set in local.inc.php

@@ -46,7 +46,7 @@ class TicketPlugin extends Plugin
     public function install()
     {
         // Create database tables and insert a Tab
-        require_once api_get_path(SYS_PLUGIN_PATH) . PLUGIN_NAME . '/database.php';
+        require_once api_get_path(SYS_PLUGIN_PATH).PLUGIN_NAME.'/database.php';
     }
 
     /**
@@ -92,7 +92,7 @@ class TicketPlugin extends Plugin
         $rsTab = $this->deleteTab($plugSetting['comment']);
 
         if ($rsTab) {
-            echo "<script>location.href = '" . $_SERVER['REQUEST_URI'] . "';</script>";
+            echo "<script>location.href = '".$_SERVER['REQUEST_URI']."';</script>";
         }
     }
 }

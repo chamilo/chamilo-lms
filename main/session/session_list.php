@@ -55,14 +55,14 @@ $courseSelect = $sessionFilter->addElement(
     'course_name',
     get_lang('SearchCourse'),
     null,
-    array('url' => api_get_path(WEB_AJAX_PATH) . 'course.ajax.php?a=search_course')
+    array('url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course')
 );
 
 if (!empty($courseId)) {
     $courseInfo = api_get_course_info_by_id($courseId);
     $parents = CourseCategory::getParentsToString($courseInfo['categoryCode']);
 
-    $courseSelect->addOption($parents . $courseInfo['title'], $courseInfo['code'], ['selected' => 'selected']);
+    $courseSelect->addOption($parents.$courseInfo['title'], $courseInfo['code'], ['selected' => 'selected']);
 }
 
 $url = api_get_self();
@@ -114,7 +114,7 @@ $extra_params['autowidth'] = 'true';
 // height auto
 $extra_params['height'] = 'auto';
 
-$extra_params['postData'] =array(
+$extra_params['postData'] = array(
     'filters' => array(
         "groupOp" => "AND",
         "rules" => $result['rules'],
@@ -128,11 +128,11 @@ $extra_params['postData'] =array(
 
 //With this function we can add actions to the jgrid (edit, delete, etc)
 $action_links = 'function action_formatter(cellvalue, options, rowObject) {
-     return \'<a href="session_edit.php?page=resume_session.php&id=\'+options.rowId+\'">'.Display::return_icon('edit.png',get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>'.
-    '&nbsp;<a href="add_users_to_session.php?page=session_list.php&id_session=\'+options.rowId+\'">'.Display::return_icon('user_subscribe_session.png',get_lang('SubscribeUsersToSession'),'',ICON_SIZE_SMALL).'</a>'.
-    '&nbsp;<a href="add_courses_to_session.php?page=session_list.php&id_session=\'+options.rowId+\'">'.Display::return_icon('courses_to_session.png',get_lang('SubscribeCoursesToSession'),'',ICON_SIZE_SMALL).'</a>'.
-    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="session_list.php?action=copy&idChecked=\'+options.rowId+\'">'.Display::return_icon('copy.png',get_lang('Copy'),'',ICON_SIZE_SMALL).'</a>'.
-    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="session_list.php?action=delete&idChecked=\'+options.rowId+\'">'.Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>'.
+     return \'<a href="session_edit.php?page=resume_session.php&id=\'+options.rowId+\'">'.Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>'.
+    '&nbsp;<a href="add_users_to_session.php?page=session_list.php&id_session=\'+options.rowId+\'">'.Display::return_icon('user_subscribe_session.png', get_lang('SubscribeUsersToSession'), '', ICON_SIZE_SMALL).'</a>'.
+    '&nbsp;<a href="add_courses_to_session.php?page=session_list.php&id_session=\'+options.rowId+\'">'.Display::return_icon('courses_to_session.png', get_lang('SubscribeCoursesToSession'), '', ICON_SIZE_SMALL).'</a>'.
+    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."\'".')) return false;"  href="session_list.php?action=copy&idChecked=\'+options.rowId+\'">'.Display::return_icon('copy.png', get_lang('Copy'), '', ICON_SIZE_SMALL).'</a>'.
+    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."\'".')) return false;"  href="session_list.php?action=delete&idChecked=\'+options.rowId+\'">'.Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>'.
     '\';
 }';
 
@@ -301,22 +301,37 @@ $urlAjaxExtraField = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?1=1';
 <?php
 
 echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_add.php">'.
-    Display::return_icon('new_session.png',get_lang('AddSession'),'',ICON_SIZE_MEDIUM).'</a>';
+    Display::return_icon('new_session.png', get_lang('AddSession'), '', ICON_SIZE_MEDIUM).'</a>';
 if (api_is_platform_admin()) {
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/add_many_session_to_category.php">'.
-        Display::return_icon('session_to_category.png',get_lang('AddSessionsInCategories'),'',ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('session_to_category.png', get_lang('AddSessionsInCategories'), '', ICON_SIZE_MEDIUM).'</a>';
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_category_list.php">'.
-        Display::return_icon('folder.png',get_lang('ListSessionCategory'),'',ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('folder.png', get_lang('ListSessionCategory'), '', ICON_SIZE_MEDIUM).'</a>';
 }
 
 if ($list_type == 'complete') {
-    echo '<a href="'.api_get_self().'?list_type=simple">'.Display::return_icon('view_remove.png',get_lang('Simple'),'',ICON_SIZE_MEDIUM).'</a>';
+    echo '<a href="'.api_get_self().'?list_type=simple">'.Display::return_icon('view_remove.png', get_lang('Simple'), '', ICON_SIZE_MEDIUM).'</a>';
 } else {
-    echo '<a href="'.api_get_self().'?list_type=complete">'.Display::return_icon('view_text.png',get_lang('Complete'),'',ICON_SIZE_MEDIUM).'</a>';
+    echo '<a href="'.api_get_self().'?list_type=complete">'.Display::return_icon('view_text.png', get_lang('Complete'), '', ICON_SIZE_MEDIUM).'</a>';
 }
 
 echo $actions;
 if (api_is_platform_admin()) {
+    echo '<div class="pull-right">';
+    // Create a search-box
+    $form = new FormValidator(
+        'search_simple',
+        'get',
+        '',
+        '',
+        [],
+        FormValidator::LAYOUT_INLINE
+    );
+    $form->addElement('text', 'keyword');
+    $form->addButtonSearch(get_lang('Search'));
+    $form->display();
+    echo '</div>';
+
     echo '<div class="pull-right">';
     echo $sessionFilter->returnForm();
     echo '</div>';

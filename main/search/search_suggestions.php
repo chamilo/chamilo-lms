@@ -6,7 +6,7 @@
  * @package chamilo.search
  */
 
-require_once dirname(__FILE__) . '/../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 function get_suggestions_from_search_engine($q)
 {

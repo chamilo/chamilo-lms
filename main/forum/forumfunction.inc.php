@@ -1817,12 +1817,18 @@ function get_threads($forum_id, $courseId = null, $sessionId = null)
     $courseId = $courseId !== null ? intval($courseId) : api_get_course_int_id();
     $groupInfo = GroupManager::get_group_properties($groupId);
     $groupCondition = '';
+
     if (!empty($groupInfo)) {
         $groupIid = $groupInfo['iid'];
         $groupCondition =  " AND item_properties.to_group_id = '$groupIid' ";
     }
 
-    $sessionCondition = api_get_session_condition($sessionId, true, false, 'item_properties.session_id');
+    $sessionCondition = api_get_session_condition(
+        $sessionId,
+        true,
+        false,
+        'item_properties.session_id'
+    );
 
     // important note:  it might seem a little bit awkward that we have 'thread.locked as locked' in the sql statement
     // because we also have thread.* in it. This is because thread has a field locked and post also has the same field
@@ -1874,6 +1880,7 @@ function get_threads($forum_id, $courseId = null, $sessionId = null)
                     thread.forum_id = ".intval($forum_id)." AND
                     thread.c_id = $courseId 
                 ORDER BY thread.thread_sticky DESC, thread.thread_date DESC";
+
     }
     $result = Database::query($sql);
     $list = array();
@@ -1964,7 +1971,7 @@ function getPosts(
             $filterModerated = false;
         }
     } else {
-        if (GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo['iid']) || api_is_allowed_to_edit(false, true)) {
+        if (GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo) || api_is_allowed_to_edit(false, true)) {
             $filterModerated = false;
         }
     }
@@ -1978,13 +1985,13 @@ function getPosts(
         ->addCriteria($criteria)
         ->addOrderBy('p.postId', $orderDirection);
 
-
     if ($filterModerated && $forumInfo['moderated'] == 1) {
         if (!api_is_allowed_to_edit(false, true)) {
             $userId = api_get_user_id();
             $qb->andWhere(
                 "p.status = 1 OR 
                     (p.status = ".CForumPost::STATUS_WAITING_MODERATION." AND p.posterId = $userId) OR
+                    (p.status = ".CForumPost::STATUS_REJECTED." AND p.posterId = $userId) OR
                     (p.status IS NULL AND p.posterId = $userId) 
                     "
             );
@@ -3557,7 +3564,7 @@ function show_edit_post_form(
         $form->addElement('html', '</div>');
     }
 
-    if ($current_forum['moderated']) {
+    if ($current_forum['moderated'] && api_is_allowed_to_edit(null, true)) {
         $group = array();
         $group[] = $form->createElement('radio', 'status', null, get_lang('Validated'), 1);
         $group[] = $form->createElement('radio', 'status', null, get_lang('WaitingModeration'), 2);
@@ -3680,19 +3687,27 @@ function store_edit_post($forumInfo, $values)
     }
 
     $status = '';
+    $updateStatus = false;
     if ($forumInfo['moderated']) {
-        $status = $values['status']['status'];
+        if (api_is_allowed_to_edit(null, true)) {
+            $status = $values['status']['status'];
+            $updateStatus = true;
+        } else {
+            $status = CForumPost::STATUS_WAITING_MODERATION;
+            $updateStatus = true;
+        }
     }
 
     // Update the post_title and the post_text.
     $params = [
-        'status' => $status,
         'post_title' => $values['post_title'],
         'post_text' => $values['post_text'],
         'post_notification' => isset($values['post_notification']) ? $values['post_notification'] : '',
     ];
+    if ($updateStatus) {
+        $params['status'] = $status;
+    }
     $where = ['c_id = ? AND post_id = ?' => [$course_id, $values['post_id']]];
-
     Database::update($table_posts, $params, $where);
 
     // Update attached files
@@ -4915,14 +4930,14 @@ function delete_attachment($post_id, $id_attach = 0, $display = true)
  *
  * @todo this is basically the same code as the get_forums function. Consider merging the two.
  */
-function get_forums_of_group($groupId)
+function get_forums_of_group($groupInfo)
 {
     $table_forums = Database :: get_course_table(TABLE_FORUM);
     $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
     $table_posts = Database :: get_course_table(TABLE_FORUM_POST);
     $table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
     $course_id = api_get_course_int_id();
-    $groupId = (int) $groupId;
+    $groupId = (int) $groupInfo['id'];
 
     // Student
     // Select all the forum information of all forums (that are visible to students).
@@ -5961,8 +5976,13 @@ function getPostStatus($current_forum, $row, $addWrapper = true)
         $row['status'] = empty($row['status']) ? 2 : $row['status'];
 
         $addUrl = false;
+        $showStatus = false;
         if (api_is_allowed_to_edit(false, true)) {
             $addUrl = true;
+        } else {
+            if ($row['user_id'] == api_get_user_id()) {
+                $showStatus = true;
+            }
         }
 
         $label = '';
@@ -5995,10 +6015,12 @@ function getPostStatus($current_forum, $row, $addWrapper = true)
                 ['class' => 'change_post_status']
             );
         } else {
-            $statusIcon .= Display::label(
-                Display::returnFontAwesomeIcon($icon).$label,
-                $buttonType
-            );
+            if ($showStatus) {
+                $statusIcon .= Display::label(
+                    Display::returnFontAwesomeIcon($icon).$label,
+                    $buttonType
+                );
+            }
         }
 
         if ($addWrapper) {
@@ -6052,9 +6074,15 @@ function postIsEditableByStudent($forum, $post)
         if (is_null($post['status'])) {
             return true;
         } else {
-            return $post['status'] == CForumPost::STATUS_WAITING_MODERATION;
+            return in_array($post['status'],
+                [
+                    CForumPost::STATUS_WAITING_MODERATION,
+                    CForumPost::STATUS_REJECTED,
+                ]
+            );
         }
     } else {
         return true;
     }
 }
+

@@ -149,7 +149,7 @@ if (!api_is_allowed_to_edit(null, true) &&
 
 if (!api_is_allowed_to_edit(null, true) &&
     (
-        ($current_forum_category && $current_forum_category['locked'] <> 0 ) ||
+        ($current_forum_category && $current_forum_category['locked'] <> 0) ||
         $current_forum['locked'] <> 0 ||
         $current_thread['locked'] <> 0
     )
@@ -165,7 +165,7 @@ $group_id = api_get_group_id();
 
 if (!api_is_allowed_to_edit(null, true) &&
     $current_forum['allow_edit'] == 0 &&
-    !GroupManager::is_tutor_of_group(api_get_user_id(), $group_properties['iid'])
+    !GroupManager::is_tutor_of_group(api_get_user_id(), $group_properties)
 ) {
     api_not_allowed(true);
 }
@@ -199,7 +199,7 @@ echo '<div class="forum_title">';
 echo '<h1>';
 echo Display::url(
     prepare4display($current_forum['forum_title']),
-    'viewforum.php?' . api_get_cidreq() . '&' . http_build_query([
+    'viewforum.php?'.api_get_cidreq().'&'.http_build_query([
         'origin' => $origin,
         'forum' => $current_forum['forum_id']
     ]),

@@ -34,13 +34,16 @@ switch ($action) {
         }
         break;
     case 'get_user_courses':
-        if (api_is_platform_admin()) {
+        if (api_is_platform_admin() || api_is_session_admin()) {
             $user_id = intval($_POST['user_id']);
-            $list_course_all_info = CourseManager::get_courses_list_by_user_id($user_id, false);
-            if (!empty($list_course_all_info)) {
-                foreach ($list_course_all_info as $course_item) {
-                    $course_info = api_get_course_info_by_id($course_item['real_id']);
-                    echo $course_info['title'].'<br />';
+            $list = CourseManager::get_courses_list_by_user_id(
+                $user_id,
+                false
+            );
+            if (!empty($list)) {
+                foreach ($list as $course) {
+                    $courseInfo = api_get_course_info_by_id($course['real_id']);
+                    echo $courseInfo['title'].'<br />';
                 }
             } else {
                 echo get_lang('UserHasNoCourse');

@@ -47,8 +47,7 @@ $sessionId = api_get_session_id();
 $groupId = api_get_group_id();
 $courseId = api_get_course_int_id();
 $groupInfo = GroupManager::get_group_properties($groupId);
-
-$isTutor = GroupManager::is_tutor_of_group($userId, $groupInfo['iid'], $courseId);
+$isTutor = GroupManager::is_tutor_of_group($userId, $groupInfo, $courseId);
 
 /* MAIN DISPLAY SECTION */
 
@@ -83,7 +82,7 @@ if (!empty($groupId)) {
     );
     $is_group_tutor = GroupManager::is_tutor_of_group(
         api_get_user_id(),
-        $group_properties['iid']
+        $group_properties
     );
 
     // Course
@@ -440,6 +439,7 @@ echo '<div class="forum_display">';
 if (is_array($threads)) {
     $html = '';
     $count = 1;
+
     foreach ($threads as $row) {
         // Thread who have no replies yet and the only post is invisible should not be displayed to students.
         if (api_is_allowed_to_edit(false, true) ||

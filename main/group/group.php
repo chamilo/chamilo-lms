@@ -72,8 +72,8 @@ if (isset($_GET['action']) && $is_allowed_in_course) {
             }
             break;
         case 'self_reg':
-            if (GroupManager::is_self_registration_allowed($userId, $groupInfo['iid'])) {
-                GroupManager::subscribe_users($userId, $groupInfo['iid']);
+            if (GroupManager::is_self_registration_allowed($userId, $groupInfo)) {
+                GroupManager::subscribe_users($userId, $groupInfo);
                 Display::addFlash(Display::return_message(get_lang('GroupNowMember')));
                 header("Location: $currentUrl");
                 exit;
@@ -84,9 +84,8 @@ if (isset($_GET['action']) && $is_allowed_in_course) {
             }
             break;
         case 'self_unreg':
-            if (GroupManager::is_self_unregistration_allowed($userId, $groupInfo['iid'])) {
-                GroupManager::unsubscribe_users($userId, $groupInfo['iid']);
-
+            if (GroupManager::is_self_unregistration_allowed($userId, $groupInfo)) {
+                GroupManager::unsubscribe_users($userId, $groupInfo);
                 Display::addFlash(Display::return_message(get_lang('StudentDeletesHimself')));
                 header("Location: $currentUrl");
                 exit;
@@ -107,7 +106,7 @@ if (api_is_allowed_to_edit(false, true)) {
                 if (is_array($_POST['group'])) {
                     foreach ($_POST['group'] as $myGroupId) {
                         $groupInfo = GroupManager::get_group_properties($myGroupId);
-                        GroupManager::delete_groups($groupInfo['iid']);
+                        GroupManager::delete_groups($groupInfo);
                     }
 
                     Display::addFlash(Display::return_message(get_lang('SelectedGroupsDeleted')));
@@ -119,7 +118,7 @@ if (api_is_allowed_to_edit(false, true)) {
                 if (is_array($_POST['group'])) {
                     foreach ($_POST['group'] as $myGroupId) {
                         $groupInfo = GroupManager::get_group_properties($myGroupId);
-                        GroupManager :: unsubscribe_all_users($groupInfo['iid']);
+                        GroupManager :: unsubscribe_all_users($groupInfo);
                     }
 
                     Display::addFlash(Display::return_message(get_lang('SelectedGroupsEmptied')));
@@ -131,7 +130,7 @@ if (api_is_allowed_to_edit(false, true)) {
                 if (is_array($_POST['group'])) {
                     foreach ($_POST['group'] as $myGroupId) {
                         $groupInfo = GroupManager::get_group_properties($myGroupId);
-                        GroupManager:: fill_groups($groupInfo['iid']);
+                        GroupManager:: fill_groups($groupInfo);
                     }
                     Display::addFlash(Display::return_message(get_lang('SelectedGroupsFilled')));
                     header("Location: $currentUrl");
@@ -152,14 +151,14 @@ if (api_is_allowed_to_edit(false, true)) {
                 break;
             case 'delete_one':
                 $groupInfo = GroupManager::get_group_properties($my_get_id);
-                GroupManager :: delete_groups($groupInfo['iid']);
+                GroupManager :: delete_groups($groupInfo);
                 Display::addFlash(Display::return_message(get_lang('GroupDel')));
                 header("Location: $currentUrl");
                 exit;
                 break;
             case 'fill_one':
                 $groupInfo = GroupManager::get_group_properties($my_get_id);
-                GroupManager :: fill_groups($groupInfo['iid']);
+                GroupManager :: fill_groups($groupInfo);
                 Display::addFlash(Display::return_message(get_lang('GroupFilledGroups')));
                 header("Location: $currentUrl");
                 exit;
@@ -211,9 +210,8 @@ if (api_is_allowed_to_edit(false, true)) {
 }
 
 $actionsRight = GroupManager::getSearchForm();
-$toolbar = Display::toolbarAction('toolbar-groups', $content = array($actionsLeft, $actionsRight));
+$toolbar = Display::toolbarAction('toolbar-groups', array($actionsLeft, $actionsRight));
 $group_cats = GroupManager::get_categories(api_get_course_id());
-
 echo $toolbar;
 
 echo UserManager::getUserSubscriptionTab(3);

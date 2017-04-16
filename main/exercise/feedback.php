@@ -9,23 +9,23 @@
 * 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
 */
 require_once __DIR__.'/../inc/global.inc.php';
-$this_section=SECTION_COURSES;
+$this_section = SECTION_COURSES;
 
-$nameTools=get_lang('ExerciseManagement');
+$nameTools = get_lang('ExerciseManagement');
 
-if (isset($_SESSION['gradebook'])){
-	$gradebook=	$_SESSION['gradebook'];
+if (isset($_SESSION['gradebook'])) {
+	$gradebook = $_SESSION['gradebook'];
 }
 
-if (!empty($gradebook) && $gradebook=='view') {
-	$interbreadcrumb[]= array (
+if (!empty($gradebook) && $gradebook == 'view') {
+	$interbreadcrumb[] = array(
 			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
 			'name' => get_lang('ToolGradebook')
 		);
 }
 
-$interbreadcrumb[]=array("url" => "exercise.php","name" => get_lang('Exercises'));
-Display::display_header($nameTools,"Exercises");
+$interbreadcrumb[] = array("url" => "exercise.php", "name" => get_lang('Exercises'));
+Display::display_header($nameTools, "Exercises");
 ?>
 <table border="0" align="center" cellpadding="2" cellspacing="2" width="100%">
 <h4>
@@ -38,17 +38,17 @@ Display::display_header($nameTools,"Exercises");
 	echo $objQuestionTmp->selectTitle();
 	echo "</td></tr>";
 	echo " <br><tr><td><b><br>".get_lang('Answer')." : </b></td></tr>";
-	$objAnswerTmp=new Answer($id);
+	$objAnswerTmp = new Answer($id);
 	$num = $objAnswerTmp->selectNbrAnswers();
 	$objAnswerTmp->read();
-	for($i=1;$i<=$num;$i++)
+	for ($i = 1; $i <= $num; $i++)
 	{
 	echo "<tr><td width='10%'> ";
-	$ans =  $objAnswerTmp->answer[$i];
+	$ans = $objAnswerTmp->answer[$i];
 
-	$form = new FormValidator('feedbackform','post',api_get_self()."?".api_get_cidreq()."&modifyQuestion=".$modifyQuestion."&newQuestion=".$newQuestion);
+	$form = new FormValidator('feedbackform', 'post', api_get_self()."?".api_get_cidreq()."&modifyQuestion=".$modifyQuestion."&newQuestion=".$newQuestion);
 	$obj_registration_form = new HTML_QuickForm('frmRegistration', 'POST');
-	$renderer =& $obj_registration_form->defaultRenderer();
+	$renderer = & $obj_registration_form->defaultRenderer();
 	$renderer->setCustomElementTemplate(
 '<tr>
 	<td align="left" style="" valign="top" width=30%>{label}

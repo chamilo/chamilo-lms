@@ -109,6 +109,7 @@ See https://support.chamilo.org/issues/6976
 .scorm_item_normal{
     line-height: 25px;
     border-bottom: 1px solid #DDD;
+    padding: 5px 0;
 }
 .level_0 {
     margin: 0;
@@ -342,7 +343,7 @@ See https://support.chamilo.org/issues/6976
     left: 5px;
     position: absolute;
     right: 5px;
-    top: 65px;
+    top: 60px;
 }
 #learning_path_right_zone .tab-pane{
     height: 100%;
@@ -371,22 +372,6 @@ See https://support.chamilo.org/issues/6976
     background: none;
     padding: 0;
     margin: 0;
-}
-.movil-toolbar{
-    width: 100%;
-    height: 40px;
-    padding-top: 5px;
-}
-.btn-movil{
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-.btn-movil li{
-    display: block;
-    float: left;
-    margin-left: 5px;
-    margin-right: 5px;
 }
 .icon-toolbar .fa{
     width: 35px;
@@ -423,6 +408,19 @@ See https://support.chamilo.org/issues/6976
 #scorm-info .progress-bar{
     line-height: 17px;
 }
+.actions_lp{
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+}
+.navegation-bar {
+    display: block;
+    padding: 5px 10px 5px 5px;
+    right: 0;
+    top: 0;
+    position: absolute;
+    z-index: 9999;
+}
 /* Small devices (tablets, 768px and up) */
 @media (min-width: 768px) {
     #scorm-info{
@@ -438,7 +436,7 @@ See https://support.chamilo.org/issues/6976
     }
     #learning_path_main.lp-view-include-breadcrumb #learning_path_left_zone,
     #learning_path_main.lp-view-include-breadcrumb #learning_path_right_zone {
-        top: 40px;
+        top: 0;
     }
     #learning_path_left_zone .lp-view-zone-container,
     #learning_path_right_zone .lp-view-zone-container {
@@ -454,7 +452,7 @@ See https://support.chamilo.org/issues/6976
     #learning_path_right_zone .lp-view-tabs .tab-content {
         bottom: 10px;
         right: 10px;
-        top: 75px;
+        top: 60px;
     }
     #learning_path_right_zone .tab-pane{
     }
@@ -485,15 +483,82 @@ See https://support.chamilo.org/issues/6976
         width: calc(100% - 350px);
     }
 }
+@media (min-width : 480px) and (max-width: 767px) {
+    #panel-scorm .image-avatar{
+        display: none;
+    }
+    #scorm-info {
+	padding: 0;
+	margin: 0;
+    }
+    #learning_path_left_zone .lp-view-zone-container,
+    #learning_path_right_zone .lp-view-zone-container{
+        padding: 0;
+    }
+    #scorm-info {
+	padding: 30px 0 0 0;
+	margin: 0;
+    }
+    .nav-tabs-bar{
+        display: none;
+    }
+}
 /* Landscape phones and down */
 @media (max-width: 480px) {
-    #home-course{
-        display: none !important;
-    }
     .scorm-title{
         font-size: 14px;
+        padding: 10px;
     }
     .movil-toolbar{
-        padding-left: 35%;
+        width: 100%;
+        height: auto;
+    }
+    .scorm_item_normal{
+        padding: 10px 5px;
+    }
+    .actions_lp .btn-group .btn-sm{
+        padding: 10px;
+    }
+    .icon-toolbar .fa {
+	width: 35px;
+	height: 35px;
+	line-height: 35px;
+	font-size: 22px;
+    }
+    .btn-movil {
+	width: 130px;
+	margin: auto;
+    }
+    #scorm-info {
+	padding: 30px 0 0 0;
+	margin: 0;
+    }
+    #learning_path_toc {
+        left: 0;
+        right: 0;
+	padding: 0;
+	border-radius: 5px;
+    }
+    #learning_path_right_zone {
+        left: 100%;
+        width: auto;
+    }
+    #panel-scorm .image-avatar{
+        display: none;
+    }
+    .navegation-bar {
+	display: block;
+	padding: 2px;
+	position: fixed;
+	top: 0;
+	right: 15px;
+	z-index: 999;
+    }
+    .nav-tabs-bar{
+        display: none;
+    }
+    #learning_path_left_zone .lp-view-zone-container,
+    #learning_path_right_zone .lp-view-zone-container{
+        padding: 0;
     }
 }

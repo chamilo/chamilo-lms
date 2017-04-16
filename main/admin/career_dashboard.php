@@ -81,13 +81,13 @@ if (!empty($careers)) {
         // Getting all promotions
         $promotions = $promotion->get_all_promotions_by_career_id(
             $career_item['id'],
-            'name DESC'
+            'name ASC'
         );
         $career_content = '';
         $promotion_array = array();
         if (!empty($promotions)) {
             foreach ($promotions as $promotion_item) {
-                if (!$promotion_item['status']) {
+                if ($promotion_item['status'] == 0) {
                     continue; //avoid status = 0
                 }
 
@@ -95,7 +95,6 @@ if (!empty($careers)) {
                 $sessions = SessionManager::get_all_sessions_by_promotion(
                     $promotion_item['id']
                 );
-
                 $session_list = array();
                 foreach ($sessions as $session_item) {
                     $course_list = SessionManager::get_course_list_by_session_id(
@@ -121,7 +120,7 @@ if (!empty($careers)) {
 
 echo '<table class="data_table">';
 
-if (!empty($career_arrayer)) {
+if (!empty($career_array)) {
     foreach ($career_array as $career_id => $data) {
         $career = $data['name'];
         $promotions = $data['promotions'];
@@ -133,47 +132,53 @@ if (!empty($career_arrayer)) {
                 $promotion_name = $promotion['name'];
                 $promotion_url = Display::url($promotion_name, 'promotions.php?action=edit&id=' . $promotion_id);
                 $sessions = $promotion['sessions'];
-                echo '<tr>';
-                $count = count($sessions);
+                $count = count($promotion['sessions']);
                 $rowspan = '';
                 if (!empty($count)) {
-                    $count++;
                     $rowspan = 'rowspan="' . $count . '"';
                 }
-                echo '<td ' . $rowspan . '>';
-                echo Display::tag('h5', $promotion_url);
-                echo '</td>';
-                echo '</tr>';
 
+                echo '<tr style="border-bottom:1px solid #ccc;">'.
+                    '<td ' . $rowspan . ' style="border-right:1px solid #aaa;">'.
+                    Display::tag('h5', $promotion_url).
+                    '</td>';
+
+                $first = true;
                 if (!empty($sessions)) {
                     foreach ($sessions as $session) {
-                        $course_list = $session['courses'];
                         $url = Display::url(
                             $session['data']['name'],
                             '../session/resume_session.php?id_session='.$session['data']['id']
                         );
-                        echo '<tr>';
+                        // Tricky TR because of "rowspan" in previous TD - only
+                        // use TR if not on the first line
+                        if (!$first) {
+                            echo '<tr style="border-bottom:1px solid #ccc;">';
+                        } else {
+                            $first = false;
+                        }
                         // Session name
-                        echo Display::tag('td', $url);
+                        echo Display::tag('td', $url, array('style' => 'border-right:1px solid #aaa;'));
                         echo '<td>';
                         // Courses
-                        echo '<table>';
-                        if (!empty($course_list)) {
-                            foreach ($course_list as $course) {
-                                echo '<tr>';
+                        echo '<ul>';
+                        if (!empty($session['courses'])) {
+                            foreach ($session['courses'] as $course) {
+                                echo '<li>';
                                 $url = Display::url(
                                     $course['title'],
                                     api_get_path(WEB_COURSE_PATH) . $course['directory'] . '/index.php?id_session=' . $session['data']['id']
                                 );
-                                echo Display::tag('td', $url);
-                                echo '</tr>';
+                                echo $url;
+                                echo '</li>';
                             }
-                            echo '</table>';
-                            echo '</td>';
-                            echo '</tr>';
                         }
+                        echo '</ul>';
+                        echo '</td>';
+                        echo '</tr>';
                     }
                 }
+                echo '</tr>';
             }
         }
     }

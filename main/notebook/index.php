@@ -9,7 +9,7 @@
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-$current_course_tool  = TOOL_NOTEBOOK;
+$current_course_tool = TOOL_NOTEBOOK;
 
 // The section (tabs)
 $this_section = SECTION_COURSES;
@@ -99,7 +99,7 @@ if ($action === 'addnote') {
         NotebookManager::display_notes();
     } else {
         echo '<div class="actions">';
-        echo '<a href="index.php">'.Display::return_icon('back.png',get_lang('BackToNotesList'),'',ICON_SIZE_MEDIUM).'</a>';
+        echo '<a href="index.php">'.Display::return_icon('back.png', get_lang('BackToNotesList'), '', ICON_SIZE_MEDIUM).'</a>';
         echo '</div>';
         $token = Security::get_token();
         $form->addElement('hidden', 'sec_token');
@@ -153,7 +153,7 @@ if ($action === 'addnote') {
     } else {
         echo '<div class="actions">';
         echo '<a href="index.php">'.
-            Display::return_icon('back.png',get_lang('BackToNotesList'),'',ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('back.png', get_lang('BackToNotesList'), '', ICON_SIZE_MEDIUM).'</a>';
         echo '</div>';
         $token = Security::get_token();
         $form->addElement('hidden', 'sec_token');

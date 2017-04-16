@@ -958,7 +958,7 @@ class GradebookUtils
             'filename' => get_lang('FlatView') . '_' . api_get_utc_datetime(),
             'pdf_title' => $title,
             'course_code' => $course_code,
-            'add_signatures' => true
+            'add_signatures' => ['Drh', 'Teacher', 'Date']
         );
 
         $page_format = $params['orientation'] == 'landscape' ? 'A4-L' : 'A4';
@@ -1419,7 +1419,6 @@ class GradebookUtils
             'course_info' => '',
             'pdf_date' => '',
             'course_code' => api_get_course_id(),
-            'add_signatures' => false,
             'student_info' => $userInfo,
             'show_grade_generated_date' => true,
             'show_real_course_teachers' => false,

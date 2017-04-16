@@ -922,10 +922,10 @@ class CourseRestorer
                         }
                         // Issue with destination directories?
                         if (!is_dir(dirname($path.$document->path))) {
-                            error_log('Course copy generated an ignorable error while trying to copy to '.dirname($path.$document->path).': destination directory not found');
+                            error_log('Course copy generated an ignorable error while trying to copy '.$this->course->backup_path.'/'.$document->path.' to '.dirname($path.$document->path).': destination directory not found');
                         }
                         if (!is_writeable(dirname($path.$document->path))) {
-                            error_log('Course copy generated an ignorable error while trying to copy to '.dirname($path.$document->path).': destination directory not writable');
+                            error_log('Course copy generated an ignorable error while trying to copy '.$this->course->backup_path.'/'.$document->path.' to '.dirname($path.$document->path).': destination directory not writable');
                         }
                     }
                 } // end file doesn't exist

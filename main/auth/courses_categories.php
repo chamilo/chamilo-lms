@@ -385,11 +385,14 @@ function return_description_button($course)
     $html = '';
     if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
         $html = Display::url(
-        Display::returnFontAwesomeIcon('info-circle'),
-        api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&code='.$course['code'],
-        array('class' => 'ajax btn btn-default btn-sm', 'data-title' => $title,'title' => get_lang('Description'), 'aria-label' => get_lang('Description')));
-        /*$html = '<a data-title="' . $title . '" class="ajax btn btn-default btn-sm" href="'.api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&code='.$course['code'].'" title="' . get_lang('Description') . '">' .
-        Display::returnFontAwesomeIcon('info-circle') . '</a>';*/
+            Display::returnFontAwesomeIcon('info-circle'),
+            api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&code='.$course['code'],
+            array(
+                'class' => 'ajax btn btn-default btn-sm',
+                'data-title' => $title,'title' => get_lang('Description'),
+                'aria-label' => get_lang('Description')
+            )
+        );
     }
 
     return $html;
@@ -450,8 +453,8 @@ function return_register_button($course, $stok, $code, $search_term)
     $title = get_lang('Subscribe');
     $html = Display::url(
         Display::returnFontAwesomeIcon('sign-in'),
-        api_get_self() . '?action=subscribe_course&sec_token=' . $stok.'&subscribe_course='.$course['code']
-        .'&search_term='.$search_term.'&category_code='.$code,
+        api_get_self() . '?action=subscribe_course&sec_token=' . $stok.
+        '&subscribe_course='.$course['code'].'&search_term='.$search_term.'&category_code='.$code,
         array('class' => 'btn btn-success btn-sm', 'title' => $title, 'aria-label' => $title)
     );
     return $html;
@@ -471,7 +474,9 @@ function return_unregister_button($course, $stok, $search_term, $code)
     $title = get_lang('Unsubscribe');
     $html = Display::url(
         Display::returnFontAwesomeIcon('sign-in'),
-        api_get_self() . '?action=unsubscribe&sec_token='.$stok.'&unsubscribe='.$course['code'].'&search_term='.$search_term.'&category_code='.$code,
-        array('class' => 'btn btn-success btn-sm', 'title' => $title, 'aria-label' => $title));
+        api_get_self() . '?action=unsubscribe&sec_token='.$stok
+        .'&unsubscribe='.$course['code'].'&search_term='.$search_term.'&category_code='.$code,
+        array('class' => 'btn btn-success btn-sm', 'title' => $title, 'aria-label' => $title)
+    );
     return $html;
 }

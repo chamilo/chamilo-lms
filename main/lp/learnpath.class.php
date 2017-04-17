@@ -6114,8 +6114,14 @@ class learnpath
      *
      * @return string
      */
-    public function create_document($courseInfo, $content = '', $title = '', $extension = 'html', $parentId = 0, $creatorId = 0)
-    {
+    public function create_document(
+        $courseInfo,
+        $content = '',
+        $title = '',
+        $extension = 'html',
+        $parentId = 0,
+        $creatorId = 0
+    ) {
         if (!empty($courseInfo)) {
             $course_id = $courseInfo['real_id'];
         } else {
@@ -6129,9 +6135,14 @@ class learnpath
         $result = $this->generate_lp_folder($courseInfo);
         $dir = $result['dir'];
 
-        if (empty($parentId)) {
+        if (empty($parentId) || $parentId == '/') {
             $postDir = isset($_POST['dir']) ? $_POST['dir'] : $dir;
             $dir = isset($_GET['dir']) ? $_GET['dir'] : $postDir; // Please, do not modify this dirname formatting.
+
+            if ($parentId === '/') {
+                $dir = '/';
+            }
+
             // Please, do not modify this dirname formatting.
             if (strstr($dir, '..')) {
                 $dir = '/';

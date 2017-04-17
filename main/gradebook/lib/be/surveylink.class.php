@@ -9,6 +9,7 @@
 class SurveyLink extends AbstractLink
 {
 	private $survey_table = null;
+	private $survey_data = [];
 
 	/**
 	 * Constructor
@@ -124,8 +125,9 @@ class SurveyLink extends AbstractLink
 
 	/**
 	 * Has anyone done this survey yet?
+     * Implementation of the AbstractLink class, mainly used dynamically in gradebook/lib/fe
 	 */
-	public function has_results($stud_id=null)
+	public function has_results()
 	{
 		$ref_id = intval($this->get_ref_id());
 		$session_id = api_get_session_id();
@@ -148,7 +150,9 @@ class SurveyLink extends AbstractLink
 	}
 
 	/**
-	 * @param int $stud_id
+	 * Calculate score for a student (to show in the gradebook)
+     * @param int $stud_id
+     * @param string $type Type of result we want (best|average|ranking)
 	 * @return array|null
 	 */
 	public function calc_score($stud_id = null, $type = null)

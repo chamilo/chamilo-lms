@@ -347,3 +347,5 @@ $_configuration['agenda_legend'] = [
 ];*/
 // Save question titles with HTML
 $_configuration['question_title_html'] = false;
+// Show the full toolbar set to all CKEditor
+//$_configuration['full_ckeditor_toolbar_set'] = false;

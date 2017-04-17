@@ -1675,7 +1675,7 @@ div.admin_section h4 {
 }
 .main-question .question_title{
   font-size: 20px;
-  font-weight: bold;
+  /*font-weight: bold;*/
   margin: 15px 0px;
   color:#666666 ;
 }
@@ -6385,7 +6385,7 @@ ul#toolnavbox-two li a.btn{
     }
     .main-question .question_title {
 	font-size: 16px;
-	font-weight: bold;
+	/*font-weight: bold;*/
 	margin: 15px 0px;
 	color: #666666;
         line-height: 20px;

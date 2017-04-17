@@ -65,10 +65,8 @@ class ExerciseLib
                 $questionDescription = $objQuestionTmp->selectDescription();
                 if ($show_title) {
                     TestCategory::displayCategoryAndTitle($objQuestionTmp->id);
-                    echo Display::div(
-                        $current_item . '. ' . $objQuestionTmp->selectTitle(),
-                        array('class' => 'question_title')
-                    );
+
+                    echo $objQuestionTmp->getTitleToDisplay($current_item);
                 }
                 if (!empty($questionDescription)) {
                     echo Display::div(
@@ -1211,7 +1209,8 @@ HTML;
             if (!$only_questions) {
                 if ($show_title) {
                     TestCategory::displayCategoryAndTitle($objQuestionTmp->id);
-                    echo '<div class="question_title">' . $current_item . '. ' . $questionName . '</div>';
+
+                    echo $objQuestionTmp->getTitleToDisplay($current_item);
                 }
                 //@todo I need to the get the feedback type
                 echo <<<HOTSPOT
@@ -1280,7 +1279,8 @@ HOTSPOT;
             if (!$only_questions) {
                 if ($show_title) {
                     TestCategory::displayCategoryAndTitle($objQuestionTmp->id);
-                    echo '<div class="question_title">'.$current_item.'. '.$objQuestionTmp->selectTitle().'</div>';
+
+                    echo $objQuestionTmp->getTitleToDisplay($current_item);
                 }
                 echo '
                     <input type="hidden" name="hidden_hotspot_id" value="'.$questionId.'" />

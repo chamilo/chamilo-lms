@@ -191,7 +191,29 @@ abstract class Question
      */
     public function selectTitle()
     {
-        return $this->question;
+        if (!api_get_configuration_value('question_title_html')) {
+            return $this->question;
+        }
+
+        return Display::div($this->question, ['style' => 'display: inline-block;']);
+    }
+
+    /**
+     * @param int $itemNumber
+     * @return string
+     */
+    public function getTitleToDisplay($itemNumber)
+    {
+        $showQuestionTitleHtml = api_get_configuration_value('question_title_html');
+
+        $title = $showQuestionTitleHtml ? '' : '<strong>';
+        $title .= $itemNumber.'. '.$this->selectTitle();
+        $title .= $showQuestionTitleHtml ? '' : '</strong>';
+
+        return Display::div(
+            $title,
+            ['class' => 'question_title']
+        );
     }
 
     /**
@@ -1536,7 +1558,13 @@ abstract class Question
         </script>';
 
         // question name
-        $form->addElement('text', 'questionName', get_lang('Question'));
+        if (api_get_configuration_value('question_title_html')) {
+            $editorConfig = ['ToolbarSet' => 'Minimal'];
+            $form->addHtmlEditor('questionName', get_lang('Question'), false, false, $editorConfig, true);
+        } else {
+            $form->addElement('text', 'questionName', get_lang('Question'));
+        }
+
         $form->addRule('questionName', get_lang('GiveQuestion'), 'required');
 
         // default content

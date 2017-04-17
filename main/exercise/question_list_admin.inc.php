@@ -250,6 +250,7 @@ if (!$inATest) {
                 ), array('class'=>'btn-actions'));
 
                 $title = Security::remove_XSS($objQuestionTmp->selectTitle());
+                $title = strip_tags($title);
                 $move = Display::returnFontAwesomeIcon("arrows moved", 'lg');
 
                 // Question name

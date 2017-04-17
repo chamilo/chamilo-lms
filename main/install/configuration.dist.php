@@ -345,3 +345,5 @@ $_configuration['agenda_legend'] = [
     'red' => 'red caption',
     '#f0f' => 'another caption'
 ];*/
+// Save question titles with HTML
+$_configuration['question_title_html'] = false;

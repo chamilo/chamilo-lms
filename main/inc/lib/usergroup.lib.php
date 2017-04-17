@@ -2029,8 +2029,6 @@ class UserGroup extends Model
                 $relation_group_title = get_lang('IAmAReader');
                 $links .= '<li class="'.($show == 'invite_friends' ? 'active' : '').'"><a href="group_invitation.php?id='.$group_id.'">'.
                             Display::return_icon('invitation_friend.png', get_lang('InviteFriends')).get_lang('InviteFriends').'</a></li>';
-                $links .= '<li><a href="group_view.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.
-                            Display::return_icon('group_leave.png', get_lang('LeaveGroup')).get_lang('LeaveGroup').'</a></li>';
                 if (self::canLeave($group_info)) {
                     $links .= '<li><a href="group_view.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.
                         Display::return_icon('group_leave.png', get_lang('LeaveGroup')).get_lang('LeaveGroup').'</a></li>';

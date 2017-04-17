@@ -45,14 +45,14 @@ class MultipleAnswerTrueFalse extends Question
         $html = '<table class="table table-striped table-hover">';
         $html .= '<thead>';
         $html .= '<tr>';
-        $html .= '<th>' . get_lang('Number') . '</th>';
-        $html .= '<th>' . get_lang('True') . '</th>';
-        $html .= '<th>' . get_lang('False') . '</th>';
-        $html .= '<th>' . get_lang('Answer') . '</th>';
+        $html .= '<th>'.get_lang('Number').'</th>';
+        $html .= '<th>'.get_lang('True').'</th>';
+        $html .= '<th>'.get_lang('False').'</th>';
+        $html .= '<th>'.get_lang('Answer').'</th>';
 
         // show column comment when feedback is enable
         if ($obj_ex->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
-            $html .= '<th>' . get_lang('Comment') . '</th>';
+            $html .= '<th>'.get_lang('Comment').'</th>';
         }
 
         $html .= '</tr>';
@@ -88,19 +88,19 @@ class MultipleAnswerTrueFalse extends Question
 
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
-                'correct[' . $i . ']'
+                'correct['.$i.']'
             );
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
-                'counter[' . $i . ']'
+                'counter['.$i.']'
             );
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
-                'answer[' . $i . ']'
+                'answer['.$i.']'
             );
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
-                'comment[' . $i . ']'
+                'comment['.$i.']'
             );
 
             $answer_number = $form->addElement(
@@ -113,15 +113,15 @@ class MultipleAnswerTrueFalse extends Question
             $answer_number->freeze();
 
             if (is_object($answer)) {
-                $defaults['answer[' . $i . ']'] = $answer->answer[$i];
-                $defaults['comment[' . $i . ']'] = $answer->comment[$i];
+                $defaults['answer['.$i.']'] = $answer->answer[$i];
+                $defaults['comment['.$i.']'] = $answer->comment[$i];
                 $correct = $answer->correct[$i];
-                $defaults['correct[' . $i . ']'] = $correct;
+                $defaults['correct['.$i.']'] = $correct;
 
                 $j = 1;
                 if (!empty($optionData)) {
                     foreach ($optionData as $id => $data) {
-                        $form->addElement('radio', 'correct[' . $i . ']', null, null, $id);
+                        $form->addElement('radio', 'correct['.$i.']', null, null, $id);
                         $j++;
                         if ($j == 3) {
                             break;
@@ -129,12 +129,12 @@ class MultipleAnswerTrueFalse extends Question
                     }
                 }
             } else {
-                $form->addElement('radio', 'correct[' . $i . ']', null, null, 1);
-                $form->addElement('radio', 'correct[' . $i . ']', null, null, 2);
+                $form->addElement('radio', 'correct['.$i.']', null, null, 1);
+                $form->addElement('radio', 'correct['.$i.']', null, null, 2);
 
-                $defaults['answer[' . $i . ']'] = '';
-                $defaults['comment[' . $i . ']'] = '';
-                $defaults['correct[' . $i . ']'] = '';
+                $defaults['answer['.$i.']'] = '';
+                $defaults['comment['.$i.']'] = '';
+                $defaults['correct['.$i.']'] = '';
             }
 
             $form->addHtmlEditor(
@@ -149,7 +149,7 @@ class MultipleAnswerTrueFalse extends Question
             if ($obj_ex->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
                 $form->addElement(
                     'html_editor',
-                    'comment[' . $i . ']',
+                    'comment['.$i.']',
                     null,
                     array(),
                     array(
@@ -167,22 +167,22 @@ class MultipleAnswerTrueFalse extends Question
 
         $correctInputTemplate = '<div class="form-group">';
         $correctInputTemplate .= '<label class="col-sm-2 control-label">';
-        $correctInputTemplate .= '<span class="form_required">*</span>' . get_lang('Score');
+        $correctInputTemplate .= '<span class="form_required">*</span>'.get_lang('Score');
         $correctInputTemplate .= '</label>';
         $correctInputTemplate .= '<div class="col-sm-8">';
         $correctInputTemplate .= '<table>';
         $correctInputTemplate .= '<tr>';
         $correctInputTemplate .= '<td>';
-        $correctInputTemplate .= get_lang('Correct') . '{element}';
+        $correctInputTemplate .= get_lang('Correct').'{element}';
         $correctInputTemplate .= '<!-- BEGIN error --><span class="form_error">{error}</span><!-- END error -->';
         $correctInputTemplate .= '</td>';
 
         $wrongInputTemplate = '<td>';
-        $wrongInputTemplate .= get_lang('Wrong') . '{element}';
+        $wrongInputTemplate .= get_lang('Wrong').'{element}';
         $wrongInputTemplate .= '<!-- BEGIN error --><span class="form_error">{error}</span><!-- END error -->';
         $wrongInputTemplate .= '</td>';
 
-        $doubtScoreInputTemplate = '<td>' . get_lang('DoubtScore') . '<br>{element}';
+        $doubtScoreInputTemplate = '<td>'.get_lang('DoubtScore').'<br>{element}';
         $doubtScoreInputTemplate .= '<!-- BEGIN error --><span class="form_error">{error}</span><!-- END error -->';
         $doubtScoreInputTemplate .= '</td>';
         $doubtScoreInputTemplate .= '</tr>';
@@ -211,7 +211,7 @@ class MultipleAnswerTrueFalse extends Question
 
             if (!empty($scores)) {
                 for ($i = 1; $i <= 3; $i++) {
-                    $defaults['option[' . $i . ']'] = $scores[$i - 1];
+                    $defaults['option['.$i.']'] = $scores[$i - 1];
                 }
             }
         }
@@ -282,7 +282,7 @@ class MultipleAnswerTrueFalse extends Question
         $extra_values = array();
         for ($i = 1; $i <= 3; $i++) {
             $score = trim($form -> getSubmitValue('option['.$i.']'));
-            $extra_values[]= $score;
+            $extra_values[] = $score;
         }
         $this->setExtra(implode(':', $extra_values));
 
@@ -315,7 +315,7 @@ class MultipleAnswerTrueFalse extends Question
     function return_header($feedback_type = null, $counter = null, $score = null)
     {
         $header = parent::return_header($feedback_type, $counter, $score);
-        $header .= '<table class="'.$this->question_table_class .'">
+        $header .= '<table class="'.$this->question_table_class.'">
         <tr>
             <th>'.get_lang("Choice").'</th>
             <th>'. get_lang("ExpectedChoice").'</th>

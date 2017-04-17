@@ -35,7 +35,7 @@ class SurveyManager
             $result = Database::query($sql);
             if (Database::num_rows($result)) {
                 $num++;
-                $new_code = $code . $num;
+                $new_code = $code.$num;
             } else {
                 break;
             }
@@ -130,7 +130,7 @@ class SurveyManager
         $table_survey = Database::get_course_table(TABLE_SURVEY);
 
         if ($shared != 0) {
-            $table_survey	= Database::get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION);
+            $table_survey = Database::get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION);
             $sql = "SELECT * FROM $table_survey
                     WHERE survey_id='".intval($survey_id)."' ";
         } else {
@@ -143,7 +143,7 @@ class SurveyManager
         $result = Database::query($sql);
         $return = array();
 
-        if (Database::num_rows($result)> 0) {
+        if (Database::num_rows($result) > 0) {
             $return = Database::fetch_array($result, 'ASSOC');
             if ($simple_return) {
                 return $return;
@@ -234,7 +234,7 @@ class SurveyManager
                             if ($values[$field] == '') {
                                 $values[$field] = 0;
                             }
-                            $field_values.= $field.':'.$values[$field].'@';
+                            $field_values .= $field.':'.$values[$field].'@';
                         }
                     }
                     $extraParams['form_fields'] = $field_values;
@@ -394,7 +394,7 @@ class SurveyManager
                             ) {
                                 $values[$field] = 0;
                             }
-                            $field_values.= $field.':'.$values[$field].'@';
+                            $field_values .= $field.':'.$values[$field].'@';
                         }
                     }
                     $extraParams['form_fields'] = $field_values;
@@ -526,7 +526,7 @@ class SurveyManager
         $_course = api_get_course_info();
 
         // Table definitions
-        $table_survey	= Database::get_main_table(TABLE_MAIN_SHARED_SURVEY);
+        $table_survey = Database::get_main_table(TABLE_MAIN_SHARED_SURVEY);
 
         if (!$values['survey_id'] ||
             !is_numeric($values['survey_id']) ||
@@ -544,7 +544,7 @@ class SurveyManager
                     '".api_get_utc_datetime()."',
                     '".$_course['id']."')";
             Database::query($sql);
-            $return	= Database::insert_id();
+            $return = Database::insert_id();
 
             $sql = "UPDATE $table_survey SET survey_id = $return WHERE iid = $return";
             Database::query($sql);
@@ -561,7 +561,7 @@ class SurveyManager
                         surveythanks	= '".Database::escape_string($values['survey_thanks'])."'
 					WHERE survey_id = '".Database::escape_string($values['survey_share']['survey_share'])."'";
             Database::query($sql);
-            $return	= $values['survey_share']['survey_share'];
+            $return = $values['survey_share']['survey_share'];
         }
 
         return $return;
@@ -662,7 +662,7 @@ class SurveyManager
             $params['c_id'] = $targetCourseId;
             unset($params['survey_id']);
             $params['session_id'] = api_get_session_id();
-            $params['title'] = $params['title'] . ' ' . get_lang('Copy');
+            $params['title'] = $params['title'].' '.get_lang('Copy');
             unset($params['iid']);
             Database::insert($table_survey, $params);
             $new_survey_id = Database::insert_id();
@@ -900,7 +900,7 @@ class SurveyManager
     {
         // Table definitions
         $tbl_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
-        $table_survey_question_option 	= Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
+        $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
         $course_id = api_get_course_int_id();
 
         $sql = "SELECT * FROM $tbl_survey_question
@@ -1220,7 +1220,7 @@ class SurveyManager
                     '".Database::escape_string($form_content['question_comment'])."',
                     '".Database::escape_string($form_content['type'])."',
                     '".Database::escape_string($form_content['horizontalvertical'])."',
-                    '".Database::escape_string($max_sort+1)."',
+                    '".Database::escape_string($max_sort + 1)."',
                     '".Database::escape_string($_course['id'])."')";
             Database::query($sql);
             $shared_question_id = Database::insert_id();

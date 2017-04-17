@@ -34,7 +34,7 @@ $TBL_TRACK_ATTEMPT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
 // General parameters passed via POST/GET
 if ($debug) {
-    error_log('Entered exercise_result.php: ' . print_r($_POST, 1));
+    error_log('Entered exercise_result.php: '.print_r($_POST, 1));
 }
 
 if (empty($formSent)) {
@@ -133,20 +133,20 @@ if (isset($_SESSION['gradebook'])) {
 }
 
 if (!empty($gradebook) && $gradebook == 'view') {
-    $interbreadcrumb[] = array('url' => '../gradebook/' . $_SESSION['gradebook_dest'], 'name' => get_lang('ToolGradebook'));
+    $interbreadcrumb[] = array('url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('ToolGradebook'));
 }
 
 $fromlink = '';
 
-$interbreadcrumb[] = array("url" => "exercise.php?" . api_get_cidreq(), "name" => get_lang('Exercises'));
-$interbreadcrumb[] = array("url" => "overview.php?exerciseId=" . $exercise_id . '&' . api_get_cidreq(), "name" => $objExercise->name);
+$interbreadcrumb[] = array("url" => "exercise.php?".api_get_cidreq(), "name" => get_lang('Exercises'));
+$interbreadcrumb[] = array("url" => "overview.php?exerciseId=".$exercise_id.'&'.api_get_cidreq(), "name" => $objExercise->name);
 $interbreadcrumb[] = array("url" => "#", "name" => get_lang('Result'));
 
 $this_section = SECTION_COURSES;
 
-$htmlHeadXtra[] = '<link rel="stylesheet" href="' . api_get_path(WEB_LIBRARY_JS_PATH) . 'hotspot/css/hotspot.css">';
-$htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_JS_PATH) . 'hotspot/js/hotspot.js"></script>';
-$htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_JS_PATH) . 'annotation/js/annotation.js"></script>';
+$htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/css/hotspot.css">';
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/js/hotspot.js"></script>';
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'annotation/js/annotation.js"></script>';
 
 if ($origin != 'learnpath') {
     Display::display_header('');
@@ -272,29 +272,29 @@ if ($show_results || $show_only_total_score || $showTotalScoreAndUserChoicesInLa
 $i = $totalScore = $totalWeighting = 0;
 
 if ($debug > 0) {
-    error_log("ExerciseResult: " . print_r($exerciseResult, 1));
-    error_log("QuestionList: " . print_r($questionList, 1));
+    error_log("ExerciseResult: ".print_r($exerciseResult, 1));
+    error_log("QuestionList: ".print_r($questionList, 1));
 }
 
 $arrques = array();
 $arrans = array();
 
-$user_restriction = $is_allowedToEdit ? '' : "AND user_id=" . intval($student_id) . " ";
+$user_restriction = $is_allowedToEdit ? '' : "AND user_id=".intval($student_id)." ";
 $sql = "SELECT attempts.question_id, answer
         FROM $TBL_TRACK_ATTEMPT as attempts
-        INNER JOIN " . $TBL_TRACK_EXERCISES . " AS stats_exercises
+        INNER JOIN ".$TBL_TRACK_EXERCISES." AS stats_exercises
         ON stats_exercises.exe_id=attempts.exe_id
         INNER JOIN $TBL_EXERCISE_QUESTION AS quizz_rel_questions
         ON
             quizz_rel_questions.exercice_id=stats_exercises.exe_exo_id AND
             quizz_rel_questions.question_id = attempts.question_id AND
-            quizz_rel_questions.c_id=" . api_get_course_int_id() . "
-        INNER JOIN " . $TBL_QUESTIONS . " AS questions
+            quizz_rel_questions.c_id=".api_get_course_int_id()."
+        INNER JOIN " . $TBL_QUESTIONS." AS questions
         ON
             questions.id=quizz_rel_questions.question_id AND
-            questions.c_id = " . api_get_course_int_id() . "
+            questions.c_id = " . api_get_course_int_id()."
         WHERE
-            attempts.exe_id = " . intval($id) . " $user_restriction
+            attempts.exe_id = " . intval($id)." $user_restriction
 		GROUP BY quizz_rel_questions.question_order, attempts.question_id";
 
 $result = Database::query($sql);
@@ -526,26 +526,26 @@ foreach ($questionList as $questionId) {
                 $table_resume = '<table class="data_table">
                     <tr class="row_odd" >
                     <td></td>
-                    <td ><b>' . get_lang('Requirements') . '</b></td>
-                    <td><b>' . get_lang('YourAnswer') . '</b></td>
+                    <td ><b>' . get_lang('Requirements').'</b></td>
+                    <td><b>' . get_lang('YourAnswer').'</b></td>
                     </tr>
         
                     <tr class="row_even">
-                    <td><b>' . get_lang('Overlap') . '</b></td>
-                    <td>' . get_lang('Min') . ' ' . $threadhold1 . '</td>
-                        <td><div style="color:' . $overlap_color . '">' . (($final_overlap < 0) ? 0 : intval($final_overlap)) . '</div></td>
+                    <td><b>' . get_lang('Overlap').'</b></td>
+                    <td>' . get_lang('Min').' '.$threadhold1.'</td>
+                        <td><div style="color:' . $overlap_color.'">'.(($final_overlap < 0) ? 0 : intval($final_overlap)).'</div></td>
                     </tr>
         
                     <tr>
-                        <td><b>' . get_lang('Excess') . '</b></td>
-                        <td>' . get_lang('Max') . ' ' . $threadhold2 . '</td>
-                        <td><div style="color:' . $excess_color . '">' . (($final_excess < 0) ? 0 : intval($final_excess)) . '</div></td>
+                        <td><b>' . get_lang('Excess').'</b></td>
+                        <td>' . get_lang('Max').' '.$threadhold2.'</td>
+                        <td><div style="color:' . $excess_color.'">'.(($final_excess < 0) ? 0 : intval($final_excess)).'</div></td>
                     </tr>
         
                     <tr class="row_even">
-                        <td><b>' . get_lang('Missing') . '</b></td>
-                        <td>' . get_lang('Max') . ' ' . $threadhold3 . '</td>
-                        <td><div style="color:' . $missing_color . '">' . (($final_missing < 0) ? 0 : intval($final_missing)) . '</div></td>
+                        <td><b>' . get_lang('Missing').'</b></td>
+                        <td>' . get_lang('Max').' '.$threadhold3.'</td>
+                        <td><div style="color:' . $missing_color.'">'.(($final_missing < 0) ? 0 : intval($final_missing)).'</div></td>
                     </tr></table>';
 
                 if ($answerType != HOT_SPOT_DELINEATION) {
@@ -569,25 +569,25 @@ foreach ($questionList as $questionId) {
                     }
                 }
 
-                echo '<h1><div style="color:#333;">' . get_lang('Feedback') . '</div></h1>';
+                echo '<h1><div style="color:#333;">'.get_lang('Feedback').'</div></h1>';
                 if ($answerType == HOT_SPOT_DELINEATION) {
                     if ($organs_at_risk_hit > 0) {
-                        $message = '<br />' . get_lang('ResultIs') . ' <b>' . $result_comment . '</b><br />';
-                        $message .= '<p style="color:#DC0A0A;"><b>' . get_lang('OARHit') . '</b></p>';
+                        $message = '<br />'.get_lang('ResultIs').' <b>'.$result_comment.'</b><br />';
+                        $message .= '<p style="color:#DC0A0A;"><b>'.get_lang('OARHit').'</b></p>';
                     } else {
-                        $message = '<p>' . get_lang('YourDelineation') . '</p>';
+                        $message = '<p>'.get_lang('YourDelineation').'</p>';
                         $message .= $table_resume;
-                        $message .= '<br />' . get_lang('ResultIs') . ' <b>' . $result_comment . '</b><br />';
+                        $message .= '<br />'.get_lang('ResultIs').' <b>'.$result_comment.'</b><br />';
                     }
-                    $message .= '<p>' . $comment . '</p>';
+                    $message .= '<p>'.$comment.'</p>';
                     echo $message;
                 } else {
-                    echo '<p>' . $comment . '</p>';
+                    echo '<p>'.$comment.'</p>';
                 }
 
                 //showing the score
-                $queryfree = "SELECT marks from " . $TBL_TRACK_ATTEMPT . " 
-                              WHERE exe_id = " . intval($id) . " AND question_id= " . intval($questionId) . "";
+                $queryfree = "SELECT marks from ".$TBL_TRACK_ATTEMPT." 
+                              WHERE exe_id = " . intval($id)." AND question_id= ".intval($questionId)."";
                 $resfree = Database::query($queryfree);
                 $questionScore = Database::result($resfree, 0, "marks");
                 $totalScore += $questionScore;
@@ -673,8 +673,8 @@ foreach ($questionList as $questionId) {
         $marksname = '';
 
         if ($isFeedbackAllowed) {
-            $name = "fckdiv" . $questionId;
-            $marksname = "marksName" . $questionId;
+            $name = "fckdiv".$questionId;
+            $marksname = "marksName".$questionId;
             if (in_array($answerType, array(FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION))) {
                 $url_name = get_lang('EditCommentsAndMarks');
             } else {
@@ -685,32 +685,32 @@ foreach ($questionList as $questionId) {
                 }
             }
             echo '<br />';
-            echo Display::url($url_name, 'javascript://', array('class' => 'btn', 'onclick' => "showfck('" . $name . "', '" . $marksname . "');"));
+            echo Display::url($url_name, 'javascript://', array('class' => 'btn', 'onclick' => "showfck('".$name."', '".$marksname."');"));
             echo '<br />';
 
-            echo '<div id="feedback_' . $name . '" style="width:100%">';
+            echo '<div id="feedback_'.$name.'" style="width:100%">';
             $comnt = trim(Event::get_comments($id, $questionId));
             if (empty($comnt)) {
                 echo '<br />';
             } else {
-                echo '<div id="question_feedback">' . $comnt . '</div>';
+                echo '<div id="question_feedback">'.$comnt.'</div>';
             }
             echo '</div>';
 
-            echo '<div id="' . $name . '" style="display:none">';
+            echo '<div id="'.$name.'" style="display:none">';
             $arrid[] = $questionId;
-            $feedback_form = new FormValidator('frmcomments' . $questionId, 'post', '');
+            $feedback_form = new FormValidator('frmcomments'.$questionId, 'post', '');
             $feedback_form->addElement('html', '<br>');
-            $renderer =& $feedback_form->defaultRenderer();
+            $renderer = & $feedback_form->defaultRenderer();
             $renderer->setFormTemplate('<form{attributes}><div align="left">{content}</div></form>');
             $renderer->setCustomElementTemplate('<div align="left">{element}</div>');
             $comnt = Event::get_comments($id, $questionId);
-            $default = array('comments_' . $questionId => $comnt);
+            $default = array('comments_'.$questionId => $comnt);
 
             if ($useAdvancedEditor) {
                 $feedback_form->addElement(
                     'html_editor',
-                    'comments_' . $questionId,
+                    'comments_'.$questionId,
                     null,
                     null,
                     array(
@@ -720,7 +720,7 @@ foreach ($questionList as $questionId) {
                     )
                 );
             } else {
-                $feedback_form->addElement('textarea', 'comments_' . $questionId);
+                $feedback_form->addElement('textarea', 'comments_'.$questionId);
             }
             $feedback_form->addElement('html', '<br>');
             $feedback_form->setDefaults($default);
@@ -731,21 +731,21 @@ foreach ($questionList as $questionId) {
             $comnt = Event::get_comments($id, $questionId);
             echo '<br />';
             if (!empty($comnt)) {
-                echo '<b>' . get_lang('Feedback') . '</b>';
-                echo '<div id="question_feedback">' . $comnt . '</div>';
+                echo '<b>'.get_lang('Feedback').'</b>';
+                echo '<div id="question_feedback">'.$comnt.'</div>';
             }
         }
 
         if ($is_allowedToEdit && $isFeedbackAllowed) {
             if (in_array($answerType, array(FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION))) {
-                $marksname = "marksName" . $questionId;
-                echo '<div id="' . $marksname . '" style="display:none">';
-                echo '<form name="marksform_' . $questionId . '" method="post" action="">';
+                $marksname = "marksName".$questionId;
+                echo '<div id="'.$marksname.'" style="display:none">';
+                echo '<form name="marksform_'.$questionId.'" method="post" action="">';
                 $arrmarks[] = $questionId;
                 echo get_lang("AssignMarks");
                 echo "&nbsp;<select name='marks' id='marks'>";
                 for ($i = 0; $i <= $questionWeighting; $i++) {
-                    echo '<option ' . (($i == $questionScore) ? "selected='selected'" : '') . '>' . $i . '</option>';
+                    echo '<option '.(($i == $questionScore) ? "selected='selected'" : '').'>'.$i.'</option>';
                 }
                 echo '</select>';
                 echo '</form><br /></div>';
@@ -756,8 +756,8 @@ foreach ($questionList as $questionId) {
                 }
             } else {
                 $arrmarks[] = $questionId;
-                echo '<div id="' . $marksname . '" style="display:none"><form name="marksform_' . $questionId . '" method="post" action="">
-					  <select name="marks" id="marks" style="display:none;"><option>' . $questionScore . '</option></select></form><br/ ></div>';
+                echo '<div id="'.$marksname.'" style="display:none"><form name="marksform_'.$questionId.'" method="post" action="">
+					  <select name="marks" id="marks" style="display:none;"><option>' . $questionScore.'</option></select></form><br/ ></div>';
             }
         } else {
             if ($questionScore == -1) {
@@ -813,7 +813,7 @@ foreach ($questionList as $questionId) {
 
     $score = array();
     if ($show_results) {
-        $score['result'] = get_lang('Score') . " : " . ExerciseLib::show_score(
+        $score['result'] = get_lang('Score')." : ".ExerciseLib::show_score(
             $my_total_score,
             $my_total_weight,
             false,
@@ -885,7 +885,7 @@ if ($isFeedbackAllowed) {
 
 if ($isFeedbackAllowed && $origin != 'learnpath' && $origin != 'student_progress') {
     if (in_array($origin, array('tracking_course', 'user_course', 'correct_exercise_in_lp'))) {
-        $formUrl = api_get_path(WEB_CODE_PATH) . 'exercise/exercise_report.php?' . api_get_cidreq() . '&';
+        $formUrl = api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.api_get_cidreq().'&';
         $formUrl .= http_build_query([
             'exerciseId' => $exercise_id,
             'filter' => 2,
@@ -904,7 +904,7 @@ if ($isFeedbackAllowed && $origin != 'learnpath' && $origin != 'student_progress
         $emailForm->addHidden('total_score', $totalScore);
         $emailForm->addHidden('my_exe_exo_id', $exercise_id);
     } else {
-        $formUrl = api_get_path(WEB_CODE_PATH) . 'exercise/exercise_report.php?' . api_get_cidreq() . '&';
+        $formUrl = api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.api_get_cidreq().'&';
         $formUrl .= http_build_query([
             'exerciseId' => $exercise_id,
             'filter' => 1,
@@ -974,7 +974,7 @@ if ($origin != 'learnpath') {
 } else {
     if (!isset($_GET['fb_type'])) {
         $lp_mode = $_SESSION['lp_mode'];
-        $url = '../lp/lp_controller.php?' . api_get_cidreq() . '&';
+        $url = '../lp/lp_controller.php?'.api_get_cidreq().'&';
         $url .= http_build_url([
             'action' => 'view',
             'lp_id' => $learnpath_id,
@@ -982,13 +982,13 @@ if ($origin != 'learnpath') {
             'exeId' => $exeId,
             'fb_type' => $feedback_type
         ]);
-        $href = ($lp_mode == 'fullscreen') ? ' window.opener.location.href="' . $url . '" ' : ' top.location.href="' . $url . '" ';
-        echo '<script type="text/javascript">' . $href . '</script>';
+        $href = ($lp_mode == 'fullscreen') ? ' window.opener.location.href="'.$url.'" ' : ' top.location.href="'.$url.'" ';
+        echo '<script type="text/javascript">'.$href.'</script>';
         // Record the results in the learning path, using the SCORM interface (API)
         echo "<script>window.parent.API.void_save_asset('$totalScore', '$totalWeighting', 0, 'completed'); </script>";
         echo '</body></html>';
     } else {
-        Display::display_normal_message(get_lang('ExerciseFinished') . ' ' . get_lang('ToContinueUseMenu'));
+        Display::display_normal_message(get_lang('ExerciseFinished').' '.get_lang('ToContinueUseMenu'));
         echo '<br />';
     }
 }

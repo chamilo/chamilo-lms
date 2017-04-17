@@ -78,7 +78,7 @@ class Answer
         $objExercise->read($exerciseId);
 
         if ($objExercise->random_answers == '1' && $this->getQuestionType() != CALCULATED_ANSWER) {
-            $this->readOrderedBy('rand()', '');// randomize answers
+            $this->readOrderedBy('rand()', ''); // randomize answers
         } else {
             $this->read(); // natural order
         }
@@ -119,7 +119,7 @@ class Answer
                 ORDER BY position";
 
         $result = Database::query($sql);
-        $i=1;
+        $i = 1;
 
         // while a record is found
         while ($object = Database::fetch_object($result)) {
@@ -136,7 +136,7 @@ class Answer
             $this->iid[$i] = $object->iid;
             $i++;
         }
-        $this->nbrAnswers = $i-1;
+        $this->nbrAnswers = $i - 1;
     }
 
     /**
@@ -148,7 +148,7 @@ class Answer
     {
         foreach ($this->autoId as $key => $autoId) {
             if ($autoId == $id) {
-                $result =  [
+                $result = [
                     'answer' => $this->answer[$key],
                     'correct' => $this->correct[$key],
                     'comment' => $this->comment[$key],
@@ -172,7 +172,7 @@ class Answer
         $TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
         $questionId = $this->questionId;
 
-        $sql="SELECT id FROM
+        $sql = "SELECT id FROM
               $TBL_ANSWER
               WHERE c_id = {$this->course_id} AND question_id ='".$questionId."'";
 
@@ -195,14 +195,14 @@ class Answer
      * @param string $field
      * @author 	Frederic Vauthier
      */
-    public function readOrderedBy($field, $order='ASC')
+    public function readOrderedBy($field, $order = 'ASC')
     {
 		$field = Database::escape_string($field);
 		if (empty($field)) {
 			$field = 'position';
 		}
 
-		if ($order != 'ASC' && $order!='DESC') {
+		if ($order != 'ASC' && $order != 'DESC') {
 			$order = 'ASC';
 		}
 
@@ -238,7 +238,7 @@ class Answer
                     c_id = {$this->course_id} AND
                     question_id='".$questionId."'
                 ORDER BY $field $order";
-		$result=Database::query($sql);
+		$result = Database::query($sql);
 
 		$i = 1;
 		// while a record is found
@@ -274,7 +274,7 @@ class Answer
             $this->iid[$i] = $doubt_data->iid;
             $i++;
 	    }
-        $this->nbrAnswers = $i-1;
+        $this->nbrAnswers = $i - 1;
 	}
 
 	/**
@@ -418,8 +418,8 @@ class Answer
     public function getGradesList()
      {
 	 	$list = array();
-	 	for ($i = 0; $i<$this->nbrAnswers;$i++){
-	 		if(!empty($this->answer[$i])){
+	 	for ($i = 0; $i < $this->nbrAnswers; $i++) {
+	 		if (!empty($this->answer[$i])) {
 	 			$list[$i] = $this->weighting[$i];
 	 		}
 	 	}
@@ -437,7 +437,7 @@ class Answer
 	 	$sql = "SELECT type FROM $TBL_QUESTIONS
 	 	        WHERE c_id = {$this->course_id} AND id = '".$this->questionId."'";
 	 	$res = Database::query($sql);
-	 	if (Database::num_rows($res)<=0){
+	 	if (Database::num_rows($res) <= 0) {
 	 		return null;
 	 	}
 	 	$row = Database::fetch_array($res);
@@ -614,7 +614,7 @@ class Answer
         $correctList = [];
         $answerList = [];
 
-		for ($i=1; $i <= $this->new_nbrAnswers; $i++) {
+		for ($i = 1; $i <= $this->new_nbrAnswers; $i++) {
 			$answer = $this->new_answer[$i];
 			$correct = isset($this->new_correct[$i]) ? $this->new_correct[$i] : '';
 			$comment = isset($this->new_comment[$i]) ? $this->new_comment[$i] : '';
@@ -787,7 +787,7 @@ class Answer
             );
             $i = 0;
             if (!empty($destination_options)) {
-                foreach($destination_options as $item) {
+                foreach ($destination_options as $item) {
                     $fixed_list[$new_option_list[$i]] = $item['id'];
                     $i++;
                 }

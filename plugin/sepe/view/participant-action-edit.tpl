@@ -2,7 +2,7 @@
 <script type='text/javascript'>
     $(document).ready(function () {
         $("select[name='company_tutor_id']").change(function(){
-            if ($(this).val() == "new_company_tutor") {
+            if ($(this).val() == "0") {
                 $("#new-company-tutor-layer").show();
             } else {
                 $("#new-company-tutor-layer").hide();
@@ -10,7 +10,7 @@
         });
         
         $("select[name='training_tutor_id']").change(function(){
-            if ($(this).val() == "new_training_tutor") {
+            if ($(this).val() == "0") {
                 $("#new-training-tutor-layer").show();
             } else {
                 $("#new-training-tutor-layer").hide();
@@ -170,7 +170,8 @@
                                 <label class="control-label col-sm-3">{{ 'CompanyTutorsList' | get_plugin_lang('SepePlugin') }}</label>
                                 <div class="col-sm-9">
                                     <select name="company_tutor_id" class="form-control">
-                                        <option value="new_company_tutor">{{ 'CreateNewTutorCompany' | get_plugin_lang('SepePlugin') }}</option>
+                                        <option value="" selected="selected">{{ 'NoTutor' | get_plugin_lang('SepePlugin') }}</option>
+                                        <option value="0">{{ 'CreateNewTutorCompany' | get_plugin_lang('SepePlugin') }}</option>
                                         {% for tutor in list_tutor_company %}
                                             {% if tutor.id == info.company_tutor_id or ( info|length == 0 and tutor.id == "1" ) %}
                                                 <option value="{{ tutor.id }}" selected="selected">{{ tutor.alias }}</option>
@@ -194,7 +195,7 @@
                                     <label class="control-label col-sm-3">{{ 'DocumentType' | get_plugin_lang('SepePlugin') }}: </label>
                                     <div class="col-sm-9">
                                
-                                    <select  name="tutor_company_document_type" class="form-control">
+                                    <select name="tutor_company_document_type" class="form-control">
                                         <option value="" selected="selected"></option>
                                         <option value="D">{{ 'DocumentTypeD' | get_plugin_lang('SepePlugin') }}</option>
                                         <option value="E">{{ 'DocumentTypeE' | get_plugin_lang('SepePlugin') }}</option>
@@ -233,7 +234,8 @@
                                 <label class="control-label col-sm-3">{{ 'TrainingTutorsList' | get_plugin_lang('SepePlugin') }}</label>
                                 <div class="col-sm-9">
                                     <select name="training_tutor_id" class="form-control">
-                                        <option value="new_training_tutor">{{ 'CreateNewTutorTraining' | get_plugin_lang('SepePlugin') }}</option>
+                                        <option value="" selected="selected">{{ 'NoTutor' | get_plugin_lang('SepePlugin') }}</option>
+                                        <option value="0">{{ 'CreateNewTutorTraining' | get_plugin_lang('SepePlugin') }}</option>
                                         {% for tutor in list_tutor_training %}
                                             {% if tutor.id == info.training_tutor_id or ( info|length == 0 and tutor.id == "1" ) %}
                                                 <option value="{{ tutor.id }}" selected="selected">{{ tutor.alias }}</option>
@@ -256,7 +258,7 @@
                                <div class="form-group">
                                     <label class="control-label col-sm-3">{{ 'DocumentType' | get_plugin_lang('SepePlugin') }}: </label>
                                     <div class="col-sm-9">
-                                        <select  name="tutor_training_document_type" class="form-control">
+                                        <select name="tutor_training_document_type" class="form-control">
                                             <option value="" selected="selected"></option>
                                             <option value="D">{{ 'DocumentTypeD' | get_plugin_lang('SepePlugin') }}</option>
                                             <option value="E">{{ 'DocumentTypeE' | get_plugin_lang('SepePlugin') }}</option>

@@ -3,30 +3,30 @@
 /**
  * Plugin class for the SEPE plugin
  * @package chamilo.plugin.sepe
- * @author Jose Angel Ruiz	<jaruiz@nosolored.com>
+ * @author Jose Angel Ruiz    <jaruiz@nosolored.com>
  * @author Julio Montoya <gugli100@gmail.com>
  */
 class SepePlugin extends Plugin
 {
-	const TABLE_SEPE_CENTER = 'plugin_sepe_center';
-	const TABLE_SEPE_ACTIONS = 'plugin_sepe_actions';
-	const TABLE_SEPE_SPECIALTY = 'plugin_sepe_specialty';
-	const TABLE_SEPE_SPECIALTY_CLASSROOM = 'plugin_sepe_specialty_classroom';
-	const TABLE_SEPE_CENTERS = 'plugin_sepe_centers';
-	const TABLE_SEPE_TUTORS = 'plugin_sepe_tutors';
-	const TABLE_SEPE_SPECIALTY_TUTORS = 'plugin_sepe_specialty_tutors';
-	const TABLE_SEPE_PARTICIPANTS = 'plugin_sepe_participants';
-	const TABLE_SEPE_PARTICIPANTS_SPECIALTY = 'plugin_sepe_participants_specialty';
-	const TABLE_SEPE_PARTICIPANTS_SPECIALTY_TUTORIALS = 'plugin_sepe_participants_specialty_tutorials';
-	const TABLE_SEPE_COURSE_ACTIONS = 'plugin_sepe_course_actions';
-	const TABLE_SEPE_TUTORS_COMPANY = 'plugin_sepe_tutors_company';
-	const TABLE_SEPE_TEACHING_COMPETENCE = 'plugin_sepe_teaching_competence';
-	const TABLE_SEPE_LOG_PARTICIPANT = 'plugin_sepe_log_participant';
-	const TABLE_SEPE_LOG_MOD_PARTICIPANT = 'plugin_sepe_log_mod_participant';
-	const TABLE_SEPE_LOG = 'plugin_sepe_log';
+    const TABLE_SEPE_CENTER = 'plugin_sepe_center';
+    const TABLE_SEPE_ACTIONS = 'plugin_sepe_actions';
+    const TABLE_SEPE_SPECIALTY = 'plugin_sepe_specialty';
+    const TABLE_SEPE_SPECIALTY_CLASSROOM = 'plugin_sepe_specialty_classroom';
+    const TABLE_SEPE_CENTERS = 'plugin_sepe_centers';
+    const TABLE_SEPE_TUTORS = 'plugin_sepe_tutors';
+    const TABLE_SEPE_SPECIALTY_TUTORS = 'plugin_sepe_specialty_tutors';
+    const TABLE_SEPE_PARTICIPANTS = 'plugin_sepe_participants';
+    const TABLE_SEPE_PARTICIPANTS_SPECIALTY = 'plugin_sepe_participants_specialty';
+    const TABLE_SEPE_PARTICIPANTS_SPECIALTY_TUTORIALS = 'plugin_sepe_participants_specialty_tutorials';
+    const TABLE_SEPE_COURSE_ACTIONS = 'plugin_sepe_course_actions';
+    const TABLE_SEPE_TUTORS_COMPANY = 'plugin_sepe_tutors_company';
+    const TABLE_SEPE_TEACHING_COMPETENCE = 'plugin_sepe_teaching_competence';
+    const TABLE_SEPE_LOG_PARTICIPANT = 'plugin_sepe_log_participant';
+    const TABLE_SEPE_LOG_MOD_PARTICIPANT = 'plugin_sepe_log_mod_participant';
+    const TABLE_SEPE_LOG = 'plugin_sepe_log';
     
-	public $isAdminPlugin = true;
-	/**
+    public $isAdminPlugin = true;
+    /**
      *
      * @return StaticPlugin
      */
@@ -39,37 +39,37 @@ class SepePlugin extends Plugin
     protected function __construct()
     {
         parent::__construct(
-			'2.0', 
-			'
-				Jose Angel Ruiz - NoSoloRed (original author) <br>
-				Julio Montoya (SOAP integration)
-			', 
-			array('sepe_enable' => 'boolean')
-		);
+            '2.0', 
+            '
+                Jose Angel Ruiz - NoSoloRed (original author) <br>
+                Julio Montoya (SOAP integration)
+            ', 
+            array('sepe_enable' => 'boolean')
+        );
     }
-	
-	/**
+    
+    /**
      * This method creates the tables required to this plugin
      */
     function install()
     {
         $tablesToBeCompared = array(
-			self::TABLE_SEPE_CENTER,
-			self::TABLE_SEPE_ACTIONS,
-			self::TABLE_SEPE_SPECIALTY,
-			self::TABLE_SEPE_SPECIALTY_CLASSROOM,
-			self::TABLE_SEPE_CENTERS,
-			self::TABLE_SEPE_TUTORS,
-			self::TABLE_SEPE_SPECIALTY_TUTORS,
-			self::TABLE_SEPE_PARTICIPANTS,
-			self::TABLE_SEPE_PARTICIPANTS_SPECIALTY,
-			self::TABLE_SEPE_PARTICIPANTS_SPECIALTY_TUTORIALS,
-			self::TABLE_SEPE_COURSE_ACTIONS,
-			self::TABLE_SEPE_TUTORS_COMPANY,
-			self::TABLE_SEPE_TEACHING_COMPETENCE,
-			self::TABLE_SEPE_LOG_PARTICIPANT,
-			self::TABLE_SEPE_LOG_MOD_PARTICIPANT,
-			self::TABLE_SEPE_LOG
+            self::TABLE_SEPE_CENTER,
+            self::TABLE_SEPE_ACTIONS,
+            self::TABLE_SEPE_SPECIALTY,
+            self::TABLE_SEPE_SPECIALTY_CLASSROOM,
+            self::TABLE_SEPE_CENTERS,
+            self::TABLE_SEPE_TUTORS,
+            self::TABLE_SEPE_SPECIALTY_TUTORS,
+            self::TABLE_SEPE_PARTICIPANTS,
+            self::TABLE_SEPE_PARTICIPANTS_SPECIALTY,
+            self::TABLE_SEPE_PARTICIPANTS_SPECIALTY_TUTORIALS,
+            self::TABLE_SEPE_COURSE_ACTIONS,
+            self::TABLE_SEPE_TUTORS_COMPANY,
+            self::TABLE_SEPE_TEACHING_COMPETENCE,
+            self::TABLE_SEPE_LOG_PARTICIPANT,
+            self::TABLE_SEPE_LOG_MOD_PARTICIPANT,
+            self::TABLE_SEPE_LOG
         );
         $em = Database::getManager();
         $cn = $em->getConnection();
@@ -82,29 +82,29 @@ class SepePlugin extends Plugin
 
         require_once api_get_path(SYS_PLUGIN_PATH) . 'sepe/database.php';
     }
-    	
-	/**
+        
+    /**
      * This method drops the plugin tables
      */
     function uninstall()
     {
         $tablesToBeDeleted = array(
             self::TABLE_SEPE_CENTER,
-			self::TABLE_SEPE_SPECIALTY_CLASSROOM,
-			self::TABLE_SEPE_CENTERS,
-			self::TABLE_SEPE_TUTORS,
-			self::TABLE_SEPE_SPECIALTY_TUTORS,
-			self::TABLE_SEPE_PARTICIPANTS_SPECIALTY_TUTORIALS,
-			self::TABLE_SEPE_PARTICIPANTS_SPECIALTY,
-			self::TABLE_SEPE_COURSE_ACTIONS,
-			self::TABLE_SEPE_PARTICIPANTS,
-			self::TABLE_SEPE_TUTORS_COMPANY,
-			self::TABLE_SEPE_SPECIALTY,
-			self::TABLE_SEPE_ACTIONS,
-			self::TABLE_SEPE_TEACHING_COMPETENCE,
-			self::TABLE_SEPE_LOG_PARTICIPANT,
-			self::TABLE_SEPE_LOG_MOD_PARTICIPANT,
-			self::TABLE_SEPE_LOG
+            self::TABLE_SEPE_SPECIALTY_CLASSROOM,
+            self::TABLE_SEPE_CENTERS,
+            self::TABLE_SEPE_TUTORS,
+            self::TABLE_SEPE_SPECIALTY_TUTORS,
+            self::TABLE_SEPE_PARTICIPANTS_SPECIALTY_TUTORIALS,
+            self::TABLE_SEPE_PARTICIPANTS_SPECIALTY,
+            self::TABLE_SEPE_COURSE_ACTIONS,
+            self::TABLE_SEPE_PARTICIPANTS,
+            self::TABLE_SEPE_TUTORS_COMPANY,
+            self::TABLE_SEPE_SPECIALTY,
+            self::TABLE_SEPE_ACTIONS,
+            self::TABLE_SEPE_TEACHING_COMPETENCE,
+            self::TABLE_SEPE_LOG_PARTICIPANT,
+            self::TABLE_SEPE_LOG_MOD_PARTICIPANT,
+            self::TABLE_SEPE_LOG
         );
 
         foreach ($tablesToBeDeleted as $tableToBeDeleted) {

@@ -3,7 +3,6 @@
 
 /**
  *    This script displays a administrator menu.
- *    @package chamilo.plugin.sepe
  */
 
 use \ChamiloSession as Session;

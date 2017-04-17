@@ -3,7 +3,6 @@
 
 /**
  *    This script displays a specialty tutors edit form.
- *    @package chamilo.plugin.sepe
  */
 
 use \ChamiloSession as Session;
@@ -16,24 +15,24 @@ $_cid = 0;
 if ( !empty($_POST)) {
     $check = Security::check_token('post');
     if ($check) {
-        $sltUserExists = trim(Security::remove_XSS(stripslashes($_POST['slt_user_exists'])));
-        $existingTutor = trim(Security::remove_XSS(stripslashes($_POST['existingTutor'])));
-        $specialtyId = trim(Security::remove_XSS(stripslashes($_POST['specialty_id'])));
-        $tutorAccreditation = trim(Security::remove_XSS(stripslashes($_POST['tutor_accreditation'])));
-        $professionalExperience = trim(Security::remove_XSS(stripslashes($_POST['professional_experience'])));
-        $teachingCompetence = trim(Security::remove_XSS(stripslashes($_POST['teaching_competence'])));
-        $experienceTeleforming = trim(Security::remove_XSS(stripslashes($_POST['experience_teleforming'])));
-        $trainingTeleforming = trim(Security::remove_XSS(stripslashes($_POST['training_teleforming'])));
-        $specialtyTutorId = trim(Security::remove_XSS(stripslashes($_POST['specialtyTutorId'])));
-        $documentType = trim(Security::remove_XSS(stripslashes($_POST['document_type'])));
-        $documentNumber = trim(Security::remove_XSS(stripslashes($_POST['document_number'])));
-        $documentLetter = trim(Security::remove_XSS(stripslashes($_POST['document_letter'])));
-        $actionId = trim(Security::remove_XSS(stripslashes($_POST['action_id'])));
-        $newTutor = trim(Security::remove_XSS(stripslashes($_POST['new_tutor'])));
-        $platformUserId = trim(Security::remove_XSS(stripslashes($_POST['platform_user_id'])));
+        $sltUserExists = intval($_POST['slt_user_exists']);
+        $existingTutor = intval($_POST['existingTutor']);
+        $specialtyId = intval($_POST['specialty_id']);
+        $tutorAccreditation = Database::escape_string(trim($_POST['tutor_accreditation']));
+        $professionalExperience = intval($_POST['professional_experience']);
+        $teachingCompetence = Database::escape_string(trim($_POST['teaching_competence']));
+        $experienceTeleforming = intval($_POST['experience_teleforming']);
+        $trainingTeleforming = Database::escape_string(trim($_POST['training_teleforming']));
+        $specialtyTutorId = intval($_POST['specialtyTutorId']);
+        $documentType = Database::escape_string(trim($_POST['document_type']));
+        $documentNumber = Database::escape_string(trim($_POST['document_number']));
+        $documentLetter = Database::escape_string(trim($_POST['document_letter']));
+        $actionId = intval($_POST['action_id']);
+        $newTutor = intval($_POST['new_tutor']);
+        $platformUserId = intval($_POST['platform_user_id']);
     
-        if ($sltUserExists == "1") {
-            $sql = "SELECT * FROM plugin_sepe_tutors WHERE cod='".$existingTutor."';";
+        if ($sltUserExists == 1) {
+            $sql = "SELECT * FROM $tableSepeTutors WHERE id = $existingTutor;";
             $rs = Database::query($sql);
             $tmp = Database::fetch_assoc($rs);
                         
@@ -46,8 +45,8 @@ if ( !empty($_POST)) {
                         experience_teleforming    ,
                         training_teleforming
                     ) VALUES (
-                        '".$specialtyId."',
-                        '".$existingTutor."',
+                        $specialtyId,
+                        $existingTutor,
                         '".$tmp['tutor_accreditation']."',
                         '".$tmp['professional_experience']."',
                         '".$tmp['teaching_competence']."',
@@ -59,28 +58,28 @@ if ( !empty($_POST)) {
             $sql = "SELECT id 
                     FROM $tableSepeTutors 
                     WHERE 
-                        document_type='".$documentType."'
-                        AND document_number='".$documentNumber."' 
-                        AND document_letter='".$documentLetter."';";
+                        document_type = '".$documentType."'
+                        AND document_number = '".$documentNumber."' 
+                        AND document_letter = '".$documentLetter."';";
             $rs = Database::query($sql);
             if (Database::num_rows($rs) > 0) {
                 $aux = Database::fetch_assoc($rs);
                 $sql = "UPDATE $tableSepeTutors SET 
-                        platform_user_id='".$platformUserId."', 
-                        tutor_accreditation='".$tutorAccreditation."', 
-                        professional_experience='".$professionalExperience."', 
-                        teaching_competence='".$teachingCompetence."', 
-                        experience_teleforming='".$experienceTeleforming."', 
-                        training_teleforming='".$trainingTeleforming."' 
-                        WHERE id='".$aux['id']."';";     
+                        platform_user_id = $platformUserId, 
+                        tutor_accreditation = '".$tutorAccreditation."', 
+                        professional_experience = $professionalExperience, 
+                        teaching_competence = '".$teachingCompetence."', 
+                        experience_teleforming = $experienceTeleforming, 
+                        training_teleforming = '".$trainingTeleforming."' 
+                        WHERE id = '".$aux['id']."';";     
                 $res = Database::query($sql);
                 if (!$res) {
                     error_log(Database::error());
                     $_SESSION['sepe_message_error'] = $plugin->get_lang('NoSaveChange');
                 }
                 $newTutor = 0; //Reset variable, no create new tutor, exists tutor
-                $tutor_id = $aux['id'];
-                $specialtyTutorId = getSpecialtyTutorId($specialtyId, $tutor_id);
+                $tutorId = $aux['id'];
+                $specialtyTutorId = getSpecialtyTutorId($specialtyId, $tutorId);
             } else {
                 $sql = "UPDATE $tableSepeTutors 
                         SET platform_user_id='' 
@@ -97,14 +96,14 @@ if ( !empty($_POST)) {
                             experience_teleforming,
                             training_teleforming
                         ) VALUES (
-                            '".$platformUserId."',
+                            $platformUserId,
                             '".$documentType."',
                             '".$documentNumber."',
                             '".$documentLetter."',
                             '".$tutorAccreditation."',
-                            '".$professionalExperience."',
+                            $professionalExperience,
                             '".$teachingCompetence."',
-                            '".$experienceTeleforming."',
+                            $experienceTeleforming,
                             '".$trainingTeleforming."'
                         );";
                 $res = Database::query($sql);
@@ -112,19 +111,19 @@ if ( !empty($_POST)) {
                     error_log(Database::error());
                     $_SESSION['sepe_message_error'] = $plugin->get_lang('NoSaveChange');
                 } else {
-                    $tutor_id = Database::insert_id();
+                    $tutorId = Database::insert_id();
                 }
             }
             
-            if (isset($newTutor) && $newTutor != "1") {
+            if (isset($newTutor) && $newTutor != 1) {
                 $sql = "UPDATE $tableSepeSpecialtyTutors SET 
-                        tutor_id='".$tutor_id."', 
-                        tutor_accreditation='".$tutorAccreditation."', 
-                        professional_experience='".$professionalExperience."', 
-                        teaching_competence='".$teachingCompetence."', 
-                        experience_teleforming='".$experienceTeleforming."', 
+                        tutor_id = $tutorId, 
+                        tutor_accreditation = '".$tutorAccreditation."', 
+                        professional_experience = $professionalExperience, 
+                        teaching_competence = '".$teachingCompetence."', 
+                        experience_teleforming = $experienceTeleforming, 
                         training_teleforming='".$trainingTeleforming."' 
-                        WHERE id='".$specialtyTutorId."';";    
+                        WHERE id = $specialtyTutorId;";    
             } else {
                 $sql = "INSERT INTO $tableSepeSpecialtyTutors (
                             specialty_id,
@@ -135,12 +134,12 @@ if ( !empty($_POST)) {
                             experience_teleforming,
                             training_teleforming
                         ) VALUES (
-                            '".$specialtyId."',
-                            '".$tutor_id."',
+                            $specialtyId,
+                            $tutorId,
                             '".$tutorAccreditation."',
-                            '".$professionalExperience."',
+                            $professionalExperience,
                             '".$teachingCompetence."',
-                            '".$experienceTeleforming."',
+                            $experienceTeleforming,
                             '".$trainingTeleforming."'
                         );";
             }
@@ -149,8 +148,8 @@ if ( !empty($_POST)) {
                 error_log(Database::error());
                 $_SESSION['sepe_message_error'] = $plugin->get_lang('NoSaveChange');
             } else {
-                if ($newTutor == "1") {
-                    $tutor_id = Database::insert_id();
+                if ($newTutor == 1) {
+                    $tutorId = Database::insert_id();
                 }
                 $_SESSION['sepe_message_info'] = $plugin->get_lang('SaveChange');
             }
@@ -158,10 +157,10 @@ if ( !empty($_POST)) {
         session_write_close();
         header("Location: specialty-action-edit.php?new_specialty=0&specialty_id=".$specialtyId."&action_id=".$actionId);
     } else {
-        $actionId = trim(Security::remove_XSS(stripslashes($_POST['action_id'])));
-        $newTutor = trim(Security::remove_XSS(stripslashes($_POST['new_tutor'])));
-        $specialtyId = trim(Security::remove_XSS(stripslashes($_POST['specialty_id'])));
-        $specialtyTutorId = trim(Security::remove_XSS(stripslashes($_POST['specialtyTutorId'])));
+        $actionId = intval($_POST['action_id']);
+        $newTutor = intval($_POST['new_tutor']);
+        $specialtyId = intval($_POST['specialty_id']);
+        $specialtyTutorId = intval($_POST['specialtyTutorId']);
         Security::clear_token();
         $token = Security::get_token();
         $_SESSION['sepe_message_error'] = $plugin->get_lang('ProblemToken');
@@ -173,16 +172,16 @@ if ( !empty($_POST)) {
 }
 
 if (api_is_platform_admin()) {
-    $courseId = getCourse($_GET['action_id']);
+    $courseId = getCourse(intval($_GET['action_id']));
     $interbreadcrumb[] = array("url" => "/plugin/sepe/src/sepe-administration-menu.php", "name" => $plugin->get_lang('MenuSepe'));
     $interbreadcrumb[] = array("url" => "formative-actions-list.php", "name" => $plugin->get_lang('FormativesActionsList'));
     $interbreadcrumb[] = array("url" => "formative-action.php?cid=".$courseId, "name" => $plugin->get_lang('FormativeAction'));
-    $interbreadcrumb[] = array("url" => "specialty-action-edit.php?new_specialty=0&specialty_id=".$_GET['specialty_id']."&action_id=".$_GET['action_id'], "name" => $plugin->get_lang('SpecialtyFormativeAction'));
-    if (isset($_GET['new_tutor']) && $_GET['new_tutor'] == "1") {
+    $interbreadcrumb[] = array("url" => "specialty-action-edit.php?new_specialty=0&specialty_id=".intval($_GET['specialty_id'])."&action_id=".$_GET['action_id'], "name" => $plugin->get_lang('SpecialtyFormativeAction'));
+    if (isset($_GET['new_tutor']) && intval($_GET['new_tutor']) == 1) {
         $templateName = $plugin->get_lang('NewSpecialtyTutor');
         $tpl = new Template($templateName);
-        $tpl->assign('action_id', $_GET['action_id']);
-        $tpl->assign('specialty_id', $_GET['specialty_id']);
+        $tpl->assign('action_id', intval($_GET['action_id']));
+        $tpl->assign('specialty_id', intval($_GET['specialty_id']));
         $info = array();
         $tpl->assign('info', $info);
         $tpl->assign('new_tutor', '1');
@@ -190,20 +189,20 @@ if (api_is_platform_admin()) {
     } else {
         $templateName = $plugin->get_lang('EditSpecialtyTutor');
         $tpl = new Template($templateName);
-        $tpl->assign('action_id', $_GET['action_id']);
-        $tpl->assign('specialty_id', $_GET['specialty_id']);
-        $tpl->assign('tutor_id', $_GET['tutor_id']);
-        $info = getInfoSpecialtyTutor($_GET['tutor_id']);
+        $tpl->assign('action_id', intval($_GET['action_id']));
+        $tpl->assign('specialty_id', intval($_GET['specialty_id']));
+        $tpl->assign('tutor_id', intval($_GET['tutor_id']));
+        $info = getInfoSpecialtyTutor(intval($_GET['tutor_id']));
         $tpl->assign('info', $info);
         $tpl->assign('new_tutor', '0');
         $platformUserId = $info['platform_user_id'];
             
     }
-    $tutorsList = getTutorsSpecialty($_GET['specialty_id']);
+    $tutorsList = getTutorsSpecialty(intval($_GET['specialty_id']));
     $tpl->assign('ExistingTutorsList', $tutorsList);
     
     $listTeachers = CourseManager::getTeachersFromCourse($courseId);
-    $listTeachers = freeTeacherList($listTeachers,$_GET['specialty_id'],$platformUserId);
+    $listTeachers = freeTeacherList($listTeachers, intval($_GET['specialty_id']), $platformUserId);
     $tpl->assign('listTeachers', $listTeachers);
     if (isset($_SESSION['sepe_message_info'])) {
         $tpl->assign('message_info', $_SESSION['sepe_message_info']);    
@@ -213,7 +212,7 @@ if (api_is_platform_admin()) {
         $tpl->assign('message_error', $_SESSION['sepe_message_error']);    
         unset($_SESSION['sepe_message_error']);
     }
-    $tpl->assign('sec_token',$token);
+    $tpl->assign('sec_token', $token);
         
     $listing_tpl = 'sepe/view/specialty-tutor-edit.tpl';
     $content = $tpl->fetch($listing_tpl);

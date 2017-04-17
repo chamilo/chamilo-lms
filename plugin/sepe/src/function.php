@@ -24,8 +24,8 @@ if ($_REQUEST['tab'] == 'delete_center_data') {
 }
 
 if ($_REQUEST['tab'] == 'delete_action') {
-    $id = $_REQUEST['id'];
-    $sql = "DELETE FROM $tableSepeActions WHERE id='".$id."';";
+    $id = intval($_REQUEST['id']);
+    $sql = "DELETE FROM $tableSepeActions WHERE id = $id;";
     $res = Database::query($sql);
     if (!$res) {
         $content = $plugin->get_lang('ProblemToDeleteInfoAction') . Database::error();
@@ -38,8 +38,8 @@ if ($_REQUEST['tab'] == 'delete_action') {
 }
 
 if ($_REQUEST['tab'] == 'delete_specialty') {
-    $id = substr($_REQUEST['id'],9);
-    $sql = "DELETE FROM $tableSepeSpecialty WHERE id='".$id."';";
+    $id = intval(substr($_REQUEST['id'],9));
+    $sql = "DELETE FROM $tableSepeSpecialty WHERE id = $id;";
     $res = Database::query($sql);
     if (!$res) {
         $content = $plugin->get_lang('ProblemToDeleteInfoSpecialty') . Database::error();
@@ -51,8 +51,8 @@ if ($_REQUEST['tab'] == 'delete_specialty') {
 }
 
 if ($_REQUEST['tab'] == 'delete_specialty_participant') {
-    $id = substr($_REQUEST['id'],9);
-    $sql = "DELETE FROM $tableSepeParticipantsSpecialty WHERE id='".$id."';";
+    $id = intval(substr($_REQUEST['id'],9));
+    $sql = "DELETE FROM $tableSepeParticipantsSpecialty WHERE id = $id;";
     $res = Database::query($sql);
     if (!$res) {
         $content = $plugin->get_lang('ProblemToDeleteInfoSpecialty') . Database::error();
@@ -64,8 +64,8 @@ if ($_REQUEST['tab'] == 'delete_specialty_participant') {
 }
 
 if ($_REQUEST['tab'] == 'delete_classroom') {
-    $id = substr($_REQUEST['id'],9);
-    $sql = "DELETE FROM $tableSepeSpecialtyClassroom WHERE id='".$id."';";
+    $id = intval(substr($_REQUEST['id'],9));
+    $sql = "DELETE FROM $tableSepeSpecialtyClassroom WHERE id = $id;";
     $res = Database::query($sql);
     if (!$res) {
         $content = $plugin->get_lang('ProblemToDeleteInfoSpecialtyClassroom') . Database::error();
@@ -77,10 +77,10 @@ if ($_REQUEST['tab'] == 'delete_classroom') {
 }
 
 if ($_REQUEST['tab'] == 'checkTutorEdit') {
-    $type = $_REQUEST['type'];
-    $number = $_REQUEST['number'];
-    $letter=$_REQUEST['letter'];
-    $platform_user_id = $_REQUEST['platform_user_id'];
+    $type = Database::escape_string(trim($_REQUEST['type']));
+    $number = Database::escape_string(trim($_REQUEST['number']));
+    $letter = Database::escape_string(trim($_REQUEST['letter']));
+    $platform_user_id = intval($_REQUEST['platform_user_id']);
     
     $sql = "SELECT platform_user_id 
             FROM $tableSepeTutors 
@@ -92,7 +92,7 @@ if ($_REQUEST['tab'] == 'checkTutorEdit') {
         exit;
     } else {
         $aux = Database::fetch_assoc($res);
-        if ($aux['platform_user_id'] == $platform_user_id || $aux['platform_user_id'] == '0') {
+        if ($aux['platform_user_id'] == $platform_user_id || $aux['platform_user_id'] == 0) {
             echo json_encode(array("status" => "true"));
         } else {
             $content = $plugin->get_lang('ModDataTeacher');
@@ -102,8 +102,8 @@ if ($_REQUEST['tab'] == 'checkTutorEdit') {
 }
 
 if ($_REQUEST['tab'] == 'delete_tutor') {
-    $id = substr($_REQUEST['id'],5);
-    $sql = "DELETE FROM $tableSepeSpecialtyTutors WHERE id='".$id."';";
+    $id = intval(substr($_REQUEST['id'],5));
+    $sql = "DELETE FROM $tableSepeSpecialtyTutors WHERE id = $id;";
     $res = Database::query($sql);
     if (!$res) {
         $content = $plugin->get_lang('ProblemToDeleteInfoSpecialtyTutor') . Database::error();
@@ -115,15 +115,15 @@ if ($_REQUEST['tab'] == 'delete_tutor') {
 }
 
 if ($_REQUEST['tab'] == 'delete_participant') {
-    $id = substr($_REQUEST['id'],11);
-    $sql = "SELECT platform_user_id, action_id FROM $tableSepeParticipants WHERE id='".$id."';";
+    $id = intval(substr($_REQUEST['id'],11));
+    $sql = "SELECT platform_user_id, action_id FROM $tableSepeParticipants WHERE id = $id;";
     $res = Database::query($sql);
     $row = Database::fetch_assoc($res);
     
     $sql = "UPDATE plugin_sepe_log_participant SET fecha_baja='".date("Y-m-d H:i:s")."' WHERE platform_user_id='".$row['platform_user_id']."' AND action_id='".$row['action_id']."';";
     $res = Database::query($sql);
     
-    $sql = "DELETE FROM $tableSepeParticipants WHERE id='".$id."';";
+    $sql = "DELETE FROM $tableSepeParticipants WHERE id = $id;";
     $res = Database::query($sql);
     if (!$res) {
         $content = $plugin->get_lang('ProblemToDeleteInfoParticipant') . Database::error();
@@ -135,8 +135,8 @@ if ($_REQUEST['tab'] == 'delete_participant') {
 }
 
 if ($_REQUEST['tab'] == 'unlink_action') {
-    $id = substr($_REQUEST['id'],16);
-    $sql = "DELETE FROM $tableSepeCourseActions WHERE id='".$id."';";
+    $id = intval(substr($_REQUEST['id'],16));
+    $sql = "DELETE FROM $tableSepeCourseActions WHERE id = $id;";
     $res = Database::query($sql);
     if (!$res) {
         $content = $plugin->get_lang('ProblemToDesvincularInfoAction') . Database::error();
@@ -148,26 +148,23 @@ if ($_REQUEST['tab'] == 'unlink_action') {
 }
 
 if ($_REQUEST['tab'] == 'assign_action') {
-    $course_id = substr($_REQUEST['course_id'],9);
-    $action_id = $_REQUEST['action_id'];
+    $course_id = intval(substr($_REQUEST['course_id'],9));
+    $action_id = intval($_REQUEST['action_id']);
     
-    if (trim($action_id) != '' && trim($course_id) != '') {
-        $action_id = Database::escape_string($action_id);
-        $course_id = Database::escape_string($course_id);
-        $sql = "SELECT * FROM $tableSepeCourseActions WHERE action_id='".$action_id."';";
-        
+    if ($action_id != 0 && $course_id != 0) {
+        $sql = "SELECT * FROM $tableSepeCourseActions WHERE action_id = $action_id;";
         $rs = Database::query($sql);
         if (Database::num_rows($rs) > 0) {
             $content = $plugin->get_lang('FormativeActionInUse');
             echo json_encode(array("status" => "false", "content" => $content));
         } else {
-            $sql = "SELECT 1 FROM course WHERE id='".$course_id."';";
+            $sql = "SELECT 1 FROM course WHERE id = $course_id;";
             $rs = Database::query($sql);
             if (Database::num_rows($rs) == 0) {
                 $content = $plugin->get_lang('NoExistsCourse');
                 echo json_encode(array("status" => "false", "content" => $content));
             } else {
-                $sql = "INSERT INTO $tableSepeCourseActions (course_id, action_id) VALUES ('".$course_id."','".$action_id."');";    
+                $sql = "INSERT INTO $tableSepeCourseActions (course_id, action_id) VALUES ($course_id, $action_id);";    
                 $rs = Database::query($sql);
                 if (!$rs) {
                     $content = $plugin->get_lang('NoSaveData'); 

@@ -270,9 +270,9 @@
                                 <option value="" selected="selected"></option>
                                 {% for teacher in listTeachers %}
                                     {% if info.platform_user_id == teacher.user_id %}
-                                        <option value="{{ teacher.user_id }}" selected="selected">{{ teacher.firstname }} {{ teacher.lastname }}</option>
+                                        <option value="{{ teacher.id }}" selected="selected">{{ teacher.firstname }} {{ teacher.lastname }}</option>
                                     {% else %}
-                                        <option value="{{ teacher.user_id }}">{{ teacher.firstname }} {{ teacher.lastname }}</option>
+                                        <option value="{{ teacher.id }}">{{ teacher.firstname }} {{ teacher.lastname }}</option>
                                     {% endif %}
                                 {% endfor %}
                             </select>

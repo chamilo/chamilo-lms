@@ -3,7 +3,6 @@
 
 /**
  * This script displays a basic info about data center.
- * @package chamilo.plugin.sepe
  */
 
 use \ChamiloSession as Session;

@@ -3,7 +3,6 @@
 
 /**
  * This script displays a data center edit form.
- * @package chamilo.plugin.sepe
  */
 use \ChamiloSession as Session;
 
@@ -13,25 +12,25 @@ $plugin = SepePlugin::create();
 if ( !empty($_POST)) {
     $check = Security::check_token('post');
     if ($check) {
-        $centerOrigin = trim(Security::remove_XSS(stripslashes($_POST['center_origin'])));
-        $centerCode = trim(Security::remove_XSS(stripslashes($_POST['center_code'])));
-        $centerName = trim(Security::remove_XSS(stripslashes($_POST['center_name'])));
-        $url = trim(Security::remove_XSS(stripslashes($_POST['url'])));
-        $trackingUrl = trim(Security::remove_XSS(stripslashes($_POST['tracking_url'])));
-        $phone = trim(Security::remove_XSS(stripslashes($_POST['phone'])));
-        $mail = trim(Security::remove_XSS(stripslashes($_POST['mail'])));
-        $id = trim(Security::remove_XSS(stripslashes($_POST['id'])));
+        $centerOrigin = Database::escape_string(trim($_POST['center_origin']));
+        $centerCode = Database::escape_string(trim($_POST['center_code']));
+        $centerName = Database::escape_string(trim($_POST['center_name']));
+        $url = Database::escape_string(trim($_POST['url']));
+        $trackingUrl = Database::escape_string(trim($_POST['tracking_url']));
+        $phone = Database::escape_string(trim($_POST['phone']));
+        $mail = Database::escape_string(trim($_POST['mail']));
+        $id = intval($_POST['id']);
         
         if (checkIdentificationData()) {
             $sql = "UPDATE $tableSepeCenter SET 
-                        center_origin='".$centerOrigin."', 
-                        center_code='".$centerCode."', 
-                        center_name='".$centerName."', 
-                        url='".$url."', 
-                        tracking_url='".$trackingUrl."', 
-                        phone='".$phone."', 
-                        mail='".$mail."' 
-                    WHERE id='".$id."'";    
+                        center_origin = '".$centerOrigin."', 
+                        center_code = '".$centerCode."', 
+                        center_name = '".$centerName."', 
+                        url = '".$url."', 
+                        tracking_url = '".$trackingUrl."', 
+                        phone = '".$phone."', 
+                        mail = '".$mail."' 
+                    WHERE id = $id";    
         } else {
             $sql = "INSERT INTO $tableSepeCenter (
                         id, 
@@ -43,7 +42,7 @@ if ( !empty($_POST)) {
                         phone, 
                         mail
                     ) VALUES (
-                        '1',
+                        1,
                         '".$centerOrigin."',
                         '".$centerCode."',
                         '".$centerName."',
@@ -84,7 +83,7 @@ if (api_is_platform_admin()) {
         $tpl->assign('message_error', $_SESSION['sepe_message_error']);
         unset($_SESSION['sepe_message_error']);
     }
-    $tpl->assign('sec_token',$token);
+    $tpl->assign('sec_token', $token);
     $listing_tpl = 'sepe/view/identification-data-edit.tpl';
     $content = $tpl->fetch($listing_tpl);
     $tpl->assign('content', $content);

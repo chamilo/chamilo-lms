@@ -289,3 +289,4 @@ $strings['NoSaveData'] = "Unable to save selection";
 $strings['NoExistsCourse'] = "The course to which the training action is associated does not exist";
 $strings['FormativeActionInUse'] = "The chosen training action is being used for another course";
 $strings['ProblemToken'] = "Token not valid";
+$strings['NoTutor'] = "No tutor";

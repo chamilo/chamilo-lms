@@ -3,7 +3,6 @@
 
 /**
  * This script displays setting api key user.
- *    @package chamilo.plugin.sepe
  */
 
 use \ChamiloSession as Session;

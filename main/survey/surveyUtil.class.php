@@ -2921,7 +2921,6 @@ class SurveyUtil
         // Database table definitions
         $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
         $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
-        $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
         $table_survey = Database:: get_course_table(TABLE_SURVEY);
 
         $sql = "SELECT question_id
@@ -2932,27 +2931,6 @@ class SurveyUtil
         $all_question_id = array();
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             $all_question_id[] = $row;
-        }
-
-        $count = 0;
-        for ($i = 0; $i < count($all_question_id); $i++) {
-            $sql = 'SELECT COUNT(*) as count
-			        FROM '.$table_survey_answer.'
-					WHERE
-					    c_id = '.$course_id.' AND
-					    question_id='.intval($all_question_id[$i]['question_id']).' AND
-					    user = '.$user_id;
-            $result = Database::query($sql);
-            while ($row = Database::fetch_array($result, 'ASSOC')) {
-                if ($row['count'] == 0) {
-                    $count++;
-                    break;
-                }
-            }
-            if ($count > 0) {
-                $link_add = true;
-                break;
-            }
         }
 
         echo '<table id="list-survey" class="table ">';

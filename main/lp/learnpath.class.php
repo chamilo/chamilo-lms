@@ -4993,6 +4993,7 @@ class learnpath
                             error_log('New LP - In learnpath::stop_previous_item() - Item is an AU, saving is managed by AICC signals', 0);
                         }
                     }
+                    break;
                 case '2':
                     if ($this->items[$this->last]->get_type() != 'sco') {
                         if ($this->debug > 2) {
@@ -11542,6 +11543,7 @@ EOD;
         switch ($type) {
             case 'dir':
                 $link .= $main_dir_path . 'lp/blank.php';
+                break;
             case TOOL_CALENDAR_EVENT:
                 $link .= $main_dir_path.'calendar/agenda.php?origin='.$origin.'&agenda_id='.$id;
                 break;

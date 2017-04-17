@@ -329,6 +329,7 @@ function return_teacher($course)
     $length = count($teachers);
     foreach ($teachers as $value) {
         $name = $value['firstname'].' ' . $value['lastname'];
+
         if ($length > 2) {
              $html .= '<a href="'.$value['url'].'" class="ajax" data-title="'.$name.'">
                     <img src="'.$value['avatar'].'" alt="'.$name.' ' .get_lang('Profile').'"/></a>';
@@ -431,7 +432,6 @@ function return_already_registered_label($in_status)
 
     $html = Display::tag(
         'button',
-
         $icon,
         array('id' => 'register', 'class' => 'btn btn-default btn-sm', 'title' => $title, 'aria-label' => $title)
     );
@@ -450,7 +450,6 @@ function return_already_registered_label($in_status)
  */
 function return_register_button($course, $stok, $code, $search_term)
 {
-
     $title = get_lang('Subscribe');
     $html = Display::url(
         Display::returnFontAwesomeIcon('sign-in'),

@@ -4888,6 +4888,7 @@ class CourseManager
                         'aria-label' => get_lang('Subscribe')
                     )
                 );
+
             }
 
             if ($access_link && in_array('enter',
@@ -4903,6 +4904,7 @@ class CourseManager
                         'aria-label' => get_lang('GoToCourse')
                     )
                 );
+
             }
 
             if ($access_link && in_array('unsubscribe', $access_link)) {
@@ -4917,6 +4919,7 @@ class CourseManager
                         'aria-label' => get_lang('Unreg')
                     )
                 );
+
             }
 
             // start buycourse validation

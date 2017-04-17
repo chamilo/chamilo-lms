@@ -482,7 +482,7 @@ class ExtraField extends Model
                         $extraName = 'extra_'.$variable;
                         if (in_array($extraName, array_keys($extraData))) {
                             $setData[$extraName] = $extraData[$extraName];
-                        };
+                        }
                     }
                     $form->setDefaults($setData);
                 } else {

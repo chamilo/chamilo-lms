@@ -46,17 +46,17 @@ if (is_array($courseSessionValue) && isset($courseSessionValue[1])) {
 }
 
 $sql = "SELECT
-				u.user_id 	AS UserId,
-				u.lastname 	AS LastName,
-				u.firstname 	AS FirstName,
-				u.email 		AS Email,
-				u.username	AS UserName,
-				".(($_configuration['password_encryption'] != 'none') ? " " : "u.password AS Password, ")."
-				u.auth_source	AS AuthSource,
-				u.status		AS Status,
-				u.official_code	AS OfficialCode,
-				u.phone		AS Phone,
-				u.registration_date AS RegistrationDate";
+            u.user_id 	AS UserId,
+            u.lastname 	AS LastName,
+            u.firstname 	AS FirstName,
+            u.email 		AS Email,
+            u.username	AS UserName,
+            ".(($_configuration['password_encryption'] != 'none') ? " " : "u.password AS Password, ")."
+            u.auth_source	AS AuthSource,
+            u.status		AS Status,
+            u.official_code	AS OfficialCode,
+            u.phone		AS Phone,
+            u.registration_date AS RegistrationDate";
 if (strlen($course_code) > 0) {
     $sql .= " FROM $user_table u, $course_user_table cu
 					WHERE
@@ -65,7 +65,7 @@ if (strlen($course_code) > 0) {
 						cu.relation_type<>".COURSE_RELATION_TYPE_RRHH."
 					ORDER BY lastname,firstname";
     $filename = 'export_users_'.$course_code.'_'.api_get_local_time();
-} else if (strlen($courseSessionCode) > 0) {
+} elseif (strlen($courseSessionCode) > 0) {
     $sql .= " FROM $user_table u, $session_course_user_table scu
 					WHERE
 						u.user_id = scu.user_id AND
@@ -73,7 +73,7 @@ if (strlen($course_code) > 0) {
 						scu.session_id = $sessionId 
 					ORDER BY lastname,firstname";
     $filename = 'export_users_'.$courseSessionCode.'_'.$sessionInfo['name'].'_'.api_get_local_time();
-} else if ($sessionId > 0) {
+} elseif ($sessionId > 0) {
     $sql .= " FROM $user_table u, $session_user_table su
 					WHERE
 						u.user_id = su.user_id AND
@@ -98,7 +98,7 @@ if (strlen($course_code) > 0) {
 }
 $data = array();
 $extra_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', false);
-if ($export['addcsvheader'] == '1' AND $export['file_type'] == 'csv') {
+if ($export['addcsvheader'] == '1' && $export['file_type'] == 'csv') {
     if ($_configuration['password_encryption'] != 'none') {
         $data[] = array(
             'UserId',
@@ -140,7 +140,7 @@ while ($user = Database::fetch_array($res, 'ASSOC')) {
         true,
         false
     );
-    foreach ($student_data as $key=>$value) {
+    foreach ($student_data as $key => $value) {
         $key = substr($key, 6);
         if (is_array($value)) {
             $user[$key] = $value['extra_'.$key];

@@ -73,7 +73,7 @@ class SurveyLink extends AbstractLink
 		$session_id = api_get_session_id();
 		$course_id = api_get_course_int_id();
 		$sql = 'SELECT survey_id, title, code FROM '.$tbl_survey.'
-				WHERE c_id = '.$course_id.' AND session_id = '.intval($session_id).'';
+				WHERE c_id = '.$course_id.' AND session_id = '.intval($session_id);
 		$result = Database::query($sql);
 		while ($data = Database::fetch_array($result)) {
 			$links[] = array(
@@ -192,13 +192,11 @@ class SurveyLink extends AbstractLink
 			$rescount = 0;
 			$sum = 0;
 			$bestResult = 0;
-			$weight = 0;
 			while ($data = Database::fetch_array($sql_result)) {
 				$sum += $data['answered'] ? $max_score : 0;
 				$rescount++;
 				if ($data['answered'] > $bestResult) {
 					$bestResult = $data['answered'];
-					$weight = $assignment['qualification'];
 				}
 			}
 			$sum = $sum / $max_score;
@@ -285,7 +283,7 @@ class SurveyLink extends AbstractLink
 					WHERE
 						c_id = '.$this->course_id.' AND
 						survey_id = '.intval($this->get_ref_id()).' AND
-						session_id='.intval($session_id).'';
+						session_id='.intval($session_id);
 			$query = Database::query($sql);
 			$this->survey_data = Database::fetch_array($query);
 		}

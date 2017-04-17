@@ -300,7 +300,7 @@ class learnpath
 
                     // Setting the object level with variable $this->items[$i][parent]
                     foreach ($this->items as $itemLPObject) {
-                        $level = learnpath::get_level_for_item($this->items, $itemLPObject->db_id);
+                        $level = self::get_level_for_item($this->items, $itemLPObject->db_id);
                         $itemLPObject->level = $level;
                     }
 
@@ -454,7 +454,7 @@ class learnpath
         if ($parentItemId == 0) {
             return 0;
         } else {
-            return learnpath::get_level_for_item($items, $parentItemId) + 1;
+            return self::get_level_for_item($items, $parentItemId) + 1;
         }
     }
 
@@ -3106,7 +3106,7 @@ class learnpath
 
         $res = Database::query($sql);
         while ($row = Database::fetch_array($res)) {
-            $sublist = learnpath::get_flat_ordered_items_list($lp, $row['id'], $course_id);
+            $sublist = self::get_flat_ordered_items_list($lp, $row['id'], $course_id);
             $list[] = $row['id'];
             foreach ($sublist as $item) {
                 $list[] = $item;
@@ -3189,7 +3189,7 @@ class learnpath
                 // Chapters
                 $html .= '<div class="section level_'.$item['level'].'" title="'.$description.'" >';
             } else {
-                $html .= '<div class="item level_'.$item['level'].' scorm_type_'.learnpath::format_scorm_type_item($item['type']).'" title="'.$description.'" >';
+                $html .= '<div class="item level_'.$item['level'].' scorm_type_'.self::format_scorm_type_item($item['type']).'" title="'.$description.'" >';
                 $html .= '<a name="atoc_'.$item['id'].'"></a>';
             }
 
@@ -3868,7 +3868,7 @@ class learnpath
                     $display = $display +1;
                 }
                 break;
-            default :
+            default:
                 return false;
         }
         return $display;

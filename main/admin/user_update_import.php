@@ -261,7 +261,7 @@ function element_start($parser, $data)
     global $current_tag;
     switch ($data) {
         case 'Contact':
-            $user = array ();
+            $user = array();
             break;
         default:
             $current_tag = $data;

@@ -167,8 +167,8 @@ $courseController = new CoursesController();
 
 /* View */
 $template = new Template($session->getName(), true, true, false, true, false);
-$template->assign('show_tutor', (api_get_setting('show_session_coach')==='true' ? true : false));
-$template->assign('page_url', api_get_path(WEB_PATH) . "session/{$session->getId()}/about/");
+$template->assign('show_tutor', (api_get_setting('show_session_coach') === 'true' ? true : false));
+$template->assign('page_url', api_get_path(WEB_PATH)."session/{$session->getId()}/about/");
 $template->assign('session', $session);
 $template->assign('session_date', $sessionDates);
 $template->assign(
@@ -213,15 +213,15 @@ if ($checker) {
 }
 
 $redirectToSession = api_get_configuration_value('allow_redirect_to_session_after_inscription_about');
-$redirectToSession = $redirectToSession ? '?s=' . $sessionId : false;
+$redirectToSession = $redirectToSession ? '?s='.$sessionId : false;
 
 $coursesInThisSession = SessionManager::get_course_list_by_session_id($sessionId);
 $coursesCount = count($coursesInThisSession);
-$redirectToSession = $coursesCount == 1 && $redirectToSession ? $redirectToSession . '&cr=' . array_values($coursesInThisSession)[0]['directory'] : $redirectToSession;
+$redirectToSession = $coursesCount == 1 && $redirectToSession ? $redirectToSession.'&cr='.array_values($coursesInThisSession)[0]['directory'] : $redirectToSession;
 
 $template->assign('redirect_to_session', $redirectToSession);
 $template->assign('courses', $courses);
-$essence =  Essence\Essence::instance();
+$essence = Essence\Essence::instance();
 $template->assign('essence', $essence);
 $template->assign(
     'session_extra_fields',

@@ -30,7 +30,7 @@ $tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
 
 /* Header */
 $tool_name = get_lang('AddUsersToACourse');
-$interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 
 $htmlHeadXtra[] = '<script>
 function validate_filter() {
@@ -142,12 +142,12 @@ if (is_array($extra_field_list)) {
                 if (isset($_POST[$varname]) && $_POST[$varname] != '0') {
                     $use_extra_fields = true;
                     if ($fieldtype == ExtraField::FIELD_TYPE_TAG) {
-                        $extra_field_result[]= UserManager::get_extra_user_data_by_tags(
+                        $extra_field_result[] = UserManager::get_extra_user_data_by_tags(
                             intval($_POST['field_id']),
                             $_POST[$varname]
                         );
                     } else {
-                        $extra_field_result[]= UserManager::get_extra_user_data_by_value(
+                        $extra_field_result[] = UserManager::get_extra_user_data_by_value(
                             $new_field['variable'],
                             $_POST[$varname]
                         );
@@ -163,8 +163,8 @@ if ($use_extra_fields) {
     $final_result = array();
     if (count($extra_field_result) > 1) {
         for ($i = 0; $i < count($extra_field_result) - 1; $i++) {
-            if (is_array($extra_field_result[$i+1])) {
-                $final_result  = array_intersect($extra_field_result[$i], $extra_field_result[$i+1]);
+            if (is_array($extra_field_result[$i + 1])) {
+                $final_result = array_intersect($extra_field_result[$i], $extra_field_result[$i + 1]);
             }
         }
     } else {
@@ -172,14 +172,14 @@ if ($use_extra_fields) {
     }
 
     if (api_is_multiple_url_enabled()) {
-        if (is_array($final_result) && count($final_result)>0) {
-            $where_filter = " AND u.user_id IN  ('".implode("','",$final_result)."') ";
+        if (is_array($final_result) && count($final_result) > 0) {
+            $where_filter = " AND u.user_id IN  ('".implode("','", $final_result)."') ";
         } else {
             //no results
             $where_filter = " AND u.user_id  = -1";
         }
     } else {
-        if (is_array($final_result) && count($final_result)>0) {
+        if (is_array($final_result) && count($final_result) > 0) {
             $where_filter = " AND user_id IN  ('".implode("','", $final_result)."') ";
         } else {
             //no results
@@ -200,10 +200,10 @@ if ($orderListByOfficialCode === 'true') {
 $sql = "SELECT user_id, lastname, firstname, username, official_code
         FROM $tbl_user
         WHERE user_id<>2 AND ".$target_name." LIKE '".$first_letter_user."%' $where_filter
-        ORDER BY ". (count($users) > 0 ? "(user_id IN(".implode(',', $users).")) DESC," : "")." ".$orderBy;
+        ORDER BY ".(count($users) > 0 ? "(user_id IN(".implode(',', $users).")) DESC," : "")." ".$orderBy;
 
 if (api_is_multiple_url_enabled()) {
-    $tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+    $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
     $access_url_id = api_get_current_access_url_id();
     if ($access_url_id != -1) {
         $sql = "SELECT u.user_id,lastname,firstname,username, official_code
@@ -215,7 +215,7 @@ if (api_is_multiple_url_enabled()) {
                     access_url_id =  $access_url_id AND
                     (".$target_name." LIKE '".$first_letter_user."%' )
                     $where_filter
-                ORDER BY ". (count($users) > 0 ? "(u.user_id IN(".implode(',', $users).")) DESC," : "")." ".$orderBy;
+                ORDER BY ".(count($users) > 0 ? "(u.user_id IN(".implode(',', $users).")) DESC," : "")." ".$orderBy;
     }
 }
 
@@ -258,8 +258,8 @@ if (is_array($extra_field_list)) {
             $fieldtype = $new_field['type'];
             echo '&nbsp;<select name="'.$varname.'">';
             echo '<option value="0">--'.get_lang('Select').'--</option>';
-            foreach	($new_field['data'] as $option) {
-                $checked='';
+            foreach ($new_field['data'] as $option) {
+                $checked = '';
                 if ($fieldtype == ExtraField::FIELD_TYPE_TAG) {
                     if (isset($_POST[$varname])) {
                         if ($_POST[$varname] == $option['tag']) {
@@ -317,7 +317,7 @@ if (is_array($extra_field_list)) {
     <td width="40%" align="center">
      <select name="UserList[]" multiple="multiple" size="20" style="width:300px;">
     <?php foreach ($db_users as $user) { ?>
-          <option value="<?php echo $user['user_id']; ?>" <?php if(in_array($user['user_id'],$users)) echo 'selected="selected"'; ?>>
+          <option value="<?php echo $user['user_id']; ?>" <?php if (in_array($user['user_id'], $users)) echo 'selected="selected"'; ?>>
       <?php
         $userName = $user['lastname'].' '.$user['firstname'].' ('.$user['username'].')';
         if ($showOfficialCode) {
@@ -338,7 +338,7 @@ if (is_array($extra_field_list)) {
    <td width="40%" align="center">
     <select name="CourseList[]" multiple="multiple" size="20" style="width:300px;">
     <?php foreach ($db_courses as $course) { ?>
-         <option value="<?php echo $course['code']; ?>" <?php if(in_array($course['code'],$courses)) echo 'selected="selected"'; ?>>
+         <option value="<?php echo $course['code']; ?>" <?php if (in_array($course['code'], $courses)) echo 'selected="selected"'; ?>>
              <?php echo '('.$course['visual_code'].') '.$course['title']; ?>
          </option>
     <?php } ?>

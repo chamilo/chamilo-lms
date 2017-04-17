@@ -30,7 +30,7 @@ SessionManager::protectSession($sessionId);
 $tool_name = get_lang('SessionOverview');
 
 //$interbreadcrumb[] = array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
+$interbreadcrumb[] = array('url' => 'session_list.php', 'name' => get_lang('SessionList'));
 
 $orig_param = '&origin=resume_session';
 
@@ -184,7 +184,7 @@ if ($sessionInfo['nbr_courses'] == 0) {
 
         $coachs = array();
         if (Database::num_rows($rs) > 0) {
-            while($info_coach = Database::fetch_array($rs)) {
+            while ($info_coach = Database::fetch_array($rs)) {
                 $coachs[] = api_get_person_name(
                         $info_coach['firstname'],
                         $info_coach['lastname']
@@ -195,7 +195,7 @@ if ($sessionInfo['nbr_courses'] == 0) {
         }
 
         if (count($coachs) > 0) {
-            $coach = implode('<br />',$coachs);
+            $coach = implode('<br />', $coachs);
         } else {
             $coach = get_lang('None');
         }
@@ -218,7 +218,7 @@ if ($sessionInfo['nbr_courses'] == 0) {
         $downIcon = 'down.png';
         $downUrl = api_get_self().'?id_session='.$sessionId.'&course_id='.$course->getId().'&action=move_down';
 
-        if ($count +1 == count($courses)) {
+        if ($count + 1 == count($courses)) {
             $downIcon = 'down_na.png';
             $downUrl = '#';
         }
@@ -245,7 +245,7 @@ if ($sessionInfo['nbr_courses'] == 0) {
 			<td>'.$coach.'</td>
 			<td>'.$numberOfUsers.'</td>
 			<td>
-                <a href="'. $courseUrl . '">'.
+                <a href="'. $courseUrl.'">'.
                 Display::return_icon('course_home.gif', get_lang('Course')).'</a>
                 '.$orderButtons.'
                 <a href="session_course_user_list.php?id_session='.$sessionId.'&course_code='.$course->getCode().'">'.
@@ -317,7 +317,7 @@ if (!empty($userList)) {
             array('onclick' => "javascript:if(!confirm('".get_lang('ConfirmYourChoice')."')) return false;")
         );
 
-        $addUserToUrlLink= '';
+        $addUserToUrlLink = '';
         if ($multiple_url_is_on) {
             if ($user['access_url_id'] != $url_id) {
                 $userLink .= ' '.Display::return_icon(

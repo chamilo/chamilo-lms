@@ -32,10 +32,10 @@ switch ($action) {
         $exercise_id = intval($_GET['exercise_id']);
         $page = intval($_REQUEST['page']); //page
         $limit = intval($_REQUEST['rows']); //quantity of rows
-        $sidx = $_REQUEST['sidx'];         //index to filter
-        $sord = $_REQUEST['sord'];         //asc or desc
+        $sidx = $_REQUEST['sidx']; //index to filter
+        $sord = $_REQUEST['sord']; //asc or desc
 
-        if (!in_array($sord, array('asc','desc'))) {
+        if (!in_array($sord, array('asc', 'desc'))) {
             $sord = 'desc';
         }
         // get index row - i.e. user click to sort $sord = $_GET['sord'];
@@ -64,7 +64,7 @@ switch ($action) {
         $total_pages = 0;
         if ($count > 0) {
             if (!empty($limit)) {
-                $total_pages = ceil($count/$limit);
+                $total_pages = ceil($count / $limit);
             }
         }
 
@@ -126,7 +126,7 @@ switch ($action) {
         $response->page = $page;
         $response->total = $total_pages;
         $response->records = $count;
-        $i=0;
+        $i = 0;
 
         if (!empty($results)) {
             foreach ($results as $row) {
@@ -149,16 +149,16 @@ switch ($action) {
                 $row['count_questions'] = $count_questions;
 
                 $response->rows[$i]['id'] = $row['exe_id'];
-                $remaining = strtotime($row['start_date'])+($oExe->expired_time*60) - strtotime(api_get_utc_datetime(time()));
-                $h = floor($remaining/3600);
-                $m = floor(($remaining - ($h*3600))/60);
-                $s = ($remaining - ($h*3600) - ($m*60));
+                $remaining = strtotime($row['start_date']) + ($oExe->expired_time * 60) - strtotime(api_get_utc_datetime(time()));
+                $h = floor($remaining / 3600);
+                $m = floor(($remaining - ($h * 3600)) / 60);
+                $s = ($remaining - ($h * 3600) - ($m * 60));
                 $array = array(
                     $row['firstname'],
                     $row['lastname'],
-                    api_format_date($row['start_date'], DATE_TIME_FORMAT_LONG).' ['.($h>0?$h.':':'').sprintf("%02d",$m).':'.sprintf("%02d",$s).']',
+                    api_format_date($row['start_date'], DATE_TIME_FORMAT_LONG).' ['.($h > 0 ? $h.':' : '').sprintf("%02d", $m).':'.sprintf("%02d", $s).']',
                     $row['count_questions'],
-                    round($row['score']*100).'%'
+                    round($row['score'] * 100).'%'
                 );
                 $response->rows[$i]['cell'] = $array;
                 $i++;
@@ -363,7 +363,7 @@ switch ($action) {
 
                 // Getting free choice data.
                 if (
-                    ($objQuestionTmp->type  == FREE_ANSWER || $objQuestionTmp->type  == ORAL_EXPRESSION)
+                    ($objQuestionTmp->type == FREE_ANSWER || $objQuestionTmp->type == ORAL_EXPRESSION)
                     && $type == 'all'
                 ) {
                     $my_choice = isset($_REQUEST['free_choice'][$my_question_id]) && !empty($_REQUEST['free_choice'][$my_question_id])
@@ -531,7 +531,7 @@ switch ($action) {
         $objQuestion = Question::read($questionId);
         $objQuestion->get_question_type_name();
 
-        echo '<p class="lead">' . $objQuestion->get_question_type_name() . '</p>';
+        echo '<p class="lead">'.$objQuestion->get_question_type_name().'</p>';
         //echo get_lang('Level').': '.$objQuestionTmp->selectLevel();
         ExerciseLib::showQuestion(
             $questionId,

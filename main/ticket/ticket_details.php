@@ -26,10 +26,10 @@ $(document).ready(function() {
 		width: 600,
 		modal: true,
 		buttons: {
-            ' . get_lang('Accept') . ': function(){
+            ' . get_lang('Accept').': function(){
                 $("#frmResponsable").submit()
             },
-            ' . ucfirst(get_lang('Close')) . ': function() {
+            ' . ucfirst(get_lang('Close')).': function() {
                 $(this).dialog("close");
             }
             }
@@ -40,13 +40,13 @@ $(document).ready(function() {
         });
 
         $(".responseyes").click(function () {
-            if(!confirm("' . get_lang('AreYouSure') . ' : ' . strtoupper(get_lang('Yes')) . '. ' . get_lang('IfYouAreSureTheTicketWillBeClosed') . '")){
+            if(!confirm("' . get_lang('AreYouSure').' : '.strtoupper(get_lang('Yes')).'. '.get_lang('IfYouAreSureTheTicketWillBeClosed').'")){
                 return false;
             }
         });
 
         $("input#responseno").click(function () {
-            if(!confirm("' . get_lang('AreYouSure') . ' : ' . strtoupper(get_lang('No')) . '")){
+            if(!confirm("' . get_lang('AreYouSure').' : '.strtoupper(get_lang('No')).'")){
                 return false;
             }
         });     
@@ -179,13 +179,13 @@ if (isset($_POST['response'])) {
             $user_id
         );
         Display::addFlash(Display::return_message(get_lang('Updated')));
-        header("Location:" . api_get_self() . "?ticket_id=" . $ticket_id);
+        header("Location:".api_get_self()."?ticket_id=".$ticket_id);
         exit;
 
     }
 }
 
-$title = 'Ticket #' . $ticket['ticket']['code'];
+$title = 'Ticket #'.$ticket['ticket']['code'];
 
 if (!isset($_POST['compose'])) {
     if (isset($_REQUEST['close'])) {
@@ -199,7 +199,7 @@ if (!isset($_POST['compose'])) {
     echo '<div class="actions">';
     echo Display::url(
         Display::return_icon('back.png', get_lang('Tickets'), [], ICON_SIZE_MEDIUM),
-        api_get_path(WEB_CODE_PATH) . 'ticket/tickets.php?project_id='.$projectId
+        api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id='.$projectId
     );
     echo '</div>';
     $bold = '';
@@ -212,9 +212,9 @@ if (!isset($_POST['compose'])) {
               </style>";
     }
     if ($isAdmin) {
-        $senderData = get_lang('AddedBy'). ' '.$ticket['ticket']['user_url'].' (' . $ticket['usuario']['username'] . ').';
+        $senderData = get_lang('AddedBy').' '.$ticket['ticket']['user_url'].' ('.$ticket['usuario']['username'].').';
     } else {
-        $senderData = get_lang('AddedBy'). ' '.$ticket['usuario']['complete_name'].' (' . $ticket['usuario']['username']. ').';
+        $senderData = get_lang('AddedBy').' '.$ticket['usuario']['complete_name'].' ('.$ticket['usuario']['username'].').';
     }
 
     echo '<table width="100%" >
@@ -223,8 +223,8 @@ if (!isset($_POST['compose'])) {
               <h1>'.$title.'</h1>
               <h2>'.$ticket['ticket']['subject'].'</h2>
               <p>
-                '.$senderData.' ' .
-                get_lang('Created') . ' '.
+                '.$senderData.' '.
+                get_lang('Created').' '.
                 Display::url(
                     date_to_str_ago($ticket['ticket']['start_date_from_db']),
                     '#',
@@ -240,37 +240,37 @@ if (!isset($_POST['compose'])) {
               </td>
             </tr>
             <tr>
-               <td><p><b>' . get_lang('Category') . ': </b>' . $ticket['ticket']['name'] . '</p></td>
+               <td><p><b>' . get_lang('Category').': </b>'.$ticket['ticket']['name'].'</p></td>
             </tr>
             <tr>
-               <td><p ' . $bold . '><b>' . get_lang('Status') . ':</b> ' . $ticket['ticket']['status'] . '</p></td>
+               <td><p ' . $bold.'><b>'.get_lang('Status').':</b> '.$ticket['ticket']['status'].'</p></td>
             </tr>
             <tr>
-                <td><p><b>' . get_lang('Priority') . ': </b>' . $ticket['ticket']['priority'] . '<p></td>
+                <td><p><b>' . get_lang('Priority').': </b>'.$ticket['ticket']['priority'].'<p></td>
             </tr>';
 
     if (!empty($ticket['ticket']['assigned_last_user'])) {
         $assignedUser = api_get_user_info($ticket['ticket']['assigned_last_user']);
         echo '<tr>
-                <td><p><b>' . get_lang('AssignedTo') . ': </b>' . $assignedUser['complete_name'] . '<p></td>
+                <td><p><b>' . get_lang('AssignedTo').': </b>'.$assignedUser['complete_name'].'<p></td>
             </tr>';
     } else {
         echo '<tr>
-                <td><p><b>' . get_lang('AssignedTo') . ': </b>-<p></td>
+                <td><p><b>' . get_lang('AssignedTo').': </b>-<p></td>
             </tr>';
     }
     if ($ticket['ticket']['course_url'] != null) {
         if (!empty($ticket['ticket']['session_id'])) {
             $sessionInfo = api_get_session_info($ticket['ticket']['session_id']);
             echo '<tr>
-				<td><b>' . get_lang('Session') . ':</b> ' . $sessionInfo['name'] . ' </td>
+				<td><b>' . get_lang('Session').':</b> '.$sessionInfo['name'].' </td>
 			    <td></td>
 	            <td colspan="2"></td>
 	          </tr>';
         }
 
         echo '<tr>
-				<td><b>' . get_lang('Course') . ':</b> ' . $ticket['ticket']['course_url'] . ' </td>
+				<td><b>' . get_lang('Course').':</b> '.$ticket['ticket']['course_url'].' </td>
 			    <td></td>
 	            <td colspan="2"></td>
 	          </tr>';
@@ -278,7 +278,7 @@ if (!isset($_POST['compose'])) {
     echo '<tr>
             <td>
             <hr />
-            <b>' . get_lang('Description') . ':</b> <br />
+            <b>' . get_lang('Description').':</b> <br />
             '.$ticket['ticket']['message'].'
             <hr />
             </td>            
@@ -296,7 +296,7 @@ if (!isset($_POST['compose'])) {
 
         $receivedMessage = '';
         if (!empty($message['subject'])) {
-            $receivedMessage = '<b>'.get_lang('Subject') . ': </b> '.$message['subject'].'<br/>';
+            $receivedMessage = '<b>'.get_lang('Subject').': </b> '.$message['subject'].'<br/>';
         }
 
         if (!empty($message['message'])) {
@@ -313,9 +313,9 @@ if (!isset($_POST['compose'])) {
             }
         }
 
-        $entireMessage = $receivedMessage . $attachmentLinks;
+        $entireMessage = $receivedMessage.$attachmentLinks;
         $counterLink = Display::url('#'.$counter, api_get_self().'?ticket_id='.$ticket_id.'#note-'.$counter);
-        echo '<a id="note-'.$counter.'"> </a><h4>' . sprintf(get_lang('UpdatedByX'), $message['user_created']).' '.$date.
+        echo '<a id="note-'.$counter.'"> </a><h4>'.sprintf(get_lang('UpdatedByX'), $message['user_created']).' '.$date.
             ' <span class="pull-right">'.$counterLink.'</span></h4>';
         echo '<hr />';
 
@@ -329,7 +329,7 @@ if (!isset($_POST['compose'])) {
         $counter++;
     }
 
-    $subject = get_lang('ReplyShort') .': '.$ticket['ticket']['subject'];
+    $subject = get_lang('ReplyShort').': '.$ticket['ticket']['subject'];
 
     if ($ticket['ticket']['status_id'] != TicketManager::STATUS_FORWARDED &&
         $ticket['ticket']['status_id'] != TicketManager::STATUS_CLOSE
@@ -451,7 +451,7 @@ if (!isset($_POST['compose'])) {
     );
 
     Display::addFlash(Display::return_message(get_lang('Saved')));
-    header("Location:" . api_get_self() . "?ticket_id=" . $ticket_id);
+    header("Location:".api_get_self()."?ticket_id=".$ticket_id);
     exit;
 }
 
@@ -466,7 +466,7 @@ function show_form_send_message($ticket)
     $form = new FormValidator(
         'send_ticket',
         'POST',
-        api_get_self() . '?ticket_id=' . $ticket['id'],
+        api_get_self().'?ticket_id='.$ticket['id'],
         '',
         array(
             'enctype' => 'multipart/form-data',
@@ -553,7 +553,7 @@ function show_form_send_message($ticket)
     $form->addLabel(
         '',
         '<span id="link-more-attach">
-         <span class="btn btn-success" onclick="return add_image_form()">' . get_lang('AddOneMoreFile') . '</span>
+         <span class="btn btn-success" onclick="return add_image_form()">' . get_lang('AddOneMoreFile').'</span>
          </span>
          ('.sprintf(get_lang('MaximunFileSizeX'), format_file_size(api_get_setting('message_max_upload_filesize'))).')
     ');

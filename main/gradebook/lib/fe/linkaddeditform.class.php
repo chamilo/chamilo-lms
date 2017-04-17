@@ -130,9 +130,9 @@ class LinkAddEditForm extends FormValidator
                 //var_dump($global_weight, $link->get_weight(), $parent_cat[0]->get_weight());
                 //$weight = $parent_cat[0]->get_weight()* $link->get_weight() / $global_weight;
                 //$values['weight'] = $weight;
-                $values['weight'] = $link->get_weight() ;
+                $values['weight'] = $link->get_weight();
             }
-            $defaults['weight_mask'] = $values['weight'] ;
+            $defaults['weight_mask'] = $values['weight'];
             $defaults['select_gradebook'] = $link->get_category_id();
 
         }
@@ -150,7 +150,7 @@ class LinkAddEditForm extends FormValidator
                     )
                 );
             } else {
-                $this->addText('max', get_lang('QualificationNumeric'), true, array ('size' => '4','maxlength' => '5'));
+                $this->addText('max', get_lang('QualificationNumeric'), true, array('size' => '4', 'maxlength' => '5'));
                 $this->addRule('max', get_lang('OnlyNumbers'), 'numeric');
                 $this->addRule('max', get_lang('NegativeValue'), 'compare', '>=');
             }
@@ -196,7 +196,7 @@ class LinkAddEditForm extends FormValidator
             if (isset($setting['gradebook']) && $setting['gradebook'] == 'false') {
                 $visibility_default = 0;
             }
-            $defaults['visible']  = $visibility_default;
+            $defaults['visible'] = $visibility_default;
         }
 
         // set default values

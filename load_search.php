@@ -255,7 +255,7 @@ $extra = $extraFieldUser->addElements(
     false,
     $fieldsToShow,
     $fieldsToShow,
-    [],
+    $defaults,
     [],
     false,
     $forceShowFields,//$forceShowFields = false

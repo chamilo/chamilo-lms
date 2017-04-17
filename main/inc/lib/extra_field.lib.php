@@ -477,7 +477,18 @@ class ExtraField extends Model
             if (!empty($itemId)) {
                 $extraData = self::get_handler_extra_data($itemId);
                 if ($form) {
-                    $form->setDefaults($extraData);
+                    if (!empty($showOnlyThisFields)) {
+                        $setData = [];
+                        foreach ($showOnlyThisFields as $variable) {
+                            $extraName = 'extra_'.$variable;
+                            if (in_array($extraName, array_keys($extraData))) {
+                                $setData[$extraName] = $extraData[$extraName];
+                            };
+                        }
+                        $form->setDefaults($setData);
+                    } else {
+                        $form->setDefaults($extraData);
+                    }
                 }
             }
         }
@@ -1468,6 +1479,7 @@ class ExtraField extends Model
                                     ) > 0
                                 ) {
                                     foreach ($user_tags as $tag) {
+                                        var_dump($tag);
                                         $tagsSelect->addOption(
                                             $tag['tag'],
                                             $tag['tag'],

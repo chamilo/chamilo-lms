@@ -2956,10 +2956,13 @@ class SurveyUtil
         }
 
         echo '<table id="list-survey" class="table ">';
+        echo '<thead>';
         echo '<tr>';
         echo '	<th>'.get_lang('SurveyName').'</th>';
-        echo '	<th>'.get_lang('Anonymous').'</th>';
+        echo '	<th class="text-center">'.get_lang('Anonymous').'</th>';
         echo '</tr>';
+        echo '</thead>';
+        echo '<tbody>';
 
         $now = api_get_utc_datetime();
 
@@ -2987,15 +2990,29 @@ class SurveyUtil
                 echo Display::return_icon('statistics.png', get_lang('CreateNewSurvey'), array(),ICON_SIZE_TINY);
                 echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/fillsurvey.php?course='.$_course['sysCode'].'&invitationcode='.$row['invitation_code'].'&cidReq='.$_course['sysCode'].'">'.$row['title'].'</a></td>';
             } else {
+                $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh($user_id, $_course);
+                $icon = Display::return_icon('statistics_na.png', get_lang('Survey'), array(), ICON_SIZE_TINY);
+                $showLink = (!api_is_allowed_to_edit(false, true) || $isDrhOfCourse)
+                    && $row['visible_results'] != SURVEY_VISIBLE_TUTOR;
+
                 echo '<td>';
-                echo Display::return_icon('statistics_na.png', get_lang('CreateNewSurvey'), array(),ICON_SIZE_TINY);
-                echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=questionreport&cidReq='.$_course['sysCode'].'&id_session='.$row['session_id'].'&gidReq=0&origin=&survey_id='.$row['survey_id'].'">'.$row['title'].'</a></td>';
+                echo $showLink
+                    ? Display::url(
+                        $icon.PHP_EOL.$row['title'],
+                        api_get_path(WEB_CODE_PATH).'survey/reporting.php?'.api_get_cidreq().'&'.http_build_query([
+                            'action' => 'questionreport',
+                            'survey_id' => $row['survey_id']
+                        ])
+                    )
+                    : $icon.PHP_EOL.$row['title'];
+                echo '</td>';
             }
-            echo '<td class="center">';
+            echo '<td class="text-center">';
             echo ($row['anonymous'] == 1) ? get_lang('Yes') : get_lang('No');
             echo '</td>';
             echo '</tr>';
         }
+        echo '</tbody>';
         echo '</table>';
     }
 

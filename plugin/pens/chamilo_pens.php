@@ -156,7 +156,7 @@ class ChamiloPens extends Plugin
         $clean_client = Database::escape_string($this->_client);
         $clean_vendor_data = Database::escape_string($this->_vendor_data);
         $created_at = api_get_utc_datetime();
-        $table = Database::get_main_table(ChamiloPens::TABLE_NAME);
+        $table = Database::get_main_table(self::TABLE_NAME);
         $sql_query = "INSERT INTO $table (pens_version, package_type, package_type_version, package_format, package_id, client, vendor_data, package_name, created_at) VALUES (" .
             "'" . $this->_pens_version . "', " .
             "'" . $this->_package_type . "', " .
@@ -186,7 +186,7 @@ class ChamiloPens extends Plugin
      */
     public static function findByPackageId($package_id)
     {
-        $table = Database::get_main_table(ChamiloPens::TABLE_NAME);
+        $table = Database::get_main_table(self::TABLE_NAME);
         $sql_query = "SELECT * FROM $table WHERE package_id = '" . $package_id . "';";
         $results = Database::query($sql_query);
         $number = Database::num_rows($results);
@@ -205,7 +205,7 @@ class ChamiloPens extends Plugin
      */
     public static function findAll()
     {
-        $table = Database::get_main_table(ChamiloPens::TABLE_NAME);
+        $table = Database::get_main_table(self::TABLE_NAME);
         $sql_query = "SELECT * FROM $table ORDER BY created_at;";
         $results = Database::query($sql_query);
         $return = array();

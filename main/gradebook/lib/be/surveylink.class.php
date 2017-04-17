@@ -97,7 +97,7 @@ class SurveyLink extends AbstractLink
 		if (empty($this->course_code)) {
 			die('Error in get_not_created_links() : course code not set');
 		}
-		$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+		$tbl_grade_links = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
 		$sql = 'SELECT survey_id, title, code
     			FROM '.$this->get_survey_table().' AS srv
@@ -229,7 +229,7 @@ class SurveyLink extends AbstractLink
 	 */
 	private function get_survey_table()
 	{
-		$this->survey_table = Database :: get_course_table(TABLE_SURVEY);
+		$this->survey_table = Database::get_course_table(TABLE_SURVEY);
 		return $this->survey_table;
 	}
 
@@ -243,7 +243,7 @@ class SurveyLink extends AbstractLink
         		 WHERE
         		 	c_id = '.$this->course_id.' AND
         		 	survey_id = '.intval($this->get_ref_id()).' AND
-        		 	session_id='.intval($session_id).'';
+        		 	session_id = '.intval($session_id);
 		$result = Database::query($sql);
 		$number = Database::fetch_row($result);
 		return ($number[0] != 0);

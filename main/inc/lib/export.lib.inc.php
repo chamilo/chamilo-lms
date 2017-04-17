@@ -149,7 +149,7 @@ class Export
             fwrite($handle, '</'.$wrapper_tagname.'>'."\n");
         }
         fclose($handle);
-        DocumentManager :: file_send_for_download($file, true, $filename.'.xml');
+        DocumentManager::file_send_for_download($file, true, $filename.'.xml');
         exit;
     }
 
@@ -181,7 +181,7 @@ class Export
             fwrite($handle, '</'.$wrapper_tagname.'>'."\n");
         }
         fclose($handle);
-        DocumentManager :: file_send_for_download($file, true, $filename.'.xml');
+        DocumentManager::file_send_for_download($file, true, $filename.'.xml');
         return false;
     }
 

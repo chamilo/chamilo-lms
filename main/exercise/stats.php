@@ -68,13 +68,13 @@ if (!empty($question_list)) {
         $data[$question_id]['type'] = $question_obj->get_question_type_name();
         $percentange = 0;
         if ($count_students) {
-            $percentange = $count_users / $count_students*100;
+            $percentange = $count_users / $count_students * 100;
         }
 
         $data[$question_id]['students_who_try_exercise'] = Display::bar_progress(
             $percentange,
             false,
-            $count_users .' / '.$count_students
+            $count_users.' / '.$count_students
         );
         $data[$question_id]['lowest_score'] = round($exercise_stats['min'], 2);
         $data[$question_id]['average_score'] = round($exercise_stats['average'], 2);
@@ -152,7 +152,7 @@ if (!empty($question_list)) {
                         $data[$id]['answer'] = $answer_item;
 
                         $answer_item = api_substr($answer_item, 1);
-                        $answer_item = api_substr($answer_item, 0, api_strlen($answer_item) -1);
+                        $answer_item = api_substr($answer_item, 0, api_strlen($answer_item) - 1);
 
                         $data[$id]['answer'] = $answer_item;
                         $data[$id]['correct'] = '-';
@@ -162,7 +162,7 @@ if (!empty($question_list)) {
 
                         $percentage = 0;
                         if (!empty($count_students)) {
-                            $percentage = $count/$count_students*100;
+                            $percentage = $count / $count_students * 100;
                         }
                         $data[$id]['attempts'] = Display::bar_progress(
                             $percentage,
@@ -203,7 +203,7 @@ if (!empty($question_list)) {
                         );
                         $percentage = 0;
                         if (!empty($count_students)) {
-                            $percentage = $count/$count_students*100;
+                            $percentage = $count / $count_students * 100;
                         }
                         $data[$id]['attempts'] = Display::bar_progress(
                             $percentage,
@@ -230,7 +230,7 @@ if (!empty($question_list)) {
                     );
                     $percentage = 0;
                     if (!empty($count_students)) {
-                        $percentage = $count/$count_students*100;
+                        $percentage = $count / $count_students * 100;
                     }
                     $data[$id]['attempts'] = Display::bar_progress(
                         $percentage,
@@ -256,7 +256,7 @@ if (!empty($question_list)) {
                     );
                     $percentage = 0;
                     if (!empty($count_students)) {
-                        $percentage = $count/$count_students*100;
+                        $percentage = $count / $count_students * 100;
                     }
                     $data[$id]['attempts'] = Display::bar_progress(
                         $percentage,
@@ -300,7 +300,7 @@ $interbreadcrumb[] = array(
 );
 
 $tpl = new Template(get_lang('ReportByQuestion'));
-$actions = '<a href="exercise_report.php?exerciseId='.intval($_GET['exerciseId']).'&'.api_get_cidreq().'">' .
+$actions = '<a href="exercise_report.php?exerciseId='.intval($_GET['exerciseId']).'&'.api_get_cidreq().'">'.
     Display:: return_icon(
         'back.png',
         get_lang('GoBackToQuestionList'),

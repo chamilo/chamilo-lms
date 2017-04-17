@@ -21,7 +21,7 @@ $plugin = BuyCoursesPlugin::create();
 $commissionsEnable = $plugin->get('commissions_enable');
 
 if ($commissionsEnable == 'true') {
-    $htmlHeadXtra[] = '<script type="text/javascript" src="' . api_get_path(WEB_PLUGIN_PATH) . 'buycourses/resources/js/commissions.js"></script>';
+    $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_PLUGIN_PATH).'buycourses/resources/js/commissions.js"></script>';
     $defaultCommissions = [];
     $commissions = '';
 }
@@ -165,9 +165,9 @@ if ($commissionsEnable === 'true') {
     . '<script>'
         . '$(function(){'
             . 'if ($("[name=\'commissions\']").val() === "") {'
-                . '$("#panelSliders").html("<button id=\"setCommissionsButton\" class=\"btn btn-warning\">' . get_plugin_lang("SetCommissions", "BuyCoursesPlugin") . '</button>");'
+                . '$("#panelSliders").html("<button id=\"setCommissionsButton\" class=\"btn btn-warning\">'.get_plugin_lang("SetCommissions", "BuyCoursesPlugin").'</button>");'
             . '} else {'
-                . 'showSliders(100, "default", "' . $commissions . '");'
+                . 'showSliders(100, "default", "'.$commissions.'");'
             . '}'
         . '});'
 
@@ -225,7 +225,7 @@ if ($commissionsEnable === 'true') {
                 . '</label>'
                 . '<div class="col-sm-8">'
                     . Display::return_message(
-                        sprintf($plugin->get_lang('TheActualPlatformCommissionIsX'), $platformCommission['commission']. '%'),
+                        sprintf($plugin->get_lang('TheActualPlatformCommissionIsX'), $platformCommission['commission'].'%'),
                         'info',
                         false
                     )
@@ -283,7 +283,7 @@ if ($form->validate()) {
         $plugin->deleteItem($productItem['id']);
     }
 
-    header('Location: ' . api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/configuration.php');
+    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/configuration.php');
     exit;
 }
 

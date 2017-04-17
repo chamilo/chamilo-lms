@@ -52,7 +52,7 @@ if ($survey_data['anonymous'] == 1) {
 }
 
 if (!isset($_GET['view']) || $_GET['view'] == 'invited') {
-	echo get_lang('ViewInvited'). ' | ';
+	echo get_lang('ViewInvited').' | ';
 } else {
 	echo '	<a href="'.api_get_self().'?survey_id='.$survey_id.'&amp;view=invited">'.get_lang('ViewInvited').'</a> |';
 }

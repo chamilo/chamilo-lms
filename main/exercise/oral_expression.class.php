@@ -105,7 +105,7 @@ class OralExpression extends Question
         }
         $this->storePath = $this->generateDirectory();
         $this->fileName = $this->generateFileName();
-        $this->filePath = $this->storePath . $this->fileName;
+        $this->filePath = $this->storePath.$this->fileName;
     }
 
     /**
@@ -114,26 +114,26 @@ class OralExpression extends Question
      */
     private function generateDirectory()
     {
-        $this->storePath = api_get_path(SYS_COURSE_PATH) . $this->course['path'] . '/exercises/';
+        $this->storePath = api_get_path(SYS_COURSE_PATH).$this->course['path'].'/exercises/';
 
         if (!is_dir($this->storePath)) {
             mkdir($this->storePath);
         }
 
-        if (!is_dir($this->storePath . $this->sessionId)) {
-            mkdir($this->storePath . $this->sessionId);
+        if (!is_dir($this->storePath.$this->sessionId)) {
+            mkdir($this->storePath.$this->sessionId);
         }
 
-        if (!empty($this->exerciseId) && !is_dir($this->storePath . $this->sessionId . '/' . $this->exerciseId)) {
-            mkdir($this->storePath . $this->sessionId . '/' . $this->exerciseId);
+        if (!empty($this->exerciseId) && !is_dir($this->storePath.$this->sessionId.'/'.$this->exerciseId)) {
+            mkdir($this->storePath.$this->sessionId.'/'.$this->exerciseId);
         }
 
-        if (!empty($this->id) && !is_dir($this->storePath . $this->sessionId . '/' . $this->exerciseId . '/' . $this->id)) {
-            mkdir($this->storePath . $this->sessionId . '/' . $this->exerciseId . '/' . $this->id);
+        if (!empty($this->id) && !is_dir($this->storePath.$this->sessionId.'/'.$this->exerciseId.'/'.$this->id)) {
+            mkdir($this->storePath.$this->sessionId.'/'.$this->exerciseId.'/'.$this->id);
         }
 
-        if (!empty($this->userId) && !is_dir($this->storePath . $this->sessionId . '/' . $this->exerciseId . '/' . $this->id . '/' . $this->userId)) {
-            mkdir($this->storePath . $this->sessionId . '/' . $this->exerciseId . '/' . $this->id . '/' . $this->userId);
+        if (!empty($this->userId) && !is_dir($this->storePath.$this->sessionId.'/'.$this->exerciseId.'/'.$this->id.'/'.$this->userId)) {
+            mkdir($this->storePath.$this->sessionId.'/'.$this->exerciseId.'/'.$this->id.'/'.$this->userId);
         }
 
         $params = [
@@ -192,7 +192,7 @@ class OralExpression extends Question
      */
     public function returnRecorder()
     {
-        $directory = '/..' . $this->generateRelativeDirectory();
+        $directory = '/..'.$this->generateRelativeDirectory();
         $recordAudioView = new Template(
             '',
             false,
@@ -246,7 +246,7 @@ class OralExpression extends Question
                     return '';
                 }
 
-                return $this->storePath . $result->getFilename();
+                return $this->storePath.$result->getFilename();
             }
         }
 
@@ -305,12 +305,12 @@ class OralExpression extends Question
             $items[5] = 'temp_exe';
             $filename = implode('-', $items);
 
-            if (is_file($this->storePath . $filename . '.' . $extension)) {
-                $old_name = $this->storePath . $filename . '.' . $extension;
+            if (is_file($this->storePath.$filename.'.'.$extension)) {
+                $old_name = $this->storePath.$filename.'.'.$extension;
                 $items = explode('-', $this->fileName);
                 $items[5] = $exe_id;
                 $filename = $filename = implode('-', $items);
-                $new_name = $this->storePath . $filename . '.' . $extension;
+                $new_name = $this->storePath.$filename.'.'.$extension;
                 rename($old_name, $new_name);
                 break;
             }

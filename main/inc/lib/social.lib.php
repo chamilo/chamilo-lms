@@ -852,7 +852,7 @@ class SocialManager extends UserManager
         $count_unread_message = MessageManager::get_number_of_messages(true);
         $count_unread_message = !empty($count_unread_message) ? Display::badge($count_unread_message) : null;
 
-        $number_of_new_messages_of_friend = SocialManager::get_message_number_invitation_by_user_id(api_get_user_id());
+        $number_of_new_messages_of_friend = self::get_message_number_invitation_by_user_id(api_get_user_id());
         $group_pending_invitations = $usergroup->get_groups_by_user(
             api_get_user_id(),
             GROUP_USER_PERMISSION_PENDING_INVITATION,
@@ -1057,7 +1057,7 @@ class SocialManager extends UserManager
             }
 
             // Check if I already sent an invitation message
-            $invitation_sent_list = SocialManager::get_list_invitation_sent_by_user_id(
+            $invitation_sent_list = self::get_list_invitation_sent_by_user_id(
                 api_get_user_id()
             );
 

@@ -187,11 +187,11 @@ function chooseFolderIcon($folderPath)
     }
 
     switch ($folderPath) {
-        case '/audio';
+        case '/audio':
             return 'folder_audio.gif';
         case '/flash':
             return 'folder_flash.gif';
-        case '/images';
+        case '/images':
             return 'folder_images.gif';
         case '/video':
             return 'folder_video.gif';

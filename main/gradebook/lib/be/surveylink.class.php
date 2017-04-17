@@ -9,6 +9,7 @@
 class SurveyLink extends AbstractLink
 {
 	private $survey_table = null;
+	private $survey_data = [];
 
 	/**
 	 * Constructor
@@ -73,7 +74,7 @@ class SurveyLink extends AbstractLink
 		$session_id = api_get_session_id();
 		$course_id = api_get_course_int_id();
 		$sql = 'SELECT survey_id, title, code FROM '.$tbl_survey.'
-				WHERE c_id = '.$course_id.' AND session_id = '.intval($session_id).'';
+				WHERE c_id = '.$course_id.' AND session_id = '.intval($session_id);
 		$result = Database::query($sql);
 		while ($data = Database::fetch_array($result)) {
 			$links[] = array(
@@ -97,7 +98,7 @@ class SurveyLink extends AbstractLink
 		if (empty($this->course_code)) {
 			die('Error in get_not_created_links() : course code not set');
 		}
-		$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+		$tbl_grade_links = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
 		$sql = 'SELECT survey_id, title, code
     			FROM '.$this->get_survey_table().' AS srv
@@ -124,8 +125,9 @@ class SurveyLink extends AbstractLink
 
 	/**
 	 * Has anyone done this survey yet?
+     * Implementation of the AbstractLink class, mainly used dynamically in gradebook/lib/fe
 	 */
-	public function has_results($stud_id=null)
+	public function has_results()
 	{
 		$ref_id = intval($this->get_ref_id());
 		$session_id = api_get_session_id();
@@ -148,7 +150,9 @@ class SurveyLink extends AbstractLink
 	}
 
 	/**
-	 * @param int $stud_id
+	 * Calculate score for a student (to show in the gradebook)
+     * @param int $stud_id
+     * @param string $type Type of result we want (best|average|ranking)
 	 * @return array|null
 	 */
 	public function calc_score($stud_id = null, $type = null)
@@ -192,13 +196,11 @@ class SurveyLink extends AbstractLink
 			$rescount = 0;
 			$sum = 0;
 			$bestResult = 0;
-			$weight = 0;
 			while ($data = Database::fetch_array($sql_result)) {
 				$sum += $data['answered'] ? $max_score : 0;
 				$rescount++;
 				if ($data['answered'] > $bestResult) {
 					$bestResult = $data['answered'];
-					$weight = $assignment['qualification'];
 				}
 			}
 			$sum = $sum / $max_score;
@@ -229,7 +231,7 @@ class SurveyLink extends AbstractLink
 	 */
 	private function get_survey_table()
 	{
-		$this->survey_table = Database :: get_course_table(TABLE_SURVEY);
+		$this->survey_table = Database::get_course_table(TABLE_SURVEY);
 		return $this->survey_table;
 	}
 
@@ -243,7 +245,7 @@ class SurveyLink extends AbstractLink
         		 WHERE
         		 	c_id = '.$this->course_id.' AND
         		 	survey_id = '.intval($this->get_ref_id()).' AND
-        		 	session_id='.intval($session_id).'';
+        		 	session_id = '.intval($session_id);
 		$result = Database::query($sql);
 		$number = Database::fetch_row($result);
 		return ($number[0] != 0);
@@ -285,7 +287,7 @@ class SurveyLink extends AbstractLink
 					WHERE
 						c_id = '.$this->course_id.' AND
 						survey_id = '.intval($this->get_ref_id()).' AND
-						session_id='.intval($session_id).'';
+						session_id='.intval($session_id);
 			$query = Database::query($sql);
 			$this->survey_data = Database::fetch_array($query);
 		}

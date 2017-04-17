@@ -409,7 +409,8 @@ class GDWrapper extends ImageWrapper
                 @imagecopy($dest, $src, 0, 0, $x, $y, $src_width, $src_height);
                 @imagegif($dest, $this->path);
 		        break;
-            default: return 0;
+            default:
+                return 0;
         }
         @imagedestroy($dest);
         @imagedestroy($src);
@@ -444,7 +445,8 @@ class GDWrapper extends ImageWrapper
 				}
 				return imagegif($this->bg, $file, $compress);
 				break;
-			default: return 0;
+			default:
+			    return 0;
 		}
 		// TODO: Occupied memory is not released, because the following fragment of code is actually dead.
 		@imagedestroy($this->bg);

@@ -16,7 +16,7 @@ $stok = Security::get_token();
 <!-- Actions: The menu with the different options in cathe course management -->
 <div id="actions" class="actions">
     <a href="<?php echo api_get_self() ?>?action=sortmycourses">
-        <?php echo Display::return_icon('back.png', get_lang('Back'),'','32'); ?>
+        <?php echo Display::return_icon('back.png', get_lang('Back'), '', '32'); ?>
     </a>
 </div>
 

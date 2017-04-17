@@ -15,7 +15,7 @@ class Diagnoser
 {
     const STATUS_OK = 1;
     const STATUS_WARNING = 2;
-    const STATUS_ERROR 	= 3;
+    const STATUS_ERROR = 3;
     const STATUS_INFORMATION = 4;
 
     /**
@@ -45,12 +45,12 @@ class Diagnoser
                 $html .= '<li>';
             }
             $params['section'] = $section;
-            $html .='<a href="system_status.php?section='.$section.'">'.get_lang($section).'</a></li>';
+            $html .= '<a href="system_status.php?section='.$section.'">'.get_lang($section).'</a></li>';
         }
 
         $html .= '</ul><div class="tab-pane">';
 
-        $data = call_user_func(array($this, 'get_' . $currentSection . '_data'));
+        $data = call_user_func(array($this, 'get_'.$currentSection.'_data'));
         echo $html;
 
         if ($currentSection != 'paths') {
@@ -117,11 +117,11 @@ class Diagnoser
     {
         $array = array();
         $writable_folders = array(
-            api_get_path(SYS_APP_PATH) .'cache',
+            api_get_path(SYS_APP_PATH).'cache',
             api_get_path(SYS_COURSE_PATH),
-            api_get_path(SYS_APP_PATH) .'home',
-            api_get_path(SYS_APP_PATH) .'upload/users/',
-            api_get_path(SYS_PATH) .'main/default_course_document/images/',
+            api_get_path(SYS_APP_PATH).'home',
+            api_get_path(SYS_APP_PATH).'upload/users/',
+            api_get_path(SYS_PATH).'main/default_course_document/images/',
         );
         foreach ($writable_folders as $index => $folder) {
             $writable = is_writable($folder);
@@ -140,10 +140,10 @@ class Diagnoser
 
         $exists = file_exists(api_get_path(SYS_CODE_PATH).'install');
         $status = $exists ? self::STATUS_WARNING : self::STATUS_OK;
-        $array[] = $this->build_setting($status, '[FILES]', get_lang('DirectoryExists') . ': /install', 'http://be2.php.net/file_exists', $exists, 0, 'yes_no', get_lang('DirectoryShouldBeRemoved'));
+        $array[] = $this->build_setting($status, '[FILES]', get_lang('DirectoryExists').': /install', 'http://be2.php.net/file_exists', $exists, 0, 'yes_no', get_lang('DirectoryShouldBeRemoved'));
 
         $app_version = api_get_setting('chamilo_database_version');
-        $array[] = $this->build_setting(self::STATUS_INFORMATION, '[DB]', 'chamilo_database_version', '#', $app_version, 0, null,  'Chamilo DB version');
+        $array[] = $this->build_setting(self::STATUS_INFORMATION, '[DB]', 'chamilo_database_version', '#', $app_version, 0, null, 'Chamilo DB version');
 
         $access_url_id = api_get_current_access_url_id();
 
@@ -155,7 +155,7 @@ class Diagnoser
                     $message2 .= get_lang('SpaceUsedOnSystemCannotBeMeasuredOnWindows');
                 } else {
                     $dir = api_get_path(SYS_PATH);
-                    $du = exec('du -sh ' . $dir, $err);
+                    $du = exec('du -sh '.$dir, $err);
                     list($size, $none) = explode("\t", $du);
                     $limit = $_configuration[$access_url_id]['hosting_limit_disk_space'];
                     $message2 .= sprintf(get_lang('TotalSpaceUsedByPortalXLimitIsYMB'), $size, $limit);
@@ -239,33 +239,33 @@ class Diagnoser
         $array[] = $this->build_setting($status, '[INI]', 'default_charset', 'http://www.php.net/manual/en/ini.core.php#ini.default-charset', $setting, $req_setting, null, get_lang('DefaultCharsetInfo'));
 
         $setting = ini_get('max_execution_time');
-        $req_setting = '300 (' . get_lang('Minimum') . ')';
+        $req_setting = '300 ('.get_lang('Minimum').')';
         $status = $setting >= 300 ? self::STATUS_OK : self::STATUS_WARNING;
         $array[] = $this->build_setting($status, '[INI]', 'max_execution_time', 'http://www.php.net/manual/en/ini.core.php#ini.max-execution-time', $setting, $req_setting, null, get_lang('MaxExecutionTimeInfo'));
 
         $setting = ini_get('max_input_time');
-        $req_setting = '300 (' . get_lang('Minimum') . ')';
+        $req_setting = '300 ('.get_lang('Minimum').')';
         $status = $setting >= 300 ? self::STATUS_OK : self::STATUS_WARNING;
         $array[] = $this->build_setting($status, '[INI]', 'max_input_time', 'http://www.php.net/manual/en/ini.core.php#ini.max-input-time', $setting, $req_setting, null, get_lang('MaxInputTimeInfo'));
 
         $setting = ini_get('memory_limit');
         $req_setting = '>= '.REQUIRED_MIN_MEMORY_LIMIT.'M';
         $status = self::STATUS_ERROR;
-        if ((float)$setting >= REQUIRED_MIN_MEMORY_LIMIT)
+        if ((float) $setting >= REQUIRED_MIN_MEMORY_LIMIT)
             $status = self::STATUS_OK;
         $array[] = $this->build_setting($status, '[INI]', 'memory_limit', 'http://www.php.net/manual/en/ini.core.php#ini.memory-limit', $setting, $req_setting, null, get_lang('MemoryLimitInfo'));
 
         $setting = ini_get('post_max_size');
         $req_setting = '>= '.REQUIRED_MIN_POST_MAX_SIZE.'M';
         $status = self::STATUS_ERROR;
-        if ((float)$setting >= REQUIRED_MIN_POST_MAX_SIZE)
+        if ((float) $setting >= REQUIRED_MIN_POST_MAX_SIZE)
             $status = self::STATUS_OK;
         $array[] = $this->build_setting($status, '[INI]', 'post_max_size', 'http://www.php.net/manual/en/ini.core.php#ini.post-max-size', $setting, $req_setting, null, get_lang('PostMaxSizeInfo'));
 
         $setting = ini_get('upload_max_filesize');
         $req_setting = '>= '.REQUIRED_MIN_UPLOAD_MAX_FILESIZE.'M';
         $status = self::STATUS_ERROR;
-        if ((float)$setting >= REQUIRED_MIN_UPLOAD_MAX_FILESIZE)
+        if ((float) $setting >= REQUIRED_MIN_UPLOAD_MAX_FILESIZE)
             $status = self::STATUS_OK;
         $array[] = $this->build_setting($status, '[INI]', 'upload_max_filesize', 'http://www.php.net/manual/en/ini.core.php#ini.upload_max_filesize', $setting, $req_setting, null, get_lang('UploadMaxFilesizeInfo'));
 
@@ -279,7 +279,7 @@ class Diagnoser
         $status = $setting == $req_setting ? self::STATUS_OK : self::STATUS_WARNING;
         $array[] = $this->build_setting($status, '[SESSION]', 'session.gc_maxlifetime', 'http://www.php.net/manual/en/ini.core.php#session.gc-maxlifetime', $setting, $req_setting, null, get_lang('SessionGCMaxLifetimeInfo'));
 
-        if (api_check_browscap()){$setting = true;}else{$setting=false;}
+        if (api_check_browscap()) {$setting = true; } else {$setting = false; }
         $req_setting = true;
         $status = $setting == $req_setting ? self::STATUS_OK : self::STATUS_WARNING;
         $array[] = $this->build_setting($status, '[INI]', 'browscap', 'http://www.php.net/manual/en/misc.configuration.php#ini.browscap', $setting, $req_setting, 'on_off', get_lang('BrowscapInfo'));
@@ -345,7 +345,7 @@ class Diagnoser
 
             $loaded = extension_loaded($extension);
             $status = $loaded ? self::STATUS_OK : self::STATUS_ERROR;
-            $array[] = $this->build_setting($status, '[EXTENSION]', get_lang('LoadedExtension') . ': ' . $extension, $url, $loaded, $expected_value, 'yes_no_optional', $comment);
+            $array[] = $this->build_setting($status, '[EXTENSION]', get_lang('LoadedExtension').': '.$extension, $url, $loaded, $expected_value, 'yes_no_optional', $comment);
         }
 
         return $array;
@@ -470,9 +470,9 @@ class Diagnoser
         $formatted_expected_value = $expected_value;
 
         if ($formatter) {
-            if (method_exists($this, 'format_' . $formatter)) {
-                $formatted_current_value = call_user_func(array($this, 'format_' . $formatter), $current_value);
-                $formatted_expected_value = call_user_func(array($this, 'format_' . $formatter), $expected_value);
+            if (method_exists($this, 'format_'.$formatter)) {
+                $formatted_current_value = call_user_func(array($this, 'format_'.$formatter), $current_value);
+                $formatted_expected_value = call_user_func(array($this, 'format_'.$formatter), $expected_value);
             }
         }
 
@@ -487,13 +487,13 @@ class Diagnoser
      */
     public function get_link($title, $url)
     {
-        return '<a href="' . $url . '" target="about:bank">' . $title . '</a>';
+        return '<a href="'.$url.'" target="about:bank">'.$title.'</a>';
     }
 
     public function format_yes_no_optional($value)
     {
     	$return = '';
-    	switch($value) {
+    	switch ($value) {
      		case 0:
      			$return = get_lang('No');
      			break;

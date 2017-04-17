@@ -37,7 +37,7 @@ class UniqueAnswerNoOption extends Question
 
         $editor_config = array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '125');
         //this line define how many question by default appear when creating a choice question
-        $nb_answers = isset($_POST['nb_answers']) ? (int) $_POST['nb_answers'] : 3;  // The previous default value was 2. See task #1759.
+        $nb_answers = isset($_POST['nb_answers']) ? (int) $_POST['nb_answers'] : 3; // The previous default value was 2. See task #1759.
         $nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
 
         /*
@@ -52,20 +52,20 @@ class UniqueAnswerNoOption extends Question
         if ($obj_ex->selectFeedbackType() == 1) {
             $editor_config['Width'] = '250';
             $editor_config['Height'] = '110';
-            $comment_title = '<th width="50%" >' . get_lang('Comment') . '</th>';
-            $feedback_title = '<th width="50%" >' . get_lang('Scenario') . '</th>';
+            $comment_title = '<th width="50%" >'.get_lang('Comment').'</th>';
+            $feedback_title = '<th width="50%" >'.get_lang('Scenario').'</th>';
         } else {
-            $comment_title = '<th width="50%">' . get_lang('Comment') . '</th>';
+            $comment_title = '<th width="50%">'.get_lang('Comment').'</th>';
         }
 
         $html = '<table class="table table-striped table-hover">';
         $html .= '<thead>';
         $html .= '<tr>';
-        $html .= '<th>' . get_lang('Number') . '</th>';
-        $html .= '<th>' . get_lang('True') . '</th>';
-        $html .= '<th width="50%">' . get_lang('Answer') . '</th>';
-        $html .= $comment_title . $feedback_title;
-        $html .= '<th>' . get_lang('Weighting') . '</th>';
+        $html .= '<th>'.get_lang('Number').'</th>';
+        $html .= '<th>'.get_lang('True').'</th>';
+        $html .= '<th width="50%">'.get_lang('Answer').'</th>';
+        $html .= $comment_title.$feedback_title;
+        $html .= '<th>'.get_lang('Weighting').'</th>';
         $html .= '</tr>';
         $html .= '</thead>';
         $html .= '<tbody>';
@@ -130,9 +130,9 @@ class UniqueAnswerNoOption extends Question
                         $weight_result = '0';
                     }
 
-                    $defaults['answer[' . $i . ']'] = $answer_result;
-                    $defaults['comment[' . $i . ']'] = $answer->comment[$i];
-                    $defaults['weighting[' . $i . ']'] = $weight_result;
+                    $defaults['answer['.$i.']'] = $answer_result;
+                    $defaults['comment['.$i.']'] = $answer->comment[$i];
+                    $defaults['weighting['.$i.']'] = $weight_result;
 
                     $item_list = explode('@@', $answer->destination[$i]);
 
@@ -153,10 +153,10 @@ class UniqueAnswerNoOption extends Question
                         $url_result = $url;
                     }
 
-                    $temp_scenario['url' . $i] = $url_result;
-                    $temp_scenario['try' . $i] = $try_result;
-                    $temp_scenario['lp' . $i] = $lp;
-                    $temp_scenario['destination' . $i] = $list_dest;
+                    $temp_scenario['url'.$i] = $url_result;
+                    $temp_scenario['try'.$i] = $try_result;
+                    $temp_scenario['lp'.$i] = $lp;
+                    $temp_scenario['destination'.$i] = $list_dest;
                 }
             }
 
@@ -169,30 +169,30 @@ class UniqueAnswerNoOption extends Question
             );
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
-                'counter[' . $i . ']'
+                'counter['.$i.']'
             );
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
-                'answer[' . $i . ']'
+                'answer['.$i.']'
             );
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
-                'comment[' . $i . ']'
+                'comment['.$i.']'
             );
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
-                'weighting[' . $i . ']'
+                'weighting['.$i.']'
             );
 
-            $answer_number = $form->addElement('text', 'counter[' . $i . ']', null, 'value="' . $i . '"');
+            $answer_number = $form->addElement('text', 'counter['.$i.']', null, 'value="'.$i.'"');
             $answer_number->freeze();
 
 
             $form->addElement('radio', 'correct', null, null, $i, 'class="checkbox" style="margin-left: 0em;"');
-            $form->addElement('html_editor', 'answer[' . $i . ']', null, array(), $editor_config);
+            $form->addElement('html_editor', 'answer['.$i.']', null, array(), $editor_config);
 
-            $form->addElement('html_editor', 'comment[' . $i . ']', null, array(), $editor_config);
-            $form->addElement('text', 'weighting[' . $i . ']', null, array('style' => 'width: 60px;', 'value' => '0'));
+            $form->addElement('html_editor', 'comment['.$i.']', null, array(), $editor_config);
+            $form->addElement('text', 'weighting['.$i.']', null, array('style' => 'width: 60px;', 'value' => '0'));
             $form->addElement('html', '</tr>');
             $i++;
         }
@@ -207,8 +207,8 @@ class UniqueAnswerNoOption extends Question
         $form->addHtml('<tr>');
 
         $defaults["counter[$i]"] = '-';
-        $defaults['answer[' . $i . ']'] = get_lang('DontKnow');
-        $defaults['weighting[' . $i . ']'] = '0';
+        $defaults['answer['.$i.']'] = get_lang('DontKnow');
+        $defaults['weighting['.$i.']'] = '0';
         $defaults['scenario'] = $temp_scenario;
         $renderer = & $form->defaultRenderer();
 
@@ -218,32 +218,32 @@ class UniqueAnswerNoOption extends Question
         );
         $renderer->setElementTemplate(
             '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
-            'counter[' . $i . ']'
+            'counter['.$i.']'
         );
         $renderer->setElementTemplate(
             '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
-            'answer[' . $i . ']'
+            'answer['.$i.']'
         );
         $renderer->setElementTemplate(
             '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
-            'comment[' . $i . ']'
+            'comment['.$i.']'
         );
         $renderer->setElementTemplate(
             '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
-            'weighting[' . $i . ']'
+            'weighting['.$i.']'
         );
 
         $form
-            ->addElement('text', 'counter[' . $i . ']', null)
+            ->addElement('text', 'counter['.$i.']', null)
             ->freeze();
 
-        $form->addElement('hidden', 'position[' . $i . ']', '666');
+        $form->addElement('hidden', 'position['.$i.']', '666');
 
         $form->addElement('radio', 'correct', null, null, $i, ['class' => 'checkbox', 'disabled' => true]);
-        $form->addElement('html_editor', 'answer[' . $i . ']', null, array(), $editor_config);
+        $form->addElement('html_editor', 'answer['.$i.']', null, array(), $editor_config);
 
-        $form->addRule('answer[' . $i . ']', get_lang('ThisFieldIsRequired'), 'required');
-        $form->addElement('html_editor', 'comment[' . $i . ']', null, array(), $editor_config);
+        $form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
+        $form->addElement('html_editor', 'comment['.$i.']', null, array(), $editor_config);
 
         //$form->addElement('select', 'destination'.$i, get_lang('SelectQuestion').' : ',$select_question,'multiple');
 
@@ -334,7 +334,7 @@ class UniqueAnswerNoOption extends Question
                 $destination_str.=$destination_id.';';
             }*/
 
-            $goodAnswer= ($correct == $i) ? true : false;
+            $goodAnswer = ($correct == $i) ? true : false;
 
             if ($goodAnswer) {
                 $nbrGoodAnswers++;
@@ -361,7 +361,7 @@ class UniqueAnswerNoOption extends Question
             }
 
             //1@@1;2;@@2;4;4;@@http://www.chamilo.org
-            $dest= $try.'@@'.$lp.'@@'.$destination.'@@'.$url;
+            $dest = $try.'@@'.$lp.'@@'.$destination.'@@'.$url;
             $objAnswer->createAnswer(
                 $answer,
                 $goodAnswer,
@@ -404,7 +404,7 @@ class UniqueAnswerNoOption extends Question
 	function return_header($feedback_type = null, $counter = null, $score = null)
     {
 	    $header = parent::return_header($feedback_type, $counter, $score);
-	    $header .= '<table class="'.$this->question_table_class .'">
+	    $header .= '<table class="'.$this->question_table_class.'">
 			<tr>
 				<th>'.get_lang("Choice").'</th>
 				<th>'. get_lang("ExpectedChoice").'</th>

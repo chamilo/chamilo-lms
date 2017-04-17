@@ -4884,7 +4884,7 @@ class CourseManager
                      '/index.php?action=subscribe&sec_token=' . $stok,
                     array(
                         'class' => 'btn btn-success btn-sm',
-                        'title' => get_lang('Subscribe'), 
+                        'title' => get_lang('Subscribe'),
                         'aria-label' => get_lang('Subscribe')
                     )
                 );

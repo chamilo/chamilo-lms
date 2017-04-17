@@ -86,8 +86,8 @@ class ForumThreadLink extends AbstractLink
 			return [];
 		}
 
-		$tbl_grade_links 	= Database::get_course_table(TABLE_FORUM_THREAD);
-		$tbl_item_property	= Database::get_course_table(TABLE_ITEM_PROPERTY);
+		$tbl_grade_links = Database::get_course_table(TABLE_FORUM_THREAD);
+		$tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 		$session_id = api_get_session_id();
 
 		if ($session_id) {
@@ -211,11 +211,11 @@ class ForumThreadLink extends AbstractLink
                 if (empty($counter) || $counter <= 2) {
                     return array(0, $assignment['thread_qualify_max']);
                 }
-                return [$score/$counter, $assignment['thread_qualify_max']];
+                return [$score / $counter, $assignment['thread_qualify_max']];
             }
         } else {
             // All students -> get average
-            $students = array();  // user list, needed to make sure we only
+            $students = array(); // user list, needed to make sure we only
             // take first attempts into account
             $counter = 0;
             $sum = 0;
@@ -246,7 +246,7 @@ class ForumThreadLink extends AbstractLink
                         return array($bestResult, $weight);
                         break;
                     case 'average':
-                        return array($sumResult/$counter, $weight);
+                        return array($sumResult / $counter, $weight);
                         break;
                     case 'ranking':
                         return AbstractLink::getCurrentUserRanking($stud_id, $students);
@@ -288,8 +288,8 @@ class ForumThreadLink extends AbstractLink
     public function get_name()
     {
         $this->get_exercise_data();
-        $thread_title=isset($this->exercise_data['thread_title']) ? $this->exercise_data['thread_title'] : '';
-        $thread_title_qualify=isset($this->exercise_data['thread_title_qualify']) ? $this->exercise_data['thread_title_qualify'] : '';
+        $thread_title = isset($this->exercise_data['thread_title']) ? $this->exercise_data['thread_title'] : '';
+        $thread_title_qualify = isset($this->exercise_data['thread_title_qualify']) ? $this->exercise_data['thread_title_qualify'] : '';
         if (isset($thread_title_qualify) && $thread_title_qualify != '') {
             return $this->exercise_data['thread_title_qualify'];
         } else {
@@ -302,7 +302,7 @@ class ForumThreadLink extends AbstractLink
      */
     public function get_description()
     {
-        return '';//$this->exercise_data['description'];
+        return ''; //$this->exercise_data['description'];
     }
 
     /**
@@ -329,8 +329,8 @@ class ForumThreadLink extends AbstractLink
         $sql = 'SELECT * FROM '.$this->get_forum_thread_table()."
                 WHERE c_id = '.$this->course_id.' AND thread_id = '".$this->get_ref_id()."' AND session_id = ".$sessionId."";
         $result = Database::query($sql);
-        $row    = Database::fetch_array($result,'ASSOC');
-        $forum_id=$row['forum_id'];
+        $row    = Database::fetch_array($result, 'ASSOC');
+        $forum_id = $row['forum_id'];
 
         $url = api_get_path(WEB_PATH).'main/forum/viewthread.php?'.api_get_cidreq_params($this->get_course_code(), $sessionId).'&thread='.$this->get_ref_id().'&gradebook=view&forum='.$forum_id;
         return $url;

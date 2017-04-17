@@ -21,7 +21,7 @@ $_SESSION['whereami'] = 'lp/view';
 $this_section = SECTION_COURSES;
 
 if ($lp_controller_touched != 1) {
-    header('location: lp_controller.php?action=view&item_id=' . intval($_REQUEST['item_id']));
+    header('location: lp_controller.php?action=view&item_id='.intval($_REQUEST['item_id']));
     exit;
 }
 
@@ -119,7 +119,7 @@ if ($_SESSION['oLP']->mode == 'embedframe' || $_SESSION['oLP']->get_hide_toc_fra
 // Impress js
 if ($_SESSION['oLP']->mode == 'impress') {
     $lp_id = $_SESSION['oLP']->get_id();
-    $url = api_get_path(WEB_CODE_PATH) . "lp/lp_impress.php?lp_id=$lp_id&" . api_get_cidreq();
+    $url = api_get_path(WEB_CODE_PATH)."lp/lp_impress.php?lp_id=$lp_id&".api_get_cidreq();
     header("Location: $url");
     exit;
 }
@@ -137,15 +137,15 @@ if (isset($exerciseResult) || isset($_SESSION['exerciseResult'])) {
 
 // additional APIs
 $htmlHeadXtra[] = '<script>
-chamilo_courseCode = "' . $course_code . '";
+chamilo_courseCode = "' . $course_code.'";
 </script>';
 // Document API
 $htmlHeadXtra[] = '<script src="js/documentapi.js" type="text/javascript" language="javascript"></script>';
 // Storage API
 $htmlHeadXtra[] = '<script>
-var sv_user = \'' . api_get_user_id() . '\';
+var sv_user = \'' . api_get_user_id().'\';
 var sv_course = chamilo_courseCode;
-var sv_sco = \'' . $lp_id . '\';
+var sv_sco = \'' . $lp_id.'\';
 </script>'; // FIXME fetch sco and userid from a more reliable source directly in sotrageapi.js
 $htmlHeadXtra[] = '<script type="text/javascript" src="js/storageapi.js"></script>';
 
@@ -216,7 +216,7 @@ if (!isset($src)) {
         case 3:
             // aicc
             $_SESSION['oLP']->stop_previous_item(); // save status manually if asset
-            $htmlHeadXtra[] = '<script src="' . $_SESSION['oLP']->get_js_lib().'" type="text/javascript" language="javascript"></script>';
+            $htmlHeadXtra[] = '<script src="'.$_SESSION['oLP']->get_js_lib().'" type="text/javascript" language="javascript"></script>';
             $preReqCheck = $_SESSION['oLP']->prerequisites_match($lp_item_id);
             if ($preReqCheck === true) {
                 $src = $_SESSION['oLP']->get_link(
@@ -238,10 +238,10 @@ $autostart = 'true';
 // Update status, total_time from lp_item_view table when you finish the exercises in learning path.
 
 if ($debug) {
-    error_log('$type_quiz: ' . $type_quiz);
-    error_log('$_REQUEST[exeId]: ' . intval($_REQUEST['exeId']));
-    error_log('$lp_id: ' . $lp_id);
-    error_log('$_GET[lp_item_id]: ' . intval($_GET['lp_item_id']));
+    error_log('$type_quiz: '.$type_quiz);
+    error_log('$_REQUEST[exeId]: '.intval($_REQUEST['exeId']));
+    error_log('$lp_id: '.$lp_id);
+    error_log('$_GET[lp_item_id]: '.intval($_GET['lp_item_id']));
 }
 
 if (!empty($_REQUEST['exeId']) &&
@@ -262,7 +262,7 @@ if (!empty($_REQUEST['exeId']) &&
         $safe_item_id == strval(intval($safe_item_id))
     ) {
         $sql = 'SELECT start_date, exe_date, exe_result, exe_weighting, exe_exo_id
-                FROM ' . $TBL_TRACK_EXERCICES . '
+                FROM ' . $TBL_TRACK_EXERCICES.'
                 WHERE exe_id = ' . $safe_exe_id;
         $res = Database::query($sql);
         $row_dates = Database::fetch_array($res);
@@ -276,14 +276,14 @@ if (!empty($_REQUEST['exeId']) &&
 
         $sql = "UPDATE $TBL_LP_ITEM SET
                     max_score = '$max_score'
-                WHERE c_id = $course_id AND id = '" . $safe_item_id . "'";
+                WHERE c_id = $course_id AND id = '".$safe_item_id."'";
         Database::query($sql);
 
         $sql = "SELECT id FROM $TBL_LP_ITEM_VIEW
                 WHERE
                     c_id = $course_id AND
                     lp_item_id = '$safe_item_id' AND
-                    lp_view_id = '" . $_SESSION['oLP']->lp_view_id . "'
+                    lp_view_id = '".$_SESSION['oLP']->lp_view_id."'
                 ORDER BY id DESC
                 LIMIT 1";
         $res_last_attempt = Database::query($sql);
@@ -312,7 +312,7 @@ if (!empty($_REQUEST['exeId']) &&
                         status = '$status',
                         score = $score,
                         total_time = $mytime
-                    WHERE id='" . $lp_item_view_id . "' AND c_id = $course_id ";
+                    WHERE id='".$lp_item_view_id."' AND c_id = $course_id ";
 
             if ($debug) {
                 error_log($sql);
@@ -322,7 +322,7 @@ if (!empty($_REQUEST['exeId']) &&
 
             $sql = "UPDATE $TBL_TRACK_EXERCICES SET
                         orig_lp_item_view_id = $lp_item_view_id
-                    WHERE exe_id = " . $safe_exe_id;
+                    WHERE exe_id = ".$safe_exe_id;
             Database::query($sql);
         }
     }
@@ -331,7 +331,7 @@ if (!empty($_REQUEST['exeId']) &&
     } else {
         $src = api_get_path(WEB_CODE_PATH).'exercise/result.php?origin=learnpath&id='.$safe_exe_id.'&'.api_get_cidreq();
         if ($debug) {
-            error_log('Calling URL: ' . $src);
+            error_log('Calling URL: '.$src);
         }
     }
     $autostart = 'false';
@@ -387,8 +387,8 @@ $mediaplayer = $_SESSION['oLP']->get_mediaplayer($_SESSION['oLP']->current, $aut
 $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 $show_audioplayer = false;
 // Getting all the information about the item.
-$sql = "SELECT audio FROM " . $tbl_lp_item . "
-        WHERE c_id = $course_id AND lp_id = '" . $_SESSION['oLP']->lp_id . "'";
+$sql = "SELECT audio FROM ".$tbl_lp_item."
+        WHERE c_id = $course_id AND lp_id = '".$_SESSION['oLP']->lp_id."'";
 $res_media = Database::query($sql);
 
 if (Database::num_rows($res_media) > 0) {
@@ -409,7 +409,7 @@ if ($is_allowed_to_edit) {
         'name' => get_lang('LearningPaths')
     );
     $interbreadcrumb[] = array(
-        'url' => api_get_self() . "?action=add_item&type=step&lp_id={$_SESSION['oLP']->lp_id}&isStudentView=false&".api_get_cidreq(true, true, 'course'),
+        'url' => api_get_self()."?action=add_item&type=step&lp_id={$_SESSION['oLP']->lp_id}&isStudentView=false&".api_get_cidreq(true, true, 'course'),
         'name' => $_SESSION['oLP']->get_name()
     );
 
@@ -421,12 +421,12 @@ if ($is_allowed_to_edit) {
 
 // Return to course home.
 if ($is_allowed_to_edit) {
-    $buttonHomeUrl = 'lp_controller.php?' . api_get_cidreq(true, true, 'course') . '&' . http_build_query([
+    $buttonHomeUrl = 'lp_controller.php?'.api_get_cidreq(true, true, 'course').'&'.http_build_query([
         'isStudentView' => 'false',
         'action' => 'return_to_course_homepage'
     ]);
 } else {
-    $buttonHomeUrl = 'lp_controller.php?' . api_get_cidreq(true, true, 'course') . '&' . http_build_query([
+    $buttonHomeUrl = 'lp_controller.php?'.api_get_cidreq(true, true, 'course').'&'.http_build_query([
         'action' => 'return_to_course_homepage'
     ]);
 }

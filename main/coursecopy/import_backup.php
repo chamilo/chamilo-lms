@@ -98,21 +98,21 @@ if (Security::check_token('post') && (
         $cr->set_file_option($_POST['same_file_name_option']);
         $cr->restore();
         Display::addFlash(Display::return_message(get_lang('ImportFinished')));
-        echo '<a class="btn btn-default" href="' . api_get_path(WEB_COURSE_PATH) . api_get_course_path() . '/index.php">' . get_lang('CourseHomepage') . '</a>';
+        echo '<a class="btn btn-default" href="'.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/index.php">'.get_lang('CourseHomepage').'</a>';
     } else {
         if (!$error) {
             Display::addFlash(Display::return_message(get_lang('NoResourcesInBackupFile'), 'warning'));
-            echo '<a class="btn btn-default" href="import_backup.php?' . api_get_cidreq() . '">' . get_lang('TryAgain') . '</a>';
+            echo '<a class="btn btn-default" href="import_backup.php?'.api_get_cidreq().'">'.get_lang('TryAgain').'</a>';
         } elseif ($filename === false) {
             Display::addFlash(Display::return_message(get_lang('ArchivesDirectoryNotWriteableContactAdmin'), 'error'));
-            echo '<a class="btn btn-default" href="import_backup.php?' . api_get_cidreq() . '">' . get_lang('TryAgain') . '</a>';
+            echo '<a class="btn btn-default" href="import_backup.php?'.api_get_cidreq().'">'.get_lang('TryAgain').'</a>';
         } else {
             if ($filename == '') {
                 Display::addFlash(Display::return_message(get_lang('SelectBackupFile'), 'error'));
-                echo '<a class="btn btn-default" href="import_backup.php?' . api_get_cidreq() . '">' . get_lang('TryAgain') . '</a>';
+                echo '<a class="btn btn-default" href="import_backup.php?'.api_get_cidreq().'">'.get_lang('TryAgain').'</a>';
             } else {
                 Display::addFlash(Display::return_message(get_lang('UploadError'), 'error'));
-                echo '<a class="btn btn-default" href="import_backup.php?' . api_get_cidreq() . '">' . get_lang('TryAgain') . '</a>';
+                echo '<a class="btn btn-default" href="import_backup.php?'.api_get_cidreq().'">'.get_lang('TryAgain').'</a>';
             }
         }
     }
@@ -142,10 +142,10 @@ if (Security::check_token('post') && (
         CourseSelectForm::display_form($course, $hiddenFields);
     } elseif ($filename === false) {
         Display::addFlash(Display::return_message(get_lang('ArchivesDirectoryNotWriteableContactAdmin'), 'error'));
-        echo '<a class="btn btn-default" href="import_backup.php?' . api_get_cidreq() . '">' . get_lang('TryAgain') . '</a>';
+        echo '<a class="btn btn-default" href="import_backup.php?'.api_get_cidreq().'">'.get_lang('TryAgain').'</a>';
     } else {
         Display::addFlash(Display::return_message(get_lang('NoResourcesInBackupFile'), 'warning'));
-        echo '<a class="btn btn-default" href="import_backup.php?' . api_get_cidreq() . '">' . get_lang('TryAgain') . '</a>';
+        echo '<a class="btn btn-default" href="import_backup.php?'.api_get_cidreq().'">'.get_lang('TryAgain').'</a>';
     }
 } else {
     $user = api_get_user_info();
@@ -157,7 +157,7 @@ if (Security::check_token('post') && (
     $form = new FormValidator(
         'import_backup_form',
         'post',
-        api_get_path(WEB_CODE_PATH) . 'coursecopy/import_backup.php?' . api_get_cidreq(),
+        api_get_path(WEB_CODE_PATH).'coursecopy/import_backup.php?'.api_get_cidreq(),
         '',
         array('enctype' => 'multipart/form-data')
     );
@@ -189,7 +189,7 @@ if (Security::check_token('post') && (
         );
         $options['null'] = '-';
         foreach ($backups as $index => $backup) {
-            $options[$backup['file']] = $backup['course_code'] . ' (' . $backup['date'] . ')';
+            $options[$backup['file']] = $backup['course_code'].' ('.$backup['date'].')';
         }
         $form->addElement(
             'select',
@@ -207,7 +207,7 @@ if (Security::check_token('post') && (
             'radio',
             '',
             '',
-            '<i>' . get_lang('NoBackupsAvailable') . '</i>',
+            '<i>'.get_lang('NoBackupsAvailable').'</i>',
             '',
             'disabled="true"'
         );

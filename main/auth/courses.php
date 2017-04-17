@@ -195,7 +195,7 @@ switch ($action) {
         if (!$user_can_view_page) {
             api_not_allowed(true);
         }
-        header('Location: ' . api_get_self());
+        header('Location: '.api_get_self());
         exit;
         /* if (!CoursesAndSessionsCatalog::is(CATALOG_SESSIONS)) {
             $courses_controller->courses_categories(
@@ -283,7 +283,7 @@ switch ($action) {
                 $continueWithSubscription = SequenceResourceManager::checkSequenceAreCompleted($requirementsData);
 
                 if (!$continueWithSubscription) {
-                    header('Location: ' .  api_get_path(WEB_CODE_PATH) . 'auth/courses.php');
+                    header('Location: '.api_get_path(WEB_CODE_PATH).'auth/courses.php');
                     exit;
                 }
             }
@@ -301,16 +301,16 @@ switch ($action) {
 
             if ($count <= 0) {
                 // no course in session -> return to catalog
-                $url = api_get_path(WEB_CODE_PATH) . 'auth/courses.php';
+                $url = api_get_path(WEB_CODE_PATH).'auth/courses.php';
             } elseif ($count == 1) {
                 // only one course, so redirect directly to this course
                 foreach ($coursesList as $course) {
-                    $url = api_get_path(WEB_COURSE_PATH) . $course['directory'] . '/index.php?id_session=' . intval($_GET['session_id']);
+                    $url = api_get_path(WEB_COURSE_PATH).$course['directory'].'/index.php?id_session='.intval($_GET['session_id']);
                 }
             } else {
-                $url = api_get_path(WEB_CODE_PATH) . 'session/index.php?session_id=' . intval($_GET['session_id']);
+                $url = api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.intval($_GET['session_id']);
             }
-            header('Location: ' . $url);
+            header('Location: '.$url);
             exit;
         }
         //else show error message?

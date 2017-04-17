@@ -129,8 +129,8 @@ class CalculatedAnswer extends Question
             ),
             array('ToolbarSet' => 'TestQuestionDescription', 'Width' => '100%', 'Height' => '350'));
 
-        $form->addRule('answer', get_lang('GiveText'),'required');
-        $form->addRule('answer', get_lang('DefineBlanks'),'regex','/\[.*\]/');
+        $form->addRule('answer', get_lang('GiveText'), 'required');
+        $form->addRule('answer', get_lang('DefineBlanks'), 'regex', '/\[.*\]/');
 
         $form->addElement('label', null, get_lang('IfYouWantOnlyIntegerValuesWriteBothLimitsWithoutDecimals'));
         $form->addElement('html', '<div id="blanks_weighting"></div>');
@@ -215,10 +215,9 @@ class CalculatedAnswer extends Question
                         $newBlankItem = "[".trim($newBlankItem)."]";
                         // take random float values when one or both edge values have a decimal point
                         $randomValue =
-                            (strpos($lowestValues[$i],'.') !== false ||
-                            strpos($highestValues[$i],'.') !== false) ?
-                            mt_rand($lowestValues[$i]*100,$highestValues[$i]*100)/100 :
-                            mt_rand($lowestValues[$i],$highestValues[$i]);
+                            (strpos($lowestValues[$i], '.') !== false ||
+                            strpos($highestValues[$i], '.') !== false) ?
+                            mt_rand($lowestValues[$i] * 100, $highestValues[$i] * 100) / 100 : mt_rand($lowestValues[$i], $highestValues[$i]);
                         $auxAnswer = str_replace($blankItem, $randomValue, $auxAnswer);
                         $auxFormula = str_replace($blankItem, $randomValue, $auxFormula);
                     }
@@ -252,7 +251,7 @@ class CalculatedAnswer extends Question
     public function return_header($feedback_type = null, $counter = null, $score = null)
     {
         $header = parent::return_header($feedback_type, $counter, $score);
-        $header .= '<table class="'.$this->question_table_class .'">
+        $header .= '<table class="'.$this->question_table_class.'">
             <tr>
                 <th>'.get_lang("Answer").'</th>
             </tr>';

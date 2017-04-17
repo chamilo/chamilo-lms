@@ -30,21 +30,21 @@ $nameTools = get_lang('ImportExercise');
 $interbredcrump[] = array('url' => '../exercise.php', 'name' => get_lang('Exercises'));
 
 // EXECUTE COMMAND
-$cmd = (isset($_REQUEST['cmd'])? $_REQUEST['cmd'] : 'show_import');
+$cmd = (isset($_REQUEST['cmd']) ? $_REQUEST['cmd'] : 'show_import');
 
 switch ($cmd) {
     case 'show_import':
         $display = '<p>'
-            .            get_lang('Imported exercises must consist of a zip or an XML file (IMS-QTI) and be compatible with your Claroline version.') . '<br>'
+            .            get_lang('Imported exercises must consist of a zip or an XML file (IMS-QTI) and be compatible with your Claroline version.').'<br>'
             .            '</p>'
             .            '<form enctype="multipart/form-data" action="" method="post">'
             .            '<input name="cmd" type="hidden" value="import" />'
             .            '<input name="uploadedExercise" type="file" /><br><br>'
-            .            get_lang('Import exercise') . ' : '
-            .            '<input value="' . get_lang('Ok') . '" type="submit" /> '
-            .            claro_html_button( $_SERVER['PHP_SELF'], get_lang('Cancel'))
+            .            get_lang('Import exercise').' : '
+            .            '<input value="'.get_lang('Ok').'" type="submit" /> '
+            .            claro_html_button($_SERVER['PHP_SELF'], get_lang('Cancel'))
             .            '<br><br>'
-            .            '<small>' . get_lang('Max file size') . ' :  2&nbsp;MB</small>'
+            .            '<small>'.get_lang('Max file size').' :  2&nbsp;MB</small>'
             .            '</form>';
         break;
     case 'import':
@@ -60,7 +60,7 @@ switch ($cmd) {
 
 
 // DISPLAY
-include api_get_path(SYS_INC_PATH) . '/header.inc.php';
+include api_get_path(SYS_INC_PATH).'/header.inc.php';
 
 // Tool introduction
 // TODO: These settings to be checked when it is possible.
@@ -82,4 +82,4 @@ if (isset($display)) {
     echo $display;
 }
 
-include api_get_path(SYS_INC_PATH) . '/footer.inc.php';
+include api_get_path(SYS_INC_PATH).'/footer.inc.php';

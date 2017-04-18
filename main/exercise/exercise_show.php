@@ -136,8 +136,6 @@ if (!empty($gradebook) && $gradebook == 'view') {
     $interbreadcrumb[] = array('url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('ToolGradebook'));
 }
 
-$fromlink = '';
-
 $interbreadcrumb[] = array("url" => "exercise.php?".api_get_cidreq(), "name" => get_lang('Exercises'));
 $interbreadcrumb[] = array("url" => "overview.php?exerciseId=".$exercise_id.'&'.api_get_cidreq(), "name" => $objExercise->name);
 $interbreadcrumb[] = array("url" => "#", "name" => get_lang('Result'));
@@ -895,7 +893,6 @@ if ($isFeedbackAllowed && $origin != 'learnpath' && $origin != 'student_progress
             'details' => 'true',
             'course' => Security::remove_XSS($_GET['cidReq'])
         ]);
-        $formUrl .= $fromlink;
 
         $emailForm = new FormValidator('myform', 'post', $formUrl, '', ['id' => 'myform']);
         $emailForm->addHidden('lp_item_id', $learnpath_id);
@@ -950,7 +947,6 @@ if ($isFeedbackAllowed && $origin != 'learnpath' && $origin != 'student_progress
     );
 
     echo $emailForm->returnForm();
-
 }
 
 //Came from lpstats in a lp
@@ -995,7 +991,7 @@ if ($origin != 'learnpath') {
 
 // Destroying the session
 Session::erase('questionList');
-unset ($questionList);
+unset($questionList);
 
 Session::erase('exerciseResult');
-unset ($exerciseResult);
+unset($exerciseResult);

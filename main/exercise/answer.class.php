@@ -39,8 +39,8 @@ class Answer
     public $new_destination; // id of the next question if feedback option is set to Directfeedback
     public $course; //Course information
     public $iid;
-	public $questionJSId;
-	public $standalone;
+    public $questionJSId;
+    public $standalone;
 
     /**
      * constructor of the class
@@ -186,34 +186,34 @@ class Answer
         }
 
         return $id;
-	}
+    }
 
     /**
      * Reads answer information from the data base ordered by parameter
-     * @param	string	Field we want to order by
-     * @param	string	DESC or ASC
-     * @param string $field
-     * @author 	Frederic Vauthier
+     * @param string $field    Field we want to order by
+     * @param string $order    DESC or ASC
+     *
+     * @author Frederic Vauthier
      */
     public function readOrderedBy($field, $order = 'ASC')
     {
-		$field = Database::escape_string($field);
-		if (empty($field)) {
-			$field = 'position';
-		}
+        $field = Database::escape_string($field);
+        if (empty($field)) {
+            $field = 'position';
+        }
 
-		if ($order != 'ASC' && $order != 'DESC') {
-			$order = 'ASC';
-		}
+        if ($order != 'ASC' && $order != 'DESC') {
+            $order = 'ASC';
+        }
 
-		$TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
-		$TBL_QUIZ = Database::get_course_table(TABLE_QUIZ_QUESTION);
-		$questionId = intval($this->questionId);
+        $TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
+        $TBL_QUIZ = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $questionId = intval($this->questionId);
 
-		$sql = "SELECT type FROM $TBL_QUIZ
-		        WHERE c_id = {$this->course_id} AND id = $questionId";
-		$result_question = Database::query($sql);
-		$questionType = Database::fetch_array($result_question);
+        $sql = "SELECT type FROM $TBL_QUIZ
+                WHERE c_id = {$this->course_id} AND id = $questionId";
+        $result_question = Database::query($sql);
+        $questionType = Database::fetch_array($result_question);
 
         if ($questionType['type'] == DRAGGABLE) {
             // Random is done by submit.js.tpl
@@ -222,32 +222,32 @@ class Answer
             return true;
         }
 
-		$sql = "SELECT
-		            answer,
-		            correct,
-		            comment,
-		            ponderation,
-		            position,
-		            hotspot_coordinates,
-		            hotspot_type,
-		            destination,
-		            id_auto,
+        $sql = "SELECT
+                    answer,
+                    correct,
+                    comment,
+                    ponderation,
+                    position,
+                    hotspot_coordinates,
+                    hotspot_type,
+                    destination,
+                    id_auto,
                     iid
                 FROM $TBL_ANSWER
                 WHERE
                     c_id = {$this->course_id} AND
                     question_id='".$questionId."'
                 ORDER BY $field $order";
-		$result = Database::query($sql);
+        $result = Database::query($sql);
 
-		$i = 1;
-		// while a record is found
-		$doubt_data = null;
-		while ($object = Database::fetch_object($result)) {
-		    if ($questionType['type'] == UNIQUE_ANSWER_NO_OPTION && $object->position == 666) {
-		        $doubt_data = $object;
+        $i = 1;
+        // while a record is found
+        $doubt_data = null;
+        while ($object = Database::fetch_object($result)) {
+            if ($questionType['type'] == UNIQUE_ANSWER_NO_OPTION && $object->position == 666) {
+                $doubt_data = $object;
                 continue;
-		    }
+            }
             $this->answer[$i] = $object->answer;
             $this->correct[$i] = $object->correct;
             $this->comment[$i] = $object->comment;
@@ -259,9 +259,9 @@ class Answer
             $this->autoId[$i] = $object->id_auto;
             $this->iid[$i] = $object->iid;
             $i++;
-		}
+        }
 
-		if ($questionType['type'] == UNIQUE_ANSWER_NO_OPTION && !empty($doubt_data)) {
+        if ($questionType['type'] == UNIQUE_ANSWER_NO_OPTION && !empty($doubt_data)) {
             $this->answer[$i] = $doubt_data->answer;
             $this->correct[$i] = $doubt_data->correct;
             $this->comment[$i] = $doubt_data->comment;
@@ -273,88 +273,88 @@ class Answer
             $this->autoId[$i] = $doubt_data->id_auto;
             $this->iid[$i] = $doubt_data->iid;
             $i++;
-	    }
+        }
         $this->nbrAnswers = $i - 1;
-	}
-
-	/**
-	 * returns the autoincrement id identificator
-	 *
-	 * @author Juan Carlos Ra�a
-	 * @return integer - answer num
-	 */
-    public function selectAutoId($id)
-    {
-		return isset($this->autoId[$id]) ? $this->autoId[$id] : 0;
-	}
-
-	/**
-	 * returns the number of answers in this question
-	 *
-	 * @author Olivier Brouckaert
-	 * @return integer - number of answers
-	 */
-	public function selectNbrAnswers()
-    {
-		return $this->nbrAnswers;
-	}
-
-	/**
-	 * returns the question ID which the answers belong to
-	 *
-	 * @author Olivier Brouckaert
-	 * @return integer - the question ID
-	 */
-	public function selectQuestionId()
-    {
-		return $this->questionId;
-	}
-
-	/**
-	 * returns the question ID of the destination question
-	 *
-	 * @author Julio Montoya
-	 * @param integer $id
-	 * @return integer - the question ID
-	 */
-	public function selectDestination($id)
-    {
-		return isset($this->destination[$id]) ? $this->destination[$id] : null;
-	}
+    }
 
     /**
-	 * returns the answer title
-	 *
-	 * @author Olivier Brouckaert
-	 * @param - integer $id - answer ID
-	 * @return string - answer title
-	 */
-	public function selectAnswer($id)
-	{
-		return isset($this->answer[$id]) ? $this->answer[$id] : null;
-	}
+     * returns the autoincrement id identificator
+     *
+     * @author Juan Carlos Ra�a
+     * @return integer - answer num
+     */
+    public function selectAutoId($id)
+    {
+        return isset($this->autoId[$id]) ? $this->autoId[$id] : 0;
+    }
 
-	/**
-	 * return array answer by id else return a bool
-	 * @param integer $auto_id
-	 */
-	public function selectAnswerByAutoId($auto_id)
-	{
-		$TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
+    /**
+     * returns the number of answers in this question
+     *
+     * @author Olivier Brouckaert
+     * @return integer - number of answers
+     */
+    public function selectNbrAnswers()
+    {
+        return $this->nbrAnswers;
+    }
 
-		$auto_id = intval($auto_id);
-		$sql = "SELECT id, answer, id_auto FROM $TBL_ANSWER
-				WHERE c_id = {$this->course_id} AND id_auto='$auto_id'";
-		$rs = Database::query($sql);
+    /**
+     * returns the question ID which the answers belong to
+     *
+     * @author Olivier Brouckaert
+     * @return integer - the question ID
+     */
+    public function selectQuestionId()
+    {
+        return $this->questionId;
+    }
 
-		if (Database::num_rows($rs) > 0) {
-			$row = Database::fetch_array($rs, 'ASSOC');
+    /**
+     * returns the question ID of the destination question
+     *
+     * @author Julio Montoya
+     * @param integer $id
+     * @return integer - the question ID
+     */
+    public function selectDestination($id)
+    {
+        return isset($this->destination[$id]) ? $this->destination[$id] : null;
+    }
 
-			return $row;
-		}
+    /**
+     * returns the answer title
+     *
+     * @author Olivier Brouckaert
+     * @param - integer $id - answer ID
+     * @return string - answer title
+     */
+    public function selectAnswer($id)
+    {
+        return isset($this->answer[$id]) ? $this->answer[$id] : null;
+    }
 
-		return false;
-	}
+    /**
+     * return array answer by id else return a bool
+     * @param integer $auto_id
+     */
+    public function selectAnswerByAutoId($auto_id)
+    {
+        $TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
+
+        $auto_id = intval($auto_id);
+        $sql = "SELECT id, answer, id_auto FROM $TBL_ANSWER
+                WHERE c_id = {$this->course_id} AND id_auto='$auto_id'";
+        $rs = Database::query($sql);
+
+        if (Database::num_rows($rs) > 0) {
+            $row = Database::fetch_array($rs, 'ASSOC');
+
+            return $row;
+        }
+
+        return false;
+    }
 
     /**
      * returns the answer title from an answer's position
@@ -363,18 +363,18 @@ class Answer
      * @param - integer $id - answer ID
      * @return bool - answer title
      */
-	public function selectAnswerIdByPosition($pos)
-	{
-		foreach ($this->position as $k => $v) {
-			if ($v != $pos) {
-				continue;
-			}
+    public function selectAnswerIdByPosition($pos)
+    {
+        foreach ($this->position as $k => $v) {
+            if ($v != $pos) {
+                continue;
+            }
 
-			return $k;
-		}
+            return $k;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
     /**
      * Returns a list of answers
@@ -383,18 +383,25 @@ class Answer
      * of (id, answer, comment, grade) and grade=weighting
      */
     public function getAnswersList($decode = false)
-     {
-	 	$list = array();
-         for ($i = 1; $i <= $this->nbrAnswers; $i++) {
-             if (!empty($this->answer[$i])) {
+    {
+        $list = array();
+        for ($i = 1; $i <= $this->nbrAnswers; $i++) {
+            if (!empty($this->answer[$i])) {
+                //Avoid problems when parsing elements with accents
+                if ($decode) {
+                    $this->answer[$i] = api_html_entity_decode(
+                        $this->answer[$i],
+                        ENT_QUOTES,
+                        api_get_system_encoding()
+                    );
+                    $this->comment[$i] = api_html_entity_decode(
+                        $this->comment[$i],
+                        ENT_QUOTES,
+                        api_get_system_encoding()
+                    );
+                }
 
-	 			//Avoid problems when parsing elements with accents
-	 			if ($decode) {
-	        		$this->answer[$i] 	= api_html_entity_decode($this->answer[$i], ENT_QUOTES, api_get_system_encoding());
-	        		$this->comment[$i]	= api_html_entity_decode($this->comment[$i], ENT_QUOTES, api_get_system_encoding());
-	 			}
-
-	 			$list[] = array(
+                $list[] = array(
                     'id' => $i,
                     'answer' => $this->answer[$i],
                     'comment' => $this->comment[$i],
@@ -402,138 +409,137 @@ class Answer
                     'hotspot_coord' => $this->hotspot_coordinates[$i],
                     'hotspot_type' => $this->hotspot_type[$i],
                     'correct' => $this->correct[$i],
-                    'destination' => $this->destination[$i]
-				);
+                    'destination' => $this->destination[$i],
+                );
             }
-	 	}
+        }
 
-	 	return $list;
-	 }
+        return $list;
+    }
 
-	/**
-	 * Returns a list of grades
-	 * @author Yannick Warnier <ywarnier@beeznest.org>
-	 * @return array	List of grades where grade=weighting (?)
-	 */
+    /**
+     * Returns a list of grades
+     * @author Yannick Warnier <ywarnier@beeznest.org>
+     * @return array    List of grades where grade=weighting (?)
+     */
     public function getGradesList()
-     {
-	 	$list = array();
-	 	for ($i = 0; $i < $this->nbrAnswers; $i++) {
-	 		if (!empty($this->answer[$i])) {
-	 			$list[$i] = $this->weighting[$i];
-	 		}
-	 	}
-	 	return $list;
-	 }
+    {
+        $list = array();
+        for ($i = 0; $i < $this->nbrAnswers; $i++) {
+            if (!empty($this->answer[$i])) {
+                $list[$i] = $this->weighting[$i];
+            }
+        }
 
-	 /**
-	  * Returns the question type
-	  * @author	Yannick Warnier <ywarnier@beeznest.org>
-	  * @return	integer	The type of the question this answer is bound to
-	  */
+        return $list;
+    }
+
+    /**
+     * Returns the question type
+     * @author    Yannick Warnier <ywarnier@beeznest.org>
+     * @return    integer    The type of the question this answer is bound to
+     */
     public function getQuestionType()
-     {
-	 	$TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
-	 	$sql = "SELECT type FROM $TBL_QUESTIONS
-	 	        WHERE c_id = {$this->course_id} AND id = '".$this->questionId."'";
-	 	$res = Database::query($sql);
-	 	if (Database::num_rows($res) <= 0) {
-	 		return null;
-	 	}
-	 	$row = Database::fetch_array($res);
+    {
+        $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $sql = "SELECT type FROM $TBL_QUESTIONS
+                WHERE c_id = {$this->course_id} AND id = '".$this->questionId."'";
+        $res = Database::query($sql);
+        if (Database::num_rows($res) <= 0) {
+            return null;
+        }
+        $row = Database::fetch_array($res);
 
-	 	return $row['type'];
-	 }
+        return $row['type'];
+    }
 
 
-	/**
-	 * tells if answer is correct or not
-	 *
-	 * @author Olivier Brouckaert
-	 * @param - integer $id - answer ID
-	 * @return integer - 0 if bad answer, not 0 if good answer
-	 */
+    /**
+     * tells if answer is correct or not
+     *
+     * @author Olivier Brouckaert
+     * @param - integer $id - answer ID
+     * @return integer - 0 if bad answer, not 0 if good answer
+     */
     public function isCorrect($id)
-	{
-		return isset($this->correct[$id]) ? $this->correct[$id] : null;
-	}
+    {
+        return isset($this->correct[$id]) ? $this->correct[$id] : null;
+    }
 
-	/**
-	 * returns answer comment
-	 *
-	 * @author Olivier Brouckaert
-	 * @param - integer $id - answer ID
-	 * @return string - answer comment
-	 */
+    /**
+     * returns answer comment
+     *
+     * @author Olivier Brouckaert
+     * @param - integer $id - answer ID
+     * @return string - answer comment
+     */
     public function selectComment($id)
-	{
+    {
         return isset($this->comment[$id]) ? $this->comment[$id] : null;
-	}
+    }
 
-	/**
-	 * returns answer weighting
-	 *
-	 * @author Olivier Brouckaert
-	 * @param - integer $id - answer ID
-	 * @param integer $id
-	 * @return integer - answer weighting
-	 */
+    /**
+     * returns answer weighting
+     *
+     * @author Olivier Brouckaert
+     * @param - integer $id - answer ID
+     * @param integer $id
+     * @return integer - answer weighting
+     */
     public function selectWeighting($id)
-	{
-		return isset($this->weighting[$id]) ? $this->weighting[$id] : null;
-	}
+    {
+        return isset($this->weighting[$id]) ? $this->weighting[$id] : null;
+    }
 
-	/**
-	 * returns answer position
-	 *
-	 * @author Olivier Brouckaert
-	 * @param - integer $id - answer ID
-	 * @return integer - answer position
-	 */
-	function selectPosition($id)
-	{
-		return isset($this->position[$id]) ? $this->position[$id] : null;
-	}
+    /**
+     * returns answer position
+     *
+     * @author Olivier Brouckaert
+     * @param - integer $id - answer ID
+     * @return integer - answer position
+     */
+    function selectPosition($id)
+    {
+        return isset($this->position[$id]) ? $this->position[$id] : null;
+    }
 
-	/**
-	 * returns answer hotspot coordinates
-	 *
-	 * @author	Olivier Brouckaert
-	 * @param	integer	Answer ID
-	 * @param integer $id
-	 * @return	integer	Answer position
-	 */
+    /**
+     * returns answer hotspot coordinates
+     *
+     * @author Olivier Brouckaert
+     * @param integer $id Answer ID
+     * @return integer    Answer position
+     */
     public function selectHotspotCoordinates($id)
-	{
-		return isset($this->hotspot_coordinates[$id]) ? $this->hotspot_coordinates[$id] : null;
-	}
+    {
+        return isset($this->hotspot_coordinates[$id]) ? $this->hotspot_coordinates[$id] : null;
+    }
 
-	/**
-	 * returns answer hotspot type
-	 *
-	 * @author	Toon Keppens
-	 * @param	integer		Answer ID
-	 * @param integer $id
-	 * @return	integer		Answer position
-	 */
+    /**
+     * returns answer hotspot type
+     *
+     * @author Toon Keppens
+     * @param integer $id Answer ID
+     * @return integer        Answer position
+     */
     public function selectHotspotType($id)
-	{
-		return isset($this->hotspot_type[$id]) ? $this->hotspot_type[$id] : null;
-	}
+    {
+        return isset($this->hotspot_type[$id]) ? $this->hotspot_type[$id] : null;
+    }
 
-	/**
-	 * Creates a new answer
-	 *
-	 * @author Olivier Brouckaert
-	 * @param string 	$answer answer title
-	 * @param integer 	$correct 0 if bad answer, not 0 if good answer
-	 * @param string 	$comment answer comment
-	 * @param integer 	$weighting answer weighting
-	 * @param integer 	$position answer position
-	 * @param array    $new_hotspot_coordinates Coordinates for hotspot exercises (optional)
-	 * @param integer	$new_hotspot_type Type for hotspot exercises (optional)
+    /**
+     * Creates a new answer
+     *
+     * @author Olivier Brouckaert
+     * @param string 	$answer answer title
+     * @param integer 	$correct 0 if bad answer, not 0 if good answer
+     * @param string 	$comment answer comment
+     * @param integer 	$weighting answer weighting
+     * @param integer 	$position answer position
+     * @param array    $new_hotspot_coordinates Coordinates for hotspot exercises (optional)
+     * @param integer	$new_hotspot_type Type for hotspot exercises (optional)
      * @param string   $destination
-	 */
+     */
     public function createAnswer(
         $answer,
         $correct,
@@ -544,7 +550,7 @@ class Answer
         $new_hotspot_type = null,
         $destination = ''
     ) {
-		$this->new_nbrAnswers++;
+        $this->new_nbrAnswers++;
         $id = $this->new_nbrAnswers;
         $this->new_answer[$id] = $answer;
         $this->new_correct[$id] = $correct;
@@ -554,7 +560,7 @@ class Answer
         $this->new_hotspot_coordinates[$id] = $new_hotspot_coordinates;
         $this->new_hotspot_type[$id] = $new_hotspot_type;
         $this->new_destination[$id] = $destination;
-	}
+    }
 
     /**
      * Updates an answer
@@ -597,32 +603,32 @@ class Answer
 
         $em->merge($quizAnswer);
         $em->flush();
-	}
+    }
 
-	/**
-	 * Records answers into the data base
-	 *
-	 * @author Olivier Brouckaert
-	 */
+    /**
+     * Records answers into the data base
+     *
+     * @author Olivier Brouckaert
+     */
     public function save()
     {
-		$answerTable = Database::get_course_table(TABLE_QUIZ_ANSWER);
+        $answerTable = Database::get_course_table(TABLE_QUIZ_ANSWER);
         $em = Database::getManager();
-		$questionId = intval($this->questionId);
+        $questionId = intval($this->questionId);
 
-		$c_id = $this->course['real_id'];
+        $c_id = $this->course['real_id'];
         $correctList = [];
         $answerList = [];
 
-		for ($i = 1; $i <= $this->new_nbrAnswers; $i++) {
-			$answer = $this->new_answer[$i];
-			$correct = isset($this->new_correct[$i]) ? $this->new_correct[$i] : '';
-			$comment = isset($this->new_comment[$i]) ? $this->new_comment[$i] : '';
-			$weighting = isset($this->new_weighting[$i]) ? $this->new_weighting[$i] : '';
-			$position = isset($this->new_position[$i]) ? $this->new_position[$i] : '';
-			$hotspot_coordinates = isset($this->new_hotspot_coordinates[$i]) ? $this->new_hotspot_coordinates[$i] : '';
-			$hotspot_type = isset($this->new_hotspot_type[$i]) ? $this->new_hotspot_type[$i] : '';
-			$destination = isset($this->new_destination[$i]) ? $this->new_destination[$i] : '';
+        for ($i = 1; $i <= $this->new_nbrAnswers; $i++) {
+            $answer = $this->new_answer[$i];
+            $correct = isset($this->new_correct[$i]) ? $this->new_correct[$i] : '';
+            $comment = isset($this->new_comment[$i]) ? $this->new_comment[$i] : '';
+            $weighting = isset($this->new_weighting[$i]) ? $this->new_weighting[$i] : '';
+            $position = isset($this->new_position[$i]) ? $this->new_position[$i] : '';
+            $hotspot_coordinates = isset($this->new_hotspot_coordinates[$i]) ? $this->new_hotspot_coordinates[$i] : '';
+            $hotspot_type = isset($this->new_hotspot_type[$i]) ? $this->new_hotspot_type[$i] : '';
+            $destination = isset($this->new_destination[$i]) ? $this->new_destination[$i] : '';
             $autoId = $this->selectAutoId($i);
             $iid = isset($this->iid[$i]) ? $this->iid[$i] : 0;
 
@@ -664,11 +670,11 @@ class Answer
                         $answer->read();
                         $correctAnswerId = $answer->selectAnswerIdByPosition($correct);
 
-						// Continue to avoid matching question bug if $correctAnswerId returns false
-						// See : https://support.chamilo.org/issues/8334
-						if ($questionType == MATCHING && !$correctAnswerId) {
-							continue;
-						}
+                        // Continue to avoid matching question bug if $correctAnswerId returns false
+                        // See : https://support.chamilo.org/issues/8334
+                        if ($questionType == MATCHING && !$correctAnswerId) {
+                            continue;
+                        }
 
                         $correctAnswerAutoId = $answer->selectAutoId($correct);
                         $quizAnswer->setCorrect($correctAnswerAutoId ? $correctAnswerAutoId : 0);
@@ -725,36 +731,36 @@ class Answer
             while ($this->position[$i]) {
                 $position = $this->position[$i];
                 $sql = "DELETE FROM $answerTable
-                		WHERE
-                			c_id = {$this->course_id} AND
-                			question_id = '".$questionId."' AND
-                			position ='$position'";
+                        WHERE
+                            c_id = {$this->course_id} AND
+                            question_id = '".$questionId."' AND
+                            position ='$position'";
                 Database::query($sql);
                 $i++;
             }
         }
 
-		// moves $new_* arrays
-		$this->answer = $this->new_answer;
-		$this->correct = $this->new_correct;
-		$this->comment = $this->new_comment;
-		$this->weighting = $this->new_weighting;
-		$this->position = $this->new_position;
-		$this->hotspot_coordinates = $this->new_hotspot_coordinates;
-		$this->hotspot_type = $this->new_hotspot_type;
-		$this->nbrAnswers = $this->new_nbrAnswers;
-		$this->destination = $this->new_destination;
+        // moves $new_* arrays
+        $this->answer = $this->new_answer;
+        $this->correct = $this->new_correct;
+        $this->comment = $this->new_comment;
+        $this->weighting = $this->new_weighting;
+        $this->position = $this->new_position;
+        $this->hotspot_coordinates = $this->new_hotspot_coordinates;
+        $this->hotspot_type = $this->new_hotspot_type;
+        $this->nbrAnswers = $this->new_nbrAnswers;
+        $this->destination = $this->new_destination;
 
-		$this->cancel();
-	}
+        $this->cancel();
+    }
 
-	/**
-	 * Duplicates answers by copying them into another question
-	 *
-	 * @author Olivier Brouckaert
-	 * @param  Question $newQuestion
+    /**
+     * Duplicates answers by copying them into another question
+     *
+     * @author Olivier Brouckaert
+     * @param  Question $newQuestion
      * @param  array $course_info destination course info (result of the function api_get_course_info() )
-	 */
+     */
     public function duplicate($newQuestion, $course_info = null)
     {
         $newQuestionId = $newQuestion->id;
@@ -777,7 +783,7 @@ class Answer
 
             if (!empty($origin_options)) {
                 foreach ($origin_options as $item) {
-            	   $new_option_list[] = $item['id'];
+                    $new_option_list[] = $item['id'];
                 }
             }
 
@@ -794,15 +800,15 @@ class Answer
             }
         }
 
-		// if at least one answer
-		if ($this->nbrAnswers) {
-			// inserts new answers into data base
-			$courseId = $course_info['real_id'];
-			$correctAnswers = [];
-			$onlyAnswers = [];
-			$allAnswers = [];
+        // if at least one answer
+        if ($this->nbrAnswers) {
+            // inserts new answers into data base
+            $courseId = $course_info['real_id'];
+            $correctAnswers = [];
+            $onlyAnswers = [];
+            $allAnswers = [];
 
-			$em = Database::getManager();
+            $em = Database::getManager();
 
             if (in_array($newQuestion->type, [MATCHING, MATCHING_DRAGGABLE])) {
                 $temp = array();
@@ -868,7 +874,7 @@ class Answer
                         $correctAnswers[$answerId] = $answer['correct'];
                         $onlyAnswers[$answerId] = $answer['answer'];
                     }
-				}
+                }
             } else {
                 for ($i = 1; $i <= $this->nbrAnswers; $i++) {
                     if ($this->course['id'] != $course_info['id']) {
@@ -945,7 +951,7 @@ class Answer
                 }
             }
         }
-	}
+    }
 
     /**
      * Get the necessary JavaScript for some answers
@@ -963,25 +969,24 @@ class Answer
             </script>";
     }
 
-	/**
-	 * Check if a answer is correct by an answer auto id
-	 * @param $needle int The answer auto id
-	 * @return bool
-	 */
-	public function isCorrectByAutoId($needle)
-	{
-		$key = 0;
+    /**
+     * Check if a answer is correct by an answer auto id
+     * @param $needle int The answer auto id
+     * @return bool
+     */
+    public function isCorrectByAutoId($needle)
+    {
+        $key = 0;
+        foreach ($this->autoId as $autoIdKey => $autoId) {
+            if ($autoId == $needle) {
+                $key = $autoIdKey;
+            }
+        }
 
-		foreach ($this->autoId as $autoIdKey => $autoId) {
-			if ($autoId == $needle) {
-				$key = $autoIdKey;
-			}
-		}
+        if (!$key) {
+            return false;
+        }
 
-		if (!$key) {
-			return false;
-		}
-
-		return $this->isCorrect($key) ? true : false;
-	}
+        return $this->isCorrect($key) ? true : false;
+    }
 }

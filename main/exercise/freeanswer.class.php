@@ -2,11 +2,11 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * 	File containing the FreeAnswer class.
- * 	This class allows to instantiate an object of type FREE_ANSWER,
- * 	extending the class question
- * 	@package chamilo.exercise
- * 	@author Eric Marguin
+ * File containing the FreeAnswer class.
+ * This class allows to instantiate an object of type FREE_ANSWER,
+ * extending the class question
+ * @package chamilo.exercise
+ * @author Eric Marguin
  */
 class FreeAnswer extends Question
 {

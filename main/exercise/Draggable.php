@@ -57,7 +57,6 @@ class Draggable extends Question
 
             if (count($answer->nbrAnswers) > 0) {
                 $nb_matches = $nb_options = 0;
-
                 for ($i = 1; $i <= $answer->nbrAnswers; $i++) {
                     if ($answer->isCorrect($i)) {
                         $nb_matches++;
@@ -107,7 +106,6 @@ class Draggable extends Question
 
         for ($i = 1; $i <= $nb_matches; ++$i) {
             $renderer = &$form->defaultRenderer();
-
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error -->{element}</td>',
                 "answer[$i]"

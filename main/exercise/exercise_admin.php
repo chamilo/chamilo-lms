@@ -109,11 +109,8 @@ $htmlHeadXtra[] = '<script>
                 disabledHideRandom();
                 $("#hidden_matrix").show();
                 break;
-
         }
     }
-
-
 </script>';
 
 // to correct #4029 Random and number of attempt menu empty added window.onload=advanced_parameters;
@@ -153,9 +150,13 @@ $objExercise->createForm($form);
 if ($form->validate()) {
     $objExercise->processCreation($form);
     if ($form->getSubmitValue('edit') == 'true') {
-        Display::addFlash(Display::return_message(get_lang('ExerciseEdited')));
+        Display::addFlash(
+            Display::return_message(get_lang('ExerciseEdited'), 'success')
+        );
     } else {
-        Display::addFlash(Display::return_message(get_lang('ExerciseAdded')));
+        Display::addFlash(
+            Display::return_message(get_lang('ExerciseAdded'), 'success')
+        );
     }
     $exercise_id = $objExercise->id;
     Session::erase('objExercise');
@@ -168,7 +169,7 @@ if ($form->validate()) {
     }
 
     if (!empty($gradebook) && $gradebook=='view') {
-        $interbreadcrumb[]= array (
+        $interbreadcrumb[]= array(
             'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
             'name' => get_lang('ToolGradebook')
         );
@@ -191,8 +192,8 @@ if ($form->validate()) {
         echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">' .
             Display :: return_icon('back.png', get_lang('GoBackToQuestionList'), '', ICON_SIZE_MEDIUM).'</a>';
     } else {
-        if (!empty($_GET['lp_id']) || !empty($_POST['lp_id'])){
-            if (!empty($_POST['lp_id'])){
+        if (!empty($_GET['lp_id']) || !empty($_POST['lp_id'])) {
+            if (!empty($_POST['lp_id'])) {
                 $lp_id = intval($_POST['lp_id']);
                 //TODO:this remains to be implemented after press the first post
             } else {
@@ -207,12 +208,15 @@ if ($form->validate()) {
     }
     echo '</div>';
 
-    if ($objExercise->feedback_type == 1)
+    if ($objExercise->feedback_type == 1) {
         Display::display_normal_message(
             get_lang('DirectFeedbackCantModifyTypeQuestion')
         );
+    }
 
-    if (api_get_setting('search_enabled')=='true' && !extension_loaded('xapian')) {
+    if (api_get_setting('search_enabled')=='true' &&
+        !extension_loaded('xapian')
+    ) {
         Display::display_error_message(get_lang('SearchXapianModuleNotInstalled'));
     }
 

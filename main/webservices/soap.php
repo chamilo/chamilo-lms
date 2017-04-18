@@ -43,7 +43,7 @@ class WSSoapServer {
 	 * Singleton method
 	 */
 	public static function singleton() {
-		if(!isset(self::$_instance)) {
+		if (!isset(self::$_instance)) {
 			self::$_instance = new soap_server();
 			// Set the error handler
 			WSError::setErrorHandler(new WSSoapErrorHandler());
@@ -88,7 +88,7 @@ $s->wsdl->addComplexType(
   '',
   'SOAP-ENC:Array',
   array(),
-  array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:extras[]')),'tns:extras'
+  array(array('ref'=>'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:extras[]')), 'tns:extras'
 );
 
 /*

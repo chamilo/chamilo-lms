@@ -88,7 +88,7 @@ class DateRangePicker extends HTML_QuickForm_text
         }
 
         $timePicker = 'true';
-        $timePickerValue =  $this->getAttribute('timePicker');
+        $timePickerValue = $this->getAttribute('timePicker');
         if (!empty($timePickerValue)) {
             $timePicker = $timePickerValue;
         }

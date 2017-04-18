@@ -43,7 +43,7 @@ foreach ($files as $file) {
         $res = preg_match_all('/get_lang\(\'(\\w*)\'\)/', $line, $myTerms);
         if ($res > 0) {
             foreach ($myTerms[1] as $term) {
-                if (substr($term, 0, 4)=='lang') {
+                if (substr($term, 0, 4) == 'lang') {
                     $term = substr($term, 4);
                 }
                 $usedTerms[$term] = $shortFile;
@@ -53,7 +53,7 @@ foreach ($files as $file) {
             $res = preg_match_all('/\{[\'"](\\w*)[\'"]\|get_lang\}/', $line, $myTerms);
             if ($res > 0) {
                 foreach ($myTerms[1] as $term) {
-                    if (substr($term, 0, 4)=='lang') {
+                    if (substr($term, 0, 4) == 'lang') {
                         $term = substr($term, 4);
                     }
                     $usedTerms[$term] = $shortFile;
@@ -67,7 +67,7 @@ foreach ($files as $file) {
 // Compare defined terms VS used terms. Used terms should be smaller than
 // defined terms, and this should prove the concept that there are much
 // more variables than what we really use
-if (count($usedTerms)<1) {
+if (count($usedTerms) < 1) {
   die("No used terms<br />\n");
 } else {
   echo "The following terms were defined but never used: <br />\n<table>";
@@ -75,7 +75,7 @@ if (count($usedTerms)<1) {
 $i = 1;
 foreach ($defined_terms as $term => $file) {
   // remove "lang" prefix just in case
-  if (substr($term,0,4)=='lang') { $term = substr($term,4); }
+  if (substr($term, 0, 4) == 'lang') { $term = substr($term, 4); }
   if (!isset($usedTerms[$term])) {
     echo "<tr><td>$i</td><td>$term</td></tr>\n";
     $i++;
@@ -88,14 +88,14 @@ function get_all_php_files($base_path) {
     $list = scandir($base_path);
     $files = array();
     foreach ($list as $item) {
-    	if (substr($item,0,1)=='.') {continue;}
-        $special_dirs = array(api_get_path(SYS_TEST_PATH),api_get_path(SYS_COURSE_PATH),api_get_path(SYS_LANG_PATH),api_get_path(SYS_ARCHIVE_PATH));
-        if (in_array($base_path.$item.'/',$special_dirs)) {continue;}
+    	if (substr($item, 0, 1) == '.') {continue; }
+        $special_dirs = array(api_get_path(SYS_TEST_PATH), api_get_path(SYS_COURSE_PATH), api_get_path(SYS_LANG_PATH), api_get_path(SYS_ARCHIVE_PATH));
+        if (in_array($base_path.$item.'/', $special_dirs)) {continue; }
         if (is_dir($base_path.$item)) {
-        	$files = array_merge($files,get_all_php_files($base_path.$item.'/'));
+        	$files = array_merge($files, get_all_php_files($base_path.$item.'/'));
         } else {
             //only analyse php files
-                $sub = substr($item,-4);
+                $sub = substr($item, -4);
         	if ($sub == '.php' or $sub == '.tpl') {
                     $files[] = $base_path.$item;
         	}

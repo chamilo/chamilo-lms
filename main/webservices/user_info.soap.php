@@ -26,11 +26,11 @@ $server->wsdl->addComplexType(
         'all',
         '',
         array(
-          'name'=>'code'  , 'type'=>'xsd:string',
-          'name'=>'title'  , 'type'=>'xsd:string',
-          'name'=>'url'    , 'type'=>'xsd:string',
+          'name'=>'code', 'type'=>'xsd:string',
+          'name'=>'title', 'type'=>'xsd:string',
+          'name'=>'url', 'type'=>'xsd:string',
           'name'=>'teacher', 'type'=>'xsd:string',
-          'name'=>'language','type'=>'xsd:string',
+          'name'=>'language', 'type'=>'xsd:string',
         )
 );
 
@@ -49,14 +49,14 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('WSCourseListOfUser',   // method name
+$server->register('WSCourseListOfUser', // method name
     array('username' => 'xsd:string',
-          'signature' => 'xsd:string'),         // input parameters
-    array('return' => 'xsd:Array'),             // output parameters
-    'urn:WSUserInfo',                           // namespace
-    'urn:WSUserInfo#WSUserInfo',          // soapaction
-    'rpc',                                      // style
-    'encoded',                                  // use
+          'signature' => 'xsd:string'), // input parameters
+    array('return' => 'xsd:Array'), // output parameters
+    'urn:WSUserInfo', // namespace
+    'urn:WSUserInfo#WSUserInfo', // soapaction
+    'rpc', // style
+    'encoded', // use
     'This service returns a list of courses'    // documentation
 );
 
@@ -104,11 +104,11 @@ $server->wsdl->addComplexType(
     'all',
     '',
     array(
-        'name'=>'datestart','type'=>'xsd:string',
-        'name'=>'dateend','type'=>'xsd:string',
-        'name'=>'title','type'=>'xsd:string',
-        'name'=>'link','type'=>'xsd:string',
-        'name'=>'coursetitle','type'=>'xsd:string',
+        'name'=>'datestart', 'type'=>'xsd:string',
+        'name'=>'dateend', 'type'=>'xsd:string',
+        'name'=>'title', 'type'=>'xsd:string',
+        'name'=>'link', 'type'=>'xsd:string',
+        'name'=>'coursetitle', 'type'=>'xsd:string',
     )
 );
 
@@ -127,16 +127,16 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('WSEventsList',       // method name
+$server->register('WSEventsList', // method name
     array('username' => 'xsd:string',
           'signature' => 'xsd:string',
           'datestart' => 'xsd:int',
-          'dateend'   => 'xsd:int'),          // input parameters
-    array('return' => 'xsd:Array'),           // output parameters
-    'urn:WSUserInfo',                         // namespace
-    'urn:WSUserInfo#WSEventsList',      // soapaction
-    'rpc',                                    // style
-    'encoded',                                // use
+          'dateend'   => 'xsd:int'), // input parameters
+    array('return' => 'xsd:Array'), // output parameters
+    'urn:WSUserInfo', // namespace
+    'urn:WSUserInfo#WSEventsList', // soapaction
+    'rpc', // style
+    'encoded', // use
     'This service returns a list of events of the courses the given user is subscribed to'      // documentation
 );
 
@@ -171,8 +171,8 @@ function WSEventsList($username, $signature, $datestart = 0, $dateend = 0) {
 
     $user_id = UserManager::get_user_id_from_username($username);
     if ($user_id === false) { return $events_list; } // Error in user id recovery.
-    $ds = substr($datestart,0,4).'-'.substr($datestart,4,2).'-'.substr($datestart,6,2).' 00:00:00';
-    $de = substr($dateend,0,4).'-'.substr($dateend,4,2).'-'.substr($dateend,6,2).' 00:00:00';
+    $ds = substr($datestart, 0, 4).'-'.substr($datestart, 4, 2).'-'.substr($datestart, 6, 2).' 00:00:00';
+    $de = substr($dateend, 0, 4).'-'.substr($dateend, 4, 2).'-'.substr($dateend, 6, 2).' 00:00:00';
     $events_list = Agenda::get_personal_agenda_items_between_dates($user_id, $ds, $de);
     return $events_list;
 }

@@ -9,7 +9,7 @@
         });
     </script>
     <div class="col-md-12">
-        <h3>{{ 'Sessions'|get_lang }}</h3>
+        <h3 class="page-header">{{ 'Sessions'|get_lang }}</h3>
         <div class="search-session">
             <div class="row">
                 <div class="col-md-{{ show_courses ? '4' : '6' }}">
@@ -45,7 +45,7 @@
 
                 {% if show_courses %}
                     <div class="col-md-4">
-                        <a class="btn btn-default btn-block btn-catalog" href="{{ _p.web_self }}">
+                        <a class="btn btn-default btn-block" href="{{ _p.web_self }}">
                             {{ "CourseManagement"|get_lang }}
                         </a>
                     </div>
@@ -112,23 +112,19 @@
                                     {% endif %}
                                 </div>
                                 <br/>
-                                <div class="info">
-                                    <span>
+                                <ul class="info list-inline">
+                                    <li>
                                         <i class="fa fa-book" aria-hidden="true"></i>
-                                        {{ item.nbr_courses }} {{ 'Courses'|get_lang }}
-                                    </span>
-                                    <span>
+                                        {{ item.nbr_courses ~ ' ' ~ 'Courses'|get_lang }}
+                                    </li>
+                                    <li>
                                         <i class="fa fa-user" aria-hidden="true"></i>
-                                        {{ item.nbr_users }} {{ 'NbUsers'|get_lang }}
-                                    </span>
-                                </div>
-                                {% if not _u.logged %}
-                                    &nbsp;
-                                {% else %}
+                                        {{ item.nbr_users ~ ' ' ~ 'NbUsers'|get_lang }}
+                                    </li>
+                                </ul>
+                                {% if _u.logged %}
                                     <div class="btn-group btn-group-sm" role="group">
-                                        {% if item.sequences is empty %}
-                                            &nbsp;
-                                        {% else %}
+                                        {% if not item.sequences is empty %}
                                             <a class="btn btn-default btn-sm" role="button"
                                                title="{{ 'SeeSequences'|get_lang }}" data-toggle="popover"
                                                id="session-{{ item.id }}-sequences">

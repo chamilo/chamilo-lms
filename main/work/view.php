@@ -86,7 +86,7 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
                 );
 
                 if (api_is_allowed_to_edit()) {
-                    $work_table = Database:: get_course_table(TABLE_STUDENT_PUBLICATION);
+                    $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
                     $sql = "UPDATE $work_table 
                             SET	
                                 qualificator_id = '".api_get_user_id()."',
@@ -104,7 +104,7 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
                         $work
                     );
                     if ($resultUpload) {
-                        $work_table = Database:: get_course_table(
+                        $work_table = Database::get_course_table(
                             TABLE_STUDENT_PUBLICATION
                         );
 

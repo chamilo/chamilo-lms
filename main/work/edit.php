@@ -13,7 +13,7 @@ $this_section = SECTION_COURSES;
 
 $work_id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : null;
 $item_id = isset($_REQUEST['item_id']) ? intval($_REQUEST['item_id']) : null;
-$work_table = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
+$work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
 $is_allowed_to_edit = api_is_allowed_to_edit();
 $course_id = api_get_course_int_id();

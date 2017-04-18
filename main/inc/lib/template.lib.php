@@ -237,7 +237,7 @@ class Template
     {
         return api_format_date($timestamp, $format);
     }
-    
+
     /**
      * Return the item's url key:
      *
@@ -717,7 +717,7 @@ class Template
             'jquery/dist/jquery.min.js',
             'bootstrap/dist/js/bootstrap.min.js',
             'jquery-ui/jquery-ui.min.js',
-            'moment/min/moment-with-locales.min.js',
+            'moment/min/moment-with-locales.js',
             'bootstrap-daterangepicker/daterangepicker.js',
             'jquery-timeago/jquery.timeago.js',
             'mediaelement/build/mediaelement-and-player.min.js',

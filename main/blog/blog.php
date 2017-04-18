@@ -241,19 +241,19 @@ $actionsLeft = Display::url(
 if (api_is_allowed('BLOG_'.$blog_id, 'article_add')) {
     $actionsLeft .= Display::url(
         Display::return_icon('new_article.png', get_lang('NewPost'), '', ICON_SIZE_MEDIUM),
-        api_get_self().'?action=new_post&amp;blog_id='.$blog_id
+        api_get_self().'?action=new_post&blog_id='.$blog_id.'&'.api_get_cidreq()
     );
 }
 if (api_is_allowed('BLOG_'.$blog_id, 'task_management')) {
     $actionsLeft .= Display::url(
         Display::return_icon('blog_tasks.png', get_lang('TaskManager'), '', ICON_SIZE_MEDIUM),
-        api_get_self().'?action=manage_tasks&amp;blog_id='.$blog_id
+        api_get_self().'?action=manage_tasks&blog_id='.$blog_id.'&'.api_get_cidreq()
     );
 }
 if (api_is_allowed('BLOG_'.$blog_id, 'member_management')) {
     $actionsLeft .= Display::url(
         Display::return_icon('blog_admin_users.png', get_lang('MemberManager'), '', ICON_SIZE_MEDIUM),
-        api_get_self().'?action=manage_members&amp;blog_id='.$blog_id
+        api_get_self().'?action=manage_members&blog_id='.$blog_id.'&'.api_get_cidreq()
     );
 }
 

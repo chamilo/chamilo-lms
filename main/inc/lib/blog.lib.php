@@ -1,9 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
- * Blog library
- * @package chamilo.blogs
- */
+
 /**
  * Class Blog
  *
@@ -2333,7 +2330,7 @@ class Blog
 
     /**
      * Displays the form to register users in a blog (in a course)
-     * The listed users are users subcribed in the course.
+     * The listed users are users subscribed in the course.
      * @author Toon Keppens
      *
      * @param Integer $blog_id
@@ -2408,11 +2405,9 @@ class Blog
                 $row[] = Display::icon_mailto_link($a_infosUser["email"]);
 
                 //Link to register users
-                if ($a_infosUser["user_id"] != $_SESSION['_user']['user_id']) {
-                    $row[] = "<a class=\"btn btn-primary \" href=\"".api_get_self(
-                        )."?action=manage_members&blog_id=$blog_id&register=yes&user_id=".$a_infosUser["user_id"]."\">".get_lang(
-                            'Register'
-                        )."</a>";
+                if ($a_infosUser["user_id"] != api_get_user_id()) {
+                    $row[] = "<a class=\"btn btn-primary \" href=\"".api_get_self()."?action=manage_members&blog_id=$blog_id&register=yes&user_id=".$a_infosUser["user_id"]."\">".
+                        get_lang('Register')."</a>";
                 } else {
                     $row[] = '';
                 }

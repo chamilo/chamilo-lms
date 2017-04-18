@@ -104,7 +104,7 @@
                 </div>
                 <div class="panel-body">
                     <article>
-                        <header>
+                        <div class="article-header">
                             <div class="title">
                                 <h1 title="{{ post.title }}">{{ post.title }}</h1>
                             </div>
@@ -124,7 +124,7 @@
                                     <i class="fa fa-star" aria-hidden="true"></i> {{ post.score_ranking }}
                                 </li>
                             </ul>
-                        </header>
+                        </div>
                         <div class="content-post">
                             {{ post.content }}
                         </div>

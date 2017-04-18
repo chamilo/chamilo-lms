@@ -6019,9 +6019,11 @@ class CourseManager
     /**
      * Return tab of params to display a course title in the My Courses tab
      * Check visibility, right, and notification icons, and load_dirs option
+     *  // get html course params
+     *   //
      * @param $courseId
      * @param bool $loadDirs
-     * @return array
+     * @return array with keys ['right_actions'] ['teachers'] ['notifications']
      */
     public static function getCourseParamsForDisplay($courseId, $loadDirs = false)
     {

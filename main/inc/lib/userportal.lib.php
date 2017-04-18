@@ -2020,23 +2020,25 @@ class IndexManager
         $courseLink = $courseInfo['course_public_url'].'?id_session=0';
 
         // get html course params
-        // ['right_actions'] ['teachers'] ['notifications']
-        $tabParams = CourseManager::getCourseParamsForDisplay($id, $loadDirs);
+        $courseParams = CourseManager::getCourseParamsForDisplay($id, $loadDirs);
+        $teachers = '';
+        $rightActions = '';
+
         // teacher list
-        if (!empty($tabParams['teachers'])) {
-            $teachers = '<p class="'.$class2.' view-by-session-teachers">'.$tabParams['teachers'].'</p>';
+        if (!empty($courseParams['teachers'])) {
+            $teachers = '<p class="'.$class2.' view-by-session-teachers">'.$courseParams['teachers'].'</p>';
         }
 
         // notification
-        if (!empty($tabParams['right_actions'])) {
-            $rightActions = '<div class="pull-right">'.$tabParams['right_actions'].'</div>';
+        if (!empty($courseParams['right_actions'])) {
+            $rightActions = '<div class="pull-right">'.$courseParams['right_actions'].'</div>';
         }
 
         return "<div>
                     $button
                     <span class='$class'>$icon
                     <a class='sessionView' href='$courseLink'>$title</a>
-                    </span>".$tabParams['notifications']."$rightActions
+                    </span>".$courseParams['notifications']." $rightActions
                 </div>
                 $teachers";
     }

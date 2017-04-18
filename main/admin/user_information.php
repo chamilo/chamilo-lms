@@ -38,8 +38,8 @@ $interbreadcrumb[] = array("url" => 'user_list.php', "name" => get_lang('UserLis
 
 $userId = $user['user_id'];
 $tool_name = $user['complete_name'].(empty($user['official_code'])?'':' ('.$user['official_code'].')');
-$table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
+$table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+$table_course = Database::get_main_table(TABLE_MAIN_COURSE);
 
 // only allow platform admins to login_as, or session admins only for students (not teachers nor other admins)
 $login_as_icon = '';

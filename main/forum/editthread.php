@@ -112,7 +112,7 @@ if (!empty($groupId)) {
     $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('EditThread'));
 }
 
-$tableLink = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+$tableLink = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
 /* Header */
 

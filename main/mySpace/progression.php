@@ -20,11 +20,11 @@ $interbreadcrumb[] = array("url" => "index.php", "name" => get_lang('MySpace'));
 Display :: display_header($nameTools);
 
 // Database Table Definitions
-$tbl_course = Database :: get_main_table(TABLE_MAIN_COURSE);
-$tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
-$tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
-$tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
-$tbl_track_exercice = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+$tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
+$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
+$tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+$tbl_track_exercice = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 
 /*
  	MAIN CODE

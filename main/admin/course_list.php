@@ -19,13 +19,13 @@ $sessionId = isset($_GET['session_id']) ? $_GET['session_id'] : null;
  */
 function get_number_of_courses()
 {
-    $course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
+    $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
     $sql = "SELECT COUNT(code) AS total_number_of_items FROM $course_table c";
 
     if ((api_is_platform_admin() || api_is_session_admin()) &&
         api_is_multiple_url_enabled() && api_get_current_access_url_id() != -1
     ) {
-        $access_url_rel_course_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $access_url_rel_course_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $sql .= " INNER JOIN $access_url_rel_course_table url_rel_course
                  ON (c.id = url_rel_course.c_id)";
     }
@@ -100,7 +100,7 @@ function get_course_data($from, $number_of_items, $column, $direction)
     if ((api_is_platform_admin() || api_is_session_admin()) &&
         api_is_multiple_url_enabled() && api_get_current_access_url_id() != -1
     ) {
-        $access_url_rel_course_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $access_url_rel_course_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $sql .= " INNER JOIN $access_url_rel_course_table url_rel_course
                  ON (course.id = url_rel_course.c_id)";
     }

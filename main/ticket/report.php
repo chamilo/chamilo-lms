@@ -141,10 +141,10 @@ function show_form()
  */
 function get_number_of_users()
 {
-    $user_table = Database :: get_main_table(TABLE_MAIN_USER);
+    $user_table = Database::get_main_table(TABLE_MAIN_USER);
     $sql = "SELECT COUNT(u.user_id) AS total_number_of_items FROM $user_table u";
     if ((api_is_platform_admin() || api_is_session_admin()) && api_get_multiple_access_url()) {
-        $access_url_rel_user_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $sql .= " INNER JOIN $access_url_rel_user_table url_rel_user ON (u.user_id=url_rel_user.user_id)";
     }
     if (isset($_GET['keyword'])) {
@@ -172,7 +172,7 @@ function get_number_of_users()
  */
 function get_user_data($from, $number_of_items, $column, $direction)
 {
-    $user_table = Database :: get_main_table(TABLE_MAIN_USER);
+    $user_table = Database::get_main_table(TABLE_MAIN_USER);
 
     if (api_is_western_name_order()) {
         $col34 = "u.firstname AS col3,

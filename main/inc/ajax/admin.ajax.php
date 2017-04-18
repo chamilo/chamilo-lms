@@ -80,7 +80,7 @@ switch ($action) {
  */
 function version_check()
 {
-    $tbl_settings = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+    $tbl_settings = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
     $sql = 'SELECT selected_value FROM '.$tbl_settings.' WHERE variable = "registered" ';
     $result = Database::query($sql);
     $row = Database::fetch_array($result, 'ASSOC');

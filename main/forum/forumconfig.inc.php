@@ -27,7 +27,7 @@ $table_threads_qualify_historical = Database :: get_course_table(
 
 $forum_table_attachment = Database :: get_course_table(TABLE_FORUM_ATTACHMENT);
 $table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
-$table_users = Database :: get_main_table(TABLE_MAIN_USER);
+$table_users = Database::get_main_table(TABLE_MAIN_USER);
 
 /*
     Some configuration settings

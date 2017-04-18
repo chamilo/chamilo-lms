@@ -63,7 +63,7 @@ if (api_get_setting('profile', 'picture') == 'true') {
                 $_FILES['picture']['name'],
                 $_FILES['picture']['tmp_name']
             )) {
-                $table_user = Database :: get_main_table(TABLE_MAIN_USER);
+                $table_user = Database::get_main_table(TABLE_MAIN_USER);
 
                 $sql = "UPDATE $table_user
                         SET 

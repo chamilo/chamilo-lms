@@ -82,7 +82,7 @@ function complete_missing_data($user) {
  * Save the imported data
  */
 function save_data($users) {
-	$user_table = Database :: get_main_table(TABLE_MAIN_USER);
+	$user_table = Database::get_main_table(TABLE_MAIN_USER);
 	if(is_array($users)) {
 		foreach ($users as $index => $user) {
 			$user = complete_missing_data($user);

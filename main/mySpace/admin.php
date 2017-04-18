@@ -21,12 +21,12 @@ Display :: display_header($nameTools);
 api_display_tool_title($nameTools);
 
 // Database Table Definitions
-$tbl_course = Database :: get_main_table(TABLE_MAIN_COURSE);
-$tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
-$tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
-$tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
-$tbl_session_rel_user = Database :: get_main_table(TABLE_MAIN_SESSION_USER);
-$tbl_admin = Database :: get_main_table(TABLE_MAIN_ADMIN);
+$tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
+$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
+$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+$tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+$tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+$tbl_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
 
 if (isset($_POST['export'])) {
     $order_clause = api_is_western_name_order(PERSON_NAME_DATA_EXPORT) ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';

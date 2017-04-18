@@ -242,7 +242,7 @@ switch ($action) {
                 exit;
             }
         } elseif (api_is_student_boss()) {
-    
+
             $supervisorStudents = UserManager::getUsersFollowedByUser(
                 api_get_user_id(),
                 api_is_student_boss() ? null : STUDENT,
@@ -259,7 +259,7 @@ switch ($action) {
                 null
             );
             $supervisorStudents = array_column($supervisorStudents, 'user_id');
-            
+
             //get students with course or session
             $userIdList = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
                 'admin',
@@ -277,23 +277,23 @@ switch ($action) {
                 5
             );
             $userIdList = array_column($userIdList, 'user_id');
-    
+
             //get students session courses
             if ($sessionId == -1) {
                 $sessionList = SessionManager::get_sessions_list();
                 $sessionIdList = array_column($sessionList, 'id');
-        
+
                 $courseCodeList = array();
                 foreach ($sessionList as $session) {
                     $courses = SessionManager::get_course_list_by_session_id($session['id']);
                     $courseCodeList = array_merge($courseCodeList, array_column($courses, 'code'));
                 }
             }
-            
+
             $searchByGroups = true;
         } elseif (api_is_platform_admin()) {
-            
-            
+
+
             //get students with course or session
             $userIdList = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
                 'admin',
@@ -311,7 +311,7 @@ switch ($action) {
                 5
             );
             $userIdList = array_column($userIdList, 'user_id');
-            
+
             //get students session courses
             if ($sessionId == -1) {
                 $sessionList = SessionManager::get_sessions_list();
@@ -806,7 +806,7 @@ switch ($action) {
             $result = [];
             break;
         }
-    
+
         //get sessions
         $arrSessions = array();
         if(count($sessionIdList) > 0) {
@@ -826,7 +826,7 @@ switch ($action) {
                 $sessionIdList
             );
         }
-    
+
         //get courses
         $arrCourses = CourseManager::get_user_list_from_course_code(
             null,
@@ -842,7 +842,7 @@ switch ($action) {
             $userIdList,
             null
         );
-        
+
         //merge courses and sessions
         $result = array_merge($arrSessions, $arrCourses);
 
@@ -945,6 +945,8 @@ switch ($action) {
                 'title',
                 'qualification',
                 'sent_date',
+                'status',
+                'has_correction',
                 'correction',
                 'actions'
             );

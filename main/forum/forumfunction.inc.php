@@ -1713,7 +1713,7 @@ function get_last_post_information($forum_id, $show_invisibles = false, $course_
 
     $table_posts = Database :: get_course_table(TABLE_FORUM_POST);
     $table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
-    $table_users = Database :: get_main_table(TABLE_MAIN_USER);
+    $table_users = Database::get_main_table(TABLE_MAIN_USER);
     $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
 
     $forum_id = intval($forum_id);
@@ -1812,7 +1812,7 @@ function get_threads($forum_id, $courseId = null, $sessionId = null)
     $sessionId = $sessionId !== null ? intval($sessionId) : api_get_session_id();
     $table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
     $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
-    $table_users = Database :: get_main_table(TABLE_MAIN_USER);
+    $table_users = Database::get_main_table(TABLE_MAIN_USER);
 
     $courseId = $courseId !== null ? intval($courseId) : api_get_course_int_id();
     $groupInfo = GroupManager::get_group_properties($groupId);
@@ -2069,7 +2069,7 @@ function getPosts(
 function get_post_information($post_id)
 {
     $table_posts = Database :: get_course_table(TABLE_FORUM_POST);
-    $table_users = Database :: get_main_table(TABLE_MAIN_USER);
+    $table_users = Database::get_main_table(TABLE_MAIN_USER);
     $course_id = api_get_course_int_id();
 
     $sql = "SELECT posts.*, email FROM ".$table_posts." posts, ".$table_users." users
@@ -2135,9 +2135,9 @@ function get_thread_information($forumId, $thread_id, $sessionId = null)
 function get_thread_users_details($thread_id)
 {
     $t_posts = Database :: get_course_table(TABLE_FORUM_POST);
-    $t_users = Database :: get_main_table(TABLE_MAIN_USER);
-    $t_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-    $t_session_rel_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+    $t_users = Database::get_main_table(TABLE_MAIN_USER);
+    $t_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+    $t_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
     $course_id = api_get_course_int_id();
 
@@ -2190,9 +2190,9 @@ function get_thread_users_qualify($thread_id)
 {
     $t_posts = Database :: get_course_table(TABLE_FORUM_POST);
     $t_qualify = Database :: get_course_table(TABLE_FORUM_THREAD_QUALIFY);
-    $t_users = Database :: get_main_table(TABLE_MAIN_USER);
-    $t_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-    $t_session_rel_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+    $t_users = Database::get_main_table(TABLE_MAIN_USER);
+    $t_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+    $t_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
     $course_id = api_get_course_int_id();
     $sessionId = api_get_session_id();
@@ -2258,9 +2258,9 @@ function get_thread_users_not_qualify($thread_id)
 {
     $t_posts = Database :: get_course_table(TABLE_FORUM_POST);
     $t_qualify = Database :: get_course_table(TABLE_FORUM_THREAD_QUALIFY);
-    $t_users = Database :: get_main_table(TABLE_MAIN_USER);
-    $t_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-    $t_session_rel_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+    $t_users = Database::get_main_table(TABLE_MAIN_USER);
+    $t_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+    $t_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
     $is_western_name_order = api_is_western_name_order();
     if ($is_western_name_order) {
@@ -4056,7 +4056,7 @@ function handle_mail_cue($content, $id)
     $table_forums = Database :: get_course_table(TABLE_FORUM);
     $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
     $table_posts = Database :: get_course_table(TABLE_FORUM_POST);
-    $table_users = Database :: get_main_table(TABLE_MAIN_USER);
+    $table_users = Database::get_main_table(TABLE_MAIN_USER);
 
     $course_id = api_get_course_int_id();
 

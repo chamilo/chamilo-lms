@@ -5,8 +5,8 @@
  */
 
 // Database table definitions
-$table_sf = Database :: get_main_table(TABLE_MAIN_SPECIFIC_FIELD);
-$table_sf_val = Database :: get_main_table(TABLE_MAIN_SPECIFIC_FIELD_VALUES);
+$table_sf = Database::get_main_table(TABLE_MAIN_SPECIFIC_FIELD);
+$table_sf_val = Database::get_main_table(TABLE_MAIN_SPECIFIC_FIELD_VALUES);
 
 /**
  * Add a specific field
@@ -223,7 +223,7 @@ function add_specific_field_value(
  * @param int $ref_id intern id inside specific tool table
  */
 function delete_all_specific_field_value($course_id, $id_specific_field, $tool_id, $ref_id) {
-    $table_sf_values = Database :: get_main_table(TABLE_MAIN_SPECIFIC_FIELD_VALUES);
+    $table_sf_values = Database::get_main_table(TABLE_MAIN_SPECIFIC_FIELD_VALUES);
     $sql = 'DELETE FROM %s WHERE course_code = \'%s\' AND tool_id = \'%s\' AND ref_id = %s AND field_id = %s';
     $sql = sprintf($sql, $table_sf_values, $course_id, $tool_id, $ref_id, $id_specific_field);
     Database::query($sql);
@@ -237,7 +237,7 @@ function delete_all_specific_field_value($course_id, $id_specific_field, $tool_i
  * @param   int     Internal ID used in specific tool table
  */
 function delete_all_values_for_item($course_id, $tool_id, $ref_id) {
-  $table_sf_values = Database :: get_main_table(TABLE_MAIN_SPECIFIC_FIELD_VALUES);
+  $table_sf_values = Database::get_main_table(TABLE_MAIN_SPECIFIC_FIELD_VALUES);
   $sql = 'DELETE FROM %s WHERE course_code = \'%s\' AND tool_id = \'%s\' AND ref_id = %s';
   $sql = sprintf($sql, $table_sf_values, $course_id, $tool_id, $ref_id);
   Database::query($sql);

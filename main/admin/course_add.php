@@ -17,13 +17,13 @@ $interbreadcrumb[] = array('url' => 'course_list.php', 'name' => get_lang('Cours
 
 // Get all possible teachers.
 $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
-$table_user = Database :: get_main_table(TABLE_MAIN_USER);
+$table_user = Database::get_main_table(TABLE_MAIN_USER);
 $sql = "SELECT user_id,lastname,firstname
         FROM $table_user
         WHERE status=1".$order_clause;
 // Filtering teachers when creating a course.
 if (api_is_multiple_url_enabled()) {
-    $access_url_rel_user_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+    $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
     $sql = "SELECT u.user_id,lastname,firstname
             FROM $table_user as u
             INNER JOIN $access_url_rel_user_table url_rel_user

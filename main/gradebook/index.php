@@ -87,7 +87,7 @@ function confirmation() {
 
 $tbl_forum_thread = Database :: get_course_table(TABLE_FORUM_THREAD);
 $tbl_attendance   = Database :: get_course_table(TABLE_ATTENDANCE);
-$tbl_grade_links  = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+$tbl_grade_links  = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 $filter_confirm_msg = true;
 $filter_warning_msg = true;
 $courseInfo = api_get_course_info();

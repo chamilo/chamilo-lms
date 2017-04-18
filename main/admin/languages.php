@@ -148,8 +148,8 @@ $htmlHeadXtra[] = '<script>
 unset($_SESSION['disabled_languages']);
 
 // setting the table that is needed for the styles management (there is a check if it exists later in this code)
-$tbl_admin_languages = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
-$tbl_settings_current = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+$tbl_admin_languages = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+$tbl_settings_current = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 
 // we change the availability
 if ($action == 'makeunavailable') {

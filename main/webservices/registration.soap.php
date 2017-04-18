@@ -1517,7 +1517,7 @@ function WSEditUserCredentials($params)
     $userRepository = UserManager::getRepository();
 
 
-    $table_user = Database :: get_main_table(TABLE_MAIN_USER);
+    $table_user = Database::get_main_table(TABLE_MAIN_USER);
 
     $original_user_id_value = $params['original_user_id_value'];
     $original_user_id_name = $params['original_user_id_name'];
@@ -1618,7 +1618,7 @@ function WSEditUsers($params)
 
     $userManager = UserManager::getManager();
     $userRepository = UserManager::getRepository();
-    $table_user = Database :: get_main_table(TABLE_MAIN_USER);
+    $table_user = Database::get_main_table(TABLE_MAIN_USER);
 
     $users_params = $params['users'];
     $results = array();
@@ -1811,7 +1811,7 @@ function WSEditUser($params)
     $userManager = UserManager::getManager();
     $userRepository = UserManager::getRepository();
 
-    $table_user = Database :: get_main_table(TABLE_MAIN_USER);
+    $table_user = Database::get_main_table(TABLE_MAIN_USER);
 
     $original_user_id_value = $params['original_user_id_value'];
     $original_user_id_name = $params['original_user_id_name'];
@@ -1985,7 +1985,7 @@ function WSEditUserWithPicture($params)
     $userManager = UserManager::getManager();
     $userRepository = UserManager::getRepository();
 
-    $table_user = Database :: get_main_table(TABLE_MAIN_USER);
+    $table_user = Database::get_main_table(TABLE_MAIN_USER);
 
     $original_user_id_value = $params['original_user_id_value'];
     $original_user_id_name = $params['original_user_id_name'];
@@ -2205,7 +2205,7 @@ function WSEditUsersPasswordCrypted($params) {
     }
 
     // get user id from id of remote system
-    $table_user = Database :: get_main_table(TABLE_MAIN_USER);
+    $table_user = Database::get_main_table(TABLE_MAIN_USER);
 
     $users_params = $params['users'];
     $results = array();
@@ -2813,7 +2813,7 @@ function WSCreateCourse($params)
     if (!WSHelperVerifyKey($params)) {
         return returnError(WS_ERROR_SECRET_KEY);
     }
-    $table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
+    $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
 
     $courses_params = $params['courses'];
     $results = array();
@@ -3327,7 +3327,7 @@ function WSEditCourse($params){
         $course_code = $courseInfo['code'];
         $courseId = $courseInfo['real_id'];
 
-        $table_user = Database :: get_main_table(TABLE_MAIN_USER);
+        $table_user = Database::get_main_table(TABLE_MAIN_USER);
         $sql = "SELECT concat(lastname,'',firstname) as tutor_name
                 FROM $table_user WHERE status='1' AND user_id = '$tutor_id'
                 ORDER BY lastname,firstname";
@@ -3751,7 +3751,7 @@ function WSDeleteCourse($params)
         return returnError(WS_ERROR_SECRET_KEY);
     }
 
-    $table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
+    $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
     $courses_params = $params['courses'];
     $results = array();
     $orig_course_id_value = array();
@@ -4856,7 +4856,7 @@ function WSUnsubscribeUserFromCourse($params)
     }
 
     $user_table = Database::get_main_table(TABLE_MAIN_USER);
-    $table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+    $table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
     $userscourses_params = $params['userscourses'];
     $results = array();

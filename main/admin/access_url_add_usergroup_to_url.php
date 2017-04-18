@@ -23,7 +23,7 @@ $firstLetterUserGroup = null;
 $courses = array();
 $url_list = array();
 
-$tbl_access_url_rel_course = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+$tbl_access_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 $tbl_access_url = Database:: get_main_table(TABLE_MAIN_ACCESS_URL);
 $tbl_user = Database:: get_main_table(TABLE_MAIN_USER);
 $tbl_course = Database:: get_main_table(TABLE_MAIN_COURSE);

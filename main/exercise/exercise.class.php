@@ -2740,7 +2740,7 @@ class Exercise
         $lp_item_view_id = 0,
         $status = 'incomplete'
     ) {
-        $track_exercises = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         if (empty($lp_id)) {
             $lp_id = 0;
         }

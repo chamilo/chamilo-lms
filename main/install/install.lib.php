@@ -3018,7 +3018,7 @@ function get_group_picture_path_by_id($id, $type = 'web', $preview = false, $ano
 
     $id = intval($id);
 
-    //$group_table = Database :: get_main_table(TABLE_MAIN_GROUP);
+    //$group_table = Database::get_main_table(TABLE_MAIN_GROUP);
     $group_table = 'groups';
     $sql = "SELECT picture_uri FROM $group_table WHERE id=".$id;
     $res = Database::query($sql);

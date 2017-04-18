@@ -24,8 +24,8 @@ if (!api_get_multiple_access_url()) {
 
 // Database Table Definitions
 $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
-$tbl_access_url_rel_user = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-$tbl_access_url = Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
+$tbl_access_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+$tbl_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
 
 // setting breadcrumbs
 $tool_name = get_lang('EditUsersToURL');

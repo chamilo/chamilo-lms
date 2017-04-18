@@ -29,7 +29,7 @@ function validate_data($users_courses)
             // 2.1 Check whethher code has been allready used by this CVS-file.
             if (!isset($coursecodes[$user_course['CourseCode']])) {
                 // 2.1.1 Check whether course with this code exists in the system.
-                $course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
+                $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
                 $sql = "SELECT * FROM $course_table
                         WHERE code = '".Database::escape_string($user_course['CourseCode'])."'";
                 $res = Database::query($sql);

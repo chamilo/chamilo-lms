@@ -28,8 +28,8 @@ Display :: display_header('');
 
 echo Display::page_header(get_lang('GradebookQualifyLog'));
 
-$t_linkeval_log = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);
-$t_user = Database :: get_main_table(TABLE_MAIN_USER);
+$t_linkeval_log = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);
+$t_user = Database::get_main_table(TABLE_MAIN_USER);
 $visible_log=Security::remove_XSS($_GET['visiblelog']);
 
 $evaledit = Evaluation :: load($visible_log);

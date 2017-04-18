@@ -175,8 +175,8 @@ switch ($action) {
         break;
     case 'search_user_by_course':
         if (api_is_platform_admin()) {
-            $user = Database :: get_main_table(TABLE_MAIN_USER);
-            $session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+            $user = Database::get_main_table(TABLE_MAIN_USER);
+            $session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
             $course = api_get_course_info_by_id($_GET['course_id']);
 
             $json = [

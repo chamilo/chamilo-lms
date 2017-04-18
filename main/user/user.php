@@ -287,7 +287,7 @@ if (api_is_allowed_to_edit(null, true)) {
 
                 if ($sessionId == 0) {
                     // users directly subscribed to the course
-                    $table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+                    $table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
                     $sql = "SELECT DISTINCT
 					            user.user_id, ".($is_western_name_order ? "user.firstname, user.lastname" : "user.lastname, user.firstname").",
 					            user.username,

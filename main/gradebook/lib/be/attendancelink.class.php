@@ -47,7 +47,7 @@ class AttendanceLink extends AbstractLink
 		if (empty($this->course_code)) {
 			die('Error in get_not_created_links() : course code not set');
 		}
-		$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+		$tbl_grade_links = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
 		$sql = 'SELECT att.id, att.name, att.attendance_qualify_title
 				FROM '.$this->get_attendance_table().' att

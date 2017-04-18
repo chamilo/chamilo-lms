@@ -319,7 +319,7 @@ $social_right_content = '';
 $listInvitations = '';
 
 if ($show_full_profile) {
-    $t_ufo = Database :: get_main_table(TABLE_EXTRA_FIELD_OPTIONS);
+    $t_ufo = Database::get_main_table(TABLE_EXTRA_FIELD_OPTIONS);
     $extra_user_data = UserManager::get_extra_user_data($user_id, false, true);
 
     $extra_information = '';

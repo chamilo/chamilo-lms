@@ -42,8 +42,8 @@ if (empty($session_id)) {
 
 // Breadcrumbs.
 if (isset($_GET['origin']) && $_GET['origin'] == 'resume_session') {
-    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'admin/index.php','name' => get_lang('PlatformAdmin'));
-    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'session/session_list.php','name' => get_lang('SessionList'));
+    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'admin/index.php', 'name' => get_lang('PlatformAdmin'));
+    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'session/session_list.php', 'name' => get_lang('SessionList'));
     $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.api_get_session_id(), 'name' => get_lang('SessionOverview'));
 }
 
@@ -73,21 +73,21 @@ echo Display::url(
 echo Display::return_icon('tools_na.png', get_lang('ResourcesTracking'), array(), ICON_SIZE_MEDIUM);
 echo '<span style="float:right; padding-top:0px;">';
 echo '<a href="javascript: void(0);" onclick="javascript: window.print();">'.
-    Display::return_icon('printer.png', get_lang('Print'),'',ICON_SIZE_MEDIUM).
+    Display::return_icon('printer.png', get_lang('Print'), '', ICON_SIZE_MEDIUM).
 '</a>';
 
 $addional_param = '';
 if (isset($_GET['additional_profile_field'])) {
-    $addional_param ='additional_profile_field='.intval($_GET['additional_profile_field']);
+    $addional_param = 'additional_profile_field='.intval($_GET['additional_profile_field']);
 }
 
 $users_tracking_per_page = '';
 if (isset($_GET['users_tracking_per_page'])) {
-    $users_tracking_per_page= '&users_tracking_per_page='.intval($_GET['users_tracking_per_page']);
+    $users_tracking_per_page = '&users_tracking_per_page='.intval($_GET['users_tracking_per_page']);
 }
 
 echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&export=csv&'.$addional_param.$users_tracking_per_page.'">
-'.Display::return_icon('export_csv.png', get_lang('ExportAsCSV'),'',ICON_SIZE_MEDIUM).'</a>';
+'.Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), '', ICON_SIZE_MEDIUM).'</a>';
 
 echo '</span>';
 echo '</div>';

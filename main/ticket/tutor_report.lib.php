@@ -21,7 +21,7 @@ function initializeReport($course_code)
     $table_post = Database::get_course_table(TABLE_FORUM_POST);
     $table_work = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $course_code = Database::escape_string($course_code);
-    $res = Database::query("SELECT COUNT(*) as cant FROM $table_reporte_semanas WHERE course_code = '" . $course_code . "'");
+    $res = Database::query("SELECT COUNT(*) as cant FROM $table_reporte_semanas WHERE course_code = '".$course_code."'");
     $sqlWeeks = "SELECT semanas FROM $table_semanas_curso WHERE course_code = '$course_code'";
     $resWeeks = Database::query($sqlWeeks);
     $weeks = Database::fetch_object($resWeeks);
@@ -167,7 +167,7 @@ function showResults($courseInfo, $weeksCount, $page)
         if ($row['week_id'] > (($page - 1) * 7) && $row['week_id'] <= (7 * $page)) {
             $results[$row['username']][$row['week_id']] = $row;
             if (count($results[$row['username']]) == 7) {
-                $html.= showStudentResult($results[$row['username']], $page);
+                $html .= showStudentResult($results[$row['username']], $page);
             }
         }
         if (count($resultadose[$row['username']]) == $weeksCount) {

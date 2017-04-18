@@ -25,7 +25,7 @@ class SelectAjax extends HTML_QuickForm_select
         $iso = api_get_language_isocode(api_get_interface_language());
         $languageCondition = '';
 
-        if (file_exists(api_get_path(SYS_PATH) . "web/assets/select2/dist/js/i18n/$iso.js")) {
+        if (file_exists(api_get_path(SYS_PATH)."web/assets/select2/dist/js/i18n/$iso.js")) {
             $html .= api_get_asset("select2/dist/js/i18n/$iso.js");
             $languageCondition = "language: '$iso',";
         }
@@ -50,8 +50,7 @@ class SelectAjax extends HTML_QuickForm_select
 
         //Get the minimumInputLength for select2
         $minimumInputLength = $this->getAttribute('minimumInputLength') > 3 ?
-            $this->getAttribute('minimumInputLength') :
-            3
+            $this->getAttribute('minimumInputLength') : 3
         ;
 
         $plHolder = $this->getAttribute('placeholder');
@@ -84,7 +83,7 @@ class SelectAjax extends HTML_QuickForm_select
         $multiple = $multiple ? 'true' : 'false';
 
         $max = $this->getAttribute('maximumSelectionLength');
-        $max = !empty($max) ? "maximumSelectionLength: $max, ": '';
+        $max = !empty($max) ? "maximumSelectionLength: $max, " : '';
 
         $html .= <<<JS
             <script>
@@ -128,7 +127,7 @@ JS;
         $this->removeAttribute('url_function');
         $this->setAttribute('style', 'width: 100%;');
 
-        return parent::toHtml() . $html;
+        return parent::toHtml().$html;
     }
 
     /**

@@ -62,8 +62,8 @@ $csv_content = array();
 
 // Breadcrumbs.
 if (isset($_GET['origin']) && $_GET['origin'] == 'resume_session') {
-    $interbreadcrumb[] = array('url' => '../admin/index.php','name' => get_lang('PlatformAdmin'));
-    $interbreadcrumb[] = array('url' => '../session/session_list.php','name' => get_lang('SessionList'));
+    $interbreadcrumb[] = array('url' => '../admin/index.php', 'name' => get_lang('PlatformAdmin'));
+    $interbreadcrumb[] = array('url' => '../session/session_list.php', 'name' => get_lang('SessionList'));
     $interbreadcrumb[] = array('url' => '../session/resume_session.php?id_session='.api_get_session_id(), 'name' => get_lang('SessionOverview'));
 }
 
@@ -131,10 +131,10 @@ echo Display::url(
 
 echo '<span style="float:right; padding-top:0px;">';
 echo '<a href="javascript: void(0);" onclick="javascript: window.print();">'.
-    Display::return_icon('printer.png', get_lang('Print'),'',ICON_SIZE_MEDIUM).'</a>';
+    Display::return_icon('printer.png', get_lang('Print'), '', ICON_SIZE_MEDIUM).'</a>';
 
 echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&id_session='.api_get_session_id().'&export=csv">
-	'.Display::return_icon('export_csv.png', get_lang('ExportAsCSV'),'',ICON_SIZE_MEDIUM).'</a>';
+	'.Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), '', ICON_SIZE_MEDIUM).'</a>';
 
 echo '</span>';
 echo '</div>';
@@ -247,7 +247,7 @@ if ($exerciseReporting) {
             $quiz_avg_score = round(($quiz_avg_score / $studentCount), 2).'%';
             $url = api_get_path(
                     WEB_CODE_PATH
-                ) . 'exercise/overview.php?exerciseId='.$quiz['id'].$course_path_params;
+                ).'exercise/overview.php?exerciseId='.$quiz['id'].$course_path_params;
 
             echo '<tr><td>'.Display::url(
                     $quiz['title'],

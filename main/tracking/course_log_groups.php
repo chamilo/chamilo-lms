@@ -99,7 +99,7 @@ $extra_params['height'] = 'auto';
 
 $action_links = '
 function action_formatter(cellvalue, options, rowObject) {
-    return \'<a href="course_log_tools.php?id_session=0&cidReq='.$course_code.'&gidReq=\'+options.rowId+\'">'.Display::return_icon('2rightarrow.png',get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>'.
+    return \'<a href="course_log_tools.php?id_session=0&cidReq='.$course_code.'&gidReq=\'+options.rowId+\'">'.Display::return_icon('2rightarrow.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>'.
     '\';
 }';
 
@@ -109,7 +109,7 @@ $htmlHeadXtra[] = api_get_jqgrid_js();
 $htmlHeadXtra[] = '
 <script>
 $(function() {
-    '.Display::grid_js('group_users',$url, $columns, $column_model, $extra_params, array(), $action_links, true).'
+    '.Display::grid_js('group_users', $url, $columns, $column_model, $extra_params, array(), $action_links, true).'
 });
 </script>';
 

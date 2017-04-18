@@ -13,7 +13,7 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseRecycler;
  */
 
 require_once __DIR__.'/../inc/global.inc.php';
-$current_course_tool  = TOOL_COURSE_MAINTENANCE;
+$current_course_tool = TOOL_COURSE_MAINTENANCE;
 api_protect_course_script(true);
 
 // Check access rights (only teachers are allowed here)

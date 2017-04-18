@@ -219,7 +219,7 @@ class Question
      */
     public function getEntityIdentifier()
     {
-        return 'GenjFaqBundle:Question:' . $this->getId();
+        return 'GenjFaqBundle:Question:'.$this->getId();
     }
 
     /**

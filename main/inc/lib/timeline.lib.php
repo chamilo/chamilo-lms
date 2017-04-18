@@ -27,7 +27,7 @@ class Timeline extends Model
 
 	public function __construct()
     {
-        $this->table =  Database::get_course_table(TABLE_TIMELINE);
+        $this->table = Database::get_course_table(TABLE_TIMELINE);
 	}
 
     /**
@@ -46,7 +46,7 @@ class Timeline extends Model
      */
     public function get_all($where_conditions = array())
     {
-        return Database::select('*',$this->table, array('where'=>$where_conditions,'order' =>'headline ASC'));
+        return Database::select('*', $this->table, array('where'=>$where_conditions, 'order' =>'headline ASC'));
     }
 
     /**
@@ -57,7 +57,7 @@ class Timeline extends Model
 		// action links
 		$html = '<div class="actions">';
         //$html .= '<a href="career_dashboard.php">'.Display::return_icon('back.png',get_lang('Back'),'','32').'</a>';
-		$html .= '<a href="'.api_get_self().'?action=add">'.Display::return_icon('add.png', get_lang('Add'),'','32').'</a>';
+		$html .= '<a href="'.api_get_self().'?action=add">'.Display::return_icon('add.png', get_lang('Add'), '', '32').'</a>';
 		$html .= '</div>';
         $html .= Display::grid_html('timelines');
         return $html;
@@ -244,7 +244,7 @@ class Timeline extends Model
         }
         unset($item['end_date']);
         // Assets
-        $item['asset'] = array( 'media'     => $item['media'],
+        $item['asset'] = array('media'     => $item['media'],
                                 'credit'    => $item['media_credit'],
                                 'caption'   => $item['media_caption'],
          );

@@ -43,9 +43,9 @@ class ScormQuestion extends Question
 		$question->type = $qst->type;
 		$question->question = $qst->question;
 		$question->description = $qst->description;
-		$question->weighting=$qst->weighting;
-		$question->position=$qst->position;
-		$question->picture=$qst->picture;
+		$question->weighting = $qst->weighting;
+		$question->position = $qst->position;
+		$question->picture = $qst->picture;
 		$assessmentItem = new ScormAssessmentItem($question, $standalone);
 
 		return $assessmentItem->export();
@@ -227,7 +227,7 @@ class ScormAnswerMultipleChoice extends Answer
 					<input name="'.$identifier.'" id="'.$identifier.'" value="'.$i.'" type="checkbox" />
 					</td>
 					<td width="95%">
-					<label for="'.$identifier.'">' . Security::remove_XSS($this->answer[$i]) . '</label>
+					<label for="'.$identifier.'">'.Security::remove_XSS($this->answer[$i]).'</label>
 					</td>
 					</tr>';
 
@@ -239,7 +239,7 @@ class ScormAnswerMultipleChoice extends Answer
                 $jstmpw .= 'questions_answers_correct['.$this->questionJSId.']['.$i.'] = '.$this->correct[$i].';';
 				$id++;
 			}
-			$js .= 'questions_answers['.$this->questionJSId.'] = new Array('.substr($jstmp,0,-1).');'."\n";
+			$js .= 'questions_answers['.$this->questionJSId.'] = new Array('.substr($jstmp, 0, -1).');'."\n";
             $js .= 'questions_types['.$this->questionJSId.'] = \'mcma\';'."\n";
 			$js .= $jstmpw;
 		} elseif ($type == MULTIPLE_ANSWER_COMBINATION) {
@@ -255,7 +255,7 @@ class ScormAnswerMultipleChoice extends Answer
 					<input name="'.$identifier.'" id="'.$identifier.'" value="'.$i.'" type="checkbox" />
 					</td>
 					<td width="95%">
-					<label for="'.$identifier.'">' . Security::remove_XSS($this->answer[$i]) . '</label>
+					<label for="'.$identifier.'">'.Security::remove_XSS($this->answer[$i]).'</label>
 					</td>
 					</tr>';
 
@@ -267,7 +267,7 @@ class ScormAnswerMultipleChoice extends Answer
                 $jstmpw .= 'questions_answers_correct['.$this->questionJSId.']['.$i.'] = '.$this->correct[$i].";";
                 $id++;
             }
-            $js .= 'questions_answers['.$this->questionJSId.'] = new Array('.substr($jstmp,0,-1).');';
+            $js .= 'questions_answers['.$this->questionJSId.'] = new Array('.substr($jstmp, 0, -1).');';
             $js .= 'questions_types['.$this->questionJSId.'] = "exact";';
             $js .= $jstmpw;
 		} else {
@@ -283,7 +283,7 @@ class ScormAnswerMultipleChoice extends Answer
 					<input name="'.$identifier_name.'" id="'.$identifier.'" value="'.$i.'" type="checkbox"/>
 					</td>
 					<td width="95%">
-					<label for="'.$identifier.'">' . Security::remove_XSS($this->answer[$i]) . '</label>
+					<label for="'.$identifier.'">'.Security::remove_XSS($this->answer[$i]).'</label>
 					</td>
 					</tr>';
 				$jstmp .= $i.',';
@@ -294,7 +294,7 @@ class ScormAnswerMultipleChoice extends Answer
                 $jstmpw .= 'questions_answers_correct['.$this->questionJSId.']['.$i.'] = '.$this->correct[$i].';';
 				$id++;
 			}
-			$js .= 'questions_answers['.$this->questionJSId.'] = new Array('.substr($jstmp,0,-1).');';
+			$js .= 'questions_answers['.$this->questionJSId.'] = new Array('.substr($jstmp, 0, -1).');';
 			$js .= 'questions_types['.$this->questionJSId.'] = \'mcua\';';
 			$js .= $jstmpw;
 		}
@@ -329,7 +329,7 @@ class ScormAnswerTrueFalse extends Answer
 				<input name="'.$identifier_true.'" id="'.$identifier_true.'" value="'.$this->trueGrade.'" type="radio" />
 				</td>
 				<td width="95%">
-				<label for="'.$identifier_true.'">' . get_lang('True') . '</label>
+				<label for="'.$identifier_true.'">'.get_lang('True').'</label>
 				</td>
 				</tr>';
 		$html .=
@@ -338,7 +338,7 @@ class ScormAnswerTrueFalse extends Answer
 			<input name="'.$identifier_false.'" id="'.$identifier_false.'" value="'.$this->falseGrade.'" type="radio" />
 			</td>
 			<td width="95%">
-			<label for="'.$identifier_false.'">' . get_lang('False') . '</label>
+			<label for="'.$identifier_false.'">'.get_lang('False').'</label>
 			</td>
 			</tr></table></td></tr>';
 		$js .= 'questions_answers['.$this->questionJSId.'] = new Array(\'true\',\'false\');'."\n";
@@ -383,30 +383,30 @@ class ScormAnswerFillInBlanks extends Answer
 		}
 
 		// splits text and weightings that are joined with the character '::'
-		list($answer,$weight)=explode('::',$answer);
-		$weights = explode(',',$weight);
+		list($answer, $weight) = explode('::', $answer);
+		$weights = explode(',', $weight);
 		// because [] is parsed here we follow this procedure:
 		// 1. find everything between the [ and ] tags
-		$i=1;
+		$i = 1;
 		$jstmp = '';
 		$jstmpc = '';
 		$jstmpw = 'questions_answers_ponderation['.$this->questionJSId.'] = new Array();'."\n";
 		$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][0] = 0;'."\n";
-		$startlocations=api_strpos($answer,'[');
-		$endlocations=api_strpos($answer,']');
+		$startlocations = api_strpos($answer, '[');
+		$endlocations = api_strpos($answer, ']');
 		while ($startlocations !== false && $endlocations !== false) {
-			$texstring = api_substr($answer,$startlocations,($endlocations-$startlocations)+1);
+			$texstring = api_substr($answer, $startlocations, ($endlocations - $startlocations) + 1);
 			$answer = api_substr_replace(
                 $answer,
                 '<input type="text" name="question_'.$this->questionJSId.'_fib_'.$i.'" id="question_'.$this->questionJSId.'_fib_'.$i.'" size="10" value="" />',
                 $startlocations,
-                ($endlocations-$startlocations)+1
+                ($endlocations - $startlocations) + 1
             );
             $jstmp .= $i.',';
 			if (!empty($texstring)) {
 				$sub = api_substr($texstring, 1, -1);
 				if (!empty($sub)) {
-					$jstmpc .= "'" . api_htmlentities($sub, ENT_QUOTES, $charset) . "',";
+					$jstmpc .= "'".api_htmlentities($sub, ENT_QUOTES, $charset)."',";
 				}
 			}
             $my_weight = explode('@', $weights[$i - 1]);
@@ -426,12 +426,12 @@ class ScormAnswerFillInBlanks extends Answer
 			'.$answer.'
 			</td>
 			</tr></table></td></tr>';
-		$js .= 'questions_answers['.$this->questionJSId.'] = new Array('.api_substr($jstmp,0,-1).');'."\n";
-		$js .= 'questions_answers_correct['.$this->questionJSId.'] = new Array('.api_substr($jstmpc,0,-1).');'."\n";
+		$js .= 'questions_answers['.$this->questionJSId.'] = new Array('.api_substr($jstmp, 0, -1).');'."\n";
+		$js .= 'questions_answers_correct['.$this->questionJSId.'] = new Array('.api_substr($jstmpc, 0, -1).');'."\n";
 		$js .= 'questions_types['.$this->questionJSId.'] = \'fib\';'."\n";
 		$js .= $jstmpw;
 
-		return array($js,$html);
+		return array($js, $html);
 	}
 }
 
@@ -457,8 +457,8 @@ class ScormAnswerMatching extends Answer
 		// get max length of displayed array
 
 		$nbrAnswers = $this->selectNbrAnswers();
-		$cpt1='A';
-		$cpt2=1;
+		$cpt1 = 'A';
+		$cpt2 = 1;
 		$Select = array();
 		$qId = $this->questionJSId;
 		$s = '';
@@ -467,37 +467,37 @@ class ScormAnswerMatching extends Answer
 		$jstmpw = 'questions_answers_ponderation['.$this->questionJSId.'] = new Array();'."\n";
 		$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][0] = 0;'."\n";
 
-		for ($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
+		for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
 			$identifier = 'question_'.$qId.'_matching_';
-			$answer=$this->selectAnswer($answerId);
-			$answerCorrect=$this->isCorrect($answerId);
-			$weight=$this->selectWeighting($answerId);
+			$answer = $this->selectAnswer($answerId);
+			$answerCorrect = $this->isCorrect($answerId);
+			$weight = $this->selectWeighting($answerId);
 			$jstmp .= $answerId.',';
 
 			if (!$answerCorrect) {
 				// options (A, B, C, ...) that will be put into the list-box
-				$Select[$answerId]['Lettre']=$cpt1;
+				$Select[$answerId]['Lettre'] = $cpt1;
 				// answers that will be shown at the right side
 				$Select[$answerId]['Reponse'] = $answer;
 				$cpt1++;
 			} else {
-				$s.='<tr>';
-				$s.='<td width="40%" valign="top"><b>'.$cpt2.'</b>.&nbsp;'.$answer."</td>";
-				$s.='<td width="20%" align="center">&nbsp;&nbsp;<select name="'.$identifier.$cpt2.'" id="'.$identifier.$cpt2.'">';
-				$s.=' <option value="0">--</option>';
+				$s .= '<tr>';
+				$s .= '<td width="40%" valign="top"><b>'.$cpt2.'</b>.&nbsp;'.$answer."</td>";
+				$s .= '<td width="20%" align="center">&nbsp;&nbsp;<select name="'.$identifier.$cpt2.'" id="'.$identifier.$cpt2.'">';
+				$s .= ' <option value="0">--</option>';
 				// fills the list-box
                 foreach ($Select as $key => $val) {
                     $s .= '<option value="'.$key.'">'.$val['Lettre'].'</option>';
                 }  // end foreach()
 
-				$s.='</select>&nbsp;&nbsp;</td>';
-				$s.='<td width="40%" valign="top">';
+				$s .= '</select>&nbsp;&nbsp;</td>';
+				$s .= '<td width="40%" valign="top">';
                 if (isset($Select[$cpt2])) {
                     $s .= '<b>'.$Select[$cpt2]['Lettre'].'.</b> '.$Select[$cpt2]['Reponse'];
                 } else {
                     $s .= '&nbsp;';
                 }
-				$s.="</td></tr>";
+				$s .= "</td></tr>";
 
 				$jstmpc .= '['.$answerCorrect.','.$cpt2.'],';
 
@@ -514,22 +514,22 @@ class ScormAnswerMatching extends Answer
 				if ($answerId == $nbrAnswers) {
 					// if there remain answers to be shown on the right side
 					while (isset($Select[$cpt2])) {
-						$s.= '<tr>';
-						$s.= '<td width="60%" colspan="2">&nbsp;</td>';
-						$s.= '<td width="40%" valign="top">';
-						$s.= '<b>'.$Select[$cpt2]['Lettre'].'.</b> '.$Select[$cpt2]['Reponse'];
-						$s.= "</td></tr>";
+						$s .= '<tr>';
+						$s .= '<td width="60%" colspan="2">&nbsp;</td>';
+						$s .= '<td width="40%" valign="top">';
+						$s .= '<b>'.$Select[$cpt2]['Lettre'].'.</b> '.$Select[$cpt2]['Reponse'];
+						$s .= "</td></tr>";
 						$cpt2++;
 					}	// end while()
 				}  // end if()
 			}
 		}
-		$js .= 'questions_answers['.$this->questionJSId.'] = new Array('.substr($jstmp,0,-1).');'."\n";
-		$js .= 'questions_answers_correct['.$this->questionJSId.'] = new Array('.substr($jstmpc,0,-1).');'."\n";
+		$js .= 'questions_answers['.$this->questionJSId.'] = new Array('.substr($jstmp, 0, -1).');'."\n";
+		$js .= 'questions_answers_correct['.$this->questionJSId.'] = new Array('.substr($jstmpc, 0, -1).');'."\n";
 		$js .= 'questions_types['.$this->questionJSId.'] = \'matching\';'."\n";
 		$js .= $jstmpw;
 		$html .= $s;
-		$html .= '</table></td></tr>' . "\n";
+		$html .= '</table></td></tr>'."\n";
 
 		return array($js, $html);
 	}
@@ -634,7 +634,7 @@ class ScormAnswerHotspot extends Answer
 		$html .= '';
 
 		// Get the answers, make a list
-		$nbrAnswers=$this->selectNbrAnswers();
+		$nbrAnswers = $this->selectNbrAnswers();
 
 		$answer_list = '<div style="padding: 10px; margin-left: -8px; border: 1px solid #4271b5; height: 448px; width: 200px;"><b>'.get_lang('HotspotZones').'</b><ol>';
         for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
@@ -698,7 +698,7 @@ class ScormAssessmentItem
 	{
 		$this->question = $question;
 		$this->question->setAnswer();
-		$this->questionIdent = "QST_" . $question->id ;
+		$this->questionIdent = "QST_".$question->id;
 		$this->standalone = $standalone;
 	}
 
@@ -798,7 +798,7 @@ class ScormAssessmentItem
 		$js .= 'var questions_answers = new Array();';
 		$js .= 'var questions_answers_correct = new Array();';
 		$js .= 'var questions_types = new Array();';
-		$js .= "\n" .
+		$js .= "\n".
 			'/**
              * Assigns any event handler to any element
              * @param	object	Element on which the event is added
@@ -1014,11 +1014,11 @@ class ScormSection
 	{
 		$js = file_get_contents('../inc/lib/javascript/hotspot/js/hotspot.js');
 
-		$js .= 'var questions = new Array();' . "\n";
-		$js .= 'var questions_answers = new Array();' . "\n";
-		$js .= 'var questions_answers_correct = new Array();' . "\n";
-		$js .= 'var questions_types = new Array();' . "\n";
-		$js .= "\n" .
+		$js .= 'var questions = new Array();'."\n";
+		$js .= 'var questions_answers = new Array();'."\n";
+		$js .= 'var questions_answers_correct = new Array();'."\n";
+		$js .= 'var questions_types = new Array();'."\n";
+		$js .= "\n".
 			'/**
              * Assigns any event handler to any element
              * @param	object	Element on which the event is added
@@ -1063,7 +1063,7 @@ class ScormSection
 
 		$js .= '';
 		$js .= 'addEvent(window,\'load\',addListeners,false);'."\n";
-		return $js. "\n";
+		return $js."\n";
 	}
 
 	/**
@@ -1110,8 +1110,8 @@ class ScormSection
 
 		$head = '';
 		if ($this->standalone) {
-			$head = '<?xml version = "1.0" encoding = "' . $charset . '" standalone = "no"?>' . "\n"
-				. '<!DOCTYPE questestinterop SYSTEM "ims_qtiasiv2p1.dtd">' . "\n";
+			$head = '<?xml version = "1.0" encoding = "'.$charset.'" standalone = "no"?>'."\n"
+				. '<!DOCTYPE questestinterop SYSTEM "ims_qtiasiv2p1.dtd">'."\n";
 		}
 
 		list($js, $html) = $this->export_questions();
@@ -1153,7 +1153,7 @@ class ScormSection
 		$js = $html = "";
 		$js_id = 0;
 		foreach ($this->exercise->selectQuestionList() as $q) {
-			list($jstmp, $htmltmp)= ScormQuestion::export_question($q, false, $js_id);
+			list($jstmp, $htmltmp) = ScormQuestion::export_question($q, false, $js_id);
 			$js .= $jstmp."\n";
 			$html .= $htmltmp."\n";
 			++$js_id;

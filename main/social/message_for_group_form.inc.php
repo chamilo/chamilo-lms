@@ -17,8 +17,8 @@ if (api_get_setting('allow_social_tool') != 'true') {
 $tok = Security::get_token();
 
 if (isset($_REQUEST['user_friend'])) {
-    $info_user_friend=array();
-    $info_path_friend=array();
+    $info_user_friend = array();
+    $info_path_friend = array();
     $userfriend_id = intval($_REQUEST['user_friend']);
     $info_user_friend = api_get_user_info($userfriend_id);
     $info_path_friend = UserManager::get_user_picture_path_by_id($userfriend_id, 'web');
@@ -28,7 +28,7 @@ $group_id = isset($_GET['group_id']) ? intval($_GET['group_id']) : null;
 $message_id = isset($_GET['message_id']) ? intval($_GET['message_id']) : null;
 $actions = array('add_message_group', 'edit_message_group', 'reply_message_group');
 
-$allowed_action = isset($_GET['action']) && in_array($_GET['action'],$actions) ? Security::remove_XSS($_GET['action']):'';
+$allowed_action = isset($_GET['action']) && in_array($_GET['action'], $actions) ? Security::remove_XSS($_GET['action']) : '';
 
 $to_group = '';
 $subject = '';
@@ -54,13 +54,13 @@ if (!empty($group_id) && $allowed_action) {
     }
 }
 
-$page_item = !empty($_GET['topics_page_nr']) ? intval($_GET['topics_page_nr']):1;
-$param_item_page = isset($_GET['items_page_nr']) && isset($_GET['topic_id']) ? ('&items_'.intval($_GET['topic_id']).'_page_nr='.(!empty($_GET['topics_page_nr'])?intval($_GET['topics_page_nr']):1)):'';
+$page_item = !empty($_GET['topics_page_nr']) ? intval($_GET['topics_page_nr']) : 1;
+$param_item_page = isset($_GET['items_page_nr']) && isset($_GET['topic_id']) ? ('&items_'.intval($_GET['topic_id']).'_page_nr='.(!empty($_GET['topics_page_nr']) ? intval($_GET['topics_page_nr']) : 1)) : '';
 if (isset($_GET['topic_id'])) {
     $param_item_page .= '&topic_id='.intval($_GET['topic_id']);
 }
-$page_topic  = isset($_GET['topics_page_nr']) ? intval($_GET['topics_page_nr']) : 1;
-$anchor_topic  = isset($_GET['anchor_topic']) ? Security::remove_XSS($_GET['anchor_topic']) : null;
+$page_topic = isset($_GET['topics_page_nr']) ? intval($_GET['topics_page_nr']) : 1;
+$anchor_topic = isset($_GET['anchor_topic']) ? Security::remove_XSS($_GET['anchor_topic']) : null;
 
 $url = api_get_path(WEB_CODE_PATH).'social/group_topics.php?id='.$group_id.'&anchor_topic='.$anchor_topic.'&topics_page_nr='.$page_topic.$param_item_page;
 
@@ -96,7 +96,7 @@ if (api_get_setting('allow_message_tool') === 'true') {
         '
             <div id="link-more-attach">
                 <a class="btn btn-default" href="javascript://" onclick="return add_image_form()">
-                    ' . get_lang('AddOneMoreFile') . '
+                    ' . get_lang('AddOneMoreFile').'
                 </a>
             </div>
         '

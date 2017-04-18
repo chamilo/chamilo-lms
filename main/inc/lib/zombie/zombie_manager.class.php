@@ -79,7 +79,7 @@ class ZombieManager
         $count = intval($count);
         $from = intval($from);
 
-        $sql .=  " ORDER BY $column $direction";
+        $sql .= " ORDER BY $column $direction";
         $sql .= " LIMIT $count, $from ";
 
         $result = Database::query($sql);
@@ -93,8 +93,8 @@ class ZombieManager
     static function deactivate_zombies($ceiling)
     {
         $zombies = self::list_zombies($ceiling);
-        $ids  = array();
-        foreach($zombies as $zombie) {
+        $ids = array();
+        foreach ($zombies as $zombie) {
             $ids[] = $zombie['user_id'];
         }
         UserManager::deactivate_users($ids);

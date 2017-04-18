@@ -28,7 +28,7 @@ if (empty($sessionId) || empty($userId)) {
 }
 
 
-$interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
+$interbreadcrumb[] = array('url' => 'session_list.php', 'name' => get_lang('SessionList'));
 $interbreadcrumb[] = array(
     'url' => "resume_session.php?id_session=".$sessionId,
     "name" => get_lang('SessionOverview')
@@ -60,7 +60,7 @@ if (count($userAccess) == 0) {
     if ($days > 0) {
         $msg = sprintf(get_lang('FirstAccessWasXSessionDurationYEndDateInZDays'), $firstAccessString, $duration, $days);
     } else {
-        $endDateInSeconds = $firstAccess + $duration * 24*60*60;
+        $endDateInSeconds = $firstAccess + $duration * 24 * 60 * 60;
         $last = api_convert_and_format_date($endDateInSeconds, DATE_FORMAT_SHORT);
         $msg = sprintf(get_lang('FirstAccessWasXSessionDurationYEndDateWasZ'), $firstAccessString, $duration, $last);
     }

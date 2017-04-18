@@ -22,7 +22,7 @@ class WSCMCourse extends WSCM
 	 */
 	protected function deleteCourseHelper($course_id_field_name, $course_id_value) {
 		$course_id = $this->getCourseId($course_id_field_name, $course_id_value);
-		if($course_id instanceof WSCMError) {
+		if ($course_id instanceof WSCMError) {
 			return $course_id;
 		} else {
 			$course_code = CourseManager::get_course_code_from_course_id($course_id);
@@ -40,11 +40,11 @@ class WSCMCourse extends WSCM
 	 */
 	public function DeleteCourse($secret_key, $course_id_field_name, $course_id_value) {
 		$verifKey = $this->verifyKey($secret_key);
-		if($verifKey instanceof WSError) {
+		if ($verifKey instanceof WSError) {
 			$this->handleError($verifKey);
 		} else {
 			$result = $this->deleteCourseHelper($course_id_field_name, $course_id_value);
-			if($result instanceof WSError) {
+			if ($result instanceof WSError) {
 				$this->handleError($result);
 			}
 		}
@@ -60,15 +60,15 @@ class WSCMCourse extends WSCM
 	 */
 	public function DeleteCourses($secret_key, $courses) {
 		$verifKey = $this->verifyKey($secret_key);
-		if($verifKey instanceof WSError) {
+		if ($verifKey instanceof WSError) {
 			$this->handleError($verifKey);
 		} else {
 			$results = array();
-			foreach($courses as $course) {
+			foreach ($courses as $course) {
 				$result_tmp = array();
 				$result_op = $this->deleteCourseHelper($course['course_id_field_name'], $course['course_id_value']);
 				$result_tmp['course_id_value'] = $course['course_id_value'];
-				if($result_op instanceof WSCMError) {
+				if ($result_op instanceof WSCMError) {
 					// Return the error in the results
 					$result_tmp['result'] = $result_op->toArray();
 				} else {
@@ -98,17 +98,17 @@ class WSCMCourse extends WSCM
 	protected function createCourseHelper($title, $category_code, $wanted_code, $tutor_name, $course_admin_user_id_field_name, $course_admin_user_id_value, $language, $course_id_field_name, $course_id_value, $extras) {
 		// Add the original course id field name and value to the extra fields if needed
 		$extras_associative = array();
-		if($course_id_field_name != "chamilo_course_id") {
+		if ($course_id_field_name != "chamilo_course_id") {
 			$extras_associative[$course_id_field_name] = $course_id_value;
 		}
-		foreach($extras as $extra) {
+		foreach ($extras as $extra) {
 			$extras_associative[$extra['field_name']] = $extra['field_value'];
 		}
 		$course_admin_id = $this->getUserId($course_admin_user_id_field_name, $course_admin_user_id_value);
-		if($course_admin_id instanceof WSError) {
+		if ($course_admin_id instanceof WSError) {
 			return $course_admin_id;
 		}
-		if($wanted_code == '') {
+		if ($wanted_code == '') {
 			$wanted_code = CourseManager::generate_course_code($title);
 		}
 		$result = create_course($wanted_code, $title, $tutor_name, $category_code, $language, $course_admin_id, $this->_configuration['db_prefix'], 0);
@@ -116,7 +116,7 @@ class WSCMCourse extends WSCM
 			return new WSError(202, 'There was an error creating the course');
 		} else {
 			// Update extra fields
-			foreach($extras_associative as $fname => $fvalue) {
+			foreach ($extras_associative as $fname => $fvalue) {
 				CourseManager::update_course_extra_field_value($result, $fname, $fvalue);
 			}
 			// Get course id
@@ -144,11 +144,11 @@ class WSCMCourse extends WSCM
 	public function CreateCourse($secret_key, $title, $category_code, $wanted_code, $tutor_name, $course_admin_user_id_field_name, $course_admin_user_id_value, $language, $course_id_field_name, $course_id_value, $extras) {
 		// First, verify the secret key
 		$verifKey = $this->verifyKey($secret_key);
-		if($verifKey instanceof WSError) {
+		if ($verifKey instanceof WSError) {
 			$this->handleError($verifKey);
 		} else {
 			$result = $this->createCourseHelper($title, $category_code, $wanted_code, $tutor_name, $course_admin_user_id_field_name, $course_admin_user_id_value, $language, $course_id_field_name, $course_id_value, $extras);
-			if($result instanceof WSError) {
+			if ($result instanceof WSError) {
 				$this->handleError($result);
 			} else {
 				return $result;
@@ -166,17 +166,17 @@ class WSCMCourse extends WSCM
 	public function CreateCourses($secret_key, $courses) {
 		// First, verify the secret key
 		$verifKey = $this->verifyKey($secret_key);
-		if($verifKey instanceof WSCMError) {
+		if ($verifKey instanceof WSCMError) {
 			$this->handleError($verifKey);
 		} else {
 			$results = array();
-			foreach($courses as $course) {
+			foreach ($courses as $course) {
 				$result_tmp = array();
 				//reinitialize variables just in case
 				$title = $category_code = $wanted_code = $tutor_name = $course_admin_user_id_field_name = $course_admin_user_id_value = $language = $course_id_field_name = $course_id_value = $extras = null;
 				extract($course);
 				$result = $this->createCourseHelper($title, $category_code, $wanted_code, $tutor_name, $course_admin_user_id_field_name, $course_admin_user_id_value, $language, $course_id_field_name, $course_id_value, $extras);
-				if($result instanceof WSCMError) {
+				if ($result instanceof WSCMError) {
 					$result_tmp['result'] = $result->toArray();
 					$result_tmp['course_id_value'] = $course_id_value;
 					$result_tmp['course_id_generated'] = 0;
@@ -210,47 +210,47 @@ class WSCMCourse extends WSCM
 	 */
 	protected function editCourseHelper($course_id_field_name, $course_id_value, $title, $category_code, $department_name, $department_url, $language, $visibility, $subscribe, $unsubscribe, $visual_code, $extras) {
 		$course_id = $this->getCourseId($course_id_field_name, $course_id_value);
-		if($course_id instanceof WSCMError) {
+		if ($course_id instanceof WSCMError) {
 			return $course_id;
 		} else {
 			$attributes = array();
-			if(!empty($title)) {
+			if (!empty($title)) {
 				$attributes['title'] = $title;
 			}
-			if(!empty($category_code)) {
+			if (!empty($category_code)) {
 				$attributes['category_code'] = $category_code;
 			}
-			if(!empty($department_name)) {
+			if (!empty($department_name)) {
 				$attributes['department_name'] = $department_name;
 			}
-			if(!empty($department_url)) {
+			if (!empty($department_url)) {
 				$attributes['department_url'] = $department_url;
 			}
-			if(!empty($language)) {
+			if (!empty($language)) {
 				$attributes['course_language'] = $language;
 			}
-			if($visibility != '') {
-				$attributes['visibility'] = (int)$visibility;
+			if ($visibility != '') {
+				$attributes['visibility'] = (int) $visibility;
 			}
-			if($subscribe != '') {
-				$attributes['subscribe'] = (int)$subscribe;
+			if ($subscribe != '') {
+				$attributes['subscribe'] = (int) $subscribe;
 			}
-			if($unsubscribe != '') {
-				$attributes['unsubscribe'] = (int)$unsubscribe;
+			if ($unsubscribe != '') {
+				$attributes['unsubscribe'] = (int) $unsubscribe;
 			}
-			if(!empty($visual_code)) {
+			if (!empty($visual_code)) {
 				$attributes['visual_code'] = $visual_code;
 			}
-			if(!empty($attributes)) {
+			if (!empty($attributes)) {
 				CourseManager::update_attributes($course_id, $attributes);
 			}
-			if(!empty($extras)) {
+			if (!empty($extras)) {
 				$course_code = CourseManager::get_course_code_from_course_id($course_id);
 				$extras_associative = array();
-				foreach($extras as $extra) {
+				foreach ($extras as $extra) {
 					$extras_associative[$extra['field_name']] = $extra['field_value'];
 				}
-				foreach($extras_associative as $fname => $fvalue) {
+				foreach ($extras_associative as $fname => $fvalue) {
 					CourseManager::update_extra_field_value($course_code, $fname, $fvalue);
 				}
 			}
@@ -277,11 +277,11 @@ class WSCMCourse extends WSCM
 	 */
 	public function EditCourse($secret_key, $course_id_field_name, $course_id_value, $title, $category_code, $department_name, $department_url, $language, $visibility, $subscribe, $unsubscribe, $visual_code, $extras) {
 		$verifKey = $this->verifyKey($secret_key);
-		if($verifKey instanceof WSCMError) {
+		if ($verifKey instanceof WSCMError) {
 			$this->handleError($verifKey);
 		} else {
 			$result = $this->editCourseHelper($course_id_field_name, $course_id_value, $title, $category_code, $department_name, $department_url, $language, $visibility, $subscribe, $unsubscribe, $visual_code, $extras);
-			if($result instanceof WSCMError) {
+			if ($result instanceof WSCMError) {
 				$this->handleError($result);
 			}
 		}
@@ -297,14 +297,14 @@ class WSCMCourse extends WSCM
 	 */
 	public function ListCourses($secret_key, $course_id_field_name) {
 		$verifKey = $this->verifyKey($secret_key);
-		if($verifKey instanceof WSError) {
+		if ($verifKey instanceof WSError) {
 			$this->handleError($verifKey);
 		} else {
 			$courses_result = array();
 			$category_names = array();
 
 			$courses = CourseManager::get_courses_list();
-			foreach($courses as $course) {
+			foreach ($courses as $course) {
 				$course_tmp = array();
 				$course_tmp['id'] = $course['id'];
 				$course_tmp['code'] = $course['code'];
@@ -313,7 +313,7 @@ class WSCMCourse extends WSCM
 				$course_tmp['visibility'] = $course['visibility'];
 
 				// Determining category name
-				if($category_names[$course['category_code']]) {
+				if ($category_names[$course['category_code']]) {
 					$course_tmp['category_name'] = $category_names[$course['category_code']];
 				} else {
 					$category = CourseManager::get_course_category($course['category_code']);
@@ -349,21 +349,21 @@ class WSCMCourse extends WSCM
 	 */
 	protected function changeUserSubscription($course_id_field_name, $course_id_value, $user_id_field_name, $user_id_value, $state, $status = STUDENT) {
 		$course_id = $this->getCourseId($course_id_field_name, $course_id_value);
-		if($course_id instanceof WSError) {
+		if ($course_id instanceof WSError) {
 			return $course_id;
 		} else {
 			$user_id = $this->getUserId($user_id_field_name, $user_id_value);
-			if($user_id instanceof WSError) {
+			if ($user_id instanceof WSError) {
 				return $user_id;
 			} else {
 				$course_code = CourseManager::get_course_code_from_course_id($course_id);
-				if($state == 0) {
+				if ($state == 0) {
 					// Unsubscribe user
 					CourseManager::unsubscribe_user($user_id, $course_code);
 					return true;
 				} else {
 					// Subscribe user
-					if(CourseManager::subscribe_user($user_id, $course_code, $status)) {
+					if (CourseManager::subscribe_user($user_id, $course_code, $status)) {
 						return true;
 					} else {
 						return new WSError(203, 'An error occured subscribing to this course');
@@ -385,11 +385,11 @@ class WSCMCourse extends WSCM
 	 */
 	public function SubscribeUserToCourse($secret_key, $course_id_field_name, $course_id_value, $user_id_field_name, $user_id_value, $status) {
 		$verifKey = $this->verifyKey($secret_key);
-		if($verifKey instanceof WSError) {
+		if ($verifKey instanceof WSError) {
 			$this->handleError($verifKey);
 		} else {
 			$result = $this->changeUserSubscription($course_id_field_name, $course_id_value, $user_id_field_name, $user_id_value, 1, $status);
-			if($result instanceof WSError) {
+			if ($result instanceof WSError) {
 				$this->handleError($result);
 			}
 		}
@@ -406,11 +406,11 @@ class WSCMCourse extends WSCM
 	 */
 	public function UnsubscribeUserFromCourse($secret_key, $course_id_field_name, $course_id_value, $user_id_field_name, $user_id_value) {
 		$verifKey = $this->verifyKey($secret_key);
-		if($verifKey instanceof WSError) {
+		if ($verifKey instanceof WSError) {
 			$this->handleError($verifKey);
 		} else {
 			$result = $this->changeUserSubscription($course_id_field_name, $course_id_value, $user_id_field_name, $user_id_value, 0);
-			if($result instanceof WSError) {
+			if ($result instanceof WSError) {
 				$this->handleError($result);
 			}
 		}
@@ -426,17 +426,17 @@ class WSCMCourse extends WSCM
 	 */
 	public function GetCourseDescriptions($secret_key, $course_id_field_name, $course_id_value) {
 		$verifKey = $this->verifyKey($secret_key);
-		if($verifKey instanceof WSError) {
+		if ($verifKey instanceof WSError) {
 			$this->handleError($verifKey);
 		} else {
 			$course_id = $this->getCourseId($course_id_field_name, $course_id_value);
-			if($course_id instanceof WSError) {
+			if ($course_id instanceof WSError) {
 				return $course_id;
 			} else {
 				// Course exists, get its descriptions
 				$descriptions = CourseDescription::get_descriptions($course_id);
 				$results = array();
-				foreach($descriptions as $description) {
+				foreach ($descriptions as $description) {
 					$results[] = array('course_desc_id' => $description->get_description_type(),
 						'course_desc_title' => $description->get_title(),
 						'course_desc_content' => $description->get_content());
@@ -459,11 +459,11 @@ class WSCMCourse extends WSCM
 	 */
 	public function EditCourseDescription($secret_key, $course_id_field_name, $course_id_value, $course_desc_id, $course_desc_title, $course_desc_content) {
 		$verifKey = $this->verifyKey($secret_key);
-		if($verifKey instanceof WSError) {
+		if ($verifKey instanceof WSError) {
 			$this->handleError($verifKey);
 		} else {
 			$course_id = $this->getCourseId($course_id_field_name, $course_id_value);
-			if($course_id instanceof WSError) {
+			if ($course_id instanceof WSError) {
 				return $course_id;
 			} else {
 				// Create the new course description
@@ -480,8 +480,8 @@ class WSCMCourse extends WSCM
 				// Check if this course description exists
 				$descriptions = CourseDescription::get_descriptions($course_id);
 				$exists = false;
-				foreach($descriptions as $description) {
-					if($description->get_description_type() == $course_desc_id) {
+				foreach ($descriptions as $description) {
+					if ($description->get_description_type() == $course_desc_id) {
 						$exists = true;
 					}
 				}
@@ -497,7 +497,7 @@ class WSCMCourse extends WSCM
 	}
 	public function unreadMessage($username, $password)
 	{
-		if($this->verifyUserPass($username, $password) == "valid")
+		if ($this->verifyUserPass($username, $password) == "valid")
 		{
 			$table_message = Database::get_main_table(TABLE_MESSAGE);
 			$user_id = UserManager::get_user_id_from_username($username);
@@ -514,7 +514,7 @@ class WSCMCourse extends WSCM
 
 	public function get_message_data($username, $password)
 	{
-		if($this->verifyUserPass($username, $password) == "valid")
+		if ($this->verifyUserPass($username, $password) == "valid")
 		{
 			$user_id = get_user_id_from_username($username);
 
@@ -524,7 +524,7 @@ class WSCMCourse extends WSCM
 
 	public function nada($username, $password)
 	{
-		if($this->verifyUserPass($username, $password) == "valid")
+		if ($this->verifyUserPass($username, $password) == "valid")
 			return $username.$password;
 		return $username;
 	}

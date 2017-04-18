@@ -59,9 +59,9 @@ class FreeAnswer extends Question
             $score['revised'] = false;
         }
         $header = parent::return_header($feedback_type, $counter, $score);
-        $header .= '<table class="' . $this->question_table_class . '" >
+        $header .= '<table class="'.$this->question_table_class.'" >
         <tr>
-        <th>' . get_lang("Answer") . '</th>
+        <th>' . get_lang("Answer").'</th>
         </tr>';
 
         return $header;

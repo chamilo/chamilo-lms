@@ -1479,7 +1479,6 @@ class ExtraField extends Model
                                     ) > 0
                                 ) {
                                     foreach ($user_tags as $tag) {
-                                        var_dump($tag);
                                         $tagsSelect->addOption(
                                             $tag['tag'],
                                             $tag['tag'],

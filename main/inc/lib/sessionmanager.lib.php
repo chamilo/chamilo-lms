@@ -8116,12 +8116,18 @@ class SessionManager
             $listOneCourse['sessionCatList'] = $listCat;
 
             // user course category
-            list($userCatId, $userCatTitle) = CourseManager::getUserCourseCategoryForCourse(
+            $courseCategory = CourseManager::getUserCourseCategoryForCourse(
                 $userId,
                 $courseId
             );
 
-            $userCatId = intval($userCatId);
+            $userCatTitle = '';
+            $userCatId = 0;
+            if ($courseCategory) {
+                $userCatId = $courseCategory['user_course_cat'];
+                $userCatTitle = $courseCategory['title'];
+            }
+
             $listResults[$userCatId]['courseInUserCategoryId'] =  $userCatId;
             $listResults[$userCatId]['courseInUserCategoryTitle'] =  $userCatTitle;
             $listResults[$userCatId]['courseInUserCatList'][] = $listOneCourse;

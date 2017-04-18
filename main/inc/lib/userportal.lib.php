@@ -1805,16 +1805,27 @@ class IndexManager
 
             // Display courses
             // [code=>xxx, real_id=>000]
-            $listCourses = CourseManager::get_courses_list_by_user_id($user_id, false);
+            $listCourses = CourseManager::get_courses_list_by_user_id(
+                $user_id,
+                false
+            );
 
             foreach ($listCourses as $i => $listCourseCodeId) {
                 if (isset($listCourseCodeId['special_course'])) {
                     continue;
                 }
-                list($userCategoryId, $userCatTitle) = CourseManager::getUserCourseCategoryForCourse(
+                $courseCategory = CourseManager::getUserCourseCategoryForCourse(
                     $user_id,
                     $listCourseCodeId['real_id']
                 );
+
+                $userCatTitle = '';
+                $userCategoryId = 0;
+                if ($courseCategory) {
+                    $userCategoryId = $courseCategory['user_course_cat'];
+                    $userCatTitle = $courseCategory['title'];
+                }
+
                 $listCourse = api_get_course_info_by_id($listCourseCodeId['real_id']);
                 $listCoursesInfo[] = array(
                     'course' => $listCourse,

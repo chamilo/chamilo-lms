@@ -2850,27 +2850,34 @@ class Blog
 
                 $visibility_icon = ($info_log[2] == 0) ? 'invisible' : 'visible';
                 $visibility_info = ($info_log[2] == 0) ? 'Visible' : 'Invisible';
-                $my_image = '<a href="'.api_get_self().'?action=edit&blog_id='.$info_log[3].'">';
-                $my_image .= Display::return_icon('edit.png', get_lang('EditBlog'));
 
+                $my_image = '<a href="'.api_get_self().'?action=visibility&blog_id='.$info_log[3].'">';
+                $my_image .= Display::return_icon($visibility_icon.'.png', get_lang($visibility_info));
                 $my_image .= "</a>";
+
+                $my_image .= '<a href="'.api_get_self().'?action=edit&blog_id='.$info_log[3].'">';
+                $my_image .= Display::return_icon('edit.png', get_lang('EditBlog'));
+                $my_image .= "</a>";
+
                 $my_image .= '<a href="'.api_get_self().'?action=delete&blog_id='.$info_log[3].'" ';
                 $my_image .= 'onclick="javascript:if(!confirm(\''.addslashes(
                         api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset)
                     ).'\')) return false;" >';
                 $my_image .= Display::return_icon('delete.png', get_lang('DeleteBlog'));
-
                 $my_image .= "</a>";
-                $my_image .= '<a href="'.api_get_self().'?action=visibility&blog_id='.$info_log[3].'">';
-                $my_image .= Display::return_icon($visibility_icon.'.gif', get_lang($visibility_info));
 
-                $my_image .= "</a>";
+
                 $list_body_blog[] = $my_image;
                 $list_content_blog[] = $list_body_blog;
                 $list_body_blog = array();
             }
 
-            $table = new SortableTableFromArrayConfig($list_content_blog, 1, 20, 'project');
+            $table = new SortableTableFromArrayConfig(
+                $list_content_blog,
+                1,
+                20,
+                'project'
+            );
             $table->set_header(0, get_lang('Title'));
             $table->set_header(1, get_lang('SubTitle'));
             $table->set_header(2, get_lang('Modify'));
@@ -2991,12 +2998,13 @@ class Blog
 
         $sql = "SELECT DISTINCT blog.blog_id, post_id, title, full_text, post.date_creation
 			FROM $tbl_blogs blog
-			INNER JOIN  $tbl_blog_post post
-			ON (blog.blog_id = post.blog_id)
+			INNER JOIN $tbl_blog_post post
+			ON (blog.blog_id = post.blog_id AND blog.c_id = post.c_id)
 			WHERE
 				blog.c_id = $courseId AND
 				post.c_id = $courseId AND
-				author_id =  $userId AND visibility = 1
+				author_id =  $userId AND 
+				visibility = 1
 			ORDER BY post.date_creation DESC ";
         $result = Database::query($sql);
         $return_data = '';
@@ -3035,11 +3043,12 @@ class Blog
         $courseId = intval($courseId);
 
         $sql = "SELECT DISTINCT blog.blog_id, comment_id, title, comment, comment.date_creation
-			FROM $tbl_blogs blog INNER JOIN  $tbl_blog_comment comment
-			ON (blog.blog_id = comment.blog_id)
+			FROM $tbl_blogs blog 
+			INNER JOIN  $tbl_blog_comment comment
+			ON (blog.blog_id = comment.blog_id AND blog.c_id = comment.c_id)
 			WHERE 	blog.c_id = $courseId AND
 					comment.c_id = $courseId AND
-					author_id =  $userId AND
+					author_id = $userId AND
 					visibility = 1
 			ORDER BY blog_name";
         $result = Database::query($sql);

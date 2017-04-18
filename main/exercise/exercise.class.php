@@ -2745,7 +2745,7 @@ class Exercise
             $lp_id = 0;
         }
         if (empty($lp_item_id)) {
-            $lp_item_id   = 0;
+            $lp_item_id = 0;
         }
         if (empty($lp_item_view_id)) {
             $lp_item_view_id = 0;
@@ -2774,12 +2774,14 @@ class Exercise
     /**
      * Saves a test attempt
      *
-     * @param int  clock_expired_time
+     * @param int  $clock_expired_time clock_expired_time
      * @param int  int lp id
      * @param int  int lp item id
      * @param int  int lp item_view id
+     * @param array $questionList
      * @param float $weight
-     * @param array question list
+     *
+     * @return int
      */
     public function save_stat_track_exercise_info(
         $clock_expired_time = 0,
@@ -7456,7 +7458,7 @@ class Exercise
      * @param int $sessionId
      * @return array exercises
      */
-    public function getExercisesByCouseSession($courseId, $sessionId)
+    public function getExercisesByCourseSession($courseId, $sessionId)
     {
         $courseId = intval($courseId);
         $sessionId = intval($sessionId);
@@ -7536,7 +7538,7 @@ class Exercise
      */
     public static function getNextQuestionId($exeId, $exercise_stat_info, $remindList, $currentQuestion)
     {
-        $result = get_exercise_results_by_attempt($exeId, 'incomplete');
+        $result = Event::get_exercise_results_by_attempt($exeId, 'incomplete');
 
         if (isset($result[$exeId])) {
             $result = $result[$exeId];

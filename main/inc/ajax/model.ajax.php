@@ -1598,7 +1598,10 @@ switch ($action) {
         break;
     case 'get_exercise_grade':
         $objExercise = new Exercise();
-        $exercises = $objExercise->getExercisesByCouseSession($_GET['course_id'], $_GET['session_id']);
+        $exercises = $objExercise->getExercisesByCourseSession(
+            $_GET['course_id'],
+            $_GET['session_id']
+        );
         $cntExer = 4;
         if (!empty($exercises)) {
             $cntExer += count($exercises);

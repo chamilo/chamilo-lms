@@ -2488,9 +2488,9 @@ class Tracking
         if (!empty($course)) {
             // Get course tables names
             $tbl_quiz_questions = Database::get_course_table(TABLE_QUIZ_QUESTION);
-            $lp_table = Database:: get_course_table(TABLE_LP_MAIN);
-            $lp_item_table = Database:: get_course_table(TABLE_LP_ITEM);
-            $lp_view_table = Database:: get_course_table(TABLE_LP_VIEW);
+            $lp_table = Database::get_course_table(TABLE_LP_MAIN);
+            $lp_item_table = Database::get_course_table(TABLE_LP_ITEM);
+            $lp_view_table = Database::get_course_table(TABLE_LP_VIEW);
             $lp_item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
             $course_id = $course['real_id'];
 
@@ -3010,9 +3010,9 @@ class Tracking
 
         if (!empty($course)) {
             $course_id = $course['real_id'];
-            $lp_table = Database:: get_course_table(TABLE_LP_MAIN);
-            $t_lpv = Database:: get_course_table(TABLE_LP_VIEW);
-            $t_lpiv = Database:: get_course_table(TABLE_LP_ITEM_VIEW);
+            $lp_table = Database::get_course_table(TABLE_LP_MAIN);
+            $t_lpv = Database::get_course_table(TABLE_LP_VIEW);
+            $t_lpiv = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 
             // Check the real number of LPs corresponding to the filter in the
             // database (and if no list was given, get them all)

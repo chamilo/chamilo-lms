@@ -885,7 +885,7 @@ if (!isset($_SESSION['login_as'])) {
         }
 
         if ($save_course_access) {
-            $course_tracking_table = Database:: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+            $course_tracking_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
             /*
             * When $_configuration['session_lifetime'] is too big 100 hours (in order to let users take exercises with no problems)
             * the function Tracking::get_time_spent_on_the_course() returns big values (200h) due the condition:

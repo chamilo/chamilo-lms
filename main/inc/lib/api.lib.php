@@ -1502,7 +1502,7 @@ function api_get_user_info(
         }
     }
 
-    $sql = "SELECT * FROM " . Database:: get_main_table(TABLE_MAIN_USER) . "
+    $sql = "SELECT * FROM " . Database::get_main_table(TABLE_MAIN_USER) . "
             WHERE id = $user_id";
     $result = Database::query($sql);
     if (Database::num_rows($result) > 0) {
@@ -4715,7 +4715,7 @@ function copy_folder_course_session(
     $document,
     $source_course_id
 ) {
-    $table = Database :: get_course_table(TABLE_DOCUMENT);
+    $table = Database::get_course_table(TABLE_DOCUMENT);
     $session_id = intval($session_id);
     $source_course_id = intval($source_course_id);
 

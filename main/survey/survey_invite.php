@@ -31,11 +31,11 @@ if (empty($survey_data)) {
 }
 
 // Database table definitions
-$table_survey = Database:: get_course_table(TABLE_SURVEY);
-$table_survey_question = Database:: get_course_table(TABLE_SURVEY_QUESTION);
-$table_survey_question_option = Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
-$table_course = Database:: get_main_table(TABLE_MAIN_COURSE);
-$table_user = Database:: get_main_table(TABLE_MAIN_USER);
+$table_survey = Database::get_course_table(TABLE_SURVEY);
+$table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
+$table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
+$table_course = Database::get_main_table(TABLE_MAIN_COURSE);
+$table_user = Database::get_main_table(TABLE_MAIN_USER);
 
 $urlname = strip_tags(api_substr(api_html_entity_decode($survey_data['title'], ENT_QUOTES), 0, 40));
 if (api_strlen(strip_tags($survey_data['title'])) > 40) {
@@ -231,7 +231,7 @@ if ($form->validate()) {
 	// Updating the invited field in the survey table
 	SurveyUtil::update_count_invited($survey_data['code']);
 	$total_count = $count_course_users + $counter_additional_users;
-    $table_survey = Database :: get_course_table(TABLE_SURVEY);
+    $table_survey = Database::get_course_table(TABLE_SURVEY);
 	// Counting the number of people that are invited
 	$sql = "SELECT * FROM $table_survey
 	        WHERE

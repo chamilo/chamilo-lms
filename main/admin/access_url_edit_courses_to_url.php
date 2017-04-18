@@ -127,7 +127,7 @@ if ($ajax_search) {
         }
     }
 
-    $tbl_course = Database:: get_main_table(TABLE_MAIN_COURSE);
+    $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
     $sql = "SELECT id, code, title
             FROM $tbl_course u
             ORDER BY title, code";

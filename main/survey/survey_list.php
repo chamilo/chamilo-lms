@@ -53,10 +53,10 @@ if (!api_is_allowed_to_edit(false, true)) {
 $extend_rights_for_coachs = api_get_setting('extend_rights_for_coach_on_survey');
 
 // Database table definitions
-$table_survey = Database:: get_course_table(TABLE_SURVEY);
-$table_survey_question = Database:: get_course_table(TABLE_SURVEY_QUESTION);
-$table_course = Database:: get_main_table(TABLE_MAIN_COURSE);
-$table_user = Database:: get_main_table(TABLE_MAIN_USER);
+$table_survey = Database::get_course_table(TABLE_SURVEY);
+$table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
+$table_course = Database::get_main_table(TABLE_MAIN_COURSE);
+$table_user = Database::get_main_table(TABLE_MAIN_USER);
 
 // Language variables
 if (isset($_GET['search']) && $_GET['search'] == 'advanced') {

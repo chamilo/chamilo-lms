@@ -188,7 +188,7 @@ class SurveyManager
         $course_id = api_get_course_int_id();
         $session_id = api_get_session_id();
         $courseCode = api_get_course_id();
-        $table_survey = Database:: get_course_table(TABLE_SURVEY);
+        $table_survey = Database::get_course_table(TABLE_SURVEY);
         $shared_survey_id = 0;
 
         if (!isset($values['survey_id'])) {
@@ -1615,8 +1615,8 @@ class SurveyManager
     public static function get_people_who_filled_survey($survey_id, $all_user_info = false, $course_id = null)
     {
         // Database table definition
-        $table_survey_answer = Database:: get_course_table(TABLE_SURVEY_ANSWER);
-        $table_user = Database:: get_main_table(TABLE_MAIN_USER);
+        $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
+        $table_user = Database::get_main_table(TABLE_MAIN_USER);
 
         // Variable initialisation
         $return = array();

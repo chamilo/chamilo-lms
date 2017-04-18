@@ -249,11 +249,11 @@ foreach ($data as $label => $item) {
 }
 $trackingInformation = $table->toHtml();
 
-$tbl_session_course = Database:: get_main_table(TABLE_MAIN_SESSION_COURSE);
-$tbl_session_course_user = Database:: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-$tbl_session = Database:: get_main_table(TABLE_MAIN_SESSION);
-$tbl_course = Database:: get_main_table(TABLE_MAIN_COURSE);
-$tbl_user = Database:: get_main_table(TABLE_MAIN_USER);
+$tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+$tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+$tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
+$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 
 $socialInformation = '';
 

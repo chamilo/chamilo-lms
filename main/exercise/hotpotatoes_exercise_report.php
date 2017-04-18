@@ -30,10 +30,10 @@ $documentPath = api_get_path(SYS_COURSE_PATH).$_course['path']."/document";
 $is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_drh();
 $is_tutor = api_is_allowed_to_edit(true);
 
-$TBL_QUESTIONS = Database :: get_course_table(TABLE_QUIZ_QUESTION);
+$TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
 $TBL_TRACK_EXERCISES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 $TBL_TRACK_HOTPOTATOES_EXERCISES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
-$TBL_LP_ITEM_VIEW = Database :: get_course_table(TABLE_LP_ITEM_VIEW);
+$TBL_LP_ITEM_VIEW = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 
 $course_id = api_get_course_int_id();
 $hotpotatoes_path = isset($_REQUEST['path']) ? Security::remove_XSS($_REQUEST['path']) : null;

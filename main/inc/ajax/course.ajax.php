@@ -231,7 +231,7 @@ switch ($action) {
         break;
     case 'search_survey_by_course':
         if (api_is_platform_admin()) {
-            $survey = Database :: get_course_table(TABLE_SURVEY);
+            $survey = Database::get_course_table(TABLE_SURVEY);
 
             $sql = "SELECT survey_id as id, title, anonymous
                     FROM $survey

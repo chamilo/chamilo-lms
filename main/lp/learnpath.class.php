@@ -322,7 +322,7 @@ class learnpath
                     $lp_item_id_list_to_string = implode("','", $lp_item_id_list);
                     if (!empty($lp_item_id_list_to_string)) {
                         // Get last viewing vars.
-                        $itemViewTable = Database:: get_course_table(TABLE_LP_ITEM_VIEW);
+                        $itemViewTable = Database::get_course_table(TABLE_LP_ITEM_VIEW);
                         // This query should only return one or zero result.
                         $sql = "SELECT lp_item_id, status
                                 FROM $itemViewTable
@@ -1042,10 +1042,10 @@ class learnpath
             return false;
         }
 
-        $lp = Database:: get_course_table(TABLE_LP_MAIN);
-        $lp_item = Database:: get_course_table(TABLE_LP_ITEM);
-        $lp_view = Database:: get_course_table(TABLE_LP_VIEW);
-        $lp_item_view = Database:: get_course_table(TABLE_LP_ITEM_VIEW);
+        $lp = Database::get_course_table(TABLE_LP_MAIN);
+        $lp_item = Database::get_course_table(TABLE_LP_ITEM);
+        $lp_view = Database::get_course_table(TABLE_LP_VIEW);
+        $lp_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 
         // Delete lp item id.
         foreach ($this->items as $id => $dummy) {

@@ -2021,8 +2021,8 @@ class CourseManager
             $courseId = api_get_course_int_id();
         }
 
-        $tbl_user = Database:: get_main_table(TABLE_MAIN_USER);
-        $tbl_session_course_user = Database:: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
+        $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
         $sql = "SELECT DISTINCT 
                     u.user_id,
@@ -2580,16 +2580,16 @@ class CourseManager
      */
     public static function get_special_course_list()
     {
-        $courseTable = Database:: get_main_table(TABLE_MAIN_COURSE);
-        $tbl_course_field = Database:: get_main_table(TABLE_EXTRA_FIELD);
-        $tbl_course_field_value = Database:: get_main_table(TABLE_EXTRA_FIELD_VALUES);
+        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
+        $tbl_course_field = Database::get_main_table(TABLE_EXTRA_FIELD);
+        $tbl_course_field_value = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
 
         //we filter the courses from the URL
         $join_access_url = $where_access_url = '';
         if (api_get_multiple_access_url()) {
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
-                $tbl_url_course = Database:: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+                $tbl_url_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
                 $join_access_url = "LEFT JOIN $tbl_url_course url_rel_course
                                     ON url_rel_course.c_id = tcfv.item_id ";
                 $where_access_url = " AND access_url_id = $access_url_id ";
@@ -2632,8 +2632,8 @@ class CourseManager
      */
     public static function getCatalogueCourseList($allowed = true, $byUserId = -1)
     {
-        $courseTable = Database:: get_main_table(TABLE_MAIN_COURSE);
-        $tblCourseRelUserCatalogue = Database:: get_main_table(TABLE_MAIN_COURSE_CATALOGUE_USER);
+        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
+        $tblCourseRelUserCatalogue = Database::get_main_table(TABLE_MAIN_COURSE_CATALOGUE_USER);
         $visibility = $allowed ? 1 : 0;
 
         // Restriction by user id
@@ -2649,7 +2649,7 @@ class CourseManager
         if (api_get_multiple_access_url()) {
             $accessUrlId = api_get_current_access_url_id();
             if ($accessUrlId != -1) {
-                $tblUrlCourse = Database:: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+                $tblUrlCourse = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
                 $joinAccessUrl = "LEFT JOIN $tblUrlCourse url_rel_course
                                     ON url_rel_course.c_id = c.id ";
                 $whereAccessUrl = " AND access_url_id = $accessUrlId ";
@@ -3672,7 +3672,7 @@ class CourseManager
         if ($coursesNotCategory) {
             $listItems['not_category'] = $coursesNotCategory;
         }
-        
+
         return $listItems;
     }
 
@@ -3689,9 +3689,9 @@ class CourseManager
         $user_category_id = (int) $user_category_id;
 
         // Table definitions
-        $TABLECOURS = Database:: get_main_table(TABLE_MAIN_COURSE);
-        $TABLECOURSUSER = Database:: get_main_table(TABLE_MAIN_COURSE_USER);
-        $TABLE_ACCESS_URL_REL_COURSE = Database:: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $TABLECOURS = Database::get_main_table(TABLE_MAIN_COURSE);
+        $TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $TABLE_ACCESS_URL_REL_COURSE = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $current_url_id = api_get_current_access_url_id();
 
         // Get course list auto-register
@@ -3843,9 +3843,9 @@ class CourseManager
     {
         $user_id = api_get_user_id();
         // Table definitions
-        $TABLECOURS = Database:: get_main_table(TABLE_MAIN_COURSE);
-        $TABLECOURSUSER = Database:: get_main_table(TABLE_MAIN_COURSE_USER);
-        $TABLE_ACCESS_URL_REL_COURSE = Database:: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $TABLECOURS = Database::get_main_table(TABLE_MAIN_COURSE);
+        $TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $TABLE_ACCESS_URL_REL_COURSE = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $current_url_id = api_get_current_access_url_id();
         $courseList = [];
 
@@ -4837,13 +4837,13 @@ class CourseManager
                 $course_info,
                 $my_course_code_list
             );
-            
+
             $userRegisterdInCourse = self::is_user_subscribed_in_course($user_id, $course_info['code']);
             $userRegisterdInCourseAsTeacher = self::is_course_teacher($user_id, $course_info['code']);
             $userRegisterd = ($userRegisterdInCourse && $userRegisterdInCourseAsTeacher);
-            
+
             $my_course['is_registerd'] = $userRegisterd;
-            
+
             $my_course['title_cut'] = cut($course_info['title'], 45);
             // if user registered as student
             /* if ($userRegisterdInCourse) {
@@ -5443,7 +5443,7 @@ class CourseManager
      */
     public static function getCourseAccessPerSessionAndUser($sessionId, $userId, $limit = null)
     {
-        $table = Database:: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 
         $sessionId = intval($sessionId);
         $userId = intval($userId);
@@ -5474,7 +5474,7 @@ class CourseManager
         $startDate,
         $endDate
     ) {
-        $table = Database:: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $courseId = intval($courseId);
         $sessionId = intval($sessionId);
         $startDate = Database::escape_string($startDate);
@@ -5504,7 +5504,7 @@ class CourseManager
         $sessionId = intval($sessionId);
         $userId = intval($userId);
 
-        $table = Database:: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $sql = "SELECT * FROM $table
                 WHERE session_id = $sessionId AND user_id = $userId
                 ORDER BY login_course_date ASC
@@ -5617,7 +5617,7 @@ class CourseManager
      */
     public static function getCourseNameFromCode($code)
     {
-        $tbl_main_categories = Database:: get_main_table(TABLE_MAIN_COURSE);
+        $tbl_main_categories = Database::get_main_table(TABLE_MAIN_COURSE);
         $sql = 'SELECT title
                 FROM ' . $tbl_main_categories . '
                 WHERE code = "' . Database::escape_string($code) . '"';

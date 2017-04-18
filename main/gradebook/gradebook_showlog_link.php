@@ -31,8 +31,8 @@ echo '<div class="actions">';
 api_display_tool_title(get_lang('GradebookQualifyLog'));
 echo '</div>';
 
-$t_user = Database:: get_main_table(TABLE_MAIN_USER);
-$t_link_log = Database:: get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);
+$t_user = Database::get_main_table(TABLE_MAIN_USER);
+$t_link_log = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);
 $visible_link = Security::remove_XSS($_GET['visiblelink']);
 $evaledit = EvalLink:: load($visible_link);
 $sql = "SELECT lk.name,lk.description,lk.weight,lk.visible,lk.type,lk.created_at,us.username

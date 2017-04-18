@@ -996,9 +996,9 @@ class GradebookUtils
      */
     public static function get_users_in_course($courseCode)
     {
-        $tbl_course_user = Database:: get_main_table(TABLE_MAIN_COURSE_USER);
-        $tbl_session_course_user = Database:: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $tbl_user = Database:: get_main_table(TABLE_MAIN_USER);
+        $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname ASC' : ' ORDER BY lastname, firstname ASC';
 
         $current_session = api_get_session_id();
@@ -1167,8 +1167,8 @@ class GradebookUtils
         $table_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
         $em = Database::getManager();
-        $tbl_forum_thread = Database:: get_course_table(TABLE_FORUM_THREAD);
-        $tbl_attendance = Database:: get_course_table(TABLE_ATTENDANCE);
+        $tbl_forum_thread = Database::get_course_table(TABLE_FORUM_THREAD);
+        $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
 
         $sql = 'UPDATE '.$table_link.' SET weight = '."'".Database::escape_string($weight)."'".'
                 WHERE id = '.$linkId;

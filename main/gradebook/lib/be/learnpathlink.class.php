@@ -33,7 +33,7 @@ class LearnpathLink extends AbstractLink
             die('Error in get_not_created_links() : course code not set');
         }
 
-        $tbl_grade_links = Database:: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+        $tbl_grade_links = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
         $sql = 'SELECT id, name FROM ' . $this->get_learnpath_table() . ' lp
 				WHERE c_id = ' . $this->course_id . ' AND id NOT IN '
@@ -250,7 +250,7 @@ class LearnpathLink extends AbstractLink
      */
     private function get_learnpath_table()
     {
-        $this->learnpath_table = Database:: get_course_table(TABLE_LP_MAIN);
+        $this->learnpath_table = Database::get_course_table(TABLE_LP_MAIN);
         return $this->learnpath_table;
     }
 

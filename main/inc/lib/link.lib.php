@@ -124,7 +124,7 @@ class Link extends Model
         $courseId = null,
         $sessionId = null
     ) {
-        $tblLink = Database:: get_course_table(TABLE_LINK);
+        $tblLink = Database::get_course_table(TABLE_LINK);
         $linkUrl = Database::escape_string($linkUrl);
         $linkId = intval($linkId);
         if (is_null($courseId)) {
@@ -270,7 +270,7 @@ class Link extends Model
 
                     // Add category name if set.
                     if (isset($selectcategory) && $selectcategory > 0) {
-                        $table_link_category = Database:: get_course_table(
+                        $table_link_category = Database::get_course_table(
                             TABLE_LINK_CATEGORY
                         );
                         $sql_cat = 'SELECT * FROM %s WHERE id=%d AND c_id = %d LIMIT 1';
@@ -301,7 +301,7 @@ class Link extends Model
                     $did = $di->index();
                     if ($did) {
                         // Save it to db.
-                        $tbl_se_ref = Database:: get_main_table(
+                        $tbl_se_ref = Database::get_main_table(
                             TABLE_MAIN_SEARCH_ENGINE_REF
                         );
                         $sql = 'INSERT INTO %s (id, course_code, tool_id, ref_id_high_level, search_did)
@@ -321,7 +321,7 @@ class Link extends Model
                 Display::addFlash(Display::return_message(get_lang('LinkAdded')));
             }
         } elseif ($type == 'category') {
-            $tbl_categories = Database:: get_course_table(TABLE_LINK_CATEGORY);
+            $tbl_categories = Database::get_course_table(TABLE_LINK_CATEGORY);
 
             $category_title = trim($_POST['category_title']);
             $description = trim($_POST['description']);
@@ -376,8 +376,8 @@ class Link extends Model
     public static function deletelinkcategory($id, $type)
     {
         $courseInfo = api_get_course_info();
-        $tbl_link = Database:: get_course_table(TABLE_LINK);
-        $tbl_categories = Database:: get_course_table(TABLE_LINK_CATEGORY);
+        $tbl_link = Database::get_course_table(TABLE_LINK);
+        $tbl_categories = Database::get_course_table(TABLE_LINK_CATEGORY);
 
         $course_id = $courseInfo['real_id'];
         $id = intval($id);
@@ -444,7 +444,7 @@ class Link extends Model
     {
         // Remove from search engine if enabled.
         if (api_get_setting('search_enabled') === 'true') {
-            $tbl_se_ref = Database:: get_main_table(
+            $tbl_se_ref = Database::get_main_table(
                 TABLE_MAIN_SEARCH_ENGINE_REF
             );
             $sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s LIMIT 1';
@@ -476,7 +476,7 @@ class Link extends Model
      **/
     public static function get_link_info($id)
     {
-        $tbl_link = Database:: get_course_table(TABLE_LINK);
+        $tbl_link = Database::get_course_table(TABLE_LINK);
         $course_id = api_get_course_int_id();
 
         if (empty($id) || empty($course_id)) {
@@ -499,7 +499,7 @@ class Link extends Model
      */
     public static function editLink($id, $values = array())
     {
-        $tbl_link = Database:: get_course_table(TABLE_LINK);
+        $tbl_link = Database::get_course_table(TABLE_LINK);
         $_course = api_get_course_info();
         $course_id = $_course['real_id'];
         $id = intval($id);
@@ -581,7 +581,7 @@ class Link extends Model
             // Actually, it consists on delete terms from db,
             // insert new ones, create a new search engine document, and remove the old one.
             // Get search_did.
-            $tbl_se_ref = Database:: get_main_table(
+            $tbl_se_ref = Database::get_main_table(
                 TABLE_MAIN_SEARCH_ENGINE_REF
             );
             $sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s LIMIT 1';
@@ -654,7 +654,7 @@ class Link extends Model
 
                 // Add category name if set.
                 if (isset($categoryId) && $categoryId > 0) {
-                    $table_link_category = Database:: get_course_table(
+                    $table_link_category = Database::get_course_table(
                         TABLE_LINK_CATEGORY
                     );
                     $sql_cat = 'SELECT * FROM %s WHERE id=%d and c_id = %d LIMIT 1';
@@ -729,7 +729,7 @@ class Link extends Model
      */
     public static function editCategory($id, $values)
     {
-        $tbl_categories = Database:: get_course_table(TABLE_LINK_CATEGORY);
+        $tbl_categories = Database::get_course_table(TABLE_LINK_CATEGORY);
         $course_id = api_get_course_int_id();
         $id = intval($id);
 
@@ -789,8 +789,8 @@ class Link extends Model
      */
     public static function getLinkCategories($courseId, $sessionId, $withBaseContent = true)
     {
-        $tblLinkCategory = Database:: get_course_table(TABLE_LINK_CATEGORY);
-        $tblItemProperty = Database:: get_course_table(TABLE_ITEM_PROPERTY);
+        $tblLinkCategory = Database::get_course_table(TABLE_LINK_CATEGORY);
+        $tblItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $courseId = intval($courseId);
 
         // Condition for the session.
@@ -868,8 +868,8 @@ class Link extends Model
         $sessionId,
         $withBaseContent = true
     ) {
-        $tbl_link = Database:: get_course_table(TABLE_LINK);
-        $TABLE_ITEM_PROPERTY = Database:: get_course_table(TABLE_ITEM_PROPERTY);
+        $tbl_link = Database::get_course_table(TABLE_LINK);
+        $TABLE_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $courseId = (int) $courseId;
         $sessionId = (int) $sessionId;
         $categoryId = (int) $categoryId;
@@ -1227,7 +1227,7 @@ class Link extends Model
      */
     public static function movecatlink($action, $catlinkid, $courseId = null, $sessionId = null)
     {
-        $tbl_categories = Database:: get_course_table(TABLE_LINK_CATEGORY);
+        $tbl_categories = Database::get_course_table(TABLE_LINK_CATEGORY);
 
         if (is_null($courseId)) {
             $courseId = api_get_course_int_id();
@@ -1298,7 +1298,7 @@ class Link extends Model
     public static function get_cat($catname)
     {
         // Get category id (existing or make new).
-        $tbl_categories = Database:: get_course_table(TABLE_LINK_CATEGORY);
+        $tbl_categories = Database::get_course_table(TABLE_LINK_CATEGORY);
         $course_id = api_get_course_int_id();
 
         $result = Database:: query(
@@ -1339,7 +1339,7 @@ class Link extends Model
         $_course = api_get_course_info();
         $_user = api_get_user_info();
 
-        $tbl_link = Database:: get_course_table(TABLE_LINK);
+        $tbl_link = Database::get_course_table(TABLE_LINK);
         $course_id = api_get_course_int_id();
 
         $urleq = "url='" . Database:: escape_string($url) . "'";

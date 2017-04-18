@@ -861,7 +861,7 @@ if (!empty($student_id)) {
         if ($user_info['status'] != INVITEE) {
             $csv_content[] = array();
             $csv_content[] = array(str_replace('&nbsp;', '', $table_title));
-            $t_lp = Database :: get_course_table(TABLE_LP_MAIN);
+            $t_lp = Database::get_course_table(TABLE_LP_MAIN);
 
             // csv export headers
             $csv_content[] = array();
@@ -1160,7 +1160,7 @@ if (!empty($student_id)) {
             get_lang('Attempts')
         );
 
-        $t_quiz = Database :: get_course_table(TABLE_QUIZ_TEST);
+        $t_quiz = Database::get_course_table(TABLE_QUIZ_TEST);
         $sessionCondition = api_get_session_condition(
             $sessionId,
             true,

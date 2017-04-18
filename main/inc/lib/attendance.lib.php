@@ -283,7 +283,7 @@ class Attendance
     {
         $_course = api_get_course_info();
         $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
-        $table_link = Database:: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+        $table_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
         $session_id = api_get_session_id();
         $user_id = api_get_user_id();
         $course_code = $_course['code'];
@@ -359,8 +359,8 @@ class Attendance
     public function attendance_edit($attendance_id, $link_to_gradebook = false)
     {
         $_course = api_get_course_info();
-        $tbl_attendance = Database:: get_course_table(TABLE_ATTENDANCE);
-        $table_link = Database:: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+        $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
+        $table_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
         $session_id = api_get_session_id();
         $user_id = api_get_user_id();

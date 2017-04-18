@@ -18,8 +18,8 @@ if (!api_is_platform_admin()) {
 }
 
 // Database table definitions
-$table_admin = Database:: get_main_table(TABLE_MAIN_ADMIN);
-$table_user = Database:: get_main_table(TABLE_MAIN_USER);
+$table_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
+$table_user = Database::get_main_table(TABLE_MAIN_USER);
 $database = Database::get_main_database();
 
 $userId = isset($_REQUEST['user_id']) ? intval($_REQUEST['user_id']) : '';

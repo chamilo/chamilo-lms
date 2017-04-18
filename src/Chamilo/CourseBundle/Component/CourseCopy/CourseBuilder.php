@@ -139,7 +139,7 @@ class CourseBuilder
         $courseCode = '',
         $with_base_content = false
     ) {
-        $table_properties = Database:: get_course_table(TABLE_ITEM_PROPERTY);
+        $table_properties = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $course = api_get_course_info($courseCode);
         $courseId = $course['real_id'];
 
@@ -334,7 +334,7 @@ class CourseBuilder
         $with_base_content = false,
         $id_list = array()
     ) {
-        $table = Database:: get_course_table(TABLE_FORUM);
+        $table = Database::get_course_table(TABLE_FORUM);
 
         $sessionCondition = api_get_session_condition(
             $session_id,
@@ -365,7 +365,7 @@ class CourseBuilder
         $with_base_content = false,
         $id_list = array()
     ) {
-        $table = Database:: get_course_table(TABLE_FORUM_CATEGORY);
+        $table = Database::get_course_table(TABLE_FORUM_CATEGORY);
 
         $sessionCondition = api_get_session_condition(
             $session_id,
@@ -398,7 +398,7 @@ class CourseBuilder
         $with_base_content = false,
         $id_list = array()
     ) {
-        $table = Database:: get_course_table(TABLE_FORUM_THREAD);
+        $table = Database::get_course_table(TABLE_FORUM_THREAD);
 
         $sessionCondition = api_get_session_condition(
             $session_id,
@@ -510,7 +510,7 @@ class CourseBuilder
         $with_base_content = false,
         $id_list = array()
     ) {
-        $table = Database:: get_course_table(TABLE_TOOL_INTRO);
+        $table = Database::get_course_table(TABLE_TOOL_INTRO);
 
         $sessionCondition = api_get_session_condition(
             $session_id,
@@ -564,9 +564,9 @@ class CourseBuilder
         $with_base_content = false,
         $idList = array()
     ) {
-        $table_qui = Database:: get_course_table(TABLE_QUIZ_TEST);
-        $table_rel = Database:: get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        $table_doc = Database:: get_course_table(TABLE_DOCUMENT);
+        $table_qui = Database::get_course_table(TABLE_QUIZ_TEST);
+        $table_rel = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        $table_doc = Database::get_course_table(TABLE_DOCUMENT);
 
         if (!empty($courseId) && !empty($session_id)) {
             $session_id = intval($session_id);
@@ -795,10 +795,10 @@ class CourseBuilder
      */
     public function build_quiz_orphan_questions()
     {
-        $table_qui = Database:: get_course_table(TABLE_QUIZ_TEST);
-        $table_rel = Database:: get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        $table_que = Database:: get_course_table(TABLE_QUIZ_QUESTION);
-        $table_ans = Database:: get_course_table(TABLE_QUIZ_ANSWER);
+        $table_qui = Database::get_course_table(TABLE_QUIZ_TEST);
+        $table_rel = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        $table_que = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $table_ans = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
         $courseId = api_get_course_int_id();
 
@@ -901,8 +901,8 @@ class CourseBuilder
         $with_base_content = false,
         $id_list = array()
     ) {
-        $table_survey = Database:: get_course_table(TABLE_SURVEY);
-        $table_question = Database:: get_course_table(TABLE_SURVEY_QUESTION);
+        $table_survey = Database::get_course_table(TABLE_SURVEY);
+        $table_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
 
         $sessionCondition = api_get_session_condition(
             $session_id,
@@ -979,7 +979,7 @@ class CourseBuilder
         $with_base_content = false,
         $id_list = array()
     ) {
-        $table = Database:: get_course_table(TABLE_ANNOUNCEMENT);
+        $table = Database::get_course_table(TABLE_ANNOUNCEMENT);
 
         $sessionCondition = api_get_session_condition(
             $session_id,
@@ -990,7 +990,7 @@ class CourseBuilder
         $sql = 'SELECT * FROM '.$table.'
                 WHERE c_id = '.$courseId.' '.$sessionCondition;
         $db_result = Database::query($sql);
-        $table_attachment = Database:: get_course_table(
+        $table_attachment = Database::get_course_table(
             TABLE_ANNOUNCEMENT_ATTACHMENT
         );
         while ($obj = Database::fetch_object($db_result)) {
@@ -1040,7 +1040,7 @@ class CourseBuilder
         $with_base_content = false,
         $id_list = array()
     ) {
-        $table = Database:: get_course_table(TABLE_AGENDA);
+        $table = Database::get_course_table(TABLE_AGENDA);
 
         $sessionCondition = api_get_session_condition(
             $session_id,
@@ -1052,7 +1052,7 @@ class CourseBuilder
                 WHERE c_id = '.$courseId.' '.$sessionCondition;
         $db_result = Database::query($sql);
         while ($obj = Database::fetch_object($db_result)) {
-            $table_attachment = Database:: get_course_table(
+            $table_attachment = Database::get_course_table(
                 TABLE_AGENDA_ATTACHMENT
             );
             $sql = 'SELECT path, comment, filename, size
@@ -1097,7 +1097,7 @@ class CourseBuilder
         $with_base_content = false,
         $id_list = array()
     ) {
-        $table = Database:: get_course_table(TABLE_COURSE_DESCRIPTION);
+        $table = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
 
         if (!empty($session_id) && !empty($courseId)) {
             $session_id = intval($session_id);
@@ -1116,7 +1116,7 @@ class CourseBuilder
             $sql = 'SELECT * FROM '.$table.'
                     WHERE c_id = '.$courseId.' '.$session_condition;
         } else {
-            $table = Database:: get_course_table(TABLE_COURSE_DESCRIPTION);
+            $table = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
             $sql = 'SELECT * FROM '.$table.'
                     WHERE c_id = '.$courseId.'  AND session_id = 0';
         }
@@ -1303,7 +1303,7 @@ class CourseBuilder
                         WHERE g.c_id = '.$courseId.' '.$session_condition;
             }
         } else {
-            $table_glossary = Database:: get_course_table(TABLE_GLOSSARY);
+            $table_glossary = Database::get_course_table(TABLE_GLOSSARY);
             //@todo check this queries are the same ... ayayay
             if (!empty($this->course->type) && $this->course->type == 'partial') {
                 $sql = 'SELECT * FROM '.$table_glossary.' g
@@ -1535,7 +1535,7 @@ class CourseBuilder
         $with_base_content = false,
         $id_list = array()
     ) {
-        $table_work = Database:: get_course_table(TABLE_STUDENT_PUBLICATION);
+        $table_work = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
         $sessionCondition = api_get_session_condition(
             $session_id,
             true,

@@ -1523,10 +1523,10 @@ HOTSPOT;
         $in_number_of_items = intval($in_number_of_items);
         $in_from = intval($in_from);
 
-        $TBL_TRACK_HOTPOTATOES = Database:: get_main_table(
+        $TBL_TRACK_HOTPOTATOES = Database::get_main_table(
             TABLE_STATISTIC_TRACK_E_HOTPOTATOES
         );
-        $TBL_USER = Database:: get_main_table(TABLE_MAIN_USER);
+        $TBL_USER = Database::get_main_table(TABLE_MAIN_USER);
 
         $sql = "SELECT * FROM $TBL_TRACK_HOTPOTATOES thp
             JOIN $TBL_USER u ON thp.exe_user_id = u.user_id
@@ -1590,7 +1590,7 @@ HOTSPOT;
         $courseId,
         $sessionId
     ) {
-        $table = Database:: get_main_table(
+        $table = Database::get_main_table(
             TABLE_STATISTIC_TRACK_E_HOTPOTATOES
         );
         $exercisePath = Database::escape_string($exercisePath);
@@ -1643,13 +1643,13 @@ HOTSPOT;
         $sessionId = api_get_session_id();
         $is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_allowed_to_edit(true) || api_is_drh() || api_is_student_boss();
 
-        $TBL_USER = Database:: get_main_table(TABLE_MAIN_USER);
-        $TBL_EXERCICES = Database:: get_course_table(TABLE_QUIZ_TEST);
-        $TBL_GROUP_REL_USER = Database:: get_course_table(TABLE_GROUP_USER);
-        $TBL_GROUP = Database:: get_course_table(TABLE_GROUP);
-        $TBL_TRACK_EXERCICES = Database:: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $TBL_TRACK_HOTPOTATOES = Database:: get_main_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
-        $TBL_TRACK_ATTEMPT_RECORDING = Database:: get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
+        $TBL_USER = Database::get_main_table(TABLE_MAIN_USER);
+        $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
+        $TBL_GROUP_REL_USER = Database::get_course_table(TABLE_GROUP_USER);
+        $TBL_GROUP = Database::get_course_table(TABLE_GROUP);
+        $TBL_TRACK_EXERCICES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $TBL_TRACK_HOTPOTATOES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
+        $TBL_TRACK_ATTEMPT_RECORDING = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
 
         $session_id_and = ' AND te.session_id = ' . $sessionId . ' ';
         $exercise_id = intval($exercise_id);
@@ -2503,7 +2503,7 @@ HOTSPOT;
             }
         }
 
-        $table = Database:: get_course_table(TABLE_QUIZ_TEST);
+        $table = Database::get_course_table(TABLE_QUIZ_TEST);
 
         return Database::select('*', $table, $conditions);
     }
@@ -2516,7 +2516,7 @@ HOTSPOT;
      */
     public static function get_exercise_by_id($exerciseId = 0, $courseId = null)
     {
-        $TBL_EXERCICES = Database:: get_course_table(TABLE_QUIZ_TEST);
+        $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
         if (empty($courseId)) {
             $courseId = api_get_course_int_id();
         } else {
@@ -2550,7 +2550,7 @@ HOTSPOT;
         $course_id = 0,
         $only_active_exercises = true
     ) {
-        $TBL_EXERCISES = Database:: get_course_table(TABLE_QUIZ_TEST);
+        $TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);
 
         if ($only_active_exercises) {
             // Only active exercises.

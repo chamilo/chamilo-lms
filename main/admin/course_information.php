@@ -26,34 +26,34 @@ function get_course_usage($course, $session_id = 0)
 {
     $courseId = $course['real_id'];
     // Learnpaths
-    $table   = Database :: get_course_table(TABLE_LP_MAIN);
+    $table   = Database::get_course_table(TABLE_LP_MAIN);
     $usage[] = array(
         get_lang(ucfirst(TOOL_LEARNPATH)),
         CourseManager::count_rows_course_table($table, $session_id, $courseId)
     );
     // Forums
-    $table   = Database :: get_course_table(TABLE_FORUM);
+    $table   = Database::get_course_table(TABLE_FORUM);
     $usage[] = array(get_lang('Forums'), CourseManager::count_rows_course_table($table, $session_id, $courseId));
     // Quizzes
-    $table   = Database :: get_course_table(TABLE_QUIZ_TEST);
+    $table   = Database::get_course_table(TABLE_QUIZ_TEST);
     $usage[] = array(
         get_lang(ucfirst(TOOL_QUIZ)),
         CourseManager::count_rows_course_table($table, $session_id, $courseId)
     );
     // Documents
-    $table   = Database :: get_course_table(TABLE_DOCUMENT);
+    $table   = Database::get_course_table(TABLE_DOCUMENT);
     $usage[] = array(
         get_lang(ucfirst(TOOL_DOCUMENT)),
         CourseManager::count_rows_course_table($table, $session_id, $courseId)
     );
     // Groups
-    $table   = Database :: get_course_table(TABLE_GROUP);
+    $table   = Database::get_course_table(TABLE_GROUP);
     $usage[] = array(
         get_lang(ucfirst(TOOL_GROUP)),
         CourseManager::count_rows_course_table($table, $session_id, $courseId)
     );
     // Calendar
-    $table   = Database :: get_course_table(TABLE_AGENDA);
+    $table   = Database::get_course_table(TABLE_AGENDA);
     $usage[] = array(
         get_lang(ucfirst(TOOL_CALENDAR_EVENT)),
         CourseManager::count_rows_course_table($table, $session_id, $courseId)
@@ -100,8 +100,8 @@ $table->display();
  */
 echo Display::page_header(get_lang('Users'));
 
-$table_course_user = Database:: get_main_table(TABLE_MAIN_COURSE_USER);
-$table_user = Database:: get_main_table(TABLE_MAIN_USER);
+$table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+$table_user = Database::get_main_table(TABLE_MAIN_USER);
 $sql = "SELECT *, cu.status as course_status
         FROM $table_course_user cu, $table_user u";
 if (api_is_multiple_url_enabled()) {

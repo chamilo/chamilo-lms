@@ -41,7 +41,7 @@ $form->addElement(
 $session_id  = api_get_session_id();
 
 // the exercises
-$tbl_exercises = Database :: get_course_table(TABLE_QUIZ_TEST);
+$tbl_exercises = Database::get_course_table(TABLE_QUIZ_TEST);
 $course_id = api_get_course_int_id();
 
 $sql = "SELECT id,title,type,description, results_disabled

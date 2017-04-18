@@ -472,8 +472,8 @@ class IndexManager
         $setting_show_also_closed_courses = api_get_setting('show_closed_courses') == 'true';
 
         // Database table definitions.
-        $main_course_table = Database:: get_main_table(TABLE_MAIN_COURSE);
-        $main_category_table = Database:: get_main_table(TABLE_MAIN_CATEGORY);
+        $main_course_table = Database::get_main_table(TABLE_MAIN_COURSE);
+        $main_category_table = Database::get_main_table(TABLE_MAIN_CATEGORY);
 
         // Get list of courses in category $category.
         $sql = "SELECT * FROM $main_course_table cours

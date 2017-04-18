@@ -348,7 +348,7 @@ abstract class AbstractLink implements GradebookItem
             isset($this->weight) &&
             isset($this->visible)
         ) {
-            $tbl_grade_links = Database:: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+            $tbl_grade_links = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
             $sql = "SELECT count(*) FROM ".$tbl_grade_links."
                     WHERE
                         ref_id=".$this->get_ref_id()." AND
@@ -416,7 +416,7 @@ abstract class AbstractLink implements GradebookItem
      */
     public static function add_link_log($idevaluation, $nameLog = null)
     {
-        $table = Database:: get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);
         $dateobject = self::load($idevaluation, null, null, null, null);
         $current_date_server = api_get_utc_datetime();
         $arreval = get_object_vars($dateobject[0]);

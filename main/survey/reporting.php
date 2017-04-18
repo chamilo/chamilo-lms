@@ -101,8 +101,8 @@ if (!api_is_allowed_to_edit(false, true) || $isDrhOfCourse) {
 }
 
 // Database table definitions
-$table_course = Database:: get_main_table(TABLE_MAIN_COURSE);
-$table_user = Database:: get_main_table(TABLE_MAIN_USER);
+$table_course = Database::get_main_table(TABLE_MAIN_COURSE);
+$table_user = Database::get_main_table(TABLE_MAIN_USER);
 $urlname = strip_tags(api_substr(api_html_entity_decode($survey_data['title'], ENT_QUOTES), 0, 40));
 if (api_strlen(strip_tags($survey_data['title'])) > 40) {
     $urlname .= '...';

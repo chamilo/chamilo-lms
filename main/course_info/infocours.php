@@ -53,10 +53,10 @@ if (api_get_setting('pdf_export_watermark_by_course') == 'true') {
         $show_delete_watermark_text_message = true;
     }
 }
-$tbl_user = Database:: get_main_table(TABLE_MAIN_USER);
-$tbl_admin = Database:: get_main_table(TABLE_MAIN_ADMIN);
-$tbl_course_user = Database:: get_main_table(TABLE_MAIN_COURSE_USER);
-$tbl_course = Database:: get_main_table(TABLE_MAIN_COURSE);
+$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
+$tbl_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
+$tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+$tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
 
 $sql = "SELECT tutor_name FROM $tbl_course WHERE id = $courseId";
 $q_tutor = Database::query($sql);

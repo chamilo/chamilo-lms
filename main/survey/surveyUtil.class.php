@@ -250,9 +250,9 @@ class SurveyUtil
      */
     public static function delete_user_report($survey_id, $user_id)
     {
-        $table_survey_answer = Database:: get_course_table(TABLE_SURVEY_ANSWER);
-        $table_survey_invitation = Database:: get_course_table(TABLE_SURVEY_INVITATION);
-        $table_survey = Database:: get_course_table(TABLE_SURVEY);
+        $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
+        $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
+        $table_survey = Database::get_course_table(TABLE_SURVEY);
 
         $course_id = api_get_course_int_id();
         $survey_id = (int) $survey_id;
@@ -480,9 +480,9 @@ class SurveyUtil
         $singlePage = isset($_GET['single_page']) ? intval($_GET['single_page']) : 0;
         $course_id = api_get_course_int_id();
         // Database table definitions
-        $table_survey_question = Database:: get_course_table(TABLE_SURVEY_QUESTION);
-        $table_survey_question_option = Database:: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
-        $table_survey_answer = Database:: get_course_table(TABLE_SURVEY_ANSWER);
+        $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
+        $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
+        $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
 
         // Determining the offset of the sql statement (the n-th question of the survey)
         $offset = !isset($_GET['question']) ? 0 : intval($_GET['question']);
@@ -2868,9 +2868,9 @@ class SurveyUtil
             $direction = 'asc';
         }
 
-        $table_survey = Database:: get_course_table(TABLE_SURVEY);
-        $table_survey_question = Database:: get_course_table(TABLE_SURVEY_QUESTION);
-        $table_user = Database:: get_main_table(TABLE_MAIN_USER);
+        $table_survey = Database::get_course_table(TABLE_SURVEY);
+        $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
+        $table_user = Database::get_main_table(TABLE_MAIN_USER);
 
         $course_id = api_get_course_int_id();
 
@@ -2921,7 +2921,7 @@ class SurveyUtil
         // Database table definitions
         $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
         $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
-        $table_survey = Database:: get_course_table(TABLE_SURVEY);
+        $table_survey = Database::get_course_table(TABLE_SURVEY);
 
         $sql = "SELECT question_id
                 FROM $table_survey_question
@@ -3151,10 +3151,10 @@ class SurveyUtil
      */
     public static function show_link_available($user_id, $survey_code, $user_answer)
     {
-        $table_survey = Database:: get_course_table(TABLE_SURVEY);
-        $table_survey_invitation = Database:: get_course_table(TABLE_SURVEY_INVITATION);
-        $table_survey_answer = Database:: get_course_table(TABLE_SURVEY_ANSWER);
-        $table_survey_question = Database:: get_course_table(TABLE_SURVEY_QUESTION);
+        $table_survey = Database::get_course_table(TABLE_SURVEY);
+        $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
+        $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
+        $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
 
         $survey_code = Database::escape_string($survey_code);
         $user_id = intval($user_id);

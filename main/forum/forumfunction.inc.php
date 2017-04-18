@@ -912,7 +912,7 @@ function deleteForumCategoryThread($content, $id)
  */
 function delete_post($post_id)
 {
-    $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
+    $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
     $post_id = intval($post_id);
     $course_id = api_get_course_int_id();
     $em = Database::getManager();
@@ -984,7 +984,7 @@ function delete_post($post_id)
  */
 function check_if_last_post_of_thread($thread_id)
 {
-    $table_posts = Database :: get_course_table(TABLE_FORUM_POST);
+    $table_posts = Database::get_course_table(TABLE_FORUM_POST);
     $course_id = api_get_course_int_id();
     $sql = "SELECT * FROM $table_posts
             WHERE c_id = $course_id AND thread_id = ".intval($thread_id)."
@@ -1174,9 +1174,9 @@ function change_visibility($content, $id, $target_visibility)
  */
 function change_lock_status($content, $id, $action)
 {
-    $table_categories = Database :: get_course_table(TABLE_FORUM_CATEGORY);
-    $table_forums = Database :: get_course_table(TABLE_FORUM);
-    $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
+    $table_categories = Database::get_course_table(TABLE_FORUM_CATEGORY);
+    $table_forums = Database::get_course_table(TABLE_FORUM);
+    $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
 
     // Determine the relevant table.
     if ($content == 'forumcategory') {
@@ -1231,9 +1231,9 @@ function change_lock_status($content, $id, $action)
  */
 function move_up_down($content, $direction, $id)
 {
-    $table_categories = Database:: get_course_table(TABLE_FORUM_CATEGORY);
-    $table_forums = Database:: get_course_table(TABLE_FORUM);
-    $table_item_property = Database:: get_course_table(TABLE_ITEM_PROPERTY);
+    $table_categories = Database::get_course_table(TABLE_FORUM_CATEGORY);
+    $table_forums = Database::get_course_table(TABLE_FORUM);
+    $table_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
     $course_id = api_get_course_int_id();
     $id = intval($id);
 
@@ -1334,8 +1334,8 @@ function move_up_down($content, $direction, $id)
  */
 function get_forum_categories($id = '', $courseId = 0, $sessionId = 0)
 {
-    $table_categories = Database :: get_course_table(TABLE_FORUM_CATEGORY);
-    $table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
+    $table_categories = Database::get_course_table(TABLE_FORUM_CATEGORY);
+    $table_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
     // Condition for the session
     $session_id = $sessionId ?: api_get_session_id();
@@ -1670,7 +1670,7 @@ function get_last_post_by_thread($course_id, $thread_id, $forum_id, $show_visibl
     $forum_id = intval($forum_id);
     $course_id = intval($course_id);
 
-    $table_posts = Database :: get_course_table(TABLE_FORUM_POST);
+    $table_posts = Database::get_course_table(TABLE_FORUM_POST);
     $sql = "SELECT * FROM $table_posts
             WHERE 
                 c_id = $course_id AND 
@@ -1711,10 +1711,10 @@ function get_last_post_information($forum_id, $show_invisibles = false, $course_
     }
     $sessionId = api_get_session_id();
 
-    $table_posts = Database :: get_course_table(TABLE_FORUM_POST);
-    $table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
+    $table_posts = Database::get_course_table(TABLE_FORUM_POST);
+    $table_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
     $table_users = Database::get_main_table(TABLE_MAIN_USER);
-    $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
+    $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
 
     $forum_id = intval($forum_id);
     $return_array = array();
@@ -1810,8 +1810,8 @@ function get_threads($forum_id, $courseId = null, $sessionId = null)
 {
     $groupId = api_get_group_id();
     $sessionId = $sessionId !== null ? intval($sessionId) : api_get_session_id();
-    $table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
-    $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
+    $table_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
+    $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
     $table_users = Database::get_main_table(TABLE_MAIN_USER);
 
     $courseId = $courseId !== null ? intval($courseId) : api_get_course_int_id();
@@ -2068,7 +2068,7 @@ function getPosts(
  */
 function get_post_information($post_id)
 {
-    $table_posts = Database :: get_course_table(TABLE_FORUM_POST);
+    $table_posts = Database::get_course_table(TABLE_FORUM_POST);
     $table_users = Database::get_main_table(TABLE_MAIN_USER);
     $course_id = api_get_course_int_id();
 
@@ -2096,8 +2096,8 @@ function get_post_information($post_id)
  */
 function get_thread_information($forumId, $thread_id, $sessionId = null)
 {
-    $table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
-    $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
+    $table_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
+    $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
     $thread_id = intval($thread_id);
     $sessionId = $sessionId !== null ? intval($sessionId) : api_get_session_id();
     $sessionCondition = api_get_session_condition($sessionId, true, false, 'threads.session_id');
@@ -2134,7 +2134,7 @@ function get_thread_information($forumId, $thread_id, $sessionId = null)
  */
 function get_thread_users_details($thread_id)
 {
-    $t_posts = Database :: get_course_table(TABLE_FORUM_POST);
+    $t_posts = Database::get_course_table(TABLE_FORUM_POST);
     $t_users = Database::get_main_table(TABLE_MAIN_USER);
     $t_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
     $t_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -2188,8 +2188,8 @@ function get_thread_users_details($thread_id)
  */
 function get_thread_users_qualify($thread_id)
 {
-    $t_posts = Database :: get_course_table(TABLE_FORUM_POST);
-    $t_qualify = Database :: get_course_table(TABLE_FORUM_THREAD_QUALIFY);
+    $t_posts = Database::get_course_table(TABLE_FORUM_POST);
+    $t_qualify = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY);
     $t_users = Database::get_main_table(TABLE_MAIN_USER);
     $t_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
     $t_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -2256,8 +2256,8 @@ function get_thread_users_qualify($thread_id)
  */
 function get_thread_users_not_qualify($thread_id)
 {
-    $t_posts = Database :: get_course_table(TABLE_FORUM_POST);
-    $t_qualify = Database :: get_course_table(TABLE_FORUM_THREAD_QUALIFY);
+    $t_posts = Database::get_course_table(TABLE_FORUM_POST);
+    $t_qualify = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY);
     $t_users = Database::get_main_table(TABLE_MAIN_USER);
     $t_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
     $t_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -2327,8 +2327,8 @@ function get_thread_users_not_qualify($thread_id)
  */
 function get_forum_information($forum_id, $courseId = 0)
 {
-    $table_forums = Database :: get_course_table(TABLE_FORUM);
-    $table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
+    $table_forums = Database::get_course_table(TABLE_FORUM);
+    $table_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
     $courseId = empty($courseId) ? api_get_course_int_id(): intval($courseId);
     $forum_id = intval($forum_id);
 
@@ -2362,8 +2362,8 @@ function get_forum_information($forum_id, $courseId = 0)
  */
 function get_forumcategory_information($cat_id)
 {
-    $table_categories = Database :: get_course_table(TABLE_FORUM_CATEGORY);
-    $table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
+    $table_categories = Database::get_course_table(TABLE_FORUM_CATEGORY);
+    $table_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
     $course_id = api_get_course_int_id();
     $sql = "SELECT *
@@ -2393,7 +2393,7 @@ function get_forumcategory_information($cat_id)
  */
 function count_number_of_forums_in_category($cat_id)
 {
-    $table_forums = Database :: get_course_table(TABLE_FORUM);
+    $table_forums = Database::get_course_table(TABLE_FORUM);
     $course_id = api_get_course_int_id();
     $sql = "SELECT count(*) AS number_of_forums
             FROM ".$table_forums."
@@ -2413,7 +2413,7 @@ function count_number_of_forums_in_category($cat_id)
  */
 function updateThread($values)
 {
-    $threadTable = Database :: get_course_table(TABLE_FORUM_THREAD);
+    $threadTable = Database::get_course_table(TABLE_FORUM_THREAD);
     $courseId = api_get_course_int_id();
 
     $params = [
@@ -2502,7 +2502,7 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
     $sessionId = $sessionId ?: api_get_session_id();
 
     $em = Database::getManager();
-    $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
+    $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
 
     $gradebook = isset($_GET['gradebook']) ? Security::remove_XSS($_GET['gradebook']) : '';
     $upload_ok = 1;
@@ -3313,7 +3313,7 @@ function store_reply($current_forum, $values, $courseId = 0, $userId = 0)
 {
     $courseId = !empty($courseId) ? $courseId : api_get_course_int_id();
     $_course = api_get_course_info_by_id($courseId);
-    $table_posts = Database :: get_course_table(TABLE_FORUM_POST);
+    $table_posts = Database::get_course_table(TABLE_FORUM_POST);
     $post_date = api_get_utc_datetime();
     $userId = $userId ?: api_get_user_id();
 
@@ -3657,8 +3657,8 @@ function show_edit_post_form(
  */
 function store_edit_post($forumInfo, $values)
 {
-    $threadTable = Database :: get_course_table(TABLE_FORUM_THREAD);
-    $table_posts = Database :: get_course_table(TABLE_FORUM_POST);
+    $threadTable = Database::get_course_table(TABLE_FORUM_THREAD);
+    $table_posts = Database::get_course_table(TABLE_FORUM_POST);
     $gradebook = Security::remove_XSS($_GET['gradebook']);
     $course_id = api_get_course_int_id();
 
@@ -3806,7 +3806,7 @@ function display_user_image($user_id, $name, $origin = '')
  */
 function increase_thread_view($thread_id)
 {
-    $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
+    $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
     $course_id = api_get_course_int_id();
 
     $sql = "UPDATE $table_threads SET thread_views=thread_views+1
@@ -3826,7 +3826,7 @@ function increase_thread_view($thread_id)
  */
 function updateThreadInfo($thread_id, $last_post_id, $post_date)
 {
-    $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
+    $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
     $course_id = api_get_course_int_id();
     $sql = "UPDATE $table_threads SET 
             thread_replies = thread_replies+1,
@@ -3871,7 +3871,7 @@ function get_whats_new()
         return false;
     }
 
-    $table_posts = Database :: get_course_table(TABLE_FORUM_POST);
+    $table_posts = Database::get_course_table(TABLE_FORUM_POST);
     $tracking_last_tool_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
 
     $tool = TOOL_FORUM;
@@ -3920,7 +3920,7 @@ function get_whats_new()
  */
 function approve_post($post_id, $action)
 {
-    $table_posts = Database :: get_course_table(TABLE_FORUM_POST);
+    $table_posts = Database::get_course_table(TABLE_FORUM_POST);
     $course_id = api_get_course_int_id();
 
     if ($action == 'invisible') {
@@ -3954,7 +3954,7 @@ function approve_post($post_id, $action)
  */
 function get_unaproved_messages($forum_id)
 {
-    $table_posts = Database :: get_course_table(TABLE_FORUM_POST);
+    $table_posts = Database::get_course_table(TABLE_FORUM_POST);
     $course_id = api_get_course_int_id();
 
     $return_array = array();
@@ -4052,10 +4052,10 @@ function send_notification_mails($forumId, $thread_id, $reply_info)
  */
 function handle_mail_cue($content, $id)
 {
-    $table_mailcue = Database :: get_course_table(TABLE_FORUM_MAIL_QUEUE);
-    $table_forums = Database :: get_course_table(TABLE_FORUM);
-    $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
-    $table_posts = Database :: get_course_table(TABLE_FORUM_POST);
+    $table_mailcue = Database::get_course_table(TABLE_FORUM_MAIL_QUEUE);
+    $table_forums = Database::get_course_table(TABLE_FORUM);
+    $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
+    $table_posts = Database::get_course_table(TABLE_FORUM_POST);
     $table_users = Database::get_main_table(TABLE_MAIN_USER);
 
     $course_id = api_get_course_int_id();
@@ -4270,9 +4270,9 @@ function store_move_post($values)
     $_course = api_get_course_info();
     $course_id = api_get_course_int_id();
 
-    $table_forums = Database :: get_course_table(TABLE_FORUM);
-    $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
-    $table_posts = Database :: get_course_table(TABLE_FORUM_POST);
+    $table_forums = Database::get_course_table(TABLE_FORUM);
+    $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
+    $table_posts = Database::get_course_table(TABLE_FORUM_POST);
 
     if ($values['thread'] == '0') {
         $current_post = get_post_information($values['post_id']);
@@ -4389,8 +4389,8 @@ function store_move_post($values)
  */
 function store_move_thread($values)
 {
-    $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
-    $table_posts = Database :: get_course_table(TABLE_FORUM_POST);
+    $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
+    $table_posts = Database::get_course_table(TABLE_FORUM_POST);
 
     $courseId = api_get_course_int_id();
     $sessionId = api_get_session_id();
@@ -4412,7 +4412,7 @@ function store_move_thread($values)
     if (!empty($forumInfo['to_group_id'])) {
         $groupId = $forumInfo['to_group_id'];
         $item = api_get_item_property_info($courseId, TABLE_FORUM_THREAD, $threadId, $sessionId, $groupId);
-        $table = Database:: get_course_table(TABLE_ITEM_PROPERTY);
+        $table = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $sessionCondition = api_get_session_condition($sessionId);
 
         if (!empty($item)) {
@@ -4528,9 +4528,9 @@ function forum_search()
  */
 function display_forum_search_results($search_term)
 {
-    $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
-    $table_posts = Database :: get_course_table(TABLE_FORUM_POST);
-    $table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
+    $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
+    $table_posts = Database::get_course_table(TABLE_FORUM_POST);
+    $table_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
     $session_id = api_get_session_id();
     $gradebook = Security::remove_XSS($_GET['gradebook']);
     $course_id = api_get_course_int_id();
@@ -4830,7 +4830,7 @@ function edit_forum_attachment_file($file_comment, $post_id, $id_attach)
  */
 function get_attachment($post_id)
 {
-    $forum_table_attachment = Database :: get_course_table(TABLE_FORUM_ATTACHMENT);
+    $forum_table_attachment = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
     $course_id = api_get_course_int_id();
     $row = array();
     $post_id = intval($post_id);
@@ -4852,7 +4852,7 @@ function get_attachment($post_id)
  */
 function getAllAttachment($postId)
 {
-    $forumAttachmentTable = Database :: get_course_table(TABLE_FORUM_ATTACHMENT);
+    $forumAttachmentTable = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
     $courseId = api_get_course_int_id();
     $postId = intval($postId);
     $columns = array('iid', 'path', 'filename', 'comment');
@@ -4932,10 +4932,10 @@ function delete_attachment($post_id, $id_attach = 0, $display = true)
  */
 function get_forums_of_group($groupInfo)
 {
-    $table_forums = Database :: get_course_table(TABLE_FORUM);
-    $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
-    $table_posts = Database :: get_course_table(TABLE_FORUM_POST);
-    $table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
+    $table_forums = Database::get_course_table(TABLE_FORUM);
+    $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
+    $table_posts = Database::get_course_table(TABLE_FORUM_POST);
+    $table_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
     $course_id = api_get_course_int_id();
     $groupId = (int) $groupInfo['id'];
 
@@ -5275,7 +5275,7 @@ function get_notifications_of_user($user_id = 0, $force = false)
  */
 function count_number_of_post_in_thread($thread_id)
 {
-    $table_posts = Database :: get_course_table(TABLE_FORUM_POST);
+    $table_posts = Database::get_course_table(TABLE_FORUM_POST);
     $course_id = api_get_course_int_id();
     if (empty($course_id)) {
         return 0;

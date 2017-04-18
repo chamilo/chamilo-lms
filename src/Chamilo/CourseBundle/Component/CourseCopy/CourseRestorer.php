@@ -2764,9 +2764,9 @@ class CourseRestorer
 	public function restore_student_publication($sessionId = 0)
 	{
         $sessionId = intval($sessionId);
-        $work_assignment_table = Database:: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
-        $work_table = Database:: get_course_table(TABLE_STUDENT_PUBLICATION);
-        $item_property_table = Database:: get_course_table(TABLE_ITEM_PROPERTY);
+        $work_assignment_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
+        $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+        $item_property_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
 		// Query in student publication
 		$sql = 'SELECT * FROM '.$work_table.'

@@ -388,7 +388,7 @@ function get_number_of_group_users()
     }
 
     // Database table definition
-    $table = Database :: get_course_table(TABLE_GROUP_USER);
+    $table = Database::get_course_table(TABLE_GROUP_USER);
 
     // Query
     $sql = "SELECT count(iid) AS number_of_users
@@ -424,9 +424,9 @@ function get_group_user_data($from, $number_of_items, $column, $direction)
     }
 
     // Database table definition
-    $table_group_user = Database:: get_course_table(TABLE_GROUP_USER);
-    $table_user = Database:: get_main_table(TABLE_MAIN_USER);
-    $tableGroup = Database:: get_course_table(TABLE_GROUP);
+    $table_group_user = Database::get_course_table(TABLE_GROUP_USER);
+    $table_user = Database::get_main_table(TABLE_MAIN_USER);
+    $tableGroup = Database::get_course_table(TABLE_GROUP);
 
     // Query
     if (api_get_setting('show_email_addresses') === 'true') {

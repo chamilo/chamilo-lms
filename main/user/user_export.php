@@ -15,9 +15,9 @@ $export['addcsvheader'] = isset($_REQUEST['addcsvheader']) ? $_REQUEST['addcsvhe
 $export['session'] = isset($_REQUEST['session']) ? $_REQUEST['session'] : null;
 
 // Database table definitions
-$course_table = Database:: get_main_table(TABLE_MAIN_COURSE);
-$user_table = Database:: get_main_table(TABLE_MAIN_USER);
-$course_user_table = Database:: get_main_table(TABLE_MAIN_COURSE_USER);
+$course_table = Database::get_main_table(TABLE_MAIN_COURSE);
+$user_table = Database::get_main_table(TABLE_MAIN_USER);
+$course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $session_course_user_table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 $session_user_table = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 

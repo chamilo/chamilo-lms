@@ -111,7 +111,7 @@ class AttendanceLink extends AbstractLink
 	 */
 	public function has_results()
 	{
-		$tbl_attendance_result = Database :: get_course_table(TABLE_ATTENDANCE_RESULT);
+		$tbl_attendance_result = Database::get_course_table(TABLE_ATTENDANCE_RESULT);
 		$session_id = api_get_session_id();
 		$sql = 'SELECT count(*) AS number FROM '.$tbl_attendance_result."
 				WHERE

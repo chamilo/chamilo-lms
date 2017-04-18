@@ -32,11 +32,11 @@ if (empty($surveyData)) {
 $is_valid_request = isset($_REQUEST['is_executable']) ? $_REQUEST['is_executable'] : null;
 
 // Database table definitions
-$table_survey = Database:: get_course_table(TABLE_SURVEY);
-$table_survey_question = Database:: get_course_table(TABLE_SURVEY_QUESTION);
-$table_survey_question_option = Database:: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
-$table_course = Database:: get_main_table(TABLE_MAIN_COURSE);
-$table_user = Database:: get_main_table(TABLE_MAIN_USER);
+$table_survey = Database::get_course_table(TABLE_SURVEY);
+$table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
+$table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
+$table_course = Database::get_main_table(TABLE_MAIN_COURSE);
+$table_user = Database::get_main_table(TABLE_MAIN_USER);
 $course_id = api_get_course_int_id();
 $urlname = api_substr(api_html_entity_decode($surveyData['title'], ENT_QUOTES), 0, 40);
 if (api_strlen(strip_tags($surveyData['title'])) > 40) {
@@ -44,7 +44,7 @@ if (api_strlen(strip_tags($surveyData['title'])) > 40) {
 }
 
 if ($surveyData['survey_type'] == 1) {
-    $sql = 'SELECT id FROM '.Database :: get_course_table(TABLE_SURVEY_QUESTION_GROUP).'
+    $sql = 'SELECT id FROM '.Database::get_course_table(TABLE_SURVEY_QUESTION_GROUP).'
             WHERE
                 c_id = '.$course_id.' AND
                 survey_id = '.(int)$_GET['survey_id'].' LIMIT 1';

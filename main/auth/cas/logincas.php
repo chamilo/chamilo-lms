@@ -39,7 +39,7 @@ if (cas_configured()) {
         $firstpage = $_GET['firstpage'];
         setcookie("GotoCourse", $firstpage);
     }
-    if (!is_object($PHPCAS_CLIENT) ) {
+    if (!is_object($PHPCAS_CLIENT)) {
         phpCAS::client(
             $cas_auth_ver,
             $cas_auth_server,

@@ -5,7 +5,7 @@
  * @package chamilo.plugin.advanced_subscription
  */
 
-require_once __DIR__ . '/../config.php';
+require_once __DIR__.'/../config.php';
 
 // Protect test
 api_protect_admin_script();
@@ -78,8 +78,7 @@ $adminsArray = UserManager::get_all_administrators();
 $isWesternNameOrder = api_is_western_name_order();
 foreach ($adminsArray as &$admin) {
     $admin['complete_name'] = $isWesternNameOrder ?
-        $admin['firstname'] . ', ' . $admin['lastname'] :
-        $admin['lastname'] . ', ' . $admin['firstname']
+        $admin['firstname'].', '.$admin['lastname'] : $admin['lastname'].', '.$admin['firstname']
     ;
 }
 unset($admin);
@@ -91,8 +90,8 @@ $data['admins'] = $adminsArray;
 $data['admin'] = current($adminsArray);
 $data['session'] = $sessionArray;
 $data['signature'] = api_get_setting('Institution');
-$data['admin_view_url'] = api_get_path(WEB_PLUGIN_PATH) .
-    'advanced_subscription/src/admin_view.php?s=' . $data['sessionId'];
+$data['admin_view_url'] = api_get_path(WEB_PLUGIN_PATH).
+    'advanced_subscription/src/admin_view.php?s='.$data['sessionId'];
 $data['newStatus'] = ADVANCED_SUBSCRIPTION_QUEUE_STATUS_BOSS_APPROVED;
 $data['student']['acceptUrl'] = $plugin->getQueueUrl($data);
 $data['newStatus'] = ADVANCED_SUBSCRIPTION_QUEUE_STATUS_BOSS_DISAPPROVED;
@@ -116,21 +115,21 @@ foreach ($tplParams as $tplParam) {
     $tpl->assign($tplParam, $data[$tplParam]);
 }
 
-$dir = __DIR__ . '/../views/';
+$dir = __DIR__.'/../views/';
 $files = scandir($dir);
 
-echo '<br>', '<pre>' , print_r($files, 1) , '</pre>';
+echo '<br>', '<pre>', print_r($files, 1), '</pre>';
 
 foreach ($files as $k =>&$file) {
     if (
-        is_file($dir . $file) &&
+        is_file($dir.$file) &&
         strpos($file, '.tpl') &&
         $file != 'admin_view.tpl'
     ) {
         echo '<pre>', $file, '</pre>';
-        echo $tpl->fetch('/advanced_subscription/views/' . $file);
+        echo $tpl->fetch('/advanced_subscription/views/'.$file);
     } else {
         unset($files[$k]);
     }
 }
-echo '<br>', '<pre>' , print_r($files, 1) , '</pre>';
+echo '<br>', '<pre>', print_r($files, 1), '</pre>';

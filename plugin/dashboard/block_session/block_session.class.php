@@ -22,9 +22,9 @@ class BlockSession extends Block
 	/**
 	 * Constructor
 	 */
-    public function __construct ($user_id)
+    public function __construct($user_id)
     {
-    	$this->user_id 	= $user_id;
+    	$this->user_id = $user_id;
     	$this->path = 'block_session';
     	if ($this->is_block_visible_for_user($user_id)) {
             $this->sessions = SessionManager::get_sessions_followed_by_drh($user_id);
@@ -66,7 +66,7 @@ class BlockSession extends Block
 			            <div class="panel panel-default" id="intro">
 			                <div class="panel-heading">
 			                    '.get_lang('SessionsInformation').'
-			                    <div class="pull-right"><a class="btn btn-danger btn-xs" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">
+			                    <div class="pull-right"><a class="btn btn-danger btn-xs" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">
 			                    <em class="fa fa-times"></em>
 			                    </a></div>
 			                </div>
@@ -127,7 +127,7 @@ class BlockSession extends Block
 
 	 			$count_courses_in_session = count(Tracking::get_courses_list_from_session($session_id));
 
-				if ($i%2 == 0) $class_tr = 'row_odd';
+				if ($i % 2 == 0) $class_tr = 'row_odd';
 	    		else $class_tr = 'row_even';
 
 				$sessions_table .= '<tr class="'.$class_tr.'">

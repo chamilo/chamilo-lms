@@ -49,9 +49,9 @@ class OpenMeetings
         $om_user   = $plugin->get('user');
         $om_pass   = $plugin->get('pass');
         $accessUrl = api_get_access_url($_configuration['access_url']);
-        $this->externalType = substr($accessUrl['url'], strpos($accessUrl['url'], '://')+3, -1);
+        $this->externalType = substr($accessUrl['url'], strpos($accessUrl['url'], '://') + 3, -1);
         if (strcmp($this->externalType, 'localhost') == 0) {
-            $this->externalType = substr(api_get_path(WEB_PATH), strpos(api_get_path(WEB_PATH), '://')+3, -1);
+            $this->externalType = substr(api_get_path(WEB_PATH), strpos(api_get_path(WEB_PATH), '://') + 3, -1);
         }
         $this->externalType = 'chamilolms.'.$this->externalType;
         $this->table = \Database::get_main_table('plugin_openmeetings');
@@ -161,7 +161,7 @@ class OpenMeetings
             // This fills the following attributes: status, name, comment, chamiloCourseId, chamiloSessionId
             $room = new Room();
             $room->loadRoomId($meetingData['room_id']);
-            $roomArray = (array)$room;
+            $roomArray = (array) $room;
             $roomArray['SID'] = $this->sessionId;
             $roomId = $this->gateway->updateRoomWithModeration($room);
             if ($roomId != $meetingData['room_id']) {
@@ -176,7 +176,7 @@ class OpenMeetings
             $room->SID = $this->sessionId;
             $room->name = $this->roomName;
             //$room->roomtypes_id = $room->roomtypes_id;
-            $room->comment = urlencode(get_lang('Course').': ' . $params['meeting_name'] . ' - '.$_configuration['software_name']);
+            $room->comment = urlencode(get_lang('Course').': '.$params['meeting_name'].' - '.$_configuration['software_name']);
             //$room->numberOfPartizipants = $room->numberOfPartizipants;
             $room->ispublic = $room->getString('isPublic', 'false');
             //$room->appointment = $room->getString('appointment');
@@ -200,7 +200,7 @@ class OpenMeetings
             $params['room_id'] = $roomId;
             $params['c_id'] = api_get_course_int_id();
             $params['session_id'] = api_get_session_id();
-            $params['record'] = ($room->allowRecording?1:0);
+            $params['record'] = ($room->allowRecording ? 1 : 0);
 
             $id = \Database::insert($this->table, $params);
 
@@ -238,7 +238,7 @@ class OpenMeetings
         }
         $params = array('room_id' => $meetingData['room_id']);
         $returnVal = $this->setUserObjectAndGenerateRoomHashByURLAndRecFlag($params);
-        $iframe = $this->url . "/?" ."secureHash=" . $returnVal;
+        $iframe = $this->url."/?"."secureHash=".$returnVal;
         printf("<iframe src='%s' width='%s' height = '%s' />", $iframe, "100%", 640);
     }
 
@@ -346,7 +346,7 @@ class OpenMeetings
         $userId = $_SESSION['_user']['user_id'];
         $systemType = 'Chamilo';
         $room_id = $params['room_id'];
-        $becomeModerator = ( $this->isTeacher() ? 1 : 0 );
+        $becomeModerator = ($this->isTeacher() ? 1 : 0);
         $allowRecording = 1; //Provisional
 
         $urlWsdl = $this->url."/services/UserService?wsdl";
@@ -420,7 +420,7 @@ class OpenMeetings
                 error_log(__FILE__.'+'.__LINE__.' Meetings found: '.print_r($meetingDb, 1));
                 $remoteMeeting = array();
                 $meetingDb['created_at'] = api_get_local_time($meetingDb['created_at']);
-                $meetingDb['closed_at'] = (!empty($meetingDb['closed_at']) ? api_get_local_time($meetingDb['closed_at']):'');
+                $meetingDb['closed_at'] = (!empty($meetingDb['closed_at']) ? api_get_local_time($meetingDb['closed_at']) : '');
                 // Fixed value for now
                 $meetingDb['participantCount'] = 40;
                 $rec = $this->gateway->getFlvRecordingByRoomId($meetingDb['room_id']);
@@ -436,7 +436,7 @@ class OpenMeetings
                         \Display::url('[.avi]', $link2, array('target' => '_blank'));
 
                 }
-                $item['show_links']  = implode('<br />', $links);
+                $item['show_links'] = implode('<br />', $links);
 
                 // The following code is currently commented because the web service
                 // says this is not allowed by the SOAP user.
@@ -486,7 +486,7 @@ class OpenMeetings
                 $remoteMeeting = $current_room;
                 */
 
-                if (empty( $remoteMeeting )) {
+                if (empty($remoteMeeting)) {
                 /*
                     error_log(__FILE__.'+'.__LINE__.' Empty remote Meeting for now');
                     if ($meetingDb['status'] == 1 && $this->isTeacher()) {

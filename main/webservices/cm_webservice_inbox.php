@@ -15,7 +15,7 @@ class WSCMInbox extends WSCM
 {
     public function unreadMessage($username, $password)
     {
-        if($this->verifyUserPass($username, $password) == "valid")
+        if ($this->verifyUserPass($username, $password) == "valid")
         {
             $table_message = Database::get_main_table(TABLE_MESSAGE);
             $user_id = UserManager::get_user_id_from_username($username);
@@ -33,14 +33,14 @@ class WSCMInbox extends WSCM
 
     public function get_message_id($username, $password, $from, $number_of_items)
     {
-        if($this->verifyUserPass($username, $password) == "valid")
+        if ($this->verifyUserPass($username, $password) == "valid")
         {
             $user_id = UserManager::get_user_id_from_username($username);
 
             $table_message = Database::get_main_table(TABLE_MESSAGE);
 
-            $sql_query = "SELECT id FROM $table_message " .
-                                     " WHERE user_receiver_id=".$user_id." AND msg_status IN (0,1)" .
+            $sql_query = "SELECT id FROM $table_message ".
+                                     " WHERE user_receiver_id=".$user_id." AND msg_status IN (0,1)".
                                      " ORDER BY send_date LIMIT $from,$number_of_items";
 
             $sql_result = Database::query($sql_query);
@@ -58,7 +58,7 @@ class WSCMInbox extends WSCM
 
     public function get_message_data($username, $password, $message_id, $field)
     {
-        if($this->verifyUserPass($username, $password) == "valid")
+        if ($this->verifyUserPass($username, $password) == "valid")
         {
             $htmlcode = false;
             $user_id = UserManager::get_user_id_from_username($username);
@@ -88,14 +88,14 @@ class WSCMInbox extends WSCM
 
             $table_message = Database::get_main_table(TABLE_MESSAGE);
 
-            $sql_query = "SELECT ".$field_table." FROM $table_message " .
+            $sql_query = "SELECT ".$field_table." FROM $table_message ".
                                      " WHERE user_receiver_id=".$user_id." AND id=".$message_id;
 
             $sql_result = Database::query($sql_query);
             $result = Database::fetch_row($sql_result);
             return (htmlcode) ? html_entity_decode($result[0]) : $result[0];
 
-        }else
+        } else
             return get_lang('InvalidId');
 
 
@@ -103,14 +103,14 @@ class WSCMInbox extends WSCM
 
     public function get_message_id_sent($username, $password, $from, $number_of_items)
     {
-        if($this->verifyUserPass($username, $password) == "valid")
+        if ($this->verifyUserPass($username, $password) == "valid")
         {
             $user_id = UserManager::get_user_id_from_username($username);
 
             $table_message = Database::get_main_table(TABLE_MESSAGE);
 
-            $sql_query = "SELECT id FROM $table_message " .
-					 "WHERE user_sender_id=".$user_id." AND msg_status=".MESSAGE_STATUS_OUTBOX." " .
+            $sql_query = "SELECT id FROM $table_message ".
+					 "WHERE user_sender_id=".$user_id." AND msg_status=".MESSAGE_STATUS_OUTBOX." ".
 					 "ORDER BY send_date LIMIT $from,$number_of_items";
 
             $sql_result = Database::query($sql_query);
@@ -129,7 +129,7 @@ class WSCMInbox extends WSCM
 
     public function get_message_data_sent($username, $password, $id, $field)
     {
-        if($this->verifyUserPass($username, $password) == "valid")
+        if ($this->verifyUserPass($username, $password) == "valid")
         {
             $htmlcode = false;
             switch ($field)
@@ -159,7 +159,7 @@ class WSCMInbox extends WSCM
 
             $table_message = Database::get_main_table(TABLE_MESSAGE);
 
-            $sql_query = "SELECT ".$field_table." FROM $table_message " .
+            $sql_query = "SELECT ".$field_table." FROM $table_message ".
                                      " WHERE user_sender_id=".$user_id." AND id=".$id;
 
             $sql_result = Database::query($sql_query);
@@ -167,7 +167,7 @@ class WSCMInbox extends WSCM
 
             return (htmlcode) ? html_entity_decode($result[0]) : $result[0];
 
-        }else
+        } else
             return get_lang('InvalidId');
 
 
@@ -176,7 +176,7 @@ class WSCMInbox extends WSCM
     public function message_send($username, $password, $receiver_user_id, $subject, $content)
     {
         //TODO: verificar data de envio. Esta divergindo de data!
-        if($this->verifyUserPass($username, $password) == "valid")
+        if ($this->verifyUserPass($username, $password) == "valid")
         {
             $group_id = intval(0);
             $parent_id = intval(0);
@@ -207,7 +207,7 @@ class WSCMInbox extends WSCM
 
     }
 
-    protected function set_message_as_read($user_id, $message_id){
+    protected function set_message_as_read($user_id, $message_id) {
         $table_message = Database::get_main_table(TABLE_MESSAGE);
         $query = "UPDATE $table_message SET msg_status = '".MESSAGE_STATUS_NEW."' WHERE user_receiver_id=".$user_id." AND id='".$message_id."';";
         $result = Database::query($query);

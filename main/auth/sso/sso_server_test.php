@@ -48,7 +48,7 @@ if (isset($_POST['user']) && isset($_POST['password'])) {
 
         /* 2.Get the chamilo username and password from your system or from webservices */
 
-        $account['username'] = 'jbrion525';             //username in Chamilo
+        $account['username'] = 'jbrion525'; //username in Chamilo
         $account['password'] = sha1(sha1('jbrion525')); //encrypted password with assuming that the first encrypted method is sha1 in chamilo
 
         $master_auth_uri = $my_chamilo_server.'/?q=user';
@@ -64,9 +64,9 @@ if (isset($_POST['user']) && isset($_POST['password'])) {
         );
 
         $cookie = base64_encode(serialize($sso));
-        $url = chamilo_sso_protocol() . $master_auth_uri;
-        $params = 'sso_referer='. urlencode($url) .'&sso_cookie='. urlencode($cookie);
-        $final_url = filter_xss($_GET['sso_referer']) .'?'. $params;
+        $url = chamilo_sso_protocol().$master_auth_uri;
+        $params = 'sso_referer='.urlencode($url).'&sso_cookie='.urlencode($cookie);
+        $final_url = filter_xss($_GET['sso_referer']).'?'.$params;
 
         //If your user exists redirect to chamilo and set the account in a session to check it later
         $_SESSION['my_server_user_session'] = $account;

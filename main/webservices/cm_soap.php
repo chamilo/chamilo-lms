@@ -43,7 +43,7 @@ class WSCMSoapServer {
 	 * Singleton method
 	 */
 	public static function singleton() {
-		if(!isset(self::$_instance)) {
+		if (!isset(self::$_instance)) {
 			self::$_instance = new soap_server();
 			// Set the error handler
 			WSCMError::setErrorHandler(new WSCMSoapErrorHandler());

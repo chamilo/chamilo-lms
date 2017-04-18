@@ -15,7 +15,7 @@ class Request
         return isset($_REQUEST[$key]) ? $_REQUEST[$key] : $default;
     }
 
-    public static function has($key){
+    public static function has($key) {
         return isset($_REQUEST[$key]);
     }
 

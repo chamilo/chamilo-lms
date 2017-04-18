@@ -20,7 +20,7 @@ class WSReport extends WS {
 	 */
 	public function GetTimeSpentOnPlatform($user_id_field_name, $user_id_value) {
 		$user_id = $this->getUserId($user_id_field_name, $user_id_value);
-		if($user_id instanceof WSError) {
+		if ($user_id instanceof WSError) {
 			return $user_id;
 		} else {
             return Tracking::get_time_spent_on_the_platform($user_id);
@@ -38,11 +38,11 @@ class WSReport extends WS {
 	 */
 	public function GetTimeSpentOnCourse($user_id_field_name, $user_id_value, $course_id_field_name, $course_id_value) {
         $user_id = $this->getUserId($user_id_field_name, $user_id_value);
-        if($user_id instanceof WSError) {
+        if ($user_id instanceof WSError) {
             return $user_id;
         }
         $course_id = $this->getCourseId($course_id_field_name, $course_id_value);
-        if($course_id instanceof WSError) {
+        if ($course_id instanceof WSError) {
             return $course_id;
         } else {
             $course_code = CourseManager::get_course_code_from_course_id($course_id);
@@ -61,17 +61,17 @@ class WSReport extends WS {
      */
     public function GetTimeSpentOnCourseInSession($user_id_field_name, $user_id_value, $course_id_field_name, $course_id_value, $session_id_field_name, $session_id_value) {
         $user_id = $this->getUserId($user_id_field_name, $user_id_value);
-        if($user_id instanceof WSError) {
+        if ($user_id instanceof WSError) {
             return $user_id;
         }
         $course_id = $this->getCourseId($course_id_field_name, $course_id_value);
-        if($course_id instanceof WSError) {
+        if ($course_id instanceof WSError) {
             return $course_id;
         } else {
             $course_code = CourseManager::get_course_code_from_course_id($course_id);
         }
         $session_id = $this->getSessionId($session_id_field_name, $session_id_value);
-        if($session_id instanceof WSError) {
+        if ($session_id instanceof WSError) {
             return $session_id;
         }
         return Tracking::get_time_spent_on_the_course($user_id, $course_id, $session_id);
@@ -87,17 +87,17 @@ class WSReport extends WS {
      */
     public function GetLearnpathsByCourse($secret_key, $user_id_field_name, $user_id_value, $course_id_field_name, $course_id_value) {
         $user_id = $this->getUserId($user_id_field_name, $user_id_value);
-        if($user_id instanceof WSError) {
+        if ($user_id instanceof WSError) {
             return $user_id;
         }
         $course_id = $this->getCourseId($course_id_field_name, $course_id_value);
-        if($course_id instanceof WSError) {
+        if ($course_id instanceof WSError) {
             return $course_id;
         } else {
             $course_code = CourseManager::get_course_code_from_course_id($course_id);
         }
 
-        $lp = new LearnpathList($user_id,$course_code);
+        $lp = new LearnpathList($user_id, $course_code);
         $list = $lp->list;
         $return = array();
         foreach ($list as $id => $item) {
@@ -117,11 +117,11 @@ class WSReport extends WS {
      */
     public function GetLearnpathProgress($secret_key, $user_id_field_name, $user_id_value, $course_id_field_name, $course_id_value, $learnpath_id) {
         $user_id = $this->getUserId($user_id_field_name, $user_id_value);
-        if($user_id instanceof WSError) {
+        if ($user_id instanceof WSError) {
             return $user_id;
         }
         $course_id = $this->getCourseId($course_id_field_name, $course_id_value);
-        if($course_id instanceof WSError) {
+        if ($course_id instanceof WSError) {
             return $course_id;
         } else {
             $course_code = CourseManager::get_course_code_from_course_id($course_id);
@@ -150,11 +150,11 @@ class WSReport extends WS {
      */
     public function GetLearnpathHighestLessonLocation($secret_key, $user_id_field_name, $user_id_value, $course_id_field_name, $course_id_value, $learnpath_id) {
         $user_id = $this->getUserId($user_id_field_name, $user_id_value);
-        if($user_id instanceof WSError) {
+        if ($user_id instanceof WSError) {
             return $user_id;
         }
         $course_id = $this->getCourseId($course_id_field_name, $course_id_value);
-        if($course_id instanceof WSError) {
+        if ($course_id instanceof WSError) {
             return $course_id;
         } else {
             $course_code = CourseManager::get_course_code_from_course_id($course_id);
@@ -179,11 +179,11 @@ class WSReport extends WS {
      */
     public function GetLearnpathScoreSingleItem($secret_key, $user_id_field_name, $user_id_value, $course_id_field_name, $course_id_value, $learnpath_id, $learnpath_item_id) {
         $user_id = $this->getUserId($user_id_field_name, $user_id_value);
-        if($user_id instanceof WSError) {
+        if ($user_id instanceof WSError) {
             return $user_id;
         }
         $course_id = $this->getCourseId($course_id_field_name, $course_id_value);
-        if($course_id instanceof WSError) {
+        if ($course_id instanceof WSError) {
             return $course_id;
         } else {
             $course_code = CourseManager::get_course_code_from_course_id($course_id);
@@ -213,15 +213,15 @@ class WSReport extends WS {
      */
     public function GetLearnpathStatusSingleItem($secret_key, $user_id_field_name, $user_id_value, $course_id_field_name, $course_id_value, $learnpath_id, $learnpath_item_id) {
         $verifKey = $this->verifyKey($secret_key);
-        if($verifKey instanceof WSError) {
+        if ($verifKey instanceof WSError) {
             $this->handleError($verifKey);
         } else {
             $user_id = $this->getUserId($user_id_field_name, $user_id_value);
-            if($user_id instanceof WSError) {
+            if ($user_id instanceof WSError) {
                 return $user_id;
             }
             $course_id = $this->getCourseId($course_id_field_name, $course_id_value);
-            if($course_id instanceof WSError) {
+            if ($course_id instanceof WSError) {
                 return $course_id;
             } else {
                 $course_code = CourseManager::get_course_code_from_course_id($course_id);

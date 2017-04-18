@@ -33,7 +33,7 @@ $client->charencoding = 'UTF-8';*/
 $soap_error = $client->getError();
 
 if (!empty($soap_error)) {
-    $error_message = 'Nusoap object creation failed: ' . $soap_error;
+    $error_message = 'Nusoap object creation failed: '.$soap_error;
     throw new Exception($error_message);
 }
 $client->setDebugLevel(10000);
@@ -45,7 +45,7 @@ $ip_address = "192.168.1.54";
 $ip_address = "127.0.0.1";
 
 //Secret key
-$secret_key = sha1($ip_address.$security_key);// Hash of the combination of IP Address + Chamilo security key
+$secret_key = sha1($ip_address.$security_key); // Hash of the combination of IP Address + Chamilo security key
 //$secret_key = sha1($security_key);
 
 //Creating a random user_id, this values need to be provided from your system
@@ -93,7 +93,7 @@ $err = $client->getError();
 
 if ($err) {
     // Display the error
-    echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
+    echo '<h2>Constructor error</h2><pre>'.$err.'</pre>';
 }
 
 
@@ -325,14 +325,14 @@ $err = $client->getError();
 
 if ($err) {
     // Display the error
-    echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
+    echo '<h2>Constructor error</h2><pre>'.$err.'</pre>';
 }
 
 
 //1. Create user webservice
 $result = $client->call(
     'WSGetPortals',
-    array('getPortals' => [    'secret_key'                => $secret_key])
+    array('getPortals' => ['secret_key'                => $secret_key])
 );
 
 $result = $client->call(
@@ -363,7 +363,7 @@ $result = $client->call(
 );
 
 
-var_dump($user_id);exit;
+var_dump($user_id); exit;
 
 
 
@@ -382,7 +382,7 @@ if ($client->fault) {
     $err = $client->getError();
     if ($err) {
         // Display the error
-        echo '<h2>Error</h2><pre>' . $err . '</pre>';
+        echo '<h2>Error</h2><pre>'.$err.'</pre>';
     } else {
         // Display the result
         echo '<h2>There are no errors</h2>';

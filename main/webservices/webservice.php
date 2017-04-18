@@ -49,7 +49,7 @@ class WSError
 	 * @param WSErrorHandler Error handler
 	 */
 	public static function setErrorHandler($handler) {
-		if($handler instanceof WSErrorHandler) {
+		if ($handler instanceof WSErrorHandler) {
 			self::$_handler = $handler;
 		}
 	}
@@ -114,12 +114,12 @@ class WS {
 		// if we are behind a reverse proxy, assume it will send the
 		// HTTP_X_FORWARDED_FOR header and use this IP instead
 		if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-			list($ip1,$ip2) = preg_split('/,/',$_SERVER['HTTP_X_FORWARDED_FOR']);
+			list($ip1, $ip2) = preg_split('/,/', $_SERVER['HTTP_X_FORWARDED_FOR']);
 			$ip = trim($ip1);
 		}
 		$security_key = $ip.$this->_configuration['security_key'];
 
-		if(!api_is_valid_secret_key($secret_key, $security_key)) {
+		if (!api_is_valid_secret_key($secret_key, $security_key)) {
 			return new WSError(1, "API key is invalid");
 		} else {
 			return null;
@@ -136,15 +136,15 @@ class WS {
 	 * @return mixed System user id if the user was found, WSError otherwise
 	 */
 	protected function getUserId($user_id_field_name, $user_id_value) {
-		if($user_id_field_name == "chamilo_user_id") {
-			if(UserManager::is_user_id_valid(intval($user_id_value))) {
+		if ($user_id_field_name == "chamilo_user_id") {
+			if (UserManager::is_user_id_valid(intval($user_id_value))) {
 				return intval($user_id_value);
 			} else {
 				return new WSError(100, "User not found");
 			}
 		} else {
 			$user_id = UserManager::get_user_id_from_original_id($user_id_value, $user_id_field_name);
-			if($user_id == 0) {
+			if ($user_id == 0) {
 				return new WSError(100, "User not found");
 			} else {
 				return $user_id;
@@ -197,7 +197,7 @@ class WS {
 	protected function getSessionId($session_id_field_name, $session_id_value)
 	{
 		if ($session_id_field_name == "chamilo_session_id") {
-			$session = SessionManager::fetch((int)$session_id_value);
+			$session = SessionManager::fetch((int) $session_id_value);
 			if (!empty($session)) {
 				return intval($session_id_value);
 			} else {

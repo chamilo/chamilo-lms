@@ -81,7 +81,7 @@ EOT;
 ?>
 <html>
 <head>
-    <title><?php echo custompages_get_lang('Registration');?></title>
+    <title><?php echo custompages_get_lang('Registration'); ?></title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">

@@ -330,7 +330,7 @@ function extldap_add_user_by_array($data, $update_if_exists = true)
 
     // TODO the password, if encrypted at the source, will be encrypted twice, which makes it useless. Try to fix that.
     $passwordKey = isset($extldap_user_correspondance['password']) ? $extldap_user_correspondance['password'] : 'userPassword';
-    $password        = $data[$passwordKey][0];
+    $password = $data[$passwordKey][0];
 
     // To ease management, we add the step-year (etape-annee) code
     //$official_code = $etape."-".$annee;

@@ -39,7 +39,7 @@ class BlockEvaluationGraph extends Block
     	$this->bg_height = 350;
     	if ($this->is_block_visible_for_user($user_id)) {
             if (!api_is_session_admin()) {
-                $this->courses  = CourseManager::get_courses_followed_by_drh($user_id);
+                $this->courses = CourseManager::get_courses_followed_by_drh($user_id);
             }
             $this->sessions = SessionManager::get_sessions_followed_by_drh($user_id);
     	}
@@ -78,13 +78,13 @@ class BlockEvaluationGraph extends Block
 		$html = '<div class="panel panel-default" id="intro">
                     <div class="panel-heading">
                         '.get_lang('EvaluationsGraph').'
-                        <div class="pull-right"><a class="btn btn-danger btn-xs" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">
+                        <div class="pull-right"><a class="btn btn-danger btn-xs" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">
                         <em class="fa fa-times"></em>
                         </a></div>
                     </div>
                     <div class="panel-body">';
         if (empty($evaluations_base_courses_graph) && empty($evaluations_courses_in_sessions_graph)) {
-            $html .= '<p>'.api_convert_encoding(get_lang('GraphicNotAvailable'),'UTF-8').'</p>';
+            $html .= '<p>'.api_convert_encoding(get_lang('GraphicNotAvailable'), 'UTF-8').'</p>';
         } else {
             // display evaluations base courses graph
             if (!empty($evaluations_base_courses_graph)) {
@@ -132,7 +132,7 @@ class BlockEvaluationGraph extends Block
 					$alleval = $cats[0]->get_evaluations(null, true, $course_code);
 					$alllinks = $cats[0]->get_links(null, true);
 					$users = GradebookUtils::get_all_users($alleval, $alllinks);
-					$datagen = new FlatViewDataGenerator ($users, $alleval, $alllinks);
+					$datagen = new FlatViewDataGenerator($users, $alleval, $alllinks);
 					$evaluation_sumary = $datagen->get_evaluation_sumary_results();
 					if (!empty($evaluation_sumary)) {
 						$items = array_keys($evaluation_sumary);
@@ -158,16 +158,16 @@ class BlockEvaluationGraph extends Block
 
                         $dataSet->normalize(100, '%');
 
-                        $dataSet->loadPalette(api_get_path(SYS_CODE_PATH) . 'palettes/pchart/default.color', true);
+                        $dataSet->loadPalette(api_get_path(SYS_CODE_PATH).'palettes/pchart/default.color', true);
 
                         // Cache definition
                         $cachePath = api_get_path(SYS_ARCHIVE_PATH);
                         $myCache = new pCache(array('CacheFolder' => substr($cachePath, 0, strlen($cachePath) - 1)));
                         $chartHash = $myCache->getHash($dataSet);
                         if ($myCache->isInCache($chartHash)) {
-                            $imgPath = api_get_path(SYS_ARCHIVE_PATH) . $chartHash;
+                            $imgPath = api_get_path(SYS_ARCHIVE_PATH).$chartHash;
                             $myCache->saveFromCache($chartHash, $imgPath);
-                            $imgPath = api_get_path(WEB_ARCHIVE_PATH) . $chartHash;
+                            $imgPath = api_get_path(WEB_ARCHIVE_PATH).$chartHash;
                         } else {
                             /* Create the pChart object */
                             $widthSize = $this->bg_width;
@@ -196,7 +196,7 @@ class BlockEvaluationGraph extends Block
                             /* Set the default font */
                             $myPicture->setFontProperties(
                                 array(
-                                    'FontName' => api_get_path(SYS_FONTS_PATH) . 'opensans/OpenSans-Regular.ttf',
+                                    'FontName' => api_get_path(SYS_FONTS_PATH).'opensans/OpenSans-Regular.ttf',
                                     'FontSize' => 10
                                 )
                             );
@@ -276,12 +276,12 @@ class BlockEvaluationGraph extends Block
                             /* Write and save into cache */
 
                             $myCache->writeToCache($chartHash, $myPicture);
-                            $imgPath = api_get_path(SYS_ARCHIVE_PATH) . $chartHash;
+                            $imgPath = api_get_path(SYS_ARCHIVE_PATH).$chartHash;
                             $myCache->saveFromCache($chartHash, $imgPath);
-                            $imgPath = api_get_path(WEB_ARCHIVE_PATH) . $chartHash;
+                            $imgPath = api_get_path(WEB_ARCHIVE_PATH).$chartHash;
                         }
                         if (!empty($imgPath)) {
-                            $courses_graph[$course_code] = '<img src="' . $imgPath . '">';
+                            $courses_graph[$course_code] = '<img src="'.$imgPath.'">';
                         }
 					}
 				}
@@ -310,7 +310,7 @@ class BlockEvaluationGraph extends Block
 						$alleval = $cats[0]->get_evaluations(null, true, $course_code);
 						$alllinks = $cats[0]->get_links(null, true);
 						$users = GradebookUtils::get_all_users($alleval, $alllinks);
-						$datagen = new FlatViewDataGenerator ($users, $alleval, $alllinks);
+						$datagen = new FlatViewDataGenerator($users, $alleval, $alllinks);
 						$evaluation_sumary = $datagen->get_evaluation_sumary_results();
 						if (!empty($evaluation_sumary)) {
 							$items = array_keys($evaluation_sumary);
@@ -336,16 +336,16 @@ class BlockEvaluationGraph extends Block
 
                             $dataSet->normalize(100, '%');
 
-                            $dataSet->loadPalette(api_get_path(SYS_CODE_PATH) . 'palettes/pchart/default.color', true);
+                            $dataSet->loadPalette(api_get_path(SYS_CODE_PATH).'palettes/pchart/default.color', true);
 
                             // Cache definition
                             $cachePath = api_get_path(SYS_ARCHIVE_PATH);
                             $myCache = new pCache(array('CacheFolder' => substr($cachePath, 0, strlen($cachePath) - 1)));
                             $chartHash = $myCache->getHash($dataSet);
                             if ($myCache->isInCache($chartHash)) {
-                                $imgPath = api_get_path(SYS_ARCHIVE_PATH) . $chartHash;
+                                $imgPath = api_get_path(SYS_ARCHIVE_PATH).$chartHash;
                                 $myCache->saveFromCache($chartHash, $imgPath);
-                                $imgPath = api_get_path(WEB_ARCHIVE_PATH) . $chartHash;
+                                $imgPath = api_get_path(WEB_ARCHIVE_PATH).$chartHash;
                             } else {
                                 /* Create the pChart object */
                                 $widthSize = $this->bg_width;
@@ -374,7 +374,7 @@ class BlockEvaluationGraph extends Block
                                 /* Set the default font */
                                 $myPicture->setFontProperties(
                                     array(
-                                        'FontName' => api_get_path(SYS_FONTS_PATH) . 'opensans/OpenSans-Regular.ttf',
+                                        'FontName' => api_get_path(SYS_FONTS_PATH).'opensans/OpenSans-Regular.ttf',
                                         'FontSize' => 10
                                     )
                                 );
@@ -448,12 +448,12 @@ class BlockEvaluationGraph extends Block
 
                                 /* Write and save into cache */
                                 $myCache->writeToCache($chartHash, $myPicture);
-                                $imgPath = api_get_path(SYS_ARCHIVE_PATH) . $chartHash;
+                                $imgPath = api_get_path(SYS_ARCHIVE_PATH).$chartHash;
                                 $myCache->saveFromCache($chartHash, $imgPath);
-                                $imgPath = api_get_path(WEB_ARCHIVE_PATH) . $chartHash;
+                                $imgPath = api_get_path(WEB_ARCHIVE_PATH).$chartHash;
                             }
                             if (!empty($imgPath)) {
-                                $courses_graph[$course_code] = '<img src="' . $imgPath . '">';
+                                $courses_graph[$course_code] = '<img src="'.$imgPath.'">';
                             }
 						}
 					}

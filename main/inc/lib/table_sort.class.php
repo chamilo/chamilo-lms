@@ -157,7 +157,7 @@ class TableSort
 
                 $new_data_order = array();
                 if (!empty($docs_to_sort)) {
-                    foreach($docs_to_sort as $id => $document) {
+                    foreach ($docs_to_sort as $id => $document) {
                         if (isset($new_data[$id])) {
                             $new_data_order[] = $new_data[$id];
                         }
@@ -165,7 +165,7 @@ class TableSort
                 }
 
                 if (!empty($folder_to_sort)) {
-                    foreach($folder_to_sort as $id => $document) {
+                    foreach ($folder_to_sort as $id => $document) {
                         if (isset($new_data[$id])) {
                             $new_data_order[] = $new_data[$id];
                         }

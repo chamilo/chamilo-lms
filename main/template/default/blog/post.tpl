@@ -1,10 +1,10 @@
 {% macro comment_template(item) %}
     <div class="media {{ item.iid }}">
         <div class="media-left">
-            <a href="{{ _p.web }}main/social/profile.php?u={{ item.id_author }}">
+            <a href="{{ item.user_info.profile_url }}">
                 <img class="media-object thumbnail avatar"
-                     src="{{ item.info_user.dir }}{{ item.info_user.file }}"
-                     alt="{{ item.name_author }}">
+                     src="{{ item.user_info.avatar }}"
+                     alt="{{ item.user_info.complete_name }}">
             </a>
         </div>
         <div class="media-body">
@@ -19,8 +19,8 @@
                 </li>
                 <li class="autor">
                     <i class="fa fa-user"></i>
-                    <a href="{{ _p.web }}main/social/profile.php?u={{ item.id_author }}">
-                        {{ item.name_author }}
+                    <a href="{{ item.user_info.profile_url }}">
+                        {{ item.user_info.complete_name }}
                     </a>
                 </li>
                 <li class="score">

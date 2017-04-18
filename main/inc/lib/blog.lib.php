@@ -1191,7 +1191,6 @@ class Blog
             $ratingSelect = null;
             $comment_text = make_clickable(stripslashes($comment['comment']));
             $comment_text = stripslashes($comment_text);
-            $infoUser = UserManager::get_user_picture_path_by_id($comment['author_id']);
 
             $commentActions .= Display::toolbarButton(
                 get_lang('ReplyToThisComment'),
@@ -1232,7 +1231,7 @@ class Blog
                 $post_id,
                 $comment['comment_id']
             );
-
+            $userInfo = api_get_user_info($comment['author_id']);
             $comments = [
                 'iid' => $comment['iid'],
                 'id_comment' => $comment['comment_id'],
@@ -1245,9 +1244,7 @@ class Blog
                 'id_post' => $comment['post_id'],
                 'id_task' => $comment['task_id'],
                 'id_parent' => $comment['parent_comment_id'],
-                'name_author' => api_get_person_name($comment['firstname'], $comment['lastname']),
-                'info_user' => $infoUser,
-                'username' => $comment['username'],
+                'user_info' => $userInfo,
                 'color' => $comment['color'],
                 'files' => $fileArray,
                 'actions' => $commentActions,

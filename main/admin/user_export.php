@@ -12,9 +12,9 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 
 // Database table definitions
-$course_table = Database:: get_main_table(TABLE_MAIN_COURSE);
-$user_table = Database:: get_main_table(TABLE_MAIN_USER);
-$course_user_table = Database:: get_main_table(TABLE_MAIN_COURSE_USER);
+$course_table = Database::get_main_table(TABLE_MAIN_COURSE);
+$user_table = Database::get_main_table(TABLE_MAIN_USER);
+$course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $session_course_user_table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
 $tool_name = get_lang('ExportUserListXMLCSV');

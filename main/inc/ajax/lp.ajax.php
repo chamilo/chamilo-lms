@@ -12,7 +12,7 @@ api_protect_course_script(true);
 $action = $_REQUEST['a'];
 
 $course_id = api_get_course_int_id();
-$tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
+$tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 $sessionId = api_get_session_id();
 
 switch ($action) {

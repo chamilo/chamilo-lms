@@ -300,7 +300,7 @@ class learnpath
 
                     // Setting the object level with variable $this->items[$i][parent]
                     foreach ($this->items as $itemLPObject) {
-                        $level = learnpath::get_level_for_item($this->items, $itemLPObject->db_id);
+                        $level = self::get_level_for_item($this->items, $itemLPObject->db_id);
                         $itemLPObject->level = $level;
                     }
 
@@ -322,7 +322,7 @@ class learnpath
                     $lp_item_id_list_to_string = implode("','", $lp_item_id_list);
                     if (!empty($lp_item_id_list_to_string)) {
                         // Get last viewing vars.
-                        $itemViewTable = Database:: get_course_table(TABLE_LP_ITEM_VIEW);
+                        $itemViewTable = Database::get_course_table(TABLE_LP_ITEM_VIEW);
                         // This query should only return one or zero result.
                         $sql = "SELECT lp_item_id, status
                                 FROM $itemViewTable
@@ -454,7 +454,7 @@ class learnpath
         if ($parentItemId == 0) {
             return 0;
         } else {
-            return learnpath::get_level_for_item($items, $parentItemId) + 1;
+            return self::get_level_for_item($items, $parentItemId) + 1;
         }
     }
 
@@ -1042,10 +1042,10 @@ class learnpath
             return false;
         }
 
-        $lp = Database:: get_course_table(TABLE_LP_MAIN);
-        $lp_item = Database:: get_course_table(TABLE_LP_ITEM);
-        $lp_view = Database:: get_course_table(TABLE_LP_VIEW);
-        $lp_item_view = Database:: get_course_table(TABLE_LP_ITEM_VIEW);
+        $lp = Database::get_course_table(TABLE_LP_MAIN);
+        $lp_item = Database::get_course_table(TABLE_LP_ITEM);
+        $lp_view = Database::get_course_table(TABLE_LP_VIEW);
+        $lp_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 
         // Delete lp item id.
         foreach ($this->items as $id => $dummy) {
@@ -3106,7 +3106,7 @@ class learnpath
 
         $res = Database::query($sql);
         while ($row = Database::fetch_array($res)) {
-            $sublist = learnpath::get_flat_ordered_items_list($lp, $row['id'], $course_id);
+            $sublist = self::get_flat_ordered_items_list($lp, $row['id'], $course_id);
             $list[] = $row['id'];
             foreach ($sublist as $item) {
                 $list[] = $item;
@@ -3189,7 +3189,7 @@ class learnpath
                 // Chapters
                 $html .= '<div class="section level_'.$item['level'].'" title="'.$description.'" >';
             } else {
-                $html .= '<div class="item level_'.$item['level'].' scorm_type_'.learnpath::format_scorm_type_item($item['type']).'" title="'.$description.'" >';
+                $html .= '<div class="item level_'.$item['level'].' scorm_type_'.self::format_scorm_type_item($item['type']).'" title="'.$description.'" >';
                 $html .= '<a name="atoc_'.$item['id'].'"></a>';
             }
 
@@ -3868,7 +3868,7 @@ class learnpath
                     $display = $display +1;
                 }
                 break;
-            default :
+            default:
                 return false;
         }
         return $display;
@@ -4993,6 +4993,7 @@ class learnpath
                             error_log('New LP - In learnpath::stop_previous_item() - Item is an AU, saving is managed by AICC signals', 0);
                         }
                     }
+                    break;
                 case '2':
                     if ($this->items[$this->last]->get_type() != 'sco') {
                         if ($this->debug > 2) {
@@ -5691,7 +5692,7 @@ class learnpath
                 );
                 $delete_icon .= '</a>';
 
-                $url = api_get_self() . '?'.api_get_cidreq().'&view=build&id='.$arrLP[$i]['id'] .'&lp_id='.$this->lp_id;
+                $url = api_get_self().'?'.api_get_cidreq().'&view=build&id='.$arrLP[$i]['id'] .'&lp_id='.$this->lp_id;
                 $previewImage = Display::return_icon(
                     'preview_view.png',
                     get_lang('Preview'),
@@ -6114,8 +6115,14 @@ class learnpath
      *
      * @return string
      */
-    public function create_document($courseInfo, $content = '', $title = '', $extension = 'html', $parentId = 0, $creatorId = 0)
-    {
+    public function create_document(
+        $courseInfo,
+        $content = '',
+        $title = '',
+        $extension = 'html',
+        $parentId = 0,
+        $creatorId = 0
+    ) {
         if (!empty($courseInfo)) {
             $course_id = $courseInfo['real_id'];
         } else {
@@ -6129,9 +6136,14 @@ class learnpath
         $result = $this->generate_lp_folder($courseInfo);
         $dir = $result['dir'];
 
-        if (empty($parentId)) {
+        if (empty($parentId) || $parentId == '/') {
             $postDir = isset($_POST['dir']) ? $_POST['dir'] : $dir;
             $dir = isset($_GET['dir']) ? $_GET['dir'] : $postDir; // Please, do not modify this dirname formatting.
+
+            if ($parentId === '/') {
+                $dir = '/';
+            }
+
             // Please, do not modify this dirname formatting.
             if (strstr($dir, '..')) {
                 $dir = '/';
@@ -8573,17 +8585,29 @@ class learnpath
             </script>';
         }
 
-        $url = api_get_self().'?cidReq='.api_get_cidreq().'&view=build&id='.$item_id .'&lp_id='.$this->lp_id;
+        $url = api_get_self().'?'.api_get_cidreq().'&view=build&id='.$item_id .'&lp_id='.$this->lp_id;
 
-        $return .= Display::url(
-            Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL),
-            $url.'&action=edit_item&path_item=' . $row['path']
-        );
+        if ($item_type != TOOL_LP_FINAL_ITEM) {
+            $return .= Display::url(
+                Display::return_icon(
+                    'edit.png',
+                    get_lang('Edit'),
+                    array(),
+                    ICON_SIZE_SMALL
+                ),
+                $url.'&action=edit_item&path_item='.$row['path']
+            );
 
-        $return .= Display::url(
-            Display::return_icon('move.png', get_lang('Move'), array(), ICON_SIZE_SMALL),
-            $url.'&action=move_item'
-        );
+            $return .= Display::url(
+                Display::return_icon(
+                    'move.png',
+                    get_lang('Move'),
+                    array(),
+                    ICON_SIZE_SMALL
+                ),
+                $url.'&action=move_item'
+            );
+        }
 
         // Commented for now as prerequisites cannot be added to chapters.
         if ($item_type != 'dir') {
@@ -11519,6 +11543,7 @@ EOD;
         switch ($type) {
             case 'dir':
                 $link .= $main_dir_path . 'lp/blank.php';
+                break;
             case TOOL_CALENDAR_EVENT:
                 $link .= $main_dir_path.'calendar/agenda.php?origin='.$origin.'&agenda_id='.$id;
                 break;

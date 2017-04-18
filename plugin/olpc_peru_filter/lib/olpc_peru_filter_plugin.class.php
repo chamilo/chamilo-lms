@@ -33,7 +33,7 @@ class OLPC_Peru_FilterPlugin extends Plugin
             $this->course_settings[] =
               array('group'=> 'olpc_peru_filter_filter', 'name' => $k,  'type' => 'checkbox', 'init_value' => $v);
         }
-        require_once dirname(__FILE__).'/../config.php';
+        require_once __DIR__.'/../config.php';
         if (!empty($blacklist_enabled_file)) {
             $this->blacklist_enabled_file = $blacklist_enabled_file;
         }

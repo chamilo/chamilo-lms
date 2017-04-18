@@ -166,7 +166,7 @@ echo '<div class="row">';
 echo '<div id="lp_sidebar" class="col-md-4">';
 $path_item = isset($_GET['path_item']) ? $_GET['path_item'] : 0;
 $path_item = Database::escape_string($path_item);
-$tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
+$tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
 $sql_doc = "SELECT path FROM ".$tbl_doc."
             WHERE c_id = $course_id AND id = '".$path_item."' ";
 

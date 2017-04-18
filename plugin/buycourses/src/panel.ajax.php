@@ -36,20 +36,20 @@ switch ($action) {
 
         $userInfo = api_get_user_info($sale['user_id']);
 
-        $html = '<h2>' . $sale['product_name'] .'</h2>';
+        $html = '<h2>'.$sale['product_name'].'</h2>';
         $html .= '<div class="row">';
         $html .= '<div class="col-sm-6 col-md-6">';
         $html .= '<ul>';
-        $html .= '<li><b>'. $plugin->get_lang('OrderPrice') . ':</b> '. $sale['price'] . '</li>';
-        $html .= '<li><b>'. $plugin->get_lang('CurrencyType') . ':</b> '. $currency['iso_code'] . '</li>';
-        $html .= '<li><b>'. $plugin->get_lang('ProductType') . ':</b> '. $productType . '</li>';
-        $html .= '<li><b>'. $plugin->get_lang('OrderDate') . ':</b> '. api_format_date($sale['date'], DATE_TIME_FORMAT_LONG_24H) . '</li>';
-        $html .= '<li><b>'. $plugin->get_lang('Buyer') . ':</b> '. $userInfo['complete_name'] . '</li>';
-        $html .= '<li><b>'. $plugin->get_lang('PaymentMethods') . ':</b> '. $paymentType . '</li>';
+        $html .= '<li><b>'.$plugin->get_lang('OrderPrice').':</b> '.$sale['price'].'</li>';
+        $html .= '<li><b>'.$plugin->get_lang('CurrencyType').':</b> '.$currency['iso_code'].'</li>';
+        $html .= '<li><b>'.$plugin->get_lang('ProductType').':</b> '.$productType.'</li>';
+        $html .= '<li><b>'.$plugin->get_lang('OrderDate').':</b> '.api_format_date($sale['date'], DATE_TIME_FORMAT_LONG_24H).'</li>';
+        $html .= '<li><b>'.$plugin->get_lang('Buyer').':</b> '.$userInfo['complete_name'].'</li>';
+        $html .= '<li><b>'.$plugin->get_lang('PaymentMethods').':</b> '.$paymentType.'</li>';
         $html .= '</ul>';
         $html .= '</div>';
         $html .= '<div class="col-sm-6 col-md-6">';
-        $html .= '<img class="thumbnail" src="'. $productImage .'" >';
+        $html .= '<img class="thumbnail" src="'.$productImage.'" >';
         $html .= '</div>';
         $html .= '</div>';
         echo $html;
@@ -89,9 +89,9 @@ switch ($action) {
         $html = '<div class="row">'
         . '<p>'
             . '<ul>'
-                . '<li>'. get_plugin_lang("PayoutsTotalCompleted", "BuyCoursesPlugin") .' <b>'. $stats['completed_count'] .'</b> - '. get_plugin_lang("TotalAmount", "BuyCoursesPlugin") .' <b>'. $stats['completed_total_amount'] .' '. $currency['iso_code'] . '</b></li>'
-                . '<li>'. get_plugin_lang("PayoutsTotalPending", "BuyCoursesPlugin") .' <b>'. $stats['pending_count'] .'</b> - '. get_plugin_lang("TotalAmount", "BuyCoursesPlugin") .' <b>'. $stats['pending_total_amount'] .' '. $currency['iso_code'] . '</b></li>'
-                . '<li>'. get_plugin_lang("PayoutsTotalCanceled", "BuyCoursesPlugin") .' <b>'. $stats['canceled_count'] .'</b> - '. get_plugin_lang("TotalAmount", "BuyCoursesPlugin") .' <b>'. $stats['canceled_total_amount'] .' '. $currency['iso_code'] . '</b></li>'
+                . '<li>'.get_plugin_lang("PayoutsTotalCompleted", "BuyCoursesPlugin").' <b>'.$stats['completed_count'].'</b> - '.get_plugin_lang("TotalAmount", "BuyCoursesPlugin").' <b>'.$stats['completed_total_amount'].' '.$currency['iso_code'].'</b></li>'
+                . '<li>'.get_plugin_lang("PayoutsTotalPending", "BuyCoursesPlugin").' <b>'.$stats['pending_count'].'</b> - '.get_plugin_lang("TotalAmount", "BuyCoursesPlugin").' <b>'.$stats['pending_total_amount'].' '.$currency['iso_code'].'</b></li>'
+                . '<li>'.get_plugin_lang("PayoutsTotalCanceled", "BuyCoursesPlugin").' <b>'.$stats['canceled_count'].'</b> - '.get_plugin_lang("TotalAmount", "BuyCoursesPlugin").' <b>'.$stats['canceled_total_amount'].' '.$currency['iso_code'].'</b></li>'
             . '</ul>'
         . '</p>';
         $html .= '</div>';
@@ -127,15 +127,15 @@ switch ($action) {
 
         $isoCode = $currentCurrency['iso_code'];
 
-        $html .= '<p>'. get_plugin_lang("VerifyTotalAmountToProceedPayout", "BuyCoursesPlugin") .'</p>';
+        $html .= '<p>'.get_plugin_lang("VerifyTotalAmountToProceedPayout", "BuyCoursesPlugin").'</p>';
         $html .= ''
         . '<p>'
             . '<ul>'
-                . '<li>'. get_plugin_lang("TotalAcounts", "BuyCoursesPlugin") .' <b>'. $totalAccounts .'</b></li>'
-                . '<li>'. get_plugin_lang("TotalPayout", "BuyCoursesPlugin") .' <b>'. $isoCode .' '. $totalPayout .'</b></li>'
+                . '<li>'.get_plugin_lang("TotalAcounts", "BuyCoursesPlugin").' <b>'.$totalAccounts.'</b></li>'
+                . '<li>'.get_plugin_lang("TotalPayout", "BuyCoursesPlugin").' <b>'.$isoCode.' '.$totalPayout.'</b></li>'
             . '</ul>'
         . '</p>';
-        $html .= '<p>'. get_plugin_lang("CautionThisProcessCantBeCanceled", "BuyCoursesPlugin") .'</p>';
+        $html .= '<p>'.get_plugin_lang("CautionThisProcessCantBeCanceled", "BuyCoursesPlugin").'</p>';
         $html .= '<br /><br />';
         $html .= '<div id="spinner" class="text-center"></div>';
 
@@ -182,7 +182,7 @@ switch ($action) {
             }
             echo Display::return_message(get_plugin_lang("PayoutSuccess", "BuyCoursesPlugin"), 'success', false);
         } else {
-            echo Display::return_message('<b>'.$result['L_SEVERITYCODE0'].' '.$result['L_ERRORCODE0'].'</b> - '.$result['L_SHORTMESSAGE0'].'<br /><ul><li>'. $result['L_LONGMESSAGE0'].'</li></ul>', 'error', false);
+            echo Display::return_message('<b>'.$result['L_SEVERITYCODE0'].' '.$result['L_ERRORCODE0'].'</b> - '.$result['L_SHORTMESSAGE0'].'<br /><ul><li>'.$result['L_LONGMESSAGE0'].'</li></ul>', 'error', false);
         }
         break;
 

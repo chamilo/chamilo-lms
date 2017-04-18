@@ -3,7 +3,7 @@
 /**
  * @package chamilo.webservices
  */
-require_once(dirname(__FILE__).'/../inc/global.inc.php');
+require_once __DIR__.'/../inc/global.inc.php';
 
 /**
  * Error returned by one of the methods of the web service.

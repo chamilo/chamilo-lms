@@ -24,9 +24,6 @@ $showSentReceivedTabs = true;
 // Do the tracking
 Event::event_access_tool(TOOL_DROPBOX);
 
-// This var is used to give a unique value to every page request. This is to prevent resubmiting data
-$dropbox_unid = md5(uniqid(rand(), true));
-
 /*	DISPLAY SECTION */
 Display::display_introduction_section(TOOL_DROPBOX);
 
@@ -50,11 +47,10 @@ $action = isset($_GET['action']) ? $_GET['action'] : null;
 
 // Display the form for adding a new dropbox item.
 if ($action == 'add') {
-	if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
-		api_not_allowed();
-	}
+    if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
+        api_not_allowed();
+    }
     display_add_form(
-        $dropbox_unid,
         $viewReceivedCategory,
         $viewSentCategory,
         $view
@@ -62,10 +58,10 @@ if ($action == 'add') {
 }
 
 if (isset($_POST['submitWork'])) {
-	$check = Security::check_token();
-	if ($check) {
+    $check = Security::check_token();
+    if ($check) {
         store_add_dropbox();
-	}
+    }
 }
 
 // Display the form for adding a category
@@ -255,7 +251,9 @@ if ($action != 'add') {
                 echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".$view."&action=addsentcategory\">".Display::return_icon('new_folder.png', get_lang('AddNewCategory'), '', ICON_SIZE_MEDIUM)."</a>\n";
             }
             if (empty($viewSentCategory)) {
-                echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".$view."&action=add\">".Display::return_icon('upload_file.png', get_lang('UploadNewFile'), '', ICON_SIZE_MEDIUM)."</a>";
+                echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".$view."&action=add\">".
+                    Display::return_icon('upload_file.png', get_lang('UploadNewFile'), '', ICON_SIZE_MEDIUM).
+                    "</a>";
             }
             echo '</div>';
         } else {
@@ -263,12 +261,17 @@ if ($action != 'add') {
                 echo '<div class="actions">';
                 if ($view_dropbox_category_sent != 0) {
                     echo get_lang('CurrentlySeeing').': <strong>'.Security::remove_XSS($dropbox_categories[$view_dropbox_category_sent]['cat_name']).'</strong> ';
-                    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category=0&view='.$view.'">'.Display::return_icon('folder_up.png', get_lang('Up').' '.get_lang('Root'), '', ICON_SIZE_MEDIUM)."</a>";
+                    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category=0&view='.$view.'">'.
+                        Display::return_icon('folder_up.png', get_lang('Up').' '.get_lang('Root'), '', ICON_SIZE_MEDIUM).
+                        "</a>";
                 } else {
-                    echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".$view."&action=addsentcategory\">".Display::return_icon('new_folder.png', get_lang('AddNewCategory'), '', ICON_SIZE_MEDIUM)."</a>\n";
+                    echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".$view."&action=addsentcategory\">".
+                        Display::return_icon('new_folder.png', get_lang('AddNewCategory'), '', ICON_SIZE_MEDIUM)."</a>\n";
                 }
                 if (empty($viewSentCategory)) {
-                    echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".$view."&action=add\">".Display::return_icon('upload_file.png', get_lang('UploadNewFile'), '', ICON_SIZE_MEDIUM)."</a>";
+                    echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".$view."&action=add\">".
+                        Display::return_icon('upload_file.png', get_lang('UploadNewFile'), '', ICON_SIZE_MEDIUM).
+                    "</a>";
                 }
                 echo '</div>';
             }
@@ -405,9 +408,16 @@ if ($action != 'add') {
 
                 // This is a hack to have an additional row in a sortable table
 
-                if ($action == 'viewfeedback' AND isset($_GET['id']) and is_numeric($_GET['id']) AND $dropbox_file->id == $_GET['id']) {
+                if ($action == 'viewfeedback' && isset($_GET['id']) && is_numeric($_GET['id']) && $dropbox_file->id == $_GET['id']) {
                     $action_icons .= "</td></tr>"; // Ending the normal row of the sortable table
-                    $action_icons .= '<tr><td colspan="2"><a href="'.api_get_path(WEB_CODE_PATH).'dropbox/index.php?"'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory."&view_sent_category=".$viewSentCategory."&view=".$view.'&'.$sort_params."\">".get_lang('CloseFeedback')."</a></td><td colspan=\"7\">".feedback($dropbox_file->feedback2)."</td></tr>";
+                    $action_icons .= '<tr>
+                        <td colspan="2">
+                            <a class = "btn btn-default" href="'.api_get_path(WEB_CODE_PATH).'dropbox/index.php?"'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory."&view_sent_category=".$viewSentCategory."&view=".$view.'&'.$sort_params."\">".
+                            get_lang('CloseFeedback')."</a>
+                        </td>
+                        <td colspan=\"7\">".
+                        feedback($dropbox_file->feedback2).
+                        "</td></tr>";
                 }
                 if (api_get_session_id() == 0) {
                     $dropbox_file_data[] = $action_icons;
@@ -570,7 +580,10 @@ if ($action != 'add') {
                 $action_icons = check_number_feedback($dropbox_file->id, $number_feedback).' '.get_lang('Feedback').'
                     <a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category='.$viewSentCategory.'&view='.$view.'&action=viewfeedback&id='.$dropbox_file->id.'&'.$sort_params.'">'.
                         Display::return_icon('discuss.png', get_lang('Comment'), '', ICON_SIZE_SMALL).
-                    '</a>
+                    '</a>                    
+                    <a href="'.api_get_path(WEB_CODE_PATH).'dropbox/update.php?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category='.$viewSentCategory.'&view='.$view.'&action=update&id='.$dropbox_file->id.'&'.$sort_params.'">'.
+                        Display::return_icon('upload_file.png', get_lang('Update'), '', ICON_SIZE_SMALL).
+                    '</a>                    
                     <a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category='.$viewSentCategory.'&view='.$view.'&action=movesent&move_id='.$dropbox_file->id.'&'.$sort_params.'">'.
                         Display::return_icon('move.png', get_lang('Move'), '', ICON_SIZE_SMALL).'
                     </a>
@@ -581,7 +594,7 @@ if ($action != 'add') {
                 if ($action == 'viewfeedback' && isset($_GET['id']) && is_numeric($_GET['id']) && $dropbox_file->id == $_GET['id']) {
                     $action_icons .= "</td></tr>\n"; // ending the normal row of the sortable table
                     $action_icons .= "<tr><td colspan=\"2\">";
-                    $action_icons .= "<a href=\"".api_get_path(WEB_CODE_PATH)."dropbox/index.php?".api_get_cidreq()."&view_received_category=".$viewReceivedCategory."&view_sent_category=".$viewSentCategory."&view=".$view.'&'.$sort_params."\">".
+                    $action_icons .= "<a class=\"btn btn-default\" href=\"".api_get_path(WEB_CODE_PATH)."dropbox/index.php?".api_get_cidreq()."&view_received_category=".$viewReceivedCategory."&view_sent_category=".$viewSentCategory."&view=".$view.'&'.$sort_params."\">".
                         get_lang('CloseFeedback')."</a>";
                     $action_icons .= "</td><td colspan=\"7\">".feedback($dropbox_file->feedback2)."</td></tr>";
                 }

@@ -94,7 +94,7 @@ class Export
         $file = api_get_path(SYS_ARCHIVE_PATH).uniqid('').'.xls';
         $handle = fopen($file, 'a+');
         $systemEncoding = api_get_system_encoding();
-        fwrite($handle, '<!DOCTYPE html><html><meta http-equiv="Content-Type" content="text/html" charset="utf-8" /><body><table>');
+        fwrite($handle, '<!DOCTYPE html><html><meta http-equiv="Content-Type" content="text/html" charset="'.$encoding.'" /><body><table>');
         foreach ($data as $id => $row) {
             foreach ($row as $id2 => $row2) {
                 $data[$id][$id2] = api_htmlentities($row2);
@@ -149,7 +149,7 @@ class Export
             fwrite($handle, '</'.$wrapper_tagname.'>'."\n");
         }
         fclose($handle);
-        DocumentManager :: file_send_for_download($file, true, $filename.'.xml');
+        DocumentManager::file_send_for_download($file, true, $filename.'.xml');
         exit;
     }
 
@@ -181,7 +181,7 @@ class Export
             fwrite($handle, '</'.$wrapper_tagname.'>'."\n");
         }
         fclose($handle);
-        DocumentManager :: file_send_for_download($file, true, $filename.'.xml');
+        DocumentManager::file_send_for_download($file, true, $filename.'.xml');
         return false;
     }
 

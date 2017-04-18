@@ -911,16 +911,21 @@ class CourseRestorer
                             $my_session_id
                         );
                     } else {
-                        if (is_file($this->course->backup_path.'/'.$document->path) &&
-                            is_readable($this->course->backup_path.'/'.$document->path)
-                        ) {
-                            error_log('Course copy generated an ignoreable error while trying to copy '.$this->course->backup_path.'/'.$document->path.': file not found');
+                        // There was an error in checking existence and
+                        // permissions for files to copy. Try to determine
+                        // the exact issue
+                        // Issue with origin document?
+                        if (!is_file($this->course->backup_path.'/'.$document->path)) {
+                            error_log('Course copy generated an ignorable error while trying to copy '.$this->course->backup_path.'/'.$document->path.': origin file not found');
+                        } elseif (!is_readable($this->course->backup_path.'/'.$document->path)) {
+                            error_log('Course copy generated an ignorable error while trying to copy '.$this->course->backup_path.'/'.$document->path.': origin file not readable');
                         }
+                        // Issue with destination directories?
                         if (!is_dir(dirname($path.$document->path))) {
-                            error_log('Course copy generated an ignoreable error while trying to copy to '.dirname($path.$document->path).': directory not found');
+                            error_log('Course copy generated an ignorable error while trying to copy '.$this->course->backup_path.'/'.$document->path.' to '.dirname($path.$document->path).': destination directory not found');
                         }
                         if (!is_writeable(dirname($path.$document->path))) {
-                            error_log('Course copy generated an ignoreable error while trying to copy to '.dirname($path.$document->path).': directory not writeable');
+                            error_log('Course copy generated an ignorable error while trying to copy '.$this->course->backup_path.'/'.$document->path.' to '.dirname($path.$document->path).': destination directory not writable');
                         }
                     }
                 } // end file doesn't exist
@@ -2102,14 +2107,13 @@ class CourseRestorer
      */
     public function restore_test_category($session_id, $respect_base_content, $destination_course_code)
     {
-        $course_id = api_get_course_int_id();
+        $destinationCourseId = $this->destination_course_info['real_id'];
         // Let's restore the categories
-        $tab_test_category_id_old_new = array(); // used to build the quiz_question_rel_category table
+        $categoryOldVsNewList = array(); // used to build the quiz_question_rel_category table
         if ($this->course->has_resources(RESOURCE_TEST_CATEGORY)) {
             $resources = $this->course->resources;
-            $destinationCourseId = $this->destination_course_info['real_id'];
             foreach ($resources[RESOURCE_TEST_CATEGORY] as $id => $courseCopyTestCategory) {
-                $tab_test_category_id_old_new[$courseCopyTestCategory->source_id] = $id;
+                $categoryOldVsNewList[$courseCopyTestCategory->source_id] = $id;
                 // check if this test_category already exist in the destination BDD
                 // do not Database::escape_string $title and $description, it will be done later
                 $title = $courseCopyTestCategory->title;
@@ -2128,15 +2132,19 @@ class CourseRestorer
                             $test_category->name = $new_title;
                             $test_category->description = $description;
                             $new_id = $test_category->save($destinationCourseId);
-                            $tab_test_category_id_old_new[$courseCopyTestCategory->source_id] = $new_id;
+                            $categoryOldVsNewList[$courseCopyTestCategory->source_id] = $new_id;
                             break;
                         case FILE_OVERWRITE:
-                            $id = TestCategory::get_category_id_for_title($title);
-                            $my_cat = new TestCategory();
-                            $my_cat = $my_cat->getCategory($id);
-                            $my_cat->name = $title;
-                            $my_cat->modifyCategory($destinationCourseId);
-                            $tab_test_category_id_old_new[$courseCopyTestCategory->source_id] = $id;
+                            // get category from source
+                            $destinationCategoryId = TestCategory::get_category_id_for_title($title, $destinationCourseId);
+                            if ($destinationCategoryId) {
+                                $my_cat = new TestCategory();
+                                $my_cat = $my_cat->getCategory($destinationCategoryId, $destinationCourseId);
+                                $my_cat->name = $title;
+                                $my_cat->description = $description;
+                                $my_cat->modifyCategory($destinationCourseId);
+                                $categoryOldVsNewList[$courseCopyTestCategory->source_id] = $destinationCategoryId;
+                            }
                             break;
                     }
                 } else {
@@ -2145,25 +2153,30 @@ class CourseRestorer
                     $test_category->name = $title;
                     $test_category->description = $description;
                     $new_id = $test_category->save($destinationCourseId);
-                    $tab_test_category_id_old_new[$courseCopyTestCategory->source_id] = $new_id;
+                    $categoryOldVsNewList[$courseCopyTestCategory->source_id] = $new_id;
                 }
-                $this->course->resources[RESOURCE_TEST_CATEGORY][$id]->destination_id = $tab_test_category_id_old_new[$courseCopyTestCategory->source_id];
+                $this->course->resources[RESOURCE_TEST_CATEGORY][$id]->destination_id = $categoryOldVsNewList[$courseCopyTestCategory->source_id];
             }
         }
-        // lets check if quizzes-question are restored too, to redo the link between test_category and quizzes question for questions restored
+
+        // lets check if quizzes-question are restored too,
+        // to redo the link between test_category and quizzes question for questions restored
         // we can use the source_id field
         // question source_id => category source_id
-        if ($this->course->has_resources(RESOURCE_QUIZQUESTION)) {
+        if (!empty($newQuestionId) && $this->course->has_resources(RESOURCE_QUIZQUESTION)) {
             // check the category number of each question restored
             if (!empty($resources[RESOURCE_QUIZQUESTION])) {
                 foreach ($resources[RESOURCE_QUIZQUESTION] as $id => $courseCopyQuestion) {
-                    $new_quiz_question_id = $resources[RESOURCE_QUIZQUESTION][$id]->destination_id;
-                    $question_category = $courseCopyQuestion->question_category;
-                    if ($question_category > 0) {
-                        TestCategory::add_category_for_question_id(
-                            $tab_test_category_id_old_new[$question_category],
-                            $new_quiz_question_id,
-                            $course_id
+                    $newQuestionId = $resources[RESOURCE_QUIZQUESTION][$id]->destination_id;
+                    $questionCategoryId = $courseCopyQuestion->question_category;
+                    if ($newQuestionId > 0 &&
+                        $questionCategoryId > 0 &&
+                        isset($categoryOldVsNewList[$questionCategoryId])
+                    ) {
+                        TestCategory::addCategoryToQuestion(
+                            $categoryOldVsNewList[$questionCategoryId],
+                            $newQuestionId,
+                            $destinationCourseId
                         );
                     }
                 }
@@ -2184,7 +2197,6 @@ class CourseRestorer
 			$table_ans = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_SURVEY] as $id => $survey) {
-
 				$sql = 'SELECT survey_id FROM '.$table_sur.'
                         WHERE
                             c_id = '.$this->destination_course_id.' AND
@@ -2752,9 +2764,9 @@ class CourseRestorer
 	public function restore_student_publication($sessionId = 0)
 	{
         $sessionId = intval($sessionId);
-        $work_assignment_table = Database:: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
-        $work_table = Database:: get_course_table(TABLE_STUDENT_PUBLICATION);
-        $item_property_table = Database:: get_course_table(TABLE_ITEM_PROPERTY);
+        $work_assignment_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
+        $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+        $item_property_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
 		// Query in student publication
 		$sql = 'SELECT * FROM '.$work_table.'

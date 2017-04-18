@@ -27,13 +27,13 @@ class CourseDriver extends Driver implements DriverInterface
 
         if (!empty($courseInfo)) {
             $coursePath = api_get_path(SYS_COURSE_PATH);
-            $courseDir = $courseInfo['directory'] . '/document';
-            $baseDir = $coursePath . $courseDir;
+            $courseDir = $courseInfo['directory'].'/document';
+            $baseDir = $coursePath.$courseDir;
 
             $this->coursePath = $baseDir;
 
             // Creates shared folder
-            if (!file_exists($baseDir . '/shared_folder')) {
+            if (!file_exists($baseDir.'/shared_folder')) {
                 $title = get_lang('UserFolders');
                 $folderName = '/shared_folder';
                 //$groupId = 0;
@@ -52,9 +52,9 @@ class CourseDriver extends Driver implements DriverInterface
             }
 
             // Creates user-course folder
-            if (!file_exists($baseDir . '/shared_folder/sf_user_' . $userId)) {
+            if (!file_exists($baseDir.'/shared_folder/sf_user_'.$userId)) {
                 $title = $userInfo['complete_name'];
-                $folderName = '/shared_folder/sf_user_' . $userId;
+                $folderName = '/shared_folder/sf_user_'.$userId;
                 $visibility = 1;
                 create_unexisting_directory(
                     $courseInfo,

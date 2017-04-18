@@ -357,7 +357,7 @@ function write_system_config_file($path)
     global $new_version_stable;
 
     $root_sys = api_add_trailing_slash(str_replace('\\', '/', realpath($pathForm)));
-    $content = file_get_contents(dirname(__FILE__).'/'.SYSTEM_CONFIG_FILENAME);
+    $content = file_get_contents(__DIR__.'/'.SYSTEM_CONFIG_FILENAME);
 
     $config['{DATE_GENERATED}'] = date('r');
     $config['{DATABASE_HOST}'] = $dbHostForm;
@@ -3018,7 +3018,7 @@ function get_group_picture_path_by_id($id, $type = 'web', $preview = false, $ano
 
     $id = intval($id);
 
-    //$group_table = Database :: get_main_table(TABLE_MAIN_GROUP);
+    //$group_table = Database::get_main_table(TABLE_MAIN_GROUP);
     $group_table = 'groups';
     $sql = "SELECT picture_uri FROM $group_table WHERE id=".$id;
     $res = Database::query($sql);

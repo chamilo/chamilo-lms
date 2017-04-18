@@ -432,7 +432,7 @@ class SystemAnnouncementManager
     **/
     public static function announcement_for_groups($announcement_id, $group_array)
     {
-        $tbl_announcement_group = Database:: get_main_table(
+        $tbl_announcement_group = Database::get_main_table(
             TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS
         );
         //first delete all group associations for this announcement

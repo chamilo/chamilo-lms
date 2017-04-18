@@ -1,4 +1,5 @@
 <?php
+/* For license terms, see /license.txt */
 /**
  * This script allows you to update all the paths in the 
  * courses/[CODE]/index.php files when you change your Chamilo installation
@@ -13,7 +14,7 @@
 if (PHP_SAPI != 'cli') {
     die('This script can only be launched from the command line');
 }
-$dir = dirname(__FILE__);
+$dir = __DIR__;
 $list = scandir($dir);
 // Set the folders from/to (only the part that needs to be replaced)
 $originalPath = 'original.path.com';

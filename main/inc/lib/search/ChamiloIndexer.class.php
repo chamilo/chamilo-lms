@@ -7,7 +7,7 @@
 /**
  * code
  */
-require_once dirname(__FILE__) . '/../../global.inc.php';
+require_once __DIR__.'/../../global.inc.php';
 include_once 'xapian/XapianIndexer.class.php';
 
 /**

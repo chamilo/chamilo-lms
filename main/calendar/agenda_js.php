@@ -109,29 +109,6 @@ switch ($type) {
         break;
 }
 
-//Setting translations
-/*$day_short = api_get_week_days_short();
-$days = api_get_week_days_long();
-$months = api_get_months_long();
-$months_short = api_get_months_short();*/
-
-//Setting calendar translations
-/*$tpl->assign('month_names', json_encode($months));
-$tpl->assign('month_names_short', json_encode($months_short));
-$tpl->assign('day_names', json_encode($days));
-$tpl->assign('day_names_short', json_encode($day_short));
-$tpl->assign(
-    'button_text',
-    json_encode(array(
-        'today' => get_lang('Today'),
-        'month' => get_lang('Month'),
-        'week' => get_lang('Week'),
-        'day' => get_lang('Day')
-    ))
-);*/
-
-//see http://docs.jquery.com/UI/Datepicker/$.datepicker.formatDate
-
 $tpl->assign('js_format_date', 'll');
 $region_value = api_get_language_isocode();
 
@@ -140,9 +117,33 @@ if ($region_value == 'en') {
 }
 $tpl->assign('region_value', $region_value);
 
-$export_icon = Display::return_icon('export.png', null, null, null, null, true, false);
-$export_icon_low = Display::return_icon('export_low_fade.png', null, null, null, null, true, false);
-$export_icon_high = Display::return_icon('export_high_fade.png', null, null, null, null, true, false);
+$export_icon = Display::return_icon(
+    'export.png',
+    null,
+    null,
+    null,
+    null,
+    true,
+    false
+);
+$export_icon_low = Display::return_icon(
+    'export_low_fade.png',
+    null,
+    null,
+    null,
+    null,
+    true,
+    false
+);
+$export_icon_high = Display::return_icon(
+    'export_high_fade.png',
+    null,
+    null,
+    null,
+    null,
+    true,
+    false
+);
 
 $tpl->assign(
     'export_ical_confidential_icon',
@@ -246,6 +247,7 @@ if ($agenda->type === 'course') {
 }
 
 $tpl->assign('form_add', $form->returnForm());
+$tpl->assign('legend_list', api_get_configuration_value('agenda_legend'));
 $templateName = $tpl->get_template('agenda/month.tpl');
 $content = $tpl->fetch($templateName);
 $tpl->assign('content', $content);

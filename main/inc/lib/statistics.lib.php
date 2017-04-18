@@ -101,9 +101,9 @@ class Statistics
     public static function countUsers($status = null, $categoryCode = null, $countInvisibleCourses = true, $onlyActive = false)
     {
         // Database table definitions
-        $course_user_table = Database:: get_main_table(TABLE_MAIN_COURSE_USER);
-        $course_table = Database:: get_main_table(TABLE_MAIN_COURSE);
-        $user_table = Database:: get_main_table(TABLE_MAIN_USER);
+        $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
+        $user_table = Database::get_main_table(TABLE_MAIN_USER);
         $access_url_rel_user_table= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $current_url_id = api_get_current_access_url_id();
         $active_filter = $onlyActive?' AND active=1':'';

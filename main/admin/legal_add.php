@@ -47,7 +47,7 @@ if ($form->validate()) {
         } else {
             $changes = '';
         }
-        $submit  = $values['send'];
+        $submit = $values['send'];
 
         $default['content'] = $content;
         if (isset($values['language'])) {
@@ -66,7 +66,7 @@ if ($form->validate()) {
                 Display::addFlash(Display::return_message($message));
                 header('Location: legal_list.php?sec_token='.$tok);
                 exit();
-            } elseif ($submit=='preview') {
+            } elseif ($submit == 'preview') {
                 $defaults['type'] = $type;
                 $defaults['content'] = $content;
                 $defaults['changes'] = $changes;
@@ -143,7 +143,7 @@ if (isset($_POST['language'])) {
 }
 
 $tool_name = get_lang('AddTermsAndConditions');
-$interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 Display :: display_header($tool_name);
 
 echo '<script>

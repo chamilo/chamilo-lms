@@ -908,7 +908,7 @@ function displayTemplates()
 function getNumberOfTemplates()
 {
     // Database table definition.
-    $table_system_template = Database :: get_main_table('system_template');
+    $table_system_template = Database::get_main_table('system_template');
 
     // The sql statement.
     $sql = "SELECT COUNT(id) AS total FROM $table_system_template";
@@ -935,7 +935,7 @@ function getNumberOfTemplates()
 function getTemplateData($from, $number_of_items, $column, $direction)
 {
     // Database table definition.
-    $table_system_template = Database :: get_main_table('system_template');
+    $table_system_template = Database::get_main_table('system_template');
 
     // The sql statement.
     $sql = "SELECT image as col0, title as col1, id as col2 FROM $table_system_template";
@@ -1023,7 +1023,7 @@ function addEditTemplate()
     // Getting all the information of the template when editing a template.
     if ($_GET['action'] == 'edit') {
         // Database table definition.
-        $table_system_template = Database :: get_main_table('system_template');
+        $table_system_template = Database::get_main_table('system_template');
         $sql = "SELECT * FROM $table_system_template WHERE id = ".intval($_GET['id'])."";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
@@ -1092,7 +1092,7 @@ function addEditTemplate()
             }
 
             // Store the information in the database (as insert or as update).
-            $table_system_template = Database :: get_main_table('system_template');
+            $table_system_template = Database::get_main_table('system_template');
             if ($_GET['action'] == 'add') {
                 $content_template =  Security::remove_XSS($values['template_text'], COURSEMANAGERLOWSECURITY);
                 $params = [
@@ -1141,7 +1141,7 @@ function addEditTemplate()
 function deleteTemplate($id)
 {
     // First we remove the image.
-    $table_system_template = Database :: get_main_table('system_template');
+    $table_system_template = Database::get_main_table('system_template');
     $sql = "SELECT * FROM $table_system_template WHERE id = ".intval($id)."";
     $result = Database::query($sql);
     $row = Database::fetch_array($result);
@@ -1215,7 +1215,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
 {
     global $_configuration, $settings_to_avoid, $convert_byte_to_mega_list;
     $em = Database::getManager();
-    $table_settings_current = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+    $table_settings_current = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 
     $form = new FormValidator('settings', 'post', 'settings.php?category='.Security::remove_XSS($_GET['category']));
 
@@ -1554,7 +1554,7 @@ function searchSetting($search)
     if (empty($search)) {
         return array();
     }
-    $table_settings_current = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+    $table_settings_current = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
     $sql = "SELECT * FROM $table_settings_current
             WHERE category <> 'Plugins' ORDER BY id ASC ";
     $result = Database::store_result(Database::query($sql), 'ASSOC');

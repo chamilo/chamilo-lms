@@ -203,7 +203,7 @@ function prepare_user_sql_query($is_count)
 
     // adding the filter to see the user's only of the current access_url
     if ((api_is_platform_admin() || api_is_session_admin()) && api_get_multiple_access_url()) {
-        $access_url_rel_user_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $sql.= " INNER JOIN $access_url_rel_user_table url_rel_user ON (u.id=url_rel_user.user_id)";
     }
 

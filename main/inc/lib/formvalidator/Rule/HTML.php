@@ -31,7 +31,7 @@ class HTML_QuickForm_Rule_HTML extends HTML_QuickForm_Rule
     static function get_allowed_tags($mode)
     {
         // Include the allowed tags.
-        //include(dirname(__FILE__).'/allowed_tags.inc.php');
+        //include __DIR__.'/allowed_tags.inc.php';
         global $allowed_tags_student, $allowed_tags_student_full_page, $allowed_tags_teacher, $allowed_tags_teacher_full_page;
         switch($mode)
         {

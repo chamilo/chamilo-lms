@@ -33,4 +33,4 @@ define('ADVANCED_SUBSCRIPTION_TERMS_MODE_FINAL', 2);
 
 
 
-require_once __DIR__ . '/../../main/inc/global.inc.php';
+require_once __DIR__.'/../../main/inc/global.inc.php';

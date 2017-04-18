@@ -319,3 +319,33 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
         'length' => 8
     ]
 ];*/
+// Customize course session tracking columns
+/*
+$_configuration['tracking_columns'] = [
+    'course_session' => [
+        'course_title' => true,
+        'published_exercises' => true,
+        'new_exercises' => true,
+        'my_average' => true,
+        'average_exercise_result' => true,
+        'time_spent' => true,
+        'lp_progress' => true,
+        'score' => true,
+        'best_score' => true,
+        'last_connection' => true,
+        'details' => true,
+    ],
+];
+*/
+// Hide session link of course_block on index/userportal
+//$_configuration['remove_session_url']= false ;
+// Shows a legend in the agenda tool
+/*
+$_configuration['agenda_legend'] = [
+    'red' => 'red caption',
+    '#f0f' => 'another caption'
+];*/
+// Save question titles with HTML
+$_configuration['question_title_html'] = false;
+// Show the full toolbar set to all CKEditor
+//$_configuration['full_ckeditor_toolbar_set'] = false;

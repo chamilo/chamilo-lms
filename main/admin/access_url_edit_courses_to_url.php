@@ -25,9 +25,9 @@ if (!api_get_multiple_access_url()) {
 }
 
 // Database Table Definitions
-$tbl_access_url_rel_course = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-$tbl_course = Database :: get_main_table(TABLE_MAIN_COURSE);
-$tbl_access_url = Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
+$tbl_access_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+$tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
+$tbl_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
 
 // setting breadcrumbs
 $tool_name = get_lang('EditCoursesToURL');
@@ -127,7 +127,7 @@ if ($ajax_search) {
         }
     }
 
-    $tbl_course = Database:: get_main_table(TABLE_MAIN_COURSE);
+    $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
     $sql = "SELECT id, code, title
             FROM $tbl_course u
             ORDER BY title, code";

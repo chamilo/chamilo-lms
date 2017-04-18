@@ -387,8 +387,8 @@ class GroupManager
         $course_id = $course_info['real_id'];
 
         // Database table definitions
-        $group_table = Database:: get_course_table(TABLE_GROUP);
-        $forum_table = Database:: get_course_table(TABLE_FORUM);
+        $group_table = Database::get_course_table(TABLE_GROUP);
+        $forum_table = Database::get_course_table(TABLE_FORUM);
         $groupInfo = self::get_group_properties($groupInfo['iid'], true);
         if ($groupInfo) {
             $groupIid = $groupInfo['iid'];
@@ -729,8 +729,8 @@ class GroupManager
      */
     public static function get_category_from_group($group_id, $course_code = null)
     {
-        $table_group = Database:: get_course_table(TABLE_GROUP);
-        $table_group_cat = Database:: get_course_table(TABLE_GROUP_CATEGORY);
+        $table_group = Database::get_course_table(TABLE_GROUP);
+        $table_group_cat = Database::get_course_table(TABLE_GROUP_CATEGORY);
 
         $group_id = intval($group_id);
 
@@ -771,8 +771,8 @@ class GroupManager
         $course_info = api_get_course_info($course_code);
         $course_id = $course_info['real_id'];
 
-        $table_group = Database:: get_course_table(TABLE_GROUP);
-        $table_group_cat = Database:: get_course_table(TABLE_GROUP_CATEGORY);
+        $table_group = Database::get_course_table(TABLE_GROUP);
+        $table_group_cat = Database::get_course_table(TABLE_GROUP_CATEGORY);
         $cat_id = intval($cat_id);
         $sql = "SELECT iid FROM $table_group
                 WHERE c_id = $course_id AND category_id='".$cat_id."'";
@@ -1227,8 +1227,8 @@ class GroupManager
 
         $category = self::get_category_from_group($groupIid);
         $groups_per_user = isset($category['groups_per_user']) ? $category['groups_per_user'] : self::GROUP_PER_MEMBER_NO_LIMIT;
-        $group_table = Database:: get_course_table(TABLE_GROUP);
-        $group_user_table = Database:: get_course_table(TABLE_GROUP_USER);
+        $group_table = Database::get_course_table(TABLE_GROUP);
+        $group_user_table = Database::get_course_table(TABLE_GROUP_USER);
         $session_id = api_get_session_id();
 
         $complete_user_list = CourseManager::get_real_and_linked_user_list(
@@ -1365,8 +1365,8 @@ class GroupManager
      */
     public static function user_in_number_of_groups($user_id, $cat_id = null)
     {
-        $table_group_user = Database:: get_course_table(TABLE_GROUP_USER);
-        $table_group = Database:: get_course_table(TABLE_GROUP);
+        $table_group_user = Database::get_course_table(TABLE_GROUP_USER);
+        $table_group = Database::get_course_table(TABLE_GROUP);
         $user_id = intval($user_id);
         $cat_id = intval($cat_id);
 

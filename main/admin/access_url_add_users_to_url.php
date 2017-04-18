@@ -24,9 +24,9 @@ $courses = array();
 $url_list = array();
 $users = array();
 
-$tbl_access_url_rel_user = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-$tbl_access_url = Database:: get_main_table(TABLE_MAIN_ACCESS_URL);
-$tbl_user = Database:: get_main_table(TABLE_MAIN_USER);
+$tbl_access_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+$tbl_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
+$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 
 /*	Header	*/
 $tool_name = get_lang('AddUsersToURL');

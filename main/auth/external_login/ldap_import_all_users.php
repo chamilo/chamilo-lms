@@ -13,9 +13,9 @@ if (PHP_SAPI != 'cli') {
 }
 use \ChamiloSession as Session;
 
-require dirname(__FILE__) . '/../../inc/global.inc.php';
-require dirname(__FILE__) . '/ldap.inc.php';
-require dirname(__FILE__) . '/../../inc/conf/auth.conf.php';
+require __DIR__.'/../../inc/global.inc.php';
+require __DIR__.'/ldap.inc.php';
+require __DIR__.'/../../inc/conf/auth.conf.php';
 /**
  * Code execution
  */

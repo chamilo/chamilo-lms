@@ -15,8 +15,8 @@ class TestCategory
     public $name;
     public $description;
 
-	/**
-	 * Constructor of the class Category
+    /**
+     * Constructor of the class Category
      */
     public function __construct()
     {
@@ -25,15 +25,16 @@ class TestCategory
     /**
      * return the TestCategory object with id=in_id
      * @param int $id
-     *
+     * @param int $courseId
      * @return TestCategory
      */
-    public function getCategory($id)
+    public function getCategory($id, $courseId = 0)
     {
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
         $id = intval($id);
+        $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
         $sql = "SELECT * FROM $table
-                WHERE id = $id AND c_id=".api_get_course_int_id();
+                WHERE id = $id AND c_id = ".$courseId;
         $res = Database::query($sql);
 
         if (Database::num_rows($res)) {
@@ -46,7 +47,7 @@ class TestCategory
             return $this;
         }
 
-        return  false;
+        return false;
     }
 
     /**
@@ -63,19 +64,18 @@ class TestCategory
         }
 
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-        $name = Database::escape_string($this->name);
-        $description = Database::escape_string($this->description);
+
         // check if name already exists
         $sql = "SELECT count(*) AS nb FROM $table
-                WHERE title = '$name' AND c_id=".$courseId;
+                WHERE title = '".$this->name."' AND c_id=$courseId";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
         // lets add in BDD if not the same name
         if ($row['nb'] <= 0) {
             $params = [
                 'c_id' => $courseId,
-                'title' => $name,
-                'description' => $description
+                'title' => $this->name,
+                'description' => $this->description
             ];
             $newId = Database::insert($table, $params);
 
@@ -192,22 +192,22 @@ class TestCategory
 
     /**
      * Return an array of all Category objects in the database
-     * If in_field=="" Return an array of all category objects in the database
+     * If $field=="" Return an array of all category objects in the database
      * Otherwise, return an array of all in_field value
      * in the database (in_field = id or name or description)
      *
-     * @param string $in_field
+     * @param string $field
      * @param int $courseId
      * @return array
      */
-    public static function getCategoryListInfo($in_field = '', $courseId = 0)
+    public static function getCategoryListInfo($field = '', $courseId = 0)
     {
         $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
 
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-        $in_field = Database::escape_string($in_field);
+        $field = Database::escape_string($field);
         $categories = array();
-        if ($in_field == '') {
+        if (empty($field)) {
             $sql = "SELECT id FROM $table
                     WHERE c_id = $courseId 
                     ORDER BY title ASC";
@@ -217,12 +217,12 @@ class TestCategory
                 $categories[] = $category->getCategory($row['id']);
             }
         } else {
-            $sql = "SELECT $in_field FROM $table
+            $sql = "SELECT $field FROM $table
                     WHERE c_id = $courseId
-                    ORDER BY $in_field ASC";
+                    ORDER BY $field ASC";
             $res = Database::query($sql);
             while ($row = Database::fetch_array($res)) {
-                $categories[] = $row[$in_field];
+                $categories[] = $row[$field];
             }
         }
         return $categories;
@@ -710,10 +710,11 @@ class TestCategory
     }
 
     /**
-     * return the number max of question in a category
+     * Return the number max of question in a category
      * count the number of questions in all categories, and return the max
      * @param int $exerciseId
      * @author - hubert borderiou
+     * @return int
     */
     public static function getNumberMaxQuestionByCat($exerciseId)
     {
@@ -741,6 +742,8 @@ class TestCategory
      * @params int $exerciseId
      * @params array pre filled array with the category_id, score, and weight
      * example: array(1 => array('score' => '10', 'total' => 20));
+     *
+     * @return string
      */
     public static function get_stats_table_by_attempt($exerciseId, $category_list = array())
     {
@@ -788,7 +791,7 @@ class TestCategory
             return $table->toHtml();
         }
 
-        return null;
+        return '';
     }
 
     /**
@@ -879,7 +882,7 @@ class TestCategory
                 break;
         }
 
-        // settting the form elements
+        // Setting the form elements
         $form->addElement('header', $header);
         $form->addElement('hidden', 'category_id');
         $form->addElement('text', 'category_name', get_lang('CategoryName'), array('class' => 'span6'));
@@ -1054,7 +1057,7 @@ class TestCategory
      *
      * @return string|false
      */
-    public static function add_category_for_question_id($categoryId, $questionId, $courseId)
+    public static function addCategoryToQuestion($categoryId, $questionId, $courseId)
     {
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
         // if question doesn't have a category

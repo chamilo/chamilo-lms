@@ -18,10 +18,10 @@ function check_download_survey($course, $invitation, $doc_url)
     $course_id = $_course['real_id'];
 
     // Database table definitions
-    $table_survey = Database:: get_course_table(TABLE_SURVEY);
-    $table_survey_question = Database:: get_course_table(TABLE_SURVEY_QUESTION);
-    $table_survey_question_option = Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
-    $table_survey_invitation = Database :: get_course_table(TABLE_SURVEY_INVITATION);
+    $table_survey = Database::get_course_table(TABLE_SURVEY);
+    $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
+    $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
+    $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
 
     // Now we check if the invitationcode is valid
     $sql = "SELECT * FROM $table_survey_invitation

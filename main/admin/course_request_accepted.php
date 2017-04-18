@@ -78,7 +78,7 @@ function get_number_of_requests()
 function get_request_data($from, $number_of_items, $column, $direction)
 {
     $keyword = isset($_GET['keyword']) ? Database::escape_string(trim($_GET['keyword'])) : null;
-    $course_request_table = Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST);
+    $course_request_table = Database::get_main_table(TABLE_MAIN_COURSE_REQUEST);
 
     $from = intval($from);
     $number_of_items = intval($number_of_items);

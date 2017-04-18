@@ -207,7 +207,7 @@ if (isset($_POST['text2voice_mode']) && $_POST['text2voice_mode'] == 'google') {
     downloadMP3_pediaphon($filepath, $dir);
 }
 
-$tbl_admin_languages = Database:: get_main_table(TABLE_MAIN_LANGUAGE);
+$tbl_admin_languages = Database::get_main_table(TABLE_MAIN_LANGUAGE);
 $sql_select = "SELECT * FROM $tbl_admin_languages";
 $result_select = Database::query($sql_select);
 

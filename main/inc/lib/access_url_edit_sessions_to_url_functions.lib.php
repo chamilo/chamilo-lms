@@ -28,7 +28,7 @@ class Accessurleditsessionstourl
      */
     function search_sessions($needle, $id)
     {
-        $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
+        $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
         $xajax_response = new xajaxResponse();
         $return = '';
 
@@ -44,7 +44,7 @@ class Accessurleditsessionstourl
                     LIMIT 11';
             $rs = Database::query($sql);
             $i=0;
-            while ($session = Database :: fetch_array($rs)) {
+            while ($session = Database::fetch_array($rs)) {
                 $i++;
                 if ($i<=10) {
                      $return .= '<a href="#" onclick="add_user_to_url(\''.addslashes($session['id']).'\',\''.addslashes($session['name']).' ('.addslashes($session['id']).')'.'\')">'.$session['name'].' </a><br />';

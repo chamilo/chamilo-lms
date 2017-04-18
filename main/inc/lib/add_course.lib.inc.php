@@ -1206,8 +1206,8 @@ class AddCourse
         $teachers = isset($params['teachers']) ? $params['teachers'] : null;
         $status = isset($params['status']) ? $params['status'] : null;
 
-        $TABLECOURSE = Database:: get_main_table(TABLE_MAIN_COURSE);
-        $TABLECOURSUSER = Database:: get_main_table(TABLE_MAIN_COURSE_USER);
+        $TABLECOURSE = Database::get_main_table(TABLE_MAIN_COURSE);
+        $TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
         $ok_to_register_course = true;
 

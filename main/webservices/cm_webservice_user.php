@@ -1,7 +1,10 @@
 <?php
-
-require_once(dirname(__FILE__).'/../inc/global.inc.php');
-require_once(dirname(__FILE__).'/cm_webservice.php');
+/* For licensing terms, see /license.txt */
+/**
+ * @package chamilo.webservices
+ */
+require_once __DIR__.'/../inc/global.inc.php';
+require_once __DIR__.'/cm_webservice.php';
 
 /**
  * Description of cm_soap_user
@@ -139,7 +142,7 @@ class WSCMUser extends WSCM {
     */
     private static function get_user_list_like_start($conditions = array(), $order_by = array())
     {
-        $user_table = Database :: get_main_table(TABLE_MAIN_USER);
+        $user_table = Database::get_main_table(TABLE_MAIN_USER);
         $return_array = array();
         $sql_query = "SELECT * FROM $user_table";
         if (count($conditions) > 0) {

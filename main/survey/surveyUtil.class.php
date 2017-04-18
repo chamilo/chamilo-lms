@@ -250,9 +250,9 @@ class SurveyUtil
      */
     public static function delete_user_report($survey_id, $user_id)
     {
-        $table_survey_answer = Database:: get_course_table(TABLE_SURVEY_ANSWER);
-        $table_survey_invitation = Database:: get_course_table(TABLE_SURVEY_INVITATION);
-        $table_survey = Database:: get_course_table(TABLE_SURVEY);
+        $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
+        $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
+        $table_survey = Database::get_course_table(TABLE_SURVEY);
 
         $course_id = api_get_course_int_id();
         $survey_id = (int) $survey_id;
@@ -480,9 +480,9 @@ class SurveyUtil
         $singlePage = isset($_GET['single_page']) ? intval($_GET['single_page']) : 0;
         $course_id = api_get_course_int_id();
         // Database table definitions
-        $table_survey_question = Database:: get_course_table(TABLE_SURVEY_QUESTION);
-        $table_survey_question_option = Database:: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
-        $table_survey_answer = Database:: get_course_table(TABLE_SURVEY_ANSWER);
+        $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
+        $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
+        $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
 
         // Determining the offset of the sql statement (the n-th question of the survey)
         $offset = !isset($_GET['question']) ? 0 : intval($_GET['question']);
@@ -2868,9 +2868,9 @@ class SurveyUtil
             $direction = 'asc';
         }
 
-        $table_survey = Database:: get_course_table(TABLE_SURVEY);
-        $table_survey_question = Database:: get_course_table(TABLE_SURVEY_QUESTION);
-        $table_user = Database:: get_main_table(TABLE_MAIN_USER);
+        $table_survey = Database::get_course_table(TABLE_SURVEY);
+        $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
+        $table_user = Database::get_main_table(TABLE_MAIN_USER);
 
         $course_id = api_get_course_int_id();
 
@@ -2921,8 +2921,7 @@ class SurveyUtil
         // Database table definitions
         $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
         $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
-        $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
-        $table_survey = Database:: get_course_table(TABLE_SURVEY);
+        $table_survey = Database::get_course_table(TABLE_SURVEY);
 
         $sql = "SELECT question_id
                 FROM $table_survey_question
@@ -2934,32 +2933,14 @@ class SurveyUtil
             $all_question_id[] = $row;
         }
 
-        $count = 0;
-        for ($i = 0; $i < count($all_question_id); $i++) {
-            $sql = 'SELECT COUNT(*) as count
-			        FROM '.$table_survey_answer.'
-					WHERE
-					    c_id = '.$course_id.' AND
-					    question_id='.intval($all_question_id[$i]['question_id']).' AND
-					    user = '.$user_id;
-            $result = Database::query($sql);
-            while ($row = Database::fetch_array($result, 'ASSOC')) {
-                if ($row['count'] == 0) {
-                    $count++;
-                    break;
-                }
-            }
-            if ($count > 0) {
-                $link_add = true;
-                break;
-            }
-        }
-
         echo '<table id="list-survey" class="table ">';
+        echo '<thead>';
         echo '<tr>';
         echo '	<th>'.get_lang('SurveyName').'</th>';
-        echo '	<th>'.get_lang('Anonymous').'</th>';
+        echo '	<th class="text-center">'.get_lang('Anonymous').'</th>';
         echo '</tr>';
+        echo '</thead>';
+        echo '<tbody>';
 
         $now = api_get_utc_datetime();
 
@@ -2987,15 +2968,29 @@ class SurveyUtil
                 echo Display::return_icon('statistics.png', get_lang('CreateNewSurvey'), array(),ICON_SIZE_TINY);
                 echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/fillsurvey.php?course='.$_course['sysCode'].'&invitationcode='.$row['invitation_code'].'&cidReq='.$_course['sysCode'].'">'.$row['title'].'</a></td>';
             } else {
+                $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh($user_id, $_course);
+                $icon = Display::return_icon('statistics_na.png', get_lang('Survey'), array(), ICON_SIZE_TINY);
+                $showLink = (!api_is_allowed_to_edit(false, true) || $isDrhOfCourse)
+                    && $row['visible_results'] != SURVEY_VISIBLE_TUTOR;
+
                 echo '<td>';
-                echo Display::return_icon('statistics_na.png', get_lang('CreateNewSurvey'), array(),ICON_SIZE_TINY);
-                echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=questionreport&cidReq='.$_course['sysCode'].'&id_session='.$row['session_id'].'&gidReq=0&origin=&survey_id='.$row['survey_id'].'">'.$row['title'].'</a></td>';
+                echo $showLink
+                    ? Display::url(
+                        $icon.PHP_EOL.$row['title'],
+                        api_get_path(WEB_CODE_PATH).'survey/reporting.php?'.api_get_cidreq().'&'.http_build_query([
+                            'action' => 'questionreport',
+                            'survey_id' => $row['survey_id']
+                        ])
+                    )
+                    : $icon.PHP_EOL.$row['title'];
+                echo '</td>';
             }
-            echo '<td class="center">';
+            echo '<td class="text-center">';
             echo ($row['anonymous'] == 1) ? get_lang('Yes') : get_lang('No');
             echo '</td>';
             echo '</tr>';
         }
+        echo '</tbody>';
         echo '</table>';
     }
 
@@ -3156,10 +3151,10 @@ class SurveyUtil
      */
     public static function show_link_available($user_id, $survey_code, $user_answer)
     {
-        $table_survey = Database:: get_course_table(TABLE_SURVEY);
-        $table_survey_invitation = Database:: get_course_table(TABLE_SURVEY_INVITATION);
-        $table_survey_answer = Database:: get_course_table(TABLE_SURVEY_ANSWER);
-        $table_survey_question = Database:: get_course_table(TABLE_SURVEY_QUESTION);
+        $table_survey = Database::get_course_table(TABLE_SURVEY);
+        $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
+        $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
+        $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
 
         $survey_code = Database::escape_string($survey_code);
         $user_id = intval($user_id);

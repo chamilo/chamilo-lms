@@ -2116,7 +2116,7 @@ class Exercise
             // Exercise time limit
             $form->addElement('checkbox', 'activate_start_date_check',null, get_lang('EnableStartTime'), array('onclick' => 'activate_start_date()'));
 
-            $var = Exercise::selectTimeLimit();
+            $var = self::selectTimeLimit();
 
             if (!empty($this->start_time)) {
                 $form->addElement('html', '<div id="start_date_div" style="display:block;">');
@@ -2348,7 +2348,7 @@ class Exercise
      */
     public function processCreation($form, $type = '')
     {
-        $this->updateTitle(Exercise::format_title_variable($form->getSubmitValue('exerciseTitle')));
+        $this->updateTitle(self::format_title_variable($form->getSubmitValue('exerciseTitle')));
         $this->updateDescription($form->getSubmitValue('exerciseDescription'));
         $this->updateAttempts($form->getSubmitValue('exerciseAttempts'));
         $this->updateFeedbackType($form->getSubmitValue('exerciseFeedbackType'));
@@ -2740,12 +2740,12 @@ class Exercise
         $lp_item_view_id = 0,
         $status = 'incomplete'
     ) {
-        $track_exercises = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         if (empty($lp_id)) {
             $lp_id = 0;
         }
         if (empty($lp_item_id)) {
-            $lp_item_id   = 0;
+            $lp_item_id = 0;
         }
         if (empty($lp_item_view_id)) {
             $lp_item_view_id = 0;
@@ -2774,12 +2774,14 @@ class Exercise
     /**
      * Saves a test attempt
      *
-     * @param int  clock_expired_time
+     * @param int  $clock_expired_time clock_expired_time
      * @param int  int lp id
      * @param int  int lp item id
      * @param int  int lp item_view id
+     * @param array $questionList
      * @param float $weight
-     * @param array question list
+     *
+     * @return int
      */
     public function save_stat_track_exercise_info(
         $clock_expired_time = 0,
@@ -2789,7 +2791,7 @@ class Exercise
         $questionList = array(),
         $weight = 0
     ) {
-        $track_exercises = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $safe_lp_id = intval($safe_lp_id);
         $safe_lp_item_id = intval($safe_lp_item_id);
         $safe_lp_item_view_id = intval($safe_lp_item_view_id);
@@ -3975,8 +3977,8 @@ class Exercise
                             }
                             $matching[$answerAutoId] = $choice[$answerAutoId];
                         }
-                        break;
                     }
+                    break;
                 case HOT_SPOT:
                     if ($from_database) {
                         $TBL_TRACK_HOTSPOT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
@@ -5255,7 +5257,7 @@ class Exercise
         }
 
         if ($saved_results) {
-            $stat_table = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+            $stat_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
             $sql = 'UPDATE ' . $stat_table . ' SET
                         exe_result = exe_result + ' . floatval($questionScore) . '
                     WHERE exe_id = ' . $exeId;
@@ -6292,7 +6294,7 @@ class Exercise
      */
     public function get_stat_track_exercise_info_by_exe_id($exe_id)
     {
-        $track_exercises = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $exe_id = intval($exe_id);
         $sql_track = "SELECT * FROM $track_exercises WHERE exe_id = $exe_id ";
         $result = Database::query($sql_track);
@@ -6326,7 +6328,7 @@ class Exercise
         $exercise_info = self::get_stat_track_exercise_info_by_exe_id($exe_id);
         $question_id = intval($question_id);
         $exe_id = intval($exe_id);
-        $track_exercises = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         if ($exercise_info) {
 
             if (empty($exercise_info['questions_to_check'])) {
@@ -7456,7 +7458,7 @@ class Exercise
      * @param int $sessionId
      * @return array exercises
      */
-    public function getExercisesByCouseSession($courseId, $sessionId)
+    public function getExercisesByCourseSession($courseId, $sessionId)
     {
         $courseId = intval($courseId);
         $sessionId = intval($sessionId);
@@ -7498,7 +7500,7 @@ class Exercise
         $ids = is_array($quizId) ? $quizId : array($quizId);
         $ids = array_map('intval', $ids);
         $ids = implode(',', $ids);
-        $track_exercises = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         if ($sessionId != 0) {
             $sql = "SELECT * FROM $track_exercises te
               INNER JOIN c_quiz cq ON cq.id = te.exe_exo_id AND te.c_id = cq.c_id
@@ -7536,7 +7538,7 @@ class Exercise
      */
     public static function getNextQuestionId($exeId, $exercise_stat_info, $remindList, $currentQuestion)
     {
-        $result = get_exercise_results_by_attempt($exeId, 'incomplete');
+        $result = Event::get_exercise_results_by_attempt($exeId, 'incomplete');
 
         if (isset($result[$exeId])) {
             $result = $result[$exeId];

@@ -1,16 +1,17 @@
 <?php
+/* For license terms, see /license.txt */
 
-require __DIR__ . '/../../vendor/autoload.php';
-if (file_exists(__DIR__ . '/config.vm.php')) {
+require __DIR__.'/../../vendor/autoload.php';
+if (file_exists(__DIR__.'/config.vm.php')) {
 
-    require_once dirname(__FILE__) . '/config.php';
+    require_once __DIR__.'/config.php';
 
-    require __DIR__ . '/lib/vm/AbstractVM.php';
-    require __DIR__ . '/lib/vm/VMInterface.php';
-    require __DIR__ . '/lib/vm/DigitalOceanVM.php';
-    require __DIR__ . '/lib/VM.php';
+    require __DIR__.'/lib/vm/AbstractVM.php';
+    require __DIR__.'/lib/vm/VMInterface.php';
+    require __DIR__.'/lib/vm/DigitalOceanVM.php';
+    require __DIR__.'/lib/VM.php';
 
-    $config = require __DIR__ . '/config.vm.php';
+    $config = require __DIR__.'/config.vm.php';
 
     $vm = new VM($config);
 

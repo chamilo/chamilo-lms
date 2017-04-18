@@ -38,7 +38,7 @@ if (isset($_GET['add_type']) && $_GET['add_type'] != '') {
 }
 
 if (!api_is_platform_admin() && !api_is_session_admin()) {
-    $sql = 'SELECT session_admin_id FROM ' . Database:: get_main_table(TABLE_MAIN_SESSION) . ' WHERE id=' . $id_session;
+    $sql = 'SELECT session_admin_id FROM ' . Database::get_main_table(TABLE_MAIN_SESSION) . ' WHERE id=' . $id_session;
     $rs = Database::query($sql);
     if (Database::result($rs, 0, 0) != $_user['user_id']) {
         api_not_allowed(true);

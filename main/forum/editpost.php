@@ -109,7 +109,7 @@ if ($origin == 'group') {
     $interbreadcrumb[] = array('url' => 'javascript: void (0);', 'name' => get_lang('EditPost'));
 }
 
-$table_link = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+$table_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
 /* Header */
 $htmlHeadXtra[] = <<<JS

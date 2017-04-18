@@ -10,7 +10,7 @@ namespace Shibboleth;
  * @author Laurent Opprecht <laurent@opprecht.info>, Nicolas Rod for the University of Geneva
  */
 
-$__dir = dirname(__FILE__) . '/';
+$__dir = __DIR__.'/';
 $no_redirection = true;  //no redirection in global.
 include_once($__dir . '/../../inc/global.inc.php');
 

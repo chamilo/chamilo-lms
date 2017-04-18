@@ -12,7 +12,7 @@ if (api_is_anonymous()) {
 }
 
 if (!isset($_GET['id']) || empty($_GET['id'])) {
-    $content =  SystemAnnouncementManager::display_announcements_slider($visibility, $_GET['id']);
+    $content = SystemAnnouncementManager::display_announcements_slider($visibility, $_GET['id']);
 } else {
     $content = SystemAnnouncementManager::displayAnnouncement($_GET['id'], $visibility);
 }

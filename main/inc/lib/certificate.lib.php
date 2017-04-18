@@ -204,7 +204,7 @@ class Certificate extends Model
                             // Creating new name
                             $name = md5($this->user_id.$this->certificate_data['cat_id']).'.html';
                             $my_path_certificate = $this->certification_user_path.$name;
-                            $path_certificate    ='/'.$name;
+                            $path_certificate    = '/'.$name;
 
                             // Getting QR filename
                             $file_info = pathinfo($path_certificate);
@@ -351,11 +351,11 @@ class Certificate extends Model
             $final_content['gradebook_institution'].' - '.
             $final_content['gradebook_sitename'].' - '.
             get_lang('Certification').$break_space.
-            get_lang('Student'). ': '.$final_content['user_firstname'].' '.$final_content['user_lastname'].$break_space.
-            get_lang('Teacher'). ': '.$final_content['teacher_firstname'].' '.$final_content['teacher_lastname'].$break_space.
-            get_lang('Date'). ': '.$final_content['date_certificate'].$break_space.
-            get_lang('Score'). ': '.$final_content['gradebook_grade'].$break_space.
-            'URL'. ': '.$final_content['certificate_link'];
+            get_lang('Student').': '.$final_content['user_firstname'].' '.$final_content['user_lastname'].$break_space.
+            get_lang('Teacher').': '.$final_content['teacher_firstname'].' '.$final_content['teacher_lastname'].$break_space.
+            get_lang('Date').': '.$final_content['date_certificate'].$break_space.
+            get_lang('Score').': '.$final_content['gradebook_grade'].$break_space.
+            'URL'.': '.$final_content['certificate_link'];
 
         return $text;
     }
@@ -408,7 +408,7 @@ class Certificate extends Model
             return false;
         }
 
-        $user_certificate = $this->certification_user_path . basename($this->certificate_data['path_certificate']);
+        $user_certificate = $this->certification_user_path.basename($this->certificate_data['path_certificate']);
 
         if (!file_exists($user_certificate)) {
             return false;
@@ -422,7 +422,7 @@ class Certificate extends Model
     */
     public function show()
     {
-        header('Content-Type: text/html; charset='. api_get_system_encoding());
+        header('Content-Type: text/html; charset='.api_get_system_encoding());
 
         $user_certificate = $this->certification_user_path.basename($this->certificate_data['path_certificate']);
         if (file_exists($user_certificate)) {

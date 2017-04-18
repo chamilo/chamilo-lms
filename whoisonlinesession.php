@@ -8,9 +8,9 @@
 include_once './main/inc/global.inc.php';
 api_block_anonymous_users();
 
-$tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
-$tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
-$tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+$tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+$tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
 /**
  * Header

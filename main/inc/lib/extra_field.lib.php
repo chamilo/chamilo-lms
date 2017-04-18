@@ -476,7 +476,18 @@ class ExtraField extends Model
             $extraData = self::get_handler_extra_data($itemId);
 
             if ($form) {
-                $form->setDefaults($extraData);
+                if (!empty($showOnlyThisFields)) {
+                    $setData = [];
+                    foreach ($showOnlyThisFields as $variable) {
+                        $extraName = 'extra_'.$variable;
+                        if (in_array($extraName, array_keys($extraData))) {
+                            $setData[$extraName] = $extraData[$extraName];
+                        }
+                    }
+                    $form->setDefaults($setData);
+                } else {
+                    $form->setDefaults($extraData);
+                }
             }
         }
 

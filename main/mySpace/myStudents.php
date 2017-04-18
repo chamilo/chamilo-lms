@@ -181,8 +181,8 @@ if (isset($_GET['details'])) {
 }
 
 // Database Table Definitions
-$tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-$tbl_stats_exercices = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+$tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+$tbl_stats_exercices = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 
 if (isset($_GET['user_id']) && $_GET['user_id'] != "") {
     $user_id = intval($_GET['user_id']);
@@ -861,7 +861,7 @@ if (!empty($student_id)) {
         if ($user_info['status'] != INVITEE) {
             $csv_content[] = array();
             $csv_content[] = array(str_replace('&nbsp;', '', $table_title));
-            $t_lp = Database :: get_course_table(TABLE_LP_MAIN);
+            $t_lp = Database::get_course_table(TABLE_LP_MAIN);
 
             // csv export headers
             $csv_content[] = array();
@@ -1160,7 +1160,7 @@ if (!empty($student_id)) {
             get_lang('Attempts')
         );
 
-        $t_quiz = Database :: get_course_table(TABLE_QUIZ_TEST);
+        $t_quiz = Database::get_course_table(TABLE_QUIZ_TEST);
         $sessionCondition = api_get_session_condition(
             $sessionId,
             true,

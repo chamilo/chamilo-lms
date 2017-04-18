@@ -253,7 +253,7 @@ class Thematic
         $session_id = null
     ) {
         // set current course and session
-        $tbl_thematic = Database:: get_course_table(TABLE_THEMATIC);
+        $tbl_thematic = Database::get_course_table(TABLE_THEMATIC);
         $course_info = api_get_course_info($course_code);
         $course_id = $course_info['real_id'];
 
@@ -647,7 +647,7 @@ class Thematic
                                 $session_star = api_get_session_image(api_get_session_id(), $uinfo['status']);
                             }
                         }
-                        
+
                         $return[$id]['title'] = Security::remove_XSS($data[$thematic_id][$id]['title'], STUDENT).$session_star;
                         $return[$id]['description'] = Security::remove_XSS($data[$thematic_id][$id]['description'], STUDENT);
                     }
@@ -658,7 +658,7 @@ class Thematic
             if ($no_data) {
                 $return .= '<div><em>'.get_lang('StillDoNotHaveAThematicPlan').'</em></div>';
             }
-            */            
+            */
         }
 
         return $final_return;

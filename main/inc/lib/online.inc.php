@@ -98,7 +98,7 @@ function online_logout($user_id = null, $logout_redirect = false)
     global $extAuthSource;
 
     // Database table definition
-    $tbl_track_login = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+    $tbl_track_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
     if (empty($user_id)) {
         $user_id = isset($_GET['uid']) ? intval($_GET['uid']) : 0;

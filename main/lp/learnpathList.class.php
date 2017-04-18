@@ -117,8 +117,8 @@ class LearnpathList
             // it prevents ' to be slashed and the input (done by learnpath.class.php::toggle_visibility())
             // is done using domesticate()
             $name = domesticate($row->getName());
-            $link = 'lp/lp_controller.php?action=view&lp_id=' . $row->getId() . '&id_session='.$session_id;
-            $oldLink = 'newscorm/lp_controller.php?action=view&lp_id=' . $row->getId() . '&id_session='.$session_id;
+            $link = 'lp/lp_controller.php?action=view&lp_id='.$row->getId().'&id_session='.$session_id;
+            $oldLink = 'newscorm/lp_controller.php?action=view&lp_id='.$row->getId().'&id_session='.$session_id;
 
             $sql2 = "SELECT * FROM $tbl_tool
                      WHERE
@@ -236,7 +236,7 @@ class LearnpathList
 
         $lessons = array();
         while ($row = Database::fetch_array($result)) {
-            if (api_get_item_visibility($course, 'learnpath', $row['id'],  $session_id)) {
+            if (api_get_item_visibility($course, 'learnpath', $row['id'], $session_id)) {
                 $lessons[$row['id']] = $row;
             }
         }

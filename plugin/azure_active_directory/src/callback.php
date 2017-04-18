@@ -1,6 +1,8 @@
 <?php
-require dirname(__FILE__) . '/../../../main/inc/global.inc.php';
-require_once dirname(__FILE__) . '/../../../main/auth/external_login/functions.inc.php';
+/* For license terms, see /license.txt */
+
+require __DIR__.'/../../../main/inc/global.inc.php';
+require_once __DIR__.'/../../../main/auth/external_login/functions.inc.php';
 
 if (isset($_POST['error']) || empty($_REQUEST)) {
     header('Location: ' . api_get_path(WEB_PATH) . 'index.php?logout=logout');

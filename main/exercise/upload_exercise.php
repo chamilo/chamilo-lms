@@ -354,7 +354,7 @@ function lp_upload_quiz_action_handling()
                     );
 
                     if (!empty($categoryId)) {
-                        TestCategory::add_category_for_question_id(
+                        TestCategory::addCategoryToQuestion(
                             $categoryId,
                             $question_id,
                             $courseId

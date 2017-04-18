@@ -77,7 +77,7 @@ if (!api_get_user_id() && CustomPages::enabled()) {
 if (!empty($_POST['submitAuth'])) {
     // The user has been already authenticated, we are now to find the last login of the user.
     if (isset ($_user['user_id'])) {
-        $track_login_table = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+        $track_login_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $sql = "SELECT UNIX_TIMESTAMP(login_date)
                 FROM $track_login_table
                 WHERE login_user_id = '".$_user['user_id']."'

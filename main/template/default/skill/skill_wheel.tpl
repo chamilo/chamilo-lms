@@ -405,7 +405,7 @@
         /* Generated random colour */
         /*
          function colour(d) {
-         
+
          if (d.children) {
          // There is a maximum of two children!
          var colours = d.children.map(colour),
@@ -624,7 +624,7 @@
                 <h4 class="modal-title" id="form-save-profile-title">{{ "SkillProfile" | get_lang }}</h4>
             </div>
             <div class="modal-body">
-                {{ saveProfileForm }}
+                {{ save_profile_form }}
             </div>
             <div class="modal-footer">
                 <button id="form-button-save-profile" class="btn btn-primary">

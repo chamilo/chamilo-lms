@@ -32,7 +32,7 @@ $interbreadcrumb[] = array('url' => 'languages.php', 'name' => get_lang('Platfor
  */
 function add_sub_language($original_name, $english_name, $isocode, $sublanguage_available, $parent_id)
 {
-    $tbl_admin_languages = Database:: get_main_table(TABLE_MAIN_LANGUAGE);
+    $tbl_admin_languages = Database::get_main_table(TABLE_MAIN_LANGUAGE);
     $original_name = Database::escape_string($original_name);
     $english_name = Database::escape_string($english_name);
     $isocode = Database::escape_string($isocode);
@@ -64,7 +64,7 @@ function add_sub_language($original_name, $english_name, $isocode, $sublanguage_
  */
 function check_if_language_exist($original_name, $english_name, $isocode, $sublanguage_available)
 {
-    $tbl_admin_languages = Database:: get_main_table(TABLE_MAIN_LANGUAGE);
+    $tbl_admin_languages = Database::get_main_table(TABLE_MAIN_LANGUAGE);
     $sql_original_name = 'SELECT count(*) AS count_original_name FROM ' . $tbl_admin_languages . ' WHERE original_name="' . Database::escape_string($original_name) . '" ';
     $sql_english_name = 'SELECT count(*) AS count_english_name FROM ' . $tbl_admin_languages . ' WHERE english_name="' . Database::escape_string($english_name) . '" ';
     //$sql_isocode='SELECT count(*) AS count_isocode FROM '.$tbl_admin_languages.' WHERE isocode="'.Database::escape_string($isocode).'" ';

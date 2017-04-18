@@ -13,7 +13,7 @@
  */
 $use_anonymous = true;
 require_once __DIR__.'/../inc/global.inc.php';
-$current_course_tool  = TOOL_USER;
+$current_course_tool = TOOL_USER;
 $this_section = SECTION_COURSES;
 
 // notice for unauthorized people.
@@ -41,7 +41,7 @@ $type = isset($_REQUEST['type']) ? intval($_REQUEST['type']) : STUDENT;
 
 //Can't auto unregister from a session
 if (!empty($sessionId)) {
-    $course_info['unsubscribe']  = 0;
+    $course_info['unsubscribe'] = 0;
 }
 
 /* Unregistering a user section	*/
@@ -180,7 +180,7 @@ if (api_is_allowed_to_edit(null, true)) {
                             '#',
                             get_lang('UserPicture'),
                             get_lang('OfficialCode'),
-                            get_lang('FirstName') . ', ' . get_lang('LastName'),
+                            get_lang('FirstName').', '.get_lang('LastName'),
                             get_lang('Email'),
                             get_lang('Phone')
                         );
@@ -189,7 +189,7 @@ if (api_is_allowed_to_edit(null, true)) {
                             '#',
                             get_lang('UserPicture'),
                             get_lang('OfficialCode'),
-                            get_lang('LastName') . ', ' . get_lang('FirstName'),
+                            get_lang('LastName').', '.get_lang('FirstName'),
                             get_lang('Email'),
                             get_lang('Phone')
                         );
@@ -214,7 +214,7 @@ if (api_is_allowed_to_edit(null, true)) {
                     if (api_is_multiple_url_enabled()) {
                         $sql .= ' , '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER).' au ';
                     }
-                    $sql .=" WHERE c_id = '$courseId' AND session_course_user.user_id = user.user_id ";
+                    $sql .= " WHERE c_id = '$courseId' AND session_course_user.user_id = user.user_id ";
                     $sql .= ' AND session_id = '.$sessionId;
 
                     if (api_is_multiple_url_enabled()) {
@@ -262,7 +262,7 @@ if (api_is_allowed_to_edit(null, true)) {
                                     $counter,
                                     $user_image,
                                     $user['official_code'],
-                                    $user['firstname'] . ', ' . $user['lastname'],
+                                    $user['firstname'].', '.$user['lastname'],
                                     $user['email'],
                                     $user['phone']
                                 );
@@ -271,7 +271,7 @@ if (api_is_allowed_to_edit(null, true)) {
                                     $counter,
                                     $user_image,
                                     $user['official_code'],
-                                    $user['lastname'] . ', ' . $user['firstname'],
+                                    $user['lastname'].', '.$user['firstname'],
                                     $user['email'],
                                     $user['phone']
                                 );
@@ -287,7 +287,7 @@ if (api_is_allowed_to_edit(null, true)) {
 
                 if ($sessionId == 0) {
                     // users directly subscribed to the course
-                    $table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+                    $table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
                     $sql = "SELECT DISTINCT
 					            user.user_id, ".($is_western_name_order ? "user.firstname, user.lastname" : "user.lastname, user.firstname").",
 					            user.username,
@@ -350,7 +350,7 @@ if (api_is_allowed_to_edit(null, true)) {
                                     $counter,
                                     $user_image,
                                     $user['official_code'],
-                                    $user['firstname'] . ', ' . $user['lastname'],
+                                    $user['firstname'].', '.$user['lastname'],
                                     $user['email'],
                                     $user['phone']
                                 );
@@ -359,7 +359,7 @@ if (api_is_allowed_to_edit(null, true)) {
                                     $counter,
                                     $user_image,
                                     $user['official_code'],
-                                    $user['lastname'] . ', ' . $user['firstname'],
+                                    $user['lastname'].', '.$user['firstname'],
                                     $user['email'],
                                     $user['phone']
                                 );
@@ -530,7 +530,7 @@ if (api_is_allowed_to_edit(null, true)) {
 
     // Actions column
     $table->set_header($header_nr++, get_lang('Action'), false);
-    $table->set_column_filter($header_nr-1, 'modify_filter');
+    $table->set_column_filter($header_nr - 1, 'modify_filter');
 
     if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true') {
         $table->set_form_actions(array('unsubscribe' => get_lang('Unreg')), 'user');
@@ -538,7 +538,7 @@ if (api_is_allowed_to_edit(null, true)) {
 } else {
     if ($course_info['unsubscribe'] == 1) {
         $table->set_header($header_nr++, get_lang('Action'), false);
-        $table->set_column_filter($header_nr-1, 'modify_filter');
+        $table->set_column_filter($header_nr - 1, 'modify_filter');
     }
 }
 
@@ -590,19 +590,19 @@ if (api_is_allowed_to_edit(null, true)) {
     echo '<div class="col-md-6">';
     echo $icon;
     $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&format=csv&type='.$type.'">'.
-        Display::return_icon('export_csv.png', get_lang('ExportAsCSV'),'',ICON_SIZE_MEDIUM).'</a> ';
+        Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), '', ICON_SIZE_MEDIUM).'</a> ';
     $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&format=xls&type='.$type.'">'.
-        Display::return_icon('export_excel.png', get_lang('ExportAsXLS'),'',ICON_SIZE_MEDIUM).'</a> ';
+        Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), '', ICON_SIZE_MEDIUM).'</a> ';
 
     if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true' ||
         api_is_platform_admin()
     ) {
         $actions .= '<a href="user_import.php?'.api_get_cidreq().'&action=import">'.
-            Display::return_icon('import_csv.png', get_lang('ImportUsersToACourse'),'',ICON_SIZE_MEDIUM).'</a> ';
+            Display::return_icon('import_csv.png', get_lang('ImportUsersToACourse'), '', ICON_SIZE_MEDIUM).'</a> ';
     }
 
     $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&format=pdf&type='.$type.'">'.
-        Display::return_icon('pdf.png', get_lang('ExportToPDF'),'',ICON_SIZE_MEDIUM).'</a> ';
+        Display::return_icon('pdf.png', get_lang('ExportToPDF'), '', ICON_SIZE_MEDIUM).'</a> ';
     echo $actions;
 
     echo '</div>';
@@ -897,7 +897,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
                 $userInfo = api_get_user_info($user_id);
                 $userPicture = $userInfo['avatar'];
 
-                $photo= '<img src="'.$userPicture.'" alt="'.$userInfo['complete_name'].'" width="22" height="22" title="'.$userInfo['complete_name'].'" />';
+                $photo = '<img src="'.$userPicture.'" alt="'.$userInfo['complete_name'].'" width="22" height="22" title="'.$userInfo['complete_name'].'" />';
 
                 $temp[] = $user_id;
                 $temp[] = $photo;
@@ -1022,7 +1022,7 @@ function modify_filter($user_id, $row, $data)
         if (api_get_setting('allow_user_course_subscription_by_course_admin') === 'true' or api_is_platform_admin()) {
             // unregister
             if ($user_id != $current_user_id || api_is_platform_admin()) {
-                $result .= '<a class="btn btn-small btn-danger" href="'.api_get_self().'?'.api_get_cidreq().'&type='.$type.'&unregister=yes&user_id='.$user_id.'" title="'.get_lang('Unreg').' " onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;">'.
+                $result .= '<a class="btn btn-small btn-danger" href="'.api_get_self().'?'.api_get_cidreq().'&type='.$type.'&unregister=yes&user_id='.$user_id.'" title="'.get_lang('Unreg').' " onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).'\')) return false;">'.
                     get_lang('Unreg').'</a>&nbsp;';
             }
         }
@@ -1030,7 +1030,7 @@ function modify_filter($user_id, $row, $data)
         // Show buttons for unsubscribe
         if ($course_info['unsubscribe'] == 1) {
             if ($user_id == $current_user_id) {
-                $result .= '<a class="btn btn-small btn-danger" href="'.api_get_self().'?'.api_get_cidreq().'&type='.$type.'&unregister=yes&user_id='.$user_id.'" title="'.get_lang('Unreg').' " onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;">'.
+                $result .= '<a class="btn btn-small btn-danger" href="'.api_get_self().'?'.api_get_cidreq().'&type='.$type.'&unregister=yes&user_id='.$user_id.'" title="'.get_lang('Unreg').' " onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).'\')) return false;">'.
                     get_lang('Unreg').'</a>&nbsp;';
             }
         }

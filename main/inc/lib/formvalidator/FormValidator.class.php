@@ -122,6 +122,7 @@ EOT;
     }
 
     /**
+     * @todo this function should be added in the element class
      * @return string
      */
     public function getDefaultElementTemplate()
@@ -441,6 +442,29 @@ EOT;
             $createElement
         );
     }
+
+    /**
+     * Returns a move style button
+     * @param string $label Text appearing on the button
+     * @param string $name Element name (for form treatment purposes)
+     * @param bool $createElement Whether to use the create or add method
+     *
+     * @return HTML_QuickForm_button
+     */
+    public function addButtonMove($label, $name = 'submit', $createElement = false)
+    {
+        return $this->addButton(
+            $name,
+            $label,
+            'arrow-circle-right',
+            'primary',
+            null,
+            null,
+            array(),
+            $createElement
+        );
+    }
+
 
     /**
      * Returns a button with the primary color and a paper-plane icon

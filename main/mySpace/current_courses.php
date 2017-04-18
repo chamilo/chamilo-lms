@@ -34,11 +34,11 @@ if (!empty($my_courses)) {
 		}
 
 		$teachers = CourseManager::get_teacher_list_from_course_code($course_code);
-		$teacher_list =  array();
+		$teacher_list = array();
 
 		if (!empty($teachers)) {
-			foreach($teachers as $teacher) {
-				$teacher_list[]= $teacher['firstname'].' '.$teacher['lastname'];
+			foreach ($teachers as $teacher) {
+				$teacher_list[] = $teacher['firstname'].' '.$teacher['lastname'];
 			}
 		}
 
@@ -54,12 +54,12 @@ if (!empty($my_courses)) {
 			$students[] = $student['user_id'];
 		}
 
-		$t_lp 	= Database :: get_course_table(TABLE_LP_MAIN);
+		$t_lp = Database::get_course_table(TABLE_LP_MAIN);
 		$sql_lp = "SELECT lp.name, lp.id FROM $t_lp lp
 				   WHERE c_id = $course_id AND lp.session_id = 0";
 		$rs_lp 	= Database::query($sql_lp);
-		$t_lpi 	= Database :: get_course_table(TABLE_LP_ITEM);
-		$t_news = Database :: get_course_table(TABLE_ANNOUNCEMENT);
+		$t_lpi 	= Database::get_course_table(TABLE_LP_ITEM);
+		$t_news = Database::get_course_table(TABLE_ANNOUNCEMENT);
 
 		$total_tools_list = Tracking::get_tools_most_used_by_course(
 			$course_id,
@@ -67,7 +67,7 @@ if (!empty($my_courses)) {
 		);
 
 		$total_tools = 0;
-		foreach($total_tools_list as $tool) {
+		foreach ($total_tools_list as $tool) {
 			$total_tools += $tool['count_access_tool'];
 		}
 
@@ -93,16 +93,16 @@ if (!empty($my_courses)) {
 				if (!empty($students)) {
 					foreach ($students  as $student_id) {
 						$avg_student_progress   = Tracking::get_avg_student_progress($student_id, $course_code, array($lp_id), $session_id);
-						$myavg_temp 			= Tracking::get_avg_student_score($student_id, $course_code, array($lp_id), $session_id);
+						$myavg_temp = Tracking::get_avg_student_score($student_id, $course_code, array($lp_id), $session_id);
 						$avg_progress_in_course = Tracking::get_avg_student_progress($student_id, $course_code, array($lp_id), $session_id);
 
 						if (intval($avg_progress_in_course) == 100) {
 							$count_students_complete_all_activities++;
 						}
 						if (intval($avg_progress_in_course) > 0 && intval($avg_progress_in_course) <= 50) {
-							$count_students_complete_all_activities_at_50 ++;
+							$count_students_complete_all_activities_at_50++;
 						}
-						$total_average_progress +=$avg_progress_in_course;
+						$total_average_progress += $avg_progress_in_course;
 
 						$time_spent = Tracking::get_time_spent_on_the_course($student_id, $course_id, $session_id);
 						$total_time_spent += $time_spent;
@@ -139,7 +139,7 @@ if (!empty($my_courses)) {
 						    ORDER BY item_type";
 				$res_lpi = Database::query($sql_lpi);
 				while ($row_lpi = Database::fetch_array($res_lpi)) {
-					switch($row_lpi['item_type']) {
+					switch ($row_lpi['item_type']) {
 						case 'document':
 							$array[$i]['learnpath_docs']++;
 							break;
@@ -171,10 +171,10 @@ if (!empty($my_courses)) {
 
 				if (!empty($student_count)) {
 					$array[$i]['count_students_accessing'] = $count_students_accessing;
-					$array[$i]['count_students_accessing_percentage'] = round($count_students_accessing / $student_count *100 , 0);
+					$array[$i]['count_students_accessing_percentage'] = round($count_students_accessing / $student_count * 100, 0);
 					$array[$i]['count_students_complete_all_activities_at_50'] = $count_students_complete_all_activities;
-					$array[$i]['count_students_complete_all_activities'] = round($count_students_complete_all_activities / $student_count *100 , 0);;
-					$array[$i]['average_percentage_activities_completed_per_student'] = round($count_students_complete_all_activities/$student_count*100,2);
+					$array[$i]['count_students_complete_all_activities'] = round($count_students_complete_all_activities / $student_count * 100, 0); ;
+					$array[$i]['average_percentage_activities_completed_per_student'] = round($count_students_complete_all_activities / $student_count * 100, 2);
 					$array[$i]['total_time_spent'] = 0;
 					$array[$i]['average_time_spent_per_student'] = 0;
 
@@ -245,7 +245,7 @@ if (isset($_GET['export'])) {
 	exit;
 }
 
-$interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('MySpace'));
+$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('MySpace'));
 
 Display::display_header(get_lang('CurrentCourses'));
 

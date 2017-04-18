@@ -1502,7 +1502,7 @@ function api_get_user_info(
         }
     }
 
-    $sql = "SELECT * FROM " . Database:: get_main_table(TABLE_MAIN_USER) . "
+    $sql = "SELECT * FROM " . Database::get_main_table(TABLE_MAIN_USER) . "
             WHERE id = $user_id";
     $result = Database::query($sql);
     if (Database::num_rows($result) > 0) {
@@ -1567,7 +1567,7 @@ function api_get_user_info_from_username($username = '')
     }
     $username = trim($username);
 
-    $sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)."
+    $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_USER)."
             WHERE username='".Database::escape_string($username)."'";
     $result = Database::query($sql);
     if (Database::num_rows($result) > 0) {
@@ -1587,7 +1587,7 @@ function api_get_user_info_from_email($email = '')
     if (empty($email)) {
         return false;
     }
-    $sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)."
+    $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_USER)."
             WHERE email ='".Database::escape_string($email)."' LIMIT 1";
     $result = Database::query($sql);
     if (Database::num_rows($result) > 0) {
@@ -4715,7 +4715,7 @@ function copy_folder_course_session(
     $document,
     $source_course_id
 ) {
-    $table = Database :: get_course_table(TABLE_DOCUMENT);
+    $table = Database::get_course_table(TABLE_DOCUMENT);
     $session_id = intval($session_id);
     $source_course_id = intval($source_course_id);
 
@@ -5009,7 +5009,7 @@ function api_get_status_langvars() {
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 */
 function api_get_settings_options($var) {
-    $table_settings_options = Database :: get_main_table(TABLE_MAIN_SETTINGS_OPTIONS);
+    $table_settings_options = Database::get_main_table(TABLE_MAIN_SETTINGS_OPTIONS);
     $var = Database::escape_string($var);
     $sql = "SELECT * FROM $table_settings_options
             WHERE variable = '$var'
@@ -5491,7 +5491,7 @@ function api_is_course_visible_for_user($userid = null, $cid = null) {
         return true;
     }
 
-    $tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+    $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
     $sql = "SELECT
                 is_tutor, status
@@ -5561,7 +5561,7 @@ function api_is_course_visible_for_user($userid = null, $cid = null) {
                 $is_courseCoach = true;
                 $is_sessionAdmin = false;
 
-                $tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
+                $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 
                 $sql = "SELECT status FROM $tbl_user
                         WHERE user_id = $userid
@@ -5703,7 +5703,7 @@ function api_request_uri() {
  * @return int access_url_id of the current Chamilo Installation
  */
 function api_get_current_access_url_id() {
-    $access_url_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
+    $access_url_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
     $path = Database::escape_string(api_get_path(WEB_PATH));
     $sql = "SELECT id FROM $access_url_table WHERE url = '".$path."'";
     $result = Database::query($sql);
@@ -5725,8 +5725,8 @@ function api_get_current_access_url_id() {
  */
 function api_get_access_url_from_user($user_id) {
     $user_id = intval($user_id);
-    $table_url_rel_user = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-    $table_url          = Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
+    $table_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+    $table_url          = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
     $sql = "SELECT access_url_id
             FROM $table_url_rel_user url_rel_user
             INNER JOIN $table_url u
@@ -5748,7 +5748,7 @@ function api_get_access_url_from_user($user_id) {
  */
 function api_get_status_of_user_in_course($user_id, $courseId)
 {
-    $tbl_rel_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+    $tbl_rel_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
     if (!empty($user_id) && !empty($courseId)) {
         $user_id = intval($user_id);
         $courseId = intval($courseId);
@@ -7188,7 +7188,7 @@ function api_get_user_info_from_official_code($officialCode)
     if (empty($officialCode)) {
         return false;
     }
-    $sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)."
+    $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_USER)."
             WHERE official_code ='".Database::escape_string($officialCode)."'";
     $result = Database::query($sql);
     if (Database::num_rows($result) > 0) {
@@ -7627,7 +7627,7 @@ function api_get_supported_image_extensions($supportVectors = true)
  * @todo the $_settings should be reloaded here. => write api function for this and use this in global.inc.php also.
  */
 function api_register_campus($listCampus = true) {
-    $tbl_settings = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+    $tbl_settings = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 
     $sql = "UPDATE $tbl_settings SET selected_value='true' WHERE variable='registered'";
     Database::query($sql);

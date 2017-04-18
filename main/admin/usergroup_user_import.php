@@ -72,7 +72,7 @@ function save_data($users_classes, $deleteUsersNotInList = false) {
     global $purification_option_for_usernames;
 
     // Table definitions.
-    $user_table = Database :: get_main_table(TABLE_MAIN_USER);
+    $user_table = Database::get_main_table(TABLE_MAIN_USER);
 
     $usergroup = new UserGroup();
 

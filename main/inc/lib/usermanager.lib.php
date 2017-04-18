@@ -879,7 +879,7 @@ class UserManager
      */
     public static function update_openid($user_id, $openid)
     {
-        $table_user = Database:: get_main_table(TABLE_MAIN_USER);
+        $table_user = Database::get_main_table(TABLE_MAIN_USER);
         if ($user_id != strval(intval($user_id))) {
             return false;
         }
@@ -1564,7 +1564,7 @@ class UserManager
 
         $id = intval($id);
         if (empty($userInfo)) {
-            $user_table = Database:: get_main_table(TABLE_MAIN_USER);
+            $user_table = Database::get_main_table(TABLE_MAIN_USER);
             $sql = "SELECT email, picture_uri FROM $user_table
                     WHERE id=".$id;
             $res = Database::query($sql);
@@ -1631,7 +1631,7 @@ class UserManager
         $id = intval($id);
 
         if (empty($userInfo)) {
-            $user_table = Database:: get_main_table(TABLE_MAIN_USER);
+            $user_table = Database::get_main_table(TABLE_MAIN_USER);
             $sql = "SELECT email, picture_uri FROM $user_table WHERE id=$id";
             $res = Database::query($sql);
 

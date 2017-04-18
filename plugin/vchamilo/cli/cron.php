@@ -1,4 +1,5 @@
 <?php
+/* For license terms, see /license.txt */
 exit;
 /**
  * This script should be called by a properly set cron process on your server.
@@ -22,7 +23,7 @@ define('CHAMILO_INTERNAL', true);
 global $CLI_VCHAMILO_PRECHECK;
 
 $CLI_VCHAMILO_PRECHECK = true; // force first config to be minimal
-require(dirname(dirname(dirname(dirname(__FILE__)))).'/main/inc/conf/configuration.php'); // get boot config
+require(dirname(dirname(dirname(__DIR__))).'/main/inc/conf/configuration.php'); // get boot config
 require_once($_configuration['root_sys'].'plugin/vchamilo/cli/clilib.php');       // cli only functions
 
 // Ensure errors are well explained

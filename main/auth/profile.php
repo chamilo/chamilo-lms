@@ -91,7 +91,7 @@ EOF;
 }
 
 $tool_name = is_profile_editable() ? get_lang('ModifProfile') : get_lang('ViewProfile');
-$table_user = Database :: get_main_table(TABLE_MAIN_USER);
+$table_user = Database::get_main_table(TABLE_MAIN_USER);
 
 /*
  * Get initial values for all fields.
@@ -427,7 +427,7 @@ function check_user_email($email)
     if ($user_id != strval(intval($user_id)) || empty($email)) {
         return false;
     }
-    $table_user = Database :: get_main_table(TABLE_MAIN_USER);
+    $table_user = Database::get_main_table(TABLE_MAIN_USER);
     $email = Database::escape_string($email);
     $sql = "SELECT * FROM $table_user
             WHERE user_id='".$user_id."' AND email='".$email."'";

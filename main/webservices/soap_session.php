@@ -4,9 +4,8 @@
  * Configures the WSSession SOAP service
  * @package chamilo.webservices
  */
-
-require_once(dirname(__FILE__).'/webservice_session.php');
-require_once(dirname(__FILE__).'/soap.php');
+require_once __DIR__.'/webservice_session.php';
+require_once __DIR__.'/soap.php';
 
 $s = WSSoapServer::singleton();
 

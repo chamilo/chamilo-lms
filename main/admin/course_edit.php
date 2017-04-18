@@ -30,12 +30,12 @@ $interbreadcrumb[] = array("url" => 'index.php', "name" => get_lang('PlatformAdm
 $interbreadcrumb[] = array("url" => "course_list.php", "name" => get_lang('CourseList'));
 
 // Get all course categories
-$table_user = Database :: get_main_table(TABLE_MAIN_USER);
+$table_user = Database::get_main_table(TABLE_MAIN_USER);
 $course_code = $courseInfo['code'];
 $courseId = $courseInfo['real_id'];
 
 // Get course teachers
-$table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+$table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
 $sql = "SELECT user.user_id,lastname,firstname
         FROM $table_user as user,$table_course_user as course_user
@@ -52,7 +52,7 @@ while ($obj = Database::fetch_object($res)) {
 
 // Get all possible teachers without the course teachers
 if (api_is_multiple_url_enabled()) {
-    $access_url_rel_user_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+    $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
     $sql = "SELECT u.user_id,lastname,firstname
             FROM $table_user as u
             INNER JOIN $access_url_rel_user_table url_rel_user

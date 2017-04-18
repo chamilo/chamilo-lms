@@ -1,6 +1,6 @@
 <?php
-
-require_once dirname(__FILE__) . '/register_course_widget.class.php';
+/* For license terms, see /license.txt */
+require_once __DIR__.'/register_course_widget.class.php';
 
 /**
  * Search course widget.

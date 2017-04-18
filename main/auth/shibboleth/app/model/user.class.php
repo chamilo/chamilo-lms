@@ -2,7 +2,7 @@
 
 namespace Shibboleth;
 
-require_once dirname(__FILE__) . '/scaffold/user.class.php';
+require_once __DIR__.'/scaffold/user.class.php';
 
 /**
  * A Chamilo user. Model for the User table.

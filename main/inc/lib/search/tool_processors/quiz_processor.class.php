@@ -5,8 +5,8 @@
  *
  * @package chamilo.include.search
  */
-include_once dirname(__FILE__).'/../../../global.inc.php';
-require_once dirname(__FILE__).'/search_processor.class.php';
+include_once __DIR__.'/../../../global.inc.php';
+require_once __DIR__.'/search_processor.class.php';
 
 /**
  * Process exercises before pass it to search listing scripts

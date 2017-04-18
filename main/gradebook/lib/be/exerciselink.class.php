@@ -51,8 +51,8 @@ class ExerciseLink extends AbstractLink
 
         $result = Database::query($sql);
         $cats = array();
-        while ($data=Database::fetch_array($result)) {
-            $cats[] = array ($data['id'], $data['title']);
+        while ($data = Database::fetch_array($result)) {
+            $cats[] = array($data['id'], $data['title']);
         }
 
         return $cats;
@@ -124,8 +124,8 @@ class ExerciseLink extends AbstractLink
         $cats = array();
         if (isset($result)) {
             if (Database::num_rows($result) > 0) {
-                while ($data=Database::fetch_array($result)) {
-                    $cats[] = array ($data['id'], $data['title']);
+                while ($data = Database::fetch_array($result)) {
+                    $cats[] = array($data['id'], $data['title']);
                 }
             }
         }
@@ -182,9 +182,9 @@ class ExerciseLink extends AbstractLink
                 WHERE
                     session_id = $session_id AND
                     c_id = $course_id AND
-                    exe_exo_id   = ".(int)$this->get_ref_id();
+                    exe_exo_id   = ".(int) $this->get_ref_id();
         $result = Database::query($sql);
-        $number=Database::fetch_row($result);
+        $number = Database::fetch_row($result);
 
         return ($number[0] != 0);
     }
@@ -270,7 +270,7 @@ class ExerciseLink extends AbstractLink
         } else {
             // all students -> get average
             // normal way of getting the info
-            $students = array();  // user list, needed to make sure we only
+            $students = array(); // user list, needed to make sure we only
             // take first attempts into account
             $student_count = 0;
             $sum = 0;
@@ -305,7 +305,7 @@ class ExerciseLink extends AbstractLink
                         if (empty($count)) {
                             return array(0, $weight);
                         }
-                        return array($sumResult/$count , $weight);
+                        return array($sumResult / $count, $weight);
                         break;
                     case 'ranking':
                         return AbstractLink::getCurrentUserRanking($stud_id, $students);
@@ -385,7 +385,7 @@ class ExerciseLink extends AbstractLink
                 FROM '.$this->get_exercise_table().'
                 WHERE 
                     c_id = '.$this->course_id.' AND 
-                    id = '.(int)$this->get_ref_id().' ';
+                    id = '.(int) $this->get_ref_id().' ';
         $result = Database::query($sql);
         $number = Database::fetch_row($result);
 

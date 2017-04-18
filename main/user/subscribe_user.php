@@ -751,7 +751,7 @@ function active_filter($active, $url_params, $row)
 function search_additional_profile_fields($keyword)
 {
 	// database table definitions
-	$table_user_field_options = Database :: get_main_table(TABLE_EXTRA_FIELD_OPTIONS);
+	$table_user_field_options = Database::get_main_table(TABLE_EXTRA_FIELD_OPTIONS);
 	$table_user_field_values = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
     $tableExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
 	$table_user = Database::get_main_table(TABLE_MAIN_USER);

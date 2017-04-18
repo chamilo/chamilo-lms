@@ -14,12 +14,12 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
 // Database table definitions
-$table_survey = Database:: get_course_table(TABLE_SURVEY);
-$table_survey_question = Database:: get_course_table(TABLE_SURVEY_QUESTION);
-$table_survey_question_option = Database:: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
-$table_course = Database:: get_main_table(TABLE_MAIN_COURSE);
-$table_user = Database:: get_main_table(TABLE_MAIN_USER);
-$table_survey_invitation = Database:: get_course_table(TABLE_SURVEY_INVITATION);
+$table_survey = Database::get_course_table(TABLE_SURVEY);
+$table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
+$table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
+$table_course = Database::get_main_table(TABLE_MAIN_COURSE);
+$table_user = Database::get_main_table(TABLE_MAIN_USER);
+$table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
 
 $course_id = api_get_course_int_id();
 $userId = api_get_user_id();

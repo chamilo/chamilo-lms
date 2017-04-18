@@ -44,7 +44,7 @@ abstract class ChamiloForm
         return $this->_form->display();
     }
 
-    public function definition_after_data(){
+    public function definition_after_data() {
     }
 
     public function return_form()
@@ -64,9 +64,9 @@ abstract class ChamiloForm
      * @param bool $slashed true means return data with addslashes applied
      * @return object submitted data; NULL if not valid or not submitted
      */
-    public function get_data($slashed=true)
+    public function get_data($slashed = true)
     {
-        $cform =& $this->_form;
+        $cform = & $this->_form;
 
         if ($this->is_submitted() and $this->is_validated()) {
             $data = $cform->exportValues(null, $slashed);
@@ -74,7 +74,7 @@ abstract class ChamiloForm
             if (empty($data)) {
                 return null;
             } else {
-                return (object)$data;
+                return (object) $data;
             }
         } else {
             return null;
@@ -87,9 +87,9 @@ abstract class ChamiloForm
      * @param bool $slashed true means return data with addslashes applied
      * @return object submitted data; NULL if not submitted
      */
-    public function get_submitted_data($slashed=true)
+    public function get_submitted_data($slashed = true)
     {
-        $cform =& $this->_form;
+        $cform = & $this->_form;
 
         if ($this->is_submitted()) {
             $data = $cform->exportValues(null, $slashed);
@@ -97,7 +97,7 @@ abstract class ChamiloForm
             if (empty($data)) {
                 return null;
             } else {
-                return (object)$data;
+                return (object) $data;
             }
         } else {
             return null;
@@ -121,10 +121,10 @@ abstract class ChamiloForm
      */
     public function is_cancelled()
     {
-        $cform =& $this->_form;
-        if ($cform->isSubmitted()){
-            foreach ($cform->_cancelButtons as $cancelbutton){
-                if (optional_param($cancelbutton, 0, PARAM_RAW)){
+        $cform = & $this->_form;
+        if ($cform->isSubmitted()) {
+            foreach ($cform->_cancelButtons as $cancelbutton) {
+                if (optional_param($cancelbutton, 0, PARAM_RAW)) {
                     return true;
                 }
             }
@@ -168,12 +168,12 @@ abstract class ChamiloForm
      *
      * @return bool true if form data valid
      */
-    public function validate_defined_fields($validateonnosubmit=false)
+    public function validate_defined_fields($validateonnosubmit = false)
     {
         static $validated = null; // one validation is enough
-        $cform =& $this->_form;
+        $cform = & $this->_form;
 
-        if ($this->no_submit_button_pressed() && empty($validateonnosubmit)){
+        if ($this->no_submit_button_pressed() && empty($validateonnosubmit)) {
             return false;
         } elseif ($validated === null) {
             $internal_val = $cform->validate();
@@ -191,7 +191,7 @@ abstract class ChamiloForm
 
             $data = $cform->exportValues(null, true);
             $chamilo_val = $this->validation($data, $files);
-            if ((is_array($chamilo_val) && count($chamilo_val)!==0)) {
+            if ((is_array($chamilo_val) && count($chamilo_val) !== 0)) {
                 // non-empty array means errors
                 foreach ($chamilo_val as $element => $msg) {
                     $cform->setElementError($element, $msg);
@@ -217,7 +217,7 @@ abstract class ChamiloForm
             return $nosubmit;
         }
 
-        $cform =& $this->_form;
+        $cform = & $this->_form;
         $nosubmit = false;
         if (!$this->is_submitted()) {
             return false;
@@ -246,7 +246,7 @@ abstract class ChamiloForm
     public function set_data($default_values, $slashed = false)
     {
         if (is_object($default_values)) {
-            $default_values = (array)$default_values;
+            $default_values = (array) $default_values;
         }
         $filter = $slashed ? 'stripslashes' : NULL;
         $this->_form->setDefaults($default_values, $filter);
@@ -266,14 +266,14 @@ abstract class ChamiloForm
         }
 
         $errors = array();
-        $mform =& $this->_form;
+        $mform = & $this->_form;
 
         // check the files
         $status = $this->_upload_manager->preprocess_files();
 
         // now check that we really want each file
         foreach ($_FILES as $elname => $file) {
-            if ($mform->elementExists($elname) and $mform->getElementType($elname)=='file') {
+            if ($mform->elementExists($elname) and $mform->getElementType($elname) == 'file') {
                 $required = $mform->isElementRequired($elname);
                 if (!empty($this->_upload_manager->files[$elname]['uploadlog']) &&
                     empty($this->_upload_manager->files[$elname]['clear'])

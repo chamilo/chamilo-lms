@@ -28,11 +28,11 @@ $server->wsdl->addComplexType(
         'all',
         '',
         array(
-          'name'=>'code'  , 'type'=>'xsd:string',
-          'name'=>'title'  , 'type'=>'xsd:string',
-          'name'=>'url'    , 'type'=>'xsd:string',
+          'name'=>'code', 'type'=>'xsd:string',
+          'name'=>'title', 'type'=>'xsd:string',
+          'name'=>'url', 'type'=>'xsd:string',
           'name'=>'teacher', 'type'=>'xsd:string',
-          'name'=>'language','type'=>'xsd:string',
+          'name'=>'language', 'type'=>'xsd:string',
         )
 );
 
@@ -51,15 +51,15 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('WSCourseList',         // method name
+$server->register('WSCourseList', // method name
     array('username' => 'xsd:string',
           'signature' => 'xsd:string',
-          'visibilities' => 'xsd:string'),      // input parameters
-    array('return' => 'xsd:Array'),             // output parameters
-    'urn:WSCourseList',                         // namespace
-    'urn:WSCourseList#WSCourseList',      // soapaction
-    'rpc',                                      // style
-    'encoded',                                  // use
+          'visibilities' => 'xsd:string'), // input parameters
+    array('return' => 'xsd:Array'), // output parameters
+    'urn:WSCourseList', // namespace
+    'urn:WSCourseList#WSCourseList', // soapaction
+    'rpc', // style
+    'encoded', // use
     'This service returns a list of courses'    // documentation
 );
 

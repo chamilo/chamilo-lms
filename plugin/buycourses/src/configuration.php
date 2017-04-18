@@ -26,7 +26,7 @@ $courses = $plugin->getCoursesForConfiguration();
 
 // breadcrumbs
 $interbreadcrumb[] = [
-    'url' => api_get_path(WEB_PLUGIN_PATH) . 'buycourses/index.php',
+    'url' => api_get_path(WEB_PLUGIN_PATH).'buycourses/index.php',
     'name' => $plugin->get_lang('plugin_title')
 ];
 

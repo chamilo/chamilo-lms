@@ -4821,9 +4821,9 @@ div#chat-remote-video video {
 .grid-courses .items .title{
     line-height: 1.4;
     padding: 0px;
-    font-size: 17px;
+    font-size: 14px;
     font-weight: bold;
-    height: 42px;
+    min-height: 42px;
     margin: 0;
 }
 .grid-courses .items .image .black-shadow {
@@ -6712,8 +6712,12 @@ input.form-control[type="color"] {
         text-align: right;
     }
     .actions .row .text-right a{
-      margin-left: 10px;
-      margin-right: 0;
+        margin-left: 10px;
+        margin-right: 0;
+    }
+
+    .section-catalog .grid-courses .col-sm-6:nth-child(2n+1) {
+        clear: left;
     }
 }
 
@@ -6721,6 +6725,13 @@ input.form-control[type="color"] {
 @media (min-width: 992px) {
     div.navbar-collapse {
         padding-left: 0;
+    }
+
+    .section-catalog .grid-courses .col-sm-6:nth-child(2n+1) {
+        clear: none;
+    }
+    .section-catalog .grid-courses .col-md-3:nth-child(4n+1) {
+        clear: left;
     }
 }
 

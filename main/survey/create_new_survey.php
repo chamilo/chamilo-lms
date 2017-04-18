@@ -100,7 +100,7 @@ if ($_GET['action'] == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
 $form = new FormValidator(
     'survey',
     'post',
-    api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&survey_id='.$survey_id. '&' . api_get_cidreq()
+    api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&survey_id='.$survey_id.'&'.api_get_cidreq()
 );
 
 $form->addElement('header', $tool_name);
@@ -216,7 +216,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit' && !empty($survey_id)) {
             foreach ($field_list as $key => & $field) {
                 if ($field['visibility'] == 1) {
                     $form->addElement('checkbox', 'profile_'.$key, ' ', '&nbsp;&nbsp;'.$field['name']);
-                    $input_name_list.= 'profile_'.$key.',';
+                    $input_name_list .= 'profile_'.$key.',';
                 }
             }
 

@@ -16,7 +16,7 @@ $coordinates = $_GET['coord'];
 $objExercise = Session::read('objExercise');
 $exerciseId = $objExercise->selectId();
 // Save clicking order
-$answerOrderId = count($_SESSION['exerciseResult'][$questionId]['ids'])+1;
+$answerOrderId = count($_SESSION['exerciseResult'][$questionId]['ids']) + 1;
 if ($_GET['answerId'] == "0") {
     // click is NOT on a hotspot
     $hit = 0;
@@ -24,18 +24,18 @@ if ($_GET['answerId'] == "0") {
 } else {
     // user clicked ON a hotspot
     $hit = 1;
-    $answerId = api_substr($_GET['answerId'],22,2);
+    $answerId = api_substr($_GET['answerId'], 22, 2);
 	// Save into session
 	$_SESSION['exerciseResult'][$questionId][$answerId] = $hit;
 }
 //round-up the coordinates
-$coords = explode('/',$coordinates);
+$coords = explode('/', $coordinates);
 $coordinates = '';
 foreach ($coords as $coord) {
-    list($x,$y) = explode(';',$coord);
+    list($x, $y) = explode(';', $coord);
     $coordinates .= round($x).';'.round($y).'/';
 }
-$coordinates = substr($coordinates,0,-1);
+$coordinates = substr($coordinates, 0, -1);
 
 $TBL_TRACK_E_HOTSPOT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
 // Save into db
@@ -45,7 +45,7 @@ $params = [
     'quiz_id' => $exerciseId,
     'question_id' => $questionId,
     'answer_id' =>  $answerId,
-    'correct' => $hit ,
+    'correct' => $hit,
     'coordinate' => $coordinates
 ];
 // Save insert id into session if users changes answer.

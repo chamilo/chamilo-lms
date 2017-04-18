@@ -24,8 +24,8 @@ class SetupThemeListener {
 
     function __construct($manager, $cssBase = null, $lteAdmin = null)
     {
-        $this->cssBase  = $cssBase?:'bundles/avanzuadmintheme/';
-        $this->lteAdmin = $lteAdmin?:'vendor/AdminLTE/css/';
+        $this->cssBase  = $cssBase ?: 'bundles/avanzuadmintheme/';
+        $this->lteAdmin = $lteAdmin ?: 'vendor/AdminLTE/css/';
         $this->manager  = $manager;
     }
 
@@ -41,7 +41,7 @@ class SetupThemeListener {
         $mng->registerStyle('datatables', $css.'/datatables/dataTables.bootstrap.css', array('bootstrap'));
         $mng->registerStyle('fontawesome', $css.'/font-awesome.css');
         $mng->registerStyle('ionicons', $css.'/ionicons.css');
-        $mng->registerStyle('admin-lte', $css.'/AdminLTE.css', array('bootstrap-slider', 'fontawesome', 'ionicons','datatables'));
+        $mng->registerStyle('admin-lte', $css.'/AdminLTE.css', array('bootstrap-slider', 'fontawesome', 'ionicons', 'datatables'));
         $mng->registerStyle('bs-colorpicker', $css.'/colorpicker/bootstrap-colorpicker.css', array('admin-lte'));
         $mng->registerStyle('daterangepicker', $css.'/daterangepicker/daterangepicker-bs3.css', array('admin-lte'));
         $mng->registerStyle('timepicker', $css.'/timepicker/bootstrap-timepicker.css', array('admin-lte'));

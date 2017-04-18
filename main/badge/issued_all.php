@@ -12,7 +12,7 @@ $userId = isset($_GET['user']) ? intval($_GET['user']) : 0;
 $skillId = isset($_GET['skill']) ? intval($_GET['skill']) : 0;
 
 if (!$userId || !$skillId) {
-    header('Location: ' . api_get_path(WEB_PATH));
+    header('Location: '.api_get_path(WEB_PATH));
     exit;
 }
 
@@ -30,7 +30,7 @@ if (!$user || !$skill) {
         Display::return_message(get_lang('NoResults'), 'error')
     );
 
-    header('Location: ' . api_get_path(WEB_PATH));
+    header('Location: '.api_get_path(WEB_PATH));
     exit;
 }
 
@@ -167,7 +167,7 @@ foreach ($userSkills as $index => $skillIssue) {
         $entityManager->persist($skillIssue);
         $entityManager->flush();
 
-        header("Location: " . $skillIssue->getIssueUrlAll());
+        header("Location: ".$skillIssue->getIssueUrlAll());
         exit;
     }
 
@@ -198,7 +198,7 @@ foreach ($userSkills as $index => $skillIssue) {
         $entityManager->persist($skillUserComment);
         $entityManager->flush();
 
-        header("Location: " . $skillIssue->getIssueUrlAll());
+        header("Location: ".$skillIssue->getIssueUrlAll());
         exit;
     }
 
@@ -214,11 +214,11 @@ foreach ($userSkills as $index => $skillIssue) {
             $backpack = $configBackpack;
         }
 
-        $htmlHeadXtra[] = '<script src="' . $backpack . 'issuer.js"></script>';
+        $htmlHeadXtra[] = '<script src="'.$backpack.'issuer.js"></script>';
         $objSkill = new Skill();
         $assertionUrl = $skillIssueInfo['badge_assertion'];
         $skills = $objSkill->get($skillId);
-        $unbakedBadge = api_get_path(SYS_UPLOAD_PATH) . "badges/".$skills['icon'];
+        $unbakedBadge = api_get_path(SYS_UPLOAD_PATH)."badges/".$skills['icon'];
         if (!is_file($unbakedBadge)) {
             $unbakedBadge = api_get_path(WEB_CODE_PATH).'img/icons/128/badges-default.png';
         }
@@ -236,12 +236,12 @@ foreach ($userSkills as $index => $skillIssue) {
                 mkdir($bakedBadge, api_get_permissions_for_new_directories(), true);
             }
             $skillRelUserId = $skillIssueInfo['id'];
-            if (!file_exists($bakedBadge . "/badge_" . $skillRelUserId)) {
-                file_put_contents($bakedBadge . "/badge_" . $skillRelUserId . ".png", $bakedInfo);
+            if (!file_exists($bakedBadge."/badge_".$skillRelUserId)) {
+                file_put_contents($bakedBadge."/badge_".$skillRelUserId.".png", $bakedInfo);
             }
 
             //Process to validate a baked badge
-            $badgeContent = file_get_contents($bakedBadge . "/badge_" . $skillRelUserId . ".png");
+            $badgeContent = file_get_contents($bakedBadge."/badge_".$skillRelUserId.".png");
             $verifyBakedBadge = $png->extractBadgeInfo($badgeContent);
             if (!is_array($verifyBakedBadge)) {
                 $badgeInfoError = true;
@@ -249,7 +249,7 @@ foreach ($userSkills as $index => $skillIssue) {
 
             if (!$badgeInfoError) {
                 $personalBadge = UserManager::getUserPathById($userId, "web");
-                $personalBadge = $personalBadge."badges/badge_" . $skillRelUserId . ".png";
+                $personalBadge = $personalBadge."badges/badge_".$skillRelUserId.".png";
             }
         }
     }

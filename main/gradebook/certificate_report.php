@@ -18,7 +18,7 @@ $this_section = SECTION_TRACKING;
 api_block_anonymous_users();
 
 $interbreadcrumb[] = array(
-    "url" => api_is_student_boss()?"#":api_get_path(WEB_CODE_PATH) . "mySpace/index.php?".api_get_cidreq(),
+    "url" => api_is_student_boss() ? "#" : api_get_path(WEB_CODE_PATH)."mySpace/index.php?".api_get_cidreq(),
     "name" => get_lang("MySpace")
 );
 
@@ -111,7 +111,7 @@ if ($searchSessionAndCourse || $searchCourseOnly) {
     }
 
     if (!is_null($gradebook)) {
-        $exportAllLink = api_get_path(WEB_CODE_PATH) . "gradebook/gradebook_display_certificate.php?";
+        $exportAllLink = api_get_path(WEB_CODE_PATH)."gradebook/gradebook_display_certificate.php?";
         $exportAllLink .= http_build_query(array(
             "action" => "export_all_certificates",
             "cidReq" => $selectedCourseInfo['code'],
@@ -246,7 +246,7 @@ $template = new Template(get_lang('GradebookListOfStudentsCertificates'));
 $form = new FormValidator(
     'certificate_report_form',
     'post',
-    api_get_path(WEB_CODE_PATH) . 'gradebook/certificate_report.php'
+    api_get_path(WEB_CODE_PATH).'gradebook/certificate_report.php'
 );
 $form->addSelect('session', get_lang('Sessions'), $sessions, ['id' => 'session']);
 $form->addSelect('course', get_lang('Courses'), $courses, ['id' => 'course']);
@@ -285,7 +285,7 @@ if (api_is_student_boss()) {
     $searchForm = new FormValidator(
         'certificate_report_form',
         'post',
-        api_get_path(WEB_CODE_PATH) . 'gradebook/certificate_report.php'
+        api_get_path(WEB_CODE_PATH).'gradebook/certificate_report.php'
     );
     $searchForm->addSelect('student', get_lang('Students'), $students, ['id' => 'student']);
     $searchForm->addButtonSearch();

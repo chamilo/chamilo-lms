@@ -20,7 +20,7 @@ $list = $em->getRepository('ChamiloSkillBundle:Level')->findAll();
 
 $listAction = api_get_self();
 
-$action =  '';
+$action = '';
 if (isset($_GET['action']) && in_array($_GET['action'], ['add', 'edit', 'delete', 'add_level'])) {
     $action = $_GET['action'];
 }
@@ -53,8 +53,8 @@ if (!empty($item)) {
 }
 $formToDisplay = $form->returnForm();
 
-$interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array ('url' => api_get_self(), 'name' => get_lang('SkillProfile'));
+$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => api_get_self(), 'name' => get_lang('SkillProfile'));
 
 $tpl = new Template($action);
 switch ($action) {

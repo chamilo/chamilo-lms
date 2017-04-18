@@ -22,7 +22,7 @@ $is_allowed_in_course = api_is_allowed_in_course();
 $userId = api_get_user_id();
 
 $this_section = SECTION_COURSES;
-$current_course_tool  = TOOL_GROUP;
+$current_course_tool = TOOL_GROUP;
 
 // Notice for unauthorized people.
 api_protect_course_script(true);
@@ -186,7 +186,7 @@ if (api_is_allowed_to_edit(false, true)) {
         Display::return_icon('add-groups.png', get_lang('NewGroupCreate'), '', ICON_SIZE_MEDIUM).'</a>';
 
     if (api_get_setting('allow_group_categories') === 'true') {
-        $actionsLeft .=  '<a href="group_category.php?'.api_get_cidreq().'&action=add_category">'.
+        $actionsLeft .= '<a href="group_category.php?'.api_get_cidreq().'&action=add_category">'.
             Display::return_icon('new_folder.png', get_lang('AddCategory'), '', ICON_SIZE_MEDIUM).'</a>';
     } else {
         $actionsLeft .= '<a href="group_category.php?'.api_get_cidreq().'&id=2">'.
@@ -240,7 +240,7 @@ if (api_get_setting('allow_group_categories') === 'true') {
         $actions = null;
         if (api_is_allowed_to_edit(false, true) && !empty($categoryId)) {
             $actions .= '<a href="group_category.php?'.api_get_cidreq().'&id='.$categoryId.'" title="'.get_lang('Edit').'">'.
-                Display::return_icon('edit.png', get_lang('EditGroup'),'',ICON_SIZE_SMALL).'</a>';
+                Display::return_icon('edit.png', get_lang('EditGroup'), '', ICON_SIZE_SMALL).'</a>';
             $actions .=
                 Display::url(
                     Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL),
@@ -250,17 +250,17 @@ if (api_get_setting('allow_group_categories') === 'true') {
                     )
                 );
             if ($index != 0) {
-                $actions .=  ' <a href="group.php?'.api_get_cidreq().'&action=swap_cat_order&id1='.$categoryId.'&id2='.$group_cats[$index -1]['id'].'">'.
-                    Display::return_icon('up.png','&nbsp;','',ICON_SIZE_SMALL).'</a>';
+                $actions .= ' <a href="group.php?'.api_get_cidreq().'&action=swap_cat_order&id1='.$categoryId.'&id2='.$group_cats[$index - 1]['id'].'">'.
+                    Display::return_icon('up.png', '&nbsp;', '', ICON_SIZE_SMALL).'</a>';
             }
             if ($index != count($group_cats) - 1) {
-                $actions .= ' <a href="group.php?'.api_get_cidreq().'&action=swap_cat_order&id1='.$categoryId.'&id2='.$group_cats[$index +1]['id'].'">'.
-                    Display::return_icon('down.png','&nbsp;','',ICON_SIZE_SMALL).'</a>';
+                $actions .= ' <a href="group.php?'.api_get_cidreq().'&action=swap_cat_order&id1='.$categoryId.'&id2='.$group_cats[$index + 1]['id'].'">'.
+                    Display::return_icon('down.png', '&nbsp;', '', ICON_SIZE_SMALL).'</a>';
             }
         }
 
         echo Display::page_header(
-            Security::remove_XSS($category['title'].' '. $label.' ').$actions,
+            Security::remove_XSS($category['title'].' '.$label.' ').$actions,
             null,
             'h4',
             false

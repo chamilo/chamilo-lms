@@ -75,7 +75,7 @@ Display::display_header($nameTools, 'Tracking');
 
 // getting all the students of the course
 if (empty($session_id)) {
-	// Registered students in a course outside session.
+    // Registered students in a course outside session.
     $a_students = CourseManager:: get_student_list_from_course_code(
         api_get_course_id(),
         false,
@@ -86,7 +86,7 @@ if (empty($session_id)) {
         api_get_group_id()
     );
 } else {
-	// Registered students in session.
+    // Registered students in session.
     $a_students = CourseManager:: get_student_list_from_course_code(
         api_get_course_id(),
         true,

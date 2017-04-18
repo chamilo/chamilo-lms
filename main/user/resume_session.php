@@ -60,9 +60,9 @@ if ($allowTutors === 'true') {
     $session_category = '';
 
     if (Database::num_rows($rs)>0) {
-    	$rows_session_category = Database::store_result($rs);
-    	$rows_session_category = $rows_session_category[0];
-    	$session_category = $rows_session_category['name'];
+        $rows_session_category = Database::store_result($rs);
+        $rows_session_category = $rows_session_category[0];
+        $session_category = $rows_session_category['name'];
     }
 
     $action = isset($_GET['action']) ? $_GET['action'] : null;
@@ -140,22 +140,22 @@ if ($allowTutors === 'true') {
     	<td><?php echo get_lang('Date'); ?> :</td>
     	<td>
     	<?php
-    		if ($session['access_start_date'] == '00-00-0000' && $session['access_end_date']== '00-00-0000' ) {
-    		    echo get_lang('NoTimeLimits');
+            if ($session['access_start_date'] == '00-00-0000' && $session['access_end_date']== '00-00-0000' ) {
+                echo get_lang('NoTimeLimits');
             }
-    		else {
+            else {
                 if ($session['access_start_date'] != '00-00-0000') {
-                	//$session['date_start'] = Display::tag('i', get_lang('NoTimeLimits'));
+                    //$session['date_start'] = Display::tag('i', get_lang('NoTimeLimits'));
                     $session['access_start_date'] =  get_lang('From').' '.$session['access_start_date'];
                 } else {
-                	$session['access_start_date'] = '';
+                    $session['access_start_date'] = '';
                 }
                 if ($session['access_end_date'] == '00-00-0000') {
                     $session['access_end_date'] ='';
                 } else {
-                	$session['access_end_date'] = get_lang('Until').' '.$session['access_end_date'];
+                    $session['access_end_date'] = get_lang('Until').' '.$session['access_end_date'];
                 }
-    			echo $session['access_start_date'].' '.$session['access_end_date'];
+                echo $session['access_start_date'].' '.$session['access_end_date'];
             }
             ?>
     	</td>
@@ -214,22 +214,22 @@ if ($allowTutors === 'true') {
     </tr>
     <?php
     if ($session['nbr_courses'] == 0) {
-    	echo '<tr>
+        echo '<tr>
             <td colspan="4">'.get_lang('NoCoursesForThisSession').'</td>
     		</tr>';
     } else {
-    	// select the courses
-    	$sql = "SELECT c.id, code,title,visual_code, nbr_users
+        // select the courses
+        $sql = "SELECT c.id, code,title,visual_code, nbr_users
     			FROM $tbl_course c,$tbl_session_rel_course sc
     			WHERE c.id = sc.c_id
     			AND	session_id='$id_session'
     			ORDER BY title";
-    	$result=Database::query($sql);
-    	$courses=Database::store_result($result);
-    	foreach ($courses as $course) {
-    		//select the number of users
+        $result=Database::query($sql);
+        $courses=Database::store_result($result);
+        foreach ($courses as $course) {
+            //select the number of users
 
-    		$sql = "SELECT count(*) FROM $tbl_session_rel_user sru, $tbl_session_rel_course_rel_user srcru
+            $sql = "SELECT count(*) FROM $tbl_session_rel_user sru, $tbl_session_rel_course_rel_user srcru
                     WHERE
                         srcru.user_id = sru.user_id AND
                         srcru.session_id = sru.session_id AND
@@ -237,49 +237,49 @@ if ($allowTutors === 'true') {
                         sru.relation_type<>".SESSION_RELATION_TYPE_RRHH." AND
                         srcru.session_id = '".intval($id_session)."'";
 
-    		$rs = Database::query($sql);
-    		$course['nbr_users'] = Database::result($rs,0,0);
+            $rs = Database::query($sql);
+            $course['nbr_users'] = Database::result($rs,0,0);
 
-    		// Get coachs of the courses in session
+            // Get coachs of the courses in session
 
-    		$sql = "SELECT user.lastname,user.firstname,user.username
+            $sql = "SELECT user.lastname,user.firstname,user.username
     		        FROM $tbl_session_rel_course_rel_user session_rcru, $tbl_user user
     				WHERE
     				    session_rcru.user_id = user.user_id AND
     				    session_rcru.session_id = '".intval($id_session)."' AND
     				    session_rcru.c_id ='".Database::escape_string($course['id'])."' AND
     				    session_rcru.status=2";
-    		$rs = Database::query($sql);
+            $rs = Database::query($sql);
 
-    		$coachs = array();
-    		if (Database::num_rows($rs) > 0) {
-    			while ($info_coach = Database::fetch_array($rs)) {
+            $coachs = array();
+            if (Database::num_rows($rs) > 0) {
+                while ($info_coach = Database::fetch_array($rs)) {
                     $coachs[] = api_get_person_name(
                             $info_coach['firstname'],
                             $info_coach['lastname']
                         ).' ('.$info_coach['username'].')';
-    			}
-    		} else {
-    			$coach = get_lang('None');
-    		}
+                }
+            } else {
+                $coach = get_lang('None');
+            }
 
-    		if (count($coachs) > 0) {
-    			$coach = implode('<br />',$coachs);
-    		} else {
-    			$coach = get_lang('None');
-    		}
+            if (count($coachs) > 0) {
+                $coach = implode('<br />',$coachs);
+            } else {
+                $coach = get_lang('None');
+            }
 
-    		$orig_param = '&origin=resume_session';
-    		//hide_course_breadcrumb the parameter has been added to hide the
+            $orig_param = '&origin=resume_session';
+            //hide_course_breadcrumb the parameter has been added to hide the
             // name of the course, that appeared in the default $interbreadcrumb
-    		echo '
+            echo '
     		<tr>
     			<td>'.Display::url($course['title'].' ('.$course['visual_code'].')', api_get_path(WEB_COURSE_PATH).$course['code'].'/?id_session='.$id_session),'</td>
     			<td>'.$coach.'</td>
     			<td>'.$course['nbr_users'].'</td>
 
     		</tr>';
-    	}
+        }
     }
     ?>
     </table>
@@ -300,11 +300,11 @@ if ($allowTutors === 'true') {
     <?php
 
     if ($session['nbr_users']==0) {
-    	echo '<tr>
+        echo '<tr>
     			<td colspan="2">'.get_lang('NoUsersForThisSession').'</td>
     		</tr>';
     } else {
-    	$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
+        $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
 
         if ($multiple_url_is_on) {
             $sql = "SELECT u.user_id, lastname, firstname, username, access_url_id
@@ -322,11 +322,11 @@ if ($allowTutors === 'true') {
                     AND su.session_id = ".$id_session.$order_clause;
         }
 
-    	$result = Database::query($sql);
-    	$users  = Database::store_result($result);
+        $result = Database::query($sql);
+        $users  = Database::store_result($result);
         // change breadcrumb in destination page
-    	$orig_param = '&origin=resume_session&id_session='.$id_session;
-    	foreach ($users as $user) {
+        $orig_param = '&origin=resume_session&id_session='.$id_session;
+        foreach ($users as $user) {
             $user_link = '';
             if (!empty($user['user_id'])) {
                 $user_link = '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.intval($user['user_id']).'">'.
@@ -343,7 +343,7 @@ if ($allowTutors === 'true') {
                 }
             }
 
-    		echo '<tr>
+            echo '<tr>
                     <td width="90%">
                         '.$user_link.'
                     </td>
@@ -357,7 +357,7 @@ if ($allowTutors === 'true') {
                         '.$link_to_add_user_in_url.'
                     </td>
                     </tr>';
-    	}
+        }
     }
     ?>
     </table>

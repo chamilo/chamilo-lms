@@ -642,11 +642,11 @@ class AttendanceController
             }
             $formToDisplay = $form->returnForm();
         } else {
-           if (!empty($sessionId)) {
-               $sessionInfo = api_get_session_info($sessionId);
-               $startDate = $sessionInfo['access_start_date'];
-               $endDate = $sessionInfo['access_end_date'];
-           }
+            if (!empty($sessionId)) {
+                $sessionInfo = api_get_session_info($sessionId);
+                $startDate = $sessionInfo['access_start_date'];
+                $endDate = $sessionInfo['access_end_date'];
+            }
         }
 
         $attendance = new Attendance();

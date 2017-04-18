@@ -1068,7 +1068,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
      */
     public function getStatusMessage($status, $isAble = true)
     {
-	$message = '';
+    $message = '';
         switch ($status) {
             case ADVANCED_SUBSCRIPTION_QUEUE_STATUS_NO_QUEUE:
                 if ($isAble) {

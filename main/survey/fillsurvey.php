@@ -6,8 +6,7 @@
 * @author unknown, the initial survey that did not make it in 1.8 because of bad code
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
 * @author Julio Montoya Armas <gugli100@gmail.com>, Chamilo: Personality Test modification and rewriting large parts of the code as well
-
-* @todo check if the user already filled the survey and if this is the case then the answers have to be updated and not stored again.
+ * @todo check if the user already filled the survey and if this is the case then the answers have to be updated and not stored again.
 * @todo performance could be improved if not the survey_id was stored with the invitation but the survey_code
  */
 // Unsetting the course id (because it is in the URL)

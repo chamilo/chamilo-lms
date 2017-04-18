@@ -47,9 +47,9 @@ if (!empty($_GET['edit']) && $_GET['edit'] == 'true' && api_is_platform_admin())
         $form->display();
     }
 } else {
-	$faq_content = @(string)file_get_contents(api_get_path(SYS_APP_PATH).'home/'.$faq_file);
-	$faq_content = api_to_system_encoding($faq_content, api_detect_encoding(strip_tags($faq_content)));
-	echo $faq_content;
+    $faq_content = @(string)file_get_contents(api_get_path(SYS_APP_PATH).'home/'.$faq_file);
+    $faq_content = api_to_system_encoding($faq_content, api_detect_encoding(strip_tags($faq_content)));
+    echo $faq_content;
 }
 
 Display::display_footer();

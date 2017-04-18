@@ -6452,7 +6452,7 @@ class SessionManager
         ]);
     }
 
-	/**
+    /**
      * Get the count of user courses in session
      * @param int $sessionId The session id
      * @return array

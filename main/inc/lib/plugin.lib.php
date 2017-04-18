@@ -175,9 +175,9 @@ class AppPlugin
     }
 
     /**
-    * @param string $pluginName
-    * @param int    $urlId
-    */
+     * @param string $pluginName
+     * @param int    $urlId
+     */
     public function uninstall($pluginName, $urlId = null)
     {
         if (empty($urlId)) {
@@ -254,12 +254,12 @@ class AppPlugin
     }
 
     /**
-    * @param string $region
-    * @param string $template
-    * @param bool   $forced
-    *
-    * @return null|string
-    */
+     * @param string $region
+     * @param string $template
+     * @param bool   $forced
+     *
+     * @return null|string
+     */
     public function load_region($region, $template, $forced = false)
     {
         if ($region == 'course_tool_plugin') {

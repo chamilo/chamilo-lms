@@ -108,12 +108,12 @@ class CourseLegalPlugin extends Plugin
     }
 
     /**
-    * @param int $userId
-    * @param int $courseCode
-    * @param int $sessionId
-    * @param boolean $sendEmail Optional. Indicate whether the mail must be sent. Default is true
-    * @return mixed
-    */
+     * @param int $userId
+     * @param int $courseCode
+     * @param int $sessionId
+     * @param boolean $sendEmail Optional. Indicate whether the mail must be sent. Default is true
+     * @return mixed
+     */
     public function saveUserLegal($userId, $courseCode, $sessionId, $sendEmail = true)
     {
         $courseInfo = api_get_course_info($courseCode);

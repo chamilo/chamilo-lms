@@ -2,7 +2,6 @@
 
 /**
  * Provides access to various HTTP request elements: GET, POST, FILE, etc paramaters.
-
  * @license see /license.txt
  * @deprecated
  * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Geneva

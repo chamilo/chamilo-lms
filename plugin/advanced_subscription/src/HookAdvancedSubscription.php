@@ -67,7 +67,7 @@ class HookAdvancedSubscription extends HookObserver implements
         if ($data['type'] === HOOK_EVENT_TYPE_PRE) {
 
         } elseif ($data['type'] === HOOK_EVENT_TYPE_POST) {
-           /** @var \nusoap_server $server */
+            /** @var \nusoap_server $server */
             $server = &$data['server'];
 
             /** WSSessionListInCategory */
@@ -424,7 +424,7 @@ class HookAdvancedSubscription extends HookObserver implements
         }
         if (!WSHelperVerifyKey($params)) {
 
-           //return return_error(WS_ERROR_SECRET_KEY);
+            //return return_error(WS_ERROR_SECRET_KEY);
         }
         // Check if category ID is set
         if (!empty($params['id']) && empty($params['name'])) {

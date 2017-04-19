@@ -22,9 +22,7 @@ class DisplayGradebook
             if ($page != 'statistics') {
                 $header .= '<a href="'.Security::remove_XSS($_SESSION['gradebook_dest']).'?selectcat='.$selectcat.'&'.api_get_cidreq().'">'.
                     Display::return_icon(('back.png'), get_lang('FolderView'), '', ICON_SIZE_MEDIUM).'</a>';
-                if ($evalobj->get_course_code() == null) {
-
-                } elseif (!$evalobj->has_results()) {
+                if (($evalobj->get_course_code() != null) && !$evalobj->has_results()) {
                     $header .= '<a href="gradebook_add_result.php?'.api_get_cidreq().'&selectcat='.$selectcat.'&selecteval='.$evalobj->get_id().'">
     				' . Display::return_icon('evaluation_rate.png', get_lang('AddResult'), '', ICON_SIZE_MEDIUM).'</a>';
                 }
@@ -99,13 +97,16 @@ class DisplayGradebook
 
         if (!$evalobj->has_results()) {
             $evalinfo .= '<br /><i>'.get_lang('NoResultsInEvaluation').'</i>';
-        } elseif ($scoredisplay->is_custom() && api_get_self() != '/main/gradebook/gradebook_statistics.php') {
+        }
+        /* Code comment without reason
+        elseif ($scoredisplay->is_custom() && api_get_self() != '/main/gradebook/gradebook_statistics.php') {
             if (api_is_allowed_to_edit(null, true)) {
                 if ($page != 'statistics') {
                     //$evalinfo .= '<br /><br /><a href="gradebook_view_result.php?selecteval='.Security::remove_XSS($_GET['selecteval']).'"> '.Display::return_icon(('evaluation_rate.png'),get_lang('ViewResult'),'',ICON_SIZE_MEDIUM) . '</a>';
                 }
             }
         }
+        */
         if ($page != 'statistics') {
             if (api_is_allowed_to_edit(null, true)) {
                 $evalinfo .= '<br /><a href="gradebook_statistics.php?'.api_get_cidreq().'&selecteval='.Security::remove_XSS($_GET['selecteval']).'"> '.
@@ -357,9 +358,7 @@ class DisplayGradebook
                 $actionsLeft .= '<a href="gradebook_add_cat.php?'.api_get_cidreq().'&selectcat='.$catobj->get_id().'">'.
                     Display::return_icon('new_folder.png', get_lang('AddGradebook'), array(), ICON_SIZE_MEDIUM).'</a></td>';
             }
-            if ($selectcat == '0') {
-
-            } else {
+            if ($selectcat != '0') {
                 $my_category = $catobj->shows_all_information_an_category($catobj->get_id());
                 if ($my_api_cidreq == '') {
                     $my_api_cidreq = 'cidReq='.$my_category['course_code'];

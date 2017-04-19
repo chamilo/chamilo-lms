@@ -133,14 +133,10 @@ function ldap_find_user_info ($login) {
             //echo " Getting entries ...";
             $info = ldap_get_entries($ldap_connect, $sr);
             //echo "Data for ".$info["count"]." items returned:<p>";
-        } else {
-            //echo "LDAP bind failed...";
-        }
+        } // else could echo "LDAP bind failed...";
         //echo "Closing LDAP connection<hr>";
         ldap_close($ldap_connect);
-    } else {
-        //echo "<h3>Unable to connect to LDAP server</h3>";
-    }
+    } // else could echo "<h3>Unable to connect to LDAP server</h3>";
     //DEBUG: $result["firstname"] = "Jan"; $result["name"] = "De Test"; $result["email"] = "email@ugent.be";
     $result["firstname"] = $info[0]["cn"][0];
     $result["name"] = $info[0]["sn"][0];
@@ -261,9 +257,7 @@ function ldap_authentication_check ($uname, $passwd) {
     if ($test_bind_res===false) {
         $ds=ldap_connect($ldap_host2,$ldap_port2);
         ldap_set_version($ds);
-    } else {
-        //error_log('Connected to server '.$ldap_host);
-    }
+    } // else: error_log('Connected to server '.$ldap_host);
     if ($ds!==false) {
         //Creation of filter containing values input by the user
         // Here it might be necessary to use $filter="(samaccountName=$uname)"; - see http://support.chamilo.org/issues/4675
@@ -312,11 +306,9 @@ function ldap_set_version(&$resource) {
     //error_log('Entering ldap_set_version(&$resource)',0);
     global $ldap_version;
     if ($ldap_version>2) {
-        if (ldap_set_option($resource, LDAP_OPT_PROTOCOL_VERSION, 3)) {
-            //ok - don't do anything
-        } else {
-            //failure - should switch back to version 2 by default
-        }
+        ldap_set_option($resource, LDAP_OPT_PROTOCOL_VERSION, 3);
+        //ok - don't do anything
+        //failure - should switch back to version 2 by default
     }
 }
 /**
@@ -630,12 +622,8 @@ function syncro_users() {
                 }
             }
             //echo "Data for ".$info["count"]." items returned:<p>";
-        } else {
-            //echo "LDAP bind failed...";
-        }
+        } // else: could echo "LDAP bind failed...";
         //echo "Closing LDAP connection<hr>";
         ldap_close($ldap_connect);
-    } else {
-        //echo "<h3>Unable to connect to LDAP server</h3>";
-    }
+    } // else: could echo "<h3>Unable to connect to LDAP server</h3>";
 }

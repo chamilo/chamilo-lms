@@ -148,12 +148,15 @@ function WriteFileCont($full_file_path, $content)
         if (basename($full_file_path) != Security::filter_filename(basename($full_file_path))) {
             return false;
         }
-        if (!($fp = fopen(urldecode($full_file_path), 'w'))) {
+        //if (!($fp = fopen(urldecode($full_file_path), 'w'))) {
             //die('Could not open Quiz input.');
+        //}
+        $fp = fopen(urldecode($full_file_path), 'w');
+        if ($fp !== false) {
+            fwrite($fp, $content);
+            fclose($fp);
+            return true;
         }
-        fwrite($fp, $content);
-        fclose($fp);
-        return true;
     }
     return false;
 }
@@ -200,7 +203,7 @@ function GetSrcName($imgtag)
     // Select src tag from img tag.
     $match = array();
     preg_match("|(src=\".*\" )|U", $imgtag, $match); //src
-    list($key, $srctag) = each($match);
+    list(, $srctag) = each($match);
     $src = substr($srctag, 5, (strlen($srctag) - 7));
     if (stristr($src, 'http') === false) {
     // valid or invalid image name
@@ -226,9 +229,9 @@ function GetImgParams($fname, $fpath, &$imgparams, &$imgcount)
     $matches = array();
     preg_match_all('(<img .*>)', $contents, $matches);
     $imgcount = 0;
-    while (list($int, $match) = each($matches)) {
+    while (list(, $match) = each($matches)) {
         // Each match consists of a key and a value.
-        while (list($key, $imgtag) = each($match)) {
+        while (list(, $imgtag) = each($match)) {
             $imgname = GetImgName($imgtag);
             if ($imgname != '' && !in_array($imgname, $imgparams)) {
                 array_push($imgparams, $imgname); // name (+ type) of the images in the html test
@@ -247,7 +250,7 @@ function GenerateHiddenList($imgparams)
 {
     $list = '';
     if (is_array($imgparams)) {
-        while (list($int, $string) = each($imgparams)) {
+        while (list(, $string) = each($imgparams)) {
             $list .= "<input type=\"hidden\" name=\"imgparams[]\" value=\"$string\" />\n";
         }
     }
@@ -299,12 +302,10 @@ function ReplaceImgTag($content)
     $newcontent = $content;
     $matches = array();
     preg_match_all('(<img .*>)', $content, $matches);
-    while (list($int, $match) = each($matches)) {
-        while (list($key, $imgtag) = each($match)) {
+    while (list(, $match) = each($matches)) {
+        while (list(, $imgtag) = each($match)) {
             $imgname = GetSrcName($imgtag);
-            if ($imgname == '') {
-                // Valid or invalid image name.
-            } else {
+            if ($imgname != '') {
                 $prehref = $imgname;
                 $posthref = basename($imgname);
                 $newcontent = str_replace($prehref, $posthref, $newcontent);
@@ -443,7 +444,7 @@ function HotPotGCt($folder, $flag, $user_id)
         }
         closedir($dir);
     }
-    while (list($key, $val) = each($filelist)) {
+    while (list(, $val) = each($filelist)) {
         if (stristr($val, $user_id.'.t.html')) {
             if ($flag == 1) {
                 my_delete($folder.'/'.$val);

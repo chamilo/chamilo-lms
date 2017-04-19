@@ -1539,15 +1539,6 @@ class learnpath
                     prerequisite_max_score = $max_score
                  WHERE c_id = $course_id AND id = $id";
         Database::query($sql);
-
-        if ($prerequisite_id != 'NULL' && $prerequisite_id != '') {
-            // Will this be enough to ensure unicity?
-            /*$sql = " UPDATE $tbl_lp_item
-                     SET mastery_score = $mastery_score
-                     WHERE c_id = $course_id AND ref = '$prerequisite_id'";
-
-            Database::query($sql);*/
-        }
         // TODO: Update the item object (can be ignored for now because refreshed).
         return true;
     }
@@ -3040,12 +3031,8 @@ class learnpath
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::get_type()', 0);
         }
-        if (!empty ($this->type)) {
-            if ($get_name) {
-                // Get it from the lp_type table in main db.
-            } else {
-                $res = $this->type;
-            }
+        if (!empty ($this->type) && (!$get_name)) {
+            $res = $this->type;
         }
         if ($this->debug > 2) {
             error_log('New LP - In learnpath::get_type() - Returning ' . ($res ? $res : 'false'), 0);
@@ -3757,8 +3744,7 @@ class learnpath
                 if ($this->debug > 2) {
                     error_log('Movement up detected', 0);
                 }
-                if ($display <= 1) { /*do nothing*/
-                } else {
+                if ($display > 1) {
                     $sql_sel2 = "SELECT * FROM $tbl_lp_item
                                  WHERE c_id = ".$course_id." AND id = $previous";
 
@@ -3823,8 +3809,7 @@ class learnpath
                 if ($this->debug > 2) {
                     error_log('Movement down detected', 0);
                 }
-                if ($next == 0) { /* Do nothing. */
-                } else {
+                if ($next != 0) {
                     $sql_sel2 = "SELECT * FROM $tbl_lp_item WHERE c_id = ".$course_id." AND id = $next";
                     if ($this->debug > 2) {
                         error_log('Selecting next: ' . $sql_sel2, 0);
@@ -4374,7 +4359,7 @@ class learnpath
 
         if (!api_is_invitee()) {
             // Save progress.
-            list($progress, $text) = $this->get_progress_bar_text('%');
+            list($progress,) = $this->get_progress_bar_text('%');
             if ($progress >= 0 && $progress <= 100) {
                 $progress = (int) $progress;
                 $sql = "UPDATE $table SET
@@ -4952,9 +4937,8 @@ class learnpath
                 $prereq_check = $this->prerequisites_match($this->current);
                 $this->items[$this->current]->save(false, $prereq_check);
                 //$this->update_queue[$this->last] = $this->items[$this->last]->get_status();
-            } else {
-                // If sco, then it is supposed to have been updated by some other call.
             }
+            // If sco, then it is supposed to have been updated by some other call.
             if ($item_type == 'sco') {
                 $this->items[$this->current]->restart();
             }
@@ -5599,8 +5583,7 @@ class learnpath
             $return_audio  .= '<td align="left" style="padding-left:10px;">';
             $audio = '';
             if (!$update_audio || $update_audio <> 'true') {
-                if (!empty($arrLP[$i]['audio'])) {
-                } else {
+                if (empty($arrLP[$i]['audio'])) {
                     $audio .= '';
                 }
             } else {
@@ -10433,9 +10416,7 @@ EOD;
                 // Try to add an extension to the file if it hasn't one.
                 $new_file_name = add_ext_on_mime(stripslashes($image_array['name']), $image_array['type']);
 
-                if (!filter_extension($new_file_name)) {
-
-                } else {
+                if (filter_extension($new_file_name)) {
                     $file_extension = explode('.', $image_array['name']);
                     $file_extension = strtolower($file_extension[sizeof($file_extension) - 1]);
                     $filename = uniqid('');

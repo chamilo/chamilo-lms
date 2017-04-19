@@ -62,6 +62,7 @@ exclude_paths:
 - plugin/kannelsms/vendor/
 - plugin/clockworksms/vendor/
 - plugin/pens/lib
+- plugin/bbb/lib/bbb_api.php
 - tests/
 - vendor/
 - web/

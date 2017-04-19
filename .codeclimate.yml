@@ -44,6 +44,7 @@ exclude_paths:
 - main/inc/lib/kses-0.2.2/
 - main/inc/lib/mimetex/
 - main/inc/lib/nanogong/
+- main/inc/lib/nusoap/
 - main/inc/lib/ppt2png/
 - main/inc/lib/pear/
 - main/inc/lib/phpmailer/

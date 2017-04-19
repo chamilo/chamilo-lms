@@ -5451,8 +5451,7 @@ function api_is_course_visible_for_user($userid = null, $cid = null) {
 
     $courseInfo = api_get_course_info($cid);
     $courseId = $courseInfo['real_id'];
-
-    global $is_platformAdmin;
+    $is_platformAdmin = api_is_platform_admin();
 
     $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
     $course_cat_table = Database::get_main_table(TABLE_MAIN_CATEGORY);
@@ -5997,7 +5996,8 @@ function api_check_term_condition($user_id)
  * @param int The tool id
  * @return array
  */
-function api_get_tool_information($tool_id) {
+function api_get_tool_information($tool_id)
+{
     $t_tool = Database::get_course_table(TABLE_TOOL_LIST);
     $course_id = api_get_course_int_id();
     $sql = "SELECT * FROM $t_tool WHERE c_id = $course_id AND id = ".intval($tool_id);
@@ -6010,7 +6010,8 @@ function api_get_tool_information($tool_id) {
  * @param int The tool id
  * @return array
  */
-function api_get_tool_information_by_name($name) {
+function api_get_tool_information_by_name($name)
+{
     $t_tool = Database::get_course_table(TABLE_TOOL_LIST);
     $course_id = api_get_course_int_id();
     $sql = "SELECT * FROM $t_tool
@@ -6029,6 +6030,7 @@ function api_get_tool_information_by_name($name) {
  *
  * @author Julio Montoya
  * @param integer $user_id
+ * @return bool
  */
 function api_is_global_platform_admin($user_id = null)
 {
@@ -6054,8 +6056,11 @@ function api_is_global_platform_admin($user_id = null)
  * @param bool $allow_session_admin
  * @return bool
  */
-function api_global_admin_can_edit_admin($admin_id_to_check, $my_user_id = null, $allow_session_admin = false)
-{
+function api_global_admin_can_edit_admin(
+    $admin_id_to_check,
+    $my_user_id = null,
+    $allow_session_admin = false
+) {
     if (empty($my_user_id)) {
         $my_user_id = api_get_user_id();
     }
@@ -6122,7 +6127,8 @@ function api_protect_global_admin_script() {
  * @param string    path absolute(abs) or relative(rel) (optional:rel)
  * @return string   actived template path
  */
-function api_get_template($path_type = 'rel') {
+function api_get_template($path_type = 'rel')
+{
     $path_types = array('rel', 'abs');
     $template_path = '';
     if (in_array($path_type, $path_types)) {
@@ -6550,7 +6556,8 @@ function api_get_course_url($course_code = null, $session_id = null)
  * @return bool true if multi site is enabled
  *
  **/
-function api_get_multiple_access_url() {
+function api_get_multiple_access_url()
+{
     global $_configuration;
     if (isset($_configuration['multiple_access_urls']) && $_configuration['multiple_access_urls']) {
         return true;
@@ -6569,7 +6576,8 @@ function api_is_multiple_url_enabled() {
  * Returns a md5 unique id
  * @todo add more parameters
  */
-function api_get_unique_id() {
+function api_get_unique_id()
+{
     $id = md5(time().uniqid().api_get_user_id().api_get_course_id().api_get_session_id());
     return $id;
 }
@@ -6603,9 +6611,10 @@ function api_get_home_path()
  * @param int Course id
  * @param int tool id: TOOL_QUIZ, TOOL_FORUM, TOOL_STUDENTPUBLICATION, TOOL_LEARNPATH
  * @param int the item id (tool id, exercise id, lp id)
- *
+ * @return bool
  */
-function api_resource_is_locked_by_gradebook($item_id, $link_type, $course_code = null) {
+function api_resource_is_locked_by_gradebook($item_id, $link_type, $course_code = null)
+{
     if (api_is_platform_admin()) {
         return false;
     }
@@ -6636,7 +6645,8 @@ function api_resource_is_locked_by_gradebook($item_id, $link_type, $course_code 
  * @param string    course code
  * @return false|null
  */
-function api_block_course_item_locked_by_gradebook($item_id, $link_type, $course_code = null) {
+function api_block_course_item_locked_by_gradebook($item_id, $link_type, $course_code = null)
+{
     if (api_is_platform_admin()) {
         return false;
     }
@@ -6646,12 +6656,14 @@ function api_block_course_item_locked_by_gradebook($item_id, $link_type, $course
         api_not_allowed(true, $message);
     }
 }
+
 /**
  * Checks the PHP version installed is enough to run Chamilo
  * @param string Include path (used to load the error page)
  * @return void
  */
-function api_check_php_version($my_inc_path = null) {
+function api_check_php_version($my_inc_path = null)
+{
     if (!function_exists('version_compare') || version_compare( phpversion(), REQUIRED_PHP_VERSION, '<')) {
         $global_error_code = 1;
         // Incorrect PHP version
@@ -6662,16 +6674,19 @@ function api_check_php_version($my_inc_path = null) {
         exit;
     }
 }
+
 /**
  * Checks whether the Archive directory is present and writeable. If not,
  * prints a warning message.
  */
-function api_check_archive_dir() {
+function api_check_archive_dir()
+{
     if (is_dir(api_get_path(SYS_ARCHIVE_PATH)) && !is_writable(api_get_path(SYS_ARCHIVE_PATH))) {
         $message = Display::return_message(get_lang('ArchivesDirectoryNotWriteableContactAdmin'),'warning');
         api_not_allowed(true, $message);
     }
 }
+
 /**
  * Returns an array of global configuration settings which should be ignored
  * when printing the configuration settings screens
@@ -6731,7 +6746,8 @@ function api_user_is_login($user_id = null) {
  * @author Jorge Frisancho Jibaja <jrfdeft@gmail.com>, USIL - Some changes to allow the use of real IP using reverse proxy
  * @version CEV CHANGE 24APR2012
  */
-function api_get_real_ip(){
+function api_get_real_ip()
+{
     // Guess the IP if behind a reverse proxy
     global $debug;
     $ip = trim($_SERVER['REMOTE_ADDR']);
@@ -6794,7 +6810,8 @@ function api_check_ip_in_range($ip,$range)
     return false;
 }
 
-function api_check_user_access_to_legal($course_visibility) {
+function api_check_user_access_to_legal($course_visibility)
+{
     $course_visibility_list = array(COURSE_VISIBILITY_OPEN_WORLD, COURSE_VISIBILITY_OPEN_PLATFORM);
     return in_array($course_visibility, $course_visibility_list) || api_is_drh();
 }
@@ -6820,6 +6837,8 @@ function api_is_global_chat_enabled()
  * @param int $tool_id
  * @param int $group_id iid
  * @param array $courseInfo
+ * @param int $sessionId
+ * @param int $userId
  */
 function api_set_default_visibility(
     $item_id,
@@ -6919,7 +6938,8 @@ function api_set_default_visibility(
 /**
  * @return string
  */
-function api_get_security_key() {
+function api_get_security_key()
+{
     return api_get_configuration_value('security_key');
 }
 
@@ -6932,8 +6952,6 @@ function api_get_security_key() {
 function api_detect_user_roles($user_id, $courseId, $session_id = 0)
 {
     $user_roles = array();
-    /*$user_info = api_get_user_info($user_id);
-    $user_roles[] = $user_info['status'];*/
     $courseInfo = api_get_course_info_by_id($courseId);
     $course_code = $courseInfo['code'];
 
@@ -7022,11 +7040,13 @@ function api_coach_can_edit_view_results($courseId = null, $session_id = null)
     }
 }
 
-function api_get_js_simple($file) {
+function api_get_js_simple($file)
+{
     return '<script type="text/javascript" src="'.$file.'"></script>'."\n";
 }
 
-function api_set_settings_and_plugins() {
+function api_set_settings_and_plugins()
+{
     global $_configuration;
     $_setting = array();
     $_plugins = array();
@@ -7119,7 +7139,8 @@ function api_set_settings_and_plugins() {
  * @assert (0) === true
  * @assert ('1G') === true
  */
-function api_set_memory_limit($mem){
+function api_set_memory_limit($mem)
+{
     //if ini_set() not available, this function is useless
     if (!function_exists('ini_set') || is_null($mem) || $mem == -1) {
         return false;
@@ -7143,7 +7164,8 @@ function api_set_memory_limit($mem){
  * @assert ('1m')  === 1048576
  * @assert ('100k') === 102400
  */
-function api_get_bytes_memory_limit($mem){
+function api_get_bytes_memory_limit($mem)
+{
     $size = strtolower(substr($mem,-1));
 
     switch ($size) {
@@ -8052,12 +8074,13 @@ function api_is_date_in_date_range($startDate, $endDate, $currentDate = null)
  * @return array
  *
  */
-function api_unique_multidim_array($array, $key){
+function api_unique_multidim_array($array, $key)
+{
     $temp_array = [];
     $i = 0;
     $key_array = [];
 
-    foreach($array as $val){
+    foreach ($array as $val) {
         if(!in_array($val[$key],$key_array)){
             $key_array[$i] = $val[$key];
             $temp_array[$i] = $val;

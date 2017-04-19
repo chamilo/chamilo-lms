@@ -297,7 +297,7 @@ class DisplayGradebook
                 $scoreinfo .= '<strong>'.sprintf(get_lang('TotalX'), $scorecourse_display.$aditionalButtons).'</strong>';
 
             }
-            Display::display_normal_message($scoreinfo, false);
+            Display::addFlash(Display::return_message($scoreinfo, 'normal', false));
         }
 
         // show navigation tree and buttons?
@@ -448,7 +448,7 @@ class DisplayGradebook
             $msg = $weight.' - '.$min_certification.$edit_icon;
             //@todo show description
             $description = (($catobj->get_description() == "" || is_null($catobj->get_description())) ? '' : '<strong>'.get_lang('GradebookDescriptionLog').'</strong>'.': '.$catobj->get_description());
-            Display::display_normal_message($msg, false);
+            Display::addFlash(Display::return_message($msg, 'normal', false));
             if (!empty($description)) {
                 echo Display::div($description, array());
             }
@@ -485,7 +485,7 @@ class DisplayGradebook
             if ((!$catobj->get_id() == '0') && (!isset($_GET['studentoverview'])) && (!isset($_GET['search'])))
                 $scoreinfo .= '<br />'.get_lang('TotalForThisCategory').' : <b>'.$scorecourse_display.'</b>';
             $scoreinfo .= '<br />'.get_lang('Total').' : <b>'.$scoretotal_display.'</b>';
-            Display::display_normal_message($scoreinfo, false);
+            Display::addFlash(Display::return_message($scoreinfo, 'normal', false));
         }
         // show navigation tree and buttons?
         $header = '<div class="actions">';

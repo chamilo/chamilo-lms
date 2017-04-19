@@ -1,5 +1,10 @@
 <?php
+/* For licensing terms, see /license.txt */
 
+/**
+ * Maintenance mode facilitator plugin
+ * @package chamilo.plugin
+ */
 
 //the plugin title
 $plugin_info['title'] = 'Edit htaccess';
@@ -95,7 +100,10 @@ if ($editFile && api_is_platform_admin()) {
     );
 
     $form->addButtonSave(get_lang('Save'));
-    $content = file_get_contents($maintenanceHtml);
+    $content = '';
+    if (is_file($maintenanceHtml)) {
+        $content = file_get_contents($maintenanceHtml);
+    }
     if (empty($content)) {
         $content = '<html><head><title></title></head><body></body></html>';
     }
@@ -106,7 +114,7 @@ if ($editFile && api_is_platform_admin()) {
     $append = api_get_configuration_value('url_append');
 
     $default = '
-RewriteCond %{REQUEST_URI} !'.$append.'/maintenance.html$ 
+RewriteCond %{REQUEST_URI} !'.$append.'/maintenance.html$
 RewriteCond %{REMOTE_HOST} !^'.$implode.'
 RewriteRule \.*$ '.$append.'/maintenance.html [R=302,L]
 ';

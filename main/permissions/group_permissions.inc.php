@@ -2,17 +2,13 @@
 /**
  * @package chamilo.permissions
  */
-/**
- * Code
- */
+
 include_once('permissions_functions.inc.php');
 include_once('all_permissions.inc.php');
 $group_id = api_get_group_id();
 
 echo $group_id;
-// ---------------------------------------------------
 // 			ACTIONS
-// ---------------------------------------------------
 if ($_POST['StoreGroupPermissions'] and $setting_visualisation == 'checkbox') {
     $result_message = store_permissions('group', $group_id);
     if ($result_message) {
@@ -32,23 +28,17 @@ if (isset($result_message)) {
     Display::display_normal_message($result_message);
 }
 
-// ---------------------------------------------------
 // 			RETRIEVING THE PERMISSIONS
-// ---------------------------------------------------
 $current_group_permissions = array();
 $current_group_permissions = get_permissions('group', $group_id);
 // @todo current group permissions and current role permissions
 
-// ---------------------------------------------------
 //   INHERITED PERMISSIONS (group roles)
-// ---------------------------------------------------
 $group_course_roles_permissions = get_roles_permissions('group', $group_id, 'course');
 $group_platform_roles_permissions = get_roles_permissions('group', $group_id, 'platform');
 $inherited_permissions = permission_array_merge($group_course_roles_permissions, $group_platform_roles_permissions);
 
-// ---------------------------------------------------
 // 			LIMITED OR FULL
-// ---------------------------------------------------
 $current_group_permissions = limited_or_full($current_group_permissions);
 $inherited_permissions = limited_or_full($inherited_permissions);
 if (api_get_setting('permissions') == 'limited') {
@@ -59,9 +49,7 @@ if (api_get_setting('permissions') == 'full') {
 }
 
 echo "<form method=\"post\" action=\"" . str_replace('&', '&amp;', $_SERVER['REQUEST_URI']) . "\">";
-// ---------------------------------------------------
 // 		DISPLAYING THE ROLES LIST
-// ---------------------------------------------------
 if (api_get_setting('group_roles') == 'true') {
     // the list of the roles for the user
     echo '<strong>' . get_lang('GroupRoles') . '</strong><br />';
@@ -71,11 +59,7 @@ if (api_get_setting('group_roles') == 'true') {
     echo '<br />';
 }
 
-
-// ---------------------------------------------------
 // 		DISPLAYING THE MATRIX (group permissions)
-// ---------------------------------------------------
-
 echo "<table class=\"data_table\">\n";
 
 // the header
@@ -99,12 +83,23 @@ foreach ($tool_rights as $tool => $rights) // $tool_rights contains all the poss
         if (in_array($value, $rights)) {
             if ($setting_visualisation == 'checkbox') {
                 //display_checkbox_matrix($current_group_permissions, $tool, $value);
-                display_checkbox_matrix($current_group_permissions, $tool, $value, $inherited_permissions,
-                    $course_admin);
+                display_checkbox_matrix(
+                    $current_group_permissions,
+                    $tool,
+                    $value,
+                    $inherited_permissions,
+                    $course_admin
+                );
             }
             if ($setting_visualisation == 'image') {
                 //display_image_matrix($current_group_permissions, $tool, $value);
-                display_image_matrix($current_group_permissions, $tool, $value, $inherited_permissions, $course_admin);
+                display_image_matrix(
+                    $current_group_permissions,
+                    $tool,
+                    $value,
+                    $inherited_permissions,
+                    $course_admin
+                );
             }
         }
         // note: in a later stage this part will be replaced by a function
@@ -122,12 +117,8 @@ if ($setting_visualisation == 'checkbox') {
 }
 echo "</form>";
 
-// ---------------------------------------------------
 // 			LEGEND
-// ---------------------------------------------------
 echo '<strong>' . get_lang('Legend') . '</strong><br />';
 echo '<img src="../img/wrong.gif" /> ' . get_lang('UserHasPermissionNot') . '<br />';
 echo '<img src="../img/checkbox_on2.gif" /> ' . get_lang('UserHasPermission') . '<br />';
 echo '<img src="../img/checkbox_on3.gif" /> ' . get_lang('UserHasPermissionByRoleGroup') . '<br />';
-
-?>

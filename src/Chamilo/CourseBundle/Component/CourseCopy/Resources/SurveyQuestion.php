@@ -85,7 +85,7 @@ class SurveyQuestion extends Resource
      * @param string $option_text
      * @param int $sort
      */
-    public function add_answer($option_text,$sort)
+    public function add_answer($option_text, $sort)
     {
         $answer = array();
         $answer['option_text'] = $option_text;

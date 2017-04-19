@@ -572,11 +572,11 @@ class Database
                         if (is_array($value_array)) {
                             $clean_values = array();
                             foreach ($value_array as $item) {
-                                $item = Database::escape_string($item);
+                                $item = self::escape_string($item);
                                 $clean_values[]= $item;
                             }
                         } else {
-                            $value_array = Database::escape_string($value_array);
+                            $value_array = self::escape_string($value_array);
                             $clean_values = $value_array;
                         }
 

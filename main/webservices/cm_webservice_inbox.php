@@ -84,7 +84,7 @@ class WSCMInbox extends WSCM
                     $htmlcode = true;
                     $field_table = "content";
                     break;
-                default :
+                default:
                     $field_table = "title";
             }
 
@@ -152,7 +152,7 @@ class WSCMInbox extends WSCM
                     $htmlcode = true;
                     $field_table = "content";
                     break;
-                default :
+                default:
                     $field_table = "title";
 
             }

@@ -2341,7 +2341,7 @@ class MySpace
             case 'Contact' :
                 $user = array ();
                 break;
-            default :
+            default:
                 $current_tag = $data;
         }
     }
@@ -2361,7 +2361,7 @@ class MySpace
                 $user['UserName'] = UserManager::purify_username($user['UserName'], $purification_option_for_usernames);
                 $users[] = $user;
                 break;
-            default :
+            default:
                 $user[$data] = $current_value;
                 break;
         }

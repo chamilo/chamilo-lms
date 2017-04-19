@@ -188,7 +188,7 @@ abstract class XapianIndexer
         }
         try {
             if (!is_a($doc, 'XapianDocument')) {
-                return FALSE;
+                return false;
             }
             $doc_data = $doc->get_data();
             return $doc_data;
@@ -235,7 +235,7 @@ abstract class XapianIndexer
         }
         if (is_numeric($did) && $did > 0) {
             $doc = $this->get_document($did);
-            if ($doc !== FALSE) {
+            if ($doc !== false) {
                 $this->db->delete_document($did);
                 $this->db->flush();
             }
@@ -252,7 +252,7 @@ abstract class XapianIndexer
     function add_term_to_doc($term, $doc)
     {
         if (!is_a($doc, 'XapianDocument')) {
-            return FALSE;
+            return false;
         }
         try {
             $doc->add_term($term);
@@ -272,7 +272,7 @@ abstract class XapianIndexer
     function remove_term_from_doc($term, $doc)
     {
         if (!is_a($doc, 'XapianDocument')) {
-            return FALSE;
+            return false;
         }
         try {
             $doc->remove_term($term);
@@ -291,7 +291,7 @@ abstract class XapianIndexer
     function replace_document($doc, $did)
     {
         if (!is_a($doc, 'XapianDocument')) {
-            return FALSE;
+            return false;
         }
         if ($this->db == null) {
             $this->connectDb();
@@ -305,7 +305,6 @@ abstract class XapianIndexer
         }
     }
 
-
     /**
      * Class destructor
      */
@@ -314,5 +313,4 @@ abstract class XapianIndexer
         unset($this->db);
         unset($this->stemmer);
     }
-
 }

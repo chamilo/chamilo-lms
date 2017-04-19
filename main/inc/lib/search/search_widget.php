@@ -360,11 +360,11 @@ function search_widget_show($action='index.php')
     $show_thesaurus = false;
     foreach ($url_params as $param) {
         if (isset($_REQUEST[$param]) && is_array($_REQUEST[$param])) {
-            $thesaurus_decided = FALSE;
+            $thesaurus_decided = false;
             foreach ($_REQUEST[$param] as $term) {
                 if (!empty($term)) {
                     $show_thesaurus = true;
-                    $thesaurus_decided = TRUE;
+                    $thesaurus_decided = true;
                     break;
                 }
             }

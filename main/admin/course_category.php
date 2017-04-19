@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * @package chamilo.admin
  */
@@ -90,8 +91,20 @@ if ($action == 'add' || $action == 'edit') {
     $form->addRule('name', get_lang('PleaseEnterCategoryInfo'), 'required');
     $form->addRule('code', get_lang('PleaseEnterCategoryInfo'), 'required');
     $group = array(
-        $form->createElement('radio', 'auth_course_child', get_lang("AllowCoursesInCategory"), get_lang('Yes'), 'TRUE'),
-        $form->createElement('radio', 'auth_course_child', null, get_lang('No'), 'FALSE')
+        $form->createElement(
+            'radio',
+            'auth_course_child',
+            get_lang("AllowCoursesInCategory"),
+            get_lang('Yes'),
+            'TRUE'
+        ),
+        $form->createElement(
+            'radio',
+            'auth_course_child',
+            null,
+            get_lang('No'),
+            'FALSE'
+        ),
     );
     $form->addGroup($group, null, get_lang("AllowCoursesInCategory"));
 

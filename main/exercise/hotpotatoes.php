@@ -223,7 +223,7 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
 
     echo '<div class="actions">';
     echo '<a href="exercise.php?show=test">'.
-        Display :: return_icon('back.png', get_lang('BackToExercisesList'), '', ICON_SIZE_MEDIUM).
+        Display::return_icon('back.png', get_lang('BackToExercisesList'), '', ICON_SIZE_MEDIUM).
         '</a>';
     echo '</div>';
 

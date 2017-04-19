@@ -33,7 +33,7 @@ function ch_qti2_display_form()
     $name_tools = get_lang('ImportQtiQuiz');
     $form  = '<div class="actions">';
     $form .= '<a href="' . api_get_path(WEB_CODE_PATH) . 'exercise/exercise.php?show=test&'.api_get_cidreq().'">'.
-        Display :: return_icon('back.png', get_lang('BackToExercisesList'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('back.png', get_lang('BackToExercisesList'), '', ICON_SIZE_MEDIUM).'</a>';
     $form .= '</div>';
     $formValidator = new FormValidator(
         'qti_upload',

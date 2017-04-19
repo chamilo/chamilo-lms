@@ -52,7 +52,7 @@ if (isset($_GET['message'])) {
 
 echo '<div class="actions">';
 echo '<a href="exercise_report.php?'.api_get_cidreq().'&filter=2">'.
-    Display :: return_icon('back.png', get_lang('BackToResultList'), '', ICON_SIZE_MEDIUM).'</a>';
+    Display::return_icon('back.png', get_lang('BackToResultList'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 ?>

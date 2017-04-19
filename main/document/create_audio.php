@@ -260,7 +260,7 @@ if ($service == 'pediaphon') {
 
     $form->addElement('select', 'speed', get_lang('Speed'), $speed_options, array());
     $form->addElement('textarea', 'text', get_lang('InsertText2Audio'), array('id' => 'textarea_pediaphon'));
-    //echo Display :: return_icon('info3.gif', get_lang('HelpPediaphon'), array('align' => 'absmiddle', 'hspace' => '3px'), false);
+    //echo Display::return_icon('info3.gif', get_lang('HelpPediaphon'), array('align' => 'absmiddle', 'hspace' => '3px'), false);
     $form->addButtonSave(get_lang('SaveMP3'));
     $defaults = array();
     $defaults['lang'] = $selected_language;

@@ -368,15 +368,15 @@ if (!empty($student_id)) {
 
     if (!empty ($user_info['email'])) {
         $send_mail = '<a href="mailto:'.$user_info['email'].'">'.
-            Display :: return_icon('mail_send.png', get_lang('SendMail'),'',ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('mail_send.png', get_lang('SendMail'),'',ICON_SIZE_MEDIUM).'</a>';
     } else {
-        $send_mail = Display :: return_icon('mail_send_na.png', get_lang('SendMail'),'',ICON_SIZE_MEDIUM);
+        $send_mail = Display::return_icon('mail_send_na.png', get_lang('SendMail'),'',ICON_SIZE_MEDIUM);
     }
     echo $send_mail;
     if (!empty($student_id) && !empty($course_code)) {
         // Only show link to connection details if course and student were defined in the URL
         echo '<a href="access_details.php?student=' . $student_id . '&course=' . $course_code . '&origin=' . $origin. '&cidReq='.$course_code.'&id_session='.$sessionId.'">'.
-            Display :: return_icon('statistics.png', get_lang('AccessDetails'),'',ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('statistics.png', get_lang('AccessDetails'),'',ICON_SIZE_MEDIUM).'</a>';
     }
     if (api_can_login_as($student_id)) {
         echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&user_id='.$student_id.'&sec_token='.$token.'">'.
@@ -1143,7 +1143,7 @@ if (!empty($student_id)) {
         <tr>
             <th><?php echo get_lang('Exercises'); ?></th>
             <th><?php echo get_lang('LearningPath');?></th>
-            <th><?php echo get_lang('AvgCourseScore').' '.Display :: return_icon('info3.gif', get_lang('AverageScore'), array('align' => 'absmiddle', 'hspace' => '3px')) ?></th>
+            <th><?php echo get_lang('AvgCourseScore').' '.Display::return_icon('info3.gif', get_lang('AverageScore'), array('align' => 'absmiddle', 'hspace' => '3px')) ?></th>
             <th><?php echo get_lang('Attempts'); ?></th>
             <th><?php echo get_lang('LatestAttempt'); ?></th>
             <th><?php echo get_lang('AllAttempts'); ?></th>

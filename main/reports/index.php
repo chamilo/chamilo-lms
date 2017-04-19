@@ -135,14 +135,14 @@ Display::display_header($tool_name);
                         <select class="input_field_12em link required" name="type" id="type">
 <?php
 foreach ($reports_template as $key => $value) {
-	echo '<option value="'.$key.'">'.$value['description'].'</option>';
+    echo '<option value="'.$key.'">'.$value['description'].'</option>';
 }
 ?>
                         </select><br />
                     </span>
 <?php
 foreach ($reports_template as $key => $value) {
-	echo $value['wizard'];
+    echo $value['wizard'];
 }
 ?>
                     <span id="format" class="step submit_step">

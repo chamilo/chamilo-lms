@@ -46,15 +46,15 @@ if ($allowTutors == 'true') {
     );
 
     //Column config
-    $column_model   = array(
-        array('name'=>'name',           'index'=>'name',          'width'=>'160',  'align'=>'left', 'search' => 'true', 'wrap_cell' => "true"),
-        array('name'=>'nbr_courses',    'index'=>'nbr_courses',   'width'=>'30',   'align'=>'left', 'search' => 'true'),
-        array('name'=>'nbr_users',      'index'=>'nbr_users',     'width'=>'30',   'align'=>'left', 'search' => 'true'),
-        array('name'=>'category_name',  'index'=>'category_name', 'width'=>'70',   'align'=>'left', 'search' => 'true'),
-        array('name'=>'access_start_date',     'index'=>'access_start_date',    'width'=>'40',   'align'=>'left', 'search' => 'true'),
-        array('name'=>'access_end_date',       'index'=>'access_end_date',      'width'=>'40',   'align'=>'left', 'search' => 'true'),
-        array('name'=>'coach_name',     'index'=>'coach_name',    'width'=>'80',   'align'=>'left', 'search' => 'false'),
-        array('name'=>'status',         'index'=>'session_active','width'=>'40',   'align'=>'left', 'search' => 'true', 'stype'=>'select',
+    $column_model = array(
+        array('name'=>'name', 'index'=>'name', 'width'=>'160', 'align'=>'left', 'search' => 'true', 'wrap_cell' => "true"),
+        array('name'=>'nbr_courses', 'index'=>'nbr_courses', 'width'=>'30', 'align'=>'left', 'search' => 'true'),
+        array('name'=>'nbr_users', 'index'=>'nbr_users', 'width'=>'30', 'align'=>'left', 'search' => 'true'),
+        array('name'=>'category_name', 'index'=>'category_name', 'width'=>'70', 'align'=>'left', 'search' => 'true'),
+        array('name'=>'access_start_date', 'index'=>'access_start_date', 'width'=>'40', 'align'=>'left', 'search' => 'true'),
+        array('name'=>'access_end_date', 'index'=>'access_end_date', 'width'=>'40', 'align'=>'left', 'search' => 'true'),
+        array('name'=>'coach_name', 'index'=>'coach_name', 'width'=>'80', 'align'=>'left', 'search' => 'false'),
+        array('name'=>'status', 'index'=>'session_active', 'width'=>'40', 'align'=>'left', 'search' => 'true', 'stype'=>'select',
           //for the bottom bar
             'searchoptions' => array(
                 'defaultValue' => '1',
@@ -62,8 +62,8 @@ if ($allowTutors == 'true') {
             ),
           //for the top bar
           'editoptions' => array('value' => ':'.get_lang('All').';1:'.get_lang('Active').';0:'.get_lang('Inactive'))),
-        array('name'=>'visibility',     'index'=>'visibility',      'width'=>'40',   'align'=>'left', 'search' => 'false'),
-        array('name'=>'actions',        'index'=>'actions',         'width'=>'100',  'align'=>'left','formatter'=>'action_formatter','sortable'=>'false', 'search' => 'false')
+        array('name'=>'visibility', 'index'=>'visibility', 'width'=>'40', 'align'=>'left', 'search' => 'false'),
+        array('name'=>'actions', 'index'=>'actions', 'width'=>'100', 'align'=>'left', 'formatter'=>'action_formatter', 'sortable'=>'false', 'search' => 'false')
     );
     //Autowidth
     $extra_params['autowidth'] = 'true';
@@ -75,7 +75,7 @@ if ($allowTutors == 'true') {
 
     //With this function we can add actions to the jgrid (edit, delete, etc)
     $action_links = 'function action_formatter(cellvalue, options, rowObject) {
-         return \'&nbsp;<a href="add_users_to_session.php?page=session_list.php&id_session=\'+options.rowId+\'">'.Display::return_icon('user_subscribe_session.png',get_lang('SubscribeUsersToSession'),'',ICON_SIZE_SMALL).'</a>'.
+         return \'&nbsp;<a href="add_users_to_session.php?page=session_list.php&id_session=\'+options.rowId+\'">'.Display::return_icon('user_subscribe_session.png', get_lang('SubscribeUsersToSession'), '', ICON_SIZE_SMALL).'</a>'.
          '\';
     }';
     ?>
@@ -96,7 +96,7 @@ if ($allowTutors == 'true') {
 
     $(function() {
         <?php
-            echo Display::grid_js('sessions', $url,$columns,$column_model,$extra_params, array(), $action_links,true);
+            echo Display::grid_js('sessions', $url, $columns, $column_model, $extra_params, array(), $action_links, true);
         ?>
 
         setSearchSelect("status");
@@ -138,9 +138,9 @@ if ($allowTutors == 'true') {
     <?php if (api_is_platform_admin()) {?>
         <div class="actions">
         <?php
-        echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_add.php">'.Display::return_icon('new_session.png',get_lang('AddSession'),'',ICON_SIZE_MEDIUM).'</a>';
-        echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/add_many_session_to_category.php">'.Display::return_icon('session_to_category.png',get_lang('AddSessionsInCategories'),'',ICON_SIZE_MEDIUM).'</a>';
-        echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_category_list.php">'.Display::return_icon('folder.png',get_lang('ListSessionCategory'),'',ICON_SIZE_MEDIUM).'</a>';
+        echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_add.php">'.Display::return_icon('new_session.png', get_lang('AddSession'), '', ICON_SIZE_MEDIUM).'</a>';
+        echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/add_many_session_to_category.php">'.Display::return_icon('session_to_category.png', get_lang('AddSessionsInCategories'), '', ICON_SIZE_MEDIUM).'</a>';
+        echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_category_list.php">'.Display::return_icon('folder.png', get_lang('ListSessionCategory'), '', ICON_SIZE_MEDIUM).'</a>';
         echo '</div>';
     }
 } else {

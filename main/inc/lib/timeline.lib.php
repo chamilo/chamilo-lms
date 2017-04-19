@@ -27,7 +27,7 @@ class Timeline extends Model
 
 	public function __construct()
     {
-        $this->table =  Database::get_course_table(TABLE_TIMELINE);
+        $this->table = Database::get_course_table(TABLE_TIMELINE);
 	}
 
     /**
@@ -46,7 +46,7 @@ class Timeline extends Model
      */
     public function get_all($where_conditions = array())
     {
-        return Database::select('*',$this->table, array('where'=>$where_conditions,'order' =>'headline ASC'));
+        return Database::select('*', $this->table, array('where'=>$where_conditions, 'order' =>'headline ASC'));
     }
 
     /**
@@ -57,7 +57,7 @@ class Timeline extends Model
 		// action links
 		$html = '<div class="actions">';
         //$html .= '<a href="career_dashboard.php">'.Display::return_icon('back.png',get_lang('Back'),'','32').'</a>';
-		$html .= '<a href="'.api_get_self().'?action=add">'.Display::return_icon('add.png', get_lang('Add'),'','32').'</a>';
+		$html .= '<a href="'.api_get_self().'?action=add">'.Display::return_icon('add.png', get_lang('Add'), '', '32').'</a>';
 		$html .= '</div>';
         $html .= Display::grid_html('timelines');
         return $html;
@@ -89,7 +89,7 @@ class Timeline extends Model
 
         $form->addElement('text', 'headline', get_lang('Name'), array('size' => '70'));
         //$form->addHtmlEditor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'Careers','Width' => '100%', 'Height' => '250'));
-	    $status_list = $this->get_status_list();
+        $status_list = $this->get_status_list();
         $form->addElement('select', 'status', get_lang('Status'), $status_list);
         if ($action == 'edit') {
             //$form->addElement('text', 'created_at', get_lang('CreatedAt'));
@@ -173,7 +173,7 @@ class Timeline extends Model
 
         // Setting the rules
         $form->addRule('headline', get_lang('ThisFieldIsRequired'), 'required');
-		return $form;
+        return $form;
 
     }
 
@@ -244,7 +244,7 @@ class Timeline extends Model
         }
         unset($item['end_date']);
         // Assets
-        $item['asset'] = array( 'media'     => $item['media'],
+        $item['asset'] = array('media'     => $item['media'],
                                 'credit'    => $item['media_credit'],
                                 'caption'   => $item['media_caption'],
          );

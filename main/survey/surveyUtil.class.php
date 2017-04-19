@@ -2054,22 +2054,28 @@ class SurveyUtil
      * This function saves all the invitations of course users and additional users in the database
      * and sends the invitations by email
      *
-     * @param array Users array can be both a list of course uids AND a list of additional emailaddresses
-     * @param string Title of the invitation, used as the title of the mail
-     * @param string Text of the invitation, used as the text of the mail.
-     *                 The text has to contain a **link** string or this will automatically be added to the end
+     * @param $users_array Users $array array can be both a list of course uids AND a list of additional emailaddresses
+     * @param $invitation_title Title $string of the invitation, used as the title of the mail
+     * @param $invitation_text Text $string of the invitation, used as the text of the mail.
+     *                         The text has to contain a **link** string or this will automatically be added to the end
+     * @param int $reminder
+     * @param bool $sendmail
+     * @param int $remindUnAnswered
      * @return int
+     * @internal param
+     * @internal param
+     * @internal param
+     *                 The text has to contain a **link** string or this will automatically be added to the end
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @author Julio Montoya - Adding auto-generated link support
      * @version January 2007
-     *
      */
     public static function saveInvitations(
         $users_array,
         $invitation_title,
         $invitation_text,
         $reminder = 0,
-        $sendmail = 0,
+        $sendmail = false,
         $remindUnAnswered = 0
     ) {
         if (!is_array($users_array)) {
@@ -2163,7 +2169,7 @@ class SurveyUtil
             }
 
             // Send the email if checkboxed
-            if (($new_user || $reminder == 1) && $sendmail != 0) {
+            if (($new_user || $reminder == 1) && $sendmail) {
                 // Make a change for absolute url
                 if (isset($invitation_text)) {
                     $invitation_text = api_html_entity_decode($invitation_text, ENT_QUOTES);

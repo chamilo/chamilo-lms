@@ -17,7 +17,7 @@ $this_section = SECTION_COURSES;
 // notice for unauthorized people.
 api_protect_course_script(true);
 
-if ($debug>0) {
+if ($debug > 0) {
     error_log('Entered exercise_result.php: '.print_r($_POST, 1));
 }
 
@@ -100,7 +100,7 @@ if ($time_control) {
 if (isset($_SESSION['exe_id'])) {
     $exe_id = intval($_SESSION['exe_id']);
 }
-$exercise_stat_info	= $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
+$exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
 if (!empty($exercise_stat_info['data_tracking'])) {
     $question_list = explode(',', $exercise_stat_info['data_tracking']);
 }
@@ -253,7 +253,7 @@ $exercise_actions .= '&nbsp;'.
     Display::url(
         get_lang('ReviewQuestions'),
         'javascript://',
-        array('onclick'=>'review_questions();','class'=>'btn btn-success')
+        array('onclick'=>'review_questions();', 'class'=>'btn btn-success')
     );
 
 echo Display::div('', array('class'=>'clear'));

@@ -1068,7 +1068,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
      */
     public function getStatusMessage($status, $isAble = true)
     {
-	$message = '';
+    $message = '';
         switch ($status) {
             case ADVANCED_SUBSCRIPTION_QUEUE_STATUS_NO_QUEUE:
                 if ($isAble) {
@@ -1163,7 +1163,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             'e='.intval($params['newStatus']).'&'.
             'u='.intval($params['studentUserId']).'&'.
             'q='.intval($params['queueId']).'&'.
-            'is_connected='.1.'&'.
+            'is_connected=' . 1 .'&'.
             'profile_completed='.intval($params['profile_completed']).'&'.
             'v='.$this->generateHash($params);
 

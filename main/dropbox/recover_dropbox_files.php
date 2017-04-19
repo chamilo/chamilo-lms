@@ -33,7 +33,7 @@ $sql = "SELECT * FROM $file_tbl
 $result = Database::query($sql);
 
 if (Database::num_rows($result)) {
-    $files  = Database::store_result($result);
+    $files = Database::store_result($result);
     $rows = array();
     foreach ($files as $file) {
         //Check if I have this file:

@@ -98,7 +98,7 @@ if (is_int($global_error_code) && $global_error_code > 0) {
             $global_error_message['description'] = $IncorrectPhpVersionDescription;
             break;
         case 2:
-            require __DIR__ . '/../install/version.php';
+            require __DIR__.'/../install/version.php';
             $global_error_message['section'] = $SectionInstallation;
             $global_error_message['title'] = $InstallationTitle;
             if (($pos = strpos($InstallationDescription, '%s')) === false) {

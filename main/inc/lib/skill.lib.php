@@ -35,11 +35,11 @@ class SkillProfile extends Model
     }
 
     /**
-    * This function is for editing profile info from profile_id.
-    * @param int    $profileId
-    * @param string $name
-    * @param string $description
-    */
+     * This function is for editing profile info from profile_id.
+     * @param int    $profileId
+     * @param string $name
+     * @param string $description
+     */
     public function updateProfileInfo($profileId, $name, $description)
     {
         $profileId = intval($profileId);
@@ -133,9 +133,9 @@ class SkillRelProfile extends Model
     }
 
     /**
-    * This function is for getting profile info from profile_id.
-    * @param int $profileId
-    */
+     * This function is for getting profile info from profile_id.
+     * @param int $profileId
+     */
 
     public function getProfileInfo($profileId)
     {

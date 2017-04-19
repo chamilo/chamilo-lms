@@ -104,7 +104,7 @@ if (!empty($gradebook) && $gradebook == 'view') {
 // Define the 'doc.inc.php' as language file.
 $nameTools = $_SESSION['oLP']->get_name();
 $interbreadcrumb[] = array(
-    'url' => api_get_path(WEB_CODE_PATH) . 'lp/lp_list.php?'.api_get_cidreq(),
+    'url' => api_get_path(WEB_CODE_PATH).'lp/lp_list.php?'.api_get_cidreq(),
     'name' => get_lang('Doc'),
 );
 // Update global setting to avoid displaying right menu.

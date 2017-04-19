@@ -22,7 +22,7 @@ class ConditionalLogin
                     if (isset($condition['conditional_function']) && $condition['conditional_function']($user) == false) {
                         $_SESSION['conditional_login']['uid'] = $user['user_id'];
                         $_SESSION['conditional_login']['can_login'] = false;
-                        header("Location:". $condition['url']);
+                        header("Location:".$condition['url']);
                         exit();
                     }
                 }

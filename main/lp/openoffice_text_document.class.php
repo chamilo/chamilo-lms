@@ -121,7 +121,7 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
         $intro_content = api_substr($content, 0, api_strpos($content, $matches[0][0]));
         $items_to_create[get_lang('Introduction')] = $intro_content;
 
-        for ($i = 0; $i<count($matches[0]); $i++) {
+        for ($i = 0; $i < count($matches[0]); $i++) {
 
             if (empty($matches[1][$i]))
                 continue;
@@ -195,7 +195,7 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
 
         $first_item = 0;
 
-        foreach($pages as $key => $page_content) {
+        foreach ($pages as $key => $page_content) {
             // For every pages, we create a new file.
 
             $key += 1;
@@ -249,7 +249,7 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
                     foreach ($specific_fields as $specific_field) {
                         if (isset($_REQUEST[$specific_field['code']])) {
                             $sterms = trim($_REQUEST[$specific_field['code']]);
-                            $all_specific_terms .= ' '. $sterms;
+                            $all_specific_terms .= ' '.$sterms;
                             if (!empty($sterms)) {
                                 $sterms = explode(',', $sterms);
                                 foreach ($sterms as $sterm) {
@@ -258,7 +258,7 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
                             }
                         }
                     }
-                    $page_content = $all_specific_terms .' '. $page_content;
+                    $page_content = $all_specific_terms.' '.$page_content;
                     $ic_slide->addValue('content', $page_content);
                     // Add a comment to say terms separated by commas.
                     $courseid = api_get_course_id();
@@ -269,7 +269,7 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
                         SE_COURSE_ID => $courseid,
                         SE_TOOL_ID => TOOL_LEARNPATH,
                         SE_DATA => array('lp_id' => $lp_id, 'lp_item' => $previous, 'document_id' => $document_id),
-                        SE_USER => (int)api_get_user_id(),
+                        SE_USER => (int) api_get_user_id(),
                     );
                     $ic_slide->xapian_data = serialize($xapian_data);
                     $di->addChunk($ic_slide);
@@ -312,7 +312,7 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
             $content = '<body><div style="width:'.$max_width.'">'.$content;
         }
 
-        $content = preg_replace('|</body>|i','</div>\\0', $content, -1, $count);
+        $content = preg_replace('|</body>|i', '</div>\\0', $content, -1, $count);
         if ($count < 1) {
             $content = $content.'</div></body>';
         }
@@ -340,7 +340,7 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
                 }
 
             } elseif ($img_width > $max_width - 10) {
-                $picture_resized = str_ireplace('width='.$img_width, 'width="'.($max_width-10).'"', $images[0][$key]);
+                $picture_resized = str_ireplace('width='.$img_width, 'width="'.($max_width - 10).'"', $images[0][$key]);
                 $content = str_replace($images[0][$key], $picture_resized, $content);
             }
         }

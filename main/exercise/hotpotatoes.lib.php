@@ -66,7 +66,7 @@ function GetQuizName($fname, $fpath)
     if ($title == '') {
         $title = basename($fname);
     }
-    return (string)$title;
+    return (string) $title;
 }
 
 /**
@@ -177,7 +177,7 @@ function GetImgName($imgtag)
         if ($src == '') {
             return '';
         } else {
-            $tmp_src = basename($src) ;
+            $tmp_src = basename($src);
             if ($tmp_src == '') {
                 return $src;
             } else {
@@ -199,7 +199,7 @@ function GetSrcName($imgtag)
 {
     // Select src tag from img tag.
     $match = array();
-    preg_match("|(src=\".*\" )|U", $imgtag, $match);            //src
+    preg_match("|(src=\".*\" )|U", $imgtag, $match); //src
     list($key, $srctag) = each($match);
     $src = substr($srctag, 5, (strlen($srctag) - 7));
     if (stristr($src, 'http') === false) {
@@ -231,8 +231,8 @@ function GetImgParams($fname, $fpath, &$imgparams, &$imgcount)
         while (list($key, $imgtag) = each($match)) {
             $imgname = GetImgName($imgtag);
             if ($imgname != '' && !in_array($imgname, $imgparams)) {
-                array_push($imgparams, $imgname);    // name (+ type) of the images in the html test
-                $imgcount = $imgcount + 1;            // number of images in the html test
+                array_push($imgparams, $imgname); // name (+ type) of the images in the html test
+                $imgcount = $imgcount + 1; // number of images in the html test
             }
         }
     }
@@ -408,7 +408,7 @@ function CheckSubFolder($path)
                 if ($file != '..') {
                     $full_name = $folder.'/'.$file;
                     if (is_dir($full_name)) {
-                        $dflag = 1;    // first directory
+                        $dflag = 1; // first directory
                     }
                 }
             }

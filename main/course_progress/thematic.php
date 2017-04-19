@@ -46,7 +46,7 @@ if (api_is_allowed_to_edit(null, true)) {
                 Display::return_icon('new_course_progress.png', get_lang('NewThematicSection'), '', ICON_SIZE_MEDIUM).'</a>';
     }
     
-    $toolbar= Display::toolbarAction('thematic-bar', array($actionLeft));
+    $toolbar = Display::toolbarAction('thematic-bar', array($actionLeft));
 }
 
 
@@ -133,12 +133,12 @@ if ($action == 'thematic_list') {
                     if ($thematic['display_order'] > 1) {
                         $toolbarThematic .= ' <a class="btn btn-default" href="'.api_get_self().'?action=moveup&'.api_get_cidreq().'&thematic_id='.$my_thematic_id.$params.$url_token.'">'.Display::return_icon('up.png', get_lang('Up'), '', ICON_SIZE_TINY).'</a>';
                     } else {
-                        $toolbarThematic .= '<div class="btn btn-default">'.Display::return_icon('up_na.png', '&nbsp;', '', ICON_SIZE_TINY) . '</div>';
+                        $toolbarThematic .= '<div class="btn btn-default">'.Display::return_icon('up_na.png', '&nbsp;', '', ICON_SIZE_TINY).'</div>';
                     }
                     if (isset($thematic['max_thematic_item']) && $thematic['display_order'] < $thematic['max_thematic_item']) {
                         $toolbarThematic .= ' <a class="btn btn-default" href="'.api_get_self().'?action=movedown&a'.api_get_cidreq().'&thematic_id='.$my_thematic_id.$params.$url_token.'">'.Display::return_icon('down.png', get_lang('Down'), '', ICON_SIZE_TINY).'</a>';
                     } else {
-                        $toolbarThematic .= '<div class="btn btn-default">'.Display::return_icon('down_na.png', '&nbsp;', '', ICON_SIZE_TINY) . '</div>';
+                        $toolbarThematic .= '<div class="btn btn-default">'.Display::return_icon('down_na.png', '&nbsp;', '', ICON_SIZE_TINY).'</div>';
                     }
                 }
                 if (api_get_session_id() == $thematic['session_id']) {

@@ -114,15 +114,15 @@ class CourseRestorer
         $this->tool_copy_settings = $array;
     }
 
-	/**
-	 * Restore a course.
+    /**
+     * Restore a course.
      *
-	 * @param string    $destination_course_code code of the Chamilo-course in
-	 * @param int	    $session_id
-	 * @param bool	    $update_course_settings Course settings are going to be restore?
-     * @param bool      $respect_base_content
+     * @param string $destination_course_code code of the Chamilo-course in
+     * @param int $session_id
+     * @param bool $update_course_settings Course settings are going to be restore?
+     * @param bool $respect_base_content
      * @return false|null
-	 */
+     */
     public function restore(
         $destination_course_code = '',
         $session_id = 0,
@@ -238,17 +238,17 @@ class CourseRestorer
         }
     }
 
-	/**
-	 * Restore only harmless course settings:
+    /**
+     * Restore only harmless course settings:
      * course_language, visibility, department_name,department_url,
      * subscribe, unsubscribe ,category_code
-	 *
-	 * @param string $destination_course_code
-	 */
+     *
+     * @param string $destination_course_code
+     */
     public function restore_course_settings($destination_course_code)
     {
-	    $origin_course_info = api_get_course_info($destination_course_code);
-	    $course_info = $this->course->info;
+        $origin_course_info = api_get_course_info($destination_course_code);
+        $course_info = $this->course->info;
         $params['course_language'] = $course_info['language'];
         $params['visibility'] = $course_info['visibility'];
         $params['department_name'] = $course_info['department_name'];
@@ -258,7 +258,7 @@ class CourseRestorer
         $params['subscribe'] = $course_info['subscribe_allowed'];
         $params['unsubscribe'] = $course_info['unsubscribe'];
         CourseManager::update_attributes($origin_course_info['real_id'], $params);
-	}
+    }
 
     /**
      * Restore documents
@@ -632,7 +632,7 @@ class CourseRestorer
                                     }
 
                                     $dest_document_path = $new_base_path.'/'.$document_path[2]; // e.g: "/var/www/wiener/courses/CURSO4/document/carpeta1_1/subcarpeta1/collaborative.png"
-                                    $basedir_dest_path 	= dirname($dest_document_path); // e.g: "/var/www/wiener/courses/CURSO4/document/carpeta1_1/subcarpeta1"
+                                    $basedir_dest_path = dirname($dest_document_path); // e.g: "/var/www/wiener/courses/CURSO4/document/carpeta1_1/subcarpeta1"
                                     $base_path_document = $course_path.$document_path[0]; // e.g: "/var/www/wiener/courses/CURSO4/document"
                                     $path_title = '/'.$new_base_foldername.'/'.$document_path[2];
 
@@ -948,56 +948,56 @@ class CourseRestorer
         unset($_SESSION['new_base_foldername']);
         unset($_SESSION['orig_base_foldername']);
         unset($_SESSION['new_base_path']);
-	}
+    }
 
-	/**
-	 * Restore scorm documents
-	 * TODO @TODO check that the restore function with renaming doesn't break the scorm structure!
+    /**
+     * Restore scorm documents
+     * TODO @TODO check that the restore function with renaming doesn't break the scorm structure!
      * see #7029
-	 */
-	public function restore_scorm_documents()
-	{
-		$perm = api_get_permissions_for_new_directories();
+     */
+    public function restore_scorm_documents()
+    {
+        $perm = api_get_permissions_for_new_directories();
 
-		if ($this->course->has_resources(RESOURCE_SCORM)) {
-			$resources = $this->course->resources;
+        if ($this->course->has_resources(RESOURCE_SCORM)) {
+            $resources = $this->course->resources;
 
-			foreach ($resources[RESOURCE_SCORM] as $document) {
-				$path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/';
-				@mkdir(dirname($path.$document->path), $perm, true);
+            foreach ($resources[RESOURCE_SCORM] as $document) {
+                $path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/';
+                @mkdir(dirname($path.$document->path), $perm, true);
 
-				if (file_exists($path.$document->path)) {
-					switch ($this->file_option) {
-						case FILE_OVERWRITE:
-							rmdirr($path.$document->path);
+                if (file_exists($path.$document->path)) {
+                    switch ($this->file_option) {
+                        case FILE_OVERWRITE:
+                            rmdirr($path.$document->path);
                             copyDirTo(
                                 $this->course->backup_path.'/'.$document->path,
                                 $path.dirname($document->path),
                                 false
                             );
-							break;
-						case FILE_SKIP:
-							break;
+                            break;
+                        case FILE_SKIP:
+                            break;
                         case FILE_RENAME:
-							$i = 1;
-							$ext = explode('.', basename($document->path));
-							if (count($ext) > 1) {
-								$ext = array_pop($ext);
-								$file_name_no_ext = substr($document->path, 0, - (strlen($ext) + 1));
-								$ext = '.'.$ext;
-							} else {
-								$ext = '';
-								$file_name_no_ext = $document->path;
-							}
+                            $i = 1;
+                            $ext = explode('.', basename($document->path));
+                            if (count($ext) > 1) {
+                                $ext = array_pop($ext);
+                                $file_name_no_ext = substr($document->path, 0, - (strlen($ext) + 1));
+                                $ext = '.'.$ext;
+                            } else {
+                                $ext = '';
+                                $file_name_no_ext = $document->path;
+                            }
 
-							$new_file_name = $file_name_no_ext.'_'.$i.$ext;
-							$file_exists = file_exists($path.$new_file_name);
+                            $new_file_name = $file_name_no_ext.'_'.$i.$ext;
+                            $file_exists = file_exists($path.$new_file_name);
 
-							while ($file_exists) {
-								$i++;
-								$new_file_name = $file_name_no_ext.'_'.$i.$ext;
-								$file_exists = file_exists($path.$new_file_name);
-							}
+                            while ($file_exists) {
+                                $i++;
+                                $new_file_name = $file_name_no_ext.'_'.$i.$ext;
+                                $file_exists = file_exists($path.$new_file_name);
+                            }
 
                             rename(
                                 $this->course->backup_path.'/'.$document->path,
@@ -1013,32 +1013,32 @@ class CourseRestorer
                                 $this->course->backup_path.'/'.$document->path
                             );
 
-							break;
-					} // end switch
-				} else {
+                            break;
+                    } // end switch
+                } else {
                     // end if file exists
                     copyDirTo(
                         $this->course->backup_path.'/'.$document->path,
                         $path.dirname($document->path),
                         false
                     );
-				}
-			} // end for each
-		}
-	}
+                }
+            } // end for each
+        }
+    }
 
-	/**
-	 * Restore forums
+    /**
+     * Restore forums
      *
      * @param int $sessionId
      */
-	public function restore_forums($sessionId = 0)
-	{
-		if ($this->course->has_resources(RESOURCE_FORUM)) {
+    public function restore_forums($sessionId = 0)
+    {
+        if ($this->course->has_resources(RESOURCE_FORUM)) {
             $sessionId = intval($sessionId);
-			$table_forum = Database::get_course_table(TABLE_FORUM);
-			$resources = $this->course->resources;
-			foreach ($resources[RESOURCE_FORUM] as $id => $forum) {
+            $table_forum = Database::get_course_table(TABLE_FORUM);
+            $resources = $this->course->resources;
+            foreach ($resources[RESOURCE_FORUM] as $id => $forum) {
                 $params = (array) $forum->obj;
                 $cat_id = '';
                 if (isset($this->course->resources[RESOURCE_FORUMCATEGORY]) &&
@@ -1085,33 +1085,33 @@ class CourseRestorer
                     Database::query($sql);
                 }
 
-				$this->course->resources[RESOURCE_FORUM][$id]->destination_id = $new_id;
+                $this->course->resources[RESOURCE_FORUM][$id]->destination_id = $new_id;
 
-				$forum_topics = 0;
-				if (is_array($this->course->resources[RESOURCE_FORUMTOPIC])) {
-					foreach ($this->course->resources[RESOURCE_FORUMTOPIC] as $topic_id => $topic) {
-						if ($topic->obj->forum_id == $id) {
-							$this->restore_topic($topic_id, $new_id, $sessionId);
-							$forum_topics++;
-						}
-					}
-				}
-				if ($forum_topics > 0) {
-					$sql = "UPDATE ".$table_forum." SET forum_threads = ".$forum_topics."
+                $forum_topics = 0;
+                if (is_array($this->course->resources[RESOURCE_FORUMTOPIC])) {
+                    foreach ($this->course->resources[RESOURCE_FORUMTOPIC] as $topic_id => $topic) {
+                        if ($topic->obj->forum_id == $id) {
+                            $this->restore_topic($topic_id, $new_id, $sessionId);
+                            $forum_topics++;
+                        }
+                    }
+                }
+                if ($forum_topics > 0) {
+                    $sql = "UPDATE ".$table_forum." SET forum_threads = ".$forum_topics."
                             WHERE c_id = {$this->destination_course_id} AND forum_id = ".(int) $new_id;
-					Database::query($sql);
-				}
-			}
-		}
-	}
+                    Database::query($sql);
+                }
+            }
+        }
+    }
 
-	/**
-	 * Restore forum-categories
-	 */
+    /**
+     * Restore forum-categories
+     */
     public function restore_forum_category($my_id = null, $sessionId = 0)
     {
-		$forum_cat_table = Database::get_course_table(TABLE_FORUM_CATEGORY);
-		$resources = $this->course->resources;
+        $forum_cat_table = Database::get_course_table(TABLE_FORUM_CATEGORY);
+        $resources = $this->course->resources;
         if (!empty($resources[RESOURCE_FORUMCATEGORY])) {
             foreach ($resources[RESOURCE_FORUMCATEGORY] as $id => $forum_cat) {
                 if (!empty($my_id)) {
@@ -1143,22 +1143,22 @@ class CourseRestorer
 
                     $this->course->resources[RESOURCE_FORUMCATEGORY][$id]->destination_id = $new_id;
                     if (!empty($my_id)) {
-
                         return $new_id;
                     }
                 }
             }
         }
-	}
+    }
 
-	/**
-	 * Restore a forum-topic
-	 * @param false|string $forum_id
-	 */
+    /**
+     * Restore a forum-topic
+     * @param false|string $forum_id
+     * @return int
+     */
     public function restore_topic($thread_id, $forum_id, $sessionId = 0)
     {
-		$table = Database::get_course_table(TABLE_FORUM_THREAD);
-		$topic = $this->course->resources[RESOURCE_FORUMTOPIC][$thread_id];
+        $table = Database::get_course_table(TABLE_FORUM_THREAD);
+        $topic = $this->course->resources[RESOURCE_FORUMTOPIC][$thread_id];
 
         $params = (array) $topic->obj;
         $params = self::DBUTF8_array($params);
@@ -1195,27 +1195,28 @@ class CourseRestorer
             $sessionId
         );
 
-		$this->course->resources[RESOURCE_FORUMTOPIC][$thread_id]->destination_id = $new_id;
-		$topic_replies = -1;
+        $this->course->resources[RESOURCE_FORUMTOPIC][$thread_id]->destination_id = $new_id;
+        $topic_replies = -1;
 
-		foreach ($this->course->resources[RESOURCE_FORUMPOST] as $post_id => $post) {
-			if ($post->obj->thread_id == $thread_id) {
-				$topic_replies++;
-				$this->restore_post($post_id, $new_id, $forum_id, $sessionId);
-			}
-		}
-		return $new_id;
-	}
+        foreach ($this->course->resources[RESOURCE_FORUMPOST] as $post_id => $post) {
+            if ($post->obj->thread_id == $thread_id) {
+                $topic_replies++;
+                $this->restore_post($post_id, $new_id, $forum_id, $sessionId);
+            }
+        }
+        return $new_id;
+    }
 
-	/**
-	 * Restore a forum-post
-	 * @TODO Restore tree-structure of posts. For example: attachments to posts.
-	 * @param false|string $topic_id
-	 */
+    /**
+     * Restore a forum-post
+     * @TODO Restore tree-structure of posts. For example: attachments to posts.
+     * @param false|string $topic_id
+     * @return int
+     */
     public function restore_post($id, $topic_id, $forum_id, $sessionId = 0)
     {
-		$table_post = Database::get_course_table(TABLE_FORUM_POST);
-		$post = $this->course->resources[RESOURCE_FORUMPOST][$id];
+        $table_post = Database::get_course_table(TABLE_FORUM_POST);
+        $post = $this->course->resources[RESOURCE_FORUMPOST][$id];
         $params = (array) $post->obj;
         $params['c_id'] = $this->destination_course_id;
         $params['forum_id'] = $forum_id;
@@ -1251,37 +1252,37 @@ class CourseRestorer
             null,
             $sessionId
         );
-		$this->course->resources[RESOURCE_FORUMPOST][$id]->destination_id = $new_id;
+        $this->course->resources[RESOURCE_FORUMPOST][$id]->destination_id = $new_id;
 
-		return $new_id;
-	}
+        return $new_id;
+    }
 
-	/**
-	 * Restore links
-	 */
+    /**
+     * Restore links
+     */
     public function restore_links($session_id = 0)
     {
-		if ($this->course->has_resources(RESOURCE_LINK)) {
-			$link_table = Database::get_course_table(TABLE_LINK);
-			$resources = $this->course->resources;
+        if ($this->course->has_resources(RESOURCE_LINK)) {
+            $link_table = Database::get_course_table(TABLE_LINK);
+            $resources = $this->course->resources;
 
-			foreach ($resources[RESOURCE_LINK] as $id => $link) {
+            foreach ($resources[RESOURCE_LINK] as $id => $link) {
                 $cat_id = $this->restore_link_category(
                     $link->category_id,
                     $session_id
                 );
-				$sql = "SELECT MAX(display_order)
-				        FROM $link_table
-				        WHERE
-				            c_id = ".$this->destination_course_id." AND
-				            category_id='" . intval($cat_id)."'";
-				$result = Database::query($sql);
-    			list($max_order) = Database::fetch_array($result);
+                $sql = "SELECT MAX(display_order)
+                        FROM $link_table
+                        WHERE
+                            c_id = ".$this->destination_course_id." AND
+                            category_id='" . intval($cat_id)."'";
+                $result = Database::query($sql);
+                list($max_order) = Database::fetch_array($result);
 
                 $params = [];
-    			if (!empty($session_id)) {
+                if (!empty($session_id)) {
                     $params['session_id'] = $session_id;
-    			}
+                }
 
                 $params['c_id'] = $this->destination_course_id;
                 $params['url'] = self::DBUTF8($link->url);
@@ -1310,12 +1311,14 @@ class CourseRestorer
                     }
                     $this->course->resources[RESOURCE_LINK][$id]->destination_id = $id;
                 }
-			}
-		}
-	}
+            }
+        }
+    }
 
     /**
      * Restore a link-category
+     * @param int
+     * @param int
      */
     public function restore_link_category($id, $session_id = 0)
     {
@@ -1332,7 +1335,7 @@ class CourseRestorer
         $link_cat = $resources[RESOURCE_LINKCATEGORY][$id];
         if (is_object($link_cat) && !$link_cat->is_restored()) {
             $sql = "SELECT MAX(display_order) FROM  $link_cat_table
-			        WHERE c_id = ".$this->destination_course_id;
+                    WHERE c_id = ".$this->destination_course_id;
             $result = Database::query($sql);
             list($orderMax) = Database::fetch_array($result, 'NUM');
             $display_order = $orderMax + 1;
@@ -1356,21 +1359,22 @@ class CourseRestorer
         return $this->course->resources[RESOURCE_LINKCATEGORY][$id]->destination_id;
     }
 
-	/**
-	 * Restore tool intro
-	 */
+    /**
+     * Restore tool intro
+     * @param int
+     */
     public function restore_tool_intro($sessionId = 0)
     {
-		if ($this->course->has_resources(RESOURCE_TOOL_INTRO)) {
+        if ($this->course->has_resources(RESOURCE_TOOL_INTRO)) {
             $sessionId = intval($sessionId);
-			$tool_intro_table = Database::get_course_table(TABLE_TOOL_INTRO);
-			$resources = $this->course->resources;
-			foreach ($resources[RESOURCE_TOOL_INTRO] as $id => $tool_intro) {
-				$sql = "DELETE FROM $tool_intro_table
-				        WHERE
-				            c_id = ".$this->destination_course_id." AND
-				            id='".self::DBUTF8escapestring($tool_intro->id)."'";
-				Database::query($sql);
+            $tool_intro_table = Database::get_course_table(TABLE_TOOL_INTRO);
+            $resources = $this->course->resources;
+            foreach ($resources[RESOURCE_TOOL_INTRO] as $id => $tool_intro) {
+                $sql = "DELETE FROM $tool_intro_table
+                        WHERE
+                            c_id = ".$this->destination_course_id." AND
+                            id='".self::DBUTF8escapestring($tool_intro->id)."'";
+                Database::query($sql);
 
                 $tool_intro->intro_text = DocumentManager::replace_urls_inside_content_html_from_copy_course(
                     $tool_intro->intro_text,
@@ -1395,21 +1399,22 @@ class CourseRestorer
 
                     $this->course->resources[RESOURCE_TOOL_INTRO][$id]->destination_id = $id;
                 }
-			}
-		}
-	}
+            }
+        }
+    }
 
-	/**
-	 * Restore events
-	 */
+    /**
+     * Restore events
+     * @param int
+     */
     public function restore_events($sessionId = 0)
     {
-		if ($this->course->has_resources(RESOURCE_EVENT)) {
+        if ($this->course->has_resources(RESOURCE_EVENT)) {
             $sessionId = intval($sessionId);
-			$table = Database::get_course_table(TABLE_AGENDA);
-			$resources = $this->course->resources;
-			foreach ($resources[RESOURCE_EVENT] as $id => $event) {
-				// check resources inside html from ckeditor tool and copy correct urls into recipient course
+            $table = Database::get_course_table(TABLE_AGENDA);
+            $resources = $this->course->resources;
+            foreach ($resources[RESOURCE_EVENT] as $id => $event) {
+                // check resources inside html from ckeditor tool and copy correct urls into recipient course
                 $event->content = DocumentManager::replace_urls_inside_content_html_from_copy_course(
                     $event->content,
                     $this->course->code,
@@ -1427,7 +1432,7 @@ class CourseRestorer
                     'end_date' => $event->end_date,
                     'session_id' => $sessionId,
                 ];
-				$new_event_id = Database::insert($table, $params);
+                $new_event_id = Database::insert($table, $params);
 
                 if ($new_event_id) {
                     $sql = "UPDATE $table SET id = iid WHERE iid = $new_event_id";
@@ -1439,32 +1444,31 @@ class CourseRestorer
                     $this->course->resources[RESOURCE_EVENT][$id]->destination_id = $new_event_id;
                 }
 
-				// Copy event attachment
-				$origin_path = $this->course->backup_path.'/upload/calendar/';
-				$destination_path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/upload/calendar/';
+                // Copy event attachment
+                $origin_path = $this->course->backup_path.'/upload/calendar/';
+                $destination_path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/upload/calendar/';
 
-				if (!empty($this->course->orig)) {
+                if (!empty($this->course->orig)) {
+                    $table_attachment = Database::get_course_table(TABLE_AGENDA_ATTACHMENT);
+                    $sql = 'SELECT path, comment, size, filename
+                            FROM '.$table_attachment.'
+                            WHERE c_id = '.$this->destination_course_id.' AND agenda_id = '.$id;
+                    $attachment_event = Database::query($sql);
+                    $attachment_event = Database::fetch_object($attachment_event);
 
-					$table_attachment = Database::get_course_table(TABLE_AGENDA_ATTACHMENT);
-					$sql = 'SELECT path, comment, size, filename
-					        FROM '.$table_attachment.'
-					        WHERE c_id = '.$this->destination_course_id.' AND agenda_id = '.$id;
-					$attachment_event = Database::query($sql);
-					$attachment_event = Database::fetch_object($attachment_event);
-
-					if (file_exists($origin_path.$attachment_event->path) &&
+                    if (file_exists($origin_path.$attachment_event->path) &&
                         !is_dir($origin_path.$attachment_event->path)
                     ) {
-						$new_filename = uniqid(''); //ass seen in the add_agenda_attachment_file() function in agenda.inc.php
+                        $new_filename = uniqid(''); //ass seen in the add_agenda_attachment_file() function in agenda.inc.php
                         $copy_result = copy(
                             $origin_path.$attachment_event->path,
                             $destination_path.$new_filename
                         );
-						//$copy_result = true;
-						if ($copy_result) {
-							$table_attachment = Database::get_course_table(TABLE_AGENDA_ATTACHMENT);
+                        //$copy_result = true;
+                        if ($copy_result) {
+                            $table_attachment = Database::get_course_table(TABLE_AGENDA_ATTACHMENT);
 
-							$params = [
+                            $params = [
                                 'c_id' => $this->destination_course_id,
                                 'path' => self::DBUTF8($new_filename),
                                 'comment' => self::DBUTF8($attachment_event->comment),
@@ -1478,20 +1482,20 @@ class CourseRestorer
                                 Database::query($sql);
                             }
                         }
-					}
-				} else {
-					// get the info of the file
-					if (!empty($event->attachment_path) &&
+                    }
+                } else {
+                    // get the info of the file
+                    if (!empty($event->attachment_path) &&
                         is_file($origin_path.$event->attachment_path) &&
                         is_readable($origin_path.$event->attachment_path)
                     ) {
-						$new_filename = uniqid(''); //ass seen in the add_agenda_attachment_file() function in agenda.inc.php
+                        $new_filename = uniqid(''); //ass seen in the add_agenda_attachment_file() function in agenda.inc.php
                         $copy_result = copy(
                             $origin_path.$event->attachment_path,
                             $destination_path.$new_filename
                         );
-						if ($copy_result) {
-							$table_attachment = Database::get_course_table(TABLE_AGENDA_ATTACHMENT);
+                        if ($copy_result) {
+                            $table_attachment = Database::get_course_table(TABLE_AGENDA_ATTACHMENT);
 
                             $params = [
                                 'c_id' => $this->destination_course_id,
@@ -1507,29 +1511,30 @@ class CourseRestorer
                                 $sql = "UPDATE $table_attachment SET id = iid WHERE iid = $id";
                                 Database::query($sql);
                             }
-						}
-					}
-				}
-			}
-		}
-	}
+                        }
+                    }
+                }
+            }
+        }
+    }
 
-	/**
-	 * Restore course-description
-	 */
+    /**
+     * Restore course-description
+     * @param int
+     */
     public function restore_course_descriptions($session_id = 0)
     {
-		if ($this->course->has_resources(RESOURCE_COURSEDESCRIPTION)) {
-			$table = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
-			$resources = $this->course->resources;
-			foreach ($resources[RESOURCE_COURSEDESCRIPTION] as $id => $cd) {
+        if ($this->course->has_resources(RESOURCE_COURSEDESCRIPTION)) {
+            $table = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
+            $resources = $this->course->resources;
+            foreach ($resources[RESOURCE_COURSEDESCRIPTION] as $id => $cd) {
                 $courseDescription = (array) $cd;
 
                 $content = isset($courseDescription['content']) ? $courseDescription['content'] : '';
                 $descriptionType = isset($courseDescription['description_type']) ? $courseDescription['description_type'] : '';
                 $title = isset($courseDescription['title']) ? $courseDescription['title'] : '';
 
-				// check resources inside html from ckeditor tool and copy correct urls into recipient course
+                // check resources inside html from ckeditor tool and copy correct urls into recipient course
                 $description_content = DocumentManager::replace_urls_inside_content_html_from_copy_course(
                     $content,
                     $this->course->code,
@@ -1558,22 +1563,22 @@ class CourseRestorer
                     }
                     $this->course->resources[RESOURCE_COURSEDESCRIPTION][$id]->destination_id = $id;
                 }
-			}
-		}
-	}
+            }
+        }
+    }
 
-	/**
-	 * Restore announcements
-	 */
+    /**
+     * Restore announcements
+     * @param int
+     */
     public function restore_announcements($sessionId = 0)
     {
-		if ($this->course->has_resources(RESOURCE_ANNOUNCEMENT)) {
+        if ($this->course->has_resources(RESOURCE_ANNOUNCEMENT)) {
             $sessionId = intval($sessionId);
-			$table = Database::get_course_table(TABLE_ANNOUNCEMENT);
-			$resources = $this->course->resources;
-			foreach ($resources[RESOURCE_ANNOUNCEMENT] as $id => $announcement) {
-
-				// check resources inside html from ckeditor tool and copy correct urls into recipient course
+            $table = Database::get_course_table(TABLE_ANNOUNCEMENT);
+            $resources = $this->course->resources;
+            foreach ($resources[RESOURCE_ANNOUNCEMENT] as $id => $announcement) {
+                // check resources inside html from ckeditor tool and copy correct urls into recipient course
                 $announcement->content = DocumentManager::replace_urls_inside_content_html_from_copy_course(
                     $announcement->content,
                     $this->course->code,
@@ -1592,7 +1597,7 @@ class CourseRestorer
                     'session_id' => $sessionId,
                 ];
 
-				$new_announcement_id = Database::insert($table, $params);
+                $new_announcement_id = Database::insert($table, $params);
 
                 if ($new_announcement_id) {
                     $sql = "UPDATE $table SET id = iid WHERE iid = $new_announcement_id";
@@ -1604,32 +1609,32 @@ class CourseRestorer
                     $this->course->resources[RESOURCE_ANNOUNCEMENT][$id]->destination_id = $new_announcement_id;
                 }
 
-				$origin_path = $this->course->backup_path.'/upload/announcements/';
-				$destination_path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/upload/announcements/';
+                $origin_path = $this->course->backup_path.'/upload/announcements/';
+                $destination_path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/upload/announcements/';
 
-				// Copy announcement attachment file
-				if (!empty($this->course->orig)) {
+                // Copy announcement attachment file
+                if (!empty($this->course->orig)) {
 
-					$table_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
-					$sql = 'SELECT path, comment, size, filename
-					        FROM '.$table_attachment.'
-					        WHERE
-					            c_id = '.$this->destination_course_id.' AND
-					            announcement_id = '.$id;
-					$attachment_event = Database::query($sql);
-					$attachment_event = Database::fetch_object($attachment_event);
+                    $table_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
+                    $sql = 'SELECT path, comment, size, filename
+                            FROM '.$table_attachment.'
+                            WHERE
+                                c_id = '.$this->destination_course_id.' AND
+                                announcement_id = '.$id;
+                    $attachment_event = Database::query($sql);
+                    $attachment_event = Database::fetch_object($attachment_event);
 
-					if (file_exists($origin_path.$attachment_event->path) &&
+                    if (file_exists($origin_path.$attachment_event->path) &&
                         !is_dir($origin_path.$attachment_event->path)
                     ) {
-						$new_filename = uniqid(''); //ass seen in the add_agenda_attachment_file() function in agenda.inc.php
+                        $new_filename = uniqid(''); //ass seen in the add_agenda_attachment_file() function in agenda.inc.php
                         $copy_result = copy(
                             $origin_path.$attachment_event->path,
                             $destination_path.$new_filename
                         );
 
-						if ($copy_result) {
-							$table_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
+                        if ($copy_result) {
+                            $table_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
 
                             $params = [
                                 'c_id' => $this->destination_course_id,
@@ -1646,19 +1651,19 @@ class CourseRestorer
                                 $sql = "UPDATE $table_attachment SET id = iid WHERE iid = $attachmentId";
                                 Database::query($sql);
                             }
-						}
-					}
-				} else {
-					// get the info of the file
-					if (!empty($announcement->attachment_path) &&
+                        }
+                    }
+                } else {
+                    // get the info of the file
+                    if (!empty($announcement->attachment_path) &&
                         is_file($origin_path.$announcement->attachment_path) &&
                         is_readable($origin_path.$announcement->attachment_path)
                     ) {
-						$new_filename = uniqid(''); //ass seen in the add_agenda_attachment_file() function in agenda.inc.php
-						$copy_result = copy($origin_path.$announcement->attachment_path, $destination_path.$new_filename);
+                        $new_filename = uniqid(''); //ass seen in the add_agenda_attachment_file() function in agenda.inc.php
+                        $copy_result = copy($origin_path.$announcement->attachment_path, $destination_path.$new_filename);
 
-						if ($copy_result) {
-							$table_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
+                        if ($copy_result) {
+                            $table_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
 
                             $params = [
                                 'c_id' => $this->destination_course_id,
@@ -1675,12 +1680,12 @@ class CourseRestorer
                                 $sql = "UPDATE $table_attachment SET id = iid WHERE iid = $attachmentId";
                                 Database::query($sql);
                             }
-						}
-					}
-				}
-			}
-		}
-	}
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     /**
      * Restore Quiz
@@ -1691,13 +1696,13 @@ class CourseRestorer
         $session_id = 0,
         $respect_base_content = false
     ) {
-		if ($this->course->has_resources(RESOURCE_QUIZ)) {
-			$table_qui = Database::get_course_table(TABLE_QUIZ_TEST);
-			$table_rel = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-			$table_doc = Database::get_course_table(TABLE_DOCUMENT);
-			$resources = $this->course->resources;
+        if ($this->course->has_resources(RESOURCE_QUIZ)) {
+            $table_qui = Database::get_course_table(TABLE_QUIZ_TEST);
+            $table_rel = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+            $table_doc = Database::get_course_table(TABLE_DOCUMENT);
+            $resources = $this->course->resources;
 
-			foreach ($resources[RESOURCE_QUIZ] as $id => $quiz) {
+            foreach ($resources[RESOURCE_QUIZ] as $id => $quiz) {
                 if (isset($quiz->obj)) {
                     // For new imports
                     $quiz = $quiz->obj;
@@ -1706,7 +1711,7 @@ class CourseRestorer
                     $quiz->obj = $quiz;
                 }
 
-				$doc = '';
+                $doc = '';
                 if (!empty($quiz->sound)) {
                     if (isset($this->course->resources[RESOURCE_DOCUMENT][$quiz->sound]) &&
                         $this->course->resources[RESOURCE_DOCUMENT][$quiz->sound]->is_restored()) {
@@ -1714,14 +1719,14 @@ class CourseRestorer
                                 WHERE
                                     c_id = ".$this->destination_course_id."  AND
                                     id = " . $resources[RESOURCE_DOCUMENT][$quiz->sound]->destination_id;
-						$doc = Database::query($sql);
-						$doc = Database::fetch_object($doc);
-						$doc = str_replace('/audio/', '', $doc->path);
-					}
-				}
+                        $doc = Database::query($sql);
+                        $doc = Database::fetch_object($doc);
+                        $doc = str_replace('/audio/', '', $doc->path);
+                    }
+                }
 
-				if ($id != -1) {
-					// check resources inside html from ckeditor tool and copy correct urls into recipient course
+                if ($id != -1) {
+                    // check resources inside html from ckeditor tool and copy correct urls into recipient course
                     $quiz->description = DocumentManager::replace_urls_inside_content_html_from_copy_course(
                         $quiz->description,
                         $this->course->code,
@@ -1733,13 +1738,13 @@ class CourseRestorer
                     $quiz->start_time = $quiz->start_time == '0000-00-00 00:00:00' ? null : $quiz->start_time;
                     $quiz->end_time = $quiz->end_time == '0000-00-00 00:00:00' ? null : $quiz->end_time;
 
-					global $_custom;
-					if (isset($_custom['exercises_clean_dates_when_restoring']) &&
+                    global $_custom;
+                    if (isset($_custom['exercises_clean_dates_when_restoring']) &&
                         $_custom['exercises_clean_dates_when_restoring']
                     ) {
-						$quiz->start_time = null;
-						$quiz->end_time   = null;
-					}
+                        $quiz->start_time = null;
+                        $quiz->end_time   = null;
+                    }
 
                     $params = array(
                         'c_id' => $this->destination_course_id,
@@ -1774,10 +1779,10 @@ class CourseRestorer
                         }
                         $params['session_id'] = $my_session_id;
                     } else {
-        				if (!empty($session_id)) {
-        					$session_id = intval($session_id);
+                        if (!empty($session_id)) {
+                            $session_id = intval($session_id);
                             $params['session_id'] = $session_id;
-    				    }
+                        }
                     }
                     $new_id = Database::insert($table_qui, $params);
 
@@ -1786,15 +1791,15 @@ class CourseRestorer
                         Database::query($sql);
                     }
 
-				} else {
-					// $id = -1 identifies the fictionary test for collecting
-					// orphan questions. We do not store it in the database.
-					$new_id = -1;
-				}
+                } else {
+                    // $id = -1 identifies the fictionary test for collecting
+                    // orphan questions. We do not store it in the database.
+                    $new_id = -1;
+                }
 
-				$this->course->resources[RESOURCE_QUIZ][$id]->destination_id = $new_id;
+                $this->course->resources[RESOURCE_QUIZ][$id]->destination_id = $new_id;
 
-				$order = 0;
+                $order = 0;
                 if (!empty($quiz->question_ids)) {
                     foreach ($quiz->question_ids as $index => $question_id) {
                         $qid = $this->restore_quiz_question($question_id);
@@ -1807,31 +1812,31 @@ class CourseRestorer
                         Database::query($sql);
                     }
                 }
-			}
-		}
-	}
+            }
+        }
+    }
 
-	/**
-	 * Restore quiz-questions
-     * @params int question id
-	 */
+    /**
+     * Restore quiz-questions
+     * @params int question id $id
+     */
     public function restore_quiz_question($id)
     {
         $em = Database::getManager();
-		$resources = $this->course->resources;
-		/** @var QuizQuestion $question */
+        $resources = $this->course->resources;
+        /** @var QuizQuestion $question */
         $question = isset($resources[RESOURCE_QUIZQUESTION][$id]) ? $resources[RESOURCE_QUIZQUESTION][$id] : null;
-		$new_id = 0;
+        $new_id = 0;
 
-		if (is_object($question)) {
-			if ($question->is_restored()) {
-				return $question->destination_id;
-			}
-			$table_que = Database::get_course_table(TABLE_QUIZ_QUESTION);
-			$table_ans = Database::get_course_table(TABLE_QUIZ_ANSWER);
+        if (is_object($question)) {
+            if ($question->is_restored()) {
+                return $question->destination_id;
+            }
+            $table_que = Database::get_course_table(TABLE_QUIZ_QUESTION);
+            $table_ans = Database::get_course_table(TABLE_QUIZ_ANSWER);
             $table_options = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
 
-			// check resources inside html from ckeditor tool and copy correct urls into recipient course
+            // check resources inside html from ckeditor tool and copy correct urls into recipient course
             $question->description = DocumentManager::replace_urls_inside_content_html_from_copy_course(
                 $question->description,
                 $this->course->code,
@@ -1864,7 +1869,7 @@ class CourseRestorer
                 'extra' => self::DBUTF8($question->extra),
             ];
 
-			$new_id = Database::insert($table_que, $params);
+            $new_id = Database::insert($table_que, $params);
 
             if ($new_id) {
                 $sql = "UPDATE $table_que SET id = iid WHERE iid = $new_id";
@@ -1932,10 +1937,10 @@ class CourseRestorer
                         $correctAnswers[$answerId] = $answer['correct'];
                         $onlyAnswers[$answerId] = $answer['answer'];
                     }
-				}
-			} else {
-				foreach ($question->answers as $index => $answer) {
-					// check resources inside html from ckeditor tool and copy correct urls into recipient course
+                }
+            } else {
+                foreach ($question->answers as $index => $answer) {
+                    // check resources inside html from ckeditor tool and copy correct urls into recipient course
                     $answer['answer'] = DocumentManager::replace_urls_inside_content_html_from_copy_course(
                         $answer['answer'],
                         $this->course->code,
@@ -1975,8 +1980,8 @@ class CourseRestorer
 
                     $correctAnswers[$answerId] = $answer['correct'];
                     $onlyAnswers[$answerId] = $answer['answer'];
-				}
-			}
+                }
+            }
 
             // Current course id
             $course_id = api_get_course_int_id();
@@ -2096,13 +2101,13 @@ class CourseRestorer
                 }
             }
 
-			$this->course->resources[RESOURCE_QUIZQUESTION][$id]->destination_id = $new_id;
-		}
+            $this->course->resources[RESOURCE_QUIZQUESTION][$id]->destination_id = $new_id;
+        }
 
-		return $new_id;
-	}
+        return $new_id;
+    }
 
-	/**
+    /**
      * @todo : add session id when used for session
      */
     public function restore_test_category($session_id, $respect_base_content, $destination_course_code)
@@ -2192,20 +2197,20 @@ class CourseRestorer
     {
         $sessionId = intval($sessionId);
         if ($this->course->has_resources(RESOURCE_SURVEY)) {
-			$table_sur = Database::get_course_table(TABLE_SURVEY);
-			$table_que = Database::get_course_table(TABLE_SURVEY_QUESTION);
-			$table_ans = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
-			$resources = $this->course->resources;
-			foreach ($resources[RESOURCE_SURVEY] as $id => $survey) {
-				$sql = 'SELECT survey_id FROM '.$table_sur.'
+            $table_sur = Database::get_course_table(TABLE_SURVEY);
+            $table_que = Database::get_course_table(TABLE_SURVEY_QUESTION);
+            $table_ans = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
+            $resources = $this->course->resources;
+            foreach ($resources[RESOURCE_SURVEY] as $id => $survey) {
+                $sql = 'SELECT survey_id FROM '.$table_sur.'
                         WHERE
                             c_id = '.$this->destination_course_id.' AND
                             code = "'.self::DBUTF8escapestring($survey->code).'" AND
                             lang = "'.self::DBUTF8escapestring($survey->lang).'" ';
 
-				$result_check = Database::query($sql);
+                $result_check = Database::query($sql);
 
-				// check resources inside html from ckeditor tool and copy correct urls into recipient course
+                // check resources inside html from ckeditor tool and copy correct urls into recipient course
                 $survey->title = DocumentManager::replace_urls_inside_content_html_from_copy_course(
                     $survey->title,
                     $this->course->code,
@@ -2259,20 +2264,20 @@ class CourseRestorer
                     'session_id' => $sessionId,
                 ];
 
-				//An existing survey exists with the same code and the same language
-				if (Database::num_rows($result_check) == 1) {
-					switch ($this->file_option) {
-						case FILE_SKIP:
-							//Do nothing
-							break;
-						case FILE_RENAME:
-							$survey_code = $survey->code.'_';
-							$i = 1;
-							$temp_survey_code = $survey_code.$i;
-							while (!$this->is_survey_code_available($temp_survey_code)) {
-								$temp_survey_code = $survey_code.++$i;
-							}
-							$survey_code = $temp_survey_code;
+                //An existing survey exists with the same code and the same language
+                if (Database::num_rows($result_check) == 1) {
+                    switch ($this->file_option) {
+                        case FILE_SKIP:
+                            //Do nothing
+                            break;
+                        case FILE_RENAME:
+                            $survey_code = $survey->code.'_';
+                            $i = 1;
+                            $temp_survey_code = $survey_code.$i;
+                            while (!$this->is_survey_code_available($temp_survey_code)) {
+                                $temp_survey_code = $survey_code.++$i;
+                            }
+                            $survey_code = $temp_survey_code;
 
                             $params['code'] = $survey_code;
                             $new_id = Database::insert($table_sur, $params);
@@ -2284,32 +2289,32 @@ class CourseRestorer
                                 foreach ($survey->question_ids as $index => $question_id) {
                                     $qid = $this->restore_survey_question($question_id, $new_id);
                                     $sql = "UPDATE $table_que SET survey_id = $new_id
-								            WHERE c_id = ".$this->destination_course_id." AND question_id = $qid";
+                                            WHERE c_id = ".$this->destination_course_id." AND question_id = $qid";
                                     Database::query($sql);
                                     $sql = "UPDATE $table_ans SET survey_id = $new_id
-								            WHERE  c_id = ".$this->destination_course_id." AND  question_id = $qid";
+                                            WHERE  c_id = ".$this->destination_course_id." AND  question_id = $qid";
                                     Database::query($sql);
                                 }
                             }
-							break;
-						case FILE_OVERWRITE:
-							// Delete the existing survey with the same code and language and import the one of the source course
-							// getting the information of the survey (used for when the survey is shared)
+                            break;
+                        case FILE_OVERWRITE:
+                            // Delete the existing survey with the same code and language and import the one of the source course
+                            // getting the information of the survey (used for when the survey is shared)
 
-							$sql = "SELECT * FROM $table_sur
-							        WHERE
-							            c_id = ".$this->destination_course_id." AND
-							            survey_id='".self::DBUTF8escapestring(Database::result($result_check, 0, 0))."'";
-							$result = Database::query($sql);
-							$survey_data = Database::fetch_array($result, 'ASSOC');
+                            $sql = "SELECT * FROM $table_sur
+                                    WHERE
+                                        c_id = ".$this->destination_course_id." AND
+                                        survey_id='".self::DBUTF8escapestring(Database::result($result_check, 0, 0))."'";
+                            $result = Database::query($sql);
+                            $survey_data = Database::fetch_array($result, 'ASSOC');
 
-							// if the survey is shared => also delete the shared content
-							if (isset($survey_data['survey_share']) && is_numeric($survey_data['survey_share'])) {
+                            // if the survey is shared => also delete the shared content
+                            if (isset($survey_data['survey_share']) && is_numeric($survey_data['survey_share'])) {
                                 SurveyManager::delete_survey($survey_data['survey_share'], true, $this->destination_course_id);
-							}
-							SurveyManager::delete_survey($survey_data['survey_id'], false, $this->destination_course_id);
+                            }
+                            SurveyManager::delete_survey($survey_data['survey_id'], false, $this->destination_course_id);
 
-							// Insert the new source survey
+                            // Insert the new source survey
                             $new_id = Database::insert($table_sur, $params);
 
                             if ($new_id) {
@@ -2330,11 +2335,11 @@ class CourseRestorer
                                     Database::query($sql);
                                 }
                             }
-							break;
-						default:
-							break;
-					}
-				} else {
+                            break;
+                        default:
+                            break;
+                    }
+                } else {
                     // No existing survey with the same language and the same code, we just copy the survey
                     $new_id = Database::insert($table_sur, $params);
 
@@ -2356,48 +2361,50 @@ class CourseRestorer
                             Database::query($sql);
                         }
                     }
-				}
-			}
-		}
-	}
+                }
+            }
+        }
+    }
 
-	/**
-	 * Check availability of a survey code
-	 * @param string $survey_code
-	 */
+    /**
+     * Check availability of a survey code
+     * @param string $survey_code
+     * @return bool
+     */
     public function is_survey_code_available($survey_code)
     {
-		$table_sur = Database::get_course_table(TABLE_SURVEY);
-		$sql = "SELECT * FROM $table_sur
-		        WHERE
-		            c_id = ".$this->destination_course_id." AND
-		            code = '".self::DBUTF8escapestring($survey_code)."'";
-		$result = Database::query($sql);
+        $table_sur = Database::get_course_table(TABLE_SURVEY);
+        $sql = "SELECT * FROM $table_sur
+                WHERE
+                    c_id = ".$this->destination_course_id." AND
+                    code = '".self::DBUTF8escapestring($survey_code)."'";
+        $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
             return false;
         } else {
             return true;
         }
-	}
+    }
 
-	/**
-	 * Restore survey-questions
-	 * @param string $survey_id
-	 */
+    /**
+     * Restore survey-questions
+     * @param int $id
+     * @param string $survey_id
+     */
     public function restore_survey_question($id, $survey_id)
     {
-		$resources = $this->course->resources;
-		$question = $resources[RESOURCE_SURVEYQUESTION][$id];
+        $resources = $this->course->resources;
+        $question = $resources[RESOURCE_SURVEYQUESTION][$id];
         $new_id = 0;
 
-		if (is_object($question)) {
-			if ($question->is_restored()) {
-				return $question->destination_id;
-			}
-			$table_que = Database::get_course_table(TABLE_SURVEY_QUESTION);
-			$table_ans = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
+        if (is_object($question)) {
+            if ($question->is_restored()) {
+                return $question->destination_id;
+            }
+            $table_que = Database::get_course_table(TABLE_SURVEY_QUESTION);
+            $table_ans = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
 
-			// check resources inside html from ckeditor tool and copy correct urls into recipient course
+            // check resources inside html from ckeditor tool and copy correct urls into recipient course
             $question->survey_question = DocumentManager::replace_urls_inside_content_html_from_copy_course(
                 $question->survey_question,
                 $this->course->code,
@@ -2451,10 +2458,10 @@ class CourseRestorer
                 }
                 $this->course->resources[RESOURCE_SURVEYQUESTION][$id]->destination_id = $new_id;
             }
-		}
+        }
 
-		return $new_id;
-	}
+        return $new_id;
+    }
 
     /**
      * Restoring learning paths
@@ -2465,17 +2472,17 @@ class CourseRestorer
     {
         $session_id = intval($session_id);
 
-		if ($this->course->has_resources(RESOURCE_LEARNPATH)) {
+        if ($this->course->has_resources(RESOURCE_LEARNPATH)) {
             $table_main = Database::get_course_table(TABLE_LP_MAIN);
             $table_item = Database::get_course_table(TABLE_LP_ITEM);
             $table_tool = Database::get_course_table(TABLE_TOOL_LIST);
 
-			$resources = $this->course->resources;
+            $resources = $this->course->resources;
 
-			$origin_path = $this->course->backup_path.'/upload/learning_path/images/';
-			$destination_path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/upload/learning_path/images/';
+            $origin_path = $this->course->backup_path.'/upload/learning_path/images/';
+            $destination_path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/upload/learning_path/images/';
 
-			foreach ($resources[RESOURCE_LEARNPATH] as $id => $lp) {
+            foreach ($resources[RESOURCE_LEARNPATH] as $id => $lp) {
                 $condition_session = '';
                 if (!empty($session_id)) {
                     if ($respect_base_content) {
@@ -2752,36 +2759,36 @@ class CourseRestorer
                     }
                     $this->course->resources[RESOURCE_LEARNPATH][$id]->destination_id = $new_lp_id;
                 }
-			}
-		}
-	}
+            }
+        }
+    }
 
-	/**
-	 * Restore works
+    /**
+     * Restore works
      * @deprecated use restore_works
      *
-	 */
-	public function restore_student_publication($sessionId = 0)
-	{
+     */
+    public function restore_student_publication($sessionId = 0)
+    {
         $sessionId = intval($sessionId);
         $work_assignment_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
         $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
         $item_property_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
-		// Query in student publication
-		$sql = 'SELECT * FROM '.$work_table.'
-		        WHERE c_id = '.$this->course_origin_id.' AND filetype = "folder" AND active IN (0, 1) ';
+        // Query in student publication
+        $sql = 'SELECT * FROM '.$work_table.'
+                WHERE c_id = '.$this->course_origin_id.' AND filetype = "folder" AND active IN (0, 1) ';
 
-		$result = Database::query($sql);
-		$folders = Database::store_result($result, 'ASSOC');
+        $result = Database::query($sql);
+        $folders = Database::store_result($result, 'ASSOC');
 
-		foreach ($folders  as $folder) {
-		    $old_id = $folder['id'];
+        foreach ($folders  as $folder) {
+            $old_id = $folder['id'];
             unset($folder['id']);
-			$folder['c_id'] = $this->destination_course_id;
+            $folder['c_id'] = $this->destination_course_id;
             $folder['parent_id'] = 0;
             $folder['session_id'] = $sessionId ? $sessionId : null;
-			$new_id = Database::insert($work_table, $folder);
+            $new_id = Database::insert($work_table, $folder);
 
             if ($new_id) {
                 // query in item property
@@ -2840,12 +2847,12 @@ class CourseRestorer
                     }
                 }
             }
-		}
+        }
 
         $destination = '../..'.api_get_path(REL_COURSE_PATH).$this->course->destination_path.'/work/';
         $origin = '../..'.api_get_path(REL_COURSE_PATH).$this->course->info['path'].'/work/';
         self::allow_create_all_directory($origin, $destination, false);
-	}
+    }
 
     /**
     * copy all directory and sub directory
@@ -2863,9 +2870,9 @@ class CourseRestorer
             mkdir($dest, api_get_permissions_for_new_directories());
         }
         if ($handle = opendir($source)) {
-// if the folder exploration is sucsessful, continue
+            // if the folder exploration is sucsessful, continue
             while (false !== ($file = readdir($handle))) {
-// as long as storing the next file to $file is successful, continue
+                // as long as storing the next file to $file is successful, continue
                 if ($file != '.' && $file != '..') {
                     $path = $source.'/'.$file;
                     if (is_file($path)) {
@@ -2885,12 +2892,12 @@ class CourseRestorer
         }
     }
 
-	/**
-	 * Gets the new ID of one specific tool item from the tool name and the old ID
-	 * @param	string	Tool name
-	 * @param	integer	Old ID
-	 * @return	integer	New ID
-	 */
+    /**
+     * Gets the new ID of one specific tool item from the tool name and the old ID
+     * @param	string	Tool name
+     * @param	integer	Old ID
+     * @return	integer	New ID
+     */
     public function get_new_id($tool, $ref)
     {
         // Check if the value exist in the current array.
@@ -2912,25 +2919,25 @@ class CourseRestorer
         }
 
         return '';
-	}
+    }
 
-	/**
-	 * Restore glossary
-	 */
+    /**
+     * Restore glossary
+     */
     public function restore_glossary($session_id = 0)
     {
-		if ($this->course->has_resources(RESOURCE_GLOSSARY)) {
-			$table_glossary = Database::get_course_table(TABLE_GLOSSARY);
-			$resources = $this->course->resources;
-			foreach ($resources[RESOURCE_GLOSSARY] as $id => $glossary) {
+        if ($this->course->has_resources(RESOURCE_GLOSSARY)) {
+            $table_glossary = Database::get_course_table(TABLE_GLOSSARY);
+            $resources = $this->course->resources;
+            foreach ($resources[RESOURCE_GLOSSARY] as $id => $glossary) {
 
                 $params = [];
-    			if (!empty($session_id)) {
-    				$session_id = intval($session_id);
+                if (!empty($session_id)) {
+                    $session_id = intval($session_id);
                     $params['session_id'] = $session_id;
-    			}
+                }
 
-				// check resources inside html from ckeditor tool and copy correct urls into recipient course
+                // check resources inside html from ckeditor tool and copy correct urls into recipient course
                 $glossary->description = DocumentManager::replace_urls_inside_content_html_from_copy_course(
                     $glossary->description,
                     $this->course->code,
@@ -2964,27 +2971,27 @@ class CourseRestorer
 
                     $this->course->resources[RESOURCE_GLOSSARY][$id]->destination_id = $my_id;
                 }
-			}
-		}
-	}
+            }
+        }
+    }
 
     /**
      * @param int $session_id
      */
     public function restore_wiki($session_id = 0)
     {
-		if ($this->course->has_resources(RESOURCE_WIKI)) {
-			// wiki table of the target course
-			$table_wiki = Database::get_course_table(TABLE_WIKI);
-			$table_wiki_conf = Database::get_course_table(TABLE_WIKI_CONF);
+        if ($this->course->has_resources(RESOURCE_WIKI)) {
+            // wiki table of the target course
+            $table_wiki = Database::get_course_table(TABLE_WIKI);
+            $table_wiki_conf = Database::get_course_table(TABLE_WIKI_CONF);
 
-			// storing all the resources that have to be copied in an array
-			$resources = $this->course->resources;
+            // storing all the resources that have to be copied in an array
+            $resources = $this->course->resources;
 
-			foreach ($resources[RESOURCE_WIKI] as $id => $wiki) {
-				// the sql statement to insert the groups from the old course to the new course
+            foreach ($resources[RESOURCE_WIKI] as $id => $wiki) {
+                // the sql statement to insert the groups from the old course to the new course
 
-				// check resources inside html from ckeditor tool and copy correct urls into recipient course
+                // check resources inside html from ckeditor tool and copy correct urls into recipient course
                 $wiki->content = DocumentManager::replace_urls_inside_content_html_from_copy_course(
                     $wiki->content,
                     $this->course->code,
@@ -3019,7 +3026,7 @@ class CourseRestorer
                     'user_ip' => '',
                 ];
 
-				$new_id = Database::insert($table_wiki, $params);
+                $new_id = Database::insert($table_wiki, $params);
 
                 if ($new_id) {
                     $sql = "UPDATE $table_wiki SET page_id = '$new_id', id = iid
@@ -3049,9 +3056,9 @@ class CourseRestorer
 
                     Database::insert($table_wiki_conf, $params);
                 }
-			}
-		}
-	}
+            }
+        }
+    }
 
     /**
      * Restore Thematics
@@ -3059,15 +3066,15 @@ class CourseRestorer
      */
     public function restore_thematic($session_id = 0)
     {
-		if ($this->course->has_resources(RESOURCE_THEMATIC)) {
+        if ($this->course->has_resources(RESOURCE_THEMATIC)) {
             $table_thematic = Database::get_course_table(TABLE_THEMATIC);
             $table_thematic_advance = Database::get_course_table(TABLE_THEMATIC_ADVANCE);
             $table_thematic_plan = Database::get_course_table(TABLE_THEMATIC_PLAN);
 
-			$resources = $this->course->resources;
-			foreach ($resources[RESOURCE_THEMATIC] as $id => $thematic) {
+            $resources = $this->course->resources;
+            foreach ($resources[RESOURCE_THEMATIC] as $id => $thematic) {
 
-				// check resources inside html from ckeditor tool and copy correct urls into recipient course
+                // check resources inside html from ckeditor tool and copy correct urls into recipient course
                 $thematic->params['content'] = DocumentManager::replace_urls_inside_content_html_from_copy_course(
                     $thematic->params['content'],
                     $this->course->code,
@@ -3075,13 +3082,13 @@ class CourseRestorer
                     $this->course->backup_path,
                     $this->course->info['path']
                 );
-				$thematic->params['c_id'] = $this->destination_course_id;
-				unset($thematic->params['id']);
+                $thematic->params['c_id'] = $this->destination_course_id;
+                unset($thematic->params['id']);
                 unset($thematic->params['iid']);
 
-				$last_id = Database::insert($table_thematic, $thematic->params, false);
+                $last_id = Database::insert($table_thematic, $thematic->params, false);
 
-				if ($last_id) {
+                if ($last_id) {
 
                     $sql = "UPDATE $table_thematic SET id = iid WHERE iid = $last_id";
                     Database::query($sql);
@@ -3094,12 +3101,12 @@ class CourseRestorer
                         api_get_user_id()
                     );
 
-					foreach ($thematic->thematic_advance_list as $thematic_advance) {
-						unset($thematic_advance['id']);
+                    foreach ($thematic->thematic_advance_list as $thematic_advance) {
+                        unset($thematic_advance['id']);
                         unset($thematic_advance['iid']);
-						$thematic_advance['attendance_id'] = 0;
-						$thematic_advance['thematic_id'] = $last_id;
-						$thematic_advance['c_id'] = $this->destination_course_id;
+                        $thematic_advance['attendance_id'] = 0;
+                        $thematic_advance['thematic_id'] = $last_id;
+                        $thematic_advance['c_id'] = $this->destination_course_id;
 
                         $my_id = Database::insert(
                             $table_thematic_advance,
@@ -3107,7 +3114,7 @@ class CourseRestorer
                             false
                         );
 
-						if ($my_id) {
+                        if ($my_id) {
 
                             $sql = "UPDATE $table_thematic_advance SET id = iid WHERE iid = $my_id";
                             Database::query($sql);
@@ -3119,17 +3126,17 @@ class CourseRestorer
                                 'ThematicAdvanceAdded',
                                 api_get_user_id()
                             );
-						}
-					}
+                        }
+                    }
 
-					foreach ($thematic->thematic_plan_list as $thematic_plan) {
-						unset($thematic_plan['id']);
+                    foreach ($thematic->thematic_plan_list as $thematic_plan) {
+                        unset($thematic_plan['id']);
                         unset($thematic_plan['iid']);
-						$thematic_plan['thematic_id'] = $last_id;
-						$thematic_plan['c_id'] = $this->destination_course_id;
-						$my_id = Database::insert($table_thematic_plan, $thematic_plan, false);
+                        $thematic_plan['thematic_id'] = $last_id;
+                        $thematic_plan['c_id'] = $this->destination_course_id;
+                        $my_id = Database::insert($table_thematic_plan, $thematic_plan, false);
 
-						if ($my_id) {
+                        if ($my_id) {
 
                             $sql = "UPDATE $table_thematic_plan SET id = iid WHERE iid = $my_id";
                             Database::query($sql);
@@ -3141,12 +3148,12 @@ class CourseRestorer
                                 'ThematicPlanAdded',
                                 api_get_user_id()
                             );
-						}
-					}
-				}
-			}
-		}
-	}
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     /**
      * Restore Attendance
@@ -3154,14 +3161,14 @@ class CourseRestorer
      */
     public function restore_attendance($session_id = 0)
     {
-		if ($this->course->has_resources(RESOURCE_ATTENDANCE)) {
-			$table_attendance = Database::get_course_table(TABLE_ATTENDANCE);
-			$table_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
+        if ($this->course->has_resources(RESOURCE_ATTENDANCE)) {
+            $table_attendance = Database::get_course_table(TABLE_ATTENDANCE);
+            $table_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
 
-			$resources = $this->course->resources;
-			foreach ($resources[RESOURCE_ATTENDANCE] as $id => $obj) {
+            $resources = $this->course->resources;
+            foreach ($resources[RESOURCE_ATTENDANCE] as $id => $obj) {
 
-				// check resources inside html from ckeditor tool and copy correct urls into recipient course
+                // check resources inside html from ckeditor tool and copy correct urls into recipient course
                 $obj->params['description'] = DocumentManager::replace_urls_inside_content_html_from_copy_course(
                     $obj->params['description'],
                     $this->course->code,
@@ -3172,13 +3179,10 @@ class CourseRestorer
 
                 unset($obj->params['id']);
                 unset($obj->params['iid']);
+                $obj->params['c_id'] = $this->destination_course_id;
+                $last_id = Database::insert($table_attendance, $obj->params);
 
-				$obj->params['c_id'] = $this->destination_course_id;
-
-				$last_id = Database::insert($table_attendance, $obj->params);
-
-				if (is_numeric($last_id)) {
-
+                if (is_numeric($last_id)) {
                     $sql = "UPDATE $table_attendance SET id = iid WHERE iid = $last_id";
                     Database::query($sql);
 
@@ -3191,11 +3195,11 @@ class CourseRestorer
                     );
 
                     foreach ($obj->attendance_calendar as $attendance_calendar) {
-						unset($attendance_calendar['id']);
+                        unset($attendance_calendar['id']);
                         unset($attendance_calendar['iid']);
 
-						$attendance_calendar['attendance_id'] = $last_id;
-						$attendance_calendar['c_id'] = $this->destination_course_id;
+                        $attendance_calendar['attendance_id'] = $last_id;
+                        $attendance_calendar['c_id'] = $this->destination_course_id;
                         $attendanceCalendarId = Database::insert(
                             $table_attendance_calendar,
                             $attendance_calendar
@@ -3203,11 +3207,11 @@ class CourseRestorer
 
                         $sql = "UPDATE $table_attendance_calendar SET id = iid WHERE iid = $attendanceCalendarId";
                         Database::query($sql);
-					}
-				}
-			}
-		}
-	}
+                    }
+                }
+            }
+        }
+    }
 
     /**
      * Restore Works
@@ -3381,11 +3385,11 @@ class CourseRestorer
      */
     public function DBUTF8($str)
     {
-		if (UTF8_CONVERT) {
+        if (UTF8_CONVERT) {
             $str = utf8_encode($str);
         }
-		return $str;
-	}
+        return $str;
+    }
 
     /**
      * @param string $str
@@ -3396,8 +3400,8 @@ class CourseRestorer
         if (UTF8_CONVERT) {
             $str = utf8_encode($str);
         }
-		return Database::escape_string($str);
-	}
+        return Database::escape_string($str);
+    }
 
     /**
      * @param array $array

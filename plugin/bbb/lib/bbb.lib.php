@@ -984,6 +984,11 @@ class bbb
 
         if (!empty($result) && isset($result['deleted']) && $result['deleted'] === 'true') {
             Database::delete(
+                'plugin_bbb_room',
+                array('meeting_id = ?' => array($id))
+            );
+
+            Database::delete(
                 $this->table,
                 array('id = ?' => array($id))
             );

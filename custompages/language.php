@@ -6,7 +6,7 @@
  * @package chamilo.custompages
  */
 // Get helper functions
-require_once __DIR__ . '/language.inc.php';
+require_once __DIR__.'/language.inc.php';
 
 // Define the languages you want to make available for auto-detection here
 $available_langs = array('en', 'fr', 'es', 'gl', 'eu');

@@ -219,7 +219,7 @@ class CourseRestorer
                                 $params['lastedit_date'] = self::DBUTF8($property['lastedit_date']);
                                 $params['ref'] = $resource->destination_id;
                                 $params['lastedit_type'] = self::DBUTF8($property['lastedit_type']);
-                                $params['lastedit_user_id'] =  $this->checkUserId($property['lastedit_user_id']);
+                                $params['lastedit_user_id'] = $this->checkUserId($property['lastedit_user_id']);
                                 $params['visibility'] = self::DBUTF8($property['visibility']);
                                 $params['start_visible'] = self::DBUTF8($property['start_visible']);
                                 $params['end_visible'] = self::DBUTF8($property['end_visible']);
@@ -587,7 +587,7 @@ class CourseRestorer
                             $new_file_name = $file_name_no_ext.'_'.$i.$ext;
                             $file_exists = file_exists($path.$new_file_name);
                             while ($file_exists) {
-                                $i ++;
+                                $i++;
                                 $new_file_name = $file_name_no_ext.'_'.$i.$ext;
                                 $file_exists = file_exists($path.$new_file_name);
                             }
@@ -631,9 +631,9 @@ class CourseRestorer
                                         $new_base_path = $_SESSION['new_base_path'];
                                     }
 
-                                    $dest_document_path = $new_base_path.'/'.$document_path[2];		// e.g: "/var/www/wiener/courses/CURSO4/document/carpeta1_1/subcarpeta1/collaborative.png"
-                                    $basedir_dest_path 	= dirname($dest_document_path);				// e.g: "/var/www/wiener/courses/CURSO4/document/carpeta1_1/subcarpeta1"
-                                    $base_path_document = $course_path.$document_path[0];			// e.g: "/var/www/wiener/courses/CURSO4/document"
+                                    $dest_document_path = $new_base_path.'/'.$document_path[2]; // e.g: "/var/www/wiener/courses/CURSO4/document/carpeta1_1/subcarpeta1/collaborative.png"
+                                    $basedir_dest_path 	= dirname($dest_document_path); // e.g: "/var/www/wiener/courses/CURSO4/document/carpeta1_1/subcarpeta1"
+                                    $base_path_document = $course_path.$document_path[0]; // e.g: "/var/www/wiener/courses/CURSO4/document"
                                     $path_title = '/'.$new_base_foldername.'/'.$document_path[2];
 
                                     copy_folder_course_session(
@@ -652,7 +652,7 @@ class CourseRestorer
                                     // Replace old course code with the new destination code see BT#1985
                                     if (file_exists($dest_document_path)) {
                                         $file_info = pathinfo($dest_document_path);
-                                        if (in_array($file_info['extension'], array('html','htm'))) {
+                                        if (in_array($file_info['extension'], array('html', 'htm'))) {
                                             $content = file_get_contents($dest_document_path);
                                             if (UTF8_CONVERT) {
                                                 $content = utf8_encode($content);
@@ -714,8 +714,8 @@ class CourseRestorer
                                     //Replace old course code with the new destination code see BT#1985
                                     if (file_exists($path.$new_file_name)) {
                                         $file_info = pathinfo($path.$new_file_name);
-                                        if (in_array($file_info['extension'], array('html','htm'))) {
-                                            $content    = file_get_contents($path.$new_file_name);
+                                        if (in_array($file_info['extension'], array('html', 'htm'))) {
+                                            $content = file_get_contents($path.$new_file_name);
                                             if (UTF8_CONVERT) {
                                                 $content = utf8_encode($content);
                                             }
@@ -779,7 +779,7 @@ class CourseRestorer
                                 // Replace old course code with the new destination code see BT#1985
                                 if (file_exists($path.$new_file_name)) {
                                     $file_info = pathinfo($path.$new_file_name);
-                                    if (in_array($file_info['extension'], array('html','htm'))) {
+                                    if (in_array($file_info['extension'], array('html', 'htm'))) {
                                         $content = file_get_contents($path.$new_file_name);
                                         if (UTF8_CONVERT) {
                                             $content = utf8_encode($content);
@@ -854,7 +854,7 @@ class CourseRestorer
                         // Replace old course code with the new destination code see BT#1985
                         if (file_exists($path.$document->path)) {
                             $file_info = pathinfo($path.$document->path);
-                            if (isset($file_info['extension']) && in_array($file_info['extension'], array('html','htm'))) {
+                            if (isset($file_info['extension']) && in_array($file_info['extension'], array('html', 'htm'))) {
                                 $content = file_get_contents($path.$document->path);
                                 if (UTF8_CONVERT) {
                                     $content = utf8_encode($content);
@@ -971,8 +971,8 @@ class CourseRestorer
 						case FILE_OVERWRITE:
 							rmdirr($path.$document->path);
                             copyDirTo(
-                                $this->course->backup_path . '/' . $document->path,
-                                $path . dirname($document->path),
+                                $this->course->backup_path.'/'.$document->path,
+                                $path.dirname($document->path),
                                 false
                             );
 							break;
@@ -994,23 +994,23 @@ class CourseRestorer
 							$file_exists = file_exists($path.$new_file_name);
 
 							while ($file_exists) {
-								$i ++;
+								$i++;
 								$new_file_name = $file_name_no_ext.'_'.$i.$ext;
 								$file_exists = file_exists($path.$new_file_name);
 							}
 
                             rename(
-                                $this->course->backup_path . '/' . $document->path,
-                                $this->course->backup_path . '/' . $new_file_name
+                                $this->course->backup_path.'/'.$document->path,
+                                $this->course->backup_path.'/'.$new_file_name
                             );
                             copyDirTo(
-                                $this->course->backup_path . '/' . $new_file_name,
-                                $path . dirname($new_file_name),
+                                $this->course->backup_path.'/'.$new_file_name,
+                                $path.dirname($new_file_name),
                                 false
                             );
                             rename(
-                                $this->course->backup_path . '/' . $new_file_name,
-                                $this->course->backup_path . '/' . $document->path
+                                $this->course->backup_path.'/'.$new_file_name,
+                                $this->course->backup_path.'/'.$document->path
                             );
 
 							break;
@@ -1018,8 +1018,8 @@ class CourseRestorer
 				} else {
                     // end if file exists
                     copyDirTo(
-                        $this->course->backup_path . '/' . $document->path,
-                        $path . dirname($document->path),
+                        $this->course->backup_path.'/'.$document->path,
+                        $path.dirname($document->path),
                         false
                     );
 				}
@@ -1039,7 +1039,7 @@ class CourseRestorer
 			$table_forum = Database::get_course_table(TABLE_FORUM);
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_FORUM] as $id => $forum) {
-                $params = (array)$forum->obj;
+                $params = (array) $forum->obj;
                 $cat_id = '';
                 if (isset($this->course->resources[RESOURCE_FORUMCATEGORY]) &&
                     isset($this->course->resources[RESOURCE_FORUMCATEGORY][$params['forum_category']])) {
@@ -1092,13 +1092,13 @@ class CourseRestorer
 					foreach ($this->course->resources[RESOURCE_FORUMTOPIC] as $topic_id => $topic) {
 						if ($topic->obj->forum_id == $id) {
 							$this->restore_topic($topic_id, $new_id, $sessionId);
-							$forum_topics ++;
+							$forum_topics++;
 						}
 					}
 				}
 				if ($forum_topics > 0) {
 					$sql = "UPDATE ".$table_forum." SET forum_threads = ".$forum_topics."
-                            WHERE c_id = {$this->destination_course_id} AND forum_id = ".(int)$new_id;
+                            WHERE c_id = {$this->destination_course_id} AND forum_id = ".(int) $new_id;
 					Database::query($sql);
 				}
 			}
@@ -1160,7 +1160,7 @@ class CourseRestorer
 		$table = Database::get_course_table(TABLE_FORUM_THREAD);
 		$topic = $this->course->resources[RESOURCE_FORUMTOPIC][$thread_id];
 
-        $params = (array)$topic->obj;
+        $params = (array) $topic->obj;
         $params = self::DBUTF8_array($params);
         $params['c_id'] = $this->destination_course_id;
         $params['forum_id'] = $forum_id;
@@ -1274,7 +1274,7 @@ class CourseRestorer
 				        FROM $link_table
 				        WHERE
 				            c_id = ".$this->destination_course_id." AND
-				            category_id='" . intval($cat_id). "'";
+				            category_id='" . intval($cat_id)."'";
 				$result = Database::query($sql);
     			list($max_order) = Database::fetch_array($result);
 
@@ -1289,7 +1289,7 @@ class CourseRestorer
                 $params['description'] = self::DBUTF8($link->description);
                 $params['category_id'] = $cat_id;
                 $params['on_homepage'] = $link->on_homepage;
-                $params['display_order'] = $max_order+1;
+                $params['display_order'] = $max_order + 1;
 
                 $id = Database::insert($link_table, $params);
 
@@ -1712,7 +1712,7 @@ class CourseRestorer
                         $this->course->resources[RESOURCE_DOCUMENT][$quiz->sound]->is_restored()) {
                         $sql = "SELECT path FROM $table_doc
                                 WHERE
-                                    c_id = " . $this->destination_course_id . "  AND
+                                    c_id = ".$this->destination_course_id."  AND
                                     id = " . $resources[RESOURCE_DOCUMENT][$quiz->sound]->destination_id;
 						$doc = Database::query($sql);
 						$doc = Database::fetch_object($doc);
@@ -1749,17 +1749,17 @@ class CourseRestorer
                         'random' => $quiz->random,
                         'active' => $quiz->active,
                         'sound' => self::DBUTF8($doc),
-                        'max_attempt' => (int)$quiz->max_attempt,
-                        'results_disabled' => (int)$quiz->results_disabled,
+                        'max_attempt' => (int) $quiz->max_attempt,
+                        'results_disabled' => (int) $quiz->results_disabled,
                         'access_condition' => $quiz->access_condition,
                         'pass_percentage' => $quiz->pass_percentage,
-                        'feedback_type' => (int)$quiz->feedback_type,
-                        'random_answers' => (int)$quiz->random_answers,
+                        'feedback_type' => (int) $quiz->feedback_type,
+                        'random_answers' => (int) $quiz->random_answers,
                         'random_by_category' => $quiz->random_by_category,
                         'review_answers' => $quiz->review_answers,
                         'propagate_neg' => $quiz->propagate_neg,
                         'text_when_finished' => $quiz->text_when_finished,
-                        'expired_time' => (int)$quiz->expired_time,
+                        'expired_time' => (int) $quiz->expired_time,
                         'start_time' => $quiz->start_time,
                         'end_time' => $quiz->end_time,
                         'save_correct_answers' => 0,
@@ -1800,10 +1800,10 @@ class CourseRestorer
                         $qid = $this->restore_quiz_question($question_id);
                         $question_order = $quiz->question_orders[$index] ? $quiz->question_orders[$index] : ++$order;
                         $sql = "INSERT IGNORE INTO $table_rel SET
-                                c_id = " . $this->destination_course_id . ",
+                                c_id = ".$this->destination_course_id.",
                                 question_id = $qid ,
                                 exercice_id = $new_id ,
-                                question_order = " . $question_order;
+                                question_order = ".$question_order;
                         Database::query($sql);
                     }
                 }
@@ -2267,7 +2267,7 @@ class CourseRestorer
 							break;
 						case FILE_RENAME:
 							$survey_code = $survey->code.'_';
-							$i=1;
+							$i = 1;
 							$temp_survey_code = $survey_code.$i;
 							while (!$this->is_survey_code_available($temp_survey_code)) {
 								$temp_survey_code = $survey_code.++$i;
@@ -2299,15 +2299,15 @@ class CourseRestorer
 							$sql = "SELECT * FROM $table_sur
 							        WHERE
 							            c_id = ".$this->destination_course_id." AND
-							            survey_id='".self::DBUTF8escapestring(Database::result($result_check,0,0))."'";
+							            survey_id='".self::DBUTF8escapestring(Database::result($result_check, 0, 0))."'";
 							$result = Database::query($sql);
-							$survey_data = Database::fetch_array($result,'ASSOC');
+							$survey_data = Database::fetch_array($result, 'ASSOC');
 
 							// if the survey is shared => also delete the shared content
 							if (isset($survey_data['survey_share']) && is_numeric($survey_data['survey_share'])) {
-                                SurveyManager::delete_survey($survey_data['survey_share'], true,$this->destination_course_id);
+                                SurveyManager::delete_survey($survey_data['survey_share'], true, $this->destination_course_id);
 							}
-							SurveyManager::delete_survey($survey_data['survey_id'],false,$this->destination_course_id);
+							SurveyManager::delete_survey($survey_data['survey_id'], false, $this->destination_course_id);
 
 							// Insert the new source survey
                             $new_id = Database::insert($table_sur, $params);
@@ -2492,10 +2492,10 @@ class CourseRestorer
 
                 // Adding the author's image
                 if (!empty($lp->preview_image)) {
-                    $new_filename = uniqid('') . substr($lp->preview_image, strlen($lp->preview_image) - 7,
+                    $new_filename = uniqid('').substr($lp->preview_image, strlen($lp->preview_image) - 7,
                             strlen($lp->preview_image));
-                    if (file_exists($origin_path . $lp->preview_image) && !is_dir($origin_path . $lp->preview_image)) {
-                        $copy_result = copy($origin_path . $lp->preview_image, $destination_path . $new_filename);
+                    if (file_exists($origin_path.$lp->preview_image) && !is_dir($origin_path.$lp->preview_image)) {
+                        $copy_result = copy($origin_path.$lp->preview_image, $destination_path.$new_filename);
                         if ($copy_result) {
                             $lp->preview_image = $new_filename;
                         } else {
@@ -2505,7 +2505,7 @@ class CourseRestorer
                 }
 
                 if ($this->add_text_in_items) {
-                    $lp->name = $lp->name . ' ' . get_lang('CopyLabelSuffix');
+                    $lp->name = $lp->name.' '.get_lang('CopyLabelSuffix');
                 }
 
                 if (isset($this->tool_copy_settings['learnpaths'])) {
@@ -2573,7 +2573,7 @@ class CourseRestorer
                         $params = [
                             'c_id' => $this->destination_course_id,
                             'name' => self::DBUTF8($lp->name),
-                            'link' => 'lp/lp_controller.php?action=view&lp_id=$new_lp_id&id_session=' . $session_id,
+                            'link' => 'lp/lp_controller.php?action=view&lp_id=$new_lp_id&id_session='.$session_id,
                             'image' => 'scormbuilder.gif',
                             'visibility' => '0',
                             'admin' => '0',
@@ -2697,8 +2697,8 @@ class CourseRestorer
                     // Updating prerequisites
                     foreach ($old_prerequisite as $key => $my_old_prerequisite) {
                         if ($my_old_prerequisite != '') {
-                            $sql = "UPDATE " . $table_item . " SET prerequisite = '" . $my_old_prerequisite . "'
-                                    WHERE c_id = " . $this->destination_course_id . " AND id = '" . $key . "'  ";
+                            $sql = "UPDATE ".$table_item." SET prerequisite = '".$my_old_prerequisite."'
+                                    WHERE c_id = " . $this->destination_course_id." AND id = '".$key."'  ";
                             Database::query($sql);
                         }
                     }
@@ -2706,8 +2706,8 @@ class CourseRestorer
                     // Updating refs
                     foreach ($old_refs as $key => $my_old_ref) {
                         if ($my_old_ref != '') {
-                            $sql = "UPDATE " . $table_item . " SET ref = '" . $my_old_ref . "'
-                                    WHERE c_id = " . $this->destination_course_id . " AND id = '" . $key . "'  ";
+                            $sql = "UPDATE ".$table_item." SET ref = '".$my_old_ref."'
+                                    WHERE c_id = " . $this->destination_course_id." AND id = '".$key."'  ";
                             Database::query($sql);
                         }
                     }
@@ -2717,8 +2717,8 @@ class CourseRestorer
                         if ($parent_item_old_id != 0) {
                             $parent_new_id = $new_item_ids[$parent_item_old_id];
                         }
-                        $sql = "UPDATE " . $table_item . " SET parent_item_id = '" . $parent_new_id . "'
-                                WHERE c_id = " . $this->destination_course_id . " AND id = '" . $new_item_id . "'";
+                        $sql = "UPDATE ".$table_item." SET parent_item_id = '".$parent_new_id."'
+                                WHERE c_id = " . $this->destination_course_id." AND id = '".$new_item_id."'";
                         Database::query($sql);
                     }
                     foreach ($previous_item_ids as $new_item_id => $previous_item_old_id) {
@@ -2726,8 +2726,8 @@ class CourseRestorer
                         if ($previous_item_old_id != 0) {
                             $previous_new_id = $new_item_ids[$previous_item_old_id];
                         }
-                        $sql = "UPDATE " . $table_item . " SET previous_item_id = '" . $previous_new_id . "'
-                                WHERE  c_id = " . $this->destination_course_id . " AND id = '" . $new_item_id . "'";
+                        $sql = "UPDATE ".$table_item." SET previous_item_id = '".$previous_new_id."'
+                                WHERE  c_id = " . $this->destination_course_id." AND id = '".$new_item_id."'";
                         Database::query($sql);
                     }
 
@@ -2736,8 +2736,8 @@ class CourseRestorer
                         if ($next_item_old_id != 0) {
                             $next_new_id = $new_item_ids[$next_item_old_id];
                         }
-                        $sql = "UPDATE " . $table_item . " SET next_item_id = '" . $next_new_id . "'
-                                WHERE c_id = " . $this->destination_course_id . " AND id = '" . $new_item_id . "'";
+                        $sql = "UPDATE ".$table_item." SET next_item_id = '".$next_new_id."'
+                                WHERE c_id = " . $this->destination_course_id." AND id = '".$new_item_id."'";
                         Database::query($sql);
                     }
 
@@ -2746,8 +2746,8 @@ class CourseRestorer
                         if ($prerequisite_old_id != 0) {
                             $prerequisite_new_id = $new_item_ids[$prerequisite_old_id];
                         }
-                        $sql = "UPDATE " . $table_item . " SET prerequisite = '" . $prerequisite_new_id . "'
-                                WHERE c_id = " . $this->destination_course_id . " AND id = '" . $new_item_id . "'";
+                        $sql = "UPDATE ".$table_item." SET prerequisite = '".$prerequisite_new_id."'
+                                WHERE c_id = " . $this->destination_course_id." AND id = '".$new_item_id."'";
                         Database::query($sql);
                     }
                     $this->course->resources[RESOURCE_LEARNPATH][$id]->destination_id = $new_lp_id;
@@ -2867,17 +2867,17 @@ class CourseRestorer
             while (false !== ($file = readdir($handle))) {
 // as long as storing the next file to $file is successful, continue
                 if ($file != '.' && $file != '..') {
-                    $path = $source . '/' . $file;
+                    $path = $source.'/'.$file;
                     if (is_file($path)) {
                        /* if (!is_file($dest . '/' . $file) || $overwrite)
                         if (!@copy($path, $dest . '/' . $file)) {
                             echo '<font color="red">File ('.$path.') '.get_lang('NotHavePermission').'</font>';
                         }*/
-                    } elseif(is_dir($path)) {
-                        if (!is_dir($dest . '/' . $file)) {
-                                                mkdir($dest . '/' . $file);
+                    } elseif (is_dir($path)) {
+                        if (!is_dir($dest.'/'.$file)) {
+                                                mkdir($dest.'/'.$file);
                         }
-                        self:: allow_create_all_directory($path, $dest . '/' . $file, $overwrite);
+                        self:: allow_create_all_directory($path, $dest.'/'.$file, $overwrite);
                     }
                 }
             }
@@ -3075,7 +3075,7 @@ class CourseRestorer
                     $this->course->backup_path,
                     $this->course->info['path']
                 );
-				$thematic->params['c_id']  = $this->destination_course_id;
+				$thematic->params['c_id'] = $this->destination_course_id;
 				unset($thematic->params['id']);
                 unset($thematic->params['iid']);
 
@@ -3099,7 +3099,7 @@ class CourseRestorer
                         unset($thematic_advance['iid']);
 						$thematic_advance['attendance_id'] = 0;
 						$thematic_advance['thematic_id'] = $last_id;
-						$thematic_advance['c_id']  = $this->destination_course_id;
+						$thematic_advance['c_id'] = $this->destination_course_id;
 
                         $my_id = Database::insert(
                             $table_thematic_advance,
@@ -3122,7 +3122,7 @@ class CourseRestorer
 						}
 					}
 
-					foreach($thematic->thematic_plan_list as $thematic_plan) {
+					foreach ($thematic->thematic_plan_list as $thematic_plan) {
 						unset($thematic_plan['id']);
                         unset($thematic_plan['iid']);
 						$thematic_plan['thematic_id'] = $last_id;
@@ -3238,7 +3238,7 @@ class CourseRestorer
                 // re-create dir
                 // @todo check security against injection of dir in crafted course backup here!
                 $path = $obj->params['url'];
-                $path = '/'.str_replace('/','',substr($path,1));
+                $path = '/'.str_replace('/', '', substr($path, 1));
 
                 $workData = array();
                 switch ($this->file_option) {
@@ -3262,9 +3262,9 @@ class CourseRestorer
                         $obj->params['new_dir'] = $obj->params['title'];
 
                         if (!empty($this->course_origin_id)) {
-                            $sql = 'SELECT * FROM ' . $table_work_assignment . '
+                            $sql = 'SELECT * FROM '.$table_work_assignment.'
                                     WHERE
-                                        c_id = ' . $this->course_origin_id . ' AND
+                                        c_id = ' . $this->course_origin_id.' AND
                                         publication_id = ' . $id_work;
 
                             $result = Database::query($sql);

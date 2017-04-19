@@ -27,11 +27,10 @@ class HtmlEditor extends HTML_QuickForm_textarea
     public function __construct(
         $name = null,
         $elementLabel = null,
-        $attributes = null,
-        $config = array()
+        $attributes = [],
+        $config = []
     ) {
         if (empty($name)) {
-
             return false;
         }
 

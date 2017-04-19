@@ -104,10 +104,11 @@ if ($editFile && api_is_platform_admin()) {
     $ipSubList = explode('.', $ip);
     $implode = implode('\.', $ipSubList);
     $append = api_get_configuration_value('url_append');
+
     $default = '
-RewriteCond %{REQUEST_URI} !/'.$append.'/maintenance.html$ 
+RewriteCond %{REQUEST_URI} !'.$append.'/maintenance.html$ 
 RewriteCond %{REMOTE_HOST} !^'.$implode.'
-RewriteRule $ /'.$append.'/maintenance.html [R=302,L]
+RewriteRule \.*$ '.$append.'/maintenance.html [R=302,L]
 ';
     if (empty($block)) {
         $block = $default;

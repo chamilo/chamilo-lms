@@ -225,7 +225,7 @@ function ldap_put_user_info_locally($login, $info_array) {
     $loginFailed = false;
     $uidReset = true;
     $_user['user_id'] = $uData['user_id'];
-    Session::write('_uid', $_uid);
+    Session::write('_uid', $_user['user_id']);
 }
 
 /**
@@ -373,7 +373,7 @@ function ldap_get_users() {
     }
 
     if (count($ldap_query)>1){
-        $str_query.="(& ";
+        $str_query ="(& ";
         foreach ($ldap_query as $query){
             $str_query.=" $query";
         }

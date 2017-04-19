@@ -13,6 +13,8 @@ $plugin_info['author'] = 'Julio Montoya';
 $editFile = false;
 
 $file = api_get_path(SYS_PATH).'.htaccess';
+$maintenanceHtml = api_get_path(SYS_PATH).'maintenance.html';
+
 if (!file_exists($file)) {
     Display::addFlash(
         Display::return_message(
@@ -73,12 +75,50 @@ if ($editFile && api_is_platform_admin()) {
 
     $form = new FormValidator('htaccess');
     $form->addHtml('The following text will be added in the /.htaccess');
-    $form->addTextarea('text', get_lang('Text'), ['rows' => '15']);
+    $form->addText('ip', 'IP');
+    $form->addTextarea('text', 'htaccess', ['rows' => '15']);
+
+    $config = [
+        'ToolbarSet' => 'Documents',
+        'Width' => '100%',
+        'Height' => '400',
+        //'fullPage' => true,
+        'allowedContent' => true
+    ];
+
+    $form->addHtmlEditor(
+        'maintenance',
+        'Maintenance',
+        true,
+        true,
+        $config
+    );
+
     $form->addButtonSave(get_lang('Save'));
-    $form->setDefaults(['text' => $block]);
+    $content = file_get_contents($maintenanceHtml);
+    if (empty($content)) {
+        $content = '<html><head><title></title></head><body></body></html>';
+    }
+    $ip = api_get_plugin_setting('edit_htaccess', 'ip');
+    $ip = api_get_real_ip();
+    $ipSubList = explode('.', $ip);
+    $implode = implode('\.', $ipSubList);
+    $append = api_get_configuration_value('url_append');
+    $default = '
+RewriteCond %{REQUEST_URI} !/'.$append.'/maintenance.html$ 
+RewriteCond %{REMOTE_HOST} !^'.$implode.'
+RewriteRule $ /'.$append.'/maintenance.html [R=302,L]
+';
+    if (empty($block)) {
+        $block = $default;
+    }
+
+    $form->setDefaults(['text' => $block, 'maintenance' => $content, 'ip' => $ip]);
+
     if ($form->validate()) {
         $values = $form->getSubmitValues();
         $text = $values['text'];
+        $content = $values['maintenance'];
 
         // Restore htaccess with out the block
         $newFileContent = $contentNoBlock;
@@ -103,6 +143,7 @@ if ($editFile && api_is_platform_admin()) {
             );
             file_put_contents($file, $originalContent);
         } else {
+            file_put_contents($maintenanceHtml, $content);
             Display::addFlash(Display::return_message('Saved'));
         }
     }

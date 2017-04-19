@@ -63,6 +63,8 @@ exclude_paths:
 - plugin/clockworksms/vendor/
 - plugin/pens/lib
 - plugin/bbb/lib/bbb_api.php
+- plugin/ims_lti/OAuthSimple.php
+- plugin/buycourses/src/Requests.php
 - tests/
 - vendor/
 - web/

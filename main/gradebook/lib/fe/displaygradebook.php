@@ -333,13 +333,10 @@ class DisplayGradebook
             } else {
                 $header .= '<td></td>';
             }
-            if ($is_course_admin &&
+            if (!($is_course_admin &&
                 $message_resource === false &&
                 isset($_GET['selectcat']) && $_GET['selectcat'] != 0
-            ) {
-            } elseif (!(isset($_GET['studentoverview']))) {
-
-            } else {
+            ) && isset($_GET['studentoverview'])) {
                 $header .= '<td style="vertical-align: top;"><a href="'.api_get_self().'?'.api_get_cidreq().'&studentoverview=&exportpdf=&selectcat='.$catobj->get_id().'" target="_blank">
 							 '.Display::return_icon('pdf.png', get_lang('ExportPDF'), [], ICON_SIZE_MEDIUM).'
 							' . get_lang('ExportPDF').'</a>';

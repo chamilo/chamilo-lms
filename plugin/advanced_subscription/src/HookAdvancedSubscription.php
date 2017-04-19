@@ -33,7 +33,7 @@ class HookAdvancedSubscription extends HookObserver implements
 
     /**
      * @param HookAdminBlockEventInterface $hook
-     * @return int
+     * @return array
      */
     public function hookAdminBlock(HookAdminBlockEventInterface $hook)
     {
@@ -468,7 +468,6 @@ class HookAdvancedSubscription extends HookObserver implements
         if (!WSHelperVerifyKey($params)) {
             return return_error(WS_ERROR_SECRET_KEY);
         }
-        $result = return_error(WS_ERROR_NOT_FOUND_RESULT);
         // Check params
         if (is_array($params) && !empty($params['session_id']) && !empty($params['user_id'])) {
             $userId = UserManager::get_user_id_from_original_id($params['user_id'], $params['user_field']);
@@ -598,7 +597,7 @@ class HookAdvancedSubscription extends HookObserver implements
         }
 
         // Get validated and waiting queue users count for each session
-        $plugin = AdvancedSubscriptionPlugin::create();
+        AdvancedSubscriptionPlugin::create();
         foreach ($sessionList as &$session) {
             // Add validated and queue users count
             $session['validated_user_num'] = self::$plugin->countQueueByParams(
@@ -659,7 +658,7 @@ class HookAdvancedSubscription extends HookObserver implements
     /**
      * Return the notification data title if the hook was triggered
      * @param HookNotificationTitleEventInterface $hook
-     * @return int
+     * @return array|bool
      */
     public function hookNotificationTitle(HookNotificationTitleEventInterface $hook)
     {

@@ -89,7 +89,7 @@ class SocialManager extends UserManager
 
             return $row['id'];
         } else {
-            return USER_UNKNOW;
+            return USER_UNKNOWN;
         }
     }
 

@@ -338,8 +338,8 @@ define('USER_IMAGE_SIZE_MEDIUM', 3);
 define('USER_IMAGE_SIZE_SMALL', 4);
 
 // Relation type between users
-define('USER_UNKNOW', 0);
-define('USER_RELATION_TYPE_UNKNOW', 1);
+define('USER_UNKNOWN', 0);
+define('USER_RELATION_TYPE_UNKNOWN', 1);
 define('USER_RELATION_TYPE_PARENT', 2); // should be deprecated is useless
 define('USER_RELATION_TYPE_FRIEND', 3);
 define('USER_RELATION_TYPE_GOODFRIEND', 4); // should be deprecated is useless

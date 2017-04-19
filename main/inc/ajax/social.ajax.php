@@ -17,7 +17,7 @@ switch ($action) {
         if (isset($_GET['is_my_friend'])) {
             $relation_type = USER_RELATION_TYPE_FRIEND; //My friend
         } else {
-            $relation_type = USER_RELATION_TYPE_UNKNOW; //Unknown contact
+            $relation_type = USER_RELATION_TYPE_UNKNOWN; //Unknown contact
         }
 
         if (isset($_GET['friend_id'])) {
@@ -41,7 +41,7 @@ switch ($action) {
         if (isset($_GET['is_my_friend'])) {
             $relation_type = USER_RELATION_TYPE_FRIEND;//my friend
         } else {
-            $relation_type = USER_RELATION_TYPE_UNKNOW;//Contact unknown
+            $relation_type = USER_RELATION_TYPE_UNKNOWN;//Contact unknown
         }
         if (isset($_GET['denied_friend_id'])) {
             SocialManager::invitation_denied($_GET['denied_friend_id'], $current_user_id);

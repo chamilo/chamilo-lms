@@ -88,7 +88,7 @@ class WSCMUser extends WSCM
                 case 'bothlf' :
                     return $userInfo['lastname']." ".$userInfo['firstname'];
                     break;
-                default :
+                default:
                     return $userInfo['firstname'];
             }
 

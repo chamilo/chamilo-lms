@@ -3582,7 +3582,7 @@ class learnpath
                     break;
                 case 4 :
                     break;
-                default :
+                default:
                     break;
             }
             // Replace &amp; by & because &amp; will break URL with params

@@ -561,6 +561,7 @@ class CourseSelectForm
 									}
 								}
 							}
+                        // no break
 					default:
 						if (!empty($resources) && is_array($resources)) {
 							foreach ($resources as $id => $obj) {

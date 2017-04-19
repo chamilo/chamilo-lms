@@ -1853,15 +1853,13 @@ class IndexManager
         $listUserCategories[0] = '';
 
         $html .= '<div class="session-view-block">';
-
-        foreach ($listUserCategories as $userCategoryId => $userCatTitle) {
+        foreach ($listUserCategories as $userCategoryId => $userCat) {
             // add user category
             $userCategoryHtml = '';
             if ($userCategoryId != 0) {
                 $userCategoryHtml = '<div class="session-view-well ">';
+                $userCategoryHtml .= self::getHtmlForUserCategory($userCategoryId, $userCat['title']);
             }
-            $userCategoryHtml .= self::getHtmlForUserCategory($userCategoryId, $userCatTitle);
-
             // look for course in this userCat in session courses : $listCoursesInSession
             $htmlCategory = '';
             if (isset($listCoursesInSession[$userCategoryId])) {

@@ -3965,24 +3965,21 @@ class CourseManager
 
     /**
      * Retrieves the user defined course categories
-     * @param string $userId
-     * @return array containing all the titles of the user defined courses with the id as key of the array
+     * @param int $userId
+     * @return array
      */
-    public static function get_user_course_categories($userId = '')
+    public static function get_user_course_categories($userId = 0)
     {
-        if ($userId == '') {
-            $realUserId = api_get_user_id();
-        } else {
-            $realUserId = $userId;
-        }
-
-        $output = array();
+        $userId = empty($userId) ? api_get_user_id() : (int) $userId;
         $table_category = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
         $sql = "SELECT * FROM $table_category 
-                WHERE user_id = '".intval($realUserId)."'";
+                WHERE user_id = $userId
+                ORDER BY sort ASC
+                ";
         $result = Database::query($sql);
-        while ($row = Database::fetch_array($result)) {
-            $output[$row['id']] = $row['title'];
+        $output = array();
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
+            $output[$row['id']] = $row;
         }
         return $output;
     }

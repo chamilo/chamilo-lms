@@ -5,8 +5,8 @@
  * Class aicc
  * Defines the AICC class, which is meant to contain the aicc items (nuclear elements)
  * @package chamilo.learnpath
- * @author	Yannick Warnier <ywarnier@beeznest.org>
- * @license	 GNU/GPL
+ * @author Yannick Warnier <ywarnier@beeznest.org>
+ * @license GNU/GPL
  * @package chamilo.learnpath
  */
 class aicc extends learnpath
@@ -58,7 +58,9 @@ class aicc extends learnpath
      */
     public function open($id)
     {
-        if ($this->debug > 0) { error_log('In aicc::open()', 0); }
+        if ($this->debug > 0) {
+            error_log('In aicc::open()', 0);
+        }
         // Redefine parent method.
     }
 
@@ -132,7 +134,7 @@ class aicc extends learnpath
             //echo '<pre>des:'.print_r($des_params, true).'</pre>';
             if ($this->debug > 1) { error_log('New LP - In aicc::parse_config_files() - '.$des_file.' has been parsed', 0); }
             // Distribute des params into the aicc object.
-            foreach ($des_params as $des){
+            foreach ($des_params as $des) {
                 // One AU in AICC is equivalent to one SCO in SCORM (scormItem class).
                 $oDes = new aiccResource('config', $des);
                 $this->deslist[$oDes->identifier] = $oDes;
@@ -215,8 +217,8 @@ class aicc extends learnpath
 
     /**
      * Import the aicc object (as a result from the parse_config_files function) into the database structure
-     * @param	string	$course_code
-     * @return	bool	Returns -1 on error
+     * @param    string $course_code
+     * @return    bool    Returns -1 on error
      */
     public function import_aicc($course_code)
     {
@@ -376,9 +378,7 @@ class aicc extends learnpath
         }
         */
         $zipFile = new PclZip($zip_file_path);
-
         // Check the zip content (real size and file extension).
-
         $zipContentArray = $zipFile->listContent();
 
         $package_type = ''; // The type of the package. Should be 'aicc' after the next few lines.
@@ -562,12 +562,13 @@ class aicc extends learnpath
         } else {
             return '';
         }
+
         return $course_sys_dir.$new_dir.$config_dir;
     }
 
     /**
      * Sets the proximity setting in the database
-     * @param	string	$proxy Proximity setting
+     * @param    string $proxy Proximity setting
      */
     function set_proximity($proxy = '')
     {
@@ -586,7 +587,7 @@ class aicc extends learnpath
 
     /**
      * Sets the theme setting in the database
-     * @param	string	Theme setting
+     * @param    string    Theme setting
      */
     function set_theme($theme = '')
     {
@@ -605,7 +606,7 @@ class aicc extends learnpath
 
     /**
      * Sets the image LP in the database
-     * @param	string	$preview_image Theme setting
+     * @param    string $preview_image Theme setting
      */
     function set_preview_image($preview_image = '')
     {
@@ -624,7 +625,7 @@ class aicc extends learnpath
 
     /**
      * Sets the Author LP in the database
-     * @param	string	$author
+     * @param    string $author
      */
     function set_author($author = '')
     {
@@ -643,7 +644,7 @@ class aicc extends learnpath
 
     /**
      * Sets the content maker setting in the database
-     * @param	string	$maker
+     * @param    string $maker
      */
     function set_maker($maker = '')
     {
@@ -662,7 +663,7 @@ class aicc extends learnpath
 
     /**
      * Exports the current AICC object's files as a zip. Excerpts taken from learnpath_functions.inc.php::exportpath()
-     * @param	integer	Learnpath ID (optional, taken from object context if not defined)
+     * @param    integer    Learnpath ID (optional, taken from object context if not defined)
      */
     function export_zip($lp_id = null)
     {
@@ -758,7 +759,8 @@ class aicc extends learnpath
      * Gets the default organisation's title
      * @return	string	The organization's title
      */
-    function get_title(){
+    function get_title()
+    {
         if ($this->debug > 0) { error_log('In aicc::get_title() method', 0); }
         $title = '';
         if (isset($this->config['organizations']['default'])) {
@@ -778,7 +780,8 @@ class aicc extends learnpath
      * updating the existing table... This will prove very useful in case initial data
      * from config files were not imported well enough.
      */
-    function reimport_aicc() {
+    function reimport_aicc()
+    {
         if ($this->debug > 0) { error_log('In aicc::reimport_aicc() method', 0); }
         //query current items list
         //get the identifiers
@@ -794,7 +797,8 @@ class aicc extends learnpath
      * @param	string	File path
      * @return	array	Structured array
      */
-    function parse_ini_file_quotes_safe($f) {
+    function parse_ini_file_quotes_safe($f)
+    {
         $null = '';
         $r = $null;
         $sec = $null;
@@ -845,7 +849,8 @@ class aicc extends learnpath
      * @param		array	List of names of sections that should be considered as containing only hard string data (no variables), provided in lower case
      * @return	array	Structured array
      */
-    function parse_ini_string_quotes_safe($s, $pure_strings = array()) {
+    function parse_ini_string_quotes_safe($s, $pure_strings = array())
+    {
         $null = '';
         $r = $null;
         $sec = $null;
@@ -908,7 +913,8 @@ class aicc extends learnpath
      * @param	boolean	Might one field name happen more than once on the same line? (then split by comma in the values)
      * @return array	Simple structured array
      */
-    function parse_csv_file($f, $delim = ',', $enclosure = '"', $multiples = false) {
+    function parse_csv_file($f, $delim = ',', $enclosure = '"', $multiples = false)
+    {
         $data = @file_get_contents($f);
         $data = api_convert_encoding($data, api_get_system_encoding(), $this->config_encoding);
         $enclosed = false;
@@ -982,6 +988,7 @@ class aicc extends learnpath
                 }
             }
         }
+
         return $ret_ret_array;
     }
 }

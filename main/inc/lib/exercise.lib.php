@@ -3699,6 +3699,7 @@ HOTSPOT;
             if (isset($exercise_stat_info['exe_user_id'])) {
                 $user_info = api_get_user_info($exercise_stat_info['exe_user_id']);
                 if ($user_info) {
+
                     // Shows exercise header
                     echo $objExercise->show_exercise_result_header(
                         $user_info,
@@ -3877,18 +3878,15 @@ HOTSPOT;
         }
 
         $total_score_text = null;
-
-        if ($origin != 'learnpath') {
-            if ($show_results || $show_only_score) {
-                $total_score_text .= '<div class="question_row_score">';
-                $total_score_text .= self::get_question_ribbon(
-                    $objExercise,
-                    $total_score,
-                    $total_weight,
-                    true
-                );
-                $total_score_text .= '</div>';
-            }
+        if ($show_results || $show_only_score) {
+            $total_score_text .= '<div class="question_row_score">';
+            $total_score_text .= self::get_question_ribbon(
+                $objExercise,
+                $total_score,
+                $total_weight,
+                true
+            );
+            $total_score_text .= '</div>';
         }
 
         if (!empty($category_list) && ($show_results || $show_only_score)) {

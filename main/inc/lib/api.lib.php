@@ -936,7 +936,7 @@ function api_get_cdn_path($web_path)
                 if (in_array($ext, $exts)) {
                     //Use host as defined in $_configuration['cdn'], without
                     // trailing slash
-                    return str_replace($web_root,$host.'/',$web_path);
+                    return str_replace($web_root, $host.'/', $web_path);
                 }
             }
         }
@@ -968,31 +968,6 @@ function api_is_ldap_activated() {
 function api_is_facebook_auth_activated() {
     global $_configuration;
     return (isset($_configuration['facebook_auth']) && $_configuration['facebook_auth'] == 1);
-}
-
-/**
- * This function checks whether a given path points inside the system.
- * @param string $path      The path to be tested.
- * It should be full path, web-absolute (WEB), semi-absolute (REL) or system-absolyte (SYS).
- * @return bool             Returns true when the given path is inside the system, false otherwise.
- */
-function api_is_internal_path($path) {
-    $path = str_replace('\\', '/', trim($path));
-    if (empty($path)) {
-        return false;
-    }
-    if (strpos($path, api_remove_trailing_slash(api_get_path(WEB_PATH))) === 0) {
-        return true;
-    }
-    if (strpos($path, api_remove_trailing_slash(api_get_path(SYS_PATH))) === 0) {
-        return true;
-    }
-    $server_base_web = api_remove_trailing_slash(api_get_path(REL_PATH));
-    $server_base_web = empty($server_base_web) ? '/' : $server_base_web;
-    if (strpos($path, $server_base_web) === 0) {
-        return true;
-    }
-    return false;
 }
 
 /**

@@ -1318,7 +1318,7 @@ class bbb
 
         if (!$isGlobal) {
             $links[] = Display::url(
-                Display::return_icon('link.gif', get_lang('CopyToLinkTool')),
+                Display::return_icon('link.gif', get_lang('UrlMeetingToShare')),
                 $this->copyToRecordToLinkTool($meetingInfo)
             );
             $links[] = Display::url(

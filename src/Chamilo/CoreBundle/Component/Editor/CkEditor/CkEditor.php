@@ -78,10 +78,13 @@ class CkEditor extends Editor
      */
     public function editorReplace()
     {
-        $toolbar = new Toolbar\Basic($this->toolbarSet, $this->config, 'CkEditor');
+        $toolbar = new Toolbar\Basic(
+            $this->toolbarSet,
+            $this->config,
+            'CkEditor'
+        );
         $toolbar->setLanguage($this->getLocale());
         $config = $toolbar->getConfig();
-
         $javascript = $this->toJavascript($config);
 
         $html = "<script>

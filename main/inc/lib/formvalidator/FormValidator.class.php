@@ -905,7 +905,7 @@ EOT;
         $attributes['cols-size'] = isset($config['cols-size']) ? $config['cols-size'] : [];
         $attributes['class'] = isset($config['class']) ? $config['class'] : [];
 
-        $this->addElement('html_editor', $name, $label, $attributes);
+        $this->addElement('html_editor', $name, $label, $attributes, $config);
         $this->applyFilter($name, 'trim');
         if ($required) {
             $this->addRule($name, get_lang('ThisFieldIsRequired'), 'required');

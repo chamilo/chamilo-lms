@@ -14,7 +14,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 
 $tool_name = get_lang('ExportCourses');
-$interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 
 set_time_limit(0);
 
@@ -59,17 +59,17 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
         $dataToExport = [];
 
         foreach ($courses as $course) {
-            $dataToExport['code'] = str_replace(';',',',$course['code']);
-            $dataToExport['title'] = str_replace(';',',',$course['title']);
-            $dataToExport['category_code'] = str_replace(';',',',$course['category_code']);
+            $dataToExport['code'] = str_replace(';', ',', $course['code']);
+            $dataToExport['title'] = str_replace(';', ',', $course['title']);
+            $dataToExport['category_code'] = str_replace(';', ',', $course['category_code']);
             $categoryInfo = CourseCategory::getCategory($course['category_code']);
             if ($categoryInfo) {
-                $dataToExport['category_name'] = str_replace(';',',',$categoryInfo['name']);
+                $dataToExport['category_name'] = str_replace(';', ',', $categoryInfo['name']);
             } else {
                 $dataToExport['category_name'] = '';
             }
-            $dataToExport['tutor_name'] = str_replace(';',',',$course['tutor_name']);
-            $dataToExport['course_language'] = str_replace(';',',',$course['course_language']);
+            $dataToExport['tutor_name'] = str_replace(';', ',', $course['tutor_name']);
+            $dataToExport['course_language'] = str_replace(';', ',', $course['course_language']);
 
             $dataToExport['students'] = '';
             $dataToExport['teachers'] = '';
@@ -79,9 +79,9 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
             if (is_array($usersInCourse) && !empty($usersInCourse)) {
                 foreach ($usersInCourse as $user) {
                     if ($user['status_rel'] == COURSEMANAGER) {
-                        $dataToExport['teachers'] .= $user['username'] . '|';
+                        $dataToExport['teachers'] .= $user['username'].'|';
                     } else {
-                        $dataToExport['students'] .= $user['username'] . '|';
+                        $dataToExport['students'] .= $user['username'].'|';
                     }
                 }
             }
@@ -153,8 +153,8 @@ if (!empty($course_list)) {
 	$form->addHtml('</div>');
 }
 
-$form->addElement('radio', 'file_type', get_lang('OutputFileType'), 'CSV' , 'csv', null);
-$form->addElement('radio', 'file_type', '' , 'XLS' , 'xls', null);
+$form->addElement('radio', 'file_type', get_lang('OutputFileType'), 'CSV', 'csv', null);
+$form->addElement('radio', 'file_type', '', 'XLS', 'xls', null);
 $form->addElement('radio', 'file_type', null, 'XML', 'xml', null, array('id' => 'file_type_xml'));
 
 $form->setDefaults(['select_type' => '1', 'file_type' => 'csv']);

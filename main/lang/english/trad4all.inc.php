@@ -605,7 +605,6 @@ $Forbidden = "Not allowed";
 $CourseAccessConfigTip = "By default, your course is public. But you can define the level of access above.";
 $OpenToTheWorld = "Public - access allowed for the whole world";
 $OpenToThePlatform = " Open - access allowed for users registered on the platform";
-$OpenToThePlatform = "Open - access allowed for users registered on the platform";
 $TipLang = "This language will be valid for every visitor of your courses portal";
 $Vid = "Chamilo LIVE";
 $Work = "Contributions";

@@ -2816,10 +2816,11 @@ function api_is_session_in_category($session_id, $category_name)
  *                               'subTitle'
  * @return void
  */
-function api_display_tool_title($title_element) {
+function api_display_tool_title($title_element)
+{
     if (is_string($title_element)) {
         $tit = $title_element;
-        unset ($title_element);
+        unset($title_element);
         $title_element['mainTitle'] = $tit;
     }
     echo '<h3>';
@@ -3743,7 +3744,7 @@ function api_item_property_update(
                 $result = Database::query($sql);
             }
             break;
-        case 'visible' : // Change item to visible.
+        case 'visible': // Change item to visible.
             $visibility = '1';
             if (!empty($session_id)) {
                 // Check whether session id already exist into item_properties for updating visibility or add it.
@@ -3785,7 +3786,7 @@ function api_item_property_update(
                 $result = Database::query($sql);
             }
             break;
-        case 'invisible' : // Change item to invisible.
+        case 'invisible': // Change item to invisible.
             $visibility = '0';
             if (!empty($session_id)) {
                 // Check whether session id already exist into item_properties for updating visibility or add it

@@ -109,8 +109,8 @@ Event::event_access_tool(TOOL_DOCUMENT);
 $display_dir = $dir;
 if (isset ($group)) {
 	$display_dir = explode('/', $dir);
-	unset ($display_dir[0]);
-	unset ($display_dir[1]);
+	unset($display_dir[0]);
+	unset($display_dir[1]);
 	$display_dir = implode('/', $display_dir);
 }
 

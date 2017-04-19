@@ -62,7 +62,7 @@ if (isset ($_GET['createallcategories'])) {
             $cat->set_weight(0);
             $cat->set_visible(0);
             $cat->add();
-            unset ($cat);
+            unset($cat);
         }
     }
     header('Location: '.$_SESSION['gradebook_dest'].'?addallcat=&selectcat=0');
@@ -133,9 +133,9 @@ if (isset ($_GET['moveeval'])) {
             header('Location: ' . api_get_self() . '?evaluationmoved=&selectcat=' . $selectcat);
             exit;
         }
-        unset ($targetcat);
+        unset($targetcat);
     }
-    unset ($evals);
+    unset($evals);
 }
 
 //move a link
@@ -154,7 +154,7 @@ if (isset ($_GET['movelink'])) {
     if ($move_form->validate()) {
         $targetcat= Category :: load($move_form->exportValue('move_cat'));
         $link[0]->move_to_cat($targetcat[0]);
-        unset ($link);
+        unset($link);
         header('Location: ' . api_get_self(). '?linkmoved=&selectcat=' . $selectcat);
         exit;
     }
@@ -172,7 +172,7 @@ if (isset ($_GET['visiblecat'])) {
     $cats[0]->set_visible($visibility_command);
     $cats[0]->save();
     $cats[0]->apply_visibility_to_children();
-    unset ($cats);
+    unset($cats);
     if ($visibility_command) {
         $confirmation_message = get_lang('ViMod');
         $filter_confirm_msg = false;
@@ -206,7 +206,7 @@ if (isset ($_GET['visibleeval'])) {
     $eval= Evaluation :: load($_GET['visibleeval']);
     $eval[0]->set_visible($visibility_command);
     $eval[0]->save();
-    unset ($eval);
+    unset($eval);
     if ($visibility_command) {
         $confirmation_message = get_lang('ViMod');
         $filter_confirm_msg = false;
@@ -235,7 +235,7 @@ if (isset ($_GET['visiblelink'])) {
     $link= LinkFactory :: load($_GET['visiblelink']);
     $link[0]->set_visible($visibility_command);
     $link[0]->save();
-    unset ($link);
+    unset($link);
     if ($visibility_command) {
         $confirmation_message = get_lang('ViMod');
         $filter_confirm_msg = false;
@@ -252,7 +252,7 @@ if (isset ($_GET['deletelink'])) {
         if ($link[0] != null) {
             $link[0]->delete();
         }
-        unset ($link);
+        unset($link);
         $confirmation_message = get_lang('LinkDeleted');
         $filter_confirm_msg = false;
     }

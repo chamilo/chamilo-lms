@@ -1105,7 +1105,7 @@ class Link extends Model
                     $url = api_get_path(WEB_CODE_PATH).'link/link_goto.php?' . api_get_cidreq() .'&link_id=' . $linkId .'&link_url=' . urlencode($myrow['url']);
                     $content .= Display::tag(
                         'a',
-                        Security:: remove_XSS($myrow['title']),
+                        Security::remove_XSS($myrow['title']),
                         array(
                             'href' => $url,
                             'target' => $myrow['target']
@@ -1126,7 +1126,7 @@ class Link extends Model
                         $url = api_get_path(WEB_CODE_PATH).'link/link_goto.php?' . api_get_cidreq() .'&link_id=' . $linkId . "&link_url=" . urlencode($myrow['url']);
                         $content .= Display::tag(
                             'a',
-                            Security:: remove_XSS($myrow['title']),
+                            Security::remove_XSS($myrow['title']),
                             array(
                                 'href' => $url,
                                 'target' => '_blank',

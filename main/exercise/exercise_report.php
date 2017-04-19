@@ -241,7 +241,7 @@ if (isset($_REQUEST['comments']) &&
         Database::query($sql);
         if ($origin == 'tracking_course') {
             //Redirect to the course detail in lp
-            header('location: '.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?course='.Security :: remove_XSS($_GET['course']));
+            header('location: '.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?course='.Security::remove_XSS($_GET['course']));
             exit;
         } else {
             // Redirect to the reporting

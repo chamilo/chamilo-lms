@@ -169,9 +169,9 @@ if (isset($_GET['movecat'])) {
             header('Location: ' . api_get_self() . '?categorymoved=&selectcat=' . $selectCat);
             exit;
         }
-        unset ($targetcat);
+        unset($targetcat);
     }
-    unset ($cats);
+    unset($cats);
 }
 
 //move an evaluation
@@ -244,7 +244,7 @@ if (isset($_GET['visiblecat'])) {
     $cats[0]->set_visible($visibility_command);
     $cats[0]->save();
     $cats[0]->apply_visibility_to_children();
-    unset ($cats);
+    unset($cats);
     if ($visibility_command) {
         $confirmation_message = get_lang('ViMod');
         $filter_confirm_msg = false;
@@ -280,7 +280,7 @@ if (isset($_GET['visibleeval'])) {
     $eval= Evaluation :: load($_GET['visibleeval']);
     $eval[0]->set_visible($visibility_command);
     $eval[0]->save();
-    unset ($eval);
+    unset($eval);
     if ($visibility_command) {
         $confirmation_message = get_lang('ViMod');
         $filter_confirm_msg = false;
@@ -332,7 +332,7 @@ if (isset($_GET['visiblelink'])) {
         $link[0]->set_visible($visibility_command);
         $link[0]->save();
     }
-    unset ($link);
+    unset($link);
     if ($visibility_command) {
         $confirmation_message = get_lang('ViMod');
         $filter_confirm_msg = false;
@@ -372,7 +372,7 @@ if (isset($_GET['deletelink'])) {
             Database::query($sql);
             $link[0]->delete();
         }
-        unset ($link);
+        unset($link);
         $confirmation_message = get_lang('LinkDeleted');
         $filter_confirm_msg = false;
     }

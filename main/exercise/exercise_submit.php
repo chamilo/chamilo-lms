@@ -719,10 +719,10 @@ if ($question_count != 0) {
 }
 
 if (!empty ($_GET['gradebook']) && $_GET['gradebook'] == 'view') {
-    $_SESSION['gradebook'] = Security :: remove_XSS($_GET['gradebook']);
+    $_SESSION['gradebook'] = Security::remove_XSS($_GET['gradebook']);
     $gradebook = $_SESSION['gradebook'];
 } elseif (empty ($_GET['gradebook'])) {
-    unset ($_SESSION['gradebook']);
+    unset($_SESSION['gradebook']);
     $gradebook = '';
 }
 
@@ -1201,7 +1201,7 @@ if (!empty($error)) {
                         $objQuestionTmp = Question::read($questionId);
                         $questionName = $objQuestionTmp->selectTitle();
                         // destruction of the Question object
-                        unset ($objQuestionTmp);
+                        unset($objQuestionTmp);
                         Display :: display_normal_message(get_lang('AlreadyAnswered'));
                         $i++;
                         break;

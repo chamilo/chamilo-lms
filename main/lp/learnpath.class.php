@@ -3227,7 +3227,7 @@ class learnpath
         if ($is_allowed_to_edit && $hide_teacher_icons_lp == false) {
             $gradebook = '';
             if (!empty($_GET['gradebook'])) {
-                $gradebook = Security:: remove_XSS($_GET['gradebook']);
+                $gradebook = Security::remove_XSS($_GET['gradebook']);
             }
             if ($this->get_lp_session_id() == api_get_session_id()) {
                 $html .= '<div id="actions_lp" class="actions_lp"><hr>';
@@ -5545,7 +5545,7 @@ class learnpath
 
         $this->tree_array($arrLP);
         $arrLP = isset($this->arrMenu) ? $this->arrMenu : null;
-        unset ($this->arrMenu);
+        unset($this->arrMenu);
         $default_data = null;
         $default_content = null;
         $elements = array();
@@ -6722,7 +6722,7 @@ class learnpath
 
         $this->tree_array($arrLP);
         $arrLP = isset($this->arrMenu) ? $this->arrMenu : null;
-        unset ($this->arrMenu);
+        unset($this->arrMenu);
 
         $form = new FormValidator(
             'quiz_form',
@@ -7343,7 +7343,7 @@ class learnpath
 
         $this->tree_array($arrLP);
         $arrLP = isset($this->arrMenu) ? $this->arrMenu : null;
-        unset ($this->arrMenu);
+        unset($this->arrMenu);
 
         $form = new FormValidator(
             'thread_form',
@@ -7820,7 +7820,7 @@ class learnpath
 
         $this->tree_array($arrLP);
         $arrLP = isset($this->arrMenu) ? $this->arrMenu : null;
-        unset ($this->arrMenu);
+        unset($this->arrMenu);
 
         if ($action == 'add') {
             $return .= get_lang('CreateTheDocument');
@@ -8181,7 +8181,7 @@ class learnpath
 
         $this->tree_array($arrLP);
         $arrLP = isset($this->arrMenu) ? $this->arrMenu : null;
-        unset ($this->arrMenu);
+        unset($this->arrMenu);
 
         if ($action == 'add') {
             $legend = get_lang('CreateTheLink');

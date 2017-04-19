@@ -5106,7 +5106,7 @@ class Exercise
             }
             //	}
         }
-        unset ($objAnswerTmp);
+        unset($objAnswerTmp);
 
         $totalWeighting += $questionWeighting;
         // Store results directly in the database

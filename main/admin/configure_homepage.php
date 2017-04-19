@@ -1236,6 +1236,7 @@ switch ($action) {
                 </div>
             </div>
         </section>
-        <?php break;
+        <?php
+        break;
 }
 Display::display_footer();

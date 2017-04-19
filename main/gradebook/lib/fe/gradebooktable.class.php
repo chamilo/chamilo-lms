@@ -982,7 +982,8 @@ class GradebookTable extends SortableTable
                     .$item->get_name()
                     .'</a>'
                     .($item->is_course() ? ' &nbsp;['.$item->get_course_code().']'.$show_message : '');
-            // evaluation
+                // evaluation
+                //no break because of return
             case 'E':
                 $cat = new Category();
                 $course_id = CourseManager::get_course_by_category($categoryId);
@@ -1021,6 +1022,7 @@ class GradebookTable extends SortableTable
                 } else {
                     return '['.get_lang('Evaluation').']&nbsp;&nbsp;'.$item->get_name().$show_message;
                 }
+                // no break because of return
             case 'L':
                 // link
                 $cat = new Category();

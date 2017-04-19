@@ -124,7 +124,7 @@ function cas_is_authenticated()
                             $user_added = $login;
                         }
                         break;
-                    default :
+                    default:
                         break;
                 }
                 return $user_added;

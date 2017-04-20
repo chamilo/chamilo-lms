@@ -32,7 +32,7 @@ echo Display::tag('h2', $thematic_data['title']);
 echo $thematic_data['content'];
 
 if (isset($message) && $message == 'ok') {
-    Display::display_normal_message(get_lang('ThematicSectionHasBeenCreatedSuccessfull'));
+    Display::addFlash(Display::return_message(get_lang('ThematicSectionHasBeenCreatedSuccessfull'), 'normal'));
 }
 
 if ($action === 'thematic_plan_list') {
@@ -152,12 +152,12 @@ if ($action === 'thematic_plan_list') {
     if (isset($default_thematic_plan_question[$description_type])) {
         $message = '<strong>'.get_lang('QuestionPlan').'</strong><br />';
         $message .= $default_thematic_plan_question[$description_type];
-        Display::display_normal_message($message, false);
+        Display::addFlash(Display::return_message($message, 'normal', false));
     }
 
     // error messages
     if ($error) {
-        Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'), false);
+        Display::addFlash(Display::return_message(get_lang('FormHasErrorsPleaseComplete'), 'error', false));
     }
     $form->display();
 }

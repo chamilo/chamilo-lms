@@ -171,9 +171,9 @@ Display :: display_header($tool_name);
 // Display confirmation or error message.
 if (!empty($message)) {
     if ($is_error_message) {
-        Display::display_error_message($message, false);
+        Display::addFlash(Display::return_message($message, 'error', false));
     } else {
-        Display::display_normal_message($message, false);
+        Display::addFlash(Display::return_message($message, 'normal', false));
     }
 }
 

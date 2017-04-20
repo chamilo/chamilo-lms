@@ -58,7 +58,7 @@ if (count($output) > 0) {
     }
     $result .= '</table>';
     $result .= '</div>';
-    Display::display_normal_message($result, false);
+    Display::addFlash(Display::return_message($result, 'normal', false));
 }
 ?>
 <div id="datafiller" class="panel panel-default">

@@ -58,12 +58,13 @@ if (Security::check_token('post') && (
     $cr = new CourseRestorer($course);
     $cr->set_file_option($_POST['same_file_name_option']);
     $cr->restore($_POST['destination_course']);
-    Display::display_normal_message(
+    Display::addFlash(Display::return_message(
         get_lang('CopyFinished').': <a href="'.api_get_course_url($_POST['destination_course']).'">'.
         Security::remove_XSS($_POST['destination_course']).
         '</a>',
+        'normal',
         false
-    );
+    ));
 } elseif (Security::check_token('post') && (
         isset($_POST['copy_option']) &&
         $_POST['copy_option'] == 'select_items'
@@ -95,7 +96,7 @@ if (Security::check_token('post') && (
     );
 
     if (empty($courseList)) {
-        Display::display_normal_message(get_lang('NoDestinationCoursesAvailable'));
+        Display::addFlash(Display::return_message(get_lang('NoDestinationCoursesAvailable'), 'normal'));
     } else {
         $options = array();
         foreach ($courseList as $courseItem) {

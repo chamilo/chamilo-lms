@@ -130,7 +130,7 @@ switch ($action) {
         $careers = $career->get_all();
         if (empty($careers)) {
             $url = Display::url(get_lang('YouNeedToCreateACareerFirst'), 'careers.php?action=add');
-            Display::display_normal_message($url, false);
+            Display::addFlash(Display::return_message($url, 'normal', false));
             Display::display_footer();
             exit;
         }
@@ -144,7 +144,7 @@ switch ($action) {
                 $values = $form->exportValues();
                 $res    = $promotion->save($values);
                 if ($res) {
-                    Display::display_confirmation_message(get_lang('ItemAdded'));
+                    Display::addFlash(Display::return_message(get_lang('ItemAdded', 'confirm')));
                 }
             }
             $promotion->display();
@@ -195,7 +195,7 @@ switch ($action) {
             // Action handling: deleting an obj
             $res = $promotion->delete($_GET['id']);
             if ($res) {
-                Display::display_confirmation_message(get_lang('ItemDeleted'));
+                Display::addFlash(Display::return_message(get_lang('ItemDeleted'), 'confirm'));
             }
         }
         $promotion->display();
@@ -207,11 +207,12 @@ switch ($action) {
         if ($check) {
             $res = $promotion->copy($_GET['id'], null, true);
             if ($res) {
-                Display::display_confirmation_message(
+                Display::addFlash(Display::return_message(
                     get_lang('ItemCopied').' - '.get_lang(
                         'ExerciseAndLPsAreInvisibleInTheNewCourse'
-                    )
-                );
+                    ),
+                    'confirm'
+                ));
             }
         }
         $promotion->display();

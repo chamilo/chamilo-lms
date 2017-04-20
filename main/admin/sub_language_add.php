@@ -261,9 +261,9 @@ echo $msg;
 if (isset($_POST['SubmitAddDeleteLanguage'])) {
     $rs = SubLanguageManager::remove_sub_language($_GET['id'], $_GET['sub_language_id']);
     if ($rs === true) {
-        Display::display_confirmation_message(get_lang('TheSubLanguageHasBeenRemoved'));
+        Display::addFlash(Display::return_message(get_lang('TheSubLanguageHasBeenRemoved'), 'confirm'));
     } else {
-        Display::display_error_message(get_lang('TheSubLanguageHasNotBeenRemoved'));
+        Display::addFlash(Display::return_message(get_lang('TheSubLanguageHasNotBeenRemoved'), 'error'));
     }
 }
 // ckeck_if_is_parent_of_sub_language($parent_id)===false
@@ -302,7 +302,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'definenewsublanguage') {
         $form->display();
     }
     if (isset($_GET['action']) && $_GET['action'] == 'definenewsublanguage') {
-        Display::display_normal_message(get_lang('TheSubLanguageForThisLanguageHasBeenAdded'));
+        Display::addFlash(Display::return_message(get_lang('TheSubLanguageForThisLanguageHasBeenAdded')));
     }
 }
 /**

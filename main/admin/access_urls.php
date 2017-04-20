@@ -35,18 +35,18 @@ if (isset($_GET['action'])) {
         case 'delete_url':
             $result = UrlManager::delete($url_id);
             if ($result) {
-                Display :: display_normal_message(get_lang('URLDeleted'));
+                Display::addFlash(Display::return_message(get_lang('URLDeleted'), 'normal'));
             } else {
                 Display :: display_error_message(get_lang('CannotDeleteURL'));
             }
             break;
         case 'lock':
             UrlManager::set_url_status('lock', $url_id);
-            Display::display_normal_message(get_lang('URLInactive'));
+            Display::addFlash(Display::return_message(get_lang('URLInactive'), 'normal'));
             break;
         case 'unlock':
             UrlManager::set_url_status('unlock', $url_id);
-            Display::display_normal_message(get_lang('URLActive'));
+            Display::addFlash(Display::return_message(get_lang('URLActive'), 'normal'));
             break;
         case 'register':
             // we are going to register the admin
@@ -59,9 +59,12 @@ if (isset($_GET['action'])) {
                             $url_str.=$my_url['url'].' <br />';
                         }
                     }
-                    Display:: display_normal_message(
-                        get_lang('AdminUserRegisteredToThisURL').': '.$url_str.'<br />',
-                        false
+                    Display::addFlash(
+                        Display::return_message(
+                            get_lang('AdminUserRegisteredToThisURL').': '.$url_str.'<br />',
+                            'normal',
+                            false
+                        )
                     );
                 }
             }

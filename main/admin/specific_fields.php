@@ -58,10 +58,10 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'delete') {
 
 // Displaying the header
 Display::display_header(get_lang('SpecificSearchFields'));
-echo Display::display_normal_message(get_lang('SpecificSearchFieldsIntro'));
+echo Display::addFlash(Display::return_message(get_lang('SpecificSearchFieldsIntro')));
 
 if(!empty($_GET['message'])) {
-  Display::display_confirmation_message($_GET['message']);
+  Display::addFlash(Display::return_message($_GET['message'], 'confirm'));
 }
 
 echo '<div class="actions">';

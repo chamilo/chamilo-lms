@@ -243,10 +243,10 @@ $interbreadcrumb[] = array("url" => 'skill_list.php', "name" => get_lang('Manage
 Display :: display_header($tool_name);
 
 if (!empty($error_message)) {
-    Display::display_error_message($error_message);
+    Display::addFlash(Display::return_message($error_message, 'error'));
 }
 if (!empty($see_message_import)) {
-    Display::display_normal_message($see_message_import);
+    Display::addFlash(Display::return_message($see_message_import, 'normal'));
 }
 
 $toolbar = Display::url(

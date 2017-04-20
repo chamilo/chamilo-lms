@@ -64,7 +64,7 @@ if (api_is_allowed_to_edit(null, true) ||
     }
 
     if (!$exists_attendance_today) {
-        Display::display_warning_message(get_lang('ThereIsNoClassScheduledTodayTryPickingAnotherDay'));
+        Display::addFlash(Display::return_message(get_lang('ThereIsNoClassScheduledTodayTryPickingAnotherDay'), 'warning'));
     }
 
     $form->addSelect(
@@ -118,11 +118,11 @@ if (api_is_allowed_to_edit(null, true) ||
     if (!empty($message_information)) {
         $message = '<strong>'.get_lang('Information').'</strong><br />';
         $message .= $message_information;
-        Display::display_normal_message($message, false);
+        Display::addFlash(Display::return_message($message, 'normal', false));
     }
 
     if ($is_locked_attendance) {
-        Display::display_warning_message(get_lang('TheAttendanceSheetIsLocked'), false);
+        Display::addFlash(Display::return_message(get_lang('TheAttendanceSheetIsLocked'), 'warning', false));
     }
 
     $param_filter = '&filter='.Security::remove_XSS($default_filter).'&group_id='.$groupId;

@@ -502,7 +502,7 @@ if ($form->validate()) {
 
     if (file_exists($filepath.$filename.'.'.$extension)) {
         Display:: display_header($nameTools, 'Doc');
-        Display:: display_error_message(get_lang('FileExists').' '.$title, false);
+        Display::addFlash(Display::return_message(get_lang('FileExists').' '.$title, 'error', false));
         Display:: display_footer();
         exit;
     }
@@ -586,12 +586,12 @@ if ($form->validate()) {
             exit();
         } else {
             Display :: display_header($nameTools, 'Doc');
-            Display :: display_error_message(get_lang('Impossible'));
+            Display::addFlash(Display::return_message(get_lang('Impossible'), 'error'));
             Display :: display_footer();
         }
     } else {
         Display :: display_header($nameTools, 'Doc');
-        Display :: display_error_message(get_lang('Impossible'));
+        Display::addFlash(Display::return_message(get_lang('Impossible'), 'error'));
         Display :: display_footer();
     }
 } else {
@@ -646,7 +646,7 @@ if ($form->validate()) {
             $str_info .= $info_value.'<br/>';
         }
         $create_certificate = get_lang('CreateCertificateWithTags');
-        Display::display_normal_message($create_certificate.': <br /><br/>'.$str_info, false);
+        Display::addFlash(Display::return_message($create_certificate.': <br /><br/>'.$str_info, 'normal', false));
     }
 
     // HTML-editor

@@ -293,7 +293,7 @@ if (Security::check_token('post') && (
         $cr = new CourseRestorer($course);
         //$cr->set_file_option($_POST['same_file_name_option']);
         $cr->restore($destination_course, $destination_session);
-        Display::display_confirmation_message(get_lang('CopyFinished'));
+        Display::addFlash(Display::return_message(get_lang('CopyFinished'), 'confirmation'));
         display_form();
     } else {
         $arr_course_origin = array();
@@ -347,7 +347,7 @@ if (Security::check_token('post') && (
 
     // Else, if a CourseSelectForm is requested, show it
     if (api_get_setting('show_glossary_in_documents') != 'none') {
-        Display::display_normal_message(get_lang('ToExportDocumentsWithGlossaryYouHaveToSelectGlossary'));
+        Display::addFlash(Display::return_message(get_lang('ToExportDocumentsWithGlossaryYouHaveToSelectGlossary'), 'normal'));
     }
 
     $arr_course_origin = array();
@@ -369,7 +369,7 @@ if (Security::check_token('post') && (
     }
 
     if ((is_array($arr_course_origin) && count($arr_course_origin) > 0) && !empty($destination_session)) {
-        Display::display_normal_message(get_lang('ToExportLearnpathWithQuizYouHaveToSelectQuiz'));
+        Display::addFlash(Display::return_message(get_lang('ToExportLearnpathWithQuizYouHaveToSelectQuiz'), 'normal'));
         $course_origin = api_get_course_info($arr_course_origin[0]);
         $cb = new CourseBuilder('', $course_origin);
         $course = $cb->build($origin_session, $arr_course_origin[0], $with_base_content);

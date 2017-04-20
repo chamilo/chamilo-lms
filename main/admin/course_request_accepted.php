@@ -140,7 +140,7 @@ if (!empty($message)) {
     if ($is_error_message) {
         Display::display_error_message($message, false);
     } else {
-        Display::display_normal_message($message, false);
+        Display::addFlash(Display::return_message($message, 'normal', false));
     }
 }
 

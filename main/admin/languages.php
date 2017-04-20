@@ -242,12 +242,12 @@ if (isset($_GET['action']) && $_GET['action'] == 'make_unavailable_confirmed') {
         SubLanguageManager::make_unavailable_language($_GET['id']);
         $platform_language = api_get_setting('platformLanguage');
         UserManager::update_all_user_languages($language_info['english_name'], $platform_language);
-        Display::display_confirmation_message(get_lang('LanguageIsNowHidden'));
+        Display::addFlash(Display::return_message(get_lang('LanguageIsNowHidden'), 'confirm'));
     }
 }
 
 // displaying the explanation for this tool
-Display::display_normal_message(get_lang('PlatformLanguagesExplanation'));
+Display::addFlash(Display::return_message(get_lang('PlatformLanguagesExplanation'), 'normal'));
 
 echo '<a id="disable_all_except_default" href="javascript:void(0)" class="btn btn-primary"><em class="fa fa-eye"></em> '.get_lang('LanguagesDisableAllExceptDefault').'</a><br /><br />';
 

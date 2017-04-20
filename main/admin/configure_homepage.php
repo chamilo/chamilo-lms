@@ -61,11 +61,8 @@ $htmlHeadXtra[] = '<script>
 $(function() {
     $("#all_langs").change(function() {
         var checkboxes = $(this).closest("form").find("#table_langs").find(":checkbox");
-        if($(this).is(":checked")) {
-            checkboxes.attr("checked", "checked");
-        } else {
-            checkboxes.removeAttr("checked");
-        }
+        
+        checkboxes.prop("checked", $(this).is(":checked"));
     });
 });
 </script>';

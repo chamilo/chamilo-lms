@@ -736,7 +736,7 @@ $interbreadcrumb[] = array("url" => "#", "name" => $objExercise->name);
 if ($origin != 'learnpath') { //so we are not in learnpath tool
     Display :: display_header(null, 'Exercises');
     if (!api_is_allowed_to_session_edit()) {
-        Display :: display_warning_message(get_lang('SessionIsReadOnly'));
+        Display::addFlash(Display::return_message(get_lang('SessionIsReadOnly'), 'warning'));
     }
 } else {
     $htmlHeadXtra[] = "
@@ -1202,7 +1202,7 @@ if (!empty($error)) {
                         $questionName = $objQuestionTmp->selectTitle();
                         // destruction of the Question object
                         unset($objQuestionTmp);
-                        Display :: display_normal_message(get_lang('AlreadyAnswered'));
+                        Display::addFlash(Display::return_message(get_lang('AlreadyAnswered')));
                         $i++;
                         break;
                     }

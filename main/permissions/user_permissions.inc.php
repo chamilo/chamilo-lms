@@ -15,7 +15,7 @@ include_once (api_get_library_path()."/blog.lib.php");
 if ($_POST['StoreUserPermissions'] and $setting_visualisation == 'checkbox') {
     $result_message = store_permissions('user', $user_id);
     if ($result_message) {
-        Display::display_normal_message($result_message);
+        Display::addFlash(Display::return_message($result_message, 'normal'));
     }
 }
 if (isset($_GET['action'])) {
@@ -30,7 +30,7 @@ if (isset($_GET['action'])) {
 }
 
 if (isset($result_message)) {
-    Display::display_normal_message($result_message);
+    Display::addFlash(Display::return_message($result_message, 'normal'));
 }
 
 // ---------------------------------------------------

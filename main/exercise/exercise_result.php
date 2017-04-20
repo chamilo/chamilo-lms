@@ -173,7 +173,7 @@ if (!empty($exercise_stat_info)) {
 
 $max_score = $objExercise->get_max_score();
 
-Display::display_normal_message(get_lang('Saved').'<br />', false);
+Display::addFlash(Display::return_message(get_lang('Saved').'<br />', 'normal', false));
 
 // Display and save questions
 ExerciseLib::display_question_list_by_attempt(

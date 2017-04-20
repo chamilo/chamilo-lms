@@ -209,9 +209,9 @@ if ($form->validate()) {
     echo '</div>';
 
     if ($objExercise->feedback_type == 1) {
-        Display::display_normal_message(
+        Display::addFlash(Display::return_message(
             get_lang('DirectFeedbackCantModifyTypeQuestion')
-        );
+        ));
     }
 
     if (api_get_setting('search_enabled')=='true' &&

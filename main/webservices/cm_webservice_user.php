@@ -107,9 +107,9 @@ class WSCMUser extends WSCM
             $count_is_true = SocialManager::send_invitation_friend($user_id,$userfriend_id, $message_title, $content_message);
 
             if ($count_is_true) {
-                return Display::display_normal_message(api_htmlentities(get_lang('InvitationHasBeenSent'), ENT_QUOTES,$charset),false);
+                return Display::return_message(api_htmlentities(get_lang('InvitationHasBeenSent'), ENT_QUOTES, $charset), 'normal', false);
             } else {
-                return Display::display_error_message(api_htmlentities(get_lang('YouAlreadySentAnInvitation'), ENT_QUOTES,$charset),false);
+                return Display::return_message(api_htmlentities(get_lang('YouAlreadySentAnInvitation'), ENT_QUOTES, $charset), 'error', false);
             }
         }
         return get_lang('InvalidId');

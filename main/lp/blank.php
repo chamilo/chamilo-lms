@@ -22,19 +22,19 @@ if (isset($_GET['error'])) {
     switch ($_GET['error']) {
         case 'document_deleted':
             echo '<br /><br />';
-            Display::display_error_message(get_lang('DocumentHasBeenDeleted'));
+            Display::addFlash(Display::return_message(get_lang('DocumentHasBeenDeleted'), 'error'));
             break;
         case 'prerequisites':
             echo '<br /><br />';
-            Display::display_warning_message(get_lang('LearnpathPrereqNotCompleted'));
+            Display::addFlash(Display::return_message(get_lang('LearnpathPrereqNotCompleted'), 'warning'));
             break;
         case 'document_not_found':
             echo '<br /><br />';
-            Display::display_warning_message(get_lang('FileNotFound'));
+            Display::addFlash(Display::return_message(get_lang('FileNotFound'), 'warning'));
             break;
         case 'reached_one_attempt':
             echo '<br /><br />';
-            Display::display_warning_message(get_lang('ReachedOneAttempt'));
+            Display::addFlash(Display::return_message(get_lang('ReachedOneAttempt'), 'warning'));
             break;
         case 'x_frames_options':
             $src = Session::read('x_frame_source');
@@ -54,7 +54,7 @@ if (isset($_GET['error'])) {
     }
 } elseif (isset($_GET['msg']) && $_GET['msg'] == 'exerciseFinished') {
     echo '<br /><br />';
-    Display::display_normal_message(get_lang('ExerciseFinished'));
+    Display::addFlash(Display::return_message(get_lang('ExerciseFinished'), 'normal'));
 }
 ?>
 </body>

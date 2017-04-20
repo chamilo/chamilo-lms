@@ -60,7 +60,7 @@ if ($showlink) {
 }
 
 if (isset($export_flatview_form) && (!$file_type == 'pdf')) {
-    Display :: display_normal_message($export_flatview_form->toHtml(), false);
+    Display::addFlash(Display::return_message($export_flatview_form->toHtml(), 'normal', false));
 }
 
 if (isset($_GET['selectcat'])) {

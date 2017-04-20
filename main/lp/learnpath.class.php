@@ -5447,7 +5447,7 @@ class learnpath
         }
         $return .= '<div id="message"></div>';
         if (count($this->items) == 0) {
-            $return .= Display::display_normal_message(get_lang('YouShouldAddItemsBeforeAttachAudio'));
+            $return .= Display::return_message(get_lang('YouShouldAddItemsBeforeAttachAudio'), 'normal');
         } else {
             $return_audio = '<table class="data_table">';
             $return_audio .= '<tr>';
@@ -6584,7 +6584,7 @@ class learnpath
             Display::return_icon('certificate.png', get_lang('Certificate'), [], ICON_SIZE_BIG),
         );
 
-        echo Display::display_normal_message(get_lang('ClickOnTheLearnerViewToSeeYourLearningPath'));
+        Display::addFlash(Display::return_message(get_lang('ClickOnTheLearnerViewToSeeYourLearningPath'), 'normal'));
         $dir = $_SESSION['oLP']->display_item_form('dir', get_lang('EnterDataNewChapter'), 'add_item');
         echo Display::tabs(
             $headers,

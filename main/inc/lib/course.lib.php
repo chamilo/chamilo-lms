@@ -852,7 +852,7 @@ class CourseManager
     public static function check_parameter($parameter, $error_message)
     {
         if (empty($parameter)) {
-            Display::display_normal_message($error_message);
+            Display::addFlash(Display::return_message($error_message, 'normal'));
             return false;
         }
         return true;

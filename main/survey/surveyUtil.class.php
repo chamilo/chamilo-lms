@@ -31,11 +31,11 @@ class SurveyUtil
         $error = false;
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             if ($counter == 1 && $row['type'] == 'pagebreak') {
-                Display::display_error_message(get_lang('PagebreakNotFirst'), false);
+                Display::addFlash(Display::return_message(get_lang('PagebreakNotFirst'), 'error', false));
                 $error = true;
             }
             if ($counter == $total && $row['type'] == 'pagebreak') {
-                Display::display_error_message(get_lang('PagebreakNotLast'), false);
+                Display::addFlash(Display::return_message(get_lang('PagebreakNotLast'), 'error', false));
                 $error = true;
             }
             $counter++;
@@ -187,7 +187,7 @@ class SurveyUtil
         if ($error) {
             $tool_name = get_lang('Reporting');
             Display::display_header($tool_name);
-            Display::display_error_message(get_lang('Error').': '.$error, false);
+            Display::addFlash(Display::return_message(get_lang('Error').': '.$error, 'error', false));
             Display::display_footer();
             exit;
         } else {
@@ -281,7 +281,7 @@ class SurveyUtil
             $message = get_lang('SurveyUserAnswersHaveBeenRemovedSuccessfully').'<br />
 					<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=userreport&survey_id='.$survey_id.'">'.
                 get_lang('GoBack').'</a>';
-            Display::display_confirmation_message($message, false);
+            Display::addFlash(Display::return_message($message, 'confirmation', false));
         }
     }
 
@@ -366,10 +366,11 @@ class SurveyUtil
         $course_id = api_get_course_int_id();
         // Step 2: displaying the survey and the answer of the selected users
         if (isset($_GET['user'])) {
-            Display::display_normal_message(
+            Display::addFlash(Display::return_message(
                 get_lang('AllQuestionsOnOnePage'),
+                'normal',
                 false
-            );
+            ));
 
             // Getting all the questions and options
             $sql = "SELECT
@@ -1671,7 +1672,7 @@ class SurveyUtil
         echo '</div>';
 
         // Displaying an information message that only the questions with predefined answers can be used in a comparative report
-        Display::display_normal_message(get_lang('OnlyQuestionsWithPredefinedAnswers'), false);
+        Display::addFlash(Display::return_message(get_lang('OnlyQuestionsWithPredefinedAnswers'), 'normal', false));
 
         $xAxis = isset($_GET['xaxis']) ? Security::remove_XSS($_GET['xaxis']) : '';
         $yAxis = isset($_GET['yaxis']) ? Security::remove_XSS($_GET['yaxis']) : '';
@@ -2527,7 +2528,7 @@ class SurveyUtil
         if (isset($_GET['do_search']) && $_GET['do_search']) {
             $message = get_lang('DisplaySearchResults').'<br />';
             $message .= '<a href="'.api_get_self().'?'.api_get_cidreq().'">'.get_lang('DisplayAll').'</a>';
-            Display::display_normal_message($message, false);
+            Display::addFlash(Display::return_message($message, 'normal', false));
         }
 
         // Create a sortable table with survey-data
@@ -2566,7 +2567,7 @@ class SurveyUtil
         if (isset($_GET['do_search'])) {
             $message = get_lang('DisplaySearchResults').'<br />';
             $message .= '<a href="'.api_get_self().'?'.api_get_cidreq().'">'.get_lang('DisplayAll').'</a>';
-            Display::display_normal_message($message, false);
+            Display::addFlash(Display::return_message($message, 'normal', false));
         }
 
         // Create a sortable table with survey-data

@@ -153,7 +153,7 @@ api_display_tool_title($tool_name);
         <div class="title"></div>
         <?php
             if(!empty($errorMsg)) {
-                Display::display_normal_message($errorMsg);
+                Display::addFlash(Display::return_message($errorMsg, 'normal'));
             }
         ?>
     </div>

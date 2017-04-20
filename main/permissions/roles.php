@@ -65,7 +65,7 @@ if (isset($_GET['action']) AND isset($_GET['role_id']) AND $_GET['action'] == 'd
 
 // displaying the return message of the actions
 if (isset($result_message)) {
-    Display::display_normal_message($result_message);
+    Display::addFlash(Display::return_message($result_message, 'normal'));
 }
 
 // 		ADDING A NEW ROLE (FORM AND LINK)

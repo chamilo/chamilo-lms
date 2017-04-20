@@ -83,7 +83,7 @@ if ($survey_data['invited'] > 0 && !isset($_POST['submit'])) {
 	$message .= get_lang('HaveAnswered').' ';
 	$message .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=invited&survey_id='.$survey_data['survey_id'].'">'.$survey_data['invited'].'</a> ';
 	$message .= get_lang('WereInvited');
-	Display::display_normal_message($message, false);
+	Display::addFlash(Display::return_message($message, 'normal', false));
 }
 
 // Building the form for publishing the survey
@@ -178,7 +178,7 @@ if ($form->validate()) {
 
     if ($sendMail) {
         if (empty($values['mail_title']) || empty($values['mail_text'])) {
-            Display :: display_error_message(get_lang('FormHasErrorsPleaseComplete'));
+            Display::addFlash(Display::return_message(get_lang('FormHasErrorsPleaseComplete'), 'error'));
             // Getting the invited users
         	$defaults = SurveyUtil::get_invited_users($survey_data['code']);
 

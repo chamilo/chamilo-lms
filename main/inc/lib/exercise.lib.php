@@ -3717,7 +3717,7 @@ HOTSPOT;
         // Display text when test is finished #4074 and for LP #4227
         $end_of_message = $objExercise->selectTextWhenFinished();
         if (!empty($end_of_message)) {
-            Display::display_normal_message($end_of_message, false);
+            Display::addFlash(Display::return_message($end_of_message, 'normal', false));
             echo "<div class='clear'>&nbsp;</div>";
         }
 
@@ -3921,7 +3921,7 @@ HOTSPOT;
         }
 
         if (!empty($remainingMessage)) {
-            Display::display_normal_message($remainingMessage, false);
+            Display::addFlash(Display::return_message($remainingMessage, 'normal', false));
         }
 
         if ($save_user_result) {

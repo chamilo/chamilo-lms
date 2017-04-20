@@ -84,7 +84,7 @@ if (!$export_to_xls) {
 
 	echo '<h2>'.get_lang('LPExerciseResultsBySession').'</h2>';
 	$form->display();
-	Display::display_normal_message(get_lang('StudentScoreAverageIsCalculatedBaseInAllLPsAndAllAttempts'));
+	Display::addFlash(Display::return_message(get_lang('StudentScoreAverageIsCalculatedBaseInAllLPsAndAllAttempts'), 'normal'));
 }
 
 $users = SessionManager::get_users_by_session($session_id);
@@ -218,7 +218,7 @@ if (!empty($users) && is_array($users)) {
 	$html_result .= "</tr>";
 	$html_result .= '</table>';
 } else {
-	Display::display_warning_message(get_lang('NoResults'));
+	Display::addFlash(Display::return_message(get_lang('NoResults'), 'warning'));
 }
 
 if (!$export_to_xls) {

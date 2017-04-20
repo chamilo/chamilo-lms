@@ -539,46 +539,46 @@ if (!isset($_GET['exportpdf'])) {
 }
 
 if (isset ($_GET['categorymoved'])) {
-    Display :: display_confirmation_message(get_lang('CategoryMoved'),false);
+    Display::addFlash(Display::return_message(get_lang('CategoryMoved'), 'confirmation', false));
 }
 if (isset ($_GET['evaluationmoved'])) {
-    Display :: display_confirmation_message(get_lang('EvaluationMoved'),false);
+    Display::addFlash(Display::return_message(get_lang('EvaluationMoved'), 'confirmation', false));
 }
 if (isset ($_GET['linkmoved'])) {
-    Display :: display_confirmation_message(get_lang('LinkMoved'),false);
+    Display::addFlash(Display::return_message(get_lang('LinkMoved'), 'confirmation', false));
 }
 if (isset ($_GET['addcat'])) {
-    Display :: display_confirmation_message(get_lang('CategoryAdded'),false);
+    Display::addFlash(Display::return_message(get_lang('CategoryAdded'), 'confirmation', false));
 }
 if (isset ($_GET['linkadded'])) {
-    Display :: display_confirmation_message(get_lang('LinkAdded'),false);
+    Display::addFlash(Display::return_message(get_lang('LinkAdded'), 'confirmation', false));
 }
 if (isset ($_GET['addresult'])) {
-    Display :: display_confirmation_message(get_lang('ResultAdded'),false);
+    Display::addFlash(Display::return_message(get_lang('ResultAdded'), 'confirmation', false));
 }
 if (isset ($_GET['editcat'])) {
-    Display :: display_confirmation_message(get_lang('CategoryEdited'),false);
+    Display::addFlash(Display::return_message(get_lang('CategoryEdited'), 'confirmation', false));
 }
 if (isset ($_GET['editeval'])) {
-    Display :: display_confirmation_message(get_lang('EvaluationEdited'),false);
+    Display::addFlash(Display::return_message(get_lang('EvaluationEdited'), 'confirmation', false));
 }
 if (isset ($_GET['linkedited'])) {
-    Display :: display_confirmation_message(get_lang('LinkEdited'),false);
+    Display::addFlash(Display::return_message(get_lang('LinkEdited'), 'confirmation', false));
 }
 if (isset ($_GET['nolinkitems'])){
-    Display :: display_warning_message(get_lang('NoLinkItems'),false);
+    Display::addFlash(Display::return_message(get_lang('NoLinkItems'), 'warning', false));
 }
 if (isset ($_GET['addallcat'])){
-    Display :: display_normal_message(get_lang('AddAllCat'),false);
+    Display::addFlash(Display::return_message(get_lang('AddAllCat'), 'normal', false));
 }
 if (isset ($confirmation_message)){
-    Display :: display_confirmation_message($confirmation_message,$filter_confirm_msg);
+    Display::addFlash(Display::return_message($confirmation_message, 'confirmation', $filter_confirm_msg));
 }
 if (isset ($warning_message)){
-    Display :: display_warning_message($warning_message,$filter_warning_msg);
+    Display::addFlash(Display::return_message($warning_message, 'warning', $filter_warning_msg));
 }
 if (isset ($move_form)){
-    Display :: display_normal_message($move_form->toHtml(),false);
+    Display::addFlash(Display::return_message($move_form->toHtml(), 'normal', false));
 }
 
 // LOAD DATA & DISPLAY TABLE
@@ -901,7 +901,7 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null,true))
                 ) {
                     //Showing the grading system
                     if (!empty($grade_models[$grade_model_id])) {
-                        Display::display_normal_message(get_lang('GradeModel').': '.$grade_models[$grade_model_id]['name']);
+                        Display::addFlash(Display::return_message(get_lang('GradeModel').': '.$grade_models[$grade_model_id]['name']));
                     }
                 }
 

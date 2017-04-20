@@ -77,7 +77,7 @@ if (is_object($objQuestion)) {
             echo '<img src="../document/download.php?doc_url=%2Fimages%2F'.$pictureName.'" border="0">';
         }
         if (!empty($msgErr)) {
-            Display::display_normal_message($msgErr);
+            Display::addFlash(Display::return_message($msgErr, 'normal'));
         }
         // display the form
         $form->display();

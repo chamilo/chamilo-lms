@@ -463,7 +463,7 @@ if (count($inserted_in_course) > 1) {
         $msg .= ' '.$title.' ('.$title.'),';
     }
     $msg = substr($msg, 0, -1);
-    Display::display_warning_message($msg);
+    Display::addFlash(Display::return_message($msg, 'warning'));
 }
 
 echo '<div class="actions">';
@@ -472,7 +472,7 @@ echo '<a href="../session/session_list.php">'.
 echo '</div>';
 
 if (!empty($error_message)) {
-    Display::display_normal_message($error_message, false);
+    Display::addFlash(Display::return_message($error_message, 'normal', false));
 }
 
 $form = new FormValidator('import_sessions', 'post', api_get_self(), null, array('enctype' => 'multipart/form-data'));
@@ -517,7 +517,7 @@ $form->addButtonImport(get_lang('ImportSession'));
 $defaults = array('sendMail' => 'true', 'file_type' => 'csv');
 $form->setDefaults($defaults);
 
-Display::display_normal_message(get_lang('TheXMLImportLetYouAddMoreInfoAndCreateResources'));
+Display::addFlash(Display::return_message(get_lang('TheXMLImportLetYouAddMoreInfoAndCreateResources'), 'normal'));
 $form->display();
 
 ?>

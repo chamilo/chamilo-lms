@@ -37,7 +37,7 @@ $rights_blog = array(
 $course_tool_table = Database::get_course_table(TABLE_TOOL_LIST);
 
 // Get all user
-$blog_users = Blog::get_blog_users($_GET['blog_id']);
+$blog_users = Blog::getBlogUsers($_GET['blog_id']);
 
 $course_id = api_get_course_int_id();
 

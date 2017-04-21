@@ -25,6 +25,8 @@ $em = Database::getManager();
 $session = null;
 if (api_is_platform_admin()) {
     $sessionList = SessionManager::get_sessions_list();
+} elseif (api_is_drh()) {
+    $sessionList = SessionManager::get_sessions_followed_by_drh(api_get_user_id());
 } else {
     $sessionList = Tracking::get_sessions_coached_by_user(api_get_user_id());
 }

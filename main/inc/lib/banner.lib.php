@@ -587,7 +587,9 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
                 $itemTitle = Display::return_icon('home.png', $_course['name'].$my_session_name, [], ICON_SIZE_TINY)
                     .' '.$course_title.$my_session_name;
 
-                if ($session->getDuration() && !api_is_allowed_to_edit()) {
+                if (
+                    $session && ($session->getDuration() && !api_is_allowed_to_edit())
+                ) {
                     $daysLeft = SessionManager::getDayLeftInSession(
                         ['id' => $session->getId(), 'duration' => $session->getDuration()],
                         $user_id

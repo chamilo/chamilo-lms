@@ -6158,13 +6158,15 @@ class SessionManager
     /**
      * Returns the number of days the student has left in a session when using
      * sessions durations
-     * @param int $userId
-     * @param int $sessionId
-     * @param int $duration in days
-     * @return int
      */
-    public static function getDayLeftInSession($sessionId, $userId, $duration)
+    public static function getDayLeftInSession(array $sessionInfo, $userId)
     {
+        $sessionId = $sessionInfo['id'];
+        $userSubsubscription = SessionManager::getUserSession($userId, $sessionId);
+        $duration = empty($userSubsubscription['duration'])
+            ? $sessionInfo['duration']
+            : $sessionInfo['duration'] + $userSubsubscription['duration'];
+
         // Get an array with the details of the first access of the student to
         // this session
         $courseAccess = CourseManager::getFirstCourseAccessPerSessionAndUser(

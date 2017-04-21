@@ -547,14 +547,17 @@ function menuArray()
  */
 function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
 {
-    $session_id = api_get_session_id();
-    $session_name = api_get_session_name($session_id);
+    /** @var \Chamilo\CoreBundle\Entity\Session $session */
+    $session = Database::getManager()
+        ->find('ChamiloCoreBundle:Session', api_get_session_id());
     $_course = api_get_course_info();
     $user_id = api_get_user_id();
     $course_id = 0;
     if (!empty($_course)) {
         $course_id = $_course['real_id'];
     }
+
+    $additonalBlocks = '';
 
     /*  Plugins for banner section */
     $web_course_path = api_get_path(WEB_COURSE_PATH);
@@ -564,44 +567,50 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
 
     // part 1: Course Homepage. If we are in a course then the first breadcrumb is a link to the course homepage
     // hide_course_breadcrumb the parameter has been added to hide the name of the course, that appeared in the default $interbreadcrumb
-    $session_name = cut($session_name, MAX_LENGTH_BREADCRUMB);
-    $my_session_name = is_null($session_name) ? '' : '&nbsp;('.$session_name.')';
+    $my_session_name = $session ? ' ('.cut($session->getName(), MAX_LENGTH_BREADCRUMB).')' : null;
 
     if (!empty($_course) && !isset($_GET['hide_course_breadcrumb'])) {
-        $navigation_item['url'] = $web_course_path.$_course['path'].'/index.php'
-            .(!empty($session_id) ? '?id_session='.$session_id : '');
         $_course['name'] = api_htmlentities($_course['name']);
         $course_title = cut($_course['name'], MAX_LENGTH_BREADCRUMB);
 
         switch (api_get_setting('breadcrumbs_course_homepage')) {
             case 'get_lang':
-                $navigation_item['title'] = Display::return_icon('home.png', get_lang('CourseHomepageLink'), [], ICON_SIZE_TINY);
+                $itemTitle = Display::return_icon('home.png', get_lang('CourseHomepageLink'), [], ICON_SIZE_TINY);
                 break;
             case 'course_code':
-                $navigation_item['title'] = Display::return_icon('home.png', $_course['official_code'], [], ICON_SIZE_TINY)
+                $itemTitle = Display::return_icon('home.png', $_course['official_code'], [], ICON_SIZE_TINY)
                     .' '.$_course['official_code'];
                 break;
             case 'session_name_and_course_title':
-                $navigation_item['title'] = Display::return_icon('home.png', $_course['name'].$my_session_name, [], ICON_SIZE_TINY)
-                    .' '.$course_title.$my_session_name;
-                break;
+                //no break
             default:
-                if (api_get_session_id() != -1) {
-                    $navigation_item['title'] = Display::return_icon('home.png', $_course['name'].$my_session_name, [], ICON_SIZE_TINY)
-                        .' '.$course_title.$my_session_name;
-                } else {
-                    $navigation_item['title'] = Display::return_icon('home.png', $_course['name'], [], ICON_SIZE_TINY)
-                        .' '.$course_title;
+                $itemTitle = Display::return_icon('home.png', $_course['name'].$my_session_name, [], ICON_SIZE_TINY)
+                    .' '.$course_title.$my_session_name;
+
+                if ($session->getDuration() && !api_is_allowed_to_edit()) {
+                    $daysLeft = SessionManager::getDayLeftInSession(
+                        ['id' => $session->getId(), 'duration' => $session->getDuration()],
+                        $user_id
+                    );
+
+                    $additonalBlocks .= Display::return_message(
+                        sprintf(get_lang('SessionDurationXDaysLeft'), $daysLeft),
+                        'information'
+                    );
                 }
                 break;
         }
+
         /**
          * @todo could be useful adding the My courses in the breadcrumb
          * $navigation_item_my_courses['title'] = get_lang('MyCourses');
          * $navigation_item_my_courses['url'] = api_get_path(WEB_PATH).'user_portal.php';
          * $navigation[] = $navigation_item_my_courses;
          */
-        $navigation[] = $navigation_item;
+        $navigation[] = [
+            'url' => $web_course_path.$_course['path'].'/index.php'.($session ? '?id_session='.$session->getId() : ''),
+            'title' => $itemTitle
+        ];
     }
 
     /* part 2: Interbreadcrumbs. If there is an array $interbreadcrumb
@@ -758,7 +767,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
         }
     }
 
-    return $html;
+    return $html . $additonalBlocks;
 }
 
 /**

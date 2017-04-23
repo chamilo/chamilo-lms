@@ -74,7 +74,7 @@ $tpl->assign('user_info', $userInfo);
 $tpl->assign('ranking', $ranking);
 $tpl->assign('skills', $skills);
 
-$template = $tpl->get_template('skill/skill_tree_student.tpl');
+$template = $tpl->get_template('skill/skill_wheel_student.tpl');
 $content = $tpl->fetch($template);
 $tpl->assign('content', $content);
 $tpl->display_no_layout_template();

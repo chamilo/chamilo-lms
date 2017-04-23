@@ -709,3 +709,6 @@ table.page-footer td{
 .border-top {
 	border-top: 1px solid #000;
 }
+.border-bottom {
+	border-bottom: 1px solid #000;
+}

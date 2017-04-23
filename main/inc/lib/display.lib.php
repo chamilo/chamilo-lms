@@ -1567,19 +1567,7 @@ class Display
                 (empty($session_info['access_end_date']) && empty($session_info['access_start_date']))
             ) {
                 if (isset($session_info['duration']) && !empty($session_info['duration'])) {
-                    $userDurationData = SessionManager::getUserSession(
-                        api_get_user_id(),
-                        $session_id
-                    );
-
-                    $userDuration = isset($userDurationData['duration']) ? (int) $userDurationData['duration'] : 0;
-                    $totalDuration = $session_info['duration'] + $userDuration;
-
-                    $daysLeft = SessionManager::getDayLeftInSession(
-                        $session_id,
-                        api_get_user_id(),
-                        $totalDuration
-                    );
+                    $daysLeft = SessionManager::getDayLeftInSession($session_info, api_get_user_id());
                     $session['duration'] = sprintf(get_lang('SessionDurationXDaysLeft'), $daysLeft);
                 }
                 $active = true;

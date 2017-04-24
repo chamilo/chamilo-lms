@@ -2429,7 +2429,7 @@ class GroupManager
                         $data['group'],
                         $categoryId,
                         null,
-                        $data['max_students']
+                        $data['max_student']
                     );
 
                     if ($groupId) {
@@ -2437,7 +2437,7 @@ class GroupManager
                             $groupId,
                             $data['group'],
                             $data['description'],
-                            $data['max_students'],
+                            $data['max_student'],
                             $data['doc_state'],
                             $data['work_state'],
                             $data['calendar_state'],
@@ -2460,7 +2460,7 @@ class GroupManager
                         $groupId,
                         $data['group'],
                         $data['description'],
-                        $data['max_students'],
+                        $data['max_student'],
                         $data['doc_state'],
                         $data['work_state'],
                         $data['calendar_state'],

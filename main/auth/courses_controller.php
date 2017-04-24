@@ -857,7 +857,11 @@ class CoursesController
                 'description' => $session->getDescription(),
                 'category' => $catName,
                 'tags' => $sessionCourseTags,
-                'edit_actions' => $actions
+                'edit_actions' => $actions,
+                'duration' => SessionManager::getDayLeftInSession(
+                    ['id' => $session->getId(), 'duration' => $session->getDuration()],
+                    $userId
+                )
             );
 
             $sessionsBlock = array_merge($sessionsBlock, $sequences);

@@ -121,7 +121,7 @@
                                     </ul>
                             	</div>
                                 <div class="block-date">
-                                    {{ item.date }}
+                                    {{ item.duration ? 'SessionDurationXDaysLeft'|get_lang|format(item.duration) : item.date }}
                                 </div>
                                 <div class="toolbar">
                                     <div class="left">

@@ -60,35 +60,16 @@
         <div class="grid-courses col-md-12">
             <div class="row">
                 {% for item in sessions %}
-                    <div class="col-md-3 col-sm-6 col-xs-6">
-                        <div id="session-{{ item.id }}" class="items">
+                    <div class="col-md-4 col-sm-6 col-xs-6">
+                        <div id="session-{{ item.id }}" class="items items-courses">
                             <div class="image">
-                                <img class="img-responsive"
-                                     src="{{ item.image ? _p.web_upload ~ item.image : 'session_default.png'|icon() }}">
+                                <a href="{{ _p.web ~ 'session/' ~ item.id ~ '/about/' }}" title="{{ item.name }}">
+                                	<img class="img-responsive" src="{{ item.image ? _p.web_upload ~ item.image : 'session_default.png'|icon() }}">
+                                </a>
                                 {% if item.category != '' %}
                                     <span class="category">{{ item.category }}</span>
                                     <div class="cribbon"></div>
                                 {% endif %}
-                                <div class="black-shadow">
-                                    {% if show_tutor %}
-                                        <div class="author-card">
-                                            <a href="{{ item.coach_url }}" class="ajax" data-title="{{ item.coach_name }}">
-                                                <img src="{{ item.coach_avatar }}"/>
-                                            </a>
-                                            <div class="teachers-details">
-                                                <h5>
-                                                    <a href="{{ item.coach_url }}" class="ajax"
-                                                       data-title="{{ item.coach_name }}">
-                                                        {{ item.coach_name }}
-                                                    </a>
-                                                </h5>
-                                            </div>
-                                        </div>
-                                    {% endif %}
-                                    <div class="session-date">
-                                        <i class="fa fa-calendar-o" aria-hidden="true"></i> {{ item.date }}
-                                    </div>
-                                </div>
                                 <div class="admin-actions">
                                     <div class="btn-group" role="group">
                                         {% if item.edit_actions != '' %}
@@ -103,19 +84,32 @@
                                 </div>
                             </div>
                             <div class="description">
-                                <h4 class="title">
-                                    <a href="{{ _p.web ~ 'session/' ~ item.id ~ '/about/' }}" title="{{ item.name }}">
-                                        {{ item.name }}
-                                    </a>
-                                </h4>
-                                <div class="toolbar">
-                                    <div class="left">
-                                        {% if item.price %}
-                                            {{ item.price }}
-                                        {% endif %}
-                                    </div>
-                                    <br/>
-                                    <ul class="info list-inline">
+                            	<div class="block-title">
+                            		<h4 class="title">
+                                    	<a href="{{ _p.web ~ 'session/' ~ item.id ~ '/about/' }}" title="{{ item.name }}">
+                                        	{{ item.name }}
+                                    	</a>
+                                	</h4>
+                            	</div>
+                            	{% if show_tutor %}
+                            	<div class="block-author">
+                                	<div class="author-card">
+                                    	<a href="{{ item.coach_url }}" class="ajax" data-title="{{ item.coach_name }}">
+                                        	<img src="{{ item.coach_avatar }}"/>
+                                    	</a>
+                                   		<div class="teachers-details">
+                                        	<h5>
+                                            	<a href="{{ item.coach_url }}" class="ajax" data-title="{{ item.coach_name }}">
+                                                   {{ item.coach_name }}
+                                            	</a>
+                                        	</h5>
+                                        	<p>{{ 'SessionGeneralCoach'|get_lang }}</p>
+                                        </div>
+                                   </div>
+                            	</div>
+                            	{% endif %}
+                            	<div class="block-info">
+                            		<ul class="info list-inline">
                                         <li>
                                             <i class="fa fa-book" aria-hidden="true"></i>
                                             {{ item.nbr_courses ~ ' ' ~ 'Courses'|get_lang }}
@@ -125,7 +119,15 @@
                                             {{ item.nbr_users ~ ' ' ~ 'NbUsers'|get_lang }}
                                         </li>
                                     </ul>
-                                    {% if _u.logged %}
+                            	</div>
+                                <div class="toolbar">
+                                    <div class="left">
+                                        {% if item.price %}
+                                            {{ item.price }}
+                                        {% endif %}
+                                    </div>
+                                    <div class="right">
+                                    	{% if _u.logged %}
                                         <div class="btn-group btn-group-sm" role="group">
                                             {% if not item.sequences is empty %}
                                                 <a class="btn btn-default btn-sm" role="button"
@@ -138,7 +140,9 @@
                                                 {{ item.subscribe_button }}
                                             {% endif %}
                                         </div>
-                                    {% endif %}
+                                    	{% endif %}
+                                    </div>
+                                    
                                 </div>
                             </div>
                             {% if _u.logged %}

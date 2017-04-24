@@ -34,15 +34,15 @@ if (Security::check_token('post')) {
     $arraysent = json_decode(Security::remove_XSS($_POST['destination_course']));
     $courseId = $arraysent->id_course;
     $sessionId = $arraysent->id_session;
-    $surveyCopyId = SurveyManager::copy_survey_session($surveyId, $courseId, $sessionId);
+    $surveyCopyId = SurveyManager::copySurveySession($surveyId, $courseId, $sessionId);
     // Copy the survey to the target course
-    SurveyManager::empty_survey_from_id($surveyCopyId);
+    SurveyManager::emptySurveyFromId($surveyCopyId);
     // Empty the copied survey
     Display::display_confirmation_message(get_lang('SurveyCopied'));
 }
 
 $surveys = SurveyManager::get_surveys(api_get_course_id(), api_get_session_id());
-$courses = CourseManager::get_all_courses_array();
+$courses = CourseManager::getAllCoursesArray();
 $form = new FormValidator('copy_survey', 'post', 'copy_survey.php?'.api_get_cidreq());
 if (!$surveys) {
     Display::display_error_message(get_lang('NoSurveyAvailable'));
@@ -67,7 +67,7 @@ if ($surveys && count($courses) > 1) {
     for ($i=0; $i<count($courses); $i++) {
         if ($courses[$i]['id'] != $currentCourseId || $courses[$i]['session_id'] != $currentSessionId) {
             $value=array("id_course" => $courses[$i]['id'], "id_session" => $courses[$i]['session_id']);
-            if(isset($courses[$i]['session_name'])) {
+            if (isset($courses[$i]['session_name'])) {
                 $options[json_encode($value)] = $courses[$i]['title'].' ['.$courses[$i]['session_name'].']';
             } else {
                 $options[json_encode($value)] = $courses[$i]['title'];

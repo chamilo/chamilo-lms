@@ -1721,13 +1721,13 @@ class SurveyManager
      * @param int $survey_id id of the survey that has to be duplicated
      * @return true
      */
-    public static function empty_survey_from_id($survey_id)
+    public static function emptySurveyFromId($survey_id)
     {
         // Database table definitions
         $table_survey_invitation = Database:: get_course_table(TABLE_SURVEY_INVITATION);
         $table_survey_answer = Database:: get_course_table(TABLE_SURVEY_ANSWER);
         $table_survey = Database:: get_course_table(TABLE_SURVEY);
-        $datasurvey = self::get_survey_array_from_id($survey_id);
+        $datasurvey = self::getSurveyArrayFromId($survey_id);
         $code = $datasurvey['code'];
         $course = $datasurvey['c_id'];
         $session = $datasurvey['session_id'];
@@ -1759,7 +1759,7 @@ class SurveyManager
      *
      * @return bool
      */
-    public static function copy_survey_session($survey_id, $course_id, $session_id)
+    public static function copySurveySession($survey_id, $course_id, $session_id)
     {
         // Database table definitions
         $table_survey = Database::get_course_table(TABLE_SURVEY);
@@ -1767,7 +1767,7 @@ class SurveyManager
         $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
         $table_survey_options = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
         $survey_id = intval($survey_id);
-        $survey_data = self::get_survey_array_from_id($survey_id);
+        $survey_data = self::getSurveyArrayFromId($survey_id);
         if (empty($survey_data)) {
             return true;
         }
@@ -1862,7 +1862,7 @@ class SurveyManager
      *
      * @return array
      */
-    public static function get_survey_array_from_id($survey_id)
+    public static function getSurveyArrayFromId($survey_id)
     {
         // Table definition
         $table_survey = Database:: get_course_table(TABLE_SURVEY);

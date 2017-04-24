@@ -6350,7 +6350,10 @@ class CourseManager
             Database::get_main_table(TABLE_MAIN_COURSE) . " course ORDER BY course.title ASC" ;
         //select all courses inside sessions
         $sql1 = "SELECT course.id id,course.title title,session.id session_id,session.name session_name FROM " .
-            Database::get_main_table(TABLE_MAIN_COURSE) . " course ,".Database::get_main_table(TABLE_MAIN_SESSION)." session, ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE). " sessioncourse WHERE course.id=sessioncourse.c_id AND session.id=sessioncourse.session_id ORDER BY session.name ASC, course.title ASC" ;
+            Database::get_main_table(TABLE_MAIN_COURSE) . " course ,".Database::get_main_table(TABLE_MAIN_SESSION).
+            " session, ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE).
+            " sessioncourse WHERE course.id=sessioncourse.c_id 
+            AND session.id=sessioncourse.session_id ORDER BY session.name ASC, course.title ASC" ;
         $data = [];
         //input rows of all courses not inside sessions in a array $data
         $res = Database::query($sql);

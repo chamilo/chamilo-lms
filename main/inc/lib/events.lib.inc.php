@@ -1115,7 +1115,7 @@ function get_all_exercise_results_by_course($course_code, $session_id = 0, $get_
         $list = array();
         while($row = Database::fetch_array($res,'ASSOC')) {
         	$list[$row['exe_id']] = $row;
-        	$sql = "SELECT * FROM $table_track_attempt WHERE exe_id = {$row['exe_id']}";
+        	$sql = "SELECT question_id, marks FROM $table_track_attempt WHERE exe_id = {$row['exe_id']}";
         	$res_question = Database::query($sql);
         	while($row_q = Database::fetch_array($res_question,'ASSOC')) {
         		$list[$row['exe_id']]['question_list'][$row_q['question_id']] = $row_q;

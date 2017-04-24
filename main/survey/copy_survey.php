@@ -31,16 +31,18 @@ if (Security::check_token('post')) {
     // Clear token
     Security::clear_token();
     $surveyId = intval($_POST['surveys']);
-    $courseId = Security::remove_XSS($_POST['destination_course']);
-    $surveyCopyId = SurveyManager::copy_survey($surveyId, null, $courseId);
+    $arraysent = json_decode(Security::remove_XSS($_POST['destination_course']));
+    $courseId = $arraysent->id_course;
+    $sessionId = $arraysent->id_session;
+    $surveyCopyId = SurveyManager::copy_survey_session($surveyId, $courseId,$sessionId);
     // Copy the survey to the target course
-    SurveyManager::empty_survey($surveyCopyId, $courseId);
+    SurveyManager::empty_survey_from_id($surveyCopyId);
     // Empty the copied survey
     Display::display_confirmation_message(get_lang('SurveyCopied'));
 }
 
 $surveys = SurveyManager::get_surveys(api_get_course_id(), api_get_session_id());
-$courses = CourseManager::get_courses_list();
+$courses = CourseManager::get_all_courses_array();
 $form = new FormValidator('copy_survey', 'post', 'copy_survey.php?'.api_get_cidreq());
 if (!$surveys) {
     Display::display_error_message(get_lang('NoSurveyAvailable'));
@@ -51,16 +53,25 @@ if (count($courses) <= 1) {
 if ($surveys && count($courses) > 1) {
     // Surveys select
     $options = array();
+    $currentCourseId = api_get_course_int_id();
+    $currentSessionId = api_get_session_id();
     foreach ($surveys as $survey) {
-        $options[$survey['survey_id']] = $survey['title'];
+        if($survey['session_id'] == $currentSessionId ) {
+            $options[$survey['survey_id']] = $survey['title'];
+        }
     }
     $form->addElement('select', 'surveys', get_lang('SelectSurvey'), $options);
     // All-courses-but-current select
-    $currentCourseId = api_get_course_int_id();
+
     $options = array();
-    foreach ($courses as $course) {
-        if ($course['id'] != $currentCourseId) {
-            $options[$course['id']] = $course['title'];
+    for ($i=0;$i<count($courses); $i++) {
+        if ($courses[$i]['id'] != $currentCourseId || $courses[$i]['session_id'] != $currentSessionId) {
+            $value=array("id_course" => $courses[$i]['id'], "id_session" => $courses[$i]['session_id']);
+            if(isset($courses[$i]['session_name'])){
+                $options[json_encode ($value)] = $courses[$i]['title'].' ['.$courses[$i]['session_name'].']';
+            } else {
+                $options[json_encode ($value)] = $courses[$i]['title'];
+            }
         }
     }
     $form->addElement('select', 'destination_course', get_lang('SelectDestinationCourse'), $options);

@@ -162,6 +162,8 @@ if (!api_is_course_coach() || $extend_rights_for_coachs == 'true') {
     // Action links
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/create_new_survey.php?'.api_get_cidreq().'&amp;action=add">'.
         Display::return_icon('new_survey.png', get_lang('CreateNewSurvey'), '', ICON_SIZE_MEDIUM).'</a> ';
+    echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/copy_survey.php?'.api_get_cidreq().'&amp;">'.
+        Display::return_icon('copy.png', get_lang('CopySurvey'), '', ICON_SIZE_MEDIUM).'</a>';
 }
 echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;search=advanced">'.
     Display::return_icon('search.png', get_lang('Search'), '', ICON_SIZE_MEDIUM).'</a>';

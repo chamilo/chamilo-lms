@@ -1213,7 +1213,7 @@ class Event
             $list = array();
             while ($row = Database::fetch_array($res, 'ASSOC')) {
                 $list[$row['exe_id']] = $row;
-                $sql = "SELECT * FROM $table_track_attempt 
+                $sql = "SELECT marks, question_id FROM $table_track_attempt 
                         WHERE exe_id = {$row['exe_id']}";
                 $res_question = Database::query($sql);
                 while ($row_q = Database::fetch_array($res_question, 'ASSOC')) {

@@ -650,6 +650,9 @@ legend{
     background-color: #162A83;
     border-color: #162A83;
 }
+.question-result .dl-horizontal {
+    display:none;
+}
 /* Large desktop */
 @media (min-width: 1200px) {
 
@@ -968,19 +971,26 @@ legend{
         display: none;
     }
     footer .sub-footer {
-	background-color: #ECECEC;
-	padding-top: 0;
-	padding-bottom: 0;
+		background-color: #ECECEC;
+		padding-top: 0;
+		padding-bottom: 0;
     }
     .sticky-footer {
-	position: relative;
-	bottom: 0;
-	width: 100%;
-	padding-top: 10px;
-	padding-bottom: 10px;
+		position: relative;
+		bottom: 0;
+		width: 100%;
+		padding-top: 10px;
+		padding-bottom: 10px;
+    }
+    .chatboxmain{
+    	width: auto;
+    	right: 0;
+    }
+    .chatboxmain .chatboxheadmain{
+    	padding: 0 5px;
+    }
+    .chatboxcontent{
+    	width: auto;
     }
 }
 
-.question-result .dl-horizontal {
-    display:none;
-}

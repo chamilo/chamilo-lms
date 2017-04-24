@@ -1732,7 +1732,8 @@ class SurveyManager
         $course = $datasurvey['c_id'];
         $session = $datasurvey['session_id'];
         $sql = 'DELETE FROM ' . $table_survey_invitation . '
-		        WHERE session_id =' . intval($session) . ' AND c_id =' . intval($course).' AND survey_code ="' . $code . '"';
+		        WHERE session_id =' . intval($session) . ' AND c_id =' .
+            intval($course).' AND survey_code ="' . $code . '"';
 
         Database::query($sql);
 

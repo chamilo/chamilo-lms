@@ -34,7 +34,7 @@ if (Security::check_token('post')) {
     $arraysent = json_decode(Security::remove_XSS($_POST['destination_course']));
     $courseId = $arraysent->id_course;
     $sessionId = $arraysent->id_session;
-    $surveyCopyId = SurveyManager::copy_survey_session($surveyId, $courseId,$sessionId);
+    $surveyCopyId = SurveyManager::copy_survey_session($surveyId, $courseId, $sessionId);
     // Copy the survey to the target course
     SurveyManager::empty_survey_from_id($surveyCopyId);
     // Empty the copied survey
@@ -56,7 +56,7 @@ if ($surveys && count($courses) > 1) {
     $currentCourseId = api_get_course_int_id();
     $currentSessionId = api_get_session_id();
     foreach ($surveys as $survey) {
-        if($survey['session_id'] == $currentSessionId ) {
+        if ($survey['session_id'] == $currentSessionId) {
             $options[$survey['survey_id']] = $survey['title'];
         }
     }
@@ -64,13 +64,13 @@ if ($surveys && count($courses) > 1) {
     // All-courses-but-current select
 
     $options = array();
-    for ($i=0;$i<count($courses); $i++) {
+    for ($i=0; $i<count($courses); $i++) {
         if ($courses[$i]['id'] != $currentCourseId || $courses[$i]['session_id'] != $currentSessionId) {
             $value=array("id_course" => $courses[$i]['id'], "id_session" => $courses[$i]['session_id']);
-            if(isset($courses[$i]['session_name'])){
-                $options[json_encode ($value)] = $courses[$i]['title'].' ['.$courses[$i]['session_name'].']';
+            if(isset($courses[$i]['session_name'])) {
+                $options[json_encode($value)] = $courses[$i]['title'].' ['.$courses[$i]['session_name'].']';
             } else {
-                $options[json_encode ($value)] = $courses[$i]['title'];
+                $options[json_encode($value)] = $courses[$i]['title'];
             }
         }
     }

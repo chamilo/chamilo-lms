@@ -6343,23 +6343,26 @@ class CourseManager
      * Returns an array assoc with info from course and session, of all courses, inside sessions and not inside.
      * @return array
      */
-    public static function get_all_courses_array() {
+    public static function getAllCoursesArray()
+    {
         //select all courses without sessions
-        $sql = "SELECT course.id id,course.title title,0 session_id FROM " . Database::get_main_table(TABLE_MAIN_COURSE) . " course ORDER BY course.title ASC" ;
+        $sql = "SELECT course.id id,course.title title,0 session_id FROM " .
+            Database::get_main_table(TABLE_MAIN_COURSE) . " course ORDER BY course.title ASC" ;
         //select all courses inside sessions
-        $sql1 = "SELECT course.id id,course.title title,session.id session_id,session.name session_name FROM " . Database::get_main_table(TABLE_MAIN_COURSE) . " course ,".Database::get_main_table(TABLE_MAIN_SESSION)." session, ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE). " sessioncourse WHERE course.id=sessioncourse.c_id AND session.id=sessioncourse.session_id ORDER BY session.name ASC, course.title ASC" ;
+        $sql1 = "SELECT course.id id,course.title title,session.id session_id,session.name session_name FROM " .
+            Database::get_main_table(TABLE_MAIN_COURSE) . " course ,".Database::get_main_table(TABLE_MAIN_SESSION)." session, ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE). " sessioncourse WHERE course.id=sessioncourse.c_id AND session.id=sessioncourse.session_id ORDER BY session.name ASC, course.title ASC" ;
         $data = [];
         //input rows of all courses not inside sessions in a array $data
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
-            while ($row = Database::fetch_array($res,"ASSOC")) {
+            while ($row = Database::fetch_array($res, "ASSOC")) {
                 $data[] = $row;
             }
         }
         //input rows of all courses inside sessions in a array $data
         $res1 = Database::query($sql1);
         if (Database::num_rows($res1) > 0) {
-            while ($row = Database::fetch_array($res1,"ASSOC")) {
+            while ($row = Database::fetch_array($res1, "ASSOC")) {
                 $data[] = $row;
             }
         }

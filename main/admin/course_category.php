@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * @package chamilo.admin
  */
@@ -26,7 +27,7 @@ if (!empty($action)) {
     if ($action == 'delete') {
         CourseCategory::deleteNode($categoryId);
         Display::addFlash(Display::return_message(get_lang('Deleted')));
-        header('Location: ' . api_get_self() . '?category=' . Security::remove_XSS($category));
+        header('Location: '.api_get_self().'?category='.Security::remove_XSS($category));
         exit();
     } elseif (($action == 'add' || $action == 'edit') && isset($_POST['formSent']) && $_POST['formSent']) {
         if ($action == 'add') {
@@ -54,7 +55,7 @@ if (!empty($action)) {
         }
     } elseif ($action == 'moveUp') {
         CourseCategory::moveNodeUp($categoryId, $_GET['tree_pos'], $category);
-        header('Location: ' . api_get_self() . '?category=' . Security::remove_XSS($category));
+        header('Location: '.api_get_self().'?category='.Security::remove_XSS($category));
         Display::addFlash(Display::return_message(get_lang('Updated')));
         exit();
     }
@@ -78,7 +79,7 @@ if ($action == 'add' || $action == 'edit') {
 
     $form_title = ($action == 'add') ? get_lang('AddACategory') : get_lang('EditNode');
     if (!empty($category)) {
-        $form_title .= ' ' . get_lang('Into') . ' ' . Security::remove_XSS($category);
+        $form_title .= ' '.get_lang('Into').' '.Security::remove_XSS($category);
     }
     $url = api_get_self().'?action='.Security::remove_XSS($action).'&category='.Security::remove_XSS($category).'&id='.Security::remove_XSS($categoryId);
     $form = new FormValidator('course_category', 'post', $url);
@@ -90,8 +91,20 @@ if ($action == 'add' || $action == 'edit') {
     $form->addRule('name', get_lang('PleaseEnterCategoryInfo'), 'required');
     $form->addRule('code', get_lang('PleaseEnterCategoryInfo'), 'required');
     $group = array(
-        $form->createElement('radio', 'auth_course_child', get_lang("AllowCoursesInCategory"), get_lang('Yes'), 'TRUE'),
-        $form->createElement('radio', 'auth_course_child', null, get_lang('No'), 'FALSE')
+        $form->createElement(
+            'radio',
+            'auth_course_child',
+            get_lang("AllowCoursesInCategory"),
+            get_lang('Yes'),
+            'TRUE'
+        ),
+        $form->createElement(
+            'radio',
+            'auth_course_child',
+            null,
+            get_lang('No'),
+            'FALSE'
+        ),
     );
     $form->addGroup($group, null, get_lang("AllowCoursesInCategory"));
 

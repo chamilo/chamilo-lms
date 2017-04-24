@@ -348,9 +348,9 @@ Display::display_header($nameTools, 'Exercise');
 /*
 if ($objExercise->exercise_was_added_in_lp) {
     if ($objExercise->force_edit_exercise_in_lp == true) {
-        Display::display_warning_message(get_lang('ForceEditingExerciseInLPWarning'));
+        Display::addFlash(Display::return_message(get_lang('ForceEditingExerciseInLPWarning'), 'warning'));
     } else {
-        Display::display_warning_message(get_lang('EditingExerciseCauseProblemsInLP'));
+        Display::addFlash(Display::return_message(get_lang('EditingExerciseCauseProblemsInLP'), 'warning'));
     }
 }*/
 
@@ -426,7 +426,7 @@ if ($inATest) {
 
 if (isset($_GET['message'])) {
     if (in_array($_GET['message'], array('ExerciseStored', 'ItemUpdated', 'ItemAdded'))) {
-        Display::display_confirmation_message(get_lang($_GET['message']));
+        Display::addFlash(Display::return_message(get_lang($_GET['message']), 'confirmation'));
     }
 }
 
@@ -483,7 +483,7 @@ if (!$newQuestion && !$modifyQuestion && !$editQuestion && !isset($_GET['hotspot
 // this test to display only message in the question authoring page and not in the question list page too
 // if (is_object($objQuestion) && $objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_EXAM && ($newQuestion || $modifyQuestion || $editQuestion)) {
 if ($objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_EXAM) {
-    Display::display_normal_message(get_lang("TestFeedbackNotShown"));
+    Display::addFlash(Display::return_message(get_lang('TestFeedbackNotShown'), 'normal'));
 }
 
 Session::write('objExercise', $objExercise);

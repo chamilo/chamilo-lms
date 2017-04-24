@@ -160,7 +160,12 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                 null,
                 ['location' => $wsUrl, 'uri' => $wsUrl]
             );
-            $userInfo = api_get_user_info($params['user_id'], false, false, true);
+            $userInfo = api_get_user_info(
+                $params['user_id'],
+                false,
+                false,
+                true
+            );
 
             try {
                 $profileCompleted = $client->__soapCall(
@@ -458,10 +463,16 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
      * @param array $fileAttachments
      * @return bool|int
      */
-    public function sendMailMessage($studentId, $receiverId, $subject, $content, $sessionId, $save = false, $fileAttachments = array())
-    {
-        if (
-            !empty($fileAttachments) &&
+    public function sendMailMessage(
+        $studentId,
+        $receiverId,
+        $subject,
+        $content,
+        $sessionId,
+        $save = false,
+        $fileAttachments = array()
+    ) {
+        if (!empty($fileAttachments) &&
             is_array($fileAttachments) &&
             isset($fileAttachments['files']) &&
             isset($fileAttachments['comments'])
@@ -957,10 +968,8 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             );
 
             if (count($row) == 1) {
-
                 return $row[0]['status'];
             } else {
-
                 return ADVANCED_SUBSCRIPTION_QUEUE_STATUS_NO_QUEUE;
             }
         }
@@ -977,7 +986,10 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
     {
         if (!empty($sessionId)) {
             $extra = new ExtraFieldValue('session');
-            $var = $extra->get_values_by_handler_and_field_variable($sessionId, 'vacancies');
+            $var = $extra->get_values_by_handler_and_field_variable(
+                $sessionId,
+                'vacancies'
+            );
             $vacancy = intval($var['value']);
             if (!empty($vacancy)) {
                 $vacancy -= $this->countQueueByParams(
@@ -987,7 +999,6 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                     )
                 );
                 if ($vacancy >= 0) {
-
                     return $vacancy;
                 } else {
                     return 0;
@@ -1068,7 +1079,6 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
      */
     public function getStatusMessage($status, $isAble = true)
     {
-	$message = '';
         switch ($status) {
             case ADVANCED_SUBSCRIPTION_QUEUE_STATUS_NO_QUEUE:
                 if ($isAble) {
@@ -1163,7 +1173,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             'e='.intval($params['newStatus']).'&'.
             'u='.intval($params['studentUserId']).'&'.
             'q='.intval($params['queueId']).'&'.
-            'is_connected='.1.'&'.
+            'is_connected=1&'.
             'profile_completed='.intval($params['profile_completed']).'&'.
             'v='.$this->generateHash($params);
 
@@ -1254,7 +1264,6 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
         );
 
         return $return;
-
     }
 
     /**
@@ -1394,7 +1403,6 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             );
 
             if (count($row) > 0) {
-
                 return $row[0]['last_message_id'];
             }
         }
@@ -1464,8 +1472,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                     false
                 );
 
-                if (
-                    count($courseCategories) > 0 &&
+                if (count($courseCategories) > 0 &&
                     Category::userFinishedCourse($userId, $courseCategories[0])
                 ) {
                     $numberOfApprovedCourses++;

@@ -83,7 +83,7 @@ if ($survey_data['invited'] > 0 && !isset($_POST['submit'])) {
 	$message .= get_lang('HaveAnswered').' ';
 	$message .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=invited&survey_id='.$survey_data['survey_id'].'">'.$survey_data['invited'].'</a> ';
 	$message .= get_lang('WereInvited');
-	Display::display_normal_message($message, false);
+	Display::addFlash(Display::return_message($message, 'normal', false));
 }
 
 // Building the form for publishing the survey
@@ -171,9 +171,14 @@ $form->addElement('label', null, $auto_survey_link);
 
 if ($form->validate()) {
    	$values = $form->exportValues();
-    if (isset($values['send_mail']) && $values['send_mail'] == 1) {
+
+    $resendAll = isset($values['resend_to_all']) ? $values['resend_to_all'] : '';
+    $sendMail = isset($values['send_mail']) ? $values['send_mail'] : '';
+    $remindUnAnswered = isset($values['remindUnAnswered']) ? $values['remindUnAnswered'] : '';
+
+    if ($sendMail) {
         if (empty($values['mail_title']) || empty($values['mail_text'])) {
-            Display :: display_error_message(get_lang('FormHasErrorsPleaseComplete'));
+            Display::addFlash(Display::return_message(get_lang('FormHasErrorsPleaseComplete'), 'error'));
             // Getting the invited users
         	$defaults = SurveyUtil::get_invited_users($survey_data['code']);
 
@@ -196,10 +201,6 @@ if ($form->validate()) {
 		$values['mail_title'],
 		!empty($survey_data['invite_mail'])
 	);
-
-    $resendAll = isset($values['resend_to_all']) ? $values['resend_to_all'] : '';
-    $sendMail = isset($values['send_mail']) ? $values['send_mail'] : '';
-    $remindUnAnswered = isset($values['remindUnAnswered']) ? $values['remindUnAnswered'] : '';
 
 	// Saving the invitations for the course users
 	$count_course_users = SurveyUtil::saveInvitations(
@@ -248,8 +249,12 @@ if ($form->validate()) {
     	$message .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=invited&survey_id='.$survey_data['survey_id'].'">'.
 			$total_invited.'</a> ';
     	$message .= get_lang('WereInvited');
-    	Display::display_normal_message($message, false);
-    	Display::display_confirmation_message($total_count.' '.get_lang('InvitationsSend'));
+
+    	echo Display::return_message($message,  'normal', false);
+
+    	if ($sendMail) {
+    	    echo Display::return_message($total_count.' '.get_lang('InvitationsSend'), 'success', false);
+        }
     }
 } else {
 	// Getting the invited users

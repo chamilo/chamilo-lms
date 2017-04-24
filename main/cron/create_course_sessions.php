@@ -14,7 +14,7 @@ if (php_sapi_name() != 'cli') {
     exit; //do not run from browser
 }
 
-require_once __DIR__ . "/../inc/global.inc.php";
+require_once __DIR__."/../inc/global.inc.php";
 
 // First day of the current month to create sessions and add courses for the next month (e.g. "07")
 define("OFFSET", "15");
@@ -41,7 +41,7 @@ function getQuarterFirstAndLastDates($initialDate = null)
 {
     $startDate = $initialDate ? $initialDate : date("Y-m-01");
     $month = getQuarterFirstMonth(getQuarter(date('m', $startDate)));
-    $startDate = substr($startDate, 0, 5) . $month . '-01';
+    $startDate = substr($startDate, 0, 5).$month.'-01';
     $nextQuarterStartDate = date('Y-m-d', api_strtotime($startDate.' + 3 month'));
     $endDate = date('Y-m-d', api_strtotime($nextQuarterStartDate.' - 1 minute'));
     return array('startDate' => $startDate, 'endDate' => $endDate);
@@ -148,8 +148,7 @@ function createCourseSessions($courses, $administratorId, $startDate, $endDate)
 {
     echo "\n";
     echo $courses ?
-        "Creating sessions and adding courses for the period between ".$startDate." and ".$endDate :
-        "Every course is already in session for the period between ".$startDate." and ".$endDate;
+        "Creating sessions and adding courses for the period between ".$startDate." and ".$endDate : "Every course is already in session for the period between ".$startDate." and ".$endDate;
     echo "\n=====================================================================================\n\n";
     // Loop through courses creating one session per each and adding them
     foreach ($courses as $course) {
@@ -158,8 +157,8 @@ function createCourseSessions($courses, $administratorId, $startDate, $endDate)
         $year = date("Y", api_strtotime($startDate));
         $quarter = getQuarter($month);
         $quarter = getQuarterRoman($quarter);
-        $period = $year . '-' . $quarter;
-        $sessionName = '[' . $period . '] ' . $course['title'];
+        $period = $year.'-'.$quarter;
+        $sessionName = '['.$period.'] '.$course['title'];
         $sessionId = SessionManager::create_session(
             $sessionName,
             $startDate,
@@ -178,7 +177,7 @@ function createCourseSessions($courses, $administratorId, $startDate, $endDate)
 }
 
 // Starts the script
-echo "Starting process..." . PHP_EOL;
+echo "Starting process...".PHP_EOL;
 // Get first active administrator
 $administrators = array_reverse(UserManager::get_all_administrators());
 $lastingAdministrators = count($administrators);
@@ -199,7 +198,7 @@ createCourseSessions($courses, $administratorId, $dates['startDate'], $dates['en
 
 // Creates course sessions for the following month
 $offsetDay = intval(substr($dates['endDate'], 8, 2)) - OFFSET;
-if (date("Y-m-d") >= date(substr($dates['endDate'], 0, 8) . $offsetDay)) {
+if (date("Y-m-d") >= date(substr($dates['endDate'], 0, 8).$offsetDay)) {
     $dates = getQuarterFirstAndLastDates(date("Y-m-d", api_strtotime(date("Y-m-01")." + 3 month")));
     // Get courses that don't have any session the next month
     $courses = CourseManager::getCoursesWithoutSession($dates['startDate'], $dates['endDate']);

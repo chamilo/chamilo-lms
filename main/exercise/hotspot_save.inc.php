@@ -12,7 +12,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
 $questionId = intval($_GET['questionId']);
-$answerId 	= intval($_GET['answerId']);
+$answerId = intval($_GET['answerId']);
 
 if ($_GET['type'] == "square" || $_GET['type'] == "circle") {
 	$hotspot_type = $_GET['type'];
@@ -20,11 +20,11 @@ if ($_GET['type'] == "square" || $_GET['type'] == "circle") {
 }
 if ($_GET['type'] == "poly" || $_GET['type'] == "delineation" || $_GET['type'] == "oar") {
 	$hotspot_type = $_GET['type'];
-	$tmp_coord = explode(",",$_GET['co']);
+	$tmp_coord = explode(",", $_GET['co']);
 	$i = 0;
 	$hotspot_coordinates = "";
 	foreach ($tmp_coord as $coord) {
-		if ($i%2 == 0) {
+		if ($i % 2 == 0) {
 			$delimiter = ";";
 		} else {
 			$delimiter = "|";
@@ -32,7 +32,7 @@ if ($_GET['type'] == "poly" || $_GET['type'] == "delineation" || $_GET['type'] =
 		$hotspot_coordinates .= $coord.$delimiter;
 		$i++;
 	}
-	$hotspot_coordinates = api_substr($hotspot_coordinates,0,-2);
+	$hotspot_coordinates = api_substr($hotspot_coordinates, 0, -2);
 }
 $course_id = api_get_course_int_id();
 $sql = "UPDATE $TBL_ANSWER SET

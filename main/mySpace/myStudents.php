@@ -14,7 +14,7 @@ api_block_anonymous_users();
 $export = isset($_GET['export']) ? $_GET['export'] : false;
 $sessionId = isset($_GET['id_session']) ? intval($_GET['id_session']) : 0;
 $origin = isset($_GET['origin']) ? Security::remove_XSS($_GET['origin']) : '';
-$course_code = isset($_GET['course']) ? Security :: remove_XSS($_GET['course']) : '';
+$course_code = isset($_GET['course']) ? Security::remove_XSS($_GET['course']) : '';
 $courseInfo = api_get_course_info($course_code);
 $student_id = intval($_GET['student']);
 
@@ -121,11 +121,11 @@ if (isset($_GET['details'])) {
                 );
                 if (isset($_GET['id_coach']) && intval($_GET['id_coach']) != 0) {
                     $interbreadcrumb[] = array (
-                        "url" => "student.php?id_coach=" . Security :: remove_XSS($_GET['id_coach']),
+                        "url" => "student.php?id_coach=" . Security::remove_XSS($_GET['id_coach']),
                         "name" => get_lang("CoachStudents")
                     );
                     $interbreadcrumb[] = array (
-                        "url" => "myStudents.php?student=" . $student_id. '&id_coach=' . Security :: remove_XSS($_GET['id_coach']),
+                        "url" => "myStudents.php?student=" . $student_id. '&id_coach=' . Security::remove_XSS($_GET['id_coach']),
                         "name" => get_lang("StudentDetails")
                     );
                 } else {
@@ -162,12 +162,12 @@ if (isset($_GET['details'])) {
         if (isset($_GET['id_coach']) && intval($_GET['id_coach']) != 0) {
             if ($sessionId) {
                 $interbreadcrumb[] = array(
-                    "url" => "student.php?id_coach=" . Security :: remove_XSS($_GET['id_coach']) . "&id_session=" . $sessionId,
+                    "url" => "student.php?id_coach=" . Security::remove_XSS($_GET['id_coach']) . "&id_session=" . $sessionId,
                     "name" => get_lang("CoachStudents")
                 );
             } else {
                 $interbreadcrumb[] = array(
-                    "url" => "student.php?id_coach=" . Security :: remove_XSS($_GET['id_coach']),
+                    "url" => "student.php?id_coach=" . Security::remove_XSS($_GET['id_coach']),
                     "name" => get_lang("CoachStudents")
                 );
             }
@@ -360,23 +360,23 @@ if (!empty($student_id)) {
     echo '<a href="javascript: void(0);" onclick="javascript: window.print();">'.
             Display::return_icon('printer.png', get_lang('Print'),'',ICON_SIZE_MEDIUM).'</a>';
 
-    echo '<a href="' . api_get_self() . '?' . Security :: remove_XSS($_SERVER['QUERY_STRING']) . '&export=csv">'.
+    echo '<a href="' . api_get_self() . '?' . Security::remove_XSS($_SERVER['QUERY_STRING']) . '&export=csv">'.
             Display::return_icon('export_csv.png', get_lang('ExportAsCSV'),'',ICON_SIZE_MEDIUM).'</a> ';
 
-    echo '<a href="' . api_get_self() . '?' . Security :: remove_XSS($_SERVER['QUERY_STRING']) . '&export=xls">'.
+    echo '<a href="' . api_get_self() . '?' . Security::remove_XSS($_SERVER['QUERY_STRING']) . '&export=xls">'.
     Display::return_icon('export_excel.png', get_lang('ExportAsXLS'),'',ICON_SIZE_MEDIUM).'</a> ';
 
     if (!empty ($user_info['email'])) {
         $send_mail = '<a href="mailto:'.$user_info['email'].'">'.
-            Display :: return_icon('mail_send.png', get_lang('SendMail'),'',ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('mail_send.png', get_lang('SendMail'),'',ICON_SIZE_MEDIUM).'</a>';
     } else {
-        $send_mail = Display :: return_icon('mail_send_na.png', get_lang('SendMail'),'',ICON_SIZE_MEDIUM);
+        $send_mail = Display::return_icon('mail_send_na.png', get_lang('SendMail'),'',ICON_SIZE_MEDIUM);
     }
     echo $send_mail;
     if (!empty($student_id) && !empty($course_code)) {
         // Only show link to connection details if course and student were defined in the URL
         echo '<a href="access_details.php?student=' . $student_id . '&course=' . $course_code . '&origin=' . $origin. '&cidReq='.$course_code.'&id_session='.$sessionId.'">'.
-            Display :: return_icon('statistics.png', get_lang('AccessDetails'),'',ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('statistics.png', get_lang('AccessDetails'),'',ICON_SIZE_MEDIUM).'</a>';
     }
     if (api_can_login_as($student_id)) {
         echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&user_id='.$student_id.'&sec_token='.$token.'">'.
@@ -1143,7 +1143,7 @@ if (!empty($student_id)) {
         <tr>
             <th><?php echo get_lang('Exercises'); ?></th>
             <th><?php echo get_lang('LearningPath');?></th>
-            <th><?php echo get_lang('AvgCourseScore').' '.Display :: return_icon('info3.gif', get_lang('AverageScore'), array('align' => 'absmiddle', 'hspace' => '3px')) ?></th>
+            <th><?php echo get_lang('AvgCourseScore').' '.Display::return_icon('info3.gif', get_lang('AverageScore'), array('align' => 'absmiddle', 'hspace' => '3px')) ?></th>
             <th><?php echo get_lang('Attempts'); ?></th>
             <th><?php echo get_lang('LatestAttempt'); ?></th>
             <th><?php echo get_lang('AllAttempts'); ?></th>

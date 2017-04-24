@@ -23,12 +23,13 @@ class Toolbar
      */
     public function __construct(
         $toolbar = null,
-        $config = array(),
+        $config = [],
         $prefix = null
     ) {
         if (!empty($toolbar)) {
             $class = __NAMESPACE__."\\".$prefix."\\Toolbar\\".$toolbar;
             if (class_exists($class)) {
+                $this->setConfig($config);
                 $toolbarObj = new $class();
                 $config = $toolbarObj->getConfig();
 
@@ -47,7 +48,7 @@ class Toolbar
                     }
                 }
 
-                $this->setConfig($config);
+                $this->updateConfig($config);
             }
         }
 

@@ -53,7 +53,7 @@ if (!empty($_GET['selfReg']) &&
     GroupManager :: is_self_registration_allowed($user_id, $current_group)
 ) {
     GroupManager :: subscribe_users($user_id, $current_group);
-    Display :: display_normal_message(get_lang('GroupNowMember'));
+    Display::addFlash(Display::return_message(get_lang('GroupNowMember'), 'normal'));
 }
 
 /*
@@ -63,7 +63,7 @@ if (!empty($_GET['selfUnReg']) &&
     GroupManager :: is_self_unregistration_allowed($user_id, $current_group)
 ) {
     GroupManager::unsubscribe_users($user_id, $current_group);
-    Display::display_normal_message(get_lang('StudentDeletesHimself'));
+    Display::addFlash(Display::return_message(get_lang('StudentDeletesHimself'), 'normal'));
 }
 
 echo '<div class="actions">';

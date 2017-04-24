@@ -9,21 +9,21 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
 
-$eval= Evaluation :: load($_GET['selecteval']);
+$eval = Evaluation :: load($_GET['selecteval']);
 if ($eval[0]->get_category_id() < 0) {
     // if category id is negative, then the evaluation's origin is a link
-    $link= LinkFactory :: get_evaluation_link($eval[0]->get_id());
+    $link = LinkFactory :: get_evaluation_link($eval[0]->get_id());
     $currentcat = Category :: load($link->get_category_id());
 } else {
     $currentcat = Category :: load($eval[0]->get_category_id());
 }
 
-$interbreadcrumb[]= array (
-    'url' => $_SESSION['gradebook_dest'].'?selectcat=' . $currentcat[0]->get_id(), 'name' => get_lang('ToolGradebook'));
+$interbreadcrumb[] = array(
+    'url' => $_SESSION['gradebook_dest'].'?selectcat='.$currentcat[0]->get_id(), 'name' => get_lang('ToolGradebook'));
 
 if (api_is_allowed_to_edit()) {
-    $interbreadcrumb[]= array (
-        'url' => 'gradebook_view_result.php?selecteval=' . Security::remove_XSS($_GET['selecteval']).'&'.api_get_cidreq(),
+    $interbreadcrumb[] = array(
+        'url' => 'gradebook_view_result.php?selecteval='.Security::remove_XSS($_GET['selecteval']).'&'.api_get_cidreq(),
         'name' => get_lang('ViewResult')
     );
 }
@@ -45,7 +45,7 @@ if (!$displayscore->is_custom() || empty($displays)) {
         Display :: display_error_message(get_lang('PleaseEnableScoringSystem'), false);
     }
 } else {
-    $allresults = Result::load(null,null,$eval[0]->get_id());
+    $allresults = Result::load(null, null, $eval[0]->get_id());
     $nr_items = array();
     foreach ($displays as $itemsdisplay) {
         $nr_items[$itemsdisplay['display']] = 0;
@@ -78,19 +78,19 @@ if (!$displayscore->is_custom() || empty($displays)) {
     }
 
     // Generate table
-    $stattable= '<table class="data_table" cellspacing="0" cellpadding="3">';
-    $stattable .= '<tr><th>' . get_lang('ScoringSystem') . '</th>';
-    $stattable .= '<th>' . get_lang('Percentage') . '</th>';
-    $stattable .= '<th>' . get_lang('CountUsers') . '</th>';
+    $stattable = '<table class="data_table" cellspacing="0" cellpadding="3">';
+    $stattable .= '<tr><th>'.get_lang('ScoringSystem').'</th>';
+    $stattable .= '<th>'.get_lang('Percentage').'</th>';
+    $stattable .= '<th>'.get_lang('CountUsers').'</th>';
     //$stattable .= '<th>' . get_lang('Statistics') . '</th></tr>';
-    $counter=0;
+    $counter = 0;
     foreach ($keys as $key) {
-        $bar = ($highest_ratio > 0?($nr_items[$key] / $highest_ratio) * 100:0);
-        $stattable .= '<tr class="row_' . ($counter % 2 == 0 ? 'odd' : 'even') . '">';
-        $stattable .= '<td width="150">' . $key . '</td>';
+        $bar = ($highest_ratio > 0 ? ($nr_items[$key] / $highest_ratio) * 100 : 0);
+        $stattable .= '<tr class="row_'.($counter % 2 == 0 ? 'odd' : 'even').'">';
+        $stattable .= '<td width="150">'.$key.'</td>';
 
         $stattable .= '<td width="550">'.Display::bar_progress($bar).'</td>';
-        $stattable .= '<td align="right">' . $nr_items[$key] . '</td>';
+        $stattable .= '<td align="right">'.$nr_items[$key].'</td>';
         $counter++;
     }
     $stattable .= '</tr></table>';

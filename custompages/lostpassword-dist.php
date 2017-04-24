@@ -12,7 +12,7 @@ $rootWeb = api_get_path('WEB_PATH');
 ?>
 <html>
 <head>
-	<title><?php echo custompages_get_lang('LostPassword');?></title>
+	<title><?php echo custompages_get_lang('LostPassword'); ?></title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<!--[if !IE 6]><!-->
 	<link rel="stylesheet" type="text/css" href="../../custompages/style.css" />
@@ -44,7 +44,7 @@ $rootWeb = api_get_path('WEB_PATH');
 		<div id="lostpassword-form-box" class="form-box">
             <?php
             if (isset($content['info']) && !empty($content['info'])) {
-                echo '<div id="registration-form-error" class="form-error"><ul>' . $content['info'] . '</ul></div>';
+                echo '<div id="registration-form-error" class="form-error"><ul>'.$content['info'].'</ul></div>';
             }
 
             echo isset($content['form']) ? $content['form'] : ''

@@ -482,14 +482,14 @@ class PortfolioShare
         $attributes['z-index'] = 100000;
         $s = ' ';
         foreach ($attributes as $key => $value) {
-            $s .= $key . '="' . $value . '" ';
+            $s .= $key.'="'.$value.'" ';
         }
 
         $result = array();
-        $result[] = '<span ' . $s . ' >';
+        $result[] = '<span '.$s.' >';
         $result[] = '<span class="dropdown" >';
         $result[] = '<a href="#" data-toggle="dropdown" class="dropdown-toggle">';
-        $result[] = Display::return_icon('document_send.png', get_lang('Send'), array(), ICON_SIZE_SMALL) . '<b class="caret"></b>';
+        $result[] = Display::return_icon('document_send.png', get_lang('Send'), array(), ICON_SIZE_SMALL).'<b class="caret"></b>';
         $result[] = '</a>';
         $result[] = '<ul class="dropdown-menu">';
 
@@ -505,7 +505,7 @@ class PortfolioShare
             $parameters[PortfolioController::PARAM_TOOL] = $tool;
             $url = api_get_path(WEB_CODE_PATH).'portfolio/share.php?';
             $result[] = '<li>';
-            $result[] = '<a href="' . $url . '">' . $portfolio->get_title() . '</a>';
+            $result[] = '<a href="'.$url.'">'.$portfolio->get_title().'</a>';
             $result[] = '</li>';
         }
         $result[] = '</ul>';
@@ -564,8 +564,8 @@ class PortfolioBulkAction
      */
     public function __construct($portfolio)
     {
-        $this->name = md5(__CLASS__) . '_' . $portfolio->get_name();
-        $this->title = $portfolio->get_title() ? $portfolio->get_title() : get_lang('SendTo') . ' ' . $portfolio->get_name();
+        $this->name = md5(__CLASS__).'_'.$portfolio->get_name();
+        $this->title = $portfolio->get_title() ? $portfolio->get_title() : get_lang('SendTo').' '.$portfolio->get_name();
         $this->portfolio = $portfolio;
     }
 

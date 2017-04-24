@@ -58,10 +58,10 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 
     if ($form_sent == 1) {
         if (count($courses) == 0 || count($url_list) == 0) {
-            Display :: display_error_message(get_lang('AtLeastOneCourseAndOneURL'));
+            Display::addFlash(Display::return_message(get_lang('AtLeastOneCourseAndOneURL'), 'error'));
         } else {
             UrlManager::add_courses_to_urls($courses, $url_list);
-            Display :: display_confirmation_message(get_lang('CourseBelongURL'));
+            Display::addFlash(Display::return_message(get_lang('CourseBelongURL'), 'confirm'));
         }
     }
 }

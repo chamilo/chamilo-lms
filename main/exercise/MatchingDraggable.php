@@ -115,7 +115,7 @@ class MatchingDraggable extends Question
 
         if ($nb_matches < 1) {
             $nb_matches = 1;
-            Display::display_normal_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
+            Display::addFlash(Display::return_message(get_lang('YouHaveToCreateAtLeastOneAnswer'), 'normal'));
         }
 
         $editorConfig = array(
@@ -174,7 +174,7 @@ class MatchingDraggable extends Question
 
         if ($nb_options < 1) {
             $nb_options = 1;
-            Display::display_normal_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
+            Display::addFlash(Display::return_message(get_lang('YouHaveToCreateAtLeastOneAnswer'), 'normal'));
         }
 
         for ($i = 1; $i <= $nb_options; ++$i) {

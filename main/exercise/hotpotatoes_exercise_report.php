@@ -77,7 +77,7 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
     }
 } else {
     $actions .= '<a href="exercise.php">' .
-        Display :: return_icon('back.png', get_lang('GoBackToQuestionList'),'',ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('back.png', get_lang('GoBackToQuestionList'),'',ICON_SIZE_MEDIUM).'</a>';
 }
 
 if ($is_allowedToEdit) {

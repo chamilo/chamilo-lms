@@ -468,7 +468,7 @@ class Security
     public static function getPasswordRequirementsToString($passedConditions = [])
     {
         $output = '';
-        $setting = Security::getPasswordRequirements();
+        $setting = self::getPasswordRequirements();
         foreach ($setting as $type => $rules) {
             foreach ($rules as $rule => $parameter) {
                 if (empty($parameter)) {

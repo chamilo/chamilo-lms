@@ -209,7 +209,7 @@ $interbreadcrumb[] = array(
 Display::display_header($tool_name);
 
 if (isset($_REQUEST['message'])) {
-	Display::display_normal_message(get_lang('Updated'));
+	Display::addFlash(Display::return_message(get_lang('Updated'), 'normal'));
 }
 $form->display();
 

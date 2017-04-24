@@ -33,7 +33,7 @@ class PDF
         /* More info @ http://mpdf1.com/manual/index.php?tid=184&searchstring=mPDF
          * mPDF ([ string $mode [, mixed $format [, float $default_font_size [, string $default_font [, float $margin_left , float $margin_right , float $margin_top , float $margin_bottom , float $margin_header , float $margin_footer [, string $orientation ]]]]]])
          */
-        if (!in_array($orientation, array('P','L'))) {
+        if (!in_array($orientation, array('P', 'L'))) {
             $orientation = 'P';
         }
         //left, right, top, bottom, margin_header, margin footer
@@ -105,7 +105,7 @@ class PDF
             $visualTheme = api_get_visual_theme();
             $img = api_get_path(SYS_CSS_PATH).'themes/'.$visualTheme.'/images/pdf_logo_header.png';
             if (file_exists($img)) {
-                $img = api_get_path(WEB_CSS_PATH) . 'themes/' . $visualTheme . '/images/pdf_logo_header.png';
+                $img = api_get_path(WEB_CSS_PATH).'themes/'.$visualTheme.'/images/pdf_logo_header.png';
                 $organization = "<img src='$img'>";
             }
         }
@@ -242,7 +242,7 @@ class PDF
             // then print the title in the PDF
             if (is_array($file) && isset($file['title'])) {
                 $html_title = $file['title'];
-                $file  = $file['path'];
+                $file = $file['path'];
             } else {
                 //we suppose we've only been sent a file path
                 $html_title = basename($file);
@@ -272,7 +272,7 @@ class PDF
             //it's not a chapter but the file exists, print its title
             if ($print_title) {
                 $this->pdf->WriteHTML(
-                    '<html><body><h3>' . $html_title . '</h3></body></html>'
+                    '<html><body><h3>'.$html_title.'</h3></body></html>'
                 );
             }
 
@@ -298,7 +298,7 @@ class PDF
                 $document_html = str_replace('href="./css/frames.css"', $absolute_css_path, $document_html);
 
                 if (!empty($course_data['path'])) {
-                    $document_html= str_replace('../', '', $document_html);
+                    $document_html = str_replace('../', '', $document_html);
                     $document_path = api_get_path(SYS_COURSE_PATH).$course_data['path'].'/document/';
 
                     $doc = new DOMDocument();
@@ -375,7 +375,7 @@ class PDF
                 if (!empty($document_html)) {
                     $this->pdf->WriteHTML($document_html.$page_break);
                 }
-            } elseif (in_array($extension, array('jpg','jpeg','png','gif'))) {
+            } elseif (in_array($extension, array('jpg', 'jpeg', 'png', 'gif'))) {
                 //Images
                 $image = Display::img($file);
                 $this->pdf->WriteHTML('<html><body>'.$image.'</body></html>'.$page_break);
@@ -438,7 +438,7 @@ class PDF
 
         //absolute path for frames.css //TODO: necessary?
         $absolute_css_path = api_get_path(WEB_CSS_PATH).api_get_setting('stylesheets').'/frames.css';
-        $document_html = str_replace('href="./css/frames.css"','href="'.$absolute_css_path.'"', $document_html);
+        $document_html = str_replace('href="./css/frames.css"', 'href="'.$absolute_css_path.'"', $document_html);
 
         $document_html = str_replace('../../', '', $document_html);
         $document_html = str_replace('../', '', $document_html);
@@ -466,7 +466,7 @@ class PDF
                                 $old_src_fixed = str_replace(api_get_path(REL_COURSE_PATH).$course_data['path'].'/document/', '', $old_src);
                                 $old_src_fixed = str_replace('courses/'.$course_data['path'].'/document/', '', $old_src_fixed);
                                 $new_path = $document_path.$old_src_fixed;
-                                $document_html= str_replace($old_src, $new_path, $document_html);
+                                $document_html = str_replace($old_src, $new_path, $document_html);
 
                             }
                         }
@@ -485,7 +485,7 @@ class PDF
         //$document_html= str_replace('temp_template_path', 'src="/main/default_course_document/', $document_html);// restore src templates
 
         api_set_encoding_html($document_html, 'UTF-8'); // The library mPDF expects UTF-8 encoded input data.
-        $title = api_get_title_html($document_html, 'UTF-8', 'UTF-8');  // TODO: Maybe it is better idea the title to be passed through
+        $title = api_get_title_html($document_html, 'UTF-8', 'UTF-8'); // TODO: Maybe it is better idea the title to be passed through
         // $_GET[] too, as it is done with file name.
         // At the moment the title is retrieved from the html document itself.
 
@@ -507,7 +507,7 @@ class PDF
         //$this->pdf->Output($output_file, $outputMode); // F to save the pdf in a file
 
         if ($outputMode == 'F') {
-            $output_file = api_get_path(SYS_ARCHIVE_PATH) . $output_file;
+            $output_file = api_get_path(SYS_ARCHIVE_PATH).$output_file;
         }
 
         if ($saveInFile) {
@@ -540,12 +540,12 @@ class PDF
         $web_path = false;
         if (!empty($course_code) && api_get_setting('pdf_export_watermark_by_course') == 'true') {
             $course_info = api_get_course_info($course_code);
-            $store_path = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/'.api_get_current_access_url_id().'_pdf_watermark.png';   // course path
+            $store_path = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/'.api_get_current_access_url_id().'_pdf_watermark.png'; // course path
             if (file_exists($store_path)) {
                 $web_path = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/'.api_get_current_access_url_id().'_pdf_watermark.png';
             }
         } else {
-            $store_path = api_get_path(SYS_CODE_PATH).'default_course_document/images/'.api_get_current_access_url_id().'_pdf_watermark.png';   // course path
+            $store_path = api_get_path(SYS_CODE_PATH).'default_course_document/images/'.api_get_current_access_url_id().'_pdf_watermark.png'; // course path
             if (file_exists($store_path))
                 $web_path = api_get_path(WEB_CODE_PATH).'default_course_document/images/'.api_get_current_access_url_id().'_pdf_watermark.png';
         }
@@ -586,10 +586,10 @@ class PDF
     {
         if (!empty($course_code) && api_get_setting('pdf_export_watermark_by_course') == 'true') {
             $course_info = api_get_course_info($course_code);
-            $store_path = api_get_path(SYS_COURSE_PATH).$course_info['path'];   // course path
+            $store_path = api_get_path(SYS_COURSE_PATH).$course_info['path']; // course path
             $web_path   = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/pdf_watermark.png';
         } else {
-            $store_path = api_get_path(SYS_CODE_PATH).'default_course_document/images';   // course path
+            $store_path = api_get_path(SYS_CODE_PATH).'default_course_document/images'; // course path
             $web_path   = api_get_path(WEB_CODE_PATH).'default_course_document/images/'.api_get_current_access_url_id().'_pdf_watermark.png';
         }
         $course_image = $store_path.'/'.api_get_current_access_url_id().'_pdf_watermark.png';
@@ -640,9 +640,11 @@ class PDF
      */
     public function set_header($course_data)
     {
-        $this->pdf->defaultheaderfontsize   = 10;   // in pts
-        $this->pdf->defaultheaderfontstyle  = 'BI';   // blank, B, I, or BI
-        $this->pdf->defaultheaderline       = 1;    // 1 to include line below header/above footer
+        $this->pdf->defaultheaderfontsize   = 10; // in pts
+        $this->pdf->defaultheaderfontstyle  = 'BI'; // blank, B, I, or BI
+        $this->pdf->defaultheaderline       = 1; // 1 to include line below header/above footer
+
+        $userId = api_get_user_id();
 
         if (!empty($course_data['code'])) {
             $teacher_list = CourseManager::get_teacher_list_from_course_code($course_data['code']);
@@ -650,74 +652,22 @@ class PDF
             $teachers = '';
             if (!empty($teacher_list)) {
                 foreach ($teacher_list as $teacher) {
-                    $teachers[]= $teacher['firstname'].' '.$teacher['lastname'];
-                }
-                if (count($teachers) > 1) {
-                    $teachers = get_lang('Teachers').': '.implode(', ', $teachers);
-                } else {
-                    $teachers = get_lang('Teacher').': '.implode('', $teachers);
-                }
+                    if ($teacher['user_id'] != $userId) {
+                        continue;
+                    }
 
-                // Do not show the teacher list see BT#4080 only the current teacher name
-                $user_info = api_get_user_info();
-                $teachers = $user_info['complete_name'];
+                    // Do not show the teacher list see BT#4080 only the current teacher name
+                    $teachers = api_get_person_name($teacher['firstname'], $teacher['lastname']);
+                }
             }
 
-            $left_content    = '';
-            $center_content  = '';
-            $right_content   = $teachers;
+            $view = new Template('', false, false, false, true, false, false);
+            $view->assign('teacher_name', $teachers);
+            $template = $view->get_template('export/pdf_header.tpl');
+            $headerHTML = $view->fetch($template);
 
-            $header = array(
-                'odd' => array(
-                    'L' => array(
-                        'content' => $left_content,
-                        'font-size' => 10,
-                        'font-style' => 'B',
-                        'font-family' => 'serif',
-                        'color'=>'#000000'
-                    ),
-                    'C' => array(
-                        'content' => $center_content,
-                        'font-size' => 10,
-                        'font-style' => 'B',
-                        'font-family' => 'serif',
-                        'color'=>'#000000'
-                    ),
-                    'R' => array(
-                        'content' => $right_content,
-                        'font-size' => 10,
-                        'font-style' => 'B',
-                        'font-family' => 'serif',
-                        'color'=>'#000000'
-                    ),
-                    'line' => 1,
-                ),
-                'even' => array(
-                    'L' => array(
-                        'content' => $left_content,
-                        'font-size' => 10,
-                        'font-style' => 'B',
-                        'font-family' => 'serif',
-                        'color'=>'#000000'
-                    ),
-                    'C' => array(
-                        'content' => $center_content,
-                        'font-size' => 10,
-                        'font-style' => 'B',
-                        'font-family' => 'serif',
-                        'color'=>'#000000'
-                    ),
-                    'R' => array(
-                        'content' => $right_content,
-                        'font-size' => 10,
-                        'font-style' => 'B',
-                        'font-family' => 'serif',
-                        'color'=>'#000000'
-                    ),
-                    'line' => 1,
-                ),
-            );
-            $this->pdf->SetHeader($header);// ('{DATE j-m-Y}|{PAGENO}/{nb}|'.$title);
+            $this->pdf->SetHTMLHeader($headerHTML, 'E');
+            $this->pdf->SetHTMLHeader($headerHTML, 'O');
         }
     }
 
@@ -762,7 +712,7 @@ class PDF
         $this->pdf->directionality = api_get_text_direction();
         $this->pdf->useOnlyCoreFonts = true;
         // Use different Odd/Even headers and footers and mirror margins
-        $this->pdf->mirrorMargins       = 1;
+        $this->pdf->mirrorMargins = 1;
 
         // Add decoration only if not stated otherwise
         if ($complete) {

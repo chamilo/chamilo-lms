@@ -165,7 +165,7 @@ echo Display::page_header($tool_name);
 
 //api_display_tool_title($tool_name);
 if (api_get_setting('allow_registration') == 'approval') {
-    Display::display_normal_message(get_lang('YourAccountHasToBeApproved'));
+    Display::addFlash(Display::return_message(get_lang('YourAccountHasToBeApproved'), 'normal'));
 }
 //if openid was not found
 if (!empty($_GET['openid_msg']) && $_GET['openid_msg'] == 'idnotfound') {
@@ -364,7 +364,7 @@ switch ($action){
         }
 
         if (!empty($errorMsg)) {
-            Display::display_normal_message($errorMsg);
+            Display::addFlash(Display::return_message($errorMsg, 'normal'));
         }
 
         $default = array();

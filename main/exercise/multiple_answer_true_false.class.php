@@ -77,7 +77,7 @@ class MultipleAnswerTrueFalse extends Question
         $form->addElement('hidden', 'nb_answers');
         if ($nb_answers < 1) {
             $nb_answers = 1;
-            Display::display_normal_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
+            Display::addFlash(Display::return_message(get_lang('YouHaveToCreateAtLeastOneAnswer'), 'normal'));
         }
 
         // Can be more options

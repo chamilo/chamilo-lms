@@ -50,14 +50,12 @@ if (!empty($attemptList) && isset($attemptList[$questionId])) {
                     foreach ($parts as $partPoint) {
                         $points[] = Geometry::decodePoint($partPoint);
                     }
-
                     $data['answers']['paths'][] = $points;
                     break;
                 case 'T':
                     $text = [
                         'text' => array_shift($parts)
                     ];
-
                     $data['answers']['texts'][] = $text + Geometry::decodePoint($parts[0]);
                     break;
             }

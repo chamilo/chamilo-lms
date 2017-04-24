@@ -1035,7 +1035,7 @@ class DocumentManager
             			a.ref = $document_id 
                     LIMIT 1";
             $result = Database::query($sql);
-            $doc_details = Database ::fetch_array($result, 'ASSOC');
+            $doc_details = Database::fetch_array($result, 'ASSOC');
 
             if ($doc_details['readonly'] == 1) {
                 return !($doc_details['insert_user_id'] == $user_id || api_is_platform_admin());

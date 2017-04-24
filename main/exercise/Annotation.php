@@ -34,7 +34,12 @@ class Annotation extends Question
     {
         parent::createForm($form, $fck_config);
 
-        $form->addElement('number', 'weighting', get_lang('Weighting'), ['step' => '0.1']);
+        $form->addElement(
+            'number',
+            'weighting',
+            get_lang('Weighting'),
+            ['step' => '0.1']
+        );
 
         if (!empty($this->id)) {
             $form->setDefaults(array('weighting' => float_format($this->weighting, 1)));
@@ -55,14 +60,26 @@ class Annotation extends Question
             'imageUpload',
             array(
                 Display::img(
-                    Display::return_icon('annotation.png', null, null, ICON_SIZE_BIG, false, true)
+                    Display::return_icon(
+                        'annotation.png',
+                        null,
+                        null,
+                        ICON_SIZE_BIG,
+                        false,
+                        true
+                    )
                 ),
                 get_lang('UploadJpgPicture'),
             )
         );
 
         $form->addButtonSave(get_lang('GoToQuestion'), 'submitQuestion');
-        $form->addRule('imageUpload', get_lang('OnlyImagesAllowed'), 'filetype', array('jpg', 'jpeg', 'png', 'gif'));
+        $form->addRule(
+            'imageUpload',
+            get_lang('OnlyImagesAllowed'),
+            'filetype',
+            array('jpg', 'jpeg', 'png', 'gif')
+        );
         $form->addRule('imageUpload', get_lang('NoImage'), 'uploadedfile');
     }
 
@@ -92,7 +109,7 @@ class Annotation extends Question
     /**
      * @param FormValidator $form
      */
-    function createAnswersForm($form)
+    public function createAnswersForm($form)
     {
         // nothing
     }
@@ -100,7 +117,7 @@ class Annotation extends Question
     /**
      * @param FormValidator $form
      */
-    function processAnswersCreation($form)
+    public function processAnswersCreation($form)
     {
         $this->weighting = $form->getSubmitValue('weighting');
         $this->save();

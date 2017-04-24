@@ -1805,16 +1805,27 @@ class IndexManager
 
             // Display courses
             // [code=>xxx, real_id=>000]
-            $listCourses = CourseManager::get_courses_list_by_user_id($user_id, false);
+            $listCourses = CourseManager::get_courses_list_by_user_id(
+                $user_id,
+                false
+            );
 
             foreach ($listCourses as $i => $listCourseCodeId) {
                 if (isset($listCourseCodeId['special_course'])) {
                     continue;
                 }
-                list($userCategoryId, $userCatTitle) = CourseManager::getUserCourseCategoryForCourse(
+                $courseCategory = CourseManager::getUserCourseCategoryForCourse(
                     $user_id,
                     $listCourseCodeId['real_id']
                 );
+
+                $userCatTitle = '';
+                $userCategoryId = 0;
+                if ($courseCategory) {
+                    $userCategoryId = $courseCategory['user_course_cat'];
+                    $userCatTitle = $courseCategory['title'];
+                }
+
                 $listCourse = api_get_course_info_by_id($listCourseCodeId['real_id']);
                 $listCoursesInfo[] = array(
                     'course' => $listCourse,
@@ -1842,15 +1853,13 @@ class IndexManager
         $listUserCategories[0] = '';
 
         $html .= '<div class="session-view-block">';
-
-        foreach ($listUserCategories as $userCategoryId => $userCatTitle) {
+        foreach ($listUserCategories as $userCategoryId => $userCat) {
             // add user category
             $userCategoryHtml = '';
             if ($userCategoryId != 0) {
                 $userCategoryHtml = '<div class="session-view-well ">';
+                $userCategoryHtml .= self::getHtmlForUserCategory($userCategoryId, $userCat['title']);
             }
-            $userCategoryHtml .= self::getHtmlForUserCategory($userCategoryId, $userCatTitle);
-
             // look for course in this userCat in session courses : $listCoursesInSession
             $htmlCategory = '';
             if (isset($listCoursesInSession[$userCategoryId])) {
@@ -2009,23 +2018,25 @@ class IndexManager
         $courseLink = $courseInfo['course_public_url'].'?id_session=0';
 
         // get html course params
-        // ['right_actions'] ['teachers'] ['notifications']
-        $tabParams = CourseManager::getCourseParamsForDisplay($id, $loadDirs);
+        $courseParams = CourseManager::getCourseParamsForDisplay($id, $loadDirs);
+        $teachers = '';
+        $rightActions = '';
+
         // teacher list
-        if (!empty($tabParams['teachers'])) {
-            $teachers = '<p class="'.$class2.' view-by-session-teachers">'.$tabParams['teachers'].'</p>';
+        if (!empty($courseParams['teachers'])) {
+            $teachers = '<p class="'.$class2.' view-by-session-teachers">'.$courseParams['teachers'].'</p>';
         }
 
         // notification
-        if (!empty($tabParams['right_actions'])) {
-            $rightActions = '<div class="pull-right">'.$tabParams['right_actions'].'</div>';
+        if (!empty($courseParams['right_actions'])) {
+            $rightActions = '<div class="pull-right">'.$courseParams['right_actions'].'</div>';
         }
 
         return "<div>
                     $button
                     <span class='$class'>$icon
                     <a class='sessionView' href='$courseLink'>$title</a>
-                    </span>".$tabParams['notifications']."$rightActions
+                    </span>".$courseParams['notifications']." $rightActions
                 </div>
                 $teachers";
     }

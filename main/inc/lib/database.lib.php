@@ -269,6 +269,10 @@ class Database
      */
     public static function fetch_assoc(Statement $result)
     {
+        if ($result === false) {
+            return array();
+        }
+
         return $result->fetch(PDO::FETCH_ASSOC);
     }
 
@@ -295,6 +299,9 @@ class Database
      */
     public static function fetch_row(Statement $result)
     {
+        if ($result === false) {
+            return array();
+        }
         return $result->fetch(PDO::FETCH_NUM);
     }
 
@@ -326,6 +333,9 @@ class Database
      */
     public static function num_rows(Statement $result)
     {
+        if ($result === false) {
+            return 0;
+        }
         return $result->rowCount();
     }
 
@@ -572,11 +582,11 @@ class Database
                         if (is_array($value_array)) {
                             $clean_values = array();
                             foreach ($value_array as $item) {
-                                $item = Database::escape_string($item);
+                                $item = self::escape_string($item);
                                 $clean_values[]= $item;
                             }
                         } else {
-                            $value_array = Database::escape_string($value_array);
+                            $value_array = self::escape_string($value_array);
                             $clean_values = $value_array;
                         }
 

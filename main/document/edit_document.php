@@ -521,14 +521,15 @@ if ($owner_id == api_get_user_id() ||
 			$str_info .= $info_value.'<br/>';
 		}
 		$create_certificate = get_lang('CreateCertificateWithTags');
-		Display::display_normal_message(
-			$create_certificate.': <br /><br />'.$str_info,
-			false
-		);
+		Display::addFlash(Display::return_message(
+		    $create_certificate.': <br /><br />'.$str_info,
+            'normal',
+            false
+        ));
 	}
 
 	if ($extension == 'svg' && !api_browser_support('svg') && api_get_setting('enabled_support_svg') == 'true') {
-		Display::display_warning_message(get_lang('BrowserDontSupportsSVG'));
+		Display::addFlash(Display::return_message(get_lang('BrowserDontSupportsSVG'), 'warning'));
 	}
     // HTML-editor
     echo '<div class="page-create">

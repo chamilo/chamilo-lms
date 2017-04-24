@@ -21,7 +21,7 @@ $tuser = Database::get_main_table(TABLE_MAIN_USER);
 $tuserfv = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
 $sql = "SELECT user_id, username FROM $tuser ORDER BY user_id";
 $res = Database::query($sql);
-while($row = Database::fetch_array($res)) {
+while ($row = Database::fetch_array($res)) {
   $sql2 = "INSERT INTO $tuserfv (item_id, field_id, value)
            VALUES (".$row['user_id'].", 11,'".$row['username']."')";
   $res2 = Database::query($sql2);

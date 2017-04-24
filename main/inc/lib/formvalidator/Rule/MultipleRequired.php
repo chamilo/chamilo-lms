@@ -27,11 +27,11 @@ class HTML_QuickForm_Rule_MultipleRequired extends HTML_QuickForm_Rule
      */
     function validate($value, $options = null)
     {
-    	if(is_array($value))
+    	if (is_array($value))
     	{
-    		$value = implode(null,$value);
+    		$value = implode(null, $value);
     	}
-        if ((string)$value == '') {
+        if ((string) $value == '') {
             return false;
         }
         return true;

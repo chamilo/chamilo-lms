@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use \ChamiloSession as Session;
+use ChamiloSession as Session;
 
 /**
 * Exercise reminder overview
@@ -17,12 +17,12 @@ $this_section = SECTION_COURSES;
 // notice for unauthorized people.
 api_protect_course_script(true);
 
-if ($debug>0) {
+if ($debug > 0) {
     error_log('Entered exercise_result.php: '.print_r($_POST, 1));
 }
 
 // general parameters passed via POST/GET
-if (empty ($origin)) {
+if (empty($origin)) {
     if (!empty($_REQUEST['origin'])) {
         $origin = Security::remove_XSS($_REQUEST['origin']);
     } else {
@@ -71,19 +71,23 @@ if (empty($objExercise)) {
 if (!$objExercise) {
     //Redirect to the exercise overview
     //Check if the exe_id exists
-    header("Location: overview.php?exerciseId=".$exerciseId);
+    header("Location: overview.php?exerciseId=".$exerciseId.'&'.api_get_cidreq());
     exit;
 }
 
 $time_control = false;
-$clock_expired_time = ExerciseLib::get_session_time_control_key($objExercise->id, $learnpath_id, $learnpath_item_id);
+$clock_expired_time = ExerciseLib::get_session_time_control_key(
+    $objExercise->id,
+    $learnpath_id,
+    $learnpath_item_id
+);
 
 if ($objExercise->expired_time != 0 && !empty($clock_expired_time)) {
     $time_control = true;
 }
 
 if ($time_control) {
-    // Get time left for exipiring time
+    // Get time left for expiring time
     $time_left = api_strtotime($clock_expired_time, 'UTC') - time();
     $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/stylesheet/jquery.epiclock.css');
     $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/renderers/minute/epiclock.minute.css');
@@ -93,11 +97,10 @@ if ($time_control) {
     $htmlHeadXtra[] = $objExercise->show_time_control_js($time_left);
 }
 
-
 if (isset($_SESSION['exe_id'])) {
     $exe_id = intval($_SESSION['exe_id']);
 }
-$exercise_stat_info	= $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
+$exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
 if (!empty($exercise_stat_info['data_tracking'])) {
     $question_list = explode(',', $exercise_stat_info['data_tracking']);
 }
@@ -132,7 +135,6 @@ if ($time_control) {
 }
 
 echo Display::div('', array('id'=>'message'));
-
 echo '<script>
     lp_data = $.param({"learnpath_id": '.$learnpath_id.', "learnpath_item_id" : '.$learnpath_item_id.', "learnpath_item_view_id": '.$learnpath_item_view_id.'});
 
@@ -176,7 +178,6 @@ echo '<script>
 $attempt_list = Event::getAllExerciseEventByExeId($exe_id);
 $remind_list = $exercise_stat_info['questions_to_check'];
 $remind_list = explode(',', $remind_list);
-
 $exercise_result = array();
 
 foreach ($attempt_list as $question_id => $options) {
@@ -225,10 +226,13 @@ foreach ($question_list as $questionId) {
 
     $counter++;
     if ($objExercise->type == ONE_PER_PAGE) {
-       $question_title = Display::url($counter.'. '.cut($objQuestionTmp->selectTitle(), 40), $url);
-       $question_title = $counter.'. '.cut($objQuestionTmp->selectTitle(), 40);
+        $question_title = Display::url(
+            $counter.'. '.cut($objQuestionTmp->selectTitle(), 40),
+            $url
+        );
+        $question_title = $counter.'. '.cut($objQuestionTmp->selectTitle(), 40);
     } else {
-       $question_title = $counter.'. '.cut($objQuestionTmp->selectTitle(), 40);
+        $question_title = $counter.'. '.cut($objQuestionTmp->selectTitle(), 40);
     }
     //Check if the question doesn't have an answer
     if (!in_array($questionId, $exercise_result)) {
@@ -249,7 +253,7 @@ $exercise_actions .= '&nbsp;'.
     Display::url(
         get_lang('ReviewQuestions'),
         'javascript://',
-        array('onclick'=>'review_questions();','class'=>'btn btn-success')
+        array('onclick'=>'review_questions();', 'class'=>'btn btn-success')
     );
 
 echo Display::div('', array('class'=>'clear'));

@@ -59,5 +59,5 @@ $server = new soap_server();
 
 $server->register('import_users_from_file');
 
-$http_request = (isset($HTTP_RAW_POST_DATA)?$HTTP_RAW_POST_DATA:'');
+$http_request = (isset($HTTP_RAW_POST_DATA) ? $HTTP_RAW_POST_DATA : '');
 $server->service($http_request);

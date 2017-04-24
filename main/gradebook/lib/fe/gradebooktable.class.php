@@ -18,20 +18,24 @@ class GradebookTable extends SortableTable
     private $currentcat;
     private $datagen;
     private $evals_links;
-    public $cats;
     private $dataForGraph;
+    public $cats;
     public $exportToPdf;
     public $teacherView;
     public $userId;
     public $studentList;
 
     /**
-     * Constructor
+     * GradebookTable constructor.
      * @param Category $currentcat
      * @param array $cats
      * @param array $evals
      * @param array $links
      * @param null $addparams
+     * @param bool $exportToPdf
+     * @param null $showTeacherView
+     * @param int $userId
+     * @param array $studentList
      */
     public function __construct(
         $currentcat,
@@ -370,8 +374,12 @@ class GradebookTable extends SortableTable
 
                         // Student result
                         $row[] = $value_data;
-                        $totalResultAverageValue = strip_tags($scoredisplay->display_score($totalResult,
-                            SCORE_AVERAGE));
+                        $totalResultAverageValue = strip_tags(
+                            $scoredisplay->display_score(
+                                $totalResult,
+                                SCORE_AVERAGE
+                            )
+                        );
                         $this->dataForGraph['my_result'][] = floatval($totalResultAverageValue);
                         $totalAverageValue = strip_tags($scoredisplay->display_score($totalAverage, SCORE_AVERAGE));
                         $this->dataForGraph['average'][] = floatval($totalAverageValue);
@@ -456,8 +464,8 @@ class GradebookTable extends SortableTable
                             $row[] = $this->build_type_column($item, array('style' => 'padding-left:5px'));
 
                             // Name.
-                            $row[] = $invisibility_span_open."&nbsp;&nbsp;&nbsp;  ".$this->build_name_link($item,
-                                    $type).$invisibility_span_close;
+                            $row[] = $invisibility_span_open."&nbsp;&nbsp;&nbsp;  ".
+                                $this->build_name_link($item, $type).$invisibility_span_close;
 
                             // Description.
                             if ($this->exportToPdf == false) {
@@ -974,7 +982,8 @@ class GradebookTable extends SortableTable
                     .$item->get_name()
                     .'</a>'
                     .($item->is_course() ? ' &nbsp;['.$item->get_course_code().']'.$show_message : '');
-            // evaluation
+                // evaluation
+                //no break because of return
             case 'E':
                 $cat = new Category();
                 $course_id = CourseManager::get_course_by_category($categoryId);
@@ -1013,6 +1022,7 @@ class GradebookTable extends SortableTable
                 } else {
                     return '['.get_lang('Evaluation').']&nbsp;&nbsp;'.$item->get_name().$show_message;
                 }
+                // no break because of return
             case 'L':
                 // link
                 $cat = new Category();
@@ -1045,7 +1055,7 @@ class GradebookTable extends SortableTable
     }
 
     /**
-     * @param $item
+     * @param AbstractLink $item
      * @return null|string
      */
     private function build_edit_column($item)

@@ -852,7 +852,7 @@ class CourseManager
     public static function check_parameter($parameter, $error_message)
     {
         if (empty($parameter)) {
-            Display::display_normal_message($error_message);
+            Display::addFlash(Display::return_message($error_message, 'normal'));
             return false;
         }
         return true;
@@ -3965,24 +3965,21 @@ class CourseManager
 
     /**
      * Retrieves the user defined course categories
-     * @param string $userId
-     * @return array containing all the titles of the user defined courses with the id as key of the array
+     * @param int $userId
+     * @return array
      */
-    public static function get_user_course_categories($userId = '')
+    public static function get_user_course_categories($userId = 0)
     {
-        if ($userId == '') {
-            $realUserId = api_get_user_id();
-        } else {
-            $realUserId = $userId;
-        }
-
-        $output = array();
+        $userId = empty($userId) ? api_get_user_id() : (int) $userId;
         $table_category = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
         $sql = "SELECT * FROM $table_category 
-                WHERE user_id = '".intval($realUserId)."'";
+                WHERE user_id = $userId
+                ORDER BY sort ASC
+                ";
         $result = Database::query($sql);
-        while ($row = Database::fetch_array($result)) {
-            $output[$row['id']] = $row['title'];
+        $output = array();
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
+            $output[$row['id']] = $row;
         }
         return $output;
     }
@@ -4009,13 +4006,12 @@ class CourseManager
 
         $res = Database::query($sql);
 
-        $result = array();
+        $data = array();
         if (Database::num_rows($res) > 0) {
             $data = Database::fetch_assoc($res);
-            $result[] = $data['user_course_cat'];
-            $result[] = $data['title'];
         }
-        return $result;
+
+        return $data;
     }
 
     /**
@@ -6020,9 +6016,11 @@ class CourseManager
     /**
      * Return tab of params to display a course title in the My Courses tab
      * Check visibility, right, and notification icons, and load_dirs option
+     *  // get html course params
+     *   //
      * @param $courseId
      * @param bool $loadDirs
-     * @return array
+     * @return array with keys ['right_actions'] ['teachers'] ['notifications']
      */
     public static function getCourseParamsForDisplay($courseId, $loadDirs = false)
     {
@@ -6052,13 +6050,13 @@ class CourseManager
                     course_rel_user.sort sort, 
                     course_rel_user.user_course_cat user_course_cat
                 FROM
-                $TABLECOURS course,
-                $TABLECOURSUSER course_rel_user, 
-                $TABLE_ACCESS_URL_REL_COURSE url
+                $TABLECOURS course 
+                INNER JOIN $TABLECOURSUSER course_rel_user                
+                ON (course.id = course_rel_user.c_id)
+                INNER JOIN $TABLE_ACCESS_URL_REL_COURSE url
+                ON (url.c_id = course.id)
                 WHERE
                     course.id=".intval($courseId)." AND
-                    course.id = course_rel_user.c_id AND
-                    url.c_id = course.id AND
                     course_rel_user.user_id = ".intval($user_id)."
                     $without_special_courses
                 ";
@@ -6066,7 +6064,7 @@ class CourseManager
         // If multiple URL access mode is enabled, only fetch courses
         // corresponding to the current URL.
         if (api_get_multiple_access_url() && $current_url_id != -1) {
-            $sql .= " AND url.course_code=course.code AND access_url_id=".intval($current_url_id);
+            $sql .= " AND url.c_id = course.id AND access_url_id=".intval($current_url_id);
         }
         // Use user's classification for courses (if any).
         $sql .= " ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC";

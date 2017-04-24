@@ -27,7 +27,7 @@ class SkillVisualizer
     {
         $this->skills   = $skills;
         $this->type     = $type;
-        $this->center_x = intval($offset_x + $this->canvas_x / 2 - $this->block_size / 2);
+        $this->center_x = intval($this->offset_x + $this->canvas_x / 2 - $this->block_size / 2);
     }
 
     function prepare_skill_box($skill, $position, $class)

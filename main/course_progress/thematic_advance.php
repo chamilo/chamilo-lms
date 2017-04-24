@@ -165,7 +165,7 @@ if ($action === 'thematic_advance_add' || $action === 'thematic_advance_edit') {
 
         // set default values
         $default['content'] = isset($thematic_advance_data['content']) ? $thematic_advance_data['content'] : null;
-        $default['duration_in_hours'] = isset($thematic_advance_data['duration']) ? $thematic_advance_data['duration'] : null;
+        $default['duration_in_hours'] = isset($thematic_advance_data['duration']) ? $thematic_advance_data['duration'] : 1;
         if (empty($thematic_advance_data['attendance_id'])) {
             $default['start_date_type'] = 1;
             $default['custom_start_date'] = null;
@@ -188,6 +188,10 @@ if ($action === 'thematic_advance_add' || $action === 'thematic_advance_edit') {
 
     if ($form->validate()) {
         $values = $form->exportValues();
+
+        if (isset($_POST['start_date_by_attendance'])) {
+            $values['start_date_by_attendance'] = $_POST['start_date_by_attendance'];
+        }
 
         $thematic = new Thematic();
         $thematic->set_thematic_advance_attributes(

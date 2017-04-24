@@ -42,7 +42,7 @@ if (empty($sessionId)) {
     $UserIsSubscribedToSession = SessionManager::isUserSubscribedAsStudent($lastSessionId, $user->getId());
 
     if (!empty($lastSessionId) && $UserIsSubscribedToSession) {
-        $urlWithSession = api_get_self() . '?' . http_build_query([
+        $urlWithSession = api_get_self().'?'.http_build_query([
             'session_id' => $lastCourseAccess->getSessionId()
         ]);
 
@@ -116,13 +116,13 @@ if ($currentSession) {
         foreach ($learningPathList->list as $learningPathId => $learningPath) {
             $courseData['stats'][] = [
                 $learningPath['lp_name'],
-                'lp/lp_controller.php?' . http_build_query([
+                'lp/lp_controller.php?'.http_build_query([
                     'action' => 'stats',
                     'cidReq' => $course->getCode(),
                     'id_session' => $currentSession->getId(),
                     'gidReq' => 0,
                     'lp_id' => $learningPathId
-                ]) . api_get_cidreq()
+                ]).api_get_cidreq()
             ];
         }
 

@@ -20,7 +20,7 @@ if ($report) {
         <script>
             $(document).ready(function() {
                 $.ajax({
-                    url: "'. api_get_path(WEB_CODE_PATH) .'inc/ajax/statistics.ajax.php?a=recentlogins",
+                    url: "'. api_get_path(WEB_CODE_PATH).'inc/ajax/statistics.ajax.php?a=recentlogins",
                     type: "POST",
                     success: function(data) {
                         Chart.defaults.global.responsive = true;
@@ -50,10 +50,10 @@ $tools[$strCourse]['report=coursebylanguage'] = get_lang('CountCourseByLanguage'
 // users ...
 $tools[$strUsers]['report=users'] = get_lang('CountUsers');
 $tools[$strUsers]['report=recentlogins'] = get_lang('Logins');
-$tools[$strUsers]['report=logins&amp;type=month'] = get_lang('Logins') . ' (' . get_lang('PeriodMonth') . ')';
-$tools[$strUsers]['report=logins&amp;type=day'] = get_lang('Logins') . ' (' . get_lang('PeriodDay') . ')';
-$tools[$strUsers]['report=logins&amp;type=hour'] = get_lang('Logins') . ' (' . get_lang('PeriodHour') . ')';
-$tools[$strUsers]['report=pictures'] = get_lang('CountUsers') . ' (' . get_lang('UserPicture') . ')';
+$tools[$strUsers]['report=logins&amp;type=month'] = get_lang('Logins').' ('.get_lang('PeriodMonth').')';
+$tools[$strUsers]['report=logins&amp;type=day'] = get_lang('Logins').' ('.get_lang('PeriodDay').')';
+$tools[$strUsers]['report=logins&amp;type=hour'] = get_lang('Logins').' ('.get_lang('PeriodHour').')';
+$tools[$strUsers]['report=pictures'] = get_lang('CountUsers').' ('.get_lang('UserPicture').')';
 $tools[$strUsers]['report=no_login_users'] = get_lang('StatsUsersDidNotLoginInLastPeriods');
 $tools[$strUsers]['report=zombies'] = get_lang('Zombies');
 
@@ -68,10 +68,10 @@ $tools[$strSocial]['report=friends'] = get_lang('CountFriends');
 echo '<table><tr>';
 foreach ($tools as $section => $items) {
     echo '<td style="vertical-align:top;">';
-    echo '<h3>' . $section . '</h3>';
+    echo '<h3>'.$section.'</h3>';
     echo '<ul>';
     foreach ($items as $key => $value) {
-        echo '<li><a href="index.php?' . $key . '">' . $value . '</a></li>';
+        echo '<li><a href="index.php?'.$key.'">'.$value.'</a></li>';
     }
     echo '</ul>';
     echo '</td>';
@@ -79,7 +79,7 @@ foreach ($tools as $section => $items) {
 echo '</tr></table>';
 
 $course_categories = Statistics::getCourseCategories();
-echo '<br/><br/>';//@todo: spaces between elements should be handled in the css, br should be removed if only there for presentation
+echo '<br/><br/>'; //@todo: spaces between elements should be handled in the css, br should be removed if only there for presentation
 
 switch ($report) {
     case 'courses':
@@ -121,7 +121,7 @@ switch ($report) {
         Statistics::printStats(get_lang('Students'), $students);
         break;
     case 'recentlogins':
-        echo '<h2>'. sprintf(get_lang('LastXDays'), '15') . '</h2>';
+        echo '<h2>'.sprintf(get_lang('LastXDays'), '15').'</h2>';
         echo '<canvas class="col-md-12" id="canvas" height="100px" style="margin-bottom: 20px"></canvas>';
         Statistics::printRecentLoginStats();
         Statistics::printRecentLoginStats(true);

@@ -72,7 +72,7 @@ class GlobalMultipleAnswer extends Question
         /* V�rification : Cr�action d'au moins une r�ponse */
         if ($nb_answers < 1) {
             $nb_answers = 1;
-            Display::display_normal_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
+            Display::addFlash(Display::return_message(get_lang('YouHaveToCreateAtLeastOneAnswer'), 'normal'));
         }
 
         //D�but affichage score global dans la modification d'une question
@@ -101,11 +101,22 @@ class GlobalMultipleAnswer extends Question
 
             $renderer = & $form->defaultRenderer();
 
-            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'correct['.$i.']');
-            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'counter['.$i.']');
-            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'answer['.$i.']');
-            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'comment['.$i.']');
-            //$renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'weighting['.$i.']');
+            $renderer->setElementTemplate(
+                '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
+                'correct['.$i.']'
+            );
+            $renderer->setElementTemplate(
+                '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
+                'counter['.$i.']'
+            );
+            $renderer->setElementTemplate(
+                '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
+                'answer['.$i.']'
+            );
+            $renderer->setElementTemplate(
+                '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
+                'comment['.$i.']'
+            );
 
             $answer_number = $form->addElement(
                 'text',

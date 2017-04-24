@@ -11,39 +11,49 @@ require_once __DIR__.'/cm_webservice.php';
  *
  * @author marcosousa
  */
-
-class WSCMUser extends WSCM {
+class WSCMUser extends WSCM
+{
 
     public function find_id_user($username, $password, $name)
     {
-         if ($this->verifyUserPass($username, $password) == "valid") {
+        if ($this->verifyUserPass($username, $password) == "valid") {
             $listResult = "#";
 
-            $listArrayResult = Array();
-            $listArray = Array();
+            $listArrayResult = [];
+            $listArray = [];
 
-            $list = $this->get_user_list_like_start(array('firstname'=>$name), array('firstname'));
-             foreach ($list as $userData) {
-                 $listArray[] = $userData['user_id'];
-             }
-
-            $list = $this->get_user_list_like_start(array('lastname'=>$name), array('firstname'));
-             foreach ($list as $userData) {
-                 $listArray[] = $userData['user_id'];
-             }
-
-            $list = $this->get_user_list_like_start(array('email'=>$name), array('firstname'));
+            $list = $this->get_user_list_like_start(
+                array('firstname' => $name),
+                array('firstname')
+            );
             foreach ($list as $userData) {
                 $listArray[] = $userData['user_id'];
             }
 
-                $listArrayResult = array_unique($listArray);
+            $list = $this->get_user_list_like_start(
+                array('lastname' => $name),
+                array('firstname')
+            );
+            foreach ($list as $userData) {
+                $listArray[] = $userData['user_id'];
+            }
+
+            $list = $this->get_user_list_like_start(
+                array('email' => $name),
+                array('firstname')
+            );
+            foreach ($list as $userData) {
+                $listArray[] = $userData['user_id'];
+            }
+
+            $listArrayResult = array_unique($listArray);
             foreach ($listArrayResult as $result) {
                 $listResult .= $result."#";
             }
 
             return $listResult;
         }
+
         return "0";
     }
 
@@ -78,7 +88,7 @@ class WSCMUser extends WSCM {
                 case 'bothlf' :
                     return $userInfo['lastname']." ".$userInfo['firstname'];
                     break;
-                default :
+                default:
                     return $userInfo['firstname'];
             }
 
@@ -97,9 +107,9 @@ class WSCMUser extends WSCM {
             $count_is_true = SocialManager::send_invitation_friend($user_id,$userfriend_id, $message_title, $content_message);
 
             if ($count_is_true) {
-                return Display::display_normal_message(api_htmlentities(get_lang('InvitationHasBeenSent'), ENT_QUOTES,$charset),false);
+                return Display::return_message(api_htmlentities(get_lang('InvitationHasBeenSent'), ENT_QUOTES, $charset), 'normal', false);
             } else {
-                return Display::display_error_message(api_htmlentities(get_lang('YouAlreadySentAnInvitation'), ENT_QUOTES,$charset),false);
+                return Display::return_message(api_htmlentities(get_lang('YouAlreadySentAnInvitation'), ENT_QUOTES, $charset), 'error', false);
             }
         }
         return get_lang('InvalidId');
@@ -140,10 +150,10 @@ class WSCMUser extends WSCM {
      *@todo Use the UserManager class
      * @todo security filter order by
     */
-    private static function get_user_list_like_start($conditions = array(), $order_by = array())
+    private static function get_user_list_like_start($conditions = [], $order_by = [])
     {
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
-        $return_array = array();
+        $return_array = [];
         $sql_query = "SELECT * FROM $user_table";
         if (count($conditions) > 0) {
             $sql_query .= ' WHERE ';

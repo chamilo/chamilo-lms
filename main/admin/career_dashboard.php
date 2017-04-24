@@ -29,7 +29,7 @@ $interbreadcrumb[] = array(
 
 Display :: display_header(null);
 
-$form = new FormValidator('filter_form','GET', api_get_self());
+$form = new FormValidator('filter_form', 'GET', api_get_self());
 
 $career = new Career();
 
@@ -60,11 +60,11 @@ $form->addButtonSearch(get_lang('Filter'));
 // action links
 echo '<div class="actions" style="margin-bottom:20px">';
     echo  '<a href="../admin/index.php">'.
-            Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'),'',ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'), '', ICON_SIZE_MEDIUM).'</a>';
     echo '<a href="careers.php">'.
-            Display::return_icon('career.png',get_lang('Careers'),'',ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('career.png', get_lang('Careers'), '', ICON_SIZE_MEDIUM).'</a>';
     echo '<a href="promotions.php">'.
-            Display::return_icon('promotion.png',get_lang('Promotions'),'',ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('promotion.png', get_lang('Promotions'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 $form->display();
@@ -124,22 +124,22 @@ if (!empty($career_array)) {
     foreach ($career_array as $career_id => $data) {
         $career = $data['name'];
         $promotions = $data['promotions'];
-        $career = Display::url($career, 'careers.php?action=edit&id=' . $career_id);
+        $career = Display::url($career, 'careers.php?action=edit&id='.$career_id);
         $career = Display::tag('h4', $career);
-        echo '<tr><td style="background-color:#ECF0F1" colspan="3">' . $career . '</td></tr>';
+        echo '<tr><td style="background-color:#ECF0F1" colspan="3">'.$career.'</td></tr>';
         if (!empty($promotions)) {
             foreach ($promotions as $promotion_id => $promotion) {
                 $promotion_name = $promotion['name'];
-                $promotion_url = Display::url($promotion_name, 'promotions.php?action=edit&id=' . $promotion_id);
+                $promotion_url = Display::url($promotion_name, 'promotions.php?action=edit&id='.$promotion_id);
                 $sessions = $promotion['sessions'];
                 $count = count($promotion['sessions']);
                 $rowspan = '';
                 if (!empty($count)) {
-                    $rowspan = 'rowspan="' . $count . '"';
+                    $rowspan = 'rowspan="'.$count.'"';
                 }
 
                 echo '<tr style="border-bottom:1px solid #ccc;">'.
-                    '<td ' . $rowspan . ' style="border-right:1px solid #aaa;">'.
+                    '<td '.$rowspan.' style="border-right:1px solid #aaa;">'.
                     Display::tag('h5', $promotion_url).
                     '</td>';
 
@@ -167,7 +167,7 @@ if (!empty($career_array)) {
                                 echo '<li>';
                                 $url = Display::url(
                                     $course['title'],
-                                    api_get_path(WEB_COURSE_PATH) . $course['directory'] . '/index.php?id_session=' . $session['data']['id']
+                                    api_get_path(WEB_COURSE_PATH).$course['directory'].'/index.php?id_session='.$session['data']['id']
                                 );
                                 echo $url;
                                 echo '</li>';

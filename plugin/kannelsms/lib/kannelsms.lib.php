@@ -75,14 +75,13 @@ class Kannelsms implements SmsPluginLibraryInterface
         $trimmedKey = trim(CONFIG_SECURITY_API_KEY);
         if (!empty($trimmedKey)) {
             $message = array(
-                "to" => array_key_exists("mobilePhoneNumber",$additionalParameters) ?
-                    $additionalParameters['mobilePhoneNumber'] :
-                    $this->getMobilePhoneNumberById($additionalParameters['userId']),
+                "to" => array_key_exists("mobilePhoneNumber", $additionalParameters) ?
+                    $additionalParameters['mobilePhoneNumber'] : $this->getMobilePhoneNumberById($additionalParameters['userId']),
                 "message" => $this->getSms($additionalParameters)
             );
 
             if (!empty($message['message'])) {
-                if(extension_loaded('curl')) {
+                if (extension_loaded('curl')) {
                     $url = $this->hostAddress.'?username='.
                         $this->username.'&password='.$this->password.'&from='.
                         $this->from.'&to='.$message['to'].'&msg='.urlencode($message['message']);

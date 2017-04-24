@@ -98,7 +98,7 @@ if ($form->validate()) {
     Display::display_header($nameTools);
 
     echo '<div class="actions">';
-    echo '<a href="exercise.php?show=test">'.Display :: return_icon('back.png', get_lang('BackToExercisesList'),'',ICON_SIZE_MEDIUM).'</a>';
+    echo '<a href="exercise.php?show=test">'.Display::return_icon('back.png', get_lang('BackToExercisesList'),'',ICON_SIZE_MEDIUM).'</a>';
     echo '</div>';
 
     // displaying the form

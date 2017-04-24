@@ -126,7 +126,7 @@ if (isset($_REQUEST['comments']) &&
     $_REQUEST['comments'] == 'update' &&
     ($is_allowedToEdit || $is_tutor || $allowCoachFeedbackExercises)
 ) {
-    //filtered by post-condition
+    // Filtered by post-condition
     $id = intval($_GET['exeid']);
     $track_exercise_info = ExerciseLib::get_exercise_track_exercise_info($id);
 
@@ -140,7 +140,6 @@ if (isset($_REQUEST['comments']) &&
     $lp_item_view_id = $track_exercise_info['orig_lp_item_view_id'];
     $exerciseId = $track_exercise_info['exe_exo_id'];
     $course_info = api_get_course_info();
-
     $url = api_get_path(WEB_CODE_PATH).'exercise/result.php?id='.$track_exercise_info['exe_id'].'&'.api_get_cidreq().'&show_headers=1&id_session='.$session_id;
 
     $my_post_info = array();
@@ -228,7 +227,7 @@ if (isset($_REQUEST['comments']) &&
             Display::addFlash(
                 Display::return_message(get_lang('MessageSent'))
             );
-            header('Location: ' . api_get_self().'?'.api_get_cidreq().'&exerciseId='.$exerciseId);
+            header('Location: '.api_get_self().'?'.api_get_cidreq().'&exerciseId='.$exerciseId);
             exit;
         }
     }
@@ -242,7 +241,7 @@ if (isset($_REQUEST['comments']) &&
         Database::query($sql);
         if ($origin == 'tracking_course') {
             //Redirect to the course detail in lp
-            header('location: '.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?course='.Security :: remove_XSS($_GET['course']));
+            header('location: '.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?course='.Security::remove_XSS($_GET['course']));
             exit;
         } else {
             // Redirect to the reporting
@@ -258,9 +257,9 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
     if (api_is_platform_admin() || api_is_course_admin() ||
         api_is_course_tutor() || api_is_course_coach()
     ) {
-        $actions .= '<a href="admin.php?exerciseId='.intval($_GET['exerciseId']).'">'.Display :: return_icon('back.png', get_lang('GoBackToQuestionList'), '', ICON_SIZE_MEDIUM).'</a>';
-        $actions .='<a href="live_stats.php?'.api_get_cidreq().'&exerciseId='.$exercise_id.'">'.Display :: return_icon('activity_monitor.png', get_lang('LiveResults'), '', ICON_SIZE_MEDIUM).'</a>';
-        $actions .='<a href="stats.php?'.api_get_cidreq().'&exerciseId='.$exercise_id.'">'.Display :: return_icon('statistics.png', get_lang('ReportByQuestion'), '', ICON_SIZE_MEDIUM).'</a>';
+        $actions .= '<a href="admin.php?exerciseId='.intval($_GET['exerciseId']).'">'.Display::return_icon('back.png', get_lang('GoBackToQuestionList'), '', ICON_SIZE_MEDIUM).'</a>';
+        $actions .= '<a href="live_stats.php?'.api_get_cidreq().'&exerciseId='.$exercise_id.'">'.Display::return_icon('activity_monitor.png', get_lang('LiveResults'), '', ICON_SIZE_MEDIUM).'</a>';
+        $actions .= '<a href="stats.php?'.api_get_cidreq().'&exerciseId='.$exercise_id.'">'.Display::return_icon('statistics.png', get_lang('ReportByQuestion'), '', ICON_SIZE_MEDIUM).'</a>';
 
         $actions .= '<a id="export_opener" href="'.api_get_self().'?export_report=1&exerciseId='.intval($_GET['exerciseId']).'" >'.
         Display::return_icon('save.png', get_lang('Export'), '', ICON_SIZE_MEDIUM).'</a>';
@@ -281,7 +280,9 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
         );
     }
 } else {
-    $actions .= '<a href="exercise.php">'.Display :: return_icon('back.png', get_lang('GoBackToQuestionList'), '', ICON_SIZE_MEDIUM).'</a>';
+    $actions .= '<a href="exercise.php">'.
+        Display::return_icon('back.png', get_lang('GoBackToQuestionList'), '', ICON_SIZE_MEDIUM).
+    '</a>';
 }
 
 //Deleting an attempt
@@ -326,11 +327,12 @@ if (($is_allowedToEdit || $is_tutor || api_is_coach()) &&
     Database::query($sql);
 }
 
-
 Display :: display_header($nameTools);
 
 // Clean all results for this test before the selected date
-if (($is_allowedToEdit || $is_tutor || api_is_coach()) && isset($_GET['delete_before_date']) && $locked == false) {
+if (($is_allowedToEdit || $is_tutor || api_is_coach()) &&
+    isset($_GET['delete_before_date']) && $locked == false
+) {
     // ask for the date
     $check = Security::check_token('get');
     if ($check) {
@@ -399,15 +401,14 @@ if ($is_allowedToEdit) {
 }
 
 echo $actions;
-
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_exercise_results&exerciseId='.$exercise_id.'&filter_by_user='.$filter_user.'&'.api_get_cidreq();
-
 $action_links = '';
-
-//Generating group list
-
+// Generating group list
 $group_list = GroupManager::get_group_list();
-$group_parameters = array('group_all:'.get_lang('All'), 'group_none:'.get_lang('None'));
+$group_parameters = array(
+    'group_all:'.get_lang('All'),
+    'group_none:'.get_lang('None'),
+);
 
 foreach ($group_list as $group) {
     $group_parameters[] = $group['id'].':'.$group['name'];

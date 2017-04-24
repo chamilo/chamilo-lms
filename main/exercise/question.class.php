@@ -1111,7 +1111,7 @@ abstract class Question
                 $se_ref = Database::fetch_array($res);
                 $se_doc = $di->get_document((int) $se_ref['search_did']);
                 if ($se_doc !== false) {
-                    if (($se_doc_data = $di->get_document_data($se_doc)) !== FALSE) {
+                    if (($se_doc_data = $di->get_document_data($se_doc)) !== false) {
                         $se_doc_data = unserialize($se_doc_data);
                         if (
                             isset($se_doc_data[SE_DATA]['type']) &&
@@ -1600,9 +1600,9 @@ abstract class Question
             // Categories
             $tabCat = TestCategory::getCategoriesIdAndName();
             $form->addElement('select', 'questionCategory', get_lang('Category'), $tabCat);
-            
+
             global $text;
-            
+
             switch ($this->type) {
                 case UNIQUE_ANSWER:
                     $buttonGroup = array();

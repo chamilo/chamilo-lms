@@ -33,17 +33,17 @@ $message_information = get_lang('AttendanceCalendarDescription');
 if (!empty($message_information)) {
     $message = '<strong>'.get_lang('Information').'</strong><br />';
     $message .= $message_information;
-    Display::display_normal_message($message, false);
+    Display::addFlash(Display::return_message($message, 'normal', false));
 }
 
 if (isset($error_repeat_date) && $error_repeat_date) {
     $message = get_lang('EndDateMustBeMoreThanStartDate');
-    Display::display_error_message($message, false);
+    Display::addFlash(Display::return_message($message, 'error', false));
 }
 
 if (isset($error_checkdate) && $error_checkdate) {
     $message = get_lang('InvalidDate');
-    Display::display_error_message($message, false);
+    Display::addFlash(Display::return_message($message, 'error', false));
 }
 
 if (isset($action) && $action == 'calendar_add') {

@@ -37,6 +37,7 @@ class aiccResource
                                 break;
                             case 'title':
                                 $this->title = $value;
+                                // no break - @todo check this, not sure the intention is to have description=title
                             case 'description':
                                 $this->description = $value;
                                 break;

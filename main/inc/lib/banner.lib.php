@@ -49,69 +49,76 @@ function get_tabs($courseId = null)
     $navigation['mycourses']['icon'] = 'my-course.png';
 
     // My Profile
-    $navigation['myprofile']['url'] = api_get_path(WEB_CODE_PATH).'auth/profile.php'.(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '' );
+    $navigation['myprofile']['url'] = api_get_path(WEB_CODE_PATH)
+        .'auth/profile.php'
+        .(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '');
     $navigation['myprofile']['title'] = get_lang('ModifyProfile');
     $navigation['myprofile']['key'] = 'profile';
     $navigation['myprofile']['icon'] = 'profile.png';
-	// Link to my agenda
+    // Link to my agenda
     $navigation['myagenda']['url'] = api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?type=personal';
     $navigation['myagenda']['title'] = get_lang('MyAgenda');
     $navigation['myagenda']['key'] = 'agenda';
     $navigation['myagenda']['icon'] = 'agenda.png';
 
-	// Gradebook
-	if (api_get_setting('gradebook_enable') == 'true') {
-        $navigation['mygradebook']['url'] = api_get_path(WEB_CODE_PATH).'gradebook/gradebook.php'.(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '' );
+    // Gradebook
+    if (api_get_setting('gradebook_enable') == 'true') {
+        $navigation['mygradebook']['url'] = api_get_path(WEB_CODE_PATH)
+            .'gradebook/gradebook.php'
+            .(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '');
         $navigation['mygradebook']['title'] = get_lang('MyGradebook');
         $navigation['mygradebook']['key'] = 'gradebook';
         $navigation['mygradebook']['icon'] = 'gradebook.png';
-	}
+    }
 
-	// Reporting
-	if (api_is_teacher() || api_is_drh() || api_is_session_admin()) {
+    // Reporting
+    if (api_is_teacher() || api_is_drh() || api_is_session_admin()) {
         // Link to my space
-        $navigation['session_my_space']['url'] = api_get_path(WEB_CODE_PATH).'mySpace/'.(api_is_drh()?'session.php':'');
-        $navigation['session_my_space']['title'] = get_lang('MySpace');
-        $navigation['session_my_space']['key'] = 'my-space';
-        $navigation['session_my_space']['icon'] = 'my-space.png';
-    } else if (api_is_student_boss()) {
-        $navigation['session_my_space']['url'] = api_get_path(WEB_CODE_PATH) . 'mySpace/student.php';
+        $navigation['session_my_space']['url'] = api_get_path(WEB_CODE_PATH).'mySpace/'
+            .(api_is_drh() ? 'session.php' : '');
         $navigation['session_my_space']['title'] = get_lang('MySpace');
         $navigation['session_my_space']['key'] = 'my-space';
         $navigation['session_my_space']['icon'] = 'my-space.png';
     } else {
-        $navigation['session_my_progress']['url'] = api_get_path(WEB_CODE_PATH);
+        if (api_is_student_boss()) {
+            $navigation['session_my_space']['url'] = api_get_path(WEB_CODE_PATH).'mySpace/student.php';
+            $navigation['session_my_space']['title'] = get_lang('MySpace');
+            $navigation['session_my_space']['key'] = 'my-space';
+            $navigation['session_my_space']['icon'] = 'my-space.png';
+        } else {
+            $navigation['session_my_progress']['url'] = api_get_path(WEB_CODE_PATH);
             // Link to my progress
-        switch (api_get_setting('gamification_mode')) {
-            case 1:
-                $navigation['session_my_progress']['url'] .= 'gamification/my_progress.php';
-                break;
-            default:
-                $navigation['session_my_progress']['url'] .= 'auth/my_progress.php';
-        }
+            switch (api_get_setting('gamification_mode')) {
+                case 1:
+                    $navigation['session_my_progress']['url'] .= 'gamification/my_progress.php';
+                    break;
+                default:
+                    $navigation['session_my_progress']['url'] .= 'auth/my_progress.php';
+            }
 
-        $navigation['session_my_progress']['title'] = get_lang('MyProgress');
-        $navigation['session_my_progress']['key'] = 'my-progress';
-        $navigation['session_my_progress']['icon'] = 'my-progress.png';
+            $navigation['session_my_progress']['title'] = get_lang('MyProgress');
+            $navigation['session_my_progress']['key'] = 'my-progress';
+            $navigation['session_my_progress']['icon'] = 'my-progress.png';
+        }
     }
 
-	// Social
-	if (api_get_setting('allow_social_tool')=='true') {
+    // Social
+    if (api_get_setting('allow_social_tool') == 'true') {
         $navigation['social']['url'] = api_get_path(WEB_CODE_PATH).'social/home.php';
         $navigation['social']['title'] = get_lang('SocialNetwork');
         $navigation['social']['key'] = 'social-network';
         $navigation['social']['icon'] = 'social-network.png';
-	}
+    }
 
-	// Dashboard
-	if (api_is_platform_admin() || api_is_drh() || api_is_session_admin()) {
+    // Dashboard
+    if (api_is_platform_admin() || api_is_drh() || api_is_session_admin()) {
         $navigation['dashboard']['url'] = api_get_path(WEB_CODE_PATH).'dashboard/index.php';
         $navigation['dashboard']['title'] = get_lang('Dashboard');
         $navigation['dashboard']['key'] = 'dashboard';
         $navigation['dashboard']['icon'] = 'dashboard.png';
-	}
+    }
 
-	// Reports
+    // Reports
     /*
 	if (api_is_platform_admin() || api_is_drh() || api_is_session_admin()) {
         $navigation['reports']['url'] = api_get_path(WEB_CODE_PATH).'reports/index.php';
@@ -134,15 +141,15 @@ function get_tabs($courseId = null)
     }
     // End Custom Tabs
 
-	// Platform administration
-	if (api_is_platform_admin(true)) {
+    // Platform administration
+    if (api_is_platform_admin(true)) {
         $navigation['platform_admin']['url'] = api_get_path(WEB_CODE_PATH).'admin/';
         $navigation['platform_admin']['title'] = get_lang('PlatformAdmin');
         $navigation['platform_admin']['key'] = 'admin';
         $navigation['platform_admin']['icon'] = 'admin.png';
-	}
+    }
 
-	return $navigation;
+    return $navigation;
 }
 
 /**
@@ -194,7 +201,7 @@ function returnNotificationMenu()
     $_course = api_get_course_info();
     $course_id = 0;
     if (!empty($_course)) {
-        $course_id  = $_course['code'];
+        $course_id = $_course['code'];
     }
 
     $user_id = api_get_user_id();
@@ -213,23 +220,32 @@ function returnNotificationMenu()
             (api_get_setting('showonline', 'world') == 'true' && !$user_id) ||
             (api_get_setting('showonline', 'users') == 'true' && $user_id)
         ) {
-            $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonline.php" target="_self" title="'.get_lang('UsersOnline').'" >'.
-                        Display::return_icon('user.png', get_lang('UsersOnline'), array(), ICON_SIZE_TINY).' '.$number.'</a></li>';
+            $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonline.php" target="_self" title="'
+                .get_lang('UsersOnline').'" >'
+                .Display::return_icon('user.png', get_lang('UsersOnline'), array(), ICON_SIZE_TINY)
+                .' '.$number.'</a></li>';
         }
 
         // Display the who's online for the course
-        if ($number_online_in_course &&
-            (is_array($_course) &&
-               api_get_setting('showonline', 'course') == 'true' && isset($_course['sysCode'])
+        if (
+            $number_online_in_course &&
+            (
+                is_array($_course) &&
+                api_get_setting('showonline', 'course') == 'true' && isset($_course['sysCode'])
             )
         ) {
-            $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonline.php?cidReq='.$_course['sysCode'].'" target="_self">'.
-                    Display::return_icon('course.png', get_lang('UsersOnline').' '.get_lang('InThisCourse'), array(), ICON_SIZE_TINY).' '.$number_online_in_course.' </a></li>';
+            $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonline.php?cidReq='.$_course['sysCode']
+                .'" target="_self">'
+                .Display::return_icon('course.png', get_lang('UsersOnline').' '.get_lang('InThisCourse'), array(), ICON_SIZE_TINY)
+                .' '.$number_online_in_course.' </a></li>';
         }
 
         if (isset($user_id) && api_get_session_id() != 0) {
-            $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonlinesession.php?id_coach='.$user_id.'&amp;referer='.urlencode($_SERVER['REQUEST_URI']).'" target="_self">'.
-                Display::return_icon('session.png', get_lang('UsersConnectedToMySessions'), array(), ICON_SIZE_TINY).' </a></li>';
+            $html .= '<li><a href="'.api_get_path(WEB_PATH)
+                .'whoisonlinesession.php?id_coach='.$user_id.'&amp;referer='.urlencode($_SERVER['REQUEST_URI'])
+                .'" target="_self">'
+                .Display::return_icon('session.png', get_lang('UsersConnectedToMySessions'), array(), ICON_SIZE_TINY)
+                .'</a></li>';
         }
     }
 
@@ -332,10 +348,13 @@ function return_navigation_array()
             }
         }
 
-		// Reports
+        // Reports
         if (!empty($possible_tabs['reports'])) {
             if (api_get_setting('show_tabs', 'reports') == 'true') {
-                if ((api_is_platform_admin() || api_is_drh() || api_is_session_admin()) && Rights::hasRight('show_tabs:reports')) {
+                if (
+                    (api_is_platform_admin() || api_is_drh() || api_is_session_admin())
+                        && Rights::hasRight('show_tabs:reports')
+                ) {
                     $navigation['reports'] = $possible_tabs['reports'];
                 }
             } else {
@@ -351,11 +370,13 @@ function return_navigation_array()
                 if (api_get_setting($tab['variable'], $tab['subkey']) == 'true' &&
                     isset($possible_tabs[$tab['subkey']])
                 ) {
-                    $possible_tabs[$tab['subkey']]['url'] = api_get_path(WEB_PATH).$possible_tabs[$tab['subkey']]['url'];
+                    $possible_tabs[$tab['subkey']]['url'] = api_get_path(WEB_PATH)
+                        .$possible_tabs[$tab['subkey']]['url'];
                     $navigation[$tab['subkey']] = $possible_tabs[$tab['subkey']];
                 } else {
                     if (isset($possible_tabs[$tab['subkey']])) {
-                        $possible_tabs[$tab['subkey']]['url'] = api_get_path(WEB_PATH).$possible_tabs[$tab['subkey']]['url'];
+                        $possible_tabs[$tab['subkey']]['url'] = api_get_path(WEB_PATH)
+                            .$possible_tabs[$tab['subkey']]['url'];
                         $menu_navigation[$tab['subkey']] = $possible_tabs[$tab['subkey']];
                     }
                 }
@@ -399,7 +420,7 @@ function menuArray()
             $cleanUrl = api_replace_dangerous_char($url);
             $cleanUrl = str_replace('/', '-', $cleanUrl);
             $cleanUrl .= '/';
-            $homepath  = api_get_path(SYS_HOME_PATH) . $cleanUrl; //homep for Home Path
+            $homepath = api_get_path(SYS_HOME_PATH).$cleanUrl; //homep for Home Path
 
             //we create the new dir for the new sites
             if (!is_dir($homepath)) {
@@ -415,9 +436,9 @@ function menuArray()
     $pageContent = '';
     // Get the extra page content, containing the links to add to the tabs
     if (is_file($homepath.$menuTabs.'_'.$lang.$ext) && is_readable($homepath.$menuTabs.'_'.$lang.$ext)) {
-        $pageContent = @(string) file_get_contents($homepath . $menuTabs . '_' . $lang . $ext);
+        $pageContent = @(string)file_get_contents($homepath.$menuTabs.'_'.$lang.$ext);
     } elseif (is_file($homepath.$menuTabs.$lang.$ext) && is_readable($homepath.$menuTabs.$lang.$ext)) {
-        $pageContent = @(string) file_get_contents($homepath . $menuTabs . $lang . $ext);
+        $pageContent = @(string)file_get_contents($homepath.$menuTabs.$lang.$ext);
     }
     // Sanitize page content
     $pageContent = api_to_system_encoding($pageContent, api_detect_encoding(strip_tags($pageContent)));
@@ -427,22 +448,31 @@ function menuArray()
     //  that are only for users already logged in
     $openMenuTabsLoggedIn = '';
     if (api_get_user_id() && !api_is_anonymous()) {
-        if (is_file($homepath . $menuTabsLoggedIn . '_' . $lang . $ext) && is_readable($homepath . $menuTabsLoggedIn . '_' . $lang . $ext)) {
-            $pageContent = @(string) file_get_contents($homepath . $menuTabsLoggedIn . '_' . $lang . $ext);
+        if (is_file($homepath.$menuTabsLoggedIn.'_'.$lang.$ext) && is_readable(
+                $homepath.$menuTabsLoggedIn.'_'.$lang.$ext
+            )
+        ) {
+            $pageContent = @(string)file_get_contents($homepath.$menuTabsLoggedIn.'_'.$lang.$ext);
             $pageContent = str_replace('::private', '', $pageContent);
-        } elseif (is_file($homepath . $menuTabsLoggedIn . $lang . $ext) && is_readable($homepath . $menuTabsLoggedIn . $lang . $ext)) {
-            $pageContent = @(string) file_get_contents($homepath . $menuTabsLoggedIn . $lang . $ext);
+        } elseif (is_file($homepath.$menuTabsLoggedIn.$lang.$ext) && is_readable(
+                $homepath.$menuTabsLoggedIn.$lang.$ext
+            )
+        ) {
+            $pageContent = @(string)file_get_contents($homepath.$menuTabsLoggedIn.$lang.$ext);
             $pageContent = str_replace('::private', '', $pageContent);
         }
 
         $pageContent = api_to_system_encoding($pageContent, api_detect_encoding(strip_tags($pageContent)));
-        $openMenuTabsLoggedIn = str_replace('{rel_path}',api_get_path(REL_PATH), $pageContent);
-        $openMenuTabsLoggedIn = api_to_system_encoding($openMenuTabsLoggedIn, api_detect_encoding(strip_tags($openMenuTabsLoggedIn)));
+        $openMenuTabsLoggedIn = str_replace('{rel_path}', api_get_path(REL_PATH), $pageContent);
+        $openMenuTabsLoggedIn = api_to_system_encoding(
+            $openMenuTabsLoggedIn,
+            api_detect_encoding(strip_tags($openMenuTabsLoggedIn))
+        );
     }
     if (!empty($open) || !empty($openMenuTabsLoggedIn)) {
         if (strpos($open.$openMenuTabsLoggedIn, 'show_menu') === false) {
             if (api_is_anonymous()) {
-                $mainNavigation['navigation'][SECTION_CAMPUS]  = null;
+                $mainNavigation['navigation'][SECTION_CAMPUS] = null;
             }
         } else {
             $list = explode("\n", api_get_user_id() && !api_is_anonymous() ? $openMenuTabsLoggedIn : $open);
@@ -463,7 +493,7 @@ function menuArray()
                     'url' => $matches[1],
                     'target' => $matches[2],
                     'title' => $matches[3],
-                    'key' => 'page-' . str_replace(' ', '-', strtolower($matches[3]))
+                    'key' => 'page-'.str_replace(' ', '-', strtolower($matches[3])),
                 );
             }
         }
@@ -473,7 +503,7 @@ function menuArray()
         //$pre_lis = '';
         $activeSection = '';
         foreach ($mainNavigation['navigation'] as $section => $navigation_info) {
-            $key = (!empty($navigation_info['key'])?'tab-'.$navigation_info['key']:'');
+            $key = (!empty($navigation_info['key']) ? 'tab-'.$navigation_info['key'] : '');
 
             if (isset($GLOBALS['this_section'])) {
                 $tempSection = $section;
@@ -487,7 +517,7 @@ function menuArray()
                 // loaded
                 if ($GLOBALS['this_section'] == SECTION_CAMPUS) {
                     if (!empty($_GET['include'])) {
-                        $name = str_replace(' ', '-', strtolower($navigation_info['title'])) . '_' . $lang . $ext;
+                        $name = str_replace(' ', '-', strtolower($navigation_info['title'])).'_'.$lang.$ext;
                         if (strtolower($_GET['include']) == $name) {
                             $activeSection = $section;
                         }
@@ -517,14 +547,17 @@ function menuArray()
  */
 function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
 {
-    $session_id = api_get_session_id();
-    $session_name = api_get_session_name($session_id);
+    /** @var \Chamilo\CoreBundle\Entity\Session $session */
+    $session = Database::getManager()
+        ->find('ChamiloCoreBundle:Session', api_get_session_id());
     $_course = api_get_course_info();
     $user_id = api_get_user_id();
     $course_id = 0;
     if (!empty($_course)) {
         $course_id = $_course['real_id'];
     }
+
+    $additonalBlocks = '';
 
     /*  Plugins for banner section */
     $web_course_path = api_get_path(WEB_COURSE_PATH);
@@ -534,39 +567,52 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
 
     // part 1: Course Homepage. If we are in a course then the first breadcrumb is a link to the course homepage
     // hide_course_breadcrumb the parameter has been added to hide the name of the course, that appeared in the default $interbreadcrumb
-    $session_name = cut($session_name, MAX_LENGTH_BREADCRUMB);
-    $my_session_name = is_null($session_name) ? '' : '&nbsp;('.$session_name.')';
+    $my_session_name = $session ? ' ('.cut($session->getName(), MAX_LENGTH_BREADCRUMB).')' : null;
 
     if (!empty($_course) && !isset($_GET['hide_course_breadcrumb'])) {
-        $navigation_item['url'] = $web_course_path . $_course['path'].'/index.php'.(!empty($session_id) ? '?id_session='.$session_id : '');
         $_course['name'] = api_htmlentities($_course['name']);
         $course_title = cut($_course['name'], MAX_LENGTH_BREADCRUMB);
 
         switch (api_get_setting('breadcrumbs_course_homepage')) {
             case 'get_lang':
-                $navigation_item['title'] = Display::return_icon('home.png', get_lang('CourseHomepageLink'), [], ICON_SIZE_TINY);
+                $itemTitle = Display::return_icon('home.png', get_lang('CourseHomepageLink'), [], ICON_SIZE_TINY);
                 break;
             case 'course_code':
-                $navigation_item['title'] =  Display::return_icon('home.png', $_course['official_code'], [], ICON_SIZE_TINY).' '.$_course['official_code'];
+                $itemTitle = Display::return_icon('home.png', $_course['official_code'], [], ICON_SIZE_TINY)
+                    .' '.$_course['official_code'];
                 break;
             case 'session_name_and_course_title':
-                $navigation_item['title'] = Display::return_icon('home.png', $_course['name'].$my_session_name, [], ICON_SIZE_TINY).' '.$course_title.$my_session_name;
-                break;
+                //no break
             default:
-                if (api_get_session_id() != -1 ) {
-                    $navigation_item['title'] = Display::return_icon('home.png', $_course['name'].$my_session_name, [], ICON_SIZE_TINY).' '.$course_title.$my_session_name;
-                } else {
-                    $navigation_item['title'] = Display::return_icon('home.png', $_course['name'], [], ICON_SIZE_TINY).' '.$course_title;
+                $itemTitle = Display::return_icon('home.png', $_course['name'].$my_session_name, [], ICON_SIZE_TINY)
+                    .' '.$course_title.$my_session_name;
+
+                if (
+                    $session && ($session->getDuration() && !api_is_allowed_to_edit())
+                ) {
+                    $daysLeft = SessionManager::getDayLeftInSession(
+                        ['id' => $session->getId(), 'duration' => $session->getDuration()],
+                        $user_id
+                    );
+
+                    $additonalBlocks .= Display::return_message(
+                        sprintf(get_lang('SessionDurationXDaysLeft'), $daysLeft),
+                        'information'
+                    );
                 }
                 break;
         }
+
         /**
          * @todo could be useful adding the My courses in the breadcrumb
-        $navigation_item_my_courses['title'] = get_lang('MyCourses');
-        $navigation_item_my_courses['url'] = api_get_path(WEB_PATH).'user_portal.php';
-        $navigation[] = $navigation_item_my_courses;
-        */
-        $navigation[] = $navigation_item;
+         * $navigation_item_my_courses['title'] = get_lang('MyCourses');
+         * $navigation_item_my_courses['url'] = api_get_path(WEB_PATH).'user_portal.php';
+         * $navigation[] = $navigation_item_my_courses;
+         */
+        $navigation[] = [
+            'url' => $web_course_path.$_course['path'].'/index.php'.($session ? '?id_session='.$session->getId() : ''),
+            'title' => $itemTitle
+        ];
     }
 
     /* part 2: Interbreadcrumbs. If there is an array $interbreadcrumb
@@ -687,42 +733,43 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
         if (!empty($final_navigation)) {
             // $home_link.= '<span class="divider">/</span>';
             if (!empty($home_link)) {
-                $lis.= Display::tag('li', $home_link);
+                $lis .= Display::tag('li', $home_link);
             }
 
             foreach ($final_navigation as $bread) {
                 $bread_check = trim(strip_tags($bread));
                 if (!empty($bread_check)) {
-                    if ($final_navigation_count-1 > $i) {
+                    if ($final_navigation_count - 1 > $i) {
                         $bread .= '';
                     }
-                    $lis.= Display::tag('li', $bread, array('class'=>'active'));
+                    $lis .= Display::tag('li', $bread, array('class' => 'active'));
                     $i++;
                 }
             }
         } else {
             if (!empty($home_link)) {
-                $lis.= Display::tag('li', $home_link);
+                $lis .= Display::tag('li', $home_link);
             }
         }
 
         // View as student/teacher link
         if (!empty($view_as_student_link)) {
-            $html .= Display::tag('div', $view_as_student_link, array('id' => 'view_as_link','class' => 'pull-right'));
+            $html .= Display::tag('div', $view_as_student_link, array('id' => 'view_as_link', 'class' => 'pull-right'));
         }
 
         if (!empty($navigation_right)) {
             foreach ($navigation_right as $item) {
                 $extra_class = isset($item['class']) ? $item['class'] : null;
-                $lis.= Display::tag('li', $item['title'], array('class' => $extra_class.' pull-right'));
+                $lis .= Display::tag('li', $item['title'], array('class' => $extra_class.' pull-right'));
             }
         }
 
         if (!empty($lis)) {
-            $html .= Display::tag('ul', $lis, array('class'=>'breadcrumb'));
+            $html .= Display::tag('ul', $lis, array('class' => 'breadcrumb'));
         }
     }
-    return $html;
+
+    return $html . $additonalBlocks;
 }
 
 /**
@@ -734,7 +781,7 @@ function getOnlineUsersCount()
     $number = 0;
     $cacheAvailable = api_get_configuration_value('apc');
     if ($cacheAvailable === true) {
-        $apcVar = api_get_configuration_value('apc_prefix') . 'my_campus_whoisonline_count_simple';
+        $apcVar = api_get_configuration_value('apc_prefix').'my_campus_whoisonline_count_simple';
         if (apcu_exists($apcVar)) {
             $number = apcu_fetch($apcVar);
         } else {
@@ -750,8 +797,8 @@ function getOnlineUsersCount()
 
 /**
  * Helper function to get the number of users online in a course, using cache if available
- * @param   int     $userId         The user ID
- * @param   array   $_course        The course details
+ * @param   int $userId The user ID
+ * @param   array $_course The course details
  * @return  int     The number of users currently online
  */
 function getOnlineUsersInCourseCount($userId, $_course)
@@ -760,7 +807,7 @@ function getOnlineUsersInCourseCount($userId, $_course)
     $numberOnlineInCourse = 0;
     if (!empty($_course['id'])) {
         if ($cacheAvailable === true) {
-            $apcVar = api_get_configuration_value('apc_prefix') . 'my_campus_whoisonline_count_simple_' . $_course['id'];
+            $apcVar = api_get_configuration_value('apc_prefix').'my_campus_whoisonline_count_simple_'.$_course['id'];
             if (apcu_exists($apcVar)) {
                 $numberOnlineInCourse = apcu_fetch($apcVar);
             } else {

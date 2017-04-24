@@ -4793,7 +4793,7 @@ class UserManager
                         //345600 = 7 days in seconds 63072000= 2 ans
                         // if ($currentTimestamp - $timestamp > 184590 )
                         if ($currentTimestamp - $timestamp > $inactive_time && self::delete_user($student_id)) {
-                            Display::display_normal_message(get_lang('UserDeleted'));
+                            Display::addFlash(Display::return_message(get_lang('UserDeleted'), 'normal'));
                             echo '<p>', 'id', $student_id, ':', $last_login_date, '</p>';
                         }
                     }

@@ -134,7 +134,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 Display::display_header($tool_name);
 
 if (!empty($message)) {
-    Display::display_normal_message($message, false);
+    Display::addFlash(Display::return_message($message, 'normal', false));
 }
 
 echo '<div class="actions">';
@@ -221,7 +221,7 @@ $url_list = UrlManager::get_url_data();
 
 <?php
 if (!empty($errorMsg)) {
-    Display::display_normal_message($errorMsg); //main API
+    Display::addFlash(Display::return_message($errorMsg, 'normal')); //main API
 }
 ?>
 

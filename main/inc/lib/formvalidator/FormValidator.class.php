@@ -896,12 +896,16 @@ EOT;
         $label,
         $required = true,
         $fullPage = false,
-        $config = array(),
+        $config = [],
         $style = false
     ) {
-        $config['rows'] = isset($config['rows']) ? $config['rows'] : 15;
-        $config['cols'] = isset($config['cols']) ? $config['cols'] : 80;
-        $this->addElement('html_editor', $name, $label, $config, $style);
+        $attributes = [];
+        $attributes['rows'] = isset($config['rows']) ? $config['rows'] : 15;
+        $attributes['cols'] = isset($config['cols']) ? $config['cols'] : 80;
+        $attributes['cols-size'] = isset($config['cols-size']) ? $config['cols-size'] : [];
+        $attributes['class'] = isset($config['class']) ? $config['class'] : [];
+
+        $this->addElement('html_editor', $name, $label, $attributes, $config);
         $this->applyFilter($name, 'trim');
         if ($required) {
             $this->addRule($name, get_lang('ThisFieldIsRequired'), 'required');

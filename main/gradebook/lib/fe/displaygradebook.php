@@ -22,9 +22,7 @@ class DisplayGradebook
             if ($page != 'statistics') {
                 $header .= '<a href="'.Security::remove_XSS($_SESSION['gradebook_dest']).'?selectcat='.$selectcat.'&'.api_get_cidreq().'">'.
                     Display::return_icon(('back.png'), get_lang('FolderView'), '', ICON_SIZE_MEDIUM).'</a>';
-                if ($evalobj->get_course_code() == null) {
-
-                } elseif (!$evalobj->has_results()) {
+                if (($evalobj->get_course_code() != null) && !$evalobj->has_results()) {
                     $header .= '<a href="gradebook_add_result.php?'.api_get_cidreq().'&selectcat='.$selectcat.'&selecteval='.$evalobj->get_id().'">
     				' . Display::return_icon('evaluation_rate.png', get_lang('AddResult'), '', ICON_SIZE_MEDIUM).'</a>';
                 }
@@ -99,13 +97,16 @@ class DisplayGradebook
 
         if (!$evalobj->has_results()) {
             $evalinfo .= '<br /><i>'.get_lang('NoResultsInEvaluation').'</i>';
-        } elseif ($scoredisplay->is_custom() && api_get_self() != '/main/gradebook/gradebook_statistics.php') {
+        }
+        /* Code comment without reason
+        elseif ($scoredisplay->is_custom() && api_get_self() != '/main/gradebook/gradebook_statistics.php') {
             if (api_is_allowed_to_edit(null, true)) {
                 if ($page != 'statistics') {
                     //$evalinfo .= '<br /><br /><a href="gradebook_view_result.php?selecteval='.Security::remove_XSS($_GET['selecteval']).'"> '.Display::return_icon(('evaluation_rate.png'),get_lang('ViewResult'),'',ICON_SIZE_MEDIUM) . '</a>';
                 }
             }
         }
+        */
         if ($page != 'statistics') {
             if (api_is_allowed_to_edit(null, true)) {
                 $evalinfo .= '<br /><a href="gradebook_statistics.php?'.api_get_cidreq().'&selecteval='.Security::remove_XSS($_GET['selecteval']).'"> '.
@@ -296,7 +297,7 @@ class DisplayGradebook
                 $scoreinfo .= '<strong>'.sprintf(get_lang('TotalX'), $scorecourse_display.$aditionalButtons).'</strong>';
 
             }
-            Display::display_normal_message($scoreinfo, false);
+            Display::addFlash(Display::return_message($scoreinfo, 'normal', false));
         }
 
         // show navigation tree and buttons?
@@ -332,13 +333,10 @@ class DisplayGradebook
             } else {
                 $header .= '<td></td>';
             }
-            if ($is_course_admin &&
+            if (!($is_course_admin &&
                 $message_resource === false &&
                 isset($_GET['selectcat']) && $_GET['selectcat'] != 0
-            ) {
-            } elseif (!(isset($_GET['studentoverview']))) {
-
-            } else {
+            ) && isset($_GET['studentoverview'])) {
                 $header .= '<td style="vertical-align: top;"><a href="'.api_get_self().'?'.api_get_cidreq().'&studentoverview=&exportpdf=&selectcat='.$catobj->get_id().'" target="_blank">
 							 '.Display::return_icon('pdf.png', get_lang('ExportPDF'), [], ICON_SIZE_MEDIUM).'
 							' . get_lang('ExportPDF').'</a>';
@@ -357,9 +355,7 @@ class DisplayGradebook
                 $actionsLeft .= '<a href="gradebook_add_cat.php?'.api_get_cidreq().'&selectcat='.$catobj->get_id().'">'.
                     Display::return_icon('new_folder.png', get_lang('AddGradebook'), array(), ICON_SIZE_MEDIUM).'</a></td>';
             }
-            if ($selectcat == '0') {
-
-            } else {
+            if ($selectcat != '0') {
                 $my_category = $catobj->shows_all_information_an_category($catobj->get_id());
                 if ($my_api_cidreq == '') {
                     $my_api_cidreq = 'cidReq='.$my_category['course_code'];
@@ -452,7 +448,7 @@ class DisplayGradebook
             $msg = $weight.' - '.$min_certification.$edit_icon;
             //@todo show description
             $description = (($catobj->get_description() == "" || is_null($catobj->get_description())) ? '' : '<strong>'.get_lang('GradebookDescriptionLog').'</strong>'.': '.$catobj->get_description());
-            Display::display_normal_message($msg, false);
+            Display::addFlash(Display::return_message($msg, 'normal', false));
             if (!empty($description)) {
                 echo Display::div($description, array());
             }
@@ -489,7 +485,7 @@ class DisplayGradebook
             if ((!$catobj->get_id() == '0') && (!isset($_GET['studentoverview'])) && (!isset($_GET['search'])))
                 $scoreinfo .= '<br />'.get_lang('TotalForThisCategory').' : <b>'.$scorecourse_display.'</b>';
             $scoreinfo .= '<br />'.get_lang('Total').' : <b>'.$scoretotal_display.'</b>';
-            Display::display_normal_message($scoreinfo, false);
+            Display::addFlash(Display::return_message($scoreinfo, 'normal', false));
         }
         // show navigation tree and buttons?
         $header = '<div class="actions">';

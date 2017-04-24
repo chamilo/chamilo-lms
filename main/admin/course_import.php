@@ -139,7 +139,7 @@ function save_courses_data($courses)
     }
 
     if (!empty($msg)) {
-        Display::display_normal_message($msg, false);
+        Display::addFlash(Display::return_message($msg, 'normal', false));
     }
 }
 

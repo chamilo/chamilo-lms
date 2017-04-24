@@ -113,7 +113,7 @@ if ($form->validate()) {
     $errors = validate_data($classes);
     if (count($errors) == 0) {
         $number_of_added_classes = save_data($classes);
-        Display::display_normal_message($number_of_added_classes.' '.get_lang('Added'));
+        Display::addFlash(Display::return_message($number_of_added_classes.' '.get_lang('Added'), 'normal'));
     } else {
         $error_message = get_lang('ErrorsWhenImportingFile');
         $error_message .= '<ul>';
@@ -123,7 +123,7 @@ if ($form->validate()) {
         }
         $error_message .= '</ul>';
         $error_message .= get_lang('Error');
-        Display :: display_error_message($error_message, false);
+        Display::addFlash(Display::return_message($error_message, 'error', false));
     }
 }
 

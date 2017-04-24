@@ -105,7 +105,7 @@ $charset = 'UTF-8';
 \Patchwork\Utf8\Bootup::initAll();
 
 // Page encoding initialization.
-header('Content-Type: text/html; charset='. $charset);
+header('Content-Type: text/html; charset='.$charset);
 
 // Setting the error reporting levels.
 error_reporting(E_ALL);
@@ -207,7 +207,7 @@ if ($installType == 'update' && in_array($my_old_version, $update_from_version_8
     // This is the main configuration file of the system before the upgrade.
     // Old configuration file.
     // Don't change to include_once
-    $oldConfigPath = api_get_path(SYS_CODE_PATH) . 'inc/conf/configuration.php';
+    $oldConfigPath = api_get_path(SYS_CODE_PATH).'inc/conf/configuration.php';
     if (file_exists($oldConfigPath)) {
         include $oldConfigPath;
     }
@@ -337,7 +337,7 @@ if ($encryptPassForm == '1') {
             //Blocking step6 button
             $("#button_step6").click(function() {
                 $("#button_step6").hide();
-                $("#button_please_wait").html('<?php echo addslashes(get_lang('PleaseWait'));?>');
+                $("#button_please_wait").html('<?php echo addslashes(get_lang('PleaseWait')); ?>');
                 $("#button_please_wait").show();
                 $("#button_please_wait").attr('disabled', true);
                 $("#is_executable").attr("value",'step6');
@@ -414,7 +414,7 @@ if ($encryptPassForm == '1') {
 
 $instalation_type_label = '';
 if ($installType == 'new') {
-    $instalation_type_label  = get_lang('NewInstallation');
+    $instalation_type_label = get_lang('NewInstallation');
 } elseif ($installType == 'update') {
     $update_from_version = isset($update_from_version) ? $update_from_version : null;
     $instalation_type_label = get_lang('UpdateFromLMSVersion').(is_array($update_from_version) ? implode('|', $update_from_version) : '');
@@ -584,8 +584,8 @@ if (@$_POST['step2']) {
 
     <?php
     if ($installType == 'new') {
-        echo get_lang('AdminLogin') . ' : <strong>' . $loginForm . '</strong><br />';
-        echo get_lang('AdminPass') . ' : <strong>' . $passForm . '</strong><br /><br />'; /* TODO: Maybe this password should be hidden too? */
+        echo get_lang('AdminLogin').' : <strong>'.$loginForm.'</strong><br />';
+        echo get_lang('AdminPass').' : <strong>'.$passForm.'</strong><br /><br />'; /* TODO: Maybe this password should be hidden too? */
     }
     $allowSelfRegistrationLiteral = ($allowSelfReg == 'true') ? get_lang('Yes') : ($allowSelfReg == 'approval' ? get_lang('Approval') : get_lang('No'));
     echo get_lang('AdminFirstName').' : '.$adminFirstName, '<br />', get_lang('AdminLastName').' : '.$adminLastName, '<br />';
@@ -597,7 +597,7 @@ if (@$_POST['step2']) {
     <?php echo get_lang('DBLogin').' : '.$dbUsernameForm; ?><br />
     <?php echo get_lang('DBPassword').' : '.str_repeat('*', api_strlen($dbPassForm)); ?><br />
     <?php echo get_lang('MainDB').' : <strong>'.$dbNameForm; ?></strong><br />
-    <?php echo get_lang('AllowSelfReg').' : '. $allowSelfRegistrationLiteral; ?><br />
+    <?php echo get_lang('AllowSelfReg').' : '.$allowSelfRegistrationLiteral; ?><br />
     <?php echo get_lang('EncryptMethodUserPass').' : ';
     echo $encryptPassForm;
     ?>

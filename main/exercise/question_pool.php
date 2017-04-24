@@ -916,7 +916,7 @@ function get_action_icon_for_question(
                 $url
             );
 			break;
-		default :
+		default:
 			$res = $in_action;
 			break;
 	}

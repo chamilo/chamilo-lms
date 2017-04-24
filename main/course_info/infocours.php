@@ -786,7 +786,7 @@ if ($form->validate() && is_settings_editable()) {
 /*	Header */
 Display :: display_header($nameTools, MODULE_HELP_NAME);
 if ($show_delete_watermark_text_message) {
-    Display :: display_normal_message(get_lang('FileDeleted'));
+    Display::addFlash(Display::return_message(get_lang('FileDeleted'), 'normal'));
 }
 
 // Display the form

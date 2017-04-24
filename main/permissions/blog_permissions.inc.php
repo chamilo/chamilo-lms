@@ -166,7 +166,6 @@ foreach ($blog_users as $user_id => $user_name) { // $blog_users contains all th
     echo "\t\t</td>\n";
 
     foreach ($rights_full as $key => $value) {
-
         echo "\t\t<td align='center'>\n";
         if (in_array($value, $rights_blog)) {
             display_image_matrix_for_blogs(

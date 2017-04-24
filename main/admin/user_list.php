@@ -431,7 +431,7 @@ function loginUser($userId)
         $target_url = api_get_path(WEB_PATH)."user_portal.php";
         $message .= '<br />'.sprintf(get_lang('LoginSuccessfulGoToX'), '<a href="'.$target_url.'">'.$target_url.'</a>');
         Display :: display_header(get_lang('UserList'));
-        Display :: display_normal_message($message, false);
+        Display::addFlash(Display::return_message($message, 'normal', false));
         Display :: display_footer();
         exit;
     }

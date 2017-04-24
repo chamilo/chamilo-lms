@@ -178,7 +178,7 @@ class CourseSelectForm
 		echo get_lang('SelectResources');
 		echo '</p>';
 
-        Display::display_normal_message(get_lang('DontForgetToSelectTheMediaFilesIfYourResourceNeedIt'));
+        Display::addFlash(Display::return_message(get_lang('DontForgetToSelectTheMediaFilesIfYourResourceNeedIt'), 'normal'));
 
         foreach ($course->resources as $type => $resources) {
             if (count($resources) > 0) {
@@ -215,12 +215,12 @@ class CourseSelectForm
 						echo '<span class="title">'.$resource_titles[$type].'</span></div>';
 						echo '<div class="item-content" id="div_'.$type.'">';
 						if ($type == RESOURCE_LEARNPATH) {
-    						Display::display_warning_message(get_lang('ToExportLearnpathWithQuizYouHaveToSelectQuiz'));
-    						Display::display_warning_message(get_lang('IfYourLPsHaveAudioFilesIncludedYouShouldSelectThemFromTheDocuments'));
+    						Display::addFlash(Display::return_message(get_lang('ToExportLearnpathWithQuizYouHaveToSelectQuiz'), 'warning'));
+    						Display::addFlash(Display::return_message(get_lang('IfYourLPsHaveAudioFilesIncludedYouShouldSelectThemFromTheDocuments'), 'warning'));
 						}
 						if ($type == RESOURCE_DOCUMENT) {
                             if (api_get_setting('show_glossary_in_documents') != 'none') {
-                                Display::display_warning_message(get_lang('ToExportDocumentsWithGlossaryYouHaveToSelectGlossary'));
+                                Display::addFlash(Display::return_message(get_lang('ToExportDocumentsWithGlossaryYouHaveToSelectGlossary'), 'warning'));
                             }
 						}
 
@@ -321,7 +321,7 @@ class CourseSelectForm
         $recycleOption = isset($_POST['recycle_option']) ? true : false;
 
 		if (empty($element_count)) {
-		    Display::display_warning_message(get_lang('NoDataAvailable'));
+		    Display::addFlash(Display::return_message(get_lang('NoDataAvailable'), 'warning'));
 		} else {
     		if (!empty($hidden_fields['destination_session'])) {
     			echo '<br /><button class="save" type="submit" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset))."'".')) return false;" >'.
@@ -561,6 +561,7 @@ class CourseSelectForm
 									}
 								}
 							}
+                        // no break
 					default:
 						if (!empty($resources) && is_array($resources)) {
 							foreach ($resources as $id => $obj) {

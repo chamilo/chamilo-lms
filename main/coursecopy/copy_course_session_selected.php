@@ -47,7 +47,7 @@ if (function_exists('ini_set')) {
 
 $this_section = SECTION_COURSES;
 $nameTools = get_lang('CopyCourse');
-$returnLink = api_get_path(WEB_CODE_PATH) . 'course_info/maintenance_coach.php?' . api_get_cidreq();
+$returnLink = api_get_path(WEB_CODE_PATH).'course_info/maintenance_coach.php?'.api_get_cidreq();
 $interbreadcrumb[] = array(
     'url' => $returnLink,
     'name' => get_lang('Maintenance')
@@ -73,29 +73,29 @@ function make_select_session_list($name, $sessions, $attr = array())
     $attrs = '';
     if (count($attr) > 0) {
         foreach ($attr as $key => $value) {
-            $attrs .= ' ' . $key . '="' . $value . '"';
+            $attrs .= ' '.$key.'="'.$value.'"';
         }
     }
-    $output = '<select name="' . $name . '" ' . $attrs . '>';
+    $output = '<select name="'.$name.'" '.$attrs.'>';
 
     if (count($sessions) == 0) {
-        $output .= '<option value = "0">' . get_lang(
+        $output .= '<option value = "0">'.get_lang(
                 'ThereIsNotStillASession'
-            ) . '</option>';
+            ).'</option>';
     } else {
-        $output .= '<option value = "0">' . get_lang(
+        $output .= '<option value = "0">'.get_lang(
                 'SelectASession'
-            ) . '</option>';
+            ).'</option>';
     }
 
     if (is_array($sessions)) {
         foreach ($sessions as $session) {
             $category_name = '';
             if (!empty($session['category_name'])) {
-                $category_name = ' (' . $session['category_name'] . ')';
+                $category_name = ' ('.$session['category_name'].')';
             }
 
-            $output .= '<option value="' . $session['id'] . '">' . $session['name'] . ' ' . $category_name . '</option>';
+            $output .= '<option value="'.$session['id'].'">'.$session['name'].' '.$category_name.'</option>';
         }
     }
     $output .= '</select>';
@@ -120,43 +120,43 @@ function displayForm()
     // Actions
     $html .= '<div class="actions">';
     // Link back to the documents overview
-    $html .= '<a href="' . $returnLink . '">' . Display::return_icon(
-            'back.png', get_lang('BackTo') . ' ' . get_lang('Maintenance'), '', ICON_SIZE_MEDIUM
-        ) . '</a>';
+    $html .= '<a href="'.$returnLink.'">'.Display::return_icon(
+            'back.png', get_lang('BackTo').' '.get_lang('Maintenance'), '', ICON_SIZE_MEDIUM
+        ).'</a>';
     $html .= '</div>';
 
     $html .= Display::return_message(
             get_lang('CopyCourseFromSessionToSessionExplanation')
     );
 
-    $html .= '<form name="formulaire" method="post" action="' . api_get_self(
-        ) . '?' . api_get_cidreq() . '" >';
+    $html .= '<form name="formulaire" method="post" action="'.api_get_self(
+        ).'?'.api_get_cidreq().'" >';
     $html .= '<table border="0" cellpadding="5" cellspacing="0" width="100%">';
 
     // Source
-    $html .= '<tr><td width="15%"><b>' . get_lang(
+    $html .= '<tr><td width="15%"><b>'.get_lang(
             'OriginCoursesFromSession'
-        ) . ':</b></td>';
-    $html .= '<td width="10%" align="left">' . api_get_session_name(
+        ).':</b></td>';
+    $html .= '<td width="10%" align="left">'.api_get_session_name(
             $sessionId
-        ) . '</td>';
+        ).'</td>';
     $html .= '<td width="50%">';
-    $html .= "{$courseInfo['title']} ({$courseInfo['code']})" . '</td></tr>';
+    $html .= "{$courseInfo['title']} ({$courseInfo['code']})".'</td></tr>';
 
     // Destination
-    $html .= '<tr><td width="15%"><b>' . get_lang(
+    $html .= '<tr><td width="15%"><b>'.get_lang(
             'DestinationCoursesFromSession'
-        ) . ':</b></td>';
+        ).':</b></td>';
     $html .= '<td width="10%" align="left"><div id="ajax_sessions_list_destination">';
     $html .= '<select name="sessions_list_destination" onchange="javascript: xajax_searchCourses(this.value,\'destination\');">';
     if (empty($sessions)) {
-        $html .= '<option value = "0">' . get_lang(
+        $html .= '<option value = "0">'.get_lang(
                 'ThereIsNotStillASession'
-            ) . '</option>';
+            ).'</option>';
     } else {
-        $html .= '<option value = "0">' . get_lang(
+        $html .= '<option value = "0">'.get_lang(
                 'SelectASession'
-            ) . '</option>';
+            ).'</option>';
         foreach ($sessions as $session) {
             if ($session['id'] == $sessionId) {
                 continue;
@@ -166,7 +166,7 @@ function displayForm()
                 continue;
             }
 
-            $html .= '<option value="' . $session['id'] . '">' . $session['name'] . '</option>';
+            $html .= '<option value="'.$session['id'].'">'.$session['name'].'</option>';
         }
     }
 
@@ -178,17 +178,17 @@ function displayForm()
     $html .= '</tr></table>';
 
     $html .= "<fieldset>";
-    $html .= '<legend>' . get_lang('TypeOfCopy') . ' <small>(' . get_lang('CopyOnlySessionItems') . ')</small></legend>';
+    $html .= '<legend>'.get_lang('TypeOfCopy').' <small>('.get_lang('CopyOnlySessionItems').')</small></legend>';
     $html .= '<label class="radio"><input type="radio" id="copy_option_1" name="copy_option" value="full_copy" checked="checked"/>';
-    $html .= get_lang('FullCopy') . '</label>';
+    $html .= get_lang('FullCopy').'</label>';
     $html .= '<label class="radio"><input type="radio" id="copy_option_2" name="copy_option" value="select_items"/>';
-    $html .= ' ' . get_lang('LetMeSelectItems') . '</label><br/>';
+    $html .= ' '.get_lang('LetMeSelectItems').'</label><br/>';
 
     $html .= "</fieldset>";
 
-    $html .= '<button class="save" type="submit" onclick="javascript:if(!confirm(' . "'" . addslashes(
+    $html .= '<button class="save" type="submit" onclick="javascript:if(!confirm('."'".addslashes(
             api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)
-        ) . "'" . ')) return false;">' . get_lang('CopyCourse') . '</button>';
+        )."'".')) return false;">'.get_lang('CopyCourse').'</button>';
     $html .= '</form>';
     echo $html;
 }
@@ -214,10 +214,10 @@ function searchCourses($idSession, $type)
 
             $courseTitle = str_replace("'", "\'", $course['title']);
 
-            $return .= '<option value="' . $course['code'] . '" title="' . @htmlspecialchars(
-                    $course['title'] . ' (' . $course['visual_code'] . ')', ENT_QUOTES, api_get_system_encoding()
-                ) . '">' .
-                $course['title'] . ' (' . $course['visual_code'] . ')</option>';
+            $return .= '<option value="'.$course['code'].'" title="'.@htmlspecialchars(
+                    $course['title'].' ('.$course['visual_code'].')', ENT_QUOTES, api_get_system_encoding()
+                ).'">'.
+                $course['title'].' ('.$course['visual_code'].')</option>';
         }
         $return .= '</select>';
         $_SESSION['course_list_destination'] = $course_list_destination;
@@ -235,7 +235,7 @@ $xajax->processRequests();
 /* HTML head extra */
 
 $htmlHeadXtra[] = $xajax->getJavascript(
-    api_get_path(WEB_LIBRARY_PATH) . 'xajax/'
+    api_get_path(WEB_LIBRARY_PATH).'xajax/'
 );
 $htmlHeadXtra[] = '<script>
 	function checkSelected(id_select,id_radio,id_title,id_destination) {
@@ -351,9 +351,10 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
 } elseif (isset($_POST['copy_option']) && $_POST['copy_option'] == 'select_items') {
     // Else, if a CourseSelectForm is requested, show it
     if (api_get_setting('show_glossary_in_documents') != 'none') {
-        Display::display_normal_message(
-            get_lang('ToExportDocumentsWithGlossaryYouHaveToSelectGlossary')
-        );
+        Display::addFlash(Display::return_message(
+            get_lang('ToExportDocumentsWithGlossaryYouHaveToSelectGlossary'),
+            'normal'
+        ));
     }
 
     $arrCourseDestination = array();
@@ -367,9 +368,10 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
     }
 
     if (!empty($destinationSession)) {
-        Display::display_normal_message(
-            get_lang('ToExportLearnpathWithQuizYouHaveToSelectQuiz')
-        );
+        Display::addFlash(Display::return_message(
+            get_lang('ToExportLearnpathWithQuizYouHaveToSelectQuiz'),
+            'normal'
+        ));
 
         $cb = new CourseBuilder('', $courseInfo);
         $course = $cb->build($sessionId, $courseCode);
@@ -380,7 +382,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
 
         CourseSelectForm :: display_form($course, $hiddenFields, true);
 
-        echo '<div style="float:right"><a href="javascript:window.history.go(-1);">' .
+        echo '<div style="float:right"><a href="javascript:window.history.go(-1);">'.
             Display::return_icon(
                 'back.png',
                 get_lang('Back').' '.get_lang('To').' '.get_lang(
@@ -388,7 +390,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
                 ),
                 array('style' => 'vertical-align:middle')
             ).
-            get_lang('Back') . '</a></div>';
+            get_lang('Back').'</a></div>';
     } else {
         Display::display_error_message(
             get_lang('You must select a course from original session and select a destination session')

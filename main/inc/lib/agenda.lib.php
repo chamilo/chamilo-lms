@@ -3916,7 +3916,7 @@ class Agenda
      * @return    array    Array of events ordered by start date, in
      * [0]('datestart','dateend','title'),[1]('datestart','dateend','title','link','coursetitle') format,
      * where datestart and dateend are in yyyyMMddhhmmss format.
-     * @TODO Implement really personal events (from user DB) and global events (from main DB)
+     * @deprecated use agenda events
      */
     public static function get_personal_agenda_items_between_dates(
         $user_id,

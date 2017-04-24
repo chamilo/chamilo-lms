@@ -34,7 +34,7 @@ function handleRegions()
             api_get_utc_datetime(),
             $user_id
         );
-        Display :: display_confirmation_message(get_lang('SettingsStored'));
+        Display::addFlash(Display::return_message(get_lang('SettingsStored'), 'confirmation'));
     }
 
     $plugin_obj = new AppPlugin();
@@ -140,7 +140,7 @@ function handlePlugins()
             api_get_utc_datetime(),
             $user_id
         );
-        Display :: display_confirmation_message(get_lang('SettingsStored'));
+        Display::addFlash(Display::return_message(get_lang('SettingsStored'), 'confirmation'));
     }
 
     $all_plugins = $plugin_obj->read_plugins_from_path();
@@ -583,7 +583,7 @@ function uploadStylesheet($values, $picture)
             }
             $zip->close();
         } else {
-            Display::display_error_message(get_lang('ErrorReadingZip').$info['extension'], false);
+            Display::addFlash(Display::return_message(get_lang('ErrorReadingZip').$info['extension'], 'error', false));
         }
     } else {
         // Simply move the file.
@@ -731,7 +731,7 @@ function handleSearch()
         $formValues = $form->exportValues();
         setConfigurationSettingsInDatabase($formValues, $_configuration['access_url']);
         $search_enabled = $formValues['search_enabled'];
-        Display::display_confirmation_message($SettingsStored);
+        Display::addFlash(Display::return_message($SettingsStored, 'confirm'));
     }
     $specific_fields = get_specific_field_list();
 
@@ -1103,7 +1103,7 @@ function addEditTemplate()
                 Database::insert($table_system_template, $params);
 
                 // Display a feedback message.
-                Display::display_confirmation_message(get_lang('TemplateAdded'));
+                Display::addFlash(Display::return_message(get_lang('TemplateAdded'), 'confirm'));
                 echo '<a href="settings.php?category=Templates&action=add">'.Display::return_icon('new_template.png', get_lang('AddTemplate'),'',ICON_SIZE_MEDIUM).'</a>';
             } else {
                 $content_template = '<head>{CSS}<style type="text/css">.text{font-weight: normal;}</style></head><body>'.Database::escape_string($values['template_text']).'</body>';
@@ -1115,7 +1115,7 @@ function addEditTemplate()
                 Database::query($sql);
 
                 // Display a feedback message.
-                Display::display_confirmation_message(get_lang('TemplateEdited'));
+                Display::addFlash(Display::return_message(get_lang('TemplateEdited'), 'confirm'));
             }
         }
         Security::clear_token();
@@ -1154,7 +1154,7 @@ function deleteTemplate($id)
     Database::query($sql);
 
     // Display a feedback message.
-    Display::display_confirmation_message(get_lang('TemplateDeleted'));
+    Display::addFlash(Display::return_message(get_lang('TemplateDeleted'), 'confirm'));
 }
 
 /**
@@ -1718,7 +1718,7 @@ function generateCSSDownloadLink($style)
 
         //@TODO: use more generic script to download.
         $str = '<a class="btn btn-primary btn-large" href="' .$url. '">'.get_lang('ClickHereToDownloadTheFile').'</a>';
-        Display::display_normal_message($str, false);
+        Display::addFlash(Display::return_message($str, 'normal', false));
     } else {
         Display::addFlash(Display::return_message(get_lang('FileNotFound'), 'warning'));
     }

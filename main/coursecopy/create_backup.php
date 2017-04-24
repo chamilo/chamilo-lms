@@ -70,8 +70,8 @@ if (Security::check_token('post') && (
 
     $zip_file = CourseArchiver::createBackup($course);
     Display::display_confirmation_message(get_lang('BackupCreated'));
-    echo '<br /><a class="btn btn-primary btn-large" href="' . api_get_path(WEB_CODE_PATH) . 'course_info/download.php?archive=' . $zip_file . '&' . api_get_cidreq() . '">
-    ' . get_lang('Download') . '</a>';
+    echo '<br /><a class="btn btn-primary btn-large" href="'.api_get_path(WEB_CODE_PATH).'course_info/download.php?archive='.$zip_file.'&'.api_get_cidreq().'">
+    ' . get_lang('Download').'</a>';
 
 } elseif (Security::check_token('post') && (
         isset($_POST['backup_option']) &&
@@ -96,7 +96,7 @@ if (Security::check_token('post') && (
         $form = new FormValidator(
             'create_backup_form',
             'post',
-            api_get_self() . '?' . api_get_cidreq()
+            api_get_self().'?'.api_get_cidreq()
         );
         $form->addElement('header', get_lang('SelectOptionForBackup'));
         $form->addElement('radio', 'backup_option', '', get_lang('CreateFullBackup'), 'full_backup');

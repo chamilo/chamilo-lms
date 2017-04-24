@@ -31,7 +31,6 @@ class CalculatedAnswer extends Question
     public function createAnswersForm($form)
     {
         $defaults = array();
-
         if (!empty($this->id)) {
             $objAnswer = new Answer($this->id);
             $preArray = explode('@@', $objAnswer->selectAnswer(1));
@@ -125,9 +124,14 @@ class CalculatedAnswer extends Question
             Display::return_icon('fill_field.png'),
             array(
                 'id' => 'answer',
-                'onkeyup' => 'javascript: updateBlanks(this);'
+                'onkeyup' => 'javascript: updateBlanks(this);',
             ),
-            array('ToolbarSet' => 'TestQuestionDescription', 'Width' => '100%', 'Height' => '350'));
+            array(
+                'ToolbarSet' => 'TestQuestionDescription',
+                'Width' => '100%',
+                'Height' => '350',
+            )
+        );
 
         $form->addRule('answer', get_lang('GiveText'), 'required');
         $form->addRule('answer', get_lang('DefineBlanks'), 'regex', '/\[.*\]/');

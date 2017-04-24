@@ -3050,9 +3050,11 @@ function get_group_picture_path_by_id($id, $type = 'web', $preview = false, $ano
 }
 
 /**
+ * Control the different steps of the migration through a big switch
  * @param string $fromVersion
  * @param EntityManager $manager
  * @param bool $processFiles
+ * @return bool Always returns true except if the process is broken
  */
 function migrateSwitch($fromVersion, $manager, $processFiles = true)
 {
@@ -3068,17 +3070,26 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
 
     switch ($fromVersion) {
         case '1.9.0':
+            //no break
         case '1.9.2':
+            //no break
         case '1.9.4':
+            //no break
         case '1.9.6':
+            //no break
         case '1.9.6.1':
+            //no break
         case '1.9.8':
+            //no break
         case '1.9.8.1':
+            //no break
         case '1.9.8.2':
+            //no break
         case '1.9.10':
+            //no break
         case '1.9.10.2':
+            //no break
         case '1.9.10.4':
-
             $database = new Database();
             $database->setManager($manager);
 

@@ -2531,7 +2531,8 @@ class Tracking
             }
 
             if ($debug) {
-                echo '$lp_list: '; var_dump($lp_list);
+                echo '$lp_list: ';
+                var_dump($lp_list);
                 echo 'Use max score or not list: '; var_dump($use_max_score);
             }
 

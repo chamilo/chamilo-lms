@@ -98,12 +98,12 @@ $browser_display_title = 'Documents - '.Security::remove_XSS($_GET['cidReq']).' 
 $file_url_web = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$header_file.'?'.api_get_cidreq();
 $pathinfo = pathinfo($header_file);
 
-if ($pathinfo['extension']=='swf') {
-	$width='83%';
-	$height='83%';
+if ($pathinfo['extension'] == 'swf') {
+	$width = '83%';
+	$height = '83%';
 } else {
-	$width='100%';
-	$height='100%';
+	$width = '100%';
+	$height = '100%';
 }
 
 echo '<iframe border="0" frameborder="0" scrolling="no" style="width:'.$width.'; height:'.$height.';background-color:#ffffff;" id="mainFrame" name="mainFrame" src="'.$file_url_web.'?'.api_get_cidreq().'&amp;rand='.mt_rand(1, 1000).'"></iframe>';

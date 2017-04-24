@@ -436,7 +436,7 @@ class Display
      * @param bool	$filter (true) or not (false)
      * @param bool $returnValue
      *
-     * @deprecated use Display::addFlash with Display::return_message($message, 'normal');
+     * @deprecated use Display::addFlash(Display::return_message($message, 'normal'));
      *
      * @return void
      */
@@ -454,7 +454,7 @@ class Display
      * Displays an warning message. Use this if you want to draw attention to something
      * This can also be used for instance with the hint in the exercises
      *
-     * @deprecated use Display::addFlash with Display::return_message
+     * @deprecated use Display::addFlash(Display::return_message($message, 'warning'));
      */
     public static function display_warning_message($message, $filter = true, $returnValue = false)
     {
@@ -469,7 +469,7 @@ class Display
     /**
      * Displays an confirmation message. Use this if something has been done successfully
      * @param bool	Filter (true) or not (false)
-     * @deprecated use Display::addFlash with Display::return_message
+     * @deprecated use Display::addFlash(Display::return_message($message, 'confirm'));
      * @return void
      */
     public static function display_confirmation_message($message, $filter = true, $returnValue = false)
@@ -487,7 +487,7 @@ class Display
      * @param string $message - include any additional html
      *                          tags if you need them
      * @param bool	Filter (true) or not (false)
-     * @deprecated use Display::addFlash with Display::return_message
+     * @deprecated use Display::addFlash(Display::return_message($message, 'error'));
      *
      * @return void
      */
@@ -1567,19 +1567,7 @@ class Display
                 (empty($session_info['access_end_date']) && empty($session_info['access_start_date']))
             ) {
                 if (isset($session_info['duration']) && !empty($session_info['duration'])) {
-                    $userDurationData = SessionManager::getUserSession(
-                        api_get_user_id(),
-                        $session_id
-                    );
-
-                    $userDuration = isset($userDurationData['duration']) ? (int) $userDurationData['duration'] : 0;
-                    $totalDuration = $session_info['duration'] + $userDuration;
-
-                    $daysLeft = SessionManager::getDayLeftInSession(
-                        $session_id,
-                        api_get_user_id(),
-                        $totalDuration
-                    );
+                    $daysLeft = SessionManager::getDayLeftInSession($session_info, api_get_user_id());
                     $session['duration'] = sprintf(get_lang('SessionDurationXDaysLeft'), $daysLeft);
                 }
                 $active = true;

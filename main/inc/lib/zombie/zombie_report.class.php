@@ -167,7 +167,7 @@ class ZombieReport implements Countable
         }
 
         $action = $this->get_action();
-        $f = array($this, 'action_' . $action);
+        $f = array($this, 'action_'.$action);
         if (is_callable($f)) {
             return call_user_func($f, $ids);
         }
@@ -292,7 +292,7 @@ class ZombieReport implements Countable
             $text = get_lang('No');
         }
 
-        $result = Display::return_icon($image . '.png', $text);
+        $result = Display::return_icon($image.'.png', $text);
         return $result;
     }
 

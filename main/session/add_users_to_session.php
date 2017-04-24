@@ -628,7 +628,7 @@ if ($add_type=='multiple') {
 
 <?php
 if (!empty($errorMsg)) {
-	Display::display_normal_message($errorMsg); //main API
+	Display::addFlash(Display::return_message($errorMsg, 'normal')); //main API
 }
 ?>
 <div id="multiple-add-session" class="row">

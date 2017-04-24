@@ -33,13 +33,14 @@ if (!empty($usergroup_list)) {
     }
 } else {
     if (api_is_platform_admin()) {
-        Display::display_normal_message(
+        Display::addFlash(Display::return_message(
             Display::url(
                 get_lang('AddClasses'),
                 api_get_path(WEB_CODE_PATH).'admin/usergroups.php?action=add'
             ),
+            'normal',
             false
-        );
+        ));
     }
 }
 

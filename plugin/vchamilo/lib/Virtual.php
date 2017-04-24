@@ -38,7 +38,7 @@ class Virtual
         // pre hook to chamilo main table and get alternate configuration.
         // sure Database object is not set up. Soo use bootstrap connection
         /** @var \Doctrine\DBAL\Connection $connection */
-        $connection = Virtual::bootConnection($_configuration);
+        $connection = self::bootConnection($_configuration);
 
         $query = "SELECT * FROM vchamilo WHERE root_web = '$virtualChamiloWebRoot'";
         $result = $connection->executeQuery($query);

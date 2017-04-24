@@ -2,13 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *	Exercise list: This script shows the list of exercises for administrators and students.
- *	@package chamilo.exercise
- *	@author Olivier Brouckaert, original author
- *	@author Denes Nagy, HotPotatoes integration
- *	@author Wolfgang Schneider, code/html cleanup
+ * Exercise list: This script shows the list of exercises for administrators and students.
+ * @package chamilo.exercise
+ * @author Olivier Brouckaert, original author
+ * @author Denes Nagy, HotPotatoes integration
+ * @author Wolfgang Schneider, code/html cleanup
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 api_protect_course_script(true);
@@ -25,9 +24,18 @@ if (!$is_allowedToEdit) {
     exit;
 }
 
-$interbreadcrumb[] = array('url' => 'exercise_report.php?'.api_get_cidreq(), 'name' => get_lang('Exercises'));
-$interbreadcrumb[] = array('url' => 'exercise_report.php?filter=2&'.api_get_cidreq(), 'name' => get_lang('StudentScore'));
-$interbreadcrumb[] = array('url' => 'exercise_history.php?exe_id='.intval($_GET['exe_id']).'&'.api_get_cidreq(), 'name' => get_lang('Details'));
+$interbreadcrumb[] = array(
+    'url' => 'exercise_report.php?'.api_get_cidreq(),
+    'name' => get_lang('Exercises'),
+);
+$interbreadcrumb[] = array(
+    'url' => 'exercise_report.php?filter=2&'.api_get_cidreq(),
+    'name' => get_lang('StudentScore'),
+);
+$interbreadcrumb[] = array(
+    'url' => 'exercise_history.php?exe_id='.intval($_GET['exe_id']).'&'.api_get_cidreq(),
+    'name' => get_lang('Details'),
+);
 
 $TBL_USER = Database::get_main_table(TABLE_MAIN_USER);
 $TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);
@@ -44,7 +52,7 @@ if (isset($_GET['message'])) {
 
 echo '<div class="actions">';
 echo '<a href="exercise_report.php?'.api_get_cidreq().'&filter=2">'.
-    Display :: return_icon('back.png', get_lang('BackToResultList'), '', ICON_SIZE_MEDIUM).'</a>';
+    Display::return_icon('back.png', get_lang('BackToResultList'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 ?>
@@ -86,6 +94,6 @@ while ($row = Database::fetch_array($query)) {
     echo '<td>'.(empty($row['firstname']) && empty($row['lastname']) ? '<i>'.get_lang('OriginalValue').'</i>' : api_get_person_name($row['firstname'], $row['lastname'])).'</td>';
     echo '<td>'.api_convert_and_format_date($row['insert_date'], DATE_TIME_FORMAT_LONG).'</td>';
     echo '</tr>';
-    }
+}
 echo '</table>';
 Display::display_footer();

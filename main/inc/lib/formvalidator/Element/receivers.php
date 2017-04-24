@@ -43,9 +43,9 @@ class HTML_QuickForm_receivers extends HTML_QuickForm_group
 	 */
 	function _createElements()
 	{
-		$this->_elements[] = new HTML_QuickForm_Radio('receivers', '', get_lang('Everybody'), '0', array ('onclick' => 'javascript:receivers_hide(\'receivers_to\')'));
+		$this->_elements[] = new HTML_QuickForm_Radio('receivers', '', get_lang('Everybody'), '0', array('onclick' => 'javascript:receivers_hide(\'receivers_to\')'));
 		$this->_elements[0]->setChecked(true);
-		$this->_elements[] = new HTML_QuickForm_Radio('receivers', '', get_lang('SelectGroupsUsers'), '1', array ('onclick' => 'javascript:receivers_show(\'receivers_to\')'));
+		$this->_elements[] = new HTML_QuickForm_Radio('receivers', '', get_lang('SelectGroupsUsers'), '1', array('onclick' => 'javascript:receivers_show(\'receivers_to\')'));
 		$this->_elements[] = new HTML_QuickForm_advmultiselect('to', '', $this->receivers);
 		$this->_elements[2]->setSelected($this->receivers_selected);
 	}

@@ -33,7 +33,7 @@ if (!$user) {
         Display::return_message(get_lang('NoUser'), 'error')
     );
 
-    header('Location: ' . api_get_path(WEB_PATH));
+    header('Location: '.api_get_path(WEB_PATH));
     exit;
 }
 
@@ -46,7 +46,7 @@ $url = api_get_path(WEB_CODE_PATH)."badge/assign.php?user=".$_REQUEST['user']."&
 $htmlHeadXtra[] = '<script>
 $( document ).ready(function() {
     $("#skill").on("change", function() {
-        $(location).attr("href", "'. $url .'"+$(this).val());
+        $(location).attr("href", "'. $url.'"+$(this).val());
     });
 });
 </script>';
@@ -131,7 +131,7 @@ if ($form->validate()) {
             Display::return_message(get_lang('SkillNotFound'), 'error')
         );
 
-        header('Location: ' . api_get_self() . '?' . http_build_query(['user' => $user->getId()]));
+        header('Location: '.api_get_self().'?'.http_build_query(['user' => $user->getId()]));
         exit;
     }
 
@@ -143,7 +143,7 @@ if ($form->validate()) {
             )
         );
 
-        header('Location: ' . api_get_self() . '?' . http_build_query(['user' => $user->getId()]));
+        header('Location: '.api_get_self().'?'.http_build_query(['user' => $user->getId()]));
         exit;
     }
 
@@ -167,7 +167,7 @@ if ($form->validate()) {
         )
     );
 
-    header('Location: ' . api_get_path(WEB_PATH) . "badge/{$skillUser->getId()}");
+    header('Location: '.api_get_path(WEB_PATH)."badge/{$skillUser->getId()}");
     exit;
 }
 

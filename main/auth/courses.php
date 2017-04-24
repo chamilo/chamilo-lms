@@ -95,7 +95,7 @@ if (isset($_GET['move'])) {
             $_GET['category']
         );
     }
-    if (isset($_GET['category']) && !$_GET['course']) {
+    if (isset($_GET['category']) && !isset($_GET['course'])) {
         $courses_controller->move_category($_GET['move'], $_GET['category']);
     }
 }

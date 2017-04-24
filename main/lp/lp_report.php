@@ -109,7 +109,7 @@ if (!empty($users)) {
 
 // View
 $interbreadcrumb[] = [
-    'url' => api_get_path(WEB_CODE_PATH) . 'lp/lp_controller.php?'.api_get_cidreq(),
+    'url' => api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq(),
     'name' => get_lang('LearningPaths')
 ];
 
@@ -120,7 +120,7 @@ $actions = Display::url(
         array(),
         ICON_SIZE_MEDIUM
     ),
-    api_get_path(WEB_CODE_PATH) . 'lp/lp_controller.php?' . api_get_cidreq()
+    api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq()
 );
 
 $template = new Template(get_lang('StudentScore'));

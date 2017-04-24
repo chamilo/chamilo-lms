@@ -31,7 +31,7 @@ echo '<a href="../session/session_list.php">'.
 echo '</div>';
 
 if (!empty($error_message)) {
-    Display::display_normal_message($error_message, false);
+    Display::addFlash(Display::return_message($error_message, 'normal', false));
 }
 
 $form = new FormValidator('import_sessions', 'post', api_get_self(), null, array('enctype' => 'multipart/form-data'));

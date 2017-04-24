@@ -6,8 +6,7 @@
 * @author unknown, the initial survey that did not make it in 1.8 because of bad code
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
 * @author Julio Montoya Armas <gugli100@gmail.com>, Chamilo: Personality Test modification and rewriting large parts of the code as well
-
-* @todo check if the user already filled the survey and if this is the case then the answers have to be updated and not stored again.
+ * @todo check if the user already filled the survey and if this is the case then the answers have to be updated and not stored again.
 * @todo performance could be improved if not the survey_id was stored with the invitation but the survey_code
  */
 // Unsetting the course id (because it is in the URL)
@@ -112,7 +111,7 @@ if ($invitationcode == 'auto' && isset($_GET['scode'])) {
         $now = api_get_utc_datetime();
         if (Database :: num_rows($result) == 0) {
             $params = [
-                'c_id' => $course_id ,
+                'c_id' => $course_id,
                 'survey_code' => $surveyCode,
                 'user' => $userid,
                 'invitation_code' => $autoInvitationcode,
@@ -482,7 +481,7 @@ if ($survey_data['form_fields'] != '' &&
     $jquery_ready_content = $returnParams['jquery_ready_content'];
 
 // the $jquery_ready_content variable collects all functions that will be load in the $(document).ready javascript function
-    $htmlHeadXtra[] ='<script>
+    $htmlHeadXtra[] = '<script>
     $(document).ready(function(){
         '.$jquery_ready_content.'
     });
@@ -915,16 +914,16 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
                             $group2 = $groups[0];
                             $secondary .= " OR ( survey_group_sec1 = '$group1' AND  survey_group_sec2 = '$group2') ";
                             $secondary .= " OR ( survey_group_sec1 = '$group2' AND survey_group_sec2 = '$group1' ) ";
-                            $combi.= $group1.' - '.$group2." or ".$group2.' - '.$group1.'<br />';
+                            $combi .= $group1.' - '.$group2." or ".$group2.' - '.$group1.'<br />';
                         } else {
                             if ($i != 0) {
                                 $secondary .= " OR ( survey_group_sec1 = '$group1' AND  survey_group_sec2 = '$group2') ";
                                 $secondary .= " OR ( survey_group_sec1 = '$group2' AND survey_group_sec2 = '$group1' ) ";
-                                $combi.= $group1.' - '.$group2." or ".$group2.' - '.$group1.'<br />';
+                                $combi .= $group1.' - '.$group2." or ".$group2.' - '.$group1.'<br />';
                             } else {
                                 $secondary .= " ( survey_group_sec1 = '$group1' AND  survey_group_sec2 = '$group2') ";
                                 $secondary .= " OR ( survey_group_sec1 = '$group2' AND survey_group_sec2 = '$group1' ) ";
-                                $combi.= $group1.' - '.$group2." or ".$group2.' - '.$group1.'<br />';
+                                $combi .= $group1.' - '.$group2." or ".$group2.' - '.$group1.'<br />';
                             }
                         }
                     }
@@ -1143,7 +1142,7 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
                         $questions[$row['sort']]['survey_group_sec1'] = $row['survey_group_sec1'];
                         $questions[$row['sort']]['survey_group_sec2'] = $row['survey_group_sec2'];
                         $questions[$row['sort']]['survey_group_pri'] = $row['survey_group_pri'];
-                    }  else {
+                    } else {
                         // If the type is a page break we are finished loading the questions for this page
                         break;
                     }

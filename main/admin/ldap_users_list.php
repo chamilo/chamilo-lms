@@ -44,28 +44,28 @@ if (isset ($_GET['action']))
 		{
 			case 'show_message' :
 				Display::display_header($tool_name);
-				Display::display_normal_message($_GET['message']);
+				Display::addFlash(Display::return_message($_GET['message'], 'normal'));
 				break;
 			case 'delete_user' :
 				Display::display_header($tool_name);
 				if ($user_id != $_user['user_id'] && UserManager::delete_user($_GET['user_id']))
 				{
-					Display::display_normal_message(get_lang('UserDeleted'));
+					Display::addFlash(Display::return_message(get_lang('UserDeleted'), 'normal'));
 				}
 				else
 				{
-					Display::display_error_message(get_lang('CannotDeleteUser'));
+					Display::addFlash(Display::return_message(get_lang('CannotDeleteUser'), 'error'));
 				}
 				break;
 			case 'lock' :
 				Display::display_header($tool_name);
 				$message=lock_unlock_user('lock',$_GET['user_id']);
-				Display::display_normal_message($message);
+				Display::addFlash(Display::return_message($message, 'normal'));
 				break;
 			case 'unlock':
 				Display::display_header($tool_name);
 				$message=lock_unlock_user('unlock',$_GET['user_id']);
-				Display::display_normal_message($message);
+				Display::addFlash(Display::return_message($message, 'normal'));
 				break;
             case 'add_user':
 				$id=$_GET['id'];
@@ -93,7 +93,7 @@ if (isset ($_GET['action']))
 					{
 						$message=get_lang('NoUserAdded');
 					}
-					Display::display_normal_message($message,false);
+					Display::addFlash(Display::return_message($message, 'normal', false));
 				}
 				break;
 			default:
@@ -132,11 +132,11 @@ if (isset ($_POST['action']))
 				}
 				if($number_of_selected_users == $number_of_deleted_users)
 				{
-					Display::display_normal_message(get_lang('SelectedUsersDeleted'));
+					Display::addFlash(Display::return_message(get_lang('SelectedUsersDeleted'), 'normal'));
 				}
 				else
 				{
-					Display::display_error_message(get_lang('SomeUsersNotDeleted'));
+					Display::addFlash(Display::return_message(get_lang('SomeUsersNotDeleted'), 'error'));
 				}
 				break;
 			case 'add_user' :
@@ -154,11 +154,11 @@ if (isset ($_POST['action']))
 					addUserToSession($UserList, $_GET['id_session']);
 				if(count($UserList)>0)
 				{
-					Display::display_normal_message(count($UserList)." ".get_lang('LDAPUsersAdded'));
+					Display::addFlash(Display::return_message(count($UserList)." ".get_lang('LDAPUsersAdded')));
 				}
 				else
 				{
-					Display::display_normal_message(get_lang('NoUserAdded'));
+					Display::addFlash(Display::return_message(get_lang('NoUserAdded')));
 				}
 				break;
 

@@ -16,7 +16,7 @@ $this_section = SECTION_TRACKING;
 
 api_block_anonymous_users();
 $htmlHeadXtra[] = api_get_jqgrid_js();
-$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('MySpace'));
+$interbreadcrumb[] = array("url" => "index.php", "name" => get_lang('MySpace'));
 Display::display_header(get_lang('Sessions'));
 
 $export_csv = false;
@@ -39,7 +39,7 @@ if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
     if (!api_is_session_admin()) {
         $menu_items[] = Display::url(
             Display::return_icon('stats.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM),
-            api_get_path(WEB_CODE_PATH) . "auth/my_progress.php"
+            api_get_path(WEB_CODE_PATH)."auth/my_progress.php"
         );
         $menu_items[] = Display::url(
             Display::return_icon('user.png', get_lang('Students'), array(), ICON_SIZE_MEDIUM),
@@ -61,11 +61,11 @@ if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
 
     $menu_items[] = Display::url(
         Display::return_icon('works.png', get_lang('WorksReport'), [], ICON_SIZE_MEDIUM),
-        api_get_path(WEB_CODE_PATH) . 'mySpace/works_in_session_report.php'
+        api_get_path(WEB_CODE_PATH).'mySpace/works_in_session_report.php'
     );
     $menu_items[] = Display::url(
         Display::return_icon('clock.png', get_lang('TeacherTimeReportBySession'), [], ICON_SIZE_MEDIUM),
-        api_get_path(WEB_CODE_PATH) . 'admin/teachers_time_by_session_report.php'
+        api_get_path(WEB_CODE_PATH).'admin/teachers_time_by_session_report.php'
     );
 
     $actionsLeft = '';
@@ -84,7 +84,7 @@ if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
         );
         $actionsRight .= Display::url(
             Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), array(), 32),
-            api_get_self() . '?export=csv'
+            api_get_self().'?export=csv'
         );
     }
 
@@ -99,7 +99,7 @@ if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
 } elseif (api_is_teacher()) {
     $actionsRight = Display::url(
         Display::return_icon('clock.png', get_lang('TeacherTimeReportBySession'), [], ICON_SIZE_MEDIUM),
-        api_get_path(WEB_CODE_PATH) . 'admin/teachers_time_by_session_report.php'
+        api_get_path(WEB_CODE_PATH).'admin/teachers_time_by_session_report.php'
     );
 
     $toolbar = Display::toolbarAction(
@@ -139,10 +139,10 @@ $columns = array(
 // Column config
 $columnModel = array(
     array('name'=>'name', 'index'=>'name', 'width'=>'255', 'align'=>'left'),
-    array('name'=>'date', 'index'=>'date', 'width'=>'150', 'align'=>'left','sortable'=>'false'),
-    array('name'=>'course_per_session', 'index'=>'course_per_session', 'width'=>'150','sortable'=>'false'),
-    array('name'=>'student_per_session', 'index'=>'student_per_session', 'width'=>'100','sortable'=>'false'),
-    array('name'=>'details', 'index'=>'details', 'width'=>'100','sortable'=>'false')
+    array('name'=>'date', 'index'=>'date', 'width'=>'150', 'align'=>'left', 'sortable'=>'false'),
+    array('name'=>'course_per_session', 'index'=>'course_per_session', 'width'=>'150', 'sortable'=>'false'),
+    array('name'=>'student_per_session', 'index'=>'student_per_session', 'width'=>'100', 'sortable'=>'false'),
+    array('name'=>'details', 'index'=>'details', 'width'=>'100', 'sortable'=>'false')
 );
 
 $extraParams = array(

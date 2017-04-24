@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 require_once __DIR__.'/../inc/global.inc.php';
-$current_course_tool  = TOOL_STUDENTPUBLICATION;
+$current_course_tool = TOOL_STUDENTPUBLICATION;
 
 api_protect_course_script(true);
 
@@ -74,7 +74,7 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !api_is_in
             get_lang('UploadMyAssignment'),
             null,
             ICON_SIZE_MEDIUM
-        ) . get_lang('UploadMyAssignment'),
+        ).get_lang('UploadMyAssignment'),
         $url,
         array('class'=>'btn-toolbar')
     );
@@ -125,10 +125,10 @@ if (!api_is_invitee()) {
         );
 
         $column_model = array(
-            array('name'=>'type', 'index'=>'file', 'width'=>'5',   'align'=>'left', 'search' => 'false', 'sortable' => 'false'),
-            array('name'=>'title', 'index'=>'title', 'width'=>'40',   'align'=>'left', 'search' => 'false', 'wrap_cell' => 'true'),
+            array('name'=>'type', 'index'=>'file', 'width'=>'5', 'align'=>'left', 'search' => 'false', 'sortable' => 'false'),
+            array('name'=>'title', 'index'=>'title', 'width'=>'40', 'align'=>'left', 'search' => 'false', 'wrap_cell' => 'true'),
             array('name'=>'qualification', 'index'=>'qualification', 'width'=>'30', 'align'=>'center', 'search' => 'true'),
-            array('name'=>'sent_date', 'index'=>'sent_date', 'width'=>'30',   'align'=>'left', 'search' => 'true', 'wrap_cell' => 'true'),
+            array('name'=>'sent_date', 'index'=>'sent_date', 'width'=>'30', 'align'=>'left', 'search' => 'true', 'wrap_cell' => 'true'),
             array('name'=>'qualificator_id', 'index'=>'qualificator_id', 'width'=>'20', 'align'=>'left', 'search' => 'true'),
             array('name'=>'actions', 'index'=>'actions', 'width'=>'20', 'align'=>'left', 'search' => 'false', 'sortable'=>'false')
         );
@@ -144,11 +144,11 @@ if (!api_is_invitee()) {
         );
 
         $column_model = array(
-            array('name'=>'type',      'index'=>'file',      'width'=>'5',  'align'=>'left', 'search' => 'false', 'sortable' => 'false'),
-            array('name'=>'title',     'index'=>'title',     'width'=>'60', 'align'=>'left', 'search' => 'false', 'wrap_cell' => "true"),
-            array('name'=>'qualification',	'index'=>'qualification', 'width'=>'30',   'align'=>'center', 'search' => 'true'),
+            array('name'=>'type', 'index'=>'file', 'width'=>'5', 'align'=>'left', 'search' => 'false', 'sortable' => 'false'),
+            array('name'=>'title', 'index'=>'title', 'width'=>'60', 'align'=>'left', 'search' => 'false', 'wrap_cell' => "true"),
+            array('name'=>'qualification', 'index'=>'qualification', 'width'=>'30', 'align'=>'center', 'search' => 'true'),
             array('name'=>'sent_date', 'index'=>'sent_date', 'width'=>'30', 'align'=>'left', 'search' => 'true', 'wrap_cell' => 'true', 'sortable'=>'false'),
-            array('name'=>'actions',   'index'=>'actions',   'width'=>'20', 'align'=>'left', 'search' => 'false', 'sortable'=>'false')
+            array('name'=>'actions', 'index'=>'actions', 'width'=>'20', 'align'=>'left', 'search' => 'false', 'sortable'=>'false')
         );
     }
 

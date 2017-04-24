@@ -15,7 +15,7 @@ if ($userNotAllowed) {
     api_not_allowed(true);
 }
 
-$interbreadcrumb[] = array('url' => api_is_student_boss()?'#':'index.php', 'name' => get_lang('MySpace'));
+$interbreadcrumb[] = array('url' => api_is_student_boss() ? '#' : 'index.php', 'name' => get_lang('MySpace'));
 
 $tool_name = get_lang('Report');
 $this_section = SECTION_TRACKING;
@@ -89,15 +89,15 @@ $actions = null;
 if (api_is_student_boss()) {
     $actions .= Display::url(
         Display::return_icon('stats.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM),
-        api_get_path(WEB_CODE_PATH) . "auth/my_progress.php"
+        api_get_path(WEB_CODE_PATH)."auth/my_progress.php"
     );
     $actions .= Display::url(
         Display::return_icon('user.png', get_lang('Students'), array(), ICON_SIZE_MEDIUM),
-        api_get_path(WEB_CODE_PATH) . "mySpace/student.php"
+        api_get_path(WEB_CODE_PATH)."mySpace/student.php"
     );
     $actions .= Display::url(
         Display::return_icon("statistics.png", get_lang("CompanyReport"), array(), ICON_SIZE_MEDIUM),
-        api_get_path(WEB_CODE_PATH) . "mySpace/company_reports.php"
+        api_get_path(WEB_CODE_PATH)."mySpace/company_reports.php"
     );
     $actions .= Display::url(
         Display::return_icon(
@@ -106,7 +106,7 @@ if (api_is_student_boss()) {
             [],
             ICON_SIZE_MEDIUM
         ),
-        api_get_path(WEB_CODE_PATH) . "gradebook/certificate_report.php"
+        api_get_path(WEB_CODE_PATH)."gradebook/certificate_report.php"
     );
 }
 
@@ -119,7 +119,7 @@ if (!empty($actions)) {
 if (!api_is_student_boss()) {
     $content .= Display::url(
         get_lang("CompanyReport"),
-        api_get_path(WEB_CODE_PATH) . "mySpace/company_reports.php",
+        api_get_path(WEB_CODE_PATH)."mySpace/company_reports.php",
         array(
             'class' => 'btn btn-success'
         )
@@ -127,7 +127,7 @@ if (!api_is_student_boss()) {
 }
 
 $content .= '</div>';
-$content .= '<h1 class="page-header">' . get_lang('CompanyReportResumed') . '</h1>';
+$content .= '<h1 class="page-header">'.get_lang('CompanyReportResumed').'</h1>';
 $content .= Display::grid_html('user_course_report');
 
 $tpl = new Template($tool_name);

@@ -90,7 +90,7 @@ if (isset($info_delete_outbox[0]) && trim($info_delete_outbox[0]) == 'delete') {
         <br><a href="../social/index.php?#remote-tab-3">'.
         get_lang('BackToOutbox').
         '</a>';
-    Display::display_normal_message(api_xml_http_response_encode($message_box),false);
+    Display::addFlash(Display::return_message(api_xml_http_response_encode($message_box), 'normal', false));
     exit;
 }
 

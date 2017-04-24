@@ -723,7 +723,9 @@ class bbb
                 $actionLinks = $this->getActionLinks($meetingDB, $record, $isGlobal, $isAdminReport);
                 $item['show_links']  = $recordLink;
             } else {
-                $actionLinks = $this->getActionLinks($meetingDB, []);
+                $actionLinks = $this->getActionLinks($meetingDB, [], $isGlobal, $isAdminReport);
+
+                $item['show_links'] = get_lang('NoRecording');
             }
 
             $item['action_links'] = implode(PHP_EOL, $actionLinks);
@@ -981,6 +983,11 @@ class bbb
         $result = $this->api->deleteRecordingsWithXmlResponseArray($recordingParams);
 
         if (!empty($result) && isset($result['deleted']) && $result['deleted'] === 'true') {
+            Database::delete(
+                'plugin_bbb_room',
+                array('meeting_id = ?' => array($id))
+            );
+
             Database::delete(
                 $this->table,
                 array('id = ?' => array($id))
@@ -1291,14 +1298,27 @@ class bbb
         $links = [];
 
         if (empty($recordInfo)) {
-            $links[] = $linkVisibility;
+            if (!$isAdminReport) {
+                $links[] = Display::url(
+                    Display::return_icon('delete.png', get_lang('Delete')),
+                    $this->deleteRecordUrl($meetingInfo)
+                );
+                $links[] = $linkVisibility;
 
-            return $links;
+                return $links;
+            } else {
+                $links[] = Display::url(
+                    Display::return_icon('course_home.png', get_lang('GoToCourse')),
+                    $this->getListingUrl()
+                );
+
+                return $links;
+            }
         }
 
         if (!$isGlobal) {
             $links[] = Display::url(
-                Display::return_icon('link.gif', get_lang('CopyToLinkTool')),
+                Display::return_icon('link.gif', get_lang('UrlMeetingToShare')),
                 $this->copyToRecordToLinkTool($meetingInfo)
             );
             $links[] = Display::url(

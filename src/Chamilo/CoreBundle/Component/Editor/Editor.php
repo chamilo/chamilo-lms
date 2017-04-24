@@ -201,9 +201,11 @@ class Editor
                     case 'Config':
                         $this->processConfig($value);
                         break;
+                    case 'width':
                     case 'Width':
                         $this->setConfigAttribute('width', $value);
                         break;
+                    case 'height':
                     case 'Height':
                         $this->setConfigAttribute('height', $value);
                         break;

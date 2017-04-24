@@ -102,7 +102,7 @@ class Export
         }
         foreach ($data as $row) {
             $string = implode("</td><td>", $row);
-            $string = '<tr><td>' . $string . '</td></tr>';
+            $string = '<tr><td>'.$string.'</td></tr>';
             if ($encoding != 'utf-8') {
                 $string = api_convert_encoding($string, $encoding, $systemEncoding);
             }
@@ -176,7 +176,7 @@ class Export
             fwrite($handle, '<'.$wrapper_tagname.'>');
         }
         $s = self::_export_complex_table_xml_helper($data);
-        fwrite($handle,$s);
+        fwrite($handle, $s);
         if (!is_null($wrapper_tagname)) {
             fwrite($handle, '</'.$wrapper_tagname.'>'."\n");
         }
@@ -198,10 +198,10 @@ class Export
         }
         $string = '';
         foreach ($data as $row) {
-            $string .= "\n".str_repeat("\t",$level).'<'.$row['name'].'>';
+            $string .= "\n".str_repeat("\t", $level).'<'.$row['name'].'>';
             if (is_array($row['value'])) {
-            	$string .= self::_export_complex_table_xml_helper($row['value'],$level+1)."\n";
-                $string .= str_repeat("\t",$level).'</'.$row['name'].'>';
+            	$string .= self::_export_complex_table_xml_helper($row['value'], $level + 1)."\n";
+                $string .= str_repeat("\t", $level).'</'.$row['name'].'>';
             } else {
                 $string .= $row['value'];
                 $string .= '</'.$row['name'].'>';

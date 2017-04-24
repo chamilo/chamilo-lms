@@ -33,14 +33,13 @@ class HookAdvancedSubscription extends HookObserver implements
 
     /**
      * @param HookAdminBlockEventInterface $hook
-     * @return int
+     * @return array
      */
     public function hookAdminBlock(HookAdminBlockEventInterface $hook)
     {
         $data = $hook->getEventData();
-        if ($data['type'] === HOOK_EVENT_TYPE_PRE) {
-            // Nothing to do
-        } elseif ($data['type'] === HOOK_EVENT_TYPE_POST) {
+        // if ($data['type'] === HOOK_EVENT_TYPE_PRE) // Nothing to do
+        if ($data['type'] === HOOK_EVENT_TYPE_POST) {
 
             if (isset($data['blocks'])) {
                 $data['blocks']['sessions']['items'][] = array(
@@ -48,10 +47,7 @@ class HookAdvancedSubscription extends HookObserver implements
                     'label' => get_plugin_lang('plugin_title', 'AdvancedSubscriptionPlugin'),
                 );
             }
-        } else {
-            // Hook type is not valid
-            // Nothing to do
-        }
+        } // Else: Hook type is not valid, nothing to do
 
         return $data;
     }
@@ -64,10 +60,9 @@ class HookAdvancedSubscription extends HookObserver implements
     public function hookWSRegistration(HookWSRegistrationEventInterface $hook)
     {
         $data = $hook->getEventData();
-        if ($data['type'] === HOOK_EVENT_TYPE_PRE) {
-
-        } elseif ($data['type'] === HOOK_EVENT_TYPE_POST) {
-           /** @var \nusoap_server $server */
+        //if ($data['type'] === HOOK_EVENT_TYPE_PRE) // nothing to do
+        if ($data['type'] === HOOK_EVENT_TYPE_POST) {
+            /** @var \nusoap_server $server */
             $server = &$data['server'];
 
             /** WSSessionListInCategory */
@@ -403,9 +398,7 @@ class HookAdvancedSubscription extends HookObserver implements
             );
 
             return $data;
-        } else {
-            // Nothing to do
-        }
+        } // Else: Nothing to do
 
         return false;
     }
@@ -421,10 +414,9 @@ class HookAdvancedSubscription extends HookObserver implements
         if ($debug) {
             error_log(__FUNCTION__);
             error_log('Params '.print_r($params, 1));
-        }
-        if (!WSHelperVerifyKey($params)) {
-
-           //return return_error(WS_ERROR_SECRET_KEY);
+            if (!WSHelperVerifyKey($params)) {
+                error_log(return_error(WS_ERROR_SECRET_KEY));
+            }
         }
         // Check if category ID is set
         if (!empty($params['id']) && empty($params['name'])) {
@@ -476,7 +468,6 @@ class HookAdvancedSubscription extends HookObserver implements
         if (!WSHelperVerifyKey($params)) {
             return return_error(WS_ERROR_SECRET_KEY);
         }
-        $result = return_error(WS_ERROR_NOT_FOUND_RESULT);
         // Check params
         if (is_array($params) && !empty($params['session_id']) && !empty($params['user_id'])) {
             $userId = UserManager::get_user_id_from_original_id($params['user_id'], $params['user_field']);
@@ -525,18 +516,14 @@ class HookAdvancedSubscription extends HookObserver implements
                                 } elseif ($status == ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED) {
                                     // send url action
                                     $data['action_url'] = self::$plugin->getSessionUrl($sessionId);
-                                } else {
-                                    // In queue, output status message, no more info.
-                                }
+                                } // Else: In queue, output status message, no more info.
                             } else {
                                 if ($status == ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED) {
                                     $data['action_url'] = self::$plugin->getSessionUrl($sessionId);
                                 } elseif ($status == ADVANCED_SUBSCRIPTION_QUEUE_STATUS_NO_QUEUE) {
                                     // in Queue or not, cannot be subscribed to session
                                     $data['action_url'] = self::$plugin->getTermsUrl($params);
-                                } else {
-                                    // In queue, output status message, no more info.
-                                }
+                                } // Else: In queue, output status message, no more info.
                             }
                         }
                     }
@@ -610,7 +597,7 @@ class HookAdvancedSubscription extends HookObserver implements
         }
 
         // Get validated and waiting queue users count for each session
-        $plugin = AdvancedSubscriptionPlugin::create();
+        AdvancedSubscriptionPlugin::create();
         foreach ($sessionList as &$session) {
             // Add validated and queue users count
             $session['validated_user_num'] = self::$plugin->countQueueByParams(
@@ -664,17 +651,14 @@ class HookAdvancedSubscription extends HookObserver implements
             }
 
             return $data;
-        } else {
-            // Hook type is not valid
-            // Nothing to do
-        }
+        } //Else hook type is not valid, nothing to do
         return false;
     }
 
     /**
      * Return the notification data title if the hook was triggered
      * @param HookNotificationTitleEventInterface $hook
-     * @return int
+     * @return array|bool
      */
     public function hookNotificationTitle(HookNotificationTitleEventInterface $hook)
     {
@@ -691,10 +675,7 @@ class HookAdvancedSubscription extends HookObserver implements
             }
 
             return $data;
-        } else {
-            // Hook type is not valid
-            // Nothing to do
-        }
+        } // Else: hook type is not valid, nothing to do
         return false;
     }
 }

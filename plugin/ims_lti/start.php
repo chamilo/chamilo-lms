@@ -7,7 +7,7 @@ $toolId = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 if (empty($toolId)) {
     if (api_is_platform_admin()) {
-        header('Location: ' . api_get_path(WEB_PLUGIN_PATH) . 'ims_lti/list.php');
+        header('Location: '.api_get_path(WEB_PLUGIN_PATH).'ims_lti/list.php');
         exit;
     }
 
@@ -26,7 +26,7 @@ $htmlHeadXtra[] = '<link rel="stylesheet" href="../assets/css/style.css" type="t
 $template = new Template($imsLtiPlugin->get_title());
 $template->assign(
     'launch_url',
-    api_get_path(WEB_PLUGIN_PATH) . 'ims_lti/form.php?' . http_build_query(['id' => $tool->getId()])
+    api_get_path(WEB_PLUGIN_PATH).'ims_lti/form.php?'.http_build_query(['id' => $tool->getId()])
 );
 
 $content = $template->fetch('ims_lti/view/start.tpl');

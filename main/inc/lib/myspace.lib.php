@@ -827,7 +827,7 @@ class MySpace
                     $message .= '<li>'.$extrafields[$extra_field_export][3].'</li>';
                 }
 
-                Display::display_normal_message(get_lang('FollowingFieldsWillAlsoBeExported').': <br /><ul>'.$message.'</ul>', false);
+                Display::addFlash(Display::return_message(get_lang('FollowingFieldsWillAlsoBeExported').': <br /><ul>'.$message.'</ul>', 'normal', false));
             }
         }
     }
@@ -2341,7 +2341,7 @@ class MySpace
             case 'Contact' :
                 $user = array ();
                 break;
-            default :
+            default:
                 $current_tag = $data;
         }
     }
@@ -2361,7 +2361,7 @@ class MySpace
                 $user['UserName'] = UserManager::purify_username($user['UserName'], $purification_option_for_usernames);
                 $users[] = $user;
                 break;
-            default :
+            default:
                 $user[$data] = $current_value;
                 break;
         }

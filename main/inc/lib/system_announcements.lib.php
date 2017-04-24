@@ -527,7 +527,7 @@ class SystemAnnouncementManager
         $lang = is_null($lang) ? '' : $lang;
 
         if (!checkdate($date_start_to_compare[1], $date_start_to_compare[2], $date_start_to_compare[0])) {
-            Display:: display_normal_message(get_lang('InvalidStartDate'));
+            Display::addFlash(Display::return_message(get_lang('InvalidStartDate'), 'normal'));
 
             return false;
         }
@@ -537,13 +537,13 @@ class SystemAnnouncementManager
             $date_end_to_compare[0]) &&
             !checkdate($date_end_to_compare[1], $date_end_to_compare[2], $date_end_to_compare[0])
         ) {
-			Display::display_normal_message(get_lang('InvalidEndDate'));
+			Display::addFlash(Display::return_message(get_lang('InvalidEndDate'), 'normal'));
 
 			return false;
 		}
 
 		if (strlen(trim($title)) == 0) {
-			Display::display_normal_message(get_lang('InvalidTitle'));
+			Display::addFlash(Display::return_message(get_lang('InvalidTitle'), 'normal'));
 
 			return false;
 		}

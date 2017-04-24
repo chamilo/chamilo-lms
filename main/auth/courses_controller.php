@@ -43,7 +43,6 @@ class CoursesController
         $data['user_courses'] = $this->model->get_courses_of_user($user_id);
         $data['user_course_categories'] = $this->model->get_user_course_categories();
         $data['courses_in_category'] = $this->model->get_courses_in_category();
-        $data['all_user_categories'] = $this->model->get_user_course_categories();
         $data['action'] = $action;
         $data['message'] = $message;
 

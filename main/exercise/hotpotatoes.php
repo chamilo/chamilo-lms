@@ -31,7 +31,7 @@ if (!empty($gradebook) && $gradebook == 'view') {
 }
 // The breadcrumbs.
 $interbreadcrumb[] = array(
-    'url' => api_get_path(WEB_CODE_PATH) . '.exercise/exercise.php?' . api_get_cidreq(),
+    'url' => api_get_path(WEB_CODE_PATH).'.exercise/exercise.php?'.api_get_cidreq(),
     'name' => get_lang('Exercises')
 );
 
@@ -151,7 +151,7 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
                 $_course,
                 $_FILES['userFile'],
                 $document_sys_path,
-                $uploadPath . '/' . $fld,
+                $uploadPath.'/'.$fld,
                 api_get_user_id(),
                 null,
                 null,
@@ -163,7 +163,7 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
                     $imgparams = $_POST['imgparams'];
                     $checked = CheckImageName($imgparams, $filename);
                     if ($checked) {
-                        $imgcount = $imgcount-1;
+                        $imgcount = $imgcount - 1;
                     } else {
                         $dialogBox .= $filename.' '.get_lang('NameNotEqual');
                         my_delete($document_sys_path.$uploadPath.'/'.$fld.'/'.$filename);
@@ -223,7 +223,7 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
 
     echo '<div class="actions">';
     echo '<a href="exercise.php?show=test">'.
-        Display :: return_icon('back.png', get_lang('BackToExercisesList'), '', ICON_SIZE_MEDIUM).
+        Display::return_icon('back.png', get_lang('BackToExercisesList'), '', ICON_SIZE_MEDIUM).
         '</a>';
     echo '</div>';
 
@@ -236,7 +236,7 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
     }
 
     if ($dialogBox) {
-        Display::display_normal_message($dialogBox, false);
+        Display::addFlash(Display::return_message($dialogBox, 'normal', false));
     }
 
     $form->display();

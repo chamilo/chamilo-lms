@@ -2,9 +2,9 @@
 /* For licensing terms, see /license.txt */
 
 /**
-*	HotPotatoes administration.
-*	@package chamilo.exercise
-* 	@author Istvan Mandak
+ * HotPotatoes administration.
+ * @package chamilo.exercise
+ * @author Istvan Mandak
 */
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -27,10 +27,10 @@ $is_allowedToEdit = api_is_allowed_to_edit(null, true);
 $documentPath=api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 
 // picture path
-$picturePath=$documentPath.'/images';
+$picturePath = $documentPath.'/images';
 
 // audio path
-$audioPath=$documentPath.'/audio';
+$audioPath = $documentPath.'/audio';
 
 // Database table definitions
 if (!$is_allowedToEdit) {
@@ -56,13 +56,10 @@ Display::display_header($nameTools,"Exercise");
 
 /** @todo probably wrong !!!! */
 require_once api_get_path(SYS_CODE_PATH).'/exercise/hotpotatoes.lib.php';
-
 ?>
-
 <h4>
   <?php echo $nameTools; ?>
 </h4>
-
 <?php
 if (isset($newName)) {
     if ($newName!="") {

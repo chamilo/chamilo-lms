@@ -12,36 +12,34 @@ require_once __DIR__.'/cm_soap.php';
  */
 $s = WSCMSoapServer::singleton();
 
-
-
 $s->register(
-	'WSCMCourses.get_courses_code',
-	array(
-		'username' => 'xsd:string',
-		'password' => 'xsd:string'
-	),
-	array('return' => 'xsd:string'),
-        'urn:WSCMService',
-        '',
-        '',
-        '',
-        'Retorna o CODE dos cursos do username.'
-        
+    'WSCMCourses.get_courses_code',
+    array(
+        'username' => 'xsd:string',
+        'password' => 'xsd:string',
+    ),
+    array('return' => 'xsd:string'),
+    'urn:WSCMService',
+    '',
+    '',
+    '',
+    'Retorna o CODE dos cursos do username.'
+
 );
 
 $s->register(
-	'WSCMCourses.get_course_title',
-	array(
-		'username' => 'xsd:string',
-		'password' => 'xsd:string',
-                'course_code' => 'xsd:string',
-	),
-	array('return' => 'xsd:string'),
-        'urn:WSCMService',
-        '',
-        '',
-        '',
-        'Retorna o titulo/nome do curso de course_code informado'
+    'WSCMCourses.get_course_title',
+    array(
+        'username' => 'xsd:string',
+        'password' => 'xsd:string',
+        'course_code' => 'xsd:string',
+    ),
+    array('return' => 'xsd:string'),
+    'urn:WSCMService',
+    '',
+    '',
+    '',
+    'Retorna o titulo/nome do curso de course_code informado'
 
 );
 

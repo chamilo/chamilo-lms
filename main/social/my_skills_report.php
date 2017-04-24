@@ -14,7 +14,7 @@ $isStudentBoss = api_is_student_boss();
 $isDRH = api_is_drh();
 
 if (!$isStudent && !$isStudentBoss && !$isDRH) {
-    header('Location: ' . api_get_path(WEB_CODE_PATH) . 'social/skills_wheel.php');
+    header('Location: '.api_get_path(WEB_CODE_PATH).'social/skills_wheel.php');
     exit;
 }
 

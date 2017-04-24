@@ -242,7 +242,7 @@ function get_work_assignment_by_id($id, $courseId = null)
     }
     $id = intval($id);
 
-    $table = Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
+    $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
     $sql = "SELECT * FROM $table
             WHERE c_id = $courseId AND publication_id = $id";
     $result = Database::query($sql);
@@ -1056,7 +1056,7 @@ function insert_all_directory_in_course_table($base_work_dir)
     }
     $course_id = api_get_course_int_id();
     $group_id  = api_get_group_id();
-    $work_table = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
+    $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $groupIid = 0;
     if ($group_id) {
         $groupInfo = GroupManager::get_group_properties($group_id);
@@ -2037,8 +2037,8 @@ function get_work_user_list(
             $item_id = $work['id'];
 
             // Get the author ID for that document from the item_property table
-            $is_author  = false;
-            $can_read   = false;
+            $is_author = false;
+            $can_read = false;
             $owner_id = $work['user_id'];
 
             /* Because a bug found when saving items using the api_item_property_update()
@@ -2099,7 +2099,6 @@ function get_work_user_list(
                     ['class' => 'work-name']
                 );
                 $work['title_clean'] = $work['title'];
-
                 $work['title'] = Security::remove_XSS($work['title']);
                 if (strlen($work['title']) > 30) {
                     $short_title = substr($work['title'], 0, 27).'...';
@@ -2137,9 +2136,8 @@ function get_work_user_list(
                 $work_date = api_get_local_time($work['sent_date']);
                 $date = date_to_str_ago($work['sent_date']). ' ' . $work_date;
                 $work['formatted_date'] = $work_date . ' ' . $add_string;
-
                 $work['sent_date_from_db'] = $work['sent_date'];
-                $work['sent_date'] = '<div class="work-date" title="'.$date.'">' . $add_string . ' ' . $work_date . '</div>';
+                $work['sent_date'] = '<div class="work-date" title="'.$date.'">' . $add_string . ' ' . Display::dateToStringAgoAndLongDate($work['sent_date']) . '</div>';
 
                 // Actions.
                 $correction = '';
@@ -2151,6 +2149,10 @@ function get_work_user_list(
                         api_get_path(WEB_CODE_PATH).'work/download.php?id='.$item_id.'&'.api_get_cidreq().'&correction=1'
                     );
                 }
+
+                $work['status'] = $hasCorrection;
+                $work['has_correction'] = $hasCorrection;
+
                 if (api_is_allowed_to_edit()) {
                     $action .= '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.
                         Display::return_icon('rate_work.png', get_lang('CorrectAndRate'), array(), ICON_SIZE_SMALL).'</a> ';
@@ -2263,13 +2265,10 @@ function get_work_user_list(
                         }
                         $action .= ' <a href="'.$url.'work_list.php?'.api_get_cidreq().'&action=delete&item_id='.$item_id.'&id='.$work['parent_id'].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES))."'".')) return false;" title="'.get_lang('Delete').'"  >'.
                             Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';
-                    } else {
-                        //$action .= Display::return_icon('edit_na.png', get_lang('Modify'), array(), ICON_SIZE_SMALL);
                     }
                 } else {
                     $action .= '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.
                         Display::return_icon('default.png', get_lang('View'), array(), ICON_SIZE_SMALL).'</a>';
-                    //$action .= Display::return_icon('edit_na.png', get_lang('Modify'), array(), ICON_SIZE_SMALL);
                 }
 
                 // Status.
@@ -3733,7 +3732,7 @@ function sendAlertToUsers($workId, $courseInfo, $session_id)
  */
 function checkExistingWorkFileName($filename, $workId)
 {
-    $work_table = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
+    $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $filename = Database::escape_string($filename);
     $sql = "SELECT title FROM $work_table
             WHERE parent_id = $workId AND title = '$filename' AND active = 1";
@@ -3765,7 +3764,7 @@ function processWorkForm(
     $checkDuplicated = false,
     $showFlashMessage = true
 ) {
-    $work_table = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
+    $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
     $courseId = $courseInfo['real_id'];
     $groupId = intval($groupId);
@@ -4079,7 +4078,7 @@ function addDir($formValues, $user_id, $courseInfo, $groupId, $session_id)
  */
 function agendaExistsForWork($workId, $courseInfo)
 {
-    $workTable = Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
+    $workTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
     $courseId = $courseInfo['real_id'];
     $workId = intval($workId);
 
@@ -4333,8 +4332,8 @@ function deleteAllWorkPerUser($userId, $courseInfo)
  */
 function deleteWorkItem($item_id, $courseInfo)
 {
-    $work_table = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
-    $TSTDPUBASG = Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
+    $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+    $TSTDPUBASG = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
     $currentCourseRepositorySys = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/';
     $is_allowed_to_edit = api_is_allowed_to_edit();
     $file_deleted = false;
@@ -4601,8 +4600,8 @@ function updateSettings($courseInfo, $showScore, $studentDeleteOwnPublication)
 {
     $showScore = intval($showScore);
     $courseId = api_get_course_int_id();
-    $main_course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
-    $table_course_setting = Database :: get_course_table(TOOL_COURSE_SETTING);
+    $main_course_table = Database::get_main_table(TABLE_MAIN_COURSE);
+    $table_course_setting = Database::get_course_table(TOOL_COURSE_SETTING);
 
     if (empty($courseId)) {
         return false;
@@ -4653,7 +4652,7 @@ function updateSettings($courseInfo, $showScore, $studentDeleteOwnPublication)
  */
 function makeVisible($item_id, $course_info)
 {
-    $work_table = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
+    $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $course_id = $course_info['real_id'];
     $item_id = intval($item_id);
 
@@ -4669,7 +4668,7 @@ function makeVisible($item_id, $course_info)
  */
 function makeInvisible($item_id, $course_info)
 {
-    $work_table = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
+    $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $item_id = intval($item_id);
     $course_id = $course_info['real_id'];
     $sql = "UPDATE  " . $work_table . "
@@ -4695,7 +4694,7 @@ function makeInvisible($item_id, $course_info)
  */
 function generateMoveForm($item_id, $path, $courseInfo, $groupId, $sessionId)
 {
-    $work_table = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
+    $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $courseId = $courseInfo['real_id'];
     $folders = array();
     $session_id = intval($sessionId);
@@ -5445,7 +5444,7 @@ function deleteCorrection($courseInfo, $work)
 {
     if (isset($work['url_correction']) && !empty($work['url_correction']) && isset($work['iid'])) {
         $id = $work['iid'];
-        $table = Database:: get_course_table(TABLE_STUDENT_PUBLICATION);
+        $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
         $sql = "UPDATE $table SET
                     url_correction = '',
                     title_correction = ''

@@ -646,10 +646,10 @@ function api_format_date($time, $format = null, $language = null)
         $date_format = str_replace(
             array('%A', '%a', '%B', '%b'),
             array(
-                $translated['days_long'][(int)strftime('%w', $time)],
-                $translated['days_short'][(int)strftime('%w', $time)],
-                $translated['months_long'][(int)strftime('%m', $time) - 1],
-                $translated['months_short'][(int)strftime('%m', $time) - 1],
+                $translated['days_long'][(int) strftime('%w', $time)],
+                $translated['days_short'][(int) strftime('%w', $time)],
+                $translated['months_long'][(int) strftime('%m', $time) - 1],
+                $translated['months_short'][(int) strftime('%m', $time) - 1],
             ),
             $date_format
         );
@@ -1611,7 +1611,7 @@ function api_natrsort(&$array, $language = null, $encoding = null)
  * @return string					Returns the encoding identificator modified in suitable for comparison way.
  */
 function api_refine_encoding_id($encoding) {
-    if (is_array($encoding)){
+    if (is_array($encoding)) {
         return array_map('api_refine_encoding_id', $encoding);
     }
     return strtoupper(str_replace('_', '-', $encoding));

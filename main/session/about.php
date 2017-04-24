@@ -191,9 +191,8 @@ $template->assign(
 $template->assign(
     'user_session_time',
     SessionManager::getDayLeftInSession(
-        $session->getId(),
-        api_get_user_id(),
-        $session->getDuration()
+        ['id' => $session->getId(), 'duration' => $session->getDuration()],
+        api_get_user_id()
     )
 
 );

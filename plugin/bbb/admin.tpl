@@ -21,15 +21,17 @@
                 {% endif %}
                 <td>
                     {% if meeting.status == 1 %}
-                        <span class="label label-success">{{ 'MeetingOpened'|get_lang }}</span>
+                        <span class="label label-success">{{ 'MeetingOpened'|get_plugin_lang('BBBPlugin') }}</span>
                     {% else %}
-                        <span class="label label-info">{{ 'MeetingClosed'|get_lang }}</span>
+                        <span class="label label-info">{{ 'MeetingClosed'|get_plugin_lang('BBBPlugin') }}</span>
                     {% endif %}
                 </td>
                 <td>
                     {% if meeting.record == 1 %}
                         {# Record list #}
                         {{ meeting.show_links }}
+                    {% else %}
+                        {{ 'NoRecording'|get_plugin_lang('BBBPlugin') }}
                     {% endif %}
                 </td>
                 <td>{{ meeting.course ?: '-' }}</td>

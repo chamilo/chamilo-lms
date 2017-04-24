@@ -41,7 +41,7 @@ class ScoreDisplay
         } elseif (!isset($score2)) {
             return -1;
         } else {
-            $scoredisplay = ScoreDisplay::instance();
+            $scoredisplay = self::instance();
             $custom1 = $scoredisplay->display_custom($score1);
             $custom2 = $scoredisplay->display_custom($score2);
             if ($custom1 == $custom2) {

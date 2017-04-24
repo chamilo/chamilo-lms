@@ -49,8 +49,11 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
     public function __construct(
         $elementName = null,
         $elementLabel = null,
-        $attributes = array()
+        $attributes = []
     ) {
+        if (is_string($attributes) && empty($attributes)) {
+            $attributes = [];
+        }
         if (is_array($attributes) || empty($attributes)) {
             $attributes['class'] = 'form-control';
         }

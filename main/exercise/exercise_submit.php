@@ -719,10 +719,10 @@ if ($question_count != 0) {
 }
 
 if (!empty ($_GET['gradebook']) && $_GET['gradebook'] == 'view') {
-    $_SESSION['gradebook'] = Security :: remove_XSS($_GET['gradebook']);
+    $_SESSION['gradebook'] = Security::remove_XSS($_GET['gradebook']);
     $gradebook = $_SESSION['gradebook'];
 } elseif (empty ($_GET['gradebook'])) {
-    unset ($_SESSION['gradebook']);
+    unset($_SESSION['gradebook']);
     $gradebook = '';
 }
 
@@ -736,7 +736,7 @@ $interbreadcrumb[] = array("url" => "#", "name" => $objExercise->name);
 if ($origin != 'learnpath') { //so we are not in learnpath tool
     Display :: display_header(null, 'Exercises');
     if (!api_is_allowed_to_session_edit()) {
-        Display :: display_warning_message(get_lang('SessionIsReadOnly'));
+        Display::addFlash(Display::return_message(get_lang('SessionIsReadOnly'), 'warning'));
     }
 } else {
     $htmlHeadXtra[] = "
@@ -754,7 +754,7 @@ $show_quiz_edition = $objExercise->added_in_lp();
 if (api_is_course_admin() && $origin != 'learnpath') {
     echo '<div class="actions">';
     if ($show_quiz_edition == false) {
-    	echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.Display :: return_icon('settings.png', get_lang('ModifyExercise'), '', ICON_SIZE_MEDIUM).'</a>';
+    	echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.Display::return_icon('settings.png', get_lang('ModifyExercise'), '', ICON_SIZE_MEDIUM).'</a>';
     } else {
     	echo '<a href="#">'.Display::return_icon('settings_na.png', get_lang('ModifyExercise'), '', ICON_SIZE_MEDIUM).'</a>';
     }
@@ -1201,8 +1201,8 @@ if (!empty($error)) {
                         $objQuestionTmp = Question::read($questionId);
                         $questionName = $objQuestionTmp->selectTitle();
                         // destruction of the Question object
-                        unset ($objQuestionTmp);
-                        Display :: display_normal_message(get_lang('AlreadyAnswered'));
+                        unset($objQuestionTmp);
+                        Display::addFlash(Display::return_message(get_lang('AlreadyAnswered')));
                         $i++;
                         break;
                     }

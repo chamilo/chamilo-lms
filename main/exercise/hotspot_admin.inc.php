@@ -572,7 +572,7 @@ if ($modifyAnswers) {
     );
 
     if (!empty($msgErr)) {
-        Display::display_normal_message($msgErr); //main API
+        Display::addFlash(Display::return_message($msgErr, 'normal')); //main API
     }
 
     $hotspot_admin_url = api_get_path(WEB_CODE_PATH) . 'exercise/admin.php?' . api_get_cidreq() . '&hotspotadmin=' . $modifyAnswers . '&exerciseId=' . $exerciseId . '&' . api_get_cidreq();

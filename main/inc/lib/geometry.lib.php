@@ -254,12 +254,12 @@ function poly_result(&$poly1, &$poly2, $max) {
 
     for ($i=0; $i<$max['x']; $i++)
         for($j=0; $j<$max['y']; $j++) {
-            if (isset($poly1[$i][$j]) && ($poly1[$i][$j] == TRUE)) {
+            if (isset($poly1[$i][$j]) && ($poly1[$i][$j] == true)) {
                 $surfaceOf1++;
-                if (isset($poly2[$i][$j]) && ($poly2[$i][$j] == FALSE))
+                if (isset($poly2[$i][$j]) && ($poly2[$i][$j] == false))
                     $onlyIn1++;
             }
-            if (isset($poly2[$i][$j]) && ($poly2[$i][$j] == TRUE))
+            if (isset($poly2[$i][$j]) && ($poly2[$i][$j] == true))
                 $surfaceOf2++;
         }
 
@@ -290,7 +290,7 @@ function poly_touch(&$poly1, &$poly2, $max) {
             }
         }
     }
-    return FALSE;
+    return false;
 }
 
 /**

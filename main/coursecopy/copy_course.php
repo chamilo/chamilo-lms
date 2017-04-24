@@ -12,7 +12,7 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 
 // Setting the global file that gets the general configuration, the databases, the languages, ...
 require_once __DIR__.'/../inc/global.inc.php';
-$current_course_tool  = TOOL_COURSE_MAINTENANCE;
+$current_course_tool = TOOL_COURSE_MAINTENANCE;
 api_protect_course_script(true);
 
 if (!api_is_allowed_to_edit()) {
@@ -58,12 +58,13 @@ if (Security::check_token('post') && (
     $cr = new CourseRestorer($course);
     $cr->set_file_option($_POST['same_file_name_option']);
     $cr->restore($_POST['destination_course']);
-    Display::display_normal_message(
+    Display::addFlash(Display::return_message(
         get_lang('CopyFinished').': <a href="'.api_get_course_url($_POST['destination_course']).'">'.
         Security::remove_XSS($_POST['destination_course']).
         '</a>',
+        'normal',
         false
-    );
+    ));
 } elseif (Security::check_token('post') && (
         isset($_POST['copy_option']) &&
         $_POST['copy_option'] == 'select_items'
@@ -95,7 +96,7 @@ if (Security::check_token('post') && (
     );
 
     if (empty($courseList)) {
-        Display::display_normal_message(get_lang('NoDestinationCoursesAvailable'));
+        Display::addFlash(Display::return_message(get_lang('NoDestinationCoursesAvailable'), 'normal'));
     } else {
         $options = array();
         foreach ($courseList as $courseItem) {
@@ -122,7 +123,7 @@ if (Security::check_token('post') && (
         $form->addGroup($group, '', get_lang('SameFilename'));
         $form->addProgress();
         $form->addButtonSave(get_lang('CopyCourse'));
-        $form->setDefaults(array('copy_option' =>'select_items','same_file_name_option' => FILE_OVERWRITE));
+        $form->setDefaults(array('copy_option' =>'select_items', 'same_file_name_option' => FILE_OVERWRITE));
 
         // Add Security token
         $token = Security::get_token();

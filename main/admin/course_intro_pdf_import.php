@@ -44,7 +44,7 @@ if (count($errors) != 0) {
         $error_message .= '<li>'.get_lang('Course').': '.$error_course['Title'].' ('.$error_course['Code'].')</li>';
     }
     $error_message .= '</ul>';
-    Display :: display_normal_message($error_message, false);
+    Display::addFlash(Display::return_message($error_message, 'normal', false));
 } elseif ($_POST['formSent']) {
     Display :: display_confirmation_message('CourseIntroductionsAllImportesSuccessfully', false);
 }

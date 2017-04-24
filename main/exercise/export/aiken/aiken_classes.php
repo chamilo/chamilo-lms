@@ -35,7 +35,7 @@ class Aiken2Question extends Question
             case MCUA :
                 $answer = new AikenAnswerMultipleChoice($this->id);
             	return $answer;
-            default :
+            default:
                 $answer = null;
                 break;
         }

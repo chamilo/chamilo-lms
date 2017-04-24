@@ -1197,7 +1197,6 @@ switch ($action) {
         require 'lp_view.php';
         break;
     case 'switch_view_mode':
-
         if (!$lp_found) {
             error_log('New LP - No learnpath given for switch', 0);
             require 'lp_list.php';

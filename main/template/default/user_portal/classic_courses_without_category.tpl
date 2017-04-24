@@ -57,15 +57,17 @@
                         </h4>
                         <div class="course-items-session">
                             <div class="list-teachers">
-                                {{ 'teacher.png' | img(16, 'Professor'|get_lang ) }}
-                                {% for teacher in item.teachers %}
-                                    {% set counter = counter + 1 %}
-                                    {% if counter > 1 %} | {% endif %}
-                                    <a href="{{ teacher.url }}" class="ajax"
-                                       data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
-                                        {{ teacher.firstname }} {{ teacher.lastname }}
-                                    </a>
-                                {% endfor %}
+                                {% if item.teachers|length > 0 %}
+                                    {{ 'teacher.png' | img(16, 'Professor'|get_lang ) }}
+                                    {% for teacher in item.teachers %}
+                                        {% set counter = counter + 1 %}
+                                        {% if counter > 1 %} | {% endif %}
+                                        <a href="{{ teacher.url }}" class="ajax"
+                                        data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
+                                            {{ teacher.firstname }} {{ teacher.lastname }}
+                                        </a>
+                                    {% endfor %}
+                                {% endif %}
                             </div>
 
                             {% if item.student_info %}

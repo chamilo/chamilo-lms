@@ -226,7 +226,7 @@ header{
 /* notifications help and bug */
 .notification-panel {
   position: fixed;
-  top: 280px;
+  top: 200px;
   right: -10px;
   z-index:9999;
   width: 73px;
@@ -5609,7 +5609,7 @@ a.sessionView {
 }
 #listFriends .list-group-item{
   border: none;
-  padding: 6px;
+  padding: 0;
   font-size: 12px;
 }
 #listFriends .help{
@@ -5618,6 +5618,9 @@ a.sessionView {
 #listFriends a{
   display: block;
   text-overflow: ellipsis;
+}
+#listFriends a:hover{
+	background: none;
 }
 #listFriends a .username{
     display: inline-block;
@@ -5640,6 +5643,7 @@ a.sessionView {
   width: 32px;
   height: 32px;
   margin-right: 5px;
+  vertical-align: baseline;
 }
 #course-block .list-group .list-group-item,
 #session-block .list-group .list-group-item

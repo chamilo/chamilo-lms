@@ -308,9 +308,9 @@ function restructureChatBoxes() {
 		user_id = chatBoxes[x];
 		if ($("#chatbox_"+user_id).css('display') != 'none') {
 			if (align == 0) {
-				$("#chatbox_"+user_id).css('right', '245px');
+				$("#chatbox_"+user_id).css('right', '10px');
 			} else {
-				width = (align)*(225+7)+20 + 225;
+				width = (align)*(225+7) + 5 + 5;
 				$("#chatbox_"+user_id).css('right', width+'px');
 			}
 			align++;
@@ -449,9 +449,9 @@ function createChatBox(user_id, chatboxtitle, minimizeChatBox, online, userImage
 	}
 
 	if (chatBoxeslength == 0) {
-		$("#chatbox_"+user_id).css('right', '245px');
+		$("#chatbox_"+user_id).css('right', '10px');
 	} else {
-		width = (chatBoxeslength)*(225+7)+20 +225;
+		width = (chatBoxeslength)*(225+7) + 5 + 5;
 		$("#chatbox_"+user_id).css('right', width+'px');
 	}
 

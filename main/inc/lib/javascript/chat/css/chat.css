@@ -60,13 +60,13 @@
 	font-weight: normal;
 	display: inline-block;
 	font-size: 10px;
-	width: 100px;
+	width: auto;
 	cursor:pointer;
-  overflow: hidden;
-  padding-left: 2px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  line-height: 10px;
+	 overflow: hidden;
+	 padding-left: 2px;
+	 text-overflow: ellipsis;
+	 white-space: nowrap;
+	 line-height: 10px;
 }
 
 .chatboxhead {

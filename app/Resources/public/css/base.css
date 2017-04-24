@@ -4853,6 +4853,7 @@ div#chat-remote-video video {
 }
 .grid-courses .items .toolbar{
     text-align: right;
+    padding: 0 10px;
 }
 .grid-courses .items .toolbar .info{
     float: left;
@@ -4864,8 +4865,13 @@ div#chat-remote-video video {
     padding: 5px 10px;
 }
 .grid-courses .items .block-info{
-	padding: 5px 10px;
-	font-size: 12px;
+    padding: 0 10px;
+    font-size: 12px;
+}
+.grid-courses .items .block-date{
+    padding: 5px 10px;
+    font-size: 11px;
+    line-height: 18px;
 }
 .grid-courses .items .block-info .list-inline{
 	margin: 0;
@@ -5271,7 +5277,6 @@ div#chat-remote-video video {
 .ui-tabs.ui-widget-content{
     border: none;
 }
-
 .ui-tabs .ui-state-default, .ui-tabs .ui-widget-content .ui-state-default, .ui-tabs .ui-widget-header .ui-state-default{
     background: #fff;
 }
@@ -5439,7 +5444,6 @@ div#chat-remote-video video {
   padding-top: 3px;
   padding-bottom: 5px;
   border-radius: 5px;
-
 }
 .items-course .items-course-info .toolbar{
     text-align: center;
@@ -5468,7 +5472,6 @@ div#chat-remote-video video {
 #toolbar-agenda .show-tick{
     width: 420px;
 }
-
 .files-table{
     padding-top: 20px;
 }

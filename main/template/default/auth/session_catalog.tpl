@@ -109,7 +109,7 @@
                             	</div>
                             	{% endif %}
                             	<div class="block-info">
-                            		<ul class="info list-inline">
+                                    <ul class="info list-inline">
                                         <li>
                                             <i class="fa fa-book" aria-hidden="true"></i>
                                             {{ item.nbr_courses ~ ' ' ~ 'Courses'|get_lang }}
@@ -120,6 +120,9 @@
                                         </li>
                                     </ul>
                             	</div>
+                                <div class="block-date">
+                                    {{ item.date }}
+                                </div>
                                 <div class="toolbar">
                                     <div class="left">
                                         {% if item.price %}

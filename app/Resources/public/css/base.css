@@ -4860,9 +4860,16 @@ div#chat-remote-video video {
 }
 .grid-courses .session-date,
 .grid-courses .session-info{
-    color: #fff;
     font-size: 12px;
     padding: 5px 10px;
+}
+.grid-courses .items .block-info{
+	padding: 5px 10px;
+	font-size: 12px;
+}
+.grid-courses .items .block-info .list-inline{
+	margin: 0;
+	padding: 0;
 }
 .grid-courses .items .image{
     position: relative;

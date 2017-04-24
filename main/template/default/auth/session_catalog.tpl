@@ -10,11 +10,12 @@
     </script>
     <div class="row">
         <div class="col-md-12">
-            <h3 class="page-header">{{ 'Sessions'|get_lang }}</h3>
-            <div class="search-session">
+        <!-- header catalog session -->
+        <h2 class="title-session">{{ 'Sessions'|get_lang }}</h2>      	
+       	<div class="search-session">
                 <div class="row">
-                    <div class="col-md-{{ show_courses ? '4' : '6' }}">
-                        <form class="form-inline" method="post" action="{{ _p.web_self }}?action=display_sessions">
+                    <div class="col-md-6">
+                        <form method="post" action="{{ _p.web_self }}?action=display_sessions">
                             <div class="form-group">
                                 <label>{{ "ByDate"|get_lang }}</label>
                                 <div class="input-group">
@@ -29,8 +30,8 @@
                             </div>
                         </form>
                     </div>
-                    <div class="col-md-{{ show_courses ? '4' : '6' }}">
-                        <form class="form-inline" method="post" action="{{ _p.web_self }}?action=search_tag">
+                    <div class="col-md-6">
+                        <form method="post" action="{{ _p.web_self }}?action=search_tag">
                             <label>{{ "ByTag"|get_lang }}</label>
                             <div class="input-group">
                                 <input type="text" name="search_tag" title="{{ 'ByTag'|get_lang }}" class="form-control"
@@ -43,16 +44,15 @@
                             </div>
                         </form>
                     </div>
-
-                    {% if show_courses %}
-                        <div class="col-md-4">
-                            <a class="btn btn-default btn-block" href="{{ _p.web_self }}">
-                                {{ "CourseManagement"|get_lang }}
-                            </a>
-                        </div>
-                    {% endif %}
                 </div>
             </div>
+       	{% if show_courses %}
+        <div class="return-catalog">
+        	<a class="btn btn-default btn-lg btn-block" href="{{ _p.web_self }}">
+            	<em class="fa fa-arrow-left"></em> {{ "CourseManagement"|get_lang }}
+            </a>
+       	</div>
+       	{% endif %}
         </div>
     </div>
     <!-- new view session grib -->
@@ -60,7 +60,7 @@
         <div class="grid-courses col-md-12">
             <div class="row">
                 {% for item in sessions %}
-                    <div class="col-md-4 col-sm-6 col-xs-6">
+                    <div class="col-md-4 col-sm-6 col-xs-12">
                         <div id="session-{{ item.id }}" class="items items-courses">
                             <div class="image">
                                 <a href="{{ _p.web ~ 'session/' ~ item.id ~ '/about/' }}" title="{{ item.name }}">

@@ -176,14 +176,17 @@ EOT;
      * @param string $name					The element name
      * @param bool   $required	(optional)	Is the form-element required (default=true)
      * @param array  $attributes (optional)	List of attributes for the form-element
+     * @return HTML_QuickForm_text
      */
     public function addText($name, $label, $required = true, $attributes = array())
     {
-        $this->addElement('text', $name, $label, $attributes);
+        $element = $this->addElement('text', $name, $label, $attributes);
         $this->applyFilter($name, 'trim');
         if ($required) {
             $this->addRule($name, get_lang('ThisFieldIsRequired'), 'required');
         }
+
+        return $element;
     }
 
     /**

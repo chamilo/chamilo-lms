@@ -6,14 +6,8 @@
  * @package chamilo.plugin
  */
 
-//the plugin title
-$plugin_info['title'] = 'Edit htaccess';
-//the comments that go with the plugin
-$plugin_info['comment'] = 'Edit htaccess';
-//the plugin version
-$plugin_info['version'] = '1.0';
-//the plugin author
-$plugin_info['author'] = 'Julio Montoya';
+$plugin = MaintenanceModePlugin::create();
+$plugin_info = $plugin->get_info();
 
 $editFile = false;
 
@@ -80,14 +74,17 @@ if ($editFile && api_is_platform_admin()) {
 
     $form = new FormValidator('htaccess');
     $form->addHtml('The following text will be added in the /.htaccess');
-    $form->addText('ip', 'IP');
+    $element = $form->addText(
+        'ip',
+        [$plugin->get_lang('IPAdmin'), $plugin->get_lang('IPAdminDescription')]
+    );
+    $element->freeze();
     $form->addTextarea('text', 'htaccess', ['rows' => '15']);
 
     $config = [
         'ToolbarSet' => 'Documents',
         'Width' => '100%',
         'Height' => '400',
-        //'fullPage' => true,
         'allowedContent' => true
     ];
 
@@ -99,16 +96,23 @@ if ($editFile && api_is_platform_admin()) {
         $config
     );
 
+    $form->addCheckBox('active', null, get_lang('Active'));
+
     $form->addButtonSave(get_lang('Save'));
     $content = '';
-    if (is_file($maintenanceHtml)) {
+    if (file_exists($maintenanceHtml)) {
         $content = file_get_contents($maintenanceHtml);
     }
     if (empty($content)) {
         $content = '<html><head><title></title></head><body></body></html>';
     }
-    $ip = api_get_plugin_setting('edit_htaccess', 'ip');
+
+    $isActive = api_get_plugin_setting('maintenancemode', 'active');
+
     $ip = api_get_real_ip();
+    if ($ip == '::1') {
+        $ip = '127.0.0.1';
+    }
     $ipSubList = explode('.', $ip);
     $implode = implode('\.', $ipSubList);
     $append = api_get_configuration_value('url_append');
@@ -122,18 +126,23 @@ RewriteRule \.*$ '.$append.'/maintenance.html [R=302,L]
         $block = $default;
     }
 
-    $form->setDefaults(['text' => $block, 'maintenance' => $content, 'ip' => $ip]);
+    $form->setDefaults(
+        ['text' => $block, 'maintenance' => $content, 'ip' => $ip, 'active' => $isActive]
+    );
 
     if ($form->validate()) {
         $values = $form->getSubmitValues();
         $text = $values['text'];
+        $active = isset($values['active']) ? true : false;
         $content = $values['maintenance'];
 
         // Restore htaccess with out the block
-        $newFileContent = $contentNoBlock;
-        $newFileContent .= $beginLine.PHP_EOL;
-        $newFileContent .= $text.PHP_EOL;
+        $newFileContent = $beginLine.PHP_EOL;
+        $newFileContent .= trim($text).PHP_EOL;
         $newFileContent .= $endLine;
+        $newFileContent .= PHP_EOL;
+        $newFileContent .= $contentNoBlock;
+
         file_put_contents($file, $newFileContent);
 
         $handle = curl_init(api_get_path(WEB_PATH));
@@ -152,8 +161,22 @@ RewriteRule \.*$ '.$append.'/maintenance.html [R=302,L]
             );
             file_put_contents($file, $originalContent);
         } else {
-            file_put_contents($maintenanceHtml, $content);
-            Display::addFlash(Display::return_message('Saved'));
+            $result = file_put_contents($maintenanceHtml, $content);
+            if ($result === false) {
+                Display::addFlash(
+                    Display::return_message(
+                        sprintf($plugin->get_lang('MaintenanceFileNotPresent'), $maintenanceHtml),
+                        'warning'
+                    )
+                );
+            }
+        }
+
+        if ($active == false) {
+            Display::addFlash(Display::return_message($plugin->get_lang('TheMaintenanceModeIsOff')));
+            file_put_contents($file, $contentNoBlock);
+        } else {
+            Display::addFlash(Display::return_message($plugin->get_lang('MaintenanceModeIsOn')));
         }
     }
     $plugin_info['settings_form'] = $form;

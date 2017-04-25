@@ -498,7 +498,7 @@ if (!empty($_GET['category'])) {
                         api_get_utc_datetime(),
                         $user_id
                     );
-                    Display :: display_confirmation_message(get_lang('DashboardPluginsUpdatedSuccessfully'));
+                    echo Display::return_message(get_lang('DashboardPluginsUpdatedSuccessfully'), 'confirmation');
                 }
             }
             echo '<script>

@@ -173,7 +173,7 @@ RewriteRule \.*$ '.$append.'/maintenance.html [R=302,L]
         }
 
         if ($active == false) {
-            Display::addFlash(Display::return_message($plugin->get_lang('TheMaintenanceModeIsOff')));
+            Display::addFlash(Display::return_message($plugin->get_lang('MaintenanceModeIsOff')));
             file_put_contents($file, $contentNoBlock);
         } else {
             Display::addFlash(Display::return_message($plugin->get_lang('MaintenanceModeIsOn')));

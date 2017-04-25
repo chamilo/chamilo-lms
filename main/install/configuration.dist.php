@@ -335,6 +335,22 @@ $_configuration['tracking_columns'] = [
         'last_connection' => true,
         'details' => true,
     ],
+    'my_students_lp' => [
+        'lp' => true,
+        'time' => true,
+        'best_score' => true,
+        'latest_attempt_avg_score' => true,
+        'progress' => true,
+        'last_connection' => true,
+    ],
+    'my_progress_lp' => [
+        'lp' => true,
+        'time' => true,
+        'progress' => true,
+        'score' => true,
+        'best_score' => true,
+        'last_connection' => true,
+    ]
 ];
 */
 // Hide session link of course_block on index/userportal

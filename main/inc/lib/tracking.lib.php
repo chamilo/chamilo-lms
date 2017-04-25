@@ -5279,16 +5279,40 @@ class Tracking
             }
             $html .= '</tbody></table></div>';
 
+            $columnHeaders = [
+                'lp' => get_lang('LearningPath'),
+                'time' => get_lang('LatencyTimeSpent'),
+                'progress' => get_lang('Progress'),
+                'score' => get_lang('Score'),
+                'best_score' => get_lang('BestScore'),
+                'last_connection' => get_lang('LastConnexion'),
+            ];
+
+            $headers = '';
+            $trackingColumns = api_get_configuration_value('tracking_columns');
+            if (isset($trackingColumns['my_progress_lp'])) {
+                foreach ($columnHeaders as $key => $value) {
+                    if (!isset($trackingColumns['my_progress_lp'][$key]) ||
+                        $trackingColumns['my_progress_lp'][$key] == false
+                    ) {
+                        unset($columnHeaders[$key]);
+                    }
+                }
+            }
+
+            $columnHeadersKeys = array_keys($columnHeaders);
+            foreach ($columnHeaders as $key => $columnName) {
+                $headers .= Display::tag(
+                    'th',
+                    $columnName
+                );
+            }
+
             // LP table results
             $html .= '<div class="table-responsive">';
             $html .= '<table class="table table-striped table-hover">';
             $html .= '<thead><tr>';
-            $html .= Display::tag('th', get_lang('LearningPath'));
-            $html .= Display::tag('th', get_lang('LatencyTimeSpent'));
-            $html .= Display::tag('th', get_lang('Progress'));
-            $html .= Display::tag('th', get_lang('Score'));
-            $html .= Display::tag('th', get_lang('BestScore'));
-            $html .= Display::tag('th', get_lang('LastConnexion'));
+            $html .= $headers;
             $html .= '</tr></thead><tbody>';
 
             $list = new LearnpathList(
@@ -5340,6 +5364,9 @@ class Tracking
                         true
                     );
 
+                    if (is_numeric($progress)) {
+                        $progress = $progress.'%';
+                    }
                     if (is_numeric($percentage_score)) {
                         $percentage_score = $percentage_score.'%';
                     } else {
@@ -5353,30 +5380,57 @@ class Tracking
                     }
 
                     $time_spent_in_lp = api_time_to_hms($time_spent_in_lp);
-
-                    $html .= '<tr class="row_even">';
-                    $url = api_get_path(WEB_CODE_PATH)."lp/lp_controller.php?cidReq={$course_code}&id_session=$session_id&lp_id=$lp_id&action=view";
-
-                    if ($learnpath['lp_visibility'] == 0) {
-                        $html .= Display::tag('td', $learnpath['lp_name']);
-                    } else {
-                        $html .= Display::tag('td', Display::url($learnpath['lp_name'], $url, array('target'=>SESSION_LINK_TARGET)));
-                    }
-
-                    $html .= Display::tag('td', $time_spent_in_lp, array('align'=>'center'));
-                    if (is_numeric($progress)) {
-                        $progress = $progress.'%';
-                    }
-                    $html .= Display::tag('td', $progress, array('align'=>'center'));
-                    $html .= Display::tag('td', $percentage_score);
-                    $html .= Display::tag('td', $bestScore);
-
                     $last_connection = '-';
                     if (!empty($last_connection_in_lp)) {
                         $last_connection = api_convert_and_format_date($last_connection_in_lp, DATE_TIME_FORMAT_LONG);
                     }
-                    $html .= Display::tag('td', $last_connection, array('align'=>'center', 'width'=>'180px'));
-                    $html .= "</tr>";
+
+                    $url = api_get_path(WEB_CODE_PATH)."lp/lp_controller.php?cidReq={$course_code}&id_session=$session_id&lp_id=$lp_id&action=view";
+                    $html .= '<tr class="row_even">';
+
+                    if (in_array('lp', $columnHeadersKeys)) {
+                        if ($learnpath['lp_visibility'] == 0) {
+                            $html .= Display::tag('td', $learnpath['lp_name']);
+                        } else {
+                            $html .= Display::tag(
+                                'td',
+                                Display::url(
+                                    $learnpath['lp_name'],
+                                    $url,
+                                    array('target' => SESSION_LINK_TARGET)
+                                )
+                            );
+                        }
+                    }
+
+
+                    if (in_array('time', $columnHeadersKeys)) {
+                        $html .= Display::tag(
+                            'td',
+                            $time_spent_in_lp,
+                            array('align' => 'center')
+                        );
+                    }
+
+                    if (in_array('progress', $columnHeadersKeys)) {
+                        $html .= Display::tag(
+                            'td',
+                            $progress,
+                            array('align' => 'center')
+                        );
+                    }
+
+                    if (in_array('score', $columnHeadersKeys)) {
+                        $html .= Display::tag('td', $percentage_score);
+                    }
+                    if (in_array('best_score', $columnHeadersKeys)) {
+                        $html .= Display::tag('td', $bestScore);
+                    }
+
+                    if (in_array('last_connection', $columnHeadersKeys)) {
+                        $html .= Display::tag('td', $last_connection, array('align'=>'center', 'width'=>'180px'));
+                    }
+                    $html .= '</tr>';
                 }
             } else {
                 $html .= '<tr>

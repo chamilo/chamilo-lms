@@ -858,22 +858,64 @@ if (!empty($student_id)) {
             echo '</div>';
         }
     } else {
+        $trackingColumns = api_get_configuration_value('tracking_columns');
+        $columnHeaders = [
+            'lp' => get_lang('LearningPath'),
+            'time' => get_lang('Time').
+                Display::return_icon(
+                    'info3.gif',
+                    get_lang('TotalTimeByCourse'),
+                    array('align' => 'absmiddle', 'hspace' => '3px')
+                ),
+            'best_score' => get_lang('BestScore'),
+            'latest_attempt_avg_score' => get_lang('LatestAttemptAverageScore').
+                Display::return_icon(
+                    'info3.gif',
+                    get_lang('AverageIsCalculatedBasedInTheLatestAttempts'),
+                    array('align' => 'absmiddle', 'hspace' => '3px')
+                ),
+            'progress'=> get_lang('Progress').
+                Display::return_icon(
+                    'info3.gif',
+                    get_lang('LPProgressScore'),
+                    array('align' => 'absmiddle', 'hspace' => '3px')
+                ),
+            'last_connection' => get_lang('LastConnexion').
+                Display::return_icon(
+                    'info3.gif',
+                    get_lang('LastTimeTheCourseWasUsed'),
+                    array('align' => 'absmiddle', 'hspace' => '3px')
+                )
+        ];
         if ($user_info['status'] != INVITEE) {
             $csv_content[] = array();
             $csv_content[] = array(str_replace('&nbsp;', '', $table_title));
-            $t_lp = Database::get_course_table(TABLE_LP_MAIN);
 
+            $trackingColumns = api_get_configuration_value('tracking_columns');
+            if (isset($trackingColumns['my_students_lp'])) {
+                foreach ($columnHeaders as $key => $value) {
+                    if (!isset($trackingColumns['my_progress_lp'][$key]) ||
+                        $trackingColumns['my_students_lp'][$key] == false
+                    ) {
+                        unset($columnHeaders[$key]);
+                    }
+                }
+            }
+
+
+            $headers = '';
+            $columnHeadersToExport = [];
             // csv export headers
-            $csv_content[] = array();
-            $csv_content[] = array(
-                get_lang('Learnpath'),
-                get_lang('Time'),
-                get_lang('BestScore'),
-                get_lang('AverageScore'),
-                get_lang('LatestAttemptAverageScore'),
-                get_lang('Progress'),
-                get_lang('LastConnexion')
-            );
+            foreach ($columnHeaders as $key => $columnName) {
+                $columnHeadersToExport[] = strip_tags($columnName);
+                $headers .= Display::tag(
+                    'th',
+                    $columnName
+                );
+            }
+            $csv_content[] = $columnHeadersToExport;
+
+            $columnHeadersKeys = array_keys($columnHeaders);
 
             // @todo use LearnpathList class
             if (empty($sessionId)) {
@@ -905,66 +947,14 @@ if (!empty($student_id)) {
 
             $lps = $query->getResult();
             if (count($lps) > 0) {
-                ?>
-                <!-- LPs-->
-                <div class="table-responsive">
-                <table class="table table-striped table-hover">
-                <thead>
-                <tr>
-                    <th><?php echo get_lang('LearningPath');?></th>
-                    <th>
-                        <?php
-                        echo get_lang('Time').' ';
-                        Display:: display_icon(
-                            'info3.gif',
-                            get_lang('TotalTimeByCourse'),
-                            array('align' => 'absmiddle', 'hspace' => '3px')
-                        );
-                    ?>
-                    </th>
-                    <th>
-                        <?php
-                        echo get_lang('BestScore').' ';
-                        ?>
-                    </th>
-                    <th>
-                    <?php
-                        echo get_lang('LatestAttemptAverageScore').' ';
-                        Display::display_icon(
-                            'info3.gif',
-                            get_lang('AverageIsCalculatedBasedInTheLatestAttempts'),
-                            array('align' => 'absmiddle', 'hspace' => '3px')
-                        );
-                        ?>
-                    </th>
-                    <th><?php
-                        echo get_lang('Progress').' ';
-                        Display:: display_icon(
-                            'info3.gif',
-                            get_lang('LPProgressScore'),
-                            array('align' => 'absmiddle', 'hspace' => '3px')
-                        );
-                        ?>
-                    </th>
-                    <th><?php
-                        echo get_lang('LastConnexion').' ';
-                        Display:: display_icon(
-                            'info3.gif',
-                            get_lang('LastTimeTheCourseWasUsed'),
-                            array('align' => 'absmiddle', 'hspace' => '3px')
-                        );
-                        ?>
-                    </th>
-                    <?php
-                    echo '<th>'.get_lang('Details').'</th>';
-                    if (api_is_allowed_to_edit()) {
-                        echo '<th>'.get_lang('ResetLP').'</th>';
-                    }
-                    ?>
-                </tr>
-                </thead>
-                <tbody>
-                <?php
+                echo '<div class="table-responsive">';
+                echo '<table class="table table-striped table-hover"><thead><tr>';
+                echo $headers;
+                echo '<th>'.get_lang('Details').'</th>';
+                if (api_is_allowed_to_edit()) {
+                    echo '<th>'.get_lang('ResetLP').'</th>';
+                }
+                echo '</tr></thead><tbody>';
 
                 $i = 0;
                 /** @var CLp $learnpath */
@@ -1059,33 +1049,11 @@ if (!empty($student_id)) {
 
                     $i++;
 
-                    // csv export content
-                    $csv_content[] = array(
-                        api_html_entity_decode(stripslashes($lp_name), ENT_QUOTES, $charset),
-                        api_time_to_hms($total_time),
-                        $bestScore,
-                        $score_latest,
-                        $progress.'%',
-                        $start_time
-                    );
-
-                    echo '<tr class="'.$css_class.'">';
-                    echo Display::tag('td', stripslashes($lp_name));
-                    echo Display::tag('td', api_time_to_hms($total_time));
-
-                    if (isset($score) && !is_null($score)) {
-                        if (is_numeric($score)) {
-                            $score = $score.'%';
-                        }
-                    }
-                    echo Display::tag('td', $bestScore);
-
                     if (isset($score_latest) && !is_null($score_latest)) {
                         if (is_numeric($score_latest)) {
                             $score_latest = $score_latest.'%';
                         }
                     }
-                    echo Display::tag('td', $score_latest);
 
                     if (is_numeric($progress)) {
                         $progress = $progress.'%';
@@ -1093,10 +1061,39 @@ if (!empty($student_id)) {
                         $progress = '-';
                     }
 
-                    echo Display::tag('td', $progress);
-                    //Do not change with api_convert_and_format_date, because this value came from the lp_item_view table
-                    //which implies several other changes not a priority right now
-                    echo Display::tag('td', $start_time);
+                    echo '<tr class="'.$css_class.'">';
+                    $contentToExport = [];
+                    if (in_array('lp', $columnHeadersKeys)) {
+                        $contentToExport[] = api_html_entity_decode(stripslashes($lp_name), ENT_QUOTES, $charset);
+                        echo Display::tag('td', stripslashes($lp_name));
+                    }
+                    if (in_array('time', $columnHeadersKeys)) {
+                        $contentToExport[] = api_time_to_hms($total_time);
+                        echo Display::tag('td', api_time_to_hms($total_time));
+                    }
+
+                    if (in_array('best_score', $columnHeadersKeys)) {
+                        $contentToExport[] = $bestScore;
+                        echo Display::tag('td', $bestScore);
+                    }
+                    if (in_array('latest_attempt_avg_score', $columnHeadersKeys)) {
+                        $contentToExport[] = $score_latest;
+                        echo Display::tag('td', $score_latest);
+                    }
+
+                    if (in_array('progress', $columnHeadersKeys)) {
+                        $contentToExport[] = $progress;
+                        echo Display::tag('td', $progress);
+                    }
+
+                    if (in_array('last_connection', $columnHeadersKeys)) {
+                        //Do not change with api_convert_and_format_date, because this value came from the lp_item_view table
+                        //which implies several other changes not a priority right now
+                        $contentToExport[] = $start_time;
+                        echo Display::tag('td', $start_time);
+                    }
+
+                    $csv_content[] = $contentToExport;
 
                     if ($any_result === true) {
                         $from = '';
@@ -1125,8 +1122,6 @@ if (!empty($student_id)) {
                         echo '</td>';
                         echo '</tr>';
                     }
-                    $data_learnpath[$i][] = $lp_name;
-                    $data_learnpath[$i][] = $progress . '%';
                 }
                 ?>
                 </tbody>

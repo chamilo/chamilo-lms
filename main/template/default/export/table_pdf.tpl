@@ -1,4 +1,4 @@
-{{ organization }}
+
 
 <h2 align="center"> {{ pdf_title }} </h2>
 

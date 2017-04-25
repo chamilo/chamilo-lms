@@ -54,6 +54,7 @@ class BuyCoursesPlugin extends Plugin
             ",
             array(
                 'show_main_menu_tab' => 'boolean',
+                'public_main_menu_tab' => 'boolean',
                 'include_sessions' => 'boolean',
                 'paypal_enable' => 'boolean',
                 'transfer_enable' => 'boolean',

@@ -238,8 +238,8 @@ function show_add_forum_form($inputvalues = array(), $lp_id)
     } else {
         $form_title = get_lang('AddForum');
     }
-    $session_header = api_get_session_name();
-    $form->addElement('header', $form_title.$session_header);
+
+    $form->addElement('header', $form_title);
 
     // We have a hidden field if we are editing.
     if (!empty($inputvalues) && is_array($inputvalues)) {

@@ -2351,6 +2351,8 @@ class GroupManager
             'groups' => array()
         );
 
+        $courseCode = api_get_course_id();
+        $sessionId = api_get_session_id();
         $groupCategories = self::get_categories();
 
         if (empty($groupCategories)) {
@@ -2429,7 +2431,7 @@ class GroupManager
                         $data['group'],
                         $categoryId,
                         null,
-                        $data['max_students']
+                        $data['max_student']
                     );
 
                     if ($groupId) {
@@ -2437,7 +2439,7 @@ class GroupManager
                             $groupId,
                             $data['group'],
                             $data['description'],
-                            $data['max_students'],
+                            $data['max_student'],
                             $data['doc_state'],
                             $data['work_state'],
                             $data['calendar_state'],
@@ -2460,7 +2462,7 @@ class GroupManager
                         $groupId,
                         $data['group'],
                         $data['description'],
-                        $data['max_students'],
+                        $data['max_student'],
                         $data['doc_state'],
                         $data['work_state'],
                         $data['calendar_state'],
@@ -2485,6 +2487,29 @@ class GroupManager
                     $studentUserIdList = array();
                     foreach ($students as $student) {
                         $userInfo = api_get_user_info_from_username($student);
+
+                        if (!$userInfo) {
+                            continue;
+                        }
+
+                        if (
+                            !CourseManager::is_user_subscribed_in_course(
+                                $userInfo['user_id'],
+                                $courseCode,
+                                !empty($sessionId),
+                                $sessionId
+                            )
+                        ) {
+                            Display::addFlash(
+                                Display::return_message(
+                                    sprintf(get_lang('StudentXIsNotSubscribedToCourse'), $userInfo['complete_name']),
+                                    'warning'
+                                )
+                            );
+
+                            continue;
+                        }
+
                         $studentUserIdList[] = $userInfo['user_id'];
                     }
                     self::subscribe_users($studentUserIdList, $groupInfo);

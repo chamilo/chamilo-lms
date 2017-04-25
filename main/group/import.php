@@ -15,8 +15,6 @@ if (!api_is_allowed_to_edit(false, true)) {
 $nameTools = get_lang('Import');
 $interbreadcrumb[] = array('url' => 'group.php', 'name' => get_lang('Groups'));
 
-Display::display_header($nameTools, 'Group');
-
 $form = new FormValidator('import', 'post', api_get_self().'?'.api_get_cidreq());
 $form->addElement('header', get_lang('ImportGroups'));
 $form->addElement('file', 'file', get_lang('ImportCSVFileLocation'));
@@ -74,10 +72,17 @@ if ($form->validate()) {
                 }
             }
 
-            echo $html;
+            Display::addFlash(
+                Display::return_message($html, 'information', false)
+            );
+
+            header('Location: '.api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq());
+            exit;
         }
     }
 }
+
+Display::display_header($nameTools, 'Group');
 
 $form->display();
 

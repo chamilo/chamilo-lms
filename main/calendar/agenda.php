@@ -85,6 +85,7 @@ if ($type === 'fromjs') {
     $id_list = explode('_', $eventId);
     $eventId = $id_list[1];
     $event_type = $id_list[0];
+    $event_type = $event_type === 'platform' ? 'admin' : $event_type;
 }
 
 $agenda = new Agenda($event_type);

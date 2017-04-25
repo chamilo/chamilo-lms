@@ -14,27 +14,29 @@ $editFile = false;
 $file = api_get_path(SYS_PATH).'.htaccess';
 $maintenanceHtml = api_get_path(SYS_PATH).'maintenance.html';
 
-if (!file_exists($file)) {
-    Display::addFlash(
-        Display::return_message(
-            "$file does not exists. ",
-            'warning'
-        )
-    );
-} else {
-    if (is_readable($file) && is_writable($file)) {
-        $editFile = true;
+if ($plugin->isEnabled()) {
+    if (!file_exists($file)) {
+        Display::addFlash(
+            Display::return_message(
+                "$file does not exists. ",
+                'warning'
+            )
+        );
     } else {
-        if (!is_readable($file)) {
-            Display::addFlash(
-                Display::return_message("$file is not readable", 'warning')
-            );
-        }
+        if (is_readable($file) && is_writable($file)) {
+            $editFile = true;
+        } else {
+            if (!is_readable($file)) {
+                Display::addFlash(
+                    Display::return_message("$file is not readable", 'warning')
+                );
+            }
 
-        if (!is_writable($file)) {
-            Display::addFlash(
-                Display::return_message("$file is not writable", 'warning')
-            );
+            if (!is_writable($file)) {
+                Display::addFlash(
+                    Display::return_message("$file is not writable", 'warning')
+                );
+            }
         }
     }
 }

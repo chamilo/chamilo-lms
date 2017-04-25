@@ -382,8 +382,8 @@ function return_navigation_array()
                 }
             }
         }
-    }else{
-        // Custom tabs public
+    } else {
+        // Show custom tabs that are specifically marked as public
         $customTabs = getCustomTabs();
         if (!empty($customTabs)) {
             foreach ($customTabs as $tab) {

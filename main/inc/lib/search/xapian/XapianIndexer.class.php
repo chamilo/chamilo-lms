@@ -90,7 +90,7 @@ abstract class XapianIndexer
 
             return $this->db;
         } catch (Exception $e) {
-            Display::display_error_message($e->getMessage());
+            echo Display::return_message($e->getMessage(), 'error');
 
             return 1;
         }
@@ -150,7 +150,7 @@ abstract class XapianIndexer
                 }
             }
         } catch (Exception $e) {
-            Display::display_error_message($e->getMessage());
+            echo Display::return_message($e->getMessage(), 'error');
             exit(1);
         }
     }
@@ -169,7 +169,7 @@ abstract class XapianIndexer
         try {
             $docid = $this->db->get_document($did);
         } catch (Exception $e) {
-            //Display::display_error_message($e->getMessage());
+            //echo Display::return_message($e->getMessage(), 'error');
             return false;
         }
         return $docid;
@@ -193,7 +193,7 @@ abstract class XapianIndexer
             $doc_data = $doc->get_data();
             return $doc_data;
         } catch (Exception $e) {
-            //Display::display_error_message($e->getMessage());
+            //echo Display::return_message($e->getMessage(), 'error');
             return false;
         }
     }
@@ -257,7 +257,7 @@ abstract class XapianIndexer
         try {
             $doc->add_term($term);
         } catch (Exception $e) {
-            Display::display_error_message($e->getMessage());
+            echo Display::return_message($e->getMessage(), 'error');
             return 1;
         }
     }
@@ -277,7 +277,7 @@ abstract class XapianIndexer
         try {
             $doc->remove_term($term);
         } catch (Exception $e) {
-            Display::display_error_message($e->getMessage());
+            echo Display::return_message($e->getMessage(), 'error');
             return 1;
         }
     }
@@ -300,7 +300,7 @@ abstract class XapianIndexer
             $this->getDb()->replace_document((int) $did, $doc);
             $this->getDb()->flush();
         } catch (Exception $e) {
-            Display::display_error_message($e->getMessage());
+            echo Display::return_message($e->getMessage(), 'error');
             return 1;
         }
     }

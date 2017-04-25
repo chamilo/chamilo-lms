@@ -88,9 +88,9 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete') {
         $result = $certificate->delete(true);
         Security::clear_token();
         if ($result == true) {
-            Display::display_confirmation_message(get_lang('CertificateRemoved'));
+            echo Display::return_message(get_lang('CertificateRemoved'), 'confirmation');
         } else {
-            Display::display_error_message(get_lang('CertificateNotRemoved'));
+            echo Display::return_message(get_lang('CertificateNotRemoved'), 'error');
         }
     }
 }
@@ -142,7 +142,7 @@ if (!empty($cats)) {
     }
 
     if ($total_resource_weight != $total_weight) {
-        Display::display_warning_message(get_lang('SumOfActivitiesWeightMustBeEqualToTotalWeight'));
+        echo Display::return_message(get_lang('SumOfActivitiesWeightMustBeEqualToTotalWeight'), 'warning');
     }
 }
 
@@ -161,7 +161,7 @@ if ($filter === 'true') {
     );
     $form->addElement('select', 'filter', get_lang('OfficialCode'), $options);
     $form->addButton('submit', get_lang('Submit'));
-    $filterForm = '<br />'.$form->return_form();
+    $filterForm = '<br />'.$form->returnForm();
 
     if ($form->validate()) {
         $officialCode = $form->getSubmitValue('filter');
@@ -200,7 +200,7 @@ echo '</div>';
 echo $filterForm;
 
 if (count($certificate_list) == 0) {
-    echo Display::display_warning_message(get_lang('NoResultsAvailable'));
+    echo Display::return_message(get_lang('NoResultsAvailable'), 'warning');
 } else {
     echo '<br /><br /><table class="data_table">';
     foreach ($certificate_list as $index => $value) {

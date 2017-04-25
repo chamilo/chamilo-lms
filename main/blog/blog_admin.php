@@ -52,22 +52,22 @@ if (api_is_allowed_to_edit()) {
     if (!empty($_POST['new_blog_submit']) && !empty($_POST['blog_name'])) {
         if (isset($_POST['blog_name']))  {
             Blog::addBlog($_POST['blog_name'], $_POST['blog_subtitle']);
-            Display::display_confirmation_message(get_lang('BlogStored'));
+            echo Display::return_message(get_lang('BlogStored'), 'confirmation');
         }
     }
     if (!empty($_POST['edit_blog_submit']) && !empty($_POST['blog_name'])) {
         if (strlen(trim($_POST['blog_name']))>0) {
             Blog::editBlog($_POST['blog_id'], $_POST['blog_name'], $_POST['blog_subtitle']);
-            Display::display_confirmation_message(get_lang('BlogEdited'));
+            echo Display::return_message(get_lang('BlogEdited'), 'confirmation');
         }
     }
     if (isset($_GET['action']) && $_GET['action'] == 'visibility') {
         Blog::changeBlogVisibility(intval($_GET['blog_id']));
-        Display::display_confirmation_message(get_lang('VisibilityChanged'));
+        echo Display::return_message(get_lang('VisibilityChanged'), 'confirmation');
     }
     if (isset($_GET['action']) && $_GET['action'] == 'delete') {
         Blog::deleteBlog(intval($_GET['blog_id']));
-        Display::display_confirmation_message(get_lang('BlogDeleted'));
+        echo Display::return_message(get_lang('BlogDeleted'), 'confirmation');
     }
 
     if (isset($_GET['action']) && $_GET['action'] == 'add') {
@@ -86,7 +86,7 @@ if (api_is_allowed_to_edit()) {
         if (!$_POST || (!empty($_POST) && (empty($_POST['edit_blog_submit']) || empty($_POST['blog_name']) ))) {
             // if there is post data there is certainly an error in the form
             if ($_POST) {
-                Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'));
+                echo Display::return_message(get_lang('FormHasErrorsPleaseComplete'), 'error');
             }
             Blog::displayBlogEditForm(intval($_GET['blog_id']));
         }

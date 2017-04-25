@@ -200,7 +200,7 @@ if ($action == 'thematic_list') {
         if (api_get_session_id()) {
             if ($thematic_data['session_id'] != api_get_session_id()) {
                 $show_form = false;
-                Display::display_error_message(get_lang('NotAllowedClickBack'), false);
+                echo Display::return_message(get_lang('NotAllowedClickBack'), 'error', false);
             }
         }
         // set default values
@@ -211,10 +211,10 @@ if ($action == 'thematic_list') {
 
     // error messages
     if (isset($error)) {
-        Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'), false);
+        echo Display::return_message(get_lang('FormHasErrorsPleaseComplete'), 'error', false);
     }
     if ($show_form) {
-        $html = $form->return_form();
+        $html = $form->returnForm();
         
     }
 } elseif ($action == 'thematic_import_select') {
@@ -224,7 +224,7 @@ if ($action == 'thematic_list') {
     $form->addElement('file', 'file');
     $form->addElement('checkbox', 'replace', null, get_lang('DeleteAllThematic'));
     $form->addButtonImport(get_lang('Import'), 'SubmitImport');
-    $html = $form->return_form();
+    $html = $form->returnForm();
 }
 $tpl->assign('actions', $toolbar);
 if (!empty($html)) {

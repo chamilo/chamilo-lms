@@ -298,7 +298,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
         $cr = new CourseRestorer($course);
         $cr->restore($destinationCourse, $destinationSession);
 
-        Display::display_confirmation_message(get_lang('CopyFinished'));
+        echo Display::return_message(get_lang('CopyFinished'), 'confirmation');
 
         displayForm();
     } else {
@@ -324,8 +324,9 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
         if ((is_array($arrCourseOrigin) && count($arrCourseOrigin) > 0) && !empty($destinationSession)) {
             //We need only one value
             if (count($arrCourseOrigin) > 1 || count($arrCourseDestination) > 1) {
-                Display::display_error_message(
-                    get_lang('YouMustSelectACourseFromOriginalSession')
+                echo Display::return_message(
+                    get_lang('YouMustSelectACourseFromOriginalSession'),
+                    'error'
                 );
             } else {
                 $courseDestination = $arrCourseDestination[0];
@@ -337,13 +338,14 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
                 $cr = new CourseRestorer($course);
                 $cr->restore($courseDestination, $destinationSession);
 
-                Display::display_confirmation_message(get_lang('CopyFinished'));
+                echo Display::return_message(get_lang('CopyFinished'), 'confirmation');
             }
 
             displayForm();
         } else {
-            Display::display_error_message(
-                get_lang('YouMustSelectACourseFromOriginalSession')
+            echo Display::return_message(
+                get_lang('YouMustSelectACourseFromOriginalSession'),
+                'error'
             );
             displayForm();
         }
@@ -392,8 +394,9 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
             ).
             get_lang('Back').'</a></div>';
     } else {
-        Display::display_error_message(
-            get_lang('You must select a course from original session and select a destination session')
+        echo Display::return_message(
+            get_lang('You must select a course from original session and select a destination session'),
+            'error'
         );
         displayForm();
     }

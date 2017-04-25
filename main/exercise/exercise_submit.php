@@ -619,8 +619,9 @@ if ($formSent && isset($_POST)) {
                         $learnpath_item_view_id
                     );
                     if ($attempt_count >= $objExercise->selectAttempts()) {
-                        Display :: display_warning_message(
+                        echo Display :: return_message(
                             sprintf(get_lang('ReachedMaxAttempts'), $exercise_title, $objExercise->selectAttempts()),
+                            'warning',
                             false
                         );
                         if ($origin != 'learnpath') {
@@ -682,8 +683,9 @@ if ($question_count != 0) {
                         $learnpath_item_view_id
                     );
 	                if ($attempt_count >= $objExercise->selectAttempts()) {
-	                    Display :: display_warning_message(
+	                    Display::return_message(
                             sprintf(get_lang('ReachedMaxAttempts'), $exercise_title, $objExercise->selectAttempts()),
+                            'warning',
                             false
                         );
 	                    if ($origin != 'learnpath') {
@@ -800,14 +802,14 @@ if ($limit_time_exists) {
     if (!$permission_to_start || $exercise_timeover) {
         if (!api_is_allowed_to_edit(null, true)) {
             $message_warning = $permission_to_start ? get_lang('ReachedTimeLimit') : get_lang('ExerciseNoStartedYet');
-            Display :: display_warning_message(sprintf($message_warning, $exercise_title, $objExercise->selectAttempts()));
+            echo Display::return_message(sprintf($message_warning, $exercise_title, $objExercise->selectAttempts()), 'warning');
             if ($origin != 'learnpath') {
             	Display :: display_footer();
             }
             exit;
         } else {
             $message_warning = $permission_to_start ? get_lang('ReachedTimeLimitAdmin') : get_lang('ExerciseNoStartedAdmin');
-            Display :: display_warning_message(sprintf($message_warning, $exercise_title, $objExercise->selectAttempts()));
+            echo Display::return_message(sprintf($message_warning, $exercise_title, $objExercise->selectAttempts()), 'warning');
         }
     }
 }
@@ -818,12 +820,13 @@ if (isset($_custom['exercises_hidden_when_no_start_date']) &&
     $_custom['exercises_hidden_when_no_start_date']
 ) {
 	if (empty($objExercise->start_time)) {
-        Display:: display_warning_message(
+        echo Display:: return_message(
             sprintf(
                 get_lang('ExerciseNoStartedYet'),
                 $exercise_title,
                 $objExercise->selectAttempts()
-            )
+            ),
+            'warning'
         );
 		if ($origin != 'learnpath') {
 			Display :: display_footer();

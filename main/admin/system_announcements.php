@@ -87,13 +87,13 @@ switch ($action) {
     case 'delete':
         // Delete an announcement.
         SystemAnnouncementManager :: delete_announcement($_GET['id']);
-        Display :: display_confirmation_message(get_lang('AnnouncementDeleted'));
+        echo Display::return_message(get_lang('AnnouncementDeleted'), 'confirmation');
         break;
     case 'delete_selected':
         foreach ($_POST['id'] as $index => $id) {
             SystemAnnouncementManager :: delete_announcement($id);
         }
-        Display :: display_confirmation_message(get_lang('AnnouncementDeleted'));
+        echo Display::return_message(get_lang('AnnouncementDeleted'), 'confirmation');
         $action_todo = false;
         break;
     case 'add':
@@ -264,8 +264,9 @@ if ($action_todo) {
                             $announcement_id,
                             array($values['group'])
                         );
-                        Display:: display_confirmation_message(
-                            get_lang('AnnouncementAdded')
+                        echo Display::return_message(
+                            get_lang('AnnouncementAdded'),
+                            'confirmation'
                         );
                     }
                 } else {
@@ -295,8 +296,9 @@ if ($action_todo) {
                             $values['id'],
                             array($values['group'])
                         );
-                        Display:: display_confirmation_message(
-                            get_lang('AnnouncementUpdated')
+                        echo Display::return_message(
+                            get_lang('AnnouncementUpdated'),
+                            'confirmation'
                         );
                     }
                 } else {

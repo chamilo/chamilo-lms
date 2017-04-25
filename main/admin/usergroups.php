@@ -123,11 +123,12 @@ if ($action == 'add') {
         $values = $form->exportValues();
         $res = $usergroup->save($values);
         if ($res) {
-            Display::display_confirmation_message(get_lang('ItemAdded'));
+            echo Display::return_message(get_lang('ItemAdded'), 'confirmation');
         } else {
-            Display::display_warning_message(
+            echo Display::return_message(
                 Security::remove_XSS($values['name']).': '.
-                get_lang('AlreadyExists')
+                get_lang('AlreadyExists'),
+                'warning'
             );
         }
 
@@ -163,11 +164,12 @@ if ($action == 'add') {
         $values = $form->getSubmitValues();
         $res = $usergroup->update($values);
         if ($res) {
-            Display::display_confirmation_message(get_lang('Updated'));
+            echo Display::return_message(get_lang('Updated'), 'confirmation');
         } else {
-            Display::display_warning_message(
+            echo Display::return_message(
                 Security::remove_XSS($values['name']).': '.
-                get_lang('AlreadyExists')
+                get_lang('AlreadyExists'),
+                'warning'
             );
         }
 
@@ -186,7 +188,7 @@ if ($action == 'add') {
 } elseif ($action == 'delete' && is_numeric($_GET['id'])) {
     $res = $usergroup->delete($_GET['id']);
     if ($res) {
-        Display::display_confirmation_message(get_lang('Deleted'));
+        echo Display::return_message(get_lang('Deleted'), 'confirmation');
     }
     $usergroup->display();
 } else {

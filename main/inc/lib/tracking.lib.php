@@ -3003,7 +3003,7 @@ class Tracking
         $lp_id,
         $session_id = 0
     ) {
-        $course = CourseManager::get_course_information($course_code);
+        $course = api_get_course_info($course_code);
         $student_id = intval($student_id);
         $lp_id = intval($lp_id);
         $last_time = 0;
@@ -3496,7 +3496,7 @@ class Tracking
     public static function count_student_uploaded_documents($student_id, $course_code, $session_id = null)
     {
         // get the information of the course
-        $a_course = CourseManager::get_course_information($course_code);
+        $a_course = api_get_course_info($course_code);
         if (!empty($a_course)) {
             // table definition
             $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
@@ -4490,7 +4490,7 @@ class Tracking
         $rs = Database::query($sql);
         $simple_session_array = array();
         while ($row = Database::fetch_array($rs)) {
-            $course_info = CourseManager::get_course_information($row['code']);
+            $course_info = api_get_course_info($row['code']);
             $temp_course_in_session[$row['session_id']]['course_list'][$course_info['real_id']] = $course_info;
             $temp_course_in_session[$row['session_id']]['name'] = $row['name'];
             $simple_session_array[$row['session_id']] = $row['name'];
@@ -5081,7 +5081,7 @@ class Tracking
             $user_id = intval($user_id);
             $session_id = intval($session_id);
             $course = Database::escape_string($course_code);
-            $course_info = CourseManager::get_course_information($course);
+            $course_info = api_get_course_info($course);
 
             $html .= '<a name="course_session_data"></a>';
             $html .= Display::page_subheader($course_info['title']);

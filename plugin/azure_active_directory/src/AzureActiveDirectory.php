@@ -63,13 +63,13 @@ class AzureActiveDirectory extends Plugin
         $settings = [];
 
         foreach ($settingsInfo as $settingInfo) {
-            $variable = str_replace($this->get_name() . '_', '', $settingInfo['variable']);
+            $variable = str_replace($this->get_name().'_', '', $settingInfo['variable']);
 
             $settings[$variable] = $settingInfo['selected_value'];
         }
 
         $url = "https://login.microsoftonline.com/{$settings[self::SETTING_TENANT]}/oauth2/v2.0/";
-        $callback = api_get_path(WEB_PLUGIN_PATH) . $this->get_name() . '/src/callback.php';
+        $callback = api_get_path(WEB_PLUGIN_PATH).$this->get_name().'/src/callback.php';
 
         if ($urlType === self::URL_TYPE_SIGNOUT) {
             $action = 'logout';
@@ -97,6 +97,6 @@ class AzureActiveDirectory extends Plugin
             ];
         }
 
-        return $url . $action . '?' . http_build_query($urlParams);
+        return $url.$action.'?'.http_build_query($urlParams);
     }
 }

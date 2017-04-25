@@ -777,4 +777,21 @@ class Plugin
     {
         return '';
     }
+
+    /**
+     * Returns true if the plugin is installed, false otherwise
+     * @return bool True if plugin is installed/enabled, false otherwise
+     */
+    public function isEnabled()
+    {
+        $settings = api_get_settings_params_simple(
+            array(
+                "subkey = ? AND category = ? AND type = ? AND variable = 'status' " => array($this->get_name(), 'Plugins', 'setting')
+            )
+        );
+        if (is_array($settings) && isset($settings['selected_value']) && $settings['selected_value'] == 'installed') {
+            return true;
+        }
+        return false;
+    }
 }

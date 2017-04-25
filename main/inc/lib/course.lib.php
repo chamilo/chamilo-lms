@@ -841,35 +841,6 @@ class CourseManager
         }
     }
 
-
-    /**
-     *    Checks wether a parameter exists.
-     *    If it doesn't, the function displays an error message.
-     * @deprecated
-     * @return boolean if parameter is set and not empty, false otherwise
-     * @todo move function to better place, main_api ?
-     */
-    public static function check_parameter($parameter, $error_message)
-    {
-        if (empty($parameter)) {
-            Display::addFlash(Display::return_message($error_message, 'normal'));
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     *    Lets the script die when a parameter check fails.
-     * @deprecated
-     * @todo move function to better place, main_api ?
-     */
-    public static function check_parameter_or_fail($parameter, $error_message)
-    {
-        if (!self::check_parameter($parameter, $error_message)) {
-            die();
-        }
-    }
-
     /**
      * @return boolean if there already are one or more courses
      *  with the same code OR visual_code (visualcode), false otherwise

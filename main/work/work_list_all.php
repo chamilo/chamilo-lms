@@ -211,14 +211,13 @@ if (!empty($my_folder_data['description'])) {
 }
 
 $check_qualification = intval($my_folder_data['qualification']);
-
 $orderName = api_is_western_name_order() ? 'firstname' : 'lastname';
+
 
 if (!empty($work_data['enable_qualification']) &&
     !empty($check_qualification)
 ) {
     $type = 'simple';
-
     $columns = array(
         get_lang('FullUserName'),
         get_lang('Title'),
@@ -287,7 +286,6 @@ if (!empty($work_data['enable_qualification']) &&
     );
 } else {
     $type = 'complex';
-
     $columns = array(
         get_lang('FullUserName'),
         get_lang('Title'),

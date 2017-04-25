@@ -1937,8 +1937,17 @@ function get_work_user_list(
 
     $work_data = get_work_data_by_id($work_id, $courseId, $sessionId);
     $is_allowed_to_edit = api_is_allowed_to_edit() || api_is_coach();
-    $condition_session  = api_get_session_condition($session_id, true, false, 'work.session_id');
-    $locked = api_resource_is_locked_by_gradebook($work_id, LINK_STUDENTPUBLICATION, $course_info['code']);
+    $condition_session = api_get_session_condition(
+        $session_id,
+        true,
+        false,
+        'work.session_id'
+    );
+    $locked = api_resource_is_locked_by_gradebook(
+        $work_id,
+        LINK_STUDENTPUBLICATION,
+        $course_info['code']
+    );
 
     $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
         api_get_user_id(),
@@ -2031,11 +2040,35 @@ function get_work_user_list(
         $loadingText = addslashes(get_lang('Loading'));
         $uploadedText = addslashes(get_lang('Uploaded'));
         $failsUploadText = addslashes(get_lang('UplNoFileUploaded'));
-        $failsUploadIcon = Display::return_icon('closed-circle.png', '', [], ICON_SIZE_TINY);
+        $failsUploadIcon = Display::return_icon(
+            'closed-circle.png',
+            '',
+            [],
+            ICON_SIZE_TINY
+        );
+        $saveIcon = Display::return_icon(
+            'save.png',
+            get_lang('Save'),
+            array(),
+            ICON_SIZE_SMALL
+        );
+
+        $correctionIcon = Display::return_icon(
+            'check-circle.png',
+            get_lang('Correction'),
+            null,
+            ICON_SIZE_SMALL
+        );
+
+        $rateIcon = Display::return_icon(
+            'rate_work.png',
+            get_lang('CorrectAndRate'),
+            array(),
+            ICON_SIZE_SMALL
+        );
 
         while ($work = Database::fetch_array($result, 'ASSOC')) {
             $item_id = $work['id'];
-
             // Get the author ID for that document from the item_property table
             $is_author = false;
             $can_read = false;
@@ -2043,7 +2076,6 @@ function get_work_user_list(
 
             /* Because a bug found when saving items using the api_item_property_update()
                the field $item_property_data['insert_user_id'] is not reliable. */
-
             if (!$is_allowed_to_edit && $owner_id == api_get_user_id()) {
                 $is_author = true;
             }
@@ -2098,6 +2130,7 @@ function get_work_user_list(
                     api_get_person_name($work['firstname'], $work['lastname']),
                     ['class' => 'work-name']
                 );
+                // Title
                 $work['title_clean'] = $work['title'];
                 $work['title'] = Security::remove_XSS($work['title']);
                 if (strlen($work['title']) > 30) {
@@ -2114,11 +2147,14 @@ function get_work_user_list(
                 $link_to_download = null;
                 // If URL is present then there's a file to download keep BC.
                 if ($work['contains_file'] || !empty($work['url'])) {
-                    $link_to_download = '<a href="'.$url.'download.php?id='.$item_id.'&'.api_get_cidreq().'">'.
-                        Display::return_icon('save.png', get_lang('Save'),array(), ICON_SIZE_SMALL).'</a> ';
+                    $link_to_download = '<a href="'.$url.'download.php?id='.$item_id.'&'.api_get_cidreq().'">'.$saveIcon.'</a> ';
                 }
 
-                $send_to = Portfolio::share('work', $work['id'],  array('style' => 'white-space:nowrap;'));
+                $send_to = Portfolio::share(
+                    'work',
+                    $work['id'],
+                    array('style' => 'white-space:nowrap;')
+                );
                 $feedback = null;
                 $count = getWorkCommentCount($item_id, $course_info);
                 if (!is_null($count) && !empty($count)) {
@@ -2145,7 +2181,7 @@ function get_work_user_list(
                 $hasCorrection = '';
                 if (!empty($work['url_correction'])) {
                     $hasCorrection = Display::url(
-                        Display::return_icon('check-circle.png', get_lang('Correction'), null, ICON_SIZE_SMALL),
+                        $correctionIcon,
                         api_get_path(WEB_CODE_PATH).'work/download.php?id='.$item_id.'&'.api_get_cidreq().'&correction=1'
                     );
                 }
@@ -2154,8 +2190,7 @@ function get_work_user_list(
                 $work['has_correction'] = $hasCorrection;
 
                 if (api_is_allowed_to_edit()) {
-                    $action .= '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.
-                        Display::return_icon('rate_work.png', get_lang('CorrectAndRate'), array(), ICON_SIZE_SMALL).'</a> ';
+                    $action .= '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.$rateIcon.'</a> ';
 
                     if ($unoconv && empty($work['contains_file'])) {
                         $action .=  '<a href="'.$url.'work_list_all.php?'.api_get_cidreq().'&id='.$work_id.'&action=export_to_doc&item_id='.$item_id.'" title="'.get_lang('ExportToDoc').'" >'.

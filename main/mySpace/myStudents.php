@@ -89,52 +89,52 @@ $em = Database::getManager();
 if (isset($_GET['details'])) {
     if ($origin === 'user_course') {
         if (empty($cidReq)) {
-            $interbreadcrumb[] = array (
-                "url" => api_get_path(WEB_COURSE_PATH) . $courseInfo['directory'],
+            $interbreadcrumb[] = array(
+                "url" => api_get_path(WEB_COURSE_PATH).$courseInfo['directory'],
                 'name' => $courseInfo['title']
             );
         }
-        $interbreadcrumb[] = array (
-            "url" => "../user/user.php?cidReq=" . $course_code,
+        $interbreadcrumb[] = array(
+            "url" => "../user/user.php?cidReq=".$course_code,
             "name" => get_lang("Users")
         );
     } else {
         if ($origin === 'tracking_course') {
-            $interbreadcrumb[] = array (
-                "url" => "../tracking/courseLog.php?cidReq=".$course_code.'&id_session=' . api_get_session_id(),
+            $interbreadcrumb[] = array(
+                "url" => "../tracking/courseLog.php?cidReq=".$course_code.'&id_session='.api_get_session_id(),
                 "name" => get_lang("Tracking")
             );
         } else {
             if ($origin === 'resume_session') {
-                $interbreadcrumb[] = array (
+                $interbreadcrumb[] = array(
                     'url' => "../session/session_list.php",
                     "name" => get_lang('SessionList')
                 );
-                $interbreadcrumb[] = array (
-                    'url' => "../session/resume_session.php?id_session=" . $sessionId,
+                $interbreadcrumb[] = array(
+                    'url' => "../session/resume_session.php?id_session=".$sessionId,
                     "name" => get_lang('SessionOverview')
                 );
             } else {
-                $interbreadcrumb[] = array (
-                    "url" => api_is_student_boss()?"#":"index.php",
+                $interbreadcrumb[] = array(
+                    "url" => api_is_student_boss() ? "#" : "index.php",
                     "name" => get_lang('MySpace')
                 );
                 if (isset($_GET['id_coach']) && intval($_GET['id_coach']) != 0) {
-                    $interbreadcrumb[] = array (
-                        "url" => "student.php?id_coach=" . Security::remove_XSS($_GET['id_coach']),
+                    $interbreadcrumb[] = array(
+                        "url" => "student.php?id_coach=".Security::remove_XSS($_GET['id_coach']),
                         "name" => get_lang("CoachStudents")
                     );
-                    $interbreadcrumb[] = array (
-                        "url" => "myStudents.php?student=" . $student_id. '&id_coach=' . Security::remove_XSS($_GET['id_coach']),
+                    $interbreadcrumb[] = array(
+                        "url" => "myStudents.php?student=".$student_id.'&id_coach='.Security::remove_XSS($_GET['id_coach']),
                         "name" => get_lang("StudentDetails")
                     );
                 } else {
-                    $interbreadcrumb[] = array (
+                    $interbreadcrumb[] = array(
                         "url" => "student.php",
                         "name" => get_lang("MyStudents")
                     );
-                    $interbreadcrumb[] = array (
-                        "url" => "myStudents.php?student=" . $student_id,
+                    $interbreadcrumb[] = array(
+                        "url" => "myStudents.php?student=".$student_id,
                         "name" => get_lang("StudentDetails")
                     );
                 }
@@ -144,7 +144,7 @@ if (isset($_GET['details'])) {
     $nameTools = get_lang("DetailsStudentInCourse");
 } else {
     if ($origin == 'resume_session') {
-        $interbreadcrumb[] = array (
+        $interbreadcrumb[] = array(
             'url' => "../session/session_list.php",
             "name" => get_lang('SessionList')
         );
@@ -155,19 +155,19 @@ if (isset($_GET['details'])) {
             );
         }
     } else {
-        $interbreadcrumb[] = array (
-            "url" => api_is_student_boss()?"#":"index.php",
+        $interbreadcrumb[] = array(
+            "url" => api_is_student_boss() ? "#" : "index.php",
             "name" => get_lang('MySpace')
         );
         if (isset($_GET['id_coach']) && intval($_GET['id_coach']) != 0) {
             if ($sessionId) {
                 $interbreadcrumb[] = array(
-                    "url" => "student.php?id_coach=" . Security::remove_XSS($_GET['id_coach']) . "&id_session=" . $sessionId,
+                    "url" => "student.php?id_coach=".Security::remove_XSS($_GET['id_coach'])."&id_session=".$sessionId,
                     "name" => get_lang("CoachStudents")
                 );
             } else {
                 $interbreadcrumb[] = array(
-                    "url" => "student.php?id_coach=" . Security::remove_XSS($_GET['id_coach']),
+                    "url" => "student.php?id_coach=".Security::remove_XSS($_GET['id_coach']),
                     "name" => get_lang("CoachStudents")
                 );
             }
@@ -355,28 +355,28 @@ if (!empty($student_id)) {
     // Actions bar
     echo '<div class="actions">';
     echo '<a href="javascript: window.history.go(-1);">'.
-            Display::return_icon('back.png', get_lang('Back'),'',ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
 
     echo '<a href="javascript: void(0);" onclick="javascript: window.print();">'.
-            Display::return_icon('printer.png', get_lang('Print'),'',ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('printer.png', get_lang('Print'), '', ICON_SIZE_MEDIUM).'</a>';
 
-    echo '<a href="' . api_get_self() . '?' . Security::remove_XSS($_SERVER['QUERY_STRING']) . '&export=csv">'.
-            Display::return_icon('export_csv.png', get_lang('ExportAsCSV'),'',ICON_SIZE_MEDIUM).'</a> ';
+    echo '<a href="'.api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']).'&export=csv">'.
+            Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), '', ICON_SIZE_MEDIUM).'</a> ';
 
-    echo '<a href="' . api_get_self() . '?' . Security::remove_XSS($_SERVER['QUERY_STRING']) . '&export=xls">'.
-    Display::return_icon('export_excel.png', get_lang('ExportAsXLS'),'',ICON_SIZE_MEDIUM).'</a> ';
+    echo '<a href="'.api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']).'&export=xls">'.
+    Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), '', ICON_SIZE_MEDIUM).'</a> ';
 
     if (!empty ($user_info['email'])) {
         $send_mail = '<a href="mailto:'.$user_info['email'].'">'.
-            Display::return_icon('mail_send.png', get_lang('SendMail'),'',ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('mail_send.png', get_lang('SendMail'), '', ICON_SIZE_MEDIUM).'</a>';
     } else {
-        $send_mail = Display::return_icon('mail_send_na.png', get_lang('SendMail'),'',ICON_SIZE_MEDIUM);
+        $send_mail = Display::return_icon('mail_send_na.png', get_lang('SendMail'), '', ICON_SIZE_MEDIUM);
     }
     echo $send_mail;
     if (!empty($student_id) && !empty($course_code)) {
         // Only show link to connection details if course and student were defined in the URL
-        echo '<a href="access_details.php?student=' . $student_id . '&course=' . $course_code . '&origin=' . $origin. '&cidReq='.$course_code.'&id_session='.$sessionId.'">'.
-            Display::return_icon('statistics.png', get_lang('AccessDetails'),'',ICON_SIZE_MEDIUM).'</a>';
+        echo '<a href="access_details.php?student='.$student_id.'&course='.$course_code.'&origin='.$origin.'&cidReq='.$course_code.'&id_session='.$sessionId.'">'.
+            Display::return_icon('statistics.png', get_lang('AccessDetails'), '', ICON_SIZE_MEDIUM).'</a>';
     }
     if (api_can_login_as($student_id)) {
         echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&user_id='.$student_id.'&sec_token='.$token.'">'.
@@ -386,7 +386,7 @@ if (!empty($student_id)) {
     if (api_is_platform_admin(false, true) || api_is_student_boss()) {
         echo Display::url(
             Display::return_icon('skill-badges.png', get_lang('AssignSkill'), null, ICON_SIZE_MEDIUM),
-            api_get_path(WEB_CODE_PATH) . 'badge/assign.php?' . http_build_query(['user' => $student_id])
+            api_get_path(WEB_CODE_PATH).'badge/assign.php?'.http_build_query(['user' => $student_id])
         );
     }
 
@@ -447,7 +447,7 @@ if (!empty($student_id)) {
     $csv_content[] = array(
         get_lang('Information')
     );
-    $csv_content[] = array (
+    $csv_content[] = array(
         get_lang('Name'),
         get_lang('Email'),
         get_lang('Tel')
@@ -475,7 +475,7 @@ if (!empty($student_id)) {
         strip_tags($first_connection_date),
         strip_tags($last_connection_date),
         $time_spent_on_the_course,
-        $avg_student_progress . '%',
+        $avg_student_progress.'%',
         $avg_student_score
     );
 
@@ -507,12 +507,12 @@ if (!empty($student_id)) {
             </thead>
             <tbody>
             <tr>
-                <td><?php echo get_lang('Name') . ' : '.$user_info['complete_name']; ?></td>
+                <td><?php echo get_lang('Name').' : '.$user_info['complete_name']; ?></td>
             </tr>
             <tr>
                 <td>
                     <?php
-                    echo get_lang('Email') . ' : ';
+                    echo get_lang('Email').' : ';
                     if (!empty($user_info['email'])) {
                         echo '<a href="mailto:'.$user_info['email'].'">'.$user_info['email'].'</a>';
                     } else {
@@ -521,7 +521,7 @@ if (!empty($student_id)) {
                 </td>
             </tr>
             <tr>
-                <td> <?php echo get_lang('Tel') . ' : ';
+                <td> <?php echo get_lang('Tel').' : ';
                     if (!empty($user_info['phone'])) {
                         echo $user_info['phone'];
                     } else {
@@ -543,7 +543,7 @@ if (!empty($student_id)) {
                 </td>
             </tr>
             <tr>
-                <td><?php echo get_lang('OnLine') . ' : '.$online; ?> </td>
+                <td><?php echo get_lang('OnLine').' : '.$online; ?> </td>
             </tr>
             <?php
             if (!empty($course_code)) {
@@ -569,7 +569,7 @@ if (!empty($student_id)) {
             if ($timezone !== null) {
                 ?>
                 <tr>
-                    <td> <?php echo get_lang('Timezone') . ' : '.$timezone; ?> </td>
+                    <td> <?php echo get_lang('Timezone').' : '.$timezone; ?> </td>
                 </tr>
             <?php
             }
@@ -720,9 +720,9 @@ if (!empty($student_id)) {
                 }
 
                 if (!empty($access_start_date) && !empty($access_end_date)) {
-                    $date_session = get_lang('From') . ' ' . $access_start_date . ' ' . get_lang('Until') . ' ' . $access_end_date;
+                    $date_session = get_lang('From').' '.$access_start_date.' '.get_lang('Until').' '.$access_end_date;
                 }
-                $title = Display::return_icon('session.png', get_lang('Session'), array(), ICON_SIZE_SMALL).' '.$session_name.($date_session?' ('.$date_session.')':'');
+                $title = Display::return_icon('session.png', get_lang('Session'), array(), ICON_SIZE_SMALL).' '.$session_name.($date_session ? ' ('.$date_session.')' : '');
             }
 
             // Courses
@@ -792,9 +792,9 @@ if (!empty($student_id)) {
                         $scoretotal = array();
                         if (isset($cats) && isset($cats[0])) {
                             if (!empty($sId)) {
-                                $scoretotal= $cats[0]->calc_score($student_id, null, $courseCodeItem, $sId);
+                                $scoretotal = $cats[0]->calc_score($student_id, null, $courseCodeItem, $sId);
                             } else {
-                                $scoretotal= $cats[0]->calc_score($student_id, null, $courseCodeItem);
+                                $scoretotal = $cats[0]->calc_score($student_id, null, $courseCodeItem);
                             }
                         }
 
@@ -832,9 +832,9 @@ if (!empty($student_id)) {
                         );
 
                         echo '<tr>
-                        <td ><a href="' .$courseInfoItem['course_public_url'] .'?id_session=' . $sId . '">'.
+                        <td ><a href="' .$courseInfoItem['course_public_url'].'?id_session='.$sId.'">'.
                             $courseInfoItem['title'].'</a></td>
-                        <td >'.$time_spent_on_course .'</td>
+                        <td >'.$time_spent_on_course.'</td>
                         <td >'.$progress.'</td>
                         <td >'.$score.'</td>
                         <td >'.$attendances_faults_avg.'</td>
@@ -1000,7 +1000,7 @@ if (!empty($student_id)) {
                     if (!empty($start_time)) {
                         $start_time = api_convert_and_format_date($start_time, DATE_TIME_FORMAT_LONG);
                     } else {
-                        $start_time =  '-';
+                        $start_time = '-';
                     }
 
                     if (!empty($total_time)) {
@@ -1098,7 +1098,7 @@ if (!empty($student_id)) {
                     if ($any_result === true) {
                         $from = '';
                         if ($from_myspace) {
-                            $from ='&from=myspace';
+                            $from = '&from=myspace';
                         }
                         $link = Display::url(
                             Display::return_icon('2rightarrow.png', get_lang('Details')),
@@ -1137,7 +1137,7 @@ if (!empty($student_id)) {
         <thead>
         <tr>
             <th><?php echo get_lang('Exercises'); ?></th>
-            <th><?php echo get_lang('LearningPath');?></th>
+            <th><?php echo get_lang('LearningPath'); ?></th>
             <th><?php echo get_lang('AvgCourseScore').' '.Display::return_icon('info3.gif', get_lang('AverageScore'), array('align' => 'absmiddle', 'hspace' => '3px')) ?></th>
             <th><?php echo get_lang('Attempts'); ?></th>
             <th><?php echo get_lang('LatestAttempt'); ?></th>
@@ -1163,7 +1163,7 @@ if (!empty($student_id)) {
             'quiz.session_id'
         );
 
-        $sql = "SELECT quiz.title, id FROM " . $t_quiz . " AS quiz
+        $sql = "SELECT quiz.title, id FROM ".$t_quiz." AS quiz
                 WHERE
                     quiz.c_id = ".$courseInfo['real_id']." AND
                     active IN (0, 1)
@@ -1228,7 +1228,7 @@ if (!empty($student_id)) {
                 echo '<td>';
 
                 if ($count_attempts > 0) {
-                    echo $score_percentage . '%';
+                    echo $score_percentage.'%';
                 } else {
                     echo '-';
                     $score_percentage = 0;
@@ -1238,7 +1238,7 @@ if (!empty($student_id)) {
                 echo '<td>'.$count_attempts.'</td>';
                 echo '<td>';
 
-                $sql = 'SELECT exe_id FROM ' . $tbl_stats_exercices . '
+                $sql = 'SELECT exe_id FROM '.$tbl_stats_exercices.'
                          WHERE
                             exe_exo_id = "'.$exercise_id.'" AND
                             exe_user_id ="'.$student_id.'" AND
@@ -1275,7 +1275,7 @@ if (!empty($student_id)) {
 
                 echo '</tr>';
                 $data_exercices[$i][] = $exercices['title'];
-                $data_exercices[$i][] = $score_percentage . '%';
+                $data_exercices[$i][] = $score_percentage.'%';
                 $data_exercices[$i][] = $count_attempts;
 
                 $csv_content[] = array(
@@ -1303,7 +1303,7 @@ if (!empty($student_id)) {
             $survey_list = SurveyManager::get_surveys($course_code, $sessionId);
 
             $survey_data = array();
-            foreach($survey_list as $survey) {
+            foreach ($survey_list as $survey) {
                 $user_list = SurveyManager::get_people_who_filled_survey($survey['survey_id'], false, $courseInfo['real_id']);
                 $survey_done = Display::return_icon("accept_na.png", get_lang('NoAnswer'), array(), ICON_SIZE_SMALL);
                 if (in_array($student_id, $user_list)) {
@@ -1328,7 +1328,7 @@ if (!empty($student_id)) {
                         $column = 0;
                         $table->setCellContents($row, $column, $data);
                         $class = 'class="row_odd"';
-                        if($row % 2) {
+                        if ($row % 2) {
                             $class = 'class="row_even"';
                         }
                         $table->setRowAttributes($row, $class, true);
@@ -1347,12 +1347,12 @@ if (!empty($student_id)) {
                 <table class="table table-striped table-hover">
                     <thead>
                         <tr>
-                            <th>' . get_lang('Tasks') . '</th>
-                            <th class="text-center">' . get_lang('DocumentNumber') . '</th>
-                            <th class="text-center">' . get_lang('Note') . '</th>
-                            <th class="text-center">' . get_lang('HandedOut') . '</th>
-                            <th class="text-center">' . get_lang('HandOutDateLimit') . '</th>
-                            <th class="text-center">' . get_lang('ConsideredWorkingTime') . '</th>
+                            <th>' . get_lang('Tasks').'</th>
+                            <th class="text-center">' . get_lang('DocumentNumber').'</th>
+                            <th class="text-center">' . get_lang('Note').'</th>
+                            <th class="text-center">' . get_lang('HandedOut').'</th>
+                            <th class="text-center">' . get_lang('HandOutDateLimit').'</th>
+                            <th class="text-center">' . get_lang('ConsideredWorkingTime').'</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -1362,12 +1362,12 @@ if (!empty($student_id)) {
             $work = $work['work'];
             foreach ($work->user_results as $key => $results) {
                 echo '<tr>';
-                echo '<td>' . $work->title . '</td>';
+                echo '<td>'.$work->title.'</td>';
                 $documentNumber = $key + 1;
-                echo '<td class="text-center"><a href="' . api_get_path(WEB_CODE_PATH) . 'work/view.php?cidReq=' . $course_code . '&id_session=' . $sessionId .'&id=' . $results['id'] . '">(' . $documentNumber . ')</a></td>';
+                echo '<td class="text-center"><a href="'.api_get_path(WEB_CODE_PATH).'work/view.php?cidReq='.$course_code.'&id_session='.$sessionId.'&id='.$results['id'].'">('.$documentNumber.')</a></td>';
                 $qualification = !empty($results['qualification']) ? $results['qualification'] : '-';
-                echo '<td class="text-center">' . $qualification. '</td>';
-                echo '<td class="text-center">' . $results['formatted_date']. '</td>';
+                echo '<td class="text-center">'.$qualification.'</td>';
+                echo '<td class="text-center">'.$results['formatted_date'].'</td>';
                 $assignment = get_work_assignment_by_id($work->id, $courseInfo['real_id']);
 
                 echo '<td class="text-center">';
@@ -1385,7 +1385,7 @@ if (!empty($student_id)) {
                 foreach ($resultExtra as $field) {
                     $field = $field['value'];
                     if ($workingTime == $field->getField()->getVariable()) {
-                        echo '<td class="text-center">' . $field->getValue() . '</td>';
+                        echo '<td class="text-center">'.$field->getValue().'</td>';
                     }
                 }
 

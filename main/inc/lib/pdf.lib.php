@@ -98,20 +98,6 @@ class PDF
         // Assignments
         $tpl->assign('pdf_content', $content);
 
-        $organization = ChamiloApi::getPlatformLogo();
-        // Use custom logo image.
-        $pdfLogo = api_get_setting('pdf_logo_header');
-        if ($pdfLogo === 'true') {
-            $visualTheme = api_get_visual_theme();
-            $img = api_get_path(SYS_CSS_PATH).'themes/'.$visualTheme.'/images/pdf_logo_header.png';
-            if (file_exists($img)) {
-                $img = api_get_path(WEB_CSS_PATH).'themes/'.$visualTheme.'/images/pdf_logo_header.png';
-                $organization = "<img src='$img'>";
-            }
-        }
-
-        $tpl->assign('organization', $organization);
-
         // Showing only the current teacher/admin instead the all teacher list name see BT#4080
         if (isset($this->params['show_real_course_teachers']) &&
             $this->params['show_real_course_teachers']
@@ -660,9 +646,22 @@ class PDF
                     $teachers = api_get_person_name($teacher['firstname'], $teacher['lastname']);
                 }
             }
+            
+            $organization = ChamiloApi::getPlatformLogo();
+            // Use custom logo image.
+            $pdfLogo = api_get_setting('pdf_logo_header');
+            if ($pdfLogo === 'true') {
+                $visualTheme = api_get_visual_theme();
+                $img = api_get_path(SYS_CSS_PATH).'themes/'.$visualTheme.'/images/pdf_logo_header.png';
+                if (file_exists($img)) {
+                    $img = api_get_path(WEB_CSS_PATH).'themes/'.$visualTheme.'/images/pdf_logo_header.png';
+                    $organization = "<img src='$img'>";
+                }
+            }
 
             $view = new Template('', false, false, false, true, false, false);
             $view->assign('teacher_name', $teachers);
+            $view->assign('organization', $organization);
             $template = $view->get_template('export/pdf_header.tpl');
             $headerHTML = $view->fetch($template);
 

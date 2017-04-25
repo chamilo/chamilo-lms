@@ -62,7 +62,6 @@
                                     <a href="{{ _p.web_self ~ '?' ~ _p.web_cid_query ~ '&' ~ {'action':'view_post', 'blog_id':item.id_blog, 'post_id':item.id_post}|url_encode }}#add_comment"
                                        title="{{ item.title }}">{{ item.title }}</a>
                                 </h3>
-
                                 <div class="info-post">
                                     <span class="date"><i class="fa fa-clock-o"></i> {{ item.post_date }}</span>
                                     <span class='comments'>

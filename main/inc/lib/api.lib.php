@@ -3,6 +3,7 @@
 
 use ChamiloSession as Session;
 use Chamilo\CourseBundle\Entity\CItemProperty;
+use Chamilo\UserBundle\Entity\User;
 use Symfony\Component\Finder\Finder;
 
 /**
@@ -1047,9 +1048,9 @@ function api_valid_email($address)
  * visibility and user status).
  *
  * This is only the first proposal, test and improve!
- * @param boolean       Option to print headers when displaying error message. Default: false
- * @param boolean       Whether session admins should be allowed or not.
- * @return boolean      True if the user has access to the current course or is out of a course context, false otherwise
+ * @param boolean Option to print headers when displaying error message. Default: false
+ * @param boolean Whether session admins should be allowed or not.
+ * @return boolean True if the user has access to the current course or is out of a course context, false otherwise
  * @todo replace global variable
  * @author Roan Embrechts
  */
@@ -1830,7 +1831,9 @@ function api_get_course_info_by_id($id = null)
     }
 
     global $_course;
-    if ($_course == '-1') $_course = array();
+    if ($_course == '-1') {
+        $_course = array();
+    }
     return $_course;
 }
 
@@ -1970,7 +1973,6 @@ function api_generate_password($length = 8)
 
     // Min uppercase
     $password .= $generator->generateString($minUpperCase, $charactersUpperCase);
-
     $password = str_shuffle($password);
 
     return $password;
@@ -2081,6 +2083,7 @@ function api_clear_anonymous($db_check = false)
  * Returns the status string corresponding to the status code
  * @author Noel Dieschburg
  * @param the int status code
+ * @return string
  */
 function get_status_from_code($status_code)
 {
@@ -2123,8 +2126,6 @@ function api_set_anonymous()
     Session::write('_user', $_user);
     return true;
 }
-
-/* CONFIGURATION SETTINGS */
 
 /**
  * Gets the current Chamilo (not PHP/cookie) session ID
@@ -5042,7 +5043,8 @@ function api_set_setting_simple($params)
 /**
  * @param int $id
  */
-function api_delete_setting_option($id) {
+function api_delete_setting_option($id)
+{
     $table = Database::get_main_table(TABLE_MAIN_SETTINGS_OPTIONS);
     if (!empty($id)) {
         Database::delete($table, array('id = ? '=> $id));
@@ -5157,6 +5159,7 @@ function api_set_setting($var, $value, $subvar = null, $cat = null, $access_url 
  * @param array     Optional array of filters on field type
  * @param string $category
  * @param string $value
+ * @return bool
  */
 function api_set_settings_category($category, $value = null, $access_url = 1, $fieldtype = array())
 {
@@ -5306,7 +5309,7 @@ function &api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $ur
     }
     $result = Database::query($sql);
     if ($result === null) {
-        return array();
+        return [];
     }
     $result = Database::store_result($result,'ASSOC');
 

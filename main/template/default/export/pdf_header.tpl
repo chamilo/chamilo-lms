@@ -5,3 +5,5 @@
         </td>
     </tr>
 </table>
+
+{{ organization }}

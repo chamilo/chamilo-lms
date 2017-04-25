@@ -37,7 +37,7 @@ if (api_is_platform_admin()) {
     // Show message to confirm that a tool it to be hidden from available tools
     // visibility 0,1->2
     if (!empty($_GET['askDelete'])) {
-        $content .='<div id="toolhide">'.get_lang('DelLk').'<br />&nbsp;&nbsp;&nbsp;
+        $content .= '<div id="toolhide">'.get_lang('DelLk').'<br />&nbsp;&nbsp;&nbsp;
             <a href="'.api_get_self().'">'.get_lang('No').'</a>&nbsp;|&nbsp;
             <a href="'.api_get_self().'?delete=yes&id='.$id.'">'.get_lang('Yes').'</a>
         </div>';
@@ -55,14 +55,14 @@ if (api_is_platform_admin()) {
 
 // Start of tools for CourseAdmins (teachers/tutors)
 if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
-    $content .=  '<div class="courseadminview" style="border:0px; margin-top: 0px;padding:5px;">
+    $content .= '<div class="courseadminview" style="border:0px; margin-top: 0px;padding:5px;">
     <div class="normal-message" id="id_normal_message" style="display:none">';
-        $content .=  '<img src="'.api_get_path(WEB_PATH).'main/inc/lib/javascript/indicator.gif"/>&nbsp;&nbsp;';
-        $content .=  get_lang('PleaseStandBy');
+        $content .= '<img src="'.api_get_path(WEB_PATH).'main/inc/lib/javascript/indicator.gif"/>&nbsp;&nbsp;';
+        $content .= get_lang('PleaseStandBy');
 
-    $content .=  '</div>
+    $content .= '</div>
         <div class="confirmation-message" id="id_confirmation_message" style="display:none"></div></div>';
-    $content .=  '<div id="activity-3col">';
+    $content .= '<div id="activity-3col">';
 
     if (api_get_setting('show_session_data') == 'true' && $session_id > 0) {
         $content .= '<div class="courseadminview-activity-3col"><span class="viewcaption">'.get_lang('SessionData').'</span>
@@ -90,10 +90,10 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
         $content .= '<div class="courseadminview-activity-3col"><span class="viewcaption">'.get_lang('SessionData').'</span>
             <table width="100%">';
                 $content .= CourseHome::show_session_data($session_id);
-             $content .=  '</table></div>';
+             $content .= '</table></div>';
     }
 
-    $content .=  '<div class="Authoringview">';
+    $content .= '<div class="Authoringview">';
                 $my_list = CourseHome::get_tools_category(TOOL_STUDENT_VIEW);
                 $content .= CourseHome::show_tools_category($my_list);
     $content .= '</div>';
@@ -106,7 +106,7 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
         $order_tool_list = array();
         foreach ($my_list as $key => $new_tool) {
             $tool_name = CourseHome::translate_tool_name($new_tool);
-            $order_tool_list [$key]= $tool_name;
+            $order_tool_list [$key] = $tool_name;
         }
         natsort($order_tool_list);
         $my_temp_tool_array = array();

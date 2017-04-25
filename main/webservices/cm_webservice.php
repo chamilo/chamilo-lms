@@ -55,7 +55,7 @@ class WSCMError
      */
     public static function setErrorHandler($handler)
     {
-        if($handler instanceof WSErrorHandler) {
+        if ($handler instanceof WSErrorHandler) {
             self::$_handler = $handler;
         }
     }
@@ -126,12 +126,12 @@ class WSCM
 		// if we are behind a reverse proxy, assume it will send the
 		// HTTP_X_FORWARDED_FOR header and use this IP instead
 		if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-		  list($ip1,$ip2) = split(',',$_SERVER['HTTP_X_FORWARDED_FOR']);
+		  list($ip1, $ip2) = split(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
 		  $ip = trim($ip1);
 		}
 		$security_key = $ip.$this->_configuration['security_key'];
 
-		if(!api_is_valid_secret_key($secret_key, $security_key)) {
+		if (!api_is_valid_secret_key($secret_key, $security_key)) {
 			return new WSCMError(1, "API key is invalid");
 		} else {
 			return null;
@@ -256,8 +256,8 @@ class WSCM
 	protected function getSessionId($session_id_field_name, $session_id_value)
 	{
 		if ($session_id_field_name == "chamilo_session_id") {
-			$session = SessionManager::fetch((int)$session_id_value);
-			if(!empty($session)) {
+			$session = SessionManager::fetch((int) $session_id_value);
+			if (!empty($session)) {
 				return intval($session_id_value);
 			} else {
 				return new WSCMError(300, "Session not found");
@@ -267,7 +267,7 @@ class WSCM
 				$session_id_value,
 				$session_id_field_name
 			);
-			if($session_id == 0) {
+			if ($session_id == 0) {
 				return new WSCMError(300, "Session not found");
 			} else {
 				return $session_id;

@@ -29,13 +29,13 @@ class CustomFooterPlugin extends Plugin {
 	function pix_url($pixname, $size = 16) {
         global $_configuration;
 
-        if (file_exists($_configuration['root_sys'].'/plugin/customplugin/pix/'.$pixname.'.png')){
+        if (file_exists($_configuration['root_sys'].'/plugin/customplugin/pix/'.$pixname.'.png')) {
             return $_configuration['root_web'].'/plugin/customplugin/pix/'.$pixname.'.png';
         }
-        if (file_exists($_configuration['root_sys'].'/plugin/customplugin/pix/'.$pixname.'.jpg')){
+        if (file_exists($_configuration['root_sys'].'/plugin/customplugin/pix/'.$pixname.'.jpg')) {
             return $_configuration['root_web'].'/plugin/customplugin/pix/'.$pixname.'.jpg';
         }
-        if (file_exists($_configuration['root_sys'].'/plugin/customplugin/pix/'.$pixname.'.gif')){
+        if (file_exists($_configuration['root_sys'].'/plugin/customplugin/pix/'.$pixname.'.gif')) {
             return $_configuration['root_web'].'/plugin/customplugin/pix/'.$pixname.'.gif';
         }
         return $_configuration['root_web'].'/main/img/icons/'.$size.'/'.$pixname.'.png';

@@ -59,11 +59,11 @@ define('PERSON_NAME_DATA_EXPORT', PERSON_NAME_EASTERN_ORDER);
 
 /**
  * Returns a translated (localized) string, called by its identificator.
- * @param string $variable				This is the identificator (name) of the translated string to be retrieved.
- * @param string $reserved				This parameter has been reserved for future use.
- * @param string $language (optional)	Language indentificator. If it is omited, the current interface language is assumed.
+ * @param string $variable This is the identificator (name) of the translated string to be retrieved.
+ * @param string $reserved This parameter has been reserved for future use.
+ * @param string $language (optional)    Language indentificator. If it is omited, the current interface language is assumed.
  *
- * @return string						Returns the requested string in the correspondent language.
+ * @return string                        Returns the requested string in the correspondent language.
  *
  * @author Roan Embrechts
  * @author Patrick Cool
@@ -99,7 +99,7 @@ function get_lang($variable, $reserved = null, $language = null) {
     }
 
     if (!isset($used_lang_vars)) {
-    	$used_lang_vars = array();
+        $used_lang_vars = array();
     }
 
     // Caching results from some API functions, for speed.
@@ -156,10 +156,10 @@ function get_lang($variable, $reserved = null, $language = null) {
 
 /**
  * Gets the current interface language.
- * @param bool $purified (optional)	When it is true, a purified (refined)
+ * @param bool $purified (optional)    When it is true, a purified (refined)
  * language value will be returned, for example 'french' instead of 'french_unicode'.
  * @param bool $setParentLanguageName
- * @return string					The current language of the interface.
+ * @return string                    The current language of the interface.
  */
 function api_get_interface_language(
     $purified = false,
@@ -301,7 +301,7 @@ function api_get_text_direction($language = null)
     static $text_direction = array();
 
     if (empty($language)) {
-    	$language = api_get_interface_language();
+        $language = api_get_interface_language();
     }
     if (!isset($text_direction[$language])) {
         $text_direction[$language] = in_array(

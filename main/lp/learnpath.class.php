@@ -6584,7 +6584,7 @@ class learnpath
             Display::return_icon('certificate.png', get_lang('Certificate'), [], ICON_SIZE_BIG),
         );
 
-        Display::addFlash(Display::return_message(get_lang('ClickOnTheLearnerViewToSeeYourLearningPath'), 'normal'));
+        echo Display::return_message(get_lang('ClickOnTheLearnerViewToSeeYourLearningPath'), 'normal');
         $dir = $_SESSION['oLP']->display_item_form('dir', get_lang('EnterDataNewChapter'), 'add_item');
         echo Display::tabs(
             $headers,

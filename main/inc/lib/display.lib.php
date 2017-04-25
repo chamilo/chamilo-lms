@@ -436,7 +436,8 @@ class Display
      * @param bool	$filter (true) or not (false)
      * @param bool $returnValue
      *
-     * @deprecated use Display::addFlash(Display::return_message($message, 'normal'));
+     * @deprecated Use <code>Display::addFlash(Display::return_message($message, 'normal'));</code>
+     *  Or <code>echo Display::return_message($message, 'normal')</code>
      *
      * @return void
      */

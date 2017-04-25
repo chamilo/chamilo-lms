@@ -212,7 +212,7 @@ unset($Courses);
 
     <?php
     if (!empty($errorMsg)) {
-        Display::addFlash(Display::return_message($errorMsg, 'normal')); //main API
+        echo Display::return_message($errorMsg); //main API
     }
     ?>
     <div id="multiple-add-session" class="row">

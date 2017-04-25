@@ -6755,7 +6755,7 @@ class Exercise
                     if ($this->feedback_type != EXERCISE_FEEDBACK_TYPE_DIRECT) {
                         // if the user has already answered this question
                         if (isset($exerciseResult[$questionId])) {
-                            Display::addFlash(Display::return_message(get_lang('AlreadyAnswered'), 'normal'));
+                            echo Display::return_message(get_lang('AlreadyAnswered'), 'normal');
                             break;
                         }
                     }
@@ -7061,7 +7061,7 @@ class Exercise
         // Display text when test is finished #4074 and for LP #4227
         $end_of_message = $this->selectTextWhenFinished();
         if (!empty($end_of_message)) {
-            Display::addFlash(Display::return_message($end_of_message, 'normal', false));
+            echo Display::return_message($end_of_message, 'normal', false);
             echo "<div class='clear'>&nbsp;</div>";
         }
 

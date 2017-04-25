@@ -512,32 +512,6 @@ if (isset ($_POST['submit']) && isset ($_POST['keyword'])) {
     exit;
 }
 
-// DISPLAY HEADERS AND MESSAGES
-if (!isset($_GET['exportpdf'])) {
-    if (isset ($_GET['studentoverview'])) {
-        $interbreadcrumb[] = array(
-            'url' => $_SESSION['gradebook_dest'].'?selectcat='.$selectCat,
-            'name' => get_lang('ToolGradebook')
-        );
-        Display :: display_header(get_lang('FlatView'));
-    } elseif (isset($_GET['search'])) {
-        $interbreadcrumb[] = array(
-            'url' => $_SESSION['gradebook_dest'].'?selectcat='.$selectCat,
-            'name' => get_lang('ToolGradebook')
-        );
-        Display :: display_header(get_lang('SearchResults'));
-    } elseif(!empty($selectCat)) {
-        $interbreadcrumb[] = array(
-            'url' => '#',
-            'name' => get_lang('ToolGradebook')
-        );
-
-        Display :: display_header('');
-    } else {
-        Display :: display_header(get_lang('ToolGradebook'));
-    }
-}
-
 if (isset ($_GET['categorymoved'])) {
     Display::addFlash(Display::return_message(get_lang('CategoryMoved'), 'confirmation', false));
 }
@@ -579,6 +553,32 @@ if (isset ($warning_message)){
 }
 if (isset ($move_form)){
     Display::addFlash(Display::return_message($move_form->toHtml(), 'normal', false));
+}
+
+// DISPLAY HEADERS AND MESSAGES
+if (!isset($_GET['exportpdf'])) {
+    if (isset ($_GET['studentoverview'])) {
+        $interbreadcrumb[] = array(
+            'url' => $_SESSION['gradebook_dest'].'?selectcat='.$selectCat,
+            'name' => get_lang('ToolGradebook')
+        );
+        Display :: display_header(get_lang('FlatView'));
+    } elseif (isset($_GET['search'])) {
+        $interbreadcrumb[] = array(
+            'url' => $_SESSION['gradebook_dest'].'?selectcat='.$selectCat,
+            'name' => get_lang('ToolGradebook')
+        );
+        Display :: display_header(get_lang('SearchResults'));
+    } elseif(!empty($selectCat)) {
+        $interbreadcrumb[] = array(
+            'url' => '#',
+            'name' => get_lang('ToolGradebook')
+        );
+
+        Display :: display_header('');
+    } else {
+        Display :: display_header(get_lang('ToolGradebook'));
+    }
 }
 
 // LOAD DATA & DISPLAY TABLE
@@ -901,7 +901,9 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null,true))
                 ) {
                     //Showing the grading system
                     if (!empty($grade_models[$grade_model_id])) {
-                        Display::addFlash(Display::return_message(get_lang('GradeModel').': '.$grade_models[$grade_model_id]['name']));
+                        echo Display::return_message(
+                            get_lang('GradeModel').': '.$grade_models[$grade_model_id]['name']
+                        );
                     }
                 }
 

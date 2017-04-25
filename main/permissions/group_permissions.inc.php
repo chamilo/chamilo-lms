@@ -12,7 +12,7 @@ echo $group_id;
 if ($_POST['StoreGroupPermissions'] and $setting_visualisation == 'checkbox') {
     $result_message = store_permissions('group', $group_id);
     if ($result_message) {
-        Display::addFlash(Display::return_message($result_message, 'normal'));
+        echo Display::return_message($result_message);
     }
 }
 if (isset($_GET['action'])) {
@@ -25,7 +25,7 @@ if (isset($_GET['action'])) {
     }
 }
 if (isset($result_message)) {
-    Display::addFlash(Display::return_message($result_message, 'normal'));
+    echo Display::return_message($result_message);
 }
 
 // 			RETRIEVING THE PERMISSIONS

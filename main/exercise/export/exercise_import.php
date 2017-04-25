@@ -75,7 +75,7 @@ Display::display_introduction_section(
 
 // Display Forms or dialog box(if needed)
 if (isset($dialogBox)) {
-    echo Display::addFlash(Display::return_message($dialogBox, 'normal', false));
+    echo Display::return_message($dialogBox, 'normal', false);
 }
 
 if (isset($display)) {

@@ -483,7 +483,7 @@ if (!$newQuestion && !$modifyQuestion && !$editQuestion && !isset($_GET['hotspot
 // this test to display only message in the question authoring page and not in the question list page too
 // if (is_object($objQuestion) && $objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_EXAM && ($newQuestion || $modifyQuestion || $editQuestion)) {
 if ($objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_EXAM) {
-    Display::addFlash(Display::return_message(get_lang('TestFeedbackNotShown'), 'normal'));
+    echo Display::return_message(get_lang('TestFeedbackNotShown'), 'normal');
 }
 
 Session::write('objExercise', $objExercise);

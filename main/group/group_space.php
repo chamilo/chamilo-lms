@@ -39,11 +39,6 @@ if (!GroupManager::userHasAccessToBrowse($user_id, $current_group, api_get_sessi
     api_not_allowed(true);
 }
 
-Display::display_header($nameTools.' '.Security::remove_XSS($current_group['name']), 'Group');
-
-/*	Introduction section (editable by course admin) */
-Display::display_introduction_section(TOOL_GROUP);
-
 /*	Actions and Action links */
 
 /*
@@ -65,6 +60,11 @@ if (!empty($_GET['selfUnReg']) &&
     GroupManager::unsubscribe_users($user_id, $current_group);
     Display::addFlash(Display::return_message(get_lang('StudentDeletesHimself'), 'normal'));
 }
+
+Display::display_header($nameTools.' '.Security::remove_XSS($current_group['name']), 'Group');
+
+/*	Introduction section (editable by course admin) */
+Display::display_introduction_section(TOOL_GROUP);
 
 echo '<div class="actions">';
 echo '<a href="group.php">'.

@@ -68,7 +68,7 @@ class MultipleAnswerCombination extends Question
 
         if ($nb_answers < 1) {
             $nb_answers = 1;
-            Display::addFlash(Display::return_message(get_lang('YouHaveToCreateAtLeastOneAnswer'), 'normal'));
+            echo Display::return_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
         }
 
         for ($i = 1; $i <= $nb_answers; ++$i) {

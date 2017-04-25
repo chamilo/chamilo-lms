@@ -74,10 +74,10 @@ echo '<a href="lp_controller.php?'.api_get_cidreq().'">'.
         Display::return_icon('back.png', get_lang('ReturnToLearningPaths'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
-Display::addFlash(Display::return_message(get_lang('AddLpIntro'), 'normal', false));
+echo Display::return_message(get_lang('AddLpIntro'), 'normal', false);
 
 if ($_POST && empty($_REQUEST['lp_name'])) {
-    Display::addFlash(Display::return_message(get_lang('FormHasErrorsPleaseComplete'), 'error', false));
+    echo Display::return_message(get_lang('FormHasErrorsPleaseComplete'), 'error', false);
 }
 
 $form = new FormValidator(

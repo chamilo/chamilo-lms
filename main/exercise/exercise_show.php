@@ -244,7 +244,7 @@ if (!empty($track_exercise_info)) {
         }
     }
 } else {
-    Display::addFlash(Display::return_message(get_lang('CantViewResults'), 'warning'));
+    echo Display::return_message(get_lang('CantViewResults'), 'warning');
     $show_results = false;
 }
 
@@ -324,7 +324,7 @@ if (!empty($track_exercise_info['data_tracking'])) {
 // Display the text when finished message if we are on a LP #4227
 $end_of_message = $objExercise->selectTextWhenFinished();
 if (!empty($end_of_message) && ($origin == 'learnpath')) {
-    Display::addFlash(Display::return_message($end_of_message, 'normal', false));
+    echo Display::return_message($end_of_message, 'normal', false);
     echo "<div class='clear'>&nbsp;</div>";
 }
 
@@ -984,7 +984,7 @@ if ($origin != 'learnpath') {
         echo "<script>window.parent.API.void_save_asset('$totalScore', '$totalWeighting', 0, 'completed'); </script>";
         echo '</body></html>';
     } else {
-        Display::addFlash(Display::return_message(get_lang('ExerciseFinished').' '.get_lang('ToContinueUseMenu'), 'normal'));
+        echo Display::return_message(get_lang('ExerciseFinished').' '.get_lang('ToContinueUseMenu'), 'normal');
         echo '<br />';
     }
 }

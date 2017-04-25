@@ -298,7 +298,7 @@ echo '<a href="../session/session_list.php">'.
 echo '</div>';
 
 if (!empty($errorMsg)) {
-	Display::addFlash(Display::return_message($errorMsg, 'normal', false)); //main API
+	echo Display::return_message($errorMsg, 'normal', false); //main API
 }
 
 $form = new FormValidator('session_export', 'post', api_get_self());

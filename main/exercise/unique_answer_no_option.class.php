@@ -87,7 +87,7 @@ class UniqueAnswerNoOption extends Question
         $temp_scenario = array();
         if ($nb_answers < 1) {
             $nb_answers = 1;
-            Display::addFlash(Display::return_message(get_lang('YouHaveToCreateAtLeastOneAnswer'), 'normal'));
+            echo Display::return_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
         }
         $editQuestion = isset($_GET['editQuestion']) ? $_GET['editQuestion'] : false;
         if ($editQuestion) {

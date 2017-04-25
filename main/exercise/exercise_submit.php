@@ -734,10 +734,13 @@ $interbreadcrumb[] = array("url" => "exercise.php?".api_get_cidreq(), "name" => 
 $interbreadcrumb[] = array("url" => "#", "name" => $objExercise->name);
 
 if ($origin != 'learnpath') { //so we are not in learnpath tool
-    Display :: display_header(null, 'Exercises');
     if (!api_is_allowed_to_session_edit()) {
-        Display::addFlash(Display::return_message(get_lang('SessionIsReadOnly'), 'warning'));
+        Display::addFlash(
+            Display::return_message(get_lang('SessionIsReadOnly'), 'warning')
+        );
     }
+
+    Display :: display_header(null, 'Exercises');
 } else {
     $htmlHeadXtra[] = "
     <style>
@@ -1202,7 +1205,7 @@ if (!empty($error)) {
                         $questionName = $objQuestionTmp->selectTitle();
                         // destruction of the Question object
                         unset($objQuestionTmp);
-                        Display::addFlash(Display::return_message(get_lang('AlreadyAnswered')));
+                        echo Display::return_message(get_lang('AlreadyAnswered'));
                         $i++;
                         break;
                     }

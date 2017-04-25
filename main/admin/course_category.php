@@ -124,7 +124,7 @@ if ($action == 'add' || $action == 'edit') {
 } else {
     // If multiple URLs and not main URL, prevent deletion and inform user
     if ($action == 'delete' && api_get_multiple_access_url() && api_get_current_access_url_id() != 1) {
-        Display::display_warning_message(get_lang('CourseCategoriesAreGlobal'));
+        echo Display::return_message(get_lang('CourseCategoriesAreGlobal'), 'warning');
     }
     echo '<div class="actions">';
     $link = null;

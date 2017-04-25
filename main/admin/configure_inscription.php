@@ -169,7 +169,7 @@ if (api_get_setting('allow_registration') == 'approval') {
 }
 //if openid was not found
 if (!empty($_GET['openid_msg']) && $_GET['openid_msg'] == 'idnotfound') {
-    Display::display_warning_message(get_lang('OpenIDCouldNotBeFoundPleaseRegister'));
+    echo Display::return_message(get_lang('OpenIDCouldNotBeFoundPleaseRegister'), 'warning');
 }
 
 $form = new FormValidator('registration');

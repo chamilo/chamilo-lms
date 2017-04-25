@@ -122,12 +122,11 @@ function search_usergroup_sessions($needle,$type) {
     $xajax_response = new xajaxResponse();
     $return = '';
     if (!empty($needle) && !empty($type)) {
-        if ($type == 'single') {
-        } else if ($type == 'searchbox') {
+        if ($type == 'searchbox') {
             $session_list = SessionManager::get_sessions_list(
                 array('s.name' => array('operator' => 'LIKE', 'value' => "%$needle%"))
             );
-        } else {
+        } elseif ($type != 'single') {
             $session_list = SessionManager::get_sessions_list(
                 array('s.name' => array('operator' => 'LIKE', 'value' => "$needle%"))
             );

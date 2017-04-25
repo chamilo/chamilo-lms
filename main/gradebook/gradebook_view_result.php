@@ -386,7 +386,7 @@ if (isset($_GET['resultdelete'])) {
 if (isset($_POST['action'])) {
     $number_of_selected_items = count($_POST['id']);
     if ($number_of_selected_items == '0') {
-        Display :: display_warning_message(get_lang('NoItemsSelected'), false);
+        Display::addFlash(Display::return_message(get_lang('NoItemsSelected'), 'warning', false));
     } else {
         switch ($_POST['action']) {
             case 'delete':
@@ -470,29 +470,29 @@ if (!isset($_GET['export']) && (!isset($_GET['import']))) {
     Display :: display_header('');
 }
 if (isset($_GET['addresultnostudents'])) {
-    Display :: display_warning_message(get_lang('AddResultNoStudents'), false);
+    Display::addFlash(Display::return_message(get_lang('AddResultNoStudents'), 'warning', false));
 }
 
 if (isset($_GET['addresult'])) {
-    Display :: display_confirmation_message(get_lang('ResultAdded'), false);
+    Display::addFlash(Display::return_message(get_lang('ResultAdded'), 'confirmation', false));
 }
 
 if (isset($_GET['adduser'])) {
-    Display :: display_confirmation_message(get_lang('UserAdded'), false);
+    Display::addFlash(Display::return_message(get_lang('UserAdded'), 'confirmation', false));
 }
 
 if (isset($_GET['incorrectdata'])) {
-    Display :: display_warning_message(get_lang('IncorrectData'), false);
+    Display::addFlash(Display::return_message(get_lang('IncorrectData'), 'warning', false));
 }
 
 if (isset($_GET['massdelete'])) {
-    Display :: display_confirmation_message(get_lang('ResultsDeleted'), false);
+    Display::addFlash(Display::return_message(get_lang('ResultsDeleted'), 'confirmation', false));
 }
 if (isset($_GET['nouser'])) {
-    Display :: display_warning_message(get_lang('NoUser'), false);
+    Display::addFlash(Display::return_message(get_lang('NoUser'), 'warning', false));
 }
 if (isset($_GET['overwritemax'])) {
-    Display :: display_warning_message(get_lang('OverWriteMax'), false);
+    Display::addFlash(Display::return_message(get_lang('OverWriteMax'), 'warning', false));
 }
 
 if (isset($_GET['import_user_error'])) {
@@ -503,7 +503,7 @@ if (isset($_GET['import_user_error'])) {
 }
 if (isset($_GET['import_score_error'])) {
     $userinfo = api_get_user_info($_GET['import_score_error']);
-    Display :: display_warning_message(get_lang('ScoreDoesNotMatch') . ' ' . api_get_person_name($userinfo['firstname'], $userinfo['lastname']));
+    Display::addFlash(Display::return_message(get_lang('ScoreDoesNotMatch'). ' ' . api_get_person_name($userinfo['firstname'], $userinfo['lastname']), 'warning'));
 }
 if ($file_type == null) {
     //show the result header

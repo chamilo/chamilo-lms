@@ -22,7 +22,7 @@ class WSCMForum extends WSCM
     public function get_foruns_id($username, $password, $course_code)
     {
         if ($this->verifyUserPass($username, $password) == "valid") {
-            $course_db = CourseManager::get_course_information($course_code);
+            $course_db = api_get_course_info($course_code);
             $foruns_info = get_forums($id='', $course_db['code']);
             $foruns_id = '#';
             foreach ($foruns_info as $forum) {
@@ -44,7 +44,7 @@ class WSCMForum extends WSCM
         $forum_id
     ) {
         if ($this->verifyUserPass($username, $password) == "valid") {
-            $course_db = CourseManager::get_course_information($course_code);
+            $course_db = api_get_course_info($course_code);
             $table_forums = Database::get_course_table(TABLE_FORUM, $course_db['db_name']);
             $table_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY, $course_db['db_name']);
 
@@ -95,7 +95,7 @@ class WSCMForum extends WSCM
         $field
     ) {
         if ($this->verifyUserPass($username, $password) == "valid") {
-            $course_db = CourseManager::get_course_information($course_code);
+            $course_db = api_get_course_info($course_code);
             $table_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY, $course_db['db_name']);
             $table_threads = Database::get_course_table(TABLE_FORUM_THREAD, $course_db['db_name']);
 
@@ -141,7 +141,7 @@ class WSCMForum extends WSCM
         $thread_id
     ) {
         if ($this->verifyUserPass($username, $password) == "valid") {
-            $course_db = CourseManager::get_course_information($course_code);
+            $course_db = api_get_course_info($course_code);
             $table_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY, $course_db['db_name']);
             $table_threads = Database::get_course_table(TABLE_FORUM_THREAD, $course_db['db_name']);
 
@@ -166,7 +166,7 @@ class WSCMForum extends WSCM
     public function get_posts_id($username, $password, $course_code, $thread_id)
     {
         if ($this->verifyUserPass($username, $password) == "valid") {
-            $course_db = CourseManager::get_course_information($course_code);
+            $course_db = api_get_course_info($course_code);
 
             $table_users = Database::get_main_table(TABLE_MAIN_USER);
             $table_posts = Database::get_course_table(TABLE_FORUM_POST, $course_db['db_name']);
@@ -214,7 +214,7 @@ class WSCMForum extends WSCM
         $field
     ) {
         if ($this->verifyUserPass($username, $password) == "valid") {
-            $course_db = CourseManager::get_course_information($course_code);
+            $course_db = api_get_course_info($course_code);
 
             $table_posts 	= Database::get_course_table(TABLE_FORUM_POST, $course_db['db_name']);
             $table_users 	= Database::get_main_table(TABLE_MAIN_USER);

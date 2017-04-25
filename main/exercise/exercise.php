@@ -142,7 +142,7 @@ if ($origin != 'learnpath') {
     Display :: display_header($nameTools, get_lang('Exercise'));
     if (isset($_GET['message'])) {
         if (in_array($_GET['message'], array('ExerciseEdited'))) {
-            Display :: display_confirmation_message(get_lang($_GET['message']));
+            echo Display::return_message(get_lang($_GET['message']), 'confirmation');
         }
     }
 } else {
@@ -220,7 +220,7 @@ if ($is_allowedToEdit) {
                             if ($link_info !== false) {
                                 GradebookUtils::remove_resource_from_course_gradebook($link_info['id']);
                             }
-                            Display :: display_confirmation_message(get_lang('ExerciseDeleted'));
+                            echo Display::return_message(get_lang('ExerciseDeleted'), 'confirmation');
                         }
                         break;
                     case 'enable':
@@ -243,7 +243,7 @@ if ($is_allowedToEdit) {
                             $userId
                         );
                         // "WHAT'S NEW" notification: update table item_property (previously last_tooledit)
-                        Display :: display_confirmation_message(get_lang('VisibilityChanged'));
+                        echo Display::return_message(get_lang('VisibilityChanged'), 'confirmation');
                         break;
                     case 'disable':
                         // disables an exercise
@@ -265,31 +265,31 @@ if ($is_allowedToEdit) {
                             'invisible',
                             $userId
                         );
-                        Display :: display_confirmation_message(get_lang('VisibilityChanged'));
+                        echo Display::return_message(get_lang('VisibilityChanged'), 'confirmation');
                         break;
                     case 'disable_results':
                         //disable the results for the learners
                         $objExerciseTmp->disable_results();
                         $objExerciseTmp->save();
-                        Display :: display_confirmation_message(get_lang('ResultsDisabled'));
+                        echo Display::return_message(get_lang('ResultsDisabled'), 'confirmation');
                         break;
                     case 'enable_results':
                         //disable the results for the learners
                         $objExerciseTmp->enable_results();
                         $objExerciseTmp->save();
-                        Display :: display_confirmation_message(get_lang('ResultsEnabled'));
+                        echo Display::return_message(get_lang('ResultsEnabled'), 'confirmation');
                         break;
                     case 'clean_results':
                         //clean student results
                         if ($exercise_action_locked == false) {
                             $quantity_results_deleted = $objExerciseTmp->clean_results(true);
                             $title = $objExerciseTmp->selectTitle();
-                            Display :: display_confirmation_message($title.': '.sprintf(get_lang('XResultsCleaned'), $quantity_results_deleted));
+                            echo Display::return_message($title.': '.sprintf(get_lang('XResultsCleaned'), $quantity_results_deleted), 'confirmation');
                         }
                         break;
                     case 'copy_exercise': //copy an exercise
                         $objExerciseTmp->copy_exercise();
-                        Display :: display_confirmation_message(get_lang('ExerciseCopied'));
+                        echo Display::return_message(get_lang('ExerciseCopied'), 'confirmation');
                         break;
                 }
             }

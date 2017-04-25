@@ -149,23 +149,23 @@ function handle_forum_and_forumcategories($lp_id = null)
             }
         }
         $return_message = deleteForumCategoryThread($get_content, $get_id);
-        Display::display_confirmation_message($return_message, false);
+        echo Display::return_message($return_message, 'confirmation', false);
     }
 
     // Change visibility of a forum or a forum category.
     if ($action_forum_cat == 'invisible' || $action_forum_cat == 'visible') {
         $return_message = change_visibility($get_content, $get_id, $action_forum_cat);
-        Display::display_confirmation_message($return_message, false);
+        echo Display::return_message($return_message, 'confirmation', false);
     }
     // Change lock status of a forum or a forum category.
     if ($action_forum_cat == 'lock' || $action_forum_cat == 'unlock') {
         $return_message = change_lock_status($get_content, $get_id, $action_forum_cat);
-        Display::display_confirmation_message($return_message, false);
+        echo Display::return_message($return_message, 'confirmation', false);
     }
     // Move a forum or a forum category.
     if ($action_forum_cat == 'move' && isset($_GET['direction'])) {
         $return_message = move_up_down($get_content, $_GET['direction'], $get_id);
-        Display::display_confirmation_message($return_message, false);
+        echo Display::return_message($return_message, 'confirmation', false);
     }
 }
 
@@ -413,7 +413,7 @@ function show_add_forum_form($inputvalues = array(), $lp_id)
         if ($check) {
             $values = $form->getSubmitValues();
             $return_message = store_forum($values);
-            Display :: display_confirmation_message($return_message);
+            echo Display::return_message($return_message, 'confirmation');
         }
         Security::clear_token();
     } else {
@@ -600,7 +600,7 @@ function store_forumcategory($values, $courseInfo = array(), $showMessage = true
     }
 
     if ($showMessage) {
-        Display::display_confirmation_message($return_message, 'success');
+        echo Display::return_message($return_message, 'confirmation');
     }
 
     return $last_id;
@@ -3750,7 +3750,7 @@ function store_edit_post($forumInfo, $values)
     Session::erase('addedresource');
     Session::erase('addedresourceid');
 
-    Display :: display_confirmation_message($message, false);
+    echo Display::return_message($message, 'confirmation', false);
 }
 
 /**
@@ -4916,7 +4916,7 @@ function delete_attachment($post_id, $id_attach = 0, $display = true)
 
     if (!empty($result) && !empty($id_attach) && $display) {
         $message = get_lang('AttachmentFileDeleteSuccess');
-        Display::display_confirmation_message($message);
+        echo Display::return_message($message, 'confirmation');
     }
 
     return $affectedRows;

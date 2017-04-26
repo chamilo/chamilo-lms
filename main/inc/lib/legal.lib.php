@@ -80,7 +80,7 @@ class LegalManager
     public static function get_last_condition_version($language)
     {
         $legal_conditions_table = Database::get_main_table(TABLE_MAIN_LEGAL);
-        $language= Database::escape_string($language);
+        $language = Database::escape_string($language);
         $sql = "SELECT version FROM $legal_conditions_table
                 WHERE language_id = '".$language."'
                 ORDER BY id DESC LIMIT 1 ";
@@ -101,7 +101,7 @@ class LegalManager
     public static function get_last_condition($language)
     {
         $legal_conditions_table = Database::get_main_table(TABLE_MAIN_LEGAL);
-        $language= Database::escape_string($language);
+        $language = Database::escape_string($language);
         $sql = "SELECT * FROM $legal_conditions_table
                 WHERE language_id = '".$language."'
                 ORDER BY version DESC
@@ -214,7 +214,7 @@ class LegalManager
                 break;
                 // Page link
             case 1:
-                $preview ='<fieldset>
+                $preview = '<fieldset>
                              <legend>'.get_lang('TermsAndConditions').'</legend>';
                 $preview .= '<div id="legal-accept-wrapper" class="form-item">
                 <label class="option" for="legal-accept">
@@ -305,7 +305,7 @@ class LegalManager
                 WHERE id =  "'.$legal_id.'" AND language_id="'.$language_id.'"';
         $rs = Database::query($sql);
 
-        return Database::result($rs,0,'type');
+        return Database::result($rs, 0, 'type');
     }
 
     /**

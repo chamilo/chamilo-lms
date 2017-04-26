@@ -23,7 +23,7 @@ $extraFieldName = array_map('trim', explode(',', $extraFieldName));
 
 if ($apiIsEnable) {
     $gmapsApiKey = $plugin->get('api_key');
-    $htmlHeadXtra[] = '<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?key='. $gmapsApiKey . '" ></script>';
+    $htmlHeadXtra[] = '<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?key='.$gmapsApiKey.'" ></script>';
 }
 
 $em = Database::getManager();

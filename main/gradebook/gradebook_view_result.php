@@ -62,7 +62,7 @@ if (isset($_GET['editres'])) {
         $resultedit[0],
         'edit_result_form',
         null,
-        api_get_self() . '?editres=' . $resultedit[0]->get_id() . '&selecteval=' . $select_eval.'&'.api_get_cidreq()
+        api_get_self().'?editres='.$resultedit[0]->get_id().'&selecteval='.$select_eval.'&'.api_get_cidreq()
     );
 
     if ($edit_res_form->validate()) {
@@ -81,21 +81,21 @@ if (isset($_GET['editres'])) {
         unset($result);
 
         Display::addFlash(Display::return_message(get_lang('ResultEdited'), 'normal', false));
-        header('Location: gradebook_view_result.php?selecteval=' . $select_eval . '&editresmessage=&'.api_get_cidreq());
+        header('Location: gradebook_view_result.php?selecteval='.$select_eval.'&editresmessage=&'.api_get_cidreq());
         exit;
     }
 }
 $file_type = null;
 if (isset($_GET['import'])) {
     $interbreadcrumb[] = array(
-        'url' => api_get_path(WEB_CODE_PATH).'gradebook/gradebook_view_result.php?selecteval=' . $select_eval.'&'.api_get_cidreq(),
+        'url' => api_get_path(WEB_CODE_PATH).'gradebook/gradebook_view_result.php?selecteval='.$select_eval.'&'.api_get_cidreq(),
         'name' => get_lang('ViewResult')
     );
     $import_result_form = new DataForm(
         DataForm :: TYPE_IMPORT,
         'import_result_form',
         null,
-        api_get_self() . '?import=&selecteval=' . $select_eval,
+        api_get_self().'?import=&selecteval='.$select_eval,
         '_blank',
         ''
     );
@@ -123,7 +123,7 @@ if (isset($_GET['import'])) {
                     if (($importedresult['user_id'] == $allresult->get_user_id())) {
                         if ($importedresult['score'] != $allresult->get_score()) {
                             if (!isset($values['overwrite'])) {
-                                header('Location: '.api_get_path(WEB_CODE_PATH).'gradebook/gradebook_view_result.php?selecteval=' . $select_eval . '&import_score_error=' . $importedresult['user_id']);
+                                header('Location: '.api_get_path(WEB_CODE_PATH).'gradebook/gradebook_view_result.php?selecteval='.$select_eval.'&import_score_error='.$importedresult['user_id']);
                                 exit;
                                 break;
                             } else {
@@ -141,7 +141,7 @@ if (isset($_GET['import'])) {
                     }
                 }
                 if ($importedresult['user_id'] == null) {
-                    header('Location: gradebook_view_result.php?selecteval=' . $select_eval . '&incorrectdata=');
+                    header('Location: gradebook_view_result.php?selecteval='.$select_eval.'&incorrectdata=');
                     exit;
                 }
                 $userinfo = api_get_user_info($importedresult['user_id']);
@@ -150,13 +150,13 @@ if (isset($_GET['import'])) {
                     $userinfo['official_code'] != $importedresult['official_code']
                 ) {
                     if (!isset($values['ignoreerrors'])) {
-                        header('Location: gradebook_view_result.php?selecteval=' . $select_eval . '&import_user_error=' . $importedresult['user_id']);
+                        header('Location: gradebook_view_result.php?selecteval='.$select_eval.'&import_user_error='.$importedresult['user_id']);
                         exit;
                     }
                 }
                 if ($added != '1') {
                     if ($importedresult['score'] > $eval[0]->get_max()) {
-                        header('Location: gradebook_view_result.php?selecteval=' . $select_eval . '&overwritemax=');
+                        header('Location: gradebook_view_result.php?selecteval='.$select_eval.'&overwritemax=');
                         exit;
                     }
                     $result = new Result();
@@ -175,7 +175,7 @@ if (isset($_GET['import'])) {
                 }
             }
         } else {
-            header('Location: ' . api_get_self() . '?import=&selecteval=' . $select_eval . '&importnofile=');
+            header('Location: '.api_get_self().'?import=&selecteval='.$select_eval.'&importnofile=');
             Display::addFlash(
                 Display::return_message(
                     get_lang('ImportNoFile'),
@@ -187,7 +187,7 @@ if (isset($_GET['import'])) {
             exit;
         }
         if ($overwritescore != 0) {
-            header('Location: ' . api_get_self() . '?selecteval=' . $select_eval. '&importoverwritescore=' . $overwritescore);
+            header('Location: '.api_get_self().'?selecteval='.$select_eval.'&importoverwritescore='.$overwritescore);
             Display::addFlash(
                 Display::return_message(
                     get_lang('ImportOverWriteScore').' '.$overwritescore
@@ -203,7 +203,7 @@ if (isset($_GET['import'])) {
                     false
                 )
             );
-            header('Location: ' . api_get_self() . '?selecteval=' . $select_eval. '&nothingadded=');
+            header('Location: '.api_get_self().'?selecteval='.$select_eval.'&nothingadded=');
             exit;
         }
         Display::addFlash(
@@ -213,7 +213,7 @@ if (isset($_GET['import'])) {
                 false
             )
         );
-        header('Location: ' . api_get_self() . '?selecteval=' . $select_eval . '&importok=');
+        header('Location: '.api_get_self().'?selecteval='.$select_eval.'&importok=');
         exit;
     }
 }
@@ -228,7 +228,7 @@ if (isset($_GET['export'])) {
         DataForm :: TYPE_EXPORT,
         'export_result_form',
         null,
-        api_get_self() . '?export=&selecteval=' . $select_eval,
+        api_get_self().'?export=&selecteval='.$select_eval,
         '_blank',
         $locked_status
     );
@@ -239,7 +239,7 @@ if (isset($_GET['export'])) {
     if ($export_result_form->validate()) {
         $export = $export_result_form->exportValues();
         $file_type = $export['file_type'];
-        $filename = 'export_results_' . gmdate('Y-m-d_H-i-s');
+        $filename = 'export_results_'.gmdate('Y-m-d_H-i-s');
         $results = Result :: load(null, null, $select_eval);
         $data = array(); //when file type is csv, add a header to the output file
         if ($file_type == 'csv') {
@@ -259,9 +259,9 @@ if (isset($_GET['export'])) {
             $datagen = new ResultsDataGenerator($eval[0], $allresults);
 
             // set headers pdf
-            !empty($_user['official_code']) ? $officialcode = $_user['official_code'] . ' - ' : '';
+            !empty($_user['official_code']) ? $officialcode = $_user['official_code'].' - ' : '';
 
-            $h1 = array(get_lang('Teacher'), $officialcode . $_user['firstName'] . ', ' . $_user['lastName']);
+            $h1 = array(get_lang('Teacher'), $officialcode.$_user['firstName'].', '.$_user['lastName']);
             $h2 = array(get_lang('Score'), $eval[0]->get_max());
             $h3 = array(get_lang('Course'), $_course['name']);
             $h4 = array(get_lang('Weight'), $eval[0]->get_weight());
@@ -271,9 +271,9 @@ if (isset($_GET['export'])) {
             $header_pdf = array($h1, $h2, $h3, $h4, $h5, $h6);
 
             // set footer pdf
-            $f1 = '<hr />' . get_lang('Drh');
-            $f2 = '<hr />' . get_lang('Teacher');
-            $f3 = '<hr />' . get_lang('Date');
+            $f1 = '<hr />'.get_lang('Drh');
+            $f2 = '<hr />'.get_lang('Teacher');
+            $f3 = '<hr />'.get_lang('Date');
             $footer_pdf = array($f1, $f2, $f3);
 
             // set title pdf
@@ -282,9 +282,9 @@ if (isset($_GET['export'])) {
             // set headers data table
             $head_ape_name = '';
             if (api_is_western_name_order()) {
-                $head_ape_name = get_lang('FirstName') . ', ' . get_lang('LastName');
+                $head_ape_name = get_lang('FirstName').', '.get_lang('LastName');
             } else {
-                $head_ape_name = get_lang('LastName') . ', ' . get_lang('FirstName');
+                $head_ape_name = get_lang('LastName').', '.get_lang('FirstName');
             }
 
             $head_table = array(
@@ -319,15 +319,15 @@ if (isset($_GET['export'])) {
                 $result[] = $user_info['username'];
 
                 if (api_is_western_name_order()) {
-                    $result[] = $user_info['firstname'] . ', ' . $user_info['lastname'];
+                    $result[] = $user_info['firstname'].', '.$user_info['lastname'];
                 } else {
-                    $result[] = $user_info['lastname'] . ', ' . $user_info['firstname'];
+                    $result[] = $user_info['lastname'].', '.$user_info['firstname'];
                 }
                 if ($number_decimals == null) {
                     if (empty($data['scoreletter']) && !is_numeric($data['score'])) {
                         $result[] = get_lang('DidNotTakeTheExam');
                     } else {
-                        $result[] = api_strtoupper(get_lang('Literal' . $data['scoreletter']));
+                        $result[] = api_strtoupper(get_lang('Literal'.$data['scoreletter']));
                     }
                 } else {
                     if (empty($data['score']) && !is_numeric($data['score'])) {
@@ -379,7 +379,7 @@ if (isset($_GET['resultdelete'])) {
     $result = Result :: load($_GET['resultdelete']);
     $result[0]->delete();
     Display::addFlash(Display::return_message(get_lang('ResultDeleted')));
-    header('Location: gradebook_view_result.php?selecteval=' . $select_eval.'&'.api_get_cidreq());
+    header('Location: gradebook_view_result.php?selecteval='.$select_eval.'&'.api_get_cidreq());
     exit;
 }
 
@@ -396,7 +396,7 @@ if (isset($_POST['action'])) {
                     $result[0]->delete();
                     $number_of_deleted_results++;
                 }
-                header('Location: gradebook_view_result.php?massdelete=&selecteval=' . $select_eval);
+                header('Location: gradebook_view_result.php?massdelete=&selecteval='.$select_eval);
                 exit;
                 break;
         }
@@ -437,14 +437,14 @@ if (isset($_GET['print'])) {
 
 $htmlHeadXtra[] = '<script>
 function confirmationuser() {
-    if (confirm("' . get_lang('DeleteUser') . '?"))
+    if (confirm("' . get_lang('DeleteUser').'?"))
     	{return true;}
     else
     	{return false;}
 }
 
 function confirmationall () {
-    if (confirm("' . get_lang('DeleteAll') . '?"))
+    if (confirm("' . get_lang('DeleteAll').'?"))
     	{return true;}
     else
     	{return false;}
@@ -453,13 +453,13 @@ function confirmationall () {
 if (isset($_GET['deleteall'])) {
     $eval[0]->delete_results();
     Display::addFlash(Display::return_message(get_lang('AllResultDeleted')));
-    header('Location: '.api_get_path(WEB_CODE_PATH).'gradebook/gradebook_view_result.php?allresdeleted=&selecteval=' . $select_eval.'&'.api_get_cidreq());
+    header('Location: '.api_get_path(WEB_CODE_PATH).'gradebook/gradebook_view_result.php?allresdeleted=&selecteval='.$select_eval.'&'.api_get_cidreq());
     exit;
 }
 if (!isset($_GET['export']) && (!isset($_GET['import']))) {
     if (!isset($_GET['selectcat'])) {
         $interbreadcrumb[] = array(
-            'url' => $_SESSION['gradebook_dest'] . '?selectcat=' . $currentcat[0]->get_id().'&'.api_get_cidreq(),
+            'url' => $_SESSION['gradebook_dest'].'?selectcat='.$currentcat[0]->get_id().'&'.api_get_cidreq(),
             'name' => get_lang('Details')
         );
     }

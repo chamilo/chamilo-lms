@@ -15,13 +15,13 @@
  */
 function validate_courses_data($courses)
 {
-    $errors = array ();
-    $coursecodes = array ();
+    $errors = array();
+    $coursecodes = array();
     foreach ($courses as $index => $course) {
-        $course['line'] = $index +1;
+        $course['line'] = $index + 1;
 
         // 1. Check whether mandatory fields are set.
-        $mandatory_fields = array ('Code', 'Title', 'CourseCategory');
+        $mandatory_fields = array('Code', 'Title', 'CourseCategory');
         foreach ($mandatory_fields as $field) {
             if (empty($course[$field])) {
                 $course['error'] = get_lang($field.'Mandatory');

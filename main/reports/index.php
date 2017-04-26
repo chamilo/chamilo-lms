@@ -22,7 +22,7 @@ api_block_anonymous_users();
 $this_section = SECTION_REPORTS;
 
 // setting the name of the tool
-$tool_name=get_lang('Reports');
+$tool_name = get_lang('Reports');
 
 // Displaying the header
 foreach (array('jquery.ba-bbq.min.js', 'jquery.validate.js', 'jquery.form.js', 'jquery.form.wizard.js', 'jquery.dataTables.min.js') as $js) {

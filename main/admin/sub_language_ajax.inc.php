@@ -12,9 +12,9 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_admin_script();
 
-$new_language        = Security::remove_XSS($_REQUEST['new_language']);
-$language_variable    = Security::remove_XSS($_REQUEST['variable_language']);
-$file_id            = intval($_REQUEST['file_id']);
+$new_language = Security::remove_XSS($_REQUEST['new_language']);
+$language_variable = Security::remove_XSS($_REQUEST['variable_language']);
+$file_id = intval($_REQUEST['file_id']);
 /**
  * Code
  */
@@ -30,10 +30,10 @@ if (isset($new_language) && isset($language_variable) && isset($file_id)) {
 
     //update variable language
     // Replace double quotes to avoid parse errors
-    $new_language = str_replace('"', '\"',$new_language);
+    $new_language = str_replace('"', '\"', $new_language);
     // Replace new line signs to avoid parse errors - see #6773
-    $new_language = str_replace("\n","\\n",$new_language);
-    $all_file_of_directory[$language_variable]="\"".$new_language."\";";
+    $new_language = str_replace("\n", "\\n", $new_language);
+    $all_file_of_directory[$language_variable] = "\"".$new_language."\";";
     $result_array = array();
 
     foreach ($all_file_of_directory as $key_value=>$value_info) {
@@ -43,7 +43,7 @@ if (isset($new_language) && isset($language_variable) && isset($file_id)) {
     if (!empty($result_array)) {
         foreach ($result_array as $key => $result) {
             if ($result == false) {
-                $variables_with_problems .=$key.' <br />';
+                $variables_with_problems .= $key.' <br />';
             }
         }
     }
@@ -53,7 +53,7 @@ if (isset($new_language) && isset($language_variable) && isset($file_id)) {
             Display::return_message(get_lang('TheNewWordHasBeenAdded'), 'success')
         );
 
-        $redirectUrl = api_get_path(WEB_CODE_PATH) . 'admin/extra_fields.php?type=';
+        $redirectUrl = api_get_path(WEB_CODE_PATH).'admin/extra_fields.php?type=';
 
         switch ($_REQUEST['extra_field_type']) {
             case ExtraField::USER_FIELD_TYPE:

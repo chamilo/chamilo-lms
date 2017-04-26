@@ -8,7 +8,7 @@
  */
 $_in_course = true;
 
-require_once __DIR__ . '/../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 $current_course_tool = TOOL_GRADEBOOK;
 
@@ -51,7 +51,7 @@ if ($checker) {
                 'normal',
                 false
             ),
-            api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/service_catalog.php'
+            api_get_path(WEB_PLUGIN_PATH).'buycourses/src/service_catalog.php'
         );
         $tpl->assign('content', $content);
         $tpl->display_blank_template();
@@ -201,19 +201,19 @@ function generateLPFinalItemTemplateBadgeLinks($userId, $courseId, $sessionId = 
                 <div class='row'>
                     <div class='col-md-2 col-xs-4'>
                         <div class='thumbnail'>
-                          <img class='skill-badge-img' src='" . $skill->getWebIconPath() . "' >
+                          <img class='skill-badge-img' src='" . $skill->getWebIconPath()."' >
                         </div>
                     </div>
                     <div class='col-md-8 col-xs-8'>
-                        <h5><b>" . $skill->getName() . "</b></h5>
-                        " . $skill->getDescription() . "
+                        <h5><b>" . $skill->getName()."</b></h5>
+                        " . $skill->getDescription()."
                     </div>
                     <div class='col-md-2 col-xs-12'>
-                        <h5><b>" . get_lang('ShareWithYourFriends') . "</b></h5>
-                        <a href='http://www.facebook.com/sharer.php?u=" . api_get_path(WEB_PATH) . "badge/" . $skill->getId() . "/user/" . $userId . "' target='_new'>
+                        <h5><b>" . get_lang('ShareWithYourFriends')."</b></h5>
+                        <a href='http://www.facebook.com/sharer.php?u=" . api_get_path(WEB_PATH)."badge/".$skill->getId()."/user/".$userId."' target='_new'>
                             <em class='fa fa-facebook-square fa-3x text-info' aria-hidden='true'></em>
                         </a>
-                        <a href='https://twitter.com/home?status=" . sprintf(get_lang('IHaveObtainedSkillXOnY'), '"' . $skill->getName() . '"', api_get_setting('siteName')) . ' - ' . api_get_path(WEB_PATH) . 'badge/' . $skill->getId() . '/user/' . $userId . "' target='_new'>
+                        <a href='https://twitter.com/home?status=" . sprintf(get_lang('IHaveObtainedSkillXOnY'), '"'.$skill->getName().'"', api_get_setting('siteName')).' - '.api_get_path(WEB_PATH).'badge/'.$skill->getId().'/user/'.$userId."' target='_new'>
                             <em class='fa fa-twitter-square fa-3x text-light' aria-hidden='true'></em>
                         </a>
                     </div>
@@ -223,7 +223,7 @@ function generateLPFinalItemTemplateBadgeLinks($userId, $courseId, $sessionId = 
         $badgeLink .= "
             <div class='panel panel-default'>
                 <div class='panel-body'>
-                    <h3 class='text-center'>" . get_lang('AdditionallyYouHaveObtainedTheFollowingSkills') . "</h3>
+                    <h3 class='text-center'>" . get_lang('AdditionallyYouHaveObtainedTheFollowingSkills')."</h3>
                     $skillList
                 </div>
             </div>
@@ -240,7 +240,7 @@ function generateLPFinalItemTemplateBadgeLinks($userId, $courseId, $sessionId = 
 function generateLPFinalItemTemplateCertificateLinks($certificate)
 {
     $downloadCertificateLink = Display::url(
-        Display::returnFontAwesomeIcon('file-pdf-o') . get_lang('DownloadCertificatePdf'),
+        Display::returnFontAwesomeIcon('file-pdf-o').get_lang('DownloadCertificatePdf'),
         $certificate['pdf_url'],
         ['class' => 'btn btn-default']
     );
@@ -248,7 +248,7 @@ function generateLPFinalItemTemplateCertificateLinks($certificate)
     $downloadCertificateLink = "
         <div class='panel panel-default'>
             <div class='panel-body'>
-                <h3 class='text-center'>" . get_lang('NowDownloadYourCertificateClickHere') . "</h3>
+                <h3 class='text-center'>" . get_lang('NowDownloadYourCertificateClickHere')."</h3>
                 <div class='text-center'>$downloadCertificateLink $viewCertificateLink</div>
             </div>
         </div>

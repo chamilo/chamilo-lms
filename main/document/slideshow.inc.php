@@ -34,7 +34,7 @@
 function resize_image($image, $target_width, $target_height, $slideshow = 0) {
     // Modifications by Ivan Tcholakov, 04-MAY-2009.
     $result = array();
-    if ( (isset($_SESSION['image_resizing']) && $_SESSION['image_resizing']== 'resizing') or $slideshow == 1) {
+    if ((isset($_SESSION['image_resizing']) && $_SESSION['image_resizing'] == 'resizing') or $slideshow == 1) {
         $new_sizes = api_resize_image($image, $target_width, $target_height);
         $result[] = $new_sizes['height'];
         $result[] = $new_sizes['width'];

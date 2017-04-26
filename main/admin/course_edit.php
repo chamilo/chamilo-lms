@@ -42,7 +42,7 @@ $sql = "SELECT user.user_id,lastname,firstname
         WHERE
             course_user.status='1' AND
             course_user.user_id=user.user_id AND
-            course_user.c_id ='" . $courseId . "'" .
+            course_user.c_id ='".$courseId."'".
         $order_clause;
 $res = Database::query($sql);
 $course_teachers = array();
@@ -58,18 +58,18 @@ if (api_is_multiple_url_enabled()) {
             INNER JOIN $access_url_rel_user_table url_rel_user
             ON (u.user_id=url_rel_user.user_id)
             WHERE
-                url_rel_user.access_url_id=" . api_get_current_access_url_id() . " AND
+                url_rel_user.access_url_id=".api_get_current_access_url_id()." AND
                 status = 1" . $order_clause;
 } else {
     $sql = "SELECT user_id, lastname, firstname
-            FROM $table_user WHERE status='1'" . $order_clause;
+            FROM $table_user WHERE status='1'".$order_clause;
 }
 $courseInfo['tutor_name'] = null;
 
 $res = Database::query($sql);
 $teachers = array();
 $allTeachers = array();
-$platform_teachers[0] = '-- ' . get_lang('NoManager') . ' --';
+$platform_teachers[0] = '-- '.get_lang('NoManager').' --';
 while ($obj = Database::fetch_object($res)) {
     $allTeachers[$obj->user_id] = api_get_person_name($obj->firstname, $obj->lastname);
     if (!array_key_exists($obj->user_id, $course_teachers)) {
@@ -87,7 +87,7 @@ while ($obj = Database::fetch_object($res)) {
 
 // Case where there is no teacher in the course
 if (count($course_teachers) == 0) {
-    $sql = 'SELECT tutor_name FROM ' . $course_table . ' WHERE code="' . $course_code . '"';
+    $sql = 'SELECT tutor_name FROM '.$course_table.' WHERE code="'.$course_code.'"';
     $res = Database::query($sql);
     $tutor_name = Database::result($res, 0, 0);
     $courseInfo['tutor_name'] = array_search($tutor_name, $platform_teachers);
@@ -95,7 +95,7 @@ if (count($course_teachers) == 0) {
 
 // Build the form
 $form = new FormValidator('update_course', 'post', api_get_self().'?id='.$courseId);
-$form->addElement('header', get_lang('Course') . '  #' . $courseInfo['real_id'] . ' ' . $course_code);
+$form->addElement('header', get_lang('Course').'  #'.$courseInfo['real_id'].' '.$course_code);
 $form->addElement('hidden', 'code', $course_code);
 
 //title
@@ -151,14 +151,14 @@ if (!empty($coursesInSession)) {
             }
         }
 
-        $groupName = 'session_coaches[' . $sessionId . ']';
-        $platformTeacherId = 'platform_teachers_by_session_' . $sessionId;
-        $coachId = 'coaches_by_session_' . $sessionId;
+        $groupName = 'session_coaches['.$sessionId.']';
+        $platformTeacherId = 'platform_teachers_by_session_'.$sessionId;
+        $coachId = 'coaches_by_session_'.$sessionId;
 
         $platformTeacherName = 'platform_teachers_by_session';
         $coachName = 'coaches_by_session';
 
-        $sessionUrl = api_get_path(WEB_CODE_PATH) . 'session/resume_session.php?id_session=' . $sessionId;
+        $sessionUrl = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$sessionId;
         $form->addElement(
             'advmultiselect',
             $groupName,
@@ -166,7 +166,7 @@ if (!empty($coursesInSession)) {
                 $session['name'],
                 $sessionUrl,
                 array('target' => '_blank')
-            ) . ' - ' . get_lang('Coaches'),
+            ).' - '.get_lang('Coaches'),
             $allTeachers
         );
         $courseInfo[$groupName] = $sessionTeachers;
@@ -174,7 +174,7 @@ if (!empty($coursesInSession)) {
 }
 
 // Category code
-$url = api_get_path(WEB_AJAX_PATH) . 'course.ajax.php?a=search_category';
+$url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_category';
 
 $categorySelect = $form->addElement(
     'select_ajax',
@@ -200,11 +200,11 @@ $form->applyFilter('department_url', 'trim');
 $form->addSelectLanguage('course_language', get_lang('CourseLanguage'));
 
 $group = array();
-$group[]= $form->createElement('radio', 'visibility', get_lang("CourseAccess"), get_lang('OpenToTheWorld'), COURSE_VISIBILITY_OPEN_WORLD);
-$group[]= $form->createElement('radio', 'visibility', null, get_lang('OpenToThePlatform'), COURSE_VISIBILITY_OPEN_PLATFORM);
-$group[]= $form->createElement('radio', 'visibility', null, get_lang('Private'), COURSE_VISIBILITY_REGISTERED);
-$group[]= $form->createElement('radio', 'visibility', null, get_lang('CourseVisibilityClosed'), COURSE_VISIBILITY_CLOSED);
-$group[]= $form->createElement('radio', 'visibility', null, get_lang('CourseVisibilityHidden'), COURSE_VISIBILITY_HIDDEN);
+$group[] = $form->createElement('radio', 'visibility', get_lang("CourseAccess"), get_lang('OpenToTheWorld'), COURSE_VISIBILITY_OPEN_WORLD);
+$group[] = $form->createElement('radio', 'visibility', null, get_lang('OpenToThePlatform'), COURSE_VISIBILITY_OPEN_PLATFORM);
+$group[] = $form->createElement('radio', 'visibility', null, get_lang('Private'), COURSE_VISIBILITY_REGISTERED);
+$group[] = $form->createElement('radio', 'visibility', null, get_lang('CourseVisibilityClosed'), COURSE_VISIBILITY_CLOSED);
+$group[] = $form->createElement('radio', 'visibility', null, get_lang('CourseVisibilityHidden'), COURSE_VISIBILITY_HIDDEN);
 $form->addGroup($group, '', get_lang('CourseAccess'));
 
 $group = array();
@@ -228,7 +228,7 @@ $extra = $extra_field->addElements($form, $courseId);
 $htmlHeadXtra[] = '
 <script>
 $(function() {
-    ' . $extra['jquery_ready_content'] . '
+    ' . $extra['jquery_ready_content'].'
 });
 </script>';
 
@@ -283,7 +283,7 @@ if ($form->validate()) {
         foreach ($list as $course_temp) {
             if ($course_temp['code'] != $course_code) {
                 $visual_code_is_used = true;
-                $warn .= ' ' . $course_temp['title'] . ' (' . $course_temp['code'] . '),';
+                $warn .= ' '.$course_temp['title'].' ('.$course_temp['code'].'),';
             }
         }
         $warn = substr($warn, 0, -1);
@@ -302,7 +302,7 @@ if ($form->validate()) {
     $course['course_code'] = $course_code;
 
     if (!stristr($department_url, 'http://')) {
-        $department_url = 'http://' . $department_url;
+        $department_url = 'http://'.$department_url;
     }
 
     Database::query($sql);
@@ -367,7 +367,7 @@ if ($form->validate()) {
     if (array_key_exists('add_teachers_to_sessions_courses', $courseInfo)) {
         $sql = "UPDATE $course_table SET
                 add_teachers_to_sessions_courses = '$addTeacherToSessionCourses'
-                WHERE id = " . $courseInfo['real_id'];
+                WHERE id = ".$courseInfo['real_id'];
         Database::query($sql);
     }
 

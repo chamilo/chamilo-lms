@@ -60,5 +60,5 @@ if (!empty($sqlList)) {
 }
 
 Display::display_header(get_lang('SyncDatabaseWithSchema'));
-echo $content ;
+echo $content;
 Display::display_footer();

@@ -13,7 +13,7 @@ use Chamilo\CourseBundle\Entity\Repository\CStudentPublicationRepository;
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
-require_once api_get_path(SYS_CODE_PATH) . 'work/work.lib.php';
+require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
 
 if (!api_is_platform_admin(true) && !api_is_teacher()) {
     api_not_allowed(true);
@@ -53,7 +53,7 @@ if ($session) {
 
     foreach ($sessionCourses as $sessionCourse) {
         $course = $sessionCourse->getCourse();
-        $coursesInfo[$course->getId()] =  $course->getCode();
+        $coursesInfo[$course->getId()] = $course->getCode();
         $criteria = Criteria::create()->where(
             Criteria::expr()->eq('status', Session::COACH)
         );
@@ -167,9 +167,9 @@ if (isset($_GET['export']) && $session && ($coursesInfo && $usersInfo)) {
 }
 
 $this_section = SECTION_PLATFORM_ADMIN;
-$interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH) . 'mySpace/', 'name' => get_lang('Reporting')];
+$interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'mySpace/', 'name' => get_lang('Reporting')];
 $interbreadcrumb[] = [
-    'url' => api_get_path(WEB_CODE_PATH) . 'mySpace/session.php',
+    'url' => api_get_path(WEB_CODE_PATH).'mySpace/session.php',
     'name' => get_lang('FollowedSessions')
 ];
 
@@ -183,11 +183,11 @@ if ($session) {
 
     $actions = Display::url(
         Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), [], ICON_SIZE_MEDIUM),
-        api_get_self() . '?' . http_build_query(['export' => 'csv', 'session' => $session->getId()])
+        api_get_self().'?'.http_build_query(['export' => 'csv', 'session' => $session->getId()])
     );
     $actions .= Display::url(
         Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), [], ICON_SIZE_MEDIUM),
-        api_get_self() . '?' . http_build_query(['export' => 'xls', 'session' => $session->getId()])
+        api_get_self().'?'.http_build_query(['export' => 'xls', 'session' => $session->getId()])
     );
 
     $view->assign(

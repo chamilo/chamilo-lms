@@ -960,34 +960,6 @@ class AnnouncementManager
     }
 
     /**
-     * this function gets all the users of the course,
-     * including users from linked courses
-     * @deprecate use CourseManager class
-     */
-    public static function get_course_users()
-    {
-        //this would return only the users from real courses:
-        $session_id = api_get_session_id();
-        if ($session_id != 0) {
-            $userList = CourseManager::get_real_and_linked_user_list(
-                api_get_course_id(),
-                true,
-                $session_id,
-                true
-            );
-        } else {
-            $userList = CourseManager::get_real_and_linked_user_list(
-                api_get_course_id(),
-                false,
-                0,
-                true
-            );
-        }
-
-        return $userList;
-    }
-
-    /**
      * this function gets all the groups of the course,
      * not including linked courses
      */
@@ -1306,7 +1278,7 @@ class AnnouncementManager
     /**
      * This function delete a attachment file by id
      * @param integer $id attachment file Id
-     *
+     * @return bool
      */
     public static function delete_announcement_attachment_file($id)
     {
@@ -1318,8 +1290,9 @@ class AnnouncementManager
         }
         $sql = "DELETE FROM $table
                 WHERE c_id = $course_id AND id = $id";
-
         Database::query($sql);
+
+        return true;
     }
 
     /**
@@ -1375,7 +1348,12 @@ class AnnouncementManager
         $user_id = $userId ?: api_get_user_id();
         $group_id = api_get_group_id();
         $session_id = $sessionId ?: api_get_session_id();
-        $condition_session = api_get_session_condition($session_id, true, true, 'announcement.session_id');
+        $condition_session = api_get_session_condition(
+            $session_id,
+            true,
+            true,
+            'announcement.session_id'
+        );
         $course_id = $courseId ?: api_get_course_int_id();
         $_course = api_get_course_info();
 

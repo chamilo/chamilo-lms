@@ -172,19 +172,19 @@ $tool_name = get_lang('ImportCourses').' CSV';
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 
 set_time_limit(0);
-Display :: display_header($tool_name);
+Display::display_header($tool_name);
 
 if (isset($_POST['formSent']) && $_POST['formSent']) {
     if (empty($_FILES['import_file']['tmp_name'])) {
         $error_message = get_lang('UplUploadFailed');
-        Display :: display_error_message($error_message, false);
+        echo Display::return_message($error_message, 'error', false);
     } else {
         $allowed_file_mimetype = array('csv');
 
         $ext_import_file = substr($_FILES['import_file']['name'], (strrpos($_FILES['import_file']['name'], '.') + 1));
 
         if (!in_array($ext_import_file, $allowed_file_mimetype)) {
-            Display :: display_error_message(get_lang('YouMustImportAFileAccordingToSelectedOption'));
+            echo Display::return_message(get_lang('YouMustImportAFileAccordingToSelectedOption'), 'error');
         } else {
             $courses = parse_csv_courses_data($_FILES['import_file']['tmp_name']);
 
@@ -204,7 +204,7 @@ if (isset($errors) && count($errors) != 0) {
         $error_message .= '</li>';
     }
     $error_message .= '</ul>';
-    Display :: display_error_message($error_message, false);
+    echo Display::return_message($error_message, 'error', false);
 }
 
 $form = new FormValidator('import', 'post', api_get_self(), null, array('enctype' => 'multipart/form-data'));
@@ -229,4 +229,4 @@ BIO0017;Language;LANG;;;english
 </blockquote>
 
 <?php
-Display :: display_footer();
+Display::display_footer();

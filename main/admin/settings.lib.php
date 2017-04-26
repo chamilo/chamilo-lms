@@ -458,7 +458,7 @@ function handleStylesheets()
             </script>';
             echo Display::tabs(
                 array(get_lang('Update'),get_lang('UpdateLogo'), get_lang('UploadNewStylesheet')),
-                array($form_change->return_form(), $logoForm->returnForm(), $form->returnForm())
+                array($form_change->returnForm(), $logoForm->returnForm(), $form->returnForm())
             );
         } else {
             $form_change->display();
@@ -540,8 +540,9 @@ function uploadStylesheet($values, $picture)
                     $error_string .= '<li>'.$invalid_file.'</li>';
                 }
                 $error_string .= '</ul>';
-                Display::display_error_message(
+                echo Display::return_message(
                     get_lang('ErrorStylesheetFilesExtensionsInsideZip').$error_string,
+                    'error',
                     false
                 );
             } else {
@@ -1691,8 +1692,9 @@ function showSearchToolsStatusTable()
         $table->set_header(2, get_lang('Status'), false);
         echo $table->display();
     } else {
-        Display::display_warning_message(
-            get_lang('YouAreUsingChamiloInAWindowsPlatformSadlyYouCantConvertDocumentsInOrderToSearchTheContentUsingThisTool')
+        echo Display::return_message(
+            get_lang('YouAreUsingChamiloInAWindowsPlatformSadlyYouCantConvertDocumentsInOrderToSearchTheContentUsingThisTool'),
+            'warning'
         );
     }
 }

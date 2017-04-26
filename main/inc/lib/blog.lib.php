@@ -379,7 +379,7 @@ class Blog
                 $file_name = $_FILES['user_upload']['name'];
 
                 if (!filter_extension($new_file_name)) {
-                    Display::display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
+                    echo Display::return_message(get_lang('UplUnableToSaveFileFilteredExtension'), 'error');
                 } else {
                     $new_file_name = uniqid('');
                     $new_path = $updir.'/'.$new_file_name;
@@ -404,7 +404,7 @@ class Blog
 
             return $last_post_id;
         } else {
-            Display::display_error_message(get_lang('UplNoFileUploaded'));
+            echo Display::return_message(get_lang('UplNoFileUploaded'), 'error');
         }
     }
 
@@ -540,7 +540,7 @@ class Blog
                     $file_name = Database::escape_string($_FILES['user_upload']['name']);
 
                     if (!filter_extension($new_file_name)) {
-                        Display:: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
+                        echo Display::return_message(get_lang('UplUnableToSaveFileFilteredExtension'), 'error');
                     } else {
                         $new_file_name = uniqid('');
                         $new_path = $updir . '/' . $new_file_name;

@@ -134,10 +134,10 @@ $code = isset($code) ? $code : null;
 <?php
 if ($showCourses && $action != 'display_sessions') {
     if (!empty($message)) {
-        Display::display_confirmation_message($message, false);
+        echo Display::return_message($message, 'confirmation', false);
     }
     if (!empty($error)) {
-        Display::display_error_message($error, false);
+        echo Display::return_message($error, 'error', false);
     }
 
     if (!empty($content)) {
@@ -213,7 +213,7 @@ if ($showCourses && $action != 'display_sessions') {
 
             // display course title and button bloc
             $html .= '<div class="description">';
-            $html .= return_title($course, $userRegisterd);
+            $html .= return_title($course, $userRegisterdInCourse);
             $html .= return_teacher($course);
 
             // display button line
@@ -226,7 +226,6 @@ if ($showCourses && $action != 'display_sessions') {
             // if user registered as student
             if ($userRegisterdInCourse) {
                 $html .= return_already_registered_label('student');
-
                 if (!$course_closed) {
                     if ($course_unsubscribe_allowed) {
                         $html .= return_unregister_button($course, $stok, $search_term, $code);
@@ -263,7 +262,7 @@ if ($showCourses && $action != 'display_sessions') {
         if (!isset($_REQUEST['subscribe_user_with_password']) &&
             !isset($_REQUEST['subscribe_course'])
         ) {
-            Display::display_warning_message(get_lang('ThereAreNoCoursesInThisCategory'));
+            echo Display::return_message(get_lang('ThereAreNoCoursesInThisCategory'), 'warning');
         }
     }
 }
@@ -434,9 +433,9 @@ function return_already_registered_label($in_status)
     }
 
     $html = Display::tag(
-        'button',
-        $icon,
-        array('id' => 'register', 'class' => 'btn btn-default btn-sm', 'title' => $title, 'aria-label' => $title)
+        'span',
+        $icon . ' ' . $title,
+        array('id' => 'register', 'class' => 'label-subscribed text-success', 'title' => $title, 'aria-label' => $title)
     );
 
     return $html;
@@ -455,7 +454,7 @@ function return_register_button($course, $stok, $code, $search_term)
 {
     $title = get_lang('Subscribe');
     $html = Display::url(
-        Display::returnFontAwesomeIcon('sign-in'),
+        Display::returnFontAwesomeIcon('check') . ' ' . $title,
         api_get_self() . '?action=subscribe_course&sec_token=' . $stok.
         '&subscribe_course='.$course['code'].'&search_term='.$search_term.'&category_code='.$code,
         array('class' => 'btn btn-success btn-sm', 'title' => $title, 'aria-label' => $title)
@@ -474,12 +473,12 @@ function return_register_button($course, $stok, $code, $search_term)
  */
 function return_unregister_button($course, $stok, $search_term, $code)
 {
-    $title = get_lang('Unsubscribe');
+    $title = get_lang('UnsubscriptionAllowed');
     $html = Display::url(
-        Display::returnFontAwesomeIcon('sign-in'),
+        Display::returnFontAwesomeIcon('sign-in').' '.$title,
         api_get_self() . '?action=unsubscribe&sec_token='.$stok
         .'&unsubscribe='.$course['code'].'&search_term='.$search_term.'&category_code='.$code,
-        array('class' => 'btn btn-success btn-sm', 'title' => $title, 'aria-label' => $title)
+        array('class' => 'btn btn-danger btn-sm', 'title' => $title, 'aria-label' => $title)
     );
     return $html;
 }

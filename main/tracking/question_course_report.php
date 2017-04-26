@@ -14,9 +14,9 @@ $this_section = "session_my_space";
 $is_allowedToTrack = $is_courseAdmin || $is_platformAdmin || $is_courseCoach || $is_sessionAdmin;
 
 if (!$is_allowedToTrack) {
-	Display :: display_header(null);
+	Display::display_header(null);
 	api_not_allowed();
-	Display :: display_footer();
+	Display::display_footer();
 }
 
 $export_to_xls = false;
@@ -45,13 +45,13 @@ function load_courses() {
 $session_id = isset($_REQUEST['session_id']) ? intval($_REQUEST['session_id']) : null;
 
 if (empty($session_id)) {
-	$temp_course_list = CourseManager :: get_courses_list();
+	$temp_course_list = CourseManager::get_courses_list();
 } else {
 	$temp_course_list = SessionManager::get_course_list_by_session_id($session_id);
 }
 
 foreach ($temp_course_list  as $temp_course_item) {
-	$course_item = CourseManager ::get_course_information($temp_course_item['code']);
+	$course_item = api_get_course_info($temp_course_item['code']);
 	$course_select_list[$temp_course_item['code']] = $course_item['title'];
 }
 
@@ -148,7 +148,7 @@ if (!empty($course_info)) {
 }
 
 if (!$export_to_xls) {
-	Display :: display_header(get_lang("MySpace"));
+	Display::display_header(get_lang("MySpace"));
 	echo '<div class="actions">';
 	if ($global) {
 		echo MySpace::getTopMenu();
@@ -171,7 +171,7 @@ if (!$export_to_xls) {
 	$form->display();
 
 	if (empty($course_code)) {
-		Display::display_warning_message(get_lang('PleaseSelectACourse'));
+		echo Display::return_message(get_lang('PleaseSelectACourse'), 'warning');
 	}
 }
 
@@ -215,7 +215,7 @@ if (!empty($main_question_list) && is_array($main_question_list)) {
 	$html_result .= '</table>';
 } else {
 	if (!empty($course_code)) {
-		Display::display_warning_message(get_lang('NoResults'));
+		echo Display::return_message(get_lang('NoResults'), 'warning');
 	}
 }
 
@@ -223,4 +223,4 @@ if (!$export_to_xls) {
 	echo $html_result;
 }
 
-Display :: display_footer();
+Display::display_footer();

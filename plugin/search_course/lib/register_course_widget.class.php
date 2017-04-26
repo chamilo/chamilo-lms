@@ -77,12 +77,12 @@ class RegisterCourseWidget
 
         if ($this->subscribe_user($course_code, $registration_code))
         {
-            Display::display_confirmation_message(get_lang('EnrollToCourseSuccessful'));
+            echo Display::return_message(get_lang('EnrollToCourseSuccessful'), 'confirmation');
             return;
         }
         if (!empty($registration_code))
         {
-            Display::display_error_message(get_lang('CourseRegistrationCodeIncorrect'));
+            echo Display::return_message(get_lang('CourseRegistrationCodeIncorrect'), 'error');
         }
         $this->display_form($course_code);
         return true;
@@ -99,7 +99,7 @@ class RegisterCourseWidget
      */
     function subscribe_user($course_code, $registration_code = '', $user_id = null)
     {
-        $course = $this->retrieve_course($course_code);
+        $course = api_get_course_info($course_code);
         $course_regisration_code = $course['registration_code'];
         if (!empty($course_regisration_code) && $registration_code != $course_regisration_code)
         {
@@ -125,7 +125,7 @@ class RegisterCourseWidget
     {
         global $stok;
 
-        $course = $this->retrieve_course($course_code);
+        $course = api_get_course_info($course_code);
         $self = $_SERVER['REQUEST_URI'];
         $course_code = $course['code'];
         $course_visual_code = $course['visual_code'];
@@ -144,19 +144,4 @@ class RegisterCourseWidget
 EOT;
         echo $result;
     }
-
-    /**
-     * DB functions - DB functions - DB functions
-     */
-
-    /**
-     *
-     * @param type $course_code
-     * @return type
-     */
-    function retrieve_course($course_code)
-    {
-        return CourseManager::get_course_information($course_code);
-    }
-
 }

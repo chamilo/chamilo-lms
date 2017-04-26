@@ -14,7 +14,7 @@
 function check_download_survey($course, $invitation, $doc_url)
 {
     // Getting all the course information
-    $_course = CourseManager::get_course_information($course);
+    $_course = api_get_course_info($course);
     $course_id = $_course['real_id'];
 
     // Database table definitions
@@ -30,16 +30,16 @@ function check_download_survey($course, $invitation, $doc_url)
                 invitation_code = '".Database::escape_string($invitation)."'";
     $result = Database::query($sql);
     if (Database::num_rows($result) < 1) {
-        Display :: display_error_message(get_lang('WrongInvitationCode'), false);
-        Display :: display_footer();
+        echo Display::return_message(get_lang('WrongInvitationCode'), 'error', false);
+        Display::display_footer();
         exit;
     }
     $survey_invitation = Database::fetch_assoc($result);
 
     // Now we check if the user already filled the survey
     if ($survey_invitation['answered'] == 1) {
-        Display :: display_error_message(get_lang('YouAlreadyFilledThisSurvey'), false);
-        Display :: display_footer();
+        echo Display::return_message(get_lang('YouAlreadyFilledThisSurvey'), 'error', false);
+        Display::display_footer();
         exit;
     }
 
@@ -102,8 +102,8 @@ function check_download_survey($course, $invitation, $doc_url)
                     )";
     $result = Database::query($sql);
     if (Database::num_rows($result) == 0) {
-        Display :: display_error_message(get_lang('WrongInvitationCode'), false);
-        Display :: display_footer();
+        echo Display::return_message(get_lang('WrongInvitationCode'), 'error', false);
+        Display::display_footer();
         exit;
     }
 

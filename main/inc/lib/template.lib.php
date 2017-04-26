@@ -94,8 +94,10 @@ class Template
 
         $loader = new Twig_Loader_Filesystem($template_paths);
 
+        $isTestMode = api_get_setting('server_type') === 'test';
+
         //Setting Twig options depending on the server see http://twig.sensiolabs.org/doc/api.html#environment-options
-        if (api_get_setting('server_type') == 'test') {
+        if ($isTestMode) {
             $options = array(
                 //'cache' => api_get_path(SYS_ARCHIVE_PATH), //path to the cache folder
                 'autoescape' => false,
@@ -121,6 +123,10 @@ class Template
         }
 
         $this->twig = new Twig_Environment($loader, $options);
+
+        if ($isTestMode) {
+            $this->twig->addExtension(new Twig_Extension_Debug());
+        }
 
         // Twig filters setup
         $filters = [
@@ -158,8 +164,8 @@ class Template
                 'callable' => 'Template::format_date'
             ],
             [
-                'name' => 'icon',
-                'callable' => 'Template::get_icon_path'
+                'name' => 'img',
+                'callable' => 'Template::get_image'
             ]
         ];
 

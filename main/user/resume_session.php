@@ -11,7 +11,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
-$id_session = (int)$_GET['id_session'];
+$id_session = (int) $_GET['id_session'];
 SessionManager::protect_teacher_session_edit($id_session);
 
 $tool_name = get_lang('SessionOverview');
@@ -59,7 +59,7 @@ if ($allowTutors === 'true') {
     $rs = Database::query($sql);
     $session_category = '';
 
-    if (Database::num_rows($rs)>0) {
+    if (Database::num_rows($rs) > 0) {
         $rows_session_category = Database::store_result($rs);
         $rows_session_category = $rows_session_category[0];
         $session_category = $rows_session_category['name'];
@@ -84,25 +84,25 @@ if ($allowTutors === 'true') {
             break;
         case 'delete':
             $idChecked = $_GET['idChecked'];
-            if(is_array($idChecked)) {
+            if (is_array($idChecked)) {
                 $my_temp = array();
-                foreach ($idChecked as $id){
+                foreach ($idChecked as $id) {
                     $courseInfo = api_get_course_info($id);
-                    $my_temp[]= $courseInfo['real_id'];// forcing the escape_string
+                    $my_temp[] = $courseInfo['real_id']; // forcing the escape_string
                 }
                 $idChecked = $my_temp;
                 $idChecked = "'".implode("','", $idChecked)."'";
 
                 $result = Database::query("DELETE FROM $tbl_session_rel_course WHERE session_id='$id_session' AND c_id IN($idChecked)");
-                $nbr_affected_rows=Database::affected_rows($result);
+                $nbr_affected_rows = Database::affected_rows($result);
 
                 Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE session_id='$id_session' AND c_id IN($idChecked)");
                 Database::query("UPDATE $tbl_session SET nbr_courses=nbr_courses-$nbr_affected_rows WHERE id='$id_session'");
             }
 
-            if (!empty($_GET['class'])){
+            if (!empty($_GET['class'])) {
                 $result = Database::query("DELETE FROM $tbl_session_rel_class WHERE session_id='$id_session' AND class_id=".intval($_GET['class']));
-                $nbr_affected_rows=Database::affected_rows($result);
+                $nbr_affected_rows = Database::affected_rows($result);
                 Database::query("UPDATE $tbl_session SET nbr_classes=nbr_classes-$nbr_affected_rows WHERE id='$id_session'");
             }
 
@@ -112,7 +112,7 @@ if ($allowTutors === 'true') {
                 Database::query("UPDATE $tbl_session SET nbr_users=nbr_users-$nbr_affected_rows WHERE id='$id_session'");
 
                 $result = Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE session_id ='$id_session' AND user_id=".intval($_GET['user']));
-                $nbr_affected_rows=Database::affected_rows($result);
+                $nbr_affected_rows = Database::affected_rows($result);
 
                 Database::query("UPDATE $tbl_session_rel_course SET nbr_users=nbr_users-$nbr_affected_rows WHERE session_id ='$id_session'");
             }
@@ -130,28 +130,28 @@ if ($allowTutors === 'true') {
     	<td><?php echo get_lang('GeneralCoach'); ?> :</td>
     	<td><?php echo api_get_person_name($session['firstname'], $session['lastname']).' ('.$session['username'].')' ?></td>
     </tr>
-    <?php if(!empty($session_category)) { ?>
+    <?php if (!empty($session_category)) { ?>
     <tr>
     	<td><?php echo get_lang('SessionCategory') ?></td>
-    	<td><?php echo $session_category;  ?></td>
+    	<td><?php echo $session_category; ?></td>
     </tr>
     <?php } ?>
     <tr>
     	<td><?php echo get_lang('Date'); ?> :</td>
     	<td>
     	<?php
-            if ($session['access_start_date'] == '00-00-0000' && $session['access_end_date']== '00-00-0000' ) {
+            if ($session['access_start_date'] == '00-00-0000' && $session['access_end_date'] == '00-00-0000') {
                 echo get_lang('NoTimeLimits');
             }
             else {
                 if ($session['access_start_date'] != '00-00-0000') {
                     //$session['date_start'] = Display::tag('i', get_lang('NoTimeLimits'));
-                    $session['access_start_date'] =  get_lang('From').' '.$session['access_start_date'];
+                    $session['access_start_date'] = get_lang('From').' '.$session['access_start_date'];
                 } else {
                     $session['access_start_date'] = '';
                 }
                 if ($session['access_end_date'] == '00-00-0000') {
-                    $session['access_end_date'] ='';
+                    $session['access_end_date'] = '';
                 } else {
                     $session['access_end_date'] = get_lang('Until').' '.$session['access_end_date'];
                 }
@@ -182,7 +182,7 @@ if ($allowTutors === 'true') {
     		<?php echo api_ucfirst(get_lang('SessionVisibility')) ?> :
     	</td>
     	<td>
-    		<?php if ($session['visibility']==1) echo get_lang('ReadOnly'); elseif($session['visibility']==2) echo get_lang('Visible');elseif($session['visibility']==3) echo api_ucfirst(get_lang('Invisible'))  ?>
+    		<?php if ($session['visibility'] == 1) echo get_lang('ReadOnly'); elseif ($session['visibility'] == 2) echo get_lang('Visible'); elseif ($session['visibility'] == 3) echo api_ucfirst(get_lang('Invisible'))  ?>
     	</td>
     </tr>
     <?php
@@ -194,7 +194,7 @@ if ($allowTutors === 'true') {
         echo '</td>';
         echo '<td>';
         $url_list = UrlManager::get_access_url_from_session($id_session);
-        foreach($url_list as $url_data) {
+        foreach ($url_list as $url_data) {
             echo $url_data['url'].'<br />';
         }
         echo '</td></tr>';
@@ -224,8 +224,8 @@ if ($allowTutors === 'true') {
     			WHERE c.id = sc.c_id
     			AND	session_id='$id_session'
     			ORDER BY title";
-        $result=Database::query($sql);
-        $courses=Database::store_result($result);
+        $result = Database::query($sql);
+        $courses = Database::store_result($result);
         foreach ($courses as $course) {
             //select the number of users
 
@@ -238,7 +238,7 @@ if ($allowTutors === 'true') {
                         srcru.session_id = '".intval($id_session)."'";
 
             $rs = Database::query($sql);
-            $course['nbr_users'] = Database::result($rs,0,0);
+            $course['nbr_users'] = Database::result($rs, 0, 0);
 
             // Get coachs of the courses in session
 
@@ -264,7 +264,7 @@ if ($allowTutors === 'true') {
             }
 
             if (count($coachs) > 0) {
-                $coach = implode('<br />',$coachs);
+                $coach = implode('<br />', $coachs);
             } else {
                 $coach = get_lang('None');
             }
@@ -274,7 +274,7 @@ if ($allowTutors === 'true') {
             // name of the course, that appeared in the default $interbreadcrumb
             echo '
     		<tr>
-    			<td>'.Display::url($course['title'].' ('.$course['visual_code'].')', api_get_path(WEB_COURSE_PATH).$course['code'].'/?id_session='.$id_session),'</td>
+    			<td>'.Display::url($course['title'].' ('.$course['visual_code'].')', api_get_path(WEB_COURSE_PATH).$course['code'].'/?id_session='.$id_session), '</td>
     			<td>'.$coach.'</td>
     			<td>'.$course['nbr_users'].'</td>
 
@@ -299,7 +299,7 @@ if ($allowTutors === 'true') {
         </tr>
     <?php
 
-    if ($session['nbr_users']==0) {
+    if ($session['nbr_users'] == 0) {
         echo '<tr>
     			<td colspan="2">'.get_lang('NoUsersForThisSession').'</td>
     		</tr>';
@@ -330,7 +330,7 @@ if ($allowTutors === 'true') {
             $user_link = '';
             if (!empty($user['user_id'])) {
                 $user_link = '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.intval($user['user_id']).'">'.
-                    api_htmlentities(api_get_person_name($user['firstname'], $user['lastname']),ENT_QUOTES,$charset).' ('.$user['username'].')</a>';
+                    api_htmlentities(api_get_person_name($user['firstname'], $user['lastname']), ENT_QUOTES, $charset).' ('.$user['username'].')</a>';
             }
 
             $link_to_add_user_in_url = '';

@@ -77,7 +77,7 @@ Display::display_header(get_lang('UserOnlineListSession'));
             $time_limit = 60;
         }
 
-        $online_time    = time() - $time_limit*60;
+        $online_time    = time() - $time_limit * 60;
         $current_date   = api_get_utc_datetime($online_time);
 
         $students_online = array();
@@ -97,7 +97,7 @@ Display::display_header(get_lang('UserOnlineListSession'));
 
             $result = Database::query($sql);
 
-            while($user_list = Database::fetch_array($result)) {
+            while ($user_list = Database::fetch_array($result)) {
                 $students_online[$user_list['access_user_id']] = $user_list;
             }
         }

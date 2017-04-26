@@ -97,7 +97,7 @@ if (!empty($_GET['gradebook']) && $_GET['gradebook'] == 'view') {
 
 if (!empty($gradebook) && $gradebook == 'view') {
     $interbreadcrumb[] = array(
-        'url' => '../gradebook/' . $_SESSION['gradebook_dest'],
+        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
         'name' => get_lang('ToolGradebook')
     );
 }
@@ -687,7 +687,7 @@ if (!empty($exerciseList)) {
                     $title = $cut_title;
                 }
 
-                $count_exercise_not_validated = (int)Event::count_exercise_result_not_validated(
+                $count_exercise_not_validated = (int) Event::count_exercise_result_not_validated(
                     $my_exercise_id,
                     $courseId,
                     $session_id
@@ -733,7 +733,7 @@ if (!empty($exerciseList)) {
                     );
 
                     // Exercise results
-                    $actions .='<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$row['id'].'">'.
+                    $actions .= '<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$row['id'].'">'.
                         Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
 
                     // Export
@@ -815,7 +815,7 @@ if (!empty($exerciseList)) {
                         }
                     }
 
-                    $actions .='<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$row['id'].'">'.
+                    $actions .= '<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$row['id'].'">'.
                         Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
                     $actions .= Display::url(Display::return_icon('cd.gif', get_lang('CopyExercise')), '', array('onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToCopy'), ENT_QUOTES, $charset))." ".addslashes($row['title'])."?"."')) return false;", 'href' => 'exercise.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$row['id']));
                 }
@@ -1014,7 +1014,7 @@ if (!empty($exerciseList)) {
                 $item .= Display::tag('td', $actions, array('class' => 'td_actions'));
             } else {
                 if ($isDrhOfCourse) {
-                    $actions ='<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$row['id'].'">'.
+                    $actions = '<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$row['id'].'">'.
                         Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
                     $item .= Display::tag('td', $actions, array('class' => 'td_actions'));
                 }
@@ -1024,7 +1024,7 @@ if (!empty($exerciseList)) {
                 'tr',
                 $item,
                 array(
-                    'id' => 'exercise_list_' . $my_exercise_id,
+                    'id' => 'exercise_list_'.$my_exercise_id,
                 )
             );
         }
@@ -1090,7 +1090,7 @@ if (isset($attribute['path']) && is_array($attribute['path'])) {
                     Display::return_icon('hotpotatoes_s.png', "HotPotatoes"),
                     Display::url(
                         $title,
-                        'showinframes.php?' . api_get_cidreq() . '&' . http_build_query([
+                        'showinframes.php?'.api_get_cidreq().'&'.http_build_query([
                             'file' => $path,
                             'uid' => $userId
                         ]),
@@ -1105,7 +1105,7 @@ if (isset($attribute['path']) && is_array($attribute['path'])) {
                 'adminhp.php?'.api_get_cidreq().'&hotpotatoesName='.$path
             );
 
-            $actions .='<a href="hotpotatoes_exercise_report.php?'.api_get_cidreq().'&path='.$path.'">'.
+            $actions .= '<a href="hotpotatoes_exercise_report.php?'.api_get_cidreq().'&path='.$path.'">'.
                 Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
 
             // if active
@@ -1114,7 +1114,7 @@ if (isset($attribute['path']) && is_array($attribute['path'])) {
                 $actions .= '      <a href="'.$exercisePath.'?'.api_get_cidreq().'&hpchoice=disable&page='.$page.'&file='.$path.'">'.
                     Display::return_icon('visible.png', get_lang('Deactivate'), '', ICON_SIZE_SMALL).'</a>';
             } else { // else if not active
-                $actions .='    <a href="'.$exercisePath.'?'.api_get_cidreq().'&hpchoice=enable&page='.$page.'&file='.$path.'">'.
+                $actions .= '    <a href="'.$exercisePath.'?'.api_get_cidreq().'&hpchoice=enable&page='.$page.'&file='.$path.'">'.
                     Display::return_icon('invisible.png', get_lang('Activate'), '', ICON_SIZE_SMALL).'</a>';
             }
             $actions .= '<a href="'.$exercisePath.'?'.api_get_cidreq().'&hpchoice=delete&file='.$path.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('AreYouSureToDeleteJS'), ENT_QUOTES, $charset).' '.$title."?").'\')) return false;">'.
@@ -1136,7 +1136,7 @@ if (isset($attribute['path']) && is_array($attribute['path'])) {
                     'td',
                     Display::url(
                         $title,
-                        'showinframes.php?' . api_get_cidreq() . '&' . http_build_query([
+                        'showinframes.php?'.api_get_cidreq().'&'.http_build_query([
                             'file' => $path,
                             'cid' => api_get_course_id(),
                             'uid' => $userId
@@ -1157,7 +1157,7 @@ if (isset($attribute['path']) && is_array($attribute['path'])) {
                 $item .= Display::tag('td', $attemptText);
 
                 if ($isDrhOfCourse) {
-                    $actions ='<a href="hotpotatoes_exercise_report.php?'.api_get_cidreq().'&path='.$path.'">'.
+                    $actions = '<a href="hotpotatoes_exercise_report.php?'.api_get_cidreq().'&path='.$path.'">'.
                         Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
 
                     $item .= Display::tag('td', $actions, array('class' => 'td_actions'));

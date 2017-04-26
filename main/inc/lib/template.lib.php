@@ -122,51 +122,69 @@ class Template
 
         $this->twig = new Twig_Environment($loader, $options);
 
-        $this->twig->addFilter('get_plugin_lang', new Twig_Filter_Function('get_plugin_lang'));
-        $this->twig->addFilter('get_lang', new Twig_Filter_Function('get_lang'));
-        $this->twig->addFilter('get_path', new Twig_Filter_Function('api_get_path'));
-        $this->twig->addFilter('get_setting', new Twig_Filter_Function('api_get_setting'));
-        $this->twig->addFilter('var_dump', new Twig_Filter_Function('var_dump'));
-        $this->twig->addFilter('return_message', new Twig_Filter_Function('Display::return_message_and_translate'));
-        $this->twig->addFilter('display_page_header', new Twig_Filter_Function('Display::page_header_and_translate'));
-        $this->twig->addFilter(
-            'display_page_subheader',
-            new Twig_Filter_Function('Display::page_subheader_and_translate')
-        );
-        $this->twig->addFilter('icon', new Twig_Filter_Function('Template::get_icon_path'));
-        $this->twig->addFilter('img', new Twig_Filter_Function('Template::get_image'));
-        $this->twig->addFilter('format_date', new Twig_Filter_Function('Template::format_date'));
-        $this->twig->addFilter('isAllowedToEdit', new Twig_Filter_Function('api_is_allowed_to_edit'));
-        $this->twig->addFilter('api_get_local_time', new Twig_Filter_Function('api_get_local_time'));
-        // a combination of the two previous functions
-        $this->twig->addFilter('local_format_date', new Twig_Filter_Function('api_convert_and_format_date'));
-        $this->twig->addFilter('user_info', new Twig_Filter_Function('api_get_user_info'));
-        $this->twig->addFilter('get_configuration_value', new Twig_Filter_Function('api_get_configuration_value'));
+        // Twig filters setup
+        $filters = [
+            'get_plugin_lang',
+            'get_lang',
+            'api_get_path',
+            'api_get_local_time',
+            'api_convert_and_format_date',
+            'api_is_allowed_to_edit',
+            'api_get_user_info',
+            'api_get_configuration_value',
+            'api_get_setting',
+            [
+                'name' => 'return_message',
+                'callable' => 'Display::return_message_and_translate'
+            ],
+            [
+                'name' => 'display_page_header',
+                'callable' => 'Display::page_header_and_translate'
+            ],
+            [
+                'name' => 'display_page_subheader',
+                'callable' => 'Display::page_subheader_and_translate'
+            ],
+            [
+                'name' => 'icon',
+                'callable' => 'Template::get_icon_path'
+            ],
+            [
+                'name' => 'img',
+                'callable' => 'Template::get_image'
+            ],
+            [
+                'name' => 'format_date',
+                'callable' => 'Template::format_date'
+            ],
+            [
+                'name' => 'icon',
+                'callable' => 'Template::get_icon_path'
+            ]
+        ];
 
-        /*
-          $lexer = new Twig_Lexer($this->twig, array(
-          //'tag_comment'  => array('{*', '*}'),
-          //'tag_comment'  => array('{#', '#}'),
-          //'tag_block'    => array('{', '}'),
-          //'tag_variable' => array('{$', '}'),
-          ));
-          $this->twig->setLexer($lexer); */
+        foreach ($filters as $filter) {
+            if (is_array($filter)) {
+                $this->twig->addFilter(new Twig_SimpleFilter($filter['name'], $filter['callable']));
+            } else {
+                $this->twig->addFilter(new Twig_SimpleFilter($filter, $filter));
+            }
+        }
 
-        //Setting system variables
+        // Setting system variables
         $this->set_system_parameters();
 
-        //Setting user variables
+        // Setting user variables
         $this->set_user_parameters();
 
-        //Setting course variables
+        // Setting course variables
         $this->set_course_parameters();
 
-        //Setting administrator variables
+        // Setting administrator variables
         $this->setAdministratorParams();
-
         $this->setCSSEditor();
 
-        //header and footer are showed by default
+        // Header and footer are showed by default
         $this->set_footer($show_footer);
         $this->set_header($show_header);
 

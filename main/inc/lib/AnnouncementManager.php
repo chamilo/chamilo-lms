@@ -28,26 +28,30 @@ class AnnouncementManager
             '((user_name))',
             '((user_firstname))',
             '((user_lastname))',
+            '((user_official_code))',
             '((teacher_name))',
             '((teacher_email))',
             '((course_title))',
-            '((course_link))',
-            '((official_code))'
+            '((course_link))'
         );
     }
 
     /**
-     * @param int       $userId
-     * @param string    $content
-     * @param string    $course_code
-     * @param int       $session_id
+     * @param int $userId
+     * @param string $content
+     * @param string $courseCode
+     * @param int $sessionId
      *
-     * @return mixed
+     * @return string
      */
-    public static function parse_content($userId, $content, $course_code, $session_id = 0)
-    {
+    public static function parse_content(
+        $userId,
+        $content,
+        $courseCode,
+        $sessionId = 0
+    ) {
         $readerInfo = api_get_user_info($userId);
-        $courseInfo = api_get_course_info($course_code);
+        $courseInfo = api_get_course_info($courseCode);
         $teacherList = CourseManager::get_teacher_list_from_course_code($courseInfo['code']);
 
         $teacher_email = '';
@@ -59,17 +63,21 @@ class AnnouncementManager
                 break;
             }
         }
-
-        $courseLink = api_get_course_url($course_code, $session_id);
+        $data = [];
+        $data['user_name'] = '';
+        $data['user_firstname'] = '';
+        $data['user_lastname'] = '';
+        $data['user_official_code'] = '';
         if (!empty($readerInfo)) {
             $data['user_name'] = $readerInfo['username'];
             $data['user_firstname'] = $readerInfo['firstname'];
             $data['user_lastname'] = $readerInfo['lastname'];
-            $data['official_code'] = $readerInfo['official_code'];
+            $data['user_official_code'] = $readerInfo['official_code'];
         }
         $data['teacher_name'] = $teacher_name;
         $data['teacher_email'] = $teacher_email;
         $data['course_title'] = $courseInfo['name'];
+        $courseLink = api_get_course_url($courseCode, $sessionId);
         $data['course_link'] = Display::url($courseLink, $courseLink);
         $content = str_replace(self::get_tags(), $data, $content);
 
@@ -78,9 +86,9 @@ class AnnouncementManager
 
     /**
      * Gets all announcements from a course
-     * @param	array $course_info
-     * @param	int $session_id
-     * @return	array html with the content and count of announcements or false otherwise
+     * @param array $course_info
+     * @param int $session_id
+     * @return array html with the content and count of announcements or false otherwise
      */
     public static function get_all_annoucement_by_course($course_info, $session_id = 0)
     {
@@ -686,8 +694,8 @@ class AnnouncementManager
      * @param int   $id id of the announcement
      * @param string $title
      * @param string $newContent
-     * @param array $to	users that will receive the announcement
-     * @param mixed $file	attachment
+     * @param array $to users that will receive the announcement
+     * @param mixed $file attachment
      * @param string $file_comment file comment
      * @param bool $sendToUsersInSession
      */
@@ -755,7 +763,7 @@ class AnnouncementManager
                         $_course,
                         TOOL_ANNOUNCEMENT,
                         $id,
-                        "AnnouncementUpdated",
+                        'AnnouncementUpdated',
                         api_get_user_id(),
                         $group
                     );
@@ -769,12 +777,24 @@ class AnnouncementManager
                         $_course,
                         TOOL_ANNOUNCEMENT,
                         $id,
-                        "AnnouncementUpdated",
+                        'AnnouncementUpdated',
                         api_get_user_id(),
                         0,
                         $user
                     );
                 }
+            }
+
+            // Send to everyone
+            if (isset($to[0]) && $to[0] === 'everyone') {
+                api_item_property_update(
+                    $_course,
+                    TOOL_ANNOUNCEMENT,
+                    $id,
+                    'AnnouncementUpdated',
+                    api_get_user_id(),
+                    0
+                );
             }
         } else {
             // the message is sent to everyone, so we set the group to 0
@@ -782,9 +802,9 @@ class AnnouncementManager
                 $_course,
                 TOOL_ANNOUNCEMENT,
                 $id,
-                "AnnouncementUpdated",
+                'AnnouncementUpdated',
                 api_get_user_id(),
-                '0'
+                0
             );
         }
     }
@@ -846,9 +866,9 @@ class AnnouncementManager
 
     /**
      * Gets all announcements from a user by course
-     * @param	string course db
-     * @param	int user id
-     * @return	array html with the content and count of announcements or false otherwise
+     * @param string course db
+     * @param int user id
+     * @return array html with the content and count of announcements or false otherwise
      */
     public static function get_all_annoucement_by_user_course($course_code, $user_id)
     {
@@ -936,35 +956,7 @@ class AnnouncementManager
         if (Database::num_rows($result)) {
             return Database::fetch_array($result);
         }
-        return array();
-    }
-
-    /**
-     * this function gets all the users of the course,
-     * including users from linked courses
-     * @deprecate use CourseManager class
-     */
-    public static function get_course_users()
-    {
-        //this would return only the users from real courses:
-        $session_id = api_get_session_id();
-        if ($session_id != 0) {
-            $userList = CourseManager::get_real_and_linked_user_list(
-                api_get_course_id(),
-                true,
-                $session_id,
-                true
-            );
-        } else {
-            $userList = CourseManager::get_real_and_linked_user_list(
-                api_get_course_id(),
-                false,
-                0,
-                true
-            );
-        }
-
-        return $userList;
+        return [];
     }
 
     /**
@@ -993,6 +985,9 @@ class AnnouncementManager
     /**
      * This tools loads all the users and all the groups who have received
      * a specific item (in this case an announcement item)
+     * @param string $tool
+     * @param int $id
+     * @return array
      */
     public static function load_edit_users($tool, $id)
     {
@@ -1020,16 +1015,17 @@ class AnnouncementManager
                     $to[] = "GROUP:" . $row['to_group_id'];
             }
         }
+
         return $to;
     }
 
     /**
      * constructs the form to display all the groups and users the message has been sent to
-     * input: 	$sent_to_array is a 2 dimensional array containing the groups and the users
-     * 			the first level is a distinction between groups and users:
-     * 			$sent_to_array['groups'] * and $sent_to_array['users']
-     * 			$sent_to_array['groups'] (resp. $sent_to_array['users']) is also an array
-     * 			containing all the id's of the groups (resp. users) who have received this message.
+     * input:    $sent_to_array is a 2 dimensional array containing the groups and the users
+     *            the first level is a distinction between groups and users:
+     *            $sent_to_array['groups'] * and $sent_to_array['users']
+     *            $sent_to_array['groups'] (resp. $sent_to_array['users']) is also an array
+     *            containing all the id's of the groups (resp. users) who have received this message.
      * @author Patrick Cool <patrick.cool@>
      */
     public static function sent_to_form($sent_to_array)
@@ -1282,7 +1278,7 @@ class AnnouncementManager
     /**
      * This function delete a attachment file by id
      * @param integer $id attachment file Id
-     *
+     * @return bool
      */
     public static function delete_announcement_attachment_file($id)
     {
@@ -1294,8 +1290,9 @@ class AnnouncementManager
         }
         $sql = "DELETE FROM $table
                 WHERE c_id = $course_id AND id = $id";
-
         Database::query($sql);
+
+        return true;
     }
 
     /**
@@ -1351,7 +1348,12 @@ class AnnouncementManager
         $user_id = $userId ?: api_get_user_id();
         $group_id = api_get_group_id();
         $session_id = $sessionId ?: api_get_session_id();
-        $condition_session = api_get_session_condition($session_id, true, true, 'announcement.session_id');
+        $condition_session = api_get_session_condition(
+            $session_id,
+            true,
+            true,
+            'announcement.session_id'
+        );
         $course_id = $courseId ?: api_get_course_int_id();
         $_course = api_get_course_info();
 

@@ -440,7 +440,6 @@ switch ($action) {
         }
 
         $form->addHtml('</div>');
-//        $form->setRequired($element);
         $form->addCheckBox('email_ann', '', get_lang('EmailOption'));
 
         if (!isset($announcement_to_modify)) {

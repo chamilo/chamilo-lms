@@ -1,4 +1,4 @@
-{% set group_courses = 'view_grid_courses_grouped_categories_in_sessions'|get_configuration_value %}
+{% set group_courses = 'view_grid_courses_grouped_categories_in_sessions'| api_get_configuration_value %}
 
 {% macro course_block(course, show_category) %}
     <div class="col-xs-12 col-sm-6 col-md-4">

@@ -3093,34 +3093,6 @@ class CourseManager
     }
 
     /**
-     *  Get count rows of a table inside a course database
-     * @param  string $table   The table of which the rows should be counted
-     * @param  int $session_id       optionally count rows by session id
-     * @return int $course_id    The number of rows in the given table.
-     *
-     * @deprecated
-     */
-    public static function count_rows_course_table($table, $session_id = '', $course_id = 0)
-    {
-        $condition_session = '';
-        if ($session_id !== '') {
-            $session_id = intval($session_id);
-            $condition_session = " AND session_id = '$session_id' ";
-        }
-        if (!empty($course_id)) {
-            $course_id = intval($course_id);
-        } else {
-            $course_id = api_get_course_int_id();
-        }
-        $condition_session .= " AND c_id = '$course_id' ";
-
-        $sql = "SELECT COUNT(*) AS n FROM $table WHERE 1=1 $condition_session ";
-        $rs = Database::query($sql);
-        $row = Database::fetch_row($rs);
-        return $row[0];
-    }
-
-    /**
      * Subscribes courses to human resource manager (Dashboard feature)
      * @param    int   $hr_manager_id      Human Resource Manager id
      * @param    array $courses_list       Courses code
@@ -3179,10 +3151,13 @@ class CourseManager
     /**
      * get courses followed by human resources manager
      * @param int $user_id
+     * @param int $status
      * @param int $from
      * @param int $limit
      * @param string $column
      * @param string $direction
+     * @param bool $getCount
+     *
      * @return array    courses
      */
     public static function get_courses_followed_by_drh(
@@ -4820,9 +4795,9 @@ class CourseManager
                     'button',
                     $icon,
                     array(
-                        'id' => 'register', 
-                        'class' => 'btn btn-default btn-sm', 
-                        'title' => $title, 
+                        'id' => 'register',
+                        'class' => 'btn btn-default btn-sm',
+                        'title' => $title,
                         'aria-label' => $title
                     )
                 );
@@ -4834,9 +4809,9 @@ class CourseManager
                     'button',
                     $icon,
                     array(
-                        'id' => 'register', 
-                        'class' => 'btn btn-default btn-sm', 
-                        'title' => $title, 
+                        'id' => 'register',
+                        'class' => 'btn btn-default btn-sm',
+                        'title' => $title,
                         'aria-label' => $title
                     )
                 );

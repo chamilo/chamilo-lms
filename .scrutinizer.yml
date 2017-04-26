@@ -60,8 +60,6 @@ coding_style:
                 linefeed_character: newline
             around_operators:
                 concatenation: false
-            within:
-                type_cast: true
         braces:
             classes_functions:
                 class: new-line

@@ -4509,7 +4509,9 @@ class Tracking
 
             $final_course_data = array();
             foreach ($my_course_data as $course_id => $value) {
-                $final_course_data[$course_id] = $course_list[$course_id];
+                if (isset($course_list[$course_id])) {
+                    $final_course_data[$course_id] = $course_list[$course_id];
+                }
             }
             $course_in_session[$my_session_id]['course_list'] = $final_course_data;
             $course_in_session[$my_session_id]['name'] = $session_name;
@@ -4789,7 +4791,9 @@ class Tracking
                     $all_average += $average;
                 }
 
-                $all_average = $all_average / count($course_list);
+                if (!empty($course_list)) {
+                    $all_average = $all_average / count($course_list);
+                }
 
                 if (isset($_GET['session_id']) && $my_session_id == $_GET['session_id']) {
                     $html .= '<tr style="background-color:#FBF09D">';

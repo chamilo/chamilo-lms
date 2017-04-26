@@ -853,9 +853,15 @@ class GradebookUtils
         $params = array(),
         $mainCourseCategory = null
     ) {
-
         // Getting data
-        $printable_data = self::get_printable_data($cat[0], $users, $alleval, $alllinks, $params, $mainCourseCategory);
+        $printable_data = self::get_printable_data(
+            $cat[0],
+            $users,
+            $alleval,
+            $alllinks,
+            $params,
+            $mainCourseCategory
+        );
 
         // HTML report creation first
         $course_code = trim($cat[0]->get_course_code());

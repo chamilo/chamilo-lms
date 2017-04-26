@@ -1,9 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use \Chamilo\CoreBundle\Entity\Session;
-use \Doctrine\Common\Collections\Criteria;
-use \Chamilo\CourseBundle\Entity\Repository\CStudentPublicationRepository;
+use Chamilo\CoreBundle\Entity\Session;
+use Doctrine\Common\Collections\Criteria;
+use Chamilo\CourseBundle\Entity\Repository\CStudentPublicationRepository;
 
 /**
  * Generate a teacher time report in platform by session only
@@ -28,7 +28,11 @@ $sessionsInfo = api_is_platform_admin()
 $session = null;
 
 $form = new FormValidator('teacher_time_report_by_session', 'GET');
-$selectSession = $form->addSelect('session', get_lang('Session'), [0 => get_lang('None')]);
+$selectSession = $form->addSelect(
+    'session',
+    get_lang('Session'),
+    [0 => get_lang('None')]
+);
 $form->addButtonFilter(get_lang('Filter'));
 
 foreach ($sessionsInfo as $sessionInfo) {
@@ -37,7 +41,6 @@ foreach ($sessionsInfo as $sessionInfo) {
 
 if (isset($_GET['session']) && intval($_GET['session'])) {
     $form->setDefaults(['session' => intval($_GET['session'])]);
-
     $session = $em->find('ChamiloCoreBundle:Session', intval($_GET['session']));
 }
 
@@ -52,7 +55,7 @@ if ($session) {
         $course = $sessionCourse->getCourse();
         $coursesInfo[$course->getId()] =  $course->getCode();
         $criteria = Criteria::create()->where(
-            Criteria::expr()->eq("status", Session::COACH)
+            Criteria::expr()->eq('status', Session::COACH)
         );
         $userCourseSubscriptions = $session
             ->getUserCourseSubscriptions()
@@ -73,22 +76,22 @@ if ($session) {
                 ];
             }
 
-            $usersInfo[$user->getId()][$course->getId() . '_number_of_students'] = null;
-            $usersInfo[$user->getId()][$course->getId() . '_number_of_works'] = null;
-            $usersInfo[$user->getId()][$course->getId() . '_last_work'] = null;
-            $usersInfo[$user->getId()][$course->getId() . '_time_spent_of_course'] = null;
+            $usersInfo[$user->getId()][$course->getId().'_number_of_students'] = null;
+            $usersInfo[$user->getId()][$course->getId().'_number_of_works'] = null;
+            $usersInfo[$user->getId()][$course->getId().'_last_work'] = null;
+            $usersInfo[$user->getId()][$course->getId().'_time_spent_of_course'] = null;
 
             if (!$session->hasCoachInCourseWithStatus($user, $course)) {
                 continue;
             }
 
-            /** @var \Chamilo\CourseBundle\Entity\Repository\CStudentPublicationRepository $studentPubRepo */
+            /** @var CStudentPublicationRepository $studentPubRepo */
             $studentPubRepo = $em->getRepository('ChamiloCourseBundle:CStudentPublication');
             $works = $studentPubRepo->findWorksByTeacher($user, $course, $session);
 
-            $usersInfo[$user->getId()][$course->getId() . '_number_of_students'] = $sessionCourse->getNbrUsers();
-            $usersInfo[$user->getId()][$course->getId() . '_number_of_works'] = count($works);
-            $usersInfo[$user->getId()][$course->getId() . '_time_spent_of_course'] = api_time_to_hms(
+            $usersInfo[$user->getId()][$course->getId().'_number_of_students'] = $sessionCourse->getNbrUsers();
+            $usersInfo[$user->getId()][$course->getId().'_number_of_works'] = count($works);
+            $usersInfo[$user->getId()][$course->getId().'_time_spent_of_course'] = api_time_to_hms(
                 Tracking::get_time_spent_on_the_course($user->getId(), $course->getId(), $session->getId())
             );
 
@@ -98,9 +101,7 @@ if ($session) {
                 continue;
             }
 
-            $lastFormattedDate = api_format_date($lastWork->getSentDate()->getTimestamp(), DATE_TIME_FORMAT_SHORT);
-
-            $usersInfo[$user->getId()][$course->getId() . '_last_work'] = api_format_date(
+            $usersInfo[$user->getId()][$course->getId().'_last_work'] = api_format_date(
                 $lastWork->getSentDate()->getTimestamp(),
                 DATE_TIME_FORMAT_SHORT
             );
@@ -109,7 +110,7 @@ if ($session) {
 }
 
 if (isset($_GET['export']) && $session && ($coursesInfo && $usersInfo)) {
-    $fileName = get_lang('TeacherTimeReport') . ' ' . api_get_local_time();
+    $fileName = get_lang('TeacherTimeReport').' '.api_get_local_time();
 
     $dataToExport = [];
     $dataToExport[] = [$toolName, $session->getName()];
@@ -153,7 +154,6 @@ if (isset($_GET['export']) && $session && ($coursesInfo && $usersInfo)) {
         }
 
         $dataToExport[] = [get_lang('Session'), $session->getName()];
-
         $dataToExport[] = $headers;
         $dataToExport[] = $contents;
     }

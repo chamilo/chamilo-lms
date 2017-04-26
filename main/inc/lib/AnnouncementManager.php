@@ -694,8 +694,8 @@ class AnnouncementManager
      * @param int   $id id of the announcement
      * @param string $title
      * @param string $newContent
-     * @param array $to	users that will receive the announcement
-     * @param mixed $file	attachment
+     * @param array $to users that will receive the announcement
+     * @param mixed $file attachment
      * @param string $file_comment file comment
      * @param bool $sendToUsersInSession
      */
@@ -763,7 +763,7 @@ class AnnouncementManager
                         $_course,
                         TOOL_ANNOUNCEMENT,
                         $id,
-                        "AnnouncementUpdated",
+                        'AnnouncementUpdated',
                         api_get_user_id(),
                         $group
                     );
@@ -777,12 +777,24 @@ class AnnouncementManager
                         $_course,
                         TOOL_ANNOUNCEMENT,
                         $id,
-                        "AnnouncementUpdated",
+                        'AnnouncementUpdated',
                         api_get_user_id(),
                         0,
                         $user
                     );
                 }
+            }
+
+            // Send to everyone
+            if (isset($to[0]) && $to[0] === 'everyone') {
+                api_item_property_update(
+                    $_course,
+                    TOOL_ANNOUNCEMENT,
+                    $id,
+                    'AnnouncementUpdated',
+                    api_get_user_id(),
+                    0
+                );
             }
         } else {
             // the message is sent to everyone, so we set the group to 0
@@ -790,9 +802,9 @@ class AnnouncementManager
                 $_course,
                 TOOL_ANNOUNCEMENT,
                 $id,
-                "AnnouncementUpdated",
+                'AnnouncementUpdated',
                 api_get_user_id(),
-                '0'
+                0
             );
         }
     }

@@ -308,7 +308,9 @@ header{
     text-align:center;
     vertical-align:middle;
 }
-
+input[type=checkbox], input[type=radio]{
+    margin: 8px 0 0;
+}
 #gradebook_list .centered .badge-group {
     width: auto;
 }

@@ -134,10 +134,10 @@ $code = isset($code) ? $code : null;
 <?php
 if ($showCourses && $action != 'display_sessions') {
     if (!empty($message)) {
-        Display::display_confirmation_message($message, false);
+        echo Display::return_message($message, 'confirmation', false);
     }
     if (!empty($error)) {
-        Display::display_error_message($error, false);
+        echo Display::return_message($error, 'error', false);
     }
 
     if (!empty($content)) {
@@ -263,7 +263,7 @@ if ($showCourses && $action != 'display_sessions') {
         if (!isset($_REQUEST['subscribe_user_with_password']) &&
             !isset($_REQUEST['subscribe_course'])
         ) {
-            Display::display_warning_message(get_lang('ThereAreNoCoursesInThisCategory'));
+            echo Display::return_message(get_lang('ThereAreNoCoursesInThisCategory'), 'warning');
         }
     }
 }

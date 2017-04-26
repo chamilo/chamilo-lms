@@ -866,9 +866,9 @@ class AnnouncementManager
 
     /**
      * Gets all announcements from a user by course
-     * @param	string course db
-     * @param	int user id
-     * @return	array html with the content and count of announcements or false otherwise
+     * @param string course db
+     * @param int user id
+     * @return array html with the content and count of announcements or false otherwise
      */
     public static function get_all_annoucement_by_user_course($course_code, $user_id)
     {
@@ -956,7 +956,7 @@ class AnnouncementManager
         if (Database::num_rows($result)) {
             return Database::fetch_array($result);
         }
-        return array();
+        return [];
     }
 
     /**
@@ -1013,6 +1013,9 @@ class AnnouncementManager
     /**
      * This tools loads all the users and all the groups who have received
      * a specific item (in this case an announcement item)
+     * @param string $tool
+     * @param int $id
+     * @return array
      */
     public static function load_edit_users($tool, $id)
     {
@@ -1040,16 +1043,17 @@ class AnnouncementManager
                     $to[] = "GROUP:" . $row['to_group_id'];
             }
         }
+
         return $to;
     }
 
     /**
      * constructs the form to display all the groups and users the message has been sent to
-     * input: 	$sent_to_array is a 2 dimensional array containing the groups and the users
-     * 			the first level is a distinction between groups and users:
-     * 			$sent_to_array['groups'] * and $sent_to_array['users']
-     * 			$sent_to_array['groups'] (resp. $sent_to_array['users']) is also an array
-     * 			containing all the id's of the groups (resp. users) who have received this message.
+     * input:    $sent_to_array is a 2 dimensional array containing the groups and the users
+     *            the first level is a distinction between groups and users:
+     *            $sent_to_array['groups'] * and $sent_to_array['users']
+     *            $sent_to_array['groups'] (resp. $sent_to_array['users']) is also an array
+     *            containing all the id's of the groups (resp. users) who have received this message.
      * @author Patrick Cool <patrick.cool@>
      */
     public static function sent_to_form($sent_to_array)

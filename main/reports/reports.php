@@ -11,7 +11,7 @@
 $cidReset = true;
 
 // including files
-require_once __DIR__ . '/../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 require_once 'reports.lib.php';
 require_once 'multiquery.lib.php';
 
@@ -39,16 +39,16 @@ if ($_REQUEST['format'] == 'link') {
     $kv = array();
     foreach ($_POST as $key => $value) {
         if ($key != 'format') {
-            $kv[] = $key . '=' . urlencode($value);
+            $kv[] = $key.'='.urlencode($value);
         }
     }
     $query_string = join("&", $kv);
-    die('<a href="reports.php?format=directlink&' . $query_string . '">' . get_lang('ReportTypeLink') . '</a>');
+    die('<a href="reports.php?format=directlink&'.$query_string.'">'.get_lang('ReportTypeLink').'</a>');
 }
 
 if ($_REQUEST['format'] == 'directlink') {
     foreach (array('jquery.dataTables.min.js') as $js) {
-        $htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/' . $js . '" type="text/javascript" language="javascript"></script>' . "\n";
+        $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/'.$js.'" type="text/javascript" language="javascript"></script>'."\n";
     }
 
     $htmlCSSXtra[] = 'dataTable.css';
@@ -77,11 +77,11 @@ if ($_REQUEST['format'] == 'csv') {
     $kv = array();
     foreach ($_POST as $key => $value) {
         if ($key != 'format') {
-            $kv[] = $key . '=' . urlencode($value);
+            $kv[] = $key.'='.urlencode($value);
         }
     }
     $query_string = join("&", $kv);
-    die('<a href="reports.php?format=downloadcsv&' . $query_string . '">' . get_lang('DownloadFile') . '</a>');
+    die('<a href="reports.php?format=downloadcsv&'.$query_string.'">'.get_lang('DownloadFile').'</a>');
 } else {
     if ($_REQUEST['format'] == 'downloadcsv') {
         if ((strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false) && (strpos($_SERVER['HTTP_USER_AGENT'],
@@ -120,7 +120,7 @@ if (is_array($reports_template[$_REQUEST['type']])) {
         //die(get_lang('NoDataAvailable'));
     }
 } else {
-    die('<b>' . get_lang('ErrorWhileBuildingReport') . '</b>');
+    die('<b>'.get_lang('ErrorWhileBuildingReport').'</b>');
 }
 
 if ($_REQUEST['format'] == 'html' || $_REQUEST['format'] == 'directlink') {
@@ -130,14 +130,14 @@ if ($_REQUEST['format'] == 'html' || $_REQUEST['format'] == 'directlink') {
     echo '<script type="text/javascript" charset="utf-8">
 			$(document).ready(function() {
 
-				$("#reportsData' . $idsuffix . '").dataTable({
+				$("#reportsData' . $idsuffix.'").dataTable({
 					"oLanguage":
 						{
 							"sProcessing":   "Traitement en cours...",
 							"sLengthMenu":   "Afficher _MENU_ éléments",
 							"sZeroRecords":  "Aucun élément à afficher",
-							"sInfo":         "Affichage de l' . "'" . 'élement _START_ à _END_ sur _TOTAL_ éléments",
-							"sInfoEmpty":    "Affichage de l' . "'" . 'élement 0 à 0 sur 0 éléments",
+							"sInfo":         "Affichage de l' . "'".'élement _START_ à _END_ sur _TOTAL_ éléments",
+							"sInfoEmpty":    "Affichage de l' . "'".'élement 0 à 0 sur 0 éléments",
 							"sInfoFiltered": "(filtré de _MAX_ éléments au total)",
 							"sInfoPostFix":  "",
 							"sSearch":       "Rechercher :",
@@ -152,7 +152,7 @@ if ($_REQUEST['format'] == 'html' || $_REQUEST['format'] == 'directlink') {
 				});
 			} );
 		</script>';
-    echo '<table id="reportsData' . $idsuffix . '" class="display">'; // FIXME style
+    echo '<table id="reportsData'.$idsuffix.'" class="display">'; // FIXME style
 
     // counting fields
     $nfields = multiquery_num_fields($result);
@@ -163,7 +163,7 @@ if ($_REQUEST['format'] == 'html' || $_REQUEST['format'] == 'directlink') {
         $columns[$i] = multiquery_field_name($result, $i);
         if (substr($columns[$i], -5, 5) != '_link') {
             $column_islink[$i] = false;
-            echo '<th>' . $columns[$i] . '</th>';
+            echo '<th>'.$columns[$i].'</th>';
         } else {
             $columns_islink[$i] = true;
         }
@@ -173,8 +173,8 @@ if ($_REQUEST['format'] == 'html' || $_REQUEST['format'] == 'directlink') {
     $columns_flip = array_flip($columns);
     $columns_link = array();
     for ($i = 0; $i < $nfields; $i++) {
-        if ($column_islink[$i] == false && array_key_exists($columns[$i] . '_link', $columns_flip)) {
-            $columns_link[$i] = $columns_flip[$columns[$i] . '_link'];
+        if ($column_islink[$i] == false && array_key_exists($columns[$i].'_link', $columns_flip)) {
+            $columns_link[$i] = $columns_flip[$columns[$i].'_link'];
         } else {
             $columns_link[$i] = '';
         }
@@ -187,12 +187,12 @@ if ($_REQUEST['format'] == 'html' || $_REQUEST['format'] == 'directlink') {
                 if ($columns_link[$i] != '') // link is defined
                 {
                     if (substr($columns_link[$i], 0, 10) == 'javascript') {
-                        echo '<td><a href="#" onclick="' . $row[$columns_link[$i]] . '">' . $row[$i] . '</a></td>';
+                        echo '<td><a href="#" onclick="'.$row[$columns_link[$i]].'">'.$row[$i].'</a></td>';
                     } else {
-                        echo '<td><a href="' . $row[$columns_link[$i]] . '">' . $row[$i] . '</a></td>';
+                        echo '<td><a href="'.$row[$columns_link[$i]].'">'.$row[$i].'</a></td>';
                     }
                 } else {
-                    echo '<td>' . $row[$i] . '</td>';
+                    echo '<td>'.$row[$i].'</td>';
                 }
             }
         }
@@ -220,7 +220,7 @@ if ($_REQUEST['format'] == 'html' || $_REQUEST['format'] == 'directlink') {
             $columns[$i] = multiquery_field_name($result, $i);
             if (substr($columns[$i], -5, 5) != '_link') {
                 $column_islink[$i] = false;
-                echo csv_escaping($columns[$i]) . ',';
+                echo csv_escaping($columns[$i]).',';
             } else {
                 $columns_islink[$i] = true;
             }
@@ -231,7 +231,7 @@ if ($_REQUEST['format'] == 'html' || $_REQUEST['format'] == 'directlink') {
             for ($i = 0; $i < $nfields; $i++) {
                 if (!$columns_islink[$i]) // ignore links
                 {
-                    echo csv_escaping($row[$i]) . ',';
+                    echo csv_escaping($row[$i]).',';
                 }
             }  // fixme
             echo "\n";
@@ -245,7 +245,7 @@ function csv_escaping($value, $csv_separator = ',')
 {
     $value = str_replace('"', '""', $value);
     if (strpos($value, '""') or strpos($value, $csv_separator) or $value != trim($value)) {
-        $value = '"' . $value . '"';
+        $value = '"'.$value.'"';
     }
     return $value;
 }

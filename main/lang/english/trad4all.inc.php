@@ -8000,4 +8000,5 @@ $NewPasswordRequirementMaxXNumeric = "Maximum %s numerical (0-9) characters";
 $NewPasswordRequirementMaxXLength = "Maximum %s characters in total";
 $YouCantNotEditThisQuestionBecauseAlreadyExistAnswers = "You can't edit this question because answers by students have already been registered";
 $Avatar = "Avatar";
+$StudyCycle = "Semester";
 ?>

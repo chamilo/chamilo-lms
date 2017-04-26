@@ -8014,4 +8014,6 @@ $NewPasswordRequirementMaxXUppercase = "Máximo %s caracter(es) alfabético(s) e
 $NewPasswordRequirementMaxXNumeric = "Máximo %s caracter(es) numéricos (0-9)";
 $NewPasswordRequirementMaxXLength = "Máximo %s caracteres en total";
 $YouCantNotEditThisQuestionBecauseAlreadyExistAnswers = "No puede editar esta pregunta porque ya existen respuestas";
+$Avatar = "Avatar";
+$StudyCycle = "Ciclo de estudio";
 ?>

@@ -162,10 +162,6 @@ class Template
             [
                 'name' => 'format_date',
                 'callable' => 'Template::format_date'
-            ],
-            [
-                'name' => 'img',
-                'callable' => 'Template::get_image'
             ]
         ];
 

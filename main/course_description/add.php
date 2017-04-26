@@ -56,8 +56,18 @@ $form = new FormValidator(
 );
 $form->addElement('header', $header);
 $form->addElement('hidden', 'description_type', $description_type);
-$form->addText('title', get_lang('Title'), true);
-$form->applyFilter('title', 'html_filter');
+if (api_get_configuration_value('save_titles_like_html')) {
+    $form->addHtmlEditor(
+        'title',
+        get_lang('Title'),
+        true,
+        false,
+        ['ToolbarSet' => 'Minimal']
+    );
+} else {
+    $form->addText('title', get_lang('Title'));
+    $form->applyFilter('title', 'html_filter');
+}
 $form->addHtmlEditor(
     'contentDescription',
     get_lang('Content'),

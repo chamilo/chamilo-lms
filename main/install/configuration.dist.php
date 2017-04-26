@@ -361,8 +361,8 @@ $_configuration['agenda_legend'] = [
     'red' => 'red caption',
     '#f0f' => 'another caption'
 ];*/
-// Save question titles with HTML
-// $_configuration['question_title_html'] = false;
+// Save some tool titles with HTML editor
+// $_configuration['save_titles_like_html'] = false;
 // Show the full toolbar set to all CKEditor
 //$_configuration['full_ckeditor_toolbar_set'] = false;
 // Allow change the orientation when export a single (course progress) thematic to pdf. Portrait or landscape

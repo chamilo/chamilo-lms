@@ -191,7 +191,7 @@ abstract class Question
      */
     public function selectTitle()
     {
-        if (!api_get_configuration_value('question_title_html')) {
+        if (!api_get_configuration_value('save_titles_like_html')) {
             return $this->question;
         }
 
@@ -204,7 +204,7 @@ abstract class Question
      */
     public function getTitleToDisplay($itemNumber)
     {
-        $showQuestionTitleHtml = api_get_configuration_value('question_title_html');
+        $showQuestionTitleHtml = api_get_configuration_value('save_titles_like_html');
 
         $title = $showQuestionTitleHtml ? '' : '<strong>';
         $title .= $itemNumber.'. '.$this->selectTitle();
@@ -1558,7 +1558,7 @@ abstract class Question
         </script>';
 
         // question name
-        if (api_get_configuration_value('question_title_html')) {
+        if (api_get_configuration_value('save_titles_like_html')) {
             $editorConfig = ['ToolbarSet' => 'Minimal'];
             $form->addHtmlEditor('questionName', get_lang('Question'), false, false, $editorConfig, true);
         } else {

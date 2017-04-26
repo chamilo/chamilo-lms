@@ -266,7 +266,7 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
         <div class="col-md-6 items-progress">
             <div class="thematic-cont '.$class1.'">
             <div class="topics">' . $subTitle1 . '</div>
-            <h4 class="title-topics">' . Display::returnFontAwesomeIcon('book') . $thematic_info['title'] . '</h4>
+            <h4 class="title-topics">'.Display::returnFontAwesomeIcon('book').strip_tags($thematic_info['title']).'</h4>
             <p class="date">' .  Display::returnFontAwesomeIcon('calendar-o') . $thematic_advance_info['start_date'] . '</p>
             <div class="views">' . Display::returnFontAwesomeIcon('file-text-o')  . strip_tags($thematic_advance_info['content']). '</div>
             <p class="time">'. Display::returnFontAwesomeIcon('clock-o') . get_lang('DurationInHours') . ' : ' . $thematic_advance_info['duration'] . ' - <a href="' . $thematicUrl . '">' . get_lang('SeeDetail') . '</a></p>

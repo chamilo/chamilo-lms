@@ -49,7 +49,7 @@ if ($form->validate()) {
             Display::return_message($plugin->get_lang('OrderCancelled'), 'error', false)
         );
 
-        header('Location: ' . api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/service_catalog.php');
+        header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/service_catalog.php');
         exit;
     }
 
@@ -64,7 +64,7 @@ if ($form->validate()) {
             Display::return_message($erroMessage, 'error', false)
         );
         unset($_SESSION['wizard']);
-        header('Location: ' . api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/service_catalog.php');
+        header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/service_catalog.php');
         exit;
     }
 
@@ -148,7 +148,7 @@ if ($form->validate()) {
 
     unset($_SESSION['bc_service_sale_id']);
 
-    header('Location: ' . api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/service_catalog.php');
+    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/service_catalog.php');
 
     exit;
 }

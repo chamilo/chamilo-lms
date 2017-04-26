@@ -148,7 +148,7 @@ switch ($action) {
         $total_average = 0;
         if (!empty($thematic_advance_id)) {
             $thematic = new Thematic();
-            $affected_rows  = $thematic->update_done_thematic_advances($thematic_advance_id);
+            $affected_rows = $thematic->update_done_thematic_advances($thematic_advance_id);
             $total_average = $thematic->get_total_average_of_thematic_advances(
                 api_get_course_id(),
                 api_get_session_id()

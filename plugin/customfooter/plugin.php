@@ -40,7 +40,7 @@ $form_settings = [];
 
 foreach ($config as $fooid => $configrecord) {
     $canonic = preg_replace('/^customfooter_/', '', $configrecord['variable']);
-    if (in_array($canonic, array('footer_left', 'footer_right'))){
+    if (in_array($canonic, array('footer_left', 'footer_right'))) {
         $form_settings[$canonic] = $configrecord['selected_value'];
     }
 }

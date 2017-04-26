@@ -4,7 +4,7 @@
 use ChamiloSession as Session;
 
 require_once __DIR__.'/../inc/global.inc.php';
-$current_course_tool  = TOOL_STUDENTPUBLICATION;
+$current_course_tool = TOOL_STUDENTPUBLICATION;
 
 api_protect_course_script(true);
 

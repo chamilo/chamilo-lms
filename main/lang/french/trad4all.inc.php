@@ -7947,4 +7947,5 @@ $NewPasswordRequirementMaxXNumeric = "Maximum %s caractère(s) numérique(s) (0-
 $NewPasswordRequirementMaxXLength = "Maximum %s caractère(s) au total";
 $YouCantNotEditThisQuestionBecauseAlreadyExistAnswers = "L'édition de cette question a été désactivée parce que des utilisateurs y ont déjà répondu";
 $Avatar = "Avatar";
+$StudyCycle = "Semestre";
 ?>

@@ -71,7 +71,7 @@ if (isset($descriptions) && count($descriptions) > 0) {
             }
             echo Display::panel(
                 $description['content'],
-                $description['title'].$actions,
+                "<div class='pull-right'>$actions</div>{$description['title']}",
                 '',
                 'info'
             );

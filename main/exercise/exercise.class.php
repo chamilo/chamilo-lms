@@ -1819,12 +1819,22 @@ class Exercise
         $form->addElement('header', $form_title);
 
         // Title.
-        $form->addElement(
-            'text',
-            'exerciseTitle',
-            get_lang('ExerciseName'),
-            array('id' => 'exercise_title')
-        );
+        if (api_get_configuration_value('save_titles_like_html')) {
+            $form->addHtmlEditor(
+                'exerciseTitle',
+                get_lang('ExerciseName'),
+                false,
+                false,
+                ['ToolbarSet' => 'Minimal']
+            );
+        } else {
+            $form->addElement(
+                'text',
+                'exerciseTitle',
+                get_lang('ExerciseName'),
+                array('id' => 'exercise_title')
+            );
+        }
 
         $form->addElement('advanced_settings', 'advanced_params', get_lang('AdvancedParameters'));
         $form->addElement('html', '<div id="advanced_params_options" style="display:none">');

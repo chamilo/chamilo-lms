@@ -167,7 +167,7 @@ class ThematicController
                     $csv = array();
                     $csv[] = array('type', 'data1', 'data2', 'data3');
                     foreach ($list as $theme) {
-                        $csv[] = array('title', $theme['title'], $theme['content']);
+                        $csv[] = array('title', strip_tags($theme['title']), strip_tags($theme['content']));
                         $data = $thematic->get_thematic_plan_data($theme['id']);
                         if (!empty($data)) {
                             foreach ($data as $plan) {

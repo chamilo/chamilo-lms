@@ -190,7 +190,17 @@ if ($action == 'thematic_list') {
         $form->addElement('hidden', 'thematic_id', $thematic_id);
     }
 
-    $form->addText('title', get_lang('Title'), true, array('size' => '50'));
+    if (api_get_configuration_value('save_titles_like_html')) {
+        $form->addHtmlEditor(
+            'title',
+            get_lang('Title'),
+            true,
+            false,
+            ['ToolbarSet' => 'Minimal']
+        );
+    } else {
+        $form->addText('title', get_lang('Title'), true, array('size' => '50'));
+    }
     $form->addHtmlEditor('content', get_lang('Content'), false, false, array('ToolbarSet' => 'TrainingDescription', 'Height' => '150'));
     $form->addButtonSave(get_lang('Save'));
 

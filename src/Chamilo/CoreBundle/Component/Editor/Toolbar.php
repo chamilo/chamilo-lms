@@ -46,6 +46,10 @@ class Toolbar
                         $config['toolbar_minToolbar'] = $basicConfig['toolbar_minToolbar'];
                         $config['toolbar_maxToolbar'] = $basicConfig['toolbar_maxToolbar'];
                     }
+
+                    $config['height'] = '85px';
+                    $config['toolbarCanCollapse'] = true;
+                    $config['toolbarStartupExpanded'] = false;
                 }
 
                 $this->updateConfig($config);

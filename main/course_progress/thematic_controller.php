@@ -248,14 +248,16 @@ class ThematicController
 
                     $template = $view->get_template('course_progress/pdf_single_thematic.tpl');
 
+                    $pdfOrientation = api_get_configuration_value('single_thematic_pdf_orientation');
+
                     Export::export_html_to_pdf(
                         $view->fetch($template),
                         [
                             'filename' => get_lang('Thematic').'-'.api_get_local_time(),
                             'pdf_title' => get_lang('Thematic'),
                             'add_signatures' => ['Drh', 'Teacher', 'Date'],
-                            'format' => 'A4-L',
-                            'orientation' => 'L'
+                            'format' => $pdfOrientation !== 'portrait' ? 'A4-L' : 'A4-P',
+                            'orientation' => $pdfOrientation !== 'portrait' ? 'L' : 'P'
                         ]
                     );
                     break;

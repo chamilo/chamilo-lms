@@ -125,7 +125,7 @@ $form->addElement(
 );
 
 $form->addElement('html', '<div id="check_mail">');
-$form->addElement('checkbox', 'send_mail','', get_lang('SendMail'));
+$form->addElement('checkbox', 'send_mail', '', get_lang('SendMail'));
 $form->addElement('html', '</div>');
 
 $form->addElement('html', '<div id="mail_text_wrapper">');
@@ -213,8 +213,8 @@ if ($form->validate()) {
 	);
 
 	// Saving the invitations for the additional users
-	$values['additional_users'] = $values['additional_users'].';'; 	// This is for the case when you enter only one email
-	$temp = str_replace(',', ';', $values['additional_users']);		// This is to allow , and ; as email separators
+	$values['additional_users'] = $values['additional_users'].';'; // This is for the case when you enter only one email
+	$temp = str_replace(',', ';', $values['additional_users']); // This is to allow , and ; as email separators
 	$additional_users = explode(';', $temp);
 	for ($i = 0; $i < count($additional_users); $i++) {
 		$additional_users[$i] = trim($additional_users[$i]);
@@ -250,7 +250,7 @@ if ($form->validate()) {
 			$total_invited.'</a> ';
     	$message .= get_lang('WereInvited');
 
-    	echo Display::return_message($message,  'normal', false);
+    	echo Display::return_message($message, 'normal', false);
 
     	if ($sendMail) {
     	    echo Display::return_message($total_count.' '.get_lang('InvitationsSend'), 'success', false);

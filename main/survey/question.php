@@ -47,13 +47,13 @@ if ($surveyData['survey_type'] == 1) {
     $sql = 'SELECT id FROM '.Database::get_course_table(TABLE_SURVEY_QUESTION_GROUP).'
             WHERE
                 c_id = '.$course_id.' AND
-                survey_id = '.(int)$_GET['survey_id'].' LIMIT 1';
+                survey_id = '.(int) $_GET['survey_id'].' LIMIT 1';
     $rs = Database::query($sql);
-    if (Database::num_rows($rs)===0) {
+    if (Database::num_rows($rs) === 0) {
         Display::addFlash(
             Display::return_message(get_lang('YouNeedToCreateGroups'))
         );
-        header('Location: '.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.(int)$_GET['survey_id']);
+        header('Location: '.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.(int) $_GET['survey_id']);
         exit;
     }
 }
@@ -93,7 +93,7 @@ $possible_types = array(
 // Actions
 $actions = '<div class="actions">';
 $actions .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.intval($_GET['survey_id']).'">'.
-	Display::return_icon('back.png', get_lang('BackToSurvey'),'',ICON_SIZE_MEDIUM).'</a>';
+	Display::return_icon('back.png', get_lang('BackToSurvey'), '', ICON_SIZE_MEDIUM).'</a>';
 $actions .= '</div>';
 // Checking if it is a valid type
 if (!in_array($_GET['type'], $possible_types)) {

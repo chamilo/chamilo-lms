@@ -332,17 +332,17 @@ function return_teacher($course)
     $length = count($teachers);
     foreach ($teachers as $value) {
         $name = $value['firstname'].' ' . $value['lastname'];
+
         if ($length > 2) {
              $html .= '<a href="'.$value['url'].'" class="ajax" data-title="'.$name.'">
-                    <img src="'.$value['avatar'].'"/></a>';
+                    <img src="'.$value['avatar'].'" alt="'.$name.' ' .get_lang('Profile').'"/></a>';
         } else {
             $html .= '<a href="'.$value['url'].'" class="ajax" data-title="'.$name.'">
-                    <img src="'.$value['avatar'].'"/></a>';
+                    <img src="'.$value['avatar'].'" alt="'.$name.' ' .get_lang('Profile').'"/></a>';
             $html .= '<div class="teachers-details"><h5>
                     <a href="'.$value['url'].'" class="ajax" data-title="'.$name.'">'
                     . $name . '</a></h5><p>'. get_lang('Teacher').'</p></div>';
         }
-        //$count ++;
     }
     $html .= '</div>';
     return $html;
@@ -388,8 +388,15 @@ function return_description_button($course)
     $title = $course['title'];
     $html = '';
     if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
-        $html = '<a data-title="' . $title . '" class="ajax btn btn-default btn-sm" href="'.api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&code='.$course['code'].'" title="' . get_lang('Description') . '">' .
-        Display::returnFontAwesomeIcon('info-circle') . '</a>';
+        $html = Display::url(
+            Display::returnFontAwesomeIcon('info-circle'),
+            api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&code='.$course['code'],
+            array(
+                'class' => 'ajax btn btn-default btn-sm',
+                'data-title' => $title,'title' => get_lang('Description'),
+                'aria-label' => get_lang('Description')
+            )
+        );
     }
 
     return $html;
@@ -402,9 +409,12 @@ function return_description_button($course)
  */
 function return_goto_button($course)
 {
-    $html = ' <a class="btn btn-default btn-sm" title="' . get_lang('GoToCourse') . '" href="'.api_get_course_url($course['code']).'">'.
-    Display::returnFontAwesomeIcon('share').'</a>';
-
+    $title=get_lang('GoToCourse');
+    $html = Display::url(
+        Display::returnFontAwesomeIcon('share'),
+        api_get_course_url($course['code']),
+        array('class' => 'btn btn-default btn-sm', 'title' => $title, 'aria-label' => $title)
+    );
     return $html;
 }
 
@@ -425,8 +435,8 @@ function return_already_registered_label($in_status)
 
     $html = Display::tag(
         'button',
-        $icon . ' ' . $title,
-        array('id' => 'register', 'class' => 'btn btn-default btn-sm', 'title' => $title)
+        $icon,
+        array('id' => 'register', 'class' => 'btn btn-default btn-sm', 'title' => $title, 'aria-label' => $title)
     );
 
     return $html;
@@ -443,8 +453,13 @@ function return_already_registered_label($in_status)
  */
 function return_register_button($course, $stok, $code, $search_term)
 {
-    $html = ' <a class="btn btn-success btn-sm" title="' . get_lang('Subscribe') . '" href="'.api_get_self().'?action=subscribe_course&sec_token='.$stok.'&subscribe_course='.$course['code'].'&search_term='.$search_term.'&category_code='.$code.'">' .
-    get_lang('Subscribe') .' '. Display::returnFontAwesomeIcon('sign-in') . '</a>';
+    $title = get_lang('Subscribe');
+    $html = Display::url(
+        Display::returnFontAwesomeIcon('sign-in'),
+        api_get_self() . '?action=subscribe_course&sec_token=' . $stok.
+        '&subscribe_course='.$course['code'].'&search_term='.$search_term.'&category_code='.$code,
+        array('class' => 'btn btn-success btn-sm', 'title' => $title, 'aria-label' => $title)
+    );
     return $html;
 }
 
@@ -459,7 +474,12 @@ function return_register_button($course, $stok, $code, $search_term)
  */
 function return_unregister_button($course, $stok, $search_term, $code)
 {
-    $html = ' <a class="btn btn-danger btn-sm" title="' . get_lang('Unsubscribe') . '" href="'. api_get_self().'?action=unsubscribe&sec_token='.$stok.'&unsubscribe='.$course['code'].'&search_term='.$search_term.'&category_code='.$code.'">' .
-    Display::returnFontAwesomeIcon('sign-out') . '</a>';
+    $title = get_lang('Unsubscribe');
+    $html = Display::url(
+        Display::returnFontAwesomeIcon('sign-in'),
+        api_get_self() . '?action=unsubscribe&sec_token='.$stok
+        .'&unsubscribe='.$course['code'].'&search_term='.$search_term.'&category_code='.$code,
+        array('class' => 'btn btn-success btn-sm', 'title' => $title, 'aria-label' => $title)
+    );
     return $html;
 }

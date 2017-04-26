@@ -21,7 +21,7 @@
         <td>
             {% for advance in advances %}
                 <p>
-                    <strong>{{ advance.start_date|local_format_date(2) ~ ' (' ~ advance.duration ~ 'HourShort'|get_lang ~ ') ' }}</strong>
+                    <strong>{{ advance.start_date|api_convert_and_format_date(2) ~ ' (' ~ advance.duration ~ 'HourShort'|get_lang ~ ') ' }}</strong>
                 </p>
                 {{ advance.content }}
             {% endfor %}

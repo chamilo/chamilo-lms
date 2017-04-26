@@ -76,7 +76,7 @@ if (!api_get_user_id() && CustomPages::enabled()) {
 
 if (!empty($_POST['submitAuth'])) {
     // The user has been already authenticated, we are now to find the last login of the user.
-    if (isset ($_user['user_id'])) {
+    if (isset($_user['user_id'])) {
         $track_login_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $sql = "SELECT UNIX_TIMESTAMP(login_date)
                 FROM $track_login_table
@@ -122,7 +122,7 @@ $useCookieValidation = api_get_setting('cookie_warning');
 if ($useCookieValidation === 'true') {
     if (isset($_POST['acceptCookies'])) {
         api_set_site_use_cookie_warning_cookie();
-    } else if (!api_site_use_cookie_warning_cookie_exist()) {
+    } elseif (!api_site_use_cookie_warning_cookie_exist()) {
         if (Template::isToolBarDisplayedForUser()) {
             $controller->tpl->assign('toolBarDisplayed', true);
         } else {

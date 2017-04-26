@@ -538,16 +538,19 @@ class MySpace
         $table -> display();
     }
 
-    public static function count_coaches() {
+    public static function count_coaches()
+    {
         global $total_no_coaches;
         return $total_no_coaches;
     }
 
-    public static function sort_users($a, $b) {
+    public static function sort_users($a, $b)
+    {
         return api_strcmp(trim(api_strtolower($a[$_SESSION['tracking_column']])), trim(api_strtolower($b[$_SESSION['tracking_column']])));
     }
 
-    public static function rsort_users($a, $b) {
+    public static function rsort_users($a, $b)
+    {
         return api_strcmp(trim(api_strtolower($b[$_SESSION['tracking_column']])), trim(api_strtolower($a[$_SESSION['tracking_column']])));
     }
 
@@ -1613,7 +1616,6 @@ class MySpace
     {
         // database table definitions
         $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-
         $is_western_name_order = api_is_western_name_order(PERSON_NAME_DATA_EXPORT);
 
         // the values of the sortable table
@@ -1921,6 +1923,7 @@ class MySpace
      * Get all information that the user with user_id = $user_data has
      * entered in the additionally defined profile fields
      * @param integer $user_id the id of the user
+     * @return array
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
      * @version Dokeos 1.8.6
      * @since November 2008
@@ -2038,6 +2041,7 @@ class MySpace
      * Of course, if in the database there is a user with the name jmontoya,
      * the newly created two users registered would be jmontoya2 and jmontoya3.
      * @param $users list of users
+     * @return array
      * @author Julio Montoya Armas
      */
     function check_all_usernames($users, $course_list, $id_session)
@@ -2083,8 +2087,8 @@ class MySpace
      * This functions checks whether there are users that are already
      * registered in the DB by different creator than the current coach.
      * @param string a given username
-     * @param array  the array with the course list ids
-     * @param the session id
+     * @param array $users the array with the course list ids
+     * @return array
      * @author Julio Montoya Armas
      */
     public function get_user_creator($users)
@@ -2151,7 +2155,8 @@ class MySpace
     /**
      * Adds missing user-information (which isn't required, like password, etc).
      */
-    function complete_missing_data($user) {
+    function complete_missing_data($user)
+    {
         // 1. Generate a password if it is necessary.
         if (!isset ($user['Password']) || strlen($user['Password']) == 0) {
             $user['Password'] = api_generate_password();
@@ -2319,7 +2324,8 @@ class MySpace
      * @param string $file Path to the CSV-file
      * @return array All userinformation read from the file
      */
-    function parse_csv_data($file) {
+    function parse_csv_data($file)
+    {
         $users = Import::csvToArray($file);
         foreach ($users as $index => $user) {
             if (isset ($user['Courses'])) {
@@ -2333,7 +2339,8 @@ class MySpace
     /**
      * XML-parser: the handler at the beginning of element.
      */
-    function element_start($parser, $data) {
+    function element_start($parser, $data)
+    {
         $data = api_utf8_decode($data);
         global $user;
         global $current_tag;
@@ -2605,13 +2612,11 @@ class MySpace
 
         //$clicks = Tracking::get_total_clicks_by_session();
         $data = array();
-
         while ($user = Database::fetch_assoc($result)) {
             $data[] = $user;
         }
 
         $return = [];
-
         //TODO: Dont use numeric index
         foreach ($data as $key => $info) {
             $start_date = $info['col0'];
@@ -2746,13 +2751,13 @@ function add_day_to($end_date) {
 
 /**
  *
- *
  * @param array
  * @author Jorge Frisancho Jibaja
  * @version OCT-22- 2010
  * @return array
  */
-function convert_to_array($sql_result){
+function convert_to_array($sql_result)
+{
     $result_to_print = '<table>';
     foreach ($sql_result as $key => $data) {
         $result_to_print .= '<tr><td>'.date('d-m-Y (H:i:s)', $data['login']).'</td><td>'.api_time_to_hms($data['logout'] - $data['login']).'</tr></td>'."\n";
@@ -2771,7 +2776,8 @@ function convert_to_array($sql_result){
  * @version OCT-22- 2010
  * @return string
  */
-function convert_to_string($sql_result){
+function convert_to_string($sql_result)
+{
     $result_to_print = '<table>';
     if (!empty($sql_result)) {
         foreach ($sql_result as $key => $data) {

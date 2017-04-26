@@ -29,7 +29,7 @@ class MessageManager
         if (!isset($count)) {
             $cacheAvailable = api_get_configuration_value('apc');
             if ($cacheAvailable === true) {
-                $var = api_get_configuration_value('apc_prefix') . 'social_messages_unread_u_' . $userId;
+                $var = api_get_configuration_value('apc_prefix').'social_messages_unread_u_'.$userId;
                 if (apcu_exists($var)) {
                     $count = apcu_fetch($var);
                 } else {
@@ -57,7 +57,7 @@ class MessageManager
         $sql = "SELECT COUNT(id) as count 
                 FROM $table
                 WHERE
-                    user_receiver_id=" . api_get_user_id() . " AND
+                    user_receiver_id=".api_get_user_id()." AND
                     msg_status = " . MESSAGE_STATUS_UNREAD;
         $result = Database::query($sql);
         $row = Database::fetch_assoc($result);
@@ -72,9 +72,9 @@ class MessageManager
     {
         $table_message = Database::get_main_table(TABLE_MESSAGE);
         if ($unread) {
-            $condition_msg_status = ' msg_status = ' . MESSAGE_STATUS_UNREAD . ' ';
+            $condition_msg_status = ' msg_status = '.MESSAGE_STATUS_UNREAD.' ';
         } else {
-            $condition_msg_status = ' msg_status IN(' . MESSAGE_STATUS_NEW . ',' . MESSAGE_STATUS_UNREAD . ') ';
+            $condition_msg_status = ' msg_status IN('.MESSAGE_STATUS_NEW.','.MESSAGE_STATUS_UNREAD.') ';
         }
 
         $keyword = Session::read('message_search_keyword');
@@ -87,7 +87,7 @@ class MessageManager
         $sql = "SELECT COUNT(id) as number_messages
                 FROM $table_message
                 WHERE $condition_msg_status AND
-                    user_receiver_id=" . api_get_user_id() . "
+                    user_receiver_id=".api_get_user_id()."
                     $keywordCondition
                 ";
         $result = Database::query($sql);
@@ -135,7 +135,7 @@ class MessageManager
                     msg_status as col4
                 FROM $table_message
                 WHERE
-                  user_receiver_id=" . api_get_user_id() . " AND
+                  user_receiver_id=".api_get_user_id()." AND
                   msg_status IN (0,1)
                   $keywordCondition
                 ORDER BY col$column $direction
@@ -160,10 +160,10 @@ class MessageManager
                 $link = '&f=social';
             }
             $userInfo = api_get_user_info($result[1]);
-            $message[1] = '<a ' . $class . ' href="view_message.php?id=' . $result[0] . $link . '">' . $result[2] . '</a><br />' . $userInfo['complete_name'];
-            $message[3] = '<a href="new_message.php?re_id=' . $result[0] . $link . '">' .
-                Display::return_icon('message_reply.png', get_lang('ReplyToMessage')) . '</a>' .
-                '&nbsp;&nbsp;<a onclick="javascript:if(!confirm(' . "'" . addslashes(api_htmlentities(get_lang('ConfirmDeleteMessage'))) . "'" . ')) return false;" href="inbox.php?action=deleteone&id=' . $result[0] . $link . '">' . Display::return_icon('delete.png', get_lang('DeleteMessage')) . '</a>';
+            $message[1] = '<a '.$class.' href="view_message.php?id='.$result[0].$link.'">'.$result[2].'</a><br />'.$userInfo['complete_name'];
+            $message[3] = '<a href="new_message.php?re_id='.$result[0].$link.'">'.
+                Display::return_icon('message_reply.png', get_lang('ReplyToMessage')).'</a>'.
+                '&nbsp;&nbsp;<a onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmDeleteMessage')))."'".')) return false;" href="inbox.php?action=deleteone&id='.$result[0].$link.'">'.Display::return_icon('delete.png', get_lang('DeleteMessage')).'</a>';
 
             $message[2] = api_convert_and_format_date($result[3], DATE_TIME_FORMAT_LONG); //date stays the same
             foreach ($message as $key => $value) {
@@ -268,7 +268,7 @@ class MessageManager
             //@todo it's possible to edit a message? yes, only for groups
             if ($edit_message_id) {
                 $query = " UPDATE $table_message SET
-                                update_date = '" . $now . "',
+                                update_date = '".$now."',
                                 content = '".Database::escape_string($content)."'
                            WHERE id = '$edit_message_id' ";
                 Database::query($query);
@@ -437,7 +437,7 @@ class MessageManager
                     $message = sprintf(
                             get_lang('CopyOfMessageSentToXUser'),
                             $userInfo['complete_name']
-                        ) . ' <br />' . $message;
+                        ).' <br />'.$message;
 
                     self::send_message_simple(
                         $drhInfo['user_id'],
@@ -485,7 +485,7 @@ class MessageManager
         $row = Database::fetch_array($result);
 
         // update parent_id for other user receiver
-        $sql = "UPDATE $table_message SET parent_id = " . $row['id'] . "
+        $sql = "UPDATE $table_message SET parent_id = ".$row['id']."
                 WHERE id = $message_id";
         Database::query($sql);
     }
@@ -504,7 +504,7 @@ class MessageManager
         $user_receiver_id = intval($user_receiver_id);
         $id = intval($id);
         $sql = "SELECT * FROM $table_message
-                WHERE id=" . $id . " AND msg_status<>4";
+                WHERE id=".$id." AND msg_status<>4";
         $rs = Database::query($sql);
 
         if (Database::num_rows($rs) > 0) {
@@ -514,7 +514,7 @@ class MessageManager
             $query = "UPDATE $table_message 
                       SET msg_status = 3
                       WHERE 
-                        user_receiver_id=" . $user_receiver_id . " AND 
+                        user_receiver_id=".$user_receiver_id." AND 
                         id = " . $id;
             Database::query($query);
 
@@ -604,13 +604,13 @@ class MessageManager
                 $path_user_info['dir'] = UserManager::getUserPathById($message_user_id, 'system');
             }
 
-            $path_message_attach = $path_user_info['dir'] . 'message_attachments/';
+            $path_message_attach = $path_user_info['dir'].'message_attachments/';
 
             // If this directory does not exist - we create it.
             if (!file_exists($path_message_attach)) {
                 @mkdir($path_message_attach, api_get_permissions_for_new_directories(), true);
             }
-            $new_path = $path_message_attach . $new_file_name;
+            $new_path = $path_message_attach.$new_file_name;
             if (is_uploaded_file($file_attach['tmp_name'])) {
                 @copy($file_attach['tmp_name'], $new_path);
             }
@@ -645,7 +645,7 @@ class MessageManager
         while ($row = Database::fetch_array($rs)) {
             $path = $row['path'];
             $attach_id = $row['id'];
-            $new_path = $path . '_DELETED_' . $attach_id;
+            $new_path = $path.'_DELETED_'.$attach_id;
 
             if (!empty($group_id)) {
                 $userGroup = new UserGroup();
@@ -661,9 +661,9 @@ class MessageManager
                 );
             }
 
-            $path_message_attach = $path_user_info['dir'] . 'message_attachments/';
-            if (is_file($path_message_attach . $path)) {
-                if (rename($path_message_attach . $path, $path_message_attach . $new_path)) {
+            $path_message_attach = $path_user_info['dir'].'message_attachments/';
+            if (is_file($path_message_attach.$path)) {
+                if (rename($path_message_attach.$path, $path_message_attach.$new_path)) {
                     $sql = "UPDATE $table_message_attach set path='$new_path'
                             WHERE id ='$attach_id'";
                     Database::query($sql);
@@ -688,8 +688,8 @@ class MessageManager
         $sql = "UPDATE $table_message SET msg_status = '0'
                 WHERE
                     msg_status<>4 AND
-                    user_receiver_id=" . intval($user_id) . " AND
-                    id='" . intval($message_id) . "'";
+                    user_receiver_id=".intval($user_id)." AND
+                    id='" . intval($message_id)."'";
         Database::query($sql);
     }
 
@@ -709,8 +709,8 @@ class MessageManager
         $sql = "UPDATE $table_message SET
                     msg_status = '$type'
                 WHERE
-                    user_receiver_id=" . intval($user_id) . " AND
-                    id='" . intval($message_id) . "'";
+                    user_receiver_id=".intval($user_id)." AND
+                    id='" . intval($message_id)."'";
         Database::query($sql);
     }
 
@@ -727,7 +727,7 @@ class MessageManager
         }
         $table_message = Database::get_main_table(TABLE_MESSAGE);
         $query = "SELECT * FROM $table_message
-                  WHERE user_receiver_id=" . intval($user_id) . " AND id='" . intval($message_id) . "'";
+                  WHERE user_receiver_id=".intval($user_id)." AND id='".intval($message_id)."'";
         $result = Database::query($query);
 
         return $row = Database::fetch_array($result);
@@ -749,7 +749,7 @@ class MessageManager
         $sql = "SELECT * FROM $table_message
                 WHERE
                     group_id= $group_id AND
-                    msg_status NOT IN ('" . MESSAGE_STATUS_OUTBOX . "', '" . MESSAGE_STATUS_DELETED . "')
+                    msg_status NOT IN ('".MESSAGE_STATUS_OUTBOX."', '".MESSAGE_STATUS_DELETED."')
                 ORDER BY id";
         $rs = Database::query($sql);
         $data = array();
@@ -777,7 +777,7 @@ class MessageManager
         $sql = "SELECT * FROM $table_message
                 WHERE
                     group_id = $group_id AND
-                    msg_status NOT IN ('" . MESSAGE_STATUS_OUTBOX . "', '" . MESSAGE_STATUS_DELETED . "')
+                    msg_status NOT IN ('".MESSAGE_STATUS_OUTBOX."', '".MESSAGE_STATUS_DELETED."')
                 ORDER BY id ";
 
         $rs = Database::query($sql);
@@ -826,7 +826,7 @@ class MessageManager
         $sql = "SELECT * FROM $table_message
                 WHERE
                     parent_id='$parent_id' AND
-                    msg_status <> " . MESSAGE_STATUS_OUTBOX . "
+                    msg_status <> ".MESSAGE_STATUS_OUTBOX."
                     $condition_group_id
                 ORDER BY send_date DESC $condition_limit ";
         $rs = Database::query($sql);
@@ -854,8 +854,8 @@ class MessageManager
         $table_message = Database::get_main_table(TABLE_MESSAGE);
         $query = "SELECT id FROM $table_message
                   WHERE
-                    user_receiver_id = " . intval($user_id) . " AND
-                    id = '" . intval($id) . "'";
+                    user_receiver_id = ".intval($user_id)." AND
+                    id = '" . intval($id)."'";
         $result = Database::query($query);
         $num = Database::num_rows($result);
         if ($num > 0) {
@@ -903,8 +903,8 @@ class MessageManager
                     msg_status as col5
                 FROM $table_message
                 WHERE
-                    user_sender_id=" . api_get_user_id() . " AND
-                    msg_status=" . MESSAGE_STATUS_OUTBOX . "
+                    user_sender_id=".api_get_user_id()." AND
+                    msg_status=" . MESSAGE_STATUS_OUTBOX."
                     $keywordCondition
                 ORDER BY col$column $direction
                 LIMIT $from, $number_of_items";
@@ -913,7 +913,7 @@ class MessageManager
         $message_list = array();
         while ($result = Database::fetch_row($sql_result)) {
             if ($request === true) {
-                $message[0] = '<input type="checkbox" value=' . $result[0] . ' name="out[]">';
+                $message[0] = '<input type="checkbox" value='.$result[0].' name="out[]">';
             } else {
                 $message[0] = ($result[0]);
             }
@@ -921,20 +921,20 @@ class MessageManager
             $result[2] = Security::remove_XSS($result[2]);
             $userInfo = api_get_user_info($result[4]);
             if ($request === true) {
-                $message[1] = '<a onclick="show_sent_message(' . $result[0] . ')" href="javascript:void(0)">' . $userInfo['complete_name'] . '</a>';
-                $message[2] = '<a onclick="show_sent_message(' . $result[0] . ')" href="javascript:void(0)">' . str_replace("\\", "", $result[2]) . '</a>';
+                $message[1] = '<a onclick="show_sent_message('.$result[0].')" href="javascript:void(0)">'.$userInfo['complete_name'].'</a>';
+                $message[2] = '<a onclick="show_sent_message('.$result[0].')" href="javascript:void(0)">'.str_replace("\\", "", $result[2]).'</a>';
                 $message[3] = api_convert_and_format_date($result[3], DATE_TIME_FORMAT_LONG); //date stays the same
-                $message[4] = '&nbsp;&nbsp;<a onclick="delete_one_message_outbox(' . $result[0] . ')" href="javascript:void(0)"  >' .
-                    Display::return_icon('delete.png', get_lang('DeleteMessage')) . '</a>';
+                $message[4] = '&nbsp;&nbsp;<a onclick="delete_one_message_outbox('.$result[0].')" href="javascript:void(0)"  >'.
+                    Display::return_icon('delete.png', get_lang('DeleteMessage')).'</a>';
             } else {
                 $link = '';
                 if (isset($_GET['f']) && $_GET['f'] == 'social') {
                     $link = '&f=social';
                 }
-                $message[1] = '<a ' . $class . ' onclick="show_sent_message (' . $result[0] . ')" href="../messages/view_message.php?id_send=' . $result[0] . $link . '">' . $result[2] . '</a><br />' . $userInfo['complete_name'];
+                $message[1] = '<a '.$class.' onclick="show_sent_message ('.$result[0].')" href="../messages/view_message.php?id_send='.$result[0].$link.'">'.$result[2].'</a><br />'.$userInfo['complete_name'];
                 $message[2] = api_convert_and_format_date($result[3], DATE_TIME_FORMAT_LONG); //date stays the same
-                $message[3] = '<a href="outbox.php?action=deleteone&id=' . $result[0] . '&' . $link . '"  onclick="javascript:if(!confirm(' . "'" . addslashes(api_htmlentities(get_lang('ConfirmDeleteMessage'))) . "'" . ')) return false;" >' .
-                    Display::return_icon('delete.png', get_lang('DeleteMessage')) . '</a>';
+                $message[3] = '<a href="outbox.php?action=deleteone&id='.$result[0].'&'.$link.'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmDeleteMessage')))."'".')) return false;" >'.
+                    Display::return_icon('delete.png', get_lang('DeleteMessage')).'</a>';
             }
 
             foreach ($message as $key => $value) {
@@ -967,8 +967,8 @@ class MessageManager
         $sql = "SELECT COUNT(id) as number_messages 
                 FROM $table_message
                 WHERE
-                  msg_status=" . MESSAGE_STATUS_OUTBOX . " AND
-                  user_sender_id=" . api_get_user_id() . "
+                  msg_status=".MESSAGE_STATUS_OUTBOX." AND
+                  user_sender_id=" . api_get_user_id()."
                   $keywordCondition
                 ";
         $result = Database::query($sql);
@@ -993,25 +993,25 @@ class MessageManager
             if (isset($message_id) && is_numeric($message_id)) {
                 $query = "SELECT * FROM $table_message
                           WHERE
-                            user_sender_id = " . api_get_user_id() . " AND
-                            id = " . $message_id . " AND
+                            user_sender_id = ".api_get_user_id()." AND
+                            id = " . $message_id." AND
                             msg_status = 4;";
                 $result = Database::query($query);
             }
         } else {
             if (is_numeric($message_id) && !empty($message_id)) {
                 $query = "UPDATE $table_message SET
-                          msg_status = '" . MESSAGE_STATUS_NEW . "'
+                          msg_status = '".MESSAGE_STATUS_NEW."'
                           WHERE
-                            user_receiver_id=" . api_get_user_id() . " AND
-                            id='" . $message_id . "'";
+                            user_receiver_id=" . api_get_user_id()." AND
+                            id='" . $message_id."'";
                 Database::query($query);
 
                 $query = "SELECT * FROM $table_message
                           WHERE
                             msg_status<>4 AND
-                            user_receiver_id=" . api_get_user_id() . " AND
-                            id='" . $message_id . "'";
+                            user_receiver_id=".api_get_user_id()." AND
+                            id='" . $message_id."'";
                 $result = Database::query($query);
             }
         }
@@ -1044,27 +1044,27 @@ class MessageManager
             if ($source == 'outbox') {
                 $message_content .= '<div class="col-md-12">';
                 $message_content .= '<ul class="list-message">';
-                $message_content .= '<li>' . $user_image . '</li>';
-                $message_content .= '<li><a href="' . api_get_path(WEB_PATH) . 'main/social/profile.php?u=' . $user_sender_id . '">' . $name . '</a> ';
-                $message_content .= api_strtolower(get_lang('To')) . '&nbsp;<b>' . $receiverUserInfo['complete_name'].'</b></li>';
-                $message_content .= '<li>' . Display::dateToStringAgoAndLongDate($row['send_date']) . '</li>';
+                $message_content .= '<li>'.$user_image.'</li>';
+                $message_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$user_sender_id.'">'.$name.'</a> ';
+                $message_content .= api_strtolower(get_lang('To')).'&nbsp;<b>'.$receiverUserInfo['complete_name'].'</b></li>';
+                $message_content .= '<li>'.Display::dateToStringAgoAndLongDate($row['send_date']).'</li>';
                 $message_content .= '</ul>';
                 $message_content .= '</div>';
             } else {
                 $message_content .= '<div class="col-md-12">';
                 $message_content .= '<ul class="list-message">';
-                $message_content .= '<li>' . $user_image . '</li>';
-                $message_content .= '<li><a href="' . api_get_path(WEB_PATH) . 'main/social/profile.php?u=' . $user_sender_id . '">' . $name . '</a> </li>';
-                $message_content .= '<li>'. Display::dateToStringAgoAndLongDate($row['send_date']) . '</li>';
+                $message_content .= '<li>'.$user_image.'</li>';
+                $message_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$user_sender_id.'">'.$name.'</a> </li>';
+                $message_content .= '<li>'.Display::dateToStringAgoAndLongDate($row['send_date']).'</li>';
                 $message_content .= '</ul>';
                 $message_content .= '</div>';
             }
             $message_content .= '</div>';
         } else {
             if ($source == 'outbox') {
-                $message_content .= get_lang('From') . ':&nbsp;' . $name . '</b> ' . api_strtolower(get_lang('To')) . ' <b>' . $receiverUserInfo['complete_name'] . '</b>';
+                $message_content .= get_lang('From').':&nbsp;'.$name.'</b> '.api_strtolower(get_lang('To')).' <b>'.$receiverUserInfo['complete_name'].'</b>';
             } else {
-                $message_content .= get_lang('From') . ':&nbsp;' . $name . '</b> ' . api_strtolower(get_lang('To')) . ' <b>' . get_lang('Me') . '</b>';
+                $message_content .= get_lang('From').':&nbsp;'.$name.'</b> '.api_strtolower(get_lang('To')).' <b>'.get_lang('Me').'</b>';
             }
         }
 
@@ -1072,26 +1072,26 @@ class MessageManager
 		        <hr style="color:#ddd" />
 		        <table width="100%">
 		            <tr>
-		              <td valign=top class="view-message-content">' . str_replace("\\", "", $content) . '</td>
+		              <td valign=top class="view-message-content">' . str_replace("\\", "", $content).'</td>
 		            </tr>
 		        </table>
-		        <div id="message-attach">' . (!empty($files_attachments) ? implode('<br />', $files_attachments) : '') . '</div>
+		        <div id="message-attach">' . (!empty($files_attachments) ? implode('<br />', $files_attachments) : '').'</div>
 		        <div style="padding: 15px 0px 5px 0px">';
         $social_link = '';
         if (isset($_GET['f']) && $_GET['f'] == 'social') {
             $social_link = 'f=social';
         }
         if ($source == 'outbox') {
-            $message_content .= '<a href="outbox.php?' . $social_link . '">' .
-                Display::return_icon('back.png', get_lang('ReturnToOutbox')) . '</a> &nbsp';
+            $message_content .= '<a href="outbox.php?'.$social_link.'">'.
+                Display::return_icon('back.png', get_lang('ReturnToOutbox')).'</a> &nbsp';
         } else {
-            $message_content .= '<a href="inbox.php?' . $social_link . '">' .
-                Display::return_icon('back.png', get_lang('ReturnToInbox')) . '</a> &nbsp';
-            $message_content .= '<a href="new_message.php?re_id=' . $message_id . '&' . $social_link . '">' .
-                Display::return_icon('message_reply.png', get_lang('ReplyToMessage')) . '</a> &nbsp';
+            $message_content .= '<a href="inbox.php?'.$social_link.'">'.
+                Display::return_icon('back.png', get_lang('ReturnToInbox')).'</a> &nbsp';
+            $message_content .= '<a href="new_message.php?re_id='.$message_id.'&'.$social_link.'">'.
+                Display::return_icon('message_reply.png', get_lang('ReplyToMessage')).'</a> &nbsp';
         }
-        $message_content .= '<a href="inbox.php?action=deleteone&id=' . $message_id . '&' . $social_link . '" >' .
-            Display::return_icon('delete.png', get_lang('DeleteMessage')) . '</a>&nbsp';
+        $message_content .= '<a href="inbox.php?action=deleteone&id='.$message_id.'&'.$social_link.'" >'.
+            Display::return_icon('delete.png', get_lang('DeleteMessage')).'</a>&nbsp';
 
         $message_content .= '</div></td>
 		      <td width=10></td>
@@ -1109,8 +1109,8 @@ class MessageManager
     public static function get_user_id_by_email($user_email)
     {
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
-        $sql = 'SELECT user_id FROM ' . $tbl_user . '
-                WHERE email="' . Database::escape_string($user_email) . '";';
+        $sql = 'SELECT user_id FROM '.$tbl_user.'
+                WHERE email="' . Database::escape_string($user_email).'";';
         $rs = Database::query($sql);
         $row = Database::fetch_array($rs, 'ASSOC');
         if (isset($row['user_id'])) {
@@ -1170,7 +1170,7 @@ class MessageManager
 
                 $items = $topic['count'];
                 $reply_label = ($items == 1) ? get_lang('GroupReply') : get_lang('GroupReplies');
-                $label = '<i class="fa fa-envelope"></i> ' . $items . ' ' . $reply_label;
+                $label = '<i class="fa fa-envelope"></i> '.$items.' '.$reply_label;
                 $topic['title'] = trim($topic['title']);
 
                 if (empty($topic['title'])) {
@@ -1182,31 +1182,31 @@ class MessageManager
                     'h4',
                     Display::url(
                         Security::remove_XSS($topic['title'], STUDENT, true),
-                        api_get_path(WEB_CODE_PATH) . 'social/group_topics.php?id=' . $group_id . '&topic_id=' . $topic['id']
+                        api_get_path(WEB_CODE_PATH).'social/group_topics.php?id='.$group_id.'&topic_id='.$topic['id']
                     ), array('class' => 'title')
                 );
                 $actions = '';
                 if ($my_group_role == GROUP_USER_PERMISSION_ADMIN ||
                     $my_group_role == GROUP_USER_PERMISSION_MODERATOR
                 ) {
-                    $actions = '<br />' . Display::url(get_lang('Delete'), api_get_path(WEB_CODE_PATH) . 'social/group_topics.php?action=delete&id=' . $group_id . '&topic_id=' . $topic['id'], array('class' => 'btn btn-default'));
+                    $actions = '<br />'.Display::url(get_lang('Delete'), api_get_path(WEB_CODE_PATH).'social/group_topics.php?action=delete&id='.$group_id.'&topic_id='.$topic['id'], array('class' => 'btn btn-default'));
                 }
 
                 $date = '';
                 if ($topic['send_date'] != $topic['update_date']) {
                     if (!empty($topic['update_date'])) {
-                        $date .= '<i class="fa fa-calendar"></i> ' . get_lang('LastUpdate') . ' ' . date_to_str_ago($topic['update_date']);
+                        $date .= '<i class="fa fa-calendar"></i> '.get_lang('LastUpdate').' '.date_to_str_ago($topic['update_date']);
                     }
                 } else {
-                    $date .= '<i class="fa fa-calendar"></i> ' . get_lang('Created') . ' ' . date_to_str_ago($topic['send_date']);
+                    $date .= '<i class="fa fa-calendar"></i> '.get_lang('Created').' '.date_to_str_ago($topic['send_date']);
                 }
-                $html .= '<div class="date">' . $label . ' - ' . $date . $actions . '</div>';
+                $html .= '<div class="date">'.$label.' - '.$date.$actions.'</div>';
                 $html .= '</div>';
 
                 $image = $user_sender_info['avatar'];
 
-                $user_info = '<div class="author"><img class="img-responsive img-circle" src="' . $image . '" alt="' . $name . '"  width="64" height="64" title="' . $name . '" /></div>';
-                $user_info .= '<div class="name"><a href="' . api_get_path(WEB_PATH) . 'main/social/profile.php?u=' . $topic['user_sender_id'] . '">' . $name . '&nbsp;</a></div>';
+                $user_info = '<div class="author"><img class="img-responsive img-circle" src="'.$image.'" alt="'.$name.'"  width="64" height="64" title="'.$name.'" /></div>';
+                $user_info .= '<div class="name"><a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$topic['user_sender_id'].'">'.$name.'&nbsp;</a></div>';
 
                 $html .= '<div class="col-xs-4 col-md-2">';
                 $html .= $user_info;
@@ -1284,7 +1284,7 @@ class MessageManager
                 'group_id' => $group_id,
                 'message_id' => $main_message['id'],
                 'action' => 'edit_message_group',
-                'anchor_topic' => 'topic_' . $main_message['id'],
+                'anchor_topic' => 'topic_'.$main_message['id'],
                 'topics_page_nr' => $topic_page_nr,
                 'items_page_nr' => $items_page_nr,
                 'topic_id' => $main_message['id']
@@ -1292,7 +1292,7 @@ class MessageManager
             if (api_is_platform_admin()) {
                 $links .= Display::url(
                     Display::returnFontAwesomeIcon('trash'),
-                    'group_topics.php?action=delete&id=' . $group_id . '&topic_id=' . $topic_id,
+                    'group_topics.php?action=delete&id='.$group_id.'&topic_id='.$topic_id,
                     [
                         'class' => 'btn btn-default'
                     ]
@@ -1317,7 +1317,7 @@ class MessageManager
             'group_id' => $group_id,
             'message_id' => $main_message['id'],
             'action' => 'reply_message_group',
-            'anchor_topic' => 'topic_' . $main_message['id'],
+            'anchor_topic' => 'topic_'.$main_message['id'],
             'topics_page_nr' => $topic_page_nr,
             'topic_id' => $main_message['id']
         ]);
@@ -1335,31 +1335,31 @@ class MessageManager
         $links .= '</div>';
         $links .= '</div>';
 
-        $title = '<h4>' . Security::remove_XSS($main_message['title'], STUDENT, true) . $links . '</h4>';
+        $title = '<h4>'.Security::remove_XSS($main_message['title'], STUDENT, true).$links.'</h4>';
 
         $userPicture = $user_sender_info['avatar'];
         $main_content .= '<div class="row">';
         $main_content .= '<div class="col-md-2">';
         $main_content .= '<div class="avatar-author">';
-        $main_content .= '<img width="60px" src="' . $userPicture . '" alt="' . $name . '" class="img-responsive img-circle" title="' . $name . '" />';
+        $main_content .= '<img width="60px" src="'.$userPicture.'" alt="'.$name.'" class="img-responsive img-circle" title="'.$name.'" />';
         $main_content .= '</div>';
         $main_content .= '</div>';
 
         $date = '';
         if ($main_message['send_date'] != $main_message['update_date']) {
             if (!empty($main_message['update_date'])) {
-                $date = '<div class="date"> '. Display::returnFontAwesomeIcon('calendar') .' ' . get_lang('LastUpdate') . ' ' . date_to_str_ago($main_message['update_date']) . '</div>';
+                $date = '<div class="date"> '.Display::returnFontAwesomeIcon('calendar').' '.get_lang('LastUpdate').' '.date_to_str_ago($main_message['update_date']).'</div>';
             }
         } else {
-            $date = '<div class="date"> ' . Display::returnFontAwesomeIcon('calendar') .' ' . get_lang('Created') . ' ' . date_to_str_ago($main_message['send_date']) . '</div>';
+            $date = '<div class="date"> '.Display::returnFontAwesomeIcon('calendar').' '.get_lang('Created').' '.date_to_str_ago($main_message['send_date']).'</div>';
         }
-        $attachment = '<div class="message-attach">' . (!empty($files_attachments) ? implode('<br />', $files_attachments) : '') . '</div>';
+        $attachment = '<div class="message-attach">'.(!empty($files_attachments) ? implode('<br />', $files_attachments) : '').'</div>';
         $main_content .= '<div class="col-md-10">';
-        $user_link = '<a href="' . api_get_path(WEB_PATH) . 'main/social/profile.php?u=' . $main_message['user_sender_id'] . '">' . $name . '</a>';
+        $user_link = '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$main_message['user_sender_id'].'">'.$name.'</a>';
         $main_content .= '<div class="message-content"> ';
-        $main_content .= '<div class="username">' . $user_link . '</div>';
-        $main_content .= $date ;
-        $main_content .= '<div class="message">'. $main_message['content'] . $attachment . '</div></div>';
+        $main_content .= '<div class="username">'.$user_link.'</div>';
+        $main_content .= $date;
+        $main_content .= '<div class="message">'.$main_message['content'].$attachment.'</div></div>';
         $main_content .= '</div>';
         $main_content .= '</div>';
 
@@ -1380,7 +1380,7 @@ class MessageManager
                 if (empty($topic['id'])) {
                     continue;
                 }
-                $items_page_nr = isset($_GET['items_' . $topic['id'] . '_page_nr']) ? intval($_GET['items_' . $topic['id'] . '_page_nr']) : null;
+                $items_page_nr = isset($_GET['items_'.$topic['id'].'_page_nr']) ? intval($_GET['items_'.$topic['id'].'_page_nr']) : null;
                 $links = '';
                 $links .= '<div class="pull-right">';
                 $html_items = '';
@@ -1390,36 +1390,36 @@ class MessageManager
 
                 $links .= '<div class="btn-group btn-group-sm">';
                 if (($my_group_role == GROUP_USER_PERMISSION_ADMIN || $my_group_role == GROUP_USER_PERMISSION_MODERATOR) || $topic['user_sender_id'] == $current_user_id) {
-                    $links .= '<a href="' . api_get_path(WEB_CODE_PATH) . 'social/message_for_group_form.inc.php?height=400&width=800&&user_friend=' . $current_user_id . '&group_id=' . $group_id . '&message_id=' . $topic['id'] . '&action=edit_message_group&anchor_topic=topic_' . $topic_id . '&topics_page_nr=' . $topic_page_nr . '&items_page_nr=' . $items_page_nr . '&topic_id=' . $topic_id . '" class="ajax btn btn-default" data-size="lg" data-title="' . get_lang('Edit') . '" title="' . get_lang('Edit') . '">' .
-                        Display::returnFontAwesomeIcon('pencil') . '</a>';
+                    $links .= '<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?height=400&width=800&&user_friend='.$current_user_id.'&group_id='.$group_id.'&message_id='.$topic['id'].'&action=edit_message_group&anchor_topic=topic_'.$topic_id.'&topics_page_nr='.$topic_page_nr.'&items_page_nr='.$items_page_nr.'&topic_id='.$topic_id.'" class="ajax btn btn-default" data-size="lg" data-title="'.get_lang('Edit').'" title="'.get_lang('Edit').'">'.
+                        Display::returnFontAwesomeIcon('pencil').'</a>';
                 }
-                $links .= '<a href="' . api_get_path(WEB_CODE_PATH) . 'social/message_for_group_form.inc.php?height=400&width=800&&user_friend=' . api_get_user_id() . '&group_id=' . $group_id . '&message_id=' . $topic['id'] . '&action=reply_message_group&anchor_topic=topic_' . $topic_id . '&topics_page_nr=' . $topic_page_nr . '&items_page_nr=' . $items_page_nr . '&topic_id=' . $topic_id . '" class="ajax btn btn-default" data-size="lg" data-title="' . get_lang('Reply') . '" title="' . get_lang('Reply') . '">';
-                $links .= Display::returnFontAwesomeIcon('commenting') . '</a>';
+                $links .= '<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?height=400&width=800&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&message_id='.$topic['id'].'&action=reply_message_group&anchor_topic=topic_'.$topic_id.'&topics_page_nr='.$topic_page_nr.'&items_page_nr='.$items_page_nr.'&topic_id='.$topic_id.'" class="ajax btn btn-default" data-size="lg" data-title="'.get_lang('Reply').'" title="'.get_lang('Reply').'">';
+                $links .= Display::returnFontAwesomeIcon('commenting').'</a>';
                 $links .= '</div>';
                 $links .= '</div>';
 
                 $userPicture = $user_sender_info['avatar'];
-                $user_link = '<a href="' . api_get_path(WEB_PATH) . 'main/social/profile.php?u=' . $topic['user_sender_id'] . '">' . $name . '&nbsp</a>';
+                $user_link = '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$topic['user_sender_id'].'">'.$name.'&nbsp</a>';
                 $html_items .= '<div class="row">';
                 $html_items .= '<div class="col-md-2">';
-                $html_items .= '<div class="avatar-author"><img width="60px" src="' . $userPicture . '" alt="' . $name . '" class="img-responsive img-circle" title="' . $name . '" /></div>';
+                $html_items .= '<div class="avatar-author"><img width="60px" src="'.$userPicture.'" alt="'.$name.'" class="img-responsive img-circle" title="'.$name.'" /></div>';
                 $html_items .= '</div>';
 
                 $date = '';
                 if ($topic['send_date'] != $topic['update_date']) {
                     if (!empty($topic['update_date'])) {
-                        $date = '<div class="date"> ' . Display::returnFontAwesomeIcon('calendar') .' '. get_lang('LastUpdate') . ' ' . date_to_str_ago($topic['update_date']) . '</div>';
+                        $date = '<div class="date"> '.Display::returnFontAwesomeIcon('calendar').' '.get_lang('LastUpdate').' '.date_to_str_ago($topic['update_date']).'</div>';
                     }
                 } else {
-                    $date = '<div class="date"> ' . Display::returnFontAwesomeIcon('calendar') . get_lang('Created') . ' ' . date_to_str_ago($topic['send_date']) . '</div>';
+                    $date = '<div class="date"> '.Display::returnFontAwesomeIcon('calendar').get_lang('Created').' '.date_to_str_ago($topic['send_date']).'</div>';
                 }
-                $attachment = '<div class="message-attach">' . (!empty($files_attachments) ? implode('<br />', $files_attachments) : '') . '</div>';
+                $attachment = '<div class="message-attach">'.(!empty($files_attachments) ? implode('<br />', $files_attachments) : '').'</div>';
                 $html_items .= '<div class="col-md-10">';
                 $html_items .= '<div class="message-content">';
                 $html_items .= $links;
-                $html_items .= '<div class="username">' . $user_link . '</div>';
+                $html_items .= '<div class="username">'.$user_link.'</div>';
                 $html_items .= $date;
-                $html_items .=  '<div class="message">' . Security::remove_XSS($topic['content'], STUDENT, true) . '</div>' . $attachment . '</div>';
+                $html_items .= '<div class="message">'.Security::remove_XSS($topic['content'], STUDENT, true).'</div>'.$attachment.'</div>';
                 $html_items .= '</div>';
                 $html_items .= '</div>';
 
@@ -1431,8 +1431,8 @@ class MessageManager
                     $indent = intval($topic['indent_cnt']) * $base_padding + $base_padding;
                 }
 
-                $html_items = Display::div($html_items, array('class' => 'message-post', 'id' => 'msg_' . $topic['id']));
-                $html_items = Display::div($html_items, array('class' => '', 'style' => 'margin-left:' . $indent . 'px'));
+                $html_items = Display::div($html_items, array('class' => 'message-post', 'id' => 'msg_'.$topic['id']));
+                $html_items = Display::div($html_items, array('class' => '', 'style' => 'margin-left:'.$indent.'px'));
                 $array_html_items[] = array($html_items);
             }
 
@@ -1446,7 +1446,7 @@ class MessageManager
             );
             if (!empty($array_html_items)) {
                 $html .= Display::return_sortable_grid(
-                    'items_' . $topic['id'],
+                    'items_'.$topic['id'],
                     array(),
                     $array_html_items,
                     $options,
@@ -1537,14 +1537,14 @@ class MessageManager
             $rs_file = Database::query($sql);
             if (Database::num_rows($rs_file) > 0) {
                 $attach_icon = Display::return_icon('attachment.gif', '');
-                $archiveURL = api_get_path(WEB_CODE_PATH) . 'messages/download.php?type=' . $type . '&file=';
+                $archiveURL = api_get_path(WEB_CODE_PATH).'messages/download.php?type='.$type.'&file=';
                 while ($row_file = Database::fetch_array($rs_file)) {
                     $archiveFile = $row_file['path'];
                     $filename = $row_file['filename'];
                     $filesize = format_file_size($row_file['size']);
                     $filecomment = Security::remove_XSS($row_file['comment']);
                     $filename = Security::remove_XSS($filename);
-                    $links_attach_file[] = $attach_icon . '&nbsp;<a href="' . $archiveURL . $archiveFile . '">' . $filename . '</a>&nbsp;(' . $filesize . ')' . (!empty($filecomment) ? '&nbsp;-&nbsp;<i>' . $filecomment . '</i>' : '');
+                    $links_attach_file[] = $attach_icon.'&nbsp;<a href="'.$archiveURL.$archiveFile.'">'.$filename.'</a>&nbsp;('.$filesize.')'.(!empty($filecomment) ? '&nbsp;-&nbsp;<i>'.$filecomment.'</i>' : '');
                 }
             }
         }
@@ -1563,7 +1563,7 @@ class MessageManager
         $sql = "SELECT * FROM $tbl_message
                 WHERE 
                     id = '$message_id' AND 
-                    msg_status <> '" . MESSAGE_STATUS_DELETED . "' ";
+                    msg_status <> '".MESSAGE_STATUS_DELETED."' ";
         $res = Database::query($sql);
         $item = array();
         if (Database::num_rows($res) > 0) {
@@ -1690,7 +1690,7 @@ class MessageManager
 
         Session::write('message_sent_search_keyword', $keyword);
 
-        $success = get_lang('SelectedMessagesDeleted') . '&nbsp</b><br /><a href="outbox.php?' . $social_link . '">' . get_lang('BackToOutbox') . '</a>';
+        $success = get_lang('SelectedMessagesDeleted').'&nbsp</b><br /><a href="outbox.php?'.$social_link.'">'.get_lang('BackToOutbox').'</a>';
 
         $html = null;
         if (isset($_REQUEST['action'])) {
@@ -1798,7 +1798,7 @@ class MessageManager
                 ON m.user_sender_id = u.user_id
                 WHERE
                     m.user_receiver_id = $userId AND
-                    m.msg_status = " . MESSAGE_STATUS_UNREAD . "
+                    m.msg_status = ".MESSAGE_STATUS_UNREAD."
                     AND m.id > $lastId
                 ORDER BY m.send_date DESC";
 
@@ -1887,11 +1887,11 @@ class MessageManager
         );
         $tplMailBody->assign('user', $user);
         $tplMailBody->assign('is_western_name_order', api_is_western_name_order());
-        $tplMailBody->assign('manageUrl', api_get_path(WEB_CODE_PATH) . 'admin/user_edit.php?user_id=' . $user->getId());
+        $tplMailBody->assign('manageUrl', api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user->getId());
 
         $layoutContent = $tplMailBody->get_template('mail/new_user_mail_to_admin.tpl');
 
-        $emailsubject = '[' . get_lang('UserRegistered') . '] ' . $user->getUsername();
+        $emailsubject = '['.get_lang('UserRegistered').'] '.$user->getUsername();
         $emailbody = $tplMailBody->fetch($layoutContent);
 
         $admins = UserManager::get_all_administrators();
@@ -1922,8 +1922,8 @@ class MessageManager
      */
     public static function failedSentMailErrors()
     {
-        $base = api_get_path(SYS_ARCHIVE_PATH) . 'mail/';
-        $mailq = $base . 'mailq';
+        $base = api_get_path(SYS_ARCHIVE_PATH).'mail/';
+        $mailq = $base.'mailq';
 
         if (!file_exists($mailq) || !is_readable($mailq)) {
             return false;
@@ -1944,7 +1944,7 @@ class MessageManager
                 $mail_queue[$i]['code'] = $codeMatches[2];
             }
 
-            $fullMail = $base . $mail_queue[$i]['code'];
+            $fullMail = $base.$mail_queue[$i]['code'];
             $mailFile = fopen($fullMail, 'r');
 
             //Get the reason of mail fail
@@ -1967,7 +1967,7 @@ class MessageManager
 
             //Get the time of mail fail
             if (preg_match('/^\s?(\d+)(\D+)\s+(.*)$/', $line, $timeMatches)) {
-                $mail_queue[$i]['time'] = $timeMatches[1] . $timeMatches[2];
+                $mail_queue[$i]['time'] = $timeMatches[1].$timeMatches[2];
             } elseif (preg_match('/^(\s+)((.*)@(.*))\s+(.*)$/', $line, $emailMatches)) {
                 $mail_queue[$i]['mail'] = $emailMatches[2];
                 $i++;

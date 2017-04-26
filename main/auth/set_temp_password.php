@@ -12,7 +12,7 @@ use ChamiloSession as Session;
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
-$course_id = isset($_GET['course_id'])  ? intval($_GET['course_id']) : null;
+$course_id = isset($_GET['course_id']) ? intval($_GET['course_id']) : null;
 $session_id = isset($_GET['session_id']) ? intval($_GET['session_id']) : null;
 $user_id = api_get_user_id();
 

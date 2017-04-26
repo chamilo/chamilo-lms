@@ -128,6 +128,11 @@ class Template
             'get_lang',
             'api_get_path',
             'api_get_local_time',
+            'api_convert_and_format_date',
+            'api_is_allowed_to_edit',
+            'api_get_user_info',
+            'api_get_configuration_value',
+            'api_get_setting',
             [
                 'name' => 'return_message',
                 'callable' => 'Display::return_message_and_translate'
@@ -155,26 +160,6 @@ class Template
             [
                 'name' => 'icon',
                 'callable' => 'Template::get_icon_path'
-            ],
-            [
-                'name' => 'isAllowedToEdit',
-                'callable' => 'api_is_allowed_to_edit'
-            ],
-            [
-                'name' => 'local_format_date',
-                'callable' => 'api_convert_and_format_date'
-            ],
-            [
-                'name' => 'user_info',
-                'callable' => 'api_get_user_info'
-            ],
-            [
-                'name' => 'get_configuration_value',
-                'callable' => 'api_get_configuration_value'
-            ],
-            [
-                'name' => 'get_setting',
-                'callable' => 'api_get_setting'
             ]
         ];
 
@@ -186,21 +171,20 @@ class Template
             }
         }
 
-        //Setting system variables
+        // Setting system variables
         $this->set_system_parameters();
 
-        //Setting user variables
+        // Setting user variables
         $this->set_user_parameters();
 
-        //Setting course variables
+        // Setting course variables
         $this->set_course_parameters();
 
-        //Setting administrator variables
+        // Setting administrator variables
         $this->setAdministratorParams();
-
         $this->setCSSEditor();
 
-        //header and footer are showed by default
+        // Header and footer are showed by default
         $this->set_footer($show_footer);
         $this->set_header($show_header);
 

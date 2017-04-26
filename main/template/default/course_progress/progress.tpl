@@ -2,7 +2,7 @@
 {{ message }}
 {{ flash_messages }}
 {% if data is not empty %}
-{% set tutor =  false | isAllowedToEdit(true) %} 
+{% set tutor =  false | api_convert_and_format_date(true) %}
 <div id="course-progress" class="thematic">
     <div class="row">
         <div class="col-md-12">
@@ -40,7 +40,7 @@
                                         <i class="fa fa-pencil" aria-hidden="true"></i>
                                     </a>
                                 </div>
-                                {% endif %}        
+                                {% endif %}
                                 <div class="thematic_plan_{{ item.id }}">
                                     {% if item.thematic_plan is empty %}
                                     <div class="alert-thematic">
@@ -64,7 +64,7 @@
                                 {% endif %}
                                 <div class="thematic-advance">
                                 <table width="100%" class="table">
-                                {% if item.thematic_advance is not empty %}    
+                                {% if item.thematic_advance is not empty %}
                                 {% for advance in item.thematic_advance %}
                                 <tr>
                                     <td style="width: 90%" class="thematic_advance_content" id="thematic_advance_content_id_{{ advance.id }}">
@@ -107,7 +107,7 @@
                                     {% endif %}
                                 </tr>
                                 {% endfor %}
-                                {% else %}                           
+                                {% else %}
                                     <div class="alert alert-info" role="alert">{{ 'ThereIsNoAThematicAdvance' | get_lang }}</div>
                                 {% endif %}
                                 </table>
@@ -115,7 +115,7 @@
                             </td>
                         </tr>
                     {% endfor %}
-                   
+
                 </table>
             </div>
         </div>

@@ -229,14 +229,14 @@ class Skill
                 return \Display::return_icon('badges-default.png', null, null, ICON_SIZE_BIG, null, true);
             }
 
-            return api_get_path(WEB_UPLOAD_PATH) . 'badges/' . sha1($this->name) . '-small.png';
+            return api_get_path(WEB_UPLOAD_PATH).'badges/'.sha1($this->name).'-small.png';
         }
 
         if (empty($this->icon)) {
             return \Display::return_icon('badges-default.png', null, null, ICON_SIZE_HUGE, null, true);
         }
 
-        return api_get_path(WEB_UPLOAD_PATH) . "badges/{$this->icon}";
+        return api_get_path(WEB_UPLOAD_PATH)."badges/{$this->icon}";
     }
 
     /**

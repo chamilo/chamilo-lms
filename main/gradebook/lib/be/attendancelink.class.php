@@ -164,7 +164,7 @@ class AttendanceLink extends AbstractLink
             }
         } else {
             // all students -> get average
-            $students = array();  // user list, needed to make sure we only
+            $students = array(); // user list, needed to make sure we only
             // take first attempts into account
             $rescount = 0;
             $sum = 0;
@@ -239,7 +239,7 @@ class AttendanceLink extends AbstractLink
         $this->get_attendance_data();
         $attendance_title = isset($this->attendance_data['name']) ? $this->attendance_data['name'] : '';
         $attendance_qualify_title = isset($this->attendance_data['attendance_qualify_title']) ? $this->attendance_data['attendance_qualify_title'] : '';
-        if ( isset($attendance_qualify_title) && $attendance_qualify_title != '') {
+        if (isset($attendance_qualify_title) && $attendance_qualify_title != '') {
             return $this->attendance_data['attendance_qualify_title'];
         } else {
             return $attendance_title;
@@ -279,7 +279,7 @@ class AttendanceLink extends AbstractLink
         $sql = 'SELECT * FROM '.$this->get_attendance_table().' att
                 WHERE att.c_id = '.$this->course_id.' AND att.id = '.intval($this->get_ref_id()).' ';
         $result = Database::query($sql);
-        $row = Database::fetch_array($result,'ASSOC');
+        $row = Database::fetch_array($result, 'ASSOC');
         $attendance_id = $row['id'];
         $url = api_get_path(WEB_PATH).'main/attendance/index.php?action=attendance_sheet_list&gradebook=view&attendance_id='.$attendance_id.'&'.api_get_cidreq_params($this->get_course_code(), $session_id);
 

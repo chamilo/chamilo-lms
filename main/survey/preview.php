@@ -154,7 +154,7 @@ if (api_is_course_admin() ||
 						survey_question_option.c_id = $course_id
 					WHERE
 					    survey_question.survey_id = '".intval($survey_id)."' AND
-						survey_question.question_id IN (".Database::escape_string(implode(',',$paged_questions[$_GET['show']]), null, false).") AND
+						survey_question.question_id IN (".Database::escape_string(implode(',', $paged_questions[$_GET['show']]), null, false).") AND
 						survey_question.c_id =  $course_id
 					ORDER BY survey_question.sort, survey_question_option.sort ASC";
 
@@ -191,7 +191,7 @@ if (api_is_course_admin() ||
 
 	// Displaying the form with the questions
 	if (isset($_GET['show'])) {
-		$show = (int)$_GET['show'] + 1;
+		$show = (int) $_GET['show'] + 1;
 	} else {
 		$show = 0;
 	}

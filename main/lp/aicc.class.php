@@ -12,9 +12,10 @@
 class aicc extends learnpath
 {
     public $config = array();
-    public $config_basename = '';	// The configuration files might be multiple and might have
-                                    // funny names. We need to keep the name of that file while we
-                                    // install the content.
+    // The configuration files might be multiple and might have
+    // funny names. We need to keep the name of that file while we
+    // install the content.
+    public $config_basename = '';
     public $config_files = array();
     public $config_exts = array(
         'crs' => 0, // Course description file (mandatory)
@@ -32,17 +33,20 @@ class aicc extends learnpath
     public $cstlist = array();
     public $orelist = array();
 
-    public $subdir = '';	// Path between the scorm/ directory and the config files e.g. maritime_nav/maritime_nav. This is the path that will be used in the lp_path when importing a package.
-    public $zipname = '';	// Keeps the zipfile safe for the object's life so that we can use it if there is no title available.
-    public $lastzipnameindex = 0;	// Keeps an index of the number of uses of the zipname so far.
+    // Path between the scorm/ directory and the config files e.g. maritime_nav/maritime_nav. This is the path that will be used in the lp_path when importing a package.
+    public $subdir = '';
+    // Keeps the zipfile safe for the object's life so that we can use it if there is no title available.
+    public $zipname = '';
+    // Keeps an index of the number of uses of the zipname so far.
+    public $lastzipnameindex = 0;
     public $config_encoding = 'ISO-8859-1';
     public $debug = 0;
 
     /**
      * Class constructor. Based on the parent constructor.
-     * @param	string	$course_code
-     * @param	integer	$resource_id Learnpath ID in DB
-     * @param	integer	$user_id
+     * @param    string $course_code
+     * @param    integer $resource_id Learnpath ID in DB
+     * @param    integer $user_id
      */
     public function __construct($course_code = null, $resource_id = null, $user_id = null)
     {
@@ -54,20 +58,20 @@ class aicc extends learnpath
 
     /**
      * Opens a resource
-     * @param	integer	Database ID of the resource
+     * @param integer Database ID of the resource
      */
     public function open($id)
     {
+        // Redefine parent method.
         if ($this->debug > 0) {
             error_log('In aicc::open()', 0);
         }
-        // Redefine parent method.
     }
 
     /**
      * Parses a set of AICC config files and puts everything into the $config array
-     * @param	string	Path to the config files dir on the system. If not defined, uses the base path of the course's scorm dir
-     * @return	array	Structured array representing the config files' contents
+     * @param string Path to the config files dir on the system. If not defined, uses the base path of the course's scorm dir
+     * @return array Structured array representing the config files' contents
      */
     function parse_config_files($dir = '')
     {
@@ -78,9 +82,7 @@ class aicc extends learnpath
         }
         if (is_dir($dir) && is_readable($dir)) {
             // Now go through all the config files one by one and parse everything into AICC objects.
-
             // The basename for the config files is stored in $this->config_basename.
-
             // Parse the Course Description File (.crs) - ini-type.
             $crs_file = $dir.'/'.$this->config_files['crs'];
             $crs_params = $this->parse_ini_file_quotes_safe($crs_file);
@@ -322,11 +324,11 @@ class aicc extends learnpath
         }
     }
 
-     /**
+    /**
      * Intermediate to import_package only to allow import from local zip files
-     * @param	string	Path to the zip file, from the dokeos sys root
-     * @param	string	Current path (optional)
-     * @return string	Absolute path to the AICC description files or empty string on error
+     * @param string    Path to the zip file, from the dokeos sys root
+     * @param string    Current path (optional)
+     * @return string    Absolute path to the AICC description files or empty string on error
      */
     function import_local_package($file_path, $current_dir = '')
     {
@@ -340,8 +342,8 @@ class aicc extends learnpath
 
     /**
      * Imports a zip file (presumably AICC) into the Chamilo structure
-     * @param	string	Zip file info as given by $_FILES['userFile']
-     * @return	string	Absolute path to the AICC config files directory or empty string on error
+     * @param    string    Zip file info as given by $_FILES['userFile']
+     * @return    string    Absolute path to the AICC config files directory or empty string on error
      */
     function import_package($zip_file_info, $current_dir = '')
     {
@@ -568,7 +570,8 @@ class aicc extends learnpath
 
     /**
      * Sets the proximity setting in the database
-     * @param    string $proxy Proximity setting
+     * @param string $proxy Proximity setting
+     * @return bool
      */
     function set_proximity($proxy = '')
     {
@@ -578,8 +581,8 @@ class aicc extends learnpath
         if ($lp != 0) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
             $sql = "UPDATE $tbl_lp SET content_local = '$proxy' WHERE c_id = ".$course_id." id = ".$lp;
-            $res = Database::query($sql);
-            return $res;
+            Database::query($sql);
+            return true;
         } else {
             return false;
         }
@@ -588,6 +591,7 @@ class aicc extends learnpath
     /**
      * Sets the theme setting in the database
      * @param    string    Theme setting
+     * @return bool
      */
     function set_theme($theme = '')
     {
@@ -598,7 +602,7 @@ class aicc extends learnpath
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
             $sql = "UPDATE $tbl_lp SET theme = '$theme' WHERE c_id = ".$course_id." id = ".$lp;
             $res = Database::query($sql);
-            return $res;
+            return true;
         } else {
             return false;
         }
@@ -607,6 +611,7 @@ class aicc extends learnpath
     /**
      * Sets the image LP in the database
      * @param    string $preview_image Theme setting
+     * @return bool
      */
     function set_preview_image($preview_image = '')
     {
@@ -616,8 +621,8 @@ class aicc extends learnpath
         if ($lp != 0) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
             $sql = "UPDATE $tbl_lp SET preview_image = '$preview_image' WHERE c_id = ".$course_id." id = ".$lp;
-            $res = Database::query($sql);
-            return $res;
+            Database::query($sql);
+            return true;
         } else {
             return false;
         }
@@ -626,6 +631,7 @@ class aicc extends learnpath
     /**
      * Sets the Author LP in the database
      * @param    string $author
+     * @return true
      */
     function set_author($author = '')
     {
@@ -635,8 +641,8 @@ class aicc extends learnpath
         if ($lp != 0) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
             $sql = "UPDATE $tbl_lp SET author = '$author' WHERE c_id = ".$course_id." id = ".$lp;
-            $res = Database::query($sql);
-            return $res;
+            Database::query($sql);
+            return true;
         } else {
             return false;
         }
@@ -645,6 +651,7 @@ class aicc extends learnpath
     /**
      * Sets the content maker setting in the database
      * @param    string $maker
+     * @return bool
      */
     function set_maker($maker = '')
     {
@@ -654,8 +661,8 @@ class aicc extends learnpath
         if ($lp != 0) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
             $sql = "UPDATE $tbl_lp SET content_maker = '$maker' WHERE c_id = ".$course_id." id = ".$lp;
-            $res = Database::query($sql);
-            return $res;
+            Database::query($sql);
+            return true;
         } else {
             return false;
         }
@@ -664,6 +671,7 @@ class aicc extends learnpath
     /**
      * Exports the current AICC object's files as a zip. Excerpts taken from learnpath_functions.inc.php::exportpath()
      * @param    integer    Learnpath ID (optional, taken from object context if not defined)
+     * @return bool
      */
     function export_zip($lp_id = null)
     {

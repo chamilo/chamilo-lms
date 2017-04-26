@@ -28,26 +28,30 @@ class AnnouncementManager
             '((user_name))',
             '((user_firstname))',
             '((user_lastname))',
+            '((user_official_code))',
             '((teacher_name))',
             '((teacher_email))',
             '((course_title))',
-            '((course_link))',
-            '((official_code))'
+            '((course_link))'
         );
     }
 
     /**
-     * @param int       $userId
-     * @param string    $content
-     * @param string    $course_code
-     * @param int       $session_id
+     * @param int $userId
+     * @param string $content
+     * @param string $courseCode
+     * @param int $sessionId
      *
-     * @return mixed
+     * @return string
      */
-    public static function parse_content($userId, $content, $course_code, $session_id = 0)
-    {
+    public static function parse_content(
+        $userId,
+        $content,
+        $courseCode,
+        $sessionId = 0
+    ) {
         $readerInfo = api_get_user_info($userId);
-        $courseInfo = api_get_course_info($course_code);
+        $courseInfo = api_get_course_info($courseCode);
         $teacherList = CourseManager::get_teacher_list_from_course_code($courseInfo['code']);
 
         $teacher_email = '';
@@ -59,17 +63,21 @@ class AnnouncementManager
                 break;
             }
         }
-
-        $courseLink = api_get_course_url($course_code, $session_id);
+        $data = [];
+        $data['user_name'] = '';
+        $data['user_firstname'] = '';
+        $data['user_lastname'] = '';
+        $data['user_official_code'] = '';
         if (!empty($readerInfo)) {
             $data['user_name'] = $readerInfo['username'];
             $data['user_firstname'] = $readerInfo['firstname'];
             $data['user_lastname'] = $readerInfo['lastname'];
-            $data['official_code'] = $readerInfo['official_code'];
+            $data['user_official_code'] = $readerInfo['official_code'];
         }
         $data['teacher_name'] = $teacher_name;
         $data['teacher_email'] = $teacher_email;
         $data['course_title'] = $courseInfo['name'];
+        $courseLink = api_get_course_url($courseCode, $sessionId);
         $data['course_link'] = Display::url($courseLink, $courseLink);
         $content = str_replace(self::get_tags(), $data, $content);
 
@@ -78,9 +86,9 @@ class AnnouncementManager
 
     /**
      * Gets all announcements from a course
-     * @param	array $course_info
-     * @param	int $session_id
-     * @return	array html with the content and count of announcements or false otherwise
+     * @param array $course_info
+     * @param int $session_id
+     * @return array html with the content and count of announcements or false otherwise
      */
     public static function get_all_annoucement_by_course($course_info, $session_id = 0)
     {

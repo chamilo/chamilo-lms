@@ -5534,6 +5534,52 @@ div#chat-remote-video video {
 .report_section .table{
   font-size: 12px;
 }
+.promotions{
+    border-bottom: 1px solid #DDD;
+    margin-top: 30px;
+}
+.career p{
+    padding-left: 10px;
+}
+.promotions .title{
+    font-size: 16px;
+    background-color: #DFDFDF;
+}
+.promotions .cycles{
+    background-color: #F3F3F3;
+    text-align: center;
+    vertical-align: middle;
+    text-transform: uppercase;
+    border-right: 1px solid #DDD;
+}
+.promotions .cycles h4{
+    font-size: 14px;
+    font-weight: bold;
+}
+.promotions .cycles a{
+    color: #66666C;
+}
+.promotions .cycles a:hover{
+    color: initial;
+}
+.promotions .courses{
+    background-color: #FAFAFA;
+    vertical-align: middle;
+    border-right: 1px solid #DDD;
+}
+.promotions .promo{
+    background-color: #D1D1D1;
+    text-align: center;
+    text-transform: uppercase;
+    vertical-align: middle;
+}
+.promotions .promo h4 {
+    font-size: 18px;
+    font-weight: bold;
+}
+.promotions .promo h4 a{
+    color: #666;
+}
 /* CSS for the view by session My Course tab */
 .session-view-block {
   font-size : 14px;

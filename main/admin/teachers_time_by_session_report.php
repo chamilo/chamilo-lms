@@ -101,10 +101,7 @@ if ($session) {
                 continue;
             }
 
-            $usersInfo[$user->getId()][$course->getId().'_last_work'] = api_format_date(
-                $lastWork->getSentDate()->getTimestamp(),
-                DATE_TIME_FORMAT_SHORT
-            );
+            $usersInfo[$user->getId()][$course->getId().'_last_work'] = api_get_local_time($lastWork->getSentDate()->getTimestamp());
         }
     }
 }

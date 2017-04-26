@@ -7590,6 +7590,7 @@ function api_warn_hosting_contact($limitName)
  * Variables that are not set in the configuration.php file but set elsewhere:
  * - virtual_css_theme_folder (vchamilo plugin)
  * - access_url (global.inc.php)
+ * - apc/apc_prefix (global.inc.php)
  *
  * @param string $variable
  *
@@ -8105,7 +8106,8 @@ function api_protect_limit_for_session_admin()
     }
 }
 
-function api_is_student_view_active() {
+function api_is_student_view_active()
+{
     $studentView = Session::read('studentview');
     return $studentView == 'studentview';
 }

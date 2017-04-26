@@ -317,12 +317,13 @@ header{
   padding-top: 7px;
   margin-right: 10px;
 }
-
 .button-load{
   background: url("../../main/img/icons/64/file_upload.png") no-repeat center 20px;
   padding-top: 70px;
 }
-
+.radio.learnpath img{
+    margin-right: 5px;
+}
 #results .file_upload_highlight {
     background: #F4D364;
 }

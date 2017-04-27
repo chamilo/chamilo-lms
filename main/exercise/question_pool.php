@@ -48,7 +48,7 @@ if (empty($objExercise) && !empty($fromExercise)) {
 }
 
 $nameTools = get_lang('QuestionPool');
-$interbreadcrumb[] = array("url" => "exercise.php","name" => get_lang('Exercises'));
+$interbreadcrumb[] = array("url" => "exercise.php", "name" => get_lang('Exercises'));
 
 if (!empty($objExercise)) {
     $interbreadcrumb[] = array(
@@ -73,7 +73,7 @@ if ($is_allowedToEdit) {
 
         if ($old_question_obj) {
             $old_question_obj->updateTitle(
-                $old_question_obj->selectTitle() . ' - ' . get_lang('Copy')
+                $old_question_obj->selectTitle().' - '.get_lang('Copy')
             );
             //Duplicating the source question, in the current course
             $new_id = $old_question_obj->duplicate($current_course);
@@ -107,7 +107,7 @@ if ($is_allowedToEdit) {
         }
         // destruction of the Question object
         unset($objQuestionTmp);
-    } elseif($recup && $fromExercise) {
+    } elseif ($recup && $fromExercise) {
         // gets an existing question and copies it into a new exercise
         $objQuestionTmp = Question :: read($recup);
         // if the question exists
@@ -139,7 +139,7 @@ if ($is_allowedToEdit) {
                 $old_question_obj = Question::read($old_question_id, $origin_course_id);
                 if ($old_question_obj) {
                     $old_question_obj->updateTitle(
-                        $old_question_obj->selectTitle() . ' - ' . get_lang('Copy')
+                        $old_question_obj->selectTitle().' - '.get_lang('Copy')
                     );
 
                     //Duplicating the source question, in the current course
@@ -167,16 +167,16 @@ if ($is_allowedToEdit) {
                 }
             }
         }
-        Session::write('objExercise',$objExercise);
+        Session::write('objExercise', $objExercise);
     }
 }
 
-if (isset($_SESSION['gradebook'])){
-	$gradebook=	$_SESSION['gradebook'];
+if (isset($_SESSION['gradebook'])) {
+	$gradebook = $_SESSION['gradebook'];
 }
 
-if (!empty($gradebook) && $gradebook=='view') {
-	$interbreadcrumb[]= array ('url' => '../gradebook/'.Security::remove_XSS($_SESSION['gradebook_dest']),'name' => get_lang('ToolGradebook'));
+if (!empty($gradebook) && $gradebook == 'view') {
+	$interbreadcrumb[] = array('url' => '../gradebook/'.Security::remove_XSS($_SESSION['gradebook_dest']), 'name' => get_lang('ToolGradebook'));
 }
 
 // if admin of course
@@ -216,11 +216,11 @@ if (isset($type)) {
 }
 if (isset($fromExercise) && $fromExercise > 0) {
     echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$fromExercise.'">'.
-            Display::return_icon('back.png', get_lang('GoBackToQuestionList'),'',ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('back.png', get_lang('GoBackToQuestionList'), '', ICON_SIZE_MEDIUM).'</a>';
     $titleAdd = get_lang('AddQuestionToTest');
 } else {
     echo '<a href="exercise.php?'.api_get_cidreq().'">'.
-        Display::return_icon('back.png', get_lang('BackToExercisesList'),'',ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('back.png', get_lang('BackToExercisesList'), '', ICON_SIZE_MEDIUM).'</a>';
     echo "<a href='admin.php?exerciseId=0'>".Display::return_icon('add_question.gif', get_lang('NewQu'), '', ICON_SIZE_MEDIUM)."</a>";
     $titleAdd = get_lang('ManageAllQuestions');
 }
@@ -249,7 +249,7 @@ $session_select_list = array();
 foreach ($sessionList as $item) {
     $session_select_list[$item['session_id']] = $item['session_name'];
 }
-$select_session_html =  Display::select('session_id', $session_select_list, $session_id, $tabAttrParam);
+$select_session_html = Display::select('session_id', $session_select_list, $session_id, $tabAttrParam);
 echo Display::form_row($labelFormRow, $select_session_html);
 
 // Course list, get course list of session, or for course where user is admin
@@ -290,7 +290,7 @@ foreach ($course_list as $item) {
 	$course_select_list[$courseItemId] .= $courseInfo['title'];
 }
 
-$select_course_html =  Display::select(
+$select_course_html = Display::select(
     'selected_course',
     $course_select_list,
     $selected_course,
@@ -346,9 +346,9 @@ $my_exercise_list = array();
 $my_exercise_list['0']  = get_lang('AllExercises');
 $my_exercise_list['-1'] = get_lang('OrphanQuestions');
 if (is_array($exercise_list)) {
-    foreach($exercise_list as $row) {
+    foreach ($exercise_list as $row) {
         $my_exercise_list[$row['id']] = "";
-        if ($row['id'] ==  $fromExercise && $selected_course == api_get_course_int_id()) {
+        if ($row['id'] == $fromExercise && $selected_course == api_get_course_int_id()) {
             $my_exercise_list[$row['id']] = ">&nbsp;&nbsp;&nbsp;&nbsp;";
         }
         $my_exercise_list[$row['id']] .= $row['title'];
@@ -358,7 +358,7 @@ if (is_array($exercise_list)) {
 if ($exercise_id_changed == 1) {
 	reset_menu_lvl_type();
 }
-$select_exercise_html =  Display::select(
+$select_exercise_html = Display::select(
     'exerciseId',
     $my_exercise_list,
     $exerciseId,
@@ -391,7 +391,7 @@ echo Display::form_row(get_lang('Difficulty'), $select_difficulty_html);
 $question_list = Question::get_question_type_list();
 
 $new_question_list = array();
-$new_question_list['-1']  = get_lang('All');
+$new_question_list['-1'] = get_lang('All');
 if (!empty($_course)) {
     $objExercise = new Exercise();
     $objExercise->read($fromExercise);
@@ -464,7 +464,7 @@ if ($exerciseId > 0) {
             ORDER BY question_order";
 
     $result = Database::query($sql);
-    while($row = Database::fetch_array($result, 'ASSOC')) {
+    while ($row = Database::fetch_array($result, 'ASSOC')) {
         $mainQuestionList[] = $row;
     }
 } elseif ($exerciseId == -1) {
@@ -477,11 +477,11 @@ if ($exerciseId > 0) {
 		        crc.c_id = $selected_course AND
 		        crc.category_id = $courseCategoryId";
 	}
-	if (isset($exerciseLevel) && $exerciseLevel!= -1 ) {
+	if (isset($exerciseLevel) && $exerciseLevel != -1) {
 		$level_where = ' AND level='.$exerciseLevel;
 	}
 	$answer_where = '';
-	if (isset($answerType) && $answerType >0 -1 ) {
+	if (isset($answerType) && $answerType > 0 - 1) {
 		$answer_where = ' AND type='.$answerType;
 	}
 
@@ -521,7 +521,7 @@ if ($exerciseId > 0) {
                     $level_where $answer_where
              )";
     $result = Database::query($sql);
-    while($row = Database::fetch_array($result, 'ASSOC')) {
+    while ($row = Database::fetch_array($result, 'ASSOC')) {
         $mainQuestionList[] = $row;
     }
 } else {

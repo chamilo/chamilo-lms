@@ -609,6 +609,7 @@ $Forbidden = "Usted no está registrado como responsable de este curso";
 $CourseAccessConfigTip = "Por defecto el curso es público. Pero Ud. puede definir el nivel de confidencialidad en los botones superiores.";
 $OpenToTheWorld = "Público - acceso autorizado a cualquier persona";
 $OpenToThePlatform = "Abierto - acceso autorizado sólo para los usuarios registrados en la plataforma";
+$StudentXIsNotSubscribedToCourse = "El estudiante %s no está inscrito a este curso";
 $TipLang = "Este será el idioma que verán todos los visitantes del curso.";
 $Vid = "Video";
 $Work = "Trabajos";
@@ -8012,4 +8013,7 @@ $NewPasswordRequirementMaxXLowercase = "Máximo %s caracter(es) alfabético(s) e
 $NewPasswordRequirementMaxXUppercase = "Máximo %s caracter(es) alfabético(s) en mayúscula";
 $NewPasswordRequirementMaxXNumeric = "Máximo %s caracter(es) numéricos (0-9)";
 $NewPasswordRequirementMaxXLength = "Máximo %s caracteres en total";
+$YouCantNotEditThisQuestionBecauseAlreadyExistAnswers = "No puede editar esta pregunta porque ya existen respuestas";
+$Avatar = "Avatar";
+$StudyCycle = "Ciclo de estudio";
 ?>

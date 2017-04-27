@@ -80,14 +80,13 @@ if (isset($_FILES['user_upload'])) {
         $missing_files = check_for_missing_files($base_work_dir.$_POST['curdirpath'].$new_path);
         if ($missing_files) {
             //show a form to upload the missing files
-            Display::addFlash(Display::return_message(
+            echo Display::return_message(
                 build_missing_files_form(
                     $missing_files,
                     $_POST['curdirpath'],
                     $_FILES['user_upload']['name']
-                ),
-                'normal'
-            ));
+                )
+            );
         }
     }
 }
@@ -146,10 +145,10 @@ if (isset($_POST['create_dir']) && $_POST['dirname'] != '') {
         $_POST['dirname']
     );
     if ($created_dir) {
-        Display::addFlash(Display::return_message(get_lang('DirCr'), 'normal'));
+        echo Display::return_message(get_lang('DirCr'));
         $path = $created_dir;
     } else {
-        Display::addFlash(Display::return_message(get_lang('CannotCreateDir')));
+        echo Display::return_message(get_lang('CannotCreateDir'));
     }
 }
 
@@ -162,7 +161,7 @@ if (isset($_GET['createdir'])) {
 	$new_folder_text .= '<input type="submit" name="create_dir" value="'.get_lang('Ok').'"/>';
 	$new_folder_text .= '</form>';
 	//show the form
-	Display::addFlash(Display::return_message($new_folder_text, 'normal'));
+	echo Display::return_message($new_folder_text, 'normal');
 } else {	//give them a link to create a directory
 ?>
 	<p>

@@ -67,7 +67,7 @@ if (isset($_GET['delete_watermark'])) {
     Display::addFlash(Display::return_message(get_lang('FileDeleted')));
 }
 
-if (isset($_GET['action']) &&  $_GET['action'] == 'delete_grading') {
+if (isset($_GET['action']) && $_GET['action'] == 'delete_grading') {
     $id = intval($_GET['id']);
     api_delete_setting_option($id);
 }
@@ -233,7 +233,7 @@ if (!empty($_GET['category']) &&
         // Set true for allow_message_tool variable if social tool is actived
         foreach ($convert_byte_to_mega_list as $item) {
             if (isset($values[$item])) {
-                $values[$item] = round($values[$item]*1024*1024);
+                $values[$item] = round($values[$item] * 1024 * 1024);
             }
         }
 
@@ -498,7 +498,7 @@ if (!empty($_GET['category'])) {
                         api_get_utc_datetime(),
                         $user_id
                     );
-                    Display :: display_confirmation_message(get_lang('DashboardPluginsUpdatedSuccessfully'));
+                    echo Display::return_message(get_lang('DashboardPluginsUpdatedSuccessfully'), 'confirmation');
                 }
             }
             echo '<script>

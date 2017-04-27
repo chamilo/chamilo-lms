@@ -116,9 +116,7 @@ class UniqueAnswerImage extends UniqueAnswer
 
         if ($numberAnswers < 1) {
             $numberAnswers = 1;
-            Display::addFlash(Display::return_message(
-                get_lang('YouHaveToCreateAtLeastOneAnswer')
-            ));
+            echo Display::return_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
         }
 
         for ($i = 1; $i <= $numberAnswers; ++$i) {

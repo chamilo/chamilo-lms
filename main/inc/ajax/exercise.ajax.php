@@ -186,7 +186,7 @@ switch ($action) {
                 );
                 $counter++;
             }
-            Display::display_confirmation_message(get_lang('Saved'));
+            echo Display::return_message(get_lang('Saved'), 'confirmation');
         }
         break;
     case 'update_question_order':
@@ -195,7 +195,7 @@ switch ($action) {
         $exercise_id = isset($_REQUEST['exercise_id']) ? $_REQUEST['exercise_id'] : null;
 
         if (empty($exercise_id)) {
-            return Display::display_error_message(get_lang('Error'));
+            return Display::return_message(get_lang('Error'), 'error');
         }
         if (api_is_allowed_to_edit(null, true)) {
             $new_question_list = $_POST['question_id_list'];
@@ -209,7 +209,7 @@ switch ($action) {
                 ;
                 $counter++;
             }
-            Display::display_confirmation_message(get_lang('Saved'));
+            echo Display::return_message(get_lang('Saved'), 'confirmation');
         }
         break;
     case 'add_question_to_reminder':

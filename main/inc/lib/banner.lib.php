@@ -382,6 +382,25 @@ function return_navigation_array()
                 }
             }
         }
+    } else {
+        // Show custom tabs that are specifically marked as public
+        $customTabs = getCustomTabs();
+        if (!empty($customTabs)) {
+            foreach ($customTabs as $tab) {
+                if (api_get_setting($tab['variable'], $tab['subkey']) == 'true' &&
+                    isset($possible_tabs[$tab['subkey']]) && 
+                    api_get_plugin_setting(strtolower(str_replace('Tabs', '', $tab['subkeytext'])), 'public_main_menu_tab') == 'true'
+                ) {
+                    $possible_tabs[$tab['subkey']]['url'] = api_get_path(WEB_PATH).$possible_tabs[$tab['subkey']]['url'];
+                    $navigation[$tab['subkey']] = $possible_tabs[$tab['subkey']];
+                } else {
+                    if (isset($possible_tabs[$tab['subkey']])) {
+                        $possible_tabs[$tab['subkey']]['url'] = api_get_path(WEB_PATH).$possible_tabs[$tab['subkey']]['url'];
+                        $menu_navigation[$tab['subkey']] = $possible_tabs[$tab['subkey']];
+                    }
+                }
+            }
+        }
     }
 
     return array(

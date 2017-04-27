@@ -221,17 +221,17 @@ class Wiki
 
         foreach ($input_array as $key => $value) {
             //now doubles brackets
-            if (isset($input_array[$key-1]) && $input_array[$key-1] == '[[' AND
-                $input_array[$key+1] == ']]'
+            if (isset($input_array[$key-1]) &&
+                $input_array[$key-1] == '[[' && $input_array[$key+1] == ']]'
             ) {
                 // now full wikilink
                 if (api_strpos($value, "|") !== false) {
-                    $full_link_array=explode("|", $value);
-                    $link=trim(strip_tags($full_link_array[0]));
-                    $title=trim($full_link_array[1]);
+                    $full_link_array = explode("|", $value);
+                    $link = trim(strip_tags($full_link_array[0]));
+                    $title = trim($full_link_array[1]);
                 } else {
-                    $link=trim(strip_tags($value));
-                    $title=trim($value);
+                    $link = trim(strip_tags($value));
+                    $title = trim($value);
                 }
 
                 //if wikilink is homepage

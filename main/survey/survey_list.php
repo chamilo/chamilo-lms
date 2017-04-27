@@ -109,9 +109,9 @@ if ($action === 'delete' && isset($_GET['survey_id'])) {
     $return = SurveyManager::delete_survey($_GET['survey_id']);
 
     if ($return) {
-        Display::display_confirmation_message(get_lang('SurveyDeleted'), false);
+        echo Display::return_message(get_lang('SurveyDeleted'), 'confirmation', false);
     } else {
-        Display::display_error_message(get_lang('ErrorOccurred'), false);
+        echo Display::return_message(get_lang('ErrorOccurred'), 'error', false);
     }
 }
 
@@ -132,9 +132,9 @@ if ($action == 'empty') {
     }
     $return = SurveyManager::empty_survey(intval($_GET['survey_id']));
     if ($return) {
-        Display :: display_confirmation_message(get_lang('SurveyEmptied'), false);
+        echo Display::return_message(get_lang('SurveyEmptied'), 'confirmation', false);
     } else {
-        Display :: display_error_message(get_lang('ErrorOccurred'), false);
+        echo Display::return_message(get_lang('ErrorOccurred'), 'error', false);
     }
 }
 
@@ -151,9 +151,9 @@ if (isset($_POST['action']) && $_POST['action']) {
             // delete the actual survey
             SurveyManager::delete_survey($value);
         }
-        Display :: display_confirmation_message(get_lang('SurveysDeleted'), false);
+        echo Display::return_message(get_lang('SurveysDeleted'), 'confirmation', false);
     } else {
-        Display :: display_error_message(get_lang('NoSurveysSelected'), false);
+        echo Display::return_message(get_lang('NoSurveysSelected'), 'error', false);
     }
 }
 

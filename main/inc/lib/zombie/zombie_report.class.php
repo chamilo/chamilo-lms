@@ -91,7 +91,13 @@ class ZombieReport implements Countable
             return null;
         }
         if (empty($this->parameters_form)) {
-            $this->parameters_form = FormValidator::create($parameters);
+            $this->parameters_form = new FormValidator(
+                $parameters['name'],
+                $parameters['method'],
+                null,
+                null,
+                $parameters['attributes']
+            );
         }
 
         return $this->parameters_form;
@@ -104,7 +110,7 @@ class ZombieReport implements Countable
             return '';
         }
 
-        $result = $form->return_form();
+        $result = $form->returnForm();
         if ($return) {
             return $result;
         } else {
@@ -312,9 +318,9 @@ class ZombieReport implements Countable
         $result = $this->display_parameters($return);
         if ($this->perform_action()) {
             if ($return) {
-                $result .= Display::return_confirmation_message(get_lang('Done'));
+                $result .= Display::return_message(get_lang('Done'), 'confirmation');
             } else {
-                Display::display_confirmation_message(get_lang('Done'));
+                echo Display::return_message(get_lang('Done'), 'confirmation');
             }
         }
         $result .= $this->display_data($return);

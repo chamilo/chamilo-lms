@@ -344,6 +344,12 @@ $htmlHeadXtra[] = api_get_js('d3/jquery.xcolor.js');
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/css/hotspot.css">';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/js/hotspot.js"></script>';
 
+if (isset($_GET['message'])) {
+    if (in_array($_GET['message'], array('ExerciseStored', 'ItemUpdated', 'ItemAdded'))) {
+        Display::addFlash(Display::return_message(get_lang($_GET['message']), 'confirmation'));
+    }
+}
+
 Display::display_header($nameTools, 'Exercise');
 /*
 if ($objExercise->exercise_was_added_in_lp) {
@@ -424,12 +430,6 @@ if ($inATest) {
     echo '</div>';
 }
 
-if (isset($_GET['message'])) {
-    if (in_array($_GET['message'], array('ExerciseStored', 'ItemUpdated', 'ItemAdded'))) {
-        Display::addFlash(Display::return_message(get_lang($_GET['message']), 'confirmation'));
-    }
-}
-
 if ($newQuestion || $editQuestion) {
     // Question management
     $type = isset($_REQUEST['answerType']) ? Security::remove_XSS($_REQUEST['answerType']) : null;
@@ -483,7 +483,7 @@ if (!$newQuestion && !$modifyQuestion && !$editQuestion && !isset($_GET['hotspot
 // this test to display only message in the question authoring page and not in the question list page too
 // if (is_object($objQuestion) && $objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_EXAM && ($newQuestion || $modifyQuestion || $editQuestion)) {
 if ($objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_EXAM) {
-    Display::addFlash(Display::return_message(get_lang('TestFeedbackNotShown'), 'normal'));
+    echo Display::return_message(get_lang('TestFeedbackNotShown'), 'normal');
 }
 
 Session::write('objExercise', $objExercise);

@@ -619,8 +619,9 @@ if ($formSent && isset($_POST)) {
                         $learnpath_item_view_id
                     );
                     if ($attempt_count >= $objExercise->selectAttempts()) {
-                        Display :: display_warning_message(
+                        echo Display :: return_message(
                             sprintf(get_lang('ReachedMaxAttempts'), $exercise_title, $objExercise->selectAttempts()),
+                            'warning',
                             false
                         );
                         if ($origin != 'learnpath') {
@@ -682,8 +683,9 @@ if ($question_count != 0) {
                         $learnpath_item_view_id
                     );
 	                if ($attempt_count >= $objExercise->selectAttempts()) {
-	                    Display :: display_warning_message(
+	                    Display::return_message(
                             sprintf(get_lang('ReachedMaxAttempts'), $exercise_title, $objExercise->selectAttempts()),
+                            'warning',
                             false
                         );
 	                    if ($origin != 'learnpath') {
@@ -734,10 +736,13 @@ $interbreadcrumb[] = array("url" => "exercise.php?".api_get_cidreq(), "name" => 
 $interbreadcrumb[] = array("url" => "#", "name" => $objExercise->name);
 
 if ($origin != 'learnpath') { //so we are not in learnpath tool
-    Display :: display_header(null, 'Exercises');
     if (!api_is_allowed_to_session_edit()) {
-        Display::addFlash(Display::return_message(get_lang('SessionIsReadOnly'), 'warning'));
+        Display::addFlash(
+            Display::return_message(get_lang('SessionIsReadOnly'), 'warning')
+        );
     }
+
+    Display :: display_header(null, 'Exercises');
 } else {
     $htmlHeadXtra[] = "
     <style>
@@ -797,14 +802,14 @@ if ($limit_time_exists) {
     if (!$permission_to_start || $exercise_timeover) {
         if (!api_is_allowed_to_edit(null, true)) {
             $message_warning = $permission_to_start ? get_lang('ReachedTimeLimit') : get_lang('ExerciseNoStartedYet');
-            Display :: display_warning_message(sprintf($message_warning, $exercise_title, $objExercise->selectAttempts()));
+            echo Display::return_message(sprintf($message_warning, $exercise_title, $objExercise->selectAttempts()), 'warning');
             if ($origin != 'learnpath') {
             	Display :: display_footer();
             }
             exit;
         } else {
             $message_warning = $permission_to_start ? get_lang('ReachedTimeLimitAdmin') : get_lang('ExerciseNoStartedAdmin');
-            Display :: display_warning_message(sprintf($message_warning, $exercise_title, $objExercise->selectAttempts()));
+            echo Display::return_message(sprintf($message_warning, $exercise_title, $objExercise->selectAttempts()), 'warning');
         }
     }
 }
@@ -815,12 +820,13 @@ if (isset($_custom['exercises_hidden_when_no_start_date']) &&
     $_custom['exercises_hidden_when_no_start_date']
 ) {
 	if (empty($objExercise->start_time)) {
-        Display:: display_warning_message(
+        echo Display:: return_message(
             sprintf(
                 get_lang('ExerciseNoStartedYet'),
                 $exercise_title,
                 $objExercise->selectAttempts()
-            )
+            ),
+            'warning'
         );
 		if ($origin != 'learnpath') {
 			Display :: display_footer();
@@ -1202,7 +1208,7 @@ if (!empty($error)) {
                         $questionName = $objQuestionTmp->selectTitle();
                         // destruction of the Question object
                         unset($objQuestionTmp);
-                        Display::addFlash(Display::return_message(get_lang('AlreadyAnswered')));
+                        echo Display::return_message(get_lang('AlreadyAnswered'));
                         $i++;
                         break;
                     }

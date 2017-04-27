@@ -12,7 +12,7 @@
 session_cache_limiter('public');
 
 require_once __DIR__.'/../inc/global.inc.php';
-$this_section=SECTION_COURSES;
+$this_section = SECTION_COURSES;
 
 // IMPORTANT to avoid caching of documents
 header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
@@ -29,7 +29,7 @@ $doc_url = str_replace('///', '&', $doc_url);
 $doc_url = str_replace(' ', '+', $doc_url);
 $doc_url = str_replace('/..', '', $doc_url); //echo $doc_url;
 
-if (! isset($_course)) {
+if (!isset($_course)) {
     api_not_allowed(true);
 }
 $full_file_name = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/blog/'.$doc_url;
@@ -37,7 +37,7 @@ $full_file_name = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/b
 //if the rewrite rule asks for a directory, we redirect to the course view
 if (is_dir($full_file_name)) {
     //remove last slash if present
-    while ($doc_url{$dul = strlen($doc_url)-1}=='/') $doc_url = substr($doc_url,0,$dul);
+    while ($doc_url{$dul = strlen($doc_url) - 1} == '/') $doc_url = substr($doc_url, 0, $dul);
     //create the path
     $document_explorer = api_get_path(WEB_COURSE_PATH).api_get_course_path(); // home course path
     //redirect

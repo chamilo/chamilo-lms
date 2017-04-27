@@ -175,7 +175,7 @@ class CourseDescription
 
         $sql = "SELECT MAX(description_type) as MAX
                 FROM $tbl_course_description
-		        WHERE c_id = $course_id AND session_id='" . $this->session_id . "'";
+		        WHERE c_id = $course_id AND session_id='".$this->session_id."'";
         $rs = Database::query($sql);
         $max = Database::fetch_array($rs);
 
@@ -216,7 +216,7 @@ class CourseDescription
             'session_id' => $this->session_id
         ];
 
-        $last_id  = Database::insert($table, $params);
+        $last_id = Database::insert($table, $params);
 
         if ($last_id > 0) {
             $sql = "UPDATE $table SET id = iid WHERE iid = $last_id";
@@ -324,8 +324,8 @@ class CourseDescription
         $sql = "DELETE FROM $tbl_course_description
 			 	WHERE
 			 	    c_id = $course_id AND
-			 	    id = '" . intval($this->id) . "' AND
-			 	    session_id = '" . intval($this->session_id) . "'";
+			 	    id = '".intval($this->id)."' AND
+			 	    session_id = '" . intval($this->session_id)."'";
         $result = Database::query($sql);
         $affected_rows = Database::affected_rows($result);
         if ($this->id > 0) {
@@ -354,7 +354,7 @@ class CourseDescription
         $course_id = api_get_course_int_id();
 
         $sql = "SELECT id FROM $tbl_course_description
-		        WHERE c_id = $course_id AND description_type = '" . intval($description_type) . "'";
+		        WHERE c_id = $course_id AND description_type = '".intval($description_type)."'";
         $rs = Database::query($sql);
         $row = Database::fetch_array($rs);
         $description_id = $row['id'];

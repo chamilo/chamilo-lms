@@ -9,20 +9,18 @@
     <tbody>
     <tr>
         <td>
-            <h2>{{ theme.title }}</h2>
+            {{ theme.title }}
             {{ theme.content }}
         </td>
         <td>
             {% for plan in plans %}
-                <h3>{{ plan.title }}</h3>
+                {{ plan.title }}
                 {{ plan.description }}
             {% endfor %}
         </td>
         <td>
             {% for advance in advances %}
-                <p>
-                    <strong>{{ advance.start_date|local_format_date(2) ~ ' (' ~ advance.duration ~ 'HourShort'|get_lang ~ ') ' }}</strong>
-                </p>
+                <p>{{ advance.start_date|api_convert_and_format_date(2) ~ ' (' ~ advance.duration ~ 'HourShort'|get_lang ~ ') ' }}</p>
                 {{ advance.content }}
             {% endfor %}
         </td>

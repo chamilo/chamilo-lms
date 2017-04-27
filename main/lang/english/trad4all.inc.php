@@ -605,6 +605,7 @@ $Forbidden = "Not allowed";
 $CourseAccessConfigTip = "By default, your course is public. But you can define the level of access above.";
 $OpenToTheWorld = "Public - access allowed for the whole world";
 $OpenToThePlatform = " Open - access allowed for users registered on the platform";
+$StudentXIsNotSubscribedToCourse = "Student %s is no subscribed to this course";
 $TipLang = "This language will be valid for every visitor of your courses portal";
 $Vid = "Chamilo LIVE";
 $Work = "Contributions";
@@ -7997,4 +7998,7 @@ $NewPasswordRequirementMaxXLowercase = "Maximum %s lowercase characters";
 $NewPasswordRequirementMaxXUppercase = "Maximum %s uppercase characters";
 $NewPasswordRequirementMaxXNumeric = "Maximum %s numerical (0-9) characters";
 $NewPasswordRequirementMaxXLength = "Maximum %s characters in total";
+$YouCantNotEditThisQuestionBecauseAlreadyExistAnswers = "You can't edit this question because answers by students have already been registered";
+$Avatar = "Avatar";
+$StudyCycle = "Semester";
 ?>

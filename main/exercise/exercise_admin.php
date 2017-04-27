@@ -209,15 +209,14 @@ if ($form->validate()) {
     echo '</div>';
 
     if ($objExercise->feedback_type == 1) {
-        Display::addFlash(Display::return_message(
-            get_lang('DirectFeedbackCantModifyTypeQuestion')
-        ));
+        echo Display::return_message(get_lang('DirectFeedbackCantModifyTypeQuestion'));
     }
 
-    if (api_get_setting('search_enabled')=='true' &&
+    if (
+        api_get_setting('search_enabled')=='true' &&
         !extension_loaded('xapian')
     ) {
-        Display::display_error_message(get_lang('SearchXapianModuleNotInstalled'));
+        echo Display::return_message(get_lang('SearchXapianModuleNotInstalled'), 'error');
     }
 
     // to hide the exercise description

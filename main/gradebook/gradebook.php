@@ -371,36 +371,6 @@ if (isset ($_POST['submit']) && isset ($_POST['keyword'])) {
     exit;
 }
 
-// DISPLAY HEADERS AND MESSAGES                           -
-if (!isset($_GET['exportpdf']) && !isset($_GET['export_certificate'])) {
-    if (isset ($_GET['studentoverview'])) {
-        $interbreadcrumb[]= array (
-            'url' => $_SESSION['gradebook_dest'].'?selectcat=' . $selectcat.'&'.api_get_cidreq(),
-            'name' => get_lang('ToolGradebook')
-        );
-        Display :: display_header(get_lang('FlatView'));
-    } elseif (isset ($_GET['search'])) {
-        if ($_SESSION['gradebook_dest'] == 'index.php') {
-            $gradebook_dest = Security::remove_XSS($_SESSION['gradebook_dest']).'?'.api_get_cidreq().'&amp;';
-        } else {
-            $gradebook_dest = Security::remove_XSS($_SESSION['gradebook_dest']);
-        }
-
-        $interbreadcrumb[]= array ('url' => $gradebook_dest,'name' => get_lang('Gradebook'));
-
-        if ((isset($_GET['selectcat']) && $_GET['selectcat']>0)) {
-            if (!empty($_GET['course'])) {
-                $interbreadcrumb[]= array ('url' => $gradebook_dest.'selectcat='.$selectcat,'name' => get_lang('Details'));
-            } else {
-                $interbreadcrumb[]= array ('url' => $_SESSION['gradebook_dest'].'?selectcat=0','name' => get_lang('Details'));
-            }
-        }
-        Display :: display_header('');
-    } else {
-        Display :: display_header('');
-    }
-}
-
 if (isset($_GET['categorymoved'])) {
     Display::addFlash(Display::return_message(get_lang('CategoryMoved'), 'confirmation', false));
 }
@@ -443,6 +413,37 @@ if (isset ($warning_message)) {
 if (isset ($move_form)) {
     Display::addFlash(Display::return_message($move_form->toHtml(), 'normal', false));
 }
+
+// DISPLAY HEADERS AND MESSAGES                           -
+if (!isset($_GET['exportpdf']) && !isset($_GET['export_certificate'])) {
+    if (isset ($_GET['studentoverview'])) {
+        $interbreadcrumb[]= array (
+            'url' => $_SESSION['gradebook_dest'].'?selectcat=' . $selectcat.'&'.api_get_cidreq(),
+            'name' => get_lang('ToolGradebook')
+        );
+        Display :: display_header(get_lang('FlatView'));
+    } elseif (isset ($_GET['search'])) {
+        if ($_SESSION['gradebook_dest'] == 'index.php') {
+            $gradebook_dest = Security::remove_XSS($_SESSION['gradebook_dest']).'?'.api_get_cidreq().'&amp;';
+        } else {
+            $gradebook_dest = Security::remove_XSS($_SESSION['gradebook_dest']);
+        }
+
+        $interbreadcrumb[]= array ('url' => $gradebook_dest,'name' => get_lang('Gradebook'));
+
+        if ((isset($_GET['selectcat']) && $_GET['selectcat']>0)) {
+            if (!empty($_GET['course'])) {
+                $interbreadcrumb[]= array ('url' => $gradebook_dest.'selectcat='.$selectcat,'name' => get_lang('Details'));
+            } else {
+                $interbreadcrumb[]= array ('url' => $_SESSION['gradebook_dest'].'?selectcat=0','name' => get_lang('Details'));
+            }
+        }
+        Display :: display_header('');
+    } else {
+        Display :: display_header('');
+    }
+}
+
 // LOAD DATA & DISPLAY TABLE                             -
 $is_platform_admin= api_is_platform_admin();
 $is_course_admin= api_is_allowed_to_edit();
@@ -602,14 +603,14 @@ $gradebooktable = new GradebookTable(
 if (((empty($allcat)) && (empty ($alleval)) && (empty ($alllink)) && (!$is_platform_admin) && ($is_course_admin) && (!isset($_GET['selectcat']))) &&
     api_is_course_tutor()
 ) {
-    Display::addFlash(Display::return_message(
+    echo Display::return_message(
         get_lang('GradebookWelcomeMessage') .
         '<br /><br />
         <form name="createcat" method="post" action="' . api_get_self() . '?createallcategories=1">
         <input type="submit" value="' . get_lang('CreateAllCat') . '"></form>',
         'normal',
         false
-    ));
+    );
 }
 // Here we are in a sub category
 if ($category != '0') {

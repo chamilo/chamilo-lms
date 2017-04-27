@@ -57,6 +57,6 @@ if ($form->validate()) {
 }
 
 Display::display_header(get_lang('ArchiveDirCleanup'));
-Display::display_warning_message(get_lang('ArchiveDirCleanupDescr'));
+echo Display::return_message(get_lang('ArchiveDirCleanupDescr'), 'warning');
 $form->display();
 Display::display_footer();

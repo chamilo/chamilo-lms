@@ -77,6 +77,7 @@ coding_style:
                 opening: end-of-line
             try:
                 opening: end-of-line
+
         upper_lower_casing:
             keywords:
                 general: lower
@@ -164,6 +165,9 @@ filter:
         - 'plugin/kannelsms/vendor/*'
         - 'plugin/clockworksms/vendor/*'
         - 'plugin/pens/lib/'
+        - 'plugin/bbb/lib/bbb_api.php'
+        - 'plugin/ims_lti/OAuthSimple.php'
+        - 'plugin/buycourses/src/Requests.php'
         - 'tests/*'
         - 'vendor/*'
         - 'web/*'

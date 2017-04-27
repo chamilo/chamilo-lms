@@ -86,7 +86,7 @@ class GradeBookResult
         $worksheet = $spreadsheet->getActiveSheet();
 
         $line = 0;
-        $column = 0; //skip the first column (row titles)
+        $column = 1;
 
         //headers
         foreach ($data[0] as $header_col) {

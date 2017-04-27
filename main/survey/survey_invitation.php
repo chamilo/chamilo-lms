@@ -47,7 +47,7 @@ Display::display_header($tool_name);
 // Getting all the people who have filled this survey
 $answered_data = SurveyManager::get_people_who_filled_survey($survey_id);
 if ($survey_data['anonymous'] == 1) {
-	Display::addFlash(Display::return_message(get_lang('AnonymousSurveyCannotKnowWhoAnswered').' '.count($answered_data).' '.get_lang('PeopleAnswered'), 'normal'));
+	echo Display::return_message(get_lang('AnonymousSurveyCannotKnowWhoAnswered').' '.count($answered_data).' '.get_lang('PeopleAnswered'));
 	$answered_data = array();
 }
 

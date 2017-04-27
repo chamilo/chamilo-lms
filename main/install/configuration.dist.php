@@ -335,6 +335,22 @@ $_configuration['tracking_columns'] = [
         'last_connection' => true,
         'details' => true,
     ],
+    'my_students_lp' => [
+        'lp' => true,
+        'time' => true,
+        'best_score' => true,
+        'latest_attempt_avg_score' => true,
+        'progress' => true,
+        'last_connection' => true,
+    ],
+    'my_progress_lp' => [
+        'lp' => true,
+        'time' => true,
+        'progress' => true,
+        'score' => true,
+        'best_score' => true,
+        'last_connection' => true,
+    ]
 ];
 */
 // Hide session link of course_block on index/userportal
@@ -345,7 +361,9 @@ $_configuration['agenda_legend'] = [
     'red' => 'red caption',
     '#f0f' => 'another caption'
 ];*/
-// Save question titles with HTML
-$_configuration['question_title_html'] = false;
+// Save some tool titles with HTML editor
+// $_configuration['save_titles_like_html'] = false;
 // Show the full toolbar set to all CKEditor
 //$_configuration['full_ckeditor_toolbar_set'] = false;
+// Allow change the orientation when export a single (course progress) thematic to pdf. Portrait or landscape
+//$_configuration['single_thematic_pdf_orientation'] = 'landscape';

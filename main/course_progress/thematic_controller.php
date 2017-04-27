@@ -167,7 +167,7 @@ class ThematicController
                     $csv = array();
                     $csv[] = array('type', 'data1', 'data2', 'data3');
                     foreach ($list as $theme) {
-                        $csv[] = array('title', $theme['title'], $theme['content']);
+                        $csv[] = array('title', strip_tags($theme['title']), strip_tags($theme['content']));
                         $data = $thematic->get_thematic_plan_data($theme['id']);
                         if (!empty($data)) {
                             foreach ($data as $plan) {
@@ -248,14 +248,16 @@ class ThematicController
 
                     $template = $view->get_template('course_progress/pdf_single_thematic.tpl');
 
+                    $pdfOrientation = api_get_configuration_value('single_thematic_pdf_orientation');
+
                     Export::export_html_to_pdf(
                         $view->fetch($template),
                         [
                             'filename' => get_lang('Thematic').'-'.api_get_local_time(),
                             'pdf_title' => get_lang('Thematic'),
                             'add_signatures' => ['Drh', 'Teacher', 'Date'],
-                            'format' => 'A4-L',
-                            'orientation' => 'L'
+                            'format' => $pdfOrientation !== 'portrait' ? 'A4-L' : 'A4-P',
+                            'orientation' => $pdfOrientation !== 'portrait' ? 'L' : 'P'
                         ]
                     );
                     break;

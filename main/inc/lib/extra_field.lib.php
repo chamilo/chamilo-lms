@@ -449,7 +449,7 @@ class ExtraField extends Model
      * @param array $exclude variables of extra field to exclude
      * @param bool $filter
      * @param bool $useTagAsSelect
-     * @param array $showOnlyThisFields
+     * @param array $showOnlyTheseFields
      * @param array $orderFields
      * @param bool $adminPermissions
      *
@@ -461,7 +461,7 @@ class ExtraField extends Model
         $exclude = [],
         $filter = false,
         $useTagAsSelect = false,
-        $showOnlyThisFields = [],
+        $showOnlyTheseFields = [],
         $orderFields = [],
         $adminPermissions = false
     ) {
@@ -476,9 +476,9 @@ class ExtraField extends Model
             $extraData = self::get_handler_extra_data($itemId);
 
             if ($form) {
-                if (!empty($showOnlyThisFields)) {
+                if (!empty($showOnlyTheseFields)) {
                     $setData = [];
-                    foreach ($showOnlyThisFields as $variable) {
+                    foreach ($showOnlyTheseFields as $variable) {
                         $extraName = 'extra_'.$variable;
                         if (in_array($extraName, array_keys($extraData))) {
                             $setData[$extraName] = $extraData[$extraName];
@@ -505,7 +505,7 @@ class ExtraField extends Model
             $itemId,
             $exclude,
             $useTagAsSelect,
-            $showOnlyThisFields,
+            $showOnlyTheseFields,
             $orderFields
         );
 
@@ -817,7 +817,7 @@ class ExtraField extends Model
      * @param int $itemId
      * @param array $exclude variables of extra field to exclude
      * @param bool $useTagAsSelect
-     * @param array $showOnlyThisFields
+     * @param array $showOnlyTheseFields
      * @param array $orderFields
      *
      * @return array If relevant, returns a one-element array with JS code to be added to the page HTML headers
@@ -830,7 +830,7 @@ class ExtraField extends Model
         $itemId = null,
         $exclude = [],
         $useTagAsSelect = false,
-        $showOnlyThisFields = [],
+        $showOnlyTheseFields = [],
         $orderFields = []
     ) {
         $type = $this->type;
@@ -849,8 +849,8 @@ class ExtraField extends Model
             }
 
             foreach ($extra as $field_details) {
-                if (!empty($showOnlyThisFields)) {
-                    if (!in_array($field_details['variable'], $showOnlyThisFields)) {
+                if (!empty($showOnlyTheseFields)) {
+                    if (!in_array($field_details['variable'], $showOnlyTheseFields)) {
                         continue;
                     }
                 }

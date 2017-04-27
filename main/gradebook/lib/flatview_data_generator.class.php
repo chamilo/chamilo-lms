@@ -103,6 +103,8 @@ class FlatViewDataGenerator
             }
         }
 
+        $headers[] = get_lang('Username');
+
         if (!isset($items_count)) {
             $items_count = count($this->evals_links) - $items_start;
         }
@@ -422,6 +424,8 @@ class FlatViewDataGenerator
                     }
                 }
             }
+
+            $row[] = $user[1];
 
             $item_value = 0;
             $item_value_total = 0;

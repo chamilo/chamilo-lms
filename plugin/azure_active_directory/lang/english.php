@@ -17,4 +17,7 @@ $strings['signup_policy'] = 'Sign up policy';
 $strings['signup_policy_help'] = 'Enter your sign up policy name, e.g.g b2c_1_sign_up';
 $strings['signin_policy'] = 'Sign in policy';
 $strings['signin_policy_help'] = 'Enter your sign in policy name, e.g. b2c_1_sign_in';
+$strings['signunified_policy'] = 'Unified sign in and sign up policy';
+$strings['signunified_policy_help'] = 'Enter your name of unified sign in and sign up policy, e.g. b2c_1_sign_unified';
 $strings['block_name'] = 'Block name';
+$strings['SignUpAndSignIn'] = 'Sign up and sign in';

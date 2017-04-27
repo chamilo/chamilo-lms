@@ -112,10 +112,10 @@ echo '</div>';
 echo '<div class="col-md-8">';
 
 if (isset($is_success) && $is_success === true) {
-    Display::addFlash(Display::return_message(get_lang('ItemRemoved'), 'confirmation'));
+    echo Display::return_message(get_lang('ItemRemoved'), 'confirmation');
 } else {
     if ($is_new) {
-        Display::addFlash(Display::return_message(get_lang('LearnpathAdded'), 'normal', zfalse));
+        echo Display::return_message(get_lang('LearnpathAdded'), 'normal', false);
     }
     // Display::addFlash(Display::return_message(get_lang('LPCreatedAddChapterStep'), 'normal', false));
     $gradebook = isset($_GET['gradebook']) ? Security::remove_XSS($_GET['gradebook']) : null;

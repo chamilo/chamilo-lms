@@ -109,9 +109,11 @@ $(document).ready( function() {
 });
 </script>';
 
-Display :: display_header(get_lang('NewEvaluation'));
 if ($evaladd->get_course_code() == null) {
     Display::addFlash(Display::return_message(get_lang('CourseIndependentEvaluation'), 'normal', false));
 }
+
+Display::display_header(get_lang('NewEvaluation'));
+
 $form->display();
 Display :: display_footer();

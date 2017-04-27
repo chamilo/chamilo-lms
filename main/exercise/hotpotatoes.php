@@ -236,7 +236,7 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
     }
 
     if ($dialogBox) {
-        Display::addFlash(Display::return_message($dialogBox, 'normal', false));
+        echo Display::return_message($dialogBox, 'normal', false);
     }
 
     $form->display();

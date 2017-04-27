@@ -3977,7 +3977,9 @@ class UserManager
             FormValidator::LAYOUT_HORIZONTAL
         );
 
-        $form->addText('q', get_lang('UsersGroups'), false);
+        $form->addText('q', get_lang('UsersGroups'), false, array(
+            "id" => "q"
+        ));
         $options = array(
             0 => get_lang('Select'),
             1 => get_lang('User'),
@@ -3987,7 +3989,7 @@ class UserManager
             'search_type',
             get_lang('Type'),
             $options,
-            array('onchange' => 'javascript: extra_field_toogle();')
+            array('onchange' => 'javascript: extra_field_toogle();', 'id' => 'search_type')
         );
 
         // Extra fields
@@ -4793,7 +4795,7 @@ class UserManager
                         //345600 = 7 days in seconds 63072000= 2 ans
                         // if ($currentTimestamp - $timestamp > 184590 )
                         if ($currentTimestamp - $timestamp > $inactive_time && self::delete_user($student_id)) {
-                            Display::addFlash(Display::return_message(get_lang('UserDeleted'), 'normal'));
+                            echo Display::return_message(get_lang('UserDeleted'));
                             echo '<p>', 'id', $student_id, ':', $last_login_date, '</p>';
                         }
                     }

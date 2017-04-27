@@ -841,35 +841,6 @@ class CourseManager
         }
     }
 
-
-    /**
-     *    Checks wether a parameter exists.
-     *    If it doesn't, the function displays an error message.
-     * @deprecated
-     * @return boolean if parameter is set and not empty, false otherwise
-     * @todo move function to better place, main_api ?
-     */
-    public static function check_parameter($parameter, $error_message)
-    {
-        if (empty($parameter)) {
-            Display::addFlash(Display::return_message($error_message, 'normal'));
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     *    Lets the script die when a parameter check fails.
-     * @deprecated
-     * @todo move function to better place, main_api ?
-     */
-    public static function check_parameter_or_fail($parameter, $error_message)
-    {
-        if (!self::check_parameter($parameter, $error_message)) {
-            die();
-        }
-    }
-
     /**
      * @return boolean if there already are one or more courses
      *  with the same code OR visual_code (visualcode), false otherwise
@@ -3122,34 +3093,6 @@ class CourseManager
     }
 
     /**
-     *  Get count rows of a table inside a course database
-     * @param  string $table   The table of which the rows should be counted
-     * @param  int $session_id       optionally count rows by session id
-     * @return int $course_id    The number of rows in the given table.
-     *
-     * @deprecated
-     */
-    public static function count_rows_course_table($table, $session_id = '', $course_id = 0)
-    {
-        $condition_session = '';
-        if ($session_id !== '') {
-            $session_id = intval($session_id);
-            $condition_session = " AND session_id = '$session_id' ";
-        }
-        if (!empty($course_id)) {
-            $course_id = intval($course_id);
-        } else {
-            $course_id = api_get_course_int_id();
-        }
-        $condition_session .= " AND c_id = '$course_id' ";
-
-        $sql = "SELECT COUNT(*) AS n FROM $table WHERE 1=1 $condition_session ";
-        $rs = Database::query($sql);
-        $row = Database::fetch_row($rs);
-        return $row[0];
-    }
-
-    /**
      * Subscribes courses to human resource manager (Dashboard feature)
      * @param    int   $hr_manager_id      Human Resource Manager id
      * @param    array $courses_list       Courses code
@@ -3208,10 +3151,13 @@ class CourseManager
     /**
      * get courses followed by human resources manager
      * @param int $user_id
+     * @param int $status
      * @param int $from
      * @param int $limit
      * @param string $column
      * @param string $direction
+     * @param bool $getCount
+     *
      * @return array    courses
      */
     public static function get_courses_followed_by_drh(
@@ -4848,7 +4794,12 @@ class CourseManager
                 $my_course['already_register_as'] = Display::tag(
                     'button',
                     $icon,
-                    array('id' => 'register', 'class' => 'btn btn-default btn-sm', 'title' => $title)
+                    array(
+                        'id' => 'register',
+                        'class' => 'btn btn-default btn-sm',
+                        'title' => $title,
+                        'aria-label' => $title
+                    )
                 );
             } elseif ($userRegisterdInCourseAsTeacher) {
                 // if user registered as teacher
@@ -4857,7 +4808,12 @@ class CourseManager
                 $my_course['already_register_as'] = Display::tag(
                     'button',
                     $icon,
-                    array('id' => 'register', 'class' => 'btn btn-default btn-sm', 'title' => $title)
+                    array(
+                        'id' => 'register',
+                        'class' => 'btn btn-default btn-sm',
+                        'title' => $title,
+                        'aria-label' => $title
+                    )
                 );
             } */
 
@@ -4866,9 +4822,15 @@ class CourseManager
                 $my_course['register_button'] = Display::url(
                     get_lang('Subscribe') . ' ' .
                     Display::returnFontAwesomeIcon('sign-in'),
-                    api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/index.php?action=subscribe&sec_token=' . $stok,
-                    array('class' => 'btn btn-success btn-sm', 'title' => get_lang('Subscribe'))
+                    api_get_path(WEB_COURSE_PATH) . $course_info['path'] .
+                     '/index.php?action=subscribe&sec_token=' . $stok,
+                    array(
+                        'class' => 'btn btn-success btn-sm',
+                        'title' => get_lang('Subscribe'),
+                        'aria-label' => get_lang('Subscribe')
+                    )
                 );
+
             }
 
             if ($access_link && in_array('enter',
@@ -4878,17 +4840,28 @@ class CourseManager
                     get_lang('GoToCourse'). ' ' .
                     Display::returnFontAwesomeIcon('share'),
                     api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/index.php',
-                    array('class' => 'btn btn-default btn-sm', 'title' => get_lang('GoToCourse'))
+                    array(
+                        'class' => 'btn btn-default btn-sm',
+                        'title' => get_lang('GoToCourse'),
+                        'aria-label' => get_lang('GoToCourse')
+                    )
                 );
+
             }
 
             if ($access_link && in_array('unsubscribe', $access_link)) {
                 $my_course['unsubscribe_button'] = Display::url(
                     get_lang('Unreg') . ' ' .
                     Display::returnFontAwesomeIcon('sign-out'),
-                    api_get_path(WEB_CODE_PATH) . 'auth/courses.php?action=unsubscribe&unsubscribe=' . $courseCode . '&sec_token=' . $stok . '&category_code=' . $categoryCode,
-                    array('class' => 'btn btn-danger btn-sm', 'title' => get_lang('Unreg'))
+                    api_get_path(WEB_CODE_PATH) . 'auth/courses.php?action=unsubscribe&unsubscribe=' . $courseCode
+                    . '&sec_token=' . $stok . '&category_code=' . $categoryCode,
+                    array(
+                        'class' => 'btn btn-danger btn-sm',
+                        'title' => get_lang('Unreg'),
+                        'aria-label' => get_lang('Unreg')
+                    )
                 );
+
             }
 
             // start buycourse validation
@@ -4919,7 +4892,8 @@ class CourseManager
                     [
                         'class' => 'btn btn-default btn-sm ajax',
                         'data-title' => get_lang('Description'),
-                        'title' => get_lang('Description')
+                        'title' => get_lang('Description'),
+                        'aria-label' => get_lang('Description')
                     ]
                 );
             //}

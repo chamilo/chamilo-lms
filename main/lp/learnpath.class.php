@@ -6584,7 +6584,7 @@ class learnpath
             Display::return_icon('certificate.png', get_lang('Certificate'), [], ICON_SIZE_BIG),
         );
 
-        Display::addFlash(Display::return_message(get_lang('ClickOnTheLearnerViewToSeeYourLearningPath'), 'normal'));
+        echo Display::return_message(get_lang('ClickOnTheLearnerViewToSeeYourLearningPath'), 'normal');
         $dir = $_SESSION['oLP']->display_item_form('dir', get_lang('EnterDataNewChapter'), 'add_item');
         echo Display::tabs(
             $headers,
@@ -8778,18 +8778,21 @@ class learnpath
         $return .= get_lang('AddEditPrerequisites');
         $return .= '</legend>';
         $return .= '<form method="POST">';
-        $return .= '<table class="data_table">';
+        $return .= '<div class="table-responsive">';
+        $return .= '<table class="table table-hover">';
         $return .= '<tr>';
-        $return .= '<th height="24">' . get_lang('LearnpathPrerequisites') . '</th>';
-        $return .= '<th width="70" >' . get_lang('Minimum') . '</th>';
-        $return .= '<th width="70">' . get_lang('Maximum') . '</th>';
+        $return .= '<th>' . get_lang('LearnpathPrerequisites') . '</th>';
+        $return .= '<th width="140" >' . get_lang('Minimum') . '</th>';
+        $return .= '<th width="140">' . get_lang('Maximum') . '</th>';
         $return .= '</tr>';
 
         // Adding the none option to the prerequisites see http://www.chamilo.org/es/node/146
-        $return .= '<tr >';
-        $return .= '<td colspan="3" class="radio">';
-        $return .= '<input checked="checked" id="idNone" name="prerequisites"  style="margin-left:0px; margin-right:10px;" type="radio" />';
-        $return .= '<label for="idNone">' . get_lang('None') . '</label>';
+        $return .= '<tr>';
+        $return .= '<td colspan="3">';
+        $return .= '<div class="radio learnpath"><label for="idNone">';
+        $return .= '<input checked="checked" id="idNone" name="prerequisites" type="radio" />';
+        $return .= get_lang('None') . '</label>';
+        $return .= '</div>'; 
         $return .= '</tr>';
 
         $sql = "SELECT * FROM $tbl_lp_item
@@ -8839,22 +8842,25 @@ class learnpath
             $selectedMinScoreValue = isset($selectedMinScore[$item['id']]) ? $selectedMinScore[$item['id']]: 0;
 
             $return .= '<tr>';
-            $return .= '<td class="radio"' . (($item['item_type'] != TOOL_QUIZ && $item['item_type'] != TOOL_HOTPOTATOES) ? ' colspan="3"' : '') . '>';
-            $return .= '<input' . (in_array($prerequisiteId, array($item['id'], $item['ref'])) ? ' checked="checked" ' : '') . ($item['item_type'] == 'dir' ? ' disabled="disabled" ' : ' ') . 'id="id' . $item['id'] . '" name="prerequisites" style="margin-left:' . $item['depth'] * 10 . 'px; margin-right:10px;" type="radio" value="' . $item['id'] . '" />';
+            $return .= '<td ' . (($item['item_type'] != TOOL_QUIZ && $item['item_type'] != TOOL_HOTPOTATOES) ? ' colspan="3"' : '') . '>';
+            $return .= '<div style="margin-left:' . $item['depth'] * 20 . 'px;" class="radio learnpath">';
             $return .= '<label for="id' . $item['id'] . '">';
+            $return .= '<input' . (in_array($prerequisiteId, array($item['id'], $item['ref'])) ? ' checked="checked" ' : '') . ($item['item_type'] == 'dir' ? ' disabled="disabled" ' : ' ') . 'id="id' . $item['id'] . '" name="prerequisites"  type="radio" value="' . $item['id'] . '" />';
+            
             $icon_name = str_replace(' ', '', $item['item_type']);
 
             if (file_exists('../img/lp_' . $icon_name . '.png')) {
                 $return .= Display::return_icon('lp_' . $icon_name . '.png');
             } else {
-                if (file_exists('../img/lp_' . $icon_name . '.gif')) {
-                    $return .= Display::return_icon('lp_' . $icon_name . '.gif');
+                if (file_exists('../img/lp_' . $icon_name . '.png')) {
+                    $return .= Display::return_icon('lp_' . $icon_name . '.png');
                 } else {
-                    $return .= Display::return_icon('folder_document.gif','',array('style'=>'margin-right:5px;'));
+                    $return .= Display::return_icon('folder_document.png');
                 }
             }
 
             $return .=  $item['title'] . '</label>';
+            $return .= '</div>';
             $return .= '</td>';
 
             if ($item['item_type'] == TOOL_QUIZ) {
@@ -8867,19 +8873,19 @@ class learnpath
                 $tmp_obj_lp_item->update_in_bdd();
                 $item['max_score'] = $tmp_obj_lp_item->max_score;
 
-                $return .= '<td class="exercise">';
-                $return .= '<input size="4" maxlength="3" name="min_' . $item['id'] . '" type="number" min="0" step="any" max="'.$item['max_score'].'" value="' . $selectedMinScoreValue. '" />';
+                $return .= '<td>';
+                $return .= '<input class="form-control" size="4" maxlength="3" name="min_' . $item['id'] . '" type="number" min="0" step="any" max="'.$item['max_score'].'" value="' . $selectedMinScoreValue. '" />';
                 $return .= '</td>';
-                $return .= '<td class="exercise">';
-                $return .= '<input size="4" maxlength="3" name="max_' . $item['id'] . '" type="number" min="0" step="any" max="'.$item['max_score'].'" value="' . $selectedMaxScoreValue . '" />';
+                $return .= '<td>';
+                $return .= '<input class="form-control" size="4" maxlength="3" name="max_' . $item['id'] . '" type="number" min="0" step="any" max="'.$item['max_score'].'" value="' . $selectedMaxScoreValue . '" />';
                 $return .= '</td>';
             }
 
             if ($item['item_type'] == TOOL_HOTPOTATOES) {
-                $return .= '<td class="exercise">';
+                $return .= '<td>';
                 $return .= '<center><input size="4" maxlength="3" name="min_' . $item['id'] . '" type="number" min="0" step="any" max="'.$item['max_score'].'" value="' . $selectedMinScoreValue . '" /></center>';
                 $return .= '</td>';
-                $return .= '<td class="exercise"">';
+                $return .= '<td>';
                 $return .= '<center><input size="4" maxlength="3" name="max_' . $item['id'] . '" type="number" min="0" step="any" max="'.$item['max_score'].'"  value="'.$selectedMaxScoreValue . '" /></center>';
                 $return .= '</td>';
             }
@@ -8888,7 +8894,8 @@ class learnpath
         $return .= '<tr>';
         $return .= '</tr>';
         $return .= '</table>';
-        $return .= '<div style="padding-top:3px;">';
+        $return .= '</div>';
+        $return .= '<div class="form-group">';
         $return .= '<button class="btn btn-primary" name="submit_button" type="submit">' . get_lang('ModifyPrerequisites') . '</button>';
         $return .= '</form>';
 

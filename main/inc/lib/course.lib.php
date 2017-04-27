@@ -6345,14 +6345,15 @@ class CourseManager
      */
     public static function getAllCoursesArray()
     {
+        // Database table definitions
+        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
+        $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
+        $sessionCourseTable = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+
         //select all courses without sessions
-        $sql = "SELECT course.id id,course.title title,0 session_id FROM " .
-            Database::get_main_table(TABLE_MAIN_COURSE) . " course ORDER BY course.title ASC" ;
+        $sql = "SELECT course.id id,course.title title,0 session_id FROM $courseTable course ORDER BY course.title ASC" ;
         //select all courses inside sessions
-        $sql1 = "SELECT course.id id,course.title title,session.id session_id,session.name session_name FROM " .
-            Database::get_main_table(TABLE_MAIN_COURSE) . " course ,".Database::get_main_table(TABLE_MAIN_SESSION).
-            " session, ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE).
-            " sessioncourse WHERE course.id=sessioncourse.c_id 
+        $sql1 = "SELECT course.id id,course.title title,session.id session_id,session.name session_name FROM $courseTable course ,$sessionTable session, $sessionCourseTable sessioncourse WHERE course.id=sessioncourse.c_id 
             AND session.id=sessioncourse.session_id ORDER BY session.name ASC, course.title ASC" ;
         $data = [];
         //input rows of all courses not inside sessions in a array $data

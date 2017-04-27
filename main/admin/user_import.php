@@ -399,7 +399,7 @@ if (isset($_POST['formSent']) && $_POST['formSent'] AND
     // List user id with error.
     $users_to_insert = array();
 
-    $keyToCheck = 'Username';
+    $keyToCheck = 'UserName';
     if ($checkUniqueEmail || api_get_setting('registration', 'email') == 'true') {
         $keyToCheck = 'Email';
     }

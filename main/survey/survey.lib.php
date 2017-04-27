@@ -1733,7 +1733,8 @@ class SurveyManager
         $courseId = intval($surveyData['c_id']);
         $sessionId = intval($surveyData['session_id']);
 
-        $sql = "DELETE FROM $surveyInvitationTable WHERE session_id =$sessionId AND c_id =$courseId AND survey_code ='$surveyCode'";
+        $sql = "DELETE FROM $surveyInvitationTable 
+                WHERE session_id =$sessionId AND c_id =$courseId AND survey_code ='$surveyCode'";
         Database::query($sql);
 
         $sql = "DELETE FROM $surveyAnswerTable WHERE survey_id=$surveyId";

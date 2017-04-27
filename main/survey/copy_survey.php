@@ -56,7 +56,7 @@ if ($survey && count($courses) > 1) {
     $options = array();
     $currentCourseId = api_get_course_int_id();
     $currentSessionId = api_get_session_id();
-    $option = str_replace("&nbsp;",'', strip_tags($survey['title']));
+    $option = str_replace("&nbsp;", '', strip_tags($survey['title']));
 
     $form->addElement('text', 'survey_title', get_lang('Survey'), array('value' => $option, 'disabled' => 'disabled'));
     // All-courses-but-current select

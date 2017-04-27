@@ -269,10 +269,6 @@ class Database
      */
     public static function fetch_assoc(Statement $result)
     {
-        if ($result === false) {
-            return array();
-        }
-
         return $result->fetch(PDO::FETCH_ASSOC);
     }
 

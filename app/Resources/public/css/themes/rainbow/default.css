@@ -182,6 +182,14 @@ a:focus {
     padding-left: 10px;
     padding-right: 10px;
 }
+.big_icon img{
+    box-shadow: none;
+    border: none;
+}
+.big_icon img:hover{
+    box-shadow: none;
+    border: none;
+}
 footer #footer_right{
     text-align: right;
 }
@@ -480,8 +488,11 @@ footer #footer_right{
   padding: 8px 15px;
   margin-bottom: 21px;
   list-style: outside none none;
-  background-color: #ECF0F1;
+  background: transparent;
   font-size: 12px;
+}
+.breadcrumb a{
+    color: #6B1D82;
 }
 .panel-default{
   border-color: #ddd;
@@ -515,6 +526,40 @@ footer #footer_right{
 }
 .ribbon h4{
     color: #FFF;
+}
+/* bar progress */
+.progress{
+    background: #FFF;
+    border: 1px solid #162A83;
+    border-radius: 0;
+    text-shadow:none;
+}
+.progress-bar{
+    color: #162A83;
+}
+.progress-bar-success{
+    background-color: #96bd0d;
+}
+.page-header{
+    color: #162a83;
+    border-bottom: none;
+    font-weight: bold;
+}
+/* table ofaj */
+.table-ofaj{
+    border-top: 1px solid #96bd0d;
+    margin-top: 20px;
+}
+.table-ofaj .table-header{
+    font-size: 14px;
+    color: #162a83;
+}
+.table-ofaj .table-header th{
+    border-bottom: 2px solid #96bd0d;
+    padding-top: 20px;
+}
+.table-ofaj tbody tr td{
+    border-top: 1px solid #96bd0d;
 }
 /* Jquery UI */
 .ui-accordion .ui-accordion-icons{

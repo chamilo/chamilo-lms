@@ -540,6 +540,12 @@ footer #footer_right{
 .progress-bar-success{
     background-color: #96bd0d;
 }
+.scorm-header .progress-bar-success{
+    background-color: #772583;
+}
+.scorm-header .progress-bar{
+    color: #FFF;
+}
 .page-header{
     color: #162a83;
     border-bottom: none;

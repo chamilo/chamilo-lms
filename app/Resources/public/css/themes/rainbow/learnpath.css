@@ -1,8 +1,30 @@
 #learning_path_breadcrumb_zone .breadcrumb{
-    background-color: #ECF0F1;
+    background-color: #FFF;
+    color: #6B1D82;
+    border-bottom: 1px solid #84bd00;
+    padding: 10px 15px;
 }
 #learning_path_breadcrumb_zone .breadcrumb a{
-    color: #000;
+    color: #6B1D82;
+}
+#learning_path_breadcrumb_zone .breadcrumb a:hover{
+    color: #162A83
+}
+.lp-view-zone-container .scorm-header{
+    background-color: #84bd00;
+    border: none !important;
+    border-radius: 0 !important;
+}
+.icon-toolbar .fa{
+    background-color: #162A83;
+}
+#scorm-info hr{
+    background-color: #84bd00;
+}
+#scorm-info .title{
+    color: #162A83;
+    margin: 10px 0 20px 0;
+    font-size: 16px;
 }
 .scorm_item_level_1{
  padding: 0 2.5em 0 1.5em;   

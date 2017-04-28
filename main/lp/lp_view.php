@@ -157,6 +157,7 @@ if ($debug) {
 }
 
 $get_toc_list = $_SESSION['oLP']->get_toc();
+
 $get_teacher_buttons = $_SESSION['oLP']->get_teacher_toc_buttons();
 
 $type_quiz = false;
@@ -541,8 +542,8 @@ $template->assign('lp_author', $_SESSION['oLP']->get_author());
 $template->assign('lp_mode', $_SESSION['oLP']->mode);
 $template->assign('lp_title_scorm', $_SESSION['oLP']->name);
 $template->assign(
-    'lp_html_toc',
-    $_SESSION['oLP']->get_html_toc($get_toc_list)
+    'data',
+    $_SESSION['oLP']->getArrayToc($get_toc_list)
 );
 $template->assign('lp_id', $_SESSION['oLP']->lp_id);
 $template->assign('lp_current_item_id', $_SESSION['oLP']->get_current_item_id());

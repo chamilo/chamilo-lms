@@ -137,7 +137,10 @@ if (!empty($gradebook) && $gradebook == 'view') {
 }
 
 $interbreadcrumb[] = array("url" => "exercise.php?".api_get_cidreq(), "name" => get_lang('Exercises'));
-$interbreadcrumb[] = array("url" => "overview.php?exerciseId=".$exercise_id.'&'.api_get_cidreq(), "name" => $objExercise->name);
+$interbreadcrumb[] = array(
+    "url" => "overview.php?exerciseId=".$exercise_id.'&'.api_get_cidreq(),
+    "name" => $objExercise->selectTitle(true)
+);
 $interbreadcrumb[] = array("url" => "#", "name" => get_lang('Result'));
 
 $this_section = SECTION_COURSES;

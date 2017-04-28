@@ -296,7 +296,7 @@ $interbreadcrumb[] = array(
 );
 $interbreadcrumb[] = array(
     "url" => "admin.php?exerciseId=$exercise_id&".api_get_cidreq(),
-    "name" => $objExercise->name,
+    "name" => $objExercise->selectTitle(true),
 );
 
 $tpl = new Template(get_lang('ReportByQuestion'));

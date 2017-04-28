@@ -181,7 +181,7 @@ if ($form->validate()) {
     );
     $interbreadcrumb[] = array(
         "url" => 'admin.php?exerciseId='.$objExercise->id.'&'.api_get_cidreq(),
-        "name" => $objExercise->name,
+        "name" => $objExercise->selectTitle(true),
     );
 
     Display::display_header($nameTools, get_lang('Exercise'));

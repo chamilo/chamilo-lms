@@ -53,7 +53,7 @@ $interbreadcrumb[] = array("url" => "exercise.php", "name" => get_lang('Exercise
 if (!empty($objExercise)) {
     $interbreadcrumb[] = array(
         "url" => "admin.php?exerciseId=".$objExercise->id."&".api_get_cidreq(),
-        "name" => $objExercise->name
+        "name" => $objExercise->selectTitle(true)
     );
 }
 

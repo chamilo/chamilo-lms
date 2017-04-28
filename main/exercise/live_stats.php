@@ -26,7 +26,7 @@ $interbreadcrumb[] = array(
 );
 $interbreadcrumb[] = array(
     "url" => "admin.php?exerciseId=$exercise_id&".api_get_cidreq(),
-    "name" => $objExercise->name,
+    "name" => $objExercise->selectTitle(true),
 );
 
 //Add the JS needed to use the jqgrid

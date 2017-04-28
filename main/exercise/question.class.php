@@ -53,7 +53,8 @@ abstract class Question
         DRAGGABLE => ['Draggable.php', 'Draggable'],
         MATCHING_DRAGGABLE => ['MatchingDraggable.php', 'MatchingDraggable'],
         //MEDIA_QUESTION => array('media_question.class.php' , 'MediaQuestion')
-        ANNOTATION => ['Annotation.php', 'Annotation']
+        ANNOTATION => ['Annotation.php', 'Annotation'],
+        READING_SPEED => ['ReadingSpeed.php', 'ReadingSpeed']
     );
 
     /**

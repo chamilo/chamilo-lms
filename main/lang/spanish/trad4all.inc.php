@@ -8016,5 +8016,5 @@ $NewPasswordRequirementMaxXLength = "Máximo %s caracteres en total";
 $YouCantNotEditThisQuestionBecauseAlreadyExistAnswers = "No puede editar esta pregunta porque ya existen respuestas";
 $Avatar = "Avatar";
 $StudyCycle = "Ciclo de estudio";
-$ReadingSpeed = "Comprensión lectora";
+$ReadingComprehension = "Comprensión lectora";
 ?>

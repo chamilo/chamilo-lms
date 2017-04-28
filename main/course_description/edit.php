@@ -77,7 +77,7 @@ $form->addElement('hidden', 'id', $original_id);
 $form->addElement('hidden', 'description_type', $description_type);
 $form->addElement('hidden', 'sec_token', $token);
 
-if (api_get_configuration_value('save_titles_like_html')) {
+if (api_get_configuration_value('save_titles_as_html')) {
     $form->addHtmlEditor(
         'title',
         get_lang('Title'),

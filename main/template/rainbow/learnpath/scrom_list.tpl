@@ -1,8 +1,8 @@
-{% if data is not empty %}
+{% if data_list is not empty %}
 <div id="learning_path_toc" class="scorm-list">
     <div class="scorm-body">
         <div id="inner_lp_toc" class="inner_lp_toc scrollbar-light">
-            {% for item in data %}
+            {% for item in data_list %}
                 <div id="toc_{{ item.id }}" class="{{ item.class }}">
                     {% if item.type == 'dir' %}
                         <div class="section {{ item.css_level }}" title="{{ item.description }}">
@@ -22,3 +22,4 @@
     </div>
 </div>
 {% endif %}
+{{ accorden_toc }}

@@ -16,7 +16,7 @@ class Session implements \ArrayAccess
     /**
      * @param string $variable
      * @param null $default
-     * @return null
+     * @return mixed
      */
     public static function read($variable, $default = null)
     {
@@ -50,7 +50,7 @@ class Session implements \ArrayAccess
      * Returns true if session has variable set up, false otherwise.
      *
      * @param string $variable
-     * @return mixed value
+     * @return bool
      */
     public static function has($variable)
     {
@@ -67,6 +67,9 @@ class Session implements \ArrayAccess
         $_SESSION = array();
     }
 
+    /**
+     * Destroy session
+     */
     public static function destroy()
     {
         session_unset();
@@ -87,7 +90,7 @@ class Session implements \ArrayAccess
      * If offset does not exists returns null. Do not trigger a warning.
      *
      * @param string $offset
-     * @return any
+     * @return mixed
      */
     public function offsetGet($offset)
     {
@@ -114,7 +117,7 @@ class Session implements \ArrayAccess
 
     /**
      * @param string $name
-     * @return mixed
+     * @return bool
      */
     public function __isset($name)
     {
@@ -143,5 +146,4 @@ class Session implements \ArrayAccess
     {
         self::write($name, $value);
     }
-
 }

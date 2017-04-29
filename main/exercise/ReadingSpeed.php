@@ -142,7 +142,6 @@ class ReadingSpeed extends UniqueAnswer
     public function processText($text)
     {
         // Refresh is set to 5s, but speed is in words per minute
-        error_log($this->getLevel().' '.$this->speeds[$this->level]);
         $wordsPerSecond = $this->speeds[$this->level] / 60;
         $this->expectedWordsPerRefresh = intval($wordsPerSecond * $this->refreshTime);
 

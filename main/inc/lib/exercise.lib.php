@@ -271,14 +271,14 @@ class ExerciseLib
                 }
             }
 
-            if ($answerType == READING_SPEED) {
+            if ($answerType == READING_COMPREHENSION) {
                 $objQuestionTmp->processText(
                     $objAnswerTmp->selectAnswer(1)
                 );
             }
 
             for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
-                if ($answerType == READING_SPEED && $answerId === 1) {
+                if ($answerType == READING_COMPREHENSION && $answerId === 1) {
                     $answerId++;
                 }
 
@@ -295,7 +295,7 @@ class ExerciseLib
                         //no break
                     case UNIQUE_ANSWER_IMAGE:
                         //no break
-                    case READING_SPEED:
+                    case READING_COMPREHENSION:
                         $input_id = 'choice-' . $questionId . '-' . $answerId;
 
                         if (isset($user_choice[0]['answer']) && $user_choice[0]['answer'] == $numAnswer) {

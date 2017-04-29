@@ -4,16 +4,16 @@
 use ChamiloSession as Session;
 
 /**
- * Class ReadingSpeed
+ * Class ReadingComprehension
  *
- * This class allows to instantiate an object of type READING_SPEED
+ * This class allows to instantiate an object of type READING_COMPREHENSION
  * extending the class question
  *
  * @package chamilo.exercise
  **/
-class ReadingSpeed extends UniqueAnswer
+class ReadingComprehension extends UniqueAnswer
 {
-    public static $typePicture = 'reading-speed.png';
+    public static $typePicture = 'reading-comprehension.png';
     public static $explanationLangVar = 'ReadingComprehension';
 
     /**
@@ -52,7 +52,7 @@ class ReadingSpeed extends UniqueAnswer
     public function __construct()
     {
         parent::__construct();
-        $this->type = READING_SPEED;
+        $this->type = READING_COMPREHENSION;
         $this->isContent = $this->getIsContent();
     }
 
@@ -129,7 +129,7 @@ class ReadingSpeed extends UniqueAnswer
     {
         $view = new Template('', false, false, false, true, false, false);
 
-        $template = $view->get_template('exercise/reading_speed.tpl');
+        $template = $view->get_template('exercise/reading_comprehension.tpl');
 
         $view->assign('id', $this->id);
         $view->assign('text', $text);

@@ -1,8 +1,4 @@
 <div class="question-{{ d }}">
-    <div class="btn-toolbar">
-        {{ words_count }}
-    </div>
-
     <div id="question-{{ id }}-text" class="center-block question-text">
         {{ text }}
     </div>
@@ -16,6 +12,9 @@
     }
     .text-highlight.active {
         color: rgba(0, 0, 0, 1);
+    }
+    .text-highlight.border {
+        color: #888;
     }
 </style>
 
@@ -38,11 +37,22 @@
 
             $(current).addClass('active');
 
+            if (index > 0) {
+                $('#question-{{ id }}-text .text-highlight').removeClass('border');
+                var previousWord = $('#question-{{ id }}-text .text-highlight').get(index-1);
+                $(previousWord).addClass('border');
+            }
+            if (index < total) {
+                $('#question-{{ id+1 }}-text .text-highlight').removeClass('border');
+                var nextWord = $('#question-{{ id }}-text .text-highlight').get(index+1);
+                $(nextWord).addClass('border');
+            }
+
             index++;
         }
 
         updateView();
 
-        var timeOuId = window.setInterval(updateView, 6 * 1000);
+        var timeOuId = window.setInterval(updateView, 5 * 1000);
     });
 </script>

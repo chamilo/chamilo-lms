@@ -1,5 +1,5 @@
-<div class="question-{{ d }}">
-    <div id="question-{{ id }}-text" class="center-block question-text">
+<div class="question-{{ id }}">
+    <div id="question-{{ id }}-text" class="center-block question-text" onselectstart="return false">
         {{ text }}
     </div>
 </div>
@@ -44,6 +44,7 @@
                 window.clearInterval(timeOuId);
                 $('.radio').removeClass('hide-reading-answers');
                 $('.question_title').removeClass('hide-reading-answers');
+                $('.text-highlight').removeClass('border');
                 return;
             }
 

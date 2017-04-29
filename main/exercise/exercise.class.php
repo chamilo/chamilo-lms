@@ -3261,6 +3261,7 @@ class Exercise
                 case UNIQUE_ANSWER:
                 case UNIQUE_ANSWER_IMAGE:
                 case UNIQUE_ANSWER_NO_OPTION:
+                case READING_COMPREHENSION:
                     if ($from_database) {
                         $sql = "SELECT answer FROM $TBL_TRACK_ATTEMPT
                                 WHERE

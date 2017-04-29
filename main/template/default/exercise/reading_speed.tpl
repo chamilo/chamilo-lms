@@ -9,11 +9,22 @@
         color: #FFF;
         text-align: justify;
     }
+    .text-highlight {
+        color:#eee;  /* Old browsers don't go transparent. */
+        text-shadow:
+                0 0 3px #ddd,   /* Many shadows blur out the area around the text */
+                5px 0 5px #ddd,
+                0 3px 3px #ddd,
+                -6px 0 6px #ddd,
+                0 -3px 3px #ddd;
+    }
     .text-highlight.active {
         color: rgba(0, 0, 0, 1);
+        text-shadow: none;
     }
     .text-highlight.border {
         color: #bbb;
+        text-shadow: none;
     }
 </style>
 

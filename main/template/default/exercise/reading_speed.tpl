@@ -13,7 +13,7 @@
         color: rgba(0, 0, 0, 1);
     }
     .text-highlight.border {
-        color: #888;
+        color: #bbb;
     }
 </style>
 

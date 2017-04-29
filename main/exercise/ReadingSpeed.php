@@ -44,7 +44,7 @@ class ReadingSpeed extends UniqueAnswer
      * Refresh delay in seconds
      * @var int
      */
-    public $refreshTime = 5;
+    public $refreshTime = 3;
 
     /**
      * Constructor
@@ -54,10 +54,6 @@ class ReadingSpeed extends UniqueAnswer
         parent::__construct();
         $this->type = READING_SPEED;
         $this->isContent = $this->getIsContent();
-        // Refresh is set to 5s, but speed is in words per minute
-        $wordsPerSecond = $this->speeds[$this->level] / 60;
-        $this->expectedWordsPerRefresh = intval($wordsPerSecond * $this->refreshTime);
-
     }
 
     public function createAnswersForm($form)
@@ -145,9 +141,16 @@ class ReadingSpeed extends UniqueAnswer
 
     public function processText($text)
     {
-        //recalulate the expected words count
-        $this->expectedCount = $this->speeds[$this->level];
+        // Refresh is set to 5s, but speed is in words per minute
+        error_log($this->getLevel().' '.$this->speeds[$this->level]);
+        $wordsPerSecond = $this->speeds[$this->level] / 60;
+        $this->expectedWordsPerRefresh = intval($wordsPerSecond * $this->refreshTime);
 
+        if (empty($text)) {
+            // We have an issue here... how do we treat this case?
+            // For now, let's define a default case
+            $text = get_lang('NoExercise');
+        }
         $words = str_word_count($text, 2, '0..9');
         $indexes = array_keys($words);
 

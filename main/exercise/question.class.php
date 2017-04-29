@@ -267,7 +267,7 @@ abstract class Question
      * @author Nicolas Raynaud
      * @return integer - level of the question, 0 by default.
      */
-    public function selectLevel()
+    public function getLevel()
     {
         return $this->level;
     }

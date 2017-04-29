@@ -57,6 +57,7 @@ class ReadingSpeed extends UniqueAnswer
         // Refresh is set to 5s, but speed is in words per minute
         $wordsPerSecond = $this->speeds[$this->level] / 60;
         $this->expectedWordsPerRefresh = intval($wordsPerSecond * $this->refreshTime);
+
     }
 
     public function createAnswersForm($form)
@@ -144,6 +145,9 @@ class ReadingSpeed extends UniqueAnswer
 
     public function processText($text)
     {
+        //recalulate the expected words count
+        $this->expectedCount = self::$speeds[$this->level];
+
         $words = str_word_count($text, 2, '0..9');
         $indexes = array_keys($words);
 

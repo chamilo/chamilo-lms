@@ -4,20 +4,17 @@
 use ChamiloSession as Session;
 
 /**
- * Class UniqueAnswer
+ * Class ReadingSpeed
  *
- * This class allows to instantiate an object of type UNIQUE_ANSWER
- * (MULTIPLE CHOICE, UNIQUE ANSWER),
+ * This class allows to instantiate an object of type READING_SPEED
  * extending the class question
  *
- * @author Eric Marguin
- * @author Julio Montoya
  * @package chamilo.exercise
  **/
 class ReadingSpeed extends UniqueAnswer
 {
     public static $typePicture = 'reading-speed.png';
-    public static $explanationLangVar = 'ReadingSpeed';
+    public static $explanationLangVar = 'ReadingComprehension';
 
     /**
      * Defines the different speeds of scrolling for the reading window,

@@ -146,7 +146,7 @@ class ReadingSpeed extends UniqueAnswer
     public function processText($text)
     {
         //recalulate the expected words count
-        $this->expectedCount = self::$speeds[$this->level];
+        $this->expectedCount = $this->speeds[$this->level];
 
         $words = str_word_count($text, 2, '0..9');
         $indexes = array_keys($words);

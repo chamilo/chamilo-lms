@@ -22,7 +22,7 @@ class ReadingSpeed extends UniqueAnswer
      * window will progress from top to bottom in 6 minutes
      * @var array $speeds
      */
-    public static $speeds = [
+    public $speeds = [
         1 => 50,
         2 => 100,
         3 => 175,
@@ -35,7 +35,16 @@ class ReadingSpeed extends UniqueAnswer
      * @var int $wordsCount
      */
     private $wordsCount = 0;
-    public $expectedCount = 0;
+    /**
+     * Number of words expected to show per refresh
+     * @var int
+     */
+    public $expectedWordsPerRefresh = 0;
+    /**
+     * Refresh delay in seconds
+     * @var int
+     */
+    public $refreshTime = 5;
 
     /**
      * Constructor
@@ -45,25 +54,9 @@ class ReadingSpeed extends UniqueAnswer
         parent::__construct();
         $this->type = READING_SPEED;
         $this->isContent = $this->getIsContent();
-        $this->expectedCount = self::$speeds[$this->level];
-    }
-
-    /**
-     * Returns the speed, in pixels per second, at which the moving
-     * window should scroll automatically
-     * @param int $textHeight The height of the text area in pixels
-     * @return int The number of pixels per second (speed) to scroll down
-     */
-    private function calculateSpeed($textHeight)
-    {
-        if (empty($this->wordsCount) or empty($textHeight)) {
-            return 0;
-        }
-        $wordsPerMinute = $this->expectedCount;
-        if ($wordsPerMinute == 0) {
-            $wordsPerMinute = 1;
-        }
-        return $this->wordsCount/$wordsPerMinute;
+        // Refresh is set to 5s, but speed is in words per minute
+        $wordsPerSecond = $this->speeds[$this->level] / 60;
+        $this->expectedWordsPerRefresh = intval($wordsPerSecond * $this->refreshTime);
     }
 
     public function createAnswersForm($form)
@@ -145,6 +138,7 @@ class ReadingSpeed extends UniqueAnswer
         $view->assign('text', $text);
         $view->assign('words_count', $wordsCount);
         $view->assign('turns', $turns);
+        $view->assign('refreshTime', $this->refreshTime);
         $view->display($template);
     }
 
@@ -157,7 +151,7 @@ class ReadingSpeed extends UniqueAnswer
         $tagStart = $tagEnd.'<span class="text-highlight">';
 
         $turns = ceil(
-            count($words) / $this->expectedCount
+            count($words) / $this->expectedWordsPerRefresh
         );
 
         $firstIndex = $indexes[0];
@@ -165,10 +159,12 @@ class ReadingSpeed extends UniqueAnswer
         for ($i = 1; $i <= $turns; $i++) {
             $text = substr_replace($text, $tagStart, $firstIndex, 0);
 
-            if ($i * $this->expectedCount <= count($words)) {
-                $nextFirstIndex = $indexes[$i * $this->expectedCount];
-
-                $firstIndex = $nextFirstIndex + (strlen($tagStart) * $i);
+            if ($i * $this->expectedWordsPerRefresh <= count($words)) {
+                $newIndex = $i * $this->expectedWordsPerRefresh;
+                if (isset($indexes[$newIndex])) {
+                    $nextFirstIndex = $indexes[$newIndex];
+                    $firstIndex = $nextFirstIndex + (strlen($tagStart) * $i);
+                }
             }
         }
 

@@ -8,7 +8,6 @@
     .question-text {
         color: #FFF;
         text-align: justify;
-        width: 800px;
     }
     .text-highlight.active {
         color: rgba(0, 0, 0, 1);
@@ -53,6 +52,6 @@
 
         updateView();
 
-        var timeOuId = window.setInterval(updateView, 5 * 1000);
+        var timeOuId = window.setInterval(updateView, {{ refreshTime }} * 1000);
     });
 </script>

@@ -7949,4 +7949,6 @@ $YouCantNotEditThisQuestionBecauseAlreadyExistAnswers = "L'édition de cette que
 $Avatar = "Avatar";
 $StudyCycle = "Semestre";
 $ReadingComprehension = "Compréhension à la lecture";
+$ReadingQuestionCongratsSpeedXReachedForYWords = "Désolé, il semblerait que la vitesse de %s mots/minute soit trop rapide pour vous pour l'instant, selon cette tentative sur un texte de %s mots.";
+$ReadingQuestionCongratsSpeedXNotReachedForYWords = "Félicitacions, vous avez atteint la vitesse de %s mots/minute en comprenant correctement un texte de %s mots.";
 ?>

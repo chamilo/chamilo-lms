@@ -334,10 +334,10 @@ function return_teacher($course)
 
         if ($length > 2) {
              $html .= '<a href="'.$value['url'].'" class="ajax" data-title="'.$name.'">
-                    <img src="'.$value['avatar'].'" alt="'.$name.' ' .get_lang('Profile').'"/></a>';
+                    <img src="'.$value['avatar'].'" alt="'.get_lang('UserPicture').'"/></a>';
         } else {
             $html .= '<a href="'.$value['url'].'" class="ajax" data-title="'.$name.'">
-                    <img src="'.$value['avatar'].'" alt="'.$name.' ' .get_lang('Profile').'"/></a>';
+                    <img src="'.$value['avatar'].'" alt="'.get_lang('UserPicture').'"/></a>';
             $html .= '<div class="teachers-details"><h5>
                     <a href="'.$value['url'].'" class="ajax" data-title="'.$name.'">'
                     . $name . '</a></h5><p>'. get_lang('Teacher').'</p></div>';

@@ -113,4 +113,13 @@ class ReadingComprehension extends UniqueAnswer
 
         $this->displayReading($this->wordsCount, $turns, $text);
     }
+    /**
+     * Returns total count of words of the text to read
+     * @return int
+     */
+    public function getWordsCount() {
+        $words = str_word_count($this->selectDescription(), 2, '0..9');
+        $this->wordsCount = count($words);
+        return $this->wordsCount;
+    }
 }

@@ -1913,11 +1913,11 @@ abstract class Question
             $header .= Display::div($this->description, array('class' => 'question_description'));
         } else {
             if ($score['pass'] == true) {
-                $message = Display::div(get_lang('ReadingQuestionCongratsSpeedXReachedForYWords'), $this->speeds[$this->level], $this->wordsCount);
+                $message = Display::div(sprintf(get_lang('ReadingQuestionCongratsSpeedXReachedForYWords'), $this->speeds[$this->level], $this->getWordsCount()));
             } else {
-                $message = Display::div(get_lang('ReadingQuestionCongratsSpeedXNotReachedForYWords'), $this->speeds[$this->level], $this->wordsCount);
+                $message = Display::div(sprintf(get_lang('ReadingQuestionCongratsSpeedXNotReachedForYWords'), $this->speeds[$this->level], $this->getWordsCount()));
             }
-            $header .= $message;
+            $header .= $message.'<br />';
         }
 
         return $header;

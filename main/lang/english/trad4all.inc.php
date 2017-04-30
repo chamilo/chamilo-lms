@@ -8002,6 +8002,6 @@ $YouCantNotEditThisQuestionBecauseAlreadyExistAnswers = "You can't edit this que
 $Avatar = "Avatar";
 $StudyCycle = "Semester";
 $ReadingComprehension = "Reading comprehension";
-$ReadingQuestionCongratsSpeedXReachedForYWords = "Sorry, it seems like a speed of %s words/minute was too fast for this text of %s words.";
-$ReadingQuestionCongratsSpeedXNotReachedForYWords = "Congratulations, you have reached and correctly understood, at a speed of %s words per minute, a text of a total %s words.";
+$ReadingQuestionCongratsSpeedXNotReachedForYWords = "Sorry, it seems like a speed of %s words/minute was too fast for this text of %s words.";
+$ReadingQuestionCongratsSpeedXReachedForYWords = "Congratulations, you have reached and correctly understood, at a speed of %s words per minute, a text of a total %s words.";
 ?>

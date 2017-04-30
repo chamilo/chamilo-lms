@@ -714,7 +714,7 @@ If you have issues with files taking a long time to download, make sure you reco
 	RewriteEngine On
 	RewriteCond %{QUERY_STRING} ^id=(.*)$
 	RewriteRule ^certificates/$ certificates/index.php?id=%1 [L]
-	RewriteRule ^courses/([^/]+)/$ main/course_home/course_home.php?cDir=$1 [QSA,L]
+	RewriteRule ^courses/([^/]+)/?$ main/course_home/course_home.php?cDir=$1 [QSA,L]
 	RewriteRule ^courses/([^/]+)/index.php$ main/course_home/course_home.php?cDir=$1 [QSA,L]
 	RewriteRule ^courses/([^/]+)/scorm/(.*)$ main/document/download_scorm.php?doc_url=/$2&cDir=$1 [QSA,L]
 	RewriteRule ^courses/([^/]+)/document/certificates/(.*)$ app/courses/$1/document/certificates/$2 [QSA,L]
@@ -732,7 +732,7 @@ If you have issues with files taking a long time to download, make sure you reco
     RewriteRule ^main/newscorm/(.*)$ main/lp/$1 [QSA,L]
 	RewriteRule ^main/upload/users/(.*)/(.*)/my_files/(.*)$ app/upload/users/$1/$2/my_files/$3 [QSA,L]
 	RewriteRule ^main/admin/$ main/admin/index.php [QSA,L]
-    RewriteRule ^service/(\d+)$ plugin/buycourses/src/service_information.php?service_id=$1 [L];
+    RewriteRule ^service/(\d+)$ plugin/buycourses/src/service_information.php?service_id=$1 [L]
 	RewriteRule ^([^/.]+)/?$ user.php?$1 [L]
     RewriteRule ^(tests|.git) - [F,L,NC]
   &lt;/Directory&gt;
@@ -760,14 +760,14 @@ If you have issues with files taking a long time to download, make sure you reco
     rewrite ^/courses/([^/]+)/(.*)$ /app/courses/$1/$2 last;
     rewrite ^/session/([^/]+)/about/?$ /main/session/about.php?session_id=$1 last;
     rewrite ^/badge/(\d+) /main/badge/issued.php?issue=$1 last;
-    rewrite ^/skill/(\d+)/user/(\d+) /main/badge/issued_all.php?skill=$1&user=$2 last;
-    rewrite ^/badge/(\d+)/user/(\d+) /main/badge/issued_all.php?skill=$1&user=$2 last;
+    rewrite ^/skill/(\d+)/user/(\d+)$ /main/badge/issued_all.php?skill=$1&user=$2 last;
+    rewrite ^/badge/(\d+)/user/(\d+)$ /main/badge/issued_all.php?skill=$1&user=$2 last;
     rewrite ^/main/exercice/(.*)$ /main/exercise/$1 last;
     rewrite ^/main/newscorm/(.*)$ /main/lp/$1 last;
     rewrite ^/service/(\d+)$ /plugin/buycourses/src/service_information.php?service_id=$1 last;
-    rewrite ^/main/upload/users/(.*)/(.*)/my_files/(.*)$ /app/upload/users/$1/$2/my_files/$3 last;
+    rewrite "^/main/upload/users/(.*)/(.*)/my_files/(.*)$" /app/upload/users/$1/$2/my_files/$3 last;
 
-    try_files $uri /index.php;
+    try_files $uri /index.php$is_args$args;
     break;
   }
 
@@ -781,8 +781,7 @@ If you have issues with files taking a long time to download, make sure you reco
 
   location ~ \.php$ {
     client_max_body_size 20M;
-    try_files $uri /index.php$is_args$args @rewrite;
-
+    try_files $uri @rewrite;
 
     fastcgi_pass unix:/var/run/php5-fpm.sock;
     fastcgi_split_path_info ^(.+\.php)(/.*)$;

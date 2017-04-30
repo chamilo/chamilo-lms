@@ -4205,7 +4205,8 @@ class Exercise
                                     UNIQUE_ANSWER_NO_OPTION,
                                     MULTIPLE_ANSWER,
                                     MULTIPLE_ANSWER_COMBINATION,
-                                    GLOBAL_MULTIPLE_ANSWER
+                                    GLOBAL_MULTIPLE_ANSWER,
+                                    READING_COMPREHENSION,
                                 )
                             )
                         ) {

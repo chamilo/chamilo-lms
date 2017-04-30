@@ -34,7 +34,7 @@ class ReadingComprehension extends UniqueAnswer
      * text to read)
      * @var int $wordsCount
      */
-    private $wordsCount = 0;
+    public $wordsCount = 0;
     /**
      * Number of words expected to show per refresh
      * @var int
@@ -86,9 +86,10 @@ class ReadingComprehension extends UniqueAnswer
 
         $tagEnd = '</span>';
         $tagStart = $tagEnd.'<span class="text-highlight blur">';
+        $this->wordsCount = count($words);
 
         $turns = ceil(
-            count($words) / $this->expectedWordsPerRefresh
+            $this->wordsCount / $this->expectedWordsPerRefresh
         );
 
         $firstIndex = $indexes[0];
@@ -110,6 +111,6 @@ class ReadingComprehension extends UniqueAnswer
         $text = substr_replace($text, '', $pos, strlen($tagEnd));
         $text .= $tagEnd;
 
-        $this->displayReading(count($words), $turns, $text);
+        $this->displayReading($this->wordsCount, $turns, $text);
     }
 }

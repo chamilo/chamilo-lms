@@ -1869,6 +1869,7 @@ abstract class Question
      * @param string $feedback_type
      * @param int $counter
      * @param float $score
+     * @return string HTML string with the header of the question (before the answers table)
      */
     function return_header($feedback_type = null, $counter = null, $score = null)
     {
@@ -1907,7 +1908,17 @@ abstract class Question
             "<div class=\"rib rib-$class\"><h3>$score_label</h3></div> <h4>{$score['result']}</h4>",
             array('class' => 'ribbon')
         );
-        $header .= Display::div($this->description, array('class' => 'question_description'));
+        if ($this->type != READING_COMPREHENSION) {
+            // Do not show the description (the text to read) if the question is of type READING_COMPREHENSION
+            $header .= Display::div($this->description, array('class' => 'question_description'));
+        } else {
+            if ($score['pass'] == true) {
+                $message = Display::div(get_lang('ReadingQuestionCongratsSpeedXReachedForYWords'), $this->speeds[$this->level], $this->wordsCount);
+            } else {
+                $message = Display::div(get_lang('ReadingQuestionCongratsSpeedXNotReachedForYWords'), $this->speeds[$this->level], $this->wordsCount);
+            }
+            $header .= $message;
+        }
 
         return $header;
     }

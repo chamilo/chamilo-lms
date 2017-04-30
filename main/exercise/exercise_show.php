@@ -396,6 +396,8 @@ foreach ($questionList as $questionId) {
             //no break
         case DRAGGABLE:
             //no break
+        case READING_COMPREHENSION:
+            //no break
         case MATCHING_DRAGGABLE:
             $question_result = $objExercise->manage_answer(
                 $id,

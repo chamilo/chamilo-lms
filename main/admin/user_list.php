@@ -816,7 +816,10 @@ if (!empty($action)) {
 
 // Create a search-box
 $form = new FormValidator('search_simple', 'get', null, null, null, 'inline');
-$form->addText('keyword', get_lang('Search'), false);
+$form->addText('keyword', get_lang('Search'), false,
+array(
+    'aria-label' => get_lang("SearchUsers")
+));
 $form->addButtonSearch(get_lang('Search'));
 
 $searchAdvanced = '

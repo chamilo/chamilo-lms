@@ -776,7 +776,7 @@ If you have issues with files taking a long time to download, make sure you reco
   }
 
   location /main {
-    rewrite ^/main/admin/$ /main/admin/index.php last;
+    rewrite ^/main/admin/?$ /main/admin/index.php last;
   }
 
   location ~ \.php$ {

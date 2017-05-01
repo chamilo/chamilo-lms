@@ -895,7 +895,9 @@ class ExtraField extends Model
                             'text',
                             'extra_'.$field_details['variable'],
                             $field_details['display_text'],
-                            array()
+                            array(
+                                'id' => 'extra_'.$field_details['variable']
+                            )
                         );
                         $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
                         $form->applyFilter('extra_'.$field_details['variable'], 'trim');
@@ -909,7 +911,7 @@ class ExtraField extends Model
                             $field_details['display_text'],
                             false,
                             false,
-                            array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130')
+                            array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130', 'id' => 'extra_'.$field_details['variable'])
                         );
                         $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
                         $form->applyFilter('extra_'.$field_details['variable'], 'trim');

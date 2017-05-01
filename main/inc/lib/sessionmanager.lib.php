@@ -7131,7 +7131,7 @@ class SessionManager
             'name',
             get_lang('SessionName'),
             true,
-            ['maxlength' => 150]
+            ['maxlength' => 150, 'id' => 'name']
         );
         $form->addRule('name', get_lang('SessionNameAlreadyExists'), 'callback', 'check_session_name');
 

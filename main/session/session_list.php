@@ -327,7 +327,9 @@ if (api_is_platform_admin()) {
         [],
         FormValidator::LAYOUT_INLINE
     );
-    $form->addElement('text', 'keyword');
+    $form->addElement('text', 'keyword', null, array(
+        'aria-label' => get_lang('Search')
+    ));
     $form->addButtonSearch(get_lang('Search'));
     $form->display();
     echo '</div>';

@@ -1327,7 +1327,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
                             get_lang($row['comment']),
                             get_lang('MB')
                         ),
-                        array('maxlength' => '8')
+                        array('maxlength' => '8', 'id' => $row['variable'])
                     );
                     $form->applyFilter($row['variable'], 'html_filter');
                     $default_values[$row['variable']] = round($row['selected_value']/1024/1024, 1);
@@ -1339,7 +1339,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
                             get_lang($row['title']),
                             get_lang($row['comment']),
                         ),
-                        array('maxlength' => '5')
+                        array('maxlength' => '5', 'id' => $row['variable'])
                     );
                     $form->applyFilter($row['variable'], 'html_filter');
                     $default_values[$row['variable']] = $row['selected_value'];
@@ -1349,6 +1349,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
                     continue;
                 } else {
                     $hideme['class'] = 'col-md-4';
+                    $hideme['id'] = $row['variable'];
                     $form->addElement(
                         'text',
                         $row['variable'],

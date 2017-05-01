@@ -1370,7 +1370,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
                     if (file_exists($file)) {
                         $value = file_get_contents($file);
                     }
-                    $form->addElement('textarea', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])) , array('rows'=>'10'), $hideme);
+                    $form->addElement('textarea', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])) , array('rows'=>'10', 'id' => $row['variable']), $hideme);
                     $default_values[$row['variable']] = $value;
                 } elseif ($row['variable'] == 'footer_extra_content') {
                     $file = api_get_home_path().'footer_extra_content.txt';
@@ -1378,10 +1378,10 @@ function generateSettingsForm($settings, $settings_by_access_list)
                     if (file_exists($file)) {
                         $value = file_get_contents($file);
                     }
-                    $form->addElement('textarea', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])) , array('rows'=>'10'), $hideme);
+                    $form->addElement('textarea', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])) , array('rows'=>'10', 'id' => $row['variable']), $hideme);
                     $default_values[$row['variable']] = $value;
                 } else {
-                    $form->addElement('textarea', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])) , array('rows'=>'10'), $hideme);
+                    $form->addElement('textarea', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])) , array('rows'=>'10', 'id' => $row['variable']), $hideme);
                     $default_values[$row['variable']] = $row['selected_value'];
                 }
                 break;

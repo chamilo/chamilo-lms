@@ -1,29 +1,52 @@
-<div class="question-{{ id }}">
-    <div id="question-{{ id }}-text" class="center-block question-text" onselectstart="return false">
+<div id="question-{{ id }}" class="question-reading-comprehension-container">
+    <div class="question-reading-comprehension-overlay"></div>
+    <div id="question-{{ id }}-text" class="center-block question-reading-comprehension-text" onselectstart="return false">
         {{ text }}
     </div>
 </div>
 
 <style>
-    .question-text {
-        color: #FFF;
+    .question-reading-comprehension-container {
+        position: relative;
+    }
+    .question-reading-comprehension-container .question-reading-comprehension-overlay {
+        bottom: 0;
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+    .question-reading-comprehension-text {
         text-align: justify;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
     }
-    .text-highlight.blur {
-        color:#eee;  /* Old browsers don't go transparent. */
-        text-shadow:
-                0 0 3px #ddd,   /* Many shadows blur out the area around the text */
-                5px 0 5px #ddd,
-                0 3px 3px #ddd,
-                -6px 0 6px #ddd,
-                0 -3px 3px #ddd;
+    .question-reading-comprehension-text .text-highlight {
+        color: transparent;
+        -webkit-text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+        -khtml-text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+        -moz-text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+        -ms-text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+        text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
     }
-    .text-highlight.active {
-        color: rgba(0, 0, 0, 1);
+    .question-reading-comprehension-text .text-highlight.active {
+        color: #000;
+        -webkit-text-shadow: none;
+        -khtml-text-shadow: none;
+        -moz-text-shadow: none;
+        -ms-text-shadow: none;
         text-shadow: none;
     }
-    .text-highlight.border {
+    .question-reading-comprehension-text .text-highlight.border {
         color: #bbb;
+        -webkit-text-shadow: none;
+        -khtml-text-shadow: none;
+        -moz-text-shadow: none;
+        -ms-text-shadow: none;
         text-shadow: none;
     }
     .radio.hide-reading-answers, .question_title.hide-reading-answers {

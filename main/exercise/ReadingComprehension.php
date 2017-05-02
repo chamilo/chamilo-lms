@@ -85,7 +85,7 @@ class ReadingComprehension extends UniqueAnswer
         $indexes = array_keys($words);
 
         $tagEnd = '</span>';
-        $tagStart = $tagEnd.'<span class="text-highlight blur">';
+        $tagStart = $tagEnd.'<span class="text-highlight">';
         $this->wordsCount = count($words);
 
         $turns = ceil(

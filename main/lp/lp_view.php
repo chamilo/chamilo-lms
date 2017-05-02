@@ -166,7 +166,6 @@ foreach ($get_toc_list as $toc) {
         $type_quiz = true;
     }
 }
-
 if (!isset($src)) {
     $src = null;
     switch ($lpType) {
@@ -546,9 +545,9 @@ $template->assign('lp_id', $_SESSION['oLP']->lp_id);
 $template->assign('lp_current_item_id', $_SESSION['oLP']->get_current_item_id());
 
 if (api_get_configuration_value('new_scorm') === 1) {
-   $template->assign('data_accorden',$_SESSION['oLP']->getAccordenToc($get_toc_list));
+   $template->assign('data_panel',$_SESSION['oLP']->getParentToc($get_toc_list));
 } else {
-    $template->assign('data_list',$_SESSION['oLP']->getListArrayToc($get_toc_list));
+   $template->assign('data_list',$_SESSION['oLP']->getListArrayToc($get_toc_list));
 }
 
 $view = $template->get_template('learnpath/view.tpl');

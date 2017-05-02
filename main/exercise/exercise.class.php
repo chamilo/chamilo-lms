@@ -4505,11 +4505,18 @@ class Exercise
 
                     switch ($answerType) {
                         case UNIQUE_ANSWER:
+                            //no break
                         case UNIQUE_ANSWER_IMAGE:
+                            //no break
                         case UNIQUE_ANSWER_NO_OPTION:
+                            //no break
                         case MULTIPLE_ANSWER:
+                            //no break
                         case GLOBAL_MULTIPLE_ANSWER :
+                            //no break
                         case MULTIPLE_ANSWER_COMBINATION:
+                            //no break
+                        case READING_COMPREHENSION:
                             if ($answerId == 1) {
                                 ExerciseShowFunctions::display_unique_or_multiple_answer(
                                     $feedback_type,

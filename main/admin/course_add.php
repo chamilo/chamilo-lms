@@ -42,10 +42,13 @@ $form = new FormValidator('update_course');
 $form->addElement('header', $tool_name);
 
 // Title
-$form->addText('title', get_lang('Title'), true,
-array(
-    'id' => 'title'
-));
+$form->addText(
+    'title',
+    get_lang('Title'),
+    true,
+    array(
+        'id' => 'title'
+    ));
 $form->applyFilter('title', 'html_filter');
 $form->applyFilter('title', 'trim');
 
@@ -96,12 +99,22 @@ $form->addElement(
 );
 
 // Course department
-$form->addText('department_name', get_lang('CourseDepartment'), false, array('size' => '60', 'id' => 'department_name'));
+$form->addText(
+    'department_name',
+    get_lang('CourseDepartment'),
+    false,
+    array('size' => '60', 'id' => 'department_name')
+);
 $form->applyFilter('department_name', 'html_filter');
 $form->applyFilter('department_name', 'trim');
 
 // Department URL
-$form->addText('department_url', get_lang('CourseDepartmentURL'), false, array('size' => '60', 'id' => 'department_url'));
+$form->addText(
+    'department_url',
+    get_lang('CourseDepartmentURL'),
+    false,
+    array('size' => '60', 'id' => 'department_url')
+);
 $form->applyFilter('department_url', 'html_filter');
 
 // Course language.

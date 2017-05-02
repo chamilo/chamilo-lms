@@ -201,7 +201,10 @@ if (api_is_platform_admin()) {
 
     $search_form = ' <form method="get" action="settings.php" class="form-inline">
             <div class="form-group">
-                <input class="form-control" type="text" name="search_field" value="" aria-label="'.get_lang('Search').'" >
+                <input class="form-control"
+                type="text"
+                name="search_field" value=""
+                aria-label="'.get_lang('Search').'" >
                 <input type="hidden" value="search_setting" name="category">
                 <button class="btn btn-default" type="submit">
                     <em class="fa fa-search"></em> ' . get_lang('Search').'
@@ -282,7 +285,11 @@ $sessionPath = api_get_path(WEB_CODE_PATH).'session/';
 
 $search_form = ' <form method="GET" class="form-inline" action="'.$sessionPath.'session_list.php">
                     <div class="form-group">
-                        <input class="form-control" type="text" name="keyword" value="" aria-label="'.get_lang('Search').'">
+                        <input class="form-control"
+                        type="text"
+                        name="keyword"
+                        value=""
+                        aria-label="'.get_lang('Search').'">
                         <button class="btn btn-default" type="submit">
                             <em class="fa fa-search"></em> ' . get_lang('Search').'
                         </button>

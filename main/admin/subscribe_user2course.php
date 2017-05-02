@@ -293,8 +293,9 @@ if (is_array($extra_field_list)) {
      <b><?php echo get_lang('UserList'); ?></b>
      <br/><br/>
         <?php echo get_lang('FirstLetterUser'); ?> :
-     <select name="firstLetterUser" onchange="javascript:document.formulaire.form_sent.value='2'; document.formulaire.submit();"
-     aria-label="<?php echo get_lang('FirstLetterUser'); ?>">
+     <select name="firstLetterUser"
+        onchange="javascript:document.formulaire.form_sent.value='2'; document.formulaire.submit();"
+        aria-label="<?php echo get_lang('FirstLetterUser'); ?>">
       <option value="">--</option>
       <?php
         echo Display :: get_alphabet_options($first_letter_user);
@@ -306,8 +307,9 @@ if (is_array($extra_field_list)) {
      <b><?php echo get_lang('CourseList'); ?> :</b>
      <br/><br/>
         <?php echo get_lang('FirstLetterCourse'); ?> :
-     <select name="firstLetterCourse" onchange="javascript:document.formulaire.form_sent.value='2'; document.formulaire.submit();"
-     aria-label="<?php echo get_lang('FirstLetterCourse'); ?>">
+     <select name="firstLetterCourse" 
+        onchange="javascript:document.formulaire.form_sent.value='2'; document.formulaire.submit();"
+        aria-label="<?php echo get_lang('FirstLetterCourse'); ?>">
       <option value="">--</option>
       <?php
       echo Display :: get_alphabet_options($first_letter_course);

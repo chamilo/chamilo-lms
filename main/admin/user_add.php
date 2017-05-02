@@ -102,45 +102,65 @@ $form = new FormValidator('user_add');
 $form->addElement('header', '', $tool_name);
 if (api_is_western_name_order()) {
     // Firstname
-    $form->addElement('text', 'firstname', get_lang('FirstName'),
-    array(
-        'id' => 'firstname'
-    ));
+    $form->addElement(
+        'text',
+        'firstname',
+        get_lang('FirstName'),
+        array(
+            'id' => 'firstname'
+        )
+    );
     $form->applyFilter('firstname', 'html_filter');
     $form->applyFilter('firstname', 'trim');
     $form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
     // Lastname
-    $form->addElement('text', 'lastname', get_lang('LastName'),
-    array(
-        'id' => 'lastname'
-    ));
+    $form->addElement(
+        'text',
+        'lastname',
+        get_lang('LastName'),
+        array(
+            'id' => 'lastname'
+        )
+    );
     $form->applyFilter('lastname', 'html_filter');
     $form->applyFilter('lastname', 'trim');
     $form->addRule('lastname', get_lang('ThisFieldIsRequired'), 'required');
 } else {
     // Lastname
-    $form->addElement('text', 'lastname', get_lang('LastName'),
-    array(
-        'id' => 'lastname'
-    ));
+    $form->addElement(
+        'text',
+        'lastname',
+        get_lang('LastName'),
+        array(
+            'id' => 'lastname'
+        )
+    );
     $form->applyFilter('lastname', 'html_filter');
     $form->applyFilter('lastname', 'trim');
     $form->addRule('lastname', get_lang('ThisFieldIsRequired'), 'required');
     // Firstname
-    $form->addElement('text', 'firstname', get_lang('FirstName'),
-    array(
-        'id' => 'firstname'
-    ));
+    $form->addElement(
+        'text',
+        'firstname',
+        get_lang('FirstName'),
+        array(
+            'id' => 'firstname'
+        )
+    );
     $form->applyFilter('firstname', 'html_filter');
     $form->applyFilter('firstname', 'trim');
     $form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
 }
 // Official code
-$form->addElement('text', 'official_code', get_lang('OfficialCode'),
-array(
-    'size' => '40',
-    'id' => 'official_code'
-));
+$form->addElement(
+    'text',
+    'official_code',
+    get_lang('OfficialCode'),
+    array(
+        'size' => '40',
+        'id' => 'official_code'
+    )
+);
 $form->applyFilter('official_code', 'html_filter');
 $form->applyFilter('official_code', 'trim');
 // Email

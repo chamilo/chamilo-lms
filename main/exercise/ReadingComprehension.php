@@ -22,7 +22,7 @@ class ReadingComprehension extends UniqueAnswer
      * window will progress from top to bottom in 6 minutes
      * @var array $speeds
      */
-    public $speeds = [
+    public static $speeds = [
         1 => 50,
         2 => 100,
         3 => 175,
@@ -73,7 +73,7 @@ class ReadingComprehension extends UniqueAnswer
     public function processText($text)
     {
         // Refresh is set to 5s, but speed is in words per minute
-        $wordsPerSecond = $this->speeds[$this->level] / 60;
+        $wordsPerSecond = self::$speeds[$this->level] / 60;
         $this->expectedWordsPerRefresh = intval($wordsPerSecond * $this->refreshTime);
 
         if (empty($text)) {
@@ -173,4 +173,22 @@ class ReadingComprehension extends UniqueAnswer
             }
         }
     }
+
+    /**
+     * @inheritdoc
+     * @return array
+     */
+    public static function get_default_levels()
+    {
+        $select_level = array(
+            1 => sprintf(get_lang('ReadingComprehensionLevelX'), self::$speeds[1]),
+            2 => sprintf(get_lang('ReadingComprehensionLevelX'), self::$speeds[2]),
+            3 => sprintf(get_lang('ReadingComprehensionLevelX'), self::$speeds[3]),
+            4 => sprintf(get_lang('ReadingComprehensionLevelX'), self::$speeds[4]),
+            5 => sprintf(get_lang('ReadingComprehensionLevelX'), self::$speeds[5])
+        );
+        return $select_level;
+    }
+
+
 }

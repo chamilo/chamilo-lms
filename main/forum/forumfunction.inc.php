@@ -2427,8 +2427,9 @@ function updateThread($values)
     $where = ['c_id = ? AND thread_id = ?' => [$courseId, $values['thread_id']]];
     Database::update($threadTable, $params, $where);
 
-    if (api_is_course_admin() == true) {
-        $option_chek = isset($values['thread_qualify_gradebook']) ? $values['thread_qualify_gradebook'] : false; // values 1 or 0
+    if (api_is_allowed_to_edit()) {
+        // values 1 or 0
+        $option_chek = isset($values['thread_qualify_gradebook']) ? $values['thread_qualify_gradebook'] : false;
         if ($option_chek) {
             $id = $values['thread_id'];
             $titleGradebook = Security::remove_XSS(stripslashes($values['calification_notebook_title']));
@@ -3489,8 +3490,17 @@ function show_edit_post_form(
 
     if (!isset($_GET['edit'])) {
         if (Gradebook::is_active()) {
-            $form->addElement('label', '<strong>'.get_lang('AlterQualifyThread').'</strong>');
-            $form->addElement('checkbox', 'thread_qualify_gradebook', '', get_lang('QualifyThreadGradebook'), 'onclick="javascript: if(this.checked){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"');
+            $form->addElement(
+                'label',
+                '<strong>'.get_lang('AlterQualifyThread').'</strong>'
+            );
+            $form->addElement(
+                'checkbox',
+                'thread_qualify_gradebook',
+                '',
+                get_lang('QualifyThreadGradebook'),
+                'onclick="javascript: if(this.checked){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"'
+            );
 
             $link_info = GradebookUtils::isResourceInCourseGradebook(
                 api_get_course_id(),
@@ -3566,9 +3576,27 @@ function show_edit_post_form(
 
     if ($current_forum['moderated'] && api_is_allowed_to_edit(null, true)) {
         $group = array();
-        $group[] = $form->createElement('radio', 'status', null, get_lang('Validated'), 1);
-        $group[] = $form->createElement('radio', 'status', null, get_lang('WaitingModeration'), 2);
-        $group[] = $form->createElement('radio', 'status', null, get_lang('Rejected'), 3);
+        $group[] = $form->createElement(
+            'radio',
+            'status',
+            null,
+            get_lang('Validated'),
+            1
+        );
+        $group[] = $form->createElement(
+            'radio',
+            'status',
+            null,
+            get_lang('WaitingModeration'),
+            2
+        );
+        $group[] = $form->createElement(
+            'radio',
+            'status',
+            null,
+            get_lang('Rejected'),
+            3
+        );
         $form->addGroup($group, 'status', get_lang('Status'));
     }
 
@@ -3628,14 +3656,17 @@ function show_edit_post_form(
     // Validation or display
     if ($form->validate()) {
         $values = $form->exportValues();
-
         if (isset($values['thread_qualify_gradebook']) && $values['thread_qualify_gradebook'] == '1' &&
             empty($values['weight_calification'])
         ) {
-            Display::addFlash(Display::return_message(get_lang('YouMustAssignWeightOfQualification').'&nbsp;<a href="javascript:window.history.go(-1);">'.get_lang('Back').'</a>', 'error', false));
+            echo Display::return_message(
+                get_lang('YouMustAssignWeightOfQualification').'&nbsp;<a href="javascript:window.history.go(-1);">'.get_lang('Back').'</a>',
+                'error',
+                false
+            );
             return false;
         }
-        return $values;
+        store_edit_post($current_forum, $values);
     } else {
         // Delete from $_SESSION forum attachment from other posts
         clearAttachedFiles($current_post['post_id']);

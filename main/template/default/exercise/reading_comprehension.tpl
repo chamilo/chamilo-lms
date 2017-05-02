@@ -49,6 +49,9 @@
         -ms-text-shadow: none;
         text-shadow: none;
     }
+    .question-reading-comprehension-text br {
+        margin-bottom: 1em;
+    }
     .radio.hide-reading-answers, .question_title.hide-reading-answers {
         display: none;
     }

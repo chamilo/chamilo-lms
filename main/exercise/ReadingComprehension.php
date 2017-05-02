@@ -63,7 +63,7 @@ class ReadingComprehension extends UniqueAnswer
         $template = $view->get_template('exercise/reading_comprehension.tpl');
 
         $view->assign('id', $this->id);
-        $view->assign('text', $text);
+        $view->assign('text', nl2br($text));
         $view->assign('words_count', $wordsCount);
         $view->assign('turns', $turns);
         $view->assign('refreshTime', $this->refreshTime);
@@ -121,5 +121,56 @@ class ReadingComprehension extends UniqueAnswer
         $words = str_word_count($this->selectDescription(), 2, '0..9');
         $this->wordsCount = count($words);
         return $this->wordsCount;
+    }
+
+    /**
+     * @inheritdoc
+     * @param FormValidator $form
+     */
+    public function createForm(&$form)
+    {
+        // question name
+        if (api_get_configuration_value('save_titles_as_html')) {
+            $editorConfig = ['ToolbarSet' => 'Minimal'];
+            $form->addHtmlEditor('questionName', get_lang('Question'), false, false, $editorConfig, true);
+        } else {
+            $form->addText('questionName', get_lang('Question'), false);
+        }
+
+        // Categories
+        $tabCat = TestCategory::getCategoriesIdAndName();
+        $form->addSelect('questionCategory', get_lang('Category'), $tabCat);
+        // Advanced parameters
+        $levels = self::get_default_levels();
+        $form->addSelect('questionLevel', get_lang('Difficulty'), $levels);
+        $form->addElement('hidden', 'answerType', READING_COMPREHENSION);
+        $form->addTextarea('questionDescription', get_lang('Text'), ['rows' => 20]);
+
+        // hidden values
+        $my_id = isset($_REQUEST['myid']) ? intval($_REQUEST['myid']) : null;
+        $form->addElement('hidden', 'myid', $my_id);
+        $form->addRule('questionName', get_lang('GiveQuestion'), 'required');
+
+        $isContent = isset($_REQUEST['isContent']) ? intval($_REQUEST['isContent']) : null;
+
+        // default values
+        $defaults = array();
+        $defaults['questionName'] = $this->question;
+        $defaults['questionDescription'] = $this->description;
+        $defaults['questionLevel'] = $this->level;
+        $defaults['questionCategory'] = $this->category;
+
+        // Came from he question pool
+        if (isset($_GET['fromExercise'])) {
+            $form->setDefaults($defaults);
+        }
+
+        if (!empty($_REQUEST['myid'])) {
+            $form->setDefaults($defaults);
+        } else {
+            if ($isContent == 1) {
+                $form->setDefaults($defaults);
+            }
+        }
     }
 }

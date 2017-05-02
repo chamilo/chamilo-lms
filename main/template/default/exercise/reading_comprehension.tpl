@@ -60,33 +60,35 @@
 <script>
     $(document).on('ready', function () {
         var index = 0,
-            total = $('#question-{{ id }}-text .text-highlight').length;
+            $questionTexts = $('#question-{{ id }}-text .text-highlight'),
+            total = $questionTexts.length;
 
         function updateView()
         {
-            $('#question-{{ id }}-text .text-highlight').removeClass('active');
+            $questionTexts.removeClass('active border');
+
+            if (index == total - 1) {
+                $('#question_div_{{ id }} .radio, #question_div_{{ id }} .question_title').removeClass('hide-reading-answers');
+            }
 
             if (index >= total) {
                 window.clearInterval(timeOuId);
-                $('.radio').removeClass('hide-reading-answers');
-                $('.question_title').removeClass('hide-reading-answers');
-                $('.text-highlight').removeClass('border');
+
                 return;
             }
 
-            var current = $('#question-{{ id }}-text .text-highlight').get(index);
+            var prev = index > 0 ? $('#question-{{ id }}-text .text-highlight').get(index - 1) : null,
+                current = $questionTexts.get(index),
+                next = index < total ? $('#question-{{ id }}-text .text-highlight').get(index + 1) : null;
 
             $(current).addClass('active');
 
-            if (index > 0) {
-                $('#question-{{ id }}-text .text-highlight').removeClass('border');
-                var previousWord = $('#question-{{ id }}-text .text-highlight').get(index-1);
-                $(previousWord).addClass('border');
+            if (prev) {
+                $(prev).addClass('border');
             }
-            if (index < total) {
-                $('#question-{{ id+1 }}-text .text-highlight').removeClass('border');
-                var nextWord = $('#question-{{ id }}-text .text-highlight').get(index+1);
-                $(nextWord).addClass('border');
+
+            if (next) {
+                $(next).addClass('border');
             }
 
             index++;

@@ -129,14 +129,6 @@ class ReadingComprehension extends UniqueAnswer
      */
     public function createForm(&$form)
     {
-        // question name
-        if (api_get_configuration_value('save_titles_as_html')) {
-            $editorConfig = ['ToolbarSet' => 'Minimal'];
-            $form->addHtmlEditor('questionName', get_lang('Question'), false, false, $editorConfig, true);
-        } else {
-            $form->addText('questionName', get_lang('Question'), false);
-        }
-
         // Categories
         $tabCat = TestCategory::getCategoriesIdAndName();
         $form->addSelect('questionCategory', get_lang('Category'), $tabCat);
@@ -145,6 +137,13 @@ class ReadingComprehension extends UniqueAnswer
         $form->addSelect('questionLevel', get_lang('Difficulty'), $levels);
         $form->addElement('hidden', 'answerType', READING_COMPREHENSION);
         $form->addTextarea('questionDescription', get_lang('Text'), ['rows' => 20]);
+        // question name
+        if (api_get_configuration_value('save_titles_as_html')) {
+            $editorConfig = ['ToolbarSet' => 'Minimal'];
+            $form->addHtmlEditor('questionName', get_lang('Question'), false, false, $editorConfig, true);
+        } else {
+            $form->addText('questionName', get_lang('Question'), false);
+        }
 
         // hidden values
         $my_id = isset($_REQUEST['myid']) ? intval($_REQUEST['myid']) : null;

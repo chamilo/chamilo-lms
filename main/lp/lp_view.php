@@ -26,6 +26,11 @@ if ($lp_controller_touched != 1) {
 }
 
 require_once __DIR__.'/../inc/global.inc.php';
+
+if (isset($_REQUEST['origin']) && $_REQUEST['origin'] === 'learnpath') {
+    $_REQUEST['origin'] = '';
+}
+
 //To prevent the template class
 $show_learnpath = true;
 

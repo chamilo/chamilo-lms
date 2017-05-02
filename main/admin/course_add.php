@@ -48,7 +48,8 @@ $form->addText(
     true,
     array(
         'id' => 'title'
-    ));
+    )
+);
 $form->applyFilter('title', 'html_filter');
 $form->applyFilter('title', 'trim');
 

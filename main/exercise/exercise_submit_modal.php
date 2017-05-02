@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use \ChamiloSession as Session;
+use ChamiloSession as Session;
 
 /**
 *	@package chamilo.exercise
@@ -43,8 +43,8 @@ if (isset($_REQUEST['learnpath_item_id'])) {
 }
 
 $_SESSION['hotspot_coord'] = array();
-$newquestionList = isset($_SESSION['newquestionList']) ? $_SESSION['newquestionList'] : [];
-$questionList = $_SESSION['questionList'];
+$newquestionList = Session::read('newquestionList', []);
+$questionList = Session::read('questionList');
 $exerciseId = intval($_GET['exerciseId']);
 $exerciseType = intval($_GET['exerciseType']);
 $questionNum = intval($_GET['num']);
@@ -78,7 +78,7 @@ if (isset($_GET['choice'])) {
 
 // Getting the options by js
 if (empty($choice_value)) {
-	echo "<script>
+    echo "<script>
 		// this works for only radio buttons
 		var f = self.parent.window.document.frm_exercise;
 		var choice_js='';
@@ -144,7 +144,6 @@ if (is_array($choice)) {
 }
 
 // the script "exercise_result.php" will take the variable $exerciseResult from the session
-
 Session::write('exerciseResult', $exerciseResult);
 Session::write('exerciseResultCoordinates', $exerciseResultCoordinates);
 
@@ -401,50 +400,48 @@ if (!empty($choice_value)) {
         }
     }
 
-	if ($overlap_color) {
-		$overlap_color='green';
+    if ($overlap_color) {
+        $overlap_color = 'green';
     } else {
-		$overlap_color='red';
+        $overlap_color = 'red';
     }
-	if ($missing_color) {
-		$missing_color='green';
+    if ($missing_color) {
+        $missing_color = 'green';
     } else {
-		$missing_color='red';
+        $missing_color = 'red';
     }
-	if ($excess_color) {
-		$excess_color='green';
+    if ($excess_color) {
+        $excess_color = 'green';
     } else {
-		$excess_color='red';
+        $excess_color = 'red';
     }
 
     if (!is_numeric($final_overlap)) {
-    	$final_overlap = 0;
+        $final_overlap = 0;
     }
 
     if (!is_numeric($final_missing)) {
-    	$final_missing = 0;
+        $final_missing = 0;
     }
     if (!is_numeric($final_excess)) {
-    	$final_excess = 0;
+        $final_excess = 0;
     }
 
-    if ($final_excess>100) {
-    	$final_excess = 100;
+    if ($final_excess > 100) {
+        $final_excess = 100;
     }
 
-	$table_resume = '<table class="data_table" >
-	<tr class="row_odd" >
+	$table_resume = '<table class="data_table">
+	<tr class="row_odd">
 		<td></td>
 		<td ><b>'.get_lang('Requirements').'</b></td>
 		<td><b>'.get_lang('YourAnswer').'</b></td>
 	</tr>
-
 	<tr class="row_even">
 		<td><b>'.get_lang('Overlap').'</b></td>
 		<td>'.get_lang('Min').' '.$threadhold1.'</td>
 		<td><div style="color:'.$overlap_color.'">'.(($final_overlap < 0)?0:intval($final_overlap)).'</div></td>
 	</tr>
-
 	<tr>
 		<td><b>'.get_lang('Excess').'</b></td>
 		<td>'.get_lang('Max').' '.$threadhold2.'</td>
@@ -458,7 +455,7 @@ if (!empty($choice_value)) {
 	</tr>
 	</table>';
 }
-$_SESSION['newquestionList'] = $newquestionList;
+Session::write('newquestionList', $newquestionList);
 $links = '';
 if (isset($choice_value) && $choice_value == -1) {
     if ($answerType != HOT_SPOT_DELINEATION) {
@@ -471,13 +468,12 @@ $destinationid = null;
 if ($answerType != HOT_SPOT_DELINEATION) {
     if (!empty($destination)) {
         $item_list = explode('@@', $destination);
-        //print_R($item_list);
         $try = $item_list[0];
         $lp = $item_list[1];
         $destinationid = $item_list[2];
         $url = $item_list[3];
     }
-	$table_resume='';
+    $table_resume = '';
 } else {
     $try = $try_hotspot;
     $lp = $lp_hotspot;
@@ -499,17 +495,17 @@ if ($answerType != HOT_SPOT_DELINEATION) {
         $exerciseResult[$questionid] = 1;
     } else {
         $exerciseResult[$questionid] = 0;
-	}
+    }
 }
 
 // the link to retry the question
 if (isset($try) && $try==1) {
     $num_value_array = array_keys($questionList, $questionid);
     $links .= Display:: return_icon(
-            'reload.gif',
-            '',
-            array('style' => 'padding-left:0px;padding-right:5px;')
-        ).'<a onclick="SendEx('.$num_value_array[0].');" href="#">'.get_lang('TryAgain').'</a><br /><br />';
+        'reload.gif',
+        '',
+        array('style' => 'padding-left:0px;padding-right:5px;')
+    ).'<a onclick="SendEx('.$num_value_array[0].');" href="#">'.get_lang('TryAgain').'</a><br /><br />';
 }
 
 // the link to theory (a learning path)
@@ -568,9 +564,7 @@ function SendEx(num) {
 }
 </script>';
 
-if ($links!='') {
-	/*echo '<div id="ModalContent" style="padding-bottom:30px;padding-top:10px;padding-left:20px;padding-right:20px;">
-    <a onclick="self.parent.tb_remove();" href="#" style="float:right; margin-top:-10px;">'.api_ucfirst(get_lang('Close')).'</a>';*/
+if ($links != '') {
 	echo '<h1><div style="color:#333;">'.get_lang('Feedback').'</div></h1>';
 	if ($answerType == HOT_SPOT_DELINEATION) {
 		if ($organs_at_risk_hit > 0) {
@@ -593,7 +587,7 @@ if ($links!='') {
 	echo '<h3>'.$links.'</h3>';
 	echo '</div>';
 
-    $_SESSION['hot_spot_result'] = $message;
+	Session::write('hot_spot_result', $message);
 	$_SESSION['hotspot_delineation_result'][$exerciseId][$questionid] = array($message, $exerciseResult[$questionid]);
     //reseting the exerciseResult variable
     Session::write('exerciseResult', $exerciseResult);

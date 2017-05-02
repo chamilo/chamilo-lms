@@ -85,6 +85,7 @@ if ($type === 'fromjs') {
     $id_list = explode('_', $eventId);
     $eventId = $id_list[1];
     $event_type = $id_list[0];
+    $event_type = $event_type === 'platform' ? 'admin' : $event_type;
 }
 
 $agenda = new Agenda($event_type);
@@ -283,7 +284,7 @@ if ($allowToEdit) {
             $content = $form->returnForm();
             break;
         case "delete":
-            if (!(api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $eventId) )) {
+            if (!(api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $eventId))) {
                 // a coach can only delete an element belonging to his session
                 $content = $agenda->deleteEvent($eventId);
             }

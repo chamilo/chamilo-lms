@@ -83,8 +83,9 @@ class ScriptHandler
             __DIR__.'/../../../../main/inc/lib/pchart/',
             __DIR__.'/../../../../main/inc/lib/pclzip/',
             __DIR__.'/../../../../main/inc/lib/htmlpurifier',
+            __DIR__.'/../../../../main/pear/excelreader/',
             __DIR__.'/../../../../main/resourcelinker',
-            //Remove from 1.10
+            // Remove from 1.10
             __DIR__.'/../../../../plugin/ticket',
             __DIR__.'/../../../../plugin/skype',
             __DIR__.'/../../../../main/newscorm',

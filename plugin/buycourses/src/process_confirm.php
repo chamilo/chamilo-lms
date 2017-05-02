@@ -46,8 +46,8 @@ switch ($sale['payment_type']) {
             $sale['price'],
             $currency['iso_code'],
             'paypal',
-            api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/success.php',
-            api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/error.php',
+            api_get_path(WEB_PLUGIN_PATH).'buycourses/src/success.php',
+            api_get_path(WEB_PLUGIN_PATH).'buycourses/src/error.php',
             $extra
         );
 
@@ -92,7 +92,7 @@ switch ($sale['payment_type']) {
 
                 unset($_SESSION['bc_sale_id']);
 
-                header('Location: ' . api_get_path(WEB_PLUGIN_PATH) . 'buycourses/index.php');
+                header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/index.php');
                 exit;
             }
 
@@ -129,7 +129,7 @@ switch ($sale['payment_type']) {
             );
 
             unset($_SESSION['bc_sale_id']);
-            header('Location: ' . api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/course_catalog.php');
+            header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/course_catalog.php');
             exit;
         }
 
@@ -163,7 +163,6 @@ switch ($sale['payment_type']) {
         break;
 
     case BuyCoursesPlugin::PAYMENT_TYPE_CULQI:
-
         // We need to include the main online script, acording to the Culqi documentation the JS needs to be loeaded
         // directly from the main url "https://integ-pago.culqi.com" because a local copy of this JS is not supported
         $htmlHeadXtra[] = '<script src="//integ-pago.culqi.com/js/v1"></script>';
@@ -201,7 +200,7 @@ switch ($sale['payment_type']) {
                     )
                 );
 
-                header('Location: ' . api_get_path(WEB_PLUGIN_PATH) . 'buycourses/index.php');
+                header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/index.php');
                 exit;
             }
         }

@@ -6,6 +6,7 @@ use ChamiloSession as Session;
 /**
  * Controller script. Prepares the common background variables to give to the scripts corresponding to
  * the requested action
+ * @todo remove repeated if $lp_found redirect
  * @package chamilo.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
@@ -1196,7 +1197,6 @@ switch ($action) {
         require 'lp_view.php';
         break;
     case 'switch_view_mode':
-
         if (!$lp_found) {
             error_log('New LP - No learnpath given for switch', 0);
             require 'lp_list.php';

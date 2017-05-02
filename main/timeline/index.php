@@ -62,7 +62,7 @@ $(function() {
     '.Display::grid_js('timelines',  $url,$columns,$column_model,$extra_params, array(), null,true).'
 });
 </script>';
-
+$toolbarAction = '';
 $timeline = new Timeline();
 
 // Action handling: Add

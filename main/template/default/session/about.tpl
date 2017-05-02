@@ -1,7 +1,14 @@
 <div id="about-session">
     <div class="row">
         <div class="col-xs-12">
-            <p><em class="fa fa-clock-o"></em> <em>{{ session_date.display }}</em></p>
+            <p>
+                <em class="fa fa-clock-o" aria-hidden="true"></em>
+                {% if session.duration %}
+                    <em>{{ 'SessionDurationXDaysLeft'|get_lang|format(session.duration) }}</em>
+                {% else %}
+                    <em>{{ session_date.display }}</em>
+                {% endif %}
+            </p>
             {% if show_tutor %}
                 <p>
                     <em class="fa fa-user"></em> {{ 'SessionGeneralCoach'|get_lang }}: <em>{{ session.generalCoach.getCompleteName() }}</em>
@@ -232,7 +239,7 @@
             {% if _u.logged and not is_subscribed %}
                 {{ subscribe_button }}
             {% elseif not _u.logged %}
-                {% if 'allow_registration'|get_setting == 'true' %}
+                {% if 'allow_registration'|api_get_setting == 'true' %}
                     <a href="{{ _p.web_main ~ 'auth/inscription.php' ~ redirect_to_session }}" class="btn btn-info btn-lg">
                         <i class="fa fa-pencil" aria-hidden="true"></i> {{ 'SignUp'|get_lang }}
                     </a>

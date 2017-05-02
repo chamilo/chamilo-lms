@@ -124,7 +124,7 @@ $is_allowedToTrackEverybodyInCourse = $is_courseAdmin; // allowed to track all s
                     [<a href='" . api_get_self() . "?uInfo=$uInfo&view=$view&period=week&reqdate=$nextReqDate' class='specialLink'>" . get_lang('NextWeek') . "</a>]
                 ";
                     break;
-                default :
+                default:
                     $period = "month";
                 case "month" :
                     // previous and next date must be evaluated

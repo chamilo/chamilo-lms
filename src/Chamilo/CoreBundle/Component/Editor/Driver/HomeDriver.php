@@ -31,7 +31,7 @@ class HomeDriver extends Driver implements DriverInterface
                 'driver' => 'HomeDriver',
                 'alias' => get_lang('Portal'),
                 'path' => $home,
-                'URL' => api_get_path(WEB_PATH) . 'home',
+                'URL' => api_get_path(WEB_PATH).'home',
                 'accessControl' => array($this, 'access'),
             );
         }

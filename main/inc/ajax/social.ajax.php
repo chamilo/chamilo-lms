@@ -17,7 +17,7 @@ switch ($action) {
         if (isset($_GET['is_my_friend'])) {
             $relation_type = USER_RELATION_TYPE_FRIEND; //My friend
         } else {
-            $relation_type = USER_RELATION_TYPE_UNKNOW; //Unknown contact
+            $relation_type = USER_RELATION_TYPE_UNKNOWN; //Unknown contact
         }
 
         if (isset($_GET['friend_id'])) {
@@ -41,7 +41,7 @@ switch ($action) {
         if (isset($_GET['is_my_friend'])) {
             $relation_type = USER_RELATION_TYPE_FRIEND;//my friend
         } else {
-            $relation_type = USER_RELATION_TYPE_UNKNOW;//Contact unknown
+            $relation_type = USER_RELATION_TYPE_UNKNOWN;//Contact unknown
         }
         if (isset($_GET['denied_friend_id'])) {
             SocialManager::invitation_denied($_GET['denied_friend_id'], $current_user_id);
@@ -154,7 +154,7 @@ switch ($action) {
                     }
 
                     //------Blog posts
-                    $result = get_blog_post_from_user($course_code, $user_id);
+                    $result = Blog::getBlogPostFromUser($course_id, $user_id, $course_code );
 
                     if (!empty($result)) {
                         api_display_tool_title(api_xml_http_response_encode(get_lang('Blog')));
@@ -166,7 +166,7 @@ switch ($action) {
                     }
 
                     //------Blog comments
-                    $result = get_blog_comment_from_user($course_code, $user_id);
+                    $result = Blog::getBlogCommentsFromUser($course_id, $user_id, $course_code);
                     if (!empty($result)) {
                         echo '<div  style="background:#FAF9F6; padding-left:10px;">';
                         api_display_tool_title(api_xml_http_response_encode(get_lang('BlogComments')));

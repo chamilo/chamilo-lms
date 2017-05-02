@@ -39,7 +39,7 @@ $show_web_odf = false;
 $web_odf_supported_files = DocumentManager::get_web_odf_extension_list();
 
 if (in_array(strtolower($pathinfo['extension']), $web_odf_supported_files)) {
-    $show_web_odf  = true;
+    $show_web_odf = true;
 }
 
 $file_url_web = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$header_file;
@@ -90,8 +90,8 @@ if (empty($document_data['parents'])) {
 echo Display::display_header('');
 
 echo '<div class="actions">';
-echo '<a href="document.php?id='.$parent_id.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
-echo '<a href="edit_document.php?'.api_get_cidreq().'&id='.$document_id.$req_gid.'&origin=editodf">'.Display::return_icon('edit.png',get_lang('Rename').'/'.get_lang('Comments'),'',ICON_SIZE_MEDIUM).'</a>';
+echo '<a href="document.php?id='.$parent_id.'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'), '', ICON_SIZE_MEDIUM).'</a>';
+echo '<a href="edit_document.php?'.api_get_cidreq().'&id='.$document_id.$req_gid.'&origin=editodf">'.Display::return_icon('edit.png', get_lang('Rename').'/'.get_lang('Comments'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 // echo '<div id="odf"></div>';

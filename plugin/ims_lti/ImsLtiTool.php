@@ -173,7 +173,7 @@ class ImsLtiTool
         $foo = explode('=', $strings);
 
         return [
-            'key' => 'custom_' . $foo[0],
+            'key' => 'custom_'.$foo[0],
             'value' => $foo[1]
         ];
     }

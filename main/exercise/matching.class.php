@@ -69,12 +69,12 @@ class Matching extends Question
                 for ($i = 1; $i <= $answer->nbrAnswers; $i++) {
                     if ($answer->isCorrect($i)) {
                         $nb_matches++;
-                        $defaults['answer[' . $nb_matches . ']'] = $answer->selectAnswer($i);
-                        $defaults['weighting[' . $nb_matches . ']'] = float_format($answer->selectWeighting($i), 1);
-                        $defaults['matches[' . $nb_matches . ']'] = $answer->correct[$i];
+                        $defaults['answer['.$nb_matches.']'] = $answer->selectAnswer($i);
+                        $defaults['weighting['.$nb_matches.']'] = float_format($answer->selectWeighting($i), 1);
+                        $defaults['matches['.$nb_matches.']'] = $answer->correct[$i];
                     } else {
                         $nb_options++;
-                        $defaults['option[' . $nb_options . ']'] = $answer->selectAnswer($i);
+                        $defaults['option['.$nb_options.']'] = $answer->selectAnswer($i);
                     }
                 }
             }
@@ -105,10 +105,10 @@ class Matching extends Question
         $html = '<table class="table table-striped table-hover">
             <thead>
                 <tr>
-                    <th width="5%">' . get_lang('Number') . '</th>
-                    <th width="70%">' . get_lang('Answer') . '</th>
-                    <th width="15%">' . get_lang('MatchesTo') . '</th>
-                    <th width="10%">' . get_lang('Weighting') . '</th>
+                    <th width="5%">' . get_lang('Number').'</th>
+                    <th width="70%">' . get_lang('Answer').'</th>
+                    <th width="15%">' . get_lang('MatchesTo').'</th>
+                    <th width="10%">' . get_lang('Weighting').'</th>
                 </tr>
             </thead>
             <tbody>';
@@ -122,6 +122,12 @@ class Matching extends Question
                 Display::return_message(get_lang('YouHaveToCreateAtLeastOneAnswer'))
             );
         }
+
+        $editorConfig = array(
+            'ToolbarSet' => 'TestMatching',
+            'Width' => '100%',
+            'Height' => '125'
+        );
 
         for ($i = 1; $i <= $nb_matches; ++$i) {
             $renderer = &$form->defaultRenderer();
@@ -142,35 +148,37 @@ class Matching extends Question
 
             $form->addHtml('<tr>');
             $form->addHtml("<td>$i</td>");
-            $form->addText("answer[$i]", null);
-
+            //$form->addText("answer[$i]", null);
+            $form->addHtmlEditor(
+                "answer[$i]",
+                null,
+                null,
+                false,
+                $editorConfig
+            );
             $form->addSelect(
                 "matches[$i]",
                 null,
                 $matches,
                 ['id' => 'matches_'.$i]
             );
-
             $form->addText(
                 "weighting[$i]",
                 null,
                 true,
                 ['id' => 'weighting_'.$i, 'value' => 10]
             );
-
             $form->addHtml('</tr>');
         }
 
         $form->addHtml('</tbody></table>');
-        $group = array();
-        $form->addGroup($group);
 
         // DISPLAY OPTIONS
         $html = '<table class="table table-striped table-hover">
             <thead>
                 <tr>
-                    <th width="15%">' . get_lang('Number') . '</th>
-                    <th width="85%">' . get_lang('Answer') . '</th>
+                    <th width="15%">' . get_lang('Number').'</th>
+                    <th width="85%">' . get_lang('Answer').'</th>
                 </tr>
             </thead>
             <tbody>';
@@ -192,20 +200,26 @@ class Matching extends Question
             );
 
             $form->addHtml('<tr>');
-            $form->addHtml('<td>' . chr(64 + $i) . '</td>');
-            $form->addText("option[$i]", null);
+            $form->addHtml('<td>'.chr(64 + $i).'</td>');
+            $form->addHtmlEditor(
+                "option[$i]",
+                null,
+                null,
+                false,
+                $editorConfig
+            );
+
             $form->addHtml('</tr>');
         }
 
         $form->addHtml('</table>');
-        $group = array();
-        global $text;
 
+        global $text;
+        $group = array();
         // setting the save button here and not in the question class.php
         $group[] = $form->addButtonDelete(get_lang('DelElem'), 'lessOptions', true);
         $group[] = $form->addButtonCreate(get_lang('AddElem'), 'moreOptions', true);
         $group[] = $form->addButtonSave($text, 'submitQuestion', true);
-
         $form->addGroup($group);
 
         if (!empty($this->id)) {
@@ -272,7 +286,7 @@ class Matching extends Question
     public function return_header($feedback_type = null, $counter = null, $score = null)
     {
         $header = parent::return_header($feedback_type, $counter, $score);
-        $header .= '<table class="'.$this->question_table_class .'">';
+        $header .= '<table class="'.$this->question_table_class.'">';
         $header .= '<tr>
                 <th>'.get_lang('ElementList').'</th>
                 <th>'.get_lang('CorrespondsTo').'</th>

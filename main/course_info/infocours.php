@@ -53,10 +53,10 @@ if (api_get_setting('pdf_export_watermark_by_course') == 'true') {
         $show_delete_watermark_text_message = true;
     }
 }
-$tbl_user = Database:: get_main_table(TABLE_MAIN_USER);
-$tbl_admin = Database:: get_main_table(TABLE_MAIN_ADMIN);
-$tbl_course_user = Database:: get_main_table(TABLE_MAIN_COURSE_USER);
-$tbl_course = Database:: get_main_table(TABLE_MAIN_COURSE);
+$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
+$tbl_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
+$tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+$tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
 
 $sql = "SELECT tutor_name FROM $tbl_course WHERE id = $courseId";
 $q_tutor = Database::query($sql);
@@ -265,37 +265,45 @@ $form->addHtml('
 $form->addHtml('</div>');
 
 // Documents
-if (api_get_setting('documents_default_visibility_defined_in_course') == 'true') {
-    $form->addHtml('<div class="panel panel-default">');
-    $form->addHtml('
-        <div class="panel-heading" role="tab" id="heading-documents">
-            <h4 class="panel-title">
-                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-documents" aria-expanded="false" aria-controls="collapse-documents">
-    ');
-    $form->addHtml(
-        Display::return_icon('folder.png', get_lang('Documents')) . ' ' . get_lang('Documents')
-    );
-    $form->addHtml('
+$form->addHtml('<div class="panel panel-default">');
+$form->addHtml('
+    <div class="panel-heading" role="tab" id="heading-documents">
+        <h4 class="panel-title">
+            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-documents" aria-expanded="false" aria-controls="collapse-documents">
+');
+$form->addHtml(
+    Display::return_icon('folder.png', get_lang('Documents')) . ' ' . get_lang('Documents')
+);
+$form->addHtml('
                 </a>
             </h4>
         </div>
     ');
-    $form->addHtml('
-        <div id="collapse-documents" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-documents">
-            <div class="panel-body">
-    ');
+$form->addHtml('
+    <div id="collapse-documents" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-documents">
+        <div class="panel-body">
+');
+
+if (api_get_setting('documents_default_visibility_defined_in_course') == 'true') {
     $group = array(
         $form->createElement('radio', 'documents_default_visibility', null, get_lang('Visible'), 'visible'),
         $form->createElement('radio', 'documents_default_visibility', null, get_lang('Invisible'), 'invisible')
     );
-    $form->addGroup($group, '', array(get_lang("DocumentsDefaultVisibility")));
-    $form->addButtonSave(get_lang('SaveSettings'), 'submit_save');
-    $form->addHtml('
-            </div>
-        </div>
-    ');
-    $form->addHtml('</div>');
+    $form->addGroup($group, '', array(get_lang('DocumentsDefaultVisibility')));
 }
+
+$group = array(
+    $form->createElement('radio', 'show_system_folders', null, get_lang('Yes'), 1),
+    $form->createElement('radio', 'show_system_folders', null, get_lang('No'), 2)
+);
+$form->addGroup($group, '', array(get_lang('ShowSystemFolders')));
+
+$form->addButtonSave(get_lang('SaveSettings'), 'submit_save');
+$form->addHtml('
+        </div>
+    </div>
+');
+$form->addHtml('</div>');
 
 // EMAIL NOTIFICATIONS
 $form->addHtml('<div class="panel panel-default">');
@@ -561,38 +569,6 @@ $form->addHtml('
 ');
 $form->addHtml('</div>');
 
-// Document settings
-$form->addHtml('<div class="panel panel-default">');
-$form->addHtml('
-    <div class="panel-heading" role="tab" id="heading-document-settings">
-        <h4 class="panel-title">
-            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-document-settings" aria-expanded="false" aria-controls="collapse-document-settings">
-');
-$form->addHtml(
-    Display::return_icon('folder.png', Security::remove_XSS(get_lang('Documents'))) . ' ' . get_lang('Documents')
-);
-$form->addHtml('
-            </a>
-        </h4>
-    </div>
-');
-$form->addHtml('
-    <div id="collapse-document-settings" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-document-settings">
-        <div class="panel-body">
-');
-
-$group = array(
-    $form->createElement('radio', 'show_system_folders', null, get_lang('Yes'), 1),
-    $form->createElement('radio', 'show_system_folders', null, get_lang('No'), 2),
-);
-$form->addGroup($group, '', array(get_lang("ShowSystemFolders")));
-$form->addButtonSave(get_lang('SaveSettings'), 'submit_save');
-$form->addHtml('
-        </div>
-    </div>
-');
-$form->addHtml('</div>');
-
 // Certificate settings
 if (api_get_setting('allow_public_certificates')=='true') {
     $form->addHtml('<div class="panel panel-default">');
@@ -670,7 +646,6 @@ $all_course_information = CourseManager::get_course_information($_course['sysCod
 
 // Set the default values of the form
 $values = array();
-
 $values['title'] = $_course['name'];
 $values['category_code'] = $_course['categoryCode'];
 $values['course_language'] = $_course['language'];
@@ -753,7 +728,7 @@ if ($form->validate() && is_settings_editable()) {
         unset($updateValues['pdf_export_watermark_path']);
     }
 
-    //Variables that will be saved in the TABLE_MAIN_COURSE table
+    // Variables that will be saved in the TABLE_MAIN_COURSE table
     $update_in_course_table = array(
         'title',
         'course_language',
@@ -770,7 +745,7 @@ if ($form->validate() && is_settings_editable()) {
     );
 
     $activeLegal = isset($updateValues['activate_legal']) ? $updateValues['activate_legal'] : 0;
-    $table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
+    $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
 
     $params = [
         'title' => $updateValues['title'],
@@ -801,6 +776,7 @@ if ($form->validate() && is_settings_editable()) {
     $appPlugin->saveCourseSettingsHook($updateValues);
     $cidReset = true;
     $cidReq = $course_code;
+    Display::addFlash(Display::return_message(get_lang('Updated')));
     require '../inc/local.inc.php';
     $url = api_get_path(WEB_CODE_PATH).'course_info/infocours.php?'.api_get_cidreq();
     header("Location: $url");
@@ -810,7 +786,7 @@ if ($form->validate() && is_settings_editable()) {
 /*	Header */
 Display :: display_header($nameTools, MODULE_HELP_NAME);
 if ($show_delete_watermark_text_message) {
-    Display :: display_normal_message(get_lang('FileDeleted'));
+    Display::addFlash(Display::return_message(get_lang('FileDeleted'), 'normal'));
 }
 
 // Display the form

@@ -15,8 +15,8 @@ if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'false'
 
 $tool_name = get_lang('ImportUsersToACourse');
 
-$interbreadcrumb[] = array ("url" => "user.php", "name" => get_lang("Users"));
-$interbreadcrumb[] = array ("url" => "#", "name" => get_lang("ImportUsersToACourse"));
+$interbreadcrumb[] = array("url" => "user.php", "name" => get_lang("Users"));
+$interbreadcrumb[] = array("url" => "#", "name" => get_lang("ImportUsersToACourse"));
 
 $form = new FormValidator('user_import', 'post', 'user_import.php');
 $form->addElement('header', $tool_name);
@@ -39,7 +39,7 @@ if ($form->validate()) {
     if (isset($_FILES['import_file']['size']) && $_FILES['import_file']['size'] !== 0) {
         $unsubscribe_users = isset($_POST['unsubscribe_users']) ? true : false;
         //@todo : csvToArray deprecated
-        $users  = Import::csvToArray($_FILES['import_file']['tmp_name']);
+        $users = Import::csvToArray($_FILES['import_file']['tmp_name']);
         $invalid_users  = array();
         $clean_users    = array();
 
@@ -76,7 +76,7 @@ if ($form->validate()) {
                         $user_ids = array();
                         foreach ($current_user_list as $user) {
                             if (!CourseManager::is_course_teacher($user['user_id'], $course_code)) {
-                                $user_ids[]= $user['user_id'];
+                                $user_ids[] = $user['user_id'];
                             }
                         }
                         CourseManager::unsubscribe_user($user_ids, $course_code, $session_id);
@@ -89,12 +89,12 @@ if ($form->validate()) {
                     if (empty($session_id)) {
                         //just to make sure
                         if (CourseManager :: is_user_subscribed_in_course($userId, $course_code)) {
-                            $user_to_show[]= $userInfo['complete_name'];
+                            $user_to_show[] = $userInfo['complete_name'];
                         }
                     } else {
                         //just to make sure
                         if (CourseManager::is_user_subscribed_in_course($userId, $course_code, true, $session_id)) {
-                            $user_to_show[]= $userInfo['complete_name'];
+                            $user_to_show[] = $userInfo['complete_name'];
                         }
                     }
                 }
@@ -102,7 +102,7 @@ if ($form->validate()) {
                 $message = get_lang('CheckUsersWithId');
                 $type = 'warning';
                 foreach ($invalid_users as $invalid_user) {
-                    $user_to_show[]= $invalid_user;
+                    $user_to_show[] = $invalid_user;
                 }
             }
         }
@@ -127,7 +127,7 @@ if (!empty($message)) {
             Display::display_warning_message($message.':  <br />'.$userMessage, false);
         }
     } else {
-        $empty_line_msg = ($empty_line == 0) ? get_lang('ErrorsWhenImportingFile'): get_lang('ErrorsWhenImportingFile').': '.get_lang('EmptyHeaderLine');
+        $empty_line_msg = ($empty_line == 0) ? get_lang('ErrorsWhenImportingFile') : get_lang('ErrorsWhenImportingFile').': '.get_lang('EmptyHeaderLine');
         Display::display_error_message($empty_line_msg);
     }
 }

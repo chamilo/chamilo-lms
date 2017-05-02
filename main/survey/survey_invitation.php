@@ -16,12 +16,12 @@ if (!api_is_allowed_to_edit(false, true)) {
 }
 
 // Database table definitions
-$table_survey = Database:: get_course_table(TABLE_SURVEY);
-$table_survey_question = Database:: get_course_table(TABLE_SURVEY_QUESTION);
-$table_survey_question_option = Database:: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
-$table_course = Database:: get_main_table(TABLE_MAIN_COURSE);
-$table_user = Database:: get_main_table(TABLE_MAIN_USER);
-$table_survey_invitation = Database:: get_course_table(TABLE_SURVEY_INVITATION);
+$table_survey = Database::get_course_table(TABLE_SURVEY);
+$table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
+$table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
+$table_course = Database::get_main_table(TABLE_MAIN_COURSE);
+$table_user = Database::get_main_table(TABLE_MAIN_USER);
+$table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
 $tool_name = get_lang('SurveyInvitations');
 
 // Getting the survey information
@@ -47,12 +47,12 @@ Display::display_header($tool_name);
 // Getting all the people who have filled this survey
 $answered_data = SurveyManager::get_people_who_filled_survey($survey_id);
 if ($survey_data['anonymous'] == 1) {
-	Display::display_normal_message(get_lang('AnonymousSurveyCannotKnowWhoAnswered').' '.count($answered_data).' '.get_lang('PeopleAnswered'));
+	echo Display::return_message(get_lang('AnonymousSurveyCannotKnowWhoAnswered').' '.count($answered_data).' '.get_lang('PeopleAnswered'));
 	$answered_data = array();
 }
 
 if (!isset($_GET['view']) || $_GET['view'] == 'invited') {
-	echo get_lang('ViewInvited'). ' | ';
+	echo get_lang('ViewInvited').' | ';
 } else {
 	echo '	<a href="'.api_get_self().'?survey_id='.$survey_id.'&amp;view=invited">'.get_lang('ViewInvited').'</a> |';
 }

@@ -56,7 +56,7 @@ echo '</div>';
 
 // error messages
 if (isset($error) && intval($error) == 1) {
-	Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'), false);
+	Display::addFlash(Display::return_message(get_lang('FormHasErrorsPleaseComplete'), 'error', false));
 }
 
 // default header title form
@@ -72,13 +72,23 @@ $form = new FormValidator(
 	'POST',
 	'index.php?action=edit&id='.$original_id.'&description_type='.$description_type.'&'.api_get_cidreq()
 );
-
 $form->addElement('header', $header);
 $form->addElement('hidden', 'id', $original_id);
 $form->addElement('hidden', 'description_type', $description_type);
 $form->addElement('hidden', 'sec_token', $token);
-$form->addText('title', get_lang('Title'), true, array('size' => '50'));
-$form->applyFilter('title', 'html_filter');
+
+if (api_get_configuration_value('save_titles_as_html')) {
+    $form->addHtmlEditor(
+        'title',
+        get_lang('Title'),
+        true,
+        false,
+        ['ToolbarSet' => 'Minimal']
+    );
+} else {
+    $form->addText('title', get_lang('Title'));
+    $form->applyFilter('title', 'html_filter');
+}
 $form->addHtmlEditor(
 	'contentDescription',
 	get_lang('Content'),
@@ -106,6 +116,6 @@ $form->setDefaults($default);
 if (isset ($question[$description_type])) {
 	$message = '<strong>'.get_lang('QuestionPlan').'</strong><br />';
 	$message .= $question[$description_type];
-	Display::display_normal_message($message, false);
+	Display::addFlash(Display::return_message($message, 'normal', false));
 }
 $form->display();

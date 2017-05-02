@@ -1,13 +1,15 @@
 <?php
 /* For licensing terms, see /license.txt */
-
-require_once(dirname(__FILE__).'/../inc/global.inc.php');
-require_once(dirname(__FILE__).'/../forum/forumconfig.inc.php');
-require_once(dirname(__FILE__).'/../forum/forumfunction.inc.php');
+/**
+ * @package chamilo.webservices
+ */
+require_once __DIR__.'/../inc/global.inc.php';
+require_once __DIR__.'/../forum/forumconfig.inc.php';
+require_once __DIR__.'/../forum/forumfunction.inc.php';
 
 $libpath = api_get_path(LIBRARY_PATH);
 
-require_once(dirname(__FILE__).'/cm_webservice.php');
+require_once __DIR__.'/cm_webservice.php';
 
 /**
  * Description of cm_soap_inbox
@@ -19,30 +21,32 @@ class WSCMForum extends WSCM
 
     public function get_foruns_id($username, $password, $course_code)
     {
-        if($this->verifyUserPass($username, $password) == "valid")
-        {
-            $course_db = CourseManager::get_course_information($course_code);
+        if ($this->verifyUserPass($username, $password) == "valid") {
+            $course_db = api_get_course_info($course_code);
             $foruns_info = get_forums($id='', $course_db['code']);
             $foruns_id = '#';
-            foreach ($foruns_info as $forum)
-            {
-                if( isset($forum['forum_id']))
-                {
+            foreach ($foruns_info as $forum) {
+                if (isset($forum['forum_id'])) {
                     $foruns_id .= $forum['forum_id']."#";
                 }
             }
+
             return $foruns_id;
-        } else
+        } else {
             return get_lang('InvalidId');
+        }
     }
 
-    public function get_forum_title($username, $password, $course_code, $forum_id)
-    {
-        if($this->verifyUserPass($username, $password) == "valid")
-        {
-            $course_db = CourseManager::get_course_information($course_code);
-            $table_forums = Database :: get_course_table(TABLE_FORUM, $course_db['db_name']);
-            $table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY, $course_db['db_name']);
+    public function get_forum_title(
+        $username,
+        $password,
+        $course_code,
+        $forum_id
+    ) {
+        if ($this->verifyUserPass($username, $password) == "valid") {
+            $course_db = api_get_course_info($course_code);
+            $table_forums = Database::get_course_table(TABLE_FORUM, $course_db['db_name']);
+            $table_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY, $course_db['db_name']);
 
             $sql="SELECT * FROM ".$table_forums." forums, ".$table_item_property." item_properties
                             WHERE item_properties.tool='".TOOL_FORUM."'
@@ -54,13 +58,18 @@ class WSCMForum extends WSCM
 
             $forum_title = utf8_decode($forum_info['forum_title']);
             return $forum_title;
-        } else
+        } else {
             return get_lang('InvalidId');
+        }
     }
 
-    public function get_forum_threads_id($username, $password, $course_code, $forum_id)
-    {
-        if($this->verifyUserPass($username, $password) == "valid") {
+    public function get_forum_threads_id(
+        $username,
+        $password,
+        $course_code,
+        $forum_id
+    ) {
+        if ($this->verifyUserPass($username, $password) == "valid") {
             $threads_info = get_threads($forum_id);
             $threads_id = '#';
             foreach ($threads_info as $thread)
@@ -73,17 +82,22 @@ class WSCMForum extends WSCM
 
             return $threads_id;
 
-        } else
+        } else {
             return get_lang('InvalidId');
+        }
     }
 
-    public function get_forum_thread_data($username, $password, $course_code, $thread_id, $field)
-    {
-        if($this->verifyUserPass($username, $password) == "valid")
-        {
-            $course_db = CourseManager::get_course_information($course_code);
-            $table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY, $course_db['db_name']);
-            $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD, $course_db['db_name']);
+    public function get_forum_thread_data(
+        $username,
+        $password,
+        $course_code,
+        $thread_id,
+        $field
+    ) {
+        if ($this->verifyUserPass($username, $password) == "valid") {
+            $course_db = api_get_course_info($course_code);
+            $table_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY, $course_db['db_name']);
+            $table_threads = Database::get_course_table(TABLE_FORUM_THREAD, $course_db['db_name']);
 
             $sql="SELECT * FROM ".$table_threads." threads, ".$table_item_property." item_properties
                             WHERE item_properties.tool='".TOOL_FORUM_THREAD."'
@@ -92,40 +106,44 @@ class WSCMForum extends WSCM
             $result=Database::query($sql);
             $thread_info=Database::fetch_array($result);
 
-            switch ($field)
-            {
+            switch ($field) {
                 case 'title':
                     $htmlcode = true;
                     $field_table = "thread_title";
                     break;
-                case 'date' :
+                case 'date':
                     $field_table = "thread_date";
                     break;
-                case 'sender' :
+                case 'sender':
                     $field_table = "insert_user_id";
                     break;
-                case 'sender_name' :
+                case 'sender_name':
                     $user_id = $thread_info['insert_user_id'];
                     $user_info = api_get_user_info($user_id);
+
                     return $user_info['firstname'];
                     break;
-                default :
+                default:
                     $field_table = "title";
             }
 
             return $thread_info[$field_table];
 
-        } else
+        } else {
             return get_lang('InvalidId');
+        }
     }
 
-    public function get_forum_thread_title($username, $password, $course_code, $thread_id)
-    {
-        if($this->verifyUserPass($username, $password) == "valid")
-        {
-            $course_db = CourseManager::get_course_information($course_code);
-            $table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY, $course_db['db_name']);
-            $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD, $course_db['db_name']);
+    public function get_forum_thread_title(
+        $username,
+        $password,
+        $course_code,
+        $thread_id
+    ) {
+        if ($this->verifyUserPass($username, $password) == "valid") {
+            $course_db = api_get_course_info($course_code);
+            $table_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY, $course_db['db_name']);
+            $table_threads = Database::get_course_table(TABLE_FORUM_THREAD, $course_db['db_name']);
 
             $sql="SELECT * FROM ".$table_threads." threads, ".$table_item_property." item_properties
                             WHERE item_properties.tool='".TOOL_FORUM_THREAD."'
@@ -139,19 +157,19 @@ class WSCMForum extends WSCM
 
             return $thread_info[$field_table];
 
-        } else
+        } else {
             return get_lang('InvalidId');
+        }
     }
 
 
     public function get_posts_id($username, $password, $course_code, $thread_id)
     {
-        if($this->verifyUserPass($username, $password) == "valid")
-        {
-            $course_db = CourseManager::get_course_information($course_code);
+        if ($this->verifyUserPass($username, $password) == "valid") {
+            $course_db = api_get_course_info($course_code);
 
-            $table_users = Database :: get_main_table(TABLE_MAIN_USER);
-            $table_posts = Database :: get_course_table(TABLE_FORUM_POST, $course_db['db_name']);
+            $table_users = Database::get_main_table(TABLE_MAIN_USER);
+            $table_posts = Database::get_course_table(TABLE_FORUM_POST, $course_db['db_name']);
 
             // note: change these SQL so that only the relevant fields of the user table are used
             if (api_is_allowed_to_edit(null,true)) {
@@ -176,52 +194,56 @@ class WSCMForum extends WSCM
 
             $posts_id = '#';
 
-            foreach ($posts_info as $post)
-            {
-                if( isset($post['post_id']))
-                {
+            foreach ($posts_info as $post) {
+                if (isset($post['post_id'])) {
                     $posts_id .= $post['post_id']."#";
                 }
             }
+
             return $posts_id;
-        } else
+        } else {
             return get_lang('InvalidId');
+        }
     }
 
-    public function get_post_data($username, $password, $course_code, $post_id, $field)
-    {
-        if($this->verifyUserPass($username, $password) == "valid")
-        {
-            $course_db = CourseManager::get_course_information($course_code);
+    public function get_post_data(
+        $username,
+        $password,
+        $course_code,
+        $post_id,
+        $field
+    ) {
+        if ($this->verifyUserPass($username, $password) == "valid") {
+            $course_db = api_get_course_info($course_code);
 
-            $table_posts 	= Database :: get_course_table(TABLE_FORUM_POST, $course_db['db_name']);
-            $table_users 	= Database :: get_main_table(TABLE_MAIN_USER);
+            $table_posts 	= Database::get_course_table(TABLE_FORUM_POST, $course_db['db_name']);
+            $table_users 	= Database::get_main_table(TABLE_MAIN_USER);
 
-            $sql="SELECT * FROM ".$table_posts."posts, ".$table_users." users WHERE posts.poster_id=users.user_id AND posts.post_id='".Database::escape_string($post_id)."'";
+            $sql = "SELECT * FROM ".$table_posts."posts, ".$table_users." users 
+                    WHERE posts.poster_id=users.user_id AND posts.post_id='".Database::escape_string($post_id)."'";
             $result=Database::query($sql);
             $post_info =Database::fetch_array($result);
 
             $htmlcode = false;
-            switch ($field)
-            {
+            switch ($field) {
                 case 'title':
                     $htmlcode = true;
                     $field_table = "post_title";
                     break;
-                case 'text' :
+                case 'text':
                     $htmlcode = true;
                     $field_table = "post_text";
                     break;
-                case 'date' :
+                case 'date':
                     $field_table = "post_date";
                     break;
-                case 'sender' :
+                case 'sender':
                     $field_table = "user_id";
                     break;
-                case 'sender_name' :
+                case 'sender_name':
                     $field_table = "firstname";
                     break;
-                default :
+                default:
                     $htmlcode = true;
                     $field_table = "title";
             }
@@ -230,17 +252,23 @@ class WSCMForum extends WSCM
             return get_lang('InvalidId');
     }
 
-    public function send_post($username, $password, $course_code, $forum_id, $thread_id, $title, $content)
-    {
-        if($this->verifyUserPass($username, $password) == "valid")
-        {
+    public function send_post(
+        $username,
+        $password,
+        $course_code,
+        $forum_id,
+        $thread_id,
+        $title,
+        $content
+    ) {
+        if ($this->verifyUserPass($username, $password) == "valid") {
             $em = Database::getManager();
-            $course_db = CourseManager::get_course_information($course_code);
+            $course_db = api_get_course_info($course_code);
 
             $user_id = UserManager::get_user_id_from_username($username);
-            $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD, $course_db['db_name']);
-            $forum_table_attachment = Database :: get_course_table(TABLE_FORUM_ATTACHMENT, $course_db['db_name']);
-            $table_posts = Database :: get_course_table(TABLE_FORUM_POST, $course_db['db_name']);
+            $table_threads = Database::get_course_table(TABLE_FORUM_THREAD, $course_db['db_name']);
+            $forum_table_attachment = Database::get_course_table(TABLE_FORUM_ATTACHMENT, $course_db['db_name']);
+            $table_posts = Database::get_course_table(TABLE_FORUM_POST, $course_db['db_name']);
             $post_date=date('Y-m-d H:i:s');
             $visible=1;
             $has_attachment=false;
@@ -253,7 +281,6 @@ class WSCMForum extends WSCM
             $content = htmlentities($content);
 
             $postDate = new DateTime(api_get_utc_datetime(), new DateTimeZone('UTC'));
-
             $post = new \Chamilo\CourseBundle\Entity\CForumPost();
             $post
                 ->setPostTitle($title)
@@ -270,15 +297,10 @@ class WSCMForum extends WSCM
             $em->flush();
 
             return "Post enviado!";
-//return $sql;
-
-            //send_notification_mails($thread_id, $values);
-
         } else
             return get_lang('InvalidId');
 
     }
-
 }
 
 /*

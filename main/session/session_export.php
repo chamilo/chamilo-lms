@@ -32,7 +32,7 @@ $archiveURL = api_get_path(WEB_CODE_PATH).'course_info/download.php?archive_path
 
 $tool_name = get_lang('ExportSessionListXMLCSV');
 
-$interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
+$interbreadcrumb[] = array('url' => 'session_list.php', 'name' => get_lang('SessionList'));
 
 set_time_limit(0);
 
@@ -56,9 +56,9 @@ if (isset($_POST['formSent'])) {
 				ORDER BY id";
 
 		if (api_is_multiple_url_enabled()) {
-			$tbl_session_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+			$tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 			$access_url_id = api_get_current_access_url_id();
-			if ($access_url_id != -1){
+			if ($access_url_id != -1) {
 			$sql = "SELECT s.id, name,id_coach,username,access_start_date,access_end_date,visibility,session_category_id
 					FROM $tbl_session s
 					INNER JOIN $tbl_session_rel_access_url as session_rel_url
@@ -107,7 +107,7 @@ if (isset($_POST['formSent'])) {
 
 			$archiveFile = 'export_sessions_'.$session_id.'_'.api_get_local_time().'.'.$file_type;
 			while (file_exists($archivePath.$archiveFile)) {
-				$archiveFile ='export_users_'.$session_id.'_'.api_get_local_time().'_'.uniqid('').'.'.$file_type;
+				$archiveFile = 'export_users_'.$session_id.'_'.api_get_local_time().'_'.uniqid('').'.'.$file_type;
 			}
 
 			$cvs = false;
@@ -116,12 +116,12 @@ if (isset($_POST['formSent'])) {
 		}
 
 		while ($row = Database::fetch_array($result)) {
-			$row['name'] = str_replace(';',',',$row['name']);
-			$row['username'] = str_replace(';',',',$row['username']);
-			$row['access_start_date'] = str_replace(';',',',$row['access_start_date']);
-			$row['access_end_date'] = str_replace(';',',',$row['access_end_date']);
-			$row['visibility'] = str_replace(';',',',$row['visibility']);
-			$row['session_category'] = str_replace(';',',',$row['session_category_id']);
+			$row['name'] = str_replace(';', ',', $row['name']);
+			$row['username'] = str_replace(';', ',', $row['username']);
+			$row['access_start_date'] = str_replace(';', ',', $row['access_start_date']);
+			$row['access_end_date'] = str_replace(';', ',', $row['access_end_date']);
+			$row['visibility'] = str_replace(';', ',', $row['visibility']);
+			$row['session_category'] = str_replace(';', ',', $row['session_category_id']);
 			// users
 			$sql = "SELECT DISTINCT $tbl_user.username
 					FROM $tbl_user
@@ -133,9 +133,9 @@ if (isset($_POST['formSent'])) {
 
 			$rsUsers = Database::query($sql);
 			$users = '';
-			while ($rowUsers = Database::fetch_array($rsUsers)){
-				if($cvs){
-					$users .= str_replace(';',',',$rowUsers['username']).'|';
+			while ($rowUsers = Database::fetch_array($rsUsers)) {
+				if ($cvs) {
+					$users .= str_replace(';', ',', $rowUsers['username']).'|';
 				} else {
 					$users .= "\t\t<User>$rowUsers[username]</User>\n";
 				}
@@ -175,8 +175,8 @@ if (isset($_POST['formSent'])) {
 				$coachs = implode(",", $coachs);
 
 				if ($cvs) {
-					$courses .= str_replace(';',',',$rowCourses['code']);
-					$courses .= '['.str_replace(';',',',$coachs).'][';
+					$courses .= str_replace(';', ',', $rowCourses['code']);
+					$courses .= '['.str_replace(';', ',', $coachs).'][';
 				} else {
 					$courses .= "\t\t<Course>\n";
 					$courses .= "\t\t\t<CourseCode>$rowCourses[code]</CourseCode>\n";
@@ -199,9 +199,9 @@ if (isset($_POST['formSent'])) {
 
 				$rsUsersCourse = Database::query($sql);
 				$userscourse = '';
-				while ($rowUsersCourse = Database::fetch_array($rsUsersCourse)){
+				while ($rowUsersCourse = Database::fetch_array($rsUsersCourse)) {
 					if ($cvs) {
-						$userscourse .= str_replace(';',',',$rowUsersCourse['username']).',';
+						$userscourse .= str_replace(';', ',', $rowUsersCourse['username']).',';
 					} else {
 						$courses .= "\t\t\t<User>$rowUsersCourse[username]</User>\n";
 					}
@@ -281,7 +281,7 @@ $sql = "SELECT id, name FROM $tbl_session ORDER BY name";
 if (api_is_multiple_url_enabled()) {
 	$tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 	$access_url_id = api_get_current_access_url_id();
-	if ($access_url_id != -1){
+	if ($access_url_id != -1) {
 	$sql = "SELECT s.id, name FROM $tbl_session s
 			INNER JOIN $tbl_session_rel_access_url as session_rel_url
 			ON (s.id = session_rel_url.session_id)
@@ -294,17 +294,17 @@ $Sessions = Database::store_result($result);
 
 echo '<div class="actions">';
 echo '<a href="../session/session_list.php">'.
-		Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('SessionList'),'',ICON_SIZE_MEDIUM).'</a>';
+		Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('SessionList'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 if (!empty($errorMsg)) {
-	Display::display_normal_message($errorMsg, false); //main API
+	echo Display::return_message($errorMsg, 'normal', false); //main API
 }
 
 $form = new FormValidator('session_export', 'post', api_get_self());
 $form->addElement('hidden', 'formSent', 1);
-$form->addElement('radio', 'file_type', get_lang('OutputFileType'), 'CSV' , 'csv', null);
-$form->addElement('radio', 'file_type', '', 'XLS' , 'xls', null);
+$form->addElement('radio', 'file_type', get_lang('OutputFileType'), 'CSV', 'csv', null);
+$form->addElement('radio', 'file_type', '', 'XLS', 'xls', null);
 $form->addElement('radio', 'file_type', null, 'XML', 'xml', null, array('id' => 'file_type_xml'));
 
 $options = array();
@@ -313,7 +313,7 @@ foreach ($Sessions as $enreg) {
     $options[$enreg['id']] = $enreg['name'];
 }
 
-$form->addElement('select', 'session_id', get_lang('WhichSessionToExport'),  $options);
+$form->addElement('select', 'session_id', get_lang('WhichSessionToExport'), $options);
 $form->addButtonExport(get_lang('ExportSession'));
 
 $defaults = array();

@@ -85,7 +85,7 @@ class Agenda
                         ) &&
                         GroupManager::is_tutor_of_group(
                             api_get_user_id(),
-                            $groupInfo['iid']
+                            $groupInfo
                         );
                     if ($isGroupAccess) {
                         $isAllowToEdit = true;
@@ -2955,16 +2955,14 @@ class Agenda
 
         $form = '';
         if (api_is_allowed_to_edit(false, true) ||
-            (api_get_course_setting(
-                    'allow_user_edit_agenda'
-                ) && !api_is_anonymous()) &&
+            (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()) &&
             api_is_allowed_to_session_edit(false, true) ||
             (GroupManager::user_has_access(
                     api_get_user_id(),
                     $groupIid,
                     GroupManager::GROUP_TOOL_CALENDAR
                 ) &&
-                GroupManager::is_tutor_of_group(api_get_user_id(), $groupIid))
+                GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo))
         ) {
             $actionsLeft .= Display::url(
                 Display::return_icon(
@@ -3063,9 +3061,7 @@ class Agenda
 
         $toolbar = Display::toolbarAction(
             'toolbar-agenda',
-            array(0 => $actionsLeft, 1 => $actionsRight),
-            2,
-            false
+            array($actionsLeft, $actionsRight)
         );
 
         return $toolbar;
@@ -3277,8 +3273,8 @@ class Agenda
         // get agenda-items for every course
         foreach ($courses_dbs as $key => $array_course_info) {
             //databases of the courses
-            $TABLEAGENDA = Database:: get_course_table(TABLE_AGENDA);
-            $TABLE_ITEMPROPERTY = Database:: get_course_table(
+            $TABLEAGENDA = Database::get_course_table(TABLE_AGENDA);
+            $TABLE_ITEMPROPERTY = Database::get_course_table(
                 TABLE_ITEM_PROPERTY
             );
 
@@ -3540,7 +3536,7 @@ class Agenda
         $week = "",
         $type
     ) {
-        $tbl_personal_agenda = Database:: get_main_table(TABLE_PERSONAL_AGENDA);
+        $tbl_personal_agenda = Database::get_main_table(TABLE_PERSONAL_AGENDA);
         $user_id = intval($user_id);
 
         // 1. creating the SQL statement for getting the personal agenda items in MONTH view
@@ -3920,7 +3916,7 @@ class Agenda
      * @return    array    Array of events ordered by start date, in
      * [0]('datestart','dateend','title'),[1]('datestart','dateend','title','link','coursetitle') format,
      * where datestart and dateend are in yyyyMMddhhmmss format.
-     * @TODO Implement really personal events (from user DB) and global events (from main DB)
+     * @deprecated use agenda events
      */
     public static function get_personal_agenda_items_between_dates(
         $user_id,
@@ -3953,8 +3949,8 @@ class Agenda
         foreach ($courses as $id => $course) {
             $c = api_get_course_info_by_id($course['real_id']);
             //databases of the courses
-            $t_a = Database:: get_course_table(TABLE_AGENDA, $course['db']);
-            $t_ip = Database:: get_course_table(
+            $t_a = Database::get_course_table(TABLE_AGENDA, $course['db']);
+            $t_ip = Database::get_course_table(
                 TABLE_ITEM_PROPERTY,
                 $course['db']
             );
@@ -4053,7 +4049,7 @@ class Agenda
      */
     public static function get_personal_agenda_item($id)
     {
-        $tbl_personal_agenda = Database:: get_main_table(TABLE_PERSONAL_AGENDA);
+        $tbl_personal_agenda = Database::get_main_table(TABLE_PERSONAL_AGENDA);
         $id = intval($id);
         // make sure events of the personal agenda can only be seen by the user himself
         $user = api_get_user_id();

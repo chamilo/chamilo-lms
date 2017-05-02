@@ -31,11 +31,11 @@ if (empty($survey_data)) {
 }
 
 // Database table definitions
-$table_survey = Database:: get_course_table(TABLE_SURVEY);
-$table_survey_question = Database:: get_course_table(TABLE_SURVEY_QUESTION);
-$table_survey_question_option = Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
-$table_course = Database:: get_main_table(TABLE_MAIN_COURSE);
-$table_user = Database:: get_main_table(TABLE_MAIN_USER);
+$table_survey = Database::get_course_table(TABLE_SURVEY);
+$table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
+$table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
+$table_course = Database::get_main_table(TABLE_MAIN_COURSE);
+$table_user = Database::get_main_table(TABLE_MAIN_USER);
 
 $urlname = strip_tags(api_substr(api_html_entity_decode($survey_data['title'], ENT_QUOTES), 0, 40));
 if (api_strlen(strip_tags($survey_data['title'])) > 40) {
@@ -83,7 +83,7 @@ if ($survey_data['invited'] > 0 && !isset($_POST['submit'])) {
 	$message .= get_lang('HaveAnswered').' ';
 	$message .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=invited&survey_id='.$survey_data['survey_id'].'">'.$survey_data['invited'].'</a> ';
 	$message .= get_lang('WereInvited');
-	Display::display_normal_message($message, false);
+	echo Display::return_message($message, 'normal', false);
 }
 
 // Building the form for publishing the survey
@@ -125,7 +125,7 @@ $form->addElement(
 );
 
 $form->addElement('html', '<div id="check_mail">');
-$form->addElement('checkbox', 'send_mail','', get_lang('SendMail'));
+$form->addElement('checkbox', 'send_mail', '', get_lang('SendMail'));
 $form->addElement('html', '</div>');
 
 $form->addElement('html', '<div id="mail_text_wrapper">');
@@ -171,9 +171,14 @@ $form->addElement('label', null, $auto_survey_link);
 
 if ($form->validate()) {
    	$values = $form->exportValues();
-    if (isset($values['send_mail']) && $values['send_mail'] == 1) {
+
+    $resendAll = isset($values['resend_to_all']) ? $values['resend_to_all'] : '';
+    $sendMail = isset($values['send_mail']) ? $values['send_mail'] : '';
+    $remindUnAnswered = isset($values['remindUnAnswered']) ? $values['remindUnAnswered'] : '';
+
+    if ($sendMail) {
         if (empty($values['mail_title']) || empty($values['mail_text'])) {
-            Display :: display_error_message(get_lang('FormHasErrorsPleaseComplete'));
+            echo Display::return_message(get_lang('FormHasErrorsPleaseComplete'), 'error');
             // Getting the invited users
         	$defaults = SurveyUtil::get_invited_users($survey_data['code']);
 
@@ -197,10 +202,6 @@ if ($form->validate()) {
 		!empty($survey_data['invite_mail'])
 	);
 
-    $resendAll = isset($values['resend_to_all']) ? $values['resend_to_all'] : '';
-    $sendMail = isset($values['send_mail']) ? $values['send_mail'] : '';
-    $remindUnAnswered = isset($values['remindUnAnswered']) ? $values['remindUnAnswered'] : '';
-
 	// Saving the invitations for the course users
 	$count_course_users = SurveyUtil::saveInvitations(
 		$values['users'],
@@ -212,8 +213,8 @@ if ($form->validate()) {
 	);
 
 	// Saving the invitations for the additional users
-	$values['additional_users'] = $values['additional_users'].';'; 	// This is for the case when you enter only one email
-	$temp = str_replace(',', ';', $values['additional_users']);		// This is to allow , and ; as email separators
+	$values['additional_users'] = $values['additional_users'].';'; // This is for the case when you enter only one email
+	$temp = str_replace(',', ';', $values['additional_users']); // This is to allow , and ; as email separators
 	$additional_users = explode(';', $temp);
 	for ($i = 0; $i < count($additional_users); $i++) {
 		$additional_users[$i] = trim($additional_users[$i]);
@@ -231,7 +232,7 @@ if ($form->validate()) {
 	// Updating the invited field in the survey table
 	SurveyUtil::update_count_invited($survey_data['code']);
 	$total_count = $count_course_users + $counter_additional_users;
-    $table_survey = Database :: get_course_table(TABLE_SURVEY);
+    $table_survey = Database::get_course_table(TABLE_SURVEY);
 	// Counting the number of people that are invited
 	$sql = "SELECT * FROM $table_survey
 	        WHERE
@@ -248,8 +249,12 @@ if ($form->validate()) {
     	$message .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=invited&survey_id='.$survey_data['survey_id'].'">'.
 			$total_invited.'</a> ';
     	$message .= get_lang('WereInvited');
-    	Display::display_normal_message($message, false);
-    	Display::display_confirmation_message($total_count.' '.get_lang('InvitationsSend'));
+
+    	echo Display::return_message($message, 'normal', false);
+
+    	if ($sendMail) {
+    	    echo Display::return_message($total_count.' '.get_lang('InvitationsSend'), 'success', false);
+        }
     }
 } else {
 	// Getting the invited users

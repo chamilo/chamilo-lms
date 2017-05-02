@@ -90,7 +90,7 @@ class OpenMeetingsRestService
                                  The exact error is returned in the XML response.' );
                 return false;
                 break;
-            default :
+            default:
                 error_log( 'Your call to OpenMeetings Web Services '.$extra.' returned an unexpected HTTP status of: ' . $status_code [0] . " Request " . $request );
                 return false;
         }

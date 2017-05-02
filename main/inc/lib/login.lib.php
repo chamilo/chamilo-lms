@@ -439,7 +439,9 @@ class Login
                         $_SESSION['id_session'] = intval($_GET['id_session']);
                         $sql = 'SELECT name FROM ' . $tbl_session . ' WHERE id="' . intval($_SESSION['id_session']) . '"';
                         $rs = Database::query($sql);
-                        list($_SESSION['session_name']) = Database::fetch_array($rs);
+                        if ($rs != null) {
+                            list($_SESSION['session_name']) = Database::fetch_array($rs);
+                        }
                     } else {
                         Session::erase('session_name');
                         Session::erase('id_session');
@@ -492,7 +494,9 @@ class Login
                     $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
                     $sql = 'SELECT name FROM ' . $tbl_session . ' WHERE id="' . intval($_SESSION['id_session']) . '"';
                     $rs = Database::query($sql);
-                    list($_SESSION['session_name']) = Database::fetch_array($rs);
+                    if ($rs != null) {
+                        list($_SESSION['session_name']) = Database::fetch_array($rs);
+                    }
                     $_SESSION['id_session'] = intval($_GET['id_session']);
                 }
 
@@ -501,12 +505,13 @@ class Login
 
                     //The value  $_dont_save_user_course_access should be added before the call of global.inc.php see the main/inc/chat.ajax.php file
                     //Disables the updates in the TRACK_E_COURSE_ACCESS table
+                    global $_dont_save_user_course_access;
                     if (isset($_dont_save_user_course_access) && $_dont_save_user_course_access == true) {
                         $save_course_access = false;
                     }
 
                     if ($save_course_access) {
-                        $course_tracking_table = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+                        $course_tracking_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 
                         /*
                          * When $_configuration['session_lifetime'] is too big 100 hours (in order to let users take exercises with no problems)
@@ -609,9 +614,9 @@ class Login
                         // this user has no status related to this course
                         // The user is subscribed in a session? The user is a Session coach a Session admin ?
 
-                        $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
-                        $tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
-                        $tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+                        $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+                        $tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+                        $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
                         //Session coach, session admin, course coach admin
                         $sql = "SELECT session.id_coach, session_admin_id, session_rcru.user_id
@@ -821,7 +826,7 @@ class Login
                         }
                     }
                 }
-            } elseif (!empty($_SESSION['studentview'])) {
+            //} elseif (!empty($_SESSION['studentview'])) {
                 //all is fine, no change to that, obviously
             } elseif (empty($_SESSION['studentview'])) {
                 // We are in teacherview here
@@ -852,7 +857,7 @@ class Login
             $condition = "LOWER(username) = '".Database::escape_string($username)."'";
         }
 
-		$tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
+		$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 		$query = "SELECT 
 		            user_id AS uid, 
 		            lastname AS lastName, 

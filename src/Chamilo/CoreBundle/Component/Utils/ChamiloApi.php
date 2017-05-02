@@ -67,17 +67,18 @@ class ChamiloApi
      * Get the platform logo path
      * @return null|string
      */
-    public static function getWebPlatformLogoPath()
+    public static function getWebPlatformLogoPath($theme = '')
     {
-        $theme = api_get_visual_theme();
+        $theme = empty($theme) ? api_get_visual_theme() : $theme;
         $accessUrlId = api_get_current_access_url_id();
-        $customLogoPath = "themes/$theme/images/header-logo-custom$accessUrlId.png";
+        $themeDir = \Template::getThemeDir($theme);
+        $customLogoPath = "$themeDir/images/header-logo-custom$accessUrlId.png";
 
         if (file_exists(api_get_path(SYS_PUBLIC_PATH) . "css/$customLogoPath")) {
             return api_get_path(WEB_CSS_PATH) . $customLogoPath;
         }
 
-        $originalLogoPath = "themes/$theme/images/header-logo.png";
+        $originalLogoPath = "$themeDir/images/header-logo.png";
 
         if (file_exists(api_get_path(SYS_CSS_PATH) . $originalLogoPath)) {
             return api_get_path(WEB_CSS_PATH) . $originalLogoPath;
@@ -92,9 +93,9 @@ class ChamiloApi
      * @param array $imageAttributes Optional.
      * @return string
      */
-    public static function getPlatformLogo($imageAttributes = [])
+    public static function getPlatformLogo($theme = '', $imageAttributes = [])
     {
-        $logoPath = self::getWebPlatformLogoPath();
+        $logoPath = self::getWebPlatformLogoPath($theme);
         $institution = api_get_setting('Institution');
         $institutionUrl = api_get_setting('InstitutionUrl');
         $siteName = api_get_setting('siteName');

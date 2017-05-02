@@ -18,7 +18,7 @@ class UserTable extends SortableTable
      */
     public function __construct($userid, $evals = array(), $links = array(), $addparams = null)
     {
-        parent :: __construct('userlist', null, null, 0);
+        parent::__construct('userlist', null, null, 0);
         $this->userid = $userid;
         $this->datagen = new UserDataGenerator($userid, $evals, $links);
         if (isset($addparams)) {
@@ -32,7 +32,7 @@ class UserTable extends SortableTable
         $this->set_header($column++, get_lang('EvaluationAverage'));
         $this->set_header($column++, get_lang('Result'));
 
-        $scoredisplay = ScoreDisplay :: instance();
+        $scoredisplay = ScoreDisplay::instance();
         if ($scoredisplay->is_custom()) {
             $this->set_header($column++, get_lang('Display'));
         }
@@ -51,37 +51,37 @@ class UserTable extends SortableTable
      */
     public function get_table_data($from = 1, $per_page = null, $column = null, $direction = null, $sort = null)
     {
-        $scoredisplay = ScoreDisplay :: instance();
+        $scoredisplay = ScoreDisplay::instance();
 
         // determine sorting type
         switch ($this->column) {
             // Type
             case 0:
-                $sorting = UserDataGenerator :: UDG_SORT_TYPE;
+                $sorting = UserDataGenerator::UDG_SORT_TYPE;
                 break;
             case 1:
-                $sorting = UserDataGenerator :: UDG_SORT_NAME;
+                $sorting = UserDataGenerator::UDG_SORT_NAME;
                 break;
             case 2:
-                $sorting = UserDataGenerator :: UDG_SORT_COURSE;
+                $sorting = UserDataGenerator::UDG_SORT_COURSE;
                 break;
             case 3:
-                $sorting = UserDataGenerator :: UDG_SORT_CATEGORY;
+                $sorting = UserDataGenerator::UDG_SORT_CATEGORY;
                 break;
             case 4:
-                $sorting = UserDataGenerator :: UDG_SORT_AVERAGE;
+                $sorting = UserDataGenerator::UDG_SORT_AVERAGE;
                 break;
             case 5:
-                $sorting = UserDataGenerator :: UDG_SORT_SCORE;
+                $sorting = UserDataGenerator::UDG_SORT_SCORE;
                 break;
             case 6:
-                $sorting = UserDataGenerator :: UDG_SORT_MASK;
+                $sorting = UserDataGenerator::UDG_SORT_MASK;
                 break;
         }
         if ($this->direction == 'DESC') {
-            $sorting |= UserDataGenerator :: UDG_SORT_DESC;
+            $sorting |= UserDataGenerator::UDG_SORT_DESC;
         } else {
-            $sorting |= UserDataGenerator :: UDG_SORT_ASC;
+            $sorting |= UserDataGenerator::UDG_SORT_ASC;
         }
         $data_array = $this->datagen->get_data($sorting, $from, $this->per_page);
         // generate the data to display

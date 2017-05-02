@@ -7,7 +7,7 @@
 /**
  * Code
  */
-require_once dirname(__FILE__) . '/IndexableChunk.class.php';
+require_once __DIR__.'/IndexableChunk.class.php';
 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 
 /**
@@ -360,11 +360,11 @@ function search_widget_show($action='index.php')
     $show_thesaurus = false;
     foreach ($url_params as $param) {
         if (isset($_REQUEST[$param]) && is_array($_REQUEST[$param])) {
-            $thesaurus_decided = FALSE;
+            $thesaurus_decided = false;
             foreach ($_REQUEST[$param] as $term) {
                 if (!empty($term)) {
                     $show_thesaurus = true;
-                    $thesaurus_decided = TRUE;
+                    $thesaurus_decided = true;
                     break;
                 }
             }

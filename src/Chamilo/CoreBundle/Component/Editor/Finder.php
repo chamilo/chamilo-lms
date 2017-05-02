@@ -26,7 +26,7 @@ class Finder extends \elFinder
     /**
      * Constructor
      *
-     * @param  array  elFinder and roots configurations
+     * @param  array  $opts elFinder and roots configurations
      * @author Dmitry (dio) Levashov
      */
     public function __construct($opts)
@@ -70,7 +70,7 @@ class Finder extends \elFinder
         }
 
         if (! interface_exists('elFinderSessionInterface')) {
-            include_once dirname(__FILE__).'/elFinderSessionInterface.php';
+            include_once __DIR__.'/elFinderSessionInterface.php';
         }
 
         // session handler
@@ -85,7 +85,7 @@ class Finder extends \elFinder
                 )
             );
             if (! class_exists('elFinderSession')) {
-                include_once dirname(__FILE__) . '/elFinderSession.php';
+                include_once __DIR__.'/elFinderSession.php';
             }
             $this->session = new elFinderSession($sessionOpts);
         }

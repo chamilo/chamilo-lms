@@ -124,7 +124,7 @@ class Link extends Model
         $courseId = null,
         $sessionId = null
     ) {
-        $tblLink = Database:: get_course_table(TABLE_LINK);
+        $tblLink = Database::get_course_table(TABLE_LINK);
         $linkUrl = Database::escape_string($linkUrl);
         $linkId = intval($linkId);
         if (is_null($courseId)) {
@@ -270,7 +270,7 @@ class Link extends Model
 
                     // Add category name if set.
                     if (isset($selectcategory) && $selectcategory > 0) {
-                        $table_link_category = Database:: get_course_table(
+                        $table_link_category = Database::get_course_table(
                             TABLE_LINK_CATEGORY
                         );
                         $sql_cat = 'SELECT * FROM %s WHERE id=%d AND c_id = %d LIMIT 1';
@@ -301,7 +301,7 @@ class Link extends Model
                     $did = $di->index();
                     if ($did) {
                         // Save it to db.
-                        $tbl_se_ref = Database:: get_main_table(
+                        $tbl_se_ref = Database::get_main_table(
                             TABLE_MAIN_SEARCH_ENGINE_REF
                         );
                         $sql = 'INSERT INTO %s (id, course_code, tool_id, ref_id_high_level, search_did)
@@ -321,7 +321,7 @@ class Link extends Model
                 Display::addFlash(Display::return_message(get_lang('LinkAdded')));
             }
         } elseif ($type == 'category') {
-            $tbl_categories = Database:: get_course_table(TABLE_LINK_CATEGORY);
+            $tbl_categories = Database::get_course_table(TABLE_LINK_CATEGORY);
 
             $category_title = trim($_POST['category_title']);
             $description = trim($_POST['description']);
@@ -376,8 +376,8 @@ class Link extends Model
     public static function deletelinkcategory($id, $type)
     {
         $courseInfo = api_get_course_info();
-        $tbl_link = Database:: get_course_table(TABLE_LINK);
-        $tbl_categories = Database:: get_course_table(TABLE_LINK_CATEGORY);
+        $tbl_link = Database::get_course_table(TABLE_LINK);
+        $tbl_categories = Database::get_course_table(TABLE_LINK_CATEGORY);
 
         $course_id = $courseInfo['real_id'];
         $id = intval($id);
@@ -444,7 +444,7 @@ class Link extends Model
     {
         // Remove from search engine if enabled.
         if (api_get_setting('search_enabled') === 'true') {
-            $tbl_se_ref = Database:: get_main_table(
+            $tbl_se_ref = Database::get_main_table(
                 TABLE_MAIN_SEARCH_ENGINE_REF
             );
             $sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s LIMIT 1';
@@ -476,7 +476,7 @@ class Link extends Model
      **/
     public static function get_link_info($id)
     {
-        $tbl_link = Database:: get_course_table(TABLE_LINK);
+        $tbl_link = Database::get_course_table(TABLE_LINK);
         $course_id = api_get_course_int_id();
 
         if (empty($id) || empty($course_id)) {
@@ -499,7 +499,7 @@ class Link extends Model
      */
     public static function editLink($id, $values = array())
     {
-        $tbl_link = Database:: get_course_table(TABLE_LINK);
+        $tbl_link = Database::get_course_table(TABLE_LINK);
         $_course = api_get_course_info();
         $course_id = $_course['real_id'];
         $id = intval($id);
@@ -581,7 +581,7 @@ class Link extends Model
             // Actually, it consists on delete terms from db,
             // insert new ones, create a new search engine document, and remove the old one.
             // Get search_did.
-            $tbl_se_ref = Database:: get_main_table(
+            $tbl_se_ref = Database::get_main_table(
                 TABLE_MAIN_SEARCH_ENGINE_REF
             );
             $sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s LIMIT 1';
@@ -654,7 +654,7 @@ class Link extends Model
 
                 // Add category name if set.
                 if (isset($categoryId) && $categoryId > 0) {
-                    $table_link_category = Database:: get_course_table(
+                    $table_link_category = Database::get_course_table(
                         TABLE_LINK_CATEGORY
                     );
                     $sql_cat = 'SELECT * FROM %s WHERE id=%d and c_id = %d LIMIT 1';
@@ -729,7 +729,7 @@ class Link extends Model
      */
     public static function editCategory($id, $values)
     {
-        $tbl_categories = Database:: get_course_table(TABLE_LINK_CATEGORY);
+        $tbl_categories = Database::get_course_table(TABLE_LINK_CATEGORY);
         $course_id = api_get_course_int_id();
         $id = intval($id);
 
@@ -789,8 +789,8 @@ class Link extends Model
      */
     public static function getLinkCategories($courseId, $sessionId, $withBaseContent = true)
     {
-        $tblLinkCategory = Database:: get_course_table(TABLE_LINK_CATEGORY);
-        $tblItemProperty = Database:: get_course_table(TABLE_ITEM_PROPERTY);
+        $tblLinkCategory = Database::get_course_table(TABLE_LINK_CATEGORY);
+        $tblItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $courseId = intval($courseId);
 
         // Condition for the session.
@@ -868,8 +868,8 @@ class Link extends Model
         $sessionId,
         $withBaseContent = true
     ) {
-        $tbl_link = Database:: get_course_table(TABLE_LINK);
-        $TABLE_ITEM_PROPERTY = Database:: get_course_table(TABLE_ITEM_PROPERTY);
+        $tbl_link = Database::get_course_table(TABLE_LINK);
+        $TABLE_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $courseId = (int) $courseId;
         $sessionId = (int) $sessionId;
         $categoryId = (int) $categoryId;
@@ -1105,7 +1105,7 @@ class Link extends Model
                     $url = api_get_path(WEB_CODE_PATH).'link/link_goto.php?' . api_get_cidreq() .'&link_id=' . $linkId .'&link_url=' . urlencode($myrow['url']);
                     $content .= Display::tag(
                         'a',
-                        Security:: remove_XSS($myrow['title']),
+                        Security::remove_XSS($myrow['title']),
                         array(
                             'href' => $url,
                             'target' => $myrow['target']
@@ -1126,7 +1126,7 @@ class Link extends Model
                         $url = api_get_path(WEB_CODE_PATH).'link/link_goto.php?' . api_get_cidreq() .'&link_id=' . $linkId . "&link_url=" . urlencode($myrow['url']);
                         $content .= Display::tag(
                             'a',
-                            Security:: remove_XSS($myrow['title']),
+                            Security::remove_XSS($myrow['title']),
                             array(
                                 'href' => $url,
                                 'target' => '_blank',
@@ -1227,7 +1227,7 @@ class Link extends Model
      */
     public static function movecatlink($action, $catlinkid, $courseId = null, $sessionId = null)
     {
-        $tbl_categories = Database:: get_course_table(TABLE_LINK_CATEGORY);
+        $tbl_categories = Database::get_course_table(TABLE_LINK_CATEGORY);
 
         if (is_null($courseId)) {
             $courseId = api_get_course_int_id();
@@ -1298,7 +1298,7 @@ class Link extends Model
     public static function get_cat($catname)
     {
         // Get category id (existing or make new).
-        $tbl_categories = Database:: get_course_table(TABLE_LINK_CATEGORY);
+        $tbl_categories = Database::get_course_table(TABLE_LINK_CATEGORY);
         $course_id = api_get_course_int_id();
 
         $result = Database:: query(
@@ -1339,7 +1339,7 @@ class Link extends Model
         $_course = api_get_course_info();
         $_user = api_get_user_info();
 
-        $tbl_link = Database:: get_course_table(TABLE_LINK);
+        $tbl_link = Database::get_course_table(TABLE_LINK);
         $course_id = api_get_course_int_id();
 
         $urleq = "url='" . Database:: escape_string($url) . "'";
@@ -1438,7 +1438,7 @@ class Link extends Model
             return 0; // 0 = fail
         }
 
-        $cat = ($catname = trim($linkdata['category'])) ? Link::get_cat($catname) : 0;
+        $cat = ($catname = trim($linkdata['category'])) ? self::get_cat($catname) : 0;
 
         $regs = array(); // Will be passed to ereg()
         $d = '';
@@ -1466,7 +1466,7 @@ class Link extends Model
             $d = substr($d, 2) . ' - ';
         }
 
-        return Link::put_link(
+        return self::put_link(
             $url,
             $cat,
             $title,
@@ -1597,7 +1597,7 @@ class Link extends Model
                 Display::return_icon('new_folder.png', get_lang('CategoryAdd'),'',ICON_SIZE_MEDIUM).'</a>';
         }
 
-        $categories = Link::getLinkCategories($course_id, $session_id);
+        $categories = self::getLinkCategories($course_id, $session_id);
         $count = count($categories);
         if (!empty($count)) {
             echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=list&show=none">';
@@ -1617,7 +1617,7 @@ class Link extends Model
 
         if ($count !== 0) {
             echo Display::panel(
-                Link::showLinksPerCategory(
+                self::showLinksPerCategory(
                     0,
                     api_get_course_int_id(),
                     api_get_session_id()
@@ -1643,11 +1643,11 @@ class Link extends Model
             $visibilityClass = null;
             if ($myrow['visibility'] == '1') {
                 $strVisibility =  '<a href="link.php?' . api_get_cidreq() .  '&sec_token='.$token.'&action=invisible&id=' . $myrow['id'] . '&scope=' . TOOL_LINK_CATEGORY . '" title="' . get_lang('Hide') . '">' .
-                    Display :: return_icon('visible.png', get_lang('Hide'), array (), ICON_SIZE_SMALL) . '</a>';
+                    Display::return_icon('visible.png', get_lang('Hide'), array (), ICON_SIZE_SMALL) . '</a>';
             } elseif ($myrow['visibility'] == '0') {
                 $visibilityClass = 'text-muted';
                 $strVisibility =  ' <a href="link.php?' . api_get_cidreq() .  '&sec_token='.$token.'&action=visible&id=' . $myrow['id'] . '&scope=' . TOOL_LINK_CATEGORY . '" title="' . get_lang('Show') . '">' .
-                    Display :: return_icon('invisible.png', get_lang('Show'), array (), ICON_SIZE_SMALL) . '</a>';
+                    Display::return_icon('invisible.png', get_lang('Show'), array (), ICON_SIZE_SMALL) . '</a>';
             }
 
             $header = '';
@@ -1665,7 +1665,7 @@ class Link extends Model
             if (api_is_allowed_to_edit(null, true)) {
                 if ($session_id == $myrow['session_id']) {
                     $header .= $strVisibility;
-                    $header .= Link::showCategoryAdminTools($myrow, $counter, count($categories));
+                    $header .= self::showCategoryAdminTools($myrow, $counter, count($categories));
                 } else {
                     $header .= get_lang('EditionNotAvailableFromSession');
                 }
@@ -1673,7 +1673,7 @@ class Link extends Model
 
             $childrenContent = '';
             if ($showChildren) {
-                $childrenContent = Link::showLinksPerCategory(
+                $childrenContent = self::showLinksPerCategory(
                     $myrow['id'],
                     api_get_course_int_id(),
                     api_get_session_id()
@@ -1697,7 +1697,7 @@ class Link extends Model
     {
         $course_id = api_get_course_int_id();
         $session_id = api_get_session_id();
-        $linkInfo = Link::get_link_info($linkId);
+        $linkInfo = self::get_link_info($linkId);
         $categoryId = isset($linkInfo['category_id']) ? $linkInfo['category_id'] : '';
         $lpId = isset($_GET['lp_id']) ? Security::remove_XSS($_GET['lp_id']) : null;
 
@@ -1740,7 +1740,7 @@ class Link extends Model
         $form->addText('title', get_lang('LinkName'));
         $form->addTextarea('description', get_lang('Description'));
 
-        $resultcategories = Link::getLinkCategories($course_id, $session_id);
+        $resultcategories = self::getLinkCategories($course_id, $session_id);
         $options = ['0' => '--'];
         if (!empty($resultcategories)) {
             foreach ($resultcategories as $myrow) {

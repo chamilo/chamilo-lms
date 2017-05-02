@@ -5,7 +5,7 @@
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-2">
-                        {% if item.visibility == constant('COURSE_VISIBILITY_CLOSED') %}
+                        {% if item.visibility == constant('COURSE_VISIBILITY_CLOSED') and not item.current_user_is_teacher %}
                             <span class="thumbnail">
                                 {% if item.thumbnails != '' %}
                                     <img src="{{ item.thumbnails }}" title="{{ item.title }}"
@@ -43,7 +43,7 @@
                             </div>
                         {% endif %}
                         <h4 class="course-items-title">
-                            {% if item.visibility == constant('COURSE_VISIBILITY_CLOSED') %}
+                            {% if item.visibility == constant('COURSE_VISIBILITY_CLOSED') and not item.current_user_is_teacher %}
                                 {{ item.title }} {{ item.code_course }}
                             {% else %}
                                 <a href="{{ item.link }}">
@@ -57,16 +57,40 @@
                         </h4>
                         <div class="course-items-session">
                             <div class="list-teachers">
-                                {{ 'teacher.png' | img(16, 'Professor'|get_lang ) }}
-                                {% for teacher in item.teachers %}
-                                    {% set counter = counter + 1 %}
-                                    {% if counter > 1 %} | {% endif %}
-                                    <a href="{{ teacher.url }}" class="ajax"
-                                       data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
-                                        {{ teacher.firstname }} {{ teacher.lastname }}
-                                    </a>
-                                {% endfor %}
+                                {% if item.teachers|length > 0 %}
+                                    {{ 'teacher.png' | img(16, 'Professor'|get_lang ) }}
+                                    {% for teacher in item.teachers %}
+                                        {% set counter = counter + 1 %}
+                                        {% if counter > 1 %} | {% endif %}
+                                        <a href="{{ teacher.url }}" class="ajax"
+                                        data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
+                                            {{ teacher.firstname }} {{ teacher.lastname }}
+                                        </a>
+                                    {% endfor %}
+                                {% endif %}
                             </div>
+
+                            {% if item.student_info %}
+                                {% if (item.student_info.progress is not null) and (item.student_info.score is not null) %}
+                                    <div class="course-student-info">
+                                        <div class="student-info">
+
+                                            {% if (item.student_info.progress is not null) %}
+                                            {{ "StudentCourseProgressX" | get_lang | format(item.student_info.progress) }}
+                                            {% endif %}
+
+                                            {% if (item.student_info.score is not null) %}
+                                            {{ "StudentCourseScoreX" | get_lang | format(item.student_info.score) }}
+                                            {% endif %}
+
+                                            {% if (item.student_info.certificate is not null) %}
+                                            {{ "StudentCourseCertificateX" | get_lang | format(item.student_info.certificate) }}
+                                            {% endif %}
+
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endif %}
                         </div>
                     </div>
                 </div>

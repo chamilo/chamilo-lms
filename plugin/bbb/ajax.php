@@ -7,7 +7,7 @@
 $course_plugin = 'bbb'; //needed in order to load the plugin lang variables
 $cidReset = true;
 
-require_once __DIR__ . '/../../main/inc/global.inc.php';
+require_once __DIR__.'/../../main/inc/global.inc.php';
 
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
 $meetingId = isset($_REQUEST['meeting']) ? intval($_REQUEST['meeting']) : 0;
@@ -33,10 +33,10 @@ switch ($action) {
                 'first'
             );
 
-            $url = $meetingInfo['video_url'] . '/capture.m4v';
+            $url = $meetingInfo['video_url'].'/capture.m4v';
             $link = Display::url(
                 Display::return_icon('save.png', get_lang('DownloadFile')),
-                $meetingInfo['video_url'] . '/capture.m4v',
+                $meetingInfo['video_url'].'/capture.m4v',
                 ['target' => '_blank']
             );
 

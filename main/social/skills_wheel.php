@@ -20,6 +20,9 @@ api_block_anonymous_users();
 $htmlHeadXtra[] = api_get_js('d3/d3.v3.5.4.min.js');
 $htmlHeadXtra[] = api_get_js('d3/colorbrewer.js');
 $htmlHeadXtra[] = api_get_js('d3/jquery.xcolor.js');
+$htmlHeadXtra[] = api_get_js('jquery.jsPlumb.all.js');
+$htmlHeadXtra[] = api_get_js('jqueryui-touch-punch/jquery.ui.touch-punch.min.js');
+$htmlHeadXtra[] = api_get_js('skills.js');
 
 $tpl = new Template(null, false, false);
 
@@ -52,6 +55,13 @@ $dialogForm->addLabel(
     Display::tag('p', null, ['id' => 'description', 'class' => 'form-control-static'])
 );
 
+$type = 'read'; //edit
+$tree = $skill->get_skills_tree($userId, null, true);
+$skill_visualizer = new SkillVisualizer($tree, $type);
+$tpl->assign('skill_visualizer', $skill_visualizer);
+//$html = $skill_visualizer->return_html();
+//$tpl->assign('html', $html);
+
 $tpl->assign('dialogForm', $dialogForm->returnForm());
 
 $url = api_get_path(WEB_AJAX_PATH)."skill.ajax.php?a=get_skills_tree_json&load_user=$userId";
@@ -64,7 +74,7 @@ $tpl->assign('user_info', $userInfo);
 $tpl->assign('ranking', $ranking);
 $tpl->assign('skills', $skills);
 
-$template = $tpl->get_template('skill/skill_tree_student.tpl');
+$template = $tpl->get_template('skill/skill_wheel_student.tpl');
 $content = $tpl->fetch($template);
 $tpl->assign('content', $content);
 $tpl->display_no_layout_template();

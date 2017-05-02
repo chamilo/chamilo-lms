@@ -40,10 +40,7 @@ require_once 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
 
 // Are we in a lp ?
-$origin = '';
-if (isset($_GET['origin'])) {
-    $origin = Security::remove_XSS($_GET['origin']);
-}
+$origin = api_get_origin();
 
 /* MAIN DISPLAY SECTION */
 
@@ -56,11 +53,18 @@ $current_thread = get_thread_information($_GET['forum'], $_GET['thread']);
 $current_forum = get_forum_information($_GET['forum']);
 $current_forum_category = get_forumcategory_information($current_forum['forum_category']);
 $current_post = get_post_information($_GET['post']);
+if (empty($current_post)) {
+    api_not_allowed(true);
+}
 
 api_block_course_item_locked_by_gradebook($_GET['thread'], LINK_FORUM_THREAD);
 
-/* Header and Breadcrumbs */
+$isEditable = postIsEditableByStudent($current_forum, $current_post);
+if (!$isEditable) {
+    api_not_allowed(true);
+}
 
+/* Header and Breadcrumbs */
 if (isset($_SESSION['gradebook'])) {
     $gradebook = $_SESSION['gradebook'];
 }
@@ -105,7 +109,7 @@ if ($origin == 'group') {
     $interbreadcrumb[] = array('url' => 'javascript: void (0);', 'name' => get_lang('EditPost'));
 }
 
-$table_link = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+$table_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
 /* Header */
 $htmlHeadXtra[] = <<<JS
@@ -145,7 +149,7 @@ if (!api_is_allowed_to_edit(null, true) &&
 
 if (!api_is_allowed_to_edit(null, true) &&
     (
-        ($current_forum_category && $current_forum_category['locked'] <> 0 ) ||
+        ($current_forum_category && $current_forum_category['locked'] <> 0) ||
         $current_forum['locked'] <> 0 ||
         $current_thread['locked'] <> 0
     )
@@ -161,7 +165,7 @@ $group_id = api_get_group_id();
 
 if (!api_is_allowed_to_edit(null, true) &&
     $current_forum['allow_edit'] == 0 &&
-    !GroupManager::is_tutor_of_group(api_get_user_id(), $group_properties['iid'])
+    !GroupManager::is_tutor_of_group(api_get_user_id(), $group_properties)
 ) {
     api_not_allowed(true);
 }
@@ -195,7 +199,7 @@ echo '<div class="forum_title">';
 echo '<h1>';
 echo Display::url(
     prepare4display($current_forum['forum_title']),
-    'viewforum.php?' . api_get_cidreq() . '&' . http_build_query([
+    'viewforum.php?'.api_get_cidreq().'&'.http_build_query([
         'origin' => $origin,
         'forum' => $current_forum['forum_id']
     ]),

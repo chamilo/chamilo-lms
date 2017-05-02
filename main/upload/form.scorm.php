@@ -127,8 +127,9 @@ if (is_dir(api_get_path(PLUGIN_PATH)."/pens")) {
 // the default values for the form
 $defaults = array('index_document' => 'checked="checked"', 'use_max_score' => 1);
 $form->setDefaults($defaults);
-Display::display_normal_message(
+echo Display::return_message(
     Display::tag('strong', get_lang('SupportedScormContentMakers')).': '.implode(', ', $content_origins),
+    'normal',
     false
 );
 $form->display();

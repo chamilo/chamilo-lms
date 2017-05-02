@@ -36,12 +36,7 @@ $this_section = SECTION_COURSES;
 $nameTools = get_lang('ToolForum');
 
 // Are we in a lp ?
-$origin = '';
-$origin_string = '';
-if (isset($_GET['origin'])) {
-    $origin = Security::remove_XSS($_GET['origin']);
-    $origin_string = '&origin='.$origin;
-}
+$origin = api_get_origin();
 
 /* Including necessary files */
 require 'forumconfig.inc.php';
@@ -52,12 +47,11 @@ $sessionId = api_get_session_id();
 $groupId = api_get_group_id();
 $courseId = api_get_course_int_id();
 $groupInfo = GroupManager::get_group_properties($groupId);
-
-$isTutor = GroupManager::is_tutor_of_group($userId, $groupInfo['iid'], $courseId);
+$isTutor = GroupManager::is_tutor_of_group($userId, $groupInfo, $courseId);
 
 /* MAIN DISPLAY SECTION */
 
-$my_forum = isset($_GET['forum']) ? $_GET['forum'] : '';
+$my_forum = isset($_GET['forum']) ? (int) $_GET['forum'] : '';
 // Note: This has to be validated that it is an existing forum.
 $current_forum = get_forum_information($my_forum);
 $isForumOpenByDateAccess = api_is_date_in_date_range($current_forum['start_time'], $current_forum['end_time']);
@@ -88,7 +82,7 @@ if (!empty($groupId)) {
     );
     $is_group_tutor = GroupManager::is_tutor_of_group(
         api_get_user_id(),
-        $group_properties['iid']
+        $group_properties
     );
 
     // Course
@@ -131,7 +125,7 @@ if (!empty($gradebook) && $gradebook == 'view') {
 
 $forumUrl = api_get_path(WEB_CODE_PATH).'forum/';
 
-if ($origin == 'group') {
+if (!empty($groupId)) {
     $interbreadcrumb[] = array(
         'url' => api_get_path(WEB_CODE_PATH) . 'group/group.php?'.api_get_cidreq(),
         'name' => get_lang('Groups')
@@ -262,21 +256,21 @@ if (
     $table_list = Display::page_subheader(get_lang('ThreadUsersList') . ': ' . get_name_thread_by_id($_GET['id']));
 
     if ($nrorow3 > 0 || $nrorow3 == -2) {
-        $url = api_get_cidreq() .'&forum=' . intval($my_forum) . '&action='
+        $url = api_get_cidreq() .'&forum=' . $my_forum . '&action='
             . Security::remove_XSS($_GET['action']) . '&content='
             . Security::remove_XSS($_GET['content'], STUDENT) . '&id=' . intval($_GET['id']);
         $tabs = array(
             array(
                 'content' =>  get_lang('AllStudents'),
-                'url' => $forumUrl . 'viewforum.php?' . $url . '&origin=' . $origin . '&list=all'
+                'url' => $forumUrl . 'viewforum.php?' . $url . '&list=all'
             ),
             array(
                 'content' =>  get_lang('StudentsQualified'),
-                'url' => $forumUrl . 'viewforum.php?' . $url . '&origin=' . $origin . '&list=qualify'
+                'url' => $forumUrl . 'viewforum.php?' . $url . '&list=qualify'
             ),
             array(
                 'content' =>  get_lang('StudentsNotQualified'),
-                'url' => $forumUrl . 'viewforum.php?' . $url . '&origin=' . $origin . '&list=notqualify'
+                'url' => $forumUrl . 'viewforum.php?' . $url . '&list=notqualify'
             ),
         );
         $table_list .= Display::tabsOnlyLink($tabs, $active);
@@ -358,7 +352,7 @@ if (!empty($message)) {
 echo '<div class="actions">';
 
 if ($origin != 'learnpath') {
-    if ($origin=='group') {
+    if (!empty($groupId)) {
         echo '<a href="' . api_get_path(WEB_CODE_PATH) . 'group/group_space.php?'
             . api_get_cidreq() . '&gradebook=' . $gradebook . '">'
             . Display::return_icon('back.png', get_lang('BackTo')
@@ -384,13 +378,13 @@ if (
         if (!api_is_anonymous() && !api_is_invitee()) {
             if ($my_forum == strval(intval($my_forum))) {
                 echo '<a href="' . $forumUrl . 'newthread.php?' . api_get_cidreq() . '&forum='
-                    . Security::remove_XSS($my_forum) . $origin_string . '">'
+                    . Security::remove_XSS($my_forum).'">'
                     . Display::return_icon('new_thread.png', get_lang('NewTopic'), '', ICON_SIZE_MEDIUM)
                     . '</a>';
             } else {
                 $my_forum = strval(intval($my_forum));
                 echo '<a href="' . $forumUrl . 'newthread.php?' . api_get_cidreq()
-                    . '&forum=' . $my_forum . $origin_string . '">'
+                    . '&forum='.$my_forum.'">'
                     . Display::return_icon('new_thread.png', get_lang('NewTopic'), '', ICON_SIZE_MEDIUM)
                     . '</a>';
             }
@@ -445,6 +439,7 @@ echo '<div class="forum_display">';
 if (is_array($threads)) {
     $html = '';
     $count = 1;
+
     foreach ($threads as $row) {
         // Thread who have no replies yet and the only post is invisible should not be displayed to students.
         if (api_is_allowed_to_edit(false, true) ||
@@ -464,8 +459,8 @@ if (is_array($threads)) {
 
             $name = api_get_person_name($row['firstname'], $row['lastname']);
 
-            $linkPostForum = '<a href="viewthread.php?' . api_get_cidreq() . '&forum=' . Security::remove_XSS($my_forum)
-                . "&origin=$origin&thread={$row['thread_id']}&search="
+            $linkPostForum = '<a href="viewthread.php?' . api_get_cidreq() . '&forum=' . $my_forum
+                . "&thread={$row['thread_id']}&search="
                 . Security::remove_XSS(urlencode($my_search)) . '">'
                 . $row['thread_title'] . '</a>';
             $html = '';
@@ -582,7 +577,7 @@ if (is_array($threads)) {
                     !(api_is_course_coach() && $current_forum['session_id'] != $sessionId)
                 ) {
                     $iconsEdit .= '<a href="' . $forumUrl . 'editthread.php?' . $cidreq
-                        . '&forum=' . intval($my_forum) . '&thread='
+                        . '&forum=' . $my_forum . '&thread='
                         . intval($row['thread_id'])
                         . '&id_attach=' . $id_attach . '">'
                         . Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL) . '</a>';
@@ -595,9 +590,8 @@ if (is_array($threads)) {
                         );
                     } else {
                         $iconsEdit.= '<a href="' . api_get_self() . '?' . $cidreq . '&forum='
-                            . intval($my_forum) . '&action=delete&content=thread&id='
-                            . $row['thread_id'] . $origin_string
-                            . "\" onclick=\"javascript:if(!confirm('"
+                            . $my_forum . '&action=delete&content=thread&id='
+                            . $row['thread_id'] . "\" onclick=\"javascript:if(!confirm('"
                             . addslashes(api_htmlentities(get_lang('DeleteCompleteThread'), ENT_QUOTES))
                             . "')) return false;\">"
                             . Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL) . '</a>';
@@ -609,7 +603,6 @@ if (is_array($threads)) {
                         $row['visibility'],
                         array(
                             'forum' => $my_forum,
-                            'origin' => $origin,
                             'gidReq' => $groupId
                         )
                     );
@@ -619,13 +612,12 @@ if (is_array($threads)) {
                         $row['locked'],
                         array(
                             'forum' => $my_forum,
-                            'origin' => $origin,
                             'gidReq' => api_get_group_id()
                         )
                     );
                     $iconsEdit .= '<a href="viewforum.php?' . $cidreq . '&forum='
-                        . intval($my_forum)
-                        . '&action=move&thread=' . $row['thread_id'] . $origin_string . '">'
+                        . $my_forum
+                        . '&action=move&thread=' . $row['thread_id'].'">'
                         . Display::return_icon('move.png', get_lang('MoveThread'), array(), ICON_SIZE_SMALL)
                         . '</a>';
                 }
@@ -643,14 +635,14 @@ if (is_array($threads)) {
             $icon_liststd = 'user.png';
             if (!api_is_anonymous() && api_is_allowed_to_session_edit(false, true)) {
                 $iconsEdit .= '<a href="' . api_get_self() . '?' . $cidreq . '&forum='
-                    . intval($my_forum)
+                    . $my_forum
                     . "&action=notify&content=thread&id={$row['thread_id']}"
                     . '">' . Display::return_icon($iconnotify, get_lang('NotifyMe')) . '</a>';
             }
 
             if (api_is_allowed_to_edit(null, true) && $origin != 'learnpath') {
                 $iconsEdit .= '<a href="' . api_get_self() . '?' . $cidreq . '&forum='
-                    . intval($my_forum)
+                    . $my_forum
                     . "&action=liststd&content=thread&id={$row['thread_id']}"
                     . '">' . Display::return_icon($icon_liststd, get_lang('StudentList'), array(), ICON_SIZE_SMALL)
                     . '</a>';

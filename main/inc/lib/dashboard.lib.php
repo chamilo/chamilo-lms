@@ -68,7 +68,7 @@ class DashboardManager
                         'tr',
                         Display::tag(
                             'td',
-                            get_lang('CheckFilePermissions') . ' ' . Security::remove_XSS($plugin_info_file),
+                            get_lang('CheckFilePermissions').' '.Security::remove_XSS($plugin_info_file),
                             array('colspan' => '3')
                         )
                     );
@@ -81,7 +81,7 @@ class DashboardManager
             foreach ($disabled_blocks_data as $disabled_block) {
                 echo '<tr style="background-color:#eee">';
                 echo '<td><center><input type="checkbox" name="disabled_block" value="true" checked disabled /></center>';
-                for ($j = 0 ; $j < count($table_cols); $j++) {
+                for ($j = 0; $j < count($table_cols); $j++) {
                     if (isset($disabled_block[strtolower($table_cols[$j])])) {
                         if ($j == 2) {
                             echo '<td>';
@@ -139,7 +139,7 @@ class DashboardManager
      */
     public static function store_dashboard_plugins($plugin_paths)
     {
-        $tbl_block = Database :: get_main_table(TABLE_MAIN_BLOCK);
+        $tbl_block = Database::get_main_table(TABLE_MAIN_BLOCK);
         $affected_rows = 0;
 
         // get all plugins path inside plugin directory
@@ -192,10 +192,10 @@ class DashboardManager
             // clean from block data
             if (!empty($not_selected_blocks_id)) {
                 $sql_check = "SELECT id FROM $tbl_block 
-                              WHERE id IN(".implode(',',$not_selected_blocks_id).")";
+                              WHERE id IN(".implode(',', $not_selected_blocks_id).")";
                 $rs_check = Database::query($sql_check);
                 if (Database::num_rows($rs_check) > 0) {
-                    $del = "DELETE FROM $tbl_block WHERE id IN(".implode(',',$not_selected_blocks_id).")";
+                    $del = "DELETE FROM $tbl_block WHERE id IN(".implode(',', $not_selected_blocks_id).")";
                     Database::query($del);
                 }
             }
@@ -215,7 +215,7 @@ class DashboardManager
                         $affected_rows = Database::affected_rows($result);
                     } else {
                         // insert
-                        $plugin_info_file = $dashboard_pluginpath . $testplugin . "/$testplugin.info";
+                        $plugin_info_file = $dashboard_pluginpath.$testplugin."/$testplugin.info";
                         $plugin_info = array();
                         if (file_exists($plugin_info_file)) {
                             $plugin_info = api_parse_info_file($plugin_info_file);
@@ -279,13 +279,13 @@ class DashboardManager
      */
     public static function get_block_data_without_plugin()
     {
-        $tbl_block = Database :: get_main_table(TABLE_MAIN_BLOCK);
+        $tbl_block = Database::get_main_table(TABLE_MAIN_BLOCK);
         $possibleplugins = self::getPossibleDashboardPluginsPath();
 
         // We check if plugin exists inside directory for updating active field
         $sql = "SELECT * FROM $tbl_block";
         $rs = Database::query($sql);
-        if (Database::num_rows($rs) > 0){
+        if (Database::num_rows($rs) > 0) {
             while ($row = Database::fetch_array($rs)) {
                 if (!in_array($row['path'], $possibleplugins)) {
                     $active = 0;
@@ -320,7 +320,7 @@ class DashboardManager
      */
     public static function get_enabled_dashboard_blocks($path = '')
     {
-        $tbl_block = Database :: get_main_table(TABLE_MAIN_BLOCK);
+        $tbl_block = Database::get_main_table(TABLE_MAIN_BLOCK);
         $condition_path = '';
         if (!empty($path)) {
             $path = Database::escape_string($path);
@@ -393,13 +393,13 @@ class DashboardManager
                     echo '<td>'.$block['description'].'</td>';
                     echo '<td>
                             <select class="selectpicker show-tick form-control" name="columns['.$block['id'].']">
-                            <option value="1" '.(isset($user_block_data[$block['id']]) && $user_block_data[$block['id']]['column']==1?'selected':'').' >1</option>
-                            <option value="2" '.(isset($user_block_data[$block['id']]) && $user_block_data[$block['id']]['column']==2?'selected':'').' >2</option>
+                            <option value="1" '.(isset($user_block_data[$block['id']]) && $user_block_data[$block['id']]['column'] == 1 ? 'selected' : '').' >1</option>
+                            <option value="2" '.(isset($user_block_data[$block['id']]) && $user_block_data[$block['id']]['column'] == 2 ? 'selected' : '').' >2</option>
                             </select>
                           </td>';
                     echo '</tr>';
                 } else {
-                    echo Display::tag('tr',  Display::tag('td', get_lang('Error').' '.$controller_class, array('colspan'=>'3')));
+                    echo Display::tag('tr', Display::tag('td', get_lang('Error').' '.$controller_class, array('colspan'=>'3')));
                 }
             }
 
@@ -449,7 +449,7 @@ class DashboardManager
      */
     public static function store_user_blocks($user_id, $enabled_blocks, $columns)
     {
-        $selected_blocks_id  = array();
+        $selected_blocks_id = array();
         if (is_array($enabled_blocks) && count($enabled_blocks) > 0) {
             $selected_blocks_id = array_keys($enabled_blocks);
         }

@@ -66,7 +66,6 @@ class Display
 
         self::$global_template = new Template($tool_name, $showHeader, $showHeader);
 
-
         // Fixing tools with any help it takes xxx part of main/xxx/index.php
         if (empty($help)) {
             $currentURL = api_get_self();
@@ -85,6 +84,7 @@ class Display
         }
 
         self::$global_template->setHelp($help);
+
         if (!empty(self::$preview_style)) {
             self::$global_template->preview_theme = self::$preview_style;
             self::$global_template->setCssFiles();
@@ -177,26 +177,6 @@ class Display
             $introduction_section = null;
             require api_get_path(SYS_INC_PATH).'introductionSection.inc.php';
             return $introduction_section;
-        }
-    }
-
-    /**
-     *	Displays a localised html file
-     *	tries to show the file "$full_file_name"."_".$language_interface.".html"
-     *	and if this does not exist, shows the file "$full_file_name".".html"
-     *	warning this public function defines a global
-     *	@param $full_file_name, the (path) name of the file, without .html
-     *	@return return a string with the path
-     */
-    public static function display_localised_html_file($full_file_name)
-    {
-        global $language_interface;
-        $localised_file_name = $full_file_name.'_'.$language_interface.'.html';
-        $default_file_name = $full_file_name.'.html';
-        if (file_exists($localised_file_name)) {
-            include $localised_file_name;
-        } else {
-            include $default_file_name;
         }
     }
 
@@ -386,21 +366,19 @@ class Display
     /**
      * Displays a table with a special configuration
      * @param array $header Titles for the table header
-     * 						each item in this array can contain 3 values
-     * 						- 1st element: the column title
-     * 						- 2nd element: true or false (column sortable?)
-     * 						- 3th element: additional attributes for
-     *  						th-tag (eg for column-width)
-     * 						- 4the element: additional attributes for the td-tags
+     * each item in this array can contain 3 values
+     * - 1st element: the column title
+     * - 2nd element: true or false (column sortable?)
+     * - 3th element: additional attributes for th-tag (eg for column-width)
+     * - 4the element: additional attributes for the td-tags
      * @param array $content 2D-array with the tables content
      * @param array $sorting_options Keys are:
-     * 					'column' = The column to use as sort-key
-     * 					'direction' = SORT_ASC or SORT_DESC
+     *  'column' = The column to use as sort-key
+     *  'direction' = SORT_ASC or SORT_DESC
      * @param array $paging_options Keys are:
-     * 					'per_page_default' = items per page when switching from
-     * 										 full-	list to per-page-view
-     * 					'per_page' = number of items to show per page
-     * 					'page_nr' = The page to display
+     *  'per_page_default' = items per page when switching from full list to per-page-view
+     *  'per_page' = number of items to show per page
+     *  'page_nr' = The page to display
      * @param array $query_vars Additional variables to add in the query-string
      * @param array $column_show Array of binaries 1= show columns 0. hide a column
      * @param array $column_order An array of integers that let us decide how the columns are going to be sort.
@@ -458,7 +436,8 @@ class Display
      * @param bool	$filter (true) or not (false)
      * @param bool $returnValue
      *
-     * @deprecated use Display::addFlash with Display::return_message($message, 'normal');
+     * @deprecated Use <code>Display::addFlash(Display::return_message($message, 'normal'));</code>
+     *  Or <code>echo Display::return_message($message, 'normal')</code>
      *
      * @return void
      */
@@ -476,7 +455,7 @@ class Display
      * Displays an warning message. Use this if you want to draw attention to something
      * This can also be used for instance with the hint in the exercises
      *
-     * @deprecated use Display::addFlash with Display::return_message
+     * @deprecated use Display::addFlash(Display::return_message($message, 'warning'));
      */
     public static function display_warning_message($message, $filter = true, $returnValue = false)
     {
@@ -491,10 +470,10 @@ class Display
     /**
      * Displays an confirmation message. Use this if something has been done successfully
      * @param bool	Filter (true) or not (false)
-     * @deprecated use Display::addFlash with Display::return_message
+     * @deprecated use Display::addFlash(Display::return_message($message, 'confirm'));
      * @return void
      */
-    public static function display_confirmation_message ($message, $filter = true, $returnValue = false)
+    public static function display_confirmation_message($message, $filter = true, $returnValue = false)
     {
         $message = self::return_message($message, 'confirm', $filter);
         if ($returnValue) {
@@ -509,11 +488,11 @@ class Display
      * @param string $message - include any additional html
      *                          tags if you need them
      * @param bool	Filter (true) or not (false)
-     * @deprecated use Display::addFlash with Display::return_message
+     * @deprecated use Display::addFlash(Display::return_message($message, 'error'));
      *
      * @return void
      */
-    public static function display_error_message ($message, $filter = true, $returnValue = false)
+    public static function display_error_message($message, $filter = true, $returnValue = false)
     {
         $message = self::return_message($message, 'error', $filter);
         if ($returnValue) {
@@ -677,10 +656,11 @@ class Display
         $result = '';
         for ($i = $min; $i <= $max; $i ++) {
             $result .= '<option value="'.$i.'"';
-            if (is_int($selected_num))
+            if (is_int($selected_num)) {
                 if ($selected_num == $i) {
                     $result .= ' selected="selected"';
                 }
+            }
             $result .= '>'.$i.'</option>';
         }
         return $result;
@@ -713,7 +693,7 @@ class Display
      */
     public static function returnIconPath($icon, $size = ICON_SIZE_SMALL)
     {
-        return Display::return_icon($icon, null, null, $size, null, true, false);
+        return self::return_icon($icon, null, null, $size, null, true, false);
     }
 
     /**
@@ -1531,8 +1511,8 @@ class Display
 
             $image = substr($notification['image'], 0, -4).'.png';
 
-            $return .= Display::url(
-                Display::return_icon($image, $label),
+            $return .= self::url(
+                self::return_icon($image, $label),
                 api_get_path(WEB_CODE_PATH).
                 $notification['link'].'&cidReq='.$course_code.
                 '&ref='.$notification['ref'].
@@ -1560,8 +1540,8 @@ class Display
         $output = array();
         $active = false;
         if (!$nosession) {
-            $main_user_table = Database :: get_main_table(TABLE_MAIN_USER);
-            $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
+            $main_user_table = Database::get_main_table(TABLE_MAIN_USER);
+            $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
             // Request for the name of the general coach
             $sql ='SELECT tu.lastname, tu.firstname, ts.*
                     FROM '.$tbl_session.' ts
@@ -1579,28 +1559,16 @@ class Display
             $session['coach'] = '';
             $session['dates'] =  '';
 
-            if (($session_info['access_end_date'] == '0000-00-00 00:00:00' && $session_info['access_start_date'] == '0000-00-00 00:00:00') ||
+            if (api_get_setting('show_session_coach') === 'true') {
+                $session['coach'] = get_lang('GeneralCoach').': '.api_get_person_name($session_info['firstname'], $session_info['lastname']);
+            }
+
+            if (
                 ($session_info['access_end_date'] == '0000-00-00 00:00:00' && $session_info['access_start_date'] == '0000-00-00 00:00:00') ||
                 (empty($session_info['access_end_date']) && empty($session_info['access_start_date']))
             ) {
-                if (api_get_setting('show_session_coach') === 'true') {
-                    $session['coach'] = get_lang('GeneralCoach').': '.api_get_person_name($session_info['firstname'], $session_info['lastname']);
-                }
-
                 if (isset($session_info['duration']) && !empty($session_info['duration'])) {
-                    $userDurationData = SessionManager::getUserSession(
-                        api_get_user_id(),
-                        $session_id
-                    );
-
-                    $userDuration = isset($userDurationData['duration']) ? (int) $userDurationData['duration'] : 0;
-                    $totalDuration = $session_info['duration'] + $userDuration;
-
-                    $daysLeft = SessionManager::getDayLeftInSession(
-                        $session_id,
-                        api_get_user_id(),
-                        $totalDuration
-                    );
+                    $daysLeft = SessionManager::getDayLeftInSession($session_info, api_get_user_id());
                     $session['duration'] = sprintf(get_lang('SessionDurationXDaysLeft'), $daysLeft);
                 }
                 $active = true;
@@ -1691,14 +1659,18 @@ class Display
     /**
      * Return the five star HTML
      *
-     * @param  string  id of the rating ul element
-     * @param  string  url that will be added (for jquery see hot_courses.tpl)
-	 * @param	string	point info array see function CourseManager::get_course_ranking()
-	 * @param	bool	add a div wrapper
-	 * @todo	use     templates
+     * @param string $id of the rating ul element
+     * @param string $url that will be added (for jquery see hot_courses.tpl)
+     * @param array $point_info point info array see function CourseManager::get_course_ranking()
+	 * @param bool $add_div_wrapper add a div wrapper
+	 * @return string
      **/
-    public static function return_rating_system($id, $url, $point_info = array(), $add_div_wrapper = true)
-    {
+    public static function return_rating_system(
+        $id,
+        $url,
+        $point_info = [],
+        $add_div_wrapper = true
+    ) {
 		$number_of_users_who_voted = isset($point_info['users_who_voted']) ? $point_info['users_who_voted'] : null;
 		$percentage = isset($point_info['point_average']) ? $point_info['point_average'] : 0;
 
@@ -1706,7 +1678,6 @@ class Display
             $percentage = $percentage*125/100;
         }
 		$accesses =  isset($point_info['accesses']) ? $point_info['accesses'] : 0;
-
 		$star_label = sprintf(get_lang('XStarsOutOf5'), $point_info['point_average_star']);
 
         $html = '<ul id="'.$id.'" class="star-rating">
@@ -1722,21 +1693,17 @@ class Display
 
 		$labels[]= $number_of_users_who_voted == 1 ? $number_of_users_who_voted.' '.get_lang('Vote') : $number_of_users_who_voted.' '.get_lang('Votes');
 		$labels[]= $accesses == 1 ? $accesses.' '.get_lang('Visit') : $accesses.' '.get_lang('Visits');
-		/* if (!empty($number_of_users_who_voted)) {
-			$labels[]= get_lang('Average').' '.$point_info['point_average_star'].'/5';
-		} */
-
 		$labels[]= $point_info['user_vote']  ? get_lang('YourVote').' ['.$point_info['user_vote'].']' : get_lang('YourVote'). ' [?] ';
 
 		if (!$add_div_wrapper && api_is_anonymous()) {
-			$labels[]= Display::tag('span', get_lang('LoginToVote'), array('class' => 'error'));
+			$labels[]= self::tag('span', get_lang('LoginToVote'), array('class' => 'error'));
 		}
 
-        $html .= Display::div(implode(' | ', $labels) , array('id' =>  'vote_label_'.$id, 'class' => 'vote_label_info'));
-        $html .= ' '.Display::span(' ', array('id' =>  'vote_label2_'.$id));
+        $html .= self::div(implode(' | ', $labels) , array('id' =>  'vote_label_'.$id, 'class' => 'vote_label_info'));
+        $html .= ' '.self::span(' ', array('id' =>  'vote_label2_'.$id));
 
         if ($add_div_wrapper) {
-			$html = Display::div($html, array('id' => 'rating_wrapper_'.$id));
+			$html = self::div($html, array('id' => 'rating_wrapper_'.$id));
 		}
 
         return $html;
@@ -2045,7 +2012,7 @@ class Display
                 <span class="caret"></span></button>
                 <ul class="dropdown-menu ' . ($alignToRight ? 'dropdown-menu-right' : '') . '">';
         foreach ($elements as $item) {
-            $html .= Display::tag('li', Display::url($item['title'], $item['href']));
+            $html .= self::tag('li', self::url($item['title'], $item['href']));
         }
         $html .= '</ul>
             </div>';
@@ -2225,7 +2192,7 @@ class Display
             $label = ($fixedValue + 1) .' '.chr(97 + $localCounter);
             $link_to_show = $link.$fixedValue.'#questionanchor'.$itemId;
         }
-        $link = Display::url($label.' ', $link_to_show, $linkAttributes);
+        $link = self::url($label.' ', $link_to_show, $linkAttributes);
 
         return  '<li class = "'.$class.'">'.$link.'</li>';
     }
@@ -2411,39 +2378,40 @@ class Display
     }
 
     /**
-     * @param int $id
+     * @param string $id
      * @param array $content
-     * @param int $col
-     * @param bool|true $right
+     * @param array $colsWidth Optional. Columns width
      * @return string
      */
-    public static function toolbarAction($id, $content = array(), $col = 2, $right = true)
+    public static function toolbarAction($id, $content, $colsWidth = [])
     {
-        $columns = 12/$col;
-        $html = '';
-        $html .= '<div id="' . $id . '" class="actions">';
-        $html .= '<div class="row">';
-        if ($col > 4) {
-            $html = '<div class="alert alert-warning" role="alert">
-                Action toolbar design does not work when exceeding four columns - check Display::toolbarAction()
-            </div>';
-        } else {
-            for ($i = 0; $i < $col; $i++) {
-                $html .= '<div class="col-md-' . $columns . '">';
-                if ($col == 2 && $i == 1) {
-                    if ($right === true) {
-                        $html .= '<div class="pull-right">';
-                        $html .= (isset($content[$i]) ? $content[$i] : '');
-                        $html .= '</div>';
-                    } else {
-                        $html .= $content[$i];
-                    }
-                } else {
-                    $html .= $content[$i];
-                }
-                $html .= '</div>';
-            }
+        $col = count($content);
+
+        if (!$colsWidth) {
+            $width = 12 / $col;
+
+            array_walk($content, function () use ($width, &$colsWidth) {
+                $colsWidth[] = $width;
+            });
         }
+
+        $html = '<div id="'.$id.'" class="actions">';
+        $html .= '<div class="row">';
+
+        for ($i = 0; $i < $col; $i++) {
+            $class = 'col-sm-'.$colsWidth[$i];
+
+            if ($col > 1) {
+                if ($i > 0 && $i < count($content) -1) {
+                    $class .= ' text-center';
+                } elseif ($i === count($content) - 1) {
+                    $class .= ' text-right';
+                }
+            }
+
+            $html .= '<div class="'.$class.'">'.$content[$i].'</div>';
+        }
+
         $html .= '</div>';
         $html .= '</div>';
 
@@ -2548,7 +2516,7 @@ HTML;
                 $html .= '<div class="panel-heading">'.$title.'</div>' . PHP_EOL;
             }
             $html.= '<div class="panel-body">'.$content.'</div>' . PHP_EOL;
-            $html = Display::div($html, $params);
+            $html = self::div($html, $params);
         }
         return $html;
     }

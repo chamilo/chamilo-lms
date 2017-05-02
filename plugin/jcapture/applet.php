@@ -5,7 +5,7 @@
 	  parse_str($HTTP_RAW_POST_DATA, $_POST);
 	}
 	
-	if(!defined('DOKU_INC')) define('DOKU_INC',dirname(__FILE__).'/../../../');
+	if(!defined('DOKU_INC')) define('DOKU_INC',__DIR__.'/../../../');
 	require_once(DOKU_INC.'inc/init.php');
 	require_once(DOKU_INC.'inc/common.php');
 	require_once(DOKU_INC.'inc/pageutils.php');

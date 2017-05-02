@@ -44,7 +44,7 @@ class LinkFactory
      */
     public function get_evaluation_link($eval_id)
     {
-        $links = AbstractLink :: load(null, null, $eval_id);
+        $links = AbstractLink::load(null, null, $eval_id);
         foreach ($links as $link) {
             if (is_a($link, 'EvalLink')) {
                 return $link;

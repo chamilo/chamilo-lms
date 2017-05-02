@@ -5,9 +5,9 @@
 * Gets all the info via the ldap module (ldap has to work)
 
 */
-require_once api_get_path(SYS_PATH) . 'main/auth/cas/cas_var.inc.php';
-require_once api_get_path(SYS_PATH) . 'main/auth/external_login/ldap.inc.php';
-require_once api_get_path(SYS_PATH) . 'main/auth/external_login/functions.inc.php';
+require_once api_get_path(SYS_PATH).'main/auth/cas/cas_var.inc.php';
+require_once api_get_path(SYS_PATH).'main/auth/external_login/ldap.inc.php';
+require_once api_get_path(SYS_PATH).'main/auth/external_login/functions.inc.php';
 
 /**
  * @return true if cas is configured
@@ -124,7 +124,7 @@ function cas_is_authenticated()
                             $user_added = $login;
                         }
                         break;
-                    default :
+                    default:
                         break;
                 }
                 return $user_added;
@@ -187,14 +187,14 @@ function cas_logout($uinfo = null, $location = null)
  */
 function get_cas_direct_URL($in_course_code)
 {
-    return api_get_path(WEB_PATH) . 'main/auth/cas/logincas.php?firstpage=' . $in_course_code;
+    return api_get_path(WEB_PATH).'main/auth/cas/logincas.php?firstpage='.$in_course_code;
 }
 
 function getCASLogoHTML()
 {
     $out_res = "";
     if (api_get_setting("casLogoURL") != "") {
-        $out_res = "<img src='" . api_get_setting("casLogoURL") . "' alt='CAS Logo' />";
+        $out_res = "<img src='".api_get_setting("casLogoURL")."' alt='CAS Logo' />";
     }
     return $out_res;
 }

@@ -221,41 +221,41 @@ class Evaluation implements GradebookItem
         $visible = null,
         $locked = null
     ) {
-        $tbl_grade_evaluations = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
+        $tbl_grade_evaluations = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
         $sql = 'SELECT * FROM '.$tbl_grade_evaluations;
         $paramcount = 0;
 
         if (isset ($id)) {
-            $sql.= ' WHERE id = '.intval($id);
-            $paramcount ++;
+            $sql .= ' WHERE id = '.intval($id);
+            $paramcount++;
         }
 
         if (isset($user_id)) {
             if ($paramcount != 0) $sql .= ' AND';
             else $sql .= ' WHERE';
             $sql .= ' user_id = '.intval($user_id);
-            $paramcount ++;
+            $paramcount++;
         }
 
         if (isset($course_code) && $course_code <> '-1') {
             if ($paramcount != 0) $sql .= ' AND';
             else $sql .= ' WHERE';
             $sql .= " course_code = '".Database::escape_string($course_code)."'";
-            $paramcount ++;
+            $paramcount++;
         }
 
         if (isset($category_id)) {
             if ($paramcount != 0) $sql .= ' AND';
             else $sql .= ' WHERE';
             $sql .= ' category_id = '.intval($category_id);
-            $paramcount ++;
+            $paramcount++;
         }
 
         if (isset($visible)) {
             if ($paramcount != 0) $sql .= ' AND';
             else $sql .= ' WHERE';
             $sql .= ' visible = '.intval($visible);
-            $paramcount ++;
+            $paramcount++;
         }
 
         if (isset($locked)) {
@@ -265,7 +265,7 @@ class Evaluation implements GradebookItem
         }
 
         $result = Database::query($sql);
-        $allEval = Evaluation::create_evaluation_objects_from_sql_result($result);
+        $allEval = self::create_evaluation_objects_from_sql_result($result);
 
         return $allEval;
     }
@@ -279,7 +279,7 @@ class Evaluation implements GradebookItem
         $alleval = array();
         if (Database::num_rows($result)) {
             while ($data = Database::fetch_array($result)) {
-                $eval= new Evaluation();
+                $eval = new Evaluation();
                 $eval->set_id($data['id']);
                 $eval->set_name($data['name']);
                 $eval->set_description($data['description']);
@@ -312,7 +312,7 @@ class Evaluation implements GradebookItem
             isset($this->eval_max) &&
             isset($this->visible)
         ) {
-            $tbl_grade_evaluations = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
+            $tbl_grade_evaluations = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
 
             $sql = 'INSERT INTO '.$tbl_grade_evaluations
                 .' (name, user_id, weight, max, visible';
@@ -362,10 +362,10 @@ class Evaluation implements GradebookItem
     public function add_evaluation_log($idevaluation)
     {
         if (!empty($idevaluation)) {
-            $tbl_grade_evaluations = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
-            $tbl_grade_linkeval_log = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);
+            $tbl_grade_evaluations = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
+            $tbl_grade_linkeval_log = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);
             $eval = new Evaluation();
-            $dateobject = $eval->load($idevaluation,null,null,null,null);
+            $dateobject = $eval->load($idevaluation, null, null, null, null);
             $arreval = get_object_vars($dateobject[0]);
             if (!empty($arreval['id'])) {
                 $sql = 'SELECT weight from '.$tbl_grade_evaluations.'
@@ -393,13 +393,13 @@ class Evaluation implements GradebookItem
      */
     public function save()
     {
-        $tbl_grade_evaluations = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
+        $tbl_grade_evaluations = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
         $sql = 'UPDATE '.$tbl_grade_evaluations
             ." SET name = '".Database::escape_string($this->get_name())."'"
             .', description = ';
         if (isset($this->description)) {
             $sql .= "'".Database::escape_string($this->get_description())."'";
-        }else {
+        } else {
             $sql .= 'null';
         }
         $sql .= ', user_id = '.intval($this->get_user_id())
@@ -431,7 +431,7 @@ class Evaluation implements GradebookItem
      */
     public function delete()
     {
-        $tbl_grade_evaluations = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
+        $tbl_grade_evaluations = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
         $sql = 'DELETE FROM '.$tbl_grade_evaluations.' WHERE id = '.intval($this->id);
         Database::query($sql);
     }
@@ -447,7 +447,7 @@ class Evaluation implements GradebookItem
             $name = $this->name;
             $parent = $this->category;
         }
-        $tbl_grade_evaluations = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
+        $tbl_grade_evaluations = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
         $sql = 'SELECT count(id) AS number'
             .' FROM '.$tbl_grade_evaluations
             ." WHERE name = '".Database::escape_string($name)."'";
@@ -459,7 +459,7 @@ class Evaluation implements GradebookItem
             $courseId = $courseInfo['real_id'];
 
             if (isset($code) && $code != '0') {
-                $main_course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+                $main_course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
                 $sql .= ' AND user_id IN (
                      SELECT user_id FROM '.$main_course_user_table.'
                      WHERE
@@ -474,12 +474,12 @@ class Evaluation implements GradebookItem
         }
 
         if (!isset($parent)) {
-            $sql.= ' AND category_id is null';
+            $sql .= ' AND category_id is null';
         } else {
-            $sql.= ' AND category_id = '.intval($parent);
+            $sql .= ' AND category_id = '.intval($parent);
         }
         $result = Database::query($sql);
-        $number=Database::fetch_row($result);
+        $number = Database::fetch_row($result);
 
         return $number[0] != 0;
     }
@@ -490,12 +490,12 @@ class Evaluation implements GradebookItem
      */
     public function has_results()
     {
-        $tbl_grade_results = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
+        $tbl_grade_results = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
         $sql = 'SELECT count(id) AS number
                 FROM '.$tbl_grade_results.'
                 WHERE evaluation_id = '.intval($this->id);
         $result = Database::query($sql);
-        $number=Database::fetch_row($result);
+        $number = Database::fetch_row($result);
 
         return ($number[0] != 0);
     }
@@ -505,7 +505,7 @@ class Evaluation implements GradebookItem
      */
     public function delete_results()
     {
-        $tbl_grade_results = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
+        $tbl_grade_results = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
         $sql = 'DELETE FROM '.$tbl_grade_results.'
                 WHERE evaluation_id = '.intval($this->id);
         Database::query($sql);
@@ -545,7 +545,7 @@ class Evaluation implements GradebookItem
             $results = isset($data[$key]) ? $data[$key] : null;
 
             if ($useSession == false) {
-                $results  = null;
+                $results = null;
             }
             if (empty($results)) {
                 $results = Result::load(null, $stud_id, $this->id);
@@ -571,7 +571,7 @@ class Evaluation implements GradebookItem
             $data = Session::read('calc_score');
             $allResults = isset($data[$key]) ? $data[$key] : null;
             if ($useSession == false) {
-                $allResults  = null;
+                $allResults = null;
             }
             if (empty($allResults)) {
                 $allResults = Result::load(null, null, $this->id);
@@ -603,7 +603,7 @@ class Evaluation implements GradebookItem
                     return array($bestResult, $weight);
                     break;
                 case 'average':
-                    return array($sumResult/$count, $weight);
+                    return array($sumResult / $count, $weight);
                     break;
                 case 'ranking':
                     $students = array();
@@ -641,17 +641,17 @@ class Evaluation implements GradebookItem
         $targets[] = $root;
 
         if (isset($this->course_code) && !empty($this->course_code)) {
-            $crscats = Category::load(null,null,$this->course_code,0);
+            $crscats = Category::load(null, null, $this->course_code, 0);
             foreach ($crscats as $cat) {
-                $targets[] = array ($cat->get_id(), $cat->get_name(), $level+1);
-                $targets = $this->add_target_subcategories($targets, $level+1, $cat->get_id());
+                $targets[] = array($cat->get_id(), $cat->get_name(), $level + 1);
+                $targets = $this->add_target_subcategories($targets, $level + 1, $cat->get_id());
             }
         }
 
-        $indcats = Category::load(null,$user,0,0);
+        $indcats = Category::load(null, $user, 0, 0);
         foreach ($indcats as $cat) {
-            $targets[] = array ($cat->get_id(), $cat->get_name(), $level+1);
-            $targets = $this->add_target_subcategories($targets, $level+1, $cat->get_id());
+            $targets[] = array($cat->get_id(), $cat->get_name(), $level + 1);
+            $targets = $this->add_target_subcategories($targets, $level + 1, $cat->get_id());
         }
 
         return $targets;
@@ -665,10 +665,10 @@ class Evaluation implements GradebookItem
      */
     private function add_target_subcategories($targets, $level, $catid)
     {
-        $subcats = Category::load(null,null,null,$catid);
+        $subcats = Category::load(null, null, null, $catid);
         foreach ($subcats as $cat) {
-            $targets[] = array ($cat->get_id(), $cat->get_name(), $level+1);
-            $targets = $this->add_target_subcategories($targets, $level+1, $cat->get_id());
+            $targets[] = array($cat->get_id(), $cat->get_name(), $level + 1);
+            $targets = $this->add_target_subcategories($targets, $level + 1, $cat->get_id());
         }
         return $targets;
     }
@@ -695,8 +695,8 @@ class Evaluation implements GradebookItem
      */
     public static function get_evaluations_with_result_for_student($cat_id = null, $stud_id)
     {
-        $tbl_grade_evaluations = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
-        $tbl_grade_results = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
+        $tbl_grade_evaluations = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
+        $tbl_grade_results = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
 
         $sql = 'SELECT * FROM '.$tbl_grade_evaluations.'
                 WHERE id IN (
@@ -713,7 +713,7 @@ class Evaluation implements GradebookItem
         }
 
         $result = Database::query($sql);
-        $alleval = Evaluation::create_evaluation_objects_from_sql_result($result);
+        $alleval = self::create_evaluation_objects_from_sql_result($result);
 
         return $alleval;
     }
@@ -723,8 +723,8 @@ class Evaluation implements GradebookItem
      */
     public function get_not_subscribed_students($first_letter_user = '')
     {
-        $tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
-        $tbl_grade_results = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
+        $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
+        $tbl_grade_results = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
 
         $sql = 'SELECT user_id,lastname,firstname,username FROM '.$tbl_user
             ." WHERE lastname LIKE '".Database::escape_string($first_letter_user)."%'"
@@ -747,7 +747,7 @@ class Evaluation implements GradebookItem
      * @return array evaluation objects matching the search criterium
      * @todo can be written more efficiently using a new (but very complex) sql query
      */
-    public function find_evaluations($name_mask,$selectcat)
+    public function find_evaluations($name_mask, $selectcat)
     {
         $rootcat = Category::load($selectcat);
         $evals = $rootcat[0]->get_evaluations((api_is_allowed_to_create_course() ? null : api_get_user_id()), true);

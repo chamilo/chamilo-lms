@@ -10,7 +10,7 @@ $action = $_REQUEST['a'];
 
 switch ($action) {
     case 'get_user_sessions':
-        if (api_is_platform_admin()) {
+        if (api_is_platform_admin() || api_is_session_admin()) {
             $user_id = intval($_POST['user_id']);
             $list_sessions = SessionManager::get_sessions_by_user($user_id, true);
             if (!empty($list_sessions)) {

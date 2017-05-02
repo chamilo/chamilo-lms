@@ -135,8 +135,9 @@ Display::display_header($nameTool);
 ?>
 <div id="message" style="display: none">
 	<?php
-	if (!empty($message))
-		Display::display_normal_message($message)
+	if (!empty($message)) {
+        Display::addFlash(Display::return_message($message, 'normal'));
+    }
 	?>
 </div>
 

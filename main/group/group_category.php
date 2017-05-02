@@ -7,12 +7,12 @@
 
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
-$current_course_tool  = TOOL_GROUP;
+$current_course_tool = TOOL_GROUP;
 
 // Notice for unauthorized people.
 api_protect_course_script(true);
 
-if (!api_is_allowed_to_edit(false,true) ||
+if (!api_is_allowed_to_edit(false, true) ||
     !(isset ($_GET['id']) ||
     isset ($_POST['id']) ||
     isset ($_GET['action']) ||
@@ -59,7 +59,7 @@ if (api_get_setting('allow_group_categories') === 'true') {
             'groups_per_user' => 1,
             'doc_state' => GroupManager::TOOL_PRIVATE,
             'work_state' => GroupManager::TOOL_PRIVATE,
-            'wiki_state' => GroupManager::TOOL_PRIVATE ,
+            'wiki_state' => GroupManager::TOOL_PRIVATE,
             'chat_state' => GroupManager::TOOL_PRIVATE,
             'calendar_state' => GroupManager::TOOL_PRIVATE,
             'announcements_state'=> GroupManager::TOOL_PRIVATE,
@@ -96,7 +96,7 @@ if (isset($_GET['id'])) {
 	$form->addElement('hidden', 'id');
 } else {
     // Checks if the field was created in the table Category. It creates it if is neccesary
-    $table_category = Database :: get_course_table(TABLE_GROUP_CATEGORY);
+    $table_category = Database::get_course_table(TABLE_GROUP_CATEGORY);
     if (!Database::query("SELECT wiki_state FROM $table_category WHERE c_id = $course_id")) {
         Database::query("ALTER TABLE $table_category ADD wiki_state tinyint(3) UNSIGNED NOT NULL default '1' WHERE c_id = $course_id");
     }
@@ -113,7 +113,7 @@ if (api_get_setting('allow_group_categories') == 'true') {
 
     // Groups per user
     $possible_values = array();
-    for ($i = 1; $i <= 10; $i ++) {
+    for ($i = 1; $i <= 10; $i++) {
         $possible_values[$i] = $i;
     }
     $possible_values[GroupManager::GROUP_PER_MEMBER_NO_LIMIT] = get_lang('All');
@@ -138,7 +138,7 @@ if (api_get_setting('allow_group_categories') == 'true') {
 
     $form->addElement('html', '<div class="col-md-6">');
     // Description
-    $form->addElement('textarea', 'description', get_lang('Description'), array ('rows' => 6));
+    $form->addElement('textarea', 'description', get_lang('Description'), array('rows' => 6));
     $form->addElement('html', '</div>');
     $form->addElement('html', '</div>');
 } else {
@@ -158,7 +158,7 @@ $group = array(
 $form->addGroup(
     $group,
     '',
-    Display::return_icon('user.png', get_lang('GroupSelfRegistration')) . ' ' . get_lang('GroupSelfRegistration'),
+    Display::return_icon('user.png', get_lang('GroupSelfRegistration')).' '.get_lang('GroupSelfRegistration'),
     null,
     false
 );
@@ -172,7 +172,7 @@ $group = array(
 $form->addGroup(
     $group,
     '',
-    Display::return_icon('folder.png', get_lang('GroupDocument')) . ' ' . get_lang('GroupDocument'),
+    Display::return_icon('folder.png', get_lang('GroupDocument')).' '.get_lang('GroupDocument'),
     null,
     false
 );
@@ -186,7 +186,7 @@ $group = array(
 $form->addGroup(
     $group,
     '',
-    Display::return_icon('work.png', get_lang('GroupWork'), array(), ICON_SIZE_SMALL) . ' ' . get_lang('GroupWork'),
+    Display::return_icon('work.png', get_lang('GroupWork'), array(), ICON_SIZE_SMALL).' '.get_lang('GroupWork'),
     '',
     false
 );
@@ -200,7 +200,7 @@ $group = array(
 $form->addGroup(
     $group,
     '',
-    Display::return_icon('agenda.png', get_lang('GroupCalendar')) . ' ' . get_lang('GroupCalendar'),
+    Display::return_icon('agenda.png', get_lang('GroupCalendar')).' '.get_lang('GroupCalendar'),
     null,
     false
 );
@@ -217,7 +217,7 @@ $group = array(
 $form->addGroup(
     $group,
     '',
-    Display::return_icon('announce.png', get_lang('GroupAnnouncements')) . ' ' . get_lang('GroupAnnouncements'),
+    Display::return_icon('announce.png', get_lang('GroupAnnouncements')).' '.get_lang('GroupAnnouncements'),
     null,
     false
 );
@@ -231,7 +231,7 @@ $group = array(
 $form->addGroup(
     $group,
     '',
-    Display::return_icon('forum.png', get_lang('GroupForum')) . ' ' . get_lang('GroupForum'),
+    Display::return_icon('forum.png', get_lang('GroupForum')).' '.get_lang('GroupForum'),
     null,
     false
 );
@@ -245,7 +245,7 @@ $group = array(
 $form->addGroup(
     $group,
     '',
-    Display::return_icon('wiki.png', get_lang('GroupWiki')) . ' ' . get_lang('GroupWiki'),
+    Display::return_icon('wiki.png', get_lang('GroupWiki')).' '.get_lang('GroupWiki'),
     null,
     false
 );
@@ -259,7 +259,7 @@ $group = array(
 $form->addGroup(
     $group,
     '',
-    Display::return_icon('chat.png', get_lang('Chat')) . ' ' . get_lang('Chat'),
+    Display::return_icon('chat.png', get_lang('Chat')).' '.get_lang('Chat'),
     null,
     false
 );
@@ -334,7 +334,7 @@ Display :: display_header($nameTools, 'Group');
 // actions bar
 echo '<div class="actions">';
 echo '<a href="group.php">'.
-    Display::return_icon('back.png', get_lang('BackToGroupList'),'',ICON_SIZE_MEDIUM).'</a>';
+    Display::return_icon('back.png', get_lang('BackToGroupList'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 $defaults = $category;

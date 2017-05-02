@@ -1,3 +1,3 @@
 <?php
 
-$strings['WelcomeToChamiloUserX']     = "Welcome to Chamilo %s!";
+$strings['WelcomeToChamiloUserX'] = "Welcome to Chamilo %s!";

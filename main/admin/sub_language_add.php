@@ -32,7 +32,7 @@ $interbreadcrumb[] = array('url' => 'languages.php', 'name' => get_lang('Platfor
  */
 function add_sub_language($original_name, $english_name, $isocode, $sublanguage_available, $parent_id)
 {
-    $tbl_admin_languages = Database:: get_main_table(TABLE_MAIN_LANGUAGE);
+    $tbl_admin_languages = Database::get_main_table(TABLE_MAIN_LANGUAGE);
     $original_name = Database::escape_string($original_name);
     $english_name = Database::escape_string($english_name);
     $isocode = Database::escape_string($isocode);
@@ -64,7 +64,7 @@ function add_sub_language($original_name, $english_name, $isocode, $sublanguage_
  */
 function check_if_language_exist($original_name, $english_name, $isocode, $sublanguage_available)
 {
-    $tbl_admin_languages = Database:: get_main_table(TABLE_MAIN_LANGUAGE);
+    $tbl_admin_languages = Database::get_main_table(TABLE_MAIN_LANGUAGE);
     $sql_original_name = 'SELECT count(*) AS count_original_name FROM ' . $tbl_admin_languages . ' WHERE original_name="' . Database::escape_string($original_name) . '" ';
     $sql_english_name = 'SELECT count(*) AS count_english_name FROM ' . $tbl_admin_languages . ' WHERE english_name="' . Database::escape_string($english_name) . '" ';
     //$sql_isocode='SELECT count(*) AS count_isocode FROM '.$tbl_admin_languages.' WHERE isocode="'.Database::escape_string($isocode).'" ';
@@ -261,9 +261,9 @@ echo $msg;
 if (isset($_POST['SubmitAddDeleteLanguage'])) {
     $rs = SubLanguageManager::remove_sub_language($_GET['id'], $_GET['sub_language_id']);
     if ($rs === true) {
-        Display::display_confirmation_message(get_lang('TheSubLanguageHasBeenRemoved'));
+        Display::addFlash(Display::return_message(get_lang('TheSubLanguageHasBeenRemoved'), 'confirm'));
     } else {
-        Display::display_error_message(get_lang('TheSubLanguageHasNotBeenRemoved'));
+        Display::addFlash(Display::return_message(get_lang('TheSubLanguageHasNotBeenRemoved'), 'error'));
     }
 }
 // ckeck_if_is_parent_of_sub_language($parent_id)===false
@@ -302,7 +302,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'definenewsublanguage') {
         $form->display();
     }
     if (isset($_GET['action']) && $_GET['action'] == 'definenewsublanguage') {
-        Display::display_normal_message(get_lang('TheSubLanguageForThisLanguageHasBeenAdded'));
+        Display::addFlash(Display::return_message(get_lang('TheSubLanguageForThisLanguageHasBeenAdded')));
     }
 }
 /**

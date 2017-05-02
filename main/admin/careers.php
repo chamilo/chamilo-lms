@@ -117,7 +117,7 @@ switch ($action) {
                 $values = $form->exportValues();
                 $res    = $career->save($values);
                 if ($res) {
-                    Display::display_confirmation_message(get_lang('ItemAdded'));
+                    echo Display::return_message(get_lang('ItemAdded'), 'confirmation');
                 }
             }
             $career->display();
@@ -144,15 +144,17 @@ switch ($action) {
                 $old_status = $career->get_status($values['id']);
                 $res = $career->update($values);
                 if ($res) {
-                    Display::display_confirmation_message(get_lang('CareerUpdated'));
+                    echo Display::return_message(get_lang('CareerUpdated'), 'confirmation');
                     if ($values['status'] && !$old_status) {
-                        Display::display_confirmation_message(
+                        echo Display::return_message(
                             sprintf(get_lang('CareerXUnarchived'), $values['name']),
+                            'confirmation',
                             false
                         );
                     } elseif (!$values['status'] && $old_status) {
-                        Display::display_confirmation_message(
+                        echo Display::return_message(
                             sprintf(get_lang('CareerXArchived'), $values['name']),
+                            'confirmation',
                             false
                         );
                     }
@@ -173,7 +175,7 @@ switch ($action) {
         if ($check) {
             $res = $career->delete($_GET['id']);
             if ($res) {
-                Display::display_confirmation_message(get_lang('ItemDeleted'));
+                echo Display::return_message(get_lang('ItemDeleted'), 'confirmation');
             }
         }
         $career->display();
@@ -185,7 +187,7 @@ switch ($action) {
         if ($check) {
             $res = $career->copy($_GET['id'], true); //copy career and promotions inside
             if ($res) {
-                Display::display_confirmation_message(get_lang('ItemCopied'));
+                echo Display::return_message(get_lang('ItemCopied'), 'confirmation');
             }
         }
         $career->display();

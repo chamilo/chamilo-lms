@@ -71,7 +71,7 @@ if ($load_dirs) {
     $url = api_get_path(WEB_AJAX_PATH).'document.ajax.php?a=document_preview';
     $folder_icon = api_get_path(WEB_IMG_PATH).'icons/22/folder.png';
     $close_icon = api_get_path(WEB_IMG_PATH).'loading1.gif';
-    $htmlHeadXtra[] =  '<script>
+    $htmlHeadXtra[] = '<script>
 	$(document).ready(function() {
 		$(".document_preview_container").hide();
 		$(".document_preview").click(function() {
@@ -103,7 +103,7 @@ if ($load_dirs) {
 if ($displayMyCourseViewBySessionLink) {
     $htmlHeadXtra[] = '
     <script>
-        userId = ' . $userId . '
+        userId = ' . $userId.'
         $(document).ready(function() {
             changeMyCoursesView($.cookie("defaultMyCourseView"+userId));
         });
@@ -115,7 +115,7 @@ if ($displayMyCourseViewBySessionLink) {
         function changeMyCoursesView(inView)
         {
             $.cookie("defaultMyCourseView"+userId, inView, { expires: 365 });
-            if (inView == ' . IndexManager::VIEW_BY_SESSION . ') {
+            if (inView == ' . IndexManager::VIEW_BY_SESSION.') {
                 $("#viewBySession").addClass("btn-primary");
                 $("#viewByDefault").removeClass("btn-primary");
             } else {
@@ -171,16 +171,16 @@ if (api_get_setting('go_to_course_after_login') == 'true') {
             if (isset($sessionInfo['courses']) && count($sessionInfo['courses']) == 1) {
                 $courseCode = $sessionInfo['courses'][0]['code'];
                 $courseInfo = api_get_course_info_by_id($sessionInfo['courses'][0]['real_id']);
-                $courseUrl = $courseInfo['course_public_url'] . '?id_session=' . $sessionInfo['session_id'];
-                header('Location:' . $courseUrl);
+                $courseUrl = $courseInfo['course_public_url'].'?id_session='.$sessionInfo['session_id'];
+                header('Location:'.$courseUrl);
                 exit;
             }
 
             // Session has many courses.
             if (isset($sessionInfo['session_id'])) {
-                $url = api_get_path(WEB_CODE_PATH) . 'session/?session_id=' . $sessionInfo['session_id'];
+                $url = api_get_path(WEB_CODE_PATH).'session/?session_id='.$sessionInfo['session_id'];
 
-                header('Location:' . $url);
+                header('Location:'.$url);
                 exit;
             }
         }
@@ -198,7 +198,7 @@ if (api_get_setting('go_to_course_after_login') == 'true') {
             $courseInfo = api_get_course_info_by_id($courses[0]['real_id']);
             if (!empty($courseInfo)) {
                 $courseUrl = $courseInfo['course_public_url'];
-                header('Location:' . $courseUrl);
+                header('Location:'.$courseUrl);
                 exit;
             }
         }

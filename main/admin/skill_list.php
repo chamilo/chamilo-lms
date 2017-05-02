@@ -115,36 +115,47 @@ switch ($action) {
         //no break
     default:
         $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
-
-        $toolbar = Display::toolbarButton(
-            get_lang('CreateSkill'),
+        
+        $toolbar = Display::url(
+            Display::return_icon(
+                'add.png',
+                get_lang('CreateSkill'),
+                null,
+                ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH) . 'admin/skill_create.php',
-            'plus',
-            'success',
             ['title' => get_lang('CreateSkill')]
-        );
-        $toolbar .= Display::toolbarButton(
-            get_lang('SkillsWheel'),
-            api_get_path(WEB_CODE_PATH) . 'admin/skills_wheel.php',
-            'bullseye',
-            'primary',
-            ['title' => get_lang('CreateSkill')]
-        );
-        $toolbar .= Display::toolbarButton(
-            get_lang('BadgesManagement'),
-            api_get_path(WEB_CODE_PATH) . 'admin/skill_badge_list.php',
-            'shield',
-            'warning',
+            );
+        
+        $toolbar .= Display::url(
+            Display::return_icon(
+                'wheel_skill.png',
+                get_lang('SkillsWheel'),
+                null,
+                ICON_SIZE_MEDIUM),
+            api_get_path(WEB_CODE_PATH).'admin/skills_wheel.php',
+            ['title' => get_lang('SkillsWheel')]
+            );
+              
+        $toolbar .= Display::url(
+            Display::return_icon(
+                'edit-skill.png',
+                get_lang('BadgesManagement'),
+                null,
+                ICON_SIZE_MEDIUM),
+            api_get_path(WEB_CODE_PATH).'admin/skill_badge_list.php',
             ['title' => get_lang('BadgesManagement')]
-        );
-        $toolbar .= Display::toolbarButton(
-            get_lang('ImportSkillsListCSV'),
-            api_get_path(WEB_CODE_PATH) . 'admin/skills_import.php',
-            'arrow-up',
-            'info',
-            ['title' => get_lang('BadgesManagement')]
-        );
-
+            );
+        
+        $toolbar .= Display::url(
+            Display::return_icon(
+                'import_csv.png',
+                get_lang('ImportSkillsListCSV'),
+                null,
+                ICON_SIZE_MEDIUM),
+            api_get_path(WEB_CODE_PATH).'admin/skills_import.php',
+            ['title' => get_lang('ImportSkillsListCSV')]
+            );
+        
         $extraField = new ExtraField('skill');
         $arrayVals = $extraField->get_handler_field_info_by_tags('tags');
         $tags = [];
@@ -179,7 +190,10 @@ switch ($action) {
         $templateName = $tpl->get_template('skill/list.tpl');
         $content = $tpl->fetch($templateName);
 
-        $tpl->assign('actions', $toolbar);
+        $tpl->assign(
+            'actions',
+            Display::toolbarAction('toolbar', [$toolbar], [12])
+        );
         $tpl->assign('content', $content);
         $tpl->display_one_col_template();
 

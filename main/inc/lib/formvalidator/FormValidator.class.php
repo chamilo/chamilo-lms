@@ -17,13 +17,13 @@ class FormValidator extends HTML_QuickForm
 
     /**
      * Constructor
-     * @param string $name					Name of the form
-     * @param string $method (optional			Method ('post' (default) or 'get')
-     * @param string $action (optional			Action (default is $PHP_SELF)
-     * @param string $target (optional			Form's target defaults to '_self'
-     * @param mixed $attributes (optional)		Extra attributes for <form> tag
+     * @param string $name Name of the form
+     * @param string $method (optional) Method ('post' (default) or 'get')
+     * @param string $action (optional) Action (default is $PHP_SELF)
+     * @param string $target (optional) Form's target defaults to '_self'
+     * @param mixed $attributes (optional) Extra attributes for <form> tag
      * @param string $layout
-     * @param bool $trackSubmit (optional)		Whether to track if the form was
+     * @param bool $trackSubmit (optional) Whether to track if the form was
      * submitted by adding a special hidden field (default = true)
      */
     public function __construct(
@@ -122,6 +122,7 @@ EOT;
     }
 
     /**
+     * @todo this function should be added in the element class
      * @return string
      */
     public function getDefaultElementTemplate()
@@ -175,14 +176,17 @@ EOT;
      * @param string $name					The element name
      * @param bool   $required	(optional)	Is the form-element required (default=true)
      * @param array  $attributes (optional)	List of attributes for the form-element
+     * @return HTML_QuickForm_text
      */
     public function addText($name, $label, $required = true, $attributes = array())
     {
-        $this->addElement('text', $name, $label, $attributes);
+        $element = $this->addElement('text', $name, $label, $attributes);
         $this->applyFilter($name, 'trim');
         if ($required) {
             $this->addRule($name, get_lang('ThisFieldIsRequired'), 'required');
         }
+
+        return $element;
     }
 
     /**
@@ -443,6 +447,29 @@ EOT;
     }
 
     /**
+     * Returns a move style button
+     * @param string $label Text appearing on the button
+     * @param string $name Element name (for form treatment purposes)
+     * @param bool $createElement Whether to use the create or add method
+     *
+     * @return HTML_QuickForm_button
+     */
+    public function addButtonMove($label, $name = 'submit', $createElement = false)
+    {
+        return $this->addButton(
+            $name,
+            $label,
+            'arrow-circle-right',
+            'primary',
+            null,
+            null,
+            array(),
+            $createElement
+        );
+    }
+
+
+    /**
      * Returns a button with the primary color and a paper-plane icon
      * @param string $label Text appearing on the button
      * @param string $name Element name (for form treatment purposes)
@@ -489,7 +516,15 @@ EOT;
      */
     public function addButtonNext($label, $name = 'submit', $attributes = array())
     {
-        return $this->addButton($name, $label, 'arrow-right', 'primary', null, null, $attributes);
+        return $this->addButton(
+            $name,
+            $label,
+            'arrow-right',
+            'primary',
+            null,
+            null,
+            $attributes
+        );
     }
 
     /**
@@ -709,7 +744,13 @@ EOT;
         $group = array();
         foreach ($options as $value => $text) {
             $attributes['value'] = $value;
-            $group[] = $this->createElement('checkbox', $value, null, $text, $attributes);
+            $group[] = $this->createElement(
+                'checkbox',
+                $value,
+                null,
+                $text,
+                $attributes
+            );
         }
 
         return $this->addGroup($group, $name, $label);
@@ -853,11 +894,21 @@ EOT;
      * @param array  $config (optional) Configuration settings for the online editor.
      * @param bool   $style
      */
-    public function addHtmlEditor($name, $label, $required = true, $fullPage = false, $config = array(), $style = false)
-    {
-        $config['rows'] = isset($config['rows']) ? $config['rows'] : 15;
-        $config['cols'] = isset($config['cols']) ? $config['cols'] : 80;
-        $this->addElement('html_editor', $name, $label, $config, $style);
+    public function addHtmlEditor(
+        $name,
+        $label,
+        $required = true,
+        $fullPage = false,
+        $config = [],
+        $style = false
+    ) {
+        $attributes = [];
+        $attributes['rows'] = isset($config['rows']) ? $config['rows'] : 15;
+        $attributes['cols'] = isset($config['cols']) ? $config['cols'] : 80;
+        $attributes['cols-size'] = isset($config['cols-size']) ? $config['cols-size'] : [];
+        $attributes['class'] = isset($config['class']) ? $config['class'] : [];
+
+        $this->addElement('html_editor', $name, $label, $attributes, $config);
         $this->applyFilter($name, 'trim');
         if ($required) {
             $this->addRule($name, get_lang('ThisFieldIsRequired'), 'required');
@@ -1230,10 +1281,10 @@ EOT;
 
     /**
      * Adds a input of type url to the form.
-     * @param type $name The label for the form-element
-     * @param type $label The element name
-     * @param type $required Optional. Is the form-element required (default=true)
-     * @param type $attributes Optional. List of attributes for the form-element
+     * @param string $name The label for the form-element
+     * @param string $label The element name
+     * @param bool $required Optional. Is the form-element required (default=true)
+     * @param array $attributes Optional. List of attributes for the form-element
      */
     public function addUrl($name, $label, $required = true, $attributes = array())
     {
@@ -1518,21 +1569,20 @@ EOT;
         $this->addMultipleUploadJavascript($url, $inputName);
 
         $this->addHtml('
-            <div class="description-upload">'.get_lang('ClickToSelectOrDragAndDropMultipleFilesOnTheUploadField').'</div>
+            <div class="description-upload">
+            '.get_lang('ClickToSelectOrDragAndDropMultipleFilesOnTheUploadField').'
+            </div>
             <span class="btn btn-success fileinput-button">
                 <i class="glyphicon glyphicon-plus"></i>
                 <span>'.get_lang('AddFiles').'</span>
                 <!-- The file input field used as target for the file upload widget -->
                 <input id="'.$inputName.'" type="file" name="files[]" multiple>
             </span>
-            <br />
-            <br />
             <div id="dropzone">
                 <div class="button-load">
                 '.get_lang('UploadFiles').'
                 </div>
             </div>
-
             <br />
             <!-- The global progress bar -->
             <div id="progress" class="progress">
@@ -1581,12 +1631,11 @@ EOT;
                     data.submit().always(function () {
                         \$this.remove();
                     });
-                });
-
+                });               
+                
             $('#".$inputName."').fileupload({
                 url: url,
                 dataType: 'json',
-                autoUpload: true,
                 // Enable image resizing, except for Android and Opera,
                 // which actually support image resizing, but fail to
                 // send Blob objects via XHR requests:
@@ -1594,15 +1643,13 @@ EOT;
                 previewMaxWidth: 100,
                 previewMaxHeight: 100,
                 previewCrop: true,
-                dropzone: $('#dropzone')
-             }).on('fileuploadadd', function (e, data) {
+                dropzone: $('#dropzone'),                                
+            }).on('fileuploadadd', function (e, data) {
                 data.context = $('<div class=\"row\" style=\"margin-bottom:35px\" />').appendTo('#files');
                 $.each(data.files, function (index, file) {
                     var node = $('<div class=\"col-sm-5\">').text(file.name);                    
                     node.appendTo(data.context);
-                }
-            );
-            
+                });
             }).on('fileuploadprocessalways', function (e, data) {
                 var index = data.index,
                     file = data.files[index],
@@ -1633,8 +1680,7 @@ EOT;
                         var link = $('<a>')
                             .attr('target', '_blank')
                             .prop('href', file.url);
-                        $(data.context.children()[index]).parent().wrap(link);
-                        
+                        $(data.context.children()[index]).parent().wrap(link);                        
                         var successMessage = $('<div class=\"col-sm-3\">').html($('<span class=\"alert alert-success\"/>').text('" . addslashes(get_lang('UplUploadSucceeded')) . "'));
                         $(data.context.children()[index]).parent().append(successMessage);
                     } else if (file.error) {
@@ -1642,19 +1688,68 @@ EOT;
                         $(data.context.children()[index]).parent().append(error);
                     }
                 });
+                $('#dropzone').removeClass('hover');
             }).on('fileuploadfail', function (e, data) {
                 $.each(data.files, function (index) {
                     var failedMessage = '" . addslashes(get_lang('UplUploadFailed')) . "';
                     var error = $('<div class=\"col-sm-3\">').html($('<span class=\"alert alert-danger\"/>').text(failedMessage));
                     $(data.context.children()[index]).parent().append(error);
                 });
-            }).prop('disabled', !$.support.fileInput)
-                .parent().addClass($.support.fileInput ? undefined : 'disabled');
-
+                $('#dropzone').removeClass('hover');
+            }).prop('disabled', !$.support.fileInput).parent().addClass($.support.fileInput ? undefined : 'disabled');            
+            
+            $('#dropzone').on('dragover', function (e) {
+                // dragleave callback implementation                
+                $('#dropzone').addClass('hover');
+            });
+            
+            $('#dropzone').on('dragleave', function (e) {                
+                $('#dropzone').removeClass('hover');
+            });
             $('.fileinput-button').hide();
-
         });
         </script>");
+    }
+
+    /**
+     * @param string $elementName
+     * @param string $groupName if element is inside a group
+     * @throws Exception
+     */
+    public function addPasswordRule($elementName, $groupName = '')
+    {
+        // Constant defined in old config/profile.conf.php
+        if (CHECK_PASS_EASY_TO_FIND === true) {
+            $message = get_lang('PassTooEasy').': '.api_generate_password();
+
+            if (!empty($groupName)) {
+                $groupObj = $this->getElement($groupName);
+
+                if ($groupObj instanceof HTML_QuickForm_group) {
+                    $elementName = $groupObj->getElementName($elementName);
+
+                    if ($elementName === false) {
+                        throw new Exception("The $groupName doesn't have the element $elementName");
+                    }
+
+                    $this->_rules[$elementName][] = array(
+                        'type' => 'callback',
+                        'format' => 'api_check_password',
+                        'message' => $message,
+                        'validation' => '',
+                        'reset' => false,
+                        'group' => $groupName
+                    );
+                }
+            } else {
+                $this->addRule(
+                    $elementName,
+                    $message,
+                    'callback',
+                    'api_check_password'
+                );
+            }
+        }
     }
 }
 

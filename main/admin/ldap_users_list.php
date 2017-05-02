@@ -32,7 +32,7 @@ if (($_GET['action']=="add_user") && ($_GET['id_session'] == strval(intval($_GET
 
 $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 $tool_name = get_lang('SearchLDAPUsers');
-//Display :: display_header($tool_name); //cannot display now as we need to redirect
+//Display::display_header($tool_name); //cannot display now as we need to redirect
 //api_display_tool_title($tool_name);
 
 if (isset ($_GET['action']))
@@ -43,31 +43,31 @@ if (isset ($_GET['action']))
 		switch ($_GET['action'])
 		{
 			case 'show_message' :
-				Display :: display_header($tool_name);
-				Display :: display_normal_message($_GET['message']);
+				Display::display_header($tool_name);
+				Display::addFlash(Display::return_message($_GET['message'], 'normal'));
 				break;
 			case 'delete_user' :
-				Display :: display_header($tool_name);
-				if ($user_id != $_user['user_id'] && UserManager :: delete_user($_GET['user_id']))
+				Display::display_header($tool_name);
+				if ($user_id != $_user['user_id'] && UserManager::delete_user($_GET['user_id']))
 				{
-					Display :: display_normal_message(get_lang('UserDeleted'));
+					Display::addFlash(Display::return_message(get_lang('UserDeleted'), 'normal'));
 				}
 				else
 				{
-					Display :: display_error_message(get_lang('CannotDeleteUser'));
+					Display::addFlash(Display::return_message(get_lang('CannotDeleteUser'), 'error'));
 				}
 				break;
 			case 'lock' :
-				Display :: display_header($tool_name);
+				Display::display_header($tool_name);
 				$message=lock_unlock_user('lock',$_GET['user_id']);
-				Display :: display_normal_message($message);
+				Display::addFlash(Display::return_message($message, 'normal'));
 				break;
-			case 'unlock';
-				Display :: display_header($tool_name);
+			case 'unlock':
+				Display::display_header($tool_name);
 				$message=lock_unlock_user('unlock',$_GET['user_id']);
-				Display :: display_normal_message($message);
+				Display::addFlash(Display::return_message($message, 'normal'));
 				break;
-			case 'add_user';
+            case 'add_user':
 				$id=$_GET['id'];
 				$UserList=array();
 				$userid_match_login = array();
@@ -80,7 +80,7 @@ if (isset ($_GET['action']))
 					ldap_add_user_to_session($UserList, $_GET['id_session']);
 					header('Location: resume_session.php?id_session='.intval($_GET['id_session']));
 				} else {
-					Display :: display_header($tool_name);
+					Display::display_header($tool_name);
 					if(count($userid_match_login)>0)
 					{
 						$message=get_lang('LDAPUsersAddedOrUpdated').':<br />';
@@ -93,11 +93,11 @@ if (isset ($_GET['action']))
 					{
 						$message=get_lang('NoUserAdded');
 					}
-					Display :: display_normal_message($message,false);
+					Display::addFlash(Display::return_message($message, 'normal', false));
 				}
 				break;
-			default :
-				Display :: display_header($tool_name);
+			default:
+				Display::display_header($tool_name);
 		}
 		Security::clear_token();
 	}
@@ -124,7 +124,7 @@ if (isset ($_POST['action']))
 				{
 					if($user_id != $_user['user_id'])
 					{
-						if(UserManager :: delete_user($user_id))
+						if(UserManager::delete_user($user_id))
 						{
 							$number_of_deleted_users++;
 						}
@@ -132,11 +132,11 @@ if (isset ($_POST['action']))
 				}
 				if($number_of_selected_users == $number_of_deleted_users)
 				{
-					Display :: display_normal_message(get_lang('SelectedUsersDeleted'));
+					Display::addFlash(Display::return_message(get_lang('SelectedUsersDeleted'), 'normal'));
 				}
 				else
 				{
-					Display :: display_error_message(get_lang('SomeUsersNotDeleted'));
+					Display::addFlash(Display::return_message(get_lang('SomeUsersNotDeleted'), 'error'));
 				}
 				break;
 			case 'add_user' :
@@ -154,11 +154,11 @@ if (isset ($_POST['action']))
 					addUserToSession($UserList, $_GET['id_session']);
 				if(count($UserList)>0)
 				{
-					Display :: display_normal_message(count($UserList)." ".get_lang('LDAPUsersAdded'));
+					Display::addFlash(Display::return_message(count($UserList)." ".get_lang('LDAPUsersAdded')));
 				}
 				else
 				{
-					Display :: display_normal_message(get_lang('NoUserAdded'));
+					Display::addFlash(Display::return_message(get_lang('NoUserAdded')));
 				}
 				break;
 
@@ -210,13 +210,10 @@ $table = new SortableTable('users', 'ldap_get_number_of_users', 'ldap_get_user_d
 $table->set_additional_parameters($parameters);
 $table->set_header(0, '', false);
 $table->set_header(1, get_lang('LoginName'));
-if (api_is_western_name_order())
-{
+if (api_is_western_name_order()) {
 	$table->set_header(2, get_lang('FirstName'));
 	$table->set_header(3, get_lang('LastName'));
-}
-else
-{
+} else {
 	$table->set_header(2, get_lang('LastName'));
 	$table->set_header(3, get_lang('FirstName'));
 }
@@ -233,5 +230,4 @@ $table->display();
 		FOOTER
 ==============================================================================
 */
-Display :: display_footer();
-?>
+Display::display_footer();

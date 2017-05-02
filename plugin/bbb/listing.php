@@ -189,16 +189,17 @@ $listing_tpl = 'bbb/listing.tpl';
 $content = $tpl->fetch($listing_tpl);
 
 if (api_is_platform_admin()) {
-    $actionLinks = [
-        Display::toolbarButton(
-            $plugin->get_lang('AdminView'),
-            api_get_path(WEB_PLUGIN_PATH) . 'bbb/admin.php',
-            'list',
-            'primary'
-        )
-    ];
+    $actionLinks = Display::toolbarButton(
+        $plugin->get_lang('AdminView'),
+        api_get_path(WEB_PLUGIN_PATH) . 'bbb/admin.php',
+        'list',
+        'primary'
+    );
 
-    $tpl->assign('actions', implode(PHP_EOL, $actionLinks));
+    $tpl->assign(
+        'actions',
+        Display::toolbarAction('toolbar', [$actionLinks])
+    );
 }
 
 $tpl->assign('content', $content);

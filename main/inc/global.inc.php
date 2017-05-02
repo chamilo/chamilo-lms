@@ -42,7 +42,7 @@ if (file_exists($kernel->getConfigurationFile())) {
     if (!$alreadyInstalled) {
         $global_error_code = 2;
         // The system has not been installed yet.
-        require_once __DIR__ . '/../inc/global_error_message.inc.php';
+        require_once __DIR__.'/../inc/global_error_message.inc.php';
         die();
     }
 }
@@ -163,9 +163,9 @@ if (!empty($_configuration['multiple_access_urls'])) {
     $request_url_root = '';
     if (empty($_SERVER['HTTP_HOST'])) {
         if (empty($_SERVER['SERVER_NAME'])) {
-            $request_url_root = $protocol . 'localhost/';
+            $request_url_root = $protocol.'localhost/';
         } else {
-            $request_url_root = $protocol . $_SERVER['SERVER_NAME'] . '/';
+            $request_url_root = $protocol.$_SERVER['SERVER_NAME'].'/';
         }
     } else {
         $request_url_root = $protocol.$_SERVER['HTTP_HOST'].'/';
@@ -194,8 +194,11 @@ if (!empty($_configuration['multiple_access_urls'])) {
 
 // Check if APCu is available. If so, store the value in $_configuration
 if (extension_loaded('apcu')) {
-    $_configuration['apc'] = true;
-    $_configuration['apc_prefix'] = $_configuration['main_database'].'_'.$_configuration['access_url'].'_';
+    $apcEnabled = ini_get('apc.enabled');
+    if (!empty($apcEnabled) && $apcEnabled != 'Off' && $apcEnabled != 'off') {
+        $_configuration['apc'] = true;
+        $_configuration['apc_prefix'] = $_configuration['main_database'].'_'.$_configuration['access_url'].'_';
+    }
 }
 
 $charset = 'UTF-8';
@@ -468,7 +471,7 @@ if (!empty($valid_languages)) {
     }
 
     if (!empty($language_priority1) && api_get_language_from_type($language_priority1) !== false) {
-        $language_interface =  api_get_language_from_type($language_priority1);
+        $language_interface = api_get_language_from_type($language_priority1);
     } else {
         if (isset($_course['language'])) {
             $language_interface = $_course['language'];
@@ -543,7 +546,7 @@ if (!$x = strpos($_SERVER['PHP_SELF'], 'whoisonline.php')) {
 if (!isset($_SESSION['login_as']) && isset($_user)) {
     // if $_SESSION['login_as'] is set, then the user is an admin logged as the user
 
-    $tbl_track_login = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+    $tbl_track_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
     $sql = "SELECT login_id, login_date
             FROM $tbl_track_login
             WHERE

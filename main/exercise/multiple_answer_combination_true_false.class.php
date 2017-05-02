@@ -2,13 +2,13 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * 	Class MultipleAnswerCombinationTrueFalse
+ *  Class MultipleAnswerCombinationTrueFalse
  *
- *	This class allows to instantiate an object of type MULTIPLE_ANSWER (MULTIPLE CHOICE, MULTIPLE ANSWER),
- *	extending the class question
+ *  This class allows to instantiate an object of type MULTIPLE_ANSWER (MULTIPLE CHOICE, MULTIPLE ANSWER),
+ *  extending the class question
  *
- *	@author Eric Marguin
- *	@package chamilo.exercise
+ * @author Eric Marguin
+ * @package chamilo.exercise
  **/
 class MultipleAnswerCombinationTrueFalse extends MultipleAnswerCombination
 {

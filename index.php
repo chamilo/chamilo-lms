@@ -45,7 +45,7 @@ if (isset($_GET['submitAuth']) && $_GET['submitAuth'] == 1) {
     Event::addEvent(
         LOG_ATTEMPTED_FORCED_LOGIN,
         'tried_hacking_get',
-        $_SERVER['REMOTE_ADDR'].(empty($_POST['login'])?'':'/'.$_POST['login']),
+        $_SERVER['REMOTE_ADDR'].(empty($_POST['login']) ? '' : '/'.$_POST['login']),
         null,
         $i
     );
@@ -76,8 +76,8 @@ if (!api_get_user_id() && CustomPages::enabled()) {
 
 if (!empty($_POST['submitAuth'])) {
     // The user has been already authenticated, we are now to find the last login of the user.
-    if (isset ($_user['user_id'])) {
-        $track_login_table = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+    if (isset($_user['user_id'])) {
+        $track_login_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $sql = "SELECT UNIX_TIMESTAMP(login_date)
                 FROM $track_login_table
                 WHERE login_user_id = '".$_user['user_id']."'
@@ -122,7 +122,7 @@ $useCookieValidation = api_get_setting('cookie_warning');
 if ($useCookieValidation === 'true') {
     if (isset($_POST['acceptCookies'])) {
         api_set_site_use_cookie_warning_cookie();
-    } else if (!api_site_use_cookie_warning_cookie_exist()) {
+    } elseif (!api_site_use_cookie_warning_cookie_exist()) {
         if (Template::isToolBarDisplayedForUser()) {
             $controller->tpl->assign('toolBarDisplayed', true);
         } else {

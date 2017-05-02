@@ -123,7 +123,7 @@ switch ($action) {
             $status  = intval($_GET['status']);
 
             if (!empty($user_id)) {
-                $user_table = Database :: get_main_table(TABLE_MAIN_USER);
+                $user_table = Database::get_main_table(TABLE_MAIN_USER);
                 $sql = "UPDATE $user_table 
                         SET active='".$status."' 
                         WHERE user_id='".$user_id."'";

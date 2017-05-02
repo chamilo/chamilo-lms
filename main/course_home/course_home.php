@@ -4,31 +4,30 @@
 use ChamiloSession as Session;
 
 /**
-        HOME PAGE FOR EACH COURSE
-*
-*	This page, included in every course's index.php is the home
-*	page. To make administration simple, the teacher edits his
-*	course from the home page. Only the login detects that the
-*	visitor is allowed to activate, deactivate home page links,
-*	access to the teachers tools (statistics, edit forums...).
-*
-* Edit visibility of tools
-*
-*   visibility = 1 - everybody
-*   visibility = 0 - course admin (teacher) and platform admin
-*
-* Who can change visibility ?
-*
-*   admin = 0 - course admin (teacher) and platform admin
-*   admin = 1 - platform admin
-*
-* Show message to confirm that a tools must be hide from available tools
-*
-*   visibility 0,1
-*
-*
-*	@package chamilo.course_home
-*/
+ * HOME PAGE FOR EACH COURSE
+ *
+ * This page, included in every course's index.php is the home
+ * page. To make administration simple, the teacher edits his
+ * course from the home page. Only the login detects that the
+ * visitor is allowed to activate, deactivate home page links,
+ * access to the teachers tools (statistics, edit forums...).
+ *
+ * Edit visibility of tools
+ *
+ *   visibility = 1 - everybody
+ *   visibility = 0 - course admin (teacher) and platform admin
+ *
+ * Who can change visibility ?
+ *
+ *   admin = 0 - course admin (teacher) and platform admin
+ *   admin = 1 - platform admin
+ *
+ * Show message to confirm that a tools must be hide from available tools
+ *
+ *   visibility 0,1
+ *
+ * @package chamilo.course_home
+ */
 
 $use_anonymous = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -159,11 +158,11 @@ if (isset($_GET['action']) && $_GET['action'] == 'subscribe') {
         }
     }
 }
+
 /*	Is the user allowed here? */
 api_protect_course_script(true);
 
 /*  STATISTICS */
-
 if (!isset($coursesAlreadyVisited[$course_code])) {
     Event::accessCourse();
     $coursesAlreadyVisited[$course_code] = 1;
@@ -181,8 +180,8 @@ if (!empty($auto_launch)) {
         } else {
             $session_key = 'lp_autolaunch_'.$session_id.'_'.api_get_course_int_id().'_'.api_get_user_id();
             if (!isset($_SESSION[$session_key])) {
-                //redirecting to the LP
-                $url = api_get_path(WEB_CODE_PATH) . 'lp/lp_controller.php?' . api_get_cidreq() . '&id_session=' . $session_id;
+                // Redirecting to the LP
+                $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&id_session='.$session_id;
                 $_SESSION[$session_key] = true;
                 header("Location: $url");
                 exit;
@@ -212,12 +211,12 @@ if (!empty($auto_launch)) {
             $lp_data = Database::fetch_array($result, 'ASSOC');
             if (!empty($lp_data['id'])) {
                 if (api_is_platform_admin() || api_is_allowed_to_edit()) {
-                	$show_autolaunch_lp_warning = true;
+                    $show_autolaunch_lp_warning = true;
                 } else {
                     $session_key = 'lp_autolaunch_'.$session_id.'_'.api_get_course_int_id().'_'.api_get_user_id();
                     if (!isset($_SESSION[$session_key])) {
                         //redirecting to the LP
-                        $url = api_get_path(WEB_CODE_PATH) . 'lp/lp_controller.php?' . api_get_cidreq() . '&action=view&lp_id=' . $lp_data['id'];
+                        $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$lp_data['id'];
 
                         $_SESSION[$session_key] = true;
                         header("Location: $url");

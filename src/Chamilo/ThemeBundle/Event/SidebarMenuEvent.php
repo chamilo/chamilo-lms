@@ -74,9 +74,9 @@ class SidebarMenuEvent extends ThemeEvent
      */
     public function getActive() {
 
-        foreach($this->getItems() as $item) {
+        foreach ($this->getItems() as $item) {
             /** @var $item MenuItemInterface */
-            if($item->isActive()) return $item;
+            if ($item->isActive()) return $item;
         }
         return null;
     }

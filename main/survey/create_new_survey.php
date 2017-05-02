@@ -18,10 +18,10 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
 // Database table definitions
-$table_survey = Database :: get_course_table(TABLE_SURVEY);
-$table_user = Database :: get_main_table(TABLE_MAIN_USER);
-$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
-$table_gradebook_link = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+$table_survey = Database::get_course_table(TABLE_SURVEY);
+$table_user = Database::get_main_table(TABLE_MAIN_USER);
+$table_course = Database::get_main_table(TABLE_MAIN_COURSE);
+$table_gradebook_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
 /** @todo this has to be moved to a more appropriate place (after the display_header of the code) */
 // If user is not teacher or if he's a coach trying to access an element out of his session
@@ -100,7 +100,7 @@ if ($_GET['action'] == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
 $form = new FormValidator(
     'survey',
     'post',
-    api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&survey_id='.$survey_id. '&' . api_get_cidreq()
+    api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&survey_id='.$survey_id.'&'.api_get_cidreq()
 );
 
 $form->addElement('header', $tool_name);
@@ -216,7 +216,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit' && !empty($survey_id)) {
             foreach ($field_list as $key => & $field) {
                 if ($field['visibility'] == 1) {
                     $form->addElement('checkbox', 'profile_'.$key, ' ', '&nbsp;&nbsp;'.$field['name']);
-                    $input_name_list.= 'profile_'.$key.',';
+                    $input_name_list .= 'profile_'.$key.',';
                 }
             }
 

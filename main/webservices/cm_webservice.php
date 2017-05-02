@@ -1,8 +1,12 @@
 <?php
+/* For licensing terms, see /license.txt */
 
+/**
+ * @package chamilo.webservices
+ */
 use Chamilo\UserBundle\Entity\User;
 
-require_once(dirname(__FILE__).'/../inc/global.inc.php');
+require_once __DIR__.'/../inc/global.inc.php';
 
 $libpath = api_get_path(LIBRARY_PATH);
 
@@ -47,11 +51,11 @@ class WSCMError
     /**
      * Sets the error handler
      *
-     * @param WSErrorHandler Error handler
+     * @param WSErrorHandler $handler Error handler
      */
     public static function setErrorHandler($handler)
     {
-        if($handler instanceof WSErrorHandler) {
+        if ($handler instanceof WSErrorHandler) {
             self::$_handler = $handler;
         }
     }
@@ -85,7 +89,7 @@ interface WSCMErrorHandler
 	/**
 	 * Handle method
 	 *
-	 * @param WSError Error
+	 * @param WSError $error Error
 	 */
 	public function handle($error);
 }
@@ -113,7 +117,7 @@ class WSCM
 	/**
 	 * Verifies the API key
 	 *
-	 * @param string Secret key
+	 * @param string $secret_key Secret key
 	 * @return mixed WSError in case of failure, null in case of success
 	 */
 	protected function verifyKey($secret_key)
@@ -122,12 +126,12 @@ class WSCM
 		// if we are behind a reverse proxy, assume it will send the
 		// HTTP_X_FORWARDED_FOR header and use this IP instead
 		if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-		  list($ip1,$ip2) = split(',',$_SERVER['HTTP_X_FORWARDED_FOR']);
+		  list($ip1, $ip2) = split(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
 		  $ip = trim($ip1);
 		}
 		$security_key = $ip.$this->_configuration['security_key'];
 
-		if(!api_is_valid_secret_key($secret_key, $security_key)) {
+		if (!api_is_valid_secret_key($secret_key, $security_key)) {
 			return new WSCMError(1, "API key is invalid");
 		} else {
 			return null;
@@ -137,10 +141,10 @@ class WSCM
 	/**
 	 * Verifies if the user is valid
 	 *
-	 * @param <String> $username of the user in chamilo
-	 * @param <String> $pass of the same user (in MD5 of SHA)
+	 * @param string $username of the user in chamilo
+	 * @param string $pass of the same user (in MD5 of SHA)
 	 *
-	 * return "valid" if username e password are correct! Else, return a message error
+	 * @return mixed "valid" if username e password are correct! Else, return a message error
 	 */
 	public function verifyUserPass($username, $pass)
     {
@@ -185,8 +189,8 @@ class WSCM
 	 * Note that if the user id field name is "chamilo_user_id", it will use the user id
 	 * in the system database
 	 *
-	 * @param string User id field name
-	 * @param string User id value
+	 * @param string $user_id_field_name User id field name
+	 * @param string $user_id_value User id value
 	 * @return mixed System user id if the user was found, WSError otherwise
 	 */
     protected function getUserId($user_id_field_name, $user_id_value)
@@ -215,8 +219,8 @@ class WSCM
 	 * Note that if the course id field name is "chamilo_course_id", it will use the course id
 	 * in the system database
 	 *
-	 * @param string Course id field name
-	 * @param string Course id value
+	 * @param string $course_id_field_name Course id field name
+	 * @param string $course_id_value Course id value
 	 * @return mixed System course id if the course was found, WSError otherwise
 	 */
 	protected function getCourseId($course_id_field_name, $course_id_value)
@@ -245,15 +249,15 @@ class WSCM
 	 * Note that if the session id field name is "chamilo_session_id", it will use the session id
 	 * in the system database
 	 *
-	 * @param string Session id field name
-	 * @param string Session id value
+	 * @param string $session_id_field_name Session id field name
+	 * @param string $session_id_value Session id value
 	 * @return mixed System session id if the session was found, WSError otherwise
 	 */
 	protected function getSessionId($session_id_field_name, $session_id_value)
 	{
 		if ($session_id_field_name == "chamilo_session_id") {
-			$session = SessionManager::fetch((int)$session_id_value);
-			if(!empty($session)) {
+			$session = SessionManager::fetch((int) $session_id_value);
+			if (!empty($session)) {
 				return intval($session_id_value);
 			} else {
 				return new WSCMError(300, "Session not found");
@@ -263,7 +267,7 @@ class WSCM
 				$session_id_value,
 				$session_id_field_name
 			);
-			if($session_id == 0) {
+			if ($session_id == 0) {
 				return new WSCMError(300, "Session not found");
 			} else {
 				return $session_id;
@@ -274,7 +278,7 @@ class WSCM
 	/**
 	 * Handles an error by calling the WSError error handler
 	 *
-	 * @param WSError Error
+	 * @param WSError $error Error
 	 */
 	protected function handleError($error)
 	{
@@ -304,8 +308,8 @@ class WSCM
 
 	/**
 	 * *Strictly* reverts PHP's nl2br() effects (whether it was used in XHTML mode or not)
-	 * @param <type> $string
-	 * @return <type> $string
+	 * @param string $string
+	 * @return string
 	 */
 	public function nl2br_revert($string)
     {

@@ -39,12 +39,10 @@ if ($course_validation_feature) {
             $message = sprintf(get_lang('CourseRequestDeletionFailed'), $course_request_code);
             $is_error_message = true;
         }
-    }
-
-    /**
-     * Form actions: delete.
-     */
-    elseif (isset($_POST['action'])) {
+    } elseif (isset($_POST['action'])) {
+        /**
+         * Form actions: delete.
+         */
         switch ($_POST['action']) {
             // Delete selected courses
             case 'delete_course_requests':
@@ -69,7 +67,8 @@ if ($course_validation_feature) {
 /**
  * Get the number of courses which will be displayed.
  */
-function get_number_of_requests() {
+function get_number_of_requests()
+{
     return CourseRequestManager::count_course_requests(COURSE_REQUEST_ACCEPTED);
 }
 
@@ -79,7 +78,7 @@ function get_number_of_requests() {
 function get_request_data($from, $number_of_items, $column, $direction)
 {
     $keyword = isset($_GET['keyword']) ? Database::escape_string(trim($_GET['keyword'])) : null;
-    $course_request_table = Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST);
+    $course_request_table = Database::get_main_table(TABLE_MAIN_COURSE_REQUEST);
 
     $from = intval($from);
     $number_of_items = intval($number_of_items);
@@ -141,7 +140,7 @@ if (!empty($message)) {
     if ($is_error_message) {
         Display::display_error_message($message, false);
     } else {
-        Display::display_normal_message($message, false);
+        Display::addFlash(Display::return_message($message, 'normal', false));
     }
 }
 

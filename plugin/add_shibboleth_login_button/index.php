@@ -1,17 +1,17 @@
 <?php
 // Show the Shibboleth button to login using SHIBBOLETH
 
-$_template['show_message']   = false;
+$_template['show_message'] = false;
 
 if (api_is_anonymous()) {
-    $_template['show_message']   = true;
+    $_template['show_message'] = true;
     // the default title
     $button_label = "Connexion via Shibboleth";
     if (!empty($plugin_info['settings']['add_shibboleth_login_button_shibboleth_button_label'])) {
         $button_label = api_htmlentities($plugin_info['settings']['add_shibboleth_login_button_shibboleth_button_label']);
     }
     // the comm
-    $comm_label = api_htmlentities($plugin_info['settings']['add_shibboleth_login_button_shibboleth_button_comment']);;
+    $comm_label = api_htmlentities($plugin_info['settings']['add_shibboleth_login_button_shibboleth_button_comment']); ;
     // URL of the image
     $url_label = $plugin_info['settings']['add_shibboleth_login_button_shibboleth_image_url'];
     

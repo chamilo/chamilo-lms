@@ -24,13 +24,11 @@ require_once 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
 
 // Are we in a lp ?
-$origin = '';
-if (isset($_GET['origin'])) {
-    $origin = Security::remove_XSS($_GET['origin']);
-}
+$origin = api_get_origin();
 
 /* MAIN DISPLAY SECTION */
-$currentForum = get_forum_information($_GET['forum']);
+$forumId = (int) $_GET['forum'];
+$currentForum = get_forum_information($forumId);
 $currentForumCategory = get_forumcategory_information($currentForum['forum_category']);
 
 // the variable $forum_settings is declared in forumconfig.inc.php
@@ -52,6 +50,7 @@ if (!empty($gradebook) && $gradebook == 'view') {
 $threadId = isset($_GET['thread']) ? intval($_GET['thread']) : 0;
 $courseInfo = isset($_GET['cidReq']) ? api_get_course_info($_GET['cidReq']) : 0;
 $cId = isset($courseInfo['real_id']) ? intval($courseInfo['real_id']) : 0;
+$gradebookId = intval(api_is_in_gradebook());
 
 /* Is the user allowed here? */
 
@@ -104,16 +103,16 @@ if (!empty($groupId)) {
     $groupProperties = GroupManager :: get_group_properties($groupId);
     $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.$cidreq, 'name' => get_lang('Groups'));
     $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.$cidreq, 'name' => get_lang('GroupSpace').' '.$groupProperties['name']);
-    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.$cidreq.'&forum='.intval($_GET['forum']), 'name' => $currentForum['forum_title']);
-    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'forum/newthread.php?'.$cidreq.'&forum='.intval($_GET['forum']),'name' => get_lang('EditThread'));
+    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.$cidreq.'&forum='.$forumId, 'name' => $currentForum['forum_title']);
+    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'forum/newthread.php?'.$cidreq.'&forum='.$forumId,'name' => get_lang('EditThread'));
 } else {
     $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'forum/index.php?'.$cidreq, 'name' => $nameTools);
     $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'forum/viewforumcategory.php?'.$cidreq.'&forumcategory='.$currentForumCategory['cat_id'], 'name' => $currentForumCategory['cat_title']);
-    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.$cidreq.'&forum='.intval($_GET['forum']), 'name' => $currentForum['forum_title']);
+    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.$cidreq.'&forum='.$forumId, 'name' => $currentForum['forum_title']);
     $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('EditThread'));
 }
 
-$tableLink = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+$tableLink = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
 /* Header */
 
@@ -142,35 +141,134 @@ $htmlHeadXtra[] = <<<JS
     </script>
 JS;
 
-if ($origin == 'learnpath') {
-    Display::display_reduced_header();
-} else {
-    Display :: display_header(null);
-}
-
-handle_forum_and_forumcategories();
-
 // Action links
-echo '<div class="actions">';
-echo '<span style="float:right;">'.search_link().'</span>';
-echo '<a href="viewforum.php?forum='.intval($_GET['forum']).'&'.$cidreq.'">'.
-    Display::return_icon('back.png',get_lang('BackToForum'),'',ICON_SIZE_MEDIUM).'</a>';
-echo '</div>';
+$actions = [
+    Display::url(
+        Display::return_icon('back.png', get_lang('BackToForum'), '', ICON_SIZE_MEDIUM),
+        'viewforum.php?forum='.$forumId.'&'.$cidreq
+    ),
+    search_link()
+];
 
 $threadData = getThreadInfo($threadId, $cId);
 
-$values = showUpdateThreadForm(
-    $currentForum,
-    $forumSettings,
-    $threadData
+$form = new FormValidator(
+    'thread',
+    'post',
+    api_get_self() . '?' . http_build_query([
+        'forum' => $forumId,
+        'thread' => $threadId,
+    ]) . '&' . api_get_cidreq()
 );
 
-if (!empty($values) && isset($values['SubmitPost'])) {
+$form->addElement('header', get_lang('EditThread'));
+$form->setConstants(array('forum' => '5'));
+$form->addElement('hidden', 'forum_id', $forumId);
+$form->addElement('hidden', 'thread_id', $threadId);
+$form->addElement('hidden', 'gradebook', $gradebookId);
+$form->addElement('text', 'thread_title', get_lang('Title'));
+$form->addElement('advanced_settings', 'advanced_params', get_lang('AdvancedParameters'));
+$form->addElement('html', '<div id="advanced_params_options" style="display:none">');
 
-    // update thread in table forum_thread.
-    updateThread($values);
+if ((api_is_course_admin() || api_is_course_coach() || api_is_course_tutor()) && ($threadId)) {
+    // Thread qualify
+    if (Gradebook::is_active()) {
+        //Loading gradebook select
+        GradebookUtils::load_gradebook_select_in_tool($form);
+        $form->addElement(
+            'checkbox',
+            'thread_qualify_gradebook',
+            '',
+            get_lang('QualifyThreadGradebook'),
+            ['id' => 'thread_qualify_gradebook']
+        );
+    } else {
+        $form->addElement('hidden', 'thread_qualify_gradebook', false);
+    }
+
+    $form->addElement('html', '<div id="options_field" style="display:none">');
+    $form->addElement('text', 'numeric_calification', get_lang('QualificationNumeric'));
+    $form->applyFilter('numeric_calification', 'html_filter');
+    $form->addElement('text', 'calification_notebook_title', get_lang('TitleColumnGradebook'));
+    $form->applyFilter('calification_notebook_title', 'html_filter');
+    $form->addElement(
+        'number',
+        'weight_calification',
+        get_lang('QualifyWeight'),
+        ['value' => '0.00', 'step' => '0.01']
+    );
+    $form->applyFilter('weight_calification', 'html_filter');
+    $group = array();
+    $group[] = $form->createElement('radio', 'thread_peer_qualify', null, get_lang('Yes'), 1);
+    $group[] = $form->createElement('radio', 'thread_peer_qualify', null, get_lang('No'), 0);
+    $form->addGroup(
+        $group,
+        '',
+        [get_lang('ForumThreadPeerScoring'), get_lang('ForumThreadPeerScoringComment'),]
+    );
+    $form->addElement('html', '</div>');
 }
 
-if (isset($origin) && $origin != 'learnpath') {
-    Display :: display_footer();
+if ($forumSettings['allow_sticky'] && api_is_allowed_to_edit(null, true)) {
+    $form->addElement('checkbox', 'thread_sticky', '', get_lang('StickyPost'));
 }
+
+$form->addElement('html', '</div>');
+
+if (!empty($threadData)) {
+    $defaults['thread_qualify_gradebook'] = ($threadData['threadQualifyMax'] > 0 && empty($_POST)) ? 1 : 0 ;
+    $defaults['thread_title'] = prepare4display($threadData['threadTitle']);
+    $defaults['thread_sticky'] = strval(intval($threadData['threadSticky']));
+    $defaults['thread_peer_qualify'] = intval($threadData['threadPeerQualify']);
+    $defaults['numeric_calification'] = $threadData['threadQualifyMax'];
+    $defaults['calification_notebook_title'] = $threadData['threadTitleQualify'];
+    $defaults['weight_calification'] = $threadData['threadWeight'];
+} else {
+    $defaults['thread_qualify_gradebook'] = 0;
+    $defaults['numeric_calification'] = 0;
+    $defaults['calification_notebook_title'] = '';
+    $defaults['weight_calification'] = 0;
+    $defaults['thread_peer_qualify'] = 0;
+}
+$form->setDefaults(isset($defaults) ? $defaults : null);
+
+$form->addButtonUpdate(get_lang('ModifyThread'), 'SubmitPost');
+
+if ($form->validate()) {
+    $redirectUrl = api_get_path(WEB_CODE_PATH).'forum/viewforum.php?forum='.$forumId;
+
+    $check = Security::check_token('post');
+    if ($check) {
+        $values = $form->exportValues();
+
+//        if (isset($values['thread_qualify_gradebook']) &&
+//            $values['thread_qualify_gradebook'] == '1' &&
+//            empty($values['weight_calification'])
+//        ) {
+//            Display::addFlash(
+//                Display::return_message(get_lang('YouMustAssignWeightOfQualification'), 'error', false)
+//            );
+//            header('Location: '.$redirectUrl);
+//            exit;
+//        }
+
+        Security::clear_token();
+        updateThread($values);
+        header('Location: '.$redirectUrl);
+        exit;
+    }
+} else {
+    $token = Security::get_token();
+    $form->addElement('hidden', 'sec_token');
+    $form->setConstants(array('sec_token' => $token));
+}
+
+$orginIsLearpath = $origin == 'learnpath';
+
+$view = new Template('', !$orginIsLearpath, !$orginIsLearpath, $orginIsLearpath, $orginIsLearpath);
+$view->assign(
+    'actions',
+    Display::toolbarAction('toolbar', $actions)
+);
+$view->assign('content', $form->returnForm());
+$view->display_one_col_template();

@@ -48,7 +48,7 @@ if ($action == 'modEventType') {
 
 $ets = Event::get_all_event_types();
 $languages = api_get_languages();
-$ajaxPath = api_get_path(WEB_CODE_PATH) . 'inc/ajax/events.ajax.php';
+$ajaxPath = api_get_path(WEB_CODE_PATH).'inc/ajax/events.ajax.php';
 
 $action_array = array(
     array(
@@ -324,7 +324,7 @@ echo Display::actions($action_array);
         <select class="col-md-6" multiple="1" id="eventList" onchange="confirmMessage(this.name); return false;" name="eventList">
         <?php
         foreach ($event_config as $key => $config) {
-            echo '<option value="' . $key . '">' . $config['name_lang_var'] . '</option>';
+            echo '<option value="'.$key.'">'.$config['name_lang_var'].'</option>';
         }
         ?>
         </select>

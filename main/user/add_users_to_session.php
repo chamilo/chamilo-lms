@@ -22,9 +22,9 @@ SessionManager::protect_teacher_session_edit($id_session);
 
 // setting breadcrumbs
 if (api_is_platform_admin()) {
-    $interbreadcrumb[] = array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
-    $interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
-    $interbreadcrumb[] = array('url' => "resume_session.php?id_session=".$id_session,"name" => get_lang('SessionOverview'));
+    $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+    $interbreadcrumb[] = array('url' => 'session_list.php', 'name' => get_lang('SessionList'));
+    $interbreadcrumb[] = array('url' => "resume_session.php?id_session=".$id_session, "name" => get_lang('SessionOverview'));
 }
 $allowTutors = api_get_setting('allow_tutors_to_assign_students_to_session');
 $extra_field_list = [];
@@ -39,7 +39,7 @@ if ($allowTutors == 'true') {
     $tool_name = get_lang('SubscribeUsersToSession');
     $add_type = 'unique';
 
-    if (isset($_REQUEST['add_type']) && $_REQUEST['add_type']!='') {
+    if (isset($_REQUEST['add_type']) && $_REQUEST['add_type'] != '') {
         $add_type = Security::remove_XSS($_REQUEST['add_type']);
     }
 
@@ -51,7 +51,7 @@ if ($allowTutors == 'true') {
     if (is_array($extra_field_list)) {
     	foreach ($extra_field_list as $extra_field) {
     		//if is enabled to filter and is a "<select>" field type
-    		if ($extra_field[8]==1 && $extra_field[2]==4 ) {
+    		if ($extra_field[8] == 1 && $extra_field[2] == 4) {
                 $new_field_list[] = array(
                     'name' => $extra_field[3],
                     'variable' => $extra_field[1],
@@ -74,7 +74,7 @@ if ($allowTutors == 'true') {
     	if (!empty($needle) && !empty($type)) {
 
             //normal behaviour
-            if ($type == 'any_session' && $needle == 'false')  {
+            if ($type == 'any_session' && $needle == 'false') {
                 $type = 'multiple';
                 $needle = '';
             }
@@ -88,7 +88,7 @@ if ($allowTutors == 'true') {
     		$cond_user_id = '';
 
             //Only for single & multiple
-            if (in_array($type, array('single','multiple'))) {
+            if (in_array($type, array('single', 'multiple'))) {
         		if (!empty($id_session)) {
         		    $id_session = intval($id_session);
         			// check id_user from session_rel_user table
@@ -98,11 +98,11 @@ if ($allowTutors == 'true') {
         			$user_ids = array();
         			if (Database::num_rows($res) > 0) {
         				while ($row = Database::fetch_row($res)) {
-        					$user_ids[] = (int)$row[0];
+        					$user_ids[] = (int) $row[0];
         				}
         			}
         			if (count($user_ids) > 0) {
-        				$cond_user_id = ' AND user.user_id NOT IN('.implode(",",$user_ids).')';
+        				$cond_user_id = ' AND user.user_id NOT IN('.implode(",", $user_ids).')';
         			}
         		}
             }
@@ -138,7 +138,7 @@ if ($allowTutors == 'true') {
                     break;
     		}
     		if (api_is_multiple_url_enabled()) {
-    			$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+    			$tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
     			$access_url_id = api_get_current_access_url_id();
     			if ($access_url_id != -1) {
                     switch ($type) {
@@ -183,11 +183,11 @@ if ($allowTutors == 'true') {
     		}
 
     		$rs = Database::query($sql);
-            $i=0;
+            $i = 0;
     		if ($type == 'single') {
     			while ($user = Database::fetch_array($rs)) {
     	            $i++;
-    	            if ($i<=10) {
+    	            if ($i <= 10) {
                 		$person_name = api_get_person_name($user['firstname'], $user['lastname']);
     					$return .= '<a href="javascript: void(0);" onclick="javascript: add_user_to_session(\''.$user['user_id'].'\',\''.$person_name.' ('.$user['username'].')'.'\')">'.$person_name.' ('.$user['username'].')</a><br />';
     	            } else {
@@ -195,7 +195,7 @@ if ($allowTutors == 'true') {
     	            }
     			}
 
-    			$xajax_response -> addAssign('ajax_list_users_single','innerHTML',api_utf8_encode($return));
+    			$xajax_response -> addAssign('ajax_list_users_single', 'innerHTML', api_utf8_encode($return));
     		} else {
     			$return .= '<select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:360px;">';
     			while ($user = Database :: fetch_array($rs)) {
@@ -203,7 +203,7 @@ if ($allowTutors == 'true') {
     	            $return .= '<option value="'.$user['user_id'].'">'.$person_name.' ('.$user['username'].')</option>';
     			}
     			$return .= '</select>';
-    			$xajax_response -> addAssign('ajax_list_users_multiple','innerHTML',api_utf8_encode($return));
+    			$xajax_response -> addAssign('ajax_list_users_multiple', 'innerHTML', api_utf8_encode($return));
     		}
     	}
 
@@ -260,7 +260,7 @@ if ($allowTutors == 'true') {
     </script>';
 
     $form_sent = 0;
-    $firstLetterUser = $firstLetterSession='';
+    $firstLetterUser = $firstLetterSession = '';
     $UserList = $SessionList = array();
     $sessions = array();
     $noPHP_SELF = true;
@@ -272,7 +272,7 @@ if ($allowTutors == 'true') {
         $UserList = $_POST['sessionUsersList'];
 
         if (!is_array($UserList)) {
-            $UserList=array();
+            $UserList = array();
         }
 
         if ($form_sent == 1) {
@@ -302,7 +302,7 @@ if ($allowTutors == 'true') {
                 WHERE u.status <> ".DRH." AND u.status<>6 $order_clause";
 
         if (api_is_multiple_url_enabled()) {
-            $tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+            $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
                 $sql = "SELECT u.user_id, lastname, firstname, username, session_id
@@ -321,7 +321,7 @@ if ($allowTutors == 'true') {
         $result = Database::query($sql);
         $users = Database::store_result($result);
         foreach ($users as $user) {
-            $sessionUsersList[$user['user_id']] = $user ;
+            $sessionUsersList[$user['user_id']] = $user;
         }
         unset($users); //clean to free memory
     } else {
@@ -333,7 +333,7 @@ if ($allowTutors == 'true') {
                 foreach ($new_field_list as $new_field) {
                     $varname = 'field_'.$new_field['variable'];
                     if (UserManager::is_extra_field_available($new_field['variable'])) {
-                        if (isset($_POST[$varname]) && $_POST[$varname]!='0') {
+                        if (isset($_POST[$varname]) && $_POST[$varname] != '0') {
                             $use_extra_fields = true;
                             $extra_field_result[] = UserManager::get_extra_user_data_by_value(
                                 $new_field['variable'],
@@ -347,9 +347,9 @@ if ($allowTutors == 'true') {
 
         if ($use_extra_fields) {
             $final_result = array();
-           	if (count($extra_field_result)>1) {
-    	    for($i=0;$i<count($extra_field_result)-1;$i++) {
-                    if (is_array($extra_field_result[$i+1])) {
+           	if (count($extra_field_result) > 1) {
+    	    for ($i = 0; $i < count($extra_field_result) - 1; $i++) {
+                    if (is_array($extra_field_result[$i + 1])) {
                         $final_result = array_intersect(
                             $extra_field_result[$i],
                             $extra_field_result[$i + 1]
@@ -360,17 +360,17 @@ if ($allowTutors == 'true') {
                 $final_result = $extra_field_result[0];
             }
 
-            $where_filter ='';
+            $where_filter = '';
             if (api_is_multiple_url_enabled()) {
-                if (is_array($final_result) && count($final_result)>0) {
-                    $where_filter = " AND u.user_id IN  ('".implode("','",$final_result)."') ";
+                if (is_array($final_result) && count($final_result) > 0) {
+                    $where_filter = " AND u.user_id IN  ('".implode("','", $final_result)."') ";
                 } else {
                     //no results
                     $where_filter = " AND u.user_id  = -1";
                 }
             } else {
-                if (is_array($final_result) && count($final_result)>0) {
-                    $where_filter = " WHERE u.user_id IN  ('".implode("','",$final_result)."') ";
+                if (is_array($final_result) && count($final_result) > 0) {
+                    $where_filter = " WHERE u.user_id IN  ('".implode("','", $final_result)."') ";
                 } else {
                     //no results
                     $where_filter = " WHERE u.user_id  = -1";
@@ -399,7 +399,7 @@ if ($allowTutors == 'true') {
                     $order_clause";
         }
         if (api_is_multiple_url_enabled()) {
-            $tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+            $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
                 $sql = "SELECT  u.user_id, lastname, firstname, username, session_id
@@ -416,7 +416,7 @@ if ($allowTutors == 'true') {
         }
 
         $result = Database::query($sql);
-        $users = Database::store_result($result,'ASSOC');
+        $users = Database::store_result($result, 'ASSOC');
 
         foreach ($users as $uid => $user) {
             if ($user['session_id'] != $id_session) {
@@ -441,7 +441,7 @@ if ($allowTutors == 'true') {
                 WHERE u.status <> ".DRH." AND u.status<>6 $order_clause";
 
         if (api_is_multiple_url_enabled()) {
-            $tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+            $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
                 $sql = "SELECT  u.user_id, lastname, firstname, username, session_id
@@ -457,11 +457,11 @@ if ($allowTutors == 'true') {
             }
         }
         $result = Database::query($sql);
-        $users = Database::store_result($result,'ASSOC');
+        $users = Database::store_result($result, 'ASSOC');
         foreach ($users as $uid => $user) {
             if ($user['session_id'] == $id_session) {
                 $sessionUsersList[$user['user_id']] = $user;
-                if (array_key_exists($user['user_id'],$nosessionUsersList)) {
+                if (array_key_exists($user['user_id'], $nosessionUsersList)) {
                     unset($nosessionUsersList[$user['user_id']]);
                 }
             }
@@ -483,20 +483,20 @@ if ($allowTutors == 'true') {
     <div class="actions">
     	<?php echo $link_add_type_unique ?>&nbsp;|&nbsp;<?php echo $link_add_type_multiple ?>&nbsp;|&nbsp;<?php echo $link_add_group; ?>
     </div>
-    <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?page=<?php echo $page; ?>&id_session=<?php echo $id_session; ?><?php if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
-    <?php echo '<legend>'.$tool_name.' (' . $session->getName() . ') </legend>'; ?>
+    <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?page=<?php echo $page; ?>&id_session=<?php echo $id_session; ?><?php if (!empty($_GET['add'])) echo '&add=true'; ?>" style="margin:0px;" <?php if ($ajax_search) {echo ' onsubmit="valide();"'; }?>>
+    <?php echo '<legend>'.$tool_name.' ('.$session->getName().') </legend>'; ?>
     <?php
     if ($add_type === 'multiple') {
     	if (is_array($extra_field_list)) {
-    		if (is_array($new_field_list) && count($new_field_list)>0 ) {
+    		if (is_array($new_field_list) && count($new_field_list) > 0) {
     			echo '<h3>'.get_lang('FilterUsers').'</h3>';
     			foreach ($new_field_list as $new_field) {
     				echo $new_field['name'];
     				$varname = 'field_'.$new_field['variable'];
     				echo '&nbsp;<select name="'.$varname.'">';
     				echo '<option value="0">--'.get_lang('Select').'--</option>';
-    				foreach	($new_field['data'] as $option) {
-    					$checked='';
+    				foreach ($new_field['data'] as $option) {
+    					$checked = '';
     					if (isset($_POST[$varname])) {
     						if ($_POST[$varname] == $option[1]) {
     							$checked = 'selected="true"';
@@ -544,7 +544,7 @@ if ($allowTutors == 'true') {
                   <?php
                   foreach ($nosessionUsersList as $uid => $enreg) {
                   ?>
-                      <option value="<?php echo $uid; ?>" <?php if(in_array($uid,$UserList)) echo 'selected="selected"'; ?>><?php echo api_get_person_name($enreg['fn'], $enreg['ln']).' ('.$enreg['un'].')'; ?></option>
+                      <option value="<?php echo $uid; ?>" <?php if (in_array($uid, $UserList)) echo 'selected="selected"'; ?>><?php echo api_get_person_name($enreg['fn'], $enreg['ln']).' ('.$enreg['un'].')'; ?></option>
                   <?php
                   }
                   ?>
@@ -596,7 +596,7 @@ if ($allowTutors == 'true') {
             </div>
             <select id="destination_users" name="sessionUsersList[]" multiple="multiple" size="15" class="span5">
             <?php
-            foreach($sessionUsersList as $enreg) {
+            foreach ($sessionUsersList as $enreg) {
             ?>
                 <option value="<?php echo $enreg['user_id']; ?>"><?php echo api_get_person_name($enreg['firstname'], $enreg['lastname']).' ('.$enreg['username'].')'; ?></option>
             <?php

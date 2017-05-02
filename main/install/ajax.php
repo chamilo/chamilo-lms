@@ -11,7 +11,7 @@ ini_set('display_errors', '1');
 ini_set('log_errors', '1');
 error_reporting(-1);
 
-require_once __DIR__ . '/../../vendor/autoload.php';
+require_once __DIR__.'/../../vendor/autoload.php';
 
 define('SYSTEM_INSTALLATION', 1);
 define('INSTALL_TYPE_UPDATE', 'update');
@@ -24,7 +24,7 @@ require_once '../inc/lib/api.lib.php';
 
 session_start();
 
-require_once api_get_path(LIBRARY_PATH) . 'database.constants.inc.php';
+require_once api_get_path(LIBRARY_PATH).'database.constants.inc.php';
 require_once 'install.lib.php';
 
 $action = isset($_POST['a']) ? $_POST['a'] : null;
@@ -62,7 +62,6 @@ switch ($action) {
         echo $countOfTables;
         break;
     case 'remove_crs_tables':
-
         $statement = $manager
             ->getConnection()
             ->executeQuery("SHOW TABLES LIKE '$db_c_prefix$db_prefix%'");

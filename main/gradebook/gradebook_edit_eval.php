@@ -20,7 +20,7 @@ $form = new EvalForm(
     null,
     'edit_eval_form',
     null,
-    api_get_self() . '?editeval=' . intval($_GET['editeval']).'&'.api_get_cidreq()
+    api_get_self().'?editeval='.intval($_GET['editeval']).'&'.api_get_cidreq()
 );
 if ($form->validate()) {
     $values = $form->exportValues();
@@ -44,10 +44,10 @@ if ($form->validate()) {
     }
     $eval->set_visible($visible);
     $eval->save();
-    header('Location: '.$_SESSION['gradebook_dest'].'?editeval=&selectcat=' . $eval->get_category_id().'&'.api_get_cidreq());
+    header('Location: '.$_SESSION['gradebook_dest'].'?editeval=&selectcat='.$eval->get_category_id().'&'.api_get_cidreq());
     exit;
 }
-$selectcat_inter=isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : 0;
+$selectcat_inter = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : 0;
 $interbreadcrumb[] = array(
     'url' => $_SESSION['gradebook_dest'].'?selectcat='.$selectcat_inter,
     'name' => get_lang('Gradebook'

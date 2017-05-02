@@ -161,7 +161,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
 
 $tool_name = get_lang('ImportSkillsListCSV');
-$interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 
 set_time_limit(0);
 $extra_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', true);
@@ -172,13 +172,13 @@ if (!empty($_POST['formSent']) && $_FILES['import_file']['size'] !== 0) {
     $file_type = $_POST['file_type'];
     Security::clear_token();
     $tok = Security::get_token();
-    $allowed_file_mimetype = array('csv','xml');
+    $allowed_file_mimetype = array('csv', 'xml');
     $error_kind_file = false;
     $error_message = '';
 
-    $ext_import_file = substr($_FILES['import_file']['name'], (strrpos($_FILES['import_file']['name'],'.')+1));
+    $ext_import_file = substr($_FILES['import_file']['name'], (strrpos($_FILES['import_file']['name'], '.') + 1));
 
-    if (in_array($ext_import_file,$allowed_file_mimetype)) {
+    if (in_array($ext_import_file, $allowed_file_mimetype)) {
         if (strcmp($file_type, 'csv') === 0 && $ext_import_file == $allowed_file_mimetype[0]) {
             $skills	= parse_csv_data($_FILES['import_file']['tmp_name']);
             $errors = validate_data($skills);
@@ -238,45 +238,50 @@ if (!empty($_POST['formSent']) && $_FILES['import_file']['size'] !== 0) {
     }
 }
 
-$interbreadcrumb[] = array ("url" => 'skill_list.php', "name" => get_lang('ManageSkills'));
+$interbreadcrumb[] = array("url" => 'skill_list.php', "name" => get_lang('ManageSkills'));
 
 Display :: display_header($tool_name);
 
 if (!empty($error_message)) {
-    Display::display_error_message($error_message);
+    Display::addFlash(Display::return_message($error_message, 'error'));
 }
 if (!empty($see_message_import)) {
-    Display::display_normal_message($see_message_import);
+    Display::addFlash(Display::return_message($see_message_import, 'normal'));
 }
 
-$toolbar = Display::toolbarButton(
-    get_lang('ManageSkills'),
-    api_get_path(WEB_CODE_PATH) . 'admin/skill_list.php',
-    'list',
-    'success',
-    ['title' => get_lang('CreateSkill')]
-);
-$toolbar .= '&nbsp;&nbsp;';
-$toolbar .= Display::toolbarButton(
-    get_lang('SkillsWheel'),
-    api_get_path(WEB_CODE_PATH) . 'admin/skills_wheel.php',
-    'bullseye',
-    'primary',
-    ['title' => get_lang('CreateSkill')]
-);
-$toolbar .= '&nbsp;&nbsp;';
-$toolbar .= Display::toolbarButton(
-    get_lang('BadgesManagement'),
-    api_get_path(WEB_CODE_PATH) . 'admin/skill_badge_list.php',
-    'shield',
-    'warning',
-    ['title' => get_lang('BadgesManagement')]
-);
-$toolbar .= '<br /><br />';
+$toolbar = Display::url(
+    Display::return_icon(
+        'list_badges.png',
+        get_lang('ManageSkills'),
+        null,
+        ICON_SIZE_MEDIUM),
+    api_get_path(WEB_CODE_PATH).'admin/skill_list.php'
+    );
 
-echo $toolbar;
+$toolbar .= Display::url(
+    Display::return_icon(
+        'wheel_skill.png',
+        get_lang('SkillsWheel'),
+        null,
+        ICON_SIZE_MEDIUM),
+    api_get_path(WEB_CODE_PATH).'admin/skills_wheel.php'
+    );
 
-$form = new FormValidator('user_import','post','skills_import.php');
+$toolbar .= Display::url(
+    Display::return_icon(
+        'edit-skill.png',
+        get_lang('BadgesManagement'),
+        null,
+        ICON_SIZE_MEDIUM),
+    api_get_path(WEB_CODE_PATH).'admin/skill_badge_list.php'
+    );
+
+
+$actions = '<div class="actions">' . $toolbar . '</div>';
+
+echo $actions;
+
+$form = new FormValidator('user_import', 'post', 'skills_import.php');
 $form->addElement('header', '', $tool_name);
 $form->addElement('hidden', 'formSent');
 $form->addElement('file', 'import_file', get_lang('ImportFileLocation'));

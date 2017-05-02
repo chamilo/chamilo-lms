@@ -74,7 +74,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];
     $session_in_promotion_posted = $_POST['session_in_promotion_name'];
     if (!is_array($session_in_promotion_posted)) {
-        $session_in_promotion_posted=array();
+        $session_in_promotion_posted=array($session_in_promotion_posted);
     }
     if ($form_sent == 1) {
         // Added a parameter to send emails when registering a user
@@ -106,37 +106,16 @@ $ajax_search = $add_type == 'unique' ? true : false;
 
 // Checking for extra field with filter on
 
-function search_sessions($needle, $type)
-{
-    global $session_in_promotion;
-    $xajax_response = new xajaxResponse();
-    $return = '';
-    if (!empty($needle) && !empty($type)) {
-        $session_list = SessionManager::get_sessions_list(
-            array('s.name' => array('operator' => 'LIKE', 'value' => "$needle%"))
-        );
-        $return .= '<select id="session_not_in_promotion" name="session_not_in_promotion_name[]" multiple="multiple" size="15" style="width:360px;">';
-        foreach ($session_list as $row) {
-            if (!in_array($row['id'], array_keys($session_in_promotion))) {
-                $return .= '<option value="'.$row['id'].'">'.$row['name'].'</option>';
-            }
-        }
-        $return .= '</select>';
-        $xajax_response -> addAssign('ajax_list_multiple','innerHTML',api_utf8_encode($return));
-    }
-
-    return $xajax_response;
-}
 $xajax->processRequests();
 
 Display::display_header($tool_name);
 
 if ($add_type == 'multiple') {
-    $link_add_type_unique = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.Security::remove_XSS($_GET['add']).'&add_type=unique">'.Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'</a>';
+    $link_add_type_unique = '<a href="'.api_get_self().'?id='.$id.'&add_type=unique">'.Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'</a>';
     $link_add_type_multiple = Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple');
 } else {
     $link_add_type_unique = Display::return_icon('single.gif').get_lang('SessionAddTypeUnique');
-    $link_add_type_multiple = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.Security::remove_XSS($_GET['add']).'&add_type=multiple">'.Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').'</a>';
+    $link_add_type_multiple = '<a href="'.api_get_self().'?id='.$id.'&add_type=multiple">'.Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').'</a>';
 }
 
 echo '<div class="actions">';
@@ -147,37 +126,39 @@ echo '</div>';
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $id; if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
 <?php echo '<legend>'.$tool_name.' '.$promotion_data['name'].'</legend>';
 
+
 if ($add_type=='multiple') {
-    if (is_array($extra_field_list)) {
-        if (is_array($new_field_list) && count($new_field_list) > 0) {
-            echo '<h3>'.get_lang('FilterUsers').'</h3>';
-            foreach ($new_field_list as $new_field) {
-                echo $new_field['name'];
-                $varname = 'field_'.$new_field['variable'];
-                echo '&nbsp;<select name="'.$varname.'">';
-                echo '<option value="0">--'.get_lang('Select').'--</option>';
-                foreach ($new_field['data'] as $option) {
-                    $checked='';
-                    if (isset($_POST[$varname])) {
-                        if ($_POST[$varname]==$option[1]) {
-                            $checked = 'selected="true"';
-                        }
+    $extraField = new \ExtraField('session');
+    $extra_field_list = $extraField->get_all_extra_field_by_type(ExtraField::FIELD_TYPE_SELECT);
+    $new_field_list = array();
+    if (is_array($extra_field_list) && (count($extra_field_list) > 0)) {
+        echo '<h3>'.get_lang('FilterSessions').'</h3>';
+        foreach ($extra_field_list as $new_field) {
+            echo $new_field['name'];
+            $varname = 'field_'.$new_field['variable'];
+            echo '&nbsp;<select name="'.$varname.'">';
+            echo '<option value="0">--'.get_lang('Select').'--</option>';
+            foreach ($new_field['data'] as $option) {
+                $checked='';
+                if (isset($_POST[$varname])) {
+                    if ($_POST[$varname] == $option[1]) {
+                        $checked = 'selected="true"';
                     }
-                    echo '<option value="'.$option[1].'" '.$checked.'>'.$option[1].'</option>';
                 }
-                echo '</select>';
-                echo '&nbsp;&nbsp;';
+                echo '<option value="'.$option[1].'" '.$checked.'>'.$option[1].'</option>';
             }
-            echo '<input type="button" value="'.get_lang('Filter').'" onclick="validate_filter()" />';
-            echo '<br /><br />';
+            echo '</select>';
+            echo '&nbsp;&nbsp;';
         }
+        echo '<input type="button" value="'.get_lang('Filter').'" onclick="validate_filter()" />';
+        echo '<br /><br />';
     }
 }
 echo Display::input('hidden', 'id', $id);
 echo Display::input('hidden', 'form_sent', '1');
 echo Display::input('hidden', 'add_type', null);
 if (!empty($errorMsg)) {
-    Display::display_normal_message($errorMsg); //main API
+    Display::addFlash(Display::return_message($errorMsg, 'normal')); //main API
 }
 ?>
 
@@ -315,7 +296,7 @@ function loadUsersInSelect(select) {
     else if(window.ActiveXObject) // Internet Explorer
         xhr_object = new ActiveXObject("Microsoft.XMLHTTP");
     else  // XMLHttpRequest non supporté par le navigateur
-    alert("Votre navigateur ne supporte pas les objets XMLHTTPRequest...");
+    alert("Your browser does not support XMLHTTPRequest...");
 
     xhr_object.open("POST", "loadUsersInSelect.ajax.php");
     xhr_object.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -343,3 +324,25 @@ function makepost(select) {
 </script>
 <?php
 Display::display_footer();
+
+function search_sessions($needle, $type)
+{
+    global $session_in_promotion;
+    $xajax_response = new xajaxResponse();
+    $return = '';
+    if (!empty($needle) && !empty($type)) {
+        $session_list = SessionManager::get_sessions_list(
+            array('s.name' => array('operator' => 'LIKE', 'value' => "$needle%"))
+        );
+        $return .= '<select id="session_not_in_promotion" name="session_not_in_promotion_name[]" multiple="multiple" size="15" style="width:360px;">';
+        foreach ($session_list as $row) {
+            if (!in_array($row['id'], array_keys($session_in_promotion))) {
+                $return .= '<option value="'.$row['id'].'">'.$row['name'].'</option>';
+            }
+        }
+        $return .= '</select>';
+        $xajax_response -> addAssign('ajax_list_multiple','innerHTML',api_utf8_encode($return));
+    }
+
+    return $xajax_response;
+}

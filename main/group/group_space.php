@@ -10,7 +10,7 @@
  */
 
 require_once __DIR__.'/../inc/global.inc.php';
-$current_course_tool  = TOOL_GROUP;
+$current_course_tool = TOOL_GROUP;
 
 // Notice for unauthorized people.
 api_protect_course_script(true);
@@ -33,16 +33,11 @@ $interbreadcrumb[] = array('url' => 'group.php?'.api_get_cidreq(), 'name' => get
 
 /*	Ensure all private groups // Juan Carlos Raña Trabado */
 
-$forums_of_groups = get_forums_of_group($current_group['iid']);
+$forums_of_groups = get_forums_of_group($current_group);
 
 if (!GroupManager::userHasAccessToBrowse($user_id, $current_group, api_get_session_id())) {
     api_not_allowed(true);
 }
-
-Display::display_header($nameTools.' '.Security::remove_XSS($current_group['name']), 'Group');
-
-/*	Introduction section (editable by course admin) */
-Display::display_introduction_section(TOOL_GROUP);
 
 /*	Actions and Action links */
 
@@ -50,32 +45,37 @@ Display::display_introduction_section(TOOL_GROUP);
  * User wants to register in this group
  */
 if (!empty($_GET['selfReg']) &&
-    GroupManager :: is_self_registration_allowed($user_id, $current_group['iid'])
+    GroupManager :: is_self_registration_allowed($user_id, $current_group)
 ) {
-    GroupManager :: subscribe_users($user_id, $current_group['iid']);
-    Display :: display_normal_message(get_lang('GroupNowMember'));
+    GroupManager :: subscribe_users($user_id, $current_group);
+    Display::addFlash(Display::return_message(get_lang('GroupNowMember'), 'normal'));
 }
 
 /*
  * User wants to unregister from this group
  */
 if (!empty($_GET['selfUnReg']) &&
-    GroupManager :: is_self_unregistration_allowed($user_id, $current_group['iid'])
+    GroupManager :: is_self_unregistration_allowed($user_id, $current_group)
 ) {
-    GroupManager::unsubscribe_users($user_id, $current_group['iid']);
-    Display::display_normal_message(get_lang('StudentDeletesHimself'));
+    GroupManager::unsubscribe_users($user_id, $current_group);
+    Display::addFlash(Display::return_message(get_lang('StudentDeletesHimself'), 'normal'));
 }
+
+Display::display_header($nameTools.' '.Security::remove_XSS($current_group['name']), 'Group');
+
+/*	Introduction section (editable by course admin) */
+Display::display_introduction_section(TOOL_GROUP);
 
 echo '<div class="actions">';
 echo '<a href="group.php">'.
-    Display::return_icon('back.png',get_lang('BackToGroupList'),'',ICON_SIZE_MEDIUM).
+    Display::return_icon('back.png', get_lang('BackToGroupList'), '', ICON_SIZE_MEDIUM).
     '</a>';
 
 /*
  * Register to group
  */
 $subscribe_group = '';
-if (GroupManager :: is_self_registration_allowed($user_id, $current_group['iid'])) {
+if (GroupManager :: is_self_registration_allowed($user_id, $current_group)) {
     $subscribe_group = '<a class="btn btn-default" href="'.api_get_self().'?selfReg=1&group_id='.$current_group['id'].'" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."'".')) return false;">'.
         get_lang("RegIntoGroup").'</a>';
 }
@@ -84,8 +84,8 @@ if (GroupManager :: is_self_registration_allowed($user_id, $current_group['iid']
  * Unregister from group
  */
 $unsubscribe_group = '';
-if (GroupManager :: is_self_unregistration_allowed($user_id, $current_group['iid'])) {
-    $unsubscribe_group = '<a class="btn btn-default" href="'.api_get_self().'?selfUnReg=1" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."'".')) return false;">'.
+if (GroupManager :: is_self_unregistration_allowed($user_id, $current_group)) {
+    $unsubscribe_group = '<a class="btn btn-default" href="'.api_get_self().'?selfUnReg=1" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."'".')) return false;">'.
         get_lang("StudentUnsubscribe").'</a>';
 }
 echo '&nbsp;</div>';
@@ -94,10 +94,10 @@ echo '&nbsp;</div>';
 
 $edit_url = '';
 if (api_is_allowed_to_edit(false, true) ||
-    GroupManager::is_tutor_of_group(api_get_user_id(), $current_group['iid'])
+    GroupManager::is_tutor_of_group(api_get_user_id(), $current_group)
 ) {
-    $edit_url =  '<a href="'.api_get_path(WEB_CODE_PATH).'group/settings.php?'.api_get_cidreq().'">'.
-        Display::return_icon('edit.png', get_lang('EditGroup'),'',ICON_SIZE_SMALL).'</a>';
+    $edit_url = '<a href="'.api_get_path(WEB_CODE_PATH).'group/settings.php?'.api_get_cidreq().'">'.
+        Display::return_icon('edit.png', get_lang('EditGroup'), '', ICON_SIZE_SMALL).'</a>';
 }
 
 echo Display::page_header(
@@ -111,13 +111,14 @@ if (!empty($current_group['description'])) {
 /*
  * Group Tools
  */
+
 // If the user is subscribed to the group or the user is a tutor of the group then
 if (api_is_allowed_to_edit(false, true) ||
-    GroupManager::is_user_in_group(api_get_user_id(), $current_group['iid'])
+    GroupManager::is_user_in_group(api_get_user_id(), $current_group)
 ) {
     $actions_array = array();
     // Link to the forum of this group
-    $forums_of_groups = get_forums_of_group($current_group['iid']);
+    $forums_of_groups = get_forums_of_group($current_group);
 
     if (is_array($forums_of_groups)) {
         if ($current_group['forum_state'] != GroupManager::TOOL_NOT_AVAILABLE) {
@@ -222,7 +223,7 @@ if (api_is_allowed_to_edit(false, true) ||
     $actions_array = array();
 
     // Link to the forum of this group
-    $forums_of_groups = get_forums_of_group($current_group['iid']);
+    $forums_of_groups = get_forums_of_group($current_group);
 
     if (is_array($forums_of_groups)) {
         if ($current_group['forum_state'] == GroupManager::TOOL_PUBLIC) {
@@ -300,7 +301,7 @@ if (api_is_allowed_to_edit(false, true) ||
 /*
  * List all the tutors of the current group
  */
-$tutors = GroupManager::get_subscribed_tutors($current_group['iid']);
+$tutors = GroupManager::get_subscribed_tutors($current_group);
 
 $tutor_info = '';
 if (count($tutors) == 0) {
@@ -339,10 +340,10 @@ $table = new SortableTable(
     'get_group_user_data',
     (api_is_western_name_order() xor api_sort_by_first_name()) ? 2 : 1
 );
+$origin = api_get_origin();
 $my_cidreq = isset($_GET['cidReq']) ? Security::remove_XSS($_GET['cidReq']) : '';
-$my_origin = isset($_GET['origin']) ? Security::remove_XSS($_GET['origin']) : '';
 $my_gidreq = isset($_GET['gidReq']) ? Security::remove_XSS($_GET['gidReq']) : '';
-$parameters = array('cidReq' => $my_cidreq, 'origin'=> $my_origin, 'gidReq' => $my_gidreq);
+$parameters = array('cidReq' => $my_cidreq, 'origin'=> $origin, 'gidReq' => $my_gidreq);
 $table->set_additional_parameters($parameters);
 $table->set_header(0, '');
 
@@ -387,7 +388,7 @@ function get_number_of_group_users()
     }
 
     // Database table definition
-    $table = Database :: get_course_table(TABLE_GROUP_USER);
+    $table = Database::get_course_table(TABLE_GROUP_USER);
 
     // Query
     $sql = "SELECT count(iid) AS number_of_users
@@ -423,8 +424,9 @@ function get_group_user_data($from, $number_of_items, $column, $direction)
     }
 
     // Database table definition
-    $table_group_user = Database:: get_course_table(TABLE_GROUP_USER);
-    $table_user = Database:: get_main_table(TABLE_MAIN_USER);
+    $table_group_user = Database::get_course_table(TABLE_GROUP_USER);
+    $table_user = Database::get_main_table(TABLE_MAIN_USER);
+    $tableGroup = Database::get_course_table(TABLE_GROUP);
 
     // Query
     if (api_get_setting('show_email_addresses') === 'true') {
@@ -437,12 +439,14 @@ function get_group_user_data($from, $number_of_items, $column, $direction)
 				user.firstname 	AS col2,"
             )."
 				user.email		AS col3
-				FROM $table_user user, 
+				FROM $table_user user INNER JOIN 
 				$table_group_user group_rel_user
+				ON (group_rel_user.user_id = user.id)
+				INNER JOIN $tableGroup g
+				ON (group_rel_user.group_id = g.id)
 				WHERE 
 				    group_rel_user.c_id = $course_id AND 
-				    group_rel_user.user_id = user.id AND 
-				    group_rel_user.group_id = '".$groupInfo['iid']."'
+				    g.iid = '".$groupInfo['iid']."'
                 ORDER BY col$column $direction 
                 LIMIT $from, $number_of_items";
     } else {
@@ -458,8 +462,12 @@ function get_group_user_data($from, $number_of_items, $column, $direction)
                         u.email		AS col3
                     FROM $table_user u 
                     INNER JOIN $table_group_user gu 
-                    ON (gu.user_id = u.id) AND gu.c_id = $course_id
-                    WHERE gu.group_id = '".$groupInfo['iid']."'
+                    ON (gu.user_id = u.id)
+                    INNER JOIN $tableGroup g
+				    ON (gu.group_id = g.id)
+                    WHERE 
+                        g.iid = '".$groupInfo['iid']."' AND 
+                        gu.c_id = $course_id
                     ORDER BY col$column $direction 
                     LIMIT $from, $number_of_items";
         } else {
@@ -472,11 +480,16 @@ function get_group_user_data($from, $number_of_items, $column, $direction)
                     "user.lastname 	AS col1,
 						user.firstname 	AS col2 "
                     )."
-                    FROM $table_user user, $table_group_user group_rel_user
+                    FROM $table_user user 
+                    INNER JOIN $table_group_user group_rel_user
+                    ON (group_rel_user.user_id = user.id)
+                    INNER JOIN $tableGroup g
+                    ON (group_rel_user.group_id = g.id)
                     WHERE 
+                        g.iid = '".$groupInfo['iid']."' AND 
                         group_rel_user.c_id = $course_id AND  
                         group_rel_user.user_id = user.id AND 
-                        group_rel_user.group_id = '".$groupInfo['iid']."'
+                        g.iid = '".$groupInfo['iid']."'
                     ORDER BY col$column $direction 
                     LIMIT $from, $number_of_items";
         }
@@ -532,8 +545,6 @@ function user_name_filter($name, $url_params, $row)
     return UserManager::getUserProfileLink($userInfo);
 }
 
-// Footer
-$orig = isset($origin) ? $origin : '';
-if ($orig != 'learnpath') {
+if ($origin != 'learnpath') {
     Display::display_footer();
 }

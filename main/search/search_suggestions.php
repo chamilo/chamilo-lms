@@ -6,14 +6,14 @@
  * @package chamilo.search
  */
 
-require_once dirname(__FILE__) . '/../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 function get_suggestions_from_search_engine($q)
 {
     global $charset;
 
     $json = [];
-    $table_sfv = Database:: get_main_table(TABLE_MAIN_SPECIFIC_FIELD_VALUES);
+    $table_sfv = Database::get_main_table(TABLE_MAIN_SPECIFIC_FIELD_VALUES);
     $q = Database::escape_string($q);
     $cid = api_get_course_id();
     $sql_add = '';

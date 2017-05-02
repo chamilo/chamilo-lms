@@ -436,11 +436,10 @@ switch ($action) {
 
             $element = CourseManager::addUserGroupMultiSelect($form, array());
         } else {
-            $element = CourseManager::addGroupMultiSelect($form, $group_properties['iid'], array());
+            $element = CourseManager::addGroupMultiSelect($form, $group_properties, array());
         }
 
         $form->addHtml('</div>');
-//        $form->setRequired($element);
         $form->addCheckBox('email_ann', '', get_lang('EmailOption'));
 
         if (!isset($announcement_to_modify)) {
@@ -487,6 +486,7 @@ switch ($action) {
         $defaults['email_ann'] = true;
 
         $form->addElement('text', 'title', get_lang('EmailTitle'));
+        $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
         $form->addElement('hidden', 'id');
         $htmlTags = "<b>".get_lang('Tags')."</b><br /><br />";
         $tags = AnnouncementManager::get_tags();
@@ -667,7 +667,7 @@ if ($allowToEdit) {
 }
 
 if ($show_actions) {
-    echo Display::toolbarAction('toolbar', array($actionsLeft, $searchFormToString), 2, false);
+    echo Display::toolbarAction('toolbar', array($actionsLeft, $searchFormToString));
 }
 
 echo $content;

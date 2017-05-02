@@ -17,7 +17,7 @@ $courseCode = isset($_GET['course_code']) ? Security::remove_XSS($_GET['course_c
 $selectCat = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : 0;
 
 $course_info = api_get_course_info($courseCode);
-$tbl_forum_thread = Database :: get_course_table(TABLE_FORUM_THREAD);
+$tbl_forum_thread = Database::get_course_table(TABLE_FORUM_THREAD);
 $tbl_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
 $session_id = api_get_session_id();

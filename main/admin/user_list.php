@@ -203,7 +203,7 @@ function prepare_user_sql_query($is_count)
 
     // adding the filter to see the user's only of the current access_url
     if ((api_is_platform_admin() || api_is_session_admin()) && api_get_multiple_access_url()) {
-        $access_url_rel_user_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $sql.= " INNER JOIN $access_url_rel_user_table url_rel_user ON (u.id=url_rel_user.user_id)";
     }
 
@@ -299,41 +299,63 @@ function prepare_user_sql_query($is_count)
     }
 
     $variables = Session::read('variables_to_show', []);
-
-    $extraField = new ExtraField('user');
-
-    $extraFieldResult = [];
-    foreach ($variables as $variable) {
-        if (isset($_GET['extra_'.$variable])) {
-            if (is_array($_GET['extra_'.$variable])) {
-                $values = $_GET['extra_'.$variable];
-            } else {
-                $values = [$_GET['extra_'.$variable]];
-            }
-            $info = $extraField->get_handler_field_info_by_field_variable($variable);
-            if (empty($info)) {
-                continue;
-            }
-
-            foreach ($values as $value) {
-                if ($info['field_type'] == ExtraField::FIELD_TYPE_TAG) {
-                    $result = $extraField->getAllUserPerTag($info['id'], $value);
-                    $result = empty($result) ? [] : array_column($result, 'user_id');
+    if (!empty($variables)) {
+        $extraField = new ExtraField('user');
+        $extraFieldResult = [];
+        $extraFieldHasData = [];
+        foreach ($variables as $variable) {
+            if (isset($_GET['extra_'.$variable])) {
+                if (is_array($_GET['extra_'.$variable])) {
+                    $values = $_GET['extra_'.$variable];
                 } else {
-                    $result = UserManager::get_extra_user_data_by_value(
-                        $variable,
-                        $value
-                    );
+                    $values = [$_GET['extra_'.$variable]];
                 }
-                if (!empty($result)) {
-                    $extraFieldResult = array_merge($extraFieldResult, $result);
+
+                if (empty($values)) {
+                    continue;
+                }
+
+                $info = $extraField->get_handler_field_info_by_field_variable(
+                    $variable
+                );
+
+                if (empty($info)) {
+                    continue;
+                }
+
+                foreach ($values as $value) {
+                    if (empty($value)) {
+                        continue;
+                    }
+                    if ($info['field_type'] == ExtraField::FIELD_TYPE_TAG) {
+                        $result = $extraField->getAllUserPerTag(
+                            $info['id'],
+                            $value
+                        );
+                        $result = empty($result) ? [] : array_column(
+                            $result,
+                            'user_id'
+                        );
+                    } else {
+                        $result = UserManager::get_extra_user_data_by_value(
+                            $variable,
+                            $value
+                        );
+                    }
+                    $extraFieldHasData[] = true;
+                    if (!empty($result)) {
+                        $extraFieldResult = array_merge(
+                            $extraFieldResult,
+                            $result
+                        );
+                    }
                 }
             }
         }
-    }
 
-    if (!empty($extraFieldResult)) {
-        $sql .= " AND (u.id IN ('".implode("','", $extraFieldResult)."')) ";
+        if (!empty($extraFieldHasData)) {
+            $sql .= " AND (u.id IN ('".implode("','", $extraFieldResult)."')) ";
+        }
     }
 
     // adding the filter to see the user's only of the current access_url
@@ -409,7 +431,7 @@ function loginUser($userId)
         $target_url = api_get_path(WEB_PATH)."user_portal.php";
         $message .= '<br />'.sprintf(get_lang('LoginSuccessfulGoToX'), '<a href="'.$target_url.'">'.$target_url.'</a>');
         Display :: display_header(get_lang('UserList'));
-        Display :: display_normal_message($message, false);
+        Display::addFlash(Display::return_message($message, 'normal', false));
         Display :: display_footer();
         exit;
     }
@@ -441,7 +463,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 {
     $sql = prepare_user_sql_query(false);
     if (!in_array($direction, array('ASC','DESC'))) {
-    	$direction = 'ASC';
+        $direction = 'ASC';
     }
     $column = intval($column);
     $from = intval($from);
@@ -452,12 +474,12 @@ function get_user_data($from, $number_of_items, $column, $direction)
         $sql .= " WHERE u.creator_id = ".api_get_user_id();
     }
 
-	$sql .= " ORDER BY col$column $direction ";
-	$sql .= " LIMIT $from,$number_of_items";
+    $sql .= " ORDER BY col$column $direction ";
+    $sql .= " LIMIT $from,$number_of_items";
 
-	$res = Database::query($sql);
+    $res = Database::query($sql);
 
-	$users = array ();
+    $users = array();
     $t = time();
 	while ($user = Database::fetch_row($res)) {
 		$userPicture = UserManager::getUserPicture($user[0], USER_IMAGE_SIZE_SMALL);
@@ -468,7 +490,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
             $expiration_time = convert_sql_date($user[10]);
             // if expiration date is passed, store a special value for active field
             if ($expiration_time < $t) {
-        	   $user[7] = '-1';
+                $user[7] = '-1';
             }
         }
 
@@ -973,14 +995,10 @@ if ($table->get_total_number_of_items() == 0) {
         }
     }
 }
-$toolbarActions = Display::toolbarAction(
-    'toolbarUser',
-    array($actionsLeft, $actionsCenter, $actionsRight),
-    3
-);
+$toolbarActions = Display::toolbarAction('toolbarUser', [$actionsLeft, $actionsCenter, $actionsRight], [4, 4, 4]);
 
 $tpl = new Template($tool_name);
-//$tpl->assign('actions', $toolbarActions);
+$tpl->assign('actions', $toolbarActions);
 $tpl->assign('message', $message);
-$tpl->assign('content', $toolbarActions.$form.$table_result.$extra_search_options);
+$tpl->assign('content', $form.$table_result.$extra_search_options);
 $tpl->display_one_col_template();

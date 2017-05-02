@@ -39,7 +39,8 @@ function api_html_to_text($string)
  * @param  string $string                The input html-formatted text.
  * @return string                        Returns the detected encoding.
  */
-function api_detect_encoding_html($string) {
+function api_detect_encoding_html($string)
+{
     if (@preg_match('/<head.*(<meta[^>]*content=[^>]*>).*<\/head>/si', $string, $matches)) {
         if (@preg_match('/<meta[^>]*charset=(.*)["\';][^>]*>/si', $matches[1], $matches)) {
             return api_refine_encoding_id(trim($matches[1]));
@@ -53,15 +54,16 @@ function api_detect_encoding_html($string) {
  * @param string $string                The input full-html document.
  * @param string                        The new encoding value to be set.
  */
-function api_set_encoding_html(&$string, $encoding) {
+function api_set_encoding_html(&$string, $encoding)
+{
     $old_encoding = api_detect_encoding_html($string);
     if (@preg_match('/(.*<head.*)(<meta[^>]*content=[^>]*>)(.*<\/head>.*)/si', $string, $matches)) {
         $meta = $matches[2];
         if (@preg_match("/(<meta[^>]*charset=)(.*)([\"';][^>]*>)/si", $meta, $matches1)) {
-            $meta = $matches1[1] . $encoding . $matches1[3];
-            $string = $matches[1] . $meta . $matches[3];
+            $meta = $matches1[1].$encoding.$matches1[3];
+            $string = $matches[1].$meta.$matches[3];
         } else {
-            $string = $matches[1] . '<meta http-equiv="Content-Type" content="text/html; charset='.$encoding.'"/>' . $matches[3];
+            $string = $matches[1].'<meta http-equiv="Content-Type" content="text/html; charset='.$encoding.'"/>'.$matches[3];
         }
     } else {
         $count = 1;
@@ -77,7 +79,8 @@ function api_set_encoding_html(&$string, $encoding) {
  * @param string $$output_encoding      The encoding of the retrieved title. If the value is not set, the system encoding is assumend.
  * @return string                       The retrieved title, html-entities and extra-whitespace between the words are cleaned.
  */
-function api_get_title_html(&$string, $output_encoding = null, $input_encoding = null) {
+function api_get_title_html(&$string, $output_encoding = null, $input_encoding = null)
+{
     if (@preg_match('/<head.+<title[^>]*>(.*)<\/title>/msi', $string, $matches)) {
         if (empty($output_encoding)) {
             $output_encoding = api_get_system_encoding();
@@ -168,9 +171,9 @@ function _api_convert_encoding_xml(&$string, $to_encoding, $from_encoding) {
     if (!preg_match(_PCRE_XML_ENCODING, $string)) {
         if (strpos($matches[0], 'standalone') !== false) {
             // The encoding option should precede the standalone option, othewise DOMDocument fails to load the document.
-            $replace = str_replace('standalone', ' encoding="'.$to_encoding.'" standalone' , $matches[0]);
+            $replace = str_replace('standalone', ' encoding="'.$to_encoding.'" standalone', $matches[0]);
         } else {
-            $replace = str_replace('?>', ' encoding="'.$to_encoding.'"?>' , $matches[0]);
+            $replace = str_replace('?>', ' encoding="'.$to_encoding.'"?>', $matches[0]);
         }
         return api_convert_encoding(str_replace($matches[0], $replace, $string), $to_encoding, $from_encoding);
     }
@@ -214,7 +217,8 @@ function api_contains_asciimathml($html) {
  * @param string $html      The input html text.
  * @return bool             Returns TRUE when there is a graph found or FALSE otherwise.
  */
-function api_contains_asciisvg($html) {
+function api_contains_asciisvg($html)
+{
     if (!preg_match_all('/<embed([^>]*?)>/mi', $html, $matches)) {
         return false;
     }
@@ -235,7 +239,8 @@ function api_contains_asciisvg($html) {
  * @param string $string                            The input string (ASCII)
  * @return string                                   The converted result string
  */
-function api_camel_case_to_underscore($string) {
+function api_camel_case_to_underscore($string)
+{
     return strtolower(preg_replace('/([a-z])([A-Z])/', "$1_$2", $string));
 }
 
@@ -246,7 +251,8 @@ function api_camel_case_to_underscore($string) {
  * @param bool $capitalise_first_char (optional)    If true (default), the function capitalises the first char in the result string.
  * @return string                                   The converted result string
  */
-function api_underscore_to_camel_case($string, $capitalise_first_char = true) {
+function api_underscore_to_camel_case($string, $capitalise_first_char = true)
+{
     if ($capitalise_first_char) {
         $string = ucfirst($string);
     }
@@ -254,7 +260,8 @@ function api_underscore_to_camel_case($string, $capitalise_first_char = true) {
 }
 
 // A function for internal use, only for this library.
-function _api_camelize($match) {
+function _api_camelize($match)
+{
     return strtoupper($match[1]);
 }
 
@@ -269,7 +276,8 @@ function _api_camelize($match) {
  * @param  boolean $middle               If this parameter is true, truncation is done in the middle of the string.
  * @return string                        Truncated string, decorated with the given suffix (replacement).
  */
-function api_trunc_str($text, $length = 30, $suffix = '...', $middle = false, $encoding = null) {
+function api_trunc_str($text, $length = 30, $suffix = '...', $middle = false, $encoding = null)
+{
     if (empty($encoding)) {
         $encoding = api_get_system_encoding();
     }
@@ -289,7 +297,8 @@ function api_trunc_str($text, $length = 30, $suffix = '...', $middle = false, $e
  * @author Denes Nagy
  * @param  string variable - the variable to be revised
  */
-function domesticate($input) {
+function domesticate($input)
+{
     $input = stripslashes($input);
     $input = str_replace("'", "''", $input);
     $input = str_replace('"', "''", $input);
@@ -335,7 +344,7 @@ function domesticate($input) {
 function _make_url_clickable_cb($matches) {
     $url = $matches[2];
 
-    if ( ')' == $matches[3] && strpos( $url, '(' ) ) {
+    if (')' == $matches[3] && strpos($url, '(')) {
         // If the trailing character is a closing parethesis, and the URL has an opening parenthesis in it, add the closing parenthesis to the URL.
         // Then we can let the parenthesis balancer do its thing below.
         $url .= $matches[3];
@@ -345,16 +354,16 @@ function _make_url_clickable_cb($matches) {
     }
 
     // Include parentheses in the URL only if paired
-    while ( substr_count( $url, '(' ) < substr_count( $url, ')' ) ) {
-        $suffix = strrchr( $url, ')' ) . $suffix;
-        $url = substr( $url, 0, strrpos( $url, ')' ) );
+    while (substr_count($url, '(') < substr_count($url, ')')) {
+        $suffix = strrchr($url, ')').$suffix;
+        $url = substr($url, 0, strrpos($url, ')'));
     }
 
     $url = esc_url($url);
-    if ( empty($url) )
+    if (empty($url))
         return $matches[0];
 
-    return $matches[1] . "<a href=\"$url\" rel=\"nofollow\">$url</a>" . $suffix;
+    return $matches[1]."<a href=\"$url\" rel=\"nofollow\">$url</a>".$suffix;
 }
 
 /**
@@ -374,10 +383,10 @@ function _make_url_clickable_cb($matches) {
  * @param string $_context Private. Use esc_url_raw() for database usage.
  * @return string The cleaned $url after the 'clean_url' filter is applied.
  */
-function esc_url( $url, $protocols = null, $_context = 'display' ) {
+function esc_url($url, $protocols = null, $_context = 'display') {
     //$original_url = $url;
 
-    if ( '' == $url )
+    if ('' == $url)
         return $url;
     $url = preg_replace('|[^a-z0-9-~+_.?#=!&;,/:%@$\|*\'()\\x80-\\xff]|i', '', $url);
     $strip = array('%0d', '%0a', '%0D', '%0A');
@@ -387,9 +396,9 @@ function esc_url( $url, $protocols = null, $_context = 'display' ) {
      * presume it needs http:// appended (unless a relative
      * link starting with /, # or ? or a php file).
      */
-    if ( strpos($url, ':') === false && ! in_array( $url[0], array( '/', '#', '?' ) ) &&
-        ! preg_match('/^[a-z0-9-]+?\.php/i', $url) )
-        $url = 'http://' . $url;
+    if (strpos($url, ':') === false && !in_array($url[0], array('/', '#', '?')) &&
+        !preg_match('/^[a-z0-9-]+?\.php/i', $url))
+        $url = 'http://'.$url;
 
     return Security::remove_XSS($url);
 
@@ -437,12 +446,12 @@ function esc_url( $url, $protocols = null, $_context = 'display' ) {
  * @param string $subject The string being searched and replaced on, otherwise known as the haystack.
  * @return string The string with the replaced svalues.
  */
-function _deep_replace( $search, $subject ) {
+function _deep_replace($search, $subject) {
     $subject = (string) $subject;
 
     $count = 1;
-    while ( $count ) {
-        $subject = str_replace( $search, '', $subject, $count );
+    while ($count) {
+        $subject = str_replace($search, '', $subject, $count);
     }
 
     return $subject;
@@ -464,17 +473,17 @@ function _deep_replace( $search, $subject ) {
 function _make_web_ftp_clickable_cb($matches) {
     $ret = '';
     $dest = $matches[2];
-    $dest = 'http://' . $dest;
+    $dest = 'http://'.$dest;
     $dest = esc_url($dest);
-    if ( empty($dest) )
+    if (empty($dest))
         return $matches[0];
 
     // removed trailing [.,;:)] from URL
-    if ( in_array( substr($dest, -1), array('.', ',', ';', ':', ')') ) === true ) {
+    if (in_array(substr($dest, -1), array('.', ',', ';', ':', ')')) === true) {
         $ret = substr($dest, -1);
-        $dest = substr($dest, 0, strlen($dest)-1);
+        $dest = substr($dest, 0, strlen($dest) - 1);
     }
-    return $matches[1] . "<a href=\"$dest\" rel=\"nofollow\">$dest</a>$ret";
+    return $matches[1]."<a href=\"$dest\" rel=\"nofollow\">$dest</a>$ret";
 }
 
 /**
@@ -490,8 +499,8 @@ function _make_web_ftp_clickable_cb($matches) {
  * @return string HTML A element with email address.
  */
 function _make_email_clickable_cb($matches) {
-    $email = $matches[2] . '@' . $matches[3];
-    return $matches[1] . "<a href=\"mailto:$email\">$email</a>";
+    $email = $matches[2].'@'.$matches[3];
+    return $matches[1]."<a href=\"mailto:$email\">$email</a>";
 }
 
 /**
@@ -505,30 +514,30 @@ function _make_email_clickable_cb($matches) {
  * @param string $text Content to convert URIs.
  * @return string Content with converted URIs.
  */
-function make_clickable( $text ) {
+function make_clickable($text) {
     $r = '';
-    $textarr = preg_split( '/(<[^<>]+>)/', $text, -1, PREG_SPLIT_DELIM_CAPTURE ); // split out HTML tags
+    $textarr = preg_split('/(<[^<>]+>)/', $text, -1, PREG_SPLIT_DELIM_CAPTURE); // split out HTML tags
     $nested_code_pre = 0; // Keep track of how many levels link is nested inside <pre> or <code>
-    foreach ( $textarr as $piece ) {
+    foreach ($textarr as $piece) {
 
-        if ( preg_match( '|^<code[\s>]|i', $piece ) || preg_match( '|^<pre[\s>]|i', $piece ) )
+        if (preg_match('|^<code[\s>]|i', $piece) || preg_match('|^<pre[\s>]|i', $piece))
             $nested_code_pre++;
-        elseif ( ( '</code>' === strtolower( $piece ) || '</pre>' === strtolower( $piece ) ) && $nested_code_pre )
+        elseif (('</code>' === strtolower($piece) || '</pre>' === strtolower($piece)) && $nested_code_pre)
             $nested_code_pre--;
 
-        if ( $nested_code_pre || empty( $piece ) || ( $piece[0] === '<' && ! preg_match( '|^<\s*[\w]{1,20}+://|', $piece ) ) ) {
+        if ($nested_code_pre || empty($piece) || ($piece[0] === '<' && !preg_match('|^<\s*[\w]{1,20}+://|', $piece))) {
             $r .= $piece;
             continue;
         }
 
         // Long strings might contain expensive edge cases ...
-        if ( 10000 < strlen( $piece ) ) {
+        if (10000 < strlen($piece)) {
             // ... break it up
-            foreach ( _split_str_by_whitespace( $piece, 2100 ) as $chunk ) { // 2100: Extra room for scheme and leading and trailing paretheses
-                if ( 2101 < strlen( $chunk ) ) {
+            foreach (_split_str_by_whitespace($piece, 2100) as $chunk) { // 2100: Extra room for scheme and leading and trailing paretheses
+                if (2101 < strlen($chunk)) {
                     $r .= $chunk; // Too big, no whitespace: bail.
                 } else {
-                    $r .= make_clickable( $chunk );
+                    $r .= make_clickable($chunk);
                 }
             }
         } else {
@@ -549,18 +558,18 @@ function make_clickable( $text ) {
 			~xS'; // The regex is a non-anchored pattern and does not have a single fixed starting character.
             // Tell PCRE to spend more time optimizing since, when used on a page load, it will probably be used several times.
 
-            $ret = preg_replace_callback( $url_clickable, '_make_url_clickable_cb', $ret );
+            $ret = preg_replace_callback($url_clickable, '_make_url_clickable_cb', $ret);
 
-            $ret = preg_replace_callback( '#([\s>])((www|ftp)\.[\w\\x80-\\xff\#$%&~/.\-;:=,?@\[\]+]+)#is', '_make_web_ftp_clickable_cb', $ret );
-            $ret = preg_replace_callback( '#([\s>])([.0-9a-z_+-]+)@(([0-9a-z-]+\.)+[0-9a-z]{2,})#i', '_make_email_clickable_cb', $ret );
+            $ret = preg_replace_callback('#([\s>])((www|ftp)\.[\w\\x80-\\xff\#$%&~/.\-;:=,?@\[\]+]+)#is', '_make_web_ftp_clickable_cb', $ret);
+            $ret = preg_replace_callback('#([\s>])([.0-9a-z_+-]+)@(([0-9a-z-]+\.)+[0-9a-z]{2,})#i', '_make_email_clickable_cb', $ret);
 
-            $ret = substr( $ret, 1, -1 ); // Remove our whitespace padding.
+            $ret = substr($ret, 1, -1); // Remove our whitespace padding.
             $r .= $ret;
         }
     }
 
     // Cleanup of accidental links within links
-    $r = preg_replace( '#(<a([ \r\n\t]+[^>]+?>|>))<a [^>]+?>([^>]+?)</a></a>#i', "$1$3</a>", $r );
+    $r = preg_replace('#(<a([ \r\n\t]+[^>]+?>|>))<a [^>]+?>([^>]+?)</a></a>#i', "$1$3</a>", $r);
     return $r;
 }
 
@@ -595,27 +604,27 @@ function make_clickable( $text ) {
  * @param int $goal The desired chunk length.
  * @return array Numeric array of chunks.
  */
-function _split_str_by_whitespace( $string, $goal ) {
+function _split_str_by_whitespace($string, $goal) {
     $chunks = array();
 
-    $string_nullspace = strtr( $string, "\r\n\t\v\f ", "\000\000\000\000\000\000" );
+    $string_nullspace = strtr($string, "\r\n\t\v\f ", "\000\000\000\000\000\000");
 
-    while ( $goal < strlen( $string_nullspace ) ) {
-        $pos = strrpos( substr( $string_nullspace, 0, $goal + 1 ), "\000" );
+    while ($goal < strlen($string_nullspace)) {
+        $pos = strrpos(substr($string_nullspace, 0, $goal + 1), "\000");
 
-        if ( false === $pos ) {
-            $pos = strpos( $string_nullspace, "\000", $goal + 1 );
-            if ( false === $pos ) {
+        if (false === $pos) {
+            $pos = strpos($string_nullspace, "\000", $goal + 1);
+            if (false === $pos) {
                 break;
             }
         }
 
-        $chunks[] = substr( $string, 0, $pos + 1 );
-        $string = substr( $string, $pos + 1 );
-        $string_nullspace = substr( $string_nullspace, $pos + 1 );
+        $chunks[] = substr($string, 0, $pos + 1);
+        $string = substr($string, $pos + 1);
+        $string_nullspace = substr($string_nullspace, $pos + 1);
     }
 
-    if ( $string ) {
+    if ($string) {
         $chunks[] = $string;
     }
 
@@ -693,7 +702,7 @@ function get_last_week() {
  */
 function get_week_from_day($date) {
     if (!empty($date)) {
-       $time = api_strtotime($date,'UTC');
+       $time = api_strtotime($date, 'UTC');
        return date('W', $time);
     } else {
         return date('W');
@@ -710,39 +719,35 @@ function get_week_from_day($date) {
  * @return a reduce string
  */
 
-function substrwords($text,$maxchar,$end='...')
+function substrwords($text, $maxchar, $end = '...')
 {
-	if(strlen($text)>$maxchar)
-	{
-		$words=explode(" ",$text);
-		$output = '';
-		$i=0;
-		while(1)
-		{
-			$length = (strlen($output)+strlen($words[$i]));
-			if($length>$maxchar)
-			{
-				break;
-			}
-			else
-			{
-				$output = $output." ".$words[$i];
-				$i++;
-			};
-		};
-	}
-	else
-	{
-		$output = $text;
-		return $output;
-	}
-	return $output.$end;
+    if (strlen($text) > $maxchar) {
+        $words = explode(" ", $text);
+        $output = '';
+        $i = 0;
+        while (1) {
+            $length = (strlen($output) + strlen($words[$i]));
+            if ($length > $maxchar) {
+                break;
+            } else {
+                $output = $output." ".$words[$i];
+                $i++;
+            }
+        }
+    } else {
+        $output = $text;
+
+        return $output;
+    }
+
+    return $output.$end;
 }
 
-function implode_with_key($glue, $array) {
+function implode_with_key($glue, $array)
+{
     if (!empty($array)) {
         $string = '';
-        foreach($array as $key => $value) {
+        foreach ($array as $key => $value) {
             if (empty($value)) {
                 $value = 'null';
             }
@@ -764,13 +769,13 @@ function format_file_size($file_size)
 {
     $file_size = intval($file_size);
     if ($file_size >= 1073741824) {
-        $file_size = round($file_size / 1073741824 * 100) / 100 . 'G';
-    } elseif($file_size >= 1048576) {
-        $file_size = round($file_size / 1048576 * 100) / 100 . 'M';
-    } elseif($file_size >= 1024) {
-        $file_size = round($file_size / 1024 * 100) / 100 . 'k';
+        $file_size = (round($file_size / 1073741824 * 100) / 100).'G';
+    } elseif ($file_size >= 1048576) {
+        $file_size = (round($file_size / 1048576 * 100) / 100).'M';
+    } elseif ($file_size >= 1024) {
+        $file_size = (round($file_size / 1024 * 100) / 100).'k';
     } else {
-        $file_size = $file_size . 'B';
+        $file_size = $file_size.'B';
     }
     return $file_size;
 }
@@ -779,18 +784,18 @@ function return_datetime_from_array($array)
 {
     $year	 = '0000';
     $month = $day = $hours = $minutes = $seconds = '00';
-    if (isset($array['Y']) && (isset($array['F']) || isset($array['M']))  && isset($array['d']) && isset($array['H']) && isset($array['i'])) {
+    if (isset($array['Y']) && (isset($array['F']) || isset($array['M'])) && isset($array['d']) && isset($array['H']) && isset($array['i'])) {
         $year = $array['Y'];
-        $month = isset($array['F'])?$array['F']:$array['M'];
-        if (intval($month) < 10 ) $month = '0'.$month;
+        $month = isset($array['F']) ? $array['F'] : $array['M'];
+        if (intval($month) < 10) $month = '0'.$month;
         $day = $array['d'];
-        if (intval($day) < 10 ) $day = '0'.$day;
+        if (intval($day) < 10) $day = '0'.$day;
         $hours = $array['H'];
-        if (intval($hours) < 10 ) $hours = '0'.$hours;
+        if (intval($hours) < 10) $hours = '0'.$hours;
         $minutes = $array['i'];
-        if (intval($minutes) < 10 ) $minutes = '0'.$minutes;
+        if (intval($minutes) < 10) $minutes = '0'.$minutes;
     }
-    if (checkdate($month,$day,$year)) {
+    if (checkdate($month, $day, $year)) {
         $datetime = $year.'-'.$month.'-'.$day.' '.$hours.':'.$minutes.':'.$seconds;
     }
     return $datetime;

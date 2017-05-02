@@ -13,7 +13,7 @@
                     <th>{{ 'LatestLoginInPlatform'|get_lang }}</th>
 
                     {% for course_code in courses %}
-                        <th title="{{ header.title }}">{{ course_code }}</th>
+                        <th title="{{ header.title }}">{{ course_code }} <br />({{ 'BestScore' | get_lang }})</th>
                         <th>{{ 'Progress'|get_lang }}</th>
                         <th>{{ 'LastSentWorkDate'|get_lang }}</th>
                     {% endfor %}

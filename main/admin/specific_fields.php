@@ -36,7 +36,7 @@ $number_of_extra_fields = count($extra_fields);
 
 $table = new SortableTableFromArrayConfig($extra_fields,2,50,'',$column_show,$column_order);
 $table->set_header(0, '&nbsp;', false,null,'width="2%"', 'style="display:none"');
-$table->set_header(1, get_lang('Code'), TRUE, 'width="10%"');
+$table->set_header(1, get_lang('Code'), true, 'width="10%"');
 $table->set_header(2, get_lang('Name'));
 $table->set_header(3, get_lang('Modify'),false,'width="10%"');
 $table->set_column_filter(3, 'edit_filter');
@@ -58,10 +58,10 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'delete') {
 
 // Displaying the header
 Display::display_header(get_lang('SpecificSearchFields'));
-echo Display::display_normal_message(get_lang('SpecificSearchFieldsIntro'));
+echo Display::addFlash(Display::return_message(get_lang('SpecificSearchFieldsIntro')));
 
 if(!empty($_GET['message'])) {
-  Display::display_confirmation_message($_GET['message']);
+  Display::addFlash(Display::return_message($_GET['message'], 'confirm'));
 }
 
 echo '<div class="actions">';

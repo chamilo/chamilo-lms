@@ -30,7 +30,7 @@ class langstats
                     return false; //cannot use if sqlite not installed
                 }
                 if (empty($file)) {
-                    $file = api_get_path(SYS_ARCHIVE_PATH) . '/langstasdb';
+                    $file = api_get_path(SYS_ARCHIVE_PATH).'/langstasdb';
                 }
                 if (is_file($file) && is_writeable($file)) {
                     $this->db = new SQLite3($file, SQLITE3_OPEN_READWRITE);
@@ -39,7 +39,7 @@ class langstats
                         $this->db = new SQLite3($file);
                     } catch (Exception $e) {
                         $this->error = 'DatabaseCreateError';
-                        error_log('Exception: ' . $e->getMessage());
+                        error_log('Exception: '.$e->getMessage());
                         return false;
                     }
                     $err = $this->db->exec(
@@ -104,7 +104,7 @@ class langstats
             $num = $row[3];
             $num++;
             $res = $this->db->query(
-                'UPDATE lang_freq SET term_count = ' . $num . ' WHERE id = ' . $row[0]
+                'UPDATE lang_freq SET term_count = '.$num.' WHERE id = '.$row[0]
             );
             if ($res === false) {
                 $this->error = 'CouldNotUpdateTerm';
@@ -136,7 +136,7 @@ class langstats
     public function get_popular_terms($num = 1000)
     {
         $res = $this->db->query(
-            'SELECT * FROM lang_freq ORDER BY term_count DESC LIMIT ' . $num
+            'SELECT * FROM lang_freq ORDER BY term_count DESC LIMIT '.$num
         );
         $list = array();
         while ($row = $res->fetchArray()) {
@@ -163,16 +163,16 @@ class langstats
      */
     public function get_variables_origin()
     {
-        $path = api_get_path(SYS_LANG_PATH) . 'english/';
+        $path = api_get_path(SYS_LANG_PATH).'english/';
         $vars = array();
         $priority = array('trad4all');
         foreach ($priority as $file) {
             $list = SubLanguageManager::get_all_language_variable_in_file(
-                $path . $file . '.inc.php',
+                $path.$file.'.inc.php',
                 true
             );
             foreach ($list as $var => $trad) {
-                $vars[$var] = $file . '.inc.php';
+                $vars[$var] = $file.'.inc.php';
             }
         }
         $files = scandir($path);
@@ -181,7 +181,7 @@ class langstats
                 continue;
             }
             $list = SubLanguageManager::get_all_language_variable_in_file(
-                $path . $file,
+                $path.$file,
                 true
             );
             foreach ($list as $var => $trad) {

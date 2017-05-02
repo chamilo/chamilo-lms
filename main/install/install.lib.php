@@ -357,7 +357,7 @@ function write_system_config_file($path)
     global $new_version_stable;
 
     $root_sys = api_add_trailing_slash(str_replace('\\', '/', realpath($pathForm)));
-    $content = file_get_contents(dirname(__FILE__).'/'.SYSTEM_CONFIG_FILENAME);
+    $content = file_get_contents(__DIR__.'/'.SYSTEM_CONFIG_FILENAME);
 
     $config['{DATE_GENERATED}'] = date('r');
     $config['{DATABASE_HOST}'] = $dbHostForm;
@@ -713,7 +713,7 @@ function display_requirements(
     if (!$properlyAccessUrl) {
         echo '
             <div class="alert alert-danger">
-                ' . Display::return_icon('error.png', get_lang('Error'), [], ICON_SIZE_MEDIUM) .
+                ' . Display::return_icon('error.png', get_lang('Error'), [], ICON_SIZE_MEDIUM, true, false, true) .
             ' ' .
             sprintf(get_lang('InstallMultiURLDetectedNotMainURL'), api_get_configuration_value('root_web')) . '
             </div>
@@ -726,7 +726,15 @@ function display_requirements(
     $timezone = checkPhpSettingExists("date.timezone");
     if (!$timezone) {
         echo "<div class='alert alert-warning'>".
-            Display::return_icon('warning.png', get_lang('Warning'), '', ICON_SIZE_MEDIUM).
+            Display::return_icon(
+                'warning.png',
+                get_lang('Warning'),
+                '',
+                ICON_SIZE_MEDIUM,
+                true,
+                false,
+                false
+            ).
             get_lang("DateTimezoneSettingNotSet")."</div>";
     }
 
@@ -1934,6 +1942,7 @@ function check_course_script_interpretation($course_dir, $course_attempt_name, $
     $content = '<?php echo "123"; exit;';
 
     if (is_writable($file_name)) {
+
         if ($handler = @fopen($file_name, "w")) {
             //write content
             if (fwrite($handler, $content)) {
@@ -3009,7 +3018,7 @@ function get_group_picture_path_by_id($id, $type = 'web', $preview = false, $ano
 
     $id = intval($id);
 
-    //$group_table = Database :: get_main_table(TABLE_MAIN_GROUP);
+    //$group_table = Database::get_main_table(TABLE_MAIN_GROUP);
     $group_table = 'groups';
     $sql = "SELECT picture_uri FROM $group_table WHERE id=".$id;
     $res = Database::query($sql);
@@ -3041,9 +3050,11 @@ function get_group_picture_path_by_id($id, $type = 'web', $preview = false, $ano
 }
 
 /**
+ * Control the different steps of the migration through a big switch
  * @param string $fromVersion
  * @param EntityManager $manager
  * @param bool $processFiles
+ * @return bool Always returns true except if the process is broken
  */
 function migrateSwitch($fromVersion, $manager, $processFiles = true)
 {
@@ -3059,17 +3070,26 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
 
     switch ($fromVersion) {
         case '1.9.0':
+            //no break
         case '1.9.2':
+            //no break
         case '1.9.4':
+            //no break
         case '1.9.6':
+            //no break
         case '1.9.6.1':
+            //no break
         case '1.9.8':
+            //no break
         case '1.9.8.1':
+            //no break
         case '1.9.8.2':
+            //no break
         case '1.9.10':
+            //no break
         case '1.9.10.2':
+            //no break
         case '1.9.10.4':
-
             $database = new Database();
             $database->setManager($manager);
 

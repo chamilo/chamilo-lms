@@ -214,11 +214,15 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 
 // Only shows the fields in this list
 /*$_configuration['allow_fields_inscription'] = [
-    'official_code',
-    'phone',
-    'status',
-    'language',
-    'extra_fields'
+    'fields' => [
+        'official_code',
+        'phone',
+        'status',
+        'language'
+    ],
+    'extra_fields' => [
+        'birthday'
+    ]
 ];*/
 // Boost option to ignore encoding check for learning paths
 //$_configuration['lp_fixed_encoding'] = 'false';
@@ -240,15 +244,14 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 //$_configuration['show_invisible_exercise_in_lp_list'] = false;
 // New grid view the list of courses
 //$_configuration['view_grid_courses'] = 'true';
+// Show courses grouped by categories when $_configuration['view_grid_courses'] is enabled
+//$_configuration['view_grid_courses_grouped_categories_in_sessions'] = true;
 // Chamilo is installed/downloaded. Packagers can change this
 // to reflect their packaging method. The default value is 'chamilo'. This will
 // be reflected on the https://version.chamilo.org/stats page in the future.
 //$_configuration['packager'] = 'chamilo';
 // If true exercises added in LP can be modified.
 //$_configuration['force_edit_exercise_in_lp'] = false;
-// to reflect their packaging method. The default value is 'chamilo'. This will
-// be reflected on the https://version.chamilo.org/stats page in the future.
-//$_configuration['packager'] = 'chamilo';
 // List of driver to plugin in ckeditor
 //$_configuration['editor_driver_list'] = ['PersonalDriver', 'CourseDriver'];
 // Hide send to hrm users options in announcements
@@ -279,11 +282,16 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 //$_configuration['personal_agenda_show_all_session_events'] = false;
 // Allows to redirect to the session after the inscription in session about
 // $_configuration['allow_redirect_to_session_after_inscription_about'] = false;
-// Allows to do a remove_XSS in course introduction with user status COURSEMANAGERLOWSECURITY in order to accept all embed type videos (like vimeo, wistia, etc)
-// $_configuration['allow_course_introduction_low_security'] = false;
+// Allows to do a remove_XSS in course introduction with user status COURSEMANAGERLOWSECURITY
+// in order to accept all embed type videos (like vimeo, wistia, etc)
+// $_configuration['course_introduction_html_strict_filtering'] = true;
 // Prevents the duplicate upload in assignments
 // $_configuration['assignment_prevent_duplicate_upload'] = false;
-// Set ConsideredWorkingTime work extra field variable from main/admin/extra_fields.php?type=work
+//Show student progress in My courses page
+//$_configuration['course_student_info']['score'] = false;
+//$_configuration['course_student_info']['progress'] = false;
+//$_configuration['course_student_info']['certificate'] = false;
+// Set ConsideredWorkingTime work extra field variable to show in MyStudents page works report
 // (with internal id 'work_time' as below) and enable the following line to show in MyStudents page works report
 // $_configuration['considered_working_time'] = 'work_time';
 // During CSV special imports update users emails to x@example.com
@@ -292,3 +300,70 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 // $_configuration['certificate_pdf_orientation'] = 'landscape'; // It can be 'portrait' or 'landscape'
 // Hide main navigation menu (left column in userportal)
 // $_configuration['hide_main_navigation_menu'] = false;
+// PDF image dpi value. Default value 96
+// $_configuration['pdf_img_dpi'] = 96;
+// Hide the "what's new" icon notifications in course list
+// $_configuration['hide_course_notification'] = true;
+// Show less session information in course list
+//$_configuration['show_simple_session_info'] = true;
+// Hide LP time in reports.
+// $_configuration['hide_lp_time'] = false;
+// Hide rating elements in pages ("Courses catalog" & "Most Popular courses")
+// $_configuration['hide_course_rating'] = false;
+// Customize password generation and verification
+/*$_configuration['password_requirements'] = [
+    'min' => [
+        'lowercase' => 2,
+        'uppercase' => 2,
+        'numeric' => 2,
+        'length' => 8
+    ]
+];*/
+// Customize course session tracking columns
+/*
+$_configuration['tracking_columns'] = [
+    'course_session' => [
+        'course_title' => true,
+        'published_exercises' => true,
+        'new_exercises' => true,
+        'my_average' => true,
+        'average_exercise_result' => true,
+        'time_spent' => true,
+        'lp_progress' => true,
+        'score' => true,
+        'best_score' => true,
+        'last_connection' => true,
+        'details' => true,
+    ],
+    'my_students_lp' => [
+        'lp' => true,
+        'time' => true,
+        'best_score' => true,
+        'latest_attempt_avg_score' => true,
+        'progress' => true,
+        'last_connection' => true,
+    ],
+    'my_progress_lp' => [
+        'lp' => true,
+        'time' => true,
+        'progress' => true,
+        'score' => true,
+        'best_score' => true,
+        'last_connection' => true,
+    ]
+];
+*/
+// Hide session link of course_block on index/userportal
+//$_configuration['remove_session_url']= false ;
+// Shows a legend in the agenda tool
+/*
+$_configuration['agenda_legend'] = [
+    'red' => 'red caption',
+    '#f0f' => 'another caption'
+];*/
+// Save some tool titles with HTML editor
+// $_configuration['save_titles_as_html'] = false;
+// Show the full toolbar set to all CKEditor
+//$_configuration['full_ckeditor_toolbar_set'] = false;
+// Allow change the orientation when export a single (course progress) thematic to pdf. Portrait or landscape
+//$_configuration['single_thematic_pdf_orientation'] = 'landscape';

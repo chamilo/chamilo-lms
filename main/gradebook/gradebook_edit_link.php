@@ -9,11 +9,11 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
 GradebookUtils::block_students();
-$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+$tbl_grade_links = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 //selected name of database
 $course_id = GradebookUtils::get_course_id_by_link_id($_GET['editlink']);
-$tbl_forum_thread = Database:: get_course_table(TABLE_FORUM_THREAD);
-$tbl_attendance = Database:: get_course_table(TABLE_ATTENDANCE);
+$tbl_forum_thread = Database::get_course_table(TABLE_FORUM_THREAD);
+$tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
 $em = Database::getManager();
 
 $linkarray = LinkFactory :: load($_GET['editlink']);
@@ -24,7 +24,7 @@ if ($link->is_locked() && !api_is_platform_admin()) {
 }
 
 $linkcat  = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : 0;
-$linkedit = isset($_GET['editlink']) ? Security::remove_XSS($_GET['editlink']):'';
+$linkedit = isset($_GET['editlink']) ? Security::remove_XSS($_GET['editlink']) : '';
 $course_code = api_get_course_id();
 $session_id = api_get_session_id();
 
@@ -48,7 +48,7 @@ $form = new LinkAddEditForm(
     null,
     $link,
     'edit_link_form',
-    api_get_self() . '?selectcat=' . $linkcat. '&editlink=' . $linkedit.'&'.api_get_cidreq()
+    api_get_self().'?selectcat='.$linkcat.'&editlink='.$linkedit.'&'.api_get_cidreq()
 );
 if ($form->validate()) {
     $values = $form->exportValues();
@@ -65,7 +65,7 @@ if ($form->validate()) {
     //Update weight for attendance
     $sql = 'SELECT ref_id FROM '.$tbl_grade_links.'
             WHERE id = '.intval($_GET['editlink']).' AND type='.LINK_ATTENDANCE;
-    $rs_attendance  = Database::query($sql);
+    $rs_attendance = Database::query($sql);
     if (Database::num_rows($rs_attendance) > 0) {
         $row_attendance = Database::fetch_array($rs_attendance);
         $attendance_id  = $row_attendance['ref_id'];
@@ -104,7 +104,7 @@ if ($form->validate()) {
             'type' => LINK_STUDENTPUBLICATION
         ]);
 
-    header('Location: '.$_SESSION['gradebook_dest'].'?linkedited=&selectcat=' . $link->get_category_id().'&'.api_get_cidreq());
+    header('Location: '.$_SESSION['gradebook_dest'].'?linkedited=&selectcat='.$link->get_category_id().'&'.api_get_cidreq());
     exit;
 }
 

@@ -7,13 +7,14 @@
 /**
  * HTML output
  */
-require_once('language.php');
+require_once api_get_path(SYS_PATH).'main/inc/global.inc.php';
+require_once __DIR__.'/language.php';
 $rootWeb = api_get_path('WEB_PATH');
 
 ?>
 <html>
 <head>
-    <title><?php echo custompages_get_lang('Registration');?></title>
+    <title><?php echo custompages_get_lang('Registration'); ?></title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -39,7 +40,7 @@ $rootWeb = api_get_path('WEB_PATH');
                     </div>
                     <div id="registration-form-box" class="form-box">
                         <div class="block-form-login">
-                            <?php   echo $content['info'];  ?>
+                            <?php   echo $content['info']; ?>
                         </div>
                     </div>
                     <div id="footer">

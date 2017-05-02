@@ -44,7 +44,7 @@ $htmlHeadXtra[] = '<script>
 </script>';
 
 $interbreadcrumb[] = array(
-    'url' => api_get_path(WEB_PATH) . 'user_portal.php',
+    'url' => api_get_path(WEB_PATH).'user_portal.php',
     'name' => get_lang('MyCourses')
 );
 
@@ -81,7 +81,7 @@ $form->addElement(
 );
 
 // Category category.
-$url = api_get_path(WEB_AJAX_PATH) . 'course.ajax.php?a=search_category';
+$url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_category';
 
 $form->addElement(
     'select_ajax',
@@ -224,7 +224,7 @@ if (api_get_setting('teacher_can_select_course_template') === 'true') {
             get_lang('PickACourseAsATemplateForThisNewCourse'),
         ],
         null,
-        ['url' => api_get_path(WEB_AJAX_PATH) . 'course.ajax.php?a=search_course']
+        ['url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course']
     );
 }
 
@@ -285,8 +285,8 @@ if ($form->validate()) {
             $params['gradebook_model_id'] = isset($course_values['gradebook_model_id']) ? $course_values['gradebook_model_id'] : null;
             $params['course_template'] = $course_values['course_template'];
 
-            include_once api_get_path(SYS_CODE_PATH) . 'lang/english/trad4all.inc.php';
-            $file_to_include = api_get_path(SYS_CODE_PATH) . 'lang/' . $course_language . '/trad4all.inc.php';
+            include_once api_get_path(SYS_CODE_PATH).'lang/english/trad4all.inc.php';
+            $file_to_include = api_get_path(SYS_CODE_PATH).'lang/'.$course_language.'/trad4all.inc.php';
 
             if (file_exists($file_to_include)) {
                 include $file_to_include;
@@ -311,13 +311,13 @@ if ($form->validate()) {
                 $splash = api_get_setting('course_creation_splash_screen');
                 if ($splash === 'true') {
                     $url = api_get_path(WEB_CODE_PATH);
-                    $url .= 'course_info/start.php?' . api_get_cidreq_params($course_info['code']);
+                    $url .= 'course_info/start.php?'.api_get_cidreq_params($course_info['code']);
                     $url .= '&first=1';
-                    header('Location: ' . $url);
+                    header('Location: '.$url);
                     exit;
                 } else {
-                    $url = api_get_path(WEB_COURSE_PATH) . $course_info['directory'] . '/';
-                    header('Location: ' . $url);
+                    $url = api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/';
+                    header('Location: '.$url);
                     exit;
                 }
             } else {
@@ -345,7 +345,7 @@ if ($form->validate()) {
 
             if ($request_id) {
                 $course_request_info = CourseRequestManager::get_course_request_info($request_id);
-                $message = (is_array($course_request_info) ? '<strong>' . $course_request_info['code'] . '</strong> : ' : '') . get_lang('CourseRequestCreated');
+                $message = (is_array($course_request_info) ? '<strong>'.$course_request_info['code'].'</strong> : ' : '').get_lang('CourseRequestCreated');
                 $message = Display::return_message(
                     $message,
                     'confirmation',
@@ -355,7 +355,7 @@ if ($form->validate()) {
                     'div',
                     Display::url(
                         get_lang('Enter'),
-                        api_get_path(WEB_PATH) . 'user_portal.php',
+                        api_get_path(WEB_PATH).'user_portal.php',
                         ['class' => 'btn btn-default']
                     ),
                     ['style' => 'float: left; margin:0px; padding: 0px;']

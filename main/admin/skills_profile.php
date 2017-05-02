@@ -26,7 +26,7 @@ $skill           = new Skill();
 $skill_profile   = new SkillProfile();
 $skill_rel_user  = new SkillRelUser();
 
-$url  = api_get_path(WEB_AJAX_PATH).'skill.ajax.php';
+$url = api_get_path(WEB_AJAX_PATH).'skill.ajax.php';
 
 $tpl = new Template(get_lang('Skills'));
 
@@ -63,7 +63,7 @@ if ($form->validate()) {
 $user_list = array();
 $count_skills = count($skills);
 
-$users  = $skill_rel_user->get_user_by_skills($skills);
+$users = $skill_rel_user->get_user_by_skills($skills);
 
 if (!empty($users)) {
     foreach ($users as $user) {
@@ -71,7 +71,7 @@ if (!empty($users)) {
         $user_list[$user['user_id']]['user'] = $user_info;
         $my_user_skills = $skill_rel_user->get_user_skills($user['user_id']);
         $user_skills = array();
-        $found_counts = 0 ;
+        $found_counts = 0;
         foreach ($my_user_skills as $my_skill) {
             $found = false;
             if (in_array($my_skill['skill_id'], $skills)) {

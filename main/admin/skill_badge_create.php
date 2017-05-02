@@ -24,16 +24,16 @@ $skillId = intval($_GET['id']);
 $objSkill = new Skill();
 $skill = $objSkill->get($skillId);
 
-$htmlHeadXtra[] = '<link  href="'. api_get_path(WEB_LIBRARY_JS_PATH) .'badge-studio/media/css/core.css" rel="stylesheet">';
+$htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_LIBRARY_JS_PATH).'badge-studio/media/css/core.css" rel="stylesheet">';
 
 // Add badge studio paths
 
 $badgeStudio = [
-    'core' => api_get_path(WEB_LIBRARY_JS_PATH) .'badge-studio/',
-    'media' => api_get_path(WEB_LIBRARY_JS_PATH) .'badge-studio/media/',
-    'templates' => api_get_path(WEB_LIBRARY_JS_PATH) .'badge-studio/media/images/templates/',
-    'masks' => api_get_path(WEB_LIBRARY_JS_PATH) .'badge-studio/media/images/masks/',
-    'script_js' => '<script src="'. api_get_path(WEB_LIBRARY_JS_PATH) .'badge-studio/media/js/studio.js?"></script>'
+    'core' => api_get_path(WEB_LIBRARY_JS_PATH).'badge-studio/',
+    'media' => api_get_path(WEB_LIBRARY_JS_PATH).'badge-studio/media/',
+    'templates' => api_get_path(WEB_LIBRARY_JS_PATH).'badge-studio/media/images/templates/',
+    'masks' => api_get_path(WEB_LIBRARY_JS_PATH).'badge-studio/media/images/masks/',
+    'script_js' => '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'badge-studio/media/js/studio.js?"></script>'
 ];
 
 
@@ -60,10 +60,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($existsBadgesDirectory) {
             if (!empty($skill['icon'])) {
-                $iconFileAbsolutePath = $badgePath . $skill['icon'];
+                $iconFileAbsolutePath = $badgePath.$skill['icon'];
 
                 if (Security::check_abs_path($iconFileAbsolutePath, $badgePath)) {
-                    unlink($badgePath . $skill['icon']);
+                    unlink($badgePath.$skill['icon']);
                 }
             }
 
@@ -93,35 +93,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $objSkill->update($params);
 
-    header('Location: ' . api_get_path(WEB_CODE_PATH) . 'admin/skill_badge_list.php');
+    header('Location: '.api_get_path(WEB_CODE_PATH).'admin/skill_badge_list.php');
     exit;
 }
 
 $interbreadcrumb = array(
     array(
-        'url' => api_get_path(WEB_CODE_PATH) . 'admin/index.php',
+        'url' => api_get_path(WEB_CODE_PATH).'admin/index.php',
         'name' => get_lang('Administration')
     ),
     array(
-        'url' => api_get_path(WEB_CODE_PATH) . 'admin/skill_badge.php',
+        'url' => api_get_path(WEB_CODE_PATH).'admin/skill_badge.php',
         'name' => get_lang('Badges')
     )
 );
 
 $toolbar = Display::toolbarButton(
     get_lang('ManageSkills'),
-    api_get_path(WEB_CODE_PATH) . 'admin/skill_list.php',
+    api_get_path(WEB_CODE_PATH).'admin/skill_list.php',
     'list',
     'primary',
     ['title' => get_lang('ManageSkills')]
 );
-
 $tpl = new Template(get_lang('CreateBadge'));
 $tpl->assign('platformAdminEmail', api_get_setting('emailAdministrator'));
 $tpl->assign('skill', $skill);
 $tpl->assign('badge_studio', $badgeStudio);
 $templateName = $tpl->get_template('skill/badge_create.tpl');
 $contentTemplate = $tpl->fetch($templateName);
-$tpl->assign('actions', $toolbar);
+$tpl->assign(
+    'actions',
+    Display::toolbarAction('toolbar', [$toolbar])
+);
 $tpl->assign('content', $contentTemplate);
 $tpl->display_one_col_template();

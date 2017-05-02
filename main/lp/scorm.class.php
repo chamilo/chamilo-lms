@@ -548,7 +548,7 @@ class scorm extends learnpath
 
         $courseInfo = empty($courseInfo) ? api_get_course_info() : $courseInfo;
 
-        $maxFilledSpace = DocumentManager :: get_course_quota($courseInfo['code']);
+        $maxFilledSpace = DocumentManager::get_course_quota($courseInfo['code']);
 
         $zip_file_path = $zip_file_info['tmp_name'];
         $zip_file_name = $zip_file_info['name'];
@@ -888,8 +888,8 @@ class scorm extends learnpath
         $zip_folder->create($scormfoldername.'/', PCLZIP_OPT_REMOVE_PATH, $scormfoldername.'/');
 
         //This file sending implies removing the default mime-type from php.ini
-        //DocumentManager :: file_send_for_download($zipfilename, true, $LPnamesafe.'.zip');
-        DocumentManager :: file_send_for_download($zipfilename, true);
+        //DocumentManager::file_send_for_download($zipfilename, true, $LPnamesafe.'.zip');
+        DocumentManager::file_send_for_download($zipfilename, true);
 
         // Delete the temporary zip file and directory in fileManage.lib.php
         my_delete($zipfilename);

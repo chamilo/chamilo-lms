@@ -24,7 +24,7 @@ class NotebookManager
      * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
      * @version januari 2009, dokeos 1.8.6
      */
-    static function javascript_notebook()
+    public static function javascript_notebook()
     {
         return "<script>
 				function confirmation (name)
@@ -49,13 +49,14 @@ class NotebookManager
      * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
      * @version januari 2009, dokeos 1.8.6
      */
-    static function save_note($values, $userId = 0, $courseId = 0, $sessionId = 0)
+    public static function save_note($values, $userId = 0, $courseId = 0, $sessionId = 0)
     {
-        if (!is_array($values) or empty($values['note_title'])) {
+        if (!is_array($values) || empty($values['note_title'])) {
             return false;
         }
+
         // Database table definition
-        $table = Database :: get_course_table(TABLE_NOTEBOOK);
+        $table = Database::get_course_table(TABLE_NOTEBOOK);
         $userId = $userId ?: api_get_user_id();
         $courseId = $courseId ?: api_get_course_int_id();
         $courseInfo = api_get_course_info_by_id($courseId);
@@ -97,13 +98,14 @@ class NotebookManager
      * @param int $notebook_id
      * @return array|mixed
      */
-    static function get_note_information($notebook_id)
+    public static function get_note_information($notebook_id)
     {
         if (empty($notebook_id)) {
             return array();
         }
+
         // Database table definition
-        $t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);
+        $t_notebook = Database::get_course_table(TABLE_NOTEBOOK);
         $course_id = api_get_course_int_id();
 
         $sql = "SELECT
@@ -136,7 +138,7 @@ class NotebookManager
             return false;
         }
         // Database table definition
-        $table = Database :: get_course_table(TABLE_NOTEBOOK);
+        $table = Database::get_course_table(TABLE_NOTEBOOK);
 
         $course_id = api_get_course_int_id();
         $sessionId = api_get_session_id();
@@ -182,8 +184,9 @@ class NotebookManager
         if (empty($notebook_id) || $notebook_id != strval(intval($notebook_id))) {
             return false;
         }
+
         // Database table definition
-        $t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);
+        $t_notebook = Database::get_course_table(TABLE_NOTEBOOK);
 
         $course_id = api_get_course_int_id();
 
@@ -197,6 +200,7 @@ class NotebookManager
         if ($affected_rows != 1) {
             return false;
         }
+
         //update item_property (delete)
         api_item_property_update(
             api_get_course_info(),
@@ -228,15 +232,21 @@ class NotebookManager
         // action links
         echo '<div class="actions">';
         if (!api_is_anonymous()) {
-            if (api_get_session_id() == 0)
-                echo '<a href="index.php?' . api_get_cidreq() . '&action=addnote">' .
-                    Display::return_icon('new_note.png', get_lang('NoteAddNew'), '', '32') . '</a>';
-            elseif (api_is_allowed_to_session_edit(false, true)) {
+            if (api_get_session_id() == 0) {
+                echo '<a href="index.php?'.api_get_cidreq().'&action=addnote">'.
+                    Display::return_icon(
+                        'new_note.png',
+                        get_lang('NoteAddNew'),
+                        '',
+                        '32'
+                    ).'</a>';
+            } elseif (api_is_allowed_to_session_edit(false, true)) {
                 echo '<a href="index.php?' . api_get_cidreq() . '&action=addnote">' .
                     Display::return_icon('new_note.png', get_lang('NoteAddNew'), '', '32') . '</a>';
             }
         } else {
-            echo '<a href="javascript:void(0)">' . Display::return_icon('new_note.png', get_lang('NoteAddNew'), '', '32') . '</a>';
+            echo '<a href="javascript:void(0)">' .
+                Display::return_icon('new_note.png', get_lang('NoteAddNew'), '', '32') . '</a>';
         }
 
         echo '<a href="index.php?' . api_get_cidreq() . '&action=changeview&view=creation_date&direction=' . $link_sort_direction . '">' .
@@ -247,12 +257,14 @@ class NotebookManager
             Display::return_icon('notes_order_by_title.png', get_lang('OrderByTitle'), '', '32') . '</a>';
         echo '</div>';
 
-        if (!isset($_SESSION['notebook_view']) || !in_array($_SESSION['notebook_view'], array('creation_date', 'update_date', 'title'))) {
+        if (!isset($_SESSION['notebook_view']) ||
+            !in_array($_SESSION['notebook_view'], array('creation_date', 'update_date', 'title'))
+        ) {
             $_SESSION['notebook_view'] = 'creation_date';
         }
 
         // Database table definition
-        $t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);
+        $t_notebook = Database::get_course_table(TABLE_NOTEBOOK);
         if ($_SESSION['notebook_view'] == 'creation_date' || $_SESSION['notebook_view'] == 'update_date') {
             $order_by = " ORDER BY " . $_SESSION['notebook_view'] . " $sort_direction ";
         } else {

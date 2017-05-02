@@ -14,12 +14,12 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
 // Database table definitions
-$table_survey = Database:: get_course_table(TABLE_SURVEY);
-$table_survey_question = Database:: get_course_table(TABLE_SURVEY_QUESTION);
-$table_survey_question_option = Database:: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
-$table_course = Database:: get_main_table(TABLE_MAIN_COURSE);
-$table_user = Database:: get_main_table(TABLE_MAIN_USER);
-$table_survey_invitation = Database:: get_course_table(TABLE_SURVEY_INVITATION);
+$table_survey = Database::get_course_table(TABLE_SURVEY);
+$table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
+$table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
+$table_course = Database::get_main_table(TABLE_MAIN_COURSE);
+$table_user = Database::get_main_table(TABLE_MAIN_USER);
+$table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
 
 $course_id = api_get_course_int_id();
 $userId = api_get_user_id();
@@ -154,7 +154,7 @@ if (api_is_course_admin() ||
 						survey_question_option.c_id = $course_id
 					WHERE
 					    survey_question.survey_id = '".intval($survey_id)."' AND
-						survey_question.question_id IN (".Database::escape_string(implode(',',$paged_questions[$_GET['show']]), null, false).") AND
+						survey_question.question_id IN (".Database::escape_string(implode(',', $paged_questions[$_GET['show']]), null, false).") AND
 						survey_question.c_id =  $course_id
 					ORDER BY survey_question.sort, survey_question_option.sort ASC";
 
@@ -191,7 +191,7 @@ if (api_is_course_admin() ||
 
 	// Displaying the form with the questions
 	if (isset($_GET['show'])) {
-		$show = (int)$_GET['show'] + 1;
+		$show = (int) $_GET['show'] + 1;
 	} else {
 		$show = 0;
 	}

@@ -11,6 +11,6 @@ namespace Shibboleth;
  * @license see /license.txt
  * @author Laurent Opprecht <laurent@opprecht.info>, Nicolas Rod for the University of Geneva
  */
-require_once dirname(__FILE__) . '/config/aai.class.php';
+require_once __DIR__.'/config/aai.class.php';
 
 Shibboleth::set_config(aai::config());

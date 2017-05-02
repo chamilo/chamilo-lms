@@ -6,7 +6,7 @@
  */
 
 require_once 'xapian.php';
-require_once dirname(__FILE__) . '/../IndexableChunk.class.php';
+require_once __DIR__.'/../IndexableChunk.class.php';
 
 /**
  * Abstract helper class
@@ -90,7 +90,7 @@ abstract class XapianIndexer
 
             return $this->db;
         } catch (Exception $e) {
-            Display::display_error_message($e->getMessage());
+            echo Display::return_message($e->getMessage(), 'error');
 
             return 1;
         }
@@ -150,7 +150,7 @@ abstract class XapianIndexer
                 }
             }
         } catch (Exception $e) {
-            Display::display_error_message($e->getMessage());
+            echo Display::return_message($e->getMessage(), 'error');
             exit(1);
         }
     }
@@ -169,7 +169,7 @@ abstract class XapianIndexer
         try {
             $docid = $this->db->get_document($did);
         } catch (Exception $e) {
-            //Display::display_error_message($e->getMessage());
+            //echo Display::return_message($e->getMessage(), 'error');
             return false;
         }
         return $docid;
@@ -188,12 +188,12 @@ abstract class XapianIndexer
         }
         try {
             if (!is_a($doc, 'XapianDocument')) {
-                return FALSE;
+                return false;
             }
             $doc_data = $doc->get_data();
             return $doc_data;
         } catch (Exception $e) {
-            //Display::display_error_message($e->getMessage());
+            //echo Display::return_message($e->getMessage(), 'error');
             return false;
         }
     }
@@ -235,7 +235,7 @@ abstract class XapianIndexer
         }
         if (is_numeric($did) && $did > 0) {
             $doc = $this->get_document($did);
-            if ($doc !== FALSE) {
+            if ($doc !== false) {
                 $this->db->delete_document($did);
                 $this->db->flush();
             }
@@ -252,12 +252,12 @@ abstract class XapianIndexer
     function add_term_to_doc($term, $doc)
     {
         if (!is_a($doc, 'XapianDocument')) {
-            return FALSE;
+            return false;
         }
         try {
             $doc->add_term($term);
         } catch (Exception $e) {
-            Display::display_error_message($e->getMessage());
+            echo Display::return_message($e->getMessage(), 'error');
             return 1;
         }
     }
@@ -272,12 +272,12 @@ abstract class XapianIndexer
     function remove_term_from_doc($term, $doc)
     {
         if (!is_a($doc, 'XapianDocument')) {
-            return FALSE;
+            return false;
         }
         try {
             $doc->remove_term($term);
         } catch (Exception $e) {
-            Display::display_error_message($e->getMessage());
+            echo Display::return_message($e->getMessage(), 'error');
             return 1;
         }
     }
@@ -291,7 +291,7 @@ abstract class XapianIndexer
     function replace_document($doc, $did)
     {
         if (!is_a($doc, 'XapianDocument')) {
-            return FALSE;
+            return false;
         }
         if ($this->db == null) {
             $this->connectDb();
@@ -300,11 +300,10 @@ abstract class XapianIndexer
             $this->getDb()->replace_document((int) $did, $doc);
             $this->getDb()->flush();
         } catch (Exception $e) {
-            Display::display_error_message($e->getMessage());
+            echo Display::return_message($e->getMessage(), 'error');
             return 1;
         }
     }
-
 
     /**
      * Class destructor
@@ -314,5 +313,4 @@ abstract class XapianIndexer
         unset($this->db);
         unset($this->stemmer);
     }
-
 }

@@ -36,12 +36,12 @@ if (!api_is_allowed_to_edit(false, true) ||
 }
 
 // Database table definitions
-$table_survey = Database:: get_course_table(TABLE_SURVEY);
-$table_survey_question = Database:: get_course_table(TABLE_SURVEY_QUESTION);
-$table_survey_question_option = Database:: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
-$table_survey_question_group = Database:: get_course_table(TABLE_SURVEY_QUESTION_GROUP);
-$table_course = Database:: get_main_table(TABLE_MAIN_COURSE);
-$table_user = Database:: get_main_table(TABLE_MAIN_USER);
+$table_survey = Database::get_course_table(TABLE_SURVEY);
+$table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
+$table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
+$table_survey_question_group = Database::get_course_table(TABLE_SURVEY_QUESTION_GROUP);
+$table_course = Database::get_main_table(TABLE_MAIN_COURSE);
+$table_user = Database::get_main_table(TABLE_MAIN_USER);
 
 $survey_id = intval($_GET['survey_id']);
 $course_id = api_get_course_int_id();
@@ -108,7 +108,7 @@ $message_information = isset($_GET['message']) ? Security::remove_XSS($_GET['mes
 if (isset($action)) {
 	if (($action == 'moveup' || $action == 'movedown') && isset($_GET['question_id'])) {
 		SurveyManager::move_survey_question($my_action_survey,$my_question_id_survey,$my_survey_id_survey);
-		Display::display_confirmation_message(get_lang('SurveyQuestionMoved'));
+		echo Display::return_message(get_lang('SurveyQuestionMoved'), 'confirmation');
 	}
 	if ($action == 'delete' AND is_numeric($_GET['question_id'])) {
 		SurveyManager::delete_survey_question($my_survey_id_survey, $my_question_id_survey, $survey_data['is_shared']);
@@ -238,11 +238,11 @@ if ($is_survey_type_1) {
 	echo '<br /><br /><b>'.get_lang('ManageGroups').'</b><br /><br />';
 
 	if (in_array($_GET['sendmsg'], array('GroupUpdatedSuccessfully', 'GroupDeletedSuccessfully', 'GroupCreatedSuccessfully'))) {
-		echo Display::display_confirmation_message(get_lang($_GET['sendmsg']), false);
+		echo Display::return_message(get_lang($_GET['sendmsg']), 'confirmation', false);
 	}
 
 	if (in_array($_GET['sendmsg'], array('GroupNeedName'))){
-		echo Display::display_warning_message(get_lang($_GET['sendmsg']), false);
+		echo Display::return_message(get_lang($_GET['sendmsg']), 'warning', false);
 	}
 	echo '<table border="0"><tr><td width="100">'.get_lang('Name').'</td><td>'.get_lang('Description').'</td></tr></table>';
 	echo '<form action="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?action=addgroup&survey_id='.$survey_id.'" method="post">';
@@ -285,4 +285,4 @@ if ($is_survey_type_1) {
 Session::erase('answer_count');
 
 // Footer
-Display :: display_footer();
+Display::display_footer();

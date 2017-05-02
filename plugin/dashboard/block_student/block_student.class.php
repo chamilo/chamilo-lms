@@ -21,12 +21,12 @@ class BlockStudent extends Block
 	/**
 	 * Constructor
 	 */
-    public function __construct ($user_id)
+    public function __construct($user_id)
     {
-    	$this->user_id  = $user_id;
-    	$this->path 	= 'block_student';
+    	$this->user_id = $user_id;
+    	$this->path = 'block_student';
     	if ($this->is_block_visible_for_user($user_id)) {
-            $this->students =  UserManager::get_users_followed_by_drh($user_id, STUDENT);
+            $this->students = UserManager::get_users_followed_by_drh($user_id, STUDENT);
     	}
     }
 
@@ -61,7 +61,7 @@ class BlockStudent extends Block
 		$html = '<div class="panel panel-default" id="intro">
                     <div class="panel-heading">
                         '.get_lang('StudentsInformationsList').'
-                        <div class="pull-right"><a class="btn btn-danger btn-xs" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">
+                        <div class="pull-right"><a class="btn btn-danger btn-xs" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">
                             <em class="fa fa-times"></em>
                         </a>
                         </div>
@@ -102,9 +102,9 @@ class BlockStudent extends Block
 
 	 			$courses_by_user = CourseManager::get_courses_list_by_user_id($student['user_id'], true);
 	 			$count_courses = count($courses_by_user);
-				$rowspan = $count_courses?$count_courses+1:2;
+				$rowspan = $count_courses ? $count_courses + 1 : 2;
 
-				if ($i%2 == 0) {
+				if ($i % 2 == 0) {
                     $style = ' style="background-color:#F2F2F2" ';
                 } else {
                     $style = ' style="background-color:#FFF" ';
@@ -122,7 +122,7 @@ class BlockStudent extends Block
 						$courseInfo = api_get_course_info($course_code);
 						$courseId = $courseInfo['real_id'];
 		 				$course_title = $course['title'];
-		 				$time = api_time_to_hms(Tracking :: get_time_spent_on_the_course($student['user_id'], $courseId));
+		 				$time = api_time_to_hms(Tracking::get_time_spent_on_the_course($student['user_id'], $courseId));
 		 				$students_table .= '<tr '.$style.'>
 											<td align="right">'.$course_title.'</td>
 											<td align="right">'.$time.'</td>
@@ -169,7 +169,7 @@ class BlockStudent extends Block
 	 			$student_id = $student['user_id'];
 	 			$firstname  = $student['firstname'];
 	 			$lastname   = $student['lastname'];
-	 			$username	= $student['username'];
+	 			$username = $student['username'];
 
 
 				// get average of faults in attendances by student
@@ -188,7 +188,7 @@ class BlockStudent extends Block
 	 				$cats = Category::load(null, null, $course_code, null, null, null, false);
 	 				$scoretotal = array();
 	 				if (isset($cats) && isset($cats[0])) {
-		 				$scoretotal= $cats[0]->calc_score($student_id, null, $course_code);
+		 				$scoretotal = $cats[0]->calc_score($student_id, null, $course_code);
 	 				}
 
 	 				if (!empty($scoretotal)) {
@@ -198,10 +198,10 @@ class BlockStudent extends Block
 	 			}
 
 	 			if (!empty($weight)) {
-	 				$evaluations_avg = '<a title="'.get_lang('GoToStudentDetails').'" href="'.api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$student_id.'">'.round($score,2).'/'.round($weight,2).'('.round(($score / $weight) * 100,2) . ' %)</a>';
+	 				$evaluations_avg = '<a title="'.get_lang('GoToStudentDetails').'" href="'.api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$student_id.'">'.round($score, 2).'/'.round($weight, 2).'('.round(($score / $weight) * 100, 2).' %)</a>';
 	 			}
 
-	 			if ($i%2 == 0) {
+	 			if ($i % 2 == 0) {
                     $class_tr = 'row_odd';
                 } else {
                     $class_tr = 'row_even';

@@ -100,7 +100,7 @@ class AddCourseToSession
             $rs = Database::query($sql);
             $course_list = array();
             if ($type == 'single') {
-                while ($course = Database :: fetch_array($rs)) {
+                while ($course = Database::fetch_array($rs)) {
                     $course_list[] = $course['code'];
                     $course_title = str_replace("'", "\'", $course_title);
                     $return .= '<a href="javascript: void(0);" onclick="javascript: add_course_to_session(\''.$course['id'].'\',\''.$course_title.' ('.$course['visual_code'].')'.'\')">'.$course['title'].' ('.$course['visual_code'].')</a><br />';
@@ -108,7 +108,7 @@ class AddCourseToSession
                 $xajax_response -> addAssign('ajax_list_courses_single', 'innerHTML', api_utf8_encode($return));
             } else {
                 $return .= '<select id="origin" name="NoSessionCoursesList[]" multiple="multiple" size="20" style="width:340px;">';
-                while ($course = Database :: fetch_array($rs)) {
+                while ($course = Database::fetch_array($rs)) {
                     $course_list[] = $course['code'];
                     $course_title = str_replace("'", "\'", $course_title);
                     $return .= '<option value="'.$course['id'].'" title="'.htmlspecialchars($course['title'].' ('.$course['visual_code'].')', ENT_QUOTES).'">'.$course['title'].' ('.$course['visual_code'].')</option>';

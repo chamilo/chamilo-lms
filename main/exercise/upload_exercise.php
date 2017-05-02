@@ -4,10 +4,8 @@
 use \ChamiloSession as Session;
 
 /**
- * 	Upload quiz: This script shows the upload quiz feature
- *  Initial work by Isaac flores on Nov 4 of 2010
- *  Encoding fixes Julio Montoya
- * 	@package chamilo.exercise
+ * Upload quiz: This script shows the upload quiz feature
+ * @package chamilo.exercise
  */
 
 // setting the help
@@ -15,14 +13,12 @@ $help_content = 'exercise_upload';
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-require_once api_get_path(LIBRARY_PATH) . 'pear/excelreader/reader.php';
-
-// Security check
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
+$origin = api_get_origin();
 if (!$is_allowed_to_edit) {
     api_not_allowed(true);
 }
-// setting the tabs
+
 $this_section = SECTION_COURSES;
 $htmlHeadXtra[] = "<script>
 $(document).ready( function(){
@@ -37,17 +33,11 @@ lp_upload_quiz_action_handling();
 
 $interbreadcrumb[] = array(
     "url" => "exercise.php?".api_get_cidreq(),
-    "name" => get_lang('Exercises'),
+    "name" => get_lang('Exercises')
 );
 
 // Display the header
 Display :: display_header(get_lang('ImportExcelQuiz'), 'Exercises');
-
-if (isset($_GET['message'])) {
-    if (in_array($_GET['message'], array('ExerciseEdited'))) {
-        Display :: display_confirmation_message(get_lang($_GET['message']));
-    }
-}
 
 // display the actions
 echo '<div class="actions">';
@@ -60,20 +50,18 @@ lp_upload_quiz_main();
 function lp_upload_quiz_actions()
 {
     $return = '<a href="exercise.php?'.api_get_cidreq().'">'.
-        Display::return_icon('back.png', get_lang('BackToExercisesList'),'',ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon(
+            'back.png',
+            get_lang('BackToExercisesList'),
+            '',
+            ICON_SIZE_MEDIUM
+        ).'</a>';
     return $return;
 }
 
-function lp_upload_quiz_secondary_actions()
-{
-    $return = '<a href="exercise_report.php?' . api_get_cidreq() . '">' .
-        Display :: return_icon('reporting32.png', get_lang('Tracking')) . get_lang('Tracking') . '</a>';
-    return $return;
-}
 
 function lp_upload_quiz_main()
 {
-    // variable initialisation
     $lp_id = isset($_GET['lp_id']) ? intval($_GET['lp_id']) : null;
 
     $form = new FormValidator(
@@ -105,7 +93,7 @@ function lp_upload_quiz_main()
     $table->setHeaderContents(0, 1, '#');
 
     $row = 1;
-    foreach ($tableList as $key => $label ) {
+    foreach ($tableList as $key => $label) {
         $table->setCellContents($row, 0, $label);
         $table->setCellContents($row, 1, $key);
         $row++;
@@ -155,16 +143,110 @@ function lp_upload_quiz_action_handling()
         return;
     }
 
-    // Read the Excel document
-    $data = new Spreadsheet_Excel_Reader();
-    // Set output Encoding.
-    $data->setOutputEncoding(api_get_system_encoding());
-    // Reading the xls document.
-    $data->read($_FILES['user_upload_quiz']['tmp_name']);
+    // Variables
+    $numberQuestions = 0;
+    $question = [];
+    $scoreList = [];
+    $feedbackTrueList = [];
+    $feedbackFalseList = [];
+    $questionDescriptionList = [];
+    $noNegativeScoreList = [];
+    $questionTypeList = [];
+    $answerList = [];
+    $quizTitle = '';
+
+    $objPHPExcel = PHPExcel_IOFactory::load($_FILES['user_upload_quiz']['tmp_name']);
+    $objPHPExcel->setActiveSheetIndex(0);
+    $worksheet = $objPHPExcel->getActiveSheet();
+    $highestRow = $worksheet->getHighestRow(); // e.g. 10
+    $highestColumn = $worksheet->getHighestColumn(); // e.g 'F'
 
     $correctScore = isset($_POST['correct_score']) ? $_POST['correct_score'] : null;
     $incorrectScore = isset($_POST['incorrect_score']) ? $_POST['incorrect_score'] : null;
     $useCustomScore = isset($_POST['user_custom_score']) ? true : false;
+
+    for ($row = 1; $row <= $highestRow; $row++) {
+        $cellTitleInfo = $worksheet->getCellByColumnAndRow(0, $row);
+        $cellDataInfo = $worksheet->getCellByColumnAndRow(1, $row);
+        $cellScoreInfo = $worksheet->getCellByColumnAndRow(2, $row);
+        $title = $cellTitleInfo->getValue();
+
+        switch ($title) {
+            case 'Quiz':
+                $quizTitle = $cellDataInfo->getValue();
+                break;
+            case 'Question':
+                $question[] = $cellDataInfo->getValue();
+                // Search cell with Answer title
+                $answerRow = $row;
+                $continue = true;
+                $answerIndex = 0;
+                while ($continue) {
+                    $answerRow++;
+                    $answerInfoTitle = $worksheet->getCellByColumnAndRow(0, $answerRow);
+                    $answerInfoData = $worksheet->getCellByColumnAndRow(1, $answerRow);
+                    $answerInfoExtra = $worksheet->getCellByColumnAndRow(2, $answerRow);
+                    $answerInfoTitle = $answerInfoTitle->getValue();
+                    if (strpos($answerInfoTitle, 'Answer') !== false) {
+                        $answerList[$numberQuestions][$answerIndex]['data'] = $answerInfoData->getValue();
+                        $answerList[$numberQuestions][$answerIndex]['extra'] = $answerInfoExtra->getValue();
+                    } else {
+                        $continue = false;
+                    }
+                    $answerIndex++;
+
+                    // To avoid loops
+                    if ($answerIndex > 60) {
+                        $continue = false;
+                    }
+                }
+
+                // Search cell with question type
+                $answerRow = $row;
+                $continue = true;
+                $questionTypeIndex = 0;
+                while ($continue) {
+                    $answerRow++;
+                    $questionTypeTitle = $worksheet->getCellByColumnAndRow(0, $answerRow);
+                    $questionTypeExtra = $worksheet->getCellByColumnAndRow(2, $answerRow);
+                    $title = $questionTypeTitle->getValue();
+                    if ($title == 'QuestionType') {
+                        $questionTypeList[$numberQuestions] = $questionTypeExtra->getValue();
+                        $continue = false;
+                    }
+                    if ($title == 'Question') {
+                        $continue = false;
+                    }
+                    // To avoid loops
+                    if ($questionTypeIndex > 60) {
+                        $continue = false;
+                    }
+                    $questionTypeIndex++;
+                }
+
+                // Detect answers
+                $numberQuestions++;
+                break;
+            case 'Score':
+                $scoreList[] = $cellScoreInfo->getValue();
+                break;
+            case 'NoNegativeScore':
+                $noNegativeScoreList[] = $cellDataInfo->getValue();
+                break;
+            case 'Category':
+                $categoryList[] = $cellDataInfo->getValue();
+                break;
+            case 'FeedbackTrue':
+                $feedbackTrueList[] = $cellDataInfo->getValue();
+                break;
+            case 'FeedbackFalse':
+                $feedbackFalseList[] = $cellDataInfo->getValue();
+                break;
+            case 'EnrichQuestion':
+                $questionDescriptionList[] = $cellDataInfo->getValue();
+                break;
+        }
+    }
 
     $propagateNegative = 0;
     if ($useCustomScore && !empty($incorrectScore)) {
@@ -173,142 +255,7 @@ function lp_upload_quiz_action_handling()
         }
     }
 
-    // Variables
-    $quiz_index = 0;
-    $question_title_index = array();
-    $question_name_index_init = array();
-    $question_name_index_end = array();
-    $score_index = array();
-    $feedback_true_index = array();
-    $feedback_false_index = array();
-    $number_questions = 0;
-    $question_description_index = array();
-    $noNegativeScoreIndex = array();
-    $questionTypeList = array();
-    $questionTypeIndex = array();
-    $categoryList = array();
-
-    // Reading all the first column items sequentially to create breakpoints
-    for ($i = 1; $i <= $data->sheets[0]['numRows']; $i++) {
-        if ($data->sheets[0]['cells'][$i][1] == 'Quiz' && $i == 1) {
-            $quiz_index = $i; // Quiz title position, only occurs once
-        } elseif ($data->sheets[0]['cells'][$i][1] == 'Question') {
-            $question_title_index[] = $i; // Question title position line
-            $question_name_index_init[] = $i + 1; // Questions name 1st position line
-            $number_questions++;
-        } elseif ($data->sheets[0]['cells'][$i][1] == 'Score') {
-            $question_name_index_end[] = $i - 1; // Question name position
-            $score_index[] = $i; // Question score position
-        } elseif ($data->sheets[0]['cells'][$i][1] == 'FeedbackTrue') {
-            $feedback_true_index[] = $i; // FeedbackTrue position (line)
-        } elseif ($data->sheets[0]['cells'][$i][1] == 'FeedbackFalse') {
-            $feedback_false_index[] = $i; // FeedbackFalse position (line)
-        } elseif ($data->sheets[0]['cells'][$i][1] == 'EnrichQuestion') {
-            $question_description_index[] = $i;
-        } elseif ($data->sheets[0]['cells'][$i][1] == 'NoNegativeScore') {
-            $noNegativeScoreIndex[] = $i;
-        } elseif ($data->sheets[0]['cells'][$i][1] == 'QuestionType') {
-            $questionTypeIndex[] = $i;
-        }
-    }
-
-    // Variables
-    $quiz = array();
-    $question = array();
-    $new_answer = array();
-    $score_list = array();
-    $feedback_true_list = array();
-    $feedback_false_list = array();
-    $question_description = array();
-    $noNegativeScoreList = array();
-
-    // Getting questions.
-    $k = $z = $q = $l = $m = $n = 0;
-    for ($i = 1; $i <= $data->sheets[0]['numRows']; $i++) {
-        if (is_array($data->sheets[0]['cells'][$i])) {
-            $column_data = $data->sheets[0]['cells'][$i];
-            // Fill all column with data to have a full array
-            for ($x = 1; $x <= $data->sheets[0]['numCols']; $x++) {
-                if (empty($column_data[$x])) {
-                    $data->sheets[0]['cells'][$i][$x] = '';
-                }
-            }
-            // Array filled with data
-            $column_data = $data->sheets[0]['cells'][$i];
-        } else {
-            $column_data = '';
-        }
-
-        // Fill quiz data
-        if ($quiz_index == $i) {
-            // The title always in the first position
-            $quiz = $column_data;
-        } elseif (in_array($i, $question_title_index)) {
-            //a complete line where 1st column is 'Question'
-            $question[$k] = $column_data;
-
-            for ($counter = 0; $counter < 12; $counter++) {
-                $myData = isset($data->sheets[0]['cells'][$i + $counter]) ? $data->sheets[0]['cells'][$i + $counter] : null;
-                if (isset($myData[1]) && $myData[1] == 'QuestionType') {
-                    $questionTypeList[$k] = $myData[3];
-                }
-
-                if (isset($myData[1]) && $myData[1] == 'Category') {
-                    $categoryList[$k] = $myData[2];
-                }
-            }
-
-            if (!isset($questionTypeList[$k])) {
-                $questionTypeList[$k] = null;
-            }
-
-            $k++;
-        } elseif (in_array($i, $score_index)) {
-            //a complete line where 1st column is 'Score'
-            $score_list[$z] = $column_data;
-            $z++;
-        } elseif (in_array($i, $feedback_true_index)) {
-            //a complete line where 1st column is 'FeedbackTrue'
-            $feedback_true_list[$q] = $column_data;
-            $q++;
-        } elseif (in_array($i, $feedback_false_index)) {
-            //a complete line where 1st column is 'FeedbackFalse' for wrong answers
-            $feedback_false_list[$l] = $column_data;
-            $l++;
-        } elseif (in_array($i, $question_description_index)) {
-            //a complete line where 1st column is 'EnrichQuestion'
-            $question_description[$m] = $column_data;
-            $m++;
-        } elseif (in_array($i, $noNegativeScoreIndex)) {
-            //a complete line where 1st column is 'NoNegativeScore'
-            $noNegativeScoreList[$z - 1] = $column_data;
-        }
-    }
-
-    // Get answers
-    for ($i = 0; $i < count($question_name_index_init); $i++) {
-        for ($j = $question_name_index_init[$i]; $j <= $question_name_index_end[$i]; $j++) {
-            if (is_array($data->sheets[0]['cells'][$j])) {
-                $column_data = $data->sheets[0]['cells'][$j];
-                // Fill all column with data
-                for ($x = 1; $x <= $data->sheets[0]['numCols']; $x++) {
-                    if (empty($column_data[$x])) {
-                        $data->sheets[0]['cells'][$j][$x] = '';
-                    }
-                }
-                $column_data = $data->sheets[0]['cells'][$j];
-                // Array filled of data
-                if (is_array($column_data) && count($column_data) > 0) {
-                    $new_answer[$i][$j] = $column_data;
-                }
-            }
-        }
-    }
-
-    // Quiz title.
-    $quiz_title = $quiz[2];
-
-    if ($quiz_title != '') {
+    if ($quizTitle != '') {
         // Variables
         $type = 2;
         $random = $active = $results = $max_attempt = $expired_time = 0;
@@ -320,7 +267,7 @@ function lp_upload_quiz_action_handling()
         $exercise = new Exercise();
 
         $quiz_id = $exercise->createExercise(
-            $quiz_title,
+            $quizTitle,
             $expired_time,
             $type,
             $random,
@@ -342,11 +289,11 @@ function lp_upload_quiz_action_handling()
             );
 
             // Import questions.
-            for ($i = 0; $i < $number_questions; $i++) {
+            for ($i = 0; $i < $numberQuestions; $i++) {
                 // Question name
-                $question_title = $question[$i][2];
-                $description = isset($question_description[$i][2]) ? $question_description[$i][2] : '';
-
+                $questionTitle = $question[$i];
+                $myAnswerList = isset($answerList[$i]) ? $answerList[$i] : [];
+                $description = isset($questionDescriptionList[$i]) ? $questionDescriptionList[$i] : '';
                 $categoryId = null;
                 if (isset($categoryList[$i]) && !empty($categoryList[$i])) {
                     $categoryName = $categoryList[$i];
@@ -354,28 +301,23 @@ function lp_upload_quiz_action_handling()
                     if (empty($categoryId)) {
                         $category = new TestCategory();
                         $category->name = $categoryName;
-                        $categoryId = $category->addCategoryInBDD();
+                        $categoryId = $category->save();
                     }
                 }
 
-                $question_description_text = "<p></p>";
+                $question_description_text = '<p></p>';
                 if (!empty($description)) {
                     // Question description.
-                    $question_description_text = "<p>".$description."</p>";
+                    $question_description_text = "<p>$description</p>";
                 }
 
                 // Unique answers are the only question types available for now
                 // through xls-format import
-                $answerList = isset($new_answer[$i]) ? $new_answer[$i] : '';
-
                 $question_id = null;
-                if (isset($questionTypeList[$i])) {
-                    $detectQuestionType = intval($questionTypeList[$i]);
+                if (isset($questionTypeList[$i]) && $questionTypeList[$i] != '') {
+                    $detectQuestionType = (int) $questionTypeList[$i];
                 } else {
-                    $detectQuestionType = detectQuestionType(
-                        $answerList,
-                        $score_list
-                    );
+                    $detectQuestionType = detectQuestionType($myAnswerList);
                 }
 
                 /** @var Question $answer */
@@ -402,17 +344,17 @@ function lp_upload_quiz_action_handling()
                         break;
                 }
 
-                if ($question_title != '') {
+                if ($questionTitle != '') {
                     $question_id = $answer->create_question(
                         $quiz_id,
-                        $question_title,
+                        $questionTitle,
                         $question_description_text,
                         0, // max score
                         $answer->type
                     );
 
                     if (!empty($categoryId)) {
-                        TestCategory::add_category_for_question_id(
+                        TestCategory::addCategoryToQuestion(
                             $categoryId,
                             $question_id,
                             $courseId
@@ -425,33 +367,33 @@ function lp_upload_quiz_action_handling()
                     case MULTIPLE_ANSWER:
                     case UNIQUE_ANSWER:
                         $total = 0;
-                        if (is_array($answerList) && !empty($question_id)) {
+                        if (is_array($myAnswerList) && !empty($myAnswerList) && !empty($question_id)) {
                             $id = 1;
                             $objAnswer = new Answer($question_id, $courseId);
-                            $globalScore = $score_list[$i][3];
+                            $globalScore = $scoreList[$i];
 
                             // Calculate the number of correct answers to divide the
                             // score between them when importing from CSV
                             $numberRightAnswers = 0;
-                            foreach ($answerList as $answer_data) {
-                                if (strtolower($answer_data[3]) == 'x') {
+                            foreach ($myAnswerList as $answer_data) {
+                                if (strtolower($answer_data['extra']) == 'x') {
                                     $numberRightAnswers++;
                                 }
                             }
 
-                            foreach ($answerList as $answer_data) {
-                                $answerValue = $answer_data[2];
+                            foreach ($myAnswerList as $answer_data) {
+                                $answerValue = $answer_data['data'];
                                 $correct = 0;
                                 $score = 0;
-                                if (strtolower($answer_data[3]) == 'x') {
+                                if (strtolower($answer_data['extra']) == 'x') {
                                     $correct = 1;
-                                    $score = $score_list[$i][3];
-                                    $comment = $feedback_true_list[$i][2];
+                                    $score = $scoreList[$i];
+                                    $comment = isset($feedbackTrueList[$i]) ? $feedbackTrueList[$i] : '';
                                 } else {
-                                    $comment = $feedback_false_list[$i][2];
-                                    $floatVal = (float)$answer_data[3];
+                                    $comment = isset($feedbackFalseList[$i]) ? $feedbackFalseList[$i] : '';
+                                    $floatVal = (float)$answer_data['extra'];
                                     if (is_numeric($floatVal)) {
-                                        $score = $answer_data[3];
+                                        $score = $answer_data['extra'];
                                     }
                                 }
 
@@ -467,13 +409,13 @@ function lp_upload_quiz_action_handling()
                                 switch ($detectQuestionType) {
                                     case GLOBAL_MULTIPLE_ANSWER:
                                         if (isset($noNegativeScoreList[$i][3])) {
-                                            if (!(strtolower($noNegativeScoreList[$i][3]) == 'x') &&
+                                            if (!(strtolower($noNegativeScoreList[$i]) == 'x') &&
                                                 !$correct
                                             ) {
-                                                $score = $score_list[$i][3] * -1;
+                                                $score = $scoreList[$i] * -1;
                                             }
                                         } else {
-                                            $score = $score_list[$i][3] * -1;
+                                            $score = $scoreList[$i] * -1;
                                         }
                                         $score /= $numberRightAnswers;
                                         break;
@@ -521,7 +463,7 @@ function lp_upload_quiz_action_handling()
                         }
                         break;
                     case FREE_ANSWER:
-                        $globalScore = $score_list[$i][3];
+                        $globalScore = $scoreList[$i];
                         $questionObj = Question::read($question_id, $courseId);
                         if ($questionObj) {
                             $questionObj->updateWeighting($globalScore);
@@ -529,11 +471,11 @@ function lp_upload_quiz_action_handling()
                         }
                         break;
                     case FILL_IN_BLANKS:
-                        $scoreList = array();
-                        $size = array();
+                        $scoreList = [];
+                        $size = [];
                         $globalScore = 0;
-                        foreach ($answerList as $data) {
-                            $score = isset($data[3]) ? $data[3] : 0;
+                        foreach ($myAnswerList as $data) {
+                            $score = isset($data['extra']) ? $data['extra'] : 0;
                             $globalScore += $score;
                             $scoreList[] = $score;
                             $size[] = 200;
@@ -562,19 +504,19 @@ function lp_upload_quiz_action_handling()
                         }
                         break;
                     case MATCHING:
-                        $globalScore = $score_list[$i][3];
+                        $globalScore = $scoreList[$i];
                         $position = 1;
 
                         $objAnswer = new Answer($question_id, $courseId);
-                        foreach ($answerList as $data) {
-                            $option = isset($data[3]) ? $data[3] : '';
+                        foreach ($myAnswerList as $data) {
+                            $option = isset($data['extra']) ? $data['extra'] : '';
                             $objAnswer->createAnswer($option, 0, '', 0, $position);
                             $position++;
                         }
 
                         $counter = 1;
-                        foreach ($answerList as $data) {
-                            $value = isset($data[2]) ? $data[2] : '';
+                        foreach ($myAnswerList as $data) {
+                            $value = isset($data['data']) ? $data['data'] : '';
                             $position++;
                             $objAnswer->createAnswer(
                                 $value,
@@ -607,7 +549,7 @@ function lp_upload_quiz_action_handling()
                 if ($debug > 0) {
                     error_log('New LP - oLP is object', 0);
                 }
-                if ((empty($oLP->cc)) OR $oLP->cc != api_get_course_id()) {
+                if ((empty($oLP->cc)) || $oLP->cc != api_get_course_id()) {
                     if ($debug > 0) {
                         error_log('New LP - Course has changed, discard lp object', 0);
                     }
@@ -624,7 +566,7 @@ function lp_upload_quiz_action_handling()
             $previous = $_SESSION['oLP']->select_previous_item_id();
             $parent = 0;
             // Add a Quiz as Lp Item
-            $_SESSION['oLP']->add_item($parent, $previous, TOOL_QUIZ, $quiz_id, $quiz_title, '');
+            $_SESSION['oLP']->add_item($parent, $previous, TOOL_QUIZ, $quiz_id, $quizTitle, '');
             // Redirect to home page for add more content
             header('location: ../lp/lp_controller.php?'.api_get_cidreq().'&action=add_item&type=step&lp_id='.intval($_GET['lp_id']));
             exit;
@@ -647,11 +589,12 @@ function detectQuestionType($answers_data)
     if (empty($answers_data)) {
         return FREE_ANSWER;
     }
+
     foreach ($answers_data as $answer_data) {
-        if (strtolower($answer_data[3]) == 'x') {
+        if (strtolower($answer_data['extra']) == 'x') {
             $correct++;
         } else {
-            if (is_numeric($answer_data[3])) {
+            if (is_numeric($answer_data['extra'])) {
                 $isNumeric = true;
             }
         }
@@ -678,7 +621,7 @@ function detectQuestionType($answers_data)
     return $type;
 }
 
-if (!isset($origin) || isset($origin) && $origin != 'learnpath') {
+if ($origin != 'learnpath') {
     //so we are not in learnpath tool
     Display :: display_footer();
 }

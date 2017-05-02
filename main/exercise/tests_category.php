@@ -75,7 +75,7 @@ switch ($action) {
                     $cat = new TestCategory();
                     $cat->name = $item['title'];
                     $cat->description = $item['description'];
-                    $cat->addCategoryInBDD();
+                    $cat->save();
                 }
                 Display::addFlash(Display::return_message(get_lang('Imported')));
             }
@@ -222,7 +222,7 @@ function add_category_form($action)
             $category = new TestCategory();
             $category->name = $values['category_name'];
             $category->description = $values['category_description'];
-            if ($category->addCategoryInBDD()) {
+            if ($category->save()) {
                 Display::addFlash(Display::return_message(get_lang('AddCategoryDone')));
             } else {
                 Display::addFlash(Display::return_message(get_lang('AddCategoryNameAlreadyExists'), 'warning'));

@@ -34,7 +34,7 @@ class FormDemoModelType extends AbstractType
                 ->add('someChoices', 'choice', array('choices' => $choices, 'expanded' => true, 'multiple' => true))
                 ->add('username')
                 ->add('email')
-                ->add('termsAccepted','checkbox')
+                ->add('termsAccepted', 'checkbox')
                 ->add('message', 'textarea')
                 ->add('price')
                 ->add('date', 'date', array('widget' => 'single_text'))

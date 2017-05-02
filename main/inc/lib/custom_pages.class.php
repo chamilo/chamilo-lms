@@ -35,7 +35,7 @@ class CustomPages
      */
     public static function path($name = '')
     {
-        return api_get_path(SYS_PATH) . 'custompages/' . $name;
+        return api_get_path(SYS_PATH).'custompages/'.$name;
     }
 
     /**
@@ -50,12 +50,12 @@ class CustomPages
             return false;
         }
 
-        $file = self::path($page_name . '.php');
+        $file = self::path($page_name.'.php');
         if (file_exists($file)) {
             include($file);
             exit;
         } else {
-            error_log('CustomPages::displayPage : could not read file ' . $file);
+            error_log('CustomPages::displayPage : could not read file '.$file);
         }
     }
 
@@ -69,14 +69,14 @@ class CustomPages
     public static function getURLImages($url_id = null)
     {
         if (is_null($url_id)) {
-            $url = 'http://' . $_SERVER['HTTP_HOST'] . '/';
+            $url = 'http://'.$_SERVER['HTTP_HOST'].'/';
             $url_id = UrlManager::get_url_id($url);
         }
-        $url_images_dir = api_get_path(SYS_PATH) . 'custompages/url-images/';
+        $url_images_dir = api_get_path(SYS_PATH).'custompages/url-images/';
         $images = array();
         for ($img_id = 1; $img_id <= 3; $img_id++) {
-            if (file_exists($url_images_dir . $url_id . '_url_image_' . $img_id . '.png')) {
-                $images[] = api_get_path(WEB_PATH) . 'custompages/url-images/' . $url_id . '_url_image_' . $img_id . '.png';
+            if (file_exists($url_images_dir.$url_id.'_url_image_'.$img_id.'.png')) {
+                $images[] = api_get_path(WEB_PATH).'custompages/url-images/'.$url_id.'_url_image_'.$img_id.'.png';
             }
         }
 

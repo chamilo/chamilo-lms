@@ -163,13 +163,13 @@ if (!empty($session_id)) {
     }
 }
 
-// Set the user status for the remove_XSS course introduction
-$userStatus = COURSEMANAGER;
+// Default behaviour show iframes.
+$userStatus = COURSEMANAGERLOWSECURITY;
 
 // Allows to do a remove_XSS in course introduction with user status COURSEMANAGERLOWSECURITY
-// in order to accept all embed type videos (like vimeo, wistia, etc) - see BT#12244
-if (api_get_configuration_value('allow_course_introduction_low_security')) {
-    $userStatus = COURSEMANAGERLOWSECURITY;
+// Block embed type videos (like vimeo, wistia, etc) - see BT#12244 BT#12556
+if (api_get_configuration_value('course_introduction_html_strict_filtering')) {
+    $userStatus = COURSEMANAGER;
 }
 
 $intro_content = Security::remove_XSS($intro_content, $userStatus);
@@ -266,7 +266,7 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
         <div class="col-md-6 items-progress">
             <div class="thematic-cont '.$class1.'">
             <div class="topics">' . $subTitle1 . '</div>
-            <h4 class="title-topics">' . Display::returnFontAwesomeIcon('book') . $thematic_info['title'] . '</h4>
+            <h4 class="title-topics">'.Display::returnFontAwesomeIcon('book').strip_tags($thematic_info['title']).'</h4>
             <p class="date">' .  Display::returnFontAwesomeIcon('calendar-o') . $thematic_advance_info['start_date'] . '</p>
             <div class="views">' . Display::returnFontAwesomeIcon('file-text-o')  . strip_tags($thematic_advance_info['content']). '</div>
             <p class="time">'. Display::returnFontAwesomeIcon('clock-o') . get_lang('DurationInHours') . ' : ' . $thematic_advance_info['duration'] . ' - <a href="' . $thematicUrl . '">' . get_lang('SeeDetail') . '</a></p>
@@ -320,7 +320,8 @@ $textIntro = '';
 if ($intro_dispCommand) {
     if (empty($intro_content)) {
         // Displays "Add intro" commands
-        $toolbar = '<div class="btn-group pull-right" role="group">';
+        $toolbar .= '<div class="toolbar-edit">';
+        $toolbar .= '<div class="btn-group pull-right" role="group">';
         if (!empty($courseId)) {
             $textIntro  = '<a class="btn btn-default" title="' . addslashes(get_lang('AddIntro')) . '" href="'.api_get_self().'?' . api_get_cidreq().'&intro_cmdAdd=1">';
             $textIntro .= '<em class="fa fa-file-text"></em> ';
@@ -330,10 +331,11 @@ if ($intro_dispCommand) {
             $toolbar .= '<a class="btn btn-default" href="' . api_get_self() . '?intro_cmdAdd=1">' . get_lang('AddIntro') . '</a>';
             $toolbar .= $editIconButton;
         }
-        $toolbar .= '</div>';
+        $toolbar .= '</div></div>';
 
     } else {
         // Displays "edit intro && delete intro" commands
+        $toolbar .= '<div class="toolbar-edit">';
         $toolbar .= '<div class="btn-group pull-right" rol="group">';
         if (!empty($courseId)) {
             $toolbar .=
@@ -354,7 +356,7 @@ if ($intro_dispCommand) {
                 if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).
                 "')) return false;\"><em class=\"fa fa-trash-o\"></em></a>";
         }
-        $toolbar .=  "</div>";
+        $toolbar .=  "</div></div>";
         // Fix for chrome XSS filter for videos in iframes - BT#7930
         $browser = api_get_navigator();
         if (strpos($introduction_section, '<iframe') !== false && $browser['name'] == 'Chrome') {

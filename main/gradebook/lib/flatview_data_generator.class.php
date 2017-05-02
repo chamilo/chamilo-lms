@@ -103,6 +103,8 @@ class FlatViewDataGenerator
             }
         }
 
+        $headers[] = get_lang('Username');
+
         if (!isset($items_count)) {
             $items_count = count($this->evals_links) - $items_start;
         }
@@ -310,14 +312,14 @@ class FlatViewDataGenerator
         }
 
         // sort users array
-        if ($users_sorting & self :: FVDG_SORT_LASTNAME) {
+        if ($users_sorting & self::FVDG_SORT_LASTNAME) {
             usort($userTable, array('FlatViewDataGenerator','sort_by_last_name'));
 
-        } elseif ($users_sorting & self :: FVDG_SORT_FIRSTNAME) {
+        } elseif ($users_sorting & self::FVDG_SORT_FIRSTNAME) {
             usort($userTable, array('FlatViewDataGenerator','sort_by_first_name'));
         }
 
-        if ($users_sorting & self :: FVDG_SORT_DESC) {
+        if ($users_sorting & self::FVDG_SORT_DESC) {
             $userTable = array_reverse($userTable);
         }
 
@@ -422,6 +424,8 @@ class FlatViewDataGenerator
                     }
                 }
             }
+
+            $row[] = $user[1];
 
             $item_value = 0;
             $item_value_total = 0;
@@ -600,7 +604,7 @@ class FlatViewDataGenerator
         $evaluationsAlreadyAdded = array()
     ) {
         // Generate actual data array
-        $scoredisplay = ScoreDisplay :: instance();
+        $scoredisplay = ScoreDisplay::instance();
         $item_total = 0;
         $item_value_total = 0;
 
@@ -828,7 +832,7 @@ class FlatViewDataGenerator
         usort($usertable, array ('FlatViewDataGenerator','sort_by_first_name'));
 
         // generate actual data array
-        $scoredisplay = ScoreDisplay :: instance();
+        $scoredisplay = ScoreDisplay::instance();
         $data = array();
         $selected_users = $usertable;
         foreach ($selected_users as $user) {

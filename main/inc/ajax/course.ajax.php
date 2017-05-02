@@ -34,13 +34,16 @@ switch ($action) {
         }
         break;
     case 'get_user_courses':
-        if (api_is_platform_admin()) {
+        if (api_is_platform_admin() || api_is_session_admin()) {
             $user_id = intval($_POST['user_id']);
-            $list_course_all_info = CourseManager::get_courses_list_by_user_id($user_id, false);
-            if (!empty($list_course_all_info)) {
-                foreach ($list_course_all_info as $course_item) {
-                    $course_info = api_get_course_info_by_id($course_item['real_id']);
-                    echo $course_info['title'].'<br />';
+            $list = CourseManager::get_courses_list_by_user_id(
+                $user_id,
+                false
+            );
+            if (!empty($list)) {
+                foreach ($list as $course) {
+                    $courseInfo = api_get_course_info_by_id($course['real_id']);
+                    echo $courseInfo['title'].'<br />';
                 }
             } else {
                 echo get_lang('UserHasNoCourse');
@@ -60,7 +63,7 @@ switch ($action) {
             foreach ($categories as $item) {
                 $list['items'][] = [
                     'id' => $item['code'],
-                    'text' => '('.$item['code'].') '.$item['name']
+                    'text' => '('.$item['code'].') '.strip_tags($item['name'])
                 ];
             }
 
@@ -172,8 +175,8 @@ switch ($action) {
         break;
     case 'search_user_by_course':
         if (api_is_platform_admin()) {
-            $user = Database :: get_main_table(TABLE_MAIN_USER);
-            $session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+            $user = Database::get_main_table(TABLE_MAIN_USER);
+            $session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
             $course = api_get_course_info_by_id($_GET['course_id']);
 
             $json = [
@@ -228,7 +231,7 @@ switch ($action) {
         break;
     case 'search_survey_by_course':
         if (api_is_platform_admin()) {
-            $survey = Database :: get_course_table(TABLE_SURVEY);
+            $survey = Database::get_course_table(TABLE_SURVEY);
 
             $sql = "SELECT survey_id as id, title, anonymous
                     FROM $survey

@@ -80,6 +80,7 @@ if (!empty($thematic_id)) {
     // thematic data by id
     $thematic_data = $thematic->get_thematic_list($thematic_id);
 }
+$cleanThematicTitle = isset($thematic_data['title']) ? strip_tags($thematic_data['title']) : null;
 
 // get default thematic plan title
 $default_thematic_plan_title = $thematic->get_default_thematic_plan_title();
@@ -208,13 +209,13 @@ if ($action == 'thematic_plan_list' || $action == 'thematic_plan_delete') {
     if (!empty($thematic_data)) {
         $interbreadcrumb[] = array(
             'url' => '#',
-            'name' => get_lang('ThematicPlan').' ('.$thematic_data['title'].') '
+            'name' => get_lang('ThematicPlan').' ('.$cleanThematicTitle.') '
         );
     }
 }
 if ($action == 'thematic_plan_add' || $action == 'thematic_plan_edit') {
     $interbreadcrumb[] = array('url' => 'index.php?'.api_get_cidreq().'&action='.$thematicControl, 'name' => get_lang('ThematicControl'));
-    $interbreadcrumb[] = array('url' => 'index.php?'.api_get_cidreq().'&action=thematic_plan_list&thematic_id='.$thematic_id, 'name' => get_lang('ThematicPlan').' ('.$thematic_data['title'].')');
+    $interbreadcrumb[] = array('url' => 'index.php?'.api_get_cidreq().'&action=thematic_plan_list&thematic_id='.$thematic_id, 'name' => get_lang('ThematicPlan').' ('.$cleanThematicTitle.')');
     if ($description_type >= ADD_THEMATIC_PLAN) {
         $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('NewBloc'));
     } else {
@@ -223,11 +224,11 @@ if ($action == 'thematic_plan_add' || $action == 'thematic_plan_edit') {
 }
 if ($action == 'thematic_advance_list' || $action == 'thematic_advance_delete') {
     $interbreadcrumb[] = array('url' => 'index.php?'.api_get_cidreq().'&action='.$thematicControl, 'name' => get_lang('ThematicControl'));
-    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('ThematicAdvance').' ('.$thematic_data['title'].')');
+    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('ThematicAdvance').' ('.$cleanThematicTitle.')');
 }
 if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
     $interbreadcrumb[] = array('url' => 'index.php?'.api_get_cidreq().'&action='.$thematicControl, 'name' => get_lang('ThematicControl'));
-    $interbreadcrumb[] = array('url' => 'index.php?'.api_get_cidreq().'&action=thematic_advance_list&thematic_id='.$thematic_id, 'name' => get_lang('ThematicAdvance').' ('.$thematic_data['title'].')');
+    $interbreadcrumb[] = array('url' => 'index.php?'.api_get_cidreq().'&action=thematic_advance_list&thematic_id='.$thematic_id, 'name' => get_lang('ThematicAdvance').' ('.$cleanThematicTitle.')');
     $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('NewThematicAdvance'));
 }
 
@@ -252,42 +253,61 @@ if ($action == 'thematic_plan_list') {
     ";
 }
 
-// Distpacher actions to controller
+// Dispatch actions to controller
 switch ($action) {
     case 'thematic_add':
+        //no break
     case 'thematic_edit':
+        //no break
     case 'thematic_delete':
+        //no break
     case 'thematic_delete_select':
+        //no break
     case 'thematic_copy':
+        //no break
     case 'thematic_import_select':
+        //no break
     case 'thematic_import':
+        //no break
     case 'moveup':
+        //no break
     case 'movedown':
         if (!api_is_allowed_to_edit(null, true)) {
             api_not_allowed();
         }
+        //no break
     case 'thematic_list':
+        //no break
     case 'thematic_export':
+        //no break
     case 'thematic_export_pdf':
+        //no break
     case 'thematic_details':
+        //no break
     case 'export_single_thematic':
         $thematic_controller->thematic($action);
         break;
     case 'thematic_plan_add':
+        //no break
     case 'thematic_plan_edit':
+        //no break
     case 'thematic_plan_delete':
         if (!api_is_allowed_to_edit(null, true)) {
             api_not_allowed();
         }
+        //no break
     case 'thematic_plan_list':
         $thematic_controller->thematic_plan($action);
         break;
     case 'thematic_advance_add':
+        //no break
     case 'thematic_advance_edit':
+        //no break
     case 'thematic_advance_delete':
         if (!api_is_allowed_to_edit(null, true)) {
             api_not_allowed();
         }
+    //no break
     case 'thematic_advance_list':
         $thematic_controller->thematic_advance($action);
         break;

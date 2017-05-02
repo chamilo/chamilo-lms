@@ -22,17 +22,18 @@ class ch_dropdown extends survey_question
             }
         }
 
-        parent :: addRemoveButtons($formData);
+        parent::addRemoveButtons($formData);
     }
 
     /**
      * @param FormValidator $form
      * @param array $questionData
      * @param array $answers
+     * @return void
      */
     public function render(FormValidator $form, $questionData = array(), $answers = '')
     {
-        $name = 'question' . $questionData['question_id'];
+        $name = 'question'.$questionData['question_id'];
         $data = array(0 => '--') + $questionData['options'];
         $form->addSelect($name, null, $data);
         if (!empty($answers)) {

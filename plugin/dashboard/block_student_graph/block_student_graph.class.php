@@ -29,15 +29,15 @@ class BlockStudentGraph extends Block
 	/**
 	 * Constructor
 	 */
-    public function __construct ($user_id)
+    public function __construct($user_id)
     {
-    	$this->user_id  = $user_id;
-    	$this->path 	= 'block_student_graph';
+    	$this->user_id = $user_id;
+    	$this->path = 'block_student_graph';
     	if ($this->is_block_visible_for_user($user_id)) {
     		/*if (api_is_platform_admin()) {
 	    		$this->students = UserManager::get_user_list(array('status' => STUDENT));
 	    	} else if (api_is_drh()) {*/
-	    		$this->students =  UserManager::get_users_followed_by_drh($user_id, STUDENT);
+	    		$this->students = UserManager::get_users_followed_by_drh($user_id, STUDENT);
 	    	//}
     	}
     }
@@ -75,7 +75,7 @@ class BlockStudentGraph extends Block
 		$html = '<div class="panel panel-default" id="intro">
 	                <div class="panel-heading">
 	                    '.get_lang('StudentsInformationsGraph').'
-	                    <div class="pull-right"><a class="btn btn-danger btn-xs" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">
+	                    <div class="pull-right"><a class="btn btn-danger btn-xs" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">
 	                    <em class="fa fa-times"></em>
 	                    </a></div>
 	                </div>
@@ -155,9 +155,9 @@ class BlockStudentGraph extends Block
             $myCache = new pCache(array('CacheFolder' => substr($cachePath, 0, strlen($cachePath) - 1)));
             $chartHash = $myCache->getHash($dataSet);
             if ($myCache->isInCache($chartHash)) {
-                $imgPath = api_get_path(SYS_ARCHIVE_PATH) . $chartHash;
+                $imgPath = api_get_path(SYS_ARCHIVE_PATH).$chartHash;
                 $myCache->saveFromCache($chartHash, $imgPath);
-                $imgPath = api_get_path(WEB_ARCHIVE_PATH) . $chartHash;
+                $imgPath = api_get_path(WEB_ARCHIVE_PATH).$chartHash;
             } else {
 
                 $maxCounts = max(count($usernames), count($faults));
@@ -182,7 +182,7 @@ class BlockStudentGraph extends Block
                 /* Set the default font */
                 $myPicture->setFontProperties(
                     array(
-                        'FontName' => api_get_path(SYS_FONTS_PATH) . 'opensans/OpenSans-Regular.ttf',
+                        'FontName' => api_get_path(SYS_FONTS_PATH).'opensans/OpenSans-Regular.ttf',
                         'FontSize' => 10
                     )
                 );
@@ -228,13 +228,13 @@ class BlockStudentGraph extends Block
 
                 /* Write and save into cache */
                 $myCache->writeToCache($chartHash, $myPicture);
-                $imgPath = api_get_path(SYS_ARCHIVE_PATH) . $chartHash;
+                $imgPath = api_get_path(SYS_ARCHIVE_PATH).$chartHash;
                 $myCache->saveFromCache($chartHash, $imgPath);
-                $imgPath = api_get_path(WEB_ARCHIVE_PATH) . $chartHash;
+                $imgPath = api_get_path(WEB_ARCHIVE_PATH).$chartHash;
             }
-            $graph = '<img src="' . $imgPath . '" >';
+            $graph = '<img src="'.$imgPath.'" >';
 		} else {
-			$graph = '<p>'.api_convert_encoding(get_lang('GraphicNotAvailable'),'UTF-8').'</p>';
+			$graph = '<p>'.api_convert_encoding(get_lang('GraphicNotAvailable'), 'UTF-8').'</p>';
 		}
 
  		return $graph;

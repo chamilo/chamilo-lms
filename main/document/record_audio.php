@@ -111,8 +111,8 @@ Event::event_access_tool(TOOL_DOCUMENT);
 $display_dir = $dir;
 if (isset ($group)) {
     $display_dir = explode('/', $dir);
-    unset ($display_dir[0]);
-    unset ($display_dir[1]);
+    unset($display_dir[0]);
+    unset($display_dir[1]);
     $display_dir = implode('/', $display_dir);
 }
 
@@ -159,6 +159,9 @@ $template->assign('user_id', api_get_user_id());
 $layout = $template->get_template('document/record_audio.tpl');
 $content = $template->fetch($layout);
 
-$template->assign('actions', $actions);
+$template->assign(
+    'actions',
+    Display::toolbarAction('toolbar', [$actions])
+);
 $template->assign('content', $content);
 $template->display_one_col_template();

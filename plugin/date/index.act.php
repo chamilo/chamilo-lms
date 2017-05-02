@@ -14,8 +14,8 @@ $convert_lang_to_code = array(
   "japanese" => "ja_JP",
   "danish" => "da_DK",
 );
-if(!empty($_SESSION['user_language_choice']) && !empty($convert_lang_to_code[$_SESSION['user_language_choice']])){
+if (!empty($_SESSION['user_language_choice']) && !empty($convert_lang_to_code[$_SESSION['user_language_choice']])) {
   $code = $convert_lang_to_code[$_SESSION['user_language_choice']];
-  $locale = setlocale(LC_TIME,$code);
+  $locale = setlocale(LC_TIME, $code);
 }
 $date = strftime('%c');

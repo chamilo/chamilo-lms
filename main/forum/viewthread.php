@@ -21,10 +21,7 @@ $nameTools = get_lang('Forum');
 $forumUrl = api_get_path(WEB_CODE_PATH).'forum/';
 
 // Are we in a lp ?
-$origin = '';
-if (isset($_GET['origin'])) {
-    $origin =  Security::remove_XSS($_GET['origin']);
-}
+$origin = api_get_origin();
 $my_search = null;
 $gradebook = null;
 
@@ -78,7 +75,7 @@ $(function() {
     
 </script>';
 
-if ($origin == 'group') {
+if (!empty($groupId)) {
     $interbreadcrumb[] = array(
         'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
         'name' => get_lang('Groups')
@@ -128,8 +125,7 @@ if ($origin == 'group') {
 
 // If the user is not a course administrator and the forum is hidden
 // then the user is not allowed here.
-if (
-    !api_is_allowed_to_edit(false, true) &&
+if (!api_is_allowed_to_edit(false, true) &&
     ($current_forum['visibility'] == 0 || $current_thread['visibility'] == 0)
 ) {
     api_not_allowed(false);
@@ -137,19 +133,18 @@ if (
 
 /* Actions */
 $my_action = isset($_GET['action']) ? $_GET['action'] : '';
-if (
-    $my_action == 'delete' &&
+if ($my_action == 'delete' &&
     isset($_GET['content']) &&
     isset($_GET['id']) &&
     (api_is_allowed_to_edit(false, true) ||
-        (isset($group_properties['iid']) && GroupManager::is_tutor_of_group(api_get_user_id(), $group_properties['iid'])))
+        (isset($group_properties['iid']) && GroupManager::is_tutor_of_group(api_get_user_id(), $group_properties)))
 ) {
     $message = delete_post($_GET['id']);
 }
 if (($my_action == 'invisible' || $my_action == 'visible') &&
     isset($_GET['id']) &&
     (api_is_allowed_to_edit(false, true) ||
-        (isset($group_properties['iid']) && GroupManager::is_tutor_of_group(api_get_user_id(), $group_properties['iid'])))
+        (isset($group_properties['iid']) && GroupManager::is_tutor_of_group(api_get_user_id(), $group_properties)))
 ) {
     $message = approve_post($_GET['id'], $_GET['action']);
 }
@@ -184,8 +179,7 @@ if ($my_message != 'PostDeletedSpecial') {
     // The reply to thread link should only appear when the forum_category is
     // not locked AND the forum is not locked AND the thread is not locked.
     // If one of the three levels is locked then the link should not be displayed.
-    if (
-        ($current_forum_category &&
+    if (($current_forum_category &&
         $current_forum_category['locked'] == 0) &&
         $current_forum['locked'] == 0 &&
         $current_thread['locked'] == 0 ||
@@ -202,8 +196,7 @@ if ($my_message != 'PostDeletedSpecial') {
                     . '</a>';
             }
             // new thread link
-            if (
-                (
+            if ((
                     api_is_allowed_to_edit(false, true) &&
                     !(api_is_course_coach() && $current_forum['session_id'] != $sessionId)
                 ) ||

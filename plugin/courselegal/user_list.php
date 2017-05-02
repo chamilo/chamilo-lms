@@ -1,6 +1,6 @@
 <?php
 /* For license terms, see /license.txt */
-require_once dirname(__FILE__) . '/config.php';
+require_once __DIR__.'/config.php';
 
 // Course legal
 $enabled = api_get_plugin_setting('courselegal', 'tool_enable');
@@ -19,7 +19,7 @@ $sessionId = api_get_session_id();
 $url = api_get_self().'?'.api_get_cidreq();
 
 $action = isset($_GET['action']) ? $_GET['action'] : null;
-switch($action) {
+switch ($action) {
     case 'resend':
         if (isset($_GET['user_id'])) {
             $legal->updateMailAgreementLink($_GET['user_id'], $courseId, $sessionId);

@@ -165,11 +165,11 @@ echo Display::page_header($tool_name);
 
 //api_display_tool_title($tool_name);
 if (api_get_setting('allow_registration') == 'approval') {
-    Display::display_normal_message(get_lang('YourAccountHasToBeApproved'));
+    Display::addFlash(Display::return_message(get_lang('YourAccountHasToBeApproved'), 'normal'));
 }
 //if openid was not found
 if (!empty($_GET['openid_msg']) && $_GET['openid_msg'] == 'idnotfound') {
-    Display::display_warning_message(get_lang('OpenIDCouldNotBeFoundPleaseRegister'));
+    echo Display::return_message(get_lang('OpenIDCouldNotBeFoundPleaseRegister'), 'warning');
 }
 
 $form = new FormValidator('registration');
@@ -218,9 +218,7 @@ if ($display_all_form) {
     $form->addRule('pass1', get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule('pass2', get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule(array('pass1', 'pass2'), get_lang('PassTwo'), 'compare');
-    if (CHECK_PASS_EASY_TO_FIND) {
-        $form->addRule('pass1', get_lang('PassTooEasy').': '.api_generate_password(), 'callback', 'api_check_password');
-    }
+    $form->addPasswordRule('pass1');
 
     //	PHONE
     $form->addElement('text', 'phone', get_lang('Phone'), array('size' => 40, 'disabled' => 'disabled'));
@@ -366,7 +364,7 @@ switch ($action){
         }
 
         if (!empty($errorMsg)) {
-            Display::display_normal_message($errorMsg);
+            Display::addFlash(Display::return_message($errorMsg, 'normal'));
         }
 
         $default = array();

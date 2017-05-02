@@ -126,14 +126,14 @@ elseif (isset($update) && $update) {
         "</td>\n".
         "<td>\n".
         "<select name=\"image\">\n".
-        "<option selected>". $image. "</option>\n";
+        "<option selected>".$image."</option>\n";
 
     if ($dir = @opendir($chemin)) {
         while ($file = readdir($dir)) {
             if ($file == '..' || $file == '.') {
                 unset($file);
             }
-            $content .= "<option>". $file. "</option>\n";
+            $content .= "<option>".$file."</option>\n";
         }
         closedir($dir);
     }
@@ -142,15 +142,15 @@ elseif (isset($update) && $update) {
         "</td>\n".
         "</tr>\n".
         "<tr>\n".
-        "<td>". get_lang('NameOfTheLink'). " : </td>\n".
-        "<td><input type=\"text\" name=\"name\" value=\"". $name. "\"></td>\n".
+        "<td>".get_lang('NameOfTheLink')." : </td>\n".
+        "<td><input type=\"text\" name=\"name\" value=\"".$name."\"></td>\n".
         "</tr>\n".
         "<tr>\n".
         "<td>Lien :</td>\n".
-        "<td><input type=\"text\" name=\"link\" value=\"". $link. "\"></td>\n".
+        "<td><input type=\"text\" name=\"link\" value=\"".$link."\"></td>\n".
         "</tr>\n".
         "<tr>\n".
-        "<td colspan=\"2\"><input type=\"submit\" name=\"submit\" value=\"". get_lang('Ok'). "\"></td>\n".
+        "<td colspan=\"2\"><input type=\"submit\" name=\"submit\" value=\"".get_lang('Ok')."\"></td>\n".
         "</tr>\n".
         "</form>\n".
         "</table>\n".
@@ -203,21 +203,21 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
         "<tr><td colspan=\"6\"><font color=\"#F66105\">\n".get_lang('CourseAdminOnly')."</font>
         </td></tr>\n";
     $content .= "<tr>\n<td colspan=\"6\">";
-    $content .=CourseHome::show_tool_3column('courseAdmin');
+    $content .= CourseHome::show_tool_3column('courseAdmin');
     $content .= "</td>\n</tr>\n";
 }
 
 /*	TOOLS FOR PLATFORM ADMIN ONLY */
 if (api_is_platform_admin() && api_is_allowed_to_edit(null, true) && !api_is_coach()) {
-    $content .=  "<tr>"."<td colspan=\"6\">".
+    $content .= "<tr>"."<td colspan=\"6\">".
         "<hr noshade size=\"1\" />".
         "</td>"."</tr>\n".
         "<tr>\n"."<td colspan=\"6\">\n".
-        "<font color=\"#F66105\" >". get_lang('PlatformAdminOnly'). "</font>\n".
+        "<font color=\"#F66105\" >".get_lang('PlatformAdminOnly')."</font>\n".
         "</td>\n"."</tr>\n";
-    $content .=  "<tr>\n<td colspan=\"6\">";
+    $content .= "<tr>\n<td colspan=\"6\">";
     $content .= CourseHome::show_tool_3column('platformAdmin');
-    $content .=  "</td>\n</tr>\n";
+    $content .= "</td>\n</tr>\n";
 }
 
-$content .=  "</table>\n";
+$content .= "</table>\n";

@@ -23,7 +23,7 @@ $strings['VideoConferenceXCourseX']             = "Videoconference #%s course %s
 $strings['VideoConferenceAddedToTheCalendar']   = "Videoconference added to the calendar";
 $strings['VideoConferenceAddedToTheLinkTool']   = "Videoconference added to the link tool";
 
-$strings['GoToTheVideoConference']   = "Go to the videoconference";
+$strings['GoToTheVideoConference'] = "Go to the videoconference";
 
 $strings['Records']             = "Recording";
 $strings['Meeting']             = "Meeting";
@@ -34,7 +34,7 @@ $strings['CopyToLinkTool']      = "Copy to link tool";
 $strings['EnterConference']     = "Enter the videoconference";
 $strings['RecordList']          = "Recording list";
 $strings['ServerIsNotRunning']  = "Videoconference server is not running";
-$strings['ServerIsNotConfigured']  = "Videoconference server is not configured";
+$strings['ServerIsNotConfigured'] = "Videoconference server is not configured";
 
 $strings['XUsersOnLine']        = "%s user(s) online";
 

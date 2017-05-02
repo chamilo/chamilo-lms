@@ -11,8 +11,7 @@
  */
 class learnpathItem
 {
-    const debug = 0; // Logging parameter.
-
+    const DEBUG = 0; // Logging parameter.
     public $attempt_id; // Also called "objectives" SCORM-wise.
     public $audio; // The path to an audio file (stored in document/audio/).
     public $children = array(); // Contains the ids of children items.
@@ -83,15 +82,14 @@ class learnpathItem
      * Don't forget to use set_lp_view() if applicable after creating the item.
      * Setting an lp_view will finalise the item_view data collection
      * @param   integer $id Learning path item ID
-     * @param   null|integer $user_id User ID
-     * @param   null|integer $course_id Course int id
+     * @param   integer $user_id User ID
+     * @param   integer $course_id Course int id
      * @param   null|array  $item_content An array with the contents of the item
-     * @return  bool    True on success, false on failure
      */
     public function __construct(
         $id,
-        $user_id = null,
-        $course_id = null,
+        $user_id = 0,
+        $course_id = 0,
         $item_content = null
     ) {
         $items_table = Database::get_course_table(TABLE_LP_ITEM);
@@ -100,7 +98,7 @@ class learnpathItem
         if (!isset($user_id)) {
             $user_id = api_get_user_id();
         }
-        if (self::debug > 0) {
+        if (self::DEBUG > 0) {
             error_log(
                 "learnpathItem constructor: id: $id user_id: ".
                 "$user_id course_id: $course_id item_content: $item_content",
@@ -108,7 +106,6 @@ class learnpathItem
             );
         }
         $id = intval($id);
-
         if (empty($item_content)) {
             if (empty($course_id)) {
                 $course_id = api_get_course_int_id();
@@ -119,9 +116,7 @@ class learnpathItem
                     WHERE c_id = $course_id AND id = $id";
             $res = Database::query($sql);
             if (Database::num_rows($res) < 1) {
-                $this->error =
-                'Could not find given learnpath item in learnpath_item table';
-                return false;
+                $this->error = 'Could not find given learnpath item in learnpath_item table';
             }
             $row = Database::fetch_array($res);
         } else {
@@ -154,17 +149,17 @@ class learnpathItem
         $this->db_id = $id;
 
         // Load children list
-        $sql = "SELECT id FROM $items_table
-                WHERE
-                    c_id = $course_id AND
-                    lp_id = ".$this->lp_id." AND
-                    parent_item_id = $id";
-        $res = Database::query($sql);
-        if (Database::num_rows($res) < 1) {
-            // Nothing to do (no children)
-        } else {
-            while ($row = Database::fetch_assoc($res)) {
-                $this->children[] = $row['id'];
+        if (!empty($this->lp_id)) {
+            $sql = "SELECT id FROM $items_table
+                    WHERE
+                        c_id = $course_id AND
+                        lp_id = ".$this->lp_id." AND
+                        parent_item_id = $id";
+            $res = Database::query($sql);
+            if (Database::num_rows($res) > 0) {
+                while ($row = Database::fetch_assoc($res)) {
+                    $this->children[] = $row['id'];
+                }
             }
         }
 
@@ -193,7 +188,7 @@ class learnpathItem
                 $this->lp_id,
                 $id
             );
-            if (self::debug > 0) {
+            if (self::DEBUG > 0) {
                 error_log($sql);
             };
             $res = Database::query($sql);
@@ -203,14 +198,12 @@ class learnpathItem
             }
         }
         $this->audio = $row['audio'];
-        if (self::debug > 0) {
+        if (self::DEBUG > 0) {
             error_log(
                 'New LP - End of learnpathItem constructor for item ' . $id,
                 0
             );
         }
-
-        return true;
     }
 
     /**
@@ -219,7 +212,7 @@ class learnpathItem
      */
     public function add_child($item)
     {
-        if (self::debug > 0) {
+        if (self::DEBUG > 0) {
             error_log('learnpathItem::add_child()', 0);
         }
         if (!empty($item)) {
@@ -285,7 +278,7 @@ class learnpathItem
      */
     public function close()
     {
-        if (self::debug > 0) {
+        if (self::DEBUG > 0) {
             error_log('learnpathItem::close()', 0);
         }
         $this->current_stop_time = time();
@@ -313,7 +306,7 @@ class learnpathItem
      */
     public function delete()
     {
-        if (self::debug > 0) {
+        if (self::DEBUG > 0) {
             error_log('learnpath_item::delete() for item ' . $this->db_id, 0);
         }
         $lp_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
@@ -323,7 +316,7 @@ class learnpathItem
 
         $sql = "DELETE FROM $lp_item_view
                 WHERE c_id = $course_id AND lp_item_id = " . $this->db_id;
-        if (self::debug > 0) {
+        if (self::DEBUG > 0) {
             error_log('Deleting from lp_item_view: ' . $sql, 0);
         }
         Database::query($sql);
@@ -338,7 +331,7 @@ class learnpathItem
         $sql = "DELETE FROM $lp_item
                 WHERE c_id = $course_id AND id = " . $this->db_id;
         Database::query($sql);
-        if (self::debug > 0) {
+        if (self::DEBUG > 0) {
             error_log('Deleting from lp_item: ' . $sql);
         }
 
@@ -360,7 +353,7 @@ class learnpathItem
      */
     public function drop_child($item)
     {
-        if (self::debug > 0) {
+        if (self::DEBUG > 0) {
             error_log('learnpathItem::drop_child()', 0);
         }
         if (!empty($item)) {
@@ -378,7 +371,7 @@ class learnpathItem
      */
     public function get_attempt_id()
     {
-        if (self::debug > 0) {
+        if (self::DEBUG > 0) {
             error_log(
                 'learnpathItem::get_attempt_id() on item ' . $this->db_id,
                 0
@@ -388,7 +381,7 @@ class learnpathItem
         if (!empty($this->attempt_id)) {
             $res = intval($this->attempt_id);
         }
-        if (self::debug > 0) {
+        if (self::DEBUG > 0) {
             error_log(
                 'New LP - End of learnpathItem::get_attempt_id() on item ' .
                 $this->db_id . ' - Returning ' . $res,
@@ -405,7 +398,7 @@ class learnpathItem
      */
     public function get_children()
     {
-        if (self::debug > 0) {
+        if (self::DEBUG > 0) {
             error_log('learnpathItem::get_children()', 0);
         }
         $list = array();
@@ -436,7 +429,7 @@ class learnpathItem
      */
     public function get_credit()
     {
-        if (self::debug > 1) {
+        if (self::DEBUG > 1) {
             error_log('learnpathItem::get_credit()', 0);
         }
         $credit = 'credit';
@@ -450,7 +443,7 @@ class learnpathItem
             // checking in the object would always return "no-credit" when we
             // want to set it to completed.
             $status = $this->get_status(true);
-            if (self::debug > 2) {
+            if (self::DEBUG > 2) {
                 error_log(
                     'learnpathItem::get_credit() - get_prevent_reinit!=0 and '.
                     'status is ' . $status,
@@ -464,7 +457,7 @@ class learnpathItem
                 $credit = 'no-credit';
             }
         }
-        if (self::debug > 1) {
+        if (self::DEBUG > 1) {
             error_log("learnpathItem::get_credit() returns: $credit");
         }
         return $credit;
@@ -476,7 +469,7 @@ class learnpathItem
      */
     public function get_current_start_time()
     {
-        if (self::debug > 0) {
+        if (self::DEBUG > 0) {
             error_log('learnpathItem::get_current_start_time()', 0);
         }
         if (empty($this->current_start_time)) {
@@ -492,7 +485,7 @@ class learnpathItem
      */
     public function get_description()
     {
-        if (self::debug > 0) {
+        if (self::DEBUG > 0) {
             error_log('learnpathItem::get_description()', 0);
         }
         if (empty($this->description)) {
@@ -511,7 +504,7 @@ class learnpathItem
     public function get_file_path($path_to_scorm_dir = '')
     {
         $course_id = api_get_course_int_id();
-        if (self::debug > 0) {
+        if (self::DEBUG > 0) {
             error_log('learnpathItem::get_file_path()', 0);
         }
         $path = $this->get_path();
@@ -560,7 +553,7 @@ class learnpathItem
      */
     public function get_id()
     {
-        if (self::debug > 1) {
+        if (self::DEBUG > 1) {
             error_log('learnpathItem::get_id()', 0);
         }
         if (!empty($this->db_id)) {
@@ -617,7 +610,7 @@ class learnpathItem
      */
     public function get_interactions_count($checkdb = false)
     {
-        if (self::debug > 1) {
+        if (self::DEBUG > 1) {
             error_log('learnpathItem::get_interactions_count()', 0);
         }
         $return = 0;
@@ -689,7 +682,7 @@ class learnpathItem
      */
     public function get_objectives_count()
     {
-        if (self::debug > 1) {
+        if (self::DEBUG > 1) {
             error_log('learnpathItem::get_objectives_count()', 0);
         }
         $res = 0;
@@ -707,7 +700,7 @@ class learnpathItem
      */
     public function get_launch_data()
     {
-        if (self::debug > 0) {
+        if (self::DEBUG > 0) {
             error_log('learnpathItem::get_launch_data()', 0);
         }
         if (!empty($this->launch_data)) {
@@ -727,7 +720,7 @@ class learnpathItem
      */
     public function get_lesson_location()
     {
-        if (self::debug > 0) {
+        if (self::DEBUG > 0) {
             error_log('learnpathItem::get_lesson_location()', 0);
         }
         if (!empty($this->lesson_location)) {
@@ -768,7 +761,7 @@ class learnpathItem
      */
     public function get_level()
     {
-        if (self::debug > 0) {
+        if (self::DEBUG > 0) {
             error_log('learnpathItem::get_level()', 0);
         }
         if (empty($this->level)) {
@@ -782,7 +775,7 @@ class learnpathItem
      */
     public function get_mastery_score()
     {
-        if (self::debug > 0) {
+        if (self::DEBUG > 0) {
             error_log('learnpathItem::get_mastery_score()', 0);
         }
         if (isset($this->mastery_score)) {
@@ -798,7 +791,7 @@ class learnpathItem
      */
     public function get_max()
     {
-        if (self::debug > 0) {
+        if (self::DEBUG > 0) {
             error_log('learnpathItem::get_max()', 0);
         }
         if ($this->type == 'sco') {
@@ -829,7 +822,7 @@ class learnpathItem
      */
     public function get_max_time_allowed()
     {
-        if (self::debug > 0) {
+        if (self::DEBUG > 0) {
             error_log('learnpathItem::get_max_time_allowed()', 0);
         }
         if (!empty($this->max_time_allowed)) {
@@ -845,7 +838,7 @@ class learnpathItem
      */
     public function get_min()
     {
-        if (self::debug > 0) {
+        if (self::DEBUG > 0) {
             error_log('learnpathItem::get_min()', 0);
         }
         if (!empty($this->min_score)) {
@@ -861,7 +854,7 @@ class learnpathItem
      */
     public function get_parent()
     {
-        if (self::debug > 0) {
+        if (self::DEBUG > 0) {
             error_log('learnpathItem::get_parent()', 0);
         }
         if (!empty($this->parent)) {
@@ -877,7 +870,7 @@ class learnpathItem
      */
     public function get_path()
     {
-        if (self::debug > 0) {
+        if (self::DEBUG > 0) {
             error_log('learnpathItem::get_path()', 0);
         }
         if (empty($this->path)) {
@@ -892,7 +885,7 @@ class learnpathItem
      */
     public function get_prereq_string()
     {
-        if (self::debug > 0) {
+        if (self::DEBUG > 0) {
             error_log('learnpathItem::get_prereq_string()', 0);
         }
         if (!empty($this->prereq_string)) {
@@ -909,7 +902,7 @@ class learnpathItem
     public function get_prevent_reinit()
     {
         $course_id = api_get_course_int_id();
-        if (self::debug > 2) {
+        if (self::DEBUG > 2) {
             error_log('learnpathItem::get_prevent_reinit()', 0);
         }
         if (!isset($this->prevent_reinit)) {
@@ -921,7 +914,7 @@ class learnpathItem
                 $res = Database::query($sql);
                 if (Database::num_rows($res) < 1) {
                     $this->error = "Could not find parent learnpath in lp table";
-                    if (self::debug > 2) {
+                    if (self::DEBUG > 2) {
                         error_log(
                             'New LP - End of learnpathItem::get_prevent_reinit() - Returning false',
                             0
@@ -937,7 +930,7 @@ class learnpathItem
                 $this->prevent_reinit = 1;
             }
         }
-        if (self::debug > 2) {
+        if (self::DEBUG > 2) {
             error_log(
                 'New LP - End of learnpathItem::get_prevent_reinit() - Returned ' . $this->prevent_reinit,
                 0
@@ -955,7 +948,7 @@ class learnpathItem
      **/
     public function get_seriousgame_mode()
     {
-        if (self::debug > 2) {
+        if (self::DEBUG > 2) {
             error_log('learnpathItem::get_seriousgame_mode()', 0);
         }
         $course_id = api_get_course_int_id();
@@ -968,7 +961,7 @@ class learnpathItem
                 $res = Database::query($sql);
                 if (Database::num_rows($res) < 1) {
                     $this->error = "Could not find parent learnpath in learnpath table";
-                    if (self::debug > 2) {
+                    if (self::DEBUG > 2) {
                         error_log(
                             'New LP - End of learnpathItem::get_seriousgame_mode() - Returning false',
                             0
@@ -983,7 +976,7 @@ class learnpathItem
                 $this->seriousgame_mode = 0; //SeriousGame mode is always off by default
             }
         }
-        if (self::debug > 2) {
+        if (self::DEBUG > 2) {
             error_log(
                 'New LP - End of learnpathItem::get_seriousgame_mode() - Returned ' . $this->seriousgame_mode,
                 0
@@ -1237,7 +1230,7 @@ class learnpathItem
                                                             'local',
                                                             'url'
                                                         );
-                                                        $in_files_list[] = learnpathItem::get_resources_from_source(
+                                                        $in_files_list[] = self::get_resources_from_source(
                                                             TOOL_DOCUMENT,
                                                             $second_part,
                                                             $recursivity + 1
@@ -1276,7 +1269,7 @@ class learnpathItem
                                                             'local',
                                                             'abs'
                                                         );
-                                                        $in_files_list[] = learnpathItem::get_resources_from_source(
+                                                        $in_files_list[] = self::get_resources_from_source(
                                                             TOOL_DOCUMENT,
                                                             $second_part,
                                                             $recursivity + 1
@@ -1307,7 +1300,7 @@ class learnpathItem
                                                         $new_abs_path = realpath(
                                                             $dir . '/' . $second_part
                                                         );
-                                                        $in_files_list[] = learnpathItem::get_resources_from_source(
+                                                        $in_files_list[] = self::get_resources_from_source(
                                                             TOOL_DOCUMENT,
                                                             $new_abs_path,
                                                             $recursivity + 1
@@ -1345,7 +1338,7 @@ class learnpathItem
                                                         $new_abs_path = realpath(
                                                             $dir . '/' . $second_part
                                                         );
-                                                        $in_files_list[] = learnpathItem::get_resources_from_source(
+                                                        $in_files_list[] = self::get_resources_from_source(
                                                             TOOL_DOCUMENT,
                                                             $new_abs_path,
                                                             $recursivity + 1
@@ -1385,7 +1378,7 @@ class learnpathItem
                                                             'local',
                                                             'url'
                                                         );
-                                                        $in_files_list[] = learnpathItem::get_resources_from_source(
+                                                        $in_files_list[] = self::get_resources_from_source(
                                                             TOOL_DOCUMENT,
                                                             $source,
                                                             $recursivity + 1
@@ -1421,7 +1414,7 @@ class learnpathItem
                                                             'local',
                                                             'abs'
                                                         );
-                                                        $in_files_list[] = learnpathItem::get_resources_from_source(
+                                                        $in_files_list[] = self::get_resources_from_source(
                                                             TOOL_DOCUMENT,
                                                             $source,
                                                             $recursivity + 1
@@ -1452,7 +1445,7 @@ class learnpathItem
                                                         $new_abs_path = realpath(
                                                             $dir . '/' . $source
                                                         );
-                                                        $in_files_list[] = learnpathItem::get_resources_from_source(
+                                                        $in_files_list[] = self::get_resources_from_source(
                                                             TOOL_DOCUMENT,
                                                             $new_abs_path,
                                                             $recursivity + 1
@@ -1490,7 +1483,7 @@ class learnpathItem
                                                         $new_abs_path = realpath(
                                                             $dir . '/' . $source
                                                         );
-                                                        $in_files_list[] = learnpathItem::get_resources_from_source(
+                                                        $in_files_list[] = self::get_resources_from_source(
                                                             TOOL_DOCUMENT,
                                                             $new_abs_path,
                                                             $recursivity + 1
@@ -1520,7 +1513,7 @@ class learnpathItem
                                                     'local',
                                                     'url'
                                                 );
-                                                $in_files_list[] = learnpathItem::get_resources_from_source(
+                                                $in_files_list[] = self::get_resources_from_source(
                                                     TOOL_DOCUMENT,
                                                     $source,
                                                     $recursivity + 1
@@ -1548,7 +1541,7 @@ class learnpathItem
                                                     'local',
                                                     'abs'
                                                 );
-                                                $in_files_list[] = learnpathItem::get_resources_from_source(
+                                                $in_files_list[] = self::get_resources_from_source(
                                                     TOOL_DOCUMENT,
                                                     $source,
                                                     $recursivity + 1
@@ -1574,7 +1567,7 @@ class learnpathItem
                                                 $new_abs_path = realpath(
                                                     $dir . '/' . $source
                                                 );
-                                                $in_files_list[] = learnpathItem::get_resources_from_source(
+                                                $in_files_list[] = self::get_resources_from_source(
                                                     TOOL_DOCUMENT,
                                                     $new_abs_path,
                                                     $recursivity + 1
@@ -1619,7 +1612,7 @@ class learnpathItem
                                                 $new_abs_path = realpath(
                                                     $dir . '/' . $source
                                                 );
-                                                $in_files_list[] = learnpathItem::get_resources_from_source(
+                                                $in_files_list[] = self::get_resources_from_source(
                                                     TOOL_DOCUMENT,
                                                     $new_abs_path,
                                                     $recursivity + 1
@@ -1668,14 +1661,14 @@ class learnpathItem
      */
     public function get_score()
     {
-        if (self::debug > 0) {
+        if (self::DEBUG > 0) {
             error_log('learnpathItem::get_score()', 0);
         }
         $res = 0;
         if (!empty($this->current_score)) {
             $res = $this->current_score;
         }
-        if (self::debug > 1) {
+        if (self::DEBUG > 1) {
             error_log(
                 'New LP - Out of learnpathItem::get_score() - returning ' . $res,
                 0
@@ -1695,7 +1688,7 @@ class learnpathItem
     public function get_status($check_db = true, $update_local = false)
     {
         $course_id = api_get_course_int_id();
-        $debug = self::debug;
+        $debug = self::DEBUG;
         if ($debug > 0) {
             error_log('learnpathItem::get_status() on item ' . $this->db_id, 0);
         }
@@ -1772,7 +1765,7 @@ class learnpathItem
      */
     public function get_suspend_data()
     {
-        if (self::debug > 0) {
+        if (self::DEBUG > 0) {
             error_log('learnpathItem::get_suspend_data()', 0);
         }
         // TODO: Improve cleaning of breaklines ... it works but is it really
@@ -1822,7 +1815,7 @@ class learnpathItem
         $time = null;
         $course_id = api_get_course_int_id();
         if (!isset($given_time)) {
-            if (self::debug > 2) {
+            if (self::DEBUG > 2) {
                 error_log(
                     'learnpathItem::get_scorm_time(): given time empty, current_start_time = ' . $this->current_start_time,
                     0
@@ -1854,7 +1847,7 @@ class learnpathItem
         } else {
             $time = $given_time;
         }
-        if (self::debug > 2) {
+        if (self::DEBUG > 2) {
             error_log(
                 'learnpathItem::get_scorm_time(): intermediate = ' . $time,
                 0
@@ -1888,7 +1881,7 @@ class learnpathItem
      */
     public function get_title()
     {
-        if (self::debug > 0) {
+        if (self::DEBUG > 0) {
             error_log('learnpathItem::get_title()', 0);
         }
         if (empty($this->title)) {
@@ -1903,7 +1896,7 @@ class learnpathItem
      */
     public function get_total_time()
     {
-        if (self::debug > 0) {
+        if (self::DEBUG > 0) {
             error_log(
                 'learnpathItem::get_total_time() for item ' . $this->db_id .
                 ' - Initially, current_start_time = ' . $this->current_start_time .
@@ -1913,7 +1906,7 @@ class learnpathItem
         }
         if ($this->current_start_time == 0) {
             // Shouldn't be necessary thanks to the open() method.
-            if (self::debug > 2) {
+            if (self::DEBUG > 2) {
                 error_log(
                     'learnpathItem::get_total_time() - Current start time was empty',
                     0
@@ -1924,7 +1917,7 @@ class learnpathItem
         //$this->current_stop_time=time();
         if (time() < $this->current_stop_time || $this->current_stop_time == 0
         ) {
-            if (self::debug > 2) {
+            if (self::DEBUG > 2) {
                 error_log(
                     'learnpathItem::get_total_time() - Current stop time was '
                     .'greater than the current time or was empty',
@@ -1938,7 +1931,7 @@ class learnpathItem
         }
         $time = $this->current_stop_time - $this->current_start_time;
         if ($time < 0) {
-            if (self::debug > 2) {
+            if (self::DEBUG > 2) {
                 error_log(
                     'learnpathItem::get_total_time() - Time smaller than 0. Returning 0',
                     0
@@ -1946,7 +1939,7 @@ class learnpathItem
             }
             return 0;
         } else {
-            if (self::debug > 2) {
+            if (self::DEBUG > 2) {
                 error_log(
                     'learnpathItem::get_total_time() - Current start time = ' .
                     $this->current_start_time . ', current stop time = ' .
@@ -1968,7 +1961,7 @@ class learnpathItem
         if (!empty($this->type)) {
             $res = $this->type;
         }
-        if (self::debug > 2) {
+        if (self::DEBUG > 2) {
             error_log(
                 'learnpathItem::get_type() - Returning ' . $res . ' for item ' . $this->db_id,
                 0
@@ -1983,7 +1976,7 @@ class learnpathItem
      */
     public function get_view_count()
     {
-        if (self::debug > 0) {
+        if (self::DEBUG > 0) {
             error_log('learnpathItem::get_view_count()', 0);
         }
         if (!empty($this->attempt_id)) {
@@ -2008,7 +2001,7 @@ class learnpathItem
         );
 
         if ($this->status_is($completedStatusList)) {
-            if (self::debug > 2) {
+            if (self::DEBUG > 2) {
                 error_log(
                     'learnpath::is_done() - Item ' . $this->get_id(
                     ) . ' is complete',
@@ -2018,7 +2011,7 @@ class learnpathItem
 
             return true;
         } else {
-            if (self::debug > 2) {
+            if (self::DEBUG > 2) {
                 error_log(
                     'learnpath::is_done() - Item ' . $this->get_id(
                     ) . ' is not complete',
@@ -2038,7 +2031,7 @@ class learnpathItem
      */
     public function is_restart_allowed()
     {
-        if (self::debug > 2) {
+        if (self::DEBUG > 2) {
             error_log('learnpathItem::is_restart_allowed()', 0);
         }
         $restart = 1;
@@ -2056,7 +2049,7 @@ class learnpathItem
                 $restart = -1;
             }
         }
-        if (self::debug > 2) {
+        if (self::DEBUG > 2) {
             error_log(
                 'New LP - End of learnpathItem::is_restart_allowed() - Returning ' . $restart,
                 0
@@ -2071,7 +2064,7 @@ class learnpathItem
      */
     public function open($allow_new_attempt = false)
     {
-        if (self::debug > 0) {
+        if (self::DEBUG > 0) {
             error_log('learnpathItem::open()', 0);
         }
         if ($this->prevent_reinit == 0) {
@@ -2109,7 +2102,7 @@ class learnpathItem
      */
     public function output()
     {
-        if (self::debug > 0) {
+        if (self::DEBUG > 0) {
             error_log('learnpathItem::output()', 0);
         }
         if (!empty($this->path) and is_file($this->path)) {
@@ -2135,7 +2128,7 @@ class learnpathItem
      */
     public function parse_prereq($prereqs_string, $items, $refs_list, $user_id)
     {
-        if (self::debug > 0) {
+        if (self::DEBUG > 0) {
             error_log(
                 'learnpathItem::parse_prereq() for learnpath ' . $this->lp_id . ' with string ' . $prereqs_string,
                 0
@@ -2197,7 +2190,7 @@ class learnpathItem
         // Parenthesis removed, now look for ORs as it is the lesser-priority
         //  binary operator (= always uses one text operand).
         if (strpos($prereqs_string, '|') === false) {
-            if (self::debug > 1) {
+            if (self::DEBUG > 1) {
                 error_log('New LP - Didnt find any OR, looking for AND', 0);
             }
             if (strpos($prereqs_string, '&') !== false) {
@@ -2213,7 +2206,7 @@ class learnpathItem
                         );
 
                         if (!$andstatus) {
-                            if (self::debug > 1) {
+                            if (self::DEBUG > 1) {
                                 error_log(
                                     'New LP - One condition in AND was false, short-circuit',
                                     0
@@ -2245,12 +2238,12 @@ class learnpathItem
             } else {
                 // No ORs found, now look for ANDs.
 
-                if (self::debug > 1) {
+                if (self::DEBUG > 1) {
                     error_log('New LP - Didnt find any AND, looking for =', 0);
                 }
 
                 if (strpos($prereqs_string, '=') !== false) {
-                    if (self::debug > 1) {
+                    if (self::DEBUG > 1) {
                         error_log('New LP - Found =, looking into it', 0);
                     }
                     // We assume '=' signs only appear when there's nothing else around.
@@ -2272,7 +2265,7 @@ class learnpathItem
                 } else {
                     // No ANDs found, look for <>
 
-                    if (self::debug > 1) {
+                    if (self::DEBUG > 1) {
                         error_log(
                             'New LP - Didnt find any =, looking for <>',
                             0
@@ -2280,7 +2273,7 @@ class learnpathItem
                     }
 
                     if (strpos($prereqs_string, '<>') !== false) {
-                        if (self::debug > 1) {
+                        if (self::DEBUG > 1) {
                             error_log('New LP - Found <>, looking into it', 0);
                         }
                         // We assume '<>' signs only appear when there's nothing else around.
@@ -2302,7 +2295,7 @@ class learnpathItem
                         }
                     } else {
                         // No <> found, look for ~ (unary)
-                        if (self::debug > 1) {
+                        if (self::DEBUG > 1) {
                             error_log(
                                 'New LP - Didnt find any =, looking for ~',
                                 0
@@ -2311,7 +2304,7 @@ class learnpathItem
                         // Only remains: ~ and X*{}
                         if (strpos($prereqs_string, '~') !== false) {
                             // Found NOT.
-                            if (self::debug > 1) {
+                            if (self::DEBUG > 1) {
                                 error_log(
                                     'New LP - Found ~, looking into it',
                                     0
@@ -2336,7 +2329,7 @@ class learnpathItem
                                 return $returnstatus;
                             } else {
                                 // Strange...
-                                if (self::debug > 1) {
+                                if (self::DEBUG > 1) {
                                     error_log(
                                         'New LP - Found ~ but strange string: ' . $prereqs_string,
                                         0
@@ -2346,7 +2339,7 @@ class learnpathItem
                         } else {
                             // Finally, look for sets/groups
 
-                            if (self::debug > 1) {
+                            if (self::DEBUG > 1) {
                                 error_log(
                                     'New LP - Didnt find any ~, looking for groups',
                                     0
@@ -2364,7 +2357,7 @@ class learnpathItem
                                 foreach ($groups[1] as $gr) {
                                     // Only take the results that correspond to
                                     //  the big brackets-enclosed condition.
-                                    if (self::debug > 1) {
+                                    if (self::DEBUG > 1) {
                                         error_log(
                                             'New LP - Dealing with group ' . $gr,
                                             0
@@ -2378,7 +2371,7 @@ class learnpathItem
                                         $multi
                                     )
                                     ) {
-                                        if (self::debug > 1) {
+                                        if (self::DEBUG > 1) {
                                             error_log(
                                                 'New LP - Found multiplier ' . $multi[0],
                                                 0
@@ -2394,7 +2387,7 @@ class learnpathItem
                                                     $status == $this->possible_status[3]
                                                 ) {
                                                     $mytrue++;
-                                                    if (self::debug > 1) {
+                                                    if (self::DEBUG > 1) {
                                                         error_log(
                                                             'New LP - Found true item, counting.. (' . ($mytrue) . ')',
                                                             0
@@ -2402,7 +2395,7 @@ class learnpathItem
                                                     }
                                                 }
                                             } else {
-                                                if (self::debug > 1) {
+                                                if (self::DEBUG > 1) {
                                                     error_log(
                                                         'New LP - item ' . $cond . ' does not exist in items list',
                                                         0
@@ -2411,7 +2404,7 @@ class learnpathItem
                                             }
                                         }
                                         if ($mytrue >= $count) {
-                                            if (self::debug > 1) {
+                                            if (self::DEBUG > 1) {
                                                 error_log(
                                                     'New LP - Got enough true results, return true',
                                                     0
@@ -2419,7 +2412,7 @@ class learnpathItem
                                             }
                                             $mycond = true;
                                         } else {
-                                            if (self::debug > 1) {
+                                            if (self::DEBUG > 1) {
                                                 error_log(
                                                     'New LP - Not enough true results',
                                                     0
@@ -2427,7 +2420,7 @@ class learnpathItem
                                             }
                                         }
                                     } else {
-                                        if (self::debug > 1) {
+                                        if (self::DEBUG > 1) {
                                             error_log(
                                                 'New LP - No multiplier',
                                                 0
@@ -2442,14 +2435,14 @@ class learnpathItem
                                                     $status == $this->possible_status[3]
                                                 ) {
                                                     $mycond = true;
-                                                    if (self::debug > 1) {
+                                                    if (self::DEBUG > 1) {
                                                         error_log(
                                                             'New LP - Found true item',
                                                             0
                                                         );
                                                     }
                                                 } else {
-                                                    if (self::debug > 1) {
+                                                    if (self::DEBUG > 1) {
                                                         error_log(
                                                             'New LP - ' .
                                                             ' Found false item, the set is not true, return false',
@@ -2460,13 +2453,13 @@ class learnpathItem
                                                     break;
                                                 }
                                             } else {
-                                                if (self::debug > 1) {
+                                                if (self::DEBUG > 1) {
                                                     error_log(
                                                         'New LP - item ' . $cond . ' does not exist in items list',
                                                         0
                                                     );
                                                 }
-                                                if (self::debug > 1) {
+                                                if (self::DEBUG > 1) {
                                                     error_log(
                                                         'New LP - Found false item, the set is not true, return false',
                                                         0
@@ -2486,7 +2479,7 @@ class learnpathItem
 
                                 // Nothing found there either. Now return the
                                 //  value of the corresponding resource completion status.
-                                if (self::debug > 1) {
+                                if (self::DEBUG > 1) {
                                     error_log(
                                         'New LP - Didnt find any group, returning value for ' . $prereqs_string,
                                         0
@@ -2503,14 +2496,14 @@ class learnpathItem
                                         $returnstatus = $status == $this->possible_status[2] || $status == $this->possible_status[3];
 
                                         if (!$returnstatus) {
-                                            if (self::debug > 1) {
+                                            if (self::DEBUG > 1) {
                                                 error_log(
                                                     'New LP - Prerequisite ' . $prereqs_string . ' not complete',
                                                     0
                                                 );
                                             }
                                         } else {
-                                            if (self::debug > 1) {
+                                            if (self::DEBUG > 1) {
                                                 error_log(
                                                     'New LP - Prerequisite ' . $prereqs_string . ' complete',
                                                     0
@@ -2524,7 +2517,7 @@ class learnpathItem
                                             if ($returnstatus) {
                                                 //AND origin_lp_item_id = '.$user_id.'
                                                 $sql = 'SELECT exe_result, exe_weighting
-                                                        FROM ' . Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES) . '
+                                                        FROM ' . Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES) . '
                                                         WHERE
                                                             exe_exo_id = ' . $items[$refs_list[$prereqs_string]]->path . ' AND
                                                             exe_user_id = ' . $user_id . ' AND
@@ -2534,7 +2527,7 @@ class learnpathItem
                                                         ORDER BY exe_date DESC
                                                         LIMIT 0, 1';
                                                 $rs_quiz = Database::query($sql);
-                                                if ($quiz = Database :: fetch_array($rs_quiz)) {
+                                                if ($quiz = Database::fetch_array($rs_quiz)) {
                                                     $minScore = $items[$refs_list[$this->get_id()]]->getPrerequisiteMinScore();
                                                     $maxScore = $items[$refs_list[$this->get_id()]]->getPrerequisiteMaxScore();
 
@@ -2567,7 +2560,7 @@ class learnpathItem
 
                                             // Checking in the database.
                                             $sql = 'SELECT exe_result, exe_weighting
-                                                    FROM ' . Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES) . '
+                                                    FROM ' . Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES) . '
                                                     WHERE
                                                         exe_exo_id = ' . $items[$refs_list[$prereqs_string]]->path . ' AND
                                                         exe_user_id = ' . $user_id . ' AND
@@ -2576,7 +2569,7 @@ class learnpathItem
 
                                             $rs_quiz = Database::query($sql);
                                             if (Database::num_rows($rs_quiz) > 0) {
-                                                while ($quiz = Database :: fetch_array($rs_quiz)) {
+                                                while ($quiz = Database::fetch_array($rs_quiz)) {
 
                                                     $minScore = $items[$refs_list[$this->get_id()]]->getPrerequisiteMinScore();
                                                     $maxScore = $items[$refs_list[$this->get_id()]]->getPrerequisiteMaxScore();
@@ -2617,14 +2610,14 @@ class learnpathItem
                                         $returnstatus = $status == $this->possible_status[2] || $status == $this->possible_status[3];
 
                                         if (!$returnstatus) {
-                                            if (self::debug > 1) {
+                                            if (self::DEBUG > 1) {
                                                 error_log(
                                                     'New LP - Prerequisite ' . $prereqs_string . ' not complete',
                                                     0
                                                 );
                                             }
                                         } else {
-                                            if (self::debug > 1) {
+                                            if (self::DEBUG > 1) {
                                                 error_log(
                                                     'New LP - Prerequisite ' . $prereqs_string . ' complete',
                                                     0
@@ -2649,7 +2642,7 @@ class learnpathItem
                                                         session_id = '.$sessionId.'
                                                     LIMIT 0, 1';
                                             $rs_lp = Database::query($sql);
-                                            $lp_id = Database :: fetch_row(
+                                            $lp_id = Database::fetch_row(
                                                 $rs_lp
                                             );
                                             $my_lp_id = $lp_id[0];
@@ -2661,7 +2654,7 @@ class learnpathItem
                                                         lp_item_id = ' . $refs_list[$prereqs_string] . '
                                                     LIMIT 0, 1';
                                             $rs_lp = Database::query($sql);
-                                            $status_array = Database :: fetch_row(
+                                            $status_array = Database::fetch_row(
                                                 $rs_lp
                                             );
                                             $status = $status_array[0];
@@ -2673,14 +2666,14 @@ class learnpathItem
                                                 );
                                             }
                                             if (!$returnstatus) {
-                                                if (self::debug > 1) {
+                                                if (self::DEBUG > 1) {
                                                     error_log(
                                                         'New LP - Prerequisite ' . $prereqs_string . ' not complete',
                                                         0
                                                     );
                                                 }
                                             } else {
-                                                if (self::debug > 1) {
+                                                if (self::DEBUG > 1) {
                                                     error_log(
                                                         'New LP - Prerequisite ' . $prereqs_string . ' complete',
                                                         0
@@ -2691,7 +2684,7 @@ class learnpathItem
                                         return $returnstatus;
                                     }
                                 } else {
-                                    if (self::debug > 1) {
+                                    if (self::DEBUG > 1) {
                                         error_log(
                                             'New LP - Could not find ' . $prereqs_string . ' in ' . print_r(
                                                 $refs_list,
@@ -2709,12 +2702,12 @@ class learnpathItem
         } else {
             $list = explode("\|", $prereqs_string);
             if (count($list) > 1) {
-                if (self::debug > 1) {
+                if (self::DEBUG > 1) {
                     error_log('New LP - Found OR, looking into it', 0);
                 }
                 $orstatus = false;
                 foreach ($list as $condition) {
-                    if (self::debug > 1) {
+                    if (self::DEBUG > 1) {
                         error_log(
                             'New LP - Found OR, adding it (' . $condition . ')',
                             0
@@ -2728,7 +2721,7 @@ class learnpathItem
                     );
                     if ($orstatus) {
                         // Shortcircuit OR.
-                        if (self::debug > 1) {
+                        if (self::DEBUG > 1) {
                             error_log(
                                 'New LP - One condition in OR was true, short-circuit',
                                 0
@@ -2744,7 +2737,7 @@ class learnpathItem
                 }
                 return $orstatus;
             } else {
-                if (self::debug > 1) {
+                if (self::DEBUG > 1) {
                     error_log(
                         'New LP - OR was found but only one elem present !?',
                         0
@@ -2768,7 +2761,7 @@ class learnpathItem
             $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
         }
 
-        if (self::debug > 1) {
+        if (self::DEBUG > 1) {
             error_log(
                 'New LP - End of parse_prereq. Error code is now ' . $this->prereq_alert,
                 0
@@ -2784,7 +2777,7 @@ class learnpathItem
      */
     public function restart()
     {
-        if (self::debug > 0) {
+        if (self::DEBUG > 0) {
             error_log('learnpathItem::restart()', 0);
         }
         if ($this->type == 'sco') {
@@ -2846,7 +2839,7 @@ class learnpathItem
      */
     public function save($from_outside = true, $prereqs_complete = false)
     {
-        if (self::debug > 0) {
+        if (self::DEBUG > 0) {
             error_log('learnpathItem::save()', 0);
         }
         // First check if parameters passed via GET can be saved here
@@ -2858,7 +2851,7 @@ class learnpathItem
                 $status != $this->possible_status[0] && // not attempted
                 $status != $this->possible_status[1]    //incomplete
             ) {
-                if (self::debug > 1) {
+                if (self::DEBUG > 1) {
                     error_log(
                         'learnpathItem::save() - save reinit blocked by setting',
                         0
@@ -2867,7 +2860,7 @@ class learnpathItem
                 // Do nothing because the status has already been set. Don't allow it to change.
                 // TODO: Check there isn't a special circumstance where this should be saved.
             } else {
-                if (self::debug > 1) {
+                if (self::DEBUG > 1) {
                     error_log(
                         'learnpathItem::save() - SCORM save request received',
                         0
@@ -2876,7 +2869,7 @@ class learnpathItem
 
                 // Get all new settings from the URL
                 if ($from_outside) {
-                    if (self::debug > 1) {
+                    if (self::DEBUG > 1) {
                         error_log(
                             'learnpathItem::save() - Getting item data from outside',
                             0
@@ -2886,7 +2879,7 @@ class learnpathItem
                         switch ($param) {
                             case 'score':
                                 $this->set_score($value);
-                                if (self::debug > 2) {
+                                if (self::DEBUG > 2) {
                                     error_log(
                                         'learnpathItem::save() - setting score to ' . $value,
                                         0
@@ -2895,7 +2888,7 @@ class learnpathItem
                                 break;
                             case 'max':
                                 $this->set_max_score($value);
-                                if (self::debug > 2) {
+                                if (self::DEBUG > 2) {
                                     error_log(
                                         'learnpathItem::save() - setting view_max_score to ' . $value,
                                         0
@@ -2904,7 +2897,7 @@ class learnpathItem
                                 break;
                             case 'min':
                                 $this->min_score = $value;
-                                if (self::debug > 2) {
+                                if (self::DEBUG > 2) {
                                     error_log(
                                         'learnpathItem::save() - setting min_score to ' . $value,
                                         0
@@ -2914,7 +2907,7 @@ class learnpathItem
                             case 'lesson_status':
                                 if (!empty($value)) {
                                     $this->set_status($value);
-                                    if (self::debug > 2) {
+                                    if (self::DEBUG > 2) {
                                         error_log(
                                             'learnpathItem::save() - setting status to ' . $value,
                                             0
@@ -2924,7 +2917,7 @@ class learnpathItem
                                 break;
                             case 'time':
                                 $this->set_time($value);
-                                if (self::debug > 2) {
+                                if (self::DEBUG > 2) {
                                     error_log(
                                         'learnpathItem::save() - setting time to ' . $value,
                                         0
@@ -2933,7 +2926,7 @@ class learnpathItem
                                 break;
                             case 'suspend_data':
                                 $this->current_data = $value;
-                                if (self::debug > 2) {
+                                if (self::DEBUG > 2) {
                                     error_log(
                                         'learnpathItem::save() - setting suspend_data to ' . $value,
                                         0
@@ -2942,7 +2935,7 @@ class learnpathItem
                                 break;
                             case 'lesson_location':
                                 $this->set_lesson_location($value);
-                                if (self::debug > 2) {
+                                if (self::DEBUG > 2) {
                                     error_log(
                                         'learnpathItem::save() - setting lesson_location to ' . $value,
                                         0
@@ -2951,7 +2944,7 @@ class learnpathItem
                                 break;
                             case 'core_exit':
                                 $this->set_core_exit($value);
-                                if (self::debug > 2) {
+                                if (self::DEBUG > 2) {
                                     error_log(
                                         'learnpathItem::save() - setting core_exit to ' . $value,
                                         0
@@ -2980,7 +2973,7 @@ class learnpathItem
                         }
                     }
                 } else {
-                    if (self::debug > 1) {
+                    if (self::DEBUG > 1) {
                         error_log(
                             'learnpathItem::save() - Using inside item status',
                             0
@@ -3012,7 +3005,7 @@ class learnpathItem
             }
         }
 
-        if (self::debug > 1) {
+        if (self::DEBUG > 1) {
             error_log(
                 'New LP - End of learnpathItem::save() - Calling write_to_db()',
                 0
@@ -3029,7 +3022,7 @@ class learnpathItem
      */
     public function set_attempt_id($num)
     {
-        if (self::debug > 0) {
+        if (self::DEBUG > 0) {
             error_log('learnpathItem::set_attempt_id()', 0);
         }
         if ($num == strval(intval($num)) && $num >= 0) {
@@ -3067,7 +3060,7 @@ class learnpathItem
      */
     public function set_description($string = '')
     {
-        if (self::debug > 0) {
+        if (self::DEBUG > 0) {
             error_log('learnpathItem::set_description()', 0);
         }
         if (!empty($string)) {
@@ -3082,7 +3075,7 @@ class learnpathItem
      */
     public function set_lesson_location($location)
     {
-        if (self::debug > 0) {
+        if (self::DEBUG > 0) {
             error_log('learnpathItem::set_lesson_location()', 0);
         }
         if (isset($location)) {
@@ -3099,7 +3092,7 @@ class learnpathItem
      */
     public function set_level($int = 0)
     {
-        if (self::debug > 0) {
+        if (self::DEBUG > 0) {
             error_log('learnpathItem::set_level(' . $int . ')', 0);
         }
         if (!empty($int) AND $int == strval(intval($int))) {
@@ -3127,7 +3120,7 @@ class learnpathItem
         $lpItemId = $this->get_id();
 
         if (empty($lpItemId)) {
-            if (self::debug > 0) {
+            if (self::DEBUG > 0) {
                 error_log(
                     'learnpathItem::set_lp_view(' . $lp_view_id . ') $lpItemId is empty',
                     0
@@ -3138,7 +3131,7 @@ class learnpathItem
         }
 
         if (empty($lp_view_id)) {
-            if (self::debug > 0) {
+            if (self::DEBUG > 0) {
                 error_log(
                     'learnpathItem::set_lp_view(' . $lp_view_id . ') $lp_view_id is empty',
                     0
@@ -3148,7 +3141,7 @@ class learnpathItem
             return false;
         }
 
-        if (self::debug > 0) {
+        if (self::DEBUG > 0) {
             error_log('learnpathItem::set_lp_view(' . $lp_view_id . ')', 0);
         }
 
@@ -3163,7 +3156,7 @@ class learnpathItem
                     lp_view_id = " . $lp_view_id . "
                 ORDER BY view_count DESC";
 
-        if (self::debug > 2) {
+        if (self::DEBUG > 2) {
             error_log(
                 'learnpathItem::set_lp_view() - Querying lp_item_view: ' . $sql,
                 0
@@ -3183,7 +3176,7 @@ class learnpathItem
             $this->lesson_location = $row['lesson_location'];
             $this->core_exit = $row['core_exit'];
 
-            if (self::debug > 2) {
+            if (self::DEBUG > 2) {
                 error_log(
                     'learnpathItem::set_lp_view() - Updated item object with database values',
                     0
@@ -3223,7 +3216,7 @@ class learnpathItem
         }
 
         // End
-        if (self::debug > 2) {
+        if (self::DEBUG > 2) {
             error_log('New LP - End of learnpathItem::set_lp_view()', 0);
         }
 
@@ -3237,7 +3230,7 @@ class learnpathItem
      */
     public function set_path($string = '')
     {
-        if (self::debug > 0) {
+        if (self::DEBUG > 0) {
             error_log('learnpathItem::set_path()', 0);
         }
         if (!empty($string)) {
@@ -3253,7 +3246,7 @@ class learnpathItem
      */
     public function set_prevent_reinit($prevent)
     {
-        if (self::debug > 0) {
+        if (self::DEBUG > 0) {
             error_log('learnpathItem::set_prevent_reinit()', 0);
         }
         if ($prevent) {
@@ -3271,7 +3264,7 @@ class learnpathItem
      */
     public function set_score($score)
     {
-        $debug = self::debug;
+        $debug = self::DEBUG;
         if ($debug > 0) {
             error_log('learnpathItem::set_score(' . $score . ')', 0);
         }
@@ -3315,12 +3308,12 @@ class learnpathItem
      */
     public function set_max_score($score)
     {
-        if (self::debug > 0) {
+        if (self::DEBUG > 0) {
             error_log('learnpathItem::set_max_score(' . $score . ')', 0);
         }
         if (is_int($score) || $score == '') {
             $this->view_max_score = $score;
-            if (self::debug > 1) {
+            if (self::DEBUG > 1) {
                 error_log(
                     'learnpathItem::set_max_score() - ' .
                     'Updated object score of item ' . $this->db_id .
@@ -3341,7 +3334,7 @@ class learnpathItem
      */
     public function set_status($status)
     {
-        if (self::debug > 0) {
+        if (self::DEBUG > 0) {
             error_log('learnpathItem::set_status(' . $status . ')', 0);
         }
 
@@ -3354,7 +3347,7 @@ class learnpathItem
 
         if ($found) {
             $this->status = $status;
-            if (self::debug > 1) {
+            if (self::DEBUG > 1) {
                 error_log(
                     'learnpathItem::set_status() - '.
                         'Updated object status of item ' . $this->db_id .
@@ -3424,7 +3417,7 @@ class learnpathItem
      */
     public function set_time($scorm_time, $format = 'scorm')
     {
-        if (self::debug > 0) {
+        if (self::DEBUG > 0) {
             error_log('learnpathItem::set_time(' . $scorm_time . ')', 0);
         }
         if ($scorm_time == '0'
@@ -3434,7 +3427,7 @@ class learnpathItem
             $my_time = time() - $this->current_start_time;
             if ($my_time > 0) {
                 $this->update_time($my_time);
-                if (self::debug > 0) {
+                if (self::DEBUG > 0) {
                     error_log(
                         'learnpathItem::set_time(' . $scorm_time . ') - ' .
                             'found asset - set time to ' . $my_time,
@@ -3475,7 +3468,7 @@ class learnpathItem
      */
     public function set_title($string = '')
     {
-        if (self::debug > 0) {
+        if (self::DEBUG > 0) {
             error_log('learnpathItem::set_title()', 0);
         }
         if (!empty($string)) {
@@ -3490,7 +3483,7 @@ class learnpathItem
      */
     public function set_type($string = '')
     {
-        if (self::debug > 0) {
+        if (self::DEBUG > 0) {
             error_log('learnpathItem::set_type()', 0);
         }
         if (!empty($string)) {
@@ -3508,7 +3501,7 @@ class learnpathItem
      */
     public function status_is($list = array())
     {
-        if (self::debug > 1) {
+        if (self::DEBUG > 1) {
             error_log(
                 'learnpathItem::status_is(' . print_r(
                     $list,
@@ -3524,7 +3517,7 @@ class learnpathItem
         $found = false;
         foreach ($list as $status) {
             if (preg_match('/^' . $status . '$/i', $currentStatus)) {
-                if (self::debug > 2) {
+                if (self::DEBUG > 2) {
                     error_log(
                         'New LP - learnpathItem::status_is() - Found status ' .
                             $status . ' corresponding to current status',
@@ -3536,7 +3529,7 @@ class learnpathItem
                 return $found;
             }
         }
-        if (self::debug > 2) {
+        if (self::DEBUG > 2) {
             error_log(
                 'New LP - learnpathItem::status_is() - Status ' .
                     $currentStatus . ' did not match request',
@@ -3555,7 +3548,7 @@ class learnpathItem
      */
     public function update_time($total_sec = 0)
     {
-        if (self::debug > 0) {
+        if (self::DEBUG > 0) {
             error_log('learnpathItem::update_time(' . $total_sec . ')', 0);
         }
         if ($total_sec >= 0) {
@@ -3597,7 +3590,7 @@ class learnpathItem
      **/
     public function scorm_update_time($total_sec = 0)
     {
-        if (self::debug > 0) {
+        if (self::DEBUG > 0) {
             error_log('Funcion called: scorm_update_time');
             error_log("total_sec: $total_sec");
         }
@@ -3620,7 +3613,7 @@ class learnpathItem
         } else {
             $total_time = $row['total_time'];
         }
-        if (self::debug > 0) {
+        if (self::DEBUG > 0) {
             error_log("total_time: $total_time");
         }
 
@@ -3667,7 +3660,7 @@ class learnpathItem
                         lp_item_id = {$this->db_id} AND 
                         lp_view_id = {$this->view_id} AND 
                         view_count = {$this->get_attempt_id()}";
-            if (self::debug > 0) {
+            if (self::DEBUG > 0) {
                 error_log($sql);
             }
             Database::query($sql);
@@ -3698,7 +3691,7 @@ class learnpathItem
      */
     public function write_objectives_to_db()
     {
-        if (self::debug > 0) {
+        if (self::DEBUG > 0) {
             error_log('learnpathItem::write_objectives_to_db()', 0);
         }
         $course_id = api_get_course_int_id();
@@ -3716,7 +3709,7 @@ class learnpathItem
             if (Database::num_rows($res) > 0) {
                 $row = Database::fetch_array($res);
                 $lp_iv_id = $row[0];
-                if (self::debug > 2) {
+                if (self::DEBUG > 2) {
                     error_log(
                         'learnpathItem::write_to_db() - Got item_view_id ' .
                             $lp_iv_id . ', now checking objectives ',
@@ -3777,13 +3770,13 @@ class learnpathItem
      */
     public function write_to_db()
     {
-        if (self::debug > 0) {
+        if (self::DEBUG > 0) {
             error_log('learnpathItem::write_to_db()', 0);
         }
 
         // Check the session visibility.
         if (!api_is_allowed_to_session_edit()) {
-            if (self::debug > 0) {
+            if (self::DEBUG > 0) {
                 error_log('return false api_is_allowed_to_session_edit');
             }
 
@@ -3825,7 +3818,7 @@ class learnpathItem
            ($this->type == 'sco' && ($credit == 'no-credit' || $mode == 'review' || $mode == 'browse'))) &&
             ($this->seriousgame_mode != 1 && $this->type == 'sco')
         ) {
-            if (self::debug > 1) {
+            if (self::DEBUG > 1) {
                 error_log(
                     "This info shouldn't be saved as the credit or lesson mode info prevent it"
                 );
@@ -3860,7 +3853,7 @@ class learnpathItem
                     //"max_time_allowed" => ,
                     "lesson_location" => $this->lesson_location
                 );
-                if (self::debug > 2) {
+                if (self::DEBUG > 2) {
                     error_log(
                         'learnpathItem::write_to_db() - Inserting into item_view forced: ' . print_r($params, 1),
                         0
@@ -3883,7 +3876,7 @@ class learnpathItem
                         lp_item_id = " . $this->db_id . " AND
                         lp_view_id = " . $this->view_id . " AND
                         view_count = " . intval($this->get_attempt_id());
-            if (self::debug > 2) {
+            if (self::DEBUG > 2) {
                 error_log(
                     'learnpathItem::write_to_db() - Querying item_view: ' . $sql,
                     0
@@ -3908,7 +3901,7 @@ class learnpathItem
                     "lesson_location" => $this->lesson_location
                 );
 
-                if (self::debug > 2) {
+                if (self::DEBUG > 2) {
                     error_log(
                         'learnpathItem::write_to_db() - Inserting into item_view forced: ' . print_r($params, 1),
                         0
@@ -4095,7 +4088,7 @@ class learnpathItem
                     }
                     $this->current_start_time = time();
                 }
-                if (self::debug > 2) {
+                if (self::DEBUG > 2) {
                     error_log(
                         'learnpathItem::write_to_db() - Updating item_view: ' . $sql,
                         0
@@ -4117,7 +4110,7 @@ class learnpathItem
                 if (Database::num_rows($res) > 0) {
                     $row = Database::fetch_array($res);
                     $lp_iv_id = $row[0];
-                    if (self::debug > 2) {
+                    if (self::DEBUG > 2) {
                         error_log(
                             'learnpathItem::write_to_db() - Got item_view_id ' .
                                 $lp_iv_id . ', now checking interactions ',
@@ -4215,7 +4208,7 @@ class learnpathItem
             }
         }
 
-        if (self::debug > 2) {
+        if (self::DEBUG > 2) {
             error_log('End of learnpathItem::write_to_db()', 0);
         }
 

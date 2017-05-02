@@ -1,6 +1,8 @@
 <?php
 /* For license terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * Process payments for the Buy Courses plugin
  * @package chamilo.plugin.buycourses
@@ -10,7 +12,8 @@ require_once '../config.php';
 $currentUserId = api_get_user_id();
 
 if (empty($currentUserId)) {
-    header('Location: ' . api_get_path(WEB_CODE_PATH) . 'auth/inscription.php');
+    Session::write('buy_course_redirect', Security::remove_XSS($_SERVER['REQUEST_URI']));
+    header('Location: '.api_get_path(WEB_CODE_PATH).'auth/inscription.php');
     exit;
 }
 

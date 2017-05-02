@@ -19,13 +19,13 @@ $sessionId = isset($_GET['session_id']) ? $_GET['session_id'] : null;
  */
 function get_number_of_courses()
 {
-    $course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
+    $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
     $sql = "SELECT COUNT(code) AS total_number_of_items FROM $course_table c";
 
     if ((api_is_platform_admin() || api_is_session_admin()) &&
         api_is_multiple_url_enabled() && api_get_current_access_url_id() != -1
     ) {
-        $access_url_rel_course_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $access_url_rel_course_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $sql .= " INNER JOIN $access_url_rel_course_table url_rel_course
                  ON (c.id = url_rel_course.c_id)";
     }
@@ -100,7 +100,7 @@ function get_course_data($from, $number_of_items, $column, $direction)
     if ((api_is_platform_admin() || api_is_session_admin()) &&
         api_is_multiple_url_enabled() && api_get_current_access_url_id() != -1
     ) {
-        $access_url_rel_course_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $access_url_rel_course_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $sql .= " INNER JOIN $access_url_rel_course_table url_rel_course
                  ON (course.id = url_rel_course.c_id)";
     }
@@ -372,40 +372,37 @@ if (isset ($_GET['search']) && $_GET['search'] === 'advanced') {
     }
 
     $courseListUrl = api_get_self();
-    $actions .= '<div class="row">';
-    $actions .= '<div class="col-md-2">';
-    $actions .= '<a href="course_add.php">'.Display::return_icon('new_course.png', get_lang('AddCourse'), '', ICON_SIZE_MEDIUM).'</a> ';
+    $actions1 = Display::url(
+        Display::return_icon('new_course.png', get_lang('AddCourse'), [], ICON_SIZE_MEDIUM),
+        api_get_path(WEB_CODE_PATH).'admin/course_add.php'
+    );
+
     if (api_get_setting('course_validation') === 'true') {
-        $actions .= '<a href="course_request_review.php">'.
-            Display::return_icon('course_request_pending.png', get_lang('ReviewCourseRequests'), '', ICON_SIZE_MEDIUM).'</a>';
+        $actions1 .= Display::url(
+            Display::return_icon('course_request_pending.png', get_lang('ReviewCourseRequests'), [], ICON_SIZE_MEDIUM),
+            api_get_path(WEB_CODE_PATH).'admin/course_request_review.php'
+        );
     }
-    $actions .= '</div>';
-    $actions .= '<div class="col-md-4">';
-    $actions .= $form->returnForm();
-    $actions .= '</div>';
-    $actions .= '<div class="col-md-4">';
-    $actions .= $sessionFilter->returnForm();
-    $actions .= '</div>';
-    $actions .= '<div class="col-md-2">';
-    $actions .= '<div class="pull-right">';
-    $actions .= $advanced;
-    $actions .= '</div>';
-    $actions .= '</div>';
-    $actions .= '</div>';
-    $actions .= '
+
+    $actions2 = $form->returnForm();
+    $actions3 = $sessionFilter->returnForm();
+    $actions4 = $advanced;
+    $actions4 .= '
     <script>
-    $(function() {
-        $("#session_name").on("change", function() {
-            var sessionId = $(this).val();
-
-            if (!sessionId) {
-                return;
-            }
-
-            window.location = "'.$courseListUrl.'?session_id="+sessionId;
+        $(function() {
+            $("#session_name").on("change", function() {
+                var sessionId = $(this).val();
+    
+                if (!sessionId) {
+                    return;
+                }
+    
+                window.location = "'.$courseListUrl.'?session_id="+sessionId;
+            });
         });
-    });
     </script>';
+
+    $actions = Display::toolbarAction('toolbar', [$actions1, $actions2, $actions3, $actions4], [2, 4, 3, 3]);
 
     if (isset($_GET['session_id']) && !empty($_GET['session_id'])) {
         // Create a sortable table with the course data filtered by session

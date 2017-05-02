@@ -17,14 +17,18 @@ use Chamilo\CourseBundle\Component\CourseCopy\Resources\Document;
  */
 class CourseSelectForm
 {
-	/**
-	 * Display the form
+    /**
+     * Display the form
      * @param array $course
-	 * @param array $hidden_fields Hidden fields to add to the form.
-	 * @param boolean $avoid_serialize the document array will be serialize. This is used in the course_copy.php file
-	 */
-	public static function display_form($course, $hidden_fields = null, $avoid_serialize = false)
-    {
+     * @param array $hidden_fields Hidden fields to add to the form.
+     * @param boolean $avoid_serialize the document array will be serialize.
+     * This is used in the course_copy.php file
+     */
+    public static function display_form(
+        $course,
+        $hidden_fields = null,
+        $avoid_serialize = false
+    ) {
         global $charset;
         $resource_titles[RESOURCE_ASSET] = get_lang('Assets');
         $resource_titles[RESOURCE_GRADEBOOK] = get_lang('Gradebook');
@@ -142,11 +146,11 @@ class CourseSelectForm
 		</script>
 		<?php
 		// get destination course title
-		if (!empty($hidden_fields['destination_course'])) {
-            $sessionTitle = !empty($hidden_fields['destination_session']) ? ' (' . api_get_session_name($hidden_fields['destination_session']) . ')' : null;
+        if (!empty($hidden_fields['destination_course'])) {
+            $sessionTitle = !empty($hidden_fields['destination_session']) ? ' ('.api_get_session_name($hidden_fields['destination_session']).')' : null;
             $course_infos = CourseManager::get_course_information($hidden_fields['destination_course']);
 			echo '<h3>';
-			echo get_lang('DestinationCourse').' : '.$course_infos['title'] . ' ('.$course_infos['code'].') '.$sessionTitle;
+			echo get_lang('DestinationCourse').' : '.$course_infos['title'].' ('.$course_infos['code'].') '.$sessionTitle;
 			echo '</h3>';
 		}
         echo '<script src="'.api_get_path(WEB_CODE_PATH).'inc/lib/javascript/upload.js" type="text/javascript"></script>';
@@ -174,7 +178,7 @@ class CourseSelectForm
 		echo get_lang('SelectResources');
 		echo '</p>';
 
-        Display::display_normal_message(get_lang('DontForgetToSelectTheMediaFilesIfYourResourceNeedIt'));
+        echo Display::return_message(get_lang('DontForgetToSelectTheMediaFilesIfYourResourceNeedIt'));
 
         foreach ($course->resources as $type => $resources) {
             if (count($resources) > 0) {
@@ -211,12 +215,12 @@ class CourseSelectForm
 						echo '<span class="title">'.$resource_titles[$type].'</span></div>';
 						echo '<div class="item-content" id="div_'.$type.'">';
 						if ($type == RESOURCE_LEARNPATH) {
-    						Display::display_warning_message(get_lang('ToExportLearnpathWithQuizYouHaveToSelectQuiz'));
-    						Display::display_warning_message(get_lang('IfYourLPsHaveAudioFilesIncludedYouShouldSelectThemFromTheDocuments'));
+    						echo Display::return_message(get_lang('ToExportLearnpathWithQuizYouHaveToSelectQuiz'), 'warning');
+    						echo Display::return_message(get_lang('IfYourLPsHaveAudioFilesIncludedYouShouldSelectThemFromTheDocuments'), 'warning');
 						}
 						if ($type == RESOURCE_DOCUMENT) {
                             if (api_get_setting('show_glossary_in_documents') != 'none') {
-                                Display::display_warning_message(get_lang('ToExportDocumentsWithGlossaryYouHaveToSelectGlossary'));
+                                echo Display::return_message(get_lang('ToExportDocumentsWithGlossaryYouHaveToSelectGlossary'), 'warning');
                             }
 						}
 
@@ -259,11 +263,9 @@ class CourseSelectForm
             foreach ($forum_categories as $forum_category_id => $forum_category) {
                 echo '<li>';
                 echo '<label class="checkbox">';
-
                 echo '<input type="checkbox" id="resource_'.RESOURCE_FORUMCATEGORY.'_'.$forum_category_id.'" my_rel="'.$forum_category_id.'" onclick="javascript:check_category(this);"  name="resource['.RESOURCE_FORUMCATEGORY.']['.$forum_category_id.']"  /> ';
                 $forum_category->show();
                 echo '</label>';
-
                 echo '</li>';
 
                 if (isset($forums[$forum_category_id])) {
@@ -305,7 +307,7 @@ class CourseSelectForm
 			/*Documents are avoided due the huge amount of memory that the serialize php function "eats"
 			(when there are directories with hundred/thousand of files) */
 			// this is a known issue of serialize
-			$course->resources['document']= null;
+			$course->resources['document'] = null;
 		}
 
 		echo '<input type="hidden" name="course" value="'.base64_encode(Course::serialize($course)).'"/>';
@@ -319,10 +321,10 @@ class CourseSelectForm
         $recycleOption = isset($_POST['recycle_option']) ? true : false;
 
 		if (empty($element_count)) {
-		    Display::display_warning_message(get_lang('NoDataAvailable'));
+		    echo Display::return_message(get_lang('NoDataAvailable'), 'warning');
 		} else {
     		if (!empty($hidden_fields['destination_session'])) {
-    			echo '<br /><button class="save" type="submit" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES, $charset))."'".')) return false;" >'.
+    			echo '<br /><button class="save" type="submit" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset))."'".')) return false;" >'.
                     get_lang('Ok').'</button>';
     		} else {
                 if ($recycleOption) {
@@ -335,8 +337,8 @@ class CourseSelectForm
     		}
 		}
 
-		CourseSelectForm::display_hidden_quiz_questions($course);
-		CourseSelectForm::display_hidden_scorm_directories($course);
+		self::display_hidden_quiz_questions($course);
+		self::display_hidden_scorm_directories($course);
 		echo '</form>';
         echo '</div>';
 		echo '<div id="dynamic_div" style="display:block;margin-left:40%;margin-top:10px;height:50px;"></div>';
@@ -347,7 +349,7 @@ class CourseSelectForm
      */
     public static function display_hidden_quiz_questions($course)
     {
-		if(is_array($course->resources)){
+		if (is_array($course->resources)) {
 			foreach ($course->resources as $type => $resources) {
 				if (count($resources) > 0) {
 					switch ($type) {
@@ -367,10 +369,10 @@ class CourseSelectForm
      */
     public static function display_hidden_scorm_directories($course)
     {
-        if (is_array($course->resources)){
+        if (is_array($course->resources)) {
 			foreach ($course->resources as $type => $resources) {
 				if (count($resources) > 0) {
-					switch($type) {
+					switch ($type) {
 						case RESOURCE_SCORM:
 							foreach ($resources as $id => $resource) {
 								echo '<input type="hidden" name="resource['.RESOURCE_SCORM.']['.$id.']" id="resource['.RESOURCE_SCORM.']['.$id.']" value="On" />';
@@ -394,7 +396,6 @@ class CourseSelectForm
 	public static function get_posted_course($from = '', $session_id = 0, $course_code = '')
     {
         $course = null;
-
         if (isset($_POST['course'])) {
             $course = Course::unserialize(base64_decode($_POST['course']));
         } else {
@@ -415,23 +416,23 @@ class CourseSelectForm
 		if ($from === 'copy_course') {
 			if (is_array($resource)) {
 				$resource = array_keys($resource);
-
-				foreach	($resource as $resource_item) {
-
-					$condition_session = '';
+				foreach ($resource as $resource_item) {
+					$conditionSession = '';
 					if (!empty($session_id)) {
 						$session_id = intval($session_id);
-						$condition_session = ' AND d.session_id ='.$session_id;
+						$conditionSession = ' AND d.session_id ='.$session_id;
 					}
 
 					$sql = 'SELECT d.id, d.path, d.comment, d.title, d.filetype, d.size
-							FROM '.$table_doc.' d, '.$table_prop.' p
+							FROM '.$table_doc.' d 
+							INNER JOIN '.$table_prop.' p
+							ON (d.c_id = p.c_id)
 							WHERE
 							    d.c_id = '.$course_id.' AND
                                 p.c_id = '.$course_id.' AND
                                 tool = \''.TOOL_DOCUMENT.'\' AND
                                 p.ref = d.id AND p.visibility != 2 AND
-                                d.id = '.$resource_item.$condition_session.'
+                                d.id = '.$resource_item.$conditionSession.'
 							ORDER BY path';
 					$db_result = Database::query($sql);
 					while ($obj = Database::fetch_object($db_result)) {
@@ -452,8 +453,8 @@ class CourseSelectForm
                                         tool = '".RESOURCE_DOCUMENT."' AND
                                         ref = $resource_item ";
                             $res = Database::query($sql);
-                            $all_properties = array ();
-                            while ($item_property = Database::fetch_array($res,'ASSOC')) {
+                            $all_properties = array();
+                            while ($item_property = Database::fetch_array($res, 'ASSOC')) {
                                 $all_properties[] = $item_property;
                             }
                             $course->resources[RESOURCE_DOCUMENT][$resource_item]->item_properties = $all_properties;
@@ -465,10 +466,9 @@ class CourseSelectForm
 
 		if (is_array($course->resources)) {
 			foreach ($course->resources as $type => $resources) {
-
 				switch ($type) {
 					case RESOURCE_SURVEYQUESTION:
-						foreach($resources as $id => $obj) {
+						foreach ($resources as $id => $obj) {
 						    if (isset($_POST['resource'][RESOURCE_SURVEY]) &&
                                 is_array($_POST['resource'][RESOURCE_SURVEY]) &&
                                 !in_array($obj->survey_id, array_keys($_POST['resource'][RESOURCE_SURVEY]))
@@ -528,9 +528,13 @@ class CourseSelectForm
                                 }
                             }
                         }
+                        // no break
 					case RESOURCE_LINKCATEGORY:
+					    // no break
 					case RESOURCE_FORUMCATEGORY:
+					    // no break
 					case RESOURCE_QUIZQUESTION:
+					    // no break
 					case RESOURCE_DOCUMENT:
 						// Mark folders to import which are not selected by the user to import,
 						// but in which a document was selected.
@@ -557,13 +561,14 @@ class CourseSelectForm
 									}
 								}
 							}
-					default :
+                        // no break
+					default:
 						if (!empty($resources) && is_array($resources)) {
 							foreach ($resources as $id => $obj) {
 								$resource_is_used_elsewhere = $course->is_linked_resource($obj);
 								// check if document is in a quiz (audio/video)
 								if ($type == RESOURCE_DOCUMENT && $course->has_resources(RESOURCE_QUIZ)) {
-									foreach($course->resources[RESOURCE_QUIZ] as $quiz) {
+									foreach ($course->resources[RESOURCE_QUIZ] as $quiz) {
                                         $quiz = $quiz->obj;
 										if (isset($quiz->media) && $quiz->media == $id) {
 											$resource_is_used_elsewhere = true;
@@ -588,9 +593,12 @@ class CourseSelectForm
 	 * @param array $hidden_fields Hidden fields to add to the form.
      * @param boolean $avoid_serialize the document array will be serialize. This is used in the course_copy.php file
 	 */
-	 public static function display_form_session_export($list_course, $hidden_fields = null, $avoid_serialize = false)
-     {
-         ?>
+    public static function display_form_session_export(
+        $list_course,
+        $hidden_fields = null,
+        $avoid_serialize = false
+    ) {
+        ?>
 		<script>
 			function exp(item) {
 				el = document.getElementById('div_'+item);
@@ -635,15 +643,15 @@ class CourseSelectForm
 		<?php
 
 		//get destination course title
-		if(!empty($hidden_fields['destination_course'])) {
+		if (!empty($hidden_fields['destination_course'])) {
              if (!empty($hidden_fields['destination_session'])) {
-                 $sessionTitle = ' (' . api_get_session_name($hidden_fields['destination_session']) . ')';
+                 $sessionTitle = ' ('.api_get_session_name($hidden_fields['destination_session']).')';
              } else {
                  $sessionTitle = null;
              }
             $course_infos = CourseManager::get_course_information($hidden_fields['destination_course']);
 			echo '<h3>';
-				echo get_lang('DestinationCourse') . ' : ' . $course_infos['title'] . $sessionTitle;
+				echo get_lang('DestinationCourse').' : '.$course_infos['title'].$sessionTitle;
 			echo '</h3>';
 		}
 
@@ -681,7 +689,7 @@ class CourseSelectForm
 		if ($avoid_serialize) {
 			//Documents are avoided due the huge amount of memory that the serialize php function "eats" (when there are directories with hundred/thousand of files)
 			// this is a known issue of serialize
-			$course->resources['document']= null;
+			$course->resources['document'] = null;
 		}
 		echo '<input type="hidden" name="course" value="'.base64_encode(Course::serialize($course)).'"/>';
 		if (is_array($hidden_fields)) {
@@ -691,8 +699,8 @@ class CourseSelectForm
 			}
 		}
 		echo '<br /><button class="save" type="submit" onclick="checkLearnPath(\''.addslashes(get_lang('DocumentsWillBeAddedToo')).'\')">'.get_lang('Ok').'</button>';
-		CourseSelectForm :: display_hidden_quiz_questions($course);
-		CourseSelectForm :: display_hidden_scorm_directories($course);
+		self::display_hidden_quiz_questions($course);
+		self::display_hidden_scorm_directories($course);
 		echo '</form>';
         echo '</div>';
 		echo '<div id="dynamic_div" style="display:block;margin-left:40%;margin-top:10px;height:50px;"></div>';

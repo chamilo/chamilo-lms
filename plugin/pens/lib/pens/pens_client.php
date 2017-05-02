@@ -26,8 +26,8 @@
  * @licence http://www.gnu.org/licenses/gpl.txt
  */
  
-require_once(dirname(__FILE__)."/pens_controller.php");
-require_once(dirname(__FILE__)."/pens_request_handler.php");
+require_once __DIR__.'/pens_controller.php';
+require_once __DIR__.'/pens_request_handler.php';
 
 /**
  * PENSClient

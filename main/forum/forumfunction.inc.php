@@ -3656,16 +3656,6 @@ function show_edit_post_form(
     // Validation or display
     if ($form->validate()) {
         $values = $form->exportValues();
-        if (isset($values['thread_qualify_gradebook']) && $values['thread_qualify_gradebook'] == '1' &&
-            empty($values['weight_calification'])
-        ) {
-            echo Display::return_message(
-                get_lang('YouMustAssignWeightOfQualification').'&nbsp;<a href="javascript:window.history.go(-1);">'.get_lang('Back').'</a>',
-                'error',
-                false
-            );
-            return false;
-        }
         store_edit_post($current_forum, $values);
     } else {
         // Delete from $_SESSION forum attachment from other posts
@@ -3704,16 +3694,33 @@ function store_edit_post($forumInfo, $values)
     }
 
     if (!empty($first_post) && $first_post['post_id'] == $values['post_id']) {
+        $where = ['c_id = ? AND thread_id = ?' => [$course_id, $values['thread_id']]];
+
+         if (Gradebook::is_active() &&
+            isset($values['thread_qualify_gradebook']) && $values['thread_qualify_gradebook'] == '1' &&
+            empty($values['weight_calification'])
+        ) {
+            echo Display::return_message(
+                get_lang('YouMustAssignWeightOfQualification').'&nbsp;<a href="javascript:window.history.go(-1);">'.get_lang('Back').'</a>',
+                'warning',
+                false
+            );
+        } else {
+             // Edit
+             $params = [
+                'thread_title_qualify' => $values['calification_notebook_title'],
+                'thread_qualify_max' => api_float_val($values['numeric_calification']),
+                'thread_weight' => api_float_val($values['weight_calification']),
+                'thread_peer_qualify' => $values['thread_peer_qualify'],
+            ];
+             Database::update($threadTable, $params, $where);
+        }
+
+        // Simple edit
         $params = [
             'thread_title' => $values['post_title'],
             'thread_sticky' => isset($values['thread_sticky']) ? $values['thread_sticky'] : null,
-            'thread_title_qualify' => $values['calification_notebook_title'],
-            'thread_qualify_max' => api_float_val($values['numeric_calification']),
-            'thread_weight' => api_float_val($values['weight_calification']),
-            'thread_peer_qualify' => $values['thread_peer_qualify'],
         ];
-        $where = ['c_id = ? AND thread_id = ?' => [$course_id, $values['thread_id']]];
-
         Database::update($threadTable, $params, $where);
     }
 

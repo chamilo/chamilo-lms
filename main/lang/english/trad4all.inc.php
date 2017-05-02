@@ -8004,4 +8004,5 @@ $StudyCycle = "Semester";
 $ReadingComprehension = "Reading comprehension";
 $ReadingQuestionCongratsSpeedXNotReachedForYWords = "Sorry, it seems like a speed of %s words/minute was too fast for this text of %s words.";
 $ReadingQuestionCongratsSpeedXReachedForYWords = "Congratulations, you have reached and correctly understood, at a speed of %s words per minute, a text of a total %s words.";
+$ReadingComprehensionLevelX = "%s words per minute";
 ?>

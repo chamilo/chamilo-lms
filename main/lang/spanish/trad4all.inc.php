@@ -8019,4 +8019,5 @@ $StudyCycle = "Ciclo de estudio";
 $ReadingComprehension = "Comprensión lectora";
 $ReadingQuestionCongratsSpeedXNotReachedForYWords = "Lo sentimos, parece que %s palabras/minuto para este texto de %s palabras fue demasiado rápido, ya que tu respuesta de comprensión lectora fue equivocada.";
 $ReadingQuestionCongratsSpeedXReachedForYWords = "Felicitaciones, ha alcanzado la celeridad de %s palabras por minuto con un correcto entendimiento sobre un texto de %s palabras.";
+$ReadingComprehensionLevelX = "%s palabras por minuto";
 ?>

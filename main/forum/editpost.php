@@ -225,7 +225,7 @@ $values = show_edit_post_form(
     isset($_SESSION['formelements']) ? $_SESSION['formelements'] : ''
 );
 
-if (!empty($values) and isset($_POST['SubmitPost'])) {
+if (!empty($values) && isset($_POST['SubmitPost'])) {
     store_edit_post($current_forum, $values);
 }
 

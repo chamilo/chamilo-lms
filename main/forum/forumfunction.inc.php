@@ -3525,7 +3525,7 @@ function show_edit_post_form(
             get_lang('QualificationNumeric'),
             array(
                 'value' => $current_thread['thread_qualify_max'],
-                'style' => 'width:40px',
+                'style' => 'width:100px',
             )
         );
         $form->applyFilter('numeric_calification', 'html_filter');
@@ -3544,7 +3544,7 @@ function show_edit_post_form(
             array(get_lang('QualifyWeight'), null, ''),
             array(
                 'value' => $current_thread['thread_weight'],
-                'style' => 'width:40px',
+                'style' => 'width:100px',
             )
         );
         $form->applyFilter('weight_calification', 'html_filter');

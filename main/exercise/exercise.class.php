@@ -3261,6 +3261,7 @@ class Exercise
                 case UNIQUE_ANSWER:
                 case UNIQUE_ANSWER_IMAGE:
                 case UNIQUE_ANSWER_NO_OPTION:
+                case READING_COMPREHENSION:
                     if ($from_database) {
                         $sql = "SELECT answer FROM $TBL_TRACK_ATTEMPT
                                 WHERE
@@ -4204,7 +4205,8 @@ class Exercise
                                     UNIQUE_ANSWER_NO_OPTION,
                                     MULTIPLE_ANSWER,
                                     MULTIPLE_ANSWER_COMBINATION,
-                                    GLOBAL_MULTIPLE_ANSWER
+                                    GLOBAL_MULTIPLE_ANSWER,
+                                    READING_COMPREHENSION,
                                 )
                             )
                         ) {
@@ -4503,11 +4505,18 @@ class Exercise
 
                     switch ($answerType) {
                         case UNIQUE_ANSWER:
+                            //no break
                         case UNIQUE_ANSWER_IMAGE:
+                            //no break
                         case UNIQUE_ANSWER_NO_OPTION:
+                            //no break
                         case MULTIPLE_ANSWER:
+                            //no break
                         case GLOBAL_MULTIPLE_ANSWER :
+                            //no break
                         case MULTIPLE_ANSWER_COMBINATION:
+                            //no break
+                        case READING_COMPREHENSION:
                             if ($answerId == 1) {
                                 ExerciseShowFunctions::display_unique_or_multiple_answer(
                                     $feedback_type,
@@ -5229,7 +5238,7 @@ class Exercise
                     false,
                     $objQuestionTmp->getAbsoluteFilePath()
                 );
-            } elseif (in_array($answerType, [UNIQUE_ANSWER, UNIQUE_ANSWER_IMAGE, UNIQUE_ANSWER_NO_OPTION])) {
+            } elseif (in_array($answerType, [UNIQUE_ANSWER, UNIQUE_ANSWER_IMAGE, UNIQUE_ANSWER_NO_OPTION, READING_COMPREHENSION])) {
                 $answer = $choice;
                 Event::saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
                 //            } elseif ($answerType == HOT_SPOT || $answerType == HOT_SPOT_DELINEATION) {

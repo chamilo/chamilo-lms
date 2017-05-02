@@ -53,7 +53,8 @@ abstract class Question
         DRAGGABLE => ['Draggable.php', 'Draggable'],
         MATCHING_DRAGGABLE => ['MatchingDraggable.php', 'MatchingDraggable'],
         //MEDIA_QUESTION => array('media_question.class.php' , 'MediaQuestion')
-        ANNOTATION => ['Annotation.php', 'Annotation']
+        ANNOTATION => ['Annotation.php', 'Annotation'],
+        READING_COMPREHENSION => ['ReadingComprehension.php', 'ReadingComprehension']
     );
 
     /**
@@ -266,7 +267,7 @@ abstract class Question
      * @author Nicolas Raynaud
      * @return integer - level of the question, 0 by default.
      */
-    public function selectLevel()
+    public function getLevel()
     {
         return $this->level;
     }
@@ -1868,6 +1869,7 @@ abstract class Question
      * @param string $feedback_type
      * @param int $counter
      * @param float $score
+     * @return string HTML string with the header of the question (before the answers table)
      */
     function return_header($feedback_type = null, $counter = null, $score = null)
     {
@@ -1906,7 +1908,29 @@ abstract class Question
             "<div class=\"rib rib-$class\"><h3>$score_label</h3></div> <h4>{$score['result']}</h4>",
             array('class' => 'ribbon')
         );
-        $header .= Display::div($this->description, array('class' => 'question_description'));
+        if ($this->type != READING_COMPREHENSION) {
+            // Do not show the description (the text to read) if the question is of type READING_COMPREHENSION
+            $header .= Display::div($this->description, array('class' => 'question_description'));
+        } else {
+            if ($score['pass'] == true) {
+                $message = Display::div(
+                    sprintf(
+                        get_lang('ReadingQuestionCongratsSpeedXReachedForYWords'),
+                        ReadingComprehension::$speeds[$this->level],
+                        $this->getWordsCount()
+                    )
+                );
+            } else {
+                $message = Display::div(
+                    sprintf(
+                        get_lang('ReadingQuestionCongratsSpeedXNotReachedForYWords'),
+                        ReadingComprehension::$speeds[$this->level],
+                        $this->getWordsCount()
+                    )
+                );
+            }
+            $header .= $message.'<br />';
+        }
 
         return $header;
     }

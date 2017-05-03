@@ -2108,15 +2108,16 @@ abstract class Question
             4 => 4,
             5 => 5
         );
+
         return $select_level;
     }
 
     /**
-     * @return null|string
+     * @return string
      */
     public function show_media_content()
     {
-        $html = null;
+        $html = '';
         if ($this->parent_id != 0) {
             $parent_question = self::read($this->parent_id);
             $html = $parent_question->show_media_content();

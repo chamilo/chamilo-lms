@@ -29,17 +29,20 @@ class ReadingComprehension extends UniqueAnswer
         4 => 300,
         5 => 600
     ];
+
     /**
      * The number of words in the question description (which serves as the
      * text to read)
      * @var int $wordsCount
      */
     public $wordsCount = 0;
+
     /**
      * Number of words expected to show per refresh
      * @var int
      */
     public $expectedWordsPerRefresh = 0;
+
     /**
      * Refresh delay in seconds
      * @var int
@@ -56,6 +59,11 @@ class ReadingComprehension extends UniqueAnswer
         $this->isContent = $this->getIsContent();
     }
 
+    /**
+     * @param $wordsCount
+     * @param $turns
+     * @param $text
+     */
     private function displayReading($wordsCount, $turns, $text)
     {
         $view = new Template('', false, false, false, true, false, false);
@@ -113,11 +121,13 @@ class ReadingComprehension extends UniqueAnswer
 
         $this->displayReading($this->wordsCount, $turns, $text);
     }
+
     /**
      * Returns total count of words of the text to read
      * @return int
      */
-    public function getWordsCount() {
+    public function getWordsCount()
+    {
         $words = str_word_count($this->selectDescription(), 2, '0..9');
         $this->wordsCount = count($words);
         return $this->wordsCount;
@@ -125,7 +135,6 @@ class ReadingComprehension extends UniqueAnswer
 
     /**
      * @inheritdoc
-     * @param FormValidator $form
      */
     public function createForm(&$form)
     {
@@ -140,7 +149,14 @@ class ReadingComprehension extends UniqueAnswer
         // question name
         if (api_get_configuration_value('save_titles_as_html')) {
             $editorConfig = ['ToolbarSet' => 'Minimal'];
-            $form->addHtmlEditor('questionName', get_lang('Question'), false, false, $editorConfig, true);
+            $form->addHtmlEditor(
+                'questionName',
+                get_lang('Question'),
+                false,
+                false,
+                $editorConfig,
+                true
+            );
         } else {
             $form->addText('questionName', get_lang('Question'), false);
         }
@@ -175,7 +191,6 @@ class ReadingComprehension extends UniqueAnswer
 
     /**
      * @inheritdoc
-     * @return array
      */
     public static function get_default_levels()
     {
@@ -188,6 +203,4 @@ class ReadingComprehension extends UniqueAnswer
         );
         return $select_level;
     }
-
-
 }

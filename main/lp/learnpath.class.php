@@ -62,7 +62,7 @@ class learnpath
     public $refs_list = array (); //list of items by ref => db_id. Used only for prerequisites match.
     // !!!This array (refs_list) is built differently depending on the nature of the LP.
     // If SCORM, uses ref, if Chamilo, uses id to keep a unique value.
-    public $type; //type of learnpath. Could be 'dokeos', 'scorm', 'scorm2004', 'aicc', ...
+    public $type; //type of learnpath. Could be 'chamilo', 'scorm', 'scorm2004', 'aicc', ...
     // TODO: Check if this type variable is useful here (instead of just in the controller script).
     public $user_id; //ID of the user that is viewing/using the course
     public $update_queue = array();

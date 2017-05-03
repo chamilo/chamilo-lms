@@ -229,27 +229,14 @@ if (!empty($threadData)) {
     $defaults['thread_peer_qualify'] = 0;
 }
 $form->setDefaults(isset($defaults) ? $defaults : null);
-
 $form->addButtonUpdate(get_lang('ModifyThread'), 'SubmitPost');
 
 if ($form->validate()) {
-    $redirectUrl = api_get_path(WEB_CODE_PATH).'forum/viewforum.php?forum='.$forumId;
+    $redirectUrl = api_get_path(WEB_CODE_PATH).'forum/viewforum.php?forum='.$forumId.'&'.api_get_cidreq();
 
     $check = Security::check_token('post');
     if ($check) {
         $values = $form->exportValues();
-
-//        if (isset($values['thread_qualify_gradebook']) &&
-//            $values['thread_qualify_gradebook'] == '1' &&
-//            empty($values['weight_calification'])
-//        ) {
-//            Display::addFlash(
-//                Display::return_message(get_lang('YouMustAssignWeightOfQualification'), 'error', false)
-//            );
-//            header('Location: '.$redirectUrl);
-//            exit;
-//        }
-
         Security::clear_token();
         updateThread($values);
         header('Location: '.$redirectUrl);
@@ -261,9 +248,15 @@ if ($form->validate()) {
     $form->setConstants(array('sec_token' => $token));
 }
 
-$orginIsLearpath = $origin == 'learnpath';
+$originIsLearnPath = $origin == 'learnpath';
 
-$view = new Template('', !$orginIsLearpath, !$orginIsLearpath, $orginIsLearpath, $orginIsLearpath);
+$view = new Template(
+    '',
+    !$originIsLearnPath,
+    !$originIsLearnPath,
+    $originIsLearnPath,
+    $originIsLearnPath
+);
 $view->assign(
     'actions',
     Display::toolbarAction('toolbar', $actions)

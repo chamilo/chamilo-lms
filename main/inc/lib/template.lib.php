@@ -753,7 +753,7 @@ class Template
         }
 
         if (api_get_setting('include_asciimathml_script') == 'true') {
-            $bowerJsFiles[] = 'MathJax/MathJax.js?config=AM_HTMLorMML';
+            $bowerJsFiles[] = 'MathJax/MathJax.js?config=TeX-AMS_HTML';
         }
 
         if ($isoCode != 'en') {

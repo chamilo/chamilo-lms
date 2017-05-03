@@ -46,7 +46,15 @@ class TestProposedAnswer extends Basic
     {
         return [
             ['Bold', 'Subscript', 'Superscript'],
-            ['Image', 'Link', 'Audio', 'Table', 'PasteFromWord', 'inserthtml'],
+            [
+                'Image',
+                'Link',
+                'Audio',
+                'Table',
+                'PasteFromWord',
+                'inserthtml',
+                api_get_setting('enabled_mathjax') === 'true' ? 'Mathjax' : ''
+            ],
             ['Asciimath', 'Asciisvg'],
             ['Maximize', 'Source']
         ];

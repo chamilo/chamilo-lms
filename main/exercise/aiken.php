@@ -25,7 +25,10 @@ if (!api_is_allowed_to_edit(null, true)) {
 }
 
 // the breadcrumbs
-$interbreadcrumb[] = array("url" => 'exercise.php?'.api_get_cidreq(), "name" => get_lang('Exercises'));
+$interbreadcrumb[] = array(
+    "url" => 'exercise.php?'.api_get_cidreq(),
+    "name" => get_lang('Exercises'),
+);
 $is_allowedToEdit = api_is_allowed_to_edit(null, true);
 // import file
 if ((api_is_allowed_to_edit(null, true))) {

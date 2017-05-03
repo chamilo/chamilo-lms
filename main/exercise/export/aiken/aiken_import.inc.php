@@ -7,6 +7,7 @@
  * @author César Perales <cesar.perales@gmail.com> Parse function for Aiken format
  * @package chamilo.exercise
  */
+
 /**
  * Security check
  */
@@ -20,12 +21,14 @@ if (count(get_included_files()) == 1)
  * @param int $mode
  * @return string
  */
-function tempdir($dir, $prefix = 'tmp', $mode = 0777) {
-    if (substr($dir, -1) != '/')
+function tempdir($dir, $prefix = 'tmp', $mode = 0777)
+{
+    if (substr($dir, -1) != '/') {
         $dir .= '/';
+    }
 
     do {
-        $path = $dir . $prefix . mt_rand(0, 9999999);
+        $path = $dir.$prefix.mt_rand(0, 9999999);
     } while (!mkdir($path, $mode));
 
     return $path;
@@ -40,7 +43,12 @@ function aiken_display_form()
     $name_tools = get_lang('ImportAikenQuiz');
     $form  = '<div class="actions">';
     $form .= '<a href="exercise.php?show=test&'.api_get_cidreq().'">' .
-        Display::return_icon('back.png', get_lang('BackToExercisesList'),'',ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon(
+            'back.png',
+            get_lang('BackToExercisesList'),
+            '',
+            ICON_SIZE_MEDIUM
+        ).'</a>';
     $form .= '</div>';
     $form_validator = new FormValidator(
         'aiken_upload',
@@ -66,14 +74,16 @@ function aiken_display_form()
  * @param string $uploadPath
  * @return bool True on success, false on failure
  */
-function get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath) {
+function get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath)
+{
     $_course = api_get_course_info();
     $_user = api_get_user_info();
-    //Check if the file is valid (not to big and exists)
-    if (!isset ($_FILES['userFile']) || !is_uploaded_file($_FILES['userFile']['tmp_name'])) {
+    // Check if the file is valid (not to big and exists)
+    if (!isset($_FILES['userFile']) || !is_uploaded_file($_FILES['userFile']['tmp_name'])) {
         // upload failed
         return false;
     }
+
     if (preg_match('/.zip$/i', $_FILES['userFile']['name']) && handle_uploaded_document($_course, $_FILES['userFile'], $baseWorkDir, $uploadPath, $_user['user_id'], 0, null, 1, 'overwrite', false)) {
         if (!function_exists('gzopen')) {
             return false;
@@ -117,7 +127,6 @@ function aiken_import_exercise($file)
     // unzip the uploaded file in a tmp directory
     if (preg_match('/.(zip|txt)$/i', $file)) {
         if (!get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath)) {
-
             return 'ThereWasAProblemWithYourFile';
         }
     }
@@ -155,7 +164,6 @@ function aiken_import_exercise($file)
     }
 
     if ($result !== true) {
-
         return $result;
     }
 
@@ -236,7 +244,8 @@ function aiken_import_exercise($file)
  * @return string|boolean True on success, error message on error
  * @assert ('','','') === false
  */
-function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile) {
+function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile)
+{
     global $questionTempDir;
 
     $questionTempDir = $exercisePath . '/' . $file . '/';
@@ -252,13 +261,13 @@ function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile) 
     $answers_array = array();
     $new_question = true;
     foreach ($data as $line => $info) {
-        if ($question_index > 0 && $new_question == true && preg_match('/^(\r)?\n/',$info)) {
+        if ($question_index > 0 && $new_question == true && preg_match('/^(\r)?\n/', $info)) {
             // double empty line
             continue;
         }
         $new_question = false;
         //make sure it is transformed from iso-8859-1 to utf-8 if in that form
-        if (!mb_check_encoding($info,'utf-8') && mb_check_encoding($info,'iso-8859-1')) {
+        if (!mb_check_encoding($info,'utf-8') && mb_check_encoding($info, 'iso-8859-1')) {
             $info = utf8_encode($info);
         }
         $exercise_info['question'][$question_index]['type'] = 'MCUA';
@@ -290,7 +299,7 @@ function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile) 
         } elseif (preg_match('/^ETIQUETAS:\s?([A-Z])\s?/', $info, $matches)) {
             //TAGS for chamilo >= 1.10 (Spanish e-ducativa format)
             $exercise_info['question'][$question_index]['answer_tags'] = explode(',', $matches[1]);
-        } elseif (preg_match('/^(\r)?\n/',$info)) {
+        } elseif (preg_match('/^(\r)?\n/', $info)) {
             //moving to next question (tolerate \r\n or just \n)
             if (empty($exercise_info['question'][$question_index]['correct_answers'])) {
                 error_log('Aiken: Error in question index '.$question_index.': no correct answer defined');
@@ -329,6 +338,7 @@ function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile) 
 /**
  * Imports the zip file
  * @param array $array_file ($_FILES)
+ * @return bool
  */
 function aiken_import_file($array_file)
 {
@@ -342,7 +352,6 @@ function aiken_import_file($array_file)
     if ($process && $unzip == 1) {
         $imported = aiken_import_exercise($array_file['name']);
         if (is_numeric($imported) && !empty($imported)) {
-
             Display::addFlash(Display::return_message(get_lang('Uploaded')));
 
             return $imported;

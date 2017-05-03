@@ -11,13 +11,14 @@ if ( count( get_included_files() ) == 1 ) die( '---' );
 
 if (!function_exists('mime_content_type')) {
 
-	/**
-	 * @param string $filename
+    /**
+     * @param string $filename
      * @return string
-	 */
-	function mime_content_type($filename) {
-		return DocumentManager::file_get_mime_type((string)$filename);
-	}
+     */
+    function mime_content_type($filename)
+    {
+        return DocumentManager::file_get_mime_type((string)$filename);
+    }
 }
 
 /**
@@ -30,24 +31,27 @@ class Aiken2Question extends Question
      */
     function setAnswer()
     {
-        switch($this->type)
-        {
-            case MCUA :
+        switch ($this->type) {
+            case MCUA:
                 $answer = new AikenAnswerMultipleChoice($this->id);
-            	return $answer;
+
+                return $answer;
             default:
                 $answer = null;
                 break;
         }
+
         return $answer;
     }
+
     function createAnswersForm($form)
     {
-    	return true;
+        return true;
     }
+
     function processAnswersCreation($form)
     {
-    	return true;
+        return true;
     }
 }
 

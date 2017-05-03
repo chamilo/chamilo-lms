@@ -640,8 +640,9 @@ class AnnouncementManager
                 );
             }
 
-            // Store in item_property (first the groups, then the users
-            if (!isset($to_users)) {
+            // Store in item_property (first the groups, then the users)
+            //if (!isset($to_users)) {
+            if (isset($to_users[0]) && $to_users[0] === 'everyone') {
                 // when no user is selected we send it to everyone
                 $send_to = CourseManager::separateUsersGroups($to);
                 // storing the selected groups
@@ -684,6 +685,7 @@ class AnnouncementManager
                 self::addAnnouncementToAllUsersInSessions($last_id);
             }
         }
+
         return $last_id;
     }
 

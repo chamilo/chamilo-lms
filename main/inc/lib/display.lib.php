@@ -2341,9 +2341,11 @@ class Display
      */
     public static function contentPanel($content)
     {
-        return '<div class="panel-body">
-                '.$content.'
-                </div>';
+        if (empty($content)) {
+            return '';
+        }
+
+        return '<div class="panel-body">'.$content.'</div>';
     }
 
     /**

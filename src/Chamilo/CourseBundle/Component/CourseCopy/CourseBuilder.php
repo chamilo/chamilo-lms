@@ -488,6 +488,7 @@ class CourseBuilder
                     $item['category_id'],
                     $item['on_homepage']
                 );
+                $link->target = $item['target'];
                 $this->course->add_resource($link);
                 $this->course->resources[RESOURCE_LINK][$item['id']]->add_linked_resource(
                     RESOURCE_LINKCATEGORY,

@@ -1291,6 +1291,7 @@ class CourseRestorer
                 $params['category_id'] = $cat_id;
                 $params['on_homepage'] = $link->on_homepage;
                 $params['display_order'] = $max_order + 1;
+                $params['target'] = $link->target;
 
                 $id = Database::insert($link_table, $params);
 

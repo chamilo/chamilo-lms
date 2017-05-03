@@ -1610,10 +1610,10 @@ class Link extends Model
 
         // Displaying the links which have no category (thus category = 0 or NULL),
         // if none present this will not be displayed
-        $sql = "SELECT * FROM $tbl_link
+        $sql = "SELECT COUNT(1) AS count FROM $tbl_link
                 WHERE c_id = $course_id AND (category_id=0 OR category_id IS NULL)";
         $result = Database::query($sql);
-        $count = Database::num_rows($result);
+        $count = Database::result($result, 0, 'count');
 
         if ($count !== 0) {
             echo Display::panel(
@@ -1622,7 +1622,7 @@ class Link extends Model
                     api_get_course_int_id(),
                     api_get_session_id()
                 ),
-                get_lang('General')
+                get_lang('NoCategory')
             );
         }
 

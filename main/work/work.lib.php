@@ -3323,6 +3323,7 @@ function deleteCommentFile($id, $courseInfo = array())
  * Adds a comments to the work document
  * @param array $courseInfo
  * @param int $userId
+ * @param array $parentWork
  * @param array $work
  * @param array $data
  * @return int
@@ -3357,7 +3358,7 @@ function addWorkComment($courseInfo, $userId, $parentWork, $work, $data)
 
     $userIdListToSend = array();
     if (api_is_allowed_to_edit()) {
-        if (isset($data['send_mail']) && $data['send_mail']) {
+        if (isset($data['send_email']) && $data['send_email']) {
             // Teacher sends a feedback
             $userIdListToSend = array($work['user_id']);
         }

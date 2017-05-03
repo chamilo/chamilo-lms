@@ -65,7 +65,7 @@ if (!api_is_allowed_to_edit(false, true) &&
 
 // 2. the forumcategory or forum is locked (locked <>0) and the user is not a course manager
 if (!api_is_allowed_to_edit(false, true) &&
-    (($currentForumCategory['visibility'] && $currentForumCategory['locked'] <> 0) OR $currentForum['locked'] <> 0)
+    (($currentForumCategory['visibility'] && $currentForumCategory['locked'] <> 0) || $currentForum['locked'] <> 0)
 ) {
     api_not_allowed();
 }
@@ -119,13 +119,11 @@ $tableLink = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 $htmlHeadXtra[] = <<<JS
     <script>
     $(document).on('ready', function() {
-
         if ($('#thread_qualify_gradebook').is(':checked') == true) {
             document.getElementById('options_field').style.display = 'block';
         } else {
             document.getElementById('options_field').style.display = 'none';
         }
-
         $('#thread_qualify_gradebook').click(function() {
             if ($('#thread_qualify_gradebook').is(':checked') == true) {
                 document.getElementById('options_field').style.display = 'block';

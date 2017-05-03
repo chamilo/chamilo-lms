@@ -74,7 +74,7 @@ class ReadingComprehension extends UniqueAnswer
         $view->assign('text', nl2br($text));
         $view->assign('words_count', $wordsCount);
         $view->assign('turns', $turns);
-        $view->assign('refreshTime', $this->refreshTime);
+        $view->assign('refresh_time', $this->refreshTime);
         $view->display($template);
     }
 

@@ -96,6 +96,6 @@
 
         updateView();
 
-        var timeOuId = window.setInterval(updateView, {{ refreshTime }} * 1000);
+        var timeOuId = window.setInterval(updateView, {{ refresh_time }} * 1000);
     });
 </script>

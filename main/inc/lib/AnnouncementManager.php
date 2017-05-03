@@ -652,7 +652,7 @@ class AnnouncementManager
                             $_course,
                             TOOL_ANNOUNCEMENT,
                             $last_id,
-                            "AnnouncementAdded",
+                            'AnnouncementAdded',
                             api_get_user_id(),
                             $group
                         );

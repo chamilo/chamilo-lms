@@ -348,18 +348,17 @@ abstract class AbstractLink implements GradebookItem
             isset($this->weight) &&
             isset($this->visible)
         ) {
-            $tbl_grade_links = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-            $sql = "SELECT count(*) FROM ".$tbl_grade_links."
+            $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+            $sql = "SELECT count(*) count FROM $table
                     WHERE
-                        ref_id=".$this->get_ref_id()." AND
+                        ref_id = ".$this->get_ref_id()." AND
                         category_id =  ".$this->category->get_id()." AND
                         course_code = '".$this->course_code."' AND
-                        type =  ".$this->type." ";
-
+                        type =  ".$this->type;
             $result = Database::query($sql);
-            $row_testing = Database::fetch_array($result);
+            $row = Database::fetch_array($result, 'ASSOC');
 
-            if ($row_testing[0] == 0) {
+            if ($row['count'] == 0) {
                 $params = [
                     'type' => $this->get_type(),
                     'ref_id' => $this->get_ref_id(),
@@ -371,10 +370,10 @@ abstract class AbstractLink implements GradebookItem
                     'created_at' => api_get_utc_datetime(),
                     'locked' => 0
                 ];
-                $inserted_id = Database::insert($tbl_grade_links, $params);
-                $this->set_id($inserted_id);
+                $id = Database::insert($table, $params);
+                $this->set_id($id);
 
-                return $inserted_id;
+                return $id;
             }
         }
 

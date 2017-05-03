@@ -959,9 +959,13 @@ class ImportCsv
                 $event['update'] = $update;
                 $event['item'] = $item;
 
+                $calendarEvent = null;
                 /* Check if event changed of course code */
-                /** @var CCalendarEvent $calendarEvent */
-                $calendarEvent = $em->getRepository('ChamiloCourseBundle:CCalendarEvent')->find($item['item_id']);
+                if (!empty($item) && isset($item['item_id']) && !empty($item['item_id'])) {
+                    /** @var CCalendarEvent $calendarEvent */
+                    $calendarEvent = $em->getRepository('ChamiloCourseBundle:CCalendarEvent')->find($item['item_id']);
+                }
+
                 if ($calendarEvent) {
                     $this->logger->addInfo('Calendar event found '.$item['item_id']);
                     if ($calendarEvent->getCId() != $courseInfo['real_id']) {

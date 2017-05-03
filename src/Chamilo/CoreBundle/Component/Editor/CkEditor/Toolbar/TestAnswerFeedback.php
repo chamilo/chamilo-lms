@@ -101,6 +101,7 @@ class TestAnswerFeedback extends Basic
             ['Link', 'Image', 'Video', 'Flash', 'Audio', 'Table'],
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+            ['Asciimath', 'Asciisvg'],
             ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor', 'Source'],
             ['Toolbarswitch']
         ];

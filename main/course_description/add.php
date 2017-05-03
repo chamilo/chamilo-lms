@@ -56,7 +56,7 @@ $form = new FormValidator(
 );
 $form->addElement('header', $header);
 $form->addElement('hidden', 'description_type', $description_type);
-if (api_get_configuration_value('save_titles_like_html')) {
+if (api_get_configuration_value('save_titles_as_html')) {
     $form->addHtmlEditor(
         'title',
         get_lang('Title'),

@@ -34,9 +34,6 @@ class TestQuestionDescription extends Basic
         );
 
         $config['extraPlugins'] = $this->getPluginsToString();
-
-        //$config['width'] = '100';
-        //$config['height'] = '200';
         if (api_get_setting('more_buttons_maximized_mode') != 'true') {
             $config['toolbar'] = $this->getNormalToolbar();
         } else {

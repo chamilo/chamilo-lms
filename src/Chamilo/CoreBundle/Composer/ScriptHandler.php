@@ -173,7 +173,6 @@ class ScriptHandler
             __DIR__.'/../../../../main/install/install.class.php',
             __DIR__.'/../../../../main/inc/latex.php',
             __DIR__.'/../../../../main/inc/lib/formvalidator/Element/calendar_popup.php',
-            __DIR__.'/../../../../main/inc/lib/formvalidator/Element/datepicker.php',
             __DIR__.'/../../../../main/inc/lib/formvalidator/Element/datepickerdate.php',
             __DIR__.'/../../../../main/inc/lib/formvalidator/Element/html_editor.php',
             __DIR__.'/../../../../main/inc/lib/formvalidator/Element/select_language.php',

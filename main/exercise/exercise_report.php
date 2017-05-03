@@ -303,17 +303,17 @@ if (($is_allowedToEdit || $is_tutor || api_is_coach()) &&
 
 
 if ($is_allowedToEdit || $is_tutor) {
-    $nameTools = get_lang('StudentScore');
     $interbreadcrumb[] = array("url" => "exercise.php?gradebook=$gradebook", "name" => get_lang('Exercises'));
     $objExerciseTmp = new Exercise();
+    $nameTools = get_lang('StudentScore');
     if ($objExerciseTmp->read($exercise_id)) {
-        $interbreadcrumb[] = array("url" => "admin.php?exerciseId=".$exercise_id, "name" => $objExerciseTmp->name);
+        $interbreadcrumb[] = array("url" => "admin.php?exerciseId=".$exercise_id, "name" => $objExerciseTmp->selectTitle(true));
     }
 } else {
     $interbreadcrumb[] = array("url" => "exercise.php?gradebook=$gradebook", "name" => get_lang('Exercises'));
     $objExerciseTmp = new Exercise();
     if ($objExerciseTmp->read($exercise_id)) {
-        $nameTools = get_lang('Results').': '.$objExerciseTmp->name;
+        $nameTools = get_lang('Results').': '.$objExerciseTmp->selectTitle(true);
     }
 }
 

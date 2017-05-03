@@ -227,7 +227,9 @@ class Exercise
      */
     public function getCutTitle()
     {
-        return cut($this->exercise, EXERCISE_MAX_NAME_SIZE);
+        $title = $this->getUnformattedTitle();
+
+        return cut($title, EXERCISE_MAX_NAME_SIZE);
     }
 
     /**
@@ -243,12 +245,16 @@ class Exercise
 
     /**
      * returns the exercise title
-     *
      * @author Olivier Brouckaert
+     * @param bool $unformattedText Optional. Get the title without HTML tags
      * @return string - exercise title
      */
-    public function selectTitle()
+    public function selectTitle($unformattedText = false)
     {
+        if ($unformattedText) {
+            return $this->getUnformattedTitle();
+        }
+
         return $this->exercise;
     }
 
@@ -1819,7 +1825,7 @@ class Exercise
         $form->addElement('header', $form_title);
 
         // Title.
-        if (api_get_configuration_value('save_titles_like_html')) {
+        if (api_get_configuration_value('save_titles_as_html')) {
             $form->addHtmlEditor(
                 'exerciseTitle',
                 get_lang('ExerciseName'),
@@ -3255,6 +3261,7 @@ class Exercise
                 case UNIQUE_ANSWER:
                 case UNIQUE_ANSWER_IMAGE:
                 case UNIQUE_ANSWER_NO_OPTION:
+                case READING_COMPREHENSION:
                     if ($from_database) {
                         $sql = "SELECT answer FROM $TBL_TRACK_ATTEMPT
                                 WHERE
@@ -4198,7 +4205,8 @@ class Exercise
                                     UNIQUE_ANSWER_NO_OPTION,
                                     MULTIPLE_ANSWER,
                                     MULTIPLE_ANSWER_COMBINATION,
-                                    GLOBAL_MULTIPLE_ANSWER
+                                    GLOBAL_MULTIPLE_ANSWER,
+                                    READING_COMPREHENSION,
                                 )
                             )
                         ) {
@@ -4497,11 +4505,18 @@ class Exercise
 
                     switch ($answerType) {
                         case UNIQUE_ANSWER:
+                            //no break
                         case UNIQUE_ANSWER_IMAGE:
+                            //no break
                         case UNIQUE_ANSWER_NO_OPTION:
+                            //no break
                         case MULTIPLE_ANSWER:
+                            //no break
                         case GLOBAL_MULTIPLE_ANSWER :
+                            //no break
                         case MULTIPLE_ANSWER_COMBINATION:
+                            //no break
+                        case READING_COMPREHENSION:
                             if ($answerId == 1) {
                                 ExerciseShowFunctions::display_unique_or_multiple_answer(
                                     $feedback_type,
@@ -5223,7 +5238,7 @@ class Exercise
                     false,
                     $objQuestionTmp->getAbsoluteFilePath()
                 );
-            } elseif (in_array($answerType, [UNIQUE_ANSWER, UNIQUE_ANSWER_IMAGE, UNIQUE_ANSWER_NO_OPTION])) {
+            } elseif (in_array($answerType, [UNIQUE_ANSWER, UNIQUE_ANSWER_IMAGE, UNIQUE_ANSWER_NO_OPTION, READING_COMPREHENSION])) {
                 $answer = $choice;
                 Event::saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
                 //            } elseif ($answerType == HOT_SPOT || $answerType == HOT_SPOT_DELINEATION) {
@@ -5632,10 +5647,20 @@ class Exercise
         if (!empty($ip)) {
             $array[] = array('title' => get_lang('IP'), 'content' => $ip);
         }
+
+        $icon = Display::return_icon('test-quiz.png', get_lang('Result'),null, ICON_SIZE_MEDIUM);
+
         $html  = '<div class="question-result">';
-        $html .= Display::page_header(
-            Display::return_icon('test-quiz.png', get_lang('Result'),null, ICON_SIZE_MEDIUM).' '.$this->exercise.' : '.get_lang('Result')
-        );
+
+        if (api_get_configuration_value('save_titles_as_html')) {
+            $html .= $this->get_formated_title();
+            $html .= Display::page_header(get_lang('Result'));
+        } else {
+            $html .= Display::page_header(
+                $icon.PHP_EOL.$this->exercise.' : '.get_lang('Result')
+            );
+        }
+
         $html .= Display::description($array);
         $html .="</div>";
         return $html;
@@ -7434,6 +7459,9 @@ class Exercise
     */
     public function get_formated_title()
     {
+        if (api_get_configuration_value('save_titles_as_html')) {
+
+        }
         return api_html_entity_decode($this->selectTitle());
     }
 
@@ -7699,5 +7727,14 @@ class Exercise
         }
 
         return $corrects;
+    }
+
+    /**
+     * Get the title without HTML tags
+     * @return string
+     */
+    private function getUnformattedTitle()
+    {
+        return strip_tags(api_html_entity_decode($this->title));
     }
 }

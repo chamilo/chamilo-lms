@@ -486,6 +486,7 @@ switch ($action) {
         $defaults['email_ann'] = true;
 
         $form->addElement('text', 'title', get_lang('EmailTitle'));
+        $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
         $form->addElement('hidden', 'id');
         $htmlTags = "<b>".get_lang('Tags')."</b><br /><br />";
         $tags = AnnouncementManager::get_tags();
@@ -498,7 +499,7 @@ switch ($action) {
         $form->addHtmlEditor(
             'content',
             get_lang('Description'),
-            false,
+            true,
             false,
             array('ToolbarSet' => 'Announcements')
         );

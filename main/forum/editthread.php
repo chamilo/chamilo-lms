@@ -65,7 +65,7 @@ if (!api_is_allowed_to_edit(false, true) &&
 
 // 2. the forumcategory or forum is locked (locked <>0) and the user is not a course manager
 if (!api_is_allowed_to_edit(false, true) &&
-    (($currentForumCategory['visibility'] && $currentForumCategory['locked'] <> 0) OR $currentForum['locked'] <> 0)
+    (($currentForumCategory['visibility'] && $currentForumCategory['locked'] <> 0) || $currentForum['locked'] <> 0)
 ) {
     api_not_allowed();
 }
@@ -119,13 +119,11 @@ $tableLink = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 $htmlHeadXtra[] = <<<JS
     <script>
     $(document).on('ready', function() {
-
         if ($('#thread_qualify_gradebook').is(':checked') == true) {
             document.getElementById('options_field').style.display = 'block';
         } else {
             document.getElementById('options_field').style.display = 'none';
         }
-
         $('#thread_qualify_gradebook').click(function() {
             if ($('#thread_qualify_gradebook').is(':checked') == true) {
                 document.getElementById('options_field').style.display = 'block';
@@ -231,27 +229,14 @@ if (!empty($threadData)) {
     $defaults['thread_peer_qualify'] = 0;
 }
 $form->setDefaults(isset($defaults) ? $defaults : null);
-
 $form->addButtonUpdate(get_lang('ModifyThread'), 'SubmitPost');
 
 if ($form->validate()) {
-    $redirectUrl = api_get_path(WEB_CODE_PATH).'forum/viewforum.php?forum='.$forumId;
+    $redirectUrl = api_get_path(WEB_CODE_PATH).'forum/viewforum.php?forum='.$forumId.'&'.api_get_cidreq();
 
     $check = Security::check_token('post');
     if ($check) {
         $values = $form->exportValues();
-
-//        if (isset($values['thread_qualify_gradebook']) &&
-//            $values['thread_qualify_gradebook'] == '1' &&
-//            empty($values['weight_calification'])
-//        ) {
-//            Display::addFlash(
-//                Display::return_message(get_lang('YouMustAssignWeightOfQualification'), 'error', false)
-//            );
-//            header('Location: '.$redirectUrl);
-//            exit;
-//        }
-
         Security::clear_token();
         updateThread($values);
         header('Location: '.$redirectUrl);
@@ -263,9 +248,15 @@ if ($form->validate()) {
     $form->setConstants(array('sec_token' => $token));
 }
 
-$orginIsLearpath = $origin == 'learnpath';
+$originIsLearnPath = $origin == 'learnpath';
 
-$view = new Template('', !$orginIsLearpath, !$orginIsLearpath, $orginIsLearpath, $orginIsLearpath);
+$view = new Template(
+    '',
+    !$originIsLearnPath,
+    !$originIsLearnPath,
+    $originIsLearnPath,
+    $originIsLearnPath
+);
 $view->assign(
     'actions',
     Display::toolbarAction('toolbar', $actions)

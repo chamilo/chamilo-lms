@@ -370,7 +370,7 @@ function lp_upload_quiz_action_handling()
                         if (is_array($myAnswerList) && !empty($myAnswerList) && !empty($question_id)) {
                             $id = 1;
                             $objAnswer = new Answer($question_id, $courseId);
-                            $globalScore = $scoreList[$i];
+                            $globalScore = isset($scoreList[$i]) ? $scoreList[$i] : null;
 
                             // Calculate the number of correct answers to divide the
                             // score between them when importing from CSV
@@ -387,7 +387,7 @@ function lp_upload_quiz_action_handling()
                                 $score = 0;
                                 if (strtolower($answer_data['extra']) == 'x') {
                                     $correct = 1;
-                                    $score = $scoreList[$i];
+                                    $score = isset($scoreList[$i]) ? $scoreList[$i] : null;
                                     $comment = isset($feedbackTrueList[$i]) ? $feedbackTrueList[$i] : '';
                                 } else {
                                     $comment = isset($feedbackFalseList[$i]) ? $feedbackFalseList[$i] : '';
@@ -463,7 +463,7 @@ function lp_upload_quiz_action_handling()
                         }
                         break;
                     case FREE_ANSWER:
-                        $globalScore = $scoreList[$i];
+                        $globalScore = isset($scoreList[$i]) ? $scoreList[$i] : null;
                         $questionObj = Question::read($question_id, $courseId);
                         if ($questionObj) {
                             $questionObj->updateWeighting($globalScore);
@@ -504,7 +504,7 @@ function lp_upload_quiz_action_handling()
                         }
                         break;
                     case MATCHING:
-                        $globalScore = $scoreList[$i];
+                        $globalScore = isset($scoreList[$i]) ? $scoreList[$i] : null;
                         $position = 1;
 
                         $objAnswer = new Answer($question_id, $courseId);

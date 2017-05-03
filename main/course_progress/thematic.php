@@ -190,7 +190,7 @@ if ($action == 'thematic_list') {
         $form->addElement('hidden', 'thematic_id', $thematic_id);
     }
 
-    if (api_get_configuration_value('save_titles_like_html')) {
+    if (api_get_configuration_value('save_titles_as_html')) {
         $form->addHtmlEditor(
             'title',
             get_lang('Title'),

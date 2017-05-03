@@ -733,7 +733,7 @@ if (!empty ($gradebook) && $gradebook == 'view') {
 }
 
 $interbreadcrumb[] = array("url" => "exercise.php?".api_get_cidreq(), "name" => get_lang('Exercises'));
-$interbreadcrumb[] = array("url" => "#", "name" => $objExercise->name);
+$interbreadcrumb[] = array("url" => "#", "name" => $objExercise->selectTitle(true));
 
 if ($origin != 'learnpath') { //so we are not in learnpath tool
     if (!api_is_allowed_to_session_edit()) {

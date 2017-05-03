@@ -169,4 +169,28 @@ class ChamiloApi
 
         return $date->format('Y-m-d H:i:s');
     }
+    /**
+     * Returns the course id (integer) for the given course directory or the current ID if no directory is defined
+     * @param   string  $directory   The course directory/path that appears in the URL
+     * @return int
+     */
+    public static function getCourseIdByDirectory($directory = null)
+    {
+        if (!empty($directory)) {
+            $directory = \Database::escape_string($directory);
+            $row = \Database::select(
+                'id',
+                \Database::get_main_table(TABLE_MAIN_COURSE),
+                array('where'=> array('directory = ?' => array($directory))),
+                'first'
+            );
+
+            if (is_array($row) && isset($row['id'])) {
+                return $row['id'];
+            } else {
+                return false;
+            }
+        }
+        return Session::read('_real_cid', 0);
+    }
 }

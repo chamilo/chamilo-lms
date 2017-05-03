@@ -108,10 +108,8 @@ if ($session) {
                 continue;
             }
 
-            $usersInfo[$user->getId()][$course->getId() . '_last_sent_date'] = api_format_date(
-                $lastPublication->getSentDate()->getTimestamp(),
-                DATE_TIME_FORMAT_SHORT
-            );
+            $usersInfo[$user->getId()][$course->getId() . '_last_sent_date'] = api_get_local_time(
+                $lastPublication->getSentDate()->getTimestamp());
         }
     }
 }

@@ -37,7 +37,7 @@ $learnpathItemViewId = isset($_REQUEST['learnpath_item_view_id']) ? intval($_REQ
 $origin = api_get_origin();
 
 $interbreadcrumb[] = array("url" => "exercise.php?gradebook=$gradebook", "name" => get_lang('Exercises'));
-$interbreadcrumb[] = array("url" => "#", "name" => $objExercise->name);
+$interbreadcrumb[] = array("url" => "#", "name" => $objExercise->selectTitle(true));
 
 $time_control = false;
 $clock_expired_time = ExerciseLib::get_session_time_control_key($objExercise->id, $learnpath_id, $learnpath_item_id);
@@ -81,7 +81,16 @@ if ($is_allowed_to_edit && $objExercise->sessionId == $sessionId) {
 }
 $iconExercise = Display::return_icon('test-quiz.png', null, array(), ICON_SIZE_MEDIUM);
 // Exercise name.
-$html .= Display::page_header($iconExercise.$objExercise->name.' '.$edit_link);
+
+if (api_get_configuration_value('save_titles_as_html')) {
+    $html .= Display::div(
+        $objExercise->get_formated_title().PHP_EOL.$edit_link
+    );
+} else {
+    $html .= Display::page_header(
+        $iconExercise.PHP_EOL.$objExercise->selectTitle().PHP_EOL.$edit_link
+    );
+}
 
 //Exercise description
 if (!empty($objExercise->description)) {

@@ -65,10 +65,21 @@ class ExerciseLib
                 $questionDescription = $objQuestionTmp->selectDescription();
                 if ($show_title) {
                     TestCategory::displayCategoryAndTitle($objQuestionTmp->id);
-
-                    echo $objQuestionTmp->getTitleToDisplay($current_item);
+                    $titleToDisplay = null;
+                    if ($answerType == READING_COMPREHENSION) {
+                        // In READING_COMPREHENSION, the title of the question
+                        // contains the question itself, which can only be
+                        // shown at the end of the given time, so hide for now
+                        $titleToDisplay = Display::div(
+                            $current_item.'. '.get_lang('ReadingComprehension'),
+                            ['class' => 'question_title']
+                        );
+                    } else {
+                        $titleToDisplay = $objQuestionTmp->getTitleToDisplay($current_item);
+                    }
+                    echo $titleToDisplay;
                 }
-                if (!empty($questionDescription)) {
+                if (!empty($questionDescription) && $answerType != READING_COMPREHENSION) {
                     echo Display::div(
                         $questionDescription,
                         array('class' => 'question_description')
@@ -271,7 +282,22 @@ class ExerciseLib
                 }
             }
 
+            $hidingClass = '';
+            if ($answerType == READING_COMPREHENSION) {
+                $objQuestionTmp->processText(
+                    $objQuestionTmp->selectDescription()
+                );
+                $hidingClass = 'hide-reading-answers';
+            }
+            if ($answerType == READING_COMPREHENSION) {
+                $s .= Display::div(
+                    $objQuestionTmp->selectTitle(),
+                    ['class' => 'question_title '.$hidingClass]
+                );
+            }
+
             for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
+
                 $answer = $objAnswerTmp->selectAnswer($answerId);
                 $answerCorrect = $objAnswerTmp->isCorrect($answerId);
                 $numAnswer = $objAnswerTmp->selectAutoId($answerId);
@@ -284,6 +310,8 @@ class ExerciseLib
                     case UNIQUE_ANSWER_NO_OPTION:
                         //no break
                     case UNIQUE_ANSWER_IMAGE:
+                        //no break
+                    case READING_COMPREHENSION:
                         $input_id = 'choice-' . $questionId . '-' . $answerId;
 
                         if (isset($user_choice[0]['answer']) && $user_choice[0]['answer'] == $numAnswer) {
@@ -336,7 +364,7 @@ class ExerciseLib
                             $answer = '<div class="thumbnail">' . $answer . '</div>';
                         }
 
-                        $answer_input .= '<label class="radio">';
+                        $answer_input .= '<label class="radio '.$hidingClass.'">';
                         $answer_input .= Display::input(
                             'radio',
                             'choice[' . $questionId . ']',
@@ -1326,6 +1354,7 @@ HOTSPOT;
             $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
 
             unset($objAnswerTmp, $objQuestionTmp);
+
         }
         return $nbrAnswers;
     }

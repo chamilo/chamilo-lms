@@ -74,8 +74,8 @@ class TestCategory
         if ($row['nb'] <= 0) {
             $params = [
                 'c_id' => $courseId,
-                'title' => $this->name,
-                'description' => $this->description
+                'title' => (string) $this->name,
+                'description' => (string) $this->description
             ];
             $newId = Database::insert($table, $params);
 

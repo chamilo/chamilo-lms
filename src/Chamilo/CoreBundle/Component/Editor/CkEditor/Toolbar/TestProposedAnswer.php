@@ -18,8 +18,6 @@ class TestProposedAnswer extends Basic
     {
         $config['toolbarCanCollapse'] = true;
         $config['toolbarStartupExpanded'] = false;
-        //$config['width'] = '100';
-        //$config['height'] = '200';
         if (api_get_setting('more_buttons_maximized_mode') != 'true') {
             $config['toolbar'] = $this->getNormalToolbar();
         } else {
@@ -27,6 +25,7 @@ class TestProposedAnswer extends Basic
 
             $config['toolbar_maxToolbar'] = $this->getMaximizedToolbar();
         }
+
         return $config;
     }
 
@@ -48,7 +47,8 @@ class TestProposedAnswer extends Basic
         return [
             ['Bold', 'Subscript', 'Superscript'],
             ['Image', 'Link', 'Audio', 'Table', 'PasteFromWord', 'inserthtml'],
-            ['Maximize', 'Source'],
+            ['Asciimath', 'Asciisvg'],
+            ['Maximize', 'Source']
         ];
     }
 

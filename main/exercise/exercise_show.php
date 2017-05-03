@@ -137,7 +137,10 @@ if (!empty($gradebook) && $gradebook == 'view') {
 }
 
 $interbreadcrumb[] = array("url" => "exercise.php?".api_get_cidreq(), "name" => get_lang('Exercises'));
-$interbreadcrumb[] = array("url" => "overview.php?exerciseId=".$exercise_id.'&'.api_get_cidreq(), "name" => $objExercise->name);
+$interbreadcrumb[] = array(
+    "url" => "overview.php?exerciseId=".$exercise_id.'&'.api_get_cidreq(),
+    "name" => $objExercise->selectTitle(true)
+);
 $interbreadcrumb[] = array("url" => "#", "name" => get_lang('Result'));
 
 $this_section = SECTION_COURSES;
@@ -392,6 +395,8 @@ foreach ($questionList as $questionId) {
         case MATCHING:
             //no break
         case DRAGGABLE:
+            //no break
+        case READING_COMPREHENSION:
             //no break
         case MATCHING_DRAGGABLE:
             $question_result = $objExercise->manage_answer(

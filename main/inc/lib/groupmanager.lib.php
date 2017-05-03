@@ -2518,6 +2518,29 @@ class GroupManager
                     $tutorIdList = array();
                     foreach ($tutors as $tutor) {
                         $userInfo = api_get_user_info_from_username($tutor);
+
+                        if (!$userInfo) {
+                            continue;
+                        }
+
+                        if (
+                            !CourseManager::is_user_subscribed_in_course(
+                                $userInfo['user_id'],
+                                $courseCode,
+                                !empty($sessionId),
+                                $sessionId
+                            )
+                        ) {
+                            Display::addFlash(
+                                Display::return_message(
+                                    sprintf(get_lang('TutorXIsNotSubscribedToCourse'), $userInfo['complete_name']),
+                                    'warning'
+                                )
+                            );
+
+                            continue;
+                        }
+
                         $tutorIdList[] = $userInfo['user_id'];
                     }
                     self::subscribe_tutors($tutorIdList, $groupInfo);

@@ -35,7 +35,7 @@ if ((api_is_allowed_to_edit(null, true))) {
     if (isset($_POST['submit'])) {
         $id = aiken_import_file($_FILES['userFile']);
         if (is_numeric($id) && !empty($id)) {
-            header('Location: admin.php?' . api_get_cidreq() . '&exerciseId=' . $id);
+            header('Location: admin.php?'.api_get_cidreq().'&exerciseId='.$id);
             exit;
         }
     }

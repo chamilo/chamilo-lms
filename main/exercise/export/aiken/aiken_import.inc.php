@@ -8,11 +8,6 @@
  * @package chamilo.exercise
  */
 
-/**
- * Security check
- */
-if (count(get_included_files()) == 1)
-    die('---');
 
 /**
  * Creates a temporary directory
@@ -84,18 +79,45 @@ function get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath)
         return false;
     }
 
-    if (preg_match('/.zip$/i', $_FILES['userFile']['name']) && handle_uploaded_document($_course, $_FILES['userFile'], $baseWorkDir, $uploadPath, $_user['user_id'], 0, null, 1, 'overwrite', false)) {
+    if (preg_match('/.zip$/i', $_FILES['userFile']['name']) &&
+        handle_uploaded_document(
+            $_course,
+            $_FILES['userFile'],
+            $baseWorkDir,
+            $uploadPath,
+            $_user['user_id'],
+            0,
+            null,
+            1,
+            'overwrite',
+            false
+        )
+    ) {
         if (!function_exists('gzopen')) {
             return false;
         }
         // upload successful
         return true;
-    } elseif (preg_match('/.txt/i', $_FILES['userFile']['name']) && handle_uploaded_document($_course, $_FILES['userFile'], $baseWorkDir, $uploadPath, $_user['user_id'], 0, null, 0, 'overwrite', false)) {
+    } elseif (preg_match('/.txt/i', $_FILES['userFile']['name']) &&
+        handle_uploaded_document(
+            $_course,
+            $_FILES['userFile'],
+            $baseWorkDir,
+            $uploadPath,
+            $_user['user_id'],
+            0,
+            null,
+            0,
+            'overwrite',
+            false
+        )
+    ) {
         return true;
     } else {
         return false;
     }
 }
+
 /**
  * Main function to import the Aiken exercise
  * @return mixed True on success, error message on failure
@@ -103,7 +125,7 @@ function get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath)
 function aiken_import_exercise($file)
 {
     global $exercise_info;
-    $archive_path = api_get_path(SYS_ARCHIVE_PATH) . 'aiken';
+    $archive_path = api_get_path(SYS_ARCHIVE_PATH).'aiken/';
     $baseWorkDir = $archive_path;
 
     if (!is_dir($baseWorkDir)) {
@@ -132,6 +154,7 @@ function aiken_import_exercise($file)
     }
 
     // find the different manifests for each question and parse them
+
     $exerciseHandle = opendir($baseWorkDir);
     $file_found = false;
     $operation = false;
@@ -267,7 +290,7 @@ function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile)
         }
         $new_question = false;
         //make sure it is transformed from iso-8859-1 to utf-8 if in that form
-        if (!mb_check_encoding($info,'utf-8') && mb_check_encoding($info, 'iso-8859-1')) {
+        if (!mb_check_encoding($info, 'utf-8') && mb_check_encoding($info, 'iso-8859-1')) {
             $info = utf8_encode($info);
         }
         $exercise_info['question'][$question_index]['type'] = 'MCUA';
@@ -329,7 +352,7 @@ function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile)
     }
     $total_questions = count($exercise_info['question']);
     $total_weight = (!empty($_POST['total_weight'])) ? intval($_POST['total_weight']) : 20;
-    foreach  ($exercise_info['question'] as $key => $question) {
+    foreach ($exercise_info['question'] as $key => $question) {
         $exercise_info['question'][$key]['weighting'][current(array_keys($exercise_info['question'][$key]['weighting']))] = $total_weight / $total_questions;
     }
     return true;

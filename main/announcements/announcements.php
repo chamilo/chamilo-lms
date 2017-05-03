@@ -499,7 +499,7 @@ switch ($action) {
         $form->addHtmlEditor(
             'content',
             get_lang('Description'),
-            false,
+            true,
             false,
             array('ToolbarSet' => 'Announcements')
         );

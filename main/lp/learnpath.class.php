@@ -3127,6 +3127,12 @@ class learnpath
      */
     public function getParentToc($tree)
     {
+        if ($this->debug > 0) {
+            error_log('In learnpath::get_html_toc()', 0);
+        }
+        if (empty($tree)) {
+            $tree = $this->get_toc();
+        }
         $dirTypes = self::getChapterTypes();
         $listParent = [];
         $listChildren = null;
@@ -3138,12 +3144,14 @@ class learnpath
                      foreach ($subtree['children'] as $subItem) {
                           if ($subItem['id'] == $this->current) {
                               $subtree['parent_current'] = 'in';
+                              $subtree['current'] = 'on';
                           }
                      }
                 }
                 $listParent[] =  $subtree;
             }
         }
+        
         return $listParent;
     }
     
@@ -3153,6 +3161,13 @@ class learnpath
      */
     public function getChildrenToc($tree, $id)
     {
+        if ($this->debug > 0) {
+            error_log('In learnpath::get_html_toc()', 0);
+        }
+        if (empty($tree)) {
+            $tree = $this->get_toc();
+        }
+        
         $dirTypes = self::getChapterTypes();
         $mycurrentitemid = $this->get_current_item_id();
         $list = [];
@@ -3185,18 +3200,25 @@ class learnpath
                     $title = self::rl_get_resource_name(api_get_course_id(), $this->get_id(), $subtree['id']);
                 }
                 
+                $classStyle = null;
+                if ($subtree['id'] == $this->current) {
+                    $classStyle = 'scorm_item_normal '. $classStyle . 'scorm_highlight';
+                } elseif (!in_array($subtree['type'], $dirTypes)) {
+                    $classStyle = 'scorm_item_normal '. $classStyle . ' ';
+                }
+
                 if (in_array($subtree['type'], $dirTypes)) {
                     $subtree['title'] = stripslashes($title);
                 } else {
                     $subtree['title'] = $title;
-                    $subtree['class'] =  ' ' . $cssStatus;
+                    
+                    $subtree['class'] = $cssStatus . ' ' .$classStyle;
                     $subtree['url'] = $this->get_link('http', $subtree['id'], $tree);
                     $subtree['current_id'] = $mycurrentitemid;
                 }
-                $list[] =  $subtree;
+                $list[] =  $subtree;                
             }
         }
-        
         return $list;
     }
     /**

@@ -131,7 +131,17 @@
             </div>
             {# end right Zone #}
 </div>
-
+{% if data_panel is not empty %}
+<script type="text/javascript">
+    $('#scorm-panel .panel .status-heading').on("click", function() {
+        $(this).siblings().find(".panel-heading").removeClass("on");
+        $(this).find(".panel-heading").toggleClass("on");
+    }); 
+    $('.section-list .list-item').click( function() {
+        $(this).addClass('active').siblings().removeClass('active');
+    });
+</script>
+{% endif %}
 <script>
     (function () {
         var LPViewUtils = {

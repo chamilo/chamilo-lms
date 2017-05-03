@@ -23,25 +23,33 @@
 </div>
 {% else %}
 <div class="panel-group" id="scorm-panel" role="tablist" aria-multiselectable="true">
+
   {% for item in data_panel %}
+  
   <div class="panel panel-default">
-    <div class="panel-heading" role="tab" id="heading-{{ item.id }}">
-      <h4 class="panel-title">
-        <a role="button" data-toggle="collapse" data-parent="#scorm-panel" href="#collapse-{{ item.id }}" aria-expanded="true" aria-controls="collapse-{{ item.id }}">
-          {{ item.title }}
-        </a>
-      </h4>
+    <div class="status-heading">
+        <div class="panel-heading {{ item.current }}" role="tab" id="heading-{{ item.id }}">
+            <a role="button" data-toggle="collapse" data-parent="#scorm-panel" href="#collapse-{{ item.id }}" aria-expanded="true" aria-controls="collapse-{{ item.id }}">
+              {{ item.title }}
+            </a>
+        </div>
     </div>
     <div id="collapse-{{ item.id }}" class="panel-collapse collapse {{ item.parent_current }}" role="tabpanel" aria-labelledby="heading-{{ item.id }}">
       <div class="panel-body">
             <ul class="section-list">
+                {% set  counter = 0 %}
+                {% set  final = item.children|length %}
             {% for subitem in item.children %}
-                <li class="list-item {{ subitem.class }} {{ subitem.current }}" title="{{ subitem.title }}">
-                    <a name="atoc_{{ subitem.id }}"></a>
-                    <a href="#" onclick="switch_item('{{ subitem.current_id }}','{{ subitem.id }}'); return false;" >
-                        {{ subitem.title }}
-                    </a>
+                {% set  counter = counter + 1 %}
+                <li id="toc_{{ subitem.id }}" class="{{ subitem.class }} {{ counter == final ? 'final':'' }}">
+                    <div class="sub-item type-{{ subitem.type }}">
+                        <a name="atoc_{{ subitem.id }}"></a>
+                        <a class="item-action" href="#" onclick="switch_item('{{ subitem.current_id }}','{{ subitem.id }}'); return false;" >
+                            {{ subitem.title }}
+                        </a>
+                    </div>
                 </li>
+                
             {% endfor %}
             </ul>
       </div>

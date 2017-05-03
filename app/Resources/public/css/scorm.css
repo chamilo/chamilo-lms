@@ -425,6 +425,23 @@ body{
 #scorm-info .progress-bar{
     line-height: 17px;
 }
+#scorm-panel .panel-body{
+    padding: 0;
+}
+.section-list{
+    display: block;
+    width: 100%;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-bottom: 1px solid #E1E1E1;
+}
+.section-list .list-item{
+    padding: 5px 10px;
+    display: flex;
+    border-bottom: 1px solid #ededed;
+}
+
 /* Small devices (tablets, 768px and up) */
 @media (min-width: 768px) {
     #scorm-info{

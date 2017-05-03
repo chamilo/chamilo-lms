@@ -158,6 +158,7 @@ if ($debug) {
 
 $get_toc_list = $_SESSION['oLP']->get_toc();
 
+
 $get_teacher_buttons = $_SESSION['oLP']->get_teacher_toc_buttons();
 
 $type_quiz = false;
@@ -544,7 +545,7 @@ $template->assign('lp_title_scorm', $_SESSION['oLP']->name);
 $template->assign('lp_id', $_SESSION['oLP']->lp_id);
 $template->assign('lp_current_item_id', $_SESSION['oLP']->get_current_item_id());
 
-if (api_get_configuration_value('new_scorm') === 1) {
+if (api_get_configuration_value('lp_new_style') === true && $lpType == 1) {
    $template->assign('data_panel',$_SESSION['oLP']->getParentToc($get_toc_list));
 } else {
    $template->assign('data_list',$_SESSION['oLP']->getListArrayToc($get_toc_list));

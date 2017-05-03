@@ -1586,6 +1586,7 @@ class Link extends Model
     public static function listLinksAndCategories($course_id, $session_id, $categoryId, $show = 'none', $token = null)
     {
         $tbl_link = Database::get_course_table(TABLE_LINK);
+        $tblCIP = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $categoryId = intval($categoryId);
 
         /*	Action Links */
@@ -1598,8 +1599,8 @@ class Link extends Model
         }
 
         $categories = self::getLinkCategories($course_id, $session_id);
-        $count = count($categories);
-        if (!empty($count)) {
+        $countCategories = count($categories);
+        if (!empty($countCategories)) {
             echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=list&show=none">';
             echo Display::return_icon('forum_listview.png', get_lang('FlatView'), '', ICON_SIZE_MEDIUM) . ' </a>';
 
@@ -1610,20 +1611,25 @@ class Link extends Model
 
         // Displaying the links which have no category (thus category = 0 or NULL),
         // if none present this will not be displayed
-        $sql = "SELECT COUNT(1) AS count FROM $tbl_link
-                WHERE c_id = $course_id AND (category_id=0 OR category_id IS NULL)";
+        $sql = "
+            SELECT COUNT(1) AS count FROM $tbl_link l
+            INNER JOIN $tblCIP c
+                ON (l.c_id = c.c_id AND l.iid = c.ref)
+            WHERE
+                c.tool = 'link' AND
+                c.visibility != 2 AND
+                l.c_id = $course_id AND
+                (l.category_id = 0 OR l.category_id IS NULL)
+        ";
         $result = Database::query($sql);
         $count = Database::result($result, 0, 'count');
 
-        if ($count !== 0) {
-            echo Display::panel(
-                self::showLinksPerCategory(
-                    0,
-                    api_get_course_int_id(),
-                    api_get_session_id()
-                ),
-                get_lang('NoCategory')
-            );
+        $linksPerCategory = self::showLinksPerCategory(0, $course_id, $session_id);
+
+        if ($count && !$countCategories) {
+            echo $linksPerCategory;
+        } elseif ($count && $countCategories) {
+            echo Display::panel($linksPerCategory, get_lang('NoCategory'));
         }
 
         $counter = 0;

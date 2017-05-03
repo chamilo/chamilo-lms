@@ -307,13 +307,13 @@ class AnnouncementManager
 
     /**
      * Displays one specific announcement
-     * @param int $announcement_id, the id of the announcement you want to display
+     * @param int $id, the id of the announcement you want to display
      *
      * @return string
      */
-    public static function display_announcement($announcement_id)
+    public static function displayAnnouncement($id)
     {
-        if ($announcement_id != strval(intval($announcement_id))) {
+        if ($id != strval(intval($id))) {
             return null;
         }
 
@@ -321,7 +321,7 @@ class AnnouncementManager
 
         $html = '';
         $result = self::getAnnouncementInfoById(
-            $announcement_id,
+            $id,
             api_get_course_int_id(),
             api_get_user_id()
         );
@@ -343,22 +343,22 @@ class AnnouncementManager
         if (api_is_allowed_to_edit(false, true) ||
             (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())
         ) {
-            $modify_icons = "<a href=\"" . api_get_self() . "?" . api_get_cidreq() . "&action=modify&id=" . $announcement_id . "\">" .
+            $modify_icons = "<a href=\"" . api_get_self() . "?" . api_get_cidreq() . "&action=modify&id=" . $id . "\">" .
                 Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL) . "</a>";
             if ($itemProperty->getVisibility() === 1) {
-                $image_visibility = "visible";
+                $image_visibility = 'visible';
                 $alt_visibility = get_lang('Hide');
             } else {
-                $image_visibility = "invisible";
+                $image_visibility = 'invisible';
                 $alt_visibility = get_lang('Visible');
             }
             global $stok;
 
-            $modify_icons .= "<a href=\"" . api_get_self() . "?" . api_get_cidreq() . "&action=showhide&id=" . $announcement_id . "&sec_token=" . $stok . "\">" .
+            $modify_icons .= "<a href=\"" . api_get_self() . "?" . api_get_cidreq() . "&action=showhide&id=" . $id . "&sec_token=" . $stok . "\">" .
                 Display::return_icon($image_visibility . '.png', $alt_visibility, '', ICON_SIZE_SMALL) . "</a>";
 
             if (api_is_allowed_to_edit(false, true)) {
-                $modify_icons .= "<a href=\"" . api_get_self() . "?" . api_get_cidreq() . "&action=delete&id=" . $announcement_id . "&sec_token=" . $stok . "\" onclick=\"javascript:if(!confirm('" . addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)) . "')) return false;\">" .
+                $modify_icons .= "<a href=\"" . api_get_self() . "?" . api_get_cidreq() . "&action=delete&id=" . $id . "&sec_token=" . $stok . "\" onclick=\"javascript:if(!confirm('" . addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)) . "')) return false;\">" .
                     Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL) .
                     "</a>";
             }
@@ -388,7 +388,7 @@ class AnnouncementManager
         }
 
         if (api_is_allowed_to_edit(false, true)) {
-            $sent_to = self::sent_to('announcement', $announcement_id);
+            $sent_to = self::sent_to('announcement', $id);
             $sent_to_form = self::sent_to_form($sent_to);
             $html .= Display::tag(
                 'td',
@@ -396,7 +396,7 @@ class AnnouncementManager
                 array('class' => 'announcements_datum')
             );
         }
-        $attachment_list = self::get_attachment($announcement_id);
+        $attachment_list = self::get_attachment($id);
 
         if (count($attachment_list) > 0) {
             $html .= "<tr><td>";

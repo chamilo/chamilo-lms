@@ -152,12 +152,12 @@ switch ($action) {
         break;
     case 'view':
         $interbreadcrumb[] = array(
-            "url" => api_get_path(WEB_CODE_PATH)."announcements/announcements.php?".api_get_cidreq(),
+            "url" => api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.api_get_cidreq(),
             "name" => $nameTools,
         );
 
         $nameTools = get_lang('View');
-        $content = AnnouncementManager::display_announcement($announcement_id);
+        $content = AnnouncementManager::displayAnnouncement($announcement_id);
         break;
     case 'list':
         $htmlHeadXtra[] = api_get_jqgrid_js();

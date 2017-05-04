@@ -49,12 +49,16 @@
     color: #96BD0D !important;
 }
 .scorm_item_section{
-    -webkit-border-top-left-radius: 5px;
-    -webkit-border-top-right-radius: 5px;
-    -moz-border-radius-topleft: 5px;
-    -moz-border-radius-topright: 5px;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
+    color: #162A83;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 5px;
+    padding-right: 5px;
+    display: block;
+    width: 100%;
+    font-size: 14px;
+    font-weight: bold;
+    background: #E1E1E1;
 }
 .lp-view-include-breadcrumb {
   background-color: #ffffff;
@@ -271,25 +275,43 @@ table.lp_overview tr:hover {
 table.lp_overview img {
 	margin-left:3px;
 }
+#learning_path_toc{
+    padding: 0;
+}
+.scorm_item_normal {
+    line-height: 25px;
+    border-bottom: 1px solid #DDD;
+    padding: 10px 5px;
+    background-color: #F5F5F5;
+}
 .scorm_item_normal a.items-list{
     line-height: 18px;
 }
-.scorm_type_document .items-list{
-	display: block;
-    background: url('images/text.png') no-repeat right center;
-    padding-bottom: 5px;
-    padding-top: 5px;
-    padding-right: 25px;
+.scorm_item_section .section {
+    background: url(images/folder-item-closed.png) no-repeat 5px center;
 }
-.scorm_type_quiz .items-list{
-	display: block;
-    background: url('images/pencil.png') no-repeat right center;
-    padding-bottom: 5px;
-    padding-top: 5px;
-    padding-right: 25px;
+.scorm_item_section.scorm_completed {
+    color: #162A83;
+}
+.scorm_item_section.scorm_completed .section {
+    background: url(images/folder-item-open.png) no-repeat 5px center;
+    padding-right: 1.5em;
+}
+.scorm_completed .item {
+    background: url(images/completed.png) no-repeat 0 center;
+}
+.scorm_highlight.scorm_completed .item {
+    background: url(images/completed-active.png) no-repeat 0 center !important;
+}
+.scorm_not_attempted .item {
+    background: url(images/not-completed.png) no-repeat 0 center;
+}
+.scorm_highlight .item {
+    background: url(images/not-completed-active.png) no-repeat 0 center !important;
+    color: #009AB8;
 }
 .scorm_item_normal.scorm_highlight{
-	background-color: #162A83;
+	background-color: #772583;
 }
 .scorm_item_normal.scorm_highlight a{
 	color: #FFFFFF !important;
@@ -366,6 +388,34 @@ table.lp_overview img {
 }
 .section-list .sub-item{
     padding-right: 30px;
+}
+.scorm_type_document .items-list{
+    display: block;
+    background: url('images/document.png') no-repeat right center;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    padding-right: 25px;
+}
+.scorm_highlight .scorm_type_document .items-list{
+    display: block;
+    background: url('images/document-active.png') no-repeat right center;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    padding-right: 25px;
+}
+.scorm_type_quiz .items-list{
+    display: block;
+    background: url('images/pencil.png') no-repeat right center;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    padding-right: 25px;
+}
+.scorm_highlight .scorm_type_quiz .items-list{
+    display: block;
+    background: url('images/pencil-active.png') no-repeat right center;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    padding-right: 25px;
 }
 .section-list .sub-item.type-document{
     background: url(images/document.png) no-repeat center right;

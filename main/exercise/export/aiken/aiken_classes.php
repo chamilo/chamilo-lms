@@ -1,21 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * @author Claro Team <cvs@claroline.net>
  * @author Yannick Warnier <yannick.warnier@beeznest.com> - updated ImsAnswerHotspot to match QTI norms
  * @author César Perales <cesar.perales@gmail.com> Updated function names and import files for Aiken format support
  * @package chamilo.exercise
  */
-
-/**
- * @param string $filename
- * @return string
- */
-function mime_content_type($filename)
-{
-    return DocumentManager::file_get_mime_type((string) $filename);
-}
-
 
 /**
  * Aiken2Question transformation class

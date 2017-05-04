@@ -36,7 +36,9 @@ if (!api_is_platform_admin(true) &&
     !CourseManager :: is_course_teacher(api_get_user_id(), $courseCode) &&
     !Tracking :: is_allowed_to_coach_student(api_get_user_id(), $user_id) && !api_is_drh() && !api_is_course_tutor()
 ) {
-    api_not_allowed();
+    api_not_allowed(
+        api_get_origin() !== 'learnpath'
+    );
 }
 
 if ($origin == 'user_course') {

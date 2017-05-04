@@ -26,6 +26,10 @@ class Category implements GradebookItem
     private $isRequirement;
     public $studentList;
 
+    public $evaluations;
+    public $links;
+    public $subCategories;
+
     /**
      * Consctructor
      */
@@ -1120,6 +1124,7 @@ class Category implements GradebookItem
             $this->id,
             null
         );
+
         $links = LinkFactory::load(
             null,
             null,
@@ -1129,22 +1134,29 @@ class Category implements GradebookItem
             $this->id,
             null
         );
+
         if (!empty($cats)) {
+            /** @var Category $cat */
             foreach ($cats as $cat) {
                 $cat->delete_all();
                 $cat->delete();
             }
         }
+
         if (!empty($evals)) {
+            /** @var Evaluation $eval */
             foreach ($evals as $eval) {
                 $eval->delete_with_results();
             }
         }
+
         if (!empty($links)) {
+            /** @var AbstractLink $link */
             foreach ($links as $link) {
                 $link->delete();
             }
         }
+
         $this->delete();
     }
 
@@ -2034,7 +2046,7 @@ class Category implements GradebookItem
                         get_lang('ExportBadges'),
                         api_get_path(WEB_CODE_PATH) . "gradebook/get_badges.php?user=$user_id",
                         'external-link'
-                    )
+                    ),
                 ];
             }
         }
@@ -2090,7 +2102,7 @@ class Category implements GradebookItem
                 $html = array(
                     'certificate_link' => $certificates,
                     'pdf_link' => $exportToPDF,
-                    'pdf_url' => "$url&action=export"
+                    'pdf_url' => "$url&action=export",
                 );
 
                 if ($skillToolEnabled && $userHasSkills) {
@@ -2275,7 +2287,7 @@ class Category implements GradebookItem
                     'category_id = ? AND user_id = ?' => [$categoryId, $userId],
                 ],
                 'order' => 'registered_at DESC',
-                'limit' => '1'
+                'limit' => '1',
             ],
             'first'
         );
@@ -2347,7 +2359,7 @@ class Category implements GradebookItem
                 'category_id' => intval($categoryId),
                 'user_id' => intval($userId),
                 'score' => api_float_val($score),
-                'registered_at' => api_get_utc_datetime()
+                'registered_at' => api_get_utc_datetime(),
             ]
         );
     }

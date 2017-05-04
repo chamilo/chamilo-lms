@@ -21,11 +21,10 @@
         </div>
     </div>
 </div>
-{% else %}
+{% endif %}
+{% if data_panel is not empty %}
 <div class="panel-group" id="scorm-panel" role="tablist" aria-multiselectable="true">
-
-  {% for item in data_panel %}
-  
+  {% for item in data_panel.are_parents %}
   <div class="panel panel-default">
     <div class="status-heading">
         <div class="panel-heading {{ item.current }}" role="tab" id="heading-{{ item.id }}">
@@ -56,5 +55,17 @@
     </div>
   </div>
   {% endfor %}
+    <ul class="section-list" style="margin-top: 5px;">
+        {% for item in data_panel.not_parents %}
+            <li id="toc_{{ item.id }}" class="{{ item.class }}">
+                <div class="sub-item type-{{ item.type }}">
+                    <a name="atoc_{{ item.id }}"></a>
+                    <a class="item-action" href="#" onclick="switch_item('{{ item.current_id }}','{{ item.id }}'); return false;" >
+                            {{ item.title }}
+                    </a>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
 </div>
 {% endif %}

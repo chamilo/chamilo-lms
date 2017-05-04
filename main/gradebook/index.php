@@ -86,18 +86,34 @@ function confirmation() {
 </script>';
 
 $tbl_forum_thread = Database::get_course_table(TABLE_FORUM_THREAD);
-$tbl_attendance   = Database::get_course_table(TABLE_ATTENDANCE);
-$tbl_grade_links  = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+$tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
+$tbl_grade_links = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 $filter_confirm_msg = true;
 $filter_warning_msg = true;
 $courseInfo = api_get_course_info();
 
-$cats = Category :: load(null, null, $course_code, null, null, $session_id, 'ORDER By id');
+$cats = Category:: load(
+    null,
+    null,
+    $course_code,
+    null,
+    null,
+    $session_id,
+    'ORDER By id'
+);
 $first_time = null;
 
 if (empty($cats)) {
-    //first time
-    $cats = Category :: load(0, null, $course_code, null, null, $session_id, 'ORDER By id');
+    // first time
+    $cats = Category:: load(
+        0,
+        null,
+        $course_code,
+        null,
+        null,
+        $session_id,
+        'ORDER By id'
+    );
     $first_time = 1;
 }
 
@@ -117,10 +133,10 @@ if (isset($_GET['isStudentView'])) {
 //this is called when there is no data for the course admin
 if (isset($_GET['createallcategories'])) {
     GradebookUtils::block_students();
-    $coursecat= Category :: get_not_created_course_categories($stud_id);
+    $coursecat= Category::get_not_created_course_categories($stud_id);
     if (!count($coursecat) == 0) {
         foreach ($coursecat as $row) {
-            $cat= new Category();
+            $cat = new Category();
             $cat->set_name($row[1]);
             $cat->set_course_code($row[0]);
             $cat->set_description(null);
@@ -178,8 +194,7 @@ if (isset($_GET['movecat'])) {
 if (isset($_GET['moveeval'])) {
     GradebookUtils::block_students();
     $evals= Evaluation :: load($_GET['moveeval']);
-    if (!isset ($_GET['targetcat'])) {
-
+    if (!isset($_GET['targetcat'])) {
         $move_form= new EvalForm(
             EvalForm :: TYPE_MOVE,
             $evals[0],
@@ -236,9 +251,9 @@ if (isset($_GET['visiblecat'])) {
     GradebookUtils::block_students();
 
     if (isset($_GET['set_visible'])) {
-        $visibility_command= 1;
+        $visibility_command = 1;
     } else {
-        $visibility_command= 0;
+        $visibility_command = 0;
     }
     $cats = Category :: load($_GET['visiblecat']);
     $cats[0]->set_visible($visibility_command);
@@ -272,7 +287,7 @@ if (isset($_GET['deletecat'])) {
 //parameters for evaluations
 if (isset($_GET['visibleeval'])) {
     GradebookUtils::block_students();
-    if (isset ($_GET['set_visible'])) {
+    if (isset($_GET['set_visible'])) {
         $visibility_command= 1;
     } else {
         $visibility_command= 0;
@@ -294,7 +309,7 @@ if (isset($_GET['visibleeval'])) {
 if (isset($_GET['lockedeval'])) {
     GradebookUtils::block_students();
     $locked = Security::remove_XSS($_GET['lockedeval']);
-    if (isset($_GET['typelocked']) && api_is_platform_admin()){
+    if (isset($_GET['typelocked']) && api_is_platform_admin()) {
         $type_locked = 0;
         $confirmation_message = get_lang('EvaluationHasBeenUnLocked');
     } else {
@@ -322,12 +337,12 @@ if (isset($_GET['deleteeval'])) {
 //parameters for links
 if (isset($_GET['visiblelink'])) {
     GradebookUtils::block_students();
-    if (isset ($_GET['set_visible'])) {
-        $visibility_command= 1;
+    if (isset($_GET['set_visible'])) {
+        $visibility_command = 1;
     } else {
-        $visibility_command= 0;
+        $visibility_command = 0;
     }
-    $link= LinkFactory :: load($_GET['visiblelink']);
+    $link = LinkFactory :: load($_GET['visiblelink']);
     if (isset($link) && isset($link[0])) {
         $link[0]->set_visible($visibility_command);
         $link[0]->save();
@@ -349,7 +364,7 @@ if (isset($_GET['deletelink'])) {
     $get_delete_link = intval($_GET['deletelink']);
     //fixing #5229
     if (!empty($get_delete_link)) {
-        $link= LinkFactory :: load($get_delete_link);
+        $link = LinkFactory :: load($get_delete_link);
         if ($link[0] != null) {
             // Clean forum qualify
             $sql = 'UPDATE '.$tbl_forum_thread.' SET
@@ -380,7 +395,6 @@ if (isset($_GET['deletelink'])) {
 
 if (!empty($course_to_crsind) && !isset($_GET['confirm'])) {
     GradebookUtils::block_students();
-
     if (!isset($_GET['movecat']) && !isset($_GET['moveeval'])) {
         die ('Error: movecat or moveeval not defined');
     }
@@ -663,7 +677,15 @@ if (isset($_GET['studentoverview'])) {
         }
         //end hack*/
 
-        $cats = Category :: load(null, null, $course_code, null, null, $session_id, false);
+        $cats = Category:: load(
+            null,
+            null,
+            $course_code,
+            null,
+            null,
+            $session_id,
+            false
+        );
         if (empty($cats)) {
             // There is no category for this course+session, so create one
             $cat = new Category();
@@ -737,8 +759,8 @@ if (!empty($selectCat)) {
             );
 
             if (isset($certificate['pdf_url']) && $hideCertificateExport !== 'true') {
-                $actionsLeft .= Display::url(Display::returnFontAwesomeIcon('file-pdf-o') .
-                    get_lang('DownloadCertificatePdf'),
+                $actionsLeft .= Display::url(
+                    Display::returnFontAwesomeIcon('file-pdf-o').get_lang('DownloadCertificatePdf'),
                     $certificate['pdf_url'],
                     ['class' => 'btn btn-default']
                 );

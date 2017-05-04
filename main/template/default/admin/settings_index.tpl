@@ -13,7 +13,7 @@
     
                 var extraContentEditor = CKEDITOR.instances.extra_content;
     
-                $('a.admin-edit-block').on('click', function (e) {
+                $('button.admin-edit-block').on('click', function (e) {
                     e.preventDefault();
     
                     var $self = $(this);
@@ -52,11 +52,11 @@
                 <div class="panel-heading">
                     {{ block_item.icon }} {{ block_item.label }}
                     {% if block_item.editable and _u.is_admin %}
-                        <a class="admin-edit-block pull-right" href="#" data-label="{{ block_item.label }}"
-                           title="{{ 'Edit'|get_lang }}" data-id="{{ block_item.class }}">
+                        <button type="button" class="btn btn-link btn-sm admin-edit-block pull-right"
+                                data-label="{{ block_item.label }}" data-id="{{ block_item.class }}">
                             <img src="{{ "edit.png"|icon(22) }}" width="22" height="22" alt="{{ "Edit"|get_lang }}"
                                  title="{{ "Edit"|get_lang }}"/>
-                        </a>
+                        </button>
                     {% endif %}
                 </div>
                 <div class="panel-body">

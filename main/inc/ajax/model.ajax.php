@@ -292,8 +292,6 @@ switch ($action) {
 
             $searchByGroups = true;
         } elseif (api_is_platform_admin()) {
-
-
             //get students with course or session
             $userIdList = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
                 'admin',
@@ -1170,7 +1168,8 @@ switch ($action) {
                     'extra' => $extra_fields,
                     'limit' => "$start , $limit",
                 ),
-                false
+                false,
+                $session_columns
             );
         } else {
             $result = SessionManager::get_sessions_admin_complete(

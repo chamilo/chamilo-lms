@@ -367,3 +367,5 @@ $_configuration['agenda_legend'] = [
 //$_configuration['full_ckeditor_toolbar_set'] = false;
 // Allow change the orientation when export a single (course progress) thematic to pdf. Portrait or landscape
 //$_configuration['single_thematic_pdf_orientation'] = 'landscape';
+// Show number of users in session list
+//$_configuration['session_list_show_count_users'] = false;

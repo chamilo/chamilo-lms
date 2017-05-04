@@ -425,10 +425,11 @@ class SessionManager
      * Gets the admin session list callback of the session/session_list.php page
      * @param array $options order and limit keys
      * @param boolean $get_count Whether to get all the results or only the count
+     * @param array $columns
      * @return mixed Integer for number of rows, or array of results
      * @assert (array(),true) !== false
      */
-    public static function get_sessions_admin($options = array(), $get_count = false)
+    public static function get_sessions_admin($options = array(), $get_count = false, $columns = [])
     {
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
         $sessionCategoryTable = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
@@ -461,10 +462,19 @@ class SessionManager
         $limit = $conditions['limit'];
 
         $isMakingOrder = false;
+        $showCountUsers = false;
 
         if ($get_count == true) {
             $select = " SELECT count(DISTINCT s.id) as total_rows";
         } else {
+            if (!empty($columns['column_model'])) {
+                foreach ($columns['column_model'] as $column) {
+                    if ($column['name'] == 'users') {
+                        $showCountUsers = true;
+                    }
+                }
+            }
+
             $select =
                 "SELECT DISTINCT 
                      s.name,
@@ -477,6 +487,10 @@ class SessionManager
                      $inject_extra_fields 
                      s.id 
              ";
+
+            if ($showCountUsers) {
+                $select .= ', count(su.user_id) users';
+            }
 
             $isMakingOrder = strpos($options['order'], 'category_name') === 0;
         }
@@ -496,10 +510,16 @@ class SessionManager
             }
         }
 
+        if ($showCountUsers) {
+            $table = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+            //$tableUserUrl = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+            $inject_joins .= " LEFT JOIN $table su ON (su.session_id = s.id)";
+        }
+
         $query = "$select FROM $tbl_session s $inject_joins $where $inject_where";
 
         if (api_is_multiple_url_enabled()) {
-            $table_access_url_rel_session= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+            $table_access_url_rel_session = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
                 $where.= " AND ar.access_url_id = $access_url_id ";
@@ -510,6 +530,9 @@ class SessionManager
             }
         }
 
+        if ($showCountUsers) {
+            $query .= ' GROUP by s.id';
+        }
         $query .= $order;
         $query .= $limit;
         $result = Database::query($query);
@@ -583,6 +606,7 @@ class SessionManager
                 $formatted_sessions[$session_id]['category_name'] = $categoryName;
             }
         }
+
         return $formatted_sessions;
     }
 
@@ -3760,7 +3784,6 @@ class SessionManager
         $sql .= api_sort_by_first_name() ? ' firstname, lastname' : '  lastname, firstname';
 
         $result = Database::query($sql);
-
         if ($getCount) {
             $count = Database::fetch_assoc($result);
 
@@ -7489,6 +7512,7 @@ class SessionManager
      */
     public static function getGridColumns($list_type = 'simple')
     {
+        $showCount = api_get_configuration_value('session_list_show_count_users');
         // Column config
         $operators = array('cn', 'nc');
         $date_operators = array('gt', 'ge', 'lt', 'le');
@@ -7505,13 +7529,65 @@ class SessionManager
                     //get_lang('CourseTitle'),
                     get_lang('Visibility'),
                 );
-                $column_model = array (
-                    array('name'=>'name', 'index'=>'s.name', 'width'=>'160',  'align'=>'left', 'search' => 'true', 'searchoptions' => array('sopt' => $operators)),
-                    array('name'=>'category_name', 'index'=>'category_name', 'width'=>'40',  'align'=>'left', 'search' => 'true', 'searchoptions' => array('sopt' => $operators)),
-                    array('name'=>'display_start_date', 'index'=>'display_start_date', 'width'=>'50',   'align'=>'left', 'search' => 'true', 'searchoptions' => array('dataInit' => 'date_pick_today', 'sopt' => $date_operators)),
-                    array('name'=>'display_end_date', 'index'=>'display_end_date', 'width'=>'50',   'align'=>'left', 'search' => 'true', 'searchoptions' => array('dataInit' => 'date_pick_one_month', 'sopt' => $date_operators)),
-                    array('name'=>'visibility', 'index'=>'visibility',      'width'=>'40',   'align'=>'left', 'search' => 'false'),
+
+                $column_model = array(
+                    array(
+                        'name' => 'name',
+                        'index' => 's.name',
+                        'width' => '160',
+                        'align' => 'left',
+                        'search' => 'true',
+                        'searchoptions' => array('sopt' => $operators),
+                    ),
+                    array(
+                        'name' => 'category_name',
+                        'index' => 'category_name',
+                        'width' => '40',
+                        'align' => 'left',
+                        'search' => 'true',
+                        'searchoptions' => array('sopt' => $operators),
+                    ),
+                    array(
+                        'name' => 'display_start_date',
+                        'index' => 'display_start_date',
+                        'width' => '50',
+                        'align' => 'left',
+                        'search' => 'true',
+                        'searchoptions' => array(
+                            'dataInit' => 'date_pick_today',
+                            'sopt' => $date_operators,
+                        ),
+                    ),
+                    array(
+                        'name' => 'display_end_date',
+                        'index' => 'display_end_date',
+                        'width' => '50',
+                        'align' => 'left',
+                        'search' => 'true',
+                        'searchoptions' => array(
+                            'dataInit' => 'date_pick_one_month',
+                            'sopt' => $date_operators,
+                        ),
+                    ),
+                    array(
+                        'name' => 'visibility',
+                        'index' => 'visibility',
+                        'width' => '40',
+                        'align' => 'left',
+                        'search' => 'false',
+                    ),
                 );
+
+                if ($showCount) {
+                    $columns[] = get_lang('Users');
+                    $column_model[] = array(
+                        'name' => 'users',
+                        'index' => 'users',
+                        'width' => '20',
+                        'align' => 'left',
+                        'search' => 'false',
+                    );
+                }
                 break;
             case 'complete':
                 $columns = array(

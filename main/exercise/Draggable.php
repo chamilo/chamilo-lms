@@ -52,6 +52,8 @@ class Draggable extends Question
                 $nb_options++;
             }
         } else if (!empty($this->id)) {
+            $defaults['orientation'] = in_array($this->extra, ['h', 'v']) ? $this->extra : 'h';
+
             $answer = new Answer($this->id);
             $answer->read();
 
@@ -76,6 +78,7 @@ class Draggable extends Question
             $defaults['matches[2]'] = '2';
             $defaults['option[1]'] = get_lang('DefaultMatchingOptA');
             $defaults['option[2]'] = get_lang('DefaultMatchingOptB');
+            $defaults['orientation'] = 'h';
         }
 
         for ($i = 1; $i <= $nb_matches; ++$i) {
@@ -84,6 +87,12 @@ class Draggable extends Question
 
         $form->addElement('hidden', 'nb_matches', $nb_matches);
         $form->addElement('hidden', 'nb_options', $nb_options);
+
+        $form->addRadio(
+            'orientation',
+            get_lang('Orientation'),
+            ['h' => get_lang('Horizontal'), 'v' => get_lang('Vertical')]
+        );
 
         // DISPLAY MATCHES
         $html = '<table class="table table-striped table-hover">
@@ -168,6 +177,7 @@ class Draggable extends Question
      */
     public function processAnswersCreation($form)
     {
+        $this->extra = $form->exportValue('orientation');
         $nb_matches = $form->getSubmitValue('nb_matches');
         $this->weighting = 0;
         $position = 0;

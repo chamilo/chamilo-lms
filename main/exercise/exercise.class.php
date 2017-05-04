@@ -3199,7 +3199,7 @@ class Exercise
         $totalScore = 0;
 
         // Extra information of the question
-        if (!empty($extra)) {
+        if ($answerType == MULTIPLE_ANSWER_TRUE_FALSE && !empty($extra)) {
             $extra = explode(':', $extra);
             if ($debug) {
                 error_log(print_r($extra, 1));

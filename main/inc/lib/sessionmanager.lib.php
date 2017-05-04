@@ -5,6 +5,7 @@ use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use \ExtraField as ExtraFieldModel;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\SequenceResource;
 
 /**
  * Class SessionManager
@@ -1553,18 +1554,22 @@ class SessionManager
 
         $ticket = Database::get_main_table(TABLE_TICKET_TICKET);
         $em = Database::getManager();
-
         $userId = api_get_user_id();
 
         /** @var \Chamilo\CoreBundle\Entity\Repository\SequenceRepository $repo */
         $repo = Database::getManager()->getRepository('ChamiloCoreBundle:SequenceResource');
-        $sequenceResourse = $repo->findRequirementForResource(
+        $sequenceResource = $repo->findRequirementForResource(
             $id_checked,
-            \Chamilo\CoreBundle\Entity\SequenceResource::SESSION_TYPE
+            SequenceResource::SESSION_TYPE
         );
 
-        if ($sequenceResourse) {
-            Display::addFlash(Display::return_message(get_lang('ThereIsASequenceResourceLinkedToThisSessionYouNeedToDeleteItFirst'), 'error'));
+        if ($sequenceResource) {
+            Display::addFlash(
+                Display::return_message(
+                    get_lang('ThereIsASequenceResourceLinkedToThisSessionYouNeedToDeleteItFirst'),
+                    'error'
+                )
+            );
             return false;
         }
 
@@ -1596,7 +1601,6 @@ class SessionManager
         foreach ($courses as $courseId) {
             $courseInfo = api_get_course_info_by_id($courseId);
             DocumentManager::deleteDocumentsFromSession($courseInfo, $id_checked);
-
             $works = Database::select(
                 '*',
                 $tbl_student_publication,
@@ -1606,7 +1610,6 @@ class SessionManager
             );
 
             $currentCourseRepositorySys = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/';
-
             foreach ($works as $index => $work) {
                 if ($work['filetype'] = 'folder') {
                     Database::query("DELETE FROM $tbl_student_publication_assignment WHERE publication_id = $index");
@@ -1638,7 +1641,7 @@ class SessionManager
 
         $repo->deleteResource(
             $id_checked,
-            \Chamilo\CoreBundle\Entity\SequenceResource::SESSION_TYPE
+            SequenceResource::SESSION_TYPE
         );
 
         // Add event to system log
@@ -1746,15 +1749,28 @@ class SessionManager
                     continue;
                 }
 
-                $tplSubject = new Template(null, false, false, false, false, false);
+                $tplSubject = new Template(
+                    null,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                );
                 $layoutSubject = $tplSubject->get_template(
                     'mail/subject_subscription_to_session_confirmation.tpl'
                 );
                 $subject = $tplSubject->fetch($layoutSubject);
-
                 $user_info = api_get_user_info($user_id);
 
-                $tplContent = new Template(null, false, false, false, false, false);
+                $tplContent = new Template(
+                    null,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                );
                 // Variables for default template
                 $tplContent->assign(
                     'complete_name',
@@ -1852,7 +1868,6 @@ class SessionManager
                     );
 
                     if (Database::affected_rows($result)) {
-
                         $nbr_users++;
                     }
                 }
@@ -2046,7 +2061,6 @@ class SessionManager
         $session_visibility = intval($session_visibility);
 
         if ($removeUsersNotInList) {
-
             $currentUsers = self::getUsersByCourseSession($session_id, $courseInfo, 0);
 
             if (!empty($user_list)) {
@@ -2199,12 +2213,12 @@ class SessionManager
      * Subscribes courses to the given session and optionally (default)
      * unsubscribe previous users
      * @author Carlos Vargas from existing code
-     * @param	int		$sessionId
-     * @param	array	$courseList List of courses int ids
-     * @param	bool	$removeExistingCoursesWithUsers Whether to unsubscribe
+     * @param   int $sessionId
+     * @param   array $courseList List of courses int ids
+     * @param   bool $removeExistingCoursesWithUsers Whether to unsubscribe
      * existing courses and users (true, default) or not (false)
      * @param bool $copyEvaluation from base course to session course
-     * @return	void	Nothing, or false on error
+     * @return    void    Nothing, or false on error
      * */
     public static function add_courses_to_session(
         $sessionId,
@@ -2851,7 +2865,6 @@ class SessionManager
         }
 
         $orderAvailableList = array('name');
-
         if (count($order_by) > 0) {
             $order = null;
             $direction = null;
@@ -3056,7 +3069,6 @@ class SessionManager
     public static function removeAllDrhFromSession($sessionId)
     {
         $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-
         $sessionId = (int) $sessionId;
 
         if (empty($sessionId)) {
@@ -3389,7 +3401,14 @@ class SessionManager
         if (Database::num_rows($result) > 0) {
             $sysUploadPath = api_get_path(SYS_UPLOAD_PATH). 'sessions/';
             $webUploadPath = api_get_path(WEB_UPLOAD_PATH). 'sessions/';
-            $imgPath = Display::return_icon('session_default_small.png', null, null, null, null, true);
+            $imgPath = Display::return_icon(
+                'session_default_small.png',
+                null,
+                null,
+                null,
+                null,
+                true
+            );
 
             $tableExtraFields = Database::get_main_table(TABLE_EXTRA_FIELD);
             $sql = "SELECT id FROM " . $tableExtraFields . "
@@ -3638,7 +3657,6 @@ class SessionManager
 
         return $courses;
     }
-
 
     /**
      * Gets the count of courses by session filtered by access_url
@@ -3984,8 +4002,7 @@ class SessionManager
             }
 
             $courses = null;
-
-            //We will copy the current courses of the session to new courses
+            // We will copy the current courses of the session to new courses
             if (!empty($short_courses)) {
                 if ($create_new_courses) {
                     //Just in case
@@ -4748,10 +4765,8 @@ class SessionManager
                     }
                 }
 
-
                 // See BT#6449
                 $onlyAddFirstCoachOrTeacher = false;
-
                 if ($sessionWithCoursesModifier) {
                     if (count($courses) >= 2) {
                         // Only first teacher in course session;
@@ -5753,7 +5768,6 @@ class SessionManager
         $sessionIdList = array()
     ) {
         $teacherListId = array();
-
         if (api_is_drh() || api_is_platform_admin()) {
             // Followed teachers by drh
             if (api_drh_can_access_all_session_content()) {
@@ -6193,6 +6207,8 @@ class SessionManager
      * @param int $duration
      * @param int $userId
      * @param int $sessionId
+     *
+     * @return bool
      */
     public static function editUserSessionDuration($duration, $userId, $sessionId)
     {
@@ -6208,6 +6224,7 @@ class SessionManager
         $parameters = array('duration' => $duration);
         $where = array('session_id = ? AND user_id = ? ' => array($sessionId, $userId));
         Database::update($table, $parameters, $where);
+        return true;
     }
 
     /**
@@ -6275,8 +6292,11 @@ class SessionManager
      * @param boolean $asPlatformAdmin The user is a platform admin and we want all sessions
      * @return array The session list
      */
-    public static function getSessionsCoachedByUser($coachId, $checkSessionRelUserVisibility = false, $asPlatformAdmin = false)
-    {
+    public static function getSessionsCoachedByUser(
+        $coachId,
+        $checkSessionRelUserVisibility = false,
+        $asPlatformAdmin = false
+    ) {
         // Get all sessions where $coachId is the general coach
         $sessions = self::get_sessions_by_general_coach($coachId, $asPlatformAdmin);
         // Get all sessions where $coachId is the course - session coach
@@ -6409,9 +6429,7 @@ class SessionManager
     public static function getTotalUserTimeInPlatform($userId, $from = '', $until = '')
     {
         $userId = intval($userId);
-
         $trackLoginTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-
         $whereConditions = array(
             'login_user_id = ? ' => $userId,
         );
@@ -6488,7 +6506,6 @@ class SessionManager
 
         return $list;
     }
-
 
     /**
      * Returns list of a few data from session (name, short description, start
@@ -6823,7 +6840,6 @@ class SessionManager
         $sTable = Database::get_main_table(TABLE_MAIN_SESSION);
         $extraFieldTable = Database::get_main_table(TABLE_EXTRA_FIELD);
         $sfvTable = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
-
         $term = Database::escape_string($term);
         $extraFieldType = ExtraField::SESSION_FIELD_TYPE;
         if (is_array($extraFieldsToInclude) && count($extraFieldsToInclude) > 0) {

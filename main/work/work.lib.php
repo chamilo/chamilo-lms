@@ -3854,6 +3854,7 @@ function processWorkForm(
     }
 
     $groupIid = 0;
+    $groupInfo = [];
     if ($groupId) {
         $groupInfo = GroupManager::get_group_properties($groupId);
         $groupIid = $groupInfo['iid'];
@@ -3910,7 +3911,7 @@ function processWorkForm(
                 $workId,
                 'DocumentAdded',
                 $userId,
-                $groupIid
+                $groupInfo
             );
             sendAlertToUsers($workId, $courseInfo, $sessionId);
             Event::event_upload($workId);
@@ -4009,6 +4010,7 @@ function addDir($formValues, $user_id, $courseInfo, $groupId, $session_id)
     $groupId = intval($groupId);
 
     $groupIid = 0;
+    $groupInfo = [];
     if (!empty($groupId)) {
         $groupInfo = GroupManager::get_group_properties($groupId);
         $groupIid = $groupInfo['iid'];
@@ -4080,7 +4082,7 @@ function addDir($formValues, $user_id, $courseInfo, $groupId, $session_id)
         $workTable->getIid(),
         'DirectoryCreated',
         $user_id,
-        $groupIid
+        $groupInfo
     );
 
     updatePublicationAssignment(

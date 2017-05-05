@@ -3516,7 +3516,7 @@ function api_get_item_visibility(
  * @param string $tool
  * @param int $itemId
  * @param int $userId
- * @param int $groupId
+ * @param int $groupId group.iid
  * @param int $sessionId
  * @return false|null
  */
@@ -3581,7 +3581,7 @@ function api_item_property_delete(
  * (3) "visible"
  * (4) "invisible"
  * @param int $user_id id of the editing/adding user
- * @param int $to_group_id group.iid
+ * @param array $groupInfo must include group.iid/group.od
  * @param int $to_user_id id of the intended user (always has priority over $to_group_id !), only relevant for $type (1)
  * @param string $start_visible 0000-00-00 00:00:00 format
  * @param string $end_visible 0000-00-00 00:00:00 format
@@ -3597,7 +3597,7 @@ function api_item_property_update(
     $item_id,
     $last_edit_type,
     $user_id,
-    $to_group_id = 0,
+    $groupInfo = [],
     $to_user_id = null,
     $start_visible = '',
     $end_visible = '',
@@ -3611,6 +3611,11 @@ function api_item_property_update(
 
     if (empty($course_id)) {
         return false;
+    }
+
+    $to_group_id = 0;
+    if (!empty($groupInfo) && isset($groupInfo['iid'])) {
+        $to_group_id = $groupInfo['iid'];
     }
 
     $em = Database::getManager();
@@ -3662,7 +3667,6 @@ function api_item_property_update(
     }
 
     $toValueCondition = empty($to_value) ? "NULL" : "'$to_value'";
-
     // Set filters for $to_user_id and $to_group_id, with priority for $to_user_id
     $condition_session = " AND session_id = $session_id ";
     if (empty($session_id)) {
@@ -4589,7 +4593,6 @@ function api_get_permissions_for_new_files()
  */
 function rmdirr($dirname, $delete_only_content_in_folder = false, $strict = false) {
     $res = true;
-
     // A sanity check.
     if (!file_exists($dirname)) {
         return false;
@@ -6839,7 +6842,7 @@ function api_is_global_chat_enabled()
  *
  * @param int $item_id
  * @param int $tool_id
- * @param int $group_id iid
+ * @param int $group_id id
  * @param array $courseInfo
  * @param int $sessionId
  * @param int $userId
@@ -6912,7 +6915,7 @@ function api_set_default_visibility(
             $item_id,
             $visibility,
             $userId,
-            $groupIid,
+            $groupInfo,
             null,
             null,
             null,
@@ -6920,7 +6923,6 @@ function api_set_default_visibility(
         );
 
         // Fixes default visibility for tests
-
         switch ($original_tool_id) {
             case TOOL_QUIZ:
                 if (empty($sessionId)) {

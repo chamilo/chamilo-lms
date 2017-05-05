@@ -265,6 +265,7 @@ class Agenda
 
                     $groupId = api_get_group_id();
                     $groupIid = 0;
+                    $groupInfo = [];
                     if ($groupId) {
                         $groupInfo = GroupManager::get_group_properties(
                             $groupId
@@ -284,7 +285,7 @@ class Agenda
                                 $id,
                                 'AgendaAdded',
                                 $senderId,
-                                $groupIid,
+                                $groupInfo,
                                 '',
                                 $start,
                                 $end,
@@ -296,7 +297,7 @@ class Agenda
                                 $id,
                                 'visible',
                                 $senderId,
-                                $groupIid,
+                                $groupInfo,
                                 '',
                                 $start,
                                 $end,
@@ -306,13 +307,13 @@ class Agenda
                             // Storing the selected groups
                             if (!empty($sendTo['groups'])) {
                                 foreach ($sendTo['groups'] as $group) {
-                                    $groupIidItem = 0;
+                                    $groupInfoItem = [];
                                     if ($group) {
-                                        $groupInfo = GroupManager::get_group_properties(
+                                        $groupInfoItem = GroupManager::get_group_properties(
                                             $group
                                         );
-                                        if ($groupInfo) {
-                                            $groupIidItem = $groupInfo['iid'];
+                                        if ($groupInfoItem) {
+                                            $groupIidItem = $groupInfoItem['iid'];
                                         }
                                     }
 
@@ -322,7 +323,7 @@ class Agenda
                                         $id,
                                         'AgendaAdded',
                                         $senderId,
-                                        $groupIidItem,
+                                        $groupInfoItem,
                                         0,
                                         $start,
                                         $end,
@@ -335,7 +336,7 @@ class Agenda
                                         $id,
                                         'visible',
                                         $senderId,
-                                        $groupIidItem,
+                                        $groupInfoItem,
                                         0,
                                         $start,
                                         $end,
@@ -353,7 +354,7 @@ class Agenda
                                         $id,
                                         'AgendaAdded',
                                         $senderId,
-                                        $groupIid,
+                                        $groupInfo,
                                         $userId,
                                         $start,
                                         $end,
@@ -366,7 +367,7 @@ class Agenda
                                         $id,
                                         'visible',
                                         $senderId,
-                                        $groupIid,
+                                        $groupInfo,
                                         $userId,
                                         $start,
                                         $end,
@@ -808,11 +809,11 @@ class Agenda
                                 foreach ($eventInfo['send_to']['groups'] as $group) {
                                     $groupIidItem = 0;
                                     if ($group) {
-                                        $groupInfo = GroupManager::get_group_properties(
+                                        $groupInfoItem = GroupManager::get_group_properties(
                                             $group
                                         );
-                                        if ($groupInfo) {
-                                            $groupIidItem = $groupInfo['iid'];
+                                        if ($groupInfoItem) {
+                                            $groupIidItem = $groupInfoItem['iid'];
                                         }
                                     }
 
@@ -850,7 +851,7 @@ class Agenda
                                 $id,
                                 'visible',
                                 $authorId,
-                                $groupIid,
+                                $groupInfo,
                                 null,
                                 $start,
                                 $end,
@@ -870,14 +871,11 @@ class Agenda
                             // Add groups
                             if (!empty($groupToAdd)) {
                                 foreach ($groupToAdd as $group) {
-                                    $groupIidItem = 0;
+                                    $groupInfoItem = [];
                                     if ($group) {
-                                        $groupInfo = GroupManager::get_group_properties(
+                                        $groupInfoItem = GroupManager::get_group_properties(
                                             $group
                                         );
-                                        if ($groupInfo) {
-                                            $groupIidItem = $groupInfo['iid'];
-                                        }
                                     }
 
                                     api_item_property_update(
@@ -886,7 +884,7 @@ class Agenda
                                         $id,
                                         'visible',
                                         $authorId,
-                                        $groupIidItem,
+                                        $groupInfoItem,
                                         0,
                                         $start,
                                         $end,
@@ -899,12 +897,13 @@ class Agenda
                             if (!empty($groupsToDelete)) {
                                 foreach ($groupsToDelete as $group) {
                                     $groupIidItem = 0;
+                                    $groupInfoItem = [];
                                     if ($group) {
-                                        $groupInfo = GroupManager::get_group_properties(
+                                        $groupInfoItem = GroupManager::get_group_properties(
                                             $group
                                         );
-                                        if ($groupInfo) {
-                                            $groupIidItem = $groupInfo['iid'];
+                                        if ($groupInfoItem) {
+                                            $groupIidItem = $groupInfoItem['iid'];
                                         }
                                     }
 
@@ -928,7 +927,7 @@ class Agenda
                                         $id,
                                         'visible',
                                         $authorId,
-                                        $groupIid,
+                                        $groupInfo,
                                         $userId,
                                         $start,
                                         $end,
@@ -945,7 +944,7 @@ class Agenda
                                         TOOL_CALENDAR_EVENT,
                                         $id,
                                         $userId,
-                                        $groupIid,
+                                        $groupInfo,
                                         $this->sessionId
                                     );
                                 }

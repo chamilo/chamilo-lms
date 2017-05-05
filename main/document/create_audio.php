@@ -355,7 +355,6 @@ function downloadMP3_google($filepath, $dir)
     }
 
     $documentPath = $filepath . '/' . $audio_filename;
-
     $clean_text = api_replace_dangerous_char($clean_text);
 
     // adding the file
@@ -380,6 +379,7 @@ function downloadMP3_google($filepath, $dir)
     // add document to database
     $current_session_id = api_get_session_id();
     $groupId = api_get_group_id();
+    $groupInfo = GroupManager::get_group_properties($groupId);
     $relativeUrlPath = $dir;
     $doc_id = add_document(
         $_course,
@@ -394,7 +394,7 @@ function downloadMP3_google($filepath, $dir)
         $doc_id,
         'DocumentAdded',
         $_user['user_id'],
-        $groupId,
+        $groupInfo,
         null,
         null,
         null,
@@ -495,6 +495,7 @@ function downloadMP3_pediaphon($filepath, $dir)
     //add document to database
     $current_session_id = api_get_session_id();
     $groupId = api_get_group_id();
+    $groupInfo = GroupManager::get_group_properties($groupId);
     $relativeUrlPath = $dir;
     $doc_id = add_document(
         $_course,
@@ -509,7 +510,7 @@ function downloadMP3_pediaphon($filepath, $dir)
         $doc_id,
         'DocumentAdded',
         $_user['user_id'],
-        $groupId,
+        $groupInfo,
         null,
         null,
         null,

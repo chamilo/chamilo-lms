@@ -345,6 +345,7 @@ class AnnouncementManager
         ) {
             $modify_icons = "<a href=\"" . api_get_self() . "?" . api_get_cidreq() . "&action=modify&id=" . $id . "\">" .
                 Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL) . "</a>";
+
             if ($itemProperty->getVisibility() === 1) {
                 $image_visibility = 'visible';
                 $alt_visibility = get_lang('Hide');
@@ -538,13 +539,14 @@ class AnnouncementManager
                 if (is_array($send_to['groups']) && !empty($send_to['groups'])) {
                     $counter = 1;
                     foreach ($send_to['groups'] as $group) {
+                        $groupInfo = GroupManager::get_group_properties($group);
                         api_item_property_update(
                             $courseInfo,
                             TOOL_ANNOUNCEMENT,
                             $last_id,
                             'AnnouncementAdded',
                             $authorId,
-                            $group
+                            $groupInfo
                         );
 
                         if (($counter % $batchSize) === 0) {
@@ -648,13 +650,14 @@ class AnnouncementManager
                 // storing the selected groups
                 if (is_array($send_to['groups'])) {
                     foreach ($send_to['groups'] as $group) {
+                        $groupInfo = GroupManager::get_group_properties($group);
                         api_item_property_update(
                             $_course,
                             TOOL_ANNOUNCEMENT,
                             $last_id,
                             'AnnouncementAdded',
                             api_get_user_id(),
-                            $group
+                            $groupInfo
                         );
                     }
                 }
@@ -666,6 +669,7 @@ class AnnouncementManager
                 // storing the selected users
                 if (is_array($to_users) && is_array($to_groups)) {
                     foreach ($to_groups as $group) {
+                        $groupInfo = GroupManager::get_group_properties($group);
                         foreach ($to_users as $user) {
                             api_item_property_update(
                                 $_course,
@@ -673,7 +677,7 @@ class AnnouncementManager
                                 $last_id,
                                 'AnnouncementAdded',
                                 api_get_user_id(),
-                                $group,
+                                $groupInfo,
                                 $user
                             );
                         }
@@ -761,13 +765,14 @@ class AnnouncementManager
             // storing the selected groups
             if (is_array($send_to['groups'])) {
                 foreach ($send_to['groups'] as $group) {
+                    $groupInfo = GroupManager::get_group_properties($group);
                     api_item_property_update(
                         $_course,
                         TOOL_ANNOUNCEMENT,
                         $id,
                         'AnnouncementUpdated',
                         api_get_user_id(),
-                        $group
+                        $groupInfo
                     );
                 }
             }

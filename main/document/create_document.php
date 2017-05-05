@@ -97,7 +97,7 @@ if (!empty($sessionId) && empty($document_data)) {
     );
 }
 $groupIid = 0;
-
+$group_properties = [];
 if (!empty($groupId)) {
     $group_properties = GroupManager::get_group_properties($groupId);
     $groupIid = $group_properties['iid'];
@@ -193,7 +193,6 @@ if (!is_dir($filepath)) {
     $dir = '/';
 }
 
-$to_group_id = 0;
 if (!$is_certificate_mode) {
     if (api_is_in_group()) {
         $interbreadcrumb[] = array(
@@ -201,7 +200,6 @@ if (!$is_certificate_mode) {
             "name" => get_lang('GroupSpace'),
         );
         $noPHP_SELF = true;
-        $to_group_id = $group_properties['iid'];
         $path = explode('/', $dir);
         if ('/'.$path[1] != $group_properties['directory']) {
             api_not_allowed(true);
@@ -518,8 +516,6 @@ if ($form->validate()) {
         fputs($fp, $content);
         fclose($fp);
         chmod($filepath.$filename.'.'.$extension, api_get_permissions_for_new_files());
-
-
         $file_size = filesize($filepath.$filename.'.'.$extension);
         $save_file_path = $dir.$filename.'.'.$extension;
 
@@ -540,7 +536,7 @@ if ($form->validate()) {
                 $document_id,
                 'DocumentAdded',
                 $userId,
-                $to_group_id,
+                $group_properties,
                 null,
                 null,
                 null,

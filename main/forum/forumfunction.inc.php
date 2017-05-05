@@ -628,6 +628,11 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
     } else {
         $group_id = api_get_group_id();
     }
+    $groupIid = 0;
+    if (!empty($group_id)) {
+        $groupInfo = GroupManager::get_group_properties($group_id);
+        $groupIid = $groupInfo['iid'];
+    }
 
     $table_forums = Database::get_course_table(TABLE_FORUM);
 
@@ -732,7 +737,7 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
             Database::escape_string($values['forum_id']),
             'ForumUpdated',
             api_get_user_id(),
-            $group_id
+            $groupInfo
         );
 
         $return_message = get_lang('ForumEdited');
@@ -775,7 +780,7 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
                 $last_id,
                 'ForumAdded',
                 api_get_user_id(),
-                $group_id
+                $groupInfo
             );
 
             api_set_default_visibility(
@@ -821,6 +826,7 @@ function deleteForumCategoryThread($content, $id)
     $table_forum_thread = Database::get_course_table(TABLE_FORUM_THREAD);
     $course_id = api_get_course_int_id();
     $groupId = api_get_group_id();
+    $groupInfo = GroupManager::get_group_properties($groupId);
     $userId = api_get_user_id();
     $id = intval($id);
 
@@ -890,7 +896,7 @@ function deleteForumCategoryThread($content, $id)
         $id,
         'delete',
         $userId,
-        $groupId
+        $groupInfo
     );
 
     // Check if this returns a true and if so => return $return_message, if not => return false;
@@ -2560,9 +2566,7 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
     } else {
         $visible = 1;
     }
-
     $clean_post_title = $values['post_title'];
-
     // We first store an entry in the forum_thread table because the thread_id is used in the forum_post table.
 
     $lastThread = new CForumThread();
@@ -2627,7 +2631,7 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
             $lastThread->getIid(),
             'ForumThreadAdded',
             $userId,
-            $groupIid,
+            $groupInfo,
             null,
             null,
             null,
@@ -2645,7 +2649,7 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
         api_set_default_visibility(
             $lastThread->getIid(),
             TOOL_FORUM_THREAD,
-            $groupIid,
+            $groupId,
             $courseInfo,
             $sessionId,
             $userId
@@ -2658,8 +2662,7 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
                 $lastThread->getIid(),
                 'invisible',
                 $userId,
-                $groupIid
-
+                $groupInfo
             );
             $visible = 1;
         }
@@ -4775,7 +4778,13 @@ function edit_forum_attachment_file($file_comment, $post_id, $id_attach)
                 $sql = "UPDATE $table_forum_attachment SET filename = '$safe_file_name', comment = '$safe_file_comment', path = '$safe_new_file_name', post_id = '$safe_post_id', size ='".$attachment['size']."'
                        WHERE c_id = $course_id AND id = '$safe_id_attach'";
                 Database::query($sql);
-                api_item_property_update($_course, TOOL_FORUM_ATTACH, $safe_id_attach, 'ForumAttachmentUpdated', api_get_user_id());
+                api_item_property_update(
+                    $_course,
+                    TOOL_FORUM_ATTACH,
+                    $safe_id_attach,
+                    'ForumAttachmentUpdated',
+                    api_get_user_id()
+                );
             }
         }
     }
@@ -4872,7 +4881,13 @@ function delete_attachment($post_id, $id_attach = 0, $display = true)
     }
 
     // Update item_property.
-    api_item_property_update($_course, TOOL_FORUM_ATTACH, $id_attach, 'ForumAttachmentDelete', api_get_user_id());
+    api_item_property_update(
+        $_course,
+        TOOL_FORUM_ATTACH,
+        $id_attach,
+        'ForumAttachmentDelete',
+        api_get_user_id()
+    );
 
     if (!empty($result) && !empty($id_attach) && $display) {
         $message = get_lang('AttachmentFileDeleteSuccess');

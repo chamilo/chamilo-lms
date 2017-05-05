@@ -240,6 +240,7 @@ function handle_uploaded_document(
     }
 
     $groupIid = 0;
+    $groupInfo = [];
     if (!empty($groupId)) {
         $groupInfo = GroupManager::get_group_properties($groupId);
         $groupIid = $groupInfo['iid'];
@@ -415,7 +416,7 @@ function handle_uploaded_document(
                                     $documentId,
                                     'DocumentUpdated',
                                     $userId,
-                                    $groupIid,
+                                    $groupInfo,
                                     $toUserId,
                                     null,
                                     null,
@@ -454,7 +455,7 @@ function handle_uploaded_document(
                                         $documentId,
                                         'DocumentAdded',
                                         $userId,
-                                        $groupIid,
+                                        $groupInfo,
                                         $toUserId,
                                         null,
                                         null,
@@ -462,7 +463,12 @@ function handle_uploaded_document(
                                     );
 
                                     // Redo visibility
-                                    api_set_default_visibility($documentId, TOOL_DOCUMENT, null, $courseInfo);
+                                    api_set_default_visibility(
+                                        $documentId,
+                                        TOOL_DOCUMENT,
+                                        null,
+                                        $courseInfo
+                                    );
                                 }
                             }
 
@@ -503,7 +509,7 @@ function handle_uploaded_document(
                                     $documentId,
                                     'DocumentAdded',
                                     $userId,
-                                    $groupIid,
+                                    $groupInfo,
                                     $toUserId,
                                     null,
                                     null,
@@ -591,7 +597,7 @@ function handle_uploaded_document(
                                 $documentId,
                                 'DocumentAdded',
                                 $userId,
-                                $groupId,
+                                $groupInfo,
                                 $toUserId,
                                 null,
                                 null,
@@ -665,7 +671,7 @@ function handle_uploaded_document(
                                     $documentId,
                                     'DocumentAdded',
                                     $userId,
-                                    $groupId,
+                                    $groupInfo,
                                     $toUserId,
                                     null,
                                     null,
@@ -1604,7 +1610,7 @@ function create_unexisting_directory(
                             $document_id,
                             $visibilities[$visibility],
                             $user_id,
-                            $groupIid,
+                            $groupInfo,
                             $to_user_id,
                             null,
                             null,
@@ -1617,7 +1623,7 @@ function create_unexisting_directory(
                             $document_id,
                             'FolderCreated',
                             $user_id,
-                            $groupIid,
+                            $groupInfo,
                             $to_user_id,
                             null,
                             null,

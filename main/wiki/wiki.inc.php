@@ -274,6 +274,7 @@ class Wiki
         $session_id = api_get_session_id();
         $groupId = api_get_group_id();
         $userId = api_get_user_id();
+        $groupInfo = GroupManager::get_group_properties($groupId);
         $course_id = api_get_course_int_id();
 
         $_clean = array(
@@ -382,7 +383,7 @@ class Wiki
                 $id,
                 'WikiAdded',
                 $userId,
-                $groupId
+                $groupInfo
             );
 
             if ($values['page_id']== 0) {
@@ -439,7 +440,7 @@ class Wiki
             $id,
             'WikiAdded',
             $userId,
-            $groupId
+            $groupInfo
         );
         self::check_emailcue($_clean['reflink'], 'P', $time, $userId);
         $this->setWikiData($id);
@@ -472,6 +473,7 @@ class Wiki
         $r_comment = get_lang('RestoredFromVersion').': '.$c_version;
         $session_id = api_get_session_id();
         $course_id = api_get_course_int_id();
+        $groupInfo = GroupManager::get_group_properties($r_group_id);
 
         $params = [
             'c_id' => $course_id,
@@ -502,7 +504,7 @@ class Wiki
                 $id,
                 'WikiAdded',
                 api_get_user_id(),
-                $r_group_id
+                $groupInfo
             );
             self::check_emailcue($r_reflink, 'P', $r_dtime, $r_user_id);
         }
@@ -616,6 +618,7 @@ class Wiki
         $_clean['version'] = 1;
 
         $groupId = api_get_group_id();
+        $groupInfo = GroupManager::get_group_properties($groupId);
 
         //check wikilinks
         $_clean['linksto'] = self::links_to($_clean['content']);
@@ -692,7 +695,7 @@ class Wiki
                         $id,
                         'WikiAdded',
                         api_get_user_id(),
-                        $groupId
+                        $groupInfo
                     );
 
                     $sql = 'UPDATE '.$tbl_wiki.' SET page_id="'.$id.'"
@@ -1927,6 +1930,7 @@ class Wiki
     {
         $_course = $this->courseInfo;
         $groupId = api_get_group_id();
+        $groupInfo = GroupManager::get_group_properties($groupId);
         $data = self::getWikiDataFromDb($doc_id);
 
         if (empty($data)) {
@@ -2020,7 +2024,7 @@ class Wiki
             $doc_id,
             'DocumentAdded',
             api_get_user_id(),
-            $groupId
+            $groupInfo
         );
 
         return $doc_id;

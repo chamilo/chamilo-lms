@@ -355,6 +355,9 @@ class CourseRestorer
                         $toUserId = isset($document->item_properties[0]['to_user_id']) ? $document->item_properties[0]['to_user_id'] : null;
                         $toUserId = $this->checkUserId($toUserId, true);
 
+                        $groupId = isset($document->item_properties[0]['to_group_id']) ? $document->item_properties[0]['to_group_id'] : null;
+                        $groupInfo = $this->checkGroupId($groupId);
+
                         // if folder exists then just refresh it
                         api_item_property_update(
                             $course_info,
@@ -362,7 +365,7 @@ class CourseRestorer
                             $documentData,
                             'FolderUpdated',
                             $insertUserId,
-                            $document->item_properties[0]['to_group_id'],
+                            $groupInfo,
                             $toUserId,
                             null,
                             null,
@@ -406,7 +409,7 @@ class CourseRestorer
                             $insertUserId = isset($itemProperty['insert_user_id']) ? $itemProperty['insert_user_id'] : api_get_user_id();
                             $toGroupId = isset($itemProperty['to_group_id']) ? $itemProperty['to_group_id'] : 0;
                             $toUserId = isset($itemProperty['to_user_id']) ? $itemProperty['to_user_id'] : null;
-
+                            $groupInfo = $this->checkGroupId($toGroupId);
                             $insertUserId = $this->checkUserId($insertUserId);
                             $toUserId = $this->checkUserId($toUserId, true);
 
@@ -416,7 +419,7 @@ class CourseRestorer
                                 $document_id,
                                 'FolderCreated',
                                 $insertUserId,
-                                $toGroupId,
+                                $groupInfo,
                                 $toUserId,
                                 null,
                                 null,
@@ -468,6 +471,7 @@ class CourseRestorer
 
                                     $insertUserId = $this->checkUserId($insertUserId);
                                     $toUserId = $this->checkUserId($toUserId, true);
+                                    $groupInfo = $this->checkGroupId($toGroupId);
 
                                     api_item_property_update(
                                         $course_info,
@@ -475,7 +479,7 @@ class CourseRestorer
                                         $document_id,
                                         'DocumentAdded',
                                         $insertUserId,
-                                        $toGroupId,
+                                        $groupInfo,
                                         $toUserId,
                                         null,
                                         null,
@@ -514,6 +518,7 @@ class CourseRestorer
 
                                     $insertUserId = $this->checkUserId($insertUserId);
                                     $toUserId = $this->checkUserId($toUserId, true);
+                                    $groupInfo = $this->checkGroupId($toGroupId);
 
                                     api_item_property_update(
                                         $course_info,
@@ -521,7 +526,7 @@ class CourseRestorer
                                         $obj->id,
                                         'default',
                                         $insertUserId,
-                                        $toGroupId,
+                                        $groupInfo,
                                         $toUserId,
                                         null,
                                         null,
@@ -694,6 +699,7 @@ class CourseRestorer
 
                                     $insertUserId = $this->checkUserId($insertUserId);
                                     $toUserId = $this->checkUserId($toUserId, true);
+                                    $groupInfo = $this->checkGroupId($toGroupId);
 
                                     api_item_property_update(
                                         $course_info,
@@ -701,7 +707,7 @@ class CourseRestorer
                                         $document_id,
                                         'DocumentAdded',
                                         $insertUserId,
-                                        $toGroupId,
+                                        $groupInfo,
                                         $toUserId,
                                         null,
                                         null,
@@ -755,6 +761,7 @@ class CourseRestorer
 
                                         $insertUserId = $this->checkUserId($insertUserId);
                                         $toUserId = $this->checkUserId($toUserId, true);
+                                        $groupInfo = $this->checkGroupId($toGroupId);
 
                                         api_item_property_update(
                                             $course_info,
@@ -762,7 +769,7 @@ class CourseRestorer
                                             $document_id,
                                             'DocumentAdded',
                                             $insertUserId,
-                                            $toGroupId,
+                                            $groupInfo,
                                             $toUserId,
                                             null,
                                             null,
@@ -821,6 +828,7 @@ class CourseRestorer
 
                                 $insertUserId = $this->checkUserId($insertUserId);
                                 $toUserId = $this->checkUserId($toUserId, true);
+                                $groupInfo = $this->checkGroupId($toGroupId);
 
                                 api_item_property_update(
                                     $course_info,
@@ -828,7 +836,7 @@ class CourseRestorer
                                     $document_id,
                                     'DocumentAdded',
                                     $insertUserId,
-                                    $toGroupId,
+                                    $groupInfo,
                                     $toUserId,
                                     null,
                                     null,
@@ -897,6 +905,7 @@ class CourseRestorer
 
                         $insertUserId = $this->checkUserId($insertUserId);
                         $toUserId = $this->checkUserId($toUserId, true);
+                        $groupInfo = $this->checkGroupId($toGroupId);
 
                         api_item_property_update(
                             $course_info,
@@ -904,7 +913,7 @@ class CourseRestorer
                             $document_id,
                             'DocumentAdded',
                             $insertUserId,
-                            $toGroupId,
+                            $groupInfo,
                             $toUserId,
                             null,
                             null,
@@ -3496,6 +3505,15 @@ class CourseRestorer
         } else {
             return $array;
         }
+    }
+
+    /**
+     * @param int $groupId
+     * @return array
+     */
+    public function checkGroupId($groupId)
+    {
+        return \GroupManager::get_group_properties($groupId);
     }
 
     /**

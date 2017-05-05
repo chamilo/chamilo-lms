@@ -150,10 +150,17 @@ class OpenofficeText extends OpenofficeDocument {
             fwrite($handle, $page_content);
             fclose($handle);
 
-            $document_id = add_document($_course, $this->created_dir.'/'.$html_file, 'file', filesize($this->base_work_dir.$this->created_dir.'/'.$html_file), $html_file);
+            $document_id = add_document(
+                $_course,
+                $this->created_dir.'/'.$html_file,
+                'file',
+                filesize(
+                    $this->base_work_dir.$this->created_dir.'/'.$html_file
+                ),
+                $html_file
+            );
 
-            if ($document_id){
-
+            if ($document_id) {
                 // Put the document in item_property update.
                 api_item_property_update(
                     $_course,
@@ -200,12 +207,9 @@ class OpenofficeText extends OpenofficeDocument {
         $pages = explode('||page_break||', $body);
 
         $first_item = 0;
-
         foreach ($pages as $key => $page_content) {
             // For every pages, we create a new file.
-
             $key += 1;
-
             $page_content = $this->format_page_content($header, $page_content, $this->base_work_dir.$this->created_dir);
             $html_file = $this->created_dir.'-'.$key.'.html';
             $handle = fopen($this->base_work_dir.$this->created_dir.'/'.$html_file, 'w+');

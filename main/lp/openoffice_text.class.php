@@ -32,7 +32,6 @@ class OpenofficeText extends OpenofficeDocument {
      * @param	string	Course code
      * @param	integer	Resource ID
      * @param	integer Creator user id
-     * @return	void
      */
     public function __construct($split_steps = false, $course_code = null, $resource_id = null, $user_id = null) {
         $this -> split_steps = $split_steps;

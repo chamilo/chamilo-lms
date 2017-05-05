@@ -18,7 +18,7 @@ require_once '../../../../../inc/global.inc.php';
 api_protect_course_script();
 api_block_anonymous_users();
 
-if(!isset($_POST['output_svg']) && !isset($_POST['output_png'])) {
+if (!isset($_POST['output_svg']) && !isset($_POST['output_png'])) {
     api_not_allowed();//from Chamilo
     die();
 }
@@ -47,7 +47,7 @@ $filename = $file;//from svg-edit
 $extension = $suffix;// from svg-edit
 $content = $contents;//from svg-edit
 
-$title = Database::escape_string(str_replace('_',' ',$filename));
+$title = Database::escape_string(str_replace('_', ' ', $filename));
 
 //get Chamilo variables
 
@@ -79,17 +79,17 @@ if ($suffix != 'svg' && $suffix != 'png') {
 //comment because finfo seems stopping the save process files in some php vers.
 /*
 if (phpversion() >= '5.3' && extension_loaded('fileinfo')) {
-	$finfo = new finfo(FILEINFO_MIME);
-	$current_mime=$finfo->buffer($contents);
-	finfo_close($finfo);
-	$mime_png='image/png';//svg-edit return image/png; charset=binary
-	$mime_svg='image/svg+xml';
-	$mime_xml='application/xml';//hack for svg-edit because original code return application/xml; charset=us-ascii. See
-	if(strpos($current_mime, $mime_png)===false && $extension=='png') {
-		die();//File extension does not match its content
-	} elseif(strpos($current_mime, $mime_svg)===false && strpos($current_mime, $mime_xml)===false && $extension=='svg') {
-		die();//File extension does not match its content
-	}
+    $finfo = new finfo(FILEINFO_MIME);
+    $current_mime=$finfo->buffer($contents);
+    finfo_close($finfo);
+    $mime_png='image/png';//svg-edit return image/png; charset=binary
+    $mime_svg='image/svg+xml';
+    $mime_xml='application/xml';//hack for svg-edit because original code return application/xml; charset=us-ascii. See
+    if(strpos($current_mime, $mime_png)===false && $extension=='png') {
+        die();//File extension does not match its content
+    } elseif(strpos($current_mime, $mime_svg)===false && strpos($current_mime, $mime_xml)===false && $extension=='svg') {
+        die();//File extension does not match its content
+    }
 }
 */
 
@@ -110,28 +110,79 @@ if (file_exists($saveDir.'/'.$filename.'.'.$extension) && $currentTool=='documen
 $documentPath = $saveDir.'/'.$drawFileName;
 
 //add new document to disk
-file_put_contents( $documentPath, $contents );
+file_put_contents($documentPath, $contents);
 
 if ($currentTool=='document/createdraw') {
     //add document to database
-    $doc_id = add_document($_course, $relativeUrlPath.'/'.$drawFileName, 'file', filesize($documentPath), $title);
-    api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'], $groupId, null, null, null, $current_session_id);
-
-} elseif($currentTool=='document/editdraw') {
-
+    $doc_id = add_document(
+        $_course,
+        $relativeUrlPath.'/'.$drawFileName,
+        'file',
+        filesize($documentPath),
+        $title
+    );
+    api_item_property_update(
+        $_course,
+        TOOL_DOCUMENT,
+        $doc_id,
+        'DocumentAdded',
+        $_user['user_id'],
+        $groupId,
+        null,
+        null,
+        null,
+        $current_session_id
+    );
+} elseif ($currentTool == 'document/editdraw') {
     //check path
-    if (!isset($_SESSION['draw_file'])){
+    if (!isset($_SESSION['draw_file'])) {
         api_not_allowed();//from Chamilo
         die();
     }
-    if ($_SESSION['draw_file'] == $drawFileName ){
-        $document_id = DocumentManager::get_document_id($_course, $relativeUrlPath.'/'.$drawFileName);
-        update_existing_document($_course, $document_id, filesize($documentPath), null);
-        api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentUpdated', $_user['user_id'], $groupId, null, null, null, $current_session_id);
+    if ($_SESSION['draw_file'] == $drawFileName) {
+        $document_id = DocumentManager::get_document_id(
+            $_course,
+            $relativeUrlPath.'/'.$drawFileName
+        );
+        update_existing_document(
+            $_course,
+            $document_id,
+            filesize($documentPath),
+            null
+        );
+        api_item_property_update(
+            $_course,
+            TOOL_DOCUMENT,
+            $document_id,
+            'DocumentUpdated',
+            $_user['user_id'],
+            $groupId,
+            null,
+            null,
+            null,
+            $current_session_id
+        );
     } else {
         //add a new document
-        $doc_id = add_document($_course, $relativeUrlPath.'/'.$drawFileName, 'file', filesize($documentPath), $title);
-        api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'], $groupId, null, null, null, $current_session_id);
+        $doc_id = add_document(
+            $_course,
+            $relativeUrlPath.'/'.$drawFileName,
+            'file',
+            filesize($documentPath),
+            $title
+        );
+        api_item_property_update(
+            $_course,
+            TOOL_DOCUMENT,
+            $doc_id,
+            'DocumentAdded',
+            $_user['user_id'],
+            $groupId,
+            null,
+            null,
+            null,
+            $current_session_id
+        );
     }
 }
 
@@ -146,8 +197,6 @@ if ($suffix != 'png') {
     };
     $url = api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq().'&curdirpath='.urlencode($relativeUrlPath);
     $message = get_lang('FileSavedAs').': '.$title;
-    //echo 'alert("'.get_lang('FileSavedAs').': '.$title.'");';
-    //echo 'window.top.location.href="'.$interbreadcrumb.'";';//return to current document list
 } else {
     $url = '';
     $message = get_lang('FileExportAs').': '.$title;

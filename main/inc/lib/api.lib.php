@@ -1413,6 +1413,14 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
 
     $result['profile_url'] = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user_id;
 
+    // Send message link
+    $sendMessage = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&user_id='.$user_id;
+    $result['complete_name_with_message_link'] = Display::url(
+        $result['complete_name'],
+        $sendMessage,
+        ['class' => 'ajax']
+    );
+
     if (isset($user['extra'])) {
         $result['extra'] = $user['extra'];
     }

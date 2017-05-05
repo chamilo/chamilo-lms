@@ -3137,12 +3137,12 @@ class Agenda
                     $end->format('e')
                 );
                 $title = api_convert_encoding(
-                    (string)$event->summary,
+                    (string) $event->summary,
                     $charset,
                     'UTF-8'
                 );
                 $description = api_convert_encoding(
-                    (string)$event->description,
+                    (string) $event->description,
                     $charset,
                     'UTF-8'
                 );

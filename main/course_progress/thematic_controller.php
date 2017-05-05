@@ -204,7 +204,7 @@ class ThematicController
 
                     $list = $thematic->get_thematic_list();
                     $item = array();
-                   
+                    $listFinish = array();
                     foreach ($list as $theme) {
                         $dataPlan = $thematic->get_thematic_plan_data($theme['id']);
                         if (!empty($dataPlan)) {
@@ -220,16 +220,11 @@ class ThematicController
                             $theme['thematic_plan'] = $item;
                             
                         }
-                        
                         $dataAdvance = $thematic->get_thematic_advance_by_thematic_id($theme['id']);
-                        //var_dump($dataAdvance);
                         if (!empty($dataAdvance)) {
                             $theme['thematic_advance'] = $dataAdvance;
                         }
-                        
                         $listFinish[] = $theme;
-                        //var_dump($theme['thematic_advance']);
-                        //exit();
                     }
                     
                     $view = new Template('', false, false, false, true, false, false);

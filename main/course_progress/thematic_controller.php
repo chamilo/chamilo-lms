@@ -199,44 +199,54 @@ class ThematicController
                     // Don't continue building a normal page.
                     return;
                 case 'thematic_export_pdf':
+                    
                     $pdfOrientation = api_get_configuration_value('thematic_pdf_orientation');
 
                     $list = $thematic->get_thematic_list();
-                    $table = array();
-                    $table[] = array(
-                        get_lang('Thematic'),
-                        get_lang('ThematicPlan'),
-                        get_lang('ThematicAdvance')
-                    );
+                    $item = array();
+                   
                     foreach ($list as $theme) {
-                        $data = $thematic->get_thematic_plan_data($theme['id']);
-                        $plan_html = null;
-                        if (!empty($data)) {
-                            foreach ($data as $plan) {
+                        $dataPlan = $thematic->get_thematic_plan_data($theme['id']);
+                        if (!empty($dataPlan)) {
+                            foreach ($dataPlan as $plan) {
                                 if (empty($plan['description'])) {
                                     continue;
                                 }
-
-                                $plan_html .= '<strong>'.$plan['title'].'</strong><br /> '.$plan['description'].'<br />';
+                                $item[] = array(
+                                    'title' => $plan['title'],
+                                    'description' => $plan['description']
+                                );
                             }
+                            $theme['thematic_plan'] = $item;
+                            
                         }
-                        $data = $thematic->get_thematic_advance_by_thematic_id($theme['id']);
-                        $advance_html = null;
-                        if (!empty($data)) {
-                            foreach ($data as $advance) {
-                                $advance_html .= api_convert_and_format_date($advance['start_date'], DATE_FORMAT_LONG).' ('.$advance['duration'].' '.get_lang('HourShort').')<br />'.$advance['content'].'<br />';
-                            }
+                        
+                        $dataAdvance = $thematic->get_thematic_advance_by_thematic_id($theme['id']);
+                        //var_dump($dataAdvance);
+                        if (!empty($dataAdvance)) {
+                            $theme['thematic_advance'] = $dataAdvance;
                         }
-                        $table[] = array($theme['title'], $plan_html, $advance_html);
+                        
+                        $listFinish[] = $theme;
+                        //var_dump($theme['thematic_advance']);
+                        //exit();
                     }
-                    $params = array(
-                        'filename' => get_lang('Thematic').'-'.api_get_local_time(),
-                        'pdf_title' => get_lang('Thematic'),
-                        'add_signatures' => ['Drh', 'Teacher', 'Date'],
-                        'format' => $pdfOrientation !== 'portrait' ? 'A4-L' : 'A4-P',
-                        'orientation' => $pdfOrientation !== 'portrait' ? 'L' : 'P'
+                    
+                    $view = new Template('', false, false, false, true, false, false);
+                    $view->assign('data', $listFinish);
+                    $template = $view->get_template('course_progress/pdf_general_thematic.tpl');
+                    
+                    Export::export_html_to_pdf(
+                        $view->fetch($template),
+                        [
+                            'filename' => get_lang('Thematic').'-'.api_get_local_time(),
+                            'pdf_title' => get_lang('Thematic'),
+                            'add_signatures' => ['Drh', 'Teacher', 'Date'],
+                            'format' => $pdfOrientation !== 'portrait' ? 'A4-L' : 'A4-P',
+                            'orientation' => $pdfOrientation !== 'portrait' ? 'L' : 'P'
+                        ]
                     );
-                    Export::export_table_pdf($table, $params);
+
                     break;
                 case 'export_single_thematic':
                     $theme = $thematic->get_thematic_list($thematic_id);

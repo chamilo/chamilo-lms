@@ -673,7 +673,17 @@ div.system_announcement_content {
 }
 
 /* New print CSS */
-
+.pdf-header{
+    border-bottom: 1px solid #CCC;
+    margin-bottom: 100px;
+}
+.pdf-header .logo a img{
+    width: 100px;
+}
+table{
+    display: block;
+    width: 100%;
+}
 table th,
 table td {
 	padding: 5px;

@@ -6199,7 +6199,7 @@ class SessionManager
     public static function getDayLeftInSession(array $sessionInfo, $userId)
     {
         $sessionId = $sessionInfo['id'];
-        $userSubsubscription = SessionManager::getUserSession($userId, $sessionId);
+        $userSubsubscription = self::getUserSession($userId, $sessionId);
         $duration = empty($userSubsubscription['duration'])
             ? $sessionInfo['duration']
             : $sessionInfo['duration'] + $userSubsubscription['duration'];

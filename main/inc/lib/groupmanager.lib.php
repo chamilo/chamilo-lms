@@ -1762,10 +1762,10 @@ class GroupManager
         if (empty($groupInfo)) {
             return false;
         }
+
         $table_group_tutor = Database::get_course_table(TABLE_GROUP_TUTOR);
         $user_id = intval($user_id);
         $group_id = intval($groupInfo['id']);
-
         $course_id = api_get_course_int_id();
 
         $sql = "SELECT * FROM $table_group_tutor

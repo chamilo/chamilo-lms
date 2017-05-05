@@ -1468,14 +1468,13 @@ class AnnouncementManager
                             INNER JOIN $tbl_item_property ip
                             ON (announcement.id = ip.ref AND announcement.c_id = ip.c_id)
                             WHERE
-                                ip.tool='announcement' AND
+                                ip.tool = 'announcement' AND
                                 announcement.c_id = $course_id AND
                                 ip.c_id = $course_id  AND
                                 (ip.visibility='0' OR ip.visibility='1')
                                 $condition_session
                                 $searchCondition
                             ORDER BY display_order DESC";
-                    //GROUP BY ip.ref
                 }
             }
         } else {

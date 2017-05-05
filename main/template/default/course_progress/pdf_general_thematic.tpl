@@ -3,13 +3,13 @@
     <thead>
         <tr>
             <th width="30%" style="display:inline-block; padding: 10px; text-align: center; background-color: #E5E5E5;">
-                {{ "Thematic" | get_lang }}
+                {{ "Thematic"|get_lang }}
             </th>
             <th width="50%" style="display:inline-block; padding: 10px; text-align: center; background-color: #E5E5E5;">
-                {{ "ThematicPlan" | get_lang }}
+                {{ "ThematicPlan"|get_lang }}
             </th>
             <th width="20%" style="display:inline-block; padding: 10px; text-align: center; background-color: #E5E5E5;">
-                {{ "ThematicAdvance" | get_lang }}
+                {{ "ThematicAdvance"|get_lang }}
            </th>
         </tr>
     </thead>

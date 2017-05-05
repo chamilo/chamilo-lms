@@ -267,20 +267,15 @@ class Agenda
                     Database::query($sql);
 
                     $groupId = api_get_group_id();
-                    $groupIid = 0;
                     $groupInfo = [];
                     if ($groupId) {
                         $groupInfo = GroupManager::get_group_properties(
                             $groupId
                         );
-                        if ($groupInfo) {
-                            $groupIid = $groupInfo['iid'];
-                        }
                     }
 
                     if (!empty($usersToSend)) {
                         $sendTo = $this->parseSendToArray($usersToSend);
-
                         if ($sendTo['everyone']) {
                             api_item_property_update(
                                 $this->course,
@@ -2337,8 +2332,8 @@ class Agenda
         if (isset($groupId) && !empty($groupId)) {
             $form->addElement(
                 'hidden',
-                'selected_form[0]',
-                "GROUP:'.$groupId.'"
+                'users_to_send[]',
+                "GROUP:$groupId"
             );
             $form->addElement('hidden', 'to', 'true');
         } else {

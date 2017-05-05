@@ -78,15 +78,18 @@ class Agenda
                 $groupId = api_get_group_id();
                 if (!empty($groupId)) {
                     $groupInfo = GroupManager::get_group_properties($groupId);
-                    $isGroupAccess = GroupManager::user_has_access(
-                            api_get_user_id(),
-                            $groupInfo['iid'],
-                            GroupManager::GROUP_TOOL_CALENDAR
-                        ) &&
-                        GroupManager::is_tutor_of_group(
-                            api_get_user_id(),
-                            $groupInfo
-                        );
+
+                    $userHasAccess = GroupManager::user_has_access(
+                        api_get_user_id(),
+                        $groupInfo['iid'],
+                        GroupManager::GROUP_TOOL_CALENDAR
+                    );
+                    $isTutor = GroupManager::is_tutor_of_group(
+                        api_get_user_id(),
+                        $groupInfo
+                    );
+
+                    $isGroupAccess = $userHasAccess || $isTutor;
                     if ($isGroupAccess) {
                         $isAllowToEdit = true;
                     } else {

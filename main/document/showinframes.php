@@ -145,7 +145,7 @@ if (empty($document_data['parents'])) {
     }
 } else {
     foreach ($document_data['parents'] as $document_sub_data) {
-        if (!isset($_GET['createdir']) && $document_sub_data['id'] ==  $document_data['id']) {
+        if (!isset($_GET['createdir']) && $document_sub_data['id'] == $document_data['id']) {
             $document_sub_data['document_url'] = '#';
         }
         $interbreadcrumb[] = array(
@@ -173,7 +173,7 @@ $frameheight = 135;
 if ($is_courseAdmin) {
     $frameheight = 165;
 }
-$js_glossary_in_documents =	'
+$js_glossary_in_documents = '
   $.frameReady(function(){
    //  $("<div>I am a div courses</div>").prependTo("body");
   }, "top.mainFrame",
@@ -193,7 +193,7 @@ $web_odf_supported_files = DocumentManager::get_web_odf_extension_list();
 // PDF should be displayed with viewerJS
 $web_odf_supported_files[] = 'pdf';
 if (in_array(strtolower($pathinfo['extension']), $web_odf_supported_files)) {
-    $show_web_odf  = true;
+    $show_web_odf = true;
     /*
     $htmlHeadXtra[] = api_get_js('webodf/webodf.js');
     $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/webodf/webodf.css');
@@ -236,7 +236,7 @@ if ($isChatFolder) {
     $htmlHeadXtra[] = api_get_js('highlight/highlight.pack.js');
     $htmlHeadXtra[] = api_get_css(api_get_path(WEB_CSS_PATH).'chat.css');
     $htmlHeadXtra[] = api_get_css(
-        api_get_path(WEB_LIBRARY_PATH) . 'javascript/highlight/styles/github.css'
+        api_get_path(WEB_LIBRARY_PATH).'javascript/highlight/styles/github.css'
     );
     $htmlHeadXtra[] = '
     <script>
@@ -288,7 +288,7 @@ if ($show_web_odf) {
     $execute_iframe = false;
 }
 
-$is_freemind_available = $pathinfo['extension']=='mm' && api_get_setting('enable_freemind') == 'true';
+$is_freemind_available = $pathinfo['extension'] == 'mm' && api_get_setting('enable_freemind') == 'true';
 if ($is_freemind_available) {
     $execute_iframe = false;
 }
@@ -331,18 +331,18 @@ $file_url = api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/document'.$heade
 $file_url_web = $file_url.'?'.api_get_cidreq();
 
 if (in_array(strtolower($pathinfo['extension']), array('html', "htm"))) {
-    echo '<a class="btn btn-default" href="' . $file_url_web . '" target="_blank">' . get_lang('CutPasteLink') . '</a>';
+    echo '<a class="btn btn-default" href="'.$file_url_web.'" target="_blank">'.get_lang('CutPasteLink').'</a>';
 }
 
 if ($show_web_odf) {
     $browser = api_get_navigator();
-    $pdfUrl = api_get_path(WEB_LIBRARY_PATH) . 'javascript/ViewerJS/index.html#' . $file_url;
+    $pdfUrl = api_get_path(WEB_LIBRARY_PATH).'javascript/ViewerJS/index.html#'.$file_url;
     if ($browser['name'] == 'Mozilla' && preg_match('|.*\.pdf|i', $header_file)) {
         $pdfUrl = $file_url;
     }
     echo '<div id="viewerJS">';
     echo '<iframe id="viewerJSContent" frameborder="0" allowfullscreen="allowfullscreen" webkitallowfullscreen style="width:100%;"
-            src="' . $pdfUrl. '">
+            src="' . $pdfUrl.'">
         </iframe>';
     echo '</div>';
 } elseif (!$originIsLearnpath) {

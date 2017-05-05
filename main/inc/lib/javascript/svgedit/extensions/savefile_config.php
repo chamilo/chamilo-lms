@@ -58,6 +58,7 @@ if (!isset($_SESSION['draw_dir']) && !isset($_SESSION['whereami'])) {
 
 $current_session_id = api_get_session_id();
 $groupId = api_get_group_id();
+$groupInfo = GroupManager::get_group_properties($groupId);
 $relativeUrlPath = $_SESSION['draw_dir'];
 $currentTool = $_SESSION['whereami'];
 $dirBaseDocuments = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
@@ -127,7 +128,7 @@ if ($currentTool=='document/createdraw') {
         $doc_id,
         'DocumentAdded',
         $_user['user_id'],
-        $groupId,
+        $groupInfo,
         null,
         null,
         null,
@@ -156,7 +157,7 @@ if ($currentTool=='document/createdraw') {
             $document_id,
             'DocumentUpdated',
             $_user['user_id'],
-            $groupId,
+            $groupInfo,
             null,
             null,
             null,
@@ -177,7 +178,7 @@ if ($currentTool=='document/createdraw') {
             $doc_id,
             'DocumentAdded',
             $_user['user_id'],
-            $groupId,
+            $groupInfo,
             null,
             null,
             null,

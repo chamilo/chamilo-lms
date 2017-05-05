@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * This is the profile social main page
  * @author Julio Montoya <gugli100@gmail.com>
@@ -63,7 +65,7 @@ if (!empty($_POST['social_wall_new_msg_main']) || !empty($_FILES['picture']['tmp
     header('Location: '.$url);
     exit;
 
-} else if (!empty($_POST['social_wall_new_msg']) && !empty($_POST['messageId'])) {
+} elseif (!empty($_POST['social_wall_new_msg']) && !empty($_POST['messageId'])) {
     $messageId = intval($_POST['messageId']);
     $messageContent = $_POST['social_wall_new_msg'];
 
@@ -80,7 +82,7 @@ if (!empty($_POST['social_wall_new_msg_main']) || !empty($_FILES['picture']['tmp
     header('Location: '.$url);
     exit;
 
-} else if (isset($_GET['messageId'])) {
+} elseif (isset($_GET['messageId'])) {
     $messageId = intval($_GET['messageId']);
     $messageInfo = MessageManager::get_message_by_id($messageId);
     if (!empty($messageInfo)) {
@@ -94,7 +96,7 @@ if (!empty($_POST['social_wall_new_msg_main']) || !empty($_FILES['picture']['tmp
         }
     }
     api_not_allowed(true);
-} else if (isset($_GET['u'])) { //I'm your friend? I can see your profile?
+} elseif (isset($_GET['u'])) { //I'm your friend? I can see your profile?
     $user_id = intval($_GET['u']);
     if (api_is_anonymous($user_id, true)) {
         api_not_allowed(true);
@@ -166,7 +168,6 @@ if (file_exists($timeAgoLocaleDir)) {
 }
 
 $htmlHeadXtra[] = '<script>
-
 $(document).ready(function (){
     var container = $("#wallMessages");
     container.jscroll({
@@ -175,8 +176,7 @@ $(document).ready(function (){
         contentSelector: "",
         callback: timeAgo
     });
-    timeAgo()
-
+    timeAgo();
 });
 
 function timeAgo() {
@@ -214,7 +214,7 @@ if (isset($_GET['u'])) {
     $param_user = '';
 }
 
-$_SESSION['social_user_id'] = intval($user_id);
+Session::write('social_user_id', (int) $user_id);
 
 // Setting some course info
 $my_user_id = isset($_GET['u']) ? intval($_GET['u']) : api_get_user_id();

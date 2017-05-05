@@ -132,16 +132,16 @@ function aiken_import_exercise($file)
     }
 
     // find the different manifests for each question and parse them
-    $exerciseHandle = opendir($baseWorkDir);
+    $exerciseHandle = opendir($baseWorkDir.$uploadPath);
     $file_found = false;
     $operation = false;
     $result = false;
 
     // Parse every subdirectory to search txt question files
     while (false !== ($file = readdir($exerciseHandle))) {
-        if (is_dir($baseWorkDir.'/'.$file) && $file != "." && $file != "..") {
+        if (is_dir($baseWorkDir.'/'.$uploadPath.$file) && $file != "." && $file != "..") {
             //find each manifest for each question repository found
-            $questionHandle = opendir($baseWorkDir.'/'.$file);
+            $questionHandle = opendir($baseWorkDir.'/'.$uploadPath.$file);
             while (false !== ($questionFile = readdir($questionHandle))) {
                 if (preg_match('/.txt$/i', $questionFile)) {
                     $result = aiken_parse_file(
@@ -154,7 +154,7 @@ function aiken_import_exercise($file)
                 }
             }
         } elseif (preg_match('/.txt$/i', $file)) {
-            $result = aiken_parse_file($exercise_info, $baseWorkDir, '', $file);
+            $result = aiken_parse_file($exercise_info, $baseWorkDir.$uploadPath, '', $file);
             $file_found = true;
         }
     }

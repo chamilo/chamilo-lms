@@ -1659,6 +1659,7 @@ class Agenda
             }
         }
 
+        $group_memberships = [];
         if (!empty($groupId)) {
             if (!api_is_allowed_to_edit()) {
                 $user_id = api_get_user_id();
@@ -1683,12 +1684,14 @@ class Agenda
                     $user_id
                 );
             } else {
-                // If no group was defined and I am a teacher/admin reviewing
-                // someone else's agenda, we should fetch this person's groups
-                $group_memberships = GroupManager::get_group_ids(
-                    $course_id,
-                    $user_id
-                );
+                if (empty($user_id)) {
+                    // If no group was defined and I am a teacher/admin reviewing
+                    // someone else's agenda, we should fetch all groups
+                    $groupList = GroupManager::get_group_list();
+                    if (!empty($groupList)) {
+                        $group_memberships = array_column($groupList, 'id');
+                    }
+                }
             }
         }
 
@@ -1702,28 +1705,16 @@ class Agenda
         if (is_array($group_memberships) && count($group_memberships) > 0) {
             if (api_is_allowed_to_edit()) {
                 if (!empty($groupId)) {
-                    $where_condition = "( ip.to_group_id IN (".implode(
-                            ", ",
-                            $group_memberships
-                        ).") ) ";
+                    $where_condition = "( ip.to_group_id IN (".implode(", ", $group_memberships).") ) ";
                 } else {
                     if (!empty($user_id)) {
-                        $where_condition = "( ip.to_user_id = $user_id OR ip.to_user_id IS NULL OR (ip.to_group_id IN (0, ".implode(
-                                ", ",
-                                $group_memberships
-                            ).")) ) ";
+                        $where_condition = "( ip.to_user_id = $user_id OR ip.to_user_id IS NULL OR (ip.to_group_id IN (0, ".implode(", ", $group_memberships).")) ) ";
                     } else {
-                        $where_condition = "( ip.to_group_id IN (0, ".implode(
-                                ", ",
-                                $group_memberships
-                            ).") ) ";
+                        $where_condition = "( ip.to_group_id IN (0, ".implode(", ", $group_memberships).") ) ";
                     }
                 }
             } else {
-                $where_condition = "( ip.to_user_id = $user_id OR ip.to_user_id IS NULL OR (ip.to_group_id IN (0, ".implode(
-                        ", ",
-                        $group_memberships
-                    ).")) ) ";
+                $where_condition = "( ip.to_user_id = $user_id OR ip.to_user_id IS NULL OR (ip.to_group_id IN (0, ".implode(", ", $group_memberships).")) ) ";
             }
 
             if (empty($session_id)) {

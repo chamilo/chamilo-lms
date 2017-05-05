@@ -418,7 +418,7 @@ class Exercise
         $res = EXERCISE_CATEGORY_RANDOM_DISABLED;
         if ($this->randomByCat == EXERCISE_CATEGORY_RANDOM_SHUFFLED) {
             $res = EXERCISE_CATEGORY_RANDOM_SHUFFLED;
-        } else if ($this->randomByCat == EXERCISE_CATEGORY_RANDOM_ORDERED) {
+        } elseif ($this->randomByCat == EXERCISE_CATEGORY_RANDOM_ORDERED) {
             $res = EXERCISE_CATEGORY_RANDOM_ORDERED;
         }
 
@@ -1949,11 +1949,14 @@ class Exercise
                     array('id' => 'result_disabled_4')
                 );
 
-                $form->addGroup($radios_results_disabled, null, get_lang('ShowResultsToStudents'));
+                $form->addGroup(
+                    $radios_results_disabled,
+                    null,
+                    get_lang('ShowResultsToStudents')
+                );
 
                 // Type of questions disposition on page
                 $radios = array();
-
                 $radios[] = $form->createElement('radio', 'exerciseType', null, get_lang('SimpleExercise'),    '1', array('onclick' => 'check_per_page_all()', 'id'=>'option_page_all'));
                 $radios[] = $form->createElement('radio', 'exerciseType', null, get_lang('SequentialExercise'),'2', array('onclick' => 'check_per_page_one()', 'id'=>'option_page_one'));
 
@@ -1997,8 +2000,28 @@ class Exercise
                     $form->addElement('hidden', 'exerciseType', ONE_PER_PAGE);
 
                     // Type of questions disposition on page
-                    $radios[] = $form->createElement('radio', 'exerciseType', null, get_lang('SimpleExercise'),    '1', array('onclick' => 'check_per_page_all()', 'id'=>'option_page_all'));
-                    $radios[] = $form->createElement('radio', 'exerciseType', null, get_lang('SequentialExercise'),'2', array('onclick' => 'check_per_page_one()', 'id'=>'option_page_one'));
+                    $radios[] = $form->createElement(
+                        'radio',
+                        'exerciseType',
+                        null,
+                        get_lang('SimpleExercise'),
+                        '1',
+                        array(
+                            'onclick' => 'check_per_page_all()',
+                            'id' => 'option_page_all',
+                        )
+                    );
+                    $radios[] = $form->createElement(
+                        'radio',
+                        'exerciseType',
+                        null,
+                        get_lang('SequentialExercise'),
+                        '2',
+                        array(
+                            'onclick' => 'check_per_page_one()',
+                            'id' => 'option_page_one',
+                        )
+                    );
 
                     $type_group = $form->addGroup($radios, null, get_lang('QuestionsPerPage'));
                     $type_group->freeze();
@@ -2153,8 +2176,7 @@ class Exercise
             $form->addElement('date_time_picker', 'end_time');
             $form->addElement('html','</div>');
 
-            //$check_option=$this->selectType();
-            $diplay = 'block';
+            $display = 'block';
             $form->addElement('checkbox', 'propagate_neg', null, get_lang('PropagateNegativeResults'));
             $form->addCheckBox(
                 'save_correct_answers',
@@ -2164,7 +2186,7 @@ class Exercise
             $form->addElement('html','<div class="clear">&nbsp;</div>');
             $form->addElement('checkbox', 'review_answers', null, get_lang('ReviewAnswers'));
 
-            $form->addElement('html','<div id="divtimecontrol"  style="display:'.$diplay.';">');
+            $form->addElement('html','<div id="divtimecontrol"  style="display:'.$display.';">');
 
             //Timer control
             //$time_hours_option = range(0,12);
@@ -2538,8 +2560,8 @@ class Exercise
                 $ic_slide->addValue("content", $exercise_description);
 
                 $di = new ChamiloIndexer();
-                isset($_POST['language'])? $lang=Database::escape_string($_POST['language']): $lang = 'english';
-                $di->connectDb(NULL, NULL, $lang);
+                isset($_POST['language']) ? $lang = Database::escape_string($_POST['language']): $lang = 'english';
+                $di->connectDb(null, null, $lang);
                 $di->remove_document((int)$se_ref['search_did']);
                 $di->addChunk($ic_slide);
 
@@ -2860,9 +2882,7 @@ class Exercise
     public function show_button($question_id, $questionNum, $questions_in_media = array(), $currentAnswer = '')
     {
         global $origin, $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id;
-
         $nbrQuestions = $this->get_count_question_list();
-
         $all_button = [];
         $html = $label = '';
         $hotspot_get = isset($_POST['hotspot']) ? Security::remove_XSS($_POST['hotspot']):null;
@@ -4490,7 +4510,7 @@ class Exercise
                                 )
                             );
                             echo '</tr>';
-                        } else if ($answerType == ANNOTATION) {
+                        } elseif ($answerType == ANNOTATION) {
                             ExerciseShowFunctions::displayAnnotationAnswer(
                                 $feedback_type,
                                 $exeId,
@@ -5109,7 +5129,7 @@ class Exercise
                     ";
                     //	}
                 }
-            } else if ($answerType == ANNOTATION) {
+            } elseif ($answerType == ANNOTATION) {
                 if ($show_result) {
                     echo '
                         <p><em>' . get_lang('Annotation') . '</em></p>
@@ -5911,7 +5931,7 @@ class Exercise
                     $message = sprintf(get_lang('ExerciseAvailableFromX'),
                         api_convert_and_format_date($this->start_time));
             }
-            } else if (!$existsStartDate && $existsEndDate) {
+            } elseif (!$existsStartDate && $existsEndDate) {
                 // doesnt exist start date, exists end date
                 if ($nowIsBeforeEndDate) {
                     // before end date, no start date
@@ -7421,7 +7441,7 @@ class Exercise
             for ($i = 0; $i < min($numberRandomQuestions, count($questionScoreList)); $i++) {
                 $out_max_score += $questionScoreList[$i];
             }
-        } else if ($this->random > 0 && $this->randomByCat > 0) {
+        } elseif ($this->random > 0 && $this->randomByCat > 0) {
             // test is random by category
             // get the $numberRandomQuestions best score question of each category
 

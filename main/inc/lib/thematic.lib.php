@@ -22,7 +22,7 @@ class Thematic
     private $thematic_advance_id;
     private $attendance_id;
     private $thematic_advance_content;
-    private	$start_date;
+    private $start_date;
     private $duration;
     private $course_int_id;
 
@@ -47,7 +47,7 @@ class Thematic
         }
         $course_id = api_get_course_int_id();
         $sql = "SELECT COUNT(id) AS total_number_of_items
-		        FROM $tbl_thematic
+                FROM $tbl_thematic
                 WHERE c_id = $course_id AND active = 1 $condition_session ";
         $res = Database::query($sql);
         $obj = Database::fetch_object($res);
@@ -83,9 +83,9 @@ class Thematic
 
         $sql = "SELECT id AS col0, title AS col1, display_order AS col2, session_id
                 FROM $tbl_thematic
-				WHERE c_id = $course_id AND active = 1 $condition_session
-				ORDER BY col2
-				LIMIT $from,$number_of_items ";
+                WHERE c_id = $course_id AND active = 1 $condition_session
+                ORDER BY col2
+                LIMIT $from,$number_of_items ";
         $res = Database::query($sql);
 
         $thematics = array();
@@ -153,7 +153,8 @@ class Thematic
 
     /**
      * Get the maximum display order of the thematic item
-     * @return int	Maximum display order
+     * @param bool $use_session
+     * @return int    Maximum display order
      */
     public function get_max_thematic_item($use_session = true)
     {
@@ -199,8 +200,8 @@ class Thematic
 
         $sql = "SELECT id, display_order
                 FROM $tbl_thematic
-		        WHERE c_id = $course_id AND active = 1 $condition_session
-		        ORDER BY display_order $sortorder";
+                WHERE c_id = $course_id AND active = 1 $condition_session
+                ORDER BY display_order $sortorder";
         $res = Database::query($sql);
         $found = false;
 
@@ -226,13 +227,13 @@ class Thematic
 
         if (!empty($next_display_order) && !empty($current_id)) {
             $sql = "UPDATE $tbl_thematic SET display_order = $next_display_order
-			        WHERE c_id = $course_id AND id = $current_id ";
+                    WHERE c_id = $course_id AND id = $current_id ";
             Database::query($sql);
         }
         if (!empty($current_display_order) && !empty($next_id)) {
             $sql = "UPDATE $tbl_thematic SET
                     display_order = $current_display_order
-			        WHERE c_id = $course_id AND id = $next_id ";
+                    WHERE c_id = $course_id AND id = $next_id ";
             Database::query($sql);
         }
 
@@ -379,7 +380,7 @@ class Thematic
 
         if (is_array($thematic_id)) {
             foreach ($thematic_id as $id) {
-                $id	= intval($id);
+                $id = intval($id);
                 $sql = "UPDATE $tbl_thematic SET active = 0
                         WHERE c_id = $course_id AND id = $id";
                 $result = Database::query($sql);
@@ -506,9 +507,9 @@ class Thematic
         if (api_is_allowed_to_edit(null, true)) {
             $sql = "SELECT id AS col0, start_date AS col1, duration AS col2, content AS col3
                     FROM $tbl_thematic_advance
-    				WHERE c_id = $course_id AND thematic_id = $thematic_id
-    				ORDER BY col$column $direction
-    				LIMIT $from,$number_of_items ";
+                    WHERE c_id = $course_id AND thematic_id = $thematic_id
+                    ORDER BY col$column $direction
+                    LIMIT $from,$number_of_items ";
 
             $list = api_get_item_property_by_tool(
                 'thematic_advance',
@@ -540,9 +541,9 @@ class Thematic
 
     /**
      * get thematic advance data by thematic id
-     * @param	int		$thematic_id
-     * @param	string	Course code (optional)
-     * @return	array	data
+     * @param    int $thematic_id
+     * @param    string $course_code    Course code (optional)
+     * @return    array    data
      */
     public function get_thematic_advance_by_thematic_id($thematic_id, $course_code = null)
     {
@@ -883,9 +884,9 @@ class Thematic
         if (!empty($thematic_plan_id_list)) {
             $sql = "SELECT
                         tp.id, thematic_id, tp.title, description, description_type, t.session_id
-			        FROM $tbl_thematic_plan tp
-			        INNER JOIN $tbl_thematic t 
-			        ON (t.id=tp.thematic_id)
+                    FROM $tbl_thematic_plan tp
+                    INNER JOIN $tbl_thematic t 
+                    ON (t.id=tp.thematic_id)
                     WHERE
                         t.c_id = $course_id AND
                         tp.c_id = $course_id
@@ -1093,10 +1094,10 @@ class Thematic
 
         $sql = "SELECT MAX(description_type) as max
                 FROM $tbl_thematic_plan
-		        WHERE
-		            c_id = $course_id AND
-		            thematic_id = $thematic_id AND
-		            description_type >= ".ADD_THEMATIC_PLAN;
+                WHERE
+                    c_id = $course_id AND
+                    thematic_id = $thematic_id AND
+                    description_type >= ".ADD_THEMATIC_PLAN;
         $rs = Database::query($sql);
         $row = Database::fetch_array($rs);
         $last_description_type = $row['max'];
@@ -1192,7 +1193,7 @@ class Thematic
             $diff = array_diff($all, $a_thematic_advance_ids);
             if (!empty($diff)) {
                 $upd = "UPDATE $tbl_thematic_advance SET done_advance = 0
-    			        WHERE c_id = $course_id AND id IN(".implode(',',$diff).") ";
+                        WHERE c_id = $course_id AND id IN(".implode(',',$diff).") ";
                 Database::query($upd);
             }
 

@@ -1109,7 +1109,7 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
         }
 
         //If password is set and user is not registered to the course then the course is not visible
-        if ($is_allowed_in_course == false &
+        if ($is_allowed_in_course == false &&
             isset($course_info['registration_code']) &&
             !empty($course_info['registration_code'])
         ) {

@@ -17,7 +17,7 @@ api_protect_course_script();
 
 /* Header and action code */
 $htmlHeadXtra[] = '<script>'.
-$_SESSION['oLP']->get_js_dropdown_array() .
+$_SESSION['oLP']->get_js_dropdown_array().
 "
     function load_cbo(id) {
         if (!id) {
@@ -41,13 +41,13 @@ $_SESSION['oLP']->get_js_dropdown_array() .
         $('#previous').selectpicker('refresh');
     }
 " .
-"\n" .
-'$().ready(function() {'."\n" .
-  'if ($(\'#previous\')) {'."\n" .
+"\n".
+'$().ready(function() {'."\n".
+  'if ($(\'#previous\')) {'."\n".
     'if(\'parent is\'+$(\'#idParent\').val()) {'.
-      'load_cbo($(\'#idParent\').val());'."\n" .
-  '}}'."\n" .
-'});</script>'."\n" ;
+      'load_cbo($(\'#idParent\').val());'."\n".
+  '}}'."\n".
+'});</script>'."\n";
 
 /* Constants and variables */
 
@@ -81,11 +81,11 @@ $therow = Database::fetch_array($result);
 /* SHOWING THE ADMIN TOOLS */
 
 if (isset($_SESSION['gradebook'])) {
-    $gradebook=	$_SESSION['gradebook'];
+    $gradebook = $_SESSION['gradebook'];
 }
 
 if (!empty($gradebook) && $gradebook == 'view') {
-    $interbreadcrumb[] = array (
+    $interbreadcrumb[] = array(
         'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
         'name' => get_lang('ToolGradebook')
     );

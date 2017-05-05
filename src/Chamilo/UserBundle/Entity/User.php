@@ -161,7 +161,7 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     private $authSource;
 
     /**
-     * @var boolean
+     * @var int
      *
      * @ORM\Column(name="status", type="integer", nullable=false)
      */

@@ -238,6 +238,7 @@ if (api_get_setting('allow_group_categories') === 'true') {
             // Edit
             $actions .= '<a href="group_category.php?'.api_get_cidreq().'&id='.$categoryId.'" title="'.get_lang('Edit').'">'.
                 Display::return_icon('edit.png', get_lang('EditGroup'), '', ICON_SIZE_SMALL).'</a>';
+
             // Delete
             $actions .= Display::url(
                 Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL),

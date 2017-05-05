@@ -1821,21 +1821,21 @@ class GroupManager
 
         $sql = "SELECT group_id FROM $tbl_group
                 WHERE c_id = $course_id AND user_id = '$user_id'";
-        $groupres = Database::query($sql);
+        $result = Database::query($sql);
 
-        if ($groupres) {
-            while ($myrow = Database::fetch_array($groupres)) {
-                $groups[] = $myrow['group_id'];
+        if ($result) {
+            while ($row = Database::fetch_array($result)) {
+                $groups[] = $row['group_id'];
             }
         }
 
         //Also loading if i'm the tutor
         $sql = "SELECT group_id FROM $tbl_group_tutor
                 WHERE c_id = $course_id AND user_id = '$user_id'";
-        $groupres = Database::query($sql);
-        if ($groupres) {
-            while ($myrow = Database::fetch_array($groupres)) {
-                $groups[] = $myrow['group_id'];
+        $result = Database::query($sql);
+        if ($result) {
+            while ($row = Database::fetch_array($result)) {
+                $groups[] = $row['group_id'];
             }
         }
         if (!empty($groups)) {

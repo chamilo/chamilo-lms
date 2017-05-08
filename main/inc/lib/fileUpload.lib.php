@@ -239,11 +239,9 @@ function handle_uploaded_document(
         $sessionId = intval($sessionId);
     }
 
-    $groupIid = 0;
     $groupInfo = [];
     if (!empty($groupId)) {
         $groupInfo = GroupManager::get_group_properties($groupId);
-        $groupIid = $groupInfo['iid'];
     }
 
     // Just in case process_uploaded_file is not called
@@ -1574,10 +1572,9 @@ function create_unexisting_directory(
                         )
             ";
 
-            $groupIid = 0;
+            $groupInfo = [];
             if (!empty($to_group_id)) {
                 $groupInfo = GroupManager::get_group_properties($to_group_id);
-                $groupIid = $groupInfo['iid'];
             }
 
             $rs = Database::query($sql);

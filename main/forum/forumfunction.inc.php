@@ -2523,8 +2523,14 @@ function updateThread($values)
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version february 2006, dokeos 1.8
  */
-function store_thread($current_forum, $values, $courseInfo = array(), $showMessage = true, $userId = 0, $sessionId = 0)
-{
+function store_thread(
+    $current_forum,
+    $values,
+    $courseInfo = array(),
+    $showMessage = true,
+    $userId = 0,
+    $sessionId = 0
+) {
     $courseInfo = empty($courseInfo) ? api_get_course_info() : $courseInfo;
     $userId = $userId ?: api_get_user_id();
     $course_id = $courseInfo['real_id'];
@@ -2552,7 +2558,11 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
     if (!$upload_ok) {
         if ($showMessage) {
             Display::addFlash(
-                Display::return_message(get_lang('UplNoFileUploaded'), 'error', false)
+                Display::return_message(
+                    get_lang('UplNoFileUploaded'),
+                    'error',
+                    false
+                )
             );
         }
 
@@ -2594,7 +2604,6 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
     $em->flush();
 
     // Add option gradebook qualify.
-
     if (isset($values['thread_qualify_gradebook']) &&
         1 == $values['thread_qualify_gradebook']
     ) {
@@ -2604,7 +2613,6 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
         $resourcename = stripslashes($values['calification_notebook_title']);
         $maxqualify = $values['numeric_calification'];
         $weigthqualify = $values['weight_calification'];
-        $resourcedescription = '';
         GradebookUtils::add_resource_to_course_gradebook(
             $values['category_id'],
             $courseCode,
@@ -2613,7 +2621,7 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
             $resourcename,
             $weigthqualify,
             $maxqualify,
-            $resourcedescription,
+            '',
             0,
             $sessionId
         );
@@ -2697,6 +2705,8 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
     $last_post_id = $lastPost->getIid();
 
     if ($last_post_id) {
+
+
         $lastPost->setPostId($last_post_id);
         $em->merge($lastPost);
         $em->flush();

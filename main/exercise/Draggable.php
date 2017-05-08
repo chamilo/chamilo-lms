@@ -160,6 +160,8 @@ class Draggable extends Question
         if (!empty($this->id)) {
             $form->setDefaults($defaults);
         } else {
+            $form->setDefaults(['orientation' => 'h']);
+
             if ($this->isContent == 1) {
                 $form->setDefaults($defaults);
             }

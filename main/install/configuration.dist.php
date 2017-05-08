@@ -369,3 +369,5 @@ $_configuration['agenda_legend'] = [
 //$_configuration['thematic_pdf_orientation'] = 'landscape';
 // Show number of users in session list
 //$_configuration['session_list_show_count_users'] = false;
+// Session admin access to all course content
+//$_configuration['session_admins_access_all_content'] = false;

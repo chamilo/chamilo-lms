@@ -1071,6 +1071,12 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
         return true;
     }
 
+    // Session admin has access to course
+    $sessionAccess = api_get_configuration_value('session_admins_access_all_content');
+    if ($sessionAccess) {
+        $allow_session_admins = true;
+    }
+
     if (api_is_platform_admin($allow_session_admins)) {
         return true;
     }

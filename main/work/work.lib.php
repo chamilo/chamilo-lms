@@ -2001,13 +2001,13 @@ function get_work_user_list(
                         parent_id,
                         accepted,
                         qualificator_id,
-                        url_correction
+                        url_correction,
+                        title_correction
                         ';
         if ($getCount) {
             $select = "SELECT DISTINCT count(u.user_id) as count ";
         }
 
-        $user_condition = "INNER JOIN $user_table u  ON (work.user_id = u.user_id) ";
         $work_assignment = get_work_assignment_by_id($work_id, $courseId);
 
         if (!empty($studentId)) {
@@ -2015,7 +2015,9 @@ function get_work_user_list(
         }
 
         $sql = " $select
-                FROM $work_table work  $user_condition
+                FROM $work_table work 
+                INNER JOIN $user_table u  
+                ON (work.user_id = u.user_id)
                 WHERE
                     work.c_id = $course_id AND
                     $extra_conditions 
@@ -2177,14 +2179,12 @@ function get_work_user_list(
 
                 $work['qualification_only'] = $qualification_string;
 
-
                 // Date.
                 $work_date = api_get_local_time($work['sent_date']);
                 $date = date_to_str_ago($work['sent_date']).' '.$work_date;
                 $work['formatted_date'] = $work_date.' '.$add_string;
                 $work['sent_date_from_db'] = $work['sent_date'];
                 $work['sent_date'] = '<div class="work-date" title="'.$date.'">'.$add_string.' '.Display::dateToStringAgoAndLongDate($work['sent_date']).'</div>';
-
                 $work['status'] = $hasCorrection;
                 $work['has_correction'] = $hasCorrection;
 
@@ -2198,6 +2198,11 @@ function get_work_user_list(
                             Display::return_icon('export_doc.png', get_lang('ExportToDoc'),array(), ICON_SIZE_SMALL).'</a> ';
                     }
 
+                    $alreadyUploaded = '';
+                    if (!empty($work['url_correction'])) {
+                        $alreadyUploaded = '<br />'.$work['title_correction'].' '.$correctionIcon;
+                    }
+
                     $correction = '
                         <form
                         id="file_upload_'.$item_id.'"
@@ -2207,6 +2212,7 @@ function get_work_user_list(
                         <div id="progress_'.$item_id.'" class="text-center button-load">
                             '.addslashes(get_lang('ClickOrDropOneFileHere')).'
                             '.Display::return_icon('upload_file.png', get_lang('Correction'), [], ICON_SIZE_TINY).'
+                            '.$alreadyUploaded.'
                         </div>
                         <input id="file_'.$item_id.'" type="file" name="file" class="" multiple>
                         </form>
@@ -2242,7 +2248,7 @@ function get_work_user_list(
                         $('#file_upload_".$item_id."').on('dragleave', function (e) {
                             // dragleave callback implementation
                             $(this).removeClass('hover');
-                        });                             
+                        });
                     });
                     </script>";
 
@@ -2993,10 +2999,10 @@ function getWorkComments($work)
     }
 
     $sql = "SELECT
-                c.id, 
+                c.id,
                 c.user_id
             FROM $commentTable c
-            INNER JOIN $userTable u 
+            INNER JOIN $userTable u
             ON (u.id = c.user_id)
             WHERE c_id = $courseId AND work_id = $workId
             ORDER BY sent_at
@@ -4646,7 +4652,7 @@ function updateSettings($courseInfo, $showScore, $studentDeleteOwnPublication)
         return false;
     }
 
-    $query = "UPDATE $main_course_table 
+    $query = "UPDATE $main_course_table
               SET show_score = '$showScore'
               WHERE id = $courseId";
     Database::query($query);
@@ -4662,8 +4668,8 @@ function updateSettings($courseInfo, $showScore, $studentDeleteOwnPublication)
 
     // counting the number of occurrences of this setting (if 0 => add, if 1 => update)
     $query = "SELECT * FROM $table_course_setting
-              WHERE 
-                c_id = $courseId AND 
+              WHERE
+                c_id = $courseId AND
                 variable = 'student_delete_own_publication'";
 
     $result = Database::query($query);

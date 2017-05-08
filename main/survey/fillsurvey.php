@@ -2,12 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 /**
-* @package chamilo.survey
-* @author unknown, the initial survey that did not make it in 1.8 because of bad code
-* @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* @author Julio Montoya Armas <gugli100@gmail.com>, Chamilo: Personality Test modification and rewriting large parts of the code as well
+ * @package chamilo.survey
+ * @author unknown, the initial survey that did not make it in 1.8 because of bad code
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
+ * @author Julio Montoya Armas <gugli100@gmail.com>, Chamilo: Personality Test modification and rewriting large parts of the code as well
  * @todo check if the user already filled the survey and if this is the case then the answers have to be updated and not stored again.
-* @todo performance could be improved if not the survey_id was stored with the invitation but the survey_code
+ * @todo performance could be improved if not the survey_id was stored with the invitation but the survey_code
  */
 // Unsetting the course id (because it is in the URL)
 if (!isset($_GET['cidReq'])) {
@@ -138,8 +138,7 @@ if (Database::num_rows($result) < 1) {
 $survey_invitation = Database::fetch_array($result, 'ASSOC');
 
 // Now we check if the user already filled the survey
-if (
-    !isset($_POST['finish_survey']) &&
+if (!isset($_POST['finish_survey']) &&
     (
         $isAnonymous &&
         isset($_SESSION['surveyuser']) &&
@@ -216,7 +215,6 @@ if (count($_POST) > 0) {
                 when it is a scoring question then the key of the array is the option_id and the value is the value
                 */
                 if (is_array($value)) {
-
                     SurveyUtil::remove_answer(
                         $survey_invitation['user'],
                         $survey_invitation['survey_id'],
@@ -341,7 +339,6 @@ if (count($_POST) > 0) {
         }
     } else {
         // In case it's another type than 0 or 1
-
         die(get_lang('ErrorSurveyTypeUnknown'));
     }
 }
@@ -477,10 +474,9 @@ if ($survey_data['form_fields'] != '' &&
     // EXTRA FIELDS
     $extraField = new ExtraField('user');
     $returnParams = $extraField->addElements($form, api_get_user_id());
-
     $jquery_ready_content = $returnParams['jquery_ready_content'];
 
-// the $jquery_ready_content variable collects all functions that will be load in the $(document).ready javascript function
+    // the $jquery_ready_content variable collects all functions that will be load in the $(document).ready javascript function
     $htmlHeadXtra[] = '<script>
     $(document).ready(function(){
         '.$jquery_ready_content.'
@@ -642,7 +638,6 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
 
         if (array_key_exists($_GET['show'], $paged_questions)) {
             if (isset($_GET['user_id'])) {
-
                 // Get the user into survey answer table (user or anonymus)
                 $my_user_id = ($survey_data['anonymous'] == 1) ? $_SESSION['surveyuser'] : api_get_user_id();
 
@@ -704,9 +699,7 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
             $counter = 0;
             $limit = 0;
             $questions = array();
-
             while ($row = Database :: fetch_array($result, 'ASSOC')) {
-
                 // If the type is not a pagebreak we store it in the $questions array
                 if ($row['type'] != 'pagebreak') {
                     $questions[$row['sort']]['question_id'] = $row['question_id'];
@@ -867,7 +860,9 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
                 // If there is one or less score equalities
                 if ($equal_count === 0 || $equal_count === 1) {
                     // i.e 70% - 70% -60% - 60%  $equal_count = 1 we only get the first 2 options
-                    if (($result[0]['value'] == $result[1]['value']) && ($result[2]['value'] == $result[3]['value'])) {
+                    if (($result[0]['value'] == $result[1]['value']) &&
+                        ($result[2]['value'] == $result[3]['value'])
+                    ) {
                         $group_cant = 1;
                     }
                     // i.e 70% - 70% -0% - 0%     -    $equal_count = 0 we only get the first 2 options
@@ -938,7 +933,6 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
                         !is_array($_SESSION['page_questions_sec']) &&
                         count($_SESSION['page_questions_sec'] == 0)
                     ) {
-
                         $sql = "SELECT * FROM $table_survey_question
                                  WHERE
                                     c_id = $course_id AND
@@ -962,8 +956,6 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
                     } else {
                         $paged_questions_sec = $_SESSION['paged_questions_sec'];
                     }
-                    //print_r($paged_questions_sec);
-
                     $paged_questions = $_SESSION['paged_questions']; // For the sake of pages counting
                     //$paged_questions = $paged_questions_sec; // For the sake of pages counting coming up at display time...
 
@@ -977,7 +969,6 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
                     //}
                     //echo '<pre>'; print_r($paged_questions_sec); echo '</pre>';
                     if (is_array($paged_questions_sec)) {
-
                         $sql = "SELECT
                                     survey_question.survey_group_sec1,
                                     survey_question.survey_group_sec2,

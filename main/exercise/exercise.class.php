@@ -1042,11 +1042,9 @@ class Exercise
                     if ($this->categoryMinusOne) {
                         //$index = 1;
                     }
-                    /** @var \Chamilo\Entity\CQuizCategory $categoryParent*/
-
+                    /** @var \Chamilo\CourseBundle\Entity\CQuizCategory $categoryParent*/
                     foreach ($path as $categoryParent) {
                         $visibility = $categoryParent->getVisibility();
-
                         if ($visibility == 0) {
                             $categoryParentId = $categoryId;
                             $categoryTitle = $cat['title'];
@@ -1154,15 +1152,15 @@ class Exercise
      *
      * @author Olivier Brouckaert
      * @author Hubert Borderiou 15 nov 2011
-     * @param    bool    $adminView  Whether we should return all questions (admin view) or just a list limited by the max number of random questions
+     * @param    bool $adminView Whether we should return all
+     * questions (admin view) or just a list limited by the max number of random questions
      * @return array - if the exercise is not set to take questions randomly, returns the question list
-     *					 without randomizing, otherwise, returns the list with questions selected randomly
+     * without randomizing, otherwise, returns the list with questions selected randomly
      */
     public function selectRandomList($adminView = false)
     {
         $TBL_EXERCISE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
-
         $random = isset($this->random) && !empty($this->random) ? $this->random : 0;
 
         $randomLimit = "ORDER BY RAND() LIMIT $random";
@@ -1176,8 +1174,10 @@ class Exercise
                 FROM $TBL_EXERCISE_QUESTION e 
                 INNER JOIN $TBL_QUESTIONS q
                 ON (e.question_id= q.id AND e.c_id = q.c_id)
-                WHERE e.c_id = {$this->course_id} AND e.exercice_id	= '".Database::escape_string($this->id)."'
-                $randomLimit ";
+                WHERE 
+                    e.c_id = {$this->course_id} AND 
+                    e.exercice_id = '".Database::escape_string($this->id)."'
+                    $randomLimit ";
         $result = Database::query($sql);
         $questionList = array();
         while ($row = Database::fetch_object($result)) {
@@ -1390,7 +1390,7 @@ class Exercise
                 $sql = "SELECT 1 FROM $TBL_DOCUMENT
                         WHERE 
                             c_id = ".$this->course_id." AND 
-                            path='".str_replace($documentPath,'',$audioPath).'/'.$this->sound."'";
+                            path = '".str_replace($documentPath,'',$audioPath).'/'.$this->sound."'";
                 $result = Database::query($sql);
 
                 if (!Database::num_rows($result)) {
@@ -1697,13 +1697,13 @@ class Exercise
      */
     public function update_question_positions()
     {
-        $quiz_question_table = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        $table = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         //Fixes #3483 when updating order
         $question_list = $this->selectQuestionList(true);
         if (!empty($question_list)) {
             foreach ($question_list as $position => $questionId) {
-                $sql = "UPDATE $quiz_question_table SET
-                        question_order ='".intval($position)."'
+                $sql = "UPDATE $table SET
+                            question_order ='".intval($position)."'
                         WHERE
                             c_id = ".$this->course_id." AND
                             question_id = ".intval($questionId)." AND
@@ -2247,7 +2247,6 @@ class Exercise
 
                 $form->addElement('checkbox', 'index_document', '', get_lang('SearchFeatureDoIndexDocument'));
                 $form->addSelectLanguage('language', get_lang('SearchFeatureDocumentLanguage'));
-
                 $specific_fields = get_specific_field_list();
 
                 foreach ($specific_fields as $specific_field) {
@@ -2344,7 +2343,7 @@ class Exercise
                 $defaults['text_when_finished'] = '';
                 $defaults['start_time'] = date('Y-m-d 12:00:00');
                 $defaults['display_category_name'] = 1;
-                $defaults['end_time']   = date('Y-m-d 12:00:00', time()+84600);
+                $defaults['end_time'] = date('Y-m-d 12:00:00', time()+84600);
                 $defaults['pass_percentage'] = '';
                 $defaults['end_button'] = $this->selectEndButton();
                 $defaults['question_selection_type'] = 1;
@@ -2442,9 +2441,9 @@ class Exercise
         }
 
         if ($form->getSubmitValue('randomAnswers') == 1) {
-            $this->random_answers=1;
+            $this->random_answers = 1;
         } else {
-            $this->random_answers=0;
+            $this->random_answers = 0;
         }
 
         // Update title in all LPs that have this quiz added

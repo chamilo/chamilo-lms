@@ -387,21 +387,29 @@ function loginUser($userId)
     $canLoginAs = api_can_login_as($userId);
 
     if (!$canLoginAs || empty($userInfo)) {
-
         return false;
     }
 
     $firstname = $userInfo['firstname'];
     $lastname = $userInfo['lastname'];
 
-	if (api_is_western_name_order()) {
-		$message = sprintf(get_lang('AttemptingToLoginAs'),$firstname, $lastname, $userId);
-	} else {
-		$message = sprintf(get_lang('AttemptingToLoginAs'), $lastname, $firstname, $userId);
-	}
+    if (api_is_western_name_order()) {
+        $message = sprintf(
+            get_lang('AttemptingToLoginAs'),
+            $firstname,
+            $lastname,
+            $userId
+        );
+    } else {
+        $message = sprintf(
+            get_lang('AttemptingToLoginAs'),
+            $lastname,
+            $firstname,
+            $userId
+        );
+    }
 
-	if ($userId) {
-
+    if ($userId) {
         // Logout the current user
         LoginDelete(api_get_user_id());
 
@@ -431,7 +439,7 @@ function loginUser($userId)
         $target_url = api_get_path(WEB_PATH)."user_portal.php";
         $message .= '<br />'.sprintf(get_lang('LoginSuccessfulGoToX'), '<a href="'.$target_url.'">'.$target_url.'</a>');
         Display :: display_header(get_lang('UserList'));
-        Display::addFlash(Display::return_message($message, 'normal', false));
+        echo Display::return_message($message, 'normal', false);
         Display :: display_footer();
         exit;
     }

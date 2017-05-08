@@ -1963,7 +1963,7 @@ class Exercise
                 $form->addGroup($radios, null, get_lang('QuestionsPerPage'));
 
             } else {
-                // if is Directfeedback but has not questions we can allow to modify the question type
+                // if is Direct feedback but has not questions we can allow to modify the question type
                 if ($this->selectNbrQuestions() == 0) {
                     // feedback type
                     $radios_feedback = array();
@@ -2043,7 +2043,6 @@ class Exercise
                 // A 321 B 654 C 87
                 EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_RANDOM => get_lang('RandomCategoriesWithRandomQuestions'),
                 // C 87 B 654 A 321
-
                 //EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_ORDERED_NO_GROUPED => get_lang('RandomCategoriesWithQuestionsOrderedNoQuestionGrouped'),
                 /*    B 456 C 78 A 123
                         456 78 123
@@ -2188,7 +2187,7 @@ class Exercise
 
             $form->addElement('html','<div id="divtimecontrol"  style="display:'.$display.';">');
 
-            //Timer control
+            // Timer control
             //$time_hours_option = range(0,12);
             //$time_minutes_option = range(0,59);
             $form->addElement(
@@ -2205,7 +2204,7 @@ class Exercise
 
             $expired_date = (int)$this->selectExpiredTime();
 
-            if (($expired_date!='0')) {
+            if (($expired_date != '0')) {
                 $form->addElement('html','<div id="timercontrol" style="display:block;">');
             } else {
                 $form->addElement('html','<div id="timercontrol" style="display:none;">');
@@ -2239,6 +2238,8 @@ class Exercise
                 false,
                 $editor_config
             );
+
+            $form->addCheckBox('update_title_in_lps', null, get_lang('UpdateTitleInLps'));
 
             $defaults = array();
             if (api_get_setting('search_enabled') === 'true') {
@@ -2445,6 +2446,29 @@ class Exercise
         } else {
             $this->random_answers=0;
         }
+
+        // Update title in all LPs that have this quiz added
+        if ($form->getSubmitValue('update_title_in_lps') == 1) {
+            $courseId = api_get_course_int_id();
+            $table = Database::get_course_table(TABLE_LP_ITEM);
+            $sql = "SELECT * FROM $table 
+                    WHERE 
+                        c_id = $courseId AND 
+                        item_type = 'quiz' AND 
+                        path = '".$this->id."'
+                    ";
+            $result = Database::query($sql);
+            $items = Database::store_result($result);
+            if (!empty($items)) {
+                foreach ($items as $item) {
+                    $itemId = $item['iid'];
+                    $sql = "UPDATE $table SET title = '".$this->title."'                             
+                            WHERE iid = $itemId AND c_id = $courseId ";
+                    Database::query($sql);
+                }
+            }
+        }
+
         $this->save($type);
     }
 

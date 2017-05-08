@@ -704,6 +704,60 @@ legend{
 .question-result .dl-horizontal {
     display:none;
 }
+.bootstrap-select .dropdown-toggle.bs-placeholder,
+.bootstrap-select .dropdown-toggle.bs-placeholder:active,
+.bootstrap-select .dropdown-toggle.bs-placeholder:focus,
+.bootstrap-select .dropdown-toggle.bs-placeholder:hover{
+    height: 30px;
+}
+.bootstrap-select .dropdown-toggle.bs-placeholder.btn-default{
+    border: 1px solid;
+    border-color: #162a83;
+    border-radius: 0;
+}
+.bootstrap-select .dropdown-toggle.btn-default{
+    border: 1px solid;
+    border-color: #162a83;
+    border-radius: 0;
+}
+.bootstrap-select .dropdown-toggle.btn-default.active,
+.bootstrap-select .dropdown-toggle.btn-default:active,
+.bootstrap-select.open .dropdown-toggle.btn-default{
+    background-color: #162a83;
+    color: #FFF;
+}
+.bootstrap-select .dropdown-menu{
+    border-color: #162a83;
+}
+.dropdown-toggle.bs-placeholder.btn-default{
+    border-color: #162a83;
+    border-radius: 0;
+}
+.bootstrap-select.btn-group .dropdown-toggle .caret{
+    color: #82BB25;
+}
+.bootstrap-select .dropdown-menu li a:focus,
+.bootstrap-select .dropdown-menu>li>a:hover{
+    background-color: #162a83;
+    color: #FFF;
+}
+.main-question .question_title img{
+    display: none;
+}
+.main-question {
+    border-color: #FFFFFF;
+}
+.main-question .question_title,
+.main-question .question_description,
+.main-question .question_options{
+    color: #162A83;
+}
+.main-question .question_title{
+    font-size: 16px;
+}
+.question-list-description-block select.selectpicker{
+    display: block!important;
+}
 /* Large desktop */
 @media (min-width: 1200px) {
 

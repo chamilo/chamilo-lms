@@ -512,7 +512,7 @@ class FillBlanks extends Question
                 // display a menu from answer separated with |
                 // if display for student, shuffle the correct answer menu
                 $listMenu = self::getFillTheBlankMenuAnswers($inTeacherSolution, $displayForStudent);
-                $result .= '<select id="choice_id_'.$currentQuestion.'_'.$inBlankNumber.'" name="choice['.$questionId.'][]">';
+                $result .= '<select class="selectpicker" id="choice_id_'.$currentQuestion.'_'.$inBlankNumber.'" name="choice['.$questionId.'][]">';
                 for ($k=0; $k < count($listMenu); $k++) {
                     $selected = '';
                     if ($correctItem == $listMenu[$k]) {

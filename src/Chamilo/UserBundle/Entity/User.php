@@ -901,7 +901,7 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     /**
      * Get status
      *
-     * @return boolean
+     * @return int
      */
     public function getStatus()
     {

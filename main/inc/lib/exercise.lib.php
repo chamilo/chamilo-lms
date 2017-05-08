@@ -115,9 +115,12 @@ class ExerciseLib
                 if ($answerType == DRAGGABLE) {
                     $isVertical = $objQuestionTmp->extra == 'v';
 
-                    $s .= '<div class="col-md-12 ui-widget ui-helper-clearfix">
-                        <div class="clearfix">
-                        <ul class="exercise-draggable-answer ui-helper-reset ui-helper-clearfix '.($isVertical ? '' : 'list-inline').'">';
+                    $s .= '
+                        <div class="col-md-12 ui-widget ui-helper-clearfix">
+                            <div class="clearfix">
+                            <ul class="exercise-draggable-answer '.($isVertical ? '' : 'list-inline').'"
+                                id="question-'.$questionId.'" data-question="'.$questionId.'">
+                    ';
                 } else {
                     $s .= '<div id="drag' . $questionId . '_question" class="drag_question">
                            <table class="data_table">';

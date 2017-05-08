@@ -2062,6 +2062,13 @@ function get_work_user_list(
             ICON_SIZE_SMALL
         );
 
+        $correctionIconSmall = Display::return_icon(
+            'check-circle.png',
+            get_lang('Correction'),
+            null,
+            ICON_SIZE_TINY
+        );
+
         $rateIcon = Display::return_icon(
             'rate_work.png',
             get_lang('CorrectAndRate'),
@@ -2200,7 +2207,7 @@ function get_work_user_list(
 
                     $alreadyUploaded = '';
                     if (!empty($work['url_correction'])) {
-                        $alreadyUploaded = '<br />'.$work['title_correction'].' '.$correctionIcon;
+                        $alreadyUploaded = '<br />'.$work['title_correction'].' '.$correctionIconSmall;
                     }
 
                     $correction = '

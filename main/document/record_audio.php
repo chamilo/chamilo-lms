@@ -80,7 +80,7 @@ if (!is_dir($filepath)) {
 
 //groups //TODO: clean
 if (!empty($groupId)) {
-    $interbreadcrumb[] = array ("url" => "../group/group_space.php?".api_get_cidreq(), "name" => get_lang('GroupSpace'));
+    $interbreadcrumb[] = array("url" => "../group/group_space.php?".api_get_cidreq(), "name" => get_lang('GroupSpace'));
     $noPHP_SELF = true;
     $group = GroupManager :: get_group_properties($groupId);
     $path = explode('/', $dir);
@@ -138,14 +138,14 @@ if (isset($document_data['parents'])) {
 //make some vars
 $wamiuserid = api_get_user_id();
 
-$htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_JS_PATH) . 'rtc/RecordRTC.js"></script>';
-$htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_PATH) . 'wami-recorder/recorder.js"></script>';
-$htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_PATH) . 'wami-recorder/gui.js"></script>';
-$htmlHeadXtra[] = '<script type="text/javascript" src="' . api_get_path(WEB_LIBRARY_PATH) . 'swfobject/swfobject.js"></script>';
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'rtc/RecordRTC.js"></script>';
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'wami-recorder/recorder.js"></script>';
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'wami-recorder/gui.js"></script>';
+$htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'swfobject/swfobject.js"></script>';
 
 $actions = Display::toolbarButton(
-    get_lang('BackTo') . ' ' . get_lang('DocumentsOverview'),
-    'document.php?' . api_get_cidreq() . "&id=$document_id",
+    get_lang('BackTo').' '.get_lang('DocumentsOverview'),
+    'document.php?'.api_get_cidreq()."&id=$document_id",
     'arrow-left',
     'default',
     [],

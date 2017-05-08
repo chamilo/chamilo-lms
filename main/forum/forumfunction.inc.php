@@ -2701,12 +2701,6 @@ function store_thread(
     $lastPostId = $lastPost->getIid();
 
     if ($lastPostId) {
-        if ($current_forum['moderated'] &&
-            !api_is_allowed_to_edit(null, true)
-        ) {
-            Display::addFlash(Display::return_message(get_lang('MessageHasToBeApproved')));
-        }
-
         $lastPost->setPostId($lastPostId);
         $em->merge($lastPost);
         $em->flush();
@@ -2734,6 +2728,14 @@ function store_thread(
                 thread_id='".Database::escape_string($lastThread->getIid())."'";
     $result = Database::query($sql);
     $message = get_lang('NewThreadStored');
+
+    // Overwrite default message.
+    if ($current_forum['moderated'] &&
+        !api_is_allowed_to_edit(null, true)
+    ) {
+        $message = get_lang('MessageHasToBeApproved');
+    }
+
     // Storing the attachments if any.
     if ($has_attachment) {
         // Try to add an extension to the file if it hasn't one.
@@ -2761,7 +2763,9 @@ function store_thread(
         $message .= '<br />';
     }
 
-    if ($current_forum['approval_direct_post'] == '1' && !api_is_allowed_to_edit(null, true)) {
+    if ($current_forum['approval_direct_post'] == '1' &&
+        !api_is_allowed_to_edit(null, true)
+    ) {
         $message .= get_lang('MessageHasToBeApproved').'<br />';
         $message .= get_lang('ReturnTo').' <a href="viewforum.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'">'.
             get_lang('Forum').'</a><br />';
@@ -3465,7 +3469,10 @@ function store_reply($current_forum, $values, $courseId = 0, $userId = 0)
         Display::addFlash(Display::return_message($message, 'confirmation', false));
     } else {
         Display::addFlash(
-            Display::return_message(get_lang('UplNoFileUploaded').' '.get_lang('UplSelectFileFirst'), 'error')
+            Display::return_message(
+                get_lang('UplNoFileUploaded').' '.get_lang('UplSelectFileFirst'),
+                'error'
+            )
         );
     }
 
@@ -3782,7 +3789,8 @@ function increase_thread_view($thread_id)
     $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
     $course_id = api_get_course_int_id();
 
-    $sql = "UPDATE $table_threads SET thread_views=thread_views+1
+    $sql = "UPDATE $table_threads 
+            SET thread_views = thread_views + 1
             WHERE 
                 c_id = $course_id AND  
                 thread_id = '".intval($thread_id)."'";
@@ -3809,23 +3817,6 @@ function updateThreadInfo($thread_id, $lastPostId, $post_date)
                 c_id = $course_id AND  
                 thread_id='".Database::escape_string($thread_id)."'"; // this needs to be cleaned first
     Database::query($sql);
-}
-
-/**
- * This function is called when the user is not allowed in this forum/thread/...
- * @return bool display message of "not allowed"
- *
- * @deprecated use api_not_allowed()
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @version february 2006, dokeos 1.8
- */
-function forum_not_allowed_here()
-{
-    Display::addFlash(Display::return_message(get_lang('NotAllowedHere'), 'error'));
-    Display :: display_footer();
-
-    return false;
 }
 
 /**

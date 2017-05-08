@@ -3095,7 +3095,7 @@ class learnpathItem
         if (self::DEBUG > 0) {
             error_log('learnpathItem::set_level(' . $int . ')', 0);
         }
-        if (!empty($int) AND $int == strval(intval($int))) {
+        if (!empty($int) && $int == strval(intval($int))) {
             $this->level = $int;
         }
     }

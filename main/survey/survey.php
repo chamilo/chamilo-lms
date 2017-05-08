@@ -110,7 +110,7 @@ if (isset($action)) {
 		SurveyManager::move_survey_question($my_action_survey,$my_question_id_survey,$my_survey_id_survey);
 		echo Display::return_message(get_lang('SurveyQuestionMoved'), 'confirmation');
 	}
-	if ($action == 'delete' AND is_numeric($_GET['question_id'])) {
+	if ($action == 'delete' && is_numeric($_GET['question_id'])) {
 		SurveyManager::delete_survey_question($my_survey_id_survey, $my_question_id_survey, $survey_data['is_shared']);
 	}
 }

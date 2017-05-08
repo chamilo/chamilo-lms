@@ -2537,10 +2537,6 @@ function store_thread(
     $courseCode = $courseInfo['code'];
     $groupId = api_get_group_id();
     $groupInfo = GroupManager::get_group_properties($groupId);
-    $groupIid = null;
-    if (!empty($groupInfo)) {
-        $groupIid = $groupInfo['iid'];
-    }
     $sessionId = $sessionId ?: api_get_session_id();
 
     $em = Database::getManager();
@@ -2702,12 +2698,16 @@ function store_thread(
     $em->persist($lastPost);
     $em->flush();
 
-    $last_post_id = $lastPost->getIid();
+    $lastPostId = $lastPost->getIid();
 
-    if ($last_post_id) {
+    if ($lastPostId) {
+        if ($current_forum['moderated'] &&
+            !api_is_allowed_to_edit(null, true)
+        ) {
+            Display::addFlash(Display::return_message(get_lang('MessageHasToBeApproved')));
+        }
 
-
-        $lastPost->setPostId($last_post_id);
+        $lastPost->setPostId($lastPostId);
         $em->merge($lastPost);
         $em->flush();
     }
@@ -2718,7 +2718,7 @@ function store_thread(
             editAttachedFile(
                 array(
                     'comment' => $_POST['file_comments'][$key],
-                    'post_id' => $last_post_id
+                    'post_id' => $lastPostId
                 ),
                 $id
             );
@@ -2728,7 +2728,7 @@ function store_thread(
     // Now we have to update the thread table to fill the thread_last_post
     // field (so that we know when the thread has been updated for the last time).
     $sql = "UPDATE $table_threads
-            SET thread_last_post = '".Database::escape_string($last_post_id)."'
+            SET thread_last_post = '".Database::escape_string($lastPostId)."'
             WHERE
                 c_id = $course_id AND
                 thread_id='".Database::escape_string($lastThread->getIid())."'";
@@ -2753,7 +2753,7 @@ function store_thread(
             if ($result) {
                 add_forum_attachment_file(
                     isset($values['file_comment']) ? $values['file_comment'] : null,
-                    $last_post_id
+                    $lastPostId
                 );
             }
         }
@@ -2771,7 +2771,7 @@ function store_thread(
         $message .= get_lang('ReturnTo').' <a href="viewthread.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'&gradebook='.$gradebook.'&thread='.$lastThread->getIid().'">'.
             get_lang('Message').'</a>';
     }
-    $reply_info['new_post_id'] = $last_post_id;
+    $reply_info['new_post_id'] = $lastPostId;
     $my_post_notification = isset($values['post_notification']) ? $values['post_notification'] : null;
 
     if ($my_post_notification == 1) {
@@ -3794,16 +3794,16 @@ function increase_thread_view($thread_id)
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version february 2006, dokeos 1.8
- * @param string $last_post_id
+ * @param string $lastPostId
  * @param string $post_date
  */
-function updateThreadInfo($thread_id, $last_post_id, $post_date)
+function updateThreadInfo($thread_id, $lastPostId, $post_date)
 {
     $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
     $course_id = api_get_course_int_id();
     $sql = "UPDATE $table_threads SET 
             thread_replies = thread_replies+1,
-            thread_last_post = '".Database::escape_string($last_post_id)."',
+            thread_last_post = '".Database::escape_string($lastPostId)."',
             thread_date = '".Database::escape_string($post_date)."'
             WHERE 
                 c_id = $course_id AND  

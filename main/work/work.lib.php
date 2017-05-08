@@ -2084,12 +2084,6 @@ function get_work_user_list(
                 $can_read = true;
             }
 
-            if ($work['accepted'] == '0') {
-                $class = 'text-muted';
-            } else {
-                $class = '';
-            }
-
             $qualification_exists = false;
             if (!empty($work_data['qualification']) &&
                 intval($work_data['qualification']) > 0
@@ -2155,29 +2149,18 @@ function get_work_user_list(
                     $work['id'],
                     array('style' => 'white-space:nowrap;')
                 );
-                $feedback = null;
+
+                $feedback = '';
                 $count = getWorkCommentCount($item_id, $course_info);
                 if (!is_null($count) && !empty($count)) {
                     if ($qualification_exists) {
                         $feedback .= ' ';
                     }
                     $feedback .= '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.
-                    $count . ' ' . Display::returnFontAwesomeIcon('comments-o') . '</a> ';
+                    $count.' '.Display::returnFontAwesomeIcon('comments-o').'</a> ';
                 }
 
-                $work['qualification'] = $qualification_string.$feedback;
-                $work['qualification_only'] = $qualification_string;
-
-                // Date.
-                $work_date = api_get_local_time($work['sent_date']);
-                $date = date_to_str_ago($work['sent_date']). ' ' . $work_date;
-                $work['formatted_date'] = $work_date . ' ' . $add_string;
-                $work['sent_date_from_db'] = $work['sent_date'];
-                $work['sent_date'] = '<div class="work-date" title="'.$date.'">' . $add_string . ' ' . Display::dateToStringAgoAndLongDate($work['sent_date']) . '</div>';
-
-                // Actions.
                 $correction = '';
-                $action = '';
                 $hasCorrection = '';
                 if (!empty($work['url_correction'])) {
                     $hasCorrection = Display::url(
@@ -2186,9 +2169,27 @@ function get_work_user_list(
                     );
                 }
 
+                if ($qualification_exists) {
+                    $work['qualification'] = $qualification_string.$feedback;
+                } else {
+                    $work['qualification'] = $qualification_string.$feedback.$hasCorrection;
+                }
+
+                $work['qualification_only'] = $qualification_string;
+
+
+                // Date.
+                $work_date = api_get_local_time($work['sent_date']);
+                $date = date_to_str_ago($work['sent_date']).' '.$work_date;
+                $work['formatted_date'] = $work_date.' '.$add_string;
+                $work['sent_date_from_db'] = $work['sent_date'];
+                $work['sent_date'] = '<div class="work-date" title="'.$date.'">'.$add_string.' '.Display::dateToStringAgoAndLongDate($work['sent_date']).'</div>';
+
                 $work['status'] = $hasCorrection;
                 $work['has_correction'] = $hasCorrection;
 
+                // Actions.
+                $action = '';
                 if (api_is_allowed_to_edit()) {
                     $action .= '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.$rateIcon.'</a> ';
 

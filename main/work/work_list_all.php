@@ -221,7 +221,7 @@ if (!empty($work_data['enable_qualification']) &&
     $columns = array(
         get_lang('FullUserName'),
         get_lang('Title'),
-        get_lang('Feedback'),
+        get_lang('Score'),
         get_lang('Date'),
         get_lang('Status'),
         get_lang('UploadCorrection'),
@@ -314,8 +314,8 @@ if (!empty($work_data['enable_qualification']) &&
         array(
             'name' => 'qualification',
             'index' => 'qualification',
-            'width' => '30',
-            'align' => 'left',
+            'width' => '20',
+            'align' => 'center',
             'search' => 'true',
         ),
         array(
@@ -329,7 +329,7 @@ if (!empty($work_data['enable_qualification']) &&
         array(
             'name' => 'correction',
             'index' => 'correction',
-            'width' => '45',
+            'width' => '40',
             'align' => 'left',
             'search' => 'false',
             'sortable' => 'false',

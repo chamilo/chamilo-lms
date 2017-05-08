@@ -555,7 +555,16 @@ class EvalForm extends FormValidator
         $this->addRule('hid_category_id', get_lang('ThisFieldIsRequired'), 'required');
         $this->addElement('checkbox', 'visible', null, get_lang('Visible'));
         $this->addRule('max', get_lang('OnlyNumbers'), 'numeric');
-        $this->addRule('max', get_lang('NegativeValue'), 'compare', '>=');
+        $this->addRule(
+            'max',
+            get_lang('NegativeValue'),
+            'compare',
+            '>=',
+            'server',
+            false,
+            false,
+            0
+        );
         $setting = api_get_setting('tool_visible_by_default_at_creation');
         $visibility_default = 1;
         if (isset($setting['gradebook']) && $setting['gradebook'] == 'false') {

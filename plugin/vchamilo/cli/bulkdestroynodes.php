@@ -19,7 +19,7 @@ echo "Starting tool\n";
 echo "Chamilo Bulk Nodes Creation v.1.0\n";
 echo "=================================\n";
 require_once('../../../main/inc/global.inc.php');
-require_once('clilib.php');       // cli only functions
+require_once('clilib.php'); // cli only functions
 // Ensure errors are well explained
 ini_set('debug_display', 1);
 ini_set('debug_level', E_ALL);
@@ -91,19 +91,19 @@ if (!empty($options['config'])) {
     }
 }
 
-require_once($_configuration['root_sys'].'local/classes/database.class.php');       // cli only functions
+require_once($_configuration['root_sys'].'local/classes/database.class.php'); // cli only functions
 if ($options['verbose']) {
     echo "loaded dbclass\n";
 }
-require_once($_configuration['root_sys'].'local/classes/textlib.class.php');       // cli only functions
+require_once($_configuration['root_sys'].'local/classes/textlib.class.php'); // cli only functions
 if ($options['verbose']) {
     echo "loaded textlib\n";
 }
-require_once($_configuration['root_sys'].'local/classes/mootochamlib.php');       // moodle like API
+require_once($_configuration['root_sys'].'local/classes/mootochamlib.php'); // moodle like API
 if ($options['verbose']) {
     echo "loaded moodle wrapping\n";
 }
-require_once($_configuration['root_sys'] . '/plugin/vchamilo/lib/vchamilo_plugin.class.php');
+require_once($_configuration['root_sys'].'/plugin/vchamilo/lib/vchamilo_plugin.class.php');
 if ($options['verbose']) {
     echo "loaded vchamilo plugin\n";
 }

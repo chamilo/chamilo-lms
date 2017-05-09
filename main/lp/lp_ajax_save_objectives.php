@@ -28,10 +28,10 @@ function save_objectives($lp_id, $user_id, $view_id, $item_id, $objectives = arr
         error_log('In xajax_save_objectives('.$lp_id.','.$user_id.','.$view_id.','.$item_id.',"'.(count($objectives) > 0 ? count($objectives) : '').'")', 0);
     }
     $mylp = learnpath::getLpFromSession(api_get_course_id(), $lp_id, $user_id);
-    $mylpi =& $mylp->items[$item_id];
-    if (is_array($objectives) && count($objectives)>0){
-        foreach ($objectives as $index=>$objective){
-            $mylpi->add_objective($index,$objectives[$index]);
+    $mylpi = & $mylp->items[$item_id];
+    if (is_array($objectives) && count($objectives) > 0) {
+        foreach ($objectives as $index=>$objective) {
+            $mylpi->add_objective($index, $objectives[$index]);
         }
         $mylpi->write_objectives_to_db();
     }

@@ -104,21 +104,21 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item)
 	$myobjectives = json_encode($phpobjectives);
 
     $return .=
-            "olms.score=".$myscore.";" .
-            "olms.max=".$mymax.";" .
-            "olms.min=".$mymin.";" .
-            "olms.lesson_status='".$mylesson_status."';" .
-            "olms.lesson_location='".$mylesson_location."';" .
-            "olms.session_time='".$mysession_time."';" .
-            "olms.suspend_data='".$mysuspend_data."';" .
-            "olms.total_time = '".$mytotal_time."';" .
-            "olms.mastery_score = '".$mymastery_score."';" .
-            "olms.max_time_allowed = '".$mymax_time_allowed."';" .
-            "olms.launch_data = '".$mylaunch_data."';" .
-            "olms.interactions = new Array(".$myistring.");" .
+            "olms.score=".$myscore.";".
+            "olms.max=".$mymax.";".
+            "olms.min=".$mymin.";".
+            "olms.lesson_status='".$mylesson_status."';".
+            "olms.lesson_location='".$mylesson_location."';".
+            "olms.session_time='".$mysession_time."';".
+            "olms.suspend_data='".$mysuspend_data."';".
+            "olms.total_time = '".$mytotal_time."';".
+            "olms.mastery_score = '".$mymastery_score."';".
+            "olms.max_time_allowed = '".$mymax_time_allowed."';".
+            "olms.launch_data = '".$mylaunch_data."';".
+            "olms.interactions = new Array(".$myistring.");".
             //"olms.item_objectives = new Array();" .
-            "olms.item_objectives = ".$myobjectives.";" .
-            "olms.G_lastError = 0;" .
+            "olms.item_objectives = ".$myobjectives.";".
+            "olms.G_lastError = 0;".
             "olms.G_LastErrorMessage = 'No error';".
             "olms.finishSignalReceived = 0;";
     /*
@@ -147,22 +147,22 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item)
     $mycore_exit = $mylpi->get_core_exit();
 
     $return .=
-            "olms.lms_lp_id=".$lp_id.";" .
-            "olms.lms_item_id=".$next_item.";" .
-            "olms.lms_old_item_id=0;" .
-            "olms.lms_initialized=0;" .
-            "olms.lms_view_id=".$view_id.";" .
-            "olms.lms_user_id=".$user_id.";" .
-            "olms.next_item=".$next_item.";" . // This one is very important to replace possible literal strings.
-            "olms.lms_next_item=".$mynext.";" .
-            "olms.lms_previous_item=".$myprevious.";" .
-            "olms.lms_item_type = '".$myitemtype."';" .
-            "olms.lms_item_credit = '".$mycredit."';" .
-            "olms.lms_item_lesson_mode = '".$mylesson_mode."';" .
-            "olms.lms_item_launch_data = '".$mylaunch_data."';" .
-            "olms.lms_item_interactions_count = '".$myinteractions_count."';" .
-            "olms.lms_item_objectives_count = '".$myinteractions_count."';" .
-            "olms.lms_item_core_exit = '".$mycore_exit."';" .
+            "olms.lms_lp_id=".$lp_id.";".
+            "olms.lms_item_id=".$next_item.";".
+            "olms.lms_old_item_id=0;".
+            "olms.lms_initialized=0;".
+            "olms.lms_view_id=".$view_id.";".
+            "olms.lms_user_id=".$user_id.";".
+            "olms.next_item=".$next_item.";".// This one is very important to replace possible literal strings.
+            "olms.lms_next_item=".$mynext.";".
+            "olms.lms_previous_item=".$myprevious.";".
+            "olms.lms_item_type = '".$myitemtype."';".
+            "olms.lms_item_credit = '".$mycredit."';".
+            "olms.lms_item_lesson_mode = '".$mylesson_mode."';".
+            "olms.lms_item_launch_data = '".$mylaunch_data."';".
+            "olms.lms_item_interactions_count = '".$myinteractions_count."';".
+            "olms.lms_item_objectives_count = '".$myinteractions_count."';".
+            "olms.lms_item_core_exit = '".$mycore_exit."';".
             "olms.asset_timer = 0;";
 
     $mylp->set_error_msg('');

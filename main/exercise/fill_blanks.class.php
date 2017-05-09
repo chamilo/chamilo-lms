@@ -508,29 +508,38 @@ class FillBlanks extends Question
             case self::FILL_THE_BLANK_MENU:
                 $selected = '';
                 // the blank menu
-                $optionMenu = '';
                 // display a menu from answer separated with |
                 // if display for student, shuffle the correct answer menu
                 $listMenu = self::getFillTheBlankMenuAnswers($inTeacherSolution, $displayForStudent);
-                $result .= '<select id="choice_id_'.$currentQuestion.'_'.$inBlankNumber.'" name="choice['.$questionId.'][]">';
+                $resultOptions = ['' => '--'];
+
+                foreach ($listMenu as $item) {
+                    $item = self::trimOption($item);
+
+                    $resultOptions[$item] = $item;
+                }
+
                 for ($k = 0; $k < count($listMenu); $k++) {
-                    $selected = '';
                     if ($correctItem == $listMenu[$k]) {
-                        $selected = " selected=selected ";
+                        $selected = $k;
+
+                        break;
                     }
                     // if in teacher view, display the first item by default, which is the right answer
                     if ($k == 0 && !$displayForStudent) {
-                        $selected = " selected=selected ";
+                        $selected = $k;
+
+                        break;
                     }
-                    $optionMenu .= '<option '.$selected.' value="'.$listMenu[$k].'">'.$listMenu[$k].'</option>';
                 }
-                if ($selected == '') {
-                    // no good answer have been found...
-                    $selected = " selected=selected ";
-                }
-                $result .= "<option $selected value=''>--</option>";
-                $result .= $optionMenu;
-                $result .= '</select>';
+
+                $result = Display::select(
+                    "choice[$questionId][]",
+                    $resultOptions,
+                    $selected,
+                    ['class' => 'selectpicker'],
+                    false
+                );
                 break;
             case self::FILL_THE_BLANK_SEVERAL_ANSWER:
                 //no break
@@ -547,6 +556,14 @@ class FillBlanks extends Question
         }
 
         return $result;
+    }
+
+    private static function trimOption($text)
+    {
+        $converted = strtr($text, array_flip(get_html_translation_table(HTML_ENTITIES, ENT_QUOTES)));
+        $trimmed = trim($converted, chr(0xC2).chr(0xA0).' ');
+
+        return $trimmed;
     }
 
     /**
@@ -616,16 +633,21 @@ class FillBlanks extends Question
         switch (self::getFillTheBlankAnswerType($correctAnswer)) {
             case self::FILL_THE_BLANK_MENU:
                 $listMenu = self::getFillTheBlankMenuAnswers($correctAnswer, false);
-                $result = $listMenu[0] == $studentAnswer;
+                $result = self::trimOption($listMenu[0]) == $studentAnswer;
                 break;
             case self::FILL_THE_BLANK_SEVERAL_ANSWER:
                 // the answer must be one of the choice made
                 $listSeveral = self::getFillTheBlankSeveralAnswers($correctAnswer);
+
+                $listSeveral = array_map(function ($item) {
+                    return self::trimOption($item);
+                }, $listSeveral);
+
                 $result = in_array($studentAnswer, $listSeveral);
                 break;
             case self::FILL_THE_BLANK_STANDARD:
             default:
-                $result = $studentAnswer == $correctAnswer;
+                $result = $studentAnswer == self::trimOption($correctAnswer);
                 break;
         }
 

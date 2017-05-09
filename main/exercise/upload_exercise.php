@@ -405,15 +405,18 @@ function lp_upload_quiz_action_handling()
                                 // Fixing scores:
                                 switch ($detectQuestionType) {
                                     case GLOBAL_MULTIPLE_ANSWER:
-                                        if (isset($noNegativeScoreList[$i][3])) {
-                                            if (!(strtolower($noNegativeScoreList[$i]) == 'x') &&
-                                                !$correct
-                                            ) {
-                                                $score = $scoreList[$i] * -1;
+                                        if (!$correct) {
+                                            if (isset($noNegativeScoreList[$i])) {
+                                                if (strtolower($noNegativeScoreList[$i]) == 'x') {
+                                                    $score = 0;
+                                                } else {
+                                                    $score = $scoreList[$i] * -1;
+                                                }
                                             }
                                         } else {
-                                            $score = $scoreList[$i] * -1;
+                                            $score = $scoreList[$i];
                                         }
+
                                         $score /= $numberRightAnswers;
                                         break;
                                     case UNIQUE_ANSWER:

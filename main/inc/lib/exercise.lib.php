@@ -113,9 +113,14 @@ class ExerciseLib
             $num_suggestions = 0;
             if (in_array($answerType, [MATCHING, DRAGGABLE, MATCHING_DRAGGABLE])) {
                 if ($answerType == DRAGGABLE) {
-                    $s .= '<div class="col-md-12 ui-widget ui-helper-clearfix">
-                        <div class="clearfix">
-                        <ul class="exercise-draggable-answer ui-helper-reset ui-helper-clearfix list-inline">';
+                    $isVertical = $objQuestionTmp->extra == 'v';
+
+                    $s .= '
+                        <div class="col-md-12 ui-widget ui-helper-clearfix">
+                            <div class="clearfix">
+                            <ul class="exercise-draggable-answer '.($isVertical ? '' : 'list-inline').'"
+                                id="question-'.$questionId.'" data-question="'.$questionId.'">
+                    ';
                 } else {
                     $s .= '<div id="drag' . $questionId . '_question" class="drag_question">
                            <table class="data_table">';
@@ -1097,31 +1102,32 @@ HTML;
             }
 
             if ($answerType == DRAGGABLE) {
+                $isVertical = $objQuestionTmp->extra == 'v';
+
                 $s .= "</ul>";
                 $s .= "</div>"; //clearfix
                 $counterAnswer = 1;
-                $s .= '<div class="col-md-12"><div class="row">';
+
+                $s .= $isVertical ? '' : '<div class="row">';
+
                 for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
                     $answerCorrect = $objAnswerTmp->isCorrect($answerId);
                     $windowId = $questionId . '_' . $counterAnswer;
                     if ($answerCorrect) {
-                        $s .= Display::div(
-                            Display::div(
-                                '&nbsp;',
-                                [
-                                    'id' => "drop_$windowId",
-                                    'class' => 'droppable',
-                                ]
-                            ),
-                            [
-                                'class' => 'col-md-3',
-                            ]
-                        );
+                        $s .= $isVertical ? '<div class="row">' : '';
+                        $s .= '
+                            <div class="'.($isVertical ? 'col-md-12' : 'col-md-3').'">
+                                <div id="drop_'.$windowId.'" class="droppable">&nbsp;</div>
+                            </div>
+                        ';
+                        $s .= $isVertical ? '</div>' : '';
+
                         $counterAnswer++;
                     }
                 }
-                $s .= '</div>'; // row
-                $s .= '</div>'; // col-md-12
+
+                $s .= $isVertical ? '' : '</div>'; // row
+//                $s .= '</div>'; // col-md-12
                 $s .= '</div>'; // col-md-12 ui-widget ui-helper-clearfix
             }
 

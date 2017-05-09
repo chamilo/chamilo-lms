@@ -279,6 +279,7 @@ class Exercise
 
     /**
      * returns the time limit
+     * @return int
      */
     public function selectTimeLimit()
     {
@@ -311,7 +312,7 @@ class Exercise
      * returns the exercise type
      *
      * @author Olivier Brouckaert
-     * @return integer - exercise type
+     * @return int - exercise type
      */
     public function selectType()
     {
@@ -486,6 +487,7 @@ class Exercise
 
     /**
      * Same as isRandom() but has a name applied to values different than 0 or 1
+     * @return int
      */
     public function getShuffle()
     {
@@ -572,9 +574,17 @@ class Exercise
      * @param string $sord
      * @param array $where_condition
      * @param array $extraFields
+     *
+     * @return array
      */
-    public function getQuestionListPagination($start, $limit, $sidx, $sord, $where_condition = array(), $extraFields = array())
-    {
+    public function getQuestionListPagination(
+        $start,
+        $limit,
+        $sidx,
+        $sord,
+        $where_condition = array(),
+        $extraFields = array()
+    ) {
         if (!empty($this->id)) {
             $category_list = TestCategory::getListOfCategoriesNameForTest(
                 $this->id,
@@ -862,8 +872,10 @@ class Exercise
      * @param int $questionSelectionType
      * @return array
      */
-    public function getQuestionListWithCategoryListFilteredByCategorySettings($question_list, $questionSelectionType)
-    {
+    public function getQuestionListWithCategoryListFilteredByCategorySettings(
+        $question_list,
+        $questionSelectionType
+    ) {
         $result = array(
             'question_list' => array(),
             'category_with_questions_list' => array()
@@ -1081,7 +1093,8 @@ class Exercise
     /**
      * returns the array with the question ID list
      * @param   bool    $from_db    Whether the results should be fetched in the database or just from memory
-     * @param   bool    $adminView  Whether we should return all questions (admin view) or just a list limited by the max number of random questions
+     * @param   bool    $adminView  Whether we should return all questions (admin view) or
+     * just a list limited by the max number of random questions
      * @author Olivier Brouckaert
      * @return array - question ID list
      */
@@ -1211,7 +1224,7 @@ class Exercise
      */
     public function updateTitle($title)
     {
-        $this->exercise = $title;
+        $this->title = $this->exercise = $title;
     }
 
     /**
@@ -1341,7 +1354,7 @@ class Exercise
      */
     public function setModelType($value)
     {
-        $this->modelType = intval($value);
+        $this->modelType = (int) $value;
     }
 
     /**
@@ -1349,7 +1362,7 @@ class Exercise
      */
     public function setQuestionSelectionType($value)
     {
-        $this->questionSelectionType = intval($value);
+        $this->questionSelectionType = (int) $value;
     }
 
     /**
@@ -1498,12 +1511,12 @@ class Exercise
      */
     public function updateResultsDisabled($results_disabled)
     {
-        $this->results_disabled = intval($results_disabled);
+        $this->results_disabled = (int) $results_disabled;
     }
 
     /**
      * updates the exercise in the data base
-     *
+     * @param string $type_e
      * @author Olivier Brouckaert
      */
     public function save($type_e = '')
@@ -3199,7 +3212,7 @@ class Exercise
         $totalScore = 0;
 
         // Extra information of the question
-        if (!empty($extra)) {
+        if ($answerType == MULTIPLE_ANSWER_TRUE_FALSE && !empty($extra)) {
             $extra = explode(':', $extra);
             if ($debug) {
                 error_log(print_r($extra, 1));

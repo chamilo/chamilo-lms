@@ -69,7 +69,7 @@ function import_exercise($file)
     global $questionTempDir;
     global $resourcesLinks;
 
-    $baseWorkDir = api_get_path(SYS_ARCHIVE_PATH) . 'qti2';
+    $baseWorkDir = api_get_path(SYS_ARCHIVE_PATH).'qti2';
 
     if (!is_dir($baseWorkDir)) {
         mkdir($baseWorkDir, api_get_permissions_for_new_directories(), true);
@@ -111,35 +111,35 @@ function import_exercise($file)
     // The assets-related code is a bit fragile as it has to deal with files renamed by Chamilo and it only works if
     // the imsmanifest.xml file is read.
     while (false !== ($file = readdir($exerciseHandle))) {
-        if (is_dir($baseWorkDir . '/' . $file) && $file != "." && $file != "..") {
+        if (is_dir($baseWorkDir.'/'.$file) && $file != "." && $file != "..") {
             // Find each manifest for each question repository found
-            $questionHandle = opendir($baseWorkDir . '/' . $file);
+            $questionHandle = opendir($baseWorkDir.'/'.$file);
             // Only analyse one level of subdirectory - no recursivity here
             while (false !== ($questionFile = readdir($questionHandle))) {
                 if (preg_match('/.xml$/i', $questionFile)) {
-                    $isQti = isQtiQuestionBank($baseWorkDir . '/' . $file . '/' . $questionFile);
+                    $isQti = isQtiQuestionBank($baseWorkDir.'/'.$file.'/'.$questionFile);
                     if ($isQti) {
                         $result = qti_parse_file($baseWorkDir, $file, $questionFile);
-                        $filePath = $baseWorkDir . $file;
+                        $filePath = $baseWorkDir.$file;
                         $file_found = true;
                     } else {
-                        $isManifest = isQtiManifest($baseWorkDir . '/' . $file . '/' . $questionFile);
+                        $isManifest = isQtiManifest($baseWorkDir.'/'.$file.'/'.$questionFile);
                         if ($isManifest) {
-                            $resourcesLinks = qtiProcessManifest($baseWorkDir . '/' . $file . '/' . $questionFile);
+                            $resourcesLinks = qtiProcessManifest($baseWorkDir.'/'.$file.'/'.$questionFile);
                         }
                     }
                 }
             }
         } elseif (preg_match('/.xml$/i', $file)) {
-            $isQti = isQtiQuestionBank($baseWorkDir . '/' . $file);
+            $isQti = isQtiQuestionBank($baseWorkDir.'/'.$file);
             if ($isQti) {
                 $result = qti_parse_file($baseWorkDir, '', $file);
-                $filePath = $baseWorkDir . '/' . $file;
+                $filePath = $baseWorkDir.'/'.$file;
                 $file_found = true;
             } else {
-                $isManifest = isQtiManifest($baseWorkDir . '/' . $file);
+                $isManifest = isQtiManifest($baseWorkDir.'/'.$file);
                 if ($isManifest) {
-                    $resourcesLinks = qtiProcessManifest($baseWorkDir . '/' . $file);
+                    $resourcesLinks = qtiProcessManifest($baseWorkDir.'/'.$file);
                 }
             }
 
@@ -179,7 +179,7 @@ function import_exercise($file)
             $question->setAnswer();
             $description = '';
             if (strlen($question_array['title']) < 50) {
-                $question->updateTitle(formatText(strip_tags($question_array['title'])) . '...');
+                $question->updateTitle(formatText(strip_tags($question_array['title'])).'...');
             } else {
                 $question->updateTitle(formatText(substr(strip_tags($question_array['title']), 0, 50)));
                 $description .= $question_array['title'];
@@ -249,7 +249,7 @@ function import_exercise($file)
         }
 
         // delete the temp dir where the exercise was unzipped
-        my_delete($baseWorkDir . $uploadPath);
+        my_delete($baseWorkDir.$uploadPath);
         return $last_exercise_id;
     }
 
@@ -277,8 +277,8 @@ function qti_parse_file($exercisePath, $file, $questionFile)
     global $record_item_body;
     global $questionTempDir;
 
-    $questionTempDir = $exercisePath . '/' . $file . '/';
-    $questionFilePath = $questionTempDir . $questionFile;
+    $questionTempDir = $exercisePath.'/'.$file.'/';
+    $questionFilePath = $questionTempDir.$questionFile;
 
     if (!($fp = fopen($questionFilePath, 'r'))) {
         Display::addFlash(Display::return_message(get_lang('Error opening question\'s XML file'), 'error'));
@@ -333,7 +333,7 @@ function qti_parse_file($exercisePath, $file, $questionFile)
         $error = xml_get_error_code();
         Display::addFlash(
             Display::return_message(
-                get_lang('Error reading XML file') . sprintf('[%d:%d]', xml_get_current_line_number($xml_parser), xml_get_current_column_number($xml_parser)),
+                get_lang('Error reading XML file').sprintf('[%d:%d]', xml_get_current_line_number($xml_parser), xml_get_current_column_number($xml_parser)),
                 'error'
             )
         );
@@ -393,9 +393,9 @@ function startElementQti2($parser, $name, $attributes)
 
     if ($record_item_body) {
         if ((!in_array($current_element, $non_HTML_tag_to_avoid))) {
-            $current_question_item_body .= "<" . $name;
+            $current_question_item_body .= "<".$name;
             foreach ($attributes as $attribute_name => $attribute_value) {
-                $current_question_item_body .= " " . $attribute_name . "=\"" . $attribute_value . "\"";
+                $current_question_item_body .= " ".$attribute_name."=\"".$attribute_value."\"";
             }
             $current_question_item_body .= ">";
         } else {
@@ -403,11 +403,11 @@ function startElementQti2($parser, $name, $attributes)
             //we first save with claroline tags ,then when the answer will be parsed, the claroline tags will be replaced
 
             if ($current_element == 'INLINECHOICEINTERACTION') {
-                $current_question_item_body .= "**claroline_start**" . $attributes['RESPONSEIDENTIFIER'] . "**claroline_end**";
+                $current_question_item_body .= "**claroline_start**".$attributes['RESPONSEIDENTIFIER']."**claroline_end**";
             }
             if ($current_element == 'TEXTENTRYINTERACTION') {
                 $correct_answer_value = $exercise_info['question'][$current_question_ident]['correct_answers'][$current_answer_id];
-                $current_question_item_body .= "[" . $correct_answer_value . "]";
+                $current_question_item_body .= "[".$correct_answer_value."]";
 
             }
             if ($current_element == 'BR') {
@@ -542,7 +542,7 @@ function endElementQti2($parser, $name)
     //treat the record of the full content of itembody tag :
 
     if ($record_item_body && (!in_array($current_element, $non_HTML_tag_to_avoid))) {
-        $current_question_item_body .= "</" . $name . ">";
+        $current_question_item_body .= "</".$name.">";
     }
 
     switch ($name) {
@@ -605,14 +605,14 @@ function elementDataQti2($parser, $data)
             if (!isset ($exercise_info['question'][$current_question_ident]['answer'][$current_answer_id]['value'])) {
                 $exercise_info['question'][$current_question_ident]['answer'][$current_answer_id]['value'] = trim($data);
             } else {
-                $exercise_info['question'][$current_question_ident]['answer'][$current_answer_id]['value'] .= '' . trim($data);
+                $exercise_info['question'][$current_question_ident]['answer'][$current_answer_id]['value'] .= ''.trim($data);
             }
             break;
         case 'FEEDBACKINLINE':
             if (!isset ($exercise_info['question'][$current_question_ident]['answer'][$current_answer_id]['feedback'])) {
                 $exercise_info['question'][$current_question_ident]['answer'][$current_answer_id]['feedback'] = trim($data);
             } else {
-                $exercise_info['question'][$current_question_ident]['answer'][$current_answer_id]['feedback'] .= ' ' . trim($data);
+                $exercise_info['question'][$current_question_ident]['answer'][$current_answer_id]['feedback'] .= ' '.trim($data);
             }
             break;
         case 'SIMPLEASSOCIABLECHOICE':
@@ -632,7 +632,7 @@ function elementDataQti2($parser, $data)
             // $resourcesLinks is only defined by qtiProcessManifest()
             if (isset($resourcesLinks) && isset($resourcesLinks['manifest']) && isset($resourcesLinks['web'])) {
                 foreach ($resourcesLinks['manifest'] as $key => $value) {
-                    $data = preg_replace('|' . $value . '|', $resourcesLinks['web'][$key], $data);
+                    $data = preg_replace('|'.$value.'|', $resourcesLinks['web'][$key], $data);
                 }
             }
             $current_question_item_body .= $data;
@@ -642,8 +642,8 @@ function elementDataQti2($parser, $data)
             $answer_identifier = $exercise_info['question'][$current_question_ident]['correct_answers'][$current_answer_id];
             if ($current_inlinechoice_id == $answer_identifier) {
                 $current_question_item_body = str_replace(
-                    "**claroline_start**" . $current_answer_id . "**claroline_end**",
-                    "[" . $data . "]",
+                    "**claroline_start**".$current_answer_id."**claroline_end**",
+                    "[".$data."]",
                     $current_question_item_body
                 );
             } else {
@@ -709,20 +709,20 @@ function startElementQti1($parser, $name, $attributes)
 
     if ($record_item_body) {
         if ((!in_array($current_element, $non_HTML_tag_to_avoid))) {
-            $current_question_item_body .= "<" . $name;
+            $current_question_item_body .= "<".$name;
             foreach ($attributes as $attribute_name => $attribute_value) {
-                $current_question_item_body .= " " . $attribute_name . "=\"" . $attribute_value . "\"";
+                $current_question_item_body .= " ".$attribute_name."=\"".$attribute_value."\"";
             }
             $current_question_item_body .= ">";
         } else {
             //in case of FIB question, we replace the IMS-QTI tag b y the correct answer between "[" "]",
             //we first save with claroline tags ,then when the answer will be parsed, the claroline tags will be replaced
             if ($current_element == 'INLINECHOICEINTERACTION') {
-                $current_question_item_body .= "**claroline_start**" . $attributes['RESPONSEIDENTIFIER'] . "**claroline_end**";
+                $current_question_item_body .= "**claroline_start**".$attributes['RESPONSEIDENTIFIER']."**claroline_end**";
             }
             if ($current_element == 'TEXTENTRYINTERACTION') {
                 $correct_answer_value = $exercise_info['question'][$current_question_ident]['correct_answers'][$current_answer_id];
-                $current_question_item_body .= "[" . $correct_answer_value . "]";
+                $current_question_item_body .= "[".$correct_answer_value."]";
 
             }
             if ($current_element == 'BR') {
@@ -842,7 +842,7 @@ function endElementQti1($parser, $name, $attributes)
     //treat the record of the full content of itembody tag :
 
     if ($record_item_body && (!in_array($current_element, $non_HTML_tag_to_avoid))) {
-        $current_question_item_body .= "</" . $name . ">";
+        $current_question_item_body .= "</".$name.">";
     }
 
     switch ($name) {
@@ -961,7 +961,7 @@ function elementDataQti1($parser, $data)
             // $resourcesLinks is only defined by qtiProcessManifest()
             if (isset($resourcesLinks) && isset($resourcesLinks['manifest']) && isset($resourcesLinks['web'])) {
                 foreach ($resourcesLinks['manifest'] as $key => $value) {
-                    $data = preg_replace('|' . $value . '|', $resourcesLinks['web'][$key], $data);
+                    $data = preg_replace('|'.$value.'|', $resourcesLinks['web'][$key], $data);
                 }
             }
             if (!empty($current_question_item_body)) {
@@ -1036,9 +1036,9 @@ function qtiProcessManifest($filePath)
     $sessionId = api_get_session_id();
     $courseDir = $course['path'];
     $sysPath = api_get_path(SYS_COURSE_PATH);
-    $exercisesSysPath = $sysPath . $courseDir . '/document/';
+    $exercisesSysPath = $sysPath.$courseDir.'/document/';
     $webPath = api_get_path(WEB_CODE_PATH);
-    $exercisesWebPath = $webPath . 'document/document.php?' . api_get_cidreq() . '&action=download&id=';
+    $exercisesWebPath = $webPath.'document/document.php?'.api_get_cidreq().'&action=download&id=';
     $links = array(
         'manifest' => array(),
         'system' => array(),
@@ -1046,7 +1046,7 @@ function qtiProcessManifest($filePath)
     );
     $tableDocuments = Database::get_course_table(TABLE_DOCUMENT);
     $countResources = count($xml->resources->resource->file);
-    for ($i=0; $i < $countResources; $i++) {
+    for ($i = 0; $i < $countResources; $i++) {
         $file = $xml->resources->resource->file[$i];
         $href = '';
         foreach ($file->attributes() as $key => $value) {
@@ -1058,21 +1058,21 @@ function qtiProcessManifest($filePath)
         }
         if (!empty($href)) {
             $links['manifest'][] = (string) $href;
-            $links['system'][] = $exercisesSysPath . strtolower($href);
+            $links['system'][] = $exercisesSysPath.strtolower($href);
             $specialHref = Database::escape_string(preg_replace('/_/', '-', strtolower($href)));
             $specialHref = preg_replace('/(-){2,8}/', '-', $specialHref);
 
-            $sql = "SELECT iid FROM " . $tableDocuments . " 
+            $sql = "SELECT iid FROM ".$tableDocuments." 
                     WHERE
-                        c_id = " . $course['real_id'] . " AND 
+                        c_id = " . $course['real_id']." AND 
                         session_id = $sessionId AND 
-                        path = '/" . $specialHref . "'";
+                        path = '/".$specialHref."'";
             $result = Database::query($sql);
             $documentId = 0;
             while ($row = Database::fetch_assoc($result)) {
                 $documentId = $row['iid'];
             }
-            $links['web'][] = $exercisesWebPath . $documentId;
+            $links['web'][] = $exercisesWebPath.$documentId;
         }
     }
     return $links;

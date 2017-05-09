@@ -22,14 +22,14 @@ class SystemAnnouncementManager
         $tbl_announcement_group = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS);
         $userGroup = new UserGroup();
 
-        $temp_user_groups = $userGroup->get_groups_by_user(api_get_user_id(),0);
+        $temp_user_groups = $userGroup->get_groups_by_user(api_get_user_id(), 0);
         $groups = array();
         foreach ($temp_user_groups as $user_group) {
             $groups = array_merge($groups, array($user_group['id']));
             $groups = array_merge($groups, $userGroup->get_parent_groups($user_group['id']));
         }
 
-        $groups_string = '('.implode($groups,',').')';
+        $groups_string = '('.implode($groups, ',').')';
         $now = api_get_utc_datetime();
         $sql = "SELECT *, DATE_FORMAT(date_start,'%d-%m-%Y %h:%i:%s') AS display_date
                 FROM  $db_table
@@ -104,13 +104,13 @@ class SystemAnnouncementManager
      * @param string $user_id
      * @return string
      */
-    public static function display_all_announcements($visible, $id = -1, $start = 0,$user_id='')
+    public static function display_all_announcements($visible, $id = -1, $start = 0, $user_id = '')
     {
         $user_selected_language = api_get_interface_language();
         $start = intval($start);
         $userGroup = new UserGroup();
         $tbl_announcement_group = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS);
-        $temp_user_groups = $userGroup->get_groups_by_user(api_get_user_id(),0);
+        $temp_user_groups = $userGroup->get_groups_by_user(api_get_user_id(), 0);
         $groups = array();
         foreach ($temp_user_groups as $user_group) {
             $groups = array_merge($groups, array($user_group['id']));
@@ -118,10 +118,10 @@ class SystemAnnouncementManager
         }
 
         // Checks if tables exists to not break platform not updated
-        $groups_string = '('.implode($groups,',').')';
+        $groups_string = '('.implode($groups, ',').')';
 
         $db_table = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
-        $now  = api_get_utc_datetime();
+        $now = api_get_utc_datetime();
 
         $sql = "SELECT * FROM ".$db_table."
                 WHERE
@@ -155,7 +155,7 @@ class SystemAnnouncementManager
         if (!isset($_GET['start']) || $_GET['start'] == 0) {
             $sql .= " ORDER BY date_start DESC LIMIT ".$start.",20";
         } else {
-            $sql .= " ORDER BY date_start DESC LIMIT ".($start+1).",20";
+            $sql .= " ORDER BY date_start DESC LIMIT ".($start + 1).",20";
         }
         $announcements = Database::query($sql);
         $content = '';
@@ -204,10 +204,10 @@ class SystemAnnouncementManager
      */
     public static function display_arrow($user_id)
     {
-        $start = (int)$_GET['start'];
+        $start = (int) $_GET['start'];
         $nb_announcement = self::count_nb_announcement($start, $user_id);
-        $next = ((int)$_GET['start']+19);
-        $prev = ((int)$_GET['start']-19);
+        $next = ((int) $_GET['start'] + 19);
+        $prev = ((int) $_GET['start'] - 19);
         $content = '';
         if (!isset($_GET['start']) || $_GET['start'] == 0) {
             if ($nb_announcement > 20) {
@@ -567,7 +567,7 @@ class SystemAnnouncementManager
                 $sendEmailTest
             );
         } else {
-            if ($send_mail==1) {
+            if ($send_mail == 1) {
                 self::send_system_announcement_by_email(
                     $title,
                     $content,
@@ -678,7 +678,7 @@ class SystemAnnouncementManager
         $language = null,
         $sendEmailTest = false
     ) {
-        $content = str_replace(array('\r\n', '\n', '\r'),'', $content);
+        $content = str_replace(array('\r\n', '\n', '\r'), '', $content);
         $now = api_get_utc_datetime();
 
         if ($sendEmailTest) {
@@ -704,7 +704,7 @@ class SystemAnnouncementManager
 					WHERE status = '5' ";
 		}
 
-		if ($teacher<> 0 && $student <> 0) {
+		if ($teacher <> 0 && $student <> 0) {
 			$sql = "SELECT DISTINCT u.user_id FROM $user_table u $url_condition 
 					WHERE 1 = 1 ";
 		}
@@ -737,7 +737,7 @@ class SystemAnnouncementManager
 
         $message_sent = false;
 
-		while ($row = Database::fetch_array($result,'ASSOC')) {
+		while ($row = Database::fetch_array($result, 'ASSOC')) {
             MessageManager::send_message_simple($row['user_id'], $title, $content);
             $message_sent = true;
 		}

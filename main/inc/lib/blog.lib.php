@@ -526,9 +526,9 @@ class Blog
                 Database::query($sql);
 
                 if ($has_attachment) {
-                    $courseDir = $_course['path'] . '/upload/blog';
+                    $courseDir = $_course['path'].'/upload/blog';
                     $sys_course_path = api_get_path(SYS_COURSE_PATH);
-                    $updir = $sys_course_path . $courseDir;
+                    $updir = $sys_course_path.$courseDir;
 
                     // Try to add an extension to the file if it hasn't one
                     $new_file_name = add_ext_on_mime(
@@ -543,7 +543,7 @@ class Blog
                         echo Display::return_message(get_lang('UplUnableToSaveFileFilteredExtension'), 'error');
                     } else {
                         $new_file_name = uniqid('');
-                        $new_path = $updir . '/' . $new_file_name;
+                        $new_path = $updir.'/'.$new_file_name;
                         $result = @move_uploaded_file($_FILES['user_upload']['tmp_name'], $new_path);
                         $comment = Database::escape_string($file_comment);
                         $size = intval($_FILES['user_upload']['size']);
@@ -1130,7 +1130,7 @@ class Blog
             'comments' => $listComments,
             'form_html' => $formComments,
             'actions' => $blogActions,
-            'score_ranking' => (int)$scoreRanking,
+            'score_ranking' => (int) $scoreRanking,
             'frm_rating' => api_is_allowed('BLOG_'.$blog_id, 'article_rate')
                 ? self::displayRatingCreateForm('post', $blog_id, $post_id)
                 : null
@@ -1283,7 +1283,7 @@ class Blog
                     blog_id = $blog_id
                     AND item_id = $post_id
                     AND rating_type = '$type'
-                    AND user_id = " . $_user['user_id'];
+                    AND user_id = ".$_user['user_id'];
             $result = Database::query($sql);
             // Add rating
             if (Database::num_rows($result) == 0) {
@@ -1470,13 +1470,13 @@ class Blog
                     blog_id = $blog_id AND
                     item_id = $item_id AND
                     rating_type = '$type' AND
-                    user_id = " . $_user['user_id'];
+                    user_id = ".$_user['user_id'];
         $result = Database::query($sql);
 
         // Add rating
         if (Database::num_rows($result) == 0) {
             $sql = "INSERT INTO $tbl_blogs_rating (c_id, blog_id, rating_type, item_id, user_id, rating )
-                    VALUES ($course_id, $blog_id, '$type', $item_id, " . $_user['user_id'] . ", '$rating')";
+                    VALUES ($course_id, $blog_id, '$type', $item_id, ".$_user['user_id'].", '$rating')";
             Database::query($sql);
 
             $id = Database::insert_id();
@@ -1752,8 +1752,8 @@ class Blog
 
             $username = api_htmlentities(sprintf(get_lang('LoginX'), $assignment['username']), ENT_QUOTES);
 
-            $return .='<tr class="'.$css_class.'" valign="top">';
-            $return .='<td width="240">'.Display::tag(
+            $return .= '<tr class="'.$css_class.'" valign="top">';
+            $return .= '<td width="240">'.Display::tag(
                     'span',
                     api_get_person_name($assignment['firstname'], $assignment['lastname']),
                     array('title' => $username)
@@ -2419,7 +2419,7 @@ class Blog
         $query_vars['action'] = 'manage_members';
         $query_vars['blog_id'] = $blog_id;
         $html .= '<form class="form-inline" method="post" action="blog.php?action=manage_members&blog_id='.$blog_id.'">';
-        $html.= Display::return_sortable_table($column_header, $user_data, null, null, $query_vars);
+        $html .= Display::return_sortable_table($column_header, $user_data, null, null, $query_vars);
         $link = '';
         $link .= isset ($_GET['action']) ? 'action='.Security::remove_XSS($_GET['action']).'&' : '';
         $link .= "blog_id=$blog_id&";
@@ -2458,7 +2458,7 @@ class Blog
         $tbl_blogs_rel_user = Database::get_course_table(TABLE_BLOGS_REL_USER);
         $blog_id = intval($blog_id);
 
-        $html.= '<legend>'.get_lang('UnsubscribeMembers').'</legend>';
+        $html .= '<legend>'.get_lang('UnsubscribeMembers').'</legend>';
 
         $properties["width"] = "100%";
         //table column titles
@@ -2534,25 +2534,25 @@ class Blog
 
         $query_vars['action'] = 'manage_members';
         $query_vars['blog_id'] = $blog_id;
-        $html.= '<form class="form-inline" method="post" action="blog.php?action=manage_members&blog_id='.$blog_id.'">';
-        $html.= Display::return_sortable_table($column_header, $user_data, null, null, $query_vars);
+        $html .= '<form class="form-inline" method="post" action="blog.php?action=manage_members&blog_id='.$blog_id.'">';
+        $html .= Display::return_sortable_table($column_header, $user_data, null, null, $query_vars);
         $link = '';
         $link .= isset ($_GET['action']) ? 'action='.Security::remove_XSS($_GET['action']).'&' : '';
         $link .= "blog_id=$blog_id&";
 
-        $html.= '<a class="btn btn-default" href="blog.php?'.$link.'selectall=unsubscribe">'.get_lang('SelectAll').'</a> - ';
-        $html.= '<a class="btn btn-default" href="blog.php?'.$link.'">'.get_lang('UnSelectAll').'</a> ';
-        $html.= '<div class="form-group">';
-        $html.= '<label>';
-        $html.= get_lang('WithSelected').' : ';
-        $html.= '</label>';
-        $html.= '<select name="action" class="selectpicker">';
-        $html.= '<option value="select_unsubscribe">'.get_lang('UnRegister').'</option>';
-        $html.= '</select>';
-        $html.= '<input type="hidden" name="unregister" value="true" />';
-        $html.= '<button class="btn btn-default" type="submit">'.get_lang('Ok').'</button>';
-        $html.= '</div>';
-        $html.= '</form>';
+        $html .= '<a class="btn btn-default" href="blog.php?'.$link.'selectall=unsubscribe">'.get_lang('SelectAll').'</a> - ';
+        $html .= '<a class="btn btn-default" href="blog.php?'.$link.'">'.get_lang('UnSelectAll').'</a> ';
+        $html .= '<div class="form-group">';
+        $html .= '<label>';
+        $html .= get_lang('WithSelected').' : ';
+        $html .= '</label>';
+        $html .= '<select name="action" class="selectpicker">';
+        $html .= '<option value="select_unsubscribe">'.get_lang('UnRegister').'</option>';
+        $html .= '</select>';
+        $html .= '<input type="hidden" name="unregister" value="true" />';
+        $html .= '<button class="btn btn-default" type="submit">'.get_lang('Ok').'</button>';
+        $html .= '</div>';
+        $html .= '</form>';
 
         return $html;
     }
@@ -2657,7 +2657,7 @@ class Blog
                     task_rel_user.c_id = $course_id AND
                     task.c_id = $course_id AND
                     blog.c_id = $course_id AND
-                    task_rel_user.user_id = " . $_user['user_id'] . " AND
+                    task_rel_user.user_id = ".$_user['user_id']." AND
                     MONTH(target_date) = '$month' AND
                     YEAR(target_date) = '$year'
                 ORDER BY target_date ASC";

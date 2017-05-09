@@ -16,7 +16,7 @@ function aiken_display_form()
 {
     $name_tools = get_lang('ImportAikenQuiz');
     $form  = '<div class="actions">';
-    $form .= '<a href="exercise.php?show=test&'.api_get_cidreq().'">' .
+    $form .= '<a href="exercise.php?show=test&'.api_get_cidreq().'">'.
         Display::return_icon(
             'back.png',
             get_lang('BackToExercisesList'),
@@ -314,7 +314,7 @@ function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile)
                     $exercise_info['question'][$question_index]['title'] = $info;
                 } else {
                     //Question itself (use a 100-chars long title and a larger description)
-                    $exercise_info['question'][$question_index]['title'] = trim(substr($info, 0, 100)) . '...';
+                    $exercise_info['question'][$question_index]['title'] = trim(substr($info, 0, 100)).'...';
                     $exercise_info['question'][$question_index]['description'] = $info;
                 }
             } else {

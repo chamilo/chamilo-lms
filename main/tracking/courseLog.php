@@ -109,7 +109,7 @@ $js = "<script>
                             get_lang('HideColumn'),
                             array('align' => 'absmiddle', 'hspace' => '3px'),
                             ICON_SIZE_SMALL
-                         ) . "</div>'
+                         )."</div>'
                     );
                 }
             );
@@ -144,7 +144,7 @@ $TABLETRACK_ACCESS      = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTA
 $TABLETRACK_LINKS       = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LINKS);
 $TABLETRACK_DOWNLOADS   = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
 $TABLETRACK_ACCESS_2    = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
-$TABLETRACK_EXERCISES 	= Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+$TABLETRACK_EXERCISES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 $TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $TABLECOURSE = Database::get_main_table(TABLE_MAIN_COURSE);
 $table_user = Database::get_main_table(TABLE_MAIN_USER);
@@ -154,8 +154,8 @@ $sessionId = api_get_session_id();
 
 // Breadcrumbs.
 if (isset($_GET['origin']) && $_GET['origin'] == 'resume_session') {
-    $interbreadcrumb[] = array('url' => '../admin/index.php','name' => get_lang('PlatformAdmin'));
-    $interbreadcrumb[] = array('url' => '../session/session_list.php','name' => get_lang('SessionList'));
+    $interbreadcrumb[] = array('url' => '../admin/index.php', 'name' => get_lang('PlatformAdmin'));
+    $interbreadcrumb[] = array('url' => '../session/session_list.php', 'name' => get_lang('SessionList'));
     $interbreadcrumb[] = array('url' => '../session/resume_session.php?id_session='.$sessionId, 'name' => get_lang('SessionOverview'));
 }
 
@@ -226,21 +226,21 @@ $actionsLeft .= Display::url(
 if (!empty($sessionId)) {
     $actionsLeft .= Display::url(
         Display::return_icon('attendance_list.png', get_lang('Logins'), '', ICON_SIZE_MEDIUM),
-        api_get_path(WEB_CODE_PATH) . 'attendance/index.php?' . api_get_cidreq() . '&action=calendar_logins'
+        api_get_path(WEB_CODE_PATH).'attendance/index.php?'.api_get_cidreq().'&action=calendar_logins'
     );
 }
 
 $actionsRight = '<div class="pull-right">';
 $actionsRight .= '<a href="javascript: void(0);" onclick="javascript: window.print();">'.
-    Display::return_icon('printer.png', get_lang('Print'),'',ICON_SIZE_MEDIUM).'</a>';
+    Display::return_icon('printer.png', get_lang('Print'), '', ICON_SIZE_MEDIUM).'</a>';
 
 $addional_param = '';
 if (isset($_GET['additional_profile_field'])) {
-    $addional_param ='additional_profile_field='.intval($_GET['additional_profile_field']);
+    $addional_param = 'additional_profile_field='.intval($_GET['additional_profile_field']);
 }
 $users_tracking_per_page = '';
 if (isset($_GET['users_tracking_per_page'])) {
-    $users_tracking_per_page= '&users_tracking_per_page='.intval($_GET['users_tracking_per_page']);
+    $users_tracking_per_page = '&users_tracking_per_page='.intval($_GET['users_tracking_per_page']);
 }
 $actionsRight .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&export=csv&'.$addional_param.$users_tracking_per_page.'">
      '.Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), '', ICON_SIZE_MEDIUM).'</a>';
@@ -264,7 +264,7 @@ echo Display::toolbarAction('toolbar-courselog', [$actionsLeft, $form_search->re
 $course_name = get_lang('Course').' '.$courseInfo['name'];
 if ($session_id) {
     $titleSession = Display::return_icon('session.png', get_lang('Session'), array(), ICON_SIZE_SMALL).' '.api_get_session_name($session_id);
-    $titleCourse =  Display::return_icon('course.png', get_lang('Course'), array(), ICON_SIZE_SMALL).' '.$course_name;
+    $titleCourse = Display::return_icon('course.png', get_lang('Course'), array(), ICON_SIZE_SMALL).' '.$course_name;
 } else {
     $titleSession = Display::return_icon('course.png', get_lang('Course'), array(), ICON_SIZE_SMALL).' '.$courseInfo['name'];
 }
@@ -304,7 +304,7 @@ if (!empty($sessionList)) {
     $html .= '<ul class="session-list">';
     foreach ($sessionList as $session) {
         $url = api_get_path(WEB_CODE_PATH).'mySpace/course.php?session_id='.$session['id'].'&cidReq='.$courseInfo['code'];
-        $html .= Display::tag('li', $iconCourse . ' ' . Display::url($session['name'], $url));
+        $html .= Display::tag('li', $iconCourse.' '.Display::url($session['name'], $url));
     }
     $html .= '</ul>';
 }
@@ -319,12 +319,12 @@ if (count($a_students) > 0) {
     $form = new FormValidator(
         'reminder_form',
         'get',
-        api_get_path(WEB_CODE_PATH).'announcements/announcements.php?' . api_get_cidreq(),
+        api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.api_get_cidreq(),
         null,
         ['style' => 'margin-bottom: 10px'],
         FormValidator::LAYOUT_INLINE
     );
-    $options = array (
+    $options = array(
         2 => sprintf($getLangXDays, 2),
         3 => sprintf($getLangXDays, 3),
         4 => sprintf($getLangXDays, 4),
@@ -337,7 +337,7 @@ if (count($a_students) > 0) {
     );
     $el = $form->addSelect(
         'since',
-        Display::returnFontAwesomeIcon('warning') . get_lang('RemindInactivesLearnersSince'),
+        Display::returnFontAwesomeIcon('warning').get_lang('RemindInactivesLearnersSince'),
         $options,
         ['class' => 'col-sm-3']
     );

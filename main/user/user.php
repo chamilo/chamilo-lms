@@ -40,6 +40,8 @@ $courseCode = $course_info['code'];
 $courseId = $course_info['real_id'];
 $type = isset($_REQUEST['type']) ? intval($_REQUEST['type']) : STUDENT;
 
+$canEditUsers = api_get_setting('allow_user_course_subscription_by_course_admin') == 'true' || api_is_platform_admin();
+
 //Can't auto unregister from a session
 if (!empty($sessionId)) {
     $course_info['unsubscribe'] = 0;
@@ -519,7 +521,7 @@ if (!empty($hideFields)) {
 if (api_is_allowed_to_edit(null, true)) {
     $table->set_header($header_nr++, get_lang('Status'), false);
     $table->set_header($header_nr++, get_lang('Active'), false);
-    if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true') {
+    if ($canEditUsers) {
         $table->set_column_filter(8, 'active_filter');
     } else {
         $table->set_column_filter(8, 'active_filter');
@@ -533,7 +535,7 @@ if (api_is_allowed_to_edit(null, true)) {
     $table->set_header($header_nr++, get_lang('Action'), false);
     $table->set_column_filter($header_nr - 1, 'modify_filter');
 
-    if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true') {
+    if ($canEditUsers) {
         $table->set_form_actions(array('unsubscribe' => get_lang('Unreg')), 'user');
     }
 } else {
@@ -594,9 +596,7 @@ if (api_is_allowed_to_edit(null, true)) {
     $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&format=xls&type='.$type.'">'.
         Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), '', ICON_SIZE_MEDIUM).'</a> ';
 
-    if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true' ||
-        api_is_platform_admin()
-    ) {
+    if ($canEditUsers) {
         $actions .= '<a href="user_import.php?'.api_get_cidreq().'&action=import">'.
             Display::return_icon('import_csv.png', get_lang('ImportUsersToACourse'), '', ICON_SIZE_MEDIUM).'</a> ';
     }
@@ -746,7 +746,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 {
     global $is_western_name_order;
     global $extraFields;
-
+    $canEditUsers = api_get_setting('allow_user_course_subscription_by_course_admin') == 'true' || api_is_platform_admin();
     $type = isset($_REQUEST['type']) ? intval($_REQUEST['type']) : STUDENT;
     $course_info = api_get_course_info();
     $sessionId = api_get_session_id();
@@ -841,7 +841,6 @@ function get_user_data($from, $number_of_items, $column, $direction)
             if (api_is_allowed_to_edit(null, true)) {
                 $userInfo = api_get_user_info($user_id);
                 $photo = Display::img($userInfo['avatar_small'], $userInfo['complete_name'], [], false);
-
                 $temp[] = $user_id;
                 $temp[] = $photo;
                 $temp[] = $o_course_user['official_code'];
@@ -895,7 +894,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 
                 $photo = '<img src="'.$userPicture.'" alt="'.$userInfo['complete_name'].'" width="22" height="22" title="'.$userInfo['complete_name'].'" />';
 
-                $temp[] = $user_id;
+                $temp[] = '';
                 $temp[] = $photo;
                 $temp[] = $o_course_user['official_code'];
 
@@ -906,6 +905,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
                     $temp[] = $o_course_user['lastname'];
                     $temp[] = $o_course_user['firstname'];
                 }
+
                 $temp[] = $o_course_user['username'];
                 // Group.
                 $temp[] = implode(', ', $groupsNameListParsed);
@@ -964,6 +964,7 @@ function active_filter($active, $urlParams, $row)
 function modify_filter($user_id, $row, $data)
 {
     global $charset;
+    $canEditUsers = api_get_setting('allow_user_course_subscription_by_course_admin') == 'true' || api_is_platform_admin();
 
     $is_allowed_to_track = api_is_allowed_to_edit(true, true);
 
@@ -1015,7 +1016,7 @@ function modify_filter($user_id, $row, $data)
         }
 
         // edit
-        if (api_get_setting('allow_user_course_subscription_by_course_admin') === 'true' || api_is_platform_admin()) {
+        if ($canEditUsers) {
             // unregister
             if ($user_id != $current_user_id || api_is_platform_admin()) {
                 $result .= '<a class="btn btn-small btn-danger" href="'.api_get_self().'?'.api_get_cidreq().'&type='.$type.'&unregister=yes&user_id='.$user_id.'" title="'.get_lang('Unreg').' " onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).'\')) return false;">'.

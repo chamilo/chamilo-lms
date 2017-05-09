@@ -63,13 +63,11 @@ class GlobalMultipleAnswer extends Question
             }
         }
 
-        #le nombre de r�ponses est bien enregistr� sous la forme int(nb)
-
+        //  le nombre de r�ponses est bien enregistr� sous la forme int(nb)
         /* Ajout mise en forme nb reponse */
         $form->addElement('hidden', 'nb_answers');
         $boxes_names = array();
 
-        /* V�rification : Cr�action d'au moins une r�ponse */
         if ($nb_answers < 1) {
             $nb_answers = 1;
             echo Display::return_message(get_lang('YouHaveToCreateAtLeastOneAnswer'), 'normal');
@@ -207,7 +205,6 @@ class GlobalMultipleAnswer extends Question
      */
     function processAnswersCreation($form)
     {
-        $questionWeighting = $nbrGoodAnswers = 0;
         $objAnswer = new Answer($this->id);
         $nb_answers = $form->getSubmitValue('nb_answers');
 

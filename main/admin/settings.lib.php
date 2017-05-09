@@ -451,11 +451,6 @@ function handleStylesheets()
         $form_change->addGroup($group);
 
         if ($show_upload_form) {
-            echo '<script>
-            $(function() {
-                $( "#tabs" ).tabs();
-            });
-            </script>';
             echo Display::tabs(
                 array(get_lang('Update'), get_lang('UpdateLogo'), get_lang('UploadNewStylesheet')),
                 array($form_change->returnForm(), $logoForm->returnForm(), $form->returnForm())

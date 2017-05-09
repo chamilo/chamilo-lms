@@ -7033,6 +7033,10 @@ function api_detect_user_roles($user_id, $courseId, $session_id = 0)
  */
 function api_coach_can_edit_view_results($courseId = null, $session_id = null)
 {
+    if (api_is_platform_admin()) {
+        return true;
+    }
+
     $user_id = api_get_user_id();
 
     if (empty($courseId)) {
@@ -7041,10 +7045,6 @@ function api_coach_can_edit_view_results($courseId = null, $session_id = null)
 
     if (empty($session_id)) {
         $session_id = api_get_session_id();
-    }
-
-    if (api_is_platform_admin()) {
-        return true;
     }
 
     $roles = api_detect_user_roles($user_id, $courseId, $session_id);

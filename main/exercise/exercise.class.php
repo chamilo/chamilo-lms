@@ -1211,7 +1211,7 @@ class Exercise
      */
     public function updateTitle($title)
     {
-        $this->exercise=$title;
+        $this->title = $this->exercise = $title;
     }
 
     /**

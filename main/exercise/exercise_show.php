@@ -39,10 +39,12 @@ $student_id = $track_exercise_info['exe_user_id'];
 $learnpath_id = $track_exercise_info['orig_lp_id'];
 $learnpath_item_id = $track_exercise_info['orig_lp_item_id'];
 $lp_item_view_id = $track_exercise_info['orig_lp_item_view_id'];
-
+$isBossOfStudent = false;
 if (api_is_student_boss()) {
     // Check if boss has access to user info.
-    if (UserManager::userIsBossOfStudent($currentUserId, $student_id) == false) {
+    if (UserManager::userIsBossOfStudent($currentUserId, $student_id)) {
+        $isBossOfStudent = true;
+    } else {
         api_not_allowed($printHeaders);
     }
 } else {
@@ -662,16 +664,18 @@ foreach ($questionList as $questionId) {
         if ($is_allowedToEdit &&
             $locked == false &&
             !api_is_drh() &&
-            !api_is_student_boss() &&
             $isCoachAllowedToEdit
         ) {
             $isFeedbackAllowed = true;
         } elseif (!$isCoachAllowedToEdit && $allowCoachFeedbackExercises) {
             $isFeedbackAllowed = true;
         }
+        // Boss cannot edit exercise result
+        if ($isBossOfStudent) {
+            $isFeedbackAllowed = false;
+        }
 
         $marksname = '';
-
         if ($isFeedbackAllowed) {
             $name = "fckdiv".$questionId;
             $marksname = "marksName".$questionId;
@@ -951,7 +955,6 @@ if ($isFeedbackAllowed && $origin != 'learnpath' && $origin != 'student_progress
         false,
         ['onclick' => "getFCK('$strids', '$marksid')"]
     );
-
     echo $emailForm->returnForm();
 }
 

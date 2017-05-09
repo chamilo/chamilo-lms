@@ -30,7 +30,7 @@ if (($_GET['action']=="add_user") && ($_GET['id_session'] == strval(intval($_GET
 }
 */
 
-$interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 $tool_name = get_lang('SearchLDAPUsers');
 //Display::display_header($tool_name); //cannot display now as we need to redirect
 //api_display_tool_title($tool_name);
@@ -38,7 +38,7 @@ $tool_name = get_lang('SearchLDAPUsers');
 if (isset ($_GET['action']))
 {
 	$check = Security::check_token('get');
-	if($check)
+	if ($check)
 	{
 		switch ($_GET['action'])
 		{
@@ -59,39 +59,39 @@ if (isset ($_GET['action']))
 				break;
 			case 'lock' :
 				Display::display_header($tool_name);
-				$message=lock_unlock_user('lock',$_GET['user_id']);
+				$message = lock_unlock_user('lock', $_GET['user_id']);
 				Display::addFlash(Display::return_message($message, 'normal'));
 				break;
 			case 'unlock':
 				Display::display_header($tool_name);
-				$message=lock_unlock_user('unlock',$_GET['user_id']);
+				$message = lock_unlock_user('unlock', $_GET['user_id']);
 				Display::addFlash(Display::return_message($message, 'normal'));
 				break;
             case 'add_user':
-				$id=$_GET['id'];
-				$UserList=array();
+				$id = $_GET['id'];
+				$UserList = array();
 				$userid_match_login = array();
 				foreach ($id as $user_id) {
 					$tmp = ldap_add_user($user_id);
-					$UserList[]= $tmp;
+					$UserList[] = $tmp;
 					$userid_match_login[$tmp] = $user_id;
 				}
-				if (isset($_GET['id_session']) && ($_GET['id_session'] == strval(intval($_GET['id_session']))) && ($_GET['id_session']>0)) {
+				if (isset($_GET['id_session']) && ($_GET['id_session'] == strval(intval($_GET['id_session']))) && ($_GET['id_session'] > 0)) {
 					ldap_add_user_to_session($UserList, $_GET['id_session']);
 					header('Location: resume_session.php?id_session='.intval($_GET['id_session']));
 				} else {
 					Display::display_header($tool_name);
-					if(count($userid_match_login)>0)
+					if (count($userid_match_login) > 0)
 					{
-						$message=get_lang('LDAPUsersAddedOrUpdated').':<br />';
-						foreach($userid_match_login as $user_id => $login)
+						$message = get_lang('LDAPUsersAddedOrUpdated').':<br />';
+						foreach ($userid_match_login as $user_id => $login)
 						{
 							$message .= '- '.$login.'<br />';
 						}
 					}
 					else
 					{
-						$message=get_lang('NoUserAdded');
+						$message = get_lang('NoUserAdded');
 					}
 					Display::addFlash(Display::return_message($message, 'normal', false));
 				}
@@ -113,7 +113,7 @@ else
 if (isset ($_POST['action']))
 {
 	$check = Security::check_token('get');
-	if($check)
+	if ($check)
 	{
 		switch ($_POST['action'])
 		{
@@ -122,15 +122,15 @@ if (isset ($_POST['action']))
 				$number_of_deleted_users = 0;
 				foreach ($_POST['id'] as $index => $user_id)
 				{
-					if($user_id != $_user['user_id'])
+					if ($user_id != $_user['user_id'])
 					{
-						if(UserManager::delete_user($user_id))
+						if (UserManager::delete_user($user_id))
 						{
 							$number_of_deleted_users++;
 						}
 					}
 				}
-				if($number_of_selected_users == $number_of_deleted_users)
+				if ($number_of_selected_users == $number_of_deleted_users)
 				{
 					Display::addFlash(Display::return_message(get_lang('SelectedUsersDeleted'), 'normal'));
 				}
@@ -142,17 +142,17 @@ if (isset ($_POST['action']))
 			case 'add_user' :
 				$number_of_selected_users = count($_POST['id']);
 				$number_of_added_users = 0;
-				$UserList=array();
+				$UserList = array();
 				foreach ($_POST['id'] as $index => $user_id)
 				{
-					if($user_id != $_user['user_id'])
+					if ($user_id != $_user['user_id'])
 					{
 						$UserList[] = ldap_add_user($user_id);
 					}
 				}
-				if (isset($_GET['id_session']) && (trim($_GET['id_session'])!=""))
+				if (isset($_GET['id_session']) && (trim($_GET['id_session']) != ""))
 					addUserToSession($UserList, $_GET['id_session']);
-				if(count($UserList)>0)
+				if (count($UserList) > 0)
 				{
 					Display::addFlash(Display::return_message(count($UserList)." ".get_lang('LDAPUsersAdded')));
 				}
@@ -167,8 +167,8 @@ if (isset ($_POST['action']))
 	}
 }
 
-$form = new FormValidator('advanced_search','get');
-$form->addText('keyword_username',get_lang('LoginName'),false);
+$form = new FormValidator('advanced_search', 'get');
+$form->addText('keyword_username', get_lang('LoginName'), false);
 if (api_is_western_name_order())
 {
 	$form->addText('keyword_firstname', get_lang('FirstName'), false);
@@ -176,20 +176,20 @@ if (api_is_western_name_order())
 }
 else
 {
-	$form->addText('keyword_lastname',get_lang('LastName'),false);
-	$form->addText('keyword_firstname',get_lang('FirstName'),false);
+	$form->addText('keyword_lastname', get_lang('LastName'), false);
+	$form->addText('keyword_firstname', get_lang('FirstName'), false);
 }
 if (isset($_GET['id_session']))
-	$form->addElement('hidden','id_session',$_GET['id_session']);
+	$form->addElement('hidden', 'id_session', $_GET['id_session']);
 
 $type = array();
 $type["all"] = get_lang('All');
-$type["employee"]  = get_lang('Teacher');
+$type["employee"] = get_lang('Teacher');
 $type["student"] = get_lang('Student');
 
-$form->addElement('select','keyword_type',get_lang('Status'),$type);
+$form->addElement('select', 'keyword_type', get_lang('Status'), $type);
 // Structure a rajouer ??
-$form->addElement('submit','submit',get_lang('Ok'));
+$form->addElement('submit', 'submit', get_lang('Ok'));
 //$defaults['keyword_active'] = 1;
 //$defaults['keyword_inactive'] = 1;
 //$form->setDefaults($defaults);
@@ -222,7 +222,7 @@ $table->set_header(5, get_lang('Actions'));
 //$table->set_column_filter(5, 'email_filter');
 //$table->set_column_filter(5, 'active_filter');
 $table->set_column_filter(5, 'modify_filter');
-$table->set_form_actions(array ('add_user' => get_lang('AddLDAPUsers')));
+$table->set_form_actions(array('add_user' => get_lang('AddLDAPUsers')));
 $table->display();
 
 /*

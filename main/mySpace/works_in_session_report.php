@@ -53,7 +53,7 @@ if ($session) {
     foreach ($sessionCourses as $sessionCourse) {
         /** @var Course $course */
         $course = $sessionCourse->getCourse();
-        $coursesInfo[$course->getId()] =  $course->getCode();
+        $coursesInfo[$course->getId()] = $course->getCode();
         $userCourseSubscriptions = $session->getUserCourseSubscriptionsByStatus($course, Session::STUDENT);
 
         foreach ($userCourseSubscriptions as $userCourseSubscription) {
@@ -72,15 +72,15 @@ if ($session) {
                 ];
             }
 
-            $usersInfo[$user->getId()][$course->getId() . '_score'] = null;
-            $usersInfo[$user->getId()][$course->getId() . '_progress'] = null;
-            $usersInfo[$user->getId()][$course->getId() . '_last_sent_date'] = null;
+            $usersInfo[$user->getId()][$course->getId().'_score'] = null;
+            $usersInfo[$user->getId()][$course->getId().'_progress'] = null;
+            $usersInfo[$user->getId()][$course->getId().'_last_sent_date'] = null;
 
             if (!$session->hasStudentInCourse($user, $course)) {
                 continue;
             }
 
-            $usersInfo[$user->getId()][$course->getId() . '_score'] = Tracking::get_avg_student_score(
+            $usersInfo[$user->getId()][$course->getId().'_score'] = Tracking::get_avg_student_score(
                 $user->getId(),
                 $course->getCode(),
                 null,
@@ -90,7 +90,7 @@ if ($session) {
                 true
 
             );
-            $usersInfo[$user->getId()][$course->getId() . '_progress'] = Tracking::get_avg_student_progress(
+            $usersInfo[$user->getId()][$course->getId().'_progress'] = Tracking::get_avg_student_progress(
                 $user->getId(),
                 $course->getCode(),
                 null,
@@ -108,14 +108,14 @@ if ($session) {
                 continue;
             }
 
-            $usersInfo[$user->getId()][$course->getId() . '_last_sent_date'] = api_get_local_time(
+            $usersInfo[$user->getId()][$course->getId().'_last_sent_date'] = api_get_local_time(
                 $lastPublication->getSentDate()->getTimestamp());
         }
     }
 }
 
 if (isset($_GET['export']) && $session && ($coursesInfo && $usersInfo)) {
-    $fileName = 'works_in_session_' . api_get_local_time();
+    $fileName = 'works_in_session_'.api_get_local_time();
 
     $dataToExport = [];
     $dataToExport[] = [$toolName, $session->getName()];
@@ -126,7 +126,7 @@ if (isset($_GET['export']) && $session && ($coursesInfo && $usersInfo)) {
     $dataToExport['headers'][] = get_lang('LatestLoginInPlatform');
 
     foreach ($coursesInfo as $courseCode) {
-        $dataToExport['headers'][] = $courseCode. ' ('.get_lang('BestScore').')';
+        $dataToExport['headers'][] = $courseCode.' ('.get_lang('BestScore').')';
         $dataToExport['headers'][] = get_lang('Progress');
         $dataToExport['headers'][] = get_lang('LastSentWorkDate');
     }
@@ -148,7 +148,7 @@ if (isset($_GET['export']) && $session && ($coursesInfo && $usersInfo)) {
 }
 
 $interbreadcrumb[] = [
-    'url' => api_get_path(WEB_CODE_PATH) . 'mySpace/index.php',
+    'url' => api_get_path(WEB_CODE_PATH).'mySpace/index.php',
     'name' => get_lang('MySpace')
 ];
 
@@ -157,11 +157,11 @@ $actions = null;
 if ($session) {
     $actions = Display::url(
         Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), [], ICON_SIZE_MEDIUM),
-        api_get_self() . '?' . http_build_query(['export' => 'csv', 'session' => $session->getId()])
+        api_get_self().'?'.http_build_query(['export' => 'csv', 'session' => $session->getId()])
     );
-    $actions .=Display::url(
+    $actions .= Display::url(
         Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), [], ICON_SIZE_MEDIUM),
-        api_get_self() . '?' . http_build_query(['export' => 'xls', 'session' => $session->getId()])
+        api_get_self().'?'.http_build_query(['export' => 'xls', 'session' => $session->getId()])
     );
 }
 

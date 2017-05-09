@@ -21,7 +21,7 @@ api_protect_admin_script(true);
 
 // setting breadcrumbs
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array('url' => 'user_list.php','name' => get_lang('UserList'));
+$interbreadcrumb[] = array('url' => 'user_list.php', 'name' => get_lang('UserList'));
 
 // Database Table Definitions
 $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -36,11 +36,11 @@ $current_user_id = api_get_user_id();
 
 // setting the name of the tool
 if (UserManager::is_admin($user_id)) {
-	$tool_name= get_lang('AssignCoursesToPlatformAdministrator');
+	$tool_name = get_lang('AssignCoursesToPlatformAdministrator');
 } else if ($user_info['status'] == SESSIONADMIN) {
-	$tool_name= get_lang('AssignCoursesToSessionsAdministrator');
+	$tool_name = get_lang('AssignCoursesToSessionsAdministrator');
 } else {
-	$tool_name= get_lang('AssignCoursesToHumanResourcesManager');
+	$tool_name = get_lang('AssignCoursesToHumanResourcesManager');
 }
 
 $add_type = 'multiple';
@@ -54,7 +54,7 @@ if (!api_is_platform_admin()) {
 
 function search_courses($needle, $type)
 {
-    global $tbl_course, $tbl_course_rel_access_url,$user_id;
+    global $tbl_course, $tbl_course_rel_access_url, $user_id;
 
     $xajax_response = new xajaxResponse();
     $return = '';
@@ -68,7 +68,7 @@ function search_courses($needle, $type)
         }
         $without_assigned_courses = '';
         if (count($assigned_courses_code) > 0) {
-            $without_assigned_courses = " AND c.code NOT IN(".implode(',',$assigned_courses_code).")";
+            $without_assigned_courses = " AND c.code NOT IN(".implode(',', $assigned_courses_code).")";
         }
 
         if (api_is_multiple_url_enabled()) {
@@ -87,14 +87,14 @@ function search_courses($needle, $type)
                 		$without_assigned_courses ";
         }
 
-		$rs	= Database::query($sql);
+		$rs = Database::query($sql);
 
         $return .= '<select id="origin" name="NoAssignedCoursesList[]" multiple="multiple" size="20" >';
         while ($course = Database :: fetch_array($rs)) {
-            $return .= '<option value="'.$course['code'].'" title="'.htmlspecialchars($course['title'],ENT_QUOTES).'">'.$course['title'].' ('.$course['code'].')</option>';
+            $return .= '<option value="'.$course['code'].'" title="'.htmlspecialchars($course['title'], ENT_QUOTES).'">'.$course['title'].' ('.$course['code'].')</option>';
         }
         $return .= '</select>';
-        $xajax_response -> addAssign('ajax_list_courses_multiple','innerHTML',api_utf8_encode($return));
+        $xajax_response -> addAssign('ajax_list_courses_multiple', 'innerHTML', api_utf8_encode($return));
     }
     return $xajax_response;
 }
@@ -151,7 +151,7 @@ function remove_item(origin) {
 }
 </script>';
 
-$formSent=0;
+$formSent = 0;
 $errorMsg = $firstLetterCourse = '';
 $UserList = array();
 
@@ -210,19 +210,19 @@ if (api_is_multiple_url_enabled()) {
             ORDER BY c.title";
 
 } else {
-	$sql= " SELECT c.code, c.title
+	$sql = " SELECT c.code, c.title
 	        FROM $tbl_course c
             WHERE  c.code LIKE '$needle' $without_assigned_courses
             ORDER BY c.title";
 }
 
-$result	= Database::query($sql);
+$result = Database::query($sql);
 
 ?>
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?user=<?php echo $user_id ?>" style="margin:0px;">
 <input type="hidden" name="formSent" value="1" />
 <?php
-if(!empty($msg)) {
+if (!empty($msg)) {
 	Display::addFlash(Display::return_message($msg, 'normal')); //main API
 }
 ?>
@@ -234,7 +234,7 @@ if(!empty($msg)) {
         <div id="ajax_list_courses_multiple">
 	<select id="origin" name="NoAssignedCoursesList[]" multiple="multiple" size="20" style="width:340px;">
 	<?php while ($enreg = Database::fetch_array($result)) { ?>
-            <option value="<?php echo $enreg['code']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['title'],ENT_QUOTES).'"';?>><?php echo $enreg['title'].' ('.$enreg['code'].')'; ?></option>
+            <option value="<?php echo $enreg['code']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['title'], ENT_QUOTES).'"'; ?>><?php echo $enreg['title'].' ('.$enreg['code'].')'; ?></option>
 	<?php } ?>
 	</select>
         </div>
@@ -242,8 +242,8 @@ if(!empty($msg)) {
     </div>
     <div class="col-md-4">
         <div class="code-course">
-        <?php if($add_type == 'multiple') { ?>
-        <p><?php echo get_lang('FirstLetterCourse');?> :</p>
+        <?php if ($add_type == 'multiple') { ?>
+        <p><?php echo get_lang('FirstLetterCourse'); ?> :</p>
         <select name="firstLetterCourse" class="selectpicker form-control" onchange = "xajax_search_courses(this.value,'multiple')">
             <option value="%">--</option>
             <?php  echo Display :: get_alphabet_options($firstLetter); ?>
@@ -282,7 +282,7 @@ if(!empty($msg)) {
             if (is_array($assigned_courses_to_hrm)) {
                 foreach ($assigned_courses_to_hrm as $enreg) {
             ?>
-                <option value="<?php echo $enreg['code']; ?>" <?php echo 'title="' . htmlspecialchars($enreg['title'], ENT_QUOTES) . '"'; ?>><?php echo $enreg['title'] . ' (' . $enreg['code'] . ')'; ?></option>
+                <option value="<?php echo $enreg['code']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['title'], ENT_QUOTES).'"'; ?>><?php echo $enreg['title'].' ('.$enreg['code'].')'; ?></option>
             <?php
                     }
                 }

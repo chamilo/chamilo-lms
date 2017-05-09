@@ -271,7 +271,7 @@ class AnnouncementManager
                             ip.tool='announcement' AND
                             (
                                 ip.toUser = $userId OR
-                                ip.group IN ('0', '" . implode("', '", $group_list) . "') OR
+                                ip.group IN ('0', '".implode("', '", $group_list)."') OR
                                 ip.group IS NULL
                             ) AND
                             ip.visibility = '1' AND                       
@@ -338,13 +338,13 @@ class AnnouncementManager
         $content = $announcement->getContent();
 
         $html .= "<table height=\"100\" width=\"100%\" cellpadding=\"5\" cellspacing=\"0\" class=\"data_table\">";
-        $html .= "<tr><td><h2>" . $title . "</h2></td></tr>";
+        $html .= "<tr><td><h2>".$title."</h2></td></tr>";
 
         if (api_is_allowed_to_edit(false, true) ||
             (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())
         ) {
-            $modify_icons = "<a href=\"" . api_get_self() . "?" . api_get_cidreq() . "&action=modify&id=" . $id . "\">" .
-                Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL) . "</a>";
+            $modify_icons = "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=modify&id=".$id."\">".
+                Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL)."</a>";
 
             if ($itemProperty->getVisibility() === 1) {
                 $image_visibility = 'visible';
@@ -355,12 +355,12 @@ class AnnouncementManager
             }
             global $stok;
 
-            $modify_icons .= "<a href=\"" . api_get_self() . "?" . api_get_cidreq() . "&action=showhide&id=" . $id . "&sec_token=" . $stok . "\">" .
-                Display::return_icon($image_visibility . '.png', $alt_visibility, '', ICON_SIZE_SMALL) . "</a>";
+            $modify_icons .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=showhide&id=".$id."&sec_token=".$stok."\">".
+                Display::return_icon($image_visibility.'.png', $alt_visibility, '', ICON_SIZE_SMALL)."</a>";
 
             if (api_is_allowed_to_edit(false, true)) {
-                $modify_icons .= "<a href=\"" . api_get_self() . "?" . api_get_cidreq() . "&action=delete&id=" . $id . "&sec_token=" . $stok . "\" onclick=\"javascript:if(!confirm('" . addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)) . "')) return false;\">" .
-                    Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL) .
+                $modify_icons .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete&id=".$id."&sec_token=".$stok."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset))."')) return false;\">".
+                    Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).
                     "</a>";
             }
             $html .= "<tr><th style='text-align:right'>$modify_icons</th></tr>";
@@ -379,10 +379,10 @@ class AnnouncementManager
         $lastEdit = $itemProperty->getLasteditDate();
 
         $html .= "<tr><td>$content</td></tr>";
-        $html .= "<tr><td class=\"announcements_datum\">" . get_lang('LastUpdateDate') . " : " .
+        $html .= "<tr><td class=\"announcements_datum\">".get_lang('LastUpdateDate')." : ".
             Display::dateToStringAgoAndLongDate(
                 !empty($lastEdit) ? $lastEdit->format('Y-m-d h:i:s') : ''
-            ) . "</td></tr>";
+            )."</td></tr>";
 
         if ($itemProperty->getGroup() !== null) {
             $sent_to_icon = Display::return_icon('group.gif', get_lang('AnnounceSentToUserSelection'));
@@ -393,7 +393,7 @@ class AnnouncementManager
             $sent_to_form = self::sent_to_form($sent_to);
             $html .= Display::tag(
                 'td',
-                get_lang('SentTo').': ' . $sent_to_form,
+                get_lang('SentTo').': '.$sent_to_form,
                 array('class' => 'announcements_datum')
             );
         }
@@ -403,15 +403,15 @@ class AnnouncementManager
             $html .= "<tr><td>";
             $realname = $attachment_list['path'];
             $user_filename = $attachment_list['filename'];
-            $full_file_name = 'download.php?'.api_get_cidreq().'&file=' . $realname;
+            $full_file_name = 'download.php?'.api_get_cidreq().'&file='.$realname;
             $html .= '<br/>';
             $html .= Display::return_icon('attachment.gif', get_lang('Attachment'));
-            $html .= '<a href="' . $full_file_name . ' "> ' . $user_filename . ' </a>';
-            $html .= ' - <span class="forum_attach_comment" >' . $attachment_list['comment'] . '</span>';
+            $html .= '<a href="'.$full_file_name.' "> '.$user_filename.' </a>';
+            $html .= ' - <span class="forum_attach_comment" >'.$attachment_list['comment'].'</span>';
             if (api_is_allowed_to_edit(false, true)) {
                 $html .= Display::url(
                     Display::return_icon('delete.png', get_lang('Delete'), '', 16),
-                    api_get_self() . "?" . api_get_cidreq() . "&action=delete_attachment&id_attach=" . $attachment_list['id'] . "&sec_token=" . $stok
+                    api_get_self()."?".api_get_cidreq()."&action=delete_attachment&id_attach=".$attachment_list['id']."&sec_token=".$stok
                 );
             }
             $html .= '</td></tr>';
@@ -442,7 +442,7 @@ class AnnouncementManager
         $order = 0;
         if (Database::num_rows($res_max)) {
             $row_max = Database::fetch_array($res_max);
-            $order = intval($row_max[0])+1;
+            $order = intval($row_max[0]) + 1;
         }
 
         return $order;
@@ -914,8 +914,8 @@ class AnnouncementManager
             $result = array();
             if ($num_rows > 0) {
                 while ($myrow = Database::fetch_array($rs)) {
-                    $content.= '<strong>' . $myrow['title'] . '</strong><br /><br />';
-                    $content.= $myrow['content'];
+                    $content .= '<strong>'.$myrow['title'].'</strong><br /><br />';
+                    $content .= $myrow['content'];
                     $i++;
                 }
                 $result['content'] = $content;
@@ -1012,14 +1012,14 @@ class AnnouncementManager
             switch ($to_group) {
                 // it was send to one specific user
                 case null:
-                    $to[] = "USER:" . $row['to_user_id'];
+                    $to[] = "USER:".$row['to_user_id'];
                     break;
                 // it was sent to everyone
                 case 0:
                     return "everyone";
                     break;
                 default:
-                    $to[] = "GROUP:" . $row['to_group_id'];
+                    $to[] = "GROUP:".$row['to_group_id'];
             }
         }
 
@@ -1083,10 +1083,10 @@ class AnnouncementManager
                 $sent_to_array['groups'][0] !== 0
             ) {
                 $group_id = $sent_to_array['groups'][0];
-                $output[] = "&nbsp;" . $group_names[$group_id]['name'];
+                $output[] = "&nbsp;".$group_names[$group_id]['name'];
             }
             if (empty($sent_to_array['groups']) and empty($sent_to_array['users'])) {
-                $output[] = "&nbsp;" . get_lang('Everybody');
+                $output[] = "&nbsp;".get_lang('Everybody');
             }
         }
 
@@ -1119,7 +1119,7 @@ class AnnouncementManager
 
         $sql = "SELECT to_group_id, to_user_id
                 FROM $tbl_item_property
-                WHERE c_id = $course_id AND tool = '$tool' AND ref=" . $id;
+                WHERE c_id = $course_id AND tool = '$tool' AND ref=".$id;
         $result = Database::query($sql);
 
         while ($row = Database::fetch_array($result)) {
@@ -1161,8 +1161,8 @@ class AnnouncementManager
         $course_id = api_get_course_int_id();
         $row = array();
         $sql = 'SELECT id, path, filename, comment 
-                FROM ' . $tbl_announcement_attachment . '
-				WHERE c_id = ' . $course_id . ' AND announcement_id = ' . $announcementId;
+                FROM ' . $tbl_announcement_attachment.'
+				WHERE c_id = ' . $course_id.' AND announcement_id = '.$announcementId;
         $result = Database::query($sql);
         if (Database::num_rows($result) != 0) {
             $row = Database::fetch_array($result, 'ASSOC');
@@ -1187,9 +1187,9 @@ class AnnouncementManager
 
         if (is_array($file) && $file['error'] == 0) {
             // TODO: This path is obsolete. The new document repository scheme should be kept in mind here.
-            $courseDir = $_course['path'] . '/upload/announcements';
+            $courseDir = $_course['path'].'/upload/announcements';
             $sys_course_path = api_get_path(SYS_COURSE_PATH);
-            $updir = $sys_course_path . $courseDir;
+            $updir = $sys_course_path.$courseDir;
 
             // Try to add an extension to the file if it hasn't one
             $new_file_name = add_ext_on_mime(stripslashes($file['name']), $file['type']);
@@ -1201,7 +1201,7 @@ class AnnouncementManager
                 Display::display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
             } else {
                 $new_file_name = uniqid('');
-                $new_path = $updir . '/' . $new_file_name;
+                $new_path = $updir.'/'.$new_file_name;
 
                 // This file is copy here but its cleaned in api_mail_html in api.lib.php
                 copy($file['tmp_name'], $new_path);
@@ -1244,9 +1244,9 @@ class AnnouncementManager
 
         if (is_array($file) && $file['error'] == 0) {
             // TODO: This path is obsolete. The new document repository scheme should be kept in mind here.
-            $courseDir = $_course['path'] . '/upload/announcements';
+            $courseDir = $_course['path'].'/upload/announcements';
             $sys_course_path = api_get_path(SYS_COURSE_PATH);
-            $updir = $sys_course_path . $courseDir;
+            $updir = $sys_course_path.$courseDir;
 
             // Try to add an extension to the file if it hasn't one
             $new_file_name = add_ext_on_mime(stripslashes($file['name']), $file['type']);
@@ -1258,7 +1258,7 @@ class AnnouncementManager
                 Display::display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
             } else {
                 $new_file_name = uniqid('');
-                $new_path = $updir . '/' . $new_file_name;
+                $new_path = $updir.'/'.$new_file_name;
                 copy($file['tmp_name'], $new_path);
                 $safe_file_comment = Database::escape_string($file_comment);
                 $safe_file_name = Database::escape_string($file_name);
@@ -1268,7 +1268,7 @@ class AnnouncementManager
                             filename = '$safe_file_name', 
                             comment = '$safe_file_comment', 
                             path = '$safe_new_file_name', 
-                            size ='" . intval($file['size']) . "'
+                            size ='".intval($file['size'])."'
 					 	WHERE c_id = $course_id AND id = '$id_attach'";
                 $result = Database::query($sql);
                 if ($result === false) {
@@ -1595,8 +1595,8 @@ class AnnouncementManager
                 if ($myrow['email_sent'] == '1') {
                     $sent_to_icon = ' '.Display::return_icon('email.gif', get_lang('AnnounceSentByEmail'));
                 }
-                $groupReference = ($myrow['to_group_id'] > 0) ? ' <span class="label label-info">' . get_lang('Group') . '</span> ' : '' ;
-                $title = $myrow['title'] . $groupReference . $sent_to_icon;
+                $groupReference = ($myrow['to_group_id'] > 0) ? ' <span class="label label-info">'.get_lang('Group').'</span> ' : '';
+                $title = $myrow['title'].$groupReference.$sent_to_icon;
                 $item_visibility = api_get_item_visibility($_course, TOOL_ANNOUNCEMENT, $myrow['id'], $session_id);
                 $myrow['visibility'] = $item_visibility;
 
@@ -1604,8 +1604,8 @@ class AnnouncementManager
                 $attachment_list = self::get_attachment($myrow['id']);
 
                 $attachment_icon = '';
-                if (count($attachment_list)>0) {
-                    $attachment_icon = ' '.Display::return_icon('attachment.gif',get_lang('Attachment'));
+                if (count($attachment_list) > 0) {
+                    $attachment_icon = ' '.Display::return_icon('attachment.gif', get_lang('Attachment'));
                 }
 
                 /* TITLE */
@@ -1624,16 +1624,16 @@ class AnnouncementManager
                     || (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())
                 ) {
                     $modify_icons = "<a href=\"".$actionUrl."&action=modify&id=".$myrow['id']."\">".
-                        Display::return_icon('edit.png', get_lang('Edit'),'',ICON_SIZE_SMALL)."</a>";
-                    if ($myrow['visibility']==1) {
-                        $image_visibility="visible";
-                        $alt_visibility=get_lang('Hide');
+                        Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL)."</a>";
+                    if ($myrow['visibility'] == 1) {
+                        $image_visibility = "visible";
+                        $alt_visibility = get_lang('Hide');
                     } else {
-                        $image_visibility="invisible";
-                        $alt_visibility=get_lang('Visible');
+                        $image_visibility = "invisible";
+                        $alt_visibility = get_lang('Visible');
                     }
-                    $modify_icons .=  "<a href=\"".$actionUrl."&action=showhide&id=".$myrow['id']."&sec_token=".$stok."\">".
-                        Display::return_icon($image_visibility.'.png', $alt_visibility,'',ICON_SIZE_SMALL)."</a>";
+                    $modify_icons .= "<a href=\"".$actionUrl."&action=showhide&id=".$myrow['id']."&sec_token=".$stok."\">".
+                        Display::return_icon($image_visibility.'.png', $alt_visibility, '', ICON_SIZE_SMALL)."</a>";
 
                     // DISPLAY MOVE UP COMMAND only if it is not the top announcement
                     if ($iterator != 1) {
@@ -1648,12 +1648,12 @@ class AnnouncementManager
                     } else {
                         $modify_icons .= Display::return_icon('down_na.gif', get_lang('Down'));
                     }
-                    if (api_is_allowed_to_edit(false,true)) {
-                        $modify_icons .= "<a href=\"".$actionUrl."&action=delete&id=".$myrow['id']."&sec_token=".$stok."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,api_get_system_encoding()))."')) return false;\">".
-                            Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL).
+                    if (api_is_allowed_to_edit(false, true)) {
+                        $modify_icons .= "<a href=\"".$actionUrl."&action=delete&id=".$myrow['id']."&sec_token=".$stok."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, api_get_system_encoding()))."')) return false;\">".
+                            Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).
                             "</a>";
                     }
-                    $iterator ++;
+                    $iterator++;
                 } else {
                     $modify_icons = Display::url(
                         Display::return_icon('default.png'),
@@ -1699,7 +1699,7 @@ class AnnouncementManager
             'announcement.session_id'
         );
 
-        if (api_is_allowed_to_edit(false,true))  {
+        if (api_is_allowed_to_edit(false, true)) {
             // check teacher status
             if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath') {
 
@@ -1768,7 +1768,7 @@ class AnnouncementManager
 
                 // the user is member of several groups => display personal announcements AND
                 // his group announcements AND the general announcements
-                if (is_array($group_memberships) && count($group_memberships)>0) {
+                if (is_array($group_memberships) && count($group_memberships) > 0) {
                     $sql = "SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id
                             FROM $tbl_announcement announcement 
                             INNER JOIN $tbl_item_property ip

@@ -30,7 +30,7 @@ class Exercise
     public $feedback_type;
     public $end_time;
     public $start_time;
-    public $questionList;  // array with the list of this exercise's questions
+    public $questionList; // array with the list of this exercise's questions
     /* including question list of the media */
     public $questionListUncompressed;
     public $results_disabled;
@@ -101,7 +101,6 @@ class Exercise
         $this->text_when_finished = '';
         $this->display_category_name = 0;
         $this->pass_percentage = '';
-
         $this->modelType = 1;
         $this->questionSelectionType = EX_Q_SELECTION_ORDERED;
         $this->endButton = 0;
@@ -122,6 +121,7 @@ class Exercise
      *
      * @author Olivier Brouckaert
      * @param integer $id - exercise Id
+     * @param bool $parseQuestionList
      *
      * @return boolean - true if exercise exists, otherwise false
      */
@@ -130,7 +130,7 @@ class Exercise
         $TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);
         $table_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 
-        $id  = intval($id);
+        $id = (int) $id;
         if (empty($this->course_id)) {
             return false;
         }
@@ -168,7 +168,6 @@ class Exercise
             $this->globalCategoryId = isset($object->global_category_id) ? $object->global_category_id : null;
             $this->questionSelectionType = isset($object->question_selection_type) ? $object->question_selection_type : null;
             $this->hideQuestionTitle = isset($object->hide_question_title) ? (int) $object->hide_question_title : 0;
-
 
             $sql = "SELECT lp_id, max_score
                     FROM $table_lp_item
@@ -1207,7 +1206,7 @@ class Exercise
      */
     public function updateTitle($title)
     {
-        $this->exercise=$title;
+        $this->title = $this->exercise = $title;
     }
 
     /**
@@ -2242,6 +2241,8 @@ class Exercise
                 $editor_config
             );
 
+            $form->addCheckBox('update_title_in_lps', null, get_lang('UpdateTitleInLps'));
+
             $defaults = array();
             if (api_get_setting('search_enabled') === 'true') {
                 require_once api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php';
@@ -2445,10 +2446,33 @@ class Exercise
         }
 
         if ($form->getSubmitValue('randomAnswers') == 1) {
-            $this->random_answers=1;
+            $this->random_answers = 1;
         } else {
-            $this->random_answers=0;
+            $this->random_answers = 0;
         }
+
+        // Update title in all LPs that have this quiz added
+        if ($form->getSubmitValue('update_title_in_lps') == 1) {
+            $courseId = api_get_course_int_id();
+            $table = Database::get_course_table(TABLE_LP_ITEM);
+            $sql = "SELECT * FROM $table 
+                    WHERE 
+                        c_id = $courseId AND 
+                        item_type = 'quiz' AND 
+                        path = '".$this->id."'
+                    ";
+            $result = Database::query($sql);
+            $items = Database::store_result($result);
+            if (!empty($items)) {
+                foreach ($items as $item) {
+                    $itemId = $item['iid'];
+                    $sql = "UPDATE $table SET title = '".$this->title."'                             
+                            WHERE iid = $itemId AND c_id = $courseId ";
+                    Database::query($sql);
+                }
+            }
+        }
+
         $this->save($type);
     }
 

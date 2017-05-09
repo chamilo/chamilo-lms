@@ -1045,7 +1045,7 @@ class Display
             $lis .= self::tag('li', $item, $ul_attributes);
             $i++;
         }
-        $ul = self::tag('ul', $lis, ['class' => 'nav nav-tabs', 'role'=> 'tablist', 'id' => 'ul_'.$id]);
+        $ul = self::tag('ul', $lis, ['class' => 'nav nav-tabs tabs-margin', 'role'=> 'tablist', 'id' => 'ul_'.$id]);
 
         $i = 1;
         $divs = '';

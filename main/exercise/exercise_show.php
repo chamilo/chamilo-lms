@@ -17,11 +17,36 @@ use ChamiloSession as Session;
 require_once __DIR__.'/../inc/global.inc.php';
 $debug = false;
 $origin = api_get_origin();
+$currentUserId = api_get_user_id();
+$printHeaders = $origin == 'learnpath';
+$id = intval($_REQUEST['id']); //exe id
 
-if ($origin == 'learnpath') {
-    api_protect_course_script(false, false, true);
+if (empty($id)) {
+    api_not_allowed(true);
+}
+
+// Getting results from the exe_id. This variable also contain all the information about the exercise
+$track_exercise_info = ExerciseLib::get_exercise_track_exercise_info($id);
+
+//No track info
+if (empty($track_exercise_info)) {
+    api_not_allowed($printHeaders);
+}
+
+$exercise_id = $track_exercise_info['id'];
+$exercise_date = $track_exercise_info['start_date'];
+$student_id = $track_exercise_info['exe_user_id'];
+$learnpath_id = $track_exercise_info['orig_lp_id'];
+$learnpath_item_id = $track_exercise_info['orig_lp_item_id'];
+$lp_item_view_id = $track_exercise_info['orig_lp_item_view_id'];
+
+if (api_is_student_boss()) {
+    // Check if boss has access to user info.
+    if (UserManager::userIsBossOfStudent($currentUserId, $student_id) == false) {
+        api_not_allowed($printHeaders);
+    }
 } else {
-    api_protect_course_script(true, false, true);
+    api_protect_course_script($printHeaders, false, true);
 }
 
 // Database table definitions
@@ -66,29 +91,6 @@ if (empty($action)) {
     $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 }
 
-$id = intval($_REQUEST['id']); //exe id
-
-if (empty($id)) {
-    api_not_allowed(true);
-}
-
-// Getting results from the exe_id. This variable also contain all the information about the exercise
-$track_exercise_info = ExerciseLib::get_exercise_track_exercise_info($id);
-
-$exercise_id = $track_exercise_info['id'];
-$exercise_date = $track_exercise_info['start_date'];
-$student_id = $track_exercise_info['exe_user_id'];
-$learnpath_id = $track_exercise_info['orig_lp_id'];
-$learnpath_item_id = $track_exercise_info['orig_lp_item_id'];
-$lp_item_view_id = $track_exercise_info['orig_lp_item_view_id'];
-
-//No track info
-if (empty($track_exercise_info)) {
-    api_not_allowed(true);
-}
-
-
-$currentUserId = api_get_user_id();
 $courseInfo = api_get_course_info();
 $sessionId = api_get_session_id();
 $is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_course_tutor() || api_is_session_admin() || api_is_drh() || api_is_student_boss();
@@ -102,15 +104,8 @@ if (!empty($sessionId)) {
     ) {
         if (!api_coach_can_edit_view_results(api_get_course_int_id(), $sessionId)
         ) {
-            api_not_allowed(true);
+            api_not_allowed($printHeaders);
         }
-    }
-}
-
-// Check if boss has access to user info.
-if (api_is_student_boss()) {
-    if (UserManager::userIsBossOfStudent($currentUserId, $student_id) == false) {
-        api_not_allowed(true);
     }
 }
 
@@ -120,7 +115,7 @@ $isCoachAllowedToEdit = api_is_allowed_to_edit(false, true);
 $isFeedbackAllowed = false;
 
 if (api_is_excluded_user_type(true, $student_id)) {
-    api_not_allowed(true);
+    api_not_allowed($printHeaders);
 }
 
 $locked = api_resource_is_locked_by_gradebook($exercise_id, LINK_EXERCISE);
@@ -134,7 +129,7 @@ $feedback_type = $objExercise->feedback_type;
 //Only users can see their own results
 if (!$is_allowedToEdit) {
     if ($student_id != $currentUserId) {
-        api_not_allowed(true);
+        api_not_allowed($printHeaders);
     }
 }
 

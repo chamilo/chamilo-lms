@@ -97,13 +97,12 @@ $courseInfo = api_get_course_info();
 $sessionId = api_get_session_id();
 $is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_course_tutor() || api_is_session_admin() || api_is_drh() || api_is_student_boss();
 
-if (!empty($sessionId)) {
+if (!empty($sessionId) && !$is_allowedToEdit) {
     if (api_is_course_session_coach(
         $currentUserId,
         api_get_course_int_id(),
         $sessionId
-    ) || $is_allowedToEdit
-    ) {
+    )) {
         if (!api_coach_can_edit_view_results(api_get_course_int_id(), $sessionId)
         ) {
             api_not_allowed($printHeaders);

@@ -510,6 +510,7 @@ $indexList['groups'] = $header_nr;
 $table->set_header($header_nr++, get_lang('GroupSingle'), false);
 
 $hideFields = api_get_configuration_value('hide_user_field_from_list');
+
 if (!empty($hideFields)) {
     foreach ($hideFields as $fieldToHide) {
         if (isset($indexList[$fieldToHide])) {
@@ -517,6 +518,9 @@ if (!empty($hideFields)) {
         }
     }
 }
+
+$table->setHideColumn('is_tutor');
+$table->setHideColumn('user_status_in_course');
 
 if (api_is_allowed_to_edit(null, true)) {
     $table->set_header($header_nr++, get_lang('Status'), false);

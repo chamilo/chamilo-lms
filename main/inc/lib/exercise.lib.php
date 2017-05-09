@@ -1116,7 +1116,7 @@ HTML;
                     if ($answerCorrect) {
                         $s .= $isVertical ? '<div class="row">' : '';
                         $s .= '
-                            <div class="'.($isVertical ? 'col-md-12' : 'col-md-3').'">
+                            <div class="'.($isVertical ? 'col-md-12' : 'col-xs-12 col-sm-4 col-md-3 col-lg-2').'">
                                 <div id="drop_'.$windowId.'" class="droppable">&nbsp;</div>
                             </div>
                         ';
@@ -1127,7 +1127,6 @@ HTML;
                 }
 
                 $s .= $isVertical ? '' : '</div>'; // row
-//                $s .= '</div>'; // col-md-12
                 $s .= '</div>'; // col-md-12 ui-widget ui-helper-clearfix
             }
 

@@ -287,7 +287,7 @@ class WSSession extends WS
                 $coachEndDate,
                 $user_id,
                 0,
-                (int)$visibility
+                (int) $visibility
             );
             if (!is_int($result_id)) {
                 return new WSError(302, 'Could not edit the session');

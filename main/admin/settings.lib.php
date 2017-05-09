@@ -148,7 +148,7 @@ function handlePlugins()
 
     // Plugins NOT installed
     echo Display::page_subheader(get_lang('Plugins'));
-    echo '<form class="form-horizontal" name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'&sec_token=' . $token . '">';
+    echo '<form class="form-horizontal" name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'&sec_token='.$token.'">';
     echo '<table class="data_table">';
     echo '<tr>';
     echo '<th width="20px">';
@@ -197,7 +197,7 @@ function handlePlugins()
             if (file_exists(api_get_path(SYS_PLUGIN_PATH).$pluginName.'/readme.txt')) {
                 echo Display::url(
                     "<em class='fa fa-file-text-o'></em> readme.txt",
-                    api_get_path(WEB_PLUGIN_PATH) . $pluginName . "/readme.txt",
+                    api_get_path(WEB_PLUGIN_PATH).$pluginName."/readme.txt",
                     [
                         'class' => 'btn btn-default ajax',
                         'data-title' => $plugin_info['title'],
@@ -349,7 +349,7 @@ function handleStylesheets()
     $dir = api_get_path(SYS_PUBLIC_PATH).'css/'.$themeDir.'/images/';
     $url = api_get_path(WEB_CSS_PATH).'/'.$themeDir.'/images/';
     $logoFileName = 'header-logo.png';
-    $newLogoFileName = 'header-logo-custom' . api_get_current_access_url_id() . '.png';
+    $newLogoFileName = 'header-logo-custom'.api_get_current_access_url_id().'.png';
     $webPlatformLogoPath = ChamiloApi::getWebPlatformLogoPath($selected);
 
     $logoForm = new FormValidator(
@@ -372,7 +372,7 @@ function handleStylesheets()
     if ($webPlatformLogoPath !== null) {
         $logoForm->addLabel(
             get_lang('CurrentLogo'),
-            '<img id="header-logo-custom" src="' . $webPlatformLogoPath . '?' . time() . '">'
+            '<img id="header-logo-custom" src="'.$webPlatformLogoPath.'?'.time().'">'
         );
     }
     $logoForm->addFile('new_logo', get_lang('UpdateLogo'));
@@ -457,7 +457,7 @@ function handleStylesheets()
             });
             </script>';
             echo Display::tabs(
-                array(get_lang('Update'),get_lang('UpdateLogo'), get_lang('UploadNewStylesheet')),
+                array(get_lang('Update'), get_lang('UpdateLogo'), get_lang('UploadNewStylesheet')),
                 array($form_change->returnForm(), $logoForm->returnForm(), $form->returnForm())
             );
         } else {
@@ -633,7 +633,7 @@ function storeRegions()
             if (!empty($areas_to_installed)) {
                 $plugin_obj->remove_all_regions($plugin);
                 foreach ($areas_to_installed as $region) {
-                    if (!empty($region) && $region != '-1' ) {
+                    if (!empty($region) && $region != '-1') {
                         $plugin_obj->add_to_region($plugin, $region);
                     }
                 }
@@ -740,14 +740,14 @@ function handleSearch()
         $values = api_get_settings_options('search_show_unlinked_results');
 
         $group = formGenerateElementsGroup($form, $values, 'search_show_unlinked_results');
-        $form->addGroup($group, 'search_show_unlinked_results', array(get_lang('SearchShowUnlinkedResultsTitle'),get_lang('SearchShowUnlinkedResultsComment')), null, false);
+        $form->addGroup($group, 'search_show_unlinked_results', array(get_lang('SearchShowUnlinkedResultsTitle'), get_lang('SearchShowUnlinkedResultsComment')), null, false);
         $default_values['search_show_unlinked_results'] = api_get_setting('search_show_unlinked_results');
 
         $sf_values = array();
         foreach ($specific_fields as $sf) {
             $sf_values[$sf['code']] = $sf['name'];
         }
-        $url =  Display::div(Display::url(get_lang('AddSpecificSearchField'), 'specific_fields.php'), array('class'=>'sectioncomment'));
+        $url = Display::div(Display::url(get_lang('AddSpecificSearchField'), 'specific_fields.php'), array('class'=>'sectioncomment'));
         if (empty($sf_values)) {
             $form->addElement('label', [get_lang('SearchPrefilterPrefix'), $url]);
         } else {
@@ -842,7 +842,7 @@ function handleTemplates()
     if ($action != 'add') {
         echo '<div class="actions" style="margin-left: 1px;">';
         echo '<a href="settings.php?category=Templates&action=add">'.
-                Display::return_icon('new_template.png', get_lang('AddTemplate'),'',ICON_SIZE_MEDIUM).'</a>';
+                Display::return_icon('new_template.png', get_lang('AddTemplate'), '', ICON_SIZE_MEDIUM).'</a>';
         echo '</div>';
     }
 
@@ -963,8 +963,8 @@ function getTemplateData($from, $number_of_items, $column, $direction)
  * @since v1.8.6
  */
 function actionsFilter($id) {
-    $return = '<a href="settings.php?category=Templates&action=edit&id='.Security::remove_XSS($id).'">'.Display::return_icon('edit.png', get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>';
-    $return .= '<a href="settings.php?category=Templates&action=delete&id='.Security::remove_XSS($id).'" onClick="javascript:if(!confirm('."'".get_lang('ConfirmYourChoice')."'".')) return false;">'.Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';
+    $return = '<a href="settings.php?category=Templates&action=edit&id='.Security::remove_XSS($id).'">'.Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>';
+    $return .= '<a href="settings.php?category=Templates&action=delete&id='.Security::remove_XSS($id).'" onClick="javascript:if(!confirm('."'".get_lang('ConfirmYourChoice')."'".')) return false;">'.Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>';
     return $return;
 }
 
@@ -1040,10 +1040,10 @@ function addEditTemplate()
         // Adding an extra field: a preview of the image that is currently used.
         if (!empty($row['image'])) {
             $form->addElement('static', 'template_image_preview', '',
-                '<img src="' . api_get_path(WEB_APP_PATH) . 'home/default_platform_document/template_thumb/' . $row['image'] . '" alt="' . get_lang('TemplatePreview') . '"/>');
+                '<img src="'.api_get_path(WEB_APP_PATH).'home/default_platform_document/template_thumb/'.$row['image'].'" alt="'.get_lang('TemplatePreview').'"/>');
         } else {
             $form->addElement('static', 'template_image_preview', '',
-                '<img src="' . api_get_path(WEB_APP_PATH) . 'home/default_platform_document/template_thumb/noimage.gif" alt="' . get_lang('NoTemplatePreview') . '"/>');
+                '<img src="'.api_get_path(WEB_APP_PATH).'home/default_platform_document/template_thumb/noimage.gif" alt="'.get_lang('NoTemplatePreview').'"/>');
         }
 
         // Setting the information of the template that we are editing.
@@ -1095,7 +1095,7 @@ function addEditTemplate()
             // Store the information in the database (as insert or as update).
             $table_system_template = Database::get_main_table('system_template');
             if ($_GET['action'] == 'add') {
-                $content_template =  Security::remove_XSS($values['template_text'], COURSEMANAGERLOWSECURITY);
+                $content_template = Security::remove_XSS($values['template_text'], COURSEMANAGERLOWSECURITY);
                 $params = [
                     'title' =>  $values['title'],
                     'content' => $content_template,
@@ -1105,7 +1105,7 @@ function addEditTemplate()
 
                 // Display a feedback message.
                 Display::addFlash(Display::return_message(get_lang('TemplateAdded'), 'confirm'));
-                echo '<a href="settings.php?category=Templates&action=add">'.Display::return_icon('new_template.png', get_lang('AddTemplate'),'',ICON_SIZE_MEDIUM).'</a>';
+                echo '<a href="settings.php?category=Templates&action=add">'.Display::return_icon('new_template.png', get_lang('AddTemplate'), '', ICON_SIZE_MEDIUM).'</a>';
             } else {
                 $content_template = '<head>{CSS}<style type="text/css">.text{font-weight: normal;}</style></head><body>'.Database::escape_string($values['template_text']).'</body>';
                 $sql = "UPDATE $table_system_template set title = '".Database::escape_string($values['title'])."', content = '".$content_template."'";
@@ -1258,13 +1258,13 @@ function generateSettingsForm($settings, $settings_by_access_list)
                             $form->addElement(
                                 'html',
                                 '<div class="pull-right"><a class="share_this_setting" data_status = "0"  data_to_send = "'.$row['variable'].'" href="javascript:void(0);">'.
-                                Display::return_icon('shared_setting.png', get_lang('ChangeSharedSetting') , null, ICON_SIZE_MEDIUM).'</a></div>'
+                                Display::return_icon('shared_setting.png', get_lang('ChangeSharedSetting'), null, ICON_SIZE_MEDIUM).'</a></div>'
                             );
                         } else {
                             $form->addElement(
                                 'html',
                                 '<div class="pull-right"><a class="share_this_setting" data_status = "1" data_to_send = "'.$row['variable'].'" href="javascript:void(0);">'.
-                                Display::return_icon('shared_setting_na.png', get_lang('ChangeSharedSetting'), null, ICON_SIZE_MEDIUM ).'</a></div>'
+                                Display::return_icon('shared_setting_na.png', get_lang('ChangeSharedSetting'), null, ICON_SIZE_MEDIUM).'</a></div>'
                             );
                         }
                     } else {
@@ -1272,13 +1272,13 @@ function generateSettingsForm($settings, $settings_by_access_list)
                             $form->addElement(
                                 'html',
                                 '<div class="pull-right">'.
-                                Display::return_icon('shared_setting.png', get_lang('ChangeSharedSetting'), null, ICON_SIZE_MEDIUM ).'</div>'
+                                Display::return_icon('shared_setting.png', get_lang('ChangeSharedSetting'), null, ICON_SIZE_MEDIUM).'</div>'
                             );
                         } else {
                             $form->addElement(
                                 'html',
                                 '<div class="pull-right">'.
-                                Display::return_icon('shared_setting_na.png', get_lang('ChangeSharedSetting'), null, ICON_SIZE_MEDIUM ).'</div>'
+                                Display::return_icon('shared_setting_na.png', get_lang('ChangeSharedSetting'), null, ICON_SIZE_MEDIUM).'</div>'
                             );
                         }
                     }
@@ -1330,7 +1330,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
                         array('maxlength' => '8')
                     );
                     $form->applyFilter($row['variable'], 'html_filter');
-                    $default_values[$row['variable']] = round($row['selected_value']/1024/1024, 1);
+                    $default_values[$row['variable']] = round($row['selected_value'] / 1024 / 1024, 1);
                 } elseif ($row['variable'] == 'account_valid_duration') {
                     $form->addElement(
                         'text',
@@ -1358,7 +1358,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
                         ),
                         $hideme
                     );
-                    $form->applyFilter($row['variable'],'html_filter');
+                    $form->applyFilter($row['variable'], 'html_filter');
                     $default_values[$row['variable']] = $row['selected_value'];
                 }
                 break;
@@ -1369,7 +1369,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
                     if (file_exists($file)) {
                         $value = file_get_contents($file);
                     }
-                    $form->addElement('textarea', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])) , array('rows'=>'10'), $hideme);
+                    $form->addElement('textarea', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])), array('rows'=>'10'), $hideme);
                     $default_values[$row['variable']] = $value;
                 } elseif ($row['variable'] == 'footer_extra_content') {
                     $file = api_get_home_path().'footer_extra_content.txt';
@@ -1377,16 +1377,16 @@ function generateSettingsForm($settings, $settings_by_access_list)
                     if (file_exists($file)) {
                         $value = file_get_contents($file);
                     }
-                    $form->addElement('textarea', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])) , array('rows'=>'10'), $hideme);
+                    $form->addElement('textarea', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])), array('rows'=>'10'), $hideme);
                     $default_values[$row['variable']] = $value;
                 } else {
-                    $form->addElement('textarea', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])) , array('rows'=>'10'), $hideme);
+                    $form->addElement('textarea', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])), array('rows'=>'10'), $hideme);
                     $default_values[$row['variable']] = $row['selected_value'];
                 }
                 break;
             case 'radio':
                 $values = api_get_settings_options($row['variable']);
-                $group = array ();
+                $group = array();
                 if (is_array($values)) {
                     foreach ($values as $key => $value) {
                         $element = &$form->createElement(
@@ -1417,7 +1417,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
                         WHERE variable='".$row['variable']."' AND access_url =  1";
 
                 $result = Database::query($sql);
-                $group = array ();
+                $group = array();
                 while ($rowkeys = Database::fetch_array($result)) {
                     // Profile tab option should be hidden when the social tool is enabled.
                     if (api_get_setting('allow_social_tool') == 'true') {
@@ -1474,7 +1474,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
                 break;
             case 'link':
                 $form->addElement('static', null, array(get_lang($row['title']), get_lang($row['comment'])),
-                    get_lang('CurrentValue') . ' : ' . $row['selected_value'], $hideme);
+                    get_lang('CurrentValue').' : '.$row['selected_value'], $hideme);
                 break;
             case 'select':
                 /*
@@ -1506,7 +1506,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
                     $row['variable'],
                     [get_lang($row['title']), get_lang($row['comment'])],
                     $courseSelectOptions,
-                    ['url' => api_get_path(WEB_AJAX_PATH) . 'course.ajax.php?a=search_course']
+                    ['url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course']
                 );
                 $default_values[$row['variable']] = $row['selected_value'];
                 break;
@@ -1514,10 +1514,10 @@ function generateSettingsForm($settings, $settings_by_access_list)
 
         switch ($row['variable']) {
             case 'pdf_export_watermark_enable':
-                $url =  PDF::get_watermark(null);
+                $url = PDF::get_watermark(null);
 
                 if ($url != false) {
-                    $delete_url = '<a href="?delete_watermark">'.get_lang('DelImage').' '.Display::return_icon('delete.png',get_lang('DelImage')).'</a>';
+                    $delete_url = '<a href="?delete_watermark">'.get_lang('DelImage').' '.Display::return_icon('delete.png', get_lang('DelImage')).'</a>';
                     $form->addElement('html', '<div style="max-height:100px; max-width:100px; margin-left:162px; margin-bottom:10px; clear:both;"><img src="'.$url.'" style="margin-bottom:10px;" />'.$delete_url.'</div>');
                 }
 
@@ -1670,7 +1670,7 @@ function showSearchToolsStatusTable()
     //@todo windows support
     if (api_is_windows_os() == false) {
         $list_of_programs = array('pdftotext', 'ps2pdf', 'catdoc', 'html2text', 'unrtf', 'catppt', 'xls2csv');
-        foreach($list_of_programs as $program) {
+        foreach ($list_of_programs as $program) {
             $output = [];
             $ret_val = null;
             exec("which $program", $output, $ret_val);
@@ -1683,7 +1683,7 @@ function showSearchToolsStatusTable()
             if (!empty($output[0])) {
                 $icon = Display::return_icon('bullet_green.png', get_lang('Installed'));
             }
-            $data2[]= array($program, $output[0], $icon);
+            $data2[] = array($program, $output[0], $icon);
         }
         echo Display::tag('h3', get_lang('ProgramsNeededToConvertFiles'));
         $table = new SortableTableFromArray($data2);
@@ -1715,11 +1715,11 @@ function generateCSSDownloadLink($style)
     if (is_dir($dir) && $check) {
         $zip = new PclZip($arch);
         // Remove path prefix except the style name and put file on disk
-        $zip->create($dir, PCLZIP_OPT_REMOVE_PATH, substr($dir,0,-strlen($style)));
-        $url = api_get_path(WEB_CODE_PATH) . 'course_info/download.php?archive_path=&archive=' . str_replace(api_get_path(SYS_ARCHIVE_PATH), '', $arch);
+        $zip->create($dir, PCLZIP_OPT_REMOVE_PATH, substr($dir, 0, -strlen($style)));
+        $url = api_get_path(WEB_CODE_PATH).'course_info/download.php?archive_path=&archive='.str_replace(api_get_path(SYS_ARCHIVE_PATH), '', $arch);
 
         //@TODO: use more generic script to download.
-        $str = '<a class="btn btn-primary btn-large" href="' .$url. '">'.get_lang('ClickHereToDownloadTheFile').'</a>';
+        $str = '<a class="btn btn-primary btn-large" href="'.$url.'">'.get_lang('ClickHereToDownloadTheFile').'</a>';
         Display::addFlash(Display::return_message($str, 'normal', false));
     } else {
         Display::addFlash(Display::return_message(get_lang('FileNotFound'), 'warning'));

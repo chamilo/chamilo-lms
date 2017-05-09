@@ -503,7 +503,7 @@ if (isset($_GET['import_user_error'])) {
 }
 if (isset($_GET['import_score_error'])) {
     $userinfo = api_get_user_info($_GET['import_score_error']);
-    Display::addFlash(Display::return_message(get_lang('ScoreDoesNotMatch'). ' ' . api_get_person_name($userinfo['firstname'], $userinfo['lastname']), 'warning'));
+    Display::addFlash(Display::return_message(get_lang('ScoreDoesNotMatch').' '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']), 'warning'));
 }
 if ($file_type == null) {
     //show the result header

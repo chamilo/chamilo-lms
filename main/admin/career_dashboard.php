@@ -82,7 +82,7 @@ $actionleft .= Display::url(
         ICON_SIZE_MEDIUM),
     'promotions.php');
 
-$actions = Display::toolbarAction('toolbar-career', array( 0 => $actionleft));
+$actions = Display::toolbarAction('toolbar-career', array(0 => $actionleft));
 
 $html .= $form->return_form();
 

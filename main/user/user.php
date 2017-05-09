@@ -2,15 +2,16 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *	This script displays a list of the users of the current course.
- *	Course admins can change user permissions, subscribe and unsubscribe users...
+ * This script displays a list of the users of the current course.
+ * Course admins can change user permissions, subscribe and unsubscribe users...
  *
- *	- show users registered in courses;
+ * show users registered in courses
  *
- *	@author Roan Embrechts
- *	@author Julio Montoya Armas, Several fixes
- *	@package chamilo.user
+ * @author Roan Embrechts
+ * @author Julio Montoya, Several fixes
+ * @package chamilo.user
  */
+
 $use_anonymous = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_USER;
@@ -44,7 +45,7 @@ if (!empty($sessionId)) {
     $course_info['unsubscribe'] = 0;
 }
 
-/* Unregistering a user section	*/
+/* Un registering a user section	*/
 if (api_is_allowed_to_edit(null, true)) {
     if (isset($_POST['action'])) {
         switch ($_POST['action']) {
@@ -566,7 +567,6 @@ $selectedTab = 1;
 
 if (api_is_allowed_to_edit(null, true)) {
     echo '<div class="actions">';
-
     switch ($type) {
         case STUDENT:
             $selectedTab = 1;
@@ -645,7 +645,6 @@ if (!empty($_GET['keyword']) && !empty($_GET['submit'])) {
 if (!isset($origin) || $origin != 'learnpath') {
     Display::display_footer();
 }
-
 
 /* Helper functions for the users lists in course */
 /**
@@ -729,8 +728,7 @@ function get_number_of_users()
  */
 function searchUserKeyword($firstname, $lastname, $username, $official_code, $keyword)
 {
-    if (
-        api_strripos($firstname, $keyword) !== false ||
+    if (api_strripos($firstname, $keyword) !== false ||
         api_strripos($lastname, $keyword) !== false ||
         api_strripos($username, $keyword) !== false ||
         api_strripos($official_code, $keyword) !== false
@@ -823,8 +821,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
     );
 
     foreach ($a_course_users as $user_id => $o_course_user) {
-        if ((
-                isset($_GET['keyword']) &&
+        if ((isset($_GET['keyword']) &&
                 searchUserKeyword(
                     $o_course_user['firstname'],
                     $o_course_user['lastname'],
@@ -834,7 +831,6 @@ function get_user_data($from, $number_of_items, $column, $direction)
                 )
             ) || !isset($_GET['keyword']) || empty($_GET['keyword'])
         ) {
-
             $groupsNameList = GroupManager::getAllGroupPerUserSubscription($user_id);
             $groupsNameListParsed = [];
             if (!empty($groupsNameList)) {
@@ -1011,10 +1007,10 @@ function modify_filter($user_id, $row, $data)
 
             if ($data['user_status_in_course'] == STUDENT) {
                 $result .= Display::url(
-                        $text,
-                        'user.php?'.api_get_cidreq().'&action=set_tutor&is_tutor='.$isTutor.'&user_id='.$user_id.'&type='.$type,
-                        array('class' => 'btn btn-default '.$disabled)
-                    ).'&nbsp;';
+                    $text,
+                    'user.php?'.api_get_cidreq().'&action=set_tutor&is_tutor='.$isTutor.'&user_id='.$user_id.'&type='.$type,
+                    array('class' => 'btn btn-default '.$disabled)
+                ).'&nbsp;';
             }
         }
 

@@ -28,7 +28,7 @@ function wsConvertPpt($pptData)
     }
     $fileData = $pptData['file_data'];
     $dataInfo = pathinfo($pptData['file_name']);
-    $fileName =  basename($pptData['file_name'], '.' . $dataInfo['extension']);
+    $fileName = basename($pptData['file_name'], '.'.$dataInfo['extension']);
     $fullFileName = $pptData['file_name'];
     $size = $pptData['service_ppt2lp_size'];
     $w = '800';
@@ -38,8 +38,8 @@ function wsConvertPpt($pptData)
     }
 
     $tempArchivePath = api_get_path(SYS_ARCHIVE_PATH);
-    $tempPath = $tempArchivePath . 'wsConvert/' . $fileName . '/';
-    $tempPathNewFiles = $tempArchivePath . 'wsConvert/' . $fileName . '-n/';
+    $tempPath = $tempArchivePath.'wsConvert/'.$fileName.'/';
+    $tempPathNewFiles = $tempArchivePath.'wsConvert/'.$fileName.'-n/';
 
     $oldumask = umask(0);
     //$perms = api_get_permissions_for_new_directories();
@@ -49,13 +49,13 @@ function wsConvertPpt($pptData)
     pptConverterDirectoriesCreate($tempPath, $tempPathNewFiles, $fileName, $perms);
 
     $file = base64_decode($fileData);
-    file_put_contents($tempPath . $fullFileName, $file);
+    file_put_contents($tempPath.$fullFileName, $file);
 
     $cmd = pptConverterGetCommandBaseParams();
-    $cmd .= ' -w ' . $w . ' -h ' . $h . ' -d oogie "' . $tempPath . $fullFileName.'"  "' . $tempPathNewFiles . $fileName . '.html"';
+    $cmd .= ' -w '.$w.' -h '.$h.' -d oogie "'.$tempPath.$fullFileName.'"  "'.$tempPathNewFiles.$fileName.'.html"';
 
     //$perms = api_get_permissions_for_new_files();
-    chmod($tempPathNewFiles . $fileName, $perms);
+    chmod($tempPathNewFiles.$fileName, $perms);
 
     $files = array();
     $return = 0;
@@ -67,7 +67,7 @@ function wsConvertPpt($pptData)
         if (is_array($files) && !empty($files)) {
             foreach ($files as $file) {
                 $imageData = explode('||', $file);
-                $images[$imageData[1]] = base64_encode(file_get_contents($tempPathNewFiles . $fileName . '/' . $imageData[1]));
+                $images[$imageData[1]] = base64_encode(file_get_contents($tempPathNewFiles.$fileName.'/'.$imageData[1]));
             }
         }
         $data = array(
@@ -93,7 +93,7 @@ function wsConvertPpt($pptData)
  */
 function deleteDirectory($directoryPath)
 {
-    $files = array_diff(scandir($directoryPath), array('.','..'));
+    $files = array_diff(scandir($directoryPath), array('.', '..'));
     foreach ($files as $file) {
         if (is_dir("$directoryPath/$file")) {
             deleteDirectory("$directoryPath/$file");
@@ -121,8 +121,8 @@ function pptConverterDirectoriesCreate($tempPath, $tempPathNewFiles, $fileName, 
     if (!is_dir($tempPathNewFiles)) {
         mkdir($tempPathNewFiles, $perms, true);
     }
-    if (!is_dir($tempPathNewFiles . $fileName)) {
-        mkdir($tempPathNewFiles . $fileName, $perms, true);
+    if (!is_dir($tempPathNewFiles.$fileName)) {
+        mkdir($tempPathNewFiles.$fileName, $perms, true);
     }
 }
 
@@ -133,16 +133,16 @@ function pptConverterDirectoriesCreate($tempPath, $tempPathNewFiles, $fileName, 
 function pptConverterGetCommandBaseParams()
 {
     if (IS_WINDOWS_OS) { // IS_WINDOWS_OS has been defined in main_api.lib.php
-        $converterPath = str_replace('/', '\\', api_get_path(SYS_PATH) . 'main/inc/lib/ppt2png');
-        $classPath = $converterPath . ';' . $converterPath . '/jodconverter-2.2.2.jar;' . $converterPath . '/jodconverter-cli-2.2.2.jar';
-        $cmd = 'java -Dfile.encoding=UTF-8 -cp "' . $classPath . '" DokeosConverter';
+        $converterPath = str_replace('/', '\\', api_get_path(SYS_PATH).'main/inc/lib/ppt2png');
+        $classPath = $converterPath.';'.$converterPath.'/jodconverter-2.2.2.jar;'.$converterPath.'/jodconverter-cli-2.2.2.jar';
+        $cmd = 'java -Dfile.encoding=UTF-8 -cp "'.$classPath.'" DokeosConverter';
     } else {
-        $converterPath = api_get_path(SYS_PATH) . 'main/inc/lib/ppt2png';
+        $converterPath = api_get_path(SYS_PATH).'main/inc/lib/ppt2png';
         $classPath = ' -Dfile.encoding=UTF-8 -cp .:jodconverter-2.2.2.jar:jodconverter-cli-2.2.2.jar';
-        $cmd = 'cd ' . $converterPath . ' && java ' . $classPath . ' DokeosConverter';
+        $cmd = 'cd '.$converterPath.' && java '.$classPath.' DokeosConverter';
     }
 
-    $cmd .= ' -p ' . api_get_setting('service_ppt2lp', 'port');
+    $cmd .= ' -p '.api_get_setting('service_ppt2lp', 'port');
     return $cmd;
 }
 
@@ -151,7 +151,7 @@ $webPath = api_get_path(WEB_PATH);
 $webCodePath = api_get_path(WEB_CODE_PATH);
 $options = array(
     'uri' => $webPath,
-    'location' => $webCodePath . 'webservices/additional_webservices.php'
+    'location' => $webCodePath.'webservices/additional_webservices.php'
 );
 
 $soapServer = new SoapServer(NULL, $options);

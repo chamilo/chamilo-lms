@@ -53,13 +53,13 @@ if ($view == "0000100")
 if ($view == "00000010")
     $nameTools = get_lang('ScormAccess');
 
-$interbreadcrumb[] = array("url" => api_get_self() . "?view=0000000", "name" => get_lang('ToolName'));
+$interbreadcrumb[] = array("url" => api_get_self()."?view=0000000", "name" => get_lang('ToolName'));
 
 $is_allowedToTrack = $is_courseAdmin || $is_platformAdmin || api_is_drh();
 
 /* 	MAIN CODE */
 
-$title[0] = get_lang('StatsOfCourse') . " : " . $_course['official_code'];
+$title[0] = get_lang('StatsOfCourse')." : ".$_course['official_code'];
 
 
 $courseInfo = api_get_course_info($_course['official_code']);
@@ -91,40 +91,40 @@ if ($is_allowedToTrack) {
         $sql = "SELECT $TABLECOURSUSER.user_i, $table_user.lastname, $table_user.firstname
                 FROM $TABLECOURSUSER, $table_user
                 WHERE
-                    $TABLECOURSUSER.c_id = '" . api_get_course_int_id() . "' AND
+                    $TABLECOURSUSER.c_id = '".api_get_course_int_id()."' AND
                     $TABLECOURSUSER.user_id = $table_user.user_id AND
-                    $TABLECOURSUSER.relation_type<>" . COURSE_RELATION_TYPE_RRHH . "
+                    $TABLECOURSUSER.relation_type<>".COURSE_RELATION_TYPE_RRHH."
                 ORDER BY $table_user.lastname";
         $results = StatsUtils::getManyResults3Col($sql);
 
         //BUGFIX: get visual code instead of real course code. Scormpaths use the visual code... (should be fixed in future versions)
-        $sql = "SELECT visual_code FROM $TABLECOURSE WHERE code = '" . api_get_course_id() . "'";
+        $sql = "SELECT visual_code FROM $TABLECOURSE WHERE code = '".api_get_course_id()."'";
         $_course['visual_code'] = StatsUtils::getOneResult($sql);
 
         if (is_array($results)) {
             $line = '';
-            $title_line = get_lang('Name') . ";" . get_lang('FirstAccess') . ";" . get_lang('LastAccess') . ";" . get_lang('Visited') . "\n";
+            $title_line = get_lang('Name').";".get_lang('FirstAccess').";".get_lang('LastAccess').";".get_lang('Visited')."\n";
 
             for ($j = 0; $j < count($results); $j++) {
                 // BEGIN % visited
                 // sum of all items (= multiple learningpaths + SCORM imported paths)
-                $sql = "SELECT COUNT(DISTINCT(iv.lp_item_id)) FROM $tbl_learnpath_item_view iv " .
+                $sql = "SELECT COUNT(DISTINCT(iv.lp_item_id)) FROM $tbl_learnpath_item_view iv ".
                         "INNER JOIN $tbl_learnpath_view v
-                        ON iv.lp_view_id = v.id " .
+                        ON iv.lp_view_id = v.id ".
                         "WHERE
                         	v.c_id = $course_id AND
                         	iv.c_id = $course_id AND
-                		v.user_id = " . $results[$j][0];
+                		v.user_id = ".$results[$j][0];
                 $total_lpath_items = StatsUtils::getOneResult($sql);
 
                 // sum of all completed items (= multiple learningpaths + SCORM imported paths)
-                $sql = "SELECT COUNT(DISTINCT(iv.lp_item_id)) " .
-                        "FROM $tbl_learnpath_item_view iv " .
-                        "INNER JOIN $tbl_learnpath_view v ON iv.lp_view_id = v.id " .
+                $sql = "SELECT COUNT(DISTINCT(iv.lp_item_id)) ".
+                        "FROM $tbl_learnpath_item_view iv ".
+                        "INNER JOIN $tbl_learnpath_view v ON iv.lp_view_id = v.id ".
                         "WHERE
                         	v.c_id = $course_id AND
                         	iv.c_id = $course_id AND
-                        	v.user_id = " . $results[$j][0] . " " .
+                        	v.user_id = ".$results[$j][0]." ".
                         "AND (status = 'completed' OR status='passed')";
                 $total_lpath_items_completed = StatsUtils::getOneResult($sql);
 
@@ -135,23 +135,23 @@ if ($is_allowedToTrack) {
                 // BEGIN first/last access
                 // first access
                 $sql = "SELECT access_date FROM $TABLETRACK_ACCESS_2
-                        WHERE access_user_id = '" . $results[$j][0] . "' AND c_id = '" . $courseId . "' AND access_tool = 'learnpath' AND access_session_id = '" . api_get_session_id() . "'
+                        WHERE access_user_id = '".$results[$j][0]."' AND c_id = '".$courseId."' AND access_tool = 'learnpath' AND access_session_id = '".api_get_session_id()."'
                         ORDER BY access_id ASC LIMIT 1";
                 $first_access = StatsUtils::getOneResult($sql);
                 $first_access = empty($first_access) ? "-" : date('d.m.y', strtotime($first_access));
 
                 // last access
-                $sql = "SELECT access_date FROM $TABLETRACK_ACCESS WHERE access_user_id = '" . $results[$j][0] . "' AND c_id = '" . $courseId . "' AND access_tool = 'learnpath'";
+                $sql = "SELECT access_date FROM $TABLETRACK_ACCESS WHERE access_user_id = '".$results[$j][0]."' AND c_id = '".$courseId."' AND access_tool = 'learnpath'";
                 $last_access = StatsUtils::getOneResult($sql);
                 $last_access = empty($last_access) ? "-" : date('d.m.y', strtotime($last_access));
                 // END first/last access
                 // BEGIN presentation of data
-                $line .= $results[$j][1] . " " . $results[$j][2] . ";" . $first_access . ";" . $last_access . ";" . $lpath_pct_completed . "\n";
+                $line .= $results[$j][1]." ".$results[$j][2].";".$first_access.";".$last_access.";".$lpath_pct_completed."\n";
 
                 // END presentation of data
             }
         } else {
-            $line = get_lang('NoResult') . "\n";
+            $line = get_lang('NoResult')."\n";
         }
     }
 
@@ -163,9 +163,9 @@ if ($is_allowedToTrack) {
 
         $sql = "SELECT count(*)
                 FROM $TABLECOURSUSER
-                WHERE c_id = '" . api_get_course_int_id() . "' AND relation_type<>" . COURSE_RELATION_TYPE_RRHH . "";
+                WHERE c_id = '".api_get_course_int_id()."' AND relation_type<>".COURSE_RELATION_TYPE_RRHH."";
         $count = StatsUtils::getOneResult($sql);
-        $title_line = get_lang('CountUsers') . " ; " . $count . "\n";
+        $title_line = get_lang('CountUsers')." ; ".$count."\n";
     }
 
     /* 	Access to this course */
@@ -183,7 +183,7 @@ if ($is_allowedToTrack) {
                     AND access_tool IS NULL";
         $count = StatsUtils::getOneResult($sql);
 
-        $line .= get_lang('CountToolAccess') . " ; " . $count . "\n";
+        $line .= get_lang('CountToolAccess')." ; ".$count."\n";
 
         // last 31 days
         $sql = "SELECT count(*)
@@ -193,7 +193,7 @@ if ($is_allowedToTrack) {
                     AND access_tool IS NULL";
         $count = StatsUtils::getOneResult($sql);
 
-        $line .= get_lang('Last31days') . " ; " . $count . "\n";
+        $line .= get_lang('Last31days')." ; ".$count."\n";
 
         // last 7 days
         $sql = "SELECT count(*)
@@ -203,7 +203,7 @@ if ($is_allowedToTrack) {
                     AND access_tool IS NULL";
         $count = StatsUtils::getOneResult($sql);
 
-        $line .= get_lang('Last7days') . " ; " . $count . "\n";
+        $line .= get_lang('Last7days')." ; ".$count."\n";
 
         // today
         $sql = "SELECT count(*)
@@ -212,7 +212,7 @@ if ($is_allowedToTrack) {
                     AND ( access_date > CURDATE() )
                     AND access_tool IS NULL";
         $count = StatsUtils::getOneResult($sql);
-        $line .= get_lang('ThisDay') . " ; " . $count . "\n";
+        $line .= get_lang('ThisDay')." ; ".$count."\n";
     }
 
     /* 	Tools */
@@ -221,7 +221,7 @@ if ($is_allowedToTrack) {
         $tempView[2] = '0';
         $title[1] = $nameTools;
         $line = '';
-        $title_line = get_lang('ToolTitleToolnameColumn') . ";" . get_lang('ToolTitleUsersColumn') . ";" . get_lang('ToolTitleCountColumn') . "\n";
+        $title_line = get_lang('ToolTitleToolnameColumn').";".get_lang('ToolTitleUsersColumn').";".get_lang('ToolTitleCountColumn')."\n";
 
         $sql = "SELECT access_tool, COUNT(DISTINCT access_user_id),count( access_tool )
                 FROM $TABLETRACK_ACCESS
@@ -233,10 +233,10 @@ if ($is_allowedToTrack) {
 
         if (is_array($results)) {
             for ($j = 0; $j < count($results); $j++) {
-                $line .= $results[$j][0] . "/" . get_lang($results[$j][0]) . ";" . $results[$j][1] . ";" . $results[$j][2] . "\n";
+                $line .= $results[$j][0]."/".get_lang($results[$j][0]).";".$results[$j][1].";".$results[$j][2]."\n";
             }
         } else {
-            $line = get_lang('NoResult') . "\n";
+            $line = get_lang('NoResult')."\n";
         }
     }
 
@@ -258,14 +258,14 @@ if ($is_allowedToTrack) {
 
         $title[1] = $nameTools;
         $line = '';
-        $title_line = get_lang('LinksTitleLinkColumn') . ";" . get_lang('LinksTitleUsersColumn') . ";" . get_lang('LinksTitleCountColumn') . "\n";
+        $title_line = get_lang('LinksTitleLinkColumn').";".get_lang('LinksTitleUsersColumn').";".get_lang('LinksTitleCountColumn')."\n";
 
         if (is_array($results)) {
             for ($j = 0; $j < count($results); $j++) {
-                $line .= $results[$j][1] . "'>" . $results[$j][0] . ";" . $results[$j][2] . ";" . $results[$j][3] . "\n";
+                $line .= $results[$j][1]."'>".$results[$j][0].";".$results[$j][2].";".$results[$j][3]."\n";
             }
         } else {
-            $line = get_lang('NoResult') . "\n";
+            $line = get_lang('NoResult')."\n";
         }
     }
 
@@ -284,13 +284,13 @@ if ($is_allowedToTrack) {
 
         $title[1] = $nameTools;
         $line = '';
-        $title_line = get_lang('DocumentsTitleDocumentColumn') . ";" . get_lang('DocumentsTitleUsersColumn') . ";" . get_lang('DocumentsTitleCountColumn') . "\n";
+        $title_line = get_lang('DocumentsTitleDocumentColumn').";".get_lang('DocumentsTitleUsersColumn').";".get_lang('DocumentsTitleCountColumn')."\n";
         if (is_array($results)) {
             for ($j = 0; $j < count($results); $j++) {
-                $line .= $results[$j][0] . ";" . $results[$j][1] . ";" . $results[$j][2] . "\n";
+                $line .= $results[$j][0].";".$results[$j][1].";".$results[$j][2]."\n";
             }
         } else {
-            $line = get_lang('NoResult') . "\n";
+            $line = get_lang('NoResult')."\n";
         }
     }
 
@@ -318,10 +318,10 @@ if ($is_allowedToTrack) {
                 //echo "<a href='".api_get_self()."?view=".$view."&scormcontopen=".$ar['id']."' class='specialLink'>$lp_title</a>";
                 if ($ar['id'] == $scormcontopen) { //have to list the students here
                     $contentId = $ar['id'];
-                    $sql2 = "SELECT u.user_id, u.lastname, u.firstname " .
-                            "FROM  $tbl_learnpath_view sd " .
-                            "INNER JOIN $table_user u " .
-                            "ON u.user_id = sd.user_id " .
+                    $sql2 = "SELECT u.user_id, u.lastname, u.firstname ".
+                            "FROM  $tbl_learnpath_view sd ".
+                            "INNER JOIN $table_user u ".
+                            "ON u.user_id = sd.user_id ".
                             "WHERE sd.c_id = $course_id AND sd.lp_id=$contentId group by u.user_id";
                     //error_log($sql2,0);
                     $result2 = Database::query($sql2);
@@ -333,28 +333,28 @@ if ($is_allowedToTrack) {
                         while ($ar2 != '') {
 
                             if (isset($_REQUEST["scormstudentopen"]) && $ar2['user_id'] == $scormstudentopen) {
-                                $line .= $ar['id'] . " " . $ar2['user_id'] . " " . api_get_person_name($ar2['firstname'], $ar2['lastname']);
+                                $line .= $ar['id']." ".$ar2['user_id']." ".api_get_person_name($ar2['firstname'], $ar2['lastname']);
                             } else {
-                                $line .= $ar['id'] . " " . $ar2['user_id'] . " " . api_get_person_name($ar2['firstname'], $ar2['lastname']);
+                                $line .= $ar['id']." ".$ar2['user_id']." ".api_get_person_name($ar2['firstname'], $ar2['lastname']);
                             }
 
                             if ($ar2['user_id'] == $scormstudentopen) { //have to list the student's results
                                 $studentId = $ar2['user_id'];
-                                $sql3 = "SELECT iv.status, iv.score, i.title, iv.total_time " .
-                                        "FROM $tbl_learnpath_item i " .
-                                        "INNER JOIN $tbl_learnpath_item_view iv ON i.id=iv.lp_item_id " .
-                                        "INNER JOIN $tbl_learnpath_view v ON iv.lp_view_id=v.id " .
+                                $sql3 = "SELECT iv.status, iv.score, i.title, iv.total_time ".
+                                        "FROM $tbl_learnpath_item i ".
+                                        "INNER JOIN $tbl_learnpath_item_view iv ON i.id=iv.lp_item_id ".
+                                        "INNER JOIN $tbl_learnpath_view v ON iv.lp_view_id=v.id ".
                                         "WHERE 	i.c_id = $course_id AND
                                         		iv.c_id = $course_id AND
                                         		v.c_id = $course_id AND
                                 				v.user_id=$studentId and v.lp_id=$contentId ORDER BY v.id, i.id";
                                 $result3 = Database::query($sql3);
                                 $ar3 = Database::fetch_array($result3);
-                                $title_line .= get_lang('ScormTitleColumn') . ";" . get_lang('ScormStatusColumn') . ";" . get_lang('ScormScoreColumn') . ";" . get_lang('ScormTimeColumn');
+                                $title_line .= get_lang('ScormTitleColumn').";".get_lang('ScormStatusColumn').";".get_lang('ScormScoreColumn').";".get_lang('ScormTimeColumn');
                                 while ($ar3['status'] != '') {
                                     require_once '../lp/learnpathItem.class.php';
                                     $time = learnpathItem::getScormTimeFromParameter('php', $ar3['total_time']);
-                                    $line .= $title . ";" . $ar3['status'] . ";" . $ar3['score'] . ";" . $time;
+                                    $line .= $title.";".$ar3['status'].";".$ar3['score'].";".$time;
                                     $ar3 = Database::fetch_array($result3);
                                 }
                             }
@@ -374,23 +374,23 @@ if ($is_allowedToTrack) {
      * Export to a CSV file
      * Force the browser to save the file instead of opening it.
      */
-    $len = strlen($title_line . $line);
+    $len = strlen($title_line.$line);
     header('Content-type: application/octet-stream');
     //header('Content-Type: application/force-download');
-    header('Content-length: ' . $len);
-    $filename = api_html_entity_decode(str_replace(":", "", str_replace(" ", "_", $title[0] . '_' . $title[1] . '.csv')));
+    header('Content-length: '.$len);
+    $filename = api_html_entity_decode(str_replace(":", "", str_replace(" ", "_", $title[0].'_'.$title[1].'.csv')));
     $filename = api_replace_dangerous_char($filename);
     if (preg_match("/MSIE 5.5/", $_SERVER['HTTP_USER_AGENT'])) {
-        header('Content-Disposition: filename= ' . $filename);
+        header('Content-Disposition: filename= '.$filename);
     } else {
-        header('Content-Disposition: attachment; filename= ' . $filename);
+        header('Content-Disposition: attachment; filename= '.$filename);
     }
     if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
         header('Pragma: ');
         header('Cache-Control: ');
         header('Cache-Control: public'); // IE cannot download from sessions without a cache
     }
-    header('Content-Description: ' . $filename);
+    header('Content-Description: '.$filename);
     header('Content-transfer-encoding: binary');
 
     echo api_html_entity_decode($title_line, ENT_COMPAT);

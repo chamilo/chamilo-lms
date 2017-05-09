@@ -200,7 +200,7 @@ function add_category_form($action)
 {
     $action = Security::remove_XSS($action);
     // initiate the object
-    $form = new FormValidator('note', 'post', api_get_self() . '?action=' . $action.'&'.api_get_cidreq());
+    $form = new FormValidator('note', 'post', api_get_self().'?action='.$action.'&'.api_get_cidreq());
     // Setting the form elements
     $form->addElement('header', get_lang('AddACategory'));
     $form->addElement('text', 'category_name', get_lang('CategoryName'), array('size' => '95'));
@@ -242,23 +242,23 @@ function add_category_form($action)
 function displayActionBar()
 {
     echo '<div class="actions">';
-    echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?' . api_get_cidreq() . '">' .
-            Display::return_icon('back.png', get_lang('GoBackToQuestionList'), '', ICON_SIZE_MEDIUM) . '</a>';
+    echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq().'">'.
+            Display::return_icon('back.png', get_lang('GoBackToQuestionList'), '', ICON_SIZE_MEDIUM).'</a>';
 
-    echo '<a href="' . api_get_self() . '?action=addcategory&'.api_get_cidreq().'">' .
-        Display::return_icon('new_folder.png', get_lang('AddACategory'), null, ICON_SIZE_MEDIUM) . '</a>';
+    echo '<a href="'.api_get_self().'?action=addcategory&'.api_get_cidreq().'">'.
+        Display::return_icon('new_folder.png', get_lang('AddACategory'), null, ICON_SIZE_MEDIUM).'</a>';
 
     echo Display::url(
         Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), [], ICON_SIZE_MEDIUM),
-        api_get_self() . '?action=export_category&'.api_get_cidreq()
+        api_get_self().'?action=export_category&'.api_get_cidreq()
     );
 
     echo Display::url(
         Display::return_icon('import_csv.png', get_lang('ImportAsCSV'), [], ICON_SIZE_MEDIUM),
-        api_get_self() . '?action=import_category&'.api_get_cidreq()
+        api_get_self().'?action=import_category&'.api_get_cidreq()
     );
 
     echo '</div>';
     echo "<br/>";
-    echo "<fieldset><legend>" . get_lang('QuestionCategory') . "</legend></fieldset>";
+    echo "<fieldset><legend>".get_lang('QuestionCategory')."</legend></fieldset>";
 }

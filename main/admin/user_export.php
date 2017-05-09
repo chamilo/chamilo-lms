@@ -130,40 +130,43 @@ if ($form->validate()) {
 	}
 	$data = array();
 	$extra_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', false);
-	if ($export['addcsvheader'] == '1' AND $export['file_type'] == 'csv') {
+        
+        if (!empty($export['addcsvheader'])) {  
+	if ($export['addcsvheader'] == '1' && ($export['file_type'] == 'csv')) {
 		if ($_configuration['password_encryption'] != 'none') {
 			$data[] = array(
-				'UserId',
-				'LastName',
-				'FirstName',
-				'Email',
-				'UserName',
-				'AuthSource',
-				'Status',
-				'OfficialCode',
-				'PhoneNumber',
-                'RegistrationDate'
+                            'UserId',
+                            'LastName',
+                            'FirstName',
+                            'Email',
+                            'UserName',
+                            'AuthSource',
+                            'Status',
+                            'OfficialCode',
+                            'PhoneNumber',
+                            'RegistrationDate'
 			);
 		} else {
 			$data[] = array(
-				'UserId',
-				'LastName',
-				'FirstName',
-				'Email',
-				'UserName',
-				'Password',
-				'AuthSource',
-				'Status',
-				'OfficialCode',
-				'PhoneNumber',
-                'RegistrationDate'
+                            'UserId',
+                            'LastName',
+                            'FirstName',
+                            'Email',
+                            'UserName',
+                            'Password',
+                            'AuthSource',
+                            'Status',
+                            'OfficialCode',
+                            'PhoneNumber',
+                            'RegistrationDate'
 			);
 		}
 
 		foreach ($extra_fields as $extra) {
 			$data[0][] = $extra[1];
 		}
-	}
+            }
+        }
 
 	$res = Database::query($sql);
 	while ($user = Database::fetch_array($res, 'ASSOC')) {

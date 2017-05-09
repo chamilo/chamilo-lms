@@ -10,12 +10,12 @@ class SystemAnnouncementManager
     const VISIBLE_STUDENT = 2;
     const VISIBLE_TEACHER = 3;
 
-	/**
-	 * Displays all announcements
-	 * @param int $visible VISIBLE_GUEST, VISIBLE_STUDENT or VISIBLE_TEACHER
-	 * @param int $id The identifier of the announcement to display
-	 */
-	public static function display_announcements($visible, $id = -1)
+    /**
+     * Displays all announcements
+     * @param int $visible VISIBLE_GUEST, VISIBLE_STUDENT or VISIBLE_TEACHER
+     * @param int $id The identifier of the announcement to display
+     */
+    public static function display_announcements($visible, $id = -1)
     {
         $user_selected_language = api_get_interface_language();
         $db_table = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
@@ -421,10 +421,11 @@ class SystemAnnouncementManager
     }
 
     /**
-    * Makes the announcement id visible only for groups in groups_array
-    * @param int $announcement_id
-    * @param array $group_array array of group id
-    **/
+     * Makes the announcement id visible only for groups in groups_array
+     * @param int $announcement_id
+     * @param array $group_array array of group id
+     * @return bool
+     **/
     public static function announcement_for_groups($announcement_id, $group_array)
     {
         $tbl_announcement_group = Database::get_main_table(
@@ -447,7 +448,6 @@ class SystemAnnouncementManager
                         group_id=".intval($group_id);
                 $res = Database::query($sql);
                 if ($res === false) {
-
                     return false;
                 }
             }
@@ -466,7 +466,6 @@ class SystemAnnouncementManager
         $tbl_announcement_group = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS);
         $tbl_group = Database::get_main_table(TABLE_USERGROUP);
         //first delete all group associations for this announcement
-
         $sql = "SELECT
                     g.id as group_id,
                     g.name as group_name
@@ -480,8 +479,8 @@ class SystemAnnouncementManager
         return $groups;
     }
 
-	/**
-	 * Updates an announcement to the database
+    /**
+     * Updates an announcement to the database
      *
      * @param integer $id of the announcement
      * @param string $title title of the announcement
@@ -490,7 +489,7 @@ class SystemAnnouncementManager
      * @param array $date_end end date of (0 => day ; 1 => month ; 2 => year ; 3 => hour ; 4 => minute)
      * @param array $visibility
      * @return bool    True on success, false on failure
-	 */
+     */
     public static function update_announcement(
         $id,
         $title,
@@ -503,7 +502,7 @@ class SystemAnnouncementManager
         $sendEmailTest = false
     ) {
         $em = Database::getManager();
-		$announcement = $em->find('ChamiloCoreBundle:SysAnnouncement', $id);
+        $announcement = $em->find('ChamiloCoreBundle:SysAnnouncement', $id);
         if (!$announcement) {
             return false;
         }
@@ -551,10 +550,6 @@ class SystemAnnouncementManager
         $content = str_replace('src=\"'.api_get_path(REL_HOME_PATH), 'src=\"'.api_get_path(WEB_PATH).api_get_path(REL_HOME_PATH), $content);
         $content = str_replace('file='.api_get_path(REL_HOME_PATH), 'file='.api_get_path(WEB_PATH).api_get_path(REL_HOME_PATH), $content);
 
-        $visible_teacher = $visibility['visible_teacher'];
-        $visible_student = $visibility['visible_student'];
-        $visible_guest = $visibility['visible_guest'];
-
         if ($sendEmailTest) {
             self::send_system_announcement_by_email(
                 $title,
@@ -569,8 +564,7 @@ class SystemAnnouncementManager
                 self::send_system_announcement_by_email(
                     $title,
                     $content,
-                    $visible_teacher,
-                    $visible_student,
+                    $visibility,
                     $lang
                 );
             }
@@ -606,8 +600,8 @@ class SystemAnnouncementManager
 
     /**
      * Deletes an announcement
-     * @param 	int $id The identifier of the announcement that should be
-     * @return	bool	True on success, false on failure
+     * @param int $id The identifier of the announcement that should be
+     * @return bool    True on success, false on failure
      */
     public static function delete_announcement($id)
     {
@@ -621,57 +615,27 @@ class SystemAnnouncementManager
         return true;
     }
 
-	/**
-	 * Gets an announcement
-	 * @param 	int		$id The identifier of the announcement that should be
-	 * @return	object	Object of class StdClass or the required class, containing the query result row
-	 */
-	public static function get_announcement($id)
+    /**
+     * Gets an announcement
+     * @param int $id The identifier of the announcement that should be
+     * @return object    Object of class StdClass or the required class, containing the query result row
+     */
+    public static function get_announcement($id)
     {
-		$db_table = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
-		$id = intval($id);
-		$sql = "SELECT * FROM ".$db_table." WHERE id = ".$id;
-		$announcement = Database::fetch_object(Database::query($sql));
+        $db_table = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
+        $id = intval($id);
+        $sql = "SELECT * FROM ".$db_table." WHERE id = ".$id;
+        $announcement = Database::fetch_object(Database::query($sql));
 
-		return $announcement;
-	}
-
-	/**
-	 * Change the visibility of an announcement
-	 * @param int $id
-	 * @param int $user For who should the visibility be changed
-     * @param int $visible
-     * (possible values are VISIBLE_TEACHER, VISIBLE_STUDENT, VISIBLE_GUEST)
-	 * @return 	bool	True on success, false on failure
-	 */
-	public static function set_visibility($id, $user, $visible)
-    {
-		$table = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
-		$id = (int) $id;
-		$list = array_keys(self::getVisibilityList());
-		$user = trim($user);
-		if (!in_array($user, $list)) {
-		    return false;
-        }
-
-        $field = $user;
-		$sql = "UPDATE $table SET ".$field." = '".$visible."'
-		        WHERE id='".$id."'";
-		$res = Database::query($sql);
-
-		if ($res === false) {
-			return false;
-		}
-
-		return true;
-	}
+        return $announcement;
+    }
 
     /**
      * @return array
      */
-	public static function getVisibilityList()
+    public static function getVisibilityList()
     {
-	    $extraRoles = api_get_configuration_value('system_announce_extra_roles');
+        $extraRoles = api_get_configuration_value('system_announce_extra_roles');
         /* Requires DB change:
          ALTER TABLE sys_announcement ADD COLUMN visible_drh INT DEFAULT 0;
          ALTER TABLE sys_announcement ADD COLUMN visible_session_admin INT DEFAULT 0;
@@ -692,15 +656,46 @@ class SystemAnnouncementManager
         return $visibleToUsers;
     }
 
-	/**
-	 * Send a system announcement by e-mail to all teachers/students depending on parameters
-	 * @param	string	$title
-	 * @param	string	$content
-	 * @param	array $visibility
-	 * @param	string	$language Language (optional, considered for all languages if left empty)
-     * @param	bool	$sendEmailTest
-     * @return  bool    True if the message was sent or there was no destination matching. False on database or e-mail sending error.
-	 */
+    /**
+     * Change the visibility of an announcement
+     * @param int $id
+     * @param int $user For who should the visibility be changed
+     * @param bool $visible
+     * @return bool True on success, false on failure
+     */
+    public static function set_visibility($id, $user, $visible)
+    {
+        $table = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
+        $id = (int) $id;
+        $list = array_keys(self::getVisibilityList());
+        $user = trim($user);
+        $visible = (int) $visible;
+        if (!in_array($user, $list)) {
+            return false;
+        }
+
+        $field = $user;
+        $sql = "UPDATE $table SET ".$field." = '".$visible."'
+                WHERE id='".$id."'";
+        $res = Database::query($sql);
+
+        if ($res === false) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Send a system announcement by e-mail to all teachers/students depending on parameters
+     * @param string $title
+     * @param string $content
+     * @param array $visibility
+     * @param string $language Language (optional, considered for all languages if left empty)
+     * @param bool $sendEmailTest
+     * @return bool True if the message was sent or there was no destination matching.
+     * False on database or e-mail sending error.
+     */
     public static function send_system_announcement_by_email(
         $title,
         $content,
@@ -726,26 +721,26 @@ class SystemAnnouncementManager
         }
 
         if ($teacher <> 0 && $student == 0) {
-			$sql = "SELECT DISTINCT u.user_id FROM $user_table u $url_condition 
-					WHERE status = '1' ";
-		}
+            $sql = "SELECT DISTINCT u.user_id FROM $user_table u $url_condition 
+                    WHERE status = '1' ";
+        }
 
-		if ($teacher == 0 && $student <> 0) {
-			$sql = "SELECT DISTINCT u.user_id FROM $user_table u $url_condition 
-					WHERE status = '5' ";
-		}
+        if ($teacher == 0 && $student <> 0) {
+            $sql = "SELECT DISTINCT u.user_id FROM $user_table u $url_condition 
+                    WHERE status = '5' ";
+        }
 
-		if ($teacher <> 0 && $student <> 0) {
-			$sql = "SELECT DISTINCT u.user_id FROM $user_table u $url_condition 
-					WHERE 1 = 1 ";
-		}
+        if ($teacher <> 0 && $student <> 0) {
+            $sql = "SELECT DISTINCT u.user_id FROM $user_table u $url_condition 
+                    WHERE 1 = 1 ";
+        }
 
-		if (!empty($language)) {
-			//special condition because language was already treated for SQL insert before
-			$sql .= " AND language = '".Database::escape_string($language)."' ";
-		}
+        if (!empty($language)) {
+            //special condition because language was already treated for SQL insert before
+            $sql .= " AND language = '".Database::escape_string($language)."' ";
+        }
 
-		if (api_is_multiple_url_enabled()) {
+        if (api_is_multiple_url_enabled()) {
             $sql .= " AND access_url_id = '".$current_access_url_id."' ";
         }
 
@@ -755,36 +750,33 @@ class SystemAnnouncementManager
         // Expiration date
         $sql .= " AND (expiration_date = '' OR expiration_date IS NULL OR expiration_date > '$now') ";
 
-		if ((empty($teacher) || $teacher == '0') && (empty($student) || $student == '0')) {
+        if ((empty($teacher) || $teacher == '0') && (empty($student) || $student == '0')) {
+            return true;
+        }
 
-			return true;
-		}
-
-		$result = Database::query($sql);
-		if ($result === false) {
-
-			return false;
-		}
+        $result = Database::query($sql);
+        if ($result === false) {
+            return false;
+        }
 
         $message_sent = false;
-
-		while ($row = Database::fetch_array($result, 'ASSOC')) {
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
             MessageManager::send_message_simple($row['user_id'], $title, $content);
             $message_sent = true;
-		}
+        }
 
         // Minor validation to clean up the attachment files in the announcement
-		if (!empty($_FILES)) {
-		    $attachments = $_FILES;
-		    foreach ($attachments as $attachment) {
-			    unlink($attachment['tmp_name']);
-		    }
-		}
+        if (!empty($_FILES)) {
+            $attachments = $_FILES;
+            foreach ($attachments as $attachment) {
+                unlink($attachment['tmp_name']);
+            }
+        }
 
-		return $message_sent; //true if at least one e-mail was sent
-	}
+        return $message_sent; //true if at least one e-mail was sent
+    }
 
-	/**
+    /**
      * Displays announcements as an slideshow
      * @param int $visible VISIBLE_GUEST, VISIBLE_STUDENT or VISIBLE_TEACHER
      * @param int $id The identifier of the announcement to display
@@ -796,11 +788,10 @@ class SystemAnnouncementManager
 
         $cut_size = 500;
         $now = api_get_utc_datetime();
-
         $sql = "SELECT * FROM $table
-				WHERE
-				    (lang = '$user_selected_language' OR lang = '') AND
-				    ('$now' >= date_start AND '$now' <= date_end) ";
+                WHERE
+                    (lang = '$user_selected_language' OR lang = '') AND
+                    ('$now' >= date_start AND '$now' <= date_end) ";
 
         switch ($visible) {
             case self::VISIBLE_GUEST:
@@ -879,13 +870,13 @@ class SystemAnnouncementManager
         ];
 
         switch ($visibility) {
-            case self::VISIBLE_GUEST :
+            case self::VISIBLE_GUEST:
                 $whereConditions["AND visible_guest = ? "] = 1;
                 break;
-            case self::VISIBLE_STUDENT :
+            case self::VISIBLE_STUDENT:
                 $whereConditions["AND visible_student = ? "] = 1;
                 break;
-            case self::VISIBLE_TEACHER :
+            case self::VISIBLE_TEACHER:
                 $whereConditions["AND visible_teacher = ? "] = 1;
                 break;
         }
@@ -899,8 +890,9 @@ class SystemAnnouncementManager
             $announcementTable,
             [
                 'where' => $whereConditions,
-                'order' => 'date_start'
-            ], 'first'
+                'order' => 'date_start',
+            ],
+            'first'
         );
 
         $template = new Template(null, false, false);

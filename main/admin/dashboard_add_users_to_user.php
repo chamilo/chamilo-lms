@@ -286,7 +286,6 @@ if (!empty($filters) && !empty($filterData)) {
     }
 }
 
-$msg = '';
 if (isset($_POST['formSent']) && intval($_POST['formSent']) == 1) {
     $user_list = $_POST['UsersList'];
     switch ($userStatus) {
@@ -302,9 +301,12 @@ if (isset($_POST['formSent']) && intval($_POST['formSent']) == 1) {
             $affected_rows = 0;
     }
 
-    if ($affected_rows) {
-        $msg = get_lang('AssignedUsersHaveBeenUpdatedSuccessfully');
-    }
+    Display::addFlash(
+        Display::return_message(
+            get_lang('AssignedUsersHaveBeenUpdatedSuccessfully'),
+            'normal'
+        )
+    );
 }
 
 // Display header
@@ -413,12 +415,6 @@ $result = Database::query($sql);
 ?>
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?user=<?php echo $user_id ?>" class="form-horizontal" <?php if ($ajax_search) {echo ' onsubmit="valide();"'; }?>>
 <input type="hidden" name="formSent" value="1" />
-<?php
-if (!empty($msg)) {
-    Display::addFlash(Display::return_message($msg, 'normal')); //main API
-}
-?>
-
 <div class="row">
     <div class="col-md-4">
         <?php echo get_lang('UserListInPlatform') ?>

@@ -10,7 +10,7 @@ function multiquery_query($array)
         $result[$i]['mysql'] = mysql_query($array[$i]);
 
         if (!$result[$i]['mysql']) {
-            die("error in query $i : " . $array[$i]);
+            die("error in query $i : ".$array[$i]);
         }
 
         // fields
@@ -29,8 +29,8 @@ function multiquery_query($array)
     $numberOfResult = mysql_num_rows($result[0]['mysql']);
     for ($i = 1; $i < $result['num_queries']; $i++) {
         if ($numberOfResult != mysql_num_rows($result[$i]['mysql'])) {
-            die("wrong number of row: $numberOfResult vs " .
-                mysql_num_rows($result[$i]['mysql']) . " on query $i");
+            die("wrong number of row: $numberOfResult vs ".
+                mysql_num_rows($result[$i]['mysql'])." on query $i");
         }
     }
 

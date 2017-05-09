@@ -60,32 +60,36 @@ $form->addSelect(
 $form->addButtonSearch(get_lang('Filter'));
 
 // action links
-$actionleft = Display::url(
+$actionLeft = Display::url(
     Display::return_icon(
         'back.png',
         get_lang('BackTo').' '.get_lang('PlatformAdmin'),
         null,
         ICON_SIZE_MEDIUM
-        ), '../admin/index.php');
-$actionleft .= Display::url(
+    ),
+    '../admin/index.php'
+);
+$actionLeft .= Display::url(
     Display::return_icon(
         'career.png',
         get_lang('Careers'),
         null,
-        ICON_SIZE_MEDIUM),
-    'careers.php');
-$actionleft .= Display::url(
+        ICON_SIZE_MEDIUM
+    ),
+    'careers.php'
+);
+$actionLeft .= Display::url(
     Display::return_icon(
         'promotion.png',
         get_lang('Promotions'),
         null,
-        ICON_SIZE_MEDIUM),
-    'promotions.php');
+        ICON_SIZE_MEDIUM
+    ),
+    'promotions.php'
+);
 
-$actions = Display::toolbarAction('toolbar-career', array( 0 => $actionleft));
-
-$html .= $form->return_form();
-
+$actions = Display::toolbarAction('toolbar-career', array($actionLeft));
+$html .= $form->returnForm();
 $careers = $career->get_all($condition); //only status =1
 
 $column_count = 3;

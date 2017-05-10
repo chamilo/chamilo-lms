@@ -197,11 +197,11 @@ function move($source, $target, $forceMove = true, $moveContent = false)
                     exec('mv '.$source.' '.$target.'/'.$file_name);
                 } else {
                     // Try copying
-                    copy($source, $target . '/' . $file_name);
+                    copy($source, $target.'/'.$file_name);
                     unlink($source);
                 }
             } else {
-                copy($source, $target . '/' . $file_name);
+                copy($source, $target.'/'.$file_name);
                 unlink($source);
             }
             return true;

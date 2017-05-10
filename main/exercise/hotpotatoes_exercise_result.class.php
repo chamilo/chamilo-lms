@@ -30,7 +30,7 @@ class HotpotatoesExerciseResult
         $course_id = api_get_course_int_id();
         //$user_id         = intval($user_id);
         $user_id = null;
-        $session_id_and  = ' AND te.session_id = ' . api_get_session_id() . ' ';
+        $session_id_and  = ' AND te.session_id = '.api_get_session_id().' ';
         $hotpotato_name  = Database::escape_string($hotpotato_name);
 
         if (!empty($exercise_id)) {
@@ -54,7 +54,7 @@ class HotpotatoesExerciseResult
             $sql = "SELECT '', exe_name, exe_result , exe_weighting, exe_date
                     FROM $TBL_TRACK_HOTPOTATOES
                     WHERE
-                        exe_user_id = '" . $user_id . "' AND
+                        exe_user_id = '".$user_id."' AND
                         c_id = $course_id AND
                         tth.exe_name = '$hotpotato_name'
                     ORDER BY c_id ASC, exe_date ASC";
@@ -78,7 +78,7 @@ class HotpotatoesExerciseResult
             for ($i = 0; $i < sizeof($hpresults); $i++) {
                 $return[$i] = array();
                 $title = GetQuizName($hpresults[$i]['exe_name'], $document_path);
-                if ($title =='') {
+                if ($title == '') {
                     $title = basename($hpresults[$i]['exe_name']);
                 }
                 if (empty($user_id)) {
@@ -87,7 +87,7 @@ class HotpotatoesExerciseResult
                     $return[$i]['last_name'] = $hpresults[$i]['userpart2'];
                 }
                 $return[$i]['title'] = $title;
-                $return[$i]['exe_date']  = $hpresults[$i]['exe_date'];
+                $return[$i]['exe_date'] = $hpresults[$i]['exe_date'];
 
                 $return[$i]['result'] = $hpresults[$i]['exe_result'];
                 $return[$i]['max'] = $hpresults[$i]['exe_weighting'];
@@ -140,18 +140,18 @@ class HotpotatoesExerciseResult
         // Results
         foreach ($this->results as $row) {
             if (api_is_western_name_order()) {
-              $data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['first_name']), ENT_QUOTES, $charset)).';';
-              $data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['last_name']), ENT_QUOTES, $charset)).';';
+              $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($row['first_name']), ENT_QUOTES, $charset)).';';
+              $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($row['last_name']), ENT_QUOTES, $charset)).';';
             } else {
-              $data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['last_name']), ENT_QUOTES, $charset)).';';
-              $data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['first_name']), ENT_QUOTES, $charset)).';';
+              $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($row['last_name']), ENT_QUOTES, $charset)).';';
+              $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($row['first_name']), ENT_QUOTES, $charset)).';';
             }
 
-            $data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['email']), ENT_QUOTES, $charset)).';';
-            $data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['title']), ENT_QUOTES, $charset)).';';
-            $data .= str_replace("\r\n",'  ',$row['exe_date']).';';
-            $data .= str_replace("\r\n",'  ',$row['result']).';';
-            $data .= str_replace("\r\n",'  ',$row['max']).';';
+            $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($row['email']), ENT_QUOTES, $charset)).';';
+            $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($row['title']), ENT_QUOTES, $charset)).';';
+            $data .= str_replace("\r\n", '  ', $row['exe_date']).';';
+            $data .= str_replace("\r\n", '  ', $row['result']).';';
+            $data .= str_replace("\r\n", '  ', $row['max']).';';
             $data .= "\n";
         }
 
@@ -173,7 +173,7 @@ class HotpotatoesExerciseResult
         header('Content-Description: '.$filename);
         header('Content-transfer-encoding: binary');
         // @todo add this utf-8 header for all csv files
-        echo "\xEF\xBB\xBF";  // force utf-8 header of csv file
+        echo "\xEF\xBB\xBF"; // force utf-8 header of csv file
         echo $data;
         return true;
     }
@@ -298,7 +298,7 @@ class HotpotatoesExerciseResult
                 $column++;
 
                 if (api_is_western_name_order()) {
-                    $worksheet->setCellValueByColumnAndRow($column, $line,api_html_entity_decode(strip_tags($row['first_name']), ENT_QUOTES, $charset));
+                    $worksheet->setCellValueByColumnAndRow($column, $line, api_html_entity_decode(strip_tags($row['first_name']), ENT_QUOTES, $charset));
                     $column++;
                     $worksheet->setCellValueByColumnAndRow($column, $line, api_html_entity_decode(strip_tags($row['last_name']), ENT_QUOTES, $charset));
                     $column++;

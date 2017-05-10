@@ -41,7 +41,7 @@ if (isset($_SESSION['gradebook'])) {
 }
 
 if (!empty($gradebook) && $gradebook == 'view') {
-    $interbreadcrumb[] = array (
+    $interbreadcrumb[] = array(
         'url' => '../gradebook/'.Security::remove_XSS($_SESSION['gradebook_dest']),
         'name' => get_lang('ToolGradebook')
     );
@@ -104,7 +104,7 @@ if (!empty($groupId)) {
     $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.$cidreq, 'name' => get_lang('Groups'));
     $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.$cidreq, 'name' => get_lang('GroupSpace').' '.$groupProperties['name']);
     $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.$cidreq.'&forum='.$forumId, 'name' => $currentForum['forum_title']);
-    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'forum/newthread.php?'.$cidreq.'&forum='.$forumId,'name' => get_lang('EditThread'));
+    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'forum/newthread.php?'.$cidreq.'&forum='.$forumId, 'name' => get_lang('EditThread'));
 } else {
     $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'forum/index.php?'.$cidreq, 'name' => $nameTools);
     $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'forum/viewforumcategory.php?'.$cidreq.'&forumcategory='.$currentForumCategory['cat_id'], 'name' => $currentForumCategory['cat_title']);
@@ -153,10 +153,10 @@ $threadData = getThreadInfo($threadId, $cId);
 $form = new FormValidator(
     'thread',
     'post',
-    api_get_self() . '?' . http_build_query([
+    api_get_self().'?'.http_build_query([
         'forum' => $forumId,
         'thread' => $threadId,
-    ]) . '&' . api_get_cidreq()
+    ]).'&'.api_get_cidreq()
 );
 
 $form->addElement('header', get_lang('EditThread'));
@@ -202,7 +202,7 @@ if ((api_is_course_admin() || api_is_course_coach() || api_is_course_tutor()) &&
     $form->addGroup(
         $group,
         '',
-        [get_lang('ForumThreadPeerScoring'), get_lang('ForumThreadPeerScoringComment'),]
+        [get_lang('ForumThreadPeerScoring'), get_lang('ForumThreadPeerScoringComment'), ]
     );
     $form->addElement('html', '</div>');
 }
@@ -214,7 +214,7 @@ if ($forumSettings['allow_sticky'] && api_is_allowed_to_edit(null, true)) {
 $form->addElement('html', '</div>');
 
 if (!empty($threadData)) {
-    $defaults['thread_qualify_gradebook'] = ($threadData['threadQualifyMax'] > 0 && empty($_POST)) ? 1 : 0 ;
+    $defaults['thread_qualify_gradebook'] = ($threadData['threadQualifyMax'] > 0 && empty($_POST)) ? 1 : 0;
     $defaults['thread_title'] = prepare4display($threadData['threadTitle']);
     $defaults['thread_sticky'] = strval(intval($threadData['threadSticky']));
     $defaults['thread_peer_qualify'] = intval($threadData['threadPeerQualify']);

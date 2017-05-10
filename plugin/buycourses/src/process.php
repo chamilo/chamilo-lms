@@ -33,7 +33,7 @@ if (!isset($_REQUEST['t'], $_REQUEST['i'])) {
 
 $buyingCourse = intval($_REQUEST['t']) === BuyCoursesPlugin::PRODUCT_TYPE_COURSE;
 $buyingSession = intval($_REQUEST['t']) === BuyCoursesPlugin::PRODUCT_TYPE_SESSION;
-$queryString = 'i=' . intval($_REQUEST['i']) . '&t=' . intval($_REQUEST['t']);
+$queryString = 'i='.intval($_REQUEST['i']).'&t='.intval($_REQUEST['t']);
 
 if ($buyingCourse) {
     $courseInfo = $plugin->getCourseInfo($_REQUEST['i']);
@@ -54,7 +54,7 @@ if ($form->validate()) {
         Display::addFlash(
             Display::return_message($plugin->get_lang('NeedToSelectPaymentType'), 'error', false)
         );
-        header('Location:' . api_get_self() . '?' . $queryString);
+        header('Location:'.api_get_self().'?'.$queryString);
         exit;
     }
 
@@ -62,7 +62,7 @@ if ($form->validate()) {
 
     if ($saleId !== false) {
         $_SESSION['bc_sale_id'] = $saleId;
-        header('Location: ' . api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/process_confirm.php');
+        header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/process_confirm.php');
     }
 
     exit;

@@ -18,8 +18,19 @@ $this_section = SECTION_COURSES;
 
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
-// Access control
-api_protect_course_script(true, false, true);
+$filter_user = isset($_REQUEST['filter_by_user']) ? intval($_REQUEST['filter_by_user']) : null;
+$isBossOfStudent = false;
+if (api_is_student_boss() && !empty($filter_user)) {
+    // Check if boss has access to user info.
+    if (UserManager::userIsBossOfStudent(api_get_user_id(), $filter_user)) {
+        $isBossOfStudent = true;
+    } else {
+        api_not_allowed(true);
+    }
+} else {
+    api_protect_course_script(true, false, true);
+}
+
 
 // including additional libraries
 require_once 'hotpotatoes.lib.php';
@@ -45,7 +56,6 @@ $allowCoachFeedbackExercises = api_get_setting('allow_coach_feedback_exercises')
 
 $course_id = api_get_course_int_id();
 $exercise_id = isset($_REQUEST['exerciseId']) ? intval($_REQUEST['exerciseId']) : null;
-$filter_user = isset($_REQUEST['filter_by_user']) ? intval($_REQUEST['filter_by_user']) : null;
 
 $locked = api_resource_is_locked_by_gradebook($exercise_id, LINK_EXERCISE);
 

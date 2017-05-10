@@ -28,7 +28,7 @@ $interbreadcrumb[] = array(
     "name" => get_lang('PlatformAdmin'),
 );
 
-$visibleToUsers = SystemAnnouncementManager::getVisibilityList();
+$visibleList = SystemAnnouncementManager::getVisibilityList();
 
 $tool_name = null;
 if (empty($_GET['lang'])) {
@@ -83,6 +83,7 @@ switch ($action) {
             $_GET['person'],
             $status
         );
+        echo Display::return_message(get_lang('Updated'), 'confirmation');
         break;
     case 'delete':
         // Delete an announcement.
@@ -119,14 +120,11 @@ switch ($action) {
             substr(api_get_local_time($announcement->date_end), 0, 16);
 
         $data = (array) $announcement;
-        foreach ($visibleToUsers as $key => $value) {
+        foreach ($visibleList as $key => $value) {
             if (isset($data[$key])) {
                 $values[$key] = $data[$key];
             }
         }
-        /*$values['visible_teacher'] = $announcement->visible_teacher;
-        $values['visible_student'] = $announcement->visible_student;
-        $values['visible_guest'] = $announcement->visible_guest;*/
 
         $values['lang'] = $announcement->lang;
         $values['action'] = 'edit';
@@ -176,7 +174,7 @@ if ($action_todo) {
     );
 
     $group = [];
-    foreach ($visibleToUsers as $key => $name) {
+    foreach ($visibleList as $key => $name) {
         $group[] = $form->createElement(
             'checkbox',
             $key,
@@ -222,7 +220,7 @@ if ($action_todo) {
     if ($form->validate()) {
         $values = $form->getSubmitValues();
         $visibilityResult = [];
-        foreach ($visibleToUsers as $key => $value) {
+        foreach ($visibleList as $key => $value) {
             if (!isset($values[$key])) {
                 $values[$key] = false;
             }
@@ -316,7 +314,7 @@ if ($show_announcement_list) {
         $row[] = api_convert_and_format_date($announcement->date_end);
 
         $data = (array) $announcement;
-        foreach ($visibleToUsers as $key => $value) {
+        foreach ($visibleList as $key => $value) {
             $value = $data[$key];
             $action = $value ? 'make_invisible' : 'make_visible';
             $row[] = "<a href=\"?id=".$announcement->id."&person=".$key."&action=".$action."\">".
@@ -339,14 +337,10 @@ if ($show_announcement_list) {
     $table->set_header(4, get_lang('EndTimeWindow'));
 
     $count = 5;
-    foreach ($visibleToUsers as $key => $value) {
-        $table->set_header($count, $value);
+    foreach ($visibleList as $key => $title) {
+        $table->set_header($count, $title);
         $count++;
     }
-
-    //$table->set_header(5, get_lang('Teacher'));
-    //$table->set_header(6, get_lang('Student'));
-    //$table->set_header(7, get_lang('Guest'));
 
     $table->set_header($count++, get_lang('Language'));
     $table->set_header($count++, get_lang('Modify'), false, 'width="50px"');

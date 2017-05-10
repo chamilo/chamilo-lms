@@ -6,16 +6,57 @@
  */
 class SystemAnnouncementManager
 {
-    const VISIBLE_GUEST = 1;
-    const VISIBLE_STUDENT = 2;
-    const VISIBLE_TEACHER = 3;
+    const VISIBLE_GUEST = 'visible_guest';
+    const VISIBLE_STUDENT = 'visible_student';
+    const VISIBLE_TEACHER = 'visible_teacher';
+    // Requires DB change
+    const VISIBLE_DRH = 'visible_drh';
+    const VISIBLE_SESSION_ADMIN = 'visible_session_admin';
+    const VISIBLE_STUDENT_BOSS = 'visible_boss';
+
+    /**
+     * @return array
+     */
+    public static function getVisibilityList()
+    {
+        $extraRoles = self::newRolesActivated();
+
+        $visibleToUsers = [
+            self::VISIBLE_TEACHER => get_lang('Teacher'),
+            self::VISIBLE_STUDENT => get_lang('Student'),
+            self::VISIBLE_GUEST => get_lang('Guest')
+        ];
+
+        if ($extraRoles) {
+            $visibleToUsers[self::VISIBLE_DRH] = get_lang('DRH');
+            $visibleToUsers[self::VISIBLE_SESSION_ADMIN] = get_lang('SessionAdministrator');
+            $visibleToUsers[self::VISIBLE_STUDENT_BOSS] = get_lang('StudentBoss');
+        }
+
+        return $visibleToUsers;
+    }
+
+    /**
+     * @param string $visibility
+     * @return string
+     */
+    public static function getVisibilityCondition($visibility)
+    {
+        $list = self::getVisibilityList();
+        $visibilityCondition = " AND ".self::VISIBLE_GUEST." = 1 ";
+        if (in_array($visibility, array_keys($list))) {
+            $visibilityCondition = " AND $visibility = 1 ";
+        }
+
+        return $visibilityCondition;
+    }
 
     /**
      * Displays all announcements
-     * @param int $visible VISIBLE_GUEST, VISIBLE_STUDENT or VISIBLE_TEACHER
+     * @param string $visibility VISIBLE_GUEST, VISIBLE_STUDENT or VISIBLE_TEACHER
      * @param int $id The identifier of the announcement to display
      */
-    public static function display_announcements($visible, $id = -1)
+    public static function display_announcements($visibility, $id = -1)
     {
         $user_selected_language = api_get_interface_language();
         $db_table = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
@@ -37,17 +78,8 @@ class SystemAnnouncementManager
                     (lang='$user_selected_language' OR lang IS NULL) AND
                     (('$now' BETWEEN date_start AND date_end) OR date_end='0000-00-00') ";
 
-        switch ($visible) {
-            case self::VISIBLE_GUEST:
-                $sql .= " AND visible_guest = 1 ";
-                break;
-            case self::VISIBLE_STUDENT:
-                $sql .= " AND visible_student = 1 ";
-                break;
-            case self::VISIBLE_TEACHER:
-                $sql .= " AND visible_teacher = 1 ";
-                break;
-        }
+
+        $sql .= self::getVisibilityCondition($visibility);
 
         if (count($groups) > 0) {
             $sql .= " OR id IN (
@@ -98,13 +130,13 @@ class SystemAnnouncementManager
     }
 
     /**
-     * @param $visible
-     * @param $id
+     * @param string $visibility
+     * @param int $id
      * @param int $start
      * @param string $user_id
      * @return string
      */
-    public static function display_all_announcements($visible, $id = -1, $start = 0, $user_id = '')
+    public static function displayAllAnnouncements($visibility, $id = -1, $start = 0, $user_id = '')
     {
         $user_selected_language = api_get_interface_language();
         $start = intval($start);
@@ -120,25 +152,15 @@ class SystemAnnouncementManager
         // Checks if tables exists to not break platform not updated
         $groups_string = '('.implode($groups, ',').')';
 
-        $db_table = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
+        $table = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
         $now = api_get_utc_datetime();
 
-        $sql = "SELECT * FROM ".$db_table."
+        $sql = "SELECT * FROM $table
                 WHERE
                     (lang = '$user_selected_language' OR lang IS NULL) AND
                     ( '$now' >= date_start AND '$now' <= date_end) ";
 
-        switch ($visible) {
-            case self::VISIBLE_GUEST:
-                $sql .= " AND visible_guest = 1 ";
-                break;
-            case self::VISIBLE_STUDENT:
-                $sql .= " AND visible_student = 1 ";
-                break;
-            case self::VISIBLE_TEACHER:
-                $sql .= " AND visible_teacher = 1 ";
-                break;
-        }
+        $sql .= self::getVisibilityCondition($visibility);
 
         if (count($groups) > 0) {
             $sql .= " OR id IN (
@@ -230,24 +252,13 @@ class SystemAnnouncementManager
     public static function count_nb_announcement($start = 0, $user_id = '')
     {
         $start = intval($start);
-        $visibility = api_is_allowed_to_create_course() ? self::VISIBLE_TEACHER : self::VISIBLE_STUDENT;
         $user_selected_language = api_get_interface_language();
         $db_table = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
         $sql = 'SELECT id FROM '.$db_table.'
                 WHERE (lang="'.$user_selected_language.'" OR lang IS NULL) ';
-        if (isset($user_id)) {
-            switch ($visibility) {
-                case self::VISIBLE_GUEST:
-                    $sql .= " AND visible_guest = 1 ";
-                    break;
-                case self::VISIBLE_STUDENT:
-                    $sql .= " AND visible_student = 1 ";
-                    break;
-                case self::VISIBLE_TEACHER:
-                    $sql .= " AND visible_teacher = 1 ";
-                    break;
-            }
-        }
+
+        $visibility = self::getCurrentUserVisibility();
+        $sql .= self::getVisibilityCondition($visibility);
 
         $current_access_url_id = 1;
         if (api_is_multiple_url_enabled()) {
@@ -631,32 +642,6 @@ class SystemAnnouncementManager
     }
 
     /**
-     * @return array
-     */
-    public static function getVisibilityList()
-    {
-        $extraRoles = api_get_configuration_value('system_announce_extra_roles');
-        /* Requires DB change:
-         ALTER TABLE sys_announcement ADD COLUMN visible_drh INT DEFAULT 0;
-         ALTER TABLE sys_announcement ADD COLUMN visible_session_admin INT DEFAULT 0;
-         ALTER TABLE sys_announcement ADD COLUMN visible_boss INT DEFAULT 0;
-        */
-        $visibleToUsers = [
-            'visible_teacher' => get_lang('Teacher'),
-            'visible_student' => get_lang('Student'),
-            'visible_guest' => get_lang('Guest')
-        ];
-
-        if ($extraRoles) {
-            $visibleToUsers['visible_drh'] = get_lang('DRH');
-            $visibleToUsers['visible_session_admin'] = get_lang('SessionAdministrator');
-            $visibleToUsers['visible_boss'] = get_lang('StudentBoss');
-        }
-
-        return $visibleToUsers;
-    }
-
-    /**
      * Change the visibility of an announcement
      * @param int $id
      * @param int $user For who should the visibility be changed
@@ -778,10 +763,12 @@ class SystemAnnouncementManager
 
     /**
      * Displays announcements as an slideshow
-     * @param int $visible VISIBLE_GUEST, VISIBLE_STUDENT or VISIBLE_TEACHER
+     * @param string $visible see self::VISIBLE_* constants
      * @param int $id The identifier of the announcement to display
+     *
+     * @return string
      */
-    public static function display_announcements_slider($visible, $id = null)
+    public static function displayAnnouncementsSlider($visible, $id = null)
     {
         $user_selected_language = Database::escape_string(api_get_interface_language());
         $table = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
@@ -793,17 +780,7 @@ class SystemAnnouncementManager
                     (lang = '$user_selected_language' OR lang = '') AND
                     ('$now' >= date_start AND '$now' <= date_end) ";
 
-        switch ($visible) {
-            case self::VISIBLE_GUEST:
-                $sql .= " AND visible_guest = 1 ";
-                break;
-            case self::VISIBLE_STUDENT:
-                $sql .= " AND visible_student = 1 ";
-                break;
-            case self::VISIBLE_TEACHER:
-                $sql .= " AND visible_teacher = 1 ";
-                break;
-        }
+        $sql .= self::getVisibilityCondition($visible);
 
         if (isset($id) && !empty($id)) {
             $id = intval($id);
@@ -860,7 +837,6 @@ class SystemAnnouncementManager
     {
         $selectedUserLanguage = Database::escape_string(api_get_interface_language());
         $announcementTable = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
-
         $now = api_get_utc_datetime();
 
         $whereConditions = [
@@ -869,17 +845,8 @@ class SystemAnnouncementManager
             "AND id = ? " => intval($announcementId)
         ];
 
-        switch ($visibility) {
-            case self::VISIBLE_GUEST:
-                $whereConditions["AND visible_guest = ? "] = 1;
-                break;
-            case self::VISIBLE_STUDENT:
-                $whereConditions["AND visible_student = ? "] = 1;
-                break;
-            case self::VISIBLE_TEACHER:
-                $whereConditions["AND visible_teacher = ? "] = 1;
-                break;
-        }
+        $condition = self::getVisibilityCondition($visibility);
+        $whereConditions[$condition] = 1;
 
         if (api_is_multiple_url_enabled()) {
             $whereConditions["AND access_url_id IN (1, ?) "] = api_get_current_access_url_id();
@@ -900,5 +867,52 @@ class SystemAnnouncementManager
         $layout = $template->get_template('announcement/view.tpl');
 
         return $template->fetch($layout);
+    }
+
+    /**
+     * @return bool
+     */
+    public static function newRolesActivated()
+    {
+        /* In order to use this option you need to run this SQL changes :
+         ALTER TABLE sys_announcement ADD COLUMN visible_drh INT DEFAULT 0;
+         ALTER TABLE sys_announcement ADD COLUMN visible_session_admin INT DEFAULT 0;
+         ALTER TABLE sys_announcement ADD COLUMN visible_boss INT DEFAULT 0;
+        */
+
+        return api_get_configuration_value('system_announce_extra_roles');
+    }
+
+    /**
+     * @return string
+     */
+    public static function getCurrentUserVisibility()
+    {
+        if (api_is_anonymous()) {
+            return SystemAnnouncementManager::VISIBLE_GUEST;
+        }
+
+        if (self::newRolesActivated()) {
+            if (api_is_student_boss()) {
+                return SystemAnnouncementManager::VISIBLE_STUDENT_BOSS;
+            }
+
+            if (api_is_session_admin()) {
+                return SystemAnnouncementManager::VISIBLE_SESSION_ADMIN;
+            }
+
+            if (api_is_drh()) {
+                return SystemAnnouncementManager::VISIBLE_DRH;
+            }
+
+            if (api_is_allowed_to_create_course()) {
+                return SystemAnnouncementManager::VISIBLE_TEACHER;
+            } else {
+                return SystemAnnouncementManager::VISIBLE_STUDENT;
+            }
+        } else {
+            // Default behaviour
+            return api_is_allowed_to_create_course() ? SystemAnnouncementManager::VISIBLE_TEACHER : SystemAnnouncementManager::VISIBLE_STUDENT;
+        }
     }
 }

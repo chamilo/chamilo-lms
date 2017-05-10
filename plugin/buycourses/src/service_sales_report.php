@@ -54,7 +54,7 @@ $template = new Template($templateName);
 if ($paypalEnable == 'true' && $commissionsEnable == 'true') {
     $toolbar = Display::toolbarButton(
         $plugin->get_lang('PaypalPayoutCommissions'),
-        api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/paypal_payout.php',
+        api_get_path(WEB_PLUGIN_PATH).'buycourses/src/paypal_payout.php',
         'paypal',
         'primary',
         ['title' => $plugin->get_lang('PaypalPayoutCommissions')]
@@ -69,7 +69,7 @@ if ($paypalEnable == 'true' && $commissionsEnable == 'true') {
 if ($commissionsEnable == 'true') {
     $toolbar = Display::toolbarButton(
         $plugin->get_lang('PayoutReport'),
-        api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/payout_report.php',
+        api_get_path(WEB_PLUGIN_PATH).'buycourses/src/payout_report.php',
         'money',
         'info',
         ['title' => $plugin->get_lang('PayoutReport')]

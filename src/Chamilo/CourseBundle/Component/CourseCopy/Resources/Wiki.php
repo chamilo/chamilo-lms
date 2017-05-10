@@ -63,6 +63,6 @@ class Wiki extends Resource
     public function show()
     {
         parent::show();
-        echo $this->reflink.' ('. (empty($this->group_id) ? get_lang('Everyone') : get_lang('Group') . ' ' .  $this->group_id) .') ' . '<i>(' . $this->dtime . ')</i>';
+        echo $this->reflink.' ('.(empty($this->group_id) ? get_lang('Everyone') : get_lang('Group').' '.$this->group_id).') '.'<i>('.$this->dtime.')</i>';
     }
 }
